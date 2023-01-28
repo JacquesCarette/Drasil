@@ -67,7 +67,7 @@ mkSRS = [TableOfContents,
       [ SSDProblem $ PDProg prob []
         [ TermsAndDefs Nothing terms
         , PhySysDesc projectileTitle physSystParts figLaunch []
-        , Goals [(phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile]]
+        , Goals [purposeInputs]]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)
@@ -88,6 +88,12 @@ mkSRS = [TableOfContents,
     AuxConsProg projectileTitle constants,
   Bibliography
   ]
+
+purposeInputs :: Sentence
+purposeInputs = (phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile
+
+purposeGoals :: Sentence
+purposeGoals = S "determines if the "+:+ phrase projectile +:+ S "hits the" +:+. phrase target
 
 background :: Sentence
 background = foldlSent [S "Common examples of", phrase projectile, phrase motion, S "include",
@@ -114,7 +120,7 @@ si = SI {
   _sys         = projectileTitle,
   _kind        = Doc.srs,
   _authors     = [samCrawford, brooks, spencerSmith],
-  _purpose     = [],
+  _purpose     = [foldlSent_ [S "Given", purposeInputs `sC` phrase projectileTitle, purposeGoals]],
   _background  = [background],
   _motivation  = [motivation],
   _scope       = [],

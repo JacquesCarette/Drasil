@@ -1,5 +1,6 @@
 module Drasil.Projectile.Body (printSetting, si, srs, projectileTitle, fullSI) where
 
+import Control.Lens ((^.))
 import Language.Drasil
 import Drasil.SRSDocument
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -67,7 +68,7 @@ mkSRS = [TableOfContents,
       [ SSDProblem $ PDProg prob []
         [ TermsAndDefs Nothing terms
         , PhySysDesc projectileTitle physSystParts figLaunch []
-        , Goals [purposeInputs]]
+        , Goals [inputsPhrase]]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)
@@ -89,11 +90,12 @@ mkSRS = [TableOfContents,
   Bibliography
   ]
 
-purposeInputs :: Sentence
-purposeInputs = (phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile
+inputsPhrase :: Sentence
+inputsPhrase = (phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile
 
-purposeGoals :: Sentence
-purposeGoals = S "determines if the "+:+ phrase projectile +:+ S "hits the" +:+. phrase target
+purpose :: Sentence
+purpose = foldlSent_ [S "Given", inputsPhrase `sC` phrase projectileTitle, S "will"] +:+ 
+  foldlSent_ (map (^. defn) goals)
 
 background :: Sentence
 background = foldlSent [S "Common examples of", phrase projectile, phrase motion, S "include",
@@ -120,7 +122,7 @@ si = SI {
   _sys         = projectileTitle,
   _kind        = Doc.srs,
   _authors     = [samCrawford, brooks, spencerSmith],
-  _purpose     = [foldlSent_ [S "Given", purposeInputs `sC` phrase projectileTitle, purposeGoals]],
+  _purpose     = [purpose],
   _background  = [background],
   _motivation  = [motivation],
   _scope       = [],

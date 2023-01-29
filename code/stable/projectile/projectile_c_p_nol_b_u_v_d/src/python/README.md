@@ -3,7 +3,7 @@
 
 > Authors:  Samuel J. Crawford, Brooks MacLachlan, W. Spencer Smith
 
-> Purpose: Given the initial velocity vector of the projectile, Projectile determines if the  projectile hits the target.
+> Purpose: Given the initial velocity vector of the projectile, Projectile will Determine if the projectile hits the target.
 
 > Motivation: Projectile motion is a common problem in physics.
 

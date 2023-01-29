@@ -177,6 +177,8 @@ Jan. 27, 2023 & 0.3.3 & Improve section referencing in \nameref{sec_revHist}\\
 							& 0.4 & Fill in \nameref{sec_funcReqs}\\
 Jan. 28, 2023 & 0.4.1 & Fill in main \nameref{sec_nonfuncReqs}, along with
 							relevant reference information\\
+							& 0.4.2 & Add TM for the Law of Conservation of Mass
+							(\tref{T:ConsMass})\\
 \bottomrule
 \end{tabularx}
 
@@ -719,6 +721,33 @@ on.
 % #9 derivation - not applicable by default
 {Not Applicable}
 
+\noindent
+\deftheory
+% #2 refname of theory
+{T:ConsMass}
+% #3 label
+{Law of Conservation of Mass}
+% #4 equation
+{Not Applicable}
+% #5 description
+{
+  This law states that ``matter can neither be created nor destroyed in a
+  chemical reaction \dots but it may change forms to other substances''
+  \cite[p. 112]{lund_introduction_2023}.
+}
+% #6 Notes
+{None}
+% #7 Source
+{
+  \url{https://chem.libretexts.org/Courses/Anoka-Ramsey_Community_College/Introduction_to_Chemistry/03\%3A_Matter_and_Energy/3.06\%3A_Conservation_of_Mass} 
+}
+% #8 Referenced by
+{
+  \iref{feasible}
+}
+% #9 derivation - not applicable by default
+{Not Applicable}
+
 %\noindent
 %\deftheory
 %% #2 refname of theory
@@ -755,10 +784,6 @@ on.
 %}
 %% #9 derivation - not applicable by default
 %{Not Applicable}
-
-~\newline
-
-\noindent\sjc{TM for Conservation of Mass, even if there isn't an equation for it?}
 
 \subsubsection{General Definitions}\label{sec_gendef}
 
@@ -1034,7 +1059,7 @@ and \iref{balance}, respectively.
   If a row of $\textbf{A}$ only has either a positive or negative entry, then
   there is an element that is either a reactant or a product (see
   \nameref{sec_termsDefs}) but not both, which breaks the Law of Conservation of
-  Mass. \sjc{Add reference.} \sjc{Is this a good place for this?}\\
+  Mass (\tref{T:ConsMass}). \sjc{Is this a good place for this?}\\
 %  &$\textbf{R}$ is the $m \times n$ matrix $(\textbf{A} \vert \textbf{0})$
 %  as close to reduced row echelon form (see \nameref{sec_termsDefs}) as possible
 %  from \iref{epcm}.

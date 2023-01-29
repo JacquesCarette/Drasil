@@ -185,6 +185,7 @@ Jan. 28, 2023 & 0.4.1 & Fill in main \nameref{sec_nonfuncReqs}, along with
 Jan. 29, 2023 & 0.4.4 & Add NFRs for understandability
 							(\nfrref{NFR_understandability}) and verifiability
 							(\nfrref{NFR_verifiability}) and improve quality of other NFRs\\
+							& 0.5 & Fill in \nameref{sec_intro} based on Drasil examples\\
 \bottomrule
 \end{tabularx}
 
@@ -369,58 +370,68 @@ as $\left(\textbf{A}\vert \textbf{B}\right)$ \cite{taboga_augmented_2021}.
   trust the authors of the SRS on any statements.  They should be able to
   independently verify/derive every statement made.}
 
-\section{Introduction}
+\section{Introduction} \label{sec_intro}
+Chemical equations are common ways of representing chemical reactions (as
+described in \nameref{sec_phySystDesc}), but must be balanced for use in other
+calculations \cite{lund_introduction_2023}. Therefore, it is useful to have a
+tool to automatically balance these chemical reactions for efficiency and
+accuracy.
 
-\plt{The introduction section is written to introduce the problem.  It starts
-  general and focuses on the problem domain. The general advice is to start with
-a paragraph or two that describes the problem, followed by a ``roadmap''
-paragraph.  A roadmap orients the reader by telling them what sub-sections to
-expect in the Introduction section.}
+The following section provides an overview of the Software Requirements
+Specification (SRS) for \progname{}. This section explains the purpose of this
+document, the scope of the requirements, the characteristics of the intended
+reader, and the organization of the document.
 
 \subsection{Purpose of Document}
+  
+The primary purpose of this document is to record the requirements of the
+program for solving chemistry problems \sjc{Is this a good description?}.
+Goals, assumptions, theoretical models,
+definitions, and other model derivation information are specified, allowing the
+reader to fully understand and verify the purpose and scientific basis of
+\progname{}. With the exception of system constraints, this SRS will remain
+abstract, describing what problem is being solved, but not how to solve it.
 
-\plt{This section summarizes the purpose of the SRS document.  It does not focus
-  on the problem itself.  The problem is described in \nameref{sec_probDesc}.
-  The purpose is for the document
-  in the context of the project itself, not in the context of this course.
-  Although the ``purpose'' of the document is to get a grade, you should not
-  mention this.  Instead, ``fake it'' as if this is a real project.  The purpose
-  section will be similar between projects.  The purpose of the document is the
-  purpose of the SRS, including communication, planning for the design stage,
-  etc.}
+This document will be used as a starting point for subsequent development
+phases, including writing the design specification and the software Verification
+and Validation (VnV) Plan. The design document will show how the requirements
+are to be realized, including decisions on the numerical algorithms and
+programming environment. The VnV Plan will show the steps that will be used to
+increase confidence in the software documentation and the implementation.
+Although the SRS fits in a series of documents that follow the so-called
+``waterfall model'', the actual development process is not constrained in any
+way. Even when the waterfall model is not followed, as Parnas and Clements point
+out in \cite{ParnasAndClements1986}, the most logical way to present the
+documentation is still to ``fake'' a rational design process.
 
 \subsection{Scope of Requirements} \label{sec_scope}
 
 The scope of the requirements includes determining if a given chemical equation
 is feasible (see \nameref{sec_termsDefs}) and, if it is, balancing it using the
 smallest whole number coefficients possible, regardless of whether or not the
-reaction would take place in a real-world setting.
+chemical formulas in the equation are correct or if the reaction would take
+place in a real-world setting.
 
 \subsection{Characteristics of Intended Reader} \label{sec_IntendedReader}
-
-\plt{This section summarizes the skills and knowledge of the readers of the
-  SRS.  It does NOT have the same purpose as the ``User Characteristics''
-  section (Section~\ref{SecUserCharacteristics}).  The intended readers are the
-  people that will read, review and maintain the SRS.  They are the people that
-  will conceivably design the software that is intended to meet the
-  requirements.  The user, on the other hand, is the person that uses the
-  software that is built.  They may never read this SRS document.  Of course,
-  the same person could be a ``user'' and an ``intended reader.''}
-
-\plt{The intended reader characteristics should be written as unambiguously and
-  as specifically as possible.  Rather than say, the user should have an
-  understanding of physics, say what kind of physics and at what level.  For
-  instance, is high school physics adequate, or should the reader have had a
-  graduate course on advanced quantum mechanics?}
+Reviewers of this documentation should have an understanding of high-school level
+chemistry, namely stoichiometry (see \nameref{sec_termsDefs}), and undergraduate
+Level 1 linear algebra, namely solving systems of linear equations. The end user
+of \progname{}, as described in \nameref{sec_userChars}, does not require
+knowledge of linear algebra, since relevant concepts will be implemented by the
+code and hidden from the user.
 
 \subsection{Organization of Document}
-This document is based on a template from \cite{smith_captemplate_2022}, which
-is itself based on \cite{SmithAndLai2005, SmithEtAl2007}.
+The organization of this document is based a template from,
+\cite{smith_captemplate_2022}, which is based on the template for an SRS for
+scientific computing software proposed by \cite{SmithAndLai2005},
+\cite{SmithEtAl2007}, and \cite{koothoor_document_2013}. The presentation
+follows the standard pattern of presenting goals, theories, definitions, and
+assumptions. For readers that would like a more bottom-up approach, they can
+start reading the \nameref{sec_instance} and trace back to find any additional
+information they require.
 
-\plt{This section provides a roadmap of the SRS document.  It will help the
-  reader orient themselves.  It will provide direction that will help them
-  select which sections they want to read, and in what order.  This section will
-  be similar between project.}
+The \nameref{sec_goals} are refined to the \nameref{sec_theoretical}, which are
+refined to the \nameref{sec_instance}.
 
 \section{General System Description}
 
@@ -553,7 +564,7 @@ chemical equation'' \cite[p. 337]{lund_introduction_2023}.
 %\cite{taboga_reduced_2021}.
 \end{itemize}
 
-\subsubsection{Physical System Description} \label{sec_phySystDescrip}
+\subsubsection{Physical System Description} \label{sec_phySystDesc}
 
 \plt{The purpose of this section is to clearly and unambiguously state the
   physical system that is to be modelled. Effective problem solving requires a
@@ -700,8 +711,8 @@ likely change [LC], in which the respective assumption is used.
 \subsubsection{Theoretical Models}\label{sec_theoretical}
 
 \plt{Theoretical models are sets of abstract mathematical equations or axioms
-  for solving the problem described in Section ``Physical System Description''
-  (Section~\ref{sec_phySystDescrip}). Examples of theoretical models are
+  for solving the problem described in \nameref{sec_phySystDesc}. Examples of
+  theoretical models are
   physical laws, constitutive equations, relevant conversion factors, etc.}
 
 This section focuses on the general equations and laws that \progname{} is based
@@ -962,7 +973,7 @@ models. \plt{Modify the examples below for your problem, and add additional
 \subsubsection{Instance Models} \label{sec_instance}    
 
 \plt{The motivation for this section is to reduce the problem defined in
-  ``Physical System Description'' (Section~\ref{sec_phySystDescrip}) to one
+	\nameref{sec_phySystDesc} to one
   expressed in mathematical terms. The IMs are built by refining the TMs and/or
   GDs.  This section should remain abstract.  The SRS should specify the
   requirements without considering the implementation.}

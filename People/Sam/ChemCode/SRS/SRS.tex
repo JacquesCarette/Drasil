@@ -182,6 +182,9 @@ Jan. 28, 2023 & 0.4.1 & Fill in main \nameref{sec_nonfuncReqs}, along with
 							& 0.4.3 & Represent input to \iref{convert} as two sequences of chemical
 							formulas, add assumptions about user input, and remove infeasible
 							likely change\\
+Jan. 29, 2023 & 0.4.4 & Add NFRs for understandability
+							(\nfrref{NFR_understandability}) and verifiability
+							(\nfrref{NFR_verifiability}) and improve quality of other NFRs\\
 \bottomrule
 \end{tabularx}
 
@@ -1267,14 +1270,10 @@ qualities that the software is expected to exhibit.
 
 \subsection{Nonfunctional Requirements} \label{sec_nonfuncReqs}
 
-\plt{A good strategy may be
-to give a ``high level'' view of the requirement, but allow for the details to
-be covered in the Verification and Validation document.}
-
 \noindent \begin{itemize}
 
 \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_accuracy}:]
-  \textbf{Accuracy} Computed solutions should have a relative error no greater
+  \textbf{Accuracy:} Computed solutions should have a relative error no greater
   than 0.1\%, since the most finely-calibrated chemistry equipment has a
   relative error of 0.1-0.2\% \cite{walker_volumetric_2012,
   godambe_measuring_nodate}. This means that computed integers should be exact.
@@ -1286,13 +1285,19 @@ be covered in the Verification and Validation document.}
 %    described following the procedure given in Section~X of the Verification and
 %    Validation Plan.''  A link to the VnV plan would be a nice extra.}
 
-\item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_usability}:] \textbf{Usability}
-  An intended user (as described by \nameref{sec_userChars}) should find
-  \progname{} usable, as measured by the procedure in Section X of the
-  Verification and Validation (VnV) Plan.
+\item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_understandability}:]
+	\textbf{Understandability:} A new intended user (as described by
+	\nameref{sec_userChars}) should be able to learn how to use \progname{} in an
+	acceptable amount of time, as measured by the procedure in Section X of
+	the Verification and Validation (VnV) Plan.
+
+\item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_usability}:]
+	\textbf{Usability:} An intended user (as described by \nameref{sec_userChars})
+	should find \progname{} easy to use, as measured by the procedure in Section X
+	of the VnV Plan.
 
 \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_maintainability}:]
-  \textbf{Maintainability} The traceability between requirements, assumptions,
+  \textbf{Maintainability:} The traceability between requirements, assumptions,
   theoretical models, general definitions, data definitions, instance models,
   likely changes, and unlikely changes is completely recorded in
   traceability matrices in the SRS.
@@ -1303,12 +1308,15 @@ be covered in the Verification and Validation document.}
 %    at the end of the report.}
 
 \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_portability}:]
-  \textbf{Portability} \progname{} should be able to run on systems with Python
-  3.x installed, including systems running on Windows or macOS. The tests from
-  the VnV Plan should be able to be run on these environments.
+  \textbf{Portability:} \progname{} should be able to run on systems with the
+  corresponding programming language
+  installed, including systems running on Windows or macOS. The tests from
+  the VnV Plan should pass in these environments.
+  
+\item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_verifiability}:]
+  \textbf{Verifiability:} \progname{} is tested following the VnV Plan.
 
-\item Other NFRs that might be discussed include verifiability,
-  understandability and reusability.
+%\item Reusability?.
 
 \end{itemize}
 

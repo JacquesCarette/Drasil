@@ -175,6 +175,8 @@ Jan. 26, 2023 & 0.3 & Add \nameref{sec_LCs} from Problem Statement, add
 							change ``infeasible'' to ``feasible''\\
 Jan. 27, 2023 & 0.3.3 & Improve section referencing in \nameref{sec_revHist}\\
 							& 0.4 & Fill in \nameref{sec_funcReqs}\\
+Jan. 28, 2023 & 0.4.1 & Fill in main \nameref{sec_nonfuncReqs}, along with
+							relevant reference information\\
 \bottomrule
 \end{tabularx}
 
@@ -269,6 +271,7 @@ which heat is transferred in
   R & Requirement\\
   SRS & Software Requirements Specification\\
   T & Theoretical Model\\
+  VnV & Verification and Validation\\
   \bottomrule
 \end{tabular}\\
 
@@ -475,16 +478,10 @@ characteristics and lists the system constraints.  \plt{This text can likely be
 \end{itemize}
 \end{itemize}
 
-\subsection{User Characteristics} \label{SecUserCharacteristics}
+\subsection{User Characteristics} \label{sec_userChars}
 
-\plt{This section summarizes the knowledge/skills expected of the user.
-  Measuring usability, which is often a required non-function requirement,
-  requires knowledge of a typical user.  As mentioned above, the user is a
-  different role from the ``intended reader,'' as given in
-  Section~\ref{sec_IntendedReader}.  As in Section~\ref{sec_IntendedReader}, the
-  user characteristics should be specific an unambiguous.  For instance, ``The
-  end user of \progname{} should have an understanding of undergraduate Level 1
-  Calculus and Physics.''}
+The end user of \progname{} should have an understanding of high-school level
+chemistry, namely stoichiometry (see \nameref{sec_termsDefs}).
 
 \subsection{System Constraints}
 
@@ -533,6 +530,10 @@ ratio of small whole numbers"
 
 \item \textbf{Reactant}: A substance present at the beginning of, and involved
 in, a chemical reaction \cite{lund_introduction_2023}.
+
+\item \textbf{Stoichiometry}: ``The calculation of the quantities of reactants
+or products in a chemical reaction using the relationships found in a balanced
+chemical equation'' \cite[p. 337]{lund_introduction_2023}.
 
 %\item \textbf{Reduced Row Echelon Form}: A form of a matrix where every row
 %with only zeros is at the bottom and every column but the rightmost one
@@ -1218,55 +1219,47 @@ qualities that the software is expected to exhibit.
 %\plt{Every IM should map to at least one requirement, but not every requirement
 %  has to map to a corresponding IM.}
 
-\subsection{Nonfunctional Requirements}
+\subsection{Nonfunctional Requirements} \label{sec_nonfuncReqs}
 
-\plt{List your nonfunctional requirements.  You may consider using a fit
-  criterion to make them verifiable.}
-\plt{The goal is for the nonfunctional requirements to be unambiguous, abstract
-  and verifiable.  This isn't easy to show succinctly, so a good strategy may be
+\plt{A good strategy may be
 to give a ``high level'' view of the requirement, but allow for the details to
 be covered in the Verification and Validation document.}
-\plt{An absolute requirement on a quality of the system is rarely needed.  For
-  instance, an accuracy of 0.0101 \% is likely fine, even if the requirement is
-  for 0.01 \% accuracy.  Therefore, the emphasis will often be more on
-  describing now well the quality is achieved, through experimentation, and
-  possibly theory, rather than meeting some bar that was defined a priori.}
-\plt{You do not need an entry for correctness in your NFRs.  The purpose of the
-  SRS is to record the requirements that need to be satisfied for correctness.
-  Any statement of correctness would just be redundant. Rather than discuss
-  correctness, you can characterize how far away from the correct (true)
-  solution you are allowed to be.  This is discussed under accuracy.}
 
 \noindent \begin{itemize}
 
-\item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_Accuracy}:]
-  \textbf{Accuracy} \plt{Characterize the accuracy by giving the context/use for
-    the software.  Maybe something like, ``The accuracy of the computed
-    solutions should meet the level needed for $<$engineering or scientific
-    application$>$.  The level of accuracy achieved by \progname{} shall be
-    described following the procedure given in Section~X of the Verification and
-    Validation Plan.''  A link to the VnV plan would be a nice extra.}
+\item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_accuracy}:]
+  \textbf{Accuracy} Computed solutions should have a relative error no greater
+  than 0.1\%, since the most finely-calibrated chemistry equipment has a
+  relative error of 0.1-0.2\% \cite{walker_volumetric_2012,
+  godambe_measuring_nodate}. This means that computed integers should be exact.
+  
+%  \plt{Characterize the accuracy by giving the context/use for
+%    the software.  Maybe something like, ``The accuracy of the computed
+%    solutions should meet the level needed for $<$engineering or scientific
+%    application$>$.  The level of accuracy achieved by \progname{} shall be
+%    described following the procedure given in Section~X of the Verification and
+%    Validation Plan.''  A link to the VnV plan would be a nice extra.}
 
-\item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_Usability}:] \textbf{Usability}
-  \plt{Characterize the usability by giving the context/use for the software.
-    You should likely reference the user characteristics section.  The level of
-    usability achieved by the software shall be described following the
-    procedure given in Section~X of the Verification and Validation Plan.  A
-    link to the VnV plan would be a nice extra.}
+\item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_usability}:] \textbf{Usability}
+  An intended user (as described by \nameref{sec_userChars}) should find
+  \progname{} usable, as measured by the procedure in Section X of the
+  Verification and Validation (VnV) Plan.
 
-\item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_Maintainability}:]
-  \textbf{Maintainability} \plt{The effort required to make any of the likely
-    changes listed for \progname{} should be less than FRACTION of the original
-    development time.  FRACTION is then a symbolic constant that can be defined
-    at the end of the report.}
+\item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_maintainability}:]
+  \textbf{Maintainability} The traceability between requirements, assumptions,
+  theoretical models, general definitions, data definitions, instance models,
+  likely changes, and unlikely changes is completely recorded in
+  traceability matrices in the SRS.
+  
+%  \plt{The effort required to make any of the likely
+%    changes listed for \progname{} should be less than FRACTION of the original
+%    development time.  FRACTION is then a symbolic constant that can be defined
+%    at the end of the report.}
 
-\item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_Portability}:]
-  \textbf{Portability} \plt{This NFR is easier to write than the others.  The
-    systems that \progname{} should run on should be listed here.  When possible
-    the specific versions of the potential operating environments should be
-    given.  To make the NFR verifiable a statement could be made that the tests
-    from a given section of the VnV plan can be successfully run on all of the
-    possible operating environments.}
+\item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_portability}:]
+  \textbf{Portability} \progname{} should be able to run on systems with Python
+  3.x installed, including systems running on Windows or macOS. The tests from
+  the VnV Plan should be able to be run on these environments.
 
 \item Other NFRs that might be discussed include verifiability,
   understandability and reusability.

@@ -197,8 +197,10 @@ Jan. 29, 2023 & 0.5 & Fill in \nameref{sec_intro} based on Drasil examples\\
 Jan. 30, 2023 & 0.5.2 & Remove unnecessary template comments about SRS document
 							and the ones from \nameref{sec_specSysDesc} up to
 							\nameref{sec_instance}, except for \nameref{sec_datatypes}\\
-							& 0.5.2 & Remove unnecessary content from \nameref{sec_tabSymbs} and
+							& 0.5.3 & Remove unnecessary content from \nameref{sec_tabSymbs} and
 							add the notion of ``gram'' to the document\\
+							& 0.5.4 & Made \nfrref{NFR_accuracy} more accurate to current scope with
+							potential future information for stretch goals added in comment\\
 \bottomrule
 \end{tabularx}
 
@@ -245,6 +247,8 @@ The table that follows summarizes the symbols used in this document along with
 their units.  The choice of symbols was made to be consistent with the heat
 transfer literature and with existing documentation for solar water heating
 systems.  The symbols are listed in alphabetical order.
+
+\newpage
 
 \renewcommand{\arraystretch}{1.2}
 %\noindent \begin{tabularx}{1.0\textwidth}{l l X}
@@ -514,7 +518,8 @@ $$
 \ce{CH4} + \ce{O2} \rightarrow \ce{CO2} + \ce{H2O}
 $$
 
-As mentioned in \nameref{sec_probDesc}, chemical formulas must be balanced to be
+\sjc{Is this paragraph helpful/needed?} As mentioned in
+\nameref{sec_probDesc}, chemical formulas must be balanced to be
 useful in other reactions \cite{lund_introduction_2023}. This means that there
 must be the same number of each element before and after the reaction takes
 place to satisfy the Law of Conservation of Mass (\tref{T:ConsMass}). Since
@@ -526,7 +531,6 @@ balanced form:
 $$
 \ce{CH4} + \ce{2O2} \rightarrow \ce{CO2} + \ce{2H2O}
 $$
-\sjc{Is this previous paragraph helpful/needed?}\\
 
 The physical system of \progname{} includes:
 
@@ -624,6 +628,7 @@ likely change [LC], in which the respective assumption is used.
 This section focuses on the general equations and laws that \progname{} is based
 on.
 
+\newpage
 \noindent
 \deftheory
 % #2 refname of theory
@@ -1174,10 +1179,16 @@ qualities that the software is expected to exhibit.
 \noindent \begin{itemize}
 
 \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_accuracy}:]
-  \textbf{Accuracy:} Computed solutions should have a relative error no greater
-  than 0.1\%, since the most finely-calibrated chemistry equipment has a
-  relative error of 0.1-0.2\% \cite{walker_volumetric_2012,
-  godambe_measuring_nodate}. This means that computed integers should be exact.
+  \textbf{Accuracy:} Chemical equations are only useful if they are balanced
+  \cite{lund_introduction_2023}, so computed coefficients from \iref{balance}
+  should be exact.
+  
+%  All other computed solutions should have a relative error no greater
+%  than 0.1\%, since the most finely-calibrated chemistry equipment has a
+%  relative error of 0.1-0.2\% \cite{walker_volumetric_2012,
+%  godambe_measuring_nodate}. Additionally, any fractional value calculated
+%  should be reported to the appropriate number of significant figures
+%  \cite{lund_introduction_2023}. \sjc{Specify what that means}
   
 %  \plt{Characterize the accuracy by giving the context/use for
 %    the software.  Maybe something like, ``The accuracy of the computed

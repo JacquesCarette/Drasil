@@ -197,6 +197,8 @@ Jan. 29, 2023 & 0.5 & Fill in \nameref{sec_intro} based on Drasil examples\\
 Jan. 30, 2023 & 0.5.2 & Remove unnecessary template comments about SRS document
 							and the ones from \nameref{sec_specSysDesc} up to
 							\nameref{sec_instance}, except for \nameref{sec_datatypes}\\
+							& 0.5.2 & Remove unnecessary content from \nameref{sec_tabSymbs} and
+							add the notion of ``gram'' to the document\\
 \bottomrule
 \end{tabularx}
 
@@ -220,38 +222,24 @@ description of the unit and the SI name.
     \toprule		
     \textbf{symbol} & \textbf{unit} & \textbf{SI}\\
     \midrule 
+    \si{\gram} & mass	& gram\\
     \si{\mole} & amount of substance & mole\\
-    \midrule 
-    \si{\metre} & length & metre\\
-    \si{\kilogram} & mass	& kilogram\\
-    \si{\second} & time & second\\
-    \si{\celsius} & temperature & centigrade\\
-    \si{\joule} & energy & joule\\
-    \si{\watt} & power & watt (W = \si{\joule\per\second})\\
+%    \si{\celsius} & temperature & centigrade\\
+%    \si{\watt} & power & watt (W = \si{\joule\per\second})\\
     \bottomrule
   \end{tabular}
   %	\caption{Provide a caption}
 %\end{table}
 
-\plt{Only include the units that your SRS actually uses.}
-
-\plt{Derived units, like newtons, pascal, etc, should show their derivation
-    (the units they are derived from) if their constituent units are in the
-    table of units (that is, if the units they are derived from are used in the
-    document).  For instance, the derivation of pascals as
-    $\si{\pascal}=\si{\newton\per\square\meter}$ is shown if newtons and m are
-    both in the table.  The derivations of newtons would not be shown if kg and
-    s are not both in the table.}
-
-\plt{The symbol for units named after people use capital letters, but the name
-  of the unit itself uses lower case.  For instance, pascals use the symbol Pa,
-  watts use the symbol W, teslas use the symbol T, newtons use the symbol N,
-  etc.  The one exception to this is degree Celsius.  Details on writing metric
-  units can be found on the 
+\plt{Derived units should show their derivation (the units they are derived
+	from) if their constituent units are used in the document. The symbol for units
+	named after people use capital letters, but the name
+  of the unit itself uses lower case. The one exception to this is degree Celsius.
+  Details on writing metric units can be found on the 
   \href{https://www.nist.gov/pml/weights-and-measures/writing-metric-units}
   {NIST} web-page.}
 
-\subsection{Table of Symbols}
+\subsection{Table of Symbols} \label{sec_tabSymbs}
 
 The table that follows summarizes the symbols used in this document along with
 their units.  The choice of symbols was made to be consistent with the heat
@@ -1272,7 +1260,7 @@ qualities that the software is expected to exhibit.
 \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_termsOfMass}:] For ease of use,
 the user will be able to enter the amounts required by \lcref{LC_calcMoles}, 
 \lcref{LC_detLimReag}, \lcref{LC_calcYield}, and \lcref{LC_calcExcess} in terms
-of mass.\cref{chemProbExs}
+of mass (e.g., in grams).\cref{chemProbExs}
 
 %\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_allEqsPermitted}:] All chemical
 %	equations will be permitted as input and processed as appropriate

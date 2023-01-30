@@ -19,6 +19,7 @@
 \usepackage{caption}
 \usepackage{pdflscape}
 \usepackage{afterpage}
+\usepackage[version=4]{mhchem}
 
 %\usepackage[round]{natbib}
 
@@ -186,10 +187,12 @@ Jan. 29, 2023 & 0.4.4 & Add NFRs for understandability
 							(\nfrref{NFR_understandability}) and verifiability
 							(\nfrref{NFR_verifiability}) and improve quality of other NFRs\\
 							& 0.5 & Fill in \nameref{sec_intro} based on Drasil examples\\
+							& 0.5.1 & Fill in \nameref{sec_phySystDesc} and remove ``product'' and
+							``reactant'' from \nameref{sec_termsDefs}\\
 \bottomrule
 \end{tabularx}
 
-~\newpage
+%~\newpage
 
 \section{Reference Material}
 
@@ -548,12 +551,6 @@ which the numbers of atoms of the elements present cannot be expressed as a
 ratio of small whole numbers"
 \cite{the_editors_of_encyclopaedia_britannica_nonstoichiometric_2010}.
 
-\item \textbf{Product}: A substance created by a chemical reaction
-\cite{lund_introduction_2023}.
-
-\item \textbf{Reactant}: A substance present at the beginning of, and involved
-in, a chemical reaction \cite{lund_introduction_2023}.
-
 \item \textbf{Stoichiometry}: ``The calculation of the quantities of reactants
 or products in a chemical reaction using the relationships found in a balanced
 chemical equation'' \cite[p. 337]{lund_introduction_2023}.
@@ -565,32 +562,43 @@ chemical equation'' \cite[p. 337]{lund_introduction_2023}.
 \end{itemize}
 
 \subsubsection{Physical System Description} \label{sec_phySystDesc}
+  
+Chemical reactions are interactions between different types of matter that
+result in new substances being formed \cite[p. 286]{lund_introduction_2023}. 
+These are represented using chemical equations, with the reactant(s)---the
+substance(s) present at the beginning of the reaction---on the left-hand side
+and the product(s)---the substance(s) formed by the reaction---on the right. An
+example of a chemical equation representing the combustion of methane in the
+presence of oxygen to form carbon dioxide and water vapour is shown below. The
+subscripts indicate how many of each element is present in the given chemical
+compound.
+$$
+\ce{CH4} + \ce{O2} \rightarrow \ce{CO2} + \ce{H2O}
+$$
 
-\plt{The purpose of this section is to clearly and unambiguously state the
-  physical system that is to be modelled. Effective problem solving requires a
-  logical and organized approach. The statements on the physical system to be
-  studied should cover enough information to solve the problem. The physical
-  description involves element identification, where elements are defined as
-  independent and separable items of the physical system. Some example elements
-  include acceleration due to gravity, the mass of an object, and the size and
-  shape of an object. Each element should be identified and labelled, with their
-  interesting properties specified clearly. The physical description can also
-  include interactions of the elements, such as the following: i) the
-  interactions between the elements and their physical environment; ii) the
-  interactions between elements; and, iii) the initial or boundary conditions.}
+As mentioned in \nameref{sec_probDesc}, chemical formulas must be balanced to be
+useful in other reactions \cite{lund_introduction_2023}. This means that there
+must be the same number of each element before and after the reaction takes
+place to satisfy the Law of Conservation of Mass (\tref{T:ConsMass}). Since
+changing the subscripts in a formula will change the type of molecule (for
+example, \ce{O3} is ozone, not oxygen), equations are balanced by introducing
+coefficients before each compound. If no coefficient is present, there is an
+implicit coefficient of ``1''. The above equation looks like this in its
+balanced form:
+$$
+\ce{CH4} + \ce{2O2} \rightarrow \ce{CO2} + \ce{2H2O}
+$$
+\sjc{Is this previous paragraph helpful/needed?}\\
 
-The physical system of \progname{}, as shown in Figure~?,
-includes the following elements:
+The physical system of \progname{} includes:
 
 \begin{itemize}
 
-\item[PS1:] 
+\item[PS1:] the products of a given chemical reaction;
 
-\item[PS2:] ...
+\item[PS2:] the reactants of the same chemical reaction.
 
 \end{itemize}
-
-\plt{A figure here makes sense for most SRS documents}
 
 % \begin{figure}[h!]
 % \begin{center}
@@ -1042,7 +1050,7 @@ and \iref{balance}, respectively.
   Label& \bf Matrix representation of elements present in reaction\\
   \hline
   Input& Two sequences of representations of chemical formulas; one for the
-  reactants and one for the products (see \nameref{sec_termsDefs}).\\
+  reactants and one for the products.\\
   \hline
   Output& A matrix such that each entry
   indicates the amount of a given element in a given compound; each row
@@ -1092,8 +1100,8 @@ and \iref{balance}, respectively.
   Description&$\textbf{A}$ is a matrix representing the amount of each element
   in each compound in a reaction from \iref{convert}. \sjc{Is this necessary?}
   If a row of $\textbf{A}$ only has either a positive or negative entry, then
-  there is an element that is either a reactant or a product (see
-  \nameref{sec_termsDefs}) but not both, which breaks the Law of Conservation of
+  there is an element that is either a reactant or a product but not both,
+  which breaks the Law of Conservation of
   Mass (\tref{T:ConsMass}). \sjc{Is this a good place for this?}\\
 %  &$\textbf{R}$ is the $m \times n$ matrix $(\textbf{A} \vert \textbf{0})$
 %  as close to reduced row echelon form (see \nameref{sec_termsDefs}) as possible

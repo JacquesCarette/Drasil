@@ -13,6 +13,7 @@
 \usepackage{longtable}
 \usepackage{xfrac}
 \usepackage{tabularx}
+\usepackage{ltablex}
 \usepackage{float}
 \usepackage{siunitx}
 \usepackage{booktabs}
@@ -86,7 +87,6 @@
 
 \newcommand{\deftheory}[9][Not Applicable]
 {
-\newpage
 \noindent \rule{\textwidth}{0.5mm}
 \paragraph{Number: } T\refstepcounter{theorynum}\thetheorynum
 \phantomsection \label{#2}
@@ -186,9 +186,16 @@ Jan. 28, 2023 & 0.4.1 & Fill in main \nameref{sec_nonfuncReqs}, along with
 Jan. 29, 2023 & 0.4.4 & Add NFRs for understandability
 							(\nfrref{NFR_understandability}) and verifiability
 							(\nfrref{NFR_verifiability}) and improve quality of other NFRs\\
-							& 0.5 & Fill in \nameref{sec_intro} based on Drasil examples\\
+\bottomrule~\\
+~\\
+\toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
+\midrule
+Jan. 29, 2023 & 0.5 & Fill in \nameref{sec_intro} based on Drasil examples\\
 							& 0.5.1 & Fill in \nameref{sec_phySystDesc} and remove ``product'' and
 							``reactant'' from \nameref{sec_termsDefs}\\
+Jan. 30, 2023 & 0.5.2 & Remove unnecessary template comments about SRS document
+							and the ones from \nameref{sec_specSysDesc} up to
+							\nameref{sec_instance}, except for \nameref{sec_datatypes}\\
 \bottomrule
 \end{tabularx}
 
@@ -306,72 +313,13 @@ as $\left(\textbf{A}\vert \textbf{B}\right)$ \cite{taboga_augmented_2021}.
   the notation is to point to a text or other source that explains the
   notation.}
 
-\newpage
-
 \pagenumbering{arabic}
 
-\plt{This SRS template is based on \cite{SmithAndLai2005, SmithEtAl2007}.  It
-  will get you started.  You should not modify the section headings, without
-  first discussing the change with the course instructor.  Modification means
-  you are not following the template, which loses some of the advantage of a
-  template, especially standardization.  Although the bits shown below do not
-  include type information, you may need to add this information for your
-  problem.  If you are unsure, please can ask the instructor.}
-
-\plt{Feel free to change the appearance of the report by modifying the LaTeX
-  commands.}
-
-\plt{This template document assumes that a single program is being documented.
-  If you are documenting a family of models, you should start with a commonality
-  analysis.  A separate template is provided for this.  For program
-  families you should look at \cite{Smith2006, SmithMcCutchanAndCarette2017}.
-  Single family member programs are often programs based on a single physical
-  model.  General purpose tools are usually documented as a family.  Families of
-  physical models also come up.}
-
-\plt{The SRS is not generally written, or read, sequentially.  The SRS is a
-  reference document.  It is generally read in an ad hoc order, as the need
-  arises.  For writing an SRS, and for reading one for the first time, the
-  suggested order of sections is:
-\begin{itemize}
-\item Goal Statement
-\item Instance Models
-\item Requirements
-\item Introduction
-\item Specific System Description
-\end{itemize}
-}
-
-\plt{Guiding principles for the SRS document:
-\begin{itemize}
-\item Do not repeat the same information at the same abstraction level.  If
-  information is repeated, the repetition should be at a different abstraction
-  level.  For instance, there will be overlap between the scope section and the
-  assumptions, but the scope section will not go into as much detail as the
-  assumptions section.
-\end{itemize}
-}
-
-\plt{The template description comments should be disabled before submitting this
-  document for grading.}
-
-\plt{You can borrow any wording from the text given in the template.  It is part
-  of the template, and not considered an instance of academic integrity.  Of
-  course, you need to cite the source of the template.}
-
-\plt{When the documentation is done, it should be possible to trace back to the
-  source of every piece of information.  Some information will come from
-  external sources, like terminology.  Other information will be derived, like
-  General Definitions.}
-
-\plt{An SRS document should have the following qualities: unambiguous,
-  consistent, complete, validatable, abstract and traceable.}
-
-\plt{The overall goal of the SRS is that someone that meets the Characteristics
-  of the Intended Reader (Section~\ref{sec_IntendedReader}) can learn,
-  understand and verify the captured domain knowledge.  They should not have to
-  trust the authors of the SRS on any statements.  They should be able to
-  independently verify/derive every statement made.}
+%\plt{An SRS document should have the following qualities: unambiguous,
+%  consistent, complete, validatable, abstract and traceable. Intended readers
+%	 (Section~\ref{sec_IntendedReader}) should be able to learn,
+%  understand and verify the captured domain knowledge, as well as 
+%  independently verify/derive every statement made.}
 
 \section{Introduction} \label{sec_intro}
 Chemical equations are common ways of representing chemical reactions (as
@@ -514,13 +462,12 @@ chemistry, namely stoichiometry (see \nameref{sec_termsDefs}).
   abstraction is relaxed here.  However, system constraints should only be
   included if they are truly required.}
 
-\section{Specific System Description}
+\section{Specific System Description} \label{sec_specSysDesc}
 
 This section first presents the problem description, which gives a high-level
 view of the problem to be solved.  This is followed by the solution characteristics
 specification, which presents the assumptions, theories, definitions and finally
-the instance models.  \plt{Add any project specific details that are relevant
-  for the section overview.}
+the instance models.
 
 \subsection{Problem Description} \label{sec_probDesc}
 
@@ -627,51 +574,19 @@ possible.
 
 \subsection{Solution Characteristics Specification}
 
-\plt{This section specifies the information in the solution domain of the system
-  to be developed. This section is intended to express what is required in
-  such a way that analysts and stakeholders get a clear picture, and the
-  latter will accept it. The purpose of this section is to reduce the problem
-  into one expressed in mathematical terms. Mathematical expertise is used to
-  extract the essentials from the underlying physical description of the
-  problem, and to collect and substantiate all physical data pertinent to the
-  problem.}
-
-\plt{This section presents the solution characteristics by successively refining
-  models.  It starts with the abstract/general Theoretical Models (TMs) and
-  refines them to the concrete/specific Instance Models (IMs).  If necessary
-  there are intermediate refinements to General Definitions (GDs).  All of these
-  refinements can potentially use Assumptions (A) and Data Definitions (DD).
-  TMs are refined to create new models, that are called GMs or IMs. DDs are not
-  refined; they are just used. GDs and IMs are derived, or refined, from other
-  models. DDs are not derived; they are just given. TMs are also just given, but
-  they are refined, not used.  If a potential DD includes a derivation, then
-  that means it is refining other models, which would make it a GD or an IM.}
-
-\plt{The above makes a distinction between ``refined'' and ``used.'' A model is
-  refined to another model if it is changed by the refinement. When we change a
-  general 3D equation to a 2D equation, we are making a refinement, by applying
-  the assumption that the third dimension does not matter. If we use a
-  definition, like the definition of density, we aren't refining, or changing
-  that definition, we are just using it.}
-
-\plt{The same information can be a TM in one problem and a DD in another.  It is
-  about how the information is used.  In one problem the definition of
-  acceleration can be a TM, in another it would be a DD.}
-
-\plt{There is repetition between the information given in the different chunks
-  (TM, GDs etc) with other information in the document.  For instance, the
-  meaning of the symbols, the units etc are repeated.  This is so that the
-  chunks can stand on their own when being read by a reviewer/user.  It also
-  facilitates reuse of the models in a different context.}
-
-\noindent \plt{The relationships between the parts of the document are show in
-  the following figure.  In this diagram ``may ref'' has the same role as
-  ``uses'' above.  The figure adds ``Likely Changes,'' which are able to
-  reference (use) Assumptions.}
-
-\begin{figure}[H]
-  \includegraphics[scale=0.9]{RelationsBetweenTM_GD_IM_DD_A.pdf}
-\end{figure}
+%\plt{DDs are not refined; they are just used. DDs are not derived; they are
+%	just given. If a potential DD includes a derivation, then that means it is
+%	refining other models, which would make it a GD or an IM. TMs are also just
+%	given, but they are refined, not used.}
+%
+%\noindent \plt{The relationships between the parts of the document are show in
+%  the following figure.  In this diagram ``may ref'' has the same role as
+%  ``uses'' above.  The figure adds ``Likely Changes,'' which are able to
+%  reference (use) Assumptions.}
+%
+%\begin{figure}[H]
+%  \includegraphics[scale=0.9]{RelationsBetweenTM_GD_IM_DD_A.pdf}
+%\end{figure}
 
 The instance models that govern \progname{} are presented in
 Subsection~\ref{sec_instance}.  The information to understand the meaning of the
@@ -679,14 +594,6 @@ instance models and their derivation is also presented, so that the instance
 models can be verified.
 
 \subsubsection{Assumptions} \label{sec_assumpt}
-
-\plt{The assumptions are a refinement of the scope.  The scope is general, where
-  the assumptions are specific.  All assumptions should be listed, even those
-  that domain experts know so well that they are rarely (if ever) written down.}
-\plt{The document should not take for granted that the reader knows which
-  assumptions have been made. In the case of unusual assumptions, it is
-  recommended that the documentation either include, or point to, an explanation
-  and justification for the assumption.}
 
 This section simplifies the original problem and helps in developing the
 theoretical model by filling in the missing information for the physical
@@ -718,15 +625,13 @@ likely change [LC], in which the respective assumption is used.
 
 \subsubsection{Theoretical Models}\label{sec_theoretical}
 
-\plt{Theoretical models are sets of abstract mathematical equations or axioms
-  for solving the problem described in \nameref{sec_phySystDesc}. Examples of
-  theoretical models are
-  physical laws, constitutive equations, relevant conversion factors, etc.}
+%\plt{Theoretical models are sets of abstract mathematical equations or axioms
+%  for solving the problem described in \nameref{sec_phySystDesc}. Examples of
+%  theoretical models are
+%  physical laws, constitutive equations, relevant conversion factors, etc.}
 
 This section focuses on the general equations and laws that \progname{} is based
 on.
-
-%~\newline
 
 \noindent
 \deftheory
@@ -762,6 +667,7 @@ on.
 % #9 derivation - not applicable by default
 {Not Applicable}
 
+\newpage
 \noindent
 \deftheory
 % #2 refname of theory
@@ -828,121 +734,110 @@ on.
 
 \subsubsection{General Definitions}\label{sec_gendef}
 
-\plt{General Definitions (GDs) are a refinement of one or more TMs, and/or of
-  other GDs.  The GDs are less abstract than the TMs.  Generally the reduction
-  in abstraction is possible through invoking (using/referencing) Assumptions.
-  For instance, the TM could be Newton's Law of Cooling stated abstracting.  The
-  GD could take the general law and apply it to get a 1D equation.}
+%\plt{Generally the reduction
+%  in abstraction is possible through invoking (using/referencing) Assumptions.
+%  For instance, the TM could be Newton's Law of Cooling stated abstracting.  The
+%  GD could take the general law and apply it to get a 1D equation.}
 
-This section collects the laws and equations that will be used in building the
-instance models.
+%This section collects the laws and equations that will be used in building the
+%instance models.
 
-\plt{Some projects may not have any content for this section, but the section
-  heading should be kept.}  \plt{Modify the examples below for your problem, and
-  add additional definitions as appropriate.}
+There are no general definitions.
 
-~\newline
-
-\noindent
-\begin{minipage}{\textwidth}
-\renewcommand*{\arraystretch}{1.5}
-\begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
-\hline
-\rowcolor[gray]{0.9}
-Number& GD\refstepcounter{defnum}\thedefnum \label{NL}\\
-\hline
-Label &\bf Newton's law of cooling \\
-\hline
-% Units&$MLt^{-3}T^0$\\
-% \hline
-SI Units&\si{\watt\per\square\metre}\\
-\hline
-Equation&$ q(t) = h \Delta T(t)$  \\
-\hline
-Description &
-Newton's law of cooling describes convective cooling from a surface.  The law is
-stated as: the rate of heat loss from a body is proportional to the difference
-in temperatures between the body and its surroundings.
-\\
-& $q(t)$ is the thermal flux (\si{\watt\per\square\metre}).\\
-& $h$ is the heat transfer coefficient, assumed independent of $T$ (\aref{A_hcoeff})
-	(\si{\watt\per\square\metre\per\celsius}).\\
-&$\Delta T(t)$= $T(t) - T_{\text{env}}(t)$ is the time-dependent thermal gradient
-between the environment and the object (\si{\celsius}).
-\\
-\hline
-  Source & Citation here \\
-  \hline
-  Ref.\ By & \ddref{FluxCoil}, \ddref{FluxPCM}\\
-  \hline
-\end{tabular}
-\end{minipage}\\
-
-\subsubsection*{Detailed derivation of simplified rate of change of temperature}
-
-\plt{This may be necessary when the necessary information does not fit in the
-  description field.}
-\plt{Derivations are important for justifying a given GD.  You want it to be
-  clear where the equation came from.}
+%\noindent
+%\begin{minipage}{\textwidth}
+%\renewcommand*{\arraystretch}{1.5}
+%\begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
+%\hline
+%\rowcolor[gray]{0.9}
+%Number& GD\refstepcounter{defnum}\thedefnum \label{NL}\\
+%\hline
+%Label &\bf Newton's law of cooling \\
+%\hline
+%% Units&$MLt^{-3}T^0$\\
+%% \hline
+%SI Units&\si{\watt\per\square\metre}\\
+%\hline
+%Equation&$ q(t) = h \Delta T(t)$  \\
+%\hline
+%Description &
+%Newton's law of cooling describes convective cooling from a surface.  The law is
+%stated as: the rate of heat loss from a body is proportional to the difference
+%in temperatures between the body and its surroundings.
+%\\
+%& $q(t)$ is the thermal flux (\si{\watt\per\square\metre}).\\
+%& $h$ is the heat transfer coefficient, assumed independent of $T$ (\aref{A_hcoeff})
+%	(\si{\watt\per\square\metre\per\celsius}).\\
+%&$\Delta T(t)$= $T(t) - T_{\text{env}}(t)$ is the time-dependent thermal gradient
+%between the environment and the object (\si{\celsius}).
+%\\
+%\hline
+%  Source & Citation here \\
+%  \hline
+%  Ref.\ By & \ddref{FluxCoil}, \ddref{FluxPCM}\\
+%  \hline
+%\end{tabular}
+%\end{minipage}\\
+%
+%\subsubsection*{Detailed derivation of simplified rate of change of temperature}
+%
+%\plt{This may be necessary when the necessary information does not fit in the
+%  description field.}
+%\plt{Derivations are important for justifying a given GD.  You want it to be
+%  clear where the equation came from.}
 
 \subsubsection{Data Definitions}\label{sec_datadef}
 
-\plt{The Data Definitions are definitions of symbols and equations that are
-  given for the problem.  They are not derived; they are simply used by other
-  models.  For instance, if a problem depends on density, there may be a data
-  definition for the equation defining density.  The DDs are given information
-  that you can use in your other modules.}
+%\plt{The Data Definitions are definitions of symbols and equations that are
+%  given for the problem.  They are not derived; they are simply used by other
+%  models.}
+%
+%This section collects and defines all the data needed to build the instance
+%models. The dimension of each quantity is also given.
 
-\plt{All Data Definitions should be used (referenced) by at least one other
-  model.}
+There are no data definitions.
 
-This section collects and defines all the data needed to build the instance
-models. The dimension of each quantity is also given.  \plt{Modify the examples
-  below for your problem, and add additional definitions as appropriate.}
-
-~\newline
-
-\noindent
-\begin{minipage}{\textwidth}
-\renewcommand*{\arraystretch}{1.5}
-\begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
-\hline
-\rowcolor[gray]{0.9}
-Number& DD\refstepcounter{datadefnum}\thedatadefnum \label{FluxCoil}\\
-\hline
-Label& \bf Heat flux out of coil\\
-\hline
-Symbol &$q_C$\\
-\hline
-% Units& $Mt^{-3}$\\
-% \hline
-  SI Units & \si{\watt\per\square\metre}\\
-  \hline
-  Equation&$q_C(t) = h_C (T_C - T_W(t))$, over area $A_C$\\
-  \hline
-  Description & 
-                $T_C$ is the temperature of the coil (\si{\celsius}).  $T_W$ is the temperature of the water (\si{\celsius}).  
-                The heat flux out of the coil, $q_C$ (\si{\watt\per\square\metre}), is found by
-                assuming that Newton's Law 
-                of Cooling applies (\aref{A_Newt_coil}).  This law (\dref{NL}) is used on the surface of
-                the coil, which has area $A_C$ (\si{\square\metre}) and heat 
-                transfer coefficient $h_C$
-                (\si{\watt\per\square\metre\per\celsius}).  This equation
-                assumes that the temperature of the coil is constant over time (\aref{A_tcoil}) and that it does not vary along the length
-                of the coil (\aref{A_tlcoil}).
-  \\
-  \hline
-  Sources& Citation here \\
-  \hline
-  Ref.\ By & \iref{ewat}\\
-  \hline
-\end{tabular}
-\end{minipage}\\
+%\noindent
+%\begin{minipage}{\textwidth}
+%\renewcommand*{\arraystretch}{1.5}
+%\begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
+%\hline
+%\rowcolor[gray]{0.9}
+%Number& DD\refstepcounter{datadefnum}\thedatadefnum \label{FluxCoil}\\
+%\hline
+%Label& \bf Heat flux out of coil\\
+%\hline
+%Symbol &$q_C$\\
+%\hline
+%% Units& $Mt^{-3}$\\
+%% \hline
+%  SI Units & \si{\watt\per\square\metre}\\
+%  \hline
+%  Equation&$q_C(t) = h_C (T_C - T_W(t))$, over area $A_C$\\
+%  \hline
+%  Description & 
+%                $T_C$ is the temperature of the coil (\si{\celsius}).  $T_W$ is the temperature of the water (\si{\celsius}).  
+%                The heat flux out of the coil, $q_C$ (\si{\watt\per\square\metre}), is found by
+%                assuming that Newton's Law 
+%                of Cooling applies (\aref{A_Newt_coil}).  This law (\dref{NL}) is used on the surface of
+%                the coil, which has area $A_C$ (\si{\square\metre}) and heat 
+%                transfer coefficient $h_C$
+%                (\si{\watt\per\square\metre\per\celsius}).  This equation
+%                assumes that the temperature of the coil is constant over time (\aref{A_tcoil}) and that it does not vary along the length
+%                of the coil (\aref{A_tlcoil}).
+%  \\
+%  \hline
+%  Sources& Citation here \\
+%  \hline
+%  Ref.\ By & \iref{ewat}\\
+%  \hline
+%\end{tabular}
+%\end{minipage}\\
 
 \subsubsection{Data Types}\label{sec_datatypes}
 
 \plt{This section is optional.  In many scientific computing programs it isn't
-  necessary, since the inputs and outpus are straightforward types, like reals,
+  necessary, since the inputs and outputs are straightforward types, like reals,
   integers, and sequences of reals and integers.  However, for some problems it
   is very helpful to capture the type information.}
 
@@ -979,12 +874,6 @@ models. \plt{Modify the examples below for your problem, and add additional
 \end{minipage}\\
 
 \subsubsection{Instance Models} \label{sec_instance}    
-
-\plt{The motivation for this section is to reduce the problem defined in
-	\nameref{sec_phySystDesc} to one
-  expressed in mathematical terms. The IMs are built by refining the TMs and/or
-  GDs.  This section should remain abstract.  The SRS should specify the
-  requirements without considering the implementation.}
 
 This section transforms the problem defined in \nameref{sec_probDesc} into 
 one which is expressed in mathematical terms. It uses concrete symbols defined 
@@ -1074,11 +963,11 @@ and \iref{balance}, respectively.
 
 %~\newline
 
-\subsubsection*{Derivation of ...}
-
-\plt{The derivation shows how the IM is derived from the TMs/GDs.  In cases
-  where the derivation cannot be described under the Description field, it will
-  be necessary to include this subsection.}
+%\subsubsection*{Derivation of ...}
+%
+%\plt{The derivation shows how the IM is derived from the TMs/GDs.  In cases
+%  where the derivation cannot be described under the Description field, it will
+%  be necessary to include this subsection.}
   
 \noindent
 \begin{minipage}{\textwidth}
@@ -1122,19 +1011,19 @@ and \iref{balance}, respectively.
 \end{tabular}
 \end{minipage}\\
 
-%~\newline
-
-\subsubsection*{Derivation of ...}
-
-\plt{The derivation shows how the IM is derived from the TMs/GDs.  In cases
-  where the derivation cannot be described under the Description field, it will
-  be necessary to include this subsection.}
+~\newline
+%
+%\subsubsection*{Derivation of ...}
+%
+%\plt{The derivation shows how the IM is derived from the TMs/GDs.  In cases
+%  where the derivation cannot be described under the Description field, it will
+%  be necessary to include this subsection.}
   
 \noindent
 \begin{minipage}{\textwidth}
 \renewcommand*{\arraystretch}{1.5}
 \begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
-  \hline
+	\hline
   \rowcolor[gray]{0.9}
   Number& IM\refstepcounter{instnum}\theinstnum \label{balance}\\
   \hline
@@ -1168,11 +1057,13 @@ and \iref{balance}, respectively.
 
 %~\newline
 
-\subsubsection*{Derivation of ...}
+%\subsubsection*{Derivation of ...}
+%
+%\plt{The derivation shows how the IM is derived from the TMs/GDs.  In cases
+%  where the derivation cannot be described under the Description field, it will
+%  be necessary to include this subsection.}
 
-\plt{The derivation shows how the IM is derived from the TMs/GDs.  In cases
-  where the derivation cannot be described under the Description field, it will
-  be necessary to include this subsection.}
+\newpage
 
 \subsubsection{Input Data Constraints} \label{sec_DataConstraints}    
 

@@ -21,6 +21,8 @@
 \usepackage{pdflscape}
 \usepackage{afterpage}
 \usepackage[version=4]{mhchem}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
 
 %\usepackage[round]{natbib}
 
@@ -199,8 +201,10 @@ Jan. 30, 2023 & 0.5.2 & Remove unnecessary template comments about SRS document
 							\nameref{sec_instance}, except for \nameref{sec_datatypes}\\
 							& 0.5.3 & Remove unnecessary content from \nameref{sec_tabSymbs} and
 							add the notion of ``gram'' to the document\\
-							& 0.5.4 & Made \nfrref{NFR_accuracy} more accurate to current scope with
+							& 0.5.4 & Make \nfrref{NFR_accuracy} more accurate to current scope with
 							potential future information for stretch goals added in comment\\
+							& 0.6 & Make System Context diagram (Figure \ref{fig_sysCon}) and start
+							to fill in \nameref{sec_sysCon}\\
 \bottomrule
 \end{tabularx}
 
@@ -394,31 +398,43 @@ characteristics and lists the system constraints.  \plt{This text can likely be
   context for a family of related models.  The general description can stay the
   same, while specific details are changed between family members.}
 
-\subsection{System Context}
+\subsection{System Context} \label{sec_sysCon}
 
-\plt{Your system context will include a figure that shows the abstract view of
-  the software.  Often in a scientific context, the program can be viewed
-  abstractly following the design pattern of Inputs $\rightarrow$ Calculations
-  $\rightarrow$ Outputs.  The system context will therefore often follow this
-  pattern.  The user provides inputs, the system does the calculations, and then
-  provides the outputs to the user.  The figure should not show all of the
-  inputs, just an abstract view of the main categories of inputs (like material
-  properties, geometry, etc.).  Likewise, the outputs should be presented from
-  an abstract point of view.  In some cases the diagram will show other external
-  entities, besides the user.  For instance, when the software product is a
-  library, the user will be another software program, not an actual end user.
-  If there are system constraints that the software must work with external
-  libraries, these libraries can also be shown on the System Context diagram.
-  They should only be named with a specific library name if this is required by
+\plt{There should only be named with a specific library name if this is required by
   the system constraint.}
 
 \begin{figure}[h!]
 \begin{center}
- \includegraphics[width=0.6\textwidth]{SystemContextFigure}
+\begin{tikzpicture}[
+roundnode/.style={circle, draw=black, very thick, minimum size=20mm},
+squarednode/.style={rectangle, draw=black, very thick, minimum size=20mm},
+]
+%Nodes
+\node[roundnode]        (user_input)                              {User};
+\node[squarednode, xshift = 3cm]      (\progname{})       [right=of user_input] {\progname{}};
+\node[roundnode, xshift = 3cm]        (user_output)       [right=of \progname{}] {User};
+\node[roundnode, align=center, yshift = 1.5cm] (ext_lib) [above=of \progname{}] {External\\Library};
+\node[roundnode, draw=none, align=center, yshift = 1.538cm] (upArrow) [above=of \progname{}] {};\node[roundnode, draw=none, align=center, yshift = 1.55cm] (downArrow) [above=of \progname{}] {};
+
+%Lines
+\draw[->, very thick] (user_input.east) -- (\progname{}.west) node[above, pos=0.5, align=center] {An unbalanced\\chemical equation};
+\begin{scope}[transform canvas={xshift=-.7em}]
+\draw[->, very thick] (\progname{}.north) -- (upArrow.south) node[left, pos=0.5, align=right] {The chemical\\equation as\\ a matrix};
+\end{scope}
+\begin{scope}[transform canvas={xshift=.7em}]
+\draw[->, very thick] (downArrow.south) -- (\progname{}.north) node[right, pos=0.5, align=left] {The matrix\\ after processing\\};
+\end{scope}
+\draw[->, very thick] (\progname{}.east) -- (user_output.west) node[above, pos=0.5, align=center] {A balanced\\form of the\\chemical equation};
+\end{tikzpicture}
 \caption{System Context}
-\label{Fig_SystemContext} 
+\label{fig_sysCon} 
 \end{center}
 \end{figure}
+
+Figure \ref{fig_sysCon} shows the system context. A circle represents an
+external entity outside the software. A rectangle represents the software system
+itself (\progname{}). Arrows are used to show the data flow between the system
+and its environment.
 
 \plt{For each of the entities in the system context diagram its responsibilities
   should be listed.  Whenever possible the system should check for data quality,

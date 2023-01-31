@@ -205,6 +205,7 @@ Jan. 30, 2023 & 0.5.2 & Remove unnecessary template comments about SRS document
 							potential future information for stretch goals added in comment\\
 							& 0.6 & Make System Context diagram (Figure \ref{fig_sysCon}) and start
 							to fill in \nameref{sec_sysCon}\\
+Jan. 31, 2023 & 0.6.1 & Fill in rest of \nameref{sec_genSysDesc}\\
 \bottomrule
 \end{tabularx}
 
@@ -251,8 +252,6 @@ The table that follows summarizes the symbols used in this document along with
 their units.  The choice of symbols was made to be consistent with the heat
 transfer literature and with existing documentation for solar water heating
 systems.  The symbols are listed in alphabetical order.
-
-\newpage
 
 \renewcommand{\arraystretch}{1.2}
 %\noindent \begin{tabularx}{1.0\textwidth}{l l X}
@@ -383,26 +382,13 @@ information they require.
 The \nameref{sec_goals} are refined to the \nameref{sec_theoretical}, which are
 refined to the \nameref{sec_instance}.
 
-\section{General System Description}
+\section{General System Description} \label{sec_genSysDesc}
 
 This section provides general information about the system.  It identifies the
 interfaces between the system and its environment, describes the user
-characteristics and lists the system constraints.  \plt{This text can likely be
-  borrowed verbatim.}
-
-\plt{The purpose of this section is to provide general information about the
-  system so the specific requirements in the next section will be easier to
-  understand. The general system description section is designed to be
-  changeable independent of changes to the functional requirements documented in
-  the specific system description. The general system description provides a
-  context for a family of related models.  The general description can stay the
-  same, while specific details are changed between family members.}
+characteristics and lists the system constraints.
 
 \subsection{System Context} \label{sec_sysCon}
-
-\plt{There should only be named with a specific library name if this is required by
-  the system constraint.}
-
 \begin{figure}[h!]
 \begin{center}
 \begin{tikzpicture}[
@@ -436,26 +422,27 @@ external entity outside the software. A rectangle represents the software system
 itself (\progname{}). Arrows are used to show the data flow between the system
 and its environment.
 
-\plt{For each of the entities in the system context diagram its responsibilities
-  should be listed.  Whenever possible the system should check for data quality,
-  but for some cases the user will need to assume that responsibility.  The list
-  of responsibilites should be about the inputs and outputs only, and they
-  should be abstract.  Details should not be presented here.  However, the
-  information should not be so abstract as to just say ``inputs'' and
-  ``outputs''.  A summarizing phrase can be used to characterize the inputs.
-  For instance, saying ``material properties'' provides some information, but it
-  stays away from the detail of listing every required properties.}
-
 \begin{itemize}
 \item User Responsibilities:
 \begin{itemize}
-\item 
+\item Provide an unbalanced chemical equation, ensuring conformation to input
+	data format required by \progname{}
+\item Ensure required software assumptions from Subsection~\ref{sec_assumps}
+	are appropriate for the problem to which the user is applying the software
 \end{itemize}
 \item \progname{} Responsibilities:
 \begin{itemize}
 \item Detect data type mismatch, such as a string of characters instead of a
-  floating point number
-\item 
+	rational number
+\item Detect improperly formatted chemical equations
+\item Format inputted chemical equation as a matrix
+\item Determine if the inputted chemical equation is feasible
+\item If the inputted chemical equation is feasible, find its balanced form with
+	the smallest whole number coefficients
+\end{itemize}
+\item External Library Responsibilities:
+\begin{itemize}
+\item Process the chemical equation matrix \sjc{Can this be more descriptive?}
 \end{itemize}
 \end{itemize}
 
@@ -466,12 +453,26 @@ chemistry, namely stoichiometry (see \nameref{sec_termsDefs}).
 
 \subsection{System Constraints}
 
-\plt{System constraints differ from other type of requirements because they
-  limit the developers' options in the system design and they identify how the
-  eventual system must fit into the world. This is the only place in the SRS
-  where design decisions can be specified.  That is, the quality requirement for
-  abstraction is relaxed here.  However, system constraints should only be
-  included if they are truly required.}
+%\plt{System constraints differ from other type of requirements because they
+%  limit the developers' options in the system design and they identify how the
+%  eventual system must fit into the world. This is the only place in the SRS
+%  where design decisions can be specified.  That is, the quality requirement for
+%  abstraction is relaxed here.  However, system constraints should only be
+%  included if they are truly required.}
+  
+\progname~will be developed using Drasil \cite{carette_drasil_2021}, ``a
+framework for generating high-quality documentation and code for Scientific
+Computing Software'' \cite[p. iii]{maclachlan_design_2020}, with the goal of
+extending it by adding concepts relevant to the problem outlined in
+\nameref{sec_probDesc}. One of the desired additions to Drasil is the notion of
+systems of linear equations, so this problem will be solved using matrices.
+Since Drasil is built on the idea of reusability, external libraries will be
+used to solve these systems of linear equations. This was previously done with
+ordinary differential equation (ODE) solvers, since ``creating a complete ODE
+solver in Drasil would take considerable time, and there are already many
+reliable external libraries \dots tested by long use''
+\cite[p. 24]{chen_solving_2022}; these rationales also apply to solvers of
+systems of linear equations.
 
 \section{Specific System Description} \label{sec_specSysDesc}
 
@@ -604,7 +605,7 @@ Subsection~\ref{sec_instance}.  The information to understand the meaning of the
 instance models and their derivation is also presented, so that the instance
 models can be verified.
 
-\subsubsection{Assumptions} \label{sec_assumpt}
+\subsubsection{Assumptions} \label{sec_assumps}
 
 This section simplifies the original problem and helps in developing the
 theoretical model by filling in the missing information for the physical

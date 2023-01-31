@@ -188,7 +188,7 @@ inputs :: [QuantityDict]
 inputs = map qw [launSpeed, launAngle, targPos]
 
 outputs :: [QuantityDict]
-outputs = [message, qw offset]
+outputs = [message, qw offset, qw flightDur]
 
 unitalQuants :: [QuantityDict]
 unitalQuants = message : map qw constrained
@@ -208,4 +208,3 @@ constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
 acronyms :: [CI]
 acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
   physSyst, requirement, Doc.srs, thModel, typUnc]
-

@@ -10,14 +10,17 @@ public class OutputFormat {
     /** \brief Writes the output values to output.txt
         \param s output message as a string
         \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
+        \param t_flight flight duration: the time when the projectile lands (s)
     */
-    public static void write_output(string s, float d_offset) {
+    public static void write_output(string s, float d_offset, float t_flight) {
         StreamWriter outputfile;
         outputfile = new StreamWriter("output.txt", false);
         outputfile.Write("s = ");
         outputfile.WriteLine(s);
         outputfile.Write("d_offset = ");
         outputfile.WriteLine(d_offset);
+        outputfile.Write("t_flight = ");
+        outputfile.WriteLine(t_flight);
         outputfile.Close();
     }
 }

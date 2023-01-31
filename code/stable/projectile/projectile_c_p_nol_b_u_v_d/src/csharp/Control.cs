@@ -16,6 +16,6 @@ public class Control {
         double p_land = Calculations.func_p_land(inParams, g_vect);
         double d_offset = Calculations.func_d_offset(inParams, p_land);
         string s = Calculations.func_s(inParams, epsilon, d_offset);
-        OutputFormat.write_output(s, d_offset);
+        OutputFormat.write_output(s, d_offset, t_flight);
     }
 }

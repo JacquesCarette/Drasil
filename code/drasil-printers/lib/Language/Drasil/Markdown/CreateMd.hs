@@ -19,12 +19,8 @@ makeMd = vcat . punctuate secSep . filtEmp
 
 -- | Example title, authors, and maybe purpose section.
 introInfo :: String -> [String] -> Maybe String -> Maybe String -> Doc
-introInfo name auths descr motiv = introSec (text name) (prepName name)
-  (listToDoc auths) (length auths) (maybeSub "Purpose" descr) (maybeSub "Motivation" motiv)
-
--- | Helper for prepending the example name.
-prepName :: String -> Doc
-prepName name = text "> The program documented here is called" <+> text name <> text "."
+introInfo name auths descr motiv = introSec (text name) (listToDoc auths) (length auths) 
+    (maybeSub "Purpose" descr) (maybeSub "Motivation" motiv)
 
 -- | Instruction section, contains 3 paragraphs, Running, Building and Config Files.
 -- The Config file section is only displayed if there are configuration files.
@@ -127,12 +123,9 @@ bkQuote = text "`"
 -- | Triple backquote separator.
 bkQuote3 = text "```"
 
-
--- FIXME as explained in #2224 we still need to add in the purpose section, 
--- this could be done by adding a third parameter to introSec
 -- | Constructs introduction section from header and message.
-introSec ::  Doc -> Doc -> Doc -> Int -> Doc -> Doc -> Doc
-introSec hd name ms1 l descr motiv = text "#" <+> hd <+> contSep <> name <> doubleSep <> 
+introSec ::  Doc -> Doc -> Int -> Doc -> Doc -> Doc
+introSec hd ms1 l descr motiv = text "#" <+> hd <+> contSep <> 
   (if l == 1 then text "> Author:" else text "> Authors: ") <+> ms1 <> descr <> motiv
 
 -- | Constructs regular section section from header and message.

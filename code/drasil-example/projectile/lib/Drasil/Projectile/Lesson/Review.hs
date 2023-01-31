@@ -25,8 +25,7 @@ reviewEqns
 
 reviewContextP2
   = foldlSP 
-      [S "Only two of these equations are independent,",
-         S "since the third equation can always be derived from the other two.",
-       S "[", refS E.lcrectNoTime +:+ S "is not in the", atStart projectile, S"SRS]"]
+      [S "Only two of these equations are independent," +:+
+       S "since the third equation can always be derived from the other two"]
 
 

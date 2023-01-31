@@ -8,8 +8,8 @@ import SysInfo.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 
 -- TODO: Add export parameters in a module
-import Drasil.DocLang (mkNb, NBDecl, NbSection(BibSec, LearnObj, BodySec), 
-  LearnObj(..), BodySec(..), BodySub(..))
+import Drasil.DocLang (mkNb, LsnDecl, LsnChapter(BibSec, LearnObj, Review, CaseProb, Example), 
+  LearnObj(..), Review(..), CaseProb(..), Example(..))
 
 import Data.Drasil.Concepts.Documentation (doccon, doccon')
 import Data.Drasil.Concepts.Math (mathcon)
@@ -24,9 +24,7 @@ import Drasil.Projectile.Expressions (eqnRefs)
 
 import Drasil.Projectile.Lesson.LearnObj (learnObjContext)
 import Drasil.Projectile.Lesson.Review (reviewContent)
-import Drasil.Projectile.Lesson.Motion (motionContextP1, figCSandA, figRefs,
-  motionContextP2, horMotion, verMotion, summary)
-import Drasil.Projectile.Lesson.Analysis (procforAnlsCont, coorSyst, kinematicEq, horMotionAna, verMotionAna)
+import Drasil.Projectile.Lesson.CaseProb (caseProbCont, figRefs)
 
 nb :: Document
 nb = mkNb mkNB (S.forGen titleize phrase) si
@@ -34,14 +32,12 @@ nb = mkNb mkNB (S.forGen titleize phrase) si
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
 
-mkNB :: NBDecl
+mkNB :: LsnDecl
 mkNB = [
   LearnObj $ LrnObjProg [learnObjContext],
-  BodySec $
-       BodyProg
-         [Review reviewContent,
-          MainIdea [motionContextP1, LlC figCSandA, motionContextP2] [horMotion, verMotion, summary],
-          MethsAndAnls procforAnlsCont [coorSyst, kinematicEq, horMotionAna, verMotionAna]],
+  Review $ ReviewProg reviewContent,
+  CaseProb $ CaseProbProg caseProbCont,
+  Example $ ExampleProg [],
   BibSec
   ]
 

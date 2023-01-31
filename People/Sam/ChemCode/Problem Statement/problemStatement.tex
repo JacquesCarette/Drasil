@@ -28,14 +28,16 @@
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
 Jan. 18, 2023 & Sam & Create document and fill in Problem, Stakeholders, and
-Goals sections\\
+								Goals sections\\
 Jan. 19, 2023 & Sam & Format for Drasil upload; fill in Inputs and Outputs,
-Environment, and Stretch Goals sections; update Stakeholders and Goals
-sections; and move Environment section\\
+								Environment, and Stretch Goals sections; update Stakeholders and Goals
+								sections; and move Environment section\\
 Jan. 20, 2023 & Sam & Update Goals and Stretch Goals sections, fill in
-Problem Statement introduction, update Drasil reference\\
+								Problem Statement introduction, update Drasil reference\\
 Jan. 22, 2023 & Sam & Replace the notion of ``fractional oxidation state'' with
-``nonstoichiometric compound''\\
+								``nonstoichiometric compound''\\
+Jan. 31, 2023 & Sam & Remove references to SciPy and comments about
+								first-person usage and add stretch goals from SRS Likely Changes\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -128,14 +130,13 @@ used to solve these systems of linear equations. This was previously done with
 ordinary differential equation (ODE) solvers, since ``creating a complete ODE
 solver in Drasil would take considerable time, and there are already many
 reliable external libraries \dots tested by long use''
-\cite[p. 24]{chen_solving_2022}.
+\cite[p. 24]{chen_solving_2022}; these rationales also apply to solvers of
+systems of linear equations.
 
 Additionally, Drasil can currently generate code in Python, C++, C\#, Java, and
 Swift \cite{chen_solving_2022}. The scope of this project will be limited to 
-generating code Python since it is the language in which I \sjc{First person?}
-have the most experience. Python also supports the SciPy library
-\cite{2020SciPy-NMeth}, which is already used by Drasil to solve ODEs
-\cite{chen_solving_2022} and supports solving systems of linear equations \cite{the_scipy_community_scipylinalgsolve_2023}.
+generating code in Python since it is the language in which I 
+have the most experience. 
 
 Since both \progname~and Drasil are purely software systems, the only
 hardware involved is the user's computer used to run \progname.
@@ -146,7 +147,7 @@ the CAS 741 Development of Scientific Computing Software course for which this
 project is being completed. Dr.~Smith and Dr.~Jacques Carette are in charge of
 the Drasil project that \progname~seeks to extend, so the implementation and
 development process are of significance to them. Likewise, any future
-developers of Drasil, including myself \sjc{Can I use the first person?}, are
+developers of Drasil, including myself, are
 potential stakeholders of this project, since they may use features added to
 Drasil, such as ideas about chemistry or systems of linear equations. Jason
 Balaci, a fellow CAS 741 student and Drasil contributor, is of particular 
@@ -175,13 +176,13 @@ The goals of this project are to develop a program that\dots
     solve systems of linear equations (see \cite[Ch. 4]{chen_solving_2022}).
 \end{itemize}
 
-\newpage
-
 \section{Stretch Goals}
 
 In descending order of priority, the stretch goals of this project are to\dots
 
 \begin{enumerate}
+	\item add support for more complex chemical formulas, such as hydrates or those
+	with polymers or isotopes.
 	\item add the ability to, given the amount of one substance in a reaction (in
 	moles), calculate the amount of every other substance in the reaction (also in
 	moles).\footnote{\label{chemProbExs}These examples of problems related to
@@ -198,7 +199,9 @@ In descending order of priority, the stretch goals of this project are to\dots
 		problem may arise when using external system of linear equations solvers,
 		meaning that \progname~may not be generated in all five languages supported
 		by Drasil.)
-	\item do the same as 1-3.~but in terms of mass.\cref{chemProbExs}
+	\item add the ability to parse valid but incorrectly formatted chemical
+	formulas inputted by the user and format them correctly when outputting them.
+	\item do the same as 2-4.~but in terms of mass.\cref{chemProbExs}
 	\item add the ability to classify a chemical reaction as ``combination (or
 		synthesis), decomposition, combustion, single replacement, \dots double
 		replacement'' \cite[p.~301]{lund_introduction_2023} or some combination of

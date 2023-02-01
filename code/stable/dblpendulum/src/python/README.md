@@ -1,6 +1,4 @@
 # DblPendulum 
-> The program documented here is called DblPendulum.
-
 > Author: Dong Chen
 
 ------------------------------------------------------------

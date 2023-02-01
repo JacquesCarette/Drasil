@@ -1,6 +1,4 @@
 # NoPCM 
-> The program documented here is called NoPCM.
-
 > Author: Thulasi Jegatheesan
 
 ------------------------------------------------------------

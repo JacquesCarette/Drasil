@@ -1,9 +1,7 @@
 # Projectile 
-> The program documented here is called Projectile.
-
 > Authors:  Samuel J. Crawford, Brooks MacLachlan, W. Spencer Smith
 
-> Purpose: Given the initial velocity vector of the projectile, Projectile will Determine if the projectile hits the target.
+> Purpose: Given the initial velocity vector of the projectile, Projectile will determine if the projectile hits the target.
 
 > Motivation: Projectile motion is a common problem in physics.
 

@@ -1,22 +1,26 @@
-{-# LANGUAGE GADTs, DataKinds #-}
-{-# LANGUAGE KindSignatures #-}
+{-# LANGUAGE DataKinds             #-}
+{-# LANGUAGE FlexibleContexts      #-}
+{-# LANGUAGE FlexibleInstances     #-}
+{-# LANGUAGE GADTs                 #-}
+{-# LANGUAGE KindSignatures        #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 
 -- | Number space types and functions.
 module Language.Drasil.Space (
   -- * Types
-  Space(..), 
+  Space(..), Primitive,
   RealInterval(..), Inclusive(..),
   DomainDesc(..), RTopology(..), DiscreteDomainDesc, ContinuousDomainDesc,
   -- * Class
   HasSpace(..),
   -- * Functions
-  getActorName, getInnerSpace, mkFunction
+  getActorName, getInnerSpace, mkFunction, isBasicNumSpace
 ) where
 
-import qualified Data.List.NonEmpty as NE
+import qualified Data.List.NonEmpty        as NE
 
-import Language.Drasil.Symbol (Symbol)
-import Control.Lens (Lens')
+import           Control.Lens              (Lens')
+import           Language.Drasil.Symbol    (Symbol)
 
 -- FIXME: These need to be spaces and not just types.
 
@@ -32,8 +36,8 @@ data Space =
   | Boolean
   | Char
   | String
-  | Radians
-  | Vect Space
+  | Vect Space -- TODO: Length for vectors?
+  | Matrix Int Int Space
   | Array Space
   | Actor String
   | DiscreteD [Double]
@@ -80,9 +84,27 @@ data RealInterval a b where
 -- | Gets the name of an 'Actor'.
 getActorName :: Space -> String
 getActorName (Actor n) = n
-getActorName _ = error "getActorName called on non-actor space"
+getActorName _         = error "getActorName called on non-actor space"
 
 -- | Gets the inner 'Space' of a vector.
 getInnerSpace :: Space -> Space
 getInnerSpace (Vect s) = s
-getInnerSpace _ = error "getInnerSpace called on non-vector space"
+getInnerSpace _        = error "getInnerSpace called on non-vector space"
+
+-- | Is this Space a basic numeric space?
+isBasicNumSpace :: Space -> Bool
+isBasicNumSpace Integer      = True
+isBasicNumSpace Rational     = True
+isBasicNumSpace Real         = True
+isBasicNumSpace Natural      = True
+isBasicNumSpace Boolean      = False
+isBasicNumSpace Char         = False
+isBasicNumSpace String       = False
+isBasicNumSpace Vect {}      = False
+isBasicNumSpace Matrix {}    = False
+isBasicNumSpace Array {}     = False
+isBasicNumSpace Actor {}     = False
+isBasicNumSpace DiscreteD {} = False
+isBasicNumSpace DiscreteS {} = False
+isBasicNumSpace Function {}  = False
+isBasicNumSpace Void         = False

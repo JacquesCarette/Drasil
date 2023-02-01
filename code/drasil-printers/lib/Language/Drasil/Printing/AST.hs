@@ -10,8 +10,9 @@ data LinkType = Internal | Cite2 Spec | External
 -- | Different operators.
 data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log 
   | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin | Arccos | Arctan | Not
-  | Dim | Exp | Neg | Cross | Dot | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff
+  | Dim | Exp | Neg | Cross | Dot | Scale | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff
   | Subt | And | Or | Add | Mul | Summ | Inte | Prod | Point | Perc | LArrow | RArrow | ForAll
+  | VAdd | VSub
 
 -- | Holds the type of "text fencing" ("(), {}, |, ||").
 data Fence = Paren | Curly | Norm | Abs

@@ -92,7 +92,6 @@ instance Semigroup Sentence where
 -- | Sentences can be empty or directly concatenated.
 instance Monoid Sentence where
   mempty = EmptyS
-  mappend = (:+:)
 
 -- | Smart constructors for turning a 'UID' into a 'Sentence'.
 sentencePlural, sentenceShort, sentenceSymb, sentenceTerm :: UID -> Sentence

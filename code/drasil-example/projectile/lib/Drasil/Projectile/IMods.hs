@@ -115,7 +115,7 @@ offsetQD = mkQuantDef offset E.offset'
 ---
 messageIM :: InstanceModel
 messageIM = imNoDerivNoRefs (equationalModelN (nounPhraseSP "output message") messageQD)
-  [qwC offset $ UpFrom (Exc, neg (sy landPos))
+  [qwC offset $ UpFrom (Exc, neg (sy targPos))
   ,qwC targPos $ UpFrom (Exc, exactDbl 0)]
   (qw message)
   [] "messageIM" [offsetNote, targPosConsNote, offsetConsNote, tolNote]
@@ -147,7 +147,7 @@ landPosConsNote = atStartNP (the constraint) +:+
 
 offsetNote = ch offset `S.is` S "from" +:+. refS offsetIM
 
-offsetConsNote = foldlSent [atStartNP (the constraint), eS (sy offset $> neg (sy landPos)) `S.is`
+offsetConsNote = foldlSent [atStartNP (the constraint), eS (sy offset $> neg (sy targPos)) `S.is`
   S "from the fact that", eS (sy landPos $> exactDbl 0) `sC` S "from", refS posXDirection]
 
 targPosConsNote = atStartNP (the constraint) +:+

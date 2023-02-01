@@ -37,3 +37,7 @@ foldle1 _ _ []       = error "foldle1 cannot be used with empty list"
 foldle1 _ _ [x]      = x
 foldle1 _ g [x,y]    = g x y
 foldle1 f g (x:y:xs) = foldle f g (f x y) xs
+
+-- | Convert "row" of elements into "column" of elements.
+toColumn :: [a] -> [[a]]
+toColumn = map (: [])

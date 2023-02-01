@@ -16,5 +16,3 @@ Code Concept pi selected as Pi.
 Language Python does not support code type Float, chosen as the match for the Real space. Trying next choice.
 Successfully matched Real with Double.
 Successfully matched String with String.
-Language Python does not support code type Float, chosen as the match for the Rational space. Trying next choice.
-Successfully matched Rational with Double.

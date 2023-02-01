@@ -4,7 +4,7 @@ module Language.Drasil.Expr.Precedence where
 import Language.Drasil.Expr.Lang (Expr(..),
   ArithBinOp(..), BoolBinOp, EqBinOp(..), LABinOp, OrdBinOp, VVNBinOp,
   UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
-  AssocBoolOper(..), AssocArithOper(..), VVVBinOp)
+  AssocBoolOper(..), AssocArithOper(..), VVVBinOp, NVVBinOp)
 
 -- These precedences are inspired from Haskell/F# 
 -- as documented at http://kevincantu.org/code/operators.html
@@ -39,6 +39,10 @@ prec2VVV _ = 190
 -- | prec2VVN - precedence for Vec->Vec->Num-related binary operations.
 prec2VVN :: VVNBinOp -> Int
 prec2VVN _ = 190
+
+-- | prec2NVV - precedence for Num->Vec->Vec-related binary operations.
+prec2NVV :: NVVBinOp -> Int
+prec2NVV _ = 190
 
 -- | precA - precedence for arithmetic-related Binary-Associative (Commutative) operators.
 precA :: AssocArithOper -> Int
@@ -91,4 +95,5 @@ eprec (LABinaryOp bo _ _)    = prec2LA bo
 eprec (OrdBinaryOp bo _ _)   = prec2Ord bo
 eprec (VVVBinaryOp bo _ _)   = prec2VVV bo
 eprec (VVNBinaryOp bo _ _)   = prec2VVN bo
+eprec (NVVBinaryOp bo _ _)   = prec2NVV bo
 eprec RealI{}                = 170

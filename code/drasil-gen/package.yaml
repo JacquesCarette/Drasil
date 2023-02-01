@@ -12,6 +12,7 @@ extra-source-files: []
 dependencies:
 - base >= 4.7 && < 5
 - pretty
+- containers
 - directory
 - time
 - drasil-build
@@ -22,6 +23,7 @@ dependencies:
 - drasil-lang
 - drasil-printers
 - drasil-sysinfo
+- lens
 
 ghc-options:
 - -Wall

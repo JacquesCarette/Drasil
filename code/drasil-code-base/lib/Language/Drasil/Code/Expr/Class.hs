@@ -1,9 +1,9 @@
 module Language.Drasil.Code.Expr.Class where
 
-import Language.Drasil (Callable, IsArgumentName, HasSpace(..),
-  Space(..), HasUID(..))
+import Language.Drasil (Callable, IsArgumentName, ExprC(sy), HasSpace(..),
+  Space(Actor), HasSymbol, HasUID(..))
 import Language.Drasil.Chunk.CodeBase (CodeIdea, CodeVarChunk)
-import Language.Drasil.Code.Expr (CodeExpr(Field, New, Message))
+import Language.Drasil.Code.Expr (CodeExpr(FCall, New, Message, Field))
 
 import Control.Lens ( (^.) )
 
@@ -27,6 +27,9 @@ class CodeExprC r where
   -- | Constructs a CodeExpr representing the field of an actor
   field :: CodeVarChunk -> CodeVarChunk -> r
 
+  -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
+  applyWithNamedArgs :: (HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f 
+    -> [r] -> [(a, r)] -> r
 
 instance CodeExprC CodeExpr where
   new c ps = New (c ^. uid) ps []
@@ -49,4 +52,8 @@ instance CodeExprC CodeExpr where
     where checkObj (Actor _) = Field (o ^. uid) (f ^. uid)
           checkObj _ = error $ "Invalid actor field: Actor should have " ++
             "Actor space"
-
+  
+  -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
+  applyWithNamedArgs f [] [] = sy f
+  applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns) 
+    (map snd ns))

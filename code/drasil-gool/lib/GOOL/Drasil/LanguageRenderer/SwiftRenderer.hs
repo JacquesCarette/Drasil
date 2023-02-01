@@ -115,7 +115,6 @@ instance Applicative SwiftCode where
   (SC f) <*> (SC x) = SC (f x)
 
 instance Monad SwiftCode where
-  return = SC
   SC x >>= f = f x
 
 instance OOProg SwiftCode where
@@ -125,7 +124,7 @@ instance ProgramSym SwiftCode where
   prog n files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
-    return $ onCodeList (progD n) fs
+    pure $ onCodeList (progD n) fs
 
 instance RenderSym SwiftCode
 
@@ -280,7 +279,7 @@ instance InternalVarElim SwiftCode where
 instance RenderVariable SwiftCode where
   varFromData b n t' d = do 
     t <- t'
-    return $ on2CodeValues (vard b n) t (toCode d)
+    pure $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym SwiftCode where
   type Value SwiftCode = ValData
@@ -326,8 +325,8 @@ instance NumericExpression SwiftCode where
     let swiftPower Integer Integer b e = cast int $ binExpr' powerOp 
           (cast double b) (cast double e)
         swiftPower _ _ b e = binExpr' powerOp b e
-    swiftPower (getType $ valueType v1) (getType $ valueType v2) (return v1) 
-      (return v2)
+    swiftPower (getType $ valueType v1) (getType $ valueType v2) (pure v1) 
+      (pure v2)
 
   log = unExpr logOp
   ln = unExpr lnOp
@@ -367,7 +366,7 @@ instance ValueExpression SwiftCode where
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs m tp vs ns = do
     t <- tp
-    call (Just m) Nothing (getTypeString t) (return t) vs ns
+    call (Just m) Nothing (getTypeString t) (pure t) vs ns
   libNewObjMixedArgs = C.libNewObjMixedArgs
 
   lambda = G.lambda swiftLambda
@@ -393,7 +392,7 @@ instance RenderValue SwiftCode where
   
   valFromData p t' d = do 
     t <- t'
-    return $ on2CodeValues (vd p) t (toCode d)
+    pure $ on2CodeValues (vd p) t (toCode d)
   
 instance ValueElim SwiftCode where
   valuePrec = valPrec . unSC
@@ -431,7 +430,7 @@ instance InternalListFunc SwiftCode where
   listSizeFunc = funcFromData (R.func swiftListSize) int
   listAddFunc _ i v = do
     f <- swiftListAddFunc i v 
-    funcFromData (R.func (RC.value f)) (return $ valueType f)
+    funcFromData (R.func (RC.value f)) (pure $ valueType f)
   listAppendFunc = G.listAppendFunc swiftListAppend
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
@@ -691,11 +690,11 @@ instance ModuleSym SwiftCode where
     CP.buildModule modName (do
       lis <- getLangImports
       libis <- getLibImports
-      return $ vcat $ map (RC.import' . 
+      pure $ vcat $ map (RC.import' . 
           (langImport :: Label -> SwiftCode (Import SwiftCode))) 
           (sort $ lis ++ is ++ libis)) 
-      (zoom lensFStoMS swiftStringError) getMainDoc (map return fns) 
-        (map return cls)
+      (zoom lensFStoMS swiftStringError) getMainDoc (map pure fns) 
+        (map pure cls)
   
 instance RenderMod SwiftCode where
   modFromData n = G.modFromData n (toCode . md n)
@@ -870,12 +869,12 @@ swiftNumBinExpr :: (RenderSym r) => (SValue r -> SValue r -> SValue r) ->
 swiftNumBinExpr f v1' v2' = do
   v1 <- v1'
   v2 <- v2'
-  let exprT t1 t2 = if t1 == t2 then f (return v1) (return v2) else exprT' t1 t2
-      exprT' Double _ = f (return v1) (cast double $ return v2)
-      exprT' _ Double = f (cast double $ return v1) (return v2)
-      exprT' Float _  = f (return v1) (cast float $ return v2)
-      exprT' _ Float  = f (cast float $ return v1) (return v2)
-      exprT' _ _      = f (return v1) (return v2)
+  let exprT t1 t2 = if t1 == t2 then f (pure v1) (pure v2) else exprT' t1 t2
+      exprT' Double _ = f (pure v1) (cast double $ pure v2)
+      exprT' _ Double = f (cast double $ pure v1) (pure v2)
+      exprT' Float _  = f (pure v1) (cast float $ pure v2)
+      exprT' _ Float  = f (cast float $ pure v1) (pure v2)
+      exprT' _ _      = f (pure v1) (pure v2)
   exprT (getType $ valueType v1) (getType $ valueType v2)
 
 swiftLitFloat :: (RenderSym r) => Float -> SValue r
@@ -897,14 +896,14 @@ swiftCast t' v' = do
   v <- v'
   let unwrap = if (getType t `elem` swiftReadableTypes) && 
         (getType (valueType v) == String) then swiftUnwrapVal else id
-  unwrap $ mkStateVal (return t) (R.castObj (RC.type' t) (RC.value v))
+  unwrap $ mkStateVal (pure t) (R.castObj (RC.type' t) (RC.value v))
 
 swiftIndexFunc :: (RenderSym r) => SValue r -> SValue r -> SValue r
 swiftIndexFunc l v' = do
   v <- v'
-  let t = return $ valueType v
+  let t = pure $ valueType v
       ofArg = var swiftOf t
-  objMethodCallNamedArgs int l swiftIndex [(ofArg, return v)]
+  objMethodCallNamedArgs int l swiftIndex [(ofArg, pure v)]
 
 swiftStrideFunc :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 swiftStrideFunc beg end step = let t = listType int 
@@ -960,9 +959,9 @@ swiftPrint newLn Nothing _ v = do
   valStmt $ funcAppMixedArgs printLabel void [v] nl
 swiftPrint newLn (Just f) _ v' = do
   v <- zoom lensMStoVS v'
-  let valToPrint (List _) = return v $. funcFromData (R.func swiftDesc) string
-      valToPrint String = return v
-      valToPrint _ = cast string (return v)
+  let valToPrint (List _) = pure v $. funcFromData (R.func swiftDesc) string
+      valToPrint String = pure v
+      valToPrint _ = cast string (pure v)
       prNewLn = if newLn then valStmt (swiftWriteFunc (litString "\\n") f)
         else emptyStmt
   tryCatch (bodyStatements
@@ -981,7 +980,7 @@ swiftInput vr vl = do
   vr' <- vr
   let swiftInput' String = vl
       swiftInput' ct
-        | ct `elem` swiftReadableTypes = cast (return $ variableType vr') vl
+        | ct `elem` swiftReadableTypes = cast (pure $ variableType vr') vl
         | otherwise = error "Attempt to read value of unreadable type"
   swiftInput' (getType $ variableType vr')
 
@@ -1018,7 +1017,7 @@ swiftCloseFile f' = do
   -- "closed", so InFile case is (correctly) just an empty stmt
   let swClose InFile = modify resetIndices >> emptyStmt 
       swClose OutFile = tryCatch (oneLiner $ valStmt $ swiftTryVal $
-          objMethodCallNoParams void (return f) swiftClose)
+          objMethodCallNoParams void (pure f) swiftClose)
         (oneLiner $ throw "Error closing file.")
       swClose _ = error "closeFile called on non-file-typed value"
   swClose (getType $ valueType f)
@@ -1107,8 +1106,8 @@ swiftStringError = do
   str <- zoom lensMStoVS (string :: VSType SwiftCode)
   if tu && not errdef then do
     modify setErrorDefined 
-    return (swiftExtension <+> RC.type' str <> swiftConforms <+> swiftError <+> bodyStart <> bodyEnd)
-  else return empty
+    pure (swiftExtension <+> RC.type' str <> swiftConforms <+> swiftError <+> bodyStart <> bodyEnd)
+  else pure empty
 
 swiftFunctionDoc :: FuncDocRenderer
 swiftFunctionDoc desc params returns = [desc | not (null desc)]

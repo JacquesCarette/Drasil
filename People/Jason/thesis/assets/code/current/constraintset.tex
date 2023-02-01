@@ -1,0 +1,7 @@
+\begin{haskell}{ConstraintSet Definition}{curConstraintSet}{https://github.com/JacquesCarette/Drasil/blob/9f435cbb9bcda515d765c551606d1f4e3d9fc101/code/drasil-theory/lib/Theory/Drasil/ConstraintSet.hs\#L15-L19}
+-- | 'ConstraintSet's are sets of invariants that always hold for underlying domains.
+data ConstraintSet e = CL {
+    _con  :: ConceptChunk,
+    _invs :: NE.NonEmpty e
+}
+\end{haskell}

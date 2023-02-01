@@ -52,7 +52,7 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   sD, termsWithAccDefn, termsWithDefsOnly, terms)
 
 srs :: Document
-srs = mkDoc mkSRS  (S.forGen titleize phrase) si
+srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
 fullSI :: SystemInformation
 fullSI = fillcdbSRS mkSRS si
@@ -65,7 +65,8 @@ si = SI {
   _sys         = glassBR,
   _kind        = Doc.srs,
   _authors     = [nikitha, spencerSmith],
-  _purpose     = purpDoc glassBR Verbose,
+  _purpose     = [],
+  _background  = [],
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,

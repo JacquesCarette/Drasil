@@ -44,7 +44,6 @@ instance Applicative JavaProject where
   (JP f) <*> (JP x) = JP (f x)
 
 instance Monad JavaProject where
-  return = JP
   JP x >>= f = f x
 
 instance PackageSym JavaProject where
@@ -61,13 +60,13 @@ instance AuxiliarySym JavaProject where
         langVersion = jVersion}
   sampleInput = G.sampleInput
 
-  optimizeDox = return yes
+  optimizeDox = pure yes
 
   makefile fs it cms = G.makefile (jBuildConfig fs it) 
     (G.noRunIfLib it (jRunnable fs)) (G.docIfEnabled cms G.doxDocConfig)
 
   auxHelperDoc = unJP
-  auxFromData fp d = return $ ad fp d
+  auxFromData fp d = pure $ ad fp d
 
 -- | Create a build configuration for Java files. Takes in 'FilePath's and the type of implementation.
 jBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig

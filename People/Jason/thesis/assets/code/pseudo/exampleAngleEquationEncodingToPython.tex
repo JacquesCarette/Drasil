@@ -1,0 +1,8 @@
+\begin{pseudocode}{python}{Example Angle Equation Python Conversion}{exampleAngleEquationEncodingToPython}
+## \brief Calculates desired firing angle: needed firing angle from a cannon to hit a target (radians)
+# \param inParams structure holding the input values
+# \param g gravitational acceleration (m/s^2)
+# \return desired firing angle: needed firing angle from a cannon to hit a target (radians)
+def func_theta_c(inParams, g):
+    return math.asin(inParams.targetDistanceFromCannon * g / (inParams.v ** 2)) / 2
+\end{pseudocode}

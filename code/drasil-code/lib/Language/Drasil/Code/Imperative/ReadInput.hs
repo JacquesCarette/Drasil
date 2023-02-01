@@ -3,7 +3,7 @@ module Language.Drasil.Code.Imperative.ReadInput (
   sampleInputDD, readWithDataDesc
 ) where
 
-import Language.Drasil hiding (Data)
+import Language.Drasil hiding (Data, Matrix)
 import Language.Drasil.Code.DataDesc (DataDesc'(..), Data'(..), DataItem'(..), 
   Delimiter, dataDesc, junk, list, singleton')
 import Language.Drasil.Chunk.Code (CodeVarChunk)
@@ -74,13 +74,12 @@ sampleInputDD ds = dataDesc (junk : intersperse junk (map toData ds)) "\n"
 
 -- | Converts a 'String' to an 'Expr' of a given 'Space'.
 strAsExpr :: Space -> String -> Expr
-strAsExpr Integer s = int (read s :: Integer)
-strAsExpr Natural s = int (read s :: Integer)
-strAsExpr Radians s = dbl (read s :: Double)
-strAsExpr Real s = dbl (read s :: Double)
+strAsExpr Integer  s = int (read s :: Integer)
+strAsExpr Natural  s = int (read s :: Integer)
+strAsExpr Real     s = dbl (read s :: Double)
 strAsExpr Rational s = dbl (read s :: Double)
-strAsExpr String s = str s
-strAsExpr _ _ = error "strAsExpr should only be numeric space or string"
+strAsExpr String   s = str s
+strAsExpr _        _ = error "strAsExpr should only be numeric space or string"
 
 -- | Gets the dimension of a 'Space'.
 getDimension :: Space -> Int

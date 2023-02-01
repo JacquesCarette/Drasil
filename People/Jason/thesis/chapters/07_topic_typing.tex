@@ -1,0 +1,880 @@
+\chapter{Typing the Expression Language}
+\label{chap:typed-expr}
+
+\begin{writingdirectives}
+      \item How is \Expr{} used?
+      \item What are current problems with \Expr{} usage?
+      \item What does it mean for expressions to be well-typed?
+      \item How does a type system work? How can we build one for \Expr{}?
+            \begin{itemize}
+                  \item ``Safety = Preservation + Progress'' \cite{Harper2016}
+                  \item Why bidirectional type rules over a normal declarative
+                        style?
+                  \item How can this be implemented in Drasil?
+            \end{itemize}
+      \item What errors did the type checker currently find?
+\end{writingdirectives}
+
+In \Cref{chap:lang-division}, we discussed Drasil's single mathematical
+expression language and split it into three variants, each specialized for their
+intended usage context. As a result, users don't need to worry about using terms
+inapplicable in various contexts. However, an issue remains with expressions:
+Drasil's standard mathematical language (\Expr{}) remains untyped, and thus
+Drasil does not detect malformed expressions, allowing users to make errors that
+affect both the problem descriptions in the \acs{srs} and the usability of
+generated software. In this chapter, we will focus on mitigating expression
+typing issues for the most important context: concrete theories used for code
+generation.
+
+\section{Expressions, Instance Models, and Data Definitions}
+\label{chap:typed-expr:sec:expressions-instance-models-and-data-definitions}
+
+To generate code, Drasil's code generator relies on a series of concrete
+theories as part of its input. There are two kinds of theories that the code
+generator uses from the abstracted \acs{srs} template: instance models and data
+definitions. Data definitions are, as the name suggests, concrete symbol
+definitions using expressions (similar to the \EquationalModel{} \ModelKind{}
+variant, discussed in \Cref{chap:modelkinds}). On the other hand, instance
+models may contain data definitions or any of the other applicable \ModelKinds{}
+variants (discussed in \Cref{chap:more-theory-kinds}, albeit currently
+limited\footnote{For our purposes, it's enough to assume that they can expose
+any number of expressions usable in code generation.}). For the expressions they
+expose/form to be usable in code generation, the expressions must be
+representable in \acs{gool} somehow\footnote{Since all code generation for
+Drasil currently goes through \acs{gool}.}. Thanks to \Cref{chap:lang-division},
+\Expr{} has become the expression language that currently limits mathematical
+expressions in both instance models and data definitions to ones with definite
+values that can be directly computed on pencil and paper, and in most modern
+programming languages. However, translatability to \acs{gool} does not
+necessarily mean that all the expressions are actually coherent and usable. At
+the moment, it is possible to give Drasil's instance models and data definitions
+invalid \Expr{}s and have Drasil generate code.
+
+\pseudoExampleLandPosQDBadTyping{}
+
+Take \refCurrentLandPosIMQD{} for example. The defining expression of
+\(p_\text{land}\), \inlineHs{E.landPosExpr}, is of type \Expr{} and limited to
+terms that can be naively translated to \acs{gool} without external knowledge.
+If we were to change the defining expression to something incoherent (such as
+\(1 + \texttt{``Drasil''}\)\footnote{The sum of the number 1 and string
+``Drasil''.}, \refPseudoExampleLandPosQDBadTyping{}), we end up with (a) an
+algorithm that doesn't exactly make sense, and (b) a generated software source
+code that does what we wanted it to do
+(\refPseudoExampleLandPosQDBadTypingJavaCode{}), but which isn't actually
+compilable software (\refPseudoExampleLandPosQDBadTypingJavaCodeCompErr{}).
+Despite the example's simplicity, assuming it was derived from other theories
+that somehow went awry, then we should have caught the type error before we
+generated code.
+
+\pseudoExampleLandPosQDBadTypingJavaCode{}
+
+\pseudoExampleLandPosQDBadTypingJavaCodeCompErr{}
+
+\refPseudoExampleLandPosQDBadTypingJavaCodeCompErr{} provides us with a
+meaningful error message: ``String cannot be converted to double.'' To fix this
+issue, we would need to change the string to something valid, a number at least
+because Java also performs a secret cast, interpreting the \(1\) as a double,
+despite our encoding having it be an integer. All code Drasil generates should
+be reliably compilable and usable, and all errors should be noted as Drasil is
+used. The issue here lies in that the initial expression was incoherent (and the
+Java code was \textit{ill-typed}). So, now, how can we avoid this situation
+altogether? We need all expressions to be \textit{well-typed}. However, Drasil
+doesn't have a working understanding of what it means for expressions to be
+well-typed.
+
+Ultimately, the issue lies in that \Expr{} is not type-safe \cite{Harper2016}
+and that we don't capture any knowledge about what it means for expressions to
+be \textit{well-typed}. In other words, \Expr{} is not closed under
+\textit{preservation}\footnote{\textit{Preservation} is a rule that evaluation
+of a language should preserve typing of expressions \cite{Harper2016}.} and
+\textit{progress}\footnote{\textit{Progress} is a rule that says that any
+well-typed expression is either a value or something that can be further
+evaluated \cite{Harper2016}.} \cite{Harper2016}, which means that during
+evaluation\footnote{Of course, ``evaluation'' here is also related to the
+evaluation of \acs{gool}-generated code.} of expressions, illegal instructions
+and type mismatches are possible. Thus, we must make \Expr{} type-safe.
+
+\section{Type-Safe Expressions}
+\label{chap:typed-expr:sec:type-safe-expressions}
+
+To make \Expr{} type-safe, we must build a type system for it so that we can
+obtain information about which \Expr{} terms are coherent/valid or not. A system
+of typing rules that dictate what well-typed expressions will allow us to
+determine which expressions are well-typed.
+
+\subsection{Example: A \textquotedblleft{}Simple\textquotedblright{} Language}
+\label{chap:typed-expr:sec:type-safe-expressions:subsec:example-a-simple-language}
+
+For example, if we had a small ``simple'' language, \(\bb{L}\), that contains
+integer and boolean values, with functionality for addition, ``less than''
+comparison, conjunction, and if-then-else (ternary operators)\footnote{Assume
+the definitions of the functions be total and understood/used under the
+conventional sense that mathematicians so often do.}, we might write the syntax
+inductively, as follows\footnote{Note that I will be using a traditional
+math-oriented syntax definition here, but if we were to transcribe it in
+Haskell, we may find differences.}:
+
+\begin{longtable}{ r c c l}
+      \(\bb{L}(l)\) & ::=       & \(n\)                                                        & Integers (where \(n\) is any integer) \\
+                    & \(\vert\) & \texttt{true}                                                & True                                  \\
+                    & \(\vert\) & \texttt{false}                                               & False                                 \\
+                    & \(\vert\) & \(l_1\ \texttt{+}\ l_2\)                                     & Addition                              \\
+                    & \(\vert\) & \(l_1\ \texttt{<}\ l_2\)                                     & ``Less than'' comparison              \\
+                    & \(\vert\) & \(l_1\ \texttt{\land}\ l_2\)                                 & Conjunction                           \\
+                    & \(\vert\) & \(\texttt{if}\ l_1\ \texttt{then}\ l_2\ \texttt{else}\ l_3\) & if-then-else (ternary ``if'')         \\
+\end{longtable}
+
+Now, we can form expressions, such as:
+
+\begin{equation}
+      10
+      \label{ex:sl:s:good1}
+\end{equation}
+
+\begin{equation}
+      23 + (400\ \texttt{+}\ 4000)
+      \label{ex:sl:s:good2}
+\end{equation}
+
+\begin{equation}
+      \texttt{if}\ \texttt{true}\ \texttt{then}\ 95\ \texttt{else}\ 96
+      \label{ex:sl:s:good3}
+\end{equation}
+
+\begin{equation}
+      42\ \texttt{+}\ \texttt{false}
+      \label{ex:sl:s:bad1}
+\end{equation}
+
+\begin{equation}
+      \texttt{if}\ (0\ \texttt{<}\ \texttt{false})\ \texttt{then}\ 1\ \texttt{else}\ \texttt{true}
+      \label{ex:sl:s:bad2}
+\end{equation}
+
+% Forcibly rename the "equation" environment tags to "expression" for the sake
+% of the below discussion.
+\Crefname{equation}{Expression}{Expressions}
+
+Now, let's evaluate these expressions.
+\Cref{ex:sl:s:good1,ex:sl:s:good2,ex:sl:s:good3} can be calculated with a
+conventional understanding of the operations, respectively, as \(10\), \(4423\),
+and \(95\). However, \Cref{ex:sl:s:bad1,ex:sl:s:bad2} are worrisome. Regarding
+\Cref{ex:sl:s:bad1}, we don't have any conventional sense of addition on
+integers with booleans, so evaluation is unclear. In \Cref{ex:sl:s:bad2}, we
+have two issues: we're trying to relate an integer with a boolean value, and our
+if-then-else construction returns differently-typed values depending on the
+condition.
+
+\Crefname{equation}{Equation}{Equations}
+
+Other than modifying the syntax into a convoluted mess to avoid issues like
+these (which won't be easy, and might not be possible), we look to type systems
+to make all expressions of \(\bb{L}\) sound. The key is in understanding that
+there are different ``kinds'' (\textit{types}) of values (\textit{terms}), and
+forming a system of figuring out which ones are valid (well-typed) or not
+(ill-typed). Thus, first, we must analyze and capture our universe of types of
+\(\bb{L}\), \(\tau\):
+
+\begin{longtable}{ r c c l}
+      \(\Tau(\tau)\) & ::=       & \(\bb{B}\) & Booleans \\
+                     & \(\vert\) & \(\bb{Z}\) & Integers
+\end{longtable}
+
+Note that we are restricting the numeric-related operations to strictly
+integers. The restriction is only there for simplification of numerics. \(\tau\)
+is an enumeration of all permissible \textit{types} of \textit{terms} we can
+have in \(\bb{L}\).
+
+Next, we need to add the typing rules. They will restrict our syntax to only
+those constructions which are semantically valid. We will do so using inference
+judgments, as follows\footnote{Note that since there are no variables, there is
+no need to have a context \(\Gamma\) on the left-hand side of each typing
+judgment.}:
+
+\begin{equation}
+      \left.
+      \infer{n : \bb{Z}}{}
+      \right.
+      \qquad
+      \text{(where \(n\) is any integer.)}
+      \label{eq:exTR:int}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{\texttt{true} : \bb{B}}{}
+      \right.
+      \qquad
+      \text{True}
+      \label{eq:exTR:true}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{\texttt{false} : \bb{B}}{}
+      \right.
+      \qquad
+      \text{False}
+      \label{eq:exTR:false}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{(a\ \texttt{+}\ b) : \bb{Z}}
+      {a : \bb{Z}  &  b : \bb{Z}}
+      \right.
+      \qquad
+      \text{Addition}
+      \label{eq:exTR:addition}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{(a\ \texttt{<}\ b) : \bb{B}}
+      {a : \bb{Z}  &  b : \bb{Z}}
+      \right.
+      \qquad
+      \text{``Less than'' comparison}
+      \label{eq:exTR:lessThan}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{(a\ \texttt{\wedge}\ b) : \bb{B}}
+      {a : \bb{B}  &  b : \bb{B}}
+      \right.
+      \qquad
+      \text{Conjunction}
+      \label{eq:exTR:conjunction}
+\end{equation}
+
+\begin{equation}
+      \left.
+      \infer{(\texttt{if}\ b\ \texttt{then}\ x\ \texttt{else}\ y) : \tau}
+      {b : \bb{B}  &  x : \tau  &  y : \tau}
+      \right.
+      \qquad
+      \text{if-then-else (ternary ``if'')}
+      \label{eq:exTR:ifThenElse}
+\end{equation}
+
+So as long as we follow these typing rules while we build our expressions, when
+we try to evaluate any of these expressions, we should not arrive at invalid
+expressions where evaluation cannot be completed. In other words, so as long as
+expressions conform to these typing rules, the language is type-safe:
+preservation and progress hold. As such, we would like to build a similar system
+for \Expr{}\footnote{To begin, we will have \Expr{} typed as that is the main
+entry for user-error, but we will eventually also add typing to the other
+expression languages in Drasil.}.
+
+Initially, when we sought to implement a type system for \Expr{}, we tried to
+piggyback on Haskells type system using type parameters in \Expr{}, \acsp{gadt},
+and \acs{ttf}. We were hopeful that we would be able to defer manually checking
+our desired type rules to the type signatures of expressions, having \acs{ghc}
+provide users with elegant error messages and feedback about typing issues.
+While we had success with typing \Expr{}, the implementation didn't fit in well
+with the rest of Drasil. Adding it relied on us adding type parameters to
+\QuantityDict{}s, having users manually type in the type in the types of
+variables in the declarations of quantities. It also required us to use the
+``data kinds'' Haskell extension \cite{GHC2020DataKinds} leading to difficulties
+with handling and flexibility of types. Additionally, we weren't able to
+adequately analyze and work with the types of expressions as needed. Thus, we
+decided rolling our own type system would be beneficial, and that we would
+manually check expressions as needed.
+
+Now the question arises: how should we build it? One of the issues with the
+traditional declaration-style is that expressions made without explicit type
+annotations might have ambiguous types should we try to infer one
+\cite{nlab:bidirectional_typechecking}. While we don't expect any of these
+scenarios to occur with \Expr{}, we might if we also added type-checking to
+\ModelExpr{}, where we would like to have higher-order functions and function
+abstractions. Thus, we decided to build the type-checker with a modern,
+future-proof scheme that will scale against our expected needs
+\cite{CaretteDiscussion2022}: with \textit{bidirectional type-checking}.
+
+\subsection{Bidirectional Type Rules}
+\label{chap:typed-expr:sec:type-safe-expressions:subsec:bidirectional-type-rules}
+
+Bidirectional typing rules break the declarative typing judgments into two
+typing judgments: a \textit{check} judgment and an \textit{inference} judgment
+\cite{Christiansen2013}. The checking judgment, \(\Gamma{} \vdash{} e \Leftarrow
+\tau{}\), says that the expression \(e\) can be \textit{checked} to be of the
+type \(\tau\) within the context \(\Gamma\). The inference judgment, \(\Gamma{}
+\vdash{} e \Rightarrow \tau{}\), says that within the context \(\Gamma\), we can
+\textit{infer} the type of expression \(e\), \(\tau\). Checking and inferencing
+may be mutually recursive \textemdash{} this is helpful for type checking in
+cases where expressions are ambiguous and may take on many shapes (i.e., may be
+polymorphic) \cite{nlab:bidirectional_typechecking}.
+
+\section{Typing the Expression Language}
+\label{chap:typed-expr:sec:typing-the-expression-language}
+
+With our goal in mind and our tools in hand, to add type-checking to \Expr{}, we
+need to:
+\begin{inparaenum}[(i)]
+      \item capture the type universe its terms belong to, and
+      \item build a system of bidirectional typing rules, and a corresponding
+            type-checker.
+\end{inparaenum}
+
+\subsection{Type Universe}
+\label{chap:typed-expr:sec:typing-the-expression-language:subsec:type-universe}
+
+Thankfully, there already exists an unused type universe, \Space{}
+(\refOriginalSpaceHaskell{}), in Drasil that we can model our type universe
+after and potentially start using as intended.
+
+\begin{longtable}{ r c c l}
+      \(\texttt{Space}(s)\) & ::=       & \(\bb{Z}\)                                                  & Integers   \\
+                            & \(\vert\) & \(\bb{Q}\)                                                  & Rationals  \\
+                            & \(\vert\) & \(\bb{R}\)                                                  & Reals      \\
+                            & \(\vert\) & \(\bb{N}\)                                                  & Naturals   \\
+                            & \(\vert\) & \(\bb{B}\)                                                  & Booleans   \\
+                            & \(\vert\) & \(\texttt{Ch}\)                                             & Characters \\
+                            & \(\vert\) & \(\texttt{String}\)                                         & Strings    \\
+                            & \(\vert\) & \(\texttt{Vector}(s)\)                                      & Vectors    \\
+                            & \(\vert\) & \(\texttt{Matrix}(s)\)                                      & Matrices   \\
+                            & \(\vert\) & \(s_1 \times s_2 \times \ldots{} \times s_n \rightarrow s\) & Functions  \\
+\end{longtable}
+
+\subsection{Type Rules}
+\label{chap:typed-expr:sec:typing-the-expression-language:subsec:type-rules}
+\newcommand{\isNum}[1]{\mathit{isNum}(#1)}
+
+We will base our typing rules on the existing \Expr{} language syntax, and focus
+on enriching it, not extending it for extra syntax. By applying these typing
+rules, we will catch any existing typing issues in the case studies. 
+
+Let \(\isNum{s} = s \in \set{\bb{Z}, \bb{Q}, \bb{R}, \bb{N}}\). The following
+inference rules make up our bidirectional type-checker's rules:
+
+\newcommand{\newTypeRule}[4]{%
+\[%
+\begin{gathered}%
+      \inferrule*[right=\hypertarget{tr:#2}{#1}]{#3}{#4}\\%
+\end{gathered}%
+\]%
+}
+
+% instance Typed Expr Space where
+
+%   infer cxt (C uid) = inferFromContext cxt uid
+      
+\newTypeRule{Symbols}{symbols}
+      {v : s \in \Gamma{}}
+      {\Gamma \vdash v \Rightarrow s}
+
+%   infer :: TypingContext Space -> Expr -> Either Space TypeError
+%   infer cxt (Lit lit) = infer cxt lit
+
+\newTypeRule{Literals}{literals}
+      {l~\text{is a literal of type}~s}
+      {\Gamma \vdash l \Rightarrow s}
+
+%   infer cxt (AssocA op exs) = allOfType cxt exs sp sp
+%       $ "Associative arithmetic operation expects all operands to be of the same expected type (" ++ show sp ++ ")."
+%     where
+%       sp = assocArithOperToTy op
+
+\newTypeRule{Assoc. Arith. Ops}{assocA}
+      {\oplus \in \set{+, \cdot{}} \\ \isNum{s} \\\\%
+       \Gamma \vdash e_1 \Rightarrow s \\ \Gamma \vdash e_2 \Rightarrow s \\ \ldots{} \\ \Gamma \vdash e_n \Rightarrow s}
+      {\Gamma \vdash (e_1 \oplus e_2 \oplus \ldots{} \oplus e_n) \Rightarrow s}
+
+%   infer cxt (AssocB _ exs) = allOfType cxt exs S.Boolean S.Boolean
+%     $ "Associative boolean operation expects all operands to be of the same type (" ++ show S.Boolean ++ ")."
+
+\newTypeRule{Assoc. Bool. Ops}{assocB}
+      {\oplus \in \set{\land{}, \lor{}} \\\\%
+       \Gamma \vdash e_1 \Rightarrow \bb{B} \\ \Gamma \vdash e_2 \Rightarrow \bb{B} \\ \ldots{} \\ \Gamma \vdash e_n \Rightarrow \bb{B}}
+      {\Gamma \vdash (e_1 \oplus e_2 \oplus \ldots{} \oplus e_n) \Rightarrow \bb{B}}
+
+
+%   -- FIXME: It seems odd having named arguments here. Should we remove it? For
+%   -- now, I'm not type checking them.
+%   infer cxt (FCall uid exs _) = case (inferFromContext cxt uid, map (infer cxt) exs) of
+%     (Left (S.Function params out), exst) -> if NE.toList params == lefts exst
+%       then Left out
+%       else Right $ "Function `" ++ show uid ++ "` expects parameters of types: " ++ show params ++ ", but received: " ++ show (lefts exst) ++ "."
+%     (Left s, _) -> Right $ "Function application on non-function `" ++ show uid ++ "` (" ++ show s ++ ")."
+%     (Right x, _) -> Right x
+
+\newTypeRule{Fun. App.}{funApp}
+      {f : (s_1 \times s_2 \times \ldots{} \times s_n) \rightarrow s \in \Gamma{} \\\\%
+       \Gamma \vdash e_1 \Rightarrow s_1 \\ \Gamma \vdash e_2 \Rightarrow s_2 \\ \ldots{} \\ \Gamma \vdash e_n \Rightarrow s_n}
+      {\Gamma \vdash f(e_1, e_2, \ldots{}, e_n) \Rightarrow s}
+
+%   infer cxt (Case _ ers) -- = _ -- all (\(e, r) -> infer cxt e) ers
+%     | null ers = Right "Case contains no expressions, no type to infer."
+%     | all (\(ne, _) -> infer cxt ne == eT) (tail ers) = eT
+%     | otherwise = Right "Expressions in case statement contain different types."
+%       where
+%         (fe, _) = head ers
+%         eT = infer cxt fe
+
+\newTypeRule{Cases}{cases}
+      {\Gamma \vdash e_1 \Rightarrow s \\ \Gamma \vdash c_1 \Rightarrow \bb{B}\\\\%
+       \Gamma \vdash e_2 \Rightarrow s \\ \Gamma \vdash c_2 \Rightarrow \bb{B}\\\\%
+       \vdots{}\\\\%
+       \Gamma \vdash e_n \Rightarrow s \\ \Gamma \vdash c_n \Rightarrow \bb{B}}
+      {\Gamma \vdash \texttt{Cases}(e_1, \ldots{}, e_n, c_1, \ldots{}, c_n) \Rightarrow s}
+
+%   infer cxt (Matrix exss)
+%     | null exss = Right "Matrix has no rows."
+%     | null $ head exss = Right "Matrix has no columns."
+%     | allRowsHaveSameColumnsAndSpace = Left $ S.Matrix rows columns t
+%     | otherwise = Right "Not all rows have the same number of columns or the same value types."
+%     where
+%         rows = length exss
+%         columns = if rows > 0 then length $ head exss else 0
+%         sss = map (map (infer cxt)) exss
+%         expT = head $ head sss
+%         allRowsHaveSameColumnsAndSpace
+%           = either
+%               (\_ -> all (\ r -> length r == columns && all (== expT) r) sss)
+%               (const False) expT
+%         (Left t) = expT
+
+\newTypeRule{Matrix}{matrices}
+      {\Gamma \vdash e_{11} \Rightarrow s \\ \Gamma \vdash e_{12} \Rightarrow s \\ \ldots{} \\ \Gamma \vdash e_{1n} \Rightarrow s \\\\%
+       \Gamma \vdash e_{21} \Rightarrow s \\ \Gamma \vdash e_{22} \Rightarrow s \\ \ldots{} \\ \Gamma \vdash e_{2n} \Rightarrow s \\\\%
+       \vdots{}\\\\%
+       \Gamma \vdash e_{m1} \Rightarrow s \\ \Gamma \vdash e_{m2} \Rightarrow s \\ \ldots{} \\ \Gamma \vdash e_{mn} \Rightarrow s}
+      {Matrix(e_{11}, \ldots{}, e_{mn}) \Rightarrow \texttt{Matrix}(m,n,s)}
+
+%   infer cxt (UnaryOp uf ex) = case infer cxt ex of
+%     Left sp -> case uf of
+%       Abs -> if S.isBasicNumSpace sp && sp /= S.Natural
+%         then Left sp
+%         else Right $ "Numeric 'absolute' value operator only applies to, non-natural, numeric types. Received `" ++ show sp ++ "`."
+%       Neg -> if S.isBasicNumSpace sp && sp /= S.Natural
+%         then Left sp
+%         else Right $ "Negation only applies to, non-natural, numeric types. Received `" ++ show sp ++ "`."
+%       Exp -> if sp == S.Real || sp == S.Integer then Left S.Real else Right $ show Exp ++ " only applies to reals."
+%       x -> if sp == S.Real
+%         then Left S.Real
+%         else Right $ show x ++ " only applies to Reals. Received `" ++ show sp ++ "`."
+%     x       -> x
+
+\newTypeRule{Abs.}{absUnOp}
+      {\isNum{s} \\ s \neq \bb{N} \\ \Gamma \vdash e \Rightarrow s}
+      {\Gamma \vdash |e| \Rightarrow s}
+
+\newTypeRule{Neg.}{negUnOp}
+      {\isNum{s} \\ s \neq \bb{N} \\ \Gamma \vdash e \Rightarrow s}
+      {\Gamma \vdash - e \Rightarrow s}
+
+\newTypeRule{Exp.}{expUnOp}
+      {s \in \set{\bb{R}, \bb{Z}} \\ \Gamma \vdash p \Rightarrow s}
+      {\Gamma \vdash \texttt{e}^p \Rightarrow \bb{R}}
+
+\newTypeRule{Un. Ops}{unOps}
+      {\oplus \in \set{\texttt{log}, \texttt{ln}, \texttt{sin}, \texttt{cos}, \texttt{tan}, \texttt{sec}, \texttt{csc}, \texttt{cot}, \texttt{arcsin}, \texttt{arccos}, \texttt{arctan}, \texttt{sqrt}} \\ \Gamma \vdash e \Rightarrow \bb{R}}
+      {\Gamma \vdash \oplus e \Rightarrow \bb{R}}
+
+%   infer cxt (UnaryOpB Not ex) = case infer cxt ex of
+%     Left S.Boolean -> Left S.Boolean
+%     Left sp        -> Right $ "¬ on non-boolean operand, " ++ show sp ++ "."
+%     x              -> x
+
+\newTypeRule{Logical Neg.}{logNeg}
+      {\Gamma \vdash e \Rightarrow \bb{B}}
+      {\Gamma \vdash \lnot e \Rightarrow \bb{B}}
+
+%   infer cxt (UnaryOpVV NegV e) = case infer cxt e of
+%     Left (S.Vect sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
+%       then Left $ S.Vect sp
+%       else Right $ "Vector negation only applies to, non-natural, numbered vectors. Received `" ++ show sp ++ "`."
+%     Left sp -> Right $ "Vector negation should only be applied to numeric vectors. Received `" ++ show sp ++ "`."
+%     Right ex -> Right ex
+
+\newTypeRule{Vec. Neg.}{vecNegOp}
+      {\isNum{s} \\ s \neq \bb{N} \\ \Gamma \vdash v \Rightarrow \texttt{Vector}(s)}
+      {\Gamma \vdash - v \Rightarrow \texttt{Vector}(s)}
+
+%   infer cxt (UnaryOpVN Norm e) = case infer cxt e of
+%     Left (S.Vect sp) -> if sp == S.Real
+%       then Left S.Real
+%       else Right $ "Vector norm only applies to vectors of real numbers. Received `" ++ show sp ++ "`."
+%     Left sp -> Right $ "Vector norm only applies to vectors of real numbers. Received `" ++ show sp ++ "`."
+%     ex -> ex
+
+\newTypeRule{Vec. Norm}{vecNormOp}
+      {\Gamma \vdash v \Rightarrow \texttt{Vector}(\bb{R})}
+      {\Gamma \vdash \| v \| \Rightarrow \bb{R}}
+
+%   infer cxt (UnaryOpVN Dim e) = case infer cxt e of
+%     Left (S.Vect _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
+%     Left sp         -> Right $ "Vector 'dim' only applies to vectors. Received `" ++ show sp ++ "`."
+%     ex              -> ex
+
+\newTypeRule{Vec. Dim.}{vecDimOp}
+      {\Gamma \vdash v \Rightarrow \texttt{Vector}(s)}
+      {\Gamma \vdash \texttt{dim}(v) \Rightarrow \bb{Z}}
+
+%   infer cxt (ArithBinaryOp Frac l r) = case (infer cxt l, infer cxt r) of
+%     (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt -- FIXME: What do we want here?
+%       then Left lt
+%       else Right $ "Fractions/divisions should only be applied to the same numeric typed operands. Received `" ++ show lt ++ "` / `" ++ show rt ++ "`."
+%     (_      , Right e) -> Right e
+%     (Right e, _      ) -> Right e
+
+\newTypeRule{Frac. Bin. Op}{fracBinOp}
+      {\isNum{s} \\ \Gamma \vdash l \Rightarrow s \\ \Gamma \vdash r \Rightarrow s}
+      {\Gamma \vdash \frac{l}{r} \Rightarrow s}
+
+%   infer cxt (ArithBinaryOp Pow l r) = case (infer cxt l, infer cxt r) of
+%     (Left lt, Left rt) -> if S.isBasicNumSpace lt && (lt == rt || (lt == S.Real && rt == S.Integer))
+%       then Left lt
+%       else Right $
+%         "Powers should only be applied to the same numeric type in both operands, or real base with integer exponent. Received `" ++ show lt ++ "` ^ `" ++ show rt ++ "`."
+%     (_      , Right x) -> Right x
+%     (Right x, _      ) -> Right x
+
+\newTypeRule{Powers}{powBinOp}
+      {\isNum{s} \\ s = r \lor (s = \bb{R} \land r = \bb{Z}) \\\\%
+       \Gamma \vdash b \Rightarrow s \\ \Gamma \vdash e \Rightarrow r}
+      {\Gamma \vdash b^e \Rightarrow s}
+
+%   infer cxt (ArithBinaryOp Subt l r) = case (infer cxt l, infer cxt r) of
+%     (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt
+%       then Left lt
+%       else Right $ "Both operands of a subtraction must be the same numeric type. Received `" ++ show lt ++ "` - `" ++ show rt ++ "`."
+%     (_, Right re) -> Right re
+%     (Right le, _) -> Right le
+
+\newTypeRule{Sub. Bin. Op}{subBinOp}
+      {\isNum{s} \\ \Gamma \vdash l \Rightarrow s \\ \Gamma \vdash r \Rightarrow s}
+      {\Gamma \vdash l - r \Rightarrow s}
+
+%   infer cxt (BoolBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
+%     (Left S.Boolean, Left S.Boolean) -> Left S.Boolean
+%     (Left lt, Left rt) -> Right $ "Boolean expression contains non-boolean operand. Received `" ++ show lt ++ "` & `" ++ show rt ++ "`."
+%     (_     , Right er) -> Right er
+%     (Right el, _     ) -> Right el
+ 
+\newTypeRule{Bool. Bin. Ops}{boolBinOp}
+      {\oplus \in \set{\implies, \equiv} \\ \Gamma \vdash l \Rightarrow \bb{B} \\ \Gamma \vdash r \Rightarrow \bb{B}}
+      {\Gamma \vdash l \oplus r \Rightarrow \bb{B}}
+
+%   infer cxt (EqBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
+%     (Left lt, Left rt) -> if lt == rt
+%       then Left S.Boolean
+%       else Right $ "Both operands of an (in)equality (=/≠) must be of the same type. Received `" ++ show lt ++ "` & `" ++ show rt ++ "`."
+%     (_, Right re) -> Right re
+%     (Right le, _) -> Right le
+
+\newTypeRule{Eq. Bin. Ops}{eqBinOp}
+      {\oplus \in \set{=, \neq} \\ \Gamma \vdash l \Rightarrow s \\ \Gamma \vdash r \Rightarrow s}
+      {\Gamma \vdash l \oplus r \Rightarrow \bb{B}}
+
+%   infer cxt (OrdBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
+%     (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt
+%       then Left S.Boolean
+%       else Right $ "Both operands of a numeric comparison must be the same numeric type, got: " ++ show lt ++ ", " ++ show rt ++ "."
+%     (_, Right re) -> Right re
+%     (Right le, _) -> Right le
+
+\newTypeRule{Ord. Bin. Ops}{ordBinOp}
+      {\oplus \in \set{>, \geq, <, \leq} \\ \isNum{s} \\\\%
+       \Gamma \vdash l \Rightarrow s \\ \Gamma \vdash r \Rightarrow s}
+      {\Gamma \vdash l \oplus r \Rightarrow \bb{B}}
+
+%   infer cxt (LABinaryOp Index l n) = case (infer cxt l, infer cxt n) of
+%     (Left (S.Vect lt), Left nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
+%       then Left lt
+%       else Right $ "List accessor not of type Integer nor Natural, but of type `" ++ show nt ++ "`"
+%     (Left lt         , _      ) -> Right $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
+%     (_               , Right e) -> Right e
+%     (Right e         , _      ) -> Right e
+
+\newTypeRule{Vec. Proj.}{vecProjOp}
+      {\Gamma \vdash v \Rightarrow \texttt{Vector}(s) \\ \Gamma \vdash i \Rightarrow \bb{N}}
+      {\Gamma \vdash v\texttt{[}i\texttt{]} \Rightarrow s}
+
+%   infer cxt (VVVBinaryOp Cross l r) = case (infer cxt l, infer cxt r) of
+%     (Left lTy, Left rTy) -> if lTy == rTy
+%       then Left lTy
+%       else Right $ "Vector cross product expects both operands to have the same time. Received `" ++ show lTy ++ "` X `" ++ show rTy ++ "`."
+%     (_       , Right re) -> Right re
+%     (Right le, _       ) -> Right le
+
+\newTypeRule{Vec. Cross Prod.}{vecCrossProd}
+      {\Gamma \vdash l \Rightarrow \texttt{Vector}(\bb{R}) \\ \Gamma \vdash r \Rightarrow \texttt{Vector}(\bb{R})}
+      {\Gamma \vdash l \times r \Rightarrow \texttt{Vector}(\bb{R})}
+
+%   infer cxt (VVNBinaryOp Dot l r) = case (infer cxt l, infer cxt r) of
+%     (Left lt@(S.Vect lsp), Left rt@(S.Vect rsp)) -> if lsp == rsp && S.isBasicNumSpace lsp
+%       then Left lsp
+%       else Right $ "Vector dot product expects same numeric vector types, but found `" ++ show lt ++ "` · `" ++ show rt ++ "`."
+%     (Left lsp, Left rsp) -> Right $ "Vector dot product expects vector operands. Received `" ++ show lsp ++ "` · `" ++ show rsp ++ "`."
+%     (_, Right rx) -> Right rx
+%     (Right lx, _) -> Right lx
+
+\newTypeRule{Vec. Dot Prod.}{vecDotProd}
+      {\isNum{s} \\ \Gamma \vdash l \Rightarrow \texttt{Vector}(s) \\ \Gamma \vdash r \Rightarrow \texttt{Vector}(s)}
+      {\Gamma \vdash l \cdot{} r \Rightarrow s}
+
+%   infer cxt (Operator aao (S.BoundedDD _ _ bot top) body) = let expTy = assocArithOperToTy aao
+%     in case (infer cxt bot, infer cxt top, infer cxt body) of
+%       (Left botTy, Left topTy, Left bodyTy) -> if expTy == botTy
+%         then if expTy == topTy
+%           then if expTy == bodyTy
+%             then Left expTy
+%             else Right $ "'Big' operator range body not of expected type: " ++ show expTy ++ ", found: " ++ show bodyTy ++ "."
+%           else Right $ "'Big' operator range top not of expected type: " ++ show expTy ++ ", found: " ++ show topTy ++ "."
+%         else Right $ "'Big' operator range bottom not of expected type: " ++ show expTy ++ ", found: " ++ show botTy ++ "."
+%       (_         , _         , Right x    ) -> Right x
+%       (_         , Right x   , _          ) -> Right x
+%       (Right x   , _         , _          ) -> Right x
+
+\newTypeRule{``Big'' Arith. Op.}{bigOp}
+      {\oplus \in \set{+, \cdot{}} \\ \isNum{s} \\\\%
+       \Gamma \vdash b \Rightarrow s \\ \Gamma \vdash t \Rightarrow s \\ \Gamma \vdash e \Rightarrow s}
+      {\Gamma \vdash \bigoplus_{b}^{t} e \Rightarrow s}
+
+%   infer cxt (RealI uid ri) = 
+%     case (inferFromContext cxt uid, riTy ri) of
+%       (Left S.Real, Left riSp) -> if riSp == S.Real
+%         then Left S.Boolean
+%         else Right $
+%           "Real interval expects interval bounds to be of type Real, but received: " ++ show riSp ++ "."
+%       (Left uidSp, _         ) -> Right $
+%         "Real interval expects variable to be of type Real, but received `" ++ show uid ++ "` of type `" ++ show uidSp ++ "`."
+%       (_          , Right x  ) -> Right x
+%       (Right x    , _        ) -> Right x
+%     where
+%       riTy :: RealInterval Expr Expr -> Either Space TypeError
+%       riTy (S.Bounded (_, lx) (_, rx)) = case (infer cxt lx, infer cxt rx) of
+%         (Left lt, Left rt) -> if lt == rt
+%           then Left lt
+%           else Right $
+%             "Bounded real interval contains mismatched types for bottom and top. Received `" ++ show lt ++ "` to `" ++ show rt ++ "`."
+%         (_      , Right x) -> Right x
+%         (Right x, _      ) -> Right x
+%       riTy (S.UpTo (_, x)) = infer cxt x
+%       riTy (S.UpFrom (_, x)) = infer cxt x
+
+\newTypeRule{``Is In'' Interval (Bottom)}{isInIntervalBot}
+      {x : \bb{R} \in \Gamma \\ \Gamma \vdash b \Rightarrow \bb{R}}
+      {\Gamma \vdash x \in (b, \infty{}) \Rightarrow \bb{B} \\ \Gamma \vdash x \in [b, \infty{}) \Rightarrow \bb{B}}
+
+\newTypeRule{``Is In'' Interval (Top)}{isInIntervalTop}
+      {x : \bb{R} \in \Gamma \\ \Gamma \vdash t \Rightarrow \bb{R}}
+      {\Gamma \vdash x \in (\infty{}, t) \Rightarrow \bb{B} \\ \Gamma \vdash x \in (\infty{}, t] \Rightarrow \bb{B}}
+
+\newTypeRule{``Is In'' Interval}{isInInterval}
+      {x : \bb{R} \in \Gamma \\ \Gamma \vdash b \Rightarrow \bb{R} \\ \Gamma \vdash t \Rightarrow \bb{R}}
+      {\Gamma \vdash x \in (b, t) \Rightarrow \bb{B} \\ \Gamma \vdash x \in (b, t] \Rightarrow \bb{B} \\\\%
+      \Gamma \vdash x \in [b, t) \Rightarrow \bb{B} \\ \Gamma \vdash x \in [b, t] \Rightarrow \bb{B}}
+
+%   check :: TypingContext Space -> Expr -> Space -> Either Space TypeError
+%   check = typeCheckByInfer
+
+\newTypeRule{Checked by Inference}{check}
+      {\Gamma \vdash e \Rightarrow s}
+      {\Gamma \vdash e \Leftarrow s}
+
+Notably, the \hyperlink{tr:check}{``check'' rule} is purely based on type
+inference because \Expr{} is a relatively straight-forward language, for which
+we can reasonably infer the type of any expression. However, for \ModelExpr{},
+this will not be the case. Finally, after having built our type universe and
+typing rules, we may implement bidirectional type checking and inferencing for
+\Expr{} in Drasil.
+
+\subsection{Implementation}
+\label{chap:typed-expr:sec:typing-the-expression-language:subsec:implementation}
+
+For a first-pass at adding a type-checker and expression validation in Drasil,
+it would be beneficial to be able to check each chunk and expression at once,
+displaying all typing issues at once. In other words, it is helpful to perform
+type-checking retroactively as opposed to performing interactively, where we
+would be forced to create a compiler panic on sight of the first ill-typed
+expression. By viewing all typing issues at once, we will be able to rapidly
+view what type issues our type-checker implementation causes and revise
+accordingly.
+
+Thus, we need to build out the typing context, \(\Gamma\). \(\Gamma\) is the set
+of expression terms for which we already know the type of. While \(\Gamma\)
+might include whole expressions, the most important information we need while
+traversing \Expr{}s is information about the types associated with \UID{}s
+(since \Expr{}s, when referring to chunks, only carry \acs{uid} information,
+such as for symbols and function applications). Since each \UID{} relates to a
+symbol with a unique type, we can build a map that carries everything for us.
+
+\begin{haskell}{Typing Context, \(\Gamma\)}{typingContext}{https://github.com/JacquesCarette/Drasil/blob/f979892d095cceed4d062afb17bd9654bcda4fe2/code/drasil-lang/lib/Language/Drasil/WellTyped.hs\#L17-L19}
+-- | We can only type check 'UID's within a type context relating 'UID's to
+--   types since they don't carry any type information.
+type TypingContext t = M.Map UID t
+\end{haskell}
+
+Now we may build our type checker. As we will want to implement type checking
+for any expression types (such as for \CodeExpr{} and \ModelExpr{} eventually)
+with respect to any type universe (not just \Space{}), we prefer to build the
+bidirectional type checker with a typeclass\footnote{Note: we needed to enable
+the ``multi-parameter type-classes'' \cite{GHC2020MultiParamTypeClasses}
+\acs{ghc} language extension to create and use this type class, at times with
+the ``flexible contexts'' \cite{GHC2020FlexibleContexts} extension too.},
+instantiated as needed. Using a typeclass with 2 parameters (\(e\) and \(t\))
+allows us to build out a bidirectional type checker with respect to any
+language, \(e\), and type universe, \(t\).
+
+\begin{haskell}{Modelling Bidirectional Type Checking}{curModellingBidirectionalTypeChecking}{https://github.com/JacquesCarette/Drasil/blob/f979892d095cceed4d062afb17bd9654bcda4fe2/code/drasil-lang/lib/Language/Drasil/WellTyped.hs\#L28-L38}
+-- | Build a bidirectional type checker for your expression language, e, with
+--   respect to a specific type universe, t.
+class (Eq t, Show t) => Typed e t where
+  
+  -- | Given a typing context and an expression, infer a unique type or explain
+  --   what went awry.
+  infer :: TypingContext t -> e -> Either t TypeError
+
+
+  -- | Given a typing context, an expression, and an expected type, check if the
+  --   expression can satisfy the expectation.
+  check :: TypingContext t -> e -> t -> Either t TypeError
+\end{haskell}
+
+At the moment, \inlineHs{TypeError} is merely a type alias for a
+\inlineHs{String}, for which we manually typeset in a reasonably okay fashion.
+Eventually, it should be replaced with a whole ``breadcrumbs''-like system that
+elegantly displays a traversal over an expression, showing where type-checking
+may have gone awry and why an expression is ill-typed.
+
+Now we may build out the bidirectional type-checker for \Expr{}:
+\refCurrentExprBidirTypeCheckingHaskell{}. After which, all that's left is to
+actually use the type-checker.
+
+While we would prefer to localize type-checking to the instant applicable chunks
+are created (and expressions too), we unfortunately aren't able to\footnote{At
+least not without ease.}. As expressions are formed and symbols are referenced,
+the whole symbol type context is missing. At the moment, Drasil gathers all
+chunks at once, registers them in memory, and then performs various ``checks''
+and generation steps to produce software artifacts. To build the type context,
+we would need to build it manually, in a very tedious fashion, for each
+expression we build. However, this does not scale well. To localize
+type-checking without the extra work, we would need to make our chunk
+registration gradual and add a feature for exposing assertions that needs to be
+asserted/proven before registration in memory\footnote{We will take steps
+towards this in \Cref{chap:storingChunks}, but this task will largely be left
+for future work.}. To make a compromise, we will settle for type-checking just
+before code and \acs{srs} generation, so that we can notify Drasil-users of any
+issues and stop generation. With this information in mind, we need to be able to
+extract all expressions and expected types, and relations from our
+\InstanceModel{}s and \DataDefinition{}s.
+
+\begin{haskell}{Requiring Type-checking Constraint}{curRequiringTypecheckingConstraint}{https://github.com/JacquesCarette/Drasil/blob/f979892d095cceed4d062afb17bd9654bcda4fe2/code/drasil-lang/lib/Language/Drasil/WellTyped.hs\#L40-L45}
+-- | For all containers, c, which contain typed expressions, e, against a
+--   specific type universe, t, expose all expressions and relations that need
+--   to be type-checked.
+class Typed e t => RequiresChecking c e t where
+  -- | All things that need type checking.
+  requiredChecks :: c -> [(e, t)]
+\end{haskell}
+
+With \inlineHs{RequiresChecking}, we have a typeclass for any instance of a
+type, \(c\), which may contain any number of expressions of type \(e\) that are
+expected to be type-checked with respect to a specific type from a type universe
+\(t\). By instantiating this typeclass for \DataDefinition{}s, we expose a
+single relation to be type-checked: that a specific \QDefinition{} is
+well-formed. Interestingly, by instantiating this typeclass for
+\InstanceModel{}s, we potentially expose more than one expression, depending on
+the \ModelKind{} variant. Recall from \Cref{chap:modelkinds} that any of our
+theories (including \InstanceModel{}s) may take on any of our theory kinds
+(\ModelKinds{}), and that some of them may work with and expose expressions
+(such as equational realms,
+\Cref{chap:more-theory-kinds:sec:classify-all-the-theories:subsec:equational-realms})
+in various ways for use. Thus, we allow them to expose the expressions and
+relations individually, and we will type-check them similarly. For other
+theories, such as the new \acs{ode} model variant, \NewDEModel{}
+(\DifferentialModel{}), we may also have a solution system of equations
+\cite{Chen2022MEng} that need to be type-checked. Moving on, we may finally plug
+in our type-checker!
+
+\begin{haskell}{Type-checking a System}{typeCheckingASystem}{https://github.com/JacquesCarette/Drasil/blob/f979892d095cceed4d062afb17bd9654bcda4fe2/code/drasil-gen/lib/Language/Drasil/TypeCheck.hs\#L14-L62}
+typeCheckSI :: SystemInformation -> IO ()
+typeCheckSI
+  (SI _ _ _ _ _ _ ims dds _ _ _ _ _ _ chks _ _)
+  = do
+    -- build a variable context (a map of UIDs to "Space"s [types])
+    let cxt = M.map (\(dict, _) -> dict ^. typ) (symbolTable chks)
+
+    -- dump out the list of variables
+    putStr "Symbol Table: "
+    print $ M.toList cxt
+
+    putStrLn "=====[ Start type checking ]====="
+    let
+      exprSpaceTups :: (HasUID t, RequiresChecking t Expr Space) => [t] -> [(UID, [(Expr, Space)])] 
+      exprSpaceTups = map (\t -> (t ^. uid, requiredChecks t))
+
+    -- grab all type-check-able expressions (w.r.t. Space) from DDs and IMs
+    let toChk = exprSpaceTups ims ++ exprSpaceTups dds
+
+    -- split up theories by "ones that contain things to type check" vs "not",
+    -- but in reverse
+    let (notChkd, chkd) = partition (\(_, exsps) -> null exsps) toChk
+
+    -- note that some theories didn't expose anything to type-check
+    mapM_ 
+      (\(t, _) -> putStrLn $ "WARNING: `" ++ show t ++ "` does not expose any expressions to type check.")
+      notChkd
+
+    -- type check them
+    let chkdd = map (second (map (uncurry (check cxt)))) chkd
+
+    -- format 'ok' messages and 'type error' messages, as applicable
+    let formattedChkd :: [Either [Char] ([Char], [Either Space TypeError])]
+        formattedChkd = map 
+                          (\(t, tcs) -> if any isRight tcs
+                            then Right ("`" ++ show t ++ "` exposes ill-typed expressions!", filter isRight tcs)
+                            else Left $ "`" ++ show t ++ "` OK!") 
+                          chkdd
+
+    mapM_ (either
+            putStrLn
+            (\(tMsg, tcs) -> do
+              putStrLn tMsg
+              mapM_ (\(Right s) -> do
+                putStr "  - ERROR: "
+                putStrLn $ temporaryIndent "  " s) tcs
+              )
+      ) formattedChkd
+    putStrLn "=====[ Finished type checking ]====="
+\end{haskell}
+
+By using this function before our code generation step, we are able to
+type-check all relations and expressions relevant to code generation. As of
+writing, we found enough (approximately
+\porthref{30}{https://github.com/JacquesCarette/Drasil/issues?q=is\%3Aissue+author\%3Abalacij+Type+checking+error+is\%3Aclosed})
+typing issues such that we decided it is best to keep type-checking done en
+masse, until we've cleared through them. Interestingly, we also found that we
+had temporary operations used in places where we needed similar variants which
+didn't exist yet. For example, using ``absolute value'' in a place where we
+needed vector norm, or using addition/multiplication when we needed vector
+addition/scaling. We may enable a compiler panic for our case studies later,
+once we've cleared through the majority of the existing found type errors.
+Notably, by adding type-checking to Drasil, we also bring into question the
+coherence of our \acs{srs} documents. By forcing the \acs{srs} abstraction to
+provide sufficiently coherent information to generate code, we also have an
+equal assurance that the \acs{srs} is sufficiently \emph{coherent} for
+developers to manually build similar software artifacts.
+
+To sum up, at this point, we:
+
+\begin{itemize}
+
+      \item have bidirectional type-checking done for our concrete mathematical
+            language with respect to a specific type universe, but creating a
+            reusable interface to create similar type-checkers for other
+            languages with respect to any type universe,
+
+      \item have type-checking performed after all chunks are gathered and
+            registered in memory, and
+
+      \item uncovered many existing typing issues in Drasil's case studies.
+
+\end{itemize}
+
+Once the existing typing issues are resolved, we can enable program panics to
+enable a ``hard'' type-checking requirement for all relevant expressions
+(including, but not limited to, data definition and instance model theories).

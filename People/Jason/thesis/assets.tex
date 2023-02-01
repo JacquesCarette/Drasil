@@ -1,0 +1,373 @@
+%------------------------------------------------------------------------------
+% Folders
+%------------------------------------------------------------------------------
+
+\newcommand{\assets}{assets}
+\newcommand{\figureAssets}{\assets/figures}
+\newcommand{\imageAssets}{\assets/images}
+\newcommand{\tableAssets}{\assets/tables}
+\newcommand{\codeAssets}{\assets/code}
+\newcommand{\currentCode}{\codeAssets/current}
+\newcommand{\originalCode}{\codeAssets/original}
+\newcommand{\protoCode}{\codeAssets/prototypes}
+\newcommand{\pseudoCode}{\codeAssets/pseudo}
+
+%------------------------------------------------------------------------------
+% Code
+%------------------------------------------------------------------------------
+
+\input{\codeAssets/names}
+
+% "Current"
+%--------------------------------------
+
+% land pos rc convert to qd 
+\newcommand{\currentLandPosRCtoQD}{\input{\currentCode/landPosRCtoQD}}
+\newcommand{\refCurrentLandPosRCtoQD}{\Cref{lst:landPosRCtoQD}}
+
+% land pos im to qd
+\newcommand{\currentLandPosIMQD}{\input{\currentCode/landPosIMQD}}
+\newcommand{\refCurrentLandPosIMQD}{\Cref{lst:landPosIMQD}}
+
+% codeexpr
+\newcommand{\currentCodeExprHaskell}{\input{\currentCode/codeExpr}}
+\newcommand{\refCurrentCodeExprHaskell}{\Cref{lst:codeExprDefinition}}
+
+% codeexpr ttf
+\newcommand{\currentCodeExprTTFHaskell}{\input{\currentCode/codeExprTTF}}
+\newcommand{\refCurrentCodeExprTTFHaskell}{\Cref{lst:codeExprDefinitionTTF}}
+
+% constraintset
+\newcommand{\currentConstraintSetHaskell}{\input{\currentCode/constraintset}}
+\newcommand{\refCurrentConstraintSetHaskell}{\Cref{lst:curConstraintSet}}
+
+% definingexpr
+\newcommand{\currentDefiningExprHaskell}{\input{\currentCode/definingexpr}}
+\newcommand{\refCurrentDefiningExprHaskell}{\Cref{lst:curDefiningExpr}}
+
+% example of gathering chunks into lists
+\newcommand{\currentExampleGatherChunkIntoListsHaskell}{\input{\currentCode/exampleGatherChunkIntoLists}}
+\newcommand{\refCurrentExampleGatherChunkIntoListsHaskell}{\Cref{lst:curExampleGatherChunkIntoLists}}
+
+% example of gathering chunk lists into chunkdb
+\newcommand{\currentExampleGatherChunkListsIntoDBHaskell}{\input{\currentCode/exampleGatherChunkListsIntoDB}}
+\newcommand{\refCurrentExampleGatherChunkListsIntoDBHaskell}{\Cref{lst:curExampleGatherChunkListsIntoDB}}
+
+% example equational constraints
+\newcommand{\currentExampleEquationalConstraintsHaskell}{\input{\currentCode/exampleEquationalConstraints}}
+\newcommand{\refCurrentExampleEquationalConstraintsHaskell}{\Cref{lst:exampleEquationalConstraints}}
+
+% example equational realm
+\newcommand{\currentExampleEquationalRealmHaskell}{\input{\currentCode/exampleEquationalRealm}}
+\newcommand{\refCurrentExampleEquationalRealmHaskell}{\Cref{lst:exampleEquationalRealm}}
+
+% expr
+\newcommand{\currentExprHaskell}{\input{\currentCode/expr}}
+\newcommand{\refCurrentExprHaskell}{\Cref{lst:curExpr}}
+
+% expr bi-directional typing instance
+\newcommand{\currentExprBidirTypeCheckingHaskell}{\input{\currentCode/exprBidirTypeChecking}}
+\newcommand{\refCurrentExprBidirTypeCheckingHaskell}{\Cref{lst:curBidirTypechecking}}
+
+% express
+\newcommand{\currentExpressHaskell}{\input{\currentCode/express}}
+\newcommand{\refCurrentExpressHaskell}{\Cref{lst:curExpress}}
+
+% exprTTF
+\newcommand{\currentExprTTFHaskell}{\input{\currentCode/exprTTF}}
+\newcommand{\refCurrentExprTTFHaskell}{\Cref{lst:curExprTTF}}
+
+% landPosIM
+\newcommand{\currentLandPosIMHaskell}{\input{\currentCode/landPosIM}}
+\newcommand{\refCurrentLandPosIMHaskell}{\Cref{lst:landPosIM}}
+
+% modelexpr
+\newcommand{\currentModelExprHaskell}{\input{\currentCode/modelexpr}}
+\newcommand{\refCurrentModelExprHaskell}{\Cref{lst:curModelExpr}}
+
+% modelexprTTF
+\newcommand{\currentModelExprTTFHaskell}{\input{\currentCode/modelexprTTF}}
+\newcommand{\refCurrentModelExprTTFHaskell}{\Cref{lst:curModelExprTTF}}
+
+% modelkinds
+\newcommand{\currentModelKindsHaskell}{\input{\currentCode/modelkinds}}
+\newcommand{\refCurrentModelKindsHaskell}{\Cref{lst:curModelKinds}}
+
+% multidefn
+\newcommand{\currentMultiDefnHaskell}{\input{\currentCode/multidefn}}
+\newcommand{\refCurrentMultiDefnHaskell}{\Cref{lst:curMultiDefn}}
+
+% qdefinition
+\newcommand{\currentQDefinitionHaskell}{\input{\currentCode/qdefinition}}
+\newcommand{\refCurrentQDefinitionHaskell}{\Cref{lst:curQDefinition}}
+
+% relationconcept
+\newcommand{\currentRelationConceptHaskell}{\input{\currentCode/relationconcept}}
+\newcommand{\refCurrentRelationConceptHaskell}{\Cref{lst:curRelConcept}}
+
+% "Original"
+%--------------------------------------
+
+% chunkdb
+\newcommand{\originalChunkDBHaskell}{\input{\originalCode/chunkdb}}
+\newcommand{\refOriginalChunkDBHaskell}{\Cref{lst:origChunkDB}}
+
+% chunkdb type maps
+\newcommand{\originalChunkDBTypeMapsHaskell}{\input{\originalCode/chunkdbtypemaps}}
+\newcommand{\refOriginalChunkDBTypeMapsHaskell}{\Cref{lst:origConceptDBTypeMaps}}
+
+% conceptchunk
+\newcommand{\originalConceptChunkHaskell}{\input{\originalCode/conceptchunk}}
+\newcommand{\refOriginalConceptChunkHaskell}{\Cref{lst:origConceptChunk}}
+
+% expr
+\newcommand{\originalExprHaskell}{\input{\originalCode/expr}}
+\newcommand{\refOriginalExprHaskell}{\Cref{lst:origExpr}}
+
+% few expr smart constructors
+\newcommand{\originalFewExprSmartConstructorsHaskell}{\input{\originalCode/fewExprSmartConstructors}}
+\newcommand{\refOriginalFewExprSmartConstructorsHaskell}{\Cref{lst:origFewExprSmartConstructors}}
+
+% java projectile main
+\newcommand{\originalJavaProjectileMain}{\input{\originalCode/javaProjectileMain}}
+\newcommand{\refOriginalJavaProjectileMain}{\Cref{lst:javaProjectileMain}}
+
+% java projectile p_land method
+\newcommand{\originalJavaProjectilePLandMethod}{\input{\originalCode/javaProjectilePLandMethod}}
+\newcommand{\refOriginalJavaProjectilePLandMethod}{\Cref{lst:javaProjectilePLandMethod}}
+
+% land pos theory definition
+\newcommand{\originalLandPosTheoryDefinition}{\input{\originalCode/landPosTheoryDefinition}}
+\newcommand{\refOriginalLandPosTheoryDefinition}{\Cref{lst:originalLandPosTheoryDefinition}}
+
+% modelkinds
+\newcommand{\originalNewModelKindsHaskell}{\input{\originalCode/modelkinds}}
+\newcommand{\refOriginalNewModelKindsHaskell}{\Cref{lst:newModelKinds}}
+
+% qdefinition
+\newcommand{\originalQDefinitionHaskell}{\input{\originalCode/qdefinition}}
+\newcommand{\refOriginalQDefinitionHaskell}{\Cref{lst:origQDefinition}}
+
+% quantitydict_example
+\newcommand{\originalQuantityDictExampleHaskell}{\input{\originalCode/quantitydict_example}}
+\newcommand{\refOriginalQuantityDictExampleHaskell}{\Cref{lst:origQuantityDictExample}}
+
+% quantitydict
+\newcommand{\originalQuantityDictHaskell}{\input{\originalCode/quantitydict}}
+\newcommand{\refOriginalQuantityDictHaskell}{\Cref{lst:origQuantityDict}}
+
+% relation
+\newcommand{\originalRelation}{\input{\originalCode/relation}}
+\newcommand{\refOriginalRelation}{\Cref{lst:origRelation}}
+
+% relationconcept
+\newcommand{\originalRelationConcept}{\input{\originalCode/relationconcept}}
+\newcommand{\refOriginalRelationConcept}{\Cref{lst:origRelationConcept}}
+
+% reltoqd
+\newcommand{\originalRelToQDHaskell}{\input{\originalCode/reltoqd}}
+\newcommand{\refOriginalRelToQDHaskell}{\Cref{lst:origRelToQD}}
+
+% uid
+\newcommand{\originalSpaceHaskell}{\input{\originalCode/space}}
+\newcommand{\refOriginalSpaceHaskell}{\Cref{lst:origSpace}}
+
+% uid
+\newcommand{\originalUidHaskell}{\input{\originalCode/uid}}
+\newcommand{\refOriginalUidHaskell}{\Cref{lst:origUidDef}}
+
+% Prototypes
+%--------------------------------------
+
+% chunk
+\newcommand{\protoChunkDBHaskell}{\input{\protoCode/chunkdb}}
+\newcommand{\refProtoChunkDBHaskell}{\Cref{lst:protoChunkDB}}
+
+% ischunk constraint
+\newcommand{\protoIsChunkHaskell}{\input{\protoCode/protoIsChunk}}
+\newcommand{\refProtoIsChunkHaskell}{\Cref{lst:protoIsChunk}}
+
+% chunk retriever error
+\newcommand{\chunkRetrieverError}{\input{\protoCode/chunkRetrieverError}}
+\newcommand{\refChunkRetrieverError}{\Cref{lst:chunkRetrieverError}}
+
+% typed uid references
+\newcommand{\protoTypedUIDHaskell}{\input{\protoCode/protoTypedUID}}
+\newcommand{\refProtoTypedUIDHaskell}{\Cref{lst:protoTypedUID}}
+
+% Pseudocode
+%--------------------------------------
+
+% chunks nesting
+\newcommand{\pseudoChunkNestingHaskell}{\input{\pseudoCode/chunkNesting}}
+\newcommand{\refPseudoChunkNestingHaskell}{\Cref{lst:chunkNesting}}
+
+% partial upgrade to modelkinds
+\newcommand{\pseudoPartialModelKindsUpgrade}{\input{\pseudoCode/partialModelKindsUpgrade}}
+\newcommand{\refPseudoPartialModelKindsUpgrade}{\Cref{lst:partialModelKindsUpgrade}}
+
+% bad universal chunk carriage
+\newcommand{\badUniversalChunkCarriage}{\input{\pseudoCode/badUniversalChunkCarriage}}
+\newcommand{\refBadUniversalChunkCarriage}{\Cref{lst:badUniversalChunkCarriage}}
+
+% showing bad chunk carriage would fail chunkdb
+\newcommand{\showingBadChunkWouldFailChunkDB}{\input{\pseudoCode/showingBadChunkWouldFailChunkDB}}
+\newcommand{\refShowingBadChunkWouldFailChunkDB}{\Cref{lst:showingBadChunkWouldFailChunkDB}}
+
+% chunks that are data voids
+\newcommand{\voidDataChunks}{\input{\pseudoCode/voidDataChunks}}
+\newcommand{\refVoidDataChunks}{\Cref{lst:voidDataChunks}}
+
+% chunkdbs failing with data void chunks
+\newcommand{\voidDataChunkDB}{\input{\pseudoCode/voidDataChunkDB}}
+\newcommand{\refVoidDataChunkDB}{\Cref{lst:voidDataChunkDB}}
+
+% showing broken chunk retrieval with data void chunks
+\newcommand{\brokenChunkRetriever}{\input{\pseudoCode/brokenChunkRetriever}}
+\newcommand{\refBrokenChunkRetriever}{\Cref{lst:brokenChunkRetriever}}
+
+% non-data-void chunks
+\newcommand{\examinableChunkBox}{\input{\pseudoCode/examinableChunkBox}}
+\newcommand{\refExaminableChunkBox}{\Cref{lst:examinableChunkBox}}
+
+% intro: example angle equation encoding
+\newcommand{\exampleAngleEquationEncoding}{\input{\pseudoCode/exampleAngleEquationEncoding}}
+\newcommand{\refExampleAngleEquationEncoding}{\Cref{lst:exampleAngleEquationEncoding}}
+
+% intro: example angle equation encoding converted to python code
+\newcommand{\exampleAngleEquationEncodingToPython}{\input{\pseudoCode/exampleAngleEquationEncodingToPython}}
+\newcommand{\refExampleAngleEquationEncodingToPython}{\Cref{lst:exampleAngleEquationEncodingToPython}}
+
+% intro: example angle equation encoding converted to srs tex
+\newcommand{\exampleAngleEquationEncodingToTeX}{\input{\pseudoCode/exampleAngleEquationEncodingToTeX}}
+\newcommand{\refExampleAngleEquationEncodingToTeX}{\Cref{lst:exampleAngleEquationEncodingToTeX}}
+
+% intro: example angle variable encoding
+\newcommand{\exampleAngleVariableEncoding}{\input{\pseudoCode/exampleAngleVariableEncoding}}
+\newcommand{\refExampleAngleVariableEncoding}{\Cref{lst:exampleAngleVariableEncoding}}
+
+% non-data-void chunks
+\newcommand{\pseudoExampleExpression}{\input{\pseudoCode/exampleExpressionEncoding}}
+\newcommand{\refPseudoExampleExpression}{\Cref{lst:pseudoExampleExpressionInHaskell}}
+
+% working chunk retriever
+\newcommand{\workingChunkRetriever}{\input{\pseudoCode/workingChunkRetriever}}
+\newcommand{\refWorkingChunkRetriever}{\Cref{lst:workingChunkRetriever}}
+
+% working chunk retriever
+\newcommand{\pseudoGrabAllChunksFromNewChunkDB}{\input{\pseudoCode/grabAllChunksFromNewChunkDB}}
+\newcommand{\refPseudoGrabAllChunksFromNewChunkDB}{\Cref{lst:grabAllChunksFromNewChunkDB}}
+
+% uid ownership contract
+\newcommand{\uidOwnershipContract}{\input{\pseudoCode/uidOwnershipContract}}
+\newcommand{\refUidOwnershipContract}{\Cref{lst:uidOwnershipContract}}
+
+% working chunks with uid constraints
+\newcommand{\chunksWithUidConstraint}{\input{\pseudoCode/chunksWithUidConstraint}}
+\newcommand{\refChunksWithUidConstraint}{\Cref{lst:chunksWithUidConstraint}}
+
+% chunk dependencies contract (HasUID)
+\newcommand{\chunkDependenciesContract}{\input{\pseudoCode/chunkDependenciesContract}}
+\newcommand{\refChunkDependenciesContract}{\Cref{lst:chunkDependenciesContract}}
+
+% chunksWithUidAndRefListConstraint
+\newcommand{\chunksWithUidAndRefListConstraint}{\input{\pseudoCode/chunksWithUidAndRefListConstraint}}
+\newcommand{\refChunksWithUidAndRefListConstraint}{\Cref{lst:chunksWithUidAndRefListConstraint}}
+
+% example java type error message
+\newcommand{\pseudoExampleJavaTypeError}{\input{\pseudoCode/exampleJavaTypeError}}
+\newcommand{\refPseudoExampleJavaTypeError}{\Cref{lst:exampleJavaTypeError}}
+
+% example haskell causing poorly typed code for land pos im
+\newcommand{\pseudoExampleLandPosQDBadTyping}{\input{\pseudoCode/exampleLandPosQDBadTyping}}
+\newcommand{\refPseudoExampleLandPosQDBadTyping}{\Cref{lst:pseudoExampleLandPosQDBadTyping}}
+
+% example haskell causing poorly typed code for land pos im (java code)
+\newcommand{\pseudoExampleLandPosQDBadTypingJavaCode}{\input{\pseudoCode/exampleLandPosQDBadTypingJavaCode}}
+\newcommand{\refPseudoExampleLandPosQDBadTypingJavaCode}{\Cref{lst:pseudoExampleLandPosQDBadTypingJavaCode}}
+
+% example haskell causing poorly typed code for land pos im (java code compilation error)
+\newcommand{\pseudoExampleLandPosQDBadTypingJavaCodeCompErr}{\input{\pseudoCode/exampleLandPosQDBadTypingJavaCodeCompErr}}
+\newcommand{\refPseudoExampleLandPosQDBadTypingJavaCodeCompErr}{\Cref{lst:pseudoExampleLandPosQDBadTypingJavaCodeCompErr}}
+
+
+%------------------------------------------------------------------------------
+% Figures
+%------------------------------------------------------------------------------
+
+% language division
+\newcommand{\languageDivision}{\input{\figureAssets/languagedivision}}
+\newcommand{\refLanguageDivision}{\Cref{fig:mathLanguageDivision}}
+
+% knowledge flow in theories without modelkinds
+\newcommand{\theoriesWithoutModelKinds}{\input{\figureAssets/theorieswithoutmodelkinds}}
+\newcommand{\refTheoriesWithoutModelKinds}{\Cref{fig:theoriesWithoutModelKinds}}
+
+% knowledge flow in theories with modelkinds
+\newcommand{\theoriesWithModelKinds}{\input{\figureAssets/theorieswithmodelkinds}}
+\newcommand{\refTheoriesWithModelKinds}{\Cref{fig:theoriesWithModelKinds}}
+
+% side-by-side view of knowledge flow pre/post modelkinds
+\newcommand{\theoriesSideBySideModelKinds}{\input{\figureAssets/theoriesSideBySideModelKinds}}
+\newcommand{\refTheoriesSideBySideModelKinds}{\Cref{fig:theoriesWithModelKindsSideBySide}}
+
+% sketch of network of domains
+\newcommand{\roughNetworkOfDomains}{\input{\figureAssets/roughnetworkofdomains}}
+\newcommand{\refRoughNetworkOfDomains}{\Cref{fig:roughNetworkOfDomains}}
+
+% sketch of network of domains (for the Introduction)
+\newcommand{\roughNetworkOfDomainsIntro}{\input{\figureAssets/roughnetworkofdomainsIntro}}
+\newcommand{\refRoughNetworkOfDomainsIntro}{\Cref{fig:roughNetworkOfDomainsIntro}}
+
+
+%------------------------------------------------------------------------------
+% Images
+%------------------------------------------------------------------------------
+
+\newcommand{\drasilLogo}{\imageAssets/drasil_logo.png}
+\newcommand{\drasilLogoImg}{\input{\imageAssets/drasil_logo}}
+\newcommand{\refDrasilLogo}{\Cref{fig:drasilLogo}}
+
+\newcommand{\matryoshkaDolls}{\imageAssets/matryoshka.jpg}
+\newcommand{\matryoshkaDollsImg}{\input{\imageAssets/matryoshka}}
+\newcommand{\refMatryoshkaDollsImg}{\Cref{fig:matryoshkaDolls}}
+
+\newcommand{\figExampleEquationalConstraints}{\imageAssets/exampleEquationalConstraints.png}
+\newcommand{\exampleEquationalConstraintsImg}{\input{\imageAssets/exampleEquationalConstraints}}
+\newcommand{\refExampleEquationalConstraintsImg}{\Cref{fig:exampleEquationalConstraints}}
+
+\newcommand{\figExampleEquationalConstraintsUsage}{\imageAssets/exampleEquationalConstraintsUsage.png}
+\newcommand{\exampleEquationalConstraintsUsageImg}{\input{\imageAssets/exampleEquationalConstraintsUsage}}
+\newcommand{\refExampleEquationalConstraintsUsageImg}{\Cref{fig:exampleEquationalConstraintsUsage}}
+
+\newcommand{\figExampleEquationalRealm}{\imageAssets/exampleEquationalRealm.png}
+\newcommand{\exampleEquationalRealmImg}{\input{\imageAssets/exampleEquationalRealm}}
+\newcommand{\refExampleEquationalRealmImg}{\Cref{fig:exampleEquationalRealm}}
+
+\newcommand{\figExampleEquationalRealmUsage}{\imageAssets/exampleEquationalRealmUsage.png}
+\newcommand{\exampleEquationalRealmUsageImg}{\input{\imageAssets/exampleEquationalRealmUsage}}
+\newcommand{\refExampleEquationalRealmUsageImg}{\Cref{fig:exampleEquationalRealmUsage}}
+
+%------------------------------------------------------------------------------
+% Tables
+%------------------------------------------------------------------------------
+
+% List of case studies, and their goals/focus
+\newcommand{\caseStudiesTable}{\input{\tableAssets/caseStudies}}
+\newcommand{\refCaseStudiesTable}{\Cref{tab:drasilCaseStudies}}
+
+% List of case studies, and information about their code generation
+\newcommand{\caseStudiesCodeTableAfterDongsWork}{\input{\tableAssets/caseStudiesCodeAfterDongsWork}}
+\newcommand{\refCaseStudiesCodeTableAfterDongsWork}{\Cref{tab:drasilCaseStudiesCodeAfterDongsWork}}
+
+% List of case studies, and information about their code generation
+\newcommand{\caseStudiesCodeTable}{\input{\tableAssets/caseStudiesCode}}
+\newcommand{\refCaseStudiesCodeTable}{\Cref{tab:drasilCaseStudiesCode}}
+
+% Drasil personification
+\newcommand{\drasilPersonification}{\input{\tableAssets/drasilPersonification}}
+\newcommand{\refDrasilPersonification}{\Cref{tab:drasilPersonification}}
+
+% Source code blob hashes
+\newcommand{\sourceCodeBlobHashesTable}{\input{\tableAssets/sourceCodeBlobHashes}}
+\newcommand{\refSourceCodeBlobHashesTable}{\Cref{tab:sourceCodeBlobHashes}}

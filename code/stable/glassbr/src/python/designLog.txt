@@ -16,8 +16,9 @@ Successfully matched String with String.
 Successfully matched Actor "Constants" with Object "Constants".
 Successfully matched Actor "InputParameters" with Object "InputParameters".
 Successfully matched Real with Double.
-Successfully matched Rational with Double.
 Successfully matched Boolean with Boolean.
+Successfully matched Rational with Double.
+Successfully matched Integer with Integer.
 Successfully matched Vect Real with List Double.
 Successfully matched Vect (Vect Real) with List (List Double).
 Successfully matched Natural with Integer.

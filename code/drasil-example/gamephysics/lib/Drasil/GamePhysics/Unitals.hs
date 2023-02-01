@@ -147,7 +147,7 @@ jVect       = ucs' (dccWDS "unitVectJ" (compoundPhrase' (cn "vertical")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) (vec $ hat lJ) Real metre
 normalVect  = ucs' (dccWDS "normalVect" (nounPhraseSent (S "collision" +:+
                    phrase QM.normalVect)) (phrase QM.normalVect)) 
-                   (eqSymb QM.normalVect) Real metre
+                   (eqSymb QM.normalVect) (Vect Real) metre
 
 dVect = ucs' (dccWDS "unitVect" 
           (cn "unit vector directed from the center of the large mass to the center of the smaller mass") 
@@ -214,12 +214,12 @@ timeC = ucs' (dccWDS "timeC" (cn "denotes the time at collision")
 initRelVel = ucs' (dccWDS "v_i^AB" (compoundPhrase'
                  (compoundPhrase' (cn "initial relative") (QP.velocity ^. term))
                  (cn "between rigid bodies of A and B")) (phrase QP.velocity))
-                 (sup (sub (eqSymb QP.velocity) QP.initial) (Concat [lBodyA, lBodyB])) Real velU
+                 (sup (sub (eqSymb QP.velocity) QP.initial) (Concat [lBodyA, lBodyB])) (Vect Real) velU
 
 finRelVel = ucs' (dccWDS "v_f^AB" (compoundPhrase'
                  (compoundPhrase' (cn "final relative") (QP.velocity ^. term))
                  (cn "between rigid bodies of A and B")) (phrase QP.velocity))
-                 (sup (sub (eqSymb QP.velocity) QP.final) (Concat [lBodyA, lBodyB])) Real velU
+                 (sup (sub (eqSymb QP.velocity) QP.final) (Concat [lBodyA, lBodyB])) (Vect Real) velU
 
 massIRigidBody = ucs' (dccWDS "massj" (compoundPhrase' (QPP.mass ^. term) 
                 (cn "of the j-th rigid body")) (phrase QPP.mass)) 
@@ -252,10 +252,12 @@ forcej = ucs' (dccWDS "forcej" (compoundPhrase'
 
 velAP = ucs' (dccWDS "v^AP" (compoundPhrase' (QP.velocity ^. term)
               (cn "of the point of collision P in body A")) 
-              (phrase QP.velocity)) (sup (eqSymb QP.velocity)(Concat [lBodyA, lPoint])) Real velU
+              (phrase QP.velocity)) (sup (eqSymb QP.velocity)(Concat [lBodyA, lPoint])) 
+              (Vect Real) velU
 velBP = ucs' (dccWDS "v^BP" (compoundPhrase' (QP.velocity ^. term)
               (cn "of the point of collision P in body B")) 
-              (phrase QP.velocity)) (sup (eqSymb QP.velocity)(Concat [lBodyB, lPoint])) Real velU
+              (phrase QP.velocity)) (sup (eqSymb QP.velocity)(Concat [lBodyB, lPoint]))
+              (Vect Real) velU
 
 force_1    = forceParam "1" "first"  label1
 force_2    = forceParam "2" "second" label2

@@ -30,11 +30,11 @@ euclidNorm  = dqdNoUnit CM.euclidN  (Atop Magnitude $ vec lD) Real
 
 area, diameter, surface, surArea, orientation :: UnitalChunk
 
-area        = ucs' CM.area     cA   Real    m_2
-diameter    = ucs' CM.diameter lD   Real    metre
-surface     = ucs' CM.surface  cS   Real    m_2
-surArea     = ucs' CM.surArea  cA   Real    m_2
-orientation = ucs' CM.orient   lPhi Radians radian
+area        = ucs' CM.area     cA   Real m_2
+diameter    = ucs' CM.diameter lD   Real metre
+surface     = ucs' CM.surface  cS   Real m_2
+surArea     = ucs' CM.surArea  cA   Real m_2
+orientation = ucs' CM.orient   lPhi Real radian
 
 -- * Constants
 

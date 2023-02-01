@@ -1,0 +1,8 @@
+\begin{haskell}{Definition of RelationConcept}{curRelConcept}{https://github.com/JacquesCarette/Drasil/blob/dc3674274edb00b1ae0d63e04ba03729e1dbc6f9/code/drasil-lang/lib/Language/Drasil/Chunk/Relation.hs\#L19-L24}
+-- | For a concept ('ConceptChunk') that also has a 'Relation' ('ModelExpr') attached.
+--
+-- Ex. We can describe a pendulum arm and then apply an associated equation so that we know its behaviour.
+data RelationConcept = RC { _conc :: ConceptChunk
+                          , _rel  :: ModelExpr
+                          }
+\end{haskell}

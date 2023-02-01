@@ -52,6 +52,7 @@ si = SI {
   _kind        = Doc.notebook,
   _authors     = [spencerSmith],
   _purpose     = [],
+  _background  = [], 
   _quants      = [] :: [QuantityDict],
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = [],

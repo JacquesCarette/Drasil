@@ -1,0 +1,147 @@
+\chapter{Future Work}
+\label{chap:future-work}
+
+While this work does contribute to the Drasil research project and the ideology
+underpinning it, there are still many questions and concerns left unanswered.
+While this thesis contributes to Drasil's theories, expressions, and database,
+it also uncovers more questions.
+
+\section{Theories}
+\label{chap:futureWork:sec:theories}
+
+While \Cref{chap:modelkinds} improves upon the mathematical expression-directed
+method of encoding ``theory knowledge,'' it is not without its own issues.
+Namely, the current implementation has two focal problems that we hope to
+resolve in the future: extensibility, and the questionable type parameter
+belonging to \ModelKind{} (\refCurrentModelKindsHaskell{}).
+
+As \ModelKinds{} is written using a GADT, it is difficult to extend its
+functionality (similar to the ``expression problem''
+\cite{Wadler1999ExpressionProblem}). A work in progress re-design of
+\ModelKinds{} \cite{DrasilIssue2853AlternativeModelKinds}, relying on \acs{ghc}s
+\ConstraintKinds{} \cite{GHC2020ConstraintKinds} language extension, uses
+Haskell-level typeclasses to describe what a model satisfying the needs of being
+a ``model kind'' must provide to be treated as a ``model kind''. These typeclass
+instances may be thought of as proofs that satisfy the requirements. The primary
+benefit to adding extensibility to theory kinds is exactly that we become able
+to add any kind of \textit{previously unknown to Drasil} theorem without needing
+to touch too much other code. It also allows us to restrict different types of
+theories to particular areas.
+
+Continuing, the type parameter in \ModelKinds{} is peculiar as it is used to
+indicate usability of a certain model in code generation through either having
+an \Expr{} or a \ModelExpr{}. A \inlineHs{ModelKind Expr} indicates that a model
+is usable in code generation, while a \inlineHs{ModelKind ModelExpr} indicates
+that the model is not to be used in code generation. However, \Expr{} and
+\ModelExpr{} should not necessarily be used to denote usability of a model in
+code generation.
+
+However, these two (2) issues are relatively unimportant for now. The issue of
+extensibility has a proof of concept solution (as discussed above) already
+constructed, and the issue of the type parameter is resolvable as a side effect.
+
+Less importantly, there is also current discussion of renaming \ModelKinds{} to
+\TheoryKind{} \cite{DrasilIssue2599RenamingModels}, as ``model'' is a heavily
+overloaded term, and ``theory'' is a guaranteed discussion of abstraction,
+unlike ``model,'' which is typically instantiated to some ``theory.''
+
+\section{Expressions}
+\label{chap:futureWork:sec:expressions}
+
+In \Cref{chap:typed-expr}, we had built a type-checker for the expression
+language \Expr{}, and while our type errors had been sufficient for us to track
+down significant errors with relative ease, they are suboptimal. For example,
+the current type-error messages shown do not show a ``breadcrumbs''-like path to
+the root problematic area(s) of an expression. Furthermore, we only added typing
+to \Expr{} but not to our other related languages, \CodeExpr{}, \ModelExpr{},
+and \acs{gool}. In the near future, we hope to add optional typing for
+\ModelExpr{}\footnote{It is at times helpful to have malformed expressions for
+purely demonstrative purposes.} and split up the \Space{} type to accommodate
+the 3 variants. Finally, after having added type information to \CodeExpr{}, we
+may begin to also add type rules to \acs{gool} to finally assure that
+expression generation will only create well-typed expressions.
+
+\section{Chunks}
+\label{chap:futureWork:sec:chunks}
+
+While \Cref{chap:storingChunks} answers questions regarding \textit{storing}
+more kinds of chunks and has created a basic set of constraints that all chunks
+must satisfy (\HasUID{} and \HasChunkRefs{}), we've embedded their solutions in
+Haskell code rather than Drasil itself. For solutions to be included ``in Drasil
+itself,'' we need to encode it such that Drasil allows users to interact with
+them fdynamically, without Template Haskell\cite{GHC2020TemplateHaskell} or
+other things ``deep'' in Haskell. Similarly, we have mysterious \Typeable{}
+usage left unknown, which should eventually be replaced with something
+well-understood to us. In the future, we hope to improve chunk building
+fundamentally, perhaps by using a \acs{dsl} instead of leaning on built-in
+Haskell functionality. This would allow us to better analyze Drasil and its
+projects.
+
+Furthermore, while we've added requirements that \acsp{uid} be unique, we
+haven't discussed how \UID{}s should be built (e.g., automatically or manually,
+and how), nor ensured that \UID{} uniquely refer to the chunks they were
+intended to link to. We desire for them to fully be \textit{rigid designators}
+\cite{Kripke1972NandN}. Perhaps these questions will naturally resolve
+themselves when we try to switch to using a Drasil \acs{dsl} to build chunks.
+
+As described in \Cref{chap:storingChunks}, once we resolve the issue regarding
+\UID{} collisions, we should be able to register more of our currently underused
+chunks in our new \ChunkDB{}s. In doing this, we will be able to perform a wider
+range of analysis on our necessary ``knowledge'' (chunks). For example, we
+should be able to better understand how much mental effort is needed to produce
+software artifacts.
+
+Addititionally, in
+\Cref{chap:typed-expr:sec:typing-the-expression-language:subsec:implementation},
+we implemented type-checking for our basic mathematical expression language
+(\Expr{}), but we added it at the \textit{database level}, checking each chunk
+registered. We can abstract over what we did and make type-checking a variant of
+what we really did: validated properties about a chunk. Thus, we can extend the
+implementation for type-checking at the level of the \ChunkDB{} and create
+general data constraints on chunks. By doing so, we will be able to categorize
+our chunk assertions and learn more about what was embedded in the Haskell
+source code.
+
+\subsection{Math-specific Instances}
+\label{chap:futureWork:sec:chunks:sub:mathSpecific}
+
+In \Cref{chap:modelkinds,chap:typed-expr}, we discussed how we can improve the
+reliability of mathematical language usage in Drasil in different facets. One
+notable facet in practice is the unit and dimension of numbers. We hope that we
+may, in the future, create a strong and reliable system for units and dimensions
+for Drasil, allowing users to discuss precision and accuracy of the generated
+\acs{scs} solver artifacts. Furthermore, in \Cref{chap:typed-expr}, we neglected
+to ensure that symbols referenced by the expression languages are all
+appropriate for the use-cases. For example, the \Expr{} should language should
+only allow for reference of concrete and usable symbols, while \ModelExpr{}
+should only allow for referencing of symbols of abstract symbols. Similarly,
+\CodeExpr{} should only allow referencing of symbols that belong to ``code''
+rather than to the mathematical models (for this, a switch from a
+\QuantityDict{} is needed as well).
+
+\subsection{Database}
+\label{chap:futureWork:sec:chunks:sub:database}
+
+Once the \ChunkDB{} prototype finds its way into Drasil, we may focus on the
+ways we can manipulate them. For example, if we consider them sets we should
+consider implementing ``union'' and ``intersection'' operations to assist in
+importing and analyzing bodies of chunks. Additionally, if we consider them
+``tables'' (as in common relational databases), we might benefit from ``inner''
+and ``outer'' joins, or even using an \acs{sql} server as a backend to inputting
+(or handling) chunks. Using an \acs{sql} server may prove beneficial as there
+are already many \acs{gui} frontends for inputting \acs{rdbms} data.
+Furthermore, with the new database structure, ``tree shaking'' should be a
+fairly simple operation, reduced to searching for chunks that are unreachable
+from the universe of references of an input set of chunks. For example, for the
+Smith et al. \acs{srs} transformer, we may consider tree shaking against the
+directly captured instances of inputs and outputs to remove any unnecessary
+assumptions, theories, symbols, etc.
+
+Finally, one pain-point in the case studies is inputting the transcribed chunks
+into the chunk database. At the moment, it requires manually inputting the data
+into lists (\refCurrentExampleGatherChunkIntoListsHaskell{}), and then using the
+lists to form the \ChunkDB{}
+(\refCurrentExampleGatherChunkListsIntoDBHaskell{}). We could attempt to
+automatically register the chunks in the database, either by analyzing Haskell
+(meta-linguistic), or de-embedding the chunks from our Haskell code and
+registering on parsing them \cite{DrasilIssue2873ChunkDBCaretteResponse}. 

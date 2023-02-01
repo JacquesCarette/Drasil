@@ -111,7 +111,6 @@ instance Applicative CSharpCode where
   (CSC f) <*> (CSC x) = CSC (f x)
 
 instance Monad CSharpCode where
-  return = CSC
   CSC x >>= f = f x
 
 instance OOProg CSharpCode where
@@ -121,7 +120,7 @@ instance ProgramSym CSharpCode where
   prog n files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
-    return $ onCodeList (progD n) fs
+    pure $ onCodeList (progD n) fs
 
 instance RenderSym CSharpCode
 
@@ -782,8 +781,8 @@ csFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> MSBody r ->
 csFuncDecDef v ps bod = do
   vr <- zoom lensMStoVS v
   pms <- mapM (zoom lensMStoVS) ps
-  t <- zoom lensMStoVS $ funcType (map (return . variableType) pms) 
-    (return $ variableType vr)
+  t <- zoom lensMStoVS $ funcType (map (pure . variableType) pms) 
+    (pure $ variableType vr)
   b <- bod
   modify (addLangImport csSystem)
   mkStmt $ RC.type' t <+> text (variableName vr) <+> equals <+>

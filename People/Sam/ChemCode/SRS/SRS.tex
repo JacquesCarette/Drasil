@@ -61,10 +61,10 @@
 \newcommand{\ddthedatadefnum}{DD\thedatadefnum}
 \newcommand{\ddref}[1]{DD\ref{#1}}
 \newcounter{theorynum} %Theory Number
-\newcommand{\tthetheorynum}{T\thetheorynum}
-\newcommand{\tref}[1]{T\ref{#1}}
+\newcommand{\tthetheorynum}{TM\thetheorynum}
+\newcommand{\tref}[1]{TM\ref{#1}}
 \newcounter{tablenum} %Table Number
-\newcommand{\tbthetablenum}{T\thetablenum}
+\newcommand{\tbthetablenum}{TB\thetablenum}
 \newcommand{\tbref}[1]{TB\ref{#1}}
 \newcounter{assumpnum} %Assumption Number
 \newcommand{\atheassumpnum}{P\theassumpnum}
@@ -90,7 +90,7 @@
 \newcommand{\deftheory}[9][Not Applicable]
 {
 \noindent \rule{\textwidth}{0.5mm}
-\paragraph{Number: } T\refstepcounter{theorynum}\thetheorynum
+\paragraph{Number: } TM\refstepcounter{theorynum}\thetheorynum
 \phantomsection \label{#2}
 
 \paragraph{Label:} #3
@@ -166,14 +166,14 @@ Jan. 25, 2023 & 0.2.2 & Add references between sections for notation and
 							(\iref{convert}), along with relevant reference information \\
 							& 0.2.5 & Rename and add input constraint to \iref{balance}\\
 							& 0.2.6 & Add note about \iref{balance} returning the smallest solution\\
-							& 0.2.7 & Add TM for matrix equation (\tref{T:MatEq})\\
+							& 0.2.7 & Add TM for matrix equation (\tref{TM_MatEq})\\
 							& 0.2.8 & Improve referencing, mainly for TMs, and add note about
 							potential TM for Conservation of Mass\\
 							& 0.2.9 & Add check for Conservation of Mass in \iref{feasible}\\
 Jan. 26, 2023 & 0.3 & Add \nameref{sec_LCs} from Problem Statement, add
 							assumption about difference between number of elements and compounds
 							(\aref{A_elemCompDiff}), and add mole to \nameref{sec_ToU}\\
-							& 0.3.1 & Update \tref{T:MatEq} (and TM function) from feedback from
+							& 0.3.1 & Update \tref{TM_MatEq} (and TM function) from feedback from
 							presentation\\
 							& 0.3.2 & Fill in \nameref{sec_scope}, fix \aref{A_elemCompDiff} and 
 							change ``infeasible'' to ``feasible''\\
@@ -182,7 +182,7 @@ Jan. 27, 2023 & 0.3.3 & Improve section referencing in \nameref{sec_revHist}\\
 Jan. 28, 2023 & 0.4.1 & Fill in main \nameref{sec_nonfuncReqs}, along with
 							relevant reference information\\
 							& 0.4.2 & Add TM for the Law of Conservation of Mass
-							(\tref{T:ConsMass})\\
+							(\tref{TM_ConsMass})\\
 							& 0.4.3 & Represent input to \iref{convert} as two sequences of chemical
 							formulas, add assumptions about user input, and remove infeasible
 							likely change\\
@@ -206,6 +206,8 @@ Jan. 30, 2023 & 0.5.2 & Remove unnecessary template comments about SRS document
 							& 0.6 & Make System Context diagram (Figure \ref{fig_sysCon}) and start
 							to fill in \nameref{sec_sysCon}\\
 Jan. 31, 2023 & 0.6.1 & Fill in rest of \nameref{sec_genSysDesc}\\
+Feb. 1, 2023 & 0.6.2 & Change abbreviation of theoretical model from ``T'' to
+							``TM'' and make TM references consistent with other references\\
 \bottomrule
 \end{tabularx}
 
@@ -285,7 +287,7 @@ which heat is transferred in
   PS & Physical System Description\\
   R & Requirement\\
   SRS & Software Requirements Specification\\
-  T & Theoretical Model\\
+  TM & Theoretical Model\\
   VnV & Verification and Validation\\
   \bottomrule
 \end{tabular}\\
@@ -539,7 +541,7 @@ $$
 \nameref{sec_probDesc}, chemical formulas must be balanced to be
 useful in other reactions \cite{lund_introduction_2023}. This means that there
 must be the same number of each element before and after the reaction takes
-place to satisfy the Law of Conservation of Mass (\tref{T:ConsMass}). Since
+place to satisfy the Law of Conservation of Mass (\tref{TM_ConsMass}). Since
 changing the subscripts in a formula will change the type of molecule (for
 example, \ce{O3} is ozone, not oxygen), equations are balanced by introducing
 coefficients before each compound. If no coefficient is present, there is an
@@ -610,7 +612,7 @@ models can be verified.
 This section simplifies the original problem and helps in developing the
 theoretical model by filling in the missing information for the physical
 system. The numbers given in the square brackets refer to the theoretical model
-[T], general definition [GD], data definition [DD], instance model [IM], or
+[TM], general definition [GD], data definition [DD], instance model [IM], or
 likely change [LC], in which the respective assumption is used.
 
 \begin{itemize}
@@ -649,7 +651,7 @@ on.
 \noindent
 \deftheory
 % #2 refname of theory
-{T:MatEq}
+{TM_MatEq}
 % #3 label
 {Matrix equation}
 % #4 equation
@@ -684,7 +686,7 @@ on.
 \noindent
 \deftheory
 % #2 refname of theory
-{T:ConsMass}
+{TM_ConsMass}
 % #3 label
 {Law of Conservation of Mass}
 % #4 equation
@@ -711,7 +713,7 @@ on.
 %\noindent
 %\deftheory
 %% #2 refname of theory
-%{T:COE}
+%{TM_COE}
 %% #3 label
 %{Conservation of thermal energy}
 %% #4 equation
@@ -1004,7 +1006,7 @@ and \iref{balance}, respectively.
   If a row of $\textbf{A}$ only has either a positive or negative entry, then
   there is an element that is either a reactant or a product but not both,
   which breaks the Law of Conservation of
-  Mass (\tref{T:ConsMass}). \sjc{Is this a good place for this?}\\
+  Mass (\tref{TM_ConsMass}). \sjc{Is this a good place for this?}\\
 %  &$\textbf{R}$ is the $m \times n$ matrix $(\textbf{A} \vert \textbf{0})$
 %  as close to reduced row echelon form (see \nameref{sec_termsDefs}) as possible
 %  from \iref{epcm}.
@@ -1047,7 +1049,7 @@ and \iref{balance}, respectively.
   \sjc{Is this correct?}\\
   \hline
   Output& $\textbf{x}$, such that it is the smallest solution to\\
-  &$\textbf{A}\textbf{x} = \textbf{0}$ from \tref{T:MatEq} 
+  &$\textbf{A}\textbf{x} = \textbf{0}$ from \tref{TM_MatEq} 
 %  \sjc{TM refs not working.}
   \sjc{Is this sufficient?}\\
   \hline

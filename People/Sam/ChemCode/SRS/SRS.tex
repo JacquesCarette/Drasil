@@ -128,10 +128,10 @@
 \begin{document}
 
 \title{Software Requirements Specification for \progname:\\
-A program for solving chemistry problems} 
+  A program for solving chemistry problems}
 \author{\authname}
 \date{February 3, 2023}
-	
+
 \maketitle
 \thispagestyle{empty}
 
@@ -146,69 +146,69 @@ A program for solving chemistry problems}
 \section*{Revision History} \label{sec_revHist}
 
 \begin{tabularx}{\textwidth}{p{2.5cm}p{1.5cm}X}
-\toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
-\midrule
-Jan. 21, 2023 & 0.0 & Start document, fill in title page, and add references\\
-							& 0.1 & Fill in \nameref{sec_probDesc} and \nameref{sec_goals} sections, as 
-							well as all relevant definitions\\
-Jan. 22, 2023 & 0.1.1 & Replace the notion of ``fractional oxidation state'' with
-							``nonstoichiometric compound''\\
-							& 0.1.2 & Fix capTemplate reference\\
-							& 0.1.3 & Update \nameref{sec_abbsAcrs}\\
-							& 0.2 & Add IM for balancing a chemical reaction (\iref{balance}), along
-							with relevant reference information\\
-Jan. 23, 2023 & 0.2.1 & Add IM for determining if a chemical reaction is feasible
-							(\iref{feasible}), along with relevant reference information\\
-Jan. 25, 2023 & 0.2.2 & Add references between sections for notation and
-							definitions\\
-							& 0.2.3 & Abstract \iref{feasible}\\
-							& 0.2.4 & Add IM for converting chemical equation to a matrix
-							(\iref{convert}), along with relevant reference information \\
-							& 0.2.5 & Rename and add input constraint to \iref{balance}\\
-							& 0.2.6 & Add note about \iref{balance} returning the smallest solution\\
-							& 0.2.7 & Add TM for matrix equation (\tref{TM_MatEq})\\
-							& 0.2.8 & Improve referencing, mainly for TMs, and add note about
-							potential TM for Conservation of Mass\\
-							& 0.2.9 & Add check for Conservation of Mass in \iref{feasible}\\
-Jan. 26, 2023 & 0.3 & Add \nameref{sec_LCs} from Problem Statement, add
-							assumption about difference between number of elements and compounds
-							(\aref{A_elemCompDiff}), and add mole to \nameref{sec_ToU}\\
-							& 0.3.1 & Update \tref{TM_MatEq} (and TM function) from feedback from
-							presentation\\
-							& 0.3.2 & Fill in \nameref{sec_scope}, fix \aref{A_elemCompDiff} and 
-							change ``infeasible'' to ``feasible''\\
-Jan. 27, 2023 & 0.3.3 & Improve section referencing in \nameref{sec_revHist}\\
-							& 0.4 & Fill in \nameref{sec_funcReqs}\\
-Jan. 28, 2023 & 0.4.1 & Fill in main \nameref{sec_nonfuncReqs}, along with
-							relevant reference information\\
-							& 0.4.2 & Add TM for the Law of Conservation of Mass
-							(\tref{TM_ConsMass})\\
-							& 0.4.3 & Represent input to \iref{convert} as two sequences of chemical
-							formulas, add assumptions about user input, and remove infeasible
-							likely change\\
-Jan. 29, 2023 & 0.4.4 & Add NFRs for understandability
-							(\nfrref{NFR_understandability}) and verifiability
-							(\nfrref{NFR_verifiability}) and improve quality of other NFRs\\
-\bottomrule~\\
-~\\
-\toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
-\midrule
-Jan. 29, 2023 & 0.5 & Fill in \nameref{sec_intro} based on Drasil examples\\
-							& 0.5.1 & Fill in \nameref{sec_phySystDesc} and remove ``product'' and
-							``reactant'' from \nameref{sec_termsDefs}\\
-Jan. 30, 2023 & 0.5.2 & Remove unnecessary template comments about SRS document
-							and the ones from \nameref{sec_specSysDesc} up to
-							\nameref{sec_instance}, except for \nameref{sec_datatypes}\\
-							& 0.5.3 & Remove unnecessary content from \nameref{sec_tabSymbs} and
-							add the notion of ``gram'' to the document\\
-							& 0.5.4 & Make \nfrref{NFR_accuracy} more accurate to current scope with
-							potential future information for stretch goals added in comment\\
-							& 0.6 & Make System Context diagram (Figure \ref{fig_sysCon}) and start
-							to fill in \nameref{sec_sysCon}\\
-Jan. 31, 2023 & 0.6.1 & Fill in rest of \nameref{sec_genSysDesc}\\
-Feb. 1, 2023 & 0.6.2 & Change abbreviation of theoretical model from ``T'' to
-							``TM'' and make TM references consistent with other references\\
-\bottomrule
+  \toprule {\bf Date} & {\bf Version} & {\bf Notes}                                                         \\
+  \midrule
+  Jan. 21, 2023       & 0.0           & Start document, fill in title page, and add references              \\
+                      & 0.1           & Fill in \nameref{sec_probDesc} and \nameref{sec_goals} sections, as
+  well as all relevant definitions                                                                          \\
+  Jan. 22, 2023       & 0.1.1         & Replace the notion of ``fractional oxidation state'' with
+  ``nonstoichiometric compound''                                                                            \\
+                      & 0.1.2         & Fix capTemplate reference                                           \\
+                      & 0.1.3         & Update \nameref{sec_abbsAcrs}                                       \\
+                      & 0.2           & Add IM for balancing a chemical reaction (\iref{balance}), along
+  with relevant reference information                                                                       \\
+  Jan. 23, 2023       & 0.2.1         & Add IM for determining if a chemical reaction is feasible
+  (\iref{feasible}), along with relevant reference information                                              \\
+  Jan. 25, 2023       & 0.2.2         & Add references between sections for notation and
+  definitions                                                                                               \\
+                      & 0.2.3         & Abstract \iref{feasible}                                            \\
+                      & 0.2.4         & Add IM for converting chemical equation to a matrix
+  (\iref{convert}), along with relevant reference information                                               \\
+                      & 0.2.5         & Rename and add input constraint to \iref{balance}                   \\
+                      & 0.2.6         & Add note about \iref{balance} returning the smallest solution       \\
+                      & 0.2.7         & Add TM for matrix equation (\tref{TM_MatEq})                        \\
+                      & 0.2.8         & Improve referencing, mainly for TMs, and add note about
+  potential TM for Conservation of Mass                                                                     \\
+                      & 0.2.9         & Add check for Conservation of Mass in \iref{feasible}               \\
+  Jan. 26, 2023       & 0.3           & Add \nameref{sec_LCs} from Problem Statement, add
+  assumption about difference between number of elements and compounds
+  (\aref{A_elemCompDiff}), and add mole to \nameref{sec_ToU}                                                \\
+                      & 0.3.1         & Update \tref{TM_MatEq} (and TM function) from feedback from
+  presentation                                                                                              \\
+                      & 0.3.2         & Fill in \nameref{sec_scope}, fix \aref{A_elemCompDiff} and
+  change ``infeasible'' to ``feasible''                                                                     \\
+  Jan. 27, 2023       & 0.3.3         & Improve section referencing in \nameref{sec_revHist}                \\
+                      & 0.4           & Fill in \nameref{sec_funcReqs}                                      \\
+  Jan. 28, 2023       & 0.4.1         & Fill in main \nameref{sec_nonfuncReqs}, along with
+  relevant reference information                                                                            \\
+                      & 0.4.2         & Add TM for the Law of Conservation of Mass
+  (\tref{TM_ConsMass})                                                                                      \\
+                      & 0.4.3         & Represent input to \iref{convert} as two sequences of chemical
+  formulas, add assumptions about user input, and remove infeasible
+  likely change                                                                                             \\
+  Jan. 29, 2023       & 0.4.4         & Add NFRs for understandability
+  (\nfrref{NFR_understandability}) and verifiability
+  (\nfrref{NFR_verifiability}) and improve quality of other NFRs                                            \\
+  \bottomrule~                                                                                              \\
+  ~                                                                                                         \\
+  \toprule {\bf Date} & {\bf Version} & {\bf Notes}                                                         \\
+  \midrule
+  Jan. 29, 2023       & 0.5           & Fill in \nameref{sec_intro} based on Drasil examples                \\
+                      & 0.5.1         & Fill in \nameref{sec_phySystDesc} and remove ``product'' and
+  ``reactant'' from \nameref{sec_termsDefs}                                                                 \\
+  Jan. 30, 2023       & 0.5.2         & Remove unnecessary template comments about SRS document
+  and the ones from \nameref{sec_specSysDesc} up to
+  \nameref{sec_instance}, except for \nameref{sec_datatypes}                                                \\
+                      & 0.5.3         & Remove unnecessary content from \nameref{sec_tabSymbs} and
+  add the notion of ``gram'' to the document                                                                \\
+                      & 0.5.4         & Make \nfrref{NFR_accuracy} more accurate to current scope with
+  potential future information for stretch goals added in comment                                           \\
+                      & 0.6           & Make System Context diagram (Figure \ref{fig_sysCon}) and start
+  to fill in \nameref{sec_sysCon}                                                                           \\
+  Jan. 31, 2023       & 0.6.1         & Fill in rest of \nameref{sec_genSysDesc}                            \\
+  Feb. 1, 2023        & 0.6.2         & Change abbreviation of theoretical model from ``T'' to
+  ``TM'' and make TM references consistent with other references                                            \\
+  \bottomrule
 \end{tabularx}
 
 %~\newpage
@@ -216,7 +216,7 @@ Feb. 1, 2023 & 0.6.2 & Change abbreviation of theoretical model from ``T'' to
 \section{Reference Material}
 
 This section records information for easy reference.
- 
+
 \subsection{Table of Units} \label{sec_ToU}
 
 Throughout this document SI (Syst\`{e}me International d'Unit\'{e}s) is employed
@@ -227,24 +227,24 @@ description of the unit and the SI name.
 
 \renewcommand{\arraystretch}{1.2}
 %\begin{table}[ht]
-  \noindent \begin{tabular}{l l l} 
-    \toprule		
-    \textbf{symbol} & \textbf{unit} & \textbf{SI}\\
-    \midrule 
-    \si{\gram} & mass	& gram\\
-    \si{\mole} & amount of substance & mole\\
-%    \si{\celsius} & temperature & centigrade\\
-%    \si{\watt} & power & watt (W = \si{\joule\per\second})\\
-    \bottomrule
-  \end{tabular}
-  %	\caption{Provide a caption}
+\noindent \begin{tabular}{l l l}
+  \toprule
+  \textbf{symbol} & \textbf{unit}       & \textbf{SI} \\
+  \midrule
+  \si{\gram}      & mass                & gram        \\
+  \si{\mole}      & amount of substance & mole        \\
+  %    \si{\celsius} & temperature & centigrade\\
+  %    \si{\watt} & power & watt (W = \si{\joule\per\second})\\
+  \bottomrule
+\end{tabular}
+%	\caption{Provide a caption}
 %\end{table}
 
 \plt{Derived units should show their derivation (the units they are derived
-	from) if their constituent units are used in the document. The symbol for units
-	named after people use capital letters, but the name
+  from) if their constituent units are used in the document. The symbol for units
+  named after people use capital letters, but the name
   of the unit itself uses lower case. The one exception to this is degree Celsius.
-  Details on writing metric units can be found on the 
+  Details on writing metric units can be found on the
   \href{https://www.nist.gov/pml/weights-and-measures/writing-metric-units}
   {NIST} web-page.}
 
@@ -258,14 +258,14 @@ systems.  The symbols are listed in alphabetical order.
 \renewcommand{\arraystretch}{1.2}
 %\noindent \begin{tabularx}{1.0\textwidth}{l l X}
 \noindent \begin{longtable*}{l l p{12cm}} \toprule
-\textbf{symbol} & \textbf{unit} & \textbf{description}\\
-\midrule 
-$A_C$ & \si[per-mode=symbol] {\square\metre} & coil surface area
-\\
-$A_\text{in}$ & \si[per-mode=symbol] {\square\metre} & surface area over 
-which heat is transferred in
-\\ 
-\bottomrule
+  \textbf{symbol} & \textbf{unit} & \textbf{description}\\
+  \midrule
+  $A_C$ & \si[per-mode=symbol] {\square\metre} & coil surface area
+  \\
+  $A_\text{in}$ & \si[per-mode=symbol] {\square\metre} & surface area over
+  which heat is transferred in
+  \\
+  \bottomrule
 \end{longtable*}
 \plt{Use your problems actual symbols.  The si package is a good idea to use for
   units.}
@@ -273,22 +273,22 @@ which heat is transferred in
 \subsection{Abbreviations and Acronyms} \label{sec_abbsAcrs}
 
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{l l} 
-  \toprule		
-  \textbf{symbol} & \textbf{description}\\
-  \midrule 
-  1D & One-Dimensional\\
-  A & Assumption\\
-  DD & Data Definition\\
-  GD & General Definition\\
-  GS & Goal Statement\\
-  IM & Instance Model\\
-  LC & Likely Change\\
-  PS & Physical System Description\\
-  R & Requirement\\
-  SRS & Software Requirements Specification\\
-  TM & Theoretical Model\\
-  VnV & Verification and Validation\\
+\begin{tabular}{l l}
+  \toprule
+  \textbf{symbol} & \textbf{description}                \\
+  \midrule
+  1D              & One-Dimensional                     \\
+  A               & Assumption                          \\
+  DD              & Data Definition                     \\
+  GD              & General Definition                  \\
+  GS              & Goal Statement                      \\
+  IM              & Instance Model                      \\
+  LC              & Likely Change                       \\
+  PS              & Physical System Description         \\
+  R               & Requirement                         \\
+  SRS             & Software Requirements Specification \\
+  TM              & Theoretical Model                   \\
+  VnV             & Verification and Validation         \\
   \bottomrule
 \end{tabular}\\
 
@@ -310,7 +310,7 @@ as $\left(\textbf{A}\vert \textbf{B}\right)$ \cite{taboga_augmented_2021}.
   these should be summarized here.  In some cases the easiest way to summarize
   the notation is to point to a text or other source that explains the
   notation.}
-  
+
 \newpage
 
 \pagenumbering{arabic}
@@ -334,7 +334,7 @@ document, the scope of the requirements, the characteristics of the intended
 reader, and the organization of the document.
 
 \subsection{Purpose of Document}
-  
+
 The primary purpose of this document is to record the requirements of the
 program for solving chemistry problems \sjc{Is this a good description?}.
 Goals, assumptions, theoretical models,
@@ -392,31 +392,31 @@ characteristics and lists the system constraints.
 
 \subsection{System Context} \label{sec_sysCon}
 \begin{figure}[h!]
-\begin{center}
-\begin{tikzpicture}[
-roundnode/.style={circle, draw=black, very thick, minimum size=20mm},
-squarednode/.style={rectangle, draw=black, very thick, minimum size=20mm},
-]
-%Nodes
-\node[roundnode]        (user_input)                              {User};
-\node[squarednode, xshift = 3cm]      (\progname{})       [right=of user_input] {\progname{}};
-\node[roundnode, xshift = 3cm]        (user_output)       [right=of \progname{}] {User};
-\node[roundnode, align=center, yshift = 1.5cm] (ext_lib) [above=of \progname{}] {External\\Library};
-\node[roundnode, draw=none, align=center, yshift = 1.538cm] (upArrow) [above=of \progname{}] {};\node[roundnode, draw=none, align=center, yshift = 1.55cm] (downArrow) [above=of \progname{}] {};
+  \begin{center}
+    \begin{tikzpicture}[
+        roundnode/.style={circle, draw=black, very thick, minimum size=20mm},
+        squarednode/.style={rectangle, draw=black, very thick, minimum size=20mm},
+      ]
+      %Nodes
+      \node[roundnode]        (user_input)                              {User};
+      \node[squarednode, xshift = 3cm]      (\progname{})       [right=of user_input] {\progname{}};
+      \node[roundnode, xshift = 3cm]        (user_output)       [right=of \progname{}] {User};
+      \node[roundnode, align=center, yshift = 1.5cm] (ext_lib) [above=of \progname{}] {External\\Library};
+      \node[roundnode, draw=none, align=center, yshift = 1.538cm] (upArrow) [above=of \progname{}] {};\node[roundnode, draw=none, align=center, yshift = 1.55cm] (downArrow) [above=of \progname{}] {};
 
-%Lines
-\draw[->, very thick] (user_input.east) -- (\progname{}.west) node[above, pos=0.5, align=center] {An unbalanced\\chemical equation};
-\begin{scope}[transform canvas={xshift=-.7em}]
-\draw[->, very thick] (\progname{}.north) -- (upArrow.south) node[left, pos=0.5, align=right] {The chemical\\equation as\\ a matrix};
-\end{scope}
-\begin{scope}[transform canvas={xshift=.7em}]
-\draw[->, very thick] (downArrow.south) -- (\progname{}.north) node[right, pos=0.5, align=left] {The matrix\\ after processing\\};
-\end{scope}
-\draw[->, very thick] (\progname{}.east) -- (user_output.west) node[above, pos=0.5, align=center] {A balanced\\form of the\\chemical equation};
-\end{tikzpicture}
-\caption{System Context}
-\label{fig_sysCon} 
-\end{center}
+      %Lines
+      \draw[->, very thick] (user_input.east) -- (\progname{}.west) node[above, pos=0.5, align=center] {An unbalanced\\chemical equation};
+      \begin{scope}[transform canvas={xshift=-.7em}]
+        \draw[->, very thick] (\progname{}.north) -- (upArrow.south) node[left, pos=0.5, align=right] {The chemical\\equation as\\ a matrix};
+      \end{scope}
+      \begin{scope}[transform canvas={xshift=.7em}]
+        \draw[->, very thick] (downArrow.south) -- (\progname{}.north) node[right, pos=0.5, align=left] {The matrix\\ after processing\\};
+      \end{scope}
+      \draw[->, very thick] (\progname{}.east) -- (user_output.west) node[above, pos=0.5, align=center] {A balanced\\form of the\\chemical equation};
+    \end{tikzpicture}
+    \caption{System Context}
+    \label{fig_sysCon}
+  \end{center}
 \end{figure}
 
 Figure \ref{fig_sysCon} shows the system context. A circle represents an
@@ -425,27 +425,27 @@ itself (\progname{}). Arrows are used to show the data flow between the system
 and its environment.
 
 \begin{itemize}
-\item User Responsibilities:
-\begin{itemize}
-\item Provide an unbalanced chemical equation, ensuring conformation to input
-	data format required by \progname{}
-\item Ensure required software assumptions from Subsection~\ref{sec_assumps}
-	are appropriate for the problem to which the user is applying the software
-\end{itemize}
-\item \progname{} Responsibilities:
-\begin{itemize}
-\item Detect data type mismatch, such as a string of characters instead of a
-	rational number
-\item Detect improperly formatted chemical equations
-\item Format inputted chemical equation as a matrix
-\item Determine if the inputted chemical equation is feasible
-\item If the inputted chemical equation is feasible, find its balanced form with
-	the smallest whole number coefficients
-\end{itemize}
-\item External Library Responsibilities:
-\begin{itemize}
-\item Process the chemical equation matrix \sjc{Can this be more descriptive?}
-\end{itemize}
+  \item User Responsibilities:
+        \begin{itemize}
+          \item Provide an unbalanced chemical equation, ensuring conformation to input
+                data format required by \progname{}
+          \item Ensure required software assumptions from Subsection~\ref{sec_assumps}
+                are appropriate for the problem to which the user is applying the software
+        \end{itemize}
+  \item \progname{} Responsibilities:
+        \begin{itemize}
+          \item Detect data type mismatch, such as a string of characters instead of a
+                rational number
+          \item Detect improperly formatted chemical equations
+          \item Format inputted chemical equation as a matrix
+          \item Determine if the inputted chemical equation is feasible
+          \item If the inputted chemical equation is feasible, find its balanced form with
+                the smallest whole number coefficients
+        \end{itemize}
+  \item External Library Responsibilities:
+        \begin{itemize}
+          \item Process the chemical equation matrix \sjc{Can this be more descriptive?}
+        \end{itemize}
 \end{itemize}
 
 \subsection{User Characteristics} \label{sec_userChars}
@@ -461,7 +461,7 @@ chemistry, namely stoichiometry (see \nameref{sec_termsDefs}).
 %  where design decisions can be specified.  That is, the quality requirement for
 %  abstraction is relaxed here.  However, system constraints should only be
 %  included if they are truly required.}
-  
+
 \progname~will be developed using Drasil \cite{carette_drasil_2021}, ``a
 framework for generating high-quality documentation and code for Scientific
 Computing Software'' \cite[p. iii]{maclachlan_design_2020}, with the goal of
@@ -500,32 +500,32 @@ sections and their meaning, with the purpose of reducing ambiguity and making it
 easier to correctly understand the requirements:
 
 \begin{itemize}
-\item \textbf{Feasible}: (Referring to a chemical equation) able to be
-balanced \cite{hamid_balancing_2019}.
+  \item \textbf{Feasible}: (Referring to a chemical equation) able to be
+        balanced \cite{hamid_balancing_2019}.
 
-\item \textbf{Hydrate}: ``A compound formed by the chemical combination of water
-and some other substance in a definite molecular ratio''
-\cite{harpercollins_publishers_hydrate_nodate}.
+  \item \textbf{Hydrate}: ``A compound formed by the chemical combination of water
+        and some other substance in a definite molecular ratio''
+        \cite{harpercollins_publishers_hydrate_nodate}.
 
-\item \textbf{Nonstoichiometric Compound}: ``Any solid chemical compound in
-which the numbers of atoms of the elements present cannot be expressed as a
-ratio of small whole numbers"
-\cite{the_editors_of_encyclopaedia_britannica_nonstoichiometric_2010}.
+  \item \textbf{Nonstoichiometric Compound}: ``Any solid chemical compound in
+        which the numbers of atoms of the elements present cannot be expressed as a
+        ratio of small whole numbers''
+        \cite{the_editors_of_encyclopaedia_britannica_nonstoichiometric_2010}.
 
-\item \textbf{Stoichiometry}: ``The calculation of the quantities of reactants
-or products in a chemical reaction using the relationships found in a balanced
-chemical equation'' \cite[p. 337]{lund_introduction_2023}.
+  \item \textbf{Stoichiometry}: ``The calculation of the quantities of reactants
+        or products in a chemical reaction using the relationships found in a balanced
+        chemical equation'' \cite[p. 337]{lund_introduction_2023}.
 
-%\item \textbf{Reduced Row Echelon Form}: A form of a matrix where every row
-%with only zeros is at the bottom and every column but the rightmost one
-%has all zeroes except for one one (which has only zeroes to its left)
-%\cite{taboga_reduced_2021}.
+        %\item \textbf{Reduced Row Echelon Form}: A form of a matrix where every row
+        %with only zeros is at the bottom and every column but the rightmost one
+        %has all zeroes except for one one (which has only zeroes to its left)
+        %\cite{taboga_reduced_2021}.
 \end{itemize}
 
 \subsubsection{Physical System Description} \label{sec_phySystDesc}
-  
+
 Chemical reactions are interactions between different types of matter that
-result in new substances being formed \cite[p. 286]{lund_introduction_2023}. 
+result in new substances being formed \cite[p. 286]{lund_introduction_2023}.
 These are represented using chemical equations, with the reactant(s)---the
 substance(s) present at the beginning of the reaction---on the left-hand side
 and the product(s)---the substance(s) formed by the reaction---on the right. An
@@ -534,7 +534,7 @@ presence of oxygen to form carbon dioxide and water vapour is shown below. The
 subscripts indicate how many of each element is present in the given chemical
 compound.
 $$
-\ce{CH4} + \ce{O2} \rightarrow \ce{CO2} + \ce{H2O}
+  \ce{CH4} + \ce{O2} \rightarrow \ce{CO2} + \ce{H2O}
 $$
 
 \sjc{Is this paragraph helpful/needed?} As mentioned in
@@ -548,16 +548,16 @@ coefficients before each compound. If no coefficient is present, there is an
 implicit coefficient of ``1''. The above equation looks like this in its
 balanced form:
 $$
-\ce{CH4} + \ce{2O2} \rightarrow \ce{CO2} + \ce{2H2O}
+  \ce{CH4} + \ce{2O2} \rightarrow \ce{CO2} + \ce{2H2O}
 $$
 
 The physical system of \progname{} includes:
 
 \begin{itemize}
 
-\item[PS1:] the products of a given chemical reaction;
+  \item[PS1:] the products of a given chemical reaction;
 
-\item[PS2:] the reactants of the same chemical reaction.
+  \item[PS2:] the reactants of the same chemical reaction.
 
 \end{itemize}
 
@@ -572,17 +572,17 @@ The physical system of \progname{} includes:
 % \end{figure}
 
 \subsubsection{Goal Statements} \label{sec_goals}
-Given a representation of a chemical equation, the goal statements 
+Given a representation of a chemical equation, the goal statements
 of \progname{} are:
 
 \begin{itemize}
 
-\item[GS\refstepcounter{goalnum}\thegoalnum \label{G_feasible}:] Determine if
-a given chemical reaction is feasible (see \nameref{sec_termsDefs}).
+  \item[GS\refstepcounter{goalnum}\thegoalnum \label{G_feasible}:] Determine if
+    a given chemical reaction is feasible (see \nameref{sec_termsDefs}).
 
-\item[GS\refstepcounter{goalnum}\thegoalnum \label{G_balance}:] Balance the
-inputted chemical equation with the smallest whole number coefficients
-possible.
+  \item[GS\refstepcounter{goalnum}\thegoalnum \label{G_balance}:] Balance the
+    inputted chemical equation with the smallest whole number coefficients
+    possible.
 
 \end{itemize}
 
@@ -612,28 +612,28 @@ models can be verified.
 This section simplifies the original problem and helps in developing the
 theoretical model by filling in the missing information for the physical
 system. The numbers given in the square brackets refer to the theoretical model
-[TM], general definition [GD], data definition [DD], instance model [IM], or
+  [TM], general definition [GD], data definition [DD], instance model [IM], or
 likely change [LC], in which the respective assumption is used.
 
 \begin{itemize}
 
-\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_elemCompDiff}:]
-  For all inputted chemical equations, there is at most one more compound than
-  element. (Through empirical analysis, chemical equations without this
-  constraint lead to unexpected results that require a deeper analysis.)
-%  [\lcref{LC_allEqsPermitted}]
-  
-\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_validInput}:]
-	All inputted chemical formulas describe real chemical formulas.
-	[\iref{convert}]
-	
-\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_correctInputFormat}:]
-	All inputted chemical formulas are formatted following some set of
-	agreed-upon conventions.	[\iref{convert}, \lcref{LC_incorrectInputFormat}]
-	
-\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_simpleForms}:]
-	All inputted chemical formulas are simple; i.e., only consist of atomic symbols
-	and subscripts.	[\iref{convert}, \lcref{LC_complexForms}]
+  \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_elemCompDiff}:]
+    For all inputted chemical equations, there is at most one more compound than
+    element. (Through empirical analysis, chemical equations without this
+    constraint lead to unexpected results that require a deeper analysis.)
+    %  [\lcref{LC_allEqsPermitted}]
+
+  \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_validInput}:]
+    All inputted chemical formulas describe real chemical formulas.
+      [\iref{convert}]
+
+  \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_correctInputFormat}:]
+    All inputted chemical formulas are formatted following some set of
+    agreed-upon conventions.	[\iref{convert}, \lcref{LC_incorrectInputFormat}]
+
+  \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_simpleForms}:]
+    All inputted chemical formulas are simple; i.e., only consist of atomic symbols
+    and subscripts.	[\iref{convert}, \lcref{LC_complexForms}]
 
 \end{itemize}
 
@@ -667,13 +667,13 @@ on.
 }
 % #6 Notes
 {
-	For any $\textbf{A}$ and $\textbf{b}$, there is either zero, one, or infinite
-	values for $\textbf{x}$ \cite{zwick_math_2012}.
+  For any $\textbf{A}$ and $\textbf{b}$, there is either zero, one, or infinite
+  values for $\textbf{x}$ \cite{zwick_math_2012}.
 }
 % #7 Source
 {
   \url{https://textbooks.math.gatech.edu/ila/matrix-equations.html} \sjc{Is this
-  a good enough source?}
+    a good enough source?}
 }
 % #8 Referenced by
 {
@@ -701,7 +701,7 @@ on.
 {None}
 % #7 Source
 {
-  \url{https://chem.libretexts.org/Courses/Anoka-Ramsey_Community_College/Introduction_to_Chemistry/03\%3A_Matter_and_Energy/3.06\%3A_Conservation_of_Mass} 
+  \url{https://chem.libretexts.org/Courses/Anoka-Ramsey_Community_College/Introduction_to_Chemistry/03\%3A_Matter_and_Energy/3.06\%3A_Conservation_of_Mass}
 }
 % #8 Referenced by
 {
@@ -872,31 +872,31 @@ models. \plt{Modify the examples below for your problem, and add additional
 
 \noindent
 \begin{minipage}{\textwidth}
-\renewcommand*{\arraystretch}{1.5}
-\begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
-  \hline
-  \rowcolor[gray]{0.9}
-  Type Name & Name for Type\\
-  \hline
-  Type Def & mathematical definition of the type\\
-  \hline
-  Description & description here
-  \\
-  \hline
-  Sources & Citation here, if the type is borrowed from another source\\
-  \hline
-\end{tabular}
+  \renewcommand*{\arraystretch}{1.5}
+  \begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
+    \hline
+    \rowcolor[gray]{0.9}
+    Type Name   & Name for Type                                              \\
+    \hline
+    Type Def    & mathematical definition of the type                        \\
+    \hline
+    Description & description here
+    \\
+    \hline
+    Sources     & Citation here, if the type is borrowed from another source \\
+    \hline
+  \end{tabular}
 \end{minipage}\\
 
-\subsubsection{Instance Models} \label{sec_instance}    
+\subsubsection{Instance Models} \label{sec_instance}
 
-This section transforms the problem defined in \nameref{sec_probDesc} into 
-one which is expressed in mathematical terms. It uses concrete symbols defined 
-in Section~\ref{sec_datadef} to replace the abstract symbols in the models 
+This section transforms the problem defined in \nameref{sec_probDesc} into
+one which is expressed in mathematical terms. It uses concrete symbols defined
+in Section~\ref{sec_datadef} to replace the abstract symbols in the models
 identified in Sections~\ref{sec_theoretical} and~\ref{sec_gendef}.
 
 The goals \gsref{G_feasible} and \gsref{G_balance} are solved by \iref{feasible}
-and \iref{balance}, respectively. 
+and \iref{balance}, respectively.
 
 ~\newline
 
@@ -945,35 +945,35 @@ and \iref{balance}, respectively.
 
 \noindent
 \begin{minipage}{\textwidth}
-\renewcommand*{\arraystretch}{1.5}
-\begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
-  \hline
-  \rowcolor[gray]{0.9}
-  Number& IM\refstepcounter{instnum}\theinstnum \label{convert}\\
-  \hline
-  Label& \bf Matrix representation of elements present in reaction\\
-  \hline
-  Input& Two sequences of representations of chemical formulas; one for the
-  reactants and one for the products.\\
-  \hline
-  Output& A matrix such that each entry
-  indicates the amount of a given element in a given compound; each row
-  corresponds to a different element and each column corresponds to a different
-  compound. Positive entries indicate the compound is a reactant, negative
-  entries indicate the compound is a product, and zeroes indicate the
-  corresponding element is not present in the corresponding compound. \\
-  \hline
-  Description& Each chemical formula present in the inputted sequences are
-  assumed to be valid (\aref{A_validInput}), be formatted correctly
-  (\aref{A_correctInputFormat}), and only consist of atomic symbols and
-  subscripts (\aref{A_simpleForms}).
-  \\
-  \hline
-  Sources& \cite{hamid_balancing_2019} \\
-  \hline
-  Ref.\ By & \iref{feasible}, \iref{balance}\\
-  \hline
-\end{tabular}
+  \renewcommand*{\arraystretch}{1.5}
+  \begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
+    \hline
+    \rowcolor[gray]{0.9}
+    Number      & IM\refstepcounter{instnum}\theinstnum \label{convert}              \\
+    \hline
+    Label       & \bf Matrix representation of elements present in reaction          \\
+    \hline
+    Input       & Two sequences of representations of chemical formulas; one for the
+    reactants and one for the products.                                              \\
+    \hline
+    Output      & A matrix such that each entry
+    indicates the amount of a given element in a given compound; each row
+    corresponds to a different element and each column corresponds to a different
+    compound. Positive entries indicate the compound is a reactant, negative
+    entries indicate the compound is a product, and zeroes indicate the
+    corresponding element is not present in the corresponding compound.              \\
+    \hline
+    Description & Each chemical formula present in the inputted sequences are
+    assumed to be valid (\aref{A_validInput}), be formatted correctly
+    (\aref{A_correctInputFormat}), and only consist of atomic symbols and
+    subscripts (\aref{A_simpleForms}).
+    \\
+    \hline
+    Sources     & \cite{hamid_balancing_2019}                                        \\
+    \hline
+    Ref.\ By    & \iref{feasible}, \iref{balance}                                    \\
+    \hline
+  \end{tabular}
 \end{minipage}\\
 
 %~\newline
@@ -983,47 +983,47 @@ and \iref{balance}, respectively.
 %\plt{The derivation shows how the IM is derived from the TMs/GDs.  In cases
 %  where the derivation cannot be described under the Description field, it will
 %  be necessary to include this subsection.}
-  
+
 \noindent
 \begin{minipage}{\textwidth}
-\renewcommand*{\arraystretch}{1.5}
-\begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
-  \hline
-  \rowcolor[gray]{0.9}
-  Number& IM\refstepcounter{instnum}\theinstnum \label{feasible}\\
-  \hline
-  Label& \bf Determination of feasibility\\
-  \hline
-  Input& $\textbf{A}$ from \iref{convert}\\
-%  & The input is constrained so that $T_\text{init} \leq T_C$ (\aref{A_charge})\\
-  \hline
-  Output& $\textsc{F}$ if a row of $\textbf{A}$ does not have a positive and a
-  			negative entry or if $(\textbf{A} \vert \textbf{0})$ has no solutions and 
-  			$\textsc{T}$ otherwise\\
-  \hline
-  Description&$\textbf{A}$ is a matrix representing the amount of each element
-  in each compound in a reaction from \iref{convert}. \sjc{Is this necessary?}
-  If a row of $\textbf{A}$ only has either a positive or negative entry, then
-  there is an element that is either a reactant or a product but not both,
-  which breaks the Law of Conservation of
-  Mass (\tref{TM_ConsMass}). \sjc{Is this a good place for this?}\\
-%  &$\textbf{R}$ is the $m \times n$ matrix $(\textbf{A} \vert \textbf{0})$
-%  as close to reduced row echelon form (see \nameref{sec_termsDefs}) as possible
-%  from \iref{epcm}.
-%	\sjc{Is the relationship between $\textbf{R}$ and $r_{m,n-1}$ clear?}
-%  \sjc{Where should $\textbf{R}$ be defined?}\\
-  &$\textbf{0}$ is the zero matrix (see \nameref{sec_mathNot}). \\
-%  & The above equation applies as long as the water is in liquid form,
-%  $0<T_W<100^o\text{C}$, where $0^o\text{C}$ and $100^o\text{C}$ are the melting
-%  and boiling points of water, respectively (\aref{A_OpRange}, \aref{A_Pressure}).
-%  \\
-  \hline
-  Sources& \cite{hamid_balancing_2019} \\
-%  , \cite{pramoditha_how_2021} \\
-  \hline
-  Ref.\ By & \iref{balance}\\
-  \hline
-\end{tabular}
+  \renewcommand*{\arraystretch}{1.5}
+  \begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
+    \hline
+    \rowcolor[gray]{0.9}
+    Number      & IM\refstepcounter{instnum}\theinstnum \label{feasible}               \\
+    \hline
+    Label       & \bf Determination of feasibility                                     \\
+    \hline
+    Input       & $\textbf{A}$ from \iref{convert}                                     \\
+    %  & The input is constrained so that $T_\text{init} \leq T_C$ (\aref{A_charge})\\
+    \hline
+    Output      & $\textsc{F}$ if a row of $\textbf{A}$ does not have a positive and a
+    negative entry or if $(\textbf{A} \vert \textbf{0})$ has no solutions and
+    $\textsc{T}$ otherwise                                                             \\
+    \hline
+    Description & $\textbf{A}$ is a matrix representing the amount of each element
+    in each compound in a reaction from \iref{convert}. \sjc{Is this necessary?}
+    If a row of $\textbf{A}$ only has either a positive or negative entry, then
+    there is an element that is either a reactant or a product but not both,
+    which breaks the Law of Conservation of
+    Mass (\tref{TM_ConsMass}). \sjc{Is this a good place for this?}                    \\
+    %  &$\textbf{R}$ is the $m \times n$ matrix $(\textbf{A} \vert \textbf{0})$
+    %  as close to reduced row echelon form (see \nameref{sec_termsDefs}) as possible
+    %  from \iref{epcm}.
+    %	\sjc{Is the relationship between $\textbf{R}$ and $r_{m,n-1}$ clear?}
+    %  \sjc{Where should $\textbf{R}$ be defined?}\\
+                & $\textbf{0}$ is the zero matrix (see \nameref{sec_mathNot}).         \\
+    %  & The above equation applies as long as the water is in liquid form,
+    %  $0<T_W<100^o\text{C}$, where $0^o\text{C}$ and $100^o\text{C}$ are the melting
+    %  and boiling points of water, respectively (\aref{A_OpRange}, \aref{A_Pressure}).
+    %  \\
+    \hline
+    Sources     & \cite{hamid_balancing_2019}                                          \\
+    %  , \cite{pramoditha_how_2021} \\
+    \hline
+    Ref.\ By    & \iref{balance}                                                       \\
+    \hline
+  \end{tabular}
 \end{minipage}\\
 
 ~\newline
@@ -1033,41 +1033,41 @@ and \iref{balance}, respectively.
 %\plt{The derivation shows how the IM is derived from the TMs/GDs.  In cases
 %  where the derivation cannot be described under the Description field, it will
 %  be necessary to include this subsection.}
-  
+
 \noindent
 \begin{minipage}{\textwidth}
-\renewcommand*{\arraystretch}{1.5}
-\begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
-	\hline
-  \rowcolor[gray]{0.9}
-  Number& IM\refstepcounter{instnum}\theinstnum \label{balance}\\
-  \hline
-  Label& \bf Vector of compound coefficients in balanced equation\\
-  \hline
-  Input& $\textbf{A}$ from \iref{convert}\\
-  & The input is constrained so that $\textbf{A}$ is feasible (\iref{feasible}).
-  \sjc{Is this correct?}\\
-  \hline
-  Output& $\textbf{x}$, such that it is the smallest solution to\\
-  &$\textbf{A}\textbf{x} = \textbf{0}$ from \tref{TM_MatEq} 
-%  \sjc{TM refs not working.}
-  \sjc{Is this sufficient?}\\
-  \hline
-  Description&$\textbf{A}$ is a matrix representing the amount of each element
-  in each compound in a reaction from \iref{convert}. \sjc{Is this necessary?}\\
-  &$\textbf{x}$ is a vector of coefficients for each compound in the reaction 
-  (in the order inputted) so that the equation is balanced.\\
-  &$\textbf{0}$ is the zero matrix (see \nameref{sec_mathNot}).\\
-%  & The above equation applies as long as the water is in liquid form,
-%  $0<T_W<100^o\text{C}$, where $0^o\text{C}$ and $100^o\text{C}$ are the melting
-%  and boiling points of water, respectively (\aref{A_OpRange}, \aref{A_Pressure}).
-%  \\
-  \hline
-  Sources& \cite{hamid_balancing_2019} \\
-  \hline
-  Ref.\ By & N/A\\
-  \hline
-\end{tabular}
+  \renewcommand*{\arraystretch}{1.5}
+  \begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
+    \hline
+    \rowcolor[gray]{0.9}
+    Number      & IM\refstepcounter{instnum}\theinstnum \label{balance}                        \\
+    \hline
+    Label       & \bf Vector of compound coefficients in balanced equation                     \\
+    \hline
+    Input       & $\textbf{A}$ from \iref{convert}                                             \\
+                & The input is constrained so that $\textbf{A}$ is feasible (\iref{feasible}).
+    \sjc{Is this correct?}                                                                     \\
+    \hline
+    Output      & $\textbf{x}$, such that it is the smallest solution to                       \\
+                & $\textbf{A}\textbf{x} = \textbf{0}$ from \tref{TM_MatEq}
+    %  \sjc{TM refs not working.}
+    \sjc{Is this sufficient?}                                                                  \\
+    \hline
+    Description & $\textbf{A}$ is a matrix representing the amount of each element
+    in each compound in a reaction from \iref{convert}. \sjc{Is this necessary?}               \\
+                & $\textbf{x}$ is a vector of coefficients for each compound in the reaction
+    (in the order inputted) so that the equation is balanced.                                  \\
+                & $\textbf{0}$ is the zero matrix (see \nameref{sec_mathNot}).                 \\
+    %  & The above equation applies as long as the water is in liquid form,
+    %  $0<T_W<100^o\text{C}$, where $0^o\text{C}$ and $100^o\text{C}$ are the melting
+    %  and boiling points of water, respectively (\aref{A_OpRange}, \aref{A_Pressure}).
+    %  \\
+    \hline
+    Sources     & \cite{hamid_balancing_2019}                                                  \\
+    \hline
+    Ref.\ By    & N/A                                                                          \\
+    \hline
+  \end{tabular}
 \end{minipage}\\
 
 %~\newline
@@ -1080,7 +1080,7 @@ and \iref{balance}, respectively.
 
 \newpage
 
-\subsubsection{Input Data Constraints} \label{sec_DataConstraints}    
+\subsubsection{Input Data Constraints} \label{sec_DataConstraints}
 
 Table~\ref{TblInputVar} shows the data constraints on the input output
 variables.  The column for physical constraints gives the physical limitations
@@ -1100,32 +1100,32 @@ Table~\ref{TblSpecParams}.
 \begin{table}[!h]
   \caption{Input Variables} \label{TblInputVar}
   \renewcommand{\arraystretch}{1.2}
-\noindent \begin{longtable*}{l l l l c} 
-  \toprule
-  \textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} &
-                             \textbf{Typical Value} & \textbf{Uncertainty}\\
-  \midrule 
-  $L$ & $L > 0$ & $L_{\text{min}} \leq L \leq L_{\text{max}}$ & 1.5 \si[per-mode=symbol] {\metre} & 10\%
-  \\
-  \bottomrule
-\end{longtable*}
+  \noindent \begin{longtable*}{l l l l c}
+    \toprule
+    \textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} &
+    \textbf{Typical Value} & \textbf{Uncertainty}\\
+    \midrule
+    $L$ & $L > 0$ & $L_{\text{min}} \leq L \leq L_{\text{max}}$ & 1.5 \si[per-mode=symbol] {\metre} & 10\%
+    \\
+    \bottomrule
+  \end{longtable*}
 \end{table}
 
-\noindent 
+\noindent
 \begin{description}
-\item[(*)] \plt{you might need to add some notes or clarifications}
+  \item[(*)] \plt{you might need to add some notes or clarifications}
 \end{description}
 
 \begin{table}[!h]
-\caption{Specification Parameter Values} \label{TblSpecParams}
-\renewcommand{\arraystretch}{1.2}
-\noindent \begin{longtable*}{l l} 
-  \toprule
-  \textbf{Var} & \textbf{Value} \\
-  \midrule 
-  $L_\text{min}$ & 0.1 \si{\metre}\\
-  \bottomrule
-\end{longtable*}
+  \caption{Specification Parameter Values} \label{TblSpecParams}
+  \renewcommand{\arraystretch}{1.2}
+  \noindent \begin{longtable*}{l l}
+    \toprule
+    \textbf{Var} & \textbf{Value} \\
+    \midrule
+    $L_\text{min}$ & 0.1 \si{\metre}\\
+    \bottomrule
+  \end{longtable*}
 \end{table}
 
 \subsubsection{Properties of a Correct Solution} \label{sec_CorrectSolution}
@@ -1139,16 +1139,16 @@ A correct solution must exhibit \plt{fill in the details}.  \plt{These
   in tabular form.  A sample table is shown in Table~\ref{TblOutputVar}}
 
 \begin{table}[!h]
-\caption{Output Variables} \label{TblOutputVar}
-\renewcommand{\arraystretch}{1.2}
-\noindent \begin{longtable*}{l l} 
-  \toprule
-  \textbf{Var} & \textbf{Physical Constraints} \\
-  \midrule 
-  $T_W$ & $T_\text{init} \leq T_W \leq T_C$ (by~\aref{A_charge})
-  \\
-  \bottomrule
-\end{longtable*}
+  \caption{Output Variables} \label{TblOutputVar}
+  \renewcommand{\arraystretch}{1.2}
+  \noindent \begin{longtable*}{l l}
+    \toprule
+    \textbf{Var} & \textbf{Physical Constraints} \\
+    \midrule
+    $T_W$ & $T_\text{init} \leq T_W \leq T_C$ (by~\aref{A_charge})
+    \\
+    \bottomrule
+  \end{longtable*}
 \end{table}
 
 \plt{This section is not for test cases or techniques for verification and
@@ -1164,30 +1164,30 @@ qualities that the software is expected to exhibit.
 
 \noindent \begin{itemize}
 
-\item[R\refstepcounter{reqnum}\thereqnum \label{R_input}:] Input a
-	representation of a chemical equation.
+  \item[R\refstepcounter{reqnum}\thereqnum \label{R_input}:] Input a
+    representation of a chemical equation.
 
-\item[R\refstepcounter{reqnum}\thereqnum \label{R_convert}:] Convert the
-	inputted equation to matrix form (from \iref{convert}).
-	
-\item[R\refstepcounter{reqnum}\thereqnum \label{R_feasible}:] Determine if the
-	inputted equation is feasible (see \nameref{sec_termsDefs};	from
-	\iref{feasible}).
-	
-\item[R\refstepcounter{reqnum}\thereqnum \label{R_balance}:] If the
-	inputted equation is feasible, balance the chemical equation with the smallest
-	whole number coefficients possible (from \iref{balance}).
-	
-\item[R\refstepcounter{reqnum}\thereqnum \label{R_infeasOutput}:] If the
-	inputted equation is infeasible, output a descriptive message.
-	\sjc{Should this go before \rref{R_balance}?}
-	
-\item[R\refstepcounter{reqnum}\thereqnum \label{R_feasOutput}:] If the
-	inputted equation is feasible, output a balanced form of the equation in the
-	same format as the input, using the coefficients from \iref{balance}.
+  \item[R\refstepcounter{reqnum}\thereqnum \label{R_convert}:] Convert the
+    inputted equation to matrix form (from \iref{convert}).
 
-%\item[R\refstepcounter{reqnum}\thereqnum \label{R_VerifyOutput}:]
-%  \plt{Verification related requirements.}
+  \item[R\refstepcounter{reqnum}\thereqnum \label{R_feasible}:] Determine if the
+    inputted equation is feasible (see \nameref{sec_termsDefs};	from
+    \iref{feasible}).
+
+  \item[R\refstepcounter{reqnum}\thereqnum \label{R_balance}:] If the
+    inputted equation is feasible, balance the chemical equation with the smallest
+    whole number coefficients possible (from \iref{balance}).
+
+  \item[R\refstepcounter{reqnum}\thereqnum \label{R_infeasOutput}:] If the
+    inputted equation is infeasible, output a descriptive message.
+    \sjc{Should this go before \rref{R_balance}?}
+
+  \item[R\refstepcounter{reqnum}\thereqnum \label{R_feasOutput}:] If the
+    inputted equation is feasible, output a balanced form of the equation in the
+    same format as the input, using the coefficients from \iref{balance}.
+
+    %\item[R\refstepcounter{reqnum}\thereqnum \label{R_VerifyOutput}:]
+    %  \plt{Verification related requirements.}
 \end{itemize}
 
 %\plt{Every IM should map to at least one requirement, but not every requirement
@@ -1197,57 +1197,57 @@ qualities that the software is expected to exhibit.
 
 \noindent \begin{itemize}
 
-\item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_accuracy}:]
-  \textbf{Accuracy:} Chemical equations are only useful if they are balanced
-  \cite{lund_introduction_2023}, so computed coefficients from \iref{balance}
-  should be exact.
-  
-%  All other computed solutions should have a relative error no greater
-%  than 0.1\%, since the most finely-calibrated chemistry equipment has a
-%  relative error of 0.1-0.2\% \cite{walker_volumetric_2012,
-%  godambe_measuring_nodate}. Additionally, any fractional value calculated
-%  should be reported to the appropriate number of significant figures
-%  \cite{lund_introduction_2023}. \sjc{Specify what that means}
-  
-%  \plt{Characterize the accuracy by giving the context/use for
-%    the software.  Maybe something like, ``The accuracy of the computed
-%    solutions should meet the level needed for $<$engineering or scientific
-%    application$>$.  The level of accuracy achieved by \progname{} shall be
-%    described following the procedure given in Section~X of the Verification and
-%    Validation Plan.''  A link to the VnV plan would be a nice extra.}
+  \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_accuracy}:]
+    \textbf{Accuracy:} Chemical equations are only useful if they are balanced
+    \cite{lund_introduction_2023}, so computed coefficients from \iref{balance}
+    should be exact.
 
-\item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_understandability}:]
-	\textbf{Understandability:} A new intended user (as described by
-	\nameref{sec_userChars}) should be able to learn how to use \progname{} in an
-	acceptable amount of time, as measured by the procedure in Section X of
-	the Verification and Validation (VnV) Plan.
+    %  All other computed solutions should have a relative error no greater
+    %  than 0.1\%, since the most finely-calibrated chemistry equipment has a
+    %  relative error of 0.1-0.2\% \cite{walker_volumetric_2012,
+    %  godambe_measuring_nodate}. Additionally, any fractional value calculated
+    %  should be reported to the appropriate number of significant figures
+    %  \cite{lund_introduction_2023}. \sjc{Specify what that means}
 
-\item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_usability}:]
-	\textbf{Usability:} An intended user (as described by \nameref{sec_userChars})
-	should find \progname{} easy to use, as measured by the procedure in Section X
-	of the VnV Plan.
+    %  \plt{Characterize the accuracy by giving the context/use for
+    %    the software.  Maybe something like, ``The accuracy of the computed
+    %    solutions should meet the level needed for $<$engineering or scientific
+    %    application$>$.  The level of accuracy achieved by \progname{} shall be
+    %    described following the procedure given in Section~X of the Verification and
+    %    Validation Plan.''  A link to the VnV plan would be a nice extra.}
 
-\item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_maintainability}:]
-  \textbf{Maintainability:} The traceability between requirements, assumptions,
-  theoretical models, general definitions, data definitions, instance models,
-  likely changes, and unlikely changes is completely recorded in
-  traceability matrices in the SRS.
-  
-%  \plt{The effort required to make any of the likely
-%    changes listed for \progname{} should be less than FRACTION of the original
-%    development time.  FRACTION is then a symbolic constant that can be defined
-%    at the end of the report.}
+  \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_understandability}:]
+    \textbf{Understandability:} A new intended user (as described by
+    \nameref{sec_userChars}) should be able to learn how to use \progname{} in an
+    acceptable amount of time, as measured by the procedure in Section X of
+    the Verification and Validation (VnV) Plan.
 
-\item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_portability}:]
-  \textbf{Portability:} \progname{} should be able to run on systems with the
-  corresponding programming language
-  installed, including systems running on Windows or macOS. The tests from
-  the VnV Plan should pass in these environments.
-  
-\item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_verifiability}:]
-  \textbf{Verifiability:} \progname{} is tested following the VnV Plan.
+  \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_usability}:]
+    \textbf{Usability:} An intended user (as described by \nameref{sec_userChars})
+    should find \progname{} easy to use, as measured by the procedure in Section X
+    of the VnV Plan.
 
-%\item Reusability?.
+  \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_maintainability}:]
+    \textbf{Maintainability:} The traceability between requirements, assumptions,
+    theoretical models, general definitions, data definitions, instance models,
+    likely changes, and unlikely changes is completely recorded in
+    traceability matrices in the SRS.
+
+    %  \plt{The effort required to make any of the likely
+    %    changes listed for \progname{} should be less than FRACTION of the original
+    %    development time.  FRACTION is then a symbolic constant that can be defined
+    %    at the end of the report.}
+
+  \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_portability}:]
+    \textbf{Portability:} \progname{} should be able to run on systems with the
+    corresponding programming language
+    installed, including systems running on Windows or macOS. The tests from
+    the VnV Plan should pass in these environments.
+
+  \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_verifiability}:]
+    \textbf{Verifiability:} \progname{} is tested following the VnV Plan.
+
+    %\item Reusability?.
 
 \end{itemize}
 
@@ -1255,74 +1255,74 @@ qualities that the software is expected to exhibit.
 
 \noindent \begin{itemize}
 
-\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_complexForms}:] The user will
-	be able to input complex chemical formulas, such as hydrates (see
-	\nameref{sec_termsDefs}) or those with polymers or isotopes
-	(\aref{A_simpleForms}).
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_complexForms}:] The user will
+    be able to input complex chemical formulas, such as hydrates (see
+    \nameref{sec_termsDefs}) or those with polymers or isotopes
+    (\aref{A_simpleForms}).
 
-\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_calcMoles}:] Given the amount
-	of one substance in a reaction (in moles), \progname{} will be able to
-	calculate the amount of every other substance in the reaction (also in
-	moles).\footnote{\label{chemProbExs}These examples of problems related to
-		chemical equations were taken from \cite{lund_introduction_2023}.}
-		
-\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_detLimReag}:] Given the amount
-	of each reactant (in moles) in a reaction, \progname{} will be able to
-	determine the limiting reactant(s).\cref{chemProbExs}
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_calcMoles}:] Given the amount
+    of one substance in a reaction (in moles), \progname{} will be able to
+    calculate the amount of every other substance in the reaction (also in
+    moles).\footnote{\label{chemProbExs}These examples of problems related to
+      chemical equations were taken from \cite{lund_introduction_2023}.}
 
-\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_calcYield}:] Given the amount
-	of each \sjc{Is ``each'' a requirement?}
-	 reactant (in moles) in a reaction, \progname{} will be able to
-	calculate the theoretical yield of each product (also in
-	moles).\cref{chemProbExs} This is dependent on \lcref{LC_detLimReag}.
-	
-\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_calcExcess}:] Given the amount
-	of each \sjc{Is ``each'' a requirement?}
-	reactant (in moles) in a reaction, \progname{} will be able to
-	calculate the amount of excess reactant(s) (also in	moles).\cref{chemProbExs}
-	This is dependent on \lcref{LC_detLimReag}.
-	
-\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_incorrectInputFormat}:] 
-	\progname{} will be able to parse valid but incorrectly-formatted chemical
-	formulas inputted by the user and format them correctly when outputting them
-	(\aref{A_correctInputFormat}).
-	
-\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_termsOfMass}:] For ease of use,
-the user will be able to enter the amounts required by \lcref{LC_calcMoles}, 
-\lcref{LC_detLimReag}, \lcref{LC_calcYield}, and \lcref{LC_calcExcess} in terms
-of mass (e.g., in grams).\cref{chemProbExs}
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_detLimReag}:] Given the amount
+    of each reactant (in moles) in a reaction, \progname{} will be able to
+    determine the limiting reactant(s).\cref{chemProbExs}
 
-%\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_allEqsPermitted}:] All chemical
-%	equations will be permitted as input and processed as appropriate
-%	(\aref{A_elemCompDiff}).
-	
-\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_classRxns}:] \progname{} will be
-	able to classify a chemical reaction as ``combination (or
-	synthesis), decomposition, combustion, single replacement, \dots double
-	replacement'' \cite[p.~301]{lund_introduction_2023} or some combination of
-	these.\cref{chemProbExs}
-	
-\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_inputPhaseLabels}:] \progname{}
-	will allow the user to input phase labels.\cref{chemProbExs}
-	
-\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_identifyPhaseLabels}:]
-	\progname{} will be able to identify the phase labels for compounds, which will
-	involve determining solubility.\cref{chemProbExs} This is dependent on
-	\lcref{LC_inputPhaseLabels}.
-	
-\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_rxnTakePlace}:] \progname{}
-	will be able to identify when a reaction will not take place.\cref{chemProbExs}
-	This is dependent on \lcref{LC_identifyPhaseLabels}.
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_calcYield}:] Given the amount
+    of each \sjc{Is ``each'' a requirement?}
+    reactant (in moles) in a reaction, \progname{} will be able to
+    calculate the theoretical yield of each product (also in
+    moles).\cref{chemProbExs} This is dependent on \lcref{LC_detLimReag}.
+
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_calcExcess}:] Given the amount
+    of each \sjc{Is ``each'' a requirement?}
+    reactant (in moles) in a reaction, \progname{} will be able to
+    calculate the amount of excess reactant(s) (also in	moles).\cref{chemProbExs}
+    This is dependent on \lcref{LC_detLimReag}.
+
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_incorrectInputFormat}:]
+    \progname{} will be able to parse valid but incorrectly-formatted chemical
+    formulas inputted by the user and format them correctly when outputting them
+    (\aref{A_correctInputFormat}).
+
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_termsOfMass}:] For ease of use,
+    the user will be able to enter the amounts required by \lcref{LC_calcMoles},
+    \lcref{LC_detLimReag}, \lcref{LC_calcYield}, and \lcref{LC_calcExcess} in terms
+    of mass (e.g., in grams).\cref{chemProbExs}
+
+    %\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_allEqsPermitted}:] All chemical
+    %	equations will be permitted as input and processed as appropriate
+    %	(\aref{A_elemCompDiff}).
+
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_classRxns}:] \progname{} will be
+    able to classify a chemical reaction as ``combination (or
+    synthesis), decomposition, combustion, single replacement, \dots double
+    replacement'' \cite[p.~301]{lund_introduction_2023} or some combination of
+    these.\cref{chemProbExs}
+
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_inputPhaseLabels}:] \progname{}
+    will allow the user to input phase labels.\cref{chemProbExs}
+
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_identifyPhaseLabels}:]
+    \progname{} will be able to identify the phase labels for compounds, which will
+    involve determining solubility.\cref{chemProbExs} This is dependent on
+    \lcref{LC_inputPhaseLabels}.
+
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_rxnTakePlace}:] \progname{}
+    will be able to identify when a reaction will not take place.\cref{chemProbExs}
+    This is dependent on \lcref{LC_identifyPhaseLabels}.
 
 \end{itemize}
 
-\section{Unlikely Changes}    
+\section{Unlikely Changes}
 
 \noindent \begin{itemize}
 
-\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_meaningfulLabel}:] \plt{Give
-    the unlikely changes.  The design can assume that the changes listed will
-    not occur.} \sjc{Is this supposed to be ``LC'' or ``UC''?}
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_meaningfulLabel}:] \plt{Give
+      the unlikely changes.  The design can assume that the changes listed will
+      not occur.} \sjc{Is this supposed to be ``LC'' or ``UC''?}
 
 \end{itemize}
 
@@ -1349,90 +1349,90 @@ the assumptions.
   your best.  In the future tools (like Drasil) will make this much easier.}
 
 \afterpage{
-\begin{landscape}
-\begin{table}[h!]
-\centering
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
-\hline
-	& \aref{A_OnlyThermalEnergy}& \aref{A_hcoeff}& \aref{A_mixed}& \aref{A_tpcm}& \aref{A_const_density}& \aref{A_const_C}& \aref{A_Newt_coil}& \aref{A_tcoil}& \aref{A_tlcoil}& \aref{A_Newt_pcm}& \aref{A_charge}& \aref{A_InitTemp}& \aref{A_OpRangePCM}& \aref{A_OpRange}& \aref{A_htank}& \aref{A_int_heat}& \aref{A_vpcm}& \aref{A_PCM_state}& \aref{A_Pressure} \\
-\hline
-\tref{T_COE}        & X& & & & & & & & & & & & & & & & & & \\ \hline
-\tref{T_SHE}        & & & & & & & & & & & & & & & & & & & \\ \hline
-\tref{T_LHE}        & & & & & & & & & & & & & & & & & & & \\ \hline
-\dref{NL}           & & X& & & & & & & & & & & & & & & & & \\ \hline
-\dref{ROCT}         & & & X& X& X& X& & & & & & & & & & & & & \\ \hline
-\ddref{FluxCoil}    & & & & & & & X& X& X& & & & & & & & & & \\ \hline
-\ddref{FluxPCM}     & & & X& X& & & & & & X& & & & & & & & & \\ \hline
-\ddref{D_HOF}       & & & & & & & & & & & & & & & & & & & \\ \hline
-\ddref{D_MF}        & & & & & & & & & & & & & & & & & & & \\ \hline
-\iref{ewat}         & & & & & & & & & & & X& X& & X& X& X& & & X \\ \hline
-\iref{epcm}         & & & & & & & & & & & & X& X& & & X& X& X& \\ \hline
-\iref{I_HWAT}       & & & & & & & & & & & & & & X& & & & & X \\ \hline
-\iref{I_HPCM}       & & & & & & & & & & & & & X& & & & & X & \\ \hline
-\lcref{LC_tpcm}     & & & & X& & & & & & & & & & & & & & & \\ \hline
-\lcref{LC_tcoil}    & & & & & & & & X& & & & & & & & & & & \\ \hline
-\lcref{LC_tlcoil}   & & & & & & & & & X& & & & & & & & & & \\ \hline
-\lcref{LC_charge}   & & & & & & & & & & & X& & & & & & & & \\ \hline
-\lcref{LC_InitTemp} & & & & & & & & & & & & X& & & & & & & \\ \hline
-\lcref{LC_htank}    & & & & & & & & & & & & & & & X& & & & \\
-\hline
-\end{tabular}
-\caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
-\label{Table:A_trace}
-\end{table}
-\end{landscape}
+  \begin{landscape}
+    \begin{table}[h!]
+      \centering
+      \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+        \hline
+                            & \aref{A_OnlyThermalEnergy} & \aref{A_hcoeff} & \aref{A_mixed} & \aref{A_tpcm} & \aref{A_const_density} & \aref{A_const_C} & \aref{A_Newt_coil} & \aref{A_tcoil} & \aref{A_tlcoil} & \aref{A_Newt_pcm} & \aref{A_charge} & \aref{A_InitTemp} & \aref{A_OpRangePCM} & \aref{A_OpRange} & \aref{A_htank} & \aref{A_int_heat} & \aref{A_vpcm} & \aref{A_PCM_state} & \aref{A_Pressure} \\
+        \hline
+        \tref{T_COE}        & X                          &                 &                &               &                        &                  &                    &                &                 &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
+        \tref{T_SHE}        &                            &                 &                &               &                        &                  &                    &                &                 &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
+        \tref{T_LHE}        &                            &                 &                &               &                        &                  &                    &                &                 &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
+        \dref{NL}           &                            & X               &                &               &                        &                  &                    &                &                 &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
+        \dref{ROCT}         &                            &                 & X              & X             & X                      & X                &                    &                &                 &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
+        \ddref{FluxCoil}    &                            &                 &                &               &                        &                  & X                  & X              & X               &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
+        \ddref{FluxPCM}     &                            &                 & X              & X             &                        &                  &                    &                &                 & X                 &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
+        \ddref{D_HOF}       &                            &                 &                &               &                        &                  &                    &                &                 &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
+        \ddref{D_MF}        &                            &                 &                &               &                        &                  &                    &                &                 &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
+        \iref{ewat}         &                            &                 &                &               &                        &                  &                    &                &                 &                   & X               & X                 &                     & X                & X              & X                 &               &                    & X                 \\ \hline
+        \iref{epcm}         &                            &                 &                &               &                        &                  &                    &                &                 &                   &                 & X                 & X                   &                  &                & X                 & X             & X                  &                   \\ \hline
+        \iref{I_HWAT}       &                            &                 &                &               &                        &                  &                    &                &                 &                   &                 &                   &                     & X                &                &                   &               &                    & X                 \\ \hline
+        \iref{I_HPCM}       &                            &                 &                &               &                        &                  &                    &                &                 &                   &                 &                   & X                   &                  &                &                   &               & X                  &                   \\ \hline
+        \lcref{LC_tpcm}     &                            &                 &                & X             &                        &                  &                    &                &                 &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
+        \lcref{LC_tcoil}    &                            &                 &                &               &                        &                  &                    & X              &                 &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
+        \lcref{LC_tlcoil}   &                            &                 &                &               &                        &                  &                    &                & X               &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
+        \lcref{LC_charge}   &                            &                 &                &               &                        &                  &                    &                &                 &                   & X               &                   &                     &                  &                &                   &               &                    &                   \\ \hline
+        \lcref{LC_InitTemp} &                            &                 &                &               &                        &                  &                    &                &                 &                   &                 & X                 &                     &                  &                &                   &               &                    &                   \\ \hline
+        \lcref{LC_htank}    &                            &                 &                &               &                        &                  &                    &                &                 &                   &                 &                   &                     &                  & X              &                   &               &                    &                   \\
+        \hline
+      \end{tabular}
+      \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
+      \label{Table:A_trace}
+    \end{table}
+  \end{landscape}
 }
 
 \begin{table}[h!]
-\centering
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
-\hline        
-	& \tref{T_COE}& \tref{T_SHE}& \tref{T_LHE}& \dref{NL}& \dref{ROCT} & \ddref{FluxCoil}& \ddref{FluxPCM} & \ddref{D_HOF}& \ddref{D_MF}& \iref{ewat}& \iref{epcm}& \iref{I_HWAT}& \iref{I_HPCM} \\
-\hline
-\tref{T_COE}     & & & & & & & & & & & & & \\ \hline
-\tref{T_SHE}     & & & X& & & & & & & & & & \\ \hline
-\tref{T_LHE}     & & & & & & & & & & & & & \\ \hline
-\dref{NL}        & & & & & & & & & & & & & \\ \hline
-\dref{ROCT}      & X& & & & & & & & & & & & \\ \hline
-\ddref{FluxCoil} & & & & X& & & & & & & & & \\ \hline
-\ddref{FluxPCM}  & & & & X& & & & & & & & & \\ \hline
-\ddref{D_HOF}    & & & & & & & & & & & & & \\ \hline
-\ddref{D_MF}     & & & & & & & & X& & & & & \\ \hline
-\iref{ewat}      & & & & & X& X& X& & & & X& & \\ \hline
-\iref{epcm}      & & & & & X& & X& & X& X& & & X \\ \hline
-\iref{I_HWAT}    & & X& & & & & & & & & & & \\ \hline
-\iref{I_HPCM}    & & X& X& & & & X& X& X& & X& & \\
-\hline
-\end{tabular}
-\caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
-\label{Table:trace}
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+                     & \tref{T_COE} & \tref{T_SHE} & \tref{T_LHE} & \dref{NL} & \dref{ROCT} & \ddref{FluxCoil} & \ddref{FluxPCM} & \ddref{D_HOF} & \ddref{D_MF} & \iref{ewat} & \iref{epcm} & \iref{I_HWAT} & \iref{I_HPCM} \\
+    \hline
+    \tref{T_COE}     &              &              &              &           &             &                  &                 &               &              &             &             &               &               \\ \hline
+    \tref{T_SHE}     &              &              & X            &           &             &                  &                 &               &              &             &             &               &               \\ \hline
+    \tref{T_LHE}     &              &              &              &           &             &                  &                 &               &              &             &             &               &               \\ \hline
+    \dref{NL}        &              &              &              &           &             &                  &                 &               &              &             &             &               &               \\ \hline
+    \dref{ROCT}      & X            &              &              &           &             &                  &                 &               &              &             &             &               &               \\ \hline
+    \ddref{FluxCoil} &              &              &              & X         &             &                  &                 &               &              &             &             &               &               \\ \hline
+    \ddref{FluxPCM}  &              &              &              & X         &             &                  &                 &               &              &             &             &               &               \\ \hline
+    \ddref{D_HOF}    &              &              &              &           &             &                  &                 &               &              &             &             &               &               \\ \hline
+    \ddref{D_MF}     &              &              &              &           &             &                  &                 & X             &              &             &             &               &               \\ \hline
+    \iref{ewat}      &              &              &              &           & X           & X                & X               &               &              &             & X           &               &               \\ \hline
+    \iref{epcm}      &              &              &              &           & X           &                  & X               &               & X            & X           &             &               & X             \\ \hline
+    \iref{I_HWAT}    &              & X            &              &           &             &                  &                 &               &              &             &             &               &               \\ \hline
+    \iref{I_HPCM}    &              & X            & X            &           &             &                  & X               & X             & X            &             & X           &               &               \\
+    \hline
+  \end{tabular}
+  \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
+  \label{Table:trace}
 \end{table}
 
 \begin{table}[h!]
-\centering
-\begin{tabular}{|c|c|c|c|c|c|c|c|}
-\hline
-	& \iref{ewat}& \iref{epcm}& \iref{I_HWAT}& \iref{I_HPCM}& \ref{sec_DataConstraints}& \rref{R_RawInputs}& \rref{R_MassInputs} \\
-\hline
-\iref{ewat}            & & X& & & & X& X \\ \hline
-\iref{epcm}            & X& & & X& & X& X \\ \hline
-\iref{I_HWAT}          & & & & & & X& X \\ \hline
-\iref{I_HPCM}          & & X& & & & X& X \\ \hline
-\rref{R_RawInputs}     & & & & & & & \\ \hline
-\rref{R_MassInputs}    & & & & & & X& \\ \hline
-\rref{R_CheckInputs}   & & & & & X& & \\ \hline
-\rref{R_OutputInputs}  & X& X& & & & X& X \\ \hline
-\rref{R_TempWater}     & X& & & & & & \\ \hline 
-\rref{R_TempPCM}       & & X& & & & & \\ \hline
-\rref{R_EnergyWater}   & & & X& & & & \\ \hline
-\rref{R_EnergyPCM}     & & & & X& & & \\ \hline
-\rref{R_VerifyOutput}  & & & X& X& & & \\ \hline
-\rref{R_timeMeltBegin} & & X& & & & & \\ \hline
-\rref{R_timeMeltEnd}   & & X& & & & & \\ 
-\hline
-\end{tabular}
-\caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}
-\label{Table:R_trace}
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \hline
+                           & \iref{ewat} & \iref{epcm} & \iref{I_HWAT} & \iref{I_HPCM} & \ref{sec_DataConstraints} & \rref{R_RawInputs} & \rref{R_MassInputs} \\
+    \hline
+    \iref{ewat}            &             & X           &               &               &                           & X                  & X                   \\ \hline
+    \iref{epcm}            & X           &             &               & X             &                           & X                  & X                   \\ \hline
+    \iref{I_HWAT}          &             &             &               &               &                           & X                  & X                   \\ \hline
+    \iref{I_HPCM}          &             & X           &               &               &                           & X                  & X                   \\ \hline
+    \rref{R_RawInputs}     &             &             &               &               &                           &                    &                     \\ \hline
+    \rref{R_MassInputs}    &             &             &               &               &                           & X                  &                     \\ \hline
+    \rref{R_CheckInputs}   &             &             &               &               & X                         &                    &                     \\ \hline
+    \rref{R_OutputInputs}  & X           & X           &               &               &                           & X                  & X                   \\ \hline
+    \rref{R_TempWater}     & X           &             &               &               &                           &                    &                     \\ \hline
+    \rref{R_TempPCM}       &             & X           &               &               &                           &                    &                     \\ \hline
+    \rref{R_EnergyWater}   &             &             & X             &               &                           &                    &                     \\ \hline
+    \rref{R_EnergyPCM}     &             &             &               & X             &                           &                    &                     \\ \hline
+    \rref{R_VerifyOutput}  &             &             & X             & X             &                           &                    &                     \\ \hline
+    \rref{R_timeMeltBegin} &             & X           &               &               &                           &                    &                     \\ \hline
+    \rref{R_timeMeltEnd}   &             & X           &               &               &                           &                    &                     \\
+    \hline
+  \end{tabular}
+  \caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}
+  \label{Table:R_trace}
 \end{table}
 
 The purpose of the traceability graphs is also to provide easy references on
@@ -1481,7 +1481,7 @@ instance models, requirements, and data constraints on each other.
 \plt{Show the values of the symbolic parameters introduced in the report.}
 
 \plt{The definition of the requirements will likely call for SYMBOLIC\_CONSTANTS.
-Their values are defined in this section for easy maintenance.}
+  Their values are defined in this section for easy maintenance.}
 
 \plt{The value of FRACTION, for the Maintainability NFR would be given here.}
 
@@ -1496,40 +1496,40 @@ Their values are defined in this section for easy maintenance.}
   when filing in the template.}
 
 \noindent \plt{Grammar, flow and \LaTeX advice:
-\begin{itemize}
-\item For Mac users \texttt{*.DS\_Store} should be in \texttt{.gitignore}
-\item \LaTeX{} and formatting rules
-\begin{itemize}
-\item Variables are italic, everything else not, includes subscripts (link to
-  document)
-\begin{itemize}
-\item \href{https://physics.nist.gov/cuu/pdf/typefaces.pdf}{Conventions}
-\item Watch out for implied multiplication
-\end{itemize}
-\item Use BibTeX
-\item Use cross-referencing
-\end{itemize}
-\item Grammar and writing rules
-\begin{itemize}
-\item Acronyms expanded on first usage (not just in table of acronyms)
-\item ``In order to'' should be ``to''
-\end{itemize}
-\end{itemize}}
+  \begin{itemize}
+    \item For Mac users \texttt{*.DS\_Store} should be in \texttt{.gitignore}
+    \item \LaTeX{} and formatting rules
+          \begin{itemize}
+            \item Variables are italic, everything else not, includes subscripts (link to
+                  document)
+                  \begin{itemize}
+                    \item \href{https://physics.nist.gov/cuu/pdf/typefaces.pdf}{Conventions}
+                    \item Watch out for implied multiplication
+                  \end{itemize}
+            \item Use BibTeX
+            \item Use cross-referencing
+          \end{itemize}
+    \item Grammar and writing rules
+          \begin{itemize}
+            \item Acronyms expanded on first usage (not just in table of acronyms)
+            \item ``In order to'' should be ``to''
+          \end{itemize}
+  \end{itemize}}
 
 \noindent \plt{Advice on using the template:
-\begin{itemize}
-\item Difference between physical and software constraints
-\item Properties of a correct solution means \emph{additional} properties, not
-  a restating of the requirements (may be ``not applicable'' for your problem).
-  If you have a table of output constraints, then these are properties of a
-  correct solution.
-\item Assumptions have to be invoked somewhere
-\item ``Referenced by'' implies that there is an explicit reference
-\item Think of traceability matrix, list of assumption invocations and list of
-  reference by fields as automatically generatable
-\item If you say the format of the output (plot, table etc), then your
-  requirement could be more abstract
-\end{itemize}
+  \begin{itemize}
+    \item Difference between physical and software constraints
+    \item Properties of a correct solution means \emph{additional} properties, not
+          a restating of the requirements (may be ``not applicable'' for your problem).
+          If you have a table of output constraints, then these are properties of a
+          correct solution.
+    \item Assumptions have to be invoked somewhere
+    \item ``Referenced by'' implies that there is an explicit reference
+    \item Think of traceability matrix, list of assumption invocations and list of
+          reference by fields as automatically generatable
+    \item If you say the format of the output (plot, table etc), then your
+          requirement could be more abstract
+  \end{itemize}
 }
 
 \newpage{}
@@ -1540,16 +1540,16 @@ graduate attribute of Lifelong Learning.  Please answer the following questions:
 
 \begin{enumerate}
   \item What knowledge and skills will the team collectively need to acquire to
-  successfully complete this capstone project?  Examples of possible knowledge
-  to acquire include domain specific knowledge from the domain of your
-  application, or software engineering knowledge, mechatronics knowledge or
-  computer science knowledge.  Skills may be related to technology, or writing,
-  or presentation, or team management, etc.  You should look to identify at
-  least one item for each team member.
+        successfully complete this capstone project?  Examples of possible knowledge
+        to acquire include domain specific knowledge from the domain of your
+        application, or software engineering knowledge, mechatronics knowledge or
+        computer science knowledge.  Skills may be related to technology, or writing,
+        or presentation, or team management, etc.  You should look to identify at
+        least one item for each team member.
   \item For each of the knowledge areas and skills identified in the previous
-  question, what are at least two approaches to acquiring the knowledge or
-  mastering the skill?  Of the identified approaches, which will each team
-  member pursue, and why did they make this choice?
+        question, what are at least two approaches to acquiring the knowledge or
+        mastering the skill?  Of the identified approaches, which will each team
+        member pursue, and why did they make this choice?
 \end{enumerate}
 
 \end{document}

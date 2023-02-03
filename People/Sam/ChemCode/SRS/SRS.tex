@@ -216,6 +216,7 @@
   Feb. 3, 2023        & 0.6.5         & Add type notation and information                                   \\
                       & 0.6.6         & Fill in \nameref{sec_UCs}, add likely change for identifying
   more types of reactions (\lcref{LC_classMoreRxns}), and reference \aref{A_elemCompDiff} in \iref{convert} \\
+                      & 0.6.7         & Fill in \nameref{sec_traceMats} and remove more unnecessary content \\
   \bottomrule
 \end{tabularx}
 
@@ -289,7 +290,7 @@ symbols are listed in alphabetical order.
   \toprule
   \textbf{symbol} & \textbf{description}                \\
   \midrule
-  1D              & One-Dimensional                     \\
+  % 1D              & One-Dimensional                     \\
   A               & Assumption                          \\
   DD              & Data Definition                     \\
   GD              & General Definition                  \\
@@ -307,7 +308,8 @@ symbols are listed in alphabetical order.
 \subsection{Mathematical Notation} \label{sec_mathNot}
 
 Matrices are written in bold uppercase letters (for example $\textbf{A}$), while
-vectors (1D matrices) are written in bold lowercase letters, (for example
+vectors (one-dimensional matrices) are written in bold lowercase letters, (for
+example
 $\textbf{x}$) \cite{osullivan_appendix_2010}. The type of a matrix will be
 denoted by the type of each value in the matrix with the matrix's dimensions
 as a superscript; for example, a matrix of integers with two rows and three
@@ -1375,83 +1377,64 @@ qualities that the software is expected to exhibit.
 
 \end{itemize}
 
-\section{Traceability Matrices and Graphs}
+\section{Traceability Matrices} \label{sec_traceMats}
 
 The purpose of the traceability matrices is to provide easy references on what
 has to be additionally modified if a certain component is changed.  Every time a
 component is changed, the items in the column of that component that are marked
-with an ``X'' may have to be modified as well.  Table~\ref{Table:trace} shows the
+with an ``X'' may have to be modified as well. Table~\ref{Table:A_trace} shows
+the dependencies of theoretical models,
+general definitions, data definitions, instance models, likely changes, and
+unlikely changes on the assumptions. Table~\ref{Table:trace} shows the
 dependencies of theoretical models, general definitions, data definitions, and
-instance models with each other. Table~\ref{Table:R_trace} shows the
-dependencies of instance models, requirements, and data constraints on each
-other. Table~\ref{Table:A_trace} shows the dependencies of theoretical models,
-general definitions, data definitions, instance models, and likely changes on
-the assumptions.
-
-\plt{You will have to modify these tables for your problem.}
-
-\plt{The traceability matrix is not generally symmetric.  If GD1 uses A1, that
-  means that GD1's derivation or presentation requires invocation of A1.  A1
-  does not use GD1.  A1 is ``used by'' GD1.}
-
-\plt{The traceability matrix is challenging to maintain manually.  Please do
-  your best.  In the future tools (like Drasil) will make this much easier.}
-
-\afterpage{
-  \begin{landscape}
-    \begin{table}[h!]
-      \centering
-      \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
-        \hline
-                            & \aref{A_OnlyThermalEnergy} & \aref{A_hcoeff} & \aref{A_mixed} & \aref{A_tpcm} & \aref{A_const_density} & \aref{A_const_C} & \aref{A_Newt_coil} & \aref{A_tcoil} & \aref{A_tlcoil} & \aref{A_Newt_pcm} & \aref{A_charge} & \aref{A_InitTemp} & \aref{A_OpRangePCM} & \aref{A_OpRange} & \aref{A_htank} & \aref{A_int_heat} & \aref{A_vpcm} & \aref{A_PCM_state} & \aref{A_Pressure} \\
-        \hline
-        \tref{T_COE}        & X                          &                 &                &               &                        &                  &                    &                &                 &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
-        \tref{T_SHE}        &                            &                 &                &               &                        &                  &                    &                &                 &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
-        \tref{T_LHE}        &                            &                 &                &               &                        &                  &                    &                &                 &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
-        \dref{NL}           &                            & X               &                &               &                        &                  &                    &                &                 &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
-        \dref{ROCT}         &                            &                 & X              & X             & X                      & X                &                    &                &                 &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
-        \ddref{FluxCoil}    &                            &                 &                &               &                        &                  & X                  & X              & X               &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
-        \ddref{FluxPCM}     &                            &                 & X              & X             &                        &                  &                    &                &                 & X                 &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
-        \ddref{D_HOF}       &                            &                 &                &               &                        &                  &                    &                &                 &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
-        \ddref{D_MF}        &                            &                 &                &               &                        &                  &                    &                &                 &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
-        \iref{ewat}         &                            &                 &                &               &                        &                  &                    &                &                 &                   & X               & X                 &                     & X                & X              & X                 &               &                    & X                 \\ \hline
-        \iref{epcm}         &                            &                 &                &               &                        &                  &                    &                &                 &                   &                 & X                 & X                   &                  &                & X                 & X             & X                  &                   \\ \hline
-        \iref{I_HWAT}       &                            &                 &                &               &                        &                  &                    &                &                 &                   &                 &                   &                     & X                &                &                   &               &                    & X                 \\ \hline
-        \iref{I_HPCM}       &                            &                 &                &               &                        &                  &                    &                &                 &                   &                 &                   & X                   &                  &                &                   &               & X                  &                   \\ \hline
-        \lcref{LC_tpcm}     &                            &                 &                & X             &                        &                  &                    &                &                 &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
-        \lcref{LC_tcoil}    &                            &                 &                &               &                        &                  &                    & X              &                 &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
-        \lcref{LC_tlcoil}   &                            &                 &                &               &                        &                  &                    &                & X               &                   &                 &                   &                     &                  &                &                   &               &                    &                   \\ \hline
-        \lcref{LC_charge}   &                            &                 &                &               &                        &                  &                    &                &                 &                   & X               &                   &                     &                  &                &                   &               &                    &                   \\ \hline
-        \lcref{LC_InitTemp} &                            &                 &                &               &                        &                  &                    &                &                 &                   &                 & X                 &                     &                  &                &                   &               &                    &                   \\ \hline
-        \lcref{LC_htank}    &                            &                 &                &               &                        &                  &                    &                &                 &                   &                 &                   &                     &                  & X              &                   &               &                    &                   \\
-        \hline
-      \end{tabular}
-      \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
-      \label{Table:A_trace}
-    \end{table}
-  \end{landscape}
-}
+instance models on each other. Table~\ref{Table:R_trace} shows the
+dependencies of requirements on instance models and data constraints.
 
 \begin{table}[h!]
   \centering
-  \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+  \begin{tabular}{|c|c|c|c|c|}
     \hline
-                     & \tref{T_COE} & \tref{T_SHE} & \tref{T_LHE} & \dref{NL} & \dref{ROCT} & \ddref{FluxCoil} & \ddref{FluxPCM} & \ddref{D_HOF} & \ddref{D_MF} & \iref{ewat} & \iref{epcm} & \iref{I_HWAT} & \iref{I_HPCM} \\
+                                    & \aref{A_elemCompDiff} & \aref{A_validInput} & \aref{A_correctInputFormat} & \aref{A_simpleForms} \\
     \hline
-    \tref{T_COE}     &              &              &              &           &             &                  &                 &               &              &             &             &               &               \\ \hline
-    \tref{T_SHE}     &              &              & X            &           &             &                  &                 &               &              &             &             &               &               \\ \hline
-    \tref{T_LHE}     &              &              &              &           &             &                  &                 &               &              &             &             &               &               \\ \hline
-    \dref{NL}        &              &              &              &           &             &                  &                 &               &              &             &             &               &               \\ \hline
-    \dref{ROCT}      & X            &              &              &           &             &                  &                 &               &              &             &             &               &               \\ \hline
-    \ddref{FluxCoil} &              &              &              & X         &             &                  &                 &               &              &             &             &               &               \\ \hline
-    \ddref{FluxPCM}  &              &              &              & X         &             &                  &                 &               &              &             &             &               &               \\ \hline
-    \ddref{D_HOF}    &              &              &              &           &             &                  &                 &               &              &             &             &               &               \\ \hline
-    \ddref{D_MF}     &              &              &              &           &             &                  &                 & X             &              &             &             &               &               \\ \hline
-    \iref{ewat}      &              &              &              &           & X           & X                & X               &               &              &             & X           &               &               \\ \hline
-    \iref{epcm}      &              &              &              &           & X           &                  & X               &               & X            & X           &             &               & X             \\ \hline
-    \iref{I_HWAT}    &              & X            &              &           &             &                  &                 &               &              &             &             &               &               \\ \hline
-    \iref{I_HPCM}    &              & X            & X            &           &             &                  & X               & X             & X            &             & X           &               &               \\
+    \tref{TM_MatEq}                 &                       &                     &                             &                      \\ \hline
+    \tref{TM_ConsMass}              &                       &                     &                             &                      \\ \hline
+    \iref{convert}                  & X                     & X                   & X                           & X                    \\ \hline
+    \iref{feasible}                 &                       &                     &                             &                      \\ \hline
+    \iref{balance}                  &                       &                     &                             &                      \\ \hline
+    \lcref{LC_complexForms}         &                       &                     &                             & X                    \\ \hline
+    \lcref{LC_calcMoles}            &                       &                     &                             &                      \\ \hline
+    \lcref{LC_detLimReag}           &                       &                     &                             &                      \\ \hline
+    \lcref{LC_calcYield}            &                       &                     &                             &                      \\ \hline
+    \lcref{LC_calcExcess}           &                       &                     &                             &                      \\ \hline
+    \lcref{LC_incorrectInputFormat} &                       &                     & X                           &                      \\ \hline
+    \lcref{LC_termsOfMass}          &                       &                     &                             &                      \\ \hline
+    \lcref{LC_classRxns}            &                       &                     &                             &                      \\ \hline
+    \lcref{LC_classMoreRxns}        &                       &                     &                             &                      \\ \hline
+    \lcref{LC_inputPhaseLabels}     &                       &                     &                             &                      \\ \hline
+    \lcref{LC_identifyPhaseLabels}  &                       &                     &                             &                      \\ \hline
+    \lcref{LC_rxnTakePlace}         &                       &                     &                             &                      \\ \hline
+    \ucref{UC_diffSolveMethod}      &                       &                     &                             &                      \\ \hline
+    \ucref{UC_allEqsPermitted}      & X                     &                     &                             &                      \\ \hline
+  \end{tabular}
+  \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
+  \label{Table:A_trace}
+\end{table}
+
+\newpage
+
+% \afterpage{
+%   \begin{landscape}
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|}
     \hline
+                       & \tref{TM_MatEq} & \tref{TM_ConsMass} & \iref{convert} & \iref{feasible} & \iref{balance} \\
+    \hline
+    \tref{TM_MatEq}    &                 &                    &                &                 &                \\ \hline
+    \tref{TM_ConsMass} &                 &                    &                &                 &                \\ \hline
+    \iref{convert}     &                 &                    &                &                 &                \\ \hline
+    \iref{feasible}    &                 & X                  & X              &                 &                \\ \hline
+    \iref{balance}     & X               &                    & X              & X               &                \\ \hline
   \end{tabular}
   \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
   \label{Table:trace}
@@ -1459,105 +1442,61 @@ the assumptions.
 
 \begin{table}[h!]
   \centering
-  \begin{tabular}{|c|c|c|c|c|c|c|c|}
+  \begin{tabular}{|c|c|c|c|c|}%c|c|c|c|c|c|c|c|c|c|c|c|}
     \hline
-                           & \iref{ewat} & \iref{epcm} & \iref{I_HWAT} & \iref{I_HPCM} & \ref{sec_DataConstraints} & \rref{R_RawInputs} & \rref{R_MassInputs} \\
+                                   & \iref{convert} & \iref{feasible} & \iref{balance} & \ref{sec_DataConstraints} \\ % & \rref{R_input} & \rref{R_convert} & \rref{R_feasible} & \rref{R_balance} & \rref{R_infeasOutput} & \rref{R_feasOutput} & \nfrref{NFR_accuracy} & \nfrref{NFR_understandability} & \nfrref{NFR_usability} & \nfrref{NFR_maintainability} & \nfrref{NFR_portability} & \nfrref{NFR_verifiability} \\
     \hline
-    \iref{ewat}            &             & X           &               &               &                           & X                  & X                   \\ \hline
-    \iref{epcm}            & X           &             &               & X             &                           & X                  & X                   \\ \hline
-    \iref{I_HWAT}          &             &             &               &               &                           & X                  & X                   \\ \hline
-    \iref{I_HPCM}          &             & X           &               &               &                           & X                  & X                   \\ \hline
-    \rref{R_RawInputs}     &             &             &               &               &                           &                    &                     \\ \hline
-    \rref{R_MassInputs}    &             &             &               &               &                           & X                  &                     \\ \hline
-    \rref{R_CheckInputs}   &             &             &               &               & X                         &                    &                     \\ \hline
-    \rref{R_OutputInputs}  & X           & X           &               &               &                           & X                  & X                   \\ \hline
-    \rref{R_TempWater}     & X           &             &               &               &                           &                    &                     \\ \hline
-    \rref{R_TempPCM}       &             & X           &               &               &                           &                    &                     \\ \hline
-    \rref{R_EnergyWater}   &             &             & X             &               &                           &                    &                     \\ \hline
-    \rref{R_EnergyPCM}     &             &             &               & X             &                           &                    &                     \\ \hline
-    \rref{R_VerifyOutput}  &             &             & X             & X             &                           &                    &                     \\ \hline
-    \rref{R_timeMeltBegin} &             & X           &               &               &                           &                    &                     \\ \hline
-    \rref{R_timeMeltEnd}   &             & X           &               &               &                           &                    &                     \\
-    \hline
+    % \iref{convert}                 &&&&&&&&&&&&&&&\\ \hline
+    % \iref{feasible}                &X&&&&&&&&&&&&&&\\ \hline
+    % \iref{balance}                 &X&X&&&&&&&&&&&&&\\ \hline
+    \rref{R_input}                 &                &                 &                &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+    \rref{R_convert}               & X              &                 &                &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+    \rref{R_feasible}              &                & X               &                &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+    \rref{R_balance}               &                &                 & X              &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+    \rref{R_infeasOutput}          &                &                 &                &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+    \rref{R_feasOutput}            &                &                 & X              &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+    \nfrref{NFR_accuracy}          &                &                 & X              &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+    \nfrref{NFR_understandability} &                &                 &                &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+    \nfrref{NFR_usability}         &                &                 &                &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+    \nfrref{NFR_maintainability}   &                &                 &                &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+    \nfrref{NFR_portability}       &                &                 &                &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+    \nfrref{NFR_verifiability}     &                &                 &                &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
   \end{tabular}
   \caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}
   \label{Table:R_trace}
 \end{table}
+%   \end{landscape}
+% }
 
-The purpose of the traceability graphs is also to provide easy references on
-what has to be additionally modified if a certain component is changed.  The
-arrows in the graphs represent dependencies. The component at the tail of an
-arrow is depended on by the component at the head of that arrow. Therefore, if a
-component is changed, the components that it points to should also be
-changed. Figure~\ref{Fig_ATrace} shows the dependencies of theoretical models,
-general definitions, data definitions, instance models, likely changes, and
-assumptions on each other. Figure~\ref{Fig_RTrace} shows the dependencies of
-instance models, requirements, and data constraints on each other.
+% \section{Development Plan}
 
-% \begin{figure}[h!]
-% 	\begin{center}
-% 		%\rotatebox{-90}
-% 		{
-% 			\includegraphics[width=\textwidth]{ATrace.png}
-% 		}
-% 		\caption{\label{Fig_ATrace} Traceability Matrix Showing the Connections Between Items of Different Sections}
-% 	\end{center}
-% \end{figure}
+% \plt{This section is optional.  It is used to explain the plan for developing
+%   the software.  In particular, this section gives a list of the order in which
+%   the requirements will be implemented.  In the context of a course  this is
+%   where you can indicate which requirements will be implemented as part of the
+%   course, and which will be ``faked'' as future work.  This section can be
+%   organized as a prioritized list of requirements, or it could should the
+%   requirements that will be implemented for ``phase 1'', ``phase 2'', etc.}
 
+% \section{Values of Auxiliary Constants}
 
-% \begin{figure}[h!]
-% 	\begin{center}
-% 		%\rotatebox{-90}
-% 		{
-% 			\includegraphics[width=0.7\textwidth]{RTrace.png}
-% 		}
-% 		\caption{\label{Fig_RTrace} Traceability Matrix Showing the Connections Between Requirements, Instance Models, and Data Constraints}
-% 	\end{center}
-% \end{figure}
+% \plt{Show the values of the symbolic parameters introduced in the report.}
 
-\section{Development Plan}
+% \plt{The definition of the requirements will likely call for SYMBOLIC\_CONSTANTS.
+%   Their values are defined in this section for easy maintenance.}
 
-\plt{This section is optional.  It is used to explain the plan for developing
-  the software.  In particular, this section gives a list of the order in which
-  the requirements will be implemented.  In the context of a course  this is
-  where you can indicate which requirements will be implemented as part of the
-  course, and which will be ``faked'' as future work.  This section can be
-  organized as a prioritized list of requirements, or it could should the
-  requirements that will be implemented for ``phase 1'', ``phase 2'', etc.}
+% \plt{The value of FRACTION, for the Maintainability NFR would be given here.}
 
-\section{Values of Auxiliary Constants}
-
-\plt{Show the values of the symbolic parameters introduced in the report.}
-
-\plt{The definition of the requirements will likely call for SYMBOLIC\_CONSTANTS.
-  Their values are defined in this section for easy maintenance.}
-
-\plt{The value of FRACTION, for the Maintainability NFR would be given here.}
-
-\newpage
+~\newpage
 
 \bibliographystyle {ieeetr}
 \bibliography {../sources}
 
 \newpage
 
-\noindent \plt{The following is not part of the template, just some things to consider
-  when filing in the template.}
-
-\noindent \plt{Grammar, flow and \LaTeX advice:
+\noindent \plt{Grammar, flow and \LaTeX{} advice:
   \begin{itemize}
-    \item For Mac users \texttt{*.DS\_Store} should be in \texttt{.gitignore}
-    \item \LaTeX{} and formatting rules
-          \begin{itemize}
-            \item Variables are italic, everything else not, includes subscripts (link to
-                  document)
-                  \begin{itemize}
-                    \item \href{https://physics.nist.gov/cuu/pdf/typefaces.pdf}{Conventions}
-                    \item Watch out for implied multiplication
-                  \end{itemize}
-            \item Use BibTeX
-            \item Use cross-referencing
-          \end{itemize}
+    \item Some \LaTeX{} \href{https://physics.nist.gov/cuu/pdf/typefaces.pdf}{Conventions}
     \item Grammar and writing rules
           \begin{itemize}
             \item Acronyms expanded on first usage (not just in table of acronyms)
@@ -1572,33 +1511,7 @@ instance models, requirements, and data constraints on each other.
           a restating of the requirements (may be ``not applicable'' for your problem).
           If you have a table of output constraints, then these are properties of a
           correct solution.
-    \item Assumptions have to be invoked somewhere
-    \item ``Referenced by'' implies that there is an explicit reference
-    \item Think of traceability matrix, list of assumption invocations and list of
-          reference by fields as automatically generatable
-    \item If you say the format of the output (plot, table etc), then your
-          requirement could be more abstract
   \end{itemize}
 }
-
-\newpage{}
-\section*{Appendix --- Reflection}
-
-The information in this section will be used to evaluate the team members on the
-graduate attribute of Lifelong Learning.  Please answer the following questions:
-
-\begin{enumerate}
-  \item What knowledge and skills will the team collectively need to acquire to
-        successfully complete this capstone project?  Examples of possible knowledge
-        to acquire include domain specific knowledge from the domain of your
-        application, or software engineering knowledge, mechatronics knowledge or
-        computer science knowledge.  Skills may be related to technology, or writing,
-        or presentation, or team management, etc.  You should look to identify at
-        least one item for each team member.
-  \item For each of the knowledge areas and skills identified in the previous
-        question, what are at least two approaches to acquiring the knowledge or
-        mastering the skill?  Of the identified approaches, which will each team
-        member pursue, and why did they make this choice?
-\end{enumerate}
 
 \end{document}

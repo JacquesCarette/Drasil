@@ -200,8 +200,7 @@
                       & 0.5.1         & Fill in \nameref{sec_phySystDesc} and remove ``product'' and
   ``reactant'' from \nameref{sec_termsDefs}                                                                 \\
   Jan. 30, 2023       & 0.5.2         & Remove unnecessary template comments about SRS document
-  and the ones from \nameref{sec_specSysDesc} up to
-  \nameref{sec_instance}, except for \nameref{sec_datatypes}                                                \\
+  and the ones from \nameref{sec_specSysDesc} up to \nameref{sec_instance}                                  \\
                       & 0.5.3         & Remove unnecessary content from \nameref{sec_tabSymbs} and
   add the notion of ``gram'' to the document                                                                \\
                       & 0.5.4         & Make \nfrref{NFR_accuracy} more accurate to current scope with
@@ -211,10 +210,12 @@
   Jan. 31, 2023       & 0.6.1         & Fill in rest of \nameref{sec_genSysDesc}                            \\
   Feb. 1, 2023        & 0.6.2         & Change abbreviation of theoretical model from ``T'' to
   ``TM'' and make TM references consistent with other references                                            \\
-  Feb. 2, 2023        & 0.6.3         & Finish \nameref{sec_refMat}, renaming specific matrices/vectors
+  Feb. 2, 2023        & 0.6.3         & Fill in \nameref{sec_refMat}, renaming specific matrices/vectors
   in \nameref{sec_instance}                                                                                 \\
                       & 0.6.4         & Reformat and clarify \nameref{sec_LCs}                              \\
   Feb. 3, 2023        & 0.6.5         & Add type notation and information                                   \\
+                      & 0.6.6         & Fill in \nameref{sec_UCs}, add likely change for identifying
+  more types of reactions (\lcref{LC_classMoreRxns}), and reference \aref{A_elemCompDiff} in \iref{convert} \\
   \bottomrule
 \end{tabularx}
 
@@ -474,7 +475,7 @@ and its environment.
 The end user of \progname{} should have an understanding of high-school level
 chemistry, namely stoichiometry (see \nameref{sec_termsDefs}).
 
-\subsection{System Constraints}
+\subsection{System Constraints} \label{sec_sysConst}
 
 %\plt{System constraints differ from other type of requirements because they
 %  limit the developers' options in the system design and they identify how the
@@ -633,16 +634,16 @@ models can be verified.
 This section simplifies the original problem and helps in developing the
 theoretical model by filling in the missing information for the physical
 system. The numbers given in the square brackets refer to the theoretical model
-  [TM], general definition [GD], data definition [DD], instance model [IM], or
-likely change [LC], in which the respective assumption is used.
+  [TM], general definition [GD], data definition [DD], instance model [IM],
+likely change [LC], or unlikely change [UC] in which the respective assumption
+is used.
 
 \begin{itemize}
 
   \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_elemCompDiff}:]
     For all inputted chemical equations, there is at most one more compound than
-    element. (Through empirical analysis, chemical equations without this
-    constraint lead to unexpected results that require a deeper analysis.)
-    %  [\lcref{LC_allEqsPermitted}]
+    element. \sjc{Should this be an assumption or a requirement?}
+    [\iref{convert}, \ucref{UC_allEqsPermitted}]
 
   \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_validInput}:]
     All inputted chemical formulas describe real chemical formulas.
@@ -989,7 +990,8 @@ and \iref{balance}, respectively.
     Description & Each chemical formula present in the inputted sequences are
     assumed to be valid (\aref{A_validInput}), be formatted correctly
     (\aref{A_correctInputFormat}), and only consist of atomic symbols and
-    subscripts (\aref{A_simpleForms}).
+    subscripts (\aref{A_simpleForms}). The number of columns is assumed to be
+    at most one more than the number of rows (\aref{A_elemCompDiff}).
     \\
     \hline
     Sources     & \cite{hamid_balancing_2019}                                        \\
@@ -999,7 +1001,7 @@ and \iref{balance}, respectively.
   \end{tabular}
 \end{minipage}\\
 
-%~\newline
+~\newline
 
 %\subsubsection*{Derivation of ...}
 %
@@ -1044,7 +1046,7 @@ and \iref{balance}, respectively.
     Sources     & \cite{hamid_balancing_2019}                                          \\
     %  , \cite{pramoditha_how_2021} \\
     \hline
-    Ref.\ By    & \iref{balance}                                                       \\
+    Ref.\ By    & \iref{balance}, \ucref{UC_diffSolveMethod}                           \\
     \hline
   \end{tabular}
 \end{minipage}\\
@@ -1088,7 +1090,7 @@ and \iref{balance}, respectively.
     \hline
     Sources     & \cite{hamid_balancing_2019}                                                  \\
     \hline
-    Ref.\ By    & N/A                                                                          \\
+    Ref.\ By    & \ucref{UC_diffSolveMethod}                                                   \\
     \hline
   \end{tabular}
 \end{minipage}\\
@@ -1151,7 +1153,6 @@ Table~\ref{TblSpecParams}.
 
 \subsubsection{Properties of a Correct Solution} \label{sec_CorrectSolution}
 
-\noindent
 A correct solution must exhibit \plt{fill in the details}.  \plt{These
   properties are in addition to the stated requirements.  There is no need to
   repeat the requirements here.  These additional properties may not exist for
@@ -1183,7 +1184,7 @@ qualities that the software is expected to exhibit.
 
 \subsection{Functional Requirements} \label{sec_funcReqs}
 
-\noindent \begin{itemize}
+\begin{itemize}
 
   \item[R\refstepcounter{reqnum}\thereqnum \label{R_input}:] Input a
     representation of a chemical equation.
@@ -1216,7 +1217,7 @@ qualities that the software is expected to exhibit.
 
 \subsection{Nonfunctional Requirements} \label{sec_nonfuncReqs}
 
-\noindent \begin{itemize}
+\begin{itemize}
 
   \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_accuracy}:]
     \textbf{Accuracy:} Chemical equations are only useful if they are balanced
@@ -1274,7 +1275,7 @@ qualities that the software is expected to exhibit.
 
 \section{Likely Changes} \label{sec_LCs}
 
-\noindent \begin{itemize}
+\begin{itemize}
 
   \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_complexForms}:] The system
     currently assumes that inputted chemical formulas are simple
@@ -1321,9 +1322,14 @@ qualities that the software is expected to exhibit.
 
   \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_classRxns}:] In the future,
     \progname{} might be able to classify a chemical reaction as ``combination
-    (or synthesis), decomposition, combustion, single replacement, \dots double
-    replacement'' \cite[p.~301]{lund_introduction_2023} or some combination of
-    these.\cref{chemProbExs}
+    (or synthesis), decomposition, combustion, single replacement, [or] double
+    replacement'' \cite[p.~301]{lund_introduction_2023}.\cref{chemProbExs}
+
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_classMoreRxns}:] In the
+    future, \progname{} might also be able to classify ``oxidation-reduction
+    reactions, \dots acid-base reactions, and condensation reactions''
+    \cite[p.~301]{lund_introduction_2023}.\cref{chemProbExs} This should be
+    done after \lcref{LC_classRxns}.
 
   \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_inputPhaseLabels}:] In the
     future, \progname{} might allow the user to input phase
@@ -1342,15 +1348,30 @@ qualities that the software is expected to exhibit.
 
 \end{itemize}
 
-\section{Unlikely Changes}
+\section{Unlikely Changes} \label{sec_UCs}
 
-\noindent \begin{itemize}
+\begin{itemize}
 
-  \item[UC\refstepcounter{ucnum}\theucnum\label{UC_diffSolveMethod}:]
+  \item[UC\refstepcounter{ucnum}\theucnum\label{UC_diffSolveMethod}:] One of
+    the system constraints in Subsection~\ref{sec_sysConst} is that \progname{}
+    will be implemented using matrices and linear algebra. It is unlikely that
+    a different method will be used to compute the values from \iref{feasible}
+    and \iref{balance}, since ``balancing chemical equations is not chemistry;
+    it is just linear algebra'' \cite[p. 193]{risteski_new_2021}.
 
-    % \item[UC\refstepcounter{ucnum}\theucnum\label{UC_allEqsPermitted}:] All chemical
-    %	equations will be permitted as input and processed as appropriate
-    %	(\aref{A_elemCompDiff}).
+  \item[UC\refstepcounter{ucnum}\theucnum\label{UC_allEqsPermitted}:]
+    \aref{A_elemCompDiff} assumes that for all inputted chemical equations,
+    there is at most one more compound than element. Using WebQC's chemical
+    equation balancer \cite{noauthor_balance_2023}, equations without this
+    constraint, such as $\ce{O3} + \ce{C} \rightarrow \ce{O2} + \ce{CO2}$,
+    ``can be balanced in an infinite number of ways'' and are
+    ``combination[s] of two different reactions'' \cite{noauthor_balance_2023}.
+    Manual empirical analysis of these equations led to unexpected results.
+    The constraint in \aref{A_elemCompDiff} might be a law of nature and a
+    byproduct of ``balancing chemical equations [being] just linear algebra''
+    \cite[p. 193]{risteski_new_2021}, but preliminary investigation did not
+    find any proof of this. Therefore, this constraint will remain an
+    assumption and is unlikely to be relaxed.
 
 \end{itemize}
 

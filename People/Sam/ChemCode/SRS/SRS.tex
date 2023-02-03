@@ -84,6 +84,9 @@
 \newcounter{lcnum} %Likely change number
 \newcommand{\lthelcnum}{LC\thelcnum}
 \newcommand{\lcref}[1]{LC\ref{#1}}
+\newcounter{ucnum} %Unlikely change number
+\newcommand{\ltheucnum}{UC\theucnum}
+\newcommand{\ucref}[1]{UC\ref{#1}}
 
 \usepackage{fullpage}
 
@@ -146,69 +149,72 @@
 \section*{Revision History} \label{sec_revHist}
 
 \begin{tabularx}{\textwidth}{p{2.5cm}p{1.5cm}X}
-  \toprule {\bf Date} & {\bf Version} & {\bf Notes}                                                                               \\
+  \toprule {\bf Date} & {\bf Version} & {\bf Notes}                                                         \\
   \midrule
-  Jan. 21, 2023       & 0.0           & Start document, fill in title page, and add references                                    \\
+  Jan. 21, 2023       & 0.0           & Start document, fill in title page, and add references              \\
                       & 0.1           & Fill in \nameref{sec_probDesc} and \nameref{sec_goals} sections, as
-  well as all relevant definitions                                                                                                \\
+  well as all relevant definitions                                                                          \\
   Jan. 22, 2023       & 0.1.1         & Replace the notion of ``fractional oxidation state'' with
-  ``nonstoichiometric compound''                                                                                                  \\
-                      & 0.1.2         & Fix capTemplate reference                                                                 \\
-                      & 0.1.3         & Update \nameref{sec_abbsAcrs}                                                             \\
+  ``nonstoichiometric compound''                                                                            \\
+                      & 0.1.2         & Fix capTemplate reference                                           \\
+                      & 0.1.3         & Update \nameref{sec_abbsAcrs}                                       \\
                       & 0.2           & Add IM for balancing a chemical reaction (\iref{balance}), along
-  with relevant reference information                                                                                             \\
+  with relevant reference information                                                                       \\
   Jan. 23, 2023       & 0.2.1         & Add IM for determining if a chemical reaction is feasible
-  (\iref{feasible}), along with relevant reference information                                                                    \\
+  (\iref{feasible}), along with relevant reference information                                              \\
   Jan. 25, 2023       & 0.2.2         & Add references between sections for notation and
-  definitions                                                                                                                     \\
-                      & 0.2.3         & Abstract \iref{feasible}                                                                  \\
+  definitions                                                                                               \\
+                      & 0.2.3         & Abstract \iref{feasible}                                            \\
                       & 0.2.4         & Add IM for converting chemical equation to a matrix
-  (\iref{convert}), along with relevant reference information                                                                     \\
-                      & 0.2.5         & Rename and add input constraint to \iref{balance}                                         \\
-                      & 0.2.6         & Add note about \iref{balance} returning the smallest solution                             \\
-                      & 0.2.7         & Add TM for matrix equation (\tref{TM_MatEq})                                              \\
+  (\iref{convert}), along with relevant reference information                                               \\
+                      & 0.2.5         & Rename and add input constraint to \iref{balance}                   \\
+                      & 0.2.6         & Add note about \iref{balance} returning the smallest solution       \\
+                      & 0.2.7         & Add TM for matrix equation (\tref{TM_MatEq})                        \\
                       & 0.2.8         & Improve referencing, mainly for TMs, and add note about
-  potential TM for Conservation of Mass                                                                                           \\
-                      & 0.2.9         & Add check for Conservation of Mass in \iref{feasible}                                     \\
+  potential TM for Conservation of Mass                                                                     \\
+                      & 0.2.9         & Add check for Conservation of Mass in \iref{feasible}               \\
   Jan. 26, 2023       & 0.3           & Add \nameref{sec_LCs} from Problem Statement, add
   assumption about difference between number of elements and compounds
-  (\aref{A_elemCompDiff}), and add mole to \nameref{sec_ToU}                                                                      \\
+  (\aref{A_elemCompDiff}), and add mole to \nameref{sec_ToU}                                                \\
                       & 0.3.1         & Update \tref{TM_MatEq} (and TM function) from feedback from
-  presentation                                                                                                                    \\
+  presentation                                                                                              \\
                       & 0.3.2         & Fill in \nameref{sec_scope}, fix \aref{A_elemCompDiff} and
-  change ``infeasible'' to ``feasible''                                                                                           \\
-  Jan. 27, 2023       & 0.3.3         & Improve section referencing in \nameref{sec_revHist}                                      \\
-                      & 0.4           & Fill in \nameref{sec_funcReqs}                                                            \\
+  change ``infeasible'' to ``feasible''                                                                     \\
+  Jan. 27, 2023       & 0.3.3         & Improve section referencing in \nameref{sec_revHist}                \\
+                      & 0.4           & Fill in \nameref{sec_funcReqs}                                      \\
   Jan. 28, 2023       & 0.4.1         & Fill in main \nameref{sec_nonfuncReqs}, along with
-  relevant reference information                                                                                                  \\
+  relevant reference information                                                                            \\
                       & 0.4.2         & Add TM for the Law of Conservation of Mass
-  (\tref{TM_ConsMass})                                                                                                            \\
+  (\tref{TM_ConsMass})                                                                                      \\
                       & 0.4.3         & Represent input to \iref{convert} as two sequences of chemical
   formulas, add assumptions about user input, and remove infeasible
-  likely change                                                                                                                   \\
+  likely change                                                                                             \\
   Jan. 29, 2023       & 0.4.4         & Add NFRs for understandability
   (\nfrref{NFR_understandability}) and verifiability
-  (\nfrref{NFR_verifiability}) and improve quality of other NFRs                                                                  \\
-  \bottomrule~                                                                                                                    \\
-  ~                                                                                                                               \\
-  \toprule {\bf Date} & {\bf Version} & {\bf Notes}                                                                               \\
+  (\nfrref{NFR_verifiability}) and improve quality of other NFRs                                            \\
+  \bottomrule~                                                                                              \\
+  ~                                                                                                         \\
+  \toprule {\bf Date} & {\bf Version} & {\bf Notes}                                                         \\
   \midrule
-  Jan. 29, 2023       & 0.5           & Fill in \nameref{sec_intro} based on Drasil examples                                      \\
+  Jan. 29, 2023       & 0.5           & Fill in \nameref{sec_intro} based on Drasil examples                \\
                       & 0.5.1         & Fill in \nameref{sec_phySystDesc} and remove ``product'' and
-  ``reactant'' from \nameref{sec_termsDefs}                                                                                       \\
+  ``reactant'' from \nameref{sec_termsDefs}                                                                 \\
   Jan. 30, 2023       & 0.5.2         & Remove unnecessary template comments about SRS document
   and the ones from \nameref{sec_specSysDesc} up to
-  \nameref{sec_instance}, except for \nameref{sec_datatypes}                                                                      \\
+  \nameref{sec_instance}, except for \nameref{sec_datatypes}                                                \\
                       & 0.5.3         & Remove unnecessary content from \nameref{sec_tabSymbs} and
-  add the notion of ``gram'' to the document                                                                                      \\
+  add the notion of ``gram'' to the document                                                                \\
                       & 0.5.4         & Make \nfrref{NFR_accuracy} more accurate to current scope with
-  potential future information for stretch goals added in comment                                                                 \\
+  potential future information for stretch goals added in comment                                           \\
                       & 0.6           & Make System Context diagram (Figure \ref{fig_sysCon}) and start
-  to fill in \nameref{sec_sysCon}                                                                                                 \\
-  Jan. 31, 2023       & 0.6.1         & Fill in rest of \nameref{sec_genSysDesc}                                                  \\
+  to fill in \nameref{sec_sysCon}                                                                           \\
+  Jan. 31, 2023       & 0.6.1         & Fill in rest of \nameref{sec_genSysDesc}                            \\
   Feb. 1, 2023        & 0.6.2         & Change abbreviation of theoretical model from ``T'' to
-  ``TM'' and make TM references consistent with other references                                                                  \\
-  Feb. 2, 2023        & 0.6.3         & Finish \nameref{sec_refMat}, renaming specific matrices/vectors in \nameref{sec_instance} \\
+  ``TM'' and make TM references consistent with other references                                            \\
+  Feb. 2, 2023        & 0.6.3         & Finish \nameref{sec_refMat}, renaming specific matrices/vectors
+  in \nameref{sec_instance}                                                                                 \\
+                      & 0.6.4         & Reformat and clarify \nameref{sec_LCs}                              \\
+  Feb. 3, 2023        & 0.6.5         & Add type notation and information                                   \\
   \bottomrule
 \end{tabularx}
 
@@ -254,24 +260,24 @@ description of the unit and the SI name.
 \subsection{Table of Symbols} \label{sec_tabSymbs}
 
 The table that follows summarizes the symbols used in this document along with
-their units.  The choice of symbols was made to be consistent with linear algebra
-conventions while distinguishing between specific matrices.  The symbols are listed
-in alphabetical order.
+their units and types. The choice of symbols was made to be consistent with
+linear algebra conventions while distinguishing between specific matrices.  The
+symbols are listed in alphabetical order.
 
 % \renewcommand{\arraystretch}{1.2}
-\noindent \begin{tabularx}{\textwidth}{l l X} \toprule
-  \textbf{symbol} & \textbf{unit} & \textbf{description}                             \\
+\noindent \begin{tabularx}{\textwidth}{l l l X} \toprule
+  \textbf{symbol} & \textbf{unit} & \textbf{type}                 & \textbf{description}                             \\
   \midrule
-  $\textbf{0}$    & --            & zero vector                                      \\
-  $\textbf{A}$    & --            & generic matrix                                   \\
-  $\textbf{E}$    & --            & matrix representation of the inputted chemical
-  equation                                                                           \\
-  $\textbf{b}$    & --            & generic vector                                   \\
-  $\textbf{c}$    & --            & vector of the smallest coefficients that balance
-  a chemical equation                                                                \\
-  $m$             & --            & generic whole number                             \\
-  $n$             & --            & generic whole number                             \\
-  $\textbf{x}$    & --            & generic vector                                   \\
+  $\textbf{0}$    & --            & $\mathbb{N}^{m \times 1}$     & zero vector                                      \\
+  $\textbf{A}$    & --            & $\mathbb{R}^{m \times n}$     & generic matrix                                   \\
+  $\textbf{E}$    & --            & $\mathbb{R}^{m \times n}$     & matrix representation of the inputted chemical
+  equation                                                                                                           \\
+  $\textbf{b}$    & --            & $\mathbb{R}^{m \times 1}$     & generic vector                                   \\
+  $\textbf{c}$    & --            & $(\mathbb{Z^+})^{n \times 1}$ & vector of the smallest coefficients that balance
+  a chemical equation                                                                                                \\
+  $m$             & --            & $\mathbb{Z}^+$                & generic whole number                             \\
+  $n$             & --            & $\mathbb{Z}^+$                & generic whole number                             \\
+  $\textbf{x}$    & --            & $\mathbb{R}^{n \times 1}$     & generic vector                                   \\
   \bottomrule
 \end{tabularx}
 
@@ -301,7 +307,11 @@ in alphabetical order.
 
 Matrices are written in bold uppercase letters (for example $\textbf{A}$), while
 vectors (1D matrices) are written in bold lowercase letters, (for example
-$\textbf{x}$) \cite{osullivan_appendix_2010}. The zero matrix is a special type
+$\textbf{x}$) \cite{osullivan_appendix_2010}. The type of a matrix will be
+denoted by the type of each value in the matrix with the matrix's dimensions
+as a superscript; for example, a matrix of integers with two rows and three
+columns is of type $\mathbb{Z}^{2 \times 3}$. \sjc{I couldn't find a source
+  for this, but this is what I'll use.} The zero matrix is a special type
 of matrix where each element is zero and is denoted by $\textbf{0}$
 \cite{weisstein_zero_2023}.
 % Individual entries in a matrix are written in
@@ -312,6 +322,10 @@ of matrix where each element is zero and is denoted by $\textbf{0}$
 Two (or more) matrices with the same
 number of rows can be joined together to form an ``augmented matrix'', written
 as $\left(\textbf{A}\vert \textbf{B}\right)$ \cite{taboga_augmented_2021}.
+
+The set of natural numbers is denoted by $\mathbb{N}$ and consists of the
+non-negative integers (including zero). The set of whole numbers is denoted by
+$\mathbb{Z}^+$ and consists of the positive integers (excluding zero).
 
 % \plt{If symbols are used to show mathematical operations,
 %   these should be summarized here.  In some cases the easiest way to summarize
@@ -668,9 +682,11 @@ on.
 % #5 description
 {
   The above equation gives the general form of the matrix equation where
-  $\textbf{A}$ is an $m\times n$ matrix, $\textbf{b}$ is a vector in
-  $\mathbb{R}^m$, and $\textbf{x}$ is a vector in $\mathbb{R}^n$ with unknown
-  values to be solved for \cite{margalit_matrix_2019}.
+  $\textbf{A}$ is of type $\mathbb{R}^{m\times n}$, $\textbf{b}$ is of type
+  $\mathbb{R}^{m \times 1}$, and $\textbf{x}$ is of type
+  $\mathbb{R}^{n \times 1}$. The values of $\textbf{x}$ are unknown
+  and will be solved for \cite{margalit_matrix_2019}. \sjc{Is this type
+    information redundant to have here?}
 }
 % #6 Notes
 {
@@ -856,44 +872,44 @@ There are no data definitions.
 %\end{tabular}
 %\end{minipage}\\
 
-\subsubsection{Data Types}\label{sec_datatypes}
+% \subsubsection{Data Types}\label{sec_datatypes}
 
-\plt{This section is optional.  In many scientific computing programs it isn't
-  necessary, since the inputs and outputs are straightforward types, like reals,
-  integers, and sequences of reals and integers.  However, for some problems it
-  is very helpful to capture the type information.}
+% \plt{This section is optional.  In many scientific computing programs it isn't
+%   necessary, since the inputs and outputs are straightforward types, like reals,
+%   integers, and sequences of reals and integers.  However, for some problems it
+%   is very helpful to capture the type information.}
 
-\plt{The data types are not derived; they are simply stated and used by other
-  models.}
+% \plt{The data types are not derived; they are simply stated and used by other
+%   models.}
 
-\plt{All data types must be used by at least one of the models.}
+% \plt{All data types must be used by at least one of the models.}
 
-\plt{For the mathematical notation for expressing types, the recommendation is
-  to use the notation of~\cite{HoffmanAndStrooper1995}.}
+% \plt{For the mathematical notation for expressing types, the recommendation is
+%   to use the notation of~\cite{HoffmanAndStrooper1995}.}
 
-This section collects and defines all the data types needed to document the
-models. \plt{Modify the examples below for your problem, and add additional
-  definitions as appropriate.}
+% This section collects and defines all the data types needed to document the
+% models. \plt{Modify the examples below for your problem, and add additional
+%   definitions as appropriate.}
 
-~\newline
+% ~\newline
 
-\noindent
-\begin{minipage}{\textwidth}
-  \renewcommand*{\arraystretch}{1.5}
-  \begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
-    \hline
-    \rowcolor[gray]{0.9}
-    Type Name   & Name for Type                                              \\
-    \hline
-    Type Def    & mathematical definition of the type                        \\
-    \hline
-    Description & description here
-    \\
-    \hline
-    Sources     & Citation here, if the type is borrowed from another source \\
-    \hline
-  \end{tabular}
-\end{minipage}\\
+% \noindent
+% \begin{minipage}{\textwidth}
+%   \renewcommand*{\arraystretch}{1.5}
+%   \begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
+%     \hline
+%     \rowcolor[gray]{0.9}
+%     Type Name   & Name for Type                                              \\
+%     \hline
+%     Type Def    & mathematical definition of the type                        \\
+%     \hline
+%     Description & description here
+%     \\
+%     \hline
+%     Sources     & Citation here, if the type is borrowed from another source \\
+%     \hline
+%   \end{tabular}
+% \end{minipage}\\
 
 \subsubsection{Instance Models} \label{sec_instance}
 
@@ -1085,8 +1101,6 @@ and \iref{balance}, respectively.
 %  where the derivation cannot be described under the Description field, it will
 %  be necessary to include this subsection.}
 
-\newpage
-
 \subsubsection{Input Data Constraints} \label{sec_DataConstraints}
 
 Table~\ref{TblInputVar} shows the data constraints on the input output
@@ -1262,63 +1276,68 @@ qualities that the software is expected to exhibit.
 
 \noindent \begin{itemize}
 
-  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_complexForms}:] The user will
-    be able to input complex chemical formulas, such as hydrates (see
-    \nameref{sec_termsDefs}) or those with polymers or isotopes
-    (\aref{A_simpleForms}).
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_complexForms}:] The system
+    currently assumes that inputted chemical formulas are simple
+    (\aref{A_simpleForms}). In the future, the user might
+    be able to input more complex chemical formulas, such as hydrates (see
+    \nameref{sec_termsDefs}) or those with polymers or isotopes.
 
-  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_calcMoles}:] Given the amount
-    of one substance in a reaction (in moles), \progname{} will be able to
-    calculate the amount of every other substance in the reaction (also in
-    moles).\footnote{\label{chemProbExs}These examples of problems related to
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_calcMoles}:] In the future,
+    \progname{} might be able to, given the amount of one substance (in moles)
+    in a reaction, calculate the amount required/produced of every other
+    substance (also in moles) in the reaction.\footnote{
+      \label{chemProbExs}These examples of problems related to
       chemical equations were taken from \cite{lund_introduction_2023}.}
 
-  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_detLimReag}:] Given the amount
-    of each reactant (in moles) in a reaction, \progname{} will be able to
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_detLimReag}:] In the future,
+    \progname{} might be able to, given the amount
+    of each reactant (in moles) in a reaction,
     determine the limiting reactant(s).\cref{chemProbExs}
+    This is dependent on \lcref{LC_calcMoles}.
 
-  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_calcYield}:] Given the amount
-    of each \sjc{Is ``each'' a requirement?}
-    reactant (in moles) in a reaction, \progname{} will be able to
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_calcYield}:] In the future,
+    \progname{} might be able to, given the amount
+    of more than one reactant (in moles) in a reaction,
     calculate the theoretical yield of each product (also in
     moles).\cref{chemProbExs} This is dependent on \lcref{LC_detLimReag}.
 
-  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_calcExcess}:] Given the amount
-    of each \sjc{Is ``each'' a requirement?}
-    reactant (in moles) in a reaction, \progname{} will be able to
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_calcExcess}:] In the future,
+    \progname{} might be able to, given the amount
+    of more than one reactant (in moles) in a reaction,
     calculate the amount of excess reactant(s) (also in	moles).\cref{chemProbExs}
     This is dependent on \lcref{LC_detLimReag}.
 
   \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_incorrectInputFormat}:]
-    \progname{} will be able to parse valid but incorrectly-formatted chemical
-    formulas inputted by the user and format them correctly when outputting them
-    (\aref{A_correctInputFormat}).
+    The system currently assumes that inputted chemical formulas are formatted
+    according to some set of conventions
+    (\aref{A_correctInputFormat}). In the future, \progname{} might be able to
+    parse valid but incorrectly formatted chemical formulas inputted by the
+    user and format them correctly when outputting them.
 
-  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_termsOfMass}:] For ease of use,
-    the user will be able to enter the amounts required by \lcref{LC_calcMoles},
-    \lcref{LC_detLimReag}, \lcref{LC_calcYield}, and \lcref{LC_calcExcess} in terms
-    of mass (e.g., in grams).\cref{chemProbExs}
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_termsOfMass}:] In the future,
+    the user might be able to enter the amounts required by \lcref{LC_calcMoles},
+    \lcref{LC_detLimReag}, \lcref{LC_calcYield}, and \lcref{LC_calcExcess} in
+    terms of mass (e.g., in grams).\cref{chemProbExs}
 
-    %\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_allEqsPermitted}:] All chemical
-    %	equations will be permitted as input and processed as appropriate
-    %	(\aref{A_elemCompDiff}).
-
-  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_classRxns}:] \progname{} will be
-    able to classify a chemical reaction as ``combination (or
-    synthesis), decomposition, combustion, single replacement, \dots double
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_classRxns}:] In the future,
+    \progname{} might be able to classify a chemical reaction as ``combination
+    (or synthesis), decomposition, combustion, single replacement, \dots double
     replacement'' \cite[p.~301]{lund_introduction_2023} or some combination of
     these.\cref{chemProbExs}
 
-  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_inputPhaseLabels}:] \progname{}
-    will allow the user to input phase labels.\cref{chemProbExs}
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_inputPhaseLabels}:] In the
+    future, \progname{} might allow the user to input phase
+    labels.\cref{chemProbExs}
 
-  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_identifyPhaseLabels}:]
-    \progname{} will be able to identify the phase labels for compounds, which will
-    involve determining solubility.\cref{chemProbExs} This is dependent on
-    \lcref{LC_inputPhaseLabels}.
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_identifyPhaseLabels}:] In
+    the future, \progname{} might be able to, given the phase labels for the
+    reactants of a reaction, identify the phase labels for the products, which
+    would involve determining solubility.\cref{chemProbExs} This is dependent
+    on \lcref{LC_inputPhaseLabels}.
 
-  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_rxnTakePlace}:] \progname{}
-    will be able to identify when a reaction will not take place.\cref{chemProbExs}
+  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_rxnTakePlace}:] In the
+    future, \progname{} might be able to identify when a reaction will not take
+    place.\cref{chemProbExs}
     This is dependent on \lcref{LC_identifyPhaseLabels}.
 
 \end{itemize}
@@ -1327,9 +1346,11 @@ qualities that the software is expected to exhibit.
 
 \noindent \begin{itemize}
 
-  \item[LC\refstepcounter{lcnum}\thelcnum\label{LC_meaningfulLabel}:] \plt{Give
-      the unlikely changes.  The design can assume that the changes listed will
-      not occur.} \sjc{Is this supposed to be ``LC'' or ``UC''?}
+  \item[UC\refstepcounter{ucnum}\theucnum\label{UC_diffSolveMethod}:]
+
+    % \item[UC\refstepcounter{ucnum}\theucnum\label{UC_allEqsPermitted}:] All chemical
+    %	equations will be permitted as input and processed as appropriate
+    %	(\aref{A_elemCompDiff}).
 
 \end{itemize}
 

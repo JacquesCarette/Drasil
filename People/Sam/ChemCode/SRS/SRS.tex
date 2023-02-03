@@ -149,78 +149,80 @@
 \section*{Revision History} \label{sec_revHist}
 
 \begin{tabularx}{\textwidth}{p{2.5cm}p{1.5cm}X}
-  \toprule {\bf Date} & {\bf Version} & {\bf Notes}                                                         \\
+  \toprule {\bf Date} & {\bf Version} & {\bf Notes}                                                          \\
   \midrule
-  Jan. 21, 2023       & 0.0           & Start document, fill in title page, and add references              \\
+  Jan. 21, 2023       & 0.0           & Start document, fill in title page, and add references               \\
                       & 0.1           & Fill in \nameref{sec_probDesc} and \nameref{sec_goals} sections, as
-  well as all relevant definitions                                                                          \\
+  well as all relevant definitions                                                                           \\
   Jan. 22, 2023       & 0.1.1         & Replace the notion of ``fractional oxidation state'' with
-  ``nonstoichiometric compound''                                                                            \\
-                      & 0.1.2         & Fix capTemplate reference                                           \\
-                      & 0.1.3         & Update \nameref{sec_abbsAcrs}                                       \\
+  ``nonstoichiometric compound''                                                                             \\
+                      & 0.1.2         & Fix capTemplate reference                                            \\
+                      & 0.1.3         & Update \nameref{sec_abbsAcrs}                                        \\
                       & 0.2           & Add IM for balancing a chemical reaction (\iref{balance}), along
-  with relevant reference information                                                                       \\
+  with relevant reference information                                                                        \\
   Jan. 23, 2023       & 0.2.1         & Add IM for determining if a chemical reaction is feasible
-  (\iref{feasible}), along with relevant reference information                                              \\
+  (\iref{feasible}), along with relevant reference information                                               \\
   Jan. 25, 2023       & 0.2.2         & Add references between sections for notation and
-  definitions                                                                                               \\
-                      & 0.2.3         & Abstract \iref{feasible}                                            \\
+  definitions                                                                                                \\
+                      & 0.2.3         & Abstract \iref{feasible}                                             \\
                       & 0.2.4         & Add IM for converting chemical equation to a matrix
-  (\iref{convert}), along with relevant reference information                                               \\
-                      & 0.2.5         & Rename and add input constraint to \iref{balance}                   \\
-                      & 0.2.6         & Add note about \iref{balance} returning the smallest solution       \\
-                      & 0.2.7         & Add TM for matrix equation (\tref{TM_MatEq})                        \\
+  (\iref{convert}), along with relevant reference information                                                \\
+                      & 0.2.5         & Rename and add input constraint to \iref{balance}                    \\
+                      & 0.2.6         & Add note about \iref{balance} returning the smallest solution        \\
+                      & 0.2.7         & Add TM for matrix equation (\tref{TM_MatEq})                         \\
                       & 0.2.8         & Improve referencing, mainly for TMs, and add note about
-  potential TM for Conservation of Mass                                                                     \\
-                      & 0.2.9         & Add check for Conservation of Mass in \iref{feasible}               \\
+  potential TM for Conservation of Mass                                                                      \\
+                      & 0.2.9         & Add check for Conservation of Mass in \iref{feasible}                \\
   Jan. 26, 2023       & 0.3           & Add \nameref{sec_LCs} from Problem Statement, add
   assumption about difference between number of elements and compounds
-  (\aref{A_elemCompDiff}), and add mole to \nameref{sec_ToU}                                                \\
+  (\aref{A_elemCompDiff}), and add mole to \nameref{sec_ToU}                                                 \\
                       & 0.3.1         & Update \tref{TM_MatEq} (and TM function) from feedback from
-  presentation                                                                                              \\
+  presentation                                                                                               \\
                       & 0.3.2         & Fill in \nameref{sec_scope}, fix \aref{A_elemCompDiff} and
-  change ``infeasible'' to ``feasible''                                                                     \\
-  Jan. 27, 2023       & 0.3.3         & Improve section referencing in \nameref{sec_revHist}                \\
-                      & 0.4           & Fill in \nameref{sec_funcReqs}                                      \\
+  change ``infeasible'' to ``feasible''                                                                      \\
+  Jan. 27, 2023       & 0.3.3         & Improve section referencing in \nameref{sec_revHist}                 \\
+                      & 0.4           & Fill in \nameref{sec_funcReqs}                                       \\
   Jan. 28, 2023       & 0.4.1         & Fill in main \nameref{sec_nonfuncReqs}, along with
-  relevant reference information                                                                            \\
+  relevant reference information                                                                             \\
                       & 0.4.2         & Add TM for the Law of Conservation of Mass
-  (\tref{TM_ConsMass})                                                                                      \\
+  (\tref{TM_ConsMass})                                                                                       \\
                       & 0.4.3         & Represent input to \iref{convert} as two sequences of chemical
   formulas, add assumptions about user input, and remove infeasible
-  likely change                                                                                             \\
+  likely change                                                                                              \\
   Jan. 29, 2023       & 0.4.4         & Add NFRs for understandability
   (\nfrref{NFR_understandability}) and verifiability
-  (\nfrref{NFR_verifiability}) and improve quality of other NFRs                                            \\
-  \bottomrule~                                                                                              \\
-  ~                                                                                                         \\
-  \toprule {\bf Date} & {\bf Version} & {\bf Notes}                                                         \\
+  (\nfrref{NFR_verifiability}) and improve quality of other NFRs                                             \\
+  \bottomrule~                                                                                               \\
+  ~                                                                                                          \\
+  \toprule {\bf Date} & {\bf Version} & {\bf Notes}                                                          \\
   \midrule
-  Jan. 29, 2023       & 0.5           & Fill in \nameref{sec_intro} based on Drasil examples                \\
+  Jan. 29, 2023       & 0.5           & Fill in \nameref{sec_intro} based on Drasil examples                 \\
                       & 0.5.1         & Fill in \nameref{sec_phySystDesc} and remove ``product'' and
-  ``reactant'' from \nameref{sec_termsDefs}                                                                 \\
+  ``reactant'' from \nameref{sec_termsDefs}                                                                  \\
   Jan. 30, 2023       & 0.5.2         & Remove unnecessary template comments about SRS document
-  and the ones from \nameref{sec_specSysDesc} up to \nameref{sec_instance}                                  \\
+  and the ones from \nameref{sec_specSysDesc} up to \nameref{sec_instance}                                   \\
                       & 0.5.3         & Remove unnecessary content from \nameref{sec_tabSymbs} and
-  add the notion of ``gram'' to the document                                                                \\
+  add the notion of ``gram'' to the document                                                                 \\
                       & 0.5.4         & Make \nfrref{NFR_accuracy} more accurate to current scope with
-  potential future information for stretch goals added in comment                                           \\
+  potential future information for stretch goals added in comment                                            \\
                       & 0.6           & Make System Context diagram (Figure \ref{fig_sysCon}) and start
-  to fill in \nameref{sec_sysCon}                                                                           \\
-  Jan. 31, 2023       & 0.6.1         & Fill in rest of \nameref{sec_genSysDesc}                            \\
+  to fill in \nameref{sec_sysCon}                                                                            \\
+  Jan. 31, 2023       & 0.6.1         & Fill in rest of \nameref{sec_genSysDesc}                             \\
   Feb. 1, 2023        & 0.6.2         & Change abbreviation of theoretical model from ``T'' to
-  ``TM'' and make TM references consistent with other references                                            \\
+  ``TM'' and make TM references consistent with other references                                             \\
   Feb. 2, 2023        & 0.6.3         & Fill in \nameref{sec_refMat}, renaming specific matrices/vectors
-  in \nameref{sec_instance}                                                                                 \\
-                      & 0.6.4         & Reformat and clarify \nameref{sec_LCs}                              \\
-  Feb. 3, 2023        & 0.6.5         & Add type notation and information                                   \\
+  in \nameref{sec_instance}                                                                                  \\
+                      & 0.6.4         & Reformat and clarify \nameref{sec_LCs}                               \\
+  Feb. 3, 2023        & 0.6.5         & Add type notation and information                                    \\
                       & 0.6.6         & Fill in \nameref{sec_UCs}, add likely change for identifying
-  more types of reactions (\lcref{LC_classMoreRxns}), and reference \aref{A_elemCompDiff} in \iref{convert} \\
-                      & 0.6.7         & Fill in \nameref{sec_traceMats} and remove more unnecessary content \\
+  more types of reactions (\lcref{LC_classMoreRxns}), and reference \aref{A_elemCompDiff} in \iref{convert}  \\
+                      & 0.6.7         & Fill in \nameref{sec_traceMats} and remove more unnecessary content  \\
+                      & 0.6.8         & Fill in data constraints sections, update traceability matrices, and
+  finalize formatting                                                                                        \\
   \bottomrule
 \end{tabularx}
 
-%~\newpage
+~\newpage
 
 \section{Reference Material} \label{sec_refMat}
 
@@ -661,6 +663,8 @@ is used.
 
 \end{itemize}
 
+\newpage
+
 \subsubsection{Theoretical Models}\label{sec_theoretical}
 
 %\plt{Theoretical models are sets of abstract mathematical equations or axioms
@@ -671,7 +675,6 @@ is used.
 This section focuses on the general equations and laws that \progname{} is based
 on.
 
-\newpage
 \noindent
 \deftheory
 % #2 refname of theory
@@ -687,9 +690,9 @@ on.
   The above equation gives the general form of the matrix equation where
   $\textbf{A}$ is of type $\mathbb{R}^{m\times n}$, $\textbf{b}$ is of type
   $\mathbb{R}^{m \times 1}$, and $\textbf{x}$ is of type
-  $\mathbb{R}^{n \times 1}$. The values of $\textbf{x}$ are unknown
-  and will be solved for \cite{margalit_matrix_2019}. \sjc{Is this type
-    information redundant to have here?}
+  $\mathbb{R}^{n \times 1}$. \sjc{Is this type information redundant to have
+    here?} The values of $\textbf{x}$ are unknown
+  and will be solved for \cite{margalit_matrix_2019}.
 }
 % #6 Notes
 {
@@ -698,8 +701,7 @@ on.
 }
 % #7 Source
 {
-  \url{https://textbooks.math.gatech.edu/ila/matrix-equations.html} \sjc{Is this
-    a good enough source?}
+  \url{https://textbooks.math.gatech.edu/ila/matrix-equations.html}
 }
 % #8 Referenced by
 {
@@ -919,7 +921,8 @@ There are no data definitions.
 This section transforms the problem defined in \nameref{sec_probDesc} into
 one which is expressed in mathematical terms. It uses concrete symbols defined
 in Section~\ref{sec_datadef} to replace the abstract symbols in the models
-identified in Sections~\ref{sec_theoretical} and~\ref{sec_gendef}.
+identified in Sections~\ref{sec_theoretical} and~\ref{sec_gendef} \sjc{Should
+  the reference to the general models be removed if there aren't any?}.
 
 The goals \gsref{G_feasible} and \gsref{G_balance} are solved by \iref{feasible}
 and \iref{balance}, respectively.
@@ -1067,32 +1070,33 @@ and \iref{balance}, respectively.
   \begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
     \hline
     \rowcolor[gray]{0.9}
-    Number      & IM\refstepcounter{instnum}\theinstnum \label{balance}                        \\
+    Number      & IM\refstepcounter{instnum}\theinstnum \label{balance}                \\
     \hline
-    Label       & \bf Vector of compound coefficients in balanced equation                     \\
+    Label       & \bf Vector of compound coefficients in balanced equation             \\
     \hline
-    Input       & $\textbf{E}$ from \iref{convert}                                             \\
-                & The input is constrained so that $\textbf{E}$ is feasible (\iref{feasible}).
-    \sjc{Is this correct?}                                                                     \\
+    Input       & $\textbf{E}$ from \iref{convert}                                     \\
+                & The input is constrained so that $\textbf{E}$ is feasible
+    (\iref{feasible}).
+    \sjc{Is this correct?}                                                             \\
     \hline
-    Output      & $\textbf{c}$, such that it is the smallest solution to                       \\
+    Output      & $\textbf{c}$, such that it is the smallest solution to               \\
                 & $\textbf{E}\textbf{c} = \textbf{0}$ from \tref{TM_MatEq}
     %  \sjc{TM refs not working.}
-    \sjc{Is this sufficient?}                                                                  \\
+    \sjc{Is this sufficient?}                                                          \\
     \hline
     Description & $\textbf{E}$ is a matrix representing the amount of each element
-    in each compound in a reaction from \iref{convert}. \sjc{Is this necessary?}               \\
-                & $\textbf{c}$ is a vector of coefficients for each compound in the reaction
-    (in the order inputted) so that the equation is balanced.                                  \\
-                & $\textbf{0}$ is the zero matrix (see \nameref{sec_mathNot}).                 \\
+    in each compound in a reaction from \iref{convert}. \sjc{Is this necessary?}       \\
+                & $\textbf{c}$ is a vector of whole number coefficients for each
+    compound in the reaction (in the order inputted) so that the equation is balanced. \\
+                & $\textbf{0}$ is the zero matrix (see \nameref{sec_mathNot}).         \\
     %  & The above equation applies as long as the water is in liquid form,
     %  $0<T_W<100^o\text{C}$, where $0^o\text{C}$ and $100^o\text{C}$ are the melting
     %  and boiling points of water, respectively (\aref{A_OpRange}, \aref{A_Pressure}).
     %  \\
     \hline
-    Sources     & \cite{hamid_balancing_2019}                                                  \\
+    Sources     & \cite{hamid_balancing_2019}                                          \\
     \hline
-    Ref.\ By    & \ucref{UC_diffSolveMethod}                                                   \\
+    Ref.\ By    & \ucref{UC_diffSolveMethod}                                           \\
     \hline
   \end{tabular}
 \end{minipage}\\
@@ -1105,79 +1109,89 @@ and \iref{balance}, respectively.
 %  where the derivation cannot be described under the Description field, it will
 %  be necessary to include this subsection.}
 
-\subsubsection{Input Data Constraints} \label{sec_DataConstraints}
+\subsubsection{Input Data Constraints} \label{sec_DataConst}
 
-Table~\ref{TblInputVar} shows the data constraints on the input output
-variables.  The column for physical constraints gives the physical limitations
-on the range of values that can be taken by the variable.  The column for
-software constraints restricts the range of inputs to reasonable values.  The
-software constraints will be helpful in the design stage for picking suitable
-algorithms.  The constraints are conservative, to give the user of the model the
-flexibility to experiment with unusual situations.  The column of typical values
-is intended to provide a feel for a common scenario.  The uncertainty column
-provides an estimate of the confidence with which the physical quantities can be
-measured.  This information would be part of the input if one were performing an
-uncertainty quantification exercise.
+There are no input data constraints.
 
-The specification parameters in Table~\ref{TblInputVar} are listed in
-Table~\ref{TblSpecParams}.
+% Table~\ref{TblInputVar} shows the data constraints on the input output
+% variables.  The column for physical constraints gives the physical limitations
+% on the range of values that can be taken by the variable.  The column for
+% software constraints restricts the range of inputs to reasonable values.  The
+% software constraints will be helpful in the design stage for picking suitable
+% algorithms.  The constraints are conservative, to give the user of the model the
+% flexibility to experiment with unusual situations.  The column of typical values
+% is intended to provide a feel for a common scenario.  The uncertainty column
+% provides an estimate of the confidence with which the physical quantities can be
+% measured.  This information would be part of the input if one were performing an
+% uncertainty quantification exercise.
 
-\begin{table}[!h]
-  \caption{Input Variables} \label{TblInputVar}
-  \renewcommand{\arraystretch}{1.2}
-  \noindent \begin{longtable*}{l l l l c}
-    \toprule
-    \textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} &
-    \textbf{Typical Value} & \textbf{Uncertainty}\\
-    \midrule
-    $L$ & $L > 0$ & $L_{\text{min}} \leq L \leq L_{\text{max}}$ & 1.5 \si[per-mode=symbol] {\metre} & 10\%
-    \\
-    \bottomrule
-  \end{longtable*}
-\end{table}
+% The specification parameters in Table~\ref{TblInputVar} are listed in
+% Table~\ref{TblSpecParams}.
 
-\noindent
-\begin{description}
-  \item[(*)] \plt{you might need to add some notes or clarifications}
-\end{description}
+% \begin{table}[!h]
+%   \caption{Input Variables} \label{TblInputVar}
+%   \renewcommand{\arraystretch}{1.2}
+%   \noindent \begin{longtable*}{l l l l c}
+%     \toprule
+%     \textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} &
+%     \textbf{Typical Value} & \textbf{Uncertainty}\\
+%     \midrule
+%     $L$ & $L > 0$ & $L_{\text{min}} \leq L \leq L_{\text{max}}$ & 1.5 \si[per-mode=symbol] {\metre} & 10\%
+%     \\
+%     \bottomrule
+%   \end{longtable*}
+% \end{table}
 
-\begin{table}[!h]
-  \caption{Specification Parameter Values} \label{TblSpecParams}
-  \renewcommand{\arraystretch}{1.2}
-  \noindent \begin{longtable*}{l l}
-    \toprule
-    \textbf{Var} & \textbf{Value} \\
-    \midrule
-    $L_\text{min}$ & 0.1 \si{\metre}\\
-    \bottomrule
-  \end{longtable*}
-\end{table}
+% \noindent
+% \begin{description}
+%   \item[(*)] \plt{you might need to add some notes or clarifications}
+% \end{description}
 
-\subsubsection{Properties of a Correct Solution} \label{sec_CorrectSolution}
+% \begin{table}[!h]
+%   \caption{Specification Parameter Values} \label{TblSpecParams}
+%   \renewcommand{\arraystretch}{1.2}
+%   \noindent \begin{longtable*}{l l}
+%     \toprule
+%     \textbf{Var} & \textbf{Value} \\
+%     \midrule
+%     $L_\text{min}$ & 0.1 \si{\metre}\\
+%     \bottomrule
+%   \end{longtable*}
+% \end{table}
 
-A correct solution must exhibit \plt{fill in the details}.  \plt{These
-  properties are in addition to the stated requirements.  There is no need to
-  repeat the requirements here.  These additional properties may not exist for
-  every problem.  Examples include conservation laws (like conservation of
-  energy or mass) and known constraints on outputs, which are usually summarized
-  in tabular form.  A sample table is shown in Table~\ref{TblOutputVar}}
+\subsubsection{Properties of a Correct Solution} \label{sec_PropsCorrSol}
 
-\begin{table}[!h]
-  \caption{Output Variables} \label{TblOutputVar}
-  \renewcommand{\arraystretch}{1.2}
-  \noindent \begin{longtable*}{l l}
-    \toprule
-    \textbf{Var} & \textbf{Physical Constraints} \\
-    \midrule
-    $T_W$ & $T_\text{init} \leq T_W \leq T_C$ (by~\aref{A_charge})
-    \\
-    \bottomrule
-  \end{longtable*}
-\end{table}
+The equation from \iref{balance} can be used as a ``sanity'' check, using the
+original input (formatted as a matrix according to \iref{convert}) as
+$\textbf{E}$ and the outputted vector of coefficients as $\textbf{c}$.
+Performing this matrix multiplication should result in the zero matrix,
+$\textbf{0}$.
 
-\plt{This section is not for test cases or techniques for verification and
-  validation.  Those topics will be addressed in the Verification and Validation
-  plan.}
+% A correct solution must exhibit \plt{fill in the details}.  \plt{These
+%   properties are in addition to the stated requirements.  There is no need to
+%   repeat the requirements here.  These additional properties may not exist for
+%   every problem.  Examples include conservation laws (like conservation of
+%   energy or mass) and known constraints on outputs, which are usually summarized
+%   in tabular form.  A sample table is shown in Table~\ref{TblOutputVar}}
+
+% \begin{table}[!h]
+%   \caption{Output Variables} \label{TblOutputVar}
+%   \renewcommand{\arraystretch}{1.2}
+%   \noindent \begin{longtable*}{l l}
+%     \toprule
+%     \textbf{Var} & \textbf{Physical Constraints} \\
+%     \midrule
+%     $T_W$ & $T_\text{init} \leq T_W \leq T_C$ (by~\aref{A_charge})
+%     \\
+%     \bottomrule
+%   \end{longtable*}
+% \end{table}
+
+% \plt{This section is not for test cases or techniques for verification and
+%   validation.  Those topics will be addressed in the Verification and Validation
+%   plan.}
+
+\newpage
 
 \section{Requirements}
 This section provides the functional requirements, the business tasks that the
@@ -1274,6 +1288,8 @@ qualities that the software is expected to exhibit.
     %\item Reusability?.
 
 \end{itemize}
+
+\newpage
 
 \section{Likely Changes} \label{sec_LCs}
 
@@ -1382,91 +1398,91 @@ qualities that the software is expected to exhibit.
 The purpose of the traceability matrices is to provide easy references on what
 has to be additionally modified if a certain component is changed.  Every time a
 component is changed, the items in the column of that component that are marked
-with an ``X'' may have to be modified as well. Table~\ref{Table:A_trace} shows
-the dependencies of theoretical models,
+with an ``X'' may have to be modified as well. Table~\ref{Table:trace} shows the
+dependencies of theoretical models, general definitions, data definitions,
+instance models, and data constraints on each other. Table~\ref{Table:A_trace}
+shows the dependencies of theoretical models,
 general definitions, data definitions, instance models, likely changes, and
-unlikely changes on the assumptions. Table~\ref{Table:trace} shows the
-dependencies of theoretical models, general definitions, data definitions, and
-instance models on each other. Table~\ref{Table:R_trace} shows the
-dependencies of requirements on instance models and data constraints.
+unlikely changes on the assumptions. Table~\ref{Table:R_trace}
+shows the dependencies of requirements on instance models.
 
 \begin{table}[h!]
   \centering
-  \begin{tabular}{|c|c|c|c|c|}
+  \begin{tabular}{|c|c|c|c|c|c|c|c|}
     \hline
-                                    & \aref{A_elemCompDiff} & \aref{A_validInput} & \aref{A_correctInputFormat} & \aref{A_simpleForms} \\
+                       & \tref{TM_MatEq} & \tref{TM_ConsMass} & \iref{convert} & \iref{feasible} & \iref{balance} & \ref{sec_DataConst} & \ref{sec_PropsCorrSol} \\
     \hline
-    \tref{TM_MatEq}                 &                       &                     &                             &                      \\ \hline
-    \tref{TM_ConsMass}              &                       &                     &                             &                      \\ \hline
-    \iref{convert}                  & X                     & X                   & X                           & X                    \\ \hline
-    \iref{feasible}                 &                       &                     &                             &                      \\ \hline
-    \iref{balance}                  &                       &                     &                             &                      \\ \hline
-    \lcref{LC_complexForms}         &                       &                     &                             & X                    \\ \hline
-    \lcref{LC_calcMoles}            &                       &                     &                             &                      \\ \hline
-    \lcref{LC_detLimReag}           &                       &                     &                             &                      \\ \hline
-    \lcref{LC_calcYield}            &                       &                     &                             &                      \\ \hline
-    \lcref{LC_calcExcess}           &                       &                     &                             &                      \\ \hline
-    \lcref{LC_incorrectInputFormat} &                       &                     & X                           &                      \\ \hline
-    \lcref{LC_termsOfMass}          &                       &                     &                             &                      \\ \hline
-    \lcref{LC_classRxns}            &                       &                     &                             &                      \\ \hline
-    \lcref{LC_classMoreRxns}        &                       &                     &                             &                      \\ \hline
-    \lcref{LC_inputPhaseLabels}     &                       &                     &                             &                      \\ \hline
-    \lcref{LC_identifyPhaseLabels}  &                       &                     &                             &                      \\ \hline
-    \lcref{LC_rxnTakePlace}         &                       &                     &                             &                      \\ \hline
-    \ucref{UC_diffSolveMethod}      &                       &                     &                             &                      \\ \hline
-    \ucref{UC_allEqsPermitted}      & X                     &                     &                             &                      \\ \hline
-  \end{tabular}
-  \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
-  \label{Table:A_trace}
-\end{table}
-
-\newpage
-
-% \afterpage{
-%   \begin{landscape}
-\begin{table}[h!]
-  \centering
-  \begin{tabular}{|c|c|c|c|c|c|}
-    \hline
-                       & \tref{TM_MatEq} & \tref{TM_ConsMass} & \iref{convert} & \iref{feasible} & \iref{balance} \\
-    \hline
-    \tref{TM_MatEq}    &                 &                    &                &                 &                \\ \hline
-    \tref{TM_ConsMass} &                 &                    &                &                 &                \\ \hline
-    \iref{convert}     &                 &                    &                &                 &                \\ \hline
-    \iref{feasible}    &                 & X                  & X              &                 &                \\ \hline
-    \iref{balance}     & X               &                    & X              & X               &                \\ \hline
+    \tref{TM_MatEq}    &                 &                    &                &                 &                &                     &                        \\ \hline
+    \tref{TM_ConsMass} &                 &                    &                &                 &                &                     &                        \\ \hline
+    \iref{convert}     &                 &                    &                &                 &                &                     & X                      \\ \hline
+    \iref{feasible}    &                 & X                  & X              &                 &                &                     &                        \\ \hline
+    \iref{balance}     & X               &                    & X              & X               &                &                     & X                      \\ \hline
   \end{tabular}
   \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
   \label{Table:trace}
 \end{table}
 
 \begin{table}[h!]
-  \centering
-  \begin{tabular}{|c|c|c|c|c|}%c|c|c|c|c|c|c|c|c|c|c|c|}
-    \hline
-                                   & \iref{convert} & \iref{feasible} & \iref{balance} & \ref{sec_DataConstraints} \\ % & \rref{R_input} & \rref{R_convert} & \rref{R_feasible} & \rref{R_balance} & \rref{R_infeasOutput} & \rref{R_feasOutput} & \nfrref{NFR_accuracy} & \nfrref{NFR_understandability} & \nfrref{NFR_usability} & \nfrref{NFR_maintainability} & \nfrref{NFR_portability} & \nfrref{NFR_verifiability} \\
-    \hline
-    % \iref{convert}                 &&&&&&&&&&&&&&&\\ \hline
-    % \iref{feasible}                &X&&&&&&&&&&&&&&\\ \hline
-    % \iref{balance}                 &X&X&&&&&&&&&&&&&\\ \hline
-    \rref{R_input}                 &                &                 &                &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
-    \rref{R_convert}               & X              &                 &                &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
-    \rref{R_feasible}              &                & X               &                &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
-    \rref{R_balance}               &                &                 & X              &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
-    \rref{R_infeasOutput}          &                &                 &                &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
-    \rref{R_feasOutput}            &                &                 & X              &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
-    \nfrref{NFR_accuracy}          &                &                 & X              &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
-    \nfrref{NFR_understandability} &                &                 &                &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
-    \nfrref{NFR_usability}         &                &                 &                &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
-    \nfrref{NFR_maintainability}   &                &                 &                &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
-    \nfrref{NFR_portability}       &                &                 &                &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
-    \nfrref{NFR_verifiability}     &                &                 &                &                           \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
-  \end{tabular}
-  \caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}
-  \label{Table:R_trace}
+  \parbox{.45\linewidth}{
+    \centering
+    \begin{tabular}{|c|c|c|c|}%c|c|c|c|c|c|c|c|c|c|c|c|}
+      \hline
+                                     & \iref{convert} & \iref{feasible} & \iref{balance} \\ % & \rref{R_input} & \rref{R_convert} & \rref{R_feasible} & \rref{R_balance} & \rref{R_infeasOutput} & \rref{R_feasOutput} & \nfrref{NFR_accuracy} & \nfrref{NFR_understandability} & \nfrref{NFR_usability} & \nfrref{NFR_maintainability} & \nfrref{NFR_portability} & \nfrref{NFR_verifiability} \\
+      \hline
+      % \iref{convert}                 &&&&&&&&&&&&&&&&\\ \hline
+      % \iref{feasible}                &X&&&&&&&&&&&&&&&\\ \hline
+      % \iref{balance}                 &X&X&&&&&&&&&&&&&&\\ \hline
+      \rref{R_input}                 &                &                 &                \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+      \rref{R_convert}               & X              &                 &                \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+      \rref{R_feasible}              &                & X               &                \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+      \rref{R_balance}               &                &                 & X              \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+      \rref{R_infeasOutput}          &                &                 &                \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+      \rref{R_feasOutput}            &                &                 & X              \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+      \nfrref{NFR_accuracy}          &                &                 & X              \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+      \nfrref{NFR_understandability} &                &                 &                \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+      \nfrref{NFR_usability}         &                &                 &                \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+      \nfrref{NFR_maintainability}   &                &                 &                \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+      \nfrref{NFR_portability}       &                &                 &                \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+      \nfrref{NFR_verifiability}     &                &                 &                \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+    \end{tabular}
+    \caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}
+    \label{Table:R_trace}
+  }
+  % \end{table}
+  \hfill
+  \parbox{.45\linewidth}{
+    % \begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+      \hline
+                                      & \aref{A_elemCompDiff} & \aref{A_validInput} & \aref{A_correctInputFormat} & \aref{A_simpleForms} \\
+      \hline
+      \tref{TM_MatEq}                 &                       &                     &                             &                      \\ \hline
+      \tref{TM_ConsMass}              &                       &                     &                             &                      \\ \hline
+      \iref{convert}                  & X                     & X                   & X                           & X                    \\ \hline
+      \iref{feasible}                 &                       &                     &                             &                      \\ \hline
+      \iref{balance}                  &                       &                     &                             &                      \\ \hline
+      \lcref{LC_complexForms}         &                       &                     &                             & X                    \\ \hline
+      \lcref{LC_calcMoles}            &                       &                     &                             &                      \\ \hline
+      \lcref{LC_detLimReag}           &                       &                     &                             &                      \\ \hline
+      \lcref{LC_calcYield}            &                       &                     &                             &                      \\ \hline
+      \lcref{LC_calcExcess}           &                       &                     &                             &                      \\ \hline
+      \lcref{LC_incorrectInputFormat} &                       &                     & X                           &                      \\ \hline
+      \lcref{LC_termsOfMass}          &                       &                     &                             &                      \\ \hline
+      \lcref{LC_classRxns}            &                       &                     &                             &                      \\ \hline
+      \lcref{LC_classMoreRxns}        &                       &                     &                             &                      \\ \hline
+      \lcref{LC_inputPhaseLabels}     &                       &                     &                             &                      \\ \hline
+      \lcref{LC_identifyPhaseLabels}  &                       &                     &                             &                      \\ \hline
+      \lcref{LC_rxnTakePlace}         &                       &                     &                             &                      \\ \hline
+      \ucref{UC_diffSolveMethod}      &                       &                     &                             &                      \\ \hline
+      \ucref{UC_allEqsPermitted}      & X                     &                     &                             &                      \\ \hline
+    \end{tabular}
+    \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
+    \label{Table:A_trace}
+  }
 \end{table}
-%   \end{landscape}
-% }
+
+\newpage
 
 % \section{Development Plan}
 
@@ -1492,26 +1508,26 @@ dependencies of requirements on instance models and data constraints.
 \bibliographystyle {ieeetr}
 \bibliography {../sources}
 
-\newpage
+% \newpage
 
-\noindent \plt{Grammar, flow and \LaTeX{} advice:
-  \begin{itemize}
-    \item Some \LaTeX{} \href{https://physics.nist.gov/cuu/pdf/typefaces.pdf}{Conventions}
-    \item Grammar and writing rules
-          \begin{itemize}
-            \item Acronyms expanded on first usage (not just in table of acronyms)
-            \item ``In order to'' should be ``to''
-          \end{itemize}
-  \end{itemize}}
+% \noindent \plt{Grammar, flow and \LaTeX{} advice:
+%   \begin{itemize}
+%     \item Some \LaTeX{} \href{https://physics.nist.gov/cuu/pdf/typefaces.pdf}{Conventions}
+%     \item Grammar and writing rules
+%           \begin{itemize}
+%             \item Acronyms expanded on first usage (not just in table of acronyms)
+%             \item ``In order to'' should be ``to''
+%           \end{itemize}
+%   \end{itemize}}
 
-\noindent \plt{Advice on using the template:
-  \begin{itemize}
-    \item Difference between physical and software constraints
-    \item Properties of a correct solution means \emph{additional} properties, not
-          a restating of the requirements (may be ``not applicable'' for your problem).
-          If you have a table of output constraints, then these are properties of a
-          correct solution.
-  \end{itemize}
-}
+% \noindent \plt{Advice on using the template:
+%   \begin{itemize}
+%     \item Difference between physical and software constraints
+%     \item Properties of a correct solution means \emph{additional} properties, not
+%           a restating of the requirements (may be ``not applicable'' for your problem).
+%           If you have a table of output constraints, then these are properties of a
+%           correct solution.
+%   \end{itemize}
+% }
 
 \end{document}

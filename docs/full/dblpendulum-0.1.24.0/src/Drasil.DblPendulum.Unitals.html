@@ -134,8 +134,8 @@
 </span><span id="line-58"></span><span id="lenRod_1"><span class="annot"><span class="annottext">lenRod_1 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#lenRod_1"><span class="hs-identifier hs-var hs-var">lenRod_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;l_1&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -154,14 +154,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span id="line-60"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">cL</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span>
 </span><span id="line-61"></span><span>
 </span><span id="line-62"></span><span id="lenRod_2"><span class="annot"><span class="annottext">lenRod_2 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#lenRod_2"><span class="hs-identifier hs-var hs-var">lenRod_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;l_2&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -180,14 +181,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span id="line-64"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">cL</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span>
 </span><span id="line-65"></span><span>
 </span><span id="line-66"></span><span id="massObj_1"><span class="annot"><span class="annottext">massObj_1 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#massObj_1"><span class="hs-identifier hs-var hs-var">massObj_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;m_1&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -206,14 +208,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span id="line-68"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lM</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">kilogram</span></span><span>
 </span><span id="line-69"></span><span>
 </span><span id="line-70"></span><span id="massObj_2"><span class="annot"><span class="annottext">massObj_2 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#massObj_2"><span class="hs-identifier hs-var hs-var">massObj_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;m_2&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -232,14 +235,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span id="line-72"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lM</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">kilogram</span></span><span>
 </span><span id="line-73"></span><span>
 </span><span id="line-74"></span><span id="xPos_1"><span class="annot"><span class="annottext">xPos_1 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#xPos_1"><span class="hs-identifier hs-var hs-var">xPos_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;p_x1&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -263,14 +267,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">lP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
 </span><span class="hs-identifier hs-var">Concat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Symbol
 </span><a href="Drasil.DblPendulum.Unitals.html#labelx"><span class="hs-identifier hs-var">labelx</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span>
 </span><span id="line-77"></span><span>
 </span><span id="line-78"></span><span id="xPos_2"><span class="annot"><span class="annottext">xPos_2 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#xPos_2"><span class="hs-identifier hs-var hs-var">xPos_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;p_x2&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -294,14 +299,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">lP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
 </span><span class="hs-identifier hs-var">Concat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Symbol
 </span><a href="Drasil.DblPendulum.Unitals.html#labelx"><span class="hs-identifier hs-var">labelx</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span>
 </span><span id="line-81"></span><span>
 </span><span id="line-82"></span><span id="yPos_1"><span class="annot"><span class="annottext">yPos_1 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#yPos_1"><span class="hs-identifier hs-var hs-var">yPos_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;p_y1&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -325,14 +331,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">lP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
 </span><span class="hs-identifier hs-var">Concat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Symbol
 </span><a href="Drasil.DblPendulum.Unitals.html#labely"><span class="hs-identifier hs-var">labely</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span>
 </span><span id="line-85"></span><span>
 </span><span id="line-86"></span><span id="yPos_2"><span class="annot"><span class="annottext">yPos_2 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#yPos_2"><span class="hs-identifier hs-var hs-var">yPos_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;p_y2&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -356,14 +363,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">lP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
 </span><span class="hs-identifier hs-var">Concat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Symbol
 </span><a href="Drasil.DblPendulum.Unitals.html#labely"><span class="hs-identifier hs-var">labely</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span>
 </span><span id="line-89"></span><span>
 </span><span id="line-90"></span><span id="xVel_1"><span class="annot"><span class="annottext">xVel_1 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#xVel_1"><span class="hs-identifier hs-var hs-var">xVel_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;v_x1&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -387,14 +395,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">lV</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
 </span><span class="hs-identifier hs-var">Concat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Symbol
 </span><a href="Drasil.DblPendulum.Unitals.html#labelx"><span class="hs-identifier hs-var">labelx</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">velU</span></span><span>
 </span><span id="line-93"></span><span>
 </span><span id="line-94"></span><span id="xVel_2"><span class="annot"><span class="annottext">xVel_2 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#xVel_2"><span class="hs-identifier hs-var hs-var">xVel_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;v_x2&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -418,14 +427,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">lV</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
 </span><span class="hs-identifier hs-var">Concat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Symbol
 </span><a href="Drasil.DblPendulum.Unitals.html#labelx"><span class="hs-identifier hs-var">labelx</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">velU</span></span><span>
 </span><span id="line-97"></span><span>
 </span><span id="line-98"></span><span id="yVel_1"><span class="annot"><span class="annottext">yVel_1 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#yVel_1"><span class="hs-identifier hs-var hs-var">yVel_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;v_y1&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -449,14 +459,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">lV</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
 </span><span class="hs-identifier hs-var">Concat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Symbol
 </span><a href="Drasil.DblPendulum.Unitals.html#labely"><span class="hs-identifier hs-var">labely</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">velU</span></span><span>
 </span><span id="line-101"></span><span>
 </span><span id="line-102"></span><span id="yVel_2"><span class="annot"><span class="annottext">yVel_2 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#yVel_2"><span class="hs-identifier hs-var hs-var">yVel_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;v_y2&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -480,14 +491,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">lV</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
 </span><span class="hs-identifier hs-var">Concat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Symbol
 </span><a href="Drasil.DblPendulum.Unitals.html#labely"><span class="hs-identifier hs-var">labely</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">velU</span></span><span>
 </span><span id="line-105"></span><span>
 </span><span id="line-106"></span><span id="xAccel_1"><span class="annot"><span class="annottext">xAccel_1 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#xAccel_1"><span class="hs-identifier hs-var hs-var">xAccel_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;a_x1&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -511,14 +523,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">lA</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
 </span><span class="hs-identifier hs-var">Concat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Symbol
 </span><a href="Drasil.DblPendulum.Unitals.html#labelx"><span class="hs-identifier hs-var">labelx</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">accelU</span></span><span>
 </span><span id="line-109"></span><span>
 </span><span id="line-110"></span><span id="xAccel_2"><span class="annot"><span class="annottext">xAccel_2 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#xAccel_2"><span class="hs-identifier hs-var hs-var">xAccel_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;a_x2&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -542,14 +555,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">lA</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
 </span><span class="hs-identifier hs-var">Concat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Symbol
 </span><a href="Drasil.DblPendulum.Unitals.html#labelx"><span class="hs-identifier hs-var">labelx</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">accelU</span></span><span>
 </span><span id="line-113"></span><span>
 </span><span id="line-114"></span><span id="yAccel_1"><span class="annot"><span class="annottext">yAccel_1 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#yAccel_1"><span class="hs-identifier hs-var hs-var">yAccel_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;a_y1&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -573,14 +587,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">lA</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
 </span><span class="hs-identifier hs-var">Concat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Symbol
 </span><a href="Drasil.DblPendulum.Unitals.html#labely"><span class="hs-identifier hs-var">labely</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">accelU</span></span><span>
 </span><span id="line-117"></span><span>
 </span><span id="line-118"></span><span id="yAccel_2"><span class="annot"><span class="annottext">yAccel_2 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#yAccel_2"><span class="hs-identifier hs-var hs-var">yAccel_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;a_y2&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -604,14 +619,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">lA</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
 </span><span class="hs-identifier hs-var">Concat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Symbol
 </span><a href="Drasil.DblPendulum.Unitals.html#labely"><span class="hs-identifier hs-var">labely</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">accelU</span></span><span>
 </span><span id="line-121"></span><span>
 </span><span id="line-122"></span><span id="angularAccel_1"><span class="annot"><span class="annottext">angularAccel_1 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#angularAccel_1"><span class="hs-identifier hs-var hs-var">angularAccel_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;alpha_x1&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -633,14 +649,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span id="line-124"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lAlpha</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">angAccelU</span></span><span>
 </span><span id="line-125"></span><span>
 </span><span id="line-126"></span><span id="angularAccel_2"><span class="annot"><span class="annottext">angularAccel_2 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#angularAccel_2"><span class="hs-identifier hs-var hs-var">angularAccel_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;alpha_y1&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -662,14 +679,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span id="line-128"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lAlpha</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">angAccelU</span></span><span>
 </span><span id="line-129"></span><span>
 </span><span id="line-130"></span><span id="tension_1"><span class="annot"><span class="annottext">tension_1 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#tension_1"><span class="hs-identifier hs-var hs-var">tension_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;T_1&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -689,14 +707,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">vec</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">cT</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">newton</span></span><span>
 </span><span id="line-133"></span><span>
 </span><span id="line-134"></span><span id="tension_2"><span class="annot"><span class="annottext">tension_2 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#tension_2"><span class="hs-identifier hs-var hs-var">tension_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;T_2&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -716,14 +735,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">vec</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">cT</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">newton</span></span><span>
 </span><span id="line-137"></span><span>
 </span><span id="line-138"></span><span id="angularVel_1"><span class="annot"><span class="annottext">angularVel_1 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#angularVel_1"><span class="hs-identifier hs-var hs-var">angularVel_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;w_1&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -742,14 +762,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span id="line-140"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lW</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">angVelU</span></span><span>
 </span><span id="line-141"></span><span>
 </span><span id="line-142"></span><span id="angularVel_2"><span class="annot"><span class="annottext">angularVel_2 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#angularVel_2"><span class="hs-identifier hs-var hs-var">angularVel_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;w_2&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -768,14 +789,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span id="line-144"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lW</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">angVelU</span></span><span>
 </span><span id="line-145"></span><span>
 </span><span id="line-146"></span><span id="pendDisAngle_1"><span class="annot"><span class="annottext">pendDisAngle_1 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#pendDisAngle_1"><span class="hs-identifier hs-var hs-var">pendDisAngle_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;theta_1&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -794,14 +816,15 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span id="line-148"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lTheta</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label1"><span class="hs-identifier hs-var">label1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">radian</span></span><span>
 </span><span id="line-149"></span><span>
 </span><span id="line-150"></span><span id="pendDisAngle_2"><span class="annot"><span class="annottext">pendDisAngle_2 :: UnitalChunk
 </span><a href="Drasil.DblPendulum.Unitals.html#pendDisAngle_2"><span class="hs-identifier hs-var hs-var">pendDisAngle_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">makeUCWDS</span></span><span> </span><span class="annot"><span class="annottext">String
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;theta_2&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -820,7 +843,8 @@ String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span id="line-152"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lTheta</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.DblPendulum.Unitals.html#label2"><span class="hs-identifier hs-var">label2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">radian</span></span><span>
 </span><span id="line-153"></span><span>
 </span><span id="line-154"></span><span class="annot"><a href="Drasil.DblPendulum.Unitals.html#unitless"><span class="hs-identifier hs-type">unitless</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span>
@@ -965,7 +989,7 @@ String
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;dependent variables&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-187"></span><span>  </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Column vector of displacement of rods with its derivatives&quot;</span></span><span> </span><span>
+</span><span class="hs-string">&quot;column vector of displacement of rods with its derivatives&quot;</span></span><span>
 </span><span id="line-188"></span><span>  </span><span class="annot"><span class="annottext">Symbol
 </span><a href="Drasil.DblPendulum.Unitals.html#lTheta%27"><span class="hs-identifier hs-var">lTheta'</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">radian</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Space -&gt; Space

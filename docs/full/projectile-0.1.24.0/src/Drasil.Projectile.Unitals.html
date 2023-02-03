@@ -17,7 +17,7 @@
 </span><span id="line-17"></span><span id="projSpeed"><span class="annot"><span class="annottext">projSpeed :: UnitalChunk
 </span><a href="Drasil.Projectile.Unitals.html#projSpeed"><span class="hs-identifier hs-var hs-var">projSpeed</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
 (Concept c, IsUnit u) =&gt;
-c -&gt; Symbol -&gt; u -&gt; UnitalChunk
+c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.Projectile.Concepts.html#projSpeed"><span class="hs-identifier hs-var">C.projSpeed</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
 </span><span class="hs-identifier hs-var">Concat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
@@ -27,7 +27,8 @@ c -&gt; Symbol -&gt; u -&gt; UnitalChunk
 </span><span class="hs-string">&quot;(&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lT</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;)&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-string">&quot;)&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">velU</span></span><span>
 </span><span id="line-18"></span><span>
 </span><span id="line-19"></span><span class="hs-comment">---</span><span>
@@ -81,13 +82,13 @@ c -&gt; [ConstraintE] -&gt; ConstrConcept
 </span><span class="hs-identifier hs-var">constrainedNRV'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">ucs'</span></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">uc</span></span><span>       </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.Projectile.Concepts.html#flightDur"><span class="hs-identifier hs-var">C.flightDur</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; String -&gt; Symbol
 </span><span class="hs-identifier hs-var">subStr</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lT</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;flight&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
-</span><span class="hs-identifier hs-var">second</span></span><span class="hs-special">)</span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
+</span><span class="hs-identifier hs-var">second</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">]</span><span>
 </span><span id="line-29"></span><span id="landPos"><span class="annot"><span class="annottext">landPos :: ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#landPos"><span class="hs-identifier hs-var hs-var">landPos</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
@@ -96,30 +97,27 @@ c -&gt; [ConstraintE] -&gt; ConstrConcept
 </span><span class="hs-identifier hs-var">constrainedNRV'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">ucs'</span></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">uc</span></span><span>       </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.Projectile.Concepts.html#landPos"><span class="hs-identifier hs-var">C.landPos</span></a></span><span>   </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; String -&gt; Symbol
 </span><span class="hs-identifier hs-var">subStr</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;land&quot;</span></span><span>  </span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
-</span><span class="hs-identifier hs-var">metre</span></span><span class="hs-special">)</span><span>   </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
+</span><span class="hs-identifier hs-var">metre</span></span><span> </span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">]</span><span>
 </span><span id="line-30"></span><span id="launAngle"><span class="annot"><span class="annottext">launAngle :: ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#launAngle"><span class="hs-identifier hs-var hs-var">launAngle</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
 (Concept c, MayHaveUnit c, Quantity c) =&gt;
 c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
-</span><span class="hs-identifier hs-var">constrained'</span></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
--&gt; (Stage -&gt; Symbol)
--&gt; Space
--&gt; Maybe UnitDefn
--&gt; DefinedQuantityDict
-</span><span class="hs-identifier hs-var">dqd'</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">constrained'</span></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall c u.
+(Concept c, IsUnit u) =&gt;
+c -&gt; (Stage -&gt; Symbol) -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">ucStaged</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.Projectile.Concepts.html#launAngle"><span class="hs-identifier hs-var">C.launAngle</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">autoStage</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><span class="hs-identifier hs-var">lTheta</span></span><span class="hs-special">)</span><span>   </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
-</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
-</span><span class="hs-identifier hs-var">radian</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
+</span><span class="hs-identifier hs-var">lTheta</span></span><span>  </span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-identifier hs-var">radian</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
 </span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
@@ -143,13 +141,13 @@ c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
 </span><span class="hs-identifier hs-var">constrained'</span></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">ucs'</span></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">uc</span></span><span>       </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.Projectile.Concepts.html#launSpeed"><span class="hs-identifier hs-var">C.launSpeed</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; String -&gt; Symbol
 </span><span class="hs-identifier hs-var">subStr</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lV</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;launch&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
-</span><span class="hs-identifier hs-var">velU</span></span><span class="hs-special">)</span><span>    </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
+</span><span class="hs-identifier hs-var">velU</span></span><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">100</span></span><span class="hs-special">)</span><span>
@@ -160,13 +158,13 @@ c -&gt; [ConstraintE] -&gt; ConstrConcept
 </span><span class="hs-identifier hs-var">constrainedNRV'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">ucs'</span></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">uc</span></span><span>       </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.Projectile.Concepts.html#offset"><span class="hs-identifier hs-var">C.offset</span></a></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; String -&gt; Symbol
 </span><span class="hs-identifier hs-var">subStr</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lD</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;offset&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
-</span><span class="hs-identifier hs-var">metre</span></span><span class="hs-special">)</span><span>   </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
+</span><span class="hs-identifier hs-var">metre</span></span><span> </span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
 </span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall b a. (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">UpFrom</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
@@ -174,7 +172,7 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">neg</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.Projectile.Unitals.html#targPos"><span class="hs-identifier hs-var">targPos</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">]</span><span>
+</span><a href="Drasil.Projectile.Unitals.html#targPos"><span class="hs-identifier hs-var">targPos</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-33"></span><span id="targPos"><span class="annot"><span class="annottext">targPos :: ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#targPos"><span class="hs-identifier hs-var hs-var">targPos</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
 (Concept c, MayHaveUnit c, Quantity c) =&gt;
@@ -182,13 +180,13 @@ c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
 </span><span class="hs-identifier hs-var">constrained'</span></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">ucs'</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">uc</span></span><span>       </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.Projectile.Concepts.html#targPos"><span class="hs-identifier hs-var">C.targPos</span></a></span><span>   </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; String -&gt; Symbol
 </span><span class="hs-identifier hs-var">subStr</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;target&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
-</span><span class="hs-identifier hs-var">metre</span></span><span class="hs-special">)</span><span>   </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
+</span><span class="hs-identifier hs-var">metre</span></span><span> </span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1000</span></span><span class="hs-special">)</span><span>

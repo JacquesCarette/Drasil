@@ -31,14 +31,16 @@
 </span><span id="line-29"></span><span id="modElas"><span class="annot"><span class="annottext">modElas :: UnitalChunk
 </span><a href="Drasil.GlassBR.Unitals.html#modElas"><span class="hs-identifier hs-var hs-var">modElas</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
 IsUnit u =&gt;
-String -&gt; NP -&gt; String -&gt; Symbol -&gt; u -&gt; UnitalChunk
+String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modElas&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modulus of elasticity of glass&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-30"></span><span>  </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;the ratio of tensile stress to tensile strain of glass&quot;</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><span class="hs-identifier hs-var">cE</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><span id="line-30"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;the ratio of tensile stress to tensile strain of glass&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><span class="hs-identifier hs-var">cE</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">pascal</span></span><span>
 </span><span id="line-31"></span><span>
 </span><span id="line-32"></span><span class="hs-comment">{--}</span><span>
@@ -381,7 +383,7 @@ c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
 </span><span class="hs-identifier hs-var">constrained'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">ucs'</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#sD"><span class="hs-identifier hs-var">sD</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;SD&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
@@ -785,7 +787,7 @@ String -&gt; NP -&gt; Symbol -&gt; u -&gt; Space -&gt; UnitaryChunk
 </span><a href="Drasil.GlassBR.Unitals.html#demand"><span class="hs-identifier hs-var hs-var">demand</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">ucs'</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#demandq"><span class="hs-identifier hs-var">demandq</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lQ</span></span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
@@ -795,7 +797,7 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><a href="Drasil.GlassBR.Unitals.html#tmDemand"><span class="hs-identifier hs-var hs-var">tmDemand</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">ucs'</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#load"><span class="hs-identifier hs-var">load</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Load&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
@@ -806,7 +808,7 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><a href="Drasil.GlassBR.Unitals.html#lRe"><span class="hs-identifier hs-var hs-var">lRe</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">ucs'</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#loadResis"><span class="hs-identifier hs-var">loadResis</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;LR&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
@@ -817,7 +819,7 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><a href="Drasil.GlassBR.Unitals.html#tmLRe"><span class="hs-identifier hs-var hs-var">tmLRe</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">ucs'</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#capacity"><span class="hs-identifier hs-var">capacity</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;capacity&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
@@ -828,7 +830,7 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><a href="Drasil.GlassBR.Unitals.html#nonFactorL"><span class="hs-identifier hs-var hs-var">nonFactorL</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">ucs'</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#nonFactoredL"><span class="hs-identifier hs-var">nonFactoredL</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;NFL&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
@@ -839,7 +841,7 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><a href="Drasil.GlassBR.Unitals.html#eqTNTWeight"><span class="hs-identifier hs-var hs-var">eqTNTWeight</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
-</span><span class="hs-identifier hs-var">ucs'</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#eqTNTChar"><span class="hs-identifier hs-var">eqTNTChar</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ

@@ -2291,31 +2291,22 @@ UC :: DefinedQuantityDict -> UnitDefn -> UnitalChunk
 [_defq'] :: UnitalChunk -> DefinedQuantityDict
 [_uni] :: UnitalChunk -> UnitDefn
 
--- | Creates a <a>UnitalChunk</a> in the same way as <a>uc'</a>, but with a
---   <a>Sentence</a> for the definition instead of a <a>Space</a>.
-makeUCWDS :: IsUnit u => String -> NP -> Sentence -> Symbol -> u -> UnitalChunk
-
 -- | Used to create a <a>UnitalChunk</a> from a <a>Concept</a>,
---   <a>Symbol</a>, and <tt>Unit</tt>. Assumes the <a>Space</a> is Real.
-uc :: (Concept c, IsUnit u) => c -> Symbol -> u -> UnitalChunk
+--   <a>Symbol</a>, and <tt>Unit</tt>.
+uc :: (Concept c, IsUnit u) => c -> Symbol -> Space -> u -> UnitalChunk
 
 -- | Similar to <a>uc</a>, except it builds the <a>Concept</a> portion of
 --   the <a>UnitalChunk</a> from a given <tt>UID</tt>, term, and definition
---   (which are the first three arguments).
-uc' :: IsUnit u => String -> NP -> String -> Symbol -> u -> UnitalChunk
+--   (as a <a>Sentence</a>) which are its first three arguments.
+uc' :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> UnitalChunk
+
+-- | Similar to <a>uc</a>, but <a>Symbol</a> is dependent on the
+--   <a>Stage</a>.
+ucStaged :: (Concept c, IsUnit u) => c -> (Stage -> Symbol) -> Space -> u -> UnitalChunk
 
 -- | Similar to <a>uc'</a>, but <a>Symbol</a> is dependent on the
 --   <a>Stage</a>.
-ucStaged :: IsUnit u => String -> NP -> String -> (Stage -> Symbol) -> u -> UnitalChunk
-
--- | Similar to <a>uc'</a>, but does not assume the <a>Space</a>.
-ucs :: IsUnit u => String -> NP -> String -> Symbol -> Space -> u -> UnitalChunk
-
--- | Similar to <a>uc</a> but does not assume the <a>Space</a>.
-ucs' :: (Concept c, IsUnit u) => c -> Symbol -> Space -> u -> UnitalChunk
-
--- | Similar to <a>ucs</a>, but uses a <a>Sentence</a> for description.
-ucsWS :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> UnitalChunk
+ucStaged' :: IsUnit u => String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> u -> UnitalChunk
 
 -- | Attach units to a chunk that has a symbol and definition.
 ucuc :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitDefn -> UnitalChunk

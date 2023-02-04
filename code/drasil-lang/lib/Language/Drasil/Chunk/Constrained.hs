@@ -13,7 +13,7 @@ import Control.Lens ((^.), makeLenses, view)
 import Language.Drasil.Chunk.Concept (cw, dcc)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', dqdWr)
 import Language.Drasil.Chunk.Quantity (QuantityDict, qw, vc)
-import Language.Drasil.Chunk.Unital (ucs)
+import Language.Drasil.Chunk.Unital (uc')
 import Language.Drasil.Chunk.Unitary (unitary)
 import Language.Drasil.Symbol (HasSymbol(..), Symbol)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
@@ -24,6 +24,7 @@ import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit))
 import Language.Drasil.Expr.Lang (Expr(..))
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.NounPhrase.Core (NP)
+import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.UID (HasUID(..))
@@ -126,7 +127,7 @@ constrainedNRV' q cs = ConstrConcept (dqdWr q) cs Nothing
 cuc' :: (IsUnit u) => String -> NP -> String -> Symbol -> u
             -> Space -> [ConstraintE] -> Expr -> ConstrConcept
 cuc' nam trm desc sym un space cs rv =
-  ConstrConcept (dqd (cw (ucs nam trm desc sym space un)) sym space uu) cs (Just rv)
+  ConstrConcept (dqd (cw (uc' nam trm (S desc) sym space un)) sym space uu) cs (Just rv)
   where uu = unitWrapper un
 
 -- | Similar to 'cuc'', but 'Symbol' is dependent on 'Stage'.

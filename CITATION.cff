@@ -3,11 +3,6 @@ title: "Drasil"
 abstract: "Generate All The Things! Drasil is a framework for generating all of the software artifacts for (well understood) research software, from the natural knowledge base of the domain."
 type: software
 message: "Please cite this software using the metadata, preferring information from 'preferred-citation' section."
-preferred-citation:
-  authors:
-    - name: "The Drasil Research Team"
-  title: "Drasil"
-  type: software
 contact:
   - family-names: Carette
     given-names: Jacques
@@ -57,10 +52,43 @@ authors:
     website: "https://www.cas.mcmaster.ca/~smiths/"
     affiliation: "McMaster University, Computing and Software Department"
     email: "smiths@mcmaster.ca"
+  - family-names: Szymczak
+    given-names: Dan
+    alias: szymczdm
+    city: "Hamilton"
+    country: "CA"
+    email: szymczdm@mcmaster.ca
+    website: "https://www.dszymczak.com"
   - family-names: Balaci
     given-names: Jason
     email: "balacij@mcmaster.ca"
     website: "https://github.com/balacij"
+  - family-names: MacLachlan
+    given-names: Brooks
+    alias: bmaclach
+    email: "brooks.maclachlan@gmail.com"
+    website: "https://github.com/bmaclach"
+  - family-names: Niazi
+    given-names: Maryyam
+    alias: niazim3
+    country: "CA"
+    email: "maryyamn01@gmail.com"
+    website: "https://github.com/niazim3"
+  - family-names: Crawford
+    given-names: Samuel
+    alias: samm82
+    country: "CA"
+    email: "sam.crawford82@gmail.com"
+    website: "https://github.com/samm82"
+  - family-names: Scime
+    given-names: Dan
+    alias: danscime
+    email: "danscime@gmail.com"
+    website: "https://github.com/danscime"
+  - family-names: Chen
+    given-names: Dong
+    email: chend79@mcmaster.ca
+    website: "https://github.com/cd155"
   - family-names: Hunt
     given-names: Anthony
     email: hunta12@mcmaster.ca
@@ -69,36 +97,3 @@ authors:
     given-names: Ting-Yu
     email: wut99@mcmaster.ca
     website: "https://github.com/tingyuw"
-  - family-names: Crawford
-    given-names: Samuel
-    alias: samm82
-    country: "CA"
-    email: "sam.crawford82@gmail.com"
-    website: "https://github.com/samm82"
-  - family-names: Chen
-    given-names: Dong
-    email: chend79@mcmaster.ca
-    website: "https://github.com/cd155"
-  - family-names: Szymczak
-    given-names: Dan
-    alias: szymczdm
-    city: "Hamilton"
-    country: "CA"
-    email: szymczdm@mcmaster.ca
-    website: "https://www.dszymczak.com"
-  - family-names: MacLachlan
-    given-names: Brooks
-    alias: bmaclach
-    email: "brooks.maclachlan@gmail.com"
-    website: "https://github.com/bmaclach"
-  - family-names: Scime
-    given-names: Dan
-    alias: danscime
-    email: "danscime@gmail.com"
-    website: "https://github.com/danscime"
-  - family-names: Niazi
-    given-names: Maryyam
-    alias: niazim3
-    country: "CA"
-    email: "maryyamn01@gmail.com"
-    website: "https://github.com/niazim3"

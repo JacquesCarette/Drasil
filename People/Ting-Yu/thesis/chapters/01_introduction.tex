@@ -1,0 +1,75 @@
+\chapter{Introduction}
+
+Jupyter Notebook can be generated from codified knowledge to improve their 
+reusability, usability, reliability, and modifiability. In many software 
+engineering domains, like scientific computing, knowledge is duplicate across 
+software artifacts, which sometimes make it difficult and tedious to write 
+and maintain them manually. 
+
+Generative programming is a technique to address this problem. It allows 
+programmers to write the code or document at a higher abstract level, and the 
+generator produces the desired outputs. With generative programming, we can do 
+things more efficiently since automation increases the efficiency. Drasil is an 
+application of generative programming, and it is the framework we used in this 
+research. We are tyring to generate Jupyter Notebook in Drasil to extend the 
+flexibility of Drasil and to acheive the reusability, usability, and 
+maintainability of software artifacts. 
+
+\section{Background}
+\subsection{Drasil}
+Drasil is a framework that can generate software artifacts, including Software 
+Requirement Specification (SRS), code (C++, C\#, Java, and Python), README, and 
+Makefile, from a stable knowledge base. The main goals are to reduce knowledge 
+duplication and improve traceability. Drasil captures the knowledge through our 
+hand-made case studies; it allows users to provide recipes of their scientific 
+problems and generate code and documentation. Each piece of information is 
+encoded in Drasil once and that information can be used wherever it is needed. 
+Drasil is capable of generating SRS in document languages HTML and LaTeX. We 
+are working on increasing our automated database and improving how we encode 
+the recipes.
+
+\subsection{Jupyter Notebook}
+Jupyter Notebook is an interactive open-source web application for creating and 
+sharing documents that contain text, executable code, equations, graphics, and 
+visualizations. 
+There are several advantages of Jupyter Notebook: sharable, all-in-one, and 
+executable code and equations. First of all, the notebook is easy to share 
+because it can be converted into other formats 
+such as HTML, Markdown, and PDF. Another benefit is that 
+it combines all aspects of data in one single document, making the document 
+easier to visualize, maintain and modify. In addition, Juypyter Notebook 
+provides an environment of executable code and equations. Programmers don't 
+have to write the entire program before executing it, the notebook can execute 
+a specific portion of the code. Jupyter Notebook is especially useful in data 
+science based on its uses and the benefits mentioned above.
+
+\section{Problem Statement}
+Both Jupyter Notebook and Drasil focus on scientific computing, therefore, we 
+are interested in generating Jupyter Notebook in Drasil. Following are the 
+three main problems we are trying to solve:
+\begin{enumerate}
+	\item We need to generate document format that is readable by the 
+	notebook. Jupyter Notebook is a simple JSON document with .ipynb file 
+	extension. Drasil can only write in HTML and LaTeX before; we will
+	need Drasil to be able to generate documents in JSON format so the 
+	documents can be read and written in Jupyter Notebook.
+	\item Not only being able to generate SRS in Drasil, we are trying to 
+	expand the application of Drasil and increase the automated database by 
+	generating a simple physics lesson plan. We need to capture the elements of 
+	chapters, found the family of lesson plans, and classified the 
+	knowledge in order to build a general structure in Drasil so the lesson 
+	plan will be able to generalize to other lessons. 
+	\item Jupyter Notebook is an interactive application for creating documents 
+	that combine text and executable code. However, Drasil doesn't support 
+	interactive receipes right now. We are looking for the possibility to 
+	generate a document with a mix of text and code, increasing the ability of 
+	Drasil and the potential to solve more scientific problems.
+\end{enumerate}
+
+By generating Jupyter Notebook in Drasil, we can extend the benefits of Jupyter 
+Notebook, expand the flexibility and the kind of knowledge we can manipulate. 
+In addition, we will be able to improve the reusability, usability, 
+reliability, and modifiability of the generated software artifacts. 
+
+\section{Thesis Outline}
+Thesis outline here.

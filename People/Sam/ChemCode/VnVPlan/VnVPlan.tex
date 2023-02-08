@@ -12,6 +12,10 @@
 }
 \usepackage[version=4]{mhchem}
 
+\newcounter{testnum} %NFR Number
+\newcommand{\tthetestnum}{NFR\thetestnum}
+\newcommand{\testref}[1]{T\ref{#1}}
+
 \input{../Comments}
 \input{../Common}
 
@@ -29,11 +33,12 @@
 \section{Revision History}
 
 \begin{tabularx}{\textwidth}{llX}
-  \toprule {\bf Date} & {\bf Version} & {\bf Notes}                             \\
+  \toprule {\bf Date} & {\bf Version} & {\bf Notes}                  \\
   \midrule
-  Feb. 5, 2023        & 0.0           & Create document and remove inapplicable
-  content                                                                       \\
-  Feb. 7-8, 2023      & 0.1           & Add input tests                         \\
+  Feb. 5, 2023        & 0.0           & Create document and remove
+  inapplicable content                                               \\
+  Feb. 7-8, 2023      & 0.1           & Add input tests              \\
+  Feb. 8, 2023        & 0.1.1         & Improve referencing of tests \\
   \bottomrule
 \end{tabularx}
 
@@ -183,105 +188,112 @@ This section defines tests for inputting chemical equations from R1 of the SRS
 
 \begin{enumerate}
 
-  \item{test-valid-input\\}
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_valid_input}:]
+    \textbf{Test for Valid Input}
 
-  Control: Manual
+    Control: Manual
 
-  Initial State: \progname{} is started.
+    Initial State: \progname{} is started.
 
-  Input: A representation of the equation
-  $\ce{CH6} + \ce{O2} \rightarrow \ce{CO2} + \ce{H2O}$
-  \cite{hamid_balancing_2019}.
+    Input: A representation of the equation
+    $\ce{CH6} + \ce{O2} \rightarrow \ce{CO2} + \ce{H2O}$
+    \cite{hamid_balancing_2019}.
 
-  Output: The inputted chemical equation is stored in \progname{}.
+    Output: The inputted chemical equation is stored in \progname{}.
 
-  Test Case Derivation: In order for \progname{} to be useful, it needs to be
-  able to receive a chemical equation from the user and store it to balance it
-  later.
+    Test Case Derivation: In order for \progname{} to be useful, it needs to be
+    able to receive a chemical equation from the user and store it to balance it
+    later.
 
-  How test will be performed: A debug statement will be added to display the
-  stored chemical equation and this representation will be manually compared to
-  the given input.
+    How test will be performed: A debug statement will be added to display the
+    stored chemical equation and this representation will be manually compared to
+    the given input.
 
-  \item{test-larger-valid-input\\}
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_larger_valid_input}:]
+    \textbf{Test for Larger Valid Input}
 
-  Control: Manual
+    Control: Manual
 
-  Initial State: \progname{} is started.
+    Initial State: \progname{} is started.
 
-  Input: A representation of the following equation from
-  \cite{taylor_balancing_2021}.
-  $$\ce{KMnO4} + \ce{HCl} \rightarrow \ce{MnCl2} + \ce{KCl} + \ce{Cl2} + \ce{H2O}$$
+    Input: A representation of the following equation from
+    \cite{taylor_balancing_2021}.
+    $$\ce{KMnO4} + \ce{HCl} \rightarrow \ce{MnCl2} + \ce{KCl} + \ce{Cl2} + \ce{H2O}$$
 
-  Output: The inputted chemical equation is stored in \progname{}.
+    Output: The inputted chemical equation is stored in \progname{}.
 
-  Test Case Derivation: In order for \progname{} to be useful, it needs to be
-  able to receive a chemical equation from the user and store it to balance it
-  later.
+    Test Case Derivation: In order for \progname{} to be useful, it needs to be
+    able to receive a chemical equation from the user and store it to balance it
+    later.
 
-  How test will be performed: A debug statement will be added to display the
-  stored chemical equation and this representation will be manually compared to
-  the given input.
+    How test will be performed: A debug statement will be added to display the
+    stored chemical equation and this representation will be manually compared to
+    the given input.
 
-  \item{test-infeasible-general-valid-input\\}
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_inf_gen_valid_input}:]
+    \textbf{Test for Valid Input that is Infeasible due to Overconstrained
+      System}
 
-  Control: Manual
+    Control: Manual
 
-  Initial State: \progname{} is started.
+    Initial State: \progname{} is started.
 
-  Input: A representation of the following equation (modified from
-  \cite{hamid_balancing_2019}).
-  $$\ce{K4FeC6N6} + \ce{K2S2O3} \rightarrow \ce{CO2} + \ce{K2SO4} + \ce{NO2} +
-    \ce{FeS}$$
+    Input: A representation of the following equation (modified from
+    \cite{hamid_balancing_2019}).
+    $$\ce{K4FeC6N6} + \ce{K2S2O3} \rightarrow \ce{CO2} + \ce{K2SO4} + \ce{NO2} +
+      \ce{FeS}$$
 
-  Output: The inputted chemical equation is stored in \progname{}.
+    Output: The inputted chemical equation is stored in \progname{}.
 
-  Test Case Derivation: In order for \progname{} to be useful, it needs to be
-  able to receive a chemical equation from the user and store it to balance it
-  later.
+    Test Case Derivation: In order for \progname{} to be useful, it needs to be
+    able to receive a chemical equation from the user and store it to balance it
+    later.
 
-  How test will be performed: A debug statement will be added to display the
-  stored chemical equation and this representation will be manually compared to
-  the given input.
+    How test will be performed: A debug statement will be added to display the
+    stored chemical equation and this representation will be manually compared to
+    the given input.
 
-  \item{test-infeasible-cons-mass-valid-input\\}
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_inf_cons_mass_valid_input}:]
+    \textbf{Test for Valid Input that is Infeasible due to Conservation of Mass
+      Violation}
 
-  Control: Manual
+    Control: Manual
 
-  Initial State: \progname{} is started.
+    Initial State: \progname{} is started.
 
-  Input: A representation of the equation
-  $\ce{CH6} \rightarrow \ce{CO2} + \ce{H2O}$.
+    Input: A representation of the equation
+    $\ce{CH6} \rightarrow \ce{CO2} + \ce{H2O}$.
 
-  Output: The inputted chemical equation is stored in \progname{}.
+    Output: The inputted chemical equation is stored in \progname{}.
 
-  Test Case Derivation: In order for \progname{} to be useful, it needs to be
-  able to receive a chemical equation from the user and store it to balance it
-  later.
+    Test Case Derivation: In order for \progname{} to be useful, it needs to be
+    able to receive a chemical equation from the user and store it to balance it
+    later.
 
-  How test will be performed: A debug statement will be added to display the
-  stored chemical equation and this representation will be manually compared to
-  the given input.
+    How test will be performed: A debug statement will be added to display the
+    stored chemical equation and this representation will be manually compared to
+    the given input.
 
-  \item{test-fractional-valid-input\\}
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_inf_nonstoich_valid_input}:]
+    \textbf{Test for Valid Input with Nonstoichiometric Compound}
 
-  Control: Manual
+    Control: Manual
 
-  Initial State: \progname{} is started.
+    Initial State: \progname{} is started.
 
-  Input: A representation of the equation
-  $\ce{Fe_{0.95}O} + \ce{O2} \rightarrow \ce{Fe2O3}$
-  \cite{doubtnut_when_nodate}.
+    Input: A representation of the equation
+    $\ce{Fe_{0.95}O} + \ce{O2} \rightarrow \ce{Fe2O3}$
+    \cite{doubtnut_when_nodate}.
 
-  Output: The inputted chemical equation is stored in \progname{}.
+    Output: The inputted chemical equation is stored in \progname{}.
 
-  Test Case Derivation: In order for \progname{} to be useful, it needs to be
-  able to receive a chemical equation from the user and store it to balance it
-  later.
+    Test Case Derivation: In order for \progname{} to be useful, it needs to be
+    able to receive a chemical equation from the user and store it to balance it
+    later.
 
-  How test will be performed: A debug statement will be added to display the
-  stored chemical equation and this representation will be manually compared to
-  the given input.
+    How test will be performed: A debug statement will be added to display the
+    stored chemical equation and this representation will be manually compared to
+    the given input.
 
 \end{enumerate}
 
@@ -308,29 +320,31 @@ This section defines tests for inputting chemical equations from R1 of the SRS
 
 \begin{enumerate}
 
-  \item{test-id1\\}
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_label}:]
+    \textbf{Title of Test}
 
-  Type: Functional, Dynamic, Manual, Static etc.
+    Type: Functional, Dynamic, Manual, Static etc.
 
-  Initial State:
+    Initial State:
 
-  Input/Condition:
+    Input/Condition:
 
-  Output/Result:
+    Output/Result:
 
-  How test will be performed:
+    How test will be performed:
 
-  \item{test-id2\\}
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_label2}:]
+    \textbf{Title of Test}
 
-  Type: Functional, Dynamic, Manual, Static etc.
+    Type: Functional, Dynamic, Manual, Static etc.
 
-  Initial State:
+    Initial State:
 
-  Input:
+    Input:
 
-  Output:
+    Output:
 
-  How test will be performed:
+    How test will be performed:
 
 \end{enumerate}
 

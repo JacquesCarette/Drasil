@@ -10,7 +10,7 @@
     linkcolor=red,
     urlcolor=blue
 }
-\usepackage[round]{natbib}
+\usepackage[version=4]{mhchem}
 
 \input{../Comments}
 \input{../Common}
@@ -18,21 +18,23 @@
 \begin{document}
 
 \title{%Project Title: 
-System Verification and Validation Plan for \progname{}} 
+  System Verification and Validation Plan for \progname{}}
 \author{\authname}
 \date{\today}
-	
+
 \maketitle
 
 \pagenumbering{roman}
 
 \section{Revision History}
 
-\begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
-\toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
-\midrule
-Feb. 5, 2023 & 0.0 & Create document and remove inapplicable content\\
-\bottomrule
+\begin{tabularx}{\textwidth}{llX}
+  \toprule {\bf Date} & {\bf Version} & {\bf Notes}                             \\
+  \midrule
+  Feb. 5, 2023        & 0.0           & Create document and remove inapplicable
+  content                                                                       \\
+  Feb. 7-8, 2023      & 0.1           & Add input tests                         \\
+  \bottomrule
 \end{tabularx}
 
 \newpage
@@ -50,16 +52,16 @@ Feb. 5, 2023 & 0.0 & Create document and remove inapplicable content\\
 \section{Symbols, Abbreviations and Acronyms}
 
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{l l} 
-  \toprule		
-  \textbf{symbol} & \textbf{description}\\
-  \midrule 
-  T & Test\\
+\begin{tabular}{l l}
+  \toprule
+  \textbf{symbol} & \textbf{description} \\
+  \midrule
+  T               & Test                 \\
   \bottomrule
 \end{tabular}\\
 
 \wss{symbols, abbreviations or acronyms --- you can simply reference the SRS
-  \citep{SRS} tables, if appropriate}
+  \cite{SRS} tables, if appropriate}
 
 \wss{Remove this section if it isn't needed}
 
@@ -92,7 +94,7 @@ This document ... \wss{provide an introductory blurb and roadmap of the
   can include these even before they are written, since by the time the project
   is done, they will be written.}
 
-\citet{SRS}
+\cite{SRS}
 
 \section{Plan}
 
@@ -108,7 +110,7 @@ This document ... \wss{provide an introductory blurb and roadmap of the
 \subsection{SRS Verification Plan}
 
 \wss{List any approaches you intend to use for SRS verification.  This may include
-  ad hoc feedback from reviewers, like your classmates, or you may plan for 
+  ad hoc feedback from reviewers, like your classmates, or you may plan for
   something more rigorous/systematic.}
 
 \wss{Maybe create an SRS checklist?}
@@ -150,7 +152,7 @@ This document ... \wss{provide an introductory blurb and roadmap of the
   Python.}
 
 \wss{If you have already done this in the development plan, you can point to
-that document.}
+  that document.}
 
 \wss{The details of this section will likely evolve as you get closer to the
   implementation.}
@@ -162,60 +164,124 @@ that document.}
   here.}
 
 \wss{You might want to use review sessions with the stakeholder to check that
-the requirements document captures the right requirements.  Maybe task based
-inspection?}
+  the requirements document captures the right requirements.  Maybe task based
+  inspection?}
 
 \wss{This section might reference back to the SRS verification section.}
 
 \section{System Test Description}
-	
-\subsection{Tests for Functional Requirements}
 
-\wss{Subsets of the tests may be in related, so this section is divided into
-  different areas.  If there are no identifiable subsets for the tests, this
-  level of document structure can be removed.}
+\subsection{Tests for Functional Requirements}
 
 \wss{Include a blurb here to explain why the subsections below
   cover the requirements.  References to the SRS would be good here.}
 
-\subsubsection{Area of Testing1}
+\subsubsection{Input Testing}
 
-\wss{It would be nice to have a blurb here to explain why the subsections below
-  cover the requirements.  References to the SRS would be good here.  If a section
-  covers tests for input constraints, you should reference the data constraints
-  table in the SRS.}
-		
-\paragraph{Title for Test}
+This section defines tests for inputting chemical equations from R1 of the SRS
+\sjc{Add link}. \sjc{Justify the choice of these specific tests.}
 
 \begin{enumerate}
 
-\item{test-id1\\}
+  \item{test-valid-input\\}
 
-Control: Manual versus Automatic
-					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs}
+  Control: Manual
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
-					
-How test will be performed: 
-					
-\item{test-id2\\}
+  Initial State: \progname{} is started.
 
-Control: Manual versus Automatic
-					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs}
+  Input: A representation of the equation
+  $\ce{CH6} + \ce{O2} \rightarrow \ce{CO2} + \ce{H2O}$
+  \cite{hamid_balancing_2019}.
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+  Output: The inputted chemical equation is stored in \progname{}.
 
-How test will be performed: 
+  Test Case Derivation: In order for \progname{} to be useful, it needs to be
+  able to receive a chemical equation from the user and store it to balance it
+  later.
+
+  How test will be performed: A debug statement will be added to display the
+  stored chemical equation and this representation will be manually compared to
+  the given input.
+
+  \item{test-larger-valid-input\\}
+
+  Control: Manual
+
+  Initial State: \progname{} is started.
+
+  Input: A representation of the following equation from
+  \cite{taylor_balancing_2021}.
+  $$\ce{KMnO4} + \ce{HCl} \rightarrow \ce{MnCl2} + \ce{KCl} + \ce{Cl2} + \ce{H2O}$$
+
+  Output: The inputted chemical equation is stored in \progname{}.
+
+  Test Case Derivation: In order for \progname{} to be useful, it needs to be
+  able to receive a chemical equation from the user and store it to balance it
+  later.
+
+  How test will be performed: A debug statement will be added to display the
+  stored chemical equation and this representation will be manually compared to
+  the given input.
+
+  \item{test-infeasible-general-valid-input\\}
+
+  Control: Manual
+
+  Initial State: \progname{} is started.
+
+  Input: A representation of the following equation (modified from
+  \cite{hamid_balancing_2019}).
+  $$\ce{K4FeC6N6} + \ce{K2S2O3} \rightarrow \ce{CO2} + \ce{K2SO4} + \ce{NO2} +
+    \ce{FeS}$$
+
+  Output: The inputted chemical equation is stored in \progname{}.
+
+  Test Case Derivation: In order for \progname{} to be useful, it needs to be
+  able to receive a chemical equation from the user and store it to balance it
+  later.
+
+  How test will be performed: A debug statement will be added to display the
+  stored chemical equation and this representation will be manually compared to
+  the given input.
+
+  \item{test-infeasible-cons-mass-valid-input\\}
+
+  Control: Manual
+
+  Initial State: \progname{} is started.
+
+  Input: A representation of the equation
+  $\ce{CH6} \rightarrow \ce{CO2} + \ce{H2O}$.
+
+  Output: The inputted chemical equation is stored in \progname{}.
+
+  Test Case Derivation: In order for \progname{} to be useful, it needs to be
+  able to receive a chemical equation from the user and store it to balance it
+  later.
+
+  How test will be performed: A debug statement will be added to display the
+  stored chemical equation and this representation will be manually compared to
+  the given input.
+
+  \item{test-fractional-valid-input\\}
+
+  Control: Manual
+
+  Initial State: \progname{} is started.
+
+  Input: A representation of the equation
+  $\ce{Fe_{0.95}O} + \ce{O2} \rightarrow \ce{Fe2O3}$
+  \cite{doubtnut_when_nodate}.
+
+  Output: The inputted chemical equation is stored in \progname{}.
+
+  Test Case Derivation: In order for \progname{} to be useful, it needs to be
+  able to receive a chemical equation from the user and store it to balance it
+  later.
+
+  How test will be performed: A debug statement will be added to display the
+  stored chemical equation and this representation will be manually compared to
+  the given input.
 
 \end{enumerate}
 
@@ -234,37 +300,37 @@ How test will be performed:
   survey.  The survey will be in the Appendix.}
 
 \wss{Static tests, review, inspections, and walkthroughs, will not follow the
-format for the tests given below.}
+  format for the tests given below.}
 
 \subsubsection{Area of Testing1}
-		
+
 \paragraph{Title for Test}
 
 \begin{enumerate}
 
-\item{test-id1\\}
+  \item{test-id1\\}
 
-Type: Functional, Dynamic, Manual, Static etc.
-					
-Initial State: 
-					
-Input/Condition: 
-					
-Output/Result: 
-					
-How test will be performed: 
-					
-\item{test-id2\\}
+  Type: Functional, Dynamic, Manual, Static etc.
 
-Type: Functional, Dynamic, Manual, Static etc.
-					
-Initial State: 
-					
-Input: 
-					
-Output: 
-					
-How test will be performed: 
+  Initial State:
+
+  Input/Condition:
+
+  Output/Result:
+
+  How test will be performed:
+
+  \item{test-id2\\}
+
+  Type: Functional, Dynamic, Manual, Static etc.
+
+  Initial State:
+
+  Input:
+
+  Output:
+
+  How test will be performed:
 
 \end{enumerate}
 
@@ -280,7 +346,7 @@ How test will be performed:
 \section{Unit Test Description}
 
 \wss{Reference your MIS (detailed design document) and explain your overall
-  philosophy for test case selection.}  
+  philosophy for test case selection.}
 \wss{This section should not be filled in until after the MIS (detailed design
   document) has been completed.}
 
@@ -307,38 +373,38 @@ How test will be performed:
 
 \begin{enumerate}
 
-\item{test-id1\\}
+  \item{test-id1\\}
 
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
-					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs}
+  Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
+    be automatic}
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+  Initial State:
 
-How test will be performed: 
-					
-\item{test-id2\\}
+  Input:
 
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
-					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs}
+  Output: \wss{The expected result for the given inputs}
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+  Test Case Derivation: \wss{Justify the expected value given in the Output field}
 
-How test will be performed: 
+  How test will be performed:
 
-\item{...\\}
-    
+  \item{test-id2\\}
+
+  Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
+    be automatic}
+
+  Initial State:
+
+  Input:
+
+  Output: \wss{The expected result for the given inputs}
+
+  Test Case Derivation: \wss{Justify the expected value given in the Output field}
+
+  How test will be performed:
+
+  \item{...\\}
+
 \end{enumerate}
 
 \subsubsection{Module 2}
@@ -355,33 +421,33 @@ How test will be performed:
   mentioned functional tests.}
 
 \subsubsection{Module ?}
-		
+
 \begin{enumerate}
 
-\item{test-id1\\}
+  \item{test-id1\\}
 
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
-					
-Initial State: 
-					
-Input/Condition: 
-					
-Output/Result: 
-					
-How test will be performed: 
-					
-\item{test-id2\\}
+  Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
+    be automatic}
 
-Type: Functional, Dynamic, Manual, Static etc.
-					
-Initial State: 
-					
-Input: 
-					
-Output: 
-					
-How test will be performed: 
+  Initial State:
+
+  Input/Condition:
+
+  Output/Result:
+
+  How test will be performed:
+
+  \item{test-id2\\}
+
+  Type: Functional, Dynamic, Manual, Static etc.
+
+  Initial State:
+
+  Input:
+
+  Output:
+
+  How test will be performed:
 
 \end{enumerate}
 
@@ -392,7 +458,7 @@ How test will be performed:
 \subsection{Traceability Between Test Cases and Modules}
 
 \wss{Provide evidence that all of the modules have been considered.}
-				
+
 \bibliographystyle{ieeetr}
 
 \bibliography{../sources}

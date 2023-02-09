@@ -43,6 +43,7 @@
   improve input tests, including rationale, labelling, and chemical
   equations                                                             \\
   Feb. 9, 2023        & 0.1.3         & Add tests for trivial equation  \\
+                      & 0.1.4         & Add feasibility tests           \\
   \bottomrule
 \end{tabularx}
 
@@ -230,7 +231,7 @@ section defines tests for inputting chemical equations from R1 of the SRS
     Output: The inputted chemical equation is stored in \progname{}.
 
     Test Case Derivation: The inputted chemical equation is valid and
-    relatively small, but larger than the trivial
+    relatively small, but larger than the trivial one from
     \testref{test_small_valid_input}.
 
     How test will be performed: A debug statement will be added to display the
@@ -277,7 +278,7 @@ section defines tests for inputting chemical equations from R1 of the SRS
     each compound has more than one element, so changing any coefficient
     affects the number of some other element, causing a chain reaction that
     does not converge. There is no solution to this system other than the
-    trivial one \cite{hamid_balancing_2019}.
+    trivial solution ($\mathbf{0}$) \cite{hamid_balancing_2019}.
 
     How test will be performed: A debug statement will be added to display the
     stored chemical equation and this representation will be manually compared to
@@ -377,7 +378,8 @@ matrices outputted may have their rows in a different order.
       \end{bmatrix}$$
 
     Test Case Derivation: The stored chemical equation is valid and relatively
-    small, but larger than the trivial \testref{test_convert_small_valid}.
+    small, but larger than the trivial one from
+    \testref{test_convert_small_valid}.
 
     How test will be performed: The outputted matrix form of the stored
     chemical equation will be automatically compared to the expected output.
@@ -439,7 +441,7 @@ matrices outputted may have their rows in a different order.
     each compound has more than one element, so changing any coefficient
     affects the number of some other element, causing a chain reaction that
     does not converge. There is no solution to this system other than the
-    trivial one \cite{hamid_balancing_2019}.
+    trivial solution ($\mathbf{0}$) \cite{hamid_balancing_2019}.
 
     How test will be performed: The outputted matrix form of the stored
     chemical equation will be automatically compared to the expected output.
@@ -495,7 +497,171 @@ matrices outputted may have their rows in a different order.
     How test will be performed: The outputted matrix form of the stored
     chemical equation will be automatically compared to the expected output.
 
-\end{enumerate}...
+\end{enumerate}
+
+\subsubsection{Feasibility Checking Testing}
+
+To balance a chemical equation, the equation must be able to be balanced. This
+section defines tests for determining if a chemical equation is feasible from
+R3 of the SRS \sjc{Add link}. \sjc{Justify the choice of these specific tests.}
+Note that since swapping rows in a matrix doesn't change its solution, the
+matrices outputted may have their rows in a different order.
+
+\begin{enumerate}
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_small_valid_feas}:]
+    \textbf{Test for Feasibility of Small Valid Chemical Equation}
+
+    Control: Automated
+
+    Initial State: \progname{} is started.
+
+    Input: $\begin{bmatrix}
+        2 & -3
+      \end{bmatrix}$.
+
+    Output: $\textsc{T}$.
+
+    Test Case Derivation: The matrix represents a chemical equation that is
+    valid and trivial.
+
+    How test will be performed: The outputted Boolean will be automatically
+    compared to the expected output.
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_valid_feas}:]
+    \textbf{Test for Feasibility of Valid Chemical Equation}
+
+    Control: Automated
+
+    Initial State: \progname{} is started.
+
+    Input: Some matrix with the rows of the following matrix from
+    \cite{hamid_balancing_2019}, potentially in a different order:
+    $$\begin{bmatrix}
+        2 & 0 & -1 & 0  \\
+        6 & 0 & 0  & -2 \\
+        0 & 2 & -2 & -1
+      \end{bmatrix}$$
+
+    Output: $\textsc{T}$.
+
+    Test Case Derivation: The matrix represents a chemical equation that is
+    valid and relatively small, but larger than the trivial one from
+    \testref{test_small_valid_feas}.
+
+    How test will be performed: The outputted Boolean will be automatically
+    compared to the expected output.
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_large_valid_feas}:]
+    \textbf{Test for Feasibility of Large Valid Chemical Equation}
+
+    Control: Automated
+
+    Initial State: \progname{} is started.
+
+    Input: Some matrix with the rows of the following matrix, potentially in a
+    different order:
+    $$\begin{bmatrix}
+        1 & 0 & 0  & -1 & 0  & 0  \\
+        1 & 0 & -1 & 0  & 0  & 0  \\
+        4 & 0 & 0  & 0  & 0  & -1 \\
+        0 & 1 & 0  & 0  & 0  & -2 \\
+        0 & 1 & -2 & -1 & -2 & 0
+      \end{bmatrix}$$
+
+    Output: $\textsc{T}$
+
+    Test Case Derivation: The matrix represents a chemical equation that is
+    valid and larger than the one from \testref{test_valid_feas}.
+
+    How test will be performed: The outputted Boolean will be automatically
+    compared to the expected output.
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_over_valid_inf}:]
+    \textbf{Test for Feasibility of Valid Chemical Equation that is Infeasible
+      due to Overconstrained System}
+
+    Control: Automated
+
+    Initial State: \progname{} is started.
+
+    Input: Some matrix with the rows of the following matrix\footnote{While
+      \cite{hamid_balancing_2019} does not include a matrix representation, the
+      system of equations it provides has a typo: the equation for $\ce{N}$
+      should be $6x_1 = x_5$, since $\ce{NO2}$ only has one $\ce{N}$.},
+    potentially in a different order:
+    $$\begin{bmatrix}
+        4 & 2 & 0  & -2 & 0  & 0  \\
+        1 & 0 & 0  & 0  & 0  & -1 \\
+        6 & 0 & -1 & 0  & 0  & 0  \\
+        6 & 0 & 0  & 0  & -1 & 0  \\
+        0 & 2 & 0  & -1 & 0  & -1 \\
+        0 & 3 & -2 & -4 & -2 & 0
+      \end{bmatrix}$$
+
+    Output: $\textsc{F}$.
+
+    Test Case Derivation: The matrix represents a chemical equation that is
+    infeasible since
+    each compound has more than one element, so changing any coefficient
+    affects the number of some other element, causing a chain reaction that
+    does not converge. There is no solution to this system other than the
+    trivial solution ($\mathbf{0}$) \cite{hamid_balancing_2019}.
+
+    How test will be performed: The outputted Boolean will be automatically
+    compared to the expected output.
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_cons_mass_valid_inf}:]
+    \textbf{Test for Feasibility of  Valid Chemical Equation that is Infeasible
+      due to Conservation of Mass Violation}
+
+    Control: Automated
+
+    Initial State: \progname{} is started.
+
+    Input: Some matrix with the rows of the following matrix, potentially in a
+    different order:
+    $$\begin{bmatrix}
+        2 & -1 & 0  \\
+        6 & 0  & -2 \\
+        0 & -2 & -1
+      \end{bmatrix}$$
+
+    Output: $\textsc{F}$.
+
+    Test Case Derivation: The matrix represents a chemical equation is
+    infeasible since
+    every element does not exist on both sides of the equation, which violates
+    the Law of Conservation of Mass (TM1 from SRS \sjc{add link}).
+
+    How test will be performed: The outputted Boolean will be automatically
+    compared to the expected output.
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_nonstoich_valid_feas}:]
+    \textbf{Test for Feasibility of Valid Chemical Equation with
+      Nonstoichiometric Compound}
+
+    Control: Automated
+
+    Initial State: \progname{} is started.
+
+    Input: Some matrix with the rows of the following matrix, potentially in a
+    different order:
+    $$\begin{bmatrix}
+        0.95 & 0 & -2 \\
+        1    & 2 & -3
+      \end{bmatrix}$$
+
+    Output: $\textsc{T}$.
+
+    Test Case Derivation: The matrix represents a chemical equation that
+    contains a nonstoichiometric compound (i.e., one with a fractional
+    subscript).
+
+    How test will be performed: The outputted Boolean will be automatically
+    compared to the expected output.
+
+\end{enumerate}
 
 \subsection{Tests for Nonfunctional Requirements}
 

@@ -42,6 +42,7 @@
                       & 0.1.2         & Add matrix conversion tests and
   improve input tests, including rationale, labelling, and chemical
   equations                                                             \\
+  Feb. 9, 2023        & 0.1.3         & Add tests for trivial equation  \\
   \bottomrule
 \end{tabularx}
 
@@ -181,6 +182,9 @@ This document ... \wss{provide an introductory blurb and roadmap of the
 
 \subsection{Tests for Functional Requirements}
 
+The tests in each section are given in order of increasing complexity/likelihood
+of the situation arising during use of \progname{}.
+
 \wss{Include a blurb here to explain why the subsections below
   cover the requirements.  References to the SRS would be good here.}
 
@@ -192,6 +196,25 @@ section defines tests for inputting chemical equations from R1 of the SRS
 \sjc{Add link}. \sjc{Justify the choice of these specific tests.}
 
 \begin{enumerate}
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_small_valid_input}:]
+    \textbf{Test for Small Valid Input}
+
+    Control: Manual
+
+    Initial State: \progname{} is started.
+
+    Input: A representation of the equation $\ce{O2} \rightarrow \ce{O3}$
+    \cite{fahey_twenty_2011}.
+
+    Output: The inputted chemical equation is stored in \progname{}.
+
+    Test Case Derivation: The inputted chemical equation is
+    valid and trivial.
+
+    How test will be performed: A debug statement will be added to display the
+    stored chemical equation and this representation will be manually compared to
+    the given input.
 
   \item[T\refstepcounter{testnum}\thetestnum \label{test_valid_input}:]
     \textbf{Test for Valid Input}
@@ -206,15 +229,16 @@ section defines tests for inputting chemical equations from R1 of the SRS
 
     Output: The inputted chemical equation is stored in \progname{}.
 
-    Test Case Derivation: The inputted chemical equation is
-    valid and relatively small.
+    Test Case Derivation: The inputted chemical equation is valid and
+    relatively small, but larger than the trivial
+    \testref{test_small_valid_input}.
 
     How test will be performed: A debug statement will be added to display the
     stored chemical equation and this representation will be manually compared to
     the given input.
 
-  \item[T\refstepcounter{testnum}\thetestnum \label{test_larger_valid_input}:]
-    \textbf{Test for Larger Valid Input}
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_large_valid_input}:]
+    \textbf{Test for Large Valid Input}
 
     Control: Manual
 
@@ -313,6 +337,26 @@ matrices outputted may have their rows in a different order.
 
 \begin{enumerate}
 
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_convert_small_valid}:]
+    \textbf{Test for Converting Small Valid Chemical Equation}
+
+    Control: Automated
+
+    Initial State: \progname{} is started with a representation of the equation
+    $\ce{O2} \rightarrow \ce{O3}$ \cite{fahey_twenty_2011} stored in memory.
+
+    Input: --
+
+    Output: The matrix
+    $\begin{bmatrix}
+        2 & -3
+      \end{bmatrix}$.
+
+    Test Case Derivation: The stored chemical equation is valid and trivial.
+
+    How test will be performed: The outputted matrix form of the stored
+    chemical equation will be automatically compared to the expected output.
+
   \item[T\refstepcounter{testnum}\thetestnum \label{test_convert_valid}:]
     \textbf{Test for Converting Valid Chemical Equation}
 
@@ -332,14 +376,14 @@ matrices outputted may have their rows in a different order.
         0 & 2 & -2 & -1
       \end{bmatrix}$$
 
-    Test Case Derivation: The stored chemical equation is
-    valid and relatively small.
+    Test Case Derivation: The stored chemical equation is valid and relatively
+    small, but larger than the trivial \testref{test_convert_small_valid}.
 
     How test will be performed: The outputted matrix form of the stored
     chemical equation will be automatically compared to the expected output.
 
-  \item[T\refstepcounter{testnum}\thetestnum \label{test_convert_larger_valid}:]
-    \textbf{Test for Converting Larger Valid Chemical Equation}
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_convert_large_valid}:]
+    \textbf{Test for Converting Large Valid Chemical Equation}
 
     Control: Automated
 

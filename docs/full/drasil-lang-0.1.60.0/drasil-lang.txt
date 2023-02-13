@@ -449,7 +449,6 @@ module Language.Drasil.Unicode
 
 -- | Special characters include partial derivatives and the degree circle.
 data Special
-Partial :: Special
 Circle :: Special
 
 -- | Class for rendering special characters.
@@ -5753,7 +5752,6 @@ prodAll :: ModelExprC r => Symbol -> r -> r
 
 -- | Special characters include partial derivatives and the degree circle.
 data Special
-Partial :: Special
 Circle :: Special
 
 -- | Class for rendering special characters.

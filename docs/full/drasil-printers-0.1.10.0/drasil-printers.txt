@@ -326,6 +326,7 @@ RArrow :: Ops
 ForAll :: Ops
 VAdd :: Ops
 VSub :: Ops
+Partial :: Ops
 
 -- | Holds the type of "text fencing" ("(), {}, |, ||").
 data Fence

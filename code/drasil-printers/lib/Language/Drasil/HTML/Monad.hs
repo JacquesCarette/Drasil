@@ -12,4 +12,4 @@ newtype PrintHTML = PH {unPH :: String}
 -- | Special HTML symbols (degree and Greek partial derivative symbol).
 instance RenderSpecial PrintHTML where
   special Circle       = PH "&deg;"
-  special Partial      = PH "&part;"
+  -- special Partial      = PH "&part;"

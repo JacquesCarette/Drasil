@@ -190,6 +190,7 @@ pOps Perc     = "%"
 pOps LArrow   = " &larr; "
 pOps RArrow   = " &rarr; "
 pOps ForAll   = " ForAll "
+pOps Partial  = "&part;"
 
 
 -- | Renders HTML table, called by 'printLO'

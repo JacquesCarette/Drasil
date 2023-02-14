@@ -1,28 +1,42 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Stages used for displaying symbols.</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Stages of the development process.</span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Language.Drasil.Stages</span><span class="hs-special">(</span><span>
 </span><span id="line-3"></span><span>   </span><span class="annot"><span class="hs-comment">-- * Type</span></span><span>
 </span><span id="line-4"></span><span>   </span><span class="annot"><a href="Language.Drasil.Stages.html#Stage"><span class="hs-identifier">Stage</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
 </span><span id="line-5"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-6"></span><span>
-</span><span id="line-7"></span><span class="hs-comment">-- FIXME: More fine-grained stages.</span><span>
-</span><span id="line-8"></span><span class="hs-comment">-- | Stages correspond to what we're trying to look up. They range from abstract</span><span>
-</span><span id="line-9"></span><span class="hs-comment">-- to concrete. Equational stages are more theoretical and oriented towards abstract design</span><span>
-</span><span id="line-10"></span><span class="hs-comment">-- while the Implementation stages are more oriented towards detailed design.                  </span><span>
-</span><span id="line-11"></span><span class="hs-keyword">data</span><span> </span><span id="Stage"><span class="annot"><a href="Language.Drasil.Stages.html#Stage"><span class="hs-identifier hs-var">Stage</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Equational"><span class="annot"><a href="Language.Drasil.Stages.html#Equational"><span class="hs-identifier hs-var">Equational</span></a></span></span><span> </span><span class="hs-comment">-- AKA Theoretical / Abstract-design</span><span>
-</span><span id="line-12"></span><span>           </span><span class="hs-glyph">|</span><span> </span><span id="Implementation"><span class="annot"><a href="Language.Drasil.Stages.html#Implementation"><span class="hs-identifier hs-var">Implementation</span></a></span></span><span> </span><span class="hs-comment">-- AKA Implementation / Detailed-design</span><span>
-</span><span id="line-13"></span><span>
-</span><span id="line-14"></span><span class="hs-comment">{- Note: Keep stages separate from StagedSymbols for lookup purposes, as we may
+</span><span id="line-7"></span><span class="hs-comment">-- | Stages are what part of the development process we are in.</span><span>
+</span><span id="line-8"></span><span class="hs-comment">-- There are currently two:</span><span>
+</span><span id="line-9"></span><span class="hs-comment">-- 1) The Equational stage (should be called Specification) </span><span>
+</span><span id="line-10"></span><span class="hs-comment">-- 2) The Implemenation stage</span><span>
+</span><span id="line-11"></span><span class="hs-comment">--</span><span>
+</span><span id="line-12"></span><span class="hs-comment">-- The point is that information may be rendered differently depending</span><span>
+</span><span id="line-13"></span><span class="hs-comment">-- at what stage we're at. Being able to talk about stages lets us also</span><span>
+</span><span id="line-14"></span><span class="hs-comment">-- attach different display information.</span><span>
+</span><span id="line-15"></span><span>
+</span><span id="line-16"></span><span class="hs-keyword">data</span><span> </span><span id="Stage"><span class="annot"><a href="Language.Drasil.Stages.html#Stage"><span class="hs-identifier hs-var">Stage</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Equational"><span class="annot"><a href="Language.Drasil.Stages.html#Equational"><span class="hs-identifier hs-var">Equational</span></a></span></span><span> </span><span class="hs-comment">-- AKA Specification</span><span>
+</span><span id="line-17"></span><span>           </span><span class="hs-glyph">|</span><span> </span><span id="Implementation"><span class="annot"><a href="Language.Drasil.Stages.html#Implementation"><span class="hs-identifier hs-var">Implementation</span></a></span></span><span> </span><span class="hs-comment">-- AKA Implementation</span><span>
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="hs-comment">{- Note: Keep stages separate from StagedSymbols for lookup purposes, as we may
    have documents which look up both stages of a symbol and show them 
    side-by-side or one after another. -}</span><span>
-</span><span id="line-17"></span><span>
-</span><span id="line-18"></span><span class="hs-comment">-- | For better error messages.</span><span>
-</span><span id="line-19"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679345872"><span id="local-6989586621679345875"><span class="annot"><span class="hs-identifier hs-type">Show</span></span><span> </span><span class="annot"><a href="Language.Drasil.Stages.html#Stage"><span class="hs-identifier hs-type">Stage</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-20"></span><span>  </span><span id="local-6989586621679345870"><span class="annot"><span class="annottext">show :: Stage -&gt; String
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span class="hs-comment">-- | For better error messages.</span><span>
+</span><span id="line-24"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679345872"><span id="local-6989586621679345875"><span class="annot"><span class="hs-identifier hs-type">Show</span></span><span> </span><span class="annot"><a href="Language.Drasil.Stages.html#Stage"><span class="hs-identifier hs-type">Stage</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-25"></span><span>  </span><span id="local-6989586621679345870"><span class="annot"><span class="annottext">show :: Stage -&gt; String
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">show</span></span></span><span> </span><span class="annot"><span class="annottext">Stage
 </span><a href="Language.Drasil.Stages.html#Equational"><span class="hs-identifier hs-var">Equational</span></a></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Theoretical stage&quot;</span></span><span>
-</span><span id="line-21"></span><span>  </span><span class="annot"><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">Stage
+</span><span class="hs-string">&quot;Specification Stage&quot;</span></span><span>
+</span><span id="line-26"></span><span>  </span><span class="annot"><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">Stage
 </span><a href="Language.Drasil.Stages.html#Implementation"><span class="hs-identifier hs-var">Implementation</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Implementation Stage&quot;</span></span><span>
-</span><span id="line-22"></span><span>
-</span><span id="line-23"></span></pre></body></html>
+</span><span id="line-27"></span><span>
+</span><span id="line-28"></span><span class="hs-comment">-- Discussion:</span><span>
+</span><span id="line-29"></span><span class="hs-comment">-- It is odd that this is in drasil-lang, because it is meta-information</span><span>
+</span><span id="line-30"></span><span class="hs-comment">-- about the development process and is used for rendering. It is indeed</span><span>
+</span><span id="line-31"></span><span class="hs-comment">-- a very tiny language (it has 2 words in it!). But what sets it apart is</span><span>
+</span><span id="line-32"></span><span class="hs-comment">-- that it is at the bottom of the module uses hierarchy! Why? That still</span><span>
+</span><span id="line-33"></span><span class="hs-comment">-- needs to be investigated. It looks like rendering issues are somehow</span><span>
+</span><span id="line-34"></span><span class="hs-comment">-- driving things more strongly than they should.</span><span>
+</span><span id="line-35"></span><span>
+</span><span id="line-36"></span><span class="hs-comment">-- FIXME: More fine-grained stages? [Only when they are actually needed.]</span><span>
+</span><span id="line-37"></span></pre></body></html>

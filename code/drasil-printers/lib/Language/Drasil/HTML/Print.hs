@@ -234,6 +234,7 @@ pOps Perc     = "%"
 pOps LArrow   = " &larr; "
 pOps RArrow   = " &rarr; "
 pOps ForAll   = " &forall; "
+pOps Partial  = "&part;"
 
 -- | Allows for open/closed variants of parenthesis, curly brackets, absolute value symbols, and normal symbols.
 fence :: OpenClose -> Fence -> String

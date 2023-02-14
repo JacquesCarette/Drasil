@@ -5,7 +5,7 @@ module Language.Drasil.Printing.Import.ModelExpr where -- TODO: tighten exports
 
 -- TODO: tighten exports
 import Language.Drasil (UID, DomainDesc(..), RealInterval(..), Inclusive(..),
-  RTopology(..), Special(..), LiteralC(int))
+  RTopology(..), LiteralC(int))
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.Literal.Development (Literal(..))
 import Language.Drasil.ModelExpr.Development
@@ -125,7 +125,7 @@ modelExpr (AssocA MulRe l)           sm = P.Row $ mulExpr l MulRe sm
 modelExpr (Deriv 0 Part a _)         sm = P.Row [modelExpr a sm]
 modelExpr (Deriv 0 Total a _)        sm = P.Row [modelExpr a sm]
 modelExpr (Deriv n Part a b)         sm =
-  let st = [P.Spc P.Thin, P.Spec Partial] in 
+  let st = [P.Spc P.Thin, P.MO P.Partial] in 
     P.Div (P.Row (st ++ sup n ++ [modelExpr a sm]))
     (P.Row (st ++ [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b] ++ sup n))
 modelExpr (Deriv n Total a b)        sm =

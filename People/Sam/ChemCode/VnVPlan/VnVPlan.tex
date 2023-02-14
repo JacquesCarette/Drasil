@@ -46,6 +46,7 @@
                       & 0.1.4         & Add feasibility tests             \\
   Feb. 13, 2023       & 0.1.5         & Clarify notion of matrices having
   the same solution after swapping rows and/or columns                    \\
+  Feb. 13-14, 2023    & 0.1.6         & Add balancing and output tests    \\
   \bottomrule
 \end{tabularx}
 
@@ -659,6 +660,327 @@ R3 of the SRS \sjc{Add link}. \sjc{Justify the choice of these specific tests.}
 
     How test will be performed: The outputted Boolean will be automatically
     compared to the expected output.
+
+\end{enumerate}
+
+\subsubsection{Balancing Testing}
+
+The main purpose of \progname{} is to balance chemical equations, so this
+functionality must be verified. This section defines tests for balancing a
+chemical equation from
+R4 of the SRS \sjc{Add link}. \sjc{Justify the choice of these specific tests.}
+Note that since swapping rows and/or columns in a matrix doesn't change its
+solution, the matrices outputted may have their rows and/or columns in a
+different order, although swapping columns of the input matrix (e.g., columns
+three and four) means that the associated rows of the output matrix (e.g., rows
+three and four) must also be swapped.
+
+\begin{enumerate}
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_bal_small_valid}:]
+    \textbf{Test for Balancing Small Valid Chemical Equation}
+
+    Control: Automated
+
+    Initial State: \progname{} is started.
+
+    Input: $\begin{bmatrix}
+        2 & -3
+      \end{bmatrix}$.
+
+    Output: $\begin{bmatrix}
+        3 \\
+        2
+      \end{bmatrix}$
+
+    Test Case Derivation: The matrix represents a chemical equation that is
+    valid and trivial.
+
+    How test will be performed: The outputted matrix will be automatically
+    compared to the expected output.
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_bal_valid}:]
+    \textbf{Test for Balancing Valid Chemical Equation}
+
+    Control: Automated
+
+    Initial State: \progname{} is started.
+
+    Input:
+    $\begin{bmatrix}
+        2 & 0 & -1 & 0  \\
+        6 & 0 & 0  & -2 \\
+        0 & 2 & -2 & -1
+      \end{bmatrix}$ from \cite{hamid_balancing_2019}
+
+    Output: $\begin{bmatrix}
+        2 \\
+        7 \\
+        4 \\
+        6
+      \end{bmatrix}$ based on \cite{hamid_balancing_2019}
+
+    Test Case Derivation: The matrix represents a chemical equation that is
+    valid and relatively small, but larger than the trivial one from
+    \testref{test_bal_small_valid}.
+
+    How test will be performed: The outputted matrix will be automatically
+    compared to the expected output.
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_bal_large_valid}:]
+    \textbf{Test for Balancing Large Valid Chemical Equation}
+
+    Control: Automated
+
+    Initial State: \progname{} is started.
+
+    Input: $\begin{bmatrix}
+        1 & 0 & 0  & -1 & 0  & 0  \\
+        1 & 0 & -1 & 0  & 0  & 0  \\
+        4 & 0 & 0  & 0  & 0  & -1 \\
+        0 & 1 & 0  & 0  & 0  & -2 \\
+        0 & 1 & -2 & -1 & -2 & 0
+      \end{bmatrix}$
+
+    Output: $\begin{bmatrix}
+        2  \\
+        16 \\
+        2  \\
+        2  \\
+        5  \\
+        8
+      \end{bmatrix}$
+
+    Test Case Derivation: The matrix represents a chemical equation that is
+    valid and larger than the one from \testref{test_bal_valid}.
+
+    How test will be performed: The outputted matrix will be automatically
+    compared to the expected output.
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_bal_nonstoich_valid}:]
+    \textbf{Test for Balancing Valid Chemical Equation with
+      Nonstoichiometric Compound}
+
+    Control: Automated
+
+    Initial State: \progname{} is started.
+
+    Input:
+    $\begin{bmatrix}
+        0.95 & 0 & -2 \\
+        1    & 2 & -3
+      \end{bmatrix}$
+
+    Output:  $\begin{bmatrix}
+        80 \\
+        17 \\
+        38
+      \end{bmatrix}$
+
+    Test Case Derivation: The matrix represents a chemical equation that
+    contains a nonstoichiometric compound (i.e., one with a fractional
+    subscript).
+
+    How test will be performed: The outputted matrix will be automatically
+    compared to the expected output.
+
+\end{enumerate}
+
+\subsubsection{Infeasible Reaction Output Testing}
+
+If a chemical equation is infeasible, it is important to notify the user as to
+why, in case it is a mistake on the part of the user. This section defines
+tests for outputting a descriptive message if an equation is infeasible from
+R5 of the SRS \sjc{Add link}. \sjc{Justify the choice of these specific tests.}
+The test cases here were chosen to represent different reason that a chemical
+reaction could be infeasible.
+
+\begin{enumerate}
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_over_valid_out}:]
+    \textbf{Test for Output for Valid Chemical Equation that is Infeasible
+      due to Overconstrained System}
+
+    Control: Manual/Automated \sjc{TBD}
+
+    Initial State: \progname{} is started and the following matrix from
+    \cite{hamid_balancing_2019}\footnote{While \cite{hamid_balancing_2019}
+      does not include a matrix representation, the
+      system of equations it provides has a typo: the equation for $\ce{N}$
+      should be $6x_1 = x_5$, since $\ce{NO2}$ only has one $\ce{N}$.} is
+    stored in memory and has been determined to be infeasible:
+    $$\begin{bmatrix}
+        4 & 2 & 0  & -2 & 0  & 0  \\
+        1 & 0 & 0  & 0  & 0  & -1 \\
+        6 & 0 & -1 & 0  & 0  & 0  \\
+        6 & 0 & 0  & 0  & -1 & 0  \\
+        0 & 2 & 0  & -1 & 0  & -1 \\
+        0 & 3 & -2 & -4 & -2 & 0
+      \end{bmatrix}$$
+
+    Input: --
+
+    Output: A descriptive message stating that the inputted chemical reaction
+    is infeasible because the system is overconstrained.
+
+    Test Case Derivation: The matrix represents a chemical equation that is
+    infeasible since
+    each compound has more than one element, so changing any coefficient
+    affects the number of some other element, causing a chain reaction that
+    does not converge. There is no solution to this system other than the
+    trivial solution ($\mathbf{0}$) \cite{hamid_balancing_2019}.
+
+    How test will be performed: The output will be verified to ensure that an
+    appropriate message is displayed to the user.
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_cons_mass_valid_out}:]
+    \textbf{Test for Output for Valid Chemical Equation that is Infeasible
+      due to Conservation of Mass Violation}
+
+    Control: Manual/Automated \sjc{TBD}
+
+    Initial State: \progname{} is started, and the following matrix is
+    stored in memory and has been determined to be infeasible:
+    $$\begin{bmatrix}
+        2 & -1 & 0  \\
+        6 & 0  & -2 \\
+        0 & -2 & -1
+      \end{bmatrix}$$
+
+    Input: --
+
+    Output: A descriptive message stating that the inputted chemical reaction
+    is infeasible because an element is present on one side of the equation but
+    not the other. \sjc{Is this test meaningful? The output should likely give
+      the specific elements to the user, which isn't possible to ascertain just
+      from the matrix representation.}
+
+    Test Case Derivation: The matrix represents a chemical equation is
+    infeasible since
+    every element does not exist on both sides of the equation, which violates
+    the Law of Conservation of Mass (TM1 from SRS \sjc{add link}).
+
+    How test will be performed: The output will be verified to ensure that an
+    appropriate message is displayed to the user.
+\end{enumerate}
+
+\subsubsection{Feasible Reaction Output Testing}
+
+Once a chemical reaction is balanced, it must be given to the user for them
+to be able to use it. This section defines tests for outputting a
+representation of the balanced chemical equation from
+R6 of the SRS \sjc{Add link}. \sjc{Justify the choice of these specific tests.}
+
+\begin{enumerate}
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_small_valid_out}:]
+    \textbf{Test for Output for Small Valid Chemical Equation}
+
+    Control: Manual/Automated \sjc{TBD}
+
+    Initial State: \progname{} is started, and some form of the original
+    equation $\ce{O2} \rightarrow \ce{O3}$ and the coefficient matrix
+    $\begin{bmatrix}
+        3 \\
+        2
+      \end{bmatrix}$ are stored in memory.
+
+    Input: --
+
+    Output: A representation of the equation $\ce{3O2} \rightarrow \ce{2O3}$
+    \cite[p.~6]{fahey_twenty_2011}.
+
+    Test Case Derivation: This chemical equation is valid and trivial.
+
+    How test will be performed: \sjc{TBD}
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_valid_out}:]
+    \textbf{Test for Output for Valid Chemical Equation}
+
+    Control: Manual/Automated \sjc{TBD}
+
+    Initial State: \progname{} is started, and some form of the original
+    equation $\ce{C2H6} + \ce{O2} \rightarrow \ce{CO2} + \ce{H2O}$
+    \cite{hamid_balancing_2019} and the following coefficient matrix
+    based on \cite{hamid_balancing_2019} are stored in memory:
+    $$\begin{bmatrix}
+        2 \\
+        7 \\
+        4 \\
+        6
+      \end{bmatrix}$$
+
+    Input: --
+
+    Output: A representation of the following equation from
+    \cite[p.~523]{hamid_balancing_2019}:
+    $$\ce{2C2H6} + \ce{7O2} \rightarrow \ce{4CO2} + \ce{6H2O}$$
+
+    Test Case Derivation: This chemical equation is
+    valid and relatively small, but larger than the trivial one from
+    \testref{test_small_valid_out}.
+
+    How test will be performed: \sjc{TBD}
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_large_valid_out}:]
+    \textbf{Test for Output for Large Valid Chemical Equation}
+
+    Control: Manual/Automated \sjc{TBD}
+
+    Initial State: \progname{} is started, and some form of the original
+    equation $\ce{KMnO4} + \ce{HCl} \rightarrow \ce{MnCl2} + \ce{KCl} +
+      \ce{Cl2} + \ce{H2O}$ \cite{taylor_balancing_2021} and the following
+    coefficient matrix are stored in memory:
+    $$\begin{bmatrix}
+        2  \\
+        16 \\
+        2  \\
+        2  \\
+        5  \\
+        8
+      \end{bmatrix}$$
+
+    Input: --
+
+    Output: A representation of the following equation from
+    \cite{taylor_balancing_2021}:
+    $$\ce{2KMnO4} + \ce{16HCl} \rightarrow \ce{2MnCl2} + \ce{2KCl} +
+      \ce{5Cl2} + \ce{8H2O}$$
+
+
+    Test Case Derivation: This chemical equation is
+    valid and larger than the one from \testref{test_valid_out}.
+
+    How test will be performed: \sjc{TBD}
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_nonstoich_valid_out}:]
+    \textbf{Test for Output for Valid Chemical Equation with
+      Nonstoichiometric Compound}
+
+    Control: Manual/Automated \sjc{TBD}
+
+    Initial State: \progname{} is started, and some form of the original
+    equation $\ce{Fe_{0.95}O} + \ce{O2} \rightarrow \ce{Fe2O3}$
+    \cite{doubtnut_when_nodate} and the following
+    coefficient matrix are stored in memory:
+    $$\begin{bmatrix}
+        80 \\
+        17 \\
+        38
+      \end{bmatrix}$$
+
+    Input: --
+
+    Output: A representation of the following equation:
+    $$\ce{80Fe_{0.95}O} + \ce{17O2} \rightarrow \ce{38Fe2O3}$$
+
+    Test Case Derivation: This chemical equation
+    contains a nonstoichiometric compound (i.e., one with a fractional
+    subscript).
+
+    How test will be performed: \sjc{TBD}
+
+
 
 \end{enumerate}
 

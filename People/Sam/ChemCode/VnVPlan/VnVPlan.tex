@@ -33,17 +33,19 @@
 \section{Revision History}
 
 \begin{tabularx}{\textwidth}{llX}
-  \toprule {\bf Date} & {\bf Version} & {\bf Notes}                     \\
+  \toprule {\bf Date} & {\bf Version} & {\bf Notes}                       \\
   \midrule
   Feb. 5, 2023        & 0.0           & Create document and remove
-  inapplicable content                                                  \\
-  Feb. 7-8, 2023      & 0.1           & Add input tests                 \\
-  Feb. 8, 2023        & 0.1.1         & Improve referencing of tests    \\
+  inapplicable content                                                    \\
+  Feb. 7-8, 2023      & 0.1           & Add input tests                   \\
+  Feb. 8, 2023        & 0.1.1         & Improve referencing of tests      \\
                       & 0.1.2         & Add matrix conversion tests and
   improve input tests, including rationale, labelling, and chemical
-  equations                                                             \\
-  Feb. 9, 2023        & 0.1.3         & Add tests for trivial equation  \\
-                      & 0.1.4         & Add feasibility tests           \\
+  equations                                                               \\
+  Feb. 9, 2023        & 0.1.3         & Add tests for trivial equation    \\
+                      & 0.1.4         & Add feasibility tests             \\
+  Feb. 13, 2023       & 0.1.5         & Clarify notion of matrices having
+  the same solution after swapping rows and/or columns                    \\
   \bottomrule
 \end{tabularx}
 
@@ -333,8 +335,9 @@ To solve a system of linear equations, \progname{} must first convert the
 inputted chemical equation into matrix form. This section defines tests for
 the matrix form conversion of chemical equations' stored representations from
 R2 of the SRS \sjc{Add link}. \sjc{Justify the choice of these specific tests.}
-Note that since swapping rows in a matrix doesn't change its solution, the
-matrices outputted may have their rows in a different order.
+Note that since swapping rows and/or columns in a matrix doesn't change its
+solution, the matrices outputted may have their rows and/or columns in a
+different order.
 
 \begin{enumerate}
 
@@ -351,6 +354,9 @@ matrices outputted may have their rows in a different order.
     Output: The matrix
     $\begin{bmatrix}
         2 & -3
+      \end{bmatrix}$ or
+    $\begin{bmatrix}
+        -3 & 2
       \end{bmatrix}$.
 
     Test Case Derivation: The stored chemical equation is valid and trivial.
@@ -369,7 +375,7 @@ matrices outputted may have their rows in a different order.
 
     Input: --
 
-    Output: Some matrix with the rows of the following matrix from
+    Output: Some matrix with the rows and columns of the following matrix from
     \cite{hamid_balancing_2019}, potentially in a different order:
     $$\begin{bmatrix}
         2 & 0 & -1 & 0  \\
@@ -395,8 +401,8 @@ matrices outputted may have their rows in a different order.
 
     Input: --
 
-    Output: Some matrix with the rows of the following matrix, potentially in a
-    different order:
+    Output: Some matrix with the rows and columns of the following matrix,
+    potentially in a different order:
     $$\begin{bmatrix}
         1 & 0 & 0  & -1 & 0  & 0  \\
         1 & 0 & -1 & 0  & 0  & 0  \\
@@ -423,7 +429,8 @@ matrices outputted may have their rows in a different order.
 
     Input: --
 
-    Output: Some matrix with the rows of the following matrix\footnote{While
+    Output: Some matrix with the rows and columns of the following
+    matrix\footnote{While
       \cite{hamid_balancing_2019} does not include a matrix representation, the
       system of equations it provides has a typo: the equation for $\ce{N}$
       should be $6x_1 = x_5$, since $\ce{NO2}$ only has one $\ce{N}$.},
@@ -457,8 +464,8 @@ matrices outputted may have their rows in a different order.
 
     Input: --
 
-    Output: Some matrix with the rows of the following matrix, potentially in a
-    different order:
+    Output: Some matrix with the rows and columns of the following matrix,
+    potentially in a different order:
     $$\begin{bmatrix}
         2 & -1 & 0  \\
         6 & 0  & -2 \\
@@ -484,8 +491,8 @@ matrices outputted may have their rows in a different order.
 
     Input: --
 
-    Output: Some matrix with the rows of the following matrix, potentially in a
-    different order:
+    Output: Some matrix with the rows and columns of the following matrix,
+    potentially in a different order:
     $$\begin{bmatrix}
         0.95 & 0 & -2 \\
         1    & 2 & -3
@@ -504,8 +511,6 @@ matrices outputted may have their rows in a different order.
 To balance a chemical equation, the equation must be able to be balanced. This
 section defines tests for determining if a chemical equation is feasible from
 R3 of the SRS \sjc{Add link}. \sjc{Justify the choice of these specific tests.}
-Note that since swapping rows in a matrix doesn't change its solution, the
-matrices outputted may have their rows in a different order.
 
 \begin{enumerate}
 
@@ -520,7 +525,7 @@ matrices outputted may have their rows in a different order.
         2 & -3
       \end{bmatrix}$.
 
-    Output: $\textsc{T}$.
+    Output: $\textsc{T}$
 
     Test Case Derivation: The matrix represents a chemical equation that is
     valid and trivial.
@@ -535,15 +540,14 @@ matrices outputted may have their rows in a different order.
 
     Initial State: \progname{} is started.
 
-    Input: Some matrix with the rows of the following matrix from
-    \cite{hamid_balancing_2019}, potentially in a different order:
-    $$\begin{bmatrix}
+    Input:
+    $\begin{bmatrix}
         2 & 0 & -1 & 0  \\
         6 & 0 & 0  & -2 \\
         0 & 2 & -2 & -1
-      \end{bmatrix}$$
+      \end{bmatrix}$ from \cite{hamid_balancing_2019}.
 
-    Output: $\textsc{T}$.
+    Output: $\textsc{T}$
 
     Test Case Derivation: The matrix represents a chemical equation that is
     valid and relatively small, but larger than the trivial one from
@@ -559,15 +563,13 @@ matrices outputted may have their rows in a different order.
 
     Initial State: \progname{} is started.
 
-    Input: Some matrix with the rows of the following matrix, potentially in a
-    different order:
-    $$\begin{bmatrix}
+    Input: $\begin{bmatrix}
         1 & 0 & 0  & -1 & 0  & 0  \\
         1 & 0 & -1 & 0  & 0  & 0  \\
         4 & 0 & 0  & 0  & 0  & -1 \\
         0 & 1 & 0  & 0  & 0  & -2 \\
         0 & 1 & -2 & -1 & -2 & 0
-      \end{bmatrix}$$
+      \end{bmatrix}$
 
     Output: $\textsc{T}$
 
@@ -585,21 +587,21 @@ matrices outputted may have their rows in a different order.
 
     Initial State: \progname{} is started.
 
-    Input: Some matrix with the rows of the following matrix\footnote{While
-      \cite{hamid_balancing_2019} does not include a matrix representation, the
-      system of equations it provides has a typo: the equation for $\ce{N}$
-      should be $6x_1 = x_5$, since $\ce{NO2}$ only has one $\ce{N}$.},
-    potentially in a different order:
-    $$\begin{bmatrix}
+    Input:
+    $\begin{bmatrix}
         4 & 2 & 0  & -2 & 0  & 0  \\
         1 & 0 & 0  & 0  & 0  & -1 \\
         6 & 0 & -1 & 0  & 0  & 0  \\
         6 & 0 & 0  & 0  & -1 & 0  \\
         0 & 2 & 0  & -1 & 0  & -1 \\
         0 & 3 & -2 & -4 & -2 & 0
-      \end{bmatrix}$$
+      \end{bmatrix}$ based on a linear system from
+    \cite{hamid_balancing_2019}\footnote{While \cite{hamid_balancing_2019}
+      does not include a matrix representation, the
+      system of equations it provides has a typo: the equation for $\ce{N}$
+      should be $6x_1 = x_5$, since $\ce{NO2}$ only has one $\ce{N}$.}.
 
-    Output: $\textsc{F}$.
+    Output: $\textsc{F}$
 
     Test Case Derivation: The matrix represents a chemical equation that is
     infeasible since
@@ -619,15 +621,13 @@ matrices outputted may have their rows in a different order.
 
     Initial State: \progname{} is started.
 
-    Input: Some matrix with the rows of the following matrix, potentially in a
-    different order:
-    $$\begin{bmatrix}
+    Input: $\begin{bmatrix}
         2 & -1 & 0  \\
         6 & 0  & -2 \\
         0 & -2 & -1
-      \end{bmatrix}$$
+      \end{bmatrix}$
 
-    Output: $\textsc{F}$.
+    Output: $\textsc{F}$
 
     Test Case Derivation: The matrix represents a chemical equation is
     infeasible since
@@ -645,14 +645,13 @@ matrices outputted may have their rows in a different order.
 
     Initial State: \progname{} is started.
 
-    Input: Some matrix with the rows of the following matrix, potentially in a
-    different order:
-    $$\begin{bmatrix}
+    Input:
+    $\begin{bmatrix}
         0.95 & 0 & -2 \\
         1    & 2 & -3
-      \end{bmatrix}$$
+      \end{bmatrix}$
 
-    Output: $\textsc{T}$.
+    Output: $\textsc{T}$
 
     Test Case Derivation: The matrix represents a chemical equation that
     contains a nonstoichiometric compound (i.e., one with a fractional

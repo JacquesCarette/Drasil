@@ -47,6 +47,7 @@
   Feb. 13, 2023       & 0.1.5         & Clarify notion of matrices having
   the same solution after swapping rows and/or columns                    \\
   Feb. 13-14, 2023    & 0.1.6         & Add balancing and output tests    \\
+  Feb. 14, 2023       & 0.1.7         & Add accuracy test for balancing   \\
   \bottomrule
 \end{tabularx}
 
@@ -980,16 +981,40 @@ R6 of the SRS \sjc{Add link}. \sjc{Justify the choice of these specific tests.}
 
     How test will be performed: \sjc{TBD}
 
-
-
 \end{enumerate}
 
 \subsection{Tests for Nonfunctional Requirements}
 
-\wss{The nonfunctional requirements for accuracy will likely just reference the
-  appropriate functional tests from above.  The test cases should mention
-  reporting the relative error for these tests.  Not all projects will
-  necessarily have nonfunctional requirements related to accuracy}
+\subsubsection{Accuracy Testing}
+
+\begin{enumerate}
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_bal_accuracy}:]
+    \textbf{Test for Accuracy of Balancing}
+
+    Control: Automated
+
+    Initial State: \progname{} is started, and the following test cases are
+    run: \testref{test_bal_small_valid}, \testref{test_bal_valid},
+    \testref{test_bal_large_valid}, \testref{test_bal_nonstoich_valid}.
+
+    Input: See the relevant test cases above for their input.
+
+    Output: See the relevant test cases above for their output.
+
+    Test Case Derivation: Chemical equations are only useful if they are
+    balanced \cite{lund_introduction_2023}, so computed coefficients should be
+    exact. Since these coefficients should be as small as possible
+    \cite{lund_introduction_2023}, there is exactly one possible set of
+    coefficients that for each feasible chemical equation, and since they are
+    whole numbers \cite{lund_introduction_2023}, they can be compared for
+    equality by a computer.
+
+    How test will be performed: For each test case, the actual output will be
+    compared to the expected output to ensure that they are exactly equal
+    (e.g., by using integer comparison).
+
+\end{enumerate}
 
 \wss{Tests related to usability could include conducting a usability test and
   survey.  The survey will be in the Appendix.}
@@ -1030,10 +1055,6 @@ R6 of the SRS \sjc{Add link}. \sjc{Justify the choice of these specific tests.}
     How test will be performed:
 
 \end{enumerate}
-
-\subsubsection{Area of Testing2}
-
-...
 
 \subsection{Traceability Between Test Cases and Requirements}
 

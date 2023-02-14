@@ -133,7 +133,7 @@
 \title{Software Requirements Specification for \progname:\\
   A program for solving chemistry problems}
 \author{\authname}
-\date{February 3, 2023}
+\date{\today}
 
 \maketitle
 \thispagestyle{empty}
@@ -219,6 +219,8 @@
                       & 0.6.7         & Fill in \nameref{sec_traceMats} and remove more unnecessary content  \\
                       & 0.6.8         & Fill in data constraints sections, update traceability matrices, and
   finalize formatting                                                                                        \\
+  Feb. 14, 2023       & 1.0.0         & Improve mathematical notation
+  (remove ``$\times 1$'' from vector types, define $\mathbb{R}$) and citations                               \\
   \bottomrule
 \end{tabularx}
 
@@ -270,18 +272,17 @@ symbols are listed in alphabetical order.
 
 % \renewcommand{\arraystretch}{1.2}
 \noindent \begin{tabularx}{\textwidth}{l l l X} \toprule
-  \textbf{symbol} & \textbf{unit} & \textbf{type}                 & \textbf{description}                             \\
+  \textbf{symbol} & \textbf{unit} & \textbf{type}             & \textbf{description}                             \\
   \midrule
-  $\textbf{0}$    & --            & $\mathbb{N}^{m \times 1}$     & zero vector                                      \\
-  $\textbf{A}$    & --            & $\mathbb{R}^{m \times n}$     & generic matrix                                   \\
-  $\textbf{E}$    & --            & $\mathbb{R}^{m \times n}$     & matrix representation of the inputted chemical
-  equation                                                                                                           \\
-  $\textbf{b}$    & --            & $\mathbb{R}^{m \times 1}$     & generic vector                                   \\
-  $\textbf{c}$    & --            & $(\mathbb{Z^+})^{n \times 1}$ & vector of the smallest coefficients that balance
-  a chemical equation                                                                                                \\
-  $m$             & --            & $\mathbb{Z}^+$                & generic whole number                             \\
-  $n$             & --            & $\mathbb{Z}^+$                & generic whole number                             \\
-  $\textbf{x}$    & --            & $\mathbb{R}^{n \times 1}$     & generic vector                                   \\
+  $\textbf{0}$    & --            & $\mathbb{N}^{m}$          & zero vector                                      \\
+  $\textbf{A}$    & --            & $\mathbb{R}^{m \times n}$ & generic matrix                                   \\
+  $\textbf{E}$    & --            & $\mathbb{R}^{m \times n}$ & matrix representation of a chemical equation     \\
+  $\textbf{b}$    & --            & $\mathbb{R}^{m}$          & generic vector                                   \\
+  $\textbf{c}$    & --            & $(\mathbb{Z^+})^{n}$      & vector of the smallest coefficients that balance
+  a chemical equation                                                                                            \\
+  $m$             & --            & $\mathbb{Z}^+$            & generic whole number                             \\
+  $n$             & --            & $\mathbb{Z}^+$            & generic whole number                             \\
+  $\textbf{x}$    & --            & $\mathbb{R}^{n}$          & generic vector                                   \\
   \bottomrule
 \end{tabularx}
 
@@ -315,8 +316,11 @@ example
 $\textbf{x}$) \cite{osullivan_appendix_2010}. The type of a matrix will be
 denoted by the type of each value in the matrix with the matrix's dimensions
 as a superscript; for example, a matrix of natural numbers with two rows and
-three columns is of type $\mathbb{N}^{2 \times 3}$. \sjc{I couldn't find a
-  source for this, but this is what I'll use.} The zero matrix is a special
+three columns is of type $\mathbb{N}^{2 \times 3}$
+\cite[p.~3]{golub_matrix_2013}. Since vectors are one-dimensional
+matrices, their types only have one dimension (for example, a row vector with
+four entries is denoted by $\mathbb{N}^{4}$) \cite[p.~4]{golub_matrix_2013}.
+The zero matrix is a special
 type of matrix where each element is zero and is denoted by $\textbf{0}$
 \cite{weisstein_zero_2023}.
 % Individual entries in a matrix are written in
@@ -330,7 +334,10 @@ as $\left(\textbf{A}\vert \textbf{B}\right)$ \cite{taboga_augmented_2021}.
 
 The set of natural numbers is denoted by $\mathbb{N}$ and consists of the
 non-negative integers (including zero). The set of whole numbers is denoted by
-$\mathbb{Z}^+$ and consists of the positive integers (excluding zero).
+$\mathbb{Z}^+$ and consists of the positive integers (excluding zero). The
+set of real numbers is denoted by $\mathbb{R}$ and consists of every number
+``that can be expressed as an infinite decimal expansion"
+\cite{the_editors_of_encyclopaedia_britannica_real_2022}.
 
 % \plt{If symbols are used to show mathematical operations,
 %   these should be summarized here.  In some cases the easiest way to summarize
@@ -689,8 +696,8 @@ on.
 {
   The above equation gives the general form of the matrix equation where
   $\textbf{A}$ is of type $\mathbb{R}^{m\times n}$, $\textbf{b}$ is of type
-  $\mathbb{R}^{m \times 1}$, and $\textbf{x}$ is of type
-  $\mathbb{R}^{n \times 1}$. \sjc{Is this type information redundant to have
+  $\mathbb{R}^{m}$, and $\textbf{x}$ is of type
+  $\mathbb{R}^{n}$. \sjc{Is this type information redundant to have
     here?} The values of $\textbf{x}$ are unknown
   and will be solved for \cite{margalit_matrix_2019}.
 }

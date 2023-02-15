@@ -221,6 +221,7 @@
   finalize formatting                                                                                        \\
   Feb. 14, 2023       & 1.0.0         & Improve mathematical notation
   (remove ``$\times 1$'' from vector types, define $\mathbb{R}$) and citations                               \\
+                      & 1.0.1         & Improve requirements based on feedback                               \\
   \bottomrule
 \end{tabularx}
 
@@ -1219,13 +1220,12 @@ qualities that the software is expected to exhibit.
     inputted equation is feasible (see \nameref{sec_termsDefs};	from
     \iref{feasible}).
 
+  \item[R\refstepcounter{reqnum}\thereqnum \label{R_infeasOutput}:] If the
+    inputted equation is infeasible, output a descriptive message.
+
   \item[R\refstepcounter{reqnum}\thereqnum \label{R_balance}:] If the
     inputted equation is feasible, balance the chemical equation with the smallest
     whole number coefficients possible (from \iref{balance}).
-
-  \item[R\refstepcounter{reqnum}\thereqnum \label{R_infeasOutput}:] If the
-    inputted equation is infeasible, output a descriptive message.
-    \sjc{Should this go before \rref{R_balance}?}
 
   \item[R\refstepcounter{reqnum}\thereqnum \label{R_feasOutput}:] If the
     inputted equation is feasible, output a balanced form of the equation in the
@@ -1273,15 +1273,9 @@ qualities that the software is expected to exhibit.
     of the VnV Plan.
 
   \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_maintainability}:]
-    \textbf{Maintainability:} The traceability between requirements, assumptions,
-    theoretical models, general definitions, data definitions, instance models,
-    likely changes, and unlikely changes is completely recorded in
-    traceability matrices in the SRS.
-
-    %  \plt{The effort required to make any of the likely
-    %    changes listed for \progname{} should be less than FRACTION of the original
-    %    development time.  FRACTION is then a symbolic constant that can be defined
-    %    at the end of the report.}
+    \textbf{Maintainability:} The development time for any of the likely
+    changes should not exceed $\text{MAINTAIN\_FRAC}$ of the original
+    development time.
 
   \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_portability}:]
     \textbf{Portability:} \progname{} should be able to run on systems with the
@@ -1442,8 +1436,8 @@ shows the dependencies of requirements on instance models.
       \rref{R_input}                 &                &                 &                \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
       \rref{R_convert}               & X              &                 &                \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
       \rref{R_feasible}              &                & X               &                \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
-      \rref{R_balance}               &                &                 & X              \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
       \rref{R_infeasOutput}          &                &                 &                \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
+      \rref{R_balance}               &                &                 & X              \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
       \rref{R_feasOutput}            &                &                 & X              \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
       \nfrref{NFR_accuracy}          &                &                 & X              \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
       \nfrref{NFR_understandability} &                &                 &                \\ \hline % &                &                  &                   &                  &                       &                     &                       &                                &                        &                              &                          &                            \\ \hline
@@ -1501,14 +1495,11 @@ shows the dependencies of requirements on instance models.
 %   organized as a prioritized list of requirements, or it could should the
 %   requirements that will be implemented for ``phase 1'', ``phase 2'', etc.}
 
-% \section{Values of Auxiliary Constants}
+~\newpage
 
-% \plt{Show the values of the symbolic parameters introduced in the report.}
+\section{Values of Auxiliary Constants}
 
-% \plt{The definition of the requirements will likely call for SYMBOLIC\_CONSTANTS.
-%   Their values are defined in this section for easy maintenance.}
-
-% \plt{The value of FRACTION, for the Maintainability NFR would be given here.}
+$\text{MAINTAIN\_FRAC} = 1/10$
 
 ~\newpage
 

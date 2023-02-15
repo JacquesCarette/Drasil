@@ -664,6 +664,84 @@ R3 of the SRS \sjc{Add link}. \sjc{Justify the choice of these specific tests.}
 
 \end{enumerate}
 
+\subsubsection{Infeasible Reaction Output Testing}
+
+If a chemical equation is infeasible, it is important to notify the user as to
+why, in case it is a mistake on the part of the user. This section defines
+tests for outputting a descriptive message if an equation is infeasible from
+R5 of the SRS \sjc{Add link}. \sjc{Justify the choice of these specific tests.}
+The test cases here were chosen to represent different reason that a chemical
+reaction could be infeasible.
+
+\begin{enumerate}
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_over_valid_out}:]
+    \textbf{Test for Output for Valid Chemical Equation that is Infeasible
+      due to Overconstrained System}
+
+    Control: Manual/Automated \sjc{TBD}
+
+    Initial State: \progname{} is started and the following matrix from
+    \cite{hamid_balancing_2019}\footnote{While \cite{hamid_balancing_2019}
+      does not include a matrix representation, the
+      system of equations it provides has a typo: the equation for $\ce{N}$
+      should be $6x_1 = x_5$, since $\ce{NO2}$ only has one $\ce{N}$.} is
+    stored in memory and has been determined to be infeasible:
+    $$\begin{bmatrix}
+        4 & 2 & 0  & -2 & 0  & 0  \\
+        1 & 0 & 0  & 0  & 0  & -1 \\
+        6 & 0 & -1 & 0  & 0  & 0  \\
+        6 & 0 & 0  & 0  & -1 & 0  \\
+        0 & 2 & 0  & -1 & 0  & -1 \\
+        0 & 3 & -2 & -4 & -2 & 0
+      \end{bmatrix}$$
+
+    Input: --
+
+    Output: A descriptive message stating that the inputted chemical reaction
+    is infeasible because the system is overconstrained.
+
+    Test Case Derivation: The matrix represents a chemical equation that is
+    infeasible since
+    each compound has more than one element, so changing any coefficient
+    affects the number of some other element, causing a chain reaction that
+    does not converge. There is no solution to this system other than the
+    trivial solution ($\mathbf{0}$) \cite{hamid_balancing_2019}.
+
+    How test will be performed: The output will be verified to ensure that an
+    appropriate message is displayed to the user.
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_cons_mass_valid_out}:]
+    \textbf{Test for Output for Valid Chemical Equation that is Infeasible
+      due to Conservation of Mass Violation}
+
+    Control: Manual/Automated \sjc{TBD}
+
+    Initial State: \progname{} is started, and the following matrix is
+    stored in memory and has been determined to be infeasible:
+    $$\begin{bmatrix}
+        2 & -1 & 0  \\
+        6 & 0  & -2 \\
+        0 & -2 & -1
+      \end{bmatrix}$$
+
+    Input: --
+
+    Output: A descriptive message stating that the inputted chemical reaction
+    is infeasible because an element is present on one side of the equation but
+    not the other. \sjc{Is this test meaningful? The output should likely give
+      the specific elements to the user, which isn't possible to ascertain just
+      from the matrix representation.}
+
+    Test Case Derivation: The matrix represents a chemical equation is
+    infeasible since
+    every element does not exist on both sides of the equation, which violates
+    the Law of Conservation of Mass (TM1 from SRS \sjc{add link}).
+
+    How test will be performed: The output will be verified to ensure that an
+    appropriate message is displayed to the user.
+\end{enumerate}
+
 \subsubsection{Balancing Testing}
 
 The main purpose of \progname{} is to balance chemical equations, so this
@@ -785,84 +863,6 @@ three and four) must also be swapped.
     How test will be performed: The outputted matrix will be automatically
     compared to the expected output.
 
-\end{enumerate}
-
-\subsubsection{Infeasible Reaction Output Testing}
-
-If a chemical equation is infeasible, it is important to notify the user as to
-why, in case it is a mistake on the part of the user. This section defines
-tests for outputting a descriptive message if an equation is infeasible from
-R5 of the SRS \sjc{Add link}. \sjc{Justify the choice of these specific tests.}
-The test cases here were chosen to represent different reason that a chemical
-reaction could be infeasible.
-
-\begin{enumerate}
-
-  \item[T\refstepcounter{testnum}\thetestnum \label{test_over_valid_out}:]
-    \textbf{Test for Output for Valid Chemical Equation that is Infeasible
-      due to Overconstrained System}
-
-    Control: Manual/Automated \sjc{TBD}
-
-    Initial State: \progname{} is started and the following matrix from
-    \cite{hamid_balancing_2019}\footnote{While \cite{hamid_balancing_2019}
-      does not include a matrix representation, the
-      system of equations it provides has a typo: the equation for $\ce{N}$
-      should be $6x_1 = x_5$, since $\ce{NO2}$ only has one $\ce{N}$.} is
-    stored in memory and has been determined to be infeasible:
-    $$\begin{bmatrix}
-        4 & 2 & 0  & -2 & 0  & 0  \\
-        1 & 0 & 0  & 0  & 0  & -1 \\
-        6 & 0 & -1 & 0  & 0  & 0  \\
-        6 & 0 & 0  & 0  & -1 & 0  \\
-        0 & 2 & 0  & -1 & 0  & -1 \\
-        0 & 3 & -2 & -4 & -2 & 0
-      \end{bmatrix}$$
-
-    Input: --
-
-    Output: A descriptive message stating that the inputted chemical reaction
-    is infeasible because the system is overconstrained.
-
-    Test Case Derivation: The matrix represents a chemical equation that is
-    infeasible since
-    each compound has more than one element, so changing any coefficient
-    affects the number of some other element, causing a chain reaction that
-    does not converge. There is no solution to this system other than the
-    trivial solution ($\mathbf{0}$) \cite{hamid_balancing_2019}.
-
-    How test will be performed: The output will be verified to ensure that an
-    appropriate message is displayed to the user.
-
-  \item[T\refstepcounter{testnum}\thetestnum \label{test_cons_mass_valid_out}:]
-    \textbf{Test for Output for Valid Chemical Equation that is Infeasible
-      due to Conservation of Mass Violation}
-
-    Control: Manual/Automated \sjc{TBD}
-
-    Initial State: \progname{} is started, and the following matrix is
-    stored in memory and has been determined to be infeasible:
-    $$\begin{bmatrix}
-        2 & -1 & 0  \\
-        6 & 0  & -2 \\
-        0 & -2 & -1
-      \end{bmatrix}$$
-
-    Input: --
-
-    Output: A descriptive message stating that the inputted chemical reaction
-    is infeasible because an element is present on one side of the equation but
-    not the other. \sjc{Is this test meaningful? The output should likely give
-      the specific elements to the user, which isn't possible to ascertain just
-      from the matrix representation.}
-
-    Test Case Derivation: The matrix represents a chemical equation is
-    infeasible since
-    every element does not exist on both sides of the equation, which violates
-    the Law of Conservation of Mass (TM1 from SRS \sjc{add link}).
-
-    How test will be performed: The output will be verified to ensure that an
-    appropriate message is displayed to the user.
 \end{enumerate}
 
 \subsubsection{Feasible Reaction Output Testing}

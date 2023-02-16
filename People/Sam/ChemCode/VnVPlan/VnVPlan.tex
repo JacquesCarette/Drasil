@@ -51,6 +51,7 @@
   Feb. 16, 2023       & 0.1.8         & Move (reordered) ``system tests'' to
   unit test section (commented out), convert them to true system tests, and
   tweak balancing accuracy test appropriately                                \\
+                      & 0.1.9         & Add static test for element support  \\
   \bottomrule
 \end{tabularx}
 
@@ -192,16 +193,34 @@ This document ... \wss{provide an introductory blurb and roadmap of the
 
 The tests in each section are given in order of increasing
 complexity/likelihood of the situation arising during use of \progname{}.
-These tests will be performed automatically. Note that the input/output format
-for each test is an abstract representation, as the specific format of each
-input/output is a design decision that is not made at this stage.
 
 \wss{Include a blurb here to explain why the subsections below
   cover the requirements.  References to the SRS would be good here.}
 
+\subsubsection{Element Support Testing}
+
+\begin{enumerate}
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_element_support}:]
+    \textbf{Test for Element Support}
+
+    Test Case Derivation: In order for the user to be able to work with any
+    possible chemical reaction, they must be able to enter each of the
+    currently known 118 elements.
+
+    How test will be performed: Static analysis will be performed against the
+    list of elements from \cite{helmenstine_list_2020}, ensuring that the
+    symbol of every element can be processed as input and used throughout the
+    execution of \progname{}.
+
+\end{enumerate}
+
 \subsubsection{Feasible Reaction Testing}
 
 The following tests are for equations of feasible chemical reactions.
+These tests will be performed automatically. Note that the input/output format
+for each test is an abstract representation, as the specific format of each
+input/output is a design decision that is not made at this stage.
 
 \begin{enumerate}
 
@@ -256,6 +275,9 @@ The following tests are for equations of feasible chemical reactions.
 \subsubsection{Infeasible Reaction Testing}
 
 The following tests are for equations of infeasible chemical reactions.
+These tests will be performed automatically. Note that the input/output format
+for each test is an abstract representation, as the specific format of each
+input/output is a design decision that is not made at this stage.
 
 \begin{enumerate}
 

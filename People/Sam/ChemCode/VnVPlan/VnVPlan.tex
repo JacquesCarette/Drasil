@@ -52,6 +52,7 @@
   unit test section (commented out), convert them to true system tests, and
   tweak balancing accuracy test appropriately                                \\
                       & 0.1.9         & Add static test for element support  \\
+  Feb. 18, 2023       & 0.1.10        & Improve formatting of existing tests \\
   \bottomrule
 \end{tabularx}
 
@@ -194,9 +195,6 @@ This document ... \wss{provide an introductory blurb and roadmap of the
 The tests in each section are given in order of increasing
 complexity/likelihood of the situation arising during use of \progname{}.
 
-\wss{Include a blurb here to explain why the subsections below
-  cover the requirements.  References to the SRS would be good here.}
-
 \subsubsection{Element Support Testing}
 
 \begin{enumerate}
@@ -210,15 +208,17 @@ complexity/likelihood of the situation arising during use of \progname{}.
 
     How test will be performed: Static analysis will be performed against the
     list of elements from \cite{helmenstine_list_2020}, ensuring that the
-    symbol of every element can be processed as input and used throughout the
-    execution of \progname{}.
+    symbol of every element can be used throughout the execution of
+    \progname{}. This includes the input stage (from R1 from SRS \sjc{add
+      link}), the conversion stage (from R2 from SRS \sjc{add link}), and the
+    output stage (from R4 and R6 from SRS \sjc{add link}).
 
 \end{enumerate}
 
 \subsubsection{Feasible Reaction Testing}
 
-The following tests are for equations of feasible chemical reactions.
-These tests will be performed automatically. Note that the input/output format
+The following tests are for equations of feasible chemical reactions and
+will be performed automatically. Note that the input/output format
 for each test is an abstract representation, as the specific format of each
 input/output is a design decision that is not made at this stage.
 
@@ -274,8 +274,8 @@ input/output is a design decision that is not made at this stage.
 
 \subsubsection{Infeasible Reaction Testing}
 
-The following tests are for equations of infeasible chemical reactions.
-These tests will be performed automatically. Note that the input/output format
+The following tests are for equations of infeasible chemical reactions and
+will be performed automatically. Note that the input/output format
 for each test is an abstract representation, as the specific format of each
 input/output is a design decision that is not made at this stage.
 
@@ -323,15 +323,12 @@ input/output is a design decision that is not made at this stage.
 
     Chemical equations are only useful if they are
     balanced \cite{lund_introduction_2023}, so computed coefficients should be
-    exact. Since these coefficients should be as small as possible
-    \cite{lund_introduction_2023}, there is exactly one possible set of
-    coefficients for each feasible chemical equation, and since they are
-    whole numbers \cite{lund_introduction_2023}, they can be compared for
-    equality by a computer.
-
-    The \nameref{sec_sysFunReqs} will be performed by comparing the actual
-    output to the expected output to ensure that they are exactly equal (e.g.,
-    by using integer comparison).
+    exact. Since these coefficients should be the smallest possible whole
+    numbers \cite{lund_introduction_2023}, there is exactly one possible set of
+    coefficients for each feasible chemical equation and exact equality between
+    this expected output and the actual output can be checked by a computer
+    (e.g., by using integer comparison). This verification will be performed by
+    the \nameref{sec_sysFunReqs}.
 
 \end{enumerate}
 

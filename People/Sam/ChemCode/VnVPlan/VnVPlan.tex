@@ -2,6 +2,7 @@
 
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{colortbl}
 \usepackage{hyperref}
 \hypersetup{
     colorlinks,
@@ -33,29 +34,30 @@
 \section{Revision History}
 
 \begin{tabularx}{\textwidth}{llX}
-  \toprule {\bf Date} & {\bf Version} & {\bf Notes}                          \\
+  \toprule {\bf Date} & {\bf Version} & {\bf Notes}                            \\
   \midrule
   Feb. 5, 2023        & 0.0           & Create document and remove
-  inapplicable content                                                       \\
-  Feb. 7-8, 2023      & 0.1           & Add input tests                      \\
-  Feb. 8, 2023        & 0.1.1         & Improve referencing of tests         \\
+  inapplicable content                                                         \\
+  Feb. 7-8, 2023      & 0.1           & Add input tests                        \\
+  Feb. 8, 2023        & 0.1.1         & Improve referencing of tests           \\
                       & 0.1.2         & Add matrix conversion tests and
   improve input tests, including rationale, labelling, and chemical
-  equations                                                                  \\
-  Feb. 9, 2023        & 0.1.3         & Add tests for trivial equation       \\
-                      & 0.1.4         & Add feasibility tests                \\
+  equations                                                                    \\
+  Feb. 9, 2023        & 0.1.3         & Add tests for trivial equation         \\
+                      & 0.1.4         & Add feasibility tests                  \\
   Feb. 13, 2023       & 0.1.5         & Clarify notion of matrices having
-  the same solution after swapping rows and/or columns                       \\
-  Feb. 13-14, 2023    & 0.1.6         & Add balancing and output tests       \\
-  Feb. 14, 2023       & 0.1.7         & Add accuracy test for balancing      \\
+  the same solution after swapping rows and/or columns                         \\
+  Feb. 13-14, 2023    & 0.1.6         & Add balancing and output tests         \\
+  Feb. 14, 2023       & 0.1.7         & Add accuracy test for balancing        \\
   Feb. 16, 2023       & 0.1.8         & Move (reordered) ``system tests'' to
   unit test section (commented out), convert them to true system tests, and
-  tweak balancing accuracy test appropriately                                \\
-                      & 0.1.9         & Add static test for element support  \\
+  tweak balancing accuracy test appropriately                                  \\
+                      & 0.1.9         & Add static test for element support    \\
   Feb. 18, 2023       & 0.1.10        & Improve formatting of existing
-  tests, including adding references to requirements                         \\
+  tests, including adding references to requirements                           \\
   Feb. 19, 2023       & 0.1.11        & Add remaining tests for
-  nonfunctional requirements (except for NFR4 \sjc{add link})                \\
+  nonfunctional requirements (except for NFR4 \sjc{add link})                  \\
+                      & 0.1.12        & Fill in \nameref{sec_vnv_team} section \\
   \bottomrule
 \end{tabularx}
 
@@ -64,7 +66,6 @@
 \tableofcontents
 
 \listoftables
-\wss{Remove this section if it isn't needed}
 
 \listoffigures
 \wss{Remove this section if it isn't needed}
@@ -78,6 +79,7 @@
   \toprule
   \textbf{symbol} & \textbf{description}   \\
   \midrule
+  CAS             & Computing and Software \\
   SUS             & System Usability Scale \\
   T               & Test                   \\
   \bottomrule
@@ -124,11 +126,58 @@ This document ... \wss{provide an introductory blurb and roadmap of the
 \wss{Introduce this section.   You can provide a roadmap of the sections to
   come.}
 
-\subsection{Verification and Validation Team}
+\subsection{Verification and Validation Team} \label{sec_vnv_team}
 
-\wss{Your teammates.  Maybe your supervisor.
-  You shoud do more than list names.  You should say what each person's role is
-  for the project's verification.  A table is a good way to summarize this information.}
+Each teammate has its role listed in \nameref{table_team} according to the
+following roles:
+
+\begin{itemize}
+  \item \textbf{Author}: The person writing the documentation and Drasil
+        implementation of \progname{}.
+
+  \item \textbf{Project Supervisor}: The person in charge of the \progname{}
+        project, including its implementation in Drasil.
+
+  \item \textbf{Reviewer}: A person in charge of ensuring that the
+        documentation and/or implementation of \progname{} meets the needs of
+        the CAS 741 course (this may be limited to one artifact).
+
+  \item \textbf{Validator}: A person in charge of ensuring that the
+        documentation and/or implementation of \progname{} meets the goals of
+        its implementation in Drasil.
+
+  \item \textbf{Verifier}: A person in charge of ensuring that the
+        implementation of \progname{} meets the requirements from its SRS.
+
+\end{itemize}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{| l | l |}
+    \hline
+    \rowcolor[gray]{0.9}
+    \bf Name          & \bf Role                                \\
+    \hline
+    Dr.~Spencer Smith & Project Supervisor, Reviewer, Validator \\
+    \hline
+    Samuel Crawford   & Author, Reviewer, Validator, Verifier   \\
+    \hline
+    Jason Balaci      & Reviewer, Validator                     \\
+    \hline
+    Deesha Patel      & SRS Reviewer                            \\
+    \hline
+    Maryam Valian     & VnV Plan Reviewer                       \\
+    \hline
+    Karen Wang        & Drasil Implementation Reviewer          \\
+    \hline
+    Drasil Team       & Validators, Verifiers                   \\
+    \hline
+    Class of CAS 741  & Reviewers                               \\
+    \hline
+  \end{tabular}
+  \caption{Table of Teammates and Their Roles}
+  \label{table_team}
+\end{table}
 
 \subsection{SRS Verification Plan}
 

@@ -54,6 +54,8 @@
                       & 0.1.9         & Add static test for element support  \\
   Feb. 18, 2023       & 0.1.10        & Improve formatting of existing
   tests, including adding references to requirements                         \\
+  Feb. 19, 2023       & 0.1.11        & Add remaining tests for
+  nonfunctional requirements (except for NFR4 \sjc{add link})                \\
   \bottomrule
 \end{tabularx}
 
@@ -74,9 +76,10 @@
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{l l}
   \toprule
-  \textbf{symbol} & \textbf{description} \\
+  \textbf{symbol} & \textbf{description}   \\
   \midrule
-  T               & Test                 \\
+  SUS             & System Usability Scale \\
+  T               & Test                   \\
   \bottomrule
 \end{tabular}\\
 
@@ -319,6 +322,10 @@ input/output is a design decision that is not made at this stage.
 
 \subsection{Tests for Nonfunctional Requirements}
 
+There are no tests for maintainability because this is the responsibility of
+the Drasil team, as Drasil is responsible for generated the actual
+implementation of \progname{}.
+
 \subsubsection{Accuracy Testing}
 
 \begin{enumerate}
@@ -326,55 +333,87 @@ input/output is a design decision that is not made at this stage.
   \item[T\refstepcounter{testnum}\thetestnum \label{test_bal_accuracy}:]
     \textbf{Test for Accuracy of Balancing}
 
-    Chemical equations are only useful if they are
+    Type: Dynamic, Automatic
+
+    Test Case Derivation: Chemical equations are only useful if they are
     balanced \cite{lund_introduction_2023}, so computed coefficients should be
     exact. Since these coefficients should be the smallest possible whole
     numbers \cite{lund_introduction_2023}, there is exactly one possible set of
     coefficients for each feasible chemical equation and exact equality between
     this expected output and the actual output can be checked by a computer
-    (e.g., by using integer comparison). This verification will be performed by
-    the \nameref{sec_sysFunReqs} and satisfies R1, R2, R3, R5, R6, and NFR1
-    from SRS \sjc{add link}.
+    (e.g., by using integer comparison).
+
+    How test will be performed: This verification will be performed by
+    the \nameref{sec_sysFunReqs} using integer comparison and satisfies R1, R2,
+    R3, R5, R6, and NFR1 from SRS \sjc{add link}.
 
 \end{enumerate}
 
-\wss{Tests related to usability could include conducting a usability test and
-  survey.  The survey will be in the Appendix.}
-
-\wss{Static tests, review, inspections, and walkthroughs, will not follow the
-  format for the tests given below.}
-
-\subsubsection{Area of Testing1}
-
-\paragraph{Title for Test}
+\subsubsection{Understandability Testing}
 
 \begin{enumerate}
 
-  \item[T\refstepcounter{testnum}\thetestnum \label{test_label}:]
-    \textbf{Title of Test}
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_understand}:]
+    \textbf{Test for Understandability of \progname{}}
 
-    Type: Functional, Dynamic, Manual, Static etc.
+    Type: Dynamic, Manual
 
-    Initial State:
+    How test will be performed: New typical users will be asked to input a
+    valid chemical reaction to be balanced by the system. At least
+    USER\_FRAC of users should be able to do so within
+    FIRST\_USE\_TIME.
 
-    Input/Condition:
+\end{enumerate}
 
-    Output/Result:
+\subsubsection{Usability Testing}
 
-    How test will be performed:
+\begin{enumerate}
 
-  \item[T\refstepcounter{testnum}\thetestnum \label{test_label2}:]
-    \textbf{Title of Test}
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_usable}:]
+    \textbf{Test for Usability of \progname{}}
 
-    Type: Functional, Dynamic, Manual, Static etc.
+    Type: Dynamic, Manual
 
-    Initial State:
+    How test will be performed: Typical users will be told how \progname{}
+    works and then instructed to input the chemical equations from the
+    \nameref{sec_sysFunReqs} to be balanced. They will then be asked the
+    questions from the System Usability Scale (SUS) \cite{thomas_how_2015}
+    (see \nameref{sec_usableSurvey}). The average score should be at least
+    SUS\_SCORE.
 
-    Input:
+\end{enumerate}
 
-    Output:
+\subsubsection{Portability Testing}
 
-    How test will be performed:
+\begin{enumerate}
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_portable}:]
+    \textbf{Test for Portability of \progname{}}
+
+    Type: Dynamic
+
+    Test Case Derivation: \progname{} may be used by a large variety of users
+    who may have different systems.
+
+    How test will be performed: This verification will be performed by
+    ensuring the correct programming language(s) is/are installed on both a
+    Windows and macOS system and the \nameref{sec_sysFunReqs} will be
+    performed. % This satisfies R1, R2,
+    % R3, R5, R6, and NFR1 from SRS \sjc{add link}.
+
+\end{enumerate}
+
+\subsubsection{Verifiability Testing}
+
+\begin{enumerate}
+
+  \item[T\refstepcounter{testnum}\thetestnum \label{test_verifiable}:]
+    \textbf{Test for Verifiability of \progname{}}
+
+    Type: Dynamic, Static
+
+    How test will be performed: All other tests from this plan will be
+    performed successfully.
 
 \end{enumerate}
 
@@ -1298,15 +1337,41 @@ input/output is a design decision that is not made at this stage.
 
 \section{Appendix}
 
-This is where you can place additional information.
-
 \subsection{Symbolic Parameters}
 
-The definition of the test cases will call for SYMBOLIC\_CONSTANTS.
-Their values are defined in this section for easy maintenance.
+Symbolic constants used in test cases are defined here for easy
+maintenance.
 
-\subsection{Usability Survey Questions?}
+\begin{itemize}
+  \item FIRST\_USE\_TIME = 10 minutes
+  \item SUS\_SCORE = 75 (note that ``the average System Usability Scale score
+        is 68'' \cite{thomas_how_2015})
+  \item USER\_FRAC = 80\%
+\end{itemize}
 
-\wss{This is a section that would be appropriate for some projects.}
+\subsection{Usability Survey} \label{sec_usableSurvey}
+
+This survey was taken from \cite{thomas_how_2015}. The user will be asked to
+answer the following questions on a scale of one to five, where one means
+``Strongly Disagree'' and five means ``Strongly Agree.'' The scores for all
+odd-numbered questions will be decremented by one, the even-numbered question
+scores will be subtracted from five, and the sum of these new values will be
+multiplied by 2.5 to yield the final score.
+
+\begin{enumerate}
+  \item I think that I would like to use this system frequently.
+  \item I found the system unnecessarily complex.
+  \item I thought the system was easy to use.
+  \item I think that I would need the support of a technical person to be able
+        to use this system.
+  \item I found the various functions in this system were well integrated.
+  \item I thought there was too much inconsistency in this system.
+  \item I would imagine that most people would learn to use this system very
+        quickly.
+  \item I found the system very cumbersome to use.
+  \item I felt very confident using the system.
+  \item I needed to learn a lot of things before I could get going with this
+        system.
+\end{enumerate}
 
 \end{document}

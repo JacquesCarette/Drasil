@@ -1,75 +1,121 @@
-\chapter{Introduction}
+\chapter{Introduction} \label{intro}
+Scientific computing (SC) is an intersection of computer science, mathematics, 
+and science. It is a field that solves complex scientific problems by using 
+computing techniques and tools. Writing documentation is a process of 
+developing scientific software. The role of documentation is to help 
+people better understand the software and to ``communicate information to its 
+audience and instil knowledge of the system it describes" 
+\cite{forward2002software}. The significance of software documentation has 
+been presented in many papers by previous researchers \cite{parnas2011precise}, 
+\cite{chomal2014significance}, \cite{kipyegen2013importance}. It is further 
+shown by Smith et al. \cite{SmithandKoothoor2016}, \cite{SmithandYu2007} that 
+developing scientific computing software (SCS) in a document-driven methodology 
+improves the quality of the software . 
 
-Jupyter Notebook can be generated from codified knowledge to improve their 
-reusability, usability, reliability, and modifiability. In many software 
-engineering domains, like scientific computing, knowledge is duplicate across 
-software artifacts, which sometimes make it difficult and tedious to write 
-and maintain them manually. 
+Jupyter Notebook is a system for creating and sharing data science and 
+scientific computing documentation. It is a nonprofit, open-source application 
+born out in 2014, providing interactive computing across multiple programming 
+languages, such as Python, Javascript, Matlab, and R. A Jupyter Notebook 
+integrates text, live code, equations, computational outputs, visualizations, 
+and multimedia resources, including images and videos. Jupyter Notebook is one 
+of the most widely used interactive systems among scientists. Its popularity 
+has grown from 200,000 to 2.5 million public Jupyter Notebooks on GitHub in 
+three years from 2015 to 2018 \cite{Jeffrey2018}. It is used in a variety of 
+areas and ways because of its flexibility and added values. For example, the 
+notebook can be used as an educational tool in engineering courses, enhancing 
+teaching and learning efficiency \cite{cardoso2019using}, \cite{zhao2019use}.
 
-Generative programming is a technique to address this problem. It allows 
-programmers to write the code or document at a higher abstract level, and the 
-generator produces the desired outputs. With generative programming, we can do 
-things more efficiently since automation increases the efficiency. Drasil is an 
-application of generative programming, and it is the framework we used in this 
-research. We are tyring to generate Jupyter Notebook in Drasil to extend the 
-flexibility of Drasil and to acheive the reusability, usability, and 
-maintainability of software artifacts. 
+Even though the importance of documentation is widely recognized, it is often 
+missing or poorly documented in SCS because: i) scientists are not aware of 
+the why, how, and what of documentation \cite{hermann2022documenting}, 
+\cite{chang2022understanding}; ii) it is time-consuming to produce 
+\cite{sanders2008dealing}; iii) scientists generally believe that writing 
+documentation demands more work and effort than they would likely yield in 
+terms of the benefits of it \cite{smith2016advantages}.
+
+We are trying to increase the efficiency of documentation development by 
+adopting generative programming. Generative programming is a technique that 
+allows programmers to write the code or document at a higher abstraction level, 
+and the generator produces the desired outputs. Drasil is an application of 
+generative programming, and it is the framework we use to conduct this 
+research. Drasil saves us more time in the documentation development process by 
+letting us encode each piece of information of our scientific problems once and 
+generating the document automatically.
+
 
 \section{Background}
 \subsection{Drasil}
 Drasil is a framework that can generate software artifacts, including Software 
-Requirement Specification (SRS), code (C++, C\#, Java, and Python), README, and 
-Makefile, from a stable knowledge base. The main goals are to reduce knowledge 
-duplication and improve traceability. Drasil captures the knowledge through our 
-hand-made case studies; it allows users to provide recipes of their scientific 
-problems and generate code and documentation. Each piece of information is 
-encoded in Drasil once and that information can be used wherever it is needed. 
-Drasil is capable of generating SRS in document languages HTML and LaTeX. We 
-are working on increasing our automated database and improving how we encode 
-the recipes.
+Requirement Specifications (SRS), code (C++, C\#, Java, and Python), README, 
+and Makefile, from a stable knowledge base. The goals of Drasil are reducing 
+knowledge duplication and improving traceability \cite{drasil}. Drasil captures 
+the knowledge through our hand-made case studies. We currently have 10 case 
+studies that cover different physics problems, such as Projectile and Pendulum. 
+Recipes for scientific problems are encoded in Drasil, and it generates code 
+and documentation for us. Each piece of information only needs to be provided 
+to Drasil once, and that information can be used wherever it is needed (note: 
+add an example). SRS is a template for designing and documenting scientific 
+computing software requirement decisions created by Smith et al 
+\cite{smith2005new}. Drasil is capable of generating SRS in document languages 
+HTML and LaTeX. We are looking to extend the capability of Drasil by generating 
+Jupyter Notebook in Drasil.
 
 \subsection{Jupyter Notebook}
 Jupyter Notebook is an interactive open-source web application for creating and 
-sharing documents that contain text, executable code, equations, graphics, and 
-visualizations. 
-There are several advantages of Jupyter Notebook: sharable, all-in-one, and 
-executable code and equations. First of all, the notebook is easy to share 
-because it can be converted into other formats 
-such as HTML, Markdown, and PDF. Another benefit is that 
-it combines all aspects of data in one single document, making the document 
-easier to visualize, maintain and modify. In addition, Juypyter Notebook 
-provides an environment of executable code and equations. Programmers don't 
-have to write the entire program before executing it, the notebook can execute 
-a specific portion of the code. Jupyter Notebook is especially useful in data 
-science based on its uses and the benefits mentioned above.
+sharing computational science documentation that contains text, executable 
+code, mathematical equations, graphics, and visualizations.
+
+\subsubsection{Structure of a notebook document}
+A Jupyter Notebook has two components: front-end ``cells" and back-end 
+``kernels". The notebook consists of a sequence of cells: code cells, markdown 
+cells, and raw cells. A cell is a multiline text input field. The notebook 
+works by users entering a piece of information (text or programming code) in 
+cells from the web page user interface. That information is then passed to the 
+back-end kernels which execute the code and return the results 
+\cite{notebookdoc}.
+
+\subsubsection{Values of Jupyter Notebook}
+There are several values of Jupyter Notebook: sharable, all-in-one, and live 
+code. First of all, the notebook is easy to share because it can be converted 
+into other formats such as HTML, Markdown, and PDF. Secondly, it combines all 
+aspects of data in one single document, making the document easy to visualize, 
+maintain and modify. In addition, Jupyter Notebook provides an environment of 
+live code and computational equations. Usually, when programmers are running 
+code on some other IDEs, they have to write the entire program before executing 
+it. However, the notebook allows programmers to execute a specific portion of 
+the code without running the whole program. The ability to run a snippet of 
+code and integrate with text highlight the usability of the notebook.
 
 \section{Problem Statement}
-Both Jupyter Notebook and Drasil focus on scientific computing, therefore, we 
-are interested in generating Jupyter Notebook in Drasil. Following are the 
-three main problems we are trying to solve:
-\begin{enumerate}
-	\item We need to generate document format that is readable by the 
-	notebook. Jupyter Notebook is a simple JSON document with .ipynb file 
-	extension. Drasil can only write in HTML and LaTeX before; we will
-	need Drasil to be able to generate documents in JSON format so the 
-	documents can be read and written in Jupyter Notebook.
-	\item Not only being able to generate SRS in Drasil, we are trying to 
-	expand the application of Drasil and increase the automated database by 
-	generating a simple physics lesson plan. We need to capture the elements of 
-	chapters, found the family of lesson plans, and classified the 
-	knowledge in order to build a general structure in Drasil so the lesson 
-	plan will be able to generalize to other lessons. 
-	\item Jupyter Notebook is an interactive application for creating documents 
-	that combine text and executable code. However, Drasil doesn't support 
-	interactive receipes right now. We are looking for the possibility to 
-	generate a document with a mix of text and code, increasing the ability of 
-	Drasil and the potential to solve more scientific problems.
-\end{enumerate}
+Since both Jupyter Notebook and Drasil focus on creating and generating 
+scientific computing documentation, we are interested in extending the values 
+of Jupyter Notebook to Drasil and the kind of knowledge we can manipulate. 
+Following are the three main problems we are trying to solve with Drasil in 
+this paper:
 
-By generating Jupyter Notebook in Drasil, we can extend the benefits of Jupyter 
-Notebook, expand the flexibility and the kind of knowledge we can manipulate. 
-In addition, we will be able to improve the reusability, usability, 
-reliability, and modifiability of the generated software artifacts. 
+\begin{enumerate}
+	\item Generate documents in JSON format. Jupyter Notebook is a simple JSON 
+	document with a .ipynb file extension. A Drasil-generated document needs to 
+	have a format that is readable by the notebook. Drasil can only write in 
+	HTML and LaTeX; we will need Drasil to be able to generate documents in 
+	JSON format so that the documents can be read and written in Jupyter 
+	Notebook.
+	\item Develop the structure of lesson plans and generate them. Not only can 
+	Drasil generate SRS, but we would also like to expand its application by 
+	generating lesson plans. As mentioned, Jupyter Notebook is used as an 
+	educational tool for teaching engineering courses. We are interested in 
+	teaching Drasil a ``textbook" structure by starting with generating a 
+	simple physics lesson plan. We are trying to capture the elements of 
+	textbook chapters, find the family of lesson plans, and classify the 
+	knowledge in order to build a general structure in Drasil so that the 
+	lesson plan will be able to generalize to a variety of lessons.
+	\item Generate an interactive notebook. Jupyter Notebook is an interactive 
+	application for creating documents that contain formattable text and 
+	executable code. However, Drasil doesn't support interactive recipes. We 
+	are looking for the possibility of generating a notebook document with a 
+	mix of text and code, increasing the ability of Drasil and its potential to 
+	solve more scientific problems.
+\end{enumerate}
 
 \section{Thesis Outline}
 Thesis outline here.

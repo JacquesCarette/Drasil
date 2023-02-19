@@ -2,7 +2,6 @@
 %\usepackage{gscale_thesis_singlespace} % Single spaced thesis
 \usepackage{gscale_thesis_doublespace} % Double spaced thesis
 \usepackage{fancyheadings} % Header and footer styling
-\usepackage{natbib} % Bibliography formatting
 \usepackage{setspace} % Allows double spacing but skips headers/footers
 \setcounter{tocdepth}{1} % Limits the TOC to chapter and section names
 
@@ -25,6 +24,20 @@
 
 \numberwithin{equation}{section} % Numbers equations based on their section
 
+% Required for biblatex, but also adds functionality for quotation
+\usepackage{csquotes}
+
+\usepackage[
+style=numeric-comp,
+backend=biber,
+sorting=none,
+backref=true,
+maxnames=99,
+alldates=iso,
+seconds=true
+]{biblatex} % bibliography
+\addbibresource{references.bib}
+
 % ********************************
 \begin{document}
 \include{definitions} % LaTeX variables for preface pages/headers
@@ -42,10 +55,6 @@
 
   \include{chapters}          
         
-  \include{sample_chapter}                  
-       \setcounter{figure}{0}
-       \setcounter{equation}{0}
-       \setcounter{table}{0}
 
   \include{conclusion}
         \setcounter{figure}{0}
@@ -65,8 +74,7 @@
 \end{appendix}
 
 % The bibliography is set up to allow for multiple bib files
-\bibliographystyle{ACM-Reference-Format}
-\bibliography{references,references_another}
+\printbibliography
 
 \label{NumDocumentPages}
 

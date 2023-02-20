@@ -38,14 +38,14 @@ gen :: DocSpec -> Document -> PrintingInformation -> IO ()
 gen ds fn sm = prnt sm ds fn -- FIXME: 'prnt' is just 'gen' with the arguments reordered
 
 -- TODO: Include Jupyter into the SRS setup.
--- | Generate the output artifacts (TeX+Makefile or HTML).
+-- | Generate the output artifacts (TeX+Makefile, HTML or Notebook).
 prnt :: PrintingInformation -> DocSpec -> Document -> IO ()
 prnt sm (DocSpec (DC Jupyter _) fn) body =
   do prntDoc body sm fn Jupyter JSON
 prnt sm (DocSpec (DC dtype fmts) fn) body =
   do mapM_ (prntDoc body sm fn dtype) fmts
 
--- | Helper for writing the documents (TeX / HTML) to file.
+-- | Helper for writing the documents (TeX / HTML / JSON) to file.
 prntDoc :: Document -> PrintingInformation -> String -> DocType -> Format -> IO ()
 prntDoc d pinfo fn Jupyter _ = prntDoc' Jupyter "Jupyter" fn JSON d pinfo
 prntDoc d pinfo fn dtype fmt =

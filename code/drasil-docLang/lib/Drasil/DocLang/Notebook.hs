@@ -14,6 +14,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (introduction, learnO
 
 -- | Section constructors for the lesson plan documents/jupyter notebooks.
 -- should be fixed once we have a more concrete idea of the notebook structure
+-- TODO: Remove [Section] since the structure of lesson plans should not be nested
 intro, learnObj, prpsOfDoc, review, caseProb, summary, appendix, reference, example :: [Contents] -> [Section] -> Section
 intro       cs ss = section (titleize Doc.introduction)      cs ss introLabel
 learnObj    cs ss = section (titleize' Doc.learnObj)         cs ss learnObjLabel

@@ -92,18 +92,6 @@ h n       | n < 1 = error "Illegal header (too small)"
                     hash 4 = "#### "
                     hash _ = "Illegal header"
 
-{- Will delete it after checking encode works well
--- JSON formatter
-formatter :: String -> String
-formatter ('"':xs) = '\\' : '"' : formatter xs
-formatter ('\\':xs) = '\\' : '\\' : formatter xs
-formatter (x:xs) = x: formatter xs
-formatter [] = []
-
-jf :: String -> Doc
-jf s = text $ replace "`" "\'" (formatter s)
--}
-
 br :: Doc -> Doc
 -- | Curly braces.
 br x = text "{" <> x <> text"}"
@@ -116,6 +104,18 @@ stripnewLine :: String -> Doc
 stripnewLine s = hcat (map text (splitOn "\n" s))
 --filter (`notElem` "\n" )
 
+-- |  Helper for building markdown cells
+markdownB, markdownB', markdownE, markdownE' :: Doc
+markdownB  = text "{\n \"cells\": [\n  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [" 
+markdownB' = text "  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [" 
+markdownE  = text "    \"\\n\"\n   ]\n  },"
+markdownE' = text "    \"\\n\"\n   ]\n  }\n ],"
+
+-- |  Helper for generate a markdown cell
+markdownCell :: Doc -> Doc
+markdownCell c = markdownB' <> c <> markdownE
+
+-- |  Generate the Metadata necessary for a notebook document.
 makeMetadata :: Doc  
 makeMetadata = vcat [
   text " \"metadata\": {", 

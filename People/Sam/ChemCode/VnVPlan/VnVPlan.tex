@@ -112,6 +112,7 @@
   section                                                                    \\
                       & 0.3.3         & Fill in \nameref{sec_unit_tests}
   section and remove its template content                                    \\
+                      & 0.3.4         & Add final pieces of information      \\
   \bottomrule
 \end{tabularx}
 
@@ -119,7 +120,7 @@
 
 \section{Abbreviations and Acronyms} \label{sec_abbrsAcrs}
 
-In addition to the ones from the \nameref{srs-sec_abbsAcrs} section from the
+In addition to the ones from the \nameref{srs_sec_abbsAcrs} section from the
 SRS \cite{srs}, the following abbreviations and acronyms are used throughout
 this document:
 
@@ -293,11 +294,10 @@ verification (e.g., linters).
 
 There are two sets of goals for \progname{}: those for CAS 741 and those for
 Drasil. The verification of the SRS from Section \ref{sec_srs_verif_plan}
-will help ensure that \progname{} satisfies both sets of goals.
-
-\wss{If there is any external data that can be used for validation, you should
-  point to it here.} \sjc{Would ``external data'' include a database of
-  chemical reactions?}
+will help ensure that \progname{} satisfies both sets of goals. External
+chemical reaction data, such as that from the NIST Chemical Kinetics Database
+\cite{national_institute_of_standards_and_technology_nist_2023}, may also be
+used to validate this software.
 
 \section{System Test Description} \label{sec_sys_tests}
 

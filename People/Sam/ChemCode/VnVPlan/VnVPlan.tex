@@ -57,8 +57,7 @@
   tests, including adding references to requirements                         \\
   Feb. 19, 2023       & 0.1.11        & Add remaining tests for
   nonfunctional requirements (except for NFR4 \sjc{add link})                \\
-                      & 0.2.0         & Start filling in \nameref{sec_plan}
-  section                                                                    \\
+                      & 0.2.0         & Fill in \nameref{sec_plan} section   \\
   \bottomrule
 \end{tabularx}
 
@@ -182,7 +181,7 @@ following roles:
   \label{table_team}
 \end{table}
 
-\subsection{SRS Verification Plan}
+\subsection{SRS Verification Plan} \label{sec_srs_verif_plan}
 
 The first round of review for the SRS will be done on its manual version.
 It will be reviewed first by Samuel Crawford during the writing process, then
@@ -238,15 +237,13 @@ verification (e.g., linters). \sjc{Are Makefiles generated?}
 
 \subsection{Software Validation Plan}
 
+There are two sets of goals for \progname{}: those for CAS 741 and those for
+Drasil. The verification of the SRS from Section \ref{sec_srs_verif_plan}
+will help ensure that \progname{} satisfies both sets of goals.
+
 \wss{If there is any external data that can be used for validation, you should
-  point to it here.  If there are no plans for validation, you should state that
-  here.}
-
-\wss{You might want to use review sessions with the stakeholder to check that
-  the requirements document captures the right requirements.  Maybe task based
-  inspection?}
-
-\wss{This section might reference back to the SRS verification section.}
+  point to it here.} \sjc{Would ``external data'' include a database of
+  chemical reactions?}
 
 \section{System Test Description} \label{sec_sys_tests}
 

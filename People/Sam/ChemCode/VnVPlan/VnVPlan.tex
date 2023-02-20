@@ -58,8 +58,8 @@
   Feb. 19, 2023       & 0.1.11        & Add remaining tests for
   nonfunctional requirements (except for NFR4 \sjc{add link})                \\
                       & 0.2.0         & Fill in \nameref{sec_plan} section   \\
-                      & 0.2.1         & Start filling in
-  \nameref{sec_gen_info} section                                             \\
+                      & 0.2.1         & Fill in \nameref{sec_gen_info}
+  section                                                                    \\
   \bottomrule
 \end{tabularx}
 
@@ -112,20 +112,18 @@ balancing chemical equations so that they may be useful
 
 \subsection{Objectives}
 
-\wss{State what is intended to be accomplished.  The objective will be around
-  the qualities that are most important for your project.  You might have
-  something like: ``build confidence in the software correctness,''
-  ``demonstrate adequate usability.'' etc.  You won't list all of the qualities,
-  just those that are most important.}
+The primary objectives of this plan are to build confidence in the software's
+correctness and to ensure that this project meets the goals of both CAS 741 and
+Drasil.
 
 \subsection{Relevant Documentation}
 
-\wss{Reference relevant documentation.  This will definitely include your SRS
-  and your other project documents (design documents, like MG, MIS, etc).  You
-  can include these even before they are written, since by the time the project
-  is done, they will be written.}
-
-\cite{SRS}
+This plan outlines the process for verifying the SRS \sjc{add link} and this
+VnV Plan in Sections \ref{sec_srs_verif_plan} and \ref{sec_vnv_verif_plan},
+respectively; these are the only relevant pieces of documentation for this
+plan. (Note that design documentation would also be relevant, but since
+\progname{} is being built in Drasil which doesn't generate this documentation,
+it is out of the scope of this project.)
 
 \section{Plan} \label{sec_plan}
 
@@ -209,6 +207,7 @@ its design will be done by the Drasil team according to their process of design
 verification and is therefore out of the scope of this document.
 
 \subsection{Verification and Validation Plan Verification Plan}
+\label{sec_vnv_verif_plan}
 
 The VnV Plan will be reviewed first by Samuel Crawford during the writing
 process, then generally by the class of CAS 741, and then more rigorously by

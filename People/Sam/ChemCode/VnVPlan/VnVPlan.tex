@@ -227,20 +227,14 @@ future, as related to future work on Drasil.
 
 \subsection{Automated Testing and Verification Tools}
 
-\wss{What tools are you using for automated testing.  Likely a unit testing
-  framework and maybe a profiling tool, like ValGrind.  Other possible tools
-  include a static analyzer, make, continuous integration tools, test coverage
-  tools, etc.  Explain your plans for summarizing code coverage metrics.
-  Linters are another important class of tools.  For the programming language
-  you select, you should look at the available linters.  There may also be tools
-  that verify that coding standards have been respected, like flake9 for
-  Python.}
-
-\wss{If you have already done this in the development plan, you can point to
-  that document.}
-
-\wss{The details of this section will likely evolve as you get closer to the
-  implementation.}
+Since the initial implementation of \progname{} will be in Python, pytest will
+be used to automate testing and measure coverage where appropriate. Other
+frameworks for automated testing will be added if/when code for \progname{} is
+generated in more languages. The Drasil repository has continuous integration
+set up to ensure that hlint standards are adhered to and that the code
+compiles \sjc{double check}. Since the code for \progname{} will be generated
+by Drasil, the Drasil team may potentially use other tools as part of its
+verification (e.g., linters). \sjc{Are Makefiles generated?}
 
 \subsection{Software Validation Plan}
 

@@ -10,13 +10,13 @@ module SysInfo.Drasil.SystemInformation (
   -- ** Types
   SystemInformation(..), Block(..),
   -- ** Lenses
-  instModels, datadefs, configFiles, inputs,
+  instModels, datadefs, configFiles, inputs, purpose, background,
   defSequence, constraints, constants, sysinfodb, usedinfodb,
   -- ** Lookup Functions
   citeDB, citationsFromBibMap,
   -- * Reference Database
   -- ** Types
-  ReferenceDB, RefMap,
+  ReferenceDB, RefMap, Purpose, Background,
   -- ** Constructors
   rdb, simpleMap,
   -- ** Lenses
@@ -29,8 +29,10 @@ import Database.Drasil (ChunkDB)
 
 import Control.Lens ((^.), makeLenses)
 import Data.Function (on)
-import Data.List (find, groupBy, sortBy)
+import Data.List (groupBy, sortBy)
+import Data.Maybe (mapMaybe)
 import qualified Data.Map as Map
+
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artifact generation.
@@ -46,7 +48,8 @@ data SystemInformation where
   { _sys         :: a
   , _kind        :: b
   , _authors     :: [c]
-  , _purpose     :: d
+  , _purpose     :: Purpose
+  , _background  :: Background
   , _quants      :: [e]
   , _concepts    :: [f]
   , _instModels  :: [InstanceModel]
@@ -61,6 +64,12 @@ data SystemInformation where
   , _usedinfodb  :: ChunkDB
   , refdb        :: ReferenceDB
   } -> SystemInformation
+
+
+-- | Project Example purpose.
+type Purpose = [Sentence]
+-- | Project Example background information, used in the 'What' section of README.
+type Background = [Sentence]
 
 -- | for listing 'QDefinition's in 'SystemInformation'.
 data Block a = Coupled a a [a] | Parallel a [a]
@@ -78,37 +87,39 @@ citationsFromBibMap bm = sortBy compareAuthYearTitle citations
 -- | Orders two authors. If given two of the exact same authors, year, and title, returns an error.
 compareAuthYearTitle :: (HasFields c) => c -> c -> Ordering
 compareAuthYearTitle c1 c2
-  | cp /= EQ = cp
-  | y1 /= y2 = y1 `compare` y2
-  | t1 /= t2 = t1 `compare` t2
-  | otherwise = error "Couldn't sort authors"
+  | cp /= EQ  = cp
+  | y1 /= y2  = y1 `compare` y2
+  | otherwise = t1 `compare` t2
   where
-    cp = comparePeople (getAuthor c1) (getAuthor c2)
-    y1 = getYear c1
-    y2 = getYear c2
-    t1 = getTitle c1
-    t2 = getTitle c2
+    (a1, y1, t1) = getAuthorYearTitle c1
+    (a2, y2, t2) = getAuthorYearTitle c2
 
--- | Helper that gets the author name from something that has a field.
-getAuthor :: (HasFields c) => c -> People
-getAuthor c = maybe (error "No author found") (\(Author x) -> x) (find isAuthor (c ^. getFields))
-  where isAuthor :: CiteField -> Bool
-        isAuthor (Author _) = True
-        isAuthor _          = False
+    cp = comparePeople a1 a2
 
--- | Helper that gets the year published from something that has a field.
-getYear :: (HasFields c) => c -> Int
-getYear c = maybe (error "No year found") (\(Year x) -> x) (find isYear (c ^. getFields))
-  where isYear :: CiteField -> Bool
-        isYear (Year _) = True
-        isYear _        = False
+-- | Search for the Author, Year, and Title of a Citation-like data type, and
+-- error out if it doesn't have them.
+getAuthorYearTitle :: HasFields c => c -> (People, Int, String)
+getAuthorYearTitle c = (a, y, t)
+  where
+    fs = c ^. getFields
 
--- | Helper that gets the title of the article from something that has a field.
-getTitle :: (HasFields c) => c -> String
-getTitle c = maybe (error "No title found") (\(Title x) -> x) (find isTitle (c ^. getFields))
-  where isTitle :: CiteField -> Bool
-        isTitle (Title _) = True
-        isTitle _         = False
+    justAuthor (Author x) = Just x
+    justAuthor _          = Nothing
+
+    as = mapMaybe justAuthor fs
+    a = if not (null as) then head as else error "No author found"
+
+    justYear (Year x) = Just x
+    justYear _        = Nothing
+
+    ys = mapMaybe justYear fs
+    y = if not (null ys) then head ys else error "No year found"
+
+    justTitle (Title x) = Just x
+    justTitle _         = Nothing
+
+    ts = mapMaybe justTitle fs
+    t = if not (null ts) then head ts else error "No title found"
 
 -- | Database for maintaining references.
 -- The Int is that reference's number.

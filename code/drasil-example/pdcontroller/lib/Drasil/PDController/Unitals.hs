@@ -7,13 +7,11 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.PDController.Concepts
 
-syms, symFS, symFt, symnegInf, symposInf, syminvLaplace, symKd, symKp,
+syms, symFS, symFt, syminvLaplace, symKd, symKp,
        symYT, symYS, symYrT, symYrS, symET, symES, symPS, symDS, symHS,
        symCT, symCS, symTStep, symTSim, symAbsTol, symRelTol,
        symDampingCoeff, symStifnessCoeff :: Symbol
 
-symnegInf        = variable "-∞"
-symposInf        = variable "∞"
 symFS            = sub (variable "F") $ label "s"
 syminvLaplace    = variable "L⁻¹[F(s)]"
 syms             = variable "s"
@@ -40,14 +38,14 @@ symStifnessCoeff = variable "k"
 
 symbols :: [QuantityDict]
 symbols
-  = [qdLaplaceTransform, qdFreqDomain, qdFxnTDomain, qdNegInf, qdPosInf,
+  = [qdLaplaceTransform, qdFreqDomain, qdFxnTDomain,
      qdInvLaplaceTransform, qdPropGain, qdDerivGain, qdSetPointTD, qdSetPointFD,
      qdProcessVariableTD, qdProcessVariableFD, qdProcessErrorTD,
      qdProcessErrorFD, qdDerivativeControlFD, qdPropControlFD,
      qdTransferFunctionFD, qdCtrlVarTD, qdCtrlVarFD, qdStepTime, qdSimTime,
      qdDampingCoeff, qdStiffnessCoeff]
 
-qdLaplaceTransform, qdFreqDomain, qdFxnTDomain, qdNegInf, qdPosInf,
+qdLaplaceTransform, qdFreqDomain, qdFxnTDomain,
                     qdInvLaplaceTransform, qdPropGain, qdDerivGain,
                     qdSetPointTD, qdSetPointFD, qdProcessVariableTD,
                     qdProcessVariableFD, qdProcessErrorTD, qdProcessErrorFD,
@@ -91,14 +89,14 @@ qdSetPointTD = qw ipSetPt
 
 --FIXME: the original timeStep is 0.01, this will trigger an error in Java ODE solver
 --change it from 0.01 to 0.001 is a temporary fix to make ODE solver working
-ipStepTime = constrained' (ucs' stepTime symTStep Real second)
+ipStepTime = constrained' (uc stepTime symTStep Real second)
   [physc $ Bounded (Inc, frac 1 1000) (Exc, sy ipSimTime)]
   (dbl 0.001)
 ipStepTimeUnc = uq ipStepTime defaultUncrt
 qdStepTime = qw ipStepTime
 
 ipSimTime
-  = constrained' (ucs' simulationTime symTSim Real second)
+  = constrained' (uc simulationTime symTSim Real second)
       [physc $ Bounded (Inc, exactDbl 1) (Inc, exactDbl 60)]
       (exactDbl 10)
 ipSimTimeUnc = uq ipSimTime defaultUncrt
@@ -166,11 +164,6 @@ qdFreqDomain
 qdFxnTDomain
   = vc "qdFxnTDomain" (nounPhraseSent (S "Function in the time domain")) symFt
       Real
-
-qdNegInf
-  = vc "qdNegInf" (nounPhraseSent (S "Negative Infinity")) symnegInf Real
-
-qdPosInf = vc "qdPosInf" (nounPhraseSent (S "Infinity")) symposInf Real
 
 qdInvLaplaceTransform
   = vc "qInvLaplaceTransform"

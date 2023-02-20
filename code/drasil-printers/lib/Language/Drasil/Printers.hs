@@ -15,7 +15,7 @@ module Language.Drasil.Printers (
   -- ** Printer
   , makeMd
   -- ** Section Printers
-  , introInfo, verInfo, unsupOS, regularSec, instDoc, extLibSec, endNote
+  , introInfo, verInfo, unsupOS, regularSec, instDoc, extLibSec, endNote, whatInfo
   -- * Plain
   -- ** Types
   , Linearity(..)
@@ -41,7 +41,7 @@ import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.JSON.Print (genJSON)
 import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS,
-  extLibSec, instDoc, regularSec, endNote)
+  extLibSec, instDoc, regularSec, endNote, whatInfo)
 import Language.Drasil.Plain.Print (Linearity(..), sentenceDoc, exprDoc,
   codeExprDoc, symbolDoc, unitDoc, showSymb, showHasSymbImpl)
 import Language.Drasil.TeX.Print (genTeX)

@@ -67,133 +67,133 @@ inSA, outSA, htCapL, htCapS, htCapV,
 
 inSA = uc' "inSA" (nounPhraseSP
   "surface area over which heat is transferred in")
-  "surface area over which thermal energy is transferred into an object"
-  (sub cA lIn) m_2
+  (S "surface area over which thermal energy is transferred into an object")
+  (sub cA lIn) Real m_2
 
 outSA = uc' "outSA" (nounPhraseSP
   "surface area over which heat is transferred out")
-  "surface area over which thermal energy is transferred out of an object"
-  (sub cA lOut) m_2
+  (S "surface area over which thermal energy is transferred out of an object")
+  (sub cA lOut) Real m_2
 
 htCapL = uc' "htCapL" (nounPhraseSP "specific heat capacity of a liquid")
-  ("the amount of energy required to raise the temperature of a given " ++
+  (S $ "the amount of energy required to raise the temperature of a given " ++
   "unit mass of a given liquid by a given amount")
-  (sup (eqSymb heatCapSpec) lLiquid) UT.heatCapSpec
+  (sup (eqSymb heatCapSpec) lLiquid) Real UT.heatCapSpec
 
 htCapS = uc' "htCapS"
   (nounPhraseSP "specific heat capacity of a solid")
-  ("the amount of energy required to raise the temperature of " ++
+  (S $ "the amount of energy required to raise the temperature of " ++
   "a given unit mass of a given solid by a given amount")
-  (sup (eqSymb heatCapSpec) lSolid) UT.heatCapSpec
+  (sup (eqSymb heatCapSpec) lSolid) Real UT.heatCapSpec
 
 htCapV = uc' "htCapV"
   (nounPhraseSP "specific heat capacity of a vapour")
-  ("the amount of energy required to raise the temperature of a given " ++
+  (S $ "the amount of energy required to raise the temperature of a given " ++
   "unit mass of vapour by a given amount")
-  (sup (eqSymb heatCapSpec) lVapour) UT.heatCapSpec
+  (sup (eqSymb heatCapSpec) lVapour) Real UT.heatCapSpec
 
 pcmInitMltE = uc' "pcmInitMltE" (nounPhraseSP
   "change in heat energy in the PCM at the instant when melting begins")
-  "change in thermal energy in the phase change material at the melting point"
-  (sup (sub (sub (eqSymb sensHeat) lPCM) lMelt) lInit) joule
+  (S "change in thermal energy in the phase change material at the melting point")
+  (sup (sub (sub (eqSymb sensHeat) lPCM) lMelt) lInit) Real joule
 
 volHtGen = uc' "volHtGen"
   (nounPhraseSP "volumetric heat generation per unit volume")
-  "Amount of thermal energy generated per unit volume" lG UT.volHtGenU
+  (S "amount of thermal energy generated per unit volume") lG Real UT.volHtGenU
 
 htTransCoeff = uc' "htTransCoeff"
   (nounPhraseSP "convective heat transfer coefficient")
-  ("the proportionality constant between the heat flux and the " ++
+  (S $ "the proportionality constant between the heat flux and the " ++
   "thermodynamic driving force for the flow of thermal energy")
-  lH UT.heatTransferCoef
+  lH Real UT.heatTransferCoef
 
 pcmMass = uc' "pcmMass" (nounPhraseSP "mass of phase change material")
-  "the quantity of matter within the phase change material"
-  (sub (eqSymb mass) lPCM) kilogram
+  (S "the quantity of matter within the phase change material")
+  (sub (eqSymb mass) lPCM) Real kilogram
 
 wMass = uc' "wMass" (nounPhraseSP "mass of water")
-  "the quantity of matter within the water" (sub (eqSymb mass) lWater) kilogram
+  (S "the quantity of matter within the water") (sub (eqSymb mass) lWater) Real kilogram
 
 thFluxVect = uc' "thFluxVect" (nounPhraseSP "thermal flux vector")
-  "vector denoting the direction of thermal flux through a surface"
-  (vec lQ) UT.thermalFlux
+  (S "vector denoting the direction of thermal flux through a surface")
+  (vec lQ) Real UT.thermalFlux
 
 htFluxC = uc' "htFluxC"
   (nounPhraseSP "heat flux into the water from the coil")
-  "the rate of heat energy transfer into the water from the coil per unit time"
-  (sub (eqSymb htFlux) lCoil) UT.thermalFlux
+  (S "the rate of heat energy transfer into the water from the coil per unit time")
+  (sub (eqSymb htFlux) lCoil) Real UT.thermalFlux
 
 htFluxIn = uc' "htFluxIn" (nounPhraseSP "heat flux input")
-  "the rate of heat energy transfer into an object per unit time"
-  (sub (eqSymb htFlux) lIn) UT.thermalFlux
+  (S "the rate of heat energy transfer into an object per unit time")
+  (sub (eqSymb htFlux) lIn) Real UT.thermalFlux
 
 htFluxOut = uc' "htFluxOut" (nounPhraseSP "heat flux output")
-  "the rate of heat energy transfer into an object per unit time"
-  (sub (eqSymb htFlux) lOut) UT.thermalFlux
+  (S "the rate of heat energy transfer into an object per unit time")
+  (sub (eqSymb htFlux) lOut) Real UT.thermalFlux
 
 htFluxP = uc' "htFluxP" (nounPhraseSP "heat flux into the PCM from water")
-  ("the rate of heat energy transfer into the phase" ++
+  (S $ "the rate of heat energy transfer into the phase" ++
   "change material from the water per unit time")
-  (sub (eqSymb htFlux) lPCM) UT.thermalFlux
+  (sub (eqSymb htFlux) lPCM) Real UT.thermalFlux
 
 latentEP = uc' "latentEP" (nounPhraseSP "latent heat energy added to PCM")
-  ("energy released or absorbed, by a body or a thermodynamic system, "++
+  (S $ "energy released or absorbed, by a body or a thermodynamic system, "++
   "during a constant-temperature process and absorbed by the phase" ++
-  "change material") (sub (eqSymb latentHeat) lPCM) joule
+  "change material") (sub (eqSymb latentHeat) lPCM) Real joule
 
 tempEnv = uc' "tempEnv" (nounPhraseSP "temperature of the environment")
-  "the tempature of a given environment"
-  (sub (eqSymb temp) lEnv) centigrade
+  (S "the tempature of a given environment")
+  (sub (eqSymb temp) lEnv) Real centigrade
 
 tInitMelt = uc' "tInitMelt"
   (nounPhraseSP "time at which melting of PCM begins")
-  ("time at which the phase change material " ++
+  (S $ "time at which the phase change material " ++
     "begins changing from a solid to a liquid")
-  (sup (sub (eqSymb time) lMelt) lInit) second
+  (sup (sub (eqSymb time) lMelt) lInit) Real second
 
 tFinalMelt = uc' "tFinalMelt"
   (nounPhraseSP "time at which melting of PCM ends")
-  ("time at which the phase change material " ++
+  (S $ "time at which the phase change material " ++
     "finishes changes from a solid to a liquid")
-  (sup (sub (eqSymb time) lMelt) lFinal) second
+  (sup (sub (eqSymb time) lMelt) lFinal) Real second
   
 tankVol = uc' "tankVol" (nounPhraseSP "volume of the cylindrical tank")
-  "the amount of space encompassed by a tank"
-  (sub (eqSymb vol) lTank) m_3
+  (S "the amount of space encompassed by a tank")
+  (sub (eqSymb vol) lTank) Real m_3
 
 wVol = uc' "wVol" (vol `of_` water)
-  "the amount of space occupied by a given quantity of water"
-  (sub (eqSymb vol) lWater) m_3
+  (S "the amount of space occupied by a given quantity of water")
+  (sub (eqSymb vol) lWater) Real m_3
 
 deltaT = uc' "deltaT" (nounPhraseSP "change in temperature")
-  "change in the average kinetic energy of a given material"
-  (Atop Delta $ eqSymb temp) centigrade
+  (S "change in the average kinetic energy of a given material")
+  (Atop Delta $ eqSymb temp) Real centigrade
 
-tau = ucStaged "tau" (nounPhraseSP "dummy variable for integration over time")
-  "binary value representing the presence or absence of integration over time"
-  (autoStage lTau) second
+tau = ucStaged' "tau" (nounPhraseSP "dummy variable for integration over time")
+  (S "binary value representing the presence or absence of integration over time")
+  (autoStage lTau) Real second
 --Not sure how to define anything after this point
 
-tauLP = ucStaged "tauLP" (nounPhraseSP "ODE parameter for liquid PCM")
-  ("derived through melting of phase change material, which " ++
+tauLP = ucStaged' "tauLP" (nounPhraseSP "ODE parameter for liquid PCM")
+  (S $ "derived through melting of phase change material, which " ++
   "changes ODE parameter for solid PCM into parameter for liquid")
-  (autoStage $ sup (sub lTau lPCM) lLiquid) second
+  (autoStage $ sup (sub lTau lPCM) lLiquid) Real second
 
-tauSP = ucStaged "tauSP" (nounPhraseSP "ODE parameter for solid PCM")
-  "derived parameter based on rate of change of temperature of phase change material"
-  (autoStage $ sup (sub lTau lPCM) lSolid) second
+tauSP = ucStaged' "tauSP" (nounPhraseSP "ODE parameter for solid PCM")
+  (S "derived parameter based on rate of change of temperature of phase change material")
+  (autoStage $ sup (sub lTau lPCM) lSolid) Real second
 
-tauW = ucStaged "tauW" (nounPhraseSP "ODE parameter for water related to decay time")
-  "derived parameter based on rate of change of temperature of water"
-  (autoStage $ sub lTau lWater) second
+tauW = ucStaged' "tauW" (nounPhraseSP "ODE parameter for water related to decay time")
+  (S "derived parameter based on rate of change of temperature of water")
+  (autoStage $ sub lTau lWater) Real second
 
 simTime = uc' "simTime" (compoundPhrase' (simulation ^. term)
-  (time ^. term)) "time over which the simulation runs"
-  lT second
+  (time ^. term)) (S "time over which the simulation runs")
+  lT Real second
 
 thickness = uc'  "thickness" (nounPhraseSP "Minimum thickness of a sheet of PCM")
-  "the minimum thickness of a sheet of PCM"
-  (subMin lH) metre
+  (S "the minimum thickness of a sheet of PCM")
+  (subMin lH) Real metre
 ----------------------
 -- Unitless symbols --
 ----------------------

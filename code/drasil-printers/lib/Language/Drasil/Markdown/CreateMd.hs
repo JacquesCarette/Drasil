@@ -3,7 +3,7 @@ module Language.Drasil.Markdown.CreateMd (
     -- * Main Function
     makeMd,
     -- * Section Creators
-    introInfo, verInfo, unsupOS, extLibSec, regularSec, instDoc, endNote) 
+    introInfo, whatInfo, verInfo, unsupOS, extLibSec, regularSec, instDoc, endNote) 
     where
 
 import Prelude hiding ((<>))
@@ -17,15 +17,23 @@ type Seperator = Doc
 makeMd :: [Doc] -> Doc
 makeMd = vcat . punctuate secSep . filtEmp
 
--- | Example title and purpose section.
-introInfo :: String -> [String] -> Doc
-introInfo name auths = introSec (text name) (listToDoc auths) $ length auths
+-- | Example title, authors, and maybe purpose section.
+introInfo :: String -> [String] -> Maybe String -> Doc
+introInfo name auths descr = introSec (text name) (listToDoc auths) (length auths) (maybePurpDoc descr)
 
 -- | Instruction section, contains 3 paragraphs, Running, Building and Config Files.
 -- The Config file section is only displayed if there are configuration files.
 instDoc :: [String] -> Doc
 instDoc cfp = regularSec (text "Making Examples") 
     (runInstDoc <> doubleSep <> makeInstDoc) <> configSec cfp 
+
+-- | Helper for creating optional Purpose subsection as Doc
+maybePurpDoc :: Maybe String -> Doc
+maybePurpDoc = maybe empty (\descr-> doubleSep <> text "> Purpose:" <+> text descr)
+
+-- | 'What' section in generated README file, does not display if empty
+whatInfo :: Maybe String -> Doc
+whatInfo = maybe empty (regularSec (text "What") . text)
 
 -- | Helper for giving instructions on the command line.
 commandLine :: Doc
@@ -117,8 +125,9 @@ bkQuote3 = text "```"
 -- FIXME as explained in #2224 we still need to add in the purpose section, 
 -- this could be done by adding a third parameter to introSec
 -- | Constructs introduction section from header and message.
-introSec ::  Doc -> Doc -> Int -> Doc
-introSec hd ms1 l = text "#" <+> hd <+> contSep <> (if l == 1 then text "> Author:" else text "> Authors: ") <+> ms1 
+introSec ::  Doc -> Doc -> Int -> Doc -> Doc
+introSec hd ms1 l descr = text "#" <+> hd <+> contSep <> (if l == 1 then text "> Author:" else text "> Authors: ") 
+  <+> ms1 <> descr
 
 -- | Constructs regular section section from header and message.
 regularSec :: Doc -> Doc -> Doc

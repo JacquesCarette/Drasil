@@ -153,9 +153,6 @@ pOps Dot      = commandD "cdot" empty
 pOps Scale    = pure $ text " "
 pOps Eq       = pure assign
 pOps NEq      = commandD "neq" empty
--- Old way of doing less than and greater than
--- pOps Lt       = pure lt
--- pOps Gt       = pure gt
 pOps Lt       = commandD "lt" empty
 pOps Gt       = commandD "gt" empty
 pOps GEq      = commandD "geq" empty
@@ -175,6 +172,7 @@ pOps Perc     = texSym "%"
 pOps LArrow   = commandD "leftarrow"  empty
 pOps RArrow   = commandD "rightarrow" empty
 pOps ForAll   = commandD "ForAll"     empty
+pOps Partial  = commandD "partial"    empty
 
 -- | Prints fencing notation ("(),{},|,||").
 fence :: OpenClose -> Fence -> D
@@ -245,9 +243,9 @@ dontCount = "\\/[]{}()_^$:"
 makeHeaders :: [Spec] -> D
 makeHeaders ls = hpunctuate (text " & ") (map (bold . spec) ls) %% pure dbs
 
--- | Creates the rows for a table.
+-- | Create rows for a table with a single line break between them.
 makeRows :: [[Spec]] -> D
-makeRows = mconcat . map (\c -> makeColumns c %% pure dbs)
+makeRows = foldr ((%%) . (\c -> makeColumns c %% pure dbs)) mempty
 
 -- | Creates the columns for a table.
 makeColumns :: [Spec] -> D
@@ -458,9 +456,10 @@ makeBib sm bib = mkEnvArgBr "filecontents*" (bibFname ++ ".bib") (mkBibRef sm bi
   command "nocite" "*" %% command "bibstyle" bibStyleT %%
   command0 "printbibliography" <> sq (pure $ text "heading=none")
 
--- | Renders a bibliographical reference.
+-- | Renders a bibliographical reference with a single line break between
+-- entries.
 mkBibRef :: PrintingInformation -> BibRef -> D
-mkBibRef sm = mconcat . map (renderF sm)
+mkBibRef sm = foldr ((%%) . renderF sm) mempty
 
 -- | Helper that renders a citation.
 renderF :: PrintingInformation -> Citation -> D

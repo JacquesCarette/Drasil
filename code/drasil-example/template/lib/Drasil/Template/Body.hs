@@ -29,6 +29,7 @@ si = SI {
   _sys         = example,
   _kind        = Doc.srs,
   _authors     = [authorName],
+  _background  = [],
   _purpose     = [],
   _quants      = [] :: [QuantityDict],
   _concepts    = [] :: [DefinedQuantityDict],

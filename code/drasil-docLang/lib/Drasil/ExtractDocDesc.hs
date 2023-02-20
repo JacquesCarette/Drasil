@@ -119,7 +119,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (Goals s c) -> s ++ def c,
     scsSub = Constant . f <$> \case
       (Assumptions c) -> def c
-      (TMs s _ t) -> let r = mappend s . concatMap (\x -> def (x ^. operations) ++
+      (TMs s _ t) -> let r = (<>) s . concatMap (\x -> def (x ^. operations) ++
                              def (x ^. defined_quant) ++ notes [x] ++
                              r (x ^. valid_context)) in r t
       (DDs s _ d _) -> s ++ der d ++ notes d

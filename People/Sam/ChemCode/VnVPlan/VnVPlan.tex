@@ -3,6 +3,7 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{colortbl}
+\usepackage{xr-hyper}
 \usepackage{hyperref}
 \hypersetup{
     colorlinks,
@@ -13,12 +14,48 @@
 }
 \usepackage[version=4]{mhchem}
 
+\makeatletter
+\newcommand*{\addFileDependency}[1]{% argument=file name and extension
+\typeout{(#1)}% latexmk will find this if $recorder=0
+% however, in that case, it will ignore #1 if it is a .aux or 
+% .pdf file etc and it exists! If it doesn't exist, it will appear 
+% in the list of dependents regardless)
+%
+% Write the following if you want it to appear in \listfiles 
+% --- although not really necessary and latexmk doesn't use this
+%
+\@addtofilelist{#1}
+%
+% latexmk will find this message if #1 doesn't exist (yet)
+\IfFileExists{#1}{}{\typeout{No file #1.}}
+}\makeatother
+
+\newcommand*{\myexternaldocument}[1]{%
+\externaldocument{#1}%
+\addFileDependency{#1.tex}%
+\addFileDependency{#1.aux}%
+}
+
 \newcounter{testnum} %NFR Number
 \newcommand{\tthetestnum}{NFR\thetestnum}
 \newcommand{\testref}[1]{T\ref{#1}}
 
+\newcommand{\dref}[1]{GD\ref{#1}}
+\newcommand{\ddref}[1]{DD\ref{#1}}
+\newcommand{\tref}[1]{TM\ref{#1}}
+\newcommand{\tbref}[1]{TB\ref{#1}}
+\newcommand{\aref}[1]{A\ref{#1}}
+\newcommand{\gsref}[1]{GS\ref{#1}}
+\newcommand{\iref}[1]{IM\ref{#1}}
+\newcommand{\rref}[1]{R\ref{#1}}
+\newcommand{\nfrref}[1]{NFR\ref{#1}}
+\newcommand{\lcref}[1]{LC\ref{#1}}
+\newcommand{\ucref}[1]{UC\ref{#1}}
+
 \input{../Comments}
 \input{../Common}
+
+\myexternaldocument{../SRS/SRS}
 
 \begin{document}
 
@@ -47,7 +84,7 @@
   \midrule
   Feb. 5, 2023        & 0.0           & Create document and remove
   inapplicable content                                                       \\
-  Feb. 7-8, 2023      & 0.1           & Add input tests                      \\
+  Feb. 7-8, 2023      & 0.1.0         & Add input tests                      \\
   Feb. 8, 2023        & 0.1.1         & Improve referencing of tests         \\
                       & 0.1.2         & Add matrix conversion tests and
   improve input tests, including rationale, labelling, and chemical
@@ -64,11 +101,13 @@
                       & 0.1.9         & Add static test for element support  \\
   Feb. 18, 2023       & 0.1.10        & Improve formatting of existing
   tests, including adding references to requirements                         \\
-  Feb. 19, 2023       & 0.1.11        & Add remaining tests for
-  nonfunctional requirements (except for NFR4 \sjc{add link})                \\
-                      & 0.2.0         & Fill in \nameref{sec_plan} section   \\
-                      & 0.2.1         & Fill in \nameref{sec_gen_info}
+  Feb. 19, 2023       & 0.2.0         & Add remaining tests for
+  nonfunctional requirements (except for \nfrref{NFR_maintainability})       \\
+                      & 0.2.1         & Fill in \nameref{sec_plan} section   \\
+                      & 0.3.0         & Fill in \nameref{sec_gen_info}
   section                                                                    \\
+  Feb. 20, 2023       & 0.3.1         & Add references to requirements and
+  external documents                                                         \\
   \bottomrule
 \end{tabularx}
 
@@ -88,7 +127,7 @@
 \end{tabular}\\
 
 \wss{symbols, abbreviations or acronyms --- you can simply reference the SRS
-  \cite{SRS} tables, if appropriate}
+  \cite{srs} tables, if appropriate}
 
 \wss{Remove this section if it isn't needed}
 
@@ -118,19 +157,20 @@ Drasil.
 
 \subsection{Relevant Documentation}
 
-This plan outlines the process for verifying the SRS \sjc{add link} and this
+This plan outlines the process for verifying the SRS \cite{srs} and this
 VnV Plan in Sections \ref{sec_srs_verif_plan} and \ref{sec_vnv_verif_plan},
 respectively; these are the only relevant pieces of documentation for this
 plan. (Note that design documentation would also be relevant, but since
-\progname{} is being built in Drasil which doesn't generate this documentation,
-it is out of the scope of this project.)
+\progname{} is being built in Drasil which doesn't generate this documentation
+\cite{carette_drasil_2021}, it is out of the scope of this project.)
 
 \section{Plan} \label{sec_plan}
 
 This section outlines the plan for verifying and validating \progname{}, which
-will be performed by a team. This plan includes verifying the SRS, design,
-VnV Plan, and implementation. It also includes the user of automated tools for
-testing and verification and external data for validation.
+will be performed by a team. This plan includes verifying the SRS \cite{srs},
+design, VnV Plan, and implementation of \progname{}. It also includes the use
+of automated tools for testing and verification and external data for
+validation.
 
 \subsection{Verification and Validation Team} \label{sec_vnv_team}
 
@@ -193,17 +233,19 @@ generally by the class of CAS 741, and then more rigorously by Jason Balaci,
 Deesha Patel, and Dr.~Spencer Smith. After appropriate revisions and its
 implementation in Drasil, the generated version will then be reviewed by Samuel
 Crawford, Dr.~Spencer Smith and a subset of the Drasil team. Each review will
-check it against the general writing checklist, the SRS checklist and the SRS
-rubric for CAS 741 \sjc{add links}; the only exception is that the Drasil team
+check it against the general writing checklist \cite{writing_checklist}, the
+SRS checklist \cite{srs_checklist} and the SRS rubric for CAS 741 \sjc{I
+  couldn't find a link for this.}; the only exception is that the Drasil team
 will only verify the SRS within the context of Drasil (so they will not check
 it against the CAS 741 rubric, for example).
 
 \subsection{Design Verification Plan}
 
-The design of \progname{} will be dictated by Drasil's code generation. As
-Drasil does not currently generate design documentation \sjc{add source?}, this
-verification will be conducted based on the generated code itself. Verifying
-its design will be done by the Drasil team according to their process of design
+The design of \progname{} will be dictated by the code generation of Drasil
+\cite{carette_drasil_2021}. As Drasil does not currently generate design
+documentation \cite{carette_drasil_2021}, this verification will be conducted
+based on the generated code itself. Verifying \progname's
+design will be done by the Drasil team according to their process of design
 verification and is therefore out of the scope of this document.
 
 \subsection{Verification and Validation Plan Verification Plan}
@@ -214,8 +256,8 @@ process, then generally by the class of CAS 741, and then more rigorously by
 Jason Balaci, Maryam Valian, and Dr.~Spencer Smith. After appropriate
 revisions, it will then be reviewed again by Samuel Crawford and Dr.~Spencer
 Smith. Each review will check it against the general writing checklist
-%, the VnV checklist, -- does this exist?
-and the VnV rubric for CAS 741 \sjc{add links}.
+\cite{writing_checklist}, the VnV checklist \cite{vnv_checklist},
+and the VnV rubric for CAS 741 \sjc{I couldn't find a link for this.}.
 
 \subsection{Implementation Verification Plan}
 
@@ -236,9 +278,11 @@ be used to automate testing and measure coverage where appropriate. Other
 frameworks for automated testing will be added if/when code for \progname{} is
 generated in more languages. The Drasil repository has continuous integration
 set up to ensure that hlint standards are adhered to and that the code
-compiles \sjc{double check}. Since the code for \progname{} will be generated
+compiles \sjc{double check}. The Makefiles generated by Drasil
+\cite{carette_drasil_2021} will also be used.
+Since the code for \progname{} will be generated
 by Drasil, the Drasil team may potentially use other tools as part of its
-verification (e.g., linters). \sjc{Are Makefiles generated?}
+verification (e.g., linters).
 
 \subsection{Software Validation Plan}
 
@@ -271,9 +315,9 @@ complexity/likelihood of the situation arising during use of \progname{}.
     How test will be performed: Static analysis will be performed against the
     list of elements from \cite{helmenstine_list_2020}, ensuring that the
     symbol of every element can be used throughout the execution of
-    \progname{}. This includes the input stage (from R1 from SRS \sjc{add
-      link}), the conversion stage (from R2 from SRS \sjc{add link}), and the
-    output stage (from R4 and R6 from SRS \sjc{add link}).
+    \progname{}. This includes the input stage (from \rref{R_input}), the
+    conversion stage (from \rref{R_convert}), and the output stage (from
+    \rref{R_infeasOutput} and \rref{R_feasOutput} from the SRS \cite{srs}).
 
 \end{enumerate}
 
@@ -281,8 +325,9 @@ complexity/likelihood of the situation arising during use of \progname{}.
 
 The following tests are for equations of feasible chemical reactions and
 will be performed automatically. Providing the correct output for an inputted
-feasible chemical reaction satisfies R1, R2, R3, R5, and R6 from SRS \sjc{add
-  link}. Note that the input/output format
+feasible chemical reaction satisfies \rref{R_input}, \rref{R_convert},
+\rref{R_feasible}, \rref{R_balance}, and \rref{R_feasOutput} from the SRS
+\cite{srs}. Note that the input/output format
 for each test is an abstract representation, as the specific format of each
 input/output is a design decision that is not made at this stage.
 
@@ -340,8 +385,9 @@ input/output is a design decision that is not made at this stage.
 
 The following tests are for equations of infeasible chemical reactions and
 will be performed automatically. Providing the correct output for an inputted
-infeasible chemical reaction satisfies R1, R2, R3, and R4 from SRS \sjc{add
-  link}. Note that the input/output format
+infeasible chemical reaction satisfies \rref{R_input}, \rref{R_convert},
+\rref{R_feasible}, and \rref{R_infeasOutput} from the SRS \cite{srs}.
+Note that the input/output format
 for each test is an abstract representation, as the specific format of each
 input/output is a design decision that is not made at this stage.
 
@@ -401,9 +447,9 @@ implementation of \progname{}.
     this expected output and the actual output can be checked by a computer
     (e.g., by using integer comparison).
 
-    How test will be performed: This verification will be performed by
-    the \nameref{sec_sysFunReqs} using integer comparison and satisfies R1, R2,
-    R3, R5, R6, and NFR1 from SRS \sjc{add link}.
+    How test will be performed: This verification will be done by performing
+    the \nameref{sec_sysFunReqs} using integer comparison and satisfies
+    \rref{R_balance} and \nfrref{NFR_accuracy} from the SRS \cite{srs}.
 
 \end{enumerate}
 
@@ -419,7 +465,8 @@ implementation of \progname{}.
     How test will be performed: New typical users will be asked to input a
     valid chemical reaction to be balanced by the system. At least
     USER\_FRAC of users should be able to do so within
-    FIRST\_USE\_TIME.
+    FIRST\_USE\_TIME. This test satisfies \nfrref{NFR_understandability} from
+    the SRS \cite{srs}.
 
 \end{enumerate}
 
@@ -437,7 +484,8 @@ implementation of \progname{}.
     \nameref{sec_sysFunReqs} to be balanced. They will then be asked the
     questions from the System Usability Scale (SUS) \cite{thomas_how_2015}
     (see \nameref{sec_usableSurvey}). The average score should be at least
-    SUS\_SCORE.
+    SUS\_SCORE. This test satisfies \nfrref{NFR_usability} from
+    the SRS \cite{srs}.
 
 \end{enumerate}
 
@@ -456,8 +504,8 @@ implementation of \progname{}.
     How test will be performed: This verification will be performed by
     ensuring the correct programming language(s) is/are installed on both a
     Windows and macOS system and the \nameref{sec_sysFunReqs} will be
-    performed. % This satisfies R1, R2,
-    % R3, R5, R6, and NFR1 from SRS \sjc{add link}.
+    performed. This test satisfies \nfrref{NFR_portability} from the SRS
+    \cite{srs}.
 
 \end{enumerate}
 
@@ -471,7 +519,8 @@ implementation of \progname{}.
     Type: Dynamic, Static
 
     How test will be performed: All other tests from this plan will be
-    performed successfully.
+    performed successfully. This test satisfies \nfrref{NFR_verifiability}
+    from the SRS \cite{srs}.
 
 \end{enumerate}
 

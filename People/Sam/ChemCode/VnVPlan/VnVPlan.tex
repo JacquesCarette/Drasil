@@ -13,6 +13,7 @@
     urlcolor=blue
 }
 \usepackage[version=4]{mhchem}
+\usepackage{pdflscape}
 
 \makeatletter
 \newcommand*{\addFileDependency}[1]{% argument=file name and extension
@@ -114,6 +115,8 @@
   section and remove its template content                                    \\
                       & 0.3.4         & Add final pieces of information and
   improve formatting                                                         \\
+                      & 1.0           & Add traceability matrix in Section
+  \ref{sec_test_req_trace}                                                   \\
   \bottomrule
 \end{tabularx}
 
@@ -537,10 +540,39 @@ implementation of \progname{}.
 
 \end{enumerate}
 
-\subsection{Traceability Between Test Cases and Requirements}
+\begin{landscape}
 
-\wss{Provide a table that shows which test cases are supporting which
-  requirements.}
+  \subsection{Traceability Between Test Cases and Requirements} \label{sec_test_req_trace}
+
+  The purpose of the traceability matrices is to provide easy references on what
+  has to be additionally modified if a certain component is changed.  Every time a
+  component is changed, the items in the column of that component that are marked
+  with an ``X'' may have to be modified as well. Table~\ref{Table:trace} shows the
+  dependencies of tests on the requirements from the SRS \cite{srs}.
+
+  \begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+      \hline
+                                             & \rref{R_input} & \rref{R_convert} & \rref{R_feasible} & \rref{R_infeasOutput} & \rref{R_balance} & \rref{R_feasOutput} & \nfrref{NFR_accuracy} & \nfrref{NFR_understandability} & \nfrref{NFR_usability} & \nfrref{NFR_maintainability} & \nfrref{NFR_portability} & \nfrref{NFR_verifiability} \\ \hline
+      \testref{test_element_support}         & X              & X                &                   & X                     &                  & X                   &                       &                                &                        &                              &                          &                            \\ \hline
+      \testref{test_small_valid_eqn}         & X              & X                & X                 &                       & X                & X                   &                       &                                &                        &                              &                          &                            \\ \hline
+      \testref{test_valid_eqn}               & X              & X                & X                 &                       & X                & X                   &                       &                                &                        &                              &                          &                            \\ \hline
+      \testref{test_large_valid_eqn}         & X              & X                & X                 &                       & X                & X                   &                       &                                &                        &                              &                          &                            \\ \hline
+      \testref{test_nonstoich_valid_eqn}     & X              & X                & X                 &                       & X                & X                   &                       &                                &                        &                              &                          &                            \\ \hline
+      \testref{test_inf_cons_mass_valid_eqn} & X              & X                & X                 & X                     &                  &                     &                       &                                &                        &                              &                          &                            \\ \hline
+      \testref{test_inf_over_valid_eqn}      & X              & X                & X                 & X                     &                  &                     &                       &                                &                        &                              &                          &                            \\ \hline
+      \testref{test_bal_accuracy}            &                &                  &                   &                       & X                &                     & X                     &                                &                        &                              &                          &                            \\ \hline
+      \testref{test_understand}              &                &                  &                   &                       &                  &                     &                       & X                              &                        &                              &                          &                            \\ \hline
+      \testref{test_usable}                  &                &                  &                   &                       &                  &                     &                       &                                & X                      &                              &                          &                            \\ \hline
+      \testref{test_portable}                &                &                  &                   &                       &                  &                     &                       &                                &                        &                              & X                        &                            \\ \hline
+      \testref{test_verifiable}              &                &                  &                   &                       &                  &                     &                       &                                &                        &                              &                          & X                          \\ \hline
+    \end{tabular}
+    \caption{Traceability Matrix Showing the Connections Between Tests and Requirements}
+    \label{Table:trace}
+  \end{table}
+
+\end{landscape}
 
 \section{Unit Test Description} \label{sec_unit_tests}
 

@@ -1,22 +1,40 @@
-\documentclass{beamer}
+\documentclass[usenames]{beamer}
+
+\mode<presentation>
+{
+%  \usetheme{Hannover}
+\usetheme[width=0.7in]{Hannover}
+% or ...
+
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+}
 
 \usepackage{times}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
 
 \usepackage{hyperref}
 
-\hypersetup{
-  urlcolor=blue,
-  linkcolor=blue,
-  colorlinks=true
-}
+\hypersetup{colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    filecolor=blue,
+    urlcolor=blue,
+    unicode=false}
+
+\usepackage{totpages}
+\usepackage[round]{natbib}
 
 \usepackage{listings}
 \lstset{frame=none, showstringspaces=false, basicstyle=\ttfamily\bfseries\footnotesize,
   xleftmargin=-8mm,language=Haskell,breaklines=true}
 
-\title {Sustainable Software Product Lines via Generation}
+\pgfdeclareimage[height=0.7cm]{logo}{../figures/McMasterLogo}
+\title[\pgfuseimage{logo}] {Sustainable Software Product Lines via Generation}
 
-\author{\textbf{Spencer Smith} and Jacques Carette}
+\author[Smith \& Carette,\\Slide \thepage~of \pageref{TotPages}]{\textbf{Spencer
+Smith} and Jacques Carette}
 
 \institute[McMaster University]
 {
@@ -25,7 +43,7 @@
   McMaster University
 }
 
-\date {Huawei 2023 Visit: Feb, 2023}
+\date {Huawei 2023 Visit: Feb?, 2023}
 
 \subject{research software, software engineering, software
   quality, code and artifact generation, software documentation}
@@ -38,54 +56,174 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\hoffset=-.4in %removing side bar for these frames
 \begin{frame}[plain]
 
 \titlepage
 
-% add a picture of product lines with artifacts
-% add an example of a user manual with multiple versions
-% all summarized together (opportunity for generation)
-
 \end{frame}
+\hoffset=0in %restore
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
 
 \frametitle{Generate All Things with Drasil}
 
 \begin{itemize}
-\item \textbf{Goal} -- Improve quality of SCS
-\item \textbf{Idea}
+\item \textbf{Goal} --- Improve software sustainability and productivity
+\item \textbf{Ideas}
   \begin{itemize}
-  \item Adapt ideas from SE
-  \item Document requirements, design, verification, etc.
-    \begin{itemize}
-    \item Good -- improves quality
-    \item Bad -- too much work, inevitable change, too hard to maintain
-    \end{itemize}
+  \item Adapt a software product line approach 
+  \item Build on success of MDSE
+  \item Value all documents, not just code
+  \item Start with well-understood domains
   \end{itemize}
 \item \textbf{Solution}
 \begin{itemize}
-\item Capture knowledge once
-\item Generate all documentation and code
-% \item Avoid duplication
-% \item Traceability
-% \item Reproducibility
+\item Capture (codify) knowledge \textcolor{red}{once}
+\item Generate all \textcolor{red}{documentation} and code
+\item Idealized dev process for \textcolor{red}{well-understood} software
 \end{itemize}
-\item \textbf{Implement Solution --
+\item \textbf{Implement Partial Solution ---
     \href{https://github.com/JacquesCarette/Drasil} {Drasil}}
-  \begin{itemize}
-  \item Facilitates change
-  \item Traceability
-  \item Reproducibility
-  \item Sustainability
-  \item Certification
-  \item Captures best practices
-  \end{itemize}
 \end{itemize}
 
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[Introduction]{Introduction}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\hoffset=-.8in
+\begin{frame}[plain, fragile]
+
+\frametitle{Product Lines}
+
+% if time add another program family example
+
+\begin{tikzpicture}[remember picture,overlay]
+\node [xshift=0cm,yshift=-3.cm] at (current page.center)
+{
+\includegraphics[width=1.2\textwidth]{../../CSE_2016/apple-mac-products-450x128.jpg}
+};
+\end{tikzpicture}
+
+\begin{tikzpicture}[remember picture,overlay]
+\node [xshift=0cm,yshift=1.cm] at (current page.center)
+{
+\includegraphics[width=0.8\textwidth]{../../CSE_2016/dodge-lineup.jpg}
+};
+\end{tikzpicture}
+
+% product line when economically makes sense to dev together
+% advantages of product line approach:
+% reduced dev time
+% improved quality
+% improved reusability
+% improved modifiability for likely changes
+
+\end{frame}
+%\hoffset=0in
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[plain, fragile]
+
+\frametitle{Product Lines in User Manual}
+
+\includegraphics[width=0.95\textwidth]{../figures/FrigFamily.pdf}
+
+% common to see all products in the same manual
+% online version for different languages, but not for different products
+% may vary due to product improvements (not integrated)
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[plain, fragile]
+
+%\frametitle{Model-Based Product Line}
+
+\includegraphics[width=0.85\textwidth]{../figures/MobileAppFeatureModel.pdf}
+
+\citet{UsmanEtAl2017}
+
+% how program family concept is realized
+% tools to support product line approach
+% systematic way to handle variabilities
+% generate code for family members
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Build on Success of MDSE}
+
+\begin{itemize}
+  \item Codify (capture) code and non-code info together
+  \begin{itemize}
+    \item Natural language (text)
+    \item Definitions
+    \item Assumptions
+    \item Derivations
+    \item Rationale
+    \item Abstract theory
+    \item User characteristics
+    \item Nonfunctional Requirements
+    \item Etc.
+  \end{itemize}
+\item Generate all artifacts from one framework
+\begin{itemize}
+  \item Requirements
+  \item User manuals
+  \item README
+  \item Build scripts, dev environment (CI etc)
+  \item Assurance case
+  \item Code (in different languages)
+  \item Test cases
+  \item etc.
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hoffset=-.4in
+\begin{frame}[plain, fragile]
+
+%\frametitle{Generate All Things}
+
+\includegraphics[width=1.05\textwidth]{../figures/GenAllThings.png}
+
+\end{frame}
+\hoffset=0in 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Why Generate All Things?}
+
+\begin{itemize}
+\item Different views of the same knowledge
+\item Generate the view needed by the audience
+\item Change to different natural languages
+\item Stay abstract longer
+\item Certification
+\item Documentation improve productivity, sustainability
+\item Reusability
+\item Modifiability
+\item One source helps synchronization
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[GlassBR Example]{GlassBR Example}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -135,65 +273,65 @@ Predict whether the glass will withstand the explosion
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
+\hoffset=-.4in
+\begin{frame}[plain, fragile]
 
 %\frametitle{Input Knowledge}
 
 \includegraphics[width=1.05\textwidth]{../figures/FoldersFiles.pdf}
 
 \end{frame}
-
+\hoffset=0in
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
+\hoffset=-.4in
+\begin{frame}[plain, fragile]
 
 %\frametitle{Input Knowledge}
 
 \includegraphics[width=1.05\textwidth]{../figures/FoldersFilesCircleGlassBR.pdf}
 
 \end{frame}
-
+\hoffset=0in
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
+\hoffset=-.4in
+\begin{frame}[plain, fragile]
 
 %\frametitle{Input Knowledge}
 
-\includegraphics[width=1.05\textwidth]{../figures/SRSCircleGlassBR.pdf}
+\includegraphics[width=1.02\textwidth]{../figures/SRSCircleGlassBR.pdf}
 
 \end{frame}
-
+\hoffset=0in
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
+\hoffset=-.4in
+\begin{frame}[plain, fragile]
 
 %\frametitle{Input Knowledge}
 
 \includegraphics[width=1.05\textwidth]{../figures/READMECircleGlassBR.pdf}
 
 \end{frame}
-
+\hoffset=0in
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
+\hoffset=-.4in
+\begin{frame}[plain, fragile]
 
 %\frametitle{Input Knowledge}
 
 \includegraphics[width=1.05\textwidth]{../figures/MakefileCircleGlassBR.pdf}
 
 \end{frame}
-
+\hoffset=0in
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
+\hoffset=-.4in
+\begin{frame}[plain, fragile]
 
 %\frametitle{Input Knowledge}
 
 \includegraphics[width=1.05\textwidth]{../figures/CodeCircleGlassBR.png}
 
 \end{frame}
-
+\hoffset=0in
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
@@ -205,7 +343,7 @@ Predict whether the glass will withstand the explosion
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\hoffset=-.3in
 \begin{frame}[plain, fragile]
 
 \frametitle{$J_{\mbox{tol}}$ in SRS.tex}
@@ -228,9 +366,9 @@ Equation & \begin{displaymath}
 Description & ...
 \end{lstlisting}
 \end{frame}
-
+\hoffset=0in
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\hoffset=-.3in
 \begin{frame}[plain, fragile]
 
 \frametitle{$J_{\mbox{tol}}$ in SRS.html}
@@ -246,8 +384,9 @@ Description & ...
 \end{lstlisting}
 
 \end{frame}
+\hoffset=0in
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\hoffset=-.3in
 \begin{frame}[plain, fragile]
 
 \frametitle{$J_{\mbox{tol}}$ in Python}
@@ -267,9 +406,9 @@ def func_J_tol(inParams):
     return math.log(math.log(1.0 / (1.0 - inParams.P_btol)) * ((inParams.a / 1000.0 * (inParams.b / 1000.0)) ** (7.0 - 1.0) / (2.86e-53 * (7.17e10 * 1000.0 * (inParams.h / 1000.0) ** 2.0) ** 7.0 * inParams.LDF)))
 \end{lstlisting}
 \end{frame}
-
+\hoffset=0in
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\hoffset=-.3in
 \begin{frame}[plain, fragile]
 
 \frametitle{$J_{\mbox{tol}}$ in Java}
@@ -287,9 +426,9 @@ def func_J_tol(inParams):
     }
 \end{lstlisting}
 \end{frame}
-
+\hoffset=0in
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\hoffset=-.3in
 \begin{frame}[plain, fragile]
 
 \frametitle{$J_{\mbox{tol}}$ in Drasil (Haskell)}
@@ -304,9 +443,9 @@ tolStrDisFacEq = ln (ln (recip_ (exactDbl 1 $- sy pbTol))
 
 \end{lstlisting}
 \end{frame}
-
+\hoffset=0in
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\hoffset=-.3in
 \begin{frame}[plain, fragile]
 
 \frametitle{$J_{\mbox{tol}}$ without Unit Conversion}
@@ -319,7 +458,7 @@ tolStrDisFacEq = ln (ln (recip_ (exactDbl 1 $- sy pbTol))
     square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac)))
 \end{lstlisting}
 \end{frame}
-
+\hoffset=0in
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
@@ -331,30 +470,48 @@ tolStrDisFacEq = ln (ln (recip_ (exactDbl 1 $- sy pbTol))
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hoffset=-0.4in
+\begin{frame}[plain, fragile]
 
-\begin{frame}
-
-\includegraphics[width=1.0\textwidth]{../figures/DrasilSupportsChange.png}
+\includegraphics[width=1.08\textwidth]{../figures/DrasilSupportsChange.png}
 
 \end{frame}
+\hoffset=0in
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[Idealized Process]{Idealized Process}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
 
-\frametitle{Improve Software Qualities}
+\frametitle{Idealized Process}
 
 \begin{itemize}
-\item Capture best practices
-\item Explore alternatives  
-\item Traceability
-\item Reproducibility
-\item Sustainability  
-\item Certifiability
-\item Reusability
+\item From wu paper
 \end{itemize}
 
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[Inputs]{Capturing Knowledge: Inputs}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Capturing Knowledge: Inputs}
+
+\begin{itemize}
+\item Probably won't have time to discuss
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[Concluding Remarks]{Concluding Remarks}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -363,26 +520,30 @@ tolStrDisFacEq = ln (ln (recip_ (exactDbl 1 $- sy pbTol))
 \frametitle{Concluding Remarks}
 
 \begin{itemize}
-\item What Drasil can currently do
-  \begin{itemize}
-  \item Explicit relations, LHS = ...
-  \item Linear first order ODEs
-  \item Knowledge on rigid body mechanics, heat transfer
-  \item SRS (LaTeX, html), code (Python, C++, C sharp, Java, Swift), README, Makefile
-  \end{itemize}
-\item Future additions
-  \begin{itemize}
-  \item More scientific knowledge: medical imaging, chemistry, more mechanics,
-    etc.
-  \item More computational knowledge: external libraries, linear systems
-    solvers, higher order ODEs, root finding, etc.
-  \item More document knowledge: Teaching lessons, academic papers, assurance
-    cases, etc.
-%  \item Sequences 
-  \item Jupyter notebooks
-  \item \href{https://github.com/JacquesCarette/Drasil/issues} {GitHub Issues}
-  \end{itemize}
+\item \textbf{Take Home Message} --- Goal of Improving Sustainability and
+Productivity via a Generate All Things Approach
+\end{itemize}
 
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[allowframebreaks]
+\frametitle{References}
+\bibliography{Huawei}
+\bibliographystyle{plainnat}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Image Credits}
+
+\begin{itemize} 
+\item \href{https://www.apple.com/ca/store} {Apple Product Line Image}
+\item
+\href{https://www.motorauthority.com/news/1055062_2011-chicago-auto-show-sporty-r-t-trim-returns-on-five-dodge-models}
+{Dodge Lineup}
 \end{itemize}
 
 \end{frame}

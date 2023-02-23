@@ -185,10 +185,88 @@ problem that \sf{} is solving}
 
 \section{Software Reuse and Software Families}
 \subsection{Software/Program Families}
-  - Bring up GNU/Linux and different distros as examples of software families
-    - (Raspbian v Raspbian lite) = Debian--, etc.
-\subsection{Reuse and Reproducible Research}
-  - Touch on reuse areas like reproducible research - Gentleman and Lang 2012
+
+Software/program families refer to a group of related systems sharing a common 
+set of features, functionality, and design~\cite{Pohl2005}. These systems are 
+typically designed to serve a specific domain or market, and are often 
+developed using a common set of core technologies and design principles.
+
+One well-known example of a software family is the Microsoft Office suite. Each 
+program in the suite is used for a specific application (word 
+processing, spreadsheet management, presentation tools, etc), yet they all have 
+similar design principles and user interface features. A user who understands 
+how to use one of the software family members will have an intuitive sense of 
+how to use the others thanks to the common design features. 
+
+Another, much larger scale, software family is that of the GNU/Linux operating 
+system (OS) and its various distributions. There are many variations on the OS 
+depending on the user's needs. For an everyday computer desktop experience, 
+there are general purpose distributions (Ubuntu, Linux Mint, Fedora, Red 
+Hat, etc.). For server/data center applications, there are specialized server 
+distributions (Ubuntu Server, Fedora Server, Debian, etc.). For systems running 
+on embedded hardware there are lightweight, specialized, embedded distributions 
+built for specific architecture (Armbian, RaspbianOS, RedSleeve, etc.). There 
+are even specialized distributions that are meant to be run without persistent 
+storage for specific applications like penetration/network testing (Kali Linux, 
+Backbox, Parrot Security OS, BlackArch, etc.). However, if you are familiar 
+with one particular flavour of linux, you'll likely be comfortable moving 
+between several of the distributions built upon the same cores. You may even be 
+familiar moving to other *NIX based systems like MacOS or Unix.
+
+Software/program families can provide a range of benefits to both developers 
+and end-users. For developers, software families can increase 
+productivity by providing a reusable set of core technologies and design 
+principles~\cite{Pohl2005}. This can help reduce the time and effort required 
+to develop new systems, and improve the quality and consistency of the 
+resulting software. For end-users, program families provide a range of 
+usability and functional benefits. Common features and UI elements improve the 
+user experience by making it easier for users to learn and use multiple 
+systems~\cite{Bosch2000}. By also providing a range of related 
+applications, such as those provided by the Microsoft office suite, software 
+families help meet users' needs across a wider range of domains.
+
+\subsection{Software Reuse}
+
+Reusing software is an ideal means of reducing costs. If we can avoid spending 
+time developing new software and instead use some existing application (or a 
+part therein), we save time and money. There have been many proposals on ways 
+to encourage software reuse, each with their own merits and drawbacks.
+
+Component based software engineering (CBSE) is one such example. CBSE is an 
+approach to software development that emphasizes using pre-built software 
+components as the building blocks of larger systems. These reusable components 
+can be developed independently and tested in isolation before being integrated 
+into the larger system software.
+
+One key benefit of CBSE, as mentioned above, is that it can help to reduce the 
+cost and time required for software development, since developers do not need 
+to implement everything from scratch. Additionally, CBSE can improve the 
+quality and reliability of software systems, since components have typically 
+been thoroughly tested and previously used in other contexts.
+
+One CBSE framework is the Common Object Request Broker Architecture (CORBA), 
+which provides a standardized mechanism for components to 
+communicate with each other across a network. CORBA defines a set of interfaces 
+and protocols that allow components written in different programming languages 
+to interact with each other in a distributed environment~cite{OMG2000}.
+
+Another CBSE framework is the JavaBeans Component Architecture. It is a 
+standard for creating reusable software components in Java. JavaBeans are 
+self-contained software modules with a well-defined interface that can be 
+easily integrated into a variety of development environments and combined to 
+form larger applications\cite{Oracle-Javabeans}.
+
+The largest challenge of CBSE is ensuring components are compatible with others 
+and can be integrated into a larger system without conflicts or errors. In an 
+effort to address this challenge, numerous approaches to component 
+compatibility testing have been proposed including static analysis, 
+dynamic analysis, and model-based testing~\cite{Wang2013}.
+
+Neighbors~\cite{Neighbors1980,Neighbors1987} proposed a method for engineering 
+reusable software systems known as ``Draco".  \ds{Finish talking about Draco 
+here}
+
+\subsection{Reproducible Research}
 
 Being able to reproduce results, is fundamental to the idea of good science.
 When it comes to software projects, there are often many undocumented
@@ -219,9 +297,11 @@ maintain a focus on code and certain computational details. Sweave,
 specifically, allows for embedding code into a document which is run as the
 document is being typeset so that up to date results are always included.
 However, Sweave (along with many other tools), still maintains a focus on
-producing a single, linear document. It is my hope that Drasil will outperform
-these existing tools due to its flexibility and its ability to create multiple
-artifacts from a knowledge base.
+producing a single, linear document. 
+%\ds{this doesn't belong here}
+%It is my hope that Drasil will outperform
+%these existing tools due to its flexibility and its ability to create multiple
+%artifacts from a knowledge base.
 
 \section{Literate Approaches to Software Development}
 
@@ -335,4 +415,39 @@ primarily code-focused with very little support for creating other software
 artifacts, in much the same way as LP.
 
 \section{Generative Programming}
- - ?
+
+Generative programming is an approach to software development that focuses on 
+automating the process of generating code from high-level 
+specifications~\cite{Czarnecki2000,Taha2006}. By writing a program 
+specification and feeding it to the generator, one does not have to manually 
+implement the desired program.
+
+One of the primary benefits of generative programming is that it can help to 
+increase productivity and reduce the time and effort required to develop 
+software~\cite{Krogdahl2004}. By automating the generation of code, developers 
+can focus on high-level design and specification, rather than low-level 
+implementation details.
+
+Generative programming has the added benefit of helping to improve the quality 
+of software by reducing the risk of errors and 
+inconsistencies~\cite{Czarnecki2000,Taha2006}. Since the code is generated 
+automatically from high-level specifications, there is less room for human 
+error, and the generated code is typically more consistent and predictable.
+
+There are also some potential drawbacks to generative programming. For 
+instance, the generated code may not always be optimal or 
+efficient~\cite{Krogdahl2004,Taha2006}.As the code is generated 
+automatically, it may not take into account all of the nuance or complexity
+of the underlying system potentially leading to suboptimal performance or other 
+issues.
+
+Generative programming also requires a significant upfront investment in time 
+and effort to develop the generators and other tools needed to automate the 
+process of code generation~\cite{Czarnecki2000,Taha2006}. This means it is 
+often not worth the effort to use generative programming for one-off projects.
+
+There are a large number of generative programming tools available today. Some, 
+like template metaprogramming (TMP) tools, are built into a number of 
+programming languages (C++, Rust, Scala, Java, Go, Python, etc.) and offer 
+varying levels of support for generative programming. 
+\ds{Give some examples of code generators and their applications here}

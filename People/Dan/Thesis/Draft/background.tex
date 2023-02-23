@@ -10,7 +10,18 @@ was designed, how it was implemented, how to test it, and so on would be
 considered a \sf{}, as would the source code whether as a text file, stack of 
 punched cards, magnetic tapes, or other media.
 
-\ds{Need to work in (here?) why \sfs{} are important}
+\SFS{} beyond just the source code are important to us for a number of reasons. 
+\SFS{} serve as a means of communication between different stakeholders 
+involved in the software development process, or even different generations of 
+developers involved in the production of a piece of software. They provide a 
+common understanding of what the software is supposed to do, how it will be 
+built, and how it will be tested. \SFS{} also provide a record of the decisions 
+that were made during the development process which is important for future 
+maintenance/modification of the software or for compliance reasons. Combined 
+with the former, this gives us a means to verify and validate the software 
+against its original requirements and design. The production, maintenance, and 
+use of \sfs{} is largely dependent on the specific design process being used 
+within a team.
 
 \fig{
 \begin{center}
@@ -65,9 +76,9 @@ curated list covers those most relevant to this thesis:
 This list is not exhaustive of all the types of \sfs{}, as there are many other
 design processes which use different types of \sfs{}. Looking at an agile 
 approach using Scrum/Kanban, the \sfs{} tend to be distributed in different 
-ways. Requirements are documented in tickets under so-called `epics', 
-`stories', and `tasks' as opposed to a singular requirements artifact, and the 
-acceptance criteria listed on those tickets make up the validation and 
+ways. Requirements are documented in tickets under so-called ``epics", 
+``stories", and ``tasks" as opposed to a singular requirements artifact, and 
+the acceptance criteria listed on those tickets make up the validation and 
 verification plan. 
 
 Regardless of the process used, most attempt to document very similar 
@@ -113,9 +124,9 @@ Rational Design phase & Corresponding Waterfall phase(s) & Common \SFS{}
 \end{tabular}
 \end{table}
 
-\SFS{} are important to development in a number of ways, such as easing the 
-burden of maintenance and training. We outline the artifacts we are most 
-interested below with a brief description of their purpose.
+As mentioned earlier, \sfs{} are important to development in a number of ways, 
+such as easing the burden of maintenance and training. We outline the artifacts 
+we are most interested below with a brief description of their purpose.
 
 \cardifact{Software Requirements Specification}{Contains the functional and 
 nonfunctional requirements detailing what the desired software system should 
@@ -184,6 +195,11 @@ problem that \sf{} is solving}
 \end{table}
 
 \section{Software Reuse and Software Families}
+
+In this section we look at ways in which others have attempted to avoid 
+``reinventing the wheel" by providing means to reuse software, in part or 
+whole, and reuse the analysis and design efforts of those that came before.
+
 \subsection{Software/Program Families}
 
 Software/program families refer to a group of related systems sharing a common 
@@ -211,7 +227,7 @@ storage for specific applications like penetration/network testing (Kali Linux,
 Backbox, Parrot Security OS, BlackArch, etc.). However, if you are familiar 
 with one particular flavour of linux, you'll likely be comfortable moving 
 between several of the distributions built upon the same cores. You may even be 
-familiar moving to other *NIX based systems like MacOS or Unix.
+familiar moving to other *NIX based systems like MacOS/Unix.
 
 Software/program families can provide a range of benefits to both developers 
 and end-users. For developers, software families can increase 

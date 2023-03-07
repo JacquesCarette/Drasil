@@ -182,6 +182,40 @@ Subsection of intro? But give examples, well illustrated. See outline.txt.
 
 Analyse the actual content of the examples. See what makes them tick.
 
+To generate code the following information is needed:
+
+\begin{itemize}
+  \item Title of the project % Change title to the more natural sounding name?
+  \item Purpose of the project % Not currently implemented? #3159, #3218
+  \item Code authors
+  \item Constants symbols, meaning, units and values
+  \item Variables symbols, meaning, and units
+  \item Equations
+  \item Identify inputs
+  \item Identify outputs
+  \item Design decisions
+\end{itemize}
+
+For projectile, much of this information is in the System Information (SI).  A
+subset of SI for the projectile package is shown below:
+
+\begin{lstlisting}
+si :: SystemInformation
+si = SI {
+  _sys         = projectileTitle,
+  _authors     = [samCrawford, brooks, spencerSmith],
+  _purpose     = [],
+  _quants      = symbols,
+  _instModels  = iMods,
+  _inputs      = inputs,
+  _outputs     = outputs,
+  _constants   = constants,
+}
+\end{lstlisting}
+
+% The next step is to expand on the information above, and to add the design
+% decisions information, since that is not in SI
+
 \section{Organize}
 \label{sec:organize}
 

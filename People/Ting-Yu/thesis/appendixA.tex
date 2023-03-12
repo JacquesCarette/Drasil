@@ -1,4 +1,48 @@
 \chapter{Your Appendix}
 \label{appendix_a}
 
-Your appendix goes here.
+Figure~\ref{fig:drasil_printer} shows the dependency between modules in 
+\textbf{drasil-printers}. The arrow points to the module that is being relied 
+on. 
+\begin{figure}
+	\includegraphics{figures/drasil-printers.jpg}
+	\caption{drasil-printer Dependency Graph}
+	\label{fig:drasil_printer}
+\end{figure}
+
+\begin{listing}[h]
+	\caption{JSON Code of A Notebook Document}
+	\label{code:notebookmetada}
+	\begin{lstlisting}[language=json] 
+		{
+			"cells": [
+			{
+				"cell_type": "markdown",
+				"metadata": {},
+				"source": []
+			}
+			],
+			"metadata": {
+				"kernelspec": {
+					"display_name": "Python 3",
+					"language": "python",
+					"name": "python3"
+				},
+				"language_info": {
+					"codemirror_mode": {
+						"name": "ipython",
+						"version": 3
+					},
+					"file_extension": ".py",
+					"mimetype": "text/x-python",
+					"name": "python",
+					"nbconvert_exporter": "python",
+					"pygments_lexer": "ipython3",
+					"version": "3.9.1"
+				}
+			},
+			"nbformat": 4,
+			"nbformat_minor": 4
+		}	
+	\end{lstlisting}
+\end{listing}

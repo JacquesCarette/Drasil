@@ -1,4 +1,8 @@
 \documentclass[12pt]{report} % Times New Roman, 12pt
+
+% Extra functionality for colouring elements
+\usepackage[table,dvipsnames]{xcolor}
+
 %\usepackage{gscale_thesis_singlespace} % Single spaced thesis
 \usepackage{gscale_thesis_doublespace} % Double spaced thesis
 \usepackage{fancyheadings} % Header and footer styling
@@ -20,9 +24,88 @@
 \usepackage{amsmath} % Non-standard math symbols
 \usepackage{amsfonts} % Extended fonts for mathematics
 
+% For nice captions and floating environments, such as for my code snippets
+\usepackage{caption}
+\usepackage{float}
+
+\definecolor{darkblue}{RGB}{0,0,139}
+
+\usepackage{todonotes}
+
+\usepackage[newfloat=true]{minted}
+\newenvironment{code}{\captionsetup{type=listing}}{}
+\SetupFloatingEnvironment{listing}{name=Code, listname=List of Codes}
+
+\usepackage{listings}
+\lstdefinelanguage{json}{
+	tabsize=2,
+	basicstyle=\normalfont\ttfamily,
+	numbers=left,
+	numberstyle=\scriptsize,
+	stepnumber=1,
+	numbersep=8pt,
+	showstringspaces=false,
+	breaklines=true,
+	literate=
+	{:}{{{\color{McMasterLightMaroon}{:}}}}{1}
+	{,}{{{\color{McMasterLightMaroon}{,}}}}{1}
+	{\{}{{{\color{McMasterWorldBlue}{\{}}}}{1}
+	{\}}{{{\color{McMasterWorldBlue}{\}}}}}{1}
+	{[}{{{\color{McMasterWorldBlue}{[}}}}{1}
+	{]}{{{\color{McMasterWorldBlue}{]}}}}{1},
+}
+
+\lstdefinelanguage{haskell1}{
+	language=haskell,
+	tabsize=2,
+	basicstyle=\normalfont\ttfamily,
+	numbers=left,
+	numberstyle=\scriptsize,
+	stringstyle=\color{orange},
+	stepnumber=1,
+	numbersep=8pt,
+	showstringspaces=false,
+	breaklines=true,
+	postbreak=\mbox{\textcolor{black}{$\hookrightarrow$}\space},
+	frame=lines,
+	framerule=1.5pt,
+	alsoletter={'},
+	commentstyle=\color{gray},
+	morecomment=[l]\--,
+	keywordstyle=[1]\color{McMasterWorldGreen},
+	keywords=[1]{case,class,data,deriving,do,else,if,import,qualified,in,infixl,
+		infixr,instance,let,module,of,primitive,then,type,where,family,newtype,as},
+	keywordstyle=[1]\color{McMasterWorldGreen},
+	morekeywords=[2]{->,|,=>,::,[,],\,*,<-, Document, Title, Author, 
+	LayoutObj, Sentence, Bool, ModelExpr, PExpr, RawContent, ListType, DType, 
+	Identifier, Contents, Lbl, Filepath, MaxWidthPercent, BibRef, Maybe, Width, 
+	Height, Tags, Spec, Label, Caption, Depth, String, Reference, 
+	LabelledContent, PrintingInformation, D, Doc, DocSection},
+	keywordstyle=[2]\color{McMasterWorldBlue},
+	keywords=[3]{rectVel, speed', equationsSent, lbldExpr, unlbldExpr, lo, 
+	makeEquation, toEqn, layLabelled, layUnlabelled, makeMetadata, DocDesc, 
+	printLO, makeTable, makeRows, makeHeaderCols, makeColumns, markdownCell, 
+	markdownB', markdownE},
+	keywordstyle=[3]\color{McMasterHeritageMaroon},
+	keywords=[4]{T, QP, P},
+	keywordstyle=[4]\color{blue}
+ }
+
 \usepackage[hidelinks]{hyperref} % Linking to LaTeX labels and external URLs
+\hypersetup{
+	colorlinks=true,
+	linkcolor=black,
+	urlcolor=red,
+	citecolor=blue
+}
 
 \numberwithin{equation}{section} % Numbers equations based on their section
+
+% McMaster Colours
+\input{mcmaster_colours}
+
+\newcommand*{\macred}{\textcolor{McMasterHeritageMaroon}}
+\newcommand*{\macblue}{\textcolor{McMasterWorldBlue}}
 
 % Required for biblatex, but also adds functionality for quotation
 \usepackage{csquotes}
@@ -50,8 +133,7 @@ seconds=true
   \referencepages % Table of Contents, List of Figures, List of Tables
   \include{notation}
   \academicstatement{academicachievementdeclaration}
-\afterpreface
-  
+\afterpreface  
 
   \include{chapters}          
         
@@ -63,11 +145,6 @@ seconds=true
 
 \begin{appendix}
     \include{appendixA}
-        \setcounter{figure}{0}
-        \setcounter{equation}{0}
-        \setcounter{table}{0}
-
-    \include{appendixB}
         \setcounter{figure}{0}
         \setcounter{equation}{0}
         \setcounter{table}{0}

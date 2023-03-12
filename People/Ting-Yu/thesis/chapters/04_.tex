@@ -1,0 +1,40 @@
+To deal with the second type of metadata, we need to answer the following 
+questions: i) what is the type of the cell, markdown or code? ii) how do we 
+know where to end a cell and start a new one? That is, when to ``cut" the 
+contents?
+
+The first question is easy to answer as there are no codes in SRS; contents are 
+either images or texts. Therefore, we can simply make all cells of type 
+markdown. 
+
+As for the second question, we would like to first know what is a cell, 
+conceptually? A working definition helps us understand what should do for 
+implementation. In the discussion, we define a cell as a kind of ``unit of 
+contents" \cite{cellsseparation}.  Thinking of what would be the ``unit" of 
+contents, the intuition might be paragraphs or sections. In Drasil document 
+language, SRS is made up of sections (Code~\ref{code:docdesc}), we can take 
+advantage of it and make each section a cell. This solution do work. 
+problem more the intuition answer of it is to have each section as a cell.
+
+\begin{listing}
+	\caption{Source Code for DocDesc}
+	\label{code:docdesc}
+	\begin{lstlisting}[language=haskell1]
+		type DocDesc = [DocSection]
+		
+		data DocSection = TableOfContents
+		| RefSec RefSec
+		| IntroSec IntroSec
+		| StkhldrSec StkhldrSec
+		| GSDSec GSDSec
+		| SSDSec SSDSec
+		| ReqrmntSec ReqrmntSec
+		| LCsSec LCsSec
+		| UCsSec UCsSec
+		| TraceabilitySec TraceabilitySec
+		| AuxConstntSec AuxConstntSec
+		| Bibliography
+		| AppndxSec AppndxSec
+		| OffShelfSolnsSec OffShelfSolnsSec
+	\end{lstlisting}
+\end{listing}

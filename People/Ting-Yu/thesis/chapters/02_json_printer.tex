@@ -1,0 +1,431 @@
+\chapter{Drasil Printer} \label{chap:jsonprinter}
+The first step to generate Jupyter Notebook in Drasil is building a printer to 
+deal with notebook generation. As mentioned in Chapter~\ref{chap:intro}, a 
+notebook is a JSON document composed of code and Markdown contexts, such as 
+text and images. Drasil is capable of generating SRS documents in HTML and 
+LaTeX, which are handle by our HTML and TeX printer, respectively. We are 
+adding a JSON printer to Drasil for generating SRS documents in notebook format.
+
+When we have the user-encoded document (i.e., recipes of their scientific 
+problem), contents are passed to Drasil's printers for printing. 
+The printer is located in \textbf{drasil-printers}, which holds all the 
+modules and functions needed for printing the software artifacts. The 
+responsibility of \textbf{drasil-printers} is transferring the types and data
+defined in Drasil's source language to printable objects and rendering those 
+objects in desirable formats, such as HTML, LaTeX, or JSON. A list of packages 
+and modules of the printers and their responsibilities can be found in 
+Table~\ref{tab:printerpacks}. Note that the majority of 
+\textbf{drasil-printers} already existed before this research, and we only 
+added a JSON printer and made a few changes to it for better notebook printing.
+
+In this chapter, we discuss how the contents are printed, how the printer 
+works, and the implementation of the JSON printer.
+
+\begin{longtable}[c]{|>{\raggedright}p{0.32\linewidth}|>{\raggedright\arraybackslash}p{0.61\linewidth}|}
+	\caption{Summary of packages and modules in \textbf{drasil-printers}} 
+	\label{tab:printerpacks}                                              
+	\\ \hline
+	
+	\rowcolor{McMasterMediumGrey}
+	\textbf{Package/Module} & \textbf{Responsibility}
+	\\ \hline
+	
+	Language.Drasil.DOT & Defines types and holds functions for generating 
+	traceability graphs as .dot files. 
+	\\ \hline
+	Language.Drasil.HTML & Holds all functions needed to generate HTML files. 
+	\\ \hline
+	Language.Drasil.JSON & Holds all functions needed to generate JSON files. 
+	\\ \hline
+	Language.Drasil.Log & Holds functions for generating log files. 
+	\\ \hline
+	Language.Drasil.Markdown & Holds functions for generating GOOL code.
+	\\ \hline
+	Language.Drasil.Plain & Holds functions for generating plain files.
+	\\ \hline
+	Language.Drasil.Printing & Transfers types and datas to printable objects 
+	and defines helper functions for printing.
+	\\ \hline
+	Language.Drasil.TeX & Holds all functions needed to generate TeX files. 
+	\\ \hline
+	Language.Drasil.Config & Holds default configuration functions. 
+	\\ \hline
+	Language.Drasil.Format & Defines document types (SRS, Website, or Jupyter) 
+	and output formats (HTML, TeX, JSON, or Plain).
+	\\ \hline
+\end{longtable}
+
+\section{How documents are printed in Drasil?}
+A ``printable" document contains a title, authors, and contents, where the 
+contents are different types of layout objects (Code~\ref{code:Document}). In 
+Drasil's document source language, contents are categorized into different 
+types and dealt with explicitly. Code~\ref{code:RawContent} shows the 
+definition of contents we defined in source code. For example, a type 
+\macred{Paragraph} is made up of sentences, and an \textbf{EqnBlock} holds an 
+expression (of type \macblue{ModelExpr} \footnote{Modelling expression is a 
+mathematical expression language.}). These contents are then converted to 
+printable layout objects (as defined in Code~\ref{code:LayoutObj}) in 
+\textbf{Language.Drasil.Printing}, with similar types but are more suitable for 
+printing. After that, we can target these layout objects to generate them in 
+a specific format in different document languages in language printers. 
+
+\begin{listing}[h]
+	\caption{Pseudocode for Definition of a Printable Document}
+	\label{code:Document}
+	\begin{lstlisting}[language=haskell1]
+		data Document = Doc Title Author [LayoutObj]
+	\end{lstlisting}
+\end{listing}
+
+\begin{listing}[h]
+	\caption{Source Code for Definition of RawContent}
+	\label{code:RawContent}
+	\begin{lstlisting}[language=haskell1]
+		-- | Types of layout objects we deal with explicitly.
+		data RawContent =
+				Table [Sentence] [[Sentence]] Title Bool
+		  | Paragraph Sentence                       
+		  | EqnBlock ModelExpr                      
+		  | DerivBlock Sentence [RawContent]        
+		  | Enumeration ListType                    
+		  | Defini DType [(Identifier, [Contents])] 
+		  | Figure Lbl Filepath MaxWidthPercent     
+		  | Bib BibRef                              
+		  | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl
+	\end{lstlisting}
+\end{listing}
+
+\begin{listing}[h]
+	\caption{Source Code for Definition of LayoutObj}
+	\label{code:LayoutObj}
+	\begin{lstlisting}[language=haskell1]
+		-- | Defines types similar to content types in 
+		-- "Language.Drasil" but better suited for printing.
+		data LayoutObj = 
+			Table Tags [[Spec]] Label Bool Caption                          
+		| Header Depth Title Label                                       
+		| Paragraph Contents                                              
+		| EqnBlock Contents                                               
+		| Definition DType [(String,[LayoutObj])] Label                   
+		| List ListType                                                   
+		| Figure Label Caption Filepath MaxWidthPercent                  
+		| Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label 
+		| HDiv Tags [LayoutObj] Label                                    
+		| Cell [LayoutObj] 
+		| Bib BibRef         
+	\end{lstlisting}
+\end{listing}
+
+Here is an example workflow of how an expression is encoded and printed. 
+Equation~\ref{eq:velocity} is an expression - velocity integrating constant 
+acceleration with respect to time in one dimension, which is used in the case 
+study 
+\href{https://jacquescarette.github.io/Drasil/examples/projectile/SRS/srs/Projectile_SRS.html}{Projectile}:
+ 
+\begin{equation}
+	\label{eq:velocity}
+	v=v^i+ac^t
+\end{equation}
+
+To encode this equation (\macred{rectVel}), we might write it as shown in 
+Code~\ref{code:encodeProjExpr}, where the type \macblue{pExpr} is a synonyms 
+used for \macblue{ModelExpr}. After defining the equation, it can be used 
+in a \macblue{Sentence} \footnote{In Drasil, some content types are 
+manipulated into a \textbf{Sentence} to form printable \textbf{Contents}.} 
+(Code~\ref{code:ExprtoSent}) or other content types that contain expressions, 
+such as \macred{DerivBlock}\footnote{DerivBlock is a type of contents 
+representing a derivation block.}. Expressions can also be converted directly 
+to \macblue{Contents} (Code~\ref{code:ExprtoCont}).
+
+\begin{listing}[h]
+	\caption{Source Code for Encoding rectVel}
+	\label{code:encodeProjExpr}
+	\begin{lstlisting}[language=haskell1]
+		speed' :: PExpr
+		speed' = sy QP.iSpeed `addRe` (sy QP.constAccel `mulRe` sy time)
+		
+		rectVel :: PExpr
+		rectVel = sy speed $= speed'
+	\end{lstlisting}
+\end{listing}
+
+\begin{listing}[h]
+	\caption{Pseudocode for Converting rectVel to Sentence}
+	\label{code:ExprtoSent}
+	\begin{lstlisting}[language=haskell1]
+		equationsSent :: Sentence
+		equationsSent = S "From Equation" +:+ eS rectVel
+		
+		-- | Lifts an expression into a Sentence.
+		E :: ModelExpr -> Sentence
+		
+		eS :: ModelExpr -> Sentence
+		eS = E
+	\end{lstlisting}
+\end{listing}
+
+\begin{listing}[h]
+	\caption{Source Code for Converting ModelExpr to Contents}
+	\label{code:ExprtoCont}
+	\begin{lstlisting}[language=haskell1]
+		-- | Displays a given expression and attaches a 'Reference' to it.
+		lbldExpr :: ModelExpr -> Reference -> LabelledContent
+		lbldExpr c lbl = llcc lbl $ EqnBlock c
+		
+		-- | Same as 'lbldExpr' except content is unlabelled 
+		-- (does not attach a 'Reference').
+		unlbldExpr :: ModelExpr -> Contents
+		unlbldExpr c = UlC $ ulcc $ EqnBlock c
+	\end{lstlisting}
+\end{listing}
+
+Next, the printers transfer the expression to a printable \textbf{EqnBlock} and 
+generate it in a specific document language. Code~\ref{code:EqnblocktoTex]} 
+shows how a \macblue{RawContent}: \textbf{EqnBlock} is converted to a 
+\macblue{LayoutObj}: \textbf{EqnBlock} and rendered in LaTeX.
+
+\begin{listing}
+	\caption{Source Code for Rendering EqnBlock to LaTeX}
+	\label{code:EqnblocktoTex]}
+	\begin{lstlisting}[language=haskell1]
+		-- Line 2-15 is handled by Language.Drasil.Printing
+		-- | Helper that translates 'LabelledContent's to a 
+		-- printable representation of 'T.LayoutObj'. 
+		-- Called internally by 'lay'.
+		layLabelled :: PrintingInformation -> LabelledContent -> T.LayoutObj
+		layLabelled sm x@(LblC _ (EqnBlock c)) = 
+		 T.HDiv ["equation"] 
+		 [T.EqnBlock (P.E (modelExpr c sm))]
+		 (P.S $ getAdd $ getRefAdd x)
+		
+		-- | Helper that translates 'RawContent's to a  
+		-- printable representation of 'T.LayoutObj'. 
+		-- Called internally by 'lay'.
+		layUnlabelled :: PrintingInformation -> RawContent -> T.LayoutObj
+		layUnlabelled sm (EqnBlock c) = T.HDiv ["equation"] 
+		 [T.EqnBlock	(P.E (modelExpr c sm))] P.EmptyS
+		
+		-- Line 18-28 is handled by Language.Drasil.TeX
+		-- | Helper for rendering 'LayoutObj's into TeX.
+		lo :: LayoutObj -> PrintingInformation -> D
+		lo (EqnBlock contents) _ = makeEquation contents
+		
+		-- | Prints an equation.
+		makeEquation :: Spec -> D
+		makeEquation contents = toEqn (spec contents)
+		
+		-- | toEqn inserts an equation environment.
+		toEqn :: D -> D
+		toEqn (PL g) = equation $ PL (\_ -> g Math)
+	\end{lstlisting}
+\end{listing}
+
+More information on how to create a project with Drasil and how information is 
+encoded can be found on the 
+\href{https://jacquescarette.github.io/Drasil/}{Drasil Wiki}. 
+
+\section{Notebook Printer}
+As we know that \macblue{LayoutObj} is the key of handling different types of 
+contents, the responsibility of each document language's printer is rendering 
+layout objects in that particular language, in addition, generating necessary 
+information of the document. For example, CSS describes the style and 
+presentation of a HTML page, therefore, generating the necessary CSS 
+selectors in HTML documents is taken care of by the HTML printer. Similarly, 
+metadata \footnote{Information about a 
+book or its contents is known as metedata. It's often used to regulate how the 
+notebook behaves and how its feature works \cite{notebookmetadata}.} is 
+required for a Jupyter Notebook document. To implement a well-functioning 
+notebook printer, we are focusing on rendering contents in JSON format and 
+generating necessary metadata.
+
+\subsection{Rendering LayoutObjs in notebook format}
+Code~\ref{code:LOtoJSON} is the main function for rendering layout objects into 
+a notebook. This function is similar to the one in HTML and TeX printers. It is 
+the core of generating the type of contents in that format. We deal with each 
+type of layout object explicitly, considering how notebook users add contents 
+by hand in Jupyter Notebook, and try to reproduce them. To properly render 
+contents in notebook format, we also created a few helper functions. For 
+example, \macred{nbformat} from Code~\ref{code:nbformat} helps create necessary 
+indentations for each line of contents and encodes them into JSON. We take 
+advantage of the \textbf{encode} function from the Haskell package 
+\textbf{Text.JSON}, which takes a Haskell value and converts it into a JSON 
+string \cite{textdotjosn}. 
+
+\begin{listing}[h]
+	\caption{Source Code for Converting contents into JSON}
+	\label{code:nbformat}
+	\begin{lstlisting}[language=haskell1]
+		import qualified Text.JSON as J (encode) 
+		
+		-- | Helper for converting a Doc in JSON format
+		nbformat :: Doc -> Doc
+		nbformat s = text ("    " ++ J.encode (show s ++ "\n") ++ ",")
+	\end{lstlisting}
+\end{listing}
+
+In addition, since non-code contents are built in Markdown in Jupyter Notebook, 
+some types of contents need to be taken care of particularly for Markdown 
+generation, such as tables. Although Jupyter Notebook allows HTML tables, where 
+we would be able to reuse the function from HTML printer, as mentioned 
+previously, we care about how people would actually create contents in Jupyter 
+to make the generated-documents more ``human-like". Hence, instead of 
+generating HTML tables, we are making tables in Markdown format. 
+\macred{makeTable} from Code~\ref{code:makeTable} renders a table in Markdown 
+and converts it to notebook format.
+
+\begin{listing}[h]
+	\caption{Source Code for Rendering a Markdown Table}
+	\label{code:makeTable}
+	\begin{lstlisting}[language=haskell1]
+		-- | Renders Markdown table, called by 'printLO'
+		makeTable :: [[Spec]] -> Doc -> Doc
+		makeTable [] _      = error "No table to print"
+		makeTable (l:lls) r = refID r $$ nbformat empty $$ 
+			(makeHeaderCols l $$ makeRows lls) $$ nbformat empty
+		
+		-- | Helper for creating table rows
+		makeRows :: [[Spec]] -> Doc
+		makeRows = foldr (($$) . makeColumns) empty
+		
+		-- | makeHeaderCols: Helper for creating table header
+		-- (each of the column header cells)
+		-- | makeColumns: Helper for creating table columns
+		makeHeaderCols, makeColumns :: [Spec] -> Doc
+		makeHeaderCols l = nbformat (text header) $$ 
+			nbformat (text $ genMDtable ++ "|")
+			where 
+				header = show(text "|" <> hcat(punctuate 
+					(text "|") (map pSpec l)) <> text "|")        
+				c = count '|' header
+				genMDtable = concat (replicate (c-1) "|:--- ")
+		
+		makeColumns ls = nbformat (text "|" <> hcat(punctuate 
+			(text "|") (map pSpec ls)) <> text "|")
+	\end{lstlisting}
+\end{listing}
+
+We break down contents into different types and handle them type by type. If 
+the case is more complicated, we build a \textbf{make} function to deal with it 
+specifically to reduce confusion in the main \macred{printLO} function. For 
+example, \macred{makeTable} takes care of table generation and 
+\macred{makeList} generates a list of items; they are called by 
+\macred{printLO}. We carefully consider how contents are created in the 
+notebook and render each type of layout object in notebook format to make sure 
+that the generated document is a valid Jupyter Notebook document.
+
+\begin{listing}[h]
+	\caption{Source Code for Rendering LayoutObjs into JSON}
+	\label{code:LOtoJSON}
+	\begin{lstlisting}[language=haskell1, tabsize=1, basicstyle=\small\ttfamily]
+		-- | Helper for rendering LayoutObjects into JSON
+		printLO :: LayoutObj -> Doc
+		printLO (Header n contents l) = nbformat empty $$
+				nbformat (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
+		printLO (Cell layoutObs) = markdownCell $ vcat (map printLO layoutObs)
+		printLO (HDiv _ layoutObs _) = vcat (map printLO layoutObs) 
+		printLO (Paragraph contents) = nbformat empty $$
+				nbformat (stripnewLine (show(pSpec contents)))
+		printLO (EqnBlock contents)  = nbformat mathEqn
+		  where
+		    toMathHelper (PL g) = PL (\_ -> g Math)
+		    mjDelimDisp d = text "$$" <> stripnewLine (show d) <> text "$$" 
+		    mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
+		printLO (Table _ rows r _ _) = nbformat empty $$
+				makeTable rows (pSpec r)
+		printLO (Definition dt ssPs l) = nbformat (text "<br>") $$ 
+				makeDefn dt ssPs (pSpec l)
+		printLO (List t) = nbformat empty $$ makeList t False
+		printLO (Figure r c f wp) = makeFigure (pSpec r) (pSpec c) (text f) wp
+		printLO (Bib bib) = makeBib bib
+		printLO Graph{} = empty 
+	\end{lstlisting}
+\end{listing}
+
+\subsection{Metadata Generation}
+There are two kinds of metadata in the notebook: the first type is for the 
+notebook environment setup (line 9-30 in Code~\ref{code:notebookmetada}), and 
+the other (line 3-7 in Code~\ref{code:notebookmetada}) is used to control the 
+behavior of a notebook cell, where we define the types of a cell (i.e, Code or 
+Markdown). Generating the first type is straightforward since the metadata for 
+setting up the environment is identical across all notebooks. We built a helper 
+function \macred{makeMetadata} in Code~\ref{code:makeMetadata}, to generate 
+necessary metadata of a notebook document. This function is called when a 
+Jupyter Notebook document is being built, and the metadata is printed at the 
+end of the document.
+
+\begin{listing}[h]
+	\caption{Source Code for Making Metadata}
+	\label{code:makeMetadata}
+	\begin{lstlisting}[language=haskell1, basicstyle=\small\ttfamily]
+		-- | Generate the metadata necessary for a notebook document.
+		makeMetadata :: Doc  
+		makeMetadata = vcat [
+		text " \"metadata\": {", 
+			vcat[
+			text "  \"kernelspec\": {", 
+				text "   \"display_name\": \"Python 3\",", 
+				text "   \"language\": \"python\",",
+				text "   \"name\": \"python3\"", 
+				text "  },"],
+			vcat[
+			text "  \"language_info\": {", 
+				text "   \"codemirror_mode\": {", 
+					text "    \"name\": \"ipython\",",
+					text "    \"version\": 3",
+					text "   },"],
+				text "   \"file_extension\": \".py\",", 
+				text "   \"mimetype\": \"text/x-python\",",
+				text "   \"name\": \"python\",",
+				text "   \"nbconvert_exporter\": \"python\",",
+				text "   \"pygments_lexer\": \"ipython3\",",
+				text "   \"version\": \"3.9.1\"",
+				text "  }",
+			text " },",
+		text " \"nbformat\": 4,", 
+		text " \"nbformat_minor\": 4" 
+		]
+	\end{lstlisting}
+\end{listing}
+
+The second type of metadata is trickier. We need to break down our contents in 
+units and differentiate them to generate the right type of cells. We are going 
+to discuss this further in Chapter~4 \todo{3,4 link} after a new case study is 
+introduced in Chapter~3. For now, since there is no code in SRS, 
+all contents should be in Markdown. The \macred{markdownCell} function in 
+Code~\ref{code:markdownCell} is the helper function for making the metadata of 
+a Markdown cell; it generates the needed metadata and creates a cell for the 
+passed-in unit of content. An example implementation can be found in 
+Code~\ref{code:callmarkdownCell}.\todo{update the code when it's final}
+
+\begin{listing}[h]
+	\caption{Source Code for markdownCell}
+	\label{code:markdownCell}
+	\begin{lstlisting}[language=haskell1]
+		-- | Helper for building markdown cells
+		markdownB', markdownE :: Doc
+		markdownB' = text "  {\n   \"cell_type\": \"markdown
+			\",\n \"metadata\": {},\n   \"source\": [" 
+		markdownE  = text "    \"\\n\"\n   ]\n  },"
+			
+		-- | Helper for generate a Markdown cell
+		markdownCell :: Doc -> Doc
+		markdownCell c = markdownB' <> c <> markdownE
+	\end{lstlisting}
+\end{listing}
+
+\begin{listing}[h]
+	\caption{Source Code for Calling markdownCell}
+	\label{code:callmarkdownCell}
+	\begin{lstlisting}[language=haskell1]
+		printLO (Cell layoutObs) = markdownCell $ vcat (map printLO layoutObs)
+	\end{lstlisting}
+\end{listing}
+
+The current JSON printer is not perfect; there is still room for improvement. 
+\todo{link to future work} However, with the printer, not only is Drasil able 
+to generate SRS in JSON format, but we are also able to edit and share the 
+documents with Jupyter Notebook, adding value to the Drasil generated 
+documents. 
+ 
+The complete implementation of the JSON printer can be found in 
+Appendix~.\todo{link}

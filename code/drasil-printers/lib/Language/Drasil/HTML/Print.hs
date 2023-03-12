@@ -209,6 +209,8 @@ pOps Dim      = "dim"
 pOps Exp      = "e"
 pOps Neg      = "&minus;"
 pOps Cross    = "&#10799;"
+pOps VAdd     = "&plus;"
+pOps VSub     = "&minus;"
 pOps Dot      = "&sdot;"
 pOps Scale    = "&#8239;" -- same as Mul
 pOps Eq       = " = " -- with spaces?
@@ -232,6 +234,7 @@ pOps Perc     = "%"
 pOps LArrow   = " &larr; "
 pOps RArrow   = " &rarr; "
 pOps ForAll   = " &forall; "
+pOps Partial  = "&part;"
 
 -- | Allows for open/closed variants of parenthesis, curly brackets, absolute value symbols, and normal symbols.
 fence :: OpenClose -> Fence -> String

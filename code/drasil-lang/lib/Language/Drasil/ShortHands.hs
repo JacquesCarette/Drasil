@@ -7,7 +7,7 @@ import Language.Drasil.Symbol.Helpers (variable)
 -- | Short forms of various variable names. c means /capital/; l means /lowercase/.
 cA,cB,cC,cD,cE,cF,cG,cH,cI,cJ,cK,cL,cM,cN,cO,cP,cQ,cR,cS,cT,cU,cV,cW,cX,cY,cZ,
   lA,lB,lC,lD,lE,lF,lG,lH,lI,lJ,lK,lL,lM,lN,lO,lP,lQ,lR,lS,lT,lU,lV,
-  lW,lX,lY,lZ,lAlpha,cAlpha,lBeta,cBeta,lGamma,cGamma,lDelta,cDelta,lEpsilon,vEpsilon, 
+  lW,lX,lY,lZ,lAlpha,cAlpha,lBeta,cBeta,lGamma,cGamma,lDelta,cDelta,lEpsilon,vEpsilon,
   cEpsilon,lZeta,cZeta,lEta,cEta,lTheta,cTheta,lIota,cIota,lKappa,cKappa,lLambda,cLambda,
   lMu,cMu,lNu,cNu,lXi,cXi,lOmicron,cOmicron,lPi,cPi,lRho,cRho,lSigma,cSigma,lTau,cTau,
   lUpsilon,cUpsilon,lPhi,vPhi,cPhi,lChi,cChi,lPsi,cPsi,lOmega,cOmega,lNabla,lEll,lPosInf,lNegInf :: Symbol
@@ -104,9 +104,9 @@ cPi      = variable "Π"
 lRho     = variable "ρ"
 cRho     = variable "Ρ"
 lSigma   = variable "σ"
-cSigma   = variable "Σ" 
+cSigma   = variable "Σ"
 lTau     = variable "τ"
-cTau     = variable "Τ" 
+cTau     = variable "Τ"
 lUpsilon = variable "υ"
 cUpsilon = variable "Υ"
 lPhi     = variable "ϕ"

@@ -1,0 +1,17 @@
+\begin{haskell}{Original Chunk Database (ChunkDB)}{origChunkDB}{https://github.com/JacquesCarette/Drasil/blob/9c26b43d3e30c3f618e534a3f176a5152729af74/code/drasil-database/Database/Drasil/ChunkDB.hs\#L130-L144}
+-- | Our chunk databases. Should contain all the maps we will need.
+data ChunkDB = CDB { symbolTable :: SymbolMap
+                   , termTable :: TermMap 
+                   , defTable  :: ConceptMap
+                   , _unitTable :: UnitMap
+                   , _traceTable :: TraceMap
+                   , _refbyTable :: RefbyMap
+                   , _dataDefnTable  :: DatadefnMap
+                   , _insmodelTable   :: InsModelMap
+                   , _gendefTable   :: GendefMap
+                   , _theoryModelTable :: TheoryModelMap
+                   , _conceptinsTable :: ConceptInstanceMap
+                   , _sectionTable :: SectionMap
+                   , _labelledcontentTable :: LabelledContentMap
+                   } --TODO: Expand and add more databases
+\end{haskell}

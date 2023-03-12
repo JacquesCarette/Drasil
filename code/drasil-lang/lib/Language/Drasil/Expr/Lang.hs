@@ -12,7 +12,7 @@ import           Language.Drasil.Space         (DiscreteDomainDesc,
 import qualified Language.Drasil.Space         as S
 import           Language.Drasil.UID           (UID)
 import           Language.Drasil.WellTyped
-import Data.Either (lefts)
+import Data.Either (lefts, fromLeft)
 import qualified Data.Foldable as NE
 
 -- * Expression Types
@@ -46,8 +46,8 @@ data LABinOp = Index
 data OrdBinOp = Lt | Gt | LEq | GEq
   deriving Eq
 
--- | @Vector x Vector -> Vector@ binary operations (cross product).
-data VVVBinOp = Cross
+-- | @Vector x Vector -> Vector@ binary operations (cross product, addition, subtraction).
+data VVVBinOp = Cross | VAdd | VSub
   deriving Eq
 
 -- | @Vector x Vector -> Number@ binary operations (dot product).
@@ -193,6 +193,16 @@ instance Eq Expr where
 --   fromRational r = ArithBinaryOp Frac (fromInteger $ numerator   r)
 --                                       (fromInteger $ denominator r)
 
+-- Helper class for pretty-printing errors (should move from here)
+-- We don't want to (ab)use Show for this
+class Pretty p where
+  pretty :: p -> String
+
+instance Pretty VVVBinOp where
+  pretty Cross = "cross product"
+  pretty VAdd  = "vector addition"
+  pretty VSub  = "vector subtraction"
+
 instance LiteralC Expr where
   int = Lit . int
   str = Lit . str
@@ -205,6 +215,19 @@ assocArithOperToTy AddI  = S.Integer
 assocArithOperToTy MulI  = S.Integer
 assocArithOperToTy AddRe = S.Real
 assocArithOperToTy MulRe = S.Real
+
+-- helper function for typechecking to help reduce duplication
+vvvInfer :: TypingContext Space -> VVVBinOp -> Expr -> Expr -> Either Space TypeError
+vvvInfer ctx op l r = case (infer ctx l, infer ctx r) of
+    (Left lt@(S.Vect lsp), Left (S.Vect rsp)) -> 
+      if lsp == rsp && S.isBasicNumSpace lsp then
+        if op == VSub && (lsp == S.Natural || rsp == S.Natural) then
+          Right $ "Vector subtraction expects both operands to be vectors of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
+        else Left lt
+      else Right $ "Vector " ++ pretty op ++ " expects both operands to be vectors of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
+    (Left lsp, Left rsp) -> Right $ "Vector operation " ++ pretty op ++ " expects vector operands. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
+    (_       , Right re) -> Right re
+    (Right le, _       ) -> Right le
 
 instance Typed Expr Space where
   check :: TypingContext Space -> Expr -> Space -> Either Space TypeError
@@ -252,7 +275,7 @@ instance Typed Expr Space where
           = either
               (\_ -> all (\ r -> length r == columns && all (== expT) r) sss)
               (const False) expT
-        (Left t) = expT
+        t = fromLeft (error "Infer on Matrix had a strong expectation of Left-valued data.") expT -- This error should never occur.
 
   infer cxt (UnaryOp uf ex) = case infer cxt ex of
     Left sp -> case uf of
@@ -340,12 +363,14 @@ instance Typed Expr Space where
     (_, Right re) -> Right re
     (Right le, _) -> Right le
 
-  infer cxt (VVVBinaryOp Cross l r) = case (infer cxt l, infer cxt r) of
+  infer cxt (VVVBinaryOp o l r) = vvvInfer cxt o l r
+    {- case (infer cxt l, infer cxt r) of
     (Left lTy, Left rTy) -> if lTy == rTy && S.isBasicNumSpace lTy && lTy /= S.Natural
       then Left lTy
       else Right $ "Vector cross product expects both operands to be vectors of non-natural numbers. Received `" ++ show lTy ++ "` X `" ++ show rTy ++ "`."
     (_       , Right re) -> Right re
     (Right le, _       ) -> Right le
+    -}
 
   infer cxt (VVNBinaryOp Dot l r) = case (infer cxt l, infer cxt r) of
     (Left lt@(S.Vect lsp), Left rt@(S.Vect rsp)) -> if lsp == rsp && S.isBasicNumSpace lsp

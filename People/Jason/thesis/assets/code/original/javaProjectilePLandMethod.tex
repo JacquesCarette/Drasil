@@ -1,0 +1,11 @@
+\begin{codeSnippet}{java}{Projectile: Java \(p_\text{land}\) Calculation Method}{javaProjectilePLandMethod}{https://github.com/JacquesCarette/Drasil/blob/9c26b43d3e30c3f618e534a3f176a5152729af74/code/stable/projectile/Projectile_U_P_NoL_U_WI_V_D/src/java/Projectile/Projectile.java\#L48-L56}
+/** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
+    \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
+    \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
+    \param g_vect gravitational acceleration (m/s^2)
+    \return landing position: the distance from the launcher to the final position of the projectile (m)
+*/
+public static double func_p_land(double v_launch, double theta, double g_vect) {
+    return 2 * Math.pow(v_launch, 2) * Math.sin(theta) * Math.cos(theta) / g_vect;
+}
+\end{codeSnippet}

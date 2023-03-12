@@ -1,4 +1,10 @@
 -- | Defines concepts used to create documentation.
+
+-- Changes to documentation-related named chunks and common ideas should be reflected in the 
+-- 'Creating Your Project in Drasil' tutorial found on the wiki:
+-- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
+
+
 module Data.Drasil.Concepts.Documentation where
 
 import Language.Drasil hiding (organization, year, label, variable)

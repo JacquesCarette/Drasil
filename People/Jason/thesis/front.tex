@@ -1,0 +1,104 @@
+%------------------------------------------------------------------------------
+% Half Title page
+%------------------------------------------------------------------------------
+
+% First two pages will have a slightly different margin than the rest of the
+% document, for the sake of making the document look slightly nicer.
+\newgeometry{margin=1in}
+
+\pagenumbering{gobble} % page 0
+\input{front/half_title}
+\newpage
+
+%------------------------------------------------------------------------------
+% Title page
+%------------------------------------------------------------------------------
+
+\input{front/title}
+\newpage
+
+% restore the required margin details for the rest of the document.
+\restoregeometry
+
+% START : HEADER %
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt} % Remove underline of header
+% END   : HEADER %
+
+%------------------------------------------------------------------------------
+% Descriptive Note
+%------------------------------------------------------------------------------
+
+\pagenumbering{roman}
+\setcounter{page}{2} % page 2
+\input{front/descriptive_note}
+\newpage
+
+%------------------------------------------------------------------------------
+% Lay Abstract
+%------------------------------------------------------------------------------
+
+\input{front/lay_abstract}
+
+%------------------------------------------------------------------------------
+% Abstract
+%------------------------------------------------------------------------------
+
+\input{front/abstract}
+
+%------------------------------------------------------------------------------
+% Acknowledgements
+%------------------------------------------------------------------------------
+
+\input{front/acknowledgements}
+
+%------------------------------------------------------------------------------
+% Table of Content
+%------------------------------------------------------------------------------
+
+\tableofcontents
+
+%------------------------------------------------------------------------------
+% List of Figures
+%------------------------------------------------------------------------------
+
+% \renewcommand{\listfigurename}{List of Illustrations, Charts, and Diagrams}
+\listoffigures
+
+%------------------------------------------------------------------------------
+% List of Tables
+%------------------------------------------------------------------------------
+
+\listoftables
+
+%------------------------------------------------------------------------------
+% Table of Source Codes
+%------------------------------------------------------------------------------
+
+\listoflistings
+
+%------------------------------------------------------------------------------
+% List of Abbreviations and Symbols
+%------------------------------------------------------------------------------
+
+\printacronyms[
+  display=used, % Change value 'used' to 'all' if you want to show unused acronyms
+  template=longtable,
+  heading=chapter,
+  name=List of Abbreviations and Symbols
+]
+
+%------------------------------------------------------------------------------
+% Reading Notes
+%------------------------------------------------------------------------------
+
+\input{front/reading_notes}
+
+%------------------------------------------------------------------------------
+% Declaration of Academic Achievement
+%------------------------------------------------------------------------------
+
+\input{front/declaration_of_academic_achievement}

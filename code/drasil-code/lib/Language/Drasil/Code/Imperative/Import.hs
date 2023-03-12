@@ -453,6 +453,8 @@ ordBfunc GEq = (?>=)
 -- Maps a 'VVVBinOp' to it's corresponding GOOL binary function.
 vecVecVecBfunc :: VVVBinOp -> (SValue r -> SValue r -> SValue r)
 vecVecVecBfunc Cross = error "bfunc: Cross not implemented"
+vecVecVecBfunc VAdd = error "bfunc: Vector addition not implemented"
+vecVecVecBfunc VSub = error "bfunc: Vector subtraction not implemented"
 
 -- Maps a 'VVNBinOp' to it's corresponding GOOL binary function.
 vecVecNumBfunc :: VVNBinOp -> (SValue r -> SValue r -> SValue r)

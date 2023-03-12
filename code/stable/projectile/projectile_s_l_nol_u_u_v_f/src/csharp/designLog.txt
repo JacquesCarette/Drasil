@@ -15,4 +15,3 @@ Auxiliary Files selected as SampleInput ../../../datafiles/projectile/sampleInpu
 Code Concept pi selected as Pi.
 Successfully matched Real with Float.
 Successfully matched String with String.
-Successfully matched Rational with Float.

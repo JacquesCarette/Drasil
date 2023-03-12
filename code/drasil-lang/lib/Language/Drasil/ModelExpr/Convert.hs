@@ -70,6 +70,8 @@ ordBinOp E.GEq = GEq
 
 vvvBinOp :: E.VVVBinOp -> VVVBinOp
 vvvBinOp E.Cross = Cross
+vvvBinOp E.VAdd = VAdd
+vvvBinOp E.VSub = VSub
 
 vvnBinOp :: E.VVNBinOp -> VVNBinOp
 vvnBinOp E.Dot = Dot

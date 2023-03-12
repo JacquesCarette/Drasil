@@ -34,8 +34,8 @@ data LABinOp = Index
 data OrdBinOp = Lt | Gt | LEq | GEq
   deriving Eq
 
--- | @Vector x Vector -> Vector@ binary operations (cross product).
-data VVVBinOp = Cross
+-- | @Vector x Vector -> Vector@ binary operations (cross product, vector addition, subtraction).
+data VVVBinOp = Cross | VAdd | VSub
   deriving Eq
 
 -- | @Vector x Vector -> Number@ binary operations (dot product).

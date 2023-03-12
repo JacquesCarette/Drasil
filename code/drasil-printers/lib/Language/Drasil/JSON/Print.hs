@@ -7,6 +7,8 @@ import Numeric (showEFloat)
 
 import qualified Language.Drasil as L
 
+import Language.Drasil.Format (DocType(Jupyter))
+
 import Language.Drasil.Printing.Import (makeDocument)
 import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
@@ -27,33 +29,43 @@ import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat,
  tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv)
 
 -- | Generate a python notebook document (using json).
-genJSON :: PrintingInformation -> L.Document -> Doc
-genJSON sm doc = build (makeDocument sm doc)
+-- build : build the general Jupyter Notbook document
+-- build': build the SRS example in JSON format
+genJSON :: PrintingInformation -> DocType -> L.Document -> Doc
+genJSON sm Jupyter doc = build (makeDocument sm doc)
+genJSON sm _       doc = build' (makeDocument sm doc)
 
 -- | Build the JSON Document, called by genJSON
 build :: Document -> Doc
 build (Document t a c) = 
-  text "{" $$
-  text " \"cells\": [" $$
-  text "  {" $$
-  text "   \"cell_type\": \"markdown\"," $$
-  text "   \"metadata\": {}," $$
-  text "   \"source\": [" $$
+  markdownB $$
   nbformat (text "# " <> pSpec t) $$
   nbformat (text "## " <> pSpec a) $$
   markdownE $$
   print c $$
+  markdownB' $$
+  markdownE' $$
+  makeMetadata $$
+  text "}" 
+
+build' :: Document -> Doc
+build' (Document t a c) = 
   markdownB $$
-  text "   ]" $$
-  text "  }" $$
-  text " ]," $$
+  nbformat (text "# " <> pSpec t) $$
+  nbformat (text "## " <> pSpec a) $$
+  markdownE $$
+  markdownB' $$ 
+  print c $$
+  markdownE' $$
   makeMetadata $$
   text "}" 
 
 -- Helper for building markdown cells
-markdownB, markdownE :: Doc
-markdownB = text "  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [" 
-markdownE = text "    \"\\n\"\n   ]\n  },"
+markdownB, markdownB', markdownE, markdownE' :: Doc
+markdownB  = text "{\n \"cells\": [\n  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [" 
+markdownB' = text "  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [" 
+markdownE  = text "    \"\\n\"\n   ]\n  },"
+markdownE' = text "    \"\\n\"\n   ]\n  }\n ],"
 
 -- Helper for rendering a D from Latex print
 printMath :: D -> Doc
@@ -62,9 +74,9 @@ printMath = (`runPrint` Math)
 -- | Helper for rendering LayoutObjects into JSON
 printLO :: LayoutObj -> Doc
 printLO (Header n contents l)            = nbformat empty $$ nbformat (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
-printLO (Cell layoutObs)                 = markdownB $$ vcat (map printLO layoutObs) $$ markdownE
+printLO (Cell layoutObs)                 = markdownB' $$ vcat (map printLO layoutObs) $$ markdownE
 printLO (HDiv _ layoutObs _)             = vcat (map printLO layoutObs)
---printLO (HDiv _ layoutObs l)             = refID (pSpec l) $$ vcat (map printLO layoutObs)
+--printLO (HDiv _ layoutObs l)           = refID (pSpec l) $$ vcat (map printLO layoutObs)
 printLO (Paragraph contents)             = nbformat empty $$ nbformat (stripnewLine (show(pSpec contents)))
 printLO (EqnBlock contents)              = nbformat mathEqn
   where
@@ -153,6 +165,8 @@ pOps Dim      = "dim"
 pOps Exp      = "e"
 pOps Neg      = "-"
 pOps Cross    = "&#10799;"
+pOps VAdd     = " + "
+pOps VSub     = " - "
 pOps Dot      = "&sdot;"
 pOps Scale    = "" -- same as Mul
 pOps Eq       = " = " -- with spaces?
@@ -176,6 +190,7 @@ pOps Perc     = "%"
 pOps LArrow   = " &larr; "
 pOps RArrow   = " &rarr; "
 pOps ForAll   = " ForAll "
+pOps Partial  = "&part;"
 
 
 -- | Renders HTML table, called by 'printLO'

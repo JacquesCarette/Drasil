@@ -1,0 +1,10 @@
+\begin{pseudohaskell}{Grabbing All Chunks from the New ChunkDB}{grabAllChunksFromNewChunkDB}
+findAllByType :: TypeRep -> ChunkDB -> [a]
+findAllByType tr cdb = catMaybes $ map (\(_, c) -> if chunkTy c == tr then Just (unChunk c) else Nothing) (M.toList cdb)
+
+chunkTy :: Chunk -> TypeRep
+chunkTy (Chunk c) = typeOf c
+
+unChunk :: Typeable a => Chunk -> Maybe a
+unChunk (Chunk c) = cast c
+\end{pseudohaskell}

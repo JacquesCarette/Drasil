@@ -83,6 +83,8 @@ ordBinOp LD.GEq = GEq
 
 vvvBinOp :: LD.VVVBinOp -> VVVBinOp
 vvvBinOp LD.Cross = Cross
+vvvBinOp LD.VAdd = VAdd
+vvvBinOp LD.VSub = VSub
 
 vvnBinOp :: LD.VVNBinOp -> VVNBinOp
 vvnBinOp LD.Dot = Dot

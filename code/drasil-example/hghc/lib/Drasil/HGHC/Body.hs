@@ -29,6 +29,7 @@ si = SI {
   _authors     = [spencerSmith],
   _quants      = symbols,
   _purpose     = [],
+  _background  = [],
   _concepts    = [] :: [UnitalChunk],
   _instModels  = [], -- FIXME; empty _instModels
   _datadefs    = dataDefs,

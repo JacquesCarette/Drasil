@@ -1,6 +1,6 @@
 module Language.Drasil.Printers (
   -- * Formats
-  Format(TeX, HTML, JSON)
+  DocType(SRS, Website, Jupyter), Format(TeX, HTML, JSON)
   -- * DOT
   -- ** Types
   , GraphInfo(..), NodeFamily(..)
@@ -15,7 +15,7 @@ module Language.Drasil.Printers (
   -- ** Printer
   , makeMd
   -- ** Section Printers
-  , introInfo, verInfo, unsupOS, regularSec, instDoc, extLibSec, endNote
+  , introInfo, verInfo, unsupOS, regularSec, instDoc, extLibSec, endNote, whatInfo
   -- * Plain
   -- ** Types
   , Linearity(..)
@@ -36,12 +36,12 @@ module Language.Drasil.Printers (
   )
   where
 
-import Language.Drasil.Format (Format(TeX, HTML,JSON))
+import Language.Drasil.Format (DocType(SRS, Website, Jupyter), Format(TeX, HTML,JSON))
 import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.JSON.Print (genJSON)
 import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS,
-  extLibSec, instDoc, regularSec, endNote)
+  extLibSec, instDoc, regularSec, endNote, whatInfo)
 import Language.Drasil.Plain.Print (Linearity(..), sentenceDoc, exprDoc,
   codeExprDoc, symbolDoc, unitDoc, showSymb, showHasSymbImpl)
 import Language.Drasil.TeX.Print (genTeX)

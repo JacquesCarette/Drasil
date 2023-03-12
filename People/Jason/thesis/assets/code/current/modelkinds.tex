@@ -1,0 +1,26 @@
+\begin{haskell}{ModelKinds}{curModelKinds}{https://github.com/JacquesCarette/Drasil/blob/dc3674274edb00b1ae0d63e04ba03729e1dbc6f9/code/drasil-theory/lib/Theory/Drasil/ModelKinds.hs\#L25-L47}
+-- | Models can be of different kinds: 
+--
+--     * 'NewDEModel's represent differential equations as 'DifferentialModel's
+--     * 'DEModel's represent differential equations as 'RelationConcept's
+--     * 'EquationalConstraint's represent invariants that will hold in a system of equations.
+--     * 'EquationalModel's represent quantities that are calculated via a single definition/'QDefinition'.
+--     * 'EquationalRealm's represent MultiDefns; quantities that may be calculated using any one of many 'DefiningExpr's (e.g., 'x = A = ... = Z')
+--     * 'FunctionalModel's represent quantity-resulting function definitions.
+--     * 'OthModel's are placeholders for models. No new 'OthModel's should be created, they should be using one of the other kinds.
+data ModelKinds e where
+  NewDEModel            :: DifferentialModel -> ModelKinds e
+  DEModel               :: RelationConcept   -> ModelKinds e -- TODO: Split into ModelKinds Expr and ModelKinds ModelExpr resulting variants. The Expr variant should carry enough information that it can be solved properly.
+  EquationalConstraints :: ConstraintSet e   -> ModelKinds e
+  EquationalModel       :: QDefinition e     -> ModelKinds e
+  EquationalRealm       :: MultiDefn e       -> ModelKinds e
+  OthModel              :: RelationConcept   -> ModelKinds e -- TODO: Remove (after having removed all instances of it).
+
+
+-- | 'ModelKinds' carrier, used to carry commonly overwritten information from the IMs/TMs/GDs.
+data ModelKind e = MK {
+  _mk     :: ModelKinds e,
+  _mkUID  :: UID,
+  _mkTerm :: NP
+}
+\end{haskell}

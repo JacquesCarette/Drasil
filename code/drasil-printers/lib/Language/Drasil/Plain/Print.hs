@@ -117,7 +117,6 @@ mtxDoc Nonlinear rs = brackets $ vcat $ map (hsep . map (pExprDoc Nonlinear)) rs
 -- | Helper for printing special characters (for degrees and partial derivatives).
 specialDoc :: Special -> Doc
 specialDoc Circle  = text "degree"
-specialDoc Partial = text "partial"
 
 -- | Helper for printing operators.
 opsDoc :: Ops -> Doc
@@ -145,6 +144,8 @@ opsDoc Dim = text "dim"
 opsDoc Exp = text "exp"
 opsDoc Neg = text "-"
 opsDoc Cross = text " cross "
+opsDoc VAdd = text " + "
+opsDoc VSub = text " - "
 opsDoc Dot = text " dot "
 opsDoc Scale = text " * "
 opsDoc Eq = text " == "
@@ -168,6 +169,7 @@ opsDoc Perc = text "%"
 opsDoc LArrow = text " <- "
 opsDoc RArrow = text " -> "
 opsDoc ForAll = text " ForAll "
+opsDoc Partial = text "partial"
 
 -- | Helper for printing the left side of some characters "(, {, \\|, |".
 fenceDocL :: Fence -> Doc

@@ -313,9 +313,11 @@ fixedReturn = lockedStatement . FRet
 
 -- | Specifies a use-case-dependent statement that returns a non-fixed value.
 fixedReturn' :: Step
-fixedReturn' = statementStep (\cdchs [e] -> case (cdchs, e) of
-  ([], _) -> FRet e
-  (_,_) -> error "Fill for fixedReturn' should provide no CodeChunk")
+fixedReturn' = statementStep go
+  where
+    go [] [e] = FRet e
+    go _  [_] = error "Fill for fixReturn' should provide no CodeChunk."
+    go _  _   = error "fixedReturn' does not yet handle multiple values."
 
 -- | Specifies a statement step.
 statementStep :: ([CodeVarChunk] -> [CodeExpr] -> FuncStmt) -> Step

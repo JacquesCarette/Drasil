@@ -5,7 +5,7 @@ module Language.Drasil.Printing.Import.ModelExpr where -- TODO: tighten exports
 
 -- TODO: tighten exports
 import Language.Drasil (UID, DomainDesc(..), RealInterval(..), Inclusive(..),
-  RTopology(..), Special(..), LiteralC(int))
+  RTopology(..), LiteralC(int))
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.Literal.Development (Literal(..))
 import Language.Drasil.ModelExpr.Development
@@ -125,7 +125,7 @@ modelExpr (AssocA MulRe l)           sm = P.Row $ mulExpr l MulRe sm
 modelExpr (Deriv 0 Part a _)         sm = P.Row [modelExpr a sm]
 modelExpr (Deriv 0 Total a _)        sm = P.Row [modelExpr a sm]
 modelExpr (Deriv n Part a b)         sm =
-  let st = [P.Spc P.Thin, P.Spec Partial] in 
+  let st = [P.Spc P.Thin, P.MO P.Partial] in 
     P.Div (P.Row (st ++ sup n ++ [modelExpr a sm]))
     (P.Row (st ++ [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b] ++ sup n))
 modelExpr (Deriv n Total a b)        sm =
@@ -174,6 +174,8 @@ modelExpr (OrdBinaryOp LEq a b)      sm = mkBOp sm P.LEq a b
 modelExpr (OrdBinaryOp GEq a b)      sm = mkBOp sm P.GEq a b
 modelExpr (VVNBinaryOp Dot a b)      sm = mkBOp sm P.Dot a b
 modelExpr (VVVBinaryOp Cross a b)    sm = mkBOp sm P.Cross a b
+modelExpr (VVVBinaryOp VAdd a b)     sm = mkBOp sm P.VAdd a b
+modelExpr (VVVBinaryOp VSub a b)     sm = mkBOp sm P.VSub a b
 modelExpr (NVVBinaryOp Scale a b)    sm = mkBOp sm P.Scale a b
 modelExpr (Operator o d e)           sm = eop sm o d e
 modelExpr (RealI c ri)               sm = renderRealInt sm (lookupC (sm ^. stg)

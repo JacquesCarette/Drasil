@@ -1,4 +1,4 @@
-\chapter{Drasil Printer} \label{chap:jsonprinter}
+\chapter{Drasil Printer} \label{chap:nbprinter}
 The first step to generate Jupyter Notebook in Drasil is building a printer to 
 deal with notebook generation. As mentioned in Chapter~\ref{chap:intro}, a 
 notebook is a JSON document composed of code and Markdown contexts, such as 
@@ -422,10 +422,10 @@ Code~\ref{code:callmarkdownCell}.\todo{update the code when it's final}
 \end{listing}
 
 The current JSON printer is not perfect; there is still room for improvement. 
-\todo{link to future work} However, with the printer, not only is Drasil able 
-to generate SRS in JSON format, but we are also able to edit and share the 
-documents with Jupyter Notebook, adding value to the Drasil generated 
-documents. 
+\todo{link to future work} However, with the printer, Drasil is capable of 
+generating Jupyter Notebooks and expanding the generated document to include 
+SRS in JSON format. This enables us to edit and share Drasil-generated 
+notebooks with Jupyter Notebook, providing additional value.
  
 The complete implementation of the JSON printer can be found in 
 Appendix~.\todo{link}

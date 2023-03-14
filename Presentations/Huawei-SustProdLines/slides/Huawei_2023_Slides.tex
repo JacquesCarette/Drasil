@@ -1,6 +1,6 @@
 \documentclass[usenames]{beamer}
 
-\mode<presentation>
+\mode<presentation> 
 {
 %  \usetheme{Hannover}
 \usetheme[width=0.7in]{Hannover}
@@ -169,18 +169,17 @@ Smith} and Jacques Carette}
     \item Natural language (text)
     \item Definitions
     \item Assumptions
-    \item Derivations
-    \item Rationale
+    \item Rationale, Derivations
     \item Abstract theory
-    \item User characteristics
-    \item Nonfunctional Requirements
+    %\item User characteristics
+    %\item Nonfunctional Requirements
     \item Etc.
   \end{itemize}
 \item Generate all artifacts from one framework
 \begin{itemize}
   \item Requirements
   \item User manuals
-  \item README
+  %\item README
   \item Build scripts, dev environment (CI etc)
   \item Assurance case
   \item Code (in different languages)
@@ -202,25 +201,101 @@ Smith} and Jacques Carette}
 \end{frame}
 \hoffset=0in 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hoffset=-.4in
+\begin{frame}[plain, fragile]
 
-\begin{frame}
+%\frametitle{Family of Mechanics Programs - why gen all things?}
 
-\frametitle{Why Generate All Things?}
+\begin{tikzpicture}[remember picture,overlay]
+\node [xshift=4cm,yshift=2.5cm] at (current page.center)
+{
+\includegraphics[width=.5\textwidth]{../figures/dblpendulum.png}
+};
+\end{tikzpicture}
 
-\begin{itemize}
-\item Different views of the same knowledge
-\item Generate the view needed by the audience
-\item Change to different natural languages
-\item Stay abstract longer
-\item Certification
-\item Documentation improve productivity, sustainability
-\item Reusability
-\item Modifiability
-\item One source helps synchronization
-\end{itemize}
+\begin{tikzpicture}[remember picture,overlay]
+\node [xshift=4.5cm,yshift=-0.2cm] at (current page.center)
+{
+\includegraphics[width=.45\textwidth]{../figures/Launch.jpg}
+};
+\end{tikzpicture}
+
+\begin{tikzpicture}[remember picture,overlay]
+\node [xshift=2.5cm,yshift=2cm] at (current page.center)
+{
+\includegraphics[width=.3\textwidth]{../figures/SackExample.png}
+};
+\end{tikzpicture}
+
+\begin{tikzpicture}[remember picture,overlay]
+\node [xshift=4cm,yshift=-2.5cm] at (current page.center)
+{
+\includegraphics[width=.4\textwidth]{../figures/ForceDiagram.png}
+};
+\end{tikzpicture}
+
+\begin{tikzpicture}[remember picture,overlay]
+\node [xshift=-3.0cm,yshift=3.5cm] at (current page.center)
+{
+$\mathbf{a} = \frac{d\mathbf{v}}{dt}$ and $\mathbf{v} = \frac{d\mathbf{p}}{dt}$
+};
+\end{tikzpicture}
+
+\begin{tikzpicture}[remember picture,overlay]
+\node [xshift=-3.0cm,yshift=2.95cm] at (current page.center)
+{
+$\mathbf{F} = m \mathbf{a}$
+};
+\end{tikzpicture}
+
+\begin{tikzpicture}[remember picture,overlay]
+\node [xshift=-3.0cm,yshift=2.4cm] at (current page.center)
+{
+$m \frac{d\mathbf{v}}{dt} = m \mathbf{g} - c\mathbf{v}$
+};
+\end{tikzpicture}
+
+\begin{tikzpicture}[remember picture,overlay]
+\node [xshift=-3.0cm,yshift=1.8cm] at (current page.center)
+{
+$g = 9.8 m/s^2$ or $g = 32.2 ft/s^2$
+};
+\end{tikzpicture}
+
+\begin{tikzpicture}[remember picture,overlay]
+\node [xshift=-3.0cm,yshift=1.3cm] at (current page.center)
+{
+$y_{n+1} = y_n + \frac{1}{6} ( k_1 + 2 k_2 + 2 k_3 + k_4) h$
+};
+\end{tikzpicture}
+
+\begin{tikzpicture}[remember picture,overlay]
+\node [xshift=-3.0cm,yshift=0.3cm] at (current page.center)
+{
+$\sigma_{ij} = D_{ijkl} \epsilon_{kl}$
+};
+\end{tikzpicture}
+
+% knowns and unknowns?
+% beam equation
+% well understood
+% practical approach - can build incrementally, don't need all theory to start
+% - can assume knowledge (theories) from the consumer of the documentation, like addition, % differentiation etc.
+% hit on these points while presenting pictures
+% \begin{itemize}
+% \item Different views of the same knowledge
+% \item Generate the view needed by the audience
+% \item Change to different natural languages
+% \item Stay abstract longer
+% \item Certification
+% \item Documentation improve productivity, sustainability
+% \item Reusability
+% \item Modifiability
+% \item One source helps synchronization
+% \end{itemize}
 
 \end{frame}
-
+\hoffset=0in 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section[GlassBR Example]{GlassBR Example}

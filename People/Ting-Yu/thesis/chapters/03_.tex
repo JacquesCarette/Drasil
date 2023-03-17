@@ -1,0 +1,181 @@
+\chapter{Projectile Lesson} \label{chap:casestudy}
+With the addition of a JSON printer capable of generating Jupyter Notebooks, we 
+are now looking to expand Drasil's application by generating educational 
+documents. As discussed in Chapter~\ref{chap:intro}, Jupyter Notebooks are 
+commonly used in teaching engineering courses due to their characteristics and 
+advantages. One of the educational practices to enhance education is conducting 
+lesson plans \cite{cicek2013effective, wong2018first}, which provide a 
+guide for structuring daily activities in each class period. A lesson plan 
+outlines the learning objectives, methods and procedures for achieving them, 
+and the measurement of how student progress. Because they are more accessible 
+than academic papers, lesson plans are an ideal starting point for generating 
+educational documents in Drasil. Also, we are able to work with real examples 
+in a lesson plan. This chapter will cover the structure of a lesson plan, how 
+we define the language of lesson plans in Drasil, and a new case study on 
+Projectile Lesson.
+
+\section{Language of Lesson Plans}
+To generate a new type of document, lesson plans, in Drasil, we must define its 
+language first. Drasil's document language has SRS, and we are creating a 
+language for lesson plans. As discussed in Chapter~\ref{chap:nbprinter}, a 
+Drasil document has a title, authors, and sections, which hold the contents 
+of the document. The definition of a document is defined in 
+\textbf{drasil-lang} as 
+shown in Code~\ref{code:drasil-lang-document} \footnote{ShowToC is 
+ShowTableOfContents in the source code, which is to determine whether to show 
+the table of contents in the document.}, where \macblue{Document} is the type 
+for SRS document and \macblue{Notebook} is for Jupyter Notebook, specifically 
+lesson plans at this moment. The reason why we define them separately is 
+because we print the SRS and lesson plans differently. We are able to pattern 
+match the way we print the document in the printer. 
+
+\begin{listing}[h]
+	\caption{Pseudocode for Definition of Document}
+	\label{code:drasil-lang-document}
+	\begin{lstlisting}[language=haskell1]
+	data Document = Document Title Author ShowToC [Section]
+								| Notebook Title Author [Section]
+	\end{lstlisting}
+\end{listing}
+
+
+Before defining the language for lesson plans, we need to understand the 
+components and categorize the knowledge to create a universal structure within 
+Drasil. We analyzed the similarities and differences of elements in textbook 
+chapters in 
+\href{https://github.com/smiths/caseStudies/blob/master/CaseStudies/projectile/projectileLesson/AboutProjectileLesson.pdf}{Discussion
+ of Projectile Lesson: What and	Why} using online resources. Based on our 
+analysis, we narrowed down the elements and defined a structure that fits our 
+lesson plans the most. It's worth noting that this structure may be subject to 
+future modifications to better suit our needs. Following is the structure of
+our lesson plans:
+\begin{itemize}
+	\item Introduction: an introduction of the lesson plan or the topic.
+	\item Learning Objectives: what students can do or will learn after the 
+	lesson.  
+	\item Review: a recap of what has been covered previously.
+	\item A Case Problem: a case problem that link the topic to a real world 
+	problem.
+	\item Example: an example of the case problem.
+	\item Summary: a summary of the lesson plan.
+	\item Bibliography: references that support the lesson plan.
+	\item Appendix: additional resources or information of the lesson.
+\end{itemize}
+
+With the lesson plan structure in place, we can now define helper types and 
+functions to create the document language for generating lesson plans. Our 
+first step is to define the types and data for the lesson and its chapters. 
+Code~\ref{code:core} is the core language of the lesson plan. A 
+\macblue{LsnDesc} type represents a lesson description (line 3), which consists 
+of lesson chapters (line 5), including an introduction, learning objectives, 
+review, case problem, example, summary, bibliography, and appendix. The details 
+of each chapter are defined in line 14-33. At present,  the contents of each 
+chapter are the only defined elements as the chapter structure has not yet been 
+fully understood. We intend to further develop the chapter structure in the 
+future. \todo{link} 
+
+\begin{listing}[h!]
+	\caption{Source Code for Notebook Core Language}
+	\label{code:core}
+	\begin{lstlisting}[language=haskell1]
+		module Drasil.DocumentLanguage.Notebook.Core where
+		
+		type LsnDesc = [LsnChapter]
+
+		data LsnChapter = Intro Intro
+										| LearnObj LearnObj
+										| Review Review
+										| CaseProb CaseProb
+										| Example Example
+										| Smmry Smmry
+										| BibSec
+										| Apndx Apndx
+		
+		-- ** Introduction
+		newtype Intro = IntrodProg [Contents]
+		
+		-- ** Learning Objectives
+		newtype LearnObj = LrnObjProg [Contents]
+		
+		-- ** Review Chapter
+		newtype Review = ReviewProg [Contents]
+		
+		-- ** A Case Problem
+		newtype CaseProb = CaseProbProg [Contents]
+		
+		-- ** Examples of the lesson
+		newtype Example = ExampleProg [Contents]
+		
+		-- ** Summary
+		newtype Smmry = SmmryProg [Contents]
+		
+		-- ** Appendix
+		newtype Apndx = ApndxProg [Contents]
+	\end{lstlisting}
+\end{listing}
+
+Code~\ref{code:LsnDecl} shows the function, \macred{mkLsnDesc}, for creating 
+the lesson description. \macblue{LsnDecl} is the lesson plan declaration that 
+made up of all necessary chapters, while \macblue{LsnDesc} is 
+the type we defined in Code~\ref{code:core} line 3, which is a more usable form 
+than \macblue{LsnDecl} for generating documents.
+
+\begin{listing}[h]
+	\caption{Source Code for mkLsnDesc}
+	\label{code:LsnDecl}
+	\begin{lstlisting}[language=haskell1]
+		module Drasil.DocumentLanguage.Notebook.LsnDecl where
+		
+		type LsnDecl  = [LsnChapter]
+		
+		data LsnChapter = Intro NB.Intro
+										| LearnObj NB.LearnObj
+										| Review NB.Review
+										| CaseProb NB.CaseProb
+										| Example NB.Example
+										| Smmry NB.Smmry
+										| BibSec
+										| Apndx NB.Apndx
+		
+		mkLsnDesc :: SystemInformation -> LsnDecl -> NB.LsnDesc
+		mkLsnDesc _ = map sec where
+			sec :: LsnChapter -> NB.LsnChapter
+			sec (Intro i)     = NB.Intro i
+			sec (LearnObj l)  = NB.LearnObj l
+			sec (Review r)    = NB.Review r  
+			sec (CaseProb c)  = NB.CaseProb c
+			sec (Example e)   = NB.Example e  
+			sec (Smmry s)     = NB.Smmry s
+			sec BibSec        = NB.BibSec
+			sec (Apndx a)     = NB.Apndx a
+	\end{lstlisting}
+\end{listing}
+
+The core language of the notebook is \macblue{LsnDesc} and 
+\macblue{Lsnchapter} since a notebook is created from a lesson description, 
+which is composed of lesson chapters. We take the lesson description and system 
+information to form a notebook (Code~).
+
+\begin{listing}[h]
+	\caption{Source Code for mkNb}
+	\label{code:mkNb}
+	\begin{lstlisting}[language=haskell1]
+		mkNb :: LsnDecl -> (IdeaDict -> IdeaDict -> Sentence) 
+					-> SystemInformation -> Document
+		mkNb dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
+		Notebook (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) 
+		authors) $
+		mkSections si l where
+		l = mkLsnDesc si dd
+	\end{lstlisting}
+\end{listing}
+
+
+all fuctions are located in \textbf{drasil-docLang}, a table overview
+projectile overview: the reason we choose, introducstion
+jupyter notebook structure (linear)
+unit of contents -> linear vs nested
+
+how we defined document structure in Drasil (kind of walk through the step? The 
+process that the language was built)
+

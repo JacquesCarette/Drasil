@@ -2371,6 +2371,8 @@
     <bcf:citekey order="16">notebookdoc</bcf:citekey>
     <bcf:citekey order="17">notebookmetadata</bcf:citekey>
     <bcf:citekey order="18">textdotjosn</bcf:citekey>
+    <bcf:citekey order="19">cicek2013effective</bcf:citekey>
+    <bcf:citekey order="19">wong2018first</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="none">

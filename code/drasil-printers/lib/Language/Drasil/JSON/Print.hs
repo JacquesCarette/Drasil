@@ -27,7 +27,7 @@ import Language.Drasil.HTML.Print(renderCite, OpenClose(Open, Close), fence)
 
 import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat,
  tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv, 
- markdownB, markdownB', markdownE, markdownE', markdownCell)
+ markdownB, markdownB', markdownE, markdownE', markdownCell, codeCell)
 
 -- | Generate a python notebook document (using json).
 -- build : build the SRS example in JSON format
@@ -66,7 +66,28 @@ printMath :: D -> Doc
 printMath = (`runPrint` Math)
 
 -- | Helper for rendering LayoutObjects into JSON
--- printLO  is used for generating SRS
+-- printLO is used for generating SRS
+{-
+printLO :: LayoutObj -> Doc
+printLO (HDiv ["section"] layoutObs _)  = markdownCell $ vcat (map printLO layoutObs)
+printLO (HDiv ["subsection"] layoutObs _)  = markdownCell $ vcat (map printLO layoutObs)
+printLO (HDiv ["subsubsection"] layoutObs _)  = markdownCell $ vcat (map printLO layoutObs)
+printLO (Header n contents l)            = markdownCell $ nbformat empty $$ nbformat (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
+printLO (Cell layoutObs)                 = vcat (map printLO layoutObs)
+printLO (HDiv _ layoutObs _)             = vcat (map printLO layoutObs)
+printLO (Paragraph contents)             = markdownCell $ nbformat empty $$ nbformat (stripnewLine (show(pSpec contents)))
+printLO (EqnBlock contents)              = nbformat mathEqn
+  where
+    toMathHelper (PL g) = PL (\_ -> g Math)
+    mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$" 
+    mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
+printLO (Table _ rows r _ _)            = markdownCell $ nbformat empty $$ makeTable rows (pSpec r)
+printLO (Definition dt ssPs l)          = nbformat (text "<br>") $$ makeDefn dt ssPs (pSpec l)
+printLO (List t)                        = markdownCell $ nbformat empty $$ makeList t False
+printLO (Figure r c f wp)               = markdownCell $ makeFigure (pSpec r) (pSpec c) (text f) wp
+printLO (Bib bib)                       = markdownCell $ makeBib bib
+printLO Graph{}                         = empty 
+-}
 printLO :: LayoutObj -> Doc
 printLO (Header n contents l)            = nbformat empty $$ nbformat (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
 printLO (Cell layoutObs)                 = markdownCell $ vcat (map printLO layoutObs)
@@ -83,12 +104,14 @@ printLO (List t)                        = nbformat empty $$ makeList t False
 printLO (Figure r c f wp)               = makeFigure (pSpec r) (pSpec c) (text f) wp
 printLO (Bib bib)                       = makeBib bib
 printLO Graph{}                         = empty 
+printLO CodeBlock {}                    = empty
 
 -- printLO' is used for generating general notebook (lesson plans)
 printLO' :: LayoutObj -> Doc
+printLO' (HDiv ["equation"] layoutObs _)  = markdownCell $ vcat (map printLO' layoutObs)
 printLO' (Header n contents l)            = markdownCell $ nbformat empty $$ nbformat (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
 printLO' (Cell layoutObs)                 = vcat (map printLO' layoutObs)
-printLO' (HDiv _ layoutObs _)             = markdownCell $ vcat (map printLO' layoutObs) --note for myself: equations are map in here
+printLO' HDiv {}                          = empty
 printLO' (Paragraph contents)             = markdownCell $ nbformat empty $$ nbformat (stripnewLine (show(pSpec contents)))
 printLO' (EqnBlock contents)              = nbformat mathEqn
   where
@@ -101,6 +124,11 @@ printLO' (List t)                        = markdownCell $ nbformat empty $$ make
 printLO' (Figure r c f wp)               = markdownCell $ makeFigure (pSpec r) (pSpec c) (text f) wp
 printLO' (Bib bib)                       = markdownCell $ makeBib bib
 printLO' Graph{}                         = empty 
+printLO' (CodeBlock contents)            = codeCell $ nbformat mathEqn
+  where
+    toMathHelper (PL g) = PL (\_ -> g Math)
+    mjDelimDisp d  = stripnewLine (show d) 
+    mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
 
 -- | Called by build, uses 'printLO' to render the layout
 -- objects in Doc format.
@@ -130,7 +158,7 @@ pSpec EmptyS    = text "" -- Expected in the output
 pSpec (Quote q) = doubleQuotes $ pSpec q
 
 
--- | Renders expressions in the JSON (called by multiple functions)
+-- | Renders expressions in JSON (called by multiple functions)
 pExpr :: Expr -> Doc
 pExpr (Dbl d)        = text $ showEFloat Nothing d ""
 pExpr (Int i)        = text $ show i
@@ -210,7 +238,7 @@ pOps ForAll   = " ForAll "
 pOps Partial  = "&part;"
 
 
--- | Renders HTML table, called by 'printLO'
+-- | Renders Markdown table, called by 'printLO'
 makeTable :: [[Spec]] -> Doc -> Doc
 makeTable [] _      = error "No table to print"
 makeTable (l:lls) r = refID r $$ nbformat empty $$ (makeHeaderCols l $$ makeRows lls) $$ nbformat empty

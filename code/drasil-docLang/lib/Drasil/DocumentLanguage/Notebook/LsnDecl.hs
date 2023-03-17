@@ -8,10 +8,10 @@ import SysInfo.Drasil (SystemInformation)
 
 -- * Types
 
--- | A Lesson Plan notebook declaration is made up of all necessary sections ('LsnChapter's).
+-- | A Lesson Plan notebook declaration is made up of all necessary chapters ('LsnChapter's).
 type LsnDecl  = [LsnChapter]
 
--- | Contains all the different sections needed for a notebook lesson plan ('LsnDecl').
+-- | Contains all the different chapters needed for a notebook lesson plan ('LsnDecl').
 data LsnChapter = Intro NB.Intro
                 | LearnObj NB.LearnObj
                 | Review NB.Review

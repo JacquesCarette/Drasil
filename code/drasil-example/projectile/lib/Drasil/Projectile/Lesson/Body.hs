@@ -25,6 +25,7 @@ import Drasil.Projectile.Expressions (eqnRefs)
 import Drasil.Projectile.Lesson.LearnObj (learnObjContext)
 import Drasil.Projectile.Lesson.Review (reviewContent)
 import Drasil.Projectile.Lesson.CaseProb (caseProbCont, figRefs)
+import Drasil.Projectile.Lesson.Example (exampleContent)
 
 nb :: Document
 nb = mkNb mkNB (S.forGen titleize phrase) si
@@ -37,7 +38,7 @@ mkNB = [
   LearnObj $ LrnObjProg [learnObjContext],
   Review $ ReviewProg reviewContent,
   CaseProb $ CaseProbProg caseProbCont,
-  Example $ ExampleProg [],
+  Example $ ExampleProg exampleContent,
   BibSec
   ]
 

@@ -107,6 +107,7 @@ printLO (Figure r c f wp)      = makeFigure (pSpec r) (pSpec c) (text f) wp
 printLO (Bib bib)              = makeBib bib
 printLO Graph{}                = empty -- FIXME
 printLO Cell{}                 = empty
+printLO CodeBlock{}            = empty
 
 
 -- | Called by build, uses 'printLO' to render the layout

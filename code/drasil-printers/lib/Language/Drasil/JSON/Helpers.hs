@@ -102,20 +102,26 @@ mkDiv s a0 a1 = (H.bslash <> text s) <> br a0 <> br a1
 -- Maybe use "lines" instead (Data.List @lines :: String -> [String])
 stripnewLine :: String -> Doc
 stripnewLine s = hcat (map text (splitOn "\n" s))
---filter (`notElem` "\n" )
 
--- |  Helper for building markdown cells
+-- | Helper for building markdown cells
 markdownB, markdownB', markdownE, markdownE' :: Doc
 markdownB  = text "{\n \"cells\": [\n  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [" 
 markdownB' = text "  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [" 
 markdownE  = text "    \"\\n\"\n   ]\n  },"
 markdownE' = text "    \"\\n\"\n   ]\n  }\n ],"
 
--- |  Helper for generate a markdown cell
+codeB :: Doc
+codeB = text "  {\n   \"cell_type\": \"code\",\n   \"execution_count\": null,\n   \"metadata\": {},\n   \"outputs\": [],\n   \"source\": [" 
+
+-- | Helper for generate a Markdown cell
 markdownCell :: Doc -> Doc
 markdownCell c = markdownB' <> c <> markdownE
 
--- |  Generate the Metadata necessary for a notebook document.
+-- | Helper for generate a Code cell
+codeCell :: Doc -> Doc
+codeCell c = codeB <> c <> markdownE
+
+-- | Generate the Metadata necessary for a notebook document.
 makeMetadata :: Doc  
 makeMetadata = vcat [
   text " \"metadata\": {", 
@@ -141,4 +147,4 @@ makeMetadata = vcat [
   text " },",
   text " \"nbformat\": 4,", 
   text " \"nbformat_minor\": 4" 
-  ]
+ ]

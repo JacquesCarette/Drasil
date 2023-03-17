@@ -72,7 +72,7 @@ data RawContent =
   | Figure Lbl Filepath MaxWidthPercent      -- ^ For creating figures in a document. Should use relative file path.
   | Bib BibRef                               -- ^ Grants the ability to reference something.
   | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl -- ^ Contain a graph with coordinates ('Sentence's), maybe a width and height, and a label ('Sentence').
- -- | CodeBlock CodeExpr                       -- ^ Block for codes
+  | CodeBlock ModelExpr                       -- ^ Block for codes
                -- TODO: Fill this one in.
 
 -- | An identifier is just a 'String'.
@@ -128,6 +128,7 @@ prependLabel Figure{}       = prepend "Fig"
 prependLabel Graph{}        = prepend "Fig"
 prependLabel Defini{}       = prepend "Def"
 prependLabel EqnBlock{}     = prepend "EqnB"
+prependLabel CodeBlock{}    = prepend "CodeB"
 prependLabel DerivBlock{}   = prepend "Deriv"
 prependLabel Enumeration{}  = prepend "Lst"
 prependLabel Paragraph{}    = error "Shouldn't reference paragraphs"

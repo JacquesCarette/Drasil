@@ -6,7 +6,8 @@ module Language.Drasil.Document.Contents (
   enumSimpleU, mkEnumSimpleD,
 
   -- * Displaying Expressions
-  lbldExpr, unlbldExpr
+  lbldExpr, unlbldExpr,
+  unlbldCode
 ) where
 
 import Language.Drasil.Classes ( Definition(..) )
@@ -14,7 +15,7 @@ import Language.Drasil.ShortName (HasShortName(..), getSentSN)
 import Language.Drasil.Document ( llcc, ulcc )
 import Language.Drasil.Document.Core
     ( LabelledContent,
-      RawContent(Enumeration, EqnBlock),
+      RawContent(Enumeration, EqnBlock, CodeBlock),
       Contents(UlC),
       ListTuple,
       ItemType(Flat),
@@ -34,6 +35,10 @@ lbldExpr c lbl = llcc lbl $ EqnBlock c
 -- | Same as 'eqUnR' except content is unlabelled (does not attach a 'Reference').
 unlbldExpr :: ModelExpr -> Contents
 unlbldExpr c = UlC $ ulcc $ EqnBlock c
+
+-- | Unlabelled code expression
+unlbldCode :: ModelExpr -> Contents
+unlbldCode c = UlC $ ulcc $ CodeBlock c
 
 -- | Creates a bulleted list.
 enumBullet :: Reference -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?

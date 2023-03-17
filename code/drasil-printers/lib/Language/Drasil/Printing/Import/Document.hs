@@ -85,6 +85,7 @@ layLabelled sm x@(LblC _ (DerivBlock h d)) = T.HDiv ["subsubsubsection"]
   where refr = P.S $ refAdd x ++ "Deriv"
 layLabelled sm (LblC _ (Enumeration cs)) = T.List $ makeL sm cs
 layLabelled  _ (LblC _ (Bib bib))        = T.Bib $ map layCite bib
+layLabelled sm (LblC _ (CodeBlock c))  = T.CodeBlock (P.E (modelExpr c sm))
 
 -- | Helper that translates 'RawContent's to a printable representation of 'T.LayoutObj'.
 -- Called internally by 'lay'.
@@ -104,6 +105,7 @@ layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S 
   where layPairs = map (second (map temp))
         temp  y   = layUnlabelled sm (y ^. accessContents)
 layUnlabelled  _ (Bib bib)              = T.Bib $ map layCite bib
+layUnlabelled sm (CodeBlock c)     = T.CodeBlock (P.E (modelExpr c sm))
 
 -- | For importing a bibliography.
 layCite :: Citation -> P.Citation

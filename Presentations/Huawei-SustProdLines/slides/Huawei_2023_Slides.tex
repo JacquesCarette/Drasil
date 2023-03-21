@@ -52,6 +52,33 @@ Smith} and Jacques Carette}
 
 \beamertemplatenavigationsymbolsempty 
 
+% unaddressed feedback from JC
+% Comments on the slides as I read them:
+% - 1-5 are good
+% - 6 is too busy - FIXED
+% - we've talked about 7 need a "recipe" bubble - FIXED
+% - I would personally explain what's in slide 8 "over" the example diagram (current slide 26 or something like it), then go into the details; remove the "wishful thinking" from it
+% - a better picture for slide 9 would be great
+% - consider using a different font on slide 10 for the inputs & the labels for the input
+% - don't have a transition (slide 12/13), go right for 13?
+% - slide 14: why isn't the GlassBR at the top highlighted too?
+% - 16 you missed more GlassBR... there are 3 more visible
+% - slide 19: make sure you have a good explanation for why it's here
+% - create a slide (to go after 24?) with "what we're aiming to write" using an external DSL syntax instead of internal DSL.
+% - to "help" with the take home on slide 29, you ought to show some "recorded knowledge" (physics, etc) that is write-once and infinitely re-usable; should probably talk about "shallow bugs"
+
+% Overall impression:
+% - you have a lot of slides on low-level, output-side stuff
+% - you have comparatively fewer slides on more conceptual front-end stuff
+% (these two things mean that our respective talks won't be as differentiated as they ought to be)
+% - talk more about Options and Recipes? More about the capture-once side of things?
+
+% I also feel that there's a non-trivial gap between what you show and the stated take-home. I'm very happy with it being the up-front goal. There are things which are achieved by what you show:
+% - different views of the same knowledge
+% - generate view needed by the audience
+% - abstract longer
+% - easier, synchronized documentation
+
 \begin{document}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -204,7 +231,9 @@ Smith} and Jacques Carette}
 \hoffset=-.4in
 \begin{frame}[plain, fragile]
 
-%\frametitle{Family of Mechanics Programs - why gen all things?}
+%\frametitle{Family of Mechanics Programs - why gen all things?} % physics shows
+%different assumptions, different information, diff coord syst., diff symbols,
+%leads to a family of different physical models
 
 \begin{tikzpicture}[remember picture,overlay]
 \node [xshift=4cm,yshift=2.5cm] at (current page.center)
@@ -242,37 +271,51 @@ $\mathbf{a} = \frac{d\mathbf{v}}{dt}$ and $\mathbf{v} = \frac{d\mathbf{p}}{dt}$
 \end{tikzpicture}
 
 \begin{tikzpicture}[remember picture,overlay]
-\node [xshift=-3.0cm,yshift=2.95cm] at (current page.center)
+\node [xshift=-3.0cm,yshift=2.7cm] at (current page.center)
 {
 $\mathbf{F} = m \mathbf{a}$
 };
 \end{tikzpicture}
 
 \begin{tikzpicture}[remember picture,overlay]
-\node [xshift=-3.0cm,yshift=2.4cm] at (current page.center)
+\node [xshift=-3.0cm,yshift=1.9cm] at (current page.center)
 {
 $m \frac{d\mathbf{v}}{dt} = m \mathbf{g} - c\mathbf{v}$
 };
 \end{tikzpicture}
 
 \begin{tikzpicture}[remember picture,overlay]
-\node [xshift=-3.0cm,yshift=1.8cm] at (current page.center)
+\node [xshift=-2.5cm,yshift=1.1cm] at (current page.center)
 {
 $g = 9.8 m/s^2$ or $g = 32.2 ft/s^2$
 };
 \end{tikzpicture}
 
 \begin{tikzpicture}[remember picture,overlay]
-\node [xshift=-3.0cm,yshift=1.3cm] at (current page.center)
+\node [xshift=-2.0cm,yshift=0.3cm] at (current page.center)
 {
 $y_{n+1} = y_n + \frac{1}{6} ( k_1 + 2 k_2 + 2 k_3 + k_4) h$
 };
 \end{tikzpicture}
 
 \begin{tikzpicture}[remember picture,overlay]
-\node [xshift=-3.0cm,yshift=0.3cm] at (current page.center)
+\node [xshift=-3.0cm,yshift=-0.5cm] at (current page.center)
 {
 $\sigma_{ij} = D_{ijkl} \epsilon_{kl}$
+};
+\end{tikzpicture}
+
+\begin{tikzpicture}[remember picture,overlay]
+\node [xshift=-3.0cm,yshift=-1.3cm] at (current page.center)
+{
+coordinate system
+};
+\end{tikzpicture}
+
+\begin{tikzpicture}[remember picture,overlay]
+\node [xshift=1.0cm,yshift=-0.8cm] at (current page.center)
+{
+\Huge $\Longrightarrow$
 };
 \end{tikzpicture}
 

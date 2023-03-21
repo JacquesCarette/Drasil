@@ -1,0 +1,16 @@
+Context (of the presentation):
+- Eelco Visser Commemorative Symposium (to tie in to his work!)
+- just 10 minutes, so
+  - make it memorable
+  - make it a sales pitch
+
+Outline
+1. Title
+2. "Old Fashioned" -- presented as a quote?
+3. the old projects "pictorially"
+4. well understood (as a key driver); knowledge duplication
+5. better tech (Haskell, DSLs, GOOL, codegen, tagless, ?)
+6. documentation / English as our key difference
+7. redundancy illustration
+8. What if we wrote a program to output what 'we' usually do by hand?
+  One potential 'answer': Drasil

@@ -248,9 +248,8 @@ generating artifacts.} to form a lesson plan document.
 \end{listing}
 
 All types and functions mentioned in this chapter are declared in 
-\textbf{drasil-docLang}, where the languages of SRS and lesson plans are 
-located. Table~\ref{tab:notebookLang} summaries the responsibility for each 
-module related to lesson plans.
+\textbf{drasil-docLang}. Table~\ref{tab:notebookLang} summarizes the 
+responsibility of each module for the language of lesson plans.
 
 \begin{longtable}[c]{|>{\raggedright}p{0.27\linewidth}|>{\raggedright\arraybackslash}p{0.69\linewidth}|}
 	\caption{Summary of Notebook Modules} 
@@ -276,18 +275,146 @@ module related to lesson plans.
 \end{longtable}
 
 
-\section{A Case Study: Projectile Motion}
+\section{A Case Study: Projectile Motion} \label{chap:projMotion}
 In Chapter~\ref{chap:lessonLang}, we discussed the language of lesson plans to 
 introduce a new case study on projectile motion. We chose projectile motion as 
 a starting point for our lesson plans for several reasons: i) it is often one 
 of the initial concepts taught when students are introduced to the study of 
 dynamics; ii) the developed model is considered relatively straightforward as 
-it solely incorporates kinematic, which pertains to the geometric 
+it solely incorporates kinematics, which pertains to the geometric 
 characteristics of motion \cite{smith2022projectile}; iii) Drasil already 
 captures the knowledge of projectile, allowing us to showcase the reuse of 
-knowledge. In this chapter, we are going to discuss how we reproduce the 
+knowledge. In this chapter, we are going to reproduce the 
 \href{https://github.com/smiths/caseStudies/blob/master/CaseStudies/projectile/projectileLesson/orgModeVersion/projMotLesson.pdf}{Projectile
- Motion Lesson} created by Dr. Spencer Smith and let Drasil generate the 
-notebook document.
+ Motion Lesson}, authored by Dr. Spencer Smith, and generate a Jupyter Notebook 
+ version with Drasil.
 
-what information is reused from projectile.
+\subsection{Knowledge Reusability}
+In Drasil, we store commonly used knowledge, such as physics concepts (e.g., 
+acceleration) and mathematics ideas (e.g., Cartesian coordinates), in a package 
+named \textbf{drasil-data}. Additionally, each case study has its own package 
+that contains concepts specific to that study. For example, ``Projectile 
+Motion" is an idea in the Projectile case study. Once these ideas and concepts 
+are defined in Drasil, they can be utilized whenever needed. Since there is an 
+overlap in knowledge between the Projectile SRS and Projectile Motion Lesson, 
+we can reuse the information without the need to encode it again.
+
+For example, the following equation is the position of a particle moving in 
+straight line as a function of time, given that the object experiences a 
+constant acceleration:
+ 
+\begin{equation}
+	\label{eq:rectPos}
+	p=p^i+v^it+\frac{a^ct^2}{2}
+\end{equation}
+
+The left side $p$ (\textbf{scalarPos}) is a physical quantity defined in 
+\textbf{drasil-data} with units as a \macblue{UnitalChunk} 
+\footnote{UnitalChunks are concepts with quantities that require a definition 
+of units. A `UnitalChunk' contains a `Concept', `Symbol', and `Unit'.}, where 
+the right side expression (\textbf{scalarPos'}) is a \macblue{PExpr} declared 
+in the Projectile package in \textbf{drasil-example}, as shown in 
+Code~\ref{code:scalarPos}. 
+
+\begin{listing}[h!]
+	\caption{Source Code for scalarPos} 
+	\label{code:scalarPos}
+	\begin{lstlisting}[language=haskell1]		
+		scalarPos :: UnitalChunk
+		scalarPos  = uc CP.scalarPos lP Real metre
+		
+		scalarPos' :: PExpr
+		scalarPos' = sy iPos `addRe` (sy QP.iSpeed `mulRe` 
+			sy time `addRe` half (sy QP.constAccel `mulRe` square (sy time)))
+	\end{lstlisting}
+\end{listing}
+
+The information of Equation~\ref{eq:rectPos} was already available prior to 
+the development of Projectile Motion. By utilizing the definitions of both 
+\textbf{scalarPos} and \textbf{scalarPos'} as a reference, we can incorporate 
+this information into our own usage for the lesson plan. The implementation of 
+this can be seen in Code~\ref{code:lcrectPos}. The expression is defined in a 
+\macblue{LabelledContent} because we are adding a label to it, allowing us to 
+cross-reference it in the document.
+
+\begin{listing}[h!]
+	\caption{Source Code for lcrectPos} 
+	\label{code:lcrectPos}
+	\begin{lstlisting}[language=haskell1]		
+		lcrectPos :: LabelledContent
+		lcrectPos = lbldExpr (sy scalarPos $= scalarPos') (makeEqnRef "rectPos")
+	\end{lstlisting}
+\end{listing}
+
+Drasil offers a powerful way to store and reuse knowledge across different 
+domains and aspects of the case study. By growing our knowledge database in 
+this way, we believe that we can save time and effort while also ensuring 
+consistency and accuracy in the use of concepts and ideas. This has the 
+potential to greatly enhance the efficiency and effectiveness of engineering 
+projects, and we are excited to continue exploring the possibilities of Drasil 
+in the field of engineering.
+
+
+\subsection{Reproduce the Lesson}
+Based on the lesson plan structure described in Chapter~\ref{chap:lessonLang}, 
+we divided the 
+\href{https://github.com/smiths/caseStudies/blob/master/CaseStudies/projectile/projectileLesson/orgModeVersion/projMotLesson.pdf}{Projectile
+ Motion Lesson} into four chapters: learning objectives, review, a case 
+problem, and examples. To form a lesson plan, we encoded it in the 
+\macblue{LsnDecl} type, which is composed of a series of chapters 
+(Code~\ref{code:mkNB}). Each chapter, in turn, consists of various contents, 
+such as sentences, equations, or figures. For example, 
+Code~\ref{code:reviewContent} 
+shows how we encode information for the review chapter in Drasil.
+
+\begin{listing}[h]
+	\caption{Source Code for Forming a Notebook} 
+	\label{code:mkNB}
+	\begin{lstlisting}[language=haskell1]				
+		mkNB :: LsnDecl
+		mkNB = [
+			LearnObj $ LrnObjProg [learnObjContext],
+			Review $ ReviewProg reviewContent,
+			CaseProb $ CaseProbProg caseProbCont,
+			Example $ ExampleProg exampleContent,
+			BibSec
+		]
+	\end{lstlisting}
+\end{listing}
+
+\begin{listing}[h]
+	\caption{Source Code for Encoded Review Chapter} 
+	\label{code:reviewContent}
+	\begin{lstlisting}[language=haskell1]	
+	reviewContent :: [Contents]
+	reviewContent = [reviewContextP1, 
+		LlC E.lcrectVel, LlC E.lcrectPos, LlC E.lcrectNoTime, 
+		reviewEqns, reviewContextP2]
+		
+	reviewContextP1, reviewEqns, reviewContextP2 :: Contents
+	reviewContP1 = foldlSP_
+		[S "As covered previously, the", plural equation, S 
+	 	 "relating", phrase velocity, sParen (eS (sy QP.speed)
+	 	 ) `sC` phrase position, sParen (eS (sy QP.scalarPos)) 
+	 	 `S.and_` phrase time, sParen (eS (sy QP.time)) 
+	 	 `S.for` phrase motion `S.in_` S "one dimension with",
+	 	 phrase QP.constAccel, sParen (eS (sy QP.constAccel)) 
+	 	 +:+ S "are as follows:"]
+		
+	reviewEqns = foldlSP 
+		[S "where", eS (sy QP.iSpeed) `S.and_` eS (sy QP.iPos), 
+	 	 S "are the initial", phrase velocity `S.and_` phrase 
+		 position, S ",respectively"]
+		
+	reviewContP2 = foldlSP 
+		[S "Only two of these", plural equation, S "are 
+	 	 independent, since the third" +:+ phrase equation, S 
+	 	 "can always be derived from the other two"]
+	\end{lstlisting}
+\end{listing}
+
+After the lesson plan is transformed into a Drasil document using the 
+\macred{mkNb} function presented in Code~\ref{code:mkNb}, it can be printed and 
+produced as a Jupyter Notebook document with the Drasil printer, as discussed 
+in Chapter~\ref{chap:nbprinter}.
+

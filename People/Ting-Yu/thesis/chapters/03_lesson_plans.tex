@@ -356,18 +356,61 @@ in the field of engineering.
 
 
 \subsection{Reproduce the Lesson}
-Based on the lesson plan structure described in Chapter~\ref{chap:lessonLang}, 
-we divided the 
+In accordance with the lesson plan structure discussed in 
+Chapter~\ref{chap:lessonLang}, we divided the 
 \href{https://github.com/smiths/caseStudies/blob/master/CaseStudies/projectile/projectileLesson/orgModeVersion/projMotLesson.pdf}{Projectile
  Motion Lesson} into four chapters: learning objectives, review, a case 
-problem, and examples. To form a lesson plan, we encoded it in the 
-\macblue{LsnDecl} type, which is composed of a series of chapters 
-(Code~\ref{code:mkNB}). Each chapter, in turn, consists of various contents, 
-such as sentences, equations, or figures. For example, 
-Code~\ref{code:reviewContent} 
-shows how we encode information for the review chapter in Drasil.
+problem, and examples. Each chapter is composed of a variety of content types, 
+such as sentences, equations, or figures. To combine these contents into a 
+chapter, we convert them to the \macblue{Contents} type and map them together. 
+We provide smart constructors like \macred{lbldExpr} \footnote{This converts a 
+\textbf{ModelExpr} into a \textbf{Contents}.} for transfering different kind of 
+contents to \macblue{Contents}. In Code~\ref{code:reviewContent}, we 
+demonstrate how information and contents of the review chapter are encoded in 
+Drasil.
 
-\begin{listing}[h]
+\begin{listing}[h!]
+	\caption{Source Code for Encoded Review Chapter} 
+	\label{code:reviewContent}
+	\begin{lstlisting}[language=haskell1]	
+	reviewContent :: [Contents]
+	reviewContent = [reviewHead, reviewContextP1, 
+		LlC E.lcrectVel, LlC E.lcrectPos, LlC E.lcrectNoTime, 
+		reviewEqns, reviewContextP2]
+		
+	reviewHead, reviewContextP1, 
+		reviewEqns, reviewContextP2 :: Contents
+	reviewHead = foldlSP_ [headSent 2 (S "Rectilinear 
+		Kinematics: Continuous Motion")]
+	reviewContP1 = foldlSP_
+		[S "As covered previously, the", plural equation, S 
+	 	 "relating", phrase velocity, sParen (eS (sy QP.speed)
+	 	 ) `sC` phrase position, sParen (eS (sy QP.scalarPos)) 
+	 	 `S.and_` phrase time, sParen (eS (sy QP.time)) 
+	 	 `S.for` phrase motion `S.in_` S "one dimension with",
+	 	 phrase QP.constAccel, sParen (eS (sy QP.constAccel)) 
+	 	 +:+ S "are as follows:"]
+		
+	reviewEqns = foldlSP [S "where", eS (sy QP.iSpeed) 
+		`S.and_` eS (sy QP.iPos), S "are the initial",
+		 phrase velocity `S.and_` phrase position, 
+		 S ",respectively"]
+		
+	reviewContP2 = foldlSP 
+		[S "Only two of these", plural equation, S "are 
+	 	 independent, since the third" +:+ phrase equation, S 
+	 	 "can always be derived from the other two"]
+	\end{lstlisting}
+\end{listing}
+
+A lesson plan is represented in the \macblue{LsnDecl} type, which is a 
+collection of chapters (see Code~\ref{code:mkNB}). We then use the 
+\macred{mkNb} function (presented in Code~\ref{code:mkNb}) to convert the 
+lesson plan into a Drasil document. The resulting document can be printed and 
+produced as a Jupyter Notebook with the Drasil printer, as discussed in 
+Chapter~\ref{chap:nbprinter}.
+
+\begin{listing}[h!]
 	\caption{Source Code for Forming a Notebook} 
 	\label{code:mkNB}
 	\begin{lstlisting}[language=haskell1]				
@@ -382,39 +425,22 @@ shows how we encode information for the review chapter in Drasil.
 	\end{lstlisting}
 \end{listing}
 
-\begin{listing}[h]
-	\caption{Source Code for Encoded Review Chapter} 
-	\label{code:reviewContent}
-	\begin{lstlisting}[language=haskell1]	
-	reviewContent :: [Contents]
-	reviewContent = [reviewContextP1, 
-		LlC E.lcrectVel, LlC E.lcrectPos, LlC E.lcrectNoTime, 
-		reviewEqns, reviewContextP2]
-		
-	reviewContextP1, reviewEqns, reviewContextP2 :: Contents
-	reviewContP1 = foldlSP_
-		[S "As covered previously, the", plural equation, S 
-	 	 "relating", phrase velocity, sParen (eS (sy QP.speed)
-	 	 ) `sC` phrase position, sParen (eS (sy QP.scalarPos)) 
-	 	 `S.and_` phrase time, sParen (eS (sy QP.time)) 
-	 	 `S.for` phrase motion `S.in_` S "one dimension with",
-	 	 phrase QP.constAccel, sParen (eS (sy QP.constAccel)) 
-	 	 +:+ S "are as follows:"]
-		
-	reviewEqns = foldlSP 
-		[S "where", eS (sy QP.iSpeed) `S.and_` eS (sy QP.iPos), 
-	 	 S "are the initial", phrase velocity `S.and_` phrase 
-		 position, S ",respectively"]
-		
-	reviewContP2 = foldlSP 
-		[S "Only two of these", plural equation, S "are 
-	 	 independent, since the third" +:+ phrase equation, S 
-	 	 "can always be derived from the other two"]
-	\end{lstlisting}
-\end{listing}
+Figures~\ref{fig:review_byhand} and \ref{fig:review_drasil} display the 
+review chapter of the lesson plan created manually and using Drasil, 
+respectively.
 
-After the lesson plan is transformed into a Drasil document using the 
-\macred{mkNb} function presented in Code~\ref{code:mkNb}, it can be printed and 
-produced as a Jupyter Notebook document with the Drasil printer, as discussed 
-in Chapter~\ref{chap:nbprinter}.
+\begin{figure}[h!]
+	\caption{Review Chapter Created Manually}
+	\includegraphics[width=1\textwidth]{figures/review_byhand.png}
+	\label{fig:review_byhand}
+\end{figure}
 
+\begin{figure}[h!]
+	\caption{Review Chapter Generated using Drasil}
+	\includegraphics[width=1\textwidth]{figures/review_drasil.png}
+	\label{fig:review_drasil}
+\end{figure}
+
+For a complete demonstration of how to create a lesson plan using Drasil, 
+including the implementation and generated document, we recommend referring to 
+the appendix. \todo{link}

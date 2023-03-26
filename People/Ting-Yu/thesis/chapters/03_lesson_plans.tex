@@ -67,10 +67,10 @@ functions to create the document language for generating lesson plans. Our
 first step is to define the types and data for the lesson and its chapters in 
 Drasil's document language, \textbf{drasil-docLang}. Code~\ref{code:core} is 
 the core declaration of the lesson plan. A \macblue{LsnDesc} type represents a 
-lesson description (line 3), which consists of lesson chapters (line 5), 
+lesson description (line 1), which consists of lesson chapters (line 3), 
 including an introduction, learning objectives, review, case problem, example, 
 summary, bibliography, and appendix. The detail structure of each chapter is 
-defined in line 14-33. At present, \macblue{Contents} is the only defined 
+defined in line 12-31. At present, \macblue{Contents} is the only defined 
 elements as the chapter structure has not yet been fully understood. We intend 
 to further develop the chapter structure in the future. \todo{link to future 
 work} 
@@ -144,23 +144,23 @@ more understanding of our lesson plans.
 	\label{code:section}
 	\begin{lstlisting}[language=haskell1]
 		data Section = Section
-		{ tle  :: Title
-			, cons :: [SecCons]
-			, _lab :: Reference
-		}
+								  { tle  :: Title
+								  , cons :: [SecCons]
+								  , _lab :: Reference
+								  }
 		makeLenses ''Section
 		
-		-- | Constructor for creating 'Section's with a 
-		-- title ('Sentence'), introductory contents, 
-		-- a list of subsections, and a	shortname ('Reference').
+		-- | Constructor for creating 'Section's with a title 
+		-- ('Sentence'), introductory contents, a list of 
+		-- subsections, and a	shortname ('Reference').
 		section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
 		section title intro secs = Section title (map Con intro ++ map Sub secs)
 	\end{lstlisting}
 \end{listing}
 
 Next, we need functions to generate chapters. We can use the \macblue{Section} 
-type, as shown in Code~\ref{code:section}, which consists of a title, a list of 
-contents, and a short name that is used for creating SRS sections. We can also 
+type that is used for creating SRS sections, which consists of a title, a list 
+of contents, and a short name, as shown in Code~\ref{code:section}. We can also 
 take advantage of the \macred{section} smart constructor to build our own 
 chapter constructors, as illustrates in Code~\ref{code:chapterConstructor}. 
 Once we have these constructors, we can use them to build each chapter 
@@ -224,14 +224,14 @@ generating artifacts.} to form a lesson plan document.
 	mkSections :: SystemInformation -> LsnDesc -> [Section]
 	mkSections si = map doit where
 		doit :: LsnChapter -> Section
-		doit (Intro i)     = mkIntro i
-		doit (LearnObj lo) = mkLearnObj lo
-		doit (Review r)    = mkReview r
-		doit (CaseProb cp) = mkCaseProb cp
-		doit (Example e)   = mkExample e
-		doit (Smmry s)     = mkSmmry s
-		doit BibSec        = mkBib (citeDB si)
-		doit (Apndx a)     = mkAppndx a
+		doit (Intro i)    = mkIntro i
+		doit (LearnObj l) = mkLearnObj l
+		doit (Review r)   = mkReview r
+		doit (CaseProb c) = mkCaseProb c
+		doit (Example e)  = mkExample e
+		doit (Smmry s)    = mkSmmry s
+		doit BibSec       = mkBib (citeDB si)
+		doit (Apndx a)    = mkAppndx a
 	
 	mkLsnDesc :: SystemInformation -> LsnDecl -> NB.LsnDesc
 	mkLsnDesc _ = map sec where
@@ -441,6 +441,6 @@ respectively.
 	\label{fig:review_drasil}
 \end{figure}
 
-For a complete demonstration of how to create a lesson plan using Drasil, 
+For a complete demonstration of how the lesson plan is created using Drasil, 
 including the implementation and generated document, we recommend referring to 
 the appendix. \todo{link}

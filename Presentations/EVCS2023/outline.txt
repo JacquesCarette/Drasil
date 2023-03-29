@@ -3,14 +3,21 @@ Context (of the presentation):
 - just 10 minutes, so
   - make it memorable
   - make it a sales pitch
+- extra twist: diverse audience. Make it understandable to them too!
 
 Outline
 1. Title
 2. "Old Fashioned" -- presented as a quote?
 3. the old projects "pictorially"
+  - (human-provided) knowledge -> programmer's brains -> softifacts
+  - knowledge + (hp) design -> program -> softifacts
 4. well understood (as a key driver); knowledge duplication
+   emergence of "language of design"
 5. better tech (Haskell, DSLs, GOOL, codegen, tagless, ?)
+   and better theory
 6. documentation / English as our key difference
+    (github AI project?)
 7. redundancy illustration
+    Spencer's nice picture
 8. What if we wrote a program to output what 'we' usually do by hand?
   One potential 'answer': Drasil

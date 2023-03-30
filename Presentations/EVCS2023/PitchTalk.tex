@@ -9,6 +9,7 @@
 \usepackage{booktabs}
 % \usepackage{bnf}
 \usepackage{bm}
+\usepackage{csquotes}
 
 \usepackage[english]{babel}
 \usepackage[latin1]{inputenc}
@@ -42,19 +43,19 @@
 \newcommand{\greencheck}{{\LARGE {\color{ForestGreen}\checkmark}}}
 \newcommand{\bluedash}{{\LARGE {\color{blue}{--}}}}
 
-\newcommand{\blt}{- } %used for bullets in a list
+\newcommand{\name}[1]{{\color{blue}{#1}}}
 
 \newcommand{\colAwidth}{0.1\textwidth}
 \newcommand{\colBwidth}{0.8\textwidth}
 
 \renewcommand{\arraystretch}{1.1} %so that tables with equations do not look crowded
 
-\title{Generating Software for Well-Understood Domains}
+\title{\textbf{Generating Software for Well-Understood Domains}}
 
 %\subtitle
 %{Include Only If Paper Has a Subtitle}
 
-\author{\textbf{Jacques Carette}, W. Spencer Smith, Jason Balaci}
+\author{\underline{Jacques Carette}, W. Spencer Smith, Jason Balaci}
 
 \institute[McMaster University]
 {
@@ -113,19 +114,33 @@
 \hoffset=0in %restore
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\hoffset=-.4in %removing side bar for these frames
-%\begin{frame}[plain]
-%  
-%  \frametitle{Example}
-%  
-%  \hspace{-1.1cm}
-%  \includegraphics[width=1.1\columnwidth]{qnfrac.pdf}
-%  
-%\end{frame}
-%\hoffset=0in %restore
+\begin{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  
+\frametitle{Old Fashioned?}
+
+\blockquote[][\\ \hfill-- \textbf{Referee 2}]{
+\footnotesize{
+I enjoyed reading this short paper. It is a very classical paper, reminiscing
+of the DSL systems of the early days, like Neighbor's 
+\name{Draco} and Baxter's \name{DMS}.
+Indeed, it is an old vision to represent domain knowledge first-class, to avoid
+duplication, and offer variation points to make engineering trade-offs.}
+}
+
+\vspace*{5mm}
+\blockquote[][\hfill -- \textbf{Referee 3}]{
+\footnotesize{
+As general feedback, the paper's message reads a bit ``old-fashioned''. The
+``well-understood'' qualification is nice (because it qualifies what would
+otherwise be overly-general statements) but the actual benefit claimed is
+straight out of the playbook of the "automatic programming" community of the
+80s and 90s. For instance, I was strongly reminded of Novak's 
+\name{GLisp}...}
+}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
   
   \frametitle{Calculations}

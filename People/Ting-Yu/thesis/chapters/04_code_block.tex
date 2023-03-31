@@ -1,43 +1,128 @@
-\chapter{Code Block}
-unit of contents: linear vs nested
+\chapter{Code Block Generation}
+Jupyter Notebooks are valued for their effectiveness in writing and revising 
+code for data research. They allow code to be written in discrete blocks (or 
+``cells"), which can be executed separately, as opposed to writing and running 
+a whole program \cite{jupyterNotebookUsage}. This allows for a mix of content 
+types with code to better present information. 
 
-To deal with the second type of metadata, we need to answer the following 
-questions: i) what is the type of the cell, markdown or code? ii) how do we 
-know where to end a cell and start a new one? That is, when to ``cut" the 
-contents?
+In Chapter~\ref{chap:nbprinter}, we cover two types of metadata in Jupyter 
+Notebooks: one type is necessary for forming the notebook, while the other is 
+required to create cells for the contents. We explain how to generate the 
+metadata and create a Markdown cell. When generating SRS, we do not need to 
+worry about generating code blocks since SRS does not include any code. 
+However, when creating lesson plans, we may want to integrate real examples 
+that involve code. As we are now combining text and code in a document, we need 
+to address the following questions before generating the right type of cell: i) 
+what type of cell should we use, Markdown or code? and ii) how do we know when 
+to end a cell and start a new one? That is, how do we determine where to split 
+the contents into cells?
+ 
+To begin, we need to consider the conceptual definition of a cell in Jupyter 
+Notebooks. A cell is essentially a standalone unit of information or code that 
+can be executed independently. In other words, it is a unit of content within 
+the notebook \cite{cellsseparation}. A cell can contain either text or code and 
+can span multiple lines. Understanding the relationship between cells and their 
+contents is crucial for implementing an effective splitting strategy. By 
+identifying natural boundaries within the text or code and recognizing the unit 
+of the contents, we can determine where to split the contents into cells.
 
-The first question is easy to answer as there are no codes in SRS; contents are 
-either images or texts. Therefore, we can simply make all cells of type 
-markdown. 
+In this chapter, we will discuss different approaches and implementations for 
+splitting the contents and generating the appropriate type of cells.
 
-As for the second question, we would like to first know what is a cell, 
-conceptually? A working definition helps us understand what should do for 
-implementation. In the discussion, we define a cell as a kind of ``unit of 
-contents" \cite{cellsseparation}.  Thinking of what would be the ``unit" of 
-contents, the intuition might be paragraphs or sections. In Drasil document 
-language, SRS is made up of sections (Code~\ref{code:docdesc}), we can take 
-advantage of it and make each section a cell. This solution do work. 
-problem more the intuition answer of it is to have each section as a cell.
+\section{Unit of Contents}
+\subsection{Section-level}
+When considering what would be the appropriate unit of content for splitting, 
+one might first think of paragraphs or sections. In the source language of 
+Drasil, since a document is made up of sections (as seen in 
+Code~\ref{code:drasil-lang-document}), it may appear reasonable to split these 
+sections into individual cells. However, the nested structure of Drasil 
+documents, where each \macblue{Section} is composed of a list of 
+\macblue{Contents} and \macblue{Section}s (as demonstrated in 
+Code~\ref{code:section}), does not align well with the sequential flow of a 
+Jupyter Notebook. To address this issue, we flatten the structure of the Drasil 
+document by making each section and subsection an independent 
+\macblue{Section}. 
 
-\begin{listing}
-	\caption{Source Code for DocDesc}
-	\label{code:docdesc}
+For example, Code~\ref{code:IntroSec} defines the Introduction section, where 
+the original nested structure (lines 1-12) comprises a list of subsections, 
+while in the flattened version (lines 13-21), each subsection is self-contained 
+and has its own type. Code~\ref{code:DocSection} further illustrates that each 
+section is independent after the changes.
+
+\begin{listing}[h]
+	\caption{Source code for Definition of Introduction}
+	\label{code:IntroSec}
 	\begin{lstlisting}[language=haskell1]
-		type DocDesc = [DocSection]
+	-- Nested Structure
+	-- | Introduction section. Contents are top level 
+	-- followed by a list of subsections.
+	data IntroSec = IntroProg Sentence Sentence [IntroSub]
 		
-		data DocSection = TableOfContents
-		| RefSec RefSec
-		| IntroSec IntroSec
-		| StkhldrSec StkhldrSec
-		| GSDSec GSDSec
-		| SSDSec SSDSec
-		| ReqrmntSec ReqrmntSec
-		| LCsSec LCsSec
-		| UCsSec UCsSec
-		| TraceabilitySec TraceabilitySec
-		| AuxConstntSec AuxConstntSec
-		| Bibliography
-		| AppndxSec AppndxSec
-		| OffShelfSolnsSec OffShelfSolnsSec
+	-- | Introduction subsections.
+	data IntroSub where
+		IPurpose :: [Sentence] -> IntroSub
+		IScope   :: Sentence -> IntroSub
+		IChar    :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
+		IOrgSec  :: Sentence -> CI -> Section -> Sentence -> IntroSub
+	
+	-- Flatten Structure
+	-- | Introduction section.
+	data IntroSec = IntroProg Sentence Sentence
+	
+	-- | Introduction subsections.
+	newtype IPurpose = IPurposeProg [Sentence] 
+	newtype IScope = IScopeProg Sentence 
+	data IChar = ICharProg [Sentence] [Sentence] [Sentence]
+	data IOrgSec = IOrgProg Sentence CI Section Sentence
 	\end{lstlisting}
 \end{listing}
+
+\begin{listing}[h]
+	\caption{Pseudocode for Definition of DocSection}
+	\label{code:DocSection}
+	\begin{lstlisting}[language=haskell1]
+		-- Nested Structure
+		data DocSection = TableOfContents
+										| RefSec RefSec
+										| IntroSec IntroSec
+										| StkhldrSec StkhldrSec
+										...
+		
+		-- Flatten Strcutrue
+		data DocSection = TableOfContents TableOfContents
+										| RefSec RefSec
+										| TUnits TUnits
+										| TSymb TSymb
+										| TAandA TAandA
+										| IntroSec IntroSec
+										| IPurposeSub IPurposeSub
+										| IScopeSub IScopeSub
+										| ICharSub ICharSub
+										| IOrgSub IOrgSub
+										...
+		
+	\end{lstlisting}
+\end{listing}
+ 
+While flattening the structure of a document can allow for it to be split into 
+individual cells by sections, there are limitations to this approach. Splitting 
+the contents at the section level might not always be the most effective 
+approach. It's possible that certain sections might be too long to fit 
+comfortably in a single cell. Moreover, when working with documents that 
+combine text and code (such as lesson plans), section-level splitting may not 
+be appropriate due to the different types of cells needed for text and code. 
+Therefore, a better approach is needed.
+
+\subsection{LayoutObj-level}
+To determine the appropriate unit of content for splitting, we need to consider 
+the content itself and what makes sense in terms of its structure and 
+organization. Splitting the content based on logical units of information might 
+be a more effective approach than using sections as the sole criterion. In 
+earlier chapters, we discussed how Drasil handles various types of content 
+through the use of the \macblue{RawContent} data type, which includes 
+paragraphs, figures, equations, and other content types 
+(Code~\ref{code:RawContent}). A Drasil \macblue{Section} can consist of a list 
+of \macblue{RawContent}, which allows for the inclusion of different types of 
+contents within a single section. Additionally, as we saw in 
+Chapter~\ref{chap:nbprinter}, the document is printed in a specific document 
+language using \macblue{LayoutObj}, which is derived from \macblue{RawContent}.

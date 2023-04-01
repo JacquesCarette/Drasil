@@ -16,6 +16,8 @@
 \usepackage{hyperref}
 \usepackage{booktabs}
 
+\usepackage{takahashi} % for full-page slide
+
 \usepackage{tikz}
 \usetikzlibrary{positioning}
 
@@ -36,6 +38,7 @@
 %  language=Python,breaklines=false,keywordstyle=\bfseries}
 
 \newcommand{\name}[1]{{\color{blue}{#1}}}
+\newcommand{\stack}[1]{\begin{tabular}{@{}c@{}}#1\end{tabular}}
 
 \renewcommand{\arraystretch}{1.1} %so that tables with equations do not look crowded
 
@@ -133,19 +136,6 @@ straight out of the playbook of the "automatic programming" community of the
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
   
-  \frametitle{Idea}
-% the development process "pictorially"
-% quote from Draco?
-%  - (human-provided) knowledge -> programmer's brains -> softifacts
-%  - knowledge + (hp) design -> program -> code
-%  - knowledge + (hp) design -> program -> softifacts
-
-\end{frame}
-  
-  
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
-  
   \frametitle{Well Understood?}
   
   Given $F, Q, \kappa, \phi, \gamma$ calculate:
@@ -181,6 +171,45 @@ straight out of the playbook of the "automatic programming" community of the
   
 \end{frame}
   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{frame}
+%Well Understood
+%\end{frame}
+%\hoffset=-.4in %removing side bar for these frames    
+{\setbeamercolor{background canvas}{bg=black}
+\addtolength\textwidth{-.4in} 
+\setlength\hsize{\textwidth} 
+\setlength\columnwidth{\textwidth}
+\takahashi{\color{yellow}{\stack{Well\\Understood}}}
+}
+%\hoffset=0in %restore  
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hoffset=-.4in %removing side bar for these frames    
+\begin{frame}[plain] % knowledge duplication
+
+  \begin{tikzpicture}[remember picture,overlay]
+    \node [xshift=0.8cm,yshift=0.0cm] at (current page.center)
+    {
+    \includegraphics[width=1.2\textwidth]{DrasilSupportsChange.png}
+    };
+  \end{tikzpicture}
+  
+\end{frame}
+\hoffset=0in %restore  
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  
+  \frametitle{Idea}
+% the development process "pictorially"
+% quote from Draco?
+%  - (human-provided) knowledge -> programmer's brains -> softifacts
+%  - knowledge + (hp) design -> program -> code
+%  - knowledge + (hp) design -> program -> softifacts
+
+\end{frame}
   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
@@ -225,21 +254,6 @@ def func_t_flight(v_launch, theta, g_vect):
 \end{lstlisting}
 \end{frame}
   
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\hoffset=-.4in %removing side bar for these frames    
-\begin{frame}[plain] % knowledge duplication
-
-  \begin{tikzpicture}[remember picture,overlay]
-    \node [xshift=0.8cm,yshift=0.0cm] at (current page.center)
-    {
-    \includegraphics[width=1.2\textwidth]{DrasilSupportsChange.png}
-    };
-  \end{tikzpicture}
-  
-\end{frame}
-\hoffset=0in %restore  
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \hoffset=-.4in %removing side bar for these frames
 \begin{frame}[plain]

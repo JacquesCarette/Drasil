@@ -5,26 +5,16 @@
 \usetheme[width=0.7in]{Hannover}
   \setbeamercovered{transparent}
 }
-\usepackage{longtable}
-\usepackage{booktabs}
-% \usepackage{bnf}
-\usepackage{bm}
-\usepackage{csquotes}
+\usepackage{bm} % for some fonts
+\usepackage{csquotes} % quotations
 
 \usepackage[english]{babel}
 \usepackage[latin1]{inputenc}
 
 \usepackage{times}
 
-\usepackage{multirow}
-\usepackage{totpages}
 \usepackage{hyperref}
 \usepackage{booktabs}
-\usepackage[round]{natbib}
-
-%\usepackage{listings}
-%\lstset{frame=none, showstringspaces=false, basicstyle=\ttfamily\bfseries\footnotesize,
-%  xleftmargin=-8mm,language=Haskell,breaklines=true}
 
 \usepackage{tikz}
 \usetikzlibrary{positioning}
@@ -44,9 +34,6 @@
 \newcommand{\bluedash}{{\LARGE {\color{blue}{--}}}}
 
 \newcommand{\name}[1]{{\color{blue}{#1}}}
-
-\newcommand{\colAwidth}{0.1\textwidth}
-\newcommand{\colBwidth}{0.8\textwidth}
 
 \renewcommand{\arraystretch}{1.1} %so that tables with equations do not look crowded
 
@@ -138,6 +125,7 @@ straight out of the playbook of the "automatic programming" community of the
 \name{GLisp}...}
 }
 
+% Add pic from Draco and GLisp paper?
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -230,6 +218,7 @@ Type Theory, Category Theory, Lenses, Biform theories
 \hoffset=-.4in %removing side bar for these frames
 \begin{frame}[plain]
 
+\vspace*{8mm}
 \begin{tikzpicture}[remember picture,overlay]
   \node [xshift=1.3cm,yshift=0cm] at (current page.center)
   {
@@ -237,8 +226,14 @@ Type Theory, Category Theory, Lenses, Biform theories
   };
 \end{tikzpicture}
 
-- what if we generated it all...
+\begin{center}
+\color{Blue}{\LARGE \textbf{What if we generated it \textcolor{Red}{all}$^{*}$?}}
+\end{center}
 
+\hspace*{1cm}\includegraphics[width=0.25\textwidth]{Icon.png}
+
+\vspace*{2cm}
+{\footnotesize $^{*}$ when it makes sense do to so}
 \end{frame}
 \hoffset=0in %restore
 \end{document}

@@ -1,4 +1,4 @@
-\documentclass[usenames,dvipsnames]{beamer}
+\documentclass[usenames,dvipsnames,10pt]{beamer}
 
 \mode<presentation>
 {
@@ -26,12 +26,14 @@
     urlcolor=blue,
     unicode=false}
 
-% \usepackage{pifont}
 \usepackage{amsmath, amsfonts, amssymb, xspace, xcolor, url}
-\newcommand{\cross}{{\LARGE {\color{red}\ding{55}}}}
 
-\newcommand{\greencheck}{{\LARGE {\color{ForestGreen}\checkmark}}}
-\newcommand{\bluedash}{{\LARGE {\color{blue}{--}}}}
+\usepackage{listings}
+% \lstset{frame=none, showstringspaces=false, basicstyle=\ttfamily\footnotesize,
+%   xleftmargin=-8mm,language=Haskell}
+%\lstset{frame=none, showstringspaces=false, 
+%  basicstyle=\ttfamily\bfseries\scriptsize,
+%  language=Python,breaklines=false,keywordstyle=\bfseries}
 
 \newcommand{\name}[1]{{\color{blue}{#1}}}
 
@@ -106,7 +108,7 @@
 \frametitle{Old Fashioned?}
 
 \blockquote[][\\ \hfill-- \textbf{Referee 2}]{
-\footnotesize{
+\small{
 I enjoyed reading this short paper. It is a very classical paper, reminiscing
 of the DSL systems of the early days, like Neighbor's 
 \name{Draco} and Baxter's \name{DMS}.
@@ -116,7 +118,7 @@ duplication, and offer variation points to make engineering trade-offs.}
 
 \vspace*{5mm}
 \blockquote[][\hfill -- \textbf{Referee 3}]{
-\footnotesize{
+\small{
 As general feedback, the paper's message reads a bit ``old-fashioned''. The
 ``well-understood'' qualification is nice (because it qualifies what would
 otherwise be overly-general statements) but the actual benefit claimed is
@@ -191,12 +193,36 @@ Type Theory, Category Theory, Lenses, Biform theories
 \end{frame}
   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
+\begin{frame}[fragile]
   
-  \frametitle{Documentation!}
-- Killer feature?
+  \frametitle{Key Philosophical Differences}
+\begin{minipage}{0.48\textwidth}
+\includegraphics[width=1.0\textwidth]{DocKinds.png}
+\end{minipage}
+\begin{minipage}{0.48\textwidth}
+\includegraphics[width=1.0\textwidth]{BoredAtWork.jpg}
+\end{minipage}
 
-(github AI project?)
+%  basicstyle=\ttfamily\bfseries\scriptsize,
+%  language=Python,breaklines=false,keywordstyle=\bfseries}
+
+\begin{lstlisting}[language=Python,basicstyle=\ttfamily\tiny,
+  keywordstyle=bfseries,breaklines=false]
+## \file Projectile.py
+# \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
+# \brief Contains the entire Projectile program
+import math
+import sys
+
+## \brief Calculates flight duration: the time when the projectile lands (s)
+# \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
+# \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
+# \param g_vect gravitational acceleration (m/s^2)
+# \return flight duration: the time when the projectile lands (s)
+def func_t_flight(v_launch, theta, g_vect):
+    return 2.0 * v_launch * math.sin(theta) / g_vect
+
+\end{lstlisting}
 \end{frame}
   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -227,13 +253,13 @@ Type Theory, Category Theory, Lenses, Biform theories
 \end{tikzpicture}
 
 \begin{center}
-\color{Blue}{\LARGE \textbf{What if we generated it \textcolor{Red}{all}$^{*}$?}}
+\color{Blue}{\huge \textbf{What if we generated it \textcolor{Red}{all}$^{*}$?}}
 \end{center}
 
 \hspace*{1cm}\includegraphics[width=0.25\textwidth]{Icon.png}
 
 \vspace*{2cm}
-{\footnotesize $^{*}$ when it makes sense do to so}
+{\scriptsize $^{*}$ when it makes sense do to so}
 \end{frame}
 \hoffset=0in %restore
 \end{document}

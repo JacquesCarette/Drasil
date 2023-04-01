@@ -88,7 +88,7 @@ section is independent after the changes.
 										| StkhldrSec StkhldrSec
 										...
 		
-		-- Flatten Strcutrue
+		-- Flatten Structure
 		data DocSection = TableOfContents TableOfContents
 										| RefSec RefSec
 										| TUnits TUnits
@@ -114,15 +114,85 @@ be appropriate due to the different types of cells needed for text and code.
 Therefore, a better approach is needed.
 
 \subsection{LayoutObj-level}
-To determine the appropriate unit of content for splitting, we need to consider 
-the content itself and what makes sense in terms of its structure and 
-organization. Splitting the content based on logical units of information might 
-be a more effective approach than using sections as the sole criterion. In 
-earlier chapters, we discussed how Drasil handles various types of content 
-through the use of the \macblue{RawContent} data type, which includes 
+In Jupyter Notebook, a cell can be seen as a self-contained unit of 
+information, and it can contain multiple types of content, such as text, code, 
+and figures. To determine the appropriate unit of content for splitting, we 
+need to consider the content itself and what makes sense in terms of its 
+structure and organization.  Although a cell might not always be the most 
+appropriate unit of conent for splitting, it is somehow the lowest level of 
+``display content" that conveys a coherent piece of information 
+\cite{cellsseparation}. Therefore, splitting the content based on logical units 
+of information might be a more effective approach rather than using sections as 
+the sole criterion. 
+
+In previous chapters, we discussed how Drasil handles different types of 
+content through the use of the \macblue{RawContent} data type, which includes 
 paragraphs, figures, equations, and other content types 
 (Code~\ref{code:RawContent}). A Drasil \macblue{Section} can consist of a list 
-of \macblue{RawContent}, which allows for the inclusion of different types of 
+of \macblue{RawContent}, allowing for the inclusion of different types of 
 contents within a single section. Additionally, as we saw in 
 Chapter~\ref{chap:nbprinter}, the document is printed in a specific document 
-language using \macblue{LayoutObj}, which is derived from \macblue{RawContent}.
+language using \macblue{LayoutObj}, which is derived from \macblue{RawContent}. 
+Because each content type is handled explicitly by \macblue{LayoutObj}, we can 
+take advantage of this and split each type of content into its own cell.
+
+To implement this approach, we first need to ensure that each layout object 
+is generated independently and is not nested with other layout objects. In 
+Chapter~\ref{chap:nbprinter}, we discussed how \macblue{RawContent} is 
+translated to a printable \macblue{LayoutObj}. The \macred{printLO} function in 
+Code~\ref{code:LayoutObj} demonstrates how the printer renders each content 
+type into a notebook format. However, it's worth noting that the current format 
+of \macblue{LayourObj} is designed for SRS and may not be suitable for lesson 
+plans. For instance, the \textbf{HDiv} type wraps sections and creates an HTML 
+$<$div$>$ tag, and even an equation block is translated into the \textbf{HDiv}, 
+as seen in Code~\ref{code:EqnblocktoTex]}. Moreover, the \textbf{Definition} 
+type is designed for the definition or model defined in SRS and may not be 
+required for lesson plans. To better accommodate lesson plan content types, we 
+may need to create a new \macblue{LayoutObj} in the future when we have a 
+better understanding of the lesson plan structure. \todo{future work}
+
+Currently, we are using the existing \macblue{LayoutObj} to translate our 
+lesson plan contents into printable layout object. Since these contents are not 
+code and should be in Mardown, we print each required content type 
+independently into a Markdown cell. To accomplish this, we use the 
+\macred{markdownCell} function from Code~\ref{code:markdownCell}. This function 
+generates the necessary metadata and creates the Markdown cell for each layout 
+object, which is our unit of content. 
+
+Code~\ref{code:printLO'} illustrates how each content type is rendered in 
+notebook format in a Markdown cell. For layout objects that are not needed in 
+lesson plans, we make them empty. We also separate equation blocks from 
+\textbf{HDiv} with the equation tag to have more control over the structure.
+
+\begin{listing}[h!]
+	\caption{Source Code for printLO'}
+	\label{code:printLO'}
+	\begin{lstlisting}[language=haskell1, basicstyle=\small\ttfamily]
+		-- printLO' is used for generating lesson plans
+		printLO' :: LayoutObj -> Doc
+		printLO' (HDiv ["equation"] layObs _) = markdownCell $ 
+			vcat (map printLO' layObs)
+		printLO' (Header n contents l) = markdownCell $ nbformat 
+			(h (n + 1) <> pSpec contents) $$ refID (pSpec l)
+		printLO' (Cell layObs) = vcat (map printLO' layObs)
+		printLO' HDiv {} = empty
+		printLO' (Paragraph contents) = markdownCell $ nbformat 
+			(stripnewLine (show(pSpec contents)))
+		printLO' (EqnBlock contents) = nbformat mathEqn
+			where
+				toMathHelper (PL g) = PL (\_ -> g Math)
+				mjDelimDisp d = text "$$" <> stripnewLine (show d) <> text "$$" 
+				mathEqn = mjDelimDisp $ printMath $ toMathHelper $ 
+					TeX.spec contents
+		printLO' (Table _ rows r _ _) = markdownCell $ 
+			makeTable rows (pSpec r)
+		printLO' (Definition dt ssPs l) = empty
+		printLO' (List t) = markdownCell $ makeList t False
+		printLO' (Figure r c f wp) = markdownCell $ makeFigure 
+			(pSpec r) (pSpec c) (text f) wp
+		printLO' (Bib bib) = markdownCell $ makeBib bib
+		printLO' Graph{} = empty
+	\end{lstlisting}
+\end{listing}
+
+\section{Code Block}

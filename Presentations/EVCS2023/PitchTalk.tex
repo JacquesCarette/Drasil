@@ -180,7 +180,7 @@ straight out of the playbook of the "automatic programming" community of the
 \addtolength\textwidth{-.4in} 
 \setlength\hsize{\textwidth} 
 \setlength\columnwidth{\textwidth}
-\takahashi{\color{yellow}{\stack{Well\\Understood}}}
+\takahashi{\color{yellow}{\stack{Well\\Understood!}}}
 }
 %\hoffset=0in %restore  
   
@@ -229,7 +229,7 @@ straight out of the playbook of the "automatic programming" community of the
 %  language=Python,breaklines=false,keywordstyle=\bfseries}
 
 \begin{lstlisting}[language=Python,basicstyle=\ttfamily\tiny,
-  keywordstyle=bfseries,breaklines=false]
+  keywordstyle=\bfseries,breaklines=false]
 ## \file Projectile.py
 # \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
 # \brief Contains the entire Projectile program
@@ -250,10 +250,25 @@ def func_t_flight(v_launch, theta, g_vect):
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
   
-  \frametitle{Better Technology, Better Theory}
-Haskell, DSLs, GOOL, partial evaluation and codegen, finally tagless
+  \frametitle{Better Technology \& Theory}
+  \tikzstyle{tech}=[fill=green!60, text=black, circle, draw=green, thick, minimum size=6mm]
+  \tikzstyle{techme}=[fill=ForestGreen!60, text=black, circle, draw=green, thick, minimum size=6mm]
+  \tikzstyle{theory}=[fill=purple!50, text=black, rectangle, draw=purple, thick, minimum size=6mm]
+  \tikzstyle{theoryme}=[fill=purple!80, text=black, rectangle, draw=purple, thick, minimum size=6mm]
+   \begin{tikzpicture}[node distance=2cm]
+     \node[tech] (Haskell) {Haskell};
+     \node[tech] (DSLs) [right of=Haskell] {DSLs};
+     \node[techme] (GOOL) [right of=DSLs] {GOOL};
+     \node[tech] (PE) [right of=GOOL] {PE};
+     \node[techme] (tagless) [right of=PE] {tagless};
 
-Type Theory, Category Theory, Lenses, Biform theories
+     \node[theory] (type) [below of=Haskell] {Type Theory};
+     \node[theory] (cat) [below of=GOOL] {Category Theory};
+     \node[theoryme] (biform) [below of=tagless] {Biform Theories};
+     \node[theory] (lens) [below of=cat] {Lenses};
+    \end{tikzpicture}
+
+% Type Theory, Category Theory, Lenses, Biform theories
 
 \end{frame}
   
@@ -275,7 +290,9 @@ Type Theory, Category Theory, Lenses, Biform theories
 
 \hspace*{1cm}\includegraphics[width=0.25\textwidth]{Icon.png}
 
-\vspace*{2cm}
+\hspace*{1.7cm}{\textbf{Drasil}}
+
+\vspace*{1.6cm}
 {\scriptsize $^{*}$ when it makes sense do to so}
 \end{frame}
 \hoffset=0in %restore

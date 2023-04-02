@@ -1,0 +1,31 @@
+\chapter{Future Work} \label{chap:futureWork}
+\section{JSON Printer Improvement}
+While the current JSON printer can satisfy our need of generating Jupyter 
+Notebook documents, there are a few issues need to be addressed. 
+
+\section{Design Lesson Plan Content Type} \label{chap:contentType}
+In Chapter~\ref{chap:codeBlock}, we discussed the potential limitations of the 
+current \macblue{LayoutObj} for the structure of lesson plans. Most of the 
+existing layout objects are designed for SRS data types such as 
+\textbf{Definition}. To better accommodate the content types found in lesson 
+plans, we could define a new set of \macblue{LayoutObj}s that are specific to 
+these types of contents, such as a model that includes step-by-step 
+instructions, since many lessons include these instructions. By doing so, we 
+could ensure that each content type is handled explicitly by the appropriate 
+\macblue{LayoutObj}, and we could create a separate cell for each type of 
+content as discussed earlier. This approach would make it easier to split the 
+content into logical units of information, and it would also make the resulting 
+notebook more modular and easier to navigate.
+
+\section{Develop the Structure of Lesson Plans}
+The current structure of lesson plans includes several chapters such as 
+learning objectives, case problems, and examples, and each chapter is made up 
+of a list of contents. However, this structure needs improvement to better fit 
+the architecture of each chapter. By gaining a better understanding of our 
+lesson plans and the structure of each chapter, we can incorporate the newly 
+designed specific content types (as discussed in \ref{chap:contentType}) into 
+each chapter. For example, the Case Problem chapter should include the model of 
+procedure analysis, which includes step-by-step instructions. Having a more 
+detailed and adaptable structure of lesson plans would enable greater 
+consistency and efficiency in creating and delivering content. Furthermore, it 
+would make it easier to capture the key elements and knowledge of each lesson.

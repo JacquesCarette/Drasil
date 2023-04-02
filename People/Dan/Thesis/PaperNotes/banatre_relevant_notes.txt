@@ -1,0 +1,76 @@
+Published 2004
+------------------------------------------------------------
+Generative Programming from a DSL Viewpoint - Charles Consel
+------------------------------------------------------------
+
+- Mentions cross-cutting concerns and DSL general use cases. Good for bg
+
+------------------------------------------------------------
+Generative Programming from an AOP/CBSE Perspective - Mira Mezini & Klaus Ostermann
+------------------------------------------------------------
+
+- Has great citations
+- Focused on AOP, but some interesting comments on decomposition and model-relations
+  specifically re: cross-cutting concerns and model projections
+- "Software decomposition techniques so far including OO decomp are weak at
+  supporting multi-view decomposition"
+- Gets into formal definitions of model projections
+- Pro AOP and GPLs, anti-DSL
+
+------------------------------------------------------------
+Overview of Generative Software Development - Krzysztof Czarnecki
+------------------------------------------------------------
+
+- Lots of great stuff - advocates shifting to software family generation
+- Good references to check out
+- "Domain engineering supplies application engineering with the reusable assets
+  whereas application engineering feeds back new requirements to domain engineering"
+  - Correlates well to our interation & refinement work, since it was iterating
+    on applications by refining the domain and vice versa.  
+- "Domain engineering can be applied at different levels of maturity... establish
+  a common terminology among different... teams... introduce a common architecture
+  for a set of systems... provide a set of components...the assembly of these
+  components can be partially or fully automated using generators and/or
+  configurators... the generated products may also contain non-software artifacts,
+  such as test plans, manuals, tutorials, maintenance guidelines, etc."
+  - I'd argue those are all non-code software artifacts, not non-software artifacts.
+- What's the Draco model of domains and software generation? (TODO: Read the paper)
+- Lots of discussion on DSLs and existing generative tech
+- MDD primer - "aims at capturing every important aspect of a software system 
+  through appropriate models" -- emphasis is really on the code
+- MDA -> Devs express applications independent of specific implementation platforms
+  - Seems to be one level above code (doesn't target other softifacts)
+  - Models are expressed using UML and framework uses Object Management Group standards 
+  - MDA efforts focused on achieving platform independence where GSD addresses 
+    both technical and application-domain variability
+- Contains a useful figure (9) that shows MDA as a subset of GSD.
+
+------------------------------------------------------------
+Generative Programming from a Post Object-Oriented Programming Viewpoint 
+  - Shigeru Chiba
+------------------------------------------------------------
+
+- Not all that relevant. A few sentences stand out, but mentions generative
+  programming, AOP, and DSLs as possible future avenues to overcome mentioned 
+  issues
+
+------------------------------------------------------------
+Understanding Generative Programming - From (meta) objects to aspects 
+  - Pierre Cointe
+------------------------------------------------------------
+
+- "Generative Programming (GP) is an attempt to manufacture software components
+  in an automated way by developing programs that synthesize other programs."
+- Good resources on GP -- Czarnecki 2000, Batory et al., 
+- Czarnecki 2000 - "The transition to automated manufacturing in software 
+  requires two steps. First we need to move our focus from engineering single 
+  systems to engineering families of systems - this will allow us to come up 
+  with the 'right' implementation of components. Second, we need to automate 
+  the assembly of the implementation components using generators"
+- "Generative Programming (GP) is an attempt to provide a variety of approaches 
+  and techniques to manufacture sofware components in an automated way by 
+  developing programs that synthesize other programs"
+- "The reflective approach makes the assumption that it is possible to separate 
+  in a given application its why expressed at the base level from its how 
+  expressed at the metalevel"
+- 

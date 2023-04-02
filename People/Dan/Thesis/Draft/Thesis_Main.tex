@@ -1,0 +1,197 @@
+\documentclass[12pt]{report} % Times New Roman, 12pt
+%\usepackage{gscale_thesis_singlespace} % Single spaced thesis
+\usepackage{gscale_thesis_doublespace} % Double spaced thesis
+\usepackage{fancyheadings} % Header and footer styling
+\usepackage[numbers]{natbib} % Bibliography formatting
+\usepackage{setspace} % Allows double spacing but skips headers/footers
+\setcounter{tocdepth}{1} % Limits the TOC to chapter and section names
+
+% Additional packages
+\usepackage{graphicx} % Allows the inclusion of figures
+\usepackage{subcaption} % Allows captions to be added to subfigures
+\usepackage[justification=centering]{caption} % Centres caption text
+\usepackage{array} % Used for table formatting
+\newcolumntype{P}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\usepackage{booktabs} % Fancy-style tables
+\usepackage{longtable} % Allows for tables that are more than one page long
+\usepackage{float} % Better figure placement control
+\usepackage{enumerate} % Numbered lists
+\usepackage[shortlabels]{enumitem} % For controlling enumerate labels
+\usepackage[shortcuts]{extdash} % Allows manual hyphenation of hypenated words
+\usepackage{amsmath} % Non-standard math symbols
+\usepackage{amsfonts} % Extended fonts for mathematics
+
+\usepackage[hidelinks]{hyperref} % Linking to LaTeX labels and external URLs
+
+\numberwithin{equation}{section} % Numbers equations based on their section
+
+% Additional packages
+\usepackage{xcolor}
+\numberwithin{equation}{section}       % Numbers equations based on their 
+									   %   section
+\usepackage[normalem]{ulem}			   % Strikeout and advanced emphasis
+
+% ********************************
+\definecolor{codegreen}{rgb}{0,0.6,0}  % Custom code colours
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+
+\usepackage{listings}				   % For code
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{magenta},
+    keywordstyle=\color{codegreen},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+% ********************************
+
+\newif\ifcomments\commentstrue
+
+\ifcomments
+\newcommand{\authornotes}[3]{\textcolor{#1}{[#3 ---#2]}}
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\else
+\newcommand{\authornotes}[3]{}
+\newcommand{\todo}[1]{}
+\fi
+
+\newcommand{\wss}[1]{\authornotes{blue}{SS}{#1}}
+\newcommand{\jc}[1]{\authornotes{red}{JC}{#1}}
+\newcommand{\ds}[1]{\authornotes{cyan}{DS}{#1}}
+
+% *******Custom commands**********
+
+%Cards
+\newcommand{\card}[3]{
+  \begin{center}
+    \begin{tabular}{||p{0.8\linewidth}||}
+	\hline
+	\textbf{Name}: {\textbf{#1}} \\ \hline
+	\textbf{Problem being solved}: #2 \\ \\
+	Relevant artifacts: #3 \\
+	\hline
+    \end{tabular}
+  \end{center}
+}
+
+\newcommand{\cardifact}[2]{
+  \begin{center}
+    \begin{tabular}{||p{0.8\linewidth}||}
+	\hline
+	\textbf{Name}: {\textbf{#1}} \\ \hline
+	\textbf{Description}: #2 \\
+	\hline
+    \end{tabular}
+  \end{center}
+}
+
+%Shortcuts
+\def\smithea{Smith et al.}
+\def\sfs{softifacts}
+\def\sf{softifact}
+\def\SFS{Softifacts}
+\def\SF{Softifact}
+\def\gp{GamePhysics}
+\def\gb{GlassBR}
+\def\sw{SWHS}
+\def\np{NoPCM}
+\def\sp{SSP}
+\def\pr{Projectile}
+
+
+%Figures
+\newcommand{\fig}[3]{
+  \begin{figure}
+    #1
+  \caption{#2}
+  \label{#3}
+  \end{figure}
+}
+
+%Tables
+%\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+% ********************************
+\begin{document}
+\include{definitions} % LaTeX variables for preface pages/headers
+    
+\beforepreface % Half title page, title page, declaration page   
+  \include{layabstr} % Lay Abstract
+  \include{abstr} % Abstract
+  \include{dedic} % Dedication
+  \include{acknowledgements} % Acknowledgements
+  \referencepages % Table of Contents, List of Figures, List of Tables
+  \include{notation}
+  \academicstatement{academicachievementdeclaration}
+\afterpreface
+  
+  
+  \include{introduction}                  
+        \setcounter{figure}{0}
+        \setcounter{equation}{0}
+        \setcounter{table}{0}
+        
+  \include{background}                  
+       \setcounter{figure}{0}
+       \setcounter{equation}{0}
+       \setcounter{table}{0}
+
+  \include{process}                  
+       \setcounter{figure}{0}
+       \setcounter{equation}{0}
+       \setcounter{table}{0}
+
+  \include{drasil}                  
+       \setcounter{figure}{0}
+       \setcounter{equation}{0}
+       \setcounter{table}{0}
+
+  \include{results}                  
+       \setcounter{figure}{0}
+       \setcounter{equation}{0}
+       \setcounter{table}{0}
+
+  \include{futureWork}                  
+       \setcounter{figure}{0}
+       \setcounter{equation}{0}
+       \setcounter{table}{0}
+
+  \include{conclusion}
+        \setcounter{figure}{0}
+        \setcounter{equation}{0}
+        \setcounter{table}{0}
+
+\begin{appendix}
+    \include{appendixA}
+        \setcounter{figure}{0}
+        \setcounter{equation}{0}
+        \setcounter{table}{0}
+
+    \include{appendixB}
+        \setcounter{figure}{0}
+        \setcounter{equation}{0}
+        \setcounter{table}{0}
+\end{appendix}
+
+% The bibliography is set up to allow for multiple bib files
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references,drasil}
+
+\label{NumDocumentPages}
+
+\end{document}
+% ********************************

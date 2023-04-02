@@ -1,0 +1,118 @@
+\chapter{Drasil}
+
+\ds{**Section Roadmap:
+    -- This is where the real meat of Drasil is discussed (implementation details)
+    -- Intro to our knowledge-capture mechanisms
+      - Chunks/hierarchy
+      - Break down each with examples from the case studies.
+      - Look for 'interesting' examples (synonyms, acronyms, complexity, etc.)
+    -- Intro to the DSL
+      - Captured knowledge is useless without the transformations/rendering engine
+      - DSL for each \sf{}}
+
+In this chapter we will introduce the Drasil framework and some details of its 
+implementation including knowledge-capture mechanisms, the domain specific 
+languages used throughout, and how all of these pieces are brought together in 
+a human-usable way to generate \sfs{}.
+      
+\section{What Drasil is and isn't}
+  * Basically just restating some things from the intro in more depth
+  - Not a silver bullet
+  - Built around a specific set of assumptions, for a particular class of problems
+  - NOT an ontology / ontology builder
+
+Manually writing and maintaining a full range of \sfs{} is
+redundant, tedious, and often \sfs{} fall our of sync with each other. 
+Drasil is a framework built to tackle these problems.
+
+Contrary to documentation generators like Doxygen, Javadoc, and Pandoc
+which take a code-centric view of the problem and rely on manual redundancy -- 
+i.e. natural-language explanations written as specially delimited
+comments which can then be weaved into API documentation alongside code -- 
+Drasil takes a knowledge-centric, redundancy-limiting, fully traceable single 
+source approach to generating all \sfs{}.
+
+However, Drasil is not a panacea for all the woes of software development. Even 
+the seemingly well-defined issues of unnecessary redundancy and manual 
+duplication turn out to be large, many-headed beasts existing across a 
+multitude of software domains; each with their own benefits, drawbacks, and 
+challenges.
+
+To reiterate: Drasil has not been designed as a silver-bullet. It is a 
+specialized tool meant to be used in well-understood domains for software that 
+will undergo frequent maintenance and/or changes. In deciding whether Drasil 
+would be useful for developing software to tackle a given problem, we recommend 
+identifying those projects that are long-lived (10+ years) with \sfs{} 
+relevant to multiple stakeholders. For our purposes, as mentioned earlier, we 
+have focused on SC software that follows the input $\rightarrow$ process 
+$\rightarrow$ output pattern. SC software has the benefit of being relatively 
+slow to change, so models used today may not be updated or invalidated for some 
+time, if ever. Should that happen, the models will likely still be applicable 
+given a set of assumptions or assuming certain margin for error.
+
+With Drasil being built around this specific class of problems, we remain aware 
+that there are likely many in-built assumptions that could affect its 
+applicability to other domains in its current state. Expanding Drasil's reach 
+is an avenue for future work.
+
+The Drasil framework relies on a knowledge-centric approach to software 
+specification and development. We attempt to codify the foundational theory 
+behind the problems we are attempting to solve and operationalize it through 
+the use of generative technologies. By doing so, we can reuse common knowledge 
+across projects and maintain a single source of truth in our knowledge database.
+
+Given how important knowledge is to Drasil, one might think we are building 
+ontologies or ontology generators. This is \emph{not} the case. We are not 
+attempting to create a source for all knowledge and relationships inside a 
+given field. We are merely using the information we have available to build up 
+knowledge as needed to solve problems. Over time, this may take on the 
+appearance of an ontology, but Drasil does not currently enforce any strict 
+rules on how knowledge should be captured, outside of its type system and some 
+best practice recommendations. We will explore knowledge capture in more depth 
+in Section~\ref{sec:kc}.
+
+\section{Our Ingredients: Organizing and Capturing Knowledge}
+\label{sec:kc}
+  - Organization of knowledge implies a need for knowledge-capture mechanisms 
+    at different levels (different levels of abstraction / specificity)
+  - segues right into chunks/hierarchy
+   - project-specific vs “DB of knowledge”
+   - Make it clear this is NOT an ontology
+   - Look for interesting examples (synonyms, acronyms, complexity) from case studies and refer to them here (again if was covered in Organizing Knowledge)
+
+\section{Recipes: Codifying Structure}
+  - Organized knowledge is fine, but is essentially just a collection of (collections of) definitions. Pretty meaningless on its own so we need the structure (in our case from the templates / case studies) to have meaning.
+  - Each \sf{} has its own recipe for combining knowledge
+  - As we consider \sfs{} "views" of the knowledge, we need to 
+  combine/transform/manipulate the knowledge into a meaningful form for the 
+  given view - ex: Math formula for human-readable doc, Function/method for 
+  code (show examples).
+  - Recipes define the "how" and "where" of putting together the knowledge. The rendering engine reads the recipe and follows its instructions.
+
+\section{Cooking it all up: Generation/Rendering}
+  - Recipes are “little programs”
+  - Each recipe can be rendered a number of ways, based on parameters fed to the generator.
+  -  Implicit parameters vs explicit: Ex. an SRS will always be rendered based on the recipe, but its output will either be LaTeX or HTML based on an explicit choice. Implicit params fed to gen table of symbols/A\&A / ToU.
+
+
+\section{Iteration and refinement}
+\ds{TODO: Figure out what belongs here and what belongs in results}
+
+  - Practical approach to iron out kinks / find holes in Drasil
+
+  - Find places to improve upon the existing case studies - ‘update as you go’ 
+  mindset
+
+  - Observe the amount of effort required to correct errors - show examples
+
+  - Most of the code we’ll show off should be in here.
+
+  - Tau example (see issue 348) and its implications - symbols and definitions 
+  didn't match. -> implicit 1m depth into the page (means we may need to change 
+  the equations). Resistive and mobilizing shear switched throughout the 
+  original docs -- impossible with Drasil.
+
+  - \ds{This next one might belong in future work} Implicit assumptions -> 
+  Issue 91. We take for granted things are "physical 
+  materials", but this is an assumption that could be codified and made 
+  explicit to the system (which would allow us some more flexibility).

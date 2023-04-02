@@ -3,7 +3,7 @@
 \mode<presentation>
 {
 \usetheme[width=0.7in]{Hannover}
-  \setbeamercovered{transparent}
+  \setbeamercovered{invisible}
 }
 \usepackage{bm} % for some fonts
 \usepackage{csquotes} % quotations
@@ -206,8 +206,37 @@ straight out of the playbook of the "automatic programming" community of the
 \begin{frame}
   
   \frametitle{Process}
-% the development process "pictorially"
-% quote from Draco?
+  \begin{tikzpicture}[node distance=1.8cm]
+    \tikzstyle{every node}=[draw=black,rectangle,fill=red!50];
+    \node (A) {knowledge};
+    \node (B) [below of=A] {programmer};
+    \node (C) [below of=B] {softifacts};
+
+    \draw[->] (A) -- (B);
+    \draw[->] (B) -- (C);
+  \end{tikzpicture}
+  \pause
+  \begin{tikzpicture}[node distance=1.8cm]
+    \tikzstyle{every node}=[draw=black,rectangle,fill=blue!50];
+    \node (A) {knowledge};
+    \node (D) [right of=A] {design};
+    \node (B) [below right of=A] {program};
+    \node (C) [below of=B] {code};
+    \draw[->] (A) -- (B) ;
+    \draw[->] (D) -- (B) ;
+    \draw[->] (B) -- (C) ;
+  \end{tikzpicture}
+  \pause
+  \begin{tikzpicture}[node distance=1.8cm]
+    \tikzstyle{every node}=[draw=black,rectangle,fill=green!50];
+    \node (A) {knowledge};
+    \node (D) [right of=A] {design};
+    \node (B) [below right of=A] {program};
+    \node (C) [below of=B] {softifacts};
+    \draw[->] (A) -- (B);
+    \draw[->] (D) -- (B);
+    \draw[->] (B) -- (C);
+  \end{tikzpicture}
 %  - (human-provided) knowledge -> programmer's brains -> softifacts
 %  - knowledge + (hp) design -> program -> code
 %  - knowledge + (hp) design -> program -> softifacts
@@ -224,9 +253,6 @@ straight out of the playbook of the "automatic programming" community of the
 \begin{minipage}{0.48\textwidth}
 \includegraphics[width=1.0\textwidth]{BoredAtWork.jpg}
 \end{minipage}
-
-%  basicstyle=\ttfamily\bfseries\scriptsize,
-%  language=Python,breaklines=false,keywordstyle=\bfseries}
 
 \begin{lstlisting}[language=Python,basicstyle=\ttfamily\tiny,
   keywordstyle=\bfseries,breaklines=false]

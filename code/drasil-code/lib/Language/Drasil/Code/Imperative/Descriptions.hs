@@ -10,9 +10,9 @@ module Language.Drasil.Code.Imperative.Descriptions (
 import Utils.Drasil (stringList)
 
 import Language.Drasil
+import Language.Drasil.Chunk.CodeBase
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
   inMod)
-import Language.Drasil.Chunk.Code (CodeIdea(codeName), quantvar)
 import Language.Drasil.Choices (ImplementationType(..), InputModule(..), 
   Structure(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))

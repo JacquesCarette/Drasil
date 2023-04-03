@@ -10,7 +10,7 @@ module Language.Drasil.Plain.Print (
 import Database.Drasil (ChunkDB)
 import Language.Drasil (Sentence, Special(..), Stage(..), Symbol, USymb(..))
 import qualified Language.Drasil as L (Expr, HasSymbol(..))
-import qualified Language.Drasil.CodeExpr as C (CodeExpr)
+import qualified Language.Drasil.CodeExpr.Development as C (CodeExpr)
 import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..), 
   OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
 import Language.Drasil.Printing.Import (expr, codeExpr, spec, symbol)

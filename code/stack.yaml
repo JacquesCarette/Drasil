@@ -41,7 +41,6 @@ packages:
 - drasil-utils
 - drasil-gool
 - drasil-build
-- drasil-code-base
 - drasil-code
 - drasil-sysinfo
 - drasil-theory

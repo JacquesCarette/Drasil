@@ -2,20 +2,19 @@
 -- | Defines the CodeSpec structure and related functions.
 module Language.Drasil.CodeSpec where
 
-import Language.Drasil hiding (None)
+import Language.Drasil hiding (None, new)
 import Language.Drasil.Development (showUID)
 import Language.Drasil.Display (Symbol(Variable))
 import Database.Drasil
 import SysInfo.Drasil hiding (sysinfodb)
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 
-import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
-  programName, quantvar, codevars, codevars', varResolve, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
   auxExprs)
 import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..))
-import Language.Drasil.Code.Expr.Development (expr, eNamesRI)
+import Language.Drasil.CodeExpr.Development (expr, eNamesRI)
+import Language.Drasil.Chunk.CodeBase
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 
 import Utils.Drasil (subsetOf)

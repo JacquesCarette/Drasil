@@ -10,7 +10,7 @@ module Language.Drasil.Chunk.Code (
 
 import Control.Lens ((^.), view)
 
-import Language.Drasil (HasSpace(typ), Space(Actor), codeSymb)
+import Language.Drasil
 import Language.Drasil.Chunk.CodeBase
 import Language.Drasil.Printers (symbolDoc)
 

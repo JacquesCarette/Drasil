@@ -18,7 +18,7 @@ import Language.Drasil (Space, HasSpace(typ))
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName)
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument)
-import Language.Drasil.Code.Expr.Development
+import Language.Drasil.CodeExpr.Development
 import Language.Drasil.CodeExpr
 import Language.Drasil.Mod (FuncStmt(..), Description)
 

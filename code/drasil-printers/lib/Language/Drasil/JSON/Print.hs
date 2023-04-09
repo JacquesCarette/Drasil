@@ -30,7 +30,7 @@ import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat,
  markdownB, markdownB', markdownE, markdownE', markdownCell, codeCell)
 
 -- | Generate a python notebook document (using json).
--- build : build the SRS example in JSON format
+-- build : build the SRS document in JSON format
 -- build': build the general Jupyter Notbook document
 genJSON :: PrintingInformation -> DocType -> L.Document -> Doc
 genJSON sm Jupyter doc = build (makeDocument sm doc)
@@ -69,29 +69,27 @@ printMath = (`runPrint` Math)
 -- printLO is used for generating SRS
 {-
 printLO :: LayoutObj -> Doc
-printLO (HDiv ["section"] layoutObs _)  = markdownCell $ vcat (map printLO layoutObs)
-printLO (HDiv ["subsection"] layoutObs _)  = markdownCell $ vcat (map printLO layoutObs)
-printLO (HDiv ["subsubsection"] layoutObs _)  = markdownCell $ vcat (map printLO layoutObs)
-printLO (Header n contents l)            = markdownCell $ nbformat empty $$ nbformat (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
+printLO (Header n contents l)            = markdownCell $ nbformat (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
 printLO (Cell layoutObs)                 = vcat (map printLO layoutObs)
-printLO (HDiv _ layoutObs _)             = vcat (map printLO layoutObs)
-printLO (Paragraph contents)             = markdownCell $ nbformat empty $$ nbformat (stripnewLine (show(pSpec contents)))
-printLO (EqnBlock contents)              = nbformat mathEqn
+printLO (HDiv _ layoutObs _)             = markdownCell $ vcat (map printLO layoutObs)
+printLO (Paragraph contents)             = markdownCell $ nbformat (stripnewLine (show(pSpec contents)))
+printLO (EqnBlock contents)              = markdownCell $ nbformat mathEqn
   where
     toMathHelper (PL g) = PL (\_ -> g Math)
     mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$" 
     mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
-printLO (Table _ rows r _ _)            = markdownCell $ nbformat empty $$ makeTable rows (pSpec r)
-printLO (Definition dt ssPs l)          = nbformat (text "<br>") $$ makeDefn dt ssPs (pSpec l)
-printLO (List t)                        = markdownCell $ nbformat empty $$ makeList t False
+printLO (Table _ rows r _ _)            = markdownCell $ makeTable rows (pSpec r)
+printLO (Definition dt ssPs l)          = markdownCell $ nbformat (text "<br>") $$ makeDefn dt ssPs (pSpec l)
+printLO (List t)                        = markdownCell $ makeList t False
 printLO (Figure r c f wp)               = markdownCell $ makeFigure (pSpec r) (pSpec c) (text f) wp
 printLO (Bib bib)                       = markdownCell $ makeBib bib
 printLO Graph{}                         = empty 
+printLO CodeBlock {}                    = empty
 -}
 printLO :: LayoutObj -> Doc
 printLO (Header n contents l)            = nbformat empty $$ nbformat (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
 printLO (Cell layoutObs)                 = markdownCell $ vcat (map printLO layoutObs)
-printLO (HDiv _ layoutObs _)             = vcat (map printLO layoutObs) --note for myself: equations are map in here
+printLO (HDiv _ layoutObs _)             = vcat (map printLO layoutObs)
 printLO (Paragraph contents)             = nbformat empty $$ nbformat (stripnewLine (show(pSpec contents)))
 printLO (EqnBlock contents)              = nbformat mathEqn
   where
@@ -109,18 +107,18 @@ printLO CodeBlock {}                    = empty
 -- printLO' is used for generating general notebook (lesson plans)
 printLO' :: LayoutObj -> Doc
 printLO' (HDiv ["equation"] layoutObs _)  = markdownCell $ vcat (map printLO' layoutObs)
-printLO' (Header n contents l)            = markdownCell $ nbformat empty $$ nbformat (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
+printLO' (Header n contents l)            = markdownCell $ nbformat (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
 printLO' (Cell layoutObs)                 = vcat (map printLO' layoutObs)
 printLO' HDiv {}                          = empty
-printLO' (Paragraph contents)             = markdownCell $ nbformat empty $$ nbformat (stripnewLine (show(pSpec contents)))
+printLO' (Paragraph contents)             = markdownCell $ nbformat (stripnewLine (show(pSpec contents)))
 printLO' (EqnBlock contents)              = nbformat mathEqn
   where
     toMathHelper (PL g) = PL (\_ -> g Math)
     mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$" 
     mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
-printLO' (Table _ rows r _ _)            = markdownCell $ nbformat empty $$ makeTable rows (pSpec r)
-printLO' (Definition dt ssPs l)          = nbformat (text "<br>") $$ makeDefn dt ssPs (pSpec l)
-printLO' (List t)                        = markdownCell $ nbformat empty $$ makeList t False
+printLO' (Table _ rows r _ _)            = markdownCell $ makeTable rows (pSpec r)
+printLO' Definition {}                   = empty
+printLO' (List t)                        = markdownCell $ makeList t False
 printLO' (Figure r c f wp)               = markdownCell $ makeFigure (pSpec r) (pSpec c) (text f) wp
 printLO' (Bib bib)                       = markdownCell $ makeBib bib
 printLO' Graph{}                         = empty 
@@ -151,7 +149,6 @@ pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr 
 pSpec (Sp s)    = text $ unPH $ L.special s
 pSpec HARDNL    = empty
 pSpec (Ref Internal r a)      = reflink     r $ pSpec a
---pSpec (Ref Cite2    r EmptyS) = reflink     r $ text r -- no difference for citations?
 pSpec (Ref (Cite2 n)   r a)    = reflinkInfo r (pSpec a) (pSpec n)
 pSpec (Ref External r a)      = reflinkURI  r $ pSpec a
 pSpec EmptyS    = text "" -- Expected in the output

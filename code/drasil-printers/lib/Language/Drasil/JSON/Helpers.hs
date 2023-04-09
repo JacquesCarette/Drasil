@@ -92,8 +92,8 @@ h n       | n < 1 = error "Illegal header (too small)"
                     hash 4 = "#### "
                     hash _ = "Illegal header"
 
-br :: Doc -> Doc
 -- | Curly braces.
+br :: Doc -> Doc
 br x = text "{" <> x <> text"}"
 
 mkDiv :: String -> Doc -> Doc -> Doc
@@ -105,8 +105,8 @@ stripnewLine s = hcat (map text (splitOn "\n" s))
 
 -- | Helper for building markdown cells
 markdownB, markdownB', markdownE, markdownE' :: Doc
-markdownB  = text "{\n \"cells\": [\n  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [" 
-markdownB' = text "  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [" 
+markdownB  = text "{\n \"cells\": [\n  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [\n" 
+markdownB' = text "  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [\n" 
 markdownE  = text "    \"\\n\"\n   ]\n  },"
 markdownE' = text "    \"\\n\"\n   ]\n  }\n ],"
 

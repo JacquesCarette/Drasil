@@ -1,5 +1,5 @@
 {-# LANGUAGE GADTs #-}
--- | Lesson plan notebook section types.
+-- | Lesson plan notebook chapter types.
 module Drasil.DocumentLanguage.Notebook.Core where
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))

@@ -15,16 +15,16 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (introduction, learnO
 -- | Section constructors for the lesson plan documents/jupyter notebooks.
 -- should be fixed once we have a more concrete idea of the notebook structure
 -- TODO: Remove [Section] since the structure of lesson plans should not be nested
-intro, learnObj, prpsOfDoc, review, caseProb, summary, appendix, reference, example :: [Contents] -> [Section] -> Section
-intro       cs ss = section (titleize Doc.introduction)      cs ss introLabel
-learnObj    cs ss = section (titleize' Doc.learnObj)         cs ss learnObjLabel
-prpsOfDoc   cs ss = section (titleize Doc.prpsOfDoc)         cs ss docPurposeLabel
-review      cs ss = section (titleize Doc.review)            cs ss reviewLabel
-caseProb    cs ss = section (titleize Doc.caseProb)          cs ss caseProbLabel
-example     cs ss = section (titleize Doc.example)           cs ss exampleLabel
-summary     cs ss = section (titleize Doc.summary)           cs ss summaryLabel
-appendix    cs ss = section (titleize Doc.appendix)          cs ss appendixLabel
-reference   cs ss = section (titleize' Doc.reference)        cs ss referenceLabel
+-- maybe add a new type Chapter for lesson plans?
+intro, learnObj, review, caseProb, summary, appendix, reference, example :: [Contents] -> [Section] -> Section
+intro     cs ss = section (titleize Doc.introduction) cs ss introLabel
+learnObj  cs ss = section (titleize' Doc.learnObj)    cs ss learnObjLabel
+review    cs ss = section (titleize Doc.review)       cs ss reviewLabel
+caseProb  cs ss = section (titleize Doc.caseProb)     cs ss caseProbLabel
+example   cs ss = section (titleize Doc.example)      cs ss exampleLabel
+summary   cs ss = section (titleize Doc.summary)      cs ss summaryLabel
+appendix  cs ss = section (titleize Doc.appendix)     cs ss appendixLabel
+reference cs ss = section (titleize' Doc.reference)   cs ss referenceLabel
 
 --Labels--
 sectionReferences :: [Reference]

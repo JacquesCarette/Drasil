@@ -20,16 +20,17 @@ import Data.Drasil.SI_Units (s_2)
 
 caseProbCont :: [Contents]
 caseProbCont = [projMotionHead, motionContextP1, LlC figCSandA, motionContextP2, 
-  horMotionHead, hMintro, hMequations, hMconcl, verMotionHead, vMintro, vMequations, vMconcl, summaryHead, summary, 
+  horMotionHead, hMintro, horizMotionEqn1, horizMotionEqn2, horizMotionEqn3, hMconcl, 
+  verMotionHead, vMintro, vertMotionEqn1, vertMotionEqn2, vertMotionEqn3, vMconcl, summaryHead, summary, 
   procforAnlsHead, procforAnls, stepOneHead, stepOneCont, stepTwoHead, stepTwoCont, stepThreeHead, stepThreeCont, 
-  stepFourHead, stepFourCont, stepFourOneHead, horizMotionEqn1, horizMotionEqn2, stepFourTwoHead, 
+  stepFourHead, stepFourCont, stepFourOneHead, horizMotionEqn1, horizMotionEqn1Sent, horizMotionEqn2, stepFourTwoHead, 
   verMotionCont, vertMotionEqn1, vertMotionEqn2, vertMotionEqn3, stepFiveHead, stepFiveCont]
 
 projMotionHead, horMotionHead, verMotionHead, summaryHead :: Contents
-projMotionHead = foldlSP_ [S "__Motion of a Projectile__"]
-horMotionHead  = foldlSP_ [S "__Horizontal Motion__"] 
-verMotionHead  = foldlSP_ [S "__Vertical Motion__"] 
-summaryHead    = foldlSP_ [S "__Summary__"]
+projMotionHead = foldlSP_ [headSent 1 (S "Motion of a Projectile")]
+horMotionHead  = foldlSP_ [headSent 2 (S "Horizontal Motion")] 
+verMotionHead  = foldlSP_ [headSent 2 (S "Vertical Motion")] 
+summaryHead    = foldlSP_ [headSent 2 (S "Summary")]
 
 motionContextP1, motionContextP2 :: Contents
 motionContextP1
@@ -89,16 +90,16 @@ procforAnls :: Contents
 procforAnls = foldlSP [S "Free-flight", phrase projMotion, S "problems can be solved using the following", phrase procedure]
 
 procforAnlsHead, stepOneHead, stepTwoHead, stepThreeHead, stepFourHead, stepFourOneHead, stepFourTwoHead, stepFiveHead:: Contents
-procforAnlsHead = foldlSP_ [S "__Procedure for Analysis__"]
-stepOneHead     = foldlSP_ [S "__Step 1: Coordinate System__"]
-stepTwoHead     = foldlSP_ [S "__Step 2: Identify Knowns__"] 
-stepThreeHead   = foldlSP_ [S "__Step 3: Identify Unknowns__"] 
-stepFourHead    = foldlSP_ [S "__Step 4: Kinematic Equations__"]
-stepFourOneHead = foldlSP_ [S "__Step 4.1: Horizontal Motion__"]
-stepFourTwoHead = foldlSP_ [S "__Step 4.2: Vertical Motion__"]
-stepFiveHead    = foldlSP_ [S "__Step 5: Solve for Unknowns__"]
+procforAnlsHead = foldlSP_ [headSent 2 (S "Procedure for Analysis")]
+stepOneHead     = foldlSP_ [headSent 3 (S "Step 1: Coordinate System")]
+stepTwoHead     = foldlSP_ [headSent 3 (S "Step 2: Identify Knowns")] 
+stepThreeHead   = foldlSP_ [headSent 3 (S "Step 3: Identify Unknowns")] 
+stepFourHead    = foldlSP_ [headSent 3 (S "Step 4: Kinematic Equations")]
+stepFourOneHead = foldlSP_ [headSent 4 (S "Step 4.1: Horizontal Motion")]
+stepFourTwoHead = foldlSP_ [headSent 4 (S "Step 4.2: Vertical Motion")]
+stepFiveHead    = foldlSP_ [headSent 3 (S "Step 5: Solve for Unknowns")]
 
-stepOneCont, stepTwoCont, stepThreeCont, stepFourCont, horizMotionEqn1, horizMotionEqn2, 
+stepOneCont, stepTwoCont, stepThreeCont, stepFourCont, horizMotionEqn1, horizMotionEqn1Sent, horizMotionEqn2, horizMotionEqn3,
   vertMotionEqn1, vertMotionEqn2, vertMotionEqn3, verMotionCont, stepFiveCont :: Contents
 stepOneCont = enumBulletU $ map foldlSent 
   [[S "Establish the fixed", P lX `sC` P lY, phrase coordinate +:+. S "axes and sketch the trajectory of the particle",
@@ -130,13 +131,14 @@ stepThreeCont = foldlSP [S "Each problem will have at most 4 unknowns that need 
 stepFourCont = foldlSP [S "Depending upon the known data and what is to be determined, a choice should be made as to which four of the following five equations" +:+
   S "should be applied between the two points on the path to obtain the most direct solution to the problem"]
 
-horizMotionEqn1 = foldlSP_ [S "From equation" +: refS lchorizVel, eS horizVel, 
-  sParen (S "The *velocity* in the horizontal" `S.or_` P lX +:+ phrase direction +:+ S "is *constant*")]
-horizMotionEqn2 = foldlSP_ [S "From equation" +: refS lchorizPos, eS horizPos]
+horizMotionEqn1 = foldlSP_ [S "From equation" +: refS lcrectVel, eS horizVel] 
+horizMotionEqn1Sent = foldlSP_ [sParen (S "The *velocity* in the horizontal" `S.or_` P lX +:+ phrase direction +:+ S "is *constant*")]
+horizMotionEqn2 = foldlSP_ [S "From equation" +: refS lcrectPos, eS horizPos]
+horizMotionEqn3 = foldlSP_ [S "From equation" +: refS lcrectNoTime, eS horizVel]
 
-vertMotionEqn1 = foldlSP_ [S "From equation" +: refS lcvertVel, eS vertVel]
-vertMotionEqn2 = foldlSP_ [S "From equation" +: refS lcvertPos, eS vertPos]
-vertMotionEqn3 = foldlSP_ [S "From equation" +: refS lcvertNoTime, eS vertNoTime]
+vertMotionEqn1 = foldlSP_ [S "From equation" +: refS lcrectVel, eS vertVel]
+vertMotionEqn2 = foldlSP_ [S "From equation" +: refS lcrectPos, eS vertPos]
+vertMotionEqn3 = foldlSP_ [S "From equation" +: refS lcrectNoTime, eS vertNoTime]
 
 verMotionCont = foldlSP [S "In the vertical" `S.or_` P lY, phrase direction, S "*only two*" `S.ofThe` S "following three equations", 
   sParen (S "using" +:+ eS (sy QP.yAccel $= neg (sy QP.gravitationalAccel))) +:+. S "can be used for solution",

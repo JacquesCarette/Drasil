@@ -1,14 +1,16 @@
 {-# LANGUAGE GADTs #-}
-module Language.Drasil.Code.Expr.Convert (
+module Language.Drasil.CodeExpr.Convert (
     expr, realInterval, constraint,
     CanGenCode(..)
 ) where
 
-import qualified Language.Drasil as L
+import Language.Drasil.Space (RealInterval(..), DiscreteDomainDesc, DomainDesc(BoundedDD))
+import Language.Drasil.Constraint (Constraint(..), ConstraintE)
+import qualified Language.Drasil.Expr.Lang as E
 import qualified Language.Drasil.Expr.Development as LD
 import qualified Language.Drasil.Literal.Development as LL
 
-import Language.Drasil.Code.Expr
+import Language.Drasil.CodeExpr.Lang
 
 import Data.Bifunctor (Bifunctor(bimap))
 
@@ -46,18 +48,18 @@ expr (LD.Operator aao dd e)    = Operator (assocArithOp aao) (renderDomainDesc d
 expr (LD.RealI u ri)           = RealI u (realInterval ri)
 
 -- | Convert 'RealInterval' 'Expr' 'Expr's into 'RealInterval' 'CodeExpr' 'CodeExpr's.
-realInterval :: L.RealInterval L.Expr L.Expr -> L.RealInterval CodeExpr CodeExpr
-realInterval (L.Bounded (il, el) (ir, er)) = L.Bounded (il, expr el) (ir, expr er)
-realInterval (L.UpTo (i, e))               = L.UpTo (i, expr e)
-realInterval (L.UpFrom (i, e))             = L.UpFrom (i, expr e)
+realInterval :: RealInterval E.Expr E.Expr -> RealInterval CodeExpr CodeExpr
+realInterval (Bounded (il, el) (ir, er)) = Bounded (il, expr el) (ir, expr er)
+realInterval (UpTo (i, e))               = UpTo (i, expr e)
+realInterval (UpFrom (i, e))             = UpFrom (i, expr e)
 
 -- | Convert constrained expressions ('ConstraintE') into 'Constraint''CodeExpr's.
-constraint :: L.ConstraintE -> L.Constraint CodeExpr
-constraint (L.Range r ri) = L.Range r (realInterval ri)
+constraint :: ConstraintE -> Constraint CodeExpr
+constraint (Range r ri) = Range r (realInterval ri)
 
 -- | Convert 'DomainDesc Expr Expr' into 'DomainDesc CodeExpr CodeExpr's.
-renderDomainDesc :: L.DiscreteDomainDesc L.Expr L.Expr -> L.DiscreteDomainDesc CodeExpr CodeExpr
-renderDomainDesc (L.BoundedDD s t l r) = L.BoundedDD s t (expr l) (expr r)
+renderDomainDesc :: DiscreteDomainDesc E.Expr E.Expr -> DiscreteDomainDesc CodeExpr CodeExpr
+renderDomainDesc (BoundedDD s t l r) = BoundedDD s t (expr l) (expr r)
 
 arithBinOp :: LD.ArithBinOp -> ArithBinOp
 arithBinOp LD.Frac = Frac

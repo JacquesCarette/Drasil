@@ -32,7 +32,6 @@ resolver:
 packages:
 - .
 - ../drasil-code
-- ../drasil-code-base
 - ../drasil-gool
 - ../drasil-lang
 - ../drasil-utils

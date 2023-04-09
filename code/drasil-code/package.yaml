@@ -19,7 +19,6 @@ dependencies:
 - filepath
 - split
 - drasil-build
-- drasil-code-base
 - drasil-database
 - drasil-gool
 - drasil-lang
@@ -39,6 +38,7 @@ library:
   - Data.Drasil.ExternalLibraries.ODELibraries
   other-modules:
     - Language.Drasil.Chunk.Code
+    - Language.Drasil.Chunk.CodeBase
     - Language.Drasil.Chunk.CodeDefinition
     - Language.Drasil.Chunk.ConstraintMap
     - Language.Drasil.Chunk.NamedArgument

@@ -1,4 +1,4 @@
-\chapter{Code Block Generation}
+\chapter{Code Block Generation} \label{chap:codeBlock}
 Jupyter Notebooks are valued for their effectiveness in writing and revising 
 code for data research. They allow code to be written in discrete blocks (or 
 ``cells"), which can be executed separately, as opposed to writing and running 
@@ -149,7 +149,7 @@ as seen in Code~\ref{code:EqnblocktoTex]}. Moreover, the \textbf{Definition}
 type is designed for the definition or model defined in SRS and may not be 
 required for lesson plans. To better accommodate lesson plan content types, we 
 may need to create a new \macblue{LayoutObj} in the future when we have a 
-better understanding of the lesson plan structure. \todo{future work}
+better understanding of the lesson plan structure.
 
 Currently, we are using the existing \macblue{LayoutObj} to translate our 
 lesson plan contents into printable layout object. Since these contents are not 
@@ -196,3 +196,183 @@ lesson plans, we make them empty. We also separate equation blocks from
 \end{listing}
 
 \section{Code Block}
+We split contents with our content types for various reasons, including the 
+need to differentiate between Markdown contents and code to generate the 
+appropriate type of cell and to deal with each type of contents specifically. 
+To better manage and generate code in Jupyter Notebook with Drasil, we 
+introduce a new content type called \textbf{CodeBlock}. Like other content 
+types, a \textbf{CodeBlock} is defined within \macblue{RawContent}, which 
+requires a \macblue{CodeExpr} as shown in \ref{code:newRawContent}.
+
+\begin{listing}[h!]
+	\caption{Source Code for the New Definition of RawContent}
+	\label{code:newRawContent}
+	\begin{lstlisting}[language=haskell1]
+		-- | Types of layout objects we deal with explicitly.
+		data RawContent =
+		Table [Sentence] [[Sentence]] Title Bool
+		| Paragraph Sentence                       
+		| EqnBlock ModelExpr                      
+		| DerivBlock Sentence [RawContent]        
+		| Enumeration ListType                    
+		| Defini DType [(Identifier, [Contents])] 
+		| Figure Lbl Filepath MaxWidthPercent     
+		| Bib BibRef                              
+		| Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl
+		| CodeBlock CodeExpr   
+	\end{lstlisting}
+\end{listing}
+
+\macblue{CodeExpr} is a language that allows us to define code expressions. It 
+shares similarities with \macblue{Expr} functions, constructors, and operators, 
+but is tailored specifically for generating code. We utilize this data type to 
+define and encode the expressions for our Jupyter Notebook code. 
+
+The process of handling code blocks and printing the code within a code cell 
+is similar to how we handle other Markdown contents, as discussed in the 
+previous chapters. However, the conversion is unique to the \textbf{CodeBlock} 
+type. For instance, to encode the code, we can use the \macred{unlbldCode} 
+(Code~\ref{code:unlbldCode}) function, which converts a \macblue{CodeExpr} to 
+\macblue{Contents}.
+
+\begin{listing}[h!]
+	\caption{Source Code for Rendering CodeBlock to LayoutObj}
+	\label{code:unlbldCode}
+	\begin{lstlisting}[language=haskell1]
+		-- | Unlabelled code expression
+		unlbldCode :: CodeExpr -> Contents
+		unlbldCode c = UlC $ ulcc $ CodeBlock c
+	\end{lstlisting}
+\end{listing}
+
+After encoding the code expressions in Drasil, the printer then converts the 
+code blocks into printable layout objects, as defined in 
+Code~\ref{code:newLayoutObj}, using the methods in 
+Code~\ref{code:codeBlocktoLayObj}. The resulting content, which is a 
+\macblue{RawContent}, is translated into a printable object, a 
+\macblue{LayourObj}, before being processed by the document language printer. 
+
+\begin{listing}[h!]
+	\caption{Source Code for the New Definition of LayoutObj}
+	\label{code:newLayoutObj}
+	\begin{lstlisting}[language=haskell1]
+		data LayoutObj = 
+				Table Tags [[Spec]] Label Bool Caption                          
+			| Header Depth Title Label                                       
+			| Paragraph Contents                                              
+			| EqnBlock Contents                                               
+			| Definition DType [(String,[LayoutObj])] Label                   
+			| List ListType                                                   
+			| Figure Label Caption Filepath MaxWidthPercent                  
+			| Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label 
+			| CodeBlock Contents  
+			| HDiv Tags [LayoutObj] Label                                    
+			| Cell [LayoutObj] 
+			| Bib BibRef     
+	\end{lstlisting}
+\end{listing}
+
+\begin{listing}[h!]
+	\caption{Source Code for Rendering CodeBlock to LayoutObj}
+	\label{code:codeBlocktoLayObj}
+	\begin{lstlisting}[language=haskell1]
+		-- | Helper that translates 'LabelledContent's to a 
+		-- printable representation of 'LayoutObj'.
+		layLabelled sm (LblC _ (CodeBlock c)) = T.CodeBlock 
+		(P.E (codeExpr c sm))
+		-- | Helper that translates 'RawContent's to a 
+		-- printable representation of 'LayoutObj'.
+		layUnlabelled sm (CodeBlock c) = T.CodeBlock (P.E (codeExpr c sm))
+	\end{lstlisting}
+\end{listing}
+
+Generating a code cell in Jupyter Notebook requires metadata, similar to 
+generating a markdown cell. However, since the metadata is identical across 
+code cells, the \macred{codeCell} function generates the required metadata and 
+creates a code cell for the given code, which is the `contents' in 
+Code~\ref{code:codeBlocktoJSON}. This constructor eliminates the need for 
+redundant metadata specification and provides a convenient way to generate code 
+cells in Jupyter Notebook.
+
+\begin{listing}[h!]
+	\caption{Source Code for Generating a CodeBlock}
+	\label{code:codeBlock}
+	\begin{lstlisting}[language=haskell1]		
+		-- | Helper for generate a Code cell
+		codeCell :: Doc -> Doc
+		codeCell c = codeB <> c <> codeE
+		
+		codeB, codeE :: Doc
+		codeB = text "  {\n   \"cell_type\": \"code\",\n   
+			\"execution_count\": null,\n   \"metadata\": 
+			{},\n   \"outputs\": [],\n   \"source\": [" 
+		codeE  = text "\n   ]\n  },"
+		\end{lstlisting}
+\end{listing}
+
+Finally, the JSON printer takes the printable layout object of the code block, 
+prints the code, converts it to the notebook format, and generates a code cell, 
+as demonstrated in Code~\ref{code:codeBlocktoJSON}.
+
+\begin{listing}[h!]
+	\caption{Source Code for Rendering CodeBlock into JSON}
+	\label{code:codeBlocktoJSON}
+	\begin{lstlisting}[language=haskell1]
+		-- | Helper for rendering CodeBlock into JSON
+		printLO' (CodeBlock contents) = codeCell $ nbformat $ cSpec contents
+	\end{lstlisting}
+\end{listing}
+
+To conclude this chapter, we can say that the benefits of using Jupyter 
+Notebook lie in its ability to allow users to write a portion of code and 
+combine it with text. We have discussed various approaches to split the 
+contents and generate the appropriate types of cell. The Projectile Motion 
+Lesson generated by Drasil, as shown in Figure~\ref{fig:example_drasil}, 
+demonstrates that we are able to mix text and code and generate the appropriate 
+cell types in Jupyter Notebook with Drasil. The source code for encoding this 
+example can be found in Code~\ref{code:encodeExample}. In comparison, 
+Figure~\ref{fig:example_manual} shows the same part created manually.
+
+\begin{figure}[h!]
+	\caption{Snapshot of Example Chapter Generated using Drasil}
+	\includegraphics[width=1\textwidth]{figures/example_drasil.png}
+	\label{fig:example_drasil}
+\end{figure}
+
+\begin{figure}[h!]
+	\caption{Snapshot of Example Chapter Created Manually}
+	\includegraphics[width=1\textwidth]{figures/example_manual.png}
+	\label{fig:example_manual}
+\end{figure}
+
+\begin{listing}[h!]
+	\caption{Source Code for Encoding Example Chapter}
+	\label{code:encodeExample}
+	\begin{lstlisting}[language=haskell1]
+	exampleContent :: [Contents]
+	exampleContent = [exampleContextP1, codeC1, 
+		exampleContextP2, codeC2, exampleContextP3, codeC3]
+		
+	exampleContextP1, exampleContextP2, exampleContextP3 :: Contents
+	exampleContextP1 = foldlSP_ [S "A sack slides off the
+		ramp, shown in Figure.", S "We can ignore the physics 
+		of the sack sliding down the ramp and just focus on 
+		its exit", phrase velocity +:+. S "from the ramp",
+		S "There is initially no vertical component of", 
+		phrase velocity `S.andThe` S "horizontal", 
+		phrase velocity, S "is:"]
+	exampleContextP2 = foldlSP_ [S "The", phrase height 
+		`S.ofThe` S "ramp from the floor is"]
+	exampleContextP3 = foldlSP_ [S "Task: Determine the", 
+		phrase time, S "needed for the sack to strike the 
+		floor and the range", P cR +:+. S "where sacks begin 
+		to pile up", S "The", phrase acceleration, S "due to", 
+		phrase gravity, P lG +:+. S "is assumed to have the 
+		following value"]
+		
+	codeC1, codeC2, codeC3 :: Contents
+	codeC1 = unlbldCode (sy horiz_velo $= exactDbl 17)
+	codeC2 = unlbldCode (sy QP.height $= exactDbl 6)
+	codeC3 = unlbldCode (sy QP.gravitationalAccel $= dbl 9.81)
+	\end{lstlisting}
+\end{listing}

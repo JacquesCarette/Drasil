@@ -82,13 +82,13 @@
 	LabelledContent, PrintingInformation, D, Doc, DocSection, Intro, LearnObj, 
 	Review, CaseProb, Example, Smmry, BibSec, Apndx, LsnDesc, LsnChapter, 
 	LsnDecl, IdeaDict, SystemInformation, Notebook, ShowToC, Section, SecCons, 
-	UnitalChunk, CI},
+	UnitalChunk, CI, CodeExpr},
 	keywordstyle=[2]\color{McMasterWorldBlue},
 	keywords=[3]{equationsSent, lbldExpr, unlbldExpr, lo, makeEquation, toEqn, 
 	layLabelled, layUnlabelled, makeMetadata, DocDesc, printLO, makeTable, 
-	makeRows, makeHeaderCols, makeColumns, markdownCell, markdownB', markdownE, 
-	mkLsnDesc, mkNb, section, mkIntro, mkLearnObj, mkReview, mkCaseProb, 
-	mkExample, mkSmmry, mkBib, mkAppndx, mkSections, mkNB},
+	makeRows, makeHeaderCols, makeColumns, markdownCell, mkLsnDesc, mkNb, 
+	section, mkIntro, mkLearnObj, mkReview, mkCaseProb, mkExample, mkSmmry, 
+	mkBib, mkAppndx, mkSections, mkNB, unlbldCode, codeCell},
 	keywordstyle=[3]\color{McMasterHeritageMaroon},
 	keywords=[4]{T, QP, P, J, NB, Lsn, CP, E, TeX},
 	keywordstyle=[4]\color{blue}
@@ -139,12 +139,6 @@ seconds=true
 \afterpreface  
 
   \include{chapters}          
-        
-
-  \include{conclusion}
-        \setcounter{figure}{0}
-        \setcounter{equation}{0}
-        \setcounter{table}{0}
 
 \begin{appendix}
     \include{appendixA}

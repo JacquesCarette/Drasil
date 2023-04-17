@@ -37,6 +37,8 @@
 \SetupFloatingEnvironment{listing}{name=Code, listname=List of Codes}
 
 \usepackage{listings}
+\renewcommand{\lstlistlistingname}{List of Codes}
+
 \lstdefinelanguage{json}{
 	tabsize=2,
 	basicstyle=\normalfont\ttfamily,
@@ -82,15 +84,15 @@
 	LabelledContent, PrintingInformation, D, Doc, DocSection, Intro, LearnObj, 
 	Review, CaseProb, Example, Smmry, BibSec, Apndx, LsnDesc, LsnChapter, 
 	LsnDecl, IdeaDict, SystemInformation, Notebook, ShowToC, Section, SecCons, 
-	UnitalChunk, CI, CodeExpr},
+	UnitalChunk, CI, CodeExpr, Expr, Special, LinkType},
 	keywordstyle=[2]\color{McMasterWorldBlue},
 	keywords=[3]{equationsSent, lbldExpr, unlbldExpr, lo, makeEquation, toEqn, 
 	layLabelled, layUnlabelled, makeMetadata, DocDesc, printLO, makeTable, 
 	makeRows, makeHeaderCols, makeColumns, markdownCell, mkLsnDesc, mkNb, 
 	section, mkIntro, mkLearnObj, mkReview, mkCaseProb, mkExample, mkSmmry, 
-	mkBib, mkAppndx, mkSections, mkNB, unlbldCode, codeCell},
+	mkBib, mkAppndx, mkSections, mkNB, unlbldCode, codeCell, rectVel},
 	keywordstyle=[3]\color{McMasterHeritageMaroon},
-	keywords=[4]{T, QP, P, J, NB, Lsn, CP, E, TeX},
+	keywords=[4]{T, QP, P, J, NB, Lsn, CP, TeX},
 	keywordstyle=[4]\color{blue}
  }
 
@@ -134,6 +136,7 @@ seconds=true
   \include{dedic} % Dedication
   \include{acknowledgements} % Acknowledgements
   \referencepages % Table of Contents, List of Figures, List of Tables
+  \lstlistoflistings
   \include{notation}
   \academicstatement{academicachievementdeclaration}
 \afterpreface  

@@ -26,10 +26,10 @@ code/stable/template/ @JacquesCarette @smiths @samm82
 
 code/drasil-gool/ @JacquesCarette @bmaclach
 
-# `DifferentialModel` (for @cd155)
+# `ModelKind`s
 
 **/DifferentialModel.hs @JacquesCarette @cd155
-**/ModelKinds.hs @JacquesCarette @cd155
+**/ModelKinds.hs @JacquesCarette @balacij
 **/ODEInfo.hs @JacquesCarette @cd155
 
 # @samm82's miscellaneous work

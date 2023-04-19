@@ -74,7 +74,7 @@ separately is because we print the SRS and lesson plans differently. We are
 able to pattern match the way we print the document in the printer.
 
 \begin{listing}[h]
-	\caption{Pseudocode for Definition of Document}
+	\caption{Code for Definition of Document}
 	\label{code:drasil-lang-document}
 	\begin{lstlisting}[language=haskell1]
 		data Document = Document Title Author ShowToC [Section]
@@ -154,7 +154,7 @@ more understanding of our lesson plans.
 \end{listing}
 
 \begin{listing}[h!]
-	\caption{Source Code for Section and the Constructor}
+	\caption{Source Code for Section and the section Constructor}
 	\label{code:section}
 	\begin{lstlisting}[language=haskell1]
 		data Section = Section
@@ -186,10 +186,10 @@ Once we have these constructors, we can use them to build each chapter
 	\begin{lstlisting}[language=haskell1]
 		learnObj, review, caseProb, example :: [Contents] -> 
 				[Section] -> Section
-		learnObj cs ss = section (titleize' Doc.learnObj) cs ss learnObjLabel
-		review   cs ss = section (titleize Doc.review)    cs ss reviewLabel
-		caseProb cs ss = section (titleize Doc.caseProb)  cs ss caseProbLabel
-		example  cs ss = section (titleize Doc.example)   cs ss exampleLabel
+		learnObj cs ss = section (titleize' Docum.learnObj) cs ss learnObjLabel
+		review   cs ss = section (titleize Docum.review)    cs ss reviewLabel
+		caseProb cs ss = section (titleize Docum.caseProb)  cs ss caseProbLabel
+		example  cs ss = section (titleize Docum.example)   cs ss exampleLabel
 	\end{lstlisting}
 \end{listing}
 
@@ -233,14 +233,17 @@ of lesson plan chapters.
 			 -> SystemInformation -> Document
 		mkNb dd comb si@SI {_sys = s, _kind = k, _authors = a} =
 			Notebook (nw k `comb` nw s) (foldlList Comma List $ 
-			map (S . name) a) $	mkSections si l where
-				l = mkLsnDesc si dd
+				map (S . name) a) $	mkSections si l where
+					l = mkLsnDesc si dd
 	\end{lstlisting}
 \end{listing}
 
 All types and functions discussed in this chapter are declared in 
 \textbf{drasil-docLang}. Table~\ref{tab:notebookLang} provides an overview of 
-the responsibilities of each module regarding the language of lesson plans.
+the responsibilities of each module regarding the language of lesson plans. 
+Complete implementation of the language of lesson plans can be found in 
+Code~\ref{code:docLang_notebook} to Code~\ref{code:notebook_LsnDecl} in 
+Appendix A.
 
 \begin{longtable}[c]{|>{\raggedright}p{0.27\linewidth}|>{\raggedright\arraybackslash}p{0.69\linewidth}|}
 	\caption{Summary of Notebook Modules} 
@@ -364,9 +367,8 @@ is generated from the code presented in Code~\ref{code:reviewContent}.
 	\label{fig:review_drasil}
 \end{figure}
 
-For a complete demonstration of how the lesson plan is created using Drasil, 
-including the implementation and generated document, we recommend referring to 
-the appendix. \todo{link}
+The remaining chapters of the generated Projectile Motion Lesson can be found 
+in Appendix A, from Figure~\ref{fig:learnObj} to Figure~\ref{fig:caseProb-5}. 
 
 \section{Knowledge Reusability}
 Drasil offers the advantage of reusing knowledge, which is not trivial. We 

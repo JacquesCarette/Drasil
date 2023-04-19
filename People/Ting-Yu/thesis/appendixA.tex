@@ -50,7 +50,6 @@ clarification on the report.
 \begin{lstlisting}[language=haskell1, 
 	basicstyle=\linespread{1.1}\small\ttfamily]
 	-- | Defines .json printers to generate Jupyter Notebooks
-	module Language.Drasil.JSON.Print where
 	
 	-- | Generate a python notebook document (using json).
 	-- build : build the SRS document in JSON format
@@ -336,8 +335,7 @@ clarification on the report.
 \begin{lstlisting}[language=haskell1, 
 	basicstyle=\linespread{1.1}\small\ttfamily]
 	-- | Defines helper functions for creating Jupyter Notebooks
-	module Language.Drasil.JSON.Helpers where
-	
+		
 	data Variation = Class | Id
 	
 	tr, td, figure, li, pa, ba :: Doc -> Doc
@@ -487,4 +485,277 @@ clarification on the report.
 		text " \"nbformat_minor\": 4" 
 	]
 \end{lstlisting}
+
+\newpage
+
+\captionof{listing}{Source Code for DocLang.Notebook
+	\label{code:docLang_notebook}}
+\begin{lstlisting}[language=haskell1, 
+	basicstyle=\linespread{1.1}\small\ttfamily]	
+	-- * Section Constructors	
+	-- | Section constructors for the Lesson Plans
+	intro, learnObj, review, caseProb, summary, appendix, 
+		reference, example :: [Contents] -> [Section] -> Section
+	intro     cs ss = section (titleize  Docum.introduction) 
+		cs ss introLabel
+	learnObj  cs ss = section (titleize' Docum.learnObj)    
+		cs ss learnObjLabel
+	review    cs ss = section (titleize  Docum.review)      
+		cs ss reviewLabel
+	caseProb  cs ss = section (titleize  Docum.caseProb)     
+		cs ss caseProbLabel
+	example   cs ss = section (titleize  Docum.example)      
+		cs ss exampleLabel
+	summary   cs ss = section (titleize  Docum.summary)      
+		cs ss summaryLabel
+	appendix  cs ss = section (titleize  Docum.appendix)     
+		cs ss appendixLabel
+	reference cs ss = section (titleize' Docum.reference)   
+		cs ss referenceLabel
+	
+	--Labels--
+	sectionReferences :: [Reference]
+	sectionReferences = [introLabel, learnObjLabel, 
+		docPurposeLabel, referenceLabel, reviewLabel, 
+		appendixLabel, summaryLabel, exampleLabel]
+	
+	-- * Section References
+	
+	-- | Individual section reference labels. 
+	-- Used in creating example sections for the notebook.
+	introLabel, learnObjLabel, docPurposeLabel, referenceLabel, 
+		reviewLabel, caseProbLabel, appendixLabel, summaryLabel, 
+		exampleLabel :: Reference
+	introLabel      = makeSecRef "Intro"            
+		$ titleize  Docum.introduction
+	learnObjLabel   = makeSecRef "LearnObj"         
+		$ titleize' Docum.learnObj
+	docPurposeLabel = makeSecRef "DocPurpose"       
+		$ titleize  Docum.prpsOfDoc
+	referenceLabel  = makeSecRef "References"       
+		$ titleize'	Docum.reference
+	reviewLabel     = makeSecRef "Review"           
+		$ titleize  Docum.review
+	caseProbLabel   = makeSecRef "CaseProb"         
+		$ titleize  Docum.caseProb
+	appendixLabel  = makeSecRef "Appendix"         
+		$ titleize  Docum.appendix
+	summaryLabel   = makeSecRef "Summary"          
+		$ titleize  Docum.summary
+	exampleLabel   = makeSecRef "Example"         
+		$ titleize  Docum.example
+\end{lstlisting}
+
+\newpage
+
+\captionof{listing}{Source Code for DocumentLanguage.Notebook.Core
+	\label{code:notebook_Core}}
+\begin{lstlisting}[language=haskell1, 
+	basicstyle=\linespread{1.1}\small\ttfamily]
+	module Drasil.DocumentLanguage.Notebook.Core where
+	
+	-- * Lesson Chapter Types
+	
+	type LsnDesc = [LsnChapter]
+	
+	data LsnChapter = Intro Intro
+	| LearnObj LearnObj
+	| Review Review
+	| CaseProb CaseProb
+	| Example Example
+	| Smmry Smmry
+	| BibSec
+	| Apndx Apndx
+	
+	-- ** Introduction
+	newtype Intro = IntrodProg [Contents]
+	
+	-- ** Learning Objectives
+	newtype LearnObj = LrnObjProg [Contents]
+	
+	-- ** Review Chapter
+	newtype Review = ReviewProg [Contents]
+	
+	-- ** A Case Problem
+	newtype CaseProb = CaseProbProg [Contents]
+	
+	-- ** Examples of the lesson
+	newtype Example = ExampleProg [Contents]
+	
+	-- ** Summary
+	newtype Smmry = SmmryProg [Contents]
+	
+	-- ** Appendix
+	newtype Apndx = ApndxProg [Contents]
+	
+	-- * Multiplate Definition and Type	
+	data DLPlate f = DLPlate {
+		lsnChap :: LsnChapter -> f LsnChapter,
+		intro :: Intro -> f Intro,
+		learnObj :: LearnObj -> f LearnObj,
+		review :: Review -> f Review,
+		caseProb :: CaseProb -> f CaseProb,
+		example :: Example -> f Example,
+		smmry :: Smmry -> f Smmry,
+		apndx :: Apndx -> f Apndx
+	}
+	
+	instance Multiplate DLPlate where
+		multiplate p = DLPlate lc introd lrnObj rvw csProb exmp smry aps where
+		lc (Intro x) = Intro <$> intro p x
+		lc (LearnObj x) = LearnObj <$> learnObj p x
+		lc (Review x) = Review <$> review p x
+		lc (CaseProb x) = CaseProb <$> caseProb p x
+		lc (Example x) = Example <$> example p x
+		lc (Smmry x) = Smmry <$> smmry p x
+		lc (Apndx x) = Apndx <$> apndx p x
+		lc BibSec = pure BibSec
+	
+		introd (IntrodProg con) = pure $ IntrodProg con 
+		lrnObj (LrnObjProg con) = pure $ LrnObjProg con 
+		rvw (ReviewProg con) = pure $ ReviewProg con
+		csProb (CaseProbProg con) = pure $ CaseProbProg con 
+		exmp (ExampleProg con) = pure $ ExampleProg con
+		smry (SmmryProg con) = pure $ SmmryProg con 
+		aps (ApndxProg con) = pure $ ApndxProg con
+		mkPlate b = DLPlate (b lsnChap) (b intro) (b learnObj) 
+			(b review) (b caseProb) (b example) (b smmry) (b apndx)
+\end{lstlisting}
+
+\newpage
+
+\captionof{listing}{Source Code for DocumentLanguage.Notebook.DocumentLanguage
+	\label{code:notebook_DocumentLanguage}}
+\begin{lstlisting}[language=haskell1, 
+	basicstyle=\linespread{1.1}\small\ttfamily]
+	-- | Creates a notebook from a lesson description and system information.
+	mkNb :: LsnDecl -> (IdeaDict -> IdeaDict -> Sentence) -> 
+		SystemInformation -> Document
+	mkNb dd comb si@SI {_sys = s, _kind = k, _authors = a} =
+		Notebook (nw k `comb` nw s) (foldlList Comma List $ 
+			map (S . name) a) $
+		mkSections si l where
+			l = mkLsnDesc si dd
+	
+	-- | Helper for creating the notebook sections.
+	mkSections :: SystemInformation -> LsnDesc -> [Section]
+	mkSections si = map doit  
+		where
+			doit :: LsnChapter -> Section
+			doit (Intro i)     = mkIntro i
+			doit (LearnObj l)  = mkLearnObj l
+			doit (Review r)    = mkReview r
+			doit (CaseProb cp) = mkCaseProb cp
+			doit (Example e)   = mkExample e
+			doit (Smmry s)     = mkSmmry s
+			doit BibSec        = mkBib (citeDB si)
+			doit (Apndx a)     = mkAppndx a
+	
+	-- | Helper for making the 'Introduction' section.
+	mkIntro :: Intro -> Section
+	mkIntro (IntrodProg i) = Lsn.intro i []
+	
+	-- | Helper for making the 'Learning Objectives' section.
+	mkLearnObj :: LearnObj -> Section
+	mkLearnObj (LrnObjProg cs) = Lsn.learnObj cs []
+	
+	-- | Helper for making the 'Review' section.
+	mkReview :: Review -> Section
+	mkReview (ReviewProg r) = Lsn.review r [] 
+	
+	-- | Helper for making the 'Case Problem' section.
+	mkCaseProb :: CaseProb -> Section
+	mkCaseProb (CaseProbProg cp) = Lsn.caseProb cp [] 
+	
+	-- | Helper for making the 'Example' section.
+	mkExample:: Example -> Section
+	mkExample (ExampleProg cs) = Lsn.example cs []
+	
+	-- | Helper for making the 'Summary' section.
+	mkSmmry :: Smmry -> Section
+	mkSmmry (SmmryProg cs) = Lsn.summary cs []
+	
+	-- | Helper for making the 'Bibliography' section.
+	mkBib :: BibRef -> Section
+	mkBib bib = Lsn.reference [UlC $ ulcc (Bib bib)] []
+	
+	-- | Helper for making the 'Appendix' section.
+	mkAppndx :: Apndx -> Section
+	mkAppndx (ApndxProg cs) = Lsn.appendix cs []
+\end{lstlisting}
+
+\newpage
+
+\captionof{listing}{Source Code for DocumentLanguage.Notebook.LsnDecl
+	\label{code:notebook_LsnDecl}}
+\begin{lstlisting}[language=haskell1, 
+	basicstyle=\linespread{1.1}\small\ttfamily]	
+	-- | A Lesson Plan notebook declaration is made up of all 
+	-- necessary chapters ('LsnChapter's).
+	type LsnDecl  = [LsnChapter]
+	
+	-- | Contains all the different chapters needed for a 
+	-- notebook lesson plan ('LsnDecl').
+	data LsnChapter = Intro NB.Intro
+									| LearnObj NB.LearnObj
+									| Review NB.Review
+									| CaseProb NB.CaseProb
+									| Example NB.Example
+									| Smmry NB.Smmry
+									| BibSec
+									| Apndx NB.Apndx
+	
+	-- * Functions
+	
+	-- | Creates the lesson description (translates 'LsnDecl' 
+	-- into a more usable form for generating documents).
+	mkLsnDesc :: SystemInformation -> LsnDecl -> NB.LsnDesc
+	mkLsnDesc _ = map sec where
+		sec :: LsnChapter -> NB.LsnChapter
+		sec (Intro i)    = NB.Intro i
+		sec (LearnObj l) = NB.LearnObj l
+		sec (Review r)   = NB.Review r  
+		sec (CaseProb c) = NB.CaseProb c
+		sec (Example e)  = NB.Example e  
+		sec (Smmry s)    = NB.Smmry s
+		sec BibSec       = NB.BibSec
+		sec (Apndx a)    = NB.Apndx a
+\end{lstlisting}
+
+\begin{figure}
+	\caption{Learning Objectives Generated using Drasil}
+	\includegraphics[width=1\textwidth]{figures/learnObj.png}
+	\label{fig:learnObj}
+\end{figure}
+
+\begin{figure}[h!]
+	\caption{Case Problem Generated using Drasil}
+	\includegraphics[width=1\textwidth]{figures/caseProb-1.png}
+	\label{fig:caseProb-1}
+\end{figure}
+
+\begin{figure}[h!]
+	\caption{Case Problem Generated using Drasil Cont.}
+	\includegraphics[width=1\textwidth]{figures/caseProb-2.png}
+	\label{fig:caseProb-2}
+\end{figure}
+
+\begin{figure}[h!]
+	\caption{Case Problem Generated using Drasil Cont.}
+	\includegraphics[width=1\textwidth]{figures/caseProb-3.png}
+	\label{fig:caseProb-3}
+\end{figure}
+
+\begin{figure}[h!]
+	\caption{Case Problem Generated using Drasil Cont.}
+	\includegraphics[width=1\textwidth]{figures/caseProb-4.png}
+	\label{fig:caseProb-4}
+\end{figure}
+
+\begin{figure}[h!]
+	\caption{Case Problem Generated using Drasil Cont.}
+	\includegraphics[width=1\textwidth]{figures/caseProb-5.png}
+	\label{fig:caseProb-5}
+\end{figure}
+
 

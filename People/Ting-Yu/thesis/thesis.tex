@@ -27,7 +27,6 @@
 % For nice captions and floating environments, such as for my code snippets
 \usepackage{caption}
 \usepackage{float}
-
 \definecolor{darkblue}{RGB}{0,0,139}
 
 \usepackage{todonotes}
@@ -40,7 +39,7 @@
 \renewcommand{\lstlistlistingname}{List of Codes}
 
 \lstdefinelanguage{json}{
-	tabsize=2,
+	tabsize=1,
 	basicstyle=\normalfont\ttfamily,
 	numbers=left,
 	numberstyle=\scriptsize,
@@ -60,7 +59,7 @@
 \lstdefinelanguage{haskell1}{
 	language=haskell,
 	tabsize=2,
-	basicstyle=\normalfont\ttfamily,
+	basicstyle=\small\ttfamily,
 	numbers=left,
 	numberstyle=\scriptsize,
 	stringstyle=\color{orange},
@@ -84,15 +83,13 @@
 	LabelledContent, PrintingInformation, D, Doc, DocSection, Intro, LearnObj, 
 	Review, CaseProb, Example, Smmry, BibSec, Apndx, LsnDesc, LsnChapter, 
 	LsnDecl, IdeaDict, SystemInformation, Notebook, ShowToC, Section, SecCons, 
-	UnitalChunk, CI, CodeExpr, Expr, Special, LinkType},
+	UnitalChunk, CI, CodeExpr, Expr, Special, LinkType, DocType, Char, Int, 
+	ItemType, Ops, Variation},
 	keywordstyle=[2]\color{McMasterWorldBlue},
 	keywords=[3]{equationsSent, lbldExpr, unlbldExpr, lo, makeEquation, toEqn, 
-	layLabelled, layUnlabelled, makeMetadata, DocDesc, printLO, makeTable, 
-	makeRows, makeHeaderCols, makeColumns, markdownCell, mkLsnDesc, mkNb, 
-	section, mkIntro, mkLearnObj, mkReview, mkCaseProb, mkExample, mkSmmry, 
-	mkBib, mkAppndx, mkSections, mkNB, unlbldCode, codeCell, rectVel},
+	layLabelled, layUnlabelled, DocDesc, printLO, unlbldCode, rectVel},
 	keywordstyle=[3]\color{McMasterHeritageMaroon},
-	keywords=[4]{T, QP, P, J, NB, Lsn, CP, TeX},
+	keywords=[4]{T, QP, P, J, NB, Lsn, CP, TeX, L, Docum},
 	keywordstyle=[4]\color{blue}
  }
 
@@ -129,7 +126,7 @@ seconds=true
 % ********************************
 \begin{document}
 \include{definitions} % LaTeX variables for preface pages/headers
-    
+
 \beforepreface % Half title page, title page, declaration page   
   \include{layabstr} % Lay Abstract
   \include{abstr} % Abstract
@@ -143,12 +140,10 @@ seconds=true
 
   \include{chapters}          
 
-\begin{appendix}
-    \include{appendixA}
-        \setcounter{figure}{0}
-        \setcounter{equation}{0}
-        \setcounter{table}{0}
-\end{appendix}
+   \include{appendixA}
+       \setcounter{figure}{0}
+       \setcounter{equation}{0}
+       \setcounter{table}{0}
 
 % The bibliography is set up to allow for multiple bib files
 \printbibliography

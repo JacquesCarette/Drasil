@@ -283,7 +283,79 @@ explicitly, which we can then do in the pattern section.}
 \ds{Example to use should be a DD/IM from GlassBR, goes to calculations module 
 in the MG, and finally a method in the source code}
 
-\subsection{MG}
+\subsection{Module Guide}
+
+The module guide (MG) is a \sf{} that details the architecture of a given 
+software system. It holds a number of design decisions around sensibly grouping 
+functionalities within the system into modules to fulfill the requirements laid 
+out in the SRS. For example, one might have an input/output module for handling 
+user input and giving the user feedback through the display (ie. via print 
+commands or some other output), or a calculations module that contains all of 
+the calculation functions being performed in the normal operation of the given 
+software system. The \smithea{} MG template also includes a traceability matrix 
+for ease of verifying which requirements are fulfilled by which modules.
+Finally, the MG includes considerations for anticipated or unlikely changes 
+that the system may undergo during its lifecycle.
+
+\fig{
+\begin{center}
+\includegraphics[width=\linewidth]{figures/gb_MG_ToC.png}
+\end{center}}
+{Table of Contents for GlassBR Module Guide}
+{fig:gbrmgtoc}
+
+Figure~\ref{fig:gbrmgtoc} shows the table of contents for the \gb{} case 
+study's MG. Again for the sake of brevity we will omit the other case studies 
+here (they can be found at \ds{TODO}). Just as with the SRS we are looking for 
+commonality we will ignore superficial differences between the MG sections.
+
+Breaking down the MG by section, we can see that the introduction is itself 
+completely generic boilerplate explaining the purpose of the MG, the audience, 
+and some references to other works that explain why we would make certain 
+choices over other (reasonable) ones given the opportunity. There is nothing 
+system-specific, nor specific to the given problem domain of the case study.
+
+Following through the table of contents into the ``Anticipated and Unlikely 
+Changes" section, we see that again the introductions to the section and 
+subsections are generic boilerplate, however the details of each section are 
+not. Both subsections are written in the same way: as a list of labeled 
+changes (AC\# for anticipated change, UC\# for unlikely change). This is the 
+first place we see both problem-domain and system specific information 
+Interestingly, the Module Hierarchy section follows the same general style: it 
+is a list of modules which represent the leaves of the module hierarchy tree 
+and each one is labeled (M\#).
+
+\fig{
+\begin{center}
+\includegraphics[width=\linewidth]{figures/gb_MG_CM.png}
+\end{center}}
+{Calc Module from the \gb{} Module Guide}
+{fig:gbrmgcm}
+
+Skipping ahead to the module decomposition, we find a section heading for each 
+Level 1 module in the hierarchy, followed by subsections describing the Level 2 
+modules. The former are almost entirely generic boilerplate (for example common 
+Level 1 modules include: Hardware-Hiding Module, Behaviour-Hiding Module, and 
+Software Decision Module), but the modules within are problem-domain or system 
+specific. An example of a system-specific module is shown in 
+Figure~\ref{fig:gbrmgcm}. 
+
+Each module is described by its secrets, services, 
+and what it will be implemented by. For example, a given module could be 
+implemented by the operating system (OS), the system being described (ex. 
+\gb{}), or a third party system that will be interfaced with the given system.
+
+Finally we have a traceability matrix and use hierarchy diagram. Both are 
+visual representations of how the different modules implement the requirements 
+and use each other respectively. The traceability matrix provides a direct and 
+obvious link between the SRS and the MG, where other connections between the 
+two \sfs{} have been implicit until this point. Generally, the next \sf{} would 
+be the MIS, however as it is structured so similarly to the MG (one section per 
+module, each section is organized the same way, the use hierarchy is repeated, 
+etc) we will skip it for brevity. The MIS includes novel system-specific, 
+implementation-level information denoting the interfaces between modules, but 
+for our exercise does not provide any revelations beyond that of the MG. We 
+continue by looking into the details of the source code itself.
 
 \subsection{Source Code}
 

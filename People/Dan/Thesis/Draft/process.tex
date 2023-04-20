@@ -368,6 +368,75 @@ mind, let us move on to the source code.
 
 \subsection{Source Code}
 
+The source code is arguably the most important \sf{} in any given software 
+system as it serves as the set of instructions that the computer executes in 
+order to solve the given problem. With only the other \sfs{} and without the 
+source code, we would have a very well defined problem and solution criteria, 
+but would never solve the problem.
+
+\fig{
+\begin{center}
+
+\begin{forest}
+  for tree={
+    font=\ttfamily,
+    grow'=0,
+    child anchor=west,
+    parent anchor=south,
+    anchor=west,
+    calign=first,
+    edge path={
+      \noexpand\path [draw, \forestoption{edge}]
+      (!u.south west) +(7.5pt,0) |- node[fill,inner sep=1.25pt] {} (.child 
+      anchor)\forestoption{edge label};
+    },
+    before typesetting nodes={
+      if n=1
+        {insert before={[,phantom]}}
+        {}
+    },
+    fit=band,
+    before computing xy={l=25pt},
+  }
+[/src/Python
+  [Calc.py]
+  [Constants.py]
+  [ContoursADT.py]
+  [Control.py]
+  [Exceptions.py]
+  [FunctADT.py]
+  [GlassTypeADT.py]
+  [Input.py]
+  [LoadASTM.py]
+  [Output.py]
+  [SeqServices.py]
+  [ThicknessADT.py]
+]
+\end{forest}
+
+\end{center}
+}
+{Python source code directory structure for \gb{}}
+{fig:gbsrcstruct}
+
+As the source code is the executable set of instructions for a system to solve 
+a problem, one would expect it to be almost entirely system and problem-domain 
+specific with very little boilerplate. Looking into the source of our case 
+studies, we find this to be mostly true barring the most generic of library use 
+(ex. \lstinline[language=C]|stdio| in C).
+
+Returning to our example of the MG from \gb{} (Figure~\ref{fig:gbrmgtoc}) and 
+comparing it to the python source code structure shown in 
+Figure~\ref{fig:gbsrcstruct} we can see that the source code follows almost 
+identically in structure to the module decomposition. The only difference is 
+that we also observe an exceptions module defining the different varieties of 
+exceptions that will be thrown by the other modules. While this is a fairly 
+trivial difference, likely made for ease of maintenance, readability, and 
+extensibility, it highlights this fairly obvious difference between the two 
+\sfs{}. A difference which we speculate was caused by a change made during the 
+implementation phase where the MG was not updated to reflect the addition of an 
+exceptions module.
+
 
 
 \section{Patterns and repetition and patterns and repetition -- (OR -- 

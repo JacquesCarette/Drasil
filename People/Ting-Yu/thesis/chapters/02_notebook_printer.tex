@@ -318,17 +318,16 @@ format and generating necessary metadata.
 \end{listing}
 
 \subsection{Rendering LayoutObjs in Notebook Format}
-Code~\ref{code:LOtoJSON} is the primary function for rendering layout objects 
-into a notebook. This function works similarly to the ones used by the HTML and 
-TeX printers, and is responsible for generating content in the appropriate 
-format. Each type of layout object is handled explicitly, taking into account 
-how notebook users add content by hand in Jupyter Notebook, to ensure accurate 
-reproduction and display of the contents. To help us properly render content in 
-notebook format, we also created a few helper functions. For instance, 
-\texttt{nbformat} (Code~\ref{code:nbformat}) helps create the 
-necessary 
-indentations for each line of content and encode them into JSON. We take 
-advantage of the \textbf{encode} function from the Haskell package 
+Code~\ref{code:LOtoJSON} shows the primary function for rendering layout 
+objects into a notebook. This function works similarly to the ones used by the 
+HTML and TeX printers, and is responsible for generating content in the 
+appropriate format. Each type of layout object is handled explicitly, taking 
+into account how notebook users add content by hand in Jupyter Notebook, to 
+ensure accurate reproduction and display of the contents. To help us properly 
+render content in notebook format, we also created a few helper functions. For 
+instance, \texttt{nbformat} (Code~\ref{code:nbformat}) helps create the 
+necessary indentations for each line of content and encode them into JSON. We 
+take advantage of the \textbf{encode} function from the Haskell package 
 \textbf{Text.JSON}, which takes a Haskell value and converts it into a JSON 
 string \cite{textdotjosn}. 
 

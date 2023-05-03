@@ -20,7 +20,7 @@ import qualified Language.Drasil.NounPhrase as NP
 import Language.Drasil.UID (HasUID(..))
 
 -- | Get short form (if it exists), else get term of an 'Idea'.
-short :: (Idea c, HasUID c) => c -> Sentence
+short :: Idea c => c -> Sentence
 short c = sentenceShort (c ^. uid)
 
 -- | Helper for common pattern of introducing the title-case version of a 
@@ -46,11 +46,11 @@ titleize  n = NP.titleizeNP (n ^. term)
 titleize' n = NP.titleizeNP' (n ^. term)
 
 -- | Helper for getting the phrase from a 'NamedIdea' using it's UID.
-phrase :: (HasUID n, NamedIdea n) => n -> Sentence
+phrase :: NamedIdea n => n -> Sentence
 phrase n = sentenceTerm (n ^. uid)
 
 -- | Helper for getting the plural of a phrase from a 'NamedIdea'.
-plural :: (HasUID n, NamedIdea n) => n -> Sentence
+plural :: NamedIdea n => n -> Sentence
 plural n = sentencePlural (n ^. uid)
 --plural n = NP.plural (n ^. term)
 

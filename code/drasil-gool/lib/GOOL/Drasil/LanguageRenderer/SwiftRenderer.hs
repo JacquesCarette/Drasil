@@ -259,7 +259,7 @@ instance VariableSym SwiftCode where
   type Variable SwiftCode = VarData
   var = G.var
   staticVar = G.staticVar
-  const = var
+  constant = var
   extVar _ = var
   self = CP.self
   classVar = CP.classVar R.classVar

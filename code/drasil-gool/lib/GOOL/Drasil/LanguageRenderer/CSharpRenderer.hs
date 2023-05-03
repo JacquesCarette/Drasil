@@ -254,7 +254,7 @@ instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
   var = G.var
   staticVar = G.staticVar
-  const = var
+  constant = var
   extVar = CP.extVar
   self = C.self
   classVar = CP.classVar R.classVar

@@ -23,7 +23,7 @@ import Data.Drasil.Quantities.Math (posInf, negInf)
 
 import Drasil.PDController.Assumptions (assumptions)
 import Drasil.PDController.Changes (likelyChgs)
-import Drasil.PDController.Concepts (acronyms, pidControllerSystem,
+import Drasil.PDController.Concepts (acronyms, pdControllerApp,
   pidC, concepts, defs)
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
@@ -61,7 +61,7 @@ mkSRS
   = [TableOfContents,
     RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
      IntroSec $
-       IntroProg introPara (phrase pidControllerSystem)
+       IntroProg introPara (phrase pdControllerApp)
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
           IOrgSec introDocOrg IDict.dataDefn (SRS.inModel [] [])
@@ -81,7 +81,7 @@ mkSRS
          [SSDProblem $
             PDProg sysProblemDesc []
               [TermsAndDefs Nothing defs,
-               PhySysDesc pidControllerSystem sysParts sysFigure [],
+               PhySysDesc pdControllerApp sysParts sysFigure [],
                Goals sysGoalInput],
           SSDSolChSpec $
             SCSProg
@@ -99,7 +99,7 @@ mkSRS
 
 si :: SystemInformation
 si = SI {
-  _sys = pidControllerSystem,
+  _sys = pdControllerApp,
   _kind = Doc.srs,
   _authors = [naveen],
   _purpose = [],
@@ -125,7 +125,7 @@ symbolsAll = symbols ++ map qw pidDqdConstants ++ map qw pidConstants
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf])
-  (nw pidControllerSystem : [nw program, nw angular, nw linear] 
+  (nw pdControllerApp : [nw program, nw angular, nw linear]
   ++ map nw doccon ++ map nw doccon' ++ concepts ++ map nw mathcon
   ++ map nw mathcon' ++ map nw [second, kilogram] ++ map nw symbols 
   ++ map nw physicscon ++ map nw acronyms ++ map nw physicalcon)

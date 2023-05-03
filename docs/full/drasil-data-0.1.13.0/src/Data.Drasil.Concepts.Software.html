@@ -72,11 +72,11 @@
 </span><span id="line-35"></span><span>
 </span><span id="line-36"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#qualOfBeing"><span class="hs-identifier hs-type">qualOfBeing</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-37"></span><span id="qualOfBeing"><span class="annot"><span class="annottext">qualOfBeing :: String -&gt; String
-</span><a href="Data.Drasil.Concepts.Software.html#qualOfBeing"><span class="hs-identifier hs-var hs-var">qualOfBeing</span></a></span></span><span> </span><span id="local-6989586621679050604"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679050604"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="Data.Drasil.Concepts.Software.html#qualOfBeing"><span class="hs-identifier hs-var hs-var">qualOfBeing</span></a></span></span><span> </span><span id="local-6989586621679050515"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679050515"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the quality or state of being&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679050604"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><a href="#local-6989586621679050515"><span class="hs-identifier hs-var">s</span></a></span><span>
 </span><span id="line-38"></span><span>  </span><span>
 </span><span id="line-39"></span><span id="accuracy"><span class="annot"><span class="annottext">accuracy :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#accuracy"><span class="hs-identifier hs-var hs-var">accuracy</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
@@ -210,11 +210,11 @@
 </span><span class="hs-string">&quot;includes programs that provide externally visible behaviour of the&quot;</span></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-83"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;system as specified in the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;system as specified in the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Data.Drasil.Concepts.Documentation.html#srs"><span class="hs-identifier hs-var">srs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall c. (Idea c, HasUID c) =&gt; c -&gt; Sentence
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Data.Drasil.Concepts.Documentation.html#srs"><span class="hs-identifier hs-var">srs</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -228,7 +228,7 @@
 </span><span class="hs-string">&quot;and the software decision module. The programs in this module will need&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-86"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;to change if there are changes in the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall c. (Idea c, HasUID c) =&gt; c -&gt; Sentence
+</span><span class="hs-string">&quot;to change if there are changes in the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Data.Drasil.Concepts.Documentation.html#srs"><span class="hs-identifier hs-var">srs</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-87"></span><span>
@@ -251,10 +251,10 @@
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span>
 </span><span id="line-93"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;includes&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;includes&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Computation.html#dataStruct"><span class="hs-identifier hs-var">dataStruct</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Computation.html#algorithm"><span class="hs-identifier hs-var">algorithm</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-94"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -320,26 +320,26 @@
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span>
 </span><span id="line-113"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;verifies that the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;verifies that the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Computation.html#inParam"><span class="hs-identifier hs-var">inParam</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;comply with&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;comply with&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#physical"><span class="hs-identifier hs-var">physical</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span>
-</span><span id="line-114"></span><span>   </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span id="line-114"></span><span>   </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#softwareConstraint"><span class="hs-identifier hs-var">softwareConstraint</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Throws an error if a parameter violates a&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span>
-</span><span id="line-115"></span><span>   </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span id="line-115"></span><span>   </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#physicalConstraint"><span class="hs-identifier hs-var">physicalConstraint</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Throws a warning if a parameter violates a&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-116"></span><span>   </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span id="line-116"></span><span>   </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#softwareConstraint"><span class="hs-identifier hs-var">softwareConstraint</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-117"></span><span>
@@ -353,16 +353,16 @@
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span>
 </span><span id="line-120"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;defines the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;defines the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#equation"><span class="hs-identifier hs-var">equation</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;transforming the initial&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;transforming the initial&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#input_"><span class="hs-identifier hs-var">input_</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-121"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;into derived&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;into derived&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#quantity"><span class="hs-identifier hs-var">quantity</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-122"></span><span>
@@ -376,11 +376,11 @@
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span>
 </span><span id="line-125"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;provides the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;provides the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#equation"><span class="hs-identifier hs-var">equation</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;that take the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;that take the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Computation.html#inParam"><span class="hs-identifier hs-var">inParam</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span>
@@ -401,12 +401,12 @@
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span>
 </span><span id="line-130"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;converts the input interpolation data into the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;converts the input interpolation data into the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Computation.html#dataStruct"><span class="hs-identifier hs-var">dataStruct</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-131"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;used by the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;used by the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#modInterpolation"><span class="hs-identifier hs-var">modInterpolation</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-132"></span><span>
@@ -509,8 +509,8 @@
 </span><span id="line-157"></span><span>
 </span><span id="line-158"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modOutputfDescFun"><span class="hs-identifier hs-type">modOutputfDescFun</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
 </span><span id="line-159"></span><span id="modOutputfDescFun"><span class="annot"><span class="annottext">modOutputfDescFun :: Sentence -&gt; ConceptChunk
-</span><a href="Data.Drasil.Concepts.Software.html#modOutputfDescFun"><span class="hs-identifier hs-var hs-var">modOutputfDescFun</span></a></span></span><span> </span><span id="local-6989586621679050570"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679050570"><span class="hs-identifier hs-var">desc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
+</span><a href="Data.Drasil.Concepts.Software.html#modOutputfDescFun"><span class="hs-identifier hs-var hs-var">modOutputfDescFun</span></a></span></span><span> </span><span id="local-6989586621679050481"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679050481"><span class="hs-identifier hs-var">desc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modOutputfDescFun&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -519,7 +519,7 @@
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;outputs the results of the calculations, including the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679050570"><span class="hs-identifier hs-var">desc</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679050481"><span class="hs-identifier hs-var">desc</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-161"></span><span>
 </span><span id="line-162"></span><span class="hs-comment">-- ODE Solver Module</span><span>
 </span><span id="line-163"></span><span class="annot"><a href="Data.Drasil.Concepts.Software.html#modOdeDesc"><span class="hs-identifier hs-type">modOdeDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>

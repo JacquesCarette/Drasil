@@ -11,7 +11,7 @@
 
 module Drasil.PDController.Concepts
 acronyms :: [CI]
-pidControllerSystem :: CI
+pdControllerApp :: CI
 pdControllerCI :: CI
 proportionalCI :: CI
 derivativeCI :: CI

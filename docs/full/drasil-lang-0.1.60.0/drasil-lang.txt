@@ -3826,10 +3826,10 @@ defnExpr :: DefiningExpr c => Lens' (c e) e
 module Language.Drasil.Development.Sentence
 
 -- | Helper for getting the phrase from a <a>NamedIdea</a> using it's UID.
-phrase :: (HasUID n, NamedIdea n) => n -> Sentence
+phrase :: NamedIdea n => n -> Sentence
 
 -- | Helper for getting the plural of a phrase from a <a>NamedIdea</a>.
-plural :: (HasUID n, NamedIdea n) => n -> Sentence
+plural :: NamedIdea n => n -> Sentence
 
 -- | Singular possesive function
 --   
@@ -3868,7 +3868,7 @@ titleize :: NamedIdea n => n -> Sentence
 titleize' :: NamedIdea n => n -> Sentence
 
 -- | Get short form (if it exists), else get term of an <a>Idea</a>.
-short :: (Idea c, HasUID c) => c -> Sentence
+short :: Idea c => c -> Sentence
 
 -- | Helper for common pattern of introducing the title-case version of a
 --   noun phrase (from an Idea) followed by its abbreviation in
@@ -7315,10 +7315,10 @@ nounPhraseSent :: Sentence -> NP
 introduceAbb :: Idea n => n -> Sentence
 
 -- | Helper for getting the phrase from a <a>NamedIdea</a> using it's UID.
-phrase :: (HasUID n, NamedIdea n) => n -> Sentence
+phrase :: NamedIdea n => n -> Sentence
 
 -- | Helper for getting the plural of a phrase from a <a>NamedIdea</a>.
-plural :: (HasUID n, NamedIdea n) => n -> Sentence
+plural :: NamedIdea n => n -> Sentence
 
 -- | Singular possesive function
 --   
@@ -7357,7 +7357,7 @@ titleize :: NamedIdea n => n -> Sentence
 titleize' :: NamedIdea n => n -> Sentence
 
 -- | Get short form (if it exists), else get term of an <a>Idea</a>.
-short :: (Idea c, HasUID c) => c -> Sentence
+short :: Idea c => c -> Sentence
 
 -- | Used for holding the short form of a name (as a <a>Sentence</a> with a
 --   wrapper).

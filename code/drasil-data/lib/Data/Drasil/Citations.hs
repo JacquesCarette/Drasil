@@ -20,7 +20,7 @@ campidelli = cBooklet
 
 koothoor2013 = 
   cMThesis [nKoothoor] 
-  "A document drive approach to certifying scientific computing software"
+  "A Document Driven Approach to Certifying Scientific Computing Software"
   "McMaster University" 2013 [address "Hamilton, ON, Canada"]
   "koothoor2013"
 

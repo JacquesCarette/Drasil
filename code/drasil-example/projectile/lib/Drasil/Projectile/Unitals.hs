@@ -17,7 +17,8 @@ projSpeed :: UnitalChunk
 projSpeed  = uc C.projSpeed (Concat [vec lV, label "(", lT, label ")"]) Real velU
 
 ---
-landPosUnc, launAngleUnc, launSpeedUnc, offsetUnc, targPosUnc :: UncertQ
+landPosUnc, launAngleUnc, launSpeedUnc, offsetUnc, targPosUnc,
+  flightDurUnc :: UncertQ
 landPosUnc   = uq landPos   defaultUncrt
 launAngleUnc = uq launAngle defaultUncrt
 launSpeedUnc = uq launSpeed defaultUncrt

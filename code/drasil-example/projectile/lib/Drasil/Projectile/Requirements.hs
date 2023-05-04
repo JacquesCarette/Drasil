@@ -42,7 +42,7 @@ calcValuesDesc = foldlSent [S "Calculate the following" +: plural value,
 outputValuesDesc = atStart output_ +:+. outputs
   where
     outputs = foldlList Comma List $ map foldlSent_ [ 
-        [ch flightDur, fromSource messageIM],
+        [ch flightDur, fromSource timeIM],
         [ch message, fromSource messageIM], 
         [ch offset, fromSource offsetIM]
       ]

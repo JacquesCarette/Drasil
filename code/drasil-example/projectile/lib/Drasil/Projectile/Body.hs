@@ -29,8 +29,7 @@ import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.Projectile.Assumptions (assumptions)
-import Drasil.Projectile.Concepts (concepts,
-  launcher, projectile, target)
+import Drasil.Projectile.Concepts (concepts, launcher, projectile, target)
 import Drasil.Projectile.DataDefs (dataDefs)
 import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.GenDefs (genDefns)

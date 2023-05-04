@@ -98,7 +98,7 @@ import GOOL.Drasil.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, getCurrMainFunc,
   addIter, getIter, resetIter)
 
-import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,constant,log,exp,mod,max)
+import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod,max)
 import Control.Lens.Zoom (zoom)
 import Control.Monad (join)
 import Control.Monad.State (State, modify)

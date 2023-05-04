@@ -200,7 +200,7 @@ inConstraints :: [UncertQ]
 inConstraints = [launAngleUnc, launSpeedUnc, targPosUnc]
 
 outConstraints :: [UncertQ]
-outConstraints = [landPosUnc, offsetUnc]
+outConstraints = [landPosUnc, offsetUnc, flightDurUnc]
 
 constrained :: [ConstrConcept]
 constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]

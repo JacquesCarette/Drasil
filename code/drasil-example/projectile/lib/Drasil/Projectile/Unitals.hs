@@ -23,6 +23,7 @@ launAngleUnc = uq launAngle defaultUncrt
 launSpeedUnc = uq launSpeed defaultUncrt
 offsetUnc    = uq offset    defaultUncrt
 targPosUnc   = uq targPos   defaultUncrt
+flightDurUnc = uq flightDur defaultUncrt
 
 flightDur, landPos, launAngle, launSpeed, offset, targPos :: ConstrConcept
 flightDur = constrainedNRV' (uc       C.flightDur (subStr lT "flight") Real second) [gtZeroConstr]

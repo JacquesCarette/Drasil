@@ -1,0 +1,38 @@
+# Default rule
+
+# Note that @JacquesCarette has to be added to each rule because of how CODEOWNERS files work
+
+* @JacquesCarette
+
+# Examples
+
+code/drasil-example/dblpendulum/ @JacquesCarette @cd155
+code/drasil-example/glassbr/ @JacquesCarette @samm82
+code/drasil-example/projectile/ @JacquesCarette @samm82 @bmaclach
+code/drasil-example/template/ @JacquesCarette @samm82
+
+# Stable
+
+# Note that @JacquesCarette and @smiths have to be added to each rule because of how CODEOWNERS files work
+
+code/stable/ @JacquesCarette @smiths
+code/stable/dblpendulum/ @JacquesCarette @smiths @cd155
+code/stable/glassbr/ @JacquesCarette @smiths @samm82
+code/stable/gooltest/ @JacquesCarette @smiths @bmaclach
+code/stable/projectile/ @JacquesCarette @smiths @samm82 @bmaclach
+code/stable/template/ @JacquesCarette @smiths @samm82
+
+# GOOL (for @bmaclach)
+
+code/drasil-gool/ @JacquesCarette @bmaclach
+
+# `ModelKind`s
+
+**/DifferentialModel.hs @JacquesCarette @cd155
+**/ModelKinds.hs @JacquesCarette @balacij
+**/ODEInfo.hs @JacquesCarette @cd155
+
+# @samm82's miscellaneous work
+
+**/Sentence/Fold.hs @JacquesCarette @samm82
+**/Symbol/Helpers.hs @JacquesCarette @samm82

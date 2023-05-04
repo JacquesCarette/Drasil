@@ -127,4 +127,4 @@ newtype Latex = L { unPL :: String }
 -- | Renders special characters.
 instance RenderSpecial Latex where
   special Circle       = L "{}^{\\circ}"
-  special Partial      = L "\\partial{}"
+  -- special Partial      = L "\\partial{}"

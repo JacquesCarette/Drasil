@@ -27,7 +27,7 @@ symbolsWithDefns = [modElas]
 
 modElas :: UnitalChunk
 modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")
-  "the ratio of tensile stress to tensile strain of glass" cE pascal
+  (S "the ratio of tensile stress to tensile strain of glass") cE Real pascal
 
 {--}
 
@@ -100,7 +100,7 @@ tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
   (variable "TNT") Real
   [ gtZeroConstr ] (exactDbl 1) defaultUncrt
 
-standOffDist = uq (constrained' (ucs' sD (variable "SD") Real metre)
+standOffDist = uq (constrained' (uc sD (variable "SD") Real metre)
   [ gtZeroConstr,
     sfwrc $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 
@@ -192,17 +192,17 @@ minThick, sflawParamK, sflawParamM, sdx, sdy, sdz, loadDur :: UnitaryChunk
 
 demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight :: UnitalChunk
 
-demand      = ucs' demandq lQ Real pascal --correct Space used?
+demand      = uc demandq lQ Real pascal --correct Space used?
 
-tmDemand    = ucs' load (variable "Load") Real pascal --correct Space used?
+tmDemand    = uc load (variable "Load") Real pascal --correct Space used?
   
-lRe         = ucs' loadResis (variable "LR") Real pascal --correct Space used?
+lRe         = uc loadResis (variable "LR") Real pascal --correct Space used?
 
-tmLRe       = ucs' capacity (variable "capacity") Real pascal --correct Space used?
+tmLRe       = uc capacity (variable "capacity") Real pascal --correct Space used?
 
-nonFactorL  = ucs' nonFactoredL (variable "NFL") Real pascal --correct Space used?
+nonFactorL  = uc nonFactoredL (variable "NFL") Real pascal --correct Space used?
 
-eqTNTWeight = ucs' eqTNTChar (sub (eqSymb charWeight) (eqSymb tNT)) Real 
+eqTNTWeight = uc eqTNTChar (sub (eqSymb charWeight) (eqSymb tNT)) Real 
   kilogram
 
 loadDur     = unitary "loadDur"    (nounPhraseSP "duration of load")

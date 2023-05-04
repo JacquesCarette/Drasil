@@ -77,21 +77,21 @@ unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
 --FIXME: parametrized hack
 --FIXME: "A" is not being capitalized when it should be.
 forceParam, massParam, timeParam :: String -> String -> Symbol -> UnitalChunk
-forceParam n w s = ucs'
+forceParam n w s = uc
  (dccWDS ("force" ++ n) (cn $ "force exerted by the " ++ w ++ 
   " body (on another body)") (phrase QP.force)) 
   (sub (eqSymb QP.force) s) Real newton
 
-massParam n w s = ucs'
+massParam n w s = uc
  (dccWDS ("mass" ++ n) (cn $ "mass of the " ++ w ++ " body") 
   (phrase QPP.mass)) (sub (eqSymb QPP.mass) s) Real kilogram
 
-timeParam n w s = ucs'
+timeParam n w s = uc
  (dccWDS ("time" ++ n) (cn $ "time at a point in " ++ w ++ " body ") 
   (phrase QP.time)) (sub (eqSymb QP.time) s) Real second
 
 contParam :: String -> String -> Symbol -> Symbol -> UnitalChunk
-contParam n m w s = ucs'
+contParam n m w s = uc
  (dccWDS ("r_" ++ n ++ m) contdispN (phrase QP.displacement))
   (sub (eqSymb QP.displacement) (Concat [w, s])) Real metre
   where contdispN = cn $ "displacement vector between the centre of mass of rigid body " ++
@@ -99,32 +99,32 @@ contParam n m w s = ucs'
 
 angParam, momtParam, perpParam, rigidParam, velBodyParam, velParam :: String -> Symbol -> UnitalChunk
 
-angParam n w = ucs'
+angParam n w = uc
  (dccWDS ("angular velocity" ++ n) (compoundPhrase'
   (cn $ n ++ " body's") (QP.angularVelocity ^. term))
   (phrase QP.angularVelocity)) (sub (eqSymb QP.angularVelocity) w) Real angVelU
 
-momtParam n w = ucs'
+momtParam n w = uc
  (dccWDS ("momentOfInertia" ++ n) (compoundPhrase'
   (QP.momentOfInertia ^. term) (cn $ "of rigid body " ++ n))
   (phrase QP.momentOfInertia)) (sub (eqSymb QP.momentOfInertia) w) Real momtInertU
 
-perpParam n w = ucs'
+perpParam n w = uc
  (dccWDS ("|| r_A" ++ n ++ " x n ||") 
   (compoundPhrase' (QPP.len `ofThe` QM.perpVect)
   (cn $ "to the contact displacement vector of rigid body " ++ n)) 
   (phrase QM.perpVect)) (Atop Magnitude $ Concat [w, label "*", --should be x for cross
   eqSymb QM.perpVect]) Real metre
 
-rigidParam n w = ucs'
+rigidParam n w = uc
  (dccWDS ("rig_mass" ++ n) (compoundPhrase' (QPP.mass ^. term)
   (cn $ "of rigid body " ++ n)) (phrase QPP.mass)) (sub (eqSymb QPP.mass) w) Real kilogram
 
-velBodyParam n w = ucs'
+velBodyParam n w = uc
  (dccWDS ("velocity" ++ n) (compoundPhrase' (QP.velocity ^. term)
   (cn $ "of the  " ++ n ++ " body")) (phrase QP.velocity)) (sub (eqSymb QP.velocity) w) Real velU
 
-velParam n w = ucs'
+velParam n w = uc
  (dccWDS ("velocity" ++ n) (compoundPhrase' (QP.velocity ^. term)
   (cn $ "at point " ++ n)) (phrase QP.velocity)) (sub (eqSymb QP.velocity) w) Real velU
 
@@ -140,121 +140,121 @@ iVect, jVect, normalVect, force_1, force_2, forcej, mass_1, mass_2,
   momtInertK, pointOfCollision, contDispK, collisionImpulse, finRelVel,
   velAP, velBP, time_1, time_2, velo_1, velo_2, rRot, mLarger, distMass, dVect :: UnitalChunk
 
-iVect = ucs' (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
+iVect = uc (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) 
                (eqSymb QM.unitVect) Real metre
-jVect       = ucs' (dccWDS "unitVectJ" (compoundPhrase' (cn "vertical")
+jVect       = uc (dccWDS "unitVectJ" (compoundPhrase' (cn "vertical")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) (vec $ hat lJ) Real metre
-normalVect  = ucs' (dccWDS "normalVect" (nounPhraseSent (S "collision" +:+
+normalVect  = uc (dccWDS "normalVect" (nounPhraseSent (S "collision" +:+
                    phrase QM.normalVect)) (phrase QM.normalVect)) 
                    (eqSymb QM.normalVect) (Vect Real) metre
 
-dVect = ucs' (dccWDS "unitVect" 
+dVect = uc (dccWDS "unitVect" 
           (cn "unit vector directed from the center of the large mass to the center of the smaller mass") 
                    (phrase QM.unitVect)) (vec (hat lD)) Real metre
 
-dispNorm = ucs' (dccWDS "euclideanNormDisp" (cn "Euclidean norm of the distance between the center of mass of two bodies")
+dispNorm = uc (dccWDS "euclideanNormDisp" (cn "Euclidean norm of the distance between the center of mass of two bodies")
                (phrase QM.euclidNorm) ) (eqSymb QM.euclidNorm) Real metre
 
-distMass = ucs' (dccWDS "distMass" (cn "distance between the center of mass of the rigid bodies") 
+distMass = uc (dccWDS "distMass" (cn "distance between the center of mass of the rigid bodies") 
                  (phrase QP.distance)) (vec lD) Real metre
 
-sqrDist = ucs' (dccWDS "euclideanNorm" (cn' "squared distance")
+sqrDist = uc (dccWDS "euclideanNorm" (cn' "squared distance")
                (phrase QM.euclidNorm)) (sup (eqSymb QM.euclidNorm) 
                label2) Real m_2
              
 rOB    = uc' "rOB" 
   (nounPhraseSP "displacement vector between the origin and point B")
-  "FIXME: Define this or remove the need for definitions" 
-  (sub (eqSymb QP.displacement) (Concat [lOrigin, lBodyB])) metre
+  (S "FIXME: Define this or remove the need for definitions")
+  (sub (eqSymb QP.displacement) (Concat [lOrigin, lBodyB])) Real metre
   
-posCM = ucs "p_CM" (nounPhraseSP "Center of Mass")
+posCM = uc' "p_CM" (nounPhraseSP "Center of Mass")
  --"mass-weighted average position of a rigid " ++
  -- "body's particles") 
-  "FIXME: Define this or remove the need for definitions" 
+  (S "FIXME: Define this or remove the need for definitions")
   (sub (eqSymb QP.position) lCMass) Real metre
 
-massj = ucs' (dccWDS "m_j" (compoundPhrase' (QPP.mass ^. term)
+massj = uc (dccWDS "m_j" (compoundPhrase' (QPP.mass ^. term)
                 (cn "of the j-th particle")) (phrase QPP.mass)) 
                 (sub (eqSymb QPP.mass) lJ) Real kilogram
 
-posj = ucs' (dccWDS "p_j" (compoundPhrase' (QP.position ^. term) 
+posj = uc (dccWDS "p_j" (compoundPhrase' (QP.position ^. term) 
                (cn "vector of the j-th particle")) (phrase QP.position))
                (sub (eqSymb QP.position) lJ) Real metre
 
-accj = ucs' (dccWDS "accj" (compoundPhrase' (cn "j-th body's")
+accj = uc (dccWDS "accj" (compoundPhrase' (cn "j-th body's")
                (QP.acceleration ^. term)) (phrase QP.acceleration))
                (sub (eqSymb QP.acceleration) lJ) Real accelU
 
 -- FIXME: Using the titleized version in the same style as 'accj' above does not render properly.
 --        Oddly, stable breaks differently when trying to use 'nounPhraseSent' or 'combineNPNI'. See #2650.
-angAccj = ucs' (dccWDS "angAccj" (nounPhrase'' (S "j-th body's" +:+
+angAccj = uc (dccWDS "angAccj" (nounPhrase'' (S "j-th body's" +:+
                phrase QP.angularAccel) (S "j-th body's" +:+
                phrase QP.angularAccel) CapWords CapWords) (phrase QP.angularAccel))
                (sub (eqSymb QP.angularAccel) lJ) Real angAccelU
 
-velj = ucs' (dccWDS "velj" (compoundPhrase' (QP.velocity ^. term)
+velj = uc (dccWDS "velj" (compoundPhrase' (QP.velocity ^. term)
                (cn "of the j-th body")) (phrase QP.velocity))
                (sub (eqSymb QP.velocity) lJ) Real velU
 
-torquej = ucs' (dccWDS "torquej" 
+torquej = uc (dccWDS "torquej" 
                (cn "torque applied to the j-th body")
                (phrase QP.torque)) (sub (eqSymb QP.torque) lJ) Real torqueU
 
-mTot = ucs' (dccWDS "M_T" (compoundPhrase' (cn "total mass of the") 
+mTot = uc (dccWDS "M_T" (compoundPhrase' (cn "total mass of the") 
                  (CP.rigidBody ^. term)) (phrase QPP.mass))
                  (sub (eqSymb QPP.mass) cT) Real kilogram
 
-mLarger = ucs' (dccWDS "mLarger" (compoundPhrase' (cn "mass of the larger") 
+mLarger = uc (dccWDS "mLarger" (compoundPhrase' (cn "mass of the larger") 
                  (CP.rigidBody ^. term)) (phrase QPP.mass)) cM Real kilogram
 
-timeC = ucs' (dccWDS "timeC" (cn "denotes the time at collision") 
+timeC = uc (dccWDS "timeC" (cn "denotes the time at collision") 
                 (phrase QP.time)) (sub (eqSymb QP.time) lColl) Real second
 
-initRelVel = ucs' (dccWDS "v_i^AB" (compoundPhrase'
+initRelVel = uc (dccWDS "v_i^AB" (compoundPhrase'
                  (compoundPhrase' (cn "initial relative") (QP.velocity ^. term))
                  (cn "between rigid bodies of A and B")) (phrase QP.velocity))
                  (sup (sub (eqSymb QP.velocity) QP.initial) (Concat [lBodyA, lBodyB])) (Vect Real) velU
 
-finRelVel = ucs' (dccWDS "v_f^AB" (compoundPhrase'
+finRelVel = uc (dccWDS "v_f^AB" (compoundPhrase'
                  (compoundPhrase' (cn "final relative") (QP.velocity ^. term))
                  (cn "between rigid bodies of A and B")) (phrase QP.velocity))
                  (sup (sub (eqSymb QP.velocity) QP.final) (Concat [lBodyA, lBodyB])) (Vect Real) velU
 
-massIRigidBody = ucs' (dccWDS "massj" (compoundPhrase' (QPP.mass ^. term) 
+massIRigidBody = uc (dccWDS "massj" (compoundPhrase' (QPP.mass ^. term) 
                 (cn "of the j-th rigid body")) (phrase QPP.mass)) 
                 (sub (eqSymb QPP.mass) lJ) Real kilogram
-normalLen = ucs' (dccWDS "length of the normal vector" (
+normalLen = uc (dccWDS "length of the normal vector" (
                   QPP.len `ofThe` QM.normalVect) 
                   (phrase QM.normalVect))
                   (Atop Magnitude $ eqSymb QM.normalVect) Real metre
 
-rRot = ucs' (dccWDS "r_j" (compoundPhrase' (QP.distance ^. term)
+rRot = uc (dccWDS "r_j" (compoundPhrase' (QP.distance ^. term)
                 (cn "between the j-th particle and the axis of rotation")) (phrase QP.distance)) 
                 (sub (eqSymb QP.distance) lJ) Real metre
 
-timeT = ucs' (dccWDS "t" (cn "point in time") (phrase QP.time))
+timeT = uc (dccWDS "t" (cn "point in time") (phrase QP.time))
                 (eqSymb QP.time) Real second
 
-inittime = ucs' (dccWDS "t_0" (cn "denotes the initial time") 
+inittime = uc (dccWDS "t_0" (cn "denotes the initial time") 
                 (phrase QP.time)) (sub (eqSymb QP.time) label0) Real second
 
-pointOfCollision = ucs' (dccWDS "point_c" (cn "point of collision") 
+pointOfCollision = uc (dccWDS "point_c" (cn "point of collision") 
                  (S "point")) cP Real metre
 
-collisionImpulse = ucs' (dccWDS "collisionImp" (compoundPhrase' 
+collisionImpulse = uc (dccWDS "collisionImp" (compoundPhrase' 
                 (cn "collision") (QP.impulseS ^. term)) (phrase QP.impulseS)) 
                 (eqSymb QP.impulseS) Real impulseU
 
-forcej = ucs' (dccWDS "forcej" (compoundPhrase' 
+forcej = uc (dccWDS "forcej" (compoundPhrase' 
       (QP.force ^. term) (cn "applied to the j-th body at time t")) 
       (phrase QP.force)) (sub (eqSymb QP.force) lJ) Real newton
 
-velAP = ucs' (dccWDS "v^AP" (compoundPhrase' (QP.velocity ^. term)
+velAP = uc (dccWDS "v^AP" (compoundPhrase' (QP.velocity ^. term)
               (cn "of the point of collision P in body A")) 
               (phrase QP.velocity)) (sup (eqSymb QP.velocity)(Concat [lBodyA, lPoint])) 
               (Vect Real) velU
-velBP = ucs' (dccWDS "v^BP" (compoundPhrase' (QP.velocity ^. term)
+velBP = uc (dccWDS "v^BP" (compoundPhrase' (QP.velocity ^. term)
               (cn "of the point of collision P in body B")) 
               (phrase QP.velocity)) (sup (eqSymb QP.velocity)(Concat [lBodyB, lPoint]))
               (Vect Real) velU

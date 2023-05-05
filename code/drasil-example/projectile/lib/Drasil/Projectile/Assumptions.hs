@@ -84,7 +84,7 @@ freeFlightDesc = S "The flight" `S.is` S "free; there" `S.are` S "no" +:+ plural
 
 neglectCurvDesc :: Sentence
 neglectCurvDesc = atStartNP (the distance) `S.is` S "small enough that" +:+.
-                  (S "curvature" `S.the_ofThe` S "Earth can be neglected")
+                  (S "curvature" `S.the_ofThe` S "celestial body can be neglected")
 
 timeStartZeroDesc :: Sentence
 timeStartZeroDesc = atStart time +:+. S "starts at zero"

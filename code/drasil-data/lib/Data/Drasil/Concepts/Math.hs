@@ -104,8 +104,8 @@ de  = commonIdeaWithDict "de"  (cn' "differential equation")          "DE"  [mat
 ode = commonIdeaWithDict "ode" (cn' "ordinary differential equation") "ODE" [mathematics]
 pde = commonIdeaWithDict "pde" (cn' "partial differential equation")  "PDE" [mathematics]
 
-leftSide  = commonIdeaWithDict "leftSide"  (nounPhrase "left hand side"  "left hand sides" ) "LHS" [mathematics]
-rightSide = commonIdeaWithDict "rightSide" (nounPhrase "right hand side" "right hand sides") "RHS" [mathematics]
+leftSide  = commonIdeaWithDict "leftSide"  (nounPhrase "left-hand side"  "left-hand sides" ) "LHS" [mathematics]
+rightSide = commonIdeaWithDict "rightSide" (nounPhrase "right-hand side" "right-hand sides") "RHS" [mathematics]
 
 --FIXME: COMBINATION HACK (all below)
 -- do we really need fterms here? Would combineNINI work?

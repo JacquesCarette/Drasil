@@ -35,7 +35,7 @@ int main(int argc, const char *argv[]) {
     double p_land = func_p_land(v_launch, theta, g_vect);
     double d_offset = func_d_offset(p_target, p_land);
     string s = func_s(p_target, epsilon, d_offset);
-    write_output(s, d_offset);
+    write_output(s, d_offset, t_flight);
     
     return 0;
 }
@@ -112,12 +112,14 @@ void input_constraints(double v_launch, double theta, double p_target) {
     }
 }
 
-void write_output(string s, double d_offset) {
+void write_output(string s, double d_offset, double t_flight) {
     ofstream outputfile;
     outputfile.open("output.txt", std::fstream::out);
     outputfile << "s = ";
     outputfile << s << std::endl;
     outputfile << "d_offset = ";
     outputfile << d_offset << std::endl;
+    outputfile << "t_flight = ";
+    outputfile << t_flight << std::endl;
     outputfile.close();
 }

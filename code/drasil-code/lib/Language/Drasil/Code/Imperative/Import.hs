@@ -10,7 +10,7 @@ import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
   Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..))
 import Database.Drasil (symbResolve)
 import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&))
-import Language.Drasil.Code.Expr.Development (CodeExpr(..), ArithBinOp(..),
+import Language.Drasil.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
   AssocArithOper(..), AssocBoolOper(..), BoolBinOp(..), EqBinOp(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
   VVNBinOp(..), VVVBinOp(..), NVVBinOp(..))

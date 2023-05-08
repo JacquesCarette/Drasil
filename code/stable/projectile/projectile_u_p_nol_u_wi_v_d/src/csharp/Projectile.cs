@@ -23,7 +23,7 @@ public class Projectile {
         double p_land = func_p_land(v_launch, theta, g_vect);
         double d_offset = func_d_offset(p_target, p_land);
         string s = func_s(p_target, epsilon, d_offset);
-        write_output(s, d_offset);
+        write_output(s, d_offset, t_flight);
     }
     
     /** \brief Calculates flight duration: the time when the projectile lands (s)
@@ -132,14 +132,17 @@ public class Projectile {
     /** \brief Writes the output values to output.txt
         \param s output message as a string
         \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
+        \param t_flight flight duration: the time when the projectile lands (s)
     */
-    public static void write_output(string s, double d_offset) {
+    public static void write_output(string s, double d_offset, double t_flight) {
         StreamWriter outputfile;
         outputfile = new StreamWriter("output.txt", false);
         outputfile.Write("s = ");
         outputfile.WriteLine(s);
         outputfile.Write("d_offset = ");
         outputfile.WriteLine(d_offset);
+        outputfile.Write("t_flight = ");
+        outputfile.WriteLine(t_flight);
         outputfile.Close();
     }
 }

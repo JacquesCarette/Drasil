@@ -93,9 +93,6 @@ you should instead open the `code/docs/full/index.html` file.
 **drasil-code**
   - Contains the code for code generation in Drasil
 
-**drasil-code-base**
-  - Proxy package between `drasil-printers` and `drasil-code`, for the bits of code in `drasil-printers` that relies on bits of `drasil-code`
-
 **drasil-data**
   - Contains the current common-knowledge base for Drasil
 

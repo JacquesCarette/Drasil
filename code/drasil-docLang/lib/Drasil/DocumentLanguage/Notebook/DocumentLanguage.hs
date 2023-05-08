@@ -5,7 +5,7 @@ import Drasil.DocumentLanguage.Notebook.NBDecl (NBDecl, mkNBDesc)
 import Drasil.DocumentLanguage.Notebook.Core (ApndxSec(..), NBDesc, DocSection(..), 
   IntrodSec(..), IntrodSub(..), BodySec(..), BodySub(..), SmmrySec(..))
 
-import Language.Drasil
+import Language.Drasil hiding (kind)
 
 import SysInfo.Drasil (SystemInformation(SI), _authors, _kind, _sys, citeDB)
 

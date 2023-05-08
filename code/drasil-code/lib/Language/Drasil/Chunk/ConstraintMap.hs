@@ -6,7 +6,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil (Constraint, HasUID(..), UID, Constrained(..),
   isPhysC, isSfwrC)
-import Language.Drasil.Code.Expr.Development (CodeExpr, constraint)
+import Language.Drasil.CodeExpr.Development (CodeExpr, constraint)
 import qualified Data.Map as Map
 
 -- | Type synonym for 'Constraint CodeExpr'

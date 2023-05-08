@@ -50,6 +50,7 @@ digraph allvsall {
 	calcValues -> landingposition;
 	calcValues -> offset;
 	calcValues -> message;
+	outputValues -> flightduration;
 	outputValues -> offset;
 	outputValues -> message;
 

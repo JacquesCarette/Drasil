@@ -32,6 +32,8 @@ library:
   - Language.Drasil.Expr.Development
   - Language.Drasil.Literal.Development
   - Language.Drasil.ModelExpr.Development
+  - Language.Drasil.CodeExpr.Development
+  - Language.Drasil.CodeExpr
   - Language.Drasil.NounPhrase.Combinators
   - Language.Drasil.Sentence.Combinators
   - Language.Drasil.ShortHands

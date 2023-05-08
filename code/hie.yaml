@@ -9,9 +9,6 @@ cradle:
     - path: "drasil-code/test"
       component: "drasil-code:test:codegenTest"
 
-    - path: "drasil-code-base/lib"
-      component: "drasil-code-base:lib"
-
     - path: "drasil-data/lib"
       component: "drasil-data:lib"
 

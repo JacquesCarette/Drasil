@@ -3,10 +3,9 @@ module Language.Drasil.Code.Imperative.Parameters(getInConstructorParams,
   getConstraintParams, getCalcParams, getOutputParams
 ) where
 
-import Language.Drasil hiding (isIn)
-import Language.Drasil.Chunk.Code (CodeVarChunk, CodeIdea(codeChunk, codeName), 
-  quantvar, codevars, codevars', DefiningCodeExpr(..))
+import Language.Drasil hiding (isIn, Var)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
+import Language.Drasil.Chunk.CodeBase
 import Language.Drasil.Choices (Structure(..), InputModule(..), 
   ConstantStructure(..), ConstantRepr(..))
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)

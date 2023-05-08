@@ -24,7 +24,7 @@ int main(int argc, const char *argv[]) {
     double p_land = func_p_land(inParams, g_vect);
     double d_offset = func_d_offset(inParams, p_land);
     string s = func_s(inParams, epsilon, d_offset);
-    write_output(s, d_offset);
+    write_output(s, d_offset, t_flight);
     
     return 0;
 }

@@ -93,12 +93,15 @@ def input_constraints(v_launch, theta, p_target):
 ## \brief Writes the output values to output.txt
 # \param s output message as a string
 # \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
-def write_output(s, d_offset):
+# \param t_flight flight duration: the time when the projectile lands (s)
+def write_output(s, d_offset, t_flight):
     outputfile = open("output.txt", "w")
     print("s = ", end="", file=outputfile)
     print(s, file=outputfile)
     print("d_offset = ", end="", file=outputfile)
     print(d_offset, file=outputfile)
+    print("t_flight = ", end="", file=outputfile)
+    print(t_flight, file=outputfile)
     outputfile.close()
 
 filename = sys.argv[1]
@@ -110,4 +113,4 @@ t_flight = func_t_flight(v_launch, theta, g_vect)
 p_land = func_p_land(v_launch, theta, g_vect)
 d_offset = func_d_offset(p_target, p_land)
 s = func_s(p_target, epsilon, d_offset)
-write_output(s, d_offset)
+write_output(s, d_offset, t_flight)

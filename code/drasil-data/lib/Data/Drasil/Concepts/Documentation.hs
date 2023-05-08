@@ -47,10 +47,10 @@ doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body, charO
 -- | Collects all documentation-related common ideas (like a concept, but with no definition).
 doccon' :: [CI]
 doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
-  likelyChg, mg, mis, notApp, physSyst, requirement, srs, thModel, typUnc, unlikelyChg, notebook]
+  likelyChg, mg, mis, notApp, physSyst, requirement, srs, thModel, typUnc, unlikelyChg, notebook, refBy, refName]
 
-assumption, desSpec, goalStmt, dataConst, likelyChg, unlikelyChg, physSyst, requirement,
-  mg, mis, notApp, srs, typUnc, sec, notebook :: CI
+assumption, desSpec, goalStmt, dataConst, likelyChg, unlikelyChg, physSyst, requirement, 
+  mg, mis, notApp, srs, typUnc, sec, notebook, refBy, refName :: CI
 
 softReqSpec :: NP
 softReqSpec = fterms compoundPhraseP1 softwareReq specification

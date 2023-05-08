@@ -5,6 +5,6 @@
 /** \brief Structure for holding the constant values
 */
 public class Constants {
-    public const double g_vect = 9.8;
+    public const double g = 9.8;
     
 }

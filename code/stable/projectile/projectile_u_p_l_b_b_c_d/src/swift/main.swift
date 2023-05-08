@@ -255,7 +255,7 @@ class InputParameters {
 /** Structure for holding the constant values
 */
 class Constants {
-    static let g_vect: Double = 9.8
+    static let g: Double = 9.8
     static let epsilon: Double = 2.0e-2
     
 }
@@ -301,7 +301,7 @@ func func_t_flight(_ inParams: inout InputParameters) throws -> Double {
         throw "Error closing file."
     }
     
-    return 2.0 * inParams.v_launch * sin(inParams.theta) / Constants.g_vect
+    return 2.0 * inParams.v_launch * sin(inParams.theta) / Constants.g
 }
 
 /** Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -345,7 +345,7 @@ func func_p_land(_ inParams: inout InputParameters) throws -> Double {
         throw "Error closing file."
     }
     
-    return 2.0 * pow(inParams.v_launch, 2.0) * sin(inParams.theta) * cos(inParams.theta) / Constants.g_vect
+    return 2.0 * pow(inParams.v_launch, 2.0) * sin(inParams.theta) * cos(inParams.theta) / Constants.g
 }
 
 /** Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)

@@ -90,7 +90,7 @@ class InputParameters:
 
 ## \brief Structure for holding the constant values
 class Constants:
-    g_vect = 9.8
+    g = 9.8
     epsilon = 2.0e-2
 
 ## \brief Calculates flight duration: the time when the projectile lands (s)
@@ -104,7 +104,7 @@ def func_t_flight(inParams):
     print("  }", file=outfile)
     outfile.close()
     
-    return 2.0 * inParams.v_launch * math.sin(inParams.theta) / Constants.g_vect
+    return 2.0 * inParams.v_launch * math.sin(inParams.theta) / Constants.g
 
 ## \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
 # \param inParams structure holding the input values
@@ -117,7 +117,7 @@ def func_p_land(inParams):
     print("  }", file=outfile)
     outfile.close()
     
-    return 2.0 * inParams.v_launch ** 2.0 * math.sin(inParams.theta) * math.cos(inParams.theta) / Constants.g_vect
+    return 2.0 * inParams.v_launch ** 2.0 * math.sin(inParams.theta) * math.cos(inParams.theta) / Constants.g
 
 ## \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
 # \param inParams structure holding the input values

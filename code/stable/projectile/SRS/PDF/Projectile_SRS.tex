@@ -82,7 +82,7 @@ ${\symbf{a}^{\text{c}}}$ & Constant acceleration vector & $\frac{\text{m}}{\text
 \\
 ${d_{\text{offset}}}$ & Distance between the target position and the landing position & ${\text{m}}$
 \\
-$\symbf{g}$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+$g$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $p$ & Scalar position & ${\text{m}}$
 \\
@@ -705,19 +705,19 @@ Output Constraints & \begin{displaymath}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{\symbf{g}}
+           {t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{g}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${t_{\text{flight}}}$ is the flight duration (${\text{s}}$)}
               \item{${v_{\text{launch}}}$ is the launch speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$θ$ is the launch angle (${\text{rad}}$)}
-              \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The constraint $0\lt{}θ\lt{}\frac{π}{2}$ is from \hyperref[posXDirection]{A:posXDirection} and \hyperref[yAxisGravity]{A:yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
         
-        $\symbf{g}$ is defined in \hyperref[gravAccelValue]{A:gravAccelValue}.
+        $g$ is defined in \hyperref[gravAccelValue]{A:gravAccelValue}.
         
         The constraint ${t_{\text{flight}}}\gt{}0$ is from \hyperref[timeStartZero]{A:timeStartZero}.
         
@@ -732,30 +732,30 @@ RefBy & \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[calcVa
 \end{minipage}
 \paragraph{Detailed derivation of flight duration:}
 \label{IM:calOfLandingTimeDeriv}
-We know that ${{p_{\text{y}}}^{\text{i}}}=0$ (\hyperref[launchOrigin]{A:launchOrigin}) and ${{a_{\text{y}}}^{\text{c}}}=-\symbf{g}$ (\hyperref[accelYGravity]{A:accelYGravity}). Substituting these values into the y-direction of \hyperref[GD:posVec]{GD:posVec} gives us:
+We know that ${{p_{\text{y}}}^{\text{i}}}=0$ (\hyperref[launchOrigin]{A:launchOrigin}) and ${{a_{\text{y}}}^{\text{c}}}=-g$ (\hyperref[accelYGravity]{A:accelYGravity}). Substituting these values into the y-direction of \hyperref[GD:posVec]{GD:posVec} gives us:
 
 \begin{displaymath}
-{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}} t-\frac{\symbf{g} t^{2}}{2}
+{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}} t-\frac{g t^{2}}{2}
 \end{displaymath}
 To find the time that the projectile lands, we want to find the $t$ value (${t_{\text{flight}}}$) where ${p_{\text{y}}}=0$ (since the target is on the $x$-axis from \hyperref[targetXAxis]{A:targetXAxis}). From the equation above we get:
 
 \begin{displaymath}
-{{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{\symbf{g} {t_{\text{flight}}}^{2}}{2}=0
+{{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{g {t_{\text{flight}}}^{2}}{2}=0
 \end{displaymath}
 Dividing by ${t_{\text{flight}}}$ (with the constraint ${t_{\text{flight}}}\gt{}0$) gives us:
 
 \begin{displaymath}
-{{v_{\text{y}}}^{\text{i}}}-\frac{\symbf{g} {t_{\text{flight}}}}{2}=0
+{{v_{\text{y}}}^{\text{i}}}-\frac{g {t_{\text{flight}}}}{2}=0
 \end{displaymath}
 Solving for ${t_{\text{flight}}}$ gives us:
 
 \begin{displaymath}
-{t_{\text{flight}}}=\frac{2 {{v_{\text{y}}}^{\text{i}}}}{\symbf{g}}
+{t_{\text{flight}}}=\frac{2 {{v_{\text{y}}}^{\text{i}}}}{g}
 \end{displaymath}
 From \hyperref[DD:speedIY]{DD:speedIY} (with ${v^{\text{i}}}={v_{\text{launch}}}$) we can replace ${{v_{\text{y}}}^{\text{i}}}$:
 
 \begin{displaymath}
-{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{\symbf{g}}
+{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{g}
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -786,19 +786,19 @@ Output Constraints & \begin{displaymath}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\symbf{g}}
+           {p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${p_{\text{land}}}$ is the landing position (${\text{m}}$)}
               \item{${v_{\text{launch}}}$ is the launch speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$θ$ is the launch angle (${\text{rad}}$)}
-              \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The constraint $0\lt{}θ\lt{}\frac{π}{2}$ is from \hyperref[posXDirection]{A:posXDirection} and \hyperref[yAxisGravity]{A:yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
         
-        $\symbf{g}$ is defined in \hyperref[gravAccelValue]{A:gravAccelValue}.
+        $g$ is defined in \hyperref[gravAccelValue]{A:gravAccelValue}.
         
         The constraint ${p_{\text{land}}}\gt{}0$ is from \hyperref[posXDirection]{A:posXDirection}.
         
@@ -821,17 +821,17 @@ We know that ${{p_{\text{x}}}^{\text{i}}}=0$ (\hyperref[launchOrigin]{A:launchOr
 To find the landing position, we want to find the ${p_{\text{x}}}$ value (${p_{\text{land}}}$) at flight duration (from \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}):
 
 \begin{displaymath}
-{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{\symbf{g}}
+{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{g}
 \end{displaymath}
 From \hyperref[DD:speedIX]{DD:speedIX} (with ${v^{\text{i}}}={v_{\text{launch}}}$) we can replace ${{v_{\text{x}}}^{\text{i}}}$:
 
 \begin{displaymath}
-{p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{\symbf{g}}
+{p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{g}
 \end{displaymath}
 Rearranging this gives us the required equation:
 
 \begin{displaymath}
-{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\symbf{g}}
+{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -1246,7 +1246,7 @@ This section contains the standard values that are used for calculations in Proj
 \\
 \midrule
 \endhead
-$\symbf{g}$ & gravitational acceleration & $9.8$ & $\frac{\text{m}}{\text{s}^{2}}$
+$g$ & gravitational acceleration & $9.8$ & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $ε$ & hit tolerance & $2.0\%$ & --
 \\

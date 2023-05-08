@@ -107,7 +107,7 @@ void InputParameters::input_constraints() {
     }
 }
 
-const double Constants::g_vect = 9.8;
+const double Constants::g = 9.8;
 const double Constants::epsilon = 2.0e-2;
 
 /** \brief Controls the flow of the program
@@ -162,7 +162,7 @@ double func_t_flight(InputParameters &inParams) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return 2.0 * inParams.v_launch * sin(inParams.theta) / Constants::g_vect;
+    return 2.0 * inParams.v_launch * sin(inParams.theta) / Constants::g;
 }
 
 double func_p_land(InputParameters &inParams) {
@@ -174,7 +174,7 @@ double func_p_land(InputParameters &inParams) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return 2.0 * pow(inParams.v_launch, 2.0) * sin(inParams.theta) * cos(inParams.theta) / Constants::g_vect;
+    return 2.0 * pow(inParams.v_launch, 2.0) * sin(inParams.theta) * cos(inParams.theta) / Constants::g;
 }
 
 double func_d_offset(InputParameters &inParams, double p_land) {

@@ -3,4 +3,4 @@
 # \brief Provides the structure for holding constant values
 ## \brief Structure for holding the constant values
 class Constants:
-    g_vect = 9.8
+    g = 9.8

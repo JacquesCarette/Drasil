@@ -159,7 +159,7 @@ float func_t_flight(InputParameters &inParams) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return 2.0f * inParams.v_launch * sin(inParams.theta) / inParams.g_vect;
+    return 2.0f * inParams.v_launch * sin(inParams.theta) / inParams.g;
 }
 
 float func_p_land(InputParameters &inParams) {
@@ -171,7 +171,7 @@ float func_p_land(InputParameters &inParams) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return 2.0f * pow(inParams.v_launch, 2.0f) * sin(inParams.theta) * cos(inParams.theta) / inParams.g_vect;
+    return 2.0f * pow(inParams.v_launch, 2.0f) * sin(inParams.theta) * cos(inParams.theta) / inParams.g;
 }
 
 float func_d_offset(InputParameters &inParams, float p_land) {

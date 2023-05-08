@@ -6,7 +6,7 @@ module Language.Drasil.Printing.Import.CodeExpr (codeExpr) where
 import Language.Drasil (DomainDesc(..), Inclusive(..),
   RTopology(..), RealInterval(..), UID, LiteralC (int))
 import Language.Drasil.Display (Symbol(..))
-import Language.Drasil.Code.Expr.Development
+import Language.Drasil.CodeExpr.Development
 import Language.Drasil.Literal.Development
 
 import qualified Language.Drasil.Printing.AST as P

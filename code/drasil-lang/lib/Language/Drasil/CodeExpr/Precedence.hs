@@ -1,6 +1,6 @@
-module Language.Drasil.Code.Expr.Precedence (precA, precB, eprec) where
+module Language.Drasil.CodeExpr.Precedence (precA, precB, eprec) where
 
-import Language.Drasil.Code.Expr (CodeExpr(..), UFuncVV, UFuncVN, UFuncB(..),
+import Language.Drasil.CodeExpr.Lang (CodeExpr(..), UFuncVV, UFuncVN, UFuncB(..),
     UFunc(..), AssocBoolOper(..), AssocArithOper(..), VVNBinOp, NVVBinOp,
     VVVBinOp, OrdBinOp, LABinOp, BoolBinOp, EqBinOp, ArithBinOp(..))
 

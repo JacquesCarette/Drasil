@@ -1,9 +1,12 @@
-module Language.Drasil.Code.Expr.Class where
+module Language.Drasil.CodeExpr.Class where
 
-import Language.Drasil (Callable, IsArgumentName, ExprC(sy), HasSpace(..),
-  Space(Actor), HasSymbol, HasUID(..))
+import Language.Drasil.Classes(IsArgumentName, Callable)
+import Language.Drasil.UID (HasUID(..))
+import Language.Drasil.Symbol (HasSymbol)
+import Language.Drasil.Space (Space(Actor), HasSpace(..))
 import Language.Drasil.Chunk.CodeBase (CodeIdea, CodeVarChunk)
-import Language.Drasil.Code.Expr (CodeExpr(FCall, New, Message, Field))
+import Language.Drasil.Expr.Class (ExprC(..))
+import Language.Drasil.CodeExpr.Lang (CodeExpr(FCall, New, Message, Field))
 
 import Control.Lens ( (^.) )
 
@@ -16,7 +19,7 @@ class CodeExprC r where
     IsArgumentName a) => f -> [r] -> [(a, r)] -> r
   
   -- | Constructs a CodeExpr for actor messaging (method call)
-  message :: (Callable f, HasUID f, CodeIdea f, HasUID c, HasSpace c, CodeIdea c) 
+  msg :: (Callable f, HasUID f, CodeIdea f, HasUID c, HasSpace c, CodeIdea c) 
     => c -> f -> [r] -> r
   
   -- | Constructs a CodeExpr for actor messaging (method call) that uses named arguments
@@ -37,7 +40,7 @@ instance CodeExprC CodeExpr where
   newWithNamedArgs c ps ns = New (c ^. uid) ps (zip (map ((^. uid) . fst) ns) 
     (map snd ns))
 
-  message o m ps = checkObj (o ^. typ)
+  msg o m ps = checkObj (o ^. typ)
     where checkObj (Actor _) = Message (o ^. uid) (m ^. uid) ps []
           checkObj _ = error $ "Invalid actor message: Actor should have " ++ 
             "Actor space"

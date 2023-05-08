@@ -10,7 +10,7 @@ module Language.Drasil.Choices (
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
   choicesSent, showChs) where
 
-import Language.Drasil hiding (None)
+import Language.Drasil hiding (None, Var)
 import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo)

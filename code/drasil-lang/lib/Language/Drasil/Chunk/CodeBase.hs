@@ -4,15 +4,18 @@ module Language.Drasil.Chunk.CodeBase where
 
 import Control.Lens ((^.), view, makeLenses, Lens')
 
-import Language.Drasil
-import Database.Drasil (ChunkDB, symbResolve)
+import Language.Drasil.Classes (CommonIdea(abrv), Quantity, Idea(getA), NamedIdea(..), Callable)
+import Language.Drasil.Chunk.Quantity (QuantityDict, implVar')
+import Language.Drasil.Space (HasSpace(..), Space(..))
+import Language.Drasil.Symbol (HasSymbol(symbol))
+import Language.Drasil.UID (HasUID(uid), (+++))
+import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
+import Language.Drasil.Stages (Stage(..))
 
-import Language.Drasil.Code.Expr (CodeExpr)
-import Language.Drasil.Code.Expr.Extract (eDep, eDep')
+import Language.Drasil.CodeExpr.Lang (CodeExpr)
 
 import Utils.Drasil (toPlainName)
 
-import Data.List (nub)
 
 -- not using lenses for now
 -- | A 'CodeIdea' must include some code and its name. 
@@ -107,30 +110,6 @@ instance Callable    CodeFuncChunk
 instance Eq          CodeFuncChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Finds the units of the 'CodeChunk' used to make the 'CodeFuncChunk'.
 instance MayHaveUnit CodeFuncChunk where getUnit = getUnit . view ccf
-
--- | Construct a 'CodeVarChunk' from a 'Quantity'.
-quantvar :: (Quantity c, MayHaveUnit c) => c -> CodeVarChunk
-quantvar c = CodeVC (CodeC (qw c) Var) Nothing
-
--- | Construct a 'CodeFuncChunk' from a 'Quantity'.
-quantfunc :: (Quantity c, MayHaveUnit c) => c -> CodeFuncChunk
-quantfunc c = CodeFC $ CodeC (qw c) Func
-
--- | Get a list of 'CodeChunk's from an equation.
-codevars :: CodeExpr -> ChunkDB -> [CodeVarChunk]
-codevars e m = map (varResolve m) $ eDep e
-
--- | Get a list of 'CodeChunk's from an equation (no functions).
-codevars' :: CodeExpr -> ChunkDB -> [CodeVarChunk]
-codevars' e m = map (varResolve m) $ nub $ eDep' e
-
--- | Make a 'CodeVarChunk' from a 'UID' in the 'ChunkDB'.
-varResolve :: ChunkDB -> UID -> CodeVarChunk
-varResolve  m x = quantvar $ symbResolve m x
-
--- | Make a 'CodeFuncChunk' from a 'UID' in the 'ChunkDB'.
-funcResolve :: ChunkDB -> UID -> CodeFuncChunk
-funcResolve m x = quantfunc $ symbResolve m x
 
 -- FIXME: use show for the UID here? Perhaps need a different implVar function for UIDs
 -- Changes a 'CodeVarChunk'\'s space from 'Vect' to 'Array'.

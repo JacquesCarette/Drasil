@@ -5,7 +5,7 @@ digraph refvsref {
 	projPos -> velocityTM;
 	projPos -> projSpeed;
 	velocity -> projSpeed;
-	position -> scalarPos;
+	position -> projPos;
 	flightduration -> iyVel;
 	flightduration -> position;
 	landingposition -> ixVel;

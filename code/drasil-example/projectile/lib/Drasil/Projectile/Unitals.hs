@@ -17,7 +17,7 @@ projSpeed :: UnitalChunk
 projSpeed  = uc C.projSpeed (Concat [vec lV, label "(", lT, label ")"]) Real velU
 
 projPos :: UnitalChunk
-projPos  = uc C.projPos (Concat [vec lP, label "(", lT, label ")"]) Real metre
+projPos  = uc C.projPos (Concat [lP, label "(", lT, label ")"]) Real metre
 
 ---
 landPosUnc, launAngleUnc, launSpeedUnc, offsetUnc, targPosUnc :: UncertQ

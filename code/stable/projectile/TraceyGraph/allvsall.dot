@@ -24,7 +24,7 @@ digraph allvsall {
 	position -> cartSyst;
 	position -> constAccel;
 	position -> timeStartZero;
-	position -> scalarPos;
+	position -> projPos;
 	flightduration -> yAxisGravity;
 	flightduration -> launchOrigin;
 	flightduration -> targetXAxis;

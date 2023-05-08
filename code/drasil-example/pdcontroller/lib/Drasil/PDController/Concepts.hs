@@ -1,14 +1,14 @@
 module Drasil.PDController.Concepts where
 
 import Data.Drasil.Concepts.Documentation
-       (assumption, goalStmt, physSyst, requirement, srs, typUnc)
+       (assumption, goalStmt, physSyst, requirement, refBy, refName, srs, typUnc)
 import Data.Drasil.TheoryConcepts
 import Language.Drasil
 
 acronyms :: [CI]
 acronyms
-  = [assumption, dataDefn, genDefn, goalStmt, inModel, physSyst, requirement,
-     srs, thModel, typUnc, pdControllerCI, proportionalCI, derivativeCI,
+  = [assumption, dataDefn, genDefn, goalStmt, inModel, physSyst, requirement, refBy, 
+     refName, srs, thModel, typUnc, pdControllerCI, proportionalCI, derivativeCI,
      integralCI, pidCI]
 
 pdControllerApp, pdControllerCI, proportionalCI, derivativeCI, integralCI,

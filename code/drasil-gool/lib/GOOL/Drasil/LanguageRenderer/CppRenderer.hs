@@ -265,7 +265,7 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   type Variable (p CppSrcCode CppHdrCode) = VarData
   var n = pair1 (var n) (var n)
   staticVar n = pair1 (staticVar n) (staticVar n)
-  const n = pair1 (const n) (const n)
+  constant n = pair1 (constant n) (constant n)
   extVar l n = pair1 (extVar l n) (extVar l n)
   self = on2StateValues pair self self
   classVar = pair2 classVar classVar
@@ -1117,7 +1117,7 @@ instance VariableSym CppSrcCode where
   type Variable CppSrcCode = VarData
   var = G.var
   staticVar = G.staticVar
-  const = var
+  constant = var
   extVar l n t = modify (addModuleImportVS l) >> var n t
   self = C.self
   classVar c' v'= do 
@@ -1771,7 +1771,7 @@ instance VariableSym CppHdrCode where
   type Variable CppHdrCode = VarData
   var = G.var
   staticVar = G.staticVar
-  const _ _ = mkStateVar "" void empty
+  constant _ _ = mkStateVar "" void empty
   extVar _ _ _ = mkStateVar "" void empty
   self = mkStateVar "" void empty
   classVar _ _ = mkStateVar "" void empty

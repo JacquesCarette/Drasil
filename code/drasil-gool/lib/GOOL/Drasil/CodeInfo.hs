@@ -100,7 +100,7 @@ instance VariableSym CodeInfo where
   type Variable CodeInfo = ()
   var         _ _   = noInfo
   staticVar   _ _   = noInfo
-  const       _ _   = noInfo
+  constant    _ _   = noInfo
   extVar      _ _ _ = noInfo
   self              = noInfo
   classVar    _ _   = noInfo

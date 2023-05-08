@@ -39,8 +39,8 @@ launcher   = dcc "launcher"   (nounPhraseSP "launcher")  ("where the projectile 
 projectile = dcc "projectile" (nounPhraseSP "projectile") "the object to be launched at the target"
 target     = dcc "target"     (nounPhraseSP "target")     "where the projectile should be launched to"
 
-projSpeed  = dccWDS "projSpeed" (nounPhraseSP "1D speed")    (getAcc oneD +:+ S"speed under" +:+ phrase constant +:+ phrase acceleration)
-projPos    = dccWDS "projPos"   (nounPhraseSP "1D position") (getAcc oneD +:+ S"position under" +:+ phrase constant +:+ phrase speed)
+projSpeed  = dccWDS "projSpeed" (nounPhraseSP "1D speed")    (getAcc oneD +:+ phrase speed +:+ S "under" +:+ phrase constant +:+ phrase acceleration)
+projPos    = dccWDS "projPos"   (nounPhraseSP "1D position") (getAcc oneD +:+ phrase position +:+ S "under" +:+ phrase constant +:+ phrase speed)
 
 landPos, launAngle, launSpeed, offset, targPos, flightDur :: ConceptChunk
 landPos = cc' landingPosNC

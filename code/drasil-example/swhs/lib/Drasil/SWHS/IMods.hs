@@ -137,7 +137,7 @@ eBalanceOnWtrDerivDesc4 = foldlSentCol [S "Factoring the negative sign out" `S.o
 
 -- TODO: Typo. Not fixing immediately because I want to keep stable diffs empty for this PR.
 eBalanceOnWtrDerivDesc5 :: Sentence
-eBalanceOnWtrDerivDesc5 = S "Rearraging this" +:+ phrase equation +: S "gives us"
+eBalanceOnWtrDerivDesc5 = S "Rearranging this" +:+ phrase equation +: S "gives us"
 
 eBalanceOnWtrDerivDesc6 :: Sentence
 eBalanceOnWtrDerivDesc6 = substitute [balanceDecayRate, balanceDecayTime]

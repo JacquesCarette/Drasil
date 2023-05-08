@@ -49,7 +49,7 @@ public class Projectile {
         outfile.print(s);
         outfile.println(" in module Projectile");
         outfile.close();
-        write_output(s, d_offset);
+        write_output(s, d_offset, t_flight);
     }
     
     /** \brief Calculates flight duration: the time when the projectile lands (s)
@@ -135,8 +135,9 @@ public class Projectile {
     /** \brief Writes the output values to output.txt
         \param s output message as a string
         \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
+        \param t_flight flight duration: the time when the projectile lands (s)
     */
-    public static void write_output(String s, float d_offset) throws IOException {
+    public static void write_output(String s, float d_offset, float t_flight) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function write_output called with inputs: {");
@@ -144,7 +145,10 @@ public class Projectile {
         outfile.print(s);
         outfile.println(", ");
         outfile.print("  d_offset = ");
-        outfile.println(d_offset);
+        outfile.print(d_offset);
+        outfile.println(", ");
+        outfile.print("  t_flight = ");
+        outfile.println(t_flight);
         outfile.println("  }");
         outfile.close();
         
@@ -154,6 +158,8 @@ public class Projectile {
         outputfile.println(s);
         outputfile.print("d_offset = ");
         outputfile.println(d_offset);
+        outputfile.print("t_flight = ");
+        outputfile.println(t_flight);
         outputfile.close();
     }
 }

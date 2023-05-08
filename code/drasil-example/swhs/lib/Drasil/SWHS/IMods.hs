@@ -131,12 +131,13 @@ eBalanceOnWtrDerivDesc3 = foldlSentCol [S "Dividing", eqN 2, S "by", eS' eq1 `sC
 
 eBalanceOnWtrDerivDesc4 :: Sentence
 eBalanceOnWtrDerivDesc4 = foldlSentCol [S "Factoring the negative sign out" `S.of_`
-  (S "second term" `S.the_ofThe` short rightSide) `S.of_` eqN 3 `S.and_`
-  S "multiplying it by", ch coilHTC, ch coilSA, S "/", ch coilHTC, ch coilSA, S "yields"]
+  (S "second term" `S.the_ofThe` (phrase rightSide +:+ sParen (short rightSide)))
+  `S.of_` eqN 3 `S.and_` S "multiplying it by", ch coilHTC, ch coilSA, S "/", ch coilHTC,
+  ch coilSA, S "yields"]
 
 -- TODO: Typo. Not fixing immediately because I want to keep stable diffs empty for this PR.
 eBalanceOnWtrDerivDesc5 :: Sentence
-eBalanceOnWtrDerivDesc5 = S "Rearraging this" +:+ phrase equation +: S "gives us"
+eBalanceOnWtrDerivDesc5 = S "Rearranging this" +:+ phrase equation +: S "gives us"
 
 eBalanceOnWtrDerivDesc6 :: Sentence
 eBalanceOnWtrDerivDesc6 = substitute [balanceDecayRate, balanceDecayTime]

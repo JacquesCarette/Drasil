@@ -42,7 +42,7 @@ import Drasil.PDController.TModel (theoreticalModels)
 import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
   inpConstrained, pidConstants, pidDqdConstants, opProcessVariable)
 import Drasil.PDController.ODEs (pidODEInfo)
-import Language.Drasil.Code (quantvar, listToArray)
+import Language.Drasil.Code (quantvar)
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"

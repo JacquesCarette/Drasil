@@ -259,7 +259,7 @@ instance VariableSym JavaCode where
   type Variable JavaCode = VarData
   var = G.var
   staticVar = G.staticVar
-  const = var
+  constant = var
   extVar = CP.extVar
   self = C.self
   classVar = CP.classVar R.classVar

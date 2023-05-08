@@ -1,11 +1,12 @@
-module Language.Drasil.Code.Expr.Extract (
+module Language.Drasil.CodeExpr.Extract (
     eDep, eDep',
     eNamesRI, eNamesRI'
 ) where
 
-import Language.Drasil (RealInterval(..), UID)
+import Language.Drasil.Space (RealInterval(..))
+import Language.Drasil.UID (UID)
 
-import Language.Drasil.Code.Expr (CodeExpr(..))
+import Language.Drasil.CodeExpr.Lang (CodeExpr(..))
 
 import Data.List (nub)
 

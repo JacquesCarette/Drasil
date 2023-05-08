@@ -3,7 +3,7 @@ module Language.Drasil.Code.Imperative.ReadInput (
   sampleInputDD, readWithDataDesc
 ) where
 
-import Language.Drasil hiding (Data, Matrix)
+import Language.Drasil hiding (Data, Matrix, CodeVarChunk)
 import Language.Drasil.Code.DataDesc (DataDesc'(..), Data'(..), DataItem'(..), 
   Delimiter, dataDesc, junk, list, singleton')
 import Language.Drasil.Chunk.Code (CodeVarChunk)

@@ -43,7 +43,7 @@ public class Projectile {
         outfile.Write(s);
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
-        write_output(s, d_offset);
+        write_output(s, d_offset, t_flight);
     }
     
     /** \brief Calculates flight duration: the time when the projectile lands (s)
@@ -129,8 +129,9 @@ public class Projectile {
     /** \brief Writes the output values to output.txt
         \param s output message as a string
         \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
+        \param t_flight flight duration: the time when the projectile lands (s)
     */
-    public static void write_output(string s, float d_offset) {
+    public static void write_output(string s, float d_offset, float t_flight) {
         StreamWriter outfile;
         outfile = new StreamWriter("log.txt", true);
         outfile.WriteLine("function write_output called with inputs: {");
@@ -138,7 +139,10 @@ public class Projectile {
         outfile.Write(s);
         outfile.WriteLine(", ");
         outfile.Write("  d_offset = ");
-        outfile.WriteLine(d_offset);
+        outfile.Write(d_offset);
+        outfile.WriteLine(", ");
+        outfile.Write("  t_flight = ");
+        outfile.WriteLine(t_flight);
         outfile.WriteLine("  }");
         outfile.Close();
         
@@ -148,6 +152,8 @@ public class Projectile {
         outputfile.WriteLine(s);
         outputfile.Write("d_offset = ");
         outputfile.WriteLine(d_offset);
+        outputfile.Write("t_flight = ");
+        outputfile.WriteLine(t_flight);
         outputfile.Close();
     }
 }

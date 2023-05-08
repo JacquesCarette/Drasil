@@ -87,7 +87,7 @@ helloIfBody = addComments "If body" (body [
 
     listDec 5 (var "myList" (listType int)),
     objDecDef (var "myObj" char) (litChar 'o'),
-    constDecDef (const "myConst" string) (litString "Imconstant"),
+    constDecDef (constant "myConst" string) (litString "Imconstant"),
 
     printLn (valueOf $ var "a" int),
     printLn (valueOf $ var "b" int),

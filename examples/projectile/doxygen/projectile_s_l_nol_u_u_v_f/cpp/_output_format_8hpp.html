@@ -76,16 +76,16 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a72368e19a872fde0cad532ba4c97b02d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_output_format_8hpp.html#a72368e19a872fde0cad532ba4c97b02d">write_output</a> (string s, float d_offset)</td></tr>
-<tr class="memdesc:a72368e19a872fde0cad532ba4c97b02d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the output values to output.txt.  <a href="_output_format_8hpp.html#a72368e19a872fde0cad532ba4c97b02d">More...</a><br /></td></tr>
-<tr class="separator:a72368e19a872fde0cad532ba4c97b02d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c84f5ea2f076c90e7dd445476540325"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_output_format_8hpp.html#a4c84f5ea2f076c90e7dd445476540325">write_output</a> (string s, float d_offset, float t_flight)</td></tr>
+<tr class="memdesc:a4c84f5ea2f076c90e7dd445476540325"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the output values to output.txt.  <a href="_output_format_8hpp.html#a4c84f5ea2f076c90e7dd445476540325">More...</a><br /></td></tr>
+<tr class="separator:a4c84f5ea2f076c90e7dd445476540325"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Provides the function for writing outputs. </p>
 <dl class="section author"><dt>Author</dt><dd>Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="a72368e19a872fde0cad532ba4c97b02d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a72368e19a872fde0cad532ba4c97b02d">&#9670;&nbsp;</a></span>write_output()</h2>
+<a id="a4c84f5ea2f076c90e7dd445476540325"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c84f5ea2f076c90e7dd445476540325">&#9670;&nbsp;</a></span>write_output()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -100,7 +100,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>d_offset</em>&#160;</td>
+          <td class="paramname"><em>d_offset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>t_flight</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -115,6 +121,7 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">s</td><td>output message as a string </td></tr>
     <tr><td class="paramname">d_offset</td><td>distance between the target position and the landing position: the offset between the target position and the landing position (m) </td></tr>
+    <tr><td class="paramname">t_flight</td><td>flight duration: the time when the projectile lands (s) </td></tr>
   </table>
   </dd>
 </dl>

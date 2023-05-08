@@ -1,3 +1,0 @@
-digraph boolbinop{
-BoolBinOp	[shape=oval, color=darkviolet, label="BoolBinOp"];
-}

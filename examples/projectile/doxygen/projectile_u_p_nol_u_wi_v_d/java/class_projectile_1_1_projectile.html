@@ -96,9 +96,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a999d3b2c7959c4ceb7f24640eb96ad08"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_projectile_1_1_projectile.html#a999d3b2c7959c4ceb7f24640eb96ad08">input_constraints</a> (double v_launch, double theta, double p_target)</td></tr>
 <tr class="memdesc:a999d3b2c7959c4ceb7f24640eb96ad08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verifies that input values satisfy the physical constraints.  <a href="class_projectile_1_1_projectile.html#a999d3b2c7959c4ceb7f24640eb96ad08">More...</a><br /></td></tr>
 <tr class="separator:a999d3b2c7959c4ceb7f24640eb96ad08"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe891660c229ec40bcf34c5cd4a075d3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_projectile_1_1_projectile.html#abe891660c229ec40bcf34c5cd4a075d3">write_output</a> (String s, double d_offset)  throws IOException </td></tr>
-<tr class="memdesc:abe891660c229ec40bcf34c5cd4a075d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the output values to output.txt.  <a href="class_projectile_1_1_projectile.html#abe891660c229ec40bcf34c5cd4a075d3">More...</a><br /></td></tr>
-<tr class="separator:abe891660c229ec40bcf34c5cd4a075d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad49e0b8021d4da60c5461fe4902d8139"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_projectile_1_1_projectile.html#ad49e0b8021d4da60c5461fe4902d8139">write_output</a> (String s, double d_offset, double t_flight)  throws IOException </td></tr>
+<tr class="memdesc:ad49e0b8021d4da60c5461fe4902d8139"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the output values to output.txt.  <a href="class_projectile_1_1_projectile.html#ad49e0b8021d4da60c5461fe4902d8139">More...</a><br /></td></tr>
+<tr class="separator:ad49e0b8021d4da60c5461fe4902d8139"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a6a5a19bdc57d595cf411ea13c11c695e"></a>
@@ -433,8 +433,8 @@ target position: the distance from the launcher to the target (m) </dd></dl>
 
 </div>
 </div>
-<a id="abe891660c229ec40bcf34c5cd4a075d3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abe891660c229ec40bcf34c5cd4a075d3">&#9670;&nbsp;</a></span>write_output()</h2>
+<a id="ad49e0b8021d4da60c5461fe4902d8139"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad49e0b8021d4da60c5461fe4902d8139">&#9670;&nbsp;</a></span>write_output()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -452,7 +452,13 @@ target position: the distance from the launcher to the target (m) </dd></dl>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>d_offset</em>&#160;</td>
+          <td class="paramname"><em>d_offset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>t_flight</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -472,6 +478,7 @@ target position: the distance from the launcher to the target (m) </dd></dl>
   <table class="params">
     <tr><td class="paramname">s</td><td>output message as a string </td></tr>
     <tr><td class="paramname">d_offset</td><td>distance between the target position and the landing position: the offset between the target position and the landing position (m) </td></tr>
+    <tr><td class="paramname">t_flight</td><td>flight duration: the time when the projectile lands (s) </td></tr>
   </table>
   </dd>
 </dl>

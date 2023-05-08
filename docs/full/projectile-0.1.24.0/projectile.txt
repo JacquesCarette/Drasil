@@ -69,6 +69,7 @@ launAngleUnc :: UncertQ
 launSpeedUnc :: UncertQ
 offsetUnc :: UncertQ
 targPosUnc :: UncertQ
+flightDurUnc :: UncertQ
 flightDur :: ConstrConcept
 landPos :: ConstrConcept
 launAngle :: ConstrConcept

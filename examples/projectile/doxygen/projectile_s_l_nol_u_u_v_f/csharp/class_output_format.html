@@ -71,13 +71,13 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ade71485fe3fc1ea82b70b15275f58a41"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_output_format.html#ade71485fe3fc1ea82b70b15275f58a41">write_output</a> (string s, float d_offset)</td></tr>
-<tr class="memdesc:ade71485fe3fc1ea82b70b15275f58a41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the output values to output.txt.  <a href="class_output_format.html#ade71485fe3fc1ea82b70b15275f58a41">More...</a><br /></td></tr>
-<tr class="separator:ade71485fe3fc1ea82b70b15275f58a41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a659399d3f9fd9118e654e163f9a59a84"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_output_format.html#a659399d3f9fd9118e654e163f9a59a84">write_output</a> (string s, float d_offset, float t_flight)</td></tr>
+<tr class="memdesc:a659399d3f9fd9118e654e163f9a59a84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the output values to output.txt.  <a href="class_output_format.html#a659399d3f9fd9118e654e163f9a59a84">More...</a><br /></td></tr>
+<tr class="separator:a659399d3f9fd9118e654e163f9a59a84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ade71485fe3fc1ea82b70b15275f58a41"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade71485fe3fc1ea82b70b15275f58a41">&#9670;&nbsp;</a></span>write_output()</h2>
+<a id="a659399d3f9fd9118e654e163f9a59a84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a659399d3f9fd9118e654e163f9a59a84">&#9670;&nbsp;</a></span>write_output()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -95,7 +95,13 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>d_offset</em>&#160;</td>
+          <td class="paramname"><em>d_offset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>t_flight</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -115,6 +121,7 @@ Static Public Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">s</td><td>output message as a string </td></tr>
     <tr><td class="paramname">d_offset</td><td>distance between the target position and the landing position: the offset between the target position and the landing position (m) </td></tr>
+    <tr><td class="paramname">t_flight</td><td>flight duration: the time when the projectile lands (s) </td></tr>
   </table>
   </dd>
 </dl>

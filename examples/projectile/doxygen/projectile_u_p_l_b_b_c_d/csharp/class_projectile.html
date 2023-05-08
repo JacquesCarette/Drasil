@@ -86,9 +86,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ad9ea6e3a8eaee20084ee842fac2677c2"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_projectile.html#ad9ea6e3a8eaee20084ee842fac2677c2">func_s</a> (<a class="el" href="class_input_parameters.html">InputParameters</a> inParams, double d_offset)</td></tr>
 <tr class="memdesc:ad9ea6e3a8eaee20084ee842fac2677c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates output message as a string.  <a href="class_projectile.html#ad9ea6e3a8eaee20084ee842fac2677c2">More...</a><br /></td></tr>
 <tr class="separator:ad9ea6e3a8eaee20084ee842fac2677c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5461ed3a0d2ccc78b3dba831a5b1c7c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_projectile.html#ac5461ed3a0d2ccc78b3dba831a5b1c7c">write_output</a> (string s, double d_offset)</td></tr>
-<tr class="memdesc:ac5461ed3a0d2ccc78b3dba831a5b1c7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the output values to output.txt.  <a href="class_projectile.html#ac5461ed3a0d2ccc78b3dba831a5b1c7c">More...</a><br /></td></tr>
-<tr class="separator:ac5461ed3a0d2ccc78b3dba831a5b1c7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2effd82b7dd7ce687b1f69a913826a4b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_projectile.html#a2effd82b7dd7ce687b1f69a913826a4b">write_output</a> (string s, double d_offset, double t_flight)</td></tr>
+<tr class="memdesc:a2effd82b7dd7ce687b1f69a913826a4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the output values to output.txt.  <a href="class_projectile.html#a2effd82b7dd7ce687b1f69a913826a4b">More...</a><br /></td></tr>
+<tr class="separator:a2effd82b7dd7ce687b1f69a913826a4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a0410dad403f62af6e37114b794f1b097"></a>
@@ -287,8 +287,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac5461ed3a0d2ccc78b3dba831a5b1c7c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac5461ed3a0d2ccc78b3dba831a5b1c7c">&#9670;&nbsp;</a></span>write_output()</h2>
+<a id="a2effd82b7dd7ce687b1f69a913826a4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2effd82b7dd7ce687b1f69a913826a4b">&#9670;&nbsp;</a></span>write_output()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -306,7 +306,13 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>d_offset</em>&#160;</td>
+          <td class="paramname"><em>d_offset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>t_flight</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -326,6 +332,7 @@ Static Public Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">s</td><td>output message as a string </td></tr>
     <tr><td class="paramname">d_offset</td><td>distance between the target position and the landing position: the offset between the target position and the landing position (m) </td></tr>
+    <tr><td class="paramname">t_flight</td><td>flight duration: the time when the projectile lands (s) </td></tr>
   </table>
   </dd>
 </dl>

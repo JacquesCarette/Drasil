@@ -9,6 +9,26 @@
 @package drasil-code
 @version 0.1.9.0
 
+module Language.Drasil.Chunk.CodeBase
+
+-- | Construct a <a>CodeVarChunk</a> from a <a>Quantity</a>.
+quantvar :: (Quantity c, MayHaveUnit c) => c -> CodeVarChunk
+
+-- | Construct a <a>CodeFuncChunk</a> from a <a>Quantity</a>.
+quantfunc :: (Quantity c, MayHaveUnit c) => c -> CodeFuncChunk
+
+-- | Get a list of <a>CodeChunk</a>s from an equation.
+codevars :: CodeExpr -> ChunkDB -> [CodeVarChunk]
+
+-- | Get a list of <a>CodeChunk</a>s from an equation (no functions).
+codevars' :: CodeExpr -> ChunkDB -> [CodeVarChunk]
+
+-- | Make a <a>CodeVarChunk</a> from a <a>UID</a> in the <a>ChunkDB</a>.
+varResolve :: ChunkDB -> UID -> CodeVarChunk
+
+-- | Make a <a>CodeFuncChunk</a> from a <a>UID</a> in the <a>ChunkDB</a>.
+funcResolve :: ChunkDB -> UID -> CodeFuncChunk
+
 
 -- | Defines chunk types for use in code generation.
 module Language.Drasil.Chunk.Code

@@ -1116,10 +1116,10 @@ VariableSym r =&gt;
 ClassName -&gt; VSType r -&gt; SVariable r
 </span><a href="GOOL.Drasil.ClassInterface.html#staticVar"><span class="hs-identifier hs-var">staticVar</span></a></span><span> </span><span class="annot"><span class="annottext">ClassName
 </span><a href="#local-6989586621679337348"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-268"></span><span>  </span><span id="local-6989586621679337344"><span class="annot"><span class="annottext">const :: ClassName
+</span><span id="line-268"></span><span>  </span><span id="local-6989586621679337344"><span class="annot"><span class="annottext">constant :: ClassName
 -&gt; VSType (p CppSrcCode CppHdrCode)
 -&gt; SVariable (p CppSrcCode CppHdrCode)
-</span><a href="GOOL.Drasil.ClassInterface.html#const"><span class="hs-identifier hs-var hs-var hs-var hs-var">const</span></a></span></span><span> </span><span id="local-6989586621679337342"><span class="annot"><span class="annottext">ClassName
+</span><a href="GOOL.Drasil.ClassInterface.html#constant"><span class="hs-identifier hs-var hs-var hs-var hs-var">constant</span></a></span></span><span> </span><span id="local-6989586621679337342"><span class="annot"><span class="annottext">ClassName
 </span><a href="#local-6989586621679337342"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall (p :: (* -&gt; *) -&gt; (* -&gt; *) -&gt; * -&gt; *) r a s b.
 Pair p =&gt;
 (SrcState r a -&gt; SrcState s b)
@@ -1129,11 +1129,11 @@ Pair p =&gt;
 </span><a href="GOOL.Drasil.LanguageRenderer.CppRenderer.html#pair1"><span class="hs-identifier hs-var">pair1</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall (r :: * -&gt; *).
 VariableSym r =&gt;
 ClassName -&gt; VSType r -&gt; SVariable r
-</span><a href="GOOL.Drasil.ClassInterface.html#const"><span class="hs-identifier hs-var">const</span></a></span><span> </span><span class="annot"><span class="annottext">ClassName
+</span><a href="GOOL.Drasil.ClassInterface.html#constant"><span class="hs-identifier hs-var">constant</span></a></span><span> </span><span class="annot"><span class="annottext">ClassName
 </span><a href="#local-6989586621679337342"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall (r :: * -&gt; *).
 VariableSym r =&gt;
 ClassName -&gt; VSType r -&gt; SVariable r
-</span><a href="GOOL.Drasil.ClassInterface.html#const"><span class="hs-identifier hs-var">const</span></a></span><span> </span><span class="annot"><span class="annottext">ClassName
+</span><a href="GOOL.Drasil.ClassInterface.html#constant"><span class="hs-identifier hs-var">constant</span></a></span><span> </span><span class="annot"><span class="annottext">ClassName
 </span><a href="#local-6989586621679337342"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-269"></span><span>  </span><span id="local-6989586621679337338"><span class="annot"><span class="annottext">extVar :: ClassName
 -&gt; ClassName
@@ -8080,8 +8080,8 @@ ClassName -&gt; VSType r -&gt; SVariable r
 RenderSym r =&gt;
 ClassName -&gt; VSType r -&gt; SVariable r
 </span><a href="GOOL.Drasil.LanguageRenderer.LanguagePolymorphic.html#staticVar"><span class="hs-identifier hs-var">G.staticVar</span></a></span><span>
-</span><span id="line-1120"></span><span>  </span><span id="local-6989586621679334238"><span class="annot"><span class="annottext">const :: ClassName -&gt; VSType CppSrcCode -&gt; SVariable CppSrcCode
-</span><a href="#local-6989586621679334238"><span class="hs-identifier hs-var hs-var hs-var hs-var">const</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall (r :: * -&gt; *).
+</span><span id="line-1120"></span><span>  </span><span id="local-6989586621679334238"><span class="annot"><span class="annottext">constant :: ClassName -&gt; VSType CppSrcCode -&gt; SVariable CppSrcCode
+</span><a href="#local-6989586621679334238"><span class="hs-identifier hs-var hs-var hs-var hs-var">constant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall (r :: * -&gt; *).
 VariableSym r =&gt;
 ClassName -&gt; VSType r -&gt; SVariable r
 </span><a href="GOOL.Drasil.ClassInterface.html#var"><span class="hs-identifier hs-var">var</span></a></span><span>
@@ -11173,8 +11173,8 @@ ClassName -&gt; VSType r -&gt; SVariable r
 RenderSym r =&gt;
 ClassName -&gt; VSType r -&gt; SVariable r
 </span><a href="GOOL.Drasil.LanguageRenderer.LanguagePolymorphic.html#staticVar"><span class="hs-identifier hs-var">G.staticVar</span></a></span><span>
-</span><span id="line-1774"></span><span>  </span><span id="local-6989586621679332519"><span class="annot"><span class="annottext">const :: ClassName -&gt; VSType CppHdrCode -&gt; SVariable CppHdrCode
-</span><a href="#local-6989586621679332519"><span class="hs-identifier hs-var hs-var hs-var hs-var">const</span></a></span></span><span> </span><span class="annot"><span class="annottext">ClassName
+</span><span id="line-1774"></span><span>  </span><span id="local-6989586621679332519"><span class="annot"><span class="annottext">constant :: ClassName -&gt; VSType CppHdrCode -&gt; SVariable CppHdrCode
+</span><a href="#local-6989586621679332519"><span class="hs-identifier hs-var hs-var hs-var hs-var">constant</span></a></span></span><span> </span><span class="annot"><span class="annottext">ClassName
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">VSType CppHdrCode
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall (r :: * -&gt; *).
 RenderSym r =&gt;

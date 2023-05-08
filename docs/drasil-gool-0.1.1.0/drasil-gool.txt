@@ -161,7 +161,7 @@ class (TypeSym r) => VariableSym r where {
 }
 var :: VariableSym r => Label -> VSType r -> SVariable r
 staticVar :: VariableSym r => Label -> VSType r -> SVariable r
-const :: VariableSym r => Label -> VSType r -> SVariable r
+constant :: VariableSym r => Label -> VSType r -> SVariable r
 extVar :: VariableSym r => Library -> Label -> VSType r -> SVariable r
 self :: VariableSym r => SVariable r
 classVar :: VariableSym r => VSType r -> SVariable r -> SVariable r

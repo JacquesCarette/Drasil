@@ -3,6 +3,8 @@ digraph alltypes {
 	}
 	subgraph code {
 	}
+	subgraph codebaes {
+	}
 	subgraph codedefinition {
 		subgraph definitiontype{
 		DefinitionType	[shape=oval, color=cyan3, label="DefinitionType"];

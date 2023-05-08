@@ -649,7 +649,9 @@ c -&gt; ConstrainedChunk
 </span><a href="Drasil.Projectile.Body.html#outputs"><span class="hs-identifier hs-var hs-var">outputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.Projectile.Unitals.html#message"><span class="hs-identifier hs-var">message</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.Projectile.Unitals.html#offset"><span class="hs-identifier hs-var">offset</span></a></span><span class="hs-special">]</span><span>
+</span><a href="Drasil.Projectile.Unitals.html#offset"><span class="hs-identifier hs-var">offset</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier hs-var">flightDur</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-191"></span><span>
 </span><span id="line-192"></span><span class="annot"><a href="Drasil.Projectile.Body.html#unitalQuants"><span class="hs-identifier hs-type">unitalQuants</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
 </span><span id="line-193"></span><span id="unitalQuants"><span class="annot"><span class="annottext">unitalQuants :: [QuantityDict]
@@ -681,7 +683,8 @@ c -&gt; ConstrainedChunk
 </span><span id="line-202"></span><span id="outConstraints"><span class="annot"><span class="annottext">outConstraints :: [UncertQ]
 </span><a href="Drasil.Projectile.Body.html#outConstraints"><span class="hs-identifier hs-var hs-var">outConstraints</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.Projectile.Unitals.html#landPosUnc"><span class="hs-identifier hs-var">landPosUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
-</span><a href="Drasil.Projectile.Unitals.html#offsetUnc"><span class="hs-identifier hs-var">offsetUnc</span></a></span><span class="hs-special">]</span><span>
+</span><a href="Drasil.Projectile.Unitals.html#offsetUnc"><span class="hs-identifier hs-var">offsetUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.Projectile.Unitals.html#flightDurUnc"><span class="hs-identifier hs-var">flightDurUnc</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-203"></span><span>
 </span><span id="line-204"></span><span class="annot"><a href="Drasil.Projectile.Body.html#constrained"><span class="hs-identifier hs-type">constrained</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstrConcept</span></span><span class="hs-special">]</span><span>
 </span><span id="line-205"></span><span id="constrained"><span class="annot"><span class="annottext">constrained :: [ConstrConcept]
@@ -709,5 +712,4 @@ c -&gt; ConstrainedChunk
 </span><span class="hs-identifier hs-var">Doc.srs</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">thModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">typUnc</span></span><span class="hs-special">]</span><span>
-</span><span id="line-210"></span><span>
-</span><span id="line-211"></span></pre></body></html>
+</span><span id="line-210"></span></pre></body></html>

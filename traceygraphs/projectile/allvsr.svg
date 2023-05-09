@@ -213,9 +213,9 @@
 <polygon fill="palegreen" stroke="black" points="3198,-108 3104,-108 3104,-72 3198,-72 3198,-108"/>
 <text text-anchor="middle" x="3151" y="-86.3" font-family="Times,serif" font-size="14.00">GD:rectVel</text>
 </g>
-<!-- scalarPos -->
+<!-- projPos -->
 <g id="node28" class="node">
-<title>scalarPos</title>
+<title>projPos</title>
 <polygon fill="palegreen" stroke="black" points="3313.5,-108 3216.5,-108 3216.5,-72 3313.5,-72 3313.5,-108"/>
 <text text-anchor="middle" x="3265" y="-86.3" font-family="Times,serif" font-size="14.00">GD:rectPos</text>
 </g>

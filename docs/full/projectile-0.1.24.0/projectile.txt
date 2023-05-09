@@ -26,6 +26,7 @@ launcher :: ConceptChunk
 projectile :: ConceptChunk
 target :: ConceptChunk
 projSpeed :: ConceptChunk
+projPos :: ConceptChunk
 landPos :: ConceptChunk
 launAngle :: ConceptChunk
 launSpeed :: ConceptChunk
@@ -64,6 +65,7 @@ citations :: BibRef
 
 module Drasil.Projectile.Unitals
 projSpeed :: UnitalChunk
+projPos :: UnitalChunk
 landPosUnc :: UncertQ
 launAngleUnc :: UncertQ
 launSpeedUnc :: UncertQ

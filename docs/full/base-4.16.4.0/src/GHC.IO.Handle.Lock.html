@@ -49,15 +49,15 @@
 </span><span id="line-49"></span><span class="hs-comment">-- @since 4.10.0.0</span><span>
 </span><span id="line-50"></span><span class="annot"><a href="GHC.IO.Handle.Lock.html#hLock"><span class="hs-identifier hs-type">hLock</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GHC.IO.Handle.Types.html#Handle"><span class="hs-identifier hs-type">Handle</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="GHC.IO.Handle.Lock.Common.html#LockMode"><span class="hs-identifier hs-type">LockMode</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-51"></span><span id="hLock"><span class="annot"><span class="annottext">hLock :: Handle -&gt; LockMode -&gt; IO ()
-</span><a href="GHC.IO.Handle.Lock.html#hLock"><span class="hs-identifier hs-var hs-var">hLock</span></a></span></span><span> </span><span id="local-6989586621679618384"><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679618384"><span class="hs-identifier hs-var">h</span></a></span></span><span> </span><span id="local-6989586621679618383"><span class="annot"><span class="annottext">LockMode
-</span><a href="#local-6989586621679618383"><span class="hs-identifier hs-var">mode</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Functor f =&gt; f a -&gt; f ()
+</span><a href="GHC.IO.Handle.Lock.html#hLock"><span class="hs-identifier hs-var hs-var">hLock</span></a></span></span><span> </span><span id="local-6989586621679618452"><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679618452"><span class="hs-identifier hs-var">h</span></a></span></span><span> </span><span id="local-6989586621679618451"><span class="annot"><span class="annottext">LockMode
+</span><a href="#local-6989586621679618451"><span class="hs-identifier hs-var">mode</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Functor f =&gt; f a -&gt; f ()
 </span><a href="Data.Functor.html#void"><span class="hs-identifier hs-var">void</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Handle -&gt; String -&gt; LockMode -&gt; Bool -&gt; IO Bool
 </span><a href="GHC.IO.Handle.Lock.LinuxOFD.html#lockImpl"><span class="hs-identifier hs-var">lockImpl</span></a></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679618384"><span class="hs-identifier hs-var">h</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679618452"><span class="hs-identifier hs-var">h</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;hLock&quot;</span></span><span> </span><span class="annot"><span class="annottext">LockMode
-</span><a href="#local-6989586621679618383"><span class="hs-identifier hs-var">mode</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679618451"><span class="hs-identifier hs-var">mode</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#True"><span class="hs-identifier hs-var">True</span></a></span><span>
 </span><span id="line-52"></span><span>
 </span><span id="line-53"></span><span class="hs-comment">-- | Non-blocking version of 'hLock'.</span><span>
@@ -67,13 +67,13 @@
 </span><span id="line-57"></span><span class="hs-comment">-- @since 4.10.0.0</span><span>
 </span><span id="line-58"></span><span class="annot"><a href="GHC.IO.Handle.Lock.html#hTryLock"><span class="hs-identifier hs-type">hTryLock</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GHC.IO.Handle.Types.html#Handle"><span class="hs-identifier hs-type">Handle</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="GHC.IO.Handle.Lock.Common.html#LockMode"><span class="hs-identifier hs-type">LockMode</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a></span><span>
 </span><span id="line-59"></span><span id="hTryLock"><span class="annot"><span class="annottext">hTryLock :: Handle -&gt; LockMode -&gt; IO Bool
-</span><a href="GHC.IO.Handle.Lock.html#hTryLock"><span class="hs-identifier hs-var hs-var">hTryLock</span></a></span></span><span> </span><span id="local-6989586621679618381"><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679618381"><span class="hs-identifier hs-var">h</span></a></span></span><span> </span><span id="local-6989586621679618380"><span class="annot"><span class="annottext">LockMode
-</span><a href="#local-6989586621679618380"><span class="hs-identifier hs-var">mode</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Handle -&gt; String -&gt; LockMode -&gt; Bool -&gt; IO Bool
+</span><a href="GHC.IO.Handle.Lock.html#hTryLock"><span class="hs-identifier hs-var hs-var">hTryLock</span></a></span></span><span> </span><span id="local-6989586621679618449"><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679618449"><span class="hs-identifier hs-var">h</span></a></span></span><span> </span><span id="local-6989586621679618448"><span class="annot"><span class="annottext">LockMode
+</span><a href="#local-6989586621679618448"><span class="hs-identifier hs-var">mode</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Handle -&gt; String -&gt; LockMode -&gt; Bool -&gt; IO Bool
 </span><a href="GHC.IO.Handle.Lock.LinuxOFD.html#lockImpl"><span class="hs-identifier hs-var">lockImpl</span></a></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679618381"><span class="hs-identifier hs-var">h</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679618449"><span class="hs-identifier hs-var">h</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;hTryLock&quot;</span></span><span> </span><span class="annot"><span class="annottext">LockMode
-</span><a href="#local-6989586621679618380"><span class="hs-identifier hs-var">mode</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679618448"><span class="hs-identifier hs-var">mode</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#False"><span class="hs-identifier hs-var">False</span></a></span><span>
 </span><span id="line-60"></span><span>
 </span><span id="line-61"></span><span class="hs-comment">-- | Release a lock taken with 'hLock' or 'hTryLock'.</span><span>

@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span id="local-6989586621679627196"><span id="local-6989586621679627197"></span></span><span class="hs-pragma">{-# LANGUAGE CPP #-}</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span id="local-6989586621679627264"><span id="local-6989586621679627265"></span></span><span class="hs-pragma">{-# LANGUAGE CPP #-}</span><span>
 </span><span id="line-2"></span><span class="hs-pragma">{-# LANGUAGE DeriveGeneric #-}</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
@@ -24,17 +24,17 @@
 </span><span id="line-24"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="GHC.Generics.html"><span class="hs-identifier">GHC.Generics</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="GHC.Generics.html#Generic"><span class="hs-identifier">Generic</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-25"></span><span>
 </span><span id="line-26"></span><span class="hs-comment">-- | Byte ordering.</span><span>
-</span><span id="line-27"></span><span id="local-6989586621679627194"><span id="local-6989586621679627195"></span></span><span class="hs-keyword">data</span><span> </span><span id="ByteOrder"><span class="annot"><a href="GHC.ByteOrder.html#ByteOrder"><span class="hs-identifier hs-var">ByteOrder</span></a></span></span><span>
+</span><span id="line-27"></span><span id="local-6989586621679627262"><span id="local-6989586621679627263"></span></span><span class="hs-keyword">data</span><span> </span><span id="ByteOrder"><span class="annot"><a href="GHC.ByteOrder.html#ByteOrder"><span class="hs-identifier hs-var">ByteOrder</span></a></span></span><span>
 </span><span id="line-28"></span><span>    </span><span class="hs-glyph">=</span><span> </span><span id="BigEndian"><span class="annot"><a href="GHC.ByteOrder.html#BigEndian"><span class="hs-identifier hs-var">BigEndian</span></a></span></span><span>    </span><span class="hs-comment">-- ^ most-significant-byte occurs in lowest address.</span><span>
 </span><span id="line-29"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="LittleEndian"><span class="annot"><a href="GHC.ByteOrder.html#LittleEndian"><span class="hs-identifier hs-var">LittleEndian</span></a></span></span><span> </span><span class="hs-comment">-- ^ least-significant-byte occurs in lowest address.</span><span>
-</span><span id="line-30"></span><span>    </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span> </span><span id="local-6989586621679627188"><span id="local-6989586621679627190"><span class="annot"><span class="annottext">ByteOrder -&gt; ByteOrder -&gt; Bool
+</span><span id="line-30"></span><span>    </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span> </span><span id="local-6989586621679627256"><span id="local-6989586621679627258"><span class="annot"><span class="annottext">ByteOrder -&gt; ByteOrder -&gt; Bool
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
 /= :: ByteOrder -&gt; ByteOrder -&gt; Bool
 $c/= :: ByteOrder -&gt; ByteOrder -&gt; Bool
 == :: ByteOrder -&gt; ByteOrder -&gt; Bool
 $c== :: ByteOrder -&gt; ByteOrder -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#Eq"><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></a></span></span></span><span>      </span><span class="hs-comment">-- ^ @since 4.11.0.0</span><span>
-</span><span id="line-31"></span><span>             </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679627168"><span id="local-6989586621679627170"><span id="local-6989586621679627173"><span id="local-6989586621679627176"><span id="local-6989586621679627179"><span id="local-6989586621679627181"><span id="local-6989586621679627183"><span class="annot"><span class="annottext">Eq ByteOrder
+</span><span id="line-31"></span><span>             </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679627236"><span id="local-6989586621679627238"><span id="local-6989586621679627241"><span id="local-6989586621679627244"><span id="local-6989586621679627247"><span id="local-6989586621679627249"><span id="local-6989586621679627251"><span class="annot"><span class="annottext">Eq ByteOrder
 ByteOrder -&gt; ByteOrder -&gt; Bool
 ByteOrder -&gt; ByteOrder -&gt; Ordering
 ByteOrder -&gt; ByteOrder -&gt; ByteOrder
@@ -63,14 +63,14 @@ $c&lt; :: ByteOrder -&gt; ByteOrder -&gt; Bool
 compare :: ByteOrder -&gt; ByteOrder -&gt; Ordering
 $ccompare :: ByteOrder -&gt; ByteOrder -&gt; Ordering
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#Ord"><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></a></span></span></span></span></span></span></span></span><span>     </span><span class="hs-comment">-- ^ @since 4.11.0.0</span><span>
-</span><span id="line-32"></span><span>             </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679627163"><span id="local-6989586621679627165"><span class="annot"><span class="annottext">ByteOrder
+</span><span id="line-32"></span><span>             </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679627231"><span id="local-6989586621679627233"><span class="annot"><span class="annottext">ByteOrder
 forall a. a -&gt; a -&gt; Bounded a
 maxBound :: ByteOrder
 $cmaxBound :: ByteOrder
 minBound :: ByteOrder
 $cminBound :: ByteOrder
 </span><a href="GHC.Enum.html#Bounded"><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Bounded</span></a></span></span></span><span> </span><span class="hs-comment">-- ^ @since 4.11.0.0</span><span>
-</span><span id="line-33"></span><span>             </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679627123"><span id="local-6989586621679627125"><span id="local-6989586621679627129"><span id="local-6989586621679627133"><span id="local-6989586621679627135"><span id="local-6989586621679627145"><span id="local-6989586621679627151"><span id="local-6989586621679627159"><span class="annot"><span class="annottext">Int -&gt; ByteOrder
+</span><span id="line-33"></span><span>             </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679627191"><span id="local-6989586621679627193"><span id="local-6989586621679627197"><span id="local-6989586621679627201"><span id="local-6989586621679627203"><span id="local-6989586621679627213"><span id="local-6989586621679627219"><span id="local-6989586621679627227"><span class="annot"><span class="annottext">Int -&gt; ByteOrder
 ByteOrder -&gt; Int
 ByteOrder -&gt; [ByteOrder]
 ByteOrder -&gt; ByteOrder
@@ -103,7 +103,7 @@ $cpred :: ByteOrder -&gt; ByteOrder
 succ :: ByteOrder -&gt; ByteOrder
 $csucc :: ByteOrder -&gt; ByteOrder
 </span><a href="GHC.Enum.html#Enum"><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Enum</span></a></span></span></span></span></span></span></span></span></span><span>    </span><span class="hs-comment">-- ^ @since 4.11.0.0</span><span>
-</span><span id="line-34"></span><span>             </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679627110"><span id="local-6989586621679627115"><span id="local-6989586621679627118"><span id="local-6989586621679627120"><span class="annot"><span class="annottext">ReadPrec [ByteOrder]
+</span><span id="line-34"></span><span>             </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679627178"><span id="local-6989586621679627183"><span id="local-6989586621679627186"><span id="local-6989586621679627188"><span class="annot"><span class="annottext">ReadPrec [ByteOrder]
 ReadPrec ByteOrder
 Int -&gt; ReadS ByteOrder
 ReadS [ByteOrder]
@@ -119,7 +119,7 @@ $creadList :: ReadS [ByteOrder]
 readsPrec :: Int -&gt; ReadS ByteOrder
 $creadsPrec :: Int -&gt; ReadS ByteOrder
 </span><a href="GHC.Read.html#Read"><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Read</span></a></span></span></span></span></span><span>    </span><span class="hs-comment">-- ^ @since 4.11.0.0</span><span>
-</span><span id="line-35"></span><span>             </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679627102"><span id="local-6989586621679627104"><span id="local-6989586621679627106"><span class="annot"><span class="annottext">Int -&gt; ByteOrder -&gt; ShowS
+</span><span id="line-35"></span><span>             </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679627170"><span id="local-6989586621679627172"><span id="local-6989586621679627174"><span class="annot"><span class="annottext">Int -&gt; ByteOrder -&gt; ShowS
 [ByteOrder] -&gt; ShowS
 ByteOrder -&gt; String
 forall a.

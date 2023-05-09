@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span id="local-6989586621679546657"><span id="local-6989586621679546658"><span id="local-6989586621679546659"></span></span></span><span class="hs-pragma">{-# LANGUAGE CPP #-}</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span id="local-6989586621679546725"><span id="local-6989586621679546726"><span id="local-6989586621679546727"></span></span></span><span class="hs-pragma">{-# LANGUAGE CPP #-}</span><span>
 </span><span id="line-2"></span><span class="hs-pragma">{-# LANGUAGE NoImplicitPrelude #-}</span><span>
 </span><span id="line-3"></span><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
 </span><span id="line-4"></span><span>
@@ -143,7 +143,7 @@
 </span><span id="line-141"></span><span>        </span><span class="hs-glyph">|</span><span> </span><span id="Surrogate"><span class="annot"><a href="GHC.Unicode.html#Surrogate"><span class="hs-identifier hs-var">Surrogate</span></a></span></span><span>             </span><span class="hs-comment">-- ^ Cs: Other, Surrogate</span><span>
 </span><span id="line-142"></span><span>        </span><span class="hs-glyph">|</span><span> </span><span id="PrivateUse"><span class="annot"><a href="GHC.Unicode.html#PrivateUse"><span class="hs-identifier hs-var">PrivateUse</span></a></span></span><span>            </span><span class="hs-comment">-- ^ Co: Other, Private Use</span><span>
 </span><span id="line-143"></span><span>        </span><span class="hs-glyph">|</span><span> </span><span id="NotAssigned"><span class="annot"><a href="GHC.Unicode.html#NotAssigned"><span class="hs-identifier hs-var">NotAssigned</span></a></span></span><span>           </span><span class="hs-comment">-- ^ Cn: Other, Not Assigned</span><span>
-</span><span id="line-144"></span><span>        </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span> </span><span id="local-6989586621679546535"><span id="local-6989586621679546537"><span id="local-6989586621679546539"><span class="annot"><span class="annottext">Int -&gt; GeneralCategory -&gt; ShowS
+</span><span id="line-144"></span><span>        </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span> </span><span id="local-6989586621679546603"><span id="local-6989586621679546605"><span id="local-6989586621679546607"><span class="annot"><span class="annottext">Int -&gt; GeneralCategory -&gt; ShowS
 [GeneralCategory] -&gt; ShowS
 GeneralCategory -&gt; String
 forall a.
@@ -155,14 +155,14 @@ $cshow :: GeneralCategory -&gt; String
 showsPrec :: Int -&gt; GeneralCategory -&gt; ShowS
 $cshowsPrec :: Int -&gt; GeneralCategory -&gt; ShowS
 </span><a href="GHC.Show.html#Show"><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></a></span></span></span></span><span>     </span><span class="hs-comment">-- ^ @since 2.01</span><span>
-</span><span id="line-145"></span><span>                 </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679546530"><span id="local-6989586621679546532"><span class="annot"><span class="annottext">GeneralCategory -&gt; GeneralCategory -&gt; Bool
+</span><span id="line-145"></span><span>                 </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679546598"><span id="local-6989586621679546600"><span class="annot"><span class="annottext">GeneralCategory -&gt; GeneralCategory -&gt; Bool
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
 /= :: GeneralCategory -&gt; GeneralCategory -&gt; Bool
 $c/= :: GeneralCategory -&gt; GeneralCategory -&gt; Bool
 == :: GeneralCategory -&gt; GeneralCategory -&gt; Bool
 $c== :: GeneralCategory -&gt; GeneralCategory -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#Eq"><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></a></span></span></span><span>       </span><span class="hs-comment">-- ^ @since 2.01</span><span>
-</span><span id="line-146"></span><span>                 </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679546510"><span id="local-6989586621679546512"><span id="local-6989586621679546515"><span id="local-6989586621679546518"><span id="local-6989586621679546521"><span id="local-6989586621679546523"><span id="local-6989586621679546525"><span class="annot"><span class="annottext">Eq GeneralCategory
+</span><span id="line-146"></span><span>                 </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679546578"><span id="local-6989586621679546580"><span id="local-6989586621679546583"><span id="local-6989586621679546586"><span id="local-6989586621679546589"><span id="local-6989586621679546591"><span id="local-6989586621679546593"><span class="annot"><span class="annottext">Eq GeneralCategory
 GeneralCategory -&gt; GeneralCategory -&gt; Bool
 GeneralCategory -&gt; GeneralCategory -&gt; Ordering
 GeneralCategory -&gt; GeneralCategory -&gt; GeneralCategory
@@ -191,7 +191,7 @@ $c&lt; :: GeneralCategory -&gt; GeneralCategory -&gt; Bool
 compare :: GeneralCategory -&gt; GeneralCategory -&gt; Ordering
 $ccompare :: GeneralCategory -&gt; GeneralCategory -&gt; Ordering
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#Ord"><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></a></span></span></span></span></span></span></span></span><span>      </span><span class="hs-comment">-- ^ @since 2.01</span><span>
-</span><span id="line-147"></span><span>                 </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679546473"><span id="local-6989586621679546475"><span id="local-6989586621679546479"><span id="local-6989586621679546483"><span id="local-6989586621679546485"><span id="local-6989586621679546495"><span id="local-6989586621679546501"><span id="local-6989586621679546507"><span class="annot"><span class="annottext">Int -&gt; GeneralCategory
+</span><span id="line-147"></span><span>                 </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679546541"><span id="local-6989586621679546543"><span id="local-6989586621679546547"><span id="local-6989586621679546551"><span id="local-6989586621679546553"><span id="local-6989586621679546563"><span id="local-6989586621679546569"><span id="local-6989586621679546575"><span class="annot"><span class="annottext">Int -&gt; GeneralCategory
 GeneralCategory -&gt; Int
 GeneralCategory -&gt; [GeneralCategory]
 GeneralCategory -&gt; GeneralCategory
@@ -227,14 +227,14 @@ $cpred :: GeneralCategory -&gt; GeneralCategory
 succ :: GeneralCategory -&gt; GeneralCategory
 $csucc :: GeneralCategory -&gt; GeneralCategory
 </span><a href="GHC.Enum.html#Enum"><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Enum</span></a></span></span></span></span></span></span></span></span></span><span>     </span><span class="hs-comment">-- ^ @since 2.01</span><span>
-</span><span id="line-148"></span><span>                 </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679546468"><span id="local-6989586621679546470"><span class="annot"><span class="annottext">GeneralCategory
+</span><span id="line-148"></span><span>                 </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679546536"><span id="local-6989586621679546538"><span class="annot"><span class="annottext">GeneralCategory
 forall a. a -&gt; a -&gt; Bounded a
 maxBound :: GeneralCategory
 $cmaxBound :: GeneralCategory
 minBound :: GeneralCategory
 $cminBound :: GeneralCategory
 </span><a href="GHC.Enum.html#Bounded"><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Bounded</span></a></span></span></span><span>  </span><span class="hs-comment">-- ^ @since 2.01</span><span>
-</span><span id="line-149"></span><span>                 </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679546451"><span id="local-6989586621679546453"><span id="local-6989586621679546455"><span id="local-6989586621679546457"><span id="local-6989586621679546459"><span id="local-6989586621679546462"><span class="annot"><span class="annottext">Ord GeneralCategory
+</span><span id="line-149"></span><span>                 </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679546519"><span id="local-6989586621679546521"><span id="local-6989586621679546523"><span id="local-6989586621679546525"><span id="local-6989586621679546527"><span id="local-6989586621679546530"><span class="annot"><span class="annottext">Ord GeneralCategory
 (GeneralCategory, GeneralCategory) -&gt; Int
 (GeneralCategory, GeneralCategory) -&gt; [GeneralCategory]
 (GeneralCategory, GeneralCategory) -&gt; GeneralCategory -&gt; Bool
@@ -289,8 +289,8 @@ $crange :: (GeneralCategory, GeneralCategory) -&gt; [GeneralCategory]
 </span><span id="line-175"></span><span class="hs-comment">--</span><span>
 </span><span id="line-176"></span><span class="annot"><a href="GHC.Unicode.html#generalCategory"><span class="hs-identifier hs-type">generalCategory</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Char"><span class="hs-identifier hs-type">Char</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="GHC.Unicode.html#GeneralCategory"><span class="hs-identifier hs-type">GeneralCategory</span></a></span><span>
 </span><span id="line-177"></span><span id="generalCategory"><span class="annot"><span class="annottext">generalCategory :: Char -&gt; GeneralCategory
-</span><a href="GHC.Unicode.html#generalCategory"><span class="hs-identifier hs-var hs-var">generalCategory</span></a></span></span><span> </span><span id="local-6989586621679546449"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546449"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Enum a =&gt; Int -&gt; a
+</span><a href="GHC.Unicode.html#generalCategory"><span class="hs-identifier hs-var hs-var">generalCategory</span></a></span></span><span> </span><span id="local-6989586621679546517"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546517"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Enum a =&gt; Int -&gt; a
 </span><a href="GHC.Enum.html#toEnum"><span class="hs-identifier hs-var">toEnum</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (Integral a, Num b) =&gt; a -&gt; b
 </span><a href="GHC.Real.html#fromIntegral"><span class="hs-identifier hs-var">fromIntegral</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -300,15 +300,15 @@ $crange :: (GeneralCategory, GeneralCategory) -&gt; [GeneralCategory]
 </span><a href="GHC.Real.html#fromIntegral"><span class="hs-identifier hs-var">fromIntegral</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Int
 </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546449"><span class="hs-identifier hs-var">c</span></a></span><span>
+</span><a href="#local-6989586621679546517"><span class="hs-identifier hs-var">c</span></a></span><span>
 </span><span id="line-178"></span><span>
 </span><span id="line-179"></span><span class="hs-comment">-- | Selects the first 128 characters of the Unicode character set,</span><span>
 </span><span id="line-180"></span><span class="hs-comment">-- corresponding to the ASCII character set.</span><span>
 </span><span id="line-181"></span><span class="annot"><a href="GHC.Unicode.html#isAscii"><span class="hs-identifier hs-type">isAscii</span></a></span><span>                 </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Char"><span class="hs-identifier hs-type">Char</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a></span><span>
 </span><span id="line-182"></span><span id="isAscii"><span class="annot"><span class="annottext">isAscii :: Char -&gt; Bool
-</span><a href="GHC.Unicode.html#isAscii"><span class="hs-identifier hs-var hs-var">isAscii</span></a></span></span><span> </span><span id="local-6989586621679546446"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546446"><span class="hs-identifier hs-var">c</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546446"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
+</span><a href="GHC.Unicode.html#isAscii"><span class="hs-identifier hs-var hs-var">isAscii</span></a></span></span><span> </span><span id="local-6989586621679546514"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546514"><span class="hs-identifier hs-var">c</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546514"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%3C"><span class="hs-operator hs-var">&lt;</span></a></span><span>  </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'\x80'</span></span><span>
 </span><span id="line-183"></span><span>
@@ -316,9 +316,9 @@ $crange :: (GeneralCategory, GeneralCategory) -&gt; [GeneralCategory]
 </span><span id="line-185"></span><span class="hs-comment">-- corresponding to the ISO 8859-1 (Latin-1) character set.</span><span>
 </span><span id="line-186"></span><span class="annot"><a href="GHC.Unicode.html#isLatin1"><span class="hs-identifier hs-type">isLatin1</span></a></span><span>                </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Char"><span class="hs-identifier hs-type">Char</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a></span><span>
 </span><span id="line-187"></span><span id="isLatin1"><span class="annot"><span class="annottext">isLatin1 :: Char -&gt; Bool
-</span><a href="GHC.Unicode.html#isLatin1"><span class="hs-identifier hs-var hs-var">isLatin1</span></a></span></span><span> </span><span id="local-6989586621679546444"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546444"><span class="hs-identifier hs-var">c</span></a></span></span><span>              </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546444"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
+</span><a href="GHC.Unicode.html#isLatin1"><span class="hs-identifier hs-var hs-var">isLatin1</span></a></span></span><span> </span><span id="local-6989586621679546512"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546512"><span class="hs-identifier hs-var">c</span></a></span></span><span>              </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546512"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%3C%3D"><span class="hs-operator hs-var">&lt;=</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'\xff'</span></span><span>
 </span><span id="line-188"></span><span>
@@ -326,13 +326,13 @@ $crange :: (GeneralCategory, GeneralCategory) -&gt; [GeneralCategory]
 </span><span id="line-190"></span><span class="hs-comment">-- i.e. characters satisfying both 'isAscii' and 'isLower'.</span><span>
 </span><span id="line-191"></span><span class="annot"><a href="GHC.Unicode.html#isAsciiLower"><span class="hs-identifier hs-type">isAsciiLower</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Char"><span class="hs-identifier hs-type">Char</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a></span><span>
 </span><span id="line-192"></span><span id="isAsciiLower"><span class="annot"><span class="annottext">isAsciiLower :: Char -&gt; Bool
-</span><a href="GHC.Unicode.html#isAsciiLower"><span class="hs-identifier hs-var hs-var">isAsciiLower</span></a></span></span><span> </span><span id="local-6989586621679546442"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546442"><span class="hs-identifier hs-var">c</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546442"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
+</span><a href="GHC.Unicode.html#isAsciiLower"><span class="hs-identifier hs-var hs-var">isAsciiLower</span></a></span></span><span> </span><span id="local-6989586621679546510"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546510"><span class="hs-identifier hs-var">c</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546510"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%3E%3D"><span class="hs-operator hs-var">&gt;=</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'a'</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%26%26"><span class="hs-operator hs-var">&amp;&amp;</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546442"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
+</span><a href="#local-6989586621679546510"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%3C%3D"><span class="hs-operator hs-var">&lt;=</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'z'</span></span><span>
 </span><span id="line-193"></span><span>
@@ -340,13 +340,13 @@ $crange :: (GeneralCategory, GeneralCategory) -&gt; [GeneralCategory]
 </span><span id="line-195"></span><span class="hs-comment">-- i.e. characters satisfying both 'isAscii' and 'isUpper'.</span><span>
 </span><span id="line-196"></span><span class="annot"><a href="GHC.Unicode.html#isAsciiUpper"><span class="hs-identifier hs-type">isAsciiUpper</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Char"><span class="hs-identifier hs-type">Char</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a></span><span>
 </span><span id="line-197"></span><span id="isAsciiUpper"><span class="annot"><span class="annottext">isAsciiUpper :: Char -&gt; Bool
-</span><a href="GHC.Unicode.html#isAsciiUpper"><span class="hs-identifier hs-var hs-var">isAsciiUpper</span></a></span></span><span> </span><span id="local-6989586621679546440"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546440"><span class="hs-identifier hs-var">c</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546440"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
+</span><a href="GHC.Unicode.html#isAsciiUpper"><span class="hs-identifier hs-var hs-var">isAsciiUpper</span></a></span></span><span> </span><span id="local-6989586621679546508"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546508"><span class="hs-identifier hs-var">c</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546508"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%3E%3D"><span class="hs-operator hs-var">&gt;=</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'A'</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%26%26"><span class="hs-operator hs-var">&amp;&amp;</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546440"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
+</span><a href="#local-6989586621679546508"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%3C%3D"><span class="hs-operator hs-var">&lt;=</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'Z'</span></span><span>
 </span><span id="line-198"></span><span>
@@ -368,38 +368,38 @@ $crange :: (GeneralCategory, GeneralCategory) -&gt; [GeneralCategory]
 </span><span id="line-214"></span><span class="hs-comment">-- use branchless ||, but currently the eqLit transformation will undo that,</span><span>
 </span><span id="line-215"></span><span class="hs-comment">-- so we'll do it like this until there's a way around that.</span><span>
 </span><span id="line-216"></span><span id="isSpace"><span class="annot"><span class="annottext">isSpace :: Char -&gt; Bool
-</span><a href="GHC.Unicode.html#isSpace"><span class="hs-identifier hs-var hs-var">isSpace</span></a></span></span><span> </span><span id="local-6989586621679546439"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546439"><span class="hs-identifier hs-var">c</span></a></span></span><span>
+</span><a href="GHC.Unicode.html#isSpace"><span class="hs-identifier hs-var hs-var">isSpace</span></a></span></span><span> </span><span id="local-6989586621679546507"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546507"><span class="hs-identifier hs-var">c</span></a></span></span><span>
 </span><span id="line-217"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Word
-</span><a href="#local-6989586621679546438"><span class="hs-identifier hs-var">uc</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
+</span><a href="#local-6989586621679546506"><span class="hs-identifier hs-var">uc</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%3C%3D"><span class="hs-operator hs-var">&lt;=</span></a></span><span> </span><span class="annot"><span class="annottext">Word
 </span><span class="hs-number">0x377</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Word
-</span><a href="#local-6989586621679546438"><span class="hs-identifier hs-var">uc</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><a href="#local-6989586621679546506"><span class="hs-identifier hs-var">uc</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%3D%3D"><span class="hs-operator hs-var">==</span></a></span><span> </span><span class="annot"><span class="annottext">Word
 </span><span class="hs-number">32</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%7C%7C"><span class="hs-operator hs-var">||</span></a></span><span> </span><span class="annot"><span class="annottext">Word
-</span><a href="#local-6989586621679546438"><span class="hs-identifier hs-var">uc</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><a href="#local-6989586621679546506"><span class="hs-identifier hs-var">uc</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><a href="GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Word
 </span><span class="hs-number">0x9</span></span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%3C%3D"><span class="hs-operator hs-var">&lt;=</span></a></span><span> </span><span class="annot"><span class="annottext">Word
 </span><span class="hs-number">4</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%7C%7C"><span class="hs-operator hs-var">||</span></a></span><span> </span><span class="annot"><span class="annottext">Word
-</span><a href="#local-6989586621679546438"><span class="hs-identifier hs-var">uc</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><a href="#local-6989586621679546506"><span class="hs-identifier hs-var">uc</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%3D%3D"><span class="hs-operator hs-var">==</span></a></span><span> </span><span class="annot"><span class="annottext">Word
 </span><span class="hs-number">0xa0</span></span><span>
 </span><span id="line-218"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><a href="GHC.Base.html#otherwise"><span class="hs-identifier hs-var">otherwise</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int
 </span><a href="GHC.Unicode.html#iswspace"><span class="hs-identifier hs-var">iswspace</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; Int
 </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546439"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><a href="#local-6989586621679546507"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%2F%3D"><span class="hs-operator hs-var">/=</span></a></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span>
 </span><span id="line-219"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-220"></span><span>    </span><span id="local-6989586621679546438"><span class="annot"><span class="annottext">uc :: Word
-</span><a href="#local-6989586621679546438"><span class="hs-identifier hs-var hs-var">uc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (Integral a, Num b) =&gt; a -&gt; b
+</span><span id="line-220"></span><span>    </span><span id="local-6989586621679546506"><span class="annot"><span class="annottext">uc :: Word
+</span><a href="#local-6989586621679546506"><span class="hs-identifier hs-var hs-var">uc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (Integral a, Num b) =&gt; a -&gt; b
 </span><a href="GHC.Real.html#fromIntegral"><span class="hs-identifier hs-var">fromIntegral</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; Int
 </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546439"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Word"><span class="hs-identifier hs-type">Word</span></a></span><span>
+</span><a href="#local-6989586621679546507"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Word"><span class="hs-identifier hs-type">Word</span></a></span><span>
 </span><span id="line-221"></span><span>
 </span><span id="line-222"></span><span class="hs-comment">-- | Selects upper-case or title-case alphabetic Unicode characters (letters).</span><span>
 </span><span id="line-223"></span><span class="hs-comment">-- Title case is used by a small number of letter ligatures like the</span><span>
@@ -425,11 +425,11 @@ $crange :: (GeneralCategory, GeneralCategory) -&gt; [GeneralCategory]
 </span><span id="line-243"></span><span class="hs-comment">-- | Selects ASCII digits, i.e. @\'0\'@..@\'9\'@.</span><span>
 </span><span id="line-244"></span><span class="annot"><a href="GHC.Unicode.html#isDigit"><span class="hs-identifier hs-type">isDigit</span></a></span><span>                 </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Char"><span class="hs-identifier hs-type">Char</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a></span><span>
 </span><span id="line-245"></span><span id="isDigit"><span class="annot"><span class="annottext">isDigit :: Char -&gt; Bool
-</span><a href="GHC.Unicode.html#isDigit"><span class="hs-identifier hs-var hs-var">isDigit</span></a></span></span><span> </span><span id="local-6989586621679546432"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546432"><span class="hs-identifier hs-var">c</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (Integral a, Num b) =&gt; a -&gt; b
+</span><a href="GHC.Unicode.html#isDigit"><span class="hs-identifier hs-var hs-var">isDigit</span></a></span></span><span> </span><span id="local-6989586621679546500"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546500"><span class="hs-identifier hs-var">c</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (Integral a, Num b) =&gt; a -&gt; b
 </span><a href="GHC.Real.html#fromIntegral"><span class="hs-identifier hs-var">fromIntegral</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; Int
 </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546432"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><a href="#local-6989586621679546500"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><a href="GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Int
 </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'0'</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Word"><span class="hs-identifier hs-type">Word</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
@@ -444,11 +444,11 @@ $crange :: (GeneralCategory, GeneralCategory) -&gt; [GeneralCategory]
 </span><span id="line-252"></span><span class="hs-comment">-- | Selects ASCII octal digits, i.e. @\'0\'@..@\'7\'@.</span><span>
 </span><span id="line-253"></span><span class="annot"><a href="GHC.Unicode.html#isOctDigit"><span class="hs-identifier hs-type">isOctDigit</span></a></span><span>              </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Char"><span class="hs-identifier hs-type">Char</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a></span><span>
 </span><span id="line-254"></span><span id="isOctDigit"><span class="annot"><span class="annottext">isOctDigit :: Char -&gt; Bool
-</span><a href="GHC.Unicode.html#isOctDigit"><span class="hs-identifier hs-var hs-var">isOctDigit</span></a></span></span><span> </span><span id="local-6989586621679546431"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546431"><span class="hs-identifier hs-var">c</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (Integral a, Num b) =&gt; a -&gt; b
+</span><a href="GHC.Unicode.html#isOctDigit"><span class="hs-identifier hs-var hs-var">isOctDigit</span></a></span></span><span> </span><span id="local-6989586621679546499"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546499"><span class="hs-identifier hs-var">c</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (Integral a, Num b) =&gt; a -&gt; b
 </span><a href="GHC.Real.html#fromIntegral"><span class="hs-identifier hs-var">fromIntegral</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; Int
 </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546431"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><a href="#local-6989586621679546499"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><a href="GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Int
 </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'0'</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Word"><span class="hs-identifier hs-type">Word</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
@@ -459,15 +459,15 @@ $crange :: (GeneralCategory, GeneralCategory) -&gt; [GeneralCategory]
 </span><span id="line-257"></span><span class="hs-comment">-- i.e. @\'0\'@..@\'9\'@, @\'a\'@..@\'f\'@, @\'A\'@..@\'F\'@.</span><span>
 </span><span id="line-258"></span><span class="annot"><a href="GHC.Unicode.html#isHexDigit"><span class="hs-identifier hs-type">isHexDigit</span></a></span><span>              </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Char"><span class="hs-identifier hs-type">Char</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a></span><span>
 </span><span id="line-259"></span><span id="isHexDigit"><span class="annot"><span class="annottext">isHexDigit :: Char -&gt; Bool
-</span><a href="GHC.Unicode.html#isHexDigit"><span class="hs-identifier hs-var hs-var">isHexDigit</span></a></span></span><span> </span><span id="local-6989586621679546430"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546430"><span class="hs-identifier hs-var">c</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Char -&gt; Bool
+</span><a href="GHC.Unicode.html#isHexDigit"><span class="hs-identifier hs-var hs-var">isHexDigit</span></a></span></span><span> </span><span id="local-6989586621679546498"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546498"><span class="hs-identifier hs-var">c</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Char -&gt; Bool
 </span><a href="GHC.Unicode.html#isDigit"><span class="hs-identifier hs-var">isDigit</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546430"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679546498"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%7C%7C"><span class="hs-operator hs-var">||</span></a></span><span>
 </span><span id="line-260"></span><span>                           </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (Integral a, Num b) =&gt; a -&gt; b
 </span><a href="GHC.Real.html#fromIntegral"><span class="hs-identifier hs-var">fromIntegral</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; Int
 </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546430"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><a href="#local-6989586621679546498"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><a href="GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Int
 </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'A'</span></span><span class="hs-special">)</span><span class="hs-glyph">::</span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Word"><span class="hs-identifier hs-type">Word</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
@@ -477,7 +477,7 @@ $crange :: (GeneralCategory, GeneralCategory) -&gt; [GeneralCategory]
 </span><span id="line-261"></span><span>                           </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (Integral a, Num b) =&gt; a -&gt; b
 </span><a href="GHC.Real.html#fromIntegral"><span class="hs-identifier hs-var">fromIntegral</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; Int
 </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546430"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><a href="#local-6989586621679546498"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><a href="GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Int
 </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'a'</span></span><span class="hs-special">)</span><span class="hs-glyph">::</span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Word"><span class="hs-identifier hs-type">Word</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
@@ -522,10 +522,10 @@ $crange :: (GeneralCategory, GeneralCategory) -&gt; [GeneralCategory]
 </span><span id="line-298"></span><span class="hs-comment">--</span><span>
 </span><span id="line-299"></span><span class="annot"><a href="GHC.Unicode.html#isPunctuation"><span class="hs-identifier hs-type">isPunctuation</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Char"><span class="hs-identifier hs-type">Char</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a></span><span>
 </span><span id="line-300"></span><span id="isPunctuation"><span class="annot"><span class="annottext">isPunctuation :: Char -&gt; Bool
-</span><a href="GHC.Unicode.html#isPunctuation"><span class="hs-identifier hs-var hs-var">isPunctuation</span></a></span></span><span> </span><span id="local-6989586621679546429"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546429"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Char -&gt; GeneralCategory
+</span><a href="GHC.Unicode.html#isPunctuation"><span class="hs-identifier hs-var hs-var">isPunctuation</span></a></span></span><span> </span><span id="local-6989586621679546497"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546497"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Char -&gt; GeneralCategory
 </span><a href="GHC.Unicode.html#generalCategory"><span class="hs-identifier hs-var">generalCategory</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546429"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><a href="#local-6989586621679546497"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="hs-keyword">of</span><span>
 </span><span id="line-301"></span><span>        </span><span class="annot"><span class="annottext">GeneralCategory
 </span><a href="GHC.Unicode.html#ConnectorPunctuation"><span class="hs-identifier hs-var">ConnectorPunctuation</span></a></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#True"><span class="hs-identifier hs-var">True</span></a></span><span>
@@ -588,10 +588,10 @@ $crange :: (GeneralCategory, GeneralCategory) -&gt; [GeneralCategory]
 </span><span id="line-344"></span><span class="hs-comment">--</span><span>
 </span><span id="line-345"></span><span class="annot"><a href="GHC.Unicode.html#isSymbol"><span class="hs-identifier hs-type">isSymbol</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Char"><span class="hs-identifier hs-type">Char</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a></span><span>
 </span><span id="line-346"></span><span id="isSymbol"><span class="annot"><span class="annottext">isSymbol :: Char -&gt; Bool
-</span><a href="GHC.Unicode.html#isSymbol"><span class="hs-identifier hs-var hs-var">isSymbol</span></a></span></span><span> </span><span id="local-6989586621679546428"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546428"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Char -&gt; GeneralCategory
+</span><a href="GHC.Unicode.html#isSymbol"><span class="hs-identifier hs-var hs-var">isSymbol</span></a></span></span><span> </span><span id="local-6989586621679546496"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546496"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Char -&gt; GeneralCategory
 </span><a href="GHC.Unicode.html#generalCategory"><span class="hs-identifier hs-var">generalCategory</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546428"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><a href="#local-6989586621679546496"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="hs-keyword">of</span><span>
 </span><span id="line-347"></span><span>        </span><span class="annot"><span class="annottext">GeneralCategory
 </span><a href="GHC.Unicode.html#MathSymbol"><span class="hs-identifier hs-var">MathSymbol</span></a></span><span>              </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#True"><span class="hs-identifier hs-var">True</span></a></span><span>
@@ -629,75 +629,75 @@ $crange :: (GeneralCategory, GeneralCategory) -&gt; [GeneralCategory]
 </span><span id="line-371"></span><span class="hs-comment">-- Regardless of the O/S and Library, use the functions contained in WCsubst.c</span><span>
 </span><span id="line-372"></span><span>
 </span><span id="line-373"></span><span id="isAlpha"><span class="annot"><span class="annottext">isAlpha :: Char -&gt; Bool
-</span><a href="GHC.Unicode.html#isAlpha"><span class="hs-identifier hs-var hs-var">isAlpha</span></a></span></span><span>    </span><span id="local-6989586621679546427"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546427"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int
+</span><a href="GHC.Unicode.html#isAlpha"><span class="hs-identifier hs-var hs-var">isAlpha</span></a></span></span><span>    </span><span id="local-6989586621679546495"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546495"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int
 </span><a href="GHC.Unicode.html#iswalpha"><span class="hs-identifier hs-var">iswalpha</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; Int
 </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546427"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><a href="#local-6989586621679546495"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%2F%3D"><span class="hs-operator hs-var">/=</span></a></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span>
 </span><span id="line-374"></span><span id="isAlphaNum"><span class="annot"><span class="annottext">isAlphaNum :: Char -&gt; Bool
-</span><a href="GHC.Unicode.html#isAlphaNum"><span class="hs-identifier hs-var hs-var">isAlphaNum</span></a></span></span><span> </span><span id="local-6989586621679546425"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546425"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int
+</span><a href="GHC.Unicode.html#isAlphaNum"><span class="hs-identifier hs-var hs-var">isAlphaNum</span></a></span></span><span> </span><span id="local-6989586621679546493"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546493"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int
 </span><a href="GHC.Unicode.html#iswalnum"><span class="hs-identifier hs-var">iswalnum</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; Int
 </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546425"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><a href="#local-6989586621679546493"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%2F%3D"><span class="hs-operator hs-var">/=</span></a></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span>
 </span><span id="line-375"></span><span id="isControl"><span class="annot"><span class="annottext">isControl :: Char -&gt; Bool
-</span><a href="GHC.Unicode.html#isControl"><span class="hs-identifier hs-var hs-var">isControl</span></a></span></span><span>  </span><span id="local-6989586621679546423"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546423"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int
+</span><a href="GHC.Unicode.html#isControl"><span class="hs-identifier hs-var hs-var">isControl</span></a></span></span><span>  </span><span id="local-6989586621679546491"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546491"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int
 </span><a href="GHC.Unicode.html#iswcntrl"><span class="hs-identifier hs-var">iswcntrl</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; Int
 </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546423"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><a href="#local-6989586621679546491"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%2F%3D"><span class="hs-operator hs-var">/=</span></a></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span>
 </span><span id="line-376"></span><span id="isPrint"><span class="annot"><span class="annottext">isPrint :: Char -&gt; Bool
-</span><a href="GHC.Unicode.html#isPrint"><span class="hs-identifier hs-var hs-var">isPrint</span></a></span></span><span>    </span><span id="local-6989586621679546421"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546421"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int
+</span><a href="GHC.Unicode.html#isPrint"><span class="hs-identifier hs-var hs-var">isPrint</span></a></span></span><span>    </span><span id="local-6989586621679546489"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546489"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int
 </span><a href="GHC.Unicode.html#iswprint"><span class="hs-identifier hs-var">iswprint</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; Int
 </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546421"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><a href="#local-6989586621679546489"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%2F%3D"><span class="hs-operator hs-var">/=</span></a></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span>
 </span><span id="line-377"></span><span id="isUpper"><span class="annot"><span class="annottext">isUpper :: Char -&gt; Bool
-</span><a href="GHC.Unicode.html#isUpper"><span class="hs-identifier hs-var hs-var">isUpper</span></a></span></span><span>    </span><span id="local-6989586621679546419"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546419"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int
+</span><a href="GHC.Unicode.html#isUpper"><span class="hs-identifier hs-var hs-var">isUpper</span></a></span></span><span>    </span><span id="local-6989586621679546487"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546487"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int
 </span><a href="GHC.Unicode.html#iswupper"><span class="hs-identifier hs-var">iswupper</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; Int
 </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546419"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><a href="#local-6989586621679546487"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%2F%3D"><span class="hs-operator hs-var">/=</span></a></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span>
 </span><span id="line-378"></span><span id="isLower"><span class="annot"><span class="annottext">isLower :: Char -&gt; Bool
-</span><a href="GHC.Unicode.html#isLower"><span class="hs-identifier hs-var hs-var">isLower</span></a></span></span><span>    </span><span id="local-6989586621679546417"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546417"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int
+</span><a href="GHC.Unicode.html#isLower"><span class="hs-identifier hs-var hs-var">isLower</span></a></span></span><span>    </span><span id="local-6989586621679546485"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546485"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int
 </span><a href="GHC.Unicode.html#iswlower"><span class="hs-identifier hs-var">iswlower</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; Int
 </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546417"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><a href="#local-6989586621679546485"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%2F%3D"><span class="hs-operator hs-var">/=</span></a></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span>
 </span><span id="line-379"></span><span>
 </span><span id="line-380"></span><span id="toLower"><span class="annot"><span class="annottext">toLower :: Char -&gt; Char
-</span><a href="GHC.Unicode.html#toLower"><span class="hs-identifier hs-var hs-var">toLower</span></a></span></span><span> </span><span id="local-6989586621679546415"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546415"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Char
+</span><a href="GHC.Unicode.html#toLower"><span class="hs-identifier hs-var hs-var">toLower</span></a></span></span><span> </span><span id="local-6989586621679546483"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546483"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Char
 </span><a href="GHC.Char.html#chr"><span class="hs-identifier hs-var">chr</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; Int
 </span><a href="GHC.Unicode.html#towlower"><span class="hs-identifier hs-var">towlower</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; Int
 </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546415"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679546483"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-381"></span><span id="toUpper"><span class="annot"><span class="annottext">toUpper :: Char -&gt; Char
-</span><a href="GHC.Unicode.html#toUpper"><span class="hs-identifier hs-var hs-var">toUpper</span></a></span></span><span> </span><span id="local-6989586621679546413"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546413"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Char
+</span><a href="GHC.Unicode.html#toUpper"><span class="hs-identifier hs-var hs-var">toUpper</span></a></span></span><span> </span><span id="local-6989586621679546481"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546481"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Char
 </span><a href="GHC.Char.html#chr"><span class="hs-identifier hs-var">chr</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; Int
 </span><a href="GHC.Unicode.html#towupper"><span class="hs-identifier hs-var">towupper</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; Int
 </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546413"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679546481"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-382"></span><span id="toTitle"><span class="annot"><span class="annottext">toTitle :: Char -&gt; Char
-</span><a href="GHC.Unicode.html#toTitle"><span class="hs-identifier hs-var hs-var">toTitle</span></a></span></span><span> </span><span id="local-6989586621679546411"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546411"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Char
+</span><a href="GHC.Unicode.html#toTitle"><span class="hs-identifier hs-var hs-var">toTitle</span></a></span></span><span> </span><span id="local-6989586621679546479"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679546479"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Char
 </span><a href="GHC.Char.html#chr"><span class="hs-identifier hs-var">chr</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; Int
 </span><a href="GHC.Unicode.html#towtitle"><span class="hs-identifier hs-var">towtitle</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; Int
 </span><a href="GHC.Base.html#ord"><span class="hs-identifier hs-var">ord</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679546411"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679546479"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-383"></span><span>
 </span><span id="line-384"></span><span class="hs-keyword">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-keyword">ccall</span></span><span> </span><span class="annot"><span class="hs-keyword">unsafe</span></span><span> </span><span class="annot"><span class="hs-string">&quot;u_iswalpha&quot;</span></span><span>
 </span><span id="line-385"></span><span>  </span><span id="iswalpha"><span class="annot"><a href="GHC.Unicode.html#iswalpha"><span class="hs-identifier hs-var">iswalpha</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Int"><span class="hs-identifier hs-type">Int</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Int"><span class="hs-identifier hs-type">Int</span></a></span><span>

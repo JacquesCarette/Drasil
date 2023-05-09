@@ -38,11 +38,11 @@
 </span><span id="line-38"></span><span id="compilerVersion"><span class="annot"><span class="annottext">compilerVersion :: Version
 </span><a href="System.Info.html#compilerVersion"><span class="hs-identifier hs-var hs-var">compilerVersion</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Int] -&gt; [String] -&gt; Version
 </span><a href="Data.Version.html#Version"><span class="hs-identifier hs-var">Version</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679625873"><span class="hs-identifier hs-var">major</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679625872"><span class="hs-identifier hs-var">minor</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-39"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679625873"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679625873"><span class="hs-identifier hs-var">major</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679625872"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679625872"><span class="hs-identifier hs-var">minor</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679625941"><span class="hs-identifier hs-var">major</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679625940"><span class="hs-identifier hs-var">minor</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-39"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679625941"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679625941"><span class="hs-identifier hs-var">major</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679625940"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679625940"><span class="hs-identifier hs-var">minor</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
 </span><a href="System.Info.html#compilerVersionRaw"><span class="hs-identifier hs-var">compilerVersionRaw</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Integral a =&gt; a -&gt; a -&gt; (a, a)
 </span><a href="GHC.Real.html#divMod"><span class="hs-operator hs-var">`divMod`</span></a></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">100</span></span><span>
@@ -54,11 +54,11 @@
 </span><span id="line-45"></span><span id="fullCompilerVersion"><span class="annot"><span class="annottext">fullCompilerVersion :: Version
 </span><a href="System.Info.html#fullCompilerVersion"><span class="hs-identifier hs-var hs-var">fullCompilerVersion</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Int] -&gt; [String] -&gt; Version
 </span><a href="Data.Version.html#Version"><span class="hs-identifier hs-var">Version</span></a></span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679625865"><span class="hs-identifier hs-var">version</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679625933"><span class="hs-identifier hs-var">version</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-46"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-47"></span><span>    </span><span class="annot"><a href="#local-6989586621679625865"><span class="hs-identifier hs-type">version</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Int"><span class="hs-identifier hs-type">Int</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-48"></span><span>    </span><span id="local-6989586621679625865"><span class="annot"><span class="annottext">version :: [Int]
-</span><a href="#local-6989586621679625865"><span class="hs-identifier hs-var hs-var">version</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span id="line-47"></span><span>    </span><span class="annot"><a href="#local-6989586621679625933"><span class="hs-identifier hs-type">version</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Int"><span class="hs-identifier hs-type">Int</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-48"></span><span>    </span><span id="local-6989586621679625933"><span class="annot"><span class="annottext">version :: [Int]
+</span><a href="#local-6989586621679625933"><span class="hs-identifier hs-var hs-var">version</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><a href="GHC.Base.html#fmap"><span class="hs-identifier hs-var">fmap</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Read a =&gt; String -&gt; a
 </span><a href="Text.Read.html#read"><span class="hs-identifier hs-var">read</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; [String]
@@ -66,28 +66,28 @@
 </span><span id="line-49"></span><span>
 </span><span id="line-50"></span><span class="annot"><a href="System.Info.html#splitVersion"><span class="hs-identifier hs-type">splitVersion</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-51"></span><span id="splitVersion"><span class="annot"><span class="annottext">splitVersion :: String -&gt; [String]
-</span><a href="System.Info.html#splitVersion"><span class="hs-identifier hs-var hs-var">splitVersion</span></a></span></span><span> </span><span id="local-6989586621679625862"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679625862"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><a href="System.Info.html#splitVersion"><span class="hs-identifier hs-var hs-var">splitVersion</span></a></span></span><span> </span><span id="local-6989586621679625930"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679625930"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-52"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><a href="GHC.List.html#dropWhile"><span class="hs-identifier hs-var">dropWhile</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%3D%3D"><span class="hs-operator hs-var">==</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'.'</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679625862"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><a href="#local-6989586621679625930"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-keyword">of</span><span>
 </span><span id="line-53"></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-54"></span><span>    </span><span id="local-6989586621679625860"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679625860"><span class="hs-identifier hs-var">s'</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">let</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679625858"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679625858"><span class="hs-identifier hs-var">w</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679625857"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679625857"><span class="hs-identifier hs-var">s''</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. (a -&gt; Bool) -&gt; [a] -&gt; ([a], [a])
+</span><span id="line-54"></span><span>    </span><span id="local-6989586621679625928"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679625928"><span class="hs-identifier hs-var">s'</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">let</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679625926"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679625926"><span class="hs-identifier hs-var">w</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679625925"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679625925"><span class="hs-identifier hs-var">s''</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. (a -&gt; Bool) -&gt; [a] -&gt; ([a], [a])
 </span><a href="GHC.List.html#break"><span class="hs-identifier hs-var">break</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%3D%3D"><span class="hs-operator hs-var">==</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'.'</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679625860"><span class="hs-identifier hs-var">s'</span></a></span><span>
+</span><a href="#local-6989586621679625928"><span class="hs-identifier hs-var">s'</span></a></span><span>
 </span><span id="line-55"></span><span>           </span><span class="hs-keyword">in</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679625858"><span class="hs-identifier hs-var">w</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679625926"><span class="hs-identifier hs-var">w</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; [a] -&gt; [a]
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#%3A"><span class="hs-glyph hs-var">:</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; [String]
 </span><a href="System.Info.html#splitVersion"><span class="hs-identifier hs-var">splitVersion</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679625857"><span class="hs-identifier hs-var">s''</span></a></span><span class="hs-cpp">
+</span><a href="#local-6989586621679625925"><span class="hs-identifier hs-var">s''</span></a></span><span class="hs-cpp">
 
 #include &quot;ghcplatform.h&quot;
 </span><span>

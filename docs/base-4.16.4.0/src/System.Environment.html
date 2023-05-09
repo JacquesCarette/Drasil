@@ -72,43 +72,43 @@
 </span><a href="System.Environment.html#getArgs"><span class="hs-identifier hs-var hs-var">getArgs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-72"></span><span>  </span><span class="annot"><span class="annottext">forall a b. Storable a =&gt; (Ptr a -&gt; IO b) -&gt; IO b
 </span><a href="Foreign.Marshal.Alloc.html#alloca"><span class="hs-identifier hs-var">alloca</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="hs-glyph">\</span><span> </span><span id="local-6989586621679626073"><span class="annot"><span class="annottext">Ptr CInt
-</span><a href="#local-6989586621679626073"><span class="hs-identifier hs-var">p_argc</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="hs-glyph">\</span><span> </span><span id="local-6989586621679626141"><span class="annot"><span class="annottext">Ptr CInt
+</span><a href="#local-6989586621679626141"><span class="hs-identifier hs-var">p_argc</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
 </span><span id="line-73"></span><span>  </span><span class="annot"><span class="annottext">forall a b. Storable a =&gt; (Ptr a -&gt; IO b) -&gt; IO b
 </span><a href="Foreign.Marshal.Alloc.html#alloca"><span class="hs-identifier hs-var">alloca</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="hs-glyph">\</span><span> </span><span id="local-6989586621679626072"><span class="annot"><span class="annottext">Ptr (Ptr CString)
-</span><a href="#local-6989586621679626072"><span class="hs-identifier hs-var">p_argv</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="hs-glyph">\</span><span> </span><span id="local-6989586621679626140"><span class="annot"><span class="annottext">Ptr (Ptr CString)
+</span><a href="#local-6989586621679626140"><span class="hs-identifier hs-var">p_argv</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
 </span><span id="line-74"></span><span>   </span><span class="annot"><span class="annottext">Ptr CInt -&gt; Ptr (Ptr CString) -&gt; IO ()
 </span><a href="System.Environment.html#getProgArgv"><span class="hs-identifier hs-var">getProgArgv</span></a></span><span> </span><span class="annot"><span class="annottext">Ptr CInt
-</span><a href="#local-6989586621679626073"><span class="hs-identifier hs-var">p_argc</span></a></span><span> </span><span class="annot"><span class="annottext">Ptr (Ptr CString)
-</span><a href="#local-6989586621679626072"><span class="hs-identifier hs-var">p_argv</span></a></span><span>
-</span><span id="line-75"></span><span>   </span><span id="local-6989586621679626070"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679626070"><span class="hs-identifier hs-var">p</span></a></span></span><span>    </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">forall a b. (Integral a, Num b) =&gt; a -&gt; b
+</span><a href="#local-6989586621679626141"><span class="hs-identifier hs-var">p_argc</span></a></span><span> </span><span class="annot"><span class="annottext">Ptr (Ptr CString)
+</span><a href="#local-6989586621679626140"><span class="hs-identifier hs-var">p_argv</span></a></span><span>
+</span><span id="line-75"></span><span>   </span><span id="local-6989586621679626138"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679626138"><span class="hs-identifier hs-var">p</span></a></span></span><span>    </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">forall a b. (Integral a, Num b) =&gt; a -&gt; b
 </span><a href="GHC.Real.html#fromIntegral"><span class="hs-identifier hs-var">fromIntegral</span></a></span><span> </span><span class="annot"><span class="annottext">forall (m :: * -&gt; *) a1 r. Monad m =&gt; (a1 -&gt; r) -&gt; m a1 -&gt; m r
 </span><a href="GHC.Base.html#liftM"><span class="hs-operator hs-var">`liftM`</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Storable a =&gt; Ptr a -&gt; IO a
 </span><a href="Foreign.Storable.html#peek"><span class="hs-identifier hs-var">peek</span></a></span><span> </span><span class="annot"><span class="annottext">Ptr CInt
-</span><a href="#local-6989586621679626073"><span class="hs-identifier hs-var">p_argc</span></a></span><span>
-</span><span id="line-76"></span><span>   </span><span id="local-6989586621679626067"><span class="annot"><span class="annottext">Ptr CString
-</span><a href="#local-6989586621679626067"><span class="hs-identifier hs-var">argv</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">forall a. Storable a =&gt; Ptr a -&gt; IO a
+</span><a href="#local-6989586621679626141"><span class="hs-identifier hs-var">p_argc</span></a></span><span>
+</span><span id="line-76"></span><span>   </span><span id="local-6989586621679626135"><span class="annot"><span class="annottext">Ptr CString
+</span><a href="#local-6989586621679626135"><span class="hs-identifier hs-var">argv</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">forall a. Storable a =&gt; Ptr a -&gt; IO a
 </span><a href="Foreign.Storable.html#peek"><span class="hs-identifier hs-var">peek</span></a></span><span> </span><span class="annot"><span class="annottext">Ptr (Ptr CString)
-</span><a href="#local-6989586621679626072"><span class="hs-identifier hs-var">p_argv</span></a></span><span>
-</span><span id="line-77"></span><span>   </span><span id="local-6989586621679626066"><span class="annot"><span class="annottext">TextEncoding
-</span><a href="#local-6989586621679626066"><span class="hs-identifier hs-var">enc</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO TextEncoding
+</span><a href="#local-6989586621679626140"><span class="hs-identifier hs-var">p_argv</span></a></span><span>
+</span><span id="line-77"></span><span>   </span><span id="local-6989586621679626134"><span class="annot"><span class="annottext">TextEncoding
+</span><a href="#local-6989586621679626134"><span class="hs-identifier hs-var">enc</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO TextEncoding
 </span><a href="GHC.IO.Encoding.html#argvEncoding"><span class="hs-identifier hs-var">argvEncoding</span></a></span><span>
 </span><span id="line-78"></span><span>   </span><span class="annot"><span class="annottext">forall a. Storable a =&gt; Int -&gt; Ptr a -&gt; IO [a]
 </span><a href="Foreign.Marshal.Array.html#peekArray"><span class="hs-identifier hs-var">peekArray</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679626070"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><a href="#local-6989586621679626138"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><a href="GHC.Num.html#-"><span class="hs-glyph hs-var">-</span></a></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. Storable a =&gt; Ptr a -&gt; Int -&gt; Ptr a
 </span><a href="Foreign.Marshal.Array.html#advancePtr"><span class="hs-identifier hs-var">advancePtr</span></a></span><span> </span><span class="annot"><span class="annottext">Ptr CString
-</span><a href="#local-6989586621679626067"><span class="hs-identifier hs-var">argv</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679626135"><span class="hs-identifier hs-var">argv</span></a></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
 </span><a href="GHC.Base.html#%3E%3E%3D"><span class="hs-operator hs-var">&gt;&gt;=</span></a></span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
 (Traversable t, Monad m) =&gt;
 (a -&gt; m b) -&gt; t a -&gt; m (t b)
 </span><a href="Data.Traversable.html#mapM"><span class="hs-identifier hs-var">mapM</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TextEncoding -&gt; CString -&gt; IO String
 </span><a href="GHC.Foreign.html#peekCString"><span class="hs-identifier hs-var">GHC.peekCString</span></a></span><span> </span><span class="annot"><span class="annottext">TextEncoding
-</span><a href="#local-6989586621679626066"><span class="hs-identifier hs-var">enc</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679626134"><span class="hs-identifier hs-var">enc</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-79"></span><span>
 </span><span id="line-80"></span><span>
 </span><span id="line-81"></span><span class="hs-keyword">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-keyword">ccall</span></span><span> </span><span class="annot"><span class="hs-keyword">unsafe</span></span><span> </span><span class="annot"><span class="hs-string">&quot;getProgArgv&quot;</span></span><span>
@@ -130,81 +130,81 @@ is probably really @FOO.EXE@, and that is what 'getProgName' will return.
 </span><a href="System.Environment.html#getProgName"><span class="hs-identifier hs-var hs-var">getProgName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-97"></span><span>  </span><span class="annot"><span class="annottext">forall a b. Storable a =&gt; (Ptr a -&gt; IO b) -&gt; IO b
 </span><a href="Foreign.Marshal.Alloc.html#alloca"><span class="hs-identifier hs-var">alloca</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="hs-glyph">\</span><span> </span><span id="local-6989586621679626061"><span class="annot"><span class="annottext">Ptr CInt
-</span><a href="#local-6989586621679626061"><span class="hs-identifier hs-var">p_argc</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="hs-glyph">\</span><span> </span><span id="local-6989586621679626129"><span class="annot"><span class="annottext">Ptr CInt
+</span><a href="#local-6989586621679626129"><span class="hs-identifier hs-var">p_argc</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
 </span><span id="line-98"></span><span>  </span><span class="annot"><span class="annottext">forall a b. Storable a =&gt; (Ptr a -&gt; IO b) -&gt; IO b
 </span><a href="Foreign.Marshal.Alloc.html#alloca"><span class="hs-identifier hs-var">alloca</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="hs-glyph">\</span><span> </span><span id="local-6989586621679626060"><span class="annot"><span class="annottext">Ptr (Ptr CString)
-</span><a href="#local-6989586621679626060"><span class="hs-identifier hs-var">p_argv</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="hs-glyph">\</span><span> </span><span id="local-6989586621679626128"><span class="annot"><span class="annottext">Ptr (Ptr CString)
+</span><a href="#local-6989586621679626128"><span class="hs-identifier hs-var">p_argv</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
 </span><span id="line-99"></span><span>     </span><span class="annot"><span class="annottext">Ptr CInt -&gt; Ptr (Ptr CString) -&gt; IO ()
 </span><a href="System.Environment.html#getProgArgv"><span class="hs-identifier hs-var">getProgArgv</span></a></span><span> </span><span class="annot"><span class="annottext">Ptr CInt
-</span><a href="#local-6989586621679626061"><span class="hs-identifier hs-var">p_argc</span></a></span><span> </span><span class="annot"><span class="annottext">Ptr (Ptr CString)
-</span><a href="#local-6989586621679626060"><span class="hs-identifier hs-var">p_argv</span></a></span><span>
-</span><span id="line-100"></span><span>     </span><span id="local-6989586621679626059"><span class="annot"><span class="annottext">Ptr CString
-</span><a href="#local-6989586621679626059"><span class="hs-identifier hs-var">argv</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">forall a. Storable a =&gt; Ptr a -&gt; IO a
+</span><a href="#local-6989586621679626129"><span class="hs-identifier hs-var">p_argc</span></a></span><span> </span><span class="annot"><span class="annottext">Ptr (Ptr CString)
+</span><a href="#local-6989586621679626128"><span class="hs-identifier hs-var">p_argv</span></a></span><span>
+</span><span id="line-100"></span><span>     </span><span id="local-6989586621679626127"><span class="annot"><span class="annottext">Ptr CString
+</span><a href="#local-6989586621679626127"><span class="hs-identifier hs-var">argv</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">forall a. Storable a =&gt; Ptr a -&gt; IO a
 </span><a href="Foreign.Storable.html#peek"><span class="hs-identifier hs-var">peek</span></a></span><span> </span><span class="annot"><span class="annottext">Ptr (Ptr CString)
-</span><a href="#local-6989586621679626060"><span class="hs-identifier hs-var">p_argv</span></a></span><span>
+</span><a href="#local-6989586621679626128"><span class="hs-identifier hs-var">p_argv</span></a></span><span>
 </span><span id="line-101"></span><span>     </span><span class="annot"><span class="annottext">Ptr CString -&gt; IO String
 </span><a href="System.Environment.html#unpackProgName"><span class="hs-identifier hs-var">unpackProgName</span></a></span><span> </span><span class="annot"><span class="annottext">Ptr CString
-</span><a href="#local-6989586621679626059"><span class="hs-identifier hs-var">argv</span></a></span><span>
+</span><a href="#local-6989586621679626127"><span class="hs-identifier hs-var">argv</span></a></span><span>
 </span><span id="line-102"></span><span>
 </span><span id="line-103"></span><span class="annot"><a href="System.Environment.html#unpackProgName"><span class="hs-identifier hs-type">unpackProgName</span></a></span><span>  </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GHC.Ptr.html#Ptr"><span class="hs-identifier hs-type">Ptr</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="GHC.Ptr.html#Ptr"><span class="hs-identifier hs-type">Ptr</span></a></span><span> </span><span class="annot"><a href="Foreign.C.Types.html#CChar"><span class="hs-identifier hs-type">CChar</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span>   </span><span class="hs-comment">-- argv[0]</span><span>
 </span><span id="line-104"></span><span id="unpackProgName"><span class="annot"><span class="annottext">unpackProgName :: Ptr CString -&gt; IO String
-</span><a href="System.Environment.html#unpackProgName"><span class="hs-identifier hs-var hs-var">unpackProgName</span></a></span></span><span> </span><span id="local-6989586621679626056"><span class="annot"><span class="annottext">Ptr CString
-</span><a href="#local-6989586621679626056"><span class="hs-identifier hs-var">argv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-105"></span><span>  </span><span id="local-6989586621679626055"><span class="annot"><span class="annottext">TextEncoding
-</span><a href="#local-6989586621679626055"><span class="hs-identifier hs-var">enc</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO TextEncoding
+</span><a href="System.Environment.html#unpackProgName"><span class="hs-identifier hs-var hs-var">unpackProgName</span></a></span></span><span> </span><span id="local-6989586621679626124"><span class="annot"><span class="annottext">Ptr CString
+</span><a href="#local-6989586621679626124"><span class="hs-identifier hs-var">argv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-105"></span><span>  </span><span id="local-6989586621679626123"><span class="annot"><span class="annottext">TextEncoding
+</span><a href="#local-6989586621679626123"><span class="hs-identifier hs-var">enc</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO TextEncoding
 </span><a href="GHC.IO.Encoding.html#argvEncoding"><span class="hs-identifier hs-var">argvEncoding</span></a></span><span>
-</span><span id="line-106"></span><span>  </span><span id="local-6989586621679626054"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626054"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">forall a. Storable a =&gt; Ptr a -&gt; Int -&gt; IO a
+</span><span id="line-106"></span><span>  </span><span id="local-6989586621679626122"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626122"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">forall a. Storable a =&gt; Ptr a -&gt; Int -&gt; IO a
 </span><a href="Foreign.Storable.html#peekElemOff"><span class="hs-identifier hs-var">peekElemOff</span></a></span><span> </span><span class="annot"><span class="annottext">Ptr CString
-</span><a href="#local-6989586621679626056"><span class="hs-identifier hs-var">argv</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679626124"><span class="hs-identifier hs-var">argv</span></a></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
 </span><a href="GHC.Base.html#%3E%3E%3D"><span class="hs-operator hs-var">&gt;&gt;=</span></a></span><span> </span><span class="annot"><span class="annottext">TextEncoding -&gt; CString -&gt; IO String
 </span><a href="GHC.Foreign.html#peekCString"><span class="hs-identifier hs-var">GHC.peekCString</span></a></span><span> </span><span class="annot"><span class="annottext">TextEncoding
-</span><a href="#local-6989586621679626055"><span class="hs-identifier hs-var">enc</span></a></span><span>
+</span><a href="#local-6989586621679626123"><span class="hs-identifier hs-var">enc</span></a></span><span>
 </span><span id="line-107"></span><span>  </span><span class="annot"><span class="annottext">forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><a href="GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; String
 </span><a href="System.Environment.html#basename"><span class="hs-identifier hs-var">basename</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626054"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679626122"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-108"></span><span>
 </span><span id="line-109"></span><span class="annot"><a href="System.Environment.html#basename"><span class="hs-identifier hs-type">basename</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GHC.IO.html#FilePath"><span class="hs-identifier hs-type">FilePath</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="GHC.IO.html#FilePath"><span class="hs-identifier hs-type">FilePath</span></a></span><span>
 </span><span id="line-110"></span><span id="basename"><span class="annot"><span class="annottext">basename :: String -&gt; String
-</span><a href="System.Environment.html#basename"><span class="hs-identifier hs-var hs-var">basename</span></a></span></span><span> </span><span id="local-6989586621679626050"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626050"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
-</span><a href="#local-6989586621679626049"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626050"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626050"><span class="hs-identifier hs-var">f</span></a></span><span>
+</span><a href="System.Environment.html#basename"><span class="hs-identifier hs-var hs-var">basename</span></a></span></span><span> </span><span id="local-6989586621679626118"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626118"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679626117"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626118"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626118"><span class="hs-identifier hs-var">f</span></a></span><span>
 </span><span id="line-111"></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-112"></span><span>  </span><span id="local-6989586621679626049"><span class="annot"><span class="annottext">go :: String -&gt; String -&gt; String
-</span><a href="#local-6989586621679626049"><span class="hs-identifier hs-var hs-var">go</span></a></span></span><span> </span><span id="local-6989586621679626048"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626048"><span class="hs-identifier hs-var">acc</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626048"><span class="hs-identifier hs-var">acc</span></a></span><span>
-</span><span id="line-113"></span><span>  </span><span class="annot"><a href="#local-6989586621679626049"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span id="local-6989586621679626047"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626047"><span class="hs-identifier hs-var">acc</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679626046"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679626046"><span class="hs-identifier hs-var">x</span></a></span></span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#%3A"><span class="hs-glyph hs-type">:</span></a></span><span id="local-6989586621679626045"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626045"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span>
+</span><span id="line-112"></span><span>  </span><span id="local-6989586621679626117"><span class="annot"><span class="annottext">go :: String -&gt; String -&gt; String
+</span><a href="#local-6989586621679626117"><span class="hs-identifier hs-var hs-var">go</span></a></span></span><span> </span><span id="local-6989586621679626116"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626116"><span class="hs-identifier hs-var">acc</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626116"><span class="hs-identifier hs-var">acc</span></a></span><span>
+</span><span id="line-113"></span><span>  </span><span class="annot"><a href="#local-6989586621679626117"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span id="local-6989586621679626115"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626115"><span class="hs-identifier hs-var">acc</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679626114"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679626114"><span class="hs-identifier hs-var">x</span></a></span></span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#%3A"><span class="hs-glyph hs-type">:</span></a></span><span id="local-6989586621679626113"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626113"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span>
 </span><span id="line-114"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Char -&gt; Bool
-</span><a href="#local-6989586621679626044"><span class="hs-identifier hs-var">isPathSeparator</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679626046"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
-</span><a href="#local-6989586621679626049"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626045"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626045"><span class="hs-identifier hs-var">xs</span></a></span><span>
+</span><a href="#local-6989586621679626112"><span class="hs-identifier hs-var">isPathSeparator</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679626114"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679626117"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626113"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626113"><span class="hs-identifier hs-var">xs</span></a></span><span>
 </span><span id="line-115"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><a href="GHC.Base.html#otherwise"><span class="hs-identifier hs-var">otherwise</span></a></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
-</span><a href="#local-6989586621679626049"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626047"><span class="hs-identifier hs-var">acc</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626045"><span class="hs-identifier hs-var">xs</span></a></span><span>
+</span><a href="#local-6989586621679626117"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626115"><span class="hs-identifier hs-var">acc</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626113"><span class="hs-identifier hs-var">xs</span></a></span><span>
 </span><span id="line-116"></span><span>
-</span><span id="line-117"></span><span>  </span><span class="annot"><a href="#local-6989586621679626044"><span class="hs-identifier hs-type">isPathSeparator</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Char"><span class="hs-identifier hs-type">Char</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a></span><span>
-</span><span id="line-118"></span><span>  </span><span id="local-6989586621679626044"><span class="annot"><span class="annottext">isPathSeparator :: Char -&gt; Bool
-</span><a href="#local-6989586621679626044"><span class="hs-identifier hs-var hs-var">isPathSeparator</span></a></span></span><span> </span><span class="annot"><span class="annottext">Char
+</span><span id="line-117"></span><span>  </span><span class="annot"><a href="#local-6989586621679626112"><span class="hs-identifier hs-type">isPathSeparator</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Char"><span class="hs-identifier hs-type">Char</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a></span><span>
+</span><span id="line-118"></span><span>  </span><span id="local-6989586621679626112"><span class="annot"><span class="annottext">isPathSeparator :: Char -&gt; Bool
+</span><a href="#local-6989586621679626112"><span class="hs-identifier hs-var hs-var">isPathSeparator</span></a></span></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'/'</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#True"><span class="hs-identifier hs-var">True</span></a></span><span class="hs-cpp">
 #if defined(mingw32_HOST_OS)
 </span><span>  </span><span class="hs-identifier">isPathSeparator</span><span> </span><span class="hs-char">'\\'</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">True</span><span class="hs-cpp">
 #endif
-</span><span>  </span><span class="annot"><a href="#local-6989586621679626044"><span class="hs-identifier hs-var">isPathSeparator</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><span>  </span><span class="annot"><a href="#local-6989586621679626112"><span class="hs-identifier hs-var">isPathSeparator</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-identifier">_</span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#False"><span class="hs-identifier hs-var">False</span></a></span><span>
 </span><span id="line-123"></span><span>
@@ -220,13 +220,13 @@ is probably really @FOO.EXE@, and that is what 'getProgName' will return.
 </span><span id="line-133"></span><span>
 </span><span id="line-134"></span><span class="annot"><a href="System.Environment.html#getEnv"><span class="hs-identifier hs-type">getEnv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span>
 </span><span id="line-135"></span><span id="getEnv"><span class="annot"><span class="annottext">getEnv :: String -&gt; IO String
-</span><a href="System.Environment.html#getEnv"><span class="hs-identifier hs-var hs-var">getEnv</span></a></span></span><span> </span><span id="local-6989586621679626043"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626043"><span class="hs-identifier hs-var">name</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; IO (Maybe String)
+</span><a href="System.Environment.html#getEnv"><span class="hs-identifier hs-var hs-var">getEnv</span></a></span></span><span> </span><span id="local-6989586621679626111"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626111"><span class="hs-identifier hs-var">name</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; IO (Maybe String)
 </span><a href="System.Environment.html#lookupEnv"><span class="hs-identifier hs-var">lookupEnv</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626043"><span class="hs-identifier hs-var">name</span></a></span><span> </span><span class="annot"><span class="annottext">forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
+</span><a href="#local-6989586621679626111"><span class="hs-identifier hs-var">name</span></a></span><span> </span><span class="annot"><span class="annottext">forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
 </span><a href="GHC.Base.html#%3E%3E%3D"><span class="hs-operator hs-var">&gt;&gt;=</span></a></span><span> </span><span class="annot"><span class="annottext">forall b a. b -&gt; (a -&gt; b) -&gt; Maybe a -&gt; b
 </span><a href="Data.Maybe.html#maybe"><span class="hs-identifier hs-var">maybe</span></a></span><span> </span><span class="annot"><span class="annottext">forall {a}. IO a
-</span><a href="#local-6989586621679626041"><span class="hs-identifier hs-var">handleError</span></a></span><span> </span><span class="annot"><span class="annottext">forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
+</span><a href="#local-6989586621679626109"><span class="hs-identifier hs-var">handleError</span></a></span><span> </span><span class="annot"><span class="annottext">forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><a href="GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a></span><span>
 </span><span id="line-136"></span><span>  </span><span class="hs-keyword">where</span><span class="hs-cpp">
 #if defined(mingw32_HOST_OS)
@@ -243,10 +243,10 @@ is probably really @FOO.EXE@, and that is what 'getProgName' will return.
 </span><span id="line-148"></span><span>  </span><span class="hs-identifier">c_GetLastError</span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">DWORD</span><span class="hs-cpp">
 
 #else
-</span><span>    </span><span id="local-6989586621679626041"><span class="annot"><span class="annottext">handleError :: IO a
-</span><a href="#local-6989586621679626041"><span class="hs-identifier hs-var hs-var">handleError</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. String -&gt; IO a
+</span><span>    </span><span id="local-6989586621679626109"><span class="annot"><span class="annottext">handleError :: IO a
+</span><a href="#local-6989586621679626109"><span class="hs-identifier hs-var hs-var">handleError</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. String -&gt; IO a
 </span><a href="System.Environment.html#ioe_missingEnvVar"><span class="hs-identifier hs-var">ioe_missingEnvVar</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626043"><span class="hs-identifier hs-var">name</span></a></span><span class="hs-cpp">
+</span><a href="#local-6989586621679626111"><span class="hs-identifier hs-var">name</span></a></span><span class="hs-cpp">
 #endif
 </span><span>
 </span><span id="line-154"></span><span class="hs-comment">-- | Return the value of the environment variable @var@, or @Nothing@ if</span><span>
@@ -270,34 +270,34 @@ is probably really @FOO.EXE@, and that is what 'getProgName' will return.
 </span><span id="line-172"></span><span>  </span><span class="hs-identifier">c_GetEnvironmentVariable</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">LPWSTR</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">LPWSTR</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">DWORD</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">DWORD</span><span class="hs-cpp">
 #else
 </span><span id="lookupEnv"><span class="annot"><span class="annottext">lookupEnv :: String -&gt; IO (Maybe String)
-</span><a href="System.Environment.html#lookupEnv"><span class="hs-identifier hs-var hs-var">lookupEnv</span></a></span></span><span> </span><span id="local-6989586621679626039"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626039"><span class="hs-identifier hs-var">name</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><a href="System.Environment.html#lookupEnv"><span class="hs-identifier hs-var hs-var">lookupEnv</span></a></span></span><span> </span><span id="local-6989586621679626107"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626107"><span class="hs-identifier hs-var">name</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-175"></span><span>    </span><span class="annot"><span class="annottext">forall a. String -&gt; (CString -&gt; IO a) -&gt; IO a
 </span><a href="Foreign.C.String.html#withCString"><span class="hs-identifier hs-var">withCString</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626039"><span class="hs-identifier hs-var">name</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679626037"><span class="annot"><span class="annottext">CString
-</span><a href="#local-6989586621679626037"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-176"></span><span>      </span><span id="local-6989586621679626036"><span class="annot"><span class="annottext">CString
-</span><a href="#local-6989586621679626036"><span class="hs-identifier hs-var">litstring</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">CString -&gt; IO CString
+</span><a href="#local-6989586621679626107"><span class="hs-identifier hs-var">name</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679626105"><span class="annot"><span class="annottext">CString
+</span><a href="#local-6989586621679626105"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-176"></span><span>      </span><span id="local-6989586621679626104"><span class="annot"><span class="annottext">CString
+</span><a href="#local-6989586621679626104"><span class="hs-identifier hs-var">litstring</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">CString -&gt; IO CString
 </span><a href="System.Environment.html#c_getenv"><span class="hs-identifier hs-var">c_getenv</span></a></span><span> </span><span class="annot"><span class="annottext">CString
-</span><a href="#local-6989586621679626037"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><a href="#local-6989586621679626105"><span class="hs-identifier hs-var">s</span></a></span><span>
 </span><span id="line-177"></span><span>      </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">CString
-</span><a href="#local-6989586621679626036"><span class="hs-identifier hs-var">litstring</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><a href="#local-6989586621679626104"><span class="hs-identifier hs-var">litstring</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%2F%3D"><span class="hs-operator hs-var">/=</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Ptr a
 </span><a href="GHC.Ptr.html#nullPtr"><span class="hs-identifier hs-var">nullPtr</span></a></span><span>
-</span><span id="line-178"></span><span>        </span><span class="hs-keyword">then</span><span> </span><span class="hs-keyword">do</span><span> </span><span id="local-6989586621679626032"><span class="annot"><span class="annottext">TextEncoding
-</span><a href="#local-6989586621679626032"><span class="hs-identifier hs-var">enc</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO TextEncoding
+</span><span id="line-178"></span><span>        </span><span class="hs-keyword">then</span><span> </span><span class="hs-keyword">do</span><span> </span><span id="local-6989586621679626100"><span class="annot"><span class="annottext">TextEncoding
+</span><a href="#local-6989586621679626100"><span class="hs-identifier hs-var">enc</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO TextEncoding
 </span><a href="GHC.IO.Encoding.html#getFileSystemEncoding"><span class="hs-identifier hs-var">getFileSystemEncoding</span></a></span><span>
-</span><span id="line-179"></span><span>                </span><span id="local-6989586621679626031"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626031"><span class="hs-identifier hs-var">result</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">TextEncoding -&gt; CString -&gt; IO String
+</span><span id="line-179"></span><span>                </span><span id="local-6989586621679626099"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626099"><span class="hs-identifier hs-var">result</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">TextEncoding -&gt; CString -&gt; IO String
 </span><a href="GHC.Foreign.html#peekCString"><span class="hs-identifier hs-var">GHC.peekCString</span></a></span><span> </span><span class="annot"><span class="annottext">TextEncoding
-</span><a href="#local-6989586621679626032"><span class="hs-identifier hs-var">enc</span></a></span><span> </span><span class="annot"><span class="annottext">CString
-</span><a href="#local-6989586621679626036"><span class="hs-identifier hs-var">litstring</span></a></span><span>
+</span><a href="#local-6989586621679626100"><span class="hs-identifier hs-var">enc</span></a></span><span> </span><span class="annot"><span class="annottext">CString
+</span><a href="#local-6989586621679626104"><span class="hs-identifier hs-var">litstring</span></a></span><span>
 </span><span id="line-180"></span><span>                </span><span class="annot"><span class="annottext">forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><a href="GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
 </span><a href="GHC.Maybe.html#Just"><span class="hs-identifier hs-var">Just</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626031"><span class="hs-identifier hs-var">result</span></a></span><span>
+</span><a href="#local-6989586621679626099"><span class="hs-identifier hs-var">result</span></a></span><span>
 </span><span id="line-181"></span><span>        </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><a href="GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
 </span><a href="GHC.Maybe.html#Nothing"><span class="hs-identifier hs-var">Nothing</span></a></span><span>
@@ -306,10 +306,10 @@ is probably really @FOO.EXE@, and that is what 'getProgName' will return.
 </span><span id="line-184"></span><span>   </span><span id="c_getenv"><span class="annot"><a href="System.Environment.html#c_getenv"><span class="hs-identifier hs-var">c_getenv</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Foreign.C.String.html#CString"><span class="hs-identifier hs-type">CString</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="GHC.Ptr.html#Ptr"><span class="hs-identifier hs-type">Ptr</span></a></span><span> </span><span class="annot"><a href="Foreign.C.Types.html#CChar"><span class="hs-identifier hs-type">CChar</span></a></span><span class="hs-special">)</span><span class="hs-cpp">
 #endif
 </span><span>
-</span><span id="line-187"></span><span id="local-6989586621679626198"><span class="annot"><a href="System.Environment.html#ioe_missingEnvVar"><span class="hs-identifier hs-type">ioe_missingEnvVar</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679626198"><span class="hs-identifier hs-type">a</span></a></span></span><span>
+</span><span id="line-187"></span><span id="local-6989586621679626266"><span class="annot"><a href="System.Environment.html#ioe_missingEnvVar"><span class="hs-identifier hs-type">ioe_missingEnvVar</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679626266"><span class="hs-identifier hs-type">a</span></a></span></span><span>
 </span><span id="line-188"></span><span id="ioe_missingEnvVar"><span class="annot"><span class="annottext">ioe_missingEnvVar :: forall a. String -&gt; IO a
-</span><a href="System.Environment.html#ioe_missingEnvVar"><span class="hs-identifier hs-var hs-var">ioe_missingEnvVar</span></a></span></span><span> </span><span id="local-6989586621679626030"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626030"><span class="hs-identifier hs-var">name</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. IOError -&gt; IO a
+</span><a href="System.Environment.html#ioe_missingEnvVar"><span class="hs-identifier hs-var hs-var">ioe_missingEnvVar</span></a></span></span><span> </span><span id="local-6989586621679626098"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626098"><span class="hs-identifier hs-var">name</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. IOError -&gt; IO a
 </span><a href="GHC.IO.Exception.html#ioException"><span class="hs-identifier hs-var">ioException</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Maybe Handle
 -&gt; IOErrorType
 -&gt; String
@@ -325,7 +325,7 @@ is probably really @FOO.EXE@, and that is what 'getProgName' will return.
 </span><span class="hs-string">&quot;no environment variable&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
 </span><a href="GHC.Maybe.html#Nothing"><span class="hs-identifier hs-var">Nothing</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
 </span><a href="GHC.Maybe.html#Just"><span class="hs-identifier hs-var">Just</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626030"><span class="hs-identifier hs-var">name</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679626098"><span class="hs-identifier hs-var">name</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-190"></span><span>
 </span><span id="line-191"></span><span class="hs-comment">-- | @setEnv name value@ sets the specified environment variable to @value@.</span><span>
 </span><span id="line-192"></span><span class="hs-comment">--</span><span>
@@ -353,12 +353,12 @@ is probably really @FOO.EXE@, and that is what 'getProgName' will return.
 </span><span id="line-214"></span><span class="hs-comment">-- @since 4.7.0.0</span><span>
 </span><span id="line-215"></span><span class="annot"><a href="System.Environment.html#setEnv"><span class="hs-identifier hs-type">setEnv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-216"></span><span id="setEnv"><span class="annot"><span class="annottext">setEnv :: String -&gt; String -&gt; IO ()
-</span><a href="System.Environment.html#setEnv"><span class="hs-identifier hs-var hs-var">setEnv</span></a></span></span><span> </span><span id="local-6989586621679626026"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626026"><span class="hs-identifier hs-var">key_</span></a></span></span><span> </span><span id="local-6989586621679626025"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626025"><span class="hs-identifier hs-var">value_</span></a></span></span><span>
+</span><a href="System.Environment.html#setEnv"><span class="hs-identifier hs-var hs-var">setEnv</span></a></span></span><span> </span><span id="local-6989586621679626094"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626094"><span class="hs-identifier hs-var">key_</span></a></span></span><span> </span><span id="local-6989586621679626093"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626093"><span class="hs-identifier hs-var">value_</span></a></span></span><span>
 </span><span id="line-217"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
 </span><a href="Data.Foldable.html#null"><span class="hs-identifier hs-var">null</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626023"><span class="hs-identifier hs-var">key</span></a></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall e a. Exception e =&gt; e -&gt; IO a
+</span><a href="#local-6989586621679626091"><span class="hs-identifier hs-var">key</span></a></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall e a. Exception e =&gt; e -&gt; IO a
 </span><a href="GHC.IO.html#throwIO"><span class="hs-identifier hs-var">throwIO</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IOErrorType -&gt; String -&gt; Maybe Handle -&gt; Maybe String -&gt; IOError
 </span><a href="System.IO.Error.html#mkIOError"><span class="hs-identifier hs-var">mkIOError</span></a></span><span> </span><span class="annot"><span class="annottext">IOErrorType
 </span><a href="GHC.IO.Exception.html#InvalidArgument"><span class="hs-identifier hs-var">InvalidArgument</span></a></span><span> </span><span class="annot"><span class="annottext">String
@@ -368,7 +368,7 @@ is probably really @FOO.EXE@, and that is what 'getProgName' will return.
 </span><span id="line-218"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'='</span></span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><a href="Data.Foldable.html#elem"><span class="hs-operator hs-var">`elem`</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626023"><span class="hs-identifier hs-var">key</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall e a. Exception e =&gt; e -&gt; IO a
+</span><a href="#local-6989586621679626091"><span class="hs-identifier hs-var">key</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall e a. Exception e =&gt; e -&gt; IO a
 </span><a href="GHC.IO.html#throwIO"><span class="hs-identifier hs-var">throwIO</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IOErrorType -&gt; String -&gt; Maybe Handle -&gt; Maybe String -&gt; IOError
 </span><a href="System.IO.Error.html#mkIOError"><span class="hs-identifier hs-var">mkIOError</span></a></span><span> </span><span class="annot"><span class="annottext">IOErrorType
 </span><a href="GHC.IO.Exception.html#InvalidArgument"><span class="hs-identifier hs-var">InvalidArgument</span></a></span><span> </span><span class="annot"><span class="annottext">String
@@ -377,27 +377,27 @@ is probably really @FOO.EXE@, and that is what 'getProgName' will return.
 </span><a href="GHC.Maybe.html#Nothing"><span class="hs-identifier hs-var">Nothing</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-219"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
 </span><a href="Data.Foldable.html#null"><span class="hs-identifier hs-var">null</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626020"><span class="hs-identifier hs-var">value</span></a></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; IO ()
+</span><a href="#local-6989586621679626088"><span class="hs-identifier hs-var">value</span></a></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; IO ()
 </span><a href="System.Environment.html#unsetEnv"><span class="hs-identifier hs-var">unsetEnv</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626023"><span class="hs-identifier hs-var">key</span></a></span><span>
+</span><a href="#local-6989586621679626091"><span class="hs-identifier hs-var">key</span></a></span><span>
 </span><span id="line-220"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><a href="GHC.Base.html#otherwise"><span class="hs-identifier hs-var">otherwise</span></a></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; IO ()
 </span><a href="System.Environment.html#setEnv_"><span class="hs-identifier hs-var">setEnv_</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626023"><span class="hs-identifier hs-var">key</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626020"><span class="hs-identifier hs-var">value</span></a></span><span>
+</span><a href="#local-6989586621679626091"><span class="hs-identifier hs-var">key</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626088"><span class="hs-identifier hs-var">value</span></a></span><span>
 </span><span id="line-221"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-222"></span><span>    </span><span id="local-6989586621679626023"><span class="annot"><span class="annottext">key :: String
-</span><a href="#local-6989586621679626023"><span class="hs-identifier hs-var hs-var">key</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
+</span><span id="line-222"></span><span>    </span><span id="local-6989586621679626091"><span class="annot"><span class="annottext">key :: String
+</span><a href="#local-6989586621679626091"><span class="hs-identifier hs-var hs-var">key</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><a href="GHC.List.html#takeWhile"><span class="hs-identifier hs-var">takeWhile</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%2F%3D"><span class="hs-operator hs-var">/=</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'\NUL'</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626026"><span class="hs-identifier hs-var">key_</span></a></span><span>
-</span><span id="line-223"></span><span>    </span><span id="local-6989586621679626020"><span class="annot"><span class="annottext">value :: String
-</span><a href="#local-6989586621679626020"><span class="hs-identifier hs-var hs-var">value</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679626094"><span class="hs-identifier hs-var">key_</span></a></span><span>
+</span><span id="line-223"></span><span>    </span><span id="local-6989586621679626088"><span class="annot"><span class="annottext">value :: String
+</span><a href="#local-6989586621679626088"><span class="hs-identifier hs-var hs-var">value</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><a href="GHC.List.html#takeWhile"><span class="hs-identifier hs-var">takeWhile</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%2F%3D"><span class="hs-operator hs-var">/=</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'\NUL'</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626025"><span class="hs-identifier hs-var">value_</span></a></span><span>
+</span><a href="#local-6989586621679626093"><span class="hs-identifier hs-var">value_</span></a></span><span>
 </span><span id="line-224"></span><span>
 </span><span id="line-225"></span><span class="annot"><a href="System.Environment.html#setEnv_"><span class="hs-identifier hs-type">setEnv_</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-cpp">
 #if defined(mingw32_HOST_OS)
@@ -413,26 +413,26 @@ is probably really @FOO.EXE@, and that is what 'getProgName' will return.
 </span><span id="line-236"></span><span class="hs-comment">-- 'putenv()'.  This leaks memory, but so do common implementations of</span><span>
 </span><span id="line-237"></span><span class="hs-comment">-- 'setenv()' (AFAIK).</span><span>
 </span><span id="line-238"></span><span id="setEnv_"><span class="annot"><span class="annottext">setEnv_ :: String -&gt; String -&gt; IO ()
-</span><a href="System.Environment.html#setEnv_"><span class="hs-identifier hs-var hs-var">setEnv_</span></a></span></span><span> </span><span id="local-6989586621679626015"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626015"><span class="hs-identifier hs-var">k</span></a></span></span><span> </span><span id="local-6989586621679626014"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626014"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; IO ()
+</span><a href="System.Environment.html#setEnv_"><span class="hs-identifier hs-var hs-var">setEnv_</span></a></span></span><span> </span><span id="local-6989586621679626083"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626083"><span class="hs-identifier hs-var">k</span></a></span></span><span> </span><span id="local-6989586621679626082"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626082"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; IO ()
 </span><a href="System.Environment.html#putEnv"><span class="hs-identifier hs-var">putEnv</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626015"><span class="hs-identifier hs-var">k</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679626083"><span class="hs-identifier hs-var">k</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
 </span><a href="GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;=&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
 </span><a href="GHC.Base.html#%2B%2B"><span class="hs-operator hs-var">++</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626014"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679626082"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-239"></span><span>
 </span><span id="line-240"></span><span class="annot"><a href="System.Environment.html#putEnv"><span class="hs-identifier hs-type">putEnv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-241"></span><span id="putEnv"><span class="annot"><span class="annottext">putEnv :: String -&gt; IO ()
-</span><a href="System.Environment.html#putEnv"><span class="hs-identifier hs-var hs-var">putEnv</span></a></span></span><span> </span><span id="local-6989586621679626012"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626012"><span class="hs-identifier hs-var">keyvalue</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-242"></span><span>  </span><span id="local-6989586621679626011"><span class="annot"><span class="annottext">CString
-</span><a href="#local-6989586621679626011"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO TextEncoding
+</span><a href="System.Environment.html#putEnv"><span class="hs-identifier hs-var hs-var">putEnv</span></a></span></span><span> </span><span id="local-6989586621679626080"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626080"><span class="hs-identifier hs-var">keyvalue</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-242"></span><span>  </span><span id="local-6989586621679626079"><span class="annot"><span class="annottext">CString
+</span><a href="#local-6989586621679626079"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO TextEncoding
 </span><a href="GHC.IO.Encoding.html#getFileSystemEncoding"><span class="hs-identifier hs-var">getFileSystemEncoding</span></a></span><span> </span><span class="annot"><span class="annottext">forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
 </span><a href="GHC.Base.html#%3E%3E%3D"><span class="hs-operator hs-var">&gt;&gt;=</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TextEncoding -&gt; String -&gt; IO CString
 </span><a href="GHC.Foreign.html#newCString"><span class="hs-operator hs-var">`GHC.newCString`</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626012"><span class="hs-identifier hs-var">keyvalue</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679626080"><span class="hs-identifier hs-var">keyvalue</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-243"></span><span>  </span><span class="hs-comment">-- IMPORTANT: Do not free `s` after calling putenv!</span><span>
 </span><span id="line-244"></span><span>  </span><span class="hs-comment">--</span><span>
 </span><span id="line-245"></span><span>  </span><span class="hs-comment">-- According to SUSv2, the string passed to putenv becomes part of the</span><span>
@@ -443,7 +443,7 @@ is probably really @FOO.EXE@, and that is what 'getProgName' will return.
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;putenv&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CString -&gt; IO CInt
 </span><a href="System.Environment.html#c_putenv"><span class="hs-identifier hs-var">c_putenv</span></a></span><span> </span><span class="annot"><span class="annottext">CString
-</span><a href="#local-6989586621679626011"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679626079"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-248"></span><span>
 </span><span id="line-249"></span><span class="hs-keyword">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-keyword">ccall</span></span><span> </span><span class="annot"><span class="hs-keyword">unsafe</span></span><span> </span><span class="annot"><span class="hs-string">&quot;putenv&quot;</span></span><span> </span><span id="c_putenv"><span class="annot"><a href="System.Environment.html#c_putenv"><span class="hs-identifier hs-var">c_putenv</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Foreign.C.String.html#CString"><span class="hs-identifier hs-type">CString</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="Foreign.C.Types.html#CInt"><span class="hs-identifier hs-type">CInt</span></a></span><span class="hs-cpp">
 #endif
@@ -469,10 +469,10 @@ is probably really @FOO.EXE@, and that is what 'getProgName' will return.
 </span><span class="hs-cpp">
 #if defined(HAVE_UNSETENV)
 </span><span id="unsetEnv"><span class="annot"><span class="annottext">unsetEnv :: String -&gt; IO ()
-</span><a href="System.Environment.html#unsetEnv"><span class="hs-identifier hs-var hs-var">unsetEnv</span></a></span></span><span> </span><span id="local-6989586621679626007"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626007"><span class="hs-identifier hs-var">key</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. String -&gt; (CString -&gt; IO a) -&gt; IO a
+</span><a href="System.Environment.html#unsetEnv"><span class="hs-identifier hs-var hs-var">unsetEnv</span></a></span></span><span> </span><span id="local-6989586621679626075"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626075"><span class="hs-identifier hs-var">key</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. String -&gt; (CString -&gt; IO a) -&gt; IO a
 </span><a href="System.Posix.Internals.html#withFilePath"><span class="hs-identifier hs-var">withFilePath</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626007"><span class="hs-identifier hs-var">key</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. (a -&gt; Bool) -&gt; String -&gt; IO a -&gt; IO ()
+</span><a href="#local-6989586621679626075"><span class="hs-identifier hs-var">key</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. (a -&gt; Bool) -&gt; String -&gt; IO a -&gt; IO ()
 </span><a href="Foreign.C.Error.html#throwErrnoIf_"><span class="hs-identifier hs-var">throwErrnoIf_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%2F%3D"><span class="hs-operator hs-var">/=</span></a></span><span> </span><span class="annot"><span class="annottext">CInt
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
@@ -490,91 +490,91 @@ is probably really @FOO.EXE@, and that is what 'getProgName' will return.
 'withArgs' @args act@ - while executing action @act@, have 'getArgs'
 return @args@.
 -}</span><span>
-</span><span id="line-284"></span><span id="local-6989586621679626179"><span class="annot"><a href="System.Environment.html#withArgs"><span class="hs-identifier hs-type">withArgs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679626179"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679626179"><span class="hs-identifier hs-type">a</span></a></span></span><span>
+</span><span id="line-284"></span><span id="local-6989586621679626247"><span class="annot"><a href="System.Environment.html#withArgs"><span class="hs-identifier hs-type">withArgs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679626247"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679626247"><span class="hs-identifier hs-type">a</span></a></span></span><span>
 </span><span id="line-285"></span><span id="withArgs"><span class="annot"><span class="annottext">withArgs :: forall a. [String] -&gt; IO a -&gt; IO a
-</span><a href="System.Environment.html#withArgs"><span class="hs-identifier hs-var hs-var">withArgs</span></a></span></span><span> </span><span id="local-6989586621679626003"><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679626003"><span class="hs-identifier hs-var">xs</span></a></span></span><span> </span><span id="local-6989586621679626002"><span class="annot"><span class="annottext">IO a
-</span><a href="#local-6989586621679626002"><span class="hs-identifier hs-var">act</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-286"></span><span>   </span><span id="local-6989586621679626001"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626001"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO String
+</span><a href="System.Environment.html#withArgs"><span class="hs-identifier hs-var hs-var">withArgs</span></a></span></span><span> </span><span id="local-6989586621679626071"><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679626071"><span class="hs-identifier hs-var">xs</span></a></span></span><span> </span><span id="local-6989586621679626070"><span class="annot"><span class="annottext">IO a
+</span><a href="#local-6989586621679626070"><span class="hs-identifier hs-var">act</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-286"></span><span>   </span><span id="local-6989586621679626069"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626069"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO String
 </span><a href="System.Environment.html#getProgName"><span class="hs-identifier hs-var">System.Environment.getProgName</span></a></span><span>
 </span><span id="line-287"></span><span>   </span><span class="annot"><span class="annottext">forall a. [String] -&gt; IO a -&gt; IO a
 </span><a href="System.Environment.html#withArgv"><span class="hs-identifier hs-var">withArgv</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679626001"><span class="hs-identifier hs-var">p</span></a></span><span class="annot"><span class="annottext">forall a. a -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679626069"><span class="hs-identifier hs-var">p</span></a></span><span class="annot"><span class="annottext">forall a. a -&gt; [a] -&gt; [a]
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#%3A"><span class="hs-glyph hs-var">:</span></a></span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679626003"><span class="hs-identifier hs-var">xs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">IO a
-</span><a href="#local-6989586621679626002"><span class="hs-identifier hs-var">act</span></a></span><span>
+</span><a href="#local-6989586621679626071"><span class="hs-identifier hs-var">xs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">IO a
+</span><a href="#local-6989586621679626070"><span class="hs-identifier hs-var">act</span></a></span><span>
 </span><span id="line-288"></span><span>
 </span><span id="line-289"></span><span class="hs-comment">{-|
 'withProgName' @name act@ - while executing action @act@,
 have 'getProgName' return @name@.
 -}</span><span>
-</span><span id="line-293"></span><span id="local-6989586621679626177"><span class="annot"><a href="System.Environment.html#withProgName"><span class="hs-identifier hs-type">withProgName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679626177"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679626177"><span class="hs-identifier hs-type">a</span></a></span></span><span>
+</span><span id="line-293"></span><span id="local-6989586621679626245"><span class="annot"><a href="System.Environment.html#withProgName"><span class="hs-identifier hs-type">withProgName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679626245"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679626245"><span class="hs-identifier hs-type">a</span></a></span></span><span>
 </span><span id="line-294"></span><span id="withProgName"><span class="annot"><span class="annottext">withProgName :: forall a. String -&gt; IO a -&gt; IO a
-</span><a href="System.Environment.html#withProgName"><span class="hs-identifier hs-var hs-var">withProgName</span></a></span></span><span> </span><span id="local-6989586621679625998"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679625998"><span class="hs-identifier hs-var">nm</span></a></span></span><span> </span><span id="local-6989586621679625997"><span class="annot"><span class="annottext">IO a
-</span><a href="#local-6989586621679625997"><span class="hs-identifier hs-var">act</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-295"></span><span>   </span><span id="local-6989586621679625996"><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679625996"><span class="hs-identifier hs-var">xs</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO [String]
+</span><a href="System.Environment.html#withProgName"><span class="hs-identifier hs-var hs-var">withProgName</span></a></span></span><span> </span><span id="local-6989586621679626066"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626066"><span class="hs-identifier hs-var">nm</span></a></span></span><span> </span><span id="local-6989586621679626065"><span class="annot"><span class="annottext">IO a
+</span><a href="#local-6989586621679626065"><span class="hs-identifier hs-var">act</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-295"></span><span>   </span><span id="local-6989586621679626064"><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679626064"><span class="hs-identifier hs-var">xs</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO [String]
 </span><a href="System.Environment.html#getArgs"><span class="hs-identifier hs-var">System.Environment.getArgs</span></a></span><span>
 </span><span id="line-296"></span><span>   </span><span class="annot"><span class="annottext">forall a. [String] -&gt; IO a -&gt; IO a
 </span><a href="System.Environment.html#withArgv"><span class="hs-identifier hs-var">withArgv</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679625998"><span class="hs-identifier hs-var">nm</span></a></span><span class="annot"><span class="annottext">forall a. a -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679626066"><span class="hs-identifier hs-var">nm</span></a></span><span class="annot"><span class="annottext">forall a. a -&gt; [a] -&gt; [a]
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#%3A"><span class="hs-glyph hs-var">:</span></a></span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679625996"><span class="hs-identifier hs-var">xs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">IO a
-</span><a href="#local-6989586621679625997"><span class="hs-identifier hs-var">act</span></a></span><span>
+</span><a href="#local-6989586621679626064"><span class="hs-identifier hs-var">xs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">IO a
+</span><a href="#local-6989586621679626065"><span class="hs-identifier hs-var">act</span></a></span><span>
 </span><span id="line-297"></span><span>
 </span><span id="line-298"></span><span class="hs-comment">-- Worker routine which marshals and replaces an argv vector for</span><span>
 </span><span id="line-299"></span><span class="hs-comment">-- the duration of an action.</span><span>
 </span><span id="line-300"></span><span>
-</span><span id="line-301"></span><span id="local-6989586621679625995"><span class="annot"><a href="System.Environment.html#withArgv"><span class="hs-identifier hs-type">withArgv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679625995"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679625995"><span class="hs-identifier hs-type">a</span></a></span></span><span>
+</span><span id="line-301"></span><span id="local-6989586621679626063"><span class="annot"><a href="System.Environment.html#withArgv"><span class="hs-identifier hs-type">withArgv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679626063"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679626063"><span class="hs-identifier hs-type">a</span></a></span></span><span>
 </span><span id="line-302"></span><span id="withArgv"><span class="annot"><span class="annottext">withArgv :: forall a. [String] -&gt; IO a -&gt; IO a
 </span><a href="System.Environment.html#withArgv"><span class="hs-identifier hs-var hs-var">withArgv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. [String] -&gt; IO a -&gt; IO a
 </span><a href="System.Environment.html#withProgArgv"><span class="hs-identifier hs-var">withProgArgv</span></a></span><span>
 </span><span id="line-303"></span><span>
-</span><span id="line-304"></span><span id="local-6989586621679625993"><span class="annot"><a href="System.Environment.html#withProgArgv"><span class="hs-identifier hs-type">withProgArgv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679625993"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679625993"><span class="hs-identifier hs-type">a</span></a></span></span><span>
+</span><span id="line-304"></span><span id="local-6989586621679626061"><span class="annot"><a href="System.Environment.html#withProgArgv"><span class="hs-identifier hs-type">withProgArgv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679626061"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679626061"><span class="hs-identifier hs-type">a</span></a></span></span><span>
 </span><span id="line-305"></span><span id="withProgArgv"><span class="annot"><span class="annottext">withProgArgv :: forall a. [String] -&gt; IO a -&gt; IO a
-</span><a href="System.Environment.html#withProgArgv"><span class="hs-identifier hs-var hs-var">withProgArgv</span></a></span></span><span> </span><span id="local-6989586621679625990"><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679625990"><span class="hs-identifier hs-var">new_args</span></a></span></span><span> </span><span id="local-6989586621679625989"><span class="annot"><span class="annottext">IO a
-</span><a href="#local-6989586621679625989"><span class="hs-identifier hs-var">act</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-306"></span><span>  </span><span id="local-6989586621679625988"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679625988"><span class="hs-identifier hs-var">pName</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO String
+</span><a href="System.Environment.html#withProgArgv"><span class="hs-identifier hs-var hs-var">withProgArgv</span></a></span></span><span> </span><span id="local-6989586621679626058"><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679626058"><span class="hs-identifier hs-var">new_args</span></a></span></span><span> </span><span id="local-6989586621679626057"><span class="annot"><span class="annottext">IO a
+</span><a href="#local-6989586621679626057"><span class="hs-identifier hs-var">act</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-306"></span><span>  </span><span id="local-6989586621679626056"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626056"><span class="hs-identifier hs-var">pName</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO String
 </span><a href="System.Environment.html#getProgName"><span class="hs-identifier hs-var">System.Environment.getProgName</span></a></span><span>
-</span><span id="line-307"></span><span>  </span><span id="local-6989586621679625987"><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679625987"><span class="hs-identifier hs-var">existing_args</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO [String]
+</span><span id="line-307"></span><span>  </span><span id="local-6989586621679626055"><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679626055"><span class="hs-identifier hs-var">existing_args</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO [String]
 </span><a href="System.Environment.html#getArgs"><span class="hs-identifier hs-var">System.Environment.getArgs</span></a></span><span>
 </span><span id="line-308"></span><span>  </span><span class="annot"><span class="annottext">forall a b c. IO a -&gt; IO b -&gt; IO c -&gt; IO c
 </span><a href="Control.Exception.Base.html#bracket_"><span class="hs-identifier hs-var">bracket_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[String] -&gt; IO ()
 </span><a href="System.Environment.html#setProgArgv"><span class="hs-identifier hs-var">setProgArgv</span></a></span><span> </span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679625990"><span class="hs-identifier hs-var">new_args</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679626058"><span class="hs-identifier hs-var">new_args</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-309"></span><span>           </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[String] -&gt; IO ()
 </span><a href="System.Environment.html#setProgArgv"><span class="hs-identifier hs-var">setProgArgv</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679625988"><span class="hs-identifier hs-var">pName</span></a></span><span class="annot"><span class="annottext">forall a. a -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679626056"><span class="hs-identifier hs-var">pName</span></a></span><span class="annot"><span class="annottext">forall a. a -&gt; [a] -&gt; [a]
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#%3A"><span class="hs-glyph hs-var">:</span></a></span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679625987"><span class="hs-identifier hs-var">existing_args</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679626055"><span class="hs-identifier hs-var">existing_args</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-310"></span><span>           </span><span class="annot"><span class="annottext">IO a
-</span><a href="#local-6989586621679625989"><span class="hs-identifier hs-var">act</span></a></span><span>
+</span><a href="#local-6989586621679626057"><span class="hs-identifier hs-var">act</span></a></span><span>
 </span><span id="line-311"></span><span>
 </span><span id="line-312"></span><span class="annot"><a href="System.Environment.html#setProgArgv"><span class="hs-identifier hs-type">setProgArgv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-313"></span><span id="setProgArgv"><span class="annot"><span class="annottext">setProgArgv :: [String] -&gt; IO ()
-</span><a href="System.Environment.html#setProgArgv"><span class="hs-identifier hs-var hs-var">setProgArgv</span></a></span></span><span> </span><span id="local-6989586621679625985"><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679625985"><span class="hs-identifier hs-var">argv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-314"></span><span>  </span><span id="local-6989586621679625984"><span class="annot"><span class="annottext">TextEncoding
-</span><a href="#local-6989586621679625984"><span class="hs-identifier hs-var">enc</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO TextEncoding
+</span><a href="System.Environment.html#setProgArgv"><span class="hs-identifier hs-var hs-var">setProgArgv</span></a></span></span><span> </span><span id="local-6989586621679626053"><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679626053"><span class="hs-identifier hs-var">argv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-314"></span><span>  </span><span id="local-6989586621679626052"><span class="annot"><span class="annottext">TextEncoding
+</span><a href="#local-6989586621679626052"><span class="hs-identifier hs-var">enc</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO TextEncoding
 </span><a href="GHC.IO.Encoding.html#argvEncoding"><span class="hs-identifier hs-var">argvEncoding</span></a></span><span>
 </span><span id="line-315"></span><span>  </span><span class="annot"><span class="annottext">forall a.
 TextEncoding -&gt; [String] -&gt; (Int -&gt; Ptr CString -&gt; IO a) -&gt; IO a
 </span><a href="GHC.Foreign.html#withCStringsLen"><span class="hs-identifier hs-var">GHC.withCStringsLen</span></a></span><span> </span><span class="annot"><span class="annottext">TextEncoding
-</span><a href="#local-6989586621679625984"><span class="hs-identifier hs-var">enc</span></a></span><span> </span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679625985"><span class="hs-identifier hs-var">argv</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679625982"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679625982"><span class="hs-identifier hs-var">len</span></a></span></span><span> </span><span id="local-6989586621679625981"><span class="annot"><span class="annottext">Ptr CString
-</span><a href="#local-6989586621679625981"><span class="hs-identifier hs-var">css</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a href="#local-6989586621679626052"><span class="hs-identifier hs-var">enc</span></a></span><span> </span><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679626053"><span class="hs-identifier hs-var">argv</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679626050"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679626050"><span class="hs-identifier hs-var">len</span></a></span></span><span> </span><span id="local-6989586621679626049"><span class="annot"><span class="annottext">Ptr CString
+</span><a href="#local-6989586621679626049"><span class="hs-identifier hs-var">css</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
 </span><span id="line-316"></span><span>    </span><span class="annot"><span class="annottext">CInt -&gt; Ptr CString -&gt; IO ()
 </span><a href="System.Environment.html#c_setProgArgv"><span class="hs-identifier hs-var">c_setProgArgv</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (Integral a, Num b) =&gt; a -&gt; b
 </span><a href="GHC.Real.html#fromIntegral"><span class="hs-identifier hs-var">fromIntegral</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679625982"><span class="hs-identifier hs-var">len</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Ptr CString
-</span><a href="#local-6989586621679625981"><span class="hs-identifier hs-var">css</span></a></span><span>
+</span><a href="#local-6989586621679626050"><span class="hs-identifier hs-var">len</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Ptr CString
+</span><a href="#local-6989586621679626049"><span class="hs-identifier hs-var">css</span></a></span><span>
 </span><span id="line-317"></span><span>
 </span><span id="line-318"></span><span class="hs-comment">-- setProgArgv copies the arguments</span><span>
 </span><span id="line-319"></span><span class="hs-keyword">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-keyword">ccall</span></span><span> </span><span class="annot"><span class="hs-keyword">unsafe</span></span><span> </span><span class="annot"><span class="hs-string">&quot;setProgArgv&quot;</span></span><span>
@@ -621,34 +621,34 @@ TextEncoding -&gt; [String] -&gt; (Int -&gt; Ptr CString -&gt; IO a) -&gt; IO a
 #else
 </span><span id="getEnvironment"><span class="annot"><span class="annottext">getEnvironment :: IO [(String, String)]
 </span><a href="System.Environment.html#getEnvironment"><span class="hs-identifier hs-var hs-var">getEnvironment</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-362"></span><span>   </span><span id="local-6989586621679625979"><span class="annot"><span class="annottext">Ptr CString
-</span><a href="#local-6989586621679625979"><span class="hs-identifier hs-var">pBlock</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO (Ptr CString)
+</span><span id="line-362"></span><span>   </span><span id="local-6989586621679626047"><span class="annot"><span class="annottext">Ptr CString
+</span><a href="#local-6989586621679626047"><span class="hs-identifier hs-var">pBlock</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO (Ptr CString)
 </span><a href="System.Environment.html#getEnvBlock"><span class="hs-identifier hs-var">getEnvBlock</span></a></span><span>
 </span><span id="line-363"></span><span>   </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Ptr CString
-</span><a href="#local-6989586621679625979"><span class="hs-identifier hs-var">pBlock</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><a href="#local-6989586621679626047"><span class="hs-identifier hs-var">pBlock</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%3D%3D"><span class="hs-operator hs-var">==</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Ptr a
 </span><a href="GHC.Ptr.html#nullPtr"><span class="hs-identifier hs-var">nullPtr</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><a href="GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-364"></span><span>    </span><span class="hs-keyword">else</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-365"></span><span>      </span><span id="local-6989586621679625977"><span class="annot"><span class="annottext">TextEncoding
-</span><a href="#local-6989586621679625977"><span class="hs-identifier hs-var">enc</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO TextEncoding
+</span><span id="line-365"></span><span>      </span><span id="local-6989586621679626045"><span class="annot"><span class="annottext">TextEncoding
+</span><a href="#local-6989586621679626045"><span class="hs-identifier hs-var">enc</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO TextEncoding
 </span><a href="GHC.IO.Encoding.html#getFileSystemEncoding"><span class="hs-identifier hs-var">getFileSystemEncoding</span></a></span><span>
-</span><span id="line-366"></span><span>      </span><span id="local-6989586621679625976"><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679625976"><span class="hs-identifier hs-var">stuff</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">forall a. (Storable a, Eq a) =&gt; a -&gt; Ptr a -&gt; IO [a]
+</span><span id="line-366"></span><span>      </span><span id="local-6989586621679626044"><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679626044"><span class="hs-identifier hs-var">stuff</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">forall a. (Storable a, Eq a) =&gt; a -&gt; Ptr a -&gt; IO [a]
 </span><a href="Foreign.Marshal.Array.html#peekArray0"><span class="hs-identifier hs-var">peekArray0</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Ptr a
 </span><a href="GHC.Ptr.html#nullPtr"><span class="hs-identifier hs-var">nullPtr</span></a></span><span> </span><span class="annot"><span class="annottext">Ptr CString
-</span><a href="#local-6989586621679625979"><span class="hs-identifier hs-var">pBlock</span></a></span><span> </span><span class="annot"><span class="annottext">forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
+</span><a href="#local-6989586621679626047"><span class="hs-identifier hs-var">pBlock</span></a></span><span> </span><span class="annot"><span class="annottext">forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
 </span><a href="GHC.Base.html#%3E%3E%3D"><span class="hs-operator hs-var">&gt;&gt;=</span></a></span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
 (Traversable t, Monad m) =&gt;
 (a -&gt; m b) -&gt; t a -&gt; m (t b)
 </span><a href="Data.Traversable.html#mapM"><span class="hs-identifier hs-var">mapM</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TextEncoding -&gt; CString -&gt; IO String
 </span><a href="GHC.Foreign.html#peekCString"><span class="hs-identifier hs-var">GHC.peekCString</span></a></span><span> </span><span class="annot"><span class="annottext">TextEncoding
-</span><a href="#local-6989586621679625977"><span class="hs-identifier hs-var">enc</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679626045"><span class="hs-identifier hs-var">enc</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-367"></span><span>      </span><span class="annot"><span class="annottext">forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><a href="GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><a href="GHC.Base.html#map"><span class="hs-identifier hs-var">map</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; (String, String)
 </span><a href="System.Environment.html#divvy"><span class="hs-identifier hs-var">divvy</span></a></span><span> </span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679625976"><span class="hs-identifier hs-var">stuff</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679626044"><span class="hs-identifier hs-var">stuff</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-368"></span><span>
 </span><span id="line-369"></span><span class="hs-keyword">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-keyword">ccall</span></span><span> </span><span class="annot"><span class="hs-keyword">unsafe</span></span><span> </span><span class="annot"><span class="hs-string">&quot;__hscore_environ&quot;</span></span><span>
 </span><span id="line-370"></span><span>  </span><span id="getEnvBlock"><span class="annot"><a href="System.Environment.html#getEnvBlock"><span class="hs-identifier hs-var">getEnvBlock</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="GHC.Ptr.html#Ptr"><span class="hs-identifier hs-type">Ptr</span></a></span><span> </span><span class="annot"><a href="Foreign.C.String.html#CString"><span class="hs-identifier hs-type">CString</span></a></span><span class="hs-special">)</span><span class="hs-cpp">
@@ -656,20 +656,20 @@ TextEncoding -&gt; [String] -&gt; (Int -&gt; Ptr CString -&gt; IO a) -&gt; IO a
 </span><span>
 </span><span id="line-373"></span><span class="annot"><a href="System.Environment.html#divvy"><span class="hs-identifier hs-type">divvy</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-374"></span><span id="divvy"><span class="annot"><span class="annottext">divvy :: String -&gt; (String, String)
-</span><a href="System.Environment.html#divvy"><span class="hs-identifier hs-var hs-var">divvy</span></a></span></span><span> </span><span id="local-6989586621679625973"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679625973"><span class="hs-identifier hs-var">str</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><a href="System.Environment.html#divvy"><span class="hs-identifier hs-var hs-var">divvy</span></a></span></span><span> </span><span id="local-6989586621679626041"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626041"><span class="hs-identifier hs-var">str</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-375"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">forall a. (a -&gt; Bool) -&gt; [a] -&gt; ([a], [a])
 </span><a href="GHC.List.html#break"><span class="hs-identifier hs-var">break</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#%3D%3D"><span class="hs-operator hs-var">==</span></a></span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'='</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679625973"><span class="hs-identifier hs-var">str</span></a></span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-376"></span><span>    </span><span class="hs-special">(</span><span id="local-6989586621679625971"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679625971"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">,</span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679625971"><span class="hs-identifier hs-var">xs</span></a></span><span class="hs-special">,</span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- don't barf (like Posix.getEnvironment)</span><span>
-</span><span id="line-377"></span><span>    </span><span class="hs-special">(</span><span id="local-6989586621679625970"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679625970"><span class="hs-identifier hs-var">name</span></a></span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Char
-</span><span class="hs-identifier">_</span></span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#%3A"><span class="hs-glyph hs-type">:</span></a></span><span id="local-6989586621679625969"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679625969"><span class="hs-identifier hs-var">value</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679625970"><span class="hs-identifier hs-var">name</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679625969"><span class="hs-identifier hs-var">value</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679626041"><span class="hs-identifier hs-var">str</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-376"></span><span>    </span><span class="hs-special">(</span><span id="local-6989586621679626039"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626039"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">,</span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626039"><span class="hs-identifier hs-var">xs</span></a></span><span class="hs-special">,</span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- don't barf (like Posix.getEnvironment)</span><span>
+</span><span id="line-377"></span><span>    </span><span class="hs-special">(</span><span id="local-6989586621679626038"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626038"><span class="hs-identifier hs-var">name</span></a></span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Char
+</span><span class="hs-identifier">_</span></span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#%3A"><span class="hs-glyph hs-type">:</span></a></span><span id="local-6989586621679626037"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626037"><span class="hs-identifier hs-var">value</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626038"><span class="hs-identifier hs-var">name</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679626037"><span class="hs-identifier hs-var">value</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-378"></span></pre></body></html>

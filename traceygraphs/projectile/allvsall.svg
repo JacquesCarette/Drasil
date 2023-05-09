@@ -177,27 +177,27 @@
 <path fill="none" stroke="black" d="M979.48,-71.88C998.7,-62.47 1022.73,-50.71 1043.24,-40.67"/>
 <polygon fill="black" stroke="black" points="1044.94,-43.73 1052.38,-36.19 1041.86,-37.44 1044.94,-43.73"/>
 </g>
-<!-- scalarPos -->
+<!-- projPos -->
 <g id="node17" class="node">
-<title>scalarPos</title>
+<title>projPos</title>
 <polygon fill="palegreen" stroke="black" points="879,-108 782,-108 782,-72 879,-72 879,-108"/>
 <text text-anchor="middle" x="830.5" y="-86.3" font-family="Times,serif" font-size="14.00">GD:rectPos</text>
 </g>
-<!-- scalarPos&#45;&gt;projSpeed -->
+<!-- projPos&#45;&gt;projSpeed -->
 <g id="edge16" class="edge">
-<title>scalarPos&#45;&gt;projSpeed</title>
+<title>projPos&#45;&gt;projSpeed</title>
 <path fill="none" stroke="black" d="M879.04,-90C881.82,-90 884.6,-90 887.38,-90"/>
 <polygon fill="black" stroke="black" points="887.45,-93.5 897.45,-90 887.45,-86.5 887.45,-93.5"/>
 </g>
-<!-- scalarPos&#45;&gt;pointMass -->
+<!-- projPos&#45;&gt;pointMass -->
 <g id="edge13" class="edge">
-<title>scalarPos&#45;&gt;pointMass</title>
+<title>projPos&#45;&gt;pointMass</title>
 <path fill="none" stroke="black" d="M860.1,-71.88C876.07,-62.64 895.96,-51.13 913.11,-41.21"/>
 <polygon fill="black" stroke="black" points="914.88,-44.23 921.79,-36.19 911.38,-38.17 914.88,-44.23"/>
 </g>
-<!-- scalarPos&#45;&gt;timeStartZero -->
+<!-- projPos&#45;&gt;timeStartZero -->
 <g id="edge14" class="edge">
-<title>scalarPos&#45;&gt;timeStartZero</title>
+<title>projPos&#45;&gt;timeStartZero</title>
 <path fill="none" stroke="black" d="M797.48,-71.88C779.42,-62.51 756.85,-50.81 737.55,-40.8"/>
 <polygon fill="black" stroke="black" points="739.14,-37.69 728.65,-36.19 735.92,-43.9 739.14,-37.69"/>
 </g>
@@ -207,9 +207,9 @@
 <polygon fill="pink" stroke="black" points="880.5,-36 780.5,-36 780.5,0 880.5,0 880.5,-36"/>
 <text text-anchor="middle" x="830.5" y="-14.3" font-family="Times,serif" font-size="14.00">TM:velocity</text>
 </g>
-<!-- scalarPos&#45;&gt;velocityTM -->
+<!-- projPos&#45;&gt;velocityTM -->
 <g id="edge15" class="edge">
-<title>scalarPos&#45;&gt;velocityTM</title>
+<title>projPos&#45;&gt;velocityTM</title>
 <path fill="none" stroke="black" d="M830.5,-71.7C830.5,-63.98 830.5,-54.71 830.5,-46.11"/>
 <polygon fill="black" stroke="black" points="834,-46.1 830.5,-36.1 827,-46.1 834,-46.1"/>
 </g>
@@ -279,9 +279,9 @@
 <path fill="none" stroke="black" d="M682.7,-71.7C684.6,-63.9 686.88,-54.51 688.98,-45.83"/>
 <polygon fill="black" stroke="black" points="692.39,-46.65 691.35,-36.1 685.58,-45 692.39,-46.65"/>
 </g>
-<!-- position&#45;&gt;scalarPos -->
+<!-- position&#45;&gt;projPos -->
 <g id="edge26" class="edge">
-<title>position&#45;&gt;scalarPos</title>
+<title>position&#45;&gt;projPos</title>
 <path fill="none" stroke="black" d="M725.11,-90C740.64,-90 756.18,-90 771.71,-90"/>
 <polygon fill="black" stroke="black" points="771.92,-93.5 781.92,-90 771.92,-86.5 771.92,-93.5"/>
 </g>

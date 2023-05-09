@@ -40,13 +40,13 @@
 </span><span id="line-40"></span><span class="hs-comment">-- :}</span><span>
 </span><span id="line-41"></span><span class="hs-comment">-- True</span><span>
 </span><span id="line-42"></span><span class="hs-comment">-- False</span><span>
-</span><span id="line-43"></span><span class="hs-keyword">newtype</span><span> </span><span id="Unique"><span class="annot"><a href="Data.Unique.html#Unique"><span class="hs-identifier hs-var">Unique</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Unique"><span class="annot"><a href="Data.Unique.html#Unique"><span class="hs-identifier hs-var">Unique</span></a></span></span><span> </span><span class="annot"><a href="../../ghc-bignum-1.2/src/GHC-Num-Integer.html#Integer"><span class="hs-identifier hs-type">Integer</span></a></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679627273"><span id="local-6989586621679627278"><span class="annot"><span class="annottext">Unique -&gt; Unique -&gt; Bool
+</span><span id="line-43"></span><span class="hs-keyword">newtype</span><span> </span><span id="Unique"><span class="annot"><a href="Data.Unique.html#Unique"><span class="hs-identifier hs-var">Unique</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Unique"><span class="annot"><a href="Data.Unique.html#Unique"><span class="hs-identifier hs-var">Unique</span></a></span></span><span> </span><span class="annot"><a href="../../ghc-bignum-1.2/src/GHC-Num-Integer.html#Integer"><span class="hs-identifier hs-type">Integer</span></a></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679627341"><span id="local-6989586621679627346"><span class="annot"><span class="annottext">Unique -&gt; Unique -&gt; Bool
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
 /= :: Unique -&gt; Unique -&gt; Bool
 $c/= :: Unique -&gt; Unique -&gt; Bool
 == :: Unique -&gt; Unique -&gt; Bool
 $c== :: Unique -&gt; Unique -&gt; Bool
-</span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#Eq"><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></a></span></span></span><span class="hs-special">,</span><span id="local-6989586621679627240"><span id="local-6989586621679627244"><span id="local-6989586621679627248"><span id="local-6989586621679627252"><span id="local-6989586621679627256"><span id="local-6989586621679627260"><span id="local-6989586621679627265"><span class="annot"><span class="annottext">Eq Unique
+</span><a href="../../ghc-prim-0.8.0/src/GHC-Classes.html#Eq"><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></a></span></span></span><span class="hs-special">,</span><span id="local-6989586621679627308"><span id="local-6989586621679627312"><span id="local-6989586621679627316"><span id="local-6989586621679627320"><span id="local-6989586621679627324"><span id="local-6989586621679627328"><span id="local-6989586621679627333"><span class="annot"><span class="annottext">Eq Unique
 Unique -&gt; Unique -&gt; Bool
 Unique -&gt; Unique -&gt; Ordering
 Unique -&gt; Unique -&gt; Unique
@@ -91,22 +91,22 @@ $ccompare :: Unique -&gt; Unique -&gt; Ordering
 </span><span id="line-53"></span><span class="annot"><a href="Data.Unique.html#newUnique"><span class="hs-identifier hs-type">newUnique</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#IO"><span class="hs-identifier hs-type">IO</span></a></span><span> </span><span class="annot"><a href="Data.Unique.html#Unique"><span class="hs-identifier hs-type">Unique</span></a></span><span>
 </span><span id="line-54"></span><span id="newUnique"><span class="annot"><span class="annottext">newUnique :: IO Unique
 </span><a href="Data.Unique.html#newUnique"><span class="hs-identifier hs-var hs-var">newUnique</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-55"></span><span>  </span><span id="local-6989586621679627233"><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679627233"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">forall a b. IORef a -&gt; (a -&gt; (a, b)) -&gt; IO b
+</span><span id="line-55"></span><span>  </span><span id="local-6989586621679627301"><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679627301"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">forall a b. IORef a -&gt; (a -&gt; (a, b)) -&gt; IO b
 </span><a href="GHC.IORef.html#atomicModifyIORef%27"><span class="hs-identifier hs-var">atomicModifyIORef'</span></a></span><span> </span><span class="annot"><span class="annottext">IORef Integer
 </span><a href="Data.Unique.html#uniqSource"><span class="hs-identifier hs-var">uniqSource</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679627231"><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679627231"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679627228"><span class="annot"><span class="annottext">z :: Integer
-</span><a href="#local-6989586621679627228"><span class="hs-identifier hs-var hs-var">z</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679627231"><span class="hs-identifier hs-var">x</span></a></span><span class="annot"><span class="annottext">forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a></span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679627299"><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679627299"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679627296"><span class="annot"><span class="annottext">z :: Integer
+</span><a href="#local-6989586621679627296"><span class="hs-identifier hs-var hs-var">z</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679627299"><span class="hs-identifier hs-var">x</span></a></span><span class="annot"><span class="annottext">forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><a href="GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a></span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1</span></span><span> </span><span class="hs-keyword">in</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679627228"><span class="hs-identifier hs-var">z</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679627228"><span class="hs-identifier hs-var">z</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679627296"><span class="hs-identifier hs-var">z</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679627296"><span class="hs-identifier hs-var">z</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-56"></span><span>  </span><span class="annot"><span class="annottext">forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><a href="GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Unique
 </span><a href="Data.Unique.html#Unique"><span class="hs-identifier hs-var">Unique</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679627233"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679627301"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-57"></span><span>
 </span><span id="line-58"></span><span class="hs-comment">-- SDM (18/3/2010): changed from MVar to STM.  This fixes</span><span>
 </span><span id="line-59"></span><span class="hs-comment">--  1. there was no async exception protection</span><span>
@@ -132,8 +132,8 @@ $ccompare :: Unique -&gt; Unique -&gt; Ordering
 </span><span id="line-79"></span><span class="hs-comment">-- returned makes a good hash key.</span><span>
 </span><span id="line-80"></span><span class="annot"><a href="Data.Unique.html#hashUnique"><span class="hs-identifier hs-type">hashUnique</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Data.Unique.html#Unique"><span class="hs-identifier hs-type">Unique</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="../../ghc-prim-0.8.0/src/GHC-Types.html#Int"><span class="hs-identifier hs-type">Int</span></a></span><span>
 </span><span id="line-81"></span><span id="hashUnique"><span class="annot"><span class="annottext">hashUnique :: Unique -&gt; Int
-</span><a href="Data.Unique.html#hashUnique"><span class="hs-identifier hs-var hs-var">hashUnique</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Unique.html#Unique"><span class="hs-identifier hs-type">Unique</span></a></span><span> </span><span id="local-6989586621679627226"><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679627226"><span class="hs-identifier hs-var">i</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Int
+</span><a href="Data.Unique.html#hashUnique"><span class="hs-identifier hs-var hs-var">hashUnique</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Unique.html#Unique"><span class="hs-identifier hs-type">Unique</span></a></span><span> </span><span id="local-6989586621679627294"><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679627294"><span class="hs-identifier hs-var">i</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Int
 </span><a href="../../ghc-bignum-1.2/src/GHC-Num-Integer.html#integerToInt"><span class="hs-identifier hs-var">integerToInt</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679627226"><span class="hs-identifier hs-var">i</span></a></span><span>
+</span><a href="#local-6989586621679627294"><span class="hs-identifier hs-var">i</span></a></span><span>
 </span><span id="line-82"></span></pre></body></html>

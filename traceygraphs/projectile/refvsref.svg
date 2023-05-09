@@ -57,15 +57,15 @@
 <path fill="none" stroke="black" d="M967,-71.7C967,-63.98 967,-54.71 967,-46.11"/>
 <polygon fill="black" stroke="black" points="970.5,-46.1 967,-36.1 963.5,-46.1 970.5,-46.1"/>
 </g>
-<!-- scalarPos -->
+<!-- projPos -->
 <g id="node6" class="node">
-<title>scalarPos</title>
+<title>projPos</title>
 <polygon fill="palegreen" stroke="black" points="558.5,-108 461.5,-108 461.5,-72 558.5,-72 558.5,-108"/>
 <text text-anchor="middle" x="510" y="-86.3" font-family="Times,serif" font-size="14.00">GD:rectPos</text>
 </g>
-<!-- scalarPos&#45;&gt;projSpeed -->
+<!-- projPos&#45;&gt;projSpeed -->
 <g id="edge5" class="edge">
-<title>scalarPos&#45;&gt;projSpeed</title>
+<title>projPos&#45;&gt;projSpeed</title>
 <path fill="none" stroke="black" d="M536.45,-108.12C548.3,-115.18 562.79,-122.42 577,-126 647.04,-143.62 832.08,-144.07 902,-126 912.51,-123.28 923.13,-118.47 932.65,-113.22"/>
 <polygon fill="black" stroke="black" points="934.53,-116.18 941.41,-108.12 931,-110.13 934.53,-116.18"/>
 </g>
@@ -75,9 +75,9 @@
 <polygon fill="pink" stroke="black" points="560,-36 460,-36 460,0 560,0 560,-36"/>
 <text text-anchor="middle" x="510" y="-14.3" font-family="Times,serif" font-size="14.00">TM:velocity</text>
 </g>
-<!-- scalarPos&#45;&gt;velocityTM -->
+<!-- projPos&#45;&gt;velocityTM -->
 <g id="edge4" class="edge">
-<title>scalarPos&#45;&gt;velocityTM</title>
+<title>projPos&#45;&gt;velocityTM</title>
 <path fill="none" stroke="black" d="M510,-71.7C510,-63.98 510,-54.71 510,-46.11"/>
 <polygon fill="black" stroke="black" points="513.5,-46.1 510,-36.1 506.5,-46.1 513.5,-46.1"/>
 </g>
@@ -99,9 +99,9 @@
 <polygon fill="palegreen" stroke="black" points="443.5,-108 350.5,-108 350.5,-72 443.5,-72 443.5,-108"/>
 <text text-anchor="middle" x="397" y="-86.3" font-family="Times,serif" font-size="14.00">GD:posVec</text>
 </g>
-<!-- position&#45;&gt;scalarPos -->
+<!-- position&#45;&gt;projPos -->
 <g id="edge7" class="edge">
-<title>position&#45;&gt;scalarPos</title>
+<title>position&#45;&gt;projPos</title>
 <path fill="none" stroke="black" d="M443.79,-90C446.26,-90 448.74,-90 451.21,-90"/>
 <polygon fill="black" stroke="black" points="451.38,-93.5 461.38,-90 451.38,-86.5 451.38,-93.5"/>
 </g>

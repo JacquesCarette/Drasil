@@ -54,7 +54,7 @@ smithLai2005 = cInProceedings [spencerSmith, lLai]
 
 smithEtAl2007 = cArticle [spencerSmith, lLai, rKhedri]
   ("Requirements Analysis for Engineering Computation: A Systematic Approach for" ++ 
-    "Improving Software Reliability")
+    " Improving Software Reliability")
   "Reliable Computing, Special Issue on Reliable Engineering Computation" 2007
   [month Feb, volume 13, number 1, pages [83..107], howPublishedU "https://doi.org/10.1007/s11155-006-9020-7"]
   "smithEtAl2007"

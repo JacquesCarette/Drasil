@@ -28,7 +28,7 @@ import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability, softwarecon)
 import Data.Drasil.Software.Products (sciCompS)
 
-import Data.Drasil.Citations (koothoor2013, smithLai2005)
+import Data.Drasil.Citations (koothoor2013, smithEtAl2007, smithLai2005, smithKoothoor2016)
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamentals,
   derived)
@@ -227,8 +227,8 @@ orgOfDocIntro, orgOfDocIntroEnd :: Sentence
 orgOfDocIntro = foldlSent [atStartNP (the organization), S "of this",
   phrase document, S "follows the", phrase template, S "for an", short Doc.srs
   `S.for` phrase sciCompS, S "proposed by" +:+ refS koothoor2013
-  `S.and_` refS smithLai2005 `sC` S "with some", 
-  plural aspect, S "taken from Volere", phrase template,
+  `sC` refS smithLai2005 `sC` refS smithEtAl2007 `S.and_` refS smithKoothoor2016 
+  `sC` S "with some", plural aspect, S "taken from Volere", phrase template,
   S "16", refS rbrtsn2012]
 
 orgOfDocIntroEnd = foldlSent_ [atStartNP' (the Doc.dataDefn) `S.are`

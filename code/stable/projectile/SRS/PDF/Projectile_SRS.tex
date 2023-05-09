@@ -86,6 +86,8 @@ $\symbf{g}$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $p$ & Scalar position & ${\text{m}}$
 \\
+$p\text{(}t\text{)}$ & 1D position & ${\text{m}}$
+\\
 ${p^{\text{i}}}$ & Initial position & ${\text{m}}$
 \\
 ${p_{\text{land}}}$ & Landing position & ${\text{m}}$
@@ -246,10 +248,10 @@ This section simplifies the original problem and helps in developing the theoret
 \item[accelXZero:\phantomsection\label{accelXZero}]{The acceleration in the $x$-direction is zero. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[constAccel]{A:constAccel}.)}
 \item[accelYGravity:\phantomsection\label{accelYGravity}]{The acceleration in the $y$-direction is the acceleration due to gravity (from \hyperref[yAxisGravity]{A:yAxisGravity}). (RefBy: \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime} and \hyperref[constAccel]{A:constAccel}.)}
 \item[neglectDrag:\phantomsection\label{neglectDrag}]{Air drag is neglected. (RefBy: \hyperref[constAccel]{A:constAccel}.)}
-\item[pointMass:\phantomsection\label{pointMass}]{The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: \hyperref[GD:rectPos]{GD:rectPos} and \hyperref[GD:rectVel]{GD:rectVel}.)}
+\item[pointMass:\phantomsection\label{pointMass}]{The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: \hyperref[GD:rectVel]{GD:rectVel} and \hyperref[GD:rectPos]{GD:rectPos}.)}
 \item[freeFlight:\phantomsection\label{freeFlight}]{The flight is free; there are no collisions during the trajectory of the projectile. (RefBy: \hyperref[constAccel]{A:constAccel}.)}
 \item[neglectCurv:\phantomsection\label{neglectCurv}]{The distance is small enough that the curvature of the celestial body can be neglected. (RefBy: \hyperref[targetXAxis]{A:targetXAxis} and \hyperref[cartSyst]{A:cartSyst}.)}
-\item[timeStartZero:\phantomsection\label{timeStartZero}]{Time starts at zero. (RefBy: \hyperref[GD:velVec]{GD:velVec}, \hyperref[GD:rectPos]{GD:rectPos}, \hyperref[GD:rectVel]{GD:rectVel}, \hyperref[GD:posVec]{GD:posVec}, and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
+\item[timeStartZero:\phantomsection\label{timeStartZero}]{Time starts at zero. (RefBy: \hyperref[GD:velVec]{GD:velVec}, \hyperref[GD:rectVel]{GD:rectVel}, \hyperref[GD:rectPos]{GD:rectPos}, \hyperref[GD:posVec]{GD:posVec}, and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
 \item[gravAccelValue:\phantomsection\label{gravAccelValue}]{The acceleration due to gravity is assumed to have the value provided in the section for \hyperref[Sec:AuxConstants]{Values of Auxiliary Constants}. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
 \end{itemize}
 \subsubsection{Theoretical Models}
@@ -383,11 +385,11 @@ Units & ${\text{m}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           p={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}
+           p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$p$ is the scalar position (${\text{m}}$)}
+              \item{$p\text{(}t\text{)}$ is the 1D position (${\text{m}}$)}
               \item{${p^{\text{i}}}$ is the initial position (${\text{m}}$)}
               \item{${v^{\text{i}}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (${\text{s}}$)}
@@ -422,7 +424,7 @@ From \hyperref[GD:rectVel]{GD:rectVel}, we can replace $v$:
 Performing the integration, we have the required equation:
 
 \begin{displaymath}
-p={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}
+p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent

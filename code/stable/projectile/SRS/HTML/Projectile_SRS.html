@@ -204,6 +204,11 @@
                   <td><em>m</em></td>
                 </tr>
                 <tr>
+                  <td><em>p(t)</em></td>
+                  <td>1D position</td>
+                  <td><em>m</em></td>
+                </tr>
+                <tr>
                   <td><em>p<sup>i</sup></em></td>
                   <td>Initial position</td>
                   <td><em>m</em></td>
@@ -548,7 +553,7 @@
                   </p>
                   <p>
                     <div id="pointMass">
-                      pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: <a href=#GD:rectPos>GD:rectPos</a> and <a href=#GD:rectVel>GD:rectVel</a>.)
+                      pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: <a href=#GD:rectVel>GD:rectVel</a> and <a href=#GD:rectPos>GD:rectPos</a>.)
                     </div>
                   </p>
                   <p>
@@ -563,7 +568,7 @@
                   </p>
                   <p>
                     <div id="timeStartZero">
-                      timeStartZero: Time starts at zero. (RefBy: <a href=#GD:velVec>GD:velVec</a>, <a href=#GD:rectPos>GD:rectPos</a>, <a href=#GD:rectVel>GD:rectVel</a>, <a href=#GD:posVec>GD:posVec</a>, and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
+                      timeStartZero: Time starts at zero. (RefBy: <a href=#GD:velVec>GD:velVec</a>, <a href=#GD:rectVel>GD:rectVel</a>, <a href=#GD:rectPos>GD:rectPos</a>, <a href=#GD:posVec>GD:posVec</a>, and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
                     </div>
                   </p>
                   <p>
@@ -767,14 +772,14 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[p={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}\]
+                        \[p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}\]
                       </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em>p</em> is the scalar position (<em>m</em>)</li>
+                          <li><em>p(t)</em> is the 1D position (<em>m</em>)</li>
                           <li>
                             <em>p<sup>i</sup></em> is the initial position (<em>m</em>)
                           </li>
@@ -818,7 +823,7 @@
                     <p class="paragraph">
                       Performing the integration, we have the required equation:
                     </p>
-                    \[p={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}\]
+                    \[p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}\]
                   </div>
                 </div>
                 <div id="GD:velVec">

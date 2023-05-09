@@ -269,6 +269,7 @@ userCharacteristicsIntro = foldlSP
 -------------------------------
 -- 4.1 : System Constraints  --
 -------------------------------
+-- Introduction of the Problem Description section derived from purp
 
 ---------------------------------
 -- 4.1.1 Terminology and Definitions --

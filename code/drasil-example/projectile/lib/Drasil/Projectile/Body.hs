@@ -63,7 +63,7 @@ mkSRS = [TableOfContents,
       [ IScope scope ],
   SSDSec $
     SSDProg
-      [ SSDProblem $ PDProg prob []
+      [ SSDProblem $ PDProg purp []
         [ TermsAndDefs Nothing terms
         , PhySysDesc projectileTitle physSystParts figLaunch []
         , Goals [(phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile]]
@@ -105,7 +105,7 @@ si = SI {
   _sys         = projectileTitle,
   _kind        = Doc.srs,
   _authors     = [samCrawford, brooks, spencerSmith],
-  _purpose     = [],
+  _purpose     = [purp],
   _background  = [],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
@@ -121,6 +121,10 @@ si = SI {
   _usedinfodb  = usedDB,
    refdb       = refDB
 }
+
+purp :: Sentence
+purp = foldlSent_ [S "efficiently" `S.and_` S "correctly predict whether a launched",
+  phrase projectile, S"hits its", phrase target]
 
 tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM]
@@ -150,9 +154,7 @@ concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
 -- Problem Description --
 -------------------------
 
-prob :: Sentence
-prob = foldlSent_ [S "efficiently" `S.and_` S "correctly predict whether a launched",
-  phrase projectile, S"hits its", phrase target]
+-- Introduction of the Problem Description section derives from purp
 
 ---------------------------------
 -- Terminology and Definitions --

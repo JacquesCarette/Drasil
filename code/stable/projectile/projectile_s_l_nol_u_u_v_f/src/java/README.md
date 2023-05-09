@@ -1,6 +1,8 @@
 # Projectile 
 > Authors:  Samuel J. Crawford, Brooks MacLachlan, W. Spencer Smith
 
+> Purpose: efficiently and correctly predict whether a launched projectile hits its target.
+
 ------------------------------------------------------------
 ## Version 
  `Java 14`

@@ -208,6 +208,8 @@ srs :: CI
 typUnc :: CI
 sec :: CI
 notebook :: CI
+refBy :: CI
+refName :: CI
 softReqSpec :: NP
 abbreviation :: NamedChunk
 acronym :: NamedChunk
@@ -408,6 +410,8 @@ nonFuncReqDom :: ConceptChunk
 chgProbDom :: ConceptChunk
 likeChgDom :: ConceptChunk
 unlikeChgDom :: ConceptChunk
+refByDom :: ConceptChunk
+refNameDom :: ConceptChunk
 
 -- | List of SRS-related concepts, including SRS.
 srsDomains :: [ConceptChunk]

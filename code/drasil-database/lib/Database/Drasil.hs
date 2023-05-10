@@ -16,7 +16,7 @@ module Database.Drasil (
   , dataDefnTable, insmodelTable, gendefTable, theoryModelTable
   , conceptinsTable, sectionTable, labelledcontentTable, refTable
   -- ** Debugging Tools
-  , dumpChunkDB
+  , dumpChunkDB, invertDumpedChunkDB, DumpedChunkDB
 ) where
 
 import Database.Drasil.ChunkDB

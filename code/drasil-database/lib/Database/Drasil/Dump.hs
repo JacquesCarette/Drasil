@@ -29,3 +29,9 @@ dumpChunkDB cdb =
     $ insert "labelledContent" (umapDump $ _labelledcontentTable cdb)
     $ insert "references" (umapDump $ _refTable cdb)
       mempty
+
+invertDumpedChunkDB :: DumpedChunkDB -> Map UID [ChunkType]
+invertDumpedChunkDB dcdb = SM.fromListWith (++) vks
+  where -- k = key, v = value
+    kvs = SM.toList dcdb
+    vks = [(v, [k]) | (k, vs) <- kvs, v <- vs]

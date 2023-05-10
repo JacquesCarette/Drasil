@@ -1,7 +1,7 @@
 -- | Defines Drasil generator functions.
 module Language.Drasil.Generate (
   -- * Debugging
-  dumpChunkDB, dumpEverything,
+  dumpTo, dumpEverything,
   -- * Type checking
   typeCheckSI,
   -- * Generator Functions

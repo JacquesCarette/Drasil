@@ -10,6 +10,8 @@ module Language.Drasil.UID (
 ) where
 
 import Data.Aeson
+import Data.Aeson.Types
+import Data.Text (pack)
 import GHC.Generics
 
 import Control.Lens (Lens', (^.), view)
@@ -23,7 +25,10 @@ class HasUID c where
 -- of information. We use a newtype wrapper to make sure we are only using
 -- 'UID's where desired.
 newtype UID = UID String
-  deriving (Eq, Ord, Generic, ToJSON)
+  deriving (Eq, Ord, Generic, ToJSON) --, ToJSONKey)
+
+instance ToJSONKey UID where
+  toJSONKey = toJSONKeyText (pack . show)
 
 instance Show UID where
   show (UID u) = u
@@ -51,7 +56,7 @@ a +++. suff
     where UID s = a
 
 (+++!) :: (HasUID a, HasUID b) => a -> b -> UID
-a +++! b 
+a +++! b
   | null (showUID a) || null (showUID b) = error $ showUID a ++ " and " ++ showUID b ++ " UIDs must be non-zero length"
   | otherwise = UID (showUID a ++ showUID b)
 

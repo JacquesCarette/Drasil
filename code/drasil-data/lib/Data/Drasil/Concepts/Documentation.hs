@@ -75,8 +75,8 @@ typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")      
 sec         = commonIdeaWithDict "section"     (cn' "section")                                       "Sec"     [documentc]
 srs         = commonIdeaWithDict "srs"         softReqSpec                                           "SRS"     [softEng]
 notebook    = commonIdeaWithDict "notebook"    (cn' "notebook")                                      "NB"      [softEng]
-refBy       = commonIdeaWithDict "refBy"       (cn' "Referenced By")                                 "RefBy"   [documentc]
-refName     = commonIdeaWithDict "refName"     (cn' "Reference Name")                                "Refname" [documentc]
+refBy       = commonIdeaWithDict "refBy"       (cn' "referenced by")                                 "RefBy"   [documentc]
+refName     = commonIdeaWithDict "refName"     (cn' "reference name")                                "Refname" [documentc]
 
 ---------------------------------------------------------------------
 

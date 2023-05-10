@@ -73,7 +73,7 @@ si = SI {
   _sys         = ssp, 
   _kind        = Doc.srs, 
   _authors     = [henryFrankis, brooks],
-  _purpose     = [],
+  _purpose     = [purp],
   _background  = [],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
@@ -110,7 +110,7 @@ mkSRS = [TableOfContents,
     ],
   SSDSec $
     SSDProg
-      [ SSDProblem $ PDProg prob []
+      [ SSDProblem $ PDProg purp []
         [ TermsAndDefs Nothing terms
         , PhySysDesc ssp physSystParts figPhysSyst physSystContents 
         , Goals goalsInputs]
@@ -133,6 +133,12 @@ mkSRS = [TableOfContents,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $ AuxConsProg ssp [],
   Bibliography]
+
+purp :: Sentence
+purp = foldlSent_ [S "evaluate the", phrase fs `S.ofA` phrasePoss slope,
+  phrase slpSrf `S.and_` S "identify", phraseNP (crtSlpSrf `the_ofThe` slope) `sC`
+  S "as well as the", phrase intrslce, phraseNP (normForce `and_` shearForce),
+  S "along the", phrase crtSlpSrf]
 
 units :: [UnitDefn]
 units = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
@@ -313,11 +319,8 @@ sysConstraints = foldlSP [atStartNP (NP.the (combineNINI morPrice method_)),
 -- SECTION 4 --
 
 -- SECTION 4.1 --
-prob :: Sentence
-prob = foldlSent_ [S "evaluate the", phrase fs `S.ofA` phrasePoss slope,
-  phrase slpSrf `S.and_` S "identify", phraseNP (crtSlpSrf `the_ofThe` slope) `sC`
-  S "as well as the", phrase intrslce, phraseNP (normForce `and_` shearForce),
-  S "along the", phrase crtSlpSrf]
+
+-- Introduction of the Problem Description section derives from purp
 
 {-
 From when solution was used in Problem Description:

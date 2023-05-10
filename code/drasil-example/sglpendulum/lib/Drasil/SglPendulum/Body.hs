@@ -26,7 +26,7 @@ import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Data.Drasil.Quantities.Physics (physicscon)
 
 import Drasil.DblPendulum.Assumptions (assumpSingle)
-import Drasil.DblPendulum.Body (justification, charsOfReader, prob, organizationOfDocumentsIntro,
+import Drasil.DblPendulum.Body (justification, charsOfReader, purp, organizationOfDocumentsIntro,
   sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms, userCharacteristicsIntro)
 import qualified Drasil.DblPendulum.Body as DPD (tMods)
 import Drasil.DblPendulum.Concepts (concepts, rod)
@@ -73,7 +73,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       SystCons [] []],                            
   SSDSec $ 
     SSDProg
-      [ SSDProblem $ PDProg prob []                --  This adds a is used to define the problem your system will solve
+      [ SSDProblem $ PDProg purp []                --  This adds a is used to define the problem your system will solve
         [ TermsAndDefs Nothing terms               -- This is used to define the terms to be defined in terminology sub section
       , PhySysDesc progName physSystParts figMotion [] -- This defines the Physicalsystem sub-section, define the parts
                                                           -- of the system using physSysParts, figMotion is a function in figures for the image
@@ -107,7 +107,7 @@ si = SI {
   _kind        = Doc.srs,
   _authors     = [olu],
   _purpose     = [],
-  _background  = [],
+  _background  = [purp],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,

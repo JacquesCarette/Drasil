@@ -65,7 +65,7 @@ si = SI {
   _sys         = glassBR,
   _kind        = Doc.srs,
   _authors     = [nikitha, spencerSmith],
-  _purpose     = [],
+  _purpose     = [purp],
   _background  = [],
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
@@ -102,7 +102,7 @@ mkSRS = [TableOfContents,
     UsrChars [userCharacteristicsIntro], SystCons [] [] ],
   SSDSec $
     SSDProg
-      [SSDProblem $ PDProg prob [termsAndDesc]
+      [SSDProblem $ PDProg purp [termsAndDesc]
         [ PhySysDesc glassBR physSystParts physSystFig []
         , Goals goalInputs],
        SSDSolChSpec $ SCSProg
@@ -125,6 +125,11 @@ mkSRS = [TableOfContents,
   AuxConstntSec $ AuxConsProg glassBR auxiliaryConstants,
   Bibliography,
   AppndxSec $ AppndxProg [appdxIntro, LlC demandVsSDFig, LlC dimlessloadVsARFig]]
+
+purp :: Sentence
+purp = foldlSent_ [S "efficiently" `S.and_` S "correctly predict whether a",
+  phrase glaSlab, S "can withstand a", phrase blast, S "under given",
+  plural condition]
 
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
@@ -302,10 +307,7 @@ userCharacteristicsIntro = enumBulletU $ map foldlSent
 
 {--PROBLEM DESCRIPTION--}
 
-prob :: Sentence
-prob = foldlSent_ [S "efficiently" `S.and_` S "correctly predict whether a",
-  phrase glaSlab, S "can withstand a", phrase blast, S "under given",
-  plural condition]
+--Introduction of Problem Description section derived from purp
 
 {--Terminology and Definitions--}
 

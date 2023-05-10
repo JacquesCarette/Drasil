@@ -6,12 +6,8 @@ import Drasil.PDController.Concepts
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
-sysProblemDesc :: Sentence
-sysProblemDesc
-  = foldlSent_
-      [S "provide a model of a", phrase pidC,
-         S "that can be used for the tuning of the gain constants before",
-         S "the deployment of the controller"]
+-- Introduction of the Problem Description section derives from purpose in
+-- SystemInformation (purp in Body.hs)
 
 sysParts :: [Sentence]
 sysParts

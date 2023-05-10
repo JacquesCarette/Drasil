@@ -36,8 +36,7 @@ import Drasil.PDController.IntroSection
         introUserChar2, introscopeOfReq)
 import Drasil.PDController.References (citations)
 import Drasil.PDController.Requirements (funcReqs, nonfuncReqs)
-import Drasil.PDController.SpSysDesc
-       (goals, sysFigure, sysGoalInput, sysParts, sysProblemDesc)
+import Drasil.PDController.SpSysDesc (goals, sysFigure, sysGoalInput, sysParts)
 import Drasil.PDController.TModel (theoreticalModels)
 import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
   inpConstrained, pidConstants, pidDqdConstants, opProcessVariable)
@@ -79,7 +78,7 @@ mkSRS
      SSDSec $
        SSDProg
          [SSDProblem $
-            PDProg sysProblemDesc []
+            PDProg purp []
               [TermsAndDefs Nothing defs,
                PhySysDesc pdControllerApp sysParts sysFigure [],
                Goals sysGoalInput],
@@ -102,7 +101,7 @@ si = SI {
   _sys = pdControllerApp,
   _kind = Doc.srs,
   _authors = [naveen],
-  _purpose = [],
+  _purpose = [purp],
   _background  = [],
   _quants = symbolsAll,
   _concepts = [] :: [DefinedQuantityDict],
@@ -117,6 +116,11 @@ si = SI {
   _sysinfodb = symbMap,
   _usedinfodb = usedDB,
    refdb = refDB}
+
+purp :: Sentence
+purp = foldlSent_ [S "provide a model of a", phrase pidC,
+         S "that can be used for the tuning of the gain constants before",
+         S "the deployment of the controller"]
 
 symbolsAll :: [QuantityDict]
 symbolsAll = symbols ++ map qw pidDqdConstants ++ map qw pidConstants

@@ -78,7 +78,7 @@ si = SI {
   _sys         = swhsPCM,
   _kind        = Doc.srs, 
   _authors     = [thulasi, brooks, spencerSmith],
-  _purpose     = [],
+  _purpose     = [purp],
   _background  = [],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
@@ -94,6 +94,10 @@ si = SI {
   _usedinfodb  = usedDB,
    refdb       = refDB
 }
+
+purp :: Sentence
+purp = foldlSent_ [S "investigate the effect" `S.of_` S "employing",
+  short phsChgMtrl, S "within a", phrase sWHT]
 
 symbMap :: ChunkDB
 symbMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
@@ -133,7 +137,7 @@ mkSRS = [TableOfContents,
     ],
   SSDSec $
     SSDProg 
-      [ SSDProblem $ PDProg probDescIntro []
+      [ SSDProblem $ PDProg purp []
         [ TermsAndDefs Nothing terms
         , PhySysDesc progName physSystParts figTank []
         , Goals goalInputs]
@@ -353,9 +357,8 @@ userChars pro = foldlSP [S "The end", phrase user `S.of_` short pro,
 -------------------------------
 -- 4.1 : Problem Description --
 -------------------------------
-probDescIntro :: Sentence
-probDescIntro = foldlSent_ [S "investigate the effect" `S.of_` S "employing",
-  short phsChgMtrl, S "within a", phrase sWHT]
+
+-- Introduction of Problem Description section derived from purp
 
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --

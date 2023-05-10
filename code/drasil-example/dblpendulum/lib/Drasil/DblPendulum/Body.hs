@@ -75,7 +75,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       SystCons [] []],                            
   SSDSec $ 
     SSDProg
-      [ SSDProblem $ PDProg prob []                --  This adds a is used to define the problem your system will solve
+      [ SSDProblem $ PDProg purp []                --  This adds a is used to define the problem your system will solve
         [ TermsAndDefs Nothing terms               -- This is used to define the terms to be defined in terminology sub section
       , PhySysDesc progName physSystParts figMotion [] -- This defines the Physicalsystem sub-section, define the parts
                                                           -- of the system using physSysParts, figMotion is a function in figures for the image
@@ -105,7 +105,7 @@ si = SI {
   _sys         = progName, 
   _kind        = Doc.srs,
   _authors     = [dong],
-  _purpose     = [],
+  _purpose     = [purp],
   _background  = [], 
   _quants      = symbolsAll,
   _concepts    = [] :: [DefinedQuantityDict],
@@ -121,6 +121,9 @@ si = SI {
   _usedinfodb  = usedDB,
    refdb       = refDB
 }
+
+purp :: Sentence
+purp = foldlSent_ [S "efficiently and correctly predict the", phraseNP (motion `ofA` pendulum)]
 
 symbolsAll :: [QuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
@@ -266,8 +269,7 @@ userCharacteristicsIntro = foldlSP
 -------------------------------
 -- 4.1 : System Constraints  --
 -------------------------------
-prob :: Sentence
-prob = foldlSent_ [S "efficiently and correctly to predict the", phraseNP (motion `ofA` pendulum)]
+-- Introduction of the Problem Description section derived from purp
 
 ---------------------------------
 -- 4.1.1 Terminology and Definitions --

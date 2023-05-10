@@ -72,20 +72,20 @@ momentum               = uc CP.momentum               (vec cP)                  
 moment                 = uc CP.moment                 (vec cM)                                    Real        torqueU
 moment2D               = uc CP.moment                 cM                                          Real        torqueU
 -- FIXME: moment2D should eventually be a specialization of moment, not separately defined
-period                 = uc CP.period             cT                                          Real        second
-position               = uc CP.position           (vec lP)                                    Real        metre
-positionVec            = uc CP.positionVec        (vec lR)                                    Real        metre
-potEnergy              = uc CP.potEnergy          (Concat [cP, cE])                           Real        joule
-pressure               = uc CP.pressure           lP                                          Real        pascal
-speed                  = uc CP.speed              lV                                          Real        velU
-scalarAccel            = uc CP.scalarAccel        lA                                          Real        accelU
-scalarPos              = uc CP.scalarPos          lP                                          Real        metre
-tension                = uc CP.tension            (vec cT)                                    Real        newton
-time                   = uc CP.time               lT                                          Real        second
-torque                 = uc CP.torque             (vec lTau)                                  Real        torqueU
-velocity               = uc CP.velocity           (vec lV)                                    (Vect Real) velU
-weight                 = uc CP.weight             cW                                          Real        newton
-fOfGravity             = uc CP.fOfGravity         (sub (vec cF) (vec lG))                     Real        newton
+period                 = uc CP.period             cT                                              Real        second
+position               = uc CP.position           (vec lP)                                        Real        metre
+positionVec            = uc CP.positionVec        (vec lR)                                        Real        metre
+potEnergy              = uc CP.potEnergy          (Concat [cP, cE])                               Real        joule
+pressure               = uc CP.pressure           lP                                              Real        pascal
+speed                  = uc CP.speed              lV                                              Real        velU
+scalarAccel            = uc CP.scalarAccel        lA                                              Real        accelU
+scalarPos              = uc CP.scalarPos          lP                                              Real        metre
+tension                = uc CP.tension            (vec cT)                                        Real        newton
+time                   = uc CP.time               lT                                              Real        second
+torque                 = uc CP.torque             (vec lTau)                                      Real        torqueU
+velocity               = uc CP.velocity           (vec lV)                                        (Vect Real) velU
+weight                 = uc CP.weight             cW                                              Real        newton
+fOfGravity             = uc CP.fOfGravity         (sub (vec cF) (vec lG))                         Real        newton
 
 -- Variants of distance, speed, and scalar acceleration
 -- FIXME: Add variants of vector forms?

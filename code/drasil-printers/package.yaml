@@ -21,7 +21,6 @@ dependencies:
 - drasil-sysinfo
 - drasil-theory
 - drasil-utils
-- json
 - split
 
 ghc-options:

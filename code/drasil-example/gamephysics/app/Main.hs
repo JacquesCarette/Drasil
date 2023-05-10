@@ -8,7 +8,7 @@ import Drasil.GamePhysics.Body (srs, printSetting, fullSI)
 main :: IO ()
 main = do
   setLocaleEncoding utf8
-  dumpEverything fullSI ".drasil"
+  dumpEverything fullSI ".drasil/"
   typeCheckSI fullSI
   gen (DocSpec (docChoices SRS [HTML, TeX, JSON]) "GamePhysics_SRS") srs  printSetting
   genDot fullSI

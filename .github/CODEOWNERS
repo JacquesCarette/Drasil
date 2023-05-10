@@ -26,6 +26,10 @@ code/stable/template/ @JacquesCarette @smiths @samm82
 
 code/drasil-gool/ @JacquesCarette @bmaclach
 
+# YAML files
+
+**.yaml @JacquesCarette @balacij
+
 # `ModelKind`s
 
 **/DifferentialModel.hs @JacquesCarette @cd155

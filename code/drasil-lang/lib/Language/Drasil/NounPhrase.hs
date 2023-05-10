@@ -270,5 +270,5 @@ capWords w@(c:cs)
 
 -- | Words that should not be capitalized in a title (prepositions, articles, or conjunctions).
 doNotCaps :: [String]
-doNotCaps = ["a", "an", "the", "at", "for", "in", "of",
+doNotCaps = ["a", "an", "the", "at", "by", "for", "in", "of",
   "on", "to", "up", "and", "as", "but", "or", "nor"] --Ref http://grammar.yourdictionary.com

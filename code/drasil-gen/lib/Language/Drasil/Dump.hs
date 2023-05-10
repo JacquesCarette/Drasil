@@ -22,5 +22,5 @@ dumpChunkDB :: DB.ChunkDB -> String -> IO ()
 dumpChunkDB chks targetFile = do
     let dumpped = DB.dumpChunkDB chks
     trg <- openFile targetFile WriteMode
-    LB.hPutStrLn trg $ encode $ dumpped
+    LB.hPutStrLn trg $ encode dumpped
     hClose trg

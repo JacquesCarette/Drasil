@@ -7,6 +7,7 @@ import SysInfo.Drasil (SystemInformation(SI))
 import System.Directory
 import System.IO
 import Data.Aeson
+import Data.Aeson.Encode.Pretty
 import qualified Data.ByteString.Lazy.Char8 as LB
 import qualified Data.Map.Strict as SM
 
@@ -28,5 +29,5 @@ dumpEverything (SI _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ chks _ _) targetPath = do
 dumpTo :: ToJSON a => a -> TargetFile -> IO ()
 dumpTo d targetFile = do
   trg <- openFile targetFile WriteMode
-  LB.hPutStrLn trg $ encode d
+  LB.hPutStrLn trg $ encodePretty d
   hClose trg

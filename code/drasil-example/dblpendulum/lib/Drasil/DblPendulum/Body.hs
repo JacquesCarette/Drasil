@@ -123,7 +123,7 @@ si = SI {
 }
 
 purp :: Sentence
-purp = foldlSent_ [S "efficiently and correctly to predict the", phraseNP (motion `ofA` pendulum)]
+purp = foldlSent_ [S "efficiently and correctly predict the", phraseNP (motion `ofA` pendulum)]
 
 symbolsAll :: [QuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 

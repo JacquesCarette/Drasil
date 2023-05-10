@@ -124,7 +124,7 @@ si = SI {
 
 purp :: Sentence
 purp = foldlSent_ [S "efficiently" `S.and_` S "correctly predict whether a launched",
-  phrase projectile, S"hits its", phrase target]
+  phrase projectile, S "hits its", phrase target]
 
 tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM]

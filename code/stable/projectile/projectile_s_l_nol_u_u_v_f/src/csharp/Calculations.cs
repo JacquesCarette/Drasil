@@ -9,7 +9,7 @@ public class Calculations {
     /** \brief Calculates flight duration: the time when the projectile lands (s)
         \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
         \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-        \param g gravitational acceleration (m/s^2)
+        \param g magnitude of gravitational acceleration (m/s^2)
         \return flight duration: the time when the projectile lands (s)
     */
     public static float func_t_flight(float v_launch, float theta, float g) {
@@ -19,7 +19,7 @@ public class Calculations {
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
         \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
         \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-        \param g gravitational acceleration (m/s^2)
+        \param g magnitude of gravitational acceleration (m/s^2)
         \return landing position: the distance from the launcher to the final position of the projectile (m)
     */
     public static float func_p_land(float v_launch, float theta, float g) {

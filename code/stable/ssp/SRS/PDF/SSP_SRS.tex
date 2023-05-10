@@ -108,7 +108,7 @@ $\symbf{f}$ & Interslice Normal to Shear Force Ratio Variation Function: A funct
 \\
 $\symbf{G}$ & Interslice Normal Forces: The forces per meter in the $z$-direction exerted between each pair of adjacent slices. & $\frac{\text{N}}{\text{m}}$
 \\
-$g$ & Gravitational Acceleration: The approximate acceleration due to gravity on Earth at sea level. & $\frac{\text{m}}{\text{s}^{2}}$
+$\symbf{g}$ & Gravitational Acceleration: The approximate acceleration due to gravity on Earth at sea level. & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\symbf{H}$ & Interslice Normal Water Forces: The normal water forces per meter in the $z$-direction exerted in the $x$-direction between each pair of adjacent slices. & $\frac{\text{N}}{\text{m}}$
 \\
@@ -1141,18 +1141,18 @@ Under the influence of gravity, and assuming a 2D Cartesian coordinate system wi
 \begin{displaymath}
 \symbf{a}=\begin{bmatrix}
           0\\
-          g \symbf{\hat{j}}
+          \symbf{g} \symbf{\hat{j}}
           \end{bmatrix}
 \end{displaymath}
 Since there is only one non-zero vector component, the scalar value $W$ will be used for the weight. In this scenario, Newton's second law of motion from \hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} can be expressed as:
 
 \begin{displaymath}
-W=m g
+W=m \symbf{g}
 \end{displaymath}
 Mass can be expressed as density multiplied by volume, resulting in:
 
 \begin{displaymath}
-W=ρ V g
+W=ρ V \symbf{g}
 \end{displaymath}
 Substituting specific weight as the product of density and gravitational acceleration yields:
 

@@ -80,7 +80,7 @@ $\symbf{F}$ & Force & ${\text{N}}$
 \\
 $f$ & Frequency & ${\text{Hz}}$
 \\
-$g$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+$\symbf{g}$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\symbf{I}$ & Moment of inertia & $\text{kg}\text{m}^{2}$
 \\
@@ -703,7 +703,7 @@ Units & ${\text{N}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{F}=m {a_{\text{y}}}=\symbf{T} \cos\left({θ_{p}}\right)-m g
+           \symbf{F}=m {a_{\text{y}}}=\symbf{T} \cos\left({θ_{p}}\right)-m \symbf{g}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -712,7 +712,7 @@ Description & \begin{symbDescription}
               \item{${a_{\text{y}}}$ is the $y$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$\symbf{T}$ is the tension (${\text{N}}$)}
               \item{${θ_{p}}$ is the displacement angle of the pendulum (${\text{rad}}$)}
-              \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -725,7 +725,7 @@ RefBy &
 \paragraph{Detailed derivation of force on the pendulum:}
 \label{GD:vForceOnPendulumDeriv}
 \begin{displaymath}
-\symbf{F}=m {a_{\text{y}}}=\symbf{T} \cos\left({θ_{p}}\right)-m g
+\symbf{F}=m {a_{\text{y}}}=\symbf{T} \cos\left({θ_{p}}\right)-m \symbf{g}
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -742,12 +742,12 @@ Units & ${\text{s}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           Ω=\sqrt{\frac{g}{{L_{\text{rod}}}}}
+           Ω=\sqrt{\frac{\symbf{g}}{{L_{\text{rod}}}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$Ω$ is the angular frequency (${\text{s}}$)}
-              \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${L_{\text{rod}}}$ is the length of the rod (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -767,37 +767,37 @@ RefBy & \hyperref[GD:periodPend]{GD:periodPend} and \hyperref[IM:calOfAngularDis
 Consider the torque on a pendulum defined in \hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}. The force providing the restoring torque is the component of weight of the pendulum bob that acts along the arc length. The torque is the length of the string ${L_{\text{rod}}}$ multiplied by the component of the net force that is perpendicular to the radius of the arc. The minus sign indicates the torque acts in the opposite direction of the angular displacement:
 
 \begin{displaymath}
-\symbf{τ}=-{L_{\text{rod}}} m g \sin\left({θ_{p}}\right)
+\symbf{τ}=-{L_{\text{rod}}} m \symbf{g} \sin\left({θ_{p}}\right)
 \end{displaymath}
 So then
 
 \begin{displaymath}
-\symbf{I} α=-{L_{\text{rod}}} m g \sin\left({θ_{p}}\right)
+\symbf{I} α=-{L_{\text{rod}}} m \symbf{g} \sin\left({θ_{p}}\right)
 \end{displaymath}
 Therefore,
 
 \begin{displaymath}
-\symbf{I} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}} m g \sin\left({θ_{p}}\right)
+\symbf{I} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}} m \symbf{g} \sin\left({θ_{p}}\right)
 \end{displaymath}
 Substituting for $\symbf{I}$
 
 \begin{displaymath}
-m {L_{\text{rod}}}^{2} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}} m g \sin\left({θ_{p}}\right)
+m {L_{\text{rod}}}^{2} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}} m \symbf{g} \sin\left({θ_{p}}\right)
 \end{displaymath}
 Crossing out $m$ and ${L_{\text{rod}}}$ we have
 
 \begin{displaymath}
-\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{g}{{L_{\text{rod}}}}\right) \sin\left({θ_{p}}\right)
+\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{\symbf{g}}{{L_{\text{rod}}}}\right) \sin\left({θ_{p}}\right)
 \end{displaymath}
 For small angles, we approximate sin ${θ_{p}}$ to ${θ_{p}}$
 
 \begin{displaymath}
-\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{g}{{L_{\text{rod}}}}\right) {θ_{p}}
+\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{\symbf{g}}{{L_{\text{rod}}}}\right) {θ_{p}}
 \end{displaymath}
 Because this equation, has the same form as the equation for simple harmonic motion the solution is easy to find.  The angular frequency
 
 \begin{displaymath}
-Ω=\sqrt{\frac{g}{{L_{\text{rod}}}}}
+Ω=\sqrt{\frac{\symbf{g}}{{L_{\text{rod}}}}}
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -814,14 +814,14 @@ Units & ${\text{s}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           T=2 π \sqrt{\frac{{L_{\text{rod}}}}{g}}
+           T=2 π \sqrt{\frac{{L_{\text{rod}}}}{\symbf{g}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$T$ is the period (${\text{s}}$)}
               \item{$π$ is the ratio of circumference to diameter for any circle (Unitless)}
               \item{${L_{\text{rod}}}$ is the length of the rod (${\text{m}}$)}
-              \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The frequency and period are defined in the data definitions for \hyperref[DD:frequencyDD]{frequency} and \hyperref[DD:periodSHMDD]{period} respectively
@@ -839,12 +839,12 @@ RefBy &
 The period of the pendulum can be defined from the general definition for the equation of \hyperref[GD:angFrequencyGD]{angular frequency}
 
 \begin{displaymath}
-Ω=\sqrt{\frac{g}{{L_{\text{rod}}}}}
+Ω=\sqrt{\frac{\symbf{g}}{{L_{\text{rod}}}}}
 \end{displaymath}
 Therefore from the data definition of the equation for \hyperref[DD:angFrequencyDD]{angular frequency}, we have
 
 \begin{displaymath}
-T=2 π \sqrt{\frac{{L_{\text{rod}}}}{g}}
+T=2 π \sqrt{\frac{{L_{\text{rod}}}}{\symbf{g}}}
 \end{displaymath}
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
@@ -1060,7 +1060,7 @@ This section transforms the problem defined in the \hyperref[Sec:ProbDesc]{probl
 Label & Calculation of angular displacement
         
 \\ \midrule \\
-Input & ${L_{\text{rod}}}$, ${θ_{i}}$, $g$
+Input & ${L_{\text{rod}}}$, ${θ_{i}}$, $\symbf{g}$
         
 \\ \midrule \\
 Output & ${θ_{p}}$
@@ -1073,7 +1073,7 @@ Input Constraints & \begin{displaymath}
                     {θ_{i}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    g\gt{}0
+                    \symbf{g}\gt{}0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
@@ -1112,17 +1112,17 @@ When the pendulum is displaced to an initial angle and released, the pendulum sw
 Where $\symbf{τ}$ denotes the torque, $\symbf{I}$ denotes the moment of inertia and $α$ denotes the angular acceleration. This implies:
 
 \begin{displaymath}
--m g \sin\left({θ_{p}}\right) {L_{\text{rod}}}=m {L_{\text{rod}}}^{2} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}
+-m \symbf{g} \sin\left({θ_{p}}\right) {L_{\text{rod}}}=m {L_{\text{rod}}}^{2} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}
 \end{displaymath}
 And rearranged as:
 
 \begin{displaymath}
-\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{g}{{L_{\text{rod}}}} \sin\left({θ_{p}}\right)=0
+\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\symbf{g}}{{L_{\text{rod}}}} \sin\left({θ_{p}}\right)=0
 \end{displaymath}
 If the amplitude of angular displacement is small enough, we can approximate $\sin\left({θ_{p}}\right)={θ_{p}}$ for the purpose of a simple pendulum at very small angles. Then the equation of motion reduces to the equation of simple harmonic motion:
 
 \begin{displaymath}
-\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{g}{{L_{\text{rod}}}} {θ_{p}}=0
+\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\symbf{g}}{{L_{\text{rod}}}} {θ_{p}}=0
 \end{displaymath}
 Thus the simple harmonic motion is:
 

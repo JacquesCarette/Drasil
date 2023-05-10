@@ -19,7 +19,7 @@ Successfully matched String with String.
 Successfully matched Actor "Constants" with Object "Constants".
 Successfully matched Actor "InputParameters" with Object "InputParameters".
 Successfully matched Real with Double.
-Successfully matched Vect Rational with List Double.
+Successfully matched Vect Real with List Double.
 Successfully matched Actor "ODEStepHandler" with Object "ODEStepHandler".
 Successfully matched Actor "ODE" with Object "ODE".
 Successfully matched Array Real with Array Double.
@@ -27,6 +27,5 @@ Successfully matched Actor "FirstOrderIntegrator" with Object "FirstOrderIntegra
 Successfully matched Actor "DormandPrince54Integrator" with Object "DormandPrince54Integrator".
 Successfully matched Void with Void.
 Successfully matched Natural with Integer.
-Successfully matched Array Rational with Array Double.
 Successfully matched Actor "StepInterpolator" with Object "StepInterpolator".
 Successfully matched Boolean with Boolean.

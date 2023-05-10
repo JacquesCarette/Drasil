@@ -100,7 +100,7 @@ ${\symbf{F}_{j}}$ & Force Applied to the J-Th Body at Time T & ${\text{N}}$
 \\
 $G$ & Gravitational constant & $\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}$
 \\
-$g$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+$\symbf{g}$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $h$ & Height & ${\text{m}}$
 \\
@@ -517,11 +517,11 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           g=-\frac{G M}{\|\symbf{d}\|^{2}} \symbf{\hat{d}}
+           \symbf{g}=-\frac{G M}{\|\symbf{d}\|^{2}} \symbf{\hat{d}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$G$ is the gravitational constant ($\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}$)}
               \item{$M$ is the mass of the larger rigid body (${\text{kg}}$)}
               \item{$\|\symbf{d}\|$ is the Euclidean norm of the distance between the center of mass of two bodies (${\text{m}}$)}
@@ -554,17 +554,17 @@ The above equation governs the gravitational attraction between two bodies. Supp
 Given the above assumptions, let $M$ and $m$ be the mass of the massive and light body respectively. Equating $\symbf{F}$ above with Newton's second law for the force experienced by the light body, we get:
 
 \begin{displaymath}
-{\symbf{F}_{\symbf{g}}}=G \frac{M m}{{\|\symbf{d}\|^{2}}} \symbf{\hat{d}}=m g
+{\symbf{F}_{\symbf{g}}}=G \frac{M m}{{\|\symbf{d}\|^{2}}} \symbf{\hat{d}}=m \symbf{g}
 \end{displaymath}
-where $g$ is the gravitational acceleration. Dividing the above equation by $m$,  we have:
+where $\symbf{g}$ is the gravitational acceleration. Dividing the above equation by $m$,  we have:
 
 \begin{displaymath}
-G \frac{M}{{\|\symbf{d}\|^{2}}} \symbf{\hat{d}}=g
+G \frac{M}{{\|\symbf{d}\|^{2}}} \symbf{\hat{d}}=\symbf{g}
 \end{displaymath}
 and thus the negative sign indicates that the force is an attractive force:
 
 \begin{displaymath}
-g=-G \frac{M}{{\|\symbf{d}\|^{2}}} \symbf{\hat{d}}
+\symbf{g}=-G \frac{M}{{\|\symbf{d}\|^{2}}} \symbf{\hat{d}}
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -1166,13 +1166,13 @@ Units & ${\text{J}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           PE=m g h
+           PE=m \symbf{g} h
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$PE$ is the potential energy (${\text{J}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$h$ is the height (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -1248,7 +1248,7 @@ The goal \hyperref[linearGS]{GS:Determine-Linear-Properties} is met by \hyperref
 Label & J-Th Body's Acceleration
         
 \\ \midrule \\
-Input & ${\symbf{v}_{j}}$, $t$, $g$, ${\symbf{F}_{j}}$, ${m_{j}}$
+Input & ${\symbf{v}_{j}}$, $t$, $\symbf{g}$, ${\symbf{F}_{j}}$, ${m_{j}}$
         
 \\ \midrule \\
 Output & ${\symbf{a}_{j}}$
@@ -1261,7 +1261,7 @@ Input Constraints & \begin{displaymath}
                     t\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    g\gt{}0
+                    \symbf{g}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
                     {\symbf{F}_{j}}\gt{}0
@@ -1273,12 +1273,12 @@ Input Constraints & \begin{displaymath}
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\symbf{a}_{j}}=g+\frac{{\symbf{F}_{j}}\left(t\right)}{{m_{j}}}
+           {\symbf{a}_{j}}=\symbf{g}+\frac{{\symbf{F}_{j}}\left(t\right)}{{m_{j}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${\symbf{a}_{j}}$ is the j-th body's acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${\symbf{F}_{j}}$ is the force applied to the j-th body at time t (${\text{N}}$)}
               \item{$t$ is the time (${\text{s}}$)}
               \item{${m_{j}}$ is the mass of the j-th particle (${\text{kg}}$)}
@@ -1310,7 +1310,7 @@ We may calculate the total acceleration of rigid body $j$ by calculating the der
 Performing the derivative, we obtain:
 
 \begin{displaymath}
-{\symbf{a}_{j}}=g+\frac{{\symbf{F}_{j}}\left(t\right)}{{m_{j}}}
+{\symbf{a}_{j}}=\symbf{g}+\frac{{\symbf{F}_{j}}\left(t\right)}{{m_{j}}}
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent

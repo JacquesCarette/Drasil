@@ -4,7 +4,7 @@ import Language.Drasil (ExprC(..), LiteralC(int, exactDbl, dbl), square)
 import Language.Drasil.Code (odeInfo, odeOptions, quantvar, ODEInfo,
   ODEMethod(RK45), ODEOptions)
 
-import Data.Drasil.Quantities.Physics (time)
+import Data.Drasil.Quantities.Physics (time, gravitationalAccelConst)
 
 import Drasil.DblPendulum.Unitals(massObj_1, massObj_2, lenRod_1, lenRod_2, pendDisAngle)
 import Prelude hiding (sin, cos)

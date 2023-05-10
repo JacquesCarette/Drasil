@@ -6,7 +6,7 @@ import Foundation
 
 /** Calculates flight duration: the time when the projectile lands (s)
     - Parameter inParams: structure holding the input values
-    - Parameter g: gravitational acceleration (m/s^2)
+    - Parameter g: magnitude of gravitational acceleration (m/s^2)
     - Returns: flight duration: the time when the projectile lands (s)
 */
 func func_t_flight(_ inParams: inout InputParameters, _ g: Double) -> Double {
@@ -15,7 +15,7 @@ func func_t_flight(_ inParams: inout InputParameters, _ g: Double) -> Double {
 
 /** Calculates landing position: the distance from the launcher to the final position of the projectile (m)
     - Parameter inParams: structure holding the input values
-    - Parameter g: gravitational acceleration (m/s^2)
+    - Parameter g: magnitude of gravitational acceleration (m/s^2)
     - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
 */
 func func_p_land(_ inParams: inout InputParameters, _ g: Double) -> Double {

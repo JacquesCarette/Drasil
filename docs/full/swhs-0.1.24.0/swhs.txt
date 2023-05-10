@@ -320,6 +320,7 @@ printSetting :: PrintingInformation
 resourcePath :: String
 units :: [UnitDefn]
 si :: SystemInformation
+purp :: Sentence
 symbMap :: ChunkDB
 usedDB :: ChunkDB
 refDB :: ReferenceDB
@@ -346,7 +347,6 @@ systContRespBullets :: Contents
 userResp :: [Sentence]
 swhsResp :: [Sentence]
 userChars :: CI -> Contents
-probDescIntro :: Sentence
 terms :: [ConceptChunk]
 physSystParts :: [Sentence]
 physSyst1 :: ConceptChunk -> ConceptChunk -> [Sentence]

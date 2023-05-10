@@ -258,6 +258,7 @@ fullSI :: SystemInformation
 printSetting :: PrintingInformation
 si :: SystemInformation
 mkSRS :: SRSDecl
+purp :: Sentence
 symbMap :: ChunkDB
 concIns :: [ConceptInstance]
 labCon :: [LabelledContent]
@@ -284,7 +285,6 @@ sysCtxSysResp :: [Sentence]
 sysCtxResp :: [Sentence]
 sysCtxList :: Contents
 userCharacteristicsIntro :: Contents
-prob :: Sentence
 termsAndDesc :: Section
 physSystParts :: [Sentence]
 goalInputs :: [Sentence]

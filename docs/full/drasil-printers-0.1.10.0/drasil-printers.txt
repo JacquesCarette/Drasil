@@ -814,6 +814,7 @@ ul :: [String] -> Doc -> Doc
 -- | Table tag wrapper
 table :: [String] -> Doc -> Doc
 nbformat :: Doc -> Doc
+escapeStringForJson :: String -> String
 wrap :: String -> [String] -> Doc -> Doc
 wrap' :: String -> [String] -> Doc -> Doc
 wrapGen' :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc

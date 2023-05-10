@@ -101,7 +101,6 @@ pidCtrlEditor1 :: Person
 pidCtrlEditor2 :: Person
 
 module Drasil.PDController.SpSysDesc
-sysProblemDesc :: Sentence
 sysParts :: [Sentence]
 sysFigure :: LabelledContent
 sysGoalInput :: [Sentence]

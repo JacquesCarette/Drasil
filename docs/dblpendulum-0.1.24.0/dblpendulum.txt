@@ -229,6 +229,7 @@ fullSI :: SystemInformation
 printSetting :: PrintingInformation
 mkSRS :: SRSDecl
 si :: SystemInformation
+purp :: Sentence
 symbolsAll :: [QuantityDict]
 symbMap :: ChunkDB
 usedDB :: ChunkDB
@@ -246,7 +247,6 @@ sysCtxSysResp :: [Sentence]
 sysCtxResp :: [Sentence]
 sysCtxList :: Contents
 userCharacteristicsIntro :: Contents
-prob :: Sentence
 terms :: [ConceptChunk]
 physSystParts :: [Sentence]
 tMods :: [TheoryModel]

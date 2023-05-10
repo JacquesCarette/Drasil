@@ -1,3 +1,6 @@
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DeriveAnyClass #-}
+
 -- | Unique Identifier used across Drasil.
 module Language.Drasil.UID (
     UID
@@ -5,6 +8,9 @@ module Language.Drasil.UID (
   , mkUid, (+++), (+++.), (+++!)
   , showUID
 ) where
+
+import Data.Aeson
+import GHC.Generics
 
 import Control.Lens (Lens', (^.), view)
 
@@ -17,11 +23,10 @@ class HasUID c where
 -- of information. We use a newtype wrapper to make sure we are only using
 -- 'UID's where desired.
 newtype UID = UID String
-  deriving (Eq, Ord)
+  deriving (Eq, Ord, Generic, ToJSON)
 
 instance Show UID where
   show (UID u) = u
-
 
 -- | Smart constructor for making a 'UID' from a 'String'.
 mkUid :: String -> UID

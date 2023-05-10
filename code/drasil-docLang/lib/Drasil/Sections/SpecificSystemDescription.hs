@@ -199,7 +199,7 @@ uncertSent = foldlSent [atStartNP (the uncertainty), phrase column,
 
 -- | General 'Sentence' that describes some conservative constraints on the model.
 conservConsSent :: Sentence
-conservConsSent = foldlSent [atStartNP' (the constraint) `S.are` S "conservative" `sC`
+conservConsSent = foldlSent [atStartNP' (the constraint) `S.are` S "conservative" +:+
   S "to give", phrase user `S.the_ofThe` phrase model,
   S "the flexibility to experiment with unusual situations"]
 

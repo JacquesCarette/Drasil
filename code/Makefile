@@ -103,7 +103,7 @@ ALL_EXPANDED_TARGETS = $(foreach P, $(PACKAGE_GEN_TARGET), $($(P)_PACKAGES)) $(f
 #-------------------------------#
 
 # make variables/configuration
-DIFF = diff --strip-trailing-cr -r -X ../.gitignore -x '*.txt'
+DIFF = diff --strip-trailing-cr -r -X ../.gitignore
 LOG_SUFFIX = _log.log
 MIN_STACK_VER = 2.3.1  # Match stack.yaml see PR #2142 for more info.
 CACHED_MSV_FILE = .drasil-min-stack-ver

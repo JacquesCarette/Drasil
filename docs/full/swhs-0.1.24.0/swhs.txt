@@ -39,7 +39,9 @@ incroperaEtAl2007 :: Citation
 koothoor2013 :: Citation
 lightstone2012 :: Citation
 parnasClements1986 :: Citation
+smithEtAl2007 :: Citation
 smithLai2005 :: Citation
+smithKoothoor2016 :: Citation
 
 module Drasil.SWHS.Unitals
 symbols :: [DefinedQuantityDict]

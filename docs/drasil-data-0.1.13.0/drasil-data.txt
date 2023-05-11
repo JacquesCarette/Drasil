@@ -83,6 +83,7 @@ rcHibbeler :: Person
 olu :: Person
 rodPierce :: Person
 dong :: Person
+rKhedri :: Person
 wikiAuthors :: Person
 
 
@@ -96,6 +97,8 @@ parnasClements1986 :: Citation
 smithLai2005 :: Citation
 lineSource :: Citation
 pointSource :: Citation
+smithEtAl2007 :: Citation
+smithKoothoor2016 :: Citation
 hibbeler2004 :: Citation
 dampingSource :: Citation
 accelerationWiki :: Citation

@@ -54,7 +54,9 @@ goalsInputs :: [Sentence]
 module Drasil.DblPendulum.References
 citations :: BibRef
 koothoor2013 :: Citation
+smithEtAl2007 :: Citation
 smithLai2005 :: Citation
+smithKoothoor2016 :: Citation
 
 module Drasil.DblPendulum.Unitals
 symbols :: [QuantityDict]

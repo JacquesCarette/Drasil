@@ -9,33 +9,33 @@
 <g id="graph0" class="graph" transform="scale(1.48 1.48) rotate(0) translate(4 421.33)">
 <title>G</title>
 <polygon fill="white" stroke="transparent" points="-4,4 -4,-421.33 630.17,-421.33 630.17,4 -4,4"/>
-<!-- u2 -->
+<!-- u1 -->
 <g id="node1" class="node">
-<title>u2</title>
-<ellipse fill="#bbffbb" stroke="black" cx="140.39" cy="-70" rx="140.28" ry="18"/>
-<text text-anchor="middle" x="140.39" y="-66.3" font-family="Times,serif" font-size="14.00">Language.Drasil.TypeCheck</text>
+<title>u1</title>
+<ellipse fill="#bbffbb" stroke="black" cx="301.39" cy="-348" rx="132.68" ry="18"/>
+<text text-anchor="middle" x="301.39" y="-344.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Generate</text>
 </g>
 <!-- u0 -->
 <g id="node2" class="node">
 <title>u0</title>
-<ellipse fill="#bbffbb" stroke="black" cx="301.39" cy="-348" rx="132.68" ry="18"/>
-<text text-anchor="middle" x="301.39" y="-344.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Generate</text>
+<ellipse fill="#bbffbb" stroke="black" cx="140.39" cy="-70" rx="140.28" ry="18"/>
+<text text-anchor="middle" x="140.39" y="-66.3" font-family="Times,serif" font-size="14.00">Language.Drasil.TypeCheck</text>
 </g>
-<!-- u0&#45;&gt;u2 -->
-<g id="edge2" class="edge">
-<title>u0&#45;&gt;u2</title>
+<!-- u1&#45;&gt;u0 -->
+<g id="edge1" class="edge">
+<title>u1&#45;&gt;u0</title>
 <path fill="none" stroke="black" d="M291.32,-329.73C263.98,-282.88 188.28,-153.11 155.67,-97.19"/>
 <polygon fill="black" stroke="black" points="158.52,-95.13 150.46,-88.26 152.47,-98.66 158.52,-95.13"/>
 </g>
-<!-- u1 -->
+<!-- u2 -->
 <g id="node3" class="node">
-<title>u1</title>
+<title>u2</title>
 <ellipse fill="#ffffbb" stroke="black" cx="462.39" cy="-70" rx="163.57" ry="18"/>
 <text text-anchor="middle" x="462.39" y="-66.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Output.Formats</text>
 </g>
-<!-- u0&#45;&gt;u1 -->
-<g id="edge1" class="edge">
-<title>u0&#45;&gt;u1</title>
+<!-- u1&#45;&gt;u2 -->
+<g id="edge2" class="edge">
+<title>u1&#45;&gt;u2</title>
 <path fill="none" stroke="black" d="M311.46,-329.73C338.79,-282.88 414.49,-153.11 447.11,-97.19"/>
 <polygon fill="black" stroke="black" points="450.3,-98.66 452.32,-88.26 444.26,-95.13 450.3,-98.66"/>
 </g>

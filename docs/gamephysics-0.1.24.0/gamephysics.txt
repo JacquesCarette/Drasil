@@ -47,7 +47,9 @@ module Drasil.GamePhysics.References
 chaslesWiki :: Citation
 citations :: BibRef
 koothoor2013 :: Citation
+smithEtAl2007 :: Citation
 smithLai2005 :: Citation
+smithKoothoor2016 :: Citation
 
 module Drasil.GamePhysics.Requirements
 funcReqs :: [ConceptInstance]

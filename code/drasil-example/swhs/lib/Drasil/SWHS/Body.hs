@@ -254,8 +254,8 @@ charReaderDE = plural de +:+ S "from level 1 and 2" +:+ phrase calculus
 orgDocIntro :: Sentence
 orgDocIntro = foldlSent [atStartNP (the organization), S "of this",
   phrase document, S "follows the template for an", short Doc.srs
-  `S.for` phrase sciCompS, S "proposed by", refS koothoor2013 `sC` refS smithLai2005 
-  `sC` refS smithEtAl2007 `S.and_` refS smithKoothoor2016]
+  `S.for` phrase sciCompS, S "proposed by", foldlList Comma List $ 
+  map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]
 
 orgDocEnd :: Sentence
 orgDocEnd = foldlSent_ [atStartNP' (the inModel), 

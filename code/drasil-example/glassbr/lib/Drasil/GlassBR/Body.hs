@@ -226,9 +226,9 @@ scope = foldlSent_ [S "determining the safety of a", phrase glaSlab,
 orgOfDocIntro, orgOfDocIntroEnd :: Sentence
 orgOfDocIntro = foldlSent [atStartNP (the organization), S "of this",
   phrase document, S "follows the", phrase template, S "for an", short Doc.srs
-  `S.for` phrase sciCompS, S "proposed by" +:+ refS koothoor2013
-  `sC` refS smithLai2005 `sC` refS smithEtAl2007 `S.and_` refS smithKoothoor2016 
-  `sC` S "with some", plural aspect, S "taken from Volere", phrase template,
+  `S.for` phrase sciCompS, S "proposed by", foldlList Comma List  
+  (map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]) `sC` 
+  S "with some", plural aspect, S "taken from Volere", phrase template,
   S "16", refS rbrtsn2012]
 
 orgOfDocIntroEnd = foldlSent_ [atStartNP' (the Doc.dataDefn) `S.are`

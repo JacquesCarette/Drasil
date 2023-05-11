@@ -233,8 +233,8 @@ orgSecStart, orgSecEnd :: Sentence
 orgSecStart = foldlSent [atStartNP (the organization), S "of this",
   phrase document, S "follows the", phrase template, S "for an",
   short Doc.srs `S.for` phrase sciCompS,
-  S "proposed by", refS koothoor2013 `sC` refS smithLai2005 
-  `sC` refS smithEtAl2007 `S.and_` refS smithKoothoor2016]
+  S "proposed by", foldlList Comma List $ 
+  map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]
 orgSecEnd   = foldlSent_ [atStartNP' (the inModel), S "provide the set of",
   S "algebraic", plural equation, S "that must be solved"]
 

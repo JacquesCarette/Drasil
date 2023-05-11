@@ -120,7 +120,7 @@ rectDeriv c1 c2 motSent initc ctm = foldlSent_ [
   (atStartNP (the c1) `S.is` getScalar c1 `S.andThe` phrase c2 `S.is` getScalar c2 !.), motSent,
   atStartNP (the initc), sParen (S "at" +:+ eS (sy time $= exactDbl 0) `sC` S "from" +:+
   refS timeStartZero) `S.is` S "represented by" +:+. getScalar initc,
-  S "From", refS ctm `sC` S "using the above", plural symbol_ +: S "we have"]
+  S "From", refS ctm `S.in_` short oneD `sC` S "and using the above", plural symbol_ +: S "we have"]
   where
     getScalar c
       | c == position     = eS' scalarPos

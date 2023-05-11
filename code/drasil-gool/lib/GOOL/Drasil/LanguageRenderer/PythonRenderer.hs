@@ -14,14 +14,15 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), 
   VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..), 
   MathConstant(..), VariableValue(..), CommandLineArgs(..), 
-  NumericExpression(..), BooleanExpression(..), Comparison(..), 
-  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj, 
-  InternalValueExp(..), objMethodCall, FunctionSym(..), GetSet(..), List(..), 
-  InternalList(..), StatementSym(..), AssignStatement(..), (&=), 
-  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), switchAsIf, StatePattern(..), 
-  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  VectorExpression(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp,
+  extNewObj, InternalValueExp(..), objMethodCall, FunctionSym(..), GetSet(..),
+  List(..), InternalList(..), StatementSym(..), AssignStatement(..), (&=),
+  DeclStatement(..), IOStatement(..), StringStatement(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
+  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..),
+  ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -345,6 +346,10 @@ instance Comparison PythonCode where
   (?>=) = typeBinExpr greaterEqualOp bool
   (?==) = typeBinExpr equalOp bool
   (?!=) = typeBinExpr notEqualOp bool
+
+instance VectorExpression PythonCode where
+  vectorDim = listSize
+  vectorIndex = listAccess
 
 instance ValueExpression PythonCode where
   inlineIf = pyInlineIf

@@ -16,14 +16,14 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), 
   Argument(..), Literal(..), MathConstant(..), VariableValue(..), 
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
-  Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, 
-  newObj, InternalValueExp(..), objMethodCallNoParams, FunctionSym(..), ($.), 
-  GetSet(..), List(..), InternalList(..), StatementSym(..), 
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), 
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
-  ControlStatement(..), StatePattern(..), ObserverPattern(..), 
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  Comparison(..), VectorExpression(..), ValueExpression(..), funcApp,
+  selfFuncApp, extFuncApp, newObj, InternalValueExp(..), objMethodCallNoParams,
+  FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..),
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), StatePattern(..),
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -344,7 +344,11 @@ instance Comparison CSharpCode where
   (?>=) = typeBinExpr greaterEqualOp bool
   (?==) = typeBinExpr equalOp bool
   (?!=) = typeBinExpr notEqualOp bool
-  
+
+instance VectorExpression CSharpCode where
+  vectorDim = listSize
+  vectorIndex = listAccess
+
 instance ValueExpression CSharpCode where
   inlineIf = C.inlineIf
 

@@ -11,19 +11,19 @@ module GOOL.Drasil.ClassInterface (
   VariableSym(..), VariableElim(..), ($->), listOf, listVar, ValueSym(..), 
   Argument(..), Literal(..), MathConstant(..), VariableValue(..), 
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
-  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, 
-  extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, 
-  InternalValueExp(..), objMethodCall, objMethodCallNamedArgs, 
-  objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..), ($.),
-  selfAccess, GetSet(..), List(..), InternalList(..), listSlice, 
-  listIndexExists, at, StatementSym(..), AssignStatement(..), (&=), 
-  assignToListIndex, DeclStatement(..), objDecNewNoParams, 
+  Comparison(..), VectorExpression(..), ValueExpression(..), funcApp,
+  funcAppNamedArgs, selfFuncApp, extFuncApp, libFuncApp, newObj, extNewObj,
+  libNewObj, exists, InternalValueExp(..), objMethodCall,
+  objMethodCallNamedArgs, objMethodCallMixedArgs, objMethodCallNoParams,
+  FunctionSym(..), ($.), selfAccess, GetSet(..), List(..), InternalList(..),
+  listSlice, listIndexExists, at, StatementSym(..), AssignStatement(..), (&=),
+  assignToListIndex, DeclStatement(..), objDecNewNoParams,
   extObjDecNewNoParams, IOStatement(..), StringStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
-  StatePattern(..), initState, changeState, ObserverPattern(..), 
-  observerListName, initObserverList, addObserver, StrategyPattern(..), 
-  ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..), 
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  StatePattern(..), initState, changeState, ObserverPattern(..),
+  observerListName, initObserverList, addObserver, StrategyPattern(..),
+  ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..),
+  privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..),
   privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), convType
 ) where
 
@@ -46,9 +46,10 @@ type GSProgram a = GS (a (Program a))
 class (ProgramSym r, AssignStatement r, DeclStatement r, IOStatement r, 
   StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r,
   InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, 
-  CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, 
-  ValueExpression r, InternalValueExp r, GetSet r, List r, StatePattern r, 
-  ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
+  CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r,
+  VectorExpression r, ValueExpression r, InternalValueExp r, GetSet r, List r,
+  StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r,
+  VariableElim r) => OOProg r
 
 class (FileSym r) => ProgramSym r where
   type Program r
@@ -229,6 +230,10 @@ class (ValueSym r) => Comparison r where
   infixl 3 ?==
   (?!=) :: SValue r -> SValue r -> SValue r
   infixl 3 ?!=
+
+class ValueSym r => VectorExpression r where
+  vectorDim :: SValue r -> SValue r
+  vectorIndex :: SValue r -> SValue r -> SValue r
 
 type NamedArgs r = [(SVariable r, SValue r)]
 -- Function call with both positional and named arguments

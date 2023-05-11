@@ -17,14 +17,14 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), 
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..), 
   VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
-  selfFuncApp, extFuncApp, InternalValueExp(..), objMethodCall, FunctionSym(..),
-  ($.), GetSet(..), List(..), InternalList(..), StatementSym(..), 
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..), 
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf, 
-  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), 
-  ParameterSym(..), MethodSym(..), pubMethod, StateVarSym(..), ClassSym(..), 
-  ModuleSym(..))
+  BooleanExpression(..), Comparison(..), VectorExpression(..),
+  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, InternalValueExp(..),
+  objMethodCall, FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..),
+  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  pubMethod, StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -354,7 +354,11 @@ instance (Pair p) => Comparison (p CppSrcCode CppHdrCode) where
   (?>=) = pair2 (?>=) (?>=)
   (?==) = pair2 (?==) (?==)
   (?!=) = pair2 (?!=) (?!=)
-  
+
+instance (Pair p) => VectorExpression (p CppSrcCode CppHdrCode) where
+  vectorDim = listSize
+  vectorIndex = listAccess
+
 instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
   inlineIf = pair3 inlineIf inlineIf
 
@@ -1233,7 +1237,11 @@ instance Comparison CppSrcCode where
   (?>=) = typeBinExpr greaterEqualOp bool
   (?==) = typeBinExpr equalOp bool
   (?!=) = typeBinExpr notEqualOp bool
-   
+
+instance VectorExpression CppSrcCode where
+  vectorDim = listSize
+  vectorIndex = listAccess
+
 instance ValueExpression CppSrcCode where
   inlineIf = C.inlineIf
 
@@ -1870,7 +1878,11 @@ instance Comparison CppHdrCode where
   (?>=) _ _ = mkStateVal void empty
   (?==) _ _ = mkStateVal void empty
   (?!=) _ _ = mkStateVal void empty
-   
+
+instance VectorExpression CppHdrCode where
+  vectorDim = listSize
+  vectorIndex = listAccess
+
 instance ValueExpression CppHdrCode where
   inlineIf _ _ _ = mkStateVal void empty
 

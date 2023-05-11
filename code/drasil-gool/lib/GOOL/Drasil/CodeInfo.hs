@@ -8,12 +8,13 @@ import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement,
   BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), 
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..), 
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
-  Comparison(..), ValueExpression(..), InternalValueExp(..), FunctionSym(..), 
-  GetSet(..), List(..), InternalList(..), StatementSym(..), 
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..), 
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
-  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), 
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  Comparison(..), VectorExpression(..), ValueExpression(..),
+  InternalValueExp(..), FunctionSym(..), GetSet(..), List(..),
+  InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), StatePattern(..),
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..), qualName)
 import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
@@ -181,6 +182,10 @@ instance Comparison CodeInfo where
   (?>=) = execute2
   (?==) = execute2
   (?!=) = execute2
+
+instance VectorExpression CodeInfo where
+  vectorDim = execute1
+  vectorIndex = execute2
     
 instance ValueExpression CodeInfo where
   inlineIf = execute3

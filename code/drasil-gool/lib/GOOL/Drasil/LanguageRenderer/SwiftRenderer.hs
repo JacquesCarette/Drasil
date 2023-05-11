@@ -16,15 +16,16 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), 
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..), 
   VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
-  funcAppNamedArgs, selfFuncApp, extFuncApp, newObj, InternalValueExp(..), 
-  objMethodCall, objMethodCallNamedArgs, objMethodCallNoParams, FunctionSym(..),
-  ($.), GetSet(..), List(..), listSlice, InternalList(..), StatementSym(..), 
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), 
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
-  ControlStatement(..), StatePattern(..), ObserverPattern(..), 
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..), convType)
+  BooleanExpression(..), Comparison(..), VectorExpression(..),
+  ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp,
+  newObj, InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
+  objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..),
+  listSlice, InternalList(..), StatementSym(..), AssignStatement(..), (&=),
+  DeclStatement(..), IOStatement(..), StringStatement(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..),
+  ModuleSym(..), convType)
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, 
   RenderFile(..), ImportSym(..), ImportElim, PermElim(binding), RenderBody(..), 
   BodyElim, RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
@@ -356,7 +357,11 @@ instance Comparison SwiftCode where
   (?>=) = swiftNumBinExpr (typeBinExpr greaterEqualOp bool)
   (?==) = swiftNumBinExpr (typeBinExpr equalOp bool)
   (?!=) = swiftNumBinExpr (typeBinExpr notEqualOp bool)
-  
+
+instance VectorExpression SwiftCode where
+  vectorDim = listSize
+  vectorIndex = listAccess
+
 instance ValueExpression SwiftCode where
   inlineIf = C.inlineIf
 

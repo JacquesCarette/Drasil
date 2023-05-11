@@ -87,6 +87,7 @@ instance TypeSym CodeInfo where
   outfile           = noInfoType
   listType      _   = noInfoType
   arrayType     _   = noInfoType
+  vectorType        = arrayType
   listInnerType _   = noInfoType
   obj               = toState . toCode
   funcType      _ _ = noInfoType

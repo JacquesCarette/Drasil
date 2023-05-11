@@ -195,6 +195,7 @@ instance TypeSym SwiftCode where
   outfile = swiftFileHdlType
   listType = swiftListType
   arrayType = listType -- For now, treating arrays and lists the same, like we do for Python
+  vectorType = arrayType
   listInnerType = G.listInnerType
   obj = G.obj
   funcType = swiftFuncType

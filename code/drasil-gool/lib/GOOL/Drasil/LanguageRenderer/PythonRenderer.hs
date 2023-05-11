@@ -184,6 +184,7 @@ instance TypeSym PythonCode where
   outfile = typeFromData OutFile "" empty
   listType t' = t' >>=(\t -> typeFromData (List (getType t)) "" empty)
   arrayType = listType
+  vectorType = arrayType
   listInnerType = G.listInnerType
   obj = G.obj
   funcType = CP.funcType

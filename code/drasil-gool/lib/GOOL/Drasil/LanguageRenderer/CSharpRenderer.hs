@@ -193,6 +193,7 @@ instance TypeSym CSharpCode where
     modify (addLangImportVS csGeneric) 
     C.listType csList t
   arrayType = CP.arrayType
+  vectorType = arrayType
   listInnerType = G.listInnerType
   obj = G.obj
   funcType = csFuncType

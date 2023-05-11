@@ -204,6 +204,7 @@ instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   outfile = on2StateValues pair outfile outfile
   listType = pair1 listType listType
   arrayType = pair1 arrayType arrayType
+  vectorType = pair1 vectorType vectorType
   listInnerType = pair1 listInnerType listInnerType
   obj t = on2StateValues pair (obj t) (obj t)
   funcType = pair1List1Val funcType funcType
@@ -1055,6 +1056,7 @@ instance TypeSym CppSrcCode where
     modify (addUsing vector . addLangImportVS vector)
     C.listType vector t
   arrayType = cppArrayType
+  vectorType = arrayType
   listInnerType = G.listInnerType
   obj n = do 
     cn <- zoom lensVStoMS getClassName
@@ -1714,6 +1716,7 @@ instance TypeSym CppHdrCode where
     modify (addHeaderUsing vector . addHeaderLangImport vector)
     C.listType vector t
   arrayType = cppArrayType
+  vectorType = arrayType
   listInnerType = G.listInnerType
   obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addHeaderModImport) 
     (Map.lookup n cm) $ G.obj n)

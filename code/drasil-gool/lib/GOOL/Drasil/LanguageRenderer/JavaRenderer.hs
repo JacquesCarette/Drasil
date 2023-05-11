@@ -198,6 +198,7 @@ instance TypeSym JavaCode where
   outfile = jOutfileType
   listType = jListType
   arrayType = CP.arrayType
+  vectorType = arrayType
   listInnerType = G.listInnerType
   obj = G.obj
   funcType = CP.funcType

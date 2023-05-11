@@ -103,6 +103,7 @@ class TypeSym r where
   outfile       :: VSType r
   listType      :: VSType r -> VSType r
   arrayType     :: VSType r -> VSType r
+  vectorType    :: VSType r -> VSType r
   listInnerType :: VSType r -> VSType r
   obj           :: ClassName -> VSType r
   funcType      :: [VSType r] -> VSType r -> VSType r

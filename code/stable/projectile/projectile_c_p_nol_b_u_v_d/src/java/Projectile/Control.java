@@ -14,11 +14,11 @@ public class Control {
     */
     public static void main(String[] args) throws FileNotFoundException, IOException {
         String filename = args[0];
-        double g_vect = 9.8;
+        double g = 9.8;
         double epsilon = 2.0e-2;
         InputParameters inParams = new InputParameters(filename);
-        double t_flight = Calculations.func_t_flight(inParams, g_vect);
-        double p_land = Calculations.func_p_land(inParams, g_vect);
+        double t_flight = Calculations.func_t_flight(inParams, g);
+        double p_land = Calculations.func_p_land(inParams, g);
         double d_offset = Calculations.func_d_offset(inParams, p_land);
         String s = Calculations.func_s(inParams, epsilon, d_offset);
         OutputFormat.write_output(s, d_offset, t_flight);

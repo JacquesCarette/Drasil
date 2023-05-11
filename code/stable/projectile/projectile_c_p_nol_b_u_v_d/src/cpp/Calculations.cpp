@@ -7,12 +7,12 @@
 
 using std::string;
 
-double func_t_flight(InputParameters &inParams, double g_vect) {
-    return 2.0 * inParams.v_launch * sin(inParams.theta) / g_vect;
+double func_t_flight(InputParameters &inParams, double g) {
+    return 2.0 * inParams.v_launch * sin(inParams.theta) / g;
 }
 
-double func_p_land(InputParameters &inParams, double g_vect) {
-    return 2.0 * pow(inParams.v_launch, 2.0) * sin(inParams.theta) * cos(inParams.theta) / g_vect;
+double func_p_land(InputParameters &inParams, double g) {
+    return 2.0 * pow(inParams.v_launch, 2.0) * sin(inParams.theta) * cos(inParams.theta) / g;
 }
 
 double func_d_offset(InputParameters &inParams, double p_land) {

@@ -6,20 +6,20 @@ import Foundation
 
 /** Calculates flight duration: the time when the projectile lands (s)
     - Parameter inParams: structure holding the input values
-    - Parameter g_vect: gravitational acceleration (m/s^2)
+    - Parameter g: magnitude of gravitational acceleration (m/s^2)
     - Returns: flight duration: the time when the projectile lands (s)
 */
-func func_t_flight(_ inParams: inout InputParameters, _ g_vect: Double) -> Double {
-    return 2.0 * inParams.v_launch * sin(inParams.theta) / g_vect
+func func_t_flight(_ inParams: inout InputParameters, _ g: Double) -> Double {
+    return 2.0 * inParams.v_launch * sin(inParams.theta) / g
 }
 
 /** Calculates landing position: the distance from the launcher to the final position of the projectile (m)
     - Parameter inParams: structure holding the input values
-    - Parameter g_vect: gravitational acceleration (m/s^2)
+    - Parameter g: magnitude of gravitational acceleration (m/s^2)
     - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
 */
-func func_p_land(_ inParams: inout InputParameters, _ g_vect: Double) -> Double {
-    return 2.0 * pow(inParams.v_launch, 2.0) * sin(inParams.theta) * cos(inParams.theta) / g_vect
+func func_p_land(_ inParams: inout InputParameters, _ g: Double) -> Double {
+    return 2.0 * pow(inParams.v_launch, 2.0) * sin(inParams.theta) * cos(inParams.theta) / g
 }
 
 /** Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)

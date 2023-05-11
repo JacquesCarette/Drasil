@@ -65,7 +65,7 @@ public class Projectile {
         outfile.println("  }");
         outfile.close();
         
-        return 2.0f * inParams.v_launch * (float)(Math.sin(inParams.theta)) / inParams.g_vect;
+        return 2.0f * inParams.v_launch * (float)(Math.sin(inParams.theta)) / inParams.g;
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -81,7 +81,7 @@ public class Projectile {
         outfile.println("  }");
         outfile.close();
         
-        return 2.0f * (float)(Math.pow(inParams.v_launch, 2.0f)) * (float)(Math.sin(inParams.theta)) * (float)(Math.cos(inParams.theta)) / inParams.g_vect;
+        return 2.0f * (float)(Math.pow(inParams.v_launch, 2.0f)) * (float)(Math.sin(inParams.theta)) * (float)(Math.cos(inParams.theta)) / inParams.g;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -170,7 +170,7 @@ class InputParameters {
     public float v_launch;
     public float theta;
     public float p_target;
-    public float g_vect = 9.8f;
+    public float g = 9.8f;
     public float epsilon = 2.0e-2f;
     
     /** \brief Initializes input object by reading inputs and checking physical constraints on the input

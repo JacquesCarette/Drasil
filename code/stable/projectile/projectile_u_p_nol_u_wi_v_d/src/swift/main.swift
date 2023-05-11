@@ -9,21 +9,21 @@ extension String: Error {}
 /** Calculates flight duration: the time when the projectile lands (s)
     - Parameter v_launch: launch speed: the initial speed of the projectile when launched (m/s)
     - Parameter theta: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-    - Parameter g_vect: gravitational acceleration (m/s^2)
+    - Parameter g: magnitude of gravitational acceleration (m/s^2)
     - Returns: flight duration: the time when the projectile lands (s)
 */
-func func_t_flight(_ v_launch: Double, _ theta: Double, _ g_vect: Double) -> Double {
-    return 2.0 * v_launch * sin(theta) / g_vect
+func func_t_flight(_ v_launch: Double, _ theta: Double, _ g: Double) -> Double {
+    return 2.0 * v_launch * sin(theta) / g
 }
 
 /** Calculates landing position: the distance from the launcher to the final position of the projectile (m)
     - Parameter v_launch: launch speed: the initial speed of the projectile when launched (m/s)
     - Parameter theta: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-    - Parameter g_vect: gravitational acceleration (m/s^2)
+    - Parameter g: magnitude of gravitational acceleration (m/s^2)
     - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
 */
-func func_p_land(_ v_launch: Double, _ theta: Double, _ g_vect: Double) -> Double {
-    return 2.0 * pow(v_launch, 2.0) * sin(theta) * cos(theta) / g_vect
+func func_p_land(_ v_launch: Double, _ theta: Double, _ g: Double) -> Double {
+    return 2.0 * pow(v_launch, 2.0) * sin(theta) * cos(theta) / g
 }
 
 /** Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -170,15 +170,15 @@ func write_output(_ s: String, _ d_offset: Double, _ t_flight: Double) throws ->
 }
 
 var filename: String = CommandLine.arguments[0]
-var g_vect: Double = 9.8
+var g: Double = 9.8
 var epsilon: Double = 2.0e-2
 var v_launch: Double
 var theta: Double
 var p_target: Double
 (v_launch, theta, p_target) = try get_input(filename)
 input_constraints(v_launch, theta, p_target)
-var t_flight: Double = func_t_flight(v_launch, theta, g_vect)
-var p_land: Double = func_p_land(v_launch, theta, g_vect)
+var t_flight: Double = func_t_flight(v_launch, theta, g)
+var p_land: Double = func_p_land(v_launch, theta, g)
 var d_offset: Double = func_d_offset(p_target, p_land)
 var s: String = func_s(p_target, epsilon, d_offset)
 try write_output(s, d_offset, t_flight)

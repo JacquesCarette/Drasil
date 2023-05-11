@@ -59,7 +59,7 @@ public class Projectile {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return 2.0 * inParams.v_launch * Math.Sin(inParams.theta) / Constants.g_vect;
+        return 2.0 * inParams.v_launch * Math.Sin(inParams.theta) / Constants.g;
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -75,7 +75,7 @@ public class Projectile {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return 2.0 * Math.Pow(inParams.v_launch, 2.0) * Math.Sin(inParams.theta) * Math.Cos(inParams.theta) / Constants.g_vect;
+        return 2.0 * Math.Pow(inParams.v_launch, 2.0) * Math.Sin(inParams.theta) * Math.Cos(inParams.theta) / Constants.g;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -264,7 +264,7 @@ public class InputParameters {
 /** \brief Structure for holding the constant values
 */
 public class Constants {
-    public const double g_vect = 9.8;
+    public const double g = 9.8;
     public const double epsilon = 2.0e-2;
     
 }

@@ -12,7 +12,7 @@ class InputParameters {
     var v_launch: Float = 0.0
     var theta: Float = 0.0
     var p_target: Float = 0.0
-    var g_vect: Float = 9.8
+    var g: Float = 9.8
     var epsilon: Float = 2.0e-2
     
     /** Initializes input object by reading inputs and checking physical constraints on the input
@@ -295,7 +295,7 @@ func func_t_flight(_ inParams: inout InputParameters) throws -> Float {
         throw "Error closing file."
     }
     
-    return 2.0 * inParams.v_launch * sin(inParams.theta) / inParams.g_vect
+    return 2.0 * inParams.v_launch * sin(inParams.theta) / inParams.g
 }
 
 /** Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -339,7 +339,7 @@ func func_p_land(_ inParams: inout InputParameters) throws -> Float {
         throw "Error closing file."
     }
     
-    return 2.0 * pow(inParams.v_launch, 2.0) * sin(inParams.theta) * cos(inParams.theta) / inParams.g_vect
+    return 2.0 * pow(inParams.v_launch, 2.0) * sin(inParams.theta) * cos(inParams.theta) / inParams.g
 }
 
 /** Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)

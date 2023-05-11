@@ -7,21 +7,21 @@ import Foundation
 /** Calculates flight duration: the time when the projectile lands (s)
     - Parameter v_launch: launch speed: the initial speed of the projectile when launched (m/s)
     - Parameter theta: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-    - Parameter g_vect: gravitational acceleration (m/s^2)
+    - Parameter g: magnitude of gravitational acceleration (m/s^2)
     - Returns: flight duration: the time when the projectile lands (s)
 */
-func func_t_flight(_ v_launch: Float, _ theta: Float, _ g_vect: Float) -> Float {
-    return 2.0 * v_launch * sin(theta) / g_vect
+func func_t_flight(_ v_launch: Float, _ theta: Float, _ g: Float) -> Float {
+    return 2.0 * v_launch * sin(theta) / g
 }
 
 /** Calculates landing position: the distance from the launcher to the final position of the projectile (m)
     - Parameter v_launch: launch speed: the initial speed of the projectile when launched (m/s)
     - Parameter theta: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-    - Parameter g_vect: gravitational acceleration (m/s^2)
+    - Parameter g: magnitude of gravitational acceleration (m/s^2)
     - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
 */
-func func_p_land(_ v_launch: Float, _ theta: Float, _ g_vect: Float) -> Float {
-    return 2.0 * pow(v_launch, 2.0) * sin(theta) * cos(theta) / g_vect
+func func_p_land(_ v_launch: Float, _ theta: Float, _ g: Float) -> Float {
+    return 2.0 * pow(v_launch, 2.0) * sin(theta) * cos(theta) / g
 }
 
 /** Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)

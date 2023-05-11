@@ -12,15 +12,15 @@ public class Projectile {
     */
     public static void Main(string[] args) {
         string filename = args[0];
-        double g_vect = 9.8;
+        double g = 9.8;
         double epsilon = 2.0e-2;
         double v_launch;
         double theta;
         double p_target;
         get_input(filename, out v_launch, out theta, out p_target);
         input_constraints(v_launch, theta, p_target);
-        double t_flight = func_t_flight(v_launch, theta, g_vect);
-        double p_land = func_p_land(v_launch, theta, g_vect);
+        double t_flight = func_t_flight(v_launch, theta, g);
+        double p_land = func_p_land(v_launch, theta, g);
         double d_offset = func_d_offset(p_target, p_land);
         string s = func_s(p_target, epsilon, d_offset);
         write_output(s, d_offset, t_flight);
@@ -29,21 +29,21 @@ public class Projectile {
     /** \brief Calculates flight duration: the time when the projectile lands (s)
         \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
         \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-        \param g_vect gravitational acceleration (m/s^2)
+        \param g magnitude of gravitational acceleration (m/s^2)
         \return flight duration: the time when the projectile lands (s)
     */
-    public static double func_t_flight(double v_launch, double theta, double g_vect) {
-        return 2.0 * v_launch * Math.Sin(theta) / g_vect;
+    public static double func_t_flight(double v_launch, double theta, double g) {
+        return 2.0 * v_launch * Math.Sin(theta) / g;
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
         \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
         \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-        \param g_vect gravitational acceleration (m/s^2)
+        \param g magnitude of gravitational acceleration (m/s^2)
         \return landing position: the distance from the launcher to the final position of the projectile (m)
     */
-    public static double func_p_land(double v_launch, double theta, double g_vect) {
-        return 2.0 * Math.Pow(v_launch, 2.0) * Math.Sin(theta) * Math.Cos(theta) / g_vect;
+    public static double func_p_land(double v_launch, double theta, double g) {
+        return 2.0 * Math.Pow(v_launch, 2.0) * Math.Sin(theta) * Math.Cos(theta) / g;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)

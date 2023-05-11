@@ -9,21 +9,21 @@ public class Calculations {
     /** \brief Calculates flight duration: the time when the projectile lands (s)
         \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
         \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-        \param g_vect gravitational acceleration (m/s^2)
+        \param g magnitude of gravitational acceleration (m/s^2)
         \return flight duration: the time when the projectile lands (s)
     */
-    public static float func_t_flight(float v_launch, float theta, float g_vect) {
-        return 2.0f * v_launch * (float)(Math.Sin(theta)) / g_vect;
+    public static float func_t_flight(float v_launch, float theta, float g) {
+        return 2.0f * v_launch * (float)(Math.Sin(theta)) / g;
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
         \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
         \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-        \param g_vect gravitational acceleration (m/s^2)
+        \param g magnitude of gravitational acceleration (m/s^2)
         \return landing position: the distance from the launcher to the final position of the projectile (m)
     */
-    public static float func_p_land(float v_launch, float theta, float g_vect) {
-        return 2.0f * (float)(Math.Pow(v_launch, 2.0f)) * (float)(Math.Sin(theta)) * (float)(Math.Cos(theta)) / g_vect;
+    public static float func_p_land(float v_launch, float theta, float g) {
+        return 2.0f * (float)(Math.Pow(v_launch, 2.0f)) * (float)(Math.Sin(theta)) * (float)(Math.Cos(theta)) / g;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)

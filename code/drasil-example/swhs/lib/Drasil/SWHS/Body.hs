@@ -46,7 +46,8 @@ import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater)
 import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
-import Drasil.SWHS.References (citations, koothoor2013, smithEtAl2007, smithLai2005, smithKoothoor2016)
+import Drasil.SWHS.References (citations, koothoor2013, smithEtAl2007,
+  smithLai2005, smithKoothoor2016)
 import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements, verifyEnergyOutput)
 import Drasil.SWHS.TMods (tMods)
 import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,

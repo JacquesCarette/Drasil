@@ -35,7 +35,8 @@ import Data.Drasil.Software.Products (sciCompS, prodtcon)
 import Data.Drasil.Theories.Physics (physicsTMs)
 
 import Data.Drasil.People (brooks, henryFrankis)
-import Data.Drasil.Citations (koothoor2013, smithEtAl2007, smithLai2005, smithKoothoor2016)
+import Data.Drasil.Citations (koothoor2013, smithEtAl2007, smithLai2005,
+  smithKoothoor2016)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
 
 import Drasil.SSP.Assumptions (assumptions)

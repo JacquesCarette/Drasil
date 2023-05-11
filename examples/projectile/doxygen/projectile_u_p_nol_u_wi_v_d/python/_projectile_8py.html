@@ -74,12 +74,12 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a4d112e027d3f9af0f780fc99d0b4884a"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_projectile_8py.html#a4d112e027d3f9af0f780fc99d0b4884a">Projectile.func_t_flight</a> (v_launch, theta, g_vect)</td></tr>
-<tr class="memdesc:a4d112e027d3f9af0f780fc99d0b4884a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates flight duration: the time when the projectile lands (s)  <a href="_projectile_8py.html#a4d112e027d3f9af0f780fc99d0b4884a">More...</a><br /></td></tr>
-<tr class="separator:a4d112e027d3f9af0f780fc99d0b4884a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e2df00a106e4cb7c4f0693360c1abe6"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_projectile_8py.html#a2e2df00a106e4cb7c4f0693360c1abe6">Projectile.func_p_land</a> (v_launch, theta, g_vect)</td></tr>
-<tr class="memdesc:a2e2df00a106e4cb7c4f0693360c1abe6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates landing position: the distance from the launcher to the final position of the projectile (m)  <a href="_projectile_8py.html#a2e2df00a106e4cb7c4f0693360c1abe6">More...</a><br /></td></tr>
-<tr class="separator:a2e2df00a106e4cb7c4f0693360c1abe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc1d5d838cec3db78b7cf365b2064133"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_projectile_8py.html#abc1d5d838cec3db78b7cf365b2064133">Projectile.func_t_flight</a> (v_launch, theta, g)</td></tr>
+<tr class="memdesc:abc1d5d838cec3db78b7cf365b2064133"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates flight duration: the time when the projectile lands (s)  <a href="_projectile_8py.html#abc1d5d838cec3db78b7cf365b2064133">More...</a><br /></td></tr>
+<tr class="separator:abc1d5d838cec3db78b7cf365b2064133"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb4e4bc1a1fc6e9678d7ce3fae7ff286"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_projectile_8py.html#afb4e4bc1a1fc6e9678d7ce3fae7ff286">Projectile.func_p_land</a> (v_launch, theta, g)</td></tr>
+<tr class="memdesc:afb4e4bc1a1fc6e9678d7ce3fae7ff286"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates landing position: the distance from the launcher to the final position of the projectile (m)  <a href="_projectile_8py.html#afb4e4bc1a1fc6e9678d7ce3fae7ff286">More...</a><br /></td></tr>
+<tr class="separator:afb4e4bc1a1fc6e9678d7ce3fae7ff286"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa45301f0589d24068971ffd96ccebbe5"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_projectile_8py.html#aa45301f0589d24068971ffd96ccebbe5">Projectile.func_d_offset</a> (p_target, p_land)</td></tr>
 <tr class="memdesc:aa45301f0589d24068971ffd96ccebbe5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)  <a href="_projectile_8py.html#aa45301f0589d24068971ffd96ccebbe5">More...</a><br /></td></tr>
 <tr class="separator:aa45301f0589d24068971ffd96ccebbe5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -101,9 +101,9 @@ Variables</h2></td></tr>
 <tr class="memitem:a8441dbc32b696302696a1d7f5a8c68c4"><td class="memItemLeft" align="right" valign="top"><a id="a8441dbc32b696302696a1d7f5a8c68c4"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Projectile.filename</b> = sys.argv[1]</td></tr>
 <tr class="separator:a8441dbc32b696302696a1d7f5a8c68c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9adabd1f826f3785a11cfe6eebc71a01"><td class="memItemLeft" align="right" valign="top"><a id="a9adabd1f826f3785a11cfe6eebc71a01"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>Projectile.g_vect</b> = 9.8</td></tr>
-<tr class="separator:a9adabd1f826f3785a11cfe6eebc71a01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6043bfab8d03a3fc6af26a8b2ac156a7"><td class="memItemLeft" align="right" valign="top"><a id="a6043bfab8d03a3fc6af26a8b2ac156a7"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>Projectile.g</b> = 9.8</td></tr>
+<tr class="separator:a6043bfab8d03a3fc6af26a8b2ac156a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3fcaf8b24d69da0085559656563c21a"><td class="memItemLeft" align="right" valign="top"><a id="ad3fcaf8b24d69da0085559656563c21a"></a>
 float&#160;</td><td class="memItemRight" valign="bottom"><b>Projectile.epsilon</b> = 2.0e-2</td></tr>
 <tr class="separator:ad3fcaf8b24d69da0085559656563c21a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -117,10 +117,10 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>Projectile.epsilon</
 &#160;</td><td class="memItemRight" valign="bottom"><b>Projectile.p_target</b></td></tr>
 <tr class="separator:ac67b162974743401655507a658663f97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacca06ef45d5075a96923d865917864f"><td class="memItemLeft" align="right" valign="top"><a id="aacca06ef45d5075a96923d865917864f"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>Projectile.t_flight</b> = func_t_flight(v_launch, theta, g_vect)</td></tr>
+def&#160;</td><td class="memItemRight" valign="bottom"><b>Projectile.t_flight</b> = func_t_flight(v_launch, theta, g)</td></tr>
 <tr class="separator:aacca06ef45d5075a96923d865917864f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ab6a88b294cd7f1debda8da07e4db99"><td class="memItemLeft" align="right" valign="top"><a id="a6ab6a88b294cd7f1debda8da07e4db99"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>Projectile.p_land</b> = func_p_land(v_launch, theta, g_vect)</td></tr>
+def&#160;</td><td class="memItemRight" valign="bottom"><b>Projectile.p_land</b> = func_p_land(v_launch, theta, g)</td></tr>
 <tr class="separator:a6ab6a88b294cd7f1debda8da07e4db99"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ea3ebda55931769f6284bb695a222f3"><td class="memItemLeft" align="right" valign="top"><a id="a0ea3ebda55931769f6284bb695a222f3"></a>
 def&#160;</td><td class="memItemRight" valign="bottom"><b>Projectile.d_offset</b> = func_d_offset(p_target, p_land)</td></tr>
@@ -171,8 +171,8 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>Projectile.s</b> = fun
 
 </div>
 </div>
-<a id="a2e2df00a106e4cb7c4f0693360c1abe6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2e2df00a106e4cb7c4f0693360c1abe6">&#9670;&nbsp;</a></span>func_p_land()</h2>
+<a id="afb4e4bc1a1fc6e9678d7ce3fae7ff286"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb4e4bc1a1fc6e9678d7ce3fae7ff286">&#9670;&nbsp;</a></span>func_p_land()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -193,7 +193,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>Projectile.s</b> = fun
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>g_vect</em>&#160;</td>
+          <td class="paramname"><em>g</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -208,7 +208,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>Projectile.s</b> = fun
   <table class="params">
     <tr><td class="paramname">v_launch</td><td>launch speed: the initial speed of the projectile when launched (m/s) </td></tr>
     <tr><td class="paramname">theta</td><td>launch angle: the angle between the launcher and a straight line from the launcher to the target (rad) </td></tr>
-    <tr><td class="paramname">g_vect</td><td>gravitational acceleration (m/s^2) </td></tr>
+    <tr><td class="paramname">g</td><td>magnitude of gravitational acceleration (m/s^2) </td></tr>
   </table>
   </dd>
 </dl>
@@ -261,8 +261,8 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>Projectile.s</b> = fun
 
 </div>
 </div>
-<a id="a4d112e027d3f9af0f780fc99d0b4884a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4d112e027d3f9af0f780fc99d0b4884a">&#9670;&nbsp;</a></span>func_t_flight()</h2>
+<a id="abc1d5d838cec3db78b7cf365b2064133"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc1d5d838cec3db78b7cf365b2064133">&#9670;&nbsp;</a></span>func_t_flight()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -283,7 +283,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>Projectile.s</b> = fun
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>g_vect</em>&#160;</td>
+          <td class="paramname"><em>g</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -298,7 +298,7 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>Projectile.s</b> = fun
   <table class="params">
     <tr><td class="paramname">v_launch</td><td>launch speed: the initial speed of the projectile when launched (m/s) </td></tr>
     <tr><td class="paramname">theta</td><td>launch angle: the angle between the launcher and a straight line from the launcher to the target (rad) </td></tr>
-    <tr><td class="paramname">g_vect</td><td>gravitational acceleration (m/s^2) </td></tr>
+    <tr><td class="paramname">g</td><td>magnitude of gravitational acceleration (m/s^2) </td></tr>
   </table>
   </dd>
 </dl>

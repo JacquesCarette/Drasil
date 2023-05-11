@@ -73,12 +73,12 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a5e17b0467070eb22dc2f72d97ad0c512"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8py.html#a5e17b0467070eb22dc2f72d97ad0c512">Calculations.func_t_flight</a> (v_launch, theta, g_vect)</td></tr>
-<tr class="memdesc:a5e17b0467070eb22dc2f72d97ad0c512"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates flight duration: the time when the projectile lands (s)  <a href="_calculations_8py.html#a5e17b0467070eb22dc2f72d97ad0c512">More...</a><br /></td></tr>
-<tr class="separator:a5e17b0467070eb22dc2f72d97ad0c512"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab451fda4e2516638fa9f581f295959a5"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8py.html#ab451fda4e2516638fa9f581f295959a5">Calculations.func_p_land</a> (v_launch, theta, g_vect)</td></tr>
-<tr class="memdesc:ab451fda4e2516638fa9f581f295959a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates landing position: the distance from the launcher to the final position of the projectile (m)  <a href="_calculations_8py.html#ab451fda4e2516638fa9f581f295959a5">More...</a><br /></td></tr>
-<tr class="separator:ab451fda4e2516638fa9f581f295959a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadd5fc0f28ff90d256eb9d1a16275aa5"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8py.html#aadd5fc0f28ff90d256eb9d1a16275aa5">Calculations.func_t_flight</a> (v_launch, theta, g)</td></tr>
+<tr class="memdesc:aadd5fc0f28ff90d256eb9d1a16275aa5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates flight duration: the time when the projectile lands (s)  <a href="_calculations_8py.html#aadd5fc0f28ff90d256eb9d1a16275aa5">More...</a><br /></td></tr>
+<tr class="separator:aadd5fc0f28ff90d256eb9d1a16275aa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef74357c47be412c088c1a13d3651fdf"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8py.html#aef74357c47be412c088c1a13d3651fdf">Calculations.func_p_land</a> (v_launch, theta, g)</td></tr>
+<tr class="memdesc:aef74357c47be412c088c1a13d3651fdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates landing position: the distance from the launcher to the final position of the projectile (m)  <a href="_calculations_8py.html#aef74357c47be412c088c1a13d3651fdf">More...</a><br /></td></tr>
+<tr class="separator:aef74357c47be412c088c1a13d3651fdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a901597578c90ea954a92cf2a8a5a96"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8py.html#a5a901597578c90ea954a92cf2a8a5a96">Calculations.func_d_offset</a> (p_target, p_land)</td></tr>
 <tr class="memdesc:a5a901597578c90ea954a92cf2a8a5a96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)  <a href="_calculations_8py.html#a5a901597578c90ea954a92cf2a8a5a96">More...</a><br /></td></tr>
 <tr class="separator:a5a901597578c90ea954a92cf2a8a5a96"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -128,8 +128,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab451fda4e2516638fa9f581f295959a5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab451fda4e2516638fa9f581f295959a5">&#9670;&nbsp;</a></span>func_p_land()</h2>
+<a id="aef74357c47be412c088c1a13d3651fdf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef74357c47be412c088c1a13d3651fdf">&#9670;&nbsp;</a></span>func_p_land()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -150,7 +150,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>g_vect</em>&#160;</td>
+          <td class="paramname"><em>g</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -165,7 +165,7 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">v_launch</td><td>launch speed: the initial speed of the projectile when launched (m/s) </td></tr>
     <tr><td class="paramname">theta</td><td>launch angle: the angle between the launcher and a straight line from the launcher to the target (rad) </td></tr>
-    <tr><td class="paramname">g_vect</td><td>gravitational acceleration (m/s^2) </td></tr>
+    <tr><td class="paramname">g</td><td>magnitude of gravitational acceleration (m/s^2) </td></tr>
   </table>
   </dd>
 </dl>
@@ -218,8 +218,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a5e17b0467070eb22dc2f72d97ad0c512"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5e17b0467070eb22dc2f72d97ad0c512">&#9670;&nbsp;</a></span>func_t_flight()</h2>
+<a id="aadd5fc0f28ff90d256eb9d1a16275aa5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadd5fc0f28ff90d256eb9d1a16275aa5">&#9670;&nbsp;</a></span>func_t_flight()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -240,7 +240,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>g_vect</em>&#160;</td>
+          <td class="paramname"><em>g</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -255,7 +255,7 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">v_launch</td><td>launch speed: the initial speed of the projectile when launched (m/s) </td></tr>
     <tr><td class="paramname">theta</td><td>launch angle: the angle between the launcher and a straight line from the launcher to the target (rad) </td></tr>
-    <tr><td class="paramname">g_vect</td><td>gravitational acceleration (m/s^2) </td></tr>
+    <tr><td class="paramname">g</td><td>magnitude of gravitational acceleration (m/s^2) </td></tr>
   </table>
   </dd>
 </dl>

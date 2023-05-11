@@ -73,12 +73,12 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a4fe6390fc86d51e41dcbe5a8c52b48cd"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8py.html#a4fe6390fc86d51e41dcbe5a8c52b48cd">Calculations.func_t_flight</a> (inParams, g_vect)</td></tr>
-<tr class="memdesc:a4fe6390fc86d51e41dcbe5a8c52b48cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates flight duration: the time when the projectile lands (s)  <a href="_calculations_8py.html#a4fe6390fc86d51e41dcbe5a8c52b48cd">More...</a><br /></td></tr>
-<tr class="separator:a4fe6390fc86d51e41dcbe5a8c52b48cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc9e6174101677686e45cc5e7927d7ff"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8py.html#acc9e6174101677686e45cc5e7927d7ff">Calculations.func_p_land</a> (inParams, g_vect)</td></tr>
-<tr class="memdesc:acc9e6174101677686e45cc5e7927d7ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates landing position: the distance from the launcher to the final position of the projectile (m)  <a href="_calculations_8py.html#acc9e6174101677686e45cc5e7927d7ff">More...</a><br /></td></tr>
-<tr class="separator:acc9e6174101677686e45cc5e7927d7ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cfa213b126d7ea216b050733acffcd3"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8py.html#a8cfa213b126d7ea216b050733acffcd3">Calculations.func_t_flight</a> (inParams, g)</td></tr>
+<tr class="memdesc:a8cfa213b126d7ea216b050733acffcd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates flight duration: the time when the projectile lands (s)  <a href="_calculations_8py.html#a8cfa213b126d7ea216b050733acffcd3">More...</a><br /></td></tr>
+<tr class="separator:a8cfa213b126d7ea216b050733acffcd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada4bcd5fac5d9a7b81b5a5c4e5a29e8e"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8py.html#ada4bcd5fac5d9a7b81b5a5c4e5a29e8e">Calculations.func_p_land</a> (inParams, g)</td></tr>
+<tr class="memdesc:ada4bcd5fac5d9a7b81b5a5c4e5a29e8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates landing position: the distance from the launcher to the final position of the projectile (m)  <a href="_calculations_8py.html#ada4bcd5fac5d9a7b81b5a5c4e5a29e8e">More...</a><br /></td></tr>
+<tr class="separator:ada4bcd5fac5d9a7b81b5a5c4e5a29e8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69a12dede2488ee09e23c7a4d120422f"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8py.html#a69a12dede2488ee09e23c7a4d120422f">Calculations.func_d_offset</a> (inParams, p_land)</td></tr>
 <tr class="memdesc:a69a12dede2488ee09e23c7a4d120422f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)  <a href="_calculations_8py.html#a69a12dede2488ee09e23c7a4d120422f">More...</a><br /></td></tr>
 <tr class="separator:a69a12dede2488ee09e23c7a4d120422f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -128,8 +128,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="acc9e6174101677686e45cc5e7927d7ff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acc9e6174101677686e45cc5e7927d7ff">&#9670;&nbsp;</a></span>func_p_land()</h2>
+<a id="ada4bcd5fac5d9a7b81b5a5c4e5a29e8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada4bcd5fac5d9a7b81b5a5c4e5a29e8e">&#9670;&nbsp;</a></span>func_p_land()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -144,7 +144,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>g_vect</em>&#160;</td>
+          <td class="paramname"><em>g</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -158,7 +158,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">inParams</td><td>structure holding the input values </td></tr>
-    <tr><td class="paramname">g_vect</td><td>gravitational acceleration (m/s^2) </td></tr>
+    <tr><td class="paramname">g</td><td>magnitude of gravitational acceleration (m/s^2) </td></tr>
   </table>
   </dd>
 </dl>
@@ -211,8 +211,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a4fe6390fc86d51e41dcbe5a8c52b48cd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4fe6390fc86d51e41dcbe5a8c52b48cd">&#9670;&nbsp;</a></span>func_t_flight()</h2>
+<a id="a8cfa213b126d7ea216b050733acffcd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cfa213b126d7ea216b050733acffcd3">&#9670;&nbsp;</a></span>func_t_flight()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -227,7 +227,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>g_vect</em>&#160;</td>
+          <td class="paramname"><em>g</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -241,7 +241,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">inParams</td><td>structure holding the input values </td></tr>
-    <tr><td class="paramname">g_vect</td><td>gravitational acceleration (m/s^2) </td></tr>
+    <tr><td class="paramname">g</td><td>magnitude of gravitational acceleration (m/s^2) </td></tr>
   </table>
   </dd>
 </dl>

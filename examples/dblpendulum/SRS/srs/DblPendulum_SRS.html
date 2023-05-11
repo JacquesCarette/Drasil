@@ -196,6 +196,11 @@
                   <td><em>N</em></td>
                 </tr>
                 <tr>
+                  <td><em>g</em></td>
+                  <td>Magnitude of gravitational acceleration</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
+                </tr>
+                <tr>
                   <td><em><b>g</b></em></td>
                   <td>Gravitational acceleration</td>
                   <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
@@ -2167,7 +2172,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{α_{1}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{-\symbf{g} \left(2 {m_{1}}+{m_{2}}\right) \sin\left({θ_{1}}\right)-{m_{2}} \symbf{g} \sin\left({θ_{1}}-2 {θ_{2}}\right)-2 \sin\left({θ_{1}}-{θ_{2}}\right) {m_{2}} \left({w_{2}}^{2} {L_{2}}+{w_{1}}^{2} {L_{1}} \cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{1}} \left(2 {m_{1}}+{m_{2}}-{m_{2}} \cos\left(2 {θ_{1}}-2 {θ_{2}}\right)\right)}\]
+                        \[{α_{1}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{-g \left(2 {m_{1}}+{m_{2}}\right) \sin\left({θ_{1}}\right)-{m_{2}} g \sin\left({θ_{1}}-2 {θ_{2}}\right)-2 \sin\left({θ_{1}}-{θ_{2}}\right) {m_{2}} \left({w_{2}}^{2} {L_{2}}+{w_{1}}^{2} {L_{1}} \cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{1}} \left(2 {m_{1}}+{m_{2}}-{m_{2}} \cos\left(2 {θ_{1}}-2 {θ_{2}}\right)\right)}\]
                       </td>
                     </tr>
                     <tr>
@@ -2190,7 +2195,7 @@
                             <em>w<sub>2</sub></em> is the the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
-                            <em><b>g</b></em> is the gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em>g</em> is the magnitude of gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li>
                             <em>m<sub>1</sub></em> is the the mass of the first object (<em>kg</em>)
@@ -2262,7 +2267,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{α_{2}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{2 \sin\left({θ_{1}}-{θ_{2}}\right) \left({w_{1}}^{2} {L_{1}} \left({m_{1}}+{m_{2}}\right)+\symbf{g} \left({m_{1}}+{m_{2}}\right) \cos\left({θ_{1}}\right)+{w_{2}}^{2} {L_{2}} {m_{2}} \cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{2}} \left(2 {m_{1}}+{m_{2}}-{m_{2}} \cos\left(2 {θ_{1}}-2 {θ_{2}}\right)\right)}\]
+                        \[{α_{2}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{2 \sin\left({θ_{1}}-{θ_{2}}\right) \left({w_{1}}^{2} {L_{1}} \left({m_{1}}+{m_{2}}\right)+g \left({m_{1}}+{m_{2}}\right) \cos\left({θ_{1}}\right)+{w_{2}}^{2} {L_{2}} {m_{2}} \cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{2}} \left(2 {m_{1}}+{m_{2}}-{m_{2}} \cos\left(2 {θ_{1}}-2 {θ_{2}}\right)\right)}\]
                       </td>
                     </tr>
                     <tr>
@@ -2294,7 +2299,7 @@
                             <em>m<sub>2</sub></em> is the the mass of the second object (<em>kg</em>)
                           </li>
                           <li>
-                            <em><b>g</b></em> is the gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em>g</em> is the magnitude of gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li>
                             <em>L<sub>2</sub></em> is the the length of the second rod (<em>m</em>)
@@ -2324,23 +2329,23 @@
                     </p>
                     \[{m_{1}} {a_{\text{x}1}}=-{\symbf{T}_{1}} \sin\left({θ_{1}}\right)-{m_{2}} {a_{\text{x}2}}\]
                     <p class="paragraph"></p>
-                    \[{m_{1}} {a_{\text{y}1}}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{m_{2}} {a_{\text{y}2}}-{m_{2}} \symbf{g}-{m_{1}} \symbf{g}\]
+                    \[{m_{1}} {a_{\text{y}1}}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{m_{2}} {a_{\text{y}2}}-{m_{2}} g-{m_{1}} g\]
                     <p class="paragraph">
                       Multiply the equation 1 by <em>cos(θ<sub>1</sub>)</em> and the equation 2 by <em>sin(θ<sub>1</sub>)</em> and rearrange to get:
                     </p>
                     \[{\symbf{T}_{1}} \sin\left({θ_{1}}\right) \cos\left({θ_{1}}\right)=-\cos\left({θ_{1}}\right) \left({m_{1}} {a_{\text{x}1}}+{m_{2}} {a_{\text{x}2}}\right)\]
                     <p class="paragraph"></p>
-                    \[{\symbf{T}_{1}} \sin\left({θ_{1}}\right) \cos\left({θ_{1}}\right)=\sin\left({θ_{1}}\right) \left({m_{1}} {a_{\text{y}1}}+{m_{2}} {a_{\text{y}2}}+{m_{2}} \symbf{g}+{m_{1}} \symbf{g}\right)\]
+                    \[{\symbf{T}_{1}} \sin\left({θ_{1}}\right) \cos\left({θ_{1}}\right)=\sin\left({θ_{1}}\right) \left({m_{1}} {a_{\text{y}1}}+{m_{2}} {a_{\text{y}2}}+{m_{2}} g+{m_{1}} g\right)\]
                     <p class="paragraph">This leads to the equation 3</p>
-                    \[\sin\left({θ_{1}}\right) \left({m_{1}} {a_{\text{y}1}}+{m_{2}} {a_{\text{y}2}}+{m_{2}} \symbf{g}+{m_{1}} \symbf{g}\right)=-\cos\left({θ_{1}}\right) \left({m_{1}} {a_{\text{x}1}}+{m_{2}} {a_{\text{x}2}}\right)\]
+                    \[\sin\left({θ_{1}}\right) \left({m_{1}} {a_{\text{y}1}}+{m_{2}} {a_{\text{y}2}}+{m_{2}} g+{m_{1}} g\right)=-\cos\left({θ_{1}}\right) \left({m_{1}} {a_{\text{x}1}}+{m_{2}} {a_{\text{x}2}}\right)\]
                     <p class="paragraph">
                       Next, multiply equation <a href=#GD:xForce2>GD:xForce2</a> by <em>cos(θ<sub>2</sub>)</em> and equation <a href=#GD:yForce2>GD:yForce2</a> by <em>sin(θ<sub>2</sub>)</em> and rearrange to get:
                     </p>
                     \[{\symbf{T}_{2}} \sin\left({θ_{2}}\right) \cos\left({θ_{2}}\right)=-\cos\left({θ_{2}}\right) {m_{2}} {a_{\text{x}2}}\]
                     <p class="paragraph"></p>
-                    \[{\symbf{T}_{1}} \sin\left({θ_{2}}\right) \cos\left({θ_{2}}\right)=\sin\left({θ_{2}}\right) \left({m_{2}} {a_{\text{y}2}}+{m_{2}} \symbf{g}\right)\]
+                    \[{\symbf{T}_{1}} \sin\left({θ_{2}}\right) \cos\left({θ_{2}}\right)=\sin\left({θ_{2}}\right) \left({m_{2}} {a_{\text{y}2}}+{m_{2}} g\right)\]
                     <p class="paragraph">which leads to equation 4</p>
-                    \[\sin\left({θ_{2}}\right) \left({m_{2}} {a_{\text{y}2}}+{m_{2}} \symbf{g}\right)=-\cos\left({θ_{2}}\right) {m_{2}} {a_{\text{x}2}}\]
+                    \[\sin\left({θ_{2}}\right) \left({m_{2}} {a_{\text{y}2}}+{m_{2}} g\right)=-\cos\left({θ_{2}}\right) {m_{2}} {a_{\text{x}2}}\]
                     <p class="paragraph">
                       By giving equations <a href=#GD:accelerationX1>GD:accelerationX1</a> and <a href=#GD:accelerationX2>GD:accelerationX2</a> and <a href=#GD:accelerationY1>GD:accelerationY1</a> and <a href=#GD:accelerationY2>GD:accelerationY2</a> plus additional two equations, 3 and 4, we can get <a href=#IM:calOfAngularAcceleration1>IM:calOfAngularAcceleration1</a> and <a href=#IM:calOfAngularAcceleration2>IM:calOfAngularAcceleration2</a> via a computer algebra program:
                     </p>

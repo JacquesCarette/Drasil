@@ -659,6 +659,7 @@ friction :: ConceptChunk
 gravity :: ConceptChunk
 gravitationalAccel :: ConceptChunk
 gravitationalConst :: ConceptChunk
+gravitationalMagnitude :: ConceptChunk
 height :: ConceptChunk
 iPos :: ConceptChunk
 iSpeed :: ConceptChunk
@@ -808,6 +809,7 @@ fVel :: UnitalChunk
 force :: UnitalChunk
 gravitationalAccel :: UnitalChunk
 gravitationalConst :: UnitalChunk
+gravitationalMagnitude :: UnitalChunk
 height :: UnitalChunk
 iPos :: UnitalChunk
 iSpeed :: UnitalChunk

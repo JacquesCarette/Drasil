@@ -47,4 +47,5 @@ introDocOrg :: Sentence
 introDocOrg
   = foldlSent
       [S "The sections in this document are based on",
-      foldlList Comma List $ map refS [smithLai2005, smithEtAl2007 , smithKoothoor2016]]
+      foldlList Comma List $ map refS [smithLai2005, smithEtAl2007, 
+      smithKoothoor2016]]

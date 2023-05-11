@@ -38,7 +38,8 @@ import Drasil.DblPendulum.GenDefs (genDefns)
 import Drasil.DblPendulum.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms, pendDisAngle, constants)
 import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs)
-import Drasil.DblPendulum.References (citations, koothoor2013, smithEtAl2007, smithLai2005, smithKoothoor2016)
+import Drasil.DblPendulum.References (citations, koothoor2013, smithEtAl2007,
+ smithLai2005, smithKoothoor2016)
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols, osloSymbols, apacheODESymbols, odeintSymbols, arrayVecDepVar)
 import Language.Drasil.Code (quantvar)
 import Drasil.DblPendulum.ODEs (dblPenODEInfo)

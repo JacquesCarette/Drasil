@@ -35,7 +35,8 @@ import Data.Drasil.Software.Products (sciCompS, prodtcon)
 import Data.Drasil.Theories.Physics (physicsTMs)
 
 import Data.Drasil.People (brooks, henryFrankis)
-import Data.Drasil.Citations (koothoor2013, smithLai2005)
+import Data.Drasil.Citations (koothoor2013, smithEtAl2007, smithLai2005,
+  smithKoothoor2016)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
 
 import Drasil.SSP.Assumptions (assumptions)
@@ -239,8 +240,8 @@ orgSecStart, orgSecEnd :: Sentence
 orgSecStart = foldlSent [atStartNP (the organization), S "of this",
   phrase document, S "follows the", phrase template, S "for an",
   short Doc.srs `S.for` phrase sciCompS,
-  S "proposed by Koothoor", refS koothoor2013, S "as well as Smith" `S.and_`
-  S "Lai", refS smithLai2005]
+  S "proposed by", foldlList Comma List $ 
+  map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]
 orgSecEnd   = foldlSent_ [atStartNP' (the inModel), S "provide the set of",
   S "algebraic", plural equation, S "that must be solved"]
 

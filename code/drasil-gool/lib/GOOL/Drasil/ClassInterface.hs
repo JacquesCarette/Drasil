@@ -378,6 +378,8 @@ class (VariableSym r, StatementSym r) => DeclStatement r where
   listDecDef   :: SVariable r -> [SValue r] -> MSStatement r
   arrayDec     :: Integer -> SVariable r -> MSStatement r
   arrayDecDef  :: SVariable r -> [SValue r] -> MSStatement r
+  vectorDec    :: Integer -> SVariable r -> MSStatement r
+  vectorDecDef :: SVariable r -> [SValue r] -> MSStatement r
   objDecDef    :: SVariable r -> SValue r -> MSStatement r
   objDecNew    :: SVariable r -> [SValue r] -> MSStatement r
   extObjDecNew :: Library -> SVariable r -> [SValue r] -> MSStatement r

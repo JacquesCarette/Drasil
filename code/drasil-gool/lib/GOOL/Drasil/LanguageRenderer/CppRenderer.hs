@@ -493,6 +493,9 @@ instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) where
   arrayDec n vr = pair1 (arrayDec n) (arrayDec n) (zoom lensMStoVS vr)
   arrayDecDef vr vs = pair1Val1List arrayDecDef arrayDecDef (zoom lensMStoVS vr)
     (map (zoom lensMStoVS) vs)
+  vectorDec n vr = pair1 (vectorDec n) (vectorDec n) (zoom lensMStoVS vr)
+  vectorDecDef vr vs = pair1Val1List vectorDecDef vectorDecDef (zoom lensMStoVS vr)
+    (map (zoom lensMStoVS) vs)
   objDecDef o v = pair2 objDecDef objDecDef (zoom lensMStoVS o) 
     (zoom lensMStoVS v)
   objDecNew vr vs = pair1Val1List objDecNew objDecNew (zoom lensMStoVS vr) 
@@ -1356,6 +1359,8 @@ instance DeclStatement CppSrcCode where
     vdc <- arrayDec (toInteger $ length vals) vr
     vs <- mapM (zoom lensMStoVS) vals
     mkStmt $ RC.statement vdc <+> equals <+> braces (valueList vs)
+  vectorDec = arrayDec
+  vectorDecDef = arrayDecDef
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
@@ -1978,6 +1983,8 @@ instance DeclStatement CppHdrCode where
   listDecDef _ _ = emptyStmt
   arrayDec _ _ = emptyStmt
   arrayDecDef _ _ = emptyStmt
+  vectorDec = arrayDec
+  vectorDecDef = arrayDecDef
   objDecDef _ _ = emptyStmt
   objDecNew _ _ = emptyStmt
   extObjDecNew _ _ _ = emptyStmt

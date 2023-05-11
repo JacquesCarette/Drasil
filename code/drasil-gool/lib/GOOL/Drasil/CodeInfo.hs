@@ -249,6 +249,8 @@ instance DeclStatement CodeInfo where
   listDecDef             _ = zoom lensMStoVS . executeList
   arrayDec             _ _ = noInfo
   arrayDecDef            _ = zoom lensMStoVS . executeList
+  vectorDec                = arrayDec
+  vectorDecDef             = arrayDecDef
   objDecDef              _ = zoom lensMStoVS . execute1
   objDecNew              _ = zoom lensMStoVS . executeList
   extObjDecNew         _ _ = zoom lensMStoVS . executeList

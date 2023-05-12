@@ -87,8 +87,12 @@ sufx :: Int -> String
 sufx 1 = "st"
 sufx 2 = "nd"
 sufx 3 = "rd"
+sufx 11 = "th"
 sufx _ = "th"
 
 -- | Similar to 'sufx' but used on any sized 'Int'.
+-- Since 11, 12, and 13 use the same suffix, the suffix for 11 can be applied in
+-- the case of either number
 sufxer :: Int -> String
-sufxer x = (++ ".") (sufx (mod x 10))
+sufxer x = if x `elem` [11, 12, 13] then (++ ".") (sufx 11) else 
+    (++ ".") (sufx (mod x 10))

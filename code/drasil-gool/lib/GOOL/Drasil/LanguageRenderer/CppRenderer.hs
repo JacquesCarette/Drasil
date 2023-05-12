@@ -61,9 +61,9 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objAccess, objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess, 
   listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
-  subAssign, increment, objDecNew, vectorScale, print, closeFile, returnStmt,
-  valStmt, comment, throw, ifCond, tryCatch, construct, param, method,
-  getMethod, setMethod, function, buildClass, implementingClass,
+  subAssign, increment, objDecNew, vectorScale, vectorAdd, print, closeFile,
+  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
+  method, getMethod, setMethod, function, buildClass, implementingClass,
   commentedClass, modFromData, fileDoc, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
@@ -560,6 +560,8 @@ instance (Pair p) => StringStatement (p CppSrcCode CppHdrCode) where
 instance (Pair p) => VectorStatement (p CppSrcCode CppHdrCode) where
   vectorScale v k = pair2 vectorScale vectorScale
     (zoom lensMStoVS v) (zoom lensMStoVS k)
+  vectorAdd v1 v2 = pair2 vectorAdd vectorAdd
+    (zoom lensMStoVS v1) (zoom lensMStoVS v2)
 
 instance (Pair p) => FuncAppStatement (p CppSrcCode CppHdrCode) where
   inOutCall n is os bs = pair3Lists (inOutCall n) (inOutCall n) 
@@ -1438,6 +1440,7 @@ instance StringStatement CppSrcCode where
 
 instance VectorStatement CppSrcCode where
   vectorScale = G.vectorScale
+  vectorAdd = G.vectorAdd
 
 instance FuncAppStatement CppSrcCode where
   inOutCall = cppInOutCall funcApp
@@ -2049,6 +2052,7 @@ instance StringStatement CppHdrCode where
 
 instance VectorStatement CppHdrCode where
   vectorScale _ _ = emptyStmt
+  vectorAdd _ _ = emptyStmt
 
 instance FuncAppStatement CppHdrCode where
   inOutCall _ _ _ _ = emptyStmt

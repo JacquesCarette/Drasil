@@ -61,9 +61,9 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   argsList, objAccess, objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess, 
   listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
-  subAssign, increment, objDecNew, print, vectorScale, closeFile, returnStmt,
-  valStmt, comment, throw, ifCond, tryCatch, construct, param, method,
-  getMethod, setMethod, function, buildClass, implementingClass,
+  subAssign, increment, objDecNew, print, vectorScale, vectorAdd, closeFile,
+  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
+  method, getMethod, setMethod, function, buildClass, implementingClass,
   commentedClass, modFromData, fileDoc, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int, 
@@ -547,6 +547,7 @@ instance StringStatement JavaCode where
 
 instance VectorStatement JavaCode where
   vectorScale = G.vectorScale
+  vectorAdd = G.vectorAdd
 
 instance FuncAppStatement JavaCode where
   inOutCall = jInOutCall funcApp

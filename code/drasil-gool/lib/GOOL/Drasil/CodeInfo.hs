@@ -299,6 +299,7 @@ instance StringStatement CodeInfo where
 
 instance VectorStatement CodeInfo where
   vectorScale v = zoom lensMStoVS . execute2 v
+  vectorAdd v = zoom lensMStoVS . execute2 v
 
 instance FuncAppStatement CodeInfo where
   inOutCall n vs _ _ = zoom lensMStoVS $ do

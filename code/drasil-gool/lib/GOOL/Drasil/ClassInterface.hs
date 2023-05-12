@@ -434,6 +434,7 @@ class (VariableSym r, StatementSym r) => StringStatement r where
 
 class (VectorExpression r, ControlStatement r) => VectorStatement r where
   vectorScale :: SValue r -> SValue r -> MSStatement r
+  vectorAdd :: SValue r -> SValue r -> MSStatement r
 
 type InOutCall r = Label -> [SValue r] -> [SVariable r] -> [SVariable r] -> 
   MSStatement r

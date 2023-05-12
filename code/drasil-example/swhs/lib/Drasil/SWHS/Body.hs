@@ -46,7 +46,8 @@ import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater)
 import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
-import Drasil.SWHS.References (citations, koothoor2013, smithLai2005)
+import Drasil.SWHS.References (citations, koothoor2013, smithEtAl2007,
+  smithLai2005, smithKoothoor2016)
 import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements, verifyEnergyOutput)
 import Drasil.SWHS.TMods (tMods)
 import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
@@ -258,8 +259,8 @@ charReaderDE = plural de +:+ S "from level 1 and 2" +:+ phrase calculus
 orgDocIntro :: Sentence
 orgDocIntro = foldlSent [atStartNP (the organization), S "of this",
   phrase document, S "follows the template for an", short Doc.srs
-  `S.for` phrase sciCompS, S "proposed by", refS koothoor2013 `S.and_`
-  refS smithLai2005]
+  `S.for` phrase sciCompS, S "proposed by", foldlList Comma List $ 
+  map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]
 
 orgDocEnd :: Sentence
 orgDocEnd = foldlSent_ [atStartNP' (the inModel), 

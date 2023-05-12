@@ -39,7 +39,8 @@ import Drasil.GamePhysics.Concepts (gamePhysics, acronyms, threeD, twoD)
 import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iMods, instModIntro)
-import Drasil.GamePhysics.References (citations, koothoor2013, smithLai2005)
+import Drasil.GamePhysics.References (citations, koothoor2013, smithEtAl2007,
+ smithLai2005, smithKoothoor2016)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs)
 import Drasil.GamePhysics.TMods (tMods)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
@@ -209,8 +210,8 @@ organizationOfDocumentsIntro :: Sentence
 organizationOfDocumentsIntro = foldlSent 
   [atStartNP (the organization), S "of this", phrase document, 
   S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
-  phrase sciCompS, S "proposed by", refS koothoor2013 `S.and_`
-  refS smithLai2005]
+  phrase sciCompS, S "proposed by", foldlList Comma List $ 
+  map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --

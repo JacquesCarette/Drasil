@@ -99,6 +99,7 @@ tests:
     - Helper
     - Observer
     - PatternTest
+    - VectorTest
     ghc-options:
     - -threaded
     - -O2

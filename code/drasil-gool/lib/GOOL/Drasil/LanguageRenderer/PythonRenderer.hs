@@ -350,6 +350,7 @@ instance Comparison PythonCode where
 instance VectorExpression PythonCode where
   vectorDim = listSize
   vectorIndex = listAccess
+  vectorSet = listSet
 
 instance ValueExpression PythonCode where
   inlineIf = pyInlineIf

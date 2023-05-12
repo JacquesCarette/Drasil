@@ -361,6 +361,7 @@ instance Comparison SwiftCode where
 instance VectorExpression SwiftCode where
   vectorDim = listSize
   vectorIndex = listAccess
+  vectorSet = listSet
 
 instance ValueExpression SwiftCode where
   inlineIf = C.inlineIf

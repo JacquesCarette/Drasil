@@ -186,6 +186,7 @@ instance Comparison CodeInfo where
 instance VectorExpression CodeInfo where
   vectorDim = execute1
   vectorIndex = execute2
+  vectorSet = execute3
     
 instance ValueExpression CodeInfo where
   inlineIf = execute3

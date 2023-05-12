@@ -357,6 +357,7 @@ instance Comparison JavaCode where
 instance VectorExpression JavaCode where
   vectorDim = listSize
   vectorIndex = listAccess
+  vectorSet = listSet
   
 instance ValueExpression JavaCode where
   inlineIf = C.inlineIf

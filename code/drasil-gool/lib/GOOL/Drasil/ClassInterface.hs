@@ -234,6 +234,7 @@ class (ValueSym r) => Comparison r where
 class ValueSym r => VectorExpression r where
   vectorDim :: SValue r -> SValue r
   vectorIndex :: SValue r -> SValue r -> SValue r
+  vectorSet :: SValue r -> SValue r -> SValue r -> SValue r
 
 type NamedArgs r = [(SVariable r, SValue r)]
 -- Function call with both positional and named arguments

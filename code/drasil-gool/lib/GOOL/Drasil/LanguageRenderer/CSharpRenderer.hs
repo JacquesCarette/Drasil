@@ -348,6 +348,7 @@ instance Comparison CSharpCode where
 instance VectorExpression CSharpCode where
   vectorDim = listSize
   vectorIndex = listAccess
+  vectorSet = listSet
 
 instance ValueExpression CSharpCode where
   inlineIf = C.inlineIf

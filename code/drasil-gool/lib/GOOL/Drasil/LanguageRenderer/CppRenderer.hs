@@ -358,6 +358,7 @@ instance (Pair p) => Comparison (p CppSrcCode CppHdrCode) where
 instance (Pair p) => VectorExpression (p CppSrcCode CppHdrCode) where
   vectorDim = listSize
   vectorIndex = listAccess
+  vectorSet = listSet
 
 instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
   inlineIf = pair3 inlineIf inlineIf
@@ -1241,6 +1242,7 @@ instance Comparison CppSrcCode where
 instance VectorExpression CppSrcCode where
   vectorDim = listSize
   vectorIndex = listAccess
+  vectorSet = listSet
 
 instance ValueExpression CppSrcCode where
   inlineIf = C.inlineIf
@@ -1882,6 +1884,7 @@ instance Comparison CppHdrCode where
 instance VectorExpression CppHdrCode where
   vectorDim = listSize
   vectorIndex = listAccess
+  vectorSet = listSet
 
 instance ValueExpression CppHdrCode where
   inlineIf _ _ _ = mkStateVal void empty

@@ -91,4 +91,4 @@ sufx _ = "th"
 
 -- | Similar to 'sufx' but used on any sized 'Int'.
 sufxer :: Int -> String
-sufxer = (++ ".") . sufx . mod 10
+sufxer x = (++ ".") (sufx (mod x 10))

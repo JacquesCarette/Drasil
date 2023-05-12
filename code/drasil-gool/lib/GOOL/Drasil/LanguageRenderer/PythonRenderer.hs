@@ -18,7 +18,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   VectorExpression(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp,
   extNewObj, InternalValueExp(..), objMethodCall, FunctionSym(..), GetSet(..),
   List(..), InternalList(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), VectorStatement(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
   StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..),
@@ -57,10 +57,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess, 
   listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
-  subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, 
-  comment, throw, ifCond, tryCatch, construct, param, method, getMethod, 
-  setMethod, function, buildClass, implementingClass, commentedClass, 
-  modFromData, fileDoc, fileFromData)
+  subAssign, increment, objDecNew, print, vectorScale, closeFile, returnStmt,
+  valStmt, comment, throw, ifCond, tryCatch, construct, param, method,
+  getMethod, setMethod, function, buildClass, implementingClass,
+  commentedClass, modFromData, fileDoc, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
   extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
@@ -519,6 +519,9 @@ instance StringStatement PythonCode where
 
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
+
+instance VectorStatement PythonCode where
+  vectorScale = G.vectorScale
 
 instance FuncAppStatement PythonCode where
   inOutCall = CP.inOutCall funcApp

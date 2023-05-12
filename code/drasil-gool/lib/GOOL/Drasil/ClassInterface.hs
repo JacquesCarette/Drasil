@@ -19,12 +19,13 @@ module GOOL.Drasil.ClassInterface (
   listSlice, listIndexExists, at, StatementSym(..), AssignStatement(..), (&=),
   assignToListIndex, DeclStatement(..), objDecNewNoParams,
   extObjDecNewNoParams, IOStatement(..), StringStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  StatePattern(..), initState, changeState, ObserverPattern(..),
-  observerListName, initObserverList, addObserver, StrategyPattern(..),
-  ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..),
-  privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..),
-  privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), convType
+  VectorStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), StatePattern(..), initState, changeState,
+  ObserverPattern(..), observerListName, initObserverList, addObserver,
+  StrategyPattern(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..),
+  MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
+  StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..),
+  convType
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
@@ -44,12 +45,12 @@ type GSProgram a = GS (a (Program a))
 -- Functions in GOOL's interface beginning with "lib" are to be used to access items from different libraries/projects
 
 class (ProgramSym r, AssignStatement r, DeclStatement r, IOStatement r, 
-  StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r,
-  InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, 
-  CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r,
-  VectorExpression r, ValueExpression r, InternalValueExp r, GetSet r, List r,
-  StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r,
-  VariableElim r) => OOProg r
+  StringStatement r, VectorStatement r, FuncAppStatement r, CommentStatement r,
+  ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r,
+  VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
+  Comparison r, VectorExpression r, ValueExpression r, InternalValueExp r,
+  GetSet r, List r, StatePattern r, ObserverPattern r, StrategyPattern r,
+  TypeElim r, VariableElim r) => OOProg r
 
 class (FileSym r) => ProgramSym r where
   type Program r
@@ -430,6 +431,9 @@ class (VariableSym r, StatementSym r) => StringStatement r where
 
   stringListVals  :: [SVariable r] -> SValue r -> MSStatement r
   stringListLists :: [SVariable r] -> SValue r -> MSStatement r
+
+class (VectorExpression r, ControlStatement r) => VectorStatement r where
+  vectorScale :: SValue r -> SValue r -> MSStatement r
 
 type InOutCall r = Label -> [SValue r] -> [SVariable r] -> [SVariable r] -> 
   MSStatement r

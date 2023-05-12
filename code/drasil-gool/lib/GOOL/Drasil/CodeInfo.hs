@@ -11,10 +11,11 @@ import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement,
   Comparison(..), VectorExpression(..), ValueExpression(..),
   InternalValueExp(..), FunctionSym(..), GetSet(..), List(..),
   InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), StatePattern(..),
-  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  IOStatement(..), StringStatement(..), VectorStatement(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..),
+  ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..), qualName)
 import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
@@ -295,6 +296,9 @@ instance StringStatement CodeInfo where
 
   stringListVals  _ = zoom lensMStoVS . execute1
   stringListLists _ = zoom lensMStoVS . execute1
+
+instance VectorStatement CodeInfo where
+  vectorScale v = zoom lensMStoVS . execute2 v
 
 instance FuncAppStatement CodeInfo where
   inOutCall n vs _ _ = zoom lensMStoVS $ do

@@ -21,7 +21,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   newObj, InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
   objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..),
   listSlice, InternalList(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), VectorStatement(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..),
@@ -61,11 +61,11 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   argsList, objAccess, objMethodCall, call, funcAppMixedArgs, 
   selfFuncAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAdd, 
   listAppend, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
-  loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, 
-  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param, 
-  method, getMethod, setMethod, initStmts, function, docFunc, buildClass, 
-  implementingClass, docClass, commentedClass, modFromData, fileDoc, docMod, 
-  fileFromData)
+  loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print,
+  vectorScale, returnStmt, valStmt, comment, throw, ifCond, tryCatch,
+  construct, param, method, getMethod, setMethod, initStmts, function, docFunc,
+  buildClass, implementingClass, docClass, commentedClass, modFromData,
+  fileDoc, docMod, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (classVar, 
   objVarSelf, intClass, buildModule, bindingError, extFuncAppMixedArgs, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, litArray, 
@@ -550,6 +550,9 @@ instance StringStatement SwiftCode where
 
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
+
+instance VectorStatement SwiftCode where
+  vectorScale = G.vectorScale
 
 instance FuncAppStatement SwiftCode where
   inOutCall = CP.inOutCall funcApp

@@ -20,10 +20,10 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   selfFuncApp, extFuncApp, newObj, InternalValueExp(..), FunctionSym(..), ($.),
   GetSet(..), List(..), InternalList(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), StatePattern(..), ObserverPattern(..),
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  StringStatement(..), VectorStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), StatePattern(..),
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -61,10 +61,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   argsList, objAccess, objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess, 
   listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
-  subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, 
-  comment, throw, ifCond, tryCatch, construct, param, method, getMethod, 
-  setMethod, function, buildClass, implementingClass, commentedClass, 
-  modFromData, fileDoc, fileFromData)
+  subAssign, increment, objDecNew, print, vectorScale, closeFile, returnStmt,
+  valStmt, comment, throw, ifCond, tryCatch, construct, param, method,
+  getMethod, setMethod, function, buildClass, implementingClass,
+  commentedClass, modFromData, fileDoc, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int, 
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
@@ -544,6 +544,9 @@ instance StringStatement JavaCode where
 
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
+
+instance VectorStatement JavaCode where
+  vectorScale = G.vectorScale
 
 instance FuncAppStatement JavaCode where
   inOutCall = jInOutCall funcApp

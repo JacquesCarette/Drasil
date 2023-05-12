@@ -21,10 +21,10 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, InternalValueExp(..),
   objMethodCall, FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..),
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  pubMethod, StateVarSym(..), ClassSym(..), ModuleSym(..))
+  StringStatement(..), VectorStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), switchAsIf, StatePattern(..),
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), pubMethod, StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -61,10 +61,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objAccess, objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess, 
   listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
-  subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, 
-  comment, throw, ifCond, tryCatch, construct, param, method, getMethod, 
-  setMethod, function, buildClass, implementingClass, commentedClass, 
-  modFromData, fileDoc, fileFromData)
+  subAssign, increment, objDecNew, vectorScale, print, closeFile, returnStmt,
+  valStmt, comment, throw, ifCond, tryCatch, construct, param, method,
+  getMethod, setMethod, function, buildClass, implementingClass,
+  commentedClass, modFromData, fileDoc, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, funcType, buildModule, litArray, 
@@ -556,6 +556,10 @@ instance (Pair p) => StringStatement (p CppSrcCode CppHdrCode) where
     (map (zoom lensMStoVS) vars) (zoom lensMStoVS sl)
   stringListLists lsts sl = pair1List1Val stringListLists stringListLists
     (map (zoom lensMStoVS) lsts) (zoom lensMStoVS sl)
+
+instance (Pair p) => VectorStatement (p CppSrcCode CppHdrCode) where
+  vectorScale v k = pair2 vectorScale vectorScale
+    (zoom lensMStoVS v) (zoom lensMStoVS k)
 
 instance (Pair p) => FuncAppStatement (p CppSrcCode CppHdrCode) where
   inOutCall n is os bs = pair3Lists (inOutCall n) (inOutCall n) 
@@ -1432,6 +1436,9 @@ instance StringStatement CppSrcCode where
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
 
+instance VectorStatement CppSrcCode where
+  vectorScale = G.vectorScale
+
 instance FuncAppStatement CppSrcCode where
   inOutCall = cppInOutCall funcApp
   selfInOutCall = cppInOutCall selfFuncApp
@@ -2039,6 +2046,9 @@ instance StringStatement CppHdrCode where
 
   stringListVals _ _ = emptyStmt
   stringListLists _ _ = emptyStmt
+
+instance VectorStatement CppHdrCode where
+  vectorScale _ _ = emptyStmt
 
 instance FuncAppStatement CppHdrCode where
   inOutCall _ _ _ _ = emptyStmt

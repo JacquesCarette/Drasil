@@ -4,6 +4,8 @@ module Language.Drasil.Printing.Helpers where
 import Prelude hiding ((<>))
 import Text.PrettyPrint (text, Doc, (<>))
 import Data.Char (toUpper, toLower)
+import Language.Drasil.Printing.Citation ( CiteField(HowPublished), HP (..) )
+import qualified Language.Drasil as L
 
 -- | Basic text-rendering helper function.
 bslash,dbs,assign,eq,lt,gt,leq,geq,dlr,ast,pls,hat,slash,hyph,tab,unders :: Doc
@@ -92,3 +94,14 @@ sufx _ = "th"
 -- | Similar to 'sufx' but used on any sized 'Int'.
 sufxer :: Int -> String
 sufxer = (++ ".") . sufx . mod 10
+
+
+--sufxPrint :: (BibRef -> [(Doc, Doc)]) -> [String] -> [String] -> (BibRef -> [(Doc, Doc)])
+--sufxPrint x = if "www." `elem` x then take (length x - 7) x else x
+
+sufxPrint :: [CiteField] -> String
+-- sufxPrint x = if HowPublished == [x] then " Print." else ""
+sufxPrint fields = if any isUrl fields then "" else " Print."
+  where
+    isUrl (HowPublished (URL _)) = True
+    isUrl _ = False

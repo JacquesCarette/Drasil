@@ -100,7 +100,6 @@ sufxer = (++ ".") . sufx . mod 10
 --sufxPrint x = if "www." `elem` x then take (length x - 7) x else x
 
 sufxPrint :: [CiteField] -> String
--- sufxPrint x = if HowPublished == [x] then " Print." else ""
 sufxPrint fields = if any isUrl fields then "" else " Print."
   where
     isUrl (HowPublished (URL _)) = True

@@ -91,5 +91,8 @@ sufx _ = "th"
 
 -- | Similar to 'sufx' but used on any sized 'Int'.
 sufxer :: Int -> String
-sufxer x = (++ ".") (if x `elem` [11, 12, 13] then sufx 0 else
-    sufx (mod x 10))
+sufxer x
+    | x `elem` [11, 12, 13] = period(sufx 0)
+    | otherwise = period(sufx (mod x 10))
+    where
+        period = (++ ".")

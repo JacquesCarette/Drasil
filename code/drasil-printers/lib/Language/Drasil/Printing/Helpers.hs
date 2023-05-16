@@ -5,7 +5,6 @@ import Prelude hiding ((<>))
 import Text.PrettyPrint (text, Doc, (<>))
 import Data.Char (toUpper, toLower)
 import Language.Drasil.Printing.Citation ( CiteField(HowPublished), HP (..) )
-import qualified Language.Drasil as L
 
 -- | Basic text-rendering helper function.
 bslash,dbs,assign,eq,lt,gt,leq,geq,dlr,ast,pls,hat,slash,hyph,tab,unders :: Doc

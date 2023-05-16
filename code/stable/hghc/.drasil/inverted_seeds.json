@@ -846,7 +846,13 @@
     "real-time": [
         "terms"
     ],
+    "refBy": [
+        "terms"
+    ],
     "refMat": [
+        "terms"
+    ],
+    "refName": [
         "terms"
     ],
     "reference": [

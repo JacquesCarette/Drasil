@@ -649,6 +649,10 @@
         "terms",
         "symbols"
     ],
+    "gravitationalMagnitude": [
+        "terms",
+        "symbols"
+    ],
     "gravity": [
         "terms"
     ],
@@ -1166,7 +1170,13 @@
     "rectilinearvelocity": [
         "terms"
     ],
+    "refBy": [
+        "terms"
+    ],
     "refMat": [
+        "terms"
+    ],
+    "refName": [
         "terms"
     ],
     "reference": [

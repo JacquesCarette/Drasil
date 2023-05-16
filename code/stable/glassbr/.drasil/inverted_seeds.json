@@ -1429,7 +1429,13 @@
     "real-time": [
         "terms"
     ],
+    "refBy": [
+        "terms"
+    ],
     "refMat": [
+        "terms"
+    ],
+    "refName": [
         "terms"
     ],
     "reference": [
@@ -1563,6 +1569,12 @@
     ],
     "simulation": [
         "terms"
+    ],
+    "smithEtAl2007": [
+        "references"
+    ],
+    "smithKoothoor2016": [
+        "references"
     ],
     "smithLai2005": [
         "references"

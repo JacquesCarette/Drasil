@@ -1,0 +1,86 @@
+name:        drasil
+version:     0.2.0.0
+author:      "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
+maintainer:  "Jacques Carette"
+synopsis:	   A framework for code and document generation for scientific software.
+github:      JacquesCarette/Drasil
+homepage:    https://jacquescarette.github.io/Drasil/
+description: Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+extra-source-files: []
+
+dependencies:
+- base >= 4.7 && < 5
+- pretty
+- containers
+- directory
+- time
+- lens
+
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+
+library:
+  source-dirs: drasil-gen/lib
+  dependencies:
+  - drasil-build
+  - drasil-code
+  - drasil-database
+  - drasil-docLang
+  - drasil-gool
+  - drasil-lang
+  - drasil-printers
+  - drasil-sysinfo
+  exposed-modules:
+  - Language.Drasil.Generate
+  when:
+  - condition: false
+    other-modules: Paths_drasil_gen
+
+executables:
+  dblpendulum:
+    main: Main
+    source-dirs:
+    - drasil-example/dblpendulum/app
+    - drasil-example/dblpendulum/lib
+    dependencies:
+    - drasil
+    - drasil-code
+    - drasil-data
+    - drasil-database
+    - drasil-docLang
+    - drasil-gool
+    - drasil-lang
+    - drasil-metadata
+    - drasil-printers
+    - drasil-theory
+    - drasil-utils
+    when:
+    - condition: false
+      other-modules: Paths_dblpendulum
+
+internal-libraries:
+  drasil-docLang:
+    visibility: public
+    source-dirs: drasil-docLang/lib
+    dependencies:
+    - multiplate
+    - transformers
+    - drasil-lang
+    - drasil-data
+    - drasil-database
+    - drasil-printers
+    - drasil-sysinfo
+    - drasil-theory
+    - drasil-utils 
+    exposed-modules:
+    - Drasil.DocLang
+    - Drasil.DocLang.Notebook
+    - Drasil.DocLang.SRS
+    - Drasil.DocumentLanguage.Units
+    - Drasil.DocumentLanguage.TraceabilityGraph
+    - Drasil.SRSDocument
+    when:
+    - condition: false
+      other-modules: Paths_drasil_docLang

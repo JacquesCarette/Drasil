@@ -37,6 +37,7 @@ resolver:
 # non-dependency (i.e. a user package), and its test suites and benchmarks
 # will not be run. This is useful for tweaking upstream packages.
 packages:
+- .
 - drasil-lang
 - drasil-utils
 - drasil-gool
@@ -46,22 +47,22 @@ packages:
 - drasil-theory
 - drasil-database
 - drasil-printers
-- drasil-gen
+# - drasil-gen
 - drasil-data
-- drasil-docLang
+# - drasil-docLang
 - drasil-metadata
-- drasil-website
-- drasil-example/dblpendulum
-- drasil-example/sglpendulum
-- drasil-example/gamephysics
-- drasil-example/glassbr
-- drasil-example/hghc
-- drasil-example/nopcm
-- drasil-example/pdcontroller
-- drasil-example/projectile
-- drasil-example/ssp
-- drasil-example/swhs
-- drasil-example/template
+# - drasil-website
+# - drasil-example/dblpendulum
+# - drasil-example/sglpendulum
+# - drasil-example/gamephysics
+# - drasil-example/glassbr
+# - drasil-example/hghc
+# - drasil-example/nopcm
+# - drasil-example/pdcontroller
+# - drasil-example/projectile
+# - drasil-example/ssp
+# - drasil-example/swhs
+# - drasil-example/template
 
 # Dependency packages to be pulled from upstream that are not in the resolver
 # (e.g., acme-missiles-0.3)

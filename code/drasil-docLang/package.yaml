@@ -22,7 +22,7 @@ dependencies:
 - drasil-printers
 - drasil-sysinfo
 - drasil-theory
-- drasil-utils 
+- drasil-utils
 
 ghc-options:
 - -Wall

@@ -3,12 +3,11 @@ resolver:
 
 packages:
 - .
+- ../drasil
 - ../../drasil-build
 - ../../drasil-code
 - ../../drasil-data
 - ../../drasil-database
-- ../../drasil-docLang
-- ../../drasil-gen
 - ../../drasil-gool
 - ../../drasil-lang
 - ../../drasil-metadata

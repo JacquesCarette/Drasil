@@ -781,6 +781,7 @@ sufx :: Int -> String
 
 -- | Similar to <a>sufx</a> but used on any sized <a>Int</a>.
 sufxer :: Int -> String
+sufxPrint :: [CiteField] -> String
 
 
 -- | Defines helper functions for creating jupyter notebooks.

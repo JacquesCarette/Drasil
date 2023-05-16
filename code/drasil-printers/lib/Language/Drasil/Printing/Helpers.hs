@@ -4,6 +4,7 @@ module Language.Drasil.Printing.Helpers where
 import Prelude hiding ((<>))
 import Text.PrettyPrint (text, Doc, (<>))
 import Data.Char (toUpper, toLower)
+import Language.Drasil.Printing.Citation ( CiteField(HowPublished), HP (..) )
 
 -- | Basic text-rendering helper function.
 bslash,dbs,assign,eq,lt,gt,leq,geq,dlr,ast,pls,hat,slash,hyph,tab,unders :: Doc
@@ -94,3 +95,9 @@ sufxer :: Int -> String
 sufxer x = sufx r ++ "."
     where
         r = if x `elem` [11, 12, 13] then 0 else mod x 10
+
+sufxPrint :: [CiteField] -> String
+sufxPrint fields = if any isUrl fields then "" else " Print."
+  where
+    isUrl (HowPublished (URL _)) = True
+    isUrl _ = False

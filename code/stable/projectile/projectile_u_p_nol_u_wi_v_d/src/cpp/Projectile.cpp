@@ -24,15 +24,15 @@ using std::string;
 */
 int main(int argc, const char *argv[]) {
     string filename = argv[1];
-    double g_vect = 9.8;
+    double g = 9.8;
     double epsilon = 2.0e-2;
     double v_launch;
     double theta;
     double p_target;
     get_input(filename, v_launch, theta, p_target);
     input_constraints(v_launch, theta, p_target);
-    double t_flight = func_t_flight(v_launch, theta, g_vect);
-    double p_land = func_p_land(v_launch, theta, g_vect);
+    double t_flight = func_t_flight(v_launch, theta, g);
+    double p_land = func_p_land(v_launch, theta, g);
     double d_offset = func_d_offset(p_target, p_land);
     string s = func_s(p_target, epsilon, d_offset);
     write_output(s, d_offset, t_flight);
@@ -40,12 +40,12 @@ int main(int argc, const char *argv[]) {
     return 0;
 }
 
-double func_t_flight(double v_launch, double theta, double g_vect) {
-    return 2.0 * v_launch * sin(theta) / g_vect;
+double func_t_flight(double v_launch, double theta, double g) {
+    return 2.0 * v_launch * sin(theta) / g;
 }
 
-double func_p_land(double v_launch, double theta, double g_vect) {
-    return 2.0 * pow(v_launch, 2.0) * sin(theta) * cos(theta) / g_vect;
+double func_p_land(double v_launch, double theta, double g) {
+    return 2.0 * pow(v_launch, 2.0) * sin(theta) * cos(theta) / g;
 }
 
 double func_d_offset(double p_target, double p_land) {

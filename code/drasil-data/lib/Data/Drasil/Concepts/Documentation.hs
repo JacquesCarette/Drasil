@@ -47,10 +47,10 @@ doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body, charO
 -- | Collects all documentation-related common ideas (like a concept, but with no definition).
 doccon' :: [CI]
 doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
-  likelyChg, mg, mis, notApp, physSyst, requirement, srs, thModel, typUnc, unlikelyChg, notebook]
+  likelyChg, mg, mis, notApp, physSyst, requirement, srs, thModel, typUnc, unlikelyChg, notebook, refBy, refName]
 
-assumption, desSpec, goalStmt, dataConst, likelyChg, unlikelyChg, physSyst, requirement,
-  mg, mis, notApp, srs, typUnc, sec, notebook :: CI
+assumption, desSpec, goalStmt, dataConst, likelyChg, unlikelyChg, physSyst, requirement, 
+  mg, mis, notApp, srs, typUnc, sec, notebook, refBy, refName :: CI
 
 softReqSpec :: NP
 softReqSpec = fterms compoundPhraseP1 softwareReq specification
@@ -75,6 +75,8 @@ typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")      
 sec         = commonIdeaWithDict "section"     (cn' "section")                                       "Sec"     [documentc]
 srs         = commonIdeaWithDict "srs"         softReqSpec                                           "SRS"     [softEng]
 notebook    = commonIdeaWithDict "notebook"    (cn' "notebook")                                      "NB"      [softEng]
+refBy       = commonIdeaWithDict "refBy"       (cn  "referenced by")                                 "RefBy"   [documentc]
+refName     = commonIdeaWithDict "refName"     (cn' "reference name")                                "Refname" [documentc]
 
 ---------------------------------------------------------------------
 
@@ -316,17 +318,21 @@ vavPlan                      = compoundNC vav plan
 srsDom :: ConceptChunk
 srsDom = dcc "srsDom" (srs ^. term) "srs"
 
-goalStmtDom, assumpDom, reqDom, funcReqDom, nonFuncReqDom, chgProbDom, likeChgDom, unlikeChgDom :: ConceptChunk
-goalStmtDom   = ccs (mkIdea "goalStmtDom"   (goalStmt ^. term)                 $ Just "GS")  EmptyS [srsDom]
-assumpDom     = ccs (mkIdea "assumpDom"     (assumption ^. term)               $ Just "A")   EmptyS [srsDom]
-reqDom        = ccs (mkIdea "reqDom"        (requirement ^. term)              $ Just "R")   EmptyS [srsDom]
-funcReqDom    = ccs (mkIdea "funcReqDom"    (functionalRequirement ^. term)    $ Just "FR")  EmptyS [reqDom]
-nonFuncReqDom = ccs (mkIdea "nonFuncReqDom" (nonfunctionalRequirement ^. term) $ Just "NFR") EmptyS [reqDom]
-chgProbDom    = ccs (nc "chgProbDom" $ cn' "change")                                         EmptyS [srsDom]
-likeChgDom    = ccs (mkIdea "likeChgDom"    (likelyChg ^. term)                $ Just "LC")  EmptyS [chgProbDom]
-unlikeChgDom  = ccs (mkIdea "unlikeChgDom"  (unlikelyChg ^. term)              $ Just "UC")  EmptyS [chgProbDom]
+goalStmtDom, assumpDom, reqDom, funcReqDom, nonFuncReqDom, chgProbDom, 
+  likeChgDom, unlikeChgDom, refByDom, refNameDom :: ConceptChunk
+goalStmtDom   = ccs (mkIdea "goalStmtDom"   (goalStmt ^. term)                 $ Just "GS")       EmptyS [srsDom]
+assumpDom     = ccs (mkIdea "assumpDom"     (assumption ^. term)               $ Just "A")        EmptyS [srsDom]
+reqDom        = ccs (mkIdea "reqDom"        (requirement ^. term)              $ Just "R")        EmptyS [srsDom]
+funcReqDom    = ccs (mkIdea "funcReqDom"    (functionalRequirement ^. term)    $ Just "FR")       EmptyS [reqDom]
+nonFuncReqDom = ccs (mkIdea "nonFuncReqDom" (nonfunctionalRequirement ^. term) $ Just "NFR")      EmptyS [reqDom]
+chgProbDom    = ccs (nc "chgProbDom" $ cn' "change")                                              EmptyS [srsDom]
+likeChgDom    = ccs (mkIdea "likeChgDom"    (likelyChg ^. term)                $ Just "LC")       EmptyS [chgProbDom]
+unlikeChgDom  = ccs (mkIdea "unlikeChgDom"  (unlikelyChg ^. term)              $ Just "UC")       EmptyS [chgProbDom]
+refByDom      = ccs (mkIdea "refByDom"      (refBy ^. term)                    $ Just "RefBy")    EmptyS [srsDom]
+refNameDom    = ccs (mkIdea "refNameDom"    (refName ^. term)                  $ Just "RefName")  EmptyS [srsDom]
 
 -- | List of SRS-related concepts, including SRS.
 srsDomains :: [ConceptChunk]
-srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom, assumpDom, chgProbDom, likeChgDom, unlikeChgDom]
+srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom, 
+  assumpDom, chgProbDom, likeChgDom, unlikeChgDom, refByDom, refNameDom]
 

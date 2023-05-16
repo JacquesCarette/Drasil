@@ -17,11 +17,11 @@ using std::string;
 */
 int main(int argc, const char *argv[]) {
     string filename = argv[1];
-    double g_vect = 9.8;
+    double g = 9.8;
     double epsilon = 2.0e-2;
     InputParameters inParams = InputParameters(filename);
-    double t_flight = func_t_flight(inParams, g_vect);
-    double p_land = func_p_land(inParams, g_vect);
+    double t_flight = func_t_flight(inParams, g);
+    double p_land = func_p_land(inParams, g);
     double d_offset = func_d_offset(inParams, p_land);
     string s = func_s(inParams, epsilon, d_offset);
     write_output(s, d_offset, t_flight);

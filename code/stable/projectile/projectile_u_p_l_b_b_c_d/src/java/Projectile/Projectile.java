@@ -65,7 +65,7 @@ public class Projectile {
         outfile.println("  }");
         outfile.close();
         
-        return 2.0 * inParams.v_launch * Math.sin(inParams.theta) / Constants.g_vect;
+        return 2.0 * inParams.v_launch * Math.sin(inParams.theta) / Constants.g;
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -81,7 +81,7 @@ public class Projectile {
         outfile.println("  }");
         outfile.close();
         
-        return 2.0 * Math.pow(inParams.v_launch, 2.0) * Math.sin(inParams.theta) * Math.cos(inParams.theta) / Constants.g_vect;
+        return 2.0 * Math.pow(inParams.v_launch, 2.0) * Math.sin(inParams.theta) * Math.cos(inParams.theta) / Constants.g;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -270,7 +270,7 @@ class InputParameters {
 /** \brief Structure for holding the constant values
 */
 class Constants {
-    public static final double g_vect = 9.8;
+    public static final double g = 9.8;
     public static final double epsilon = 2.0e-2;
     
 }

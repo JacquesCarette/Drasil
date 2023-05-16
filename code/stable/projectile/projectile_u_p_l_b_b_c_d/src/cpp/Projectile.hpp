@@ -41,7 +41,7 @@ class InputParameters {
 */
 class Constants {
     public:
-        static const double g_vect;
+        static const double g;
         static const double epsilon;
         
 };

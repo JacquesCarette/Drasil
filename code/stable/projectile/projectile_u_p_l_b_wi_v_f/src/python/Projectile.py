@@ -6,7 +6,7 @@ import sys
 
 ## \brief Structure for holding the input values and constant values
 class InputParameters:
-    g_vect = 9.8
+    g = 9.8
     epsilon = 2.0e-2
     
     ## \brief Initializes input object by reading inputs and checking physical constraints on the input
@@ -102,7 +102,7 @@ def func_t_flight(inParams):
     print("  }", file=outfile)
     outfile.close()
     
-    return 2.0 * inParams.v_launch * math.sin(inParams.theta) / inParams.g_vect
+    return 2.0 * inParams.v_launch * math.sin(inParams.theta) / inParams.g
 
 ## \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
 # \param inParams structure holding the input values
@@ -115,7 +115,7 @@ def func_p_land(inParams):
     print("  }", file=outfile)
     outfile.close()
     
-    return 2.0 * inParams.v_launch ** 2.0 * math.sin(inParams.theta) * math.cos(inParams.theta) / inParams.g_vect
+    return 2.0 * inParams.v_launch ** 2.0 * math.sin(inParams.theta) * math.cos(inParams.theta) / inParams.g
 
 ## \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
 # \param inParams structure holding the input values

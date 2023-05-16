@@ -7,11 +7,12 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
-import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst, requirement, srs, typUnc)
+import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
+  requirement, refBy, refName, srs, typUnc)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
 import Data.Drasil.SI_Units (metre, radian, kilogram, newton)
 import qualified Data.Drasil.Quantities.Physics as QP (position, force, velocity,
-  angularVelocity, angularAccel, gravitationalAccel, tension, acceleration, time)
+  angularVelocity, angularAccel, gravitationalAccel, gravitationalMagnitude, tension, acceleration, time)
 import Data.Drasil.Concepts.Physics (twoD)
 import Data.Drasil.Concepts.Math as CM (angle, xDir, yDir)
 import Data.Drasil.Quantities.Math as QM (unitVect, unitVectj, pi_)
@@ -26,7 +27,7 @@ symbols = map qw unitalChunks ++ map qw unitless ++ [qw pendDisAngle] ++ map qw 
 
 acronyms :: [CI]
 acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
-  physSyst, requirement, srs, thModel, typUnc]
+  physSyst, requirement, refBy, refName, srs, thModel, typUnc]
 
 inputs :: [QuantityDict]
 inputs = map qw [lenRod_1, lenRod_2, massObj_1, massObj_2] 
@@ -46,7 +47,7 @@ unitalChunks = [
   pendDisAngle_1, pendDisAngle_2, xVel_1, xVel_2, yVel_1, yVel_2,
   xPos_1, xPos_2, yPos_1, yPos_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2,
   angularAccel_1, angularAccel_2, tension_1, tension_2, 
-  QPP.mass, QP.force, QP.gravitationalAccel, QP.tension, QP.acceleration,
+  QPP.mass, QP.force, QP.gravitationalAccel, QP.gravitationalMagnitude, QP.tension, QP.acceleration,
   QP.time, QP.velocity, QP.position]
   
 lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2, 

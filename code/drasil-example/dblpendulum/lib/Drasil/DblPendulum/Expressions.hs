@@ -3,7 +3,7 @@ module Drasil.DblPendulum.Expressions where
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
 
-import Data.Drasil.Quantities.Physics (gravitationalAccel)
+import Data.Drasil.Quantities.Physics (gravitationalAccel, gravitationalMagnitude)
 import Drasil.DblPendulum.DataDefs (positionXEqn_1)
 import Drasil.DblPendulum.Unitals (lenRod_1, lenRod_2, massObj_1, massObj_2,
   xVel_1, yVel_1, xAccel_1, yAccel_1, angularAccel_1, angularAccel_2,
@@ -56,9 +56,9 @@ yForceWithAngle_2 = sy tension_2 `mulRe` cos (sy pendDisAngle_2) $-
 
 -- Angular acceleration acting on the first object
 angularAccelExpr_1 :: PExpr
-angularAccelExpr_1 = neg(sy gravitationalAccel) `mulRe`
+angularAccelExpr_1 = neg(sy gravitationalMagnitude) `mulRe`
                    (exactDbl 2 `mulRe` sy massObj_1 `addRe` sy massObj_2) `mulRe` sin (sy pendDisAngle_1 ) $-
-                   (sy massObj_2 `mulRe` sy gravitationalAccel `mulRe`
+                   (sy massObj_2 `mulRe` sy gravitationalMagnitude `mulRe`
                    sin (sy pendDisAngle_1 $- (exactDbl 2 `mulRe` sy pendDisAngle_2))) $-
                    ((exactDbl 2 `mulRe` sin (sy pendDisAngle_1 $- sy pendDisAngle_2 )) `mulRe` sy massObj_2 `mulRe`
                    (
@@ -78,7 +78,7 @@ angularAccelExpr_2 :: PExpr
 angularAccelExpr_2 = exactDbl 2 `mulRe` sin (sy pendDisAngle_1 $- sy pendDisAngle_2) `mulRe`
                    (
                        square (sy angularVel_1) `mulRe` sy lenRod_1 `mulRe` (sy massObj_1 `addRe` sy massObj_2 ) `addRe`
-                       (sy gravitationalAccel `mulRe` (sy massObj_1 `addRe` sy massObj_2 ) `mulRe` cos (sy pendDisAngle_1)) `addRe`
+                       (sy gravitationalMagnitude `mulRe` (sy massObj_1 `addRe` sy massObj_2 ) `mulRe` cos (sy pendDisAngle_1)) `addRe`
                        (square (sy angularVel_2) `mulRe` sy lenRod_2 `mulRe` sy massObj_2 `mulRe` 
                        cos (sy pendDisAngle_1 $- sy pendDisAngle_2 ))
                    )

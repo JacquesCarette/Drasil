@@ -59,7 +59,7 @@ public class Projectile {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return 2.0f * inParams.v_launch * (float)(Math.Sin(inParams.theta)) / inParams.g_vect;
+        return 2.0f * inParams.v_launch * (float)(Math.Sin(inParams.theta)) / inParams.g;
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -75,7 +75,7 @@ public class Projectile {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return 2.0f * (float)(Math.Pow(inParams.v_launch, 2.0f)) * (float)(Math.Sin(inParams.theta)) * (float)(Math.Cos(inParams.theta)) / inParams.g_vect;
+        return 2.0f * (float)(Math.Pow(inParams.v_launch, 2.0f)) * (float)(Math.Sin(inParams.theta)) * (float)(Math.Cos(inParams.theta)) / inParams.g;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -164,7 +164,7 @@ public class InputParameters {
     public float v_launch;
     public float theta;
     public float p_target;
-    public float g_vect = 9.8f;
+    public float g = 9.8f;
     public float epsilon = 2.0e-2f;
     
     /** \brief Initializes input object by reading inputs and checking physical constraints on the input

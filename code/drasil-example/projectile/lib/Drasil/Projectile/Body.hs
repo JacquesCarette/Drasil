@@ -9,7 +9,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
   problem, srsDomains, assumption, goalStmt, physSyst,
-  requirement, typUnc)
+  requirement, refBy, refName, typUnc)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Math (cartesian, mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
@@ -208,4 +208,4 @@ constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
 
 acronyms :: [CI]
 acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
-  physSyst, requirement, Doc.srs, thModel, typUnc]
+  physSyst, requirement, Doc.srs, refBy, refName, thModel, typUnc]

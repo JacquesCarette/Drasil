@@ -21,7 +21,7 @@ class InputParameters {
         float v_launch;
         float theta;
         float p_target;
-        float g_vect = 9.8f;
+        float g = 9.8f;
         float epsilon = 2.0e-2f;
         
         /** \brief Initializes input object by reading inputs and checking physical constraints on the input

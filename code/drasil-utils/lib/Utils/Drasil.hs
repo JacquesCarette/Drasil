@@ -15,6 +15,9 @@ module Utils.Drasil (
   foldle, foldle1,
   toColumn,
 
+  -- * Maps
+  invert,
+
   -- ** Strings
   toPlainName
 ) where
@@ -22,4 +25,5 @@ module Utils.Drasil (
 import Utils.Drasil.Document
 import Utils.Drasil.English
 import Utils.Drasil.Lists
+import Utils.Drasil.Maps
 import Utils.Drasil.Strings

@@ -11,6 +11,8 @@ import Data.Aeson.Encode.Pretty
 import qualified Data.ByteString.Lazy.Char8 as LB
 import qualified Data.Map.Strict as SM
 
+import Utils.Drasil (invert)
+
 type Path = String
 type TargetFile = String
 
@@ -18,7 +20,7 @@ dumpEverything :: SystemInformation -> Path -> IO ()
 dumpEverything (SI _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ chks _ _) targetPath = do
     createDirectoryIfMissing True targetPath
     let chunkDump = DB.dumpChunkDB chks
-    let invertedChunkDump = DB.invertDumpedChunkDB chunkDump
+    let invertedChunkDump = invert chunkDump
     let sharedUIDs = SM.filter (\x -> length x > 1) invertedChunkDump
 
     dumpTo chunkDump $ targetPath ++ "seeds.json"

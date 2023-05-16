@@ -26,6 +26,7 @@ dependencies:
 - drasil-lang
 - drasil-printers
 - drasil-sysinfo
+- drasil-utils
 - lens
 
 ghc-options:

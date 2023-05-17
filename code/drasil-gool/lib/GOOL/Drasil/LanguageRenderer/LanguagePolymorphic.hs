@@ -10,10 +10,10 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd, 
   listAppend, listAccess, listSet, getFunc, setFunc, 
   listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment, 
-  objDecNew, print, vectorScale, vectorAdd, closeFile, returnStmt, valStmt,
-  comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
-  setMethod, initStmts, function, docFuncRepr, docFunc, buildClass,
-  implementingClass, docClass, commentedClass, modFromData, fileDoc, docMod
+  objDecNew, print, performVectorized, closeFile, returnStmt, valStmt, comment,
+  throw, ifCond, tryCatch, construct, param, method, getMethod, setMethod,
+  initStmts, function, docFuncRepr, docFunc, buildClass, implementingClass,
+  docClass, commentedClass, modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
@@ -29,8 +29,8 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock,
   NumericExpression((#+), (#-), (#*), (#/), sin, cos, tan), Comparison(..),
   VectorExpression(..), funcApp, newObj, objMethodCallNoParams, ($.),
   StatementSym(multi), AssignStatement((&++)), (&=), IOStatement(printStr,
-  printStrLn, printFile, printFileStr, printFileStrLn), ifNoElse, ScopeSym(..),
-  ModuleSym(Module), convType)
+  printStrLn, printFile, printFileStr, printFileStrLn), Vectorized,
+  unvectorize, ifNoElse, ScopeSym(..), ModuleSym(Module), convType)
 import qualified GOOL.Drasil.ClassInterface as S (BodySym(body),
   BlockSym(block), TypeSym(int, double, char, string, listType, arrayType,
   listInnerType, funcType, void), VariableSym(var, objVarSelf), Literal(litInt,
@@ -340,20 +340,10 @@ objDecNew v vs = S.varDecDef v (newObj (onStateValue variableType v) vs)
 
 -- FIXME: We should really be able to get a "fresh" variable name to use for
 -- the loop variable
-vectorScale :: RenderSym r => SValue r -> SValue r -> MSStatement r
-vectorScale v k = S.forRange i (S.litInt 0) (vectorDim v) (S.litInt 1) $ S.body
+performVectorized :: RenderSym r => SValue r -> Vectorized r -> MSStatement r
+performVectorized v e = S.forRange i (S.litInt 0) (vectorDim v) (S.litInt 1) $ S.body
   [S.block
-    [S.valStmt $ vectorSet v (S.valueOf i) (vectorIndex v (S.valueOf i) #* k)]]
-  where
-    i = S.var "i" S.int
-
--- FIXME: We should really be able to get a "fresh" variable name to use for
--- the loop variable
-vectorAdd :: RenderSym r => SValue r -> SValue r -> MSStatement r
-vectorAdd v1 v2 = S.forRange i (S.litInt 0) (vectorDim v1) (S.litInt 1) $ S.body
-  [S.block
-    [S.valStmt $ vectorSet v1 (S.valueOf i)
-      (vectorIndex v1 (S.valueOf i) #+ vectorIndex v2 (S.valueOf i))]]
+    [S.valStmt $ vectorSet v (S.valueOf i) (unvectorize e (S.valueOf i))]]
   where
     i = S.var "i" S.int
 

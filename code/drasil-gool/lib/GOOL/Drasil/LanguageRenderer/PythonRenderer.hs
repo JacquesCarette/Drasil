@@ -57,7 +57,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess, 
   listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
-  subAssign, increment, objDecNew, print, vectorScale, vectorAdd, closeFile,
+  subAssign, increment, objDecNew, print, performVectorized, closeFile,
   returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
   method, getMethod, setMethod, function, buildClass, implementingClass,
   commentedClass, modFromData, fileDoc, fileFromData)
@@ -521,8 +521,7 @@ instance StringStatement PythonCode where
   stringListLists = M.stringListLists
 
 instance VectorStatement PythonCode where
-  vectorScale = G.vectorScale
-  vectorAdd = G.vectorAdd
+  performVectorized = G.performVectorized
 
 instance FuncAppStatement PythonCode where
   inOutCall = CP.inOutCall funcApp

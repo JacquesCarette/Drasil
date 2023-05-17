@@ -54,16 +54,16 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
   VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
   binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, 
-  negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
-  lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, 
-  objVar, arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, 
-  argsList, objAccess, objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, 
-  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess, 
-  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
-  subAssign, increment, objDecNew, print, vectorScale, vectorAdd, closeFile,
-  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
-  method, getMethod, setMethod, function, buildClass, implementingClass,
+  multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
+  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
+  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
+  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
+  objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
+  lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
+  setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
+  increment, objDecNew, print, performVectorized, closeFile, returnStmt,
+  valStmt, comment, throw, ifCond, tryCatch, construct, param, method,
+  getMethod, setMethod, function, buildClass, implementingClass,
   commentedClass, modFromData, fileDoc, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int, 
@@ -546,8 +546,7 @@ instance StringStatement JavaCode where
   stringListLists = M.stringListLists
 
 instance VectorStatement JavaCode where
-  vectorScale = G.vectorScale
-  vectorAdd = G.vectorAdd
+  performVectorized = G.performVectorized
 
 instance FuncAppStatement JavaCode where
   inOutCall = jInOutCall funcApp

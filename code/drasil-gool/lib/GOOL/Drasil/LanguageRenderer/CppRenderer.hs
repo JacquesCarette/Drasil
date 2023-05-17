@@ -61,7 +61,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objAccess, objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess, 
   listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
-  subAssign, increment, objDecNew, vectorScale, vectorAdd, print, closeFile,
+  subAssign, increment, objDecNew, performVectorized, print, closeFile,
   returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
   method, getMethod, setMethod, function, buildClass, implementingClass,
   commentedClass, modFromData, fileDoc, fileFromData)
@@ -558,10 +558,7 @@ instance (Pair p) => StringStatement (p CppSrcCode CppHdrCode) where
     (map (zoom lensMStoVS) lsts) (zoom lensMStoVS sl)
 
 instance (Pair p) => VectorStatement (p CppSrcCode CppHdrCode) where
-  vectorScale v k = pair2 vectorScale vectorScale
-    (zoom lensMStoVS v) (zoom lensMStoVS k)
-  vectorAdd v1 v2 = pair2 vectorAdd vectorAdd
-    (zoom lensMStoVS v1) (zoom lensMStoVS v2)
+  performVectorized = G.performVectorized
 
 instance (Pair p) => FuncAppStatement (p CppSrcCode CppHdrCode) where
   inOutCall n is os bs = pair3Lists (inOutCall n) (inOutCall n) 
@@ -1439,8 +1436,7 @@ instance StringStatement CppSrcCode where
   stringListLists = M.stringListLists
 
 instance VectorStatement CppSrcCode where
-  vectorScale = G.vectorScale
-  vectorAdd = G.vectorAdd
+  performVectorized = G.performVectorized
 
 instance FuncAppStatement CppSrcCode where
   inOutCall = cppInOutCall funcApp
@@ -2051,8 +2047,7 @@ instance StringStatement CppHdrCode where
   stringListLists _ _ = emptyStmt
 
 instance VectorStatement CppHdrCode where
-  vectorScale _ _ = emptyStmt
-  vectorAdd _ _ = emptyStmt
+  performVectorized = G.performVectorized
 
 instance FuncAppStatement CppHdrCode where
   inOutCall _ _ _ _ = emptyStmt

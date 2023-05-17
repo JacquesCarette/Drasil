@@ -62,10 +62,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   selfFuncAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAdd, 
   listAppend, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
   loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print,
-  vectorScale, vectorAdd, returnStmt, valStmt, comment, throw, ifCond,
-  tryCatch, construct, param, method, getMethod, setMethod, initStmts,
-  function, docFunc, buildClass, implementingClass, docClass, commentedClass,
-  modFromData, fileDoc, docMod, fileFromData)
+  performVectorized, returnStmt, valStmt, comment, throw, ifCond, tryCatch,
+  construct, param, method, getMethod, setMethod, initStmts, function, docFunc,
+  buildClass, implementingClass, docClass, commentedClass, modFromData,
+  fileDoc, docMod, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (classVar, 
   objVarSelf, intClass, buildModule, bindingError, extFuncAppMixedArgs, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, litArray, 
@@ -552,8 +552,7 @@ instance StringStatement SwiftCode where
   stringListLists = M.stringListLists
 
 instance VectorStatement SwiftCode where
-  vectorScale = G.vectorScale
-  vectorAdd = G.vectorAdd
+  performVectorized = G.performVectorized
 
 instance FuncAppStatement SwiftCode where
   inOutCall = CP.inOutCall funcApp

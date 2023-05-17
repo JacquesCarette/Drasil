@@ -298,8 +298,8 @@ instance StringStatement CodeInfo where
   stringListLists _ = zoom lensMStoVS . execute1
 
 instance VectorStatement CodeInfo where
-  vectorScale v = zoom lensMStoVS . execute2 v
-  vectorAdd v = zoom lensMStoVS . execute2 v
+  -- FIXME: give better info
+  performVectorized _ _ = noInfo
 
 instance FuncAppStatement CodeInfo where
   inOutCall n vs _ _ = zoom lensMStoVS $ do

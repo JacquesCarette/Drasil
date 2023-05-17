@@ -91,7 +91,7 @@ physSystDesc progName parts fg other = SRS.physSyst (intro : bullets : LlC fg : 
 
 -- | General constructor for the Goal Statement section. Takes the given inputs ('Sentence's) and the descriptions ('Contents').
 goalStmtF :: [Sentence] -> [Contents] -> Int -> Section
-goalStmtF _ [] _ = SRS.goalStmt ([mkParagraph $ S "Not applicable"]) []
+goalStmtF _ [] _ = SRS.goalStmt [mkParagraph $ S "Not applicable"] []
 goalStmtF givenInputs otherContents amt = SRS.goalStmt (intro:otherContents) []
   where intro = mkParagraph $ S "Given" +:+ foldlList Comma List 
                 givenInputs `sC` if amt == 1

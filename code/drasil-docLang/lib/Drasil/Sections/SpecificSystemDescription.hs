@@ -19,7 +19,7 @@ module Drasil.Sections.SpecificSystemDescription (
   tInDataCstRef, tOutDataCstRef,
   helperCI,
   -- * Subsection Stubs
-  tmStub, ddStub, imStub, pdStub
+  tmStub, ddStub, gdStub, imStub, pdStub
   ) where
 
 import Language.Drasil hiding (variable)
@@ -33,7 +33,7 @@ import Data.Drasil.Concepts.Documentation (assumption, column, constraint, corSo
   input_, limitation, model, output_, physical, physicalConstraint, physicalSystem,
   physSyst, problem, problemDescription, property, purpose, quantity, requirement,
   scope, section_, softwareConstraint, solutionCharacteristic, specification,
-  symbol_, system, theory, typUnc, uncertainty, user, value, variable, table_, problemDescription)
+  symbol_, system, theory, typUnc, uncertainty, user, value, variable, table_, problemDescription, notApp)
 import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
 import Data.Drasil.Concepts.Math (equation, parameter)
 import Data.Drasil.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
@@ -119,12 +119,18 @@ assumpF otherContents = SRS.assumpt (assumpIntro : otherContents) []
 
 -- | Wrapper for 'thModelIntro'. Takes the program name and other 'Contents'.
 thModF :: (Idea a) => a -> [Contents] -> Section
-thModF progName otherContents = SRS.thModel (thModIntro progName : otherContents) []
+thModF progName otherContents = if not (null otherContents) then
+                                  SRS.thModel (thModIntro progName : otherContents) []
+                                else
+                                  SRS.thModel (thModIntroNoContent progName : otherContents) []
 
 -- | Creates a eneralized Theoretical Model introduction given the program name.
 thModIntro :: (Idea a) => a -> Contents
 thModIntro progName = foldlSP [S "This", phrase section_, S "focuses on the",
   phrase general, plural equation `S.and_` S "laws that", short progName, S "is based on"]
+
+thModIntroNoContent :: a -> Contents
+thModIntroNoContent _ = foldlSP [getAcc notApp]
 
 -- | Creates a General Definitions section with a general introduction.
 -- Takes in relevant general definitions ('Contents'). Use empty list if none are needed.
@@ -280,8 +286,9 @@ helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a
     refby sent   = sParen $ S "RefBy:" +:+. sent
 
 -- | Section stubs for implicit referencing of different models and definitions.
-tmStub, ddStub, imStub, pdStub :: Section
+tmStub, ddStub, imStub, pdStub, gdStub :: Section
 tmStub = SRS.thModel   [] []
 ddStub = SRS.dataDefn  [] []
+gdStub = SRS.genDefn   [] []
 imStub = SRS.inModel   [] []
 pdStub = SRS.probDesc  [] []

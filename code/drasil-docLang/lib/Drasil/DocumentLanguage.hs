@@ -44,7 +44,7 @@ import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, goalStmtF, inModelF, physSystDesc, probDescF,
   propCorSolF, solutionCharSpecIntro, specSysDescr, termDefnF, thModF, helperCI,
-  tmStub, ddStub, imStub, pdStub)
+  tmStub, ddStub, gdStub, imStub, pdStub)
 import qualified Drasil.Sections.Stakeholders as Stk (stakeholderIntro,
   tClientF, tCustomerF)
 import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (
@@ -361,10 +361,10 @@ mkSolChSpec si (SCSProg l) =
     map (mkSubSCS si) l
   where
     mkSubSCS :: SystemInformation -> SCSSub -> Section
-    mkSubSCS _ (TMs _ _ [])      = error "There are no Theoretical Models"
+    mkSubSCS _ (TMs _ _ [])      = SSD.thModF Doc.section_ []
     mkSubSCS _ (GDs _ _ [] _)    = SSD.genDefnF []
-    mkSubSCS _ (DDs _ _ [] _)    = error "There are no Data Definitions"
-    mkSubSCS _ (IMs _ _ [] _)    = error "There are no Instance Models"
+    mkSubSCS _ (DDs _ _ [] _)    = SSD.dataDefnF EmptyS []
+    mkSubSCS _ (IMs _ _ [] _)    = SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub SSD.gdStub []
     mkSubSCS si' (TMs intro fields ts) =
       SSD.thModF (siSys si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
@@ -378,10 +378,10 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (GDs intro fields gs' _) =
       SSD.genDefnF $ map mkParagraph intro ++ map (LlC . gdefn fields si') gs'
     mkSubSCS si' (IMs intro fields ims ShowDerivation) =
-      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
+      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub SSD.gdStub $ map mkParagraph intro ++
       concatMap (\x -> [LlC $ instanceModel fields si' x, derivation x]) ims
     mkSubSCS si' (IMs intro fields ims _) =
-      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
+      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub SSD.gdStub $ map mkParagraph intro ++
       map (LlC . instanceModel fields si') ims
     mkSubSCS si' (Assumptions ci) =
       SSD.assumpF $ mkEnumSimpleD $ map (`SSD.helperCI` si') ci

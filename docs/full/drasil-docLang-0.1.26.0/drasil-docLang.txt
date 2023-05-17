@@ -1343,7 +1343,7 @@ physSystDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> Se
 
 -- | General constructor for the Goal Statement section. Takes the given
 --   inputs (<a>Sentence</a>s) and the descriptions (<a>Contents</a>).
-goalStmtF :: [Sentence] -> [Contents] -> Section
+goalStmtF :: [Sentence] -> [Contents] -> Int -> Section
 
 -- | General introduction for the Solution Characteristics Specification
 --   section. Takes the program name and a section of instance models.

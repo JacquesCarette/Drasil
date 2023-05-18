@@ -177,7 +177,7 @@
                   <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>a</b></em></td>
+                  <td><em><b>a</b>(t)</em></td>
                   <td>Acceleration</td>
                   <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
                 </tr>
@@ -244,7 +244,7 @@
                   <td><em>m</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>p</b></em></td>
+                  <td><em><b>p</b>(t)</em></td>
                   <td>Position</td>
                   <td><em>m</em></td>
                 </tr>
@@ -266,6 +266,11 @@
                 <tr>
                   <td><em>v</em></td>
                   <td>Speed</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>v(t)</em></td>
+                  <td>1D speed</td>
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
@@ -299,13 +304,8 @@
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>v</b></em></td>
-                  <td>Velocity</td>
-                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
-                </tr>
-                <tr>
                   <td><em><b>v</b>(t)</em></td>
-                  <td>1D speed</td>
+                  <td>Velocity</td>
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
@@ -483,7 +483,7 @@
               <div class="subsubsection">
                 <h3>Goal Statements</h3>
                 <p class="paragraph">
-                  Given the initial velocity vector of the projectile, the goal statements are:
+                  Given the initial velocity vector of the projectile, the goal statement is:
                 </p>
                 <div class="list">
                   <p>
@@ -605,18 +605,20 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{a}=\frac{\,d\symbf{v}}{\,dt}\]</td>
+                      <td>
+                        \[\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}\]
+                      </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>a</b></em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li><em>t</em> is the time (<em>s</em>)</li>
                           <li>
-                            <em><b>v</b></em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>v</b>(t)</em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                         </ul>
                       </td>
@@ -649,17 +651,19 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{v}=\frac{\,d\symbf{p}}{\,dt}\]</td>
+                      <td>
+                        \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}\]
+                      </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>v</b></em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>v</b>(t)</em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li><em>t</em> is the time (<em>s</em>)</li>
-                          <li><em><b>p</b></em> is the position (<em>m</em>)</li>
+                          <li><em><b>p</b>(t)</em> is the position (<em>m</em>)</li>
                         </ul>
                       </td>
                     </tr>
@@ -707,14 +711,14 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{v}\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t\]</td>
+                      <td>\[v\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>v</b>(t)</em> is the 1D speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em>v(t)</em> is the 1D speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>v<sup>i</sup></em> is the initial speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
@@ -756,7 +760,7 @@
                     <p class="paragraph">
                       Performing the integration, we have the required equation:
                     </p>
-                    \[\symbf{v}\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t\]
+                    \[v\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t\]
                   </div>
                 </div>
                 <div id="GD:rectPos">
@@ -857,10 +861,10 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{v}=\begin{bmatrix}
-                                    {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}} t\\
-                                    {{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}} t
-                                    \end{bmatrix}\]
+                        \[\symbf{v}\text{(}t\text{)}=\begin{bmatrix}
+                                                     {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}} t\\
+                                                     {{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}} t
+                                                     \end{bmatrix}\]
                       </td>
                     </tr>
                     <tr>
@@ -868,7 +872,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>v</b></em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>v</b>(t)</em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>v<sub>x</sub><sup>i</sup></em> is the <em>x</em>-component of initial velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
@@ -900,24 +904,24 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of velocity vector:</h4>
                     <p class="paragraph">
-                      For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A:twoDMotion</a> and <a href=#cartSyst>A:cartSyst</a>), we can represent the velocity vector as <em><b>v</b> = \(\begin{bmatrix}
-                                                                                                                                                                                                              {v_{\text{x}}}\\
-                                                                                                                                                                                                              {v_{\text{y}}}
-                                                                                                                                                                                                              \end{bmatrix}\)</em> and the acceleration vector as <em><b>a</b> = \(\begin{bmatrix}
-                                                                                                                                                                                                                                                                                   {a_{\text{x}}}\\
-                                                                                                                                                                                                                                                                                   {a_{\text{y}}}
-                                                                                                                                                                                                                                                                                   \end{bmatrix}\)</em>. The acceleration is assumed to be constant (<a href=#constAccel>A:constAccel</a>) and the constant acceleration vector is represented as <em><b>a</b><sup>c</sup> = \(\begin{bmatrix}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                               {{a_{\text{x}}}^{\text{c}}}\\
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                               {{a_{\text{y}}}^{\text{c}}}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                               \end{bmatrix}\)</em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A:timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = \(\begin{bmatrix}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              {{v_{\text{x}}}^{\text{i}}}\\
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              {{v_{\text{y}}}^{\text{i}}}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              \end{bmatrix}\)</em>. Since we have a Cartesian coordinate system, <a href=#GD:rectVel>GD:rectVel</a> can be applied to each coordinate of the velocity vector to yield the required equation:
+                      For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A:twoDMotion</a> and <a href=#cartSyst>A:cartSyst</a>), we can represent the velocity vector as <em><b>v</b>(t) = \(\begin{bmatrix}
+                                                                                                                                                                                                                 {v_{\text{x}}}\\
+                                                                                                                                                                                                                 {v_{\text{y}}}
+                                                                                                                                                                                                                 \end{bmatrix}\)</em> and the acceleration vector as <em><b>a</b>(t) = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                                         {a_{\text{x}}}\\
+                                                                                                                                                                                                                                                                                         {a_{\text{y}}}
+                                                                                                                                                                                                                                                                                         \end{bmatrix}\)</em>. The acceleration is assumed to be constant (<a href=#constAccel>A:constAccel</a>) and the constant acceleration vector is represented as <em><b>a</b><sup>c</sup> = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     {{a_{\text{x}}}^{\text{c}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     {{a_{\text{y}}}^{\text{c}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     \end{bmatrix}\)</em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A:timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{v_{\text{x}}}^{\text{i}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{v_{\text{y}}}^{\text{i}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \end{bmatrix}\)</em>. Since we have a Cartesian coordinate system, <a href=#GD:rectVel>GD:rectVel</a> can be applied to each coordinate of the velocity vector to yield the required equation:
                     </p>
-                    \[\symbf{v}=\begin{bmatrix}
-                                {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}} t\\
-                                {{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}} t
-                                \end{bmatrix}\]
+                    \[\symbf{v}\text{(}t\text{)}=\begin{bmatrix}
+                                                 {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}} t\\
+                                                 {{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}} t
+                                                 \end{bmatrix}\]
                   </div>
                 </div>
                 <div id="GD:posVec">
@@ -941,17 +945,17 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{p}=\begin{bmatrix}
-                                    {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\
-                                    {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}
-                                    \end{bmatrix}\]
+                        \[\symbf{p}\text{(}t\text{)}=\begin{bmatrix}
+                                                     {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\
+                                                     {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}
+                                                     \end{bmatrix}\]
                       </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em><b>p</b></em> is the position (<em>m</em>)</li>
+                          <li><em><b>p</b>(t)</em> is the position (<em>m</em>)</li>
                           <li>
                             <em>p<sub>x</sub><sup>i</sup></em> is the <em>x</em>-component of initial position (<em>m</em>)
                           </li>
@@ -992,27 +996,27 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of position vector:</h4>
                     <p class="paragraph">
-                      For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A:twoDMotion</a> and <a href=#cartSyst>A:cartSyst</a>), we can represent the position vector as <em><b>p</b> = \(\begin{bmatrix}
-                                                                                                                                                                                                              {p_{\text{x}}}\\
-                                                                                                                                                                                                              {p_{\text{y}}}
-                                                                                                                                                                                                              \end{bmatrix}\)</em>, the velocity vector as <em><b>v</b> = \(\begin{bmatrix}
-                                                                                                                                                                                                                                                                            {v_{\text{x}}}\\
-                                                                                                                                                                                                                                                                            {v_{\text{y}}}
-                                                                                                                                                                                                                                                                            \end{bmatrix}\)</em>, and the acceleration vector as <em><b>a</b> = \(\begin{bmatrix}
-                                                                                                                                                                                                                                                                                                                                                  {a_{\text{x}}}\\
-                                                                                                                                                                                                                                                                                                                                                  {a_{\text{y}}}
-                                                                                                                                                                                                                                                                                                                                                  \end{bmatrix}\)</em>. The acceleration is assumed to be constant (<a href=#constAccel>A:constAccel</a>) and the constant acceleration vector is represented as <em><b>a</b><sup>c</sup> = \(\begin{bmatrix}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              {{a_{\text{x}}}^{\text{c}}}\\
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              {{a_{\text{y}}}^{\text{c}}}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              \end{bmatrix}\)</em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A:timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = \(\begin{bmatrix}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             {{v_{\text{x}}}^{\text{i}}}\\
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             {{v_{\text{y}}}^{\text{i}}}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \end{bmatrix}\)</em>. Since we have a Cartesian coordinate system, <a href=#GD:rectPos>GD:rectPos</a> can be applied to each coordinate of the position vector to yield the required equation:
+                      For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A:twoDMotion</a> and <a href=#cartSyst>A:cartSyst</a>), we can represent the position vector as <em><b>p</b>(t) = \(\begin{bmatrix}
+                                                                                                                                                                                                                 {p_{\text{x}}}\\
+                                                                                                                                                                                                                 {p_{\text{y}}}
+                                                                                                                                                                                                                 \end{bmatrix}\)</em>, the velocity vector as <em><b>v</b>(t) = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                                  {v_{\text{x}}}\\
+                                                                                                                                                                                                                                                                                  {v_{\text{y}}}
+                                                                                                                                                                                                                                                                                  \end{bmatrix}\)</em>, and the acceleration vector as <em><b>a</b>(t) = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                           {a_{\text{x}}}\\
+                                                                                                                                                                                                                                                                                                                                                           {a_{\text{y}}}
+                                                                                                                                                                                                                                                                                                                                                           \end{bmatrix}\)</em>. The acceleration is assumed to be constant (<a href=#constAccel>A:constAccel</a>) and the constant acceleration vector is represented as <em><b>a</b><sup>c</sup> = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       {{a_{\text{x}}}^{\text{c}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       {{a_{\text{y}}}^{\text{c}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       \end{bmatrix}\)</em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A:timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      {{v_{\text{x}}}^{\text{i}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      {{v_{\text{y}}}^{\text{i}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      \end{bmatrix}\)</em>. Since we have a Cartesian coordinate system, <a href=#GD:rectPos>GD:rectPos</a> can be applied to each coordinate of the position vector to yield the required equation:
                     </p>
-                    \[\symbf{p}=\begin{bmatrix}
-                                {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\
-                                {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}
-                                \end{bmatrix}\]
+                    \[\symbf{p}\text{(}t\text{)}=\begin{bmatrix}
+                                                 {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\
+                                                 {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}
+                                                 \end{bmatrix}\]
                   </div>
                 </div>
               </div>
@@ -1045,7 +1049,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[v=\|\symbf{v}\|\]</td>
+                      <td>\[v=\|\symbf{v}\text{(}t\text{)}\|\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1055,7 +1059,7 @@
                             <em>v</em> is the speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li>
-                            <em><b>v</b></em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>v</b>(t)</em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                         </ul>
                       </td>
@@ -1064,7 +1068,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          For a given velocity vector <em><b>v</b></em>, the magnitude of the vector (<em>||<b>v</b>||</em>) is the scalar called speed.
+                          For a given velocity vector <em><b>v</b>(t)</em>, the magnitude of the vector (<em>||<b>v</b>(t)||</em>) is the scalar called speed.
                         </p>
                       </td>
                     </tr>

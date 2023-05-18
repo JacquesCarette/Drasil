@@ -181,7 +181,7 @@
                   <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>a</b></em></td>
+                  <td><em><b>a</b>(t)</em></td>
                   <td>Acceleration</td>
                   <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
                 </tr>
@@ -241,7 +241,7 @@
                   <td><em>m</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>p</b></em></td>
+                  <td><em><b>p</b>(t)</em></td>
                   <td>Position</td>
                   <td><em>m</em></td>
                 </tr>
@@ -271,7 +271,7 @@
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>v</b></em></td>
+                  <td><em><b>v</b>(t)</em></td>
                   <td>Velocity</td>
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
@@ -553,7 +553,7 @@
               <div class="subsubsection">
                 <h3>Goal Statements</h3>
                 <p class="paragraph">
-                  Given the mass and length of the rod, initial angle of the mass and the gravitational constant, the goal statements are:
+                  Given the mass and length of the rod, initial angle of the mass and the gravitational constant, the goal statement is:
                 </p>
                 <div class="list">
                   <p>
@@ -625,18 +625,20 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{a}=\frac{\,d\symbf{v}}{\,dt}\]</td>
+                      <td>
+                        \[\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}\]
+                      </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>a</b></em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li><em>t</em> is the time (<em>s</em>)</li>
                           <li>
-                            <em><b>v</b></em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>v</b>(t)</em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                         </ul>
                       </td>
@@ -667,17 +669,19 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{v}=\frac{\,d\symbf{p}}{\,dt}\]</td>
+                      <td>
+                        \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}\]
+                      </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>v</b></em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>v</b>(t)</em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li><em>t</em> is the time (<em>s</em>)</li>
-                          <li><em><b>p</b></em> is the position (<em>m</em>)</li>
+                          <li><em><b>p</b>(t)</em> is the position (<em>m</em>)</li>
                         </ul>
                       </td>
                     </tr>
@@ -705,7 +709,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{F}=m \symbf{a}\]</td>
+                      <td>\[\symbf{F}=m \symbf{a}\text{(}t\text{)}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -714,7 +718,7 @@
                           <li><em><b>F</b></em> is the force (<em>N</em>)</li>
                           <li><em>m</em> is the mass (<em>kg</em>)</li>
                           <li>
-                            <em><b>a</b></em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                         </ul>
                       </td>
@@ -723,7 +727,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The net force <em><b>F</b></em> on a body is proportional to the acceleration <em><b>a</b></em> of the body, where <em>m</em> denotes the mass of the body as the constant of proportionality.
+                          The net force <em><b>F</b></em> on a body is proportional to the acceleration <em><b>a</b>(t)</em> of the body, where <em>m</em> denotes the mass of the body as the constant of proportionality.
                         </p>
                       </td>
                     </tr>
@@ -860,7 +864,7 @@
                     <p class="paragraph">
                       At a given point in time, velocity may be defined as
                     </p>
-                    \[\symbf{v}=\frac{\,d\symbf{p}}{\,dt}\]
+                    \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}\]
                     <p class="paragraph">We also know the horizontal position</p>
                     \[{p_{\text{x}}}={L_{\text{rod}}} \sin\left({θ_{p}}\right)\]
                     <p class="paragraph">Applying this,</p>
@@ -936,7 +940,7 @@
                     <p class="paragraph">
                       At a given point in time, velocity may be defined as
                     </p>
-                    \[\symbf{v}=\frac{\,d\symbf{p}}{\,dt}\]
+                    \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}\]
                     <p class="paragraph">We also know the vertical position</p>
                     \[{p_{\text{y}}}=-{L_{\text{rod}}} \cos\left({θ_{p}}\right)\]
                     <p class="paragraph">Applying this,</p>
@@ -1013,7 +1017,7 @@
                       Detailed derivation of the <em>x</em>-component of acceleration:
                     </h4>
                     <p class="paragraph">Our acceleration is:</p>
-                    \[\symbf{a}=\frac{\,d\symbf{v}}{\,dt}\]
+                    \[\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}\]
                     <p class="paragraph">
                       Earlier, we found the horizontal velocity to be
                     </p>
@@ -1092,7 +1096,7 @@
                       Detailed derivation of the <em>y</em>-component of acceleration:
                     </h4>
                     <p class="paragraph">Our acceleration is:</p>
-                    \[\symbf{a}=\frac{\,d\symbf{v}}{\,dt}\]
+                    \[\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}\]
                     <p class="paragraph">
                       Earlier, we found the vertical velocity to be
                     </p>
@@ -2924,7 +2928,7 @@
           </li>
           <li>
             <div id="smithKoothoor2016">
-              [4]: Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em> Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418. Print.
+              [4]: Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em> Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
             </div>
           </li>
           <li>
@@ -2934,7 +2938,7 @@
           </li>
           <li>
             <div id="smithEtAl2007">
-              [6]: Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107. Print.
+              [6]: Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
             </div>
           </li>
           <li>

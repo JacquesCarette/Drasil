@@ -74,7 +74,7 @@ $\text{(x,y)}$ & Cartesian Position Coordinates: $y$ is considered parallel to t
 \\
 $A$ & Area: A part of an object or surface. & ${\text{m}^{2}}$
 \\
-$\symbf{a}$ & Acceleration: The rate of change of a body's velocity. & $\frac{\text{m}}{\text{s}^{2}}$
+$\symbf{a}\text{(}t\text{)}$ & Acceleration: The rate of change of a body's velocity. & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\symbf{b}$ & Base Width of Slices: The width of each slice in the $x$-direction. & ${\text{m}}$
 \\
@@ -621,16 +621,16 @@ Label & Newton's second law of motion
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}
+           \symbf{F}=m \symbf{a}\text{(}t\text{)}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The net force $\symbf{F}$ on a body is proportional to the acceleration $\symbf{a}$ of the body, where $m$ denotes the mass of the body as the constant of proportionality.
+Notes & The net force $\symbf{F}$ on a body is proportional to the acceleration $\symbf{a}\text{(}t\text{)}$ of the body, where $m$ denotes the mass of the body as the constant of proportionality.
         
 \\ \midrule \\
 Source & --
@@ -1143,10 +1143,10 @@ RefBy & \hyperref[GD:sliceWght]{GD:sliceWght} and \hyperref[GD:momentEql]{GD:mom
 Under the influence of gravity, and assuming a 2D Cartesian coordinate system with down as positive, an object has an acceleration vector of:
 
 \begin{displaymath}
-\symbf{a}=\begin{bmatrix}
-          0\\
-          \symbf{g} \symbf{\hat{j}}
-          \end{bmatrix}
+\symbf{a}\text{(}t\text{)}=\begin{bmatrix}
+                           0\\
+                           \symbf{g} \symbf{\hat{j}}
+                           \end{bmatrix}
 \end{displaymath}
 Since there is only one non-zero vector component, the scalar value $W$ will be used for the weight. In this scenario, Newton's second law of motion from \hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} can be expressed as:
 

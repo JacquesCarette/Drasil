@@ -186,7 +186,7 @@
                   <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>a</b></em></td>
+                  <td><em><b>a</b>(t)</em></td>
                   <td>Acceleration</td>
                   <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
                 </tr>
@@ -256,7 +256,7 @@
                   <td><em>m</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>p</b></em></td>
+                  <td><em><b>p</b>(t)</em></td>
                   <td>Position</td>
                   <td><em>m</em></td>
                 </tr>
@@ -306,7 +306,7 @@
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>v</b></em></td>
+                  <td><em><b>v</b>(t)</em></td>
                   <td>Velocity</td>
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
@@ -589,7 +589,7 @@
               <div class="subsubsection">
                 <h3>Goal Statements</h3>
                 <p class="paragraph">
-                  Given the masses, length of the rods, initial angle of the masses and the gravitational constant, the goal statements are:
+                  Given the masses, length of the rods, initial angle of the masses and the gravitational constant, the goal statement is:
                 </p>
                 <div class="list">
                   <p>
@@ -671,18 +671,20 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{a}=\frac{\,d\symbf{v}}{\,dt}\]</td>
+                      <td>
+                        \[\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}\]
+                      </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>a</b></em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li><em>t</em> is the time (<em>s</em>)</li>
                           <li>
-                            <em><b>v</b></em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>v</b>(t)</em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                         </ul>
                       </td>
@@ -713,17 +715,19 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{v}=\frac{\,d\symbf{p}}{\,dt}\]</td>
+                      <td>
+                        \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}\]
+                      </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>v</b></em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>v</b>(t)</em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li><em>t</em> is the time (<em>s</em>)</li>
-                          <li><em><b>p</b></em> is the position (<em>m</em>)</li>
+                          <li><em><b>p</b>(t)</em> is the position (<em>m</em>)</li>
                         </ul>
                       </td>
                     </tr>
@@ -751,7 +755,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{F}=m \symbf{a}\]</td>
+                      <td>\[\symbf{F}=m \symbf{a}\text{(}t\text{)}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -760,7 +764,7 @@
                           <li><em><b>F</b></em> is the force (<em>N</em>)</li>
                           <li><em>m</em> is the mass (<em>kg</em>)</li>
                           <li>
-                            <em><b>a</b></em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                         </ul>
                       </td>
@@ -769,7 +773,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The net force <em><b>F</b></em> on a body is proportional to the acceleration <em><b>a</b></em> of the body, where <em>m</em> denotes the mass of the body as the constant of proportionality.
+                          The net force <em><b>F</b></em> on a body is proportional to the acceleration <em><b>a</b>(t)</em> of the body, where <em>m</em> denotes the mass of the body as the constant of proportionality.
                         </p>
                       </td>
                     </tr>
@@ -854,7 +858,7 @@
                     <p class="paragraph">
                       At a given point in time, velocity is defined in <a href=#DD:positionGDD>DD:positionGDD</a>
                     </p>
-                    \[\symbf{v}=\frac{\,d\symbf{p}}{\,dt}\]
+                    \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}\]
                     <p class="paragraph">
                       We also know the horizontal position that is defined in <a href=#DD:positionXDD1>DD:positionXDD1</a>
                     </p>
@@ -932,7 +936,7 @@
                     <p class="paragraph">
                       At a given point in time, velocity is defined in <a href=#DD:positionGDD>DD:positionGDD</a>
                     </p>
-                    \[\symbf{v}=\frac{\,d\symbf{p}}{\,dt}\]
+                    \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}\]
                     <p class="paragraph">
                       We also know the vertical position that is defined in <a href=#DD:positionYDD1>DD:positionYDD1</a>
                     </p>
@@ -1013,7 +1017,7 @@
                     <p class="paragraph">
                       At a given point in time, velocity is defined in <a href=#DD:positionGDD>DD:positionGDD</a>
                     </p>
-                    \[\symbf{v}=\frac{\,d\symbf{p}}{\,dt}\]
+                    \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}\]
                     <p class="paragraph">
                       We also know the horizontal position that is defined in <a href=#DD:positionXDD2>DD:positionXDD2</a>
                     </p>
@@ -1092,7 +1096,7 @@
                     <p class="paragraph">
                       At a given point in time, velocity is defined in <a href=#DD:positionGDD>DD:positionGDD</a>
                     </p>
-                    \[\symbf{v}=\frac{\,d\symbf{p}}{\,dt}\]
+                    \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}\]
                     <p class="paragraph">
                       We also know the vertical position that is defined in <a href=#DD:positionYDD2>DD:positionYDD2</a>
                     </p>
@@ -1171,7 +1175,7 @@
                       Detailed derivation of the <em>x</em>-component of acceleration:
                     </h4>
                     <p class="paragraph">Our acceleration is:</p>
-                    \[\symbf{a}=\frac{\,d\symbf{v}}{\,dt}\]
+                    \[\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}\]
                     <p class="paragraph">
                       Earlier, we found the horizontal velocity to be
                     </p>
@@ -1254,7 +1258,7 @@
                       Detailed derivation of the <em>y</em>-component of acceleration:
                     </h4>
                     <p class="paragraph">Our acceleration is:</p>
-                    \[\symbf{a}=\frac{\,d\symbf{v}}{\,dt}\]
+                    \[\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}\]
                     <p class="paragraph">
                       Earlier, we found the vertical velocity to be
                     </p>
@@ -1340,7 +1344,7 @@
                       Detailed derivation of the <em>x</em>-component of acceleration:
                     </h4>
                     <p class="paragraph">Our acceleration is:</p>
-                    \[\symbf{a}=\frac{\,d\symbf{v}}{\,dt}\]
+                    \[\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}\]
                     <p class="paragraph">
                       Earlier, we found the horizontal velocity to be
                     </p>
@@ -1424,7 +1428,7 @@
                       Detailed derivation of the <em>y</em>-component of acceleration:
                     </h4>
                     <p class="paragraph">Our acceleration is:</p>
-                    \[\symbf{a}=\frac{\,d\symbf{v}}{\,dt}\]
+                    \[\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}\]
                     <p class="paragraph">
                       Earlier, we found the horizontal velocity to be
                     </p>
@@ -1456,7 +1460,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{F}=m \symbf{a}=-{\symbf{T}_{1}} \sin\left({θ_{1}}\right)+{\symbf{T}_{2}} \sin\left({θ_{2}}\right)\]
+                        \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{1}} \sin\left({θ_{1}}\right)+{\symbf{T}_{2}} \sin\left({θ_{2}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1466,7 +1470,7 @@
                           <li><em><b>F</b></em> is the force (<em>N</em>)</li>
                           <li><em>m</em> is the mass (<em>kg</em>)</li>
                           <li>
-                            <em><b>a</b></em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li>
                             <em><b>T</b><sub>1</sub></em> is the the tension of the first object (<em>N</em>)
@@ -1500,7 +1504,7 @@
                 <div id="GD:xForce1Deriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of force on the first object:</h4>
-                    \[\symbf{F}=m \symbf{a}=-{\symbf{T}_{1}} \sin\left({θ_{1}}\right)+{\symbf{T}_{2}} \sin\left({θ_{2}}\right)\]
+                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{1}} \sin\left({θ_{1}}\right)+{\symbf{T}_{2}} \sin\left({θ_{2}}\right)\]
                   </div>
                 </div>
                 <div id="GD:yForce1">
@@ -1522,7 +1526,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{F}=m \symbf{a}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{1}} \symbf{g}\]
+                        \[\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{1}} \symbf{g}\]
                       </td>
                     </tr>
                     <tr>
@@ -1532,7 +1536,7 @@
                           <li><em><b>F</b></em> is the force (<em>N</em>)</li>
                           <li><em>m</em> is the mass (<em>kg</em>)</li>
                           <li>
-                            <em><b>a</b></em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li>
                             <em><b>T</b><sub>1</sub></em> is the the tension of the first object (<em>N</em>)
@@ -1572,7 +1576,7 @@
                 <div id="GD:yForce1Deriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of force on the first object:</h4>
-                    \[\symbf{F}=m \symbf{a}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{1}} \symbf{g}\]
+                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{1}} \symbf{g}\]
                   </div>
                 </div>
                 <div id="GD:xForce2">
@@ -1594,7 +1598,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{F}=m \symbf{a}=-{\symbf{T}_{2}} \sin\left({θ_{2}}\right)\]
+                        \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{2}} \sin\left({θ_{2}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1604,7 +1608,7 @@
                           <li><em><b>F</b></em> is the force (<em>N</em>)</li>
                           <li><em>m</em> is the mass (<em>kg</em>)</li>
                           <li>
-                            <em><b>a</b></em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li>
                             <em><b>T</b><sub>2</sub></em> is the the tension of the second object (<em>N</em>)
@@ -1632,7 +1636,7 @@
                 <div id="GD:xForce2Deriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of force on the second object:</h4>
-                    \[\symbf{F}=m \symbf{a}=-{\symbf{T}_{2}} \sin\left({θ_{2}}\right)\]
+                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{2}} \sin\left({θ_{2}}\right)\]
                   </div>
                 </div>
                 <div id="GD:yForce2">
@@ -1654,7 +1658,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{F}=m \symbf{a}={\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} \symbf{g}\]
+                        \[\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} \symbf{g}\]
                       </td>
                     </tr>
                     <tr>
@@ -1664,7 +1668,7 @@
                           <li><em><b>F</b></em> is the force (<em>N</em>)</li>
                           <li><em>m</em> is the mass (<em>kg</em>)</li>
                           <li>
-                            <em><b>a</b></em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li>
                             <em><b>T</b><sub>2</sub></em> is the the tension of the second object (<em>N</em>)
@@ -1698,7 +1702,7 @@
                 <div id="GD:yForce2Deriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of force on the second object:</h4>
-                    \[\symbf{F}=m \symbf{a}={\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} \symbf{g}\]
+                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} \symbf{g}\]
                   </div>
                 </div>
               </div>
@@ -1721,7 +1725,7 @@
                     </tr>
                     <tr>
                       <th>Symbol</th>
-                      <td><p class="paragraph"><em><b>v</b></em></p></td>
+                      <td><p class="paragraph"><em><b>v</b>(t)</em></p></td>
                     </tr>
                     <tr>
                       <th>Units</th>
@@ -1731,17 +1735,19 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{v}=\frac{\,d\symbf{p}}{\,dt}\]</td>
+                      <td>
+                        \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}\]
+                      </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>v</b></em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>v</b>(t)</em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li><em>t</em> is the time (<em>s</em>)</li>
-                          <li><em><b>p</b></em> is the position (<em>m</em>)</li>
+                          <li><em><b>p</b>(t)</em> is the position (<em>m</em>)</li>
                         </ul>
                       </td>
                     </tr>
@@ -2042,7 +2048,7 @@
                     </tr>
                     <tr>
                       <th>Symbol</th>
-                      <td><p class="paragraph"><em><b>a</b></em></p></td>
+                      <td><p class="paragraph"><em><b>a</b>(t)</em></p></td>
                     </tr>
                     <tr>
                       <th>Units</th>
@@ -2052,18 +2058,20 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{a}=\frac{\,d\symbf{v}}{\,dt}\]</td>
+                      <td>
+                        \[\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}\]
+                      </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>a</b></em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li><em>t</em> is the time (<em>s</em>)</li>
                           <li>
-                            <em><b>v</b></em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>v</b>(t)</em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                         </ul>
                       </td>
@@ -2099,7 +2107,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{F}=m \symbf{a}\]</td>
+                      <td>\[\symbf{F}=m \symbf{a}\text{(}t\text{)}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -2108,7 +2116,7 @@
                           <li><em><b>F</b></em> is the force (<em>N</em>)</li>
                           <li><em>m</em> is the mass (<em>kg</em>)</li>
                           <li>
-                            <em><b>a</b></em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                         </ul>
                       </td>
@@ -3982,7 +3990,7 @@
           </li>
           <li>
             <div id="smithKoothoor2016">
-              [4]: Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em> Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418. Print.
+              [4]: Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em> Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
             </div>
           </li>
           <li>
@@ -3992,7 +4000,7 @@
           </li>
           <li>
             <div id="smithEtAl2007">
-              [6]: Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107. Print.
+              [6]: Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
             </div>
           </li>
           <li>

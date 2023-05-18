@@ -76,7 +76,7 @@ ${a_{\text{y}1}}$ & The vertical acceleration of the first object & $\frac{\text
 \\
 ${a_{\text{y}2}}$ & The vertical acceleration of the second object & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-$\symbf{a}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+$\symbf{a}\text{(}t\text{)}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\symbf{F}$ & Force & ${\text{N}}$
 \\
@@ -104,7 +104,7 @@ ${p_{\text{y}1}}$ & The vertical position of the first object & ${\text{m}}$
 \\
 ${p_{\text{y}2}}$ & The vertical position of the second object & ${\text{m}}$
 \\
-$\symbf{p}$ & Position & ${\text{m}}$
+$\symbf{p}\text{(}t\text{)}$ & Position & ${\text{m}}$
 \\
 $\symbf{T}$ & Tension & ${\text{N}}$
 \\
@@ -124,7 +124,7 @@ ${v_{\text{y}1}}$ & The vertical velocity of the first object & $\frac{\text{m}}
 \\
 ${v_{\text{y}2}}$ & The vertical velocity of the second object & $\frac{\text{m}}{\text{s}}$
 \\
-$\symbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
+$\symbf{v}\text{(}t\text{)}$ & Velocity & $\frac{\text{m}}{\text{s}}$
 \\
 ${w_{1}}$ & The angular velocity of the first object & $\frac{\text{rad}}{\text{s}}$
 \\
@@ -283,7 +283,7 @@ The physical system of DblPendulum, as shown in \hyperref[Figure:dblpendulum]{Fi
 \end{figure}
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
-Given the masses, length of the rods, initial angle of the masses and the gravitational constant, the goal statements are:
+Given the masses, length of the rods, initial angle of the masses and the gravitational constant, the goal statement is:
 
 \begin{itemize}
 \item[motionMass:\phantomsection\label{motionMass}]{Calculate the motion of the masses.}
@@ -321,13 +321,13 @@ Label & Acceleration
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+           \symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\symbf{v}\text{(}t\text{)}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & \cite{accelerationWiki}
@@ -349,13 +349,13 @@ Label & Velocity
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+           \symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\symbf{v}\text{(}t\text{)}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{p}$ is the position (${\text{m}}$)}
+              \item{$\symbf{p}\text{(}t\text{)}$ is the position (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & \cite{velocityWiki}
@@ -377,16 +377,16 @@ Label & Newton's second law of motion
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}
+           \symbf{F}=m \symbf{a}\text{(}t\text{)}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The net force $\symbf{F}$ on a body is proportional to the acceleration $\symbf{a}$ of the body, where $m$ denotes the mass of the body as the constant of proportionality.
+Notes & The net force $\symbf{F}$ on a body is proportional to the acceleration $\symbf{a}\text{(}t\text{)}$ of the body, where $m$ denotes the mass of the body as the constant of proportionality.
         
 \\ \midrule \\
 Source & --
@@ -437,7 +437,7 @@ RefBy &
 At a given point in time, velocity is defined in \hyperref[DD:positionGDD]{DD:positionGDD}
 
 \begin{displaymath}
-\symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 We also know the horizontal position that is defined in \hyperref[DD:positionXDD1]{DD:positionXDD1}
 
@@ -496,7 +496,7 @@ RefBy &
 At a given point in time, velocity is defined in \hyperref[DD:positionGDD]{DD:positionGDD}
 
 \begin{displaymath}
-\symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 We also know the vertical position that is defined in \hyperref[DD:positionYDD1]{DD:positionYDD1}
 
@@ -556,7 +556,7 @@ RefBy &
 At a given point in time, velocity is defined in \hyperref[DD:positionGDD]{DD:positionGDD}
 
 \begin{displaymath}
-\symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 We also know the horizontal position that is defined in \hyperref[DD:positionXDD2]{DD:positionXDD2}
 
@@ -611,7 +611,7 @@ RefBy &
 At a given point in time, velocity is defined in \hyperref[DD:positionGDD]{DD:positionGDD}
 
 \begin{displaymath}
-\symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 We also know the vertical position that is defined in \hyperref[DD:positionYDD2]{DD:positionYDD2}
 
@@ -667,7 +667,7 @@ RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
 Our acceleration is:
 
 \begin{displaymath}
-\symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 Earlier, we found the horizontal velocity to be
 
@@ -728,7 +728,7 @@ RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
 Our acceleration is:
 
 \begin{displaymath}
-\symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 Earlier, we found the vertical velocity to be
 
@@ -790,7 +790,7 @@ RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
 Our acceleration is:
 
 \begin{displaymath}
-\symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 Earlier, we found the horizontal velocity to be
 
@@ -847,7 +847,7 @@ RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
 Our acceleration is:
 
 \begin{displaymath}
-\symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 Earlier, we found the horizontal velocity to be
 
@@ -879,13 +879,13 @@ Units & ${\text{N}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}=-{\symbf{T}_{1}} \sin\left({θ_{1}}\right)+{\symbf{T}_{2}} \sin\left({θ_{2}}\right)
+           \symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{1}} \sin\left({θ_{1}}\right)+{\symbf{T}_{2}} \sin\left({θ_{2}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${\symbf{T}_{1}}$ is the the tension of the first object (${\text{N}}$)}
               \item{${θ_{1}}$ is the the angle of the first rod (${\text{rad}}$)}
               \item{${\symbf{T}_{2}}$ is the the tension of the second object (${\text{N}}$)}
@@ -903,7 +903,7 @@ RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
 \paragraph{Detailed derivation of force on the first object:}
 \label{GD:xForce1Deriv}
 \begin{displaymath}
-\symbf{F}=m \symbf{a}=-{\symbf{T}_{1}} \sin\left({θ_{1}}\right)+{\symbf{T}_{2}} \sin\left({θ_{2}}\right)
+\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{1}} \sin\left({θ_{1}}\right)+{\symbf{T}_{2}} \sin\left({θ_{2}}\right)
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -920,13 +920,13 @@ Units & ${\text{N}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{1}} \symbf{g}
+           \symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{1}} \symbf{g}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${\symbf{T}_{1}}$ is the the tension of the first object (${\text{N}}$)}
               \item{${θ_{1}}$ is the the angle of the first rod (${\text{rad}}$)}
               \item{${\symbf{T}_{2}}$ is the the tension of the second object (${\text{N}}$)}
@@ -946,7 +946,7 @@ RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
 \paragraph{Detailed derivation of force on the first object:}
 \label{GD:yForce1Deriv}
 \begin{displaymath}
-\symbf{F}=m \symbf{a}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{1}} \symbf{g}
+\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{1}} \symbf{g}
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -963,13 +963,13 @@ Units & ${\text{N}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}=-{\symbf{T}_{2}} \sin\left({θ_{2}}\right)
+           \symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{2}} \sin\left({θ_{2}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${\symbf{T}_{2}}$ is the the tension of the second object (${\text{N}}$)}
               \item{${θ_{2}}$ is the the angle of the second rod (${\text{rad}}$)}
               \end{symbDescription}
@@ -985,7 +985,7 @@ RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
 \paragraph{Detailed derivation of force on the second object:}
 \label{GD:xForce2Deriv}
 \begin{displaymath}
-\symbf{F}=m \symbf{a}=-{\symbf{T}_{2}} \sin\left({θ_{2}}\right)
+\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{2}} \sin\left({θ_{2}}\right)
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -1002,13 +1002,13 @@ Units & ${\text{N}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}={\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} \symbf{g}
+           \symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} \symbf{g}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${\symbf{T}_{2}}$ is the the tension of the second object (${\text{N}}$)}
               \item{${θ_{2}}$ is the the angle of the second rod (${\text{rad}}$)}
               \item{${m_{2}}$ is the the mass of the second object (${\text{kg}}$)}
@@ -1026,7 +1026,7 @@ RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
 \paragraph{Detailed derivation of force on the second object:}
 \label{GD:yForce2Deriv}
 \begin{displaymath}
-\symbf{F}=m \symbf{a}={\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} \symbf{g}
+\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} \symbf{g}
 \end{displaymath}
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
@@ -1043,20 +1043,20 @@ This section collects and defines all the data needed to build the instance mode
 Label & Velocity
         
 \\ \midrule \\
-Symbol & $\symbf{v}$
+Symbol & $\symbf{v}\text{(}t\text{)}$
          
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+           \symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\symbf{v}\text{(}t\text{)}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{p}$ is the position (${\text{m}}$)}
+              \item{$\symbf{p}\text{(}t\text{)}$ is the position (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -1245,20 +1245,20 @@ RefBy & \hyperref[GD:velocityY2]{GD:velocityY2}
 Label & Acceleration
         
 \\ \midrule \\
-Symbol & $\symbf{a}$
+Symbol & $\symbf{a}\text{(}t\text{)}$
          
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+           \symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\symbf{v}\text{(}t\text{)}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -1287,13 +1287,13 @@ Units & ${\text{N}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}
+           \symbf{F}=m \symbf{a}\text{(}t\text{)}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --

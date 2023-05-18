@@ -74,7 +74,7 @@ ${a_{\text{x}}}$ & $x$-component of acceleration & $\frac{\text{m}}{\text{s}^{2}
 \\
 ${a_{\text{y}}}$ & $y$-component of acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-$\symbf{a}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+$\symbf{a}\text{(}t\text{)}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\symbf{F}$ & Force & ${\text{N}}$
 \\
@@ -98,7 +98,7 @@ ${p_{\text{y}}}$ & $y$-component of position & ${\text{m}}$
 \\
 ${{p_{\text{y}}}^{\text{i}}}$ & $y$-component of initial position & ${\text{m}}$
 \\
-$\symbf{p}$ & Position & ${\text{m}}$
+$\symbf{p}\text{(}t\text{)}$ & Position & ${\text{m}}$
 \\
 $T$ & Period & ${\text{s}}$
 \\
@@ -110,7 +110,7 @@ ${v_{\text{x}}}$ & $x$-component of velocity & $\frac{\text{m}}{\text{s}}$
 \\
 ${v_{\text{y}}}$ & $y$-component of velocity & $\frac{\text{m}}{\text{s}}$
 \\
-$\symbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
+$\symbf{v}\text{(}t\text{)}$ & Velocity & $\frac{\text{m}}{\text{s}}$
 \\
 $α$ & Angular acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
 \\
@@ -269,7 +269,7 @@ The physical system of SglPendulum, as shown in \hyperref[Figure:sglpendulum]{Fi
 \end{figure}
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
-Given the mass and length of the rod, initial angle of the mass and the gravitational constant, the goal statements are:
+Given the mass and length of the rod, initial angle of the mass and the gravitational constant, the goal statement is:
 
 \begin{itemize}
 \item[Motion-of-the-mass:\phantomsection\label{motionMass}]{Calculate the motion of the mass.}
@@ -305,13 +305,13 @@ Label & Acceleration
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+           \symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\symbf{v}\text{(}t\text{)}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & \cite{accelerationWiki}
@@ -333,13 +333,13 @@ Label & Velocity
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+           \symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\symbf{v}\text{(}t\text{)}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{p}$ is the position (${\text{m}}$)}
+              \item{$\symbf{p}\text{(}t\text{)}$ is the position (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & \cite{velocityWiki}
@@ -361,16 +361,16 @@ Label & Newton's second law of motion
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}
+           \symbf{F}=m \symbf{a}\text{(}t\text{)}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The net force $\symbf{F}$ on a body is proportional to the acceleration $\symbf{a}$ of the body, where $m$ denotes the mass of the body as the constant of proportionality.
+Notes & The net force $\symbf{F}$ on a body is proportional to the acceleration $\symbf{a}\text{(}t\text{)}$ of the body, where $m$ denotes the mass of the body as the constant of proportionality.
         
 \\ \midrule \\
 Source & --
@@ -453,7 +453,7 @@ RefBy &
 At a given point in time, velocity may be defined as
 
 \begin{displaymath}
-\symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 We also know the horizontal position
 
@@ -512,7 +512,7 @@ RefBy &
 At a given point in time, velocity may be defined as
 
 \begin{displaymath}
-\symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 We also know the vertical position
 
@@ -572,7 +572,7 @@ RefBy &
 Our acceleration is:
 
 \begin{displaymath}
-\symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 Earlier, we found the horizontal velocity to be
 
@@ -632,7 +632,7 @@ RefBy &
 Our acceleration is:
 
 \begin{displaymath}
-\symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 Earlier, we found the vertical velocity to be
 

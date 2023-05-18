@@ -36,11 +36,11 @@ traceMIntro refs trailings = UlC $ ulcc $ Paragraph $ foldlSent [phrase purpose
 
 -- | Generates a traceability table. Takes a 'UID' for the table, a description ('Sentence'), columns ('TraceViewCat'), rows ('TraceViewCat'), and 'SystemInformation'.
 generateTraceTableView :: UID -> Sentence -> [TraceViewCat] -> [TraceViewCat] -> SystemInformation -> LabelledContent
-generateTraceTableView u _ [] _ _ = error $ "Expected non-empty list of column-view categories for traceability matrix " ++ show u
-generateTraceTableView u _ _ [] _ = error $ "Expected non-empty list of row-view categories for traceability matrix " ++ show u
+generateTraceTableView u _ [] _ _ = emptyItems u 
+generateTraceTableView u _ _ [] _ = emptyItems u
 generateTraceTableView u desc cols rows c = llcc (makeTabRef' u) $ Table
-  (EmptyS : ensureItems (show u) (traceMColHeader colf c))
-  (makeTMatrix (ensureItems (show u) $ traceMRowHeader rowf c) (traceMColumns colf rowf cdb) $ traceMReferees colf cdb)
+  (EmptyS : traceMColHeader colf c)
+  (makeTMatrix (traceMRowHeader rowf c) (traceMColumns colf rowf cdb) $ traceMReferees colf cdb)
   (showingCxnBw traceyMatrix desc) True where
     cdb = _sysinfodb c
     colf = layoutUIDs cols cdb
@@ -76,10 +76,9 @@ traceMColumns fc fr c = map ((\u -> filter (`elem` u) $ fc u) . flip traceLookup
 tableShows :: (Referable a, HasShortName a) => a -> Sentence -> Sentence
 tableShows r end = refS r +:+ S "shows the" +:+ plural dependency `S.of_` (end !.)
 
--- | Helper that makes sure the rows and columns of a traceability matrix have substance.
-ensureItems :: String -> [a] -> [a]
-ensureItems u [] = error $ "Expected non-empty matrix dimension for traceability matrix " ++ u
-ensureItems _ l = l
+-- | Helper that prints an error when traceability matrix is empty.
+emptyItems :: UID -> LabelledContent
+emptyItems u = llcc (makeTabRef' u) $ Paragraph $ S $ show u ++ " : is empty/incomplete"
 
 -- | Helper that finds the layout 'UID's of a traceability matrix.
 layoutUIDs :: [TraceViewCat] -> ChunkDB -> [UID] -> [UID]

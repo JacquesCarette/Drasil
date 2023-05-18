@@ -33,7 +33,7 @@ import Data.Drasil.Concepts.Documentation (assumption, column, constraint, corSo
   input_, limitation, model, output_, physical, physicalConstraint, physicalSystem,
   physSyst, problem, problemDescription, property, purpose, quantity, requirement,
   scope, section_, softwareConstraint, solutionCharacteristic, specification,
-  symbol_, system, theory, typUnc, uncertainty, user, value, variable, table_, problemDescription, notApp)
+  symbol_, system, theory, typUnc, uncertainty, user, value, variable, table_, problemDescription)
 import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
 import Data.Drasil.Concepts.Math (equation, parameter)
 import Data.Drasil.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
@@ -120,9 +120,12 @@ assumpF otherContents = SRS.assumpt (assumpIntro : otherContents) []
 -- | Wrapper for 'thModelIntro'. Takes the program name and other 'Contents'.
 thModF :: (Idea a) => a -> [Contents] -> Section
 thModF progName otherContents = if not (null otherContents) then
-                                  SRS.thModel (thModIntro progName : otherContents) []
+                                  SRS.thModel 
+                                    (thModIntro progName : otherContents) []
                                 else
-                                  SRS.thModel (thModIntroNoContent progName : otherContents) []
+                                  SRS.thModel 
+                                    (thModIntroNoContent progName : 
+                                    otherContents) []
 
 -- | Creates a eneralized Theoretical Model introduction given the program name.
 thModIntro :: (Idea a) => a -> Contents
@@ -130,7 +133,7 @@ thModIntro progName = foldlSP [S "This", phrase section_, S "focuses on the",
   phrase general, plural equation `S.and_` S "laws that", short progName, S "is based on"]
 
 thModIntroNoContent :: a -> Contents
-thModIntroNoContent _ = foldlSP [getAcc notApp]
+thModIntroNoContent _ = mkParagraph $ S "There are no theoretical models."
 
 -- | Creates a General Definitions section with a general introduction.
 -- Takes in relevant general definitions ('Contents'). Use empty list if none are needed.
@@ -147,8 +150,14 @@ generalDefinitionIntro _ = foldlSP [S "This", phrase section_,
                        
 -- | Similar to 'genDefnF', but for Data Definitions. It also uses 'EmptyS' if the ending 'Sentence' is not needed rather than an empty list.
 dataDefnF :: Sentence -> [Contents] -> Section
-dataDefnF endingSent otherContents = SRS.dataDefn
-  (dataDefinitionIntro endingSent : otherContents) []
+dataDefnF endingSent otherContents = if not (null otherContents) then 
+                                      SRS.dataDefn 
+                                        (dataDefinitionIntro endingSent : 
+                                        otherContents) []
+                                     else
+                                      SRS.dataDefn 
+                                        (dataDefnIntroNoContent endingSent : 
+                                        otherContents) []
 
 -- | Creates a general Data Definition introduction. Appends the given 'Sentence' to the end.
 dataDefinitionIntro :: Sentence -> Contents
@@ -156,12 +165,24 @@ dataDefinitionIntro closingSent = mkParagraph (foldlSent [S "This", phrase secti
     S "collects and defines all the", plural datum, 
     S "needed to build the", plural inModel] +:+ closingSent)
 
+dataDefnIntroNoContent :: Sentence -> Contents
+dataDefnIntroNoContent _ = mkParagraph $ S "There are no data definitions."
+
 -- wrappers for inModelIntro. Use inModelF' if genDef are not needed
 -- | Constructor for Instance Models. Takes the problem description,
 -- data definition, theoretical model, general definition, and any other relevant contents.
 inModelF :: Section -> Section -> Section -> Section -> [Contents] -> Section
-inModelF probDes datDef theMod genDef otherContents = SRS.inModel 
-  (inModelIntro probDes datDef theMod genDef : otherContents) []
+inModelF probDes datDef theMod genDef otherContents = if not (null otherContents) then 
+                                                        SRS.inModel 
+                                                          (inModelIntro probDes 
+                                                          datDef theMod genDef 
+                                                          : otherContents) []
+                                                      else
+                                                        SRS.inModel 
+                                                          (inModelIntroNoContent 
+                                                          probDes datDef theMod 
+                                                          genDef : 
+                                                          otherContents) []
 
 -- | Creates a general Instance Model introduction. Requires four references to function. Nothing can be input into the last reference if only three tables are present.
 inModelIntro :: Section -> Section -> Section -> Section -> Contents
@@ -171,6 +192,9 @@ inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
   plural symbol_, S "defined in the", namedRef r2 $ plural dataDefn, S "to replace the abstract",
   pluralNP $ symbol_ `inThePP` model, S "identified in", namedRef r3 (plural thModel) `S.and_`
   namedRef r4 (plural genDefn)]
+
+inModelIntroNoContent :: Section -> Section -> Section -> Section -> Contents
+inModelIntroNoContent _ _ _ _ = mkParagraph $ S "There are no instance models."
 
 -- | Constructor for Data Constraints section. Takes a trailing 'Sentence' (use 'EmptyS' if none) and data constraints.
 datConF :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 

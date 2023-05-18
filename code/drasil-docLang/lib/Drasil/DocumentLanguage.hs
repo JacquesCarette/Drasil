@@ -30,7 +30,7 @@ import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.Sections.TableOfContents (toToC, findToC)
 import Drasil.Sections.TableOfSymbols (table, tsIntro)
 import Drasil.Sections.TableOfUnits (tOfUnitSIName, tuIntro, defaultTUI)
-import qualified Drasil.DocLang.SRS as SRS (appendix, genDefn,
+import qualified Drasil.DocLang.SRS as SRS (appendix,
   genSysDes, likeChg, unlikeChg, reference, solCharSpec,
   stakeholder, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol, refMat,
   tOfAbbAcc)

@@ -2,7 +2,7 @@
 
 module GOOL.Drasil.ClassInterface (
   -- Types
-  Label, Library, GSProgram, SFile, MSBody, MSBlock, VSType, SVariable, SValue, 
+  Label, Library, GSProgram, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
   VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass, FSModule,
   NamedArgs, Initializers, MixedCall, MixedCtorCall, PosCall, PosCtorCall,
   -- Typeclasses
@@ -19,14 +19,13 @@ module GOOL.Drasil.ClassInterface (
   listSlice, listIndexExists, at, StatementSym(..), AssignStatement(..), (&=),
   assignToListIndex, DeclStatement(..), objDecNewNoParams,
   extObjDecNewNoParams, IOStatement(..), StringStatement(..),
-  Vectorized, vectorized, unvectorize, vectorizedScale, vectorizedAdd,
-  VectorStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), StatePattern(..), initState, changeState,
-  ObserverPattern(..), observerListName, initObserverList, addObserver,
-  StrategyPattern(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..),
-  MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
-  StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..),
-  convType
+  VectorStatement(..), setVectorized, FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), StatePattern(..), initState,
+  changeState, ObserverPattern(..), observerListName, initObserverList,
+  addObserver, StrategyPattern(..), ifNoElse, switchAsIf, ScopeSym(..),
+  ParameterSym(..), MethodSym(..), privMethod, pubMethod, initializer,
+  nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar,
+  ClassSym(..), ModuleSym(..), convType
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
@@ -433,33 +432,23 @@ class (VariableSym r, StatementSym r) => StringStatement r where
   stringListVals  :: [SVariable r] -> SValue r -> MSStatement r
   stringListLists :: [SVariable r] -> SValue r -> MSStatement r
 
-data Vectorized r
-  = Vectorized (SValue r)
-  | Vectorize (SValue r -> SValue r) (Vectorized r)
-  | Vectorize2 (SValue r -> SValue r -> SValue r) (Vectorized r) (Vectorized r)
+type SVectorized a = VS (a (Vectorized a VS))
 
-vectorized :: SValue r -> Vectorized r
-vectorized = Vectorized
+class (VectorExpression r, ControlStatement r, Literal r, VariableValue r) => VectorStatement r where
+  type Vectorized r (s :: * -> *)
+  unvectorize :: SValue r -> SVectorized r -> SValue r
+  vectorized :: SValue r -> SVectorized r
+  vectorizedScale :: SValue r -> SVectorized r -> SVectorized r
+  vectorizedAdd :: SVectorized r -> SVectorized r -> SVectorized r
 
-vectorize :: (SValue r -> SValue r) -> Vectorized r -> Vectorized r
-vectorize = Vectorize
-
-vectorize2 :: (SValue r -> SValue r -> SValue r) -> Vectorized r -> Vectorized r -> Vectorized r
-vectorize2 = Vectorize2
-
-unvectorize :: VectorExpression r => Vectorized r -> SValue r -> SValue r
-unvectorize (Vectorized v) i = vectorIndex v i
-unvectorize (Vectorize op v) i = op (unvectorize v i)
-unvectorize (Vectorize2 op v1 v2) i = op (unvectorize v1 i) (unvectorize v2 i)
-
-vectorizedScale :: NumericExpression r => SValue r -> Vectorized r -> Vectorized r
-vectorizedScale k = vectorize (k #*)
-
-vectorizedAdd :: NumericExpression r => Vectorized r -> Vectorized r -> Vectorized r
-vectorizedAdd = vectorize2 (#+)
-
-class (VectorExpression r, ControlStatement r) => VectorStatement r where
-  performVectorized :: SValue r -> Vectorized r -> MSStatement r
+-- FIXME: We should really be able to get a "fresh" variable name to use for
+-- the loop variable
+setVectorized :: VectorStatement r => SValue r -> SVectorized r -> MSStatement r
+setVectorized v e = forRange i (litInt 0) (vectorDim v) (litInt 1) $ body
+  [block
+    [valStmt $ vectorSet v (valueOf i) (unvectorize (valueOf i) e)]]
+  where
+    i = var "i" int
 
 type InOutCall r = Label -> [SValue r] -> [SVariable r] -> [SVariable r] -> 
   MSStatement r

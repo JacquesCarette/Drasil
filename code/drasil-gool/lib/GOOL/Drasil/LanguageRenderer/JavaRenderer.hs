@@ -61,10 +61,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  increment, objDecNew, print, performVectorized, closeFile, returnStmt,
-  valStmt, comment, throw, ifCond, tryCatch, construct, param, method,
-  getMethod, setMethod, function, buildClass, implementingClass,
-  commentedClass, modFromData, fileDoc, fileFromData)
+  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
+  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
+  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
+  fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int, 
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
@@ -85,7 +85,8 @@ import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists,
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
-  progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
+  progD, TypeData(..), td, ValData(..), vd, VarData(..), vard, VectorizedData,
+  vectorizedD, vectorizeD, vectorize2D, unvectorizeD)
 import GOOL.Drasil.CodeAnalysis (Exception(..), ExceptionType(..), exception, 
   stdExc, HasException(..))
 import GOOL.Drasil.Helpers (emptyIfNull, toCode, toState, onCodeValue, 
@@ -98,6 +99,7 @@ import GOOL.Drasil.State (VS, lensGStoFS, lensMStoFS, lensMStoVS, lensVStoFS,
   isOutputsDeclared, getExceptions, getMethodExcMap, addExceptions)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
+import Control.Applicative (liftA2)
 import Control.Lens.Zoom (zoom)
 import Control.Monad (join)
 import Control.Monad.State (modify)
@@ -546,7 +548,11 @@ instance StringStatement JavaCode where
   stringListLists = M.stringListLists
 
 instance VectorStatement JavaCode where
-  performVectorized = G.performVectorized
+  type Vectorized JavaCode s = VectorizedData s
+  unvectorize i = (>>= fmap JC . unvectorizeD (fmap unJC . flip vectorIndex i . fmap JC) . unJC)
+  vectorized = toState . toCode . vectorizedD . fmap unJC
+  vectorizedScale k = fmap $ fmap $ vectorizeD (fmap unJC . (k #*) . fmap JC)
+  vectorizedAdd = liftA2 $ liftA2 $ vectorize2D (\v1 v2 -> fmap unJC $ fmap JC v1 #+ fmap JC v2)
 
 instance FuncAppStatement JavaCode where
   inOutCall = jInOutCall funcApp

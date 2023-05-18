@@ -54,17 +54,17 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkVal, mkStateVar, mkVar, VSOp, mkOp, unOpPrec, powerPrec, 
   unExpr, unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, 
-  cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
-  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar,
-  arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList, 
-  objAccess, objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, 
-  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess, 
-  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
-  subAssign, increment, objDecNew, performVectorized, print, closeFile,
-  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param,
-  method, getMethod, setMethod, function, buildClass, implementingClass,
-  commentedClass, modFromData, fileDoc, fileFromData)
+  multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
+  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
+  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
+  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
+  objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
+  lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
+  setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
+  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
+  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
+  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
+  fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, funcType, buildModule, litArray, 
@@ -81,7 +81,8 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), Binding(..), onBinding,
   BindData(..), bd, FileType(..), FileData(..), fileD, FuncData(..), fd, 
   ModData(..), md, updateMod, OpData(..), ParamData(..), pd, ProgData(..), 
   progD, emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd, 
-  VarData(..), vard)
+  VarData(..), vard, VectorizedData, vectorizedD, vectorizeD, vectorize2D,
+  unvectorizeD)
 import GOOL.Drasil.Classes (Pair(..))
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, 
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
@@ -99,6 +100,7 @@ import GOOL.Drasil.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   addIter, getIter, resetIter)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod,max)
+import Control.Applicative (liftA2)
 import Control.Lens.Zoom (zoom)
 import Control.Monad (join)
 import Control.Monad.State (State, modify)
@@ -356,9 +358,9 @@ instance (Pair p) => Comparison (p CppSrcCode CppHdrCode) where
   (?!=) = pair2 (?!=) (?!=)
 
 instance (Pair p) => VectorExpression (p CppSrcCode CppHdrCode) where
-  vectorDim = listSize
-  vectorIndex = listAccess
-  vectorSet = listSet
+  vectorDim = pair1 vectorDim vectorDim
+  vectorIndex = pair2 vectorIndex vectorIndex
+  vectorSet = pair3 vectorSet vectorSet
 
 instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
   inlineIf = pair3 inlineIf inlineIf
@@ -558,7 +560,11 @@ instance (Pair p) => StringStatement (p CppSrcCode CppHdrCode) where
     (map (zoom lensMStoVS) lsts) (zoom lensMStoVS sl)
 
 instance (Pair p) => VectorStatement (p CppSrcCode CppHdrCode) where
-  performVectorized = G.performVectorized
+  type Vectorized (p CppSrcCode CppHdrCode) s = VectorizedData s
+  unvectorize = pair2 unvectorize unvectorize
+  vectorized = pair1 vectorized vectorized
+  vectorizedScale = pair2 vectorizedScale vectorizedScale
+  vectorizedAdd = pair2 vectorizedAdd vectorizedAdd
 
 instance (Pair p) => FuncAppStatement (p CppSrcCode CppHdrCode) where
   inOutCall n is os bs = pair3Lists (inOutCall n) (inOutCall n) 
@@ -1436,7 +1442,11 @@ instance StringStatement CppSrcCode where
   stringListLists = M.stringListLists
 
 instance VectorStatement CppSrcCode where
-  performVectorized = G.performVectorized
+  type Vectorized CppSrcCode s = VectorizedData s
+  unvectorize i = (>>= fmap CPPSC . unvectorizeD (fmap unCPPSC . flip vectorIndex i . fmap CPPSC) . unCPPSC)
+  vectorized = toState . toCode . vectorizedD . fmap unCPPSC
+  vectorizedScale k = fmap $ fmap $ vectorizeD (fmap unCPPSC . (k #*) . fmap CPPSC)
+  vectorizedAdd = liftA2 $ liftA2 $ vectorize2D (\v1 v2 -> fmap unCPPSC $ fmap CPPSC v1 #+ fmap CPPSC v2)
 
 instance FuncAppStatement CppSrcCode where
   inOutCall = cppInOutCall funcApp
@@ -2047,7 +2057,11 @@ instance StringStatement CppHdrCode where
   stringListLists _ _ = emptyStmt
 
 instance VectorStatement CppHdrCode where
-  performVectorized = G.performVectorized
+  type Vectorized CppHdrCode s = VectorizedData s
+  unvectorize _ _ = mkStateVal void empty
+  vectorized = toState . toCode . vectorizedD . fmap unCPPHC
+  vectorizedScale k = fmap $ fmap $ vectorizeD (fmap unCPPHC . (k #*) . fmap CPPHC)
+  vectorizedAdd = liftA2 $ liftA2 $ vectorize2D (\v1 v2 -> fmap unCPPHC $ fmap CPPHC v1 #+ fmap CPPHC v2)
 
 instance FuncAppStatement CppHdrCode where
   inOutCall _ _ _ _ = emptyStmt

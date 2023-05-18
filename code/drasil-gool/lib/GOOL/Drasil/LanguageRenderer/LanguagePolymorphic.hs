@@ -10,34 +10,33 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd, 
   listAppend, listAccess, listSet, getFunc, setFunc, 
   listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment, 
-  objDecNew, print, performVectorized, closeFile, returnStmt, valStmt, comment,
-  throw, ifCond, tryCatch, construct, param, method, getMethod, setMethod,
-  initStmts, function, docFuncRepr, docFunc, buildClass, implementingClass,
-  docClass, commentedClass, modFromData, fileDoc, docMod
+  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
+  tryCatch, construct, param, method, getMethod, setMethod, initStmts,
+  function, docFuncRepr, docFunc, buildClass, implementingClass, docClass,
+  commentedClass, modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
-  VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, 
-  CSStateVar, SClass, FSModule, NamedArgs, Initializers, MixedCall, 
-  MixedCtorCall, FileSym(File), BodySym(Body), bodyStatements, oneLiner, 
-  BlockSym(Block), PermanenceSym(..), TypeSym(Type), 
-  TypeElim(getType, getTypeString), VariableSym(Variable), 
-  VariableElim(variableName, variableType), ValueSym(Value, valueType), 
-  NumericExpression((#+), (#-), (#*), (#/), sin, cos, tan), Comparison(..),
-  VectorExpression(..), funcApp, newObj, objMethodCallNoParams, ($.),
+  VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod,
+  CSStateVar, SClass, FSModule, NamedArgs, Initializers, MixedCall,
+  MixedCtorCall, FileSym(File), BodySym(Body), bodyStatements, oneLiner,
+  BlockSym(Block), PermanenceSym(..), TypeSym(Type), TypeElim(getType,
+  getTypeString), VariableSym(Variable), VariableElim(variableName,
+  variableType), ValueSym(Value, valueType), NumericExpression((#-), (#/), sin,
+  cos, tan), Comparison(..), funcApp, newObj, objMethodCallNoParams, ($.),
   StatementSym(multi), AssignStatement((&++)), (&=), IOStatement(printStr,
-  printStrLn, printFile, printFileStr, printFileStrLn), Vectorized,
-  unvectorize, ifNoElse, ScopeSym(..), ModuleSym(Module), convType)
-import qualified GOOL.Drasil.ClassInterface as S (BodySym(body),
-  BlockSym(block), TypeSym(int, double, char, string, listType, arrayType,
-  listInnerType, funcType, void), VariableSym(var, objVarSelf), Literal(litInt,
-  litFloat, litDouble, litString), VariableValue(valueOf), FunctionSym(func),
+  printStrLn, printFile, printFileStr, printFileStrLn), ifNoElse, ScopeSym(..),
+  ModuleSym(Module), convType)
+import qualified GOOL.Drasil.ClassInterface as S (
+  TypeSym(int, double, char, string, listType, arrayType, listInnerType,
+  funcType, void), VariableSym(var, objVarSelf), Literal(litInt, litFloat,
+  litDouble, litString), VariableValue(valueOf), FunctionSym(func),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
-  IOStatement(print), ControlStatement(returnStmt, for, forRange),
-  ParameterSym(param), MethodSym(method))
+  IOStatement(print), ControlStatement(returnStmt, for), ParameterSym(param),
+  MethodSym(method))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(commentedMod),  
   RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
   RenderFunction(funcFromData), FunctionElim(functionType), 
@@ -337,15 +336,6 @@ increment vr' v'= do
 
 objDecNew :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
 objDecNew v vs = S.varDecDef v (newObj (onStateValue variableType v) vs)
-
--- FIXME: We should really be able to get a "fresh" variable name to use for
--- the loop variable
-performVectorized :: RenderSym r => SValue r -> Vectorized r -> MSStatement r
-performVectorized v e = S.forRange i (S.litInt 0) (vectorDim v) (S.litInt 1) $ S.body
-  [S.block
-    [S.valStmt $ vectorSet v (S.valueOf i) (unvectorize e (S.valueOf i))]]
-  where
-    i = S.var "i" S.int
 
 printList :: (RenderSym r) => Integer -> SValue r -> (SValue r -> MSStatement r)
   -> (String -> MSStatement r) -> (String -> MSStatement r) -> MSStatement r

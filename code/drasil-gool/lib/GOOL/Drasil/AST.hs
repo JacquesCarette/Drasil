@@ -6,7 +6,8 @@ module GOOL.Drasil.AST (Terminator(..), ScopeTag(..), QualifiedName, qualName,
   paramName, updateParam, ProgData(progName, progMods), progD, emptyProg, 
   StateVarData(getStVarScp, stVar, destructSts), svd, 
   TypeData(cType, typeString, typeDoc), td, ValData(valPrec, valType, val), 
-  vd, updateValDoc, VarData(varBind, varName, varType, varDoc), vard
+  vd, updateValDoc, VarData(varBind, varName, varType, varDoc), vard,
+  VectorizedData, vectorizedD, vectorizeD, vectorize2D, unvectorizeD
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -141,3 +142,23 @@ data VarData = VarD {varBind :: Binding, varName :: String,
 
 vard :: Binding -> String -> TypeData -> Doc -> VarData
 vard = VarD
+
+-- Used as the underlying data type for Vectorized in all renderers
+data VectorizedData s
+  = Vectorized (s ValData)
+  | Vectorize (s ValData -> s ValData) (VectorizedData s)
+  | Vectorize2 (s ValData -> s ValData -> s ValData) (VectorizedData s) (VectorizedData s)
+
+vectorizedD :: s ValData -> VectorizedData s
+vectorizedD = Vectorized
+
+vectorizeD :: (s ValData -> s ValData) -> VectorizedData s -> VectorizedData s
+vectorizeD = Vectorize
+
+vectorize2D :: (s ValData -> s ValData -> s ValData) -> VectorizedData s -> VectorizedData s -> VectorizedData s
+vectorize2D = Vectorize2
+
+unvectorizeD :: (s ValData -> s ValData) -> VectorizedData s -> s ValData
+unvectorizeD index (Vectorized v) = index v
+unvectorizeD index (Vectorize op v) = op (unvectorizeD index v)
+unvectorizeD index (Vectorize2 op v1 v2) = unvectorizeD index v1 `op` unvectorizeD index v2

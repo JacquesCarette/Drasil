@@ -54,18 +54,17 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
   mkVal, VSOp, unOpPrec, powerPrec, unExpr, unExpr', typeUnExpr, binExpr, 
   binExpr', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, 
-  negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
-  lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, 
-  objVar, arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, 
-  argsList, objAccess, objMethodCall, call, funcAppMixedArgs, 
-  selfFuncAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAdd, 
-  listAppend, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
-  loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print,
-  performVectorized, returnStmt, valStmt, comment, throw, ifCond, tryCatch,
-  construct, param, method, getMethod, setMethod, initStmts, function, docFunc,
-  buildClass, implementingClass, docClass, commentedClass, modFromData,
-  fileDoc, docMod, fileFromData)
+  multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
+  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
+  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
+  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
+  objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
+  lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
+  setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
+  increment, objDecNew, print, returnStmt, valStmt, comment, throw, ifCond,
+  tryCatch, construct, param, method, getMethod, setMethod, initStmts,
+  function, docFunc, buildClass, implementingClass, docClass, commentedClass,
+  modFromData, fileDoc, docMod, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (classVar, 
   objVarSelf, intClass, buildModule, bindingError, extFuncAppMixedArgs, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, litArray, 
@@ -82,7 +81,8 @@ import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement1,
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
-  progD, TypeData(..), td, ValData(..), vd, Binding(..), VarData(..), vard)
+  progD, TypeData(..), td, ValData(..), vd, Binding(..), VarData(..), vard,
+  VectorizedData, vectorizedD, vectorizeD, vectorize2D, unvectorizeD)
 import GOOL.Drasil.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, 
@@ -93,6 +93,7 @@ import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getLineIndex, getWordIndex, resetIndices)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
+import Control.Applicative (liftA2)
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 import Data.Composition ((.:))
@@ -552,7 +553,11 @@ instance StringStatement SwiftCode where
   stringListLists = M.stringListLists
 
 instance VectorStatement SwiftCode where
-  performVectorized = G.performVectorized
+  type Vectorized SwiftCode s = VectorizedData s
+  unvectorize i = (>>= fmap SC . unvectorizeD (fmap unSC . flip vectorIndex i . fmap SC) . unSC)
+  vectorized = toState . toCode . vectorizedD . fmap unSC
+  vectorizedScale k = fmap $ fmap $ vectorizeD (fmap unSC . (k #*) . fmap SC)
+  vectorizedAdd = liftA2 $ liftA2 $ vectorize2D (\v1 v2 -> fmap unSC $ fmap SC v1 #+ fmap SC v2)
 
 instance FuncAppStatement SwiftCode where
   inOutCall = CP.inOutCall funcApp

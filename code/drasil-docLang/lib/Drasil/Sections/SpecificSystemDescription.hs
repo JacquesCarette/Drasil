@@ -119,13 +119,9 @@ assumpF otherContents = SRS.assumpt (assumpIntro : otherContents) []
 
 -- | Wrapper for 'thModelIntro'. Takes the program name and other 'Contents'.
 thModF :: (Idea a) => a -> [Contents] -> Section
-thModF progName otherContents = if not (null otherContents) then
-                                  SRS.thModel 
-                                    (thModIntro progName : otherContents) []
-                                else
-                                  SRS.thModel 
-                                    (thModIntroNoContent progName : 
-                                    otherContents) []
+thModF progName []            = SRS.thModel [thModIntroNoContent progName] []
+thModF progName otherContents = SRS.thModel (thModIntro progName : 
+                                              otherContents) []
 
 -- | Creates a eneralized Theoretical Model introduction given the program name.
 thModIntro :: (Idea a) => a -> Contents
@@ -150,14 +146,9 @@ generalDefinitionIntro _ = foldlSP [S "This", phrase section_,
                        
 -- | Similar to 'genDefnF', but for Data Definitions. It also uses 'EmptyS' if the ending 'Sentence' is not needed rather than an empty list.
 dataDefnF :: Sentence -> [Contents] -> Section
-dataDefnF endingSent otherContents = if not (null otherContents) then 
-                                      SRS.dataDefn 
-                                        (dataDefinitionIntro endingSent : 
-                                        otherContents) []
-                                     else
-                                      SRS.dataDefn 
-                                        (dataDefnIntroNoContent endingSent : 
-                                        otherContents) []
+dataDefnF endingSent []            = SRS.dataDefn [dataDefnIntroNoContent endingSent] []
+dataDefnF endingSent otherContents = SRS.dataDefn (dataDefinitionIntro 
+                                        endingSent : otherContents) []
 
 -- | Creates a general Data Definition introduction. Appends the given 'Sentence' to the end.
 dataDefinitionIntro :: Sentence -> Contents
@@ -172,17 +163,15 @@ dataDefnIntroNoContent _ = mkParagraph $ S "There are no data definitions."
 -- | Constructor for Instance Models. Takes the problem description,
 -- data definition, theoretical model, general definition, and any other relevant contents.
 inModelF :: Section -> Section -> Section -> Section -> [Contents] -> Section
-inModelF probDes datDef theMod genDef otherContents = if not (null otherContents) then 
-                                                        SRS.inModel 
-                                                          (inModelIntro probDes 
-                                                          datDef theMod genDef 
-                                                          : otherContents) []
-                                                      else
-                                                        SRS.inModel 
-                                                          (inModelIntroNoContent 
-                                                          probDes datDef theMod 
-                                                          genDef : 
-                                                          otherContents) []
+inModelF probDes datDef theMod genDef []            = SRS.inModel 
+                                                        [inModelIntroNoContent 
+                                                        probDes datDef theMod 
+                                                        genDef] []
+inModelF probDes datDef theMod genDef otherContents = SRS.inModel (inModelIntro 
+                                                        probDes datDef theMod 
+                                                        genDef : otherContents) 
+                                                        []
+                                                        
 
 -- | Creates a general Instance Model introduction. Requires four references to function. Nothing can be input into the last reference if only three tables are present.
 inModelIntro :: Section -> Section -> Section -> Section -> Contents

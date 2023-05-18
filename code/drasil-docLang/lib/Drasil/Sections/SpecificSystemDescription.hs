@@ -119,7 +119,7 @@ assumpF otherContents = SRS.assumpt (assumpIntro : otherContents) []
 
 -- | Wrapper for 'thModelIntro'. Takes the program name and other 'Contents'.
 thModF :: (Idea a) => a -> [Contents] -> Section
-thModF progName []            = SRS.thModel [thModIntroNoContent progName] []
+thModF _        []                   = SRS.thModel [thModIntroNoContent] []
 thModF progName otherContents = SRS.thModel (thModIntro progName : 
                                               otherContents) []
 
@@ -128,8 +128,8 @@ thModIntro :: (Idea a) => a -> Contents
 thModIntro progName = foldlSP [S "This", phrase section_, S "focuses on the",
   phrase general, plural equation `S.and_` S "laws that", short progName, S "is based on"]
 
-thModIntroNoContent :: a -> Contents
-thModIntroNoContent _ = mkParagraph $ S "There are no theoretical models."
+thModIntroNoContent :: Contents
+thModIntroNoContent = mkParagraph $ S "There are no theoretical models."
 
 -- | Creates a General Definitions section with a general introduction.
 -- Takes in relevant general definitions ('Contents'). Use empty list if none are needed.
@@ -146,7 +146,7 @@ generalDefinitionIntro _ = foldlSP [S "This", phrase section_,
                        
 -- | Similar to 'genDefnF', but for Data Definitions. It also uses 'EmptyS' if the ending 'Sentence' is not needed rather than an empty list.
 dataDefnF :: Sentence -> [Contents] -> Section
-dataDefnF endingSent []            = SRS.dataDefn [dataDefnIntroNoContent endingSent] []
+dataDefnF _          []            = SRS.dataDefn [dataDefnIntroNoContent] []
 dataDefnF endingSent otherContents = SRS.dataDefn (dataDefinitionIntro 
                                         endingSent : otherContents) []
 
@@ -156,17 +156,15 @@ dataDefinitionIntro closingSent = mkParagraph (foldlSent [S "This", phrase secti
     S "collects and defines all the", plural datum, 
     S "needed to build the", plural inModel] +:+ closingSent)
 
-dataDefnIntroNoContent :: Sentence -> Contents
-dataDefnIntroNoContent _ = mkParagraph $ S "There are no data definitions."
+dataDefnIntroNoContent :: Contents
+dataDefnIntroNoContent = mkParagraph $ S "There are no data definitions."
 
 -- wrappers for inModelIntro. Use inModelF' if genDef are not needed
 -- | Constructor for Instance Models. Takes the problem description,
 -- data definition, theoretical model, general definition, and any other relevant contents.
 inModelF :: Section -> Section -> Section -> Section -> [Contents] -> Section
-inModelF probDes datDef theMod genDef []            = SRS.inModel 
-                                                        [inModelIntroNoContent 
-                                                        probDes datDef theMod 
-                                                        genDef] []
+inModelF _       _      _      _      []            = SRS.inModel 
+                                                        [inModelIntroNoContent] []
 inModelF probDes datDef theMod genDef otherContents = SRS.inModel (inModelIntro 
                                                         probDes datDef theMod 
                                                         genDef : otherContents) 
@@ -182,8 +180,8 @@ inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
   pluralNP $ symbol_ `inThePP` model, S "identified in", namedRef r3 (plural thModel) `S.and_`
   namedRef r4 (plural genDefn)]
 
-inModelIntroNoContent :: Section -> Section -> Section -> Section -> Contents
-inModelIntroNoContent _ _ _ _ = mkParagraph $ S "There are no instance models."
+inModelIntroNoContent :: Contents
+inModelIntroNoContent = mkParagraph $ S "There are no instance models."
 
 -- | Constructor for Data Constraints section. Takes a trailing 'Sentence' (use 'EmptyS' if none) and data constraints.
 datConF :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 

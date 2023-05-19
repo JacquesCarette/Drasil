@@ -297,7 +297,7 @@ helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a
     refby sent   = sParen $ S "RefBy:" +:+. sent
 
 -- | Section stubs for implicit referencing of different models and definitions.
-tmStub, ddStub, imStub, pdStub, gdStub :: Section
+tmStub, ddStub, gdStub, imStub, pdStub :: Section
 tmStub = SRS.thModel   [] []
 ddStub = SRS.dataDefn  [] []
 gdStub = SRS.genDefn   [] []

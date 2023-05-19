@@ -9,7 +9,7 @@ import Language.Drasil
 import Drasil.SRSDocument
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Data.Drasil.Concepts.Documentation(doccon, doccon')
+import Data.Drasil.Concepts.Documentation (doccon, doccon')
 import Data.Drasil.Concepts.Software (errMsg, program)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
@@ -34,7 +34,7 @@ mkSRS = [SSDSec $ SSDProg [
 
 si :: SystemInformation
 si = SI {
-  _sys         = template,
+  _sys         = progName,
   _kind        = Doc.srs,
   _authors     = [authorName],
   _background  = [],
@@ -55,7 +55,7 @@ si = SI {
 }
 
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict]) (nw template : [nw errMsg, nw program] ++ 
+symbMap = cdb ([] :: [QuantityDict]) (nw progName : [nw errMsg, nw program] ++ 
   map nw doccon ++ map nw doccon') ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
@@ -71,8 +71,8 @@ refDB :: ReferenceDB
 refDB = rdb [] []
 
 -- MOVE TO CONCEPTS
-template :: CI
-template = commonIdeaWithDict "templateName" (pn "Template") "Template" []
+progName :: CI
+progName = commonIdeaWithDict "progName" (pn "ProgName") "ProgName" []
 
 -- MOVE TO DATA.PEOPLE
 authorName :: Person

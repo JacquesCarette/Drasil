@@ -36,12 +36,10 @@ traceMIntro refs trailings = UlC $ ulcc $ Paragraph $ foldlSent [phrase purpose
 
 -- | Generates a traceability table. Takes a 'UID' for the table, a description ('Sentence'), columns ('TraceViewCat'), rows ('TraceViewCat'), and 'SystemInformation'.
 generateTraceTableView :: UID -> Sentence -> [TraceViewCat] -> [TraceViewCat] -> SystemInformation -> LabelledContent
-generateTraceTableView u _ [] _ _ = emptyItems u 
-generateTraceTableView u _ _ [] _ = emptyItems u
-generateTraceTableView u desc cols rows c = llcc (makeTabRef' u) $ Table
-  (EmptyS : traceMColHeader colf c)
-  (makeTMatrix (traceMRowHeader rowf c) (traceMColumns colf rowf cdb) $ traceMReferees colf cdb)
-  (showingCxnBw traceyMatrix desc) True where
+generateTraceTableView u desc cols rows c = llcc (makeTabRef' u) $ 
+  ensureItems u (traceMColHeader colf c) (traceMRowHeader rowf c) 
+  (traceMColumns colf rowf cdb) (traceMReferees colf cdb) (showingCxnBw traceyMatrix desc)
+    where
     cdb = _sysinfodb c
     colf = layoutUIDs cols cdb
     rowf = layoutUIDs rows cdb
@@ -76,9 +74,17 @@ traceMColumns fc fr c = map ((\u -> filter (`elem` u) $ fc u) . flip traceLookup
 tableShows :: (Referable a, HasShortName a) => a -> Sentence -> Sentence
 tableShows r end = refS r +:+ S "shows the" +:+ plural dependency `S.of_` (end !.)
 
--- | Helper that prints an error when traceability matrix is empty.
-emptyItems :: UID -> LabelledContent
-emptyItems u = llcc (makeTabRef' u) $ Paragraph $ S $ show u ++ " : is empty/incomplete"
+-- | Helper that checks if any dimention of the traceability matrix is empty.
+ensureItems :: UID -> [Sentence] -> [Sentence] -> [[UID]] -> [UID] -> Sentence -> RawContent
+ensureItems u [] [] _ _ _ = mkError u ":is empty"
+ensureItems u [] _ _ _ _  = mkError u ":has no columns"
+ensureItems u _ [] _ _ _  = mkError u ":has no rows"
+ensureItems _ colh rowh traceColumns traceReferees showCxnBw = Table (EmptyS : colh)
+  (makeTMatrix rowh traceColumns traceReferees) showCxnBw True
+
+-- | Helper to construct error message
+mkError :: UID -> String -> RawContent
+mkError u m = Paragraph $ S $ show u ++ m
 
 -- | Helper that finds the layout 'UID's of a traceability matrix.
 layoutUIDs :: [TraceViewCat] -> ChunkDB -> [UID] -> [UID]

@@ -12,16 +12,17 @@ import Utils.Drasil (blank, indent, indentList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
-  VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, NamedArgs, OOProg, 
-  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
-  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), 
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..), 
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
-  BooleanExpression(..), Comparison(..), VectorExpression(..),
-  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, InternalValueExp(..),
-  objMethodCall, FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), VectorStatement(..), FuncAppStatement(..),
+  VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, NamedArgs, OOProg,
+  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements,
+  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  selfFuncApp, extFuncApp, InternalValueExp(..), objMethodCall,
+  FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), VectorSym(..),
+  VectorType(..), VectorDecl(..), VectorValue(..), VectorExpression(..),
+  VectorAssign(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), switchAsIf, StatePattern(..),
   ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
   MethodSym(..), pubMethod, StateVarSym(..), ClassSym(..), ModuleSym(..))
@@ -61,10 +62,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
-  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
-  fileFromData)
+  vecAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt,
+  comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
+  setMethod, function, buildClass, implementingClass, commentedClass,
+  modFromData, fileDoc, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, funcType, buildModule, litArray, 
@@ -78,11 +79,11 @@ import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float,
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (runStrategy, 
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), Binding(..), onBinding, 
-  BindData(..), bd, FileType(..), FileData(..), fileD, FuncData(..), fd, 
-  ModData(..), md, updateMod, OpData(..), ParamData(..), pd, ProgData(..), 
-  progD, emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd, 
-  VarData(..), vard, VectorizedData, vectorizedD, vectorizeD, vectorize2D,
-  unvectorizeD)
+  BindData(..), bd, FileType(..), FileData(..), fileD, FuncData(..), fd,
+  ModData(..), md, updateMod, OpData(..), ParamData(..), pd, ProgData(..),
+  progD, emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd,
+  VarData(..), vard, ArrayVector, arrayVector, vectorize, vectorize2,
+  arrayVectorIndex)
 import GOOL.Drasil.Classes (Pair(..))
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, 
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
@@ -206,7 +207,6 @@ instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   outfile = on2StateValues pair outfile outfile
   listType = pair1 listType listType
   arrayType = pair1 arrayType arrayType
-  vectorType = pair1 vectorType vectorType
   listInnerType = pair1 listInnerType listInnerType
   obj t = on2StateValues pair (obj t) (obj t)
   funcType = pair1List1Val funcType funcType
@@ -357,11 +357,6 @@ instance (Pair p) => Comparison (p CppSrcCode CppHdrCode) where
   (?==) = pair2 (?==) (?==)
   (?!=) = pair2 (?!=) (?!=)
 
-instance (Pair p) => VectorExpression (p CppSrcCode CppHdrCode) where
-  vectorDim = pair1 vectorDim vectorDim
-  vectorIndex = pair2 vectorIndex vectorIndex
-  vectorSet = pair3 vectorSet vectorSet
-
 instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
   inlineIf = pair3 inlineIf inlineIf
 
@@ -446,6 +441,28 @@ instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where
   listAccessFunc = pair2 listAccessFunc listAccessFunc
   listSetFunc = pair3 listSetFunc listSetFunc
 
+instance VectorSym (p CppSrcCode CppHdrCode) where
+  type Vector (p CppSrcCode CppHdrCode) = ArrayVector VS
+
+instance Pair p => VectorType (p CppSrcCode CppHdrCode) where
+  vecType = pair1 vecType vecType
+
+instance Pair p => VectorDecl (p CppSrcCode CppHdrCode) where
+  vecDec n = pair1 (vecDec n) (vecDec n) . zoom lensMStoVS
+  vecDecDef vr = pair1Val1List vecDecDef vecDecDef (zoom lensMStoVS vr) .
+    map (zoom lensMStoVS)
+
+instance Pair p => VectorValue (p CppSrcCode CppHdrCode) where
+  vecValue = pair1 vecValue vecValue
+
+instance Pair p => VectorExpression (p CppSrcCode CppHdrCode) where
+  vecScale = pair2 vecScale vecScale
+  vecAdd = pair2 vecAdd vecAdd
+  vecIndex = pair2 vecIndex vecIndex
+
+instance Pair p => VectorAssign (p CppSrcCode CppHdrCode) where
+  vecAssign vr = pair2 vecAssign vecAssign (zoom lensMStoVS vr) . zoom lensMStoVS
+
 instance (Pair p) => RenderFunction (p CppSrcCode CppHdrCode) where  
   funcFromData d = pair1 (funcFromData d) (funcFromData d)
   
@@ -501,9 +518,6 @@ instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) where
   arrayDec n vr = pair1 (arrayDec n) (arrayDec n) (zoom lensMStoVS vr)
   arrayDecDef vr vs = pair1Val1List arrayDecDef arrayDecDef (zoom lensMStoVS vr)
     (map (zoom lensMStoVS) vs)
-  vectorDec n vr = pair1 (vectorDec n) (vectorDec n) (zoom lensMStoVS vr)
-  vectorDecDef vr vs = pair1Val1List vectorDecDef vectorDecDef (zoom lensMStoVS vr)
-    (map (zoom lensMStoVS) vs)
   objDecDef o v = pair2 objDecDef objDecDef (zoom lensMStoVS o) 
     (zoom lensMStoVS v)
   objDecNew vr vs = pair1Val1List objDecNew objDecNew (zoom lensMStoVS vr) 
@@ -558,13 +572,6 @@ instance (Pair p) => StringStatement (p CppSrcCode CppHdrCode) where
     (map (zoom lensMStoVS) vars) (zoom lensMStoVS sl)
   stringListLists lsts sl = pair1List1Val stringListLists stringListLists
     (map (zoom lensMStoVS) lsts) (zoom lensMStoVS sl)
-
-instance (Pair p) => VectorStatement (p CppSrcCode CppHdrCode) where
-  type Vectorized (p CppSrcCode CppHdrCode) s = VectorizedData s
-  unvectorize = pair2 unvectorize unvectorize
-  vectorized = pair1 vectorized vectorized
-  vectorizedScale = pair2 vectorizedScale vectorizedScale
-  vectorizedAdd = pair2 vectorizedAdd vectorizedAdd
 
 instance (Pair p) => FuncAppStatement (p CppSrcCode CppHdrCode) where
   inOutCall n is os bs = pair3Lists (inOutCall n) (inOutCall n) 
@@ -1070,7 +1077,6 @@ instance TypeSym CppSrcCode where
     modify (addUsing vector . addLangImportVS vector)
     C.listType vector t
   arrayType = cppArrayType
-  vectorType = arrayType
   listInnerType = G.listInnerType
   obj n = do 
     cn <- zoom lensVStoMS getClassName
@@ -1248,11 +1254,6 @@ instance Comparison CppSrcCode where
   (?==) = typeBinExpr equalOp bool
   (?!=) = typeBinExpr notEqualOp bool
 
-instance VectorExpression CppSrcCode where
-  vectorDim = listSize
-  vectorIndex = listAccess
-  vectorSet = listSet
-
 instance ValueExpression CppSrcCode where
   inlineIf = C.inlineIf
 
@@ -1325,6 +1326,27 @@ instance InternalListFunc CppSrcCode where
   listAccessFunc = CP.listAccessFunc' cppListAccess
   listSetFunc = CP.listSetFunc cppListSetDoc
 
+instance VectorSym CppSrcCode where
+  type Vector CppSrcCode = ArrayVector VS
+
+instance VectorType CppSrcCode where
+  vecType = arrayType
+
+instance VectorDecl CppSrcCode where
+  vecDec = arrayDec
+  vecDecDef = arrayDecDef
+
+instance VectorValue CppSrcCode where
+  vecValue = pure . pure . arrayVector . fmap unCPPSC . valueOf
+
+instance VectorExpression CppSrcCode where
+  vecScale k = fmap $ fmap $ vectorize (fmap unCPPSC . (k #*) . fmap pure)
+  vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unCPPSC $ fmap pure v1 #+ fmap pure v2)
+  vecIndex i = (>>= fmap pure . arrayVectorIndex (fmap unCPPSC . flip listAccess i . fmap pure) . unCPPSC)
+
+instance VectorAssign CppSrcCode where
+  vecAssign = G.vecAssign
+
 instance RenderFunction CppSrcCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
   
@@ -1380,8 +1402,6 @@ instance DeclStatement CppSrcCode where
     vdc <- arrayDec (toInteger $ length vals) vr
     vs <- mapM (zoom lensMStoVS) vals
     mkStmt $ RC.statement vdc <+> equals <+> braces (valueList vs)
-  vectorDec = arrayDec
-  vectorDecDef = arrayDecDef
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
@@ -1440,13 +1460,6 @@ instance StringStatement CppSrcCode where
 
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
-
-instance VectorStatement CppSrcCode where
-  type Vectorized CppSrcCode s = VectorizedData s
-  unvectorize i = (>>= fmap CPPSC . unvectorizeD (fmap unCPPSC . flip vectorIndex i . fmap CPPSC) . unCPPSC)
-  vectorized = toState . toCode . vectorizedD . fmap unCPPSC
-  vectorizedScale k = fmap $ fmap $ vectorizeD (fmap unCPPSC . (k #*) . fmap CPPSC)
-  vectorizedAdd = liftA2 $ liftA2 $ vectorize2D (\v1 v2 -> fmap unCPPSC $ fmap CPPSC v1 #+ fmap CPPSC v2)
 
 instance FuncAppStatement CppSrcCode where
   inOutCall = cppInOutCall funcApp
@@ -1742,7 +1755,6 @@ instance TypeSym CppHdrCode where
     modify (addHeaderUsing vector . addHeaderLangImport vector)
     C.listType vector t
   arrayType = cppArrayType
-  vectorType = arrayType
   listInnerType = G.listInnerType
   obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addHeaderModImport) 
     (Map.lookup n cm) $ G.obj n)
@@ -1897,11 +1909,6 @@ instance Comparison CppHdrCode where
   (?==) _ _ = mkStateVal void empty
   (?!=) _ _ = mkStateVal void empty
 
-instance VectorExpression CppHdrCode where
-  vectorDim = listSize
-  vectorIndex = listAccess
-  vectorSet = listSet
-
 instance ValueExpression CppHdrCode where
   inlineIf _ _ _ = mkStateVal void empty
 
@@ -1969,6 +1976,27 @@ instance InternalListFunc CppHdrCode where
   listAppendFunc _ = funcFromData empty void
   listAccessFunc _ _ = funcFromData empty void
   listSetFunc _ _ _ = funcFromData empty void
+
+instance VectorSym CppHdrCode where
+  type Vector CppHdrCode = ArrayVector VS
+
+instance VectorType CppHdrCode where
+  vecType = arrayType
+
+instance VectorDecl CppHdrCode where
+  vecDec _ _ = emptyStmt
+  vecDecDef _ _ = emptyStmt
+
+instance VectorValue CppHdrCode where
+  vecValue = pure . pure . arrayVector . fmap unCPPHC . valueOf
+
+instance VectorExpression CppHdrCode where
+  vecScale _ _ = pure $ pure $ arrayVector $ fmap unCPPHC (mkStateVal void empty)
+  vecAdd _ _ = pure $ pure $ arrayVector $ fmap unCPPHC (mkStateVal void empty)
+  vecIndex _ _ = mkStateVal void empty
+
+instance VectorAssign CppHdrCode where
+  vecAssign _ _ = emptyStmt
   
 instance RenderFunction CppHdrCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
@@ -2017,8 +2045,6 @@ instance DeclStatement CppHdrCode where
   listDecDef _ _ = emptyStmt
   arrayDec _ _ = emptyStmt
   arrayDecDef _ _ = emptyStmt
-  vectorDec = arrayDec
-  vectorDecDef = arrayDecDef
   objDecDef _ _ = emptyStmt
   objDecNew _ _ = emptyStmt
   extObjDecNew _ _ _ = emptyStmt
@@ -2055,13 +2081,6 @@ instance StringStatement CppHdrCode where
 
   stringListVals _ _ = emptyStmt
   stringListLists _ _ = emptyStmt
-
-instance VectorStatement CppHdrCode where
-  type Vectorized CppHdrCode s = VectorizedData s
-  unvectorize _ _ = mkStateVal void empty
-  vectorized = toState . toCode . vectorizedD . fmap unCPPHC
-  vectorizedScale k = fmap $ fmap $ vectorizeD (fmap unCPPHC . (k #*) . fmap CPPHC)
-  vectorizedAdd = liftA2 $ liftA2 $ vectorize2D (\v1 v2 -> fmap unCPPHC $ fmap CPPHC v1 #+ fmap CPPHC v2)
 
 instance FuncAppStatement CppHdrCode where
   inOutCall _ _ _ _ = emptyStmt

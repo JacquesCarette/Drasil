@@ -11,20 +11,20 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
-  VSFunction, MSStatement, MSParameter, SMethod, OOProg, ProgramSym(..), 
-  FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), 
-  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), 
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..), 
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
-  Comparison(..), VectorExpression(..), ValueExpression(..), funcApp,
-  selfFuncApp, extFuncApp, newObj, InternalValueExp(..), objMethodCallNoParams,
-  FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..),
+  VSFunction, MSStatement, MSParameter, SMethod, OOProg, ProgramSym(..),
+  FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..),
+  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp,
+  newObj, InternalValueExp(..), objMethodCallNoParams, FunctionSym(..), ($.),
+  GetSet(..), List(..), InternalList(..), VectorSym(..), VectorType(..),
+  VectorDecl(..), VectorValue(..), VectorExpression(..), VectorAssign(..),
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  IOStatement(..), StringStatement(..), VectorStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..),
-  ModuleSym(..))
+  IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), StatePattern(..),
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -59,10 +59,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
-  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
-  fileFromData)
+  vecAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt,
+  comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
+  setMethod, function, buildClass, implementingClass, commentedClass,
+  modFromData, fileDoc, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
   extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
@@ -83,7 +83,7 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, 
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD, 
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
-  vard, VectorizedData, vectorizedD, vectorizeD, vectorize2D, unvectorizeD)
+  vard, ArrayVector, arrayVector, vectorize, vectorize2, arrayVectorIndex)
 import GOOL.Drasil.Helpers (angles, hicat, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
   on2StateWrapped, onCodeList, onStateList)
@@ -195,7 +195,6 @@ instance TypeSym CSharpCode where
     modify (addLangImportVS csGeneric) 
     C.listType csList t
   arrayType = CP.arrayType
-  vectorType = arrayType
   listInnerType = G.listInnerType
   obj = G.obj
   funcType = csFuncType
@@ -347,11 +346,6 @@ instance Comparison CSharpCode where
   (?==) = typeBinExpr equalOp bool
   (?!=) = typeBinExpr notEqualOp bool
 
-instance VectorExpression CSharpCode where
-  vectorDim = listSize
-  vectorIndex = listAccess
-  vectorSet = listSet
-
 instance ValueExpression CSharpCode where
   inlineIf = C.inlineIf
 
@@ -423,7 +417,28 @@ instance InternalListFunc CSharpCode where
   listAppendFunc = G.listAppendFunc csListAppend
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
-    
+
+instance VectorSym CSharpCode where
+  type Vector CSharpCode = ArrayVector VS
+
+instance VectorType CSharpCode where
+  vecType = arrayType
+
+instance VectorDecl CSharpCode where
+  vecDec = arrayDec
+  vecDecDef = arrayDecDef
+
+instance VectorValue CSharpCode where
+  vecValue = pure . pure . arrayVector . fmap unCSC . valueOf
+
+instance VectorExpression CSharpCode where
+  vecScale k = fmap $ fmap $ vectorize (fmap unCSC . (k #*) . fmap pure)
+  vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unCSC $ fmap pure v1 #+ fmap pure v2)
+  vecIndex i = (>>= fmap pure . arrayVectorIndex (fmap unCSC . flip listAccess i . fmap pure) . unCSC)
+
+instance VectorAssign CSharpCode where
+  vecAssign = G.vecAssign
+
 instance RenderFunction CSharpCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
   
@@ -473,8 +488,6 @@ instance DeclStatement CSharpCode where
   listDecDef = CP.listDecDef
   arrayDec n = CP.arrayDec (litInt n)
   arrayDecDef = CP.arrayDecDef
-  vectorDec = arrayDec
-  vectorDecDef = arrayDecDef
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
@@ -513,13 +526,6 @@ instance StringStatement CSharpCode where
 
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
-
-instance VectorStatement CSharpCode where
-  type Vectorized CSharpCode s = VectorizedData s
-  unvectorize i = (>>= fmap CSC . unvectorizeD (fmap unCSC . flip vectorIndex i . fmap CSC) . unCSC)
-  vectorized = toState . toCode . vectorizedD . fmap unCSC
-  vectorizedScale k = fmap $ fmap $ vectorizeD (fmap unCSC . (k #*) . fmap CSC)
-  vectorizedAdd = liftA2 $ liftA2 $ vectorize2D (\v1 v2 -> fmap unCSC $ fmap CSC v1 #+ fmap CSC v2)
 
 instance FuncAppStatement CSharpCode where
   inOutCall = csInOutCall funcApp

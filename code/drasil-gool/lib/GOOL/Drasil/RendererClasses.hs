@@ -15,15 +15,15 @@ module GOOL.Drasil.RendererClasses (
 ) where
 
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
-  VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, 
-  CSStateVar, SClass, FSModule, MixedCall, FileSym(..), PermanenceSym(..), 
-  BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), 
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..), 
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
+  VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod,
+  CSStateVar, SClass, FSModule, MixedCall, FileSym(..), PermanenceSym(..),
+  BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..),
   InternalValueExp(..), FunctionSym(..), GetSet(..), List(..),
-  InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
-  IOStatement(..), StringStatement(..), VectorStatement(..),
+  InternalList(..), VectorExpression(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..),
@@ -36,10 +36,10 @@ import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r, 
-  StringStatement r, VectorStatement r, FuncAppStatement r, CommentStatement r,
-  ControlStatement r, Argument r, Literal r, MathConstant r, VariableValue r,
-  CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r,
-  ValueExpression r, InternalValueExp r, GetSet r, List r, InternalList r,
+  StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement
+  r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
+  NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r,
+  InternalValueExp r, GetSet r, List r, InternalList r, VectorExpression r,
   StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r,
   VariableElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r,
   RenderClass r, ClassElim r, RenderFile r, InternalGetSet r, InternalListFunc

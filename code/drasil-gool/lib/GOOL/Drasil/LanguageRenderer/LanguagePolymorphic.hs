@@ -9,9 +9,9 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd, 
   listAppend, listAccess, listSet, getFunc, setFunc, 
-  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment, 
-  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
-  tryCatch, construct, param, method, getMethod, setMethod, initStmts,
+  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, vecAssign,
+  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
+  ifCond, tryCatch, construct, param, method, getMethod, setMethod, initStmts,
   function, docFuncRepr, docFunc, buildClass, implementingClass, docClass,
   commentedClass, modFromData, fileDoc, docMod
 ) where
@@ -20,8 +20,8 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
-  VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod,
-  CSStateVar, SClass, FSModule, NamedArgs, Initializers, MixedCall,
+  VSType, SVariable, SValue, SVector, VSFunction, MSStatement, MSParameter,
+  SMethod, CSStateVar, SClass, FSModule, NamedArgs, Initializers, MixedCall,
   MixedCtorCall, FileSym(File), BodySym(Body), bodyStatements, oneLiner,
   BlockSym(Block), PermanenceSym(..), TypeSym(Type), TypeElim(getType,
   getTypeString), VariableSym(Variable), VariableElim(variableName,
@@ -31,12 +31,13 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock,
   printStrLn, printFile, printFileStr, printFileStrLn), ifNoElse, ScopeSym(..),
   ModuleSym(Module), convType)
 import qualified GOOL.Drasil.ClassInterface as S (
-  TypeSym(int, double, char, string, listType, arrayType, listInnerType,
-  funcType, void), VariableSym(var, objVarSelf), Literal(litInt, litFloat,
-  litDouble, litString), VariableValue(valueOf), FunctionSym(func),
-  List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
-  IOStatement(print), ControlStatement(returnStmt, for), ParameterSym(param),
-  MethodSym(method))
+  BodySym(body), BlockSym(block), TypeSym(int, double, char, string, listType,
+  arrayType, listInnerType, funcType, void), VariableSym(var, objVarSelf),
+  Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
+  FunctionSym(func), List(listSize, listAccess, listSet),
+  VectorExpression(vecIndex), StatementSym(valStmt), DeclStatement(varDecDef),
+  IOStatement(print), ControlStatement(returnStmt, for, forRange),
+  ParameterSym(param), MethodSym(method))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(commentedMod),  
   RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
   RenderFunction(funcFromData), FunctionElim(functionType), 
@@ -327,6 +328,13 @@ subAssign t vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   stmtFromData (R.subAssign vr v) t
+
+-- FIXME: We should really be able to get a "fresh" variable name to use for
+-- the loop variable
+vecAssign :: RenderSym r => SVariable r -> SVector r -> MSStatement r
+vecAssign vr v = S.forRange i (S.litInt 0) (S.listSize (S.valueOf vr)) (S.litInt 1) $ S.body
+  [S.block [S.valStmt $ S.listSet (S.valueOf vr) (S.valueOf i) (S.vecIndex (S.valueOf i) v)]]
+  where i = S.var "i" S.int
 
 increment :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 increment vr' v'= do 

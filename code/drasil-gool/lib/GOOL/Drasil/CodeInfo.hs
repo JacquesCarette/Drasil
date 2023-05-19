@@ -4,18 +4,18 @@
 module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
 import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
-  SMethod, OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), 
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..), 
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
-  Comparison(..), VectorExpression(..), ValueExpression(..),
-  InternalValueExp(..), FunctionSym(..), GetSet(..), List(..),
-  InternalList(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
-  IOStatement(..), StringStatement(..), VectorStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..),
-  ModuleSym(..))
+  SMethod, OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..),
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), InternalValueExp(..), FunctionSym(..),
+  GetSet(..), List(..), InternalList(..), VectorSym(..), VectorType(..),
+  VectorDecl(..), VectorValue(..), VectorExpression(..), VectorAssign(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), StatePattern(..), ObserverPattern(..),
+  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..), qualName)
 import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
@@ -89,7 +89,6 @@ instance TypeSym CodeInfo where
   outfile           = noInfoType
   listType      _   = noInfoType
   arrayType     _   = noInfoType
-  vectorType        = arrayType
   listInnerType _   = noInfoType
   obj               = toState . toCode
   funcType      _ _ = noInfoType
@@ -183,11 +182,6 @@ instance Comparison CodeInfo where
   (?>=) = execute2
   (?==) = execute2
   (?!=) = execute2
-
-instance VectorExpression CodeInfo where
-  vectorDim = execute1
-  vectorIndex = execute2
-  vectorSet = execute3
     
 instance ValueExpression CodeInfo where
   inlineIf = execute3
@@ -238,6 +232,27 @@ instance InternalList CodeInfo where
     _ <- vl
     noInfo
 
+instance VectorSym CodeInfo where
+  type Vector CodeInfo = ()
+
+instance VectorType CodeInfo where
+  vecType _ = noInfoType
+
+instance VectorDecl CodeInfo where
+  vecDec _ _ = noInfo
+  vecDecDef _ = zoom lensMStoVS . executeList
+
+instance VectorValue CodeInfo where
+  vecValue _ = noInfo
+
+instance VectorExpression CodeInfo where
+  vecScale = execute2
+  vecAdd = execute2
+  vecIndex = execute2
+
+instance VectorAssign CodeInfo where
+  vecAssign _ = zoom lensMStoVS . execute1
+
 instance StatementSym CodeInfo where
   type Statement CodeInfo = ()
   valStmt = zoom lensMStoVS . execute1
@@ -257,8 +272,6 @@ instance DeclStatement CodeInfo where
   listDecDef             _ = zoom lensMStoVS . executeList
   arrayDec             _ _ = noInfo
   arrayDecDef            _ = zoom lensMStoVS . executeList
-  vectorDec                = arrayDec
-  vectorDecDef             = arrayDecDef
   objDecDef              _ = zoom lensMStoVS . execute1
   objDecNew              _ = zoom lensMStoVS . executeList
   extObjDecNew         _ _ = zoom lensMStoVS . executeList
@@ -296,13 +309,6 @@ instance StringStatement CodeInfo where
 
   stringListVals  _ = zoom lensMStoVS . execute1
   stringListLists _ = zoom lensMStoVS . execute1
-
-instance VectorStatement CodeInfo where
-  type Vectorized CodeInfo s = ()
-  unvectorize = execute2
-  vectorized = execute1
-  vectorizedScale = execute2
-  vectorizedAdd = execute2
 
 instance FuncAppStatement CodeInfo where
   inOutCall n vs _ _ = zoom lensMStoVS $ do

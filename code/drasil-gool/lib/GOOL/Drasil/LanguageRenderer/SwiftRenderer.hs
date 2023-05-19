@@ -11,21 +11,22 @@ import Utils.Drasil (indent, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable, 
-  SValue, MSStatement, MSParameter, SMethod, OOProg, Initializers, 
-  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, 
-  bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), 
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..), 
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
-  BooleanExpression(..), Comparison(..), VectorExpression(..),
-  ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp,
-  newObj, InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
-  objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..),
-  listSlice, InternalList(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..), VectorStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..),
-  ModuleSym(..), convType)
+  SValue, MSStatement, MSParameter, SMethod, OOProg, Initializers,
+  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), oneLiner,
+  bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  funcAppNamedArgs, selfFuncApp, extFuncApp, newObj, InternalValueExp(..),
+  objMethodCall, objMethodCallNamedArgs, objMethodCallNoParams,
+  FunctionSym(..), ($.), GetSet(..), List(..), listSlice, InternalList(..),
+  VectorSym(..), VectorType(..), VectorDecl(..), VectorValue(..),
+  VectorExpression(..), VectorAssign(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), StatePattern(..), ObserverPattern(..),
+  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  StateVarSym(..), ClassSym(..), ModuleSym(..), convType)
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, 
   RenderFile(..), ImportSym(..), ImportElim, PermElim(binding), RenderBody(..), 
   BodyElim, RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
@@ -61,8 +62,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  increment, objDecNew, print, returnStmt, valStmt, comment, throw, ifCond,
-  tryCatch, construct, param, method, getMethod, setMethod, initStmts,
+  vecAssign, increment, objDecNew, print, returnStmt, valStmt, comment, throw,
+  ifCond, tryCatch, construct, param, method, getMethod, setMethod, initStmts,
   function, docFunc, buildClass, implementingClass, docClass, commentedClass,
   modFromData, fileDoc, docMod, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (classVar, 
@@ -82,7 +83,7 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), td, ValData(..), vd, Binding(..), VarData(..), vard,
-  VectorizedData, vectorizedD, vectorizeD, vectorize2D, unvectorizeD)
+  ArrayVector, arrayVector, vectorize, vectorize2, arrayVectorIndex)
 import GOOL.Drasil.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, 
@@ -197,7 +198,6 @@ instance TypeSym SwiftCode where
   outfile = swiftFileHdlType
   listType = swiftListType
   arrayType = listType -- For now, treating arrays and lists the same, like we do for Python
-  vectorType = arrayType
   listInnerType = G.listInnerType
   obj = G.obj
   funcType = swiftFuncType
@@ -359,11 +359,6 @@ instance Comparison SwiftCode where
   (?==) = swiftNumBinExpr (typeBinExpr equalOp bool)
   (?!=) = swiftNumBinExpr (typeBinExpr notEqualOp bool)
 
-instance VectorExpression SwiftCode where
-  vectorDim = listSize
-  vectorIndex = listAccess
-  vectorSet = listSet
-
 instance ValueExpression SwiftCode where
   inlineIf = C.inlineIf
 
@@ -442,7 +437,28 @@ instance InternalListFunc SwiftCode where
   listAppendFunc = G.listAppendFunc swiftListAppend
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
-    
+
+instance VectorSym SwiftCode where
+  type Vector SwiftCode = ArrayVector VS
+
+instance VectorType SwiftCode where
+  vecType = arrayType
+
+instance VectorDecl SwiftCode where
+  vecDec = arrayDec
+  vecDecDef = arrayDecDef
+
+instance VectorValue SwiftCode where
+  vecValue = pure . pure . arrayVector . fmap unSC . valueOf
+
+instance VectorExpression SwiftCode where
+  vecScale k = fmap $ fmap $ vectorize (fmap unSC . (k #*) . fmap pure)
+  vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unSC $ fmap pure v1 #+ fmap pure v2)
+  vecIndex i = (>>= fmap pure . arrayVectorIndex (fmap unSC . flip listAccess i . fmap pure) . unSC)
+
+instance VectorAssign SwiftCode where
+  vecAssign = G.vecAssign
+
 instance RenderFunction SwiftCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
   
@@ -490,8 +506,6 @@ instance DeclStatement SwiftCode where
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
-  vectorDec = arrayDec
-  vectorDecDef = arrayDecDef
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
@@ -551,13 +565,6 @@ instance StringStatement SwiftCode where
 
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
-
-instance VectorStatement SwiftCode where
-  type Vectorized SwiftCode s = VectorizedData s
-  unvectorize i = (>>= fmap SC . unvectorizeD (fmap unSC . flip vectorIndex i . fmap SC) . unSC)
-  vectorized = toState . toCode . vectorizedD . fmap unSC
-  vectorizedScale k = fmap $ fmap $ vectorizeD (fmap unSC . (k #*) . fmap SC)
-  vectorizedAdd = liftA2 $ liftA2 $ vectorize2D (\v1 v2 -> fmap unSC $ fmap SC v1 #+ fmap SC v2)
 
 instance FuncAppStatement SwiftCode where
   inOutCall = CP.inOutCall funcApp

@@ -7,7 +7,7 @@ module GOOL.Drasil.AST (Terminator(..), ScopeTag(..), QualifiedName, qualName,
   StateVarData(getStVarScp, stVar, destructSts), svd, 
   TypeData(cType, typeString, typeDoc), td, ValData(valPrec, valType, val), 
   vd, updateValDoc, VarData(varBind, varName, varType, varDoc), vard,
-  VectorizedData, vectorizedD, vectorizeD, vectorize2D, unvectorizeD
+  ArrayVector, arrayVector, vectorize, vectorize2, arrayVectorIndex
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -143,22 +143,22 @@ data VarData = VarD {varBind :: Binding, varName :: String,
 vard :: Binding -> String -> TypeData -> Doc -> VarData
 vard = VarD
 
--- Used as the underlying data type for Vectorized in all renderers
-data VectorizedData s
-  = Vectorized (s ValData)
-  | Vectorize (s ValData -> s ValData) (VectorizedData s)
-  | Vectorize2 (s ValData -> s ValData -> s ValData) (VectorizedData s) (VectorizedData s)
+-- Used as the underlying data type for Vectors in all renderers
+data ArrayVector s
+  = ArrayVector (s ValData)
+  | Vectorize (s ValData -> s ValData) (ArrayVector s)
+  | Vectorize2 (s ValData -> s ValData -> s ValData) (ArrayVector s) (ArrayVector s)
 
-vectorizedD :: s ValData -> VectorizedData s
-vectorizedD = Vectorized
+arrayVector :: s ValData -> ArrayVector s
+arrayVector = ArrayVector
 
-vectorizeD :: (s ValData -> s ValData) -> VectorizedData s -> VectorizedData s
-vectorizeD = Vectorize
+vectorize :: (s ValData -> s ValData) -> ArrayVector s -> ArrayVector s
+vectorize = Vectorize
 
-vectorize2D :: (s ValData -> s ValData -> s ValData) -> VectorizedData s -> VectorizedData s -> VectorizedData s
-vectorize2D = Vectorize2
+vectorize2 :: (s ValData -> s ValData -> s ValData) -> ArrayVector s -> ArrayVector s -> ArrayVector s
+vectorize2 = Vectorize2
 
-unvectorizeD :: (s ValData -> s ValData) -> VectorizedData s -> s ValData
-unvectorizeD index (Vectorized v) = index v
-unvectorizeD index (Vectorize op v) = op (unvectorizeD index v)
-unvectorizeD index (Vectorize2 op v1 v2) = unvectorizeD index v1 `op` unvectorizeD index v2
+arrayVectorIndex :: (s ValData -> s ValData) -> ArrayVector s -> s ValData
+arrayVectorIndex index (ArrayVector v) = index v
+arrayVectorIndex index (Vectorize op v) = op (arrayVectorIndex index v)
+arrayVectorIndex index (Vectorize2 op v1 v2) = arrayVectorIndex index v1 `op` arrayVectorIndex index v2

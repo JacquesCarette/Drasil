@@ -3,35 +3,38 @@
 module GOOL.Drasil.ClassInterface (
   -- Types
   Label, Library, GSProgram, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
-  VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass, FSModule,
-  NamedArgs, Initializers, MixedCall, MixedCtorCall, PosCall, PosCtorCall,
+  SVector, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass,
+  FSModule, NamedArgs, Initializers, MixedCall, MixedCtorCall, PosCall,
+  PosCtorCall,
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), 
   VariableSym(..), VariableElim(..), ($->), listOf, listVar, ValueSym(..), 
   Argument(..), Literal(..), MathConstant(..), VariableValue(..), 
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
-  Comparison(..), VectorExpression(..), ValueExpression(..), funcApp,
-  funcAppNamedArgs, selfFuncApp, extFuncApp, libFuncApp, newObj, extNewObj,
-  libNewObj, exists, InternalValueExp(..), objMethodCall,
-  objMethodCallNamedArgs, objMethodCallMixedArgs, objMethodCallNoParams,
-  FunctionSym(..), ($.), selfAccess, GetSet(..), List(..), InternalList(..),
-  listSlice, listIndexExists, at, StatementSym(..), AssignStatement(..), (&=),
-  assignToListIndex, DeclStatement(..), objDecNewNoParams,
-  extObjDecNewNoParams, IOStatement(..), StringStatement(..),
-  VectorStatement(..), setVectorized, FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), StatePattern(..), initState,
-  changeState, ObserverPattern(..), observerListName, initObserverList,
-  addObserver, StrategyPattern(..), ifNoElse, switchAsIf, ScopeSym(..),
-  ParameterSym(..), MethodSym(..), privMethod, pubMethod, initializer,
-  nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar,
-  ClassSym(..), ModuleSym(..), convType
+  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp,
+  extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists,
+  InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
+  objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..), ($.),
+  selfAccess, GetSet(..), List(..), InternalList(..), listSlice,
+  listIndexExists, at, VectorSym(..), VectorType(..), VectorDecl(..),
+  VectorValue(..), VectorExpression(..), VectorAssign(..), StatementSym(..),
+  AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
+  objDecNewNoParams, extObjDecNewNoParams, IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), StatePattern(..), initState, changeState,
+  ObserverPattern(..), observerListName, initObserverList, addObserver,
+  StrategyPattern(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..),
+  MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
+  StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..),
+  convType
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.Helpers (onStateValue)
 import GOOL.Drasil.State (GS, FS, CS, MS, VS)
 
+import qualified Data.Kind as K (Type)
 import Data.Bifunctor (first)
 
 type Label = String
@@ -44,13 +47,14 @@ type GSProgram a = GS (a (Program a))
 -- Functions in GOOL's interface beginning with "ext" are to be used to access items from other modules in the same program/project
 -- Functions in GOOL's interface beginning with "lib" are to be used to access items from different libraries/projects
 
-class (ProgramSym r, AssignStatement r, DeclStatement r, IOStatement r, 
-  StringStatement r, VectorStatement r, FuncAppStatement r, CommentStatement r,
+class (ProgramSym r, VectorType r, VectorDecl r, VectorValue r,
+  VectorExpression r, VectorAssign r, AssignStatement r, DeclStatement r,
+  IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r,
   ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r,
   VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
-  Comparison r, VectorExpression r, ValueExpression r, InternalValueExp r,
-  GetSet r, List r, StatePattern r, ObserverPattern r, StrategyPattern r,
-  TypeElim r, VariableElim r) => OOProg r
+  Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r,
+  StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r,
+  VariableElim r) => OOProg r
 
 class (FileSym r) => ProgramSym r where
   type Program r
@@ -105,7 +109,6 @@ class TypeSym r where
   outfile       :: VSType r
   listType      :: VSType r -> VSType r
   arrayType     :: VSType r -> VSType r
-  vectorType    :: VSType r -> VSType r
   listInnerType :: VSType r -> VSType r
   obj           :: ClassName -> VSType r
   funcType      :: [VSType r] -> VSType r -> VSType r
@@ -232,11 +235,6 @@ class (ValueSym r) => Comparison r where
   (?!=) :: SValue r -> SValue r -> SValue r
   infixl 3 ?!=
 
-class ValueSym r => VectorExpression r where
-  vectorDim :: SValue r -> SValue r
-  vectorIndex :: SValue r -> SValue r -> SValue r
-  vectorSet :: SValue r -> SValue r -> SValue r -> SValue r
-
 type NamedArgs r = [(SVariable r, SValue r)]
 -- Function call with both positional and named arguments
 type MixedCall r = Label -> VSType r -> [SValue r] -> NamedArgs r -> SValue r
@@ -352,6 +350,32 @@ listIndexExists lst index = listSize lst ?> index
 at :: (List r) => SValue r -> SValue r -> SValue r
 at = listAccess
 
+type SVector a = VS (a (Vector a))
+
+class VectorSym r where
+  -- K.Type -> K.Type annotation needed because r is not applied here so its
+  -- kind cannot be inferred (whereas for Value, r is applied in the type
+  -- signature of valueType
+  type Vector (r :: K.Type -> K.Type)
+
+class TypeSym r => VectorType r where
+  vecType :: VSType r -> VSType r
+
+class (VariableSym r, StatementSym r) => VectorDecl r where
+  vecDec :: Integer -> SVariable r -> MSStatement r
+  vecDecDef :: SVariable r -> [SValue r] -> MSStatement r
+
+class (VariableSym r, VectorSym r) => VectorValue r where
+  vecValue :: SVariable r -> SVector r
+
+class (VectorSym r, ValueSym r) => VectorExpression r where
+  vecScale :: SValue r -> SVector r -> SVector r
+  vecAdd :: SVector r -> SVector r -> SVector r
+  vecIndex :: SValue r -> SVector r -> SValue r
+
+class (VariableSym r, StatementSym r) => VectorAssign r where
+  vecAssign :: SVariable r -> SVector r -> MSStatement r
+
 type MSStatement a = MS (a (Statement a))
 
 class (ValueSym r) => StatementSym r where
@@ -386,8 +410,6 @@ class (VariableSym r, StatementSym r) => DeclStatement r where
   listDecDef   :: SVariable r -> [SValue r] -> MSStatement r
   arrayDec     :: Integer -> SVariable r -> MSStatement r
   arrayDecDef  :: SVariable r -> [SValue r] -> MSStatement r
-  vectorDec    :: Integer -> SVariable r -> MSStatement r
-  vectorDecDef :: SVariable r -> [SValue r] -> MSStatement r
   objDecDef    :: SVariable r -> SValue r -> MSStatement r
   objDecNew    :: SVariable r -> [SValue r] -> MSStatement r
   extObjDecNew :: Library -> SVariable r -> [SValue r] -> MSStatement r
@@ -431,24 +453,6 @@ class (VariableSym r, StatementSym r) => StringStatement r where
 
   stringListVals  :: [SVariable r] -> SValue r -> MSStatement r
   stringListLists :: [SVariable r] -> SValue r -> MSStatement r
-
-type SVectorized a = VS (a (Vectorized a VS))
-
-class (VectorExpression r, ControlStatement r, Literal r, VariableValue r) => VectorStatement r where
-  type Vectorized r (s :: * -> *)
-  unvectorize :: SValue r -> SVectorized r -> SValue r
-  vectorized :: SValue r -> SVectorized r
-  vectorizedScale :: SValue r -> SVectorized r -> SVectorized r
-  vectorizedAdd :: SVectorized r -> SVectorized r -> SVectorized r
-
--- FIXME: We should really be able to get a "fresh" variable name to use for
--- the loop variable
-setVectorized :: VectorStatement r => SValue r -> SVectorized r -> MSStatement r
-setVectorized v e = forRange i (litInt 0) (vectorDim v) (litInt 1) $ body
-  [block
-    [valStmt $ vectorSet v (valueOf i) (unvectorize (valueOf i) e)]]
-  where
-    i = var "i" int
 
 type InOutCall r = Label -> [SValue r] -> [SVariable r] -> [SVariable r] -> 
   MSStatement r

@@ -10,19 +10,20 @@ import Utils.Drasil (blank, indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue, 
-  VSFunction, MSStatement, MixedCtorCall, OOProg, ProgramSym(..), FileSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), 
-  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..), 
-  MathConstant(..), VariableValue(..), CommandLineArgs(..), 
+  VSFunction, MSStatement, MixedCtorCall, OOProg, ProgramSym(..), FileSym(..),
+  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
+  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  VectorExpression(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp,
-  extNewObj, InternalValueExp(..), objMethodCall, FunctionSym(..), GetSet(..),
-  List(..), InternalList(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..), VectorStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
-  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..),
-  ModuleSym(..))
+  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj,
+  InternalValueExp(..), objMethodCall, FunctionSym(..), GetSet(..), List(..),
+  InternalList(..), VectorSym(..), VectorType(..), VectorDecl(..),
+  VectorValue(..), VectorExpression(..), VectorAssign(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..),
+  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -57,10 +58,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
-  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
-  fileFromData)
+  vecAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt,
+  comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
+  setMethod, function, buildClass, implementingClass, commentedClass,
+  modFromData, fileDoc, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
   extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
@@ -72,10 +73,10 @@ import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists,
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
   notifyObservers', checkState)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
-  FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, 
-  updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..), 
-  td, ValData(..), vd, VarData(..), vard, VectorizedData, vectorizedD,
-  vectorizeD, vectorize2D, unvectorizeD)
+  FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
+  updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
+  td, ValData(..), vd, VarData(..), vard, ArrayVector, arrayVector, vectorize,
+  vectorize2, arrayVectorIndex)
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList, on2StateWrapped)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
@@ -187,7 +188,6 @@ instance TypeSym PythonCode where
   outfile = typeFromData OutFile "" empty
   listType t' = t' >>=(\t -> typeFromData (List (getType t)) "" empty)
   arrayType = listType
-  vectorType = arrayType
   listInnerType = G.listInnerType
   obj = G.obj
   funcType = CP.funcType
@@ -349,11 +349,6 @@ instance Comparison PythonCode where
   (?==) = typeBinExpr equalOp bool
   (?!=) = typeBinExpr notEqualOp bool
 
-instance VectorExpression PythonCode where
-  vectorDim = listSize
-  vectorIndex = listAccess
-  vectorSet = listSet
-
 instance ValueExpression PythonCode where
   inlineIf = pyInlineIf
 
@@ -433,6 +428,27 @@ instance InternalListFunc PythonCode where
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
 
+instance VectorSym PythonCode where
+  type Vector PythonCode = ArrayVector VS
+
+instance VectorType PythonCode where
+  vecType = arrayType
+
+instance VectorDecl PythonCode where
+  vecDec = arrayDec
+  vecDecDef = arrayDecDef
+
+instance VectorValue PythonCode where
+  vecValue = pure . pure . arrayVector . fmap unPC . valueOf
+
+instance VectorExpression PythonCode where
+  vecScale k = fmap $ fmap $ vectorize (fmap unPC . (k #*) . fmap pure)
+  vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unPC $ fmap pure v1 #+ fmap pure v2)
+  vecIndex i = (>>= fmap pure . arrayVectorIndex (fmap unPC . flip listAccess i . fmap pure) . unPC)
+
+instance VectorAssign PythonCode where
+  vecAssign = G.vecAssign
+
 instance RenderFunction PythonCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
   
@@ -481,8 +497,6 @@ instance DeclStatement PythonCode where
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
-  vectorDec = arrayDec
-  vectorDecDef = arrayDecDef
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew lib v vs = do
@@ -521,13 +535,6 @@ instance StringStatement PythonCode where
 
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
-
-instance VectorStatement PythonCode where
-  type Vectorized PythonCode s = VectorizedData s
-  unvectorize i = (>>= fmap PC . unvectorizeD (fmap unPC . flip vectorIndex i . fmap PC) . unPC)
-  vectorized = toState . toCode . vectorizedD . fmap unPC
-  vectorizedScale k = fmap $ fmap $ vectorizeD (fmap unPC . (k #*) . fmap PC)
-  vectorizedAdd = liftA2 $ liftA2 $ vectorize2D (\v1 v2 -> fmap unPC $ fmap PC v1 #+ fmap PC v2)
 
 instance FuncAppStatement PythonCode where
   inOutCall = CP.inOutCall funcApp

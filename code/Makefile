@@ -462,6 +462,7 @@ clean: clean_artifacts ##@Cleaning Fully clean all generated builds, artifacts, 
 #--- Help & Information ---#
 #--------------------------#
 
+# Credits to "nowox" from StackOverflow: https://stackoverflow.com/a/30796664/16760741
 HELP_FUN = \
 	%help; while(<>){push@{$$help{$$2//'options'}},[$$1,$$3] \
 	if/^([\w-_]+)\s*:.*\#\#(?:@(\w+))?\s(.*)$$/}; \

@@ -58,7 +58,7 @@ escapeStringForJson = concatMap (either id ('\\' :) . special)
       | otherwise             = Left [c]
 
 codeformat :: Doc -> Doc
-codeformat s = text ("    " ++ J.encode (show s))
+codeformat s = text ("    \"" ++ escapeStringForJson (show s) ++ "\\n\"")
 
 wrap :: String -> [String] -> Doc -> Doc
 wrap a = wrapGen' vcat Class a empty

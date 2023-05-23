@@ -25,7 +25,7 @@ import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (th, bold, reflinkInfo)
 import Language.Drasil.HTML.Print(renderCite, OpenClose(Open, Close), fence)
 
-import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat,
+import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat, codeformat,
  tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv, 
  markdownB, markdownB', markdownE, markdownE', markdownCell, codeCell)
 
@@ -67,25 +67,6 @@ printMath = (`runPrint` Math)
 
 -- | Helper for rendering LayoutObjects into JSON
 -- printLO is used for generating SRS
-{-
-printLO :: LayoutObj -> Doc
-printLO (Header n contents l)            = markdownCell $ nbformat (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
-printLO (Cell layoutObs)                 = vcat (map printLO layoutObs)
-printLO (HDiv _ layoutObs _)             = markdownCell $ vcat (map printLO layoutObs)
-printLO (Paragraph contents)             = markdownCell $ nbformat (stripnewLine (show(pSpec contents)))
-printLO (EqnBlock contents)              = markdownCell $ nbformat mathEqn
-  where
-    toMathHelper (PL g) = PL (\_ -> g Math)
-    mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$" 
-    mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
-printLO (Table _ rows r _ _)            = markdownCell $ makeTable rows (pSpec r)
-printLO (Definition dt ssPs l)          = markdownCell $ nbformat (text "<br>") $$ makeDefn dt ssPs (pSpec l)
-printLO (List t)                        = markdownCell $ makeList t False
-printLO (Figure r c f wp)               = markdownCell $ makeFigure (pSpec r) (pSpec c) (text f) wp
-printLO (Bib bib)                       = markdownCell $ makeBib bib
-printLO Graph{}                         = empty 
-printLO CodeBlock {}                    = empty
--}
 printLO :: LayoutObj -> Doc
 printLO (Header n contents l)            = nbformat empty $$ nbformat (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
 printLO (Cell layoutObs)                 = markdownCell $ vcat (map printLO layoutObs)
@@ -122,11 +103,8 @@ printLO' (List t)                        = markdownCell $ makeList t False
 printLO' (Figure r c f wp)               = markdownCell $ makeFigure (pSpec r) (pSpec c) (text f) wp
 printLO' (Bib bib)                       = markdownCell $ makeBib bib
 printLO' Graph{}                         = empty 
-printLO' (CodeBlock contents)            = codeCell $ nbformat mathEqn
-  where
-    toMathHelper (PL g) = PL (\_ -> g Math)
-    mjDelimDisp d  = stripnewLine (show d) 
-    mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
+printLO' (CodeBlock contents)            = codeCell $ codeformat $ cSpec contents
+
 
 -- | Called by build, uses 'printLO' to render the layout
 -- objects in Doc format.
@@ -154,6 +132,10 @@ pSpec (Ref External r a)      = reflinkURI  r $ pSpec a
 pSpec EmptyS    = text "" -- Expected in the output
 pSpec (Quote q) = doubleQuotes $ pSpec q
 
+cSpec :: Spec -> Doc
+cSpec (E e)  = pExpr e 
+cSpec _      = empty
+
 
 -- | Renders expressions in JSON (called by multiple functions)
 pExpr :: Expr -> Doc
@@ -176,9 +158,7 @@ pExpr (Font Bold e)  = pExpr e
 --pExpr (Spc Thin)     = text "&#8239;" -- HTML used
 -- Uses TeX for Mathjax for all other exprs 
 pExpr e              = printMath $ toMath $ TeX.pExpr e
-  -- before
-  --where mjDelimDisp d = text "$" <> d <> text "$"
-  --      mathEqn = mjDelimDisp $ printMath $ toMath $ TeX.pExpr e
+
 
 
 -- TODO: edit all operations in markdown format

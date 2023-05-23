@@ -24,7 +24,7 @@ figure     = wrap "figure" []
 li         = wrap' "li" []
 -- | Paragraph in list tag wrapper
 pa         = wrap "p" []
-
+-- | Bring attention to element wrapper.
 ba         = wrap "b" []
 
 ol, ul, table :: [String] -> Doc -> Doc
@@ -37,6 +37,9 @@ table    = wrap "table"
 
 nbformat :: Doc -> Doc
 nbformat s = text ("    " ++ J.encode (show s ++ "\n") ++ ",")
+
+codeformat :: Doc -> Doc
+codeformat s = text ("    " ++ J.encode (show s))
 
 wrap :: String -> [String] -> Doc -> Doc
 wrap a = wrapGen' vcat Class a empty
@@ -103,25 +106,27 @@ mkDiv s a0 a1 = (H.bslash <> text s) <> br a0 <> br a1
 stripnewLine :: String -> Doc
 stripnewLine s = hcat (map text (splitOn "\n" s))
 
--- | Helper for building markdown cells
+-- | Helper for building Markdown cells
 markdownB, markdownB', markdownE, markdownE' :: Doc
 markdownB  = text "{\n \"cells\": [\n  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [\n" 
 markdownB' = text "  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [\n" 
 markdownE  = text "    \"\\n\"\n   ]\n  },"
 markdownE' = text "    \"\\n\"\n   ]\n  }\n ],"
 
-codeB :: Doc
+-- | Helper for building code cells
+codeB, codeE :: Doc
 codeB = text "  {\n   \"cell_type\": \"code\",\n   \"execution_count\": null,\n   \"metadata\": {},\n   \"outputs\": [],\n   \"source\": [" 
+codeE  = text "\n   ]\n  },"
 
 -- | Helper for generate a Markdown cell
 markdownCell :: Doc -> Doc
 markdownCell c = markdownB' <> c <> markdownE
 
--- | Helper for generate a Code cell
+-- | Helper for generate a code cell
 codeCell :: Doc -> Doc
-codeCell c = codeB <> c <> markdownE
+codeCell c = codeB <> c <> codeE
 
--- | Generate the Metadata necessary for a notebook document.
+-- | Generate the metadata necessary for a notebook document.
 makeMetadata :: Doc  
 makeMetadata = vcat [
   text " \"metadata\": {", 

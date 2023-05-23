@@ -25,7 +25,7 @@ import Drasil.Projectile.Expressions (eqnRefs)
 import Drasil.Projectile.Lesson.LearnObj (learnObjContext)
 import Drasil.Projectile.Lesson.Review (reviewContent)
 import Drasil.Projectile.Lesson.CaseProb (caseProbCont, figRefs)
-import Drasil.Projectile.Lesson.Example (exampleContent)
+import Drasil.Projectile.Lesson.Example (exampleContent, horiz_velo)
 
 nb :: Document
 nb = mkNb mkNB (S.forGen titleize phrase) si
@@ -65,14 +65,17 @@ si = SI {
 }
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw physicscon) (nw projectileMotion : map nw doccon ++ 
-  map nw doccon' ++ map nw physicCon ++ concepts ++ map nw mathcon) 
+symbMap = cdb (map qw physicscon ++ symbols) (nw projectileMotion : map nw doccon ++ 
+  map nw doccon' ++ map nw physicCon ++ concepts ++ map nw mathcon ++ map nw symbols) 
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] allRefs
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
+usedDB = cdb ([] :: [QuantityDict]) (map nw symbols :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) [] [] [] [] ([] :: [ConceptInstance])
   ([] :: [Section]) ([] :: [LabelledContent]) ([] :: [Reference])
+
+symbols :: [QuantityDict]
+symbols = [qw horiz_velo]
 
 refDB :: ReferenceDB
 refDB = rdb [] []

@@ -8,13 +8,13 @@ import Data.Drasil.Units.Physics (accelU)
 import Data.Drasil.Concepts.Math (component, direction, equation, xDir, yAxis)
 import Drasil.Projectile.Concepts (projectile, projMotion)
 import Drasil.Projectile.Expressions
+import Drasil.Projectile.Lesson.Figures (figCSandA)
 import qualified Data.Drasil.Quantities.Physics as QP (iSpeed, ixSpeed, iySpeed, speed,
   constAccel, gravitationalAccel, xAccel, yAccel, time,
   ixPos, iyPos, xPos, yPos, ixVel, iyVel, xVel, yVel)
-import Data.Drasil.Concepts.Documentation (coordinateSystem, coordinate, procedure)
+import Data.Drasil.Concepts.Documentation (coordinate, procedure)
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.SI_Units (s_2)
 
@@ -150,12 +150,6 @@ stepFiveCont = foldlSP [S "Use the equations from Step 4, together with the know
   S "We can do this systematically by going through each equation and determining how many unknowns are in that equation",
   S "Any equations with one unknown can be used to solve for that unknown directly"]
 
-resourcePath :: String
-resourcePath = "../../../datafiles/Projectile/"
-
-figCSandA :: LabelledContent
-figCSandA = llcc (makeFigRef "CoordSystAndAssumpts") $ fig (atStartNP $ the coordinateSystem)
-  (resourcePath ++ "CoordSystAndAssumpts.png") 
 
 equationsSents :: [Sentence]
 equationsSents = [S "From Equation" +: refS lcrectVel,

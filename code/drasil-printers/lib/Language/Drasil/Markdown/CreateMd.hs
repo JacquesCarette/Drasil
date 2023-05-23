@@ -98,12 +98,10 @@ license auth = text "Copyright (c) 2021," <+> auth <>
   text ". All rights reserved. Please see the [full license](https://github.com/JacquesCarette/Drasil/blob/4b9ad0a3016fecb3c7a2aa82ab142f9e805b5cc8/LICENSE) for more details."
 -- | Drasil Tree icon. Uses HTML directly to format image since normal markdown doesn't support it.
 drasilImage :: String -> Doc
-drasilImage name = if name == "Projectile" then 
-                      alignImage 
-                        "../../../../../drasil-website/WebInfo/images/Icon.png"
-                   else
-                      alignImage 
-                        "../../../../drasil-website/WebInfo/images/Icon.png"
+drasilImage "Projectile" = alignImage 
+  "../../../../../drasil-website/WebInfo/images/Icon.png"
+drasilImage _            = alignImage 
+  "../../../../drasil-website/WebInfo/images/Icon.png"
 -- | Aligns an image to the center using HTML, since markdown doesn't support it.
 alignImage :: FilePath -> Doc
 alignImage img = text "<p align=\"center\">" <>

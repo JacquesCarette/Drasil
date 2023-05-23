@@ -31,7 +31,7 @@ makeReadMe ReadMeInfo {
     verInfo progLang progLangVers,
     unsupOS unsupportedOSs,
     extLibSec extLibns extLibfp,
-    endNote auths] -- add date information to end note for license
+    endNote name auths] -- add date information to end note for license
 
 -- | Helper for encoding the type of program (either library or controller-based) in a README file.
 makeInstr :: ImplementationType -> [FilePath]-> Doc

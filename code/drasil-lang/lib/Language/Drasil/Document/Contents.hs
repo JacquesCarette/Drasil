@@ -10,19 +10,20 @@ module Language.Drasil.Document.Contents (
   unlbldCode
 ) where
 
-import Language.Drasil.Classes ( Definition(..) )
+import Language.Drasil.Classes (Definition(..))
 import Language.Drasil.ShortName (HasShortName(..), getSentSN)
-import Language.Drasil.Document ( llcc, ulcc )
+import Language.Drasil.Document (llcc, ulcc)
 import Language.Drasil.Document.Core
-    ( LabelledContent,
-      RawContent(Enumeration, EqnBlock, CodeBlock),
-      Contents(UlC),
-      ListTuple,
-      ItemType(Flat),
-      ListType(Simple) )
-import Language.Drasil.ModelExpr.Lang ( ModelExpr )
-import Language.Drasil.Reference ( Reference )
-import Language.Drasil.Sentence ( Sentence )
+    (LabelledContent,
+     RawContent(Enumeration, EqnBlock, CodeBlock),
+     Contents(UlC),
+     ListTuple,
+     ItemType(Flat),
+     ListType(Simple))
+import Language.Drasil.ModelExpr.Lang (ModelExpr)
+import Language.Drasil.CodeExpr.Lang (CodeExpr)
+import Language.Drasil.Reference (Reference)
+import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Document.Combinators (bulletFlat, mkEnumAbbrevList)
 import Language.Drasil.Label.Type ( Referable(refAdd) )
 
@@ -37,7 +38,7 @@ unlbldExpr :: ModelExpr -> Contents
 unlbldExpr c = UlC $ ulcc $ EqnBlock c
 
 -- | Unlabelled code expression
-unlbldCode :: ModelExpr -> Contents
+unlbldCode :: CodeExpr -> Contents
 unlbldCode c = UlC $ ulcc $ CodeBlock c
 
 -- | Creates a bulleted list.

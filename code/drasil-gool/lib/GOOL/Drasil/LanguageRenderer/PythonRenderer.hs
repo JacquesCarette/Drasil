@@ -17,8 +17,8 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj,
   InternalValueExp(..), objMethodCall, FunctionSym(..), GetSet(..), List(..),
-  InternalList(..), VectorSym(..), VectorType(..), VectorDecl(..),
-  VectorValue(..), VectorExpression(..), VectorAssign(..), StatementSym(..),
+  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..),
@@ -58,7 +58,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  vecAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt,
+  thunkAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt,
   comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
   setMethod, function, buildClass, implementingClass, commentedClass,
   modFromData, fileDoc, fileFromData)
@@ -75,8 +75,8 @@ import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists,
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
-  td, ValData(..), vd, VarData(..), vard, ArrayVector, arrayVector, vectorize,
-  vectorize2, arrayVectorIndex)
+  td, ValData(..), vd, VarData(..), vard, CommonThunk, pureValue, vectorize,
+  vectorize2, indexVectorized)
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList, on2StateWrapped)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
@@ -428,8 +428,11 @@ instance InternalListFunc PythonCode where
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
 
-instance VectorSym PythonCode where
-  type Vector PythonCode = ArrayVector VS
+instance ThunkSym PythonCode where
+  type Thunk PythonCode = CommonThunk VS
+
+instance ThunkAssign PythonCode where
+  thunkAssign = G.thunkAssign
 
 instance VectorType PythonCode where
   vecType = arrayType
@@ -438,16 +441,13 @@ instance VectorDecl PythonCode where
   vecDec = arrayDec
   vecDecDef = arrayDecDef
 
-instance VectorValue PythonCode where
-  vecValue = pure . pure . arrayVector . fmap unPC . valueOf
+instance VectorThunk PythonCode where
+  vecThunk = pure . pure . pureValue . fmap unPC . valueOf
 
 instance VectorExpression PythonCode where
   vecScale k = fmap $ fmap $ vectorize (fmap unPC . (k #*) . fmap pure)
   vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unPC $ fmap pure v1 #+ fmap pure v2)
-  vecIndex i = (>>= fmap pure . arrayVectorIndex (fmap unPC . flip listAccess i . fmap pure) . unPC)
-
-instance VectorAssign PythonCode where
-  vecAssign = G.vecAssign
+  vecIndex i = (>>= fmap pure . indexVectorized (fmap unPC . flip listAccess i . fmap pure) . unPC)
 
 instance RenderFunction PythonCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))

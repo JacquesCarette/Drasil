@@ -9,7 +9,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd, 
   listAppend, listAccess, listSet, getFunc, setFunc, 
-  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, vecAssign,
+  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, thunkAssign,
   increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, initStmts,
   function, docFuncRepr, docFunc, buildClass, implementingClass, docClass,
@@ -20,7 +20,7 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
-  VSType, SVariable, SValue, SVector, VSFunction, MSStatement, MSParameter,
+  VSType, SVariable, SValue, SThunk, VSFunction, MSStatement, MSParameter,
   SMethod, CSStateVar, SClass, FSModule, NamedArgs, Initializers, MixedCall,
   MixedCtorCall, FileSym(File), BodySym(Body), bodyStatements, oneLiner,
   BlockSym(Block), PermanenceSym(..), TypeSym(Type), TypeElim(getType,
@@ -331,8 +331,8 @@ subAssign t vr' v' = do
 
 -- FIXME: We should really be able to get a "fresh" variable name to use for
 -- the loop variable
-vecAssign :: RenderSym r => SVariable r -> SVector r -> MSStatement r
-vecAssign vr v = S.forRange i (S.litInt 0) (S.listSize (S.valueOf vr)) (S.litInt 1) $ S.body
+thunkAssign :: RenderSym r => SVariable r -> SThunk r -> MSStatement r
+thunkAssign vr v = S.forRange i (S.litInt 0) (S.listSize (S.valueOf vr)) (S.litInt 1) $ S.body
   [S.block [S.valStmt $ S.listSet (S.valueOf vr) (S.valueOf i) (S.vecIndex (S.valueOf i) v)]]
   where i = S.var "i" S.int
 

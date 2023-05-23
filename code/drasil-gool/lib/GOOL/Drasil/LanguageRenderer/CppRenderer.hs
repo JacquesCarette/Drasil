@@ -19,9 +19,9 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
   selfFuncApp, extFuncApp, InternalValueExp(..), objMethodCall,
-  FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), VectorSym(..),
-  VectorType(..), VectorDecl(..), VectorValue(..), VectorExpression(..),
-  VectorAssign(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
+  FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), ThunkSym(..),
+  VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
+  ThunkAssign(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
   IOStatement(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), switchAsIf, StatePattern(..),
   ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
@@ -62,7 +62,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  vecAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt,
+  thunkAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt,
   comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
   setMethod, function, buildClass, implementingClass, commentedClass,
   modFromData, fileDoc, fileFromData)
@@ -82,8 +82,8 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), Binding(..), onBinding,
   BindData(..), bd, FileType(..), FileData(..), fileD, FuncData(..), fd,
   ModData(..), md, updateMod, OpData(..), ParamData(..), pd, ProgData(..),
   progD, emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd,
-  VarData(..), vard, ArrayVector, arrayVector, vectorize, vectorize2,
-  arrayVectorIndex)
+  VarData(..), vard, CommonThunk, pureValue, vectorize, vectorize2,
+  indexVectorized)
 import GOOL.Drasil.Classes (Pair(..))
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, 
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
@@ -441,8 +441,11 @@ instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where
   listAccessFunc = pair2 listAccessFunc listAccessFunc
   listSetFunc = pair3 listSetFunc listSetFunc
 
-instance VectorSym (p CppSrcCode CppHdrCode) where
-  type Vector (p CppSrcCode CppHdrCode) = ArrayVector VS
+instance ThunkSym (p CppSrcCode CppHdrCode) where
+  type Thunk (p CppSrcCode CppHdrCode) = CommonThunk VS
+
+instance Pair p => ThunkAssign (p CppSrcCode CppHdrCode) where
+  thunkAssign vr = pair2 thunkAssign thunkAssign (zoom lensMStoVS vr) . zoom lensMStoVS
 
 instance Pair p => VectorType (p CppSrcCode CppHdrCode) where
   vecType = pair1 vecType vecType
@@ -452,16 +455,13 @@ instance Pair p => VectorDecl (p CppSrcCode CppHdrCode) where
   vecDecDef vr = pair1Val1List vecDecDef vecDecDef (zoom lensMStoVS vr) .
     map (zoom lensMStoVS)
 
-instance Pair p => VectorValue (p CppSrcCode CppHdrCode) where
-  vecValue = pair1 vecValue vecValue
+instance Pair p => VectorThunk (p CppSrcCode CppHdrCode) where
+  vecThunk = pair1 vecThunk vecThunk
 
 instance Pair p => VectorExpression (p CppSrcCode CppHdrCode) where
   vecScale = pair2 vecScale vecScale
   vecAdd = pair2 vecAdd vecAdd
   vecIndex = pair2 vecIndex vecIndex
-
-instance Pair p => VectorAssign (p CppSrcCode CppHdrCode) where
-  vecAssign vr = pair2 vecAssign vecAssign (zoom lensMStoVS vr) . zoom lensMStoVS
 
 instance (Pair p) => RenderFunction (p CppSrcCode CppHdrCode) where  
   funcFromData d = pair1 (funcFromData d) (funcFromData d)
@@ -1326,8 +1326,11 @@ instance InternalListFunc CppSrcCode where
   listAccessFunc = CP.listAccessFunc' cppListAccess
   listSetFunc = CP.listSetFunc cppListSetDoc
 
-instance VectorSym CppSrcCode where
-  type Vector CppSrcCode = ArrayVector VS
+instance ThunkSym CppSrcCode where
+  type Thunk CppSrcCode = CommonThunk VS
+
+instance ThunkAssign CppSrcCode where
+  thunkAssign = G.thunkAssign
 
 instance VectorType CppSrcCode where
   vecType = arrayType
@@ -1336,16 +1339,13 @@ instance VectorDecl CppSrcCode where
   vecDec = arrayDec
   vecDecDef = arrayDecDef
 
-instance VectorValue CppSrcCode where
-  vecValue = pure . pure . arrayVector . fmap unCPPSC . valueOf
+instance VectorThunk CppSrcCode where
+  vecThunk = pure . pure . pureValue . fmap unCPPSC . valueOf
 
 instance VectorExpression CppSrcCode where
   vecScale k = fmap $ fmap $ vectorize (fmap unCPPSC . (k #*) . fmap pure)
   vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unCPPSC $ fmap pure v1 #+ fmap pure v2)
-  vecIndex i = (>>= fmap pure . arrayVectorIndex (fmap unCPPSC . flip listAccess i . fmap pure) . unCPPSC)
-
-instance VectorAssign CppSrcCode where
-  vecAssign = G.vecAssign
+  vecIndex i = (>>= fmap pure . indexVectorized (fmap unCPPSC . flip listAccess i . fmap pure) . unCPPSC)
 
 instance RenderFunction CppSrcCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
@@ -1977,9 +1977,12 @@ instance InternalListFunc CppHdrCode where
   listAccessFunc _ _ = funcFromData empty void
   listSetFunc _ _ _ = funcFromData empty void
 
-instance VectorSym CppHdrCode where
-  type Vector CppHdrCode = ArrayVector VS
+instance ThunkSym CppHdrCode where
+  type Thunk CppHdrCode = CommonThunk VS
 
+instance ThunkAssign CppHdrCode where
+  thunkAssign _ _ = emptyStmt
+  
 instance VectorType CppHdrCode where
   vecType = arrayType
 
@@ -1987,17 +1990,14 @@ instance VectorDecl CppHdrCode where
   vecDec _ _ = emptyStmt
   vecDecDef _ _ = emptyStmt
 
-instance VectorValue CppHdrCode where
-  vecValue = pure . pure . arrayVector . fmap unCPPHC . valueOf
+instance VectorThunk CppHdrCode where
+  vecThunk = pure . pure . pureValue . fmap unCPPHC . valueOf
 
 instance VectorExpression CppHdrCode where
-  vecScale _ _ = pure $ pure $ arrayVector $ fmap unCPPHC (mkStateVal void empty)
-  vecAdd _ _ = pure $ pure $ arrayVector $ fmap unCPPHC (mkStateVal void empty)
+  vecScale _ _ = pure $ pure $ pureValue $ fmap unCPPHC (mkStateVal void empty)
+  vecAdd _ _ = pure $ pure $ pureValue $ fmap unCPPHC (mkStateVal void empty)
   vecIndex _ _ = mkStateVal void empty
 
-instance VectorAssign CppHdrCode where
-  vecAssign _ _ = emptyStmt
-  
 instance RenderFunction CppHdrCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
   

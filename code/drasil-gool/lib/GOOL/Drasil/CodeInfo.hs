@@ -9,8 +9,8 @@ import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement,
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), InternalValueExp(..), FunctionSym(..),
-  GetSet(..), List(..), InternalList(..), VectorSym(..), VectorType(..),
-  VectorDecl(..), VectorValue(..), VectorExpression(..), VectorAssign(..),
+  GetSet(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), StatePattern(..), ObserverPattern(..),
@@ -232,8 +232,11 @@ instance InternalList CodeInfo where
     _ <- vl
     noInfo
 
-instance VectorSym CodeInfo where
-  type Vector CodeInfo = ()
+instance ThunkSym CodeInfo where
+  type Thunk CodeInfo = ()
+
+instance ThunkAssign CodeInfo where
+  thunkAssign _ = zoom lensMStoVS . execute1
 
 instance VectorType CodeInfo where
   vecType _ = noInfoType
@@ -242,16 +245,13 @@ instance VectorDecl CodeInfo where
   vecDec _ _ = noInfo
   vecDecDef _ = zoom lensMStoVS . executeList
 
-instance VectorValue CodeInfo where
-  vecValue _ = noInfo
+instance VectorThunk CodeInfo where
+  vecThunk _ = noInfo
 
 instance VectorExpression CodeInfo where
   vecScale = execute2
   vecAdd = execute2
   vecIndex = execute2
-
-instance VectorAssign CodeInfo where
-  vecAssign _ = zoom lensMStoVS . execute1
 
 instance StatementSym CodeInfo where
   type Statement CodeInfo = ()

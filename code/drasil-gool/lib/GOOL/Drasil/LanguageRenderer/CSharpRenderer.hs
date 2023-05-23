@@ -18,8 +18,8 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp,
   newObj, InternalValueExp(..), objMethodCallNoParams, FunctionSym(..), ($.),
-  GetSet(..), List(..), InternalList(..), VectorSym(..), VectorType(..),
-  VectorDecl(..), VectorValue(..), VectorExpression(..), VectorAssign(..),
+  GetSet(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
   IOStatement(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), StatePattern(..),
@@ -59,7 +59,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  vecAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt,
+  thunkAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt,
   comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
   setMethod, function, buildClass, implementingClass, commentedClass,
   modFromData, fileDoc, fileFromData)
@@ -83,7 +83,7 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, 
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD, 
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
-  vard, ArrayVector, arrayVector, vectorize, vectorize2, arrayVectorIndex)
+  vard, CommonThunk, pureValue, vectorize, vectorize2, indexVectorized)
 import GOOL.Drasil.Helpers (angles, hicat, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
   on2StateWrapped, onCodeList, onStateList)
@@ -418,8 +418,11 @@ instance InternalListFunc CSharpCode where
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
 
-instance VectorSym CSharpCode where
-  type Vector CSharpCode = ArrayVector VS
+instance ThunkSym CSharpCode where
+  type Thunk CSharpCode = CommonThunk VS
+
+instance ThunkAssign CSharpCode where
+  thunkAssign = G.thunkAssign
 
 instance VectorType CSharpCode where
   vecType = arrayType
@@ -428,16 +431,13 @@ instance VectorDecl CSharpCode where
   vecDec = arrayDec
   vecDecDef = arrayDecDef
 
-instance VectorValue CSharpCode where
-  vecValue = pure . pure . arrayVector . fmap unCSC . valueOf
+instance VectorThunk CSharpCode where
+  vecThunk = pure . pure . pureValue . fmap unCSC . valueOf
 
 instance VectorExpression CSharpCode where
   vecScale k = fmap $ fmap $ vectorize (fmap unCSC . (k #*) . fmap pure)
   vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unCSC $ fmap pure v1 #+ fmap pure v2)
-  vecIndex i = (>>= fmap pure . arrayVectorIndex (fmap unCSC . flip listAccess i . fmap pure) . unCSC)
-
-instance VectorAssign CSharpCode where
-  vecAssign = G.vecAssign
+  vecIndex i = (>>= fmap pure . indexVectorized (fmap unCSC . flip listAccess i . fmap pure) . unCSC)
 
 instance RenderFunction CSharpCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))

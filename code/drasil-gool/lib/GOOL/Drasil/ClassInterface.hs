@@ -3,7 +3,7 @@
 module GOOL.Drasil.ClassInterface (
   -- Types
   Label, Library, GSProgram, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
-  SVector, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass,
+  SThunk, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass,
   FSModule, NamedArgs, Initializers, MixedCall, MixedCtorCall, PosCall,
   PosCtorCall,
   -- Typeclasses
@@ -17,8 +17,8 @@ module GOOL.Drasil.ClassInterface (
   InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
   objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..), ($.),
   selfAccess, GetSet(..), List(..), InternalList(..), listSlice,
-  listIndexExists, at, VectorSym(..), VectorType(..), VectorDecl(..),
-  VectorValue(..), VectorExpression(..), VectorAssign(..), StatementSym(..),
+  listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
   objDecNewNoParams, extObjDecNewNoParams, IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
@@ -47,8 +47,8 @@ type GSProgram a = GS (a (Program a))
 -- Functions in GOOL's interface beginning with "ext" are to be used to access items from other modules in the same program/project
 -- Functions in GOOL's interface beginning with "lib" are to be used to access items from different libraries/projects
 
-class (ProgramSym r, VectorType r, VectorDecl r, VectorValue r,
-  VectorExpression r, VectorAssign r, AssignStatement r, DeclStatement r,
+class (ProgramSym r, VectorType r, VectorDecl r, VectorThunk r,
+  VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r,
   IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r,
   ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r,
   VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
@@ -350,13 +350,16 @@ listIndexExists lst index = listSize lst ?> index
 at :: (List r) => SValue r -> SValue r -> SValue r
 at = listAccess
 
-type SVector a = VS (a (Vector a))
+type SThunk a = VS (a (Thunk a))
 
-class VectorSym r where
+class ThunkSym r where
   -- K.Type -> K.Type annotation needed because r is not applied here so its
   -- kind cannot be inferred (whereas for Value, r is applied in the type
   -- signature of valueType
-  type Vector (r :: K.Type -> K.Type)
+  type Thunk (r :: K.Type -> K.Type)
+
+class (VariableSym r, ThunkSym r, StatementSym r) => ThunkAssign r where
+  thunkAssign :: SVariable r -> SThunk r -> MSStatement r
 
 class TypeSym r => VectorType r where
   vecType :: VSType r -> VSType r
@@ -365,16 +368,13 @@ class (VariableSym r, StatementSym r) => VectorDecl r where
   vecDec :: Integer -> SVariable r -> MSStatement r
   vecDecDef :: SVariable r -> [SValue r] -> MSStatement r
 
-class (VariableSym r, VectorSym r) => VectorValue r where
-  vecValue :: SVariable r -> SVector r
+class (VariableSym r, ThunkSym r) => VectorThunk r where
+  vecThunk :: SVariable r -> SThunk r
 
-class (VectorSym r, ValueSym r) => VectorExpression r where
-  vecScale :: SValue r -> SVector r -> SVector r
-  vecAdd :: SVector r -> SVector r -> SVector r
-  vecIndex :: SValue r -> SVector r -> SValue r
-
-class (VariableSym r, StatementSym r) => VectorAssign r where
-  vecAssign :: SVariable r -> SVector r -> MSStatement r
+class (ThunkSym r, ValueSym r) => VectorExpression r where
+  vecScale :: SValue r -> SThunk r -> SThunk r
+  vecAdd :: SThunk r -> SThunk r -> SThunk r
+  vecIndex :: SValue r -> SThunk r -> SValue r
 
 type MSStatement a = MS (a (Statement a))
 

@@ -7,7 +7,7 @@ module GOOL.Drasil.AST (Terminator(..), ScopeTag(..), QualifiedName, qualName,
   StateVarData(getStVarScp, stVar, destructSts), svd, 
   TypeData(cType, typeString, typeDoc), td, ValData(valPrec, valType, val), 
   vd, updateValDoc, VarData(varBind, varName, varType, varDoc), vard,
-  ArrayVector, arrayVector, vectorize, vectorize2, arrayVectorIndex
+  CommonThunk, pureValue, vectorize, vectorize2, indexVectorized
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -143,22 +143,22 @@ data VarData = VarD {varBind :: Binding, varName :: String,
 vard :: Binding -> String -> TypeData -> Doc -> VarData
 vard = VarD
 
--- Used as the underlying data type for Vectors in all renderers
-data ArrayVector s
-  = ArrayVector (s ValData)
-  | Vectorize (s ValData -> s ValData) (ArrayVector s)
-  | Vectorize2 (s ValData -> s ValData -> s ValData) (ArrayVector s) (ArrayVector s)
+-- Used as the underlying data type for Thunks in all renderers
+data CommonThunk s
+  = PureValue (s ValData)
+  | Vectorize (s ValData -> s ValData) (CommonThunk s)
+  | Vectorize2 (s ValData -> s ValData -> s ValData) (CommonThunk s) (CommonThunk s)
 
-arrayVector :: s ValData -> ArrayVector s
-arrayVector = ArrayVector
+pureValue :: s ValData -> CommonThunk s
+pureValue = PureValue
 
-vectorize :: (s ValData -> s ValData) -> ArrayVector s -> ArrayVector s
+vectorize :: (s ValData -> s ValData) -> CommonThunk s -> CommonThunk s
 vectorize = Vectorize
 
-vectorize2 :: (s ValData -> s ValData -> s ValData) -> ArrayVector s -> ArrayVector s -> ArrayVector s
+vectorize2 :: (s ValData -> s ValData -> s ValData) -> CommonThunk s -> CommonThunk s -> CommonThunk s
 vectorize2 = Vectorize2
 
-arrayVectorIndex :: (s ValData -> s ValData) -> ArrayVector s -> s ValData
-arrayVectorIndex index (ArrayVector v) = index v
-arrayVectorIndex index (Vectorize op v) = op (arrayVectorIndex index v)
-arrayVectorIndex index (Vectorize2 op v1 v2) = arrayVectorIndex index v1 `op` arrayVectorIndex index v2
+indexVectorized :: (s ValData -> s ValData) -> CommonThunk s -> s ValData
+indexVectorized index (PureValue v) = index v
+indexVectorized index (Vectorize op v) = op (indexVectorized index v)
+indexVectorized index (Vectorize2 op v1 v2) = indexVectorized index v1 `op` indexVectorized index v2

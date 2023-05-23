@@ -20,8 +20,8 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   funcAppNamedArgs, selfFuncApp, extFuncApp, newObj, InternalValueExp(..),
   objMethodCall, objMethodCallNamedArgs, objMethodCallNoParams,
   FunctionSym(..), ($.), GetSet(..), List(..), listSlice, InternalList(..),
-  VectorSym(..), VectorType(..), VectorDecl(..), VectorValue(..),
-  VectorExpression(..), VectorAssign(..), StatementSym(..),
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), StatePattern(..), ObserverPattern(..),
@@ -62,7 +62,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  vecAssign, increment, objDecNew, print, returnStmt, valStmt, comment, throw,
+  thunkAssign, increment, objDecNew, print, returnStmt, valStmt, comment, throw,
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, initStmts,
   function, docFunc, buildClass, implementingClass, docClass, commentedClass,
   modFromData, fileDoc, docMod, fileFromData)
@@ -83,7 +83,7 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), td, ValData(..), vd, Binding(..), VarData(..), vard,
-  ArrayVector, arrayVector, vectorize, vectorize2, arrayVectorIndex)
+  CommonThunk, pureValue, vectorize, vectorize2, indexVectorized)
 import GOOL.Drasil.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, 
@@ -438,8 +438,11 @@ instance InternalListFunc SwiftCode where
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
 
-instance VectorSym SwiftCode where
-  type Vector SwiftCode = ArrayVector VS
+instance ThunkSym SwiftCode where
+  type Thunk SwiftCode = CommonThunk VS
+
+instance ThunkAssign SwiftCode where
+  thunkAssign = G.thunkAssign
 
 instance VectorType SwiftCode where
   vecType = arrayType
@@ -448,16 +451,13 @@ instance VectorDecl SwiftCode where
   vecDec = arrayDec
   vecDecDef = arrayDecDef
 
-instance VectorValue SwiftCode where
-  vecValue = pure . pure . arrayVector . fmap unSC . valueOf
+instance VectorThunk SwiftCode where
+  vecThunk = pure . pure . pureValue . fmap unSC . valueOf
 
 instance VectorExpression SwiftCode where
   vecScale k = fmap $ fmap $ vectorize (fmap unSC . (k #*) . fmap pure)
   vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unSC $ fmap pure v1 #+ fmap pure v2)
-  vecIndex i = (>>= fmap pure . arrayVectorIndex (fmap unSC . flip listAccess i . fmap pure) . unSC)
-
-instance VectorAssign SwiftCode where
-  vecAssign = G.vecAssign
+  vecIndex i = (>>= fmap pure . indexVectorized (fmap unSC . flip listAccess i . fmap pure) . unSC)
 
 instance RenderFunction SwiftCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))

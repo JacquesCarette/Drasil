@@ -74,7 +74,7 @@ ${a_{\text{x}}}$ & $x$-component of acceleration & $\frac{\text{m}}{\text{s}^{2}
 \\
 ${a_{\text{y}}}$ & $y$-component of acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-$\symbf{a}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+$\symbf{a}\text{(}t\text{)}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\symbf{F}$ & Force & ${\text{N}}$
 \\
@@ -98,7 +98,7 @@ ${p_{\text{y}}}$ & $y$-component of position & ${\text{m}}$
 \\
 ${{p_{\text{y}}}^{\text{i}}}$ & $y$-component of initial position & ${\text{m}}$
 \\
-$\symbf{p}$ & Position & ${\text{m}}$
+$\symbf{p}\text{(}t\text{)}$ & Position & ${\text{m}}$
 \\
 $T$ & Period & ${\text{s}}$
 \\
@@ -110,7 +110,7 @@ ${v_{\text{x}}}$ & $x$-component of velocity & $\frac{\text{m}}{\text{s}}$
 \\
 ${v_{\text{y}}}$ & $y$-component of velocity & $\frac{\text{m}}{\text{s}}$
 \\
-$\symbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
+$\symbf{v}\text{(}t\text{)}$ & Velocity & $\frac{\text{m}}{\text{s}}$
 \\
 $α$ & Angular acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
 \\
@@ -156,6 +156,10 @@ PS & Physical System Description
 \\
 R & Requirement
 \\
+RefBy & Referenced by
+\\
+Refname & Reference Name
+\\
 SRS & Software Requirements Specification
 \\
 TM & Theoretical Model
@@ -188,7 +192,7 @@ Reviewers of this documentation should have an understanding of undergraduate le
 
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
-The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013} and \cite{smithLai2005}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{instance models} and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013}, \cite{smithLai2005}, \cite{smithEtAl2007}, and \cite{smithKoothoor2016}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{instance models} and trace back to find any additional information they require.
 
 The \hyperref[Sec:GoalStmt]{goal statements} are refined to the theoretical models and the \hyperref[Sec:TMs]{theoretical models} to the \hyperref[Sec:IMs]{instance models}.
 
@@ -238,7 +242,7 @@ This section first presents the problem description, which gives a high-level vi
 
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
-A system is needed to efficiently and correctly to predict the motion of a pendulum.
+A system is needed to efficiently and correctly predict the motion of a pendulum.
 
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
@@ -265,7 +269,7 @@ The physical system of SglPendulum, as shown in \hyperref[Figure:sglpendulum]{Fi
 \end{figure}
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
-Given the mass and length of the rod, initial angle of the mass and the gravitational constant, the goal statements are:
+Given the mass and length of the rod, initial angle of the mass and the gravitational constant, the goal statement is:
 
 \begin{itemize}
 \item[Motion-of-the-mass:\phantomsection\label{motionMass}]{Calculate the motion of the mass.}
@@ -301,13 +305,13 @@ Label & Acceleration
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+           \symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\symbf{v}\text{(}t\text{)}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & \cite{accelerationWiki}
@@ -329,13 +333,13 @@ Label & Velocity
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+           \symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\symbf{v}\text{(}t\text{)}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{p}$ is the position (${\text{m}}$)}
+              \item{$\symbf{p}\text{(}t\text{)}$ is the position (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & \cite{velocityWiki}
@@ -357,16 +361,16 @@ Label & Newton's second law of motion
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}
+           \symbf{F}=m \symbf{a}\text{(}t\text{)}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The net force $\symbf{F}$ on a body is proportional to the acceleration $\symbf{a}$ of the body, where $m$ denotes the mass of the body as the constant of proportionality.
+Notes & The net force $\symbf{F}$ on a body is proportional to the acceleration $\symbf{a}\text{(}t\text{)}$ of the body, where $m$ denotes the mass of the body as the constant of proportionality.
         
 \\ \midrule \\
 Source & --
@@ -449,7 +453,7 @@ RefBy &
 At a given point in time, velocity may be defined as
 
 \begin{displaymath}
-\symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 We also know the horizontal position
 
@@ -508,7 +512,7 @@ RefBy &
 At a given point in time, velocity may be defined as
 
 \begin{displaymath}
-\symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 We also know the vertical position
 
@@ -568,7 +572,7 @@ RefBy &
 Our acceleration is:
 
 \begin{displaymath}
-\symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 Earlier, we found the horizontal velocity to be
 
@@ -628,7 +632,7 @@ RefBy &
 Our acceleration is:
 
 \begin{displaymath}
-\symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 Earlier, we found the vertical velocity to be
 
@@ -1131,7 +1135,7 @@ Thus the simple harmonic motion is:
 \end{displaymath}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
 
 \begin{longtable}{l l l l}
 \toprule
@@ -1419,7 +1423,7 @@ publisher={Pearson Prentice Hall},
 year={2004}}
 @mastersthesis{koothoor2013,
 author={Koothoor, Nirmitha},
-title={A document drive approach to certifying scientific computing software},
+title={A Document Driven Approach to Certifying Scientific Computing Software},
 school={McMaster University},
 year={2013},
 address={Hamilton, ON, Canada}}
@@ -1433,6 +1437,16 @@ volume={12},
 number={2},
 pages={251--257},
 address={Washington, USA}}
+@article{smithKoothoor2016,
+author={Smith, W. Spencer and Koothoor, Nirmitha},
+title={A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis},
+journal={ Nuclear Engineering and Technology},
+year={2016},
+month=apr,
+volume={48},
+number={2},
+pages={404--418},
+howpublished={\url{http://www.sciencedirect.com/science/article/pii/S1738573315002582}}}
 @inproceedings{smithLai2005,
 author={Smith, W. Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
@@ -1442,6 +1456,16 @@ editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
 address={Paris, France},
 pages={107--121},
 note={In conjunction with 13th IEEE International Requirements Engineering Conference,}}
+@article{smithEtAl2007,
+author={Smith, W. Spencer and Lai, Lei and Khedri, Ridha},
+title={Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability},
+journal={Reliable Computing, Special Issue on Reliable Engineering Computation},
+year={2007},
+month=feb,
+volume={13},
+number={1},
+pages={83--107},
+howpublished={\url{https://doi.org/10.1007/s11155-006-9020-7}}}
 @misc{accelerationWiki,
 author={Wikipedia Contributors},
 title={Acceleration},

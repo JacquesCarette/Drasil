@@ -5,7 +5,7 @@ import Prelude hiding (sin, cos)
 import Language.Drasil (ModelExprC(..), ExprC(..),
   Express(..), ModelExpr, DefiningExpr(..))
 
-import Data.Drasil.Quantities.Physics(velocity, acceleration, gravitationalAccel, time)
+import Data.Drasil.Quantities.Physics(velocity, acceleration, gravitationalMagnitude, time)
 import Drasil.DblPendulum.DataDefs
 import Drasil.DblPendulum.Expressions (velXExpr_2, velYExpr_2)
 import Drasil.DblPendulum.Unitals (lenRod_1, massObj_1, massObj_2,
@@ -67,7 +67,7 @@ angularAccelDerivEqn1 = sy massObj_1 `mulRe` sy xAccel_1 $=
                       neg (sy tension_1) `mulRe` sin (sy pendDisAngle_1) $- (sy massObj_2 `mulRe` sy xAccel_2)
 angularAccelDerivEqn2 = sy massObj_1 `mulRe` sy yAccel_1 $=
                       sy tension_1 `mulRe` cos (sy pendDisAngle_1) $- (sy massObj_2 `mulRe` sy yAccel_2) $-
-                      (sy massObj_2 `mulRe` sy gravitationalAccel) $- (sy massObj_1 `mulRe` sy gravitationalAccel)
+                      (sy massObj_2 `mulRe` sy gravitationalMagnitude) $- (sy massObj_1 `mulRe` sy gravitationalMagnitude)
 angularAccelDerivEqn3 = sy tension_1 `mulRe` sin (sy pendDisAngle_1) `mulRe` cos (sy pendDisAngle_1) $=
                       neg (cos (sy pendDisAngle_1)) `mulRe`
                       ((sy massObj_1 `mulRe` sy xAccel_1) `addRe` (sy massObj_2 `mulRe` sy xAccel_2))
@@ -75,12 +75,12 @@ angularAccelDerivEqn4 = sy tension_1 `mulRe` sin (sy pendDisAngle_1) `mulRe` cos
                       sin (sy pendDisAngle_1) `mulRe` 
                       (
                           (sy massObj_1 `mulRe` sy yAccel_1) `addRe` (sy massObj_2 `mulRe` sy yAccel_2) `addRe`
-                          (sy massObj_2 `mulRe` sy gravitationalAccel) `addRe` (sy massObj_1 `mulRe` sy gravitationalAccel)
+                          (sy massObj_2 `mulRe` sy gravitationalMagnitude) `addRe` (sy massObj_1 `mulRe` sy gravitationalMagnitude)
                       )
 angularAccelDerivEqn5 = sin (sy pendDisAngle_1) `mulRe` 
                       (
                           (sy massObj_1 `mulRe` sy yAccel_1) `addRe` (sy massObj_2 `mulRe` sy yAccel_2) `addRe`
-                          (sy massObj_2 `mulRe` sy gravitationalAccel) `addRe` (sy massObj_1 `mulRe` sy gravitationalAccel)
+                          (sy massObj_2 `mulRe` sy gravitationalMagnitude) `addRe` (sy massObj_1 `mulRe` sy gravitationalMagnitude)
                       ) $=
                       neg (cos (sy pendDisAngle_1)) `mulRe` 
                       ((sy massObj_1 `mulRe` sy xAccel_1) `addRe` (sy massObj_2 `mulRe` sy xAccel_2))
@@ -88,7 +88,7 @@ angularAccelDerivEqn6 = sy tension_2 `mulRe` sin(sy pendDisAngle_2) `mulRe` cos 
                       neg (cos (sy pendDisAngle_2)) `mulRe` sy massObj_2 `mulRe` sy xAccel_2
 angularAccelDerivEqn7 = sy tension_1 `mulRe` sin (sy pendDisAngle_2 ) `mulRe` cos (sy pendDisAngle_2) $=
                       sin (sy pendDisAngle_2) `mulRe`
-                      ((sy massObj_2 `mulRe` sy yAccel_2) `addRe` (sy massObj_2 `mulRe` sy gravitationalAccel))
+                      ((sy massObj_2 `mulRe` sy yAccel_2) `addRe` (sy massObj_2 `mulRe` sy gravitationalMagnitude))
 angularAccelDerivEqn8 = sin (sy pendDisAngle_2) `mulRe` 
-                      ((sy massObj_2 `mulRe` sy yAccel_2) `addRe` (sy massObj_2 `mulRe` sy gravitationalAccel)) $=
+                      ((sy massObj_2 `mulRe` sy yAccel_2) `addRe` (sy massObj_2 `mulRe` sy gravitationalMagnitude)) $=
                       neg (cos (sy pendDisAngle_2)) `mulRe` sy massObj_2 `mulRe` sy xAccel_2

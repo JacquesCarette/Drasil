@@ -6,7 +6,8 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (analysis, assumption, goalStmt,
-  likelyChg, physSyst, property, requirement, safety, srs, typUnc, unlikelyChg)
+  likelyChg, physSyst, property, requirement, refBy, refName, safety, srs, typUnc, 
+  unlikelyChg)
 import Data.Drasil.Concepts.Education (mechanics)
 import Data.Drasil.Concepts.Math (surface)
 import Data.Drasil.Concepts.Physics (twoD, threeD, force, stress)
@@ -17,7 +18,7 @@ import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 ----Acronyms-----
 acronyms :: [CI]
 acronyms = [twoD, threeD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
-  physSyst, requirement, srs, ssp, thModel, typUnc, unlikelyChg]
+  physSyst, requirement, refBy, refName, srs, ssp, thModel, typUnc, unlikelyChg]
 
 ssp :: CI
 ssp = commonIdeaWithDict "ssp" (pn' "Slope Stability analysis Program") "SSP"   [civilEng]

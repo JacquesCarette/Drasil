@@ -132,7 +132,7 @@ mkSRS = [TableOfContents,
       ],
   SSDSec $
     SSDProg
-    [ SSDProblem $ PDProg probDescIntro []
+    [ SSDProblem $ PDProg purp []
       [ TermsAndDefs Nothing terms
       , PhySysDesc progName physSystParts figTank []
       , Goals goalInputs]
@@ -174,7 +174,7 @@ si = SI {
   _sys         = srsSWHS,
   _kind        = Doc.srs,
   _authors     = [thulasi],
-  _purpose     = [],
+  _purpose     = [purp],
   _background  = [],
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but 
@@ -193,6 +193,9 @@ si = SI {
   _usedinfodb  = usedDB,
    refdb       = refDB
 }
+
+purp :: Sentence
+purp = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWHT)]
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
@@ -279,8 +282,7 @@ orgDocEnd = foldlSent_ [atStartNP (the inModel),
 --Section 4.1 : PROBLEM DESCRIPTION
 -----------------------------------
 
-probDescIntro :: Sentence
-probDescIntro = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWHT)]
+--Introduction of Problem Description section derived from purp
 
 terms :: [ConceptChunk]
 terms = [htFlux, heatCapSpec, thermalConduction, transient]

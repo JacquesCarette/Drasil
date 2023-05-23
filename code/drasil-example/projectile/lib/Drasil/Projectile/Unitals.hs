@@ -11,18 +11,23 @@ import Data.Drasil.SI_Units (radian, metre, second)
 import Data.Drasil.Units.Physics (velU)
 
 import qualified Drasil.Projectile.Concepts as C (flightDur, offset,
-  flightDur, landPos, launAngle, launSpeed, offset, targPos, projSpeed)
+  flightDur, landPos, launAngle, launSpeed, offset, targPos, projSpeed, projPos)
 
 projSpeed :: UnitalChunk
-projSpeed  = uc C.projSpeed (Concat [vec lV, label "(", lT, label ")"]) Real velU
+projSpeed = uc C.projSpeed (Concat [lV, label "(", lT, label ")"]) Real velU
+
+projPos :: UnitalChunk
+projPos = uc C.projPos (Concat [lP, label "(", lT, label ")"]) Real metre
 
 ---
-landPosUnc, launAngleUnc, launSpeedUnc, offsetUnc, targPosUnc :: UncertQ
+landPosUnc, launAngleUnc, launSpeedUnc, offsetUnc, targPosUnc,
+  flightDurUnc :: UncertQ
 landPosUnc   = uq landPos   defaultUncrt
 launAngleUnc = uq launAngle defaultUncrt
 launSpeedUnc = uq launSpeed defaultUncrt
 offsetUnc    = uq offset    defaultUncrt
 targPosUnc   = uq targPos   defaultUncrt
+flightDurUnc = uq flightDur defaultUncrt
 
 flightDur, landPos, launAngle, launSpeed, offset, targPos :: ConstrConcept
 flightDur = constrainedNRV' (uc       C.flightDur (subStr lT "flight") Real second) [gtZeroConstr]

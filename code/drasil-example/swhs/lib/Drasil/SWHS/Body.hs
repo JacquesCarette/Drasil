@@ -46,7 +46,8 @@ import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater)
 import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
-import Drasil.SWHS.References (citations, koothoor2013, smithLai2005)
+import Drasil.SWHS.References (citations, koothoor2013, smithEtAl2007,
+  smithLai2005, smithKoothoor2016)
 import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements, verifyEnergyOutput)
 import Drasil.SWHS.TMods (tMods)
 import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
@@ -78,7 +79,7 @@ si = SI {
   _sys         = swhsPCM,
   _kind        = Doc.srs, 
   _authors     = [thulasi, brooks, spencerSmith],
-  _purpose     = [],
+  _purpose     = [purp],
   _background  = [],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
@@ -94,6 +95,10 @@ si = SI {
   _usedinfodb  = usedDB,
    refdb       = refDB
 }
+
+purp :: Sentence
+purp = foldlSent_ [S "investigate the effect" `S.of_` S "employing",
+  short phsChgMtrl, S "within a", phrase sWHT]
 
 symbMap :: ChunkDB
 symbMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
@@ -133,7 +138,7 @@ mkSRS = [TableOfContents,
     ],
   SSDSec $
     SSDProg 
-      [ SSDProblem $ PDProg probDescIntro []
+      [ SSDProblem $ PDProg purp []
         [ TermsAndDefs Nothing terms
         , PhySysDesc progName physSystParts figTank []
         , Goals goalInputs]
@@ -254,8 +259,8 @@ charReaderDE = plural de +:+ S "from level 1 and 2" +:+ phrase calculus
 orgDocIntro :: Sentence
 orgDocIntro = foldlSent [atStartNP (the organization), S "of this",
   phrase document, S "follows the template for an", short Doc.srs
-  `S.for` phrase sciCompS, S "proposed by", refS koothoor2013 `S.and_`
-  refS smithLai2005]
+  `S.for` phrase sciCompS, S "proposed by", foldlList Comma List $ 
+  map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]
 
 orgDocEnd :: Sentence
 orgDocEnd = foldlSent_ [atStartNP' (the inModel), 
@@ -353,9 +358,8 @@ userChars pro = foldlSP [S "The end", phrase user `S.of_` short pro,
 -------------------------------
 -- 4.1 : Problem Description --
 -------------------------------
-probDescIntro :: Sentence
-probDescIntro = foldlSent_ [S "investigate the effect" `S.of_` S "employing",
-  short phsChgMtrl, S "within a", phrase sWHT]
+
+-- Introduction of Problem Description section derived from purp
 
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --

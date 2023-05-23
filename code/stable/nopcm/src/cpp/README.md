@@ -1,6 +1,8 @@
 # NoPCM 
 > Author: Thulasi Jegatheesan
 
+> Purpose: investigate the heating of water in a solar water heating tank.
+
 ------------------------------------------------------------
 ## Making Examples 
  How to Run the Program:

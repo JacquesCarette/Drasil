@@ -1,0 +1,122 @@
+\chapter{Conclusion} \label{chap:conclusion}
+In this chapter, we will discuss the future work and summarize the achievements 
+of this paper.
+
+\section{Future Work}
+Although this work has contributed to the Drasil research project and opened up 
+new possibilities for future research, there is still much to be done.
+
+\subsection{JSON Printer Improvement} \label{chap:jsonPrinterImprove}
+While the current JSON printer is capable of generating Jupyter Notebook 
+documents, there are several issues that need to be addressed. For example, the 
+JSON printer currently relies on the TeX printer function for generating 
+mathematical equations. However, this approach has some limitations, and some 
+equations may not be displayed correctly in Jupyter Notebook, such as the use 
+of the \textbf{symbf} command for math equations in LaTeX, which is not 
+valid in Jupyter 
+Notebook\footnote{\href{https://github.com/JacquesCarette/Drasil/issues/2761}{symbf
+ not recognized in notebook.}}. To ensure mathematical symbols and expressions 
+are 
+displayed correctly, it is crucial to understand how Jupyter Notebook works 
+with these elements. It may be necessary to modify the JSON printer and use 
+different methods or consider using specialized libraries or tools designed for 
+generating mathematical equations in Jupyter Notebook. 
+
+\subsection{Design Lesson Plan Content Type} \label{chap:designContentType}
+In Chapter~\ref{chap:codeBlock}, we discussed the potential limitations of the 
+current \texttt{LayoutObj} for the structure of lesson plans. Most of the 
+existing layout objects are designed for SRS data types such as 
+\texttt{Definition}. To better accommodate the content types found in lesson 
+plans, we could define a new set of \texttt{LayoutObj}s that are specific to 
+these types of contents, such as a model that includes step-by-step 
+instructions, since many lessons include these instructions. By doing so, we 
+could ensure that each content type is handled explicitly by the appropriate 
+\texttt{LayoutObj}, and we could create a separate cell for each type of 
+content as discussed earlier. This approach would make it easier to split the 
+content into logical units of information, and it would also make the resulting 
+notebook more modular and easier to navigate.
+
+\subsection{Develop the Structure of Lesson Plans} 
+\label{chap:developlsnPlanStruc}
+The current structure of lesson plans includes several chapters such as 
+learning objectives, case problems, and examples, and each chapter is made up 
+of a list of contents. However, this structure needs improvement to better fit 
+the architecture of each chapter. By gaining a better understanding of our 
+lesson plans and the structure of each chapter, we can incorporate the newly 
+designed specific content types (as discussed in \ref{chap:designContentType}) 
+into each chapter. For example, the Case Problem chapter should include the 
+model of procedure analysis, which includes step-by-step instructions. Having a 
+more detailed and adaptable structure of lesson plans would enable greater 
+consistency and efficiency in creating and delivering content. Furthermore, it 
+would make it easier to capture the key elements and knowledge of each lesson.
+
+\subsection{Develop the Language of Code Block}
+As we have discussed in earlier chapters, Drasil has the capability to generate 
+source code as a part of software artifacts. To generate code content, we can 
+use the available code expression, known as \texttt{CodeExpr}. However, 
+generating code in a `text' document is different from generating it as a 
+program. While we can generate code and code blocks in the Jupyter Notebook, 
+the current language is not yet mature and requires further improvement. For 
+example, to encode the code variable, we need to define it as a 
+\texttt{UnitalChunk} (Code~\ref{code:horiz_velo}) before we can use it in an 
+expression. However, \texttt{UnitalChunk}s are concepts with quantities that 
+require unit definition, which does not align with the concept of code 
+variables. We can introduce a new data type that better fits code variables or 
+create smart constructors. In addition, we still need to explore how to make 
+the most of our \texttt{CodeBlock}, and generate code flawlessly. These are 
+interesting areas to investigate.
+
+\begin{listing}[h!]
+	\caption{Source Code for horiz\_velo}
+	\label{code:horiz_velo}
+	\begin{lstlisting}[language=haskell1]
+		horiz_velo :: UnitalChunk
+		horiz_velo = uc horizontalMotion (variable "horiz_velo") Real velU 
+	\end{lstlisting}
+\end{listing}
+
+\subsection{Enable Other Programming Languages in Notebook}
+Jupyter Notebook can handle code written in multiple programming languages, 
+such as Python, Matlab, Julia, and R. In Chapter~\ref{chap:nbprinter}, we cover 
+the metadata required to configure the notebook's environment. At present, the 
+metadata enables Python code, but we aim to support additional languages in the 
+future. To accomplish this, users should be able to choose their preferred 
+language, and we can generate the appropriate metadata accordingly. 
+Furthermore, we need to develop the syntax or structure for supporting other 
+programming languages as well.
+
+\section{Conclusion}
+This paper demonstrates the potential of Jupyter Notebook as a versatile 
+tool for creating and sharing scientific documents and for enhancing the 
+teaching and learning efficiency in engineering education. To extend the 
+capabilities of Jupyter Notebook to Drasil, we present the implementation of 
+a JSON printer that is capable of generating Drasil software artifacts, 
+such as the SRS, in the notebook format. We discuss the necessary functions and 
+data types for working with notebook generation, as well as the process of 
+encoding information in Drasil and generating and printing Jupyter Notebook 
+documents using the printer.
+
+The addition of the JSON printer expands the application of Drasil, making it 
+possible to generate educational documents and develop lesson planes. We 
+analyze the similarities and differences of elements in textbook chapters to 
+create a universal structure that fits our lesson plans the most and provide 
+insights into the design and implementation of the structure in the Drasil 
+language. With the lesson plan structure in place, we demonstrate how the 
+knowledge can be manipulated and reused in Drasil through the creation of a new 
+case study on Projectile Motion Lesson. 
+
+Furthermore, we highlight the benefits of using Jupyter Notebooks for data 
+research and how they enable users to seamlessly combine different content 
+types with code. When creating lesson plans that involve code, we need to 
+address questions such as which type of cell to use and how to determine where 
+to split the contents into cells. By understanding the conceptual definition of 
+a cell and identifying natural boundaries within the text or code, we can 
+effectively divide the contents and generate appropriate cell types. We cover 
+the implementation of Markdown and code cell generation, which are essential 
+components for creating a Jupyter Notebook document. 
+
+In conclusion, this research addresses three main problems and provides a 
+starting point for generating Jupyter Notebook in Drasil. With further 
+refinement and development of the JSON printer and the language of lesson 
+plans, generating Jupyter Notebook documents in Drasil can open up more 
+possibilities.   

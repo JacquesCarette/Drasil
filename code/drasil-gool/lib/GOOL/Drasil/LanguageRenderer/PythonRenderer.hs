@@ -245,7 +245,7 @@ instance VariableSym PythonCode where
   type Variable PythonCode = VarData
   var = G.var
   staticVar = G.staticVar
-  const = var
+  constant = var
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
   classVar = CP.classVar R.classVar

@@ -23,7 +23,7 @@ import Drasil.Projectile.Concepts (rectVel)
 import qualified Drasil.Projectile.Derivations as D
 import qualified Drasil.Projectile.Expressions as E
 import Data.Drasil.Citations (hibbeler2004)
-import Drasil.Projectile.Unitals (projSpeed)
+import Drasil.Projectile.Unitals (projSpeed, projPos)
 
 genDefns :: [GenDefn]
 genDefns = [rectVelGD, rectPosGD, velVecGD, posVecGD]
@@ -54,18 +54,18 @@ rectVelDerivEqns = map eS D.rectVelDeriv ++ [eS' rectVelQD]
 
 ----------
 rectPosGD :: GenDefn
-rectPosGD = gd (equationalModel' rectPosQD) (getUnit scalarPos) (Just rectPosDeriv)
+rectPosGD = gd (equationalModel' rectPosQD) (getUnit projPos) (Just rectPosDeriv)
   [dRefInfo hibbeler2004 $ Page [8]] "rectPos" [{-Notes-}]
 
 rectPosQD :: ModelQDef
-rectPosQD = mkQuantDef' scalarPos (nounPhraseSent $ foldlSent_ 
+rectPosQD = mkQuantDef' projPos (nounPhraseSent $ foldlSent_ 
             [atStart rectilinear, sParen $ getAcc oneD, phrase position,
              S "as a function" `S.of_` phraseNP (time `for` QP.constAccel)])
             E.scalarPos'
 
 rectPosDeriv :: Derivation
 rectPosDeriv = mkDerivName (phrase rectilinear +:+ phrase position)
-               (weave [rectPosDerivSents, map eS rectPosDerivEqns])
+               (weave [rectPosDerivSents, rectPosDerivEqns])
 
 rectPosDerivSents :: [Sentence]
 rectPosDerivSents = [rectDeriv position velocity motSent iPos velocityTM,
@@ -73,8 +73,8 @@ rectPosDerivSents = [rectDeriv position velocity motSent iPos velocityTM,
     where
       motSent = atStartNP (the motion) `S.in_` refS velocityTM `S.is` S "now" +:+. phrase oneD
 
-rectPosDerivEqns :: [ModelExpr]
-rectPosDerivEqns = D.rectPosDeriv ++ [express rectPosQD]
+rectPosDerivEqns :: [Sentence]
+rectPosDerivEqns = map eS D.rectPosDeriv ++ [eS' rectPosQD]
 
 ----------
 velVecGD :: GenDefn
@@ -120,7 +120,7 @@ rectDeriv c1 c2 motSent initc ctm = foldlSent_ [
   (atStartNP (the c1) `S.is` getScalar c1 `S.andThe` phrase c2 `S.is` getScalar c2 !.), motSent,
   atStartNP (the initc), sParen (S "at" +:+ eS (sy time $= exactDbl 0) `sC` S "from" +:+
   refS timeStartZero) `S.is` S "represented by" +:+. getScalar initc,
-  S "From", refS ctm `sC` S "using the above", plural symbol_ +: S "we have"]
+  S "From", refS ctm `S.in_` short oneD `sC` S "and using the above", plural symbol_ +: S "we have"]
   where
     getScalar c
       | c == position     = eS' scalarPos

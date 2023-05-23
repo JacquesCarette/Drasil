@@ -43,7 +43,7 @@ public class Projectile {
         outfile.Write(s);
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
-        write_output(s, d_offset);
+        write_output(s, d_offset, t_flight);
     }
     
     /** \brief Calculates flight duration: the time when the projectile lands (s)
@@ -59,7 +59,7 @@ public class Projectile {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return 2.0 * inParams.v_launch * Math.Sin(inParams.theta) / Constants.g_vect;
+        return 2.0 * inParams.v_launch * Math.Sin(inParams.theta) / Constants.g;
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -75,7 +75,7 @@ public class Projectile {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return 2.0 * Math.Pow(inParams.v_launch, 2.0) * Math.Sin(inParams.theta) * Math.Cos(inParams.theta) / Constants.g_vect;
+        return 2.0 * Math.Pow(inParams.v_launch, 2.0) * Math.Sin(inParams.theta) * Math.Cos(inParams.theta) / Constants.g;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -129,8 +129,9 @@ public class Projectile {
     /** \brief Writes the output values to output.txt
         \param s output message as a string
         \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
+        \param t_flight flight duration: the time when the projectile lands (s)
     */
-    public static void write_output(string s, double d_offset) {
+    public static void write_output(string s, double d_offset, double t_flight) {
         StreamWriter outfile;
         outfile = new StreamWriter("log.txt", true);
         outfile.WriteLine("function write_output called with inputs: {");
@@ -138,7 +139,10 @@ public class Projectile {
         outfile.Write(s);
         outfile.WriteLine(", ");
         outfile.Write("  d_offset = ");
-        outfile.WriteLine(d_offset);
+        outfile.Write(d_offset);
+        outfile.WriteLine(", ");
+        outfile.Write("  t_flight = ");
+        outfile.WriteLine(t_flight);
         outfile.WriteLine("  }");
         outfile.Close();
         
@@ -148,6 +152,8 @@ public class Projectile {
         outputfile.WriteLine(s);
         outputfile.Write("d_offset = ");
         outputfile.WriteLine(d_offset);
+        outputfile.Write("t_flight = ");
+        outputfile.WriteLine(t_flight);
         outputfile.Close();
     }
 }
@@ -258,7 +264,7 @@ public class InputParameters {
 /** \brief Structure for holding the constant values
 */
 public class Constants {
-    public const double g_vect = 9.8;
+    public const double g = 9.8;
     public const double epsilon = 2.0e-2;
     
 }

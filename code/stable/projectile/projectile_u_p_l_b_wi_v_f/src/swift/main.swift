@@ -12,7 +12,7 @@ class InputParameters {
     var v_launch: Float = 0.0
     var theta: Float = 0.0
     var p_target: Float = 0.0
-    var g_vect: Float = 9.8
+    var g: Float = 9.8
     var epsilon: Float = 2.0e-2
     
     /** Initializes input object by reading inputs and checking physical constraints on the input
@@ -295,7 +295,7 @@ func func_t_flight(_ inParams: inout InputParameters) throws -> Float {
         throw "Error closing file."
     }
     
-    return 2.0 * inParams.v_launch * sin(inParams.theta) / inParams.g_vect
+    return 2.0 * inParams.v_launch * sin(inParams.theta) / inParams.g
 }
 
 /** Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -339,7 +339,7 @@ func func_p_land(_ inParams: inout InputParameters) throws -> Float {
         throw "Error closing file."
     }
     
-    return 2.0 * pow(inParams.v_launch, 2.0) * sin(inParams.theta) * cos(inParams.theta) / inParams.g_vect
+    return 2.0 * pow(inParams.v_launch, 2.0) * sin(inParams.theta) * cos(inParams.theta) / inParams.g
 }
 
 /** Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -475,8 +475,9 @@ func func_s(_ inParams: inout InputParameters, _ d_offset: Float) throws -> Stri
 /** Writes the output values to output.txt
     - Parameter s: output message as a string
     - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
+    - Parameter t_flight: flight duration: the time when the projectile lands (s)
 */
-func write_output(_ s: String, _ d_offset: Float) throws -> Void {
+func write_output(_ s: String, _ d_offset: Float, _ t_flight: Float) throws -> Void {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -513,6 +514,22 @@ func write_output(_ s: String, _ d_offset: Float) throws -> Void {
     }
     do {
         try outfile.write(contentsOf: Data(String(d_offset).utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outfile.write(contentsOf: Data(", ".utf8))
+        try outfile.write(contentsOf: Data("\n".utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outfile.write(contentsOf: Data("  t_flight = ".utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outfile.write(contentsOf: Data(String(t_flight).utf8))
         try outfile.write(contentsOf: Data("\n".utf8))
     } catch {
         throw "Error printing to file."
@@ -553,6 +570,17 @@ func write_output(_ s: String, _ d_offset: Float) throws -> Void {
     }
     do {
         try outputfile.write(contentsOf: Data(String(d_offset).utf8))
+        try outputfile.write(contentsOf: Data("\n".utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outputfile.write(contentsOf: Data("t_flight = ".utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outputfile.write(contentsOf: Data(String(t_flight).utf8))
         try outputfile.write(contentsOf: Data("\n".utf8))
     } catch {
         throw "Error printing to file."
@@ -706,4 +734,4 @@ do {
 } catch {
     throw "Error closing file."
 }
-try write_output(s, d_offset)
+try write_output(s, d_offset, t_flight)

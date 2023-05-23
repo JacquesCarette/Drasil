@@ -6,7 +6,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (constant)
 import Data.Drasil.Concepts.Math (angle)
-import Data.Drasil.Concepts.Physics (position, speed, motion, distance, iSpeed, time,
+import Data.Drasil.Concepts.Physics (oneD, position, speed, motion, distance, iSpeed, time,
   rectilinear, velocity, acceleration)
 
 concepts :: [IdeaDict]
@@ -31,15 +31,16 @@ projMotion = compoundNC projectile motion
 ---
 
 defs :: [ConceptChunk]
-defs = [launcher, projectile, target, projSpeed]
+defs = [launcher, projectile, target, projSpeed, projPos]
 
-launcher, projectile, target, projSpeed :: ConceptChunk
+launcher, projectile, target, projSpeed, projPos :: ConceptChunk
 launcher   = dcc "launcher"   (nounPhraseSP "launcher")  ("where the projectile is launched from " ++
                                                           "and the device that does the launching")
 projectile = dcc "projectile" (nounPhraseSP "projectile") "the object to be launched at the target"
 target     = dcc "target"     (nounPhraseSP "target")     "where the projectile should be launched to"
 
-projSpeed  = dccWDS "projSpeed" (nounPhraseSP "1D speed") (S "1D speed under" +:+ phrase constant +:+ phrase acceleration)
+projSpeed  = dccWDS "projSpeed" (nounPhraseSP "1D speed")    (getAcc oneD +:+ phrase speed +:+ S "under" +:+ phrase constant +:+ phrase acceleration)
+projPos    = dccWDS "projPos"   (nounPhraseSP "1D position") (getAcc oneD +:+ phrase position +:+ S "under" +:+ phrase constant +:+ phrase speed)
 
 landPos, launAngle, launSpeed, offset, targPos, flightDur :: ConceptChunk
 landPos = cc' landingPosNC

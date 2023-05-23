@@ -90,10 +90,13 @@ physSystDesc progName parts fg other = SRS.physSyst (intro : bullets : LlC fg : 
         bullets = enumSimpleU 1 (short physSyst) parts
 
 -- | General constructor for the Goal Statement section. Takes the given inputs ('Sentence's) and the descriptions ('Contents').
-goalStmtF :: [Sentence] -> [Contents] -> Section
-goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
-  where intro = mkParagraph $ S "Given" +:+ foldlList Comma List givenInputs `sC` 
-                pluralNP (the goalStmt) +: S "are"
+goalStmtF :: [Sentence] -> [Contents] -> Int -> Section
+goalStmtF _ [] _ = SRS.goalStmt [mkParagraph $ S "Not applicable"] []
+goalStmtF givenInputs otherContents amt = SRS.goalStmt (intro:otherContents) []
+  where intro = mkParagraph $ S "Given" +:+ foldlList Comma List 
+                givenInputs `sC` if amt == 1
+                                   then phraseNP (the goalStmt) +: S "is"
+                                   else pluralNP (the goalStmt) +: S "are"
 
 -- | General introduction for the Solution Characteristics Specification section. Takes the program name and a section of instance models. 
 solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
@@ -199,7 +202,7 @@ uncertSent = foldlSent [atStartNP (the uncertainty), phrase column,
 
 -- | General 'Sentence' that describes some conservative constraints on the model.
 conservConsSent :: Sentence
-conservConsSent = foldlSent [atStartNP' (the constraint) `S.are` S "conservative" `sC`
+conservConsSent = foldlSent [atStartNP' (the constraint) `S.are` S "conservative" +:+
   S "to give", phrase user `S.the_ofThe` phrase model,
   S "the flexibility to experiment with unusual situations"]
 

@@ -35,7 +35,8 @@ import Data.Drasil.Software.Products (sciCompS, prodtcon)
 import Data.Drasil.Theories.Physics (physicsTMs)
 
 import Data.Drasil.People (brooks, henryFrankis)
-import Data.Drasil.Citations (koothoor2013, smithLai2005)
+import Data.Drasil.Citations (koothoor2013, smithEtAl2007, smithLai2005,
+  smithKoothoor2016)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
 
 import Drasil.SSP.Assumptions (assumptions)
@@ -73,7 +74,7 @@ si = SI {
   _sys         = ssp, 
   _kind        = Doc.srs, 
   _authors     = [henryFrankis, brooks],
-  _purpose     = [],
+  _purpose     = [purp],
   _background  = [],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
@@ -110,7 +111,7 @@ mkSRS = [TableOfContents,
     ],
   SSDSec $
     SSDProg
-      [ SSDProblem $ PDProg prob []
+      [ SSDProblem $ PDProg purp []
         [ TermsAndDefs Nothing terms
         , PhySysDesc ssp physSystParts figPhysSyst physSystContents 
         , Goals goalsInputs]
@@ -133,6 +134,12 @@ mkSRS = [TableOfContents,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $ AuxConsProg ssp [],
   Bibliography]
+
+purp :: Sentence
+purp = foldlSent_ [S "evaluate the", phrase fs `S.ofA` phrasePoss slope,
+  phrase slpSrf `S.and_` S "identify", phraseNP (crtSlpSrf `the_ofThe` slope) `sC`
+  S "as well as the", phrase intrslce, phraseNP (normForce `and_` shearForce),
+  S "along the", phrase crtSlpSrf]
 
 units :: [UnitDefn]
 units = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
@@ -233,8 +240,8 @@ orgSecStart, orgSecEnd :: Sentence
 orgSecStart = foldlSent [atStartNP (the organization), S "of this",
   phrase document, S "follows the", phrase template, S "for an",
   short Doc.srs `S.for` phrase sciCompS,
-  S "proposed by Koothoor", refS koothoor2013, S "as well as Smith" `S.and_`
-  S "Lai", refS smithLai2005]
+  S "proposed by", foldlList Comma List $ 
+  map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]
 orgSecEnd   = foldlSent_ [atStartNP' (the inModel), S "provide the set of",
   S "algebraic", plural equation, S "that must be solved"]
 
@@ -313,11 +320,8 @@ sysConstraints = foldlSP [atStartNP (NP.the (combineNINI morPrice method_)),
 -- SECTION 4 --
 
 -- SECTION 4.1 --
-prob :: Sentence
-prob = foldlSent_ [S "evaluate the", phrase fs `S.ofA` phrasePoss slope,
-  phrase slpSrf `S.and_` S "identify", phraseNP (crtSlpSrf `the_ofThe` slope) `sC`
-  S "as well as the", phrase intrslce, phraseNP (normForce `and_` shearForce),
-  S "along the", phrase crtSlpSrf]
+
+-- Introduction of the Problem Description section derives from purp
 
 {-
 From when solution was used in Problem Description:

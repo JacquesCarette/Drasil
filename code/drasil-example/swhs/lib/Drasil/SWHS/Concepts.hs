@@ -6,7 +6,7 @@ import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt,
-  likelyChg, physSyst, requirement, srs, typUnc, unlikelyChg)
+  likelyChg, physSyst, requirement, refBy, refName, srs, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (ode, parameter, rightSide)
 import Data.Drasil.Domains (materialEng)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
@@ -19,7 +19,7 @@ con = [charging, coil, discharging, gaussDiv,
 ---Acronyms---
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
-  progName, physSyst, requirement, srs, thModel, typUnc, unlikelyChg]
+  progName, physSyst, requirement, refBy, refName, srs, thModel, typUnc, unlikelyChg]
 
 acronymsFull :: [CI]
 acronymsFull = acronyms ++ [phsChgMtrl, rightSide]

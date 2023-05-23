@@ -2,14 +2,16 @@ module Drasil.GlassBR.References where
 
 import Language.Drasil
 
-import Data.Drasil.Citations (campidelli, koothoor2013, smithLai2005, parnasClements1986)
+import Data.Drasil.Citations (campidelli, koothoor2013, smithEtAl2007,
+  smithLai2005, smithKoothoor2016, parnasClements1986)
 import Data.Drasil.People (jRobertson, jmBracci, sRobertson, tlKohutek, wlBeason)
 
 rbrtsn2012, astm2009, astm2016, astm2012, beasonEtAl1998 :: Citation
 
 citations :: BibRef
-citations = [campidelli, koothoor2013, smithLai2005, rbrtsn2012, astm2009, astm2016,
-  astm2012, beasonEtAl1998, parnasClements1986]
+citations = [campidelli, koothoor2013, smithEtAl2007, smithLai2005,
+             smithKoothoor2016, rbrtsn2012, astm2009, astm2016, astm2012,
+             beasonEtAl1998, parnasClements1986]
 
 rbrtsn2012 = cMisc [author [jRobertson, sRobertson], title
   "Volere requirements specification template edition 16",

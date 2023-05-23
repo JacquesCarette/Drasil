@@ -21,7 +21,7 @@ class InputParameters {
         float v_launch;
         float theta;
         float p_target;
-        float g_vect = 9.8f;
+        float g = 9.8f;
         float epsilon = 2.0e-2f;
         
         /** \brief Initializes input object by reading inputs and checking physical constraints on the input
@@ -68,7 +68,8 @@ string func_s(InputParameters &inParams, float d_offset);
 /** \brief Writes the output values to output.txt
     \param s output message as a string
     \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
+    \param t_flight flight duration: the time when the projectile lands (s)
 */
-void write_output(string s, float d_offset);
+void write_output(string s, float d_offset, float t_flight);
 
 #endif

@@ -20,7 +20,7 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
-  VSType, SVariable, SValue, SThunk, VSFunction, MSStatement, MSParameter,
+  VSType, SVariable, SValue, VSThunk, VSFunction, MSStatement, MSParameter,
   SMethod, CSStateVar, SClass, FSModule, NamedArgs, Initializers, MixedCall,
   MixedCtorCall, FileSym(File), BodySym(Body), bodyStatements, oneLiner,
   BlockSym(Block), PermanenceSym(..), TypeSym(Type), TypeElim(getType,
@@ -331,7 +331,7 @@ subAssign t vr' v' = do
 
 -- FIXME: We should really be able to get a "fresh" variable name to use for
 -- the loop variable
-thunkAssign :: RenderSym r => SVariable r -> SThunk r -> MSStatement r
+thunkAssign :: RenderSym r => SVariable r -> VSThunk r -> MSStatement r
 thunkAssign vr v = S.forRange i (S.litInt 0) (S.listSize (S.valueOf vr)) (S.litInt 1) $ S.body
   [S.block [S.valStmt $ S.listSet (S.valueOf vr) (S.valueOf i) (S.vecIndex (S.valueOf i) v)]]
   where i = S.var "i" S.int

@@ -3,7 +3,7 @@
 module GOOL.Drasil.ClassInterface (
   -- Types
   Label, Library, GSProgram, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
-  SThunk, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass,
+  VSThunk, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass,
   FSModule, NamedArgs, Initializers, MixedCall, MixedCtorCall, PosCall,
   PosCtorCall,
   -- Typeclasses
@@ -350,7 +350,7 @@ listIndexExists lst index = listSize lst ?> index
 at :: (List r) => SValue r -> SValue r -> SValue r
 at = listAccess
 
-type SThunk a = VS (a (Thunk a))
+type VSThunk a = VS (a (Thunk a))
 
 class ThunkSym r where
   -- K.Type -> K.Type annotation needed because r is not applied here so its
@@ -359,7 +359,7 @@ class ThunkSym r where
   type Thunk (r :: K.Type -> K.Type)
 
 class (VariableSym r, ThunkSym r, StatementSym r) => ThunkAssign r where
-  thunkAssign :: SVariable r -> SThunk r -> MSStatement r
+  thunkAssign :: SVariable r -> VSThunk r -> MSStatement r
 
 class TypeSym r => VectorType r where
   vecType :: VSType r -> VSType r
@@ -369,12 +369,12 @@ class (VariableSym r, StatementSym r) => VectorDecl r where
   vecDecDef :: SVariable r -> [SValue r] -> MSStatement r
 
 class (VariableSym r, ThunkSym r) => VectorThunk r where
-  vecThunk :: SVariable r -> SThunk r
+  vecThunk :: SVariable r -> VSThunk r
 
 class (ThunkSym r, ValueSym r) => VectorExpression r where
-  vecScale :: SValue r -> SThunk r -> SThunk r
-  vecAdd :: SThunk r -> SThunk r -> SThunk r
-  vecIndex :: SValue r -> SThunk r -> SValue r
+  vecScale :: SValue r -> VSThunk r -> VSThunk r
+  vecAdd :: VSThunk r -> VSThunk r -> VSThunk r
+  vecIndex :: SValue r -> VSThunk r -> SValue r
 
 type MSStatement a = MS (a (Statement a))
 

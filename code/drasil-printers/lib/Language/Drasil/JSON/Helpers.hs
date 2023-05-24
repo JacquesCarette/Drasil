@@ -115,6 +115,7 @@ h n       | n < 1 = error "Illegal header (too small)"
                     hash _ = "Illegal header"
 
 -- | Curly braces.
+br :: Doc -> Doc
 br x = text "{" <> x <> text "}"
 
 mkDiv :: String -> Doc -> Doc -> Doc

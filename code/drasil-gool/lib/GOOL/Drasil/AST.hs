@@ -7,7 +7,7 @@ module GOOL.Drasil.AST (Terminator(..), ScopeTag(..), QualifiedName, qualName,
   StateVarData(getStVarScp, stVar, destructSts), svd, 
   TypeData(cType, typeString, typeDoc), td, ValData(valPrec, valType, val), 
   vd, updateValDoc, VarData(varBind, varName, varType, varDoc), vard,
-  CommonThunk, pureValue, vectorize, vectorize2, indexVectorized
+  CommonThunk, pureValue, vectorize, vectorize2, commonVecIndex
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -158,7 +158,7 @@ vectorize = Vectorize
 vectorize2 :: (s ValData -> s ValData -> s ValData) -> CommonThunk s -> CommonThunk s -> CommonThunk s
 vectorize2 = Vectorize2
 
-indexVectorized :: (s ValData -> s ValData) -> CommonThunk s -> s ValData
-indexVectorized index (PureValue v) = index v
-indexVectorized index (Vectorize op v) = op (indexVectorized index v)
-indexVectorized index (Vectorize2 op v1 v2) = indexVectorized index v1 `op` indexVectorized index v2
+commonVecIndex :: (s ValData -> s ValData) -> CommonThunk s -> s ValData
+commonVecIndex index (PureValue v) = index v
+commonVecIndex index (Vectorize op v) = op (commonVecIndex index v)
+commonVecIndex index (Vectorize2 op v1 v2) = commonVecIndex index v1 `op` commonVecIndex index v2

@@ -83,7 +83,7 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), Binding(..), onBinding,
   ModData(..), md, updateMod, OpData(..), ParamData(..), pd, ProgData(..),
   progD, emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd,
   VarData(..), vard, CommonThunk, pureValue, vectorize, vectorize2,
-  indexVectorized)
+  commonVecIndex)
 import GOOL.Drasil.Classes (Pair(..))
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, 
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
@@ -1345,7 +1345,7 @@ instance VectorThunk CppSrcCode where
 instance VectorExpression CppSrcCode where
   vecScale k = fmap $ fmap $ vectorize (fmap unCPPSC . (k #*) . fmap pure)
   vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unCPPSC $ fmap pure v1 #+ fmap pure v2)
-  vecIndex i = (>>= fmap pure . indexVectorized (fmap unCPPSC . flip listAccess i . fmap pure) . unCPPSC)
+  vecIndex i = (>>= fmap pure . commonVecIndex (fmap unCPPSC . flip listAccess i . fmap pure) . unCPPSC)
 
 instance RenderFunction CppSrcCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))

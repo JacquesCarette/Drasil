@@ -87,7 +87,7 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard,
-  CommonThunk, pureValue, vectorize, vectorize2, indexVectorized)
+  CommonThunk, pureValue, vectorize, vectorize2, commonVecIndex)
 import GOOL.Drasil.CodeAnalysis (Exception(..), ExceptionType(..), exception, 
   stdExc, HasException(..))
 import GOOL.Drasil.Helpers (emptyIfNull, toCode, toState, onCodeValue, 
@@ -468,7 +468,7 @@ instance VectorThunk JavaCode where
 instance VectorExpression JavaCode where
   vecScale k = fmap $ fmap $ vectorize (fmap unJC . (k #*) . fmap pure)
   vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unJC $ fmap pure v1 #+ fmap pure v2)
-  vecIndex i = (>>= fmap pure . indexVectorized (fmap unJC . flip listAccess i . fmap pure) . unJC)
+  vecIndex i = (>>= fmap pure . commonVecIndex (fmap unJC . flip listAccess i . fmap pure) . unJC)
 
 instance RenderFunction JavaCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))

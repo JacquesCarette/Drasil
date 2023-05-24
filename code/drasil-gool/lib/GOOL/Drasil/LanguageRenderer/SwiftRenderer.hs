@@ -83,7 +83,7 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), td, ValData(..), vd, Binding(..), VarData(..), vard,
-  CommonThunk, pureValue, vectorize, vectorize2, indexVectorized)
+  CommonThunk, pureValue, vectorize, vectorize2, commonVecIndex)
 import GOOL.Drasil.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, 
@@ -457,7 +457,7 @@ instance VectorThunk SwiftCode where
 instance VectorExpression SwiftCode where
   vecScale k = fmap $ fmap $ vectorize (fmap unSC . (k #*) . fmap pure)
   vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unSC $ fmap pure v1 #+ fmap pure v2)
-  vecIndex i = (>>= fmap pure . indexVectorized (fmap unSC . flip listAccess i . fmap pure) . unSC)
+  vecIndex i = (>>= fmap pure . commonVecIndex (fmap unSC . flip listAccess i . fmap pure) . unSC)
 
 instance RenderFunction SwiftCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))

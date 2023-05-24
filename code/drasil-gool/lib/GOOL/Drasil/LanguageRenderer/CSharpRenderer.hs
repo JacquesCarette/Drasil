@@ -83,7 +83,7 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, 
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD, 
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
-  vard, CommonThunk, pureValue, vectorize, vectorize2, indexVectorized)
+  vard, CommonThunk, pureValue, vectorize, vectorize2, commonVecIndex)
 import GOOL.Drasil.Helpers (angles, hicat, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
   on2StateWrapped, onCodeList, onStateList)
@@ -437,7 +437,7 @@ instance VectorThunk CSharpCode where
 instance VectorExpression CSharpCode where
   vecScale k = fmap $ fmap $ vectorize (fmap unCSC . (k #*) . fmap pure)
   vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unCSC $ fmap pure v1 #+ fmap pure v2)
-  vecIndex i = (>>= fmap pure . indexVectorized (fmap unCSC . flip listAccess i . fmap pure) . unCSC)
+  vecIndex i = (>>= fmap pure . commonVecIndex (fmap unCSC . flip listAccess i . fmap pure) . unCSC)
 
 instance RenderFunction CSharpCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))

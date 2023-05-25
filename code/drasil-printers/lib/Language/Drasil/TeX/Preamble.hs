@@ -119,3 +119,4 @@ parseDoc los' =
     parseDoc' List{}       = ([EnumItem], [])
     parseDoc' EqnBlock{}   = ([], [])
     parseDoc' Cell{}       = ([], [])
+    parseDoc' CodeBlock{}  = ([], [])

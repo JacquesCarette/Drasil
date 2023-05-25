@@ -26,7 +26,7 @@ import Data.Char (isSpace, toLower)
 -- trailing notes ('Sentence's), and any other needed contents to create a Traceability 'Section'.
 -- Traceability graphs generate as both a link and a figure for convenience.
 traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> String -> [Section] -> Section
-traceMGF _ _ [] _ = SRS.traceyMandG [mkParagraph $ S "No contents"]
+traceMGF [] [] [] _ = SRS.traceyMandG [mkParagraph $ S "No contents"]
 traceMGF refs trailing otherContents ex = SRS.traceyMandG (traceMIntro refs trailing : otherContents
   ++ map UlC (traceGIntro traceGUIDs (trailing ++ [allvsallDesc])) ++ traceGCon ex)
 

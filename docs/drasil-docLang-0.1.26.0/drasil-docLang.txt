@@ -12,51 +12,51 @@
 module Drasil.DocLang.Notebook
 
 -- | Section constructors for the lesson plan documents/jupyter notebooks.
+--   should be fixed once we have a more concrete idea of the notebook
+--   structure TODO: Remove [Section] since the structure of lesson plans
+--   should not be nested maybe add a new type Chapter for lesson plans?
 intro :: [Contents] -> [Section] -> Section
 
 -- | Section constructors for the lesson plan documents/jupyter notebooks.
-prpsOfDoc :: [Contents] -> [Section] -> Section
+--   should be fixed once we have a more concrete idea of the notebook
+--   structure TODO: Remove [Section] since the structure of lesson plans
+--   should not be nested maybe add a new type Chapter for lesson plans?
+learnObj :: [Contents] -> [Section] -> Section
 
 -- | Section constructors for the lesson plan documents/jupyter notebooks.
-body :: [Contents] -> [Section] -> Section
-
--- | Section constructors for the lesson plan documents/jupyter notebooks.
+--   should be fixed once we have a more concrete idea of the notebook
+--   structure TODO: Remove [Section] since the structure of lesson plans
+--   should not be nested maybe add a new type Chapter for lesson plans?
 review :: [Contents] -> [Section] -> Section
 
 -- | Section constructors for the lesson plan documents/jupyter notebooks.
-mainIdea :: [Contents] -> [Section] -> Section
+--   should be fixed once we have a more concrete idea of the notebook
+--   structure TODO: Remove [Section] since the structure of lesson plans
+--   should not be nested maybe add a new type Chapter for lesson plans?
+caseProb :: [Contents] -> [Section] -> Section
 
 -- | Section constructors for the lesson plan documents/jupyter notebooks.
-motion :: [Contents] -> [Section] -> Section
-
--- | Section constructors for the lesson plan documents/jupyter notebooks.
-hormotion :: [Contents] -> [Section] -> Section
-
--- | Section constructors for the lesson plan documents/jupyter notebooks.
-vermotion :: [Contents] -> [Section] -> Section
-
--- | Section constructors for the lesson plan documents/jupyter notebooks.
-methAndAnls :: [Contents] -> [Section] -> Section
-
--- | Section constructors for the lesson plan documents/jupyter notebooks.
-coorSyst :: [Contents] -> [Section] -> Section
-
--- | Section constructors for the lesson plan documents/jupyter notebooks.
-kinematic :: [Contents] -> [Section] -> Section
-
--- | Section constructors for the lesson plan documents/jupyter notebooks.
-procForAnls :: [Contents] -> [Section] -> Section
-
--- | Section constructors for the lesson plan documents/jupyter notebooks.
+--   should be fixed once we have a more concrete idea of the notebook
+--   structure TODO: Remove [Section] since the structure of lesson plans
+--   should not be nested maybe add a new type Chapter for lesson plans?
 summary :: [Contents] -> [Section] -> Section
 
 -- | Section constructors for the lesson plan documents/jupyter notebooks.
+--   should be fixed once we have a more concrete idea of the notebook
+--   structure TODO: Remove [Section] since the structure of lesson plans
+--   should not be nested maybe add a new type Chapter for lesson plans?
 appendix :: [Contents] -> [Section] -> Section
 
 -- | Section constructors for the lesson plan documents/jupyter notebooks.
+--   should be fixed once we have a more concrete idea of the notebook
+--   structure TODO: Remove [Section] since the structure of lesson plans
+--   should not be nested maybe add a new type Chapter for lesson plans?
 reference :: [Contents] -> [Section] -> Section
 
 -- | Section constructors for the lesson plan documents/jupyter notebooks.
+--   should be fixed once we have a more concrete idea of the notebook
+--   structure TODO: Remove [Section] since the structure of lesson plans
+--   should not be nested maybe add a new type Chapter for lesson plans?
 example :: [Contents] -> [Section] -> Section
 sectionReferences :: [Reference]
 
@@ -66,11 +66,11 @@ introLabel :: Reference
 
 -- | Individual section reference labels. Used in creating example sections
 --   for the notebook.
-docPurposeLabel :: Reference
+learnObjLabel :: Reference
 
 -- | Individual section reference labels. Used in creating example sections
 --   for the notebook.
-methsAndanlsLabel :: Reference
+docPurposeLabel :: Reference
 
 -- | Individual section reference labels. Used in creating example sections
 --   for the notebook.
@@ -78,27 +78,11 @@ referenceLabel :: Reference
 
 -- | Individual section reference labels. Used in creating example sections
 --   for the notebook.
-bodyLabel :: Reference
-
--- | Individual section reference labels. Used in creating example sections
---   for the notebook.
 reviewLabel :: Reference
 
 -- | Individual section reference labels. Used in creating example sections
 --   for the notebook.
-mainIdeaLabel :: Reference
-
--- | Individual section reference labels. Used in creating example sections
---   for the notebook.
-motionLabel :: Reference
-
--- | Individual section reference labels. Used in creating example sections
---   for the notebook.
-hormotionLabel :: Reference
-
--- | Individual section reference labels. Used in creating example sections
---   for the notebook.
-vermotionLabel :: Reference
+caseProbLabel :: Reference
 
 -- | Individual section reference labels. Used in creating example sections
 --   for the notebook.
@@ -106,19 +90,7 @@ appendixLabel :: Reference
 
 -- | Individual section reference labels. Used in creating example sections
 --   for the notebook.
-coorSystLabel :: Reference
-
--- | Individual section reference labels. Used in creating example sections
---   for the notebook.
-kinematicLabel :: Reference
-
--- | Individual section reference labels. Used in creating example sections
---   for the notebook.
 summaryLabel :: Reference
-
--- | Individual section reference labels. Used in creating example sections
---   for the notebook.
-anlsProcLabel :: Reference
 
 -- | Individual section reference labels. Used in creating example sections
 --   for the notebook.
@@ -904,38 +876,37 @@ fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
 findAllRefs :: Section -> [Reference]
 
 -- | A Lesson Plan notebook declaration is made up of all necessary
---   sections (<a>NbSection</a>s).
-type NBDecl = [NbSection]
+--   chapters (<a>LsnChapter</a>s).
+type LsnDecl = [LsnChapter]
 
--- | Contains all the different sections needed for a notebook lesson plan
---   (<a>NBDecl</a>).
-data NbSection
-IntrodSec :: IntrodSec -> NbSection
-BodySec :: BodySec -> NbSection
-BibSec :: NbSection
+-- | Contains all the different chapters needed for a notebook lesson plan
+--   (<a>LsnDecl</a>).
+data LsnChapter
+Intro :: Intro -> LsnChapter
+LearnObj :: LearnObj -> LsnChapter
+Review :: Review -> LsnChapter
+CaseProb :: CaseProb -> LsnChapter
+Example :: Example -> LsnChapter
+Smmry :: Smmry -> LsnChapter
+BibSec :: LsnChapter
+Apndx :: Apndx -> LsnChapter
+newtype Intro
+IntrodProg :: [Contents] -> Intro
+newtype LearnObj
+LrnObjProg :: [Contents] -> LearnObj
+newtype Review
+ReviewProg :: [Contents] -> Review
+newtype CaseProb
+CaseProbProg :: [Contents] -> CaseProb
+newtype Example
+ExampleProg :: [Contents] -> Example
+newtype Smmry
+SmmryProg :: [Contents] -> Smmry
+newtype Apndx
+ApndxProg :: [Contents] -> Apndx
 
--- | Introduction section. Contents are top level followed by a list of
---   subsections.
-data IntrodSec
-IntrodProg :: [Contents] -> [IntrodSub] -> IntrodSec
-
--- | Introduction subsections
-data IntrodSub
-[InPurpose] :: [Sentence] -> IntrodSub
-newtype BodySec
-BodyProg :: [BodySub] -> BodySec
-data BodySub
-[Review] :: [Contents] -> BodySub
-[MainIdea] :: [Contents] -> [Section] -> BodySub
-[MethsAndAnls] :: [Contents] -> [Section] -> BodySub
-[Example] :: [Contents] -> [Section] -> BodySub
-newtype SmmrySec
-SmmryProg :: [Contents] -> SmmrySec
-newtype ApndxSec
-ApndxProg :: [Contents] -> ApndxSec
-
--- | Creates a notebook from a document description and system information.
-mkNb :: NBDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
+-- | Creates a notebook from a lesson description and system information.
+mkNb :: LsnDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 
 -- | Fields that should be displayed in definitions.
 data Field

@@ -1,0 +1,4 @@
+digraph example{
+Example	[shape=oval, color=darkgreen, label="Example"];
+Example -> Contents;
+}

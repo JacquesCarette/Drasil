@@ -1,0 +1,4 @@
+digraph smmry{
+Smmry	[shape=oval, color=darkgreen, label="Smmry"];
+Smmry -> Contents;
+}

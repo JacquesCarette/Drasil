@@ -167,8 +167,8 @@ showHasSymbImpl :: HasSymbol x => x -> String
 genTeX :: Document -> PrintingInformation -> Doc
 
 -- | Generate a python notebook document (using json). build : build the
---   general Jupyter Notbook document build': build the SRS example in JSON
---   format
+--   SRS document in JSON format build': build the general Jupyter Notbook
+--   document
 genJSON :: PrintingInformation -> DocType -> Document -> Doc
 
 -- | Gathers all printing functions and creates the debugging tables from

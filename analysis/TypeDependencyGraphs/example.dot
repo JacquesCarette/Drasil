@@ -185,15 +185,17 @@ digraph alltypes {
 	}
 	subgraph main {
 	}
-	subgraph analyiss {
-	}
 	subgraph body {
 	}
-	subgraph introsection {
+	subgraph caeprobs {
+	}
+	subgraph example {
+	}
+	subgraph figures {
+	}
+	subgraph learnobj {
 	}
 	subgraph main {
-	}
-	subgraph motion {
 	}
 	subgraph review {
 	}

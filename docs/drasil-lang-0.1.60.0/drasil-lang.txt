@@ -3594,6 +3594,9 @@ RefNote :: String -> RefInfo
 -- | Capitalizes a Sentence.
 capSent :: Sentence -> Sentence
 
+-- | Helper which creates a Header with size s of the <a>Sentence</a>.
+headSent :: Int -> Sentence -> Sentence
+
 -- | Gets a symbol and places it in a <a>Sentence</a>.
 ch :: (HasUID c, HasSymbol c) => c -> Sentence
 eS :: ModelExpr -> Sentence
@@ -4110,9 +4113,11 @@ Figure :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
 Bib :: BibRef -> RawContent
 
 -- | Contain a graph with coordinates (<a>Sentence</a>s), maybe a width and
---   height, and a label (<a>Sentence</a>). | CodeBlock CodeExpr -- ^ Block
---   for codes TODO: Fill this one in.
+--   height, and a label (<a>Sentence</a>).
 Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawContent
+
+-- | Block for codes TODO: Fill this one in.
+CodeBlock :: CodeExpr -> RawContent
 
 -- | Smart constructor that wraps <a>LabelledContent</a> into
 --   <a>Contents</a>.
@@ -4205,6 +4210,9 @@ lbldExpr :: ModelExpr -> Reference -> LabelledContent
 -- | Same as <tt>eqUnR</tt> except content is unlabelled (does not attach a
 --   <a>Reference</a>).
 unlbldExpr :: ModelExpr -> Contents
+
+-- | Unlabelled code expression
+unlbldCode :: CodeExpr -> Contents
 
 -- | Output is of the form "<tt>reference - sentence</tt>".
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence

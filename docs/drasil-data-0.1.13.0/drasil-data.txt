@@ -201,6 +201,7 @@ desSpec :: CI
 goalStmt :: CI
 dataConst :: CI
 likelyChg :: CI
+learnObj :: CI
 unlikelyChg :: CI
 physSyst :: CI
 requirement :: CI
@@ -346,6 +347,7 @@ video :: NamedChunk
 verification :: NamedChunk
 year :: NamedChunk
 abbAcc :: NamedChunk
+caseProb :: NamedChunk
 charOfIR :: NamedChunk
 consVals :: NamedChunk
 corSol :: NamedChunk

@@ -55,10 +55,24 @@ figLaunch :: LabelledContent
 module Drasil.Projectile.Goals
 goals :: [ConceptInstance]
 
-module Drasil.Projectile.Lesson.IntroSection
-introContext :: Contents
-reasonList :: Contents
-overviewParagraph :: Contents
+module Drasil.Projectile.Lesson.Example
+exampleContent :: [Contents]
+exampleContextP1 :: Contents
+exampleContextP2 :: Contents
+exampleContextP3 :: Contents
+codeC1 :: Contents
+codeC2 :: Contents
+codeC3 :: Contents
+horiz_velo :: UnitalChunk
+
+module Drasil.Projectile.Lesson.Figures
+figCSandA :: LabelledContent
+
+module Drasil.Projectile.Lesson.LearnObj
+learnObjContext :: Contents
+learnObjList :: [Sentence]
+assumpResp :: [Sentence]
+solveResp :: [Sentence]
 
 module Drasil.Projectile.References
 citations :: BibRef
@@ -98,69 +112,93 @@ positionXY :: PExpr
 velocityXY :: PExpr
 accelerationXY :: PExpr
 constAccelXY :: PExpr
+horizVel :: PExpr
+horizPos :: PExpr
+vertVel :: PExpr
+vertPos :: PExpr
+vertNoTime :: PExpr
 lcrectVel :: LabelledContent
 lcrectPos :: LabelledContent
 lcrectNoTime :: LabelledContent
+lchorizVel :: LabelledContent
+lchorizPos :: LabelledContent
+lcvertVel :: LabelledContent
+lcvertPos :: LabelledContent
+lcvertNoTime :: LabelledContent
 eqnRefs :: [Reference]
 
 module Drasil.Projectile.Lesson.Review
 reviewContent :: [Contents]
+reviewHead :: Contents
 reviewContextP1 :: Contents
 reviewEqns :: Contents
 reviewContextP2 :: Contents
+
+module Drasil.Projectile.Lesson.CaseProb
+caseProbCont :: [Contents]
+projMotionHead :: Contents
+horMotionHead :: Contents
+verMotionHead :: Contents
+summaryHead :: Contents
+motionContextP1 :: Contents
+motionContextP2 :: Contents
+hMintro :: Contents
+hMequations :: Contents
+hMconcl :: Contents
+vMintro :: Contents
+vMequations :: Contents
+vMconcl :: Contents
+summary :: Contents
+procforAnls :: Contents
+procforAnlsHead :: Contents
+stepOneHead :: Contents
+stepTwoHead :: Contents
+stepThreeHead :: Contents
+stepFourHead :: Contents
+stepFourOneHead :: Contents
+stepFourTwoHead :: Contents
+stepFiveHead :: Contents
+stepOneCont :: Contents
+stepTwoCont :: Contents
+stepThreeCont :: Contents
+stepFourCont :: Contents
+horizMotionEqn1 :: Contents
+horizMotionEqn1Sent :: Contents
+horizMotionEqn2 :: Contents
+horizMotionEqn3 :: Contents
+vertMotionEqn1 :: Contents
+vertMotionEqn2 :: Contents
+vertMotionEqn3 :: Contents
+verMotionCont :: Contents
+stepFiveCont :: Contents
+equationsSents :: [Sentence]
+horMotionEqns :: [ModelExpr]
+verMotionEqns :: [ModelExpr]
+motionSent :: Sentence
+figRefs :: [Reference]
+foot :: UnitDefn
+accelinftU :: UnitDefn
+
+module Drasil.Projectile.Lesson.Body
+nb :: Document
+printSetting :: PrintingInformation
+mkNB :: LsnDecl
+si :: SystemInformation
+symbMap :: ChunkDB
+usedDB :: ChunkDB
+symbols :: [QuantityDict]
+refDB :: ReferenceDB
+projectileMotion :: CI
+allRefs :: [Reference]
+
+module Drasil.Projectile.Lesson.Main
+main :: IO ()
 
 module Drasil.Projectile.Derivations
 timeDeriv :: [ModelExpr]
 landPosDeriv :: [ModelExpr]
 rectVelDeriv :: [ModelExpr]
 rectPosDeriv :: [ModelExpr]
-horMotionDeriv :: [ModelExpr]
-horMotionEqn1 :: ModelExpr
-horMotionEqn2 :: ModelExpr
-verMotionDeriv :: [ModelExpr]
-verMotionEqn1 :: ModelExpr
-verMotionEqn2 :: ModelExpr
-verMotionEqn3 :: ModelExpr
-
-module Drasil.Projectile.Lesson.Motion
-motionContextP1 :: Contents
-motionContextP2 :: Contents
-horMotion :: Section
-verMotion :: Section
-summary :: Section
-resourcePath :: String
-figCSandA :: LabelledContent
-equationsSents :: [Sentence]
-horMotionEqns :: [ModelExpr]
-motionSent :: Sentence
-figRefs :: [Reference]
-foot :: UnitDefn
-accelinftU :: UnitDefn
-
-module Drasil.Projectile.Lesson.Analysis
-coorSyst :: Section
-kinematicEq :: Section
-horMotionAna :: Section
-verMotionAna :: Section
-coorSystContext :: Contents
-kinematicContext :: Contents
-horMotionContext :: Contents
-verMotionContext :: Contents
-
-module Drasil.Projectile.Lesson.Body
-nb :: Document
-printSetting :: PrintingInformation
-mkNB :: NBDecl
-si :: SystemInformation
-symbMap :: ChunkDB
-usedDB :: ChunkDB
-refDB :: ReferenceDB
-projectileMotion :: CI
-mAndaintro :: Contents
-allRefs :: [Reference]
-
-module Drasil.Projectile.Lesson.Main
-main :: IO ()
 
 module Drasil.Projectile.GenDefs
 genDefns :: [GenDefn]

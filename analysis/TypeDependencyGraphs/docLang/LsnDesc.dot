@@ -1,0 +1,4 @@
+digraph lsndesc{
+LsnDesc	[shape=oval, color=red2, label="LsnDesc"];
+LsnDesc -> LsnChapter;
+}

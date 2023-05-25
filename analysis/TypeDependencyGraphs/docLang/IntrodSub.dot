@@ -1,5 +1,0 @@
-digraph introdsub{
-IntrodSub	[shape=oval, color=darkviolet, label="IntrodSub"];
-IntrodSub -> Sentence;
-IntrodSub -> IntrodSub;
-}

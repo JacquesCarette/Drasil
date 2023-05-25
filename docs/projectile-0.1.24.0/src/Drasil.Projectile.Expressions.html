@@ -9,7 +9,7 @@
 </span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
 </span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">iSpeed</span></span><span class="hs-special">,</span><span>
 </span><span id="line-11"></span><span>  </span><span class="annot"><span class="hs-identifier">constAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">xConstAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yConstAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ixPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iyPos</span></span><span class="hs-special">)</span><span>
-</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">gravitationalAccelConst</span></span><span class="hs-special">,</span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">gravitationalAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">gravitationalAccelConst</span></span><span class="hs-special">,</span><span>
 </span><span id="line-13"></span><span>  </span><span class="annot"><span class="hs-identifier">ixVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iyVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">xPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">scalarPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">xVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">xAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">position</span></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-14"></span><span>  </span><span class="annot"><span class="hs-identifier">velocity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">acceleration</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">constAccelV</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">speed</span></span><span class="hs-special">)</span><span>
 </span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Projectile.Unitals.html"><span class="hs-identifier">Drasil.Projectile.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Projectile.Unitals.html#launAngle"><span class="hs-identifier">launAngle</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Unitals.html#launSpeed"><span class="hs-identifier">launSpeed</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Unitals.html#targPos"><span class="hs-identifier">targPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Unitals.html#tol"><span class="hs-identifier">tol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Unitals.html#landPos"><span class="hs-identifier">landPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Unitals.html#offset"><span class="hs-identifier">offset</span></a></span><span class="hs-special">)</span><span>
@@ -57,11 +57,11 @@
 </span><span id="line-27"></span><span id="message"><span class="annot"><span class="annottext">message :: PExpr
 </span><a href="Drasil.Projectile.Expressions.html#message"><span class="hs-identifier hs-var hs-var">message</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; [(r, r)] -&gt; r
 </span><span class="hs-identifier hs-var">completeCase</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(r, r)
-</span><a href="#local-6989586621679065061"><span class="hs-identifier hs-var">case1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(r, r)
-</span><a href="#local-6989586621679065060"><span class="hs-identifier hs-var">case2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(r, r)
-</span><a href="#local-6989586621679065059"><span class="hs-identifier hs-var">case3</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-28"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679065061"><span class="annot"><span class="annottext">case1 :: (r, r)
-</span><a href="#local-6989586621679065061"><span class="hs-identifier hs-var hs-var">case1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; String -&gt; r
+</span><a href="#local-6989586621679065935"><span class="hs-identifier hs-var">case1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(r, r)
+</span><a href="#local-6989586621679065934"><span class="hs-identifier hs-var">case2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(r, r)
+</span><a href="#local-6989586621679065933"><span class="hs-identifier hs-var">case3</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-28"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679065935"><span class="annot"><span class="annottext">case1 :: (r, r)
+</span><a href="#local-6989586621679065935"><span class="hs-identifier hs-var hs-var">case1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; String -&gt; r
 </span><span class="hs-identifier hs-var">str</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The target was hit.&quot;</span></span><span class="hs-special">,</span><span>        </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">abs_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -73,8 +73,8 @@
 </span><span class="hs-operator hs-var">$&lt;</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.Projectile.Unitals.html#tol"><span class="hs-identifier hs-var">tol</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-29"></span><span>        </span><span id="local-6989586621679065060"><span class="annot"><span class="annottext">case2 :: (r, r)
-</span><a href="#local-6989586621679065060"><span class="hs-identifier hs-var hs-var">case2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; String -&gt; r
+</span><span id="line-29"></span><span>        </span><span id="local-6989586621679065934"><span class="annot"><span class="annottext">case2 :: (r, r)
+</span><a href="#local-6989586621679065934"><span class="hs-identifier hs-var hs-var">case2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; String -&gt; r
 </span><span class="hs-identifier hs-var">str</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The projectile fell short.&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
@@ -82,8 +82,8 @@
 </span><span class="hs-operator hs-var">$&lt;</span></span><span> </span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-30"></span><span>        </span><span id="local-6989586621679065059"><span class="annot"><span class="annottext">case3 :: (r, r)
-</span><a href="#local-6989586621679065059"><span class="hs-identifier hs-var hs-var">case3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; String -&gt; r
+</span><span id="line-30"></span><span>        </span><span id="local-6989586621679065933"><span class="annot"><span class="annottext">case3 :: (r, r)
+</span><a href="#local-6989586621679065933"><span class="hs-identifier hs-var hs-var">case3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; String -&gt; r
 </span><span class="hs-identifier hs-var">str</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The projectile went long.&quot;</span></span><span class="hs-special">,</span><span>  </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
@@ -276,8 +276,89 @@
 </span><span class="hs-identifier hs-var">QP.yConstAccel</span></span><span class="hs-special">)</span><span>
 </span><span id="line-62"></span><span>
 </span><span id="line-63"></span><span class="hs-comment">-- Expressions for Lesson</span><span>
-</span><span id="line-64"></span><span class="annot"><a href="Drasil.Projectile.Expressions.html#lcrectVel"><span class="hs-identifier hs-type">lcrectVel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Expressions.html#lcrectPos"><span class="hs-identifier hs-type">lcrectPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Expressions.html#lcrectNoTime"><span class="hs-identifier hs-type">lcrectNoTime</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span>
-</span><span id="line-65"></span><span id="lcrectVel"><span class="annot"><span class="annottext">lcrectVel :: LabelledContent
+</span><span id="line-64"></span><span class="annot"><a href="Drasil.Projectile.Expressions.html#horizVel"><span class="hs-identifier hs-type">horizVel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Expressions.html#horizPos"><span class="hs-identifier hs-type">horizPos</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PExpr</span></span><span>
+</span><span id="line-65"></span><span id="horizVel"><span class="annot"><span class="annottext">horizVel :: PExpr
+</span><a href="Drasil.Projectile.Expressions.html#horizVel"><span class="hs-identifier hs-var hs-var">horizVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">xVel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">ixVel</span></span><span>
+</span><span id="line-66"></span><span id="horizPos"><span class="annot"><span class="annottext">horizPos :: PExpr
+</span><a href="Drasil.Projectile.Expressions.html#horizPos"><span class="hs-identifier hs-var hs-var">horizPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">xPos</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.ixPos</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">ixVel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span>
+</span><span id="line-67"></span><span>
+</span><span id="line-68"></span><span class="annot"><a href="Drasil.Projectile.Expressions.html#vertVel"><span class="hs-identifier hs-type">vertVel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Expressions.html#vertPos"><span class="hs-identifier hs-type">vertPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Expressions.html#vertNoTime"><span class="hs-identifier hs-type">vertNoTime</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PExpr</span></span><span>
+</span><span id="line-69"></span><span id="vertVel"><span class="annot"><span class="annottext">vertVel :: PExpr
+</span><a href="Drasil.Projectile.Expressions.html#vertVel"><span class="hs-identifier hs-var hs-var">vertVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">yVel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">iyVel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">gravitationalAccel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span>
+</span><span id="line-70"></span><span id="vertPos"><span class="annot"><span class="annottext">vertPos :: PExpr
+</span><a href="Drasil.Projectile.Expressions.html#vertPos"><span class="hs-identifier hs-var hs-var">vertPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">yPos</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.iyPos</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">iyVel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">gravitationalAccel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><span class="hs-number">2</span></span><span class="hs-special">)</span><span>
+</span><span id="line-71"></span><span id="vertNoTime"><span class="annot"><span class="annottext">vertNoTime :: PExpr
+</span><a href="Drasil.Projectile.Expressions.html#vertNoTime"><span class="hs-identifier hs-var hs-var">vertNoTime</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">yVel</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">iyVel</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">gravitationalAccel</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">yPos</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QP.iyPos</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span>
+</span><span id="line-72"></span><span>
+</span><span id="line-73"></span><span class="annot"><a href="Drasil.Projectile.Expressions.html#lcrectVel"><span class="hs-identifier hs-type">lcrectVel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Expressions.html#lcrectPos"><span class="hs-identifier hs-type">lcrectPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Expressions.html#lcrectNoTime"><span class="hs-identifier hs-type">lcrectNoTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Expressions.html#lchorizVel"><span class="hs-identifier hs-type">lchorizVel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Expressions.html#lchorizPos"><span class="hs-identifier hs-type">lchorizPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Expressions.html#lcvertVel"><span class="hs-identifier hs-type">lcvertVel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Expressions.html#lcvertPos"><span class="hs-identifier hs-type">lcvertPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Expressions.html#lcvertNoTime"><span class="hs-identifier hs-type">lcvertNoTime</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span>
+</span><span id="line-74"></span><span id="lcrectVel"><span class="annot"><span class="annottext">lcrectVel :: LabelledContent
 </span><a href="Drasil.Projectile.Expressions.html#lcrectVel"><span class="hs-identifier hs-var hs-var">lcrectVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Reference -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">lbldExpr</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -286,7 +367,7 @@
 </span><a href="Drasil.Projectile.Expressions.html#speed%27"><span class="hs-identifier hs-var">speed'</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
 </span><span class="hs-identifier hs-var">makeEqnRef</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;rectVel&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-66"></span><span id="lcrectPos"><span class="annot"><span class="annottext">lcrectPos :: LabelledContent
+</span><span id="line-75"></span><span id="lcrectPos"><span class="annot"><span class="annottext">lcrectPos :: LabelledContent
 </span><a href="Drasil.Projectile.Expressions.html#lcrectPos"><span class="hs-identifier hs-var hs-var">lcrectPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Reference -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">lbldExpr</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -295,16 +376,46 @@
 </span><a href="Drasil.Projectile.Expressions.html#scalarPos%27"><span class="hs-identifier hs-var">scalarPos'</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
 </span><span class="hs-identifier hs-var">makeEqnRef</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;rectPos&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-67"></span><span id="lcrectNoTime"><span class="annot"><span class="annottext">lcrectNoTime :: LabelledContent
+</span><span id="line-76"></span><span id="lcrectNoTime"><span class="annot"><span class="annottext">lcrectNoTime :: LabelledContent
 </span><a href="Drasil.Projectile.Expressions.html#lcrectNoTime"><span class="hs-identifier hs-var hs-var">lcrectNoTime</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Reference -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">lbldExpr</span></span><span> </span><span class="annot"><span class="annottext">PExpr
 </span><a href="Drasil.Projectile.Expressions.html#rectNoTime"><span class="hs-identifier hs-var">rectNoTime</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
 </span><span class="hs-identifier hs-var">makeEqnRef</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;rectNoTime&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-68"></span><span>
-</span><span id="line-69"></span><span class="hs-comment">-- References --</span><span>
-</span><span id="line-70"></span><span class="annot"><a href="Drasil.Projectile.Expressions.html#eqnRefs"><span class="hs-identifier hs-type">eqnRefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span>
-</span><span id="line-71"></span><span id="eqnRefs"><span class="annot"><span class="annottext">eqnRefs :: [Reference]
+</span><span id="line-77"></span><span id="lchorizVel"><span class="annot"><span class="annottext">lchorizVel :: LabelledContent
+</span><a href="Drasil.Projectile.Expressions.html#lchorizVel"><span class="hs-identifier hs-var hs-var">lchorizVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Reference -&gt; LabelledContent
+</span><span class="hs-identifier hs-var">lbldExpr</span></span><span> </span><span class="annot"><span class="annottext">PExpr
+</span><a href="Drasil.Projectile.Expressions.html#horizVel"><span class="hs-identifier hs-var">horizVel</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
+</span><span class="hs-identifier hs-var">makeEqnRef</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;horizVel&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-78"></span><span id="lchorizPos"><span class="annot"><span class="annottext">lchorizPos :: LabelledContent
+</span><a href="Drasil.Projectile.Expressions.html#lchorizPos"><span class="hs-identifier hs-var hs-var">lchorizPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Reference -&gt; LabelledContent
+</span><span class="hs-identifier hs-var">lbldExpr</span></span><span> </span><span class="annot"><span class="annottext">PExpr
+</span><a href="Drasil.Projectile.Expressions.html#horizPos"><span class="hs-identifier hs-var">horizPos</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
+</span><span class="hs-identifier hs-var">makeEqnRef</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;horizPos&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-79"></span><span id="lcvertVel"><span class="annot"><span class="annottext">lcvertVel :: LabelledContent
+</span><a href="Drasil.Projectile.Expressions.html#lcvertVel"><span class="hs-identifier hs-var hs-var">lcvertVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Reference -&gt; LabelledContent
+</span><span class="hs-identifier hs-var">lbldExpr</span></span><span> </span><span class="annot"><span class="annottext">PExpr
+</span><a href="Drasil.Projectile.Expressions.html#vertVel"><span class="hs-identifier hs-var">vertVel</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
+</span><span class="hs-identifier hs-var">makeEqnRef</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;vertVel&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-80"></span><span id="lcvertPos"><span class="annot"><span class="annottext">lcvertPos :: LabelledContent
+</span><a href="Drasil.Projectile.Expressions.html#lcvertPos"><span class="hs-identifier hs-var hs-var">lcvertPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Reference -&gt; LabelledContent
+</span><span class="hs-identifier hs-var">lbldExpr</span></span><span> </span><span class="annot"><span class="annottext">PExpr
+</span><a href="Drasil.Projectile.Expressions.html#vertPos"><span class="hs-identifier hs-var">vertPos</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
+</span><span class="hs-identifier hs-var">makeEqnRef</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;vertPos&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-81"></span><span id="lcvertNoTime"><span class="annot"><span class="annottext">lcvertNoTime :: LabelledContent
+</span><a href="Drasil.Projectile.Expressions.html#lcvertNoTime"><span class="hs-identifier hs-var hs-var">lcvertNoTime</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Reference -&gt; LabelledContent
+</span><span class="hs-identifier hs-var">lbldExpr</span></span><span> </span><span class="annot"><span class="annottext">PExpr
+</span><a href="Drasil.Projectile.Expressions.html#vertNoTime"><span class="hs-identifier hs-var">vertNoTime</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
+</span><span class="hs-identifier hs-var">makeEqnRef</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;vertNoTime&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-82"></span><span>
+</span><span id="line-83"></span><span class="hs-comment">-- References --</span><span>
+</span><span id="line-84"></span><span class="annot"><a href="Drasil.Projectile.Expressions.html#eqnRefs"><span class="hs-identifier hs-type">eqnRefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span>
+</span><span id="line-85"></span><span id="eqnRefs"><span class="annot"><span class="annottext">eqnRefs :: [Reference]
 </span><a href="Drasil.Projectile.Expressions.html#eqnRefs"><span class="hs-identifier hs-var hs-var">eqnRefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
@@ -312,5 +423,10 @@ r -&gt; Reference
 </span><span class="hs-identifier hs-var">ref</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">LabelledContent
 </span><a href="Drasil.Projectile.Expressions.html#lcrectVel"><span class="hs-identifier hs-var">lcrectVel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent
 </span><a href="Drasil.Projectile.Expressions.html#lcrectPos"><span class="hs-identifier hs-var">lcrectPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent
-</span><a href="Drasil.Projectile.Expressions.html#lcrectNoTime"><span class="hs-identifier hs-var">lcrectNoTime</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-72"></span></pre></body></html>
+</span><a href="Drasil.Projectile.Expressions.html#lcrectNoTime"><span class="hs-identifier hs-var">lcrectNoTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent
+</span><a href="Drasil.Projectile.Expressions.html#lchorizVel"><span class="hs-identifier hs-var">lchorizVel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent
+</span><a href="Drasil.Projectile.Expressions.html#lchorizPos"><span class="hs-identifier hs-var">lchorizPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent
+</span><a href="Drasil.Projectile.Expressions.html#lcvertVel"><span class="hs-identifier hs-var">lcvertVel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent
+</span><a href="Drasil.Projectile.Expressions.html#lcvertPos"><span class="hs-identifier hs-var">lcvertPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent
+</span><a href="Drasil.Projectile.Expressions.html#lcvertNoTime"><span class="hs-identifier hs-var">lcvertNoTime</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-86"></span></pre></body></html>

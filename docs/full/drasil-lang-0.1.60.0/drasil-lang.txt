@@ -2262,6 +2262,9 @@ NoCap :: TermCapitalization
 -- | Capitalizes a Sentence.
 capSent :: Sentence -> Sentence
 
+-- | Helper which creates a Header with size s of the <a>Sentence</a>.
+headSent :: Int -> Sentence -> Sentence
+
 -- | Gets a symbol and places it in a <a>Sentence</a>.
 ch :: (HasUID c, HasSymbol c) => c -> Sentence
 eS :: ModelExpr -> Sentence
@@ -2933,259 +2936,6 @@ instance Language.Drasil.ShortName.HasShortName Language.Drasil.Chunk.Citation.C
 instance Language.Drasil.Data.Citation.HasFields Language.Drasil.Chunk.Citation.Citation
 instance Language.Drasil.Label.Type.Referable Language.Drasil.Chunk.Citation.Citation
 instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Chunk.Citation.Citation
-
-
--- | Contains types and functions common to aspects of generating
---   documents.
-module Language.Drasil.Document.Core
-
--- | Denotes the different possible types that can be used as a list.
-data ListType
-
--- | Bulleted list.
-Bullet :: [(ItemType, Maybe String)] -> ListType
-
--- | Enumerated list.
-Numeric :: [(ItemType, Maybe String)] -> ListType
-
--- | Simple list with items denoted by <tt>:</tt>. Renders as "Title: Item"
-Simple :: [ListTuple] -> ListType
-
--- | Descriptive list, renders as "<b>Title: Item</b>" (see
---   <a>ListTuple</a>).
-Desc :: [ListTuple] -> ListType
-
--- | Renders a list of "<tt><a>Title</a></tt> is the <tt>Item</tt>".
-Definitions :: [ListTuple] -> ListType
-
--- | Denotes how something should behave in a list (<a>ListType</a>).
-data ItemType
-
--- | Standard singular item.
-Flat :: Sentence -> ItemType
-
--- | Nest a list (<a>ListType</a>) as an item.
-Nested :: Header -> ListType -> ItemType
-
--- | MaxWidthPercent should be kept in the range 1-100. Values outside this
---   range may have unexpected results. Used for specifying max figure
---   width as <tt>pagewidth*MaxWidthPercent/100</tt>.
-type MaxWidthPercent = Float
-type Title = Sentence
-type Author = Sentence
-type Header = Sentence " Used when creating sublists."
-type Depth = Int
-type Width = Float
-type Height = Float
-type ListTuple = (Title, ItemType, Maybe String) " Formats as Title: Item. For use in lists."
-type Filepath = String
-type Lbl = Sentence " Label."
-
--- | Contents may be labelled or unlabelled.
-data Contents
-UlC :: UnlabelledContent -> Contents
-LlC :: LabelledContent -> Contents
-
--- | Types of definitions (general, instance, theory, or data).
-data DType
-General :: DType
-Instance :: DType
-Theory :: DType
-Data :: DType
-
--- | Types of layout objects we deal with explicitly.
-data RawContent
-
--- | table has: header-row, data(rows), label/caption, and a bool that
---   determines whether or not to show label.
-Table :: [Sentence] -> [[Sentence]] -> Title -> Bool -> RawContent
-
--- | Paragraphs are just sentences.
-Paragraph :: Sentence -> RawContent
-
--- | Block of Equations holds an expression.
-EqnBlock :: ModelExpr -> RawContent
-
--- | Grants the ability to label a group of <a>RawContent</a>.
-DerivBlock :: Sentence -> [RawContent] -> RawContent
-
--- | For enumerated lists.
-Enumeration :: ListType -> RawContent
-
--- | Defines something with a type, identifier, and <a>Contents</a>.
-Defini :: DType -> [(Identifier, [Contents])] -> RawContent
-
--- | For creating figures in a document. Should use relative file path.
-Figure :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
-
--- | Grants the ability to reference something.
-Bib :: BibRef -> RawContent
-
--- | Contain a graph with coordinates (<a>Sentence</a>s), maybe a width and
---   height, and a label (<a>Sentence</a>). | CodeBlock CodeExpr -- ^ Block
---   for codes TODO: Fill this one in.
-Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawContent
-
--- | An identifier is just a <a>String</a>.
-type Identifier = String
-
--- | Contains a <a>Reference</a> and <a>RawContent</a>.
-data LabelledContent
-LblC :: Reference -> RawContent -> LabelledContent
-[_ref] :: LabelledContent -> Reference
-[_ctype] :: LabelledContent -> RawContent
-
--- | Only contains <a>RawContent</a>.
-newtype UnlabelledContent
-UnlblC :: RawContent -> UnlabelledContent
-[_cntnts] :: UnlabelledContent -> RawContent
-ref :: Lens' LabelledContent Reference
-ctype :: Lens' LabelledContent RawContent
-cntnts :: Iso' UnlabelledContent RawContent
-
--- | Members of this class must have <a>RawContent</a>.
-class HasContents c
-
--- | Provides a <tt>Lens</tt> to the <a>RawContent</a>.
-accessContents :: HasContents c => Lens' c RawContent
-
--- | Helper to prepend labels to <a>LabelledContent</a> when referencing.
-prependLabel :: RawContent -> IRefProg
-instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.LabelledContent
-instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.UnlabelledContent
-instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.Contents
-instance Language.Drasil.UID.HasUID Language.Drasil.Document.Core.LabelledContent
-instance GHC.Classes.Eq Language.Drasil.Document.Core.LabelledContent
-instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Document.Core.LabelledContent
-instance Language.Drasil.ShortName.HasShortName Language.Drasil.Document.Core.LabelledContent
-instance Language.Drasil.Label.Type.Referable Language.Drasil.Document.Core.LabelledContent
-
-
--- | Document Description Language.
-module Language.Drasil.Document
-
--- | Section Contents are split into subsections or contents, where
---   contents are standard layout objects (see <a>Contents</a>).
-data SecCons
-Sub :: Section -> SecCons
-Con :: Contents -> SecCons
-data Partition
-Sections :: Partition
-Part :: Partition
-Chapter :: Partition
-
--- | Sections have a title (<a>Sentence</a>), a list of contents
---   (<a>SecCons</a>) and a shortname (<a>Reference</a>).
-data Section
-Section :: Title -> [SecCons] -> Reference -> Section
-[tle] :: Section -> Title
-[cons] :: Section -> [SecCons]
-[_lab] :: Section -> Reference
-lab :: Lens' Section Reference
-
--- | A Document has a Title (<a>Sentence</a>), Author(s) (<a>Sentence</a>),
---   and <a>Section</a>s which hold the contents of the document.
-data Document
-Document :: Title -> Author -> ShowTableOfContents -> [Section] -> Document
-Notebook :: Title -> Author -> [Section] -> Document
-
--- | Determines whether or not the table of contents appears on the
---   generated artifacts.
-data ShowTableOfContents
-ToC :: ShowTableOfContents
-NoToC :: ShowTableOfContents
-
--- | Manually removes the first section of a document (table of contents
---   section). temp fix for Notebook (see if we need this in notebook
---   later)
-checkToC :: Document -> Document
-
--- | Smart constructor for labelled content chunks.
-llcc :: Reference -> RawContent -> LabelledContent
-
--- | Smart constructor for unlabelled content chunks (no <a>Reference</a>).
-ulcc :: RawContent -> UnlabelledContent
-
--- | Smart constructor that wraps <a>UnlabelledContent</a> into
---   <a>Contents</a>.
-mkParagraph :: Sentence -> Contents
-
--- | Smart constructor that wraps <a>LabelledContent</a> into
---   <a>Contents</a>.
-mkFig :: Reference -> RawContent -> Contents
-
--- | Smart constructor similar to <a>llcc</a>, but takes in
---   <a>RawContent</a> first.
-mkRawLC :: RawContent -> Reference -> LabelledContent
-
--- | Smart constructor for creating <a>Section</a>s with a title
---   (<a>Sentence</a>), introductory contents (ie. paragraphs, tables,
---   etc.), a list of subsections, and a shortname (<a>Reference</a>).
-section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
-
--- | Smart constructor for retrieving the contents (<a>Section</a>s) from a
---   <a>Document</a>.
-extractSection :: Document -> [Section]
-
--- | Smart constructor for retrieving the subsections (<a>Section</a>s)
---   within a <a>Section</a>.
-getSec :: Section -> [Section]
-
--- | Helper to retrieve subsections (<a>Section</a>s) from section contents
---   (<a>SecCons</a>).
-getSecCons :: SecCons -> [Section]
-
--- | <a>Figure</a> smart constructor with a <a>Lbl</a> and a
---   <a>Filepath</a>. Assumes 100% of page width as max width.
-fig :: Lbl -> Filepath -> RawContent
-
--- | <a>Figure</a> smart constructor that allows for customized max widths.
-figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
-
--- | Create a reference for a table. Takes in the name of a table (which
---   will also be used for its shortname).
-makeTabRef :: String -> Reference
-
--- | Create a reference for a figure. Takes in the name of a figure (which
---   will also be used for its shortname).
-makeFigRef :: String -> Reference
-
--- | Create a reference for a section. Takes in the name of a section and a
---   shortname for the section.
-makeSecRef :: String -> Sentence -> Reference
-
--- | Create a reference for a equation. Takes in the name of the equation
---   (which will also be used for its shortname).
-makeEqnRef :: String -> Reference
-
--- | Create a reference for a <a>URI</a>. Takes in a <a>UID</a> (as a
---   <a>String</a>), a reference address, and a shortname.
-makeURI :: String -> String -> ShortName -> Reference
-
--- | Variants of <a>makeTabRef</a> that takes a <a>UID</a> instead of a
---   <a>String</a>.
-makeTabRef' :: UID -> Reference
-
--- | Variants of <a>makeFigRef</a> that takes a <a>UID</a> instead of a
---   <a>String</a>.
-makeFigRef' :: UID -> Reference
-
--- | Variants of <a>makeSecRef</a> that takes a <a>UID</a> instead of a
---   <a>String</a>.
-makeSecRef' :: UID -> Sentence -> Reference
-
--- | Variants of <a>makeEqnRef</a> that takes a <a>UID</a> instead of a
---   <a>String</a>.
-makeEqnRef' :: UID -> Reference
-
--- | Variants of <a>makeURI</a> that takes a <a>UID</a> instead of a
---   <a>String</a>.
-makeURI' :: UID -> String -> ShortName -> Reference
-instance Language.Drasil.UID.HasUID Language.Drasil.Document.Section
-instance GHC.Classes.Eq Language.Drasil.Document.Section
-instance Language.Drasil.ShortName.HasShortName Language.Drasil.Document.Section
-instance Language.Drasil.Label.Type.Referable Language.Drasil.Document.Section
-instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Document.Section
 
 
 -- | Defines operator precedence.
@@ -3918,6 +3668,261 @@ columnVec :: ExprC r => [r] -> r
 instance Language.Drasil.Expr.Class.ExprC Language.Drasil.Expr.Lang.Expr
 instance Language.Drasil.Expr.Class.ExprC Language.Drasil.ModelExpr.Lang.ModelExpr
 instance Language.Drasil.Expr.Class.ExprC Language.Drasil.CodeExpr.Lang.CodeExpr
+
+
+-- | Contains types and functions common to aspects of generating
+--   documents.
+module Language.Drasil.Document.Core
+
+-- | Denotes the different possible types that can be used as a list.
+data ListType
+
+-- | Bulleted list.
+Bullet :: [(ItemType, Maybe String)] -> ListType
+
+-- | Enumerated list.
+Numeric :: [(ItemType, Maybe String)] -> ListType
+
+-- | Simple list with items denoted by <tt>:</tt>. Renders as "Title: Item"
+Simple :: [ListTuple] -> ListType
+
+-- | Descriptive list, renders as "<b>Title: Item</b>" (see
+--   <a>ListTuple</a>).
+Desc :: [ListTuple] -> ListType
+
+-- | Renders a list of "<tt><a>Title</a></tt> is the <tt>Item</tt>".
+Definitions :: [ListTuple] -> ListType
+
+-- | Denotes how something should behave in a list (<a>ListType</a>).
+data ItemType
+
+-- | Standard singular item.
+Flat :: Sentence -> ItemType
+
+-- | Nest a list (<a>ListType</a>) as an item.
+Nested :: Header -> ListType -> ItemType
+
+-- | MaxWidthPercent should be kept in the range 1-100. Values outside this
+--   range may have unexpected results. Used for specifying max figure
+--   width as <tt>pagewidth*MaxWidthPercent/100</tt>.
+type MaxWidthPercent = Float
+type Title = Sentence
+type Author = Sentence
+type Header = Sentence " Used when creating sublists."
+type Depth = Int
+type Width = Float
+type Height = Float
+type ListTuple = (Title, ItemType, Maybe String) " Formats as Title: Item. For use in lists."
+type Filepath = String
+type Lbl = Sentence " Label."
+
+-- | Contents may be labelled or unlabelled.
+data Contents
+UlC :: UnlabelledContent -> Contents
+LlC :: LabelledContent -> Contents
+
+-- | Types of definitions (general, instance, theory, or data).
+data DType
+General :: DType
+Instance :: DType
+Theory :: DType
+Data :: DType
+
+-- | Types of layout objects we deal with explicitly.
+data RawContent
+
+-- | table has: header-row, data(rows), label/caption, and a bool that
+--   determines whether or not to show label.
+Table :: [Sentence] -> [[Sentence]] -> Title -> Bool -> RawContent
+
+-- | Paragraphs are just sentences.
+Paragraph :: Sentence -> RawContent
+
+-- | Block of Equations holds an expression.
+EqnBlock :: ModelExpr -> RawContent
+
+-- | Grants the ability to label a group of <a>RawContent</a>.
+DerivBlock :: Sentence -> [RawContent] -> RawContent
+
+-- | For enumerated lists.
+Enumeration :: ListType -> RawContent
+
+-- | Defines something with a type, identifier, and <a>Contents</a>.
+Defini :: DType -> [(Identifier, [Contents])] -> RawContent
+
+-- | For creating figures in a document. Should use relative file path.
+Figure :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+
+-- | Grants the ability to reference something.
+Bib :: BibRef -> RawContent
+
+-- | Contain a graph with coordinates (<a>Sentence</a>s), maybe a width and
+--   height, and a label (<a>Sentence</a>).
+Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawContent
+
+-- | Block for codes TODO: Fill this one in.
+CodeBlock :: CodeExpr -> RawContent
+
+-- | An identifier is just a <a>String</a>.
+type Identifier = String
+
+-- | Contains a <a>Reference</a> and <a>RawContent</a>.
+data LabelledContent
+LblC :: Reference -> RawContent -> LabelledContent
+[_ref] :: LabelledContent -> Reference
+[_ctype] :: LabelledContent -> RawContent
+
+-- | Only contains <a>RawContent</a>.
+newtype UnlabelledContent
+UnlblC :: RawContent -> UnlabelledContent
+[_cntnts] :: UnlabelledContent -> RawContent
+ref :: Lens' LabelledContent Reference
+ctype :: Lens' LabelledContent RawContent
+cntnts :: Iso' UnlabelledContent RawContent
+
+-- | Members of this class must have <a>RawContent</a>.
+class HasContents c
+
+-- | Provides a <tt>Lens</tt> to the <a>RawContent</a>.
+accessContents :: HasContents c => Lens' c RawContent
+
+-- | Helper to prepend labels to <a>LabelledContent</a> when referencing.
+prependLabel :: RawContent -> IRefProg
+instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.UnlabelledContent
+instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.Contents
+instance Language.Drasil.UID.HasUID Language.Drasil.Document.Core.LabelledContent
+instance GHC.Classes.Eq Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.ShortName.HasShortName Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.Label.Type.Referable Language.Drasil.Document.Core.LabelledContent
+
+
+-- | Document Description Language.
+module Language.Drasil.Document
+
+-- | Section Contents are split into subsections or contents, where
+--   contents are standard layout objects (see <a>Contents</a>).
+data SecCons
+Sub :: Section -> SecCons
+Con :: Contents -> SecCons
+data Partition
+Sections :: Partition
+Part :: Partition
+Chapter :: Partition
+
+-- | Sections have a title (<a>Sentence</a>), a list of contents
+--   (<a>SecCons</a>) and a shortname (<a>Reference</a>).
+data Section
+Section :: Title -> [SecCons] -> Reference -> Section
+[tle] :: Section -> Title
+[cons] :: Section -> [SecCons]
+[_lab] :: Section -> Reference
+lab :: Lens' Section Reference
+
+-- | A Document has a Title (<a>Sentence</a>), Author(s) (<a>Sentence</a>),
+--   and <a>Section</a>s which hold the contents of the document.
+data Document
+Document :: Title -> Author -> ShowTableOfContents -> [Section] -> Document
+Notebook :: Title -> Author -> [Section] -> Document
+
+-- | Determines whether or not the table of contents appears on the
+--   generated artifacts.
+data ShowTableOfContents
+ToC :: ShowTableOfContents
+NoToC :: ShowTableOfContents
+
+-- | Manually removes the first section of a document (table of contents
+--   section). temp fix for Notebook (see if we need this in notebook
+--   later)
+checkToC :: Document -> Document
+
+-- | Smart constructor for labelled content chunks.
+llcc :: Reference -> RawContent -> LabelledContent
+
+-- | Smart constructor for unlabelled content chunks (no <a>Reference</a>).
+ulcc :: RawContent -> UnlabelledContent
+
+-- | Smart constructor that wraps <a>UnlabelledContent</a> into
+--   <a>Contents</a>.
+mkParagraph :: Sentence -> Contents
+
+-- | Smart constructor that wraps <a>LabelledContent</a> into
+--   <a>Contents</a>.
+mkFig :: Reference -> RawContent -> Contents
+
+-- | Smart constructor similar to <a>llcc</a>, but takes in
+--   <a>RawContent</a> first.
+mkRawLC :: RawContent -> Reference -> LabelledContent
+
+-- | Smart constructor for creating <a>Section</a>s with a title
+--   (<a>Sentence</a>), introductory contents (ie. paragraphs, tables,
+--   etc.), a list of subsections, and a shortname (<a>Reference</a>).
+section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
+
+-- | Smart constructor for retrieving the contents (<a>Section</a>s) from a
+--   <a>Document</a>.
+extractSection :: Document -> [Section]
+
+-- | Smart constructor for retrieving the subsections (<a>Section</a>s)
+--   within a <a>Section</a>.
+getSec :: Section -> [Section]
+
+-- | Helper to retrieve subsections (<a>Section</a>s) from section contents
+--   (<a>SecCons</a>).
+getSecCons :: SecCons -> [Section]
+
+-- | <a>Figure</a> smart constructor with a <a>Lbl</a> and a
+--   <a>Filepath</a>. Assumes 100% of page width as max width.
+fig :: Lbl -> Filepath -> RawContent
+
+-- | <a>Figure</a> smart constructor that allows for customized max widths.
+figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+
+-- | Create a reference for a table. Takes in the name of a table (which
+--   will also be used for its shortname).
+makeTabRef :: String -> Reference
+
+-- | Create a reference for a figure. Takes in the name of a figure (which
+--   will also be used for its shortname).
+makeFigRef :: String -> Reference
+
+-- | Create a reference for a section. Takes in the name of a section and a
+--   shortname for the section.
+makeSecRef :: String -> Sentence -> Reference
+
+-- | Create a reference for a equation. Takes in the name of the equation
+--   (which will also be used for its shortname).
+makeEqnRef :: String -> Reference
+
+-- | Create a reference for a <a>URI</a>. Takes in a <a>UID</a> (as a
+--   <a>String</a>), a reference address, and a shortname.
+makeURI :: String -> String -> ShortName -> Reference
+
+-- | Variants of <a>makeTabRef</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeTabRef' :: UID -> Reference
+
+-- | Variants of <a>makeFigRef</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeFigRef' :: UID -> Reference
+
+-- | Variants of <a>makeSecRef</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeSecRef' :: UID -> Sentence -> Reference
+
+-- | Variants of <a>makeEqnRef</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeEqnRef' :: UID -> Reference
+
+-- | Variants of <a>makeURI</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeURI' :: UID -> String -> ShortName -> Reference
+instance Language.Drasil.UID.HasUID Language.Drasil.Document.Section
+instance GHC.Classes.Eq Language.Drasil.Document.Section
+instance Language.Drasil.ShortName.HasShortName Language.Drasil.Document.Section
+instance Language.Drasil.Label.Type.Referable Language.Drasil.Document.Section
+instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Document.Section
 
 module Language.Drasil.CodeExpr.Precedence
 
@@ -5407,6 +5412,9 @@ lbldExpr :: ModelExpr -> Reference -> LabelledContent
 -- | Same as <tt>eqUnR</tt> except content is unlabelled (does not attach a
 --   <a>Reference</a>).
 unlbldExpr :: ModelExpr -> Contents
+
+-- | Unlabelled code expression
+unlbldCode :: CodeExpr -> Contents
 
 
 -- | Defines chunk types for use in code generation.
@@ -7976,6 +7984,9 @@ RefNote :: String -> RefInfo
 -- | Capitalizes a Sentence.
 capSent :: Sentence -> Sentence
 
+-- | Helper which creates a Header with size s of the <a>Sentence</a>.
+headSent :: Int -> Sentence -> Sentence
+
 -- | Gets a symbol and places it in a <a>Sentence</a>.
 ch :: (HasUID c, HasSymbol c) => c -> Sentence
 eS :: ModelExpr -> Sentence
@@ -8492,9 +8503,11 @@ Figure :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
 Bib :: BibRef -> RawContent
 
 -- | Contain a graph with coordinates (<a>Sentence</a>s), maybe a width and
---   height, and a label (<a>Sentence</a>). | CodeBlock CodeExpr -- ^ Block
---   for codes TODO: Fill this one in.
+--   height, and a label (<a>Sentence</a>).
 Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawContent
+
+-- | Block for codes TODO: Fill this one in.
+CodeBlock :: CodeExpr -> RawContent
 
 -- | Smart constructor that wraps <a>LabelledContent</a> into
 --   <a>Contents</a>.
@@ -8587,6 +8600,9 @@ lbldExpr :: ModelExpr -> Reference -> LabelledContent
 -- | Same as <tt>eqUnR</tt> except content is unlabelled (does not attach a
 --   <a>Reference</a>).
 unlbldExpr :: ModelExpr -> Contents
+
+-- | Unlabelled code expression
+unlbldCode :: CodeExpr -> Contents
 
 -- | Output is of the form "<tt>reference - sentence</tt>".
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence

@@ -1044,61 +1044,67 @@ digraph alltypes {
 	subgraph srs {
 	}
 	subgraph core {
-		subgraph docsection{
-		DocSection	[shape=oval, color=darkviolet, label="DocSection"];
-		DocSection -> IntrodSec;
-		DocSection -> BodySec;
-		DocSection -> SmmrySec;
-		DocSection -> ApndxSec;
+		subgraph lsnchapter{
+		LsnChapter	[shape=oval, color=darkviolet, label="LsnChapter"];
+		LsnChapter -> Intro;
+		LsnChapter -> LearnObj;
+		LsnChapter -> Review;
+		LsnChapter -> CaseProb;
+		LsnChapter -> Example;
+		LsnChapter -> Smmry;
+		LsnChapter -> Apndx;
 		}
-		subgraph introdsec{
-		IntrodSec	[shape=oval, color=darkviolet, label="IntrodSec"];
-		IntrodSec -> Contents;
-		IntrodSec -> IntrodSub;
+		subgraph apndx{
+		Apndx	[shape=oval, color=darkgreen, label="Apndx"];
 		}
-		subgraph introdsub{
-		IntrodSub	[shape=oval, color=darkviolet, label="IntrodSub"];
-		IntrodSub -> Sentence;
-		IntrodSub -> IntrodSub;
+		subgraph intro{
+		Intro	[shape=oval, color=darkgreen, label="Intro"];
+		Intro -> Contents;
 		}
-		subgraph bodysub{
-		BodySub	[shape=oval, color=darkviolet, label="BodySub"];
-		BodySub -> Contents;
-		BodySub -> BodySub;
-		BodySub -> Section;
+		subgraph learnobj{
+		LearnObj	[shape=oval, color=darkgreen, label="LearnObj"];
+		LearnObj -> Contents;
 		}
-		subgraph apndxsec{
-		ApndxSec	[shape=oval, color=darkgreen, label="ApndxSec"];
+		subgraph review{
+		Review	[shape=oval, color=darkgreen, label="Review"];
+		Review -> Contents;
 		}
-		subgraph bodysec{
-		BodySec	[shape=oval, color=darkgreen, label="BodySec"];
-		BodySec -> BodySub;
+		subgraph caseprob{
+		CaseProb	[shape=oval, color=darkgreen, label="CaseProb"];
+		CaseProb -> Contents;
 		}
-		subgraph smmrysec{
-		SmmrySec	[shape=oval, color=darkgreen, label="SmmrySec"];
-		SmmrySec -> Contents;
+		subgraph example{
+		Example	[shape=oval, color=darkgreen, label="Example"];
+		Example -> Contents;
 		}
-		subgraph nbdesc{
-		NBDesc	[shape=oval, color=red2, label="NBDesc"];
-		NBDesc -> DocSection;
+		subgraph smmry{
+		Smmry	[shape=oval, color=darkgreen, label="Smmry"];
+		Smmry -> Contents;
+		}
+		subgraph lsndesc{
+		LsnDesc	[shape=oval, color=red2, label="LsnDesc"];
+		LsnDesc -> LsnChapter;
 		}
 	}
 	subgraph documentlanguage {
 	}
-	subgraph nbdecl {
-		subgraph nbsection{
-		NbSection	[shape=oval, color=darkviolet, label="NbSection"];
-		NbSection -> IntrodSec;
-		NbSection -> BodySec;
-		NbSection -> SmmrySec;
-		NbSection -> ApndxSec;
-		NbSection -> SystemInformation;
-		NbSection -> NBDecl;
-		NbSection -> NBDesc;
+	subgraph lndecls {
+		subgraph lsnchapter{
+		LsnChapter	[shape=oval, color=darkviolet, label="LsnChapter"];
+		LsnChapter -> Intro;
+		LsnChapter -> LearnObj;
+		LsnChapter -> Review;
+		LsnChapter -> CaseProb;
+		LsnChapter -> Example;
+		LsnChapter -> Smmry;
+		LsnChapter -> Apndx;
+		LsnChapter -> SystemInformation;
+		LsnChapter -> LsnDecl;
+		LsnChapter -> LsnDesc;
 		}
-		subgraph nbdecl{
-		NBDecl	[shape=oval, color=red2, label="NBDecl"];
-		NBDecl -> NbSection;
+		subgraph lsndecl{
+		LsnDecl	[shape=oval, color=red2, label="LsnDecl"];
+		LsnDecl -> LsnChapter;
 		}
 	}
 	subgraph core {
@@ -1322,10 +1328,6 @@ digraph alltypes {
 		}
 	}
 	subgraph units {
-	}
-	subgraph body {
-	}
-	subgraph introduction {
 	}
 	subgraph auxiliarycontantss {
 	}
@@ -1617,15 +1619,17 @@ digraph alltypes {
 	}
 	subgraph main {
 	}
-	subgraph analyiss {
-	}
 	subgraph body {
 	}
-	subgraph introsection {
+	subgraph caeprobs {
+	}
+	subgraph example {
+	}
+	subgraph figures {
+	}
+	subgraph learnobj {
 	}
 	subgraph main {
-	}
-	subgraph motion {
 	}
 	subgraph review {
 	}

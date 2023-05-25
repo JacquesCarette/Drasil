@@ -1,4 +1,0 @@
-digraph bodysec{
-BodySec	[shape=oval, color=darkgreen, label="BodySec"];
-BodySec -> BodySub;
-}

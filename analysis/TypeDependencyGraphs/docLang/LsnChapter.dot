@@ -1,0 +1,13 @@
+digraph lsnchapter{
+LsnChapter	[shape=oval, color=darkviolet, label="LsnChapter"];
+LsnChapter -> Intro;
+LsnChapter -> LearnObj;
+LsnChapter -> Review;
+LsnChapter -> CaseProb;
+LsnChapter -> Example;
+LsnChapter -> Smmry;
+LsnChapter -> Apndx;
+LsnChapter -> SystemInformation;
+LsnChapter -> LsnDecl;
+LsnChapter -> LsnDesc;
+}

@@ -1,4 +1,0 @@
-digraph smmrysec{
-SmmrySec	[shape=oval, color=darkgreen, label="SmmrySec"];
-SmmrySec -> Contents;
-}

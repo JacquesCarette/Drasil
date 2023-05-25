@@ -804,6 +804,8 @@ li :: Doc -> Doc
 
 -- | Paragraph in list tag wrapper
 pa :: Doc -> Doc
+
+-- | Bring attention to element wrapper.
 ba :: Doc -> Doc
 
 -- | Ordered list tag wrapper
@@ -816,6 +818,7 @@ ul :: [String] -> Doc -> Doc
 table :: [String] -> Doc -> Doc
 nbformat :: Doc -> Doc
 escapeStringForJson :: String -> String
+codeformat :: Doc -> Doc
 wrap :: String -> [String] -> Doc -> Doc
 wrap' :: String -> [String] -> Doc -> Doc
 wrapGen' :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
@@ -836,6 +839,32 @@ h :: Int -> Doc
 br :: Doc -> Doc
 mkDiv :: String -> Doc -> Doc -> Doc
 stripnewLine :: String -> Doc
+
+-- | Helper for building Markdown cells
+markdownB :: Doc
+
+-- | Helper for building Markdown cells
+markdownB' :: Doc
+
+-- | Helper for building Markdown cells
+markdownE :: Doc
+
+-- | Helper for building Markdown cells
+markdownE' :: Doc
+
+-- | Helper for building code cells
+codeB :: Doc
+
+-- | Helper for building code cells
+codeE :: Doc
+
+-- | Helper for generate a Markdown cell
+markdownCell :: Doc -> Doc
+
+-- | Helper for generate a code cell
+codeCell :: Doc -> Doc
+
+-- | Generate the metadata necessary for a notebook document.
 makeMetadata :: Doc
 
 
@@ -964,6 +993,9 @@ Figure :: Label -> Caption -> Filepath -> MaxWidthPercent -> LayoutObj
 
 -- | Holds all information needed for a graph.
 Graph :: [(Spec, Spec)] -> Maybe Width -> Maybe Height -> Caption -> Label -> LayoutObj
+
+-- | Code block.
+CodeBlock :: Contents -> LayoutObj
 
 -- | Holds tags, more contents, and a label.
 HDiv :: Tags -> [LayoutObj] -> Label -> LayoutObj
@@ -1113,6 +1145,14 @@ renderURI :: ctx -> ShortName -> Sentence
 renderCitInfo :: RefInfo -> Sentence
 
 
+-- | Defines functions to render <a>CodeExpr</a>s as printable
+--   <a>Expr</a>s.
+module Language.Drasil.Printing.Import.CodeExpr
+
+-- | Translate <a>CodeExpr</a>s to printable layout AST <tt>Expr</tt>s.
+codeExpr :: CodeExpr -> PrintingInformation -> Expr
+
+
 -- | Defines functions to transform Drasil-based documents into a printable
 --   version.
 module Language.Drasil.Printing.Import.Document
@@ -1157,14 +1197,6 @@ makeL :: PrintingInformation -> ListType -> ListType
 
 -- | Helper for translating list items to be printable.
 item :: PrintingInformation -> ItemType -> ItemType
-
-
--- | Defines functions to render <a>CodeExpr</a>s as printable
---   <a>Expr</a>s.
-module Language.Drasil.Printing.Import.CodeExpr
-
--- | Translate <a>CodeExpr</a>s to printable layout AST <tt>Expr</tt>s.
-codeExpr :: CodeExpr -> PrintingInformation -> Expr
 
 
 -- | Re-export top-level functions for easy use across drasil-printers.
@@ -1676,8 +1708,8 @@ fence :: OpenClose -> Fence -> String
 module Language.Drasil.JSON.Print
 
 -- | Generate a python notebook document (using json). build : build the
---   general Jupyter Notbook document build': build the SRS example in JSON
---   format
+--   SRS document in JSON format build': build the general Jupyter Notbook
+--   document
 genJSON :: PrintingInformation -> DocType -> Document -> Doc
 
 module Language.Drasil.Printers
@@ -1838,8 +1870,8 @@ showHasSymbImpl :: HasSymbol x => x -> String
 genTeX :: Document -> PrintingInformation -> Doc
 
 -- | Generate a python notebook document (using json). build : build the
---   general Jupyter Notbook document build': build the SRS example in JSON
---   format
+--   SRS document in JSON format build': build the general Jupyter Notbook
+--   document
 genJSON :: PrintingInformation -> DocType -> Document -> Doc
 
 -- | Gathers all printing functions and creates the debugging tables from

@@ -117,6 +117,9 @@ assumpF otherContents = SRS.assumpt (assumpIntro : otherContents) []
        atStartNP' (the assumption), S "refine the", phrase scope,
        S "by providing more detail"]
 
+emptySectSentence :: NamedIdea n => n -> Contents
+emptySectSentence var = foldlSP[ S "There are no" +:+ plural var]
+
 -- | Wrapper for 'thModelIntro'. Takes the program name and other 'Contents'.
 thModF :: (Idea a) => a -> [Contents] -> Section
 thModF _        []                   = SRS.thModel [thModIntroNoContent] []
@@ -129,7 +132,7 @@ thModIntro progName = foldlSP [S "This", phrase section_, S "focuses on the",
   phrase general, plural equation `S.and_` S "laws that", short progName, S "is based on"]
 
 thModIntroNoContent :: Contents
-thModIntroNoContent = mkParagraph $ S "There are no theoretical models."
+thModIntroNoContent = emptySectSentence thModel
 
 -- | Creates a General Definitions section with a general introduction.
 -- Takes in relevant general definitions ('Contents'). Use empty list if none are needed.
@@ -138,7 +141,7 @@ genDefnF otherContents = SRS.genDefn (generalDefinitionIntro otherContents : oth
 
 -- | Creates the introduction used in 'genDefnF'. If the given list is empty, the returned 'Sentence' is "There are no general definitions."
 generalDefinitionIntro :: [t] -> Contents
-generalDefinitionIntro [] = mkParagraph $ S "There are no general definitions."
+generalDefinitionIntro [] = emptySectSentence genDefn
 generalDefinitionIntro _ = foldlSP [S "This", phrase section_, 
   S "collects the laws and", plural equation, 
   S "that will be used to build the", plural inModel]
@@ -157,7 +160,7 @@ dataDefinitionIntro closingSent = mkParagraph (foldlSent [S "This", phrase secti
     S "needed to build the", plural inModel] +:+ closingSent)
 
 dataDefnIntroNoContent :: Contents
-dataDefnIntroNoContent = mkParagraph $ S "There are no data definitions."
+dataDefnIntroNoContent = emptySectSentence dataDefn
 
 -- wrappers for inModelIntro. Use inModelF' if genDef are not needed
 -- | Constructor for Instance Models. Takes the problem description,
@@ -181,7 +184,7 @@ inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
   namedRef r4 (plural genDefn)]
 
 inModelIntroNoContent :: Contents
-inModelIntroNoContent = mkParagraph $ S "There are no instance models."
+inModelIntroNoContent = emptySectSentence inModel
 
 -- | Constructor for Data Constraints section. Takes a trailing 'Sentence' (use 'EmptyS' if none) and data constraints.
 datConF :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 

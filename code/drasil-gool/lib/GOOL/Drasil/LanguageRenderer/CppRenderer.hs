@@ -31,12 +31,12 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
   RenderValue(..), ValueElim(valuePrec), InternalGetSet(..), 
-  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType), 
-  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), 
-  RenderStatement(..), StatementElim(statementTerm), RenderScope(..), ScopeElim, 
-  MSMthdType, MethodTypeSym(..), RenderParam(..), 
-  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
-  StateVarElim, ParentSpec, RenderClass(..), ClassElim, RenderMod(..), 
+  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  RenderStatement(..), StatementElim(statementTerm), RenderScope(..),
+  ScopeElim, MSMthdType, MethodTypeSym(..), RenderParam(..),
+  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
+  StateVarElim, ParentSpec, RenderClass(..), ClassElim, RenderMod(..),
   ModuleElim, BlockCommentSym(..), BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
@@ -62,10 +62,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  thunkAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt,
-  comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
-  setMethod, function, buildClass, implementingClass, commentedClass,
-  modFromData, fileDoc, fileFromData)
+  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
+  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
+  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
+  fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, funcType, buildModule, litArray, 
@@ -83,7 +83,7 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), Binding(..), onBinding,
   ModData(..), md, updateMod, OpData(..), ParamData(..), pd, ProgData(..),
   progD, emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd,
   VarData(..), vard, CommonThunk, pureValue, vectorize, vectorize2,
-  commonVecIndex)
+  sumComponents, commonVecIndex, commonThunkElim)
 import GOOL.Drasil.Classes (Pair(..))
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, 
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
@@ -100,7 +100,7 @@ import GOOL.Drasil.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, getCurrMainFunc,
   addIter, getIter, resetIter)
 
-import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod,max)
+import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,log,exp,mod,max)
 import Control.Applicative (liftA2)
 import Control.Lens.Zoom (zoom)
 import Control.Monad (join)
@@ -462,6 +462,7 @@ instance Pair p => VectorExpression (p CppSrcCode CppHdrCode) where
   vecScale = pair2 vecScale vecScale
   vecAdd = pair2 vecAdd vecAdd
   vecIndex = pair2 vecIndex vecIndex
+  vecDot = pair2 vecDot vecDot
 
 instance (Pair p) => RenderFunction (p CppSrcCode CppHdrCode) where  
   funcFromData d = pair1 (funcFromData d) (funcFromData d)
@@ -1330,7 +1331,18 @@ instance ThunkSym CppSrcCode where
   type Thunk CppSrcCode = CommonThunk VS
 
 instance ThunkAssign CppSrcCode where
-  thunkAssign = G.thunkAssign
+  -- FIXME: We should really be able to get a "fresh" variable name to use for
+  -- the loop variable
+  thunkAssign v t = multi [loopInit,
+    forRange i (litInt 0) (listSize (valueOf v)) (litInt 1) $ body [block [loopBody]]]
+    where
+      i = var "i" int
+      -- FIXME: use int or double depending on type of v
+      loopInit = zoom lensMStoVS (fmap unCPPSC t) >>= commonThunkElim
+        (const emptyStmt) (const $ assign v (litDouble 0))
+      loopBody = zoom lensMStoVS (fmap unCPPSC t) >>= commonThunkElim
+        (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
+        ((v &+=) . vecIndex (valueOf i) . pure . pure)
 
 instance VectorType CppSrcCode where
   vecType = arrayType
@@ -1346,6 +1358,7 @@ instance VectorExpression CppSrcCode where
   vecScale k = fmap $ fmap $ vectorize (fmap unCPPSC . (k #*) . fmap pure)
   vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unCPPSC $ fmap pure v1 #+ fmap pure v2)
   vecIndex i = (>>= fmap pure . commonVecIndex (fmap unCPPSC . flip listAccess i . fmap pure) . unCPPSC)
+  vecDot = liftA2 $ liftA2 $ fmap (fmap sumComponents) $ vectorize2 (\v1 v2 -> fmap unCPPSC $ fmap pure v1 #* fmap pure v2)
 
 instance RenderFunction CppSrcCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
@@ -1997,6 +2010,7 @@ instance VectorExpression CppHdrCode where
   vecScale _ _ = pure $ pure $ pureValue $ fmap unCPPHC (mkStateVal void empty)
   vecAdd _ _ = pure $ pure $ pureValue $ fmap unCPPHC (mkStateVal void empty)
   vecIndex _ _ = mkStateVal void empty
+  vecDot _ _ = pure $ pure $ pureValue $ fmap unCPPHC (mkStateVal void empty)
 
 instance RenderFunction CppHdrCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))

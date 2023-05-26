@@ -62,10 +62,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  thunkAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt,
-  comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
-  setMethod, function, buildClass, implementingClass, commentedClass,
-  modFromData, fileDoc, fileFromData)
+  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
+  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
+  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
+  fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int, 
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
@@ -87,7 +87,8 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard,
-  CommonThunk, pureValue, vectorize, vectorize2, commonVecIndex)
+  CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
+  commonThunkElim)
 import GOOL.Drasil.CodeAnalysis (Exception(..), ExceptionType(..), exception, 
   stdExc, HasException(..))
 import GOOL.Drasil.Helpers (emptyIfNull, toCode, toState, onCodeValue, 
@@ -453,7 +454,18 @@ instance ThunkSym JavaCode where
   type Thunk JavaCode = CommonThunk VS
 
 instance ThunkAssign JavaCode where
-  thunkAssign = G.thunkAssign
+  -- FIXME: We should really be able to get a "fresh" variable name to use for
+  -- the loop variable
+  thunkAssign v t = multi [loopInit,
+    forRange i (litInt 0) (listSize (valueOf v)) (litInt 1) $ body [block [loopBody]]]
+    where
+      i = var "i" int
+      -- FIXME: use int or double depending on type of v
+      loopInit = zoom lensMStoVS (fmap unJC t) >>= commonThunkElim
+        (const emptyStmt) (const $ assign v (litDouble 0))
+      loopBody = zoom lensMStoVS (fmap unJC t) >>= commonThunkElim
+        (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
+        ((v &+=) . vecIndex (valueOf i) . pure . pure)
 
 instance VectorType JavaCode where
   vecType = arrayType
@@ -469,6 +481,7 @@ instance VectorExpression JavaCode where
   vecScale k = fmap $ fmap $ vectorize (fmap unJC . (k #*) . fmap pure)
   vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unJC $ fmap pure v1 #+ fmap pure v2)
   vecIndex i = (>>= fmap pure . commonVecIndex (fmap unJC . flip listAccess i . fmap pure) . unJC)
+  vecDot = liftA2 $ liftA2 $ fmap (fmap sumComponents) $ vectorize2 (\v1 v2 -> fmap unJC $ fmap pure v1 #* fmap pure v2)
 
 instance RenderFunction JavaCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))

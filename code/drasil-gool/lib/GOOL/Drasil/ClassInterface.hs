@@ -375,6 +375,7 @@ class (ThunkSym r, ValueSym r) => VectorExpression r where
   vecScale :: SValue r -> VSThunk r -> VSThunk r
   vecAdd :: VSThunk r -> VSThunk r -> VSThunk r
   vecIndex :: SValue r -> VSThunk r -> SValue r
+  vecDot :: VSThunk r -> VSThunk r -> VSThunk r
 
 type MSStatement a = MS (a (Statement a))
 

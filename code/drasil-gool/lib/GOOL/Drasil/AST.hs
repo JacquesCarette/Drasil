@@ -7,7 +7,8 @@ module GOOL.Drasil.AST (Terminator(..), ScopeTag(..), QualifiedName, qualName,
   StateVarData(getStVarScp, stVar, destructSts), svd, 
   TypeData(cType, typeString, typeDoc), td, ValData(valPrec, valType, val), 
   vd, updateValDoc, VarData(varBind, varName, varType, varDoc), vard,
-  CommonThunk, pureValue, vectorize, vectorize2, commonVecIndex
+  CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
+  commonThunkElim
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -148,6 +149,7 @@ data CommonThunk s
   = PureValue (s ValData)
   | Vectorize (s ValData -> s ValData) (CommonThunk s)
   | Vectorize2 (s ValData -> s ValData -> s ValData) (CommonThunk s) (CommonThunk s)
+  | SumComponents (CommonThunk s)
 
 pureValue :: s ValData -> CommonThunk s
 pureValue = PureValue
@@ -158,7 +160,15 @@ vectorize = Vectorize
 vectorize2 :: (s ValData -> s ValData -> s ValData) -> CommonThunk s -> CommonThunk s -> CommonThunk s
 vectorize2 = Vectorize2
 
+sumComponents :: CommonThunk s -> CommonThunk s
+sumComponents = SumComponents
+
 commonVecIndex :: (s ValData -> s ValData) -> CommonThunk s -> s ValData
 commonVecIndex index (PureValue v) = index v
 commonVecIndex index (Vectorize op v) = op (commonVecIndex index v)
 commonVecIndex index (Vectorize2 op v1 v2) = commonVecIndex index v1 `op` commonVecIndex index v2
+commonVecIndex _ (SumComponents _) = error "Indexing into a scalar thunk"
+
+commonThunkElim :: (CommonThunk s -> a) -> (CommonThunk s -> a) -> CommonThunk s -> a
+commonThunkElim _ sumF (SumComponents v) = sumF v
+commonThunkElim vectorF _ v = vectorF v

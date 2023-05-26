@@ -62,8 +62,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  thunkAssign, increment, objDecNew, print, returnStmt, valStmt, comment, throw,
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, initStmts,
+  increment, objDecNew, print, returnStmt, valStmt, comment, throw, ifCond,
+  tryCatch, construct, param, method, getMethod, setMethod, initStmts,
   function, docFunc, buildClass, implementingClass, docClass, commentedClass,
   modFromData, fileDoc, docMod, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (classVar, 
@@ -83,7 +83,8 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), td, ValData(..), vd, Binding(..), VarData(..), vard,
-  CommonThunk, pureValue, vectorize, vectorize2, commonVecIndex)
+  CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
+  commonThunkElim)
 import GOOL.Drasil.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, 
@@ -442,7 +443,18 @@ instance ThunkSym SwiftCode where
   type Thunk SwiftCode = CommonThunk VS
 
 instance ThunkAssign SwiftCode where
-  thunkAssign = G.thunkAssign
+  -- FIXME: We should really be able to get a "fresh" variable name to use for
+  -- the loop variable
+  thunkAssign v t = multi [loopInit,
+    forRange i (litInt 0) (listSize (valueOf v)) (litInt 1) $ body [block [loopBody]]]
+    where
+      i = var "i" int
+      -- FIXME: use int or double depending on type of v
+      loopInit = zoom lensMStoVS (fmap unSC t) >>= commonThunkElim
+        (const emptyStmt) (const $ assign v (litDouble 0))
+      loopBody = zoom lensMStoVS (fmap unSC t) >>= commonThunkElim
+        (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
+        ((v &+=) . vecIndex (valueOf i) . pure . pure)
 
 instance VectorType SwiftCode where
   vecType = arrayType
@@ -458,6 +470,7 @@ instance VectorExpression SwiftCode where
   vecScale k = fmap $ fmap $ vectorize (fmap unSC . (k #*) . fmap pure)
   vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unSC $ fmap pure v1 #+ fmap pure v2)
   vecIndex i = (>>= fmap pure . commonVecIndex (fmap unSC . flip listAccess i . fmap pure) . unSC)
+  vecDot = liftA2 $ liftA2 $ fmap (fmap sumComponents) $ vectorize2 (\v1 v2 -> fmap unSC $ fmap pure v1 #* fmap pure v2)
 
 instance RenderFunction SwiftCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))

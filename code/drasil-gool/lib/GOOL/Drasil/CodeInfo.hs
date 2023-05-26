@@ -252,6 +252,7 @@ instance VectorExpression CodeInfo where
   vecScale = execute2
   vecAdd = execute2
   vecIndex = execute2
+  vecDot = execute2
 
 instance StatementSym CodeInfo where
   type Statement CodeInfo = ()

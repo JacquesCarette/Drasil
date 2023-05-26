@@ -29,13 +29,13 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
-  RenderValue(..), ValueElim(valuePrec), InternalGetSet(..), InternalListFunc(..), 
-  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
-  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
-  StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..), 
-  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), 
-  MethodElim, StateVarElim, RenderClass(..), ClassElim, RenderMod(..), ModuleElim, 
-  BlockCommentSym(..), BlockCommentElim)
+  RenderValue(..), ValueElim(valuePrec), InternalGetSet(..),
+  InternalListFunc(..),  RenderFunction(..), FunctionElim(functionType),
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  RenderStatement(..), StatementElim(statementTerm), RenderScope(..),
+  ScopeElim, MethodTypeSym(..), RenderParam(..), ParamElim(parameterName,
+  parameterType), RenderMethod(..), MethodElim, StateVarElim, RenderClass(..),
+  ClassElim, RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
@@ -59,7 +59,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  thunkAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt,
+  increment, objDecNew, print, closeFile, returnStmt, valStmt,
   comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
   setMethod, function, buildClass, implementingClass, commentedClass,
   modFromData, fileDoc, fileFromData)
@@ -83,7 +83,8 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, 
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD, 
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
-  vard, CommonThunk, pureValue, vectorize, vectorize2, commonVecIndex)
+  vard, CommonThunk, pureValue, vectorize, vectorize2, sumComponents,
+  commonVecIndex, commonThunkElim)
 import GOOL.Drasil.Helpers (angles, hicat, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
   on2StateWrapped, onCodeList, onStateList)
@@ -422,7 +423,18 @@ instance ThunkSym CSharpCode where
   type Thunk CSharpCode = CommonThunk VS
 
 instance ThunkAssign CSharpCode where
-  thunkAssign = G.thunkAssign
+  -- FIXME: We should really be able to get a "fresh" variable name to use for
+  -- the loop variable
+  thunkAssign v t = multi [loopInit,
+    forRange i (litInt 0) (listSize (valueOf v)) (litInt 1) $ body [block [loopBody]]]
+    where
+      i = var "i" int
+      -- FIXME: use int or double depending on type of v
+      loopInit = zoom lensMStoVS (fmap unCSC t) >>= commonThunkElim
+        (const emptyStmt) (const $ assign v (litDouble 0))
+      loopBody = zoom lensMStoVS (fmap unCSC t) >>= commonThunkElim
+        (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
+        ((v &+=) . vecIndex (valueOf i) . pure . pure)
 
 instance VectorType CSharpCode where
   vecType = arrayType
@@ -438,6 +450,7 @@ instance VectorExpression CSharpCode where
   vecScale k = fmap $ fmap $ vectorize (fmap unCSC . (k #*) . fmap pure)
   vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unCSC $ fmap pure v1 #+ fmap pure v2)
   vecIndex i = (>>= fmap pure . commonVecIndex (fmap unCSC . flip listAccess i . fmap pure) . unCSC)
+  vecDot = liftA2 $ liftA2 $ fmap (fmap sumComponents) $ vectorize2 (\v1 v2 -> fmap unCSC $ fmap pure v1 #* fmap pure v2)
 
 instance RenderFunction CSharpCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))

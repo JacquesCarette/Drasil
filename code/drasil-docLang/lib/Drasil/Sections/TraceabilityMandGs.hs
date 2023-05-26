@@ -65,8 +65,8 @@ tvChanges = traceViewCC chgProbDom
 
 -- | Assumptions on the assumptions of a traceabiliy matrix.
 traceMatAssumpAssump :: TraceConfig
-traceMatAssumpAssump = TraceConfig (mkUid "TraceMatAvsA") [pluralNP (assumption
-  `onThePP` assumption)] (titleize' assumption +:+
+traceMatAssumpAssump = TraceConfig (mkUid "TraceMatAvsA") [plural assumption 
+  +:+ S "with each other"] (titleize' assumption +:+
   S "and Other" +:+ titleize' assumption ) [tvAssumps] [tvAssumps]
 
 -- | Other assumptions of the traceability matrix
@@ -87,10 +87,11 @@ traceMatRefinement = TraceConfig (mkUid "TraceMatRefvsRef") [plural Doc.dataDefn
 
 -- | Records other requirements. Converts the 'SystemInformation' into a 'TraceConfig'.
 traceMatOtherReq :: SystemInformation -> TraceConfig
-traceMatOtherReq si = TraceConfig (mkUid "TraceMatAllvsR") [x plural +:+ S "on the" +:+
-  plural Doc.dataDefn, plural Doc.thModel, plural Doc.genDefn, plural Doc.inModel]
-  (x titleize' +:+ S "and Other" +:+ titleize' item) [tvDataDefns, tvTheoryModels,
-  tvGenDefns, tvInsModels, tvReqs] [tvGoals, tvReqs] where
+traceMatOtherReq si = TraceConfig (mkUid "TraceMatAllvsR") [plural requirement +:+ 
+  S "and" +:+ pluralNP (goalStmt `onThePP` Doc.dataDefn), plural Doc.thModel, 
+  plural Doc.genDefn, plural Doc.inModel] (x titleize' +:+ S "and Other" +:+ 
+  titleize' item) [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs] 
+  [tvGoals, tvReqs] where
     x g = foldl (\a (f,t) -> a `sC'` case traceMReferrers (flip f $ _sysinfodb si) $
       _sysinfodb si of
       [] -> mempty

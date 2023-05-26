@@ -362,10 +362,6 @@ mkSolChSpec si (SCSProg l) =
     map (mkSubSCS si) l
   where
     mkSubSCS :: SystemInformation -> SCSSub -> Section
-    mkSubSCS _ (TMs _ _ [])      = SSD.thModF Doc.section_ []
-    mkSubSCS _ (GDs _ _ [] _)    = SSD.genDefnF []
-    mkSubSCS _ (DDs _ _ [] _)    = SSD.dataDefnF EmptyS []
-    mkSubSCS _ (IMs _ _ [] _)    = SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub SSD.gdStub []
     mkSubSCS si' (TMs intro fields ts) =
       SSD.thModF (siSys si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.

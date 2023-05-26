@@ -428,8 +428,8 @@ mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
   where
     trace = map (\(TraceConfig u _ desc rows cols) -> TM.generateTraceTableView
       u desc rows cols si) fProgs
-    fProgs = filter (\(TraceConfig _ _ _ rows cols) -> eitherEmtpy 
-      (header (showUIDs rows sidb) si) (header (showUIDs cols sidb) si)) progs
+    fProgs = filter (\(TraceConfig _ _ _ rows cols) -> not $ null 
+      (header (showUIDs rows sidb) si) || null (header (showUIDs cols sidb) si)) progs
     sidb = _sysinfodb si
 
 -- | Helper to get UIDs
@@ -439,12 +439,6 @@ showUIDs a s e = filter (`elem` (Map.keys $ s ^. traceTable)) $ concatMap (\x ->
 -- | Helper to get headers of rows and columns
 header :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]
 header f = TM.traceMHeader (f . nub . Map.keys . (^. refbyTable))
-
--- | Helper to check if either list is empty instead of using isEmpty
-eitherEmtpy :: [a] -> [a] -> Bool
-eitherEmtpy _ [] = False
-eitherEmtpy [] _ = False
-eitherEmtpy _ _  = True
 
 -- ** Off the Shelf Solutions
 

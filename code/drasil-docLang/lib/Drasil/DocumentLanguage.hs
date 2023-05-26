@@ -48,7 +48,7 @@ import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
 import qualified Drasil.Sections.Stakeholders as Stk (stakeholderIntro,
   tClientF, tCustomerF)
 import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (
-  generateTraceTableView)
+  generateTraceTableView, traceMHeader, TraceViewCat)
 import qualified Drasil.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
 import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs)
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
@@ -59,7 +59,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
 import Control.Lens ((^.), set)
 import Data.Function (on)
 import Data.List (nub, sortBy, sortOn)
-import qualified Data.Map as Map (elems, toList, assocs)
+import qualified Data.Map as Map (elems, toList, assocs, keys)
 import Data.Char (isSpace)
 
 -- * Main Function
@@ -423,11 +423,22 @@ mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
 -- | Helper for making the Traceability Matrices and Graphs section.
 mkTraceabilitySec :: TraceabilitySec -> SystemInformation -> Section
 mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
-  (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) progs)
+  (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) fProgs)
   (map LlC trace) (filter (not.isSpace) $ abrv sys) []
   where
-  trace = map (\(TraceConfig u _ desc rows cols) -> TM.generateTraceTableView
-    u desc rows cols si) progs
+    trace = map (\(TraceConfig u _ desc rows cols) -> TM.generateTraceTableView
+      u desc rows cols si) fProgs
+    fProgs = filter (\(TraceConfig _ _ _ rows cols) -> not $ null 
+      (header (showUIDs rows sidb) si) || null (header (showUIDs cols sidb) si)) progs
+    sidb = _sysinfodb si
+
+-- | Helper to get UIDs
+showUIDs :: [TM.TraceViewCat] -> ChunkDB -> [UID] -> [UID]
+showUIDs a s e = filter (`elem` (Map.keys $ s ^. traceTable)) $ concatMap (\x -> x e s) a
+
+-- | Helper to get headers of rows and columns
+header :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]
+header f = TM.traceMHeader (f . nub . Map.keys . (^. refbyTable))
 
 -- ** Off the Shelf Solutions
 

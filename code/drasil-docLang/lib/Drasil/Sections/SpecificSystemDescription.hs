@@ -125,7 +125,7 @@ emptySectSentence var = foldlSP[ S "There are no" +:+ plural var]
 
 -- | Wrapper for 'thModelIntro'. Takes the program name and other 'Contents'.
 thModF :: (Idea a) => a -> [Contents] -> Section
-thModF _        []                   = SRS.thModel [thModIntroNoContent] []
+thModF _        []            = SRS.thModel [thModIntroNoContent] []
 thModF progName otherContents = SRS.thModel (thModIntro progName : 
                                               otherContents) []
 
@@ -145,7 +145,7 @@ genDefnF otherContents = SRS.genDefn (generalDefinitionIntro otherContents : oth
 -- | Creates the introduction used in 'genDefnF'. If the given list is empty, the returned 'Sentence' is "There are no general definitions."
 generalDefinitionIntro :: [t] -> Contents
 generalDefinitionIntro [] = emptySectSentence genDefn
-generalDefinitionIntro _ = foldlSP [S "This", phrase section_, 
+generalDefinitionIntro _  = foldlSP [S "This", phrase section_, 
   S "collects the laws and", plural equation, 
   S "that will be used to build the", plural inModel]
 

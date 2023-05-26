@@ -121,7 +121,7 @@ assumpF otherContents = SRS.assumpt (assumpIntro : otherContents) []
        S "by providing more detail"]
 
 emptySectSentence :: NamedIdea n => n -> Contents
-emptySectSentence var = foldlSP[ S "There are no" +:+ plural var]
+emptySectSentence var = foldlSP [S "There are no" +:+ plural var]
 
 -- | Wrapper for 'thModelIntro'. Takes the program name and other 'Contents'.
 thModF :: (Idea a) => a -> [Contents] -> Section

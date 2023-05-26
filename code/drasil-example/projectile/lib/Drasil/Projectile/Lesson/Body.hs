@@ -8,8 +8,8 @@ import SysInfo.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 
 -- TODO: Add export parameters in a module
-import Drasil.DocLang (mkNb, NBDecl, NbSection(BibSec, IntrodSec, BodySec), 
-  IntrodSec(..), BodySec(..), BodySub(..))
+import Drasil.DocLang (mkNb, LsnDecl, LsnChapter(BibSec, LearnObj, Review, CaseProb, Example), 
+  LearnObj(..), Review(..), CaseProb(..), Example(..))
 
 import Data.Drasil.Concepts.Documentation (doccon, doccon')
 import Data.Drasil.Concepts.Math (mathcon)
@@ -19,14 +19,13 @@ import Data.Drasil.Concepts.Physics (physicCon)
 
 import Data.Drasil.People (spencerSmith)
 
-import Drasil.Projectile.Concepts (concepts, projMotion)
+import Drasil.Projectile.Concepts (concepts)
 import Drasil.Projectile.Expressions (eqnRefs)
 
-import Drasil.Projectile.Lesson.IntroSection (introContext, reasonList, overviewParagraph)
+import Drasil.Projectile.Lesson.LearnObj (learnObjContext)
 import Drasil.Projectile.Lesson.Review (reviewContent)
-import Drasil.Projectile.Lesson.Motion (motionContextP1, figCSandA, figRefs,
-  motionContextP2, horMotion, verMotion, summary)
-import Drasil.Projectile.Lesson.Analysis (coorSyst, kinematicEq, horMotionAna, verMotionAna)
+import Drasil.Projectile.Lesson.CaseProb (caseProbCont, figRefs)
+import Drasil.Projectile.Lesson.Example (exampleContent, horiz_velo)
 
 nb :: Document
 nb = mkNb mkNB (S.forGen titleize phrase) si
@@ -34,15 +33,12 @@ nb = mkNb mkNB (S.forGen titleize phrase) si
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
 
-mkNB :: NBDecl
+mkNB :: LsnDecl
 mkNB = [
-  IntrodSec $
-    IntrodProg [introContext, reasonList, overviewParagraph] [],
-  BodySec $
-       BodyProg
-         [Review reviewContent,
-          MainIdea [motionContextP1, LlC figCSandA, motionContextP2] [horMotion, verMotion, summary],
-          MethsAndAnls [mAndaintro] [coorSyst, kinematicEq, horMotionAna, verMotionAna]],
+  LearnObj $ LrnObjProg [learnObjContext],
+  Review $ ReviewProg reviewContent,
+  CaseProb $ CaseProbProg caseProbCont,
+  Example $ ExampleProg exampleContent,
   BibSec
   ]
 
@@ -69,24 +65,24 @@ si = SI {
 }
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw physicscon) (nw projectileMotion : map nw doccon ++ 
-  map nw doccon' ++ map nw physicCon ++ concepts ++ map nw mathcon) 
+symbMap = cdb (map qw physicscon ++ symbols) (nw projectileMotion : map nw doccon ++ 
+  map nw doccon' ++ map nw physicCon ++ concepts ++ map nw mathcon ++ map nw symbols) 
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] allRefs
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
+usedDB = cdb ([] :: [QuantityDict]) (map nw symbols :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) [] [] [] [] ([] :: [ConceptInstance])
   ([] :: [Section]) ([] :: [LabelledContent]) ([] :: [Reference])
+
+symbols :: [QuantityDict]
+symbols = [qw horiz_velo]
 
 refDB :: ReferenceDB
 refDB = rdb [] []
 
 projectileMotion :: CI
-projectileMotion = commonIdea "projectileMotion" (pn "Projectile Motion") "Projectile Motion" []
+projectileMotion = commonIdea "projectileMotion" (pn "Projectile Motion Lesson") "Projectile Motion" []
 
-mAndaintro :: Contents
-mAndaintro = foldlSP 
-  [S "Free-flight", phrase projMotion, S "problems can be solved using the following procedure"]
 
 allRefs :: [Reference]
 allRefs = nub (figRefs ++ eqnRefs) 

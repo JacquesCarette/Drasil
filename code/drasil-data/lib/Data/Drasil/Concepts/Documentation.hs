@@ -18,7 +18,7 @@ import Control.Lens ((^.))
 
 -- | Collects all documentation-related named chunks (not concept-level yet).
 doccon :: [NamedChunk]
-doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body, charOfIR, characteristic,
+doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body, caseProb, charOfIR, characteristic,
   class_, client, code, column, company, component, concept, condition, connection,
   consVals, constant, constraint, consumer, content, context, coordinate, coordinateSystem, 
   corSol, customer, datum, datumConstraint, decision, definition, dependency, description,
@@ -47,9 +47,9 @@ doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body, charO
 -- | Collects all documentation-related common ideas (like a concept, but with no definition).
 doccon' :: [CI]
 doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
-  likelyChg, mg, mis, notApp, physSyst, requirement, srs, thModel, typUnc, unlikelyChg, notebook, refBy, refName]
+  likelyChg, learnObj, mg, mis, notApp, physSyst, requirement, srs, thModel, typUnc, unlikelyChg, notebook]
 
-assumption, desSpec, goalStmt, dataConst, likelyChg, unlikelyChg, physSyst, requirement, 
+assumption, desSpec, goalStmt, dataConst, likelyChg, learnObj, unlikelyChg, physSyst, requirement, 
   mg, mis, notApp, srs, typUnc, sec, notebook, refBy, refName :: CI
 
 softReqSpec :: NP
@@ -65,6 +65,7 @@ desSpec     = commonIdeaWithDict "desSpec"     (combineNINI design specification
 goalStmt    = commonIdeaWithDict "goalStmt"    (combineNINI goal statement)                          "GS"      [softEng]
 dataConst   = commonIdeaWithDict "dataConst"   (cn' "data constraint")                               "DC"      [softEng]
 likelyChg   = commonIdeaWithDict "likelyChg"   (cn' "likely change")                                 "LC"      [softEng]
+learnObj    = commonIdeaWithDict "learnObj"    (cn' "learning objective")                            "LO"      [documentc]
 unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")                               "UC"      [softEng]
 physSyst    = commonIdeaWithDict "physSyst"    (combineNINI physicalSystem description)              "PS"      [softEng]
 requirement = commonIdeaWithDict "requirement" (cn' "requirement")                                   "R"       [softEng]
@@ -234,11 +235,12 @@ year            = nc "year"           (cn'    "year"               )
 scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- temporary generated for test
 
 
-abbAcc, charOfIR, consVals, corSol, methAndAnls, orgOfDoc, procForAnls, propOfCorSol, prpsOfDoc, 
+abbAcc, caseProb, charOfIR, consVals, corSol, methAndAnls, orgOfDoc, procForAnls, propOfCorSol, prpsOfDoc, 
   refMat, reqInput, scpOfReq, tAuxConsts, tOfSymb, tOfUnit,
   termAndDef, traceyMandG, vav, tOfCont :: NamedChunk
 
 abbAcc              = nc "TAbbAcc"            (abbreviation `and_PP` acronym)
+caseProb            = nc "caseProb"           (cn' "case problem")
 consVals            = nc "consVals"           (cn "values of auxiliary constants")
 corSol              = nc "corSol"             (cn' "correct solution")
 charOfIR            = nc "charOfIR"           (characteristic `of_PS` intReader)

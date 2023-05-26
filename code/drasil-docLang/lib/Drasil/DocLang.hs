@@ -22,10 +22,10 @@ module Drasil.DocLang (
   -- | For generating Jupyter notebook lesson plans.
 
   -- *** Types
-  -- Drasil.DocumentLanguage.Notebook.NBDecl
-  NBDecl, NbSection(BibSec, IntrodSec, BodySec),
+  -- Drasil.DocumentLanguage.Notebook.LsnDecl
+  LsnDecl, LsnChapter(Intro, LearnObj, Review, CaseProb, Example, Smmry, BibSec, Apndx),
   -- Drasil.DocumentLanguage.Notebook.Core
-  IntrodSec(..), IntrodSub(..), BodySec(..), BodySub(..), SmmrySec(..), ApndxSec(..),
+  Intro(..), LearnObj(..), Review(..), CaseProb(..), Example(..), Smmry(..), Apndx(..),
   -- *** Functions
   -- Drasil.DocumentLanguage.Notebook.DocumentLanguage
   mkNb,
@@ -77,10 +77,11 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   Literature(Doc', Lit,Manual), RefSec(..), RefTab(..), StkhldrSec(..),
   StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
   TSIntro(..), TUIntro(..))
-import Drasil.DocumentLanguage.Notebook.Core (IntrodSec(..), IntrodSub(..), BodySec(..), 
-  BodySub(..), ApndxSec(..), SmmrySec(..))
+import Drasil.DocumentLanguage.Notebook.Core (Intro(..), LearnObj(..), Review(..), 
+  CaseProb(..), Example(..), Smmry(..), Apndx(..))
 import Drasil.DocumentLanguage.Notebook.DocumentLanguage (mkNb)
-import Drasil.DocumentLanguage.Notebook.NBDecl (NBDecl, NbSection(BibSec, IntrodSec, BodySec))
+import Drasil.DocumentLanguage.Notebook.LsnDecl (LsnDecl, LsnChapter(Intro, LearnObj, Review, 
+  CaseProb, Example, Smmry, BibSec, Apndx))
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
   Verbosity(..), ddefn)
 --import Drasil.DocumentLanguage.TraceabilityMatrix

@@ -4,13 +4,10 @@ Last updated: July 19, 2018
 --------------------------------------------------
 
 **DocLang**
-  - Contains SRS.hs, with functions for building a Software Requirements Specification.
+  - Contains SRS.hs, with functions for building a Software Requirements Specification, and Notebook.hs for building Lesson Plans.
 
 **DocumentLanguage**
   - Contains helpers for generating documents.
-
-**NBSections**
-  - Contains helpers for generating lesson plan notebooks.
 
 **Sections**
   - Contains the files used to auto-generate the paragraphs of each case study.

@@ -653,10 +653,6 @@ traceMColumns :: ([UID] -> [UID]) -> ([UID] -> [UID]) -> ChunkDB -> [[UID]]
 --   dependencies of <tt>something</tt>".
 tableShows :: (Referable a, HasShortName a) => a -> Sentence -> Sentence
 
--- | Helper that makes sure the rows and columns of a traceability matrix
---   have substance.
-ensureItems :: String -> [a] -> [a]
-
 -- | Helper that finds the layout <a>UID</a>s of a traceability matrix.
 layoutUIDs :: [TraceViewCat] -> ChunkDB -> [UID] -> [UID]
 
@@ -1737,6 +1733,12 @@ mkUCsSec :: UCsSec -> Section
 
 -- | Helper for making the Traceability Matrices and Graphs section.
 mkTraceabilitySec :: TraceabilitySec -> SystemInformation -> Section
+
+-- | Helper to get UIDs
+showUIDs :: [TraceViewCat] -> ChunkDB -> [UID] -> [UID]
+
+-- | Helper to get headers of rows and columns
+header :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]
 
 -- | Helper for making the Off-the-Shelf Solutions section.
 mkOffShelfSolnSec :: OffShelfSolnsSec -> Section

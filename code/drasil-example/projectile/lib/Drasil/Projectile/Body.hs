@@ -1,6 +1,5 @@
 module Drasil.Projectile.Body (printSetting, si, srs, projectileTitle, fullSI) where
 
-import Control.Lens ((^.))
 import Language.Drasil
 import Drasil.SRSDocument
 import Language.Drasil.Chunk.Concept.NamedCombinators

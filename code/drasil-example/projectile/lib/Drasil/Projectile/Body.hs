@@ -10,7 +10,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
   problem, srsDomains, assumption, goalStmt, physSyst,
-  requirement, typUnc)
+  requirement, refBy, refName, typUnc)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Math (cartesian, mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
@@ -30,8 +30,7 @@ import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.Projectile.Assumptions (assumptions)
-import Drasil.Projectile.Concepts (concepts, landingPosNC,
-  launcher, projectile, target)
+import Drasil.Projectile.Concepts (concepts, launcher, projectile, target)
 import Drasil.Projectile.DataDefs (dataDefs)
 import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.GenDefs (genDefns)
@@ -65,7 +64,7 @@ mkSRS = [TableOfContents,
       [ IScope scope ],
   SSDSec $
     SSDProg
-      [ SSDProblem $ PDProg prob []
+      [ SSDProblem $ PDProg purp []
         [ TermsAndDefs Nothing terms
         , PhySysDesc projectileTitle physSystParts figLaunch []
         , Goals [inputsPhrase]]
@@ -93,10 +92,6 @@ mkSRS = [TableOfContents,
 inputsPhrase :: Sentence
 inputsPhrase = (phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile
 
-purpose :: Sentence
-purpose = foldlSent_ [S "Given", inputsPhrase `sC` phrase projectileTitle, S "will"] +:+ 
-  foldlSent_ (map (^. defn) goals)
-
 background :: Sentence
 background = foldlSent [S "Common examples of", phrase projectile, phrase motion, S "include",
     S "ballistics", plural problem, S "(missiles and bullets)" `S.andThe` S "flight of the balls",
@@ -122,7 +117,7 @@ si = SI {
   _sys         = projectileTitle,
   _kind        = Doc.srs,
   _authors     = [samCrawford, brooks, spencerSmith],
-  _purpose     = [purpose],
+  _purpose     = [purp],
   _background  = [background],
   _motivation  = [motivation],
   _scope       = [],
@@ -141,6 +136,10 @@ si = SI {
   _usedinfodb  = usedDB,
    refdb       = refDB
 }
+
+purp :: Sentence
+purp = foldlSent_ [S "efficiently" `S.and_` S "correctly predict whether a launched",
+  phrase projectile, S "hits its", phrase target]
 
 tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM]
@@ -170,9 +169,7 @@ concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
 -- Problem Description --
 -------------------------
 
-prob :: Sentence
-prob = foldlSent_ [S "efficiently" `S.and_` S "correctly predict the",
-  phraseNP (landingPosNC `ofA` projectile)]
+-- Introduction of the Problem Description section derives from purp
 
 ---------------------------------
 -- Terminology and Definitions --
@@ -197,7 +194,7 @@ physSystParts = map (!.)
 symbols :: [QuantityDict]
 symbols = qw gravitationalAccelConst : unitalQuants ++ map qw constants ++
   map qw [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
-  iyPos, ixVel, iyVel, position, scalarPos, projSpeed, time, velocity, xAccel,
+  iyPos, ixVel, iyVel, position, scalarPos, projPos, projSpeed, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel]
 
 constants :: [ConstQDef]
@@ -207,7 +204,7 @@ inputs :: [QuantityDict]
 inputs = map qw [launSpeed, launAngle, targPos]
 
 outputs :: [QuantityDict]
-outputs = [message, qw offset]
+outputs = [message, qw offset, qw flightDur]
 
 unitalQuants :: [QuantityDict]
 unitalQuants = message : map qw constrained
@@ -219,12 +216,11 @@ inConstraints :: [UncertQ]
 inConstraints = [launAngleUnc, launSpeedUnc, targPosUnc]
 
 outConstraints :: [UncertQ]
-outConstraints = [landPosUnc, offsetUnc]
+outConstraints = [landPosUnc, offsetUnc, flightDurUnc]
 
 constrained :: [ConstrConcept]
 constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
 
 acronyms :: [CI]
 acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
-  physSyst, requirement, Doc.srs, thModel, typUnc]
-
+  physSyst, requirement, Doc.srs, refBy, refName, thModel, typUnc]

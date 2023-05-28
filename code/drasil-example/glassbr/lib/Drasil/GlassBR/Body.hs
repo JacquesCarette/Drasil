@@ -28,7 +28,8 @@ import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability, softwarecon)
 import Data.Drasil.Software.Products (sciCompS)
 
-import Data.Drasil.Citations (koothoor2013, smithLai2005)
+import Data.Drasil.Citations (koothoor2013, smithEtAl2007, smithLai2005,
+  smithKoothoor2016)
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamentals,
   derived)
@@ -65,7 +66,7 @@ si = SI {
   _sys         = glassBR,
   _kind        = Doc.srs,
   _authors     = [nikitha, spencerSmith],
-  _purpose     = [],
+  _purpose     = [purp],
   _background  = [],
   _motivation  = [],
   _scope       = [],
@@ -105,7 +106,7 @@ mkSRS = [TableOfContents,
     UsrChars [userCharacteristicsIntro], SystCons [] [] ],
   SSDSec $
     SSDProg
-      [SSDProblem $ PDProg prob [termsAndDesc]
+      [SSDProblem $ PDProg purp [termsAndDesc]
         [ PhySysDesc glassBR physSystParts physSystFig []
         , Goals goalInputs],
        SSDSolChSpec $ SCSProg
@@ -128,6 +129,11 @@ mkSRS = [TableOfContents,
   AuxConstntSec $ AuxConsProg glassBR auxiliaryConstants,
   Bibliography,
   AppndxSec $ AppndxProg [appdxIntro, LlC demandVsSDFig, LlC dimlessloadVsARFig]]
+
+purp :: Sentence
+purp = foldlSent_ [S "efficiently" `S.and_` S "correctly predict whether a",
+  phrase glaSlab, S "can withstand a", phrase blast, S "under given",
+  plural condition]
 
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
@@ -229,9 +235,9 @@ scope = foldlSent_ [S "determining the safety of a", phrase glaSlab,
 orgOfDocIntro, orgOfDocIntroEnd :: Sentence
 orgOfDocIntro = foldlSent [atStartNP (the organization), S "of this",
   phrase document, S "follows the", phrase template, S "for an", short Doc.srs
-  `S.for` phrase sciCompS, S "proposed by" +:+ refS koothoor2013
-  `S.and_` refS smithLai2005 `sC` S "with some", 
-  plural aspect, S "taken from Volere", phrase template,
+  `S.for` phrase sciCompS, S "proposed by", foldlList Comma List  
+  (map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]) 
+  `sC` S "with some", plural aspect, S "taken from Volere", phrase template,
   S "16", refS rbrtsn2012]
 
 orgOfDocIntroEnd = foldlSent_ [atStartNP' (the Doc.dataDefn) `S.are`
@@ -305,10 +311,7 @@ userCharacteristicsIntro = enumBulletU $ map foldlSent
 
 {--PROBLEM DESCRIPTION--}
 
-prob :: Sentence
-prob = foldlSent_ [S "efficiently" `S.and_` S "correctly predict whether a",
-  phrase glaSlab, S "can withstand a", phrase blast, S "under given",
-  plural condition]
+--Introduction of Problem Description section derived from purp
 
 {--Terminology and Definitions--}
 

@@ -1,6 +1,6 @@
 module Drasil.PDController.IntroSection where
 
-import Data.Drasil.Citations (smithLai2005)
+import Data.Drasil.Citations (smithEtAl2007, smithLai2005, smithKoothoor2016)
 
 import Drasil.PDController.Concepts
 import Language.Drasil
@@ -47,4 +47,5 @@ introDocOrg :: Sentence
 introDocOrg
   = foldlSent
       [S "The sections in this document are based on",
-         refS smithLai2005]
+      foldlList Comma List $ map refS [smithLai2005, smithEtAl2007, 
+      smithKoothoor2016]]

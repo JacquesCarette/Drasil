@@ -16,13 +16,11 @@ dependencies:
 - containers
 - directory
 - drasil-data
-- drasil-code-base
 - drasil-database
 - drasil-lang
 - drasil-sysinfo
 - drasil-theory
 - drasil-utils
-- json
 - split
 
 ghc-options:

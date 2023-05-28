@@ -3,7 +3,7 @@ module Language.Drasil.Chunk.Parameter (
   PassBy(..), ParameterChunk(..), pcAuto, pcVal
 ) where
 
-import Language.Drasil hiding (Ref)
+import Language.Drasil hiding (Ref, CodeIdea(..), CodeChunk)
 import Language.Drasil.Chunk.Code (CodeIdea(..), CodeChunk)
 
 import Control.Lens ((^.), makeLenses, view)

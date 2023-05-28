@@ -76,9 +76,11 @@ ${a_{\text{y}1}}$ & The vertical acceleration of the first object & $\frac{\text
 \\
 ${a_{\text{y}2}}$ & The vertical acceleration of the second object & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-$\symbf{a}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+$\symbf{a}\text{(}t\text{)}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\symbf{F}$ & Force & ${\text{N}}$
+\\
+$g$ & Magnitude of gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\symbf{g}$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
@@ -102,7 +104,7 @@ ${p_{\text{y}1}}$ & The vertical position of the first object & ${\text{m}}$
 \\
 ${p_{\text{y}2}}$ & The vertical position of the second object & ${\text{m}}$
 \\
-$\symbf{p}$ & Position & ${\text{m}}$
+$\symbf{p}\text{(}t\text{)}$ & Position & ${\text{m}}$
 \\
 $\symbf{T}$ & Tension & ${\text{N}}$
 \\
@@ -122,7 +124,7 @@ ${v_{\text{y}1}}$ & The vertical velocity of the first object & $\frac{\text{m}}
 \\
 ${v_{\text{y}2}}$ & The vertical velocity of the second object & $\frac{\text{m}}{\text{s}}$
 \\
-$\symbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
+$\symbf{v}\text{(}t\text{)}$ & Velocity & $\frac{\text{m}}{\text{s}}$
 \\
 ${w_{1}}$ & The angular velocity of the first object & $\frac{\text{rad}}{\text{s}}$
 \\
@@ -166,6 +168,10 @@ PS & Physical System Description
 \\
 R & Requirement
 \\
+RefBy & Referenced by
+\\
+Refname & Reference Name
+\\
 SRS & Software Requirements Specification
 \\
 TM & Theoretical Model
@@ -198,7 +204,7 @@ Reviewers of this documentation should have an understanding of undergraduate le
 
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
-The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013} and \cite{smithLai2005}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{instance models} and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013}, \cite{smithLai2005}, \cite{smithEtAl2007}, and \cite{smithKoothoor2016}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{instance models} and trace back to find any additional information they require.
 
 The \hyperref[Sec:GoalStmt]{goal statements} are refined to the theoretical models and the \hyperref[Sec:TMs]{theoretical models} to the \hyperref[Sec:IMs]{instance models}.
 
@@ -248,7 +254,7 @@ This section first presents the problem description, which gives a high-level vi
 
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
-A system is needed to efficiently and correctly to predict the motion of a pendulum.
+A system is needed to efficiently and correctly predict the motion of a pendulum.
 
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
@@ -277,7 +283,7 @@ The physical system of DblPendulum, as shown in \hyperref[Figure:dblpendulum]{Fi
 \end{figure}
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
-Given the masses, length of the rods, initial angle of the masses and the gravitational constant, the goal statements are:
+Given the masses, length of the rods, initial angle of the masses and the gravitational constant, the goal statement is:
 
 \begin{itemize}
 \item[motionMass:\phantomsection\label{motionMass}]{Calculate the motion of the masses.}
@@ -315,13 +321,13 @@ Label & Acceleration
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+           \symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\symbf{v}\text{(}t\text{)}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & \cite{accelerationWiki}
@@ -343,13 +349,13 @@ Label & Velocity
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+           \symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\symbf{v}\text{(}t\text{)}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{p}$ is the position (${\text{m}}$)}
+              \item{$\symbf{p}\text{(}t\text{)}$ is the position (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & \cite{velocityWiki}
@@ -371,16 +377,16 @@ Label & Newton's second law of motion
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}
+           \symbf{F}=m \symbf{a}\text{(}t\text{)}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The net force $\symbf{F}$ on a body is proportional to the acceleration $\symbf{a}$ of the body, where $m$ denotes the mass of the body as the constant of proportionality.
+Notes & The net force $\symbf{F}$ on a body is proportional to the acceleration $\symbf{a}\text{(}t\text{)}$ of the body, where $m$ denotes the mass of the body as the constant of proportionality.
         
 \\ \midrule \\
 Source & --
@@ -431,7 +437,7 @@ RefBy &
 At a given point in time, velocity is defined in \hyperref[DD:positionGDD]{DD:positionGDD}
 
 \begin{displaymath}
-\symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 We also know the horizontal position that is defined in \hyperref[DD:positionXDD1]{DD:positionXDD1}
 
@@ -490,7 +496,7 @@ RefBy &
 At a given point in time, velocity is defined in \hyperref[DD:positionGDD]{DD:positionGDD}
 
 \begin{displaymath}
-\symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 We also know the vertical position that is defined in \hyperref[DD:positionYDD1]{DD:positionYDD1}
 
@@ -550,7 +556,7 @@ RefBy &
 At a given point in time, velocity is defined in \hyperref[DD:positionGDD]{DD:positionGDD}
 
 \begin{displaymath}
-\symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 We also know the horizontal position that is defined in \hyperref[DD:positionXDD2]{DD:positionXDD2}
 
@@ -605,7 +611,7 @@ RefBy &
 At a given point in time, velocity is defined in \hyperref[DD:positionGDD]{DD:positionGDD}
 
 \begin{displaymath}
-\symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 We also know the vertical position that is defined in \hyperref[DD:positionYDD2]{DD:positionYDD2}
 
@@ -661,7 +667,7 @@ RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
 Our acceleration is:
 
 \begin{displaymath}
-\symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 Earlier, we found the horizontal velocity to be
 
@@ -722,7 +728,7 @@ RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
 Our acceleration is:
 
 \begin{displaymath}
-\symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 Earlier, we found the vertical velocity to be
 
@@ -784,7 +790,7 @@ RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
 Our acceleration is:
 
 \begin{displaymath}
-\symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 Earlier, we found the horizontal velocity to be
 
@@ -841,7 +847,7 @@ RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
 Our acceleration is:
 
 \begin{displaymath}
-\symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 Earlier, we found the horizontal velocity to be
 
@@ -873,13 +879,13 @@ Units & ${\text{N}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}=-{\symbf{T}_{1}} \sin\left({θ_{1}}\right)+{\symbf{T}_{2}} \sin\left({θ_{2}}\right)
+           \symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{1}} \sin\left({θ_{1}}\right)+{\symbf{T}_{2}} \sin\left({θ_{2}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${\symbf{T}_{1}}$ is the the tension of the first object (${\text{N}}$)}
               \item{${θ_{1}}$ is the the angle of the first rod (${\text{rad}}$)}
               \item{${\symbf{T}_{2}}$ is the the tension of the second object (${\text{N}}$)}
@@ -897,7 +903,7 @@ RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
 \paragraph{Detailed derivation of force on the first object:}
 \label{GD:xForce1Deriv}
 \begin{displaymath}
-\symbf{F}=m \symbf{a}=-{\symbf{T}_{1}} \sin\left({θ_{1}}\right)+{\symbf{T}_{2}} \sin\left({θ_{2}}\right)
+\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{1}} \sin\left({θ_{1}}\right)+{\symbf{T}_{2}} \sin\left({θ_{2}}\right)
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -914,13 +920,13 @@ Units & ${\text{N}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{1}} \symbf{g}
+           \symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{1}} \symbf{g}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${\symbf{T}_{1}}$ is the the tension of the first object (${\text{N}}$)}
               \item{${θ_{1}}$ is the the angle of the first rod (${\text{rad}}$)}
               \item{${\symbf{T}_{2}}$ is the the tension of the second object (${\text{N}}$)}
@@ -940,7 +946,7 @@ RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
 \paragraph{Detailed derivation of force on the first object:}
 \label{GD:yForce1Deriv}
 \begin{displaymath}
-\symbf{F}=m \symbf{a}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{1}} \symbf{g}
+\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{1}} \symbf{g}
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -957,13 +963,13 @@ Units & ${\text{N}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}=-{\symbf{T}_{2}} \sin\left({θ_{2}}\right)
+           \symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{2}} \sin\left({θ_{2}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${\symbf{T}_{2}}$ is the the tension of the second object (${\text{N}}$)}
               \item{${θ_{2}}$ is the the angle of the second rod (${\text{rad}}$)}
               \end{symbDescription}
@@ -979,7 +985,7 @@ RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
 \paragraph{Detailed derivation of force on the second object:}
 \label{GD:xForce2Deriv}
 \begin{displaymath}
-\symbf{F}=m \symbf{a}=-{\symbf{T}_{2}} \sin\left({θ_{2}}\right)
+\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{2}} \sin\left({θ_{2}}\right)
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -996,13 +1002,13 @@ Units & ${\text{N}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}={\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} \symbf{g}
+           \symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} \symbf{g}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${\symbf{T}_{2}}$ is the the tension of the second object (${\text{N}}$)}
               \item{${θ_{2}}$ is the the angle of the second rod (${\text{rad}}$)}
               \item{${m_{2}}$ is the the mass of the second object (${\text{kg}}$)}
@@ -1020,7 +1026,7 @@ RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
 \paragraph{Detailed derivation of force on the second object:}
 \label{GD:yForce2Deriv}
 \begin{displaymath}
-\symbf{F}=m \symbf{a}={\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} \symbf{g}
+\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} \symbf{g}
 \end{displaymath}
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
@@ -1037,20 +1043,20 @@ This section collects and defines all the data needed to build the instance mode
 Label & Velocity
         
 \\ \midrule \\
-Symbol & $\symbf{v}$
+Symbol & $\symbf{v}\text{(}t\text{)}$
          
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+           \symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\symbf{v}\text{(}t\text{)}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{p}$ is the position (${\text{m}}$)}
+              \item{$\symbf{p}\text{(}t\text{)}$ is the position (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -1239,20 +1245,20 @@ RefBy & \hyperref[GD:velocityY2]{GD:velocityY2}
 Label & Acceleration
         
 \\ \midrule \\
-Symbol & $\symbf{a}$
+Symbol & $\symbf{a}\text{(}t\text{)}$
          
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+           \symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\symbf{v}\text{(}t\text{)}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -1281,13 +1287,13 @@ Units & ${\text{N}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}
+           \symbf{F}=m \symbf{a}\text{(}t\text{)}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -1337,7 +1343,7 @@ Output Constraints & \begin{displaymath}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {α_{1}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{-\symbf{g} \left(2 {m_{1}}+{m_{2}}\right) \sin\left({θ_{1}}\right)-{m_{2}} \symbf{g} \sin\left({θ_{1}}-2 {θ_{2}}\right)-2 \sin\left({θ_{1}}-{θ_{2}}\right) {m_{2}} \left({w_{2}}^{2} {L_{2}}+{w_{1}}^{2} {L_{1}} \cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{1}} \left(2 {m_{1}}+{m_{2}}-{m_{2}} \cos\left(2 {θ_{1}}-2 {θ_{2}}\right)\right)}
+           {α_{1}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{-g \left(2 {m_{1}}+{m_{2}}\right) \sin\left({θ_{1}}\right)-{m_{2}} g \sin\left({θ_{1}}-2 {θ_{2}}\right)-2 \sin\left({θ_{1}}-{θ_{2}}\right) {m_{2}} \left({w_{2}}^{2} {L_{2}}+{w_{1}}^{2} {L_{1}} \cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{1}} \left(2 {m_{1}}+{m_{2}}-{m_{2}} \cos\left(2 {θ_{1}}-2 {θ_{2}}\right)\right)}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1346,7 +1352,7 @@ Description & \begin{symbDescription}
               \item{${θ_{2}}$ is the the angle of the second rod (${\text{rad}}$)}
               \item{${w_{1}}$ is the the angular velocity of the first object ($\frac{\text{rad}}{\text{s}}$)}
               \item{${w_{2}}$ is the the angular velocity of the second object ($\frac{\text{rad}}{\text{s}}$)}
-              \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$g$ is the magnitude of gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${m_{1}}$ is the the mass of the first object (${\text{kg}}$)}
               \item{${m_{2}}$ is the the mass of the second object (${\text{kg}}$)}
               \item{${L_{2}}$ is the the length of the second rod (${\text{m}}$)}
@@ -1397,7 +1403,7 @@ Output Constraints & \begin{displaymath}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {α_{2}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{2 \sin\left({θ_{1}}-{θ_{2}}\right) \left({w_{1}}^{2} {L_{1}} \left({m_{1}}+{m_{2}}\right)+\symbf{g} \left({m_{1}}+{m_{2}}\right) \cos\left({θ_{1}}\right)+{w_{2}}^{2} {L_{2}} {m_{2}} \cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{2}} \left(2 {m_{1}}+{m_{2}}-{m_{2}} \cos\left(2 {θ_{1}}-2 {θ_{2}}\right)\right)}
+           {α_{2}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{2 \sin\left({θ_{1}}-{θ_{2}}\right) \left({w_{1}}^{2} {L_{1}} \left({m_{1}}+{m_{2}}\right)+g \left({m_{1}}+{m_{2}}\right) \cos\left({θ_{1}}\right)+{w_{2}}^{2} {L_{2}} {m_{2}} \cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{2}} \left(2 {m_{1}}+{m_{2}}-{m_{2}} \cos\left(2 {θ_{1}}-2 {θ_{2}}\right)\right)}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1409,7 +1415,7 @@ Description & \begin{symbDescription}
               \item{${L_{1}}$ is the the length of the first rod (${\text{m}}$)}
               \item{${m_{1}}$ is the the mass of the first object (${\text{kg}}$)}
               \item{${m_{2}}$ is the the mass of the second object (${\text{kg}}$)}
-              \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$g$ is the magnitude of gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${L_{2}}$ is the the length of the second rod (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -1430,7 +1436,7 @@ By solving equations \hyperref[GD:xForce2]{GD:xForce2} and \hyperref[GD:yForce2]
 \end{displaymath}
 
 \begin{displaymath}
-{m_{1}} {a_{\text{y}1}}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{m_{2}} {a_{\text{y}2}}-{m_{2}} \symbf{g}-{m_{1}} \symbf{g}
+{m_{1}} {a_{\text{y}1}}={\symbf{T}_{1}} \cos\left({θ_{1}}\right)-{m_{2}} {a_{\text{y}2}}-{m_{2}} g-{m_{1}} g
 \end{displaymath}
 Multiply the equation 1 by $\cos\left({θ_{1}}\right)$ and the equation 2 by $\sin\left({θ_{1}}\right)$ and rearrange to get:
 
@@ -1439,12 +1445,12 @@ Multiply the equation 1 by $\cos\left({θ_{1}}\right)$ and the equation 2 by $\s
 \end{displaymath}
 
 \begin{displaymath}
-{\symbf{T}_{1}} \sin\left({θ_{1}}\right) \cos\left({θ_{1}}\right)=\sin\left({θ_{1}}\right) \left({m_{1}} {a_{\text{y}1}}+{m_{2}} {a_{\text{y}2}}+{m_{2}} \symbf{g}+{m_{1}} \symbf{g}\right)
+{\symbf{T}_{1}} \sin\left({θ_{1}}\right) \cos\left({θ_{1}}\right)=\sin\left({θ_{1}}\right) \left({m_{1}} {a_{\text{y}1}}+{m_{2}} {a_{\text{y}2}}+{m_{2}} g+{m_{1}} g\right)
 \end{displaymath}
 This leads to the equation 3
 
 \begin{displaymath}
-\sin\left({θ_{1}}\right) \left({m_{1}} {a_{\text{y}1}}+{m_{2}} {a_{\text{y}2}}+{m_{2}} \symbf{g}+{m_{1}} \symbf{g}\right)=-\cos\left({θ_{1}}\right) \left({m_{1}} {a_{\text{x}1}}+{m_{2}} {a_{\text{x}2}}\right)
+\sin\left({θ_{1}}\right) \left({m_{1}} {a_{\text{y}1}}+{m_{2}} {a_{\text{y}2}}+{m_{2}} g+{m_{1}} g\right)=-\cos\left({θ_{1}}\right) \left({m_{1}} {a_{\text{x}1}}+{m_{2}} {a_{\text{x}2}}\right)
 \end{displaymath}
 Next, multiply equation \hyperref[GD:xForce2]{GD:xForce2} by $\cos\left({θ_{2}}\right)$ and equation \hyperref[GD:yForce2]{GD:yForce2} by $\sin\left({θ_{2}}\right)$ and rearrange to get:
 
@@ -1453,18 +1459,18 @@ Next, multiply equation \hyperref[GD:xForce2]{GD:xForce2} by $\cos\left({θ_{2}}
 \end{displaymath}
 
 \begin{displaymath}
-{\symbf{T}_{1}} \sin\left({θ_{2}}\right) \cos\left({θ_{2}}\right)=\sin\left({θ_{2}}\right) \left({m_{2}} {a_{\text{y}2}}+{m_{2}} \symbf{g}\right)
+{\symbf{T}_{1}} \sin\left({θ_{2}}\right) \cos\left({θ_{2}}\right)=\sin\left({θ_{2}}\right) \left({m_{2}} {a_{\text{y}2}}+{m_{2}} g\right)
 \end{displaymath}
 which leads to equation 4
 
 \begin{displaymath}
-\sin\left({θ_{2}}\right) \left({m_{2}} {a_{\text{y}2}}+{m_{2}} \symbf{g}\right)=-\cos\left({θ_{2}}\right) {m_{2}} {a_{\text{x}2}}
+\sin\left({θ_{2}}\right) \left({m_{2}} {a_{\text{y}2}}+{m_{2}} g\right)=-\cos\left({θ_{2}}\right) {m_{2}} {a_{\text{x}2}}
 \end{displaymath}
 By giving equations \hyperref[GD:accelerationX1]{GD:accelerationX1} and \hyperref[GD:accelerationX2]{GD:accelerationX2} and \hyperref[GD:accelerationY1]{GD:accelerationY1} and \hyperref[GD:accelerationY2]{GD:accelerationY2} plus additional two equations, 3 and 4, we can get \hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1} and \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2} via a computer algebra program:
 
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
 
 \begin{longtable}{l l l l}
 \toprule
@@ -1782,7 +1788,7 @@ publisher={Pearson Prentice Hall},
 year={2004}}
 @mastersthesis{koothoor2013,
 author={Koothoor, Nirmitha},
-title={A document drive approach to certifying scientific computing software},
+title={A Document Driven Approach to Certifying Scientific Computing Software},
 school={McMaster University},
 year={2013},
 address={Hamilton, ON, Canada}}
@@ -1796,6 +1802,16 @@ volume={12},
 number={2},
 pages={251--257},
 address={Washington, USA}}
+@article{smithKoothoor2016,
+author={Smith, W. Spencer and Koothoor, Nirmitha},
+title={A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis},
+journal={ Nuclear Engineering and Technology},
+year={2016},
+month=apr,
+volume={48},
+number={2},
+pages={404--418},
+howpublished={\url{http://www.sciencedirect.com/science/article/pii/S1738573315002582}}}
 @inproceedings{smithLai2005,
 author={Smith, W. Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
@@ -1805,6 +1821,16 @@ editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
 address={Paris, France},
 pages={107--121},
 note={In conjunction with 13th IEEE International Requirements Engineering Conference,}}
+@article{smithEtAl2007,
+author={Smith, W. Spencer and Lai, Lei and Khedri, Ridha},
+title={Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability},
+journal={Reliable Computing, Special Issue on Reliable Engineering Computation},
+year={2007},
+month=feb,
+volume={13},
+number={1},
+pages={83--107},
+howpublished={\url{https://doi.org/10.1007/s11155-006-9020-7}}}
 @misc{accelerationWiki,
 author={Wikipedia Contributors},
 title={Acceleration},

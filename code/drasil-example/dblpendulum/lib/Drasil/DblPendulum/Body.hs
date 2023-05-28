@@ -38,9 +38,10 @@ import Drasil.DblPendulum.GenDefs (genDefns)
 import Drasil.DblPendulum.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms, pendDisAngle, constants)
 import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs)
-import Drasil.DblPendulum.References (citations, koothoor2013, smithLai2005)
+import Drasil.DblPendulum.References (citations, koothoor2013, smithEtAl2007,
+ smithLai2005, smithKoothoor2016)
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols, osloSymbols, apacheODESymbols, odeintSymbols, arrayVecDepVar)
-import Language.Drasil.Code (listToArray, quantvar)
+import Language.Drasil.Code (quantvar)
 import Drasil.DblPendulum.ODEs (dblPenODEInfo)
 
 
@@ -75,7 +76,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       SystCons [] []],                            
   SSDSec $ 
     SSDProg
-      [ SSDProblem $ PDProg prob []                --  This adds a is used to define the problem your system will solve
+      [ SSDProblem $ PDProg purp []                --  This adds a is used to define the problem your system will solve
         [ TermsAndDefs Nothing terms               -- This is used to define the terms to be defined in terminology sub section
       , PhySysDesc progName physSystParts figMotion [] -- This defines the Physicalsystem sub-section, define the parts
                                                           -- of the system using physSysParts, figMotion is a function in figures for the image
@@ -105,7 +106,7 @@ si = SI {
   _sys         = progName, 
   _kind        = Doc.srs,
   _authors     = [dong],
-  _purpose     = [],
+  _purpose     = [purp],
   _background  = [], 
   _motivation  = [],
   _scope       = [],
@@ -124,6 +125,9 @@ si = SI {
   _usedinfodb  = usedDB,
    refdb       = refDB
 }
+
+purp :: Sentence
+purp = foldlSent_ [S "efficiently and correctly predict the", phraseNP (motion `ofA` pendulum)]
 
 symbolsAll :: [QuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
@@ -192,8 +196,8 @@ organizationOfDocumentsIntro :: Sentence
 organizationOfDocumentsIntro = foldlSent 
   [atStartNP (the organization), S "of this", phrase document, 
   S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
-  phrase sciCompS, S "proposed by", refS koothoor2013 `S.and_`
-  refS smithLai2005]
+  phrase sciCompS, S "proposed by", foldlList Comma List $ 
+    map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]
 
 
 --------------------------------------------
@@ -269,8 +273,7 @@ userCharacteristicsIntro = foldlSP
 -------------------------------
 -- 4.1 : System Constraints  --
 -------------------------------
-prob :: Sentence
-prob = foldlSent_ [S "efficiently and correctly to predict the", phraseNP (motion `ofA` pendulum)]
+-- Introduction of the Problem Description section derived from purp
 
 ---------------------------------
 -- 4.1.1 Terminology and Definitions --

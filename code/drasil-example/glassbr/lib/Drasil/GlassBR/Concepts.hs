@@ -4,7 +4,8 @@ import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
-  notApp, physSyst, response, requirement, srs, type_, typUnc, unlikelyChg)
+  notApp, physSyst, response, requirement, refBy, refName, srs, type_, typUnc, 
+  unlikelyChg)
 import Data.Drasil.TheoryConcepts (dataDefn, inModel, thModel)
 
 {--}
@@ -29,7 +30,7 @@ acronyms :: [CI]
 acronyms = [assumption, annealed, aR, dataDefn, fullyT, goalStmt, 
   glassTypeFac, heatS, iGlass, inModel, likelyChg, loadDurFactor, 
   lGlass, lResistance, lShareFac, notApp, nFL, physSyst, requirement, 
-  stdOffDist, srs, thModel, typUnc, unlikelyChg]
+  refBy, refName, stdOffDist, srs, thModel, typUnc, unlikelyChg]
 
 annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
   lResistance, lShareFac, glassBR, stdOffDist, nFL :: CI

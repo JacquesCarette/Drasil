@@ -63,8 +63,7 @@ instance HasSymbol          DataDefinition where symbol = either symbol symbol .
 -- | 'DataDefinition where's have a 'Quantity'.
 instance Quantity           DataDefinition where
 -- | Converts the defining expression of a 'DataDefinition where' into the model expression language.
-instance Express            DataDefinition where
-  express d = defines (sy d) (either (express . (^. defnExpr)) (^. defnExpr) (qdFromDD d))
+instance Express            DataDefinition where express = either express express . qdFromDD
 {-- Finds 'Reference's contained in the 'DataDefinition where'.
 instance HasReference       DataDefinition where getReferences = rf-}
 -- | Finds 'DecRef's contained in the 'DataDefinition where'.

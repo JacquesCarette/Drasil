@@ -10,7 +10,7 @@ module Language.Drasil.Plain.Print (
 import Database.Drasil (ChunkDB)
 import Language.Drasil (Sentence, Special(..), Stage(..), Symbol, USymb(..))
 import qualified Language.Drasil as L (Expr, HasSymbol(..))
-import qualified Language.Drasil.CodeExpr as C (CodeExpr)
+import qualified Language.Drasil.CodeExpr.Development as C (CodeExpr)
 import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..), 
   OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
 import Language.Drasil.Printing.Import (expr, codeExpr, spec, symbol)
@@ -117,7 +117,6 @@ mtxDoc Nonlinear rs = brackets $ vcat $ map (hsep . map (pExprDoc Nonlinear)) rs
 -- | Helper for printing special characters (for degrees and partial derivatives).
 specialDoc :: Special -> Doc
 specialDoc Circle  = text "degree"
-specialDoc Partial = text "partial"
 
 -- | Helper for printing operators.
 opsDoc :: Ops -> Doc
@@ -170,6 +169,7 @@ opsDoc Perc = text "%"
 opsDoc LArrow = text " <- "
 opsDoc RArrow = text " -> "
 opsDoc ForAll = text " ForAll "
+opsDoc Partial = text "partial"
 
 -- | Helper for printing the left side of some characters "(, {, \\|, |".
 fenceDocL :: Fence -> Doc

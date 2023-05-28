@@ -382,7 +382,7 @@ compileEntryData ordClassInsts entry filename = do
 
 -- gets folder from dictionary using folder name (iff it exists in dictionary)
 getFolder :: Map.Map DC.FolderName DC.Folder -> DC.FolderName -> DC.Folder
-getFolder dict name = fromJust $ Map.lookup name dict
+getFolder dict name = fromMaybe (error $ "Could not find " ++ name) $ Map.lookup name dict
 
 -- converts list to dictionary list format (for use by drasil- directories only)
 toDictList :: DC.Folder -> (DC.FolderName,DC.Folder)

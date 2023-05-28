@@ -1,25 +1,25 @@
 module Drasil.PDController.Concepts where
 
 import Data.Drasil.Concepts.Documentation
-       (assumption, goalStmt, physSyst, requirement, srs, typUnc)
+       (assumption, goalStmt, physSyst, requirement, refBy, refName, srs, typUnc)
 import Data.Drasil.TheoryConcepts
 import Language.Drasil
 
 acronyms :: [CI]
 acronyms
-  = [assumption, dataDefn, genDefn, goalStmt, inModel, physSyst, requirement,
-     srs, thModel, typUnc, pdControllerCI, proportionalCI, derivativeCI,
+  = [assumption, dataDefn, genDefn, goalStmt, inModel, physSyst, requirement, refBy, 
+     refName, srs, thModel, typUnc, pdControllerCI, proportionalCI, derivativeCI,
      integralCI, pidCI]
 
-pidControllerSystem, pdControllerCI, proportionalCI, derivativeCI, integralCI,
+pdControllerApp, pdControllerCI, proportionalCI, derivativeCI, integralCI,
                      pidCI :: CI
 
-pidControllerSystem = commonIdeaWithDict "pdControllerApp" (pn "PD Controller")                    "PD Controller" []
-pdControllerCI      = commonIdeaWithDict "pdControllerCI"  (pn "Proportional Derivative")          "PD"            []
-proportionalCI      = commonIdeaWithDict "proportionalCI"  (pn "Proportional")                     "P"             []
-derivativeCI        = commonIdeaWithDict "derivativeCI"    (pn "Derivative")                       "D"             []
-integralCI          = commonIdeaWithDict "integralCI"      (pn "Integral")                         "I"             []
-pidCI               = commonIdeaWithDict "pidCI"           (pn "Proportional Integral Derivative") "PID"           []
+pdControllerApp = commonIdeaWithDict "pdControllerApp" (pn "PD Controller")                    "PD Controller" []
+pdControllerCI  = commonIdeaWithDict "pdControllerCI"  (pn "Proportional Derivative")          "PD"            []
+proportionalCI  = commonIdeaWithDict "proportionalCI"  (pn "Proportional")                     "P"             []
+derivativeCI    = commonIdeaWithDict "derivativeCI"    (pn "Derivative")                       "D"             []
+integralCI      = commonIdeaWithDict "integralCI"      (pn "Integral")                         "I"             []
+pidCI           = commonIdeaWithDict "pidCI"           (pn "Proportional Integral Derivative") "PID"           []
 
 pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
       simulationTime, processVariable, setPoint, propGain, derGain, 

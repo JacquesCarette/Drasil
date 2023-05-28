@@ -72,6 +72,7 @@ lo (Graph ps w h c l)    _  = toText $ makeGraph
   (pure $ text $ maybe "" (\x -> "minimum height = " ++ show x ++ "em, ") h)
   (spec c) (spec l)
 lo (Cell _) _               = empty
+lo (CodeBlock _) _          = empty
 
 -- | Converts layout objects into a document form.
 print :: PrintingInformation -> [LayoutObj] -> D
@@ -153,9 +154,6 @@ pOps Dot      = commandD "cdot" empty
 pOps Scale    = pure $ text " "
 pOps Eq       = pure assign
 pOps NEq      = commandD "neq" empty
--- Old way of doing less than and greater than
--- pOps Lt       = pure lt
--- pOps Gt       = pure gt
 pOps Lt       = commandD "lt" empty
 pOps Gt       = commandD "gt" empty
 pOps GEq      = commandD "geq" empty
@@ -175,6 +173,7 @@ pOps Perc     = texSym "%"
 pOps LArrow   = commandD "leftarrow"  empty
 pOps RArrow   = commandD "rightarrow" empty
 pOps ForAll   = commandD "ForAll"     empty
+pOps Partial  = commandD "partial"    empty
 
 -- | Prints fencing notation ("(),{},|,||").
 fence :: OpenClose -> Fence -> D

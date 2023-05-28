@@ -39,7 +39,7 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   mkODELibNoPath, pubStateVar, privStateVar,
   NamedArgument, narg)
 import Language.Drasil.CodeExpr
-import Language.Drasil.Code.Expr.Development
+import Language.Drasil.CodeExpr.Development
 
 import Control.Lens ((^.), _1, _2, over)
 

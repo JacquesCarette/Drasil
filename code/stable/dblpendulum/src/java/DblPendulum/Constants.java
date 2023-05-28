@@ -7,6 +7,6 @@ package DblPendulum;
 /** \brief Structure for holding the constant values
 */
 public class Constants {
-    public static final double g_vect = 9.8;
+    public static final double g = 9.8;
     
 }

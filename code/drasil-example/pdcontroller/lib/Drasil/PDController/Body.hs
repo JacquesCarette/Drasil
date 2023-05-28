@@ -23,7 +23,7 @@ import Data.Drasil.Quantities.Math (posInf, negInf)
 
 import Drasil.PDController.Assumptions (assumptions)
 import Drasil.PDController.Changes (likelyChgs)
-import Drasil.PDController.Concepts (acronyms, pidControllerSystem,
+import Drasil.PDController.Concepts (acronyms, pdControllerApp,
   pidC, concepts, defs)
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
@@ -36,13 +36,12 @@ import Drasil.PDController.IntroSection
         introUserChar2, introscopeOfReq)
 import Drasil.PDController.References (citations)
 import Drasil.PDController.Requirements (funcReqs, nonfuncReqs)
-import Drasil.PDController.SpSysDesc
-       (goals, sysFigure, sysGoalInput, sysParts, sysProblemDesc)
+import Drasil.PDController.SpSysDesc (goals, sysFigure, sysGoalInput, sysParts)
 import Drasil.PDController.TModel (theoreticalModels)
 import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
   inpConstrained, pidConstants, pidDqdConstants, opProcessVariable)
 import Drasil.PDController.ODEs (pidODEInfo)
-import Language.Drasil.Code (quantvar, listToArray)
+import Language.Drasil.Code (quantvar)
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
@@ -61,7 +60,7 @@ mkSRS
   = [TableOfContents,
     RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
      IntroSec $
-       IntroProg introPara (phrase pidControllerSystem)
+       IntroProg introPara (phrase pdControllerApp)
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
           IOrgSec introDocOrg IDict.dataDefn (SRS.inModel [] [])
@@ -79,9 +78,9 @@ mkSRS
      SSDSec $
        SSDProg
          [SSDProblem $
-            PDProg sysProblemDesc []
+            PDProg purp []
               [TermsAndDefs Nothing defs,
-               PhySysDesc pidControllerSystem sysParts sysFigure [],
+               PhySysDesc pdControllerApp sysParts sysFigure [],
                Goals sysGoalInput],
           SSDSolChSpec $
             SCSProg
@@ -99,10 +98,10 @@ mkSRS
 
 si :: SystemInformation
 si = SI {
-  _sys = pidControllerSystem,
+  _sys = pdControllerApp,
   _kind = Doc.srs,
   _authors = [naveen],
-  _purpose = [],
+  _purpose = [purp],
   _background  = [],
   _motivation  = [],
   _scope       = [],
@@ -121,6 +120,11 @@ si = SI {
   _usedinfodb = usedDB,
    refdb = refDB}
 
+purp :: Sentence
+purp = foldlSent_ [S "provide a model of a", phrase pidC,
+         S "that can be used for the tuning of the gain constants before",
+         S "the deployment of the controller"]
+
 symbolsAll :: [QuantityDict]
 symbolsAll = symbols ++ map qw pidDqdConstants ++ map qw pidConstants
   ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
@@ -128,7 +132,7 @@ symbolsAll = symbols ++ map qw pidDqdConstants ++ map qw pidConstants
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf])
-  (nw pidControllerSystem : [nw program, nw angular, nw linear] 
+  (nw pdControllerApp : [nw program, nw angular, nw linear]
   ++ map nw doccon ++ map nw doccon' ++ concepts ++ map nw mathcon
   ++ map nw mathcon' ++ map nw [second, kilogram] ++ map nw symbols 
   ++ map nw physicscon ++ map nw acronyms ++ map nw physicalcon)

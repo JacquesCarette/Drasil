@@ -7,7 +7,7 @@ module Language.Drasil.Mod (Class(..), StateVariable(..), Func(..),
   funcDefParams, packmod, packmodRequires
 ) where
 
-import Language.Drasil (Space, MayHaveUnit, Quantity)
+import Language.Drasil (Space, MayHaveUnit, Quantity, CodeExpr, LiteralC(..))
 import Database.Drasil (ChunkDB)
 import GOOL.Drasil (ScopeTag(..))
 
@@ -15,8 +15,6 @@ import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codevars,
   codevars', quantvar)
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
 import Language.Drasil.Code.DataDesc (DataDesc)
-import Language.Drasil.CodeExpr (CodeExpr)
-import qualified Language.Drasil.CodeExpr as CE
 
 import Utils.Drasil (toPlainName)
 
@@ -147,7 +145,7 @@ v $:= e = FAsg (quantvar v) e
 -- upper bound at that variable (the variable will start with a value of 0).
 -- ['FuncStmt'] is for the loop body.
 ffor :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> [FuncStmt] -> FuncStmt
-ffor v end = fforRange v (CE.int 0) end (CE.int 1)
+ffor v end = fforRange v (int 0) end (int 1)
 
 -- | Define a for-loop. 'Quantity' is for the iteration variable, and 3 'CodeExpr's
 -- for the start, stop, step numbers.

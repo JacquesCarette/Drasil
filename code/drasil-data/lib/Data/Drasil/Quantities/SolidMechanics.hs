@@ -13,11 +13,11 @@ import Data.Drasil.Units.SolidMechanics (stiffnessU)
 
 elastMod, mobShear, nrmStrss, shearRes, stffness :: UnitalChunk
 
-elastMod = uc CSM.elastMod cE pascal 
-mobShear = uc CSM.mobShear cS newton 
-shearRes = uc CSM.shearRes cP newton 
-stffness = uc CSM.stffness cK stiffnessU 
-nrmStrss = uc CSM.nrmStrss lSigma pascal
+elastMod = uc CSM.elastMod cE     Real pascal 
+mobShear = uc CSM.mobShear cS     Real newton 
+shearRes = uc CSM.shearRes cP     Real newton 
+stffness = uc CSM.stffness cK     Real stiffnessU 
+nrmStrss = uc CSM.nrmStrss lSigma Real pascal
 
 -- * Without Units
 

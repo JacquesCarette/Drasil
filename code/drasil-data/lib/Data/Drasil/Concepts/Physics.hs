@@ -20,9 +20,9 @@ physicCon :: [ConceptChunk]
 physicCon = [acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity,
   cohesion, collision, compression, constAccel, constAccelV, damping, dampingCoeff,
   displacement, distance, elasticity, energy, fSpeed, fVel, fbd, force,
-  friction, gravity, gravitationalAccel, gravitationalConst, height, iPos,
-  iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, ixSpeed, iySpeed, iyPos, iyVel,
-  joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy,
+  friction, gravity, gravitationalAccel, gravitationalConst, gravitationalMagnitude, height, 
+  iPos, iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, ixSpeed, iySpeed, iyPos, 
+  iyVel, joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy,
   momentOfInertia, position, potEnergy, pressure, restitutionCoef, rectilinear,
   rigidBody, scalarAccel, scalarPos, shm, space, speed, stiffCoeff, strain, stress, tension,
   time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
@@ -42,10 +42,10 @@ physicCon' = [oneD, twoD, threeD]
 acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity, cohesion,
   collision, compression, constAccel, constAccelV, damping, dampingCoeff, displacement,
   distance, elasticity, energy, fSpeed, fVel, fbd, force, friction, gravity,
-  gravitationalAccel, gravitationalConst, height, iPos, iSpeed, iVel, impulseS,
-  impulseV, isotropy, ixPos, ixVel, ixSpeed, iySpeed, iyPos, iyVel, joint, kEnergy, linAccel,
-  linDisp, linVelo, linear, mechEnergy, momentOfInertia, position, potEnergy,
-  pressure, rectilinear, restitutionCoef, rigidBody, scalarAccel, scalarPos, shm,
+  gravitationalAccel, gravitationalConst, gravitationalMagnitude, height, iPos, iSpeed, 
+  iVel, impulseS, impulseV, isotropy, ixPos, ixVel, ixSpeed, iySpeed, iyPos, iyVel, joint, 
+  kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia, position, 
+  potEnergy, pressure, rectilinear, restitutionCoef, rigidBody, scalarAccel, scalarPos, shm,
   space, speed, stiffCoeff, strain, stress, tension, time, torque, velocity, weight,
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
   yPos, yVel, momentum, moment, fOfGravity, positionVec, pendulum, body,
@@ -102,6 +102,8 @@ gravitationalAccel = dcc "gravitationalAccel" (cn "gravitational acceleration")
   "the approximate acceleration due to gravity on Earth at sea level"
 gravitationalConst = dcc "gravitationalConst" (cn "gravitational constant")
   "the empirical physical constant used to show the force between two objects caused by gravity"
+gravitationalMagnitude = dcc "gravitationalMagnitude" (cn "magnitude of gravitational acceleration")
+  "the magnitude of the approximate acceleration due to gravity on Earth at sea level"
 height = dccWDS "height" (cn' "height")
   (S "the" +:+ phrase distance +:+ S "above a reference point for a point of interest")
 horizontalMotion = dccWDS "horizontalMotion" (cn "horizontal motion")

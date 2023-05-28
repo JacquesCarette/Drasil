@@ -17,6 +17,7 @@ import Language.Drasil.Expr.Lang
 import Language.Drasil.Literal.Lang
 import Language.Drasil.Space (DomainDesc(..), RTopology(..), RealInterval)
 import qualified Language.Drasil.ModelExpr.Lang as M
+import qualified Language.Drasil.CodeExpr.Lang as C
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.UID (HasUID(..))
 
@@ -565,3 +566,179 @@ instance ExprC M.ModelExpr where
   -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy x = M.C (x ^. uid)
+
+instance ExprC C.CodeExpr where
+  lit = C.Lit
+
+  -- | Smart constructor for equating two expressions.
+  ($=)  = C.EqBinaryOp C.Eq
+  -- | Smart constructor for showing that two expressions are not equal.
+  ($!=) = C.EqBinaryOp C.NEq
+  
+  -- | Smart constructor for ordering two equations.
+  -- | Less than.
+  ($<)  = C.OrdBinaryOp C.Lt
+  -- | Greater than.
+  ($>)  = C.OrdBinaryOp C.Gt
+  -- | Less than or equal to.
+  ($<=) = C.OrdBinaryOp C.LEq
+  -- | Greater than or equal to.
+  ($>=) = C.OrdBinaryOp C.GEq
+  
+  -- | Smart constructor for the dot product of two equations.
+  ($.) = C.VVNBinaryOp C.Dot
+  
+  -- | Add two expressions (Integers).
+  addI l (C.Lit (Int 0)) = l
+  addI (C.Lit (Int 0)) r = r
+  addI (C.AssocA C.AddI l) (C.AssocA C.AddI r) = C.AssocA C.AddI (l ++ r)
+  addI (C.AssocA C.AddI l) r = C.AssocA C.AddI (l ++ [r])
+  addI l (C.AssocA C.AddI r) = C.AssocA C.AddI (l : r)
+  addI l r = C.AssocA C.AddI [l, r]
+  
+  -- | Add two expressions (Real numbers).
+  addRe l (C.Lit (Dbl 0))= l
+  addRe (C.Lit(Dbl 0)) r      = r
+  addRe l (C.Lit (ExactDbl 0)) = l
+  addRe (C.Lit (ExactDbl 0)) r = r
+  addRe (C.AssocA C.AddRe l) (C.AssocA C.AddRe r) = C.AssocA C.AddRe (l ++ r)
+  addRe (C.AssocA C.AddRe l) r = C.AssocA C.AddRe (l ++ [r])
+  addRe l (C.AssocA C.AddRe r) = C.AssocA C.AddRe (l : r)
+  addRe l r = C.AssocA C.AddRe [l, r]
+  
+  -- | Multiply two expressions (Integers).
+  mulI l (C.Lit (Int 1)) = l
+  mulI (C.Lit (Int 1)) r = r
+  mulI (C.AssocA C.MulI l) (C.AssocA C.MulI r) = C.AssocA C.MulI (l ++ r)
+  mulI (C.AssocA C.MulI l) r = C.AssocA C.MulI (l ++ [r])
+  mulI l (C.AssocA C.MulI r) = C.AssocA C.MulI (l : r)
+  mulI l r = C.AssocA C.MulI [l, r]
+  
+  -- | Multiply two expressions (Real numbers).
+  mulRe l (C.Lit (Dbl 1))      = l
+  mulRe (C.Lit (Dbl 1)) r      = r
+  mulRe l (C.Lit (ExactDbl 1)) = l
+  mulRe (C.Lit (ExactDbl 1)) r = r
+  mulRe (C.AssocA C.MulRe l) (C.AssocA C.MulRe r) = C.AssocA C.MulRe (l ++ r)
+  mulRe (C.AssocA C.MulRe l) r = C.AssocA C.MulRe (l ++ [r])
+  mulRe l (C.AssocA C.MulRe r) = C.AssocA C.MulRe (l : r)
+  mulRe l r = C.AssocA C.MulRe [l, r]
+  
+  -- | Smart constructor for subtracting two expressions.
+  ($-) = C.ArithBinaryOp C.Subt
+  -- | Smart constructor for dividing two expressions.
+  ($/) = C.ArithBinaryOp C.Frac
+  -- | Smart constructor for rasing the first expression to the power of the second.
+  ($^) = C.ArithBinaryOp C.Pow
+  
+  -- | Smart constructor to show that one expression implies the other (conditional operator).
+  ($=>)  = C.BoolBinaryOp C.Impl
+  -- | Smart constructor to show that an expression exists if and only if another expression exists (biconditional operator).
+  ($<=>) = C.BoolBinaryOp C.Iff
+  
+  -- | Smart constructor for the boolean /and/ operator.
+  a $&& b = C.AssocB C.And [a, b]
+  -- | Smart constructor for the boolean /or/ operator.
+  a $|| b = C.AssocB C.Or  [a, b]
+  
+  -- | Smart constructor for taking the absolute value of an expression.
+  abs_ = C.UnaryOp C.Abs
+  
+  -- | Smart constructor for negating an expression.
+  neg = C.UnaryOp C.Neg
+  
+  -- | Smart constructor to take the log of an expression.
+  log = C.UnaryOp C.Log
+  
+  -- | Smart constructor to take the ln of an expression.
+  ln = C.UnaryOp C.Ln
+  
+  -- | Smart constructor to take the square root of an expression.
+  sqrt = C.UnaryOp C.Sqrt
+  
+  -- | Smart constructor to apply sin to an expression.
+  sin = C.UnaryOp C.Sin
+  
+  -- | Smart constructor to apply cos to an expression.
+  cos = C.UnaryOp C.Cos
+  
+  -- | Smart constructor to apply tan to an expression.
+  tan = C.UnaryOp C.Tan
+  
+  -- | Smart constructor to apply sec to an expression.
+  sec = C.UnaryOp C.Sec
+  
+  -- | Smart constructor to apply csc to an expression.
+  csc = C.UnaryOp C.Csc
+  
+  -- | Smart constructor to apply cot to an expression.
+  cot = C.UnaryOp C.Cot
+  
+  -- | Smart constructor to apply arcsin to an expression.
+  arcsin = C.UnaryOp C.Arcsin
+  
+  -- | Smart constructor to apply arccos to an expression.
+  arccos = C.UnaryOp C.Arccos
+  
+  -- | Smart constructor to apply arctan to an expression.
+  arctan = C.UnaryOp C.Arctan
+  
+  -- | Smart constructor for the exponential (base e) function.
+  exp = C.UnaryOp C.Exp
+  
+  -- | Smart constructor for calculating the dimension of a vector.
+  dim = C.UnaryOpVN C.Dim
+  
+  -- | Smart constructor for calculating the normal form of a vector.
+  norm = C.UnaryOpVN C.Norm
+  
+  -- | Smart constructor for negating vectors.
+  negVec = C.UnaryOpVV C.NegV
+  -- | And more general scaling
+  vScale = C.NVVBinaryOp C.Scale
+  
+  -- | Smart constructor for applying logical negation to an expression.
+  not_ = C.UnaryOpB C.Not
+  
+  -- | Smart constructor for indexing.
+  idx = C.LABinaryOp C.Index
+  
+  -- | Integrate over some expression with bounds (∫).
+  defint v low high = C.Operator C.AddRe (BoundedDD v Continuous low high)
+  
+  -- | Sum over some expression with bounds (∑).
+  defsum v low high = C.Operator C.AddRe (BoundedDD v Discrete low high)
+  
+  -- | Product over some expression with bounds (∏).
+  defprod v low high = C.Operator C.MulRe (BoundedDD v Discrete low high)
+  
+  -- | Smart constructor for 'real interval' membership.
+  realInterval c = C.RealI (c ^. uid)
+  
+  -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
+  euclidean = sqrt . foldr1 addRe . map square
+  
+  -- | Smart constructor to cross product two expressions.
+  cross = C.VVVBinaryOp C.Cross
+  
+  -- | Adding vectors
+  vAdd  = C.VVVBinaryOp C.VAdd
+  -- | Subtracting vectors
+  vSub  = C.VVVBinaryOp C.VSub
+
+  -- | Smart constructor for case statements with a complete set of cases.
+  completeCase = C.Case Complete
+  
+  -- | Smart constructor for case statements with an incomplete set of cases.
+  incompleteCase = C.Case Incomplete
+  
+  matrix = C.Matrix
+
+  -- | Applies a given function with a list of parameters.
+  apply f [] = sy f
+  apply f ps = C.FCall (f ^. uid) ps []
+  
+  -- Note how |sy| 'enforces' having a symbol
+  -- | Create an 'Expr' from a 'Symbol'ic Chunk.
+  sy x = C.C (x ^. uid)
+

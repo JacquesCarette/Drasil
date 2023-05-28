@@ -3,14 +3,12 @@ module Language.Drasil.Chunk.CodeDefinition (
   CodeDefinition, DefinitionType(..), qtoc, qtov, odeDef, auxExprs, defType,
 ) where
 
-import Language.Drasil
-import Language.Drasil.Chunk.Code (CodeChunk(..), CodeIdea(codeName, codeChunk),
-  VarOrFunc(..), quantvar, quantfunc, funcPrefix, DefiningCodeExpr(..))
-import Language.Drasil.CodeExpr (CodeExpr, expr)
+import Language.Drasil 
+import Language.Drasil.Chunk.Code (quantvar, quantfunc)
+import Language.Drasil.CodeExpr.Development (expr, CanGenCode(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo(..), ODEOptions(..))
 
 import Control.Lens ((^.), makeLenses, view)
-import Language.Drasil.Code.Expr.Convert (CanGenCode(toCodeExpr))
 
 -- | The definition may be specialized to use ODEs.
 data DefinitionType = Definition | ODE

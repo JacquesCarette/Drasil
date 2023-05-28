@@ -2,10 +2,10 @@ digraph refvsref {
 	ixVel -> speed;
 	iyVel -> speed;
 	projSpeed -> accelerationTM;
-	scalarPos -> velocityTM;
-	scalarPos -> projSpeed;
+	projPos -> velocityTM;
+	projPos -> projSpeed;
 	velocity -> projSpeed;
-	position -> scalarPos;
+	position -> projPos;
 	flightduration -> iyVel;
 	flightduration -> position;
 	landingposition -> ixVel;
@@ -33,13 +33,13 @@ digraph refvsref {
 	}
 
 	projSpeed	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectVel"];
-	scalarPos	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectPos"];
+	projPos	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectPos"];
 	velocity	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velVec"];
 	position	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:posVec"];
 
 	subgraph GD {
 	rank="same"
-	{projSpeed, scalarPos, velocity, position}
+	{projSpeed, projPos, velocity, position}
 	}
 
 	flightduration	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingTime"];

@@ -301,7 +301,7 @@ userCharacteristicsIntro = foldlSP
 
 probDescIntro :: Sentence
 probDescIntro = foldlSent_
-  [purp `sC` S "in a", foldlList Comma List $ map S ["simple", "lightweight", "fast", "portable"],
+  [purp, S "in a", foldlList Comma List $ map S ["simple", "lightweight", "fast", "portable"],
   S "manner" `sC` S "which will allow for the production of higher quality" +:+. plural product_,
   S "Creating a gaming", phrase physLib, S "is a difficult" +:+. phrase task, titleize' game,
   S "need",  plural physLib, S "that simulate", plural object, S "acting under various", phrase physical,

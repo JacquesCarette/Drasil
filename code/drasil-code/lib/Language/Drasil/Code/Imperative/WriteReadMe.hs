@@ -24,14 +24,15 @@ makeReadMe ReadMeInfo {
         configFP = configFPs,
         caseName = name,
         examplePurpose = purp,
-        exampleDescr = descr} = 
+        exampleDescr = descr,
+        sampleFile = file} = 
     makeMd [introInfo name auths $ fieldEmptySTR purp,
     whatInfo $ fieldEmptySTR descr,
     makeInstr imptype configFPs,
     verInfo progLang progLangVers,
     unsupOS unsupportedOSs,
     extLibSec extLibns extLibfp,
-    endNote name auths] -- add date information to end note for license
+    endNote file auths] -- add date information to end note for license
 
 -- | Helper for encoding the type of program (either library or controller-based) in a README file.
 makeInstr :: ImplementationType -> [FilePath]-> Doc

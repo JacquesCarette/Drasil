@@ -154,6 +154,7 @@ mkTableLC pinfo = mkTableFromLenses pinfo (view labelledcontentTable)
     getContConst Figure{} = "Figure"
     getContConst Bib{} = "Bibliography"
     getContConst Graph{} = "Graph"
+    getContConst CodeBlock{} = "Code"
 
 -- | Makes a table with all references in the SRS.
 mkTableRef :: PrintingInformation -> Doc

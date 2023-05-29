@@ -103,7 +103,7 @@ si = SI {
   _sys         = gamePhysics,
   _kind        = Doc.srs,
   _authors     = [alex, luthfi, olu],
-  _purpose     = [],
+  _purpose     = [purp],
   _background  = [],
   -- FIXME: The _quants field should be filled in with all the symbols, however
   -- #1658 is why this is empty, otherwise we end up with unused (and probably
@@ -124,6 +124,10 @@ si = SI {
    refdb       = refDB
 }
   where qDefs = mapMaybe qdEFromDD dataDefs
+
+purp :: Sentence
+purp = foldlSent_ [S "simulate", getAcc twoD, phrase CP.rigidBody,
+  phrase Doc.physics, S "for use in", phrase game, S "development"]
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
@@ -297,9 +301,8 @@ userCharacteristicsIntro = foldlSP
 
 probDescIntro :: Sentence
 probDescIntro = foldlSent_
-  [S "create a", foldlList Comma List $ map S ["simple", "lightweight", "fast", "portable"],
-  getAcc twoD, phrase CP.rigidBody, phrase physLib `sC` S "which will allow for more accessible",
-  phrase game, S "development" `S.and_` S "the production of higher quality" +:+. plural product_,
+  [purp, S "in a", foldlList Comma List $ map S ["simple", "lightweight", "fast", "portable"],
+  S "manner" `sC` S "which will allow for the production of higher quality" +:+. plural product_,
   S "Creating a gaming", phrase physLib, S "is a difficult" +:+. phrase task, titleize' game,
   S "need",  plural physLib, S "that simulate", plural object, S "acting under various", phrase physical,
   plural condition `sC` S "while simultaneously being fast and efficient enough to work in soft",

@@ -72,6 +72,7 @@ lo (Graph ps w h c l)    _  = toText $ makeGraph
   (pure $ text $ maybe "" (\x -> "minimum height = " ++ show x ++ "em, ") h)
   (spec c) (spec l)
 lo (Cell _) _               = empty
+lo (CodeBlock _) _          = empty
 
 -- | Converts layout objects into a document form.
 print :: PrintingInformation -> [LayoutObj] -> D

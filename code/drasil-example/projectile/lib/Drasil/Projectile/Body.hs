@@ -66,7 +66,7 @@ mkSRS = [TableOfContents,
       [ SSDProblem $ PDProg purp []
         [ TermsAndDefs Nothing terms
         , PhySysDesc projectileTitle physSystParts figLaunch []
-        , Goals [(phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile]]
+        , Goals [inputsPhrase]]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)
@@ -88,9 +88,20 @@ mkSRS = [TableOfContents,
   Bibliography
   ]
 
+inputsPhrase :: Sentence
+inputsPhrase = (phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile
+
+background :: Sentence
+background = foldlSent [S "Common examples of", phrase projectile, phrase motion, S "include",
+    S "ballistics", plural problem, S "(missiles and bullets)" `S.andThe` S "flight of the balls",
+    S "in various sports (baseball, golf, football, etc.)"]
+
+motivation :: Sentence
+motivation = foldlSent [atStart projectile, phrase motion, S "is a common" +:+
+  phraseNP (problem `in_` physics)]
+
 justification, scope :: Sentence
-justification = foldlSent [atStart projectile, phrase motion, S "is a common" +:+.
-  phraseNP (problem `in_` physics), S "Therefore, it is useful to have a",
+justification = foldlSent [motivation, S "Therefore, it is useful to have a",
   phrase program, S "to solve and model these types of" +:+. plural problem,
   atStartNP (the program), S "documented here is called", phrase projectileTitle]
 scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
@@ -106,7 +117,10 @@ si = SI {
   _kind        = Doc.srs,
   _authors     = [samCrawford, brooks, spencerSmith],
   _purpose     = [purp],
-  _background  = [],
+  _background  = [background],
+  _motivation  = [motivation],
+  _scope       = [],
+  _sftwr_rev   = [],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,

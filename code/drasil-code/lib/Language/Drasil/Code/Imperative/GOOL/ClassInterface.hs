@@ -52,6 +52,8 @@ type CaseName = String
 type ExamplePurpose = String
 -- | Description of example
 type ExampleDescr = String
+-- | Motivation of example
+type ExampleMotivation = String
 -- | File contributors
 type Contributor = String
 -- | Holds all information needed to create a README file.
@@ -66,5 +68,6 @@ data ReadMeInfo = ReadMeInfo {
   configFP :: [FilePath],
   caseName :: CaseName,
   examplePurpose :: ExamplePurpose,
-  exampleDescr :: ExampleDescr
+  exampleDescr :: ExampleDescr,
+  exampleMotivation :: ExampleMotivation
 }

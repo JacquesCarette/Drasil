@@ -18,8 +18,9 @@ makeMd :: [Doc] -> Doc
 makeMd = vcat . punctuate secSep . filtEmp
 
 -- | Example title, authors, and maybe purpose section.
-introInfo :: String -> [String] -> Maybe String -> Doc
-introInfo name auths descr = introSec (text name) (listToDoc auths) (length auths) (maybePurpDoc descr)
+introInfo :: String -> [String] -> Maybe String -> Maybe String -> Doc
+introInfo name auths descr motiv = introSec (text name) (listToDoc auths) (length auths) 
+    (maybeSub "Purpose" descr) (maybeSub "Motivation" motiv)
 
 -- | Instruction section, contains 3 paragraphs, Running, Building and Config Files.
 -- The Config file section is only displayed if there are configuration files.
@@ -27,9 +28,10 @@ instDoc :: [String] -> Doc
 instDoc cfp = regularSec (text "Making Examples") 
     (runInstDoc <> doubleSep <> makeInstDoc) <> configSec cfp 
 
--- | Helper for creating optional Purpose subsection as Doc
-maybePurpDoc :: Maybe String -> Doc
-maybePurpDoc = maybe empty (\descr-> doubleSep <> text "> Purpose:" <+> text descr)
+-- | Helper for creating optional Intro subsection as Doc
+maybeSub :: String -> Maybe String -> Doc
+maybeSub role = maybe empty (\content-> doubleSep <> text ("> " ++ role ++ ":") 
+  <+> text content)
 
 -- | 'What' section in generated README file, does not display if empty
 whatInfo :: Maybe String -> Doc
@@ -121,13 +123,10 @@ bkQuote = text "`"
 -- | Triple backquote separator.
 bkQuote3 = text "```"
 
-
--- FIXME as explained in #2224 we still need to add in the purpose section, 
--- this could be done by adding a third parameter to introSec
 -- | Constructs introduction section from header and message.
-introSec ::  Doc -> Doc -> Int -> Doc -> Doc
-introSec hd ms1 l descr = text "#" <+> hd <+> contSep <> (if l == 1 then text "> Author:" else text "> Authors: ") 
-  <+> ms1 <> descr
+introSec ::  Doc -> Doc -> Int -> Doc -> Doc -> Doc
+introSec hd ms1 l descr motiv = text "#" <+> hd <+> contSep <> 
+  (if l == 1 then text "> Author:" else text "> Authors: ") <+> ms1 <> descr <> motiv
 
 -- | Constructs regular section section from header and message.
 regularSec :: Doc -> Doc -> Doc

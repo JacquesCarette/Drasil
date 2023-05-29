@@ -1,7 +1,13 @@
 # Projectile 
 > Authors:  Samuel J. Crawford, Brooks MacLachlan, W. Spencer Smith
 
-> Purpose: efficiently and correctly predict whether a launched projectile hits its target.
+> Purpose: efficiently and correctly predict whether a launched projectile hits its target
+
+> Motivation: Projectile motion is a common problem in physics.
+
+------------------------------------------------------------
+## What 
+ Common examples of projectile motion include ballistics problems (missiles and bullets) and the flight of the balls in various sports (baseball, golf, football, etc.).
 
 ------------------------------------------------------------
 ## Making Examples 

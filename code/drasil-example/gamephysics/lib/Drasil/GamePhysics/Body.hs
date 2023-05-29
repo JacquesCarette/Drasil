@@ -126,8 +126,8 @@ si = SI {
   where qDefs = mapMaybe qdEFromDD dataDefs
 
 purp :: Sentence
-purp = foldlSent_ [S "simulate", getAcc twoD, phrase CP.rigidBody, S "for use in",
-  phrase game, S "development"]
+purp = foldlSent_ [S "simulate", getAcc twoD, phrase CP.rigidBody,
+  phrase Doc.physics, S "for use in", phrase game, S "development"]
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs

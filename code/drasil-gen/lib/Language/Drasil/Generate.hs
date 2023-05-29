@@ -118,7 +118,7 @@ genCode :: Choices -> CodeSpec -> IO ()
 genCode chs spec = do
   workingDir <- getCurrentDirectory
   time <- getCurrentTime
-  sampData <- maybe (return []) (\sd -> readWithDataDesc sd $ sampleInputDD
+  sampData <- (\sd -> readWithDataDesc sd $ sampleInputDD
     (extInputs spec)) (getSampleData chs)
   createDirectoryIfMissing False "src"
   setCurrentDirectory "src"

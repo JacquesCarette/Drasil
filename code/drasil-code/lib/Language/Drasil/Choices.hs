@@ -276,10 +276,10 @@ instance RenderChoices AuxFile where
 
 -- | Gets the file path to a sample input data set from a 'Choices' structure, if 
 -- the user chose to generate a sample input file.
-getSampleData :: Choices -> Maybe FilePath
+getSampleData :: Choices -> FilePath
 getSampleData chs = getSampleData' (auxFiles $ optFeats chs)
-  where getSampleData' [] = Nothing
-        getSampleData' (SampleInput fp:_) = Just fp
+  where getSampleData' [] = []
+        getSampleData' (SampleInput fp:_) = fp
         getSampleData' (_:xs) = getSampleData' xs
 
 -- | Predicate that returns true if the list of 'AuxFile's includes a 'SampleInput'.

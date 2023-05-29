@@ -27,7 +27,7 @@ import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
   Visibility(..), DataInfo(..), Constraints(..), choicesSent, DocConfig(..),
-  LogConfig(..), OptionalFeatures(..))
+  LogConfig(..), OptionalFeatures(..), getSampleData)
 import Language.Drasil.CodeSpec (CodeSpec(..), getODE)
 import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
 
@@ -74,7 +74,7 @@ generator l dt sd chs spec = DrasilState {
   libEMap = lem,
   clsMap = cdm,
   defList = nub $ keys mem ++ keys cdm,
-
+  getPath = getSampleData chs,
   -- stateful
   currentModule = "",
   currentClass = "",
@@ -149,7 +149,8 @@ genPackage unRepr = do
         configFP = cfp,
         caseName = "",
         examplePurpose = prps,
-        exampleDescr = bckgrnd}
+        exampleDescr = bckgrnd,
+        sampleFile = getPath g}
   return $ package pd (m:catMaybes [i,rm,d])
 
 -- | Generates an SCS program based on the problem and the user's design choices.

@@ -97,21 +97,15 @@ license :: Doc -> Doc
 license auth = text "Copyright (c) 2021," <+> auth <>
   text ". All rights reserved. Please see the [full license](https://github.com/JacquesCarette/Drasil/blob/4b9ad0a3016fecb3c7a2aa82ab142f9e805b5cc8/LICENSE) for more details."
 -- | Drasil Tree icon. Uses HTML directly to format image since normal markdown doesn't support it.
--- Extracts the backslash from the filepath.
-removeSlash :: [Char] -> [Char]
-removeSlash st = [ x | x <- st, x `elem` "//"]
-
--- Determines the number of slashes within the FilePath of the SampleInput file
-numSlash :: [Char] -> Int
-numSlash [] = 4
-numSlash file = length (removeSlash file)
 
 -- Creates the prefix to be attached to the general drasil logo path
 buildPath :: [Char] -> [Char]
 buildPath file = [x | x <- pathPrefix, x /= ' ']
   where
-    pathPrefix = unwords pathPrfx
-    pathPrfx = replicate (numSlash file) "../"
+    pathPrefix = unwords $ replicate (numSlash file) "../"
+    numSlash [] = 4
+    numSlash fp = length (removeSlash fp)
+    removeSlash st = [ x | x <- st, x `elem` "//"]
 
 -- Path of the Drasil Logo
 drasilImage :: [Char] -> Doc

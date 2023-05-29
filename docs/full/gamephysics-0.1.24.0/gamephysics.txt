@@ -215,6 +215,7 @@ printSetting :: PrintingInformation
 resourcePath :: String
 mkSRS :: SRSDecl
 si :: SystemInformation
+purp :: Sentence
 concIns :: [ConceptInstance]
 section :: [Section]
 stdFields :: Fields

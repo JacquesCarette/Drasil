@@ -98,16 +98,15 @@ license auth = text "Copyright (c) 2021," <+> auth <>
   text ". All rights reserved. Please see the [full license](https://github.com/JacquesCarette/Drasil/blob/4b9ad0a3016fecb3c7a2aa82ab142f9e805b5cc8/LICENSE) for more details."
 -- | Drasil Tree icon. Uses HTML directly to format image since normal markdown doesn't support it.
 
--- Creates the prefix to be attached to the general drasil logo path
+-- Creates the prefix to be attached to the general Drasil logo path
 buildPath :: [Char] -> [Char]
 buildPath file = [x | x <- pathPrefix, x /= ' ']
   where
     pathPrefix = unwords $ replicate (numSlash file) "../"
     numSlash [] = 4
-    numSlash fp = length (removeSlash fp)
-    removeSlash st = [ x | x <- st, x `elem` "//"]
+    numSlash fp = length [x | x <- fp, x `elem` "//"]
 
--- Path of the Drasil Logo
+-- Path of the Drasil logo
 drasilImage :: [Char] -> Doc
 drasilImage file = alignImage (buildPath file ++ "drasil-website/WebInfo/images/Icon.png")
 

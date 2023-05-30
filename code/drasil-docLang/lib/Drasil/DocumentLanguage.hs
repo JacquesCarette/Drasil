@@ -30,7 +30,7 @@ import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.Sections.TableOfContents (toToC, findToC)
 import Drasil.Sections.TableOfSymbols (table, tsIntro)
 import Drasil.Sections.TableOfUnits (tOfUnitSIName, tuIntro, defaultTUI)
-import qualified Drasil.DocLang.SRS as SRS (appendix, genDefn,
+import qualified Drasil.DocLang.SRS as SRS (appendix,
   genSysDes, likeChg, unlikeChg, reference, solCharSpec,
   stakeholder, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol, refMat,
   tOfAbbAcc)
@@ -44,11 +44,11 @@ import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, goalStmtF, inModelF, physSystDesc, probDescF,
   propCorSolF, solutionCharSpecIntro, specSysDescr, termDefnF, thModF, helperCI,
-  tmStub, ddStub, imStub, pdStub)
+  tmStub, ddStub, gdStub, imStub, pdStub)
 import qualified Drasil.Sections.Stakeholders as Stk (stakeholderIntro,
   tClientF, tCustomerF)
 import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (
-  generateTraceTableView)
+  generateTraceTableView, traceMHeader, TraceViewCat)
 import qualified Drasil.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
 import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs)
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
@@ -59,7 +59,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
 import Control.Lens ((^.), set)
 import Data.Function (on)
 import Data.List (nub, sortBy, sortOn)
-import qualified Data.Map as Map (elems, toList, assocs)
+import qualified Data.Map as Map (elems, toList, assocs, keys)
 import Data.Char (isSpace)
 
 -- * Main Function
@@ -161,8 +161,9 @@ fillReferences dd si@SI{_sys = sys} = si2
     -- get refs from SRSDecl. Should include all section labels and labelled content.
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database
-    inRefs = concatMap dRefToRef ddefs ++ concatMap dRefToRef gdefs ++ concatMap dRefToRef imods ++ concatMap dRefToRef tmods
-    ddefs  = map (fst.snd) $ Map.assocs $ chkdb ^. dataDefnTable
+    inRefs  = concatMap dRefToRef ddefs ++ concatMap dRefToRef gdefs ++
+                concatMap dRefToRef imods ++ concatMap dRefToRef tmods
+    ddefs   = map (fst.snd) $ Map.assocs $ chkdb ^. dataDefnTable
     gdefs   = map (fst.snd) $ Map.assocs $ chkdb ^. gendefTable
     imods   = map (fst.snd) $ Map.assocs $ chkdb ^. insmodelTable
     tmods   = map (fst.snd) $ Map.assocs $ chkdb ^. theoryModelTable
@@ -352,7 +353,8 @@ mkSSDProb :: SystemInformation -> ProblemDescription -> Section
 mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSubPD subPD)
   where mkSubPD (TermsAndDefs sen concepts) = SSD.termDefnF sen concepts
         mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
-        mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g)
+        mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g) (length g)
+                
 
 -- | Helper for making the Solution Characteristics Specification section.
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
@@ -361,10 +363,6 @@ mkSolChSpec si (SCSProg l) =
     map (mkSubSCS si) l
   where
     mkSubSCS :: SystemInformation -> SCSSub -> Section
-    mkSubSCS _ (TMs _ _ [])      = error "There are no Theoretical Models"
-    mkSubSCS _ (GDs _ _ [] _)    = SSD.genDefnF []
-    mkSubSCS _ (DDs _ _ [] _) = error "There are no Data Definitions"
-    mkSubSCS _ (IMs _ _ [] _)    = error "There are no Instance Models"
     mkSubSCS si' (TMs intro fields ts) =
       SSD.thModF (siSys si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
@@ -378,10 +376,10 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (GDs intro fields gs' _) =
       SSD.genDefnF $ map mkParagraph intro ++ map (LlC . gdefn fields si') gs'
     mkSubSCS si' (IMs intro fields ims ShowDerivation) =
-      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
+      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub SSD.gdStub $ map mkParagraph intro ++
       concatMap (\x -> [LlC $ instanceModel fields si' x, derivation x]) ims
     mkSubSCS si' (IMs intro fields ims _) =
-      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
+      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub SSD.gdStub $ map mkParagraph intro ++
       map (LlC . instanceModel fields si') ims
     mkSubSCS si' (Assumptions ci) =
       SSD.assumpF $ mkEnumSimpleD $ map (`SSD.helperCI` si') ci
@@ -422,11 +420,22 @@ mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
 -- | Helper for making the Traceability Matrices and Graphs section.
 mkTraceabilitySec :: TraceabilitySec -> SystemInformation -> Section
 mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
-  (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) progs)
+  (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) fProgs)
   (map LlC trace) (filter (not.isSpace) $ abrv sys) []
   where
-  trace = map (\(TraceConfig u _ desc rows cols) -> TM.generateTraceTableView
-    u desc rows cols si) progs
+    trace = map (\(TraceConfig u _ desc rows cols) -> TM.generateTraceTableView
+      u desc rows cols si) fProgs
+    fProgs = filter (\(TraceConfig _ _ _ rows cols) -> not $ null 
+      (header (showUIDs rows sidb) si) || null (header (showUIDs cols sidb) si)) progs
+    sidb = _sysinfodb si
+
+-- | Helper to get UIDs
+showUIDs :: [TM.TraceViewCat] -> ChunkDB -> [UID] -> [UID]
+showUIDs a s e = filter (`elem` (Map.keys $ s ^. traceTable)) $ concatMap (\x -> x e s) a
+
+-- | Helper to get headers of rows and columns
+header :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]
+header f = TM.traceMHeader (f . nub . Map.keys . (^. refbyTable))
 
 -- ** Off the Shelf Solutions
 

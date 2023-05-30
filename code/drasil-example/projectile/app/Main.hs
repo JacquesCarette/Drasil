@@ -17,7 +17,7 @@ main = do
   dumpEverything fullSI ".drasil/"
   typeCheckSI fullSI
   gen (DocSpec (docChoices SRS [HTML, TeX, JSON]) "Projectile_SRS") srs printSetting
-  gen (DocSpec (docChoices Jupyter [])      "Projectile Motion Lesson") PL.nb PL.printSetting
+  gen (DocSpec (docChoices Jupyter [])      "Projectile Lesson") PL.nb PL.printSetting
   genCodeWithChoices choiceCombos
   genDot fullSI
   genLog fullSI printSetting

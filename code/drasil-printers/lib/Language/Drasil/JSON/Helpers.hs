@@ -24,7 +24,7 @@ figure     = wrap "figure" []
 li         = wrap' "li" []
 -- | Paragraph in list tag wrapper
 pa         = wrap "p" []
-
+-- | Bring attention to element wrapper.
 ba         = wrap "b" []
 
 ol, ul, table :: [String] -> Doc -> Doc
@@ -56,6 +56,9 @@ escapeStringForJson = concatMap (either id ('\\' :) . special)
       -- shouldn't be an issue if we switch to using `Doc`s.
       | c < '\x20'            = Right (showHex (fromEnum c) "")
       | otherwise             = Left [c]
+
+codeformat :: Doc -> Doc
+codeformat s = text ("    \"" ++ escapeStringForJson (show s) ++ "\\n\"")
 
 wrap :: String -> [String] -> Doc -> Doc
 wrap a = wrapGen' vcat Class a empty
@@ -111,20 +114,8 @@ h n       | n < 1 = error "Illegal header (too small)"
                     hash 4 = "#### "
                     hash _ = "Illegal header"
 
-{- Will delete it after checking encode works well
--- JSON formatter
-formatter :: String -> String
-formatter ('"':xs) = '\\' : '"' : formatter xs
-formatter ('\\':xs) = '\\' : '\\' : formatter xs
-formatter (x:xs) = x: formatter xs
-formatter [] = []
-
-jf :: String -> Doc
-jf s = text $ replace "`" "\'" (formatter s)
--}
-
-br :: Doc -> Doc
 -- | Curly braces.
+br :: Doc -> Doc
 br x = text "{" <> x <> text "}"
 
 mkDiv :: String -> Doc -> Doc -> Doc
@@ -133,9 +124,29 @@ mkDiv s a0 a1 = (H.bslash <> text s) <> br a0 <> br a1
 -- Maybe use "lines" instead (Data.List @lines :: String -> [String])
 stripnewLine :: String -> Doc
 stripnewLine s = hcat (map text (splitOn "\n" s))
---filter (`notElem` "\n" )
 
-makeMetadata :: Doc
+-- | Helper for building Markdown cells
+markdownB, markdownB', markdownE, markdownE' :: Doc
+markdownB  = text "{\n \"cells\": [\n  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [\n" 
+markdownB' = text "  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [\n" 
+markdownE  = text "    \"\\n\"\n   ]\n  },"
+markdownE' = text "    \"\\n\"\n   ]\n  }\n ],"
+
+-- | Helper for building code cells
+codeB, codeE :: Doc
+codeB = text "  {\n   \"cell_type\": \"code\",\n   \"execution_count\": null,\n   \"metadata\": {},\n   \"outputs\": [],\n   \"source\": [" 
+codeE  = text "\n   ]\n  },"
+
+-- | Helper for generate a Markdown cell
+markdownCell :: Doc -> Doc
+markdownCell c = markdownB' <> c <> markdownE
+
+-- | Helper for generate a code cell
+codeCell :: Doc -> Doc
+codeCell c = codeB <> c <> codeE
+
+-- | Generate the metadata necessary for a notebook document.
+makeMetadata :: Doc  
 makeMetadata = vcat [
   text " \"metadata\": {",
   vcat [
@@ -158,6 +169,6 @@ makeMetadata = vcat [
   text "   \"version\": \"3.9.1\"",
   text "  }",
   text " },",
-  text " \"nbformat\": 4,",
-  text " \"nbformat_minor\": 4"
-  ]
+  text " \"nbformat\": 4,", 
+  text " \"nbformat_minor\": 4" 
+ ]

@@ -269,6 +269,12 @@ $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
 	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec -- "$(EEXE)" $(EXECARGS)
 
+# Compiles GOOL examples to concrete code (Java, C++, etc.)
+$(GOOLTEST)$(GEN_E_SUFFIX):
+	stack build $(stackArgs) "drasil-code:exe:$(GOOLTEST_EXE)"
+	@mkdir -p "$(BUILD_FOLDER)$(GOOLTEST_DIR)"
+	cd "$(BUILD_FOLDER)$(GOOLTEST_DIR)" && stack exec -- "$(GOOLTEST_EXE)" $(EXECARGS)
+
 # Install individual Drasil examples
 $(filter %$(INSTALL_E_SUFFIX), $(INSTALL_EXAMPLES)): %$(INSTALL_E_SUFFIX):
 	stack install $(stackArgs) "$(EEXE)"
@@ -462,6 +468,7 @@ clean: clean_artifacts ##@Cleaning Fully clean all generated builds, artifacts, 
 #--- Help & Information ---#
 #--------------------------#
 
+# Credits to "nowox" from StackOverflow: https://stackoverflow.com/a/30796664/16760741
 HELP_FUN = \
 	%help; while(<>){push@{$$help{$$2//'options'}},[$$1,$$3] \
 	if/^([\w-_]+)\s*:.*\#\#(?:@(\w+))?\s(.*)$$/}; \

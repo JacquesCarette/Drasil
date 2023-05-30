@@ -7,7 +7,7 @@ cradle:
       component: "drasil-code:lib"
 
     - path: "drasil-code/test"
-      component: "drasil-code:test:codegenTest"
+      component: "drasil-code:exe:codegenTest"
 
     - path: "drasil-data/lib"
       component: "drasil-data:lib"

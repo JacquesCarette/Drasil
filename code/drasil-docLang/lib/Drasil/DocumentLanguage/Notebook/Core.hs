@@ -1,78 +1,76 @@
 {-# LANGUAGE GADTs #-}
--- | Lesson plan notebook section types.
+-- | Lesson plan notebook chapter types.
 module Drasil.DocumentLanguage.Notebook.Core where
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
 import Language.Drasil
 
--- * Section Types
+-- * Lesson Chapter Types
 
-type NBDesc = [DocSection]
+type LsnDesc = [LsnChapter]
 
-data DocSection = IntrodSec IntrodSec
-                | BodySec BodySec
-                | SmmrySec SmmrySec
+data LsnChapter = Intro Intro
+                | LearnObj LearnObj
+                | Review Review
+                | CaseProb CaseProb
+                | Example Example
+                | Smmry Smmry
                 | BibSec
-                | ApndxSec ApndxSec
+                | Apndx Apndx
 
--- TODO: Work on detail structure of notebooks
+-- TODO: Work on detail structure of Lesson Plan
 
--- ** Introduction Section
+-- ** Introduction
+newtype Intro = IntrodProg [Contents]
 
--- | Introduction section. Contents are top level followed by a list of subsections.
-data IntrodSec = IntrodProg [Contents] [IntrodSub]
+-- ** Learning Objectives
+newtype LearnObj = LrnObjProg [Contents]
 
--- | Introduction subsections
-data IntrodSub where
-  InPurpose :: [Sentence] -> IntrodSub -- TODO: maybe change to [Contents]  
+-- ** Review Chapter
+newtype Review = ReviewProg [Contents]
 
--- ** Body Section
+-- ** A Case Problem
+newtype CaseProb = CaseProbProg [Contents]
 
-newtype BodySec = BodyProg [BodySub]
-
-data BodySub where
-  Review       :: [Contents] -> BodySub
-  MainIdea     :: [Contents] -> [Section] -> BodySub
-  MethsAndAnls :: [Contents] -> [Section] -> BodySub
-  Example      :: [Contents] -> [Section] -> BodySub
+-- ** Examples of the lesson
+newtype Example = ExampleProg [Contents]
   
--- ** Summary Section
+-- ** Summary
+newtype Smmry = SmmryProg [Contents]
 
-newtype SmmrySec = SmmryProg [Contents]
-
--- ** Appendix Section
-
-newtype ApndxSec = ApndxProg [Contents]
+-- ** Appendix
+newtype Apndx = ApndxProg [Contents]
 
 -- * Multiplate Definition and Type
 
 data DLPlate f = DLPlate {
-  docSec :: DocSection -> f DocSection,
-  introdSec :: IntrodSec -> f IntrodSec,
-  introdSub :: IntrodSub -> f IntrodSub,
-  bodySec :: BodySec -> f BodySec,
-  bodySub :: BodySub -> f BodySub,
-  smmrySec ::SmmrySec -> f SmmrySec,
-  apendSec :: ApndxSec -> f ApndxSec
+  lsnChap :: LsnChapter -> f LsnChapter,
+  intro :: Intro -> f Intro,
+  learnObj :: LearnObj -> f LearnObj,
+  review :: Review -> f Review,
+  caseProb :: CaseProb -> f CaseProb,
+  example :: Example -> f Example,
+  smmry :: Smmry -> f Smmry,
+  apndx :: Apndx -> f Apndx
 }
 
 instance Multiplate DLPlate where
-  multiplate p = DLPlate ds intro intro' body body' smry aps where
-    ds (IntrodSec x) = IntrodSec <$> introdSec p x
-    ds (BodySec x) = BodySec <$> bodySec p x
-    ds (SmmrySec x) = SmmrySec <$> smmrySec p x
-    ds (ApndxSec x) = ApndxSec <$> apendSec p x
-    ds BibSec = pure BibSec
+  multiplate p = DLPlate lc introd lrnObj rvw csProb exmp smry aps where
+    lc (Intro x) = Intro <$> intro p x
+    lc (LearnObj x) = LearnObj <$> learnObj p x
+    lc (Review x) = Review <$> review p x
+    lc (CaseProb x) = CaseProb <$> caseProb p x
+    lc (Example x) = Example <$> example p x
+    lc (Smmry x) = Smmry <$> smmry p x
+    lc (Apndx x) = Apndx <$> apndx p x
+    lc BibSec = pure BibSec
 
-    intro (IntrodProg c progs) = IntrodProg c <$>
-      traverse (introdSub p) progs
-    intro' (InPurpose s) = pure $ InPurpose s
-    body (BodyProg progs) = BodyProg <$> traverse (bodySub p) progs
-    body' (Review c) = pure $ Review c
-    body' (MainIdea c s) = pure $ MainIdea c s
-    body' (MethsAndAnls c s) = pure $ MethsAndAnls c s
-    body' (Example c s) = pure $ Example c s
+    introd (IntrodProg con) = pure $ IntrodProg con 
+    lrnObj (LrnObjProg con) = pure $ LrnObjProg con 
+    rvw (ReviewProg con) = pure $ ReviewProg con
+    csProb (CaseProbProg con) = pure $ CaseProbProg con 
+    exmp (ExampleProg con) = pure $ ExampleProg con
     smry (SmmryProg con) = pure $ SmmryProg con 
     aps (ApndxProg con) = pure $ ApndxProg con
-  mkPlate b = DLPlate (b docSec) (b introdSec) (b introdSub) (b bodySec)
-    (b bodySub) (b smmrySec) (b apendSec)
+  mkPlate b = DLPlate (b lsnChap) (b intro) (b learnObj) (b review) 
+    (b caseProb) (b example) (b smmry) (b apndx)

@@ -9,4 +9,4 @@ import Drasil.Projectile.Lesson.Body (nb, printSetting)
 main :: IO()
 main = do
   setLocaleEncoding utf8
-  gen (DocSpec (docChoices Jupyter []) "Projectile Motion Lesson") nb printSetting
+  gen (DocSpec (docChoices Jupyter []) "Projectile Lesson") nb printSetting

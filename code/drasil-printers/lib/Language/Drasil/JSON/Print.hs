@@ -25,12 +25,13 @@ import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (th, bold, reflinkInfo)
 import Language.Drasil.HTML.Print(renderCite, OpenClose(Open, Close), fence)
 
-import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat,
- tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv)
+import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat, codeformat,
+ tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv, 
+ markdownB, markdownB', markdownE, markdownE', markdownCell, codeCell)
 
 -- | Generate a python notebook document (using json).
--- build : build the general Jupyter Notbook document
--- build': build the SRS example in JSON format
+-- build : build the SRS document in JSON format
+-- build': build the general Jupyter Notbook document
 genJSON :: PrintingInformation -> DocType -> L.Document -> Doc
 genJSON sm Jupyter doc = build (makeDocument sm doc)
 genJSON sm _       doc = build' (makeDocument sm doc)
@@ -42,7 +43,7 @@ build (Document t a c) =
   nbformat (text "# " <> pSpec t) $$
   nbformat (text "## " <> pSpec a) $$
   markdownE $$
-  print c $$
+  print' c $$
   markdownB' $$
   markdownE' $$
   makeMetadata $$
@@ -60,23 +61,16 @@ build' (Document t a c) =
   makeMetadata $$
   text "}" 
 
--- Helper for building markdown cells
-markdownB, markdownB', markdownE, markdownE' :: Doc
-markdownB  = text "{\n \"cells\": [\n  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [" 
-markdownB' = text "  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [" 
-markdownE  = text "    \"\\n\"\n   ]\n  },"
-markdownE' = text "    \"\\n\"\n   ]\n  }\n ],"
-
--- Helper for rendering a D from Latex print
+-- | Helper for rendering a D from Latex print
 printMath :: D -> Doc
 printMath = (`runPrint` Math)
 
 -- | Helper for rendering LayoutObjects into JSON
+-- printLO is used for generating SRS
 printLO :: LayoutObj -> Doc
 printLO (Header n contents l)            = nbformat empty $$ nbformat (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
-printLO (Cell layoutObs)                 = markdownB' $$ vcat (map printLO layoutObs) $$ markdownE
+printLO (Cell layoutObs)                 = markdownCell $ vcat (map printLO layoutObs)
 printLO (HDiv _ layoutObs _)             = vcat (map printLO layoutObs)
---printLO (HDiv _ layoutObs l)           = refID (pSpec l) $$ vcat (map printLO layoutObs)
 printLO (Paragraph contents)             = nbformat empty $$ nbformat (stripnewLine (show(pSpec contents)))
 printLO (EqnBlock contents)              = nbformat mathEqn
   where
@@ -89,11 +83,38 @@ printLO (List t)                        = nbformat empty $$ makeList t False
 printLO (Figure r c f wp)               = makeFigure (pSpec r) (pSpec c) (text f) wp
 printLO (Bib bib)                       = makeBib bib
 printLO Graph{}                         = empty 
+printLO CodeBlock {}                    = empty
+
+-- printLO' is used for generating general notebook (lesson plans)
+printLO' :: LayoutObj -> Doc
+printLO' (HDiv ["equation"] layoutObs _)  = markdownCell $ vcat (map printLO' layoutObs)
+printLO' (Header n contents l)            = markdownCell $ nbformat (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
+printLO' (Cell layoutObs)                 = vcat (map printLO' layoutObs)
+printLO' HDiv {}                          = empty
+printLO' (Paragraph contents)             = markdownCell $ nbformat (stripnewLine (show(pSpec contents)))
+printLO' (EqnBlock contents)              = nbformat mathEqn
+  where
+    toMathHelper (PL g) = PL (\_ -> g Math)
+    mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$" 
+    mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
+printLO' (Table _ rows r _ _)            = markdownCell $ makeTable rows (pSpec r)
+printLO' Definition {}                   = empty
+printLO' (List t)                        = markdownCell $ makeList t False
+printLO' (Figure r c f wp)               = markdownCell $ makeFigure (pSpec r) (pSpec c) (text f) wp
+printLO' (Bib bib)                       = markdownCell $ makeBib bib
+printLO' Graph{}                         = empty 
+printLO' (CodeBlock contents)            = codeCell $ codeformat $ cSpec contents
+
 
 -- | Called by build, uses 'printLO' to render the layout
 -- objects in Doc format.
 print :: [LayoutObj] -> Doc
 print = foldr (($$) . printLO) empty
+
+-- | Called by build', uses 'printLO'' to render the layout
+-- objects in Doc format.
+print' :: [LayoutObj] -> Doc
+print' = foldr (($$) . printLO') empty
 
 pSpec :: Spec -> Doc
 pSpec (E e)  = text "$" <> pExpr e <> text "$" -- symbols used
@@ -106,14 +127,17 @@ pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr 
 pSpec (Sp s)    = text $ unPH $ L.special s
 pSpec HARDNL    = empty
 pSpec (Ref Internal r a)      = reflink     r $ pSpec a
---pSpec (Ref Cite2    r EmptyS) = reflink     r $ text r -- no difference for citations?
 pSpec (Ref (Cite2 n)   r a)    = reflinkInfo r (pSpec a) (pSpec n)
 pSpec (Ref External r a)      = reflinkURI  r $ pSpec a
 pSpec EmptyS    = text "" -- Expected in the output
 pSpec (Quote q) = doubleQuotes $ pSpec q
 
+cSpec :: Spec -> Doc
+cSpec (E e)  = pExpr e 
+cSpec _      = empty
 
--- | Renders expressions in the JSON (called by multiple functions)
+
+-- | Renders expressions in JSON (called by multiple functions)
 pExpr :: Expr -> Doc
 pExpr (Dbl d)        = text $ showEFloat Nothing d ""
 pExpr (Int i)        = text $ show i
@@ -134,9 +158,7 @@ pExpr (Font Bold e)  = pExpr e
 --pExpr (Spc Thin)     = text "&#8239;" -- HTML used
 -- Uses TeX for Mathjax for all other exprs 
 pExpr e              = printMath $ toMath $ TeX.pExpr e
-  -- before
-  --where mjDelimDisp d = text "$" <> d <> text "$"
-  --      mathEqn = mjDelimDisp $ printMath $ toMath $ TeX.pExpr e
+
 
 
 -- TODO: edit all operations in markdown format
@@ -193,31 +215,23 @@ pOps ForAll   = " ForAll "
 pOps Partial  = "&part;"
 
 
--- | Renders HTML table, called by 'printLO'
+-- | Renders Markdown table, called by 'printLO'
 makeTable :: [[Spec]] -> Doc -> Doc
 makeTable [] _      = error "No table to print"
 makeTable (l:lls) r = refID r $$ nbformat empty $$ (makeHeaderCols l $$ makeRows lls) $$ nbformat empty
---if b then t else empty
---htmlway
---makeTable (l:lls) r = refwrap r (table [] (tr (makeHeaderCols l) $$ makeRows lls)) $$ quote empty
-
 
 -- | Helper for creating table rows
 makeRows :: [[Spec]] -> Doc
 makeRows = foldr (($$) . makeColumns) empty
---htmlway
---makeRows = foldr (($$) . tr . makeColumns) empty
 
-makeColumns, makeHeaderCols :: [Spec] -> Doc
--- | Helper for creating table header row (each of the column header cells)
+-- | makeHeaderCols: Helper for creating table header row (each of the column header cells)
+-- | makeColumns: Helper for creating table columns
+makeHeaderCols, makeColumns :: [Spec] -> Doc
 makeHeaderCols l = nbformat (text header) $$ nbformat (text $ genMDtable ++ "|")
   where header = show(text "|" <> hcat(punctuate (text "|") (map pSpec l)) <> text "|")        
         c = count '|' header
         genMDtable = concat (replicate (c-1) "|:--- ")
 
-        --genMDtable = concat [hl ++ "|:--- " | i <- [1..c-1]]
-
--- | Helper for creating table columns
 makeColumns ls = nbformat (text "|" <> hcat(punctuate (text "|") (map pSpec ls)) <> text "|")
 
 count :: Char -> String -> Int
@@ -225,30 +239,6 @@ count _ [] = 0
 count c (x:xs) 
   | c == x = 1 + count c xs
   | otherwise = count c xs
-
-{-htmlway
-makeColumns, makeHeaderCols :: [Spec] -> Doc
--- | Helper for creating table header row (each of the column header cells)
-makeHeaderCols = vcat . map (stripnewLine . show . quote . th . pSpec)
---makeHeaderCols = vcat . map (th . pSpec)
-
--- | Helper for creating table columns
-makeColumns = vcat . map (td . quote . jf . show . pSpec)
--}
-
-{- markdown way
--- | Renders definition tables (Data, General, Theory, etc.)
-makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
-makeDefn _ [] _  = error "L.Empty definition"
-makeDefn dt ps l = refwrap l $ (quote (text "|Refname|" <> l <> text "|") $$ makeDRows ps)
-
--- | Helper for making the definition table rows
-makeDRows :: [(String,[LayoutObj])] -> Doc
-makeDRows []         = error "No fields to create defn table"
-makeDRows [(f,d)] = text "|" <> text "**" <> text f <> text "**|" <> (vcat $ map printLO d) <> text "|"
-makeDRows ((f,d):ps) = text "|" <> text "**" <> text f <> text "**|" <> (vcat $ map printLO d) $$ makeDRows ps
--}
-
 
 -- | Renders definition tables (Data, General, Theory, etc.)
 makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc

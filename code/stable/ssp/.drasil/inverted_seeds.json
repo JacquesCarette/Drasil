@@ -630,6 +630,9 @@
     "cartesian": [
         "terms"
     ],
+    "caseProb": [
+        "terms"
+    ],
     "centigrade": [
         "terms"
     ],
@@ -1329,6 +1332,9 @@
         "terms"
     ],
     "layer": [
+        "terms"
+    ],
+    "learnObj": [
         "terms"
     ],
     "leftSide": [

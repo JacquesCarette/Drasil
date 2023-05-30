@@ -375,6 +375,9 @@
     "cartesian": [
         "terms"
     ],
+    "caseProb": [
+        "terms"
+    ],
     "centre": [
         "terms"
     ],
@@ -877,6 +880,9 @@
         "references"
     ],
     "law": [
+        "terms"
+    ],
+    "learnObj": [
         "terms"
     ],
     "leftSide": [

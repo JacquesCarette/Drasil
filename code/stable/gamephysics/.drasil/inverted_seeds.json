@@ -435,6 +435,9 @@
     "cartesianWiki": [
         "references"
     ],
+    "caseProb": [
+        "terms"
+    ],
     "centigrade": [
         "terms"
     ],
@@ -1003,6 +1006,9 @@
         "references",
         "concepts",
         "conceptInstances"
+    ],
+    "learnObj": [
+        "terms"
     ],
     "leftSide": [
         "terms"

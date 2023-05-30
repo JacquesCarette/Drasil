@@ -34,6 +34,7 @@
         "references"
     ],
     "GDsLabel": [
+        "sections",
         "references"
     ],
     "GenSysDescLabel": [
@@ -43,6 +44,7 @@
         "references"
     ],
     "IMsLabel": [
+        "sections",
         "references"
     ],
     "InDataConstraints": [
@@ -135,6 +137,7 @@
         "references"
     ],
     "TMsLabel": [
+        "sections",
         "references"
     ],
     "TermDefsLabel": [
@@ -270,6 +273,9 @@
         "terms"
     ],
     "cartesian": [
+        "terms"
+    ],
+    "caseProb": [
         "terms"
     ],
     "centigrade": [
@@ -602,6 +608,9 @@
     "law": [
         "terms"
     ],
+    "learnObj": [
+        "terms"
+    ],
     "library": [
         "terms"
     ],
@@ -846,13 +855,7 @@
     "real-time": [
         "terms"
     ],
-    "refBy": [
-        "terms"
-    ],
     "refMat": [
-        "terms"
-    ],
-    "refName": [
         "terms"
     ],
     "reference": [

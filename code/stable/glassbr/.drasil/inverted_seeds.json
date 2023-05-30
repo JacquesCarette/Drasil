@@ -460,6 +460,9 @@
     "cartesian": [
         "terms"
     ],
+    "caseProb": [
+        "terms"
+    ],
     "centigrade": [
         "terms"
     ],
@@ -1022,6 +1025,9 @@
         "terms"
     ],
     "law": [
+        "terms"
+    ],
+    "learnObj": [
         "terms"
     ],
     "leftSide": [

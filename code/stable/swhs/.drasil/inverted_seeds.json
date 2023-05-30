@@ -513,6 +513,9 @@
     "cartesian": [
         "terms"
     ],
+    "caseProb": [
+        "terms"
+    ],
     "centigrade": [
         "units",
         "terms"
@@ -1249,6 +1252,9 @@
         "terms"
     ],
     "lawConvCooling": [
+        "terms"
+    ],
+    "learnObj": [
         "terms"
     ],
     "leftSide": [

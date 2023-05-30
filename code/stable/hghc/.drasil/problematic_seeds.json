@@ -3,6 +3,14 @@
         "sections",
         "references"
     ],
+    "GDsLabel": [
+        "sections",
+        "references"
+    ],
+    "IMsLabel": [
+        "sections",
+        "references"
+    ],
     "InDataConstraints": [
         "terms",
         "references"
@@ -33,6 +41,10 @@
     ],
     "TAuxConsts": [
         "terms",
+        "references"
+    ],
+    "TMsLabel": [
+        "sections",
         "references"
     ],
     "ToCLabel": [

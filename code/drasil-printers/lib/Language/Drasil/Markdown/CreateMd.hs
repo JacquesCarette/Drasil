@@ -100,7 +100,7 @@ license auth = text "Copyright (c) 2021," <+> auth <>
 
 -- Creates the prefix to be attached to the general Drasil logo path
 buildPath :: String -> String
-buildPath file = [x | x <- pathPrefix, x /= ' ']
+buildPath file = filter (/=' ') pathPrefix
   where
     pathPrefix = unwords $ replicate (numSlash file) "../"
     numSlash [] = 4

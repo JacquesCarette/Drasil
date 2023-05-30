@@ -18,5 +18,5 @@ si :: SystemInformation
 symbMap :: ChunkDB
 usedDB :: ChunkDB
 refDB :: ReferenceDB
-example :: CI
+progName :: CI
 authorName :: Person

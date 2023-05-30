@@ -1349,6 +1349,10 @@ ddStub :: Section
 
 -- | Section stubs for implicit referencing of different models and
 --   definitions.
+gdStub :: Section
+
+-- | Section stubs for implicit referencing of different models and
+--   definitions.
 imStub :: Section
 
 -- | Section stubs for implicit referencing of different models and

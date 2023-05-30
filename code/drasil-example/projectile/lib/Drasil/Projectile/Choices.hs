@@ -91,7 +91,8 @@ choiceCombos = [baseChoices,
     optFeats = makeOptFeats
       (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
       (makeLogConfig [LogVar, LogFunc] "log.txt")
-      [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME]
+      [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME],
+    folderVal = 5
   },
   baseChoices {
     dataInfo = makeData Bundled WithInputs Var,
@@ -99,7 +100,8 @@ choiceCombos = [baseChoices,
     optFeats = makeOptFeats
       (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
       (makeLogConfig [LogVar, LogFunc] "log.txt")
-      [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME]
+      [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME],
+    folderVal = 5
   }]
 
 matchToFloats :: SpaceMatch
@@ -115,5 +117,6 @@ baseChoices = defaultChoices {
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
     (makeLogConfig [] "log.txt")
     [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME],
-  srsConstraints = makeConstraints Warning Warning
+  srsConstraints = makeConstraints Warning Warning,
+  folderVal = 5
 }

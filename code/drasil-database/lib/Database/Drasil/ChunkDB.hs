@@ -4,8 +4,28 @@
 -- Changes to ChunkDB should be reflected in the 'Creating Your Project 
 -- in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
-
-module Database.Drasil.ChunkDB where
+module Database.Drasil.ChunkDB (
+  -- * Types
+  -- ** 'ChunkDB'
+  -- | Main database type
+  ChunkDB(..),
+  -- ** Maps
+  -- | Exported for external use.
+  RefbyMap, TraceMap, UMap,
+  -- * Functions
+  -- ** Constructors
+  cdb, idMap, termMap, conceptMap, traceMap, generateRefbyMap, -- idMap, termMap for docLang
+  -- ** Lookup Functions
+  asOrderedList, collectUnits,
+  termResolve, defResolve, symbResolve,
+  traceLookup, refbyLookup,
+  datadefnLookup, insmodelLookup, gendefLookup, theoryModelLookup,
+  conceptinsLookup, sectionLookup, labelledconLookup, refResolve,
+  -- ** Lenses
+  unitTable, traceTable, refbyTable,
+  dataDefnTable, insmodelTable, gendefTable, theoryModelTable,
+  conceptinsTable, sectionTable, labelledcontentTable, refTable
+) where
 
 import Language.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)

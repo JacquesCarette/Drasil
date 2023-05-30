@@ -2,7 +2,7 @@
 module Language.Drasil.Dump where
 
 import qualified Database.Drasil as DB
-import SysInfo.Drasil (SystemInformation(SI))
+import SysInfo.Drasil (SystemInformation(_sysinfodb))
 
 import System.Directory
 import System.IO
@@ -17,15 +17,15 @@ type Path = String
 type TargetFile = String
 
 dumpEverything :: SystemInformation -> Path -> IO ()
-dumpEverything (SI _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ chks _ _) targetPath = do
-    createDirectoryIfMissing True targetPath
-    let chunkDump = DB.dumpChunkDB chks
-    let invertedChunkDump = invert chunkDump
-    let sharedUIDs = SM.filter (\x -> length x > 1) invertedChunkDump
+dumpEverything si targetPath = do
+  createDirectoryIfMissing True targetPath
+  let chunkDump = DB.dumpChunkDB $ _sysinfodb si
+  let invertedChunkDump = invert chunkDump
+  let sharedUIDs = SM.filter (\x -> length x > 1) invertedChunkDump
 
-    dumpTo chunkDump $ targetPath ++ "seeds.json"
-    dumpTo invertedChunkDump $ targetPath ++ "inverted_seeds.json"
-    dumpTo sharedUIDs $ targetPath ++ "problematic_seeds.json"
+  dumpTo chunkDump $ targetPath ++ "seeds.json"
+  dumpTo invertedChunkDump $ targetPath ++ "inverted_seeds.json"
+  dumpTo sharedUIDs $ targetPath ++ "problematic_seeds.json"
 
 -- FIXME: This is more of a general utility than it is drasil-database specific
 dumpTo :: ToJSON a => a -> TargetFile -> IO ()

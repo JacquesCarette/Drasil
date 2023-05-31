@@ -103,7 +103,7 @@ mkTMField t m RefBy fs = ("RefBy", [mkParagraph $ helperRefs t m]) : fs --FIXME:
 mkTMField t _ Source fs = ("Source", helperSources $ t ^. getDecRefs) : fs
 mkTMField t _ Notes fs =
   nonEmpty fs (\ss -> ("Notes", map mkParagraph ss) : fs) (t ^. getNotes)
-mkTMField _ _ l fs = ("Label not supported for data definitions", []) : fs
+mkTMField _ _ _ fs = ("Label not supported for data definitions", []) : fs
 
 
 -- | Helper function to make a list of 'Sentence's from the current system information and something that has a 'UID'.
@@ -140,7 +140,7 @@ mkDDField d m (Description v u) fs = ("Description", buildDDescription' v u d m)
 mkDDField t m RefBy fs = ("RefBy", [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
 mkDDField d _ Source fs = ("Source", helperSources $ d ^. getDecRefs) : fs
 mkDDField d _ Notes fs = nonEmpty fs (\ss -> ("Notes", map mkParagraph ss) : fs) (d ^. getNotes)
-mkDDField _ _ l fs = ("Label not supported for data definitions", []) : fs
+mkDDField _ _ _ fs = ("Label not supported for data definitions", []) : fs
 
 -- | Creates the description field for 'Contents' (if necessary) using the given verbosity and
 -- including or ignoring units for a model/general definition.
@@ -170,7 +170,7 @@ mkGDField g m (Description v u) fs = ("Description",
 mkGDField g m RefBy fs = ("RefBy", [mkParagraph $ helperRefs g m]) : fs --FIXME: fill this in
 mkGDField g _ Source fs = ("Source", helperSources $ g ^. getDecRefs) : fs
 mkGDField g _ Notes fs = nonEmpty fs (\ss -> ("Notes", map mkParagraph ss) : fs) (g ^. getNotes)
-mkGDField _ _ l fs = ("Label not supported for data definitions", []) : fs
+mkGDField _ _ _ fs = ("Label not supported for data definitions", []) : fs
 
 -- | Create the fields for an instance model from an 'InstanceModel' chunk.
 mkIMField :: InstanceModel -> SystemInformation -> Field -> ModRow -> ModRow
@@ -195,7 +195,7 @@ mkIMField i _ OutConstraints fs =
     (i ^. out_constraints)) : fs
 mkIMField i _ Notes fs =
   nonEmpty fs (\ss -> ("Notes", map mkParagraph ss) : fs) (i ^. getNotes)
-mkIMField _ _ l fs = ("Label not supported for data definitions", []) : fs
+mkIMField _ _ _ fs = ("Label not supported for data definitions", []) : fs
 
 -- | Used for making definitions. The first pair is the symbol of the quantity we are
 -- defining.

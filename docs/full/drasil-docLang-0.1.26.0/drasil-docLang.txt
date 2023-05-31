@@ -1482,7 +1482,7 @@ module Drasil.Sections.TraceabilityMandGs
 --   Sections.
 generateTraceTable :: SystemInformation -> LabelledContent
 
--- | Assumptions on the assumptions of a traceabiliy matrix.
+-- | Assumptions on the assumptions of a traceability matrix.
 traceMatAssumpAssump :: TraceConfig
 
 -- | Other assumptions of the traceability matrix
@@ -1495,39 +1495,42 @@ traceMatRefinement :: TraceConfig
 --   a <a>TraceConfig</a>.
 traceMatOtherReq :: SystemInformation -> TraceConfig
 
--- | Contains traceability matrix assumptions, other assumptions,
+-- | Helpers to check if given argument has more than one peice of
+--   information
+--   
+--   Contains traceability matrix assumptions, other assumptions,
 --   refinement, and other requirements.
 traceMatStandard :: SystemInformation -> [TraceConfig]
 
--- | Traceabiliy viewing assumptions. Takes a <a>UID</a> and a
+-- | Traceability viewing assumptions. Takes a <a>UID</a> and a
 --   <a>ChunkDB</a>. Returns a list of <a>UID</a>s.
 tvAssumps :: TraceViewCat
 
--- | Traceabiliy viewing data definitions. Takes a <a>UID</a> and a
+-- | Traceability viewing data definitions. Takes a <a>UID</a> and a
 --   <a>ChunkDB</a>. Returns a list of <a>UID</a>s.
 tvDataDefns :: TraceViewCat
 
--- | Traceabiliy viewing general definitions. Takes a <a>UID</a> and a
+-- | Traceability viewing general definitions. Takes a <a>UID</a> and a
 --   <a>ChunkDB</a>. Returns a list of <a>UID</a>s.
 tvGenDefns :: TraceViewCat
 
--- | Traceabiliy viewing theory models. Takes a <a>UID</a> and a
+-- | Traceability viewing theory models. Takes a <a>UID</a> and a
 --   <a>ChunkDB</a>. Returns a list of <a>UID</a>s.
 tvTheoryModels :: TraceViewCat
 
--- | Traceabiliy viewing instance models. Takes a <a>UID</a> and a
+-- | Traceability viewing instance models. Takes a <a>UID</a> and a
 --   <a>ChunkDB</a>. Returns a list of <a>UID</a>s.
 tvInsModels :: TraceViewCat
 
--- | Traceabiliy viewing goals. Takes a <a>UID</a> and a <a>ChunkDB</a>.
+-- | Traceability viewing goals. Takes a <a>UID</a> and a <a>ChunkDB</a>.
 --   Returns a list of <a>UID</a>s.
 tvGoals :: TraceViewCat
 
--- | Traceabiliy viewing requirements. Takes a <a>UID</a> and a
+-- | Traceability viewing requirements. Takes a <a>UID</a> and a
 --   <a>ChunkDB</a>. Returns a list of <a>UID</a>s.
 tvReqs :: TraceViewCat
 
--- | Traceabiliy viewing changes. Takes a <a>UID</a> and a <a>ChunkDB</a>.
+-- | Traceability viewing changes. Takes a <a>UID</a> and a <a>ChunkDB</a>.
 --   Returns a list of <a>UID</a>s.
 tvChanges :: TraceViewCat
 
@@ -2147,7 +2150,10 @@ mkGraphInfo :: SystemInformation -> GraphInfo
 --   Primarily used for reference database in examples.
 traceyGraphGetRefs :: String -> [Reference]
 
--- | Contains traceability matrix assumptions, other assumptions,
+-- | Helpers to check if given argument has more than one peice of
+--   information
+--   
+--   Contains traceability matrix assumptions, other assumptions,
 --   refinement, and other requirements.
 traceMatStandard :: SystemInformation -> [TraceConfig]
 
@@ -2633,7 +2639,10 @@ fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
 -- | Default Reference Material section introduction.
 intro :: Contents
 
--- | Contains traceability matrix assumptions, other assumptions,
+-- | Helpers to check if given argument has more than one peice of
+--   information
+--   
+--   Contains traceability matrix assumptions, other assumptions,
 --   refinement, and other requirements.
 traceMatStandard :: SystemInformation -> [TraceConfig]
 

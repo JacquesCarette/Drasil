@@ -954,7 +954,10 @@ mkGraphInfo :: SystemInformation -> GraphInfo
 --   Primarily used for reference database in examples.
 traceyGraphGetRefs :: String -> [Reference]
 
--- | Contains traceability matrix assumptions, other assumptions,
+-- | Helpers to check if given argument has more than one peice of
+--   information
+--   
+--   Contains traceability matrix assumptions, other assumptions,
 --   refinement, and other requirements.
 traceMatStandard :: SystemInformation -> [TraceConfig]
 
@@ -1440,7 +1443,10 @@ fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
 -- | Default Reference Material section introduction.
 intro :: Contents
 
--- | Contains traceability matrix assumptions, other assumptions,
+-- | Helpers to check if given argument has more than one peice of
+--   information
+--   
+--   Contains traceability matrix assumptions, other assumptions,
 --   refinement, and other requirements.
 traceMatStandard :: SystemInformation -> [TraceConfig]
 

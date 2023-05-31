@@ -423,9 +423,9 @@ mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
   (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) fProgs)
   (map LlC trace) (filter (not.isSpace) $ abrv sys) []
   where
-    trace = map (\(TraceConfig u _ desc rows cols) -> TM.generateTraceTableView
-      u desc rows cols si) fProgs
-    fProgs = filter (\(TraceConfig _ _ _ rows cols) -> not $ null 
+    trace = map (\(TraceConfig u _ desc cols rows) -> TM.generateTraceTableView
+      u desc cols rows si) fProgs
+    fProgs = filter (\(TraceConfig _ _ _ cols rows) -> not $ null 
       (header (showUIDs rows sidb) si) || null (header (showUIDs cols sidb) si)) progs
     sidb = _sysinfodb si
 

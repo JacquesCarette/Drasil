@@ -13,6 +13,7 @@ import Control.Lens ((^.))
 import Data.List (intersperse, isPrefixOf, transpose)
 import Data.List.Split (splitOn)
 import Data.List.NonEmpty (NonEmpty(..), toList)
+import Data.Maybe (fromMaybe)
 
 -- | Reads data from a file and converts the values to 'Expr's. The file must be 
 -- formatted according to the 'DataDesc'' passed as a parameter.
@@ -66,7 +67,7 @@ readWithDataDesc fp ddsc = do
 sampleInputDD :: [CodeVarChunk] -> DataDesc'
 sampleInputDD ds = dataDesc (junk : intersperse junk (map toData ds)) "\n"
   where toData d = toData' (d ^. typ) d
-        toData' t@(Vect _) d = list d 
+        toData' t@Vect{} d = list d 
           (take (getDimension t) ([", ", "; "] ++ iterate (':':) ":"))
         toData' _ d = singleton' d
 
@@ -83,8 +84,8 @@ strAsExpr _        _ = error "strAsExpr should only be numeric space or string"
 
 -- | Gets the dimension of a 'Space'.
 getDimension :: Space -> Int
-getDimension (Vect t) = 1 + getDimension t
-getDimension _ = 0
+getDimension (Vect l t) = fromMaybe (1 + getDimension t) l
+getDimension _          = 0
 
 -- | Splits a string at the first (and only the first) occurrence of a delimiter.
 -- The delimiter is dropped from the result.
@@ -100,10 +101,10 @@ splitAtFirst = splitAtFirst' []
 
 -- | Converts a list of 'String's to a Matrix 'Expr' of a given 'Space'.
 strListAsExpr :: Space -> [String] -> Expr
-strListAsExpr (Vect t) ss = Matrix [map (strAsExpr t) ss]
+strListAsExpr (Vect _ t) ss = Matrix [map (strAsExpr t) ss]
 strListAsExpr _ _ = error "strListsAsExpr called on non-vector space"
 
 -- | Converts a 2D list of 'String's to a Matrix 'Expr' of a given 'Space'.
 strList2DAsExpr :: Space -> [[String]] -> Expr
-strList2DAsExpr (Vect (Vect t)) sss = Matrix $ map (map (strAsExpr t)) sss
+strList2DAsExpr (Vect _ (Vect _ t)) sss = Matrix $ map (map (strAsExpr t)) sss
 strList2DAsExpr _ _ = error "strLists2DAsExprs called on non-2D-vector space"

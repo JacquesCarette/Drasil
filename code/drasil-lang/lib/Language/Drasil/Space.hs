@@ -36,7 +36,7 @@ data Space =
   | Boolean
   | Char
   | String
-  | Vect Space -- TODO: Length for vectors?
+  | Vect (Maybe Int) Space
   | Matrix Int Int Space
   | Array Space
   | Actor String
@@ -88,8 +88,8 @@ getActorName _         = error "getActorName called on non-actor space"
 
 -- | Gets the inner 'Space' of a vector.
 getInnerSpace :: Space -> Space
-getInnerSpace (Vect s) = s
-getInnerSpace _        = error "getInnerSpace called on non-vector space"
+getInnerSpace (Vect _ s) = s
+getInnerSpace _          = error "getInnerSpace called on non-vector space"
 
 -- | Is this Space a basic numeric space?
 isBasicNumSpace :: Space -> Bool

@@ -20,6 +20,6 @@ Successfully matched Boolean with Boolean.
 Successfully matched Rational with Double.
 Successfully matched Integer with Integer.
 Successfully matched Function (String :| [Real,Real]) Real with Func [String] Double.
-Successfully matched Vect Real with List Double.
-Successfully matched Vect (Vect Real) with List (List Double).
+Successfully matched Vect Nothing Real with List Double.
+Successfully matched Vect Nothing (Vect Nothing Real) with List (List Double).
 Successfully matched Natural with Integer.

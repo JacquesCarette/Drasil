@@ -219,7 +219,7 @@ assocArithOperToTy MulRe = S.Real
 -- helper function for typechecking to help reduce duplication
 vvvInfer :: TypingContext Space -> VVVBinOp -> Expr -> Expr -> Either Space TypeError
 vvvInfer ctx op l r = case (infer ctx l, infer ctx r) of
-    (Left lt@(S.Vect lsp), Left (S.Vect rsp)) -> 
+    (Left lt@(S.Vect _ lsp), Left (S.Vect _ rsp)) -> 
       if lsp == rsp && S.isBasicNumSpace lsp then
         if op == VSub && (lsp == S.Natural || rsp == S.Natural) then
           Right $ "Vector subtraction expects both operands to be vectors of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
@@ -297,19 +297,19 @@ instance Typed Expr Space where
     x              -> x
 
   infer cxt (UnaryOpVV NegV e) = case infer cxt e of
-    Left (S.Vect sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
-      then Left $ S.Vect sp
+    Left (S.Vect l sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
+      then Left $ S.Vect l sp
       else Right $ "Vector negation only applies to, non-natural, numbered vectors. Received `" ++ show sp ++ "`."
     Left sp -> Right $ "Vector negation should only be applied to numeric vectors. Received `" ++ show sp ++ "`."
     x -> x
 
   infer cxt (UnaryOpVN Norm e) = case infer cxt e of
-    Left (S.Vect S.Real) -> Left S.Real
+    Left (S.Vect _ S.Real) -> Left S.Real
     Left sp -> Right $ "Vector norm only applies to vectors of real numbers. Received `" ++ show sp ++ "`."
     x -> x
 
   infer cxt (UnaryOpVN Dim e) = case infer cxt e of
-    Left (S.Vect _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
+    Left (S.Vect _ _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
     Left sp -> Right $ "Vector 'dim' only applies to vectors. Received `" ++ show sp ++ "`."
     x -> x
 
@@ -349,7 +349,7 @@ instance Typed Expr Space where
     (Right le, _) -> Right le
 
   infer cxt (LABinaryOp Index l n) = case (infer cxt l, infer cxt n) of
-    (Left (S.Vect lt), Left nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
+    (Left (S.Vect _ lt), Left nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
       then Left lt
       else Right $ "List accessor not of type Integer nor Natural, but of type `" ++ show nt ++ "`"
     (Left lt         , Left _)  -> Right $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
@@ -373,7 +373,7 @@ instance Typed Expr Space where
     -}
 
   infer cxt (VVNBinaryOp Dot l r) = case (infer cxt l, infer cxt r) of
-    (Left lt@(S.Vect lsp), Left rt@(S.Vect rsp)) -> if lsp == rsp && S.isBasicNumSpace lsp
+    (Left lt@(S.Vect _ lsp), Left rt@(S.Vect _ rsp)) -> if lsp == rsp && S.isBasicNumSpace lsp
       then Left lsp
       else Right $ "Vector dot product expects same numeric vector types, but found `" ++ show lt ++ "` · `" ++ show rt ++ "`."
     (Left lsp, Left rsp) -> Right $ "Vector dot product expects vector operands. Received `" ++ show lsp ++ "` · `" ++ show rsp ++ "`."
@@ -381,7 +381,7 @@ instance Typed Expr Space where
     (Right lx, _) -> Right lx
 
   infer cxt (NVVBinaryOp Scale l r) = case (infer cxt l, infer cxt r) of
-    (Left lt, Left (S.Vect rsp)) -> if S.isBasicNumSpace lt && lt == rsp
+    (Left lt, Left (S.Vect _ rsp)) -> if S.isBasicNumSpace lt && lt == rsp
       then Left rsp
       else if lt /= rsp then
         Right $ "Vector scaling expects a scaling by the same kind as the vector's but found scaling by`" ++ show lt ++ "` over vectors of type `" ++ show rsp ++ "`."

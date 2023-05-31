@@ -64,25 +64,25 @@ y = var "y" "y-coordinate to interpolate at"  lY Real
 z = var "z" "z-coordinate to interpolate at"  lZ Real
 
 zVector = var "zVector" "list of z values" 
-  (sub lZ (label "vector")) (Vect Real)               
+  (sub lZ (label "vector")) (Vect Nothing Real)               
 yMatrix = var "yMatrix" "lists of y values at different z values" 
-  (sub lY (label "matrix")) (Vect $ Vect Real)        
+  (sub lY (label "matrix")) (Vect Nothing $ Vect Nothing Real)        
 xMatrix = var "xMatrix" "lists of x values at different z values" 
-  (sub lX (label "matrix")) (Vect $ Vect Real)        
+  (sub lX (label "matrix")) (Vect Nothing $ Vect Nothing Real)        
 arr     = var "arr"     "array in which value should be found" 
-  (label "arr")             (Vect Real)  --FIXME: temporary variable for findCT?
+  (label "arr")             (Vect Nothing Real)  --FIXME: temporary variable for findCT?
 x_z_1   = var "x_z_1"   "list of x values at a specific z value"    
-  (sub lX (sub lZ one))      (Vect Real)
+  (sub lX (sub lZ one))      (Vect Nothing Real)
 y_z_1   = var "y_z_1"   "list of y values at a specific z value"    
-  (sub lY (sub lZ one))      (Vect Real)   
+  (sub lY (sub lZ one))      (Vect Nothing Real)   
 x_z_2   = var "x_z_2"   "list of x values at a specific z value"    
-  (sub lX (sub lZ two))      (Vect Real)
+  (sub lX (sub lZ two))      (Vect Nothing Real)
 y_z_2   = var "y_z_2"   "list of y values at a specific z value"   
-  (sub lY (sub lZ two))      (Vect Real)
+  (sub lY (sub lZ two))      (Vect Nothing Real)
 mat     = var "mat"     "matrix from which column will be extracted"     
-  (label "mat")             (Vect $ Vect Real)
+  (label "mat")             (Vect Nothing $ Vect Nothing Real)
 col     = var "col"     "extracted column"    
-  (label "col")             (Vect Real)               
+  (label "col")             (Vect Nothing Real)               
 filename = var "filename" "name of file with x y and z data" 
   (label "filename")        String
 
@@ -152,7 +152,7 @@ findCT = funcDef "find"
 
 extractColumnCT :: Func
 extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix" 
-  [mat, j] (Vect Real) (Just "column of the given matrix at the given index")
+  [mat, j] (Vect Nothing Real) (Just "column of the given matrix at the given index")
   [
     fDecDef col (matrix [[]]),
     --

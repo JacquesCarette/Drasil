@@ -41,9 +41,9 @@ instance MayHaveUnit ParameterChunk where getUnit = getUnit . view pcc
 pcAuto :: (CodeIdea c) => c -> ParameterChunk
 pcAuto c = PC cdch (choosePB $ cdch ^. typ)
   where cdch = codeChunk c
-        choosePB (Vect _) = Ref
-        choosePB (Actor _) = Ref
-        choosePB _ = Val
+        choosePB (Vect _ _) = Ref
+        choosePB (Actor _)  = Ref
+        choosePB _          = Val
 
 -- | Constructs a pass-by-value parameter.
 pcVal :: (CodeIdea c) => c -> ParameterChunk

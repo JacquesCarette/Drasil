@@ -115,7 +115,8 @@ instance MayHaveUnit CodeFuncChunk where getUnit = getUnit . view ccf
 -- Changes a 'CodeVarChunk'\'s space from 'Vect' to 'Array'.
 listToArray :: CodeVarChunk -> CodeVarChunk
 listToArray c = newSpc (c ^. typ) 
-  where newSpc (Vect t) = CodeVC (CodeC (implVar' (show $ c +++ "_array")
+  -- TODO: should vector length be used here?
+  where newSpc (Vect _ t) = CodeVC (CodeC (implVar' (show $ c +++ "_array")
           (c ^. term) (getA c) (Array t) (symbol c Implementation) (getUnit c)) 
           Var) (c ^. obv)
         newSpc _ = c

@@ -13,21 +13,23 @@ import Data.List.NonEmpty (toList)
 
 -- | Render a 'Space'.
 space :: PrintingInformation -> Space -> P.Expr
-space _  Integer           = P.MO P.Integer
-space _  Rational          = P.MO P.Rational
-space _  Real              = P.MO P.Real
-space _  Natural           = P.MO P.Natural
-space _  Boolean           = P.MO P.Boolean
-space _  Char              = P.Ident "Char"
-space _  String            = P.Ident "String"
-space sm (Vect Nothing  s) = P.Row [space sm s, P.Sup $ P.Ident "n"]
-space sm (Vect (Just l) s) = P.Row [space sm s, P.Sup $ P.Label $ show l]
-space _  Matrix {}         = error "Matrix space not translated"
-space _  (Array _)         = error "Array space not translated"
-space _  (Actor s)         = P.Ident s
-space sm (DiscreteD l)     = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm . dbl) l -- [Double]
-space _  (DiscreteS l)     = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map P.Str l --ex. let Meal = {"breakfast", "lunch", "dinner"}
-space _  Void              = error "Void not translated"
-space sm (Function i t)    = P.Row $
+space _  Integer             = P.MO P.Integer
+space _  Rational            = P.MO P.Rational
+space _  Real                = P.MO P.Real
+space _  Natural             = P.MO P.Natural
+space _  Boolean             = P.MO P.Boolean
+space _  Char                = P.Ident "Char"
+space _  String              = P.Ident "String"
+space sm (Vect   Nothing  s) = P.Row [space sm s, P.Sup $ P.Ident "n"]
+space sm (Vect   (Just l) s) = P.Row [space sm s, P.Sup $ P.Label $ show l]
+space _  (Matrix Nothing  _) = error "Matrix space not translated"
+space sm (Matrix (Just d) s) = P.Row [space sm s, P.Sup $ P.Row $
+  intersperse (P.MO P.Cross) (map (P.Label . show) $ (\(x,y) -> [x,y]) d)]
+space _  (Array _)           = error "Array space not translated"
+space _  (Actor s)           = P.Ident s
+space sm (DiscreteD l)       = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm . dbl) l -- [Double]
+space _  (DiscreteS l)       = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map P.Str l --ex. let Meal = {"breakfast", "lunch", "dinner"}
+space _  Void                = error "Void not translated"
+space sm (Function i t)      = P.Row $
   intersperse (P.MO P.Cross) (map (space sm) $ toList i) ++  -- AxBxC...xY
   [P.MO P.RArrow, space sm t]                                -- -> Z

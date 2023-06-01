@@ -264,7 +264,7 @@ instance Typed Expr Space where
   infer cxt (Matrix exss)
     | null exss = Right "Matrix has no rows."
     | null $ head exss = Right "Matrix has no columns."
-    | allRowsHaveSameColumnsAndSpace = Left $ S.Matrix rows columns t
+    | allRowsHaveSameColumnsAndSpace = Left $ S.Matrix (Just (rows, columns)) t
     | otherwise = Right "Not all rows have the same number of columns or the same value types."
     where
         rows = length exss

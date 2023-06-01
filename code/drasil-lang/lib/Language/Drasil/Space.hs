@@ -37,7 +37,7 @@ data Space =
   | Char
   | String
   | Vect (Maybe Int) Space
-  | Matrix Int Int Space
+  | Matrix (Maybe (Int, Int)) Space
   | Array Space
   | Actor String
   | DiscreteD [Double]

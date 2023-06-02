@@ -19,7 +19,6 @@ data Package = AMSMath      -- ^ Improves information structure for mathematical
              | Graphics     -- ^ Manipulate graphical elements.
              | HyperRef     -- ^ Handles cross-referencing within the document.
              | Listings     -- ^ Source code printer for LaTeX.
-             | LongTable    -- ^ Allow tables to overflow page boundaries.
              | Tikz         -- ^ Create graphical elements.
              | Dot2Tex      -- ^ Create better graphs.
              | AdjustBox    -- ^ Adjustable boxed content.
@@ -47,7 +46,6 @@ addPackage Graphics  = usepackage "graphics"
 addPackage HyperRef  = usepackage "hyperref" %%
                        command "hypersetup" hyperSettings
 addPackage Listings  = usepackage "listings"
-addPackage LongTable = usepackage "longtable"
 addPackage Tikz      = usepackage "tikz" %%
                        command "usetikzlibrary" "arrows.meta, shapes"
 addPackage Dot2Tex   = usepackage "dot2texi"
@@ -100,7 +98,7 @@ parseDoc los' =
   where 
     res = map parseDoc' los'
     parseDoc' :: LayoutObj -> ([Package], [Def])
-    parseDoc' Table{} = ([Tabularray,TabularX,LongTable,BookTabs,Caption], [])
+    parseDoc' Table{} = ([Tabularray,TabularX,BookTabs,Caption], [])
     parseDoc' (HDiv _ slos _) = 
       let res1 = map parseDoc' slos in
       let pp = concatMap fst res1 in
@@ -110,7 +108,7 @@ parseDoc los' =
       let res1 = concatMap (map parseDoc' . snd) ps in
       let pp = concatMap fst res1 in
       let dd = concatMap snd res1 in
-      (Tabularray:TabularX:LongTable:BookTabs:pp,SymbDescriptionP1:SymbDescriptionP2:dd)
+      (Tabularray:TabularX:BookTabs:pp,SymbDescriptionP1:SymbDescriptionP2:dd)
     parseDoc' Figure{}     = ([Graphics,Caption, SVG],[])
     parseDoc' Graph{}      = ([Caption,Tikz,Dot2Tex,AdjustBox],[])
     parseDoc' Bib{}        = ([FileContents,BibLaTeX,URL],[Bibliography])

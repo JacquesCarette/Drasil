@@ -7,8 +7,8 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{unicode-math}
-\usepackage{tabu}
-\usepackage{longtable}
+\usepackage{tabularray}
+\usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{caption}
 \usepackage{graphics}
@@ -20,7 +20,6 @@
 \setmathfont{Latin Modern Math}
 \newcommand{\gt}{\ensuremath >}
 \newcommand{\lt}{\ensuremath <}
-\global\tabulinesep=1mm
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \bibliography{bibfile}
@@ -38,12 +37,11 @@ This section records information for easy reference.
 \label{Sec:ToU}
 The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the \hyperref[Table:ToU]{Table of Units} lists the symbol, a description and the SI name.
 
-\begin{longtable}{l l l}
-\toprule
+\begin{longtblr}
+[caption={Table of Units}]
+{colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{SI Name}
 \\
-\midrule
-\endhead
 ${{}^{\circ}}$ & angle & degree
 \\
 ${\text{kg}}$ & mass & kilogram
@@ -55,21 +53,17 @@ ${\text{N}}$ & force & newton
 ${\text{Pa}}$ & pressure & pascal
 \\
 ${\text{s}}$ & time & second
-\\
-\bottomrule
-\caption{Table of Units}
 \label{Table:ToU}
-\end{longtable}
+\end{longtblr}
 \subsection{Table of Symbols}
 \label{Sec:ToS}
 The symbols used in this document are summarized in the \hyperref[Table:ToS]{Table of Symbols} along with their units. Throughout the document, a subscript $i$ indicates that the value will be taken at, and analyzed at, a slice or slice interface composing the total slip mass. For vector quantities, the units shown are for each component of the vector.
 
-\begin{longtabu}{l X[l] l}
-\toprule
+\begin{longtblr}
+[caption={Table of Symbols}]
+{colspec={l X[l] l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
-\midrule
-\endhead
 $\text{(x,y)}$ & Cartesian Position Coordinates: $y$ is considered parallel to the direction of the force of gravity and $x$ is considered perpendicular to $y$. & ${\text{m}}$
 \\
 $A$ & Area: A part of an object or surface. & ${\text{m}^{2}}$
@@ -255,19 +249,15 @@ $φ'$ & Effective Angle of Friction: The angle of inclination with respect to th
 $\symbf{Ψ}$ & Second Function for Incorporating Interslice Forces Into Shear Force: The function for converting mobile shear without the influence of interslice forces, to a calculation considering the interslice forces. & --
 \\
 $\symbf{ω}$ & Imposed Load Angles: The angles between the external force acting into the surface of each slice and the vertical. & ${{}^{\circ}}$
-\\
-\bottomrule
-\caption{Table of Symbols}
 \label{Table:ToS}
-\end{longtabu}
+\end{longtblr}
 \subsection{Abbreviations and Acronyms}
 \label{Sec:TAbbAcc}
-\begin{longtable}{l l}
-\toprule
+\begin{longtblr}
+[caption={Abbreviations and Acronyms}]
+{colspec={l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Abbreviation} & \textbf{Full Form}
 \\
-\midrule
-\endhead
 2D & Two-Dimensional
 \\
 3D & Three-Dimensional
@@ -301,11 +291,8 @@ TM & Theoretical Model
 UC & Unlikely Change
 \\
 Uncert. & Typical Uncertainty
-\\
-\bottomrule
-\caption{Abbreviations and Acronyms}
 \label{Table:TAbbAcc}
-\end{longtable}
+\end{longtblr}
 \section{Introduction}
 \label{Sec:Intro}
 A slope of geological mass, composed of soil and rock and sometimes water, is subject to the influence of gravity on the mass. This can cause instability in the form of soil or rock movement. The effects of soil or rock movement can range from inconvenient to seriously hazardous, resulting in significant life and economic losses. Slope stability is of interest both when analysing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety.
@@ -2524,12 +2511,11 @@ RefBy & \hyperref[displayGraph]{FR:Display-Graph} and \hyperref[determineCritSli
 \label{Sec:DataConstraints}
 The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
 
-\begin{longtable}{l l l l}
-\toprule
+\begin{longtblr}
+[caption={Input Data Constraints}]
+{colspec={l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Var} & \textbf{Physical Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
 \\
-\midrule
-\endhead
 $c'$ & $c'\gt{}0$ & $10000$ ${\text{Pa}}$ & 10$\%$
 \\
 ${{x_{\text{slip}}}^{\text{maxEtr}}}$ & -- & $20$ ${\text{m}}$ & 10$\%$
@@ -2559,29 +2545,22 @@ ${γ_{\text{sat}}}$ & ${γ_{\text{sat}}}\gt{}0$ & $20000$ $\frac{\text{N}}{\text
 ${γ_{w}}$ & ${γ_{w}}\gt{}0$ & $9800$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
 \\
 $φ'$ & $0\lt{}φ'\lt{}90$ & $25$ ${{}^{\circ}}$ & 10$\%$
-\\
-\bottomrule
-\caption{Input Data Constraints}
 \label{Table:InDataConstraints}
-\end{longtable}
+\end{longtblr}
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:CorSolProps}
 The \hyperref[Table:OutDataConstraints]{Data Constraints Table} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
 
-\begin{longtable}{l l}
-\toprule
+\begin{longtblr}
+[caption={Output Data Constraints}]
+{colspec={l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Var} & \textbf{Physical Constraints}
 \\
-\midrule
-\endhead
 ${F_{\text{S}}}$ & ${F_{\text{S}}}\gt{}0$
 \\
 $\text{(x,y)}$ & --
-\\
-\bottomrule
-\caption{Output Data Constraints}
 \label{Table:OutDataConstraints}
-\end{longtable}
+\end{longtblr}
 \section{Requirements}
 \label{Sec:Requirements}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
@@ -2602,12 +2581,11 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Display-Interslice-Shear-Forces:\phantomsection\label{displayShear}]{Using \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, and \hyperref[IM:intsliceFs]{IM:intsliceFs}, calculate and graphically display the interslice shear forces.}
 \item[Write-Results-To-File:\phantomsection\label{writeToFile}]{Provide the option of writing the output result data, as given in \hyperref[displayInput]{FR:Display-Input}, \hyperref[displayGraph]{FR:Display-Graph}, \hyperref[displayFS]{FR:Display-Factor-of-Safety}, \hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}, and \hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}, to a file.}
 \end{itemize}
-\begin{longtable}{l l l}
-\toprule
+\begin{longtblr}
+[caption={Required Inputs following \hyperref[readAndStore]{FR:Read-and-Store}}]
+{colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
-\midrule
-\endhead
 $\text{(x,y)}$ & Cartesian position coordinates & ${\text{m}}$
 \\
 $c'$ & Effective cohesion & ${\text{Pa}}$
@@ -2641,17 +2619,13 @@ ${γ_{\text{sat}}}$ & Soil saturated unit weight & $\frac{\text{N}}{\text{m}^{3}
 ${γ_{w}}$ & Unit weight of water & $\frac{\text{N}}{\text{m}^{3}}$
 \\
 $φ'$ & Effective angle of friction & ${{}^{\circ}}$
-\\
-\bottomrule
-\caption{Required Inputs following \hyperref[readAndStore]{FR:Read-and-Store}}
 \label{Table:ReqInputs}
-\end{longtable}
-\begin{longtable}{l l}
-\toprule
+\end{longtblr}
+\begin{longtblr}
+[caption={Inputs to be returned as output}]
+{colspec={l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Name}
 \\
-\midrule
-\endhead
 $\mathit{const\_f}$ & decision on f
 \\
 ${{x_{\text{slip}}}^{\text{maxExt}}}$ & maximum exit $x$-coordinate
@@ -2665,11 +2639,8 @@ ${{x_{\text{slip}}}^{\text{minEtr}}}$ & minimum entry $x$-coordinate
 ${{y_{\text{slip}}}^{\text{max}}}$ & maximum $y$-coordinate
 \\
 ${{y_{\text{slip}}}^{\text{min}}}$ & minimum $y$-coordinate
-\\
-\bottomrule
-\caption{Inputs to be returned as output}
 \label{Table:inputsToOutputTable}
-\end{longtable}
+\end{longtblr}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
@@ -2701,12 +2672,11 @@ This section lists the unlikely changes to be made to the software.
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Tab:TraceMatAvsA} shows the dependencies of the assumptions on each other. \hyperref[Table:TraceMatAvsAll]{Tab:TraceMatAvsAll} shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Tab:TraceMatRefvsRef} shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Table:TraceMatAllvsR]{Tab:TraceMatAllvsR} shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.
 
-\begin{longtable}{l l l l l l l l l l l l l l l l l}
-\toprule
+\begin{longtblr}
+[caption={Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}]
+{colspec={l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{} & \textbf{\hyperref[assumpSSC]{A:Slip-Surface-Concave}} & \textbf{\hyperref[assumpFOS]{A:Factor-of-Safety}} & \textbf{\hyperref[assumpSLH]{A:Soil-Layer-Homogeneous}} & \textbf{\hyperref[assumpSP]{A:Soil-Properties}} & \textbf{\hyperref[assumpSLI]{A:Soil-Layers-Isotropic}} & \textbf{\hyperref[assumpINSFL]{A:Interslice-Norm-Shear-Forces-Linear}} & \textbf{\hyperref[assumpPSC]{A:Plane-Strain-Conditions}} & \textbf{\hyperref[assumpENSL]{A:Effective-Norm-Stress-Large}} & \textbf{\hyperref[assumpSBSBISL]{A:Surface-Base-Slice-between-Interslice-Straight-Lines}} & \textbf{\hyperref[assumpES]{A:Edge-Slices}} & \textbf{\hyperref[assumpSF]{A:Seismic-Force}} & \textbf{\hyperref[assumpSL]{A:Surface-Load}} & \textbf{\hyperref[assumpWIBE]{A:Water-Intersects-Base-Edge}} & \textbf{\hyperref[assumpWISE]{A:Water-Intersects-Surface-Edge}} & \textbf{\hyperref[assumpNESSS]{A:Negligible-Effect-Surface-Slope-Seismic}} & \textbf{\hyperref[assumpHFSM]{A:Hydrostatic-Force-Slice-Midpoint}}
 \\
-\midrule
-\endhead
 \hyperref[assumpSSC]{A:Slip-Surface-Concave} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[assumpFOS]{A:Factor-of-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -2738,17 +2708,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[assumpNESSS]{A:Negligible-Effect-Surface-Slope-Seismic} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[assumpHFSM]{A:Hydrostatic-Force-Slice-Midpoint} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}
 \label{Table:TraceMatAvsA}
-\end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l}
-\toprule
+\end{longtblr}
+\begin{longtblr}
+[caption={Traceability Matrix Showing the Connections Between Assumptions and Other Items}]
+{colspec={l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{} & \textbf{\hyperref[assumpSSC]{A:Slip-Surface-Concave}} & \textbf{\hyperref[assumpFOS]{A:Factor-of-Safety}} & \textbf{\hyperref[assumpSLH]{A:Soil-Layer-Homogeneous}} & \textbf{\hyperref[assumpSP]{A:Soil-Properties}} & \textbf{\hyperref[assumpSLI]{A:Soil-Layers-Isotropic}} & \textbf{\hyperref[assumpINSFL]{A:Interslice-Norm-Shear-Forces-Linear}} & \textbf{\hyperref[assumpPSC]{A:Plane-Strain-Conditions}} & \textbf{\hyperref[assumpENSL]{A:Effective-Norm-Stress-Large}} & \textbf{\hyperref[assumpSBSBISL]{A:Surface-Base-Slice-between-Interslice-Straight-Lines}} & \textbf{\hyperref[assumpES]{A:Edge-Slices}} & \textbf{\hyperref[assumpSF]{A:Seismic-Force}} & \textbf{\hyperref[assumpSL]{A:Surface-Load}} & \textbf{\hyperref[assumpWIBE]{A:Water-Intersects-Base-Edge}} & \textbf{\hyperref[assumpWISE]{A:Water-Intersects-Surface-Edge}} & \textbf{\hyperref[assumpNESSS]{A:Negligible-Effect-Surface-Slope-Seismic}} & \textbf{\hyperref[assumpHFSM]{A:Hydrostatic-Force-Slice-Midpoint}}
 \\
-\midrule
-\endhead
 \hyperref[DD:intersliceWtrF]{DD:intersliceWtrF} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:angleA]{DD:angleA} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
@@ -2870,17 +2836,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[UC_normshearlinear]{UC:Normal-And-Shear-Linear-Only} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[UC_2donly]{UC:2D-Analysis-Only} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
 \label{Table:TraceMatAvsAll}
-\end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
-\toprule
+\end{longtblr}
+\begin{longtblr}
+[caption={Traceability Matrix Showing the Connections Between Items and Other Sections}]
+{colspec={l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{} & \textbf{\hyperref[DD:intersliceWtrF]{DD:intersliceWtrF}} & \textbf{\hyperref[DD:angleA]{DD:angleA}} & \textbf{\hyperref[DD:angleB]{DD:angleB}} & \textbf{\hyperref[DD:lengthB]{DD:lengthB}} & \textbf{\hyperref[DD:lengthLb]{DD:lengthLb}} & \textbf{\hyperref[DD:lengthLs]{DD:lengthLs}} & \textbf{\hyperref[DD:slcHeight]{DD:slcHeight}} & \textbf{\hyperref[DD:normStress]{DD:normStress}} & \textbf{\hyperref[DD:tangStress]{DD:tangStress}} & \textbf{\hyperref[DD:torque]{DD:torque}} & \textbf{\hyperref[DD:ratioVariation]{DD:ratioVariation}} & \textbf{\hyperref[DD:convertFunc1]{DD:convertFunc1}} & \textbf{\hyperref[DD:convertFunc2]{DD:convertFunc2}} & \textbf{\hyperref[DD:nrmForceSumDD]{DD:nrmForceSumDD}} & \textbf{\hyperref[DD:watForceSumDD]{DD:watForceSumDD}} & \textbf{\hyperref[DD:sliceHghtRightDD]{DD:sliceHghtRightDD}} & \textbf{\hyperref[DD:sliceHghtLeftDD]{DD:sliceHghtLeftDD}} & \textbf{\hyperref[TM:factOfSafety]{TM:factOfSafety}} & \textbf{\hyperref[TM:equilibrium]{TM:equilibrium}} & \textbf{\hyperref[TM:mcShrStrgth]{TM:mcShrStrgth}} & \textbf{\hyperref[TM:effStress]{TM:effStress}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[GD:normForcEq]{GD:normForcEq}} & \textbf{\hyperref[GD:bsShrFEq]{GD:bsShrFEq}} & \textbf{\hyperref[GD:resShr]{GD:resShr}} & \textbf{\hyperref[GD:mobShr]{GD:mobShr}} & \textbf{\hyperref[GD:effNormF]{GD:effNormF}} & \textbf{\hyperref[GD:resShearWO]{GD:resShearWO}} & \textbf{\hyperref[GD:mobShearWO]{GD:mobShearWO}} & \textbf{\hyperref[GD:normShrR]{GD:normShrR}} & \textbf{\hyperref[GD:momentEql]{GD:momentEql}} & \textbf{\hyperref[GD:weight]{GD:weight}} & \textbf{\hyperref[GD:sliceWght]{GD:sliceWght}} & \textbf{\hyperref[GD:hsPressure]{GD:hsPressure}} & \textbf{\hyperref[GD:baseWtrF]{GD:baseWtrF}} & \textbf{\hyperref[GD:srfWtrF]{GD:srfWtrF}} & \textbf{\hyperref[IM:fctSfty]{IM:fctSfty}} & \textbf{\hyperref[IM:nrmShrFor]{IM:nrmShrFor}} & \textbf{\hyperref[IM:nrmShrForNum]{IM:nrmShrForNum}} & \textbf{\hyperref[IM:nrmShrForDen]{IM:nrmShrForDen}} & \textbf{\hyperref[IM:intsliceFs]{IM:intsliceFs}} & \textbf{\hyperref[IM:crtSlpId]{IM:crtSlpId}}
 \\
-\midrule
-\endhead
 \hyperref[DD:intersliceWtrF]{DD:intersliceWtrF} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:angleA]{DD:angleA} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -2964,17 +2926,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[IM:intsliceFs]{IM:intsliceFs} &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  & X & X &  &  & X & 
 \\
 \hyperref[IM:crtSlpId]{IM:crtSlpId} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
 \label{Table:TraceMatRefvsRef}
-\end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
-\toprule
+\end{longtblr}
+\begin{longtblr}
+[caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
+{colspec={l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{} & \textbf{\hyperref[DD:intersliceWtrF]{DD:intersliceWtrF}} & \textbf{\hyperref[DD:angleA]{DD:angleA}} & \textbf{\hyperref[DD:angleB]{DD:angleB}} & \textbf{\hyperref[DD:lengthB]{DD:lengthB}} & \textbf{\hyperref[DD:lengthLb]{DD:lengthLb}} & \textbf{\hyperref[DD:lengthLs]{DD:lengthLs}} & \textbf{\hyperref[DD:slcHeight]{DD:slcHeight}} & \textbf{\hyperref[DD:normStress]{DD:normStress}} & \textbf{\hyperref[DD:tangStress]{DD:tangStress}} & \textbf{\hyperref[DD:torque]{DD:torque}} & \textbf{\hyperref[DD:ratioVariation]{DD:ratioVariation}} & \textbf{\hyperref[DD:convertFunc1]{DD:convertFunc1}} & \textbf{\hyperref[DD:convertFunc2]{DD:convertFunc2}} & \textbf{\hyperref[DD:nrmForceSumDD]{DD:nrmForceSumDD}} & \textbf{\hyperref[DD:watForceSumDD]{DD:watForceSumDD}} & \textbf{\hyperref[DD:sliceHghtRightDD]{DD:sliceHghtRightDD}} & \textbf{\hyperref[DD:sliceHghtLeftDD]{DD:sliceHghtLeftDD}} & \textbf{\hyperref[TM:factOfSafety]{TM:factOfSafety}} & \textbf{\hyperref[TM:equilibrium]{TM:equilibrium}} & \textbf{\hyperref[TM:mcShrStrgth]{TM:mcShrStrgth}} & \textbf{\hyperref[TM:effStress]{TM:effStress}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[GD:normForcEq]{GD:normForcEq}} & \textbf{\hyperref[GD:bsShrFEq]{GD:bsShrFEq}} & \textbf{\hyperref[GD:resShr]{GD:resShr}} & \textbf{\hyperref[GD:mobShr]{GD:mobShr}} & \textbf{\hyperref[GD:effNormF]{GD:effNormF}} & \textbf{\hyperref[GD:resShearWO]{GD:resShearWO}} & \textbf{\hyperref[GD:mobShearWO]{GD:mobShearWO}} & \textbf{\hyperref[GD:normShrR]{GD:normShrR}} & \textbf{\hyperref[GD:momentEql]{GD:momentEql}} & \textbf{\hyperref[GD:weight]{GD:weight}} & \textbf{\hyperref[GD:sliceWght]{GD:sliceWght}} & \textbf{\hyperref[GD:hsPressure]{GD:hsPressure}} & \textbf{\hyperref[GD:baseWtrF]{GD:baseWtrF}} & \textbf{\hyperref[GD:srfWtrF]{GD:srfWtrF}} & \textbf{\hyperref[IM:fctSfty]{IM:fctSfty}} & \textbf{\hyperref[IM:nrmShrFor]{IM:nrmShrFor}} & \textbf{\hyperref[IM:nrmShrForNum]{IM:nrmShrForNum}} & \textbf{\hyperref[IM:nrmShrForDen]{IM:nrmShrForDen}} & \textbf{\hyperref[IM:intsliceFs]{IM:intsliceFs}} & \textbf{\hyperref[IM:crtSlpId]{IM:crtSlpId}} & \textbf{\hyperref[readAndStore]{FR:Read-and-Store}} & \textbf{\hyperref[verifyInput]{FR:Verify-Input}} & \textbf{\hyperref[determineCritSlip]{FR:Determine-Critical-Slip-Surface}} & \textbf{\hyperref[verifyOutput]{FR:Verify-Output}} & \textbf{\hyperref[displayInput]{FR:Display-Input}} & \textbf{\hyperref[displayGraph]{FR:Display-Graph}} & \textbf{\hyperref[displayFS]{FR:Display-Factor-of-Safety}} & \textbf{\hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}} & \textbf{\hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}} & \textbf{\hyperref[writeToFile]{FR:Write-Results-To-File}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[understandable]{NFR:Understandable}} & \textbf{\hyperref[reusable]{NFR:Reusable}} & \textbf{\hyperref[maintainable]{NFR:Maintainable}}
 \\
-\midrule
-\endhead
 \hyperref[identifyCritAndFS]{GS:Identify-Crit-and-FS} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[determineNormalF]{GS:Determine-Normal-Forces} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -3008,11 +2966,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[reusable]{NFR:Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[maintainable]{NFR:Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}
 \label{Table:TraceMatAllvsR}
-\end{longtable}
+\end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
 
 \begin{figure}

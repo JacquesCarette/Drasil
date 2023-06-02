@@ -15,10 +15,10 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, characteristic,
   decision, definition, desSpec, design, designDoc, document, documentation,
   environment, goal, goalStmt, implementation, intReader, model, organization,
   purpose, requirement, scope, section_, softwareDoc, softwareVAV, srs,
-  theory, user, vavPlan, problem, information, systemConstraint, aspect, template)
+  theory, user, vavPlan, problem, information, systemConstraint, template)
 import Data.Drasil.TheoryConcepts as Doc (inModel, thModel)
 import Data.Drasil.Citations (smithKoothoor2016, smithLai2005, smithEtAl2007,
-  koothoor2013, parnasClements1986, rbrtsn2012)
+  koothoor2013, parnasClements1986)
 import Data.Drasil.Software.Products (sciCompS)
 
 
@@ -164,9 +164,8 @@ orgIntro bottom bottomSec trailingSentence = [foldlSP [
       _      -> foldlSP
 
 orgOfDocIntro :: Sentence
-orgOfDocIntro = foldlSent [atStartNP (the Doc.organization), S "of this",
-  phrase document, S "follows the", phrase template, S "for an", short Doc.srs
-  `S.for` phrase sciCompS, S "proposed by", foldlList Comma List  
-  (map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]) 
-  `sC` S "with some", plural aspect, S "taken from Volere", phrase template,
-  S "16", refS rbrtsn2012]
+orgOfDocIntro = foldlSent 
+  [atStartNP (the Doc.organization), S "of this", phrase document, 
+  S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
+  phrase sciCompS, S "proposed by", foldlList Comma List $ 
+    map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]

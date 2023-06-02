@@ -4,8 +4,8 @@ smithEtAl2007, smithLai2005, smithKoothoor2016) where
 import Language.Drasil
 
 import Data.Drasil.Citations (cartesianWiki, koothoor2013,
-  parnasClements1986, rbrtsn2012, smithEtAl2007, smithLai2005,
-  smithKoothoor2016, lineSource, pointSource, dampingSource)
+  parnasClements1986, smithEtAl2007, smithLai2005, smithKoothoor2016,
+  lineSource, pointSource, dampingSource)
 import Data.Drasil.People (bWaugh, cTitus, dParnas, daAruliah, epWhite, gWilson,
   imMitchell, jBueche, kdHuff, mDavis, mdPlumblet, nChueHong, pWilson, rGuy, shdHaddock,
   wikiAuthors)
@@ -14,7 +14,7 @@ chaslesWiki, jfBeucheIntro, parnas1978, sciComp2013 :: Citation
 
 citations :: BibRef
 citations = [parnas1978, sciComp2013, chaslesWiki, parnasClements1986,
-  koothoor2013, rbrtsn2012, smithEtAl2007, smithLai2005, smithKoothoor2016, jfBeucheIntro, 
+  koothoor2013, smithEtAl2007, smithLai2005, smithKoothoor2016, jfBeucheIntro, 
   cartesianWiki, lineSource, pointSource, dampingSource]
 
 --FIXME: check for references made within document

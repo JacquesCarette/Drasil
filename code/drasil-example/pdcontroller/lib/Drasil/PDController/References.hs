@@ -5,8 +5,8 @@ import Data.Drasil.Citations (rbrtsn2012, smithEtAl2007, smithLai2005,
 import Language.Drasil
 
 citations :: BibRef
-citations = [johnson2008, abbasi2015, rbrtsn2012, smithEtAl2007, smithLai2005, 
-  smithKoothoor2016, koothoor2013, laplaceWiki, pidWiki]
+citations = [johnson2008, abbasi2015, smithEtAl2007, smithLai2005,
+             smithKoothoor2016, koothoor2013, laplaceWiki, pidWiki]
 
 johnson2008, abbasi2015 :: Citation
 

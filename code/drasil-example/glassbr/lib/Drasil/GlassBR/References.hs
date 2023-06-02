@@ -3,21 +3,15 @@ module Drasil.GlassBR.References where
 import Language.Drasil
 
 import Data.Drasil.Citations (campidelli, koothoor2013, smithEtAl2007,
-  smithLai2005, smithKoothoor2016, parnasClements1986)
-import Data.Drasil.People (jRobertson, jmBracci, sRobertson, tlKohutek, wlBeason)
+  smithLai2005, smithKoothoor2016, parnasClements1986, rbrtsn2012)
+import Data.Drasil.People (jmBracci, tlKohutek, wlBeason)
 
-rbrtsn2012, astm2009, astm2016, astm2012, beasonEtAl1998 :: Citation
+astm2009, astm2016, astm2012, beasonEtAl1998 :: Citation
 
 citations :: BibRef
 citations = [campidelli, koothoor2013, smithEtAl2007, smithLai2005,
              smithKoothoor2016, rbrtsn2012, astm2009, astm2016, astm2012,
              beasonEtAl1998, parnasClements1986]
-
-rbrtsn2012 = cMisc [author [jRobertson, sRobertson], title
-  "Volere requirements specification template edition 16",
-  howPublishedU "https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf"
-  , year 2012]
-  "rbrtsn2012"
 
 astm2009 = cMisc [author [mononym "ASTM"],
   title "Standard Practice for Determining Load Resistance of Glass in Buildings",

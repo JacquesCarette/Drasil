@@ -1,5 +1,5 @@
 module Drasil.PDController.References where
-import Data.Drasil.Citations (rbrtsn2012, smithEtAl2007, smithLai2005,
+import Data.Drasil.Citations (smithEtAl2007, smithLai2005,
   smithKoothoor2016, koothoor2013, laplaceWiki, pidWiki)
 
 import Language.Drasil

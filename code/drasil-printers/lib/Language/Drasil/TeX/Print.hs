@@ -349,7 +349,7 @@ makeDefTable sm ps l = mkEnvArgBr "tabular" (col rr colAwidth ++ col (rr ++ "\\a
 makeDRows :: PrintingInformation -> [(String,[LayoutObj])] -> D
 makeDRows _  []         = error "No fields to create Defn table"
 makeDRows sm ls    = foldl1 (%%) $ map (\(f, d) -> dBoilerplate %%  pure (text (f ++ " & ")) <> print sm d) ls
-  where dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs
+  where dBoilerplate = pure $ dbs <+> text "\\midrule"
 
 -----------------------------------------------------------------
 ------------------ EQUATION PRINTING------------------------

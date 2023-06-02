@@ -16,7 +16,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, characteristic,
   environment, goal, goalStmt, implementation, intReader, model, organization,
   purpose, requirement, scope, section_, softwareDoc, softwareVAV, srs,
   theory, user, vavPlan, problem, information, systemConstraint, aspect, template)
-import Data.Drasil.TheoryConcepts as Doc (inModel, thModel, dataDefn)
+import Data.Drasil.TheoryConcepts as Doc (inModel, thModel)
 import Data.Drasil.Citations (smithKoothoor2016, smithLai2005, smithEtAl2007,
   koothoor2013, parnasClements1986, rbrtsn2012)
 import Data.Drasil.Software.Products (sciCompS)

@@ -41,8 +41,8 @@ import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
 import Drasil.SWHS.Body (charsOfReader, dataContMid, introEnd, introStart,
-  orgDocIntro, physSyst1, physSyst2, sysCntxtDesc, sysCntxtFig,
-  systContRespBullets, sysCntxtRespIntro, userChars)
+  physSyst1, physSyst2, sysCntxtDesc, sysCntxtFig, systContRespBullets,
+  sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con, phsChgMtrl)
 import Drasil.SWHS.Requirements (nfRequirements)
@@ -122,7 +122,7 @@ mkSRS = [TableOfContents,
     [ IPurpose $ purpDoc progName Verbose
     , IScope scope
     , IChar [] charsOfReader []
-    , IOrgSec orgDocIntro inModel (SRS.inModel [] []) orgDocEnd
+    , IOrgSec inModel (SRS.inModel [] []) orgDocEnd
     ],
   GSDSec $
     GSDProg

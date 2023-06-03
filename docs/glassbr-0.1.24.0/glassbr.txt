@@ -39,7 +39,6 @@ ptOfExplsn :: NamedChunk
 responseTy :: NamedChunk
 
 module Drasil.GlassBR.References
-rbrtsn2012 :: Citation
 astm2009 :: Citation
 astm2016 :: Citation
 astm2012 :: Citation
@@ -276,7 +275,6 @@ startIntro :: NamedChunk -> Sentence -> CI -> Sentence
 undIR :: [Sentence]
 appStanddIR :: [Sentence]
 scope :: Sentence
-orgOfDocIntro :: Sentence
 orgOfDocIntroEnd :: Sentence
 sysCtxIntro :: Contents
 sysCtxDesc :: Contents

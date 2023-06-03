@@ -815,7 +815,7 @@ data IntroSub
 [IChar] :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
 
 -- | Organises the section.
-[IOrgSec] :: Sentence -> CI -> Section -> Sentence -> IntroSub
+[IOrgSec] :: CI -> Section -> Sentence -> IntroSub
 
 -- | Stakeholders section (wraps stakeholders subsections
 --   <a>StkhldrSub</a>).
@@ -1029,7 +1029,7 @@ module Drasil.Sections.Introduction
 --   up approach (<a>NamedIdea</a>), reference to that resource
 --   (<a>Section</a>), and any other relevant information
 --   (<a>Sentence</a>).
-orgSec :: NamedIdea c => Sentence -> c -> Section -> Sentence -> Section
+orgSec :: NamedIdea c => c -> Section -> Sentence -> Section
 
 -- | Constructor for the Introduction section. In order, the parameters
 --   are:
@@ -1949,7 +1949,7 @@ data IntroSub
 [IChar] :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
 
 -- | Organises the section.
-[IOrgSec] :: Sentence -> CI -> Section -> Sentence -> IntroSub
+[IOrgSec] :: CI -> Section -> Sentence -> IntroSub
 
 -- | Lens (lookup) functions (currently for TSymb).
 data LFunc
@@ -2489,7 +2489,7 @@ data IntroSub
 [IChar] :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
 
 -- | Organises the section.
-[IOrgSec] :: Sentence -> CI -> Section -> Sentence -> IntroSub
+[IOrgSec] :: CI -> Section -> Sentence -> IntroSub
 
 -- | Lens (lookup) functions (currently for TSymb).
 data LFunc

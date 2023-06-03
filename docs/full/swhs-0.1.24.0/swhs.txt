@@ -340,7 +340,6 @@ scope :: Sentence
 charsOfReader :: [Sentence]
 charReaderHTT :: Sentence
 charReaderDE :: Sentence
-orgDocIntro :: Sentence
 orgDocEnd :: Sentence
 sysCntxtDesc :: CI -> Contents
 sysCntxtFig :: LabelledContent

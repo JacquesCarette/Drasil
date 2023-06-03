@@ -225,7 +225,6 @@ symbMap :: ChunkDB
 usedDB :: ChunkDB
 para1_introduction_intro :: Sentence
 scope :: Sentence
-organizationOfDocumentsIntro :: Sentence
 sysCtxIntro :: Contents
 sysCtxFig1 :: LabelledContent
 sysCtxDesc :: Contents

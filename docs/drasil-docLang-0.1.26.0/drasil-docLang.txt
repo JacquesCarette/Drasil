@@ -753,7 +753,7 @@ data IntroSub
 [IChar] :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
 
 -- | Organises the section.
-[IOrgSec] :: Sentence -> CI -> Section -> Sentence -> IntroSub
+[IOrgSec] :: CI -> Section -> Sentence -> IntroSub
 
 -- | Lens (lookup) functions (currently for TSymb).
 data LFunc
@@ -1293,7 +1293,7 @@ data IntroSub
 [IChar] :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
 
 -- | Organises the section.
-[IOrgSec] :: Sentence -> CI -> Section -> Sentence -> IntroSub
+[IOrgSec] :: CI -> Section -> Sentence -> IntroSub
 
 -- | Lens (lookup) functions (currently for TSymb).
 data LFunc

@@ -241,7 +241,6 @@ concIns :: [ConceptInstance]
 justification :: Sentence
 scope :: Sentence
 charsOfReader :: [Sentence]
-organizationOfDocumentsIntro :: Sentence
 sysCtxIntro :: Contents
 sysCtxDesc :: Contents
 sysCtxUsrResp :: [Sentence]

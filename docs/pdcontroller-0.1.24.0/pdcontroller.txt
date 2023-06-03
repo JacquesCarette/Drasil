@@ -91,7 +91,6 @@ introPurposeOfDoc :: Sentence
 introscopeOfReq :: Sentence
 introUserChar1 :: [Sentence]
 introUserChar2 :: [Sentence]
-introDocOrg :: Sentence
 
 module Drasil.PDController.References
 citations :: BibRef

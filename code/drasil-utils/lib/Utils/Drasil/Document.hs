@@ -25,16 +25,16 @@ buildPath num = filter (/= ' ') $ unwords $ replicate num "../"
 
 -- | Drasil Tree icon. Uses HTML directly to format image since normal markdown doesn't support it.
 drasilImage :: Int -> Doc
-drasilImage num = alignImage (buildPath num ++ "drasil-website/WebInfo/images/Icon.png")
+drasilImage num = alignImage (buildPath num ++
+  "drasil-website/WebInfo/images/Icon.png")
 
 -- | Aligns an image to the center using HTML, since markdown doesn't support it.
 alignImage :: FilePath -> Doc
-alignImage img = text "<p align=\"center\">" <>
-  contSep <> text ("<img src=\"" ++ img ++ "\" alt=\"Drasil Tree\" width=\"200\" />")
-  <> contSep <> text "</p>"
+alignImage img = text "<p align=\"center\">" <> contSep <> text ("<img src=\"" 
+  ++ img ++ "\" alt=\"Drasil Tree\" width=\"200\" />") <> contSep <> text "</p>"
 
 -- | Separates document sections.
-type Seperator = Doc
+type Separator = Doc
 
-contSep :: Seperator
+contSep :: Separator
 contSep = text "\n"

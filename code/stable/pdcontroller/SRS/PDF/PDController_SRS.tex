@@ -169,7 +169,7 @@ Reviewers of this documentation should have an understanding of control systems 
 
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
-The sections in this document are based on \cite{smithLai2005}, \cite{smithEtAl2007}, and \cite{smithKoothoor2016}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{data definitions} and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013}, \cite{smithLai2005}, \cite{smithEtAl2007}, and \cite{smithKoothoor2016}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{data definitions} and trace back to find any additional information they require.
 
 The \hyperref[Sec:GoalStmt]{goal statements} are refined to the theoretical models and the \hyperref[Sec:TMs]{theoretical models} to the \hyperref[Sec:IMs]{instance models}. The instance model referred as \hyperref[IM:pdEquationIM]{IM:pdEquationIM} provides an Ordinary Differential Equation (ODE) that models the PD Controller.
 
@@ -303,27 +303,27 @@ This section focuses on the general equations and laws that PD Controller is bas
 \toprule \textbf{Refname} & \textbf{TM:laplaceTransform}
 \phantomsection 
 \label{TM:laplaceTransform}
-\\ \midrule \\
+\\ \midrule
 Label & Laplace Transform
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            {F_{\text{s}}}=\int_{\mathit{-∞}}^{∞}{{f_{\text{t}}} e^{-s t}}\,dt
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{${F_{\text{s}}}$ is the Laplace Transform of a function (Unitless)}
               \item{${f_{\text{t}}}$ is the Function in the time domain (Unitless)}
               \item{$s$ is the Complex frequency-domain parameter (Unitless)}
               \item{$t$ is the time (${\text{s}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & Bilateral Laplace Transform. The Laplace transforms are typically inferred from a pre-computed table of Laplace Transforms (\cite{laplaceWiki}).
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{laplaceWiki}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[DD:ddPropCtrl]{DD:ddPropCtrl}, \hyperref[DD:ddProcessError]{DD:ddProcessError}, \hyperref[DD:ddDerivCtrl]{DD:ddDerivCtrl}, and \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}
         
 \\ \bottomrule
@@ -336,25 +336,25 @@ RefBy & \hyperref[DD:ddPropCtrl]{DD:ddPropCtrl}, \hyperref[DD:ddProcessError]{DD
 \toprule \textbf{Refname} & \textbf{TM:invLaplaceTransform}
 \phantomsection 
 \label{TM:invLaplaceTransform}
-\\ \midrule \\
+\\ \midrule
 Label & Inverse Laplace Transform
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            {f_{\text{t}}}=\mathit{L⁻¹[F(s)]}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{${f_{\text{t}}}$ is the Function in the time domain (Unitless)}
               \item{$\mathit{L⁻¹[F(s)]}$ is the Inverse Laplace Transform of a function (Unitless)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & Inverse Laplace Transform of F(S). The Inverse Laplace transforms are typically inferred from a pre-computed table of Laplace Transforms (\cite{laplaceWiki}).
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{laplaceWiki}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[IM:pdEquationIM]{IM:pdEquationIM}
         
 \\ \bottomrule
@@ -367,27 +367,27 @@ RefBy & \hyperref[IM:pdEquationIM]{IM:pdEquationIM}
 \toprule \textbf{Refname} & \textbf{TM:tmSOSystem}
 \phantomsection 
 \label{TM:tmSOSystem}
-\\ \midrule \\
+\\ \midrule
 Label & Second Order Mass-Spring-Damper System
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            \frac{1}{m s^{2}+c s+k}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$m$ is the mass (${\text{kg}}$)}
               \item{$s$ is the Complex frequency-domain parameter (Unitless)}
               \item{$c$ is the Damping coefficient of the spring (Unitless)}
               \item{$k$ is the Stiffness coefficient of the spring (${\text{s}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & The Transfer Function (from \hyperref[pwrPlantTxFnx]{A:Transfer Function}) of a Second Order System (mass-spring-damper) is characterized by this equation.
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{abbasi2015}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}
         
 \\ \bottomrule
@@ -404,24 +404,24 @@ This section collects the laws and equations that will be used to build the inst
 \toprule \textbf{Refname} & \textbf{GD:gdPowerPlant}
 \phantomsection 
 \label{GD:gdPowerPlant}
-\\ \midrule \\
+\\ \midrule
 Label & The Transfer Function of the Power Plant
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            \frac{1}{s^{2}+s+20}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$s$ is the Complex frequency-domain parameter (Unitless)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & The Transfer Function of the Second Order System (from \hyperref[TM:tmSOSystem]{TM:tmSOSystem}) is reduced to this equation by substituting the mass (m) to 1 Kg (from \hyperref[massSpring]{A:Spring Mass}), the Damping Coefficient ($c$) to 1 (from \hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}), and the Stiffness Coefficient ($k$) to 20 (from \hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}). The equation is converted to the frequency domain by applying the Laplace transform (from \hyperref[TM:laplaceTransform]{TM:laplaceTransform}). Additionally, there are no external disturbances to the power plant (from \hyperref[externalDisturb]{A:External disturbance}).
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{pidWiki} and \cite{abbasi2015}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[IM:pdEquationIM]{IM:pdEquationIM}
         
 \\ \bottomrule
@@ -438,32 +438,32 @@ This section collects and defines all the data needed to build the instance mode
 \toprule \textbf{Refname} & \textbf{DD:ddProcessError}
 \phantomsection 
 \label{DD:ddProcessError}
-\\ \midrule \\
+\\ \midrule
 Label & Process Error in the frequency domain
         
-\\ \midrule \\
+\\ \midrule
 Symbol & ${E_{\text{s}}}$
          
-\\ \midrule \\
+\\ \midrule
 Units & Unitless
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            {E_{\text{s}}}={R_{\text{s}}}-{Y_{\text{s}}}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{${E_{\text{s}}}$ is the Process Error in the frequency domain (Unitless)}
               \item{${R_{\text{s}}}$ is the Set-Point in the frequency domain (Unitless)}
               \item{${Y_{\text{s}}}$ is the Process Variable in the frequency domain (Unitless)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & The Process Error is the difference between the Set-Point and Process Variable. The equation is converted to the frequency domain by applying the Laplace transform (from \hyperref[TM:laplaceTransform]{TM:laplaceTransform}). The Set-Point is assumed to be constant throughout the simulation (from \hyperref[setPoint]{A:Set-Point}). The initial value of the Process Variable is assumed to be zero (from \hyperref[initialValue]{A:Initial Value}).
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{johnson2008}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[DD:ddPropCtrl]{DD:ddPropCtrl}, \hyperref[DD:ddDerivCtrl]{DD:ddDerivCtrl}, and \hyperref[IM:pdEquationIM]{IM:pdEquationIM}
         
 \\ \bottomrule
@@ -477,32 +477,32 @@ RefBy & \hyperref[DD:ddPropCtrl]{DD:ddPropCtrl}, \hyperref[DD:ddDerivCtrl]{DD:dd
 \toprule \textbf{Refname} & \textbf{DD:ddPropCtrl}
 \phantomsection 
 \label{DD:ddPropCtrl}
-\\ \midrule \\
+\\ \midrule
 Label & Proportional control in the frequency domain
         
-\\ \midrule \\
+\\ \midrule
 Symbol & ${P_{\text{s}}}$
          
-\\ \midrule \\
+\\ \midrule
 Units & Unitless
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            {P_{\text{s}}}={K_{\text{p}}} {E_{\text{s}}}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{${P_{\text{s}}}$ is the Proportional control in the frequency domain (Unitless)}
               \item{${K_{\text{p}}}$ is the Proportional Gain (Unitless)}
               \item{${E_{\text{s}}}$ is the Process Error in the frequency domain (Unitless)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & The Proportional Controller is the product of the Proportional Gain and the Process Error (from \hyperref[DD:ddProcessError]{DD:ddProcessError}). The equation is converted to the frequency domain by applying the Laplace transform (from \hyperref[TM:laplaceTransform]{TM:laplaceTransform}).
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{johnson2008}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[DD:ddCtrlVar]{DD:ddCtrlVar}
         
 \\ \bottomrule
@@ -516,33 +516,33 @@ RefBy & \hyperref[DD:ddCtrlVar]{DD:ddCtrlVar}
 \toprule \textbf{Refname} & \textbf{DD:ddDerivCtrl}
 \phantomsection 
 \label{DD:ddDerivCtrl}
-\\ \midrule \\
+\\ \midrule
 Label & Derivative control in the frequency domain
         
-\\ \midrule \\
+\\ \midrule
 Symbol & ${D_{\text{s}}}$
          
-\\ \midrule \\
+\\ \midrule
 Units & Unitless
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            {D_{\text{s}}}={K_{\text{d}}} {E_{\text{s}}} s
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{${D_{\text{s}}}$ is the Derivative control in the frequency domain (Unitless)}
               \item{${K_{\text{d}}}$ is the Derivative Gain (Unitless)}
               \item{${E_{\text{s}}}$ is the Process Error in the frequency domain (Unitless)}
               \item{$s$ is the Complex frequency-domain parameter (Unitless)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & The Derivative Controller is the product of the Derivative Gain and the differential of the Process Error (from \hyperref[DD:ddProcessError]{DD:ddProcessError}). The equation is converted to the frequency domain by applying the Laplace transform (from \hyperref[TM:laplaceTransform]{TM:laplaceTransform}). A pure form of the Derivative controller is used in this application (from \hyperref[unfilteredDerivative]{A:Unfiltered Derivative}).
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{johnson2008}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[DD:ddCtrlVar]{DD:ddCtrlVar}
         
 \\ \bottomrule
@@ -556,20 +556,20 @@ RefBy & \hyperref[DD:ddCtrlVar]{DD:ddCtrlVar}
 \toprule \textbf{Refname} & \textbf{DD:ddCtrlVar}
 \phantomsection 
 \label{DD:ddCtrlVar}
-\\ \midrule \\
+\\ \midrule
 Label & Control Variable in the frequency domain
         
-\\ \midrule \\
+\\ \midrule
 Symbol & ${C_{\text{s}}}$
          
-\\ \midrule \\
+\\ \midrule
 Units & Unitless
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            {C_{\text{s}}}={E_{\text{s}}} \left({K_{\text{p}}}+{K_{\text{d}}} s\right)
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{${C_{\text{s}}}$ is the Control Variable in the frequency domain (Unitless)}
               \item{${E_{\text{s}}}$ is the Process Error in the frequency domain (Unitless)}
@@ -577,13 +577,13 @@ Description & \begin{symbDescription}
               \item{${K_{\text{d}}}$ is the Derivative Gain (Unitless)}
               \item{$s$ is the Complex frequency-domain parameter (Unitless)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & The Control Variable is the output of the controller. In this case, it is the sum of the Proportional (from \hyperref[DD:ddPropCtrl]{DD:ddPropCtrl}) and Derivative (from \hyperref[DD:ddDerivCtrl]{DD:ddDerivCtrl}) controllers. The parallel (from \hyperref[parallelEq]{A:Parallel Equation}) and de-coupled (from \hyperref[decoupled]{A:Decoupled equation}) form of the PD equation is used in this document.
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{johnson2008}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[IM:pdEquationIM]{IM:pdEquationIM}
         
 \\ \bottomrule
@@ -601,16 +601,16 @@ This section transforms the problem defined in the \hyperref[Sec:ProbDesc]{probl
 \toprule \textbf{Refname} & \textbf{IM:pdEquationIM}
 \phantomsection 
 \label{IM:pdEquationIM}
-\\ \midrule \\
+\\ \midrule
 Label & Computation of the Process Variable as a function of time
         
-\\ \midrule \\
+\\ \midrule
 Input & ${r_{\text{t}}}$, ${K_{\text{p}}}$, ${K_{\text{d}}}$
         
-\\ \midrule \\
+\\ \midrule
 Output & ${y_{\text{t}}}$
          
-\\ \midrule \\
+\\ \midrule
 Input Constraints & \begin{displaymath}
                     {r_{\text{t}}}\gt{}0
                     \end{displaymath}
@@ -620,15 +620,15 @@ Input Constraints & \begin{displaymath}
                     \begin{displaymath}
                     {K_{\text{d}}}\gt{}0
                     \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Output Constraints & \begin{displaymath}
                      {y_{\text{t}}}\gt{}0
                      \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            \frac{\,d^{2}{y_{\text{t}}}}{\,dt^{2}}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {{y_{\text{t}}}}={r_{\text{t}}} {K_{\text{p}}}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$t$ is the time (${\text{s}}$)}
               \item{${y_{\text{t}}}$ is the Process Variable (Unitless)}
@@ -636,10 +636,10 @@ Description & \begin{symbDescription}
               \item{${K_{\text{p}}}$ is the Proportional Gain (Unitless)}
               \item{${r_{\text{t}}}$ is the Set-Point (Unitless)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Source & \cite{abbasi2015} and \cite{johnson2008}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[outputValues]{FR:Output-Values} and \hyperref[calculateValues]{FR:Calculate-Values}
         
 \\ \bottomrule
@@ -916,6 +916,12 @@ author={Johnson, Michael A. and Moradi, Mohammad H.},
 title={PID Control: New Identification and Design Methods, Chapter 1},
 publisher={Springer Science and Business Media},
 year={2006}}
+@mastersthesis{koothoor2013,
+author={Koothoor, Nirmitha},
+title={A Document Driven Approach to Certifying Scientific Computing Software},
+school={McMaster University},
+year={2013},
+address={Hamilton, ON, Canada}}
 @article{smithKoothoor2016,
 author={Smith, W. Spencer and Koothoor, Nirmitha},
 title={A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis},

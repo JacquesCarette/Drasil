@@ -313,7 +313,7 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
     mkSubIntro _ (IScope main) = Intro.scopeOfRequirements main
     mkSubIntro SI {_sys = sys} (IChar assumed topic asset) =
       Intro.charIntRdrF sys assumed topic asset (SRS.userChar [] [])
-    mkSubIntro _ (IOrgSec i b s t) = Intro.orgSec i b s t
+    mkSubIntro _ (IOrgSec b s t) = Intro.orgSec b s t
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 
 -- ** Stakeholders

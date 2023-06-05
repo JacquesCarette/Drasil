@@ -3,9 +3,9 @@ smithEtAl2007, smithLai2005, smithKoothoor2016) where
 
 import Language.Drasil
 
-import Data.Drasil.Citations (cartesianWiki, koothoor2013, parnasClements1986,
-  smithEtAl2007, smithLai2005, smithKoothoor2016, lineSource, pointSource, 
-  dampingSource)
+import Data.Drasil.Citations (cartesianWiki, koothoor2013,
+  parnasClements1986, smithEtAl2007, smithLai2005, smithKoothoor2016,
+  lineSource, pointSource, dampingSource)
 import Data.Drasil.People (bWaugh, cTitus, dParnas, daAruliah, epWhite, gWilson,
   imMitchell, jBueche, kdHuff, mDavis, mdPlumblet, nChueHong, pWilson, rGuy, shdHaddock,
   wikiAuthors)

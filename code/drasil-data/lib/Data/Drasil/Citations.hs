@@ -2,16 +2,16 @@
 module Data.Drasil.Citations where
 
 import Language.Drasil --(S,(:+:),(+:+),sC,phrase,F,Accent(..),Citation(..),CiteField(..))
-import Data.Drasil.People (dParnas, jRalyte, lLai, nKoothoor, nKraiem, 
-  pcClements, pjAgerfalk, spencerSmith, mCampidelli, dmWiess, rodPierce, 
-  wikiAuthors, rcHibbeler, rKhedri)
+import Data.Drasil.People (dParnas, jRalyte, lLai, nKoothoor, nKraiem,
+  pcClements, pjAgerfalk, spencerSmith, mCampidelli, dmWiess, rodPierce,
+  wikiAuthors, rcHibbeler, rKhedri, sRobertson, jRobertson)
 
 -- * Citations
 
 -- ** Papers
 
 campidelli, koothoor2013, parnas1972, parnasClements1984,
-  parnasClements1986, smithLai2005, lineSource, pointSource,
+  parnasClements1986, rbrtsn2012, smithLai2005, lineSource, pointSource,
   smithEtAl2007, smithKoothoor2016, hibbeler2004 :: Citation
 
 campidelli = cBooklet
@@ -40,6 +40,12 @@ parnasClements1986 = cArticle [dParnas, pcClements]
   "IEEE Transactions on Software Engineering" 1986
   [month Feb, volume 12, number 2, pages [251..257], address "Washington, USA"]
   "parnasClements1986"
+
+rbrtsn2012 = cMisc [author [jRobertson, sRobertson], title
+  "Volere requirements specification template edition 16",
+  howPublishedU "https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf"
+  , year 2012]
+  "rbrtsn2012"
 
 smithLai2005 = cInProceedings [spencerSmith, lLai]
   "A new requirements template for scientific computing"

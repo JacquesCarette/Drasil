@@ -1218,7 +1218,7 @@ module Language.Drasil.Choices
 --   down. Full details of Choices documentation
 --   <a>https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator</a>
 data Choices
-Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> Choices
+Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> Int -> Choices
 
 -- | Target languages. Choosing multiple means program will be generated in
 --   multiple languages.
@@ -1243,6 +1243,9 @@ Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Con
 
 -- | List of external libraries what to utilize
 [extLibs] :: Choices -> [ExtLib]
+
+-- | Number of folders to go up in order to obtain the image
+[folderVal] :: Choices -> Int
 
 -- | Architecture of a program
 data Architecture
@@ -1611,7 +1614,7 @@ module Language.Drasil.Code.Imperative.GOOL.ClassInterface
 
 -- | Holds all information needed to create a README file.
 data ReadMeInfo
-ReadMeInfo :: LangAbbrev -> LangVers -> Maybe String -> ImplementationType -> [(Name, Version)] -> [FilePath] -> [Contributor] -> [FilePath] -> CaseName -> ExamplePurpose -> ExampleDescr -> ReadMeInfo
+ReadMeInfo :: LangAbbrev -> LangVers -> Maybe String -> ImplementationType -> [(Name, Version)] -> [FilePath] -> [Contributor] -> [FilePath] -> CaseName -> ExamplePurpose -> ExampleDescr -> Int -> ReadMeInfo
 [langName] :: ReadMeInfo -> LangAbbrev
 [langVersion] :: ReadMeInfo -> LangVers
 [invalidOS] :: ReadMeInfo -> Maybe String
@@ -1623,6 +1626,7 @@ ReadMeInfo :: LangAbbrev -> LangVers -> Maybe String -> ImplementationType -> [(
 [caseName] :: ReadMeInfo -> CaseName
 [examplePurpose] :: ReadMeInfo -> ExamplePurpose
 [exampleDescr] :: ReadMeInfo -> ExampleDescr
+[folderNum] :: ReadMeInfo -> Int
 
 -- | Members of this class must have all the information necessary for the
 --   <a>AuxiliarySym</a> in addition to information necessary to create a
@@ -1841,7 +1845,7 @@ type GenState = State DrasilState
 
 -- | Private State, used to push these options around the generator.
 data DrasilState
-DrasilState :: CodeSpec -> Modularity -> ImplementationType -> Structure -> ConstantStructure -> ConstantRepr -> MatchedConceptMap -> MatchedSpaces -> ConstraintBehaviour -> ConstraintBehaviour -> [Comments] -> Verbosity -> String -> String -> [Logging] -> [AuxFile] -> [Expr] -> [Mod] -> [(Name, Version)] -> ExtLibMap -> [FilePath] -> ModExportMap -> ModExportMap -> ClassDefinitionMap -> [Name] -> String -> String -> Doc -> [(Space, CodeType)] -> DrasilState
+DrasilState :: CodeSpec -> Modularity -> ImplementationType -> Structure -> ConstantStructure -> ConstantRepr -> MatchedConceptMap -> MatchedSpaces -> ConstraintBehaviour -> ConstraintBehaviour -> [Comments] -> Verbosity -> String -> String -> [Logging] -> [AuxFile] -> [Expr] -> [Mod] -> [(Name, Version)] -> ExtLibMap -> [FilePath] -> ModExportMap -> ModExportMap -> ClassDefinitionMap -> [Name] -> Int -> String -> String -> Doc -> [(Space, CodeType)] -> DrasilState
 [codeSpec] :: DrasilState -> CodeSpec
 [modular] :: DrasilState -> Modularity
 [implType] :: DrasilState -> ImplementationType
@@ -1867,6 +1871,7 @@ DrasilState :: CodeSpec -> Modularity -> ImplementationType -> Structure -> Cons
 [libEMap] :: DrasilState -> ModExportMap
 [clsMap] :: DrasilState -> ClassDefinitionMap
 [defList] :: DrasilState -> [Name]
+[getVal] :: DrasilState -> Int
 [currentModule] :: DrasilState -> String
 [currentClass] :: DrasilState -> String
 [_designLog] :: DrasilState -> Doc
@@ -2310,7 +2315,7 @@ sampleInputDD :: [CodeVarChunk] -> DataDesc'
 --   down. Full details of Choices documentation
 --   <a>https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator</a>
 data Choices
-Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> Choices
+Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> Int -> Choices
 
 -- | Target languages. Choosing multiple means program will be generated in
 --   multiple languages.
@@ -2335,6 +2340,9 @@ Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Con
 
 -- | List of external libraries what to utilize
 [extLibs] :: Choices -> [ExtLib]
+
+-- | Number of folders to go up in order to obtain the image
+[folderVal] :: Choices -> Int
 
 -- | Comment implementation options.
 data Comments

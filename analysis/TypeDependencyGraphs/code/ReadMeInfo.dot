@@ -10,4 +10,5 @@ ReadMeInfo -> Contributor;
 ReadMeInfo -> CaseName;
 ReadMeInfo -> ExamplePurpose;
 ReadMeInfo -> ExampleDescr;
+ReadMeInfo -> Int;
 }

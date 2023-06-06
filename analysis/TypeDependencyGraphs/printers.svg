@@ -321,15 +321,15 @@
 <path fill="none" stroke="black" d="M485.63,-367.18C497.14,-364.8 509.42,-362.28 520.83,-360 603.82,-343.41 624.85,-340.69 707.83,-324 715.74,-322.41 724.08,-320.7 732.27,-318.99"/>
 <polygon fill="black" stroke="black" points="733.09,-322.4 742.17,-316.93 731.66,-315.55 733.09,-322.4"/>
 </g>
-<!-- Seperator -->
+<!-- Separator -->
 <g id="node18" class="node">
-<title>Seperator</title>
+<title>Separator</title>
 <ellipse fill="none" stroke="#ee0000" cx="1287.83" cy="-162" rx="57.39" ry="18"/>
-<text text-anchor="middle" x="1287.83" y="-158.3" font-family="Times,serif" font-size="14.00">Seperator</text>
+<text text-anchor="middle" x="1287.83" y="-158.3" font-family="Times,serif" font-size="14.00">Separator</text>
 </g>
-<!-- Seperator&#45;&gt;Doc -->
+<!-- Separator&#45;&gt;Doc -->
 <g id="edge21" class="edge">
-<title>Seperator&#45;&gt;Doc</title>
+<title>Separator&#45;&gt;Doc</title>
 <path fill="none" stroke="black" d="M1281.05,-144.05C1277.81,-135.97 1273.87,-126.12 1270.27,-117.11"/>
 <polygon fill="black" stroke="black" points="1273.5,-115.77 1266.54,-107.79 1267.01,-118.37 1273.5,-115.77"/>
 </g>

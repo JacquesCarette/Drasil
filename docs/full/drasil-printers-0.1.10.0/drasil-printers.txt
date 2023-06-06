@@ -260,7 +260,7 @@ regularSec :: Doc -> Doc -> Doc
 instDoc :: [String] -> Doc
 
 -- | End section.
-endNote :: [String] -> Doc
+endNote :: Int -> [String] -> Doc
 
 
 -- | Defines types similar to those in <a>Drasil.Language</a>, but better
@@ -1834,7 +1834,7 @@ instDoc :: [String] -> Doc
 extLibSec :: [(String, String)] -> [String] -> Doc
 
 -- | End section.
-endNote :: [String] -> Doc
+endNote :: Int -> [String] -> Doc
 
 -- | <tt>What</tt> section in generated README file, does not display if
 --   empty

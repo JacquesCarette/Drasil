@@ -1,0 +1,4 @@
+digraph separator{
+Separator	[shape=oval, color=red2, label="Separator"];
+Separator -> Doc;
+}

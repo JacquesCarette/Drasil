@@ -269,6 +269,7 @@ digraph alltypes {
 		ReadMeInfo -> CaseName;
 		ReadMeInfo -> ExamplePurpose;
 		ReadMeInfo -> ExampleDescr;
+		ReadMeInfo -> Int;
 		}
 		subgraph langabbrev{
 		LangAbbrev	[shape=oval, color=red2, label="LangAbbrev"];
@@ -347,6 +348,7 @@ digraph alltypes {
 		DrasilState -> FilePath;
 		DrasilState -> ModExportMap;
 		DrasilState -> ClassDefinitionMap;
+		DrasilState -> Int;
 		DrasilState -> Doc;
 		DrasilState -> Space;
 		}
@@ -670,6 +672,7 @@ digraph alltypes {
 		Choices -> OptionalFeatures;
 		Choices -> Constraints;
 		Choices -> ExtLib;
+		Choices -> Int;
 		}
 		subgraph architecture{
 		Architecture	[shape=oval, color=cyan3, label="Architecture"];
@@ -3813,9 +3816,9 @@ digraph alltypes {
 	subgraph print {
 	}
 	subgraph createmd {
-		subgraph seperator{
-		Seperator	[shape=oval, color=red2, label="Seperator"];
-		Seperator -> Doc;
+		subgraph separator{
+		Separator	[shape=oval, color=red2, label="Separator"];
+		Separator -> Doc;
 		}
 	}
 	subgraph print {
@@ -4216,6 +4219,10 @@ digraph alltypes {
 	subgraph drails {
 	}
 	subgraph document {
+		subgraph separator{
+		Separator	[shape=oval, color=red2, label="Separator"];
+		Separator -> Doc;
+		}
 	}
 	subgraph englihs {
 	}

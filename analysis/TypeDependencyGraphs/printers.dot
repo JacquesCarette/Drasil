@@ -60,9 +60,9 @@ digraph alltypes {
 	subgraph print {
 	}
 	subgraph createmd {
-		subgraph seperator{
-		Seperator	[shape=oval, color=red2, label="Seperator"];
-		Seperator -> Doc;
+		subgraph separator{
+		Separator	[shape=oval, color=red2, label="Separator"];
+		Separator -> Doc;
 		}
 	}
 	subgraph print {

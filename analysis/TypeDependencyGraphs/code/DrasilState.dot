@@ -21,6 +21,7 @@ DrasilState -> ExtLibMap;
 DrasilState -> FilePath;
 DrasilState -> ModExportMap;
 DrasilState -> ClassDefinitionMap;
+DrasilState -> Int;
 DrasilState -> Doc;
 DrasilState -> Space;
 }

@@ -26,6 +26,11 @@ indent :: Doc -> Doc
 -- | Indents a list of Docs and combines into one Doc.
 indentList :: [Doc] -> Doc
 
+-- | Drasil Tree icon. Uses HTML directly to format image since normal
+--   markdown doesn't support it.
+drasilImage :: Int -> Doc
+contSep :: Separator
+
 
 -- | Useful functions for working with English-related <a>String</a>s.
 module Utils.Drasil.English

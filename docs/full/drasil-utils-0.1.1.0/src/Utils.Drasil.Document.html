@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Common 'Doc'-related functions for writting printers with a little more clarity.</span><span>
-</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Utils.Drasil.Document</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Utils.Drasil.Document.html#blank"><span class="hs-identifier">blank</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Document.html#indent"><span class="hs-identifier">indent</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Document.html#%2B%3A%2B."><span class="hs-operator">(+:+.)</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Document.html#indentList"><span class="hs-identifier">indentList</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Utils.Drasil.Document</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Utils.Drasil.Document.html#blank"><span class="hs-identifier">blank</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Document.html#indent"><span class="hs-identifier">indent</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Document.html#%2B%3A%2B."><span class="hs-operator">(+:+.)</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Document.html#indentList"><span class="hs-identifier">indentList</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Document.html#drasilImage"><span class="hs-identifier">drasilImage</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Document.html#contSep"><span class="hs-identifier">contSep</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.PrettyPrint.HughesPJ</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Doc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">nest</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">text</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">vcat</span></span><span class="hs-special">)</span><span>
 </span><span id="line-5"></span><span>
@@ -19,13 +19,13 @@
 </span><span id="line-13"></span><span>
 </span><span id="line-14"></span><span class="hs-comment">-- | Helper which concatenates two Docs and appends a period.</span><span>
 </span><span id="line-15"></span><span class="annot"><a href="Utils.Drasil.Document.html#%2B%3A%2B."><span class="hs-operator hs-type">(+:+.)</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
-</span><span id="line-16"></span><span id="local-6989586621679022918"><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679022918"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="%2B%3A%2B."><span class="annot"><span class="annottext">+:+. :: Doc -&gt; Doc -&gt; Doc
-</span><a href="Utils.Drasil.Document.html#%2B%3A%2B."><span class="hs-operator hs-var hs-var">+:+.</span></a></span></span><span> </span><span id="local-6989586621679022917"><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679022917"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679022918"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><span id="line-16"></span><span id="local-6989586621679023009"><span class="annot"><span class="annottext">Doc
+</span><a href="#local-6989586621679023009"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="%2B%3A%2B."><span class="annot"><span class="annottext">+:+. :: Doc -&gt; Doc -&gt; Doc
+</span><a href="Utils.Drasil.Document.html#%2B%3A%2B."><span class="hs-operator hs-var hs-var">+:+.</span></a></span></span><span> </span><span id="local-6989586621679023008"><span class="annot"><span class="annottext">Doc
+</span><a href="#local-6989586621679023008"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc
+</span><a href="#local-6989586621679023009"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679022917"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><a href="#local-6989586621679023008"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;.&quot;</span></span><span>
@@ -38,4 +38,63 @@
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc
 </span><a href="Utils.Drasil.Document.html#indent"><span class="hs-identifier hs-var">indent</span></a></span><span>  </span><span class="hs-comment">-- TODO: Isn't this just `indent . vcat`? This would be a bit more efficient too</span><span>
-</span><span id="line-21"></span></pre></body></html>
+</span><span id="line-21"></span><span>
+</span><span id="line-22"></span><span class="hs-comment">-- Function to create the prefix for the path of the Drasil Logo</span><span>
+</span><span id="line-23"></span><span class="annot"><a href="Utils.Drasil.Document.html#buildPath"><span class="hs-identifier hs-type">buildPath</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-24"></span><span id="buildPath"><span class="annot"><span class="annottext">buildPath :: Int -&gt; String
+</span><a href="Utils.Drasil.Document.html#buildPath"><span class="hs-identifier hs-var hs-var">buildPath</span></a></span></span><span> </span><span id="local-6989586621679023005"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679023005"><span class="hs-identifier hs-var">num</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
+</span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><span class="hs-operator hs-var">/=</span></span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">' '</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[String] -&gt; String
+</span><span class="hs-identifier hs-var">unwords</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall a. Int -&gt; a -&gt; [a]
+</span><span class="hs-identifier hs-var">replicate</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679023005"><span class="hs-identifier hs-var">num</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;../&quot;</span></span><span>
+</span><span id="line-25"></span><span>
+</span><span id="line-26"></span><span class="hs-comment">-- | Drasil Tree icon. Uses HTML directly to format image since normal markdown doesn't support it.</span><span>
+</span><span id="line-27"></span><span class="annot"><a href="Utils.Drasil.Document.html#drasilImage"><span class="hs-identifier hs-type">drasilImage</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
+</span><span id="line-28"></span><span id="drasilImage"><span class="annot"><span class="annottext">drasilImage :: Int -&gt; Doc
+</span><a href="Utils.Drasil.Document.html#drasilImage"><span class="hs-identifier hs-var hs-var">drasilImage</span></a></span></span><span> </span><span id="local-6989586621679023001"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679023001"><span class="hs-identifier hs-var">num</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><a href="Utils.Drasil.Document.html#alignImage"><span class="hs-identifier hs-var">alignImage</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; String
+</span><a href="Utils.Drasil.Document.html#buildPath"><span class="hs-identifier hs-var">buildPath</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679023001"><span class="hs-identifier hs-var">num</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span>
+</span><span id="line-29"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;drasil-website/WebInfo/images/Icon.png&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-30"></span><span>
+</span><span id="line-31"></span><span class="hs-comment">-- | Aligns an image to the center using HTML, since markdown doesn't support it.</span><span>
+</span><span id="line-32"></span><span class="annot"><a href="Utils.Drasil.Document.html#alignImage"><span class="hs-identifier hs-type">alignImage</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
+</span><span id="line-33"></span><span id="alignImage"><span class="annot"><span class="annottext">alignImage :: String -&gt; Doc
+</span><a href="Utils.Drasil.Document.html#alignImage"><span class="hs-identifier hs-var hs-var">alignImage</span></a></span></span><span> </span><span id="local-6989586621679022998"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679022998"><span class="hs-identifier hs-var">img</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;&lt;p align=\&quot;center\&quot;&gt;&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
+</span><a href="Utils.Drasil.Document.html#contSep"><span class="hs-identifier hs-var">contSep</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;&lt;img src=\&quot;&quot;</span></span><span> </span><span>
+</span><span id="line-34"></span><span>  </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679022998"><span class="hs-identifier hs-var">img</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;\&quot; alt=\&quot;Drasil Tree\&quot; width=\&quot;200\&quot; /&gt;&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
+</span><a href="Utils.Drasil.Document.html#contSep"><span class="hs-identifier hs-var">contSep</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;&lt;/p&gt;&quot;</span></span><span>
+</span><span id="line-35"></span><span>
+</span><span id="line-36"></span><span class="hs-comment">-- | Separates document sections.</span><span>
+</span><span id="line-37"></span><span class="hs-keyword">type</span><span> </span><span id="Separator"><span class="annot"><a href="Utils.Drasil.Document.html#Separator"><span class="hs-identifier hs-var">Separator</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
+</span><span id="line-38"></span><span>
+</span><span id="line-39"></span><span class="annot"><a href="Utils.Drasil.Document.html#contSep"><span class="hs-identifier hs-type">contSep</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Utils.Drasil.Document.html#Separator"><span class="hs-identifier hs-type">Separator</span></a></span><span>
+</span><span id="line-40"></span><span id="contSep"><span class="annot"><span class="annottext">contSep :: Doc
+</span><a href="Utils.Drasil.Document.html#contSep"><span class="hs-identifier hs-var hs-var">contSep</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;\n&quot;</span></span><span>
+</span><span id="line-41"></span></pre></body></html>

@@ -7,8 +7,8 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{unicode-math}
-\usepackage{tabu}
-\usepackage{longtable}
+\usepackage{tabularray}
+\usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{caption}
 \usepackage{graphics}
@@ -20,7 +20,6 @@
 \setmathfont{Latin Modern Math}
 \newcommand{\gt}{\ensuremath >}
 \newcommand{\lt}{\ensuremath <}
-\global\tabulinesep=1mm
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \bibliography{bibfile}
@@ -38,12 +37,11 @@ This section records information for easy reference.
 \label{Sec:ToU}
 The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the \hyperref[Table:ToU]{Table of Units} lists the symbol, a description and the SI name.
 
-\begin{longtable}{l l l}
-\toprule
+\begin{longtblr}
+[caption={Table of Units}]
+{colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{SI Name}
 \\
-\midrule
-\endhead
 ${\text{kg}}$ & mass & kilogram
 \\
 ${\text{m}}$ & length & metre
@@ -53,21 +51,17 @@ ${\text{N}}$ & force & newton
 ${\text{Pa}}$ & pressure & pascal
 \\
 ${\text{s}}$ & time & second
-\\
-\bottomrule
-\caption{Table of Units}
 \label{Table:ToU}
-\end{longtable}
+\end{longtblr}
 \subsection{Table of Symbols}
 \label{Sec:ToS}
 The symbols used in this document are summarized in the \hyperref[Table:ToS]{Table of Symbols} along with their units. The symbols are listed in alphabetical order.
 
-\begin{longtabu}{l X[l] l}
-\toprule
+\begin{longtblr}
+[caption={Table of Symbols}]
+{colspec={l X[l] l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
-\midrule
-\endhead
 $a$ & Plate length (long dimension) & ${\text{m}}$
 \\
 $\mathit{AR}$ & Aspect ratio & --
@@ -165,19 +159,15 @@ ${w_{\text{max}}}$ & Maximum permissible input charge weight & ${\text{kg}}$
 ${w_{\text{min}}}$ & Minimum permissible input charge weight & ${\text{kg}}$
 \\
 ${w_{\mathit{TNT}}}$ & Equivalent TNT charge mass & ${\text{kg}}$
-\\
-\bottomrule
-\caption{Table of Symbols}
 \label{Table:ToS}
-\end{longtabu}
+\end{longtblr}
 \subsection{Abbreviations and Acronyms}
 \label{Sec:TAbbAcc}
-\begin{longtable}{l l}
-\toprule
+\begin{longtblr}
+[caption={Abbreviations and Acronyms}]
+{colspec={l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Abbreviation} & \textbf{Full Form}
 \\
-\midrule
-\endhead
 A & Assumption
 \\
 AN & Annealed
@@ -229,11 +219,8 @@ TM & Theoretical Model
 UC & Unlikely Change
 \\
 Uncert. & Typical Uncertainty
-\\
-\bottomrule
-\caption{Abbreviations and Acronyms}
 \label{Table:TAbbAcc}
-\end{longtable}
+\end{longtblr}
 \section{Introduction}
 \label{Sec:Intro}
 Software is helpful to efficiently and correctly predict the blast risk involved with the glass slab. The blast under consideration is any kind of man-made explosion. The software, herein called GlassBR, aims to predict the blast risk involved with the glass slab using an intuitive interface.
@@ -1245,12 +1232,11 @@ RefBy & \hyperref[IM:isSafePb]{IM:isSafePb}
 \label{Sec:DataConstraints}
 The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The \hyperref[Sec:AuxConstants]{auxiliary constants} give the values of the specification parameters used in the \hyperref[Table:InDataConstraints]{Data Constraints Table}.
 
-\begin{longtable}{l l l l l}
-\toprule
+\begin{longtblr}
+[caption={Input Data Constraints}]
+{colspec={l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
 \\
-\midrule
-\endhead
 $a$ & $a\gt{}0\land{}a\geq{}b$ & ${d_{\text{min}}}\leq{}a\leq{}{d_{\text{max}}}$ & $1.5$ ${\text{m}}$ & 10$\%$
 \\
 $\mathit{AR}$ & $\mathit{AR}\geq{}1$ & $\mathit{AR}\leq{}{\mathit{AR}_{\text{max}}}$ & $1.5$ & 10$\%$
@@ -1264,29 +1250,22 @@ $\mathit{SD}$ & $\mathit{SD}\gt{}0$ & ${\mathit{SD}_{\text{min}}}\leq{}\mathit{S
 $\mathit{TNT}$ & $\mathit{TNT}\gt{}0$ & -- & $1$ & 10$\%$
 \\
 $w$ & $w\gt{}0$ & ${w_{\text{min}}}\leq{}w\leq{}{w_{\text{max}}}$ & $42$ ${\text{kg}}$ & 10$\%$
-\\
-\bottomrule
-\caption{Input Data Constraints}
 \label{Table:InDataConstraints}
-\end{longtable}
+\end{longtblr}
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:CorSolProps}
 The \hyperref[Table:OutDataConstraints]{Data Constraints Table} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
 
-\begin{longtable}{l l}
-\toprule
+\begin{longtblr}
+[caption={Output Data Constraints}]
+{colspec={l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Var} & \textbf{Physical Constraints}
 \\
-\midrule
-\endhead
 ${P_{\text{b}}}$ & $0\leq{}{P_{\text{b}}}\leq{}1$
 \\
 $J$ & ${J_{\text{min}}}\leq{}J\leq{}{J_{\text{max}}}$
-\\
-\bottomrule
-\caption{Output Data Constraints}
 \label{Table:OutDataConstraints}
-\end{longtable}
+\end{longtblr}
 \section{Requirements}
 \label{Sec:Requirements}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
@@ -1303,12 +1282,11 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Check-Glass-Safety:\phantomsection\label{checkGlassSafety}]{If $\mathit{isSafePb}\land{}\mathit{isSafeLR}$ (from \hyperref[TM:isSafeProb]{TM:isSafeProb} and \hyperref[TM:isSafeLoad]{TM:isSafeLoad}), output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''}
 \item[Output-Values:\phantomsection\label{outputValues}]{Output the values from the table for \hyperref[Table:ReqOutputs]{Required Outputs}.}
 \end{itemize}
-\begin{longtabu}{l X[l] l}
-\toprule
+\begin{longtblr}
+[caption={Required Inputs following \hyperref[inputValues]{FR:Input-Values}}]
+{colspec={l X[l] l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
-\midrule
-\endhead
 $a$ & Plate length (long dimension) & ${\text{m}}$
 \\
 $b$ & Plate width (short dimension) & ${\text{m}}$
@@ -1328,17 +1306,13 @@ $t$ & Nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0
 $\mathit{TNT}$ & TNT equivalent factor & --
 \\
 $w$ & Charge weight & ${\text{kg}}$
-\\
-\bottomrule
-\caption{Required Inputs following \hyperref[inputValues]{FR:Input-Values}}
 \label{Table:ReqInputs}
-\end{longtabu}
-\begin{longtable}{l l l l}
-\toprule
+\end{longtblr}
+\begin{longtblr}
+[caption={Required Assignments following \hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}}]
+{colspec={l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Source} & \textbf{Units}
 \\
-\midrule
-\endhead
 $\mathit{AR}$ & Aspect ratio & \hyperref[DD:aspectRatio]{DD:aspectRatio} & --
 \\
 $E$ & Modulus of elasticity of glass & \hyperref[assumpSV]{A:standardValues} & ${\text{Pa}}$
@@ -1358,17 +1332,13 @@ $m$ & Surface flaw parameter & \hyperref[assumpSV]{A:standardValues} & $\frac{\t
 $\mathit{SD}$ & Stand off distance & \hyperref[DD:standOffDist]{DD:standOffDist} & ${\text{m}}$
 \\
 ${t_{\text{d}}}$ & Duration of load & \hyperref[assumpSV]{A:standardValues} & ${\text{s}}$
-\\
-\bottomrule
-\caption{Required Assignments following \hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}}
 \label{Table:ReqAssignments}
-\end{longtable}
-\begin{longtabu}{l X[l] l l}
-\toprule
+\end{longtblr}
+\begin{longtblr}
+[caption={Required Outputs following \hyperref[outputValues]{FR:Output-Values}}]
+{colspec={l X[l] l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Source} & \textbf{Units}
 \\
-\midrule
-\endhead
 $\mathit{AR}$ & Aspect ratio & \hyperref[DD:aspectRatio]{DD:aspectRatio} & --
 \\
 $B$ & Risk of failure & \hyperref[DD:riskFun]{DD:riskFun} & --
@@ -1390,11 +1360,8 @@ $\mathit{NFL}$ & Non-factored load & \hyperref[DD:nFL]{DD:nFL} & ${\text{Pa}}$
 $\hat{q}$ & Dimensionless load & \hyperref[DD:dimlessLoad]{DD:dimlessLoad} & --
 \\
 ${\hat{q}_{\text{tol}}}$ & Tolerable load & \hyperref[DD:tolLoad]{DD:tolLoad} & --
-\\
-\bottomrule
-\caption{Required Outputs following \hyperref[outputValues]{FR:Output-Values}}
 \label{Table:ReqOutputs}
-\end{longtabu}
+\end{longtblr}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
@@ -1430,12 +1397,11 @@ This section lists the unlikely changes to be made to the software.
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Tab:TraceMatAvsA} shows the dependencies of the assumptions on each other. \hyperref[Table:TraceMatAvsAll]{Tab:TraceMatAvsAll} shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Tab:TraceMatRefvsRef} shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Table:TraceMatAllvsR]{Tab:TraceMatAllvsR} shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.
 
-\begin{longtable}{l l l l l l l l l}
-\toprule
+\begin{longtblr}
+[caption={Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}]
+{colspec={l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{} & \textbf{\hyperref[assumpGT]{A:glassType}} & \textbf{\hyperref[assumpGC]{A:glassCondition}} & \textbf{\hyperref[assumpES]{A:explainScenario}} & \textbf{\hyperref[assumpSV]{A:standardValues}} & \textbf{\hyperref[assumpGL]{A:glassLite}} & \textbf{\hyperref[assumpBC]{A:boundaryConditions}} & \textbf{\hyperref[assumpRT]{A:responseType}} & \textbf{\hyperref[assumpLDFC]{A:ldfConstant}}
 \\
-\midrule
-\endhead
 \hyperref[assumpGT]{A:glassType} &  &  &  &  &  &  &  & 
 \\
 \hyperref[assumpGC]{A:glassCondition} &  &  &  &  &  &  &  & 
@@ -1451,17 +1417,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[assumpRT]{A:responseType} &  &  &  &  &  &  &  & 
 \\
 \hyperref[assumpLDFC]{A:ldfConstant} &  &  &  & X &  &  &  & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}
 \label{Table:TraceMatAvsA}
-\end{longtable}
-\begin{longtable}{l l l l l l l l l}
-\toprule
+\end{longtblr}
+\begin{longtblr}
+[caption={Traceability Matrix Showing the Connections Between Assumptions and Other Items}]
+{colspec={l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{} & \textbf{\hyperref[assumpGT]{A:glassType}} & \textbf{\hyperref[assumpGC]{A:glassCondition}} & \textbf{\hyperref[assumpES]{A:explainScenario}} & \textbf{\hyperref[assumpSV]{A:standardValues}} & \textbf{\hyperref[assumpGL]{A:glassLite}} & \textbf{\hyperref[assumpBC]{A:boundaryConditions}} & \textbf{\hyperref[assumpRT]{A:responseType}} & \textbf{\hyperref[assumpLDFC]{A:ldfConstant}}
 \\
-\midrule
-\endhead
 \hyperref[DD:riskFun]{DD:riskFun} &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:minThick]{DD:minThick} &  &  &  &  &  &  &  & 
@@ -1537,17 +1499,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[predictWithstandOfCertDeg]{UC:Predict-Withstanding-of-Certain-Degree} &  &  &  &  &  &  &  & 
 \\
 \hyperref[accAlteredGlass]{UC:Accommodate-Altered-Glass} &  & X &  &  &  &  &  & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
 \label{Table:TraceMatAvsAll}
-\end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l}
-\toprule
+\end{longtblr}
+\begin{longtblr}
+[caption={Traceability Matrix Showing the Connections Between Items and Other Sections}]
+{colspec={l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{} & \textbf{\hyperref[DD:riskFun]{DD:riskFun}} & \textbf{\hyperref[DD:minThick]{DD:minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD:loadDurFactor}} & \textbf{\hyperref[DD:stressDistFac]{DD:stressDistFac}} & \textbf{\hyperref[DD:nFL]{DD:nFL}} & \textbf{\hyperref[DD:gTF]{DD:gTF}} & \textbf{\hyperref[DD:dimlessLoad]{DD:dimlessLoad}} & \textbf{\hyperref[DD:tolLoad]{DD:tolLoad}} & \textbf{\hyperref[DD:sdfTol]{DD:sdfTol}} & \textbf{\hyperref[DD:standOffDist]{DD:standOffDist}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[DD:eqTNTW]{DD:eqTNTW}} & \textbf{\hyperref[DD:probOfBreak]{DD:probOfBreak}} & \textbf{\hyperref[DD:calofCapacity]{DD:calofCapacity}} & \textbf{\hyperref[DD:calofDemand]{DD:calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM:isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM:isSafeLoad}} & \textbf{\hyperref[IM:isSafePb]{IM:isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM:isSafeLR}}
 \\
-\midrule
-\endhead
 \hyperref[DD:riskFun]{DD:riskFun} &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:minThick]{DD:minThick} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1585,17 +1543,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[IM:isSafePb]{IM:isSafePb} &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & X
 \\
 \hyperref[IM:isSafeLR]{IM:isSafeLR} &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
 \label{Table:TraceMatRefvsRef}
-\end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
-\toprule
+\end{longtblr}
+\begin{longtblr}
+[caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
+{colspec={l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{} & \textbf{\hyperref[DD:riskFun]{DD:riskFun}} & \textbf{\hyperref[DD:minThick]{DD:minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD:loadDurFactor}} & \textbf{\hyperref[DD:stressDistFac]{DD:stressDistFac}} & \textbf{\hyperref[DD:nFL]{DD:nFL}} & \textbf{\hyperref[DD:gTF]{DD:gTF}} & \textbf{\hyperref[DD:dimlessLoad]{DD:dimlessLoad}} & \textbf{\hyperref[DD:tolLoad]{DD:tolLoad}} & \textbf{\hyperref[DD:sdfTol]{DD:sdfTol}} & \textbf{\hyperref[DD:standOffDist]{DD:standOffDist}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[DD:eqTNTW]{DD:eqTNTW}} & \textbf{\hyperref[DD:probOfBreak]{DD:probOfBreak}} & \textbf{\hyperref[DD:calofCapacity]{DD:calofCapacity}} & \textbf{\hyperref[DD:calofDemand]{DD:calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM:isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM:isSafeLoad}} & \textbf{\hyperref[IM:isSafePb]{IM:isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM:isSafeLR}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}} & \textbf{\hyperref[checkInputWithDataCons]{FR:Check-Input-with-Data\_Constraints}} & \textbf{\hyperref[outputValsAndKnownValues]{FR:Output-Values-and-Known-Values}} & \textbf{\hyperref[checkGlassSafety]{FR:Check-Glass-Safety}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[verifiable]{NFR:Verifiable}} & \textbf{\hyperref[understandable]{NFR:Understandable}} & \textbf{\hyperref[reusable]{NFR:Reusable}} & \textbf{\hyperref[maintainable]{NFR:Maintainable}} & \textbf{\hyperref[portable]{NFR:Portable}}
 \\
-\midrule
-\endhead
 \hyperref[willBreakGS]{GS:Predict-Glass-Withstands-Explosion} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1621,11 +1575,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[maintainable]{NFR:Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[portable]{NFR:Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}
 \label{Table:TraceMatAllvsR}
-\end{longtable}
+\end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
 
 \begin{figure}
@@ -1676,12 +1627,11 @@ For convenience, the following graphs can be found at the links below:
 \label{Sec:AuxConstants}
 This section contains the standard values that are used for calculations in GlassBR.
 
-\begin{longtabu}{l X[l] l l}
-\toprule
+\begin{longtblr}
+[caption={Auxiliary Constants}]
+{colspec={l X[l] l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Value} & \textbf{Unit}
 \\
-\midrule
-\endhead
 ${\mathit{AR}_{\text{max}}}$ & maximum aspect ratio & $5$ & --
 \\
 ${d_{\text{max}}}$ & maximum value for one of the dimensions of the glass plate & $5$ & ${\text{m}}$
@@ -1709,11 +1659,8 @@ ${t_{\text{d}}}$ & duration of load & $3$ & ${\text{s}}$
 ${w_{\text{max}}}$ & maximum permissible input charge weight & $910$ & ${\text{kg}}$
 \\
 ${w_{\text{min}}}$ & minimum permissible input charge weight & $4.5$ & ${\text{kg}}$
-\\
-\bottomrule
-\caption{Auxiliary Constants}
 \label{Table:TAuxConsts}
-\end{longtabu}
+\end{longtblr}
 \section{References}
 \label{Sec:References}
 \begin{filecontents*}{bibfile.bib}

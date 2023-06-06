@@ -32,7 +32,7 @@ data LayoutObj =
    | Header Depth Title Label                                        -- ^ Holds all information needed for a header.
    | Paragraph Contents                                              -- ^ Paragraph.
    | EqnBlock Contents                                               -- ^ Equation block.
-   | Definition DType [(String,[LayoutObj])] Label                   -- ^ Definition. Holds the type, contents, and a label.
+   | Definition DType [(LayoutObj,[LayoutObj])] Label                -- ^ Definition. Holds the type, contents, and a label.
    | List ListType                                                   -- ^ List.
    | Figure Label Caption Filepath MaxWidthPercent                   -- ^ Holds all information needed for a figure.
    | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label -- ^ Holds all information needed for a graph.

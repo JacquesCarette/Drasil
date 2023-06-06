@@ -67,7 +67,7 @@ layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls)
   (P.S $ getAdd $ getRefAdd x)
   b (spec sm t)
-layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"]
+layLabelled sm x@(LblC _ (EqnBlock c))        = T.HDiv ["equation"]
   [T.EqnBlock (P.E (modelExpr c sm))]
   (P.S $ getAdd $ getRefAdd x)
 layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure
@@ -77,16 +77,15 @@ layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph
   (map (bimap (spec sm) (spec sm)) ps) w h (spec sm t)
   (P.S $ getAdd $ getRefAdd x)
 layLabelled sm x@(LblC _ (Defini dtyp pairs)) = T.Definition
-  dtyp (layPairs pairs)
-  (P.S $ getAdd $ getRefAdd x)
+  dtyp (layPairs $ docCon sm pairs) (P.S $ getAdd $ getRefAdd x)
   where layPairs = map (second (map (lay sm)))
-layLabelled sm (LblC _ (Paragraph c))    = T.Paragraph (spec sm c)
-layLabelled sm x@(LblC _ (DerivBlock h d)) = T.HDiv ["subsubsubsection"]
+layLabelled sm (LblC _ (Paragraph c))         = T.Paragraph (spec sm c)
+layLabelled sm x@(LblC _ (DerivBlock h d))    = T.HDiv ["subsubsubsection"]
   (T.Header 3 (spec sm h) refr : map (layUnlabelled sm) d) refr
   where refr = P.S $ refAdd x ++ "Deriv"
-layLabelled sm (LblC _ (Enumeration cs)) = T.List $ makeL sm cs
-layLabelled  _ (LblC _ (Bib bib))        = T.Bib $ map layCite bib
-layLabelled sm (LblC _ (CodeBlock c))  = T.CodeBlock (P.E (codeExpr c sm))
+layLabelled sm (LblC _ (Enumeration cs))      = T.List $ makeL sm cs
+layLabelled  _ (LblC _ (Bib bib))             = T.Bib $ map layCite bib
+layLabelled sm (LblC _ (CodeBlock c))         = T.CodeBlock (P.E (codeExpr c sm))
 
 -- | Helper that translates 'RawContent's to a printable representation of 'T.LayoutObj'.
 -- Called internally by 'lay'.
@@ -102,10 +101,10 @@ layUnlabelled sm (Enumeration cs) = T.List $ makeL sm cs
 layUnlabelled sm (Figure c f wp)  = T.Figure (P.S "nolabel2") (spec sm c) f wp
 layUnlabelled sm (Graph ps w h t) = T.Graph (map (bimap (spec sm) (spec sm)) ps)
                                w h (spec sm t) (P.S "nolabel6")
-layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
+layUnlabelled sm (Defini dtyp pairs) = T.Definition dtyp (layPairs $ docCon sm pairs) (P.S "nolabel7")
   where layPairs = map (second (map temp))
-        temp  y   = layUnlabelled sm (y ^. accessContents)
-layUnlabelled  _ (Bib bib)              = T.Bib $ map layCite bib
+        temp  y  = layUnlabelled sm (y ^. accessContents)
+layUnlabelled  _ (Bib bib)         = T.Bib $ map layCite bib
 layUnlabelled sm (CodeBlock c)     = T.CodeBlock (P.E (codeExpr c sm))
 
 -- | For importing a bibliography.
@@ -149,3 +148,6 @@ makeL sm (Definitions ps) = P.Definitions $ map (\(x,y,z) -> (spec sm x, item sm
 item :: PrintingInformation -> ItemType -> P.ItemType
 item sm (Flat i)     = P.Flat $ spec sm i
 item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
+
+docCon :: PrintingInformation -> [(Sentence, [Contents])] -> [(T.LayoutObj, [Contents])]
+docCon sm pairs = map (\(s, c) -> (layUnlabelled sm $ Paragraph s, c)) pairs

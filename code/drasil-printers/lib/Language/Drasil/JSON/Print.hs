@@ -117,20 +117,20 @@ print' :: [LayoutObj] -> Doc
 print' = foldr (($$) . printLO') empty
 
 pSpec :: Spec -> Doc
-pSpec (E e)  = text "$" <> pExpr e <> text "$" -- symbols used
-pSpec (a :+: b) = pSpec a <> pSpec b
-pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr s invalid
+pSpec (E e)                 = text "$" <> pExpr e <> text "$" -- symbols used
+pSpec (a :+: b)             = pSpec a <> pSpec b
+pSpec (S s)                 = either error (text . concatMap escapeChars) $ L.checkValidStr s invalid
   where
     invalid = ['<', '>']
     escapeChars '&' = "\\&"
     escapeChars c = [c]
-pSpec (Sp s)    = text $ unPH $ L.special s
-pSpec HARDNL    = empty
-pSpec (Ref Internal r a)      = reflink     r $ pSpec a
-pSpec (Ref (Cite2 n)   r a)    = reflinkInfo r (pSpec a) (pSpec n)
-pSpec (Ref External r a)      = reflinkURI  r $ pSpec a
-pSpec EmptyS    = text "" -- Expected in the output
-pSpec (Quote q) = doubleQuotes $ pSpec q
+pSpec (Sp s)                = text $ unPH $ L.special s
+pSpec HARDNL                = empty
+pSpec (Ref Internal r a)    = reflink     r $ pSpec a
+pSpec (Ref (Cite2 n)   r a) = reflinkInfo r (pSpec a) (pSpec n)
+pSpec (Ref External r a)    = reflinkURI  r $ pSpec a
+pSpec EmptyS                = text "" -- Expected in the output
+pSpec (Quote q)             = doubleQuotes $ pSpec q
 
 cSpec :: Spec -> Doc
 cSpec (E e)  = pExpr e 
@@ -241,7 +241,7 @@ count c (x:xs)
   | otherwise = count c xs
 
 -- | Renders definition tables (Data, General, Theory, etc.)
-makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
+makeDefn :: L.DType -> [(LayoutObj,[LayoutObj])] -> Doc -> Doc
 makeDefn _ [] _  = error "L.Empty definition"
 makeDefn dt ps l = refID l $$ table [dtag dt]
   (tr (nbformat (th (text "Refname")) $$ td (nbformat(bold l))) $$ makeDRows ps)
@@ -251,11 +251,10 @@ makeDefn dt ps l = refID l $$ table [dtag dt]
         dtag L.Data     = "ddefn"
 
 -- | Helper for making the definition table rows
-makeDRows :: [(String,[LayoutObj])] -> Doc
+makeDRows :: [(LayoutObj,[LayoutObj])] -> Doc
 makeDRows []         = error "No fields to create defn table"
-makeDRows [(f,d)]    = tr (nbformat (th (text f)) $$ td (vcat $ map printLO d))
-makeDRows ((f,d):ps) = tr (nbformat (th (text f)) $$ td (vcat $ map printLO d)) $$ makeDRows ps
-
+makeDRows [(f,d)]    = tr (nbformat (th (printLO f)) $$ td (vcat $ map printLO d))
+makeDRows ((f,d):ps) = tr (nbformat (th (printLO f)) $$ td (vcat $ map printLO d)) $$ makeDRows ps
 
 -- | Renders lists
 makeList :: ListType -> Bool -> Doc -- FIXME: ref id's should be folded into the li

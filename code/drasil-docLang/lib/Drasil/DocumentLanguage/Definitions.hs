@@ -83,7 +83,7 @@ makeDerivCons (E e) = EqnBlock e
 makeDerivCons s     = Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs.
-type ModRow = [(String, [Contents])]
+type ModRow = [(Sentence, [Contents])]
 
 -- | Similar to 'maybe' but for lists.
 nonEmpty :: b -> ([a] -> b) -> [a] -> b
@@ -95,15 +95,15 @@ tmDispExprs t = map express (t ^. defined_quant) ++ t ^. invariants
 
 -- | Create the fields for a model from a relation concept (used by 'tmodel').
 mkTMField :: TheoryModel -> SystemInformation -> Field -> ModRow -> ModRow
-mkTMField t _ Label fs  = ("Label", [mkParagraph $ atStart t]) : fs
-mkTMField t _ DefiningEquation fs = ("Equation", map unlbldExpr $ tmDispExprs t) : fs
-mkTMField t m (Description v u) fs = ("Description",
+mkTMField t _ l@Label fs  = (getSent l, [mkParagraph $ atStart t]) : fs
+mkTMField t _ l@DefiningEquation fs = (getSent l, map unlbldExpr $ tmDispExprs t) : fs
+mkTMField t m l@(Description v u) fs = (getSent l,
   foldr ((\x -> buildDescription v u x m) . express) [] $ tmDispExprs t) : fs
-mkTMField t m RefBy fs = ("RefBy", [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
-mkTMField t _ Source fs = ("Source", helperSources $ t ^. getDecRefs) : fs
-mkTMField t _ Notes fs =
-  nonEmpty fs (\ss -> ("Notes", map mkParagraph ss) : fs) (t ^. getNotes)
-mkTMField _ _ _ fs = ("Label not supported for data definitions", []) : fs
+mkTMField t m l@RefBy fs = (getSent l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
+mkTMField t _ l@Source fs = (getSent l, helperSources $ t ^. getDecRefs) : fs
+mkTMField t _ l@Notes fs =
+  nonEmpty fs (\ss -> (getSent l, map mkParagraph ss) : fs) (t ^. getNotes)
+mkTMField _ _ l fs = (getSent l +:+ S ":Label not supported for data definitions", []) : fs
 
 
 -- | Helper function to make a list of 'Sentence's from the current system information and something that has a 'UID'.
@@ -132,15 +132,15 @@ helperSources rs  = [mkParagraph $ foldlList Comma List $ map (\r -> Ref (r ^. u
 
 -- | Creates the fields for a definition from a 'QDefinition' (used by 'ddefn').
 mkDDField :: DataDefinition -> SystemInformation -> Field -> ModRow -> ModRow
-mkDDField d _ Label fs = ("Label", [mkParagraph $ atStart d]) : fs
-mkDDField d _ Symbol fs = ("Symbol", [mkParagraph . P $ eqSymb d]) : fs
-mkDDField d _ Units fs = ("Units", [mkParagraph $ toSentenceUnitless d]) : fs
-mkDDField d _ DefiningEquation fs = ("Equation", [unlbldExpr $ express d]) : fs
-mkDDField d m (Description v u) fs = ("Description", buildDDescription' v u d m) : fs
-mkDDField t m RefBy fs = ("RefBy", [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
-mkDDField d _ Source fs = ("Source", helperSources $ d ^. getDecRefs) : fs
-mkDDField d _ Notes fs = nonEmpty fs (\ss -> ("Notes", map mkParagraph ss) : fs) (d ^. getNotes)
-mkDDField _ _ _ fs = ("Label not supported for data definitions", []) : fs
+mkDDField d _ l@Label fs = (getSent l, [mkParagraph $ atStart d]) : fs
+mkDDField d _ l@Symbol fs = (getSent l, [mkParagraph . P $ eqSymb d]) : fs
+mkDDField d _ l@Units fs = (getSent l, [mkParagraph $ toSentenceUnitless d]) : fs
+mkDDField d _ l@DefiningEquation fs = (getSent l, [unlbldExpr $ express d]) : fs
+mkDDField d m l@(Description v u) fs = (getSent l, buildDDescription' v u d m) : fs
+mkDDField t m l@RefBy fs = (getSent l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
+mkDDField d _ l@Source fs = (getSent l, helperSources $ d ^. getDecRefs) : fs
+mkDDField d _ l@Notes fs = nonEmpty fs (\ss -> (getSent l, map mkParagraph ss) : fs) (d ^. getNotes)
+mkDDField _ _ l fs = (getSent l +:+ S ":Label not supported for data definitions", []) : fs
 
 -- | Creates the description field for 'Contents' (if necessary) using the given verbosity and
 -- including or ignoring units for a model/general definition.
@@ -161,41 +161,41 @@ buildDDescription' Verbose  u d m = [UlC . ulcc . Enumeration $ Definitions $
 
 -- | Create the fields for a general definition from a 'GenDefn' chunk.
 mkGDField :: GenDefn -> SystemInformation -> Field -> ModRow -> ModRow
-mkGDField g _ Label fs = ("Label", [mkParagraph $ atStart g]) : fs
-mkGDField g _ Units fs =
-  maybe fs (\udef -> ("Units", [mkParagraph . Sy $ usymb udef]) : fs) (getUnit g)
-mkGDField g _ DefiningEquation fs = ("Equation", [unlbldExpr $ express g]) : fs
-mkGDField g m (Description v u) fs = ("Description",
+mkGDField g _ l@Label fs = (getSent l, [mkParagraph $ atStart g]) : fs
+mkGDField g _ l@Units fs =
+  maybe fs (\udef -> (getSent l, [mkParagraph . Sy $ usymb udef]) : fs) (getUnit g)
+mkGDField g _ l@DefiningEquation fs = (getSent l, [unlbldExpr $ express g]) : fs
+mkGDField g m l@(Description v u) fs = (getSent l,
   buildDescription v u (express g) m []) : fs
-mkGDField g m RefBy fs = ("RefBy", [mkParagraph $ helperRefs g m]) : fs --FIXME: fill this in
-mkGDField g _ Source fs = ("Source", helperSources $ g ^. getDecRefs) : fs
-mkGDField g _ Notes fs = nonEmpty fs (\ss -> ("Notes", map mkParagraph ss) : fs) (g ^. getNotes)
-mkGDField _ _ _ fs = ("Label not supported for data definitions", []) : fs
+mkGDField g m l@RefBy fs = (getSent l, [mkParagraph $ helperRefs g m]) : fs --FIXME: fill this in
+mkGDField g _ l@Source fs = (getSent l, helperSources $ g ^. getDecRefs) : fs
+mkGDField g _ l@Notes fs = nonEmpty fs (\ss -> (getSent l, map mkParagraph ss) : fs) (g ^. getNotes)
+mkGDField _ _ l fs = (getSent l +:+ S ":Label not supported for data definitions", []) : fs
 
 -- | Create the fields for an instance model from an 'InstanceModel' chunk.
 mkIMField :: InstanceModel -> SystemInformation -> Field -> ModRow -> ModRow
-mkIMField i _ Label fs  = ("Label", [mkParagraph $ atStart i]) : fs
-mkIMField i _ DefiningEquation fs = ("Equation", [unlbldExpr $ express i]) : fs
-mkIMField i m (Description v u) fs = ("Description",
+mkIMField i _ l@Label fs  = (getSent l, [mkParagraph $ atStart i]) : fs
+mkIMField i _ l@DefiningEquation fs = (getSent l, [unlbldExpr $ express i]) : fs
+mkIMField i m l@(Description v u) fs = (getSent l,
   foldr (\x -> buildDescription v u x m) [] [express i]) : fs
-mkIMField i m RefBy fs = ("RefBy", [mkParagraph $ helperRefs i m]) : fs --FIXME: fill this in
-mkIMField i _ Source fs = ("Source", helperSources $ i ^. getDecRefs) : fs
-mkIMField i _ Output fs = ("Output", [mkParagraph x]) : fs
+mkIMField i m l@RefBy fs = (getSent l, [mkParagraph $ helperRefs i m]) : fs --FIXME: fill this in
+mkIMField i _ l@Source fs = (getSent l, helperSources $ i ^. getDecRefs) : fs
+mkIMField i _ l@Output fs = (getSent l, [mkParagraph x]) : fs
   where x = P . eqSymb $ i ^. output
-mkIMField i _ Input fs =
+mkIMField i _ l@Input fs =
   case map fst (i ^. inputs) of
-    [] -> ("Input", [mkParagraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?
-    (_:_) -> ("Input", [mkParagraph $ foldl1 sC xs]) : fs
+    [] -> (getSent l, [mkParagraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?
+    (_:_) -> (getSent l, [mkParagraph $ foldl1 sC xs]) : fs
   where xs = map (P . eqSymb . fst) $ i ^. inputs
-mkIMField i _ InConstraints fs  =
+mkIMField i _ l@InConstraints fs  =
   let ll = mapMaybe (\(x,y) -> y >>= (\z -> Just (x, z))) (i ^. inputs) in
-  ("Input Constraints", foldr ((:) . UlC . ulcc . EqnBlock . express . uncurry realInterval) [] ll) : fs
-mkIMField i _ OutConstraints fs =
-  ("Output Constraints", foldr ((:) . UlC . ulcc . EqnBlock . express . realInterval (i ^. output)) []
+  (getSent l, foldr ((:) . UlC . ulcc . EqnBlock . express . uncurry realInterval) [] ll) : fs
+mkIMField i _ l@OutConstraints fs =
+  (getSent l, foldr ((:) . UlC . ulcc . EqnBlock . express . realInterval (i ^. output)) []
     (i ^. out_constraints)) : fs
-mkIMField i _ Notes fs =
-  nonEmpty fs (\ss -> ("Notes", map mkParagraph ss) : fs) (i ^. getNotes)
-mkIMField _ _ _ fs = ("Label not supported for data definitions", []) : fs
+mkIMField i _ l@Notes fs =
+  nonEmpty fs (\ss -> (getSent l, map mkParagraph ss) : fs) (i ^. getNotes)
+mkIMField _ _ l fs = (getSent l +:+ S ":Label not supported for data definitions", []) : fs
 
 -- | Used for making definitions. The first pair is the symbol of the quantity we are
 -- defining.
@@ -210,3 +210,17 @@ descPairs IgnoreUnits = map (\x -> (P $ eqSymb x, Flat $ phrase x, Nothing))
 descPairs IncludeUnits =
   map (\x -> (P $ eqSymb x, Flat $ phrase x +:+ sParen (toSentenceUnitless x), Nothing))
   -- FIXME: Need a Units map for looking up units from variables
+
+getSent :: Field -> Sentence
+getSent Label             = S "Label"
+getSent Symbol            = S "Symbol"
+getSent Units             = S "Units"
+getSent RefBy             = S "RefBy"
+getSent Source            = S "Source"
+getSent Input             = S "Input"
+getSent Output            = S "Output"
+getSent InConstraints     = S "Input Constraints"
+getSent OutConstraints    = S "Output Constraints"
+getSent DefiningEquation  = S "Equation"
+getSent (Description _ _) = S "Description"
+getSent Notes             = S "Notes" 

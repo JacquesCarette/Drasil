@@ -327,12 +327,12 @@ pUnit (L.US ls) = formatu t b
 -----------------------------------------------------------------
 
 -- | Prints a (data) definition.
-makeDefn :: PrintingInformation -> [(String,[LayoutObj])] -> D -> D
+makeDefn :: PrintingInformation -> [(LayoutObj,[LayoutObj])] -> D -> D
 makeDefn _  [] _ = error "Empty definition"
 makeDefn sm ps l = mkMinipage (makeDefTable sm ps l)
 
 -- | Helper that creates the definition and associated table.
-makeDefTable :: PrintingInformation -> [(String,[LayoutObj])] -> D -> D
+makeDefTable :: PrintingInformation -> [(LayoutObj,[LayoutObj])] -> D -> D
 makeDefTable _ [] _ = error "Trying to make empty Data Defn"
 makeDefTable sm ps l = mkEnvArgBr "tabular" (col rr colAwidth ++ col (rr ++ "\\arraybackslash") colBwidth) $ vcat [
   command0 "toprule " <> bold (pure $ text "Refname") <> pure (text " & ") <> bold l, --shortname instead of refname?
@@ -346,9 +346,9 @@ makeDefTable sm ps l = mkEnvArgBr "tabular" (col rr colAwidth ++ col (rr ++ "\\a
     tw = "\\textwidth"
 
 -- | Helper that makes the rows of a definition table.
-makeDRows :: PrintingInformation -> [(String,[LayoutObj])] -> D
-makeDRows _  []         = error "No fields to create Defn table"
-makeDRows sm ls    = foldl1 (%%) $ map (\(f, d) -> dBoilerplate %%  pure (text (f ++ " & ")) <> print sm d) ls
+makeDRows :: PrintingInformation -> [(LayoutObj,[LayoutObj])] -> D
+makeDRows _  [] = error "No fields to create Defn table"
+makeDRows sm ls = foldl1 (%%) $ map (\(f, d) -> dBoilerplate %% (lo f sm) <> pure (text " & ") <> print sm d) ls
   where dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs
 
 -----------------------------------------------------------------

@@ -69,15 +69,12 @@ data RawContent =
   | EqnBlock ModelExpr                       -- ^ Block of Equations holds an expression.
   | DerivBlock Sentence [RawContent]         -- ^ Grants the ability to label a group of 'RawContent'.
   | Enumeration ListType                     -- ^ For enumerated lists.
-  | Defini DType [(Identifier, [Contents])]  -- ^ Defines something with a type, identifier, and 'Contents'.
+  | Defini DType [(Sentence, [Contents])]    -- ^ Defines something with a type, identifier, and 'Contents'.
   | Figure Lbl Filepath MaxWidthPercent      -- ^ For creating figures in a document. Should use relative file path.
   | Bib BibRef                               -- ^ Grants the ability to reference something.
   | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl -- ^ Contain a graph with coordinates ('Sentence's), maybe a width and height, and a label ('Sentence').
   | CodeBlock CodeExpr                       -- ^ Block for codes
                -- TODO: Fill this one in.
-
--- | An identifier is just a 'String'.
-type Identifier = String
 
 -- | Contains a 'Reference' and 'RawContent'.
 data LabelledContent = LblC { _ref :: Reference

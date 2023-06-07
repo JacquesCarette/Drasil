@@ -283,7 +283,7 @@ makeColumns = vcat . map (td . pSpec)
 -----------------------------------------------------------------
 
 -- | Renders definition tables (Data, General, Theory, etc.).
-makeDefn :: L.DType -> [(LayoutObj,[LayoutObj])] -> Doc -> Doc
+makeDefn :: L.DType -> [(Spec,[LayoutObj])] -> Doc -> Doc
 makeDefn _ [] _  = error "L.Empty definition"
 makeDefn dt ps l = refwrap l $ table [dtag dt]
   (tr (th (text "Refname") $$ td (bold l)) $$ makeDRows ps)
@@ -293,10 +293,10 @@ makeDefn dt ps l = refwrap l $ table [dtag dt]
         dtag L.Data     = "ddefn"
 
 -- | Helper for making the definition table rows.
-makeDRows :: [(LayoutObj,[LayoutObj])] -> Doc
+makeDRows :: [(Spec,[LayoutObj])] -> Doc
 makeDRows []         = error "No fields to create defn table"
-makeDRows [(f,d)]    = tr (th (printLO f) $$ td (vcat $ map printLO d))
-makeDRows ((f,d):ps) = tr (th (printLO f) $$ td (vcat $ map printLO d)) $$ makeDRows ps
+makeDRows [(f,d)]    = tr (th (pSpec f) $$ td (vcat $ map printLO d))
+makeDRows ((f,d):ps) = tr (th (pSpec f) $$ td (vcat $ map printLO d)) $$ makeDRows ps
 
 -----------------------------------------------------------------
 ------------------BEGIN LIST PRINTING----------------------------

@@ -149,5 +149,5 @@ item :: PrintingInformation -> ItemType -> P.ItemType
 item sm (Flat i)     = P.Flat $ spec sm i
 item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
 
-docCon :: PrintingInformation -> [(Sentence, [Contents])] -> [(T.LayoutObj, [Contents])]
-docCon sm pairs = map (\(s, c) -> (layUnlabelled sm $ Paragraph s, c)) pairs
+docCon :: PrintingInformation -> [(Sentence, [Contents])] -> [(P.Spec, [Contents])]
+docCon sm pairs = map (\(s, c) -> (spec sm s, c)) pairs

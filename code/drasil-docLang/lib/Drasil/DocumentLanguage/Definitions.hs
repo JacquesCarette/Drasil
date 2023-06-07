@@ -106,7 +106,7 @@ mkTMField t m l@RefBy fs = (getSent l, [mkParagraph $ helperRefs t m]) : fs --FI
 mkTMField t _ l@Source fs = (getSent l, helperSources $ t ^. getDecRefs) : fs
 mkTMField t _ l@Notes fs =
   nonEmpty fs (\ss -> (getSent l, map mkParagraph ss) : fs) (t ^. getNotes)
-mkTMField _ _ l fs = (getSent l +:+ S ":Label not supported for data definitions", []) : fs
+mkTMField _ _ l fs = (getSent l +:+ S ":Label not supported for theory models", []) : fs
 
 
 -- | Helper function to make a list of 'Sentence's from the current system information and something that has a 'UID'.
@@ -173,7 +173,7 @@ mkGDField g m l@(Description v u) fs = (getSent l,
 mkGDField g m l@RefBy fs = (getSent l, [mkParagraph $ helperRefs g m]) : fs --FIXME: fill this in
 mkGDField g _ l@Source fs = (getSent l, helperSources $ g ^. getDecRefs) : fs
 mkGDField g _ l@Notes fs = nonEmpty fs (\ss -> (getSent l, map mkParagraph ss) : fs) (g ^. getNotes)
-mkGDField _ _ l fs = (getSent l +:+ S ":Label not supported for data definitions", []) : fs
+mkGDField _ _ l fs = (getSent l +:+ S ":Label not supported for gen defs", []) : fs
 
 -- | Create the fields for an instance model from an 'InstanceModel' chunk.
 mkIMField :: InstanceModel -> SystemInformation -> Field -> ModRow -> ModRow
@@ -198,7 +198,7 @@ mkIMField i _ l@OutConstraints fs =
     (i ^. out_constraints)) : fs
 mkIMField i _ l@Notes fs =
   nonEmpty fs (\ss -> (getSent l, map mkParagraph ss) : fs) (i ^. getNotes)
-mkIMField _ _ l fs = (getSent l +:+ S ":Label not supported for data definitions", []) : fs
+mkIMField _ _ l fs = (getSent l +:+ S ":Label not supported for instance models", []) : fs
 
 -- | Used for making definitions. The first pair is the symbol of the quantity we are
 -- defining.

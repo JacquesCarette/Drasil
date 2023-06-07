@@ -18,9 +18,9 @@ import Control.Lens ((^.))
 import Language.Drasil
 import Database.Drasil
 import SysInfo.Drasil
-import Data.Drasil.Concepts.Documentation as DOC(input_, output_, description,
+import Data.Drasil.Concepts.Documentation as Doc (input_, output_, description,
  refBy, source, label, constraint, symbol_)
-import Data.Drasil.Concepts.Math(equation, unit_)
+import Data.Drasil.Concepts.Math (equation, unit_)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(..),
   TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints), qdFromDD)
 
@@ -215,15 +215,15 @@ descPairs IncludeUnits =
   -- FIXME: Need a Units map for looking up units from variables
 
 getSent :: Field -> Sentence
-getSent Label             = titleize DOC.label
-getSent Symbol            = titleize DOC.symbol_
+getSent Label             = titleize Doc.label
+getSent Symbol            = titleize Doc.symbol_
 getSent Units             = titleize' unit_
-getSent RefBy             = S $ abrv DOC.refBy
+getSent RefBy             = S $ abrv Doc.refBy
 getSent Source            = titleize source
-getSent Input             = titleize DOC.input_
-getSent Output            = titleize DOC.output_
-getSent InConstraints     = titleize DOC.input_ +:+ titleize' DOC.constraint
-getSent OutConstraints    = titleize DOC.output_ +:+ titleize' DOC.constraint
+getSent Input             = titleize Doc.input_
+getSent Output            = titleize Doc.output_
+getSent InConstraints     = titleize Doc.input_ +:+ titleize' Doc.constraint
+getSent OutConstraints    = titleize Doc.output_ +:+ titleize' Doc.constraint
 getSent DefiningEquation  = titleize equation
-getSent (Description _ _) = titleize DOC.description
+getSent (Description _ _) = titleize Doc.description
 getSent Notes             = S "Notes" -- placeholder until we have a NI for note

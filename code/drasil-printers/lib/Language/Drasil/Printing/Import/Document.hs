@@ -15,7 +15,7 @@ import Language.Drasil.Printing.Import.CodeExpr (codeExpr)
 import Language.Drasil.Printing.Import.Sentence (spec)
 
 import Control.Lens ((^.))
-import Data.Bifunctor (bimap, second)
+import Data.Bifunctor (bimap, first, second)
 
 -- * Main Function
 
@@ -150,4 +150,4 @@ item sm (Flat i)     = P.Flat $ spec sm i
 item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
 
 docCon :: PrintingInformation -> [(Sentence, [Contents])] -> [(P.Spec, [Contents])]
-docCon sm pairs = map (\(s, c) -> (spec sm s, c)) pairs
+docCon sm = map (first (spec sm))

@@ -26,8 +26,9 @@ import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Data.Drasil.Quantities.Physics (physicscon)
 
 import Drasil.DblPendulum.Assumptions (assumpSingle)
-import Drasil.DblPendulum.Body (justification, charsOfReader, purp, organizationOfDocumentsIntro,
-  sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms, userCharacteristicsIntro)
+import Drasil.DblPendulum.Body (justification, charsOfReader, purp,
+  sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,
+  userCharacteristicsIntro)
 import qualified Drasil.DblPendulum.Body as DPD (tMods)
 import Drasil.DblPendulum.Concepts (concepts, rod)
 import Drasil.DblPendulum.Requirements (nonFuncReqs)
@@ -65,7 +66,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],
-       IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel [] []) EmptyS],
+       IOrgSec inModel (SRS.inModel [] []) EmptyS],
   GSDSec $ 
     GSDProg [
       SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],

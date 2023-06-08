@@ -173,7 +173,7 @@ mkGDField g m l@(Description v u) fs = (getSent l,
 mkGDField g m l@RefBy fs = (getSent l, [mkParagraph $ helperRefs g m]) : fs --FIXME: fill this in
 mkGDField g _ l@Source fs = (getSent l, helperSources $ g ^. getDecRefs) : fs
 mkGDField g _ l@Notes fs = nonEmpty fs (\ss -> (getSent l, map mkParagraph ss) : fs) (g ^. getNotes)
-mkGDField _ _ l fs = (getSent l +:+ S ":Label not supported for gen defs", []) : fs
+mkGDField _ _ l fs = (getSent l +:+ S ":Label not supported for general definitions", []) : fs
 
 -- | Create the fields for an instance model from an 'InstanceModel' chunk.
 mkIMField :: InstanceModel -> SystemInformation -> Field -> ModRow -> ModRow

@@ -28,7 +28,7 @@ doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body, caseP
   implementation, indPRCase, individual, information, input_, instance_, intReader,
   interest, interface, introduction, issue, item, label, library, limitation,
   literacy, loss, material_, mainIdea, message, method_, methAndAnls, model, module_, name_, 
-  nonfunctional, nonfunctionalRequirement, object, offShelf, offShelfSolution, open, orgOfDoc,
+  nonfunctional, nonfunctionalRequirement, note_, object, offShelf, offShelfSolution, open, orgOfDoc,
   organization, output_, physical, physicalConstraint, physicalProperty, physicalSim,
   physicalSystem, physics, plan, practice, priority, problem, problemDescription, procedure,
   prodUCTable, productUC, product_, project, procForAnls, propOfCorSol, property, prpsOfDoc,
@@ -93,7 +93,7 @@ abbreviation, acronym, analysis, appendix, aspect, body, characteristic, class_,
   functional, game, general, goal, guide, implementation, individual, information, 
   interest, interface, input_, instance_, intReader, introduction, issue, item, 
   loss, label, library, limitation, literacy, material_, mainIdea, message, method_, module_,
-  model, name_, nonfunctional, object, offShelf, open, organization, output_,
+  model, name_, nonfunctional, note_, object, offShelf, open, organization, output_,
   physics, physical, plan, practice, priority, problem, procedure, product_, project,
   property, purpose, quantity, realtime, review, reference, requirement_, response, 
   result, reviewer, safety, scope, scpOfTheProjS, second_, section_, scenario,
@@ -173,6 +173,7 @@ module_         = nc "module"         (cn'    "module"             )
 model           = nc "model"          (cn'    "model"              )
 name_           = nc "name"           (cn'    "name"               )
 nonfunctional   = nc "non-functional" (cn'    "non-functional"     ) --FIXME: Adjective
+note_            = nc "note"           (cn'    "note"               )
 object          = nc "object"         (cn'    "object"             )
 offShelf        = nc "Off-the-Shelf"  (cn'    "Off-the-Shelf"      )
 open            = nc "open"           (cn'    "open"               )

@@ -19,7 +19,7 @@ import Language.Drasil
 import Database.Drasil
 import SysInfo.Drasil
 import Data.Drasil.Concepts.Documentation as Doc (input_, output_, description,
- refBy, source, label, constraint, symbol_)
+ refBy, source, label, constraint, symbol_, note_)
 import Data.Drasil.Concepts.Math (equation, unit_)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(..),
   TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints), qdFromDD)
@@ -226,4 +226,4 @@ getSent InConstraints     = titleize Doc.input_ +:+ titleize' Doc.constraint
 getSent OutConstraints    = titleize Doc.output_ +:+ titleize' Doc.constraint
 getSent DefiningEquation  = titleize equation
 getSent (Description _ _) = titleize Doc.description
-getSent Notes             = S "Notes" -- placeholder until we have a NI for note
+getSent Notes             = titleize' Doc.note_

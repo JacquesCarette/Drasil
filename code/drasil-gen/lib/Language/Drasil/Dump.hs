@@ -11,7 +11,7 @@ import Data.Aeson.Encode.Pretty (encodePretty)
 import qualified Data.ByteString.Lazy.Char8 as LB
 import qualified Data.Map.Strict as SM
 
-import Utils.Drasil (invert)
+import Utils.Drasil (invert, atLeast2)
 import Database.Drasil (traceTable, refbyTable)
 import Control.Lens ((^.))
 
@@ -24,7 +24,7 @@ dumpEverything si targetPath = do
   let chunkDb = _sysinfodb si
       chunkDump = DB.dumpChunkDB chunkDb
       invertedChunkDump = invert chunkDump
-      sharedUIDs = SM.filter (\x -> length x > 1) invertedChunkDump
+      sharedUIDs = SM.filter atLeast2 invertedChunkDump
       traceDump = chunkDb ^. traceTable
       refByDump = chunkDb ^. refbyTable
 

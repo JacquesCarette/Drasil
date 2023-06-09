@@ -15,9 +15,10 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, characteristic,
   decision, definition, desSpec, design, designDoc, document, documentation,
   environment, goal, goalStmt, implementation, intReader, model, organization,
   purpose, requirement, scope, section_, softwareDoc, softwareVAV, srs,
-  theory, user, vavPlan, problem, information, systemConstraint)
+  theory, user, vavPlan, problem, information, systemConstraint, template)
 import Data.Drasil.TheoryConcepts as Doc (inModel, thModel)
-import Data.Drasil.Citations (parnasClements1986)
+import Data.Drasil.Citations (parnasClements1986, smithEtAl2007, smithKoothoor2016, smithLai2005, koothoor2013)
+import Data.Drasil.Software.Products
 
 
 -----------------------
@@ -61,6 +62,8 @@ introductionSubsections = foldlList Comma List (map (uncurry S.the_ofThe)
 --     * programDefinition  - 'Sentence' definition of the specific example.
 --     * subSections        - List of subsections for this section.
 introductionSection :: Sentence -> Sentence -> [Section] -> Section
+introductionSection EmptyS              programDefinition = SRS.intro 
+  [mkParagraph $ foldlSent[S "There is no problem introduction provided"], overviewParagraph programDefinition]
 introductionSection problemIntroduction programDefinition = SRS.intro 
   [mkParagraph problemIntroduction, overviewParagraph programDefinition]
 
@@ -107,6 +110,7 @@ purposeOfDoc _ = SRS.prpsOfDoc [mkParagraph developmentProcessParagraph] []
 -- | Constructor for the Scope of Requirements subsection.
 -- Takes in the main requirement for the program.
 scopeOfRequirements :: Sentence -> Section
+scopeOfRequirements EmptyS = SRS.scpOfReq [foldlSP [S "There are no" +:+ plural requirement]] []
 scopeOfRequirements req = SRS.scpOfReq [foldlSP
   [phrase scope `S.the_ofTheC` plural requirement, S "includes", req]] []
 
@@ -127,6 +131,9 @@ charIntRdrF progName assumed topic asset r =
 --     * reference to User Characteristics section.
 intReaderIntro :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] ->
   Section -> [Contents]
+intReaderIntro _ [] [] [] _ = 
+  [foldlSP [S "Reviewers of this", phrase documentation,
+  S "do not need to have any prerequisite knowledge"]]
 intReaderIntro progName assumed topic asset sectionRef = 
   [foldlSP [S "Reviewers of this", phrase documentation,
   S "should have an understanding of" +:+.
@@ -144,10 +151,30 @@ intReaderIntro progName assumed topic asset sectionRef =
 orgSec :: NamedIdea c => Sentence -> c -> Section -> Sentence -> Section
 orgSec i b s t = SRS.orgOfDoc (orgIntro i b s t) []
 
+organizationOfDocumentsIntro :: Sentence
+organizationOfDocumentsIntro = foldlSent 
+  [atStartNP (the Doc.organization), S "of this", phrase document, 
+  S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
+  phrase sciCompS, S "proposed by", foldlList Comma List $ 
+    map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]
+
 -- | Helper function that creates the introduction for the Organization of the Document section. Parameters should be
 -- an introduction ('Sentence'), a resource for a bottom up approach ('NamedIdea'), reference to that resource ('Section'),
 -- and any other relevant information ('Sentence').
 orgIntro :: NamedIdea c => Sentence -> c -> Section -> Sentence -> [Contents]
+orgIntro EmptyS bottom bottomSec trailingSentence = [foldlSP [
+  organizationOfDocumentsIntro, S "The presentation follows the standard pattern of presenting" +:+.
+  foldlList Comma List (map plural [nw Doc.goal, nw theory, nw definition, nw assumption]),
+  S "For readers that would like a more bottom up approach" `sC`
+  S "they can start reading the", namedRef bottomSec (plural bottom)`S.and_`
+  S "trace back to find any additional information they require"],
+  folder [refineChain (zip [goalStmt, thModel, inModel]
+         [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]), trailingSentence]]
+  where
+    folder = case trailingSentence of
+      EmptyS -> foldlSP_
+      _      -> foldlSP
+
 orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
   intro, S "The presentation follows the standard pattern of presenting" +:+.
   foldlList Comma List (map plural [nw Doc.goal, nw theory, nw definition, nw assumption]),

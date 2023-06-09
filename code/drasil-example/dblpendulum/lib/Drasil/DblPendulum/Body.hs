@@ -89,8 +89,8 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
         , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
         , Constraints EmptyS inConstraints
         , CorrSolnPpties outConstraints []
-       ]
-     ],
+        ]
+      ],
   ReqrmntSec $ ReqsProg
     [ FReqsSub EmptyS []
     , NonFReqsSub

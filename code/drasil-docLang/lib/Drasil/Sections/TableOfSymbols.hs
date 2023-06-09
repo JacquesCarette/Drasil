@@ -18,6 +18,7 @@ import Drasil.DocumentLanguage.Core (Literature(..), TConvention(..), TSIntro(..
 -- | Table of Symbols creation function. Takes in a 'Stage', 'Symbol's, and something that turns
 -- the symbols into a 'Sentence'. Filters non-symbol chunks and checks for duplicate symbol error.
 table :: (Quantity s, MayHaveUnit s) => Stage -> [s] -> (s -> Sentence) -> LabelledContent
+table _ [] _ = llcc symbTableRef $ Paragraph EmptyS
 table st ls f
     |noDuplicate = llcc symbTableRef $
       Table [atStart symbol_, atStart description, atStart' unit_]
@@ -58,6 +59,7 @@ tsymb'' intro lfunc = TSymb' lfunc intro
 
 -- | Table of symbols introduction builder. Used by 'mkRefSec'.
 tsIntro :: [TSIntro] -> Contents
+tsIntro [] = foldlSP [S "There are no" +:+ plural symbol_]
 tsIntro x = mkParagraph $ foldr ((+:+) . tsI) EmptyS x
 
 -- | Table of symbols intro writer. Translates a 'TSIntro' to a list in a 'Sentence'.

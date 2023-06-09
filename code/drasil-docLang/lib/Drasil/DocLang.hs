@@ -52,7 +52,7 @@ module Drasil.DocLang (
   -- Drasil.Sections.TableOfSymbols
   tsymb, tsymb'',
   -- Drasil.Sections.TableOfUnits
-  unitTableRef, tunit, tunit',
+  unitTableRef, tunit, tunit', tunitNone,
   -- ** Requirements
   -- Drasil.Sections.Requirements
   inReq, inTable, mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable, reqInputsRef,
@@ -96,7 +96,7 @@ import Drasil.Sections.SpecificSystemDescription (auxSpecSent, termDefnF', inDat
 --import Drasil.Sections.Stakeholders
 --import Drasil.Sections.TableOfAbbAndAcronyms
 import Drasil.Sections.TableOfSymbols (tsymb, tsymb'')
-import Drasil.Sections.TableOfUnits (unitTableRef, tunit, tunit')
+import Drasil.Sections.TableOfUnits (unitTableRef, tunit, tunit',tunitNone)
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard, traceMatOtherReq)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)

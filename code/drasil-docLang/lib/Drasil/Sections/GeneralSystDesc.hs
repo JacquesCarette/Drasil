@@ -5,7 +5,7 @@ import Language.Drasil
 import Language.Drasil.Sentence.Combinators
 
 import Data.Drasil.Concepts.Documentation (interface, system, environment,
-  userCharacteristic, systemConstraint, information, section_)
+  userCharacteristic, systemConstraint, information, section_, sysCont)
 import qualified Drasil.DocLang.SRS as SRS (sysCon, sysCont, userChar)
 
 -- | Default General System Description introduction.
@@ -17,6 +17,7 @@ genSysIntro = foldlSP [S "This", phrase section_, S "provides general",
 
 -- | User Characeristics section constructor. Does not contain any subsections.
 usrCharsF :: [Contents] -> Section
+usrCharsF [] = SRS.userChar [foldlSP[S "There are no", plural userCharacteristic]] []
 usrCharsF intro = SRS.userChar intro []
 
 -- | System Constraints section constructor.
@@ -28,4 +29,5 @@ systCon a subSec = SRS.sysCon a subSec
 
 -- | System Context section constructor. Does not contain any subsections.
 sysContxt :: [Contents] -> Section
+sysContxt [] = SRS.sysCont [foldlSP[S "There are no", plural sysCont]] []
 sysContxt cs = SRS.sysCont cs []

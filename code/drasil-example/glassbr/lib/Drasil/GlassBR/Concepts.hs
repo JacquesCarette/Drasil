@@ -17,7 +17,7 @@ con :: [CI]
 con = [annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
   lResistance, lShareFac, glassBR, stdOffDist, nFL]
 
-con' :: [NamedChunk]
+con' :: [IdeaDict]
 con' = [beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
   glass, ptOfExplsn, responseTy]
 
@@ -55,16 +55,16 @@ nFL           = commonIdeaWithDict "nFL"           (nounPhraseSP "non-factored l
 -- TODO: See if we can make some of these terms less specific and/or parameterized.
  
 beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
-  glass, ptOfExplsn, responseTy :: NamedChunk
-beam         = nc "beam"       (nounPhraseSP "beam")
-blastRisk    = nc "blastRisk"  (nounPhraseSP "blast risk")
-cantilever   = nc "cantilever" (nounPhraseSP "cantilever")
-edge         = nc "edge"       (cn'          "edge")
-glass        = nc "glass"      (nounPhraseSP "glass")
-glaSlab      = nc "glaSlab"    (nounPhraseSP "glass slab")
-plane        = nc "plane"      (nounPhraseSP "plane")
+  glass, ptOfExplsn, responseTy :: IdeaDict
+beam         = nc "beam"       (nounPhraseSP "beam")       Nothing
+blastRisk    = nc "blastRisk"  (nounPhraseSP "blast risk") Nothing
+cantilever   = nc "cantilever" (nounPhraseSP "cantilever") Nothing
+edge         = nc "edge"       (cn'          "edge")       Nothing
+glass        = nc "glass"      (nounPhraseSP "glass")      Nothing
+glaSlab      = nc "glaSlab"    (nounPhraseSP "glass slab") Nothing
+plane        = nc "plane"      (nounPhraseSP "plane")      Nothing
 
-ptOfExplsn   = nc "ptOfExplsn" (cn' "point of explosion")
+ptOfExplsn   = nc "ptOfExplsn" (cn' "point of explosion")  Nothing
 
 glaPlane     = compoundNC glass plane
 responseTy   = compoundNC response type_

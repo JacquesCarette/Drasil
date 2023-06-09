@@ -23,7 +23,7 @@ acronyms = [twoD, threeD, assumption, dataDefn, genDefn, goalStmt, inModel, like
 ssp :: CI
 ssp = commonIdeaWithDict "ssp" (pn' "Slope Stability analysis Program") "SSP"   [civilEng]
 
-defs :: [NamedChunk]
+defs :: [IdeaDict]
 defs = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice,
   soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics, 
   stabAnalysis, ssa]
@@ -33,22 +33,23 @@ defs' = [slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable]
 
 ----Other Common Phrases----
 soil, layer, material, intrslce, slip, slope, slice, stability,
-  morPrice :: NamedChunk
-intrslce = nc "interslice" (cn' "interslice")
-layer    = nc "layer"      (cn' "layer")
-material = nc "material"   (cn' "material")
-slice    = nc "slice"      (cn' "slice")
-slip     = nc "slip"       (cn  "slip") --FIXME: verb (escape or get loose from (a means of restraint))/noun 
-                                        --       (an act of sliding unintentionally for a short distance)?
-                                        --       (related to issue #129)
-slope    = nc "slope"      (cn' "slope")
-soil     = nc "soil"       (cn  "soil")
-stability = nc "stability" (cn "stability")
+  morPrice :: IdeaDict
+intrslce = nc "interslice" (cn' "interslice")         Nothing
+layer    = nc "layer"      (cn' "layer")              Nothing
+material = nc "material"   (cn' "material")           Nothing
+slice    = nc "slice"      (cn' "slice")              Nothing
+slip     = nc "slip"       (cn  "slip")               Nothing 
+  --FIXME: verb (escape or get loose from (a means of restraint))/noun 
+  --       (an act of sliding unintentionally for a short distance)?
+  --       (related to issue #129)
+slope    = nc "slope"      (cn' "slope")              Nothing
+soil     = nc "soil"       (cn  "soil")               Nothing
+stability = nc "stability" (cn "stability")           Nothing
 
-morPrice = nc "morPrice"   (pn  "Morgenstern-Price")
+morPrice = nc "morPrice"   (pn  "Morgenstern-Price")  Nothing
 
 soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics, 
-  stabAnalysis, ssa :: NamedChunk
+  stabAnalysis, ssa :: IdeaDict
 --slpSrf    = compoundNC slip surface
 soilPrpty = compoundNC soil     property
 mtrlPrpty = compoundNC material property
@@ -98,9 +99,9 @@ waterTable = dcc "water table" (cn' "water table") ("The upper boundary of a" ++
   " saturated zone in the ground")
 
 --
-factor :: NamedChunk --FIXME: this is here becuase this phrase is
+factor :: IdeaDict --FIXME: this is here becuase this phrase is
                      --used in datadefs and instance models
-factor = nc "factor" (cn' "factor") -- possible use this everywhere
+factor = nc "factor" (cn' "factor") Nothing-- possible use this everywhere
                                       -- (fs, fs_rc, fsConcept...)
 factorOfSafety :: NP
 factorOfSafety = factor `of_PS` safety

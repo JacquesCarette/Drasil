@@ -196,7 +196,7 @@ priorityNFReqs = [correctness, verifiability, understandability,
 
 {--INTRODUCTION--}
 
-startIntro :: NamedChunk -> Sentence -> CI -> Sentence
+startIntro :: IdeaDict -> Sentence -> CI -> Sentence
 startIntro prgm sfwrPredicts progName = foldlSent [
   atStart prgm, S "is helpful to efficiently" `S.and_` S "correctly predict the"
   +:+. sfwrPredicts, underConsidertn blast,

@@ -14,19 +14,20 @@ concepts = nw projMotion : map nw [landingPosNC, launchNC, launchAngleNC, launch
   rectVel] ++ map nw defs
 
 durationNC, flightDurNC, landingPosNC, launchNC, launchAngleNC, launchSpeedNC, offsetNC, targetPosNC,
-  rectVel :: NamedChunk
-durationNC   = nc "duration" (nounPhraseSP "duration")
-launchNC     = nc "launch"   (nounPhraseSP "launch")
-offsetNC     = nc "offset"   (nounPhraseSent $ S "distance between the" +:+ phraseNP (targetPosNC `andThe` landingPosNC))
+  rectVel :: IdeaDict
+durationNC   = nc "duration" (nounPhraseSP "duration")  Nothing
+launchNC     = nc "launch"   (nounPhraseSP "launch")    Nothing
+offsetNC     = nc "offset"   (nounPhraseSent $ S "distance between the" 
+  +:+ phraseNP (targetPosNC `andThe` landingPosNC)) Nothing
 
-flightDurNC   = compoundNC (nc "flight"  (nounPhraseSP "flight" )) durationNC
-landingPosNC  = compoundNC (nc "landing" (nounPhraseSP "landing")) position
+flightDurNC   = compoundNC (nc "flight"  (nounPhraseSP "flight" ) Nothing) durationNC
+landingPosNC  = compoundNC (nc "landing" (nounPhraseSP "landing") Nothing) position
 launchAngleNC = compoundNC launchNC angle
 launchSpeedNC = compoundNC launchNC speed
 targetPosNC   = compoundNC target position
 rectVel       = compoundNC rectilinear velocity
 
-projMotion :: NamedChunk
+projMotion :: IdeaDict
 projMotion = compoundNC projectile motion
 ---
 

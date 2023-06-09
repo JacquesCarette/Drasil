@@ -10,16 +10,16 @@ import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Domains (progLanguage)
 
 
-prodtcon :: [NamedChunk]
+prodtcon :: [IdeaDict]
 prodtcon = [sciCompS, videoGame, openSource, compPro]
 
 matlab :: CI
 matlab     = commonIdeaWithDict "matlab" (pn' "MATLAB programming language")       "MATLAB"  [progLanguage]
 
-sciCompS :: NamedChunk
-sciCompS   = nc "sciCompS"       (cn' "scientific computing software")
+sciCompS :: IdeaDict
+sciCompS   = nc "sciCompS"       (cn' "scientific computing software") Nothing
 
-videoGame, openSource, compPro :: NamedChunk
+videoGame, openSource, compPro :: IdeaDict
 videoGame   = compoundNC video game
 openSource  = compoundNC open source
 compPro     = compoundNC computer program

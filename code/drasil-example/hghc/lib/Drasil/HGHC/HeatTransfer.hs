@@ -68,9 +68,9 @@ htTransCladFuelEq = (exactDbl 2 `mulRe` sy cladCond `mulRe` sy gapFilmCond) $/ (
 hghc :: CommonConcept
 hghc = dcc' "hghc" (cn "HGHC") "HGHC program" "HGHC"
 
-nuclearPhys, fp :: NamedChunk
-nuclearPhys = nc "nuclearPhys" (nounPhraseSP "nuclear physics")
-fp = nc "fp" (cn "FP")
+nuclearPhys, fp :: IdeaDict
+nuclearPhys = nc "nuclearPhys" (nounPhraseSP "nuclear physics") Nothing
+fp = nc "fp" (cn "FP") Nothing
 
 lCoolant, lClad, lEffective, lGap :: Symbol
 lCoolant   = label "b"

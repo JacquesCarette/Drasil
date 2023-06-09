@@ -1,7 +1,9 @@
 module Database.Drasil.Dump where
 
-import Language.Drasil
-import Database.Drasil.ChunkDB hiding (cdb)
+import Language.Drasil (UID, HasUID(..))
+import Database.Drasil.ChunkDB (refTable, labelledcontentTable, sectionTable, 
+  conceptinsTable, theoryModelTable, gendefTable, insmodelTable, dataDefnTable,
+  unitTable, UMap, ChunkDB(termTable, symbolTable))
 
 import Data.Map.Strict (Map, insert)
 import qualified Data.Map.Strict as SM
@@ -18,14 +20,14 @@ dumpChunkDB :: ChunkDB -> DumpedChunkDB
 dumpChunkDB cdb = 
       insert "symbols" (umapDump $ symbolTable cdb)
     $ insert "terms" (umapDump $ termTable cdb)
-    $ insert "concepts" (umapDump $ _conceptinsTable cdb)
-    $ insert "units" (umapDump $ _unitTable cdb)
-    $ insert "dataDefinitions" (umapDump $ _dataDefnTable cdb)
-    $ insert "instanceModels" (umapDump $ _insmodelTable cdb)
-    $ insert "generalDefinitions" (umapDump $ _gendefTable cdb)
-    $ insert "theoryModels" (umapDump $ _theoryModelTable cdb)
-    $ insert "conceptInstances" (umapDump $ _conceptinsTable cdb)
-    $ insert "sections" (umapDump $ _sectionTable cdb)
-    $ insert "labelledContent" (umapDump $ _labelledcontentTable cdb)
-    $ insert "references" (umapDump $ _refTable cdb)
+    $ insert "concepts" (umapDump $ cdb ^. conceptinsTable)
+    $ insert "units" (umapDump $ cdb ^. unitTable)
+    $ insert "dataDefinitions" (umapDump $ cdb ^. dataDefnTable)
+    $ insert "instanceModels" (umapDump $ cdb ^. insmodelTable)
+    $ insert "generalDefinitions" (umapDump $ cdb ^. gendefTable)
+    $ insert "theoryModels" (umapDump $ cdb ^. theoryModelTable)
+    $ insert "conceptInstances" (umapDump $ cdb ^. conceptinsTable)
+    $ insert "sections" (umapDump $ cdb ^. sectionTable)
+    $ insert "labelledContent" (umapDump $ cdb ^. labelledcontentTable)
+    $ insert "references" (umapDump $ cdb ^. refTable)
       mempty

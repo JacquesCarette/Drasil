@@ -8,7 +8,7 @@ module Database.Drasil.ChunkDB (
   -- * Types
   -- ** 'ChunkDB'
   -- | Main database type
-  ChunkDB(..),
+  ChunkDB(CDB, symbolTable, termTable, defTable),
   -- ** Maps
   -- | Exported for external use.
   RefbyMap, TraceMap, UMap,

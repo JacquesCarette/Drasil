@@ -66,5 +66,6 @@ data ReadMeInfo = ReadMeInfo {
   configFP :: [FilePath],
   caseName :: CaseName,
   examplePurpose :: ExamplePurpose,
-  exampleDescr :: ExampleDescr
+  exampleDescr :: ExampleDescr,
+  folderNum :: Int
 }

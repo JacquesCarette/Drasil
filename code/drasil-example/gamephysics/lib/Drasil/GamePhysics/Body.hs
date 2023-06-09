@@ -11,11 +11,10 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
-  condition, consumer, document, endUser, environment, game, guide,
-  input_, interface, object, organization, physical,
-  physicalSim, physics, problem, product_, project, quantity, realtime,
-  section_, simulation, software, softwareSys, srsDomains, system,
-  systemConstraint, sysCont, task, template, user, doccon, doccon',
+  condition, consumer, endUser, environment, game, guide, input_, interface,
+  object, physical, physicalSim, physics, problem, product_, project,
+  quantity, realtime, section_, simulation, software, softwareSys,
+  srsDomains, system, systemConstraint, sysCont, task, user, doccon, doccon',
   property, problemDescription)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (dataDefn, inModel)
@@ -25,7 +24,7 @@ import Data.Drasil.Concepts.Software (physLib, softwarecon)
 import Data.Drasil.People (alex, luthfi, olu)
 import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
   derived, fundamentals, joule)
-import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
+import Data.Drasil.Software.Products (openSource, prodtcon, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
 import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon, rigidBody, collision, damping)
@@ -39,8 +38,7 @@ import Drasil.GamePhysics.Concepts (gamePhysics, acronyms, threeD, twoD)
 import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iMods, instModIntro)
-import Drasil.GamePhysics.References (citations, koothoor2013, smithEtAl2007,
- smithLai2005, smithKoothoor2016)
+import Drasil.GamePhysics.References (citations)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs)
 import Drasil.GamePhysics.TMods (tMods)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
@@ -66,7 +64,7 @@ mkSRS = [TableOfContents,
   [IPurpose $ purpDoc gamePhysics Verbose,
    IScope scope,
    IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
-   IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel [] []) EmptyS],
+   IOrgSec inModel (SRS.inModel [] []) EmptyS],
    GSDSec $ GSDProg [
     SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] []],
@@ -209,13 +207,6 @@ scope = foldlSent_ [phraseNP (the physicalSim) `S.of_` getAcc twoD,
 -------------------------------------
 -- 2.3 : Organization of Documents --
 -------------------------------------
-
-organizationOfDocumentsIntro :: Sentence
-organizationOfDocumentsIntro = foldlSent 
-  [atStartNP (the organization), S "of this", phrase document, 
-  S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
-  phrase sciCompS, S "proposed by", foldlList Comma List $ 
-  map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --

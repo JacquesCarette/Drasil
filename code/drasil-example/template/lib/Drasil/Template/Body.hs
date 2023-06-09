@@ -9,6 +9,8 @@ import Language.Drasil
 import Drasil.SRSDocument
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Language.Drasil.Sentence.Combinators as S
+import Data.Drasil.Concepts.Documentation (doccon, doccon')
+import Data.Drasil.Concepts.Software (errMsg, program)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 
@@ -22,11 +24,17 @@ printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
 mkSRS :: SRSDecl
-mkSRS = []
+mkSRS = [SSDSec $ SSDProg [
+  SSDSolChSpec $ SCSProg [
+      TMs [] []
+    , GDs [] [] HideDerivation
+    , DDs [] [] HideDerivation
+    , IMs [] [] HideDerivation
+  ]]]
 
 si :: SystemInformation
 si = SI {
-  _sys         = example,
+  _sys         = progName,
   _kind        = Doc.srs,
   _authors     = [authorName],
   _background  = [],
@@ -47,7 +55,8 @@ si = SI {
 }
 
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict]) [nw example] ([] :: [ConceptChunk])
+symbMap = cdb ([] :: [QuantityDict]) (nw progName : [nw errMsg, nw program] ++ 
+  map nw doccon ++ map nw doccon') ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
   ([] :: [Section]) ([] :: [LabelledContent]) ([] :: [Reference])
@@ -62,8 +71,8 @@ refDB :: ReferenceDB
 refDB = rdb [] []
 
 -- MOVE TO CONCEPTS
-example :: CI -- name of example
-example = commonIdeaWithDict "example" (pn "Template") "Template" []
+progName :: CI
+progName = commonIdeaWithDict "progName" (pn "ProgName") "ProgName" []
 
 -- MOVE TO DATA.PEOPLE
 authorName :: Person

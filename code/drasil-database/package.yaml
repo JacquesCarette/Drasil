@@ -16,6 +16,7 @@ dependencies:
 - lens
 - drasil-lang
 - drasil-theory
+- drasil-utils
 
 ghc-options:
 - -Wall

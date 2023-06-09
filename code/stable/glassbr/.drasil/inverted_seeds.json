@@ -1425,9 +1425,6 @@
     "rate": [
         "terms"
     ],
-    "rbrtsn2012": [
-        "references"
-    ],
     "read_table": [
         "terms",
         "symbols"

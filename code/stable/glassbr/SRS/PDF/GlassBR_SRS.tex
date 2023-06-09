@@ -7,8 +7,8 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{unicode-math}
-\usepackage{tabu}
-\usepackage{longtable}
+\usepackage{tabularray}
+\usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{caption}
 \usepackage{graphics}
@@ -20,7 +20,6 @@
 \setmathfont{Latin Modern Math}
 \newcommand{\gt}{\ensuremath >}
 \newcommand{\lt}{\ensuremath <}
-\global\tabulinesep=1mm
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \bibliography{bibfile}
@@ -38,12 +37,11 @@ This section records information for easy reference.
 \label{Sec:ToU}
 The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the \hyperref[Table:ToU]{Table of Units} lists the symbol, a description and the SI name.
 
-\begin{longtable}{l l l}
-\toprule
+\begin{longtblr}
+[caption={Table of Units}]
+{colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{SI Name}
 \\
-\midrule
-\endhead
 ${\text{kg}}$ & mass & kilogram
 \\
 ${\text{m}}$ & length & metre
@@ -53,21 +51,17 @@ ${\text{N}}$ & force & newton
 ${\text{Pa}}$ & pressure & pascal
 \\
 ${\text{s}}$ & time & second
-\\
-\bottomrule
-\caption{Table of Units}
 \label{Table:ToU}
-\end{longtable}
+\end{longtblr}
 \subsection{Table of Symbols}
 \label{Sec:ToS}
 The symbols used in this document are summarized in the \hyperref[Table:ToS]{Table of Symbols} along with their units. The symbols are listed in alphabetical order.
 
-\begin{longtabu}{l X[l] l}
-\toprule
+\begin{longtblr}
+[caption={Table of Symbols}]
+{colspec={l X[l] l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
-\midrule
-\endhead
 $a$ & Plate length (long dimension) & ${\text{m}}$
 \\
 $\mathit{AR}$ & Aspect ratio & --
@@ -165,19 +159,15 @@ ${w_{\text{max}}}$ & Maximum permissible input charge weight & ${\text{kg}}$
 ${w_{\text{min}}}$ & Minimum permissible input charge weight & ${\text{kg}}$
 \\
 ${w_{\mathit{TNT}}}$ & Equivalent TNT charge mass & ${\text{kg}}$
-\\
-\bottomrule
-\caption{Table of Symbols}
 \label{Table:ToS}
-\end{longtabu}
+\end{longtblr}
 \subsection{Abbreviations and Acronyms}
 \label{Sec:TAbbAcc}
-\begin{longtable}{l l}
-\toprule
+\begin{longtblr}
+[caption={Abbreviations and Acronyms}]
+{colspec={l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Abbreviation} & \textbf{Full Form}
 \\
-\midrule
-\endhead
 A & Assumption
 \\
 AN & Annealed
@@ -229,11 +219,8 @@ TM & Theoretical Model
 UC & Unlikely Change
 \\
 Uncert. & Typical Uncertainty
-\\
-\bottomrule
-\caption{Abbreviations and Acronyms}
 \label{Table:TAbbAcc}
-\end{longtable}
+\end{longtblr}
 \section{Introduction}
 \label{Sec:Intro}
 Software is helpful to efficiently and correctly predict the blast risk involved with the glass slab. The blast under consideration is any kind of man-made explosion. The software, herein called GlassBR, aims to predict the blast risk involved with the glass slab using an intuitive interface.
@@ -256,7 +243,7 @@ Reviewers of this documentation should have an understanding of second year calc
 
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
-The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013}, \cite{smithLai2005}, \cite{smithEtAl2007}, and \cite{smithKoothoor2016}, with some aspects taken from Volere template 16 \cite{rbrtsn2012}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{data definitions} and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013}, \cite{smithLai2005}, \cite{smithEtAl2007}, and \cite{smithKoothoor2016}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{data definitions} and trace back to find any additional information they require.
 
 The \hyperref[Sec:GoalStmt]{goal statements} are refined to the theoretical models and the \hyperref[Sec:TMs]{theoretical models} to the \hyperref[Sec:IMs]{instance models}. The data definitions are used to support the definitions of the different models.
 
@@ -405,26 +392,26 @@ This section focuses on the general equations and laws that GlassBR is based on.
 \toprule \textbf{Refname} & \textbf{TM:isSafeProb}
 \phantomsection 
 \label{TM:isSafeProb}
-\\ \midrule \\
+\\ \midrule
 Label & Safety Probability
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            \mathit{isSafeProb}={P_{\text{f}}}\lt{}{P_{\text{f}\text{tol}}}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$\mathit{isSafeProb}$ is the probability of failure safety requirement (Unitless)}
               \item{${P_{\text{f}}}$ is the probability of failure (Unitless)}
               \item{${P_{\text{f}\text{tol}}}$ is the tolerable probability of failure (Unitless)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & If $\mathit{isSafeProb}$, the structure is considered safe.
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{astm2009}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[checkGlassSafety]{FR:Check-Glass-Safety}
         
 \\ \bottomrule
@@ -437,26 +424,26 @@ RefBy & \hyperref[checkGlassSafety]{FR:Check-Glass-Safety}
 \toprule \textbf{Refname} & \textbf{TM:isSafeLoad}
 \phantomsection 
 \label{TM:isSafeLoad}
-\\ \midrule \\
+\\ \midrule
 Label & Safety Load
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            \mathit{isSafeLoad}=\mathit{capacity}\gt{}\mathit{Load}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$\mathit{isSafeLoad}$ is the load resistance safety requirement (Unitless)}
               \item{$\mathit{capacity}$ is the capacity or load resistance (${\text{Pa}}$)}
               \item{$\mathit{Load}$ is the applied load (demand) or pressure (${\text{Pa}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & If $\mathit{isSafeLoad}$, the structure is considered safe.
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{astm2009}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[checkGlassSafety]{FR:Check-Glass-Safety}
         
 \\ \bottomrule
@@ -477,20 +464,20 @@ This section collects and defines all the data needed to build the instance mode
 \toprule \textbf{Refname} & \textbf{DD:riskFun}
 \phantomsection 
 \label{DD:riskFun}
-\\ \midrule \\
+\\ \midrule
 Label & Risk of failure
         
-\\ \midrule \\
+\\ \midrule
 Symbol & $B$
          
-\\ \midrule \\
+\\ \midrule
 Units & Unitless
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            B=\frac{k}{\left(a b\right)^{m-1}} \left(E h^{2}\right)^{m} \mathit{LDF} e^{J}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$B$ is the risk of failure (Unitless)}
               \item{$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
@@ -502,7 +489,7 @@ Description & \begin{symbDescription}
               \item{$\mathit{LDF}$ is the load duration factor (Unitless)}
               \item{$J$ is the stress distribution factor (Function) (Unitless)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & $a$ and $b$ are the dimensions of the plate, where ($a\geq{}b$).
         
         $h$ is defined in \hyperref[DD:minThick]{DD:minThick} and is based on the nominal thicknesses.
@@ -511,10 +498,10 @@ Notes & $a$ and $b$ are the dimensions of the plate, where ($a\geq{}b$).
         
         $J$ is defined in \hyperref[DD:stressDistFac]{DD:stressDistFac}.
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{astm2009}, \cite[(Eqs. 4-5)]{beasonEtAl1998}, and \cite[(Eq. 14)]{campidelli}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[DD:probOfBreak]{DD:probOfBreak}
         
 \\ \bottomrule
@@ -528,16 +515,16 @@ RefBy & \hyperref[DD:probOfBreak]{DD:probOfBreak}
 \toprule \textbf{Refname} & \textbf{DD:minThick}
 \phantomsection 
 \label{DD:minThick}
-\\ \midrule \\
+\\ \midrule
 Label & Minimum thickness
         
-\\ \midrule \\
+\\ \midrule
 Symbol & $h$
          
-\\ \midrule \\
+\\ \midrule
 Units & ${\text{m}}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            h=\frac{1}{1000} \begin{cases}
                             2.16, & t=2.5\\
@@ -554,18 +541,18 @@ Equation & \begin{displaymath}
                             21.44, & t=22.0
                             \end{cases}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$h$ is the minimum thickness (${\text{m}}$)}
               \item{$t$ is the nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ (${\text{mm}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & $t$ is a function that maps from the nominal thickness ($h$) to the minimum thickness.
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{astm2009}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[DD:sdfTol]{DD:sdfTol}, \hyperref[DD:riskFun]{DD:riskFun}, \hyperref[DD:nFL]{DD:nFL}, and \hyperref[DD:dimlessLoad]{DD:dimlessLoad}
         
 \\ \bottomrule
@@ -579,34 +566,34 @@ RefBy & \hyperref[DD:sdfTol]{DD:sdfTol}, \hyperref[DD:riskFun]{DD:riskFun}, \hyp
 \toprule \textbf{Refname} & \textbf{DD:loadDurFactor}
 \phantomsection 
 \label{DD:loadDurFactor}
-\\ \midrule \\
+\\ \midrule
 Label & Load duration factor
         
-\\ \midrule \\
+\\ \midrule
 Symbol & $\mathit{LDF}$
          
-\\ \midrule \\
+\\ \midrule
 Units & Unitless
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            \mathit{LDF}=\left(\frac{{t_{\text{d}}}}{60}\right)^{\frac{m}{16}}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$\mathit{LDF}$ is the load duration factor (Unitless)}
               \item{${t_{\text{d}}}$ is the duration of load (${\text{s}}$)}
               \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & ${t_{\text{d}}}$ and $m$ come from \hyperref[assumpSV]{A:standardValues}.
         
         $\mathit{LDF}$ is assumed to be constant (from \hyperref[assumpLDFC]{A:ldfConstant}).
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{astm2009}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[DD:sdfTol]{DD:sdfTol} and \hyperref[DD:riskFun]{DD:riskFun}
         
 \\ \bottomrule
@@ -620,37 +607,37 @@ RefBy & \hyperref[DD:sdfTol]{DD:sdfTol} and \hyperref[DD:riskFun]{DD:riskFun}
 \toprule \textbf{Refname} & \textbf{DD:stressDistFac}
 \phantomsection 
 \label{DD:stressDistFac}
-\\ \midrule \\
+\\ \midrule
 Label & Stress distribution factor (Function)
         
-\\ \midrule \\
+\\ \midrule
 Symbol & $J$
          
-\\ \midrule \\
+\\ \midrule
 Units & Unitless
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            J=\mathit{interpZ}\left(\text{``SDF.txt''},\mathit{AR},\hat{q}\right)
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$J$ is the stress distribution factor (Function) (Unitless)}
               \item{$\mathit{interpZ}$ is the interpZ (Unitless)}
               \item{$\mathit{AR}$ is the aspect ratio (Unitless)}
               \item{$\hat{q}$ is the dimensionless load (Unitless)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & $J$ is obtained by interpolating from data shown in \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect}.
         
         $\mathit{AR}$ is defined in \hyperref[DD:aspectRatio]{DD:aspectRatio}.
         
         $\hat{q}$ is defined in \hyperref[DD:dimlessLoad]{DD:dimlessLoad}.
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{astm2009}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[DD:riskFun]{DD:riskFun}
         
 \\ \bottomrule
@@ -664,20 +651,20 @@ RefBy & \hyperref[DD:riskFun]{DD:riskFun}
 \toprule \textbf{Refname} & \textbf{DD:nFL}
 \phantomsection 
 \label{DD:nFL}
-\\ \midrule \\
+\\ \midrule
 Label & Non-factored load
         
-\\ \midrule \\
+\\ \midrule
 Symbol & $\mathit{NFL}$
          
-\\ \midrule \\
+\\ \midrule
 Units & ${\text{Pa}}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            \mathit{NFL}=\frac{{\hat{q}_{\text{tol}}} E h^{4}}{\left(a b\right)^{2}}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$\mathit{NFL}$ is the non-factored load (${\text{Pa}}$)}
               \item{${\hat{q}_{\text{tol}}}$ is the tolerable load (Unitless)}
@@ -686,7 +673,7 @@ Description & \begin{symbDescription}
               \item{$a$ is the plate length (long dimension) (${\text{m}}$)}
               \item{$b$ is the plate width (short dimension) (${\text{m}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & ${\hat{q}_{\text{tol}}}$ is defined in \hyperref[DD:tolLoad]{DD:tolLoad}.
         
         $E$ comes from \hyperref[assumpSV]{A:standardValues}.
@@ -695,10 +682,10 @@ Notes & ${\hat{q}_{\text{tol}}}$ is defined in \hyperref[DD:tolLoad]{DD:tolLoad}
         
         $a$ and $b$ are the dimensions of the plate, where ($a\geq{}b$).
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{astm2009}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[DD:calofCapacity]{DD:calofCapacity}
         
 \\ \bottomrule
@@ -712,16 +699,16 @@ RefBy & \hyperref[DD:calofCapacity]{DD:calofCapacity}
 \toprule \textbf{Refname} & \textbf{DD:gTF}
 \phantomsection 
 \label{DD:gTF}
-\\ \midrule \\
+\\ \midrule
 Label & Glass type factor
         
-\\ \midrule \\
+\\ \midrule
 Symbol & $\mathit{GTF}$
          
-\\ \midrule \\
+\\ \midrule
 Units & Unitless
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            \mathit{GTF}=\begin{cases}
                         1, & g=\text{``AN''}\\
@@ -729,22 +716,22 @@ Equation & \begin{displaymath}
                         2, & g=\text{``HS''}
                         \end{cases}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$\mathit{GTF}$ is the glass type factor (Unitless)}
               \item{$g$ is the glass type (Unitless)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & AN is annealed glass.
         
         FT is fully tempered glass.
         
         HS is heat strengthened glass.
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{astm2009}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[DD:calofCapacity]{DD:calofCapacity} and \hyperref[DD:dimlessLoad]{DD:dimlessLoad}
         
 \\ \bottomrule
@@ -758,20 +745,20 @@ RefBy & \hyperref[DD:calofCapacity]{DD:calofCapacity} and \hyperref[DD:dimlessLo
 \toprule \textbf{Refname} & \textbf{DD:dimlessLoad}
 \phantomsection 
 \label{DD:dimlessLoad}
-\\ \midrule \\
+\\ \midrule
 Label & Dimensionless load
         
-\\ \midrule \\
+\\ \midrule
 Symbol & $\hat{q}$
          
-\\ \midrule \\
+\\ \midrule
 Units & Unitless
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            \hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} \mathit{GTF}}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$\hat{q}$ is the dimensionless load (Unitless)}
               \item{$q$ is the applied load (demand) (${\text{Pa}}$)}
@@ -781,7 +768,7 @@ Description & \begin{symbDescription}
               \item{$h$ is the minimum thickness (${\text{m}}$)}
               \item{$\mathit{GTF}$ is the glass type factor (Unitless)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & $q$ is the 3 second duration equivalent pressure, as given in \hyperref[DD:calofDemand]{DD:calofDemand}.
         
         $a$ and $b$ are the dimensions of the plate, where ($a\geq{}b$).
@@ -792,10 +779,10 @@ Notes & $q$ is the 3 second duration equivalent pressure, as given in \hyperref[
         
         $\mathit{GTF}$ is defined in \hyperref[DD:gTF]{DD:gTF}.
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{astm2009} and \cite[(Eq. 7)]{campidelli}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[DD:stressDistFac]{DD:stressDistFac}
         
 \\ \bottomrule
@@ -809,37 +796,37 @@ RefBy & \hyperref[DD:stressDistFac]{DD:stressDistFac}
 \toprule \textbf{Refname} & \textbf{DD:tolLoad}
 \phantomsection 
 \label{DD:tolLoad}
-\\ \midrule \\
+\\ \midrule
 Label & Tolerable load
         
-\\ \midrule \\
+\\ \midrule
 Symbol & ${\hat{q}_{\text{tol}}}$
          
-\\ \midrule \\
+\\ \midrule
 Units & Unitless
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            {\hat{q}_{\text{tol}}}=\mathit{interpY}\left(\text{``SDF.txt''},\mathit{AR},{J_{\text{tol}}}\right)
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{${\hat{q}_{\text{tol}}}$ is the tolerable load (Unitless)}
               \item{$\mathit{interpY}$ is the interpY (Unitless)}
               \item{$\mathit{AR}$ is the aspect ratio (Unitless)}
               \item{${J_{\text{tol}}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & ${\hat{q}_{\text{tol}}}$ is obtained by interpolating from data shown in \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect}.
         
         $\mathit{AR}$ is defined in \hyperref[DD:aspectRatio]{DD:aspectRatio}.
         
         ${J_{\text{tol}}}$ is defined in \hyperref[DD:sdfTol]{DD:sdfTol}.
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{astm2009}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[DD:nFL]{DD:nFL}
         
 \\ \bottomrule
@@ -853,20 +840,20 @@ RefBy & \hyperref[DD:nFL]{DD:nFL}
 \toprule \textbf{Refname} & \textbf{DD:sdfTol}
 \phantomsection 
 \label{DD:sdfTol}
-\\ \midrule \\
+\\ \midrule
 Label & Stress distribution factor (Function) based on Pbtol
         
-\\ \midrule \\
+\\ \midrule
 Symbol & ${J_{\text{tol}}}$
          
-\\ \midrule \\
+\\ \midrule
 Units & Unitless
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            {J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} \mathit{LDF}}\right)
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{${J_{\text{tol}}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
               \item{${P_{\text{b}\text{tol}}}$ is the tolerable probability of breakage (Unitless)}
@@ -878,7 +865,7 @@ Description & \begin{symbDescription}
               \item{$h$ is the minimum thickness (${\text{m}}$)}
               \item{$\mathit{LDF}$ is the load duration factor (Unitless)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & ${P_{\text{b}\text{tol}}}$ is entered by the user.
         
         $a$ and $b$ are the dimensions of the plate, where ($a\geq{}b$).
@@ -889,10 +876,10 @@ Notes & ${P_{\text{b}\text{tol}}}$ is entered by the user.
         
         $\mathit{LDF}$ is defined in \hyperref[DD:loadDurFactor]{DD:loadDurFactor}.
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{astm2009}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[DD:tolLoad]{DD:tolLoad}
         
 \\ \bottomrule
@@ -906,30 +893,30 @@ RefBy & \hyperref[DD:tolLoad]{DD:tolLoad}
 \toprule \textbf{Refname} & \textbf{DD:standOffDist}
 \phantomsection 
 \label{DD:standOffDist}
-\\ \midrule \\
+\\ \midrule
 Label & Stand off distance
         
-\\ \midrule \\
+\\ \midrule
 Symbol & $\mathit{SD}$
          
-\\ \midrule \\
+\\ \midrule
 Units & ${\text{m}}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            \mathit{SD}=\sqrt{{\mathit{SD}_{\text{x}}}^{2}+{\mathit{SD}_{\text{y}}}^{2}+{\mathit{SD}_{\text{z}}}^{2}}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$\mathit{SD}$ is the stand off distance (${\text{m}}$)}
               \item{${\mathit{SD}_{\text{x}}}$ is the stand off distance ($x$-component) (${\text{m}}$)}
               \item{${\mathit{SD}_{\text{y}}}$ is the stand off distance ($y$-component) (${\text{m}}$)}
               \item{${\mathit{SD}_{\text{z}}}$ is the stand off distance ($z$-component) (${\text{m}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Source & \cite{astm2009}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[DD:calofDemand]{DD:calofDemand}
         
 \\ \bottomrule
@@ -943,32 +930,32 @@ RefBy & \hyperref[DD:calofDemand]{DD:calofDemand}
 \toprule \textbf{Refname} & \textbf{DD:aspectRatio}
 \phantomsection 
 \label{DD:aspectRatio}
-\\ \midrule \\
+\\ \midrule
 Label & Aspect ratio
         
-\\ \midrule \\
+\\ \midrule
 Symbol & $\mathit{AR}$
          
-\\ \midrule \\
+\\ \midrule
 Units & Unitless
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            \mathit{AR}=\frac{a}{b}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$\mathit{AR}$ is the aspect ratio (Unitless)}
               \item{$a$ is the plate length (long dimension) (${\text{m}}$)}
               \item{$b$ is the plate width (short dimension) (${\text{m}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & $a$ and $b$ are the dimensions of the plate, where ($a\geq{}b$).
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{astm2009}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[DD:tolLoad]{DD:tolLoad} and \hyperref[DD:stressDistFac]{DD:stressDistFac}
         
 \\ \bottomrule
@@ -982,29 +969,29 @@ RefBy & \hyperref[DD:tolLoad]{DD:tolLoad} and \hyperref[DD:stressDistFac]{DD:str
 \toprule \textbf{Refname} & \textbf{DD:eqTNTW}
 \phantomsection 
 \label{DD:eqTNTW}
-\\ \midrule \\
+\\ \midrule
 Label & Equivalent TNT charge mass
         
-\\ \midrule \\
+\\ \midrule
 Symbol & ${w_{\mathit{TNT}}}$
          
-\\ \midrule \\
+\\ \midrule
 Units & ${\text{kg}}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            {w_{\mathit{TNT}}}=w \mathit{TNT}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{${w_{\mathit{TNT}}}$ is the equivalent TNT charge mass (${\text{kg}}$)}
               \item{$w$ is the charge weight (${\text{kg}}$)}
               \item{$\mathit{TNT}$ is the TNT equivalent factor (Unitless)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Source & \cite{astm2009}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[DD:calofDemand]{DD:calofDemand}
         
 \\ \bottomrule
@@ -1018,31 +1005,31 @@ RefBy & \hyperref[DD:calofDemand]{DD:calofDemand}
 \toprule \textbf{Refname} & \textbf{DD:probOfBreak}
 \phantomsection 
 \label{DD:probOfBreak}
-\\ \midrule \\
+\\ \midrule
 Label & Probability of breakage
         
-\\ \midrule \\
+\\ \midrule
 Symbol & ${P_{\text{b}}}$
          
-\\ \midrule \\
+\\ \midrule
 Units & Unitless
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            {P_{\text{b}}}=1-e^{-B}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{${P_{\text{b}}}$ is the probability of breakage (Unitless)}
               \item{$B$ is the risk of failure (Unitless)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & $B$ is defined in \hyperref[DD:riskFun]{DD:riskFun}.
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{astm2009} and \cite{beasonEtAl1998}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[IM:isSafePb]{IM:isSafePb}
         
 \\ \bottomrule
@@ -1056,37 +1043,37 @@ RefBy & \hyperref[IM:isSafePb]{IM:isSafePb}
 \toprule \textbf{Refname} & \textbf{DD:calofCapacity}
 \phantomsection 
 \label{DD:calofCapacity}
-\\ \midrule \\
+\\ \midrule
 Label & Load resistance
         
-\\ \midrule \\
+\\ \midrule
 Symbol & $\mathit{LR}$
          
-\\ \midrule \\
+\\ \midrule
 Units & ${\text{Pa}}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            \mathit{LR}=\mathit{NFL} \mathit{GTF} \mathit{LSF}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$\mathit{LR}$ is the load resistance (${\text{Pa}}$)}
               \item{$\mathit{NFL}$ is the non-factored load (${\text{Pa}}$)}
               \item{$\mathit{GTF}$ is the glass type factor (Unitless)}
               \item{$\mathit{LSF}$ is the load share factor (Unitless)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & $\mathit{LR}$ is also called capacity.
         
         $\mathit{NFL}$ is defined in \hyperref[DD:nFL]{DD:nFL}.
         
         $\mathit{GTF}$ is defined in \hyperref[DD:gTF]{DD:gTF}.
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{astm2009}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[IM:isSafeLR]{IM:isSafeLR}
         
 \\ \bottomrule
@@ -1100,33 +1087,33 @@ RefBy & \hyperref[IM:isSafeLR]{IM:isSafeLR}
 \toprule \textbf{Refname} & \textbf{DD:calofDemand}
 \phantomsection 
 \label{DD:calofDemand}
-\\ \midrule \\
+\\ \midrule
 Label & Applied load (demand)
         
-\\ \midrule \\
+\\ \midrule
 Symbol & $q$
          
-\\ \midrule \\
+\\ \midrule
 Units & ${\text{Pa}}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            q=\mathit{interpY}\left(\text{``TSD.txt''},\mathit{SD},{w_{\mathit{TNT}}}\right)
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$q$ is the applied load (demand) (${\text{Pa}}$)}
               \item{$\mathit{interpY}$ is the interpY (Unitless)}
               \item{$\mathit{SD}$ is the stand off distance (${\text{m}}$)}
               \item{${w_{\mathit{TNT}}}$ is the equivalent TNT charge mass (${\text{kg}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & $q$, or applied load (demand), is the 3 second duration equivalent pressure obtained from \hyperref[Figure:demandVSsod]{Fig:demandVSsod} by interpolation using stand off distance ($\mathit{SD}$) and ${w_{\mathit{TNT}}}$ as parameters. ${w_{\mathit{TNT}}}$ is defined in \hyperref[DD:eqTNTW]{DD:eqTNTW}. $\mathit{SD}$ is the stand off distance as defined in \hyperref[DD:standOffDist]{DD:standOffDist}.
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{astm2009}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[IM:isSafeLR]{IM:isSafeLR} and \hyperref[DD:dimlessLoad]{DD:dimlessLoad}
         
 \\ \bottomrule
@@ -1146,45 +1133,45 @@ The goal \hyperref[willBreakGS]{GS:Predict-Glass-Withstands-Explosion} is met by
 \toprule \textbf{Refname} & \textbf{IM:isSafePb}
 \phantomsection 
 \label{IM:isSafePb}
-\\ \midrule \\
+\\ \midrule
 Label & Safety Req-Pb
         
-\\ \midrule \\
+\\ \midrule
 Input & ${P_{\text{b}}}$, ${P_{\text{b}\text{tol}}}$
         
-\\ \midrule \\
+\\ \midrule
 Output & $\mathit{isSafePb}$
          
-\\ \midrule \\
+\\ \midrule
 Input Constraints & \begin{displaymath}
                     {P_{\text{b}}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
                     {P_{\text{b}\text{tol}}}\gt{}0
                     \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Output Constraints & 
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            \mathit{isSafePb}={P_{\text{b}}}\lt{}{P_{\text{b}\text{tol}}}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$\mathit{isSafePb}$ is the probability of glass breakage safety requirement (Unitless)}
               \item{${P_{\text{b}}}$ is the probability of breakage (Unitless)}
               \item{${P_{\text{b}\text{tol}}}$ is the tolerable probability of breakage (Unitless)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & If $\mathit{isSafePb}$, the glass is considered safe. $\mathit{isSafePb}$ and $\mathit{isSafePb}$ (from \hyperref[IM:isSafeLR]{IM:isSafeLR}) are either both True or both False.
         
         ${P_{\text{b}}}$ is defined in \hyperref[DD:probOfBreak]{DD:probOfBreak}.
         
         ${P_{\text{b}\text{tol}}}$ is entered by the user.
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{astm2009}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[IM:isSafeLR]{IM:isSafeLR}
         
 \\ \bottomrule
@@ -1197,45 +1184,45 @@ RefBy & \hyperref[IM:isSafeLR]{IM:isSafeLR}
 \toprule \textbf{Refname} & \textbf{IM:isSafeLR}
 \phantomsection 
 \label{IM:isSafeLR}
-\\ \midrule \\
+\\ \midrule
 Label & Safety Req-LR
         
-\\ \midrule \\
+\\ \midrule
 Input & $\mathit{LR}$, $q$
         
-\\ \midrule \\
+\\ \midrule
 Output & $\mathit{isSafeLR}$
          
-\\ \midrule \\
+\\ \midrule
 Input Constraints & \begin{displaymath}
                     \mathit{LR}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
                     q\gt{}0
                     \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Output Constraints & 
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            \mathit{isSafeLR}=\mathit{LR}\gt{}q
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$\mathit{isSafeLR}$ is the 3 second load equivalent resistance safety requirement (Unitless)}
               \item{$\mathit{LR}$ is the load resistance (${\text{Pa}}$)}
               \item{$q$ is the applied load (demand) (${\text{Pa}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & If $\mathit{isSafeLR}$, the glass is considered safe. $\mathit{isSafePb}$ (from \hyperref[IM:isSafePb]{IM:isSafePb}) and $\mathit{isSafeLR}$ are either both True or both False.
         
         $\mathit{LR}$ is defined in \hyperref[DD:calofCapacity]{DD:calofCapacity} and is also called capacity.
         
         $q$ is the 3 second duration equivalent pressure, as given in \hyperref[DD:calofDemand]{DD:calofDemand}.
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{astm2009}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[IM:isSafePb]{IM:isSafePb}
         
 \\ \bottomrule
@@ -1245,12 +1232,11 @@ RefBy & \hyperref[IM:isSafePb]{IM:isSafePb}
 \label{Sec:DataConstraints}
 The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The \hyperref[Sec:AuxConstants]{auxiliary constants} give the values of the specification parameters used in the \hyperref[Table:InDataConstraints]{Data Constraints Table}.
 
-\begin{longtable}{l l l l l}
-\toprule
+\begin{longtblr}
+[caption={Input Data Constraints}]
+{colspec={l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
 \\
-\midrule
-\endhead
 $a$ & $a\gt{}0\land{}a\geq{}b$ & ${d_{\text{min}}}\leq{}a\leq{}{d_{\text{max}}}$ & $1.5$ ${\text{m}}$ & 10$\%$
 \\
 $\mathit{AR}$ & $\mathit{AR}\geq{}1$ & $\mathit{AR}\leq{}{\mathit{AR}_{\text{max}}}$ & $1.5$ & 10$\%$
@@ -1264,29 +1250,22 @@ $\mathit{SD}$ & $\mathit{SD}\gt{}0$ & ${\mathit{SD}_{\text{min}}}\leq{}\mathit{S
 $\mathit{TNT}$ & $\mathit{TNT}\gt{}0$ & -- & $1$ & 10$\%$
 \\
 $w$ & $w\gt{}0$ & ${w_{\text{min}}}\leq{}w\leq{}{w_{\text{max}}}$ & $42$ ${\text{kg}}$ & 10$\%$
-\\
-\bottomrule
-\caption{Input Data Constraints}
 \label{Table:InDataConstraints}
-\end{longtable}
+\end{longtblr}
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:CorSolProps}
 The \hyperref[Table:OutDataConstraints]{Data Constraints Table} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
 
-\begin{longtable}{l l}
-\toprule
+\begin{longtblr}
+[caption={Output Data Constraints}]
+{colspec={l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Var} & \textbf{Physical Constraints}
 \\
-\midrule
-\endhead
 ${P_{\text{b}}}$ & $0\leq{}{P_{\text{b}}}\leq{}1$
 \\
 $J$ & ${J_{\text{min}}}\leq{}J\leq{}{J_{\text{max}}}$
-\\
-\bottomrule
-\caption{Output Data Constraints}
 \label{Table:OutDataConstraints}
-\end{longtable}
+\end{longtblr}
 \section{Requirements}
 \label{Sec:Requirements}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
@@ -1303,12 +1282,11 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Check-Glass-Safety:\phantomsection\label{checkGlassSafety}]{If $\mathit{isSafePb}\land{}\mathit{isSafeLR}$ (from \hyperref[TM:isSafeProb]{TM:isSafeProb} and \hyperref[TM:isSafeLoad]{TM:isSafeLoad}), output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''}
 \item[Output-Values:\phantomsection\label{outputValues}]{Output the values from the table for \hyperref[Table:ReqOutputs]{Required Outputs}.}
 \end{itemize}
-\begin{longtabu}{l X[l] l}
-\toprule
+\begin{longtblr}
+[caption={Required Inputs following \hyperref[inputValues]{FR:Input-Values}}]
+{colspec={l X[l] l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
-\midrule
-\endhead
 $a$ & Plate length (long dimension) & ${\text{m}}$
 \\
 $b$ & Plate width (short dimension) & ${\text{m}}$
@@ -1328,17 +1306,13 @@ $t$ & Nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0
 $\mathit{TNT}$ & TNT equivalent factor & --
 \\
 $w$ & Charge weight & ${\text{kg}}$
-\\
-\bottomrule
-\caption{Required Inputs following \hyperref[inputValues]{FR:Input-Values}}
 \label{Table:ReqInputs}
-\end{longtabu}
-\begin{longtable}{l l l l}
-\toprule
+\end{longtblr}
+\begin{longtblr}
+[caption={Required Assignments following \hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}}]
+{colspec={l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Source} & \textbf{Units}
 \\
-\midrule
-\endhead
 $\mathit{AR}$ & Aspect ratio & \hyperref[DD:aspectRatio]{DD:aspectRatio} & --
 \\
 $E$ & Modulus of elasticity of glass & \hyperref[assumpSV]{A:standardValues} & ${\text{Pa}}$
@@ -1358,17 +1332,13 @@ $m$ & Surface flaw parameter & \hyperref[assumpSV]{A:standardValues} & $\frac{\t
 $\mathit{SD}$ & Stand off distance & \hyperref[DD:standOffDist]{DD:standOffDist} & ${\text{m}}$
 \\
 ${t_{\text{d}}}$ & Duration of load & \hyperref[assumpSV]{A:standardValues} & ${\text{s}}$
-\\
-\bottomrule
-\caption{Required Assignments following \hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}}
 \label{Table:ReqAssignments}
-\end{longtable}
-\begin{longtabu}{l X[l] l l}
-\toprule
+\end{longtblr}
+\begin{longtblr}
+[caption={Required Outputs following \hyperref[outputValues]{FR:Output-Values}}]
+{colspec={l X[l] l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Source} & \textbf{Units}
 \\
-\midrule
-\endhead
 $\mathit{AR}$ & Aspect ratio & \hyperref[DD:aspectRatio]{DD:aspectRatio} & --
 \\
 $B$ & Risk of failure & \hyperref[DD:riskFun]{DD:riskFun} & --
@@ -1390,11 +1360,8 @@ $\mathit{NFL}$ & Non-factored load & \hyperref[DD:nFL]{DD:nFL} & ${\text{Pa}}$
 $\hat{q}$ & Dimensionless load & \hyperref[DD:dimlessLoad]{DD:dimlessLoad} & --
 \\
 ${\hat{q}_{\text{tol}}}$ & Tolerable load & \hyperref[DD:tolLoad]{DD:tolLoad} & --
-\\
-\bottomrule
-\caption{Required Outputs following \hyperref[outputValues]{FR:Output-Values}}
 \label{Table:ReqOutputs}
-\end{longtabu}
+\end{longtblr}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
@@ -1430,12 +1397,11 @@ This section lists the unlikely changes to be made to the software.
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Tab:TraceMatAvsA} shows the dependencies of the assumptions on each other. \hyperref[Table:TraceMatAvsAll]{Tab:TraceMatAvsAll} shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Tab:TraceMatRefvsRef} shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Table:TraceMatAllvsR]{Tab:TraceMatAllvsR} shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.
 
-\begin{longtable}{l l l l l l l l l}
-\toprule
+\begin{longtblr}
+[caption={Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}]
+{colspec={l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{} & \textbf{\hyperref[assumpGT]{A:glassType}} & \textbf{\hyperref[assumpGC]{A:glassCondition}} & \textbf{\hyperref[assumpES]{A:explainScenario}} & \textbf{\hyperref[assumpSV]{A:standardValues}} & \textbf{\hyperref[assumpGL]{A:glassLite}} & \textbf{\hyperref[assumpBC]{A:boundaryConditions}} & \textbf{\hyperref[assumpRT]{A:responseType}} & \textbf{\hyperref[assumpLDFC]{A:ldfConstant}}
 \\
-\midrule
-\endhead
 \hyperref[assumpGT]{A:glassType} &  &  &  &  &  &  &  & 
 \\
 \hyperref[assumpGC]{A:glassCondition} &  &  &  &  &  &  &  & 
@@ -1451,17 +1417,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[assumpRT]{A:responseType} &  &  &  &  &  &  &  & 
 \\
 \hyperref[assumpLDFC]{A:ldfConstant} &  &  &  & X &  &  &  & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}
 \label{Table:TraceMatAvsA}
-\end{longtable}
-\begin{longtable}{l l l l l l l l l}
-\toprule
+\end{longtblr}
+\begin{longtblr}
+[caption={Traceability Matrix Showing the Connections Between Assumptions and Other Items}]
+{colspec={l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{} & \textbf{\hyperref[assumpGT]{A:glassType}} & \textbf{\hyperref[assumpGC]{A:glassCondition}} & \textbf{\hyperref[assumpES]{A:explainScenario}} & \textbf{\hyperref[assumpSV]{A:standardValues}} & \textbf{\hyperref[assumpGL]{A:glassLite}} & \textbf{\hyperref[assumpBC]{A:boundaryConditions}} & \textbf{\hyperref[assumpRT]{A:responseType}} & \textbf{\hyperref[assumpLDFC]{A:ldfConstant}}
 \\
-\midrule
-\endhead
 \hyperref[DD:riskFun]{DD:riskFun} &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:minThick]{DD:minThick} &  &  &  &  &  &  &  & 
@@ -1537,17 +1499,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[predictWithstandOfCertDeg]{UC:Predict-Withstanding-of-Certain-Degree} &  &  &  &  &  &  &  & 
 \\
 \hyperref[accAlteredGlass]{UC:Accommodate-Altered-Glass} &  & X &  &  &  &  &  & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
 \label{Table:TraceMatAvsAll}
-\end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l}
-\toprule
+\end{longtblr}
+\begin{longtblr}
+[caption={Traceability Matrix Showing the Connections Between Items and Other Sections}]
+{colspec={l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{} & \textbf{\hyperref[DD:riskFun]{DD:riskFun}} & \textbf{\hyperref[DD:minThick]{DD:minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD:loadDurFactor}} & \textbf{\hyperref[DD:stressDistFac]{DD:stressDistFac}} & \textbf{\hyperref[DD:nFL]{DD:nFL}} & \textbf{\hyperref[DD:gTF]{DD:gTF}} & \textbf{\hyperref[DD:dimlessLoad]{DD:dimlessLoad}} & \textbf{\hyperref[DD:tolLoad]{DD:tolLoad}} & \textbf{\hyperref[DD:sdfTol]{DD:sdfTol}} & \textbf{\hyperref[DD:standOffDist]{DD:standOffDist}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[DD:eqTNTW]{DD:eqTNTW}} & \textbf{\hyperref[DD:probOfBreak]{DD:probOfBreak}} & \textbf{\hyperref[DD:calofCapacity]{DD:calofCapacity}} & \textbf{\hyperref[DD:calofDemand]{DD:calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM:isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM:isSafeLoad}} & \textbf{\hyperref[IM:isSafePb]{IM:isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM:isSafeLR}}
 \\
-\midrule
-\endhead
 \hyperref[DD:riskFun]{DD:riskFun} &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:minThick]{DD:minThick} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1585,17 +1543,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[IM:isSafePb]{IM:isSafePb} &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & X
 \\
 \hyperref[IM:isSafeLR]{IM:isSafeLR} &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
 \label{Table:TraceMatRefvsRef}
-\end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
-\toprule
+\end{longtblr}
+\begin{longtblr}
+[caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
+{colspec={l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{} & \textbf{\hyperref[DD:riskFun]{DD:riskFun}} & \textbf{\hyperref[DD:minThick]{DD:minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD:loadDurFactor}} & \textbf{\hyperref[DD:stressDistFac]{DD:stressDistFac}} & \textbf{\hyperref[DD:nFL]{DD:nFL}} & \textbf{\hyperref[DD:gTF]{DD:gTF}} & \textbf{\hyperref[DD:dimlessLoad]{DD:dimlessLoad}} & \textbf{\hyperref[DD:tolLoad]{DD:tolLoad}} & \textbf{\hyperref[DD:sdfTol]{DD:sdfTol}} & \textbf{\hyperref[DD:standOffDist]{DD:standOffDist}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[DD:eqTNTW]{DD:eqTNTW}} & \textbf{\hyperref[DD:probOfBreak]{DD:probOfBreak}} & \textbf{\hyperref[DD:calofCapacity]{DD:calofCapacity}} & \textbf{\hyperref[DD:calofDemand]{DD:calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM:isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM:isSafeLoad}} & \textbf{\hyperref[IM:isSafePb]{IM:isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM:isSafeLR}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}} & \textbf{\hyperref[checkInputWithDataCons]{FR:Check-Input-with-Data\_Constraints}} & \textbf{\hyperref[outputValsAndKnownValues]{FR:Output-Values-and-Known-Values}} & \textbf{\hyperref[checkGlassSafety]{FR:Check-Glass-Safety}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[verifiable]{NFR:Verifiable}} & \textbf{\hyperref[understandable]{NFR:Understandable}} & \textbf{\hyperref[reusable]{NFR:Reusable}} & \textbf{\hyperref[maintainable]{NFR:Maintainable}} & \textbf{\hyperref[portable]{NFR:Portable}}
 \\
-\midrule
-\endhead
 \hyperref[willBreakGS]{GS:Predict-Glass-Withstands-Explosion} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1621,11 +1575,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[maintainable]{NFR:Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[portable]{NFR:Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}
 \label{Table:TraceMatAllvsR}
-\end{longtable}
+\end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
 
 \begin{figure}
@@ -1676,12 +1627,11 @@ For convenience, the following graphs can be found at the links below:
 \label{Sec:AuxConstants}
 This section contains the standard values that are used for calculations in GlassBR.
 
-\begin{longtabu}{l X[l] l l}
-\toprule
+\begin{longtblr}
+[caption={Auxiliary Constants}]
+{colspec={l X[l] l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Value} & \textbf{Unit}
 \\
-\midrule
-\endhead
 ${\mathit{AR}_{\text{max}}}$ & maximum aspect ratio & $5$ & --
 \\
 ${d_{\text{max}}}$ & maximum value for one of the dimensions of the glass plate & $5$ & ${\text{m}}$
@@ -1709,11 +1659,8 @@ ${t_{\text{d}}}$ & duration of load & $3$ & ${\text{s}}$
 ${w_{\text{max}}}$ & maximum permissible input charge weight & $910$ & ${\text{kg}}$
 \\
 ${w_{\text{min}}}$ & minimum permissible input charge weight & $4.5$ & ${\text{kg}}$
-\\
-\bottomrule
-\caption{Auxiliary Constants}
 \label{Table:TAuxConsts}
-\end{longtabu}
+\end{longtblr}
 \section{References}
 \label{Sec:References}
 \begin{filecontents*}{bibfile.bib}
@@ -1764,11 +1711,6 @@ volume={12},
 number={2},
 pages={251--257},
 address={Washington, USA}}
-@misc{rbrtsn2012,
-author={Robertson, James and Robertson, Suzanne},
-title={Volere requirements specification template edition 16},
-howpublished={\url{https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf}},
-year={2012}}
 @article{smithKoothoor2016,
 author={Smith, W. Spencer and Koothoor, Nirmitha},
 title={A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis},

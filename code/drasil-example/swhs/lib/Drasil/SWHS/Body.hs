@@ -14,10 +14,11 @@ import Control.Lens ((^.))
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (inModel)
 import Data.Drasil.Concepts.Computation (algorithm, compcon)
-import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
-  constraint, corSol, datum, document, environment,input_, model, organization, 
-  output_, physical, physics, property, quantity, software, softwareSys, solution,
-  srsDomains, sysCont, system, user, value, variable, doccon, doccon')
+import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
+  condition, constraint, corSol, datum, document, environment,input_, model,
+  output_, physical, physics, property, quantity, software, softwareSys,
+  solution, srsDomains, sysCont, system, user, value, variable, doccon,
+  doccon')
 import Data.Drasil.Concepts.Education (calculus, educon, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_, mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
@@ -31,7 +32,7 @@ import Data.Drasil.Quantities.Math (surArea, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol)
 import Data.Drasil.Quantities.Physics (energy, time, physicscon)
 import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat)
-import Data.Drasil.Software.Products (sciCompS, prodtcon)
+import Data.Drasil.Software.Products (prodtcon)
 
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
@@ -46,8 +47,7 @@ import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater)
 import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
-import Drasil.SWHS.References (citations, koothoor2013, smithEtAl2007,
-  smithLai2005, smithKoothoor2016)
+import Drasil.SWHS.References (citations)
 import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements, verifyEnergyOutput)
 import Drasil.SWHS.TMods (tMods)
 import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
@@ -129,7 +129,7 @@ mkSRS = [TableOfContents,
     [IPurpose $ purpDoc progName Verbose,
      IScope scope,
      IChar [] charsOfReader [],
-     IOrgSec orgDocIntro inModel (SRS.inModel [] []) orgDocEnd
+     IOrgSec inModel (SRS.inModel [] []) orgDocEnd
     ],
   GSDSec $ GSDProg
     [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
@@ -255,13 +255,6 @@ charReaderDE = plural de +:+ S "from level 1 and 2" +:+ phrase calculus
 ------------------------------------
 -- 2.4 : Organization of Document --
 ------------------------------------
-
-orgDocIntro :: Sentence
-orgDocIntro = foldlSent [atStartNP (the organization), S "of this",
-  phrase document, S "follows the template for an", short Doc.srs
-  `S.for` phrase sciCompS, S "proposed by", foldlList Comma List $ 
-  map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]
-
 orgDocEnd :: Sentence
 orgDocEnd = foldlSent_ [atStartNP' (the inModel), 
   S "to be solved are referred to as" +:+. 

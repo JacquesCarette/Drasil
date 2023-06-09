@@ -15,9 +15,9 @@ concepts = nw newtonSLRQD : map nw [rod, horizontal, vertical,
   ++ map nw defs
 
 rod, horizontal, vertical :: IdeaDict
-rod = nc "rod" (cn' "rod") Nothing
-horizontal = nc "horizontal" (cn "horizontal") Nothing
-vertical = nc "vertical" (cn "vertical") Nothing
+rod = nc "rod" (cn' "rod")
+horizontal = nc "horizontal" (cn "horizontal") 
+vertical = nc "vertical" (cn "vertical") 
 
 pendMotion, horizontalPos, verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce,
   horizontalAccel, verticalAccel, firstRod, secondRod, firstObject, secondObject:: IdeaDict

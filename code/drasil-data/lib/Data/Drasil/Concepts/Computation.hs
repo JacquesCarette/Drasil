@@ -27,11 +27,11 @@ compcon = [application, computer, structure, dataStruct, dataStruct', dataType, 
 application, computer, structure :: IdeaDict
 os :: CI
 ------------------------------------------------------------------------------------
--- IdeaDict |     |      id       |       term             |  abbreviation | domain
+--  NC      |     |      id       |       term             |  abbreviation | domain
 -------------------------------------------------------------------------------------s
-application = nc   "application"      (cn' "application")      Nothing
-computer    = nc   "computer"         (cn' "computer")         Nothing
-structure   = nc   "structure"        (cn' "structure")        Nothing 
+application = nc   "application"      (cn' "application") 
+computer    = nc   "computer"         (cn' "computer") 
+structure   = nc   "structure"        (cn' "structure")         
 os          = commonIdeaWithDict "os" (cn' "operating system")    "OS"   [compScience]
 
 

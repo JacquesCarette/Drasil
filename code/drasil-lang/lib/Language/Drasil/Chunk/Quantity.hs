@@ -86,7 +86,7 @@ implVar' s np a t sym = mkQuant' s np a t f
 
 -- | Similar to 'implVar' but takes in a 'UID' rather than a 'String'.
 implVarUID :: UID -> NP -> Space -> Symbol -> QuantityDict
-implVarUID i des sp sym = QD (nw $ ncUID i des Nothing) sp f Nothing
+implVarUID i des sp sym = QD (nw $ ncUID i des) sp f Nothing
   where
     f :: Stage -> Symbol
     f Implementation = sym
@@ -102,15 +102,15 @@ implVarUID' s np a t sym = QD (mkIdeaUID s np a) t f
 
 -- | Creates a 'QuantityDict' from a 'UID', term ('NP'), 'Symbol', and 'Space'.
 vc :: String -> NP -> Symbol -> Space -> QuantityDict
-vc i des sym space = QD (nw $ nc i des Nothing) space (const sym) Nothing
+vc i des sym space = QD (nw $ nc i des) space (const sym) Nothing
 
 -- | Creates a 'QuantityDict' from a 'UID', term ('NP'), 'Symbol', 'Space', and unit ('UnitDefn').
 vcUnit :: String -> NP -> Symbol -> Space -> UnitDefn -> QuantityDict
-vcUnit i des sym space u = QD (nw $ nc i des Nothing) space (const sym) (Just u)
+vcUnit i des sym space u = QD (nw $ nc i des) space (const sym) (Just u)
 
 -- | Similar to 'vc', but creates a 'QuantityDict' from something that knows about 'Stage's.
 vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict
-vcSt i des sym space = QD (nw $ nc i des Nothing) space sym Nothing
+vcSt i des sym space = QD (nw $ nc i des) space sym Nothing
 
 -- | Makes a 'QuantityDict' from an 'Idea', 'Symbol', and 'Space'.
 -- 'Symbol' is implementation-only.

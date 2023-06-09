@@ -17,7 +17,7 @@ matlab :: CI
 matlab     = commonIdeaWithDict "matlab" (pn' "MATLAB programming language")       "MATLAB"  [progLanguage]
 
 sciCompS :: IdeaDict
-sciCompS   = nc "sciCompS"       (cn' "scientific computing software") Nothing
+sciCompS   = nc "sciCompS"       (cn' "scientific computing software")
 
 videoGame, openSource, compPro :: IdeaDict
 videoGame   = compoundNC video game

@@ -360,19 +360,19 @@ a_Gen f t = nounPhrase'' (S "a" +:+ f t) (S "a" +:+ f t) CapFirst CapWords
 -- /Does not preserve abbreviations/.
 compoundNC :: (NamedIdea a, NamedIdea b) => a -> b -> IdeaDict
 compoundNC t1 t2 = ncUID
-  (t1 +++! t2) (compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing
+  (t1 +++! t2) (compoundPhrase (t1 ^. term) (t2 ^. term))
 
 -- | Similar to 'compoundNC' but both terms are pluralized for plural case.
 compoundNCPP :: (NamedIdea a, NamedIdea b) => a -> b -> IdeaDict
-compoundNCPP t1 t2 = ncUID (t1 +++! t2) 
-  (compoundPhrase'' D.pluralNP D.pluralNP (t1 ^. term) (t2 ^. term)) Nothing
+compoundNCPP t1 t2 = ncUID
+  (t1 +++! t2) (compoundPhrase'' D.pluralNP D.pluralNP (t1 ^. term) (t2 ^. term))
 
 -- | Similar to 'compoundNC', except plural cases are customizable.
 compoundNCGen :: (NamedIdea a, NamedIdea b) => 
   (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> IdeaDict
 compoundNCGen f1 f2 t1 t2 = ncUID
   (t1 +++! t2)
-  (compoundPhrase'' f1 f2 (t1 ^. term) (t2 ^. term)) Nothing
+  (compoundPhrase'' f1 f2 (t1 ^. term) (t2 ^. term))
 
 -- | Similar to 'compoundNC', except for plural case, where first parameter gets pluralized while second one stays singular.
 compoundNCPS :: IdeaDict -> IdeaDict -> IdeaDict
@@ -383,7 +383,7 @@ compoundNCPS = compoundNCGen D.pluralNP D.phraseNP
 -- | Similar to 'compoundNC', but takes a function that is applied to the first term (eg. 'short' or 'plural').
 compoundNCGenP :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> a -> b -> IdeaDict
 compoundNCGenP f1 t1 t2 = ncUID
-  (t1 +++! t2) (compoundPhrase''' f1 (t1 ^. term) (t2 ^. term)) Nothing
+  (t1 +++! t2) (compoundPhrase''' f1 (t1 ^. term) (t2 ^. term))
 
 -- FIXME: Same as above function
 -- | Similar to 'compoundNCGenP' but sets first parameter function to plural.

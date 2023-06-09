@@ -91,12 +91,12 @@ fromEqn' nm desc def symb sp =
 fromEqnSt :: IsUnit u => UID -> NP -> Sentence -> (Stage -> Symbol) ->
   Space -> u -> e -> QDefinition e
 fromEqnSt nm desc def symb sp un =
-  QD (dqd' (cc' (nw $ ncUID nm desc Nothing) def) symb sp (Just $ unitWrapper un)) []
+  QD (dqd' (cc' (nw $ ncUID nm desc) def) symb sp (Just $ unitWrapper un)) []
 
 -- | Same as 'fromEqn', but symbol depends on stage and has no units.
 fromEqnSt' :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e -> QDefinition e
 fromEqnSt' nm desc def symb sp =
-  QD (dqd' (cc' (nw $ ncUID nm desc Nothing) def) symb sp Nothing) []
+  QD (dqd' (cc' (nw $ ncUID nm desc) def) symb sp Nothing) []
 
 -- | Same as 'fromEqnSt'', but takes a 'String' instead of a 'UID'.
 fromEqnSt'' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> e ->
@@ -130,7 +130,7 @@ mkFuncDef0 :: (HasUID f, HasSymbol f, HasSpace f,
                HasUID i, HasSymbol i, HasSpace i) =>
   f -> NP -> Sentence -> Maybe UnitDefn -> [i] -> e -> QDefinition e
 mkFuncDef0 f n s u is = QD
-  (dqd' (cc' (nw (ncUID (f ^. uid) n Nothing)) s) (symbol f)
+  (dqd' (cc' (nw (ncUID (f ^. uid) n)) s) (symbol f)
     (f ^. typ) u) (map (^. uid) is)
     -- (mkFunction (map (^. typ) is) (f ^. typ)) u) (map (^. uid) is)
 

@@ -41,7 +41,7 @@ instance ConceptDomain CI where cdom = cdom'
 -- | The commonIdea smart constructor requires a chunk id ('String'), a
 -- term ('NP'), an abbreviation ('String'), and a domain (['UID']).
 commonIdea :: String -> NP -> String -> [UID] -> CI
-commonIdea s np = CI (nc s np Nothing)
+commonIdea s np = CI (nc s np)
 
 -- | Similar to 'commonIdea', but takes a list of 'IdeaDict' (often a domain).
 commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI

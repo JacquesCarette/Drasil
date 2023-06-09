@@ -69,8 +69,8 @@ hghc :: CommonConcept
 hghc = dcc' "hghc" (cn "HGHC") "HGHC program" "HGHC"
 
 nuclearPhys, fp :: IdeaDict
-nuclearPhys = nc "nuclearPhys" (nounPhraseSP "nuclear physics") Nothing
-fp = nc "fp" (cn "FP") Nothing
+nuclearPhys = nc "nuclearPhys" (nounPhraseSP "nuclear physics")
+fp = nc "fp" (cn "FP")
 
 lCoolant, lClad, lEffective, lGap :: Symbol
 lCoolant   = label "b"

@@ -20,16 +20,16 @@ educon = [calculus, civil, degree_, engineering, structural, mechanics,
 calculus, civil, degree_, engineering, structural, mechanics,
   undergraduate, highSchool, physical_, chemistry :: IdeaDict
 
-calculus      = nc "calculus"       (cn   "calculus"     ) Nothing 
-civil         = nc "civil"          (cn'  "civil"        ) Nothing --FIXME: Adjective
-degree_       = nc "degree"         (cn'  "degree"       ) Nothing 
-engineering   = nc "engineering"    (cn'  "engineering"  ) Nothing 
-mechanics     = nc "mechanics"      (cn   "mechanics"    ) Nothing 
-structural    = nc "structural"     (cn'  "structural"   ) Nothing --FIXME: Adjective
-undergraduate = nc "undergraduate"  (cn'  "undergraduate") Nothing --FIXME: Functions as adjective
-highSchool    = nc "highSchool"     (cn'  "high school"  ) Nothing --FIXME: Functions as adjective
-chemistry     = nc "chemistry"      (cn'  "chemistry"    ) Nothing 
-physical_     = nc "physical"       (cn'  "physical"     ) Nothing --FIXME: Adjective
+calculus      = nc "calculus"       (cn   "calculus"     )
+civil         = nc "civil"          (cn'  "civil"        )--FIXME: Adjective
+degree_       = nc "degree"         (cn'  "degree"       )
+engineering   = nc "engineering"    (cn'  "engineering"  )
+mechanics     = nc "mechanics"      (cn   "mechanics"    )
+structural    = nc "structural"     (cn'  "structural"   )--FIXME: Adjective
+undergraduate = nc "undergraduate"  (cn'  "undergraduate")--FIXME: Functions as adjective
+highSchool    = nc "highSchool"     (cn'  "high school"  )--FIXME: Functions as adjective
+chemistry     = nc "chemistry"      (cn'  "chemistry"    )
+physical_     = nc "physical"       (cn'  "physical"     )--FIXME: Adjective
 
 undergradDegree, scndYrCalculus, solidMechanics, secondYear, structuralEng,
   structuralMechanics, civilEng, highSchoolCalculus, highSchoolPhysics,

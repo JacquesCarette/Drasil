@@ -15,13 +15,12 @@ concepts = nw projMotion : map nw [landingPosNC, launchNC, launchAngleNC, launch
 
 durationNC, flightDurNC, landingPosNC, launchNC, launchAngleNC, launchSpeedNC, offsetNC, targetPosNC,
   rectVel :: IdeaDict
-durationNC   = nc "duration" (nounPhraseSP "duration")  Nothing
-launchNC     = nc "launch"   (nounPhraseSP "launch")    Nothing
-offsetNC     = nc "offset"   (nounPhraseSent $ S "distance between the" 
-  +:+ phraseNP (targetPosNC `andThe` landingPosNC)) Nothing
+durationNC   = nc "duration" (nounPhraseSP "duration")
+launchNC     = nc "launch"   (nounPhraseSP "launch")
+offsetNC     = nc "offset"   (nounPhraseSent $ S "distance between the" +:+ phraseNP (targetPosNC `andThe` landingPosNC))
 
-flightDurNC   = compoundNC (nc "flight"  (nounPhraseSP "flight" ) Nothing) durationNC
-landingPosNC  = compoundNC (nc "landing" (nounPhraseSP "landing") Nothing) position
+flightDurNC   = compoundNC (nc "flight"  (nounPhraseSP "flight" )) durationNC
+landingPosNC  = compoundNC (nc "landing" (nounPhraseSP "landing")) position
 launchAngleNC = compoundNC launchNC angle
 launchSpeedNC = compoundNC launchNC speed
 targetPosNC   = compoundNC target position

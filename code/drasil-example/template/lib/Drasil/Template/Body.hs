@@ -61,7 +61,7 @@ mkSRS = [TableOfContents,
   SSDSec $
     SSDProg
       [ SSDProblem $ PDProg EmptyS []                --  This adds a is used to define the problem your system will solve
-      [ TermsAndDefs Nothing ([] :: [ConceptChunk])               -- This is used to define the terms to be defined in terminology sub section
+      [ TermsAndDefs Nothing ([] :: [ConceptChunk])   -- This is used to define the terms to be defined in terminology sub section
       , PhySysDesc progName [] figTemp [] -- This defines the Physicalsystem sub-section, define the parts
                                                           -- of the system using physSysParts, figMotion is a function in figures for the image
       , Goals []
@@ -82,6 +82,8 @@ mkSRS = [TableOfContents,
        FReqsSub EmptyS []
      , NonFReqsSub
     ],
+  LCsSec,
+  UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
      AuxConsProg progName [],

@@ -71,7 +71,7 @@ mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
     fullSI = fillcdbSRS dd si
     l = mkDocDesc fullSI dd
 
--- * Functions to Fill 'CunkDB'
+-- * Functions to Fill 'ChunkDB'
 
 -- TODO: Move all of these "filler" functions to a new file?
 -- TODO: Add in 'fillTermMap' once #2775 is complete.
@@ -403,16 +403,22 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 
 -- | Helper for making the Likely Changes section.
 mkLCsSec :: LCsSec -> Section
-mkLCsSec (LCsProg c) = SRS.likeChg (intro : mkEnumSimpleD c) []
-  where intro = foldlSP [S "This", phrase Doc.section_, S "lists the",
+mkLCsSec (LCsProg c) = SRS.likeChg (introLCs c : mkEnumSimpleD c) []
+
+introLCs :: [ConceptInstance] -> Contents
+introLCs [] = foldlSP [S "There are no" +:+ plural Doc.likelyChg]
+introLCs _  = foldlSP [S "This", phrase Doc.section_, S "lists the",
                 plural Doc.likelyChg, S "to be made to the", phrase Doc.software]
 
 -- ** Unlikely Changes
 
 -- | Helper for making the Unikely Changes section.
 mkUCsSec :: UCsSec -> Section
-mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
-  where intro = foldlSP [S "This", phrase Doc.section_, S "lists the",
+mkUCsSec (UCsProg c) = SRS.unlikeChg (introUCs c : mkEnumSimpleD c) []
+
+introUCs :: [ConceptInstance] -> Contents
+introUCs [] = foldlSP [S "There are no" +:+ plural Doc.unlikelyChg]
+introUCs _  = foldlSP [S "This", phrase Doc.section_, S "lists the",
                 plural Doc.unlikelyChg, S "to be made to the", phrase Doc.software]
 
 -- ** Traceability

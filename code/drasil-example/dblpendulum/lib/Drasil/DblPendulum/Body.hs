@@ -14,9 +14,10 @@ import Data.Drasil.People (dong)
 import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz)
 import Data.Drasil.Concepts.Computation (inDatum, compcon, inValue, algorithm)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
-import Data.Drasil.Concepts.Documentation (assumption, condition, endUser, environment, datum, document,
-  input_, interface, output_, organization, problem, product_, physical, sysCont, software, softwareConstraint,
-  softwareSys, srsDomains, system, template, user, doccon, doccon', analysis)
+import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
+  environment, datum, input_, interface, output_, problem, product_,
+  physical, sysCont, software, softwareConstraint, softwareSys, srsDomains,
+  system, user, doccon, doccon', analysis)
 import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate, educon, )
 import Data.Drasil.Concepts.Math (mathcon, cartesian, ode, mathcon', graph)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
@@ -24,7 +25,7 @@ import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
 import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
-import Data.Drasil.Software.Products (prodtcon, sciCompS)
+import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM, newtonSLR)
 import Data.Drasil.TheoryConcepts (inModel)
 
@@ -38,9 +39,9 @@ import Drasil.DblPendulum.GenDefs (genDefns)
 import Drasil.DblPendulum.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms, pendDisAngle, constants)
 import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs)
-import Drasil.DblPendulum.References (citations, koothoor2013, smithEtAl2007,
- smithLai2005, smithKoothoor2016)
-import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols, osloSymbols, apacheODESymbols, odeintSymbols, arrayVecDepVar)
+import Drasil.DblPendulum.References (citations)
+import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
+  osloSymbols, apacheODESymbols, odeintSymbols, arrayVecDepVar)
 import Language.Drasil.Code (quantvar)
 import Drasil.DblPendulum.ODEs (dblPenODEInfo)
 
@@ -68,7 +69,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],
-       IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel [] []) EmptyS],
+       IOrgSec inModel (SRS.inModel [] []) EmptyS],
   GSDSec $ 
     GSDProg [
       SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
@@ -189,13 +190,8 @@ charsOfReader = [phrase undergraduate +:+ S "level 2" +:+ phrase Doc.physics,
 -------------------------------------
 -- 2.4 : Organization of Documents --
 -------------------------------------
-organizationOfDocumentsIntro :: Sentence
-organizationOfDocumentsIntro = foldlSent 
-  [atStartNP (the organization), S "of this", phrase document, 
-  S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
-  phrase sciCompS, S "proposed by", foldlList Comma List $ 
-    map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]
-
+-- Starting intro sentence of Organization of Documents automatically generated
+-- in IOrg
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --

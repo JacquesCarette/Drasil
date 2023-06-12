@@ -73,7 +73,7 @@ traceMColumns fc fr c = map ((\u -> filter (`elem` u) $ fc u) . flip traceLookup
 
 -- | Helper that makes references of the form "@reference@ shows the dependencies of @something@".
 tableShows :: (Referable a, HasShortName a) => a -> Sentence -> Sentence
-tableShows r end = refS r +:+ S "shows the" +:+ plural dependency `S.of_` (end !.)
+tableShows r end = refS r +:+ S "shows the" +:+ plural dependency `S.ofThe` (end !.)
 
 -- | Helper that finds the layout 'UID's of a traceability matrix.
 layoutUIDs :: [TraceViewCat] -> ChunkDB -> [UID] -> [UID]

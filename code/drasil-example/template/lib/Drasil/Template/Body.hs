@@ -9,19 +9,13 @@ import Language.Drasil
 import Drasil.SRSDocument
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Data.Drasil.Concepts.Documentation (doccon, doccon', funcReqDom,
-  assumpDom, reqDom, srsDom, nonFuncReqDom, srsDomains)
-import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
-import Data.Drasil.Concepts.Physics (physicCon, physicCon')
-import Data.Drasil.Concepts.Computation (inValue, algorithm, compcon)
+import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
+import Data.Drasil.Concepts.Computation (inValue, algorithm)
 import Data.Drasil.Concepts.Software (errMsg, program)
-import Data.Drasil.Concepts.Math (mathcon, mathcon', graph)
-import Data.Drasil.Quantities.Physics(physicscon)
+import Data.Drasil.Concepts.Math (mathcon)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import qualified Drasil.DocLang.SRS as SRS
-import Data.Drasil.SI_Units
-import Data.Drasil.Concepts.Education
 import Data.Drasil.Software.Products
 import Data.Drasil.TheoryConcepts
 import Data.Drasil.Citations
@@ -113,7 +107,9 @@ si = SI {
 }
 
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict]) (nw progName : nw inValue : [nw errMsg, nw program] ++ map nw doccon ++ map nw doccon' ++ [nw algorithm] ++ map nw prodtcon ++ map nw mathcon) srsDomains
+symbMap = cdb ([] :: [QuantityDict]) (nw progName : nw inValue : [nw errMsg, 
+  nw program] ++ map nw doccon ++ map nw doccon' ++ [nw algorithm] ++ 
+  map nw prodtcon ++ map nw mathcon) srsDomains
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
   ([] :: [Section]) ([] :: [LabelledContent]) ([] :: [Reference])
@@ -125,19 +121,11 @@ usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [Section]) ([] :: [LabelledContent]) ([] :: [Reference])
 
 refDB :: ReferenceDB
-refDB = rdb citations concIns
+refDB = rdb citations []
 
 citations :: BibRef
 citations = [parnasClements1986, koothoor2013, smithEtAl2007, smithLai2005,
              smithKoothoor2016]
-
-concIns :: [ConceptInstance]
-concIns = funcReqs ++ nonFuncReqs
-
-assump, funcReqs, nonFuncReqs :: [ConceptInstance]
-assump      = []
-funcReqs    = []
-nonFuncReqs = []
 
 inConstraints :: [UncertQ]
 inConstraints = []

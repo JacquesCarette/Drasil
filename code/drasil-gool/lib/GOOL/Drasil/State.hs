@@ -41,8 +41,8 @@ import Control.Lens (Lens', (^.), lens, makeLenses, over, set, _1, _2)
 import Control.Monad.State (State, modify, gets)
 import Data.List (nub, delete)
 import Data.Maybe (isNothing)
-import Data.Map (Map, fromList, insert, union, findWithDefault, mapWithKey)
-import qualified Data.Map as Map (empty, map)
+import Data.Map (Map)
+import qualified Data.Map as Map
 import Text.PrettyPrint.HughesPJ (Doc, empty)
 
 data GOOLState = GS {
@@ -438,7 +438,7 @@ getClasses :: FS [String]
 getClasses = gets (^. currClasses)
 
 updateClassMap :: String -> FileState -> FileState
-updateClassMap n fs = over (goolState . classMap) (union (fromList $ 
+updateClassMap n fs = over (goolState . classMap) (Map.union (Map.fromList $
   map (n,) (fs ^. currClasses))) fs
 
 getClassMap :: VS (Map String String)
@@ -446,7 +446,7 @@ getClassMap = gets (^. (lensVStoFS . goolState . classMap))
 
 updateMethodExcMap :: String -> MethodState -> MethodState
 updateMethodExcMap n ms = over (lensMStoFS . goolState . methodExceptionMap) 
-  (insert (qualName mn n) (ms ^. exceptions)) ms
+  (Map.insert (qualName mn n) (ms ^. exceptions)) ms
   where mn = ms ^. (lensMStoFS . currModName)
 
 getMethodExcMap :: VS (Map QualifiedName [ExceptionType])
@@ -454,7 +454,7 @@ getMethodExcMap = gets (^. (lensVStoFS . goolState . methodExceptionMap))
 
 updateCallMap :: String -> MethodState -> MethodState
 updateCallMap n ms = over (lensMStoFS . goolState . callMap) 
-  (insert (qualName mn n) (ms ^. calls)) ms
+  (Map.insert (qualName mn n) (ms ^. calls)) ms
   where mn = ms ^. (lensMStoFS . currModName)
 
 callMapTransClosure :: GOOLState -> GOOLState
@@ -464,16 +464,16 @@ callMapTransClosure = over callMap tClosure
           [QualifiedName]
         traceCalls _ [] = []
         traceCalls cm (c:cs) = nub $ c : traceCalls cm (nub $ cs ++ 
-          findWithDefault [] c cm)
+          Map.findWithDefault [] c cm)
 
 updateMEMWithCalls :: GOOLState -> GOOLState
-updateMEMWithCalls s = over methodExceptionMap (\mem -> mapWithKey 
+updateMEMWithCalls s = over methodExceptionMap (\mem -> Map.mapWithKey
   (addCallExcs mem (s ^. callMap)) mem) s
   where addCallExcs :: Map QualifiedName [ExceptionType] -> 
           Map QualifiedName [QualifiedName] -> QualifiedName -> [ExceptionType] 
           -> [ExceptionType]
-        addCallExcs mem cm f es = nub $ es ++ concatMap (\fn -> findWithDefault 
-          [] fn mem) (findWithDefault [] f cm)
+        addCallExcs mem cm f es = nub $ es ++ concatMap (\fn -> Map.findWithDefault
+          [] fn mem) (Map.findWithDefault [] f cm)
 
 addParameter :: String -> MethodState -> MethodState
 addParameter p = over currParameters (\ps -> ifElemError p ps $ 

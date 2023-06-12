@@ -16,9 +16,10 @@ import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Printers (GraphInfo(..), NodeFamily(..))
 import Data.Maybe (fromMaybe)
 import Data.Drasil.Concepts.Math (graph)
-import Data.Drasil.Concepts.Documentation (traceyGraph, component, dependency, reference, purpose)
+import Data.Drasil.Concepts.Documentation (traceyGraph, component, dependency, reference, purpose, traceyMatrix)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Char (isSpace, toLower)
+import Language.Drasil.Sentence.Combinators (and_)
 
 -- * Main Functions
 
@@ -26,7 +27,8 @@ import Data.Char (isSpace, toLower)
 -- trailing notes ('Sentence's), and any other needed contents to create a Traceability 'Section'.
 -- Traceability graphs generate as both a link and a figure for convenience.
 traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> String -> [Section] -> Section
-traceMGF [] [] [] _ = SRS.traceyMandG [mkParagraph $ S "No contents"]
+traceMGF [] [] [] _ = SRS.traceyMandG [foldlSP [S "There are no" +:+ 
+  plural traceyMatrix `and_` plural traceyGraph]]
 traceMGF refs trailing otherContents ex = SRS.traceyMandG (traceMIntro refs trailing : otherContents
   ++ map UlC (traceGIntro traceGUIDs (trailing ++ [allvsallDesc])) ++ traceGCon ex)
 

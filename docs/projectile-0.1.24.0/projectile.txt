@@ -11,16 +11,16 @@
 
 module Drasil.Projectile.Concepts
 concepts :: [IdeaDict]
-durationNC :: NamedChunk
-flightDurNC :: NamedChunk
-landingPosNC :: NamedChunk
-launchNC :: NamedChunk
-launchAngleNC :: NamedChunk
-launchSpeedNC :: NamedChunk
-offsetNC :: NamedChunk
-targetPosNC :: NamedChunk
-rectVel :: NamedChunk
-projMotion :: NamedChunk
+durationNC :: IdeaDict
+flightDurNC :: IdeaDict
+landingPosNC :: IdeaDict
+launchNC :: IdeaDict
+launchAngleNC :: IdeaDict
+launchSpeedNC :: IdeaDict
+offsetNC :: IdeaDict
+targetPosNC :: IdeaDict
+rectVel :: IdeaDict
+projMotion :: IdeaDict
 defs :: [ConceptChunk]
 launcher :: ConceptChunk
 projectile :: ConceptChunk

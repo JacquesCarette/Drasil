@@ -12,7 +12,7 @@
 module Drasil.GlassBR.Concepts
 idglass :: IdeaDict
 con :: [CI]
-con' :: [NamedChunk]
+con' :: [IdeaDict]
 acronyms :: [CI]
 annealed :: CI
 aR :: CI
@@ -27,16 +27,16 @@ lShareFac :: CI
 glassBR :: CI
 stdOffDist :: CI
 nFL :: CI
-beam :: NamedChunk
-blastRisk :: NamedChunk
-cantilever :: NamedChunk
-edge :: NamedChunk
-glaPlane :: NamedChunk
-glaSlab :: NamedChunk
-plane :: NamedChunk
-glass :: NamedChunk
-ptOfExplsn :: NamedChunk
-responseTy :: NamedChunk
+beam :: IdeaDict
+blastRisk :: IdeaDict
+cantilever :: IdeaDict
+edge :: IdeaDict
+glaPlane :: IdeaDict
+glaSlab :: IdeaDict
+plane :: IdeaDict
+glass :: IdeaDict
+ptOfExplsn :: IdeaDict
+responseTy :: IdeaDict
 
 module Drasil.GlassBR.References
 astm2009 :: Citation
@@ -169,7 +169,7 @@ type GlassType = [(Integer, CI)]
 type GlassThickness = [(Double, Double)]
 glassType :: GlassType
 glassThickness :: GlassThickness
-lateralLoad :: NamedChunk
+lateralLoad :: IdeaDict
 
 module Drasil.GlassBR.TMods
 tMods :: [TheoryModel]
@@ -271,7 +271,7 @@ termsAndDescBulletsLoadSubSec :: [ItemType]
 solChSpecSubsections :: [CI]
 auxiliaryConstants :: [ConstQDef]
 priorityNFReqs :: [ConceptChunk]
-startIntro :: NamedChunk -> Sentence -> CI -> Sentence
+startIntro :: NamedIdea n => n -> Sentence -> CI -> Sentence
 undIR :: [Sentence]
 appStanddIR :: [Sentence]
 scope :: Sentence

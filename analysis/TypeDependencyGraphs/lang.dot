@@ -56,7 +56,7 @@ digraph alltypes {
 	subgraph commonidea {
 		subgraph ci{
 		CI	[shape=oval, color=cyan3, label="CI"];
-		CI -> NamedChunk;
+		CI -> IdeaDict;
 		CI -> String;
 		CI -> UID;
 		}
@@ -129,14 +129,10 @@ digraph alltypes {
 		}
 	}
 	subgraph namedidea {
-		subgraph namedchunk{
-		NamedChunk	[shape=oval, color=cyan3, label="NamedChunk"];
-		NamedChunk -> UID;
-		NamedChunk -> NP;
-		}
 		subgraph ideadict{
 		IdeaDict	[shape=oval, color=cyan3, label="IdeaDict"];
-		IdeaDict -> NamedChunk;
+		IdeaDict -> UID;
+		IdeaDict -> NP;
 		IdeaDict -> MaybeString;
 		}
 	}

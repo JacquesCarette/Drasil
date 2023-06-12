@@ -1418,29 +1418,29 @@ is :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 with :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Combinator for combining two <tt>NamedIdeas</tt>s into a
---   <a>NamedChunk</a>. Plural case only makes second term plural. See
+--   <a>IdeaDict</a>. Plural case only makes second term plural. See
 --   <a>compoundPhrase</a> for more on plural behaviour. <i>Does not
 --   preserve abbreviations</i>.
-compoundNC :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
+compoundNC :: (NamedIdea a, NamedIdea b) => a -> b -> IdeaDict
 
 -- | Similar to <a>compoundNC</a> but both terms are pluralized for plural
 --   case.
-compoundNCPP :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
+compoundNCPP :: (NamedIdea a, NamedIdea b) => a -> b -> IdeaDict
 
 -- | Similar to <a>compoundNC</a>, except plural cases are customizable.
-compoundNCGen :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> NamedChunk
+compoundNCGen :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> IdeaDict
 
 -- | Similar to <a>compoundNC</a>, except for plural case, where first
 --   parameter gets pluralized while second one stays singular.
-compoundNCPS :: NamedChunk -> NamedChunk -> NamedChunk
+compoundNCPS :: IdeaDict -> IdeaDict -> IdeaDict
 
 -- | Similar to <a>compoundNCGenP</a> but sets first parameter function to
 --   plural.
-compoundNCPSPP :: NamedChunk -> NamedChunk -> NamedChunk
+compoundNCPSPP :: IdeaDict -> IdeaDict -> IdeaDict
 
 -- | Similar to <a>compoundNC</a>, but takes a function that is applied to
 --   the first term (eg. <tt>short</tt> or <a>plural</a>).
-compoundNCGenP :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> a -> b -> NamedChunk
+compoundNCGenP :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> a -> b -> IdeaDict
 
 -- | Helper function that combines a <a>NamedIdea</a> and a <a>NP</a>
 --   without any words in between. Plural case is <tt>(phrase t1) +:+
@@ -2367,26 +2367,16 @@ mkUid :: String -> UID
 (+++.) :: UID -> String -> UID
 (+++!) :: (HasUID a, HasUID b) => a -> b -> UID
 
--- | Used for anything worth naming. Note that a <a>NamedChunk</a> does not
---   have an acronym/abbreviation as that's a <tt>CommonIdea</tt>, which
---   has its own representation. Contains a <a>UID</a> and a term that we
---   can capitalize or pluralize (<a>NP</a>).
---   
---   Ex. Anything worth naming must start out somewhere. Before we can
---   assign equations and values and symbols to something like the arm of a
---   pendulum, we must first give it a name.
-data NamedChunk
-
--- | <a>NamedChunk</a> constructor, takes a <a>String</a> for its
---   <a>UID</a> and a term.
-nc :: String -> NP -> NamedChunk
+-- | <a>IdeaDict</a> constructor, takes a <a>String</a> for its <a>UID</a>
+--   and a term.
+nc :: String -> NP -> IdeaDict
 
 -- | Similar to <a>nc</a>, but takes in the <a>UID</a> in the form of a
 --   <a>UID</a> rather than a <a>String</a>.
-ncUID :: UID -> NP -> NamedChunk
+ncUID :: UID -> NP -> IdeaDict
 
 -- | <a>IdeaDict</a> is the canonical dictionary associated to an
---   <a>Idea</a>. Contains a <a>NamedChunk</a> that could have an
+--   <a>Idea</a>. Contains a <a>UID</a> and a term that could have an
 --   abbreviation (<a>Maybe</a> <a>String</a>).
 --   
 --   Ex. The project name "Double Pendulum" may have the abbreviation
@@ -2458,7 +2448,7 @@ codeExpr :: DefiningCodeExpr c => Lens' c CodeExpr
 -- | The common idea (with <tt>NounPhrase</tt>) data type. It must have a
 --   <a>UID</a>, <tt>NounPhrase</tt> for its term, an abbreviation
 --   (<a>String</a>), and a domain ([<a>UID</a>]). It is similar to
---   <a>NamedChunk</a> and <a>IdeaDict</a> in the sense that these are for
+--   <a>IdeaDict</a> and <a>IdeaDict</a> in the sense that these are for
 --   things worth naming, but this type also carries an abbreviation and
 --   related domains of knowledge.
 --   

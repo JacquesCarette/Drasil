@@ -33,7 +33,7 @@ waterVolumeNotes :: Sentence
 waterVolume :: DataDefinition
 
 module Drasil.NoPCM.Definitions
-htTrans :: NamedChunk
+htTrans :: IdeaDict
 srsSWHS :: CommonConcept
 
 module Drasil.NoPCM.Derivations

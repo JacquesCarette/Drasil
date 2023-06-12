@@ -17,7 +17,7 @@
 </span><span class="hs-operator hs-var">$</span></span><span>
 </span><span id="line-13"></span><span>      </span><span class="annot"><span class="annottext">Lbl -&gt; String -&gt; RawContent
 </span><span class="hs-identifier hs-var">fig</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Lbl
-</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">sysCont</span></span><span class="hs-special">)</span><span>
 </span><span id="line-14"></span><span>        </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;../../../../datafiles/pdcontroller/Fig_SystemContext.png&quot;</span></span><span>
@@ -33,17 +33,17 @@
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;shows the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Lbl
-</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">sysCont</span></span><span class="hs-special">,</span><span>
 </span><span id="line-20"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Lbl
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The circle represents an external entity outside the&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-21"></span><span>         </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Lbl
-</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">software</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Lbl
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall t. NamedIdea t =&gt; t -&gt; NP
-</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">user</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -52,7 +52,7 @@
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The rectangle represents the&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-23"></span><span>        </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Lbl
-</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">softwareSys</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;itself&quot;</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
@@ -66,9 +66,9 @@
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Arrows are used to show the data flow between the&quot;</span></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-25"></span><span>        </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Lbl
-</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">system</span></span><span> </span><span class="annot"><span class="annottext">forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
-</span><span class="hs-operator hs-var">`andIts`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-operator hs-var">`andIts`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">environment</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-26"></span><span>
 </span><span id="line-27"></span><span id="gsdSysContextP2"><span class="annot"><span class="annottext">gsdSysContextP2 :: Contents
@@ -87,9 +87,9 @@
 </span><span id="line-31"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Lbl
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The responsibilities of the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Lbl
-</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">user</span></span><span> </span><span class="annot"><span class="annottext">forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
-</span><span class="hs-operator hs-var">`andThe`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-operator hs-var">`andThe`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">system</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-32"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Lbl
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -99,7 +99,7 @@
 </span><span id="line-35"></span><span id="gsdTitle"><span class="annot"><span class="annottext">gsdTitle :: [Lbl]
 </span><a href="Drasil.PDController.GenSysDesc.html#gsdTitle"><span class="hs-identifier hs-var hs-var">gsdTitle</span></a></span></span><span>
 </span><span id="line-36"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Lbl
-</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">user</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String

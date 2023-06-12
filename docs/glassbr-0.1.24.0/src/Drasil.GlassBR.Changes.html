@@ -35,8 +35,8 @@
 Concept c =&gt;
 String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;calcInternalBlastRisk&quot;</span></span><span>     </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
-</span><a href="Drasil.GlassBR.Changes.html#calcInternalBlastRiskDesc"><span class="hs-identifier hs-var">calcInternalBlastRiskDesc</span></a></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-string">&quot;calcInternalBlastRisk&quot;</span></span><span>     </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><a href="Drasil.GlassBR.Changes.html#calcInternalBlastRiskDesc"><span class="hs-identifier hs-var">calcInternalBlastRiskDesc</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.GlassBR.Concepts.html#blastRisk"><span class="hs-identifier hs-var">blastRisk</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Calculate-Internal-Blast-Risk&quot;</span></span><span>       </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">likeChgDom</span></span><span>
@@ -77,12 +77,12 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-string">&quot;Consider-More-than-Flexure-Glass&quot;</span></span><span>    </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">likeChgDom</span></span><span>
 </span><span id="line-32"></span><span>
-</span><span id="line-33"></span><span class="annot"><a href="Drasil.GlassBR.Changes.html#calcInternalBlastRiskDesc"><span class="hs-identifier hs-type">calcInternalBlastRiskDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-33"></span><span id="local-6989586621679080303"><span class="annot"><a href="Drasil.GlassBR.Changes.html#calcInternalBlastRiskDesc"><span class="hs-identifier hs-type">calcInternalBlastRiskDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679080303"><span class="hs-identifier hs-type">n</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679080303"><span class="hs-identifier hs-type">n</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span><span>
 </span><span id="line-34"></span><span class="annot"><a href="Drasil.GlassBR.Changes.html#varValsOfmkEDesc"><span class="hs-identifier hs-type">varValsOfmkEDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Changes.html#accMoreThanSingleLiteDesc"><span class="hs-identifier hs-type">accMoreThanSingleLiteDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Changes.html#accMoreBoundaryConditionsDesc"><span class="hs-identifier hs-type">accMoreBoundaryConditionsDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Changes.html#considerMoreThanFlexGlassDesc"><span class="hs-identifier hs-type">considerMoreThanFlexGlassDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-35"></span><span>
-</span><span id="line-36"></span><span id="calcInternalBlastRiskDesc"><span class="annot"><span class="annottext">calcInternalBlastRiskDesc :: NamedChunk -&gt; Sentence
-</span><a href="Drasil.GlassBR.Changes.html#calcInternalBlastRiskDesc"><span class="hs-identifier hs-var hs-var">calcInternalBlastRiskDesc</span></a></span></span><span> </span><span id="local-6989586621679080444"><span class="annot"><span class="annottext">NamedChunk
-</span><a href="#local-6989586621679080444"><span class="hs-identifier hs-var">mainConcept</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-36"></span><span id="calcInternalBlastRiskDesc"><span class="annot"><span class="annottext">calcInternalBlastRiskDesc :: forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><a href="Drasil.GlassBR.Changes.html#calcInternalBlastRiskDesc"><span class="hs-identifier hs-var hs-var">calcInternalBlastRiskDesc</span></a></span></span><span> </span><span id="local-6989586621679080187"><span class="annot"><span class="annottext">n
+</span><a href="#local-6989586621679080187"><span class="hs-identifier hs-var">mainConcept</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall x.
 (HasShortName x, Referable x) =&gt;
 x -&gt; Sentence -&gt; Sentence
@@ -91,14 +91,14 @@ x -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-37"></span><span>  </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">system</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;currently only calculates for external&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span>
 </span><span id="line-38"></span><span>  </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
-</span><a href="#local-6989586621679080444"><span class="hs-identifier hs-var">mainConcept</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">n
+</span><a href="#local-6989586621679080187"><span class="hs-identifier hs-var">mainConcept</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;In the future,&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -106,8 +106,8 @@ x -&gt; Sentence -&gt; Sentence
 </span><span id="line-39"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;can be added for the internal&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
-</span><a href="#local-6989586621679080444"><span class="hs-identifier hs-var">mainConcept</span></a></span><span class="hs-special">]</span><span>
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">n
+</span><a href="#local-6989586621679080187"><span class="hs-identifier hs-var">mainConcept</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-40"></span><span>
 </span><span id="line-41"></span><span id="varValsOfmkEDesc"><span class="annot"><span class="annottext">varValsOfmkEDesc :: Sentence
 </span><a href="Drasil.GlassBR.Changes.html#varValsOfmkEDesc"><span class="hs-identifier hs-var hs-var">varValsOfmkEDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
@@ -124,7 +124,7 @@ x -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Currently, the&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-42"></span><span>  </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">value</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;for&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
@@ -140,19 +140,19 @@ x -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;are assumed to be the same for all&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.GlassBR.Concepts.html#glass"><span class="hs-identifier hs-var">glass</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-44"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;In the future, these&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">value</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;can be changed to&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-45"></span><span>  </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">pluralNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
-</span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
-</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">input_</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-46"></span><span>
 </span><span id="line-47"></span><span id="accMoreThanSingleLiteDesc"><span class="annot"><span class="annottext">accMoreThanSingleLiteDesc :: Sentence
@@ -164,7 +164,7 @@ x -&gt; Sentence -&gt; Sentence
 </span><a href="Drasil.GlassBR.Assumptions.html#assumpGL"><span class="hs-identifier hs-var">assumpGL</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">software</span></span><span class="hs-special">,</span><span>
 </span><span id="line-48"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -181,12 +181,12 @@ x -&gt; Sentence -&gt; Sentence
 </span><a href="Drasil.GlassBR.Assumptions.html#assumpBC"><span class="hs-identifier hs-var">assumpBC</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">software</span></span><span class="hs-special">,</span><span>
 </span><span id="line-51"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;may be changed to accommodate more boundary&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">condition</span></span><span class="hs-special">,</span><span>
 </span><span id="line-52"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -201,7 +201,7 @@ x -&gt; Sentence -&gt; Sentence
 </span><a href="Drasil.GlassBR.Assumptions.html#assumpRT"><span class="hs-identifier hs-var">assumpRT</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">software</span></span><span class="hs-special">,</span><span>
 </span><span id="line-55"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -246,14 +246,14 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span id="line-70"></span><span id="predictWithstandOfCertDegDesc"><span class="annot"><span class="annottext">predictWithstandOfCertDegDesc :: Sentence
 </span><a href="Drasil.GlassBR.Changes.html#predictWithstandOfCertDegDesc"><span class="hs-identifier hs-var hs-var">predictWithstandOfCertDegDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">goal</span></span><span> </span><span class="annot"><span class="annottext">forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
-</span><span class="hs-operator hs-var">`the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-operator hs-var">`the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">system</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-71"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is to predict whether the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.GlassBR.Concepts.html#glaSlab"><span class="hs-identifier hs-var">glaSlab</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;under consideration can&quot;</span></span><span class="hs-special">,</span><span>
@@ -274,7 +274,7 @@ r -&gt; Sentence
 </span><a href="Drasil.GlassBR.Assumptions.html#assumpGC"><span class="hs-identifier hs-var">assumpGC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;requires that the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.GlassBR.Concepts.html#glass"><span class="hs-identifier hs-var">glass</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span>
 </span><span id="line-75"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -283,6 +283,6 @@ r -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Therefore, this cannot be used on altered&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-76"></span><span>  </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.GlassBR.Concepts.html#glass"><span class="hs-identifier hs-var">glass</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-77"></span></pre></body></html>

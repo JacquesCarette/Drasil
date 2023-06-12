@@ -29,8 +29,8 @@ htTransCladFuel :: SimpleQDef
 htTransCladCoolDD :: DataDefinition
 htTransCladFuelDD :: DataDefinition
 hghc :: CommonConcept
-nuclearPhys :: NamedChunk
-fp :: NamedChunk
+nuclearPhys :: IdeaDict
+fp :: IdeaDict
 lCoolant :: Symbol
 lClad :: Symbol
 lEffective :: Symbol

@@ -17,7 +17,7 @@ acronyms :: [CI]
 acronymsFull :: [CI]
 phsChgMtrl :: CI
 progName :: CI
-full :: NamedChunk
+full :: IdeaDict
 charging :: ConceptChunk
 coil :: ConceptChunk
 discharging :: ConceptChunk

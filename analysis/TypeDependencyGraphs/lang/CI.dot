@@ -1,6 +1,6 @@
 digraph ci{
 CI	[shape=oval, color=cyan3, label="CI"];
-CI -> NamedChunk;
+CI -> IdeaDict;
 CI -> String;
 CI -> UID;
 }

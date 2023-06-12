@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 -- | Defines functions used in creating an introduction section.
-module Drasil.Sections.Introduction (orgSec, introductionSection, purposeOfDoc, scopeOfRequirements, 
-  charIntRdrF, purpDoc) where
+module Drasil.Sections.Introduction (orgSec, introductionSection,
+  purposeOfDoc, scopeOfRequirements, charIntRdrF, purpDoc) where
 
 import Language.Drasil
 import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
@@ -17,7 +17,8 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, characteristic,
   purpose, requirement, scope, section_, softwareDoc, softwareVAV, srs,
   theory, user, vavPlan, problem, information, systemConstraint, template)
 import Data.Drasil.TheoryConcepts as Doc (inModel, thModel)
-import Data.Drasil.Citations (parnasClements1986, smithEtAl2007, smithKoothoor2016, smithLai2005, koothoor2013)
+import Data.Drasil.Citations (parnasClements1986, smithEtAl2007,
+  smithKoothoor2016, smithLai2005, koothoor2013)
 import Data.Drasil.Software.Products
 
 
@@ -62,8 +63,9 @@ introductionSubsections = foldlList Comma List (map (uncurry S.the_ofThe)
 --     * programDefinition  - 'Sentence' definition of the specific example.
 --     * subSections        - List of subsections for this section.
 introductionSection :: Sentence -> Sentence -> [Section] -> Section
-introductionSection EmptyS              programDefinition = SRS.intro 
-  [mkParagraph $ foldlSent[S "There is no problem introduction provided"], overviewParagraph programDefinition]
+introductionSection EmptyS              programDefinition = SRS.intro
+  [mkParagraph $ foldlSent[S "There is no problem introduction provided"],
+  overviewParagraph programDefinition]
 introductionSection problemIntroduction programDefinition = SRS.intro 
   [mkParagraph problemIntroduction, overviewParagraph programDefinition]
 

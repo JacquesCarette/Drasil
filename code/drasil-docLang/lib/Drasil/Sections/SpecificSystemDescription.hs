@@ -28,12 +28,14 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Data.Drasil.Concepts.Documentation (assumption, column, constraint, corSol,
-  datum, datumConstraint, inDatumConstraint, outDatumConstraint, definition, element, general, goalStmt, information,
-  input_, limitation, model, output_, physical, physicalConstraint, physicalSystem,
-  physSyst, problem, problemDescription, property, purpose, quantity, requirement,
+import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
+  corSol, datum, datumConstraint, inDatumConstraint, outDatumConstraint,
+  definition, element, general, goalStmt, information, input_, limitation,
+  model, output_, physical, physicalConstraint, physicalSystem, physSyst,
+  problem, problemDescription, property, purpose, quantity, requirement,
   scope, section_, softwareConstraint, solutionCharacteristic, specification,
-  symbol_, system, theory, typUnc, uncertainty, user, value, variable, table_, problemDescription, description, termAndDef)
+  symbol_, system, theory, typUnc, uncertainty, user, value, variable,
+  table_, problemDescription, description, termAndDef)
 import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
 import Data.Drasil.Concepts.Math (equation, parameter)
 import Data.Drasil.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
@@ -110,7 +112,8 @@ goalStmtF givenInputs otherContents amt = SRS.goalStmt (intro:otherContents) []
 solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
 solutionCharSpecIntro progName instModelSection = foldlSP [atStartNP' (the inModel),
   S "that govern", short progName, S "are presented in the" +:+.
-  namedRef instModelSection (titleize inModel +:+ titleize DCD.sec), atStartNP (the information), S "to understand",
+  namedRef instModelSection (titleize inModel +:+ titleize DCD.sec), 
+  atStartNP (the information), S "to understand",
   S "meaning" `S.the_ofThe` plural inModel,
   S "and their derivation is also presented, so that the", plural inModel,
   S "can be verified"]

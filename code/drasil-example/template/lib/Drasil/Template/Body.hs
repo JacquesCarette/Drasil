@@ -9,7 +9,8 @@ import Language.Drasil
 import Drasil.SRSDocument
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Data.Drasil.Concepts.Documentation (doccon, doccon', funcReqDom, assumpDom, reqDom, srsDom, nonFuncReqDom, srsDomains)
+import Data.Drasil.Concepts.Documentation (doccon, doccon', funcReqDom,
+  assumpDom, reqDom, srsDom, nonFuncReqDom, srsDomains)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.Computation (inValue, algorithm, compcon)

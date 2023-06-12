@@ -45,7 +45,7 @@ mkSRS = [TableOfContents,
     [ IPurpose $ purpDoc progName Verbose,
       IScope EmptyS,
       IChar [] [] [],
-      IOrgSec EmptyS inModel (SRS.inModel [] []) EmptyS
+      IOrgSec inModel (SRS.inModel [] []) EmptyS
     ],
   GSDSec $
     GSDProg

@@ -9,10 +9,10 @@ module Language.Drasil.Sentence.Fold (
   foldConstraints,
   -- ** Sentence-related
   foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol,
-  foldlSent, foldlSent_, foldlSentCol, foldlsC, foldNums, numList
+  foldlSent, foldlSent_, foldlSentCol, foldlsC, foldNums, numList, emptySectSentence
 ) where
 
-import Language.Drasil.Classes ( Express(express), Quantity )
+import Language.Drasil.Classes ( Express(express), Quantity, NamedIdea )
 import Language.Drasil.Constraint
     ( Constraint(Range), ConstraintE )
 import Language.Drasil.Document ( mkParagraph )
@@ -22,6 +22,7 @@ import Language.Drasil.Sentence
     ( Sentence(S, E, EmptyS, (:+:)), sParen, (+:+), sC, (+:+.), (+:) )
 import qualified Language.Drasil.Sentence.Combinators as S (and_, or_)
 import Utils.Drasil
+import Language.Drasil.Development.Sentence (plural)
 
 -- TODO: This looks like it should be moved to wherever uses it, it's too specific.
 -- | Helper for formatting a list of constraints.
@@ -126,3 +127,7 @@ numList s (y:z:xs)
 -- | Helper for numList that concatenates integers to strings.
 rangeSep :: Int -> Int -> String -> String
 rangeSep p q s = show p ++ s ++ show q
+
+-- | Helper to create default sentence for empty sections using NamedIdea
+emptySectSentence :: NamedIdea n => n -> Contents
+emptySectSentence var = foldlSP [S "There are no" +:+ plural var]

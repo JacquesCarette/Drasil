@@ -112,7 +112,7 @@ purposeOfDoc _ = SRS.prpsOfDoc [mkParagraph developmentProcessParagraph] []
 -- | Constructor for the Scope of Requirements subsection.
 -- Takes in the main requirement for the program.
 scopeOfRequirements :: Sentence -> Section
-scopeOfRequirements EmptyS = SRS.scpOfReq [foldlSP [S "There are no" +:+ plural requirement]] []
+scopeOfRequirements EmptyS = SRS.scpOfReq [emptySectSentence requirement] []
 scopeOfRequirements req = SRS.scpOfReq [foldlSP
   [phrase scope `S.the_ofTheC` plural requirement, S "includes", req]] []
 

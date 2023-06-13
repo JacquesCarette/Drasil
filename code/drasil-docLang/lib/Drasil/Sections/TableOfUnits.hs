@@ -47,7 +47,7 @@ tunitNone t = TUnits' t tOfUnitNone
 
 -- | Table of units introduction builder. Used by 'mkRefSec'.
 tuIntro :: [TUIntro] -> Contents
-tuIntro [] = foldlSP [S "There are no" +:+ plural unit_]
+tuIntro [] = emptySectSentence unit_
 tuIntro x = mkParagraph $ foldr ((+:+) . tuI) EmptyS x
 
 -- | Table of units introduction writer. Translates a 'TUIntro' to a 'Sentence'.

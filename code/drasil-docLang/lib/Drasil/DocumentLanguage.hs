@@ -406,9 +406,8 @@ mkLCsSec :: LCsSec -> Section
 mkLCsSec (LCsProg c) = SRS.likeChg (introLCs c : mkEnumSimpleD c) []
 
 introLCs :: [ConceptInstance] -> Contents
-introLCs [] = foldlSP [S "There are no" +:+ plural Doc.likelyChg]
-introLCs _  = foldlSP [S "This", phrase Doc.section_, S "lists the",
-                plural Doc.likelyChg, S "to be made to the", phrase Doc.software]
+introLCs [] = emptySectSentence Doc.likelyChg
+introLCs _  = introChgs Doc.likelyChg
 
 -- ** Unlikely Changes
 
@@ -417,9 +416,13 @@ mkUCsSec :: UCsSec -> Section
 mkUCsSec (UCsProg c) = SRS.unlikeChg (introUCs c : mkEnumSimpleD c) []
 
 introUCs :: [ConceptInstance] -> Contents
-introUCs [] = foldlSP [S "There are no" +:+ plural Doc.unlikelyChg]
-introUCs _  = foldlSP [S "This", phrase Doc.section_, S "lists the",
-                plural Doc.unlikelyChg, S "to be made to the", phrase Doc.software]
+introUCs [] = emptySectSentence Doc.unlikelyChg
+introUCs _  = introChgs Doc.unlikelyChg
+
+
+introChgs :: NamedIdea n => n -> Contents
+introChgs xs = foldlSP [S "This", phrase Doc.section_, S "lists the",
+  plural xs, S "to be made to the", phrase Doc.software]
 
 -- ** Traceability
 

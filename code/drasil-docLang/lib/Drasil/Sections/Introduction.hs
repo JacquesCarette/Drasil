@@ -135,7 +135,7 @@ intReaderIntro :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] ->
   Section -> [Contents]
 intReaderIntro _ [] [] [] _ = 
   [foldlSP [S "Reviewers of this", phrase documentation,
-  S "do not need to have any prerequisite knowledge"]]
+  S "do not need any prerequisite knowledge"]]
 intReaderIntro progName assumed topic asset sectionRef = 
   [foldlSP [S "Reviewers of this", phrase documentation,
   S "should have an understanding of" +:+.

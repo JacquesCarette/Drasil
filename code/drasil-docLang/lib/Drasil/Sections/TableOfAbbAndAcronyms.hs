@@ -18,7 +18,7 @@ select (x:xs) = case getA x of
 
 -- | The actual table creation function.
 tableAbbAccGen :: (Idea s) => [s] -> LabelledContent
-tableAbbAccGen [] = llcc tableAbbAccRef $ Paragraph (S "There are no" +:+ plural abbAcc)
+tableAbbAccGen [] = llcc tableAbbAccRef $ Paragraph (S "There are no" +:+. plural abbAcc)
 tableAbbAccGen ls = let chunks = sortBy (compare `on` fst) $ select ls in
   llcc tableAbbAccRef $ Table
   (map titleize [abbreviation, fullForm]) (mkTable

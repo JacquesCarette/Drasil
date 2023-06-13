@@ -19,7 +19,7 @@ import Data.Drasil.Concepts.Math (graph)
 import Data.Drasil.Concepts.Documentation (traceyGraph, component, dependency, reference, purpose, traceyMatrix)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Char (isSpace, toLower)
-import Language.Drasil.Sentence.Combinators (and_)
+import Language.Drasil.Sentence.Combinators (or_)
 
 -- * Main Functions
 
@@ -28,7 +28,7 @@ import Language.Drasil.Sentence.Combinators (and_)
 -- Traceability graphs generate as both a link and a figure for convenience.
 traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> String -> [Section] -> Section
 traceMGF [] [] [] _ = SRS.traceyMandG [foldlSP [S "There are no" +:+ 
-  plural traceyMatrix `and_` plural traceyGraph]]
+  plural traceyMatrix `or_` plural traceyGraph]]
 traceMGF refs trailing otherContents ex = SRS.traceyMandG (traceMIntro refs trailing : otherContents
   ++ map UlC (traceGIntro traceGUIDs (trailing ++ [allvsallDesc])) ++ traceGCon ex)
 

@@ -35,7 +35,7 @@ import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
   problem, problemDescription, property, purpose, quantity, requirement,
   scope, section_, softwareConstraint, solutionCharacteristic, specification,
   symbol_, system, theory, typUnc, uncertainty, user, value, variable,
-  table_, problemDescription, description, termAndDef)
+  table_, problemDescription, terminology)
 import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
 import Data.Drasil.Concepts.Math (equation, parameter)
 import Data.Drasil.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
@@ -45,6 +45,7 @@ import qualified Drasil.DocLang.SRS as SRS
 
 import Control.Lens ((^.), over)
 import Data.Maybe
+import Language.Drasil.Sentence.Combinators (or_)
 
 -- Takes the system and subsections.
 -- | Specific System Description section builder.
@@ -68,8 +69,7 @@ probDescF prob   = SRS.probDesc [mkParagraph $ foldlSent [atStartNP (a_ system) 
 
 -- | Creates the Terms and Definitions section. Can take a ('Just' 'Sentence') if needed or 'Nothing' if not. Also takes 'Concept's that contain the definitions.
 termDefnF :: Concept c => Maybe Sentence -> [c] -> Section
-termDefnF _   []  = SRS.termAndDefn [intro] []
-      where intro = foldlSP [S "There are no", plural termAndDef]
+termDefnF _   []  = SRS.termAndDefn [introNoTermDefn] []
 termDefnF end lst = SRS.termAndDefn [intro, enumBulletU $ map termDef lst] []
   where intro = foldlSP_ [
                   S "This subsection provides a list of terms that are used in the subsequent",
@@ -80,8 +80,7 @@ termDefnF end lst = SRS.termAndDefn [intro, enumBulletU $ map termDef lst] []
 
 -- | Similar to 'termDefnF', except does not take definitions from the list of terms. 
 termDefnF' :: Maybe Sentence -> [Contents] -> Section
-termDefnF' _ [] = SRS.termAndDefn [intro] []
-      where intro = foldlSP [S "There are no", plural termAndDef]
+termDefnF' _   []            = SRS.termAndDefn [introNoTermDefn] []
 termDefnF' end otherContents = SRS.termAndDefn (intro : otherContents) []
       where intro = foldlSP [S "This subsection provides a list of terms",
                     S "that are used in the subsequent", plural section_,
@@ -89,10 +88,13 @@ termDefnF' end otherContents = SRS.termAndDefn (intro : otherContents) []
                     S "of reducing ambiguity and making it easier to correctly",
                     S "understand the", plural requirement :+: maybe EmptyS (S "." +:+) end]
 
+-- Intro for no terminology or definitions.
+introNoTermDefn :: Contents
+introNoTermDefn = foldlSP [S "There is no", phrase terminology `or_` plural definition]
+
 -- | General introduction for the Physical System Description section.
 physSystDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> Section
-physSystDesc _        []    _  _     = SRS.physSyst [intro] []
-  where intro = foldlSP [S "There are no", phrase physicalSystem, plural description]
+physSystDesc _        []    _  _     = SRS.physSyst [emptySectSentence physSyst] []
 physSystDesc progName parts fg other = SRS.physSyst (intro : bullets : LlC fg : other) []
   where intro = mkParagraph $ foldlSentCol [atStartNP (the physicalSystem) `S.of_` short progName `sC`
                 S "as shown in", refS fg `sC` S "includes the following", plural element]

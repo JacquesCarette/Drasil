@@ -24,8 +24,7 @@ usrCharsF intro = SRS.userChar intro []
 -- | System Constraints section constructor.
 -- Generalized if no constraints, but if there are, they can be passed through.
 systCon :: [Contents] -> [Section] -> Section
-systCon [] subSec  = SRS.sysCon [systCon_none] subSec
-            where systCon_none = emptySectSentence systemConstraint
+systCon [] subSec  = SRS.sysCon [emptySectSentence systemConstraint] subSec
 systCon a subSec = SRS.sysCon a subSec
 
 -- | System Context section constructor. Does not contain any subsections.

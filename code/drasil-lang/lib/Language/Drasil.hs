@@ -219,7 +219,7 @@ module Language.Drasil (
 
   -- *** Sentence-related
   , foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent
-  , foldlSent_,foldlSentCol, foldlsC, foldNums, numList, emptySectSentence 
+  , foldlSent_,foldlSentCol, foldlsC, foldNums, numList 
 
 
   -- * Basic Document Language

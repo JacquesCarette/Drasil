@@ -61,6 +61,7 @@ import Data.Function (on)
 import Data.List (nub, sortBy, sortOn)
 import qualified Data.Map as Map (elems, toList, assocs, keys)
 import Data.Char (isSpace)
+import Drasil.Sections.ReferenceMaterial (emptySectSentence)
 
 -- * Main Function
 -- | Creates a document from a document description, a title combinator function, and system information.

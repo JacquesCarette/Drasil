@@ -27,6 +27,7 @@ import Language.Drasil.Development (showUID)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.Sections.ReferenceMaterial(emptySectSentence)
 
 import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
   corSol, datum, datumConstraint, inDatumConstraint, outDatumConstraint,

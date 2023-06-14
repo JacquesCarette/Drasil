@@ -4,6 +4,7 @@ module Drasil.Sections.TableOfUnits (tOfUnitDesc, tOfUnitSIName, unitTableRef, t
 
 import Control.Lens ((^.))
 import Language.Drasil
+import Drasil.Sections.ReferenceMaterial(emptySectSentence)
 import Data.Drasil.Concepts.Documentation (symbol_, description, tOfUnit)
 import Drasil.DocumentLanguage.Core (TUIntro(..), RefTab(..))
 import Data.Drasil.Concepts.Math (unit_)

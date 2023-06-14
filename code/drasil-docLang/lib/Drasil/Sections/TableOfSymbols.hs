@@ -8,6 +8,8 @@ import Data.List (nub, (\\))
 import Control.Lens (view)
 import Text.PrettyPrint.HughesPJ (text, render, vcat, (<+>))
 
+import Drasil.Sections.ReferenceMaterial(emptySectSentence)
+
 import Drasil.DocumentLanguage.Units (toSentence)
 import Data.Drasil.Concepts.Documentation (symbol_, description, tOfSymb)
 import Data.Drasil.Concepts.Math (unit_)

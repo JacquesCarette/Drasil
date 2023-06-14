@@ -17,7 +17,7 @@ import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 import Control.Lens ((^.))
 
 -- | Collects all documentation-related named chunks (not concept-level yet).
-doccon :: [NamedChunk]
+doccon :: [IdeaDict]
 doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body, caseProb, charOfIR, characteristic,
   class_, client, code, column, company, component, concept, condition, connection,
   consVals, constant, constraint, consumer, content, context, coordinate, coordinateSystem, 
@@ -100,7 +100,7 @@ abbreviation, acronym, analysis, appendix, aspect, body, characteristic, class_,
   source, simulation, software, solution, summary, specific, specification, stakeholder,
   standard, statement, symbol_, system, table_, task, template, term_, terminology,
   theory, traceyGraph, traceyMatrix, type_, uncertainty, user, useCase, validation,
-  value, variable, video, verification, year :: NamedChunk
+  value, variable, video, verification, year :: IdeaDict
 
 abbreviation    = nc "abbreviation"   (cn'    "abbreviation"       )
 acronym         = nc "acronym"        (cn'    "acronym"            )
@@ -237,7 +237,7 @@ scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- tempora
 
 abbAcc, caseProb, charOfIR, consVals, corSol, methAndAnls, orgOfDoc, procForAnls, propOfCorSol, prpsOfDoc, 
   refMat, reqInput, scpOfReq, tAuxConsts, tOfSymb, tOfUnit,
-  termAndDef, traceyMandG, vav, tOfCont :: NamedChunk
+  termAndDef, traceyMandG, vav, tOfCont :: IdeaDict
 
 abbAcc              = nc "TAbbAcc"            (abbreviation `and_PP` acronym)
 caseProb            = nc "caseProb"           (cn' "case problem")
@@ -262,7 +262,7 @@ outDatumConstraint  = nc "OutDataConstraints" (cn' "output data constraint")
 traceyMandG         = nc "traceyMandG"        (and_TGen titleize' titleize' traceyMatrix graph)
 vav                 = nc "vav"                (verification `and_` validation)
 
-scpOfTheProj :: (NamedChunk -> Sentence) -> NamedChunk
+scpOfTheProj :: (IdeaDict -> Sentence) -> IdeaDict
 scpOfTheProj oper = nc "scpOfTheProj" (scope `of_NINP` theGen oper project) -- reasonable hack?
 
 -- ** Compound Chunks
@@ -274,7 +274,7 @@ designDoc, fullForm, generalSystemDescription, moduleInterface, indPRCase,
   outDatumConstraint, functionalRequirement, nonfunctionalRequirement, safetyReq, 
   softwareConstraint, softwareDoc, softwareReq, softwareSys, softwareVerif, 
   softwareVAV, solutionCharSpec, solutionCharacteristic, offShelfSolution, 
-  physicalSim, productUC, useCaseTable, physicalProperty, vavPlan, uncertCol, userInput :: NamedChunk
+  physicalSim, productUC, useCaseTable, physicalProperty, vavPlan, uncertCol, userInput :: IdeaDict
  
 coordinateSystem             = compoundNC coordinate system
 datumConstraint              = compoundNCPP datum constraint

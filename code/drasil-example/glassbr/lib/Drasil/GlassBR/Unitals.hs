@@ -450,5 +450,5 @@ glassThickness =
   (22.0, 21.44)]
 
 --Below are present in this file temporarily--
-lateralLoad :: NamedChunk
+lateralLoad :: IdeaDict
 lateralLoad  = compoundNC lateral load

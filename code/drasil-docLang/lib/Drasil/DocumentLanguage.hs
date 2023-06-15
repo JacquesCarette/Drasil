@@ -404,25 +404,18 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 
 -- | Helper for making the Likely Changes section.
 mkLCsSec :: LCsSec -> Section
-mkLCsSec (LCsProg c) = SRS.likeChg (introLCs c : mkEnumSimpleD c) []
-
-introLCs :: [ConceptInstance] -> Contents
-introLCs [] = emptySectSentence Doc.likelyChg
-introLCs _  = introChgs Doc.likelyChg
+mkLCsSec (LCsProg c) = SRS.likeChg (introChgs Doc.likelyChg c: mkEnumSimpleD c) []
 
 -- ** Unlikely Changes
 
 -- | Helper for making the Unikely Changes section.
 mkUCsSec :: UCsSec -> Section
-mkUCsSec (UCsProg c) = SRS.unlikeChg (introUCs c : mkEnumSimpleD c) []
+mkUCsSec (UCsProg c) = SRS.unlikeChg (introChgs Doc.unlikelyChg  c : mkEnumSimpleD c) []
 
-introUCs :: [ConceptInstance] -> Contents
-introUCs [] = emptySectSentence Doc.unlikelyChg
-introUCs _  = introChgs Doc.unlikelyChg
-
-
-introChgs :: NamedIdea n => n -> Contents
-introChgs xs = foldlSP [S "This", phrase Doc.section_, S "lists the",
+-- | Intro paragraph for likely and unlikely changes
+introChgs :: NamedIdea n => n -> [ConceptInstance] -> Contents
+introChgs xs [] = emptySectSentence xs
+introChgs xs _ = foldlSP [S "This", phrase Doc.section_, S "lists the",
   plural xs, S "to be made to the", phrase Doc.software]
 
 -- ** Traceability

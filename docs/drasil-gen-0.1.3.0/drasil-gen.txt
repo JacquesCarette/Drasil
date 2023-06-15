@@ -12,6 +12,8 @@
 
 -- | Defines Drasil generator functions.
 module Language.Drasil.Generate
+dumpTo :: ToJSON a => a -> TargetFile -> IO ()
+dumpEverything :: SystemInformation -> Path -> IO ()
 typeCheckSI :: SystemInformation -> IO ()
 
 -- | Generate a number of artifacts based on a list of recipes.

@@ -1,0 +1,4 @@
+digraph chunktype{
+ChunkType	[shape=oval, color=red2, label="ChunkType"];
+ChunkType -> String;
+}

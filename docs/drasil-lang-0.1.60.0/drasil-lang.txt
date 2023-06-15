@@ -2356,7 +2356,7 @@ class (HasSymbol c) => IsArgumentName c
 --   sure we are only using <a>UID</a>s where desired.
 data UID
 
--- | Smart constructor for making a <a>UID</a> from a <a>String</a>.
+-- | Smart constructor for making a <a>UID</a> from a <a>Value</a>.
 mkUid :: String -> UID
 
 -- | For when we need to modify a UID. We first take the base chunk's UID

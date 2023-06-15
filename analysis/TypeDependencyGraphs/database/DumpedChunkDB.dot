@@ -1,0 +1,4 @@
+digraph dumpedchunkdb{
+DumpedChunkDB	[shape=oval, color=red2, label="DumpedChunkDB"];
+DumpedChunkDB -> MapChunkTypeUID;
+}

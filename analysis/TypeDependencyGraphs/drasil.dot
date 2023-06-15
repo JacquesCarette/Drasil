@@ -1038,6 +1038,16 @@ digraph alltypes {
 		ReferenceMap -> UMapReference;
 		}
 	}
+	subgraph dump {
+		subgraph chunktype{
+		ChunkType	[shape=oval, color=red2, label="ChunkType"];
+		ChunkType -> String;
+		}
+		subgraph dumpedchunkdb{
+		DumpedChunkDB	[shape=oval, color=red2, label="DumpedChunkDB"];
+		DumpedChunkDB -> MapChunkTypeUID;
+		}
+	}
 	subgraph drails {
 	}
 	subgraph notebook {
@@ -1786,6 +1796,16 @@ digraph alltypes {
 		subgraph filename{
 		Filename	[shape=oval, color=red2, label="Filename"];
 		Filename -> String;
+		}
+	}
+	subgraph dump {
+		subgraph path{
+		Path	[shape=oval, color=red2, label="Path"];
+		Path -> String;
+		}
+		subgraph targetfile{
+		TargetFile	[shape=oval, color=red2, label="TargetFile"];
+		TargetFile -> String;
 		}
 	}
 	subgraph generate {
@@ -4223,6 +4243,8 @@ digraph alltypes {
 	subgraph englihs {
 	}
 	subgraph litss {
+	}
+	subgraph maps {
 	}
 	subgraph strings {
 	}

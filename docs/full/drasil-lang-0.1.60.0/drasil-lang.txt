@@ -297,7 +297,7 @@ class HasUID c
 -- | Provides a <i>unique</i> id for internal Drasil use.
 uid :: HasUID c => Lens' c UID
 
--- | Smart constructor for making a <a>UID</a> from a <a>String</a>.
+-- | Smart constructor for making a <a>UID</a> from a <a>Value</a>.
 mkUid :: String -> UID
 
 -- | For when we need to modify a UID. We first take the base chunk's UID
@@ -311,8 +311,11 @@ mkUid :: String -> UID
 -- | Grabs the UID from something that has a UID and displays it as a
 --   String.
 showUID :: HasUID a => a -> String
+instance Data.Aeson.Types.ToJSON.ToJSON Language.Drasil.UID.UID
+instance GHC.Generics.Generic Language.Drasil.UID.UID
 instance GHC.Classes.Ord Language.Drasil.UID.UID
 instance GHC.Classes.Eq Language.Drasil.UID.UID
+instance Data.Aeson.Types.ToJSON.ToJSONKey Language.Drasil.UID.UID
 instance GHC.Show.Show Language.Drasil.UID.UID
 
 
@@ -6732,7 +6735,7 @@ class (HasSymbol c) => IsArgumentName c
 --   sure we are only using <a>UID</a>s where desired.
 data UID
 
--- | Smart constructor for making a <a>UID</a> from a <a>String</a>.
+-- | Smart constructor for making a <a>UID</a> from a <a>Value</a>.
 mkUid :: String -> UID
 
 -- | For when we need to modify a UID. We first take the base chunk's UID

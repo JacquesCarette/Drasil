@@ -135,6 +135,12 @@ sectionTable :: Lens' ChunkDB SectionMap
 labelledcontentTable :: Lens' ChunkDB LabelledContentMap
 refTable :: Lens' ChunkDB ReferenceMap
 
+module Database.Drasil.Dump
+type ChunkType = String
+type DumpedChunkDB = Map ChunkType [UID]
+umapDump :: HasUID a => UMap a -> [UID]
+dumpChunkDB :: ChunkDB -> DumpedChunkDB
+
 
 -- | Re-export database types and functions to simplify external use.
 module Database.Drasil
@@ -260,3 +266,5 @@ conceptinsTable :: Lens' ChunkDB ConceptInstanceMap
 sectionTable :: Lens' ChunkDB SectionMap
 labelledcontentTable :: Lens' ChunkDB LabelledContentMap
 refTable :: Lens' ChunkDB ReferenceMap
+dumpChunkDB :: ChunkDB -> DumpedChunkDB
+type DumpedChunkDB = Map ChunkType [UID]

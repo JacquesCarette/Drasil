@@ -66,7 +66,8 @@ mkSRS = [TableOfContents,
       [ SSDProblem $ PDProg probDescIntro []
         [ TermsAndDefs Nothing terms
         , PhySysDesc projectileTitle physSystParts figLaunch []
-        , Goals [(phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile]]
+        , Goals [(phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile, 
+                  S "geometric layout" `S.the_ofThe` phrase launcher `S.and_` phrase target]]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)

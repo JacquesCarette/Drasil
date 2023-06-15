@@ -11,10 +11,10 @@ import Language.Drasil
 intro :: Contents
 intro = mkParagraph $ S "This section records information for easy reference."
 
--- | Helper to create default plural sentence for empty sections using NamedIdea
+-- | Helper to create default plural sentence for empty sections using `NamedIdea`s
 emptySectSentPlu :: NamedIdea n => [n] -> Sentence
-emptySectSentPlu var =  foldlSent_ [S "There are no" +:+ foldlList Comma Options (map plural var)]
+emptySectSentPlu var = S "There are no" +:+ foldlList Comma Options (map plural var)
 
--- | Helper to create default singular sentence for empty sections using NamedIdea
+-- | Helper to create default singular sentence for empty sections using `NamedIdea`s
 emptySectSentSing :: NamedIdea n => [n] -> Sentence
-emptySectSentSing var = foldlSent_ [S "There is no", foldlList Comma Options (map phrase var)]
+emptySectSentSing var = S "There is no" +:+ foldlList Comma Options (map phrase var)

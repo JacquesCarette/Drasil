@@ -1,0 +1,46 @@
+{
+    "DDsLabel": [
+        "sections",
+        "references"
+    ],
+    "GDsLabel": [
+        "sections",
+        "references"
+    ],
+    "IMsLabel": [
+        "sections",
+        "references"
+    ],
+    "InDataConstraints": [
+        "terms",
+        "references"
+    ],
+    "OutDataConstraints": [
+        "terms",
+        "references"
+    ],
+    "ReqInputs": [
+        "terms",
+        "references"
+    ],
+    "SolCharSpecLabel": [
+        "sections",
+        "references"
+    ],
+    "SpecSystDescLabel": [
+        "sections",
+        "references"
+    ],
+    "TAbbAcc": [
+        "terms",
+        "references"
+    ],
+    "TAuxConsts": [
+        "terms",
+        "references"
+    ],
+    "TMsLabel": [
+        "sections",
+        "references"
+    ]
+}

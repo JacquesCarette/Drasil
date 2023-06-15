@@ -56,7 +56,9 @@ tuI :: TUIntro -> Sentence
 tuI System  =
   S "The unit system used throughout is SI (Système International d'Unités)."
 tuI TUPurpose =
-  S "For each unit" `sC` S "the" +:+ namedRef unitTableRef (titleize' tOfUnit) +:+. S "lists the symbol, a description and the SI name"
+  S "For each unit" `sC` S "the" +:+ namedRef unitTableRef (titleize' tOfUnit) +:+
+    S "lists" +:+. foldlList Comma List [S "the" +:+ phrase symbol_,
+    S "a" +:+ phrase description, S "the SI name"]
 tuI Derived =
   S "In addition to the basic units, several derived units are also used."
 

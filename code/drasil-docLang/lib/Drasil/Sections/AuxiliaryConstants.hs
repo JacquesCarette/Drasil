@@ -8,6 +8,7 @@ import Drasil.DocumentLanguage.Units (toSentence)
 import Data.Drasil.Concepts.Documentation (value, description, symbol_, tAuxConsts)
 import qualified Data.Drasil.Concepts.Math as CM (unit_)
 import Control.Lens ((^.))
+import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- | Gets the auxiliary constant values given an introductory 'Idea' and a 'QDefinition'.
 valsOfAuxConstantsF :: Idea a => a -> [ConstQDef] -> Section
@@ -15,7 +16,7 @@ valsOfAuxConstantsF kWord listOfConstants = SRS.valsOfAuxCons (contentGenerator 
 
 -- | Gets a table of constants from a 'QDefinition'. Also uses an 'Idea' as the introduction.
 contentGenerator :: Idea a => a -> [ConstQDef] -> [Contents]
-contentGenerator _ [] = [foldlSP [S "There are no auxiliary constants"]]
+contentGenerator _ [] = [foldlSP [emptySectSentPlu [tAuxConsts]]]
 contentGenerator a b  = [intro a, LlC $ tableOfConstants b]
 
 --FIXME: general introduction?

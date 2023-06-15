@@ -4,7 +4,7 @@ module Drasil.Sections.TableOfUnits (tOfUnitDesc, tOfUnitSIName, unitTableRef, t
 
 import Control.Lens ((^.))
 import Language.Drasil
-import Drasil.Sections.ReferenceMaterial(emptySectSentence)
+import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 import Data.Drasil.Concepts.Documentation (symbol_, description, tOfUnit)
 import Drasil.DocumentLanguage.Core (TUIntro(..), RefTab(..))
 import Data.Drasil.Concepts.Math (unit_)
@@ -48,7 +48,7 @@ tunitNone t = TUnits' t tOfUnitNone
 
 -- | Table of units introduction builder. Used by 'mkRefSec'.
 tuIntro :: [TUIntro] -> Contents
-tuIntro [] = emptySectSentence unit_
+tuIntro [] = foldlSP [emptySectSentPlu [unit_]]
 tuIntro x = mkParagraph $ foldr ((+:+) . tuI) EmptyS x
 
 -- | Table of units introduction writer. Translates a 'TUIntro' to a 'Sentence'.

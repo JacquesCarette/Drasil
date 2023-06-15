@@ -61,7 +61,7 @@ import Data.Function (on)
 import Data.List (nub, sortBy, sortOn)
 import qualified Data.Map as Map (elems, toList, assocs, keys)
 import Data.Char (isSpace)
-import Drasil.Sections.ReferenceMaterial (emptySectSentence)
+import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- * Main Function
 -- | Creates a document from a document description, a title combinator function, and system information.
@@ -414,7 +414,7 @@ mkUCsSec (UCsProg c) = SRS.unlikeChg (introChgs Doc.unlikelyChg  c : mkEnumSimpl
 
 -- | Intro paragraph for likely and unlikely changes
 introChgs :: NamedIdea n => n -> [ConceptInstance] -> Contents
-introChgs xs [] = emptySectSentence xs
+introChgs xs [] = foldlSP [emptySectSentPlu [xs]]
 introChgs xs _ = foldlSP [S "This", phrase Doc.section_, S "lists the",
   plural xs, S "to be made to the", phrase Doc.software]
 

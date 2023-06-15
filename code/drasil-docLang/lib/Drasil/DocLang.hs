@@ -48,7 +48,7 @@ module Drasil.DocLang (
   purpDoc,
   -- ** Reference Material
   -- Drasil.Sections.ReferenceMaterial
-  intro, emptySectSentence,
+  intro, emptySectSentPlu, emptySectSentSing,
   -- Drasil.Sections.TableOfSymbols
   tsymb, tsymb'',
   -- Drasil.Sections.TableOfUnits
@@ -89,7 +89,7 @@ import Drasil.DocumentLanguage.TraceabilityGraph (mkGraphInfo, traceyGraphGetRef
 import Drasil.Sections.AuxiliaryConstants (tableOfConstants)
 --import Drasil.Sections.GeneralSystDesc
 import Drasil.Sections.Introduction (purpDoc)
-import Drasil.Sections.ReferenceMaterial (intro, emptySectSentence)
+import Drasil.Sections.ReferenceMaterial (intro, emptySectSentPlu, emptySectSentSing)
 import Drasil.Sections.Requirements (inReq, inTable, mkInputPropsTable,
   mkQRTuple, mkQRTupleRef, mkValsSourceTable, reqInputsRef)
 import Drasil.Sections.SpecificSystemDescription (auxSpecSent, termDefnF', inDataConstTbl, outDataConstTbl)

@@ -8,7 +8,7 @@ import Data.List (nub, (\\))
 import Control.Lens (view)
 import Text.PrettyPrint.HughesPJ (text, render, vcat, (<+>))
 
-import Drasil.Sections.ReferenceMaterial(emptySectSentence)
+import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 
 import Drasil.DocumentLanguage.Units (toSentence)
 import Data.Drasil.Concepts.Documentation (symbol_, description, tOfSymb)
@@ -61,7 +61,7 @@ tsymb'' intro lfunc = TSymb' lfunc intro
 
 -- | Table of symbols introduction builder. Used by 'mkRefSec'.
 tsIntro :: [TSIntro] -> Contents
-tsIntro [] = emptySectSentence symbol_
+tsIntro [] = foldlSP [emptySectSentPlu [symbol_]]
 tsIntro x = mkParagraph $ foldr ((+:+) . tsI) EmptyS x
 
 -- | Table of symbols intro writer. Translates a 'TSIntro' to a list in a 'Sentence'.

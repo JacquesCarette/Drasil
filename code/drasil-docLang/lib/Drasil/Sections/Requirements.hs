@@ -14,7 +14,7 @@ module Drasil.Sections.Requirements (
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.Sections.ReferenceMaterial(emptySectSentence)
+import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 
 import Data.Drasil.Concepts.Documentation (description, funcReqDom,
   functionalRequirement, input_, nonfunctionalRequirement, {-output_,-} section_,
@@ -91,12 +91,12 @@ reqIntro = mkParagraph $ reqIntroStart +:+. (frReqIntroBody `sC` EmptyS `S.and_`
 
 -- | Generalized Functional Requirements subsection introduction.
 fReqIntro :: [Contents] -> Contents
-fReqIntro [] = emptySectSentence functionalRequirement
+fReqIntro [] = foldlSP [emptySectSentPlu [functionalRequirement]]
 fReqIntro _  = mkParagraph $ reqIntroStart +:+. frReqIntroBody
 
 -- | Generalized Non-Functional Requirements subsection introduction.
 nfReqIntro :: [Contents] -> Contents
-nfReqIntro [] = emptySectSentence nonfunctionalRequirement
+nfReqIntro [] = foldlSP [emptySectSentPlu [nonfunctionalRequirement]]
 nfReqIntro _  = mkParagraph $ reqIntroStart +:+. nfrReqIntroBody
 
 -- | Creates an Input Data Table for use in the Functional Requirments section. Takes a list of wrapped variables and something that is 'Referable'.

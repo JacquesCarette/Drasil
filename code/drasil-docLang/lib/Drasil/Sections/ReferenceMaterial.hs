@@ -1,5 +1,5 @@
 -- | Defines functions used in the Reference Material section.
-module Drasil.Sections.ReferenceMaterial (intro, emptySectSentence) where
+module Drasil.Sections.ReferenceMaterial (intro, emptySectSentPlu, emptySectSentSing) where
 {-
 Depending where this is used, it might be worth combining it with other module(s),
 or simply moving it to Data.Drasil.Documentation since it's highly reusable
@@ -11,6 +11,10 @@ import Language.Drasil
 intro :: Contents
 intro = mkParagraph $ S "This section records information for easy reference."
 
--- | Helper to create default sentence for empty sections using NamedIdea
-emptySectSentence :: NamedIdea n => n -> Contents
-emptySectSentence var = foldlSP [S "There are no" +:+ plural var]
+-- | Helper to create default plural sentence for empty sections using NamedIdea
+emptySectSentPlu :: NamedIdea n => [n] -> Sentence
+emptySectSentPlu var =  foldlSent_ [S "There are no" +:+ foldlList Comma Options (map plural var)]
+
+-- | Helper to create default singular sentence for empty sections using NamedIdea
+emptySectSentSing :: NamedIdea n => [n] -> Sentence
+emptySectSentSing var = foldlSent_ [S "There is no", foldlList Comma Options (map phrase var)]

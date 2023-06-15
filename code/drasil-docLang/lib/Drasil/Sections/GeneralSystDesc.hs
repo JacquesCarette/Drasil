@@ -3,7 +3,7 @@ module Drasil.Sections.GeneralSystDesc where
 
 import Language.Drasil
 import Language.Drasil.Sentence.Combinators
-import Drasil.Sections.ReferenceMaterial(emptySectSentence)
+import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 
 import Data.Drasil.Concepts.Documentation (interface, system, environment,
   userCharacteristic, systemConstraint, information, section_, sysCont)
@@ -18,16 +18,16 @@ genSysIntro = foldlSP [S "This", phrase section_, S "provides general",
 
 -- | User Characeristics section constructor. Does not contain any subsections.
 usrCharsF :: [Contents] -> Section
-usrCharsF [] = SRS.userChar [emptySectSentence userCharacteristic] []
+usrCharsF [] = SRS.userChar [foldlSP [emptySectSentPlu [userCharacteristic]]] []
 usrCharsF intro = SRS.userChar intro []
 
 -- | System Constraints section constructor.
 -- Generalized if no constraints, but if there are, they can be passed through.
 systCon :: [Contents] -> [Section] -> Section
-systCon [] subSec  = SRS.sysCon [emptySectSentence systemConstraint] subSec
+systCon [] subSec  = SRS.sysCon [foldlSP [emptySectSentPlu [systemConstraint]]] subSec
 systCon a subSec = SRS.sysCon a subSec
 
 -- | System Context section constructor. Does not contain any subsections.
 sysContxt :: [Contents] -> Section
-sysContxt [] = SRS.sysCont [emptySectSentence sysCont] []
+sysContxt [] = SRS.sysCont [foldlSP [emptySectSentPlu [sysCont]]] []
 sysContxt cs = SRS.sysCont cs []

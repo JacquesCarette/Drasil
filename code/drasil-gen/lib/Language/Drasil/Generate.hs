@@ -1,5 +1,7 @@
 -- | Defines Drasil generator functions.
 module Language.Drasil.Generate (
+  -- * Debugging
+  dumpTo, dumpEverything,
   -- * Type checking
   typeCheckSI,
   -- * Generator Functions
@@ -29,6 +31,7 @@ import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
 import Language.Drasil.Output.Formats(Filename, DocSpec(DocSpec), DocChoices(DC))
 
 import Language.Drasil.TypeCheck
+import Language.Drasil.Dump
 
 import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
 import Data.Char (isSpace)

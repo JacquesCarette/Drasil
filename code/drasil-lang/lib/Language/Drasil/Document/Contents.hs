@@ -23,7 +23,7 @@ import Language.Drasil.Document.Core
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.Reference (Reference)
-import Language.Drasil.Sentence (Sentence)
+import Language.Drasil.Sentence (Sentence (..))
 import Language.Drasil.Document.Combinators (bulletFlat, mkEnumAbbrevList)
 import Language.Drasil.Label.Type ( Referable(refAdd) )
 
@@ -87,7 +87,8 @@ mkEnumSimpleD = mkEnumSimple $ mkListTuple (\x -> Flat $ x ^. defn)
 -- | Helper function for converting a list of something into a bulleted list.
 -- Used in 'mkEnumSimpleD'.
 mkEnumSimple :: (a -> ListTuple) -> [a] -> [Contents]
-mkEnumSimple f = replicate 1 . UlC . ulcc . Enumeration . Simple . map f
+mkEnumSimple _ [] = []
+mkEnumSimple f xs = [UlC $ ulcc $ Enumeration $ Simple $ map f xs]
 
 -- | Helper function that creates a bullet point from a function and an item.
 -- Used in 'mkEnumSimpleD'.

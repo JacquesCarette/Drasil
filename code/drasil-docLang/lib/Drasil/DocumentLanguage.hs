@@ -61,6 +61,7 @@ import Data.Function (on)
 import Data.List (nub, sortBy, sortOn)
 import qualified Data.Map as Map (elems, toList, assocs, keys)
 import Data.Char (isSpace)
+import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- * Main Function
 -- | Creates a document from a document description, a title combinator function, and system information.
@@ -71,7 +72,7 @@ mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
     fullSI = fillcdbSRS dd si
     l = mkDocDesc fullSI dd
 
--- * Functions to Fill 'CunkDB'
+-- * Functions to Fill 'ChunkDB'
 
 -- TODO: Move all of these "filler" functions to a new file?
 -- TODO: Add in 'fillTermMap' once #2775 is complete.
@@ -403,17 +404,19 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 
 -- | Helper for making the Likely Changes section.
 mkLCsSec :: LCsSec -> Section
-mkLCsSec (LCsProg c) = SRS.likeChg (intro : mkEnumSimpleD c) []
-  where intro = foldlSP [S "This", phrase Doc.section_, S "lists the",
-                plural Doc.likelyChg, S "to be made to the", phrase Doc.software]
+mkLCsSec (LCsProg c) = SRS.likeChg (introChgs Doc.likelyChg c: mkEnumSimpleD c) []
 
 -- ** Unlikely Changes
 
 -- | Helper for making the Unikely Changes section.
 mkUCsSec :: UCsSec -> Section
-mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
-  where intro = foldlSP [S "This", phrase Doc.section_, S "lists the",
-                plural Doc.unlikelyChg, S "to be made to the", phrase Doc.software]
+mkUCsSec (UCsProg c) = SRS.unlikeChg (introChgs Doc.unlikelyChg  c : mkEnumSimpleD c) []
+
+-- | Intro paragraph for likely and unlikely changes
+introChgs :: NamedIdea n => n -> [ConceptInstance] -> Contents
+introChgs xs [] = mkParagraph $ emptySectSentPlu [xs]
+introChgs xs _ = foldlSP [S "This", phrase Doc.section_, S "lists the",
+  plural xs, S "to be made to the", phrase Doc.software]
 
 -- ** Traceability
 

@@ -14,13 +14,13 @@ concepts = nw newtonSLRQD : map nw [rod, horizontal, vertical,
   verticalVel, horizontalForce, verticalForce, firstRod, secondRod, firstObject, secondObject] 
   ++ map nw defs
 
-rod, horizontal, vertical :: NamedChunk
+rod, horizontal, vertical :: IdeaDict
 rod = nc "rod" (cn' "rod")
 horizontal = nc "horizontal" (cn "horizontal") 
 vertical = nc "vertical" (cn "vertical") 
 
 pendMotion, horizontalPos, verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce,
-  horizontalAccel, verticalAccel, firstRod, secondRod, firstObject, secondObject:: NamedChunk
+  horizontalAccel, verticalAccel, firstRod, secondRod, firstObject, secondObject:: IdeaDict
 pendMotion      = compoundNC pendulum motion
 horizontalPos   = compoundNC horizontal position
 verticalPos     = compoundNC vertical position

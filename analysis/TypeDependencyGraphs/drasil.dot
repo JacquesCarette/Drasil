@@ -1349,6 +1349,13 @@ digraph alltypes {
 	subgraph introduction {
 	}
 	subgraph referencematerial {
+		subgraph plurality{
+		Plurality	[shape=oval, color=darkviolet, label="Plurality"];
+		Plurality -> NamedIdea;
+		Plurality -> n;
+		Plurality -> Plurality;
+		Plurality -> Sentence;
+		}
 	}
 	subgraph requirements {
 	}

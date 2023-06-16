@@ -987,38 +987,17 @@ instance Data.Generics.Multiplate.Multiplate Drasil.DocumentLanguage.Core.DLPlat
 instance GHC.Show.Show Drasil.DocumentLanguage.Core.Emphasis
 
 
--- | Defines helper functions for making the Table of Auxiliary Constants
---   section.
-module Drasil.Sections.AuxiliaryConstants
+-- | Defines functions used in the Reference Material section.
+module Drasil.Sections.ReferenceMaterial
 
--- | Gets the auxiliary constant values given an introductory <a>Idea</a>
---   and a <a>QDefinition</a>.
-valsOfAuxConstantsF :: Idea a => a -> [ConstQDef] -> Section
+-- | Default Reference Material section introduction.
+intro :: Contents
 
--- | Helper that gets a table of constants from a <a>QDefinition</a>.
-tableOfConstants :: [ConstQDef] -> LabelledContent
+-- | Helper for variants of <a>emptySectSent</a>
+emptySectSentPlu :: NamedIdea n => [n] -> Sentence
 
--- | Table of constants reference label.
-tableOfConstantsRef :: Reference
-
-
--- | Defines helper functions used to make the general system description
---   section.
-module Drasil.Sections.GeneralSystDesc
-
--- | Default General System Description introduction.
-genSysIntro :: Contents
-
--- | User Characeristics section constructor. Does not contain any
---   subsections.
-usrCharsF :: [Contents] -> Section
-
--- | System Constraints section constructor. Generalized if no constraints,
---   but if there are, they can be passed through.
-systCon :: [Contents] -> [Section] -> Section
-
--- | System Context section constructor. Does not contain any subsections.
-sysContxt :: [Contents] -> Section
+-- | Helper for variants of <a>emptySectSent</a>
+emptySectSentSing :: NamedIdea n => [n] -> Sentence
 
 
 -- | Defines functions used in creating an introduction section.
@@ -1072,11 +1051,38 @@ charIntRdrF :: Idea a => a -> [Sentence] -> [Sentence] -> [Sentence] -> Section 
 purpDoc :: CI -> Verbosity -> [Sentence]
 
 
--- | Defines functions used in the Reference Material section.
-module Drasil.Sections.ReferenceMaterial
+-- | Defines helper functions used to make the general system description
+--   section.
+module Drasil.Sections.GeneralSystDesc
 
--- | Default Reference Material section introduction.
-intro :: Contents
+-- | Default General System Description introduction.
+genSysIntro :: Contents
+
+-- | User Characeristics section constructor. Does not contain any
+--   subsections.
+usrCharsF :: [Contents] -> Section
+
+-- | System Constraints section constructor. Generalized if no constraints,
+--   but if there are, they can be passed through.
+systCon :: [Contents] -> [Section] -> Section
+
+-- | System Context section constructor. Does not contain any subsections.
+sysContxt :: [Contents] -> Section
+
+
+-- | Defines helper functions for making the Table of Auxiliary Constants
+--   section.
+module Drasil.Sections.AuxiliaryConstants
+
+-- | Gets the auxiliary constant values given an introductory <a>Idea</a>
+--   and a <a>QDefinition</a>.
+valsOfAuxConstantsF :: Idea a => a -> [ConstQDef] -> Section
+
+-- | Helper that gets a table of constants from a <a>QDefinition</a>.
+tableOfConstants :: [ConstQDef] -> LabelledContent
+
+-- | Table of constants reference label.
+tableOfConstantsRef :: Reference
 
 
 -- | Defines functions used in the Requirements section.
@@ -1466,6 +1472,11 @@ tunit :: [TUIntro] -> RefTab
 --   Table of units constructors.
 tunit' :: [TUIntro] -> RefTab
 
+-- | Table of units with SI name in the description column.
+--   
+--   Table of units constructors.
+tunitNone :: [TUIntro] -> RefTab
+
 -- | Table of units introduction builder. Used by <tt>mkRefSec</tt>.
 tuIntro :: [TUIntro] -> Contents
 
@@ -1737,6 +1748,9 @@ mkLCsSec :: LCsSec -> Section
 
 -- | Helper for making the Unikely Changes section.
 mkUCsSec :: UCsSec -> Section
+
+-- | Intro paragraph for likely and unlikely changes
+introChgs :: NamedIdea n => n -> [ConceptInstance] -> Contents
 
 -- | Helper for making the Traceability Matrices and Graphs section.
 mkTraceabilitySec :: TraceabilitySec -> SystemInformation -> Section
@@ -2175,6 +2189,12 @@ purpDoc :: CI -> Verbosity -> [Sentence]
 -- | Default Reference Material section introduction.
 intro :: Contents
 
+-- | Helper for variants of <a>emptySectSent</a>
+emptySectSentPlu :: NamedIdea n => [n] -> Sentence
+
+-- | Helper for variants of <a>emptySectSent</a>
+emptySectSentSing :: NamedIdea n => [n] -> Sentence
+
 -- | Default is term and given introduction.
 --   
 --   Table of symbols constructor.
@@ -2196,6 +2216,11 @@ tunit :: [TUIntro] -> RefTab
 --   
 --   Table of units constructors.
 tunit' :: [TUIntro] -> RefTab
+
+-- | Table of units with SI name in the description column.
+--   
+--   Table of units constructors.
+tunitNone :: [TUIntro] -> RefTab
 
 -- | Creates a <a>ConceptInstance</a> of input values.
 inReq :: Sentence -> ConceptInstance

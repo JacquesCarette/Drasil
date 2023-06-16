@@ -979,6 +979,12 @@ purpDoc :: CI -> Verbosity -> [Sentence]
 -- | Default Reference Material section introduction.
 intro :: Contents
 
+-- | Helper for variants of <a>emptySectSent</a>
+emptySectSentPlu :: NamedIdea n => [n] -> Sentence
+
+-- | Helper for variants of <a>emptySectSent</a>
+emptySectSentSing :: NamedIdea n => [n] -> Sentence
+
 -- | Default is term and given introduction.
 --   
 --   Table of symbols constructor.
@@ -1000,6 +1006,11 @@ tunit :: [TUIntro] -> RefTab
 --   
 --   Table of units constructors.
 tunit' :: [TUIntro] -> RefTab
+
+-- | Table of units with SI name in the description column.
+--   
+--   Table of units constructors.
+tunitNone :: [TUIntro] -> RefTab
 
 -- | Creates a <a>ConceptInstance</a> of input values.
 inReq :: Sentence -> ConceptInstance

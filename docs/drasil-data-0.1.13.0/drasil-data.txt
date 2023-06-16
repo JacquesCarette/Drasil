@@ -376,6 +376,7 @@ indPRCase :: IdeaDict
 physicalConstraint :: IdeaDict
 physicalSystem :: IdeaDict
 problemDescription :: IdeaDict
+problemIntro :: IdeaDict
 prodUCTable :: IdeaDict
 specificsystemdescription :: IdeaDict
 systemdescription :: IdeaDict

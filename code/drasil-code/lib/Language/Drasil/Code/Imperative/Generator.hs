@@ -153,7 +153,8 @@ genPackage unRepr = do
         examplePurpose = prps,
         exampleDescr = bckgrnd,
         folderNum = getVal g,
-        inputOutput = Just (sampleInputName, sampleOutputName)} -- This needs a more permanent solution
+        inputf = Just sampleInputName,
+        outputf = Just sampleOutputName} -- This needs a more permanent solution
   return $ package pd (m:catMaybes [i,rm,d])
 
 -- | Generates an SCS program based on the problem and the user's design choices.

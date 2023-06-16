@@ -18,8 +18,8 @@ make build
 ```
 
 How to Change Input:
-GlassBR will take the inputs from input.txt and write the outputs to output.txt.
-Inputs can be changed by editing input.txt.
+GlassBR will take the inputs from `Input.txt` and write the outputs to `Output.txt`
+Inputs can be changed by editing `Input.txt`
 
 ## Configuration Files 
  Configuration files are files that must be in the same directory as the executable in order to run or build successfully.

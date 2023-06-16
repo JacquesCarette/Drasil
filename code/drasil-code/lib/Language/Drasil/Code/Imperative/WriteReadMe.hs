@@ -25,19 +25,20 @@ makeReadMe ReadMeInfo {
         caseName = name,
         examplePurpose = purp,
         exampleDescr = descr,
-        folderNum = number} = 
+        folderNum = number,
+        inputOutput = inOutName} = 
     makeMd [introInfo name auths $ fieldEmptySTR purp,
     whatInfo $ fieldEmptySTR descr,
-    makeInstr imptype configFPs name,
+    makeInstr imptype configFPs name inOutName,
     verInfo progLang progLangVers,
     unsupOS unsupportedOSs,
     extLibSec extLibns extLibfp,
     endNote number auths] -- add date information to end note for license
 
 -- | Helper for encoding the type of program (either library or controller-based) in a README file.
-makeInstr :: ImplementationType -> [FilePath] -> String -> Doc
-makeInstr Library _ = const empty
-makeInstr Program cfp = instDoc cfp
+makeInstr :: ImplementationType -> [FilePath] -> String  -> (Maybe String, Maybe String)-> Doc
+makeInstr Library _ _ _ = empty
+makeInstr Program cfp n inOut = instDoc cfp n inOut
 
 -- |Helper that checks if the field is empty; allowing optional content 
 -- rendering in a README file

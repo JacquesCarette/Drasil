@@ -151,7 +151,8 @@ genPackage unRepr = do
         caseName = "",
         examplePurpose = prps,
         exampleDescr = bckgrnd,
-        folderNum = getVal g}
+        folderNum = getVal g,
+        inputOutput = (Just "Input.txt", Just "Output.txt")} -- This needs a more permanent solution
   return $ package pd (m:catMaybes [i,rm,d])
 
 -- | Generates an SCS program based on the problem and the user's design choices.

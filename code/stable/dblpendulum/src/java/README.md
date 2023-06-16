@@ -18,8 +18,8 @@ make build
 ```
 
 How to Change Input:
-DblPendulum will take the inputs from input.txt and write the outputs to output.txt.
-Inputs can be changed by editing input.txt.
+DblPendulum will take the inputs from `Input.txt` and write the outputs to `Output.txt`
+Inputs can be changed by editing `Input.txt`
 
 ------------------------------------------------------------
 ## Version 

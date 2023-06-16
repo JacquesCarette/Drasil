@@ -36,7 +36,7 @@ makeReadMe ReadMeInfo {
     endNote number auths] -- add date information to end note for license
 
 -- | Helper for encoding the type of program (either library or controller-based) in a README file.
-makeInstr :: ImplementationType -> [FilePath] -> String  -> (Maybe String, Maybe String)-> Doc
+makeInstr :: ImplementationType -> [FilePath] -> String  -> Maybe (String, String)-> Doc
 makeInstr Library _ _ _ = empty
 makeInstr Program cfp n inOut = instDoc cfp n inOut
 

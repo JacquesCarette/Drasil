@@ -18,8 +18,8 @@ make build
 ```
 
 How to Change Input:
-NoPCM will take the inputs from `Input.txt` and write the outputs to `Output.txt`
-Inputs can be changed by editing `Input.txt`
+NoPCM will take the inputs from `input.txt` and write the outputs to `output.txt`.
+Inputs can be changed by editing `input.txt`.
 
 ------------------------------------------------------------
 ## Version 

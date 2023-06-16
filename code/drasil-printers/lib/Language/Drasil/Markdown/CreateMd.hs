@@ -24,7 +24,7 @@ introInfo name auths descr = introSec (text name) (listToDoc auths) (length auth
 
 -- | Instruction section, contains 4 paragraphs, Running, Building, Input-Output and Config Files.
 -- The Config file section is only displayed if there are configuration files.
-instDoc :: [String] -> String -> (Maybe String, Maybe String) -> Doc
+instDoc :: [String] -> String -> Maybe (String, String) -> Doc
 instDoc cfp name inOut= regularSec (text "Making Examples") 
     (runInstDoc <> doubleSep <> makeInstDoc) <> inOutFile name inOut <> configSec cfp
 
@@ -53,15 +53,14 @@ makeInstDoc = text "How to Build the Program:" <> contSep <> commandLine <> cont
     bkQuote3 <> contSep <> text "make build" <> contSep <> bkQuote3
 
 -- | Helper for giving instuctions and Input and Output files.
-inOutFile :: String -> (Maybe String, Maybe String) -> Doc
-inOutFile _    (Nothing, Nothing) = empty
-inOutFile _    (Nothing, _      ) = empty
-inOutFile _    (_      , Nothing) = empty
-inOutFile name (Just inFile, Just outFile) = doubleSep <>
+inOutFile :: String -> Maybe (String, String) -> Doc
+inOutFile _ Nothing = empty
+inOutFile name (Just (inFile, outFile)) = doubleSep <>
       text "How to Change Input:" <> contSep <> text name <+> 
       text "will take the inputs from" <+> bkQuote <> text inFile <> bkQuote <+> 
       text "and write the outputs to" <+> bkQuote <> text outFile <> bkQuote <> 
-      contSep <> text "Inputs can be changed by editing" <+> bkQuote <> text inFile <> bkQuote
+      text "." <> contSep <> text "Inputs can be changed by editing" <+> bkQuote <> 
+      text inFile <> bkQuote <> text "."
 
 -- | Helper for giving instructions for configuration files.
 configSec :: [String] -> Doc

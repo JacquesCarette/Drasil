@@ -18,31 +18,36 @@ import Control.Lens ((^.))
 
 -- | Collects all documentation-related named chunks (not concept-level yet).
 doccon :: [IdeaDict]
-doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body, caseProb, charOfIR, characteristic,
-  class_, client, code, column, company, component, concept, condition, connection,
-  consVals, constant, constraint, consumer, content, context, coordinate, coordinateSystem, 
-  corSol, customer, datum, datumConstraint, decision, definition, dependency, description,
-  design, designDoc, document, documentation, effect, element, emphasis, endUser,
-  environment, example, failure, figure, first, form, full, fullForm, functional,
-  functionalRequirement, game, general, generalSystemDescription, goal, guide, 
-  implementation, indPRCase, individual, information, input_, instance_, intReader,
-  interest, interface, introduction, issue, item, label, library, limitation,
-  literacy, loss, material_, mainIdea, message, method_, methAndAnls, model, module_, name_, 
-  nonfunctional, nonfunctionalRequirement, object, offShelf, offShelfSolution, open, orgOfDoc,
-  organization, output_, physical, physicalConstraint, physicalProperty, physicalSim,
-  physicalSystem, physics, plan, practice, priority, problem, problemDescription, procedure,
-  prodUCTable, productUC, product_, project, procForAnls, propOfCorSol, property, prpsOfDoc,
-  purpose, quantity, realtime, review, reference, refMat, reqInput, requirement_, response, result,
-  reviewer, safety, safetyReq, scenario, scope, scpOfReq, scpOfTheProjS, second_,
-  section_, simulation, software, softwareConstraint, softwareDoc, softwareReq,
-  softwareSys, softwareVAV, softwareVerif, solution, solutionCharSpec,
-  solutionCharacteristic, summary, source, specific, specification, specificsystemdescription,
-  stakeholder, standard, statement, symbol_, sysCont, system, systemConstraint,
-  systemdescription, tAuxConsts, tOfCont, tOfSymb, tOfUnit, inDatumConstraint, outDatumConstraint,
-  table_, task, template, termAndDef, term_,
-  terminology, theory, traceyGraph, traceyMandG, traceyMatrix, type_, uncertCol,
-  uncertainty, useCase, useCaseTable, user, userCharacteristic, userInput,
-  validation, value, variable, vav, vavPlan, verification, video, year]
+doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body,
+  caseProb, charOfIR, characteristic, class_, client, code, column, company,
+  component, concept, condition, connection, consVals, constant, constraint,
+  consumer, content, context, coordinate, coordinateSystem, corSol, customer,
+  datum, datumConstraint, decision, definition, dependency, description,
+  design, designDoc, document, documentation, effect, element, emphasis,
+  endUser, environment, example, failure, figure, first, form, full,
+  fullForm, functional, functionalRequirement, game, general,
+  generalSystemDescription, goal, guide, implementation, indPRCase,
+  individual, information, input_, instance_, intReader, interest, interface,
+  introduction, issue, item, label, library, limitation, literacy, loss,
+  material_, mainIdea, message, method_, methAndAnls, model, module_, name_,
+  nonfunctional, nonfunctionalRequirement, object, offShelf,
+  offShelfSolution, open, orgOfDoc, organization, output_, physical,
+  physicalConstraint, physicalProperty, physicalSim, physicalSystem, physics,
+  plan, practice, priority, problem, problemDescription, problemIntro,
+  procedure, prodUCTable, productUC, product_, project, procForAnls,
+  propOfCorSol, property, prpsOfDoc, purpose, quantity, realtime, review,
+  reference, refMat, reqInput, requirement_, response, result, reviewer,
+  safety, safetyReq, scenario, scope, scpOfReq, scpOfTheProjS, second_,
+  section_, simulation, software, softwareConstraint, softwareDoc,
+  softwareReq, softwareSys, softwareVAV, softwareVerif, solution,
+  solutionCharSpec, solutionCharacteristic, summary, source, specific,
+  specification, specificsystemdescription, stakeholder, standard, statement,
+  symbol_, sysCont, system, systemConstraint, systemdescription, tAuxConsts,
+  tOfCont, tOfSymb, tOfUnit, inDatumConstraint, outDatumConstraint, table_,
+  task, template, termAndDef, term_, terminology, theory, traceyGraph,
+  traceyMandG, traceyMatrix, type_, uncertCol, uncertainty, useCase,
+  useCaseTable, user, userCharacteristic, userInput, validation, value,
+  variable, vav, vavPlan, verification, video, year]
 
 -- | Collects all documentation-related common ideas (like a concept, but with no definition).
 doccon' :: [CI]
@@ -268,7 +273,7 @@ scpOfTheProj oper = nc "scpOfTheProj" (scope `of_NINP` theGen oper project) -- r
 -- ** Compound Chunks
 
 designDoc, fullForm, generalSystemDescription, moduleInterface, indPRCase,
-  physicalConstraint, physicalSystem, problemDescription, prodUCTable,
+  physicalConstraint, physicalSystem, problemDescription, problemIntro, prodUCTable,
   specificsystemdescription, systemdescription, systemConstraint, sysCont,
   userCharacteristic, coordinateSystem, datumConstraint, inDatumConstraint, 
   outDatumConstraint, functionalRequirement, nonfunctionalRequirement, safetyReq, 
@@ -293,6 +298,7 @@ physicalProperty             = compoundNC physical property
 physicalSim                  = compoundNC physical simulation
 physicalSystem               = compoundNC physical system
 problemDescription           = compoundNC problem description
+problemIntro                 = compoundNC problem introduction
 prodUCTable                  = compoundNC productUC table_
 productUC                    = compoundNC product_ useCase
 safetyReq                    = compoundNC safety requirement_

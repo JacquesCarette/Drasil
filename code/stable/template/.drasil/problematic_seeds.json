@@ -1,9 +1,45 @@
 {
+    "AssumpsLabel": [
+        "sections",
+        "references"
+    ],
+    "AuxConstantsLabel": [
+        "sections",
+        "references"
+    ],
+    "CorSolPropsLabel": [
+        "sections",
+        "references"
+    ],
     "DDsLabel": [
         "sections",
         "references"
     ],
+    "DataConstraintsLabel": [
+        "sections",
+        "references"
+    ],
+    "DocOrgLabel": [
+        "sections",
+        "references"
+    ],
+    "DocPurposeLabel": [
+        "sections",
+        "references"
+    ],
+    "FRsLabel": [
+        "sections",
+        "references"
+    ],
     "GDsLabel": [
+        "sections",
+        "references"
+    ],
+    "GenSysDescLabel": [
+        "sections",
+        "references"
+    ],
+    "GoalStmtLabel": [
         "sections",
         "references"
     ],
@@ -15,12 +51,52 @@
         "terms",
         "references"
     ],
+    "IntroLabel": [
+        "sections",
+        "references"
+    ],
+    "LCsLabel": [
+        "sections",
+        "references"
+    ],
+    "NFRsLabel": [
+        "sections",
+        "references"
+    ],
     "OutDataConstraints": [
         "terms",
         "references"
     ],
+    "PhysSystLabel": [
+        "sections",
+        "references"
+    ],
+    "ProbDescLabel": [
+        "sections",
+        "references"
+    ],
+    "ReaderCharsLabel": [
+        "sections",
+        "references"
+    ],
+    "RefMatLabel": [
+        "sections",
+        "references"
+    ],
+    "ReferencesLabel": [
+        "sections",
+        "references"
+    ],
     "ReqInputs": [
         "terms",
+        "references"
+    ],
+    "ReqsScopeLabel": [
+        "sections",
+        "references"
+    ],
+    "RequirementsLabel": [
+        "sections",
         "references"
     ],
     "SolCharSpecLabel": [
@@ -31,8 +107,21 @@
         "sections",
         "references"
     ],
+    "SysConstraintsLabel": [
+        "sections",
+        "references"
+    ],
+    "SysContextLabel": [
+        "sections",
+        "references"
+    ],
     "TAbbAcc": [
         "terms",
+        "references",
+        "labelledContent"
+    ],
+    "TAbbAccLabel": [
+        "sections",
         "references"
     ],
     "TAuxConsts": [
@@ -40,6 +129,42 @@
         "references"
     ],
     "TMsLabel": [
+        "sections",
+        "references"
+    ],
+    "TermDefsLabel": [
+        "sections",
+        "references"
+    ],
+    "ToCLabel": [
+        "sections",
+        "references"
+    ],
+    "ToS": [
+        "references",
+        "labelledContent"
+    ],
+    "ToSLabel": [
+        "sections",
+        "references"
+    ],
+    "ToU": [
+        "references",
+        "labelledContent"
+    ],
+    "ToULabel": [
+        "sections",
+        "references"
+    ],
+    "TraceMatricesLabel": [
+        "sections",
+        "references"
+    ],
+    "UCsLabel": [
+        "sections",
+        "references"
+    ],
+    "UserCharsLabel": [
         "sections",
         "references"
     ]

@@ -16,6 +16,7 @@ import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import HelloWorld (helloWorld)
 import PatternTest (patternTest)
 import FileTests (fileTests)
+import NameGenTest (nameGenTest)
 
 -- | Renders three GOOL tests (FileTests, HelloWorld, and PatternTest)
 -- in Java, Python, C#, C++, and Swift.
@@ -58,8 +59,8 @@ classes unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs 
                 pd = unRepr p'
   in unRepr' $ package pd [makefile [] Program [] gs' pd]) 
-  [helloWorld, patternTest, fileTests]
-  (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests])
+  [helloWorld, patternTest, fileTests, nameGenTest]
+  (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests, nameGenTest])
 
 -- | Formats code to be rendered.
 makeCode :: [[FileData]] -> [[AuxData]] -> [(FilePath, Doc)]

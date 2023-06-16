@@ -99,6 +99,7 @@ executables:
     - Helper
     - Observer
     - PatternTest
+    - NameGenTest
     ghc-options:
     - -threaded
     - -O2

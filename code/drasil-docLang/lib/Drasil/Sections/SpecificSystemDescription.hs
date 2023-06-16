@@ -30,13 +30,12 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 
 import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
-  corSol, datum, datumConstraint, inDatumConstraint, outDatumConstraint,
-  definition, element, general, goalStmt, information, input_, limitation,
-  model, output_, physical, physicalConstraint, physicalSystem, physSyst,
-  problem, problemDescription, property, purpose, quantity, requirement,
-  scope, section_, softwareConstraint, solutionCharacteristic, specification,
-  symbol_, system, theory, typUnc, uncertainty, user, value, variable,
-  table_, problemDescription, term_)
+  datum, datumConstraint, inDatumConstraint, outDatumConstraint, definition,
+  element, general, goalStmt, information, input_, limitation, model, output_,
+  physical, physicalConstraint, physicalSystem, physSyst, problem,
+  problemDescription, propOfCorSol, purpose, quantity, requirement, scope,
+  section_, softwareConstraint, solutionCharacteristic, specification, symbol_,
+  system, table_, term_, theory, typUnc, uncertainty, user, value, variable)
 import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
 import Data.Drasil.Concepts.Math (equation, parameter)
 import Data.Drasil.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
@@ -286,13 +285,9 @@ fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
 
 -- | Creates the Properties of a Correct Solution section.
 propCorSolF :: (Quantity c, Constrained c) => [c] -> [Contents] -> Section
-propCorSolF []  [] = SRS.propCorSol [mkParagraph noPropsSent] []
+propCorSolF []  [] = SRS.propCorSol [mkParagraph $ emptySectSentPlu [propOfCorSol]] []
 propCorSolF [] con = SRS.propCorSol con []
 propCorSolF c  con = SRS.propCorSol ([propsIntro, LlC $ outDataConstTbl c] ++ con) []
-
--- | General 'Sentence' that states there are no properties of a correct solution. Used in 'propCorSolF'.
-noPropsSent :: Sentence
-noPropsSent = foldlSent [S "There are no", pluralNP $ property `ofAPS` corSol]
 
 -- | Creates the Properties of a Correct Solution introduction.
 propsIntro :: Contents

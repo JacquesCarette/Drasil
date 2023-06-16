@@ -66,7 +66,7 @@ introductionSubsections = foldlList Comma List (map (uncurry S.the_ofThe)
 --     * subSections        - List of subsections for this section.
 introductionSection :: Sentence -> Sentence -> [Section] -> Section
 introductionSection EmptyS              programDefinition = SRS.intro
-  [foldlSP [emptySectSentSing [problemIntro]],
+  [mkParagraph $ emptySectSentSing [problemIntro],
   overviewParagraph programDefinition]
 introductionSection problemIntroduction programDefinition = SRS.intro 
   [mkParagraph problemIntroduction, overviewParagraph programDefinition]
@@ -114,7 +114,7 @@ purposeOfDoc _ = SRS.prpsOfDoc [mkParagraph developmentProcessParagraph] []
 -- | Constructor for the Scope of Requirements subsection.
 -- Takes in the main requirement for the program.
 scopeOfRequirements :: Sentence -> Section
-scopeOfRequirements EmptyS = SRS.scpOfReq [foldlSP [emptySectSentPlu [requirement]]] []
+scopeOfRequirements EmptyS = SRS.scpOfReq [mkParagraph $ emptySectSentPlu [requirement]] []
 scopeOfRequirements req = SRS.scpOfReq [foldlSP
   [phrase scope `S.the_ofTheC` plural requirement, S "includes", req]] []
 

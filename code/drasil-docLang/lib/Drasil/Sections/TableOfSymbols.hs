@@ -61,7 +61,7 @@ tsymb'' intro lfunc = TSymb' lfunc intro
 
 -- | Table of symbols introduction builder. Used by 'mkRefSec'.
 tsIntro :: [TSIntro] -> Contents
-tsIntro [] = foldlSP [emptySectSentPlu [symbol_]]
+tsIntro [] = mkParagraph $ emptySectSentPlu [symbol_]
 tsIntro x = mkParagraph $ foldr ((+:+) . tsI) EmptyS x
 
 -- | Table of symbols intro writer. Translates a 'TSIntro' to a list in a 'Sentence'.

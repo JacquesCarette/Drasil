@@ -90,11 +90,11 @@ termDefnF' end otherContents = SRS.termAndDefn (intro : otherContents) []
 
 -- Intro for no terminology or definitions.
 introNoTermDefn :: Contents
-introNoTermDefn = foldlSP [emptySectSentPlu [term_, definition]]
+introNoTermDefn = mkParagraph $ emptySectSentPlu [term_, definition]
 
 -- | General introduction for the Physical System Description section.
 physSystDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> Section
-physSystDesc _        []    _  _     = SRS.physSyst [foldlSP [emptySectSentPlu [physSyst]]] []
+physSystDesc _        []    _  _     = SRS.physSyst [mkParagraph $ emptySectSentPlu [physSyst]] []
 physSystDesc progName parts fg other = SRS.physSyst (intro : bullets : LlC fg : other) []
   where intro = mkParagraph $ foldlSentCol [atStartNP (the physicalSystem) `S.of_` short progName `sC`
                 S "as shown in", refS fg `sC` S "includes the following", plural element]
@@ -102,8 +102,8 @@ physSystDesc progName parts fg other = SRS.physSyst (intro : bullets : LlC fg : 
 
 -- | General constructor for the Goal Statement section. Takes the given inputs ('Sentence's) and the descriptions ('Contents').
 goalStmtF :: [Sentence] -> [Contents] -> Int -> Section
-goalStmtF _           []            _   = SRS.goalStmt [foldlSP [emptySectSentPlu [goalStmt]]] []
-goalStmtF []          _             _   = SRS.goalStmt [foldlSP [emptySectSentPlu [goalStmt]]] []
+goalStmtF _           []            _   = SRS.goalStmt [mkParagraph $ emptySectSentPlu [goalStmt]] []
+goalStmtF []          _             _   = SRS.goalStmt [mkParagraph $ emptySectSentPlu [goalStmt]] []
 goalStmtF givenInputs otherContents amt = SRS.goalStmt (intro:otherContents) []
   where intro = mkParagraph $ S "Given" +:+ foldlList Comma List
                 givenInputs `sC` if amt == 1
@@ -127,7 +127,7 @@ assumpF :: [Contents] -> Section
 assumpF otherContents = SRS.assumpt (assumpIntro otherContents : otherContents) []
 
 assumpIntro :: [a] -> Contents
-assumpIntro [] = foldlSP [emptySectSentPlu [assumption]]
+assumpIntro [] = mkParagraph $ emptySectSentPlu [assumption]
 assumpIntro _  = mkParagraph $ foldlSent
                   [S "This", phrase section_, S "simplifies the original", phrase problem,
                   S "and helps in developing the", plural thModel, S "by filling in the",
@@ -147,7 +147,7 @@ thModIntro progName = foldlSP [S "This", phrase section_, S "focuses on the",
   phrase general, plural equation `S.and_` S "laws that", short progName, S "is based on"]
 
 thModIntroNoContent :: Contents
-thModIntroNoContent = foldlSP [emptySectSentPlu [thModel]]
+thModIntroNoContent = mkParagraph $ emptySectSentPlu [thModel]
 
 -- | Creates a General Definitions section with a general introduction.
 -- Takes in relevant general definitions ('Contents'). Use empty list if none are needed.
@@ -156,7 +156,7 @@ genDefnF otherContents = SRS.genDefn (generalDefinitionIntro otherContents : oth
 
 -- | Creates the introduction used in 'genDefnF'. If the given list is empty, the returned 'Sentence' is "There are no general definitions."
 generalDefinitionIntro :: [t] -> Contents
-generalDefinitionIntro [] = foldlSP [emptySectSentPlu [genDefn]]
+generalDefinitionIntro [] = mkParagraph $ emptySectSentPlu [genDefn]
 generalDefinitionIntro _  = foldlSP [S "This", phrase section_,
   S "collects the laws and", plural equation,
   S "that will be used to build the", plural inModel]
@@ -175,14 +175,14 @@ dataDefinitionIntro closingSent = mkParagraph (foldlSent [S "This", phrase secti
     S "needed to build the", plural inModel] +:+ closingSent)
 
 dataDefnIntroNoContent :: Contents
-dataDefnIntroNoContent = foldlSP [emptySectSentPlu [dataDefn]]
+dataDefnIntroNoContent = mkParagraph $ emptySectSentPlu [dataDefn]
 
 -- wrappers for inModelIntro. Use inModelF' if genDef are not needed
 -- | Constructor for Instance Models. Takes the problem description,
 -- data definition, theoretical model, general definition, and any other relevant contents.
 inModelF :: Section -> Section -> Section -> Section -> [Contents] -> Section
 inModelF _       _      _      _      []            = SRS.inModel
-                                                        [foldlSP [emptySectSentPlu [inModel]]] []
+                                                        [mkParagraph $ emptySectSentPlu [inModel]] []
 inModelF probDes datDef theMod genDef otherContents = SRS.inModel (inModelIntro
                                                         probDes datDef theMod
                                                         genDef : otherContents)
@@ -201,7 +201,7 @@ inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
 -- | Constructor for Data Constraints section. Takes a trailing 'Sentence' (use 'EmptyS' if none) and data constraints.
 datConF :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) =>
   Sentence -> [c] -> Section
-datConF _ [] = SRS.datCon [foldlSP [emptySectSentPlu [datumConstraint]]] []
+datConF _ [] = SRS.datCon [mkParagraph $ emptySectSentPlu [datumConstraint]] []
 datConF t c  = SRS.datCon [dataConstraintParagraph t, LlC $ inDataConstTbl c] []
 
 -- optional trailing sentence(s) -> data constraints tables -> Contents

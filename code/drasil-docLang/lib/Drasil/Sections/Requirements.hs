@@ -91,12 +91,12 @@ reqIntro = mkParagraph $ reqIntroStart +:+. (frReqIntroBody `sC` EmptyS `S.and_`
 
 -- | Generalized Functional Requirements subsection introduction.
 fReqIntro :: [Contents] -> Contents
-fReqIntro [] = foldlSP [emptySectSentPlu [functionalRequirement]]
+fReqIntro [] = mkParagraph $ emptySectSentPlu [functionalRequirement]
 fReqIntro _  = mkParagraph $ reqIntroStart +:+. frReqIntroBody
 
 -- | Generalized Non-Functional Requirements subsection introduction.
 nfReqIntro :: [Contents] -> Contents
-nfReqIntro [] = foldlSP [emptySectSentPlu [nonfunctionalRequirement]]
+nfReqIntro [] = mkParagraph $ emptySectSentPlu [nonfunctionalRequirement]
 nfReqIntro _  = mkParagraph $ reqIntroStart +:+. nfrReqIntroBody
 
 -- | Creates an Input Data Table for use in the Functional Requirments section. Takes a list of wrapped variables and something that is 'Referable'.

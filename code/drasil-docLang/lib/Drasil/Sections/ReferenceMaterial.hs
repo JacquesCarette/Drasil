@@ -6,15 +6,24 @@ or simply moving it to Data.Drasil.Documentation since it's highly reusable
 If anything, this could be called by the recipes that need it
 -}
 import Language.Drasil
+import Language.Drasil.Sentence.Combinators (are, is)
 
 -- | Default Reference Material section introduction.
 intro :: Contents
 intro = mkParagraph $ S "This section records information for easy reference."
 
--- | Helper to create default plural sentence for empty sections using `NamedIdea`s
-emptySectSentPlu :: NamedIdea n => [n] -> Sentence
-emptySectSentPlu var = S "There are no" +:+ foldlList Comma Options (map plural var)
+data Plurality = Sing | Plu
 
--- | Helper to create default singular sentence for empty sections using `NamedIdea`s
-emptySectSentSing :: NamedIdea n => [n] -> Sentence
-emptySectSentSing var = S "There is no" +:+ foldlList Comma Options (map phrase var)
+-- | Helper to create default `Sentence`s for empty sections using `NamedIdea`s
+emptySectSent :: NamedIdea n => Plurality -> [n] -> Sentence
+emptySectSent p n = foldlSent [verb p (S "There") (S "no"), foldlList Comma Options (map (f p) n)]
+    where 
+        verb Sing = is
+        verb Plu  = are
+        f Sing = phrase
+        f Plu  = plural
+
+-- | Helper for variants of `emptySectSent`
+emptySectSentSing, emptySectSentPlu :: NamedIdea n => [n] -> Sentence
+emptySectSentSing = emptySectSent Sing
+emptySectSentPlu  = emptySectSent Plu

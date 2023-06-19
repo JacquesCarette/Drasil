@@ -27,7 +27,6 @@ dependencies:
 - drasil-database
 - drasil-lang
 - drasil-metadata
-- drasil-printers
 - drasil-sysinfo
 - drasil-theory
 - drasil-utils
@@ -84,6 +83,14 @@ internal-libraries:
     when:
     - condition: false
       other-modules: Paths_drasil_gool
+
+  drasil-printers:
+    source-dirs: drasil-printers/lib
+    exposed-modules:
+    - Language.Drasil.Printers
+    when:
+    - condition: false
+      other-modules: Paths_drasil_printers
 
   drasil-code:
     source-dirs: drasil-code/lib

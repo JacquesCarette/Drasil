@@ -46,7 +46,7 @@ packages:
 - drasil-sysinfo
 - drasil-theory
 - drasil-database
-- drasil-printers
+# - drasil-printers
 # - drasil-gen
 - drasil-data
 # - drasil-docLang

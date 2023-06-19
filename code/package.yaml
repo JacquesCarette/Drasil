@@ -43,6 +43,9 @@ executables:
     dependencies:
     - drasil-code
     - drasil-gool
+    when:
+    - condition: false
+      other-modules: Paths_drasil
 
   dblpendulum:
     main: Main
@@ -63,7 +66,7 @@ executables:
     - drasil-utils
     when:
     - condition: false
-      other-modules: Paths_dblpendulum
+      other-modules: Paths_drasil
 
 internal-libraries:
   drasil-build:
@@ -72,7 +75,7 @@ internal-libraries:
     - Build.Drasil
     when:
     - condition: false
-      other-modules: Paths_drasil_build
+      other-modules: Paths_drasil
 
   drasil-utils:
     source-dirs: drasil-utils/lib
@@ -81,7 +84,7 @@ internal-libraries:
     - Utils.Drasil.Document
     when:
     - condition: false
-      other-modules: Paths_drasil_utils
+      other-modules: Paths_drasil
 
   drasil-gool:
     source-dirs: drasil-gool/lib
@@ -91,7 +94,7 @@ internal-libraries:
     - GOOL.Drasil
     when:
     - condition: false
-      other-modules: Paths_drasil_gool
+      other-modules: Paths_drasil
 
   drasil-lang:
     source-dirs: drasil-lang/lib
@@ -112,7 +115,7 @@ internal-libraries:
     - Language.Drasil.ShortHands
     when:
     - condition: false
-      other-modules: Paths_drasil_lang
+      other-modules: Paths_drasil
 
   drasil-metadata:
     source-dirs: drasil-metadata/lib
@@ -122,7 +125,7 @@ internal-libraries:
     - Data.Drasil.Domains
     when:
     - condition: false
-      other-modules: Paths_drasil_metadata
+      other-modules: Paths_drasil
 
   drasil-theory:
     source-dirs: drasil-theory/lib
@@ -135,7 +138,7 @@ internal-libraries:
     - Data.Drasil.TheoryConcepts
     when:
     - condition: false
-      other-modules: Paths_drasil_theory
+      other-modules: Paths_drasil
 
   drasil-database:
     source-dirs: drasil-database/lib
@@ -147,7 +150,7 @@ internal-libraries:
     - Database.Drasil
     when:
     - condition: false
-      other-modules: Paths_drasil_database
+      other-modules: Paths_drasil
 
   drasil-sysinfo:
     source-dirs: drasil-sysinfo/lib
@@ -159,7 +162,7 @@ internal-libraries:
     - SysInfo.Drasil
     when:
     - condition: false
-      other-modules: Paths_drasil_sysinfo
+      other-modules: Paths_drasil
 
   drasil-data:
     source-dirs: drasil-data/lib
@@ -170,7 +173,7 @@ internal-libraries:
     - drasil-utils
     when:
     - condition: false
-      other-modules: Paths_drasil_data
+      other-modules: Paths_drasil
 
   drasil-printers:
     source-dirs: drasil-printers/lib
@@ -183,7 +186,7 @@ internal-libraries:
     - Language.Drasil.Printers
     when:
     - condition: false
-      other-modules: Paths_drasil_printers
+      other-modules: Paths_drasil
 
   drasil-code:
     source-dirs: drasil-code/lib
@@ -201,7 +204,7 @@ internal-libraries:
     - Data.Drasil.ExternalLibraries.ODELibraries
     when:
     - condition: false
-      other-modules: Paths_drasil_code
+      other-modules: Paths_drasil
 
   drasil-docLang:
     source-dirs: drasil-docLang/lib
@@ -223,7 +226,7 @@ internal-libraries:
     - Drasil.SRSDocument
     when:
     - condition: false
-      other-modules: Paths_drasil_docLang
+      other-modules: Paths_drasil
 
   drasil-gen:
     source-dirs: drasil-gen/lib
@@ -241,4 +244,4 @@ internal-libraries:
     - Language.Drasil.Generate
     when:
     - condition: false
-      other-modules: Paths_drasil_gen
+      other-modules: Paths_drasil

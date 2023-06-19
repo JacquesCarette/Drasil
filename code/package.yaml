@@ -26,7 +26,6 @@ dependencies:
 - time
 - transformers
 - drasil-lang
-- drasil-metadata
 - drasil-utils
 
 ghc-options:
@@ -82,8 +81,18 @@ internal-libraries:
     - condition: false
       other-modules: Paths_drasil_gool
 
+  drasil-metadata:
+    source-dirs: drasil-metadata/lib
+    exposed-modules:
+    - Data.Drasil.Domains
+    when:
+    - condition: false
+      other-modules: Paths_drasil_metadata
+
   drasil-theory:
     source-dirs: drasil-theory/lib
+    dependencies:
+    - drasil-metadata
     exposed-modules:
     - Theory.Drasil
     - Data.Drasil.TheoryConcepts
@@ -115,6 +124,7 @@ internal-libraries:
   drasil-data:
     source-dirs: drasil-data/lib
     dependencies:
+    - drasil-metadata
     - drasil-theory
     when:
     - condition: false

@@ -20,13 +20,14 @@ dependencies:
 - filepath
 - lens
 - mtl
+- multiplate
 - pretty
 - split
 - time
+- transformers
 - drasil-database
 - drasil-lang
 - drasil-metadata
-- drasil-sysinfo
 - drasil-theory
 - drasil-utils
 
@@ -83,6 +84,14 @@ internal-libraries:
     - condition: false
       other-modules: Paths_drasil_gool
 
+  drasil-sysinfo:
+    source-dirs: drasil-sysinfo/lib
+    exposed-modules:
+    - SysInfo.Drasil
+    when:
+    - condition: false
+      other-modules: Paths_drasil_sysinfo
+
   drasil-data:
     source-dirs: drasil-data/lib
     when:
@@ -91,6 +100,8 @@ internal-libraries:
 
   drasil-printers:
     source-dirs: drasil-printers/lib
+    dependencies:
+    - drasil-sysinfo
     exposed-modules:
     - Language.Drasil.Printers
     when:
@@ -101,13 +112,9 @@ internal-libraries:
     source-dirs: drasil-code/lib
     dependencies:
     - drasil-build
-    - drasil-database
     - drasil-gool
-    - drasil-lang
     - drasil-printers
     - drasil-sysinfo
-    - drasil-theory
-    - drasil-utils
     exposed-modules:
     - Language.Drasil.Code
     - Data.Drasil.ExternalLibraries.ODELibraries
@@ -118,8 +125,6 @@ internal-libraries:
   drasil-docLang:
     source-dirs: drasil-docLang/lib
     dependencies:
-    - multiplate
-    - transformers
     - drasil-lang
     - drasil-data
     - drasil-database
@@ -143,13 +148,10 @@ internal-libraries:
     dependencies:
     - drasil-build
     - drasil-code
-    - drasil-database
     - drasil-docLang
     - drasil-gool
-    - drasil-lang
     - drasil-printers
     - drasil-sysinfo
-    - drasil-utils
     exposed-modules:
     - Language.Drasil.Generate
     when:

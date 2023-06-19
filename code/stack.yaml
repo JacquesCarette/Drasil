@@ -40,16 +40,8 @@ packages:
 - .
 - drasil-lang
 - drasil-utils
-# - drasil-gool
-# - drasil-build
-# - drasil-code
-- drasil-sysinfo
 - drasil-theory
 - drasil-database
-# - drasil-printers
-# - drasil-gen
-# - drasil-data
-# - drasil-docLang
 - drasil-metadata
 # - drasil-website
 # - drasil-example/dblpendulum

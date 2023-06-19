@@ -86,26 +86,29 @@ stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList
           (S.listAccess sl (S.litInt n))) : assignVals vs (n+1)
 
 stringListLists :: (RenderSym r) => [SVariable r] -> SValue r -> MSStatement r
-stringListLists lsts sl = zoom lensMStoVS sl >>= (\slst -> checkList (getType $ 
-  valueType slst))
-  where checkList (List String) = mapM (zoom lensMStoVS) lsts >>= listVals . 
-          map (getType . variableType)
-        checkList _ = error 
-          "Value passed to stringListLists must be a list of strings"
-        listVals [] = loop
-        listVals (List _:vs) = listVals vs
-        listVals _ = error 
-          "All values passed to stringListLists must have list types"
-        loop = S.forRange var_i (S.litInt 0) (S.listSize sl #/ numLists) 
-          (S.litInt 1) (bodyStatements $ appendLists (map S.valueOf lsts) 0)
-        appendLists [] _ = []
-        appendLists (v:vs) n = S.valStmt (S.listAppend v (cast 
-          (S.listInnerType $ onStateValue valueType v)
-          (S.listAccess sl ((v_i #* numLists) #+ S.litInt n)))) 
-          : appendLists vs (n+1)
-        numLists = S.litInt (toInteger $ length lsts)
-        var_i = S.var "stringlist_i" S.int
-        v_i = S.valueOf var_i
+stringListLists lsts sl = do
+  slst <- zoom lensMStoVS sl
+  l_i <- genLoopIndex
+  let
+    checkList (List String) = mapM (zoom lensMStoVS) lsts >>= listVals .
+      map (getType . variableType)
+    checkList _ = error
+      "Value passed to stringListLists must be a list of strings"
+    listVals [] = loop
+    listVals (List _:vs) = listVals vs
+    listVals _ = error
+      "All values passed to stringListLists must have list types"
+    loop = S.forRange var_i (S.litInt 0) (S.listSize sl #/ numLists)
+      (S.litInt 1) (bodyStatements $ appendLists (map S.valueOf lsts) 0)
+    appendLists [] _ = []
+    appendLists (v:vs) n = S.valStmt (S.listAppend v (cast
+      (S.listInnerType $ onStateValue valueType v)
+      (S.listAccess sl ((v_i #* numLists) #+ S.litInt n))))
+      : appendLists vs (n+1)
+    numLists = S.litInt (toInteger $ length lsts)
+    var_i = S.var l_i S.int
+    v_i = S.valueOf var_i
+  checkList (getType $ valueType slst)
 
 forRange :: (RenderSym r) => SVariable r -> SValue r -> SValue r -> SValue r -> 
   MSBody r -> MSStatement r

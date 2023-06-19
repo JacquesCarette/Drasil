@@ -28,8 +28,8 @@ def read_table(filename, z_vector, x_matrix, y_matrix):
     infile = open(filename, "r")
     line = infile.readline().rstrip()
     linetokens = line.split(",")
-    for stringlist_i in range(0, len(linetokens) // 1, 1):
-        z_vector.append(float(linetokens[stringlist_i * 1 + 0]))
+    for i in range(0, len(linetokens) // 1, 1):
+        z_vector.append(float(linetokens[i * 1 + 0]))
     outfile = open("log.txt", "a")
     print("var 'z_vector' assigned ", end="", file=outfile)
     print(z_vector, end="", file=outfile)
@@ -40,9 +40,9 @@ def read_table(filename, z_vector, x_matrix, y_matrix):
         linetokens = lines[i].split(",")
         x_matrix_temp = []
         y_matrix_temp = []
-        for stringlist_i in range(0, len(linetokens) // 2, 1):
-            x_matrix_temp.append(float(linetokens[stringlist_i * 2 + 0]))
-            y_matrix_temp.append(float(linetokens[stringlist_i * 2 + 1]))
+        for j in range(0, len(linetokens) // 2, 1):
+            x_matrix_temp.append(float(linetokens[j * 2 + 0]))
+            y_matrix_temp.append(float(linetokens[j * 2 + 1]))
         x_matrix.append(x_matrix_temp)
         y_matrix.append(y_matrix_temp)
     outfile = open("log.txt", "a")

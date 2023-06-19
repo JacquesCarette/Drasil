@@ -40,7 +40,7 @@ packages:
 - .
 - drasil-lang
 - drasil-utils
-- drasil-gool
+# - drasil-gool
 # - drasil-build
 # - drasil-code
 - drasil-sysinfo

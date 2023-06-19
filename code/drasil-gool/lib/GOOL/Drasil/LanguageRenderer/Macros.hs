@@ -26,7 +26,7 @@ import qualified GOOL.Drasil.RendererClasses as S (
 import qualified GOOL.Drasil.RendererClasses as RC (BodyElim(..),
   StatementElim(statement))
 import GOOL.Drasil.Helpers (toCode, onStateValue, on2StateValues)
-import GOOL.Drasil.State (MS, lensMStoVS, genVarName)
+import GOOL.Drasil.State (MS, lensMStoVS, genVarName, genLoopIndex)
 
 import Data.Maybe (fromMaybe)
 import Control.Lens.Zoom (zoom)
@@ -62,7 +62,7 @@ listSlice :: (RenderSym r) => Maybe (SValue r) -> Maybe (SValue r) ->
   Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
 listSlice b e s vnew vold = do
   l_temp <- genVarName [] "temp"
-  l_i <- genVarName ["i", "j", "k"] "i"
+  l_i <- genLoopIndex
   let
     var_temp = S.var l_temp (onStateValue variableType vnew)
     v_temp = S.valueOf var_temp

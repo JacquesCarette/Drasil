@@ -28,7 +28,7 @@ module GOOL.Drasil.State (
   setMainDoc, getMainDoc, setScope, getScope, setCurrMainFunc, getCurrMainFunc, 
   setThrowUsed, getThrowUsed, setErrorDefined, getErrorDefined, addIter, 
   getIter, resetIter, incrementLine, incrementWord, getLineIndex, getWordIndex, 
-  resetIndices, useVarName, genVarName
+  resetIndices, useVarName, genVarName, genLoopIndex
 ) where
 
 import GOOL.Drasil.AST (FileType(..), ScopeTag(..), QualifiedName, qualName)
@@ -564,6 +564,9 @@ genVarName candidates backup = do
     isAvailable (n,c) = maybe True (maybe (const False) (>=) c) $ Map.lookup n used
     choice = foldr const (splitVarName backup) $ filter isAvailable $ map splitVarName candidates
   bumpVarName choice
+
+genLoopIndex :: MS String
+genLoopIndex = genVarName ["i", "j", "k"] "i"
 
 -- Helpers
 

@@ -27,7 +27,6 @@ dependencies:
 - transformers
 - drasil-lang
 - drasil-metadata
-- drasil-theory
 - drasil-utils
 
 ghc-options:
@@ -83,8 +82,19 @@ internal-libraries:
     - condition: false
       other-modules: Paths_drasil_gool
 
+  drasil-theory:
+    source-dirs: drasil-theory/lib
+    exposed-modules:
+    - Theory.Drasil
+    - Data.Drasil.TheoryConcepts
+    when:
+    - condition: false
+      other-modules: Paths_drasil_theory
+
   drasil-database:
     source-dirs: drasil-database/lib
+    dependencies:
+    - drasil-theory
     exposed-modules:
     - Database.Drasil
     when:
@@ -95,6 +105,7 @@ internal-libraries:
     source-dirs: drasil-sysinfo/lib
     dependencies:
     - drasil-database
+    - drasil-theory
     exposed-modules:
     - SysInfo.Drasil
     when:
@@ -103,6 +114,8 @@ internal-libraries:
 
   drasil-data:
     source-dirs: drasil-data/lib
+    dependencies:
+    - drasil-theory
     when:
     - condition: false
       other-modules: Paths_drasil_data
@@ -126,6 +139,7 @@ internal-libraries:
     - drasil-gool
     - drasil-printers
     - drasil-sysinfo
+    - drasil-theory
     exposed-modules:
     - Language.Drasil.Code
     - Data.Drasil.ExternalLibraries.ODELibraries

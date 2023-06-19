@@ -26,7 +26,7 @@ import qualified GOOL.Drasil.RendererClasses as S (
 import qualified GOOL.Drasil.RendererClasses as RC (BodyElim(..),
   StatementElim(statement))
 import GOOL.Drasil.Helpers (toCode, onStateValue, on2StateValues)
-import GOOL.Drasil.State (MS, lensMStoVS)
+import GOOL.Drasil.State (MS, lensMStoVS, genVarName)
 
 import Data.Maybe (fromMaybe)
 import Control.Lens.Zoom (zoom)
@@ -60,20 +60,20 @@ runStrategy l strats rv av = maybe
 
 listSlice :: (RenderSym r) => Maybe (SValue r) -> Maybe (SValue r) -> 
   Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
-listSlice b e s vnew vold = 
-  let l_temp = "temp"
-      var_temp = S.var l_temp (onStateValue variableType vnew)
-      v_temp = S.valueOf var_temp
-      l_i = "i_temp"
-      var_i = S.var l_i S.int
-      v_i = S.valueOf var_i
-  in
-    S.block [
-      S.listDec 0 var_temp,
-      S.for (S.varDecDef var_i (fromMaybe (S.litInt 0) b)) 
-        (v_i ?< fromMaybe (S.listSize vold) e) (maybe (var_i &++) (var_i &+=) s)
-        (oneLiner $ S.valStmt $ S.listAppend v_temp (S.listAccess vold v_i)),
-      vnew &= v_temp]
+listSlice b e s vnew vold = do
+  l_temp <- genVarName [] "temp"
+  l_i <- genVarName ["i", "j", "k"] "i"
+  let
+    var_temp = S.var l_temp (onStateValue variableType vnew)
+    v_temp = S.valueOf var_temp
+    var_i = S.var l_i S.int
+    v_i = S.valueOf var_i
+  S.block [
+    S.listDec 0 var_temp,
+    S.for (S.varDecDef var_i (fromMaybe (S.litInt 0) b))
+      (v_i ?< fromMaybe (S.listSize vold) e) (maybe (var_i &++) (var_i &+=) s)
+      (oneLiner $ S.valStmt $ S.listAppend v_temp (S.listAccess vold v_i)),
+    vnew &= v_temp]
       
 stringListVals :: (RenderSym r) => [SVariable r] -> SValue r -> MSStatement r
 stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList 

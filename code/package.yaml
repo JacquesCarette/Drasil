@@ -60,6 +60,14 @@ executables:
       other-modules: Paths_dblpendulum
 
 internal-libraries:
+  drasil-build:
+    source-dirs: drasil-build/lib
+    exposed-modules:
+    - Build.Drasil
+    when:
+    - condition: false
+      other-modules: Paths_drasil_build
+
   drasil-code:
     source-dirs: drasil-code/lib
     dependencies:

@@ -14,17 +14,30 @@ dependencies:
 - aeson
 - aeson-pretty
 - bytestring
-- pretty
 - containers
 - directory
-- time
+- filepath
 - lens
+- mtl
+- pretty
+- split
+- time
 
 ghc-options:
 - -Wall
 - -Wredundant-constraints
 
 executables:
+  codegenTest:
+    main: Main
+    source-dirs: drasil-code/test
+    ghc-options:
+    - -threaded
+    - -O2
+    dependencies:
+    - drasil-code
+    - drasil-gool
+
   dblpendulum:
     main: Main
     source-dirs:
@@ -47,23 +60,23 @@ executables:
       other-modules: Paths_dblpendulum
 
 internal-libraries:
-  drasil-gen:
-    source-dirs: drasil-gen/lib
+  drasil-code:
+    source-dirs: drasil-code/lib
     dependencies:
     - drasil-build
-    - drasil-code
     - drasil-database
-    - drasil-docLang
     - drasil-gool
     - drasil-lang
     - drasil-printers
     - drasil-sysinfo
+    - drasil-theory
     - drasil-utils
     exposed-modules:
-    - Language.Drasil.Generate
+    - Language.Drasil.Code
+    - Data.Drasil.ExternalLibraries.ODELibraries
     when:
     - condition: false
-      other-modules: Paths_drasil_gen
+      other-modules: Paths_drasil_code
 
   drasil-docLang:
     source-dirs: drasil-docLang/lib
@@ -87,3 +100,21 @@ internal-libraries:
     when:
     - condition: false
       other-modules: Paths_drasil_docLang
+
+  drasil-gen:
+    source-dirs: drasil-gen/lib
+    dependencies:
+    - drasil-build
+    - drasil-code
+    - drasil-database
+    - drasil-docLang
+    - drasil-gool
+    - drasil-lang
+    - drasil-printers
+    - drasil-sysinfo
+    - drasil-utils
+    exposed-modules:
+    - Language.Drasil.Generate
+    when:
+    - condition: false
+      other-modules: Paths_drasil_gen

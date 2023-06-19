@@ -265,13 +265,13 @@ $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
 # Specific example targets will have the name exampleName_gen.
 # Alternatively, you can run an example by running `stack exec exampleName`.
 $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
-	stack build $(stackArgs) "$(EEXE)"
+	stack build $(stackArgs) "drasil:exe:$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
 	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec -- "$(EEXE)" $(EXECARGS)
 
 # Compiles GOOL examples to concrete code (Java, C++, etc.)
 $(GOOLTEST)$(GEN_E_SUFFIX):
-	stack build $(stackArgs) "drasil-code:exe:$(GOOLTEST_EXE)"
+	stack build $(stackArgs) "drasil:exe:$(GOOLTEST_EXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(GOOLTEST_DIR)"
 	cd "$(BUILD_FOLDER)$(GOOLTEST_DIR)" && stack exec -- "$(GOOLTEST_EXE)" $(EXECARGS)
 

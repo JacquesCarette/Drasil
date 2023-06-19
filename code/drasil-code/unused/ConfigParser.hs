@@ -1,3 +1,5 @@
+{-         SEE https://github.com/JacquesCarette/Drasil/issues/2469           -}
+
 -- | The parser that processes the configuration file specified as a command-line argument is defined here
 module Language.Drasil.Code.Imperative.Parsers.ConfigParser (
     -- * Configuration for Code Generation

@@ -23,7 +23,6 @@ dependencies:
 - pretty
 - split
 - time
-- drasil-data
 - drasil-database
 - drasil-lang
 - drasil-metadata
@@ -83,6 +82,12 @@ internal-libraries:
     when:
     - condition: false
       other-modules: Paths_drasil_gool
+
+  drasil-data:
+    source-dirs: drasil-data/lib
+    when:
+    - condition: false
+      other-modules: Paths_drasil_data
 
   drasil-printers:
     source-dirs: drasil-printers/lib

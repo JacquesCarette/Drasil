@@ -48,7 +48,7 @@ packages:
 - drasil-database
 # - drasil-printers
 # - drasil-gen
-- drasil-data
+# - drasil-data
 # - drasil-docLang
 - drasil-metadata
 # - drasil-website

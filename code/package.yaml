@@ -48,7 +48,6 @@ executables:
 
 internal-libraries:
   drasil-gen:
-    visibility: public
     source-dirs: drasil-gen/lib
     dependencies:
     - drasil-build
@@ -67,7 +66,6 @@ internal-libraries:
       other-modules: Paths_drasil_gen
 
   drasil-docLang:
-    visibility: public
     source-dirs: drasil-docLang/lib
     dependencies:
     - multiplate

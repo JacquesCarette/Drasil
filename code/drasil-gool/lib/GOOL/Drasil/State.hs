@@ -28,7 +28,7 @@ module GOOL.Drasil.State (
   setMainDoc, getMainDoc, setScope, getScope, setCurrMainFunc, getCurrMainFunc, 
   setThrowUsed, getThrowUsed, setErrorDefined, getErrorDefined, addIter, 
   getIter, resetIter, incrementLine, incrementWord, getLineIndex, getWordIndex, 
-  resetIndices
+  resetIndices, useVarName
 ) where
 
 import GOOL.Drasil.AST (FileType(..), ScopeTag(..), QualifiedName, qualName)
@@ -37,13 +37,16 @@ import GOOL.Drasil.CodeType (ClassName)
 
 import Utils.Drasil (nubSort)
 
-import Control.Lens (Lens', (^.), lens, makeLenses, over, set, _1, _2)
+import Control.Lens (Lens', (^.), lens, makeLenses, over, set, _1, _2, both, at)
 import Control.Monad.State (State, modify, gets)
+import Data.Char (isDigit)
 import Data.List (nub, delete)
-import Data.Maybe (isNothing)
+import Data.Maybe (isNothing, fromMaybe)
 import Data.Map (Map)
 import qualified Data.Map as Map
+import Data.Tuple (swap)
 import Text.PrettyPrint.HughesPJ (Doc, empty)
+import Text.Read (readMaybe)
 
 data GOOLState = GS {
   _headers :: [FilePath], -- Used by Drasil for doxygen config gen
@@ -104,6 +107,7 @@ data MethodState = MS {
   _classState :: ClassState,
   _currParameters :: [String], -- Used to get parameter names when generating 
                                -- function documentation
+  _varNames :: Map String Int, -- Used to generate fresh variable names
 
   -- Only used for Java
   _outputsDeclared :: Bool, -- So Java doesn't redeclare outputs variable when using inOutCall
@@ -251,6 +255,7 @@ initialMS :: MethodState
 initialMS = MS {
   _classState = initialCS,
   _currParameters = [],
+  _varNames = Map.empty,
 
   _outputsDeclared = False,
   _exceptions = [],
@@ -548,7 +553,15 @@ getWordIndex = gets (^. (contentsIndices . _2))
 resetIndices :: MethodState -> MethodState
 resetIndices = set contentsIndices (0,0)
 
+useVarName :: String -> MethodState -> MethodState
+useVarName v = over (varNames . at prefix) (Just . max nextSuffix . fromMaybe 0)
+  where (prefix, nextSuffix) = over _2 (maybe 0 (+1)) $ splitVarName v
+
 -- Helpers
 
 ifElemError :: (Eq a) => a -> [a] -> String -> [a]
 ifElemError e es err = if e `elem` es then error err else e : es
+
+-- Split the longest numerical (0-9) suffix from the rest of the string
+splitVarName :: String -> (String, Maybe Int)
+splitVarName = over _2 readMaybe . over both reverse . swap . span isDigit . reverse

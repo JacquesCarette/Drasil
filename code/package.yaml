@@ -16,6 +16,7 @@ dependencies:
 - bytestring
 - composition
 - containers
+- Decimal
 - directory
 - filepath
 - lens
@@ -23,9 +24,10 @@ dependencies:
 - multiplate
 - pretty
 - split
+- text
 - time
 - transformers
-- drasil-lang
+- unicode-names
 - drasil-utils
 
 ghc-options:
@@ -81,8 +83,29 @@ internal-libraries:
     - condition: false
       other-modules: Paths_drasil_gool
 
+  drasil-lang:
+    source-dirs: drasil-lang/lib
+    exposed-modules:
+    - Language.Drasil
+    - Language.Drasil.Chunk.Concept.NamedCombinators
+    - Language.Drasil.Development
+    - Language.Drasil.Display
+    - Language.Drasil.Expr.Development
+    - Language.Drasil.Literal.Development
+    - Language.Drasil.ModelExpr.Development
+    - Language.Drasil.CodeExpr.Development
+    - Language.Drasil.CodeExpr
+    - Language.Drasil.NounPhrase.Combinators
+    - Language.Drasil.Sentence.Combinators
+    - Language.Drasil.ShortHands
+    when:
+    - condition: false
+      other-modules: Paths_drasil_lang
+
   drasil-metadata:
     source-dirs: drasil-metadata/lib
+    dependencies:
+    - drasil-lang
     exposed-modules:
     - Data.Drasil.Domains
     when:
@@ -92,6 +115,7 @@ internal-libraries:
   drasil-theory:
     source-dirs: drasil-theory/lib
     dependencies:
+    - drasil-lang
     - drasil-metadata
     exposed-modules:
     - Theory.Drasil
@@ -103,6 +127,7 @@ internal-libraries:
   drasil-database:
     source-dirs: drasil-database/lib
     dependencies:
+    - drasil-lang
     - drasil-theory
     exposed-modules:
     - Database.Drasil
@@ -114,6 +139,7 @@ internal-libraries:
     source-dirs: drasil-sysinfo/lib
     dependencies:
     - drasil-database
+    - drasil-lang
     - drasil-theory
     exposed-modules:
     - SysInfo.Drasil
@@ -125,6 +151,7 @@ internal-libraries:
     source-dirs: drasil-data/lib
     dependencies:
     - drasil-metadata
+    - drasil-lang
     - drasil-theory
     when:
     - condition: false
@@ -134,6 +161,7 @@ internal-libraries:
     source-dirs: drasil-printers/lib
     dependencies:
     - drasil-database
+    - drasil-lang
     - drasil-sysinfo
     exposed-modules:
     - Language.Drasil.Printers
@@ -147,6 +175,7 @@ internal-libraries:
     - drasil-build
     - drasil-database
     - drasil-gool
+    - drasil-lang
     - drasil-printers
     - drasil-sysinfo
     - drasil-theory
@@ -163,6 +192,7 @@ internal-libraries:
     - drasil-lang
     - drasil-data
     - drasil-database
+    - drasil-lang
     - drasil-printers
     - drasil-sysinfo
     - drasil-theory
@@ -186,6 +216,7 @@ internal-libraries:
     - drasil-database
     - drasil-docLang
     - drasil-gool
+    - drasil-lang
     - drasil-printers
     - drasil-sysinfo
     exposed-modules:

@@ -38,7 +38,6 @@ resolver:
 # will not be run. This is useful for tweaking upstream packages.
 packages:
 - .
-- drasil-lang
 - drasil-utils
 # - drasil-website
 # - drasil-example/dblpendulum

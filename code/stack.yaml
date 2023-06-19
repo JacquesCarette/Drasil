@@ -41,7 +41,6 @@ packages:
 - drasil-lang
 - drasil-utils
 - drasil-theory
-- drasil-database
 - drasil-metadata
 # - drasil-website
 # - drasil-example/dblpendulum

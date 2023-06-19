@@ -25,7 +25,6 @@ dependencies:
 - split
 - time
 - transformers
-- drasil-database
 - drasil-lang
 - drasil-metadata
 - drasil-theory
@@ -84,8 +83,18 @@ internal-libraries:
     - condition: false
       other-modules: Paths_drasil_gool
 
+  drasil-database:
+    source-dirs: drasil-database/lib
+    exposed-modules:
+    - Database.Drasil
+    when:
+    - condition: false
+      other-modules: Paths_drasil_database
+
   drasil-sysinfo:
     source-dirs: drasil-sysinfo/lib
+    dependencies:
+    - drasil-database
     exposed-modules:
     - SysInfo.Drasil
     when:
@@ -101,6 +110,7 @@ internal-libraries:
   drasil-printers:
     source-dirs: drasil-printers/lib
     dependencies:
+    - drasil-database
     - drasil-sysinfo
     exposed-modules:
     - Language.Drasil.Printers
@@ -112,6 +122,7 @@ internal-libraries:
     source-dirs: drasil-code/lib
     dependencies:
     - drasil-build
+    - drasil-database
     - drasil-gool
     - drasil-printers
     - drasil-sysinfo
@@ -148,6 +159,7 @@ internal-libraries:
     dependencies:
     - drasil-build
     - drasil-code
+    - drasil-database
     - drasil-docLang
     - drasil-gool
     - drasil-printers

@@ -28,7 +28,7 @@ module GOOL.Drasil.State (
   setMainDoc, getMainDoc, setScope, getScope, setCurrMainFunc, getCurrMainFunc, 
   setThrowUsed, getThrowUsed, setErrorDefined, getErrorDefined, addIter, 
   getIter, resetIter, incrementLine, incrementWord, getLineIndex, getWordIndex, 
-  resetIndices, useVarName
+  resetIndices, useVarName, genVarName
 ) where
 
 import GOOL.Drasil.AST (FileType(..), ScopeTag(..), QualifiedName, qualName)
@@ -557,6 +557,14 @@ useVarName :: String -> MethodState -> MethodState
 useVarName v = over (varNames . at prefix) (Just . max nextSuffix . fromMaybe 0)
   where (prefix, nextSuffix) = over _2 (maybe 0 (+1)) $ splitVarName v
 
+genVarName :: [String] -> String -> MS String
+genVarName candidates backup = do
+  used <- gets (^. varNames)
+  let
+    isAvailable (n,c) = maybe True (maybe (const False) (>=) c) $ Map.lookup n used
+    choice = foldr const (splitVarName backup) $ filter isAvailable $ map splitVarName candidates
+  bumpVarName choice
+
 -- Helpers
 
 ifElemError :: (Eq a) => a -> [a] -> String -> [a]
@@ -565,3 +573,10 @@ ifElemError e es err = if e `elem` es then error err else e : es
 -- Split the longest numerical (0-9) suffix from the rest of the string
 splitVarName :: String -> (String, Maybe Int)
 splitVarName = over _2 readMaybe . over both reverse . swap . span isDigit . reverse
+
+bumpVarName :: (String, Maybe Int) -> MS String
+bumpVarName (n,c) = do
+  count <- gets (^. (varNames . at n))
+  let suffix = maybe count (flip fmap count . max) c
+  modify $ set (varNames . at n) $ Just $ maybe 0 (+1) suffix
+  return $ maybe n ((n ++) . show) count

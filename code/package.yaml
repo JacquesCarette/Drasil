@@ -28,7 +28,6 @@ dependencies:
 - time
 - transformers
 - unicode-names
-- drasil-utils
 
 ghc-options:
 - -Wall
@@ -75,8 +74,19 @@ internal-libraries:
     - condition: false
       other-modules: Paths_drasil_build
 
+  drasil-utils:
+    source-dirs: drasil-utils/lib
+    exposed-modules:
+    - Utils.Drasil
+    - Utils.Drasil.Document
+    when:
+    - condition: false
+      other-modules: Paths_drasil_utils
+
   drasil-gool:
     source-dirs: drasil-gool/lib
+    dependencies:
+    - drasil-utils
     exposed-modules:
     - GOOL.Drasil
     when:
@@ -85,6 +95,8 @@ internal-libraries:
 
   drasil-lang:
     source-dirs: drasil-lang/lib
+    dependencies:
+    - drasil-utils
     exposed-modules:
     - Language.Drasil
     - Language.Drasil.Chunk.Concept.NamedCombinators
@@ -117,6 +129,7 @@ internal-libraries:
     dependencies:
     - drasil-lang
     - drasil-metadata
+    - drasil-utils
     exposed-modules:
     - Theory.Drasil
     - Data.Drasil.TheoryConcepts
@@ -129,6 +142,7 @@ internal-libraries:
     dependencies:
     - drasil-lang
     - drasil-theory
+    - drasil-utils
     exposed-modules:
     - Database.Drasil
     when:
@@ -153,6 +167,7 @@ internal-libraries:
     - drasil-metadata
     - drasil-lang
     - drasil-theory
+    - drasil-utils
     when:
     - condition: false
       other-modules: Paths_drasil_data
@@ -163,6 +178,7 @@ internal-libraries:
     - drasil-database
     - drasil-lang
     - drasil-sysinfo
+    - drasil-utils
     exposed-modules:
     - Language.Drasil.Printers
     when:
@@ -179,6 +195,7 @@ internal-libraries:
     - drasil-printers
     - drasil-sysinfo
     - drasil-theory
+    - drasil-utils
     exposed-modules:
     - Language.Drasil.Code
     - Data.Drasil.ExternalLibraries.ODELibraries
@@ -219,6 +236,7 @@ internal-libraries:
     - drasil-lang
     - drasil-printers
     - drasil-sysinfo
+    - drasil-utils
     exposed-modules:
     - Language.Drasil.Generate
     when:

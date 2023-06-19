@@ -1,5 +1,5 @@
 /** main.swift
-    Contains the entire Projectile program
+    A program to predict whether a launched projectile hits its target.
     - Authors: Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
 */
 import Foundation

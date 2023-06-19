@@ -15,10 +15,10 @@ public class ODE implements FirstOrderDifferentialEquations {
     private double L_2;
     
     /** \brief Constructor for ODE objects
-        \param m_1 the mass of the first object (kg)
-        \param m_2 the mass of the second object (kg)
-        \param L_1 the length of the first rod (m)
-        \param L_2 the length of the second rod (m)
+        \param m_1 mass of the first object (kg)
+        \param m_2 mass of the second object (kg)
+        \param L_1 length of the first rod (m)
+        \param L_2 length of the second rod (m)
     */
     public ODE(double m_1, double m_2, double L_1, double L_2) {
         this.m_1 = m_1;

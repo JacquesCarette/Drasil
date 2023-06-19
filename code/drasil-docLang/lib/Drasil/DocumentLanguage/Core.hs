@@ -113,7 +113,7 @@ data IntroSub where
   -- | Describes characteristics of the system.
   IChar   :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
   -- | Organises the section.
-  IOrgSec  :: Sentence -> CI -> Section -> Sentence -> IntroSub
+  IOrgSec  :: CI -> Section -> Sentence -> IntroSub
 
 -- ** Stakeholders Section
 
@@ -296,7 +296,7 @@ instance Multiplate DLPlate where
     intro' (IPurpose s) = pure $ IPurpose s
     intro' (IScope s) = pure $ IScope s
     intro' (IChar s1 s2 s3) = pure $ IChar s1 s2 s3
-    intro' (IOrgSec s1 c sect s2) = pure $ IOrgSec s1 c sect s2
+    intro' (IOrgSec c sect s2) = pure $ IOrgSec c sect s2
     stk (StkhldrProg progs) = StkhldrProg <$> traverse (stkSub p) progs
     stk' (Client c s) = pure $ Client c s
     stk' (Cstmr c) = pure (Cstmr c)

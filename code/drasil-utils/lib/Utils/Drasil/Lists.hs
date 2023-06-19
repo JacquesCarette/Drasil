@@ -3,6 +3,11 @@ module Utils.Drasil.Lists where
 
 import Data.List
 
+-- | Check if list has at least 2 elements.
+atLeast2 :: [a] -> Bool
+atLeast2 (_:_:_) = True
+atLeast2 _       = False
+
 -- | Replaces all elements of a target list that belong to a provided "bad"
 --   input list.
 replaceAll :: Eq a => [a] -> a -> [a] -> [a]

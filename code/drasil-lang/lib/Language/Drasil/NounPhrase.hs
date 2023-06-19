@@ -177,7 +177,7 @@ compoundPhrase'' f1 f2 t1 t2 = Phrase
 
 --More primes might not be wanted but fixes two issues
 -- pluralization problem with software requirements specification (Documentation.hs)
--- SWHS program not being about to use a compound to create the NamedChunk
+-- SWHS program not being about to use a compound to create the IdeaDict
 -- | Similar to 'compoundPhrase', but used when you need a special function applied 
 -- to the first term of both singular and pluralcases (eg. short or plural).
 compoundPhrase''' :: (NP -> Sentence) -> NP -> NP -> NP

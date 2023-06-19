@@ -74,6 +74,7 @@ generator l dt sd chs spec = DrasilState {
   libEMap = lem,
   clsMap = cdm,
   defList = nub $ keys mem ++ keys cdm,
+  getVal = folderVal chs,
 
   -- stateful
   currentModule = "",
@@ -149,7 +150,8 @@ genPackage unRepr = do
         configFP = cfp,
         caseName = "",
         examplePurpose = prps,
-        exampleDescr = bckgrnd}
+        exampleDescr = bckgrnd,
+        folderNum = getVal g}
   return $ package pd (m:catMaybes [i,rm,d])
 
 -- | Generates an SCS program based on the problem and the user's design choices.

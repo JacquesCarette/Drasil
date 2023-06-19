@@ -1,0 +1,133 @@
+{
+    "AuxConstantsLabel": [
+        "message",
+        "gravAccelValue"
+    ],
+    "CorSolPropsLabel": [
+        "correct"
+    ],
+    "DataConstraintsLabel": [
+        "verifyInVals"
+    ],
+    "Launch": [
+        "landingposition",
+        "iyVel",
+        "ixVel",
+        "flightduration"
+    ],
+    "ReqInputs": [
+        "inputValues"
+    ],
+    "accelXZero": [
+        "landingposition",
+        "constAccel"
+    ],
+    "accelYGravity": [
+        "flightduration",
+        "constAccel"
+    ],
+    "accelerationTM": [
+        "projSpeed",
+        "projSpeed"
+    ],
+    "cartSyst": [
+        "velocity",
+        "position"
+    ],
+    "constAccel": [
+        "velocity",
+        "position"
+    ],
+    "flightduration": [
+        "outputValues",
+        "landingposition",
+        "calcValues"
+    ],
+    "freeFlight": [
+        "constAccel"
+    ],
+    "gravAccelValue": [
+        "landingposition",
+        "flightduration"
+    ],
+    "ixVel": [
+        "landingposition"
+    ],
+    "iyVel": [
+        "flightduration"
+    ],
+    "landingposition": [
+        "offset",
+        "calcValues"
+    ],
+    "launchOrigin": [
+        "landingposition",
+        "flightduration"
+    ],
+    "message": [
+        "outputValues",
+        "calcValues"
+    ],
+    "neglectCurv": [
+        "targetXAxis",
+        "cartSyst"
+    ],
+    "neglectDrag": [
+        "constAccel"
+    ],
+    "offset": [
+        "outputValues",
+        "message",
+        "calcValues"
+    ],
+    "pointMass": [
+        "projSpeed",
+        "projPos"
+    ],
+    "posXDirection": [
+        "offset",
+        "message",
+        "message",
+        "landingposition",
+        "landingposition",
+        "flightduration"
+    ],
+    "position": [
+        "landingposition",
+        "flightduration"
+    ],
+    "projPos": [
+        "position"
+    ],
+    "projSpeed": [
+        "velocity",
+        "projPos"
+    ],
+    "speed": [
+        "iyVel",
+        "ixVel"
+    ],
+    "targetXAxis": [
+        "flightduration"
+    ],
+    "timeStartZero": [
+        "velocity",
+        "projSpeed",
+        "projPos",
+        "position",
+        "flightduration"
+    ],
+    "twoDMotion": [
+        "velocity",
+        "position"
+    ],
+    "velocityTM": [
+        "projPos",
+        "projPos"
+    ],
+    "yAxisGravity": [
+        "landingposition",
+        "flightduration",
+        "accelYGravity"
+    ]
+}

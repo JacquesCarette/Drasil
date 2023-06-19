@@ -2,7 +2,7 @@
 module Data.Drasil.Concepts.Computation where
 
 import Language.Drasil (dcc, nc, cn', commonIdeaWithDict, Sentence,
-  ConceptChunk, CI, NamedChunk, dccWDS)
+  ConceptChunk, CI, IdeaDict, dccWDS)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_, 
@@ -20,11 +20,11 @@ modCalcDesc :: Sentence -> ConceptChunk
 modCalcDesc = dccWDS "modCalcDesc" (cn' "calculation")
 
 -- | Collects all computing-related named chunks (not concept-level yet).
-compcon :: [NamedChunk]
+compcon :: [IdeaDict]
 compcon = [application, computer, structure, dataStruct, dataStruct', dataType, dataType', 
   inDatum, outDatum, inParam, inVar, inValue, inQty, computerLiteracy, computerApp]
 
-application, computer, structure :: NamedChunk
+application, computer, structure :: IdeaDict
 os :: CI
 ------------------------------------------------------------------------------------
 --  NC      |     |      id       |       term             |  abbreviation | domain
@@ -37,7 +37,7 @@ os          = commonIdeaWithDict "os" (cn' "operating system")    "OS"   [compSc
 
 dataStruct, dataStruct', dataType, dataType', 
   inDatum, outDatum, inParam, inVar, inValue, inQty,
-  computerLiteracy, computerApp :: NamedChunk
+  computerLiteracy, computerApp :: IdeaDict
 
 dataStruct       = compoundNCPSPP datum structure
 dataStruct'      = compoundNCPS datum structure

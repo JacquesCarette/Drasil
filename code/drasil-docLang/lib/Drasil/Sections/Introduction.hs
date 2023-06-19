@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 -- | Defines functions used in creating an introduction section.
-module Drasil.Sections.Introduction (orgSec, introductionSection, purposeOfDoc, scopeOfRequirements, 
-  charIntRdrF, purpDoc) where
+module Drasil.Sections.Introduction (orgSec, introductionSection,
+  purposeOfDoc, scopeOfRequirements, charIntRdrF, purpDoc) where
 
 import Language.Drasil
 import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
@@ -9,15 +9,19 @@ import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
 import Drasil.DocumentLanguage.Definitions(Verbosity(..))
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
 
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, characteristic,
   decision, definition, desSpec, design, designDoc, document, documentation,
-  environment, goal, goalStmt, implementation, intReader, model, organization,
-  purpose, requirement, scope, section_, softwareDoc, softwareVAV, srs,
-  theory, user, vavPlan, problem, information, systemConstraint)
+  environment, goal, goalStmt, implementation, intReader, model,
+  organization, purpose, requirement, scope, section_, softwareDoc,
+  softwareVAV, srs, theory, user, vavPlan, problem, problemIntro,
+  information, systemConstraint, template)
 import Data.Drasil.TheoryConcepts as Doc (inModel, thModel)
-import Data.Drasil.Citations (parnasClements1986)
+import Data.Drasil.Citations (parnasClements1986, smithEtAl2007,
+  smithKoothoor2016, smithLai2005, koothoor2013)
+import Data.Drasil.Software.Products
 
 
 -----------------------
@@ -61,6 +65,9 @@ introductionSubsections = foldlList Comma List (map (uncurry S.the_ofThe)
 --     * programDefinition  - 'Sentence' definition of the specific example.
 --     * subSections        - List of subsections for this section.
 introductionSection :: Sentence -> Sentence -> [Section] -> Section
+introductionSection EmptyS              programDefinition = SRS.intro
+  [mkParagraph $ emptySectSentSing [problemIntro],
+  overviewParagraph programDefinition]
 introductionSection problemIntroduction programDefinition = SRS.intro 
   [mkParagraph problemIntroduction, overviewParagraph programDefinition]
 
@@ -107,6 +114,7 @@ purposeOfDoc _ = SRS.prpsOfDoc [mkParagraph developmentProcessParagraph] []
 -- | Constructor for the Scope of Requirements subsection.
 -- Takes in the main requirement for the program.
 scopeOfRequirements :: Sentence -> Section
+scopeOfRequirements EmptyS = SRS.scpOfReq [mkParagraph $ emptySectSentPlu [requirement]] []
 scopeOfRequirements req = SRS.scpOfReq [foldlSP
   [phrase scope `S.the_ofTheC` plural requirement, S "includes", req]] []
 
@@ -127,6 +135,9 @@ charIntRdrF progName assumed topic asset r =
 --     * reference to User Characteristics section.
 intReaderIntro :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] ->
   Section -> [Contents]
+intReaderIntro _ [] [] [] _ = 
+  [foldlSP [S "Reviewers of this", phrase documentation,
+  S "do not need any prerequisite knowledge"]]
 intReaderIntro progName assumed topic asset sectionRef = 
   [foldlSP [S "Reviewers of this", phrase documentation,
   S "should have an understanding of" +:+.
@@ -141,15 +152,16 @@ intReaderIntro progName assumed topic asset sectionRef =
 -- | Constructor for the Organization of the Document section. Parameters should be
 -- an introduction ('Sentence'), a resource for a bottom up approach ('NamedIdea'), reference to that resource ('Section'),
 -- and any other relevant information ('Sentence').
-orgSec :: NamedIdea c => Sentence -> c -> Section -> Sentence -> Section
-orgSec i b s t = SRS.orgOfDoc (orgIntro i b s t) []
+orgSec :: NamedIdea c => c -> Section -> Sentence -> Section
+orgSec b s t = SRS.orgOfDoc (orgIntro b s t) []
+
 
 -- | Helper function that creates the introduction for the Organization of the Document section. Parameters should be
 -- an introduction ('Sentence'), a resource for a bottom up approach ('NamedIdea'), reference to that resource ('Section'),
 -- and any other relevant information ('Sentence').
-orgIntro :: NamedIdea c => Sentence -> c -> Section -> Sentence -> [Contents]
-orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
-  intro, S "The presentation follows the standard pattern of presenting" +:+.
+orgIntro :: NamedIdea c => c -> Section -> Sentence -> [Contents]
+orgIntro bottom bottomSec trailingSentence = [foldlSP [
+  orgOfDocIntro, S "The presentation follows the standard pattern of presenting" +:+.
   foldlList Comma List (map plural [nw Doc.goal, nw theory, nw definition, nw assumption]),
   S "For readers that would like a more bottom up approach" `sC`
   S "they can start reading the", namedRef bottomSec (plural bottom)`S.and_`
@@ -160,3 +172,10 @@ orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
     folder = case trailingSentence of
       EmptyS -> foldlSP_
       _      -> foldlSP
+
+orgOfDocIntro :: Sentence
+orgOfDocIntro = foldlSent 
+  [atStartNP (the Doc.organization), S "of this", phrase document, 
+  S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
+  phrase sciCompS, S "proposed by", foldlList Comma List $ 
+    map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]

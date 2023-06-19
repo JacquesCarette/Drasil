@@ -89,7 +89,7 @@ library:
   - condition: false
     other-modules: Paths_drasil_code
 
-tests:
+executables:
   codegenTest:
     main: Main
     source-dirs: test

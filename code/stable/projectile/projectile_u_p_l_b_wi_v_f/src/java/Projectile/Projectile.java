@@ -2,7 +2,7 @@ package Projectile;
 
 /** \file Projectile.java
     \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
-    \brief Contains the entire Projectile program
+    \brief A program to predict whether a launched projectile hits its target.
 */
 import java.io.File;
 import java.io.FileNotFoundException;

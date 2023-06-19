@@ -4,7 +4,6 @@
 -- Changes to ChunkDB should be reflected in the 'Creating Your Project 
 -- in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
-
 module Database.Drasil.ChunkDB (
   -- * Types
   -- ** 'ChunkDB'
@@ -26,7 +25,7 @@ module Database.Drasil.ChunkDB (
   unitTable, traceTable, refbyTable,
   dataDefnTable, insmodelTable, gendefTable, theoryModelTable,
   conceptinsTable, sectionTable, labelledcontentTable, refTable
-  ) where
+) where
 
 import Language.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
@@ -35,6 +34,7 @@ import Control.Lens ((^.), makeLenses)
 import Data.List (sortOn)
 import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Map as Map
+import Utils.Drasil (invert)
 
 -- | The misnomers below (for the following Map types) are not actually a bad thing. We want to ensure data can't
 -- be added to a map if it's not coming from a chunk, and there's no point confusing
@@ -216,11 +216,6 @@ collectUnits m = map (unitWrapper . flip unitLookup (m ^. unitTable))
 -- | Trace a 'UID' to related 'UID's.
 traceLookup :: UID -> TraceMap -> [UID]
 traceLookup c = fromMaybe [] . Map.lookup c
-
--- | Inverts the order of how tuples are organized in a list.
-invert :: (Ord v) => Map.Map k [v] -> Map.Map v [k]
-invert m = Map.fromListWith (++) pairs
-    where pairs = [(v, [k]) | (k, vs) <- Map.toList m, v <- vs]
 
 -- | Translates a traceability map into a reference map.
 generateRefbyMap :: TraceMap -> RefbyMap

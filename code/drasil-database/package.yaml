@@ -11,10 +11,12 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- lens
+- aeson
 - containers
+- lens
 - drasil-lang
 - drasil-theory
+- drasil-utils
 
 ghc-options:
 - -Wall

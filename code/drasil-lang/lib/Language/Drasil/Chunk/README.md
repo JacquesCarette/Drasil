@@ -26,8 +26,8 @@ Eq.hs
   - Defines `QDefinition` data type (quantity with units and defining equations)
 
 NamedIdea.hs
-  - `NamedChunk` and `IdeaDict` data types
-  - Various `NamedChunk` combinators
+  - `IdeaDict` data types
+  - Various `IdeaDict` combinators
 
 Quantity.hs
   - `Quantity` class definition

@@ -69,6 +69,7 @@ data DrasilState = DrasilState {
   libEMap :: ModExportMap, 
   clsMap :: ClassDefinitionMap,
   defList :: [Name],
+  getVal :: Int,
   -- Stateful
   currentModule :: String,
   currentClass :: String,

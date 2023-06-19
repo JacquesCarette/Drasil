@@ -11,6 +11,9 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
+- aeson
+- aeson-pretty
+- bytestring
 - pretty
 - containers
 - directory
@@ -23,6 +26,7 @@ dependencies:
 - drasil-lang
 - drasil-printers
 - drasil-sysinfo
+- drasil-utils
 - lens
 
 ghc-options:

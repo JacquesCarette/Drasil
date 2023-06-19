@@ -17,7 +17,7 @@ con :: [CI]
 con = [annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
   lResistance, lShareFac, glassBR, stdOffDist, nFL]
 
-con' :: [NamedChunk]
+con' :: [IdeaDict]
 con' = [beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
   glass, ptOfExplsn, responseTy]
 
@@ -55,7 +55,7 @@ nFL           = commonIdeaWithDict "nFL"           (nounPhraseSP "non-factored l
 -- TODO: See if we can make some of these terms less specific and/or parameterized.
  
 beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
-  glass, ptOfExplsn, responseTy :: NamedChunk
+  glass, ptOfExplsn, responseTy :: IdeaDict
 beam         = nc "beam"       (nounPhraseSP "beam")
 blastRisk    = nc "blastRisk"  (nounPhraseSP "blast risk")
 cantilever   = nc "cantilever" (nounPhraseSP "cantilever")

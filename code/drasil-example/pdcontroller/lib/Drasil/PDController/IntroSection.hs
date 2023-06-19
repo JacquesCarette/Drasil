@@ -1,7 +1,5 @@
 module Drasil.PDController.IntroSection where
 
-import Data.Drasil.Citations (smithEtAl2007, smithLai2005, smithKoothoor2016)
-
 import Drasil.PDController.Concepts
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -42,10 +40,3 @@ introUserChar1
   = [S "control systems (control theory and controllers) at the fourth-year undergraduate level"]
 introUserChar2
   = [S "engineering mathematics at a second-year undergraduate level"]
-
-introDocOrg :: Sentence
-introDocOrg
-  = foldlSent
-      [S "The sections in this document are based on",
-      foldlList Comma List $ map refS [smithLai2005, smithEtAl2007, 
-      smithKoothoor2016]]

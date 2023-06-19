@@ -17,6 +17,7 @@ import Language.Drasil.Choices (ImplementationType(..), InputModule(..),
   Structure(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Mod (Description)
+import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
 
 import Data.Map (member)
 import qualified Data.Map as Map (filter, lookup, null)
@@ -35,10 +36,11 @@ modDesc = fmap ((++) "Provides " . stringList)
 unmodularDesc :: GenState Description
 unmodularDesc = do
   g <- get
-  let n = pName $ codeSpec g
-      getDesc Library = "library"
-      getDesc Program = "program"
-  return $ "Contains the entire " ++ n ++ " " ++ getDesc (implType g)
+  let spec = codeSpec g
+      implTypeStr Program = "program"
+      implTypeStr Library = "library"
+  return $ show $ sentenceDoc (sysinfodb spec) Implementation Linear $ capSent $
+    foldlSent ([S "a", S (implTypeStr (implType g)), S "to"] ++ purpose spec)
 
 -- | Returns description of what is contained in the Input Parameters module.
 -- If user chooses the 'Bundled' input parameter, this module will include the structure for holding the 

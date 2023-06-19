@@ -9,7 +9,7 @@ import Prelude hiding (cos, sin)
 import Language.Drasil
 import qualified Data.Drasil.Quantities.Physics as QP (iSpeed,
   constAccel, xConstAccel, yConstAccel, ixPos, iyPos)
-import Data.Drasil.Quantities.Physics (gravitationalAccelConst,
+import Data.Drasil.Quantities.Physics (gravitationalAccel, gravitationalAccelConst,
   ixVel, iyVel, xPos, yPos, time, iPos, scalarPos, xVel, yVel, xAccel, yAccel, position, 
   velocity, acceleration, constAccelV, speed)
 import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, tol, landPos, offset)
@@ -61,11 +61,25 @@ accelerationXY = sy acceleration $= vec2D (sy xAccel)         (sy yAccel)
 constAccelXY   = sy constAccelV  $= vec2D (sy QP.xConstAccel) (sy QP.yConstAccel)
 
 -- Expressions for Lesson
-lcrectVel, lcrectPos, lcrectNoTime :: LabelledContent
+horizVel, horizPos :: PExpr
+horizVel = sy xVel $= sy ixVel
+horizPos = sy xPos $= sy QP.ixPos `addRe` (sy ixVel `mulRe` sy time)
+
+vertVel, vertPos, vertNoTime :: PExpr
+vertVel = sy yVel $= sy iyVel $- (sy gravitationalAccel `mulRe` sy time)
+vertPos = sy yPos $= sy QP.iyPos `addRe` (sy iyVel `mulRe` sy time) $- (sy gravitationalAccel `mulRe` square (sy time) $/ exactDbl 2)
+vertNoTime = square (sy yVel) $= square (sy iyVel) $- (exactDbl 2 `mulRe` sy gravitationalAccel `mulRe` (sy yPos $- sy QP.iyPos)) 
+
+lcrectVel, lcrectPos, lcrectNoTime, lchorizVel, lchorizPos, lcvertVel, lcvertPos, lcvertNoTime :: LabelledContent
 lcrectVel = lbldExpr (sy speed $= speed') (makeEqnRef "rectVel")
 lcrectPos = lbldExpr (sy scalarPos $= scalarPos') (makeEqnRef "rectPos")
 lcrectNoTime = lbldExpr rectNoTime (makeEqnRef "rectNoTime")
+lchorizVel = lbldExpr horizVel (makeEqnRef "horizVel")
+lchorizPos = lbldExpr horizPos (makeEqnRef "horizPos")
+lcvertVel = lbldExpr vertVel (makeEqnRef "vertVel")
+lcvertPos = lbldExpr vertPos (makeEqnRef "vertPos")
+lcvertNoTime = lbldExpr vertNoTime (makeEqnRef "vertNoTime")
 
 -- References --
 eqnRefs :: [Reference]
-eqnRefs = map ref [lcrectVel, lcrectPos, lcrectNoTime]
+eqnRefs = map ref [lcrectVel, lcrectPos, lcrectNoTime, lchorizVel, lchorizPos, lcvertVel, lcvertPos, lcvertNoTime]

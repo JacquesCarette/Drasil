@@ -1,0 +1,85 @@
+{
+    "DataConstraintsLabel": [
+        "verifyInputs"
+    ],
+    "ReqInputs": [
+        "inputValues"
+    ],
+    "dampingCoeffSpring": [
+        "likeChgPP",
+        "gdPowerPlantRC"
+    ],
+    "decoupled": [
+        "qdCtrlVarFD"
+    ],
+    "externalDisturb": [
+        "gdPowerPlantRC"
+    ],
+    "gdPowerPlantRC": [
+        "imPDRC"
+    ],
+    "imPDRC": [
+        "outputValues",
+        "calculateValues"
+    ],
+    "initialValue": [
+        "qdProcessErrorFD"
+    ],
+    "invLaplaceRC": [
+        "imPDRC"
+    ],
+    "laplaceRC": [
+        "qdPropControlFD",
+        "qdProcessErrorFD",
+        "qdDerivativeControlFD",
+        "gdPowerPlantRC"
+    ],
+    "laplaceWiki": [
+        "laplaceRC",
+        "invLaplaceRC"
+    ],
+    "massSpring": [
+        "likeChgPP",
+        "gdPowerPlantRC"
+    ],
+    "parallelEq": [
+        "qdCtrlVarFD"
+    ],
+    "pwrPlant": [
+        "stiffnessCoeffSpring",
+        "pwrPlantTxFnx",
+        "massSpring",
+        "dampingCoeffSpring"
+    ],
+    "pwrPlantTxFnx": [
+        "tmSOSystemRC"
+    ],
+    "qdCtrlVarFD": [
+        "imPDRC"
+    ],
+    "qdDerivativeControlFD": [
+        "qdCtrlVarFD"
+    ],
+    "qdProcessErrorFD": [
+        "qdPropControlFD",
+        "qdDerivativeControlFD",
+        "imPDRC"
+    ],
+    "qdPropControlFD": [
+        "qdCtrlVarFD"
+    ],
+    "setPoint": [
+        "qdProcessErrorFD",
+        "imPDRC"
+    ],
+    "stiffnessCoeffSpring": [
+        "likeChgPP",
+        "gdPowerPlantRC"
+    ],
+    "tmSOSystemRC": [
+        "gdPowerPlantRC"
+    ],
+    "unfilteredDerivative": [
+        "qdDerivativeControlFD"
+    ]
+}

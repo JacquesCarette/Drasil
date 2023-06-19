@@ -30,12 +30,12 @@ module Language.Drasil.Chunk.Concept.NamedCombinators (
   -- ** Other Combinators
   is, with,
   -- * Direct Term Combinators
-  -- | Some are specific to 'NamedChunk's.
+  -- | Some are specific to 'IdeaDict's.
   compoundNC, compoundNCPP, compoundNCGen,
   compoundNCPS, compoundNCPSPP, compoundNCGenP,
   combineNINP, combineNPNI, combineNINI) where
 
-import Language.Drasil.Chunk.NamedIdea ( NamedChunk, ncUID )
+import Language.Drasil.Chunk.NamedIdea ( IdeaDict, ncUID )
 import Language.Drasil.Classes ( Idea, NamedIdea(..) )
 import Language.Drasil.Development.Sentence ( phrase, plural )
 import Language.Drasil.NounPhrase
@@ -354,40 +354,40 @@ a_ t = nounPhrase'' (S "a" +:+ phrase t) (S "a" +:+ plural t) CapFirst CapWords
 a_Gen :: (c -> Sentence) -> c -> NP
 a_Gen f t = nounPhrase'' (S "a" +:+ f t) (S "a" +:+ f t) CapFirst CapWords
 
--- | Combinator for combining two 'NamedIdeas's into a 'NamedChunk'. 
+-- | Combinator for combining two 'NamedIdeas's into a 'IdeaDict'. 
 -- Plural case only makes second term plural. 
 -- See 'compoundPhrase' for more on plural behaviour.
 -- /Does not preserve abbreviations/.
-compoundNC :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
+compoundNC :: (NamedIdea a, NamedIdea b) => a -> b -> IdeaDict
 compoundNC t1 t2 = ncUID
   (t1 +++! t2) (compoundPhrase (t1 ^. term) (t2 ^. term))
 
 -- | Similar to 'compoundNC' but both terms are pluralized for plural case.
-compoundNCPP :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
+compoundNCPP :: (NamedIdea a, NamedIdea b) => a -> b -> IdeaDict
 compoundNCPP t1 t2 = ncUID
   (t1 +++! t2) (compoundPhrase'' D.pluralNP D.pluralNP (t1 ^. term) (t2 ^. term))
 
 -- | Similar to 'compoundNC', except plural cases are customizable.
 compoundNCGen :: (NamedIdea a, NamedIdea b) => 
-  (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> NamedChunk
+  (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> IdeaDict
 compoundNCGen f1 f2 t1 t2 = ncUID
   (t1 +++! t2)
   (compoundPhrase'' f1 f2 (t1 ^. term) (t2 ^. term))
 
 -- | Similar to 'compoundNC', except for plural case, where first parameter gets pluralized while second one stays singular.
-compoundNCPS :: NamedChunk -> NamedChunk -> NamedChunk
+compoundNCPS :: IdeaDict -> IdeaDict -> IdeaDict
 compoundNCPS = compoundNCGen D.pluralNP D.phraseNP
 
 -- hack for Solution Characteristics Specification, calling upon plural will pluralize
 -- Characteristics as it is the end of the first term (solutionCharacteristic)
 -- | Similar to 'compoundNC', but takes a function that is applied to the first term (eg. 'short' or 'plural').
-compoundNCGenP :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> a -> b -> NamedChunk
+compoundNCGenP :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> a -> b -> IdeaDict
 compoundNCGenP f1 t1 t2 = ncUID
   (t1 +++! t2) (compoundPhrase''' f1 (t1 ^. term) (t2 ^. term))
 
 -- FIXME: Same as above function
 -- | Similar to 'compoundNCGenP' but sets first parameter function to plural.
-compoundNCPSPP :: NamedChunk -> NamedChunk -> NamedChunk
+compoundNCPSPP :: IdeaDict -> IdeaDict -> IdeaDict
 compoundNCPSPP = compoundNCGenP D.pluralNP
 
 -- | Helper function that combines a 'NamedIdea' and a 'NP' without any words in between.

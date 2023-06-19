@@ -30,7 +30,7 @@ import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.Sections.TableOfContents (toToC, findToC)
 import Drasil.Sections.TableOfSymbols (table, tsIntro)
 import Drasil.Sections.TableOfUnits (tOfUnitSIName, tuIntro, defaultTUI)
-import qualified Drasil.DocLang.SRS as SRS (appendix, genDefn,
+import qualified Drasil.DocLang.SRS as SRS (appendix,
   genSysDes, likeChg, unlikeChg, reference, solCharSpec,
   stakeholder, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol, refMat,
   tOfAbbAcc)
@@ -44,11 +44,11 @@ import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, goalStmtF, inModelF, physSystDesc, probDescF,
   propCorSolF, solutionCharSpecIntro, specSysDescr, termDefnF, thModF, helperCI,
-  tmStub, ddStub, imStub, pdStub)
+  tmStub, ddStub, gdStub, imStub, pdStub)
 import qualified Drasil.Sections.Stakeholders as Stk (stakeholderIntro,
   tClientF, tCustomerF)
 import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (
-  generateTraceTableView)
+  generateTraceTableView, traceMHeader, TraceViewCat)
 import qualified Drasil.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
 import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs)
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
@@ -59,8 +59,9 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
 import Control.Lens ((^.), set)
 import Data.Function (on)
 import Data.List (nub, sortBy, sortOn)
-import qualified Data.Map as Map (elems, toList, assocs)
+import qualified Data.Map as Map (elems, toList, assocs, keys)
 import Data.Char (isSpace)
+import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- * Main Function
 -- | Creates a document from a document description, a title combinator function, and system information.
@@ -71,7 +72,7 @@ mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
     fullSI = fillcdbSRS dd si
     l = mkDocDesc fullSI dd
 
--- * Functions to Fill 'CunkDB'
+-- * Functions to Fill 'ChunkDB'
 
 -- TODO: Move all of these "filler" functions to a new file?
 -- TODO: Add in 'fillTermMap' once #2775 is complete.
@@ -161,8 +162,9 @@ fillReferences dd si@SI{_sys = sys} = si2
     -- get refs from SRSDecl. Should include all section labels and labelled content.
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database
-    inRefs = concatMap dRefToRef ddefs ++ concatMap dRefToRef gdefs ++ concatMap dRefToRef imods ++ concatMap dRefToRef tmods
-    ddefs  = map (fst.snd) $ Map.assocs $ chkdb ^. dataDefnTable
+    inRefs  = concatMap dRefToRef ddefs ++ concatMap dRefToRef gdefs ++
+                concatMap dRefToRef imods ++ concatMap dRefToRef tmods
+    ddefs   = map (fst.snd) $ Map.assocs $ chkdb ^. dataDefnTable
     gdefs   = map (fst.snd) $ Map.assocs $ chkdb ^. gendefTable
     imods   = map (fst.snd) $ Map.assocs $ chkdb ^. insmodelTable
     tmods   = map (fst.snd) $ Map.assocs $ chkdb ^. theoryModelTable
@@ -312,7 +314,7 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
     mkSubIntro _ (IScope main) = Intro.scopeOfRequirements main
     mkSubIntro SI {_sys = sys} (IChar assumed topic asset) =
       Intro.charIntRdrF sys assumed topic asset (SRS.userChar [] [])
-    mkSubIntro _ (IOrgSec i b s t) = Intro.orgSec i b s t
+    mkSubIntro _ (IOrgSec b s t) = Intro.orgSec b s t
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 
 -- ** Stakeholders
@@ -352,7 +354,8 @@ mkSSDProb :: SystemInformation -> ProblemDescription -> Section
 mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSubPD subPD)
   where mkSubPD (TermsAndDefs sen concepts) = SSD.termDefnF sen concepts
         mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
-        mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g)
+        mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g) (length g)
+                
 
 -- | Helper for making the Solution Characteristics Specification section.
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
@@ -361,10 +364,6 @@ mkSolChSpec si (SCSProg l) =
     map (mkSubSCS si) l
   where
     mkSubSCS :: SystemInformation -> SCSSub -> Section
-    mkSubSCS _ (TMs _ _ [])      = error "There are no Theoretical Models"
-    mkSubSCS _ (GDs _ _ [] _)    = SSD.genDefnF []
-    mkSubSCS _ (DDs _ _ [] _) = error "There are no Data Definitions"
-    mkSubSCS _ (IMs _ _ [] _)    = error "There are no Instance Models"
     mkSubSCS si' (TMs intro fields ts) =
       SSD.thModF (siSys si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
@@ -378,10 +377,10 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (GDs intro fields gs' _) =
       SSD.genDefnF $ map mkParagraph intro ++ map (LlC . gdefn fields si') gs'
     mkSubSCS si' (IMs intro fields ims ShowDerivation) =
-      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
+      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub SSD.gdStub $ map mkParagraph intro ++
       concatMap (\x -> [LlC $ instanceModel fields si' x, derivation x]) ims
     mkSubSCS si' (IMs intro fields ims _) =
-      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
+      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub SSD.gdStub $ map mkParagraph intro ++
       map (LlC . instanceModel fields si') ims
     mkSubSCS si' (Assumptions ci) =
       SSD.assumpF $ mkEnumSimpleD $ map (`SSD.helperCI` si') ci
@@ -405,28 +404,41 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 
 -- | Helper for making the Likely Changes section.
 mkLCsSec :: LCsSec -> Section
-mkLCsSec (LCsProg c) = SRS.likeChg (intro : mkEnumSimpleD c) []
-  where intro = foldlSP [S "This", phrase Doc.section_, S "lists the",
-                plural Doc.likelyChg, S "to be made to the", phrase Doc.software]
+mkLCsSec (LCsProg c) = SRS.likeChg (introChgs Doc.likelyChg c: mkEnumSimpleD c) []
 
 -- ** Unlikely Changes
 
 -- | Helper for making the Unikely Changes section.
 mkUCsSec :: UCsSec -> Section
-mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
-  where intro = foldlSP [S "This", phrase Doc.section_, S "lists the",
-                plural Doc.unlikelyChg, S "to be made to the", phrase Doc.software]
+mkUCsSec (UCsProg c) = SRS.unlikeChg (introChgs Doc.unlikelyChg  c : mkEnumSimpleD c) []
+
+-- | Intro paragraph for likely and unlikely changes
+introChgs :: NamedIdea n => n -> [ConceptInstance] -> Contents
+introChgs xs [] = mkParagraph $ emptySectSentPlu [xs]
+introChgs xs _ = foldlSP [S "This", phrase Doc.section_, S "lists the",
+  plural xs, S "to be made to the", phrase Doc.software]
 
 -- ** Traceability
 
 -- | Helper for making the Traceability Matrices and Graphs section.
 mkTraceabilitySec :: TraceabilitySec -> SystemInformation -> Section
 mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
-  (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) progs)
+  (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) fProgs)
   (map LlC trace) (filter (not.isSpace) $ abrv sys) []
   where
-  trace = map (\(TraceConfig u _ desc rows cols) -> TM.generateTraceTableView
-    u desc rows cols si) progs
+    trace = map (\(TraceConfig u _ desc cols rows) -> TM.generateTraceTableView
+      u desc cols rows si) fProgs
+    fProgs = filter (\(TraceConfig _ _ _ cols rows) -> not $ null 
+      (header (showUIDs rows sidb) si) || null (header (showUIDs cols sidb) si)) progs
+    sidb = _sysinfodb si
+
+-- | Helper to get UIDs
+showUIDs :: [TM.TraceViewCat] -> ChunkDB -> [UID] -> [UID]
+showUIDs a s e = filter (`elem` (Map.keys $ s ^. traceTable)) $ concatMap (\x -> x e s) a
+
+-- | Helper to get headers of rows and columns
+header :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]
+header f = TM.traceMHeader (f . nub . Map.keys . (^. refbyTable))
 
 -- ** Off the Shelf Solutions
 

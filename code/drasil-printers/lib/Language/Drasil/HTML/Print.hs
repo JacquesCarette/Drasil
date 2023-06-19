@@ -34,7 +34,7 @@ import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title,
   Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb), 
   Citation(Cite), BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..), Tags)
-import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac)
+import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac, sufxPrint)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 import qualified Language.Drasil.TeX.Print as TeX (pExpr, spec)
@@ -107,6 +107,7 @@ printLO (Figure r c f wp)      = makeFigure (pSpec r) (pSpec c) (text f) wp
 printLO (Bib bib)              = makeBib bib
 printLO Graph{}                = empty -- FIXME
 printLO Cell{}                 = empty
+printLO CodeBlock{}            = empty
 
 
 -- | Called by build, uses 'printLO' to render the layout
@@ -351,10 +352,10 @@ makeBib = ul ["hide-list-style"] . vcat .
 
 -- | For when we add other things to reference like website, newspaper
 renderCite :: Citation -> (Doc, Doc)
-renderCite (Cite e L.Book cfs)      = (text e, renderF cfs useStyleBk    <> text " Print.")
-renderCite (Cite e L.Article cfs)   = (text e, renderF cfs useStyleArtcl <> text " Print.")
-renderCite (Cite e L.MThesis cfs)   = (text e, renderF cfs useStyleBk    <> text " Print.")
-renderCite (Cite e L.PhDThesis cfs) = (text e, renderF cfs useStyleBk    <> text " Print.")
+renderCite (Cite e L.Book cfs)      = (text e, renderF cfs useStyleBk    <> text (sufxPrint cfs))
+renderCite (Cite e L.Article cfs)   = (text e, renderF cfs useStyleArtcl <> text (sufxPrint cfs))
+renderCite (Cite e L.MThesis cfs)   = (text e, renderF cfs useStyleBk    <> text (sufxPrint cfs))
+renderCite (Cite e L.PhDThesis cfs) = (text e, renderF cfs useStyleBk    <> text (sufxPrint cfs))
 renderCite (Cite e L.Misc cfs)      = (text e, renderF cfs useStyleBk)
 renderCite (Cite e _ cfs)           = (text e, renderF cfs useStyleArtcl) --FIXME: Properly render these later.
 

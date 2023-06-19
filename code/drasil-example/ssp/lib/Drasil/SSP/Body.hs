@@ -14,11 +14,10 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
-  constant, document, effect, endUser, environment,
-  input_, interest, loss, method_, organization,
-  physical, physics, problem, software,
-  softwareSys, srsDomains, symbol_, sysCont, system,
-  template, type_, user, value, variable, doccon, doccon', datumConstraint)
+  constant, effect, endUser, environment, input_, interest, loss, method_,
+  physical, physics, problem, software, softwareSys, srsDomains, symbol_,
+  sysCont, system, type_, user, value, variable, doccon, doccon',
+  datumConstraint)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (inModel)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
@@ -31,12 +30,10 @@ import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce, 
   shearRes, solidcon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
-import Data.Drasil.Software.Products (sciCompS, prodtcon)
+import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (physicsTMs)
 
 import Data.Drasil.People (brooks, henryFrankis)
-import Data.Drasil.Citations (koothoor2013, smithEtAl2007, smithLai2005,
-  smithKoothoor2016)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
 
 import Drasil.SSP.Assumptions (assumptions)
@@ -102,7 +99,7 @@ mkSRS = [TableOfContents,
         [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
         phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics]
         [phrase soilMechanics]
-    , IOrgSec orgSecStart inModel (SRS.inModel [] []) orgSecEnd
+    , IOrgSec inModel (SRS.inModel [] []) orgSecEnd
     ],
     --FIXME: issue #235
   GSDSec $ GSDProg
@@ -236,12 +233,7 @@ scope = foldlSent_ [phraseNP (stabAnalysis `ofA` twoD), sParen (getAcc twoD),
 
 -- SECTION 2.4 --
 -- Organization automatically generated in IOrgSec
-orgSecStart, orgSecEnd :: Sentence
-orgSecStart = foldlSent [atStartNP (the organization), S "of this",
-  phrase document, S "follows the", phrase template, S "for an",
-  short Doc.srs `S.for` phrase sciCompS,
-  S "proposed by", foldlList Comma List $ 
-  map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]
+orgSecEnd :: Sentence
 orgSecEnd   = foldlSent_ [atStartNP' (the inModel), S "provide the set of",
   S "algebraic", plural equation, S "that must be solved"]
 

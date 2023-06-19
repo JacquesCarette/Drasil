@@ -10,6 +10,7 @@ import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
 import Data.Drasil.Concepts.Software (program)
+import Data.Drasil.Software.Products (sciCompS)
 import Data.Drasil.ExternalLibraries.ODELibraries
        (apacheODESymbols, arrayVecDepVar, odeintSymbols, osloSymbols,
         scipyODESymbols)
@@ -31,9 +32,8 @@ import Drasil.PDController.GenSysDesc
        (gsdSysContextFig, gsdSysContextList, gsdSysContextP1, gsdSysContextP2,
         gsduserCharacteristics)
 import Drasil.PDController.IModel (instanceModels, imPD)
-import Drasil.PDController.IntroSection
-       (introDocOrg, introPara, introPurposeOfDoc, introUserChar1,
-        introUserChar2, introscopeOfReq)
+import Drasil.PDController.IntroSection (introPara, introPurposeOfDoc,
+       introUserChar1, introUserChar2, introscopeOfReq)
 import Drasil.PDController.References (citations)
 import Drasil.PDController.Requirements (funcReqs, nonfuncReqs)
 import Drasil.PDController.SpSysDesc (goals, sysFigure, sysGoalInput, sysParts)
@@ -63,7 +63,7 @@ mkSRS
        IntroProg introPara (phrase pdControllerApp)
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
-          IOrgSec introDocOrg IDict.dataDefn (SRS.inModel [] [])
+          IOrgSec IDict.dataDefn (SRS.inModel [] [])
             (S "The instance model referred as" +:+ refS imPD +:+
                S "provides an"
                +:+ titleize ode +:+ sParen (short ode)
@@ -129,7 +129,7 @@ symbolsAll = symbols ++ map qw pidDqdConstants ++ map qw pidConstants
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf])
-  (nw pdControllerApp : [nw program, nw angular, nw linear]
+  (nw pdControllerApp : [nw program, nw angular, nw linear] ++ [nw sciCompS]
   ++ map nw doccon ++ map nw doccon' ++ concepts ++ map nw mathcon
   ++ map nw mathcon' ++ map nw [second, kilogram] ++ map nw symbols 
   ++ map nw physicscon ++ map nw acronyms ++ map nw physicalcon)

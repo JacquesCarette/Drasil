@@ -38,7 +38,9 @@ data Choices = Choices {
   -- | Constraint violation behaviour. Exception or Warning.
   srsConstraints :: Constraints,
   -- | List of external libraries what to utilize 
-  extLibs :: [ExtLib]
+  extLibs :: [ExtLib],
+  -- | Number of folders to go up in order to obtain the image
+  folderVal :: Int
 }
 
 -- | Renders program choices as a 'Sentence'.
@@ -338,7 +340,8 @@ defaultChoices = Choices {
     (makeLogConfig [] "log.txt") 
     [ReadME],
   srsConstraints = makeConstraints Exception Warning,
-  extLibs = []
+  extLibs = [],
+  folderVal = 4
 }
 
 -- | Renders 'Choices' as 'Sentence's.

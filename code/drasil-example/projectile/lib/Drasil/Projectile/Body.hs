@@ -9,7 +9,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
   problem, srsDomains, assumption, goalStmt, physSyst,
-  requirement, refBy, refName, typUnc)
+  requirement, refBy, refName, typUnc, example)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Math (cartesian, mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
@@ -92,11 +92,19 @@ mkSRS = [TableOfContents,
 justification, scope :: Sentence
 justification = foldlSent [atStart projectile, phrase motion, S "is a common" +:+.
   phraseNP (problem `in_` physics), S "Therefore, it is useful to have a",
-  phrase program, S "to solve and model these types of" +:+. plural problem,
+  phrase program, S "to solve and model these types of" +:+. plural problem, 
+  S "Common", plural example `S.of_` phraseNP (combineNINI projectile motion), 
+  S "include" +:+. foldlList Comma List projectileExamples,
   atStartNP (the program), S "documented here is called", phrase projectileTitle]
 scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
-  sParen (getAcc twoD), phraseNP (combineNINI projectile motion), phrase problem, S "with",
-  phrase constAccel]
+  sParen (getAcc twoD), phraseNP (combineNINI projectile motion), phrase problem, 
+  S "with", phrase constAccel]
+
+projectileExamples :: [Sentence]
+projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles" `sC` 
+  S "bullets" `sC` S "etc."), S "the flight" `S.of_` S "balls" `S.in_` 
+  S "various sports" +:+ sParen (S "baseball" `sC` S "golf" `sC` S "football" `sC`
+  S "etc.")]
 
 projectileTitle :: CI
 projectileTitle = commonIdea "projectileTitle" (pn "Projectile") "Projectile" []

@@ -1,6 +1,6 @@
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (
   -- * Common Syntax
-  doxConfigName, makefileName, sampleInputName, sampleOutputName, readMeName
+  doxConfigName, makefileName, sampleInputName, readMeName
 ) where
 
 ----------------------------------------
@@ -8,15 +8,13 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (
 ----------------------------------------
 
 -- | Common syntax for several renderers.
-doxConfigName, makefileName, sampleInputName, sampleOutputName, readMeName :: String
+doxConfigName, makefileName, sampleInputName, readMeName :: String
 -- | "doxConfig".
 doxConfigName = "doxConfig"
 -- | \"Makefile\".
 makefileName = "Makefile"
 -- | "input.txt".
 sampleInputName = "input.txt"
--- | "output.txt"
-sampleOutputName = "output.txt"
 -- | "README.md".
 readMeName = "README.md"
 

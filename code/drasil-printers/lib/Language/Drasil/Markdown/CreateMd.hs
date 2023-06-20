@@ -24,9 +24,9 @@ introInfo name auths descr = introSec (text name) (listToDoc auths) (length auth
 
 -- | Instruction section, contains 4 paragraphs, Running, Building, Input-Output and Config Files.
 -- The Config file section is only displayed if there are configuration files.
-instDoc :: [String] -> String -> Maybe String ->  Maybe String -> Doc
-instDoc cfp name inf outf = regularSec (text "Making Examples") 
-    (runInstDoc <> doubleSep <> makeInstDoc) <> inOutFile name inf outf <> configSec cfp
+instDoc :: [String] -> String -> (String, String) -> Doc
+instDoc cfp name inoutn = regularSec (text "Making Examples") 
+    (runInstDoc inoutn <> doubleSep <> makeInstDoc) <> inOutFile name inoutn <> configSec cfp
 
 -- | Helper for creating optional Purpose subsection as Doc
 maybePurpDoc :: Maybe String -> Doc
@@ -42,9 +42,9 @@ commandLine = text $ "In your terminal command line, enter the same directory as
     "README file. Then enter the following line:"
 
 -- | Helper for giving instructions on how to run the program.
-runInstDoc :: Doc
-runInstDoc = text "How to Run the Program:" <> contSep <>
-    commandLine <> contSep <> bkQuote3 <> contSep <> text "make run RUNARGS=input.txt" 
+runInstDoc :: (String, String) -> Doc
+runInstDoc (inFile, _) = text "How to Run the Program:" <> contSep <>
+    commandLine <> contSep <> bkQuote3 <> contSep <> text "make run RUNARGS=" <> text inFile
       <> contSep <> bkQuote3
 
 -- | Helper for giving instructions on how to build the program.
@@ -53,10 +53,9 @@ makeInstDoc = text "How to Build the Program:" <> contSep <> commandLine <> cont
     bkQuote3 <> contSep <> text "make build" <> contSep <> bkQuote3
 
 -- | Helper for giving instuctions and Input and Output files.
-inOutFile :: String -> Maybe String -> Maybe String -> Doc
-inOutFile _ Nothing _ = empty
-inOutFile _ _ Nothing = empty
-inOutFile name (Just inFile) (Just outFile) = doubleSep <>
+-- * This needs a more permanent solution (For cases of no Input/Output file).
+inOutFile :: String -> (String, String) -> Doc
+inOutFile name (inFile, outFile) = doubleSep <>
       text "How to Change Input:" <> contSep <> text name <+> 
       text "will take the inputs from" <+> bkQuote <> text inFile <> bkQuote <+> 
       text "and write the outputs to" <+> bkQuote <> text outFile <> bkQuote <> 

@@ -5,17 +5,19 @@ import Drasil.SRSDocument
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
+import qualified Drasil.DocLang.SRS as SRS
 
-import Data.Drasil.Concepts.Computation (inValue)
+import Data.Drasil.Concepts.Computation (inValue, algorithm)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
   problem, srsDomains, assumption, goalStmt, physSyst,
   requirement, refBy, refName, typUnc, example)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics)
 import Data.Drasil.Concepts.Math (cartesian, mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon',
   rectilinear, oneD, twoD, motion)
 import Data.Drasil.Concepts.Software (errMsg, program)
+import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)
 import Data.Drasil.Quantities.Physics (acceleration, constAccel,
@@ -27,6 +29,7 @@ import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 import Data.Drasil.SI_Units (metre, radian, second)
 import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
+import Data.Drasil.Concepts.Education(calculus, educon, undergraduate)
 
 import Drasil.Projectile.Assumptions (assumptions)
 import Drasil.Projectile.Concepts (concepts, launcher, projectile, target)
@@ -60,7 +63,10 @@ mkSRS = [TableOfContents,
       ],
   IntroSec $
     IntroProg justification (phrase projectileTitle)
-      [ IScope scope ],
+      [ IPurpose $ purpDoc projectileTitle Verbose
+      , IScope scope
+      , IChar [] charsOfReader []
+      , IOrgSec inModel (SRS.inModel [] []) EmptyS],
   SSDSec $
     SSDProg
       [ SSDProblem $ PDProg probDescIntro []
@@ -141,8 +147,9 @@ symbMap :: ChunkDB
 symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
   (nw projectileTitle : nw mass : nw inValue : [nw errMsg, nw program] ++
     map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
-    map nw physicscon ++ map nw mathcon ++ concepts ++ unitalIdeas ++
-    map nw acronyms ++ map nw symbols ++ map nw [metre, radian, second]) (cw pi_ : map cw constrained ++ srsDomains)
+    map nw physicscon ++ map nw mathcon ++ [nw algorithm] ++ concepts ++ 
+    [nw sciCompS] ++ unitalIdeas ++ map nw acronyms ++ map nw symbols ++ 
+    map nw educon ++ map nw [metre, radian, second]) (cw pi_ : map cw constrained ++ srsDomains)
   (map unitWrapper [metre, radian, second]) dataDefs iMods genDefns tMods concIns [] [] []
 
 usedDB :: ChunkDB
@@ -157,6 +164,14 @@ refDB = rdb citations concIns
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
+
+-------------------------
+-- Problem Description --
+-------------------------
+
+charsOfReader :: [Sentence]
+charsOfReader = [phrase undergraduate +:+ S "level 1" +:+ phrase Doc.physics,
+                 phrase undergraduate +:+ S "level 1" +:+ phrase calculus]
 
 -------------------------
 -- Problem Description --

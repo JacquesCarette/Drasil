@@ -19,6 +19,14 @@
         "sections",
         "references"
     ],
+    "DocOrgLabel": [
+        "sections",
+        "references"
+    ],
+    "DocPurposeLabel": [
+        "sections",
+        "references"
+    ],
     "FRsLabel": [
         "sections",
         "references"
@@ -62,6 +70,10 @@
         "references"
     ],
     "ProbDescLabel": [
+        "sections",
+        "references"
+    ],
+    "ReaderCharsLabel": [
         "sections",
         "references"
     ],

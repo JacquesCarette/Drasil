@@ -166,7 +166,7 @@ concIns :: [ConceptInstance]
 concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
 
 -------------------------
--- Problem Description --
+-- Characteristics of Intended Reader --
 -------------------------
 
 charsOfReader :: [Sentence]

@@ -1614,7 +1614,7 @@ module Language.Drasil.Code.Imperative.GOOL.ClassInterface
 
 -- | Holds all information needed to create a README file.
 data ReadMeInfo
-ReadMeInfo :: LangAbbrev -> LangVers -> Maybe String -> ImplementationType -> [(Name, Version)] -> [FilePath] -> [Contributor] -> [FilePath] -> CaseName -> ExamplePurpose -> ExampleDescr -> Int -> ReadMeInfo
+ReadMeInfo :: LangAbbrev -> LangVers -> Maybe String -> ImplementationType -> [(Name, Version)] -> [FilePath] -> [Contributor] -> [FilePath] -> CaseName -> ExamplePurpose -> ExampleDescr -> Int -> (InFile, OutFile) -> ReadMeInfo
 [langName] :: ReadMeInfo -> LangAbbrev
 [langVersion] :: ReadMeInfo -> LangVers
 [invalidOS] :: ReadMeInfo -> Maybe String
@@ -1627,6 +1627,7 @@ ReadMeInfo :: LangAbbrev -> LangVers -> Maybe String -> ImplementationType -> [(
 [examplePurpose] :: ReadMeInfo -> ExamplePurpose
 [exampleDescr] :: ReadMeInfo -> ExampleDescr
 [folderNum] :: ReadMeInfo -> Int
+[inputOutput] :: ReadMeInfo -> (InFile, OutFile)
 
 -- | Members of this class must have all the information necessary for the
 --   <a>AuxiliarySym</a> in addition to information necessary to create a

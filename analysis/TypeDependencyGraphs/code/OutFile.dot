@@ -1,0 +1,4 @@
+digraph outfile{
+OutFile	[shape=oval, color=red2, label="OutFile"];
+OutFile -> String;
+}

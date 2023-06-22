@@ -120,10 +120,10 @@ unsupOS :: Maybe String -> Doc
 -- | Constructs regular section section from header and message.
 regularSec :: Doc -> Doc -> Doc
 
--- | Instruction section, contains 3 paragraphs, Running, Building and
---   Config Files. The Config file section is only displayed if there are
---   configuration files.
-instDoc :: [String] -> Doc
+-- | Instruction section, contains 4 paragraphs, Running, Building,
+--   Input-Output and Config Files. The Config file section is only
+--   displayed if there are configuration files.
+instDoc :: [String] -> String -> (String, String) -> Doc
 
 -- | External Libraries section. The inputs are a list of name and version
 --   pairs and a list of the corresponding version numbers, these are first

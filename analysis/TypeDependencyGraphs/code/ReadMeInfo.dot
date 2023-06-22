@@ -11,4 +11,5 @@ ReadMeInfo -> CaseName;
 ReadMeInfo -> ExamplePurpose;
 ReadMeInfo -> ExampleDescr;
 ReadMeInfo -> Int;
+ReadMeInfo -> InFile;
 }

@@ -1,0 +1,4 @@
+digraph infile{
+InFile	[shape=oval, color=red2, label="InFile"];
+InFile -> String;
+}

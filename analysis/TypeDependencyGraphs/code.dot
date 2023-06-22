@@ -211,6 +211,7 @@ digraph alltypes {
 		ReadMeInfo -> ExamplePurpose;
 		ReadMeInfo -> ExampleDescr;
 		ReadMeInfo -> Int;
+		ReadMeInfo -> InFile;
 		}
 		subgraph langabbrev{
 		LangAbbrev	[shape=oval, color=red2, label="LangAbbrev"];
@@ -235,6 +236,14 @@ digraph alltypes {
 		subgraph contributor{
 		Contributor	[shape=oval, color=red2, label="Contributor"];
 		Contributor -> String;
+		}
+		subgraph infile{
+		InFile	[shape=oval, color=red2, label="InFile"];
+		InFile -> String;
+		}
+		subgraph outfile{
+		OutFile	[shape=oval, color=red2, label="OutFile"];
+		OutFile -> String;
 		}
 	}
 	subgraph data {

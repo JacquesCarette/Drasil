@@ -1,0 +1,679 @@
+\documentclass{beamer}
+
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usepackage{anyfontsize}
+
+\lstset{
+    language=[latex]tex,
+    breaklines=true}
+
+\usetheme{Madrid}
+
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;} 
+
+\title[Committee Meeting 1]{First Committee Meeting}
+\subtitle{Progress Report}
+\author{Samuel Crawford}
+
+\institute{McMaster University}
+\date{June 19, 2023}
+
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\begin{document}
+
+% from https://tex.stackexchange.com/a/42826/192195
+\NewDocumentCommand{\ShowListingForLineNumber}{s O{1.0} m m}{
+    \IfBooleanTF{#1}{\vspace{-#2\baselineskip}}{}
+    \lstinputlisting[
+        style=MyListStyle,
+        linerange={#3-#3},
+        firstnumber=#3,
+    ]{#4}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% TITLE PAGE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{\titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% TABLE OF CONTENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% INTRODUCTION
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+
+\begin{frame}
+    \frametitle{About Me}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{.675\textwidth}
+            \begin{minipage}{\textwidth}
+                \begin{itemize}
+                    \item I am \textbf{Samuel "Sam" Crawford}
+                    \item<2-> Graduated from McMaster University (2022)
+                        \begin{itemize}
+                            \item Bachelor of Engineering (B.Eng.) in Software Engineering
+                            \item Worked on Drasil as an Undergraduate Summer Research Assistant
+                                  (during the summers of 2018 and 2019)
+                        \end{itemize}
+                    \item<3-> Currently pursuing a Master of Applied Science (M.A.Sc.) in Software
+                        Engineering under the supervision of \textbf{Dr.~Jacques Carette} and \textbf{Dr.~Spencer Smith}
+                \end{itemize}
+            \end{minipage}
+        \end{column}
+        \begin{column}{.3\textwidth}
+            \begin{figure}
+                \includegraphics[width=.8\textwidth]{assets/me.jpg}
+                % \caption{Me}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Overview of Progression Towards M.A.Sc.}
+    \framesubtitle{Course-related progression}
+    \begin{itemize}
+        \item I'm required to complete:
+              \begin{itemize}
+                  \item Two "Software" courses ~\only<3->{\checkmark} \only<5->{\checkmark}
+                  \item One "Theory" course ~\only<4->{\checkmark}
+                  \item One "Systems" course ~\only<6->{\checkmark}
+              \end{itemize}
+        \item<2-> I've completed:
+            \begin{itemize}
+                \item<3-> CAS 735: (Micro)service-oriented architectures - Fall 2022
+                \item<4-> CAS 761: Logic for Practical Use - Fall 2022
+                \item<5-> CAS 741: Development of Scientific Computing Software - Winter 2023
+                \item<6-> CAS 781: Advanced Topics in Computing and Software\\
+                    \quad (High-Performance Scientific Computing) - Winter 2023
+            \end{itemize}
+            % \item<7-> These satisfy the "Course Requirements" from the academic calendar\footnotemark[1] and the "Regulations for the Software Engineering M.A.Sc. Program"\footnotemark[2]
+    \end{itemize}
+
+    % \only<7->{\footnotetext[1]{\tiny\url{https://academiccalendars.romcmaster.ca/preview_program.php?catoid=46&poid=23752}}}
+    % \only<7->{\footnotetext[2]{\tiny\url{https://www.cas.mcmaster.ca/cas/0files/reg_master_se_2019a.pdf}}}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Overview of Progression Towards M.A.Sc.}
+    \framesubtitle{Thesis/research-related Progression}
+    \begin{itemize}
+        \item<1-> Conducted "part-time research" while taking courses (Fall 2022/Winter 2023)
+            % \begin{itemize}
+            %     \item<2-> Investigating our current "chunk lattice"
+            %     \item<3-> The specification of "ChemCode" in CAS 741, a program for balancing chemical equations
+            % \end{itemize}
+        \item<2-> Pivoted to "full-time research" for Spring 2023 (and beyond)
+            % \begin{itemize}
+            %     \item<5-> Mentoring summer students, including providing feedback and guidance on their projects
+            %     \item<6-> Starting the actual research for my project (to be detailed later...)
+            % \end{itemize}
+            % \item<7-> Attended a thesis seminar and a thesis defense to learn about what to expect from a thesis defense (and their research!)
+        \item<3-> Formed my supervisory committee; we are currently having our first supervisory committee meeting!
+            % \begin{itemize}
+            %     \item \emph{Supervisor}: Dr.~Jacques Carette
+            %     \item \emph{Supervisor}: Dr.~Spencer Smith
+            %     \item Dr.~Ned Nedialkov
+            %     \item Dr.~Richard Paige
+            % \end{itemize}
+    \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PROJECT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Project}
+\subsection{Drasil}
+
+\begin{frame}
+    \frametitle{Preface}
+    \framesubtitle{What is Drasil?}
+    Drasil is "a framework for generating all of the software
+    artifacts from a stable knowledge base, focusing
+    currently on scientific software" \cite{hunt_drasil_2021}
+    \vspace{-2mm}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{.5\textwidth}
+            \vspace{2mm}
+            \begin{minipage}{\textwidth}
+                \begin{itemize}
+                    % \item<2-> Knowledge is introduced either at a global level
+                    %     or at an example-specific level
+                    \item<2-> This knowledge, using recipes, is used to generate
+                        software artifacts, including:
+                        \begin{itemize}
+                            \item SRS (HTML, PDF, Jupyter)
+                            \item Code (Python, Java, C\#, C++, Swift)
+                            \item READMEs
+                            \item Makefiles
+                            \item Its own website\footnotemark[1]!
+                        \end{itemize}
+                \end{itemize}
+            \end{minipage}
+        \end{column}
+        \begin{column}{.45\textwidth}
+            \vspace{-4mm}
+            \begin{figure}
+                \includegraphics[width=.8\textwidth]{assets/drasil-logo.png}
+                \caption{Drasil's Logo \tiny\cite{Drasil2021}}
+            \end{figure}
+        \end{column}
+    \end{columns}
+    \footnotetext[1]{\tiny \url{https://jacquescarette.github.io/Drasil/}}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Visualizing Drasil's Traceability}
+    \begin{figure}
+        \center
+        \includegraphics[width=0.8\textwidth]{assets/DrasilSupportsChange.png}
+        \vspace{-2mm}
+        \caption{Knowledge flow from knowledge base to artifacts; by Dr.~Spencer Smith}
+        \label{fig:knowledge-flow}
+    \end{figure}
+\end{frame}
+
+% \begin{frame}
+%     \frametitle{Drasil}
+%     \framesubtitle{"Generate All The Things!"}
+%     % TODO: "Generate All The Things!" is a beautifully appropriate tagline for Drasil
+%     %       for a few reasons:
+%     %                  1. What are "Things"? One may only think of "Things" as far as their knowledge and understanding allows them! You wouldn't be able to think of things without some sort of basis/constructive understanding/methodology to _get_ there, you can't _think of random phenomena_ (that's why they're phenomena).
+
+%     \begin{itemize}
+%         \item<2-> An exploration in software-related artifact generation for "well understood" domains \cite{KnowledgeCapture2021} through strong knowledge capture.
+%             \begin{itemize}
+%                 \item<3-> By unifying knowledge into a single framework with reusable composable units of knowledge, we eliminate code duplication, formally impose traceability and maintainability of knowledge (and software), and allow for easy knowledge transference.
+%                 \item<4-> Knowledge organization and capture is of utmost importance, as it is the pathway for interpreters and Domain-Specific Languages (DSLs) to make appropriate usage of the knowledge captured.
+%                 \item<5-> By creating different kinds of "printers", we can use a stable knowledge-base to generate software that solves "well understood" problems.
+%             \end{itemize}
+%         \item<6-> Drasil currently focuses on building research software, generating Software Requirement Specification documents (SRS) in both LaTeX and HTML (with MathJaX), code to solve a problem, README files, Makefiles, graphs, etc.
+%     \end{itemize}
+% \end{frame}
+
+\begin{frame}
+    \frametitle{Problem Statement}
+    \begin{itemize}
+        \item Currently, there is no way to verify Drasil's output
+        \item <2-> Drasil is "tested" by comparing generated
+              artifacts to \texttt{stable}
+              \begin{columns}[T,onlytextwidth]
+                  \begin{column}{.4\textwidth}
+                      \begin{figure}
+                          %   \vspace{-1mm}
+                          \includegraphics[width=.8\textwidth]{assets/stable.png}
+                          %   \vspace{-3mm}
+                          \caption{Contents of \texttt{stable}}
+                          \vspace{-1mm}
+                      \end{figure}
+                  \end{column}
+                  \begin{column}{.6\textwidth}
+                      \lstinputlisting[
+                          title=An example log,
+                          captionpos=b,
+                          language={},
+                          basicstyle=\tiny, % TODO: reduce font size?
+                          breakatwhitespace=true,
+                          showstringspaces=false
+                      ]{assets/log.txt}
+                      \vspace{-2mm}
+                  \end{column}
+              \end{columns}
+        \item <3-> This does not actually say anything about Drasil's output!
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Purpose Statement}
+    \begin{itemize}
+        \item The purpose of this research is to implement test case generation
+              to verify generated code
+        \item These test cases will be generated from information within Drasil
+        \item<2-> Why use test cases for verification as opposed to, say,
+            consistency/correctness checks?
+            \begin{enumerate}
+                \item<3-> A more well-defined, Master's level scope
+                \item<4-> Targets a more complex artifact that is harder to verify
+                \item<5-> Gives Drasil another "bragging point"!
+            \end{enumerate}
+    \end{itemize}
+\end{frame}
+
+
+\subsection{The Common Drasil Workflow}
+\subsubsection*{Example: Projectile}
+
+\begin{frame}
+    \frametitle{The Common Drasil Workflow}
+    \framesubtitle{Example: Projectile}
+
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{.25\textwidth}
+            \begin{enumerate}
+                \item<2-|handout:1-> Create a manual version of an artifact
+                \item<3-|handout:2-> Understand it (and its components) well
+                \item<4-|handout:3> Generate it!
+            \end{enumerate}
+        \end{column}
+        \begin{column}{.75\textwidth}
+            \begin{overprint}
+                \centering
+                \onslide<2|handout:1>\begin{figure}
+                    \centering\includegraphics[width=.8\textwidth]{assets/projectile-sketch.PNG}
+                    \caption{Sketch of Projectile SRS \tiny \cite{projectile_sketch}}
+                \end{figure}
+                \onslide<3|handout:2>\begin{figure}
+                    \centering\includegraphics[width=.9\textwidth]{assets/projectile-wip.PNG}
+                    \caption{Review of Manual Projectile SRS \tiny \cite{projectile_wip}}
+                \end{figure}
+                \onslide<4|handout:3>\begin{figure}
+                    \centering\includegraphics[width=0.95\textwidth]{assets/projectile-current.PNG}
+                    \caption{HTML Version of Generated Projectile SRS \tiny \cite{projectile_current}}
+                \end{figure}
+            \end{overprint}
+        \end{column}
+    \end{columns}
+
+    % \begin{itemize}
+    %     \item<2-> Create a manual version of an artifact
+    %     \item<3-> Understand it (and its components) well
+    %     \item<4-> Generate it!
+    % \end{itemize}
+    % \begin{columns}[T,onlytextwidth]
+    %     \begin{column}{.3\textwidth}<3->
+    %         \begin{figure}
+    %             %   \vspace{-1mm}
+    %             \includegraphics[width=.8\textwidth]{assets/projectile-sketch.PNG}
+    %             %   \vspace{-3mm}
+    %             \caption{Sketch of Projectile SRS}
+    %             % \vspace{-1mm}
+    %         \end{figure}
+    %     \end{column}
+    %     \begin{column}{.3\textwidth}<3->
+    %         \begin{figure}
+    %             %   \vspace{-1mm}
+    %             \includegraphics[width=.8\textwidth]{assets/projectile-wip.PNG}
+    %             %   \vspace{-3mm}
+    %             \caption{Review of Manual Projectile SRS}
+    %             % \vspace{-1mm}
+    %         \end{figure}
+    %     \end{column}
+    %     \begin{column}{.3\textwidth}<3->
+    %         \begin{figure}
+    %             %   \vspace{-1mm}
+    %             \includegraphics[width=.8\textwidth]{assets/projectile-current.PNG}
+    %             %   \vspace{-3mm}
+    %             \caption{HTML Version of Generated Projectile SRS\footnotemark[1]}
+    %             % \vspace{-1mm}
+    %         \end{figure}
+    %     \end{column}
+    % \end{columns}
+
+    % \only<2->{\footnotetext[1]{\tiny \url{https://github.com/JacquesCarette/Drasil/blob/master/notes/ProjectileMotionSketchOfSRS.pdf}}}
+    % \only<3->{\footnotetext[2]{\tiny \url{https://github.com/JacquesCarette/Drasil/blob/master/notes/FeedbackOnProjectile.tiff}}}
+    % \only<4->{\footnotetext[3]{\tiny \url{https://jacquescarette.github.io/Drasil/examples/projectile/SRS/srs/Projectile_SRS.html\#Sec:Intro}}}
+    % \vspace{-3mm}
+\end{frame}
+
+\subsubsection*{Applied to Testing}
+
+\begin{frame}
+    \frametitle{The Common Drasil Workflow}
+    \framesubtitle{Applied to Testing}
+
+    1. Create a manual version of an artifact
+    \begin{itemize}
+        % TODO: better colours
+        \item Manual unit tests (26 \textcolor{green}{pass}, 18 \textcolor{orange}{fail with known reason})
+        \item<5-|handout:4> Manual system tests (3 \textcolor{green}{pass}, 4 \textcolor{orange}{fail with known reason})
+    \end{itemize}
+    \begin{overprint}
+        \centering
+        \onslide<2|handout:1>\begin{figure}
+            \centering
+            \lstinputlisting[
+                title=Sample from \texttt{InputParameters\_test.py},
+                captionpos=b,
+                language=Python,
+                basicstyle=\tiny, % TODO: make bigger
+                firstline=17,
+                lastline=23,
+                breakatwhitespace=true,
+                showstringspaces=false
+            ]{assets/code/InputParameters_test.py}
+        \end{figure}
+        \onslide<3|handout:2>\begin{figure}
+            \centering
+            \lstinputlisting[
+                title=Sample from \texttt{Calculations\_test.py},
+                captionpos=b,
+                language=Python,
+                basicstyle=\tiny, % TODO: make bigger
+                firstline=19,
+                lastline=34,
+                breakatwhitespace=true,
+                showstringspaces=false
+            ]{assets/code/Calculations_test.py}
+        \end{figure}
+        \onslide<4|handout:3>\begin{figure}
+            \centering
+            \lstinputlisting[
+                title=Sample from \texttt{OutputFormat\_test.py},
+                captionpos=b,
+                language=Python,
+                basicstyle=\tiny, % TODO: make bigger
+                firstline=10,
+                lastline=17,
+                breakatwhitespace=true,
+                showstringspaces=false
+            ]{assets/code/OutputFormat_test.py}
+        \end{figure}
+        \onslide<6|handout:4>\begin{figure}
+            \centering
+            \lstinputlisting[
+                title=Sample from \texttt{Control\_test.py},
+                captionpos=b,
+                language=Python,
+                basicstyle=\tiny, % TODO: make bigger
+                firstline=17,
+                lastline=23,
+                breakatwhitespace=true,
+                showstringspaces=false
+            ]{assets/code/Control_test.py}
+        \end{figure}
+    \end{overprint}
+\end{frame}
+
+\begin{frame}
+    \frametitle{The Common Drasil Workflow}
+    \framesubtitle{Applied to Testing}
+
+    2. Understand the manual artifact (and its components) well
+    \begin{itemize}
+        \item<2-> Changes made to "stable" to faciliate testing
+            \begin{itemize}
+                \item The inclusion of \texttt{\_\_init\_\_.py} files to
+                      improve \texttt{import} statements
+                \item Wrapping \texttt{Control.py}'s functionality in a
+                      \texttt{main} function
+                \item Changing how command line parameters are
+                      passed to \texttt{Control.py}
+            \end{itemize}
+        \item<3-> Changes to be made to generated code to improve correctness
+            \begin{itemize}
+                \item Invalid values should stop the calculations
+                      \cite{projectile_current}
+                \item Assumptions, such as values of constants, should be
+                      verified
+            \end{itemize}
+    \end{itemize}
+    % \vspace{2mm}
+    % \begin{overprint}
+    %     \centering
+    %     \onslide<3>The inclusion of \texttt{\_\_init\_\_.py} files to
+    %     improve \texttt{import} statements
+    %     \onslide<4>Wrapping \texttt{Control.py}'s functionality in a
+    %     \texttt{main} function
+    %     \onslide<5>Changing how command line parameters are
+    %     passed to \texttt{Control.py}
+    %     \onslide<7>Invalid values should stop the calculations
+    %     \cite{projectile_current}
+    %     \onslide<8>Assumptions, such as values of constants, should be
+    %     verified
+    % \end{overprint}
+    % \vspace{-4mm}
+    % \begin{overprint}
+    %     \centering
+    %     \onslide<3>
+    %     \begin{figure}
+    %         \centering
+    %         \lstinputlisting[
+    %             title=Sample from \texttt{InputParameters\_test.py},
+    %             captionpos=b,
+    %             language=Python,
+    %             basicstyle=\tiny, % TODO: make bigger
+    %             firstline=12,
+    %             lastline=15,
+    %             breakatwhitespace=true,
+    %             showstringspaces=false
+    %         ]{assets/code/InputParameters_test.py}
+    %     \end{figure}
+    %     \vspace{-8mm}
+    %     \begin{figure}
+    %         \centering
+    %         \lstinputlisting[
+    %             title=Sample from \texttt{Control.py},
+    %             captionpos=b,
+    %             language=Python,
+    %             basicstyle=\tiny, % TODO: make bigger
+    %             firstline=7,
+    %             lastline=9,
+    %             breakatwhitespace=true,
+    %             showstringspaces=false
+    %         ]{assets/code/Control.py}
+    %     \end{figure}
+    %     \onslide<4>
+    %     % TOOD: align better on page
+    %     \begin{figure}[]
+    %         % \centering
+    %         \lstinputlisting[
+    %             language=Python,
+    %             basicstyle=\tiny, % TODO: make bigger
+    %             firstline=11,
+    %             lastline=11,
+    %             breakatwhitespace=true,
+    %             showstringspaces=false,
+    %             % numbers=right % TODO: display line numbers for clarity
+    %         ]{assets/code/Control.py}
+    %     \end{figure}
+    %     \vspace{-3mm}
+    %     \begin{figure}
+    %         % \centering
+    %         \lstinputlisting[
+    %             title=Sample of \texttt{Control.py},
+    %             captionpos=b,
+    %             language=Python,
+    %             basicstyle=\tiny, % TODO: make bigger
+    %             firstline=29,
+    %             lastline=30,
+    %             breakatwhitespace=true,
+    %             showstringspaces=false,
+    %             % numbers=right % TODO: display line numbers for clarity
+    %         ]{assets/code/Control.py}
+    %     \end{figure}
+    %     \onslide<5>
+    %     \begin{figure}
+    %         \centering
+    %         \lstinputlisting[
+    %             title=Sample of \texttt{Control.py},
+    %             captionpos=b,
+    %             language=Python,
+    %             basicstyle=\tiny, % TODO: make bigger
+    %             firstline=13,
+    %             lastline=16,
+    %             breakatwhitespace=true,
+    %             showstringspaces=false
+    %         ]{assets/code/Control.py}
+    %     \end{figure}
+    %     \onslide<7>
+    %     \begin{figure}
+    %         \centering
+    %         \lstinputlisting[
+    %             language=Python,
+    %             basicstyle=\tiny, % TODO: make bigger
+    %             firstline=26,
+    %             lastline=29,
+    %             breakatwhitespace=true,
+    %             showstringspaces=false,
+    %             % numbers=right % TODO: display line numbers for clarity
+    %         ]{assets/code/Control_test.py}
+    %     \end{figure}
+    %     \vspace{-8mm}
+    %     \begin{figure}
+    %         \centering
+    %         \lstinputlisting[
+    %             title=Sample of \texttt{Control\_test.py},
+    %             captionpos=b,
+    %             language=Python,
+    %             basicstyle=\tiny, % TODO: make bigger
+    %             firstline=37,
+    %             lastline=43,
+    %             breakatwhitespace=true,
+    %             showstringspaces=false,
+    %             % numbers=right % TODO: display line numbers for clarity
+    %         ]{assets/code/Control_test.py}
+    %     \end{figure}
+    %     \onslide<8>
+    %     \begin{figure}
+    %         \centering
+    %         \lstinputlisting[
+    %             title=Sample from \texttt{Calculations\_test.py},
+    %             captionpos=b,
+    %             language=Python,
+    %             basicstyle=\tiny, % TODO: make bigger
+    %             firstline=52,
+    %             lastline=68,
+    %             breakatwhitespace=true,
+    %             showstringspaces=false
+    %         ]{assets/code/Calculations_test.py}
+    %     \end{figure}
+    % \end{overprint}
+\end{frame}
+
+\subsection{Why Test Generated Code?}
+
+\begin{frame}
+    \frametitle{Why Test Generated Code?}
+    If the code is being generated from a stable knowledge base,
+    then it should be correct. Why waste effort testing it?
+    \begin{enumerate}
+        \item<2-> The knowledge base is not actually "stable" yet
+        \item<3-> There are plenty of places for a mistake to be introduced
+            %, both by Drasil's developers and "end users"
+        \item<4-> Testing provides a greater degree of confidence in
+            Drasil's capabilities
+        \item<5-> Generating code for testing allows for it to be done
+            "properly" instead of taking shortcuts commonly taken by humans
+    \end{enumerate}
+\end{frame}
+
+\subsection{Next Steps}
+
+\begin{frame}
+    \frametitle{Next Steps}
+    2. Understand the manual artifact (and its components) well
+    \begin{itemize}
+        \item<2-> Understanding the problem domain lets one develop
+            a solution that:
+            \begin{itemize}
+                \item Makes use of all areas of the domain
+                \item Follows domain standards, including quality and terminology
+            \end{itemize}
+        \item<3-> There are specific areas of testing that need to be understood:
+            \begin{itemize}
+                \item<4-> \textbf{Research Question \#1:}
+                    What information is necessary for different types of testing?
+                \item<5-> \textbf{Research Question \#2:}
+                    How can test cases be generated from information that currently
+                    exists within Drasil?
+                \item<6-> \textbf{Research Question \#3:}
+                    How can new information be added to facilitate the generation of
+                    more types of testing?
+            \end{itemize}
+    \end{itemize}
+    \onslide<7-|handout:1>\begin{exampleblock}{}
+        {\large "The information you have should be just as useful for generating
+            tests as it should be for manually running them."}
+        \vspace{3mm}
+        \hspace\fill{\small--- Dr.~Jacques Carette}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Next Steps}
+    3. Generate it!
+    \begin{itemize}
+        \item<2-> Test cases will then be written for:
+            \begin{itemize}
+                \item Other variabilities of Projectile's Python implementation
+                \item Projectile's implementation in other languages
+                \item Other examples where code is generated: GlassBR, NoPCM,
+                      DblPendulum, PD Controller \cite{hunt_drasil_2021}
+            \end{itemize}
+        \item<3-> These test cases will also be added to Drasil's CI/CD
+            to ensure that future changes preserve the code's functionality
+    \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ACKNOWLEDGEMENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+    \frametitle{Acknowledgements}
+
+    \begin{itemize}
+        \item Dr.~Smith and Dr.~Carette have been great supervisors in the
+              past and have, both then and now, provided me with valuable guidance
+              and feedback
+              \begin{itemize}
+                  \item They have helped me refine the scope of this project
+                  \item The project itself was originally posed by Dr.~Smith back
+                        in 2020!
+              \end{itemize}
+        \item<2-> The format of this presentation was \emph{heavily} based on
+            a previous presentation by Jason Balaci
+        \item<2-> Dr.~Smith created the knowledge flow figure shown earlier
+        \item<3-> The past and current Drasil team have created a truly amazing
+            framework!
+    \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% A FINAL THANK YOU
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+    \center
+    \huge{Thank you!}\\
+    \normalsize{Questions?}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% REFERENCES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{References}
+
+\begin{frame}%[allowframebreaks]
+    \frametitle{References}
+
+    \bibliography{references}
+    \bibliographystyle{apalike}
+\end{frame}
+
+\end{document}

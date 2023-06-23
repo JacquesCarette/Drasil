@@ -124,9 +124,8 @@ mkSRS = [TableOfContents,
   AppndxSec $ AppndxProg [appdxIntro, LlC demandVsSDFig, LlC dimlessloadVsARFig]]
 
 purp :: Sentence
-purp = foldlSent_ [S "efficiently" `S.and_` S "correctly predict whether a",
-  phrase glaSlab, S "can withstand a", phrase blast, S "under given",
-  plural condition]
+purp = foldlSent_ [S "predict whether a", phrase glaSlab, S "can withstand a", 
+  phrase blast, S "under given", plural condition]
 
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con

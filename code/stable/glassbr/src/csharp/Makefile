@@ -13,7 +13,7 @@ else
     endif
 endif
 
-# Project Name and Purpose: GlassBR - To efficiently and correctly predict whether a glass slab can withstand a blast under given conditions.
+# Project Name and Purpose: GlassBR - To predict whether a glass slab can withstand a blast under given conditions.
 
 build: GlassBR$(TARGET_EXTENSION)
 

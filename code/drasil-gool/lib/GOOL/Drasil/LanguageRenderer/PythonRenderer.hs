@@ -110,10 +110,10 @@ instance OOProg PythonCode
 
 instance ProgramSym PythonCode where
   type Program PythonCode = ProgData 
-  prog n files = do
+  prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
-    pure $ onCodeList (progD n) fs
+    pure $ onCodeList (progD n st) fs
 
 instance RenderSym PythonCode
 

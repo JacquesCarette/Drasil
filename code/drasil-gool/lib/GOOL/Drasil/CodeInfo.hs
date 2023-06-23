@@ -48,7 +48,7 @@ instance OOProg CodeInfo where
 
 instance ProgramSym CodeInfo where
   type Program CodeInfo = GOOLState
-  prog _ fs = do
+  prog _ _ fs = do
     mapM_ (zoom lensGStoFS) fs
     modify (updateMEMWithCalls . callMapTransClosure)
     s <- S.get

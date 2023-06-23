@@ -52,7 +52,7 @@ class (ProgramSym r, AssignStatement r, DeclStatement r, IOStatement r,
 
 class (FileSym r) => ProgramSym r where
   type Program r
-  prog :: Label -> [SFile r] -> GSProgram r
+  prog :: Label -> Label -> [SFile r] -> GSProgram r
 
 type SFile a = FS (a (File a))
 

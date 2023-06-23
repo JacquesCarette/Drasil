@@ -96,7 +96,7 @@ import GOOL.Drasil.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing, 
   setFileType, getModuleName, setModuleName, setClassName, getClassName, setCurrMain, 
   getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, getCurrMainFunc,
-  addIter, getIter, resetIter)
+  addIter, getIter, resetIter, useVarName)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod,max)
 import Control.Lens.Zoom (zoom)
@@ -1350,6 +1350,7 @@ instance DeclStatement CppSrcCode where
     let sz' = litInt n :: SValue CppSrcCode
     sz <- zoom lensMStoVS sz'
     v <- zoom lensMStoVS vr 
+    modify $ useVarName $ variableName v
     mkStmt $ RC.type' (variableType v) <+> RC.variable v <> 
       brackets (RC.value sz)
   arrayDecDef vr vals = do

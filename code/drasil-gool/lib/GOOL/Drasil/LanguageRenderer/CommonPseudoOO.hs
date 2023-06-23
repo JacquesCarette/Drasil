@@ -55,7 +55,8 @@ import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
 import GOOL.Drasil.AST (ScopeTag(..))
 import GOOL.Drasil.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS, 
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports, 
-  getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc)
+  getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc,
+  useVarName)
 
 import Prelude hiding (print,pi,(<>))
 import Data.List (sort, intercalate)
@@ -172,6 +173,7 @@ arrayDec :: (RenderSym r) => SValue r -> SVariable r -> MSStatement r
 arrayDec n vr = do
   sz <- zoom lensMStoVS n 
   v <- zoom lensMStoVS vr 
+  modify $ useVarName $ variableName v
   let tp = variableType v
   innerTp <- zoom lensMStoVS $ listInnerType $ return tp
   mkStmt $ RC.type' tp <+> RC.variable v <+> equals <+> new' <+> 

@@ -255,6 +255,7 @@ constDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 constDecDef vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
+  modify $ useVarName $ variableName vr
   mkStmt (R.constDecDef vr v)
   
 docInOutFunc :: (RenderSym r) => ([SVariable r] -> [SVariable r] -> 

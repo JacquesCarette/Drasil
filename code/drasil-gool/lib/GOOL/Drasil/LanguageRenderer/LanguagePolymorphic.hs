@@ -66,12 +66,12 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, VSOp, unOpPrec, 
   compEqualPrec, compPrec, addPrec, multPrec)
 import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS, 
-  currMain, currFileType, modifyReturnFunc, addFile, setMainMod, setModuleName, 
-  getModuleName, addParameter, getParameters, useVarName)
+  currMain, currFileType, addFile, setMainMod, setModuleName, getModuleName,
+  addParameter, getParameters, useVarName)
 
 import Prelude hiding (print,sin,cos,tan,(<>))
 import Data.Maybe (fromMaybe, maybeToList)
-import Control.Monad.State (modify, join)
+import Control.Monad.State (modify)
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,

@@ -10,6 +10,7 @@ import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, empty, isEmpty, vcat, text, (<+>),
     (<>), comma, punctuate, hsep)
 import Utils.Drasil.Document (drasilImage, contSep)
+import Utils.Drasil (capitalize)
 
 -- | Separates document sections.
 type Separator = Doc
@@ -30,7 +31,7 @@ instDoc cfp name inoutn = regularSec (text "Making Examples")
 
 -- | Helper for creating optional Purpose subsection as Doc
 maybePurpDoc :: Maybe String -> Doc
-maybePurpDoc = maybe empty (\descr-> doubleSep <> text "> Purpose:" <+> text descr)
+maybePurpDoc = maybe empty (\descr-> doubleSep <> text "> Purpose:" <+> text (capitalize descr))
 
 -- | 'What' section in generated README file, does not display if empty
 whatInfo :: Maybe String -> Doc

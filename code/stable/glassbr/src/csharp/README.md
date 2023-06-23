@@ -1,7 +1,7 @@
 # GlassBR 
 > Authors:  Nikitha Krithnan, W. Spencer Smith
 
-> Purpose: predict whether a glass slab can withstand a blast under given conditions.
+> Purpose: Predict whether a glass slab can withstand a blast under given conditions.
 
 ------------------------------------------------------------
 ## Making Examples 

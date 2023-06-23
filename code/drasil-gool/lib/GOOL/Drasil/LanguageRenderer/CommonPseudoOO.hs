@@ -378,6 +378,7 @@ funcDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> MSBody r ->
   MSStatement r
 funcDecDef v ps b = do
   vr <- zoom lensMStoVS v
+  modify $ useVarName $ variableName vr
   s <- get
   f <- function (variableName vr) private (return $ variableType vr) 
     (map S.param ps) b

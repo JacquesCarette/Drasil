@@ -3,7 +3,14 @@ module NameGenTest (nameGenTest) where
 import GOOL.Drasil
 
 nameGenTest :: OOProg r => GSProgram r
-nameGenTest = prog "NameGenTest" [fileDoc $ buildModule "NameGenTest" [] [main] []]
+nameGenTest = prog "NameGenTest" [fileDoc $ buildModule "NameGenTest" [] [main, helper] []]
+
+helper :: OOProg r => SMethod r
+helper = function "helper" private void [param temp] $ body
+  [listSlice result (valueOf temp) (Just (litInt 1)) (Just (litInt 3)) Nothing]
+  where
+    temp = var "temp" (listType int)
+    result = var "result" (listType int)
 
 main :: OOProg r => SMethod r
 main = mainFunction $ body

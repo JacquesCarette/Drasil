@@ -6,4 +6,4 @@ Template_SRS.pdf: Template_SRS.tex
 	lualatex $(TEXFLAGS) Template_SRS
 	lualatex $(TEXFLAGS) Template_SRS
 
-.PHONY: srs
+.PHONY:

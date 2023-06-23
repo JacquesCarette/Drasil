@@ -1,3 +1,5 @@
+# Project Name and Purpose: DblPendulum - To efficiently and correctly predict the motion of a pendulum.
+
 build:
 
 run: build

@@ -7,11 +7,13 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
 
-import Data.Drasil.Concepts.Computation (inValue, algorithm)
+import Data.Drasil.Concepts.Computation (inValue, algorithm, inDatum, compcon)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
-  problem, srsDomains, assumption, goalStmt, physSyst,
-  requirement, refBy, refName, typUnc, example)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics)
+  problem, srsDomains, assumption, goalStmt, physSyst, sysCont, software, user,
+  requirement, refBy, refName, typUnc, example, softwareSys, system, environment, 
+  product_, interface, condition, physical, datum, input_, softwareConstraint, 
+  output_, endUser)
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
 import Data.Drasil.Concepts.Math (cartesian, mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon',
@@ -29,12 +31,13 @@ import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 import Data.Drasil.SI_Units (metre, radian, second)
 import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
-import Data.Drasil.Concepts.Education(calculus, educon, undergraduate)
+import Data.Drasil.Concepts.Education(calculus, educon, undergraduate, 
+  highSchoolPhysics, highSchoolCalculus)
 
 import Drasil.Projectile.Assumptions (assumptions)
 import Drasil.Projectile.Concepts (concepts, launcher, projectile, target)
 import Drasil.Projectile.DataDefs (dataDefs)
-import Drasil.Projectile.Figures (figLaunch)
+import Drasil.Projectile.Figures (figLaunch, sysCtxFig1)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
@@ -67,6 +70,11 @@ mkSRS = [TableOfContents,
       , IScope scope
       , IChar [] charsOfReader []
       , IOrgSec inModel (SRS.inModel [] []) EmptyS],
+  GSDSec $ 
+      GSDProg 
+        [ SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList]
+        , UsrChars [userCharacteristicsIntro]
+        , SystCons [] []],  
   SSDSec $
     SSDProg
       [ SSDProblem $ PDProg probDescIntro []
@@ -149,8 +157,9 @@ symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
     map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
     map nw physicscon ++ map nw mathcon ++ [nw algorithm] ++ concepts ++ 
     [nw sciCompS] ++ unitalIdeas ++ map nw acronyms ++ map nw symbols ++ 
-    map nw educon ++ map nw [metre, radian, second]) (cw pi_ : map cw constrained ++ srsDomains)
-  (map unitWrapper [metre, radian, second]) dataDefs iMods genDefns tMods concIns [] [] []
+    map nw educon ++ map nw [metre, radian, second] ++ map nw compcon) 
+  (cw pi_ : map cw constrained ++ srsDomains) (map unitWrapper [metre, radian, second]) 
+  dataDefs iMods genDefns tMods concIns [] [] []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols)
@@ -165,13 +174,68 @@ refDB = rdb citations concIns
 concIns :: [ConceptInstance]
 concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
 
--------------------------
+----------------------------------------
 -- Characteristics of Intended Reader --
--------------------------
+----------------------------------------
 
 charsOfReader :: [Sentence]
 charsOfReader = [phrase undergraduate +:+ S "level 1" +:+ phrase Doc.physics,
                  phrase undergraduate +:+ S "level 1" +:+ phrase calculus]
+
+-----------------
+--SystemContext--
+-----------------
+
+sysCtxIntro :: Contents
+sysCtxIntro = foldlSP
+  [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
+   S "A circle represents an entity external to the", phrase software
+   `sC` phraseNP (the user), S "in this case. A rectangle represents the",
+   phrase softwareSys, S "itself", sParen (short projectileTitle) +:+. EmptyS,
+   S "Arrows are used to show the data flow between the", phraseNP (system
+   `andIts` environment)]
+
+sysCtxDesc :: Contents
+sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_
+   `andThe` user), S "is through an application programming" +:+.
+   phrase interface, S "The responsibilities of the", phraseNP (user 
+   `andThe` system), S "are as follows"]
+
+sysCtxUsrResp :: [Sentence]
+sysCtxUsrResp = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
+  physical) +:+ S "state of the" +:+ phrase motion +:+ S "and the" +:+ plural inDatum +:+ S "related to the" +:+
+  phrase projectileTitle `sC` S "ensuring no errors in the" +:+
+  plural datum +:+. S "entry",
+  S "Ensure that consistent units are used for" +:+. pluralNP (combineNINI input_ Doc.variable),
+  S "Ensure required" +:+
+  namedRef (SRS.assumpt ([]::[Contents]) ([]::[Section])) (phrase software +:+ plural assumption) +:+
+  S "are appropriate for any particular" +:+
+  phrase problem +:+ S "input to the" +:+. phrase software]
+
+sysCtxSysResp :: [Sentence]
+sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +:+
+  phrase input_ +:+. S "instead of a floating point number",
+  S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+.
+  pluralNP (physical `and_` softwareConstraint),
+  S "Calculate the required" +:+. plural output_]
+
+sysCtxResp :: [Sentence]
+sysCtxResp = [titleize user +:+ S "Responsibilities",
+  short projectileTitle +:+ S "Responsibilities"]
+
+sysCtxList :: Contents
+sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
+  map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+
+-------------------------
+--User Characteristics --
+-------------------------
+
+userCharacteristicsIntro :: Contents
+userCharacteristicsIntro = foldlSP
+  [S "The", phrase endUser `S.of_` short projectileTitle,
+   S "should have an understanding of", 
+   phrase highSchoolPhysics `S.and_` phrase highSchoolCalculus]
 
 -------------------------
 -- Problem Description --

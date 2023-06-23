@@ -69,7 +69,7 @@ mkSRS = [TableOfContents,
       , IOrgSec inModel (SRS.inModel [] []) EmptyS],
   SSDSec $
     SSDProg
-      [ SSDProblem $ PDProg probDescIntro []
+      [ SSDProblem $ PDProg purp []
         [ TermsAndDefs Nothing terms
         , PhySysDesc projectileTitle physSystParts figLaunch []
         , Goals [(phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile, 
@@ -177,8 +177,8 @@ charsOfReader = [phrase undergraduate +:+ S "level 1" +:+ phrase Doc.physics,
 -- Problem Description --
 -------------------------
 
-probDescIntro :: Sentence
-probDescIntro = S "efficiently" +:+ purp
+-- The text for the problem description is the same as that of the purpose of
+-- this example.
 
 ---------------------------------
 -- Terminology and Definitions --

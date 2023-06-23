@@ -128,6 +128,7 @@ code,test/,FileTests.hs,	,	,
 code,test/,HelloWorld.hs,	,	,	
 code,test/,Helper.hs,	,	,	
 code,test/,Main.hs,	,	,	
+code,test/,NameGenTest.hs,	,	,	
 code,test/,Observer.hs,	,	,	
 code,test/,PatternTest.hs,	,	,	
 	

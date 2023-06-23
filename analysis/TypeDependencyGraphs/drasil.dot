@@ -912,6 +912,8 @@ digraph alltypes {
 	}
 	subgraph main {
 	}
+	subgraph namegentets {
+	}
 	subgraph obervers {
 	}
 	subgraph patterntets {
@@ -2808,6 +2810,7 @@ digraph alltypes {
 		MethodState	[shape=oval, color=cyan3, label="MethodState"];
 		MethodState -> ClassState;
 		MethodState -> String;
+		MethodState -> MapStringInt;
 		MethodState -> Bool;
 		MethodState -> ExceptionType;
 		MethodState -> QualifiedName;

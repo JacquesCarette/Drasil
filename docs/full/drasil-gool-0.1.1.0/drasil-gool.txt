@@ -243,6 +243,9 @@ incrementWord :: MethodState -> MethodState
 getLineIndex :: MS Index
 getWordIndex :: MS Index
 resetIndices :: MethodState -> MethodState
+useVarName :: String -> MethodState -> MethodState
+genVarName :: [String] -> String -> MS String
+genLoopIndex :: MS String
 
 module GOOL.Drasil.ClassInterface
 type Label = String

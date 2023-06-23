@@ -853,6 +853,8 @@ digraph alltypes {
 	}
 	subgraph main {
 	}
+	subgraph namegentets {
+	}
 	subgraph obervers {
 	}
 	subgraph patterntets {

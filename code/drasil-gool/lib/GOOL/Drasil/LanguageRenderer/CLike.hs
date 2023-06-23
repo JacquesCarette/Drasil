@@ -14,8 +14,7 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable, 
   SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall, 
   PermanenceSym(..), TypeElim(getType, getTypeString), 
-  VariableElim(variableType), ValueSym(Value, valueType), extNewObj, ($.), 
-  ScopeSym(..))
+  VariableElim(..), ValueSym(Value, valueType), extNewObj, ($.), ScopeSym(..))
 import qualified GOOL.Drasil.ClassInterface as S (TypeSym(bool, float, obj),
   ValueExpression(funcAppMixedArgs, newObjMixedArgs), 
   DeclStatement(varDec, varDecDef))
@@ -34,7 +33,8 @@ import qualified GOOL.Drasil.LanguageRenderer as R (switch, increment,
   decrement, this', this)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
   mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
-import GOOL.Drasil.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName)
+import GOOL.Drasil.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName,
+  useVarName)
 
 import Prelude hiding (break,(<>))
 import Control.Applicative ((<|>))
@@ -139,6 +139,7 @@ varDec :: (RenderSym r) => r (Permanence r) -> r (Permanence r) -> Doc ->
   SVariable r -> MSStatement r
 varDec s d pdoc v' = do 
   v <- zoom lensMStoVS v' 
+  modify $ useVarName (variableName v)
   mkStmt (RC.perm (bind $ variableBind v)
     <+> RC.type' (variableType v) <+> (ptrdoc (getType (variableType v)) <> 
     RC.variable v))

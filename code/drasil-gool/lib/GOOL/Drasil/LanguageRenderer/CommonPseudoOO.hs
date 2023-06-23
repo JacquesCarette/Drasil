@@ -55,7 +55,8 @@ import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
 import GOOL.Drasil.AST (ScopeTag(..))
 import GOOL.Drasil.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS, 
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports, 
-  getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc)
+  getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc,
+  useVarName)
 
 import Prelude hiding (print,pi,(<>))
 import Data.List (sort, intercalate)
@@ -172,6 +173,7 @@ arrayDec :: (RenderSym r) => SValue r -> SVariable r -> MSStatement r
 arrayDec n vr = do
   sz <- zoom lensMStoVS n 
   v <- zoom lensMStoVS vr 
+  modify $ useVarName $ variableName v
   let tp = variableType v
   innerTp <- zoom lensMStoVS $ listInnerType $ return tp
   mkStmt $ RC.type' tp <+> RC.variable v <+> equals <+> new' <+> 
@@ -253,6 +255,7 @@ constDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 constDecDef vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
+  modify $ useVarName $ variableName vr
   mkStmt (R.constDecDef vr v)
   
 docInOutFunc :: (RenderSym r) => ([SVariable r] -> [SVariable r] -> 
@@ -375,6 +378,7 @@ funcDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> MSBody r ->
   MSStatement r
 funcDecDef v ps b = do
   vr <- zoom lensMStoVS v
+  modify $ useVarName $ variableName vr
   s <- get
   f <- function (variableName vr) private (return $ variableType vr) 
     (map S.param ps) b

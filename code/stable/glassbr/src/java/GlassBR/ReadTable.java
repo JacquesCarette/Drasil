@@ -46,8 +46,8 @@ public class ReadTable {
         infile = new Scanner(new File(filename));
         line = infile.nextLine();
         linetokens = new ArrayList<String>(Arrays.asList(line.split(",")));
-        for (int stringlist_i = 0; stringlist_i < linetokens.size() / 1; stringlist_i += 1) {
-            z_vector.add(Double.parseDouble(linetokens.get(stringlist_i * 1 + 0)));
+        for (int i = 0; i < linetokens.size() / 1; i += 1) {
+            z_vector.add(Double.parseDouble(linetokens.get(i * 1 + 0)));
         }
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'z_vector' assigned ");
@@ -61,9 +61,9 @@ public class ReadTable {
             linetokens = new ArrayList<String>(Arrays.asList(lines.get(i).split(",")));
             ArrayList<Double> x_matrix_temp = new ArrayList<Double>();
             ArrayList<Double> y_matrix_temp = new ArrayList<Double>();
-            for (int stringlist_i = 0; stringlist_i < linetokens.size() / 2; stringlist_i += 1) {
-                x_matrix_temp.add(Double.parseDouble(linetokens.get(stringlist_i * 2 + 0)));
-                y_matrix_temp.add(Double.parseDouble(linetokens.get(stringlist_i * 2 + 1)));
+            for (int j = 0; j < linetokens.size() / 2; j += 1) {
+                x_matrix_temp.add(Double.parseDouble(linetokens.get(j * 2 + 0)));
+                y_matrix_temp.add(Double.parseDouble(linetokens.get(j * 2 + 1)));
             }
             x_matrix.add(x_matrix_temp);
             y_matrix.add(y_matrix_temp);

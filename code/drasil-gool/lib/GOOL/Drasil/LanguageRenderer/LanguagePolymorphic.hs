@@ -66,12 +66,12 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, VSOp, unOpPrec, 
   compEqualPrec, compPrec, addPrec, multPrec)
 import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS, 
-  currMain, currFileType, modifyReturnFunc, addFile, setMainMod, setModuleName, 
-  getModuleName, addParameter, getParameters)
+  currMain, currFileType, addFile, setMainMod, setModuleName, getModuleName,
+  addParameter, getParameters, useVarName)
 
 import Prelude hiding (print,sin,cos,tan,(<>))
 import Data.Maybe (fromMaybe, maybeToList)
-import Control.Monad.State (modify, join)
+import Control.Monad.State (modify)
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
@@ -422,8 +422,12 @@ construct n = zoom lensMStoVS $ typeFromData (Object n) n empty
 
 param :: (RenderSym r) => (r (Variable r) -> Doc) -> SVariable r -> 
   MSParameter r
-param f v' = join $ modifyReturnFunc (addParameter . variableName) 
-  (paramFromData v' . f) (zoom lensMStoVS v')
+param f v' = do
+  v <- zoom lensMStoVS v'
+  let n = variableName v
+  modify $ addParameter n
+  modify $ useVarName n
+  paramFromData v' $ f v
 
 method :: (RenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> VSType r 
   -> [MSParameter r] -> MSBody r -> SMethod r
@@ -514,4 +518,4 @@ fileFromData f fpath mdl' = do
 -- Helper functions
 
 setEmpty :: (RenderSym r) => MSStatement r -> MSStatement r
-setEmpty s' = s' >>= mkStmtNoEnd . RC.statement 
+setEmpty s' = s' >>= mkStmtNoEnd . RC.statement

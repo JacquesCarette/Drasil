@@ -191,7 +191,7 @@ sysCtxIntro = foldlSP
   [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
    S "A circle represents an entity external to the", phrase software
    `sC` phraseNP (the user), S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself", sParen (short projectileTitle) +:+. EmptyS,
+   phrase softwareSys, S "itself" +:+. sParen (short projectileTitle),
    S "Arrows are used to show the data flow between the", phraseNP (system
    `andIts` environment)]
 
@@ -202,26 +202,24 @@ sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_
    `andThe` system), S "are as follows"]
 
 sysCtxUsrResp :: [Sentence]
-sysCtxUsrResp = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
-  physical) +:+ S "state of the" +:+ phrase motion +:+ S "and the" +:+ plural inDatum +:+ S "related to the" +:+
-  phrase projectileTitle `sC` S "ensuring no errors in the" +:+
-  plural datum +:+. S "entry",
-  S "Ensure that consistent units are used for" +:+. pluralNP (combineNINI input_ Doc.variable),
-  S "Ensure required" +:+
-  namedRef (SRS.assumpt ([]::[Contents]) ([]::[Section])) (phrase software +:+ plural assumption) +:+
-  S "are appropriate for any particular" +:+
-  phrase problem +:+ S "input to the" +:+. phrase software]
+sysCtxUsrResp = map foldlSent [[S "Provide initial", pluralNP (condition `ofThePS`
+  physical), S "state of the", phrase motion, S "and the", plural inDatum, S "related to the",
+  phrase projectileTitle `sC` S "ensuring no errors in the", plural datum, S "entry"], 
+  [S "Ensure that consistent units are used for", pluralNP (combineNINI input_ Doc.variable)],
+  [S "Ensure required", namedRef (SRS.assumpt ([]::[Contents]) ([]::[Section])) 
+   (phrase software +:+ plural assumption), S "are appropriate for any particular",
+  phrase problem, S "input to the", phrase software]]
 
 sysCtxSysResp :: [Sentence]
-sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +:+
-  phrase input_ +:+. S "instead of a floating point number",
-  S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+.
-  pluralNP (physical `and_` softwareConstraint),
-  S "Calculate the required" +:+. plural output_]
+sysCtxSysResp = map foldlSent [[S "Detect data type mismatch, such as a string of characters",
+  phrase input_, S "instead of a floating point number"],
+  [S "Determine if the", plural input_, S "satisfy the required",
+  pluralNP (physical `and_` softwareConstraint)],
+  [S "Calculate the required", plural output_]]
 
 sysCtxResp :: [Sentence]
-sysCtxResp = [titleize user +:+ S "Responsibilities",
-  short projectileTitle +:+ S "Responsibilities"]
+sysCtxResp = map (\x -> x +:+ S "Responsibilities") 
+  [titleize user, short projectileTitle]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $

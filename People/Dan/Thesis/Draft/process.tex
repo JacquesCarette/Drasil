@@ -293,7 +293,7 @@ user input and giving the user feedback through the display (ie. via print
 commands or some other output), or a calculations module that contains all of 
 the calculation functions being performed in the normal operation of the given 
 software system. The \smithea{} MG template also includes a traceability matrix 
-for ease of verifying which requirements are fulfilled by which modules.
+for ease of verifying which requirements are fulfilled by which modules. 
 Finally, the MG includes considerations for anticipated or unlikely changes 
 that the system may undergo during its lifecycle.
 
@@ -323,7 +323,7 @@ Changes" section, we see that again the introductions to this section and
 its subsections are generic boilerplate, however the details of each section 
 are not. Both subsections are written in the same way: as a list of labeled 
 changes (AC\# for anticipated change, UC\# for unlikely change). This is the 
-first place we see both problem-domain and system specific information 
+first place we see both problem-domain and system-specific information 
 Interestingly, the Module Hierarchy section follows the same general style: it 
 is a list of modules which represent the leaves of the module hierarchy tree 
 and each one is labeled (M\#).
@@ -357,7 +357,7 @@ the MIS, however as it is structured so similarly to the MG (one section per
 module, each section organized in a very similar way, a repeated use hierarchy, 
 etc) we will skip it for brevity. The MIS includes novel system-specific, 
 implementation-level information denoting the interfaces between modules, but 
-for our exercise does not provide any revelations beyond that of the MG.
+for our current exercise does not provide any revelations beyond that of the MG.
 
 The MG gives us a very clear picture of \textit{decisions} made by the system 
 designers, as opposed to the knowledge of the system domain, problem being 
@@ -369,10 +369,10 @@ mind, let us move on to the source code.
 \subsection{Source Code}
 
 The source code is arguably the most important \sf{} in any given software 
-system as it serves as the set of instructions that the computer executes in 
+system since it serves as the set of instructions that a computer executes in 
 order to solve the given problem. With only the other \sfs{} and without the 
-source code, we would have a very well defined problem and solution criteria, 
-but would never solve the problem.
+source code, we would have a very well defined problem and acceptance criteria 
+for a possible solution, but would never actually solve the problem.
 
 \fig{
 \begin{center}
@@ -419,30 +419,47 @@ but would never solve the problem.
 {Python source code directory structure for \gb{}}
 {fig:gbsrcstruct}
 
-As the source code is the executable set of instructions for a system to solve 
-a problem, one would expect it to be almost entirely system and problem-domain 
-specific with very little boilerplate. Looking into the source of our case 
-studies, we find this to be mostly true barring the most generic of library use 
-(ex. \lstinline[language=C]|stdio| in C).
+As the source code is the executable set of instructions, one would expect it 
+to be almost entirely system and problem-domain specific with very little 
+boilerplate. Looking into the source of our case studies, we find this to be 
+mostly true barring the most generic of library use (ex. 
+\code{C}{stdio} in C).
 
 Returning to our example of the MG from \gb{} (Figure~\ref{fig:gbrmgtoc}) and 
 comparing it to the python source code structure shown in 
 Figure~\ref{fig:gbsrcstruct} we can see that the source code follows almost 
-identically in structure to the module decomposition. The only difference is 
-that we also observe an exceptions module defining the different varieties of 
-exceptions that will be thrown by the other modules. While this is a fairly 
-trivial difference, likely made for ease of maintenance, readability, and 
-extensibility, it highlights a fairly obvious difference between the two 
-\sfs{}. A difference which we speculate was caused by a change made during the 
-implementation phase where the MG was not updated to reflect the addition of an 
-exceptions module.
+identically in structure to the module decomposition. The only difference being 
+the existence of an exceptions module defining the different types of
+exceptions that may be thrown by the other modules. While this can be 
+considered a fairly trivial difference, likely made for ease of maintenance, 
+readability, and extensibility, it highlights that the two \sfs{} are out of 
+sync. We speculate this difference was caused by a change made during the 
+implementation phase, wherein the MG was not updated to reflect the addition of 
+an exceptions module.
 
 \fig{
 \lstinputlisting[language=Python, firstline=5, 
 lastline=61, firstnumber=5]{code/Calc.py}
 }{Source code of the Calc.py module for \gb{}}{fig:gbrsrccalc}
 
-Looking deeper into the code, as shown in Figure~\ref{fig:gbrsrccalc} we see
+Let us look deeper into the code for one specific module, for example the Calc 
+module introduced in the MG~(Figure~\ref{fig:gbrmgcm}). The source code for 
+said module can be found in Figure~\ref{fig:gbrsrccalc}. In the source code we 
+see a number of calculation functions, including those that calculate the 
+probability of glass breakage, demand (also known as \emph{load} or $q$), and 
+capacity (also known as \emph{load resistance} or $LR$) as outlined in the 
+\emph{secrets} section of the Calc module definition in the MG. We also see a 
+number of intermediary calculation functions required to calculate these values 
+(for example \code{python}|calc_NFL| and its dependencies).
+
+The source code provides clear instructions to the machine on how to calculate 
+each of these values and their intermediaries; it provides the actionable steps 
+to solve the given problem. When we compare the code with relevant sections of 
+the SRS, specifically the Data Definitions (DDs) for each term, we can see a 
+very obvious transformation from one form to the other; the symbol used by the 
+DD is the (partial) name of the function in the source code and the equation 
+from the DD is calculated within the source code. This is one of many patterns 
+we see across our \sfs{} within each case study.
 
 \section{Patterns and repetition and patterns and repetition -- (OR -- 
 Repeating patterns and patterns that repeat --)}

@@ -451,7 +451,7 @@ instance VectorExpression CSharpCode where
   vecScale k = fmap $ fmap $ vectorize (fmap unCSC . (k #*) . fmap pure)
   vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unCSC $ fmap pure v1 #+ fmap pure v2)
   vecIndex i = (>>= fmap pure . commonVecIndex (fmap unCSC . flip listAccess i . fmap pure) . unCSC)
-  vecDot = liftA2 $ liftA2 $ fmap (fmap sumComponents) $ vectorize2 (\v1 v2 -> fmap unCSC $ fmap pure v1 #* fmap pure v2)
+  vecDot = liftA2 $ liftA2 $ fmap sumComponents <$> vectorize2 (\v1 v2 -> fmap unCSC $ fmap pure v1 #* fmap pure v2)
 
 instance RenderFunction CSharpCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))

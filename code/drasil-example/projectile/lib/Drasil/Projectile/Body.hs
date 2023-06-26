@@ -189,7 +189,7 @@ charsOfReader = [phrase undergraduate +:+ S "level 1" +:+ phrase Doc.physics,
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
   [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
-   S "A circle represents an entity external to the", phrase software
+   S "A circle represents an entity external" `S.toThe` phrase software
    `sC` phraseNP (the user), S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself" +:+. sParen (short projectileTitle),
    S "Arrows are used to show the data flow between the", phraseNP (system
@@ -198,17 +198,17 @@ sysCtxIntro = foldlSP
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_
    `andThe` user), S "is through an application programming" +:+.
-   phrase interface, S "The responsibilities of the", phraseNP (user 
+   phrase interface, S "responsibilities" `S.the_ofTheC` phraseNP (user 
    `andThe` system), S "are as follows"]
 
 sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = map foldlSent [[S "Provide initial", pluralNP (condition `ofThePS`
-  physical), S "state of the", phrase motion, S "and the", plural inDatum, S "related to the",
-  phrase projectileTitle `sC` S "ensuring no errors in the", plural datum, S "entry"], 
+  physical), S "state" `S.ofThe` phrase motion `S.andThe` plural inDatum, S "related" `S.toThe`
+  phrase projectileTitle `sC` S "ensuring no errors" `S.inThe` plural datum, S "entry"], 
   [S "Ensure that consistent units are used for", pluralNP (combineNINI input_ Doc.variable)],
   [S "Ensure required", namedRef (SRS.assumpt ([]::[Contents]) ([]::[Section])) 
    (phrase software +:+ plural assumption), S "are appropriate for any particular",
-  phrase problem, S "input to the", phrase software]]
+  phrase problem, phrase input_ `S.toThe` phrase software]]
 
 sysCtxSysResp :: [Sentence]
 sysCtxSysResp = map foldlSent [[S "Detect data type mismatch, such as a string of characters",

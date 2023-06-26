@@ -17,6 +17,7 @@ import HelloWorld (helloWorld)
 import PatternTest (patternTest)
 import FileTests (fileTests)
 import VectorTest (vectorTest)
+import NameGenTest (nameGenTest)
 
 -- | Renders four GOOL tests (FileTests, HelloWorld, PatternTest, and VectorTest)
 -- in Java, Python, C#, C++, and Swift.
@@ -59,8 +60,8 @@ classes unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs 
                 pd = unRepr p'
   in unRepr' $ package pd [makefile [] Program [] gs' pd]) 
-  [helloWorld, patternTest, fileTests, vectorTest]
-  (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests, vectorTest])
+  [helloWorld, patternTest, fileTests, vectorTest, nameGenTest]
+  (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests, vectorTest, nameGenTest])
 
 -- | Formats code to be rendered.
 makeCode :: [[FileData]] -> [[AuxData]] -> [(FilePath, Doc)]

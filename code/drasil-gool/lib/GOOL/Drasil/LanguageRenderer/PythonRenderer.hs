@@ -82,7 +82,7 @@ import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
   revFiles, addLangImportVS, getLangImports, addLibImportVS, 
   getLibImports, addModuleImport, addModuleImportVS, getModuleImports, 
-  setFileType, getClassName, setCurrMain, getClassMap, getMainDoc)
+  setFileType, getClassName, setCurrMain, getClassMap, getMainDoc, useVarName)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -503,8 +503,14 @@ instance AssignStatement PythonCode where
   (&--) = M.decrement1
 
 instance DeclStatement PythonCode where
-  varDec _ = mkStmtNoEnd empty
-  varDecDef = assign
+  varDec v = do
+    v' <- zoom lensMStoVS v
+    modify $ useVarName (variableName v')
+    mkStmtNoEnd empty
+  varDecDef v e = do
+    v' <- zoom lensMStoVS v
+    modify $ useVarName (variableName v')
+    assign v e
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
   arrayDec = listDec

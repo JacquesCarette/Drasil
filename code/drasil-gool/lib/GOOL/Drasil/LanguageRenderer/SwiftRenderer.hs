@@ -92,7 +92,7 @@ import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getLangImports, getLibImports, setFileType, getClassName, setModuleName, 
   getModuleName, getCurrMain, getMethodExcMap, getMainDoc, setThrowUsed, 
   getThrowUsed, setErrorDefined, getErrorDefined, incrementLine, incrementWord, 
-  getLineIndex, getWordIndex, resetIndices)
+  getLineIndex, getWordIndex, resetIndices, useVarName)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Applicative (liftA2)
@@ -1069,6 +1069,7 @@ swiftReadFile v f = let l = var "l" string
 swiftVarDec :: Doc -> SVariable SwiftCode -> MSStatement SwiftCode
 swiftVarDec dec v' = do
   v <- zoom lensMStoVS v'
+  modify $ useVarName (variableName v)
   let bind Static = static :: SwiftCode (Permanence SwiftCode)
       bind Dynamic = dynamic :: SwiftCode (Permanence SwiftCode)
       p = bind $ variableBind v

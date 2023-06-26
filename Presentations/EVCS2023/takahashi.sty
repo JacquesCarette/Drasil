@@ -1,0 +1,82 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{takahashi}[2013/06/25 Takahashi method for beamer]
+
+%   Copyright (c) 2008-2013, Chung-chieh Shan.
+
+%   This program is free software; you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation; either version 2 of the License, or
+%   (at your option) any later version.
+
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Our main command \takahashi takes an optional overlay specification
+% (for the frame), an optional argument (frame options, defaulting to
+% "plain"), and a mandatory argument (the contents of the frame).
+\newcommand<>{\takahashi}[2][plain]{%
+  \toks0={#1}%
+  \toks2={\begin{frame}#3}%
+  \edef\next{\the\toks0 }%
+  \ifx\next\@empty
+    \edef\next{\the\toks2 }%
+  \else
+    \edef\next{\the\toks2 [{\the\toks0 }]}%
+  \fi
+  \next
+    \aftergroup\aftergroup\aftergroup\beamer@takahashi
+    \resizebox\hsize!{#2}%
+  \end{frame}%
+}
+
+% Define \takahashi@shrinkframebox, a variant of \beamer@shrinkframebox
+% that centers the frame horizontally and does not depend on
+% \beamer@shrinkpercentage.
+\def\takahashi@shrinkframebox{%
+  \@tempdima=\ht\beamer@framebox
+  \advance\@tempdima\dp\beamer@framebox
+  \ifdim\@tempdima>\beamer@frametextheight
+    \@tempcnta=\@tempdima
+    \divide\@tempcnta by 65536
+    \@tempdimc=\beamer@frametextheight
+    \divide\@tempdimc by\@tempcnta
+    \edef\beamer@factortemp{\strip@pt\@tempdimc}%
+    \setbox\beamer@framebox=\vbox to\beamer@frametextheight{%
+      \begin{pgfpicture}{-.5\wd\beamer@framebox}{-\beamer@frametextheight}{0pt}{0pt}
+        {\pgftransformscale{\beamer@factortemp}%
+          \pgftext[top]{\box\beamer@framebox}}%
+      \end{pgfpicture}%
+    }%
+  \fi
+}
+
+% Takahashi slides always enable the frame option "shrink" with
+% \takahashi@shrinkframebox in place of \beamer@shrinkframebox.
+\def\beamer@takahashi{%
+  \beamer@shrinktrue
+  \let\beamer@shrinkframebox\takahashi@shrinkframebox
+}
+
+% Patch beamer's implementation of the ignorenonframetext option
+% (i.e., the \mode* command) so that \takahashi is not ignored.
+\toks0={\ifx\beamer@nexttoken\takahashi\let\next=\beamer@stopoutsidemode\fi}%
+\toks2=\expandafter{\beamer@treat}%
+\edef\beamer@treat{\the\toks0 \the\toks2 }%
+
+% Tested with beamer 3.07:
+% \documentclass{beamer}
+% \usepackage{takahashi}
+% \usepackage{calc}
+% \setbeamersize{text margin left = 0pt, text margin right = 0pt}
+% \begin{document}
+% \takahashi{Test \onslide<2>{some more}}
+% \takahashi<1>[label=repeat]{\frametitle{Title here}Test \onslide<2>{some more}}
+% \againframe<2>{repeat}
+% \takahashi{$_g$\!\vrule depth.2pt height.2pt \vrule}
+% \takahashi[]{\frametitle{Title here}$_g$\!\vrule depth.2pt height.2pt \vrule}
+% \takahashi{\raisebox{0pt}[\height+1pt][\depth+1pt]{!}}
+% \end{document}

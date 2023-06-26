@@ -32,7 +32,7 @@ phsChgMtrl  = commonIdeaWithDict "phsChgMtrl" (nounPhrase "phase change material
 progName    = commonIdeaWithDict "swhsName"   (nounPhrase "solar water heating system"
   "solar water heating systems") "SWHS" [materialEng]
 
-full :: NamedChunk
+full :: IdeaDict
 full = nc "full" (progName `with` phsChgMtrl)
 -- I want to include SI as an acronym, but I can't find a way for the
 -- description to have accents when using dcc.

@@ -5,17 +5,19 @@ import Drasil.SRSDocument
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
+import qualified Drasil.DocLang.SRS as SRS
 
-import Data.Drasil.Concepts.Computation (inValue)
+import Data.Drasil.Concepts.Computation (inValue, algorithm)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
   problem, srsDomains, assumption, goalStmt, physSyst,
-  requirement, refBy, refName, typUnc)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
+  requirement, refBy, refName, typUnc, example)
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics)
 import Data.Drasil.Concepts.Math (cartesian, mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon',
   rectilinear, oneD, twoD, motion)
 import Data.Drasil.Concepts.Software (errMsg, program)
+import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)
 import Data.Drasil.Quantities.Physics (acceleration, constAccel,
@@ -27,6 +29,7 @@ import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 import Data.Drasil.SI_Units (metre, radian, second)
 import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
+import Data.Drasil.Concepts.Education(calculus, educon, undergraduate)
 
 import Drasil.Projectile.Assumptions (assumptions)
 import Drasil.Projectile.Concepts (concepts, launcher, projectile, target)
@@ -60,13 +63,17 @@ mkSRS = [TableOfContents,
       ],
   IntroSec $
     IntroProg justification (phrase projectileTitle)
-      [ IScope scope ],
+      [ IPurpose $ purpDoc projectileTitle Verbose
+      , IScope scope
+      , IChar [] charsOfReader []
+      , IOrgSec inModel (SRS.inModel [] []) EmptyS],
   SSDSec $
     SSDProg
       [ SSDProblem $ PDProg probDescIntro []
         [ TermsAndDefs Nothing terms
         , PhySysDesc projectileTitle physSystParts figLaunch []
-        , Goals [(phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile]]
+        , Goals [(phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile, 
+                  S "geometric layout" `S.the_ofThe` phrase launcher `S.and_` phrase target]]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)
@@ -91,11 +98,19 @@ mkSRS = [TableOfContents,
 justification, scope :: Sentence
 justification = foldlSent [atStart projectile, phrase motion, S "is a common" +:+.
   phraseNP (problem `in_` physics), S "Therefore, it is useful to have a",
-  phrase program, S "to solve and model these types of" +:+. plural problem,
+  phrase program, S "to solve and model these types of" +:+. plural problem, 
+  S "Common", plural example `S.of_` phraseNP (combineNINI projectile motion), 
+  S "include" +:+. foldlList Comma List projectileExamples,
   atStartNP (the program), S "documented here is called", phrase projectileTitle]
 scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
-  sParen (getAcc twoD), phraseNP (combineNINI projectile motion), phrase problem, S "with",
-  phrase constAccel]
+  sParen (getAcc twoD), phraseNP (combineNINI projectile motion), phrase problem, 
+  S "with", phrase constAccel]
+
+projectileExamples :: [Sentence]
+projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles" `sC` 
+  S "bullets" `sC` S "etc."), S "the flight" `S.of_` S "balls" `S.in_` 
+  S "various sports" +:+ sParen (S "baseball" `sC` S "golf" `sC` S "football" `sC`
+  S "etc.")]
 
 projectileTitle :: CI
 projectileTitle = commonIdea "projectileTitle" (pn "Projectile") "Projectile" []
@@ -132,8 +147,9 @@ symbMap :: ChunkDB
 symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
   (nw projectileTitle : nw mass : nw inValue : [nw errMsg, nw program] ++
     map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
-    map nw physicscon ++ map nw mathcon ++ concepts ++ unitalIdeas ++
-    map nw acronyms ++ map nw symbols ++ map nw [metre, radian, second]) (cw pi_ : map cw constrained ++ srsDomains)
+    map nw physicscon ++ map nw mathcon ++ [nw algorithm] ++ concepts ++ 
+    [nw sciCompS] ++ unitalIdeas ++ map nw acronyms ++ map nw symbols ++ 
+    map nw educon ++ map nw [metre, radian, second]) (cw pi_ : map cw constrained ++ srsDomains)
   (map unitWrapper [metre, radian, second]) dataDefs iMods genDefns tMods concIns [] [] []
 
 usedDB :: ChunkDB
@@ -148,6 +164,14 @@ refDB = rdb citations concIns
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
+
+-------------------------
+-- Characteristics of Intended Reader --
+-------------------------
+
+charsOfReader :: [Sentence]
+charsOfReader = [phrase undergraduate +:+ S "level 1" +:+ phrase Doc.physics,
+                 phrase undergraduate +:+ S "level 1" +:+ phrase calculus]
 
 -------------------------
 -- Problem Description --

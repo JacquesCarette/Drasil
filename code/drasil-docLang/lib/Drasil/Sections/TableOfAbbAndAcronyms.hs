@@ -8,6 +8,7 @@ import Data.Drasil.Concepts.Documentation (abbreviation, fullForm, abbAcc)
 import Control.Lens ((^.))
 import Data.List (sortBy)
 import Data.Function (on)
+import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- | Helper function that gets the acronym out of an 'Idea'.
 select :: (Idea s) => [s] -> [(String, s)]
@@ -18,6 +19,7 @@ select (x:xs) = case getA x of
 
 -- | The actual table creation function.
 tableAbbAccGen :: (Idea s) => [s] -> LabelledContent
+tableAbbAccGen [] = llcc tableAbbAccRef $ Paragraph $ emptySectSentPlu [abbAcc]
 tableAbbAccGen ls = let chunks = sortBy (compare `on` fst) $ select ls in
   llcc tableAbbAccRef $ Table
   (map titleize [abbreviation, fullForm]) (mkTable

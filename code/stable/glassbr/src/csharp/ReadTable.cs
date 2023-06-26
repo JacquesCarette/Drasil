@@ -95,8 +95,8 @@ public class ReadTable {
         infile = new StreamReader(filename);
         line = infile.ReadLine();
         linetokens = new List<string>(line.Split(','));
-        for (int stringlist_i = 0; stringlist_i < linetokens.Count / 1; stringlist_i += 1) {
-            z_vector.Add(Double.Parse(linetokens[stringlist_i * 1 + 0]));
+        for (int i = 0; i < linetokens.Count / 1; i += 1) {
+            z_vector.Add(Double.Parse(linetokens[i * 1 + 0]));
         }
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'z_vector' assigned ");
@@ -118,9 +118,9 @@ public class ReadTable {
             linetokens = new List<string>(lines[i].Split(','));
             List<double> x_matrix_temp = new List<double> {};
             List<double> y_matrix_temp = new List<double> {};
-            for (int stringlist_i = 0; stringlist_i < linetokens.Count / 2; stringlist_i += 1) {
-                x_matrix_temp.Add(Double.Parse(linetokens[stringlist_i * 2 + 0]));
-                y_matrix_temp.Add(Double.Parse(linetokens[stringlist_i * 2 + 1]));
+            for (int j = 0; j < linetokens.Count / 2; j += 1) {
+                x_matrix_temp.Add(Double.Parse(linetokens[j * 2 + 0]));
+                y_matrix_temp.Add(Double.Parse(linetokens[j * 2 + 1]));
             }
             x_matrix.Add(x_matrix_temp);
             y_matrix.Add(y_matrix_temp);

@@ -98,8 +98,8 @@ void read_table(string filename, vector<double> &z_vector, vector<vector<double>
     while (std::getline(ss, word, ',')) {
         linetokens.push_back(word);
     }
-    for (int stringlist_i = 0; stringlist_i < (int)(linetokens.size()) / 1; stringlist_i += 1) {
-        z_vector.push_back(std::stod(linetokens.at(stringlist_i * 1 + 0)));
+    for (int i = 0; i < (int)(linetokens.size()) / 1; i += 1) {
+        z_vector.push_back(std::stod(linetokens.at(i * 1 + 0)));
     }
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'z_vector' assigned ";
@@ -128,9 +128,9 @@ void read_table(string filename, vector<double> &z_vector, vector<vector<double>
         }
         vector<double> x_matrix_temp{};
         vector<double> y_matrix_temp{};
-        for (int stringlist_i = 0; stringlist_i < (int)(linetokens.size()) / 2; stringlist_i += 1) {
-            x_matrix_temp.push_back(std::stod(linetokens.at(stringlist_i * 2 + 0)));
-            y_matrix_temp.push_back(std::stod(linetokens.at(stringlist_i * 2 + 1)));
+        for (int j = 0; j < (int)(linetokens.size()) / 2; j += 1) {
+            x_matrix_temp.push_back(std::stod(linetokens.at(j * 2 + 0)));
+            y_matrix_temp.push_back(std::stod(linetokens.at(j * 2 + 1)));
         }
         x_matrix.push_back(x_matrix_temp);
         y_matrix.push_back(y_matrix_temp);

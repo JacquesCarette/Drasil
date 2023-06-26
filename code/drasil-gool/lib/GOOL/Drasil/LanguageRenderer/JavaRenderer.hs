@@ -94,7 +94,7 @@ import GOOL.Drasil.State (VS, lensGStoFS, lensMStoFS, lensMStoVS, lensVStoFS,
   lensVStoMS, modifyReturn, modifyReturnList, revFiles, addProgNameToPaths, 
   addLangImport, addLangImportVS, addExceptionImports, getModuleName, 
   setFileType, getClassName, setCurrMain, setOutputsDeclared, 
-  isOutputsDeclared, getExceptions, getMethodExcMap, addExceptions)
+  isOutputsDeclared, getExceptions, getMethodExcMap, addExceptions, useVarName)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
@@ -862,6 +862,7 @@ jConstDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 jConstDecDef v' def' = do
   v <- zoom lensMStoVS v'
   def <- zoom lensMStoVS def'
+  modify $ useVarName $ variableName v
   mkStmt $ jFinal <+> RC.type' (variableType v) <+> 
     RC.variable v <+> equals <+> RC.value def
 
@@ -869,6 +870,7 @@ jFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> MSBody r ->
   MSStatement r
 jFuncDecDef v ps bod = do
   vr <- zoom lensMStoVS v
+  modify $ useVarName $ variableName vr
   pms <- mapM (zoom lensMStoVS) ps
   b <- bod
   mkStmt $ RC.type' (variableType vr) <+> RC.variable vr <+> equals <+>

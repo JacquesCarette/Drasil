@@ -11,9 +11,9 @@
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{caption}
-\usepackage{enumitem}
 \usepackage{graphics}
 \usepackage{svg}
+\usepackage{enumitem}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
@@ -192,6 +192,45 @@ Reviewers of this documentation should have an understanding of undergraduate le
 The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013}, \cite{smithLai2005}, \cite{smithEtAl2007}, and \cite{smithKoothoor2016}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{instance models} and trace back to find any additional information they require.
 
 The \hyperref[Sec:GoalStmt]{goal statements} are refined to the theoretical models and the \hyperref[Sec:TMs]{theoretical models} to the \hyperref[Sec:IMs]{instance models}.
+
+\section{General System Description}
+\label{Sec:GenSysDesc}
+This section provides general information about the system. It identifies the interfaces between the system and its environment, describes the user characteristics, and lists the system constraints.
+
+\subsection{System Context}
+\label{Sec:SysContext}
+\hyperref[Figure:sysCtxDiag]{Fig:sysCtxDiag} shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (Projectile). Arrows are used to show the data flow between the system and its environment.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{../../../../datafiles/projectile/SystemContextFigure.png}
+\caption{System Context}
+\label{Figure:sysCtxDiag}
+\end{center}
+\end{figure}
+The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:
+
+\begin{itemize}
+\item{User Responsibilities}
+\begin{itemize}
+\item{Provide initial conditions of the physical state of the motion and the input data related to the Projectile, ensuring no errors in the data entry.}
+\item{Ensure that consistent units are used for input variables.}
+\item{Ensure required \hyperref[Sec:Assumps]{software assumptions} are appropriate for any particular problem input to the software.}
+\end{itemize}
+\item{Projectile Responsibilities}
+\begin{itemize}
+\item{Detect data type mismatch, such as a string of characters input instead of a floating point number.}
+\item{Determine if the inputs satisfy the required physical and software constraints.}
+\item{Calculate the required outputs.}
+\end{itemize}
+\end{itemize}
+\subsection{User Characteristics}
+\label{Sec:UserChars}
+The end user of Projectile should have an understanding of high school physics and high school calculus.
+
+\subsection{System Constraints}
+\label{Sec:SysConstraints}
+There are no system constraints.
 
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}

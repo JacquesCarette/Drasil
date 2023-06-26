@@ -51,6 +51,7 @@ yAxisGravity :: ConceptInstance
 
 module Drasil.Projectile.Figures
 figLaunch :: LabelledContent
+sysCtxFig1 :: LabelledContent
 
 module Drasil.Projectile.Goals
 goals :: [ConceptInstance]

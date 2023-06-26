@@ -82,7 +82,8 @@ import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
   revFiles, addLangImportVS, getLangImports, addLibImportVS, 
   getLibImports, addModuleImport, addModuleImportVS, getModuleImports, 
-  setFileType, getClassName, setCurrMain, getClassMap, getMainDoc, useVarName)
+  setFileType, getClassName, setCurrMain, getClassMap, getMainDoc, useVarName,
+  genLoopIndex)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -432,18 +433,18 @@ instance ThunkSym PythonCode where
   type Thunk PythonCode = CommonThunk VS
 
 instance ThunkAssign PythonCode where
-  -- FIXME: We should really be able to get a "fresh" variable name to use for
-  -- the loop variable
-  thunkAssign v t = multi [loopInit,
-    forRange i (litInt 0) (listSize (valueOf v)) (litInt 1) $ body [block [loopBody]]]
-    where
-      i = var "i" int
+  thunkAssign v t = do
+    iName <- genLoopIndex
+    let
+      i = var iName int
       -- FIXME: use int or double depending on type of v
       loopInit = zoom lensMStoVS (fmap unPC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v (litDouble 0))
       loopBody = zoom lensMStoVS (fmap unPC t) >>= commonThunkElim
         (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
         ((v &+=) . vecIndex (valueOf i) . pure . pure)
+    multi [loopInit,
+      forRange i (litInt 0) (listSize (valueOf v)) (litInt 1) $ body [block [loopBody]]]
 
 instance VectorType PythonCode where
   vecType = arrayType

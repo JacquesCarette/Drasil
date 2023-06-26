@@ -92,7 +92,7 @@ import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getLangImports, getLibImports, setFileType, getClassName, setModuleName, 
   getModuleName, getCurrMain, getMethodExcMap, getMainDoc, setThrowUsed, 
   getThrowUsed, setErrorDefined, getErrorDefined, incrementLine, incrementWord, 
-  getLineIndex, getWordIndex, resetIndices, useVarName)
+  getLineIndex, getWordIndex, resetIndices, useVarName, genLoopIndex)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Applicative (liftA2)
@@ -443,18 +443,18 @@ instance ThunkSym SwiftCode where
   type Thunk SwiftCode = CommonThunk VS
 
 instance ThunkAssign SwiftCode where
-  -- FIXME: We should really be able to get a "fresh" variable name to use for
-  -- the loop variable
-  thunkAssign v t = multi [loopInit,
-    forRange i (litInt 0) (listSize (valueOf v)) (litInt 1) $ body [block [loopBody]]]
-    where
-      i = var "i" int
+  thunkAssign v t = do
+    iName <- genLoopIndex
+    let
+      i = var iName int
       -- FIXME: use int or double depending on type of v
       loopInit = zoom lensMStoVS (fmap unSC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v (litDouble 0))
       loopBody = zoom lensMStoVS (fmap unSC t) >>= commonThunkElim
         (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
         ((v &+=) . vecIndex (valueOf i) . pure . pure)
+    multi [loopInit,
+      forRange i (litInt 0) (listSize (valueOf v)) (litInt 1) $ body [block [loopBody]]]
 
 instance VectorType SwiftCode where
   vecType = arrayType

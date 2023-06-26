@@ -90,7 +90,7 @@ import GOOL.Drasil.Helpers (angles, hicat, toCode, toState, onCodeValue,
   on2StateWrapped, onCodeList, onStateList)
 import GOOL.Drasil.State (VS, lensGStoFS, lensMStoVS, modifyReturn, revFiles,
   addLangImport, addLangImportVS, setFileType, getClassName, setCurrMain,
-  useVarName)
+  useVarName, genLoopIndex)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Applicative (liftA2)
@@ -424,18 +424,18 @@ instance ThunkSym CSharpCode where
   type Thunk CSharpCode = CommonThunk VS
 
 instance ThunkAssign CSharpCode where
-  -- FIXME: We should really be able to get a "fresh" variable name to use for
-  -- the loop variable
-  thunkAssign v t = multi [loopInit,
-    forRange i (litInt 0) (listSize (valueOf v)) (litInt 1) $ body [block [loopBody]]]
-    where
-      i = var "i" int
+  thunkAssign v t = do
+    iName <- genLoopIndex
+    let
+      i = var iName int
       -- FIXME: use int or double depending on type of v
       loopInit = zoom lensMStoVS (fmap unCSC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v (litDouble 0))
       loopBody = zoom lensMStoVS (fmap unCSC t) >>= commonThunkElim
         (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
         ((v &+=) . vecIndex (valueOf i) . pure . pure)
+    multi [loopInit,
+      forRange i (litInt 0) (listSize (valueOf v)) (litInt 1) $ body [block [loopBody]]]
 
 instance VectorType CSharpCode where
   vecType = arrayType

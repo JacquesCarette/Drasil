@@ -48,6 +48,7 @@
         "references"
     ],
     "GenSysDescLabel": [
+        "sections",
         "references"
     ],
     "GoalStmtLabel": [
@@ -149,9 +150,11 @@
         "references"
     ],
     "SysConstraintsLabel": [
+        "sections",
         "references"
     ],
     "SysContextLabel": [
+        "sections",
         "references"
     ],
     "TAbbAcc": [
@@ -261,6 +264,7 @@
         "references"
     ],
     "UserCharsLabel": [
+        "sections",
         "references"
     ],
     "abbreviation": [
@@ -323,6 +327,9 @@
         "symbols"
     ],
     "appendix": [
+        "terms"
+    ],
+    "application": [
         "terms"
     ],
     "area": [
@@ -421,6 +428,15 @@
     "compression": [
         "terms"
     ],
+    "computer": [
+        "terms"
+    ],
+    "computerapplication": [
+        "terms"
+    ],
+    "computerliteracy": [
+        "terms"
+    ],
     "concept": [
         "terms"
     ],
@@ -494,6 +510,12 @@
         "terms"
     ],
     "datumconstraint": [
+        "terms"
+    ],
+    "datumstructure": [
+        "terms"
+    ],
+    "datumtype": [
         "terms"
     ],
     "decision": [
@@ -754,7 +776,19 @@
         "concepts",
         "conceptInstances"
     ],
+    "inputdatum": [
+        "terms"
+    ],
+    "inputparameter": [
+        "terms"
+    ],
+    "inputquantity": [
+        "terms"
+    ],
     "inputvalue": [
+        "terms"
+    ],
+    "inputvariable": [
         "terms"
     ],
     "instance": [
@@ -1040,6 +1074,9 @@
         "references",
         "concepts",
         "conceptInstances"
+    ],
+    "outputdatum": [
+        "terms"
     ],
     "parameter": [
         "terms"
@@ -1410,6 +1447,9 @@
     "structuralmechanics": [
         "terms"
     ],
+    "structure": [
+        "terms"
+    ],
     "summary": [
         "terms"
     ],
@@ -1421,6 +1461,10 @@
     ],
     "symbol": [
         "terms"
+    ],
+    "sysCtxDiag": [
+        "references",
+        "labelledContent"
     ],
     "system": [
         "terms"

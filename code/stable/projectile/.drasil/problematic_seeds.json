@@ -35,6 +35,10 @@
         "sections",
         "references"
     ],
+    "GenSysDescLabel": [
+        "sections",
+        "references"
+    ],
     "GoalStmtLabel": [
         "sections",
         "references"
@@ -103,6 +107,14 @@
         "references"
     ],
     "SpecSystDescLabel": [
+        "sections",
+        "references"
+    ],
+    "SysConstraintsLabel": [
+        "sections",
+        "references"
+    ],
+    "SysContextLabel": [
         "sections",
         "references"
     ],
@@ -185,6 +197,10 @@
         "labelledContent"
     ],
     "TraceMatricesLabel": [
+        "sections",
+        "references"
+    ],
+    "UserCharsLabel": [
         "sections",
         "references"
     ],
@@ -548,6 +564,10 @@
         "references",
         "labelledContent",
         "dataDefinitions"
+    ],
+    "sysCtxDiag": [
+        "references",
+        "labelledContent"
     ],
     "targetHit": [
         "references",

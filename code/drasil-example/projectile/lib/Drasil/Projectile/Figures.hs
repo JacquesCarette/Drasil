@@ -1,9 +1,9 @@
-module Drasil.Projectile.Figures (figLaunch) where
+module Drasil.Projectile.Figures (figLaunch, sysCtxFig1) where
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 
-import Data.Drasil.Concepts.Documentation (physicalSystem)
+import Data.Drasil.Concepts.Documentation (physicalSystem, sysCont)
 
 resourcePath :: String
 resourcePath = "../../../../datafiles/projectile/"
@@ -11,3 +11,7 @@ resourcePath = "../../../../datafiles/projectile/"
 figLaunch :: LabelledContent
 figLaunch = llcc (makeFigRef "Launch") $ figWithWidth (atStartNP (the physicalSystem))
   (resourcePath ++ "Launch.jpg") 70
+
+sysCtxFig1 :: LabelledContent
+sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont) 
+  (resourcePath ++ "SystemContextFigure.png")

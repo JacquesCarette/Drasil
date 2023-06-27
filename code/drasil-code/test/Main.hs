@@ -19,7 +19,7 @@ import FileTests (fileTests)
 import VectorTest (vectorTest)
 import NameGenTest (nameGenTest)
 
--- | Renders four GOOL tests (FileTests, HelloWorld, PatternTest, and VectorTest)
+-- | Renders five GOOL tests (FileTests, HelloWorld, PatternTest, VectorTest, and NameGenTest)
 -- in Java, Python, C#, C++, and Swift.
 main :: IO()
 main = do

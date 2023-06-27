@@ -13,7 +13,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   VSFunction, MSStatement, MixedCtorCall, OOProg, ProgramSym(..), FileSym(..),
   PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
   VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj,
   InternalValueExp(..), objMethodCall, FunctionSym(..), GetSet(..), List(..),
@@ -437,9 +437,8 @@ instance ThunkAssign PythonCode where
     iName <- genLoopIndex
     let
       i = var iName int
-      -- FIXME: use int or double depending on type of v
       loopInit = zoom lensMStoVS (fmap unPC t) >>= commonThunkElim
-        (const emptyStmt) (const $ assign v (litDouble 0))
+        (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
       loopBody = zoom lensMStoVS (fmap unPC t) >>= commonThunkElim
         (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
         ((v &+=) . vecIndex (valueOf i) . pure . pure)

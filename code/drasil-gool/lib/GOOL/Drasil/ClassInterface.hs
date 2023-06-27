@@ -10,7 +10,7 @@ module GOOL.Drasil.ClassInterface (
   OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), 
   VariableSym(..), VariableElim(..), ($->), listOf, listVar, ValueSym(..), 
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..), 
+  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp,
   extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists,
@@ -166,6 +166,15 @@ class (ValueSym r) => Literal r where
   litString :: String -> SValue r
   litArray  :: VSType r -> [SValue r] -> SValue r
   litList   :: VSType r -> [SValue r] -> SValue r
+
+litZero :: (TypeElim r, Literal r) => VSType r -> SValue r
+litZero t = do
+  t' <- t
+  case getType t' of
+    Integer -> litInt 0
+    Float -> litFloat 0
+    Double -> litDouble 0
+    _ -> error "litZero expects a numeric type"
 
 class (ValueSym r) => MathConstant r where
   pi :: SValue r

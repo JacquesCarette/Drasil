@@ -14,14 +14,14 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   SValue, MSStatement, MSParameter, SMethod, OOProg, Initializers,
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), oneLiner,
   bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  funcAppNamedArgs, selfFuncApp, extFuncApp, newObj, InternalValueExp(..),
-  objMethodCall, objMethodCallNamedArgs, objMethodCallNoParams,
-  FunctionSym(..), ($.), GetSet(..), List(..), listSlice, InternalList(..),
-  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp,
+  newObj, InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
+  objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..),
+  listSlice, InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), StatePattern(..), ObserverPattern(..),
@@ -447,9 +447,8 @@ instance ThunkAssign SwiftCode where
     iName <- genLoopIndex
     let
       i = var iName int
-      -- FIXME: use int or double depending on type of v
       loopInit = zoom lensMStoVS (fmap unSC t) >>= commonThunkElim
-        (const emptyStmt) (const $ assign v (litDouble 0))
+        (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
       loopBody = zoom lensMStoVS (fmap unSC t) >>= commonThunkElim
         (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
         ((v &+=) . vecIndex (valueOf i) . pure . pure)

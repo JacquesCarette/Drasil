@@ -518,4 +518,4 @@ fileFromData f fpath mdl' = do
 -- Helper functions
 
 setEmpty :: (RenderSym r) => MSStatement r -> MSStatement r
-setEmpty s' = s' >>= mkStmtNoEnd . RC.statement 
+setEmpty s' = s' >>= mkStmtNoEnd . RC.statement

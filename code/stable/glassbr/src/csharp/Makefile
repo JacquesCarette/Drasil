@@ -13,6 +13,8 @@ else
     endif
 endif
 
+# Project Name and Purpose: GlassBR - To predict whether a glass slab can withstand a blast under given conditions.
+
 build: GlassBR$(TARGET_EXTENSION)
 
 GlassBR$(TARGET_EXTENSION): Control.cs InputParameters.cs InputFormat.cs DerivedValues.cs InputConstraints.cs Calculations.cs OutputFormat.cs ReadTable.cs Interpolation.cs

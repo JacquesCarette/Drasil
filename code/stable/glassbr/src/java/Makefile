@@ -1,3 +1,5 @@
+# Project Name and Purpose: GlassBR - To predict whether a glass slab can withstand a blast under given conditions.
+
 build: GlassBR/Control.class
 
 GlassBR/Control.class: GlassBR/Control.java GlassBR/InputParameters.java GlassBR/InputFormat.java GlassBR/DerivedValues.java GlassBR/InputConstraints.java GlassBR/Calculations.java GlassBR/OutputFormat.java GlassBR/ReadTable.java GlassBR/Interpolation.java

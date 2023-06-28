@@ -162,7 +162,8 @@ genProgram = do
   g <- get
   ms <- chooseModules $ modular g
   let n = pName $ codeSpec g
-  return $ prog n ms
+  let p = show $ sentenceDoc (sysinfodb $ codeSpec g) Implementation Linear $ foldlSent $ purpose $ codeSpec g
+  return $ prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice 
 -- of modularity.

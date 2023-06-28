@@ -2,35 +2,39 @@
 
 module GOOL.Drasil.ClassInterface (
   -- Types
-  Label, Library, GSProgram, SFile, MSBody, MSBlock, VSType, SVariable, SValue, 
-  VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass, FSModule,
-  NamedArgs, Initializers, MixedCall, MixedCtorCall, PosCall, PosCtorCall,
+  Label, Library, GSProgram, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
+  VSThunk, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass,
+  FSModule, NamedArgs, Initializers, MixedCall, MixedCtorCall, PosCall,
+  PosCtorCall,
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), 
   VariableSym(..), VariableElim(..), ($->), listOf, listVar, ValueSym(..), 
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..), 
+  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
-  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, 
-  extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, 
-  InternalValueExp(..), objMethodCall, objMethodCallNamedArgs, 
+  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp,
+  extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists,
+  InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
   objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..), ($.),
-  selfAccess, GetSet(..), List(..), InternalList(..), listSlice, 
-  listIndexExists, at, StatementSym(..), AssignStatement(..), (&=), 
-  assignToListIndex, DeclStatement(..), objDecNewNoParams, 
-  extObjDecNewNoParams, IOStatement(..), StringStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
-  StatePattern(..), initState, changeState, ObserverPattern(..), 
-  observerListName, initObserverList, addObserver, StrategyPattern(..), 
-  ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..), 
-  privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), convType
+  selfAccess, GetSet(..), List(..), InternalList(..), listSlice,
+  listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
+  objDecNewNoParams, extObjDecNewNoParams, IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), StatePattern(..), initState, changeState,
+  ObserverPattern(..), observerListName, initObserverList, addObserver,
+  StrategyPattern(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..),
+  MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
+  StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..),
+  convType
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.Helpers (onStateValue)
 import GOOL.Drasil.State (GS, FS, CS, MS, VS)
 
+import qualified Data.Kind as K (Type)
 import Data.Bifunctor (first)
 
 type Label = String
@@ -43,16 +47,18 @@ type GSProgram a = GS (a (Program a))
 -- Functions in GOOL's interface beginning with "ext" are to be used to access items from other modules in the same program/project
 -- Functions in GOOL's interface beginning with "lib" are to be used to access items from different libraries/projects
 
-class (ProgramSym r, AssignStatement r, DeclStatement r, IOStatement r, 
-  StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r,
-  InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, 
-  CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, 
-  ValueExpression r, InternalValueExp r, GetSet r, List r, StatePattern r, 
-  ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
+class (ProgramSym r, VectorType r, VectorDecl r, VectorThunk r,
+  VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r,
+  IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r,
+  ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r,
+  VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
+  Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r,
+  StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r,
+  VariableElim r) => OOProg r
 
 class (FileSym r) => ProgramSym r where
   type Program r
-  prog :: Label -> [SFile r] -> GSProgram r
+  prog :: Label -> Label -> [SFile r] -> GSProgram r
 
 type SFile a = FS (a (File a))
 
@@ -160,6 +166,15 @@ class (ValueSym r) => Literal r where
   litString :: String -> SValue r
   litArray  :: VSType r -> [SValue r] -> SValue r
   litList   :: VSType r -> [SValue r] -> SValue r
+
+litZero :: (TypeElim r, Literal r) => VSType r -> SValue r
+litZero t = do
+  t' <- t
+  case getType t' of
+    Integer -> litInt 0
+    Float -> litFloat 0
+    Double -> litDouble 0
+    _ -> error "litZero expects a numeric type"
 
 class (ValueSym r) => MathConstant r where
   pi :: SValue r
@@ -343,6 +358,33 @@ listIndexExists lst index = listSize lst ?> index
 
 at :: (List r) => SValue r -> SValue r -> SValue r
 at = listAccess
+
+type VSThunk a = VS (a (Thunk a))
+
+class ThunkSym r where
+  -- K.Type -> K.Type annotation needed because r is not applied here so its
+  -- kind cannot be inferred (whereas for Value, r is applied in the type
+  -- signature of valueType
+  type Thunk (r :: K.Type -> K.Type)
+
+class (VariableSym r, ThunkSym r, StatementSym r) => ThunkAssign r where
+  thunkAssign :: SVariable r -> VSThunk r -> MSStatement r
+
+class TypeSym r => VectorType r where
+  vecType :: VSType r -> VSType r
+
+class (VariableSym r, StatementSym r) => VectorDecl r where
+  vecDec :: Integer -> SVariable r -> MSStatement r
+  vecDecDef :: SVariable r -> [SValue r] -> MSStatement r
+
+class (VariableSym r, ThunkSym r) => VectorThunk r where
+  vecThunk :: SVariable r -> VSThunk r
+
+class (ThunkSym r, ValueSym r) => VectorExpression r where
+  vecScale :: SValue r -> VSThunk r -> VSThunk r
+  vecAdd :: VSThunk r -> VSThunk r -> VSThunk r
+  vecIndex :: SValue r -> VSThunk r -> SValue r
+  vecDot :: VSThunk r -> VSThunk r -> VSThunk r
 
 type MSStatement a = MS (a (Statement a))
 

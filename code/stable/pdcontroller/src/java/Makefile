@@ -1,3 +1,5 @@
+# Project Name and Purpose: PD_Controller - To provide a model of a PD Controller that can be used for the tuning of the gain constants before the deployment of the controller.
+
 build: PD_Controller/Control.class
 
 PD_Controller/Control.class: PD_Controller/Control.java PD_Controller/InputParameters.java PD_Controller/Constants.java PD_Controller/Calculations.java PD_Controller/OutputFormat.java PD_Controller/ODE.java PD_Controller/ODEStepHandler.java

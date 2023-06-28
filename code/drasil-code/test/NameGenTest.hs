@@ -7,7 +7,8 @@ nameGenTest = prog "NameGenTest" [fileDoc $ buildModule "NameGenTest" [] [main, 
 
 helper :: OOProg r => SMethod r
 helper = function "helper" private void [param temp] $ body
-  [listSlice result (valueOf temp) (Just (litInt 1)) (Just (litInt 3)) Nothing]
+  [block [listDec 2 result],
+    listSlice result (valueOf temp) (Just (litInt 1)) (Just (litInt 3)) Nothing]
   where
     temp = var "temp" (listType int)
     result = var "result" (listType int)

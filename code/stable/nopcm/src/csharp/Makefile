@@ -13,6 +13,8 @@ else
     endif
 endif
 
+# Project Name and Purpose: NoPCM - To investigate the heating of water in a solar water heating tank.
+
 build: NoPCM$(TARGET_EXTENSION)
 
 NoPCM$(TARGET_EXTENSION): Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs

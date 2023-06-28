@@ -13,6 +13,8 @@ else
     endif
 endif
 
+# Project Name and Purpose: Projectile - To predict whether a launched projectile hits its target.
+
 build: Projectile$(LIB_EXTENSION)
 
 Projectile$(LIB_EXTENSION): InputFormat.cs InputConstraints.cs Calculations.cs OutputFormat.cs

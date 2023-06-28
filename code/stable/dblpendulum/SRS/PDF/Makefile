@@ -6,4 +6,4 @@ DblPendulum_SRS.pdf: DblPendulum_SRS.tex
 	lualatex $(TEXFLAGS) DblPendulum_SRS
 	lualatex $(TEXFLAGS) DblPendulum_SRS
 
-.PHONY: srs
+.PHONY:

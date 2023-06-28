@@ -10,6 +10,7 @@ import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, empty, isEmpty, vcat, text, (<+>),
     (<>), comma, punctuate, hsep)
 import Utils.Drasil.Document (drasilImage, contSep)
+import Language.Drasil.Printing.Helpers (upcase)
 
 -- | Separates document sections.
 type Separator = Doc
@@ -30,7 +31,7 @@ instDoc cfp name inoutn = regularSec (text "Making Examples")
 
 -- | Helper for creating optional Purpose subsection as Doc
 maybePurpDoc :: Maybe String -> Doc
-maybePurpDoc = maybe empty (\descr-> doubleSep <> text "> Purpose:" <+> text descr)
+maybePurpDoc = maybe empty (\descr-> doubleSep <> text "> Purpose:" <+> upcase descr)
 
 -- | 'What' section in generated README file, does not display if empty
 whatInfo :: Maybe String -> Doc
@@ -65,7 +66,8 @@ inOutFile name (inFile, outFile) = doubleSep <>
 -- | Helper for giving instructions for configuration files.
 configSec :: [String] -> Doc
 configSec [] = empty
-configSec cfp = doubleSep <> regularSec (text "Configuration Files") (text ("Configuration files are files that must be " ++
+configSec cfp = doubleSep <> regularSec (text "Configuration Files") 
+  (text ("Configuration files are files that must be " ++
     "in the same directory as the executable in order to run or build successfully.")
     <> doubleSep <> bkQuote <> listToDoc cfp <> bkQuote)
 

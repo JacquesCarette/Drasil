@@ -64,6 +64,8 @@ jobs:
         run: make code stackArgs="--no-terminal" GHCFLAGS="-Werror"
       - name: "Test built artifacts against stable"
         run: make stackArgs="--no-terminal" GHCFLAGS="-Werror" NOISY=yes
+      - name: "Compile GOOL examples"
+        run: make codegenTest
       - name: "Compile generated TeX artifacts"
         run: make tex SUMMARIZE_TEX=yes
       - name: "Compile generated software artifacts"

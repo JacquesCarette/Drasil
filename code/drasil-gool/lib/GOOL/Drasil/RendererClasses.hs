@@ -5,28 +5,29 @@ module GOOL.Drasil.RendererClasses (
   RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), RenderType(..), 
   InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, BinaryOpSym(..), 
   OpElim(..), RenderVariable(..), InternalVarElim(..), RenderValue(..), 
-  ValueElim(..), InternalGetSet(..), InternalListFunc(..),
-  RenderFunction(..), FunctionElim(..), InternalAssignStmt(..), 
-  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
-  StatementElim(..), RenderScope(..), ScopeElim(..), MSMthdType, 
-  MethodTypeSym(..), RenderParam(..), ParamElim(..), RenderMethod(..), 
-  MethodElim(..), StateVarElim(..), ParentSpec, RenderClass(..), ClassElim(..), 
-  RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..)
+  ValueElim(..), InternalGetSet(..), InternalListFunc(..), RenderFunction(..),
+  FunctionElim(..), InternalAssignStmt(..), InternalIOStmt(..),
+  InternalControlStmt(..), RenderStatement(..), StatementElim(..),
+  RenderScope(..), ScopeElim(..), MSMthdType, MethodTypeSym(..),
+  RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..),
+  StateVarElim(..), ParentSpec, RenderClass(..), ClassElim(..), RenderMod(..),
+  ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..)
 ) where
 
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
-  VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, 
-  CSStateVar, SClass, FSModule, MixedCall, FileSym(..), PermanenceSym(..), 
-  BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), 
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..), 
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
-  BooleanExpression(..), Comparison(..), ValueExpression(..), 
-  InternalValueExp(..), FunctionSym(..), GetSet(..), List(..), InternalList(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), 
-  IOStatement(..), StringStatement(..), FuncAppStatement(..), 
-  CommentStatement(..), ControlStatement(..), StatePattern(..), 
-  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter,
+  SMethod, CSStateVar, SClass, FSModule, MixedCall, FileSym(..),
+  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
+  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), InternalValueExp(..), FunctionSym(..), GetSet(..),
+  List(..), InternalList(..), VectorExpression(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..),
+  ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType)
 import GOOL.Drasil.AST (Binding, Terminator, ScopeTag)
 import GOOL.Drasil.State (FS, CS, MS, VS)
@@ -35,21 +36,20 @@ import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r, 
-  StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r,
-  Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
-  NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, 
-  InternalValueExp r, GetSet r, List r, InternalList r, 
-  StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, 
-  VariableElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r, 
-  RenderClass r, ClassElim r, RenderFile r, InternalGetSet r, 
-  InternalListFunc r, RenderFunction r, FunctionElim r, 
-  RenderMethod r, MethodElim r, RenderMod r, ModuleElim r, OpElim r, 
-  RenderParam r, ParamElim r, PermElim r, RenderScope r, 
-  ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, 
-  RenderStatement r, StatementElim r, StateVarElim r, 
-  RenderType r, InternalTypeElim r, RenderValue r, ValueElim r, 
-  RenderVariable r, InternalVarElim r, ImportSym r, ImportElim r, 
-  UnaryOpSym r, BinaryOpSym r, BlockCommentElim r) => RenderSym r
+  StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement
+  r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
+  NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r,
+  InternalValueExp r, GetSet r, List r, InternalList r, VectorExpression r,
+  StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r,
+  VariableElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r,
+  RenderClass r, ClassElim r, RenderFile r, InternalGetSet r, InternalListFunc
+  r, RenderFunction r, FunctionElim r, RenderMethod r, MethodElim r, RenderMod
+  r, ModuleElim r, OpElim r, RenderParam r, ParamElim r, PermElim r,
+  RenderScope r, ScopeElim r, InternalAssignStmt r, InternalIOStmt r,
+  InternalControlStmt r, RenderStatement r, StatementElim r, StateVarElim r,
+  RenderType r, InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable
+  r, InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r,
+  BlockCommentElim r) => RenderSym r
 
 class (BlockCommentSym r) => RenderFile r where
   -- top and bottom are only used for pre-processor guards for C++ header 

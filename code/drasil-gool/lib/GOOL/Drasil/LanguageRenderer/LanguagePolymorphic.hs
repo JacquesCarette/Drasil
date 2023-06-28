@@ -9,34 +9,34 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd, 
   listAppend, listAccess, listSet, getFunc, setFunc, 
-  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment, 
-  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond, 
-  tryCatch, construct, param, method, getMethod, setMethod, initStmts, 
-  function, docFuncRepr, docFunc, buildClass, implementingClass, 
-  docClass, commentedClass, modFromData, fileDoc, docMod
+  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment,
+  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
+  tryCatch, construct, param, method, getMethod, setMethod, initStmts,
+  function, docFuncRepr, docFunc, buildClass, implementingClass, docClass,
+  commentedClass, modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
-  VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, 
-  CSStateVar, SClass, FSModule, NamedArgs, Initializers, MixedCall, 
-  MixedCtorCall, FileSym(File), BodySym(Body), bodyStatements, oneLiner, 
-  BlockSym(Block), PermanenceSym(..), TypeSym(Type), 
-  TypeElim(getType, getTypeString), VariableSym(Variable), 
-  VariableElim(variableName, variableType), ValueSym(Value, valueType), 
-  NumericExpression((#-), (#/), sin, cos, tan), Comparison(..), funcApp, 
-  newObj, objMethodCallNoParams, ($.), StatementSym(multi), 
-  AssignStatement((&++)), (&=), 
-  IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
-  ifNoElse, ScopeSym(..), ModuleSym(Module), convType)
+  VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod,
+  CSStateVar, SClass, FSModule, NamedArgs, Initializers, MixedCall,
+  MixedCtorCall, FileSym(File), BodySym(Body), bodyStatements, oneLiner,
+  BlockSym(Block), PermanenceSym(..), TypeSym(Type), TypeElim(getType,
+  getTypeString), VariableSym(Variable), VariableElim(variableName,
+  variableType), ValueSym(Value, valueType), NumericExpression((#-), (#/), sin,
+  cos, tan), Comparison(..), funcApp, newObj, objMethodCallNoParams, ($.),
+  StatementSym(multi), AssignStatement((&++)), (&=), IOStatement(printStr,
+  printStrLn, printFile, printFileStr, printFileStrLn), ifNoElse, ScopeSym(..),
+  ModuleSym(Module), convType)
 import qualified GOOL.Drasil.ClassInterface as S (
-  TypeSym(int, double, char, string, listType, arrayType, listInnerType, funcType, void), 
-  VariableSym(var, objVarSelf), Literal(litInt, litFloat, litDouble, litString),
-  VariableValue(valueOf), FunctionSym(func), List(listSize, listAccess), 
-  StatementSym(valStmt), DeclStatement(varDecDef), IOStatement(print),
-  ControlStatement(returnStmt, for), ParameterSym(param), MethodSym(method))
+  TypeSym(int, double, char, string, listType, arrayType, listInnerType,
+  funcType, void), VariableSym(var, objVarSelf), Literal(litInt, litFloat,
+  litDouble, litString), VariableValue(valueOf), FunctionSym(func),
+  List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
+  IOStatement(print), ControlStatement(returnStmt, for), ParameterSym(param),
+  MethodSym(method))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(commentedMod),  
   RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
   RenderFunction(funcFromData), FunctionElim(functionType), 

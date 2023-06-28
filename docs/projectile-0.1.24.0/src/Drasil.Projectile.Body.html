@@ -151,7 +151,7 @@
 </span><span class="hs-identifier hs-var">SSDProblem</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Section] -&gt; [PDSub] -&gt; ProblemDescription
 </span><span class="hs-identifier hs-var">PDProg</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="Drasil.Projectile.Body.html#probDescIntro"><span class="hs-identifier hs-var">probDescIntro</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><a href="Drasil.Projectile.Body.html#purp"><span class="hs-identifier hs-var">purp</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-81"></span><span>        </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">forall c. Concept c =&gt; Maybe Sentence -&gt; [c] -&gt; PDSub
 </span><span class="hs-identifier hs-var">TermsAndDefs</span></span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
@@ -855,9 +855,9 @@ r -&gt; Sentence -&gt; Sentence
 </span><span id="line-220"></span><span class="annot"><a href="Drasil.Projectile.Body.html#sysCtxResp"><span class="hs-identifier hs-type">sysCtxResp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-221"></span><span id="sysCtxResp"><span class="annot"><span class="annottext">sysCtxResp :: [Sentence]
 </span><a href="Drasil.Projectile.Body.html#sysCtxResp"><span class="hs-identifier hs-var hs-var">sysCtxResp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679069515"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679069515"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679069515"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679069505"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679069505"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679069505"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Responsibilities&quot;</span></span><span class="hs-special">)</span><span> </span><span>
@@ -915,13 +915,8 @@ r -&gt; Sentence -&gt; Sentence
 </span><span id="line-239"></span><span class="hs-comment">-- Problem Description --</span><span>
 </span><span id="line-240"></span><span class="hs-comment">-------------------------</span><span>
 </span><span id="line-241"></span><span>
-</span><span id="line-242"></span><span class="annot"><a href="Drasil.Projectile.Body.html#probDescIntro"><span class="hs-identifier hs-type">probDescIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-243"></span><span id="probDescIntro"><span class="annot"><span class="annottext">probDescIntro :: Sentence
-</span><a href="Drasil.Projectile.Body.html#probDescIntro"><span class="hs-identifier hs-var hs-var">probDescIntro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;efficiently&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="Drasil.Projectile.Body.html#purp"><span class="hs-identifier hs-var">purp</span></a></span><span>
+</span><span id="line-242"></span><span class="hs-comment">-- The text for the problem description is the same as that of the purpose of</span><span>
+</span><span id="line-243"></span><span class="hs-comment">-- this example.</span><span>
 </span><span id="line-244"></span><span>
 </span><span id="line-245"></span><span class="hs-comment">---------------------------------</span><span>
 </span><span id="line-246"></span><span class="hs-comment">-- Terminology and Definitions --</span><span>

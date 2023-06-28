@@ -33,7 +33,7 @@ class (ProgramSym r, VectorType r, VectorDecl r, VectorThunk r, VectorExpression
 class (FileSym r) => ProgramSym r where {
     type Program r;
 }
-prog :: ProgramSym r => Label -> [SFile r] -> GSProgram r
+prog :: ProgramSym r => Label -> Label -> [SFile r] -> GSProgram r
 class (ModuleSym r) => FileSym r where {
     type File r;
 }

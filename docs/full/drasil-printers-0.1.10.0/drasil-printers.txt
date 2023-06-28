@@ -226,43 +226,6 @@ PH :: String -> PrintHTML
 instance Language.Drasil.Unicode.RenderSpecial Language.Drasil.HTML.Monad.PrintHTML
 
 
--- | Markdown file creator for generated GOOL code.
-module Language.Drasil.Markdown.CreateMd
-
--- | Combines a list of sentences into a final Doc, also appends end note.
-makeMd :: [Doc] -> Doc
-
--- | Example title, authors, and maybe purpose section.
-introInfo :: String -> [String] -> Maybe String -> Doc
-
--- | <tt>What</tt> section in generated README file, does not display if
---   empty
-whatInfo :: Maybe String -> Doc
-
--- | Language version section.
-verInfo :: String -> String -> Doc
-
--- | Invalid Operating Systems section, does not display unless atleast 1
---   invalid OS.
-unsupOS :: Maybe String -> Doc
-
--- | External Libraries section. The inputs are a list of name and version
---   pairs and a list of the corresponding version numbers, these are first
---   combined into a list of triplets, and then each printed on a new line.
-extLibSec :: [(String, String)] -> [String] -> Doc
-
--- | Constructs regular section section from header and message.
-regularSec :: Doc -> Doc -> Doc
-
--- | Instruction section, contains 4 paragraphs, Running, Building,
---   Input-Output and Config Files. The Config file section is only
---   displayed if there are configuration files.
-instDoc :: [String] -> String -> (String, String) -> Doc
-
--- | End section.
-endNote :: Int -> [String] -> Doc
-
-
 -- | Defines types similar to those in <a>Drasil.Language</a>, but better
 --   suited to printing.
 module Language.Drasil.Printing.AST
@@ -782,6 +745,43 @@ sufx :: Int -> String
 -- | Similar to <a>sufx</a> but used on any sized <a>Int</a>.
 sufxer :: Int -> String
 sufxPrint :: [CiteField] -> String
+
+
+-- | Markdown file creator for generated GOOL code.
+module Language.Drasil.Markdown.CreateMd
+
+-- | Combines a list of sentences into a final Doc, also appends end note.
+makeMd :: [Doc] -> Doc
+
+-- | Example title, authors, and maybe purpose section.
+introInfo :: String -> [String] -> Maybe String -> Doc
+
+-- | <tt>What</tt> section in generated README file, does not display if
+--   empty
+whatInfo :: Maybe String -> Doc
+
+-- | Language version section.
+verInfo :: String -> String -> Doc
+
+-- | Invalid Operating Systems section, does not display unless atleast 1
+--   invalid OS.
+unsupOS :: Maybe String -> Doc
+
+-- | External Libraries section. The inputs are a list of name and version
+--   pairs and a list of the corresponding version numbers, these are first
+--   combined into a list of triplets, and then each printed on a new line.
+extLibSec :: [(String, String)] -> [String] -> Doc
+
+-- | Constructs regular section section from header and message.
+regularSec :: Doc -> Doc -> Doc
+
+-- | Instruction section, contains 4 paragraphs, Running, Building,
+--   Input-Output and Config Files. The Config file section is only
+--   displayed if there are configuration files.
+instDoc :: [String] -> String -> (String, String) -> Doc
+
+-- | End section.
+endNote :: Int -> [String] -> Doc
 
 
 -- | Defines helper functions for creating jupyter notebooks.

@@ -437,11 +437,11 @@ instance ThunkAssign CSharpCode where
       forRange i (litInt 0) (listSize (valueOf v)) (litInt 1) $ body [block [loopBody]]]
 
 instance VectorType CSharpCode where
-  vecType = arrayType
+  vecType = listType
 
 instance VectorDecl CSharpCode where
-  vecDec = arrayDec
-  vecDecDef = arrayDecDef
+  vecDec = listDec
+  vecDecDef = listDecDef
 
 instance VectorThunk CSharpCode where
   vecThunk = pure . pure . pureValue . fmap unCSC . valueOf

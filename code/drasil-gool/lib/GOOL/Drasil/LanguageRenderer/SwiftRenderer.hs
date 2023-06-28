@@ -456,11 +456,11 @@ instance ThunkAssign SwiftCode where
       forRange i (litInt 0) (listSize (valueOf v)) (litInt 1) $ body [block [loopBody]]]
 
 instance VectorType SwiftCode where
-  vecType = arrayType
+  vecType = listType
 
 instance VectorDecl SwiftCode where
-  vecDec = arrayDec
-  vecDecDef = arrayDecDef
+  vecDec = listDec
+  vecDecDef = listDecDef
 
 instance VectorThunk SwiftCode where
   vecThunk = pure . pure . pureValue . fmap unSC . valueOf

@@ -468,11 +468,11 @@ instance ThunkAssign JavaCode where
       forRange i (litInt 0) (listSize (valueOf v)) (litInt 1) $ body [block [loopBody]]]
 
 instance VectorType JavaCode where
-  vecType = arrayType
+  vecType = listType
 
 instance VectorDecl JavaCode where
-  vecDec = arrayDec
-  vecDecDef = arrayDecDef
+  vecDec = listDec
+  vecDecDef = listDecDef
 
 instance VectorThunk JavaCode where
   vecThunk = pure . pure . pureValue . fmap unJC . valueOf

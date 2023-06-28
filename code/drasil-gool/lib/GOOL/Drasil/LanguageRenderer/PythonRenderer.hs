@@ -446,11 +446,11 @@ instance ThunkAssign PythonCode where
       forRange i (litInt 0) (listSize (valueOf v)) (litInt 1) $ body [block [loopBody]]]
 
 instance VectorType PythonCode where
-  vecType = arrayType
+  vecType = listType
 
 instance VectorDecl PythonCode where
-  vecDec = arrayDec
-  vecDecDef = arrayDecDef
+  vecDec = listDec
+  vecDecDef = listDecDef
 
 instance VectorThunk PythonCode where
   vecThunk = pure . pure . pureValue . fmap unPC . valueOf

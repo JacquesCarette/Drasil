@@ -1345,11 +1345,11 @@ instance ThunkAssign CppSrcCode where
       forRange i (litInt 0) (listSize (valueOf v)) (litInt 1) $ body [block [loopBody]]]
 
 instance VectorType CppSrcCode where
-  vecType = arrayType
+  vecType = listType
 
 instance VectorDecl CppSrcCode where
-  vecDec = arrayDec
-  vecDecDef = arrayDecDef
+  vecDec = listDec
+  vecDecDef = listDecDef
 
 instance VectorThunk CppSrcCode where
   vecThunk = pure . pure . pureValue . fmap unCPPSC . valueOf
@@ -1998,7 +1998,7 @@ instance ThunkAssign CppHdrCode where
   thunkAssign _ _ = emptyStmt
   
 instance VectorType CppHdrCode where
-  vecType = arrayType
+  vecType = listType
 
 instance VectorDecl CppHdrCode where
   vecDec _ _ = emptyStmt

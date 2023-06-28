@@ -10,7 +10,7 @@ import Prelude hiding (return, print, log, exp, sin, cos, tan)
 
 -- | Creates a program in GOOL to test reading and writing to files.
 fileTests :: (OOProg r) => GSProgram r
-fileTests = prog "FileTests" [fileDoc (buildModule "FileTests" [] 
+fileTests = prog "FileTests" "" [fileDoc (buildModule "FileTests" [] 
   [fileTestMethod] [])]
 
 -- | File test method starts with 'writeStory' and ends with 'goodBye'.

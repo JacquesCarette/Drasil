@@ -1,7 +1,7 @@
 # PD_Controller 
 > Author: Naveen Ganesh Muralidharan
 
-> Purpose: provide a model of a PD Controller that can be used for the tuning of the gain constants before the deployment of the controller.
+> Purpose: Provide a model of a PD Controller that can be used for the tuning of the gain constants before the deployment of the controller.
 
 ------------------------------------------------------------
 ## Making Examples 

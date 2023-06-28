@@ -15,7 +15,7 @@ import Helper (helper)
 
 -- | Creates the HelloWorld program and necessary files.
 helloWorld :: (OOProg r) => GSProgram r
-helloWorld = prog "HelloWorld" [docMod description 
+helloWorld = prog "HelloWorld" "" [docMod description 
   ["Brooks MacLachlan"] "" $ fileDoc (buildModule "HelloWorld" [] 
   [helloWorldMain] []), helper]
 

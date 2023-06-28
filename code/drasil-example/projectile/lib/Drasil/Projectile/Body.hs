@@ -77,7 +77,7 @@ mkSRS = [TableOfContents,
         , SystCons [] []],  
   SSDSec $
     SSDProg
-      [ SSDProblem $ PDProg probDescIntro []
+      [ SSDProblem $ PDProg purp []
         [ TermsAndDefs Nothing terms
         , PhySysDesc projectileTitle physSystParts figLaunch []
         , Goals [(phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile, 
@@ -239,8 +239,8 @@ userCharacteristicsIntro = foldlSP
 -- Problem Description --
 -------------------------
 
-probDescIntro :: Sentence
-probDescIntro = S "efficiently" +:+ purp
+-- The text for the problem description is the same as that of the purpose of
+-- this example.
 
 ---------------------------------
 -- Terminology and Definitions --

@@ -3,7 +3,7 @@ module GOOL.Drasil.AST (Terminator(..), ScopeTag(..), QualifiedName, qualName,
   FileData(filePath, fileMod), fileD, updateFileMod, FuncData(fType, funcDoc), 
   fd, ModData(name, modDoc), md, updateMod, MethodData(mthdDoc), mthd, 
   updateMthd, OpData(opPrec, opDoc), od, ParamData(paramVar, paramDoc), pd, 
-  paramName, updateParam, ProgData(progName, progMods), progD, emptyProg, 
+  paramName, updateParam, ProgData(progName, progPurp, progMods), progD, emptyProg, 
   StateVarData(getStVarScp, stVar, destructSts), svd, 
   TypeData(cType, typeString, typeDoc), td, ValData(valPrec, valType, val), 
   vd, updateValDoc, VarData(varBind, varName, varType, varDoc), vard,
@@ -107,13 +107,13 @@ updateParam :: (Doc -> Doc) -> ParamData -> ParamData
 updateParam f v = pd (paramVar v) ((f . paramDoc) v)
 
 -- Used as the underlying data type for Programs in all renderers
-data ProgData = ProgD {progName :: String, progMods :: [FileData]}
+data ProgData = ProgD {progName :: String, progPurp :: String, progMods :: [FileData]}
 
-progD :: String -> [FileData] -> ProgData
-progD n fs = ProgD n (filter (not . isEmpty . modDoc . fileMod) fs)
+progD :: String -> String -> [FileData] -> ProgData
+progD n st fs = ProgD n st (filter (not . isEmpty . modDoc . fileMod) fs)
 
 emptyProg :: ProgData
-emptyProg = progD "" []
+emptyProg = progD "" "" []
 
 -- Used as the underlying data type for StateVars in the C++ renderer
 data StateVarData = SVD {getStVarScp :: ScopeTag, stVar :: Doc, 

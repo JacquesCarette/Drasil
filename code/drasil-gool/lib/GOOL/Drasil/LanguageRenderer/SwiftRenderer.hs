@@ -125,10 +125,10 @@ instance OOProg SwiftCode where
 
 instance ProgramSym SwiftCode where
   type Program SwiftCode = ProgData
-  prog n files = do
+  prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
-    pure $ onCodeList (progD n) fs
+    pure $ onCodeList (progD n st) fs
 
 instance RenderSym SwiftCode
 

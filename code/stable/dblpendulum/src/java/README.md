@@ -1,7 +1,7 @@
 # DblPendulum 
 > Author: Dong Chen
 
-> Purpose: efficiently and correctly predict the motion of a pendulum.
+> Purpose: Predict the motion of a pendulum.
 
 ------------------------------------------------------------
 ## Making Examples 

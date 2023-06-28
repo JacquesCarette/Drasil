@@ -1,7 +1,7 @@
 # Projectile 
 > Authors:  Samuel J. Crawford, Brooks MacLachlan, W. Spencer Smith
 
-> Purpose: predict whether a launched projectile hits its target.
+> Purpose: Predict whether a launched projectile hits its target.
 
 ------------------------------------------------------------
 ## Version 

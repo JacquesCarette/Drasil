@@ -84,7 +84,7 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..),
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), td, ValData(..), vd, Binding(..), VarData(..), vard,
   CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
-  commonThunkElim)
+  commonThunkElim, commonThunkDim)
 import GOOL.Drasil.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, 
@@ -447,13 +447,14 @@ instance ThunkAssign SwiftCode where
     iName <- genLoopIndex
     let
       i = var iName int
+      dim = fmap pure $ t >>= commonThunkDim (fmap unSC . listSize . fmap pure) . unSC
       loopInit = zoom lensMStoVS (fmap unSC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
       loopBody = zoom lensMStoVS (fmap unSC t) >>= commonThunkElim
         (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
         ((v &+=) . vecIndex (valueOf i) . pure . pure)
     multi [loopInit,
-      forRange i (litInt 0) (listSize (valueOf v)) (litInt 1) $ body [block [loopBody]]]
+      forRange i (litInt 0) dim (litInt 1) $ body [block [loopBody]]]
 
 instance VectorType SwiftCode where
   vecType = listType

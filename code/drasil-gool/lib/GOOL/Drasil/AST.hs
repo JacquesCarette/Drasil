@@ -8,7 +8,7 @@ module GOOL.Drasil.AST (Terminator(..), ScopeTag(..), QualifiedName, qualName,
   TypeData(cType, typeString, typeDoc), td, ValData(valPrec, valType, val), 
   vd, updateValDoc, VarData(varBind, varName, varType, varDoc), vard,
   CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
-  commonThunkElim
+  commonThunkElim, commonThunkDim
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -172,3 +172,11 @@ commonVecIndex _ (SumComponents _) = error "Indexing into a scalar thunk"
 commonThunkElim :: (CommonThunk s -> a) -> (CommonThunk s -> a) -> CommonThunk s -> a
 commonThunkElim _ sumF (SumComponents v) = sumF v
 commonThunkElim vectorF _ v = vectorF v
+
+-- The dimension of a vector or the vector underlying a dot product
+-- Used to generate thunkAssign loops
+commonThunkDim :: (s ValData -> s ValData) -> CommonThunk s -> s ValData
+commonThunkDim dim (PureValue v) = dim v
+commonThunkDim dim (Vectorize _ v) = commonThunkDim dim v
+commonThunkDim dim (Vectorize2 _ v1 _) = commonThunkDim dim v1
+commonThunkDim dim (SumComponents v) = commonThunkDim dim v

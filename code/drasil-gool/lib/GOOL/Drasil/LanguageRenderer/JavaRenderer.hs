@@ -88,7 +88,7 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..),
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard,
   CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
-  commonThunkElim)
+  commonThunkElim, commonThunkDim)
 import GOOL.Drasil.CodeAnalysis (Exception(..), ExceptionType(..), exception, 
   stdExc, HasException(..))
 import GOOL.Drasil.Helpers (emptyIfNull, toCode, toState, onCodeValue, 
@@ -459,13 +459,14 @@ instance ThunkAssign JavaCode where
     iName <- genLoopIndex
     let
       i = var iName int
+      dim = fmap pure $ t >>= commonThunkDim (fmap unJC . listSize . fmap pure) . unJC
       loopInit = zoom lensMStoVS (fmap unJC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
       loopBody = zoom lensMStoVS (fmap unJC t) >>= commonThunkElim
         (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
         ((v &+=) . vecIndex (valueOf i) . pure . pure)
     multi [loopInit,
-      forRange i (litInt 0) (listSize (valueOf v)) (litInt 1) $ body [block [loopBody]]]
+      forRange i (litInt 0) dim (litInt 1) $ body [block [loopBody]]]
 
 instance VectorType JavaCode where
   vecType = listType

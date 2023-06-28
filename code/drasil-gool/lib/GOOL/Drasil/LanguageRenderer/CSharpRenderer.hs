@@ -84,7 +84,7 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD, 
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
   vard, CommonThunk, pureValue, vectorize, vectorize2, sumComponents,
-  commonVecIndex, commonThunkElim)
+  commonVecIndex, commonThunkElim, commonThunkDim)
 import GOOL.Drasil.Helpers (angles, hicat, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
   on2StateWrapped, onCodeList, onStateList)
@@ -428,13 +428,14 @@ instance ThunkAssign CSharpCode where
     iName <- genLoopIndex
     let
       i = var iName int
+      dim = fmap pure $ t >>= commonThunkDim (fmap unCSC . listSize . fmap pure) . unCSC
       loopInit = zoom lensMStoVS (fmap unCSC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
       loopBody = zoom lensMStoVS (fmap unCSC t) >>= commonThunkElim
         (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
         ((v &+=) . vecIndex (valueOf i) . pure . pure)
     multi [loopInit,
-      forRange i (litInt 0) (listSize (valueOf v)) (litInt 1) $ body [block [loopBody]]]
+      forRange i (litInt 0) dim (litInt 1) $ body [block [loopBody]]]
 
 instance VectorType CSharpCode where
   vecType = listType

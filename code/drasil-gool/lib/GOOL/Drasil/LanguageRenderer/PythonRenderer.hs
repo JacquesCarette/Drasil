@@ -76,7 +76,7 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
   td, ValData(..), vd, VarData(..), vard, CommonThunk, pureValue, vectorize,
-  vectorize2, sumComponents, commonVecIndex, commonThunkElim)
+  vectorize2, sumComponents, commonVecIndex, commonThunkElim, commonThunkDim)
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList, on2StateWrapped)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
@@ -437,13 +437,14 @@ instance ThunkAssign PythonCode where
     iName <- genLoopIndex
     let
       i = var iName int
+      dim = fmap pure $ t >>= commonThunkDim (fmap unPC . listSize . fmap pure) . unPC
       loopInit = zoom lensMStoVS (fmap unPC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
       loopBody = zoom lensMStoVS (fmap unPC t) >>= commonThunkElim
         (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
         ((v &+=) . vecIndex (valueOf i) . pure . pure)
     multi [loopInit,
-      forRange i (litInt 0) (listSize (valueOf v)) (litInt 1) $ body [block [loopBody]]]
+      forRange i (litInt 0) dim (litInt 1) $ body [block [loopBody]]]
 
 instance VectorType PythonCode where
   vecType = listType

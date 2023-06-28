@@ -1,0 +1,4 @@
+digraph thunkpcppsrccodecpphdrcode{
+ThunkpCppSrcCodeCppHdrCode	[shape=oval, color=red2, label="ThunkpCppSrcCodeCppHdrCode"];
+ThunkpCppSrcCodeCppHdrCode -> CommonThunkVS;
+}

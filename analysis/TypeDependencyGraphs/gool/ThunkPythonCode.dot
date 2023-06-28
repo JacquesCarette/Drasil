@@ -1,0 +1,4 @@
+digraph thunkpythoncode{
+ThunkPythonCode	[shape=oval, color=red2, label="ThunkPythonCode"];
+ThunkPythonCode -> CommonThunkVS;
+}

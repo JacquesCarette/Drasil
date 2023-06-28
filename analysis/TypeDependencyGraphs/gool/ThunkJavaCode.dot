@@ -1,0 +1,4 @@
+digraph thunkjavacode{
+ThunkJavaCode	[shape=oval, color=red2, label="ThunkJavaCode"];
+ThunkJavaCode -> CommonThunkVS;
+}

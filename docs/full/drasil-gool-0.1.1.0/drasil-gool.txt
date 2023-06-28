@@ -99,6 +99,14 @@ vd :: Maybe Int -> TypeData -> Doc -> ValData
 updateValDoc :: (Doc -> Doc) -> ValData -> ValData
 data VarData
 vard :: Binding -> String -> TypeData -> Doc -> VarData
+data CommonThunk s
+pureValue :: s ValData -> CommonThunk s
+vectorize :: (s ValData -> s ValData) -> CommonThunk s -> CommonThunk s
+vectorize2 :: (s ValData -> s ValData -> s ValData) -> CommonThunk s -> CommonThunk s -> CommonThunk s
+sumComponents :: CommonThunk s -> CommonThunk s
+commonVecIndex :: (s ValData -> s ValData) -> CommonThunk s -> s ValData
+commonThunkElim :: (CommonThunk s -> a) -> (CommonThunk s -> a) -> CommonThunk s -> a
+commonThunkDim :: (s ValData -> s ValData) -> CommonThunk s -> s ValData
 instance GHC.Classes.Eq GOOL.Drasil.AST.ScopeTag
 instance GHC.Classes.Ord GOOL.Drasil.AST.QualifiedName
 instance GHC.Classes.Eq GOOL.Drasil.AST.QualifiedName
@@ -257,6 +265,7 @@ type MSBlock a = MS (a (Block a))
 type VSType a = VS (a (Type a))
 type SVariable a = VS (a (Variable a))
 type SValue a = VS (a (Value a))
+type VSThunk a = VS (a (Thunk a))
 type VSFunction a = VS (a (Function a))
 type MSStatement a = MS (a (Statement a))
 type MSParameter a = MS (a (Parameter a))
@@ -270,7 +279,7 @@ type MixedCall r = Label -> VSType r -> [SValue r] -> NamedArgs r -> SValue r
 type MixedCtorCall r = VSType r -> [SValue r] -> NamedArgs r -> SValue r
 type PosCall r = Label -> VSType r -> [SValue r] -> SValue r
 type PosCtorCall r = VSType r -> [SValue r] -> SValue r
-class (ProgramSym r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
+class (ProgramSym r, VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
 class (FileSym r) => ProgramSym r where {
     type Program r;
 }
@@ -352,6 +361,7 @@ litInt :: Literal r => Integer -> SValue r
 litString :: Literal r => String -> SValue r
 litArray :: Literal r => VSType r -> [SValue r] -> SValue r
 litList :: Literal r => VSType r -> [SValue r] -> SValue r
+litZero :: (TypeElim r, Literal r) => VSType r -> SValue r
 class (ValueSym r) => MathConstant r
 pi :: MathConstant r => SValue r
 class (VariableSym r, ValueSym r) => VariableValue r
@@ -462,6 +472,23 @@ listSlice' :: InternalList r => Maybe (SValue r) -> Maybe (SValue r) -> Maybe (S
 listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 at :: List r => SValue r -> SValue r -> SValue r
+class ThunkSym r where {
+    type Thunk (r :: Type -> Type);
+}
+class TypeSym r => VectorType r
+vecType :: VectorType r => VSType r -> VSType r
+class (VariableSym r, StatementSym r) => VectorDecl r
+vecDec :: VectorDecl r => Integer -> SVariable r -> MSStatement r
+vecDecDef :: VectorDecl r => SVariable r -> [SValue r] -> MSStatement r
+class (VariableSym r, ThunkSym r) => VectorThunk r
+vecThunk :: VectorThunk r => SVariable r -> VSThunk r
+class (ThunkSym r, ValueSym r) => VectorExpression r
+vecScale :: VectorExpression r => SValue r -> VSThunk r -> VSThunk r
+vecAdd :: VectorExpression r => VSThunk r -> VSThunk r -> VSThunk r
+vecIndex :: VectorExpression r => SValue r -> VSThunk r -> SValue r
+vecDot :: VectorExpression r => VSThunk r -> VSThunk r -> VSThunk r
+class (VariableSym r, ThunkSym r, StatementSym r) => ThunkAssign r
+thunkAssign :: ThunkAssign r => SVariable r -> VSThunk r -> MSStatement r
 class (ValueSym r) => StatementSym r where {
     type Statement r;
 }
@@ -602,7 +629,7 @@ buildModule :: ModuleSym r => Label -> [Label] -> [SMethod r] -> [SClass r] -> F
 convType :: TypeSym r => CodeType -> VSType r
 
 module GOOL.Drasil.RendererClasses
-class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, InternalList r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r, RenderClass r, ClassElim r, RenderFile r, InternalGetSet r, InternalListFunc r, RenderFunction r, FunctionElim r, RenderMethod r, MethodElim r, RenderMod r, ModuleElim r, OpElim r, RenderParam r, ParamElim r, PermElim r, RenderScope r, ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, RenderStatement r, StatementElim r, StateVarElim r, RenderType r, InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable r, InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r, BlockCommentElim r) => RenderSym r
+class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, InternalList r, VectorExpression r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r, RenderClass r, ClassElim r, RenderFile r, InternalGetSet r, InternalListFunc r, RenderFunction r, FunctionElim r, RenderMethod r, MethodElim r, RenderMod r, ModuleElim r, OpElim r, RenderParam r, ParamElim r, PermElim r, RenderScope r, ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, RenderStatement r, StatementElim r, StateVarElim r, RenderType r, InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable r, InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r, BlockCommentElim r) => RenderSym r
 class (BlockCommentSym r) => RenderFile r
 top :: RenderFile r => r (Module r) -> r (Block r)
 bottom :: RenderFile r => r (Block r)
@@ -1225,6 +1252,12 @@ instance GOOL.Drasil.ClassInterface.List GOOL.Drasil.LanguageRenderer.PythonRend
 instance GOOL.Drasil.ClassInterface.InternalList GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.RendererClasses.InternalGetSet GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.RendererClasses.InternalListFunc GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
+instance GOOL.Drasil.ClassInterface.ThunkSym GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
+instance GOOL.Drasil.ClassInterface.ThunkAssign GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
+instance GOOL.Drasil.ClassInterface.VectorType GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
+instance GOOL.Drasil.ClassInterface.VectorDecl GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
+instance GOOL.Drasil.ClassInterface.VectorThunk GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
+instance GOOL.Drasil.ClassInterface.VectorExpression GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.RendererClasses.RenderFunction GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.RendererClasses.FunctionElim GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.RendererClasses.InternalAssignStmt GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
@@ -1355,6 +1388,12 @@ instance GOOL.Drasil.ClassInterface.List GOOL.Drasil.LanguageRenderer.SwiftRende
 instance GOOL.Drasil.ClassInterface.InternalList GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.RendererClasses.InternalGetSet GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.RendererClasses.InternalListFunc GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
+instance GOOL.Drasil.ClassInterface.ThunkSym GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
+instance GOOL.Drasil.ClassInterface.ThunkAssign GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
+instance GOOL.Drasil.ClassInterface.VectorType GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
+instance GOOL.Drasil.ClassInterface.VectorDecl GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
+instance GOOL.Drasil.ClassInterface.VectorThunk GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
+instance GOOL.Drasil.ClassInterface.VectorExpression GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.RendererClasses.RenderFunction GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.RendererClasses.FunctionElim GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.RendererClasses.InternalAssignStmt GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
@@ -1450,6 +1489,12 @@ instance GOOL.Drasil.ClassInterface.List GOOL.Drasil.LanguageRenderer.JavaRender
 instance GOOL.Drasil.ClassInterface.InternalList GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.RendererClasses.InternalGetSet GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.RendererClasses.InternalListFunc GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
+instance GOOL.Drasil.ClassInterface.ThunkSym GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
+instance GOOL.Drasil.ClassInterface.ThunkAssign GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
+instance GOOL.Drasil.ClassInterface.VectorType GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
+instance GOOL.Drasil.ClassInterface.VectorDecl GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
+instance GOOL.Drasil.ClassInterface.VectorThunk GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
+instance GOOL.Drasil.ClassInterface.VectorExpression GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.RendererClasses.RenderFunction GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.RendererClasses.FunctionElim GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.RendererClasses.InternalAssignStmt GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
@@ -1558,6 +1603,12 @@ instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.List (p GOOL.D
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.InternalList (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.RendererClasses.InternalGetSet (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.RendererClasses.InternalListFunc (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
+instance GOOL.Drasil.ClassInterface.ThunkSym (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
+instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.ThunkAssign (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
+instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.VectorType (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
+instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.VectorDecl (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
+instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.VectorThunk (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
+instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.VectorExpression (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.RendererClasses.RenderFunction (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.RendererClasses.FunctionElim (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.RendererClasses.InternalAssignStmt (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
@@ -1641,6 +1692,12 @@ instance GOOL.Drasil.ClassInterface.List GOOL.Drasil.LanguageRenderer.CppRendere
 instance GOOL.Drasil.ClassInterface.InternalList GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.RendererClasses.InternalGetSet GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.RendererClasses.InternalListFunc GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
+instance GOOL.Drasil.ClassInterface.ThunkSym GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
+instance GOOL.Drasil.ClassInterface.ThunkAssign GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
+instance GOOL.Drasil.ClassInterface.VectorType GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
+instance GOOL.Drasil.ClassInterface.VectorDecl GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
+instance GOOL.Drasil.ClassInterface.VectorThunk GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
+instance GOOL.Drasil.ClassInterface.VectorExpression GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.RendererClasses.RenderFunction GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.RendererClasses.FunctionElim GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.RendererClasses.InternalAssignStmt GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
@@ -1724,6 +1781,12 @@ instance GOOL.Drasil.ClassInterface.List GOOL.Drasil.LanguageRenderer.CppRendere
 instance GOOL.Drasil.ClassInterface.InternalList GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.RendererClasses.InternalGetSet GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.RendererClasses.InternalListFunc GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
+instance GOOL.Drasil.ClassInterface.ThunkSym GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
+instance GOOL.Drasil.ClassInterface.ThunkAssign GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
+instance GOOL.Drasil.ClassInterface.VectorType GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
+instance GOOL.Drasil.ClassInterface.VectorDecl GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
+instance GOOL.Drasil.ClassInterface.VectorThunk GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
+instance GOOL.Drasil.ClassInterface.VectorExpression GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.RendererClasses.RenderFunction GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.RendererClasses.FunctionElim GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.RendererClasses.InternalAssignStmt GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
@@ -1819,6 +1882,12 @@ instance GOOL.Drasil.ClassInterface.List GOOL.Drasil.LanguageRenderer.CSharpRend
 instance GOOL.Drasil.ClassInterface.InternalList GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.RendererClasses.InternalGetSet GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.RendererClasses.InternalListFunc GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
+instance GOOL.Drasil.ClassInterface.ThunkSym GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
+instance GOOL.Drasil.ClassInterface.ThunkAssign GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
+instance GOOL.Drasil.ClassInterface.VectorType GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
+instance GOOL.Drasil.ClassInterface.VectorDecl GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
+instance GOOL.Drasil.ClassInterface.VectorThunk GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
+instance GOOL.Drasil.ClassInterface.VectorExpression GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.RendererClasses.RenderFunction GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.RendererClasses.FunctionElim GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.RendererClasses.InternalAssignStmt GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
@@ -1891,6 +1960,12 @@ instance GOOL.Drasil.ClassInterface.FunctionSym GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.GetSet GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.List GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.InternalList GOOL.Drasil.CodeInfo.CodeInfo
+instance GOOL.Drasil.ClassInterface.ThunkSym GOOL.Drasil.CodeInfo.CodeInfo
+instance GOOL.Drasil.ClassInterface.ThunkAssign GOOL.Drasil.CodeInfo.CodeInfo
+instance GOOL.Drasil.ClassInterface.VectorType GOOL.Drasil.CodeInfo.CodeInfo
+instance GOOL.Drasil.ClassInterface.VectorDecl GOOL.Drasil.CodeInfo.CodeInfo
+instance GOOL.Drasil.ClassInterface.VectorThunk GOOL.Drasil.CodeInfo.CodeInfo
+instance GOOL.Drasil.ClassInterface.VectorExpression GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.StatementSym GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.AssignStatement GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.DeclStatement GOOL.Drasil.CodeInfo.CodeInfo
@@ -1929,7 +2004,7 @@ type SClass a = CS (a (Class a))
 type FSModule a = FS (a (Module a))
 type NamedArgs r = [(SVariable r, SValue r)]
 type Initializers r = [(SVariable r, SValue r)]
-class (ProgramSym r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
+class (ProgramSym r, VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
 class (FileSym r) => ProgramSym r where {
     type Program r;
 }
@@ -1975,6 +2050,23 @@ void :: TypeSym r => VSType r
 class (TypeSym r) => TypeElim r
 getType :: TypeElim r => r (Type r) -> CodeType
 getTypeString :: TypeElim r => r (Type r) -> String
+class ThunkSym r where {
+    type Thunk (r :: Type -> Type);
+}
+class TypeSym r => VectorType r
+vecType :: VectorType r => VSType r -> VSType r
+class (VariableSym r, StatementSym r) => VectorDecl r
+vecDec :: VectorDecl r => Integer -> SVariable r -> MSStatement r
+vecDecDef :: VectorDecl r => SVariable r -> [SValue r] -> MSStatement r
+class (VariableSym r, ThunkSym r) => VectorThunk r
+vecThunk :: VectorThunk r => SVariable r -> VSThunk r
+class (ThunkSym r, ValueSym r) => VectorExpression r
+vecScale :: VectorExpression r => SValue r -> VSThunk r -> VSThunk r
+vecAdd :: VectorExpression r => VSThunk r -> VSThunk r -> VSThunk r
+vecIndex :: VectorExpression r => SValue r -> VSThunk r -> SValue r
+vecDot :: VectorExpression r => VSThunk r -> VSThunk r -> VSThunk r
+class (VariableSym r, ThunkSym r, StatementSym r) => ThunkAssign r
+thunkAssign :: ThunkAssign r => SVariable r -> VSThunk r -> MSStatement r
 class (ValueSym r) => StatementSym r where {
     type Statement r;
 }

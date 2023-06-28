@@ -1,0 +1,4 @@
+digraph thunkcppsrccode{
+ThunkCppSrcCode	[shape=oval, color=red2, label="ThunkCppSrcCode"];
+ThunkCppSrcCode -> CommonThunkVS;
+}

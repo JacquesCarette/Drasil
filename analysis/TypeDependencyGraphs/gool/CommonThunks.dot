@@ -1,0 +1,3 @@
+digraph commonthunks{
+CommonThunks	[shape=oval, color=darkviolet, label="CommonThunks"];
+}

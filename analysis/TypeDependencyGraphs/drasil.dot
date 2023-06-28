@@ -918,6 +918,8 @@ digraph alltypes {
 	}
 	subgraph patterntets {
 	}
+	subgraph vectortets {
+	}
 	subgraph computation {
 	}
 	subgraph documentation {
@@ -1885,6 +1887,10 @@ digraph alltypes {
 		FunctionCSharpCode	[shape=oval, color=red2, label="FunctionCSharpCode"];
 		FunctionCSharpCode -> FuncData;
 		}
+		subgraph thunkcsharpcode{
+		ThunkCSharpCode	[shape=oval, color=red2, label="ThunkCSharpCode"];
+		ThunkCSharpCode -> CommonThunkVS;
+		}
 		subgraph statementcsharpcode{
 		StatementCSharpCode	[shape=oval, color=red2, label="StatementCSharpCode"];
 		StatementCSharpCode -> DocTerminator;
@@ -1997,6 +2003,10 @@ digraph alltypes {
 		FunctionpCppSrcCodeCppHdrCode	[shape=oval, color=red2, label="FunctionpCppSrcCodeCppHdrCode"];
 		FunctionpCppSrcCodeCppHdrCode -> FuncData;
 		}
+		subgraph thunkpcppsrccodecpphdrcode{
+		ThunkpCppSrcCodeCppHdrCode	[shape=oval, color=red2, label="ThunkpCppSrcCodeCppHdrCode"];
+		ThunkpCppSrcCodeCppHdrCode -> CommonThunkVS;
+		}
 		subgraph statementpcppsrccodecpphdrcode{
 		StatementpCppSrcCodeCppHdrCode	[shape=oval, color=red2, label="StatementpCppSrcCodeCppHdrCode"];
 		StatementpCppSrcCodeCppHdrCode -> DocTerminator;
@@ -2093,6 +2103,10 @@ digraph alltypes {
 		FunctionCppSrcCode	[shape=oval, color=red2, label="FunctionCppSrcCode"];
 		FunctionCppSrcCode -> FuncData;
 		}
+		subgraph thunkcppsrccode{
+		ThunkCppSrcCode	[shape=oval, color=red2, label="ThunkCppSrcCode"];
+		ThunkCppSrcCode -> CommonThunkVS;
+		}
 		subgraph statementcppsrccode{
 		StatementCppSrcCode	[shape=oval, color=red2, label="StatementCppSrcCode"];
 		StatementCppSrcCode -> DocTerminator;
@@ -2172,6 +2186,10 @@ digraph alltypes {
 		subgraph functioncpphdrcode{
 		FunctionCppHdrCode	[shape=oval, color=red2, label="FunctionCppHdrCode"];
 		FunctionCppHdrCode -> FuncData;
+		}
+		subgraph thunkcpphdrcode{
+		ThunkCppHdrCode	[shape=oval, color=red2, label="ThunkCppHdrCode"];
+		ThunkCppHdrCode -> CommonThunkVS;
 		}
 		subgraph statementcpphdrcode{
 		StatementCppHdrCode	[shape=oval, color=red2, label="StatementCppHdrCode"];
@@ -2262,6 +2280,10 @@ digraph alltypes {
 		subgraph functionjavacode{
 		FunctionJavaCode	[shape=oval, color=red2, label="FunctionJavaCode"];
 		FunctionJavaCode -> FuncData;
+		}
+		subgraph thunkjavacode{
+		ThunkJavaCode	[shape=oval, color=red2, label="ThunkJavaCode"];
+		ThunkJavaCode -> CommonThunkVS;
 		}
 		subgraph statementjavacode{
 		StatementJavaCode	[shape=oval, color=red2, label="StatementJavaCode"];
@@ -2357,6 +2379,10 @@ digraph alltypes {
 		FunctionPythonCode	[shape=oval, color=red2, label="FunctionPythonCode"];
 		FunctionPythonCode -> FuncData;
 		}
+		subgraph thunkpythoncode{
+		ThunkPythonCode	[shape=oval, color=red2, label="ThunkPythonCode"];
+		ThunkPythonCode -> CommonThunkVS;
+		}
 		subgraph statementpythoncode{
 		StatementPythonCode	[shape=oval, color=red2, label="StatementPythonCode"];
 		StatementPythonCode -> DocTerminator;
@@ -2446,6 +2472,10 @@ digraph alltypes {
 		subgraph functionswiftcode{
 		FunctionSwiftCode	[shape=oval, color=red2, label="FunctionSwiftCode"];
 		FunctionSwiftCode -> FuncData;
+		}
+		subgraph thunkswiftcode{
+		ThunkSwiftCode	[shape=oval, color=red2, label="ThunkSwiftCode"];
+		ThunkSwiftCode -> CommonThunkVS;
 		}
 		subgraph statementswiftcode{
 		StatementSwiftCode	[shape=oval, color=red2, label="StatementSwiftCode"];
@@ -2563,6 +2593,9 @@ digraph alltypes {
 		Binding -> Binding;
 		Binding -> a;
 		}
+		subgraph commonthunks{
+		CommonThunks	[shape=oval, color=darkviolet, label="CommonThunks"];
+		}
 		subgraph methoddata{
 		MethodData	[shape=oval, color=darkgreen, label="MethodData"];
 		MethodData -> Doc;
@@ -2628,6 +2661,10 @@ digraph alltypes {
 		subgraph vsfunctiona{
 		VSFunctiona	[shape=oval, color=red2, label="VSFunctiona"];
 		VSFunctiona -> VSaFunctiona;
+		}
+		subgraph vsthunka{
+		VSThunka	[shape=oval, color=red2, label="VSThunka"];
+		VSThunka -> VSaThunka;
 		}
 		subgraph msstatementa{
 		MSStatementa	[shape=oval, color=red2, label="MSStatementa"];
@@ -2715,6 +2752,9 @@ digraph alltypes {
 		}
 		subgraph functioncodeinfo{
 		FunctionCodeInfo	[shape=oval, color=red2, label="FunctionCodeInfo"];
+		}
+		subgraph thunkcodeinfo{
+		ThunkCodeInfo	[shape=oval, color=red2, label="ThunkCodeInfo"];
 		}
 		subgraph statementcodeinfo{
 		StatementCodeInfo	[shape=oval, color=red2, label="StatementCodeInfo"];

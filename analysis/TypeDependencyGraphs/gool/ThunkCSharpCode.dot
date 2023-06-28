@@ -1,0 +1,4 @@
+digraph thunkcsharpcode{
+ThunkCSharpCode	[shape=oval, color=red2, label="ThunkCSharpCode"];
+ThunkCSharpCode -> CommonThunkVS;
+}

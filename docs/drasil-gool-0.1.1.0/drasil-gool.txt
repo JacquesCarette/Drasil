@@ -29,7 +29,7 @@ type SClass a = CS (a (Class a))
 type FSModule a = FS (a (Module a))
 type NamedArgs r = [(SVariable r, SValue r)]
 type Initializers r = [(SVariable r, SValue r)]
-class (ProgramSym r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
+class (ProgramSym r, VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
 class (FileSym r) => ProgramSym r where {
     type Program r;
 }
@@ -75,6 +75,23 @@ void :: TypeSym r => VSType r
 class (TypeSym r) => TypeElim r
 getType :: TypeElim r => r (Type r) -> CodeType
 getTypeString :: TypeElim r => r (Type r) -> String
+class ThunkSym r where {
+    type Thunk (r :: Type -> Type);
+}
+class TypeSym r => VectorType r
+vecType :: VectorType r => VSType r -> VSType r
+class (VariableSym r, StatementSym r) => VectorDecl r
+vecDec :: VectorDecl r => Integer -> SVariable r -> MSStatement r
+vecDecDef :: VectorDecl r => SVariable r -> [SValue r] -> MSStatement r
+class (VariableSym r, ThunkSym r) => VectorThunk r
+vecThunk :: VectorThunk r => SVariable r -> VSThunk r
+class (ThunkSym r, ValueSym r) => VectorExpression r
+vecScale :: VectorExpression r => SValue r -> VSThunk r -> VSThunk r
+vecAdd :: VectorExpression r => VSThunk r -> VSThunk r -> VSThunk r
+vecIndex :: VectorExpression r => SValue r -> VSThunk r -> SValue r
+vecDot :: VectorExpression r => VSThunk r -> VSThunk r -> VSThunk r
+class (VariableSym r, ThunkSym r, StatementSym r) => ThunkAssign r
+thunkAssign :: ThunkAssign r => SVariable r -> VSThunk r -> MSStatement r
 class (ValueSym r) => StatementSym r where {
     type Statement r;
 }

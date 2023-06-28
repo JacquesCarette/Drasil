@@ -859,4 +859,6 @@ digraph alltypes {
 	}
 	subgraph patterntets {
 	}
+	subgraph vectortets {
+	}
 }

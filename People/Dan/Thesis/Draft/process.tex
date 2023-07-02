@@ -1,6 +1,7 @@
 \chapter{A look under the hood: \\ Our process}
 
-\ds{Make sure we talk about continuous integration / git processes / etc}
+\ds{Make sure we talk about continuous integration / git processes / etc.
+Actually might belong in the next chapter - iteration and refinement}
 
 The first step in removing unnecessary redundancy is identifying exactly what
 that redundancy is and where it exists. To that end we need to understand what
@@ -113,7 +114,12 @@ studies from those developed using common artifact templates, we have given
 ourselves a head start on that process, however, there is still much work to be 
 done.
 
+The following subsections present a brief sampling of our process of breaking 
+down \sfs{}, acknowledging that a comprehensive overview would be excessively 
+lengthy.
+
 \subsection{SRS}
+\label{sec:breakdown:srs}
 
 To start, we look at the Software Requirements Specification (SRS). The SRS
 (or some incarnation of it) is one of the most important artifacts for any
@@ -190,7 +196,8 @@ represents. Figure~\ref{fig:csRefSecs} shows the reference section of the SRS
 for \gb. Each of the case studies' SRS contains a similar section so for 
 brevity we will omit the others here, but they can be found at \ds{TODO}. 
 % Provide a link / ref to relevant appendix
-We will look into the case studies in more detail later, for now we will try to 
+We will look into the case studies in more detail later \ds{will we actually? 
+depends on length of chapter}, for now we will try to 
 ignore any superficial differences (spelling, grammar, phrasing, etc.) in each 
 of them while we look for commonality. We are also trying to determine how the 
 non-superficial differences relate to the document template, general problem 
@@ -284,6 +291,7 @@ explicitly, which we can then do in the pattern section.}
 in the MG, and finally a method in the source code}
 
 \subsection{Module Guide}
+\label{sec:breakdown:mg}
 
 The module guide (MG) is a \sf{} that details the architecture of a given 
 software system. It holds a number of design decisions around sensibly grouping 
@@ -367,6 +375,7 @@ be translated into implementation details in the source code. With that in
 mind, let us move on to the source code.
 
 \subsection{Source Code}
+\label{sec:breakdown:code}
 
 The source code is arguably the most important \sf{} in any given software 
 system since it serves as the set of instructions that a computer executes in 
@@ -461,39 +470,42 @@ DD is the (partial) name of the function in the source code and the equation
 from the DD is calculated within the source code. This is one of many patterns 
 we see across our \sfs{} within each case study.
 
-\section{Patterns and repetition and patterns and repetition -- (OR -- 
-Repeating patterns and patterns that repeat --)}
+\section{Identifying Repetitive Redundancy}
 \label{sec:patterns}
   \ds{\sout{**Make sure to mention "We actually found that some
   info is boilerplate, some is system-specific, and some is general to all
   members of a software family, but more specific than generic boilerplate"}}
 \ds{Pretty sure I got that covered earlier}
 
-\ds{This part isn't exactly true with the reorg of info. I'm going to show some 
-patterns here instead}. \sout{From the above sections, we see many emerging 
-patterns 
-in our \sfs{}. Ignoring, 
-for now, the organizational patterns from the \smithea{} templates we can 
-already see simple patterns emerging.}
+From the examples in Section~\ref{sec:breakdown}, we can see a number of simple 
+patterns emerging with respect to organization and information repetition 
+within a case study. Upon applying our process to all of the case studies and 
+adopting a broader perspective, numerous instances emerge where patterns 
+transcend individual case studies and remain universally applicable. Several of 
+these patterns should be unsurprising, as they relate to the template of a 
+particular \sf{}. It is interesting, however, that patterns of information 
+organization crop up within a given \sf{} in multiple places, containing 
+distinct information.
 
-Returning to our example from Section~\ref{sec:breakdown}, looking only at the 
-reference section of our SRS template, we have already found
-three subsections that contain the majority of their information in the same
-organizational structure: a table of symbols and general information relevant 
-to those symbols. Additionally, we can see that the Table of Units and Table of 
-Symbols have an introductory blurb preceding the tables themselves, whereas the 
-Table of Abbreviations and Acronyms does not. Inspecting across case studies, 
-we can see that the introduction to the Table of Units is simply boilerplate 
-text dropped into each case study verbatim, thus is completely generic and 
-applicable to \emph{any} software system using SI units. The introduction to 
-the Table of Symbols appears to be boilerplate across several examples, 
-however, it does have some variation which we can see by comparing 
-Figure~\ref{fig:gbrtos} to Figure~\ref{fig:gptos} (\gb{} compared to \gp{}).
+Returning to our example from Section~\ref{sec:breakdown:srs}, looking only at 
+the reference section of our SRS template, we have already found three 
+subsections that contain the majority of their information in the same 
+organizational structure: a table defining terms with respect to their symbolic 
+representation and general information relevant to those terms. Additionally, 
+we can see that the Table of Units and Table of Symbols have an introductory 
+blurb preceding the tables themselves, whereas the Table of Abbreviations and 
+Acronyms does not. Inspecting across case studies, we observe that the 
+introduction to the Table of Units is nothing more than boilerplate text 
+dropped into each case study verbatim; it is completely generic and applicable 
+to \emph{any} software system using SI units. The introduction to the Table of 
+Symbols also appears to be boilerplate across several examples, however, it 
+does have minor variations which we can see by comparing 
+Figure~\ref{fig:gbrtos} to Figure~\ref{fig:gptos} (\gb{} compared to \gp{}). 
 These variations reveal the obvious: the variability between systems is greater 
 than simply a difference in choice of symbols, and so there is some 
-system-specific knowledge being encoded. We can intuit this conclusion based 
-solely on each system solving a different problem, however, we have confirmed 
-this by solely looking at the structure (patterns) of one section of the SRS.
+system-specific knowledge being encoded. While we can intuitively infer this 
+conclusion based solely on each system addressing a different problem, our 
+observation of the (structural) patterns within this SRS section confirms it.
 
 \fig{
 \centering

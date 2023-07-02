@@ -522,17 +522,83 @@ NoPCM, or Projectile. Finally, acronyms are very context-dependent. They are
 often specific to a given domain and, without a coinciding definition, it can 
 be very difficult for even the target audience to understand what they refer 
 to. Within one domain, there may be several acronyms meaning different things, 
-for example: PM can refer to Product Manager, Project Manager, Program 
-Manager, etc.
+for example: PM can refer to a Product Manager, Project Manager, Program 
+Manager, Portfolio Manager, etc.
 
 By continuing to breakdown the SRS and other \sfs{}, we are able to find many 
 more patterns. For example, we see the same concept being introduced in 
-multiple areas within a single artifact and across artifacts in a project. 
-\ds{Example from one of the figures in the previous section. Preferably 
-something like a DD or TM that shows up within a single doc multiple times}. We 
-also see patterns of commonality across software family members (The SWHS and 
-NoPCM case studies) as they have been developed to solve similar, or in our 
-case nearly identical, problems.
+multiple areas within a single artifact and across artifacts in a project.
+\fig{
+\centering
+\includegraphics[width=\textwidth]{figures/gb_dd_q.png}}
+{Data Definition for Dimensionless Load ($\hat{q}$) from \gb{} SRS}
+{fig:gbrddq}
+Figure~\ref{fig:gbrddq} shows the data definition for $\hat{q}$ in \gb{}. That 
+same term was previously defined with fewer details in the table of symbols 
+(omitted here for simplicity), as well as showing up implicitly or in passing 
+in the MG (Figure~\ref{fig:gbrmgcm} and the \emph{loadASTM} module 
+respectively), and implemented in the Source Code (Figure~\ref{fig:gbrsrccalc} 
+lines 11-14). It should be noted that the SRS contains many references to 
+$\hat{q}$, such as in the data definitions of the Stress Distribution Factor 
+($J$) and Non-Factored Load ($NFL$). There are also implied references through 
+intermediate calculations, for example the Calculation of Capacity ($LR$) is 
+defined in terms of $NFL$ which relies on $\hat{q}$.
+
+\ds{expand above to discuss knowledge projection/transformation and why things 
+are the way they are above. word vomit:} %While $\hat{q}$ is only fully defined 
+%for a human audience once, we need to keep some reference to it for different 
+%audiences. It is expected each audience will understand the symbol in the 
+%context of this system, or will be able to refer to the SRS to understand it 
+%in more depth. For someone reading the SRS, the DD (and the reference 
+%material) are important to quickly understand the full definition in the 
+%context of the system's inputs, outputs, functional requirements, and 
+%acceptance criteria. The MG barely mentions it, except in passing when 
+%defining what the loadASTM and Calc modules are responsible for (the former 
+%being loading values from a file, the latter using those values for 
+%calculations). However the source code has a very detailed definition of it, 
+%to ensure the computer is able to execute the appropriate calculation(s). The 
+%varying level of detail throughout \sfs{} should not be too surprising as the 
+%audience of each \sf{} requires a different level of verbosity depending on 
+%their needs at any particular stage of the software development process. While 
+%the verbosity varies, the underlying information is the same, ie. we are 
+%always talking about $\hat{q}$ and what it represents regardless of the level 
+%of detail we include. We are simply projecting relevant portions of our 
+%knowledge of a given term based on our understanding of the context and our 
+%audience's needs.
+\ds{edited} Although the full definition of $\hat{q}$ is initially provided 
+for a human audience only once, it is necessary to reference it in different 
+ways for different audiences. Each audience is expected to grasp the symbol's 
+meaning within their given context or consult other \sfs{} for more 
+comprehensive understanding. When reading the SRS, the data definitions and 
+other reference materials play a crucial role in swiftly comprehending the 
+complete definition of $\hat{q}$ in relation to the system's inputs, outputs, 
+functional requirements, and acceptance criteria.
+
+The MG, on the other hand, briefly mentions $\hat{q}$ when defining the 
+responsibilities of both the loadASTM and Calc modules (the former being 
+responsible for loading values from a file, and the latter utilizing those 
+values for calculations), whereas the source code provides a highly detailed 
+definition to ensure accurate execution of the relevant calculation(s).
+
+The varying level of detail across the \sfs{} should not come as a surprise 
+since each \sf{} targets a different audience and their specific needs at 
+various stages of the software development process. Although the level of 
+verbosity may differ, the core information remains consistent: we are 
+consistently referring to the definition of $\hat{q}$ via its representation, 
+regardless of the level of detail we incorporate. Our goal is to convey 
+relevant aspects of our knowledge of a given term based on the context and the 
+specific requirements of our audience.\footnote{We have only referred to the 
+term as $\hat{q}$ in this section to emphasize our argument and make the 
+meta-point that the definition is irrelevant to our audience in this example, 
+only the symbolic reference matters and we share a common understanding of what 
+it refers to.}
+
+
+\ds{transition to the next part}
+
+We can also find patterns of commonality across software family members (The 
+SWHS and NoPCM case studies) as they have been developed to solve similar, or 
+in our case nearly identical, problems.
 
 - inter-project (repetition throughout different views + other patterns.)
   vs intra-project knowledge (repetition across projects/family members,

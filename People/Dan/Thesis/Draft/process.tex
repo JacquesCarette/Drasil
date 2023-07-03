@@ -565,7 +565,9 @@ are the way they are above. word vomit:} %While $\hat{q}$ is only fully defined
 %of detail we include. We are simply projecting relevant portions of our 
 %knowledge of a given term based on our understanding of the context and our 
 %audience's needs.
-\ds{edited} Although the full definition of $\hat{q}$ is initially provided 
+\ds{edited} 
+
+Although the full definition of $\hat{q}$ is initially provided 
 for a human audience only once, it is necessary to reference it in different 
 ways for different audiences. Each audience is expected to grasp the symbol's 
 meaning within their given context or consult other \sfs{} for more 
@@ -583,22 +585,46 @@ definition to ensure accurate execution of the relevant calculation(s).
 The varying level of detail across the \sfs{} should not come as a surprise 
 since each \sf{} targets a different audience and their specific needs at 
 various stages of the software development process. Although the level of 
-verbosity may differ, the core information remains consistent: we are 
+verbosity may differ, the core information remains consistent: the authors are 
 consistently referring to the definition of $\hat{q}$ via its representation, 
-regardless of the level of detail we incorporate. Our goal is to convey 
-relevant aspects of our knowledge of a given term based on the context and the 
-specific requirements of our audience.\footnote{We have only referred to the 
-term as $\hat{q}$ in this section to emphasize our argument and make the 
-meta-point that the definition is irrelevant to our audience in this example, 
-only the symbolic reference matters and we share a common understanding of what 
-it refers to.}
+regardless of the level of detail incorporated. The goal is to convey relevant 
+aspects of knowledge of a given term, while eliding that which is deemed 
+superfluous, based on the context and the specific requirements of our 
+audience. In other words, the authors only \emph{project} some portion of their 
+knowledge of given terms at a given time, depending on their needs (which 
+include precision, brevity, and clarity, among others), the expectations of the 
+audience, and contextual relevance. \footnote{We have only referred to the term 
+as $\hat{q}$ in this section to emphasize our argument and make the meta-point 
+that the definition is irrelevant to our audience in this example. What matters 
+is the symbolic reference, which we share a common understanding of.}
 
+\ds{something about glossary = common example of a knowledge base w/ terms used 
+for knowledge projections. That should go somewhere}
 
-\ds{transition to the next part}
+\ds{It all boils down to: Common Knowledge (system specific, domain specific, 
+general/boilerplate) displayed via projections (decided on by artifact type and 
+audience relevance) + organizational patterns}
 
-We can also find patterns of commonality across software family members (The 
-SWHS and NoPCM case studies) as they have been developed to solve similar, or 
-in our case nearly identical, problems.
+If we broaden our view from a single system, to a software family, we can also 
+find patterns of commonality across the various \sfs{} of the family members 
+(For example the SWHS and NoPCM case studies) as they have been developed to 
+solve similar, or in our case nearly identical, problems. Software family 
+members are good examples to help determine what types of information or 
+knowledge provided in the \sfs{} belong to the system-domain, problem-domain, 
+or are simply general/boilerplate.
+
+Looking at SWHS and NoPCM, we can easily find identical theoretical models 
+(TMs) \ds{thermodynamics equations should look the same, use them here} as the 
+underlying theory for each system is based on the problem domain.
+However, when we follow the derivations from the TMs to the Instance Models 
+(IMs), we find the resulting equations have changed due to the context of the 
+system; the lack of PCM has changed the relevant equations for calculating the 
+amount of heat energy stored in the tank as shown in 
+Figure~\ref{fig:swhsnopcmim} \ds{Add figure 
+showing the appropriate IM that has/lacks PCM in the equation}.
+
+\ds{Patterns outlined above are a small subset of examples, but are highly 
+generalizable}
 
 - inter-project (repetition throughout different views + other patterns.)
   vs intra-project knowledge (repetition across projects/family members,
@@ -606,12 +632,13 @@ in our case nearly identical, problems.
 - Hint at chunkifying/parceling out the fundamental (system/view-agnostic)
 knowledge vs the specific knowledge
 
-\ds{Need to talk about knowledge projection/transformation in this section
+\ds{\sout{Need to talk about knowledge projection/transformation in this section
 - Use a relevant example from Case studies, maybe from PCM? Something like 
 $\Delta{}U = Q - W$ is the same as ``Total energy within a closed system must 
 be conserved" but transformed for / projects out what is relevant to a given 
 audience.
-- This will be useful for the following section}
+- This will be useful for the following section} Covered that with the 
+$\hat{q}$ example.}
 
 \section{Organizing knowledge - a fluid approach}
   **Subsec roadmap:
@@ -626,10 +653,28 @@ audience.
   **NOTE: Under the hood section should explain the process of how we determined
   what we needed to do. What we ended up doing should come in the following
   section(s) - no 'real' implementation details, only conceptual stuff here.
+
+- Some ``boilerplate" information is actually in the domain of \sf{} writing 
+and 
+thus is so broad, yet relevant to everything we do, that we consider it 
+completely general. Things like stakeholders, characteristics of the intended 
+audience, etc.
   
-\section{The seeds of Drasil}
+\section{The seeds of Drasil}\ds{this'll probably get merged in to the previous 
+section as a conclusion paragraph or something instead, unless I think of 
+something big}
   **Subsec roadmap:
     -- Summarize the above subsections and lead into next section
     -- Add relevant information that doesn't quite fit above 
       and isn't implementation related
     -- 'Relevant buckshot section'
+
+- We see patterns boil down to ``Give me relevant info on X for this \sf{} and 
+audience" and ``Organize it in a reasonable way".
+
+- Everything boils down to knowledge we are trying to convey, audience 
+(context), and organizational structure. The latter can be 
+handled through a number of means (deterministic generation / templates / 
+blueprints). The former is more interesting as it essentially boils down to a 
+particular grouping of information (knowledge-base) and some way to transform 
+or project out what is relevant given a set of characteristics or expectations.

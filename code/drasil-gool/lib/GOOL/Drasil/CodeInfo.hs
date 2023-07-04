@@ -50,7 +50,7 @@ instance OOProg CodeInfo where
 
 instance ProgramSym CodeInfo where
   type Program CodeInfo = GOOLState
-  prog _ _ fs = do
+  prog _ _ _ fs = do
     mapM_ (zoom lensGStoFS) fs
     modify (updateMEMWithCalls . callMapTransClosure)
     s <- S.get
@@ -60,7 +60,7 @@ instance FileSym CodeInfo where
   type File CodeInfo = ()
   fileDoc = execute1
   
-  docMod _ _ _ = execute1
+  docMod _ _ _ _ = execute1
 
 instance PermanenceSym CodeInfo where
   type Permanence CodeInfo = ()

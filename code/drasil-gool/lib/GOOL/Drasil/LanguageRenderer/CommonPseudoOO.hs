@@ -88,8 +88,7 @@ doxFunc = docFunc functionDox
 doxClass :: (RenderSym r) => String -> SClass r -> SClass r
 doxClass = docClass classDox
 
-doxMod :: (RenderSym r) => String -> String -> [String] -> String -> SFile r -> 
-  SFile r
+doxMod :: (RenderSym r) => String -> String -> [String] -> String -> String -> SFile r -> SFile r
 doxMod = docMod moduleDox
 
 -- Python, Java, and C# --

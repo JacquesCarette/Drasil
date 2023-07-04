@@ -58,7 +58,7 @@ class (ProgramSym r, VectorType r, VectorDecl r, VectorThunk r,
 
 class (FileSym r) => ProgramSym r where
   type Program r
-  prog :: Label -> Label -> [SFile r] -> GSProgram r
+  prog :: Label -> Label -> Label -> [SFile r] -> GSProgram r
 
 type SFile a = FS (a (File a))
 
@@ -67,7 +67,7 @@ class (ModuleSym r) => FileSym r where
   fileDoc :: FSModule r -> SFile r
 
   -- Module description, list of author names, date as a String, file to comment
-  docMod :: String -> [String] -> String -> SFile r -> SFile r
+  docMod :: String -> [String] -> String -> String -> SFile r -> SFile r
 
 class PermanenceSym r where
   type Permanence r

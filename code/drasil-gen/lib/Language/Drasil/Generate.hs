@@ -29,6 +29,7 @@ import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD,
   unPP, unJP, unCSP, unCPPP, unSP)
 import Language.Drasil.Output.Formats(Filename, DocSpec(DocSpec), DocChoices(DC))
+import Data.Drasil.DrasilConfig (obtainVersion)
 
 import Language.Drasil.TypeCheck
 import Language.Drasil.Dump
@@ -117,21 +118,23 @@ genLog SI{_sys = sysName} pinfo = do
   setCurrentDirectory workingDir
 
 -- | Calls the code generator.
-genCode :: Choices -> CodeSpec -> IO ()
-genCode chs spec = do
+genCode :: Choices -> CodeSpec -> FilePath -> IO ()
+genCode chs spec fp = do
   workingDir <- getCurrentDirectory
   time <- getCurrentTime
   sampData <- maybe (return []) (\sd -> readWithDataDesc sd $ sampleInputDD
     (extInputs spec)) (getSampleData chs)
   createDirectoryIfMissing False "src"
   setCurrentDirectory "src"
+  x <- obtainVersion fp
   let genLangCode Java = genCall Java unJC unJP
       genLangCode Python = genCall Python unPC unPP
       genLangCode CSharp = genCall CSharp unCSC unCSP
       genLangCode Cpp = genCall Cpp unCPPC unCPPP
       genLangCode Swift = genCall Swift unSC unSP
+      vers = x
       genCall lng unProgRepr unPackRepr = generateCode lng unProgRepr
-        unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
+        unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec vers
   mapM_ genLangCode (lang chs)
   setCurrentDirectory workingDir
 

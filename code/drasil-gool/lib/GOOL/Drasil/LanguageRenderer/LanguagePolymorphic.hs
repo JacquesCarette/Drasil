@@ -497,8 +497,8 @@ fileDoc ext topb botb mdl = do
   S.fileFromData fp (toState updm)
 
 docMod :: (RenderSym r) => ModuleDocRenderer -> String -> String -> [String] -> 
-  String -> SFile r -> SFile r
-docMod mdr e d a dt fl = commentedMod fl (docComment $ mdr d a dt . addExt e 
+  String -> String -> SFile r -> SFile r
+docMod mdr e d a dt v fl = commentedMod fl (docComment $ mdr d a dt v . addExt e 
   <$> getModuleName)
 
 fileFromData :: (RenderSym r) => (FilePath -> r (Module r) -> r (File r)) 

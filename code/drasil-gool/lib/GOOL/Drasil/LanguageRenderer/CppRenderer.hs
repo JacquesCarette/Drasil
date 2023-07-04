@@ -133,11 +133,11 @@ instance (Pair p) => OOProg (p CppSrcCode CppHdrCode)
 
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
   type Program (p CppSrcCode CppHdrCode) = ProgData
-  prog n st mods = do
+  prog n st v mods = do
     m <-  mapM (zoom lensGStoFS) mods
     let fm = map pfst m
         sm = map (hdrToSrc . psnd) m
-    p1 <- prog n st $ map pure sm ++ map pure fm
+    p1 <- prog n st v $ map pure sm ++ map pure fm
     modify revFiles
     pure $ pair p1 (toCode emptyProg)
 
@@ -147,7 +147,7 @@ instance (Pair p) => FileSym (p CppSrcCode CppHdrCode) where
   type File (p CppSrcCode CppHdrCode) = FileData
   fileDoc = pair1 fileDoc fileDoc
 
-  docMod d a dt = pair1 (docMod d a dt) (docMod d a dt)
+  docMod d a dt v = pair1 (docMod d a dt v) (docMod d a dt v)
 
 instance (Pair p) => RenderFile (p CppSrcCode CppHdrCode) where
   top m = pair (top $ pfst m) (top $ psnd m)
@@ -998,7 +998,7 @@ instance Monad CppSrcCode where
 
 instance ProgramSym CppSrcCode where
   type Program CppSrcCode = ProgData
-  prog n st = onStateList (onCodeList (progD n st)) . map (zoom lensGStoFS)
+  prog n st v = onStateList (onCodeList (progD n st v)) . map (zoom lensGStoFS)
 
 instance RenderSym CppSrcCode
   

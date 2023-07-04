@@ -131,8 +131,8 @@ instance OOProg JavaCode where
 
 instance ProgramSym JavaCode where
   type Program JavaCode = ProgData
-  prog n st fs = modifyReturnList (map (zoom lensGStoFS) fs) (revFiles . 
-    addProgNameToPaths n) (onCodeList (progD n st . map (R.package n 
+  prog n st v fs = modifyReturnList (map (zoom lensGStoFS) fs) (revFiles . 
+    addProgNameToPaths n) (onCodeList (progD n st v . map (R.package n 
     endStatement)))
 
 instance RenderSym JavaCode

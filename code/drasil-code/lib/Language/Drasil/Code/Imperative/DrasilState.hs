@@ -70,6 +70,7 @@ data DrasilState = DrasilState {
   clsMap :: ClassDefinitionMap,
   defList :: [Name],
   getVal :: Int,
+  version :: String,
   -- Stateful
   currentModule :: String,
   currentClass :: String,

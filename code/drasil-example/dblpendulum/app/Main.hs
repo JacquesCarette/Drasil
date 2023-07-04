@@ -13,6 +13,6 @@ main = do
   dumpEverything fullSI ".drasil/"
   typeCheckSI fullSI
   gen (DocSpec (docChoices SRS [HTML, TeX, JSON]) "DblPendulum_SRS") srs printSetting
-  genCode choices code
+  genCode choices code "../../../drasil-metadata/lib/Data/Drasil/DrasilConfiguration.json"
   genDot fullSI
   genLog fullSI printSetting

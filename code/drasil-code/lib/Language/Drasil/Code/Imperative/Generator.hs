@@ -47,8 +47,8 @@ import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
 -- | Initializes the generator's 'DrasilState'.
 -- 'String' parameter is a string representing the date.
 -- \['Expr'\] parameter is the sample input values provided by the user.
-generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
-generator l dt sd chs spec = DrasilState {
+generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> String -> DrasilState
+generator l dt sd chs spec vers = DrasilState {
   -- constants
   codeSpec = spec,
   modular = modularity $ architecture chs,
@@ -76,6 +76,7 @@ generator l dt sd chs spec = DrasilState {
   clsMap = cdm,
   defList = nub $ keys mem ++ keys cdm,
   getVal = folderVal chs,
+  version = vers,
 
   -- stateful
   currentModule = "",
@@ -163,7 +164,8 @@ genProgram = do
   ms <- chooseModules $ modular g
   let n = pName $ codeSpec g
   let p = show $ sentenceDoc (sysinfodb $ codeSpec g) Implementation Linear $ foldlSent $ purpose $ codeSpec g
-  return $ prog n p ms
+  let v = version g
+  return $ prog n p v ms
 
 -- | Generates either a single module or many modules, based on the users choice 
 -- of modularity.

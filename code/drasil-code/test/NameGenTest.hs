@@ -3,7 +3,7 @@ module NameGenTest (nameGenTest) where
 import GOOL.Drasil
 
 nameGenTest :: OOProg r => GSProgram r
-nameGenTest = prog "NameGenTest" "" [fileDoc $ buildModule "NameGenTest" [] [main, helper] []]
+nameGenTest = prog "NameGenTest" "" "" [fileDoc $ buildModule "NameGenTest" [] [main, helper] []]
 
 helper :: OOProg r => SMethod r
 helper = function "helper" private void [param temp] $ body

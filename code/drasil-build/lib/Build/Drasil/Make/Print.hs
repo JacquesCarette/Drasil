@@ -31,6 +31,7 @@ printPhony = (<+>) (text ".PHONY:") . hsep . noFirstElement . tail . map (\(R t 
 
 -- | Renders targets with their dependencies.
 printTarget :: Target -> Dependencies -> Doc
+printTarget nameLb []   = text (renderMS nameLb)
 printTarget nameLb deps = text (renderMS nameLb ++ ":") <+> hsep (map (text . renderMS) deps)
 
 -- | Renders a makefile command.

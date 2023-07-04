@@ -3,40 +3,40 @@
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer (
   -- * Common Syntax
-  classDec, dot, commentStart, returnLabel, ifLabel, elseLabel, elseIfLabel, 
-  forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, throwsLabel, 
-  importLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
-  endStatement, constDec', exceptionObj', new', this', self', array', listSep', 
-  argc, argv, args, printLabel, constDec, exceptionObj, mainFunc, new, this, 
-  self, nullLabel, array, listSep, sqrt, abs, fabs, log10, log, exp, sin, cos, 
+  classDec, dot, commentStart, returnLabel, ifLabel, elseLabel, elseIfLabel,
+  forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, throwsLabel,
+  importLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd,
+  endStatement, constDec', exceptionObj', new', this', self', array', listSep',
+  argc, argv, args, printLabel, constDec, exceptionObj, mainFunc, new, this,
+  self, nullLabel, array, listSep, sqrt, abs, fabs, log10, log, exp, sin, cos,
   tan, asin, acos, atan, floor, ceil, pow, piLabel, access, containing, tuple,
   mathFunc, addExt,
-  
+
   -- * Default Functions available for use in renderers
-  package, file, module', class', multiStmt, block, body, print, printFile, 
-  param, method, stateVar, constVar, stateVarList, switch, assign, 
-  addAssign, subAssign, increment, decrement, listDec, getTerm, return', 
-  comment, var, extVar, arg, classVar, objVar, unOpDocD, unOpDocD', binOpDocD, 
-  binOpDocD', constDecDef, func, cast, listAccessFunc, listSetFunc, objAccess, 
-  castObj, break, continue, static, dynamic, private, public, blockCmt, docCmt, 
+  package, file, module', class', multiStmt, block, body, print, printFile,
+  param, method, stateVar, constVar, stateVarList, switch, assign,
+  addAssign, subAssign, increment, decrement, listDec, getTerm, return',
+  comment, var, extVar, arg, classVar, objVar, unOpDocD, unOpDocD', binOpDocD,
+  binOpDocD', constDecDef, func, cast, listAccessFunc, listSetFunc, objAccess,
+  castObj, break, continue, static, dynamic, private, public, blockCmt, docCmt,
   commentedItem, addComments, FuncDocRenderer, functionDox, ClassDocRenderer,
-  classDox, ModuleDocRenderer, moduleDox, commentedMod, valueList, 
-  variableList, parameterList, namedArgList, prependToBody, appendToBody, 
+  classDox, ModuleDocRenderer, moduleDox, commentedMod, valueList,
+  variableList, parameterList, namedArgList, prependToBody, appendToBody,
   surroundBody, getterName, setterName, intValue
 ) where
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, Library, SValue, BodySym(Body), 
+import GOOL.Drasil.ClassInterface (Label, Library, SValue, BodySym(Body),
   PermanenceSym(Permanence), TypeSym(Type), TypeElim(..), VariableSym(Variable),
-  VariableElim(..), ValueSym(..), StatementSym(Statement), ScopeSym(Scope), 
+  VariableElim(..), ValueSym(..), StatementSym(Statement), ScopeSym(Scope),
   ParameterSym(Parameter))
 import GOOL.Drasil.RendererClasses (RenderSym)
 import qualified GOOL.Drasil.RendererClasses as RC (PermElim(..), BodyElim(..),
   InternalTypeElim(..), InternalVarElim(..), ValueElim(..), StatementElim(..),
   ScopeElim(..), ParamElim(..))
-import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
+import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod,
   updateMod, TypeData(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
 
@@ -51,10 +51,10 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
 -- Syntax common to several renderers --
 ----------------------------------------
 
-classDec, dot, commentStart, returnLabel, ifLabel, elseLabel, elseIfLabel, 
+classDec, dot, commentStart, returnLabel, ifLabel, elseLabel, elseIfLabel,
   forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, throwsLabel,
-  importLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
-  endStatement, constDec', exceptionObj', new', this', self', array', 
+  importLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd,
+  endStatement, constDec', exceptionObj', new', this', self', array',
   listSep' :: Doc
 classDec = text "class"
 dot = text "."
@@ -85,7 +85,7 @@ self' = text self
 array' = text array
 listSep' = text listSep
 
-argc, argv, args, printLabel, constDec, exceptionObj, mainFunc, new, this, 
+argc, argv, args, printLabel, constDec, exceptionObj, mainFunc, new, this,
   self, nullLabel, array, listSep :: String
 argc = "argc"
 argv = "argv"
@@ -101,7 +101,7 @@ nullLabel = "null"
 array = "[]"
 listSep = ", "
 
-sqrt, abs, fabs, log10, log, exp, sin, cos, tan, asin, acos, atan, floor, 
+sqrt, abs, fabs, log10, log, exp, sin, cos, tan, asin, acos, atan, floor,
   ceil, pow, piLabel :: String
 sqrt = "sqrt"
 abs = "abs"
@@ -140,8 +140,8 @@ addExt ext nm = nm ++ "." ++ ext
 ----------------------------------
 
 package :: Label -> Doc -> FileData -> FileData
-package n end f = fileD (n ++ "/" ++ filePath f) (updateMod 
-  (\d -> emptyIfEmpty d (vibcat [text "package" <+> text n <> end, d])) 
+package n end f = fileD (n ++ "/" ++ filePath f) (updateMod
+  (\d -> emptyIfEmpty d (vibcat [text "package" <+> text n <> end, d]))
   (fileMod f))
 
 file :: Doc -> Doc -> Doc -> Doc
@@ -161,14 +161,14 @@ file t m b = vibcat [
 -- Module --
 
 module' :: Doc -> Doc -> Doc -> Doc
-module' ls fs cs = emptyIfEmpty (fs <> cs) (vibcat (filter (not . isEmpty) 
+module' ls fs cs = emptyIfEmpty (fs <> cs) (vibcat (filter (not . isEmpty)
   [ls, fs, cs]))
 
 -- Class --
 
 class' :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
 class' n p s vs fs = vcat [
-  s <+> classDec <+> text n <+> p <+> lbrace, 
+  s <+> classDec <+> text n <+> p <+> lbrace,
   indentList [
     vs,
     blank,
@@ -208,10 +208,10 @@ param v = RC.type' (variableType v) <+> RC.variable v
 
 -- Method --
 
-method :: (RenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> 
+method :: (RenderSym r) => Label -> r (Scope r) -> r (Permanence r) ->
   r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 method n s p t ps b = vcat [
-  RC.scope s <+> RC.perm p <+> RC.type' t <+> text n <> 
+  RC.scope s <+> RC.perm p <+> RC.type' t <+> text n <>
     parens (parameterList ps) <+> lbrace,
   indent (RC.body b),
   rbrace]
@@ -230,9 +230,9 @@ stateVarList = vcat
 
 -- Controls --
 
-switch :: (RenderSym r) => (Doc -> Doc) -> r (Statement r) -> r (Value r) -> r (Body r) -> 
+switch :: (RenderSym r) => (Doc -> Doc) -> r (Statement r) -> r (Value r) -> r (Body r) ->
   [(r (Value r), r (Body r))] -> Doc
-switch f st v defBody cs = 
+switch f st v defBody cs =
   let caseDoc (l, result) = vcat [
         text "case" <+> RC.value l <> colon,
         indentList [
@@ -268,11 +268,11 @@ decrement :: (RenderSym r) => r (Variable r) -> Doc
 decrement v = RC.variable v <> text "--"
 
 listDec :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-listDec v n = space <> equals <+> new' <+> RC.type' (variableType v) 
+listDec v n = space <> equals <+> new' <+> RC.type' (variableType v)
   <> parens (RC.value n)
 
 constDecDef :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-constDecDef v def = constDec' <+> RC.type' (variableType v) <+> 
+constDecDef v def = constDec' <+> RC.type' (variableType v) <+>
   RC.variable v <+> equals <+> RC.value def
 
 return' :: (RenderSym r) => [r (Value r)] -> Doc
@@ -386,7 +386,7 @@ addComments c cStart b = vcat [
   endCommentDelimit c cStart]
 
 commentDelimit :: Label -> Doc -> Doc
-commentDelimit c cStart = 
+commentDelimit c cStart =
   let com = cStart <> text (" " ++ c ++ " ")
   in com <> text (dashes (render com) commentLength)
 
@@ -411,9 +411,9 @@ classDox desc = [doxBrief ++ desc | not (null desc)]
 type ModuleDocRenderer = String -> [String] -> String -> String -> String -> [String]
 
 moduleDox :: ModuleDocRenderer
-moduleDox desc as date v m = (doxFile ++ m) : 
+moduleDox desc as date v m = (doxFile ++ m) :
   [doxAuthor ++ stringList as | not (null as)] ++
-  [doxDate ++ date | not (null date)] ++ 
+  [doxDate ++ date | not (null date)] ++
   [doxBrief ++ desc | not (null desc)] ++
   [doxDrasilGen v]
 
@@ -467,4 +467,4 @@ doxAuthor = doxCommand ++ "author "
 doxDate = doxCommand ++ "date "
 
 doxDrasilGen :: String -> String
-doxDrasilGen v = doxCommand ++ "\"Generated by Drasil " ++ (filter (/= '"') v) ++ "\""
+doxDrasilGen v = doxCommand ++ "\"Generated by Drasil " ++ filter (/= '"') v ++ "\""

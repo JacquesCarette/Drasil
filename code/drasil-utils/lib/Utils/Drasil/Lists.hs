@@ -46,3 +46,9 @@ foldle1 f g (x:y:xs) = foldle f g (f x y) xs
 -- | Convert "row" of elements into "column" of elements.
 toColumn :: [a] -> [[a]]
 toColumn = map (: [])
+
+-- | Helper to remove the first element of a list if it exists.
+noFirstElement :: [a] -> [a]
+noFirstElement [] = []
+noFirstElement [_] = []
+noFirstElement xs = tail xs

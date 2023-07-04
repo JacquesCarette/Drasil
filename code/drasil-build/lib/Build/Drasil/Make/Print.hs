@@ -9,6 +9,7 @@ import Build.Drasil.Make.AST (Command(C), CommandOpts(IgnoreReturnCode),
 import Build.Drasil.Make.Helpers (addCommonFeatures, tab)
 import Build.Drasil.Make.Import (RuleTransformer, toMake)
 import Build.Drasil.Make.MakeString (renderMS)
+import Utils.Drasil(noFirstElement)
 
 -- | Generates the makefile by calling 'build' after 'toMake'.
 genMake :: RuleTransformer c => [c] -> Doc
@@ -39,8 +40,3 @@ printCmd (C c opts) = text $ (if IgnoreReturnCode `elem` opts then "-" else "") 
 -- | Renders multiple commands.
 printCmds :: [Command] -> Doc
 printCmds = foldr (($+$) . (<>) tab . printCmd) empty
-
-noFirstElement :: [a] -> [a]
-noFirstElement [] = []
-noFirstElement [_] = []
-noFirstElement xs = tail xs

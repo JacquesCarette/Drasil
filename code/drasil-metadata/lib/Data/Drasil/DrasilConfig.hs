@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
 -- Contains the current Drasil Version
-module Data.Drasil.Version (obtainVersion, drasilVersion) where
+module Data.Drasil.DrasilConfig (obtainVersion, drasilVersion) where
 
 import Data.Aeson
 import qualified Data.ByteString.Lazy as B

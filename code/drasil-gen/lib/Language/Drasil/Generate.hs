@@ -118,15 +118,15 @@ genLog SI{_sys = sysName} pinfo = do
   setCurrentDirectory workingDir
 
 -- | Calls the code generator.
-genCode :: Choices -> CodeSpec -> FilePath -> IO ()
-genCode chs spec fp = do
+genCode :: Choices -> CodeSpec -> Int -> IO ()
+genCode chs spec num = do
   workingDir <- getCurrentDirectory
   time <- getCurrentTime
   sampData <- maybe (return []) (\sd -> readWithDataDesc sd $ sampleInputDD
     (extInputs spec)) (getSampleData chs)
   createDirectoryIfMissing False "src"
   setCurrentDirectory "src"
-  x <- obtainVersion fp
+  x <- obtainVersion num
   let genLangCode Java = genCall Java unJC unJP
       genLangCode Python = genCall Python unPC unPP
       genLangCode CSharp = genCall CSharp unCSC unCSP

@@ -6,14 +6,15 @@ module Data.Drasil.DrasilConfig (obtainVersion, drasilVersion) where
 import Data.Aeson
 import qualified Data.ByteString.Lazy as B
 import GHC.Generics
+import Utils.Drasil(drasilConfigPath)
 
 newtype DrasilConfig = DrasilConfig {version :: String} deriving Generic
 
 instance FromJSON DrasilConfig
 
-obtainVersion :: FilePath -> IO String
-obtainVersion fp = do
-  input <- B.readFile fp
+obtainVersion :: Int -> IO String
+obtainVersion num = do
+  input <- B.readFile $ drasilConfigPath num
   let dc = decode input :: Maybe DrasilConfig
   case dc of
     Nothing -> return "error parsing JSON"

@@ -13,6 +13,6 @@ main = do
   dumpEverything fullSI ".drasil/"
   typeCheckSI fullSI
   gen (DocSpec (docChoices SRS [HTML, TeX, JSON]) "PDController_SRS") srs printSetting
-  genCode codeChoices codeSpecs "../../../drasil-metadata/lib/Data/Drasil/DrasilConfiguration.json"
+  genCode codeChoices codeSpecs 3
   genDot fullSI
   genLog fullSI printSetting

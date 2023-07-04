@@ -29,7 +29,7 @@ genCodeWithChoices (c:cs) = let dir = map toLower $ codedDirName (getSysName ful
     workingDir <- getCurrentDirectory
     createDirectoryIfMissing False dir
     setCurrentDirectory dir
-    genCode c (codeSpec fullSI c []) "../../../../drasil-metadata/lib/Data/Drasil/DrasilConfiguration.json"
+    genCode c (codeSpec fullSI c []) 4
     setCurrentDirectory workingDir
     genCodeWithChoices cs
 

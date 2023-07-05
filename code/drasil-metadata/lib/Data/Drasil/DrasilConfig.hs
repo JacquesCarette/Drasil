@@ -10,7 +10,7 @@ import Utils.Drasil(drasilConfigPath)
 
 newtype DrasilConfig = DrasilConfig {version :: String} deriving Generic
 
--- The number of folders that needs to be exited in order to obtain the
+-- The number of folders that need to be exited in order to obtain the
 -- DrasilConfiguration.json file
 defaultFolderVal :: Int
 defaultFolderVal = 3

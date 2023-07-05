@@ -12,6 +12,6 @@ main = do
   dumpEverything fullSI ".drasil/"
   typeCheckSI fullSI
   gen (DocSpec (docChoices SRS [HTML, TeX, JSON]) "GlassBR_SRS") srs printSetting
-  genCode choices code 3
+  genCode choices code Nothing
   genDot fullSI
   genLog fullSI printSetting

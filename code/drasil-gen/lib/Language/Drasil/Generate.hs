@@ -118,7 +118,7 @@ genLog SI{_sys = sysName} pinfo = do
   setCurrentDirectory workingDir
 
 -- | Calls the code generator.
-genCode :: Choices -> CodeSpec -> Int -> IO ()
+genCode :: Choices -> CodeSpec -> Maybe Int -> IO ()
 genCode chs spec num = do
   workingDir <- getCurrentDirectory
   time <- getCurrentTime

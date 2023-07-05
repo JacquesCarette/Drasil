@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
 -- Contains the current Drasil Version
-module Data.Drasil.DrasilConfig (obtainVersion, drasilVersion) where
+module Data.Drasil.DrasilConfig (obtainVersion) where
 
 import Data.Aeson
 import qualified Data.ByteString.Lazy as B
@@ -19,7 +19,3 @@ obtainVersion num = do
   case dc of
     Nothing -> return "error parsing JSON"
     Just d -> return ((show.version) d)
-
--- The current Drasil version
-drasilVersion :: String
-drasilVersion = "v0.1-alpha"

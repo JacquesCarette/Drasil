@@ -7,10 +7,11 @@ import Data.Aeson
 import qualified Data.ByteString.Lazy as B
 import GHC.Generics
 import Utils.Drasil(drasilConfigPath)
+import Data.Maybe(fromMaybe)
 
 newtype DrasilConfig = DrasilConfig {version :: String} deriving Generic
 
--- The number of folders that need to be exited in order to obtain the
+-- The number of folders that need to be exited to obtain the 
 -- DrasilConfiguration.json file
 defaultFolderVal :: Int
 defaultFolderVal = 3
@@ -21,13 +22,6 @@ instance FromJSON DrasilConfig
 obtainVersion :: Maybe Int -> IO String
 obtainVersion num = do
   input <- B.readFile $ drasilConfigPath $ fromMaybe defaultFolderVal num
-  let dc = decode input :: Maybe DrasilConfig
-  case dc of
-    Nothing -> return "error parsing JSON"
-    Just d -> return ((show.version) d)
-
-obtainVersion (Just num) = do
-  input <- B.readFile $ drasilConfigPath num
   let dc = decode input :: Maybe DrasilConfig
   case dc of
     Nothing -> return "error parsing JSON"

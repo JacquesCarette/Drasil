@@ -19,8 +19,8 @@ instance FromJSON DrasilConfig
 
 -- Reads the DrasilConfiguration.json file and extracts the data from that file.
 obtainVersion :: Maybe Int -> IO String
-obtainVersion Nothing = do
-  input <- B.readFile $ drasilConfigPath defaultFolderVal
+obtainVersion num = do
+  input <- B.readFile $ drasilConfigPath $ fromMaybe defaultFolderVal num
   let dc = decode input :: Maybe DrasilConfig
   case dc of
     Nothing -> return "error parsing JSON"

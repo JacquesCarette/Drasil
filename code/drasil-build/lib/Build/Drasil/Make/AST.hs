@@ -7,7 +7,7 @@ import Build.Drasil.Make.MakeString (MakeString)
 -- | A Makefile is made up of Makefile rules.
 newtype Makefile = M [Rule]
 
--- | A Makefile Rule needs a comment, target, dependencies, type, and commands.
+-- | A Makefile Rule needs comments, a target, dependencies, a type, and commands.
 data Rule = R [MkComment] Target Dependencies Type [Command]
 
 -- | A command is made up of 'MakeString's and command operators.

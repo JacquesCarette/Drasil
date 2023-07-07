@@ -7,8 +7,8 @@ import Build.Drasil.Make.MakeString (MakeString)
 -- | A Makefile is made up of Makefile rules.
 newtype Makefile = M [Rule]
 
--- | A Makefile Rule needs a target, dependencies, type, and commands.
-data Rule = R Target Dependencies Type [Command]
+-- | A Makefile Rule needs a comment, target, dependencies, type, and commands.
+data Rule = R [MkComment] Target Dependencies Type [Command]
 
 -- | A command is made up of 'MakeString's and command operators.
 data Command = C MakeString [CommandOpts]
@@ -21,6 +21,9 @@ data CommandOpts =
 data Type = Abstract
           | File deriving Eq
 
+
+-- | A makefile Comment is a String
+type MkComment = String
 -- | A Makefile target is made from a 'MakeString'.
 type Target = MakeString
 -- | Dependencies are made up of 0 or more 'Target's.
@@ -29,12 +32,12 @@ type Dependencies = [Target]
 -- * Constructors
 
 -- | Creates a Rule which results in a file being created.
-mkFile :: Target -> Dependencies -> [Command] -> Rule
-mkFile t d = R t d File
+mkFile :: [MkComment] -> Target -> Dependencies -> [Command] -> Rule
+mkFile c t d = R c t d File
 
 -- | Creates an abstract Rule not associated to a specific file.
-mkRule :: Target -> Dependencies -> [Command] -> Rule
-mkRule t d = R t d Abstract
+mkRule :: [MkComment] -> Target -> Dependencies -> [Command] -> Rule
+mkRule c t d = R c t d Abstract
 
 -- | Creates a Command which fails the make process if it does not return zero.
 mkCheckedCommand :: MakeString -> Command

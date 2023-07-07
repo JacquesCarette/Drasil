@@ -5,7 +5,7 @@ import Prelude hiding ((<>))
 import Text.PrettyPrint (Doc, empty, text, (<>), (<+>), ($+$), ($$), hsep, vcat)
 
 import Build.Drasil.Make.AST (Command(C), CommandOpts(IgnoreReturnCode),
-  Dependencies, Makefile(M), Rule(R), Target, Type(Abstract))
+  Dependencies, Makefile(M), Rule(R), Target, Type(Abstract), MkComment)
 import Build.Drasil.Make.Helpers (addCommonFeatures, tab)
 import Build.Drasil.Make.Import (RuleTransformer, toMake)
 import Build.Drasil.Make.MakeString (renderMS)
@@ -21,12 +21,21 @@ build (M rules) = addCommonFeatures rules $
 
 -- | Renders specific makefile rules. Called by 'build'.
 printRule :: Rule -> Doc
-printRule (R t d _ c) = printTarget t d $+$ printCmds c
+printRule (R c t d _ cmd) = printComments c $+$ printTarget t d $+$ printCmds cmd
+
+-- | Renders a makefile comment
+printComment :: MkComment -> Doc
+printComment [] = empty
+printComment c  = text ("# " ++ c ++ "\n")
+
+-- | Renders multiple comments
+printComments :: [MkComment] -> Doc
+printComments = foldr (($+$) . printComment) empty
 
 -- | Gathers all rules to abstract targets and tags them as phony.
 printPhony :: [Rule] -> Doc
-printPhony = (<+>) (text ".PHONY:") . hsep . tail . map (\(R t _ _ _) -> text $ renderMS t) . 
-  filter (\(R _ _ t _) -> t == Abstract)
+printPhony = (<+>) (text ".PHONY:") . hsep . map (\(R _ t _ _ _) -> text $ renderMS t) .
+  filter (\(R _ _ _ t _) -> t == Abstract)
 
 -- | Renders targets with their dependencies.
 printTarget :: Target -> Dependencies -> Doc

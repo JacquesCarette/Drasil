@@ -23,7 +23,7 @@
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \bibliography{bibfile}
-\title{Software Requirements Specification for Game Physics}
+\title{Software Requirements Specification for GamePhysics}
 \author{Alex Halliwushka, Luthfi Mawarid, and Olu Owojaiye}
 \begin{document}
 \maketitle
@@ -218,7 +218,7 @@ GD & General Definition
 \\
 GS & Goal Statement
 \\
-Game Physics & game physics library
+GamePhysics & GamePhysics
 \\
 IM & Instance Model
 \\
@@ -245,11 +245,11 @@ Uncert. & Typical Uncertainty
 \label{Sec:Intro}
 Due to the rising cost of developing video games, developers are looking for ways to save time and money for their projects. Using an open source physics library that is reliable and free will cut down development costs and lead to better quality products.
 
-The following section provides an overview of the Software Requirements Specification (SRS) for Game Physics. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+The following section provides an overview of the Software Requirements Specification (SRS) for GamePhysics. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
-The primary purpose of this document is to record the requirements of the game physics library. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of Game Physics. With the exception of \hyperref[Sec:SysConstraints]{system constraints}, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+The primary purpose of this document is to record the requirements of GamePhysics. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of GamePhysics. With the exception of \hyperref[Sec:SysConstraints]{system constraints}, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
 
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 
@@ -259,7 +259,7 @@ The scope of the requirements includes the physical simulation of 2D rigid bodie
 
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
-Reviewers of this documentation should have an understanding of rigid body dynamics and high school calculus. The users of Game Physics can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Sec:User Characteristics}.
+Reviewers of this documentation should have an understanding of rigid body dynamics and high school calculus. The users of GamePhysics can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Sec:User Characteristics}.
 
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
@@ -273,7 +273,7 @@ This section provides general information about the system. It identifies the in
 
 \subsection{System Context}
 \label{Sec:SysContext}
-\hyperref[Figure:sysCtxDiag]{Fig:sysCtxDiag} shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (Game Physics). Arrows are used to show the data flow between the system and its environment.
+\hyperref[Figure:sysCtxDiag]{Fig:sysCtxDiag} shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (GamePhysics). Arrows are used to show the data flow between the system and its environment.
 
 \begin{figure}
 \begin{center}
@@ -291,7 +291,7 @@ The interaction between the product and the user is through an application progr
 \item{Ensure application programming interface use complies with the user guide.}
 \item{Ensure required \hyperref[Sec:Assumps]{software assumptions} are appropriate for any particular problem the software addresses.}
 \end{itemize}
-\item{Game Physics Responsibilities}
+\item{GamePhysics Responsibilities}
 \begin{itemize}
 \item{Determine if the inputs and simulation state satisfy the required \hyperref[Sec:DataConstraints]{physical and system constraints}.}
 \item{Calculate the new state of all rigid bodies within the simulation at each simulation step.}
@@ -300,7 +300,7 @@ The interaction between the product and the user is through an application progr
 \end{itemize}
 \subsection{User Characteristics}
 \label{Sec:UserChars}
-The end user of Game Physics should have an understanding of first year programming concepts and an understanding of high school physics.
+The end user of GamePhysics should have an understanding of first year programming concepts and an understanding of high school physics.
 
 \subsection{System Constraints}
 \label{Sec:SysConstraints}
@@ -338,7 +338,7 @@ Given the kinematic properties, and forces (including any collision forces) appl
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
-The instance models that govern Game Physics are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern GamePhysics are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
@@ -355,7 +355,7 @@ This section simplifies the original problem and helps in developing the theoret
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
-This section focuses on the general equations and laws that Game Physics is based on.
+This section focuses on the general equations and laws that GamePhysics is based on.
 
 \vspace{\baselineskip}
 \noindent

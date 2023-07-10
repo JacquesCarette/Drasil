@@ -5,7 +5,7 @@ module GOOL.Drasil.ClassInterface (
   Label, Library, GSProgram, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
   VSThunk, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass,
   FSModule, NamedArgs, Initializers, MixedCall, MixedCtorCall, PosCall,
-  PosCtorCall,
+  PosCtorCall, Comment,
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), 

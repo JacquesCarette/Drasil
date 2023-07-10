@@ -4,6 +4,9 @@ module Build.Drasil.Make.Print where
 import Prelude hiding ((<>))
 import Text.PrettyPrint (Doc, empty, text, (<>), (<+>), ($+$), ($$), hsep, vcat)
 
+import qualified Data.Text as T
+import Text.Wrap
+
 import Build.Drasil.Make.AST (Command(C), CommandOpts(IgnoreReturnCode),
   Dependencies, Makefile(M), Rule(R), Target, Type(Abstract))
 import Build.Drasil.Make.Helpers (addCommonFeatures, tab)
@@ -27,7 +30,14 @@ printRule (R c t d _ cmd) = printComments c $+$ printTarget t d $+$ printCmds cm
 -- | Renders a makefile comment
 printComment :: Comment -> Doc
 printComment [] = empty
-printComment c  = text ("# " ++ c ++ "\n")
+printComment c  = text $ T.unpack (wrapText wrapSettings 80 $ T.pack c) ++ "\n"
+
+wrapSettings :: WrapSettings
+wrapSettings = WrapSettings { preserveIndentation = True
+                 , breakLongWords = False
+                 , fillStrategy = FillPrefix (T.pack "# ")
+                 , fillScope = FillAll
+                 }
 
 -- | Renders multiple comments
 printComments :: [Comment] -> Doc

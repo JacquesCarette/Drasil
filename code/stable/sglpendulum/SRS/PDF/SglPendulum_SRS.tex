@@ -23,7 +23,7 @@
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \bibliography{bibfile}
-\title{Software Requirements Specification for Pendulum}
+\title{Software Requirements Specification for SglPendulum}
 \author{Olu Owojaiye}
 \begin{document}
 \maketitle
@@ -159,13 +159,13 @@ Uncert. & Typical Uncertainty
 \end{longtblr}
 \section{Introduction}
 \label{Sec:Intro}
-A pendulum consists of mass attached to the end of a rod and its moving curve is highly sensitive to initial conditions. Therefore, it is useful to have a program to simulate the motion of the pendulum to exhibit its chaotic characteristics. The program documented here is called Pendulum.
+A pendulum consists of mass attached to the end of a rod and its moving curve is highly sensitive to initial conditions. Therefore, it is useful to have a program to simulate the motion of the pendulum to exhibit its chaotic characteristics. The program documented here is called SglPendulum.
 
-The following section provides an overview of the Software Requirements Specification (SRS) for Pendulum. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+The following section provides an overview of the Software Requirements Specification (SRS) for SglPendulum. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
-The primary purpose of this document is to record the requirements of SglPendulum. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of SglPendulum. With the exception of \hyperref[Sec:SysConstraints]{system constraints}, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+The primary purpose of this document is to record the requirements of SglPend. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of SglPend. With the exception of \hyperref[Sec:SysConstraints]{system constraints}, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
 
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 
@@ -175,7 +175,7 @@ The scope of the requirements includes the analysis of a two-dimensional (2D) pe
 
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
-Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, and ordinary differential equations. The users of SglPendulum can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Sec:User Characteristics}.
+Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, and ordinary differential equations. The users of SglPend can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Sec:User Characteristics}.
 
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
@@ -189,7 +189,7 @@ This section provides general information about the system. It identifies the in
 
 \subsection{System Context}
 \label{Sec:SysContext}
-\hyperref[Figure:sysCtxDiag]{Fig:sysCtxDiag} shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (SglPendulum). Arrows are used to show the data flow between the system and its environment.
+\hyperref[Figure:sysCtxDiag]{Fig:sysCtxDiag} shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (SglPend). Arrows are used to show the data flow between the system and its environment.
 
 \begin{figure}
 \begin{center}
@@ -203,11 +203,11 @@ The interaction between the product and the user is through an application progr
 \begin{itemize}
 \item{User Responsibilities}
 \begin{itemize}
-\item{Provide initial conditions of the physical state of the motion and the input data related to the Pendulum, ensuring no errors in the data entry.}
+\item{Provide initial conditions of the physical state of the motion and the input data related to the SglPendulum, ensuring no errors in the data entry.}
 \item{Ensure that consistent units are used for input variables.}
 \item{Ensure required \hyperref[Sec:Assumps]{software assumptions} are appropriate for any particular problem input to the software.}
 \end{itemize}
-\item{SglPendulum Responsibilities}
+\item{SglPend Responsibilities}
 \begin{itemize}
 \item{Detect data type mismatch, such as a string of characters input instead of a floating point number.}
 \item{Determine if the inputs satisfy the required physical and software constraints.}
@@ -217,7 +217,7 @@ The interaction between the product and the user is through an application progr
 \end{itemize}
 \subsection{User Characteristics}
 \label{Sec:UserChars}
-The end user of SglPendulum should have an understanding of high school physics, high school calculus and ordinary differential equations.
+The end user of SglPend should have an understanding of high school physics, high school calculus and ordinary differential equations.
 
 \subsection{System Constraints}
 \label{Sec:SysConstraints}
@@ -241,7 +241,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
-The physical system of SglPendulum, as shown in \hyperref[Figure:sglpendulum]{Fig:sglpendulum}, includes the following elements:
+The physical system of SglPend, as shown in \hyperref[Figure:sglpendulum]{Fig:sglpendulum}, includes the following elements:
 
 \begin{itemize}
 \item[PS1:]{The rod.}
@@ -263,7 +263,7 @@ Given the mass and length of the rod, initial angle of the mass and the gravitat
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
-The instance models that govern SglPendulum are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern SglPend are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
@@ -278,7 +278,7 @@ This section simplifies the original problem and helps in developing the theoret
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
-This section focuses on the general equations and laws that SglPendulum is based on.
+This section focuses on the general equations and laws that SglPend is based on.
 
 \vspace{\baselineskip}
 \noindent
@@ -1326,35 +1326,35 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 \begin{figure}
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/sglpendulum/avsa}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/sglpend/avsa}
 \caption{TraceGraphAvsA}
 \label{Figure:TraceGraphAvsA}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/sglpendulum/avsall}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/sglpend/avsall}
 \caption{TraceGraphAvsAll}
 \label{Figure:TraceGraphAvsAll}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/sglpendulum/refvsref}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/sglpend/refvsref}
 \caption{TraceGraphRefvsRef}
 \label{Figure:TraceGraphRefvsRef}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/sglpendulum/allvsr}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/sglpend/allvsr}
 \caption{TraceGraphAllvsR}
 \label{Figure:TraceGraphAllvsR}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
-\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/sglpendulum/allvsall}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/sglpend/allvsall}
 \caption{TraceGraphAllvsAll}
 \label{Figure:TraceGraphAllvsAll}
 \end{center}
@@ -1362,11 +1362,11 @@ The purpose of the traceability graphs is also to provide easy references on wha
 For convenience, the following graphs can be found at the links below:
 
 \begin{itemize}
-\item{\hyperref{../../../../traceygraphs/sglpendulum/avsa.svg}{}{}{TraceGraphAvsA}}
-\item{\hyperref{../../../../traceygraphs/sglpendulum/avsall.svg}{}{}{TraceGraphAvsAll}}
-\item{\hyperref{../../../../traceygraphs/sglpendulum/refvsref.svg}{}{}{TraceGraphRefvsRef}}
-\item{\hyperref{../../../../traceygraphs/sglpendulum/allvsr.svg}{}{}{TraceGraphAllvsR}}
-\item{\hyperref{../../../../traceygraphs/sglpendulum/allvsall.svg}{}{}{TraceGraphAllvsAll}}
+\item{\hyperref{../../../../traceygraphs/sglpend/avsa.svg}{}{}{TraceGraphAvsA}}
+\item{\hyperref{../../../../traceygraphs/sglpend/avsall.svg}{}{}{TraceGraphAvsAll}}
+\item{\hyperref{../../../../traceygraphs/sglpend/refvsref.svg}{}{}{TraceGraphRefvsRef}}
+\item{\hyperref{../../../../traceygraphs/sglpend/allvsr.svg}{}{}{TraceGraphAllvsR}}
+\item{\hyperref{../../../../traceygraphs/sglpend/allvsall.svg}{}{}{TraceGraphAllvsAll}}
 \end{itemize}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}

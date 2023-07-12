@@ -13,15 +13,15 @@ else
     endif
 endif
 
-# Project Name and Purpose: DblPendulum - To predict the motion of a pendulum.
+# Project Name and Purpose: DblPend - To predict the motion of a pendulum.
 
-build: DblPendulum$(TARGET_EXTENSION)
+build: DblPend$(TARGET_EXTENSION)
 
-DblPendulum$(TARGET_EXTENSION): Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs
-	$(CSC) -out:DblPendulum$(TARGET_EXTENSION) -r:Microsoft.Research.Oslo.dll Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs
+DblPend$(TARGET_EXTENSION): Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs
+	$(CSC) -out:DblPend$(TARGET_EXTENSION) -r:Microsoft.Research.Oslo.dll Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs
 
 run: build
-	./DblPendulum$(TARGET_EXTENSION) $(RUNARGS)
+	./DblPend$(TARGET_EXTENSION) $(RUNARGS)
 
 doc: doxConfig Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs
 	doxygen doxConfig

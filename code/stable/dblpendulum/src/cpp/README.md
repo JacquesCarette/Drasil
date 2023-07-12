@@ -1,4 +1,4 @@
-# DblPendulum 
+# DblPend 
 > Author: Dong Chen
 
 > Purpose: Predict the motion of a pendulum.
@@ -18,7 +18,7 @@ make build
 ```
 
 How to Change Input:
-DblPendulum will take the inputs from `input.txt` and write the outputs to `output.txt`.
+DblPend will take the inputs from `input.txt` and write the outputs to `output.txt`.
 Inputs can be changed by editing `input.txt`.
 
 ------------------------------------------------------------

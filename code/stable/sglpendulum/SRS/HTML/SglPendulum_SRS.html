@@ -2,7 +2,7 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="SglPendulum_SRS.css">
-    <title>Software Requirements Specification for Pendulum</title>
+    <title>Software Requirements Specification for SglPendulum</title>
     <meta charset="utf-8">
     <script>
     MathJax = {
@@ -21,7 +21,7 @@
   </head>
   <body>
     <div class="title">
-      <h1>Software Requirements Specification for Pendulum</h1>
+      <h1>Software Requirements Specification for SglPendulum</h1>
     </div>
     <div class="author"><h2>Olu Owojaiye</h2></div>
     <div id="Sec:ToC">
@@ -392,16 +392,16 @@
       <div class="section">
         <h1>Introduction</h1>
         <p class="paragraph">
-          A pendulum consists of mass attached to the end of a rod and its moving curve is highly sensitive to initial conditions. Therefore, it is useful to have a program to simulate the motion of the pendulum to exhibit its chaotic characteristics. The program documented here is called Pendulum.
+          A pendulum consists of mass attached to the end of a rod and its moving curve is highly sensitive to initial conditions. Therefore, it is useful to have a program to simulate the motion of the pendulum to exhibit its chaotic characteristics. The program documented here is called SglPendulum.
         </p>
         <p class="paragraph">
-          The following section provides an overview of the Software Requirements Specification (SRS) for Pendulum. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the Software Requirements Specification (SRS) for SglPendulum. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:DocPurpose">
           <div class="subsection">
             <h2>Purpose of Document</h2>
             <p class="paragraph">
-              The primary purpose of this document is to record the requirements of SglPendulum. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of SglPendulum. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+              The primary purpose of this document is to record the requirements of SglPend. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of SglPend. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
             </p>
             <p class="paragraph">
               This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
@@ -420,7 +420,7 @@
           <div class="subsection">
             <h2>Characteristics of Intended Reader</h2>
             <p class="paragraph">
-              Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, and ordinary differential equations. The users of SglPendulum can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
+              Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, and ordinary differential equations. The users of SglPend can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
             </p>
           </div>
         </div>
@@ -447,7 +447,7 @@
           <div class="subsection">
             <h2>System Context</h2>
             <p class="paragraph">
-              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (SglPendulum). Arrows are used to show the data flow between the system and its environment.
+              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (SglPend). Arrows are used to show the data flow between the system and its environment.
             </p>
             <div id="Figure:sysCtxDiag">
               <figure>
@@ -463,7 +463,7 @@
                 User Responsibilities
                 <ul class="list">
                   <li>
-                    Provide initial conditions of the physical state of the motion and the input data related to the Pendulum, ensuring no errors in the data entry.
+                    Provide initial conditions of the physical state of the motion and the input data related to the SglPendulum, ensuring no errors in the data entry.
                   </li>
                   <li>Ensure that consistent units are used for input variables.</li>
                   <li>
@@ -472,7 +472,7 @@
                 </ul>
               </li>
               <li>
-                SglPendulum Responsibilities
+                SglPend Responsibilities
                 <ul class="list">
                   <li>
                     Detect data type mismatch, such as a string of characters input instead of a floating point number.
@@ -491,7 +491,7 @@
           <div class="subsection">
             <h2>User Characteristics</h2>
             <p class="paragraph">
-              The end user of SglPendulum should have an understanding of high school physics, high school calculus and ordinary differential equations.
+              The end user of SglPend should have an understanding of high school physics, high school calculus and ordinary differential equations.
             </p>
           </div>
         </div>
@@ -535,7 +535,7 @@
               <div class="subsubsection">
                 <h3>Physical System Description</h3>
                 <p class="paragraph">
-                  The physical system of SglPendulum, as shown in <a href=#Figure:sglpendulum>Fig:sglpendulum</a>, includes the following elements:
+                  The physical system of SglPend, as shown in <a href=#Figure:sglpendulum>Fig:sglpendulum</a>, includes the following elements:
                 </p>
                 <div class="list">
                   <p>PS1: The rod.</p>
@@ -570,7 +570,7 @@
           <div class="subsection">
             <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              The instance models that govern SglPendulum are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+              The instance models that govern SglPend are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
             <div id="Sec:Assumps">
               <div class="subsubsection">
@@ -611,7 +611,7 @@
               <div class="subsubsection">
                 <h3>Theoretical Models</h3>
                 <p class="paragraph">
-                  This section focuses on the general equations and laws that SglPendulum is based on.
+                  This section focuses on the general equations and laws that SglPend is based on.
                 </p>
                 <div id="TM:acceleration">
                   <table class="tdefn">
@@ -2851,31 +2851,31 @@
         </p>
         <div id="Figure:TraceGraphAvsA">
           <figure>
-            <img src="../../../../traceygraphs/sglpendulum/avsa.svg" alt="TraceGraphAvsA" >
+            <img src="../../../../traceygraphs/sglpend/avsa.svg" alt="TraceGraphAvsA" >
             <figcaption>TraceGraphAvsA</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAvsAll">
           <figure>
-            <img src="../../../../traceygraphs/sglpendulum/avsall.svg" alt="TraceGraphAvsAll" >
+            <img src="../../../../traceygraphs/sglpend/avsall.svg" alt="TraceGraphAvsAll" >
             <figcaption>TraceGraphAvsAll</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphRefvsRef">
           <figure>
-            <img src="../../../../traceygraphs/sglpendulum/refvsref.svg" alt="TraceGraphRefvsRef" >
+            <img src="../../../../traceygraphs/sglpend/refvsref.svg" alt="TraceGraphRefvsRef" >
             <figcaption>TraceGraphRefvsRef</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAllvsR">
           <figure>
-            <img src="../../../../traceygraphs/sglpendulum/allvsr.svg" alt="TraceGraphAllvsR" >
+            <img src="../../../../traceygraphs/sglpend/allvsr.svg" alt="TraceGraphAllvsR" >
             <figcaption>TraceGraphAllvsR</figcaption>
           </figure>
         </div>
         <div id="Figure:TraceGraphAllvsAll">
           <figure>
-            <img src="../../../../traceygraphs/sglpendulum/allvsall.svg" alt="TraceGraphAllvsAll" >
+            <img src="../../../../traceygraphs/sglpend/allvsall.svg" alt="TraceGraphAllvsAll" >
             <figcaption>TraceGraphAllvsAll</figcaption>
           </figure>
         </div>
@@ -2884,19 +2884,19 @@
         </p>
         <ul class="list">
           <li>
-            <a href="../../../../traceygraphs/sglpendulum/avsa.svg">TraceGraphAvsA</a>
+            <a href="../../../../traceygraphs/sglpend/avsa.svg">TraceGraphAvsA</a>
           </li>
           <li>
-            <a href="../../../../traceygraphs/sglpendulum/avsall.svg">TraceGraphAvsAll</a>
+            <a href="../../../../traceygraphs/sglpend/avsall.svg">TraceGraphAvsAll</a>
           </li>
           <li>
-            <a href="../../../../traceygraphs/sglpendulum/refvsref.svg">TraceGraphRefvsRef</a>
+            <a href="../../../../traceygraphs/sglpend/refvsref.svg">TraceGraphRefvsRef</a>
           </li>
           <li>
-            <a href="../../../../traceygraphs/sglpendulum/allvsr.svg">TraceGraphAllvsR</a>
+            <a href="../../../../traceygraphs/sglpend/allvsr.svg">TraceGraphAllvsR</a>
           </li>
           <li>
-            <a href="../../../../traceygraphs/sglpendulum/allvsall.svg">TraceGraphAllvsAll</a>
+            <a href="../../../../traceygraphs/sglpend/allvsall.svg">TraceGraphAllvsAll</a>
           </li>
         </ul>
       </div>

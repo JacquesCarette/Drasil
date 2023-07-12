@@ -1,4 +1,4 @@
-package DblPendulum;
+package DblPend;
 
 /** \file OutputFormat.java
     \author Dong Chen

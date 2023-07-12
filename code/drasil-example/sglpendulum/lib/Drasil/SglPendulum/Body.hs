@@ -62,15 +62,15 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       , TAandA         -- Add table of abbreviation and acronym section
       ],
   IntroSec $
-    IntroProg justification (phrase progName)
+    IntroProg (justification progName) (phrase progName)
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],
        IOrgSec inModel (SRS.inModel [] []) EmptyS],
   GSDSec $ 
     GSDProg [
-      SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
-      UsrChars [userCharacteristicsIntro], 
+      SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
+      UsrChars [userCharacteristicsIntro progName], 
       SystCons [] []],                            
   SSDSec $ 
     SSDProg
@@ -100,7 +100,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
   ]
 
 progName :: CI
-progName = commonIdeaWithDict "pendulumTitle" (pn "Pendulum") "SglPendulum" [physics]
+progName = commonIdeaWithDict "sglPendulum" (pn "SglPendulum") "SglPend" [physics]
 
 si :: SystemInformation
 si = SI {

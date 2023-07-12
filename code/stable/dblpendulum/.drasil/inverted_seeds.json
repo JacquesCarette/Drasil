@@ -620,6 +620,9 @@
     "datumtype": [
         "terms"
     ],
+    "dblPendulum": [
+        "terms"
+    ],
     "dblpendulum": [
         "references",
         "labelledContent"
@@ -1295,9 +1298,6 @@
         "symbols"
     ],
     "pendulum": [
-        "terms"
-    ],
-    "pendulumTitle": [
         "terms"
     ],
     "pendulummotion": [

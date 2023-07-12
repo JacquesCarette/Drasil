@@ -34,6 +34,7 @@ import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 import Data.Drasil.Software.Products (prodtcon)
+import Data.Drasil.Domains (materialEng)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
 
@@ -44,7 +45,7 @@ import Drasil.SWHS.Body (charsOfReader, dataContMid, introEnd, introStart,
   physSyst1, physSyst2, sysCntxtDesc, sysCntxtFig, systContRespBullets,
   sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
-import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con, phsChgMtrl)
+import Drasil.SWHS.Concepts (acronyms, coil, sWHT, tank, transient, water, con, phsChgMtrl)
 import Drasil.SWHS.Requirements (nfRequirements)
 import Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, nwtnCooling, sensHtETemplate)
 import Drasil.SWHS.Unitals (coilSAMax, deltaT, htFluxC, htFluxIn,
@@ -194,6 +195,10 @@ si = SI {
    refdb       = refDB
 }
 
+progName :: CI
+progName = commonIdeaWithDict "swhsNoPCM"   (nounPhrase "solar water heating system"
+  "solar water heating systems") "NoPCM" [materialEng]
+
 purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWHT)]
 
@@ -201,7 +206,7 @@ refDB :: ReferenceDB
 refDB = rdb citations concIns
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
+symbMap = cdb symbolsAll (nw progName : map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived

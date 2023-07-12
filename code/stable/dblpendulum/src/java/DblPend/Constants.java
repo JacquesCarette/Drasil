@@ -1,4 +1,4 @@
-package DblPendulum;
+package DblPend;
 
 /** \file Constants.java
     \author Dong Chen

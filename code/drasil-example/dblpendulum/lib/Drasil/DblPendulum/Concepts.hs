@@ -42,4 +42,4 @@ arcLen :: ConceptChunk
 arcLen = dcc "arc length" (nounPhraseSP "arc length") "the distance between two points on a curve"
 
 progName :: CI
-progName = commonIdeaWithDict "pendulumTitle" (pn "Pendulum") "DblPendulum" [physics]
+progName = commonIdeaWithDict "dblPendulum" (pn "DblPendulum") "DblPend" [physics]

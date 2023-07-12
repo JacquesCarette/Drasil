@@ -1,4 +1,4 @@
-package DblPendulum;
+package DblPend;
 
 /** \file Calculations.java
     \author Dong Chen

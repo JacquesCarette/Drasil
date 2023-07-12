@@ -1102,9 +1102,6 @@
     "pendulum": [
         "terms"
     ],
-    "pendulumTitle": [
-        "terms"
-    ],
     "pendulummotion": [
         "terms"
     ],
@@ -1337,6 +1334,9 @@
         "terms"
     ],
     "section": [
+        "terms"
+    ],
+    "sglPendulum": [
         "terms"
     ],
     "sglpendulum": [

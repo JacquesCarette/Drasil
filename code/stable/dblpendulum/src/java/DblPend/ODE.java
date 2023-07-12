@@ -1,4 +1,4 @@
-package DblPendulum;
+package DblPend;
 
 /** \file ODE.java
     \author Dong Chen

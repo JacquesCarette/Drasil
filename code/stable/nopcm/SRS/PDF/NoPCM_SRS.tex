@@ -215,11 +215,11 @@ Uncert. & Typical Uncertainty
 \label{Sec:Intro}
 Due to increasing costs, diminishing availability, and negative environmental impact of fossil fuels, the demand is high for renewable energy sources and energy storage technology. Solar water heating systems provide a novel way of storing energy.
 
-The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems. The developed program will be referred to as Solar Water Heating System (SWHS). This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems. The developed program will be referred to as Solar Water Heating System (NoPCM). This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
-The primary purpose of this document is to record the requirements of SWHS. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of SWHS. With the exception of \hyperref[Sec:SysConstraints]{system constraints}, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+The primary purpose of this document is to record the requirements of NoPCM. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of NoPCM. With the exception of \hyperref[Sec:SysConstraints]{system constraints}, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
 
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 
@@ -235,7 +235,7 @@ Reviewers of this documentation should have an understanding of heat transfer th
 \label{Sec:DocOrg}
 The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013}, \cite{smithLai2005}, \cite{smithEtAl2007}, and \cite{smithKoothoor2016}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{instance models} and trace back to find any additional information they require.
 
-The \hyperref[Sec:GoalStmt]{goal statements} are refined to the theoretical models and the \hyperref[Sec:TMs]{theoretical models} to the \hyperref[Sec:IMs]{instance models}. The instance model to be solved is referred to as \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}. The instance model provides the Ordinary Differential Equation (ODE) that models the solar water heating system. SWHS solves this ODE.
+The \hyperref[Sec:GoalStmt]{goal statements} are refined to the theoretical models and the \hyperref[Sec:TMs]{theoretical models} to the \hyperref[Sec:IMs]{instance models}. The instance model to be solved is referred to as \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}. The instance model provides the Ordinary Differential Equation (ODE) that models the solar water heating system. NoPCM solves this ODE.
 
 \section{General System Description}
 \label{Sec:GenSysDesc}
@@ -243,7 +243,7 @@ This section provides general information about the system. It identifies the in
 
 \subsection{System Context}
 \label{Sec:SysContext}
-\hyperref[Figure:SysCon]{Fig:SysCon} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system and its environment.
+\hyperref[Figure:SysCon]{Fig:SysCon} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (NoPCM). Arrows are used to show the data flow between the system and its environment.
 
 \begin{figure}
 \begin{center}
@@ -252,7 +252,7 @@ This section provides general information about the system. It identifies the in
 \label{Figure:SysCon}
 \end{center}
 \end{figure}
-SWHS is mostly self-contained. The only external interaction is through the user interface. The responsibilities of the user and the system are as follows:
+NoPCM is mostly self-contained. The only external interaction is through the user interface. The responsibilities of the user and the system are as follows:
 
 \begin{itemize}
 \item{User Responsibilities:}
@@ -269,7 +269,7 @@ SWHS is mostly self-contained. The only external interaction is through the user
 \end{itemize}
 \subsection{User Characteristics}
 \label{Sec:UserChars}
-The end user of SWHS should have an understanding of undergraduate Level 1 Calculus and Physics.
+The end user of NoPCM should have an understanding of undergraduate Level 1 Calculus and Physics.
 
 \subsection{System Constraints}
 \label{Sec:SysConstraints}
@@ -295,7 +295,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
-The physical system of SWHS, as shown in \hyperref[Figure:Tank]{Fig:Tank}, includes the following elements:
+The physical system of NoPCM, as shown in \hyperref[Figure:Tank]{Fig:Tank}, includes the following elements:
 
 \begin{itemize}
 \item[PS1:]{Tank containing water.}
@@ -1164,7 +1164,7 @@ For convenience, the following graphs can be found at the links below:
 \end{itemize}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}
-This section contains the standard values that are used for calculations in SWHS.
+This section contains the standard values that are used for calculations in NoPCM.
 
 \begin{longtblr}
 [caption={Auxiliary Constants}]

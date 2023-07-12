@@ -1,4 +1,4 @@
-package DblPendulum;
+package DblPend;
 
 /** \file ODEStepHandler.java
     \author Dong Chen

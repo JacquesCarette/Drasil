@@ -1893,6 +1893,9 @@
     "swhsName": [
         "terms"
     ],
+    "swhsNoPCM": [
+        "terms"
+    ],
     "symbol": [
         "terms"
     ],

@@ -1,4 +1,4 @@
-package DblPendulum;
+package DblPend;
 
 /** \file Control.java
     \author Dong Chen

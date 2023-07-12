@@ -1,4 +1,4 @@
-package DblPendulum;
+package DblPend;
 
 /** \file InputParameters.java
     \author Dong Chen

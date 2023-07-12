@@ -1,14 +1,14 @@
-# Project Name and Purpose: DblPendulum - To predict the motion of a pendulum.
+# Project Name and Purpose: DblPend - To predict the motion of a pendulum.
 
-build: DblPendulum/Control.class
+build: DblPend/Control.class
 
-DblPendulum/Control.class: DblPendulum/Control.java DblPendulum/InputParameters.java DblPendulum/Constants.java DblPendulum/Calculations.java DblPendulum/OutputFormat.java DblPendulum/ODE.java DblPendulum/ODEStepHandler.java
-	javac -cp "lib/commons-math3-3.6.1.jar:." DblPendulum/Control.java
+DblPend/Control.class: DblPend/Control.java DblPend/InputParameters.java DblPend/Constants.java DblPend/Calculations.java DblPend/OutputFormat.java DblPend/ODE.java DblPend/ODEStepHandler.java
+	javac -cp "lib/commons-math3-3.6.1.jar:." DblPend/Control.java
 
 run: build
-	java -cp "lib/commons-math3-3.6.1.jar:." DblPendulum.Control $(RUNARGS)
+	java -cp "lib/commons-math3-3.6.1.jar:." DblPend.Control $(RUNARGS)
 
-doc: doxConfig DblPendulum/Control.java DblPendulum/InputParameters.java DblPendulum/Constants.java DblPendulum/Calculations.java DblPendulum/OutputFormat.java DblPendulum/ODE.java DblPendulum/ODEStepHandler.java
+doc: doxConfig DblPend/Control.java DblPend/InputParameters.java DblPend/Constants.java DblPend/Calculations.java DblPend/OutputFormat.java DblPend/ODE.java DblPend/ODEStepHandler.java
 	doxygen doxConfig
 
 .PHONY: build run doc

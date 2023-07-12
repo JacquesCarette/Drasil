@@ -65,15 +65,15 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       , TAandA         -- Add table of abbreviation and acronym section
       ],
   IntroSec $
-    IntroProg justification (phrase progName)
+    IntroProg (justification progName) (phrase progName)
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],
        IOrgSec inModel (SRS.inModel [] []) EmptyS],
   GSDSec $ 
     GSDProg [
-      SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
-      UsrChars [userCharacteristicsIntro], 
+      SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
+      UsrChars [userCharacteristicsIntro progName], 
       SystCons [] []],                            
   SSDSec $ 
     SSDProg
@@ -158,13 +158,13 @@ concIns = assumpDouble ++ goals ++ funcReqs ++ nonFuncReqs
 ------------------------------
 -- Section : INTRODUCTION --
 ------------------------------
-justification :: Sentence
-justification = foldlSent [ atStartNP (a_ pendulum), S "consists" `S.of_` phrase mass, 
+justification :: CI -> Sentence
+justification prog = foldlSent [ atStartNP (a_ pendulum), S "consists" `S.of_` phrase mass, 
                             S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
                             (S "highly sensitive to initial conditions" !.), S "Therefore" `sC`
                             S "it is useful to have a", phrase program, S "to simulate", phraseNP (motion
                             `the_ofThe` pendulum), (S "to exhibit its chaotic characteristics" !.),
-                            atStartNP (the program), S "documented here is called", phrase progName]
+                            atStartNP (the program), S "documented here is called", phrase prog]
 
 -------------------------------
 -- 2.1 : Purpose of Document --
@@ -201,12 +201,12 @@ charsOfReader = [phrase undergraduate +:+ S "level 2" +:+ phrase Doc.physics,
 --------------------------
 -- 3.1 : System Context --
 --------------------------
-sysCtxIntro :: Contents
-sysCtxIntro = foldlSP
+sysCtxIntro :: CI -> Contents
+sysCtxIntro prog = foldlSP
   [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
    S "A circle represents an entity external to the", phrase software
    `sC` phraseNP (the user), S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself", sParen (short progName) +:+. EmptyS,
+   phrase softwareSys, S "itself", sParen (short prog) +:+. EmptyS,
    S "Arrows are used to show the data flow between the", phraseNP (system
    `andIts` environment)]
 
@@ -216,10 +216,10 @@ sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_
    phrase interface, S "The responsibilities of the", phraseNP (user 
    `andThe` system), S "are as follows"]
 
-sysCtxUsrResp :: [Sentence]
-sysCtxUsrResp = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
+sysCtxUsrResp :: CI -> [Sentence]
+sysCtxUsrResp prog = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
   physical) +:+ S "state of the" +:+ phrase motion +:+ S "and the" +:+ plural inDatum +:+ S "related to the" +:+
-  phrase progName `sC` S "ensuring no errors in the" +:+
+  phrase prog `sC` S "ensuring no errors in the" +:+
   plural datum +:+. S "entry",
   S "Ensure that consistent units are used for" +:+. pluralNP (combineNINI input_ Doc.variable),
   S "Ensure required" +:+
@@ -235,20 +235,20 @@ sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +
   S "Calculate the required" +:+. plural output_, 
   S "Generate the required" +:+. plural graph]
 
-sysCtxResp :: [Sentence]
-sysCtxResp = [titleize user +:+ S "Responsibilities",
-  short progName +:+ S "Responsibilities"]
+sysCtxResp :: CI -> [Sentence]
+sysCtxResp prog = [titleize user +:+ S "Responsibilities",
+  short prog +:+ S "Responsibilities"]
 
-sysCtxList :: Contents
-sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
-  map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+sysCtxList :: CI -> Contents
+sysCtxList prog = UlC $ ulcc $ Enumeration $ bulletNested (sysCtxResp prog) $
+  map bulletFlat [sysCtxUsrResp prog, sysCtxSysResp]
 
 --------------------------------
 -- 3.2 : User Characteristics --
 --------------------------------
-userCharacteristicsIntro :: Contents
-userCharacteristicsIntro = foldlSP
-  [S "The", phrase endUser `S.of_` short progName,
+userCharacteristicsIntro :: CI -> Contents
+userCharacteristicsIntro prog = foldlSP
+  [S "The", phrase endUser `S.of_` short prog,
    S "should have an understanding of", 
    phrase highSchoolPhysics `sC` phrase highSchoolCalculus `S.and_` plural ode]
 

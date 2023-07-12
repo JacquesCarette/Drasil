@@ -1,4 +1,4 @@
-# Project Name and Purpose: DblPendulum - To predict the motion of a pendulum.
+# Project Name and Purpose: DblPend - To predict the motion of a pendulum.
 
 build:
 

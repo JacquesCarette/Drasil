@@ -142,7 +142,7 @@ symbMap = cdb (map qw iMods ++ map qw symbolsAll)
   dataDefs iMods genDefns tMods concIns [] [] ([] :: [Reference])
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbols) ([] :: [ConceptChunk])
+usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw acronyms ++ map nw symbols) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 stdFields :: Fields

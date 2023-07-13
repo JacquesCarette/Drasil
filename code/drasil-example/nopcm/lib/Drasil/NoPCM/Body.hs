@@ -13,7 +13,7 @@ import Data.List ((\\))
 import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Computation (algorithm, inValue)
-import Data.Drasil.Concepts.Documentation as Doc (doccon, doccon', material_, srsDomains)
+import Data.Drasil.Concepts.Documentation as Doc (doccon, doccon', material_, srsDomains, sysCont)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (inModel)
 import Data.Drasil.Concepts.Education (educon)
@@ -42,7 +42,7 @@ import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
 import Drasil.SWHS.Body (charsOfReader, dataContMid, introEnd, introStart,
-  physSyst1, physSyst2, sysCntxtDesc, sysCntxtFig, systContRespBullets,
+  physSyst1, physSyst2, sysCntxtDesc, systContRespBullets,
   sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, sWHT, tank, transient, water, con, phsChgMtrl)
@@ -127,7 +127,7 @@ mkSRS = [TableOfContents,
     ],
   GSDSec $
     GSDProg
-      [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
+      [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets progName]
       , UsrChars [userChars progName]
       , SystCons [] []
       ],
@@ -196,8 +196,9 @@ si = SI {
 }
 
 progName :: CI
-progName = commonIdeaWithDict "swhsNoPCM"   (nounPhrase "solar water heating system"
-  "solar water heating systems") "NoPCM" [materialEng]
+progName = commonIdeaWithDict "swhsNoPCM" 
+  (nounPhrase "solar water heating system with no phase change material"
+  "solar water heating systems with no phase change material") "NoPCM" [materialEng]
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWHT)]
@@ -216,7 +217,7 @@ symbMap = cdb symbolsAll (nw progName : map nw symbols ++ map nw acronyms ++ map
   tMods concIns section labCon []
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
+usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw symbols ++ map nw acronyms)
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 --------------------------
@@ -257,13 +258,18 @@ orgDocEnd = foldlSent_ [atStartNP (the inModel),
 --Section 3 : GENERAL SYSTEM DESCRIPTION
 ----------------------------------------
 
---ALL OF THIS SECTION IS NOW PULLED FROM SWHS
+--ALL OF THIS SECTION IS NOW PULLED FROM SWHS (Exept System Context Figure)
 
 --TODO: If/when system constraints recieves any content, add s3_3_intro
 
 ------------------------------
 --Section 3.1 : SYSTEM CONTEXT
 ------------------------------
+
+sysCntxtFig :: LabelledContent
+sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
+  [refS sysCntxtFig +: EmptyS, titleize sysCont])
+  $ resourcePath ++ "SystemContextFigure.png"
 
 ------------------------------------
 --Section 3.2 : USER CHARACTERISTICS

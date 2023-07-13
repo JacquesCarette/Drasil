@@ -57,7 +57,7 @@ ${\text{W}}$ & power & watt
 \end{longtblr}
 \subsection{Table of Symbols}
 \label{Sec:ToS}
-The symbols used in this document are summarized in the \hyperref[Table:ToS]{Table of Symbols} along with their units. The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
+The symbols used in this document are summarized in the \hyperref[Table:ToS]{Table of Symbols} along with their units. The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems with no phase change material. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
 
 \begin{longtblr}
 [caption={Table of Symbols}]
@@ -175,7 +175,7 @@ $∇$ & Gradient & --
 \label{Sec:TAbbAcc}
 \begin{longtblr}
 [caption={Abbreviations and Acronyms}]
-{colspec={l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+{colspec={l X[l]}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Abbreviation} & \textbf{Full Form}
 \\
 A & Assumption
@@ -190,6 +190,8 @@ IM & Instance Model
 \\
 LC & Likely Change
 \\
+NoPCM & Solar Water Heating System With No Phase Change Material
+\\
 ODE & Ordinary Differential Equation
 \\
 PS & Physical System Description
@@ -202,8 +204,6 @@ Refname & Reference Name
 \\
 SRS & Software Requirements Specification
 \\
-SWHS & Solar Water Heating System
-\\
 TM & Theoretical Model
 \\
 UC & Unlikely Change
@@ -213,9 +213,9 @@ Uncert. & Typical Uncertainty
 \end{longtblr}
 \section{Introduction}
 \label{Sec:Intro}
-Due to increasing costs, diminishing availability, and negative environmental impact of fossil fuels, the demand is high for renewable energy sources and energy storage technology. Solar water heating systems provide a novel way of storing energy.
+Due to increasing costs, diminishing availability, and negative environmental impact of fossil fuels, the demand is high for renewable energy sources and energy storage technology. Solar water heating systems with no phase change material provide a novel way of storing energy.
 
-The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems. The developed program will be referred to as Solar Water Heating System (NoPCM). This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems with no phase change material. The developed program will be referred to as Solar Water Heating System With No Phase Change Material (NoPCM). This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
@@ -235,7 +235,7 @@ Reviewers of this documentation should have an understanding of heat transfer th
 \label{Sec:DocOrg}
 The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013}, \cite{smithLai2005}, \cite{smithEtAl2007}, and \cite{smithKoothoor2016}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{instance models} and trace back to find any additional information they require.
 
-The \hyperref[Sec:GoalStmt]{goal statements} are refined to the theoretical models and the \hyperref[Sec:TMs]{theoretical models} to the \hyperref[Sec:IMs]{instance models}. The instance model to be solved is referred to as \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}. The instance model provides the Ordinary Differential Equation (ODE) that models the solar water heating system. NoPCM solves this ODE.
+The \hyperref[Sec:GoalStmt]{goal statements} are refined to the theoretical models and the \hyperref[Sec:TMs]{theoretical models} to the \hyperref[Sec:IMs]{instance models}. The instance model to be solved is referred to as \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}. The instance model provides the Ordinary Differential Equation (ODE) that models the solar water heating system with no phase change material. NoPCM solves this ODE.
 
 \section{General System Description}
 \label{Sec:GenSysDesc}
@@ -247,7 +247,7 @@ This section provides general information about the system. It identifies the in
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth]{../../../../datafiles/swhs/SystemContextFigure.png}
+\includegraphics[width=\textwidth]{../../../../datafiles/nopcm/SystemContextFigure.png}
 \caption{\hyperref[Figure:SysCon]{Fig:SysCon}: System Context}
 \label{Figure:SysCon}
 \end{center}
@@ -260,7 +260,7 @@ NoPCM is mostly self-contained. The only external interaction is through the use
 \item{Provide the input data to the system, ensuring no errors in the data entry}
 \item{Take care that consistent units are used for input variables}
 \end{itemize}
-\item{SWHS Responsibilities:}
+\item{NoPCM Responsibilities:}
 \begin{itemize}
 \item{Detect data type mismatch, such as a string of characters instead of a floating point number}
 \item{Determine if the inputs satisfy the required physical and software constraints}

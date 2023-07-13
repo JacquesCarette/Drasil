@@ -19,10 +19,10 @@ con = [charging, coil, discharging, gaussDiv,
 ---Acronyms---
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
-  progName, physSyst, requirement, refBy, refName, srs, thModel, typUnc, unlikelyChg]
+  physSyst, requirement, refBy, refName, srs, thModel, typUnc, unlikelyChg]
 
 acronymsFull :: [CI]
-acronymsFull = acronyms ++ [phsChgMtrl, rightSide]
+acronymsFull = acronyms ++ [phsChgMtrl, rightSide, progName]
 
 phsChgMtrl, progName :: CI
 

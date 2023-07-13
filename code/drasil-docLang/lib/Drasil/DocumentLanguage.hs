@@ -434,7 +434,7 @@ mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
 
 -- | Helper to get UIDs
 showUIDs :: [TM.TraceViewCat] -> ChunkDB -> [UID] -> [UID]
-showUIDs a s e = filter (`elem` (Map.keys $ s ^. traceTable)) $ concatMap (\x -> x e s) a
+showUIDs a s e = concatMap (filter (`elem` (Map.keys $ s ^. traceTable)) . (\ x -> x e s)) a
 
 -- | Helper to get headers of rows and columns
 header :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]

@@ -1708,20 +1708,20 @@ Sentence -&gt; [c] -&gt; Section
 </span><a href="Drasil.DocumentLanguage.html#showUIDs"><span class="hs-identifier hs-var hs-var">showUIDs</span></a></span></span><span> </span><span id="local-6989586621679096544"><span class="annot"><span class="annottext">[TraceViewCat]
 </span><a href="#local-6989586621679096544"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679096543"><span class="annot"><span class="annottext">ChunkDB
 </span><a href="#local-6989586621679096543"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679096542"><span class="annot"><span class="annottext">[UID]
-</span><a href="#local-6989586621679096542"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679096542"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
+</span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall k a. Map k a -&gt; [k]
 </span><span class="hs-identifier hs-var">Map.keys</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 </span><a href="#local-6989586621679096543"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Lens' ChunkDB (Map UID [UID])
-</span><span class="hs-identifier hs-var">traceTable</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
-</span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679096541"><span class="annot"><span class="annottext">TraceViewCat
+</span><span class="hs-identifier hs-var">traceTable</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span> </span><span id="local-6989586621679096541"><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="#local-6989586621679096541"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
 </span><a href="#local-6989586621679096541"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[UID]
 </span><a href="#local-6989586621679096542"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679096543"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat]
+</span><a href="#local-6989586621679096543"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat]
 </span><a href="#local-6989586621679096544"><span class="hs-identifier hs-var">a</span></a></span><span>
 </span><span id="line-438"></span><span>
 </span><span id="line-439"></span><span class="hs-comment">-- | Helper to get headers of rows and columns</span><span>

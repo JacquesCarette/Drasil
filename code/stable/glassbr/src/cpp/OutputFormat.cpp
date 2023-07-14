@@ -4,24 +4,41 @@
 #include <iostream>
 #include <string>
 
+#include "InputParameters.hpp"
+
 using std::ofstream;
 using std::string;
 
-void write_output(bool isSafePb, bool isSafeLR, double P_b, double J) {
+void write_output(InputParameters &inParams, bool isSafePb, bool isSafeLR, double B, double J, double NFL, double q_hat, double q_hat_tol, double J_tol) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
     outfile << "function write_output called with inputs: {" << std::endl;
+    outfile << "  inParams = ";
+    outfile << "Instance of InputParameters object";
+    outfile << ", " << std::endl;
     outfile << "  isSafePb = ";
     outfile << isSafePb;
     outfile << ", " << std::endl;
     outfile << "  isSafeLR = ";
     outfile << isSafeLR;
     outfile << ", " << std::endl;
-    outfile << "  P_b = ";
-    outfile << P_b;
+    outfile << "  B = ";
+    outfile << B;
     outfile << ", " << std::endl;
     outfile << "  J = ";
-    outfile << J << std::endl;
+    outfile << J;
+    outfile << ", " << std::endl;
+    outfile << "  NFL = ";
+    outfile << NFL;
+    outfile << ", " << std::endl;
+    outfile << "  q_hat = ";
+    outfile << q_hat;
+    outfile << ", " << std::endl;
+    outfile << "  q_hat_tol = ";
+    outfile << q_hat_tol;
+    outfile << ", " << std::endl;
+    outfile << "  J_tol = ";
+    outfile << J_tol << std::endl;
     outfile << "  }" << std::endl;
     outfile.close();
     
@@ -31,9 +48,23 @@ void write_output(bool isSafePb, bool isSafeLR, double P_b, double J) {
     outputfile << isSafePb << std::endl;
     outputfile << "isSafeLR = ";
     outputfile << isSafeLR << std::endl;
-    outputfile << "P_b = ";
-    outputfile << P_b << std::endl;
+    outputfile << "B = ";
+    outputfile << B << std::endl;
     outputfile << "J = ";
     outputfile << J << std::endl;
+    outputfile << "NFL = ";
+    outputfile << NFL << std::endl;
+    outputfile << "GTF = ";
+    outputfile << inParams.GTF << std::endl;
+    outputfile << "q_hat = ";
+    outputfile << q_hat << std::endl;
+    outputfile << "q_hat_tol = ";
+    outputfile << q_hat_tol << std::endl;
+    outputfile << "J_tol = ";
+    outputfile << J_tol << std::endl;
+    outputfile << "h = ";
+    outputfile << inParams.h << std::endl;
+    outputfile << "AR = ";
+    outputfile << inParams.AR << std::endl;
     outputfile.close();
 }

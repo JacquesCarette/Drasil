@@ -25,7 +25,6 @@ import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)
 import Drasil.GlassBR.Concepts (glass)
 import Drasil.GlassBR.DataDefs (aspRat, dimLL, glaTyFac, hFromt, loadDF, nonFL, 
   risk, standOffDis, strDisFac, tolPre, tolStrDisFac)
-import Drasil.GlassBR.IMods (iMods)
 import Drasil.GlassBR.TMods (lrIsSafe, pbIsSafe)
 import Drasil.GlassBR.Unitals (blast, isSafeLR, isSafePb, loadSF, notSafe,
   pbTolfail, safeMessage)
@@ -34,19 +33,18 @@ import Drasil.GlassBR.Unitals (blast, isSafeLR, isSafePb, loadSF, notSafe,
 
 funcReqs :: [ConceptInstance]
 funcReqs = [sysSetValsFollowingAssumps, checkInputWithDataCons,
-  outputValsAndKnownValues, checkGlassSafety, outputValues]
+  outputValsAndKnownValues, checkGlassSafety]
 
 funcReqsTables :: [LabelledContent]
-funcReqsTables = [sysSetValsFollowingAssumpsTable, outputValuesTable]
+funcReqsTables = [sysSetValsFollowingAssumpsTable]
 
 sysSetValsFollowingAssumps, checkInputWithDataCons,
-  outputValsAndKnownValues, checkGlassSafety, outputValues :: ConceptInstance
+  outputValsAndKnownValues, checkGlassSafety :: ConceptInstance
 
 sysSetValsFollowingAssumps = cic "sysSetValsFollowingAssumps" sysSetValsFollowingAssumpsDesc "System-Set-Values-Following-Assumptions" funcReqDom
 checkInputWithDataCons     = cic "checkInputWithDataCons"     checkInputWithDataConsDesc     "Check-Input-with-Data_Constraints"       funcReqDom
 outputValsAndKnownValues   = cic "outputValsAndKnownValues"   outputValsAndKnownValuesDesc   "Output-Values-and-Known-Values"          funcReqDom
 checkGlassSafety           = cic "checkGlassSafety"           checkGlassSafetyDesc           "Check-Glass-Safety"                      funcReqDom
-outputValues               = cic "outputValues"               outputValuesDesc               "Output-Values"                           funcReqDom
 
 inReqDesc, sysSetValsFollowingAssumpsDesc, checkInputWithDataConsDesc, outputValsAndKnownValuesDesc, checkGlassSafetyDesc :: Sentence
 
@@ -60,7 +58,7 @@ sysSetValsFollowingAssumpsTable :: LabelledContent
 sysSetValsFollowingAssumpsTable = mkValsSourceTable (mkQRTupleRef r2AQs r2ARs ++ mkQRTuple r2DDs) "ReqAssignments"
                                   (S "Required Assignments" `follows` sysSetValsFollowingAssumps)
   where
-    r2AQs = qw loadSF   : map qw (take 4 assumptionConstants)
+    r2AQs = qw loadSF : map qw (take 4 assumptionConstants)
     r2ARs = assumpGL : replicate 4 assumpSV
     r2DDs = [loadDF, hFromt, glaTyFac, standOffDis, aspRat]
 
@@ -81,16 +79,6 @@ checkGlassSafetyDesc = foldlSent_ [S "If", eS $ sy isSafePb $&& sy isSafeLR,
   phrase output_, phraseNP (the message), Quote (safeMessage ^. defn),
   S "If the", phrase condition, S "is false, then", phrase output_,
   phraseNP (the message), Quote (notSafe ^. defn)]
-
-outputValuesDesc :: Sentence
-outputValuesDesc = foldlSent [titleize output_, pluralNP (the value), S "from the table for", namedRef outputValuesTable (S "Required Outputs")]
-
-outputValuesTable :: LabelledContent
-outputValuesTable = mkValsSourceTable (mkQRTuple iMods ++ mkQRTuple r6DDs) "ReqOutputs"
-                              (S "Required" +:+ titleize' output_ `follows` outputValues)
-  where
-    r6DDs :: [DataDefinition]
-    r6DDs = [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, hFromt, aspRat]
 
 {--Nonfunctional Requirements--}
 

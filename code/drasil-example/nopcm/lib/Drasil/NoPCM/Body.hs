@@ -197,8 +197,9 @@ si = SI {
 
 progName :: CI
 progName = commonIdeaWithDict "swhsNoPCM" 
-  (nounPhrase "solar water heating system with no phase change material"
-  "solar water heating systems with no phase change material") "NoPCM" [materialEng]
+  (nounPhrase' "solar water heating system with no phase change material"
+  "solar water heating systems with no phase change material" $ Replace $
+  S "Solar Water Heating System with no Phase Change Material") "NoPCM" [materialEng]
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWHT)]
@@ -224,6 +225,7 @@ usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw symbols ++ map nw acro
 --Section 2 : INTRODUCTION
 --------------------------
 
+-- To get this generating properly we need to add a constructor for custom plural and capital case, see #3535
 introStartNoPCM :: Sentence
 introStartNoPCM = atStart' progName +:+ S "provide a novel way of storing" +:+. phrase energy
 

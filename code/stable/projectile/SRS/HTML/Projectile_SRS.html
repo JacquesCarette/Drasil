@@ -1419,7 +1419,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#outputValues>FR:Output-Values</a>, <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>, and <a href=#calcValues>FR:Calculate-Values</a>
+                          <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a> and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1627,7 +1627,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#outputValues>FR:Output-Values</a>, <a href=#IM:messageIM>IM:messageIM</a>, and <a href=#calcValues>FR:Calculate-Values</a>
+                          <a href=#IM:messageIM>IM:messageIM</a> and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1717,7 +1717,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#outputValues>FR:Output-Values</a> and <a href=#calcValues>FR:Calculate-Values</a>
+                          <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1830,7 +1830,7 @@
               </p>
               <p>
                 <div id="outputValues">
-                  Output-Values: Output <em>t<sub>flight</sub></em> (from <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>), <em>s</em> (from <a href=#IM:messageIM>IM:messageIM</a>), and <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM:offsetIM</a>).
+                  Output-Values: Output the values from <a href=#Table:ReqOutputs>Tab:ReqOutputs</a>.
                 </div>
               </p>
             </div>
@@ -1859,6 +1859,39 @@
               </table>
               <p class="caption">
                 Required Inputs following <a href=#inputValues>FR:Input-Values</a>
+              </p>
+            </div>
+            <div id="Table:ReqOutputs">
+              <table class="table">
+                <tr>
+                  <th>Symbol</th>
+                  <th>Description</th>
+                  <th>Source</th>
+                  <th>Units</th>
+                </tr>
+                <tr>
+                  <td><em>d<sub>offset</sub></em></td>
+                  <td>
+                    Distance between the target position and the landing position
+                  </td>
+                  <td></td>
+                  <td><em>m</em></td>
+                </tr>
+                <tr>
+                  <td><em>s</em></td>
+                  <td>Output message as a string</td>
+                  <td></td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>t<sub>flight</sub></em></td>
+                  <td>Flight duration</td>
+                  <td></td>
+                  <td><em>s</em></td>
+                </tr>
+              </table>
+              <p class="caption">
+                Required Outputs following <a href=#outputValues>FR:Output-Values</a>
               </p>
             </div>
           </div>
@@ -3015,10 +3048,10 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
               <td></td>
-              <td>X</td>
-              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

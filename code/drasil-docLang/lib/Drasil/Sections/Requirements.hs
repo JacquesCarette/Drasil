@@ -18,7 +18,7 @@ import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 
 import Data.Drasil.Concepts.Documentation (description, funcReqDom,
   functionalRequirement, input_, nonfunctionalRequirement, {-output_,-} section_,
-  software, symbol_, value, reqInput)
+  software, symbol_, value, reqInput, output_)
 import Data.Drasil.Concepts.Math (unit_)
 
 import qualified Drasil.DocLang.SRS as SRS
@@ -32,42 +32,56 @@ import Data.Bifunctor (bimap)
 reqF :: [Section] -> Section
 reqF = SRS.require [reqIntro]
 
--- | Prepends a 'ConceptInstance' referencing an input-value table to a list of other 'ConceptInstance's.
--- For listing input requirements.
-fullReqs :: (Quantity i, MayHaveUnit i) => [i] -> Sentence -> [ConceptInstance] -> [ConceptInstance]
-fullReqs [] _ _ = []
-fullReqs i d r = nub $ inReq (inReqDesc (inTable i) d) : r-- ++ [outReq (outReqDesc outTable)]
+-- | Prepends an input value requirement and appends an output value
+-- requirement to a list of the other requirements.
+fullReqs :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j) => [i]
+  -> Sentence -> [(j, Sentence)] -> [ConceptInstance] -> [ConceptInstance]
+fullReqs [] _ [] _ = []
+fullReqs i  d [] r = nub $ inReq (inReqDesc (inTable i) d) : r
+fullReqs [] _ j  r = nub $ r ++ [outReq (outReqDesc (outTable j))]
+fullReqs i  d j  r = nub $ inReq (inReqDesc (inTable i) d) : r ++ [outReq (outReqDesc (outTable j))]
 
 -- | Prepends given LabelledContent to an input-value table.
-fullTables :: (Quantity i, MayHaveUnit i) => [i] -> [LabelledContent] -> [LabelledContent]
-fullTables [] _ = []
-fullTables i t = inTable i : t
+fullTables :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j) => [i]
+  -> [(j, Sentence)] -> [LabelledContent] -> [LabelledContent]
+fullTables [] [] _ = []
+fullTables i  [] t = inTable i : t
+fullTables [] j  t = t ++ [outTable j]
+fullTables i  j  t = inTable i : t ++ [outTable j]
 
 -- | Creates a generalized input-value table for the Requirements section.
 inTable :: (Quantity i, MayHaveUnit i) => [i] -> LabelledContent
 inTable i = mkInputPropsTable i (inReq EmptyS) -- passes empty Sentence to make stub of inReq
---outTable    = mkValsSourceTable o "ReqOutputs" (S "Required" +:+ titleize' output_ `follows` (outReq EmptyS))
+
+-- | Creates a generalized output-value table for the Requirements section.
+outTable :: (Quantity j, MayHaveUnit j) => [(j, Sentence)] -> LabelledContent
+outTable o = mkValsSourceTable o "ReqOutputs" (S "Required" +:+ titleize' output_ `follows` outReq EmptyS)
                                                 -- passes empty Sentence to make stub of outReq
 
 -- | Creates a Sentence from a Referable and possible description. Output is of the form
 -- "Inputs the values from @reference@, which define @description@". If no description is given,
 -- there will be nothing after the word "@reference@".
-inReqDesc :: (HasShortName r, Referable r) => r -> Sentence -> Sentence 
+inReqDesc :: (HasShortName r, Referable r) => r -> Sentence -> Sentence
 inReqDesc  t desc = foldlSent [atStart input_,  S "the", plural value, S "from", end]
   where end = case desc of EmptyS -> refS t
                            sent   -> refS t `sC` S "which define" +:+ sent
---outReqDesc t = foldlSent [atStart output_, S "the", plural value, S "from", refS t]
+
+-- TODO: document
+outReqDesc :: (HasShortName r, Referable r) => r -> Sentence
+outReqDesc t = foldlSent [atStart output_, S "the", plural value, S "from", refS t]
 
 -- | Creates a 'ConceptInstance' of input values.
-inReq :: Sentence -> ConceptInstance
+inReq, outReq :: Sentence -> ConceptInstance
 inReq  s = cic "inputValues"  s "Input-Values"  funcReqDom
---outReq s = cic "inputValues" s "Output-Values" funcReqDom
+outReq s = cic "outputValues" s "Output-Values" funcReqDom
 
--- | Adds a generalized introduction for a Non-Fucntional Requirements section. Takes in the contents of that section.
+-- | Adds a generalized introduction for the Non-Functional Requirements
+-- section. Takes in the contents of that section.
 fReqF :: [Contents] -> Section
 fReqF listOfFReqs = SRS.funcReq (fReqIntro listOfFReqs : listOfFReqs) []
 
--- | Adds a generalized introduction for a Non-Fucntional Requirements section. Takes in the contents of that section.
+-- | Adds a generalized introduction for the Non-Functional Requirements
+-- section. Takes in the contents of that section.
 nfReqF :: [Contents] -> Section
 nfReqF nfrs = SRS.nonfuncReq (nfReqIntro nfrs : nfrs) []
 
@@ -99,11 +113,12 @@ nfReqIntro :: [Contents] -> Contents
 nfReqIntro [] = mkParagraph $ emptySectSentPlu [nonfunctionalRequirement]
 nfReqIntro _  = mkParagraph $ reqIntroStart +:+. nfrReqIntroBody
 
--- | Creates an Input Data Table for use in the Functional Requirments section. Takes a list of wrapped variables and something that is 'Referable'.
-mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => 
+-- | Creates an Input Data Table for use in the Functional Requirements
+-- section. Takes a list of wrapped variables and something that is 'Referable'.
+mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) =>
                           [i] -> r -> LabelledContent
 mkInputPropsTable []        _   = llcc reqInputsRef $ Paragraph EmptyS
-mkInputPropsTable reqInputs req = llcc reqInputsRef $ 
+mkInputPropsTable reqInputs req = llcc reqInputsRef $
   Table [atStart symbol_, atStart description, atStart' unit_]
   (mkTable [ch, atStart, toSentence] $ sortBySymbol reqInputs)
   (titleize' reqInput `follows` req) True
@@ -112,10 +127,11 @@ mkInputPropsTable reqInputs req = llcc reqInputsRef $
 reqInputsRef :: Reference
 reqInputsRef = makeTabRef' (reqInput ^. uid)
 
--- | Creates a table for use in the Functional Requirments section. Takes a list of tuples containing variables and sources, a label, and a caption. 
-mkValsSourceTable :: (Quantity i, MayHaveUnit i) => 
-                          [(i, Sentence)] -> String -> Sentence -> LabelledContent
-mkValsSourceTable vals labl cap = llcc (makeTabRef labl) $ 
+-- | Creates a table for use in the Functional Requirements section. Takes a
+-- list of tuples containing variables and sources, a label, and a caption. 
+mkValsSourceTable :: (Quantity j, MayHaveUnit j) =>
+                          [(j, Sentence)] -> String -> Sentence -> LabelledContent
+mkValsSourceTable vals labl cap = llcc (makeTabRef labl) $
   Table [atStart symbol_, atStart description, S "Source", atStart' unit_]
   (mkTable [ch . fst, atStart . fst, snd, toSentence . fst] $ sortBySymbolTuple vals) cap True
 

@@ -1,4 +1,5 @@
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE TupleSections #-}
 -- | Document declaration types and functions for generating Software Requirement Specifications.
 
 -- Changes to DocSection and its subections should be reflected in the 'Creating Your Project 
@@ -106,7 +107,7 @@ data ReqsSub where
 
 -- | Creates the document description (translates 'SRSDecl' into a more usable form for generating documents).
 mkDocDesc :: SystemInformation -> SRSDecl -> DocDesc
-mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
+mkDocDesc SI{_inputs = is, _outputs = os, _sysinfodb = db} = map sec where
   sec :: DocSection -> DL.DocSection
   sec TableOfContents = DL.TableOfContents
   sec (RefSec r) = DL.RefSec r
@@ -123,9 +124,10 @@ mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
   sec (AppndxSec a) = DL.AppndxSec a
   sec (OffShelfSolnsSec e) = DL.OffShelfSolnsSec e
   reqSec :: ReqsSub -> DL.ReqsSub
-  reqSec (FReqsSub d t) = DL.FReqsSub (fullReqs is d $ fromConcInsDB funcReqDom) (fullTables is t)
+  reqSec (FReqsSub d t) = DL.FReqsSub (fullReqs is d tempOutputs $ fromConcInsDB funcReqDom) (fullTables is tempOutputs t)
   reqSec (FReqsSub' t) = DL.FReqsSub' (fromConcInsDB funcReqDom) t
   reqSec NonFReqsSub = DL.NonFReqsSub $ fromConcInsDB nonFuncReqDom
+  tempOutputs = map (, EmptyS) os
   ssdSec :: SSDSub -> DL.SSDSub
   ssdSec (SSDProblem (PDProg s ls p)) = DL.SSDProblem $ DL.PDProg s ls $ map pdSub p
   ssdSec (SSDSolChSpec (SCSProg scs)) = DL.SSDSolChSpec $ DL.SCSProg $ map scsSub scs

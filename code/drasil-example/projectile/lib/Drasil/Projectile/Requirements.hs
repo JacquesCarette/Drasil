@@ -19,15 +19,13 @@ import Drasil.Projectile.Unitals (flightDur, landPos, message, offset)
 {--Functional Requirements--}
 
 funcReqs :: [ConceptInstance]
-funcReqs = [verifyInVals, calcValues, outputValues]
+funcReqs = [verifyInVals, calcValues]
 
-verifyInVals, calcValues, outputValues :: ConceptInstance
-
+verifyInVals, calcValues :: ConceptInstance
 verifyInVals = cic "verifyInVals" verifyParamsDesc "Verify-Input-Values" funcReqDom
 calcValues   = cic "calcValues"   calcValuesDesc   "Calculate-Values"    funcReqDom
-outputValues = cic "outputValues" outputValuesDesc "Output-Values"       funcReqDom
 
-verifyParamsDesc, calcValuesDesc, outputValuesDesc :: Sentence
+verifyParamsDesc, calcValuesDesc :: Sentence
 verifyParamsDesc = foldlSent [S "Check the entered", plural inValue,
   S "to ensure that they do not exceed the" +:+. namedRef (datCon [] []) (plural datumConstraint),
   S "If any of the", plural inValue, S "are out of bounds" `sC`
@@ -39,13 +37,6 @@ calcValuesDesc = foldlSent [S "Calculate the following" +: plural value,
     ch offset    +:+ fromSource offsetIM,
     ch message   +:+ fromSource messageIM
   ]]
-outputValuesDesc = atStart output_ +:+. outputs
-  where
-    outputs = foldlList Comma List $ map foldlSent_ [ 
-        [ch flightDur, fromSource timeIM],
-        [ch message, fromSource messageIM], 
-        [ch offset, fromSource offsetIM]
-      ]
 
 {--Nonfunctional Requirements--}
 
@@ -76,7 +67,7 @@ maintainable = cic "maintainable" (foldlSent [
   S "The traceability between", foldlList Comma List [plural requirement,
   plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
   plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
-  plural traceyMatrix, S "in the", getAcc srs `S.and_` phrase mg]) "Maintainable" nonFuncReqDom
+  plural traceyMatrix `S.inThe` getAcc srs `S.and_` phrase mg]) "Maintainable" nonFuncReqDom
 
 portable :: ConceptInstance
 portable = cic "portable" (foldlSent [

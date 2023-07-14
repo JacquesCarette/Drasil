@@ -7,12 +7,13 @@ import Text.PrettyPrint (Doc, empty, text, (<>), (<+>), ($+$), ($$), hsep, vcat)
 import qualified Data.Text as T
 import Text.Wrap
 
-import Build.Drasil.Make.AST (Command(C), CommandOpts(IgnoreReturnCode),
-  Dependencies, Makefile(M), Rule(R), Target, Type(Abstract))
+import Build.Drasil.Make.AST (Annotation, Command(C), 
+  CommandOpts(IgnoreReturnCode), Dependencies, Makefile(M), Rule(R), Target, 
+  Type(Abstract))
 import Build.Drasil.Make.Helpers (addCommonFeatures, tab)
 import Build.Drasil.Make.Import (RuleTransformer, toMake)
 import Build.Drasil.Make.MakeString (renderMS)
-import GOOL.Drasil (Comment)
+import Utils.Drasil(Comment)
 
 -- | Generates the makefile by calling 'build' after 'toMake'.
 genMake :: RuleTransformer c => [c] -> Doc
@@ -40,7 +41,7 @@ wrapSettings = WrapSettings { preserveIndentation = True
                  }
 
 -- | Renders multiple comments
-printComments :: [Comment] -> Doc
+printComments :: Annotation -> Doc
 printComments = foldr (($+$) . printComment) empty
 
 -- | Gathers all rules to abstract targets and tags them as phony.

@@ -1,7 +1,7 @@
 -- | re-export smart constructors for external code writing
 module GOOL.Drasil (Label, GSProgram, SFile, MSBody, MSBlock, VSType, 
   SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar,
-  SClass, FSModule, NamedArgs, Initializers, Comment, OOProg, ProgramSym(..),
+  SClass, FSModule, NamedArgs, Initializers, OOProg, ProgramSym(..),
   FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), TypeSym(..), TypeElim(..), ThunkSym(..), VectorType(..),
   VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
@@ -28,7 +28,7 @@ module GOOL.Drasil (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
 
 import GOOL.Drasil.ClassInterface (Label, GSProgram, SFile, MSBody, MSBlock, 
   VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod,
-  CSStateVar, SClass, FSModule, NamedArgs, Initializers, Comment, OOProg,
+  CSStateVar, SClass, FSModule, NamedArgs, Initializers, OOProg,
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements,
   oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), ThunkSym(..),
   VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),

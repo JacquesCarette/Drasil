@@ -6,7 +6,7 @@ import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
+import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains, vavPlan)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
 import Data.Drasil.Concepts.Software (program)
@@ -42,6 +42,7 @@ import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
   inpConstrained, pidConstants, pidDqdConstants, opProcessVariable)
 import Drasil.PDController.ODEs (pidODEInfo)
 import Language.Drasil.Code (quantvar)
+import Data.Drasil.Concepts.Computation (os)
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
@@ -129,10 +130,10 @@ symbolsAll = symbols ++ map qw pidDqdConstants ++ map qw pidConstants
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf])
-  (nw pdControllerApp : [nw program, nw angular, nw linear] ++ [nw sciCompS]
-  ++ map nw doccon ++ map nw doccon' ++ concepts ++ map nw mathcon
-  ++ map nw mathcon' ++ map nw [second, kilogram] ++ map nw symbols 
-  ++ map nw physicscon ++ map nw acronyms ++ map nw physicalcon)
+  (nw pdControllerApp : nw os : nw vavPlan :  [nw program, nw angular, nw linear]
+  ++ [nw sciCompS] ++ map nw doccon ++ map nw doccon' ++ concepts
+  ++ map nw mathcon ++ map nw mathcon' ++ map nw [second, kilogram]
+  ++ map nw symbols ++ map nw physicscon ++ map nw acronyms ++ map nw physicalcon)
   (map cw inpConstrained ++ srsDomains)
   (map unitWrapper [second, kilogram])
   dataDefinitions

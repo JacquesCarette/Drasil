@@ -1,7 +1,9 @@
 {-#LANGUAGE PostfixOperators#-}
 module Drasil.PDController.Requirements where
 
-import Data.Drasil.Concepts.Documentation (funcReqDom, nonFuncReqDom, datumConstraint)
+import Data.Drasil.Concepts.Computation (os)
+import Data.Drasil.Concepts.Documentation (datumConstraint, funcReqDom,
+  nonFuncReqDom, vavPlan)
 
 import Drasil.DocLang.SRS (datCon)
 
@@ -9,6 +11,7 @@ import Drasil.PDController.Concepts
 import Drasil.PDController.IModel
 
 import Language.Drasil
+import qualified Language.Drasil.Sentence.Combinators as S
 
 funcReqs :: [ConceptInstance]
 funcReqs = [verifyInputs, calculateValues]
@@ -22,10 +25,8 @@ calculateValues
 verifyInputsDesc, calculateValuesDesc :: Sentence
 
 verifyInputsDesc
-  = foldlSent_
-      [S "Ensure that the input values are within the",
-         S "limits specified in the"
-         +:+. namedRef (datCon [] []) (plural datumConstraint)]
+  = (S "Ensure that the input values are within the limits specified" `S.inThe`
+      namedRef (datCon [] []) (plural datumConstraint) !.)
 
 calculateValuesDesc
   = foldlSent
@@ -40,7 +41,7 @@ nonfuncReqs = [portability, security, maintainability, verifiability]
 portability :: ConceptInstance
 portability
   = cic "portability"
-      (S "The code shall be portable to multiple Operating Systems" !.)
+      (S "The code shall be portable to multiple" +:+. plural os)
       "Portable"
       nonFuncReqDom
 
@@ -66,6 +67,6 @@ maintainability
 verifiability :: ConceptInstance
 verifiability
   = cic "verifiability"
-      (S "The code shall be verifiable against a Verification and Validation plan" !.)
+      (S "The code shall be verifiable against a" +:+. phrase vavPlan)
       "Verifiable"
       nonFuncReqDom

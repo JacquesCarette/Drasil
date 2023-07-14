@@ -11,16 +11,15 @@ import Drasil.PDController.IModel
 import Language.Drasil
 
 funcReqs :: [ConceptInstance]
-funcReqs = [verifyInputs, calculateValues, outputValues]
+funcReqs = [verifyInputs, calculateValues]
 
-verifyInputs, calculateValues, outputValues :: ConceptInstance
+verifyInputs, calculateValues :: ConceptInstance
 verifyInputs
   = cic "verifyInputs" verifyInputsDesc "Verify-Input-Values" funcReqDom
 calculateValues
   = cic "calculateValues" calculateValuesDesc "Calculate-Values" funcReqDom
-outputValues = cic "outputValues" outputValuesDesc "Output-Values" funcReqDom
 
-verifyInputsDesc, calculateValuesDesc, outputValuesDesc :: Sentence
+verifyInputsDesc, calculateValuesDesc :: Sentence
 
 verifyInputsDesc
   = foldlSent_
@@ -31,11 +30,6 @@ verifyInputsDesc
 calculateValuesDesc
   = foldlSent
       [S "Calculate the", phrase processVariable, fromSource imPD,
-         S "over the simulation time"]
-
-outputValuesDesc
-  = foldlSent
-      [S "Output the", phrase processVariable, fromSource imPD,
          S "over the simulation time"]
 
 -----------------------------------------------------------------------------

@@ -1225,7 +1225,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#outputValues>FR:Output-Values</a> and <a href=#calculateValues>FR:Calculate-Values</a>
+                          <a href=#calculateValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1341,7 +1341,7 @@
               </p>
               <p>
                 <div id="outputValues">
-                  Output-Values: Output the Process Variable (from <a href=#IM:pdEquationIM>IM:pdEquationIM</a>) over the simulation time.
+                  Output-Values: Output the values from <a href=#Table:ReqOutputs>Tab:ReqOutputs</a>.
                 </div>
               </p>
             </div>
@@ -1380,6 +1380,25 @@
               </table>
               <p class="caption">
                 Required Inputs following <a href=#inputValues>FR:Input-Values</a>
+              </p>
+            </div>
+            <div id="Table:ReqOutputs">
+              <table class="table">
+                <tr>
+                  <th>Symbol</th>
+                  <th>Description</th>
+                  <th>Source</th>
+                  <th>Units</th>
+                </tr>
+                <tr>
+                  <td><em>y<sub>t</sub></em></td>
+                  <td>Process Variable</td>
+                  <td></td>
+                  <td>--</td>
+                </tr>
+              </table>
+              <p class="caption">
+                Required Outputs following <a href=#outputValues>FR:Output-Values</a>
               </p>
             </div>
           </div>
@@ -2136,7 +2155,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

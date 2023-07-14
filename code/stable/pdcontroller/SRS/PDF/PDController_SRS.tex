@@ -640,7 +640,7 @@ Description & \begin{symbDescription}
 Source & \cite{abbasi2015} and \cite{johnson2008}
          
 \\ \midrule
-RefBy & \hyperref[outputValues]{FR:Output-Values} and \hyperref[calculateValues]{FR:Calculate-Values}
+RefBy & \hyperref[calculateValues]{FR:Calculate-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -699,7 +699,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}.}
 \item[Verify-Input-Values:\phantomsection\label{verifyInputs}]{Ensure that the input values are within the limits specified in the \hyperref[Sec:DataConstraints]{data constraints}.}
 \item[Calculate-Values:\phantomsection\label{calculateValues}]{Calculate the Process Variable (from \hyperref[IM:pdEquationIM]{IM:pdEquationIM}) over the simulation time.}
-\item[Output-Values:\phantomsection\label{outputValues}]{Output the Process Variable (from \hyperref[IM:pdEquationIM]{IM:pdEquationIM}) over the simulation time.}
+\item[Output-Values:\phantomsection\label{outputValues}]{Output the values from \hyperref[Table:ReqOutputs]{Tab:ReqOutputs}.}
 \end{itemize}
 \begin{longtblr}
 [caption={Required Inputs following \hyperref[inputValues]{FR:Input-Values}}]
@@ -716,6 +716,14 @@ ${t_{\text{sim}}}$ & Simulation Time & ${\text{s}}$
 \\
 ${t_{\text{step}}}$ & Step Time & ${\text{s}}$
 \label{Table:ReqInputs}
+\end{longtblr}
+\begin{longtblr}
+[caption={Required Outputs following \hyperref[outputValues]{FR:Output-Values}}]
+{colspec={l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{Symbol} & \textbf{Description} & \textbf{Source} & \textbf{Units}
+\\
+${y_{\text{t}}}$ & Process Variable &  & --
+\label{Table:ReqOutputs}
 \end{longtblr}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
@@ -845,7 +853,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[calculateValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[portability]{NFR:Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\

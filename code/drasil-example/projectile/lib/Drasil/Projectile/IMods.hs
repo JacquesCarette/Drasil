@@ -1,4 +1,5 @@
-module Drasil.Projectile.IMods (iMods, landPosIM, messageIM, offsetIM, timeIM) where
+module Drasil.Projectile.IMods (iMods, outputs, landPosIM, messageIM,
+  offsetIM, timeIM) where
 
 import Prelude hiding (cos, sin)
 
@@ -30,6 +31,10 @@ import Drasil.Projectile.Unitals (flightDur, landPos, launAngle, launSpeed,
 
 iMods :: [InstanceModel]
 iMods = [timeIM, landPosIM, offsetIM, messageIM]
+
+outputs :: [InstanceModel]
+outputs = [messageIM, offsetIM, timeIM]
+
 ---
 timeIM :: InstanceModel
 timeIM = imNoRefs (equationalModelN (nounPhraseSP "calculation of landing time") timeQD)

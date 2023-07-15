@@ -7,7 +7,7 @@ import Language.Drasil.Development (showUID)
 import Language.Drasil.Display (Symbol(Variable))
 import Database.Drasil
 import SysInfo.Drasil hiding (sysinfodb)
-import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
+import Theory.Drasil (DataDefinition, HasOutput(output), qdEFromDD, getEqModQdsFromIm)
 
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
@@ -116,7 +116,7 @@ codeSpec SI {_sys         = sys
         ++ mapODE (getODE $ extLibs chs)
       -- TODO: When we have better DEModels, we should be deriving our ODE information
       --       directly from the instance models (ims) instead of directly from the choices.
-      outs' = map quantvar outs
+      outs' = map (quantvar . (^. output)) outs
       allInputs = nub $ inputs' ++ map quantvar derived
       exOrder = getExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
   in  CodeSpec {

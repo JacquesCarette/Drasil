@@ -26,6 +26,7 @@ import Drasil.Projectile.Lesson.LearnObj (learnObjContext)
 import Drasil.Projectile.Lesson.Review (reviewContent)
 import Drasil.Projectile.Lesson.CaseProb (caseProbCont, figRefs)
 import Drasil.Projectile.Lesson.Example (exampleContent, horiz_velo)
+import Theory.Drasil (InstanceModel)
 
 nb :: Document
 nb = mkNb mkNB (S.forGen titleize phrase) si
@@ -55,7 +56,7 @@ si = SI {
   _datadefs    = [],
   _configFiles  = [],
   _inputs      = [] :: [QuantityDict],
-  _outputs     = [] :: [QuantityDict],
+  _outputs     = [] :: [InstanceModel],
   _defSequence = [] :: [Block SimpleQDef],
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [] :: [ConstQDef],

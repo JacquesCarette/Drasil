@@ -8,7 +8,6 @@ import Drasil.DocLang (auxSpecSent, termDefnF')
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
-import Theory.Drasil (HasOutput(output))
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
@@ -71,7 +70,7 @@ si = SI {
   _datadefs    = GB.dataDefs,
   _configFiles = configFp,
   _inputs      = inputs,
-  _outputs     = map (^. output) outputs,
+  _outputs     = outputs,
   _defSequence = qDefns,
   _constraints = constrained,
   _constants   = constants,

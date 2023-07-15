@@ -43,7 +43,7 @@ data SystemInformation where
 -- use a lookup of some sort from their internal (Drasil) ids.
  SI :: (CommonIdea a, Idea a, Idea b, HasName c,
   Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f,
-  Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i,
+  Quantity h, MayHaveUnit h, HasOutput i, HasShortName i, Referable i,
   HasUID j, Constrained j) => 
   { _sys         :: a
   , _kind        :: b

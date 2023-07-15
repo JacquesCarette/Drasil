@@ -3,7 +3,7 @@ module Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, inReqDesc, nonfunc
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Drasil.DocLang (inReq, mkQRTuple, mkQRTupleRef, mkValsSourceTable)
+import Drasil.DocLang (inReq, mkQRTuple, mkQRTupleRef, mkTupleValsSourceTable)
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
@@ -53,7 +53,7 @@ sysSetValsFollowingAssumpsDesc = foldlSent [atStartNP (the system), S "shall set
     plural value, S "as described in the table for", namedRef sysSetValsFollowingAssumpsTable (S "Required Assignments")]
 
 sysSetValsFollowingAssumpsTable :: LabelledContent
-sysSetValsFollowingAssumpsTable = mkValsSourceTable (mkQRTupleRef r2AQs r2ARs ++ mkQRTuple r2DDs) "ReqAssignments"
+sysSetValsFollowingAssumpsTable = mkTupleValsSourceTable (mkQRTupleRef r2AQs r2ARs ++ mkQRTuple r2DDs) "ReqAssignments"
                                   (S "Required Assignments" `follows` sysSetValsFollowingAssumps)
   where
     r2AQs = qw loadSF : map qw (take 4 assumptionConstants)

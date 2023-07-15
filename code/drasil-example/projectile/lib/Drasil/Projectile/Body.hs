@@ -40,7 +40,7 @@ import Drasil.Projectile.DataDefs (dataDefs)
 import Drasil.Projectile.Figures (figLaunch, sysCtxFig1)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
-import Drasil.Projectile.IMods (iMods)
+import Drasil.Projectile.IMods (iMods, outputs)
 import Drasil.Projectile.References (citations)
 import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs)
 import Drasil.Projectile.Unitals
@@ -273,9 +273,6 @@ constants = [gravitationalAccelConst, piConst, tol]
 
 inputs :: [QuantityDict]
 inputs = map qw [launSpeed, launAngle, targPos]
-
-outputs :: [QuantityDict]
-outputs = [message, qw offset, qw flightDur]
 
 unitalQuants :: [QuantityDict]
 unitalQuants = message : map qw constrained

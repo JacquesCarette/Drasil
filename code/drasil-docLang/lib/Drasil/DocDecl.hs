@@ -125,10 +125,9 @@ mkDocDesc SI{_inputs = is, _outputs = os, _sysinfodb = db} = map sec where
   sec (OffShelfSolnsSec e) = DL.OffShelfSolnsSec e
   reqSec :: ReqsSub -> DL.ReqsSub
   reqSec (FReqsSub r t) = DL.FReqsSub
-    (nub $ fullReqs   (sort r) is tempOutputs $ fromConcInsDB funcReqDom)
-    (nub $ fullTables (sort r) is tempOutputs t)
+    (nub $ fullReqs   (sort r) is os $ fromConcInsDB funcReqDom)
+    (nub $ fullTables (sort r) is os t)
   reqSec NonFReqsSub = DL.NonFReqsSub $ fromConcInsDB nonFuncReqDom
-  tempOutputs = map (, EmptyS) os
   ssdSec :: SSDSub -> DL.SSDSub
   ssdSec (SSDProblem (PDProg s ls p)) = DL.SSDProblem $ DL.PDProg s ls $ map pdSub p
   ssdSec (SSDSolChSpec (SCSProg scs)) = DL.SSDSolChSpec $ DL.SCSProg $ map scsSub scs

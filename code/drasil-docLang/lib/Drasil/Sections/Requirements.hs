@@ -6,7 +6,7 @@ module Drasil.Sections.Requirements (
   fReqF,
   -- ** Input Requirements
   fullReqs, fullTables, inReq, inTable, mkInputPropsTable, mkQRTuple,
-  mkQRTupleRef, mkValsSourceTable,
+  mkQRTupleRef, mkValsSourceTable, mkTupleValsSourceTable,
   -- * Non-functional Requirements
   nfReqF
   ) where
@@ -66,8 +66,8 @@ reqSection :: ReqLocation -> [(ReqLocation, b)] -> [b]
 reqSection l = map snd . filter (\x -> fst x == l)
 
 -- | Creates a Requirement based on its type, along with its location in the list
-genReq :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j) =>
-  ReqType -> [i] -> [(j, Sentence)] -> (ReqLocation, ConceptInstance)
+genReq :: (Quantity i, MayHaveUnit i, HasOutput j, HasShortName j, Referable j)
+  => ReqType -> [i] -> [j] -> (ReqLocation, ConceptInstance)
 genReq (InputReq _) [] _  = error "Input requirement cannot be generated without inputs"
 genReq (InputReq s) i  _  = (Before, inReq (inReqDesc i s))
 genReq OutputReq    _  [] = error "Output requirement cannot be generated without outputs"
@@ -77,17 +77,16 @@ genReq _            _  _  = error "ReqTypes not fully implemented"
 
 -- | Prepends generated requirements that should come first to the list of the
 -- other requirements and appends the rest to it.
-fullReqs :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j)
-  => [ReqType] -> [i] -> [(j, Sentence)] -> [ConceptInstance]
-  -> [ConceptInstance]
+fullReqs :: (Quantity i, MayHaveUnit i, HasOutput j, HasShortName j, Referable j)
+  => [ReqType] -> [i] -> [j] -> [ConceptInstance] -> [ConceptInstance]
 fullReqs r i o c = reqSection Before genReqs ++ c ++ reqSection After genReqs
   where
     genReqs = map (\x -> genReq x i o) r
 
 -- | Creates a table for a given Requirmement type, along with its location in
 -- the list
-genReqTable :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j) =>
-  ReqType -> [i] -> [(j, Sentence)] -> (ReqLocation, LabelledContent)
+genReqTable :: (Quantity i, MayHaveUnit i, HasOutput j, HasShortName j, Referable j)
+  => ReqType -> [i] -> [j] -> (ReqLocation, LabelledContent)
 genReqTable (InputReq _) i _ = (Before, inTable i)
 genReqTable OutputReq    _ o = (After, outTable o)
 genReqTable _            _ _ = error "ReqTypes not fully implemented"
@@ -96,9 +95,8 @@ genReqTable _            _ _ = error "ReqTypes not fully implemented"
 -- of the other requirement tables and appends the rest to it.
 -- This function looks very similar to 'fullReqs', but @samm82 is pretty sure
 -- it will change to be different in the future
-fullTables :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j)
-  => [ReqType] -> [i] -> [(j, Sentence)] -> [LabelledContent]
-  -> [LabelledContent]
+fullTables :: (Quantity i, MayHaveUnit i, HasOutput j, HasShortName j, Referable j)
+  => [ReqType] -> [i] -> [j] -> [LabelledContent] -> [LabelledContent]
 fullTables r i o c = reqSection Before genReqs ++ c ++ reqSection After genReqs
   where
     genReqs = map (\x -> genReqTable x i o) r
@@ -112,9 +110,9 @@ singleValCaptionHelper [_] = titleize
 singleValCaptionHelper _   = titleize'
 
 -- | Creates a generalized output-value table for the Requirements section.
-outTable :: (Quantity j, MayHaveUnit j) => [(j, Sentence)] -> LabelledContent
-outTable o = mkValsSourceTable o "ReqOutputs" (S "Required" +:+
-  singleValCaptionHelper o output_ `follows` outReq EmptyS)
+outTable :: (HasOutput j, HasShortName j, Referable j)
+  => [j] -> LabelledContent
+outTable o = mkValsSourceTable o "ReqOutputs" (S "Required" +:+ singleValCaptionHelper o output_ `follows` outReq EmptyS)
                                                 -- passes empty Sentence to make stub of outReq
 
 singleValHelper :: NamedIdea n => [a] -> n -> Sentence
@@ -133,7 +131,8 @@ inReqDesc i desc = foldlSent [atStart input_,  S "the", singleValHelper i value,
 
 -- | Creates a Sentence from a Referable. Output is of the form "Outputs the
 -- values from @reference@."
-outReqDesc :: (Quantity j, MayHaveUnit j) => [(j, Sentence)] -> Sentence
+outReqDesc :: (HasOutput j, HasShortName j, Referable j)
+  => [j] -> Sentence
 outReqDesc o = foldlSent [atStart output_, S "the", singleValHelper o value,
   S "from", refS (outTable o)]
 
@@ -194,13 +193,19 @@ mkInputPropsTable i  req = llcc reqInputsRef $
 reqInputsRef :: Reference
 reqInputsRef = makeTabRef' (reqInput ^. uid)
 
--- | Creates a table for use in the Functional Requirements section. Takes a
+-- | Creates a table for use in the Functional Requirments section. Takes a
 -- list of tuples containing variables and sources, a label, and a caption. 
-mkValsSourceTable :: (Quantity j, MayHaveUnit j) =>
-                          [(j, Sentence)] -> String -> Sentence -> LabelledContent
-mkValsSourceTable vals labl cap = llcc (makeTabRef labl) $
+mkTupleValsSourceTable :: (Quantity i, MayHaveUnit i) => 
+                          [(i, Sentence)] -> String -> Sentence -> LabelledContent
+mkTupleValsSourceTable vals labl cap = llcc (makeTabRef labl) $ 
   Table [atStart symbol_, atStart description, S "Source", atStart' unit_]
   (mkTable [ch . fst, atStart . fst, snd, toSentence . fst] $ sortBySymbolTuple vals) cap True
+
+-- | Creates a table for use in the Functional Requirements section. Takes a
+-- list of values with quantities and sources, a label, and a caption. 
+mkValsSourceTable :: (HasOutput j, HasShortName j, Referable j) =>
+                          [j] -> String -> Sentence -> LabelledContent
+mkValsSourceTable vals = mkTupleValsSourceTable (mkQRTuple vals)
 
 -- | Pulls out the 'QuantityDict' and reference 'Sentence' into a tuple for
 -- each item in a list with both.

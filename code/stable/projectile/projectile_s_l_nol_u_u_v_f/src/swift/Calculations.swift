@@ -25,10 +25,10 @@ func func_p_land(_ v_launch: Float, _ theta: Float, _ g: Float) -> Float {
     return 2.0 * pow(v_launch, 2.0) * sin(theta) * cos(theta) / g
 }
 
-/** Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
+/** Calculates offset: the distance between the target position and the landing position (m)
     - Parameter p_target: target position: the distance from the launcher to the target (m)
     - Parameter p_land: landing position: the distance from the launcher to the final position of the projectile (m)
-    - Returns: distance between the target position and the landing position: the offset between the target position and the landing position (m)
+    - Returns: offset: the distance between the target position and the landing position (m)
 */
 func func_d_offset(_ p_target: Float, _ p_land: Float) -> Float {
     return p_land - p_target
@@ -37,7 +37,7 @@ func func_d_offset(_ p_target: Float, _ p_land: Float) -> Float {
 /** Calculates output message as a string
     - Parameter p_target: target position: the distance from the launcher to the target (m)
     - Parameter epsilon: hit tolerance
-    - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
+    - Parameter d_offset: offset: the distance between the target position and the landing position (m)
     - Returns: output message as a string
 */
 func func_s(_ p_target: Float, _ epsilon: Float, _ d_offset: Float) -> String {

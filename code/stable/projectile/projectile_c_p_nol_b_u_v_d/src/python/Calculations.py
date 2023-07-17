@@ -18,17 +18,17 @@ def func_t_flight(inParams, g):
 def func_p_land(inParams, g):
     return 2.0 * inParams.v_launch ** 2.0 * math.sin(inParams.theta) * math.cos(inParams.theta) / g
 
-## \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
+## \brief Calculates offset: the distance between the target position and the landing position (m)
 # \param inParams structure holding the input values
 # \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
-# \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
+# \return offset: the distance between the target position and the landing position (m)
 def func_d_offset(inParams, p_land):
     return p_land - inParams.p_target
 
 ## \brief Calculates output message as a string
 # \param inParams structure holding the input values
 # \param epsilon hit tolerance
-# \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
+# \param d_offset offset: the distance between the target position and the landing position (m)
 # \return output message as a string
 def func_s(inParams, epsilon, d_offset):
     if (math.fabs(d_offset / inParams.p_target) < epsilon):

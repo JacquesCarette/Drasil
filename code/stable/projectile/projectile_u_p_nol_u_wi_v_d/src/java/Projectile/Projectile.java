@@ -56,10 +56,10 @@ public class Projectile {
         return 2.0 * Math.pow(v_launch, 2.0) * Math.sin(theta) * Math.cos(theta) / g;
     }
     
-    /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
+    /** \brief Calculates offset: the distance between the target position and the landing position (m)
         \param p_target target position: the distance from the launcher to the target (m)
         \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
-        \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
+        \return offset: the distance between the target position and the landing position (m)
     */
     public static double func_d_offset(double p_target, double p_land) {
         return p_land - p_target;
@@ -68,7 +68,7 @@ public class Projectile {
     /** \brief Calculates output message as a string
         \param p_target target position: the distance from the launcher to the target (m)
         \param epsilon hit tolerance
-        \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
+        \param d_offset offset: the distance between the target position and the landing position (m)
         \return output message as a string
     */
     public static String func_s(double p_target, double epsilon, double d_offset) {
@@ -152,7 +152,7 @@ public class Projectile {
     
     /** \brief Writes the output values to output.txt
         \param s output message as a string
-        \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
+        \param d_offset offset: the distance between the target position and the landing position (m)
         \param t_flight flight duration: the time when the projectile lands (s)
     */
     public static void write_output(String s, double d_offset, double t_flight) throws IOException {

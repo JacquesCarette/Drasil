@@ -27,10 +27,10 @@ public class Calculations {
         return 2.0f * (float)(Math.Pow(v_launch, 2.0f)) * (float)(Math.Sin(theta)) * (float)(Math.Cos(theta)) / g;
     }
     
-    /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
+    /** \brief Calculates offset: the distance between the target position and the landing position (m)
         \param p_target target position: the distance from the launcher to the target (m)
         \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
-        \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
+        \return offset: the distance between the target position and the landing position (m)
     */
     public static float func_d_offset(float p_target, float p_land) {
         return p_land - p_target;
@@ -39,7 +39,7 @@ public class Calculations {
     /** \brief Calculates output message as a string
         \param p_target target position: the distance from the launcher to the target (m)
         \param epsilon hit tolerance
-        \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
+        \param d_offset offset: the distance between the target position and the landing position (m)
         \return output message as a string
     */
     public static string func_s(float p_target, float epsilon, float d_offset) {

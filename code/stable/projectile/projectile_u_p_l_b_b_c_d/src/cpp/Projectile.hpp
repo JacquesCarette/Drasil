@@ -59,23 +59,23 @@ double func_t_flight(InputParameters &inParams);
 */
 double func_p_land(InputParameters &inParams);
 
-/** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
+/** \brief Calculates offset: the distance between the target position and the landing position (m)
     \param inParams structure holding the input values
     \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
-    \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
+    \return offset: the distance between the target position and the landing position (m)
 */
 double func_d_offset(InputParameters &inParams, double p_land);
 
 /** \brief Calculates output message as a string
     \param inParams structure holding the input values
-    \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
+    \param d_offset offset: the distance between the target position and the landing position (m)
     \return output message as a string
 */
 string func_s(InputParameters &inParams, double d_offset);
 
 /** \brief Writes the output values to output.txt
     \param s output message as a string
-    \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
+    \param d_offset offset: the distance between the target position and the landing position (m)
     \param t_flight flight duration: the time when the projectile lands (s)
 */
 void write_output(string s, double d_offset, double t_flight);

@@ -10,8 +10,8 @@ import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (radian, metre, second)
 import Data.Drasil.Units.Physics (velU)
 
-import qualified Drasil.Projectile.Concepts as C (flightDur, offset,
-  flightDur, landPos, launAngle, launSpeed, offset, targPos, projSpeed, projPos)
+import qualified Drasil.Projectile.Concepts as C (flightDur, landPos,
+  launAngle, launSpeed, offset, projPos, projSpeed, targPos)
 
 projSpeed :: UnitalChunk
 projSpeed = uc C.projSpeed (Concat [lV, label "(", lT, label ")"]) Real velU

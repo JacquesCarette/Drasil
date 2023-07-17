@@ -21,17 +21,17 @@ def func_t_flight(v_launch, theta, g):
 def func_p_land(v_launch, theta, g):
     return 2.0 * v_launch ** 2.0 * math.sin(theta) * math.cos(theta) / g
 
-## \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
+## \brief Calculates offset: the distance between the target position and the landing position (m)
 # \param p_target target position: the distance from the launcher to the target (m)
 # \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
-# \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
+# \return offset: the distance between the target position and the landing position (m)
 def func_d_offset(p_target, p_land):
     return p_land - p_target
 
 ## \brief Calculates output message as a string
 # \param p_target target position: the distance from the launcher to the target (m)
 # \param epsilon hit tolerance
-# \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
+# \param d_offset offset: the distance between the target position and the landing position (m)
 # \return output message as a string
 def func_s(p_target, epsilon, d_offset):
     if (math.fabs(d_offset / p_target) < epsilon):
@@ -93,7 +93,7 @@ def input_constraints(v_launch, theta, p_target):
 
 ## \brief Writes the output values to output.txt
 # \param s output message as a string
-# \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
+# \param d_offset offset: the distance between the target position and the landing position (m)
 # \param t_flight flight duration: the time when the projectile lands (s)
 def write_output(s, d_offset, t_flight):
     outputfile = open("output.txt", "w")

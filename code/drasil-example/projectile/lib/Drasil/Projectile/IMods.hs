@@ -29,6 +29,8 @@ import Drasil.Projectile.GenDefs (posVecGD)
 import Drasil.Projectile.Unitals (flightDur, landPos, launAngle, launSpeed,
   message, offset, targPos, tol)
 
+import Control.Lens ((^.))
+
 iMods :: [InstanceModel]
 iMods = [timeIM, landPosIM, offsetIM, messageIM]
 
@@ -37,7 +39,7 @@ outputs = [messageIM, offsetIM, timeIM]
 
 ---
 timeIM :: InstanceModel
-timeIM = imNoRefs (equationalModelN (nounPhraseSP "calculation of landing time") timeQD)
+timeIM = imNoRefs (equationalModelN (flightDur ^. term) timeQD)
   [qwC launSpeed $ UpFrom (Exc, exactDbl 0)
   ,qwC launAngle $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)]
   (qw flightDur) [UpFrom (Exc, exactDbl 0)]
@@ -76,7 +78,7 @@ timeDerivEqns = D.timeDeriv ++ [express timeQD]
 
 ---
 landPosIM :: InstanceModel
-landPosIM = imNoRefs (equationalModelN (nounPhraseSP "calculation of landing position") landPosQD)
+landPosIM = imNoRefs (equationalModelN (landPos ^. term) landPosQD)
   [qwC launSpeed $ UpFrom (Exc, exactDbl 0),
    qwC launAngle $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)]
   (qw landPos) [UpFrom (Exc, exactDbl 0)]
@@ -110,7 +112,7 @@ landPosDerivEqns = D.landPosDeriv ++ [express landPosQD]
 
 ---
 offsetIM :: InstanceModel
-offsetIM = imNoDerivNoRefs (equationalModelN (nounPhraseSP "offset") offsetQD)
+offsetIM = imNoDerivNoRefs (equationalModelN (offset ^. term) offsetQD)
   [qwC landPos $ UpFrom (Exc, exactDbl 0)
   ,qwC targPos $ UpFrom (Exc, exactDbl 0)]
   (qw offset) [] "offsetIM" [landPosNote, landAndTargPosConsNote]
@@ -119,7 +121,7 @@ offsetQD :: SimpleQDef
 offsetQD = mkQuantDef offset E.offset'
 ---
 messageIM :: InstanceModel
-messageIM = imNoDerivNoRefs (equationalModelN (nounPhraseSP "output message") messageQD)
+messageIM = imNoDerivNoRefs (equationalModelN (message ^. term) messageQD)
   [qwC offset $ UpFrom (Exc, neg (sy targPos))
   ,qwC targPos $ UpFrom (Exc, exactDbl 0)]
   (qw message)

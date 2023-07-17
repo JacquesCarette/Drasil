@@ -23,10 +23,10 @@ func func_p_land(_ inParams: inout InputParameters, _ g: Double) -> Double {
     return 2.0 * pow(inParams.v_launch, 2.0) * sin(inParams.theta) * cos(inParams.theta) / g
 }
 
-/** Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
+/** Calculates offset: the distance between the target position and the landing position (m)
     - Parameter inParams: structure holding the input values
     - Parameter p_land: landing position: the distance from the launcher to the final position of the projectile (m)
-    - Returns: distance between the target position and the landing position: the offset between the target position and the landing position (m)
+    - Returns: offset: the distance between the target position and the landing position (m)
 */
 func func_d_offset(_ inParams: inout InputParameters, _ p_land: Double) -> Double {
     return p_land - inParams.p_target
@@ -35,7 +35,7 @@ func func_d_offset(_ inParams: inout InputParameters, _ p_land: Double) -> Doubl
 /** Calculates output message as a string
     - Parameter inParams: structure holding the input values
     - Parameter epsilon: hit tolerance
-    - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
+    - Parameter d_offset: offset: the distance between the target position and the landing position (m)
     - Returns: output message as a string
 */
 func func_s(_ inParams: inout InputParameters, _ epsilon: Double, _ d_offset: Double) -> String {

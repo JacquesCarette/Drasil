@@ -15,9 +15,9 @@ concepts = nw projMotion : map nw [landingPosNC, launchNC, launchAngleNC, launch
 
 durationNC, flightDurNC, landingPosNC, launchNC, launchAngleNC, launchSpeedNC, offsetNC, targetPosNC,
   rectVel :: IdeaDict
-durationNC   = nc "duration" (nounPhraseSP "duration")
-launchNC     = nc "launch"   (nounPhraseSP "launch")
-offsetNC     = nc "offset"   (nounPhraseSent $ S "distance between the" +:+ phraseNP (targetPosNC `andThe` landingPosNC))
+durationNC = nc "duration" (nounPhraseSP "duration")
+launchNC   = nc "launch"   (nounPhraseSP "launch")
+offsetNC   = nc "offset"   (nounPhraseSP "offset")
 
 flightDurNC   = compoundNC (nc "flight"  (nounPhraseSP "flight" )) durationNC
 landingPosNC  = compoundNC (nc "landing" (nounPhraseSP "landing")) position
@@ -52,7 +52,6 @@ launAngle = cc' launchAngleNC
              `S.fromThe` phraseNP (launcher `toThe` target)])
 
 launSpeed = cc' launchSpeedNC (phraseNP (iSpeed `the_ofThe` projectile) +:+ S "when launched")
-offset = cc' offsetNC (S "the offset between the" +:+ phraseNP (targetPosNC `andThe` landingPosNC))
-targPos = cc' targetPosNC (phraseNP (the distance) `S.fromThe` phraseNP (launcher `toThe` target))
+offset    = cc' offsetNC (phraseNP (the distance) +:+ S "between the" +:+ phraseNP (targetPosNC `andThe` landingPosNC))
+targPos   = cc' targetPosNC (phraseNP (the distance) `S.fromThe` phraseNP (launcher `toThe` target))
 flightDur = cc' flightDurNC (foldlSent_ [phraseNP (the time), S "when the", phrase projectile, S "lands"])
-

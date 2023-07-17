@@ -55,7 +55,7 @@ The symbols used in this document are summarized in the \hyperref[Table:ToS]{Tab
 
 \begin{longtblr}
 [caption={Table of Symbols}]
-{colspec={l X[l] l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+{colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
 $a$ & Scalar acceleration & $\frac{\text{m}}{\text{s}^{2}}$
@@ -74,7 +74,7 @@ $\symbf{a}\text{(}t\text{)}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 ${\symbf{a}^{\text{c}}}$ & Constant acceleration vector & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-${d_{\text{offset}}}$ & Distance between the target position and the landing position & ${\text{m}}$
+${d_{\text{offset}}}$ & Offset & ${\text{m}}$
 \\
 $g$ & Magnitude of gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
@@ -738,7 +738,7 @@ This section transforms the problem defined in the \hyperref[Sec:ProbDesc]{probl
 \phantomsection 
 \label{IM:calOfLandingTime}
 \\ \midrule
-Label & Calculation of landing time
+Label & Flight duration
         
 \\ \midrule
 Input & ${v_{\text{launch}}}$, $θ$
@@ -820,7 +820,7 @@ From \hyperref[DD:speedIY]{DD:speedIY} (with ${v^{\text{i}}}={v_{\text{launch}}}
 \phantomsection 
 \label{IM:calOfLandingDist}
 \\ \midrule
-Label & Calculation of landing position
+Label & Landing position
         
 \\ \midrule
 Input & ${v_{\text{launch}}}$, $θ$
@@ -920,7 +920,7 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{${d_{\text{offset}}}$ is the distance between the target position and the landing position (${\text{m}}$)}
+              \item{${d_{\text{offset}}}$ is the offset (${\text{m}}$)}
               \item{${p_{\text{land}}}$ is the landing position (${\text{m}}$)}
               \item{${p_{\text{target}}}$ is the target position (${\text{m}}$)}
               \end{symbDescription}
@@ -947,7 +947,7 @@ RefBy & \hyperref[IM:messageIM]{IM:messageIM} and \hyperref[calcValues]{FR:Calcu
 \phantomsection 
 \label{IM:messageIM}
 \\ \midrule
-Label & Output message
+Label & Output message as a string
         
 \\ \midrule
 Input & ${d_{\text{offset}}}$, ${p_{\text{target}}}$
@@ -975,7 +975,7 @@ Equation & \begin{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
               \item{$s$ is the output message as a string (Unitless)}
-              \item{${d_{\text{offset}}}$ is the distance between the target position and the landing position (${\text{m}}$)}
+              \item{${d_{\text{offset}}}$ is the offset (${\text{m}}$)}
               \item{${p_{\text{target}}}$ is the target position (${\text{m}}$)}
               \item{$ε$ is the hit tolerance (Unitless)}
               \end{symbDescription}
@@ -1058,10 +1058,14 @@ $θ$ & Launch angle & ${\text{rad}}$
 \end{longtblr}
 \begin{longtblr}
 [caption={Required Outputs following \hyperref[outputValues]{FR:Output-Values}}]
-{colspec={l X[l] l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+{colspec={l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Source} & \textbf{Units}
 \\
+<<<<<<< HEAD
 ${d_{\text{offset}}}$ & Distance between the target position and the landing position & \hyperref[IM:offsetIM]{IM:offsetIM} & ${\text{m}}$
+=======
+${d_{\text{offset}}}$ & Offset & \hyperref[IM:offsetIM]{IM:offsetIM} & ${\text{m}}$
+>>>>>>> 05f9eb3216 (use names of unitals for names of IMs in Projectile)
 \\
 $s$ & Output message as a string & \hyperref[IM:messageIM]{IM:messageIM} & --
 \\

@@ -25,10 +25,10 @@ public class Calculations {
         return 2.0 * Math.pow(inParams.v_launch, 2.0) * Math.sin(inParams.theta) * Math.cos(inParams.theta) / g;
     }
     
-    /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
+    /** \brief Calculates offset: the distance between the target position and the landing position (m)
         \param inParams structure holding the input values
         \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
-        \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
+        \return offset: the distance between the target position and the landing position (m)
     */
     public static double func_d_offset(InputParameters inParams, double p_land) {
         return p_land - inParams.p_target;
@@ -37,7 +37,7 @@ public class Calculations {
     /** \brief Calculates output message as a string
         \param inParams structure holding the input values
         \param epsilon hit tolerance
-        \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
+        \param d_offset offset: the distance between the target position and the landing position (m)
         \return output message as a string
     */
     public static String func_s(InputParameters inParams, double epsilon, double d_offset) {

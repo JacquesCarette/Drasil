@@ -36,7 +36,7 @@ import GOOL.Drasil.State (GS, FS, CS, MS, VS)
 
 import qualified Data.Kind as K (Type)
 import Data.Bifunctor (first)
-import Utils.Drasil (Comment)
+import CodeLang.Drasil (Comment)
 
 type Label = String
 type Library = String

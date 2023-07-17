@@ -13,7 +13,7 @@ import Build.Drasil.Make.AST (Annotation, Command(C),
 import Build.Drasil.Make.Helpers (addCommonFeatures, tab)
 import Build.Drasil.Make.Import (RuleTransformer, toMake)
 import Build.Drasil.Make.MakeString (renderMS)
-import Utils.Drasil(Comment)
+import CodeLang.Drasil (Comment)
 
 -- | Generates the makefile by calling 'build' after 'toMake'.
 genMake :: RuleTransformer c => [c] -> Doc

@@ -14,7 +14,7 @@ dependencies:
 - pretty
 - text
 - word-wrap
-- drasil-utils
+- drasil-codeLang
 
 ghc-options:
 - -Wall

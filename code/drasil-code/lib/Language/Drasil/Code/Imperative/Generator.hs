@@ -108,9 +108,12 @@ generateCode l unReprProg unReprPack g = do
   createDirectoryIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
   let (pckg, ds) = runState (genPackage unReprProg) g
-      code = makeCode (progMods $ packProg $ unReprPack pckg)
-        ([ad "designLog.txt" (ds ^. designLog) | not $ isEmpty $
-          ds ^. designLog] ++ packAux (unReprPack pckg))
+      baseAux = [ad "designLog.txt" (ds ^. designLog) | not $ isEmpty $
+          ds ^. designLog] ++ packAux (unReprPack pckg)
+      aux
+        | l == Python = ad "__init__.py" mempty : baseAux
+        | otherwise   = baseAux
+      code = makeCode (progMods $ packProg $ unReprPack pckg) aux
   createCodeFiles code
   setCurrentDirectory workingDir
 

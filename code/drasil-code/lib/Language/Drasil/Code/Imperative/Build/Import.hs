@@ -29,13 +29,13 @@ data CodeHarness = Ch {
 
 -- | Transforms information in 'CodeHarness' into a list of Makefile rules.
 instance RuleTransformer CodeHarness where
-  makeRule (Ch b r s m d) = maybe [mkRule ["Project Name: " ++ progName m, 
-    "Project Purpose: " ++ capitalize (progPurp m)]  buildTarget [] []]
+  makeRule (Ch b r s m d) = maybe [mkRule ["Project Name: " ++ progName m,
+    progPurpAdd m]  buildTarget [] []]
     (\(BuildConfig comp onm anm bt) ->
     let outnm = maybe (asFragment "") (renderBuildName s m nameOpts) onm
         addnm = maybe (asFragment "") (renderBuildName s m nameOpts) anm
     in [
-    mkRule ["Project Name: " ++ progName m, "Project Purpose: " ++ capitalize (progPurp m)] 
+    mkRule ["Project Name: " ++ progName m, progPurpAdd m] 
     buildTarget [outnm] [],
     mkFile [] outnm (map (makeS . filePath) (progMods m)) $
       map (mkCheckedCommand . foldr (+:+) mempty) $
@@ -49,6 +49,12 @@ instance RuleTransformer CodeHarness where
       mkRule [] (makeS "doc") (dps ++ getCommentedFiles s) cmds
     ]) d where
       buildTarget = makeS "build"
+
+-- | Helper that renders project purpose into a string if there is one.
+progPurpAdd :: ProgData -> String
+progPurpAdd m = if progPurp m /= [] then "Project Purpose: " ++ 
+                  capitalize (progPurp m)
+                else []
 
 -- | Helper that renders information into a MakeString. Dependent on the 'BuildName' criteria.
 renderBuildName :: GOOLState -> ProgData -> NameOpts -> BuildName -> MakeString

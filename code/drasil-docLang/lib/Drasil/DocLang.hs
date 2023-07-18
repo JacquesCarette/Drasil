@@ -91,9 +91,11 @@ import Drasil.Sections.AuxiliaryConstants (tableOfConstants)
 --import Drasil.Sections.GeneralSystDesc
 import Drasil.Sections.Introduction (purpDoc)
 import Drasil.Sections.ReferenceMaterial (intro, emptySectSentPlu, emptySectSentSing)
-import Drasil.Sections.Requirements (ReqType(..), inReq, inTable, mkInputPropsTable,
-  mkQRTuple, mkQRTupleRef, mkValsSourceTable, mkTupleValsSourceTable, reqInputsRef)
-import Drasil.Sections.SpecificSystemDescription (auxSpecSent, termDefnF', inDataConstTbl, outDataConstTbl)
+import Drasil.Sections.Requirements (ReqType(..), inReq, inTable,
+  mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
+  mkTupleValsSourceTable, reqInputsRef)
+import Drasil.Sections.SpecificSystemDescription (auxSpecSent, termDefnF',
+  inDataConstTbl, outDataConstTbl)
 --import Drasil.Sections.Stakeholders
 --import Drasil.Sections.TableOfAbbAndAcronyms
 import Drasil.Sections.TableOfSymbols (tsymb, tsymb'')

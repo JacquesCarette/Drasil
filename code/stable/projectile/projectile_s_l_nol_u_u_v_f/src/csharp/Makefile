@@ -13,8 +13,9 @@ else
     endif
 endif
 
-# Project Name and Purpose: Projectile - To predict whether a launched
-# projectile hits its target.
+# Project Name: Projectile
+
+# Project Purpose: Predict whether a launched projectile hits its target.
 
 build: Projectile$(LIB_EXTENSION)
 

@@ -1,7 +1,7 @@
 # NoPCM 
 > Author: Thulasi Jegatheesan
 
-> Purpose: investigate the heating of water in a solar water heating tank.
+> Purpose: Investigate the heating of water in a solar water heating tank.
 
 ------------------------------------------------------------
 ## Making Examples 
@@ -16,6 +16,10 @@ In your terminal command line, enter the same directory as this README file. The
 ```
 make build
 ```
+
+How to Change Input:
+NoPCM will take the inputs from `input.txt` and write the outputs to `output.txt`.
+Inputs can be changed by editing `input.txt`.
 
 ------------------------------------------------------------
 ## Version 

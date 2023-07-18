@@ -5,7 +5,7 @@ import Data.List (nub)
 
 import Language.Drasil.Printing.LayoutObj (LayoutObj(..))
 import Language.Drasil.TeX.Monad (D, vcat, (%%))
-import Language.Drasil.TeX.Helpers (docclass, command, command0, command1o, command2, command3, 
+import Language.Drasil.TeX.Helpers (docclass, command, command1o, command2, command3,
   usepackage)
 
 import Language.Drasil.Config (hyperSettings, fontSize, bibFname)
@@ -19,7 +19,6 @@ data Package = AMSMath      -- ^ Improves information structure for mathematical
              | Graphics     -- ^ Manipulate graphical elements.
              | HyperRef     -- ^ Handles cross-referencing within the document.
              | Listings     -- ^ Source code printer for LaTeX.
-             | LongTable    -- ^ Allow tables to overflow page boundaries.
              | Tikz         -- ^ Create graphical elements.
              | Dot2Tex      -- ^ Create better graphs.
              | AdjustBox    -- ^ Adjustable boxed content.
@@ -27,7 +26,8 @@ data Package = AMSMath      -- ^ Improves information structure for mathematical
 --           | Breqn --line breaks long equations automatically
              | FileContents -- ^ Creates .bib file within .tex file.
              | BibLaTeX     -- ^ Reimplementation of bibliography elements.
-             | Tabu         -- ^ Adds auto column width feature for tables.
+             | Tabularray   -- ^ Adds auto column width feature for tables.
+             | TabularX     -- ^ Adds \arraybackslash
              | Mathtools    -- ^ Line breaks for long fractions and cases.
              | URL          -- ^ Allows for hyperlinks.
              | FontSpec     -- ^ For utf-8 encoding in lualatex.
@@ -46,7 +46,6 @@ addPackage Graphics  = usepackage "graphics"
 addPackage HyperRef  = usepackage "hyperref" %%
                        command "hypersetup" hyperSettings
 addPackage Listings  = usepackage "listings"
-addPackage LongTable = usepackage "longtable"
 addPackage Tikz      = usepackage "tikz" %%
                        command "usetikzlibrary" "arrows.meta, shapes"
 addPackage Dot2Tex   = usepackage "dot2texi"
@@ -55,7 +54,8 @@ addPackage AMSsymb   = usepackage "amssymb"
 --addPackage Breqn     = usepackage "breqn"
 addPackage FileContents = usepackage "filecontents"
 addPackage BibLaTeX  = command1o "usepackage" (Just "backend=bibtex") "biblatex"
-addPackage Tabu      = usepackage "tabu"
+addPackage Tabularray = usepackage "tabularray"
+addPackage TabularX  = usepackage "tabularx"
 addPackage Mathtools = usepackage "mathtools"
 addPackage URL       = usepackage "url"
 -- Discussed in issue #1819
@@ -67,7 +67,6 @@ addPackage SVG       = usepackage "svg"
 
 -- | Common LaTeX commands.
 data Def = Bibliography
-         | TabuLine
          | GreaterThan
          | LessThan
          | SetMathFont
@@ -80,7 +79,6 @@ addDef :: Def -> D
 addDef Bibliography  = command "bibliography" bibFname
 addDef GreaterThan   = command2 "newcommand" "\\gt" "\\ensuremath >"
 addDef LessThan      = command2 "newcommand" "\\lt" "\\ensuremath <"
-addDef TabuLine      = command0 "global\\tabulinesep=1mm"
 addDef SetMathFont   = command "setmathfont" "Latin Modern Math"
 addDef SymbDescriptionP1 = command3 "newlist" "symbDescription" "description" "1"
 addDef SymbDescriptionP2 = command1o "setlist" (Just "symbDescription") "noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt"
@@ -100,7 +98,7 @@ parseDoc los' =
   where 
     res = map parseDoc' los'
     parseDoc' :: LayoutObj -> ([Package], [Def])
-    parseDoc' Table{} = ([Tabu,LongTable,BookTabs,Caption], [TabuLine])
+    parseDoc' Table{} = ([Tabularray,TabularX,BookTabs,Caption], [])
     parseDoc' (HDiv _ slos _) = 
       let res1 = map parseDoc' slos in
       let pp = concatMap fst res1 in
@@ -110,7 +108,7 @@ parseDoc los' =
       let res1 = concatMap (map parseDoc' . snd) ps in
       let pp = concatMap fst res1 in
       let dd = concatMap snd res1 in
-      (Tabu:LongTable:BookTabs:pp,SymbDescriptionP1:SymbDescriptionP2:TabuLine:dd)
+      (Tabularray:TabularX:BookTabs:pp,SymbDescriptionP1:SymbDescriptionP2:dd)
     parseDoc' Figure{}     = ([Graphics,Caption, SVG],[])
     parseDoc' Graph{}      = ([Caption,Tikz,Dot2Tex,AdjustBox],[])
     parseDoc' Bib{}        = ([FileContents,BibLaTeX,URL],[Bibliography])

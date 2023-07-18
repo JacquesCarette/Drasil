@@ -5,17 +5,21 @@ import Drasil.SRSDocument
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
+import qualified Drasil.DocLang.SRS as SRS
 
-import Data.Drasil.Concepts.Computation (inValue)
+import Data.Drasil.Concepts.Computation (inValue, algorithm, inDatum, compcon)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
-  problem, srsDomains, assumption, goalStmt, physSyst,
-  requirement, refBy, refName, typUnc)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
+  problem, srsDomains, assumption, goalStmt, physSyst, sysCont, software, user,
+  requirement, refBy, refName, typUnc, example, softwareSys, system, environment, 
+  product_, interface, condition, physical, datum, input_, softwareConstraint, 
+  output_, endUser)
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
 import Data.Drasil.Concepts.Math (cartesian, mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon',
   rectilinear, oneD, twoD, motion)
 import Data.Drasil.Concepts.Software (errMsg, program)
+import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)
 import Data.Drasil.Quantities.Physics (acceleration, constAccel,
@@ -27,11 +31,13 @@ import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 import Data.Drasil.SI_Units (metre, radian, second)
 import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
+import Data.Drasil.Concepts.Education(calculus, educon, undergraduate, 
+  highSchoolPhysics, highSchoolCalculus)
 
 import Drasil.Projectile.Assumptions (assumptions)
 import Drasil.Projectile.Concepts (concepts, launcher, projectile, target)
 import Drasil.Projectile.DataDefs (dataDefs)
-import Drasil.Projectile.Figures (figLaunch)
+import Drasil.Projectile.Figures (figLaunch, sysCtxFig1)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
@@ -60,13 +66,22 @@ mkSRS = [TableOfContents,
       ],
   IntroSec $
     IntroProg justification (phrase projectileTitle)
-      [ IScope scope ],
+      [ IPurpose $ purpDoc projectileTitle Verbose
+      , IScope scope
+      , IChar [] charsOfReader []
+      , IOrgSec inModel (SRS.inModel [] []) EmptyS],
+  GSDSec $ 
+      GSDProg 
+        [ SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList]
+        , UsrChars [userCharacteristicsIntro]
+        , SystCons [] []],  
   SSDSec $
     SSDProg
-      [ SSDProblem $ PDProg probDescIntro []
+      [ SSDProblem $ PDProg purp []
         [ TermsAndDefs Nothing terms
         , PhySysDesc projectileTitle physSystParts figLaunch []
-        , Goals [(phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile]]
+        , Goals [(phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile, 
+                  S "geometric layout" `S.the_ofThe` phrase launcher `S.and_` phrase target]]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)
@@ -91,11 +106,19 @@ mkSRS = [TableOfContents,
 justification, scope :: Sentence
 justification = foldlSent [atStart projectile, phrase motion, S "is a common" +:+.
   phraseNP (problem `in_` physics), S "Therefore, it is useful to have a",
-  phrase program, S "to solve and model these types of" +:+. plural problem,
+  phrase program, S "to solve and model these types of" +:+. plural problem, 
+  S "Common", plural example `S.of_` phraseNP (combineNINI projectile motion), 
+  S "include" +:+. foldlList Comma List projectileExamples,
   atStartNP (the program), S "documented here is called", phrase projectileTitle]
 scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
-  sParen (getAcc twoD), phraseNP (combineNINI projectile motion), phrase problem, S "with",
-  phrase constAccel]
+  sParen (getAcc twoD), phraseNP (combineNINI projectile motion), phrase problem, 
+  S "with", phrase constAccel]
+
+projectileExamples :: [Sentence]
+projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles" `sC` 
+  S "bullets" `sC` S "etc."), S "the flight" `S.of_` S "balls" `S.in_` 
+  S "various sports" +:+ sParen (S "baseball" `sC` S "golf" `sC` S "football" `sC`
+  S "etc.")]
 
 projectileTitle :: CI
 projectileTitle = commonIdea "projectileTitle" (pn "Projectile") "Projectile" []
@@ -132,9 +155,11 @@ symbMap :: ChunkDB
 symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
   (nw projectileTitle : nw mass : nw inValue : [nw errMsg, nw program] ++
     map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
-    map nw physicscon ++ map nw mathcon ++ concepts ++ unitalIdeas ++
-    map nw acronyms ++ map nw symbols ++ map nw [metre, radian, second]) (cw pi_ : map cw constrained ++ srsDomains)
-  (map unitWrapper [metre, radian, second]) dataDefs iMods genDefns tMods concIns [] [] []
+    map nw physicscon ++ map nw mathcon ++ [nw algorithm] ++ concepts ++ 
+    [nw sciCompS] ++ unitalIdeas ++ map nw acronyms ++ map nw symbols ++ 
+    map nw educon ++ map nw [metre, radian, second] ++ map nw compcon) 
+  (cw pi_ : map cw constrained ++ srsDomains) (map unitWrapper [metre, radian, second]) 
+  dataDefs iMods genDefns tMods concIns [] [] []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols)
@@ -149,12 +174,73 @@ refDB = rdb citations concIns
 concIns :: [ConceptInstance]
 concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
 
+----------------------------------------
+-- Characteristics of Intended Reader --
+----------------------------------------
+
+charsOfReader :: [Sentence]
+charsOfReader = [phrase undergraduate +:+ S "level 1" +:+ phrase Doc.physics,
+                 phrase undergraduate +:+ S "level 1" +:+ phrase calculus]
+
+-----------------
+--SystemContext--
+-----------------
+
+sysCtxIntro :: Contents
+sysCtxIntro = foldlSP
+  [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
+   S "A circle represents an entity external" `S.toThe` phrase software
+   `sC` phraseNP (the user), S "in this case. A rectangle represents the",
+   phrase softwareSys, S "itself" +:+. sParen (short projectileTitle),
+   S "Arrows are used to show the data flow between the", phraseNP (system
+   `andIts` environment)]
+
+sysCtxDesc :: Contents
+sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_
+   `andThe` user), S "is through an application programming" +:+.
+   phrase interface, S "responsibilities" `S.the_ofTheC` phraseNP (user 
+   `andThe` system), S "are as follows"]
+
+sysCtxUsrResp :: [Sentence]
+sysCtxUsrResp = map foldlSent [[S "Provide initial", pluralNP (condition `ofThePS`
+  physical), S "state" `S.ofThe` phrase motion `S.andThe` plural inDatum, S "related" `S.toThe`
+  phrase projectileTitle `sC` S "ensuring no errors" `S.inThe` plural datum, S "entry"], 
+  [S "Ensure that consistent units are used for", pluralNP (combineNINI input_ Doc.variable)],
+  [S "Ensure required", namedRef (SRS.assumpt ([]::[Contents]) ([]::[Section])) 
+   (phrase software +:+ plural assumption), S "are appropriate for any particular",
+  phrase problem, phrase input_ `S.toThe` phrase software]]
+
+sysCtxSysResp :: [Sentence]
+sysCtxSysResp = map foldlSent [[S "Detect data type mismatch, such as a string of characters",
+  phrase input_, S "instead of a floating point number"],
+  [S "Determine if the", plural input_, S "satisfy the required",
+  pluralNP (physical `and_` softwareConstraint)],
+  [S "Calculate the required", plural output_]]
+
+sysCtxResp :: [Sentence]
+sysCtxResp = map (\x -> x +:+ S "Responsibilities") 
+  [titleize user, short projectileTitle]
+
+sysCtxList :: Contents
+sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
+  map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+
+-------------------------
+--User Characteristics --
+-------------------------
+
+userCharacteristicsIntro :: Contents
+userCharacteristicsIntro = foldlSP
+  [S "The", phrase endUser `S.of_` short projectileTitle,
+   S "should have an understanding of", 
+   phrase highSchoolPhysics `S.and_` phrase highSchoolCalculus]
+
 -------------------------
 -- Problem Description --
 -------------------------
 
-probDescIntro :: Sentence
-probDescIntro = S "efficiently" +:+ purp
+-- The text for the problem description is the same as that of the purpose of
+-- this example.
 
 ---------------------------------
 -- Terminology and Definitions --

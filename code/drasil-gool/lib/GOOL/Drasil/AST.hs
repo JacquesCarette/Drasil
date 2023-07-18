@@ -3,10 +3,12 @@ module GOOL.Drasil.AST (Terminator(..), ScopeTag(..), QualifiedName, qualName,
   FileData(filePath, fileMod), fileD, updateFileMod, FuncData(fType, funcDoc), 
   fd, ModData(name, modDoc), md, updateMod, MethodData(mthdDoc), mthd, 
   updateMthd, OpData(opPrec, opDoc), od, ParamData(paramVar, paramDoc), pd, 
-  paramName, updateParam, ProgData(progName, progMods), progD, emptyProg, 
+  paramName, updateParam, ProgData(progName, progPurp, progMods), progD, emptyProg, 
   StateVarData(getStVarScp, stVar, destructSts), svd, 
   TypeData(cType, typeString, typeDoc), td, ValData(valPrec, valType, val), 
-  vd, updateValDoc, VarData(varBind, varName, varType, varDoc), vard
+  vd, updateValDoc, VarData(varBind, varName, varType, varDoc), vard,
+  CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
+  commonThunkElim, commonThunkDim
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -105,13 +107,13 @@ updateParam :: (Doc -> Doc) -> ParamData -> ParamData
 updateParam f v = pd (paramVar v) ((f . paramDoc) v)
 
 -- Used as the underlying data type for Programs in all renderers
-data ProgData = ProgD {progName :: String, progMods :: [FileData]}
+data ProgData = ProgD {progName :: String, progPurp :: String, progMods :: [FileData]}
 
-progD :: String -> [FileData] -> ProgData
-progD n fs = ProgD n (filter (not . isEmpty . modDoc . fileMod) fs)
+progD :: String -> String -> [FileData] -> ProgData
+progD n st fs = ProgD n st (filter (not . isEmpty . modDoc . fileMod) fs)
 
 emptyProg :: ProgData
-emptyProg = progD "" []
+emptyProg = progD "" "" []
 
 -- Used as the underlying data type for StateVars in the C++ renderer
 data StateVarData = SVD {getStVarScp :: ScopeTag, stVar :: Doc, 
@@ -141,3 +143,40 @@ data VarData = VarD {varBind :: Binding, varName :: String,
 
 vard :: Binding -> String -> TypeData -> Doc -> VarData
 vard = VarD
+
+-- Used as the underlying data type for Thunks in all renderers
+data CommonThunk s
+  = PureValue (s ValData)
+  | Vectorize (s ValData -> s ValData) (CommonThunk s)
+  | Vectorize2 (s ValData -> s ValData -> s ValData) (CommonThunk s) (CommonThunk s)
+  | SumComponents (CommonThunk s)
+
+pureValue :: s ValData -> CommonThunk s
+pureValue = PureValue
+
+vectorize :: (s ValData -> s ValData) -> CommonThunk s -> CommonThunk s
+vectorize = Vectorize
+
+vectorize2 :: (s ValData -> s ValData -> s ValData) -> CommonThunk s -> CommonThunk s -> CommonThunk s
+vectorize2 = Vectorize2
+
+sumComponents :: CommonThunk s -> CommonThunk s
+sumComponents = SumComponents
+
+commonVecIndex :: (s ValData -> s ValData) -> CommonThunk s -> s ValData
+commonVecIndex index (PureValue v) = index v
+commonVecIndex index (Vectorize op v) = op (commonVecIndex index v)
+commonVecIndex index (Vectorize2 op v1 v2) = commonVecIndex index v1 `op` commonVecIndex index v2
+commonVecIndex _ (SumComponents _) = error "Indexing into a scalar thunk"
+
+commonThunkElim :: (CommonThunk s -> a) -> (CommonThunk s -> a) -> CommonThunk s -> a
+commonThunkElim _ sumF (SumComponents v) = sumF v
+commonThunkElim vectorF _ v = vectorF v
+
+-- The dimension of a vector or the vector underlying a dot product
+-- Used to generate thunkAssign loops
+commonThunkDim :: (s ValData -> s ValData) -> CommonThunk s -> s ValData
+commonThunkDim dim (PureValue v) = dim v
+commonThunkDim dim (Vectorize _ v) = commonThunkDim dim v
+commonThunkDim dim (Vectorize2 _ v1 _) = commonThunkDim dim v1
+commonThunkDim dim (SumComponents v) = commonThunkDim dim v

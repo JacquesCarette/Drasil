@@ -85,7 +85,7 @@ module Language.Drasil (
   , UID, mkUid
   -- Language.Drasil.Chunk.NamedIdea
   , (+++), (+++.), (+++!)
-  , NamedChunk, nc, ncUID, IdeaDict , mkIdea
+  , nc, ncUID, IdeaDict , mkIdea
   , nw -- bad name (historical)
   -- Language.Drasil.Chunk.CodeBase
   , CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..)
@@ -219,7 +219,7 @@ module Language.Drasil (
 
   -- *** Sentence-related
   , foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent
-  , foldlSent_,foldlSentCol, foldlsC, foldNums, numList
+  , foldlSent_,foldlSentCol, foldlsC, foldNums, numList 
 
 
   -- * Basic Document Language

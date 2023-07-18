@@ -28,8 +28,10 @@ data CodeHarness = Ch {
 
 -- | Transforms information in 'CodeHarness' into a list of Makefile rules.
 instance RuleTransformer CodeHarness where
-  makeRule (Ch b r s m d) = maybe [mkRule buildTarget [] []] 
-    (\(BuildConfig comp onm anm bt) -> 
+  makeRule (Ch b r s m d) = [mkRule (makeS "# Project Name and Purpose") 
+    [makeS (progName m ++ " - To " ++ progPurp m)] []]  ++
+    maybe [mkRule buildTarget [] []]
+    (\(BuildConfig comp onm anm bt) ->
     let outnm = maybe (asFragment "") (renderBuildName s m nameOpts) onm
         addnm = maybe (asFragment "") (renderBuildName s m nameOpts) anm
     in [
@@ -39,7 +41,8 @@ instance RuleTransformer CodeHarness where
         comp (getCompilerInput bt s m) outnm addnm
     ]) b ++ maybe [] (\(Runnable nm no ty) -> [
     mkRule (makeS "run") [buildTarget] [
-      mkCheckedCommand $ buildRunTarget (renderBuildName s m no nm) ty +:+ mkFreeVar "RUNARGS"
+      mkCheckedCommand $ buildRunTarget (renderBuildName s m no nm) ty +:+ 
+      mkFreeVar "RUNARGS"
       ]
     ]) r ++ maybe [] (\(DocConfig dps cmds) -> [
       mkRule (makeS "doc") (dps ++ getCommentedFiles s) cmds

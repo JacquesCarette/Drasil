@@ -94,7 +94,7 @@ sufx _ = "th"
 sufxer :: Int -> String
 sufxer x = sufx r ++ "."
     where
-        r = if x `elem` [11, 12, 13] then 0 else mod x 10
+        r = if mod x 100 `elem` [11, 12, 13] then 0 else mod x 10
 
 sufxPrint :: [CiteField] -> String
 sufxPrint fields = if any isUrl fields then "" else " Print."

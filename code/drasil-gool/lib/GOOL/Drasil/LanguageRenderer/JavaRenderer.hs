@@ -11,18 +11,20 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
-  VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass, OOProg, 
-  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, 
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), 
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..), 
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
-  Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj,
-  InternalValueExp(..), FunctionSym(..), ($.), GetSet(..), List(..), 
-  InternalList(..), StatementSym(..), AssignStatement(..), 
-  (&=), DeclStatement(..), IOStatement(..), StringStatement(..), 
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
-  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), 
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass, OOProg,
+  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), oneLiner,
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  selfFuncApp, extFuncApp, newObj, InternalValueExp(..), FunctionSym(..), ($.),
+  GetSet(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), StatePattern(..),
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -53,17 +55,17 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
   VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
   binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, 
-  negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
-  lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, 
-  objVar, arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, 
-  argsList, objAccess, objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, 
-  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess, 
-  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
-  subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, 
-  comment, throw, ifCond, tryCatch, construct, param, method, getMethod, 
-  setMethod, function, buildClass, implementingClass, commentedClass, 
-  modFromData, fileDoc, fileFromData)
+  multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
+  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
+  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
+  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
+  objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
+  lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
+  setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
+  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
+  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
+  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
+  fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int, 
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
@@ -82,9 +84,11 @@ import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists,
   runStrategy, listSlice, stringListVals, stringListLists, forRange, 
   notifyObservers, checkState)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..), 
-  FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
-  MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
-  progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
+  FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
+  MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
+  ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard,
+  CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
+  commonThunkElim, commonThunkDim)
 import GOOL.Drasil.CodeAnalysis (Exception(..), ExceptionType(..), exception, 
   stdExc, HasException(..))
 import GOOL.Drasil.Helpers (emptyIfNull, toCode, toState, onCodeValue, 
@@ -94,9 +98,11 @@ import GOOL.Drasil.State (VS, lensGStoFS, lensMStoFS, lensMStoVS, lensVStoFS,
   lensVStoMS, modifyReturn, modifyReturnList, revFiles, addProgNameToPaths, 
   addLangImport, addLangImportVS, addExceptionImports, getModuleName, 
   setFileType, getClassName, setCurrMain, setOutputsDeclared, 
-  isOutputsDeclared, getExceptions, getMethodExcMap, addExceptions)
+  isOutputsDeclared, getExceptions, getMethodExcMap, addExceptions, useVarName,
+  genLoopIndex)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
+import Control.Applicative (liftA2)
 import Control.Lens.Zoom (zoom)
 import Control.Monad (join)
 import Control.Monad.State (modify)
@@ -125,8 +131,8 @@ instance OOProg JavaCode where
 
 instance ProgramSym JavaCode where
   type Program JavaCode = ProgData
-  prog n fs = modifyReturnList (map (zoom lensGStoFS) fs) (revFiles . 
-    addProgNameToPaths n) (onCodeList (progD n . map (R.package n 
+  prog n st fs = modifyReturnList (map (zoom lensGStoFS) fs) (revFiles . 
+    addProgNameToPaths n) (onCodeList (progD n st . map (R.package n 
     endStatement)))
 
 instance RenderSym JavaCode
@@ -444,6 +450,39 @@ instance InternalListFunc JavaCode where
   listAppendFunc = G.listAppendFunc jListAdd
   listAccessFunc = CP.listAccessFunc' jListAccess
   listSetFunc = jListSetFunc
+
+instance ThunkSym JavaCode where
+  type Thunk JavaCode = CommonThunk VS
+
+instance ThunkAssign JavaCode where
+  thunkAssign v t = do
+    iName <- genLoopIndex
+    let
+      i = var iName int
+      dim = fmap pure $ t >>= commonThunkDim (fmap unJC . listSize . fmap pure) . unJC
+      loopInit = zoom lensMStoVS (fmap unJC t) >>= commonThunkElim
+        (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
+      loopBody = zoom lensMStoVS (fmap unJC t) >>= commonThunkElim
+        (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
+        ((v &+=) . vecIndex (valueOf i) . pure . pure)
+    multi [loopInit,
+      forRange i (litInt 0) dim (litInt 1) $ body [block [loopBody]]]
+
+instance VectorType JavaCode where
+  vecType = listType
+
+instance VectorDecl JavaCode where
+  vecDec = listDec
+  vecDecDef = listDecDef
+
+instance VectorThunk JavaCode where
+  vecThunk = pure . pure . pureValue . fmap unJC . valueOf
+
+instance VectorExpression JavaCode where
+  vecScale k = fmap $ fmap $ vectorize (fmap unJC . (k #*) . fmap pure)
+  vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unJC $ fmap pure v1 #+ fmap pure v2)
+  vecIndex i = (>>= fmap pure . commonVecIndex (fmap unJC . flip listAccess i . fmap pure) . unJC)
+  vecDot = liftA2 $ liftA2 $ fmap sumComponents <$> vectorize2 (\v1 v2 -> fmap unJC $ fmap pure v1 #* fmap pure v2)
 
 instance RenderFunction JavaCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
@@ -862,6 +901,7 @@ jConstDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 jConstDecDef v' def' = do
   v <- zoom lensMStoVS v'
   def <- zoom lensMStoVS def'
+  modify $ useVarName $ variableName v
   mkStmt $ jFinal <+> RC.type' (variableType v) <+> 
     RC.variable v <+> equals <+> RC.value def
 
@@ -869,6 +909,7 @@ jFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> MSBody r ->
   MSStatement r
 jFuncDecDef v ps bod = do
   vr <- zoom lensMStoVS v
+  modify $ useVarName $ variableName vr
   pms <- mapM (zoom lensMStoVS) ps
   b <- bod
   mkStmt $ RC.type' (variableType vr) <+> RC.variable vr <+> equals <+>

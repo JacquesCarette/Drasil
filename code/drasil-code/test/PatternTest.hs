@@ -41,7 +41,7 @@ newObserver = extNewObj observerName observerType []
 
 -- | Creates the pattern test program.
 patternTest :: (OOProg r) => GSProgram r
-patternTest = prog progName [fileDoc (buildModule progName []
+patternTest = prog progName "" [fileDoc (buildModule progName []
   [patternTestMainMethod] []), observer]
 
 -- | Creates the main function for PatternTest.

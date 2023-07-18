@@ -56,100 +56,100 @@ lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2,
   yAccel_1, xAccel_2, yAccel_2,
   angularAccel_1, angularAccel_2, tension_1, tension_2 :: UnitalChunk
 
-lenRod_1 = uc' "l_1" (nounPhraseSent $ phraseNP(len `the_ofThe` firstRod))
-        (S "The" +:+ phraseNP (len `the_ofThe` firstRod)) -- Fix me, can have more information 
+lenRod_1 = uc' "l_1" (len `ofThe` firstRod)
+        (phraseNP (len `the_ofThe` firstRod)) -- Fix me, can have more information 
         (sub cL label1) Real metre
 
-lenRod_2 = uc' "l_2" (nounPhraseSent $ phraseNP(len `the_ofThe` secondRod))
-        (S "The" +:+ phraseNP (len `the_ofThe` secondRod))
+lenRod_2 = uc' "l_2" (len `ofThe` secondRod)
+        (phraseNP (len `the_ofThe` secondRod))
         (sub cL label2) Real metre
 
-massObj_1 = uc' "m_1" (nounPhraseSent $ phraseNP (mass `the_ofThe` firstObject))
-        (S "The" +:+ phraseNP (mass `the_ofThe` firstObject))
+massObj_1 = uc' "m_1" (mass `ofThe` firstObject)
+        (phraseNP (mass `the_ofThe` firstObject))
         (sub lM label1) Real kilogram
 
-massObj_2 = uc' "m_2" (nounPhraseSent $ phraseNP (mass `the_ofThe` secondObject))
-        (S "The" +:+ phraseNP (mass `the_ofThe` secondObject))
+massObj_2 = uc' "m_2" (mass `ofThe` secondObject)
+        (phraseNP (mass `the_ofThe` secondObject))
         (sub lM label2) Real kilogram
 
-xPos_1 = uc' "p_x1" (nounPhraseSent $ phraseNP (horizontalPos `the_ofThe` firstObject))
-        (S "The" +:+ phraseNP (QP.position `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
+xPos_1 = uc' "p_x1" (horizontalPos `ofThe` firstObject)
+        (phraseNP (QP.position `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
         (sub lP (Concat [labelx, label1])) Real metre
 
-xPos_2 = uc' "p_x2" (nounPhraseSent $ phraseNP (horizontalPos `the_ofThe` secondObject))
-        (S "The" +:+ phraseNP (QP.position `the_ofThe` secondObject) `S.inThe` phrase CM.xDir)
+xPos_2 = uc' "p_x2" (horizontalPos `ofThe` secondObject)
+        (phraseNP (QP.position `the_ofThe` secondObject) `S.inThe` phrase CM.xDir)
         (sub lP (Concat [labelx, label2])) Real metre
 
-yPos_1 = uc' "p_y1" (nounPhraseSent $ phraseNP (verticalPos `the_ofThe` firstObject))
-        (S "The" +:+ phraseNP (QP.position `the_ofThe` firstObject) `S.inThe` phrase CM.yDir)
+yPos_1 = uc' "p_y1" (verticalPos `ofThe` firstObject)
+        (phraseNP (QP.position `the_ofThe` firstObject) `S.inThe` phrase CM.yDir)
         (sub lP (Concat [labely, label1])) Real metre
 
-yPos_2 = uc' "p_y2" (nounPhraseSent $ phraseNP (verticalPos `the_ofThe` secondObject))
-        (S "The" +:+ phraseNP (QP.position `the_ofThe` secondObject) `S.inThe` phrase CM.yDir)
+yPos_2 = uc' "p_y2" (verticalPos `ofThe` secondObject)
+        (phraseNP (QP.position `the_ofThe` secondObject) `S.inThe` phrase CM.yDir)
         (sub lP (Concat [labely, label2])) Real metre
 
-xVel_1 = uc' "v_x1" (nounPhraseSent $ phraseNP (horizontalVel `the_ofThe` firstObject))
-        (S "The" +:+ phraseNP (QP.angularVelocity `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
+xVel_1 = uc' "v_x1" (horizontalVel `ofThe` firstObject)
+        (phraseNP (QP.angularVelocity `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
         (sub lV (Concat [labelx, label1])) Real velU
 
-xVel_2 = uc' "v_x2" (nounPhraseSent $ phraseNP (horizontalVel `the_ofThe` secondObject))
-        (S "The" +:+ phraseNP (QP.angularVelocity `the_ofThe` secondObject) `S.inThe` phrase CM.xDir)
+xVel_2 = uc' "v_x2" (horizontalVel `ofThe` secondObject)
+        (phraseNP (QP.angularVelocity `the_ofThe` secondObject) `S.inThe` phrase CM.xDir)
         (sub lV (Concat [labelx, label2])) Real velU
 
-yVel_1 = uc' "v_y1" (nounPhraseSent $ phraseNP (verticalVel `the_ofThe` firstObject))
-        (S "The" +:+ phraseNP (QP.angularVelocity `the_ofThe` firstObject) `S.inThe` phrase CM.yDir)
+yVel_1 = uc' "v_y1" (verticalVel `ofThe` firstObject)
+        (phraseNP (QP.angularVelocity `the_ofThe` firstObject) `S.inThe` phrase CM.yDir)
         (sub lV (Concat [labely, label1])) Real velU
 
-yVel_2 = uc' "v_y2" (nounPhraseSent $ phraseNP (verticalVel `the_ofThe` secondObject))
-        (S "The" +:+ phraseNP (QP.angularVelocity `the_ofThe` secondObject) `S.inThe` phrase CM.yDir)
+yVel_2 = uc' "v_y2" (verticalVel `ofThe` secondObject)
+        (phraseNP (QP.angularVelocity `the_ofThe` secondObject) `S.inThe` phrase CM.yDir)
         (sub lV (Concat [labely, label2])) Real velU
 
-xAccel_1 = uc' "a_x1" (nounPhraseSent $ phraseNP (horizontalAccel `the_ofThe` firstObject))
-        (S "The" +:+ phraseNP (QP.acceleration `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
+xAccel_1 = uc' "a_x1" (horizontalAccel `ofThe` firstObject)
+        (phraseNP (QP.acceleration `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
         (sub lA (Concat [labelx, label1])) Real accelU
 
-xAccel_2 = uc' "a_x2" (nounPhraseSent $ phraseNP (horizontalAccel `the_ofThe` secondObject))
-        (S "The" +:+ phraseNP (QP.acceleration `the_ofThe` secondObject) `S.inThe` phrase CM.xDir)
+xAccel_2 = uc' "a_x2" (horizontalAccel `ofThe` secondObject)
+        (phraseNP (QP.acceleration `the_ofThe` secondObject) `S.inThe` phrase CM.xDir)
         (sub lA (Concat [labelx, label2])) Real accelU
 
-yAccel_1 = uc' "a_y1" (nounPhraseSent $ phraseNP (verticalAccel `the_ofThe` firstObject))
-        (S "The" +:+ phraseNP (QP.acceleration `the_ofThe` firstObject) `S.inThe` phrase CM.yDir)
+yAccel_1 = uc' "a_y1" (verticalAccel `ofThe` firstObject)
+        (phraseNP (QP.acceleration `the_ofThe` firstObject) `S.inThe` phrase CM.yDir)
         (sub lA (Concat [labely, label1])) Real accelU
 
-yAccel_2 = uc' "a_y2" (nounPhraseSent $ phraseNP (verticalAccel `the_ofThe` secondObject))
-        (S "The" +:+ phraseNP (QP.acceleration `the_ofThe` secondObject) `S.inThe` phrase CM.yDir)
+yAccel_2 = uc' "a_y2" (verticalAccel `ofThe` secondObject)
+        (phraseNP (QP.acceleration `the_ofThe` secondObject) `S.inThe` phrase CM.yDir)
         (sub lA (Concat [labely, label2])) Real accelU
 
-angularAccel_1 = uc' "alpha_x1" (nounPhraseSent $ phraseNP (QP.angularAccel `the_ofThe` firstObject))
-        (S "The" +:+ phraseNP (QP.angularAccel `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
+angularAccel_1 = uc' "alpha_x1" (QP.angularAccel `ofThe` firstObject)
+        (phraseNP (QP.angularAccel `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
         (sub lAlpha label1) Real angAccelU
 
-angularAccel_2 = uc' "alpha_y1" (nounPhraseSent $ phraseNP (QP.angularAccel `the_ofThe` secondObject))
-        (S "The" +:+ phraseNP (QP.angularAccel `the_ofThe` secondObject) `S.inThe` phrase CM.yDir)
+angularAccel_2 = uc' "alpha_y1" (QP.angularAccel `ofThe` secondObject)
+        (phraseNP (QP.angularAccel `the_ofThe` secondObject) `S.inThe` phrase CM.yDir)
         (sub lAlpha label2) Real angAccelU
 
-tension_1 = uc' "T_1" (nounPhraseSent $ phraseNP (QP.tension `the_ofThe` firstObject))
-        (S "The" +:+ phraseNP (QP.tension `the_ofThe` firstObject))
+tension_1 = uc' "T_1" (QP.tension `ofThe` firstObject)
+        (phraseNP (QP.tension `the_ofThe` firstObject))
         (sub (vec cT) label1) Real newton
 
-tension_2 = uc' "T_2" (nounPhraseSent $ phraseNP (QP.tension `the_ofThe` secondObject))
-        (S "The" +:+ phraseNP (QP.tension `the_ofThe` secondObject))
+tension_2 = uc' "T_2" (QP.tension `ofThe` secondObject)
+        (phraseNP (QP.tension `the_ofThe` secondObject))
         (sub (vec cT) label2) Real newton
 
-angularVel_1 = uc' "w_1" (nounPhraseSent $ phraseNP (QP.angularVelocity `the_ofThe` firstObject))
-        (S "The" +:+ phraseNP (QP.angularVelocity `the_ofThe` firstObject))
+angularVel_1 = uc' "w_1" (QP.angularVelocity `ofThe` firstObject)
+        (phraseNP (QP.angularVelocity `the_ofThe` firstObject))
         (sub lW label1) Real angVelU
 
-angularVel_2 = uc' "w_2" (nounPhraseSent $ phraseNP (QP.angularVelocity `the_ofThe` secondObject))
-        (S "The" +:+ phraseNP (QP.angularVelocity `the_ofThe` secondObject))
+angularVel_2 = uc' "w_2" (QP.angularVelocity `ofThe` secondObject)
+        (phraseNP (QP.angularVelocity `the_ofThe` secondObject))
         (sub lW label2) Real angVelU
 
-pendDisAngle_1 = uc' "theta_1" (nounPhraseSent $ phraseNP (angle `the_ofThe` firstRod))
-        (S "The" +:+ phraseNP (angle `the_ofThe` firstRod))
+pendDisAngle_1 = uc' "theta_1" (angle `ofThe` firstRod)
+        (phraseNP (angle `the_ofThe` firstRod))
         (sub lTheta label1) Real radian
 
-pendDisAngle_2 = uc' "theta_2" (nounPhraseSent $ phraseNP (angle `the_ofThe` secondRod))
-        (S "The" +:+ phraseNP (angle `the_ofThe` secondRod))
+pendDisAngle_2 = uc' "theta_2" (angle `ofThe` secondRod)
+        (phraseNP (angle `the_ofThe` secondRod))
         (sub lTheta label2) Real radian
 
 unitless :: [DefinedQuantityDict]

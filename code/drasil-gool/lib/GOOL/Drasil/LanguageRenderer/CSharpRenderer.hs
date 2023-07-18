@@ -11,30 +11,31 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
-  VSFunction, MSStatement, MSParameter, SMethod, OOProg, ProgramSym(..), 
-  FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), 
-  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), 
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..), 
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
-  Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, 
-  newObj, InternalValueExp(..), objMethodCallNoParams, FunctionSym(..), ($.), 
-  GetSet(..), List(..), InternalList(..), StatementSym(..), 
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), 
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
-  ControlStatement(..), StatePattern(..), ObserverPattern(..), 
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  VSFunction, MSStatement, MSParameter, SMethod, OOProg, ProgramSym(..),
+  FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..),
+  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp,
+  newObj, InternalValueExp(..), objMethodCallNoParams, FunctionSym(..), ($.),
+  GetSet(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), StatePattern(..),
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
-  RenderValue(..), ValueElim(valuePrec), InternalGetSet(..), InternalListFunc(..), 
-  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
-  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
-  StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..), 
-  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), 
-  MethodElim, StateVarElim, RenderClass(..), ClassElim, RenderMod(..), ModuleElim, 
-  BlockCommentSym(..), BlockCommentElim)
+  RenderValue(..), ValueElim(valuePrec), InternalGetSet(..),
+  InternalListFunc(..),  RenderFunction(..), FunctionElim(functionType),
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  RenderStatement(..), StatementElim(statementTerm), RenderScope(..),
+  ScopeElim, MethodTypeSym(..), RenderParam(..), ParamElim(parameterName,
+  parameterType), RenderMethod(..), MethodElim, StateVarElim, RenderClass(..),
+  ClassElim, RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
@@ -51,17 +52,17 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt,
   mkStateVal, mkVal, VSOp, unOpPrec, powerPrec, unExpr, unExpr', 
   unExprNumDbl, typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, 
-  negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
-  lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, 
-  objVar, arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, 
-  argsList, objAccess, objMethodCall, call, funcAppMixedArgs, 
-  selfFuncAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAdd, 
-  listAppend, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
-  loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, 
-  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, 
-  param, method, getMethod, setMethod, function, buildClass, implementingClass, 
-  commentedClass, modFromData, fileDoc, fileFromData)
+  multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
+  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
+  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
+  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
+  objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
+  lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
+  setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
+  increment, objDecNew, print, closeFile, returnStmt, valStmt,
+  comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
+  setMethod, function, buildClass, implementingClass, commentedClass,
+  modFromData, fileDoc, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
   extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
@@ -82,14 +83,17 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, 
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD, 
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
-  vard)
+  vard, CommonThunk, pureValue, vectorize, vectorize2, sumComponents,
+  commonVecIndex, commonThunkElim, commonThunkDim)
 import GOOL.Drasil.Helpers (angles, hicat, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
   on2StateWrapped, onCodeList, onStateList)
 import GOOL.Drasil.State (VS, lensGStoFS, lensMStoVS, modifyReturn, revFiles,
-  addLangImport, addLangImportVS, setFileType, getClassName, setCurrMain)
+  addLangImport, addLangImportVS, setFileType, getClassName, setCurrMain,
+  useVarName, genLoopIndex)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
+import Control.Applicative (liftA2)
 import Control.Lens.Zoom (zoom)
 import Control.Monad (join)
 import Control.Monad.State (modify)
@@ -117,10 +121,10 @@ instance OOProg CSharpCode where
 
 instance ProgramSym CSharpCode where
   type Program CSharpCode = ProgData
-  prog n files = do
+  prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
-    pure $ onCodeList (progD n) fs
+    pure $ onCodeList (progD n st) fs
 
 instance RenderSym CSharpCode
 
@@ -343,7 +347,7 @@ instance Comparison CSharpCode where
   (?>=) = typeBinExpr greaterEqualOp bool
   (?==) = typeBinExpr equalOp bool
   (?!=) = typeBinExpr notEqualOp bool
-  
+
 instance ValueExpression CSharpCode where
   inlineIf = C.inlineIf
 
@@ -415,7 +419,40 @@ instance InternalListFunc CSharpCode where
   listAppendFunc = G.listAppendFunc csListAppend
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
-    
+
+instance ThunkSym CSharpCode where
+  type Thunk CSharpCode = CommonThunk VS
+
+instance ThunkAssign CSharpCode where
+  thunkAssign v t = do
+    iName <- genLoopIndex
+    let
+      i = var iName int
+      dim = fmap pure $ t >>= commonThunkDim (fmap unCSC . listSize . fmap pure) . unCSC
+      loopInit = zoom lensMStoVS (fmap unCSC t) >>= commonThunkElim
+        (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
+      loopBody = zoom lensMStoVS (fmap unCSC t) >>= commonThunkElim
+        (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
+        ((v &+=) . vecIndex (valueOf i) . pure . pure)
+    multi [loopInit,
+      forRange i (litInt 0) dim (litInt 1) $ body [block [loopBody]]]
+
+instance VectorType CSharpCode where
+  vecType = listType
+
+instance VectorDecl CSharpCode where
+  vecDec = listDec
+  vecDecDef = listDecDef
+
+instance VectorThunk CSharpCode where
+  vecThunk = pure . pure . pureValue . fmap unCSC . valueOf
+
+instance VectorExpression CSharpCode where
+  vecScale k = fmap $ fmap $ vectorize (fmap unCSC . (k #*) . fmap pure)
+  vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unCSC $ fmap pure v1 #+ fmap pure v2)
+  vecIndex i = (>>= fmap pure . commonVecIndex (fmap unCSC . flip listAccess i . fmap pure) . unCSC)
+  vecDot = liftA2 $ liftA2 $ fmap sumComponents <$> vectorize2 (\v1 v2 -> fmap unCSC $ fmap pure v1 #* fmap pure v2)
+
 instance RenderFunction CSharpCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
   
@@ -780,6 +817,7 @@ csFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> MSBody r ->
   MSStatement r
 csFuncDecDef v ps bod = do
   vr <- zoom lensMStoVS v
+  modify $ useVarName $ variableName vr
   pms <- mapM (zoom lensMStoVS) ps
   t <- zoom lensMStoVS $ funcType (map (pure . variableType) pms) 
     (pure $ variableType vr)

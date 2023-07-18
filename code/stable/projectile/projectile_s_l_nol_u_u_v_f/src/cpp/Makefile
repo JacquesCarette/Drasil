@@ -10,6 +10,8 @@ else
     endif
 endif
 
+# Project Name and Purpose: Projectile - To predict whether a launched projectile hits its target.
+
 build: Projectile$(LIB_EXTENSION)
 
 Projectile$(LIB_EXTENSION): InputFormat.hpp InputConstraints.hpp Calculations.hpp OutputFormat.hpp InputFormat.cpp InputConstraints.cpp Calculations.cpp OutputFormat.cpp

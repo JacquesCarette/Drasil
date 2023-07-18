@@ -22,6 +22,7 @@ import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
   PackageSym(..), AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer(sampleInputName)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
@@ -74,6 +75,7 @@ generator l dt sd chs spec = DrasilState {
   libEMap = lem,
   clsMap = cdm,
   defList = nub $ keys mem ++ keys cdm,
+  getVal = folderVal chs,
 
   -- stateful
   currentModule = "",
@@ -106,9 +108,12 @@ generateCode l unReprProg unReprPack g = do
   createDirectoryIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
   let (pckg, ds) = runState (genPackage unReprProg) g
-      code = makeCode (progMods $ packProg $ unReprPack pckg)
-        ([ad "designLog.txt" (ds ^. designLog) | not $ isEmpty $
-          ds ^. designLog] ++ packAux (unReprPack pckg))
+      baseAux = [ad "designLog.txt" (ds ^. designLog) | not $ isEmpty $
+          ds ^. designLog] ++ packAux (unReprPack pckg)
+      aux
+        | l == Python = ad "__init__.py" mempty : baseAux
+        | otherwise   = baseAux
+      code = makeCode (progMods $ packProg $ unReprPack pckg) aux
   createCodeFiles code
   setCurrentDirectory workingDir
 
@@ -149,7 +154,9 @@ genPackage unRepr = do
         configFP = cfp,
         caseName = "",
         examplePurpose = prps,
-        exampleDescr = bckgrnd}
+        exampleDescr = bckgrnd,
+        folderNum = getVal g,
+        inputOutput = (sampleInputName, "output.txt")} -- This needs a more permanent solution
   return $ package pd (m:catMaybes [i,rm,d])
 
 -- | Generates an SCS program based on the problem and the user's design choices.
@@ -158,7 +165,8 @@ genProgram = do
   g <- get
   ms <- chooseModules $ modular g
   let n = pName $ codeSpec g
-  return $ prog n ms
+  let p = show $ sentenceDoc (sysinfodb $ codeSpec g) Implementation Linear $ foldlSent $ purpose $ codeSpec g
+  return $ prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice 
 -- of modularity.

@@ -25,7 +25,7 @@ printRule (R t d _ c) = printTarget t d $+$ printCmds c
 
 -- | Gathers all rules to abstract targets and tags them as phony.
 printPhony :: [Rule] -> Doc
-printPhony = (<+>) (text ".PHONY:") . hsep . map (\(R t _ _ _) -> text $ renderMS t) .
+printPhony = (<+>) (text ".PHONY:") . hsep . tail . map (\(R t _ _ _) -> text $ renderMS t) . 
   filter (\(R _ _ t _) -> t == Abstract)
 
 -- | Renders targets with their dependencies.

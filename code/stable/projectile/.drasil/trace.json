@@ -1,0 +1,128 @@
+{
+    "accelXZero": [],
+    "accelYGravity": [
+        "yAxisGravity"
+    ],
+    "accelerationTM": [],
+    "calcValues": [
+        "flightduration",
+        "landingposition",
+        "offset",
+        "message"
+    ],
+    "cartSyst": [
+        "neglectCurv"
+    ],
+    "constAccel": [
+        "accelXZero",
+        "accelYGravity",
+        "neglectDrag",
+        "freeFlight"
+    ],
+    "correct": [
+        "CorSolPropsLabel"
+    ],
+    "flightduration": [
+        "launchOrigin",
+        "accelYGravity",
+        "position",
+        "targetXAxis",
+        "iyVel",
+        "posXDirection",
+        "yAxisGravity",
+        "Launch",
+        "gravAccelValue",
+        "timeStartZero"
+    ],
+    "freeFlight": [],
+    "gravAccelValue": [
+        "AuxConstantsLabel"
+    ],
+    "inputValues": [
+        "ReqInputs"
+    ],
+    "ixVel": [
+        "speed",
+        "Launch"
+    ],
+    "iyVel": [
+        "speed",
+        "Launch"
+    ],
+    "landingposition": [
+        "launchOrigin",
+        "accelXZero",
+        "position",
+        "flightduration",
+        "ixVel",
+        "posXDirection",
+        "yAxisGravity",
+        "Launch",
+        "gravAccelValue",
+        "posXDirection"
+    ],
+    "launchOrigin": [],
+    "maintainable": [],
+    "message": [
+        "offset",
+        "posXDirection",
+        "posXDirection",
+        "AuxConstantsLabel"
+    ],
+    "neglectCurv": [],
+    "neglectDrag": [],
+    "offset": [
+        "landingposition",
+        "posXDirection"
+    ],
+    "outputValues": [
+        "flightduration",
+        "message",
+        "offset"
+    ],
+    "pointMass": [],
+    "portable": [],
+    "posXDirection": [],
+    "position": [
+        "twoDMotion",
+        "cartSyst",
+        "constAccel",
+        "timeStartZero",
+        "projPos"
+    ],
+    "projPos": [
+        "pointMass",
+        "velocityTM",
+        "timeStartZero",
+        "velocityTM",
+        "projSpeed"
+    ],
+    "projSpeed": [
+        "pointMass",
+        "accelerationTM",
+        "timeStartZero",
+        "accelerationTM"
+    ],
+    "reusable": [],
+    "speed": [],
+    "targetHit": [],
+    "targetXAxis": [
+        "neglectCurv"
+    ],
+    "timeStartZero": [],
+    "twoDMotion": [],
+    "understandable": [],
+    "velocity": [
+        "twoDMotion",
+        "cartSyst",
+        "constAccel",
+        "timeStartZero",
+        "projSpeed"
+    ],
+    "velocityTM": [],
+    "verifiable": [],
+    "verifyInVals": [
+        "DataConstraintsLabel"
+    ],
+    "yAxisGravity": []
+}

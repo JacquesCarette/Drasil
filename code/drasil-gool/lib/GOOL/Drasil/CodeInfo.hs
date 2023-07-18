@@ -4,16 +4,18 @@
 module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
 import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
-  SMethod, OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), 
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..), 
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
-  Comparison(..), ValueExpression(..), InternalValueExp(..), FunctionSym(..), 
-  GetSet(..), List(..), InternalList(..), StatementSym(..), 
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..), 
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
-  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), 
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  SMethod, OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..),
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), InternalValueExp(..), FunctionSym(..),
+  GetSet(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), StatePattern(..), ObserverPattern(..),
+  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..), qualName)
 import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
@@ -48,7 +50,7 @@ instance OOProg CodeInfo where
 
 instance ProgramSym CodeInfo where
   type Program CodeInfo = GOOLState
-  prog _ fs = do
+  prog _ _ fs = do
     mapM_ (zoom lensGStoFS) fs
     modify (updateMEMWithCalls . callMapTransClosure)
     s <- S.get
@@ -229,6 +231,28 @@ instance InternalList CodeInfo where
     mapM_ (fromMaybe noInfo) [b,e,s]
     _ <- vl
     noInfo
+
+instance ThunkSym CodeInfo where
+  type Thunk CodeInfo = ()
+
+instance ThunkAssign CodeInfo where
+  thunkAssign _ = zoom lensMStoVS . execute1
+
+instance VectorType CodeInfo where
+  vecType _ = noInfoType
+
+instance VectorDecl CodeInfo where
+  vecDec _ _ = noInfo
+  vecDecDef _ = zoom lensMStoVS . executeList
+
+instance VectorThunk CodeInfo where
+  vecThunk _ = noInfo
+
+instance VectorExpression CodeInfo where
+  vecScale = execute2
+  vecAdd = execute2
+  vecIndex = execute2
+  vecDot = execute2
 
 instance StatementSym CodeInfo where
   type Statement CodeInfo = ()

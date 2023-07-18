@@ -1,7 +1,7 @@
 # GlassBR 
 > Authors:  Nikitha Krithnan, W. Spencer Smith
 
-> Purpose: efficiently and correctly predict whether a glass slab can withstand a blast under given conditions.
+> Purpose: Predict whether a glass slab can withstand a blast under given conditions.
 
 ------------------------------------------------------------
 ## Making Examples 
@@ -16,6 +16,10 @@ In your terminal command line, enter the same directory as this README file. The
 ```
 make build
 ```
+
+How to Change Input:
+GlassBR will take the inputs from `input.txt` and write the outputs to `output.txt`.
+Inputs can be changed by editing `input.txt`.
 
 ## Configuration Files 
  Configuration files are files that must be in the same directory as the executable in order to run or build successfully.

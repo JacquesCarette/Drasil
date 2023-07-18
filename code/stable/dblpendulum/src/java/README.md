@@ -1,7 +1,7 @@
 # DblPendulum 
 > Author: Dong Chen
 
-> Purpose: efficiently and correctly predict the motion of a pendulum.
+> Purpose: Predict the motion of a pendulum.
 
 ------------------------------------------------------------
 ## Making Examples 
@@ -16,6 +16,10 @@ In your terminal command line, enter the same directory as this README file. The
 ```
 make build
 ```
+
+How to Change Input:
+DblPendulum will take the inputs from `input.txt` and write the outputs to `output.txt`.
+Inputs can be changed by editing `input.txt`.
 
 ------------------------------------------------------------
 ## Version 

@@ -110,8 +110,8 @@ func read_table(_ filename: String, _ z_vector: inout [Double], _ x_matrix: inou
     goolLine = [Int](stride(from: 0, to: goolContents[0].count, by: 1)).map({(i: Int) -> String in goolContents[0][i]})
     line = goolLine.joined(separator: " ")
     linetokens = line.components(separatedBy: ",")
-    for stringlist_i in [Int](stride(from: 0, to: linetokens.count / 1, by: 1)) {
-        z_vector.append(Double(linetokens[stringlist_i * 1 + 0])!)
+    for i in [Int](stride(from: 0, to: linetokens.count / 1, by: 1)) {
+        z_vector.append(Double(linetokens[i * 1 + 0])!)
     }
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -146,9 +146,9 @@ func read_table(_ filename: String, _ z_vector: inout [Double], _ x_matrix: inou
         linetokens = lines[i].components(separatedBy: ",")
         var x_matrix_temp: [Double] = []
         var y_matrix_temp: [Double] = []
-        for stringlist_i in [Int](stride(from: 0, to: linetokens.count / 2, by: 1)) {
-            x_matrix_temp.append(Double(linetokens[stringlist_i * 2 + 0])!)
-            y_matrix_temp.append(Double(linetokens[stringlist_i * 2 + 1])!)
+        for j in [Int](stride(from: 0, to: linetokens.count / 2, by: 1)) {
+            x_matrix_temp.append(Double(linetokens[j * 2 + 0])!)
+            y_matrix_temp.append(Double(linetokens[j * 2 + 1])!)
         }
         x_matrix.append(x_matrix_temp)
         y_matrix.append(y_matrix_temp)

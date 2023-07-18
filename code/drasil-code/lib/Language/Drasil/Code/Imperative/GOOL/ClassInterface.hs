@@ -54,6 +54,10 @@ type ExamplePurpose = String
 type ExampleDescr = String
 -- | File contributors
 type Contributor = String
+-- | Input File
+type InFile = String -- TODO: There may not always be an Input/Output File
+-- | Output File
+type OutFile = String
 -- | Holds all information needed to create a README file.
 data ReadMeInfo = ReadMeInfo {
   langName :: LangAbbrev,
@@ -66,5 +70,7 @@ data ReadMeInfo = ReadMeInfo {
   configFP :: [FilePath],
   caseName :: CaseName,
   examplePurpose :: ExamplePurpose,
-  exampleDescr :: ExampleDescr
+  exampleDescr :: ExampleDescr,
+  folderNum :: Int,
+  inputOutput :: (InFile, OutFile)
 }

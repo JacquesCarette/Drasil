@@ -4,7 +4,7 @@ Last updated: July 29, 2021
 --------------------------------------------------
 
 This folder contains helper files including (but not limited to) system figures or images, graphs, sample inputs, and generated code dependencies for these Drasil examples:
-- **dblpendulum**
+- **dblpend**
 - **gamephysics**
 - **glassbr**
 - **nopcm**

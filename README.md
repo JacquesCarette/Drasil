@@ -73,7 +73,7 @@ ssp_diff | Slope Stability Analysis
 nopcm_diff | Minimal SWHS Example, with PCM Removed
 projectile_diff | Projectile Motion Analysis
 pdcontroller_diff | Proportional Derivative Controller
-dblpendulum_diff | Double Pendulum
+dblpend_diff | Double Pendulum
 sglpendulum_diff | Single Pendulum
 
 For more commands related to Drasil, use `make help` or check out the [Makefile documentation](https://github.com/JacquesCarette/Drasil/wiki/Makefile).
@@ -95,7 +95,7 @@ ssp | Slope Stability Analysis (SSP)
 nopcm | SWHS without PCM (NoPCM)
 projectile | Projectile motion analysis
 pdcontroller | Proportional Derivative Controller
-dblpendulum | Double Pendulum
+dblpend | Double Pendulum
 sglpendulum | Single Pendulum
 
 This runs the examples manually from the .stack-work folder after building, and the generated docs will

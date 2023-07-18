@@ -3,8 +3,8 @@
 Last updated: August 20, 2021
 --------------------------------------------------
 
-**dblpendulum**
-  - Contains the (currently) expected output for the DblPendulum example
+**dblpend**
+  - Contains the (currently) expected output for the DblPend example
 
 **gamephysics**
   - Contains the (currently) expected output for the GamePhysics example

@@ -10,7 +10,7 @@
  import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (mass, len)
  import Data.Drasil.Concepts.Physics (gravitationalConst, motion)
  import Data.Drasil.Concepts.Math (iAngle)
- import Drasil.DblPendulum.Concepts (rod)
+ import Drasil.DblPend.Concepts (rod)
 
 
  goals :: [ConceptInstance]

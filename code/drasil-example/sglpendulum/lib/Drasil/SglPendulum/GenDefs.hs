@@ -29,7 +29,7 @@ import Drasil.SglPendulum.DataDefs (frequencyDD, periodSHMDD, angFrequencyDD)
 import qualified Drasil.SglPendulum.Derivations as D
 import qualified Drasil.SglPendulum.Expressions as E
 import Drasil.SglPendulum.Unitals (lenRod, pendDisplacementAngle)
-import Drasil.DblPendulum.Concepts (arcLen, horizontalPos,
+import Drasil.DblPend.Concepts (arcLen, horizontalPos,
     verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce)
 
 genDefns :: [GenDefn]

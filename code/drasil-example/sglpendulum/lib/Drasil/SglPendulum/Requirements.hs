@@ -6,7 +6,7 @@ import Data.Drasil.Concepts.Documentation (funcReqDom, output_, value)
 import Drasil.SglPendulum.IMods (angularDisplacementIM)
 import Drasil.SglPendulum.Unitals (lenRod, pendDisplacementAngle)
 import Data.Drasil.Quantities.Physics (angularDisplacement)
-import Drasil.DblPendulum.Requirements(verifyInptValsDesc)
+import Drasil.DblPend.Requirements(verifyInptValsDesc)
 
 --Functional Requirements--
 funcReqs :: [ConceptInstance]

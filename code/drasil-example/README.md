@@ -5,7 +5,7 @@ Last updated: July 22, 2021
 
 This folder contains our working examples (implementations in Drasil of the previously manually created case studies).
 
-**dblpendulum**
+**dblpend**
   - Contains the current state of the Double Pendulum case study implemented in Drasil
 
 **gamephysics**

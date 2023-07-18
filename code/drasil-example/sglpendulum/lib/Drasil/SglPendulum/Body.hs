@@ -25,15 +25,15 @@ import Data.Drasil.TheoryConcepts (inModel)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Data.Drasil.Quantities.Physics (physicscon)
 
-import Drasil.DblPendulum.Assumptions (assumpSingle)
-import Drasil.DblPendulum.Body (justification, charsOfReader, purp,
+import Drasil.DblPend.Assumptions (assumpSingle)
+import Drasil.DblPend.Body (justification, charsOfReader, purp,
   sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,
   userCharacteristicsIntro)
-import qualified Drasil.DblPendulum.Body as DPD (tMods)
-import Drasil.DblPendulum.Concepts (concepts, rod)
-import Drasil.DblPendulum.Requirements (nonFuncReqs)
-import Drasil.DblPendulum.Unitals (acronyms)
-import Drasil.DblPendulum.References (citations)
+import qualified Drasil.DblPend.Body as DPD (tMods)
+import Drasil.DblPend.Concepts (concepts, rod)
+import Drasil.DblPend.Requirements (nonFuncReqs)
+import Drasil.DblPend.Unitals (acronyms)
+import Drasil.DblPend.References (citations)
 
 import Drasil.SglPendulum.Figures (figMotion, sysCtxFig1)
 import Drasil.SglPendulum.Goals (goals, goalsInputs)

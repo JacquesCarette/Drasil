@@ -25,7 +25,7 @@ dependencies:
 - drasil-theory
 - drasil-utils
 - sglpendulum
-- dblpendulum
+- dblpend
 - gamephysics
 - glassbr
 - hghc

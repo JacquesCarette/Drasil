@@ -17,7 +17,7 @@ packages:
 - ../drasil-theory
 - ../drasil-utils
 - ../drasil-example/sglpendulum
-- ../drasil-example/dblpendulum
+- ../drasil-example/dblpend
 - ../drasil-example/gamephysics
 - ../drasil-example/glassbr
 - ../drasil-example/hghc

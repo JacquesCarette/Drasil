@@ -27,7 +27,7 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 #--------------------------------------------#
 
 # Current list of examples
-SRC_EXAMPLES = glassbr nopcm projectile pdcontroller dblpendulum
+SRC_EXAMPLES = glassbr nopcm projectile pdcontroller dblpend
 EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpendulum 
 GOOLTEST = codegenTest
 
@@ -41,7 +41,7 @@ GAMEPHYSICS_DIR  = gamephysics
 PROJECTILE_DIR = projectile
 TEMPLATE_DIR = template
 GOOLTEST_DIR = gooltest
-DBLPENDULUM_DIR = dblpendulum
+DBLPEND_DIR = dblpend
 SGLPENDULUM_DIR = sglpendulum
 PDCONTROLLER_DIR = pdcontroller
 
@@ -50,7 +50,7 @@ MULTI_SRC_DIRS = $(PROJECTILE_DIR)
 
 # All example directories
 EXAMPLE_DIRS = $(MULTI_SRC_DIRS) $(HGHC_DIR) $(GLASSBR_DIR) $(NOPCM_DIR) \
-  $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR) $(DBLPENDULUM_DIR) $(SGLPENDULUM_DIR)\
+  $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR) $(DBLPEND_DIR) $(SGLPENDULUM_DIR)\
   $(PDCONTROLLER_DIR)
 
 # and the name of their executables
@@ -63,7 +63,7 @@ GAMEPHYSICS_EXE  = gamephysics
 PROJECTILE_EXE = projectile
 TEMPLATE_EXE = template
 GOOLTEST_EXE = codegenTest
-DBLPENDULUM_EXE = dblpendulum
+DBLPEND_EXE = dblpend
 SGLPENDULUM_EXE = sglpendulum
 PDCONTROLLER_EXE = pdcontroller
 
@@ -243,7 +243,7 @@ packagedeps: graphmod check_dot
 	@echo ----------------------------
 	@echo Generating package dependency graph
 	@echo ----------------------------
-	@stack dot --prune dblpendulum,gamephysics,glassbr,hghc,nopcm,pdcontroller,projectile,sglpendulum,ssp,swhs,template,drasil-website | tred | dot -Tpng > "$(GRAPH_FOLDER)drasil-all-pkgs-deps".png	
+	@stack dot --prune dblpend,gamephysics,glassbr,hghc,nopcm,pdcontroller,projectile,sglpendulum,ssp,swhs,template,drasil-website | tred | dot -Tpng > "$(GRAPH_FOLDER)drasil-all-pkgs-deps".png	
 
 #--------------------------------------------------------------#
 #--- Targets that are used for individual packages/examples ---#

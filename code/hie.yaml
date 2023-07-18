@@ -18,11 +18,11 @@ cradle:
     - path: "drasil-docLang/lib"
       component: "drasil-docLang:lib"
 
-    - path: "drasil-example/dblpendulum/lib"
-      component: "dblpendulum:lib"
+    - path: "drasil-example/dblpend/lib"
+      component: "dblpend:lib"
 
-    - path: "drasil-example/dblpendulum/app/Main.hs"
-      component: "dblpendulum:exe:dblpendulum"
+    - path: "drasil-example/dblpend/app/Main.hs"
+      component: "dblpend:exe:dblpend"
 
     - path: "drasil-example/gamephysics/lib"
       component: "gamephysics:lib"

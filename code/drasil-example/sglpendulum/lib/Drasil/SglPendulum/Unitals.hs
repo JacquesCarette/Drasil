@@ -14,8 +14,8 @@ import qualified Data.Drasil.Quantities.Physics as QP (position, ixPos, xPos, fo
 import Data.Drasil.Concepts.Physics (pendulum)
 import Data.Drasil.Concepts.Math as CM (angle, iAngle)
 import Data.Drasil.Quantities.Math as QM (unitVect, unitVectj, pi_)
-import Drasil.DblPendulum.Concepts (rod)
-import Drasil.DblPendulum.Unitals (lRod)
+import Drasil.DblPend.Concepts (rod)
+import Drasil.DblPend.Unitals (lRod)
 
 
 symbols:: [QuantityDict]

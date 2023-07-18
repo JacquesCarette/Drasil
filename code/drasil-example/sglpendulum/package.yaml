@@ -24,7 +24,7 @@ dependencies:
 - drasil-printers
 - drasil-theory
 - drasil-utils
-- dblpendulum
+- dblpend
 
 library:
   source-dirs: lib

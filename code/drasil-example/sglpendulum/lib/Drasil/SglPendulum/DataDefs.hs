@@ -12,7 +12,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (ixPos, iyPos,
 import Drasil.SglPendulum.Unitals (lenRod, initialPendAngle)
 --import Data.Drasil.Concepts.Physics (pendulum)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)
-import Drasil.DblPendulum.Concepts (horizontalPos, verticalPos)
+import Drasil.DblPend.Concepts (horizontalPos, verticalPos)
 
 
 dataDefs :: [DataDefinition]

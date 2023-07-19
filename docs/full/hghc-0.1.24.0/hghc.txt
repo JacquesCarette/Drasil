@@ -28,7 +28,7 @@ htTransCladCool :: SimpleQDef
 htTransCladFuel :: SimpleQDef
 htTransCladCoolDD :: DataDefinition
 htTransCladFuelDD :: DataDefinition
-hghc :: CommonConcept
+hghc :: CI
 nuclearPhys :: IdeaDict
 fp :: IdeaDict
 lCoolant :: Symbol

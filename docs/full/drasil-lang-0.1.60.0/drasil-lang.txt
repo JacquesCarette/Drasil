@@ -312,11 +312,11 @@ mkUid :: String -> UID
 --   String.
 showUID :: HasUID a => a -> String
 instance Data.Aeson.Types.ToJSON.ToJSON Language.Drasil.UID.UID
+instance Data.Aeson.Types.ToJSON.ToJSONKey Language.Drasil.UID.UID
+instance GHC.Show.Show Language.Drasil.UID.UID
 instance GHC.Generics.Generic Language.Drasil.UID.UID
 instance GHC.Classes.Ord Language.Drasil.UID.UID
 instance GHC.Classes.Eq Language.Drasil.UID.UID
-instance Data.Aeson.Types.ToJSON.ToJSONKey Language.Drasil.UID.UID
-instance GHC.Show.Show Language.Drasil.UID.UID
 
 
 -- | Even though we do not have <tt>Label</tt>s per se, here we define the

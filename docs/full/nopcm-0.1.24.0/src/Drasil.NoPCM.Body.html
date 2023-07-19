@@ -463,8 +463,8 @@ Sentence -&gt; [c] -&gt; SCSSub
 </span><span id="line-172"></span><span class="annot"><a href="Drasil.NoPCM.Body.html#si"><span class="hs-identifier hs-type">si</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span>
 </span><span id="line-173"></span><span id="si"><span class="annot"><span class="annottext">si :: SystemInformation
 </span><a href="Drasil.NoPCM.Body.html#si"><span class="hs-identifier hs-var hs-var">si</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SI</span></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-174"></span><span>  </span><span class="annot"><span class="annottext">_sys :: CommonConcept
-</span><span class="hs-identifier hs-var">_sys</span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CommonConcept
+</span><span id="line-174"></span><span>  </span><span class="annot"><span class="annottext">_sys :: CI
+</span><span class="hs-identifier hs-var">_sys</span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.NoPCM.Definitions.html#srsSWHS"><span class="hs-identifier hs-var">srsSWHS</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-175"></span><span>  </span><span class="annot"><span class="annottext">_kind :: CI
 </span><span class="hs-identifier hs-var">_kind</span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI
@@ -516,13 +516,13 @@ Sentence -&gt; [c] -&gt; SCSSub
 </span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><span class="hs-identifier hs-var">watE</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>     </span><span class="hs-comment">--outputs</span><span>
 </span><span id="line-189"></span><span>  </span><span class="annot"><span class="annottext">_defSequence :: [Block SimpleQDef]
-</span><span class="hs-identifier hs-var">_defSequence</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679073780"><span class="annot"><span class="annottext">[SimpleQDef]
-</span><a href="#local-6989586621679073780"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; [a] -&gt; Block a
+</span><span class="hs-identifier hs-var">_defSequence</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679074502"><span class="annot"><span class="annottext">[SimpleQDef]
+</span><a href="#local-6989586621679074502"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; [a] -&gt; Block a
 </span><span class="hs-identifier hs-var">Parallel</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. [a] -&gt; a
 </span><span class="hs-identifier hs-var">head</span></span><span> </span><span class="annot"><span class="annottext">[SimpleQDef]
-</span><a href="#local-6989586621679073780"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a]
+</span><a href="#local-6989586621679074502"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">tail</span></span><span> </span><span class="annot"><span class="annottext">[SimpleQDef]
-</span><a href="#local-6989586621679073780"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[SimpleQDef]
+</span><a href="#local-6989586621679074502"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[SimpleQDef]
 </span><a href="Drasil.NoPCM.DataDefs.html#qDefs"><span class="hs-identifier hs-var">qDefs</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-190"></span><span>  </span><span class="annot"><span class="annottext">_constraints :: [ConstrainedChunk]
 </span><span class="hs-identifier hs-var">_constraints</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
@@ -678,7 +678,7 @@ c -&gt; ConstrainedChunk
 </span><span class="hs-identifier hs-var">relTol</span></span><span class="hs-special">]</span><span>
 </span><span id="line-209"></span><span>  </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall c. Idea c =&gt; c -&gt; IdeaDict
-</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">CommonConcept
+</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.NoPCM.Definitions.html#srsSWHS"><span class="hs-identifier hs-var">srsSWHS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">algorithm</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall c. Idea c =&gt; c -&gt; IdeaDict

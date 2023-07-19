@@ -210,7 +210,7 @@
 <!-- UID -->
 <g id="node297" class="node">
 <title>UID</title>
-<ellipse fill="none" stroke="darkgreen" cx="6693.44" cy="-306" rx="29.5" ry="18"/>
+<ellipse fill="none" stroke="#00cdcd" cx="6693.44" cy="-306" rx="29.5" ry="18"/>
 <text text-anchor="middle" x="6693.44" y="-302.3" font-family="Times,serif" font-size="14.00">UID</text>
 </g>
 <!-- CodeExpr&#45;&gt;UID -->

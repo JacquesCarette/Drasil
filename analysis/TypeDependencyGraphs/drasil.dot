@@ -3783,7 +3783,7 @@ digraph alltypes {
 	}
 	subgraph uid {
 		subgraph uid{
-		UID	[shape=oval, color=darkgreen, label="UID"];
+		UID	[shape=oval, color=cyan3, label="UID"];
 		UID -> String;
 		}
 	}

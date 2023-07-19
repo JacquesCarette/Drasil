@@ -30,7 +30,7 @@ transient :: ConceptChunk
 water :: ConceptChunk
 sWHT :: ConceptChunk
 tankParam :: ConceptChunk
-swhsPCM :: CommonConcept
+swhsPCM :: CI
 
 module Drasil.SWHS.References
 citations :: BibRef

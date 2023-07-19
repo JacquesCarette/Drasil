@@ -304,6 +304,7 @@ Monoid	[shape=oval, color=pink, label="Monoid"];
 Show	[shape=oval, color=pink, label="Show"];
 Semigroup	[shape=oval, color=pink, label="Semigroup"];
 Monoid	[shape=oval, color=pink, label="Monoid"];
+ToJSON	[shape=oval, color=pink, label="ToJSON"];
 ToJSONKey	[shape=oval, color=pink, label="ToJSONKey"];
 Show	[shape=oval, color=pink, label="Show"];
 HasCitation	[shape=oval, color=magenta, label="HasCitation"];
@@ -588,6 +589,7 @@ Sentence -> Monoid;
 Stage -> Show;
 Symbol -> Semigroup;
 Symbol -> Monoid;
+UID -> ToJSON;
 UID -> ToJSONKey;
 UID -> Show;
 }

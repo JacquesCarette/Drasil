@@ -85,16 +85,16 @@ fullExList codePth srsDoxPth = Enumeration $ Bullet $ map (, Nothing) (allExampl
 allExampleList :: [Example] -> [ItemType]
 allExampleList = map (\x -> Nested (nameAndDesc x) $ Bullet $ map (, Nothing) (individualExList x))
   where
-    nameAndDesc E{sysInfoE = SI{_sys = sys}, descE = desc} = S (abrv sys) +:+ desc
+    nameAndDesc E{sysInfoE = SI{_sys = sys}, descE = desc} = S (programName sys) +:+ desc
 
 -- | Display the points for generated documents and call 'versionList' to display the code.
 individualExList :: Example -> [ItemType]
 -- No choices mean no generated code, so we do not need to display generated code and thus do not call versionList.
 individualExList E{sysInfoE = SI{_sys = sys}, choicesE = [], codePath = srsP} = 
-  [Flat $ S (abrv sys ++ "_SRS") +:+ namedRef (getSRSRef srsP "html" $ abrv sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ abrv sys) (S "[PDF]")]
+  [Flat $ S (programName sys ++ "_SRS") +:+ namedRef (getSRSRef srsP "html" $ programName sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ programName sys) (S "[PDF]")]
 -- Anything else means we need to display program information, so use versionList.
 individualExList ex@E{sysInfoE = SI{_sys = sys}, codePath = srsP} = 
-  [Flat $ S (abrv sys ++ "_SRS") +:+ namedRef (getSRSRef srsP "html" $ abrv sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ abrv sys) (S "[PDF]"),
+  [Flat $ S (programName sys ++ "_SRS") +:+ namedRef (getSRSRef srsP "html" $ programName sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ programName sys) (S "[PDF]"),
   Nested (S generatedCodeTitle) $ Bullet $ map (, Nothing) (versionList getCodeRef ex),
   Nested (S generatedCodeDocsTitle) $ Bullet $ map (, Nothing) (versionList getDoxRef noSwiftEx)]
     where
@@ -119,9 +119,9 @@ versionList getRef ex@E{sysInfoE = SI{_sys = sys}, choicesE = chcs} =
     -- Determine the version name based on the system name and if there is more than one set of choices.
     verName chc = case chcs of
       -- If there is one set of choices, then the program does not have multiple versions.
-      [_] -> abrv sys
+      [_] -> programName sys
       -- If the above two don't match, we have more than one set of choices and must display every version.
-      _   -> Projectile.codedDirName (abrv sys) chc
+      _   -> Projectile.codedDirName (programName sys) chc
 
 -- | Show function to display program languages to user.
 showLang :: Lang -> String
@@ -200,8 +200,8 @@ getCodeRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName =
 
     -- System name, different between one set of choices and multiple sets.
     sysName = case chcs of 
-      [_] -> map toLower $ filter (not.isSpace) $ abrv sys
-      _   -> map toLower (filter (not.isSpace) $ abrv sys) ++ "/" ++ verName
+      [_] -> map toLower $ filter (not.isSpace) $ programName sys
+      _   -> map toLower (filter (not.isSpace) $ programName sys) ++ "/" ++ verName
     -- Program language converted for use in file folder navigation.
     programLang = convertLang l
 
@@ -214,7 +214,7 @@ getDoxRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName =
     refURI = getDoxPath (srsDoxPath ex) sysName programLang
     refShortNm = shortname' $ S refUID
 
-    sysName = filter (not.isSpace) $ abrv sys
+    sysName = filter (not.isSpace) $ programName sys
     -- Here is the only difference from getCodeRef. When there is more than one set of choices,
     -- we append version name to program language since the organization of folders follows this way.
     programLang = case chcs of 
@@ -258,4 +258,4 @@ getDoxRefDB ex = concatMap (\x -> map (\y -> getDoxRef ex y $ verName x) $ lang 
 
 -- | Helper to pull the system name (abbreviation) from an 'Example'.
 getAbrv :: Example -> String
-getAbrv E{sysInfoE = SI{_sys=sys}} = abrv sys
+getAbrv E{sysInfoE = SI{_sys=sys}} = programName sys

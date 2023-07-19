@@ -1,127 +1,229 @@
 {
     "AuxConstantsLabel": [
-        "assumpSV"
+        [
+            "assumpSV"
+        ]
     ],
     "CorSolPropsLabel": [
-        "correct"
+        [
+            "correct"
+        ]
     ],
     "DataConstraintsLabel": [
-        "checkInputWithDataCons"
+        [
+            "checkInputWithDataCons"
+        ]
     ],
     "ReqAssignments": [
-        "sysSetValsFollowingAssumps"
+        [
+            "sysSetValsFollowingAssumps"
+        ]
     ],
     "ReqInputs": [
-        "inputValues"
+        [
+            "inputValues"
+        ]
     ],
     "ReqOutputs": [
-        "outputValues"
+        [
+            "outputValues"
+        ]
     ],
     "aR": [
-        "tolLoad",
-        "stressDistFac"
+        [
+            "tolLoad"
+        ],
+        [
+            "stressDistFac"
+        ]
     ],
     "assumpBC": [
-        "accMoreBoundaryConditions"
+        [
+            "accMoreBoundaryConditions"
+        ]
     ],
     "assumpES": [
-        "calcInternalBlastRisk"
+        [
+            "calcInternalBlastRisk"
+        ]
     ],
     "assumpGC": [
-        "accAlteredGlass"
+        [
+            "accAlteredGlass"
+        ]
     ],
     "assumpGL": [
-        "accMoreThanSingleLite"
+        [
+            "accMoreThanSingleLite"
+        ]
     ],
     "assumpLDFC": [
-        "varValsOfmkE",
-        "loadDurFactor"
+        [
+            "varValsOfmkE"
+        ],
+        [
+            "loadDurFactor"
+        ]
     ],
     "assumpRT": [
-        "considerMoreThanFlexGlass"
+        [
+            "considerMoreThanFlexGlass"
+        ]
     ],
     "assumpSV": [
-        "varValsOfmkE",
-        "sdfTol",
-        "nFL",
-        "loadDurFactor",
-        "dimlessLoad",
-        "assumpLDFC"
+        [
+            "varValsOfmkE"
+        ],
+        [
+            "sdfTol"
+        ],
+        [
+            "nFL"
+        ],
+        [
+            "loadDurFactor"
+        ],
+        [
+            "dimlessLoad"
+        ],
+        [
+            "assumpLDFC"
+        ]
     ],
     "astm2009": [
-        "assumpGC"
+        [
+            "assumpGC"
+        ]
     ],
     "demandVSsod": [
-        "demandq"
+        [
+            "demandq"
+        ]
     ],
     "demandq": [
-        "isSafeLR",
-        "dimlessLoad"
+        [
+            "isSafeLR"
+        ],
+        [
+            "dimlessLoad"
+        ]
     ],
     "dimlessLoad": [
-        "stressDistFac"
+        [
+            "stressDistFac"
+        ]
     ],
     "dimlessloadVSaspect": [
-        "tolLoad",
-        "stressDistFac"
+        [
+            "tolLoad"
+        ],
+        [
+            "stressDistFac"
+        ]
     ],
     "eqTNTChar": [
-        "demandq"
+        [
+            "demandq"
+        ]
     ],
     "glassTypeFac": [
-        "lResistance",
-        "dimlessLoad"
+        [
+            "lResistance"
+        ],
+        [
+            "dimlessLoad"
+        ]
     ],
     "inputValues": [
-        "outputValsAndKnownValues"
+        [
+            "outputValsAndKnownValues"
+        ]
     ],
     "isSafeLR": [
-        "isSafePb"
+        [
+            "isSafePb"
+        ]
     ],
     "isSafeLoad": [
-        "checkGlassSafety"
+        [
+            "checkGlassSafety"
+        ]
     ],
     "isSafePb": [
-        "isSafeLR"
+        [
+            "isSafeLR"
+        ]
     ],
     "isSafeProb": [
-        "checkGlassSafety"
+        [
+            "checkGlassSafety"
+        ]
     ],
     "lResistance": [
-        "isSafeLR"
+        [
+            "isSafeLR"
+        ]
     ],
     "loadDurFactor": [
-        "sdfTol",
-        "riskFun"
+        [
+            "sdfTol"
+        ],
+        [
+            "riskFun"
+        ]
     ],
     "minThick": [
-        "sdfTol",
-        "riskFun",
-        "nFL",
-        "dimlessLoad"
+        [
+            "sdfTol"
+        ],
+        [
+            "riskFun"
+        ],
+        [
+            "nFL"
+        ],
+        [
+            "dimlessLoad"
+        ]
     ],
     "nFL": [
-        "lResistance"
+        [
+            "lResistance"
+        ]
     ],
     "probBr": [
-        "isSafePb"
+        [
+            "isSafePb"
+        ]
     ],
     "riskFun": [
-        "probBr"
+        [
+            "probBr"
+        ]
     ],
     "sdfTol": [
-        "tolLoad"
+        [
+            "tolLoad"
+        ]
     ],
     "stdOffDist": [
-        "demandq"
+        [
+            "demandq"
+        ]
     ],
     "stressDistFac": [
-        "riskFun"
+        [
+            "riskFun"
+        ]
     ],
     "sysSetValsFollowingAssumps": [
-        "outputValsAndKnownValues"
+        [
+            "outputValsAndKnownValues"
+        ]
     ],
     "tolLoad": [
-        "nFL"
+        [
+            "nFL"
+        ]
     ]
 }

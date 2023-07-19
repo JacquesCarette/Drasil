@@ -1,107 +1,197 @@
 {
     "CorSolPropsLabel": [
-        "correct"
+        [
+            "correct"
+        ]
     ],
     "DataConstraintsLabel": [
-        "checkWithPhysConsts"
+        [
+            "checkWithPhysConsts"
+        ]
     ],
     "ReqInputs": [
-        "inputInitVals"
+        [
+            "inputInitVals"
+        ]
     ],
     "assumpAPT": [
-        "heatEInWtrIM"
+        [
+            "heatEInWtrIM"
+        ]
     ],
     "assumpCTNTD": [
-        "likeChgDT"
+        [
+            "likeChgDT"
+        ]
     ],
     "assumpCWTAT": [
-        "rocTempSimpRC"
+        [
+            "rocTempSimpRC"
+        ]
     ],
     "assumpDWCoW": [
-        "rocTempSimpRC"
+        [
+            "rocTempSimpRC"
+        ]
     ],
     "assumpHTCC": [
-        "nwtnCoolingTM"
+        [
+            "nwtnCoolingTM"
+        ]
     ],
     "assumpLCCCW": [
-        "htFluxC"
+        [
+            "htFluxC"
+        ]
     ],
     "assumpNIHGBW": [
-        "unlikeChgNIHG",
-        "eBalanceOnWtrRC"
+        [
+            "unlikeChgNIHG"
+        ],
+        [
+            "eBalanceOnWtrRC"
+        ]
     ],
     "assumpPIT": [
-        "likeChgTLH",
-        "eBalanceOnWtrRC"
+        [
+            "likeChgTLH"
+        ],
+        [
+            "eBalanceOnWtrRC"
+        ]
     ],
     "assumpSHECoW": [
-        "rocTempSimpRC"
+        [
+            "rocTempSimpRC"
+        ]
     ],
     "assumpTEO": [
-        "consThermECS"
+        [
+            "consThermECS"
+        ]
     ],
     "assumpTHCCoL": [
-        "likeChgTCVOL"
+        [
+            "likeChgTCVOL"
+        ]
     ],
     "assumpTHCCoT": [
-        "likeChgTCVOD",
-        "htFluxC"
+        [
+            "likeChgTCVOD"
+        ],
+        [
+            "htFluxC"
+        ]
     ],
     "assumpVCN": [
-        "wVol"
+        [
+            "wVol"
+        ]
     ],
     "assumpWAL": [
-        "unlikeChgWFS",
-        "sensHeat",
-        "sensHeat",
-        "heatEInWtrIM",
-        "eBalanceOnWtrRC"
+        [
+            "unlikeChgWFS"
+        ],
+        [
+            "sensHeat"
+        ],
+        [
+            "sensHeat"
+        ],
+        [
+            "heatEInWtrIM"
+        ],
+        [
+            "eBalanceOnWtrRC"
+        ]
     ],
     "consThermECS": [
-        "rocTempSimpRC"
+        [
+            "rocTempSimpRC"
+        ]
     ],
     "eBalanceOnWtrRC": [
-        "unlikeChgNIHG",
-        "findMass",
-        "calcTempWtrOverTime"
+        [
+            "unlikeChgNIHG"
+        ],
+        [
+            "findMass"
+        ],
+        [
+            "calcTempWtrOverTime"
+        ]
     ],
     "findMass": [
-        "outputInputDerivVals"
+        [
+            "outputInputDerivVals"
+        ]
     ],
     "heatEInWtrIM": [
-        "calcChgHeatEnergyWtrOverTime"
+        [
+            "calcChgHeatEnergyWtrOverTime"
+        ]
     ],
     "htFluxC": [
-        "eBalanceOnWtrRC",
-        "eBalanceOnWtrRC"
+        [
+            "eBalanceOnWtrRC"
+        ],
+        [
+            "eBalanceOnWtrRC"
+        ]
     ],
     "inputInitVals": [
-        "outputInputDerivVals",
-        "findMass"
+        [
+            "outputInputDerivVals"
+        ],
+        [
+            "findMass"
+        ]
     ],
     "nwtnCoolingTM": [
-        "htFluxC"
+        [
+            "htFluxC"
+        ]
     ],
     "rocTempSimpRC": [
-        "rocTempSimpRC",
-        "eBalanceOnWtrRC"
+        [
+            "rocTempSimpRC"
+        ],
+        [
+            "eBalanceOnWtrRC"
+        ]
     ],
     "sensHeat": [
-        "heatEInWtrIM"
+        [
+            "heatEInWtrIM"
+        ]
     ],
     "tankVol": [
-        "wVol",
-        "findMass"
+        [
+            "wVol"
+        ],
+        [
+            "findMass"
+        ]
     ],
     "tauW": [
-        "outputInputDerivVals",
-        "eBalanceOnWtrRC",
-        "eBalanceOnWtrRC"
+        [
+            "outputInputDerivVals"
+        ],
+        [
+            "eBalanceOnWtrRC"
+        ],
+        [
+            "eBalanceOnWtrRC"
+        ]
     ],
     "wMass": [
-        "findMass"
+        [
+            "findMass"
+        ]
     ],
     "wVol": [
-        "findMass"
+        [
+            "findMass"
+        ]
     ]
 }

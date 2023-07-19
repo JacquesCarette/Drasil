@@ -1,85 +1,159 @@
 {
     "DataConstraintsLabel": [
-        "verifyInputs"
+        [
+            "verifyInputs"
+        ]
     ],
     "ReqInputs": [
-        "inputValues"
+        [
+            "inputValues"
+        ]
     ],
     "dampingCoeffSpring": [
-        "likeChgPP",
-        "gdPowerPlantRC"
+        [
+            "likeChgPP"
+        ],
+        [
+            "gdPowerPlantRC"
+        ]
     ],
     "decoupled": [
-        "qdCtrlVarFD"
+        [
+            "qdCtrlVarFD"
+        ]
     ],
     "externalDisturb": [
-        "gdPowerPlantRC"
+        [
+            "gdPowerPlantRC"
+        ]
     ],
     "gdPowerPlantRC": [
-        "imPDRC"
+        [
+            "imPDRC"
+        ]
     ],
     "imPDRC": [
-        "outputValues",
-        "calculateValues"
+        [
+            "outputValues"
+        ],
+        [
+            "calculateValues"
+        ]
     ],
     "initialValue": [
-        "qdProcessErrorFD"
+        [
+            "qdProcessErrorFD"
+        ]
     ],
     "invLaplaceRC": [
-        "imPDRC"
+        [
+            "imPDRC"
+        ]
     ],
     "laplaceRC": [
-        "qdPropControlFD",
-        "qdProcessErrorFD",
-        "qdDerivativeControlFD",
-        "gdPowerPlantRC"
+        [
+            "qdPropControlFD"
+        ],
+        [
+            "qdProcessErrorFD"
+        ],
+        [
+            "qdDerivativeControlFD"
+        ],
+        [
+            "gdPowerPlantRC"
+        ]
     ],
     "laplaceWiki": [
-        "laplaceRC",
-        "invLaplaceRC"
+        [
+            "laplaceRC"
+        ],
+        [
+            "invLaplaceRC"
+        ]
     ],
     "massSpring": [
-        "likeChgPP",
-        "gdPowerPlantRC"
+        [
+            "likeChgPP"
+        ],
+        [
+            "gdPowerPlantRC"
+        ]
     ],
     "parallelEq": [
-        "qdCtrlVarFD"
+        [
+            "qdCtrlVarFD"
+        ]
     ],
     "pwrPlant": [
-        "stiffnessCoeffSpring",
-        "pwrPlantTxFnx",
-        "massSpring",
-        "dampingCoeffSpring"
+        [
+            "stiffnessCoeffSpring"
+        ],
+        [
+            "pwrPlantTxFnx"
+        ],
+        [
+            "massSpring"
+        ],
+        [
+            "dampingCoeffSpring"
+        ]
     ],
     "pwrPlantTxFnx": [
-        "tmSOSystemRC"
+        [
+            "tmSOSystemRC"
+        ]
     ],
     "qdCtrlVarFD": [
-        "imPDRC"
+        [
+            "imPDRC"
+        ]
     ],
     "qdDerivativeControlFD": [
-        "qdCtrlVarFD"
+        [
+            "qdCtrlVarFD"
+        ]
     ],
     "qdProcessErrorFD": [
-        "qdPropControlFD",
-        "qdDerivativeControlFD",
-        "imPDRC"
+        [
+            "qdPropControlFD"
+        ],
+        [
+            "qdDerivativeControlFD"
+        ],
+        [
+            "imPDRC"
+        ]
     ],
     "qdPropControlFD": [
-        "qdCtrlVarFD"
+        [
+            "qdCtrlVarFD"
+        ]
     ],
     "setPoint": [
-        "qdProcessErrorFD",
-        "imPDRC"
+        [
+            "qdProcessErrorFD"
+        ],
+        [
+            "imPDRC"
+        ]
     ],
     "stiffnessCoeffSpring": [
-        "likeChgPP",
-        "gdPowerPlantRC"
+        [
+            "likeChgPP"
+        ],
+        [
+            "gdPowerPlantRC"
+        ]
     ],
     "tmSOSystemRC": [
-        "gdPowerPlantRC"
+        [
+            "gdPowerPlantRC"
+        ]
     ],
     "unfilteredDerivative": [
-        "qdDerivativeControlFD"
+        [
+            "qdDerivativeControlFD"
+        ]
     ]
 }

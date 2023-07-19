@@ -15,7 +15,7 @@ Last updated: August 20, 2021
 **hghc**
   - Contains the (currently) expected output for the HGHC example
 
-**nopcm**
+**swhsnopcm**
   - Contains the (currently) expected output for the NoPCM example
   
 **pdcontroller**

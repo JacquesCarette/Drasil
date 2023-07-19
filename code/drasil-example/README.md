@@ -17,7 +17,7 @@ This folder contains our working examples (implementations in Drasil of the prev
 **hghc**
   - Contains the current state of the HGHC (fuel pin) example implemented in Drasil
   
-**nopcm**
+**swhsnopcm**
   - Contains the current state of the solar water heating system case study implemented in Drasil
 
 **pdcontroller**

@@ -56,7 +56,7 @@ packages:
 - drasil-example/gamephysics
 - drasil-example/glassbr
 - drasil-example/hghc
-- drasil-example/nopcm
+- drasil-example/swhsnopcm
 - drasil-example/pdcontroller
 - drasil-example/projectile
 - drasil-example/ssp

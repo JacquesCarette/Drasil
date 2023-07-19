@@ -42,11 +42,11 @@ cradle:
     - path: "drasil-example/hghc/app/Main.hs"
       component: "hghc:exe:hghc"
 
-    - path: "drasil-example/nopcm/lib"
-      component: "nopcm:lib"
+    - path: "drasil-example/swhsnopcm/lib"
+      component: "swhsnopcm:lib"
 
-    - path: "drasil-example/swhs_nopcm/app/Main.hs"
-      component: "swhs_nopcm:exe:swhs_nopcm"
+    - path: "drasil-example/swhsnopcm/app/Main.hs"
+      component: "swhsnopcm:exe:swhsnopcm"
 
     - path: "drasil-example/pdcontroller/lib"
       component: "pdcontroller:lib"

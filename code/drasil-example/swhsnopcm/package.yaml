@@ -1,8 +1,9 @@
-name:                drasil-website
-version:             0.1.0.0
-github:              JacquesCarette/Drasil
+name:                swhsnopcm
+version:             0.1.24.0
+author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
 maintainer:          "Jacques Carette"
-synopsis:            Using the Drasil generators to create Drasil's website
+synopsis:	           A framework for code and document generation for scientific software - Example SubPackage
+github:              JacquesCarette/Drasil
 homepage:            https://jacquescarette.github.io/Drasil/
 description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
@@ -11,48 +12,37 @@ extra-source-files: []
 dependencies:
 - base >= 4.7 && < 5
 - lens
-- split
 - directory
+- drasil-code
 - drasil-data
 - drasil-database
 - drasil-docLang
-- drasil-code
-- drasil-gool
 - drasil-gen
+- drasil-gool
 - drasil-lang
+- drasil-metadata
 - drasil-printers
-- drasil-sysinfo
 - drasil-theory
 - drasil-utils
-- sglpend
-- dblpend
-- gamephysics
-- glassbr
-- hghc
-- swhsnopcm
-- pdcontroller
-- projectile
-- ssp
 - swhs
-- template
 
 library:
   source-dirs: lib
   when:
   - condition: false
-    other-modules: Paths_drasil_website
+    other-modules: Paths_swhsnopcm
 
 executables:
-  website:
+  swhsnopcm:
     main: Main
-    source-dirs: app
+    source-dirs: app 
     ghc-options:
     - -Wall
     - -Wredundant-constraints
     - -threaded
     - -O2
     dependencies:
-    - drasil-website
+    - swhsnopcm
     when:
     - condition: false
-      other-modules: Paths_drasil_website
+      other-modules: Paths_swhsnopcm

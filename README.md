@@ -70,7 +70,7 @@ swhs_diff | Solar Water Heating System with Phase Change Material
 glassbr_diff | Glass-BR
 hghc_diff | HGHC Toy Example
 ssp_diff | Slope Stability Analysis
-nopcm_diff | Minimal SWHS Example, with PCM Removed
+swhsnopcm_diff | Minimal SWHS Example, with PCM Removed
 projectile_diff | Projectile Motion Analysis
 pdcontroller_diff | Proportional Derivative Controller
 dblpend_diff | Double Pendulum
@@ -92,7 +92,7 @@ swhs | Solar Water Heating System with PCM (SWHS)
 glassbr | Glass-BR
 hghc | HGHC toy example
 ssp | Slope Stability Analysis (SSP)
-nopcm | SWHS without PCM (NoPCM)
+swhsnopcm | SWHS without PCM (SWHSNoPCM)
 projectile | Projectile motion analysis
 pdcontroller | Proportional Derivative Controller
 dblpend | Double Pendulum

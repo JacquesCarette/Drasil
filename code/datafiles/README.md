@@ -7,7 +7,7 @@ This folder contains helper files including (but not limited to) system figures 
 - **dblpend**
 - **gamephysics**
 - **glassbr**
-- **nopcm**
+- **swhsnopcm**
 - **pdcontroller**
 - **projectile**
 - **sglpend**

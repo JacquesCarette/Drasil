@@ -80,13 +80,13 @@ tankPCM = dcc "tankPCM" (nounPhrase''
   CapFirst CapWords)
   "solar water heating tank incorporating phase change material"
 
-swhsPCM :: CommonConcept
+swhsPCM :: CI
 -- Nounphrase'' hack to get nounPhraseSP words to accept
 -- nounPhrases instead of strings
 -- Another capitalization hack.
-swhsPCM = dcc' "swhsPCM" (nounPhrase''
+swhsPCM = commonIdea "swhsPCM" (nounPhrase''
   (S "solar water heating systems" +:+ S "incorporating" +:+ short phsChgMtrl)
   (S "solar water heating systems" +:+ S "incorporating" +:+ short phsChgMtrl)
   CapFirst CapWords)
-  "solar water heating systems incorporating phase change material"
   "SWHS"
+  []

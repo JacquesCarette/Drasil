@@ -1,127 +1,229 @@
 {
     "aR": [],
     "accAlteredGlass": [
-        "assumpGC"
+        [
+            "assumpGC"
+        ]
     ],
     "accMoreBoundaryConditions": [
-        "assumpBC"
+        [
+            "assumpBC"
+        ]
     ],
     "accMoreThanSingleLite": [
-        "assumpGL"
+        [
+            "assumpGL"
+        ]
     ],
     "assumpBC": [],
     "assumpES": [],
     "assumpGC": [
-        "astm2009"
+        [
+            "astm2009"
+        ]
     ],
     "assumpGL": [],
     "assumpGT": [],
     "assumpLDFC": [
-        "assumpSV"
+        [
+            "assumpSV"
+        ]
     ],
     "assumpRT": [],
     "assumpSV": [
-        "AuxConstantsLabel"
+        [
+            "AuxConstantsLabel"
+        ]
     ],
     "calcInternalBlastRisk": [
-        "assumpES"
+        [
+            "assumpES"
+        ]
     ],
     "checkGlassSafety": [
-        "isSafeProb",
-        "isSafeLoad"
+        [
+            "isSafeProb"
+        ],
+        [
+            "isSafeLoad"
+        ]
     ],
     "checkInputWithDataCons": [
-        "DataConstraintsLabel"
+        [
+            "DataConstraintsLabel"
+        ]
     ],
     "considerMoreThanFlexGlass": [
-        "assumpRT"
+        [
+            "assumpRT"
+        ]
     ],
     "correct": [
-        "CorSolPropsLabel"
+        [
+            "CorSolPropsLabel"
+        ]
     ],
     "demandq": [
-        "demandVSsod",
-        "eqTNTChar",
-        "stdOffDist"
+        [
+            "demandVSsod"
+        ],
+        [
+            "eqTNTChar"
+        ],
+        [
+            "stdOffDist"
+        ]
     ],
     "dimlessLoad": [
-        "demandq",
-        "assumpSV",
-        "minThick",
-        "glassTypeFac"
+        [
+            "demandq"
+        ],
+        [
+            "assumpSV"
+        ],
+        [
+            "minThick"
+        ],
+        [
+            "glassTypeFac"
+        ]
     ],
     "eqTNTChar": [],
     "glassTypeFac": [],
     "inputValues": [
-        "ReqInputs"
+        [
+            "ReqInputs"
+        ]
     ],
     "isSafeLR": [
-        "isSafePb",
-        "lResistance",
-        "demandq"
+        [
+            "isSafePb"
+        ],
+        [
+            "lResistance"
+        ],
+        [
+            "demandq"
+        ]
     ],
     "isSafeLoad": [],
     "isSafePb": [
-        "isSafeLR",
-        "probBr"
+        [
+            "isSafeLR"
+        ],
+        [
+            "probBr"
+        ]
     ],
     "isSafeProb": [],
     "lResistance": [
-        "nFL",
-        "glassTypeFac"
+        [
+            "nFL"
+        ],
+        [
+            "glassTypeFac"
+        ]
     ],
     "loadDurFactor": [
-        "assumpSV",
-        "assumpLDFC"
+        [
+            "assumpSV"
+        ],
+        [
+            "assumpLDFC"
+        ]
     ],
     "maintainable": [],
     "minThick": [],
     "nFL": [
-        "tolLoad",
-        "assumpSV",
-        "minThick"
+        [
+            "tolLoad"
+        ],
+        [
+            "assumpSV"
+        ],
+        [
+            "minThick"
+        ]
     ],
     "outputValsAndKnownValues": [
-        "inputValues",
-        "sysSetValsFollowingAssumps"
+        [
+            "inputValues"
+        ],
+        [
+            "sysSetValsFollowingAssumps"
+        ]
     ],
     "outputValues": [
-        "ReqOutputs"
+        [
+            "ReqOutputs"
+        ]
     ],
     "portable": [],
     "predictWithstandOfCertDeg": [],
     "probBr": [
-        "riskFun"
+        [
+            "riskFun"
+        ]
     ],
     "reusable": [],
     "riskFun": [
-        "minThick",
-        "loadDurFactor",
-        "stressDistFac"
+        [
+            "minThick"
+        ],
+        [
+            "loadDurFactor"
+        ],
+        [
+            "stressDistFac"
+        ]
     ],
     "sdfTol": [
-        "assumpSV",
-        "minThick",
-        "loadDurFactor"
+        [
+            "assumpSV"
+        ],
+        [
+            "minThick"
+        ],
+        [
+            "loadDurFactor"
+        ]
     ],
     "stdOffDist": [],
     "stressDistFac": [
-        "dimlessloadVSaspect",
-        "aR",
-        "dimlessLoad"
+        [
+            "dimlessloadVSaspect"
+        ],
+        [
+            "aR"
+        ],
+        [
+            "dimlessLoad"
+        ]
     ],
     "sysSetValsFollowingAssumps": [
-        "ReqAssignments"
+        [
+            "ReqAssignments"
+        ]
     ],
     "tolLoad": [
-        "dimlessloadVSaspect",
-        "aR",
-        "sdfTol"
+        [
+            "dimlessloadVSaspect"
+        ],
+        [
+            "aR"
+        ],
+        [
+            "sdfTol"
+        ]
     ],
     "understandable": [],
     "varValsOfmkE": [
-        "assumpSV",
-        "assumpLDFC"
+        [
+            "assumpSV"
+        ],
+        [
+            "assumpLDFC"
+        ]
     ],
     "verifiable": [],
     "willBreakGS": []

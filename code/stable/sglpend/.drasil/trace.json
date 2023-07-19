@@ -1,50 +1,84 @@
 {
     "accelerationTM": [],
     "angFrequencyGD": [
-        "newtonSLR",
-        "newtonSLR",
-        "frequency"
+        [
+            "newtonSLR"
+        ],
+        [
+            "newtonSLR"
+        ],
+        [
+            "frequency"
+        ]
     ],
     "angularDisplacementIM": [
-        "newtonSLR",
-        "angFrequencyGD"
+        [
+            "newtonSLR"
+        ],
+        [
+            "angFrequencyGD"
+        ]
     ],
     "angularFrequency": [
-        "period"
+        [
+            "period"
+        ]
     ],
     "calcAngPos": [
-        "angularDisplacementIM"
+        [
+            "angularDisplacementIM"
+        ]
     ],
     "cartSys": [],
     "cartSysR": [],
     "correct": [
-        "CorSolPropsLabel"
+        [
+            "CorSolPropsLabel"
+        ]
     ],
     "frequency": [],
     "hForceOnPendulum": [],
     "inputValues": [
-        "ReqInputs"
+        [
+            "ReqInputs"
+        ]
     ],
     "ixPos": [
-        "sglpend"
+        [
+            "sglpendulum"
+        ]
     ],
     "iyPos": [
-        "sglpend"
+        [
+            "sglpendulum"
+        ]
     ],
     "motionMass": [],
     "newtonSL": [],
     "newtonSLR": [],
     "outputValues": [
-        "angularDisplacementIM"
+        [
+            "angularDisplacementIM"
+        ]
     ],
     "period": [
-        "frequency"
+        [
+            "frequency"
+        ]
     ],
     "periodPendGD": [
-        "angFrequencyGD",
-        "angularFrequency",
-        "frequency",
-        "period"
+        [
+            "angFrequencyGD"
+        ],
+        [
+            "angularFrequency"
+        ],
+        [
+            "frequency"
+        ],
+        [
+            "period"
+        ]
     ],
     "portable": [],
     "startOrigin": [],
@@ -52,7 +86,9 @@
     "vForceOnPendulum": [],
     "velocityTM": [],
     "verifyInptVals": [
-        "DataConstraintsLabel"
+        [
+            "DataConstraintsLabel"
+        ]
     ],
     "xScalAcc": [],
     "xVel": [],

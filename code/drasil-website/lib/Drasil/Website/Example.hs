@@ -15,7 +15,7 @@ import qualified Drasil.HGHC.Body as HGHC (fullSI)
 import qualified Drasil.NoPCM.Body as NoPCM (fullSI)
 import qualified Drasil.PDController.Body as PDController (fullSI)
 import qualified Drasil.Projectile.Body as Projectile (fullSI)
-import qualified Drasil.SglPendulum.Body as SglPendulum (fullSI)
+import qualified Drasil.SglPend.Body as SglPend (fullSI)
 import qualified Drasil.SSP.Body as SSP (fullSI)
 import qualified Drasil.SWHS.Body as SWHS (fullSI)
 
@@ -53,7 +53,7 @@ data Example = E {
 
 -- | Records example system information.
 allExampleSI :: [SystemInformation]
-allExampleSI = [DblPend.fullSI, GamePhysics.fullSI, GlassBR.fullSI, HGHC.fullSI, NoPCM.fullSI, PDController.fullSI, Projectile.fullSI, SglPendulum.fullSI, SSP.fullSI, SWHS.fullSI]
+allExampleSI = [DblPend.fullSI, GamePhysics.fullSI, GlassBR.fullSI, HGHC.fullSI, NoPCM.fullSI, PDController.fullSI, Projectile.fullSI, SglPend.fullSI, SSP.fullSI, SWHS.fullSI]
 
 -- | Records example descriptions.
 allExampleDesc :: [Sentence]

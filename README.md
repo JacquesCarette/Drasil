@@ -74,7 +74,7 @@ nopcm_diff | Minimal SWHS Example, with PCM Removed
 projectile_diff | Projectile Motion Analysis
 pdcontroller_diff | Proportional Derivative Controller
 dblpend_diff | Double Pendulum
-sglpendulum_diff | Single Pendulum
+sglpend_diff | Single Pendulum
 
 For more commands related to Drasil, use `make help` or check out the [Makefile documentation](https://github.com/JacquesCarette/Drasil/wiki/Makefile).
 
@@ -96,7 +96,7 @@ nopcm | SWHS without PCM (NoPCM)
 projectile | Projectile motion analysis
 pdcontroller | Proportional Derivative Controller
 dblpend | Double Pendulum
-sglpendulum | Single Pendulum
+sglpend | Single Pendulum
 
 This runs the examples manually from the .stack-work folder after building, and the generated docs will
 appear in this folder (i.e. in the SRS folders). Due to this placement, these generated

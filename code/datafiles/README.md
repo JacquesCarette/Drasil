@@ -10,7 +10,7 @@ This folder contains helper files including (but not limited to) system figures 
 - **nopcm**
 - **pdcontroller**
 - **projectile**
-- **sglpendulum**
+- **sglpend**
 - **ssp**
 - **swhs**
 

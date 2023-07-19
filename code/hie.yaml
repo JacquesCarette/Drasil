@@ -45,8 +45,8 @@ cradle:
     - path: "drasil-example/nopcm/lib"
       component: "nopcm:lib"
 
-    - path: "drasil-example/nopcm/app/Main.hs"
-      component: "nopcm:exe:nopcm"
+    - path: "drasil-example/swhs_nopcm/app/Main.hs"
+      component: "swhs_nopcm:exe:swhs_nopcm"
 
     - path: "drasil-example/pdcontroller/lib"
       component: "pdcontroller:lib"
@@ -60,11 +60,11 @@ cradle:
     - path: "drasil-example/projectile/app/Main.hs"
       component: "projectile:exe:projectile"
 
-    - path: "drasil-example/sglpendulum/lib"
-      component: "sglpendulum:lib"
+    - path: "drasil-example/sglpend/lib"
+      component: "sglpend:lib"
 
-    - path: "drasil-example/sglpendulum/app/Main.hs"
-      component: "sglpendulum:exe:sglpendulum"
+    - path: "drasil-example/sglpend/app/Main.hs"
+      component: "sglpend:exe:sglpend"
 
     - path: "drasil-example/ssp/lib"
       component: "ssp:lib"

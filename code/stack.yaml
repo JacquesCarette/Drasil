@@ -52,7 +52,7 @@ packages:
 - drasil-metadata
 - drasil-website
 - drasil-example/dblpend
-- drasil-example/sglpendulum
+- drasil-example/sglpend
 - drasil-example/gamephysics
 - drasil-example/glassbr
 - drasil-example/hghc

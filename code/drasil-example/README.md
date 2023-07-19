@@ -26,7 +26,7 @@ This folder contains our working examples (implementations in Drasil of the prev
 **projectile**
   - Contains the current work on implementing the projectile example in Drasil
 
-**sglpendulum**
+**sglpend**
   - Contains the current state of the Single Pendulum case study implemented in Drasil
 
 **ssp**

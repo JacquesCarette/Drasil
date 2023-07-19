@@ -135,9 +135,8 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **Chunk/CommonIdea**: Data-structure for an Idea which also has an abbreviation.
 
-- **Chunk/Concept/Core**: Defines 3 data-structures.
+- **Chunk/Concept/Core**: Defines 2 data-structures.
   - ConceptChunk, which is an idea, definition and (concept) domain
-  - CommonConcept, which is a common idea, definition and (concept) domain
   - ConceptInstance, which is a ConceptChunk that also has a shortname
 
 - **Chunk/Concept**: (smart) constructors for all of the above.

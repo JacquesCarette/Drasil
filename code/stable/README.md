@@ -16,7 +16,7 @@ Last updated: August 20, 2021
   - Contains the (currently) expected output for the HGHC example
 
 **swhsnopcm**
-  - Contains the (currently) expected output for the NoPCM example
+  - Contains the (currently) expected output for the SWHSNoPCM example
   
 **pdcontroller**
   - Contains the (currently) expected output for the PD Controller example
@@ -24,8 +24,8 @@ Last updated: August 20, 2021
 **projectile**
   - Contains the (currently) expected output for the Projectile example
 
-**sglpendulum**
-  - Contains the (currently) expected output for the SglPendulum example
+**sglpend**
+  - Contains the (currently) expected output for the SglPend example
 
 **ssp**
   - Contains the (currently) expected output for the SSP example

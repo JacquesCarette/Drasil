@@ -78,22 +78,22 @@
     ],
     "p_x1": [
         [
-            "dblpendulum"
+            "dblpend"
         ]
     ],
     "p_x2": [
         [
-            "dblpendulum"
+            "dblpend"
         ]
     ],
     "p_y1": [
         [
-            "dblpendulum"
+            "dblpend"
         ]
     ],
     "p_y2": [
         [
-            "dblpendulum"
+            "dblpend"
         ]
     ],
     "portable": [],

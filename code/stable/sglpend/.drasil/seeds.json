@@ -206,7 +206,7 @@
             "periodPendGD"
         ],
         [
-            "sglpendulum"
+            "sglpend"
         ],
         [
             "sysCtxDiag"
@@ -502,7 +502,7 @@
             "portable"
         ],
         [
-            "sglpendulum"
+            "sglpend"
         ],
         [
             "smithEtAl2007"
@@ -1504,9 +1504,6 @@
             "pendulum"
         ],
         [
-            "pendulumTitle"
-        ],
-        [
             "pendulummotion"
         ],
         [
@@ -1721,6 +1718,9 @@
         ],
         [
             "section"
+        ],
+        [
+            "sglPendulum"
         ],
         [
             "shape"

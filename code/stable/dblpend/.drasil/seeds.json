@@ -157,7 +157,6 @@
         ]
     ],
     "labelledContent": [
-
         [
             "InDataConstraints"
         ],
@@ -228,7 +227,7 @@
             "angularAccelerationIM2"
         ],
         [
-            "dblpendulum"
+            "dblpend"
         ],
         [
             "force"
@@ -518,7 +517,7 @@
             "correct"
         ],
         [
-            "dblpendulum"
+            "dblpend"
         ],
         [
             "firstPend"
@@ -1304,6 +1303,9 @@
             "datumtype"
         ],
         [
+            "dblPendulum"
+        ],
+        [
             "de"
         ],
         [
@@ -1836,9 +1838,6 @@
         ],
         [
             "pendulum"
-        ],
-        [
-            "pendulumTitle"
         ],
         [
             "pendulummotion"

@@ -254,7 +254,7 @@
         "references",
         "labelledContent"
     ],
-    "doc:sglpendulum": [
+    "doc:sglpend": [
         "references",
         "labelledContent"
     ],
@@ -390,10 +390,6 @@
     "second": [
         "units",
         "terms"
-    ],
-    "sglpend": [
-        "references",
-        "labelledContent"
     ],
     "startOrigin": [
         "references",

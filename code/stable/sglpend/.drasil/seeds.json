@@ -161,12 +161,6 @@
             "periodPendGD"
         ],
         [
-            "sglpend"
-        ],
-        [
-            "sysCtxDiag"
-        ],
-        [
             "vForceOnPendulum"
         ],
         [
@@ -246,7 +240,7 @@
         ],
         [
             "doc",
-            "sglpendulum"
+            "sglpend"
         ],
         [
             "doc",
@@ -477,9 +471,6 @@
             "portable"
         ],
         [
-            "sglpend"
-        ],
-        [
             "smithEtAl2007"
         ],
         [
@@ -587,7 +578,7 @@
         ],
         [
             "doc",
-            "sglpendulum"
+            "sglpend"
         ],
         [
             "doc",

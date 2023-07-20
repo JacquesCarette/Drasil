@@ -570,10 +570,6 @@
     "dblPendulum": [
         "terms"
     ],
-    "dblpend": [
-        "references",
-        "labelledContent"
-    ],
     "de": [
         "terms"
     ],
@@ -683,7 +679,7 @@
         "references",
         "labelledContent"
     ],
-    "doc:dblpendulum": [
+    "doc:dblpend": [
         "references",
         "labelledContent"
     ],

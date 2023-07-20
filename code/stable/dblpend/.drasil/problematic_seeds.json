@@ -219,10 +219,6 @@
         "concepts",
         "conceptInstances"
     ],
-    "dblpend": [
-        "references",
-        "labelledContent"
-    ],
     "degree": [
         "units",
         "terms"
@@ -287,7 +283,7 @@
         "references",
         "labelledContent"
     ],
-    "doc:dblpendulum": [
+    "doc:dblpend": [
         "references",
         "labelledContent"
     ],

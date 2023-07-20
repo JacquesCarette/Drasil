@@ -35,7 +35,7 @@
             "inputValues"
         ]
     ],
-    "doc:sglpendulum": [
+    "doc:sglpend": [
         [
             "iyPos"
         ],
@@ -71,14 +71,6 @@
         ],
         [
             "angularFrequency"
-        ]
-    ],
-    "sglpend": [
-        [
-            "iyPos"
-        ],
-        [
-            "ixPos"
         ]
     ]
 }

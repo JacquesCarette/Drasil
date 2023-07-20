@@ -578,7 +578,7 @@
         "references",
         "labelledContent"
     ],
-    "doc:sglpendulum": [
+    "doc:sglpend": [
         "references",
         "labelledContent"
     ],
@@ -1356,10 +1356,6 @@
     ],
     "sglPendulum": [
         "terms"
-    ],
-    "sglpend": [
-        "references",
-        "labelledContent"
     ],
     "shape": [
         "terms"

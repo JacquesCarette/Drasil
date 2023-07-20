@@ -59,8 +59,8 @@ data CaseStudy = CS {
 -- so we take the naming scheme from there.
 mkCaseStudy :: Example -> [CaseStudy]
 mkCaseStudy E{choicesE = []} = []
-mkCaseStudy E{sysInfoE = si@SI{_sys = sys}, choicesE = [x]} = [CS{sysInfoCS = si, progName = S $ abrv sys, choicesCS = x}]
-mkCaseStudy E{sysInfoE = si@SI{_sys = sys}, choicesE = xs} = map (\x -> CS{sysInfoCS = si, progName = S $ Projectile.codedDirName (abrv sys) x, choicesCS = x}) xs
+mkCaseStudy E{sysInfoE = si@SI{_sys = sys}, choicesE = [x]} = [CS{sysInfoCS = si, progName = S $ programName sys, choicesCS = x}]
+mkCaseStudy E{sysInfoE = si@SI{_sys = sys}, choicesE = xs} = map (\x -> CS{sysInfoCS = si, progName = S $ Projectile.codedDirName (programName sys) x, choicesCS = x}) xs
 
 -- * Display 'CaseStudy' Information as a Table
 --

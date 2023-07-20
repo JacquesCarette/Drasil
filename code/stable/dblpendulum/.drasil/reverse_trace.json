@@ -9,11 +9,6 @@
             "verifyInptVals"
         ]
     ],
-    "ReqInputs": [
-        [
-            "inputValues"
-        ]
-    ],
     "a_x1": [
         [
             "angularAccelerationIM2"
@@ -56,7 +51,12 @@
             "angularAccelerationIM2"
         ]
     ],
-    "dblpendulum": [
+    "doc:ReqInputs": [
+        [
+            "inputValues"
+        ]
+    ],
+    "doc:dblpendulum": [
         [
             "p_y2"
         ],

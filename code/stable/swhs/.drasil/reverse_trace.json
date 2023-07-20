@@ -12,11 +12,6 @@
             "checkWithPhysConsts"
         ]
     ],
-    "ReqInputs": [
-        [
-            "inputValues"
-        ]
-    ],
     "assumpAPT": [
         [
             "heatEInWtrIM"
@@ -183,6 +178,11 @@
     "consThermECS": [
         [
             "rocTempSimpRC"
+        ]
+    ],
+    "doc:ReqInputs": [
+        [
+            "inputValues"
         ]
     ],
     "eBalanceOnPCMRC": [

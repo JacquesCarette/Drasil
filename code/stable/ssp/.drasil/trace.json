@@ -190,6 +190,7 @@
             "alpha_i"
         ],
         [
+            "doc",
             "ForceDiagram"
         ],
         [
@@ -258,6 +259,7 @@
     ],
     "displayInput": [
         [
+            "doc",
             "inputsToOutputTable"
         ]
     ],
@@ -458,6 +460,7 @@
             "torque"
         ],
         [
+            "doc",
             "ForceDiagram"
         ],
         [
@@ -515,6 +518,7 @@
             "alpha_i"
         ],
         [
+            "doc",
             "ForceDiagram"
         ],
         [
@@ -614,6 +618,7 @@
     "pressure": [],
     "readAndStore": [
         [
+            "doc",
             "ReqInputs"
         ]
     ],

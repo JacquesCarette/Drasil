@@ -4,11 +4,16 @@ module Build.Drasil.Make.Print where
 import Prelude hiding ((<>))
 import Text.PrettyPrint (Doc, empty, text, (<>), (<+>), ($+$), ($$), hsep, vcat)
 
-import Build.Drasil.Make.AST (Command(C), CommandOpts(IgnoreReturnCode),
-  Dependencies, Makefile(M), Rule(R), Target, Type(Abstract))
+import qualified Data.Text as T
+import Text.Wrap
+
+import Build.Drasil.Make.AST (Annotation, Command(C), 
+  CommandOpts(IgnoreReturnCode), Dependencies, Makefile(M), Rule(R), Target, 
+  Type(Abstract))
 import Build.Drasil.Make.Helpers (addCommonFeatures, tab)
 import Build.Drasil.Make.Import (RuleTransformer, toMake)
 import Build.Drasil.Make.MakeString (renderMS)
+import CodeLang.Drasil (Comment)
 
 -- | Generates the makefile by calling 'build' after 'toMake'.
 genMake :: RuleTransformer c => [c] -> Doc
@@ -21,12 +26,28 @@ build (M rules) = addCommonFeatures rules $
 
 -- | Renders specific makefile rules. Called by 'build'.
 printRule :: Rule -> Doc
-printRule (R t d _ c) = printTarget t d $+$ printCmds c
+printRule (R c t d _ cmd) = printComments c $+$ printTarget t d $+$ printCmds cmd
+
+-- | Renders a makefile comment
+printComment :: Comment -> Doc
+printComment [] = empty
+printComment c  = text $ T.unpack (wrapText wrapSettings 80 $ T.pack c) ++ "\n"
+
+wrapSettings :: WrapSettings
+wrapSettings = WrapSettings { preserveIndentation = True
+                 , breakLongWords = False
+                 , fillStrategy = FillPrefix (T.pack "# ")
+                 , fillScope = FillAll
+                 }
+
+-- | Renders multiple comments
+printComments :: Annotation -> Doc
+printComments = foldr (($+$) . printComment) empty
 
 -- | Gathers all rules to abstract targets and tags them as phony.
 printPhony :: [Rule] -> Doc
-printPhony = (<+>) (text ".PHONY:") . hsep . tail . map (\(R t _ _ _) -> text $ renderMS t) . 
-  filter (\(R _ _ t _) -> t == Abstract)
+printPhony = (<+>) (text ".PHONY:") . hsep . map (\(R _ t _ _ _) -> text $ renderMS t) .
+  filter (\(R _ _ _ t _) -> t == Abstract)
 
 -- | Renders targets with their dependencies.
 printTarget :: Target -> Dependencies -> Doc

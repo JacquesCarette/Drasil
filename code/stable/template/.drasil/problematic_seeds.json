@@ -47,10 +47,6 @@
         "sections",
         "references"
     ],
-    "InDataConstraints": [
-        "terms",
-        "references"
-    ],
     "IntroLabel": [
         "sections",
         "references"
@@ -61,10 +57,6 @@
     ],
     "NFRsLabel": [
         "sections",
-        "references"
-    ],
-    "OutDataConstraints": [
-        "terms",
         "references"
     ],
     "PhysSystLabel": [
@@ -85,10 +77,6 @@
     ],
     "ReferencesLabel": [
         "sections",
-        "references"
-    ],
-    "ReqInputs": [
-        "terms",
         "references"
     ],
     "ReqsScopeLabel": [
@@ -115,17 +103,8 @@
         "sections",
         "references"
     ],
-    "TAbbAcc": [
-        "terms",
-        "references",
-        "labelledContent"
-    ],
     "TAbbAccLabel": [
         "sections",
-        "references"
-    ],
-    "TAuxConsts": [
-        "terms",
         "references"
     ],
     "TMsLabel": [
@@ -140,17 +119,9 @@
         "sections",
         "references"
     ],
-    "ToS": [
-        "references",
-        "labelledContent"
-    ],
     "ToSLabel": [
         "sections",
         "references"
-    ],
-    "ToU": [
-        "references",
-        "labelledContent"
     ],
     "ToULabel": [
         "sections",
@@ -167,5 +138,17 @@
     "UserCharsLabel": [
         "sections",
         "references"
+    ],
+    "doc:TAbbAcc": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:ToS": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:ToU": [
+        "references",
+        "labelledContent"
     ]
 }

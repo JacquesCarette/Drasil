@@ -17,25 +17,6 @@
             "verifyInVals"
         ]
     ],
-    "Launch": [
-        [
-            "landingposition"
-        ],
-        [
-            "iyVel"
-        ],
-        [
-            "ixVel"
-        ],
-        [
-            "flightduration"
-        ]
-    ],
-    "ReqInputs": [
-        [
-            "inputValues"
-        ]
-    ],
     "accelXZero": [
         [
             "landingposition"
@@ -74,6 +55,25 @@
         ],
         [
             "position"
+        ]
+    ],
+    "doc:Launch": [
+        [
+            "landingposition"
+        ],
+        [
+            "iyVel"
+        ],
+        [
+            "ixVel"
+        ],
+        [
+            "flightduration"
+        ]
+    ],
+    "doc:ReqInputs": [
+        [
+            "inputValues"
         ]
     ],
     "flightduration": [

@@ -40,16 +40,19 @@
     "hForceOnPendulum": [],
     "inputValues": [
         [
+            "doc",
             "ReqInputs"
         ]
     ],
     "ixPos": [
         [
+            "doc",
             "sglpendulum"
         ]
     ],
     "iyPos": [
         [
+            "doc",
             "sglpendulum"
         ]
     ],

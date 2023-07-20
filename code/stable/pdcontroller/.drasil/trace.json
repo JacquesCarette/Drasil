@@ -51,6 +51,7 @@
     "initialValue": [],
     "inputValues": [
         [
+            "doc",
             "ReqInputs"
         ]
     ],

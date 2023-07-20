@@ -1,7 +1,7 @@
 -- | Defines functions used in the Requirements section.
 module Drasil.Sections.Requirements (
   -- * Requirements
-  reqF, reqInputsRef,
+  ReqType(..), reqF, reqInputsRef,
   -- * Functional Requirements
   fReqF,
   -- ** Input Requirements
@@ -23,10 +23,37 @@ import Data.Drasil.Concepts.Math (unit_)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.DocumentLanguage.Units (toSentence)
-import Data.List (nub)
 
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap)
+import Data.List (nub)
+
+-- | Types of requirements that may be generated.
+data ReqType = InputReq Sentence
+             | VerifyInputReq
+             | CalculateReq
+             | VerifyOutputReq
+             | OutputReq
+
+instance Eq ReqType where
+  InputReq _      == InputReq _      = True
+  VerifyInputReq  == VerifyInputReq  = True
+  CalculateReq    == CalculateReq    = True
+  VerifyOutputReq == VerifyOutputReq = True
+  OutputReq       == OutputReq       = True
+  _               == _               = False
+
+instance Ord ReqType where
+  compare (InputReq _)    (InputReq _)    = EQ
+  compare (InputReq _)    _               = LT
+  compare VerifyInputReq  VerifyInputReq  = EQ
+  compare VerifyInputReq  _               = LT
+  compare CalculateReq    CalculateReq    = EQ
+  compare CalculateReq    _               = LT
+  compare VerifyOutputReq VerifyOutputReq = EQ
+  compare VerifyOutputReq _               = LT
+  compare OutputReq       OutputReq       = EQ
+  compare OutputReq       _               = GT
 
 -- | Wrapper for 'reqIntro'.
 reqF :: [Section] -> Section
@@ -34,20 +61,20 @@ reqF = SRS.require [reqIntro]
 
 -- | Prepends an input value requirement and appends an output value
 -- requirement to a list of the other requirements.
-fullReqs :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j) => [i]
-  -> Sentence -> [(j, Sentence)] -> [ConceptInstance] -> [ConceptInstance]
-fullReqs [] _ [] _ = []
-fullReqs i  d [] r = nub $ inReq (inReqDesc (inTable i) d) : r
-fullReqs [] _ j  r = nub $ r ++ [outReq (outReqDesc (outTable j))]
-fullReqs i  d j  r = nub $ inReq (inReqDesc (inTable i) d) : r ++ [outReq (outReqDesc (outTable j))]
+fullReqs :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j) =>
+  [ReqType] -> [i] -> [(j, Sentence)] -> [ConceptInstance] -> [ConceptInstance]
+fullReqs []                _ _ r = r
+fullReqs ((InputReq s):rs) i o r = nub $ inReq (inReqDesc (inTable i) s) : fullReqs rs i o r
+fullReqs [OutputReq]       _ o r = nub $ r ++ [outReq (outReqDesc (outTable o))]
+fullReqs _                 _ _ _ = error "ReqTypes not fully implemented"
 
 -- | Prepends given LabelledContent to an input-value table.
-fullTables :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j) => [i]
-  -> [(j, Sentence)] -> [LabelledContent] -> [LabelledContent]
-fullTables [] [] _ = []
-fullTables i  [] t = inTable i : t
-fullTables [] j  t = t ++ [outTable j]
-fullTables i  j  t = inTable i : t ++ [outTable j]
+fullTables :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j) =>
+  [ReqType] -> [i] -> [(j, Sentence)] -> [LabelledContent] -> [LabelledContent]
+fullTables []                _ _ t = t
+fullTables ((InputReq _):rs) i o t = inTable i : fullTables rs i o t
+fullTables [OutputReq]       _ o t = t ++ [outTable o]
+fullTables _                 _ _ _ = error "ReqTypes not fully implemented"
 
 -- | Creates a generalized input-value table for the Requirements section.
 inTable :: (Quantity i, MayHaveUnit i) => [i] -> LabelledContent

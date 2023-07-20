@@ -30,10 +30,11 @@ module Drasil.SRSDocument (
   mkDoc, fillcdbSRS,
   -- ** Helper functions to make an SRS Document
   -- | Imports from various sections of @drasil-docLang@
-  intro,            -- Drasil.Sections.ReferenceMaterial
-  traceMatStandard, -- Drasil.Sections.TraceabilityMandGs
-  tsymb, tsymb'',   -- Drasil.Sections.TableOfSymbols
-  purpDoc           -- Drasil.Sections.Introduction
+  purpDoc,         -- Drasil.Sections.Introduction
+  intro,           -- Drasil.Sections.ReferenceMaterial
+  ReqType(..),     -- Drasil.Sections.Requirements
+  tsymb, tsymb'',  -- Drasil.Sections.TableOfSymbols
+  traceMatStandard -- Drasil.Sections.TraceabilityMandGs
   ) where
 
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
@@ -51,16 +52,17 @@ import Drasil.DocLang (
   SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..),
-  -- Drasil.Sections.ReferenceMaterial
-  intro,
   -- DocumentLanguage
   mkDoc, fillcdbSRS,
-  -- Sections.TraceabilityMandGs
-  traceMatStandard,
-  -- Sections.TableOfSymbols
-  tsymb, tsymb'',
   -- Sections.Introduction
   purpDoc,
+  -- Sections.ReferenceMaterial
+  intro,
+  -- Sections.Requirements
+  ReqType(..),
+  -- Sections.TableOfSymbols
+  tsymb, tsymb'',
+  -- Sections.TraceabilityMandGs
+  traceMatStandard,
   -- DocumentLanguage.Definitions
   Field(..), Fields, InclUnits(IncludeUnits), Verbosity(..))
-  

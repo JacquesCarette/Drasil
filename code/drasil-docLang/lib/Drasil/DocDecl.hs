@@ -15,7 +15,7 @@ import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
   ProblemDescription(..), PDSub(..), SolChSpec(..), SCSSub(..), ReqrmntSec(..),
   ReqsSub(..), LCsSec(..), UCsSec(..), TraceabilitySec(..), AuxConstntSec(..),
   AppndxSec(..), OffShelfSolnsSec(..), DerivationDisplay)
-import Drasil.Sections.Requirements (fullReqs, fullTables)
+import Drasil.Sections.Requirements (ReqType, fullReqs, fullTables)
 
 import Database.Drasil
 import SysInfo.Drasil
@@ -25,6 +25,7 @@ import Data.Drasil.Concepts.Documentation (assumpDom, funcReqDom, goalStmtDom,
   nonFuncReqDom, likeChgDom, unlikeChgDom)
 
 import Control.Lens((^.), Getting)
+import Data.List (sort)
 
 -- * Types
 
@@ -96,8 +97,9 @@ newtype ReqrmntSec = ReqsProg [ReqsSub]
 
 -- | Requirements subsections.
 data ReqsSub where
-  -- | Functional requirements. 'LabelledContent' for tables (includes input values).
-  FReqsSub    :: Sentence -> [LabelledContent] -> ReqsSub
+  -- | Functional requirements. 'ReqType' for generating some requirements.
+  -- 'LabelledContent' for tables (excluding what is generated).
+  FReqsSub    :: [ReqType] -> [LabelledContent] -> ReqsSub
   -- | Functional requirements. 'LabelledContent' for tables (no input values).
   FReqsSub'   :: [LabelledContent] -> ReqsSub
   -- | Non-Functional requirements.
@@ -124,7 +126,9 @@ mkDocDesc SI{_inputs = is, _outputs = os, _sysinfodb = db} = map sec where
   sec (AppndxSec a) = DL.AppndxSec a
   sec (OffShelfSolnsSec e) = DL.OffShelfSolnsSec e
   reqSec :: ReqsSub -> DL.ReqsSub
-  reqSec (FReqsSub d t) = DL.FReqsSub (fullReqs is d tempOutputs $ fromConcInsDB funcReqDom) (fullTables is tempOutputs t)
+  reqSec (FReqsSub r t) = DL.FReqsSub
+    (fullReqs (sort r) is tempOutputs $ fromConcInsDB funcReqDom)
+    (fullTables (sort r) is tempOutputs t)
   reqSec (FReqsSub' t) = DL.FReqsSub' (fromConcInsDB funcReqDom) t
   reqSec NonFReqsSub = DL.NonFReqsSub $ fromConcInsDB nonFuncReqDom
   tempOutputs = map (, EmptyS) os

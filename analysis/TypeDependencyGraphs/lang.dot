@@ -6,11 +6,6 @@ digraph alltypes {
 		ConceptChunk -> Sentence;
 		ConceptChunk -> UID;
 		}
-		subgraph commonconcept{
-		CommonConcept	[shape=oval, color=cyan3, label="CommonConcept"];
-		CommonConcept -> CI;
-		CommonConcept -> Sentence;
-		}
 		subgraph conceptinstance{
 		ConceptInstance	[shape=oval, color=cyan3, label="ConceptInstance"];
 		ConceptInstance -> ConceptChunk;

@@ -300,6 +300,9 @@ uid :: HasUID c => Lens' c UID
 -- | Smart constructor for making a <a>UID</a> from a <a>Value</a>.
 mkUid :: String -> UID
 
+-- | Nest UID under a namespace
+nsUid :: String -> UID -> UID
+
 -- | For when we need to modify a UID. We first take the base chunk's UID
 --   and then append a suffix to it.
 (+++) :: HasUID a => a -> String -> UID
@@ -3867,6 +3870,8 @@ fig :: Lbl -> Filepath -> RawContent
 
 -- | <a>Figure</a> smart constructor that allows for customized max widths.
 figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+docNs :: UID -> UID
+docUid :: String -> UID
 
 -- | Create a reference for a table. Takes in the name of a table (which
 --   will also be used for its shortname).
@@ -4643,44 +4648,6 @@ combineNPNI :: NamedIdea c => NP -> c -> NP
 combineNINI :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 
--- | Contains the common idea type and respective constructors.
-module Language.Drasil.Chunk.CommonIdea
-
--- | The common idea (with <tt>NounPhrase</tt>) data type. It must have a
---   <a>UID</a>, <tt>NounPhrase</tt> for its term, an abbreviation
---   (<a>String</a>), and a domain ([<a>UID</a>]). It is similar to
---   <a>IdeaDict</a> and <a>IdeaDict</a> in the sense that these are for
---   things worth naming, but this type also carries an abbreviation and
---   related domains of knowledge.
---   
---   Ex. The term "Operating System" has the abbreviation <a>OS</a> and
---   comes from the domain of computer science.
-data CI
-
--- | The commonIdea smart constructor requires a chunk id (<a>String</a>),
---   a term (<a>NP</a>), an abbreviation (<a>String</a>), and a domain
---   ([<a>UID</a>]).
-commonIdea :: String -> NP -> String -> [UID] -> CI
-
--- | Similar to <a>commonIdea</a>, but takes a list of <a>IdeaDict</a>
---   (often a domain).
-commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
-
--- | Get abbreviation in <a>Sentence</a> form from a <a>CI</a>.
-getAcc :: CI -> Sentence
-
--- | Get abbreviation in <a>String</a> form from a <a>CI</a>.
-getAccStr :: CI -> String
-
--- | Prepends the abbreviation from a <a>CommonIdea</a> to a <a>String</a>.
-prependAbrv :: CommonIdea c => c -> String -> String
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.CommonIdea.CI
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CommonIdea.CI
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CommonIdea.CI
-instance Language.Drasil.Classes.CommonIdea Language.Drasil.Chunk.CommonIdea.CI
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.CommonIdea.CI
-
-
 -- | Define concept-related chunks. A concept is usually something that has
 --   a term, definition, and comes from some domain of knowledge.
 module Language.Drasil.Chunk.Concept.Core
@@ -4693,12 +4660,6 @@ module Language.Drasil.Chunk.Concept.Core
 --   state of being correct or precise.
 data ConceptChunk
 ConDict :: IdeaDict -> Sentence -> [UID] -> ConceptChunk
-
--- | Contains a common idea (<a>CI</a>) with a definition
---   (<a>Sentence</a>). Similar to <a>ConceptChunk</a>, but must have an
---   abbreviation.
-data CommonConcept
-ComConDict :: CI -> Sentence -> CommonConcept
 
 -- | Contains a <a>ConceptChunk</a>, reference address, and a
 --   <a>ShortName</a>. It is a concept that can be referred to, or rather,
@@ -4724,13 +4685,6 @@ instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Concept.Cor
 instance Language.Drasil.ShortName.HasShortName Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance Language.Drasil.Label.Type.Referable Language.Drasil.Chunk.Concept.Core.ConceptInstance
-instance GHC.Classes.Eq Language.Drasil.Chunk.Concept.Core.CommonConcept
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Concept.Core.CommonConcept
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Concept.Core.CommonConcept
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Concept.Core.CommonConcept
-instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Concept.Core.CommonConcept
-instance Language.Drasil.Classes.CommonIdea Language.Drasil.Chunk.Concept.Core.CommonConcept
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Concept.Core.CommonConcept
 instance GHC.Classes.Eq Language.Drasil.Chunk.Concept.Core.ConceptChunk
 instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Concept.Core.ConceptChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Concept.Core.ConceptChunk
@@ -4773,20 +4727,6 @@ ccs :: (Idea c, Concept d) => c -> Sentence -> [d] -> ConceptChunk
 
 -- | For projecting out to the <a>ConceptChunk</a> data-type.
 cw :: Concept c => c -> ConceptChunk
-
--- | Contains a common idea (<a>CI</a>) with a definition
---   (<a>Sentence</a>). Similar to <a>ConceptChunk</a>, but must have an
---   abbreviation.
-data CommonConcept
-
--- | Identical to <a>dcc</a>, but takes an abbreviation (<a>String</a>) and
---   returns a <a>CommonConcept</a> instead.
-dcc' :: String -> NP -> String -> String -> CommonConcept
-
--- | Similar to <a>dcc</a>, except the definition is a <a>Sentence</a>,
---   takes an abbreviation (<a>String</a>) and returns a
---   <a>CommonConcept</a> instead.
-dccWDS' :: String -> NP -> Sentence -> String -> CommonConcept
 
 -- | Contains a <a>ConceptChunk</a>, reference address, and a
 --   <a>ShortName</a>. It is a concept that can be referred to, or rather,
@@ -5404,6 +5344,44 @@ unlbldExpr :: ModelExpr -> Contents
 
 -- | Unlabelled code expression
 unlbldCode :: CodeExpr -> Contents
+
+
+-- | Contains the common idea type and respective constructors.
+module Language.Drasil.Chunk.CommonIdea
+
+-- | The common idea (with <tt>NounPhrase</tt>) data type. It must have a
+--   <a>UID</a>, <tt>NounPhrase</tt> for its term, an abbreviation
+--   (<a>String</a>), and a domain ([<a>UID</a>]). It is similar to
+--   <a>IdeaDict</a> and <a>IdeaDict</a> in the sense that these are for
+--   things worth naming, but this type also carries an abbreviation and
+--   related domains of knowledge.
+--   
+--   Ex. The term "Operating System" has the abbreviation <a>OS</a> and
+--   comes from the domain of computer science.
+data CI
+
+-- | The commonIdea smart constructor requires a chunk id (<a>String</a>),
+--   a term (<a>NP</a>), an abbreviation (<a>String</a>), and a domain
+--   ([<a>UID</a>]).
+commonIdea :: String -> NP -> String -> [UID] -> CI
+
+-- | Similar to <a>commonIdea</a>, but takes a list of <a>IdeaDict</a>
+--   (often a domain).
+commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
+
+-- | Get abbreviation in <a>Sentence</a> form from a <a>CI</a>.
+getAcc :: CI -> Sentence
+
+-- | Get abbreviation in <a>String</a> form from a <a>CI</a>.
+getAccStr :: CI -> String
+
+-- | Prepends the abbreviation from a <a>CommonIdea</a> to a <a>String</a>.
+prependAbrv :: CommonIdea c => c -> String -> String
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.CommonIdea.CI
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CommonIdea.CI
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CommonIdea.CI
+instance Language.Drasil.Classes.CommonIdea Language.Drasil.Chunk.CommonIdea.CI
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.CommonIdea.CI
 
 
 -- | Defines chunk types for use in code generation.
@@ -6861,11 +6839,6 @@ prependAbrv :: CommonIdea c => c -> String -> String
 --   state of being correct or precise.
 data ConceptChunk
 
--- | Contains a common idea (<a>CI</a>) with a definition
---   (<a>Sentence</a>). Similar to <a>ConceptChunk</a>, but must have an
---   abbreviation.
-data CommonConcept
-
 -- | Contains a <a>ConceptChunk</a>, reference address, and a
 --   <a>ShortName</a>. It is a concept that can be referred to, or rather,
 --   a instance of where a concept is applied. Often used in Goal
@@ -6887,17 +6860,8 @@ sDom :: [UID] -> UID
 --   Concept domain tagging is not yet implemented in this constructor.
 dcc :: String -> NP -> String -> ConceptChunk
 
--- | Identical to <a>dcc</a>, but takes an abbreviation (<a>String</a>) and
---   returns a <a>CommonConcept</a> instead.
-dcc' :: String -> NP -> String -> String -> CommonConcept
-
 -- | Similar to <a>dcc</a>, except the definition takes a <a>Sentence</a>.
 dccWDS :: String -> NP -> Sentence -> ConceptChunk
-
--- | Similar to <a>dcc</a>, except the definition is a <a>Sentence</a>,
---   takes an abbreviation (<a>String</a>) and returns a
---   <a>CommonConcept</a> instead.
-dccWDS' :: String -> NP -> Sentence -> String -> CommonConcept
 
 -- | Constructor for projecting an idea into a <a>ConceptChunk</a>. Takes
 --   the definition of the <a>ConceptChunk</a> as a <a>String</a>. Does not

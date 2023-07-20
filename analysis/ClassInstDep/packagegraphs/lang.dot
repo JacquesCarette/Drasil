@@ -1,6 +1,5 @@
 digraph lang{
 ConceptChunk	[shape=oval, color=turquoise4, label="ConceptChunk"];
-CommonConcept	[shape=oval, color=turquoise4, label="CommonConcept"];
 ConceptInstance	[shape=oval, color=turquoise4, label="ConceptInstance"];
 Citation	[shape=oval, color=turquoise4, label="Citation"];
 VarOrFunc	[shape=oval, color=turquoise4, label="VarOrFunc"];
@@ -139,7 +138,6 @@ NamedIdea	[shape=oval, color=pink, label="NamedIdea"];
 Idea	[shape=oval, color=pink, label="Idea"];
 Definition	[shape=oval, color=pink, label="Definition"];
 ConceptDomain	[shape=oval, color=pink, label="ConceptDomain"];
-CommonIdea	[shape=oval, color=pink, label="CommonIdea"];
 HasShortName	[shape=oval, color=pink, label="HasShortName"];
 HasRefAddress	[shape=oval, color=pink, label="HasRefAddress"];
 Referable	[shape=oval, color=pink, label="Referable"];
@@ -358,13 +356,6 @@ ConceptChunk -> NamedIdea;
 ConceptChunk -> Idea;
 ConceptChunk -> Definition;
 ConceptChunk -> ConceptDomain;
-CommonConcept -> Eq;
-CommonConcept -> HasUID;
-CommonConcept -> NamedIdea;
-CommonConcept -> Idea;
-CommonConcept -> Definition;
-CommonConcept -> CommonIdea;
-CommonConcept -> ConceptDomain;
 ConceptInstance -> Eq;
 ConceptInstance -> HasUID;
 ConceptInstance -> NamedIdea;

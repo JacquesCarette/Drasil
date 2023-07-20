@@ -2482,11 +2482,6 @@ prependAbrv :: CommonIdea c => c -> String -> String
 --   state of being correct or precise.
 data ConceptChunk
 
--- | Contains a common idea (<a>CI</a>) with a definition
---   (<a>Sentence</a>). Similar to <a>ConceptChunk</a>, but must have an
---   abbreviation.
-data CommonConcept
-
 -- | Contains a <a>ConceptChunk</a>, reference address, and a
 --   <a>ShortName</a>. It is a concept that can be referred to, or rather,
 --   a instance of where a concept is applied. Often used in Goal
@@ -2508,17 +2503,8 @@ sDom :: [UID] -> UID
 --   Concept domain tagging is not yet implemented in this constructor.
 dcc :: String -> NP -> String -> ConceptChunk
 
--- | Identical to <a>dcc</a>, but takes an abbreviation (<a>String</a>) and
---   returns a <a>CommonConcept</a> instead.
-dcc' :: String -> NP -> String -> String -> CommonConcept
-
 -- | Similar to <a>dcc</a>, except the definition takes a <a>Sentence</a>.
 dccWDS :: String -> NP -> Sentence -> ConceptChunk
-
--- | Similar to <a>dcc</a>, except the definition is a <a>Sentence</a>,
---   takes an abbreviation (<a>String</a>) and returns a
---   <a>CommonConcept</a> instead.
-dccWDS' :: String -> NP -> Sentence -> String -> CommonConcept
 
 -- | Constructor for projecting an idea into a <a>ConceptChunk</a>. Takes
 --   the definition of the <a>ConceptChunk</a> as a <a>String</a>. Does not

@@ -5,8 +5,8 @@ module Drasil.Sections.Requirements (
   -- * Functional Requirements
   fReqF,
   -- ** Input Requirements
-  fullReqs, fullTables, inReq, inTable,
-  mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
+  fullReqs, fullTables, inReq, inTable, mkInputPropsTable, mkQRTuple,
+  mkQRTupleRef, mkValsSourceTable,
   -- * Non-functional Requirements
   nfReqF
   ) where
@@ -14,11 +14,11 @@ module Drasil.Sections.Requirements (
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
+import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 import Data.Drasil.Concepts.Documentation (description, funcReqDom,
-  functionalRequirement, input_, nonfunctionalRequirement, {-output_,-} section_,
-  software, symbol_, value, reqInput, output_)
+  functionalRequirement, input_, nonfunctionalRequirement, output_, reqInput,
+  section_, software, symbol_, value)
 import Data.Drasil.Concepts.Math (unit_)
 
 import qualified Drasil.DocLang.SRS as SRS

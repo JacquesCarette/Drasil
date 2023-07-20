@@ -97,11 +97,9 @@ newtype ReqrmntSec = ReqsProg [ReqsSub]
 
 -- | Requirements subsections.
 data ReqsSub where
-  -- | Functional requirements. 'ReqType' for generating some requirements.
-  -- 'LabelledContent' for tables (excluding what is generated).
+  -- | Functional requirements. 'ReqType' for specifying which requirements to
+  -- generate. 'LabelledContent' for tables (excluding what is generated).
   FReqsSub    :: [ReqType] -> [LabelledContent] -> ReqsSub
-  -- | Functional requirements. 'LabelledContent' for tables (no input values).
-  FReqsSub'   :: [LabelledContent] -> ReqsSub
   -- | Non-Functional requirements.
   NonFReqsSub :: ReqsSub
 
@@ -129,7 +127,6 @@ mkDocDesc SI{_inputs = is, _outputs = os, _sysinfodb = db} = map sec where
   reqSec (FReqsSub r t) = DL.FReqsSub
     (fullReqs (sort r) is tempOutputs $ fromConcInsDB funcReqDom)
     (fullTables (sort r) is tempOutputs t)
-  reqSec (FReqsSub' t) = DL.FReqsSub' (fromConcInsDB funcReqDom) t
   reqSec NonFReqsSub = DL.NonFReqsSub $ fromConcInsDB nonFuncReqDom
   tempOutputs = map (, EmptyS) os
   ssdSec :: SSDSub -> DL.SSDSub

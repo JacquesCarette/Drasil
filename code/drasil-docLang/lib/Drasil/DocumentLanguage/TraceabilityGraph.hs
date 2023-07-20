@@ -48,13 +48,13 @@ traceGIntro refs trailings = [ulcc $ Paragraph $ foldlSent
 mkGraphInfo :: SystemInformation -> GraphInfo
 mkGraphInfo si = GI {
     assumpNF = mkGraphNodes tvAssumps si "mistyrose"
-    , ddNF     = mkGraphNodes tvDataDefns si "paleturquoise1"
-    , gdNF     = mkGraphNodes tvGenDefns si "palegreen"
-    , tmNF     = mkGraphNodes tvTheoryModels si "pink"
-    , imNF     = mkGraphNodes tvInsModels si "khaki1"
-    , reqNF    = mkGraphNodes tvReqs si "ivory"
-    , gsNF     = mkGraphNodes tvGoals si "darkgoldenrod1"
-    , chgNF    = mkGraphNodes tvChanges si "lavender"
+    , ddNF   = mkGraphNodes tvDataDefns si "paleturquoise1"
+    , gdNF   = mkGraphNodes tvGenDefns si "palegreen"
+    , tmNF   = mkGraphNodes tvTheoryModels si "pink"
+    , imNF   = mkGraphNodes tvInsModels si "khaki1"
+    , reqNF  = mkGraphNodes tvReqs si "ivory"
+    , gsNF   = mkGraphNodes tvGoals si "darkgoldenrod1"
+    , chgNF  = mkGraphNodes tvChanges si "lavender"
 
     , edgesAvsA     = mkGraphEdges [tvAssumps] [tvAssumps] si
     , edgesAvsAll   = mkGraphEdges [tvAssumps] [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvChanges] si

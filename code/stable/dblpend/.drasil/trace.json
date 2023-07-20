@@ -63,6 +63,7 @@
     "force": [],
     "inputValues": [
         [
+            "doc",
             "ReqInputs"
         ]
     ],
@@ -78,21 +79,25 @@
     ],
     "p_x1": [
         [
+            "doc",
             "dblpend"
         ]
     ],
     "p_x2": [
         [
+            "doc",
             "dblpend"
         ]
     ],
     "p_y1": [
         [
+            "doc",
             "dblpend"
         ]
     ],
     "p_y2": [
         [
+            "doc",
             "dblpend"
         ]
     ],

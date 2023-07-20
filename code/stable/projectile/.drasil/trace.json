@@ -67,6 +67,7 @@
             "yAxisGravity"
         ],
         [
+            "doc",
             "Launch"
         ],
         [
@@ -84,6 +85,7 @@
     ],
     "inputValues": [
         [
+            "doc",
             "ReqInputs"
         ]
     ],
@@ -92,6 +94,7 @@
             "speed"
         ],
         [
+            "doc",
             "Launch"
         ]
     ],
@@ -100,6 +103,7 @@
             "speed"
         ],
         [
+            "doc",
             "Launch"
         ]
     ],
@@ -126,6 +130,7 @@
             "yAxisGravity"
         ],
         [
+            "doc",
             "Launch"
         ],
         [

@@ -9,11 +9,6 @@
             "verifyInptVals"
         ]
     ],
-    "ReqInputs": [
-        [
-            "inputValues"
-        ]
-    ],
     "angFrequencyGD": [
         [
             "periodPendGD"
@@ -33,6 +28,19 @@
     "angularFrequency": [
         [
             "periodPendGD"
+        ]
+    ],
+    "doc:ReqInputs": [
+        [
+            "inputValues"
+        ]
+    ],
+    "doc:sglpendulum": [
+        [
+            "iyPos"
+        ],
+        [
+            "ixPos"
         ]
     ],
     "frequency": [

@@ -21,10 +21,6 @@ con' :: [IdeaDict]
 con' = [beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
   glass, ptOfExplsn, responseTy]
 
-{-glassBRProg :: CommonConcept
-glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")
-  "The glass safety analysis program" "GlassBR"-}
-
 {-Acronyms-}
 acronyms :: [CI]
 acronyms = [assumption, annealed, aR, dataDefn, fullyT, goalStmt, 

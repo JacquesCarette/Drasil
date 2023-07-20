@@ -578,6 +578,7 @@
         "organization",
         "orientation",
         "origin",
+        "os",
         "output",
         "parameter",
         "pdController",

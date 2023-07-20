@@ -1066,6 +1066,9 @@
     "origin": [
         "terms"
     ],
+    "os": [
+        "terms"
+    ],
     "output": [
         "terms"
     ],

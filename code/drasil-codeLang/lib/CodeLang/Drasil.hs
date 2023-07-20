@@ -1,3 +1,3 @@
 module CodeLang.Drasil (Comment) where
 
-import CodeLang.Drasil.CommonConcept
+import CodeLang.Drasil.LanguageStructure

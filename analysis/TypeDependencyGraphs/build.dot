@@ -2,6 +2,7 @@ digraph alltypes {
 	subgraph ast {
 		subgraph rule{
 		Rule	[shape=oval, color=darkviolet, label="Rule"];
+		Rule -> Annotation;
 		Rule -> Target;
 		Rule -> Dependencies;
 		Rule -> Type;
@@ -21,6 +22,10 @@ digraph alltypes {
 		subgraph makefile{
 		Makefile	[shape=oval, color=darkgreen, label="Makefile"];
 		Makefile -> Rule;
+		}
+		subgraph annotation{
+		Annotation	[shape=oval, color=red2, label="Annotation"];
+		Annotation -> Comment;
 		}
 		subgraph target{
 		Target	[shape=oval, color=red2, label="Target"];

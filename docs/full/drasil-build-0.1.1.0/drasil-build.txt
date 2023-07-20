@@ -79,9 +79,10 @@ module Build.Drasil.Make.AST
 newtype Makefile
 M :: [Rule] -> Makefile
 
--- | A Makefile Rule needs a target, dependencies, type, and commands.
+-- | A Makefile Rule can have comments and commands but needs a target,
+--   dependencies, and a type.
 data Rule
-R :: Target -> Dependencies -> Type -> [Command] -> Rule
+R :: Annotation -> Target -> Dependencies -> Type -> [Command] -> Rule
 
 -- | A command is made up of <a>MakeString</a>s and command operators.
 data Command
@@ -96,6 +97,9 @@ data Type
 Abstract :: Type
 File :: Type
 
+-- | A Makefile Annotation is made of 0 or more <a>Comment</a>s
+type Annotation = [Comment]
+
 -- | A Makefile target is made from a <a>MakeString</a>.
 type Target = MakeString
 
@@ -103,10 +107,10 @@ type Target = MakeString
 type Dependencies = [Target]
 
 -- | Creates a Rule which results in a file being created.
-mkFile :: Target -> Dependencies -> [Command] -> Rule
+mkFile :: Annotation -> Target -> Dependencies -> [Command] -> Rule
 
 -- | Creates an abstract Rule not associated to a specific file.
-mkRule :: Target -> Dependencies -> [Command] -> Rule
+mkRule :: Annotation -> Target -> Dependencies -> [Command] -> Rule
 
 -- | Creates a Command which fails the make process if it does not return
 --   zero.
@@ -191,6 +195,13 @@ build :: Makefile -> Doc
 -- | Renders specific makefile rules. Called by <a>build</a>.
 printRule :: Rule -> Doc
 
+-- | Renders a makefile comment
+printComment :: Comment -> Doc
+wrapSettings :: WrapSettings
+
+-- | Renders multiple comments
+printComments :: Annotation -> Doc
+
 -- | Gathers all rules to abstract targets and tags them as phony.
 printPhony :: [Rule] -> Doc
 
@@ -224,14 +235,15 @@ mkCommand :: MakeString -> Command
 -- | Dependencies are made up of 0 or more <a>Target</a>s.
 type Dependencies = [Target]
 
--- | A Makefile Rule needs a target, dependencies, type, and commands.
+-- | A Makefile Rule can have comments and commands but needs a target,
+--   dependencies, and a type.
 data Rule
 
 -- | Creates a Rule which results in a file being created.
-mkFile :: Target -> Dependencies -> [Command] -> Rule
+mkFile :: Annotation -> Target -> Dependencies -> [Command] -> Rule
 
 -- | Creates an abstract Rule not associated to a specific file.
-mkRule :: Target -> Dependencies -> [Command] -> Rule
+mkRule :: Annotation -> Target -> Dependencies -> [Command] -> Rule
 data MakeString
 
 -- | Concatenates two <a>MakeString</a>s with a space in between.

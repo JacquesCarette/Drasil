@@ -841,10 +841,6 @@ digraph alltypes {
 		InOutCallr	[shape=oval, color=red2, label="InOutCallr"];
 		InOutCallr -> LabelSValuerSVariablerSVariabler;
 		}
-		subgraph comment{
-		Comment	[shape=oval, color=red2, label="Comment"];
-		Comment -> String;
-		}
 		subgraph msparametera{
 		MSParametera	[shape=oval, color=red2, label="MSParametera"];
 		MSParametera -> MSaParametera;

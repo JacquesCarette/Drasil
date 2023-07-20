@@ -30,14 +30,15 @@ mkCommand :: MakeString -> Command
 -- | Dependencies are made up of 0 or more <a>Target</a>s.
 type Dependencies = [Target]
 
--- | A Makefile Rule needs a target, dependencies, type, and commands.
+-- | A Makefile Rule can have comments and commands but needs a target,
+--   dependencies, and a type.
 data Rule
 
 -- | Creates a Rule which results in a file being created.
-mkFile :: Target -> Dependencies -> [Command] -> Rule
+mkFile :: Annotation -> Target -> Dependencies -> [Command] -> Rule
 
 -- | Creates an abstract Rule not associated to a specific file.
-mkRule :: Target -> Dependencies -> [Command] -> Rule
+mkRule :: Annotation -> Target -> Dependencies -> [Command] -> Rule
 data MakeString
 
 -- | Concatenates two <a>MakeString</a>s with a space in between.

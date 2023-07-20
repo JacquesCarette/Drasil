@@ -133,6 +133,9 @@ code,test/,Observer.hs,	,	,
 code,test/,PatternTest.hs,	,	,	
 code,test/,VectorTest.hs,	,	,	
 	
+codeLang,lib/CodeLang/Drasil/,LanguageStructure.hs,	,	,	
+codeLang,lib/CodeLang/,Drasil.hs,	,	,	
+	
 data,lib/Data/Drasil/Concepts/,Computation.hs,	,	,	
 data,lib/Data/Drasil/Concepts/,Documentation.hs,	,	,	
 data,lib/Data/Drasil/Concepts/,Education.hs,	,	,	

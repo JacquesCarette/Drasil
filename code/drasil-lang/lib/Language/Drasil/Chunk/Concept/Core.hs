@@ -3,14 +3,13 @@
 -- a term, definition, and comes from some domain of knowledge.
 module Language.Drasil.Chunk.Concept.Core(
   -- * Concept-related Datatypes
-  ConceptChunk(ConDict), CommonConcept(ComConDict)
+  ConceptChunk(ConDict)
   , ConceptInstance(ConInst)
   , sDom)
   where
 import Language.Drasil.ShortName (HasShortName(..), ShortName)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), CommonIdea(abrv))
-import Language.Drasil.Chunk.CommonIdea (CI)
+  Definition(defn), ConceptDomain(cdom))
 import Language.Drasil.Chunk.NamedIdea (IdeaDict)
 import Language.Drasil.Label.Type ((+::+), defer, name, raw,
   LblType(..), Referable(..), HasRefAddress(..))
@@ -47,26 +46,6 @@ instance Idea          ConceptChunk where getA = getA . view idea
 instance Definition    ConceptChunk where defn = defn'
 -- | Finds the domain of 'UID's of a 'ConceptChunk'.
 instance ConceptDomain ConceptChunk where cdom = cdom'
-
--- | Contains a common idea ('CI') with a definition ('Sentence').
--- Similar to 'ConceptChunk', but must have an abbreviation.
-data CommonConcept = ComConDict { _comm :: CI, _def :: Sentence}
-makeLenses ''CommonConcept
-
--- | Equal if 'UID's are equal.
-instance Eq            CommonConcept where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
--- | Finds 'UID' of the 'CI' used to make the 'CommonConcept'.
-instance HasUID        CommonConcept where uid = comm . uid
--- | Finds term ('NP') of the 'CI' used to make the 'CommonConcept'.
-instance NamedIdea     CommonConcept where term = comm . term
--- | Finds the idea contained in the 'CI' used to make the 'CommonConcept'.
-instance Idea          CommonConcept where getA = getA . view comm
--- | Finds definition of a 'CommonConcept'.
-instance Definition    CommonConcept where defn = def
--- | Finds the abbreviation contained in the 'CI' used to make the 'CommonConcept'.
-instance CommonIdea    CommonConcept where abrv = abrv . view comm
--- | Finds the domain contained in the 'CI' used to make the 'CommonConcept'.
-instance ConceptDomain CommonConcept where cdom = cdom . view comm
 
 -- | Contains a 'ConceptChunk', reference address, and a 'ShortName'.
 -- It is a concept that can be referred to, or rather, a instance of where a concept is applied.

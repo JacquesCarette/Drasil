@@ -109,9 +109,9 @@ genDot si = do
 genLog :: SystemInformation -> PrintingInformation -> IO ()
 genLog SI{_sys = sysName} pinfo = do
   workingDir <- getCurrentDirectory
-  createDirectoryIfMissing True $ "../../debug/" ++ filter (not.isSpace) (abrv sysName) ++ "/SRSlogs"
-  setCurrentDirectory $ "../../debug/" ++ filter (not.isSpace) (abrv sysName) ++ "/SRSlogs"
-  handle <- openFile (filter (not.isSpace) (abrv sysName) ++ "_SRS.log") WriteMode
+  createDirectoryIfMissing True $ "../../debug/" ++ filter (not.isSpace) (programName sysName) ++ "/SRSlogs"
+  setCurrentDirectory $ "../../debug/" ++ filter (not.isSpace) (programName sysName) ++ "/SRSlogs"
+  handle <- openFile (filter (not.isSpace) (programName sysName) ++ "_SRS.log") WriteMode
   mapM_ (hPutStrLn handle . render) $ printAllDebugInfo pinfo
   hClose handle
   setCurrentDirectory workingDir

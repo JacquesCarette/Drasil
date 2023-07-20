@@ -4,11 +4,6 @@
             "verifyInputs"
         ]
     ],
-    "ReqInputs": [
-        [
-            "inputValues"
-        ]
-    ],
     "dampingCoeffSpring": [
         [
             "likeChgPP"
@@ -20,6 +15,11 @@
     "decoupled": [
         [
             "qdCtrlVarFD"
+        ]
+    ],
+    "doc:ReqInputs": [
+        [
+            "inputValues"
         ]
     ],
     "externalDisturb": [

@@ -4,7 +4,7 @@ Last updated: August 13, 2021
 ----------------------------------------------------------
 
 **Concept**
-  - `ConceptChunk`, `CommonConcept`, and `ConceptInstance` data types
+  - `ConceptChunk` and `ConceptInstance` data types
 
 Citation.hs
   - `Citation` chunks and related data types

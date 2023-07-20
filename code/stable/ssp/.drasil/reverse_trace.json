@@ -41,17 +41,6 @@
             "FS"
         ]
     ],
-    "ForceDiagram": [
-        [
-            "normForcEq"
-        ],
-        [
-            "momentEql"
-        ],
-        [
-            "bsShrFEq"
-        ]
-    ],
     "H_i": [
         [
             "resShearWO"
@@ -97,11 +86,6 @@
         ],
         [
             "FS"
-        ]
-    ],
-    "ReqInputs": [
-        [
-            "readAndStore"
         ]
     ],
     "X_i": [
@@ -457,6 +441,27 @@
             "writeToFile"
         ]
     ],
+    "doc:ForceDiagram": [
+        [
+            "normForcEq"
+        ],
+        [
+            "momentEql"
+        ],
+        [
+            "bsShrFEq"
+        ]
+    ],
+    "doc:ReqInputs": [
+        [
+            "readAndStore"
+        ]
+    ],
+    "doc:inputsToOutputTable": [
+        [
+            "displayInput"
+        ]
+    ],
     "effectiveStressTM": [
         [
             "effNormF"
@@ -520,11 +525,6 @@
         ],
         [
             "momentEql"
-        ]
-    ],
-    "inputsToOutputTable": [
-        [
-            "displayInput"
         ]
     ],
     "intsliceFsRC": [

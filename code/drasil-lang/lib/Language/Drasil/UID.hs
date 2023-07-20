@@ -6,7 +6,7 @@
 module Language.Drasil.UID (
     UID
   , HasUID(uid)
-  , mkUid, (+++), (+++.), (+++!)
+  , mkUid, nsUid, (+++), (+++.), (+++!)
   , showUID
 ) where
 
@@ -49,6 +49,10 @@ mkUid s = UID { _namespace = [], _baseName = s }
   -- '►' `elem` s = error $ "► not allowed in UID " ++ show s -- FIXME: Need to implement other constructors before we can use this.
   -- null s       = error "UID must be non-zero length" -- FIXME: See Drasil.DocumentLanguage.TraceabilityGraph (uses an empty UID)
   -- otherwise    = UID s
+
+-- | Nest UID under a namespace
+nsUid :: String -> UID -> UID
+nsUid ns = over namespace (ns:)
 
 -- | For when we need to modify a UID. We first take the base chunk's UID and then append a suffix to it.
 (+++) :: HasUID a => a -> String -> UID

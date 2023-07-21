@@ -16,6 +16,7 @@ dependencies:
 - pretty
 - mtl
 - composition
+- drasil-codeLang
 - drasil-utils
 
 ghc-options:

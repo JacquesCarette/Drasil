@@ -39,11 +39,6 @@
         "sections",
         "references"
     ],
-    "InDataConstraints": [
-        "terms",
-        "references",
-        "labelledContent"
-    ],
     "IntroLabel": [
         "sections",
         "references"
@@ -59,10 +54,6 @@
     "NegInf": [
         "terms",
         "symbols"
-    ],
-    "OutDataConstraints": [
-        "terms",
-        "references"
     ],
     "PhysSystLabel": [
         "sections",
@@ -88,11 +79,6 @@
         "sections",
         "references"
     ],
-    "ReqInputs": [
-        "terms",
-        "references",
-        "labelledContent"
-    ],
     "ReqsScopeLabel": [
         "sections",
         "references"
@@ -117,17 +103,8 @@
         "sections",
         "references"
     ],
-    "TAbbAcc": [
-        "terms",
-        "references",
-        "labelledContent"
-    ],
     "TAbbAccLabel": [
         "sections",
-        "references"
-    ],
-    "TAuxConsts": [
-        "terms",
         "references"
     ],
     "TMsLabel": [
@@ -142,57 +119,13 @@
         "sections",
         "references"
     ],
-    "ToS": [
-        "references",
-        "labelledContent"
-    ],
     "ToSLabel": [
         "sections",
         "references"
     ],
-    "ToU": [
-        "references",
-        "labelledContent"
-    ],
     "ToULabel": [
         "sections",
         "references"
-    ],
-    "TraceGraphAllvsAll": [
-        "references",
-        "labelledContent"
-    ],
-    "TraceGraphAllvsR": [
-        "references",
-        "labelledContent"
-    ],
-    "TraceGraphAvsA": [
-        "references",
-        "labelledContent"
-    ],
-    "TraceGraphAvsAll": [
-        "references",
-        "labelledContent"
-    ],
-    "TraceGraphRefvsRef": [
-        "references",
-        "labelledContent"
-    ],
-    "TraceMatAllvsR": [
-        "references",
-        "labelledContent"
-    ],
-    "TraceMatAvsA": [
-        "references",
-        "labelledContent"
-    ],
-    "TraceMatAvsAll": [
-        "references",
-        "labelledContent"
-    ],
-    "TraceMatRefvsRef": [
-        "references",
-        "labelledContent"
     ],
     "TraceMatricesLabel": [
         "sections",
@@ -268,6 +201,70 @@
     "distance": [
         "terms",
         "symbols"
+    ],
+    "doc:InDataConstraints": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:ReqInputs": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TAbbAcc": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:ToS": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:ToU": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceGraphAllvsAll": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceGraphAllvsR": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceGraphAvsA": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceGraphAvsAll": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceGraphRefvsRef": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceMatAllvsR": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceMatAvsA": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceMatAvsAll": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceMatRefvsRef": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:pidSysDiagram": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:systemContextDiag": [
+        "references",
+        "labelledContent"
     ],
     "energy": [
         "terms",
@@ -453,10 +450,6 @@
         "terms",
         "symbols"
     ],
-    "pidSysDiagram": [
-        "references",
-        "labelledContent"
-    ],
     "portability": [
         "references",
         "concepts",
@@ -615,10 +608,6 @@
         "references",
         "concepts",
         "conceptInstances"
-    ],
-    "systemContextDiag": [
-        "references",
-        "labelledContent"
     ],
     "tension": [
         "terms",

@@ -58,9 +58,7 @@
         "references"
     ],
     "InDataConstraints": [
-        "terms",
-        "references",
-        "labelledContent"
+        "terms"
     ],
     "IndividualProdUCLabel": [
         "references"
@@ -94,8 +92,7 @@
         "symbols"
     ],
     "OutDataConstraints": [
-        "terms",
-        "references"
+        "terms"
     ],
     "PhysSystLabel": [
         "sections",
@@ -131,9 +128,7 @@
         "references"
     ],
     "ReqInputs": [
-        "terms",
-        "references",
-        "labelledContent"
+        "terms"
     ],
     "ReqsScopeLabel": [
         "sections",
@@ -169,17 +164,14 @@
         "references"
     ],
     "TAbbAcc": [
-        "terms",
-        "references",
-        "labelledContent"
+        "terms"
     ],
     "TAbbAccLabel": [
         "sections",
         "references"
     ],
     "TAuxConsts": [
-        "terms",
-        "references"
+        "terms"
     ],
     "TMsLabel": [
         "sections",
@@ -196,72 +188,28 @@
         "sections",
         "references"
     ],
-    "ToS": [
-        "references",
-        "labelledContent"
-    ],
     "ToSLabel": [
         "sections",
         "references"
-    ],
-    "ToU": [
-        "references",
-        "labelledContent"
     ],
     "ToULabel": [
         "sections",
         "references"
     ],
-    "TraceGraphAllvsAll": [
-        "references",
-        "labelledContent"
-    ],
     "TraceGraphAllvsAllLink": [
         "references"
-    ],
-    "TraceGraphAllvsR": [
-        "references",
-        "labelledContent"
     ],
     "TraceGraphAllvsRLink": [
         "references"
     ],
-    "TraceGraphAvsA": [
-        "references",
-        "labelledContent"
-    ],
     "TraceGraphAvsALink": [
         "references"
-    ],
-    "TraceGraphAvsAll": [
-        "references",
-        "labelledContent"
     ],
     "TraceGraphAvsAllLink": [
         "references"
     ],
-    "TraceGraphRefvsRef": [
-        "references",
-        "labelledContent"
-    ],
     "TraceGraphRefvsRefLink": [
         "references"
-    ],
-    "TraceMatAllvsR": [
-        "references",
-        "labelledContent"
-    ],
-    "TraceMatAvsA": [
-        "references",
-        "labelledContent"
-    ],
-    "TraceMatAvsAll": [
-        "references",
-        "labelledContent"
-    ],
-    "TraceMatRefvsRef": [
-        "references",
-        "labelledContent"
     ],
     "TraceMatricesLabel": [
         "sections",
@@ -559,6 +507,76 @@
     "distance": [
         "terms",
         "symbols"
+    ],
+    "doc:InDataConstraints": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:OutDataConstraints": [
+        "references"
+    ],
+    "doc:ReqInputs": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TAbbAcc": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TAuxConsts": [
+        "references"
+    ],
+    "doc:ToS": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:ToU": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceGraphAllvsAll": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceGraphAllvsR": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceGraphAvsA": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceGraphAvsAll": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceGraphRefvsRef": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceMatAllvsR": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceMatAvsA": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceMatAvsAll": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceMatRefvsRef": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:pidSysDiagram": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:systemContextDiag": [
+        "references",
+        "labelledContent"
     ],
     "document": [
         "terms"
@@ -1137,10 +1155,6 @@
     "pidCI": [
         "terms"
     ],
-    "pidSysDiagram": [
-        "references",
-        "labelledContent"
-    ],
     "pidWiki": [
         "references"
     ],
@@ -1593,10 +1607,6 @@
     ],
     "system": [
         "terms"
-    ],
-    "systemContextDiag": [
-        "references",
-        "labelledContent"
     ],
     "systemconstraint": [
         "terms"

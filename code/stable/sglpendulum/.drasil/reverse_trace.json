@@ -1,40 +1,76 @@
 {
     "CorSolPropsLabel": [
-        "correct"
+        [
+            "correct"
+        ]
     ],
     "DataConstraintsLabel": [
-        "verifyInptVals"
-    ],
-    "ReqInputs": [
-        "inputValues"
+        [
+            "verifyInptVals"
+        ]
     ],
     "angFrequencyGD": [
-        "periodPendGD",
-        "angularDisplacementIM"
+        [
+            "periodPendGD"
+        ],
+        [
+            "angularDisplacementIM"
+        ]
     ],
     "angularDisplacementIM": [
-        "outputValues",
-        "calcAngPos"
+        [
+            "outputValues"
+        ],
+        [
+            "calcAngPos"
+        ]
     ],
     "angularFrequency": [
-        "periodPendGD"
+        [
+            "periodPendGD"
+        ]
+    ],
+    "doc:ReqInputs": [
+        [
+            "inputValues"
+        ]
+    ],
+    "doc:sglpendulum": [
+        [
+            "iyPos"
+        ],
+        [
+            "ixPos"
+        ]
     ],
     "frequency": [
-        "periodPendGD",
-        "period",
-        "angFrequencyGD"
+        [
+            "periodPendGD"
+        ],
+        [
+            "period"
+        ],
+        [
+            "angFrequencyGD"
+        ]
     ],
     "newtonSLR": [
-        "angularDisplacementIM",
-        "angFrequencyGD",
-        "angFrequencyGD"
+        [
+            "angularDisplacementIM"
+        ],
+        [
+            "angFrequencyGD"
+        ],
+        [
+            "angFrequencyGD"
+        ]
     ],
     "period": [
-        "periodPendGD",
-        "angularFrequency"
-    ],
-    "sglpendulum": [
-        "iyPos",
-        "ixPos"
+        [
+            "periodPendGD"
+        ],
+        [
+            "angularFrequency"
+        ]
     ]
 }

@@ -47,11 +47,6 @@
         "sections",
         "references"
     ],
-    "InDataConstraints": [
-        "terms",
-        "references",
-        "labelledContent"
-    ],
     "IntroLabel": [
         "sections",
         "references"
@@ -63,11 +58,6 @@
     "NFRsLabel": [
         "sections",
         "references"
-    ],
-    "OutDataConstraints": [
-        "terms",
-        "references",
-        "labelledContent"
     ],
     "PhysSystLabel": [
         "sections",
@@ -89,11 +79,6 @@
         "sections",
         "references"
     ],
-    "ReqInputs": [
-        "terms",
-        "references",
-        "labelledContent"
-    ],
     "ReqsScopeLabel": [
         "sections",
         "references"
@@ -110,10 +95,6 @@
         "sections",
         "references"
     ],
-    "SysCon": [
-        "references",
-        "labelledContent"
-    ],
     "SysConstraintsLabel": [
         "sections",
         "references"
@@ -122,27 +103,13 @@
         "sections",
         "references"
     ],
-    "TAbbAcc": [
-        "terms",
-        "references",
-        "labelledContent"
-    ],
     "TAbbAccLabel": [
         "sections",
         "references"
     ],
-    "TAuxConsts": [
-        "terms",
-        "references",
-        "labelledContent"
-    ],
     "TMsLabel": [
         "sections",
         "references"
-    ],
-    "Tank": [
-        "references",
-        "labelledContent"
     ],
     "TermDefsLabel": [
         "sections",
@@ -152,57 +119,13 @@
         "sections",
         "references"
     ],
-    "ToS": [
-        "references",
-        "labelledContent"
-    ],
     "ToSLabel": [
         "sections",
         "references"
     ],
-    "ToU": [
-        "references",
-        "labelledContent"
-    ],
     "ToULabel": [
         "sections",
         "references"
-    ],
-    "TraceGraphAllvsAll": [
-        "references",
-        "labelledContent"
-    ],
-    "TraceGraphAllvsR": [
-        "references",
-        "labelledContent"
-    ],
-    "TraceGraphAvsA": [
-        "references",
-        "labelledContent"
-    ],
-    "TraceGraphAvsAll": [
-        "references",
-        "labelledContent"
-    ],
-    "TraceGraphRefvsRef": [
-        "references",
-        "labelledContent"
-    ],
-    "TraceMatAllvsR": [
-        "references",
-        "labelledContent"
-    ],
-    "TraceMatAvsA": [
-        "references",
-        "labelledContent"
-    ],
-    "TraceMatAvsAll": [
-        "references",
-        "labelledContent"
-    ],
-    "TraceMatRefvsRef": [
-        "references",
-        "labelledContent"
     ],
     "TraceMatricesLabel": [
         "sections",
@@ -358,6 +281,78 @@
     "diam": [
         "terms",
         "symbols"
+    ],
+    "doc:InDataConstraints": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:OutDataConstraints": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:ReqInputs": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:SysCon": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TAbbAcc": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TAuxConsts": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:Tank": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:ToS": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:ToU": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceGraphAllvsAll": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceGraphAllvsR": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceGraphAvsA": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceGraphAvsAll": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceGraphRefvsRef": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceMatAllvsR": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceMatAvsA": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceMatAvsAll": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceMatRefvsRef": [
+        "references",
+        "labelledContent"
     ],
     "eBalanceOnWtrRC": [
         "references",

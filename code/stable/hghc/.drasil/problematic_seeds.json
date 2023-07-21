@@ -11,20 +11,8 @@
         "sections",
         "references"
     ],
-    "InDataConstraints": [
-        "terms",
-        "references"
-    ],
-    "OutDataConstraints": [
-        "terms",
-        "references"
-    ],
     "RefMatLabel": [
         "sections",
-        "references"
-    ],
-    "ReqInputs": [
-        "terms",
         "references"
     ],
     "SolCharSpecLabel": [
@@ -35,14 +23,6 @@
         "sections",
         "references"
     ],
-    "TAbbAcc": [
-        "terms",
-        "references"
-    ],
-    "TAuxConsts": [
-        "terms",
-        "references"
-    ],
     "TMsLabel": [
         "sections",
         "references"
@@ -51,17 +31,9 @@
         "sections",
         "references"
     ],
-    "ToS": [
-        "references",
-        "labelledContent"
-    ],
     "ToSLabel": [
         "sections",
         "references"
-    ],
-    "ToU": [
-        "references",
-        "labelledContent"
     ],
     "ToULabel": [
         "sections",
@@ -102,6 +74,14 @@
     "coulomb": [
         "units",
         "terms"
+    ],
+    "doc:ToS": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:ToU": [
+        "references",
+        "labelledContent"
     ],
     "farad": [
         "units",

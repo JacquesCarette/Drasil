@@ -6,4 +6,4 @@ PDController_SRS.pdf: PDController_SRS.tex
 	lualatex $(TEXFLAGS) PDController_SRS
 	lualatex $(TEXFLAGS) PDController_SRS
 
-.PHONY:
+.PHONY: srs

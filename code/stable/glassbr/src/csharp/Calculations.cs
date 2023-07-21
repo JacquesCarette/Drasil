@@ -119,26 +119,6 @@ public class Calculations {
         return q_hat_tol * 7.17e10 * Math.Pow(inParams.h, 4.0) / Math.Pow(inParams.a * inParams.b, 2.0);
     }
     
-    /** \brief Calculates risk of failure
-        \param inParams structure holding the input values
-        \param J stress distribution factor (Function)
-        \return risk of failure
-    */
-    public static double func_B(InputParameters inParams, double J) {
-        StreamWriter outfile;
-        outfile = new StreamWriter("log.txt", true);
-        outfile.WriteLine("function func_B called with inputs: {");
-        outfile.Write("  inParams = ");
-        outfile.Write("Instance of InputParameters object");
-        outfile.WriteLine(", ");
-        outfile.Write("  J = ");
-        outfile.WriteLine(J);
-        outfile.WriteLine("  }");
-        outfile.Close();
-        
-        return 2.86e-53 / Math.Pow(inParams.a * inParams.b, 7.0 - 1.0) * Math.Pow(7.17e10 * Math.Pow(inParams.h, 2.0), 7.0) * inParams.LDF * Math.Exp(J);
-    }
-    
     /** \brief Calculates load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
         \param inParams structure holding the input values
         \param NFL non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
@@ -157,6 +137,26 @@ public class Calculations {
         outfile.Close();
         
         return NFL * inParams.GTF * 1.0;
+    }
+    
+    /** \brief Calculates risk of failure
+        \param inParams structure holding the input values
+        \param J stress distribution factor (Function)
+        \return risk of failure
+    */
+    public static double func_B(InputParameters inParams, double J) {
+        StreamWriter outfile;
+        outfile = new StreamWriter("log.txt", true);
+        outfile.WriteLine("function func_B called with inputs: {");
+        outfile.Write("  inParams = ");
+        outfile.Write("Instance of InputParameters object");
+        outfile.WriteLine(", ");
+        outfile.Write("  J = ");
+        outfile.WriteLine(J);
+        outfile.WriteLine("  }");
+        outfile.Close();
+        
+        return 2.86e-53 / Math.Pow(inParams.a * inParams.b, 7.0 - 1.0) * Math.Pow(7.17e10 * Math.Pow(inParams.h, 2.0), 7.0) * inParams.LDF * Math.Exp(J);
     }
     
     /** \brief Calculates probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)

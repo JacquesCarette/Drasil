@@ -14,11 +14,11 @@ import Drasil.GlassBR.DataDefs {- temporarily import everything -}
 import Drasil.GlassBR.Goals (willBreakGS)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (charWeight, demand, isSafeLR, isSafePb,
-  lRe, pbTol, plateLen, plateWidth, probBr, standOffDist)
+  lRe, pbTol, plateLen, plateWidth, probBr, standOffDist, loadSF)
 
 
 iMods :: [InstanceModel]
-iMods = [probOfBreak, pbIsSafe, lrIsSafe]
+iMods = [probOfBreak, calofCapacity, pbIsSafe, lrIsSafe]
 
 symb :: [UnitalChunk]
 symb =  [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram, ucuc standOffDist metre, demand] -- this is temporary
@@ -32,11 +32,18 @@ probOfBreak = imNoDeriv (equationalModelN (probBr ^. term) probOfBreakQD)
   [qwUC risk] (qw probBr) [] (map dRef [astm2009, beasonEtAl1998]) "probOfBreak"
   [riskRef]
 
-probOfBreakEq :: Expr
-probOfBreakEq = exactDbl 1 $- exp (neg (sy risk))
-
 probOfBreakQD :: SimpleQDef
-probOfBreakQD = mkQuantDef probBr probOfBreakEq
+probOfBreakQD = mkQuantDef probBr (exactDbl 1 $- exp (neg (sy risk)))
+
+{--}
+
+calofCapacity :: InstanceModel
+calofCapacity = imNoDeriv (equationalModelN (lRe ^. term) calofCapacityQD)
+  (map qwUC [nonFL, glaTyFac] ++ [qwUC loadSF]) (qw lRe) []
+  [dRef astm2009] "calofCapacity" [lrCap, nonFLRef, gtfRef]
+
+calofCapacityQD :: SimpleQDef
+calofCapacityQD = mkQuantDef lRe (sy nonFL `mulRe` sy glaTyFac `mulRe` sy loadSF)
 
 {--}
 
@@ -46,7 +53,6 @@ pbIsSafe = imNoDeriv (equationalModelN (nounPhraseSP "Safety Req-Pb") pbIsSafeQD
   (qw isSafePb) []
   [dRef astm2009] "isSafePb"
   [pbIsSafeDesc, probBRRef, pbTolUsr]
-
 
 pbIsSafeQD :: SimpleQDef
 pbIsSafeQD = mkQuantDef isSafePb (sy probBr $< sy pbTol)

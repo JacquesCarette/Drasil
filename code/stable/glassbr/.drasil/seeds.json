@@ -188,9 +188,6 @@
             "glassTypeFac"
         ],
         [
-            "lResistance"
-        ],
-        [
             "loadDurFactor"
         ],
         [
@@ -222,6 +219,9 @@
         ],
         [
             "isSafePb"
+        ],
+        [
+            "lResistance"
         ],
         [
             "probBr"

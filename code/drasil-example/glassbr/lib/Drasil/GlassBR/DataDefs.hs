@@ -34,8 +34,7 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspectRatio, charWeight,
 
 dataDefs :: [DataDefinition]
 dataDefs = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
-  tolStrDisFac, standOffDis, aspRat, eqTNTWDD, calofCapacity,
-  calofDemand]
+  tolStrDisFac, standOffDis, aspRat, eqTNTWDD, calofDemand]
 
 qDefns :: [Block SimpleQDef]
 qDefns = Parallel hFromtQD [glaTyFacQD] : --can be calculated on their own
@@ -202,18 +201,6 @@ eqTNTWQD = mkQuantDef eqTNTWeight eqTNTWEq
 
 eqTNTWDD :: DataDefinition
 eqTNTWDD = ddE eqTNTWQD [dRef astm2009] Nothing "eqTNTW" []
-
-{--}
-
-calofCapacityEq :: Expr
-calofCapacityEq = sy nonFL `mulRe` sy glaTyFac `mulRe` sy loadSF
-
-calofCapacityQD :: SimpleQDef
-calofCapacityQD = mkQuantDef lRe calofCapacityEq
-
-calofCapacity :: DataDefinition
-calofCapacity = ddE calofCapacityQD [dRef astm2009] Nothing "calofCapacity"
-  [lrCap, nonFLRef, gtfRef]
 
 {--}
 

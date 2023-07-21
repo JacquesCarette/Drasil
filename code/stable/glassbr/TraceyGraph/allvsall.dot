@@ -19,15 +19,15 @@ digraph allvsall {
 	sdfTol -> assumpSV;
 	sdfTol -> minThick;
 	sdfTol -> loadDurFactor;
-	lResistance -> nFL;
-	lResistance -> glassTypeFac;
 	demandq -> stdOffDist;
 	demandq -> eqTNTChar;
 	probBr -> riskFun;
+	lResistance -> nFL;
+	lResistance -> glassTypeFac;
 	isSafePb -> probBr;
 	isSafePb -> isSafeLR;
-	isSafeLR -> lResistance;
 	isSafeLR -> demandq;
+	isSafeLR -> lResistance;
 	isSafeLR -> isSafePb;
 	outputValsAndKnownValues -> inputValues;
 	outputValsAndKnownValues -> sysSetValsFollowingAssumps;
@@ -68,12 +68,11 @@ digraph allvsall {
 	stdOffDist	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:standOffDist"];
 	aR	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:aspectRatio"];
 	eqTNTChar	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:eqTNTW"];
-	lResistance	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:calofCapacity"];
 	demandq	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:calofDemand"];
 
 	subgraph DD {
 	rank="same"
-	{riskFun, minThick, loadDurFactor, stressDistFac, nFL, glassTypeFac, dimlessLoad, tolLoad, sdfTol, stdOffDist, aR, eqTNTChar, lResistance, demandq}
+	{riskFun, minThick, loadDurFactor, stressDistFac, nFL, glassTypeFac, dimlessLoad, tolLoad, sdfTol, stdOffDist, aR, eqTNTChar, demandq}
 	}
 
 	isSafeProb	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeProb"];
@@ -85,12 +84,13 @@ digraph allvsall {
 	}
 
 	probBr	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:probOfBreak"];
+	lResistance	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calofCapacity"];
 	isSafePb	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafePb"];
 	isSafeLR	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafeLR"];
 
 	subgraph IM {
 	rank="same"
-	{probBr, isSafePb, isSafeLR}
+	{probBr, lResistance, isSafePb, isSafeLR}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

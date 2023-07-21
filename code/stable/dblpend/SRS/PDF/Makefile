@@ -6,4 +6,4 @@ DblPend_SRS.pdf: DblPend_SRS.tex
 	lualatex $(TEXFLAGS) DblPend_SRS
 	lualatex $(TEXFLAGS) DblPend_SRS
 
-.PHONY:
+.PHONY: srs

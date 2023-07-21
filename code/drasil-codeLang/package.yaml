@@ -1,8 +1,8 @@
-name:                drasil-build
-version:             0.1.1.0
-author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
+name:                drasil-codeLang
+version:             0.1.0.0
+author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith, Harmanpreet Singh Sagar"
 maintainer:          "Jacques Carette"
-synopsis:	           A framework for code and document generation for scientific software - Build System SubPackage
+synopsis:	     A framework for code and document generation for scientific software - Code Language SubPackage
 github:              JacquesCarette/Drasil
 homepage:            https://jacquescarette.github.io/Drasil/
 description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
@@ -11,10 +11,6 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- pretty
-- text
-- word-wrap
-- drasil-codeLang
 
 ghc-options:
 - -Wall
@@ -23,7 +19,7 @@ ghc-options:
 library:
   source-dirs: lib
   exposed-modules:
-  - Build.Drasil
+  - CodeLang.Drasil
   when:
   - condition: false
-    other-modules: Paths_drasil_build
+    other-modules: Paths_drasil_codeLang

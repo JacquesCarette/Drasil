@@ -23,8 +23,8 @@ data DocSpec = DocSpec DocChoices Filename
 instance RuleTransformer DocSpec where
   makeRule (DocSpec (DC Website _) _) = []
   makeRule (DocSpec (DC dt _) fn) = [
-    mkRule (makeS $ map toLower $ show dt) [pdfName] [],
-    mkFile pdfName [makeS $ fn ++ ".tex"] $
+    mkRule [] (makeS $ map toLower $ show dt) [pdfName] [],
+    mkFile [] pdfName [makeS $ fn ++ ".tex"] $
       map ($ fn) [lualatex, bibtex, lualatex, lualatex]] where
         lualatex, bibtex :: String -> Command
         lualatex = mkCheckedCommand . (+:+) (makeS "lualatex" +:+ mkFreeVar "TEXFLAGS") . makeS

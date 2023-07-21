@@ -36,6 +36,7 @@ import GOOL.Drasil.State (GS, FS, CS, MS, VS)
 
 import qualified Data.Kind as K (Type)
 import Data.Bifunctor (first)
+import CodeLang.Drasil (Comment)
 
 type Label = String
 type Library = String
@@ -472,8 +473,6 @@ class (VariableSym r, StatementSym r) => FuncAppStatement r where
   inOutCall     ::            InOutCall r
   selfInOutCall ::            InOutCall r
   extInOutCall  :: Library -> InOutCall r
-
-type Comment = String  
 
 class (StatementSym r) => CommentStatement r where
   comment :: Comment -> MSStatement r

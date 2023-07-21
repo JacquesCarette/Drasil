@@ -60,7 +60,7 @@ varName (Os s _ _ _) = s
 
 -- | Extracts variables from a Makefile rule.
 extractVars :: Rule -> [MVar]
-extractVars (R t d _ cs) = concatMap getVars $ t : d ++ map (\(C s _) -> s) cs
+extractVars (R _ t d _ cs) = concatMap getVars $ t : d ++ map (\(C s _) -> s) cs
 
 -- | Gets one or more variables from a MakeString.
 getVars :: MakeString -> [MVar]

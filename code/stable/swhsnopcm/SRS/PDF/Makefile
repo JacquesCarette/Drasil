@@ -6,4 +6,4 @@ SWHSNoPCM_SRS.pdf: SWHSNoPCM_SRS.tex
 	lualatex $(TEXFLAGS) SWHSNoPCM_SRS
 	lualatex $(TEXFLAGS) SWHSNoPCM_SRS
 
-.PHONY:
+.PHONY: srs

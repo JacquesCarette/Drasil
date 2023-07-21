@@ -13,7 +13,10 @@ else
     endif
 endif
 
-# Project Name and Purpose: SWHSNoPCM - To investigate the heating of water in a solar water heating tank.
+# Project Name: SWHSNoPCM
+
+# Project Purpose: Investigate the heating of water in a solar water heating
+# tank.
 
 build: SWHSNoPCM$(TARGET_EXTENSION)
 

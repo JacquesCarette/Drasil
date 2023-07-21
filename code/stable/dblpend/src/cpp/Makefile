@@ -10,7 +10,9 @@ else
     endif
 endif
 
-# Project Name and Purpose: DblPend - To predict the motion of a pendulum.
+# Project Name: DblPend
+
+# Project Purpose: Predict the motion of a pendulum.
 
 build: DblPend$(TARGET_EXTENSION)
 

@@ -502,7 +502,7 @@ Notes & $a$ and $b$ are the dimensions of the plate, where ($a\geq{}b$).
 Source & \cite{astm2009}, \cite[(Eqs. 4-5)]{beasonEtAl1998}, and \cite[(Eq. 14)]{campidelli}
          
 \\ \midrule
-RefBy & \hyperref[DD:probOfBreak]{DD:probOfBreak}
+RefBy & \hyperref[IM:probOfBreak]{IM:probOfBreak}
         
 \\ \bottomrule
 \end{tabular}
@@ -1002,44 +1002,6 @@ RefBy & \hyperref[DD:calofDemand]{DD:calofDemand}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:probOfBreak}
-\phantomsection 
-\label{DD:probOfBreak}
-\\ \midrule
-Label & Probability of breakage
-        
-\\ \midrule
-Symbol & ${P_{\text{b}}}$
-         
-\\ \midrule
-Units & Unitless
-        
-\\ \midrule
-Equation & \begin{displaymath}
-           {P_{\text{b}}}=1-e^{-B}
-           \end{displaymath}
-\\ \midrule
-Description & \begin{symbDescription}
-              \item{${P_{\text{b}}}$ is the probability of breakage (Unitless)}
-              \item{$B$ is the risk of failure (Unitless)}
-              \end{symbDescription}
-\\ \midrule
-Notes & $B$ is defined in \hyperref[DD:riskFun]{DD:riskFun}.
-        
-\\ \midrule
-Source & \cite{astm2009} and \cite{beasonEtAl1998}
-         
-\\ \midrule
-RefBy & \hyperref[IM:isSafePb]{IM:isSafePb}
-        
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
-
-\vspace{\baselineskip}
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:calofCapacity}
 \phantomsection 
 \label{DD:calofCapacity}
@@ -1130,6 +1092,47 @@ The goal \hyperref[willBreakGS]{GS:Predict-Glass-Withstands-Explosion} is met by
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{IM:probOfBreak}
+\phantomsection 
+\label{IM:probOfBreak}
+\\ \midrule
+Label & Probability of breakage
+        
+\\ \midrule
+Input & $B$
+        
+\\ \midrule
+Output & ${P_{\text{b}}}$
+         
+\\ \midrule
+Input Constraints & 
+\\ \midrule
+Output Constraints & 
+\\ \midrule
+Equation & \begin{displaymath}
+           {P_{\text{b}}}=1-e^{-B}
+           \end{displaymath}
+\\ \midrule
+Description & \begin{symbDescription}
+              \item{${P_{\text{b}}}$ is the probability of breakage (Unitless)}
+              \item{$B$ is the risk of failure (Unitless)}
+              \end{symbDescription}
+\\ \midrule
+Notes & $B$ is defined in \hyperref[DD:riskFun]{DD:riskFun}.
+        
+\\ \midrule
+Source & \cite{astm2009} and \cite{beasonEtAl1998}
+         
+\\ \midrule
+RefBy & \hyperref[IM:isSafePb]{IM:isSafePb}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:isSafePb}
 \phantomsection 
 \label{IM:isSafePb}
@@ -1164,7 +1167,7 @@ Description & \begin{symbDescription}
 \\ \midrule
 Notes & If $\mathit{isSafePb}$, the glass is considered safe. $\mathit{isSafePb}$ and $\mathit{isSafePb}$ (from \hyperref[IM:isSafeLR]{IM:isSafeLR}) are either both True or both False.
         
-        ${P_{\text{b}}}$ is defined in \hyperref[DD:probOfBreak]{DD:probOfBreak}.
+        ${P_{\text{b}}}$ is defined in \hyperref[IM:probOfBreak]{IM:probOfBreak}.
         
         ${P_{\text{b}\text{tol}}}$ is entered by the user.
         
@@ -1357,6 +1360,8 @@ ${J_{\text{tol}}}$ & Stress distribution factor (Function) based on Pbtol & \hyp
 \\
 $\mathit{NFL}$ & Non-factored load & \hyperref[DD:nFL]{DD:nFL} & ${\text{Pa}}$
 \\
+${P_{\text{b}}}$ & Probability of breakage & \hyperref[IM:probOfBreak]{IM:probOfBreak} & --
+\\
 $\hat{q}$ & Dimensionless load & \hyperref[DD:dimlessLoad]{DD:dimlessLoad} & --
 \\
 ${\hat{q}_{\text{tol}}}$ & Tolerable load & \hyperref[DD:tolLoad]{DD:tolLoad} & --
@@ -1448,8 +1453,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:eqTNTW]{DD:eqTNTW} &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:probOfBreak]{DD:probOfBreak} &  &  &  &  &  &  &  & 
-\\
 \hyperref[DD:calofCapacity]{DD:calofCapacity} &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:calofDemand]{DD:calofDemand} &  &  &  &  &  &  &  & 
@@ -1457,6 +1460,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[TM:isSafeProb]{TM:isSafeProb} &  &  &  &  &  &  &  & 
 \\
 \hyperref[TM:isSafeLoad]{TM:isSafeLoad} &  &  &  &  &  &  &  & 
+\\
+\hyperref[IM:probOfBreak]{IM:probOfBreak} &  &  &  &  &  &  &  & 
 \\
 \hyperref[IM:isSafePb]{IM:isSafePb} &  &  &  &  &  &  &  & 
 \\
@@ -1504,7 +1509,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Items and Other Sections}]
 {colspec={l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:riskFun]{DD:riskFun}} & \textbf{\hyperref[DD:minThick]{DD:minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD:loadDurFactor}} & \textbf{\hyperref[DD:stressDistFac]{DD:stressDistFac}} & \textbf{\hyperref[DD:nFL]{DD:nFL}} & \textbf{\hyperref[DD:gTF]{DD:gTF}} & \textbf{\hyperref[DD:dimlessLoad]{DD:dimlessLoad}} & \textbf{\hyperref[DD:tolLoad]{DD:tolLoad}} & \textbf{\hyperref[DD:sdfTol]{DD:sdfTol}} & \textbf{\hyperref[DD:standOffDist]{DD:standOffDist}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[DD:eqTNTW]{DD:eqTNTW}} & \textbf{\hyperref[DD:probOfBreak]{DD:probOfBreak}} & \textbf{\hyperref[DD:calofCapacity]{DD:calofCapacity}} & \textbf{\hyperref[DD:calofDemand]{DD:calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM:isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM:isSafeLoad}} & \textbf{\hyperref[IM:isSafePb]{IM:isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM:isSafeLR}}
+\textbf{} & \textbf{\hyperref[DD:riskFun]{DD:riskFun}} & \textbf{\hyperref[DD:minThick]{DD:minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD:loadDurFactor}} & \textbf{\hyperref[DD:stressDistFac]{DD:stressDistFac}} & \textbf{\hyperref[DD:nFL]{DD:nFL}} & \textbf{\hyperref[DD:gTF]{DD:gTF}} & \textbf{\hyperref[DD:dimlessLoad]{DD:dimlessLoad}} & \textbf{\hyperref[DD:tolLoad]{DD:tolLoad}} & \textbf{\hyperref[DD:sdfTol]{DD:sdfTol}} & \textbf{\hyperref[DD:standOffDist]{DD:standOffDist}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[DD:eqTNTW]{DD:eqTNTW}} & \textbf{\hyperref[DD:calofCapacity]{DD:calofCapacity}} & \textbf{\hyperref[DD:calofDemand]{DD:calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM:isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM:isSafeLoad}} & \textbf{\hyperref[IM:probOfBreak]{IM:probOfBreak}} & \textbf{\hyperref[IM:isSafePb]{IM:isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM:isSafeLR}}
 \\
 \hyperref[DD:riskFun]{DD:riskFun} &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1518,7 +1523,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:gTF]{DD:gTF} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:dimlessLoad]{DD:dimlessLoad} &  & X &  &  &  & X &  &  &  &  &  &  &  &  & X &  &  &  & 
+\hyperref[DD:dimlessLoad]{DD:dimlessLoad} &  & X &  &  &  & X &  &  &  &  &  &  &  & X &  &  &  &  & 
 \\
 \hyperref[DD:tolLoad]{DD:tolLoad} &  &  &  &  &  &  &  &  & X &  & X &  &  &  &  &  &  &  & 
 \\
@@ -1530,8 +1535,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:eqTNTW]{DD:eqTNTW} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:probOfBreak]{DD:probOfBreak} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
 \hyperref[DD:calofCapacity]{DD:calofCapacity} &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:calofDemand]{DD:calofDemand} &  &  &  &  &  &  &  &  &  & X &  & X &  &  &  &  &  &  & 
@@ -1540,15 +1543,17 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[TM:isSafeLoad]{TM:isSafeLoad} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:isSafePb]{IM:isSafePb} &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & X
+\hyperref[IM:probOfBreak]{IM:probOfBreak} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:isSafeLR]{IM:isSafeLR} &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X & 
+\hyperref[IM:isSafePb]{IM:isSafePb} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & X
+\\
+\hyperref[IM:isSafeLR]{IM:isSafeLR} &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  & X & 
 \label{Table:TraceMatRefvsRef}
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
 {colspec={l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:riskFun]{DD:riskFun}} & \textbf{\hyperref[DD:minThick]{DD:minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD:loadDurFactor}} & \textbf{\hyperref[DD:stressDistFac]{DD:stressDistFac}} & \textbf{\hyperref[DD:nFL]{DD:nFL}} & \textbf{\hyperref[DD:gTF]{DD:gTF}} & \textbf{\hyperref[DD:dimlessLoad]{DD:dimlessLoad}} & \textbf{\hyperref[DD:tolLoad]{DD:tolLoad}} & \textbf{\hyperref[DD:sdfTol]{DD:sdfTol}} & \textbf{\hyperref[DD:standOffDist]{DD:standOffDist}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[DD:eqTNTW]{DD:eqTNTW}} & \textbf{\hyperref[DD:probOfBreak]{DD:probOfBreak}} & \textbf{\hyperref[DD:calofCapacity]{DD:calofCapacity}} & \textbf{\hyperref[DD:calofDemand]{DD:calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM:isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM:isSafeLoad}} & \textbf{\hyperref[IM:isSafePb]{IM:isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM:isSafeLR}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}} & \textbf{\hyperref[checkInputWithDataCons]{FR:Check-Input-with-Data\_Constraints}} & \textbf{\hyperref[outputValsAndKnownValues]{FR:Output-Values-and-Known-Values}} & \textbf{\hyperref[checkGlassSafety]{FR:Check-Glass-Safety}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[verifiable]{NFR:Verifiable}} & \textbf{\hyperref[understandable]{NFR:Understandable}} & \textbf{\hyperref[reusable]{NFR:Reusable}} & \textbf{\hyperref[maintainable]{NFR:Maintainable}} & \textbf{\hyperref[portable]{NFR:Portable}}
+\textbf{} & \textbf{\hyperref[DD:riskFun]{DD:riskFun}} & \textbf{\hyperref[DD:minThick]{DD:minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD:loadDurFactor}} & \textbf{\hyperref[DD:stressDistFac]{DD:stressDistFac}} & \textbf{\hyperref[DD:nFL]{DD:nFL}} & \textbf{\hyperref[DD:gTF]{DD:gTF}} & \textbf{\hyperref[DD:dimlessLoad]{DD:dimlessLoad}} & \textbf{\hyperref[DD:tolLoad]{DD:tolLoad}} & \textbf{\hyperref[DD:sdfTol]{DD:sdfTol}} & \textbf{\hyperref[DD:standOffDist]{DD:standOffDist}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[DD:eqTNTW]{DD:eqTNTW}} & \textbf{\hyperref[DD:calofCapacity]{DD:calofCapacity}} & \textbf{\hyperref[DD:calofDemand]{DD:calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM:isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM:isSafeLoad}} & \textbf{\hyperref[IM:probOfBreak]{IM:probOfBreak}} & \textbf{\hyperref[IM:isSafePb]{IM:isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM:isSafeLR}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}} & \textbf{\hyperref[checkInputWithDataCons]{FR:Check-Input-with-Data\_Constraints}} & \textbf{\hyperref[outputValsAndKnownValues]{FR:Output-Values-and-Known-Values}} & \textbf{\hyperref[checkGlassSafety]{FR:Check-Glass-Safety}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[verifiable]{NFR:Verifiable}} & \textbf{\hyperref[understandable]{NFR:Understandable}} & \textbf{\hyperref[reusable]{NFR:Reusable}} & \textbf{\hyperref[maintainable]{NFR:Maintainable}} & \textbf{\hyperref[portable]{NFR:Portable}}
 \\
 \hyperref[willBreakGS]{GS:Predict-Glass-Withstands-Explosion} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1560,7 +1565,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[outputValsAndKnownValues]{FR:Output-Values-and-Known-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[checkGlassSafety]{FR:Check-Glass-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[checkGlassSafety]{FR:Check-Glass-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\

@@ -1081,7 +1081,7 @@
                     <tr>
                       <th>RefBy</th>
                       <td>
-                        <p class="paragraph"><a href=#DD:probOfBreak>DD:probOfBreak</a></p>
+                        <p class="paragraph"><a href=#IM:probOfBreak>IM:probOfBreak</a></p>
                       </td>
                     </tr>
                   </table>
@@ -1823,64 +1823,6 @@
                   </table>
                 </div>
                 <p class="paragraph"></p>
-                <div id="DD:probOfBreak">
-                  <table class="ddefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>DD:probOfBreak</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">Probability of breakage</p></td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em>P<sub>b</sub></em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph">Unitless</p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>\[{P_{\text{b}}}=1-e^{-B}\]</td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li>
-                            <em>P<sub>b</sub></em> is the probability of breakage (Unitless)
-                          </li>
-                          <li><em>B</em> is the risk of failure (Unitless)</li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>B</em> is defined in <a href=#DD:riskFun>DD:riskFun</a>.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td>
-                        <p class="paragraph">
-                          <a href=#astm2009>astm2009</a> and <a href=#beasonEtAl1998>beasonEtAl1998</a>
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph"><a href=#IM:isSafePb>IM:isSafePb</a></p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <p class="paragraph"></p>
                 <div id="DD:calofCapacity">
                   <table class="ddefn">
                     <tr>
@@ -2010,6 +1952,71 @@
                 <p class="paragraph">
                   The goal <a href=#willBreakGS>GS:Predict-Glass-Withstands-Explosion</a> is met by <a href=#IM:isSafePb>IM:isSafePb</a>, <a href=#IM:isSafeLR>IM:isSafeLR</a>.
                 </p>
+                <div id="IM:probOfBreak">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:probOfBreak</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Probability of breakage</p></td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td><p class="paragraph"><em>B</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>P<sub>b</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[{P_{\text{b}}}=1-e^{-B}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>P<sub>b</sub></em> is the probability of breakage (Unitless)
+                          </li>
+                          <li><em>B</em> is the risk of failure (Unitless)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>B</em> is defined in <a href=#DD:riskFun>DD:riskFun</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#astm2009>astm2009</a> and <a href=#beasonEtAl1998>beasonEtAl1998</a>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#IM:isSafePb>IM:isSafePb</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
                 <div id="IM:isSafePb">
                   <table class="idefn">
                     <tr>
@@ -2072,7 +2079,7 @@
                           If <em>isSafePb</em>, the glass is considered safe. <em>isSafePb</em> and <em>isSafePb</em> (from <a href=#IM:isSafeLR>IM:isSafeLR</a>) are either both True or both False.
                         </p>
                         <p class="paragraph">
-                          <em>P<sub>b</sub></em> is defined in <a href=#DD:probOfBreak>DD:probOfBreak</a>.
+                          <em>P<sub>b</sub></em> is defined in <a href=#IM:probOfBreak>IM:probOfBreak</a>.
                         </p>
                         <p class="paragraph">
                           <em>P<sub>btol</sub></em> is entered by the user.
@@ -2522,6 +2529,12 @@
                   <td><em>Pa</em></td>
                 </tr>
                 <tr>
+                  <td><em>P<sub>b</sub></em></td>
+                  <td>Probability of breakage</td>
+                  <td><a href=#IM:probOfBreak>IM:probOfBreak</a></td>
+                  <td>--</td>
+                </tr>
+                <tr>
                   <td><em>q&#770;</em></td>
                   <td>Dimensionless load</td>
                   <td><a href=#DD:dimlessLoad>DD:dimlessLoad</a></td>
@@ -2891,17 +2904,6 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:probOfBreak>DD:probOfBreak</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#DD:calofCapacity>DD:calofCapacity</a></td>
               <td></td>
               <td></td>
@@ -2936,6 +2938,17 @@
             </tr>
             <tr>
               <td><a href=#TM:isSafeLoad>TM:isSafeLoad</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:probOfBreak>IM:probOfBreak</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3213,11 +3226,11 @@
               <th><a href=#DD:standOffDist>DD:standOffDist</a></th>
               <th><a href=#DD:aspectRatio>DD:aspectRatio</a></th>
               <th><a href=#DD:eqTNTW>DD:eqTNTW</a></th>
-              <th><a href=#DD:probOfBreak>DD:probOfBreak</a></th>
               <th><a href=#DD:calofCapacity>DD:calofCapacity</a></th>
               <th><a href=#DD:calofDemand>DD:calofDemand</a></th>
               <th><a href=#TM:isSafeProb>TM:isSafeProb</a></th>
               <th><a href=#TM:isSafeLoad>TM:isSafeLoad</a></th>
+              <th><a href=#IM:probOfBreak>IM:probOfBreak</a></th>
               <th><a href=#IM:isSafePb>IM:isSafePb</a></th>
               <th><a href=#IM:isSafeLR>IM:isSafeLR</a></th>
             </tr>
@@ -3368,8 +3381,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3486,28 +3499,6 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:probOfBreak>DD:probOfBreak</a></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#DD:calofCapacity>DD:calofCapacity</a></td>
               <td></td>
               <td></td>
@@ -3596,6 +3587,28 @@
               <td></td>
             </tr>
             <tr>
+              <td><a href=#IM:probOfBreak>IM:probOfBreak</a></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#IM:isSafePb>IM:isSafePb</a></td>
               <td></td>
               <td></td>
@@ -3609,11 +3622,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td>X</td>
             </tr>
@@ -3631,9 +3644,9 @@
               <td></td>
               <td></td>
               <td></td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
-              <td>X</td>
-              <td>X</td>
               <td></td>
               <td></td>
               <td>X</td>
@@ -3660,11 +3673,11 @@
               <th><a href=#DD:standOffDist>DD:standOffDist</a></th>
               <th><a href=#DD:aspectRatio>DD:aspectRatio</a></th>
               <th><a href=#DD:eqTNTW>DD:eqTNTW</a></th>
-              <th><a href=#DD:probOfBreak>DD:probOfBreak</a></th>
               <th><a href=#DD:calofCapacity>DD:calofCapacity</a></th>
               <th><a href=#DD:calofDemand>DD:calofDemand</a></th>
               <th><a href=#TM:isSafeProb>TM:isSafeProb</a></th>
               <th><a href=#TM:isSafeLoad>TM:isSafeLoad</a></th>
+              <th><a href=#IM:probOfBreak>IM:probOfBreak</a></th>
               <th><a href=#IM:isSafePb>IM:isSafePb</a></th>
               <th><a href=#IM:isSafeLR>IM:isSafeLR</a></th>
               <th><a href=#inputValues>FR:Input-Values</a></th>
@@ -3880,9 +3893,9 @@
               <td></td>
               <td></td>
               <td></td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
-              <td>X</td>
-              <td>X</td>
               <td></td>
               <td></td>
               <td></td>

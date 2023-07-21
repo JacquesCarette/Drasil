@@ -200,9 +200,6 @@
             "nFL"
         ],
         [
-            "probBr"
-        ],
-        [
             "riskFun"
         ],
         [
@@ -225,6 +222,9 @@
         ],
         [
             "isSafePb"
+        ],
+        [
+            "probBr"
         ]
     ],
     "labelledContent": [

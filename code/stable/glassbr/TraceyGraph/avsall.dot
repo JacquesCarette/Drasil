@@ -39,13 +39,12 @@ digraph avsall {
 	stdOffDist	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:standOffDist"];
 	aR	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:aspectRatio"];
 	eqTNTChar	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:eqTNTW"];
-	probBr	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:probOfBreak"];
 	lResistance	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:calofCapacity"];
 	demandq	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:calofDemand"];
 
 	subgraph DD {
 	rank="same"
-	{riskFun, minThick, loadDurFactor, stressDistFac, nFL, glassTypeFac, dimlessLoad, tolLoad, sdfTol, stdOffDist, aR, eqTNTChar, probBr, lResistance, demandq}
+	{riskFun, minThick, loadDurFactor, stressDistFac, nFL, glassTypeFac, dimlessLoad, tolLoad, sdfTol, stdOffDist, aR, eqTNTChar, lResistance, demandq}
 	}
 
 	isSafeProb	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeProb"];
@@ -56,12 +55,13 @@ digraph avsall {
 	{isSafeProb, isSafeLoad}
 	}
 
+	probBr	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:probOfBreak"];
 	isSafePb	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafePb"];
 	isSafeLR	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafeLR"];
 
 	subgraph IM {
 	rank="same"
-	{isSafePb, isSafeLR}
+	{probBr, isSafePb, isSafeLR}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

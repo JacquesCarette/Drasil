@@ -1,6 +1,7 @@
-module Drasil.GlassBR.DataDefs (aspRat, dataDefs, dimLL, qDefns, glaTyFac,
+module Drasil.GlassBR.DataDefs {- temporarily export everything-}
+{- (aspRat, dataDefs, dimLL, qDefns, glaTyFac,
   hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac,
-  eqTNTWDD, probOfBreak, calofCapacity, calofDemand, pbTolUsr, qRef,configFp)
+  eqTNTWDD, calofCapacity, calofDemand, pbTolUsr, qRef,configFp)-}
   where
 
 import Control.Lens ((^.))
@@ -33,7 +34,7 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspectRatio, charWeight,
 
 dataDefs :: [DataDefinition]
 dataDefs = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
-  tolStrDisFac, standOffDis, aspRat, eqTNTWDD, probOfBreak, calofCapacity,
+  tolStrDisFac, standOffDis, aspRat, eqTNTWDD, calofCapacity,
   calofDemand]
 
 qDefns :: [Block SimpleQDef]
@@ -201,17 +202,6 @@ eqTNTWQD = mkQuantDef eqTNTWeight eqTNTWEq
 
 eqTNTWDD :: DataDefinition
 eqTNTWDD = ddE eqTNTWQD [dRef astm2009] Nothing "eqTNTW" []
-
-{--}
-
-probOfBreakEq :: Expr
-probOfBreakEq = exactDbl 1 $- exp (neg (sy risk))
-
-probOfBreakQD :: SimpleQDef
-probOfBreakQD = mkQuantDef probBr probOfBreakEq
-
-probOfBreak :: DataDefinition
-probOfBreak = ddE probOfBreakQD (map dRef [astm2009, beasonEtAl1998]) Nothing "probOfBreak" [riskRef]
 
 {--}
 

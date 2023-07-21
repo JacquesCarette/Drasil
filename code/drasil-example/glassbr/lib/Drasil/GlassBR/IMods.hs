@@ -1,27 +1,42 @@
 module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro) where
 
+import Control.Lens ((^.))
 import Prelude hiding (exp)
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoDeriv, qwC, equationalModelN)
+import Theory.Drasil (InstanceModel, imNoDeriv, qwC, qwUC, equationalModelN)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
+
+import Data.Drasil.Concepts.Documentation (goal)
 import Data.Drasil.SI_Units
-import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity,
-  pbTolUsr, qRef)
+
+import Drasil.GlassBR.DataDefs {- temporarily import everything -}
 import Drasil.GlassBR.Goals (willBreakGS)
-import Drasil.GlassBR.References (astm2009)
+import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (charWeight, demand, isSafeLR, isSafePb,
   lRe, pbTol, plateLen, plateWidth, probBr, standOffDist)
 
-import Data.Drasil.Concepts.Documentation (goal)
 
 iMods :: [InstanceModel]
-iMods = [pbIsSafe, lrIsSafe]
+iMods = [probOfBreak, pbIsSafe, lrIsSafe]
 
 symb :: [UnitalChunk]
 symb =  [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram, ucuc standOffDist metre, demand] -- this is temporary
 -- ++
  -- [dqdQd (qw calofDemand) demandq]
+
+{--}
+
+probOfBreak :: InstanceModel
+probOfBreak = imNoDeriv (equationalModelN (probBr ^. term) probOfBreakQD)
+  [qwUC risk] (qw probBr) [] (map dRef [astm2009, beasonEtAl1998]) "probOfBreak"
+  [riskRef]
+
+probOfBreakEq :: Expr
+probOfBreakEq = exactDbl 1 $- exp (neg (sy risk))
+
+probOfBreakQD :: SimpleQDef
+probOfBreakQD = mkQuantDef probBr probOfBreakEq
 
 {--}
 

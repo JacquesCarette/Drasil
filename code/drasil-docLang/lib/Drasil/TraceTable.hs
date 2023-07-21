@@ -12,6 +12,7 @@ import Theory.Drasil (Theory(..))
 import Control.Lens ((^.))
 import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (foldFor, preorderFold, purePlate)
+import Data.List (transpose)
 
 -- | Creates a dependency plate for 'UID's.
 dependencyPlate :: DLPlate (Constant [(UID, [UID])])
@@ -27,9 +28,10 @@ dependencyPlate = preorderFold $ purePlate {
     (GDs _ _ g _) -> getDependenciesOf [defs, derivs, notes] g
     (IMs _ _ i _) -> getDependenciesOf [derivs, notes] i
     _ -> [],
-  reqSub = Constant . getDependenciesOf [defs] <$> \case
-    (FReqsSub c _) -> c
-    (NonFReqsSub c) -> c,
+  reqSub = Constant <$> \case
+    (FReqsSub c t) -> getDependenciesOf [defs] c ++
+      map (\x -> getSourcesOf (x ^. accessContents)) t
+    (NonFReqsSub c) -> getDependenciesOf [defs] c,
   lcsSec = Constant . getDependenciesOf [defs] <$> \(LCsProg c) -> c,
   ucsSec = Constant . getDependenciesOf [defs] <$> \(UCsProg c) -> c
 } where
@@ -41,6 +43,14 @@ dependencyPlate = preorderFold $ purePlate {
   derivs x = maybe [] (\(Derivation h d) -> h : d) $ x ^. derivations
   notes :: HasAdditionalNotes a => a -> [Sentence]
   notes = (^. getNotes)
+  getSourcesOf :: RawContent -> (UID, [UID])
+  getSourcesOf (Table s1 s2 t _) = (last $ lnames' [t], lnames' $ isSource (s1, transpose s2))
+  getSourcesOf _ = error "Unexpected type of LabelledContent in Functional Requirement"
+  isSource :: ([Sentence], [[Sentence]]) -> [Sentence]
+  isSource (S "Source" : _, hd1 : _) = hd1
+  isSource (_ : tl, _ : tl1) = isSource (tl, tl1)
+  isSource ([], _) = []
+  isSource (_, []) = []
 
 -- | Creates a traceability map from document sections.
 generateTraceMap :: [DocSection] -> TraceMap

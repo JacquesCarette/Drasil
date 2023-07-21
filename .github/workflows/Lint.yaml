@@ -3,6 +3,9 @@ on:
     branches: master
     paths: 'code/drasil-*'
 name: Linter
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 defaults:
   run:
     shell: bash

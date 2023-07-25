@@ -113,7 +113,7 @@ mkSRS = [TableOfContents,
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub [InputReq inReqDesc, OutputReq] funcReqsTables,
+    FReqsSub [InputReq inReqDesc] funcReqsTables,
     NonFReqsSub
   ],
   LCsSec,

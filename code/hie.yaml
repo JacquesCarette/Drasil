@@ -21,11 +21,11 @@ cradle:
     - path: "drasil-docLang/lib"
       component: "drasil-docLang:lib"
 
-    - path: "drasil-example/dblpendulum/lib"
-      component: "dblpendulum:lib"
+    - path: "drasil-example/dblpend/lib"
+      component: "dblpend:lib"
 
-    - path: "drasil-example/dblpendulum/app/Main.hs"
-      component: "dblpendulum:exe:dblpendulum"
+    - path: "drasil-example/dblpend/app/Main.hs"
+      component: "dblpend:exe:dblpend"
 
     - path: "drasil-example/gamephysics/lib"
       component: "gamephysics:lib"
@@ -45,11 +45,11 @@ cradle:
     - path: "drasil-example/hghc/app/Main.hs"
       component: "hghc:exe:hghc"
 
-    - path: "drasil-example/nopcm/lib"
-      component: "nopcm:lib"
+    - path: "drasil-example/swhsnopcm/lib"
+      component: "swhsnopcm:lib"
 
-    - path: "drasil-example/nopcm/app/Main.hs"
-      component: "nopcm:exe:nopcm"
+    - path: "drasil-example/swhsnopcm/app/Main.hs"
+      component: "swhsnopcm:exe:swhsnopcm"
 
     - path: "drasil-example/pdcontroller/lib"
       component: "pdcontroller:lib"
@@ -63,11 +63,11 @@ cradle:
     - path: "drasil-example/projectile/app/Main.hs"
       component: "projectile:exe:projectile"
 
-    - path: "drasil-example/sglpendulum/lib"
-      component: "sglpendulum:lib"
+    - path: "drasil-example/sglpend/lib"
+      component: "sglpend:lib"
 
-    - path: "drasil-example/sglpendulum/app/Main.hs"
-      component: "sglpendulum:exe:sglpendulum"
+    - path: "drasil-example/sglpend/app/Main.hs"
+      component: "sglpend:exe:sglpend"
 
     - path: "drasil-example/ssp/lib"
       component: "ssp:lib"

@@ -48,7 +48,7 @@ import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
 import qualified Drasil.Sections.Stakeholders as Stk (stakeholderIntro,
   tClientF, tCustomerF)
 import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (
-  generateTraceTableView, traceMHeader, TraceViewCat)
+  generateTraceTableView, traceMHeader, layoutUIDs)
 import qualified Drasil.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
 import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs)
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
@@ -429,12 +429,8 @@ mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
     trace = map (\(TraceConfig u _ desc cols rows) -> TM.generateTraceTableView
       u desc cols rows si) fProgs
     fProgs = filter (\(TraceConfig _ _ _ cols rows) -> not $ null 
-      (header (showUIDs rows sidb) si) || null (header (showUIDs cols sidb) si)) progs
+      (header (TM.layoutUIDs rows sidb) si) || null (header (TM.layoutUIDs cols sidb) si)) progs
     sidb = _sysinfodb si
-
--- | Helper to get UIDs
-showUIDs :: [TM.TraceViewCat] -> ChunkDB -> [UID] -> [UID]
-showUIDs a s e = concatMap (filter (`elem` (Map.keys $ s ^. traceTable)) . (\ x -> x e s)) a
 
 -- | Helper to get headers of rows and columns
 header :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]

@@ -84,7 +84,7 @@ overviewParagraph programDefinition = foldlSP [S "The following", phrase section
 -- | Constructor for Purpose of Document section that each example controls.
 purpDocPara1 :: CI -> Sentence 
 purpDocPara1 proName = foldlSent [S "The primary purpose of this", phrase document, S "is to",
-  S "record the", plural requirement, S "of the" +:+. titleize proName, 
+  S "record the", plural requirement, S "of" +:+. getAcc proName, 
   atStart' goal `sC` plural assumption `sC` plural thModel `sC` 
   plural definition `sC` S "and other", phrase model, S "derivation",
   phrase information, S "are specified" `sC` S "allowing the reader to fully",

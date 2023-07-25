@@ -8,21 +8,21 @@ import SysInfo.Drasil (SystemInformation(..))
 import Language.Drasil.Code (Choices(..), Lang(..))
 import Data.Char (toLower, isSpace)
 
-import qualified Drasil.DblPendulum.Body as DblPendulum (fullSI)
+import qualified Drasil.DblPend.Body as DblPend (fullSI)
 import qualified Drasil.GamePhysics.Body as GamePhysics (fullSI)
 import qualified Drasil.GlassBR.Body as GlassBR (fullSI)
 import qualified Drasil.HGHC.Body as HGHC (fullSI)
-import qualified Drasil.NoPCM.Body as NoPCM (fullSI)
+import qualified Drasil.SWHSNoPCM.Body as NoPCM (fullSI)
 import qualified Drasil.PDController.Body as PDController (fullSI)
 import qualified Drasil.Projectile.Body as Projectile (fullSI)
-import qualified Drasil.SglPendulum.Body as SglPendulum (fullSI)
+import qualified Drasil.SglPend.Body as SglPend (fullSI)
 import qualified Drasil.SSP.Body as SSP (fullSI)
 import qualified Drasil.SWHS.Body as SWHS (fullSI)
 
 -- import choices for code generation
-import qualified Drasil.DblPendulum.Choices as DblPendulum (choices)
+import qualified Drasil.DblPend.Choices as DblPend (choices)
 import qualified Drasil.GlassBR.Choices as GlassBR (choices)
-import qualified Drasil.NoPCM.Choices as NoPCM (choices)
+import qualified Drasil.SWHSNoPCM.Choices as NoPCM (choices)
 import qualified Drasil.PDController.Choices as PDController (codeChoices)
 import qualified Drasil.Projectile.Choices as Projectile (codedDirName, choiceCombos)
 -- the other examples currently do not generate any code.
@@ -53,7 +53,7 @@ data Example = E {
 
 -- | Records example system information.
 allExampleSI :: [SystemInformation]
-allExampleSI = [DblPendulum.fullSI, GamePhysics.fullSI, GlassBR.fullSI, HGHC.fullSI, NoPCM.fullSI, PDController.fullSI, Projectile.fullSI, SglPendulum.fullSI, SSP.fullSI, SWHS.fullSI]
+allExampleSI = [DblPend.fullSI, GamePhysics.fullSI, GlassBR.fullSI, HGHC.fullSI, NoPCM.fullSI, PDController.fullSI, Projectile.fullSI, SglPend.fullSI, SSP.fullSI, SWHS.fullSI]
 
 -- | Records example descriptions.
 allExampleDesc :: [Sentence]
@@ -64,7 +64,7 @@ allExampleDesc = [dblPendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDes
 -- | Records example choices. The order of the list must match up with
 -- that in `allExampleSI`, or the Case Studies Table will be incorrect.
 allExampleChoices :: [[Choices]]
-allExampleChoices = [[DblPendulum.choices], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.codeChoices], Projectile.choiceCombos, [], [], []]
+allExampleChoices = [[DblPend.choices], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.codeChoices], Projectile.choiceCombos, [], [], []]
 
 -- | Combine system info, description, choices, and file paths into one nice package.
 allExamples :: [SystemInformation] -> [Sentence] -> [[Choices]] -> FilePath -> FilePath -> [Example]

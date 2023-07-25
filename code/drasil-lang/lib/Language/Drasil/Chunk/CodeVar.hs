@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 -- | Defines chunk types for use in code generation.
-module Language.Drasil.Chunk.CodeBase where
+module Language.Drasil.Chunk.CodeVar where
 
 import Control.Lens ((^.), view, makeLenses, Lens')
 

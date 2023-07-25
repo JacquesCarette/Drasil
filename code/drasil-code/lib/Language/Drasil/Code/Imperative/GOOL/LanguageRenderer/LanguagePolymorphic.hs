@@ -23,6 +23,7 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName,
 
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface ( ReadMeInfo(..),
   AuxiliarySym(Auxiliary, AuxHelper, auxHelperDoc, auxFromData))
+import Data.Drasil.DrasilConfig (DrasilConfig)
 
 -- | Defines a Doxygen configuration file.
 doxConfig :: (AuxiliarySym r) => r (AuxHelper r) -> String -> 
@@ -41,8 +42,8 @@ sampleInput db d sd = auxFromData sampleInputName (makeInputFile db d sd)
 
 -- | Defines a Makefile.
 makefile :: (AuxiliarySym r) => Maybe BuildConfig -> Maybe Runnable -> 
-  Maybe DocConfig -> GOOLState -> ProgData -> r (Auxiliary r)
-makefile bc r dc s p = auxFromData makefileName (makeBuild dc bc r s p)
+  Maybe DocConfig -> GOOLState -> ProgData -> DrasilConfig -> r (Auxiliary r)
+makefile bc r d s p dc = auxFromData makefileName (makeBuild d bc r s p dc)
 
 -- | Changes a 'Runnable' to 'Nothing' if the user chose 'Library' for the 'ImplementationType'.
 noRunIfLib :: ImplementationType -> Maybe Runnable -> Maybe Runnable

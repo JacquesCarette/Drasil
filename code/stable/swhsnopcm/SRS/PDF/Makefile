@@ -1,0 +1,9 @@
+srs: SWHSNoPCM_SRS.pdf
+
+SWHSNoPCM_SRS.pdf: SWHSNoPCM_SRS.tex
+	lualatex $(TEXFLAGS) SWHSNoPCM_SRS
+	-bibtex $(BIBTEXFLAGS) SWHSNoPCM_SRS
+	lualatex $(TEXFLAGS) SWHSNoPCM_SRS
+	lualatex $(TEXFLAGS) SWHSNoPCM_SRS
+
+.PHONY: srs

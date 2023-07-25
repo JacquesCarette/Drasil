@@ -70,11 +70,11 @@ swhs_diff | Solar Water Heating System with Phase Change Material
 glassbr_diff | Glass-BR
 hghc_diff | HGHC Toy Example
 ssp_diff | Slope Stability Analysis
-nopcm_diff | Minimal SWHS Example, with PCM Removed
+swhsnopcm_diff | Minimal SWHS Example, with PCM Removed
 projectile_diff | Projectile Motion Analysis
 pdcontroller_diff | Proportional Derivative Controller
-dblpendulum_diff | Double Pendulum
-sglpendulum_diff | Single Pendulum
+dblpend_diff | Double Pendulum
+sglpend_diff | Single Pendulum
 
 For more commands related to Drasil, use `make help` or check out the [Makefile documentation](https://github.com/JacquesCarette/Drasil/wiki/Makefile).
 
@@ -92,11 +92,11 @@ swhs | Solar Water Heating System with PCM (SWHS)
 glassbr | Glass-BR
 hghc | HGHC toy example
 ssp | Slope Stability Analysis (SSP)
-nopcm | SWHS without PCM (NoPCM)
+swhsnopcm | SWHS without PCM (SWHSNoPCM)
 projectile | Projectile motion analysis
 pdcontroller | Proportional Derivative Controller
-dblpendulum | Double Pendulum
-sglpendulum | Single Pendulum
+dblpend | Double Pendulum
+sglpend | Single Pendulum
 
 This runs the examples manually from the .stack-work folder after building, and the generated docs will
 appear in this folder (i.e. in the SRS folders). Due to this placement, these generated

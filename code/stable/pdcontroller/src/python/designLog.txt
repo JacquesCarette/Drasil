@@ -10,7 +10,7 @@ Comments selected as CommentFunc CommentClass CommentMod.
 Dox Verbosity selected as Verbose.
 Dates selected as Hide.
 Log File Name selected as log.txt.
-Logging selected as.
+Logging selected as None.
 Auxiliary Files selected as SampleInput ../../datafiles/pdcontroller/sampleInput.txt ReadME.
 Successfully selected first choice ODE Library package SciPy.
 Successfully matched String with String.

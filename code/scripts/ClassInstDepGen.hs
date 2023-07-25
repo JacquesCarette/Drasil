@@ -1,3 +1,12 @@
+#!/usr/bin/env stack
+{- stack script
+   --resolver lts-20.20
+   --package split
+   --package directory,filepath
+   --package text
+   --package containers
+-}
+
 -- FIXME: use real parser (Low Priority; see line 267)
 -- | Data table generator. Uses information from SourceCodeReader.hs 
 -- to organize all types, classes, and instances in Drasil.

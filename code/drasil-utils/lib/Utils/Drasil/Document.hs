@@ -36,7 +36,7 @@ alignImage img = text "<p align=\"center\">" <> contSep <> text ("<img src=\""
 
 -- | Path to the Drasil Configuration file.
 drasilConfigPath :: Int -> String
-drasilConfigPath num = (buildPath (num - 2)) ++ "drasil-metadata/lib/Data/Drasil/DrasilConfiguration.json"
+drasilConfigPath num = buildPath (num - 2) ++ "drasil-metadata/lib/Data/Drasil/DrasilConfiguration.json"
 
 -- | Separates document sections.
 type Separator = Doc

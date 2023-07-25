@@ -1,7 +1,6 @@
 module Drasil.GlassBR.DataDefs (aspRat, dataDefs, dimLL, qDefns, glaTyFac,
   hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac,
-  eqTNTWDD, probOfBreak, calofCapacity, calofDemand, pbTolUsr, qRef, configFp,
-  r6DDs)
+  eqTNTWDD, probOfBreak, calofCapacity, calofDemand, pbTolUsr, qRef,configFp)
   where
 
 import Control.Lens ((^.))
@@ -36,9 +35,6 @@ dataDefs :: [DataDefinition]
 dataDefs = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac,
   dimLL, tolPre, tolStrDisFac, standOffDis, aspRat, eqTNTWDD, probOfBreak,
   calofCapacity, calofDemand]
-
-r6DDs :: [DataDefinition]
-r6DDs = [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, hFromt, aspRat]
 
 qDefns :: [Block SimpleQDef]
 qDefns = Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}] : --can be calculated on their own

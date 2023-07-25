@@ -347,4 +347,4 @@ do {
 } catch {
     throw "Error closing file."
 }
-try write_output(&inParams, isSafePb, isSafeLR, B, J, NFL, q_hat, q_hat_tol, J_tol)
+try write_output(isSafePb, isSafeLR, P_b, J)

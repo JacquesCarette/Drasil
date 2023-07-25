@@ -34,7 +34,7 @@ import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, glassBR, 
   ptOfExplsn, con, con', glass)
-import Drasil.GlassBR.DataDefs (qDefns, configFp, r6DDs)
+import Drasil.GlassBR.DataDefs (qDefns, configFp)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures
 import Drasil.GlassBR.Goals (goals)
@@ -44,7 +44,7 @@ import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfunc
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
-  constrained, inputDataConstraints, inputs, specParamVals, glassTy,
+  constrained, inputDataConstraints, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
   sD, termsWithAccDefn, termsWithDefsOnly, terms)
 
@@ -70,7 +70,7 @@ si = SI {
   _datadefs    = GB.dataDefs,
   _configFiles = configFp,
   _inputs      = inputs,
-  _outputs     = map qw iMods ++ map qw r6DDs,
+  _outputs     = outputs,
   _defSequence = qDefns,
   _constraints = constrained,
   _constants   = constants,

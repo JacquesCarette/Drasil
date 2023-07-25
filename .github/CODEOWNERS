@@ -6,7 +6,7 @@
 
 # Examples
 
-code/drasil-example/dblpendulum/ @JacquesCarette @cd155
+code/drasil-example/dblpend/ @JacquesCarette @cd155
 code/drasil-example/glassbr/ @JacquesCarette @samm82
 code/drasil-example/projectile/ @JacquesCarette @samm82 @bmaclach
 code/drasil-example/template/ @JacquesCarette @samm82
@@ -16,7 +16,7 @@ code/drasil-example/template/ @JacquesCarette @samm82
 # Note that @JacquesCarette and @smiths have to be added to each rule because of how CODEOWNERS files work
 
 code/stable/ @JacquesCarette @smiths
-code/stable/dblpendulum/ @JacquesCarette @smiths @cd155
+code/stable/dblpend/ @JacquesCarette @smiths @cd155
 code/stable/glassbr/ @JacquesCarette @smiths @samm82
 code/stable/gooltest/ @JacquesCarette @smiths @bmaclach
 code/stable/projectile/ @JacquesCarette @smiths @samm82 @bmaclach

@@ -47,7 +47,7 @@ ncUID u np' = IdeaDict u np' Nothing
 -- | 'IdeaDict' is the canonical dictionary associated to an 'Idea'.
 -- Contains a 'UID' and a term that could have an abbreviation ('Maybe' 'String').
 --
--- Ex. The project name "Double Pendulum" may have the abbreviation "DblPendulum".
+-- Ex. The project name "Double Pendulum" may have the abbreviation "DblPend".
 data IdeaDict = IdeaDict {
   _uu :: UID,
   _np :: NP,

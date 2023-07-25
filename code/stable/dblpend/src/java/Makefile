@@ -1,0 +1,16 @@
+# Project Name: DblPend
+
+# Project Purpose: Predict the motion of a pendulum.
+
+build: DblPend/Control.class
+
+DblPend/Control.class: DblPend/Control.java DblPend/InputParameters.java DblPend/Constants.java DblPend/Calculations.java DblPend/OutputFormat.java DblPend/ODE.java DblPend/ODEStepHandler.java
+	javac -cp "lib/commons-math3-3.6.1.jar:." DblPend/Control.java
+
+run: build
+	java -cp "lib/commons-math3-3.6.1.jar:." DblPend.Control $(RUNARGS)
+
+doc: doxConfig DblPend/Control.java DblPend/InputParameters.java DblPend/Constants.java DblPend/Calculations.java DblPend/OutputFormat.java DblPend/ODE.java DblPend/ODEStepHandler.java
+	doxygen doxConfig
+
+.PHONY: build run doc

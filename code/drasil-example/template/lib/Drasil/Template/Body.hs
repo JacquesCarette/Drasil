@@ -134,8 +134,8 @@ outConstraints :: [UncertQ]
 outConstraints = []
 
 figTemp :: LabelledContent
-figTemp = llcc (makeFigRef "dblpendulum") $ figWithWidth EmptyS
-  (resourcePath ++ "dblpendulum.png") 60
+figTemp = llcc (makeFigRef "dblpend") $ figWithWidth EmptyS
+  (resourcePath ++ "dblpend.png") 60
 
 
 -- MOVE TO CONCEPTS

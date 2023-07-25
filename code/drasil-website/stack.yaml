@@ -16,12 +16,12 @@ packages:
 - ../drasil-sysinfo
 - ../drasil-theory
 - ../drasil-utils
-- ../drasil-example/sglpendulum
-- ../drasil-example/dblpendulum
+- ../drasil-example/sglpend
+- ../drasil-example/dblpend
 - ../drasil-example/gamephysics
 - ../drasil-example/glassbr
 - ../drasil-example/hghc
-- ../drasil-example/nopcm
+- ../drasil-example/swhsnopcm
 - ../drasil-example/pdcontroller
 - ../drasil-example/projectile
 - ../drasil-example/ssp

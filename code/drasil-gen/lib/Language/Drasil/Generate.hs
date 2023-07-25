@@ -36,6 +36,8 @@ import Language.Drasil.Dump
 import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
 import Data.Char (isSpace)
 
+import Data.Drasil.DrasilConfig (obtainVersion)
+
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
 gen ds fn sm = prnt sm ds fn -- FIXME: 'prnt' is just 'gen' with the arguments reordered
@@ -123,6 +125,7 @@ genCode chs spec = do
   time <- getCurrentTime
   sampData <- maybe (return []) (\sd -> readWithDataDesc sd $ sampleInputDD
     (extInputs spec)) (getSampleData chs)
+  x <- obtainVersion (folderVal chs)
   createDirectoryIfMissing False "src"
   setCurrentDirectory "src"
   let genLangCode Java = genCall Java unJC unJP
@@ -130,8 +133,9 @@ genCode chs spec = do
       genLangCode CSharp = genCall CSharp unCSC unCSP
       genLangCode Cpp = genCall Cpp unCPPC unCPPP
       genLangCode Swift = genCall Swift unSC unSP
+      dConfig = x
       genCall lng unProgRepr unPackRepr = generateCode lng unProgRepr
-        unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
+        unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec dConfig
   mapM_ genLangCode (lang chs)
   setCurrentDirectory workingDir
 

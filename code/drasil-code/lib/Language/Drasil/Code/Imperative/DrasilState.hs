@@ -24,6 +24,7 @@ import Control.Monad.State (State)
 import Data.List (nub)
 import Data.Map (Map, fromList)
 import Text.PrettyPrint.HughesPJ (Doc, ($$))
+import Data.Drasil.DrasilConfig (DrasilConfig)
 
 -- | Type for the mapping between 'Space's and 'CodeType's.
 type MatchedSpaces = Space -> GenState CodeType
@@ -70,6 +71,8 @@ data DrasilState = DrasilState {
   clsMap :: ClassDefinitionMap,
   defList :: [Name],
   getVal :: Int,
+  drasilConfig :: DrasilConfig,
+  
   -- Stateful
   currentModule :: String,
   currentClass :: String,

@@ -37,8 +37,8 @@ genModuleWithImports n desc is maybeMs maybeCs = do
   cs <- sequence maybeCs
   ms <- sequence maybeMs
   let commMod | CommentMod `elem` commented g                   = docMod desc 
-                  as (date g)
-              | CommentFunc `elem` commented g && not (null ms) = docMod "" []  
+                  as (drasilConfig g) (date g)
+              | CommentFunc `elem` commented g && not (null ms) = docMod "" [] (drasilConfig g) 
                   ""
               | otherwise                                       = id
   return $ commMod $ fileDoc $ buildModule n is (catMaybes ms) (catMaybes cs)

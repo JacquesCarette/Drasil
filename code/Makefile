@@ -342,8 +342,8 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod ch
 analysis: graphmod ##@Analysis Generate a table and some graphs to analyze Drasil's class, datatype, and instance structures.
 	- rm -rf "$(ANALYSIS_FOLDER)"
 	@mkdir -p "$(ANALYSIS_FOLDER)"
-	cd $(SCRIPT_FOLDER) && stack exec -- runghc ClassInstDepGen.hs
-	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeDepGen.hs
+	cd $(SCRIPT_FOLDER) && stack ClassInstDepGen.hs
+	cd $(SCRIPT_FOLDER) && stack TypeDepGen.hs
 	@echo "Analysis complete. Please see '$(ANALYSIS_FOLDER)' folder."
 
 convertAnalyzed: ##@Analysis Convert analyzed dot graphs into SVGs.

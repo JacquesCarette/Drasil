@@ -1,3 +1,12 @@
+#!/usr/bin/env stack
+{- stack script
+   --resolver lts-20.20
+   --package split
+   --package directory,filepath
+   --package text
+   --package containers
+-}
+
 -- FIXME: use real parser (Low Priority; see line 189)
 -- | Creates graphs showing the dependency of one type upon another.
 module TypeDepGen (main) where

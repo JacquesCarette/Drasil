@@ -10,7 +10,7 @@ Comments selected as CommentFunc CommentClass CommentMod.
 Dox Verbosity selected as Verbose.
 Dates selected as Hide.
 Log File Name selected as log.txt.
-Logging selected as.
+Logging selected as None.
 Auxiliary Files selected as SampleInput ../../datafiles/pdcontroller/sampleInput.txt ReadME.
 Language CSharp is not compatible with chosen library SciPy, trying next choice.
 ODE Library package selected as OSLO.

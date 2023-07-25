@@ -56,8 +56,6 @@ jobs:
         run: |
           echo "$HOME/.local/bin" >> $GITHUB_PATH
           echo "$HOME/.swift/usr/bin" >> $GITHUB_PATH
-      - name: "HLint"
-        run: make hot_hlint
       - name: "Install dependencies"
         run: make stackArgs="--no-terminal" deps
       - name: "Build"
@@ -96,7 +94,7 @@ jobs:
             bash scripts/deploy_wrapper.bash
       - name: "Deploy 🚀"
         if: ${{ fromJSON(env.is_deployment) }}
-        uses: JamesIves/github-pages-deploy-action@v4.4.2
+        uses: JamesIves/github-pages-deploy-action@v4.4.3
         with:
           git-config-name: ${{ secrets.BOT_NAME }}
           git-config-email: ${{ secrets.BOT_EMAIL }}

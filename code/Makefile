@@ -146,8 +146,8 @@ WEBSITE_FOLDER = $(WEBSITE_FOLDER_NAME)/HTML/
 FULL ?= 0
 
 # GHC debug options
-PROFALL = --executable-profiling --library-profiling
-PROFEXEC = +RTS -xc -P
+PROFALL = --profile
+PROFEXEC = --profile --rts-options '-xc -P'
 
 # GHC build options
 GHCTHREADS ?= 2
@@ -267,13 +267,13 @@ $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
 $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
 	stack build $(stackArgs) "$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
-	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec -- "$(EEXE)" $(EXECARGS)
+	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec $(EXECARGS) -- "$(EEXE)"
 
 # Compiles GOOL examples to concrete code (Java, C++, etc.)
 $(GOOLTEST)$(GEN_E_SUFFIX):
 	stack build $(stackArgs) "drasil-code:exe:$(GOOLTEST_EXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(GOOLTEST_DIR)"
-	cd "$(BUILD_FOLDER)$(GOOLTEST_DIR)" && stack exec -- "$(GOOLTEST_EXE)" $(EXECARGS)
+	cd "$(BUILD_FOLDER)$(GOOLTEST_DIR)" && stack exec $(EXECARGS) -- "$(GOOLTEST_EXE)"
 
 # Install individual Drasil examples
 $(filter %$(INSTALL_E_SUFFIX), $(INSTALL_EXAMPLES)): %$(INSTALL_E_SUFFIX):
@@ -285,7 +285,7 @@ $(filter %$(INSTALL_E_SUFFIX), $(INSTALL_EXAMPLES)): %$(INSTALL_E_SUFFIX):
 $(filter %$(TRACE_GRAPH_SUFFIX), $(TRACE_GRAPH_EXAMPLES)): %$(TRACE_GRAPH_SUFFIX): graphmod
 	stack build $(stackArgs) "$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
-	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec -- "$(EEXE)" $(EXECARGS)
+	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec $(EXECARGS) -- "$(EEXE)"
 	@mkdir -p "$(TRACEY_GRAPHS_FOLDER)$(EDIR)"
 	@echo Making traceability graphs for "$(EEXE)"
 	@if [ -d "$(BUILD_FOLDER)$(EDIR)/$(TRACEY_GRAPH_FOLDER)" ]; then \

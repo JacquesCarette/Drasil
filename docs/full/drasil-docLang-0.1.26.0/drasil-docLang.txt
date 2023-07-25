@@ -1755,9 +1755,6 @@ introChgs :: NamedIdea n => n -> [ConceptInstance] -> Contents
 -- | Helper for making the Traceability Matrices and Graphs section.
 mkTraceabilitySec :: TraceabilitySec -> SystemInformation -> Section
 
--- | Helper to get UIDs
-showUIDs :: [TraceViewCat] -> ChunkDB -> [UID] -> [UID]
-
 -- | Helper to get headers of rows and columns
 header :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]
 

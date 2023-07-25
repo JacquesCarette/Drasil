@@ -344,7 +344,7 @@ orgDocEnd :: Sentence
 sysCntxtDesc :: CI -> Contents
 sysCntxtFig :: LabelledContent
 sysCntxtRespIntro :: CI -> Contents
-systContRespBullets :: Contents
+systContRespBullets :: CI -> Contents
 userResp :: [Sentence]
 swhsResp :: [Sentence]
 userChars :: CI -> Contents

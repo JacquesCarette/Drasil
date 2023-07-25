@@ -2460,7 +2460,7 @@ module Language.Drasil.Chunk.NamedIdea
 --   abbreviation (<a>Maybe</a> <a>String</a>).
 --   
 --   Ex. The project name "Double Pendulum" may have the abbreviation
---   <a>DblPendulum</a>.
+--   <a>DblPend</a>.
 data IdeaDict
 
 -- | A NamedIdea is a <a>term</a> that we've identified (has a <a>UID</a>)
@@ -5385,7 +5385,7 @@ instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.CommonIdea.
 
 
 -- | Defines chunk types for use in code generation.
-module Language.Drasil.Chunk.CodeBase
+module Language.Drasil.Chunk.CodeVar
 
 -- | A <a>CodeIdea</a> must include some code and its name.
 class CodeIdea c
@@ -5437,31 +5437,31 @@ CodeFC :: CodeChunk -> CodeFuncChunk
 [_ccf] :: CodeFuncChunk -> CodeChunk
 ccf :: Iso' CodeFuncChunk CodeChunk
 listToArray :: CodeVarChunk -> CodeVarChunk
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.CodeBase.CodeFuncChunk
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CodeBase.CodeFuncChunk
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CodeBase.CodeFuncChunk
-instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.CodeBase.CodeFuncChunk
-instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.CodeBase.CodeFuncChunk
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.CodeBase.CodeFuncChunk
-instance Language.Drasil.Classes.Callable Language.Drasil.Chunk.CodeBase.CodeFuncChunk
-instance GHC.Classes.Eq Language.Drasil.Chunk.CodeBase.CodeFuncChunk
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.CodeBase.CodeFuncChunk
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.CodeBase.CodeVarChunk
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CodeBase.CodeVarChunk
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CodeBase.CodeVarChunk
-instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.CodeBase.CodeVarChunk
-instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.CodeBase.CodeVarChunk
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.CodeBase.CodeVarChunk
-instance GHC.Classes.Eq Language.Drasil.Chunk.CodeBase.CodeVarChunk
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.CodeBase.CodeVarChunk
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.CodeBase.CodeChunk
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CodeBase.CodeChunk
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CodeBase.CodeChunk
-instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.CodeBase.CodeChunk
-instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.CodeBase.CodeChunk
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.CodeBase.CodeChunk
-instance GHC.Classes.Eq Language.Drasil.Chunk.CodeBase.CodeChunk
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.CodeBase.CodeChunk
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.CodeVar.CodeFuncChunk
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CodeVar.CodeFuncChunk
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CodeVar.CodeFuncChunk
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.CodeVar.CodeFuncChunk
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.CodeVar.CodeFuncChunk
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.CodeVar.CodeFuncChunk
+instance Language.Drasil.Classes.Callable Language.Drasil.Chunk.CodeVar.CodeFuncChunk
+instance GHC.Classes.Eq Language.Drasil.Chunk.CodeVar.CodeFuncChunk
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.CodeVar.CodeFuncChunk
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.CodeVar.CodeVarChunk
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CodeVar.CodeVarChunk
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CodeVar.CodeVarChunk
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.CodeVar.CodeVarChunk
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.CodeVar.CodeVarChunk
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.CodeVar.CodeVarChunk
+instance GHC.Classes.Eq Language.Drasil.Chunk.CodeVar.CodeVarChunk
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.CodeVar.CodeVarChunk
+instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.CodeVar.CodeChunk
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CodeVar.CodeChunk
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CodeVar.CodeChunk
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.CodeVar.CodeChunk
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.CodeVar.CodeChunk
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.CodeVar.CodeChunk
+instance GHC.Classes.Eq Language.Drasil.Chunk.CodeVar.CodeChunk
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.CodeVar.CodeChunk
 
 module Language.Drasil.CodeExpr.Class
 class CodeExprC r
@@ -6737,7 +6737,7 @@ ncUID :: UID -> NP -> IdeaDict
 --   abbreviation (<a>Maybe</a> <a>String</a>).
 --   
 --   Ex. The project name "Double Pendulum" may have the abbreviation
---   <a>DblPendulum</a>.
+--   <a>DblPend</a>.
 data IdeaDict
 
 -- | <a>IdeaDict</a> constructor, takes a <a>UID</a>, <a>NP</a>, and an

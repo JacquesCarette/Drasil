@@ -103,9 +103,9 @@ funcPrefix :: String
 --   the CodeExpr language.
 class CodeIdea c => DefiningCodeExpr c
 codeExpr :: DefiningCodeExpr c => Lens' c CodeExpr
-instance Language.Drasil.Chunk.CodeBase.CodeIdea Language.Drasil.Chunk.CodeBase.CodeChunk
-instance Language.Drasil.Chunk.CodeBase.CodeIdea Language.Drasil.Chunk.CodeBase.CodeVarChunk
-instance Language.Drasil.Chunk.CodeBase.CodeIdea Language.Drasil.Chunk.CodeBase.CodeFuncChunk
+instance Language.Drasil.Chunk.CodeVar.CodeIdea Language.Drasil.Chunk.CodeVar.CodeChunk
+instance Language.Drasil.Chunk.CodeVar.CodeIdea Language.Drasil.Chunk.CodeVar.CodeVarChunk
+instance Language.Drasil.Chunk.CodeVar.CodeIdea Language.Drasil.Chunk.CodeVar.CodeFuncChunk
 
 module Language.Drasil.Chunk.ConstraintMap
 
@@ -173,7 +173,7 @@ instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Parameter.Pa
 instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Parameter.ParameterChunk
 instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.Parameter.ParameterChunk
 instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Parameter.ParameterChunk
-instance Language.Drasil.Chunk.CodeBase.CodeIdea Language.Drasil.Chunk.Parameter.ParameterChunk
+instance Language.Drasil.Chunk.CodeVar.CodeIdea Language.Drasil.Chunk.Parameter.ParameterChunk
 instance GHC.Classes.Eq Language.Drasil.Chunk.Parameter.ParameterChunk
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Parameter.ParameterChunk
 
@@ -619,10 +619,10 @@ instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CodeDefiniti
 instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.CodeDefinition.CodeDefinition
-instance Language.Drasil.Chunk.CodeBase.CodeIdea Language.Drasil.Chunk.CodeDefinition.CodeDefinition
+instance Language.Drasil.Chunk.CodeVar.CodeIdea Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance GHC.Classes.Eq Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.CodeDefinition.CodeDefinition
-instance Language.Drasil.Chunk.CodeBase.DefiningCodeExpr Language.Drasil.Chunk.CodeDefinition.CodeDefinition
+instance Language.Drasil.Chunk.CodeVar.DefiningCodeExpr Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 
 
 -- | Defines an AST for defining Modules.

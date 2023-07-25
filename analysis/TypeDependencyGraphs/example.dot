@@ -129,36 +129,6 @@ digraph alltypes {
 	}
 	subgraph coicehs {
 	}
-	subgraph datadefs {
-	}
-	subgraph definitions {
-	}
-	subgraph derivations {
-	}
-	subgraph gendefs {
-	}
-	subgraph goals {
-	}
-	subgraph imods {
-	}
-	subgraph odes {
-	}
-	subgraph references {
-	}
-	subgraph requirements {
-	}
-	subgraph unitals {
-	}
-	subgraph main {
-	}
-	subgraph asumptionss {
-	}
-	subgraph body {
-	}
-	subgraph cangehs {
-	}
-	subgraph coicehs {
-	}
 	subgraph concepts {
 	}
 	subgraph datadefs {
@@ -314,6 +284,36 @@ digraph alltypes {
 		PhaseChange -> Sentence;
 		PhaseChange -> TheoryModel;
 		}
+	}
+	subgraph unitals {
+	}
+	subgraph main {
+	}
+	subgraph asumptionss {
+	}
+	subgraph body {
+	}
+	subgraph cangehs {
+	}
+	subgraph coicehs {
+	}
+	subgraph datadefs {
+	}
+	subgraph definitions {
+	}
+	subgraph derivations {
+	}
+	subgraph gendefs {
+	}
+	subgraph goals {
+	}
+	subgraph imods {
+	}
+	subgraph odes {
+	}
+	subgraph references {
+	}
+	subgraph requirements {
 	}
 	subgraph unitals {
 	}

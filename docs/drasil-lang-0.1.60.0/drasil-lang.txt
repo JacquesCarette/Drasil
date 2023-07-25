@@ -2380,7 +2380,7 @@ ncUID :: UID -> NP -> IdeaDict
 --   abbreviation (<a>Maybe</a> <a>String</a>).
 --   
 --   Ex. The project name "Double Pendulum" may have the abbreviation
---   <a>DblPendulum</a>.
+--   <a>DblPend</a>.
 data IdeaDict
 
 -- | <a>IdeaDict</a> constructor, takes a <a>UID</a>, <a>NP</a>, and an

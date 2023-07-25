@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.SWHSNoPCM.Derivations</span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-2"></span><span>  </span><span class="annot"><a href="Drasil.SWHSNoPCM.Derivations.html#eBalanceOnWtrDerivEqns"><span class="hs-identifier">eBalanceOnWtrDerivEqns</span></a></span><span>
+</span><span id="line-3"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-4"></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">ExprC</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ModelExprC</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ModelExpr</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">recip_</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.SWHS.Unitals</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">coilHTC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">coilSA</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">htCapW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">htFluxC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tauW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tempC</span></span><span class="hs-special">,</span><span>
+</span><span id="line-9"></span><span>  </span><span class="annot"><span class="hs-identifier">tempW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">wMass</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span>
+</span><span id="line-11"></span><span class="hs-comment">----------------------------------------------</span><span>
+</span><span id="line-12"></span><span class="hs-comment">--    Derivation of eBalanceOnWtr           --</span><span>
+</span><span id="line-13"></span><span class="hs-comment">----------------------------------------------</span><span>
+</span><span id="line-14"></span><span class="annot"><a href="Drasil.SWHSNoPCM.Derivations.html#eBalanceOnWtrDerivEqn1"><span class="hs-identifier hs-type">eBalanceOnWtrDerivEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHSNoPCM.Derivations.html#eBalanceOnWtrDerivEqn2"><span class="hs-identifier hs-type">eBalanceOnWtrDerivEqn2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHSNoPCM.Derivations.html#eBalanceOnWtrDerivEqn3"><span class="hs-identifier hs-type">eBalanceOnWtrDerivEqn3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHSNoPCM.Derivations.html#eBalanceOnWtrDerivEqn4"><span class="hs-identifier hs-type">eBalanceOnWtrDerivEqn4</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
+</span><span id="line-15"></span><span>
+</span><span id="line-16"></span><span id="eBalanceOnWtrDerivEqn1"><span class="annot"><span class="annottext">eBalanceOnWtrDerivEqn1 :: ModelExpr
+</span><a href="Drasil.SWHSNoPCM.Derivations.html#eBalanceOnWtrDerivEqn1"><span class="hs-identifier hs-var hs-var">eBalanceOnWtrDerivEqn1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">wMass</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">htCapW</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">time</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span>
+</span><span id="line-17"></span><span>  </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">htFluxC</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">coilSA</span></span><span>
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span id="eBalanceOnWtrDerivEqn2"><span class="annot"><span class="annottext">eBalanceOnWtrDerivEqn2 :: ModelExpr
+</span><a href="Drasil.SWHSNoPCM.Derivations.html#eBalanceOnWtrDerivEqn2"><span class="hs-identifier hs-var hs-var">eBalanceOnWtrDerivEqn2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">wMass</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">htCapW</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">time</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span>
+</span><span id="line-20"></span><span>  </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">coilHTC</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">coilSA</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">tempC</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">)</span><span>
+</span><span id="line-21"></span><span>
+</span><span id="line-22"></span><span id="eBalanceOnWtrDerivEqn3"><span class="annot"><span class="annottext">eBalanceOnWtrDerivEqn3 :: ModelExpr
+</span><a href="Drasil.SWHSNoPCM.Derivations.html#eBalanceOnWtrDerivEqn3"><span class="hs-identifier hs-var hs-var">eBalanceOnWtrDerivEqn3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">time</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span>
+</span><span id="line-23"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">coilHTC</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">coilSA</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$/</span></span><span>
+</span><span id="line-24"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">wMass</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">htCapW</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">tempC</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">)</span><span>
+</span><span id="line-25"></span><span>
+</span><span id="line-26"></span><span id="eBalanceOnWtrDerivEqn4"><span class="annot"><span class="annottext">eBalanceOnWtrDerivEqn4 :: ModelExpr
+</span><a href="Drasil.SWHSNoPCM.Derivations.html#eBalanceOnWtrDerivEqn4"><span class="hs-identifier hs-var hs-var">eBalanceOnWtrDerivEqn4</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-27"></span><span>  </span><span class="annot"><span class="annottext">forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">time</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">recip_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">tauW</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">tempC</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">)</span><span>
+</span><span id="line-28"></span><span>
+</span><span id="line-29"></span><span class="annot"><a href="Drasil.SWHSNoPCM.Derivations.html#eBalanceOnWtrDerivEqns"><span class="hs-identifier hs-type">eBalanceOnWtrDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span class="hs-special">]</span><span>
+</span><span id="line-30"></span><span id="eBalanceOnWtrDerivEqns"><span class="annot"><span class="annottext">eBalanceOnWtrDerivEqns :: [ModelExpr]
+</span><a href="Drasil.SWHSNoPCM.Derivations.html#eBalanceOnWtrDerivEqns"><span class="hs-identifier hs-var hs-var">eBalanceOnWtrDerivEqns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr
+</span><a href="Drasil.SWHSNoPCM.Derivations.html#eBalanceOnWtrDerivEqn1"><span class="hs-identifier hs-var">eBalanceOnWtrDerivEqn1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr
+</span><a href="Drasil.SWHSNoPCM.Derivations.html#eBalanceOnWtrDerivEqn2"><span class="hs-identifier hs-var">eBalanceOnWtrDerivEqn2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr
+</span><a href="Drasil.SWHSNoPCM.Derivations.html#eBalanceOnWtrDerivEqn3"><span class="hs-identifier hs-var">eBalanceOnWtrDerivEqn3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr
+</span><a href="Drasil.SWHSNoPCM.Derivations.html#eBalanceOnWtrDerivEqn4"><span class="hs-identifier hs-var">eBalanceOnWtrDerivEqn4</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-31"></span></pre></body></html>

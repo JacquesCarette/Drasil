@@ -32,7 +32,7 @@ digraph alltypes {
 		EntryID -> String;
 		}
 	}
-	subgraph codebaes {
+	subgraph codevar {
 		subgraph varorfunc{
 		VarOrFunc	[shape=oval, color=cyan3, label="VarOrFunc"];
 		VarOrFunc -> QuantityDict;

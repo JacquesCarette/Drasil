@@ -78,6 +78,8 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
   brackets, integer, vcat, comma, isEmpty)
 import qualified Text.PrettyPrint.HughesPJ as D (char, double)
 
+import Data.Drasil.DrasilConfig(DrasilConfig)
+
 -- Bodies --
 
 multiBody :: (RenderSym r, Monad r) => [MSBody r] -> MS (r Doc)
@@ -496,9 +498,9 @@ fileDoc ext topb botb mdl = do
         (R.file (RC.block $ topb m) d (RC.block botb))) m
   S.fileFromData fp (toState updm)
 
-docMod :: (RenderSym r) => ModuleDocRenderer -> String -> String -> [String] -> 
-  String -> SFile r -> SFile r
-docMod mdr e d a dt fl = commentedMod fl (docComment $ mdr d a dt . addExt e 
+docMod :: (RenderSym r) => ModuleDocRenderer -> String -> String -> 
+  [String] -> DrasilConfig -> String -> SFile r -> SFile r
+docMod mdr e d a dc dt fl = commentedMod fl (docComment $ mdr d a dt dc . addExt e 
   <$> getModuleName)
 
 fileFromData :: (RenderSym r) => (FilePath -> r (Module r) -> r (File r)) 

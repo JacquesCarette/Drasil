@@ -12,11 +12,12 @@ import GOOL.Drasil (GSProgram, MSBody, MSBlock, MSStatement, SMethod, OOProg,
   MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Helper (helper)
+import Data.Drasil.DrasilConfig(DrasilConfig(..))
 
 -- | Creates the HelloWorld program and necessary files.
 helloWorld :: (OOProg r) => GSProgram r
 helloWorld = prog "HelloWorld" "" [docMod description 
-  ["Brooks MacLachlan"] "" $ fileDoc (buildModule "HelloWorld" [] 
+  ["Brooks MacLachlan"] DrasilConfig{version=[]} "" $ fileDoc (buildModule "HelloWorld" [] 
   [helloWorldMain] []), helper]
 
 -- | Description of program.

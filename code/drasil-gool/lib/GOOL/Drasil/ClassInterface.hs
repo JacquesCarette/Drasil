@@ -37,6 +37,7 @@ import GOOL.Drasil.State (GS, FS, CS, MS, VS)
 import qualified Data.Kind as K (Type)
 import Data.Bifunctor (first)
 import CodeLang.Drasil (Comment)
+import Data.Drasil.DrasilConfig (DrasilConfig)
 
 type Label = String
 type Library = String
@@ -68,7 +69,7 @@ class (ModuleSym r) => FileSym r where
   fileDoc :: FSModule r -> SFile r
 
   -- Module description, list of author names, date as a String, file to comment
-  docMod :: String -> [String] -> String -> SFile r -> SFile r
+  docMod :: String -> [String] -> DrasilConfig -> String -> SFile r -> SFile r
 
 class PermanenceSym r where
   type Permanence r

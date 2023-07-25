@@ -67,6 +67,7 @@ import qualified Control.Lens as L (set)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
   brackets, braces, colon, vcat, equals)
+import Data.Drasil.DrasilConfig (DrasilConfig)
 
 -- Python, Java, C#, and C++ --
 
@@ -88,7 +89,7 @@ doxFunc = docFunc functionDox
 doxClass :: (RenderSym r) => String -> SClass r -> SClass r
 doxClass = docClass classDox
 
-doxMod :: (RenderSym r) => String -> String -> [String] -> String -> SFile r -> 
+doxMod :: (RenderSym r) => String -> String -> [String] -> DrasilConfig -> String -> SFile r -> 
   SFile r
 doxMod = docMod moduleDox
 

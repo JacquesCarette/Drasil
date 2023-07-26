@@ -1,6 +1,6 @@
 -- | Common 'Doc'-related functions for writting printers with a little more clarity.
 module Utils.Drasil.Document (blank, indent, (+:+.), indentList, drasilImage, 
-  contSep, drasilConfigPath) where
+  contSep) where
 
 import Text.PrettyPrint.HughesPJ (Doc, nest, text, vcat)
 
@@ -33,10 +33,6 @@ drasilImage num = alignImage (buildPath num ++
 alignImage :: FilePath -> Doc
 alignImage img = text "<p align=\"center\">" <> contSep <> text ("<img src=\"" 
   ++ img ++ "\" alt=\"Drasil Tree\" width=\"200\" />") <> contSep <> text "</p>"
-
--- | Path to the Drasil Configuration file.
-drasilConfigPath :: Int -> String
-drasilConfigPath num = buildPath (num - 2) ++ "drasil-metadata/lib/Data/Drasil/DrasilConfiguration.json"
 
 -- | Separates document sections.
 type Separator = Doc

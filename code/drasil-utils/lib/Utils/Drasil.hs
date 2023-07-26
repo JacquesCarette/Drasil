@@ -3,7 +3,7 @@
 module Utils.Drasil (
   -- * Documents
   -- | From "Utils.Drasil.Document".
-  blank, indent, indentList, drasilConfigPath,
+  blank, indent, indentList,
 
   -- * Language
   -- | From "Utils.Drasil.English".

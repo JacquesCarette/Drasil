@@ -86,14 +86,15 @@ outTable o = mkValsSourceTable o "ReqOutputs" (S "Required" +:+ titleize' output
                                                 -- passes empty Sentence to make stub of outReq
 
 -- | Creates a Sentence from a Referable and possible description. Output is of the form
--- "Inputs the values from @reference@, which define @description@". If no description is given,
+-- "Inputs the values from @reference@, which define @description@." If no description is given,
 -- there will be nothing after the word "@reference@".
 inReqDesc :: (HasShortName r, Referable r) => r -> Sentence -> Sentence
 inReqDesc  t desc = foldlSent [atStart input_,  S "the", plural value, S "from", end]
   where end = case desc of EmptyS -> refS t
                            sent   -> refS t `sC` S "which define" +:+ sent
 
--- TODO: document
+-- | Creates a Sentence from a Referable. Output is of the form "Outputs the
+-- values from @reference@."
 outReqDesc :: (HasShortName r, Referable r) => r -> Sentence
 outReqDesc t = foldlSent [atStart output_, S "the", plural value, S "from", refS t]
 
@@ -162,8 +163,14 @@ mkValsSourceTable vals labl cap = llcc (makeTabRef labl) $
   Table [atStart symbol_, atStart description, S "Source", atStart' unit_]
   (mkTable [ch . fst, atStart . fst, snd, toSentence . fst] $ sortBySymbolTuple vals) cap True
 
-mkQRTuple :: (Quantity i, MayHaveUnit i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
+-- | Pulls out the 'QuantityDict' and reference 'Sentence' into a tuple for
+-- each item in a list with both.
+mkQRTuple :: (Quantity i, MayHaveUnit i, HasShortName i, Referable i) => [i]
+  -> [(QuantityDict, Sentence)]
 mkQRTuple = map (\c -> (qw c, refS c))
 
-mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> [r] -> [(QuantityDict, Sentence)]
+-- | Zips a list of items with 'QuantityDict's with a list of items with
+-- reference 'Sentence's.
+mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i]
+  -> [r] -> [(QuantityDict, Sentence)]
 mkQRTupleRef = zipWith (curry (bimap qw refS))

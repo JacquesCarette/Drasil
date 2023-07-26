@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell, DeriveLift, DeriveGeneric #-}
+{-# LANGUAGE TemplateHaskellQuotes, DeriveLift, DeriveGeneric #-}
 module Data.Drasil.DrasilMeta where
 
 import Data.Aeson (decodeFileStrict, FromJSON, ToJSON)

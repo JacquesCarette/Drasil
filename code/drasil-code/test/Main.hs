@@ -18,7 +18,6 @@ import PatternTest (patternTest)
 import FileTests (fileTests)
 import VectorTest (vectorTest)
 import NameGenTest (nameGenTest)
-import Data.Drasil.DrasilConfig (DrasilConfig(..))
 
 -- | Renders five GOOL tests (FileTests, HelloWorld, PatternTest, VectorTest, and NameGenTest)
 -- in Java, Python, C#, C++, and Swift.
@@ -60,7 +59,7 @@ classes :: (OOProg r, PackageSym r') => (r (Program r) -> ProgData) ->
 classes unRepr unRepr' = zipWith 
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
-  in unRepr' $ package pd [makefile [] Program [] gs' pd (DrasilConfig{version = []})]) 
+  in unRepr' $ package pd [makefile [] Program [] gs' pd]) 
   [helloWorld, patternTest, fileTests, vectorTest, nameGenTest]
   (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests, vectorTest, nameGenTest])
 

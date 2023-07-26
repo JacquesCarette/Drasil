@@ -147,7 +147,7 @@ instance (Pair p) => FileSym (p CppSrcCode CppHdrCode) where
   type File (p CppSrcCode CppHdrCode) = FileData
   fileDoc = pair1 fileDoc fileDoc
 
-  docMod d a dc dt = pair1 (docMod d a dc dt) (docMod d a dc dt)
+  docMod d a dt = pair1 (docMod d a dt) (docMod d a dt)
 
 instance (Pair p) => RenderFile (p CppSrcCode CppHdrCode) where
   top m = pair (top $ pfst m) (top $ psnd m)

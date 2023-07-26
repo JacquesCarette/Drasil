@@ -60,7 +60,7 @@ instance FileSym CodeInfo where
   type File CodeInfo = ()
   fileDoc = execute1
   
-  docMod _ _ _ _ = execute1
+  docMod _ _ _ = execute1
 
 instance PermanenceSym CodeInfo where
   type Permanence CodeInfo = ()

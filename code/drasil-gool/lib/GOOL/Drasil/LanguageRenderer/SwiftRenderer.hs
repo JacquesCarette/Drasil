@@ -102,11 +102,10 @@ import Data.Composition ((.:))
 import Data.List (intercalate, sort)
 import Data.Map (findWithDefault)
 import Data.Maybe (fromMaybe)
-import Data.Drasil.DrasilConfig (DrasilConfig(..))
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, lbrace, rbrace, braces, brackets, colon, space, doubleQuotes)
 import qualified Text.PrettyPrint.HughesPJ as D (float)
-
+import Data.Drasil.DrasilMetaCall (drasilMeta, DrasilMeta(..))
 swiftExt :: String
 swiftExt = "swift"
 
@@ -1158,11 +1157,11 @@ swiftClassDoc :: ClassDocRenderer
 swiftClassDoc desc = [desc | not (null desc)]
 
 swiftModDoc :: ModuleDocRenderer
-swiftModDoc desc as date dc m = m : [desc | not (null desc)] ++ 
+swiftModDoc desc as date m = m : [desc | not (null desc)] ++ 
   [swiftDocCommandInit ++ swiftAuthorDoc ++ swiftDocCommandSep ++ stringList as 
     | not (null as)]
   ++ [swiftDocCommandInit ++ swiftDateDoc ++ swiftDocCommandSep ++ date 
-    | not (null date)] ++ [swiftDocCommandInit ++ swiftDrasilVersion ++ version dc]
+    | not (null date)] ++ [swiftDocCommandInit ++ swiftDrasilVersion ++ version drasilMeta]
 
 swiftDocCommandInit, swiftDocCommandSep, swiftParamDoc, swiftRetDoc,
   swiftAuthorDoc, swiftDateDoc, swiftDrasilVersion :: String

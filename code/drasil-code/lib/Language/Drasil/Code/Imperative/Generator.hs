@@ -43,13 +43,12 @@ import Data.List (nub)
 import Data.Map (fromList, member, keys, elems)
 import Data.Maybe (maybeToList, catMaybes)
 import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
-import Data.Drasil.DrasilConfig (DrasilConfig)
 
 -- | Initializes the generator's 'DrasilState'.
 -- 'String' parameter is a string representing the date.
 -- \['Expr'\] parameter is the sample input values provided by the user.
-generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilConfig -> DrasilState
-generator l dt sd chs spec dc = DrasilState {
+generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
+generator l dt sd chs spec = DrasilState {
   -- constants
   codeSpec = spec,
   modular = modularity $ architecture chs,
@@ -77,7 +76,6 @@ generator l dt sd chs spec dc = DrasilState {
   clsMap = cdm,
   defList = nub $ keys mem ++ keys cdm,
   getVal = folderVal chs,
-  drasilConfig = dc,
   -- stateful
   currentModule = "",
   currentClass = "",
@@ -134,7 +132,7 @@ genPackage unRepr = do
   let info = unCI $ evalState ci initialState
       (reprPD, s) = runState p info
       pd = unRepr reprPD
-      m = makefile (libPaths g) (implType g) (commented g) s pd (drasilConfig g)
+      m = makefile (libPaths g) (implType g) (commented g) s pd
       as = case codeSpec g of CodeSpec {authors = a} -> map name a
       cfp = configFiles $ codeSpec g
       db = sysinfodb $ codeSpec g

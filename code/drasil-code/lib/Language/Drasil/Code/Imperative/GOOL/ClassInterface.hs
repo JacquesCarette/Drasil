@@ -17,7 +17,6 @@ import Language.Drasil.Choices (Comments, ImplementationType, Verbosity)
 import GOOL.Drasil (ProgData, GOOLState)
 
 import Text.PrettyPrint.HughesPJ (Doc)
-import Data.Drasil.DrasilConfig (DrasilConfig)
 
 -- | Members of this class must have all the information necessary for
 -- the 'AuxiliarySym' in addition to information necessary to create a package.
@@ -38,7 +37,7 @@ class AuxiliarySym r where
   optimizeDox :: r (AuxHelper r)
 
   makefile :: [FilePath] -> ImplementationType -> [Comments] -> GOOLState -> 
-    ProgData -> DrasilConfig -> r (Auxiliary r)
+    ProgData -> r (Auxiliary r)
 
   auxHelperDoc :: r (AuxHelper r) -> Doc
   auxFromData :: FilePath -> Doc -> r (Auxiliary r)

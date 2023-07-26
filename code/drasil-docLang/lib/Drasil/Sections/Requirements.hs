@@ -64,8 +64,8 @@ reqF = SRS.require [reqIntro]
 fullReqs :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j) =>
   [ReqType] -> [i] -> [(j, Sentence)] -> [ConceptInstance] -> [ConceptInstance]
 fullReqs []                _ _ r = r
-fullReqs ((InputReq s):rs) i o r = nub $ inReq (inReqDesc (inTable i) s) : fullReqs rs i o r
-fullReqs [OutputReq]       _ o r = nub $ r ++ [outReq (outReqDesc (outTable o))]
+fullReqs ((InputReq s):rs) i o r = nub $ inReq (inReqDesc i s) : fullReqs rs i o r
+fullReqs [OutputReq]       _ o r = nub $ r ++ [outReq (outReqDesc o)]
 fullReqs _                 _ _ _ = error "ReqTypes not fully implemented"
 
 -- | Prepends given LabelledContent to an input-value table.
@@ -80,23 +80,35 @@ fullTables _                 _ _ _ = error "ReqTypes not fully implemented"
 inTable :: (Quantity i, MayHaveUnit i) => [i] -> LabelledContent
 inTable i = mkInputPropsTable i (inReq EmptyS) -- passes empty Sentence to make stub of inReq
 
+singleValCaptionHelper :: NamedIdea n => [a] -> n -> Sentence
+singleValCaptionHelper [_] = titleize
+singleValCaptionHelper _   = titleize'
+
 -- | Creates a generalized output-value table for the Requirements section.
 outTable :: (Quantity j, MayHaveUnit j) => [(j, Sentence)] -> LabelledContent
-outTable o = mkValsSourceTable o "ReqOutputs" (S "Required" +:+ titleize' output_ `follows` outReq EmptyS)
+outTable o = mkValsSourceTable o "ReqOutputs" (S "Required" +:+
+  singleValCaptionHelper o output_ `follows` outReq EmptyS)
                                                 -- passes empty Sentence to make stub of outReq
+
+singleValHelper :: NamedIdea n => [a] -> n -> Sentence
+singleValHelper [_] = phrase
+singleValHelper _   = plural
 
 -- | Creates a Sentence from a Referable and possible description. Output is of the form
 -- "Inputs the values from @reference@, which define @description@." If no description is given,
 -- there will be nothing after the word "@reference@".
-inReqDesc :: (HasShortName r, Referable r) => r -> Sentence -> Sentence
-inReqDesc  t desc = foldlSent [atStart input_,  S "the", plural value, S "from", end]
-  where end = case desc of EmptyS -> refS t
-                           sent   -> refS t `sC` S "which define" +:+ sent
+inReqDesc :: (Quantity i, MayHaveUnit i) => [i] -> Sentence -> Sentence
+inReqDesc i desc = foldlSent [atStart input_,  S "the", singleValHelper i value, S "from", end]
+  where
+    t = inTable i
+    end = case desc of EmptyS -> refS t
+                       sent   -> refS t `sC` S "which define" +:+ sent
 
 -- | Creates a Sentence from a Referable. Output is of the form "Outputs the
 -- values from @reference@."
-outReqDesc :: (HasShortName r, Referable r) => r -> Sentence
-outReqDesc t = foldlSent [atStart output_, S "the", plural value, S "from", refS t]
+outReqDesc :: (Quantity j, MayHaveUnit j) => [(j, Sentence)] -> Sentence
+outReqDesc o = foldlSent [atStart output_, S "the", singleValHelper o value,
+  S "from", refS (outTable o)]
 
 -- | Creates a 'ConceptInstance' of input values.
 inReq, outReq :: Sentence -> ConceptInstance
@@ -145,11 +157,11 @@ nfReqIntro _  = mkParagraph $ reqIntroStart +:+. nfrReqIntroBody
 -- section. Takes a list of wrapped variables and something that is 'Referable'.
 mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) =>
                           [i] -> r -> LabelledContent
-mkInputPropsTable []        _   = llcc reqInputsRef $ Paragraph EmptyS
-mkInputPropsTable reqInputs req = llcc reqInputsRef $
+mkInputPropsTable [] _   = llcc reqInputsRef $ Paragraph EmptyS
+mkInputPropsTable i  req = llcc reqInputsRef $
   Table [atStart symbol_, atStart description, atStart' unit_]
-  (mkTable [ch, atStart, toSentence] $ sortBySymbol reqInputs)
-  (titleize' reqInput `follows` req) True
+  (mkTable [ch, atStart, toSentence] $ sortBySymbol i)
+  (singleValCaptionHelper i reqInput `follows` req) True
 
 -- | Reference for the Required Inputs table.
 reqInputsRef :: Reference

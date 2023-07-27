@@ -19,7 +19,7 @@ module Utils.Drasil (
   invert,
 
   -- ** Strings
-  toPlainName
+  toPlainName, watermark
 ) where
 
 import Utils.Drasil.Document

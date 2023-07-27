@@ -16,10 +16,12 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
+import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (description, funcReqDom,
   functionalRequirement, input_, nonfunctionalRequirement, output_, reqInput,
-  section_, software, symbol_, value)
-import Data.Drasil.Concepts.Math (unit_)
+  section_, software, symbol_, value, datumConstraint)
+import Data.Drasil.Concepts.Math (unit_, calculation)
+import Data.Drasil.Concepts.Software (errMsg)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.DocumentLanguage.Units (toSentence)
@@ -63,16 +65,18 @@ reqF = SRS.require [reqIntro]
 -- requirement to a list of the other requirements.
 fullReqs :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j) =>
   [ReqType] -> [i] -> [(j, Sentence)] -> [ConceptInstance] -> [ConceptInstance]
-fullReqs []                _ _ r = r
-fullReqs ((InputReq s):rs) i o r = nub $ inReq (inReqDesc i s) : fullReqs rs i o r
-fullReqs [OutputReq]       _ o r = nub $ r ++ [outReq (outReqDesc o)]
-fullReqs _                 _ _ _ = error "ReqTypes not fully implemented"
+fullReqs []                  _ _ r = r
+fullReqs ((InputReq s):rs)   i o r = nub $ inReq (inReqDesc i s) : fullReqs rs i o r
+fullReqs (VerifyInputReq:rs) i o r = nub $ verInReq (verInReqDesc i) : fullReqs rs i o r
+fullReqs [OutputReq]         _ o r = nub $ r ++ [outReq (outReqDesc o)]
+fullReqs _                   _ _ _ = error "ReqTypes not fully implemented"
 
 -- | Prepends given LabelledContent to an input-value table.
 fullTables :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j) =>
   [ReqType] -> [i] -> [(j, Sentence)] -> [LabelledContent] -> [LabelledContent]
 fullTables []                _ _ t = t
 fullTables ((InputReq _):rs) i o t = inTable i : fullTables rs i o t
+fullTables (_:[OutputReq])   _ o t = t ++ [outTable o]
 fullTables [OutputReq]       _ o t = t ++ [outTable o]
 fullTables _                 _ _ _ = error "ReqTypes not fully implemented"
 
@@ -94,7 +98,7 @@ singleValHelper :: NamedIdea n => [a] -> n -> Sentence
 singleValHelper [_] = phrase
 singleValHelper _   = plural
 
--- | Creates a Sentence from a Referable and possible description. Output is of the form
+-- | Creates a Sentence from a list of inputs and possible description. Output is of the form
 -- "Inputs the values from @reference@, which define @description@." If no description is given,
 -- there will be nothing after the word "@reference@".
 inReqDesc :: (Quantity i, MayHaveUnit i) => [i] -> Sentence -> Sentence
@@ -104,16 +108,27 @@ inReqDesc i desc = foldlSent [atStart input_,  S "the", singleValHelper i value,
     end = case desc of EmptyS -> refS t
                        sent   -> refS t `sC` S "which define" +:+ sent
 
--- | Creates a Sentence from a Referable. Output is of the form "Outputs the
+-- | Creates a Sentence from a list of inputs. Output is of the form "Check the entered input
+-- values to ensure that they do not exceed the @data constraints@. If any of the input values
+-- are out of bounds, an error message is displayed and the calculations stop."
+verInReqDesc :: [a] -> Sentence
+verInReqDesc i = foldlSent [S "Check the entered", singleValHelper i inValue,
+  S "to ensure that they do not exceed the" +:+. namedRef (SRS.datCon [] [])
+    (plural datumConstraint), S "If any of the", plural inValue,
+  S "are out of bounds" `sC` S "an", phrase errMsg, S "is displayed" `S.andThe`
+    plural calculation, S "stop"]
+
+-- | Creates a Sentence from a list of outputs. Output is of the form "Outputs the
 -- values from @reference@."
 outReqDesc :: (Quantity j, MayHaveUnit j) => [(j, Sentence)] -> Sentence
 outReqDesc o = foldlSent [atStart output_, S "the", singleValHelper o value,
   S "from", refS (outTable o)]
 
--- | Creates a 'ConceptInstance' of input values.
-inReq, outReq :: Sentence -> ConceptInstance
-inReq  s = cic "inputValues"  s "Input-Values"  funcReqDom
-outReq s = cic "outputValues" s "Output-Values" funcReqDom
+-- | Creates a 'ConceptInstance' for a functional requirement.
+inReq, verInReq, outReq :: Sentence -> ConceptInstance
+inReq    s = cic "inputValues"  s "Input-Values"        funcReqDom
+verInReq s = cic "verifyInVals" s "Verify-Input-Values" funcReqDom
+outReq   s = cic "outputValues" s "Output-Values"       funcReqDom
 
 -- | Adds a generalized introduction for the Non-Functional Requirements
 -- section. Takes in the contents of that section.

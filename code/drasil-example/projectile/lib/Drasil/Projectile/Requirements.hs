@@ -19,17 +19,12 @@ import Drasil.Projectile.Unitals (flightDur, landPos, message, offset)
 {--Functional Requirements--}
 
 funcReqs :: [ConceptInstance]
-funcReqs = [verifyInVals, calcValues]
+funcReqs = [calcValues]
 
-verifyInVals, calcValues :: ConceptInstance
-verifyInVals = cic "verifyInVals" verifyParamsDesc "Verify-Input-Values" funcReqDom
-calcValues   = cic "calcValues"   calcValuesDesc   "Calculate-Values"    funcReqDom
+calcValues :: ConceptInstance
+calcValues = cic "calcValues" calcValuesDesc "Calculate-Values" funcReqDom
 
-verifyParamsDesc, calcValuesDesc :: Sentence
-verifyParamsDesc = foldlSent [S "Check the entered", plural inValue,
-  S "to ensure that they do not exceed the" +:+. namedRef (datCon [] []) (plural datumConstraint),
-  S "If any of the", plural inValue, S "are out of bounds" `sC`
-  S "an", phrase errMsg, S "is displayed" `S.andThe` plural calculation, S "stop"]
+calcValuesDesc :: Sentence
 calcValuesDesc = foldlSent [S "Calculate the following" +: plural value,
   foldlList Comma List [
     ch flightDur +:+ fromSource timeIM,

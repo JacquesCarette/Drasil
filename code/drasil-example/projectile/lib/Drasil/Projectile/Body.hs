@@ -94,7 +94,7 @@ mkSRS = [TableOfContents,
       ],
   ReqrmntSec $
     ReqsProg
-      [ FReqsSub [InputReq EmptyS, OutputReq] []
+      [ FReqsSub [InputReq EmptyS, VerifyInputReq, OutputReq] []
       , NonFReqsSub
       ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,

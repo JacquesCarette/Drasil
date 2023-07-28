@@ -95,21 +95,6 @@ double func_NFL(InputParameters &inParams, double q_hat_tol) {
     return q_hat_tol * 7.17e10 * pow(inParams.h, 4.0) / pow(inParams.a * inParams.b, 2.0);
 }
 
-double func_LR(InputParameters &inParams, double NFL) {
-    ofstream outfile;
-    outfile.open("log.txt", std::fstream::app);
-    outfile << "function func_LR called with inputs: {" << std::endl;
-    outfile << "  inParams = ";
-    outfile << "Instance of InputParameters object";
-    outfile << ", " << std::endl;
-    outfile << "  NFL = ";
-    outfile << NFL << std::endl;
-    outfile << "  }" << std::endl;
-    outfile.close();
-    
-    return NFL * inParams.GTF * 1.0;
-}
-
 double func_B(InputParameters &inParams, double J) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
@@ -123,6 +108,21 @@ double func_B(InputParameters &inParams, double J) {
     outfile.close();
     
     return 2.86e-53 / pow(inParams.a * inParams.b, 7.0 - 1.0) * pow(7.17e10 * pow(inParams.h, 2.0), 7.0) * inParams.LDF * exp(J);
+}
+
+double func_LR(InputParameters &inParams, double NFL) {
+    ofstream outfile;
+    outfile.open("log.txt", std::fstream::app);
+    outfile << "function func_LR called with inputs: {" << std::endl;
+    outfile << "  inParams = ";
+    outfile << "Instance of InputParameters object";
+    outfile << ", " << std::endl;
+    outfile << "  NFL = ";
+    outfile << NFL << std::endl;
+    outfile << "  }" << std::endl;
+    outfile.close();
+    
+    return NFL * inParams.GTF * 1.0;
 }
 
 double func_P_b(double B) {

@@ -1,8 +1,5 @@
 digraph allvsall {
 	assumpLDFC -> assumpSV;
-	riskFun -> minThick;
-	riskFun -> loadDurFactor;
-	riskFun -> stressDistFac;
 	loadDurFactor -> assumpSV;
 	loadDurFactor -> assumpLDFC;
 	stressDistFac -> dimlessLoad;
@@ -21,6 +18,9 @@ digraph allvsall {
 	sdfTol -> loadDurFactor;
 	demandq -> stdOffDist;
 	demandq -> eqTNTChar;
+	riskFun -> minThick;
+	riskFun -> loadDurFactor;
+	riskFun -> stressDistFac;
 	probBr -> riskFun;
 	lResistance -> nFL;
 	lResistance -> glassTypeFac;
@@ -31,8 +31,8 @@ digraph allvsall {
 	isSafeLR -> isSafePb;
 	outputValsAndKnownValues -> inputValues;
 	outputValsAndKnownValues -> sysSetValsFollowingAssumps;
-	checkGlassSafety -> isSafeProb;
-	checkGlassSafety -> isSafeLoad;
+	checkGlassSafety -> isSafePb;
+	checkGlassSafety -> isSafeLR;
 	calcInternalBlastRisk -> assumpES;
 	varValsOfmkE -> assumpSV;
 	varValsOfmkE -> assumpLDFC;
@@ -56,7 +56,6 @@ digraph allvsall {
 	{assumpGT, assumpGC, assumpES, assumpSV, assumpGL, assumpBC, assumpRT, assumpLDFC}
 	}
 
-	riskFun	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:riskFun"];
 	minThick	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:minThick"];
 	loadDurFactor	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:loadDurFactor"];
 	stressDistFac	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:stressDistFac"];
@@ -72,7 +71,7 @@ digraph allvsall {
 
 	subgraph DD {
 	rank="same"
-	{riskFun, minThick, loadDurFactor, stressDistFac, nFL, glassTypeFac, dimlessLoad, tolLoad, sdfTol, stdOffDist, aR, eqTNTChar, demandq}
+	{minThick, loadDurFactor, stressDistFac, nFL, glassTypeFac, dimlessLoad, tolLoad, sdfTol, stdOffDist, aR, eqTNTChar, demandq}
 	}
 
 	isSafeProb	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeProb"];
@@ -83,6 +82,7 @@ digraph allvsall {
 	{isSafeProb, isSafeLoad}
 	}
 
+	riskFun	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:riskFun"];
 	probBr	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:probOfBreak"];
 	lResistance	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calofCapacity"];
 	isSafePb	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafePb"];
@@ -90,7 +90,7 @@ digraph allvsall {
 
 	subgraph IM {
 	rank="same"
-	{probBr, lResistance, isSafePb, isSafeLR}
+	{riskFun, probBr, lResistance, isSafePb, isSafeLR}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

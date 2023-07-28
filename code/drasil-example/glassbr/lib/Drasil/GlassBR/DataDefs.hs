@@ -33,31 +33,8 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspectRatio, charWeight,
 ----------------------
 
 dataDefs :: [DataDefinition]
-dataDefs = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
+dataDefs = [hFromt, loadDF, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
   tolStrDisFac, standOffDis, aspRat, eqTNTWDD, calofDemand]
-
-qDefns :: [Block SimpleQDef]
-qDefns = Parallel hFromtQD [glaTyFacQD] : --can be calculated on their own
-  map (`Parallel` []) [dimLLQD, strDisFacQD, riskQD, tolStrDisFacQD, tolPreQD,
-    nonFLQD]
-
-{--}
-
-riskEq :: Expr
-riskEq = (sy sflawParamK $/
-  (mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- exactDbl 1))) `mulRe`
-  ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac)
-
--- FIXME [4] !!!
-riskQD :: SimpleQDef
-riskQD = mkQuantDef riskFun riskEq
-
-risk :: DataDefinition
-risk = ddE riskQD
-  [dRef astm2009, dRefInfo beasonEtAl1998 $ Equation [4, 5],
-  dRefInfo campidelli $ Equation [14]]
-  Nothing "riskFun" [aGrtrThanB, hRef, ldfRef, jRef]
-
 {--}
 
 hFromtEq :: Relation
@@ -255,7 +232,7 @@ pbTolUsr = ch pbTol `S.is` S "entered by the" +:+. phrase user
 qRef :: Sentence
 qRef = ch demand `S.isThe` (demandq ^. defn) `sC` S "as given in" +:+. refS calofDemand
 
-arRef, gtfRef, hRef, jRef, jtolRef, ldfRef, nonFLRef, qHtRef, qHtTlTolRef, riskRef :: Sentence
+arRef, gtfRef, hRef, jRef, jtolRef, ldfRef, nonFLRef, qHtRef, qHtTlTolRef :: Sentence
 arRef       = definedIn  aspRat
 gtfRef      = definedIn  glaTyFac
 hRef        = definedIn' hFromt (S "and is based on the nominal thicknesses")
@@ -265,7 +242,6 @@ ldfRef      = definedIn  loadDF
 nonFLRef    = definedIn  nonFL
 qHtRef      = definedIn  dimLL
 qHtTlTolRef = definedIn  tolPre
-riskRef     = definedIn  risk
 
 -- List of Configuration Files necessary for DataDefs.hs
 configFp :: [String]

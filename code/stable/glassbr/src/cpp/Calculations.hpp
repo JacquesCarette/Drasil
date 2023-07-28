@@ -52,19 +52,19 @@ double func_J(InputParameters &inParams, double q_hat);
 */
 double func_NFL(InputParameters &inParams, double q_hat_tol);
 
-/** \brief Calculates load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
-    \param inParams structure holding the input values
-    \param NFL non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
-    \return load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
-*/
-double func_LR(InputParameters &inParams, double NFL);
-
 /** \brief Calculates risk of failure
     \param inParams structure holding the input values
     \param J stress distribution factor (Function)
     \return risk of failure
 */
 double func_B(InputParameters &inParams, double J);
+
+/** \brief Calculates load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
+    \param inParams structure holding the input values
+    \param NFL non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
+    \return load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
+*/
+double func_LR(InputParameters &inParams, double NFL);
 
 /** \brief Calculates probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
     \param B risk of failure

@@ -925,11 +925,7 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td>
-                        <p class="paragraph">
-                          <a href=#checkGlassSafety>FR:Check-Glass-Safety</a>
-                        </p>
-                      </td>
+                      <td><p class="paragraph"></p></td>
                     </tr>
                   </table>
                 </div>
@@ -979,11 +975,7 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td>
-                        <p class="paragraph">
-                          <a href=#checkGlassSafety>FR:Check-Glass-Safety</a>
-                        </p>
-                      </td>
+                      <td><p class="paragraph"></p></td>
                     </tr>
                   </table>
                 </div>
@@ -1001,92 +993,6 @@
                 <p class="paragraph">
                   This section collects and defines all the data needed to build the instance models.
                 </p>
-                <div id="DD:riskFun">
-                  <table class="ddefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>DD:riskFun</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">Risk of failure</p></td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em>B</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph">Unitless</p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[B=\frac{k}{\left(a b\right)^{m-1}} \left(E h^{2}\right)^{m} \mathit{LDF} e^{J}\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li><em>B</em> is the risk of failure (Unitless)</li>
-                          <li>
-                            <em>k</em> is the surface flaw parameter (<em>\(\frac{\text{m}^{12}}{\text{N}^{7}}\)</em>)
-                          </li>
-                          <li>
-                            <em>a</em> is the plate length (long dimension) (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>b</em> is the plate width (short dimension) (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>m</em> is the surface flaw parameter (<em>\(\frac{\text{m}^{12}}{\text{N}^{7}}\)</em>)
-                          </li>
-                          <li>
-                            <em>E</em> is the modulus of elasticity of glass (<em>Pa</em>)
-                          </li>
-                          <li><em>h</em> is the minimum thickness (<em>m</em>)</li>
-                          <li><em>LDF</em> is the load duration factor (Unitless)</li>
-                          <li>
-                            <em>J</em> is the stress distribution factor (Function) (Unitless)
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
-                        </p>
-                        <p class="paragraph">
-                          <em>h</em> is defined in <a href=#DD:minThick>DD:minThick</a> and is based on the nominal thicknesses.
-                        </p>
-                        <p class="paragraph">
-                          <em>LDF</em> is defined in <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.
-                        </p>
-                        <p class="paragraph">
-                          <em>J</em> is defined in <a href=#DD:stressDistFac>DD:stressDistFac</a>.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td>
-                        <p class="paragraph">
-                          <a href=#astm2009>astm2009</a>, <a href=#beasonEtAl1998>beasonEtAl1998</a> (Eqs. 4-5), and <a href=#campidelli>campidelli</a> (Eq. 14)
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph"><a href=#IM:probOfBreak>IM:probOfBreak</a></p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <p class="paragraph"></p>
                 <div id="DD:minThick">
                   <table class="ddefn">
                     <tr>
@@ -1151,7 +1057,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#DD:sdfTol>DD:sdfTol</a>, <a href=#DD:riskFun>DD:riskFun</a>, <a href=#DD:nFL>DD:nFL</a>, and <a href=#DD:dimlessLoad>DD:dimlessLoad</a>
+                          <a href=#DD:sdfTol>DD:sdfTol</a>, <a href=#IM:riskFun>IM:riskFun</a>, <a href=#DD:nFL>DD:nFL</a>, and <a href=#DD:dimlessLoad>DD:dimlessLoad</a>
                         </p>
                       </td>
                     </tr>
@@ -1215,7 +1121,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#DD:sdfTol>DD:sdfTol</a> and <a href=#DD:riskFun>DD:riskFun</a>
+                          <a href=#DD:sdfTol>DD:sdfTol</a> and <a href=#IM:riskFun>IM:riskFun</a>
                         </p>
                       </td>
                     </tr>
@@ -1282,7 +1188,7 @@
                     <tr>
                       <th>RefBy</th>
                       <td>
-                        <p class="paragraph"><a href=#DD:riskFun>DD:riskFun</a></p>
+                        <p class="paragraph"><a href=#IM:riskFun>IM:riskFun</a></p>
                       </td>
                     </tr>
                   </table>
@@ -1894,6 +1800,106 @@
                 <p class="paragraph">
                   The goal <a href=#willBreakGS>GS:Predict-Glass-Withstands-Explosion</a> is met by <a href=#IM:isSafePb>IM:isSafePb</a>, <a href=#IM:isSafeLR>IM:isSafeLR</a>.
                 </p>
+                <div id="IM:riskFun">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:riskFun</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Risk of failure</p></td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>E</em>, <em>LDF</em>, <em>J</em>, <em>k</em>, <em>m</em>, <em>h</em>, <em>a</em>, <em>b</em>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>B</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td>
+                        \[a\gt{}0\]
+                        \[0\lt{}b\leq{}a\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[B=\frac{k}{\left(a b\right)^{m-1}} \left(E h^{2}\right)^{m} \mathit{LDF} e^{J}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>B</em> is the risk of failure (Unitless)</li>
+                          <li>
+                            <em>k</em> is the surface flaw parameter (<em>\(\frac{\text{m}^{12}}{\text{N}^{7}}\)</em>)
+                          </li>
+                          <li>
+                            <em>a</em> is the plate length (long dimension) (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>b</em> is the plate width (short dimension) (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>m</em> is the surface flaw parameter (<em>\(\frac{\text{m}^{12}}{\text{N}^{7}}\)</em>)
+                          </li>
+                          <li>
+                            <em>E</em> is the modulus of elasticity of glass (<em>Pa</em>)
+                          </li>
+                          <li><em>h</em> is the minimum thickness (<em>m</em>)</li>
+                          <li><em>LDF</em> is the load duration factor (Unitless)</li>
+                          <li>
+                            <em>J</em> is the stress distribution factor (Function) (Unitless)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
+                        </p>
+                        <p class="paragraph">
+                          <em>h</em> is defined in <a href=#DD:minThick>DD:minThick</a> and is based on the nominal thicknesses.
+                        </p>
+                        <p class="paragraph">
+                          <em>LDF</em> is defined in <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>J</em> is defined in <a href=#DD:stressDistFac>DD:stressDistFac</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#astm2009>astm2009</a>, <a href=#beasonEtAl1998>beasonEtAl1998</a> (Eqs. 4-5), and <a href=#campidelli>campidelli</a> (Eq. 14)
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#IM:probOfBreak>IM:probOfBreak</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
                 <div id="IM:probOfBreak">
                   <table class="idefn">
                     <tr>
@@ -1939,7 +1945,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>B</em> is defined in <a href=#DD:riskFun>DD:riskFun</a>.
+                          <em>B</em> is defined in <a href=#IM:riskFun>IM:riskFun</a>.
                         </p>
                       </td>
                     </tr>
@@ -2102,7 +2108,9 @@
                     <tr>
                       <th>RefBy</th>
                       <td>
-                        <p class="paragraph"><a href=#IM:isSafeLR>IM:isSafeLR</a></p>
+                        <p class="paragraph">
+                          <a href=#IM:isSafeLR>IM:isSafeLR</a> and <a href=#checkGlassSafety>FR:Check-Glass-Safety</a>
+                        </p>
                       </td>
                     </tr>
                   </table>
@@ -2173,7 +2181,9 @@
                     <tr>
                       <th>RefBy</th>
                       <td>
-                        <p class="paragraph"><a href=#IM:isSafePb>IM:isSafePb</a></p>
+                        <p class="paragraph">
+                          <a href=#IM:isSafePb>IM:isSafePb</a> and <a href=#checkGlassSafety>FR:Check-Glass-Safety</a>
+                        </p>
                       </td>
                     </tr>
                   </table>
@@ -2329,7 +2339,7 @@
               </p>
               <p>
                 <div id="checkGlassSafety">
-                  Check-Glass-Safety: If <em>isSafePb &and; isSafeLR</em> (from <a href=#TM:isSafeProb>TM:isSafeProb</a> and <a href=#TM:isSafeLoad>TM:isSafeLoad</a>), output the message "For the given input parameters, the glass is considered safe." If the condition is false, then output the message "For the given input parameters, the glass is NOT considered safe."
+                  Check-Glass-Safety: If <em>isSafePb &and; isSafeLR</em> (from <a href=#IM:isSafePb>IM:isSafePb</a> and <a href=#IM:isSafeLR>IM:isSafeLR</a>), output the message "For the given input parameters, the glass is considered safe." If the condition is false, then output the message "For the given input parameters, the glass is NOT considered safe."
                 </div>
               </p>
               <p>
@@ -2492,7 +2502,7 @@
                 <tr>
                   <td><em>B</em></td>
                   <td>Risk of failure</td>
-                  <td><a href=#DD:riskFun>DD:riskFun</a></td>
+                  <td><a href=#IM:riskFun>IM:riskFun</a></td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -2787,17 +2797,6 @@
               <th><a href=#assumpLDFC>A:ldfConstant</a></th>
             </tr>
             <tr>
-              <td><a href=#DD:riskFun>DD:riskFun</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#DD:minThick>DD:minThick</a></td>
               <td></td>
               <td></td>
@@ -2942,6 +2941,17 @@
             </tr>
             <tr>
               <td><a href=#TM:isSafeLoad>TM:isSafeLoad</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:riskFun>IM:riskFun</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3229,7 +3239,6 @@
           <table class="table">
             <tr>
               <th></th>
-              <th><a href=#DD:riskFun>DD:riskFun</a></th>
               <th><a href=#DD:minThick>DD:minThick</a></th>
               <th><a href=#DD:loadDurFactor>DD:loadDurFactor</a></th>
               <th><a href=#DD:stressDistFac>DD:stressDistFac</a></th>
@@ -3244,32 +3253,11 @@
               <th><a href=#DD:calofDemand>DD:calofDemand</a></th>
               <th><a href=#TM:isSafeProb>TM:isSafeProb</a></th>
               <th><a href=#TM:isSafeLoad>TM:isSafeLoad</a></th>
+              <th><a href=#IM:riskFun>IM:riskFun</a></th>
               <th><a href=#IM:probOfBreak>IM:probOfBreak</a></th>
               <th><a href=#IM:calofCapacity>IM:calofCapacity</a></th>
               <th><a href=#IM:isSafePb>IM:isSafePb</a></th>
               <th><a href=#IM:isSafeLR>IM:isSafeLR</a></th>
-            </tr>
-            <tr>
-              <td><a href=#DD:riskFun>DD:riskFun</a></td>
-              <td></td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:minThick>DD:minThick</a></td>
@@ -3322,12 +3310,12 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3339,7 +3327,6 @@
             </tr>
             <tr>
               <td><a href=#DD:nFL>DD:nFL</a></td>
-              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -3347,6 +3334,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3383,7 +3371,6 @@
             </tr>
             <tr>
               <td><a href=#DD:dimlessLoad>DD:dimlessLoad</a></td>
-              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -3396,6 +3383,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3412,10 +3400,10 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3427,9 +3415,9 @@
             </tr>
             <tr>
               <td><a href=#DD:sdfTol>DD:sdfTol</a></td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
-              <td>X</td>
-              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3523,10 +3511,10 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3580,10 +3568,10 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#IM:probOfBreak>IM:probOfBreak</a></td>
+              <td><a href=#IM:riskFun>IM:riskFun</a></td>
               <td>X</td>
-              <td></td>
-              <td></td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3602,13 +3590,35 @@
               <td></td>
             </tr>
             <tr>
+              <td><a href=#IM:probOfBreak>IM:probOfBreak</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#IM:calofCapacity>IM:calofCapacity</a></td>
               <td></td>
               <td></td>
               <td></td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
-              <td>X</td>
-              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3658,8 +3668,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3676,7 +3686,6 @@
           <table class="table">
             <tr>
               <th></th>
-              <th><a href=#DD:riskFun>DD:riskFun</a></th>
               <th><a href=#DD:minThick>DD:minThick</a></th>
               <th><a href=#DD:loadDurFactor>DD:loadDurFactor</a></th>
               <th><a href=#DD:stressDistFac>DD:stressDistFac</a></th>
@@ -3691,6 +3700,7 @@
               <th><a href=#DD:calofDemand>DD:calofDemand</a></th>
               <th><a href=#TM:isSafeProb>TM:isSafeProb</a></th>
               <th><a href=#TM:isSafeLoad>TM:isSafeLoad</a></th>
+              <th><a href=#IM:riskFun>IM:riskFun</a></th>
               <th><a href=#IM:probOfBreak>IM:probOfBreak</a></th>
               <th><a href=#IM:calofCapacity>IM:calofCapacity</a></th>
               <th><a href=#IM:isSafePb>IM:isSafePb</a></th>
@@ -3907,12 +3917,12 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>

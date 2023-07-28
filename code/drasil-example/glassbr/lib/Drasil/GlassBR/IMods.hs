@@ -1,4 +1,6 @@
-module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro) where
+module Drasil.GlassBR.IMods {- temporarily export everything-}
+-- (symb, iMods, pbIsSafe, lrIsSafe, instModIntro)
+  where
 
 import Control.Lens ((^.))
 import Prelude hiding (exp)
@@ -7,23 +9,45 @@ import Theory.Drasil (InstanceModel, imNoDeriv, qwC, qwUC, equationalModelN)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
+import Data.Drasil.Citations (campidelli)
 import Data.Drasil.Concepts.Documentation (goal)
 import Data.Drasil.SI_Units
 
 import Drasil.GlassBR.DataDefs {- temporarily import everything -}
 import Drasil.GlassBR.Goals (willBreakGS)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
-import Drasil.GlassBR.Unitals (charWeight, demand, isSafeLR, isSafePb,
-  lRe, pbTol, plateLen, plateWidth, probBr, standOffDist, loadSF)
-
+import Drasil.GlassBR.Unitals {- temporarily import everything -}
+import Drasil.SRSDocument (Block (Parallel))
 
 iMods :: [InstanceModel]
-iMods = [probOfBreak, calofCapacity, pbIsSafe, lrIsSafe]
+iMods = [risk, probOfBreak, calofCapacity, pbIsSafe, lrIsSafe]
 
 symb :: [UnitalChunk]
 symb =  [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram, ucuc standOffDist metre, demand] -- this is temporary
 -- ++
  -- [dqdQd (qw calofDemand) demandq]
+
+qDefns :: [Block SimpleQDef]
+qDefns = Parallel hFromtQD [glaTyFacQD] : --can be calculated on their own
+  map (`Parallel` []) [dimLLQD, strDisFacQD, riskQD, tolStrDisFacQD, tolPreQD,
+    nonFLQD]
+
+{--}
+
+risk :: InstanceModel
+risk = imNoDeriv (equationalModelN (riskFun ^. term) riskQD)
+  (qwUC modElas : qwUC lDurFac : qwUC stressDistFac :
+    map qwUC [sflawParamK, sflawParamM, minThick] ++ [
+      qwC plateLen   $ UpFrom  (Exc, exactDbl 0),
+      qwC plateWidth $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen)])
+  (qw riskFun) [] [dRef astm2009, dRefInfo beasonEtAl1998 $ Equation [4, 5],
+    dRefInfo campidelli $ Equation [14]] "riskFun" [aGrtrThanB, hRef, ldfRef, jRef]
+
+-- FIXME [4] !!!
+riskQD :: SimpleQDef
+riskQD = mkQuantDef riskFun ((sy sflawParamK $/
+  (mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- exactDbl 1))) `mulRe`
+  ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac))
 
 {--}
 
@@ -94,3 +118,6 @@ pbIsSafeDesc = iModDesc isSafePb
 
 probBRRef :: Sentence
 probBRRef = definedIn probOfBreak
+
+riskRef :: Sentence
+riskRef = definedIn risk

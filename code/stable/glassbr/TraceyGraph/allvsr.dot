@@ -1,8 +1,8 @@
 digraph allvsr {
 	outputValsAndKnownValues -> inputValues;
 	outputValsAndKnownValues -> sysSetValsFollowingAssumps;
-	checkGlassSafety -> isSafeProb;
-	checkGlassSafety -> isSafeLoad;
+	checkGlassSafety -> isSafePb;
+	checkGlassSafety -> isSafeLR;
 
 
 	assumpGT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpGT"];
@@ -19,7 +19,6 @@ digraph allvsr {
 	{assumpGT, assumpGC, assumpES, assumpSV, assumpGL, assumpBC, assumpRT, assumpLDFC}
 	}
 
-	riskFun	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:riskFun"];
 	minThick	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:minThick"];
 	loadDurFactor	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:loadDurFactor"];
 	stressDistFac	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:stressDistFac"];
@@ -35,7 +34,7 @@ digraph allvsr {
 
 	subgraph DD {
 	rank="same"
-	{riskFun, minThick, loadDurFactor, stressDistFac, nFL, glassTypeFac, dimlessLoad, tolLoad, sdfTol, stdOffDist, aR, eqTNTChar, demandq}
+	{minThick, loadDurFactor, stressDistFac, nFL, glassTypeFac, dimlessLoad, tolLoad, sdfTol, stdOffDist, aR, eqTNTChar, demandq}
 	}
 
 	isSafeProb	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeProb"];
@@ -46,6 +45,7 @@ digraph allvsr {
 	{isSafeProb, isSafeLoad}
 	}
 
+	riskFun	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:riskFun"];
 	probBr	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:probOfBreak"];
 	lResistance	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calofCapacity"];
 	isSafePb	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafePb"];
@@ -53,7 +53,7 @@ digraph allvsr {
 
 	subgraph IM {
 	rank="same"
-	{probBr, lResistance, isSafePb, isSafeLR}
+	{riskFun, probBr, lResistance, isSafePb, isSafeLR}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

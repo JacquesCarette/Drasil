@@ -197,9 +197,6 @@
             "nFL"
         ],
         [
-            "riskFun"
-        ],
-        [
             "sdfTol"
         ],
         [
@@ -225,6 +222,9 @@
         ],
         [
             "probBr"
+        ],
+        [
+            "riskFun"
         ]
     ],
     "labelledContent": [

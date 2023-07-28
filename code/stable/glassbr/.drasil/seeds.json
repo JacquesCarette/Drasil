@@ -179,9 +179,6 @@
             "demandq"
         ],
         [
-            "dimlessLoad"
-        ],
-        [
             "eqTNTChar"
         ],
         [
@@ -205,6 +202,9 @@
     ],
     "generalDefinitions": [],
     "instanceModels": [
+        [
+            "dimlessLoad"
+        ],
         [
             "isSafeLR"
         ],

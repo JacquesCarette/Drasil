@@ -33,8 +33,8 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspectRatio, charWeight,
 ----------------------
 
 dataDefs :: [DataDefinition]
-dataDefs = [hFromt, loadDF, glaTyFac, dimLL, tolPre,
-  tolStrDisFac, standOffDis, aspRat, eqTNTWDD, calofDemand]
+dataDefs = [hFromt, loadDF, glaTyFac, tolPre, tolStrDisFac, standOffDis,
+  aspRat, eqTNTWDD, calofDemand]
 {--}
 
 hFromtEq :: Relation
@@ -76,19 +76,6 @@ glaTyFacQD = mkQuantDef gTF glaTyFacEq
 glaTyFac :: DataDefinition
 glaTyFac = ddE glaTyFacQD [dRef astm2009] Nothing "gTF"
   [anGlass, ftGlass, hsGlass]
-
-{--}
-
-dimLLEq :: Expr
-dimLLEq = mulRe (sy demand) (square (mulRe (sy plateLen) (sy plateWidth)))
-  $/ mulRe (mulRe (sy modElas) (sy minThick $^ exactDbl 4)) (sy gTF)
-
-dimLLQD :: SimpleQDef
-dimLLQD = mkQuantDef dimlessLoad dimLLEq
-
-dimLL :: DataDefinition
-dimLL = ddE dimLLQD [dRef astm2009, dRefInfo campidelli $ Equation [7]] Nothing "dimlessLoad"
-  [qRef, aGrtrThanB, stdVals [modElas], hRef, gtfRef]
 
 {--}
 
@@ -205,13 +192,12 @@ pbTolUsr = ch pbTol `S.is` S "entered by the" +:+. phrase user
 qRef :: Sentence
 qRef = ch demand `S.isThe` (demandq ^. defn) `sC` S "as given in" +:+. refS calofDemand
 
-arRef, gtfRef, hRef, jtolRef, ldfRef, qHtRef, qHtTlTolRef :: Sentence
+arRef, gtfRef, hRef, jtolRef, ldfRef, qHtTlTolRef :: Sentence
 arRef       = definedIn  aspRat
 gtfRef      = definedIn  glaTyFac
 hRef        = definedIn' hFromt (S "and is based on the nominal thicknesses")
 jtolRef     = definedIn  tolStrDisFac
 ldfRef      = definedIn  loadDF
-qHtRef      = definedIn  dimLL
 qHtTlTolRef = definedIn  tolPre
 
 -- List of Configuration Files necessary for DataDefs.hs

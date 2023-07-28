@@ -21,7 +21,8 @@ import Drasil.GlassBR.Unitals {- temporarily import everything -}
 import Drasil.SRSDocument (Block (Parallel))
 
 iMods :: [InstanceModel]
-iMods = [risk, strDisFac, nonFL, probOfBreak, calofCapacity, pbIsSafe, lrIsSafe]
+iMods = [risk, strDisFac, nonFL, dimLL, probOfBreak, calofCapacity, pbIsSafe,
+  lrIsSafe]
 
 symb :: [UnitalChunk]
 symb =  [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram, ucuc standOffDist metre, demand] -- this is temporary
@@ -83,6 +84,23 @@ nonFLEq = mulRe (mulRe (sy tolLoad) (sy modElas)) (sy minThick $^ exactDbl 4) $/
 
 nonFLQD :: SimpleQDef
 nonFLQD = mkQuantDef nonFactorL nonFLEq
+
+{--}
+
+dimLL :: InstanceModel
+dimLL = imNoDeriv (equationalModelN (dimlessLoad ^. term) dimLLQD)
+  (qwUC demand : qwUC modElas : qwUC minThick : qwUC gTF :
+    [qwC plateLen   $ UpFrom  (Exc, exactDbl 0),
+     qwC plateWidth $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen)])
+  (qw dimlessLoad) [] [dRef astm2009, dRefInfo campidelli $ Equation [7]]
+  "dimlessLoad" [qRef, aGrtrThanB, stdVals [modElas], hRef, gtfRef]
+
+dimLLEq :: Expr
+dimLLEq = mulRe (sy demand) (square (mulRe (sy plateLen) (sy plateWidth)))
+  $/ mulRe (mulRe (sy modElas) (sy minThick $^ exactDbl 4)) (sy gTF)
+
+dimLLQD :: SimpleQDef
+dimLLQD = mkQuantDef dimlessLoad dimLLEq
 
 {--}
 
@@ -151,8 +169,9 @@ pbIsSafeDesc :: Sentence
 pbIsSafeDesc = iModDesc isSafePb
   (ch isSafePb `S.and_` ch isSafePb +:+ fromSource lrIsSafe)
 
-jRef, nonFLRef, probBRRef, riskRef :: Sentence
+jRef, nonFLRef, probBRRef, qHtRef, riskRef :: Sentence
 jRef      = definedIn strDisFac
-nonFLRef  = definedIn  nonFL
+nonFLRef  = definedIn nonFL
 probBRRef = definedIn probOfBreak
+qHtRef    = definedIn dimLL
 riskRef   = definedIn risk

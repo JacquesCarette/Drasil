@@ -290,7 +290,7 @@
         "symbols",
         "references",
         "labelledContent",
-        "dataDefinitions"
+        "instanceModels"
     ],
     "doc:InDataConstraints": [
         "references",

@@ -194,9 +194,6 @@
             "minThick"
         ],
         [
-            "nFL"
-        ],
-        [
             "sdfTol"
         ],
         [
@@ -216,6 +213,9 @@
         ],
         [
             "lResistance"
+        ],
+        [
+            "nFL"
         ],
         [
             "probBr"

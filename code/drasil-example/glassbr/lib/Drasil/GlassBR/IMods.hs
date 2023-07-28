@@ -21,7 +21,7 @@ import Drasil.GlassBR.Unitals {- temporarily import everything -}
 import Drasil.SRSDocument (Block (Parallel))
 
 iMods :: [InstanceModel]
-iMods = [risk, strDisFac, probOfBreak, calofCapacity, pbIsSafe, lrIsSafe]
+iMods = [risk, strDisFac, nonFL, probOfBreak, calofCapacity, pbIsSafe, lrIsSafe]
 
 symb :: [UnitalChunk]
 symb =  [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram, ucuc standOffDist metre, demand] -- this is temporary
@@ -69,6 +69,23 @@ strDisFacEq = apply interpZ [str "SDF.txt", sy aspectRatio, sy dimlessLoad]
 
 {--}
 
+nonFL :: InstanceModel
+nonFL = imNoDeriv (equationalModelN (nonFactorL ^. term) nonFLQD)
+  (qwUC tolLoad : qwUC modElas : qwUC minThick :
+    [qwC plateLen   $ UpFrom  (Exc, exactDbl 0),
+     qwC plateWidth $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen)])
+  (qw nonFactorL) [] [dRef astm2009] "nFL"
+  [qHtTlTolRef, stdVals [modElas], hRef, aGrtrThanB]
+
+nonFLEq :: Expr
+nonFLEq = mulRe (mulRe (sy tolLoad) (sy modElas)) (sy minThick $^ exactDbl 4) $/
+  square (mulRe (sy plateLen) (sy plateWidth))
+
+nonFLQD :: SimpleQDef
+nonFLQD = mkQuantDef nonFactorL nonFLEq
+
+{--}
+
 probOfBreak :: InstanceModel
 probOfBreak = imNoDeriv (equationalModelN (probBr ^. term) probOfBreakQD)
   [qwUC risk] (qw probBr) [] (map dRef [astm2009, beasonEtAl1998]) "probOfBreak"
@@ -81,7 +98,7 @@ probOfBreakQD = mkQuantDef probBr (exactDbl 1 $- exp (neg (sy risk)))
 
 calofCapacity :: InstanceModel
 calofCapacity = imNoDeriv (equationalModelN (lRe ^. term) calofCapacityQD)
-  (map qwUC [nonFL, glaTyFac] ++ [qwUC loadSF]) (qw lRe) []
+  (qwUC nonFL : qwUC glaTyFac : [qwUC loadSF]) (qw lRe) []
   [dRef astm2009] "calofCapacity" [lrCap, nonFLRef, gtfRef]
 
 calofCapacityQD :: SimpleQDef
@@ -134,7 +151,8 @@ pbIsSafeDesc :: Sentence
 pbIsSafeDesc = iModDesc isSafePb
   (ch isSafePb `S.and_` ch isSafePb +:+ fromSource lrIsSafe)
 
-jRef, probBRRef, riskRef :: Sentence
+jRef, nonFLRef, probBRRef, riskRef :: Sentence
 jRef      = definedIn strDisFac
+nonFLRef  = definedIn  nonFL
 probBRRef = definedIn probOfBreak
 riskRef   = definedIn risk

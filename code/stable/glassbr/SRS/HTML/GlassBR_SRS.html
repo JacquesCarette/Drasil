@@ -847,7 +847,7 @@
                   </p>
                   <p>
                     <div id="assumpSV">
-                      standardValues: The values provided in <a href=#Sec:AuxConstants>Sec:Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. (RefBy: <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a>, <a href=#DD:sdfTol>DD:sdfTol</a>, <a href=#DD:nFL>DD:nFL</a>, <a href=#DD:loadDurFactor>DD:loadDurFactor</a>, <a href=#DD:dimlessLoad>DD:dimlessLoad</a>, and <a href=#assumpLDFC>A:ldfConstant</a>.)
+                      standardValues: The values provided in <a href=#Sec:AuxConstants>Sec:Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. (RefBy: <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a>, <a href=#DD:sdfTol>DD:sdfTol</a>, <a href=#IM:nFL>IM:nFL</a>, <a href=#DD:loadDurFactor>DD:loadDurFactor</a>, <a href=#DD:dimlessLoad>DD:dimlessLoad</a>, and <a href=#assumpLDFC>A:ldfConstant</a>.)
                     </div>
                   </p>
                   <p>
@@ -1057,7 +1057,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#DD:sdfTol>DD:sdfTol</a>, <a href=#IM:riskFun>IM:riskFun</a>, <a href=#DD:nFL>DD:nFL</a>, and <a href=#DD:dimlessLoad>DD:dimlessLoad</a>
+                          <a href=#DD:sdfTol>DD:sdfTol</a>, <a href=#IM:riskFun>IM:riskFun</a>, <a href=#IM:nFL>IM:nFL</a>, and <a href=#DD:dimlessLoad>DD:dimlessLoad</a>
                         </p>
                       </td>
                     </tr>
@@ -1122,83 +1122,6 @@
                       <td>
                         <p class="paragraph">
                           <a href=#DD:sdfTol>DD:sdfTol</a> and <a href=#IM:riskFun>IM:riskFun</a>
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <p class="paragraph"></p>
-                <div id="DD:nFL">
-                  <table class="ddefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>DD:nFL</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">Non-factored load</p></td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em>NFL</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph"><em>Pa</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[\mathit{NFL}=\frac{{\hat{q}_{\text{tol}}} E h^{4}}{\left(a b\right)^{2}}\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li><em>NFL</em> is the non-factored load (<em>Pa</em>)</li>
-                          <li>
-                            <em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
-                          </li>
-                          <li>
-                            <em>E</em> is the modulus of elasticity of glass (<em>Pa</em>)
-                          </li>
-                          <li><em>h</em> is the minimum thickness (<em>m</em>)</li>
-                          <li>
-                            <em>a</em> is the plate length (long dimension) (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>b</em> is the plate width (short dimension) (<em>m</em>)
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>q&#770;<sub>tol</sub></em> is defined in <a href=#DD:tolLoad>DD:tolLoad</a>.
-                        </p>
-                        <p class="paragraph">
-                          <em>E</em> comes from <a href=#assumpSV>A:standardValues</a>.
-                        </p>
-                        <p class="paragraph">
-                          <em>h</em> is defined in <a href=#DD:minThick>DD:minThick</a> and is based on the nominal thicknesses.
-                        </p>
-                        <p class="paragraph">
-                          <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph">
-                          <a href=#IM:calofCapacity>IM:calofCapacity</a>
                         </p>
                       </td>
                     </tr>
@@ -1407,7 +1330,7 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td><p class="paragraph"><a href=#DD:nFL>DD:nFL</a></p></td>
+                      <td><p class="paragraph"><a href=#IM:nFL>IM:nFL</a></p></td>
                     </tr>
                   </table>
                 </div>
@@ -1907,6 +1830,97 @@
                     </tr>
                   </table>
                 </div>
+                <div id="IM:nFL">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:nFL</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Non-factored load</p></td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>q&#770;<sub>tol</sub></em>, <em>E</em>, <em>h</em>, <em>a</em>, <em>b</em>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>NFL</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td>
+                        \[a\gt{}0\]
+                        \[0\lt{}b\leq{}a\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[\mathit{NFL}=\frac{{\hat{q}_{\text{tol}}} E h^{4}}{\left(a b\right)^{2}}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>NFL</em> is the non-factored load (<em>Pa</em>)</li>
+                          <li>
+                            <em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
+                          </li>
+                          <li>
+                            <em>E</em> is the modulus of elasticity of glass (<em>Pa</em>)
+                          </li>
+                          <li><em>h</em> is the minimum thickness (<em>m</em>)</li>
+                          <li>
+                            <em>a</em> is the plate length (long dimension) (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>b</em> is the plate width (short dimension) (<em>m</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>q&#770;<sub>tol</sub></em> is defined in <a href=#DD:tolLoad>DD:tolLoad</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>E</em> comes from <a href=#assumpSV>A:standardValues</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>h</em> is defined in <a href=#DD:minThick>DD:minThick</a> and is based on the nominal thicknesses.
+                        </p>
+                        <p class="paragraph">
+                          <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:calofCapacity>IM:calofCapacity</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
                 <div id="IM:probOfBreak">
                   <table class="idefn">
                     <tr>
@@ -2020,7 +2034,7 @@
                       <td>
                         <p class="paragraph"><em>LR</em> is also called capacity.</p>
                         <p class="paragraph">
-                          <em>NFL</em> is defined in <a href=#DD:nFL>DD:nFL</a>.
+                          <em>NFL</em> is defined in <a href=#IM:nFL>IM:nFL</a>.
                         </p>
                         <p class="paragraph">
                           <em>GTF</em> is defined in <a href=#DD:gTF>DD:gTF</a>.
@@ -2557,7 +2571,7 @@
                 <tr>
                   <td><em>NFL</em></td>
                   <td>Non-factored load</td>
-                  <td><a href=#DD:nFL>DD:nFL</a></td>
+                  <td><a href=#IM:nFL>IM:nFL</a></td>
                   <td><em>Pa</em></td>
                 </tr>
                 <tr>
@@ -2826,17 +2840,6 @@
               <td>X</td>
             </tr>
             <tr>
-              <td><a href=#DD:nFL>DD:nFL</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#DD:gTF>DD:gTF</a></td>
               <td></td>
               <td></td>
@@ -2963,6 +2966,17 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:nFL>IM:nFL</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3248,7 +3262,6 @@
               <th></th>
               <th><a href=#DD:minThick>DD:minThick</a></th>
               <th><a href=#DD:loadDurFactor>DD:loadDurFactor</a></th>
-              <th><a href=#DD:nFL>DD:nFL</a></th>
               <th><a href=#DD:gTF>DD:gTF</a></th>
               <th><a href=#DD:dimlessLoad>DD:dimlessLoad</a></th>
               <th><a href=#DD:tolLoad>DD:tolLoad</a></th>
@@ -3261,6 +3274,7 @@
               <th><a href=#TM:isSafeLoad>TM:isSafeLoad</a></th>
               <th><a href=#IM:riskFun>IM:riskFun</a></th>
               <th><a href=#IM:stressDistFac>IM:stressDistFac</a></th>
+              <th><a href=#IM:nFL>IM:nFL</a></th>
               <th><a href=#IM:probOfBreak>IM:probOfBreak</a></th>
               <th><a href=#IM:calofCapacity>IM:calofCapacity</a></th>
               <th><a href=#IM:isSafePb>IM:isSafePb</a></th>
@@ -3311,28 +3325,6 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:nFL>DD:nFL</a></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#DD:gTF>DD:gTF</a></td>
               <td></td>
               <td></td>
@@ -3358,7 +3350,6 @@
               <td><a href=#DD:dimlessLoad>DD:dimlessLoad</a></td>
               <td>X</td>
               <td></td>
-              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -3367,6 +3358,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3383,10 +3375,10 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3494,10 +3486,10 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3567,8 +3559,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3579,12 +3571,34 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:nFL>IM:nFL</a></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3610,8 +3624,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3623,18 +3637,18 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3673,8 +3687,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3695,7 +3709,6 @@
               <th></th>
               <th><a href=#DD:minThick>DD:minThick</a></th>
               <th><a href=#DD:loadDurFactor>DD:loadDurFactor</a></th>
-              <th><a href=#DD:nFL>DD:nFL</a></th>
               <th><a href=#DD:gTF>DD:gTF</a></th>
               <th><a href=#DD:dimlessLoad>DD:dimlessLoad</a></th>
               <th><a href=#DD:tolLoad>DD:tolLoad</a></th>
@@ -3708,6 +3721,7 @@
               <th><a href=#TM:isSafeLoad>TM:isSafeLoad</a></th>
               <th><a href=#IM:riskFun>IM:riskFun</a></th>
               <th><a href=#IM:stressDistFac>IM:stressDistFac</a></th>
+              <th><a href=#IM:nFL>IM:nFL</a></th>
               <th><a href=#IM:probOfBreak>IM:probOfBreak</a></th>
               <th><a href=#IM:calofCapacity>IM:calofCapacity</a></th>
               <th><a href=#IM:isSafePb>IM:isSafePb</a></th>

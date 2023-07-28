@@ -47,6 +47,7 @@ data Choices = Choices {
 class RenderChoices a where
     showChs :: a -> Sentence
     showChsList :: [a] -> Sentence
+    showChsList [] = S "None"
     showChsList lst = foldlSent_ (map showChs lst)
 
 -- | Architecture of a program

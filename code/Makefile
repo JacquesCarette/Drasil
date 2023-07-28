@@ -27,44 +27,44 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 #--------------------------------------------#
 
 # Current list of examples
-SRC_EXAMPLES = glassbr nopcm projectile pdcontroller dblpendulum
-EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpendulum 
+SRC_EXAMPLES = glassbr swhsnopcm projectile pdcontroller dblpend
+EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpend 
 GOOLTEST = codegenTest
 
 # where they live
 HGHC_DIR  = hghc
 GLASSBR_DIR = glassbr
-NOPCM_DIR = nopcm
+SWHSNOPCM_DIR = swhsnopcm
 SWHS_DIR  = swhs
 SSP_DIR   = ssp
 GAMEPHYSICS_DIR  = gamephysics
 PROJECTILE_DIR = projectile
 TEMPLATE_DIR = template
 GOOLTEST_DIR = gooltest
-DBLPENDULUM_DIR = dblpendulum
-SGLPENDULUM_DIR = sglpendulum
+DBLPEND_DIR = dblpend
+SGLPEND_DIR = sglpend
 PDCONTROLLER_DIR = pdcontroller
 
 # Directories for examples with multiple src versions
 MULTI_SRC_DIRS = $(PROJECTILE_DIR)
 
 # All example directories
-EXAMPLE_DIRS = $(MULTI_SRC_DIRS) $(HGHC_DIR) $(GLASSBR_DIR) $(NOPCM_DIR) \
-  $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR) $(DBLPENDULUM_DIR) $(SGLPENDULUM_DIR)\
+EXAMPLE_DIRS = $(MULTI_SRC_DIRS) $(HGHC_DIR) $(GLASSBR_DIR) $(SWHSNOPCM_DIR) \
+  $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR) $(DBLPEND_DIR) $(SGLPEND_DIR)\
   $(PDCONTROLLER_DIR)
 
 # and the name of their executables
 HGHC_EXE  = hghc
 GLASSBR_EXE = glassbr
-NOPCM_EXE = nopcm
+SWHSNOPCM_EXE = swhsnopcm
 SWHS_EXE  = swhs
 SSP_EXE   = ssp
 GAMEPHYSICS_EXE  = gamephysics
 PROJECTILE_EXE = projectile
 TEMPLATE_EXE = template
 GOOLTEST_EXE = codegenTest
-DBLPENDULUM_EXE = dblpendulum
-SGLPENDULUM_EXE = sglpendulum
+DBLPEND_EXE = dblpend
+SGLPEND_EXE = sglpend
 PDCONTROLLER_EXE = pdcontroller
 
 # and the associated per-example information generated
@@ -146,8 +146,8 @@ WEBSITE_FOLDER = $(WEBSITE_FOLDER_NAME)/HTML/
 FULL ?= 0
 
 # GHC debug options
-PROFALL = --executable-profiling --library-profiling
-PROFEXEC = +RTS -xc -P
+PROFALL = --profile
+PROFEXEC = --profile --rts-options '-xc -P'
 
 # GHC build options
 GHCTHREADS ?= 2
@@ -243,7 +243,7 @@ packagedeps: graphmod check_dot
 	@echo ----------------------------
 	@echo Generating package dependency graph
 	@echo ----------------------------
-	@stack dot --prune dblpendulum,gamephysics,glassbr,hghc,nopcm,pdcontroller,projectile,sglpendulum,ssp,swhs,template,drasil-website | tred | dot -Tpng > "$(GRAPH_FOLDER)drasil-all-pkgs-deps".png	
+	@stack dot --prune dblpend,gamephysics,glassbr,hghc,swhsnopcm,pdcontroller,projectile,sglpend,ssp,swhs,template,drasil-website | tred | dot -Tpng > "$(GRAPH_FOLDER)drasil-all-pkgs-deps".png	
 
 #--------------------------------------------------------------#
 #--- Targets that are used for individual packages/examples ---#
@@ -267,13 +267,13 @@ $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
 $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
 	stack build $(stackArgs) "$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
-	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec -- "$(EEXE)" $(EXECARGS)
+	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec $(EXECARGS) -- "$(EEXE)"
 
 # Compiles GOOL examples to concrete code (Java, C++, etc.)
 $(GOOLTEST)$(GEN_E_SUFFIX):
 	stack build $(stackArgs) "drasil-code:exe:$(GOOLTEST_EXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(GOOLTEST_DIR)"
-	cd "$(BUILD_FOLDER)$(GOOLTEST_DIR)" && stack exec -- "$(GOOLTEST_EXE)" $(EXECARGS)
+	cd "$(BUILD_FOLDER)$(GOOLTEST_DIR)" && stack exec $(EXECARGS) -- "$(GOOLTEST_EXE)"
 
 # Install individual Drasil examples
 $(filter %$(INSTALL_E_SUFFIX), $(INSTALL_EXAMPLES)): %$(INSTALL_E_SUFFIX):
@@ -285,7 +285,7 @@ $(filter %$(INSTALL_E_SUFFIX), $(INSTALL_EXAMPLES)): %$(INSTALL_E_SUFFIX):
 $(filter %$(TRACE_GRAPH_SUFFIX), $(TRACE_GRAPH_EXAMPLES)): %$(TRACE_GRAPH_SUFFIX): graphmod
 	stack build $(stackArgs) "$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
-	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec -- "$(EEXE)" $(EXECARGS)
+	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec $(EXECARGS) -- "$(EEXE)"
 	@mkdir -p "$(TRACEY_GRAPHS_FOLDER)$(EDIR)"
 	@echo Making traceability graphs for "$(EEXE)"
 	@if [ -d "$(BUILD_FOLDER)$(EDIR)/$(TRACEY_GRAPH_FOLDER)" ]; then \
@@ -342,8 +342,8 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod ch
 analysis: graphmod ##@Analysis Generate a table and some graphs to analyze Drasil's class, datatype, and instance structures.
 	- rm -rf "$(ANALYSIS_FOLDER)"
 	@mkdir -p "$(ANALYSIS_FOLDER)"
-	cd $(SCRIPT_FOLDER) && stack exec -- runghc ClassInstDepGen.hs
-	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeDepGen.hs
+	cd $(SCRIPT_FOLDER) && stack ClassInstDepGen.hs
+	cd $(SCRIPT_FOLDER) && stack TypeDepGen.hs
 	@echo "Analysis complete. Please see '$(ANALYSIS_FOLDER)' folder."
 
 convertAnalyzed: ##@Analysis Convert analyzed dot graphs into SVGs.

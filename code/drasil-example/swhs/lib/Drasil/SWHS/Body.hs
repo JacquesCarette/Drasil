@@ -132,7 +132,7 @@ mkSRS = [TableOfContents,
      IOrgSec inModel (SRS.inModel [] []) orgDocEnd
     ],
   GSDSec $ GSDProg
-    [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
+    [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets progName]
     , UsrChars [userChars progName]
     , SystCons [] []
     ],
@@ -307,9 +307,9 @@ sysCntxtRespIntro pro = foldlSPCol [short pro +:+. S "is mostly self-contained",
   S "interface", S "responsibilities" `S.the_ofTheC` phraseNP (user `andThe`
   system) `S.are` S "as follows"]
 
-systContRespBullets :: Contents
-systContRespBullets = UlC $ ulcc $ Enumeration $ bulletNested
-  [titleize user +: S "Responsibilities", short progName +: S "Responsibilities"]
+systContRespBullets :: CI -> Contents
+systContRespBullets prog = UlC $ ulcc $ Enumeration $ bulletNested
+  [titleize user +: S "Responsibilities", short prog +: S "Responsibilities"]
   $ map bulletFlat [userResp, swhsResp]
 
 userResp :: [Sentence]

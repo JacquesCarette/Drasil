@@ -4,7 +4,7 @@ import Language.Drasil.Classes(IsArgumentName, Callable)
 import Language.Drasil.UID (HasUID(..))
 import Language.Drasil.Symbol (HasSymbol)
 import Language.Drasil.Space (Space(Actor), HasSpace(..))
-import Language.Drasil.Chunk.CodeBase (CodeIdea, CodeVarChunk)
+import Language.Drasil.Chunk.CodeVar (CodeIdea, CodeVarChunk)
 import Language.Drasil.Expr.Class (ExprC(..))
 import Language.Drasil.CodeExpr.Lang (CodeExpr(FCall, New, Message, Field))
 

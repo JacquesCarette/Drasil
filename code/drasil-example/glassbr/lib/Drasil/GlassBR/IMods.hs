@@ -14,13 +14,14 @@ import Data.Drasil.Concepts.Documentation (goal)
 import Data.Drasil.SI_Units
 
 import Drasil.GlassBR.DataDefs {- temporarily import everything -}
+import Drasil.GlassBR.Figures (dimlessloadVsARFig)
 import Drasil.GlassBR.Goals (willBreakGS)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals {- temporarily import everything -}
 import Drasil.SRSDocument (Block (Parallel))
 
 iMods :: [InstanceModel]
-iMods = [risk, probOfBreak, calofCapacity, pbIsSafe, lrIsSafe]
+iMods = [risk, strDisFac, probOfBreak, calofCapacity, pbIsSafe, lrIsSafe]
 
 symb :: [UnitalChunk]
 symb =  [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram, ucuc standOffDist metre, demand] -- this is temporary
@@ -48,6 +49,22 @@ riskQD :: SimpleQDef
 riskQD = mkQuantDef riskFun ((sy sflawParamK $/
   (mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- exactDbl 1))) `mulRe`
   ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac))
+
+{--}
+
+strDisFac :: InstanceModel
+strDisFac = imNoDeriv (equationalModelN (stressDistFac ^. term) strDisFacQD)
+  (qwC aspectRatio (UpFrom (Inc, exactDbl 1)) : [qwUC dimlessLoad])
+  (qw stressDistFac) [] [dRef astm2009] "stressDistFac"
+  [interpolating stressDistFac dimlessloadVsARFig, arRef, qHtRef]
+
+strDisFacQD :: SimpleQDef
+strDisFacQD = mkQuantDef stressDistFac strDisFacEq
+
+strDisFacEq :: Expr
+-- strDisFacEq = apply (sy stressDistFac)
+--   [sy dimlessLoad, sy aspectRatio]
+strDisFacEq = apply interpZ [str "SDF.txt", sy aspectRatio, sy dimlessLoad]
 
 {--}
 
@@ -116,8 +133,7 @@ pbIsSafeDesc :: Sentence
 pbIsSafeDesc = iModDesc isSafePb
   (ch isSafePb `S.and_` ch isSafePb +:+ fromSource lrIsSafe)
 
-probBRRef :: Sentence
+jRef, probBRRef, riskRef :: Sentence
+jRef      = definedIn strDisFac
 probBRRef = definedIn probOfBreak
-
-riskRef :: Sentence
-riskRef = definedIn risk
+riskRef   = definedIn risk

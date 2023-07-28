@@ -1128,72 +1128,6 @@
                   </table>
                 </div>
                 <p class="paragraph"></p>
-                <div id="DD:stressDistFac">
-                  <table class="ddefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>DD:stressDistFac</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td>
-                        <p class="paragraph">Stress distribution factor (Function)</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em>J</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph">Unitless</p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[J=\mathit{interpZ}\left(\text{``SDF.txt''},\mathit{AR},\hat{q}\right)\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li>
-                            <em>J</em> is the stress distribution factor (Function) (Unitless)
-                          </li>
-                          <li><em>interpZ</em> is the interpZ (Unitless)</li>
-                          <li><em>AR</em> is the aspect ratio (Unitless)</li>
-                          <li><em>q&#770;</em> is the dimensionless load (Unitless)</li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>J</em> is obtained by interpolating from data shown in <a href=#Figure:dimlessloadVSaspect>Fig:dimlessloadVSaspect</a>.
-                        </p>
-                        <p class="paragraph">
-                          <em>AR</em> is defined in <a href=#DD:aspectRatio>DD:aspectRatio</a>.
-                        </p>
-                        <p class="paragraph">
-                          <em>q&#770;</em> is defined in <a href=#DD:dimlessLoad>DD:dimlessLoad</a>.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph"><a href=#IM:riskFun>IM:riskFun</a></p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <p class="paragraph"></p>
                 <div id="DD:nFL">
                   <table class="ddefn">
                     <tr>
@@ -1407,7 +1341,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#DD:stressDistFac>DD:stressDistFac</a>
+                          <a href=#IM:stressDistFac>IM:stressDistFac</a>
                         </p>
                       </td>
                     </tr>
@@ -1675,7 +1609,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#DD:tolLoad>DD:tolLoad</a> and <a href=#DD:stressDistFac>DD:stressDistFac</a>
+                          <a href=#DD:tolLoad>DD:tolLoad</a> and <a href=#IM:stressDistFac>IM:stressDistFac</a>
                         </p>
                       </td>
                     </tr>
@@ -1880,7 +1814,7 @@
                           <em>LDF</em> is defined in <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.
                         </p>
                         <p class="paragraph">
-                          <em>J</em> is defined in <a href=#DD:stressDistFac>DD:stressDistFac</a>.
+                          <em>J</em> is defined in <a href=#IM:stressDistFac>IM:stressDistFac</a>.
                         </p>
                       </td>
                     </tr>
@@ -1896,6 +1830,79 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph"><a href=#IM:probOfBreak>IM:probOfBreak</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="IM:stressDistFac">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:stressDistFac</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">Stress distribution factor (Function)</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td><p class="paragraph"><em>AR</em>, <em>q&#770;</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>J</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td>\[\mathit{AR}\geq{}1\]</td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[J=\mathit{interpZ}\left(\text{``SDF.txt''},\mathit{AR},\hat{q}\right)\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>J</em> is the stress distribution factor (Function) (Unitless)
+                          </li>
+                          <li><em>interpZ</em> is the interpZ (Unitless)</li>
+                          <li><em>AR</em> is the aspect ratio (Unitless)</li>
+                          <li><em>q&#770;</em> is the dimensionless load (Unitless)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>J</em> is obtained by interpolating from data shown in <a href=#Figure:dimlessloadVSaspect>Fig:dimlessloadVSaspect</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>AR</em> is defined in <a href=#DD:aspectRatio>DD:aspectRatio</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>q&#770;</em> is defined in <a href=#DD:dimlessLoad>DD:dimlessLoad</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#IM:riskFun>IM:riskFun</a></p>
                       </td>
                     </tr>
                   </table>
@@ -2532,7 +2539,7 @@
                 <tr>
                   <td><em>J</em></td>
                   <td>Stress distribution factor (Function)</td>
-                  <td><a href=#DD:stressDistFac>DD:stressDistFac</a></td>
+                  <td><a href=#IM:stressDistFac>IM:stressDistFac</a></td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -2819,17 +2826,6 @@
               <td>X</td>
             </tr>
             <tr>
-              <td><a href=#DD:stressDistFac>DD:stressDistFac</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#DD:nFL>DD:nFL</a></td>
               <td></td>
               <td></td>
@@ -2952,6 +2948,17 @@
             </tr>
             <tr>
               <td><a href=#IM:riskFun>IM:riskFun</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:stressDistFac>IM:stressDistFac</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3241,7 +3248,6 @@
               <th></th>
               <th><a href=#DD:minThick>DD:minThick</a></th>
               <th><a href=#DD:loadDurFactor>DD:loadDurFactor</a></th>
-              <th><a href=#DD:stressDistFac>DD:stressDistFac</a></th>
               <th><a href=#DD:nFL>DD:nFL</a></th>
               <th><a href=#DD:gTF>DD:gTF</a></th>
               <th><a href=#DD:dimlessLoad>DD:dimlessLoad</a></th>
@@ -3254,6 +3260,7 @@
               <th><a href=#TM:isSafeProb>TM:isSafeProb</a></th>
               <th><a href=#TM:isSafeLoad>TM:isSafeLoad</a></th>
               <th><a href=#IM:riskFun>IM:riskFun</a></th>
+              <th><a href=#IM:stressDistFac>IM:stressDistFac</a></th>
               <th><a href=#IM:probOfBreak>IM:probOfBreak</a></th>
               <th><a href=#IM:calofCapacity>IM:calofCapacity</a></th>
               <th><a href=#IM:isSafePb>IM:isSafePb</a></th>
@@ -3304,36 +3311,14 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:stressDistFac>DD:stressDistFac</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#DD:nFL>DD:nFL</a></td>
               <td>X</td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3374,7 +3359,6 @@
               <td>X</td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -3383,6 +3367,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3399,10 +3384,10 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3510,10 +3495,10 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3571,13 +3556,35 @@
               <td><a href=#IM:riskFun>IM:riskFun</a></td>
               <td>X</td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:stressDistFac>IM:stressDistFac</a></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3604,8 +3611,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3615,9 +3622,9 @@
               <td><a href=#IM:calofCapacity>IM:calofCapacity</a></td>
               <td></td>
               <td></td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
-              <td>X</td>
-              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3667,8 +3674,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3688,7 +3695,6 @@
               <th></th>
               <th><a href=#DD:minThick>DD:minThick</a></th>
               <th><a href=#DD:loadDurFactor>DD:loadDurFactor</a></th>
-              <th><a href=#DD:stressDistFac>DD:stressDistFac</a></th>
               <th><a href=#DD:nFL>DD:nFL</a></th>
               <th><a href=#DD:gTF>DD:gTF</a></th>
               <th><a href=#DD:dimlessLoad>DD:dimlessLoad</a></th>
@@ -3701,6 +3707,7 @@
               <th><a href=#TM:isSafeProb>TM:isSafeProb</a></th>
               <th><a href=#TM:isSafeLoad>TM:isSafeLoad</a></th>
               <th><a href=#IM:riskFun>IM:riskFun</a></th>
+              <th><a href=#IM:stressDistFac>IM:stressDistFac</a></th>
               <th><a href=#IM:probOfBreak>IM:probOfBreak</a></th>
               <th><a href=#IM:calofCapacity>IM:calofCapacity</a></th>
               <th><a href=#IM:isSafePb>IM:isSafePb</a></th>

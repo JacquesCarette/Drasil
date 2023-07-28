@@ -203,9 +203,6 @@
             "stdOffDist"
         ],
         [
-            "stressDistFac"
-        ],
-        [
             "tolLoad"
         ]
     ],
@@ -225,6 +222,9 @@
         ],
         [
             "riskFun"
+        ],
+        [
+            "stressDistFac"
         ]
     ],
     "labelledContent": [

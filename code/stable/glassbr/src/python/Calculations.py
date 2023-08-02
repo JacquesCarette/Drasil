@@ -25,19 +25,6 @@ def func_GTF(inParams):
     else :
         raise Exception("Undefined case encountered in function func_GTF")
 
-## \brief Calculates aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
-# \param inParams structure holding the input values
-# \return aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
-def func_AR(inParams):
-    outfile = open("log.txt", "a")
-    print("function func_AR called with inputs: {", file=outfile)
-    print("  inParams = ", end="", file=outfile)
-    print("Instance of InputParameters object", file=outfile)
-    print("  }", file=outfile)
-    outfile.close()
-    
-    return inParams.a / inParams.b
-
 ## \brief Calculates stress distribution factor (Function) based on Pbtol
 # \param inParams structure holding the input values
 # \return stress distribution factor (Function) based on Pbtol
@@ -50,6 +37,19 @@ def func_J_tol(inParams):
     outfile.close()
     
     return math.log(math.log(1.0 / (1.0 - inParams.P_btol)) * ((inParams.a * inParams.b) ** (7.0 - 1.0) / (2.86e-53 * (7.17e10 * inParams.h ** 2.0) ** 7.0 * inParams.LDF)))
+
+## \brief Calculates aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
+# \param inParams structure holding the input values
+# \return aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
+def func_AR(inParams):
+    outfile = open("log.txt", "a")
+    print("function func_AR called with inputs: {", file=outfile)
+    print("  inParams = ", end="", file=outfile)
+    print("Instance of InputParameters object", file=outfile)
+    print("  }", file=outfile)
+    outfile.close()
+    
+    return inParams.a / inParams.b
 
 ## \brief Calculates applied load (demand): 3 second duration equivalent pressure (Pa)
 # \param inParams structure holding the input values

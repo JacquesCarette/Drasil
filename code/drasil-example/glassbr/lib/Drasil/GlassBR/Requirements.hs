@@ -90,7 +90,7 @@ outputValuesTable = mkValsSourceTable (mkQRTuple iMods ++ mkQRTuple r6DDs) "ReqO
                               (S "Required" +:+ titleize' output_ `follows` outputValues)
   where
     r6DDs :: [DataDefinition]
-    r6DDs = [tolStrDisFac, hFromt]
+    r6DDs = [hFromt]
 
 {--Nonfunctional Requirements--}
 

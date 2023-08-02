@@ -34,18 +34,6 @@ int func_GTF(InputParameters &inParams) {
     }
 }
 
-double func_AR(InputParameters &inParams) {
-    ofstream outfile;
-    outfile.open("log.txt", std::fstream::app);
-    outfile << "function func_AR called with inputs: {" << std::endl;
-    outfile << "  inParams = ";
-    outfile << "Instance of InputParameters object" << std::endl;
-    outfile << "  }" << std::endl;
-    outfile.close();
-    
-    return inParams.a / inParams.b;
-}
-
 double func_J_tol(InputParameters &inParams) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
@@ -56,6 +44,18 @@ double func_J_tol(InputParameters &inParams) {
     outfile.close();
     
     return log(log(1.0 / (1.0 - inParams.P_btol)) * (pow(inParams.a * inParams.b, 7.0 - 1.0) / (2.86e-53 * pow(7.17e10 * pow(inParams.h, 2.0), 7.0) * inParams.LDF)));
+}
+
+double func_AR(InputParameters &inParams) {
+    ofstream outfile;
+    outfile.open("log.txt", std::fstream::app);
+    outfile << "function func_AR called with inputs: {" << std::endl;
+    outfile << "  inParams = ";
+    outfile << "Instance of InputParameters object" << std::endl;
+    outfile << "  }" << std::endl;
+    outfile.close();
+    
+    return inParams.a / inParams.b;
 }
 
 double func_q(InputParameters &inParams) {

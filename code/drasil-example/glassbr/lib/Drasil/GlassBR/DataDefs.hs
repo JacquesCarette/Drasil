@@ -33,7 +33,7 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspectRatio, charWeight,
 ----------------------
 
 dataDefs :: [DataDefinition]
-dataDefs = [hFromt, loadDF, tolStrDisFac, standOffDis, eqTNTWDD, calofDemand]
+dataDefs = [hFromt, loadDF, standOffDis, eqTNTWDD, calofDemand]
 {--}
 
 hFromtEq :: Relation
@@ -60,22 +60,6 @@ loadDFQD = mkQuantDef lDurFac loadDFEq
 loadDF :: DataDefinition
 loadDF = ddE loadDFQD [dRef astm2009] Nothing "loadDurFactor"
   [stdVals [loadDur, sflawParamM], ldfConst]
-
-{--}
-
-tolStrDisFacEq :: Expr
-tolStrDisFacEq = ln (ln (recip_ (exactDbl 1 $- sy pbTol))
-  `mulRe` ((sy plateLen `mulRe` sy plateWidth) $^ (sy sflawParamM $- exactDbl 1) $/
-    (sy sflawParamK `mulRe` ((sy modElas `mulRe`
-    square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac)))
-
-tolStrDisFacQD :: SimpleQDef
-tolStrDisFacQD = mkQuantDef sdfTol tolStrDisFacEq
-
-tolStrDisFac :: DataDefinition
-tolStrDisFac = ddE tolStrDisFacQD [dRef astm2009] Nothing "sdfTol"
-  [pbTolUsr, aGrtrThanB, stdVals [sflawParamM, sflawParamK, mkUnitary modElas],
-   hRef, ldfRef]
 
 {--}
 
@@ -152,10 +136,9 @@ pbTolUsr = ch pbTol `S.is` S "entered by the" +:+. phrase user
 qRef :: Sentence
 qRef = ch demand `S.isThe` (demandq ^. defn) `sC` S "as given in" +:+. refS calofDemand
 
-hRef, jtolRef, ldfRef :: Sentence
-hRef    = definedIn' hFromt (S "and is based on the nominal thicknesses")
-jtolRef = definedIn  tolStrDisFac
-ldfRef  = definedIn  loadDF
+hRef, ldfRef :: Sentence
+hRef   = definedIn' hFromt (S "and is based on the nominal thicknesses")
+ldfRef = definedIn  loadDF
 
 -- List of Configuration Files necessary for DataDefs.hs
 configFp :: [String]

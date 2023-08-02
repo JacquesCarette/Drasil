@@ -18,17 +18,17 @@ using std::string;
 */
 int func_GTF(InputParameters &inParams);
 
-/** \brief Calculates aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
-    \param inParams structure holding the input values
-    \return aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
-*/
-double func_AR(InputParameters &inParams);
-
 /** \brief Calculates stress distribution factor (Function) based on Pbtol
     \param inParams structure holding the input values
     \return stress distribution factor (Function) based on Pbtol
 */
 double func_J_tol(InputParameters &inParams);
+
+/** \brief Calculates aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
+    \param inParams structure holding the input values
+    \return aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
+*/
+double func_AR(InputParameters &inParams);
 
 /** \brief Calculates applied load (demand): 3 second duration equivalent pressure (Pa)
     \param inParams structure holding the input values

@@ -21,8 +21,8 @@ import Drasil.GlassBR.Unitals {- temporarily import everything -}
 import Drasil.SRSDocument (Block (Parallel))
 
 iMods :: [InstanceModel]
-iMods = [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, aspRat, probOfBreak,
-  calofCapacity, pbIsSafe, lrIsSafe]
+iMods = [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, aspRat,
+  probOfBreak, calofCapacity, pbIsSafe, lrIsSafe]
 
 symb :: [UnitalChunk]
 symb =  [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram, ucuc standOffDist metre, demand] -- this is temporary
@@ -133,6 +133,21 @@ tolPreQD = mkQuantDef tolLoad tolPreEq
 
 {--}
 
+tolStrDisFac :: InstanceModel
+tolStrDisFac = imNoDeriv (equationalModelN (sdfTol ^. term) tolStrDisFacQD)
+  ((lDurFac, Nothing) : qwUC pbTol : qwUC modElas : abInputConstraints ++
+    map qwUC [sflawParamM, sflawParamK, minThick]) (qw sdfTol) []
+  [dRef astm2009] "sdfTol" [pbTolUsr, aGrtrThanB, stdVals [sflawParamM,
+      sflawParamK, mkUnitary modElas], hRef, ldfRef]  
+
+tolStrDisFacQD :: SimpleQDef
+tolStrDisFacQD = mkQuantDef sdfTol $ ln (ln (recip_ (exactDbl 1 $- sy pbTol))
+  `mulRe` ((sy plateLen `mulRe` sy plateWidth) $^ (sy sflawParamM $- exactDbl 1) $/
+    (sy sflawParamK `mulRe` ((sy modElas `mulRe`
+    square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac)))
+
+{--}
+
 aspRat :: InstanceModel
 aspRat = imNoDeriv (equationalModelN (aspectRatio ^. term) aspRatQD)
   abInputConstraints (qw aspectRatio) [] [dRef astm2009] "aspectRatio"
@@ -208,10 +223,11 @@ pbIsSafeDesc :: Sentence
 pbIsSafeDesc = iModDesc isSafePb
   (ch isSafePb `S.and_` ch isSafePb +:+ fromSource lrIsSafe)
 
-arRef, gtfRef, jRef, nonFLRef, probBRRef, qHtRef, qHtTlTolRef, riskRef :: Sentence
+arRef, gtfRef, jRef, jtolRef, nonFLRef, probBRRef, qHtRef, qHtTlTolRef, riskRef :: Sentence
 arRef       = definedIn aspRat
-gtfRef      = definedIn  glaTyFac
+gtfRef      = definedIn glaTyFac
 jRef        = definedIn strDisFac
+jtolRef     = definedIn tolStrDisFac
 nonFLRef    = definedIn nonFL
 probBRRef   = definedIn probOfBreak
 qHtRef      = definedIn dimLL

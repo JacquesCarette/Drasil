@@ -375,7 +375,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[glassType:\phantomsection\label{assumpGT}]{The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that: (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam; and (3) glass supported on one side acts as a cantilever.}
 \item[glassCondition:\phantomsection\label{assumpGC}]{Following \cite[(pg. 1)]{astm2009}, this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. (RefBy: \hyperref[accAlteredGlass]{UC:Accommodate-Altered-Glass}.)}
 \item[explainScenario:\phantomsection\label{assumpES}]{This system only considers the external explosion scenario for its calculations. (RefBy: \hyperref[calcInternalBlastRisk]{LC:Calculate-Internal-Blast-Risk}.)}
-\item[standardValues:\phantomsection\label{assumpSV}]{The values provided in \hyperref[Sec:AuxConstants]{Sec:Values of Auxiliary Constants} are assumed for the duration of load (${t_{\text{d}}}$), and the material properties of $m$, $k$, and $E$. (RefBy: \hyperref[varValsOfmkE]{LC:Variable-Values-of-m,k,E}, \hyperref[DD:sdfTol]{DD:sdfTol}, \hyperref[IM:nFL]{IM:nFL}, \hyperref[DD:loadDurFactor]{DD:loadDurFactor}, \hyperref[IM:dimlessLoad]{IM:dimlessLoad}, and \hyperref[assumpLDFC]{A:ldfConstant}.)}
+\item[standardValues:\phantomsection\label{assumpSV}]{The values provided in \hyperref[Sec:AuxConstants]{Sec:Values of Auxiliary Constants} are assumed for the duration of load (${t_{\text{d}}}$), and the material properties of $m$, $k$, and $E$. (RefBy: \hyperref[varValsOfmkE]{LC:Variable-Values-of-m,k,E}, \hyperref[IM:sdfTol]{IM:sdfTol}, \hyperref[IM:nFL]{IM:nFL}, \hyperref[DD:loadDurFactor]{DD:loadDurFactor}, \hyperref[IM:dimlessLoad]{IM:dimlessLoad}, and \hyperref[assumpLDFC]{A:ldfConstant}.)}
 \item[glassLite:\phantomsection\label{assumpGL}]{Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: \hyperref[accMoreThanSingleLite]{LC:Accomodate-More-than-Single-Lite}.)}
 \item[boundaryConditions:\phantomsection\label{assumpBC}]{Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. (RefBy: \hyperref[accMoreBoundaryConditions]{LC:Accomodate-More-Boundary-Conditions}.)}
 \item[responseType:\phantomsection\label{assumpRT}]{The response type considered in GlassBR is flexural. (RefBy: \hyperref[considerMoreThanFlexGlass]{LC:Consider-More-than-Flexure-Glass}.)}
@@ -500,7 +500,7 @@ Notes & $t$ is a function that maps from the nominal thickness ($h$) to the mini
 Source & \cite{astm2009}
          
 \\ \midrule
-RefBy & \hyperref[DD:sdfTol]{DD:sdfTol}, \hyperref[IM:riskFun]{IM:riskFun}, \hyperref[IM:nFL]{IM:nFL}, and \hyperref[IM:dimlessLoad]{IM:dimlessLoad}
+RefBy & \hyperref[IM:sdfTol]{IM:sdfTol}, \hyperref[IM:riskFun]{IM:riskFun}, \hyperref[IM:nFL]{IM:nFL}, and \hyperref[IM:dimlessLoad]{IM:dimlessLoad}
         
 \\ \bottomrule
 \end{tabular}
@@ -541,60 +541,7 @@ Notes & ${t_{\text{d}}}$ and $m$ come from \hyperref[assumpSV]{A:standardValues}
 Source & \cite{astm2009}
          
 \\ \midrule
-RefBy & \hyperref[DD:sdfTol]{DD:sdfTol} and \hyperref[IM:riskFun]{IM:riskFun}
-        
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
-
-\vspace{\baselineskip}
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:sdfTol}
-\phantomsection 
-\label{DD:sdfTol}
-\\ \midrule
-Label & Stress distribution factor (Function) based on Pbtol
-        
-\\ \midrule
-Symbol & ${J_{\text{tol}}}$
-         
-\\ \midrule
-Units & Unitless
-        
-\\ \midrule
-Equation & \begin{displaymath}
-           {J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} \mathit{LDF}}\right)
-           \end{displaymath}
-\\ \midrule
-Description & \begin{symbDescription}
-              \item{${J_{\text{tol}}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
-              \item{${P_{\text{b}\text{tol}}}$ is the tolerable probability of breakage (Unitless)}
-              \item{$a$ is the plate length (long dimension) (${\text{m}}$)}
-              \item{$b$ is the plate width (short dimension) (${\text{m}}$)}
-              \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
-              \item{$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
-              \item{$E$ is the modulus of elasticity of glass (${\text{Pa}}$)}
-              \item{$h$ is the minimum thickness (${\text{m}}$)}
-              \item{$\mathit{LDF}$ is the load duration factor (Unitless)}
-              \end{symbDescription}
-\\ \midrule
-Notes & ${P_{\text{b}\text{tol}}}$ is entered by the user.
-        
-        $a$ and $b$ are the dimensions of the plate, where ($a\geq{}b$).
-        
-        $m$, $k$, and $E$ come from \hyperref[assumpSV]{A:standardValues}.
-        
-        $h$ is defined in \hyperref[DD:minThick]{DD:minThick} and is based on the nominal thicknesses.
-        
-        $\mathit{LDF}$ is defined in \hyperref[DD:loadDurFactor]{DD:loadDurFactor}.
-        
-\\ \midrule
-Source & \cite{astm2009}
-         
-\\ \midrule
-RefBy & \hyperref[IM:tolLoad]{IM:tolLoad}
+RefBy & \hyperref[IM:sdfTol]{IM:sdfTol} and \hyperref[IM:riskFun]{IM:riskFun}
         
 \\ \bottomrule
 \end{tabular}
@@ -1031,13 +978,74 @@ Notes & ${\hat{q}_{\text{tol}}}$ is obtained by interpolating from data shown in
         
         $\mathit{AR}$ is defined in \hyperref[IM:aspectRatio]{IM:aspectRatio}.
         
-        ${J_{\text{tol}}}$ is defined in \hyperref[DD:sdfTol]{DD:sdfTol}.
+        ${J_{\text{tol}}}$ is defined in \hyperref[IM:sdfTol]{IM:sdfTol}.
         
 \\ \midrule
 Source & \cite{astm2009}
          
 \\ \midrule
 RefBy & \hyperref[IM:nFL]{IM:nFL}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{IM:sdfTol}
+\phantomsection 
+\label{IM:sdfTol}
+\\ \midrule
+Label & Stress distribution factor (Function) based on Pbtol
+        
+\\ \midrule
+Input & $\mathit{LDF}$, ${P_{\text{b}\text{tol}}}$, $E$, $a$, $b$, $m$, $k$, $h$
+        
+\\ \midrule
+Output & ${J_{\text{tol}}}$
+         
+\\ \midrule
+Input Constraints & \begin{displaymath}
+                    a\gt{}0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    0\lt{}b\leq{}a
+                    \end{displaymath}
+\\ \midrule
+Output Constraints & 
+\\ \midrule
+Equation & \begin{displaymath}
+           {J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} \mathit{LDF}}\right)
+           \end{displaymath}
+\\ \midrule
+Description & \begin{symbDescription}
+              \item{${J_{\text{tol}}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
+              \item{${P_{\text{b}\text{tol}}}$ is the tolerable probability of breakage (Unitless)}
+              \item{$a$ is the plate length (long dimension) (${\text{m}}$)}
+              \item{$b$ is the plate width (short dimension) (${\text{m}}$)}
+              \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
+              \item{$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
+              \item{$E$ is the modulus of elasticity of glass (${\text{Pa}}$)}
+              \item{$h$ is the minimum thickness (${\text{m}}$)}
+              \item{$\mathit{LDF}$ is the load duration factor (Unitless)}
+              \end{symbDescription}
+\\ \midrule
+Notes & ${P_{\text{b}\text{tol}}}$ is entered by the user.
+        
+        $a$ and $b$ are the dimensions of the plate, where ($a\geq{}b$).
+        
+        $m$, $k$, and $E$ come from \hyperref[assumpSV]{A:standardValues}.
+        
+        $h$ is defined in \hyperref[DD:minThick]{DD:minThick} and is based on the nominal thicknesses.
+        
+        $\mathit{LDF}$ is defined in \hyperref[DD:loadDurFactor]{DD:loadDurFactor}.
+        
+\\ \midrule
+Source & \cite{astm2009}
+         
+\\ \midrule
+RefBy & \hyperref[IM:tolLoad]{IM:tolLoad}
         
 \\ \bottomrule
 \end{tabular}
@@ -1404,7 +1412,7 @@ $\mathit{isSafePb}$ & Safety Req-Pb & \hyperref[IM:isSafePb]{IM:isSafePb} & --
 \\
 $J$ & Stress distribution factor (Function) & \hyperref[IM:stressDistFac]{IM:stressDistFac} & --
 \\
-${J_{\text{tol}}}$ & Stress distribution factor (Function) based on Pbtol & \hyperref[DD:sdfTol]{DD:sdfTol} & --
+${J_{\text{tol}}}$ & Stress distribution factor (Function) based on Pbtol & \hyperref[IM:sdfTol]{IM:sdfTol} & --
 \\
 $\mathit{LR}$ & Load resistance & \hyperref[IM:calofCapacity]{IM:calofCapacity} & ${\text{Pa}}$
 \\
@@ -1483,8 +1491,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:loadDurFactor]{DD:loadDurFactor} &  &  &  & X &  &  &  & X
 \\
-\hyperref[DD:sdfTol]{DD:sdfTol} &  &  &  & X &  &  &  & 
-\\
 \hyperref[DD:standOffDist]{DD:standOffDist} &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:eqTNTW]{DD:eqTNTW} &  &  &  &  &  &  &  & 
@@ -1506,6 +1512,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[IM:dimlessLoad]{IM:dimlessLoad} &  &  &  & X &  &  &  & 
 \\
 \hyperref[IM:tolLoad]{IM:tolLoad} &  &  &  &  &  &  &  & 
+\\
+\hyperref[IM:sdfTol]{IM:sdfTol} &  &  &  & X &  &  &  & 
 \\
 \hyperref[IM:aspectRatio]{IM:aspectRatio} &  &  &  &  &  &  &  & 
 \\
@@ -1559,51 +1567,51 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Items and Other Sections}]
 {colspec={l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:minThick]{DD:minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD:loadDurFactor}} & \textbf{\hyperref[DD:sdfTol]{DD:sdfTol}} & \textbf{\hyperref[DD:standOffDist]{DD:standOffDist}} & \textbf{\hyperref[DD:eqTNTW]{DD:eqTNTW}} & \textbf{\hyperref[DD:calofDemand]{DD:calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM:isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM:isSafeLoad}} & \textbf{\hyperref[IM:riskFun]{IM:riskFun}} & \textbf{\hyperref[IM:stressDistFac]{IM:stressDistFac}} & \textbf{\hyperref[IM:nFL]{IM:nFL}} & \textbf{\hyperref[IM:gTF]{IM:gTF}} & \textbf{\hyperref[IM:dimlessLoad]{IM:dimlessLoad}} & \textbf{\hyperref[IM:tolLoad]{IM:tolLoad}} & \textbf{\hyperref[IM:aspectRatio]{IM:aspectRatio}} & \textbf{\hyperref[IM:probOfBreak]{IM:probOfBreak}} & \textbf{\hyperref[IM:calofCapacity]{IM:calofCapacity}} & \textbf{\hyperref[IM:isSafePb]{IM:isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM:isSafeLR}}
+\textbf{} & \textbf{\hyperref[DD:minThick]{DD:minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD:loadDurFactor}} & \textbf{\hyperref[DD:standOffDist]{DD:standOffDist}} & \textbf{\hyperref[DD:eqTNTW]{DD:eqTNTW}} & \textbf{\hyperref[DD:calofDemand]{DD:calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM:isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM:isSafeLoad}} & \textbf{\hyperref[IM:riskFun]{IM:riskFun}} & \textbf{\hyperref[IM:stressDistFac]{IM:stressDistFac}} & \textbf{\hyperref[IM:nFL]{IM:nFL}} & \textbf{\hyperref[IM:gTF]{IM:gTF}} & \textbf{\hyperref[IM:dimlessLoad]{IM:dimlessLoad}} & \textbf{\hyperref[IM:tolLoad]{IM:tolLoad}} & \textbf{\hyperref[IM:sdfTol]{IM:sdfTol}} & \textbf{\hyperref[IM:aspectRatio]{IM:aspectRatio}} & \textbf{\hyperref[IM:probOfBreak]{IM:probOfBreak}} & \textbf{\hyperref[IM:calofCapacity]{IM:calofCapacity}} & \textbf{\hyperref[IM:isSafePb]{IM:isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM:isSafeLR}}
 \\
 \hyperref[DD:minThick]{DD:minThick} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:loadDurFactor]{DD:loadDurFactor} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:sdfTol]{DD:sdfTol} & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
 \hyperref[DD:standOffDist]{DD:standOffDist} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:eqTNTW]{DD:eqTNTW} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:calofDemand]{DD:calofDemand} &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:calofDemand]{DD:calofDemand} &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[TM:isSafeProb]{TM:isSafeProb} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[TM:isSafeLoad]{TM:isSafeLoad} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:riskFun]{IM:riskFun} & X & X &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
+\hyperref[IM:riskFun]{IM:riskFun} & X & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:stressDistFac]{IM:stressDistFac} &  &  &  &  &  &  &  &  &  &  &  &  & X &  & X &  &  &  & 
+\hyperref[IM:stressDistFac]{IM:stressDistFac} &  &  &  &  &  &  &  &  &  &  &  & X &  &  & X &  &  &  & 
 \\
-\hyperref[IM:nFL]{IM:nFL} & X &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & 
+\hyperref[IM:nFL]{IM:nFL} & X &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
 \\
 \hyperref[IM:gTF]{IM:gTF} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:dimlessLoad]{IM:dimlessLoad} & X &  &  &  &  & X &  &  &  &  &  & X &  &  &  &  &  &  & 
+\hyperref[IM:dimlessLoad]{IM:dimlessLoad} & X &  &  &  & X &  &  &  &  &  & X &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:tolLoad]{IM:tolLoad} &  &  & X &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & 
+\hyperref[IM:tolLoad]{IM:tolLoad} &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  & 
+\\
+\hyperref[IM:sdfTol]{IM:sdfTol} & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[IM:aspectRatio]{IM:aspectRatio} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:probOfBreak]{IM:probOfBreak} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & 
+\hyperref[IM:probOfBreak]{IM:probOfBreak} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:calofCapacity]{IM:calofCapacity} &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  & 
+\hyperref[IM:calofCapacity]{IM:calofCapacity} &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  & 
 \\
 \hyperref[IM:isSafePb]{IM:isSafePb} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & X
 \\
-\hyperref[IM:isSafeLR]{IM:isSafeLR} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & X & X & 
+\hyperref[IM:isSafeLR]{IM:isSafeLR} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & X & X & 
 \label{Table:TraceMatRefvsRef}
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
 {colspec={l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:minThick]{DD:minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD:loadDurFactor}} & \textbf{\hyperref[DD:sdfTol]{DD:sdfTol}} & \textbf{\hyperref[DD:standOffDist]{DD:standOffDist}} & \textbf{\hyperref[DD:eqTNTW]{DD:eqTNTW}} & \textbf{\hyperref[DD:calofDemand]{DD:calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM:isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM:isSafeLoad}} & \textbf{\hyperref[IM:riskFun]{IM:riskFun}} & \textbf{\hyperref[IM:stressDistFac]{IM:stressDistFac}} & \textbf{\hyperref[IM:nFL]{IM:nFL}} & \textbf{\hyperref[IM:gTF]{IM:gTF}} & \textbf{\hyperref[IM:dimlessLoad]{IM:dimlessLoad}} & \textbf{\hyperref[IM:tolLoad]{IM:tolLoad}} & \textbf{\hyperref[IM:aspectRatio]{IM:aspectRatio}} & \textbf{\hyperref[IM:probOfBreak]{IM:probOfBreak}} & \textbf{\hyperref[IM:calofCapacity]{IM:calofCapacity}} & \textbf{\hyperref[IM:isSafePb]{IM:isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM:isSafeLR}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}} & \textbf{\hyperref[checkInputWithDataCons]{FR:Check-Input-with-Data\_Constraints}} & \textbf{\hyperref[outputValsAndKnownValues]{FR:Output-Values-and-Known-Values}} & \textbf{\hyperref[checkGlassSafety]{FR:Check-Glass-Safety}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[verifiable]{NFR:Verifiable}} & \textbf{\hyperref[understandable]{NFR:Understandable}} & \textbf{\hyperref[reusable]{NFR:Reusable}} & \textbf{\hyperref[maintainable]{NFR:Maintainable}} & \textbf{\hyperref[portable]{NFR:Portable}}
+\textbf{} & \textbf{\hyperref[DD:minThick]{DD:minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD:loadDurFactor}} & \textbf{\hyperref[DD:standOffDist]{DD:standOffDist}} & \textbf{\hyperref[DD:eqTNTW]{DD:eqTNTW}} & \textbf{\hyperref[DD:calofDemand]{DD:calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM:isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM:isSafeLoad}} & \textbf{\hyperref[IM:riskFun]{IM:riskFun}} & \textbf{\hyperref[IM:stressDistFac]{IM:stressDistFac}} & \textbf{\hyperref[IM:nFL]{IM:nFL}} & \textbf{\hyperref[IM:gTF]{IM:gTF}} & \textbf{\hyperref[IM:dimlessLoad]{IM:dimlessLoad}} & \textbf{\hyperref[IM:tolLoad]{IM:tolLoad}} & \textbf{\hyperref[IM:sdfTol]{IM:sdfTol}} & \textbf{\hyperref[IM:aspectRatio]{IM:aspectRatio}} & \textbf{\hyperref[IM:probOfBreak]{IM:probOfBreak}} & \textbf{\hyperref[IM:calofCapacity]{IM:calofCapacity}} & \textbf{\hyperref[IM:isSafePb]{IM:isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM:isSafeLR}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}} & \textbf{\hyperref[checkInputWithDataCons]{FR:Check-Input-with-Data\_Constraints}} & \textbf{\hyperref[outputValsAndKnownValues]{FR:Output-Values-and-Known-Values}} & \textbf{\hyperref[checkGlassSafety]{FR:Check-Glass-Safety}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[verifiable]{NFR:Verifiable}} & \textbf{\hyperref[understandable]{NFR:Understandable}} & \textbf{\hyperref[reusable]{NFR:Reusable}} & \textbf{\hyperref[maintainable]{NFR:Maintainable}} & \textbf{\hyperref[portable]{NFR:Portable}}
 \\
 \hyperref[willBreakGS]{GS:Predict-Glass-Withstands-Explosion} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\

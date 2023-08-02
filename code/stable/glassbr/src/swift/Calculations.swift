@@ -59,50 +59,6 @@ func func_GTF(_ inParams: inout InputParameters) throws -> Int {
     }
 }
 
-/** Calculates aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
-    - Parameter inParams: structure holding the input values
-    - Returns: aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
-*/
-func func_AR(_ inParams: inout InputParameters) throws -> Double {
-    var outfile: FileHandle
-    do {
-        outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-        try outfile.seekToEnd()
-    } catch {
-        throw "Error opening file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("function func_AR called with inputs: {".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  inParams = ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("Instance of InputParameters object".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  }".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.close()
-    } catch {
-        throw "Error closing file."
-    }
-    
-    return inParams.a / inParams.b
-}
-
 /** Calculates stress distribution factor (Function) based on Pbtol
     - Parameter inParams: structure holding the input values
     - Returns: stress distribution factor (Function) based on Pbtol
@@ -145,6 +101,50 @@ func func_J_tol(_ inParams: inout InputParameters) throws -> Double {
     }
     
     return log(log(1.0 / (1.0 - inParams.P_btol)) * (pow(inParams.a * inParams.b, 7.0 - 1.0) / (2.86e-53 * pow(7.17e10 * pow(inParams.h, 2.0), 7.0) * inParams.LDF)))
+}
+
+/** Calculates aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
+    - Parameter inParams: structure holding the input values
+    - Returns: aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
+*/
+func func_AR(_ inParams: inout InputParameters) throws -> Double {
+    var outfile: FileHandle
+    do {
+        outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
+        try outfile.seekToEnd()
+    } catch {
+        throw "Error opening file."
+    }
+    do {
+        try outfile.write(contentsOf: Data("function func_AR called with inputs: {".utf8))
+        try outfile.write(contentsOf: Data("\n".utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outfile.write(contentsOf: Data("  inParams = ".utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outfile.write(contentsOf: Data("Instance of InputParameters object".utf8))
+        try outfile.write(contentsOf: Data("\n".utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outfile.write(contentsOf: Data("  }".utf8))
+        try outfile.write(contentsOf: Data("\n".utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outfile.close()
+    } catch {
+        throw "Error closing file."
+    }
+    
+    return inParams.a / inParams.b
 }
 
 /** Calculates applied load (demand): 3 second duration equivalent pressure (Pa)

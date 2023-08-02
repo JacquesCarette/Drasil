@@ -67,34 +67,6 @@ do {
 } catch {
     throw "Error closing file."
 }
-var AR: Double = try func_AR(&inParams)
-do {
-    outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-    try outfile.seekToEnd()
-} catch {
-    throw "Error opening file."
-}
-do {
-    try outfile.write(contentsOf: Data("var 'AR' assigned ".utf8))
-} catch {
-    throw "Error printing to file."
-}
-do {
-    try outfile.write(contentsOf: Data(String(AR).utf8))
-} catch {
-    throw "Error printing to file."
-}
-do {
-    try outfile.write(contentsOf: Data(" in module Control".utf8))
-    try outfile.write(contentsOf: Data("\n".utf8))
-} catch {
-    throw "Error printing to file."
-}
-do {
-    try outfile.close()
-} catch {
-    throw "Error closing file."
-}
 var J_tol: Double = try func_J_tol(&inParams)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -109,6 +81,34 @@ do {
 }
 do {
     try outfile.write(contentsOf: Data(String(J_tol).utf8))
+} catch {
+    throw "Error printing to file."
+}
+do {
+    try outfile.write(contentsOf: Data(" in module Control".utf8))
+    try outfile.write(contentsOf: Data("\n".utf8))
+} catch {
+    throw "Error printing to file."
+}
+do {
+    try outfile.close()
+} catch {
+    throw "Error closing file."
+}
+var AR: Double = try func_AR(&inParams)
+do {
+    outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
+    try outfile.seekToEnd()
+} catch {
+    throw "Error opening file."
+}
+do {
+    try outfile.write(contentsOf: Data("var 'AR' assigned ".utf8))
+} catch {
+    throw "Error printing to file."
+}
+do {
+    try outfile.write(contentsOf: Data(String(AR).utf8))
 } catch {
     throw "Error printing to file."
 }

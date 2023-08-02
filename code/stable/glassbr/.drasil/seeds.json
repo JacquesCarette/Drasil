@@ -185,9 +185,6 @@
             "minThick"
         ],
         [
-            "sdfTol"
-        ],
-        [
             "stdOffDist"
         ]
     ],
@@ -219,6 +216,9 @@
         ],
         [
             "riskFun"
+        ],
+        [
+            "sdfTol"
         ],
         [
             "stressDistFac"

@@ -1333,65 +1333,6 @@
                   </table>
                 </div>
                 <p class="paragraph"></p>
-                <div id="DD:aspectRatio">
-                  <table class="ddefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>DD:aspectRatio</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">Aspect ratio</p></td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em>AR</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph">Unitless</p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>\[\mathit{AR}=\frac{a}{b}\]</td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li><em>AR</em> is the aspect ratio (Unitless)</li>
-                          <li>
-                            <em>a</em> is the plate length (long dimension) (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>b</em> is the plate width (short dimension) (<em>m</em>)
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph">
-                          <a href=#IM:tolLoad>IM:tolLoad</a> and <a href=#IM:stressDistFac>IM:stressDistFac</a>
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <p class="paragraph"></p>
                 <div id="DD:eqTNTW">
                   <table class="ddefn">
                     <tr>
@@ -1664,7 +1605,7 @@
                           <em>J</em> is obtained by interpolating from data shown in <a href=#Figure:dimlessloadVSaspect>Fig:dimlessloadVSaspect</a>.
                         </p>
                         <p class="paragraph">
-                          <em>AR</em> is defined in <a href=#DD:aspectRatio>DD:aspectRatio</a>.
+                          <em>AR</em> is defined in <a href=#IM:aspectRatio>IM:aspectRatio</a>.
                         </p>
                         <p class="paragraph">
                           <em>q&#770;</em> is defined in <a href=#IM:dimlessLoad>IM:dimlessLoad</a>.
@@ -1927,7 +1868,7 @@
                           <em>q&#770;<sub>tol</sub></em> is obtained by interpolating from data shown in <a href=#Figure:dimlessloadVSaspect>Fig:dimlessloadVSaspect</a>.
                         </p>
                         <p class="paragraph">
-                          <em>AR</em> is defined in <a href=#DD:aspectRatio>DD:aspectRatio</a>.
+                          <em>AR</em> is defined in <a href=#IM:aspectRatio>IM:aspectRatio</a>.
                         </p>
                         <p class="paragraph">
                           <em>J<sub>tol</sub></em> is defined in <a href=#DD:sdfTol>DD:sdfTol</a>.
@@ -1941,6 +1882,75 @@
                     <tr>
                       <th>RefBy</th>
                       <td><p class="paragraph"><a href=#IM:nFL>IM:nFL</a></p></td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="IM:aspectRatio">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:aspectRatio</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Aspect ratio</p></td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td><p class="paragraph"><em>a</em>, <em>b</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>AR</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td>
+                        \[a\gt{}0\]
+                        \[0\lt{}b\leq{}a\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[\mathit{AR}=\frac{a}{b}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>AR</em> is the aspect ratio (Unitless)</li>
+                          <li>
+                            <em>a</em> is the plate length (long dimension) (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>b</em> is the plate width (short dimension) (<em>m</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:tolLoad>IM:tolLoad</a> and <a href=#IM:stressDistFac>IM:stressDistFac</a>
+                        </p>
+                      </td>
                     </tr>
                   </table>
                 </div>
@@ -2467,7 +2477,7 @@
                 <tr>
                   <td><em>AR</em></td>
                   <td>Aspect ratio</td>
-                  <td><a href=#DD:aspectRatio>DD:aspectRatio</a></td>
+                  <td><a href=#IM:aspectRatio>IM:aspectRatio</a></td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -2540,7 +2550,7 @@
                 <tr>
                   <td><em>AR</em></td>
                   <td>Aspect ratio</td>
-                  <td><a href=#DD:aspectRatio>DD:aspectRatio</a></td>
+                  <td><a href=#IM:aspectRatio>IM:aspectRatio</a></td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -2896,17 +2906,6 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:aspectRatio>DD:aspectRatio</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#DD:eqTNTW>DD:eqTNTW</a></td>
               <td></td>
               <td></td>
@@ -2996,6 +2995,17 @@
             </tr>
             <tr>
               <td><a href=#IM:tolLoad>IM:tolLoad</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:aspectRatio>IM:aspectRatio</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3288,7 +3298,6 @@
               <th><a href=#DD:gTF>DD:gTF</a></th>
               <th><a href=#DD:sdfTol>DD:sdfTol</a></th>
               <th><a href=#DD:standOffDist>DD:standOffDist</a></th>
-              <th><a href=#DD:aspectRatio>DD:aspectRatio</a></th>
               <th><a href=#DD:eqTNTW>DD:eqTNTW</a></th>
               <th><a href=#DD:calofDemand>DD:calofDemand</a></th>
               <th><a href=#TM:isSafeProb>TM:isSafeProb</a></th>
@@ -3298,6 +3307,7 @@
               <th><a href=#IM:nFL>IM:nFL</a></th>
               <th><a href=#IM:dimlessLoad>IM:dimlessLoad</a></th>
               <th><a href=#IM:tolLoad>IM:tolLoad</a></th>
+              <th><a href=#IM:aspectRatio>IM:aspectRatio</a></th>
               <th><a href=#IM:probOfBreak>IM:probOfBreak</a></th>
               <th><a href=#IM:calofCapacity>IM:calofCapacity</a></th>
               <th><a href=#IM:isSafePb>IM:isSafePb</a></th>
@@ -3414,28 +3424,6 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:aspectRatio>DD:aspectRatio</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#DD:eqTNTW>DD:eqTNTW</a></td>
               <td></td>
               <td></td>
@@ -3464,8 +3452,8 @@
               <td></td>
               <td></td>
               <td>X</td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3535,8 +3523,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3552,7 +3540,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3562,6 +3549,7 @@
               <td></td>
               <td>X</td>
               <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3582,8 +3570,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3597,8 +3585,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3618,7 +3606,29 @@
               <td></td>
               <td>X</td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:aspectRatio>IM:aspectRatio</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3644,8 +3654,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3668,8 +3678,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3707,8 +3717,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3735,7 +3745,6 @@
               <th><a href=#DD:gTF>DD:gTF</a></th>
               <th><a href=#DD:sdfTol>DD:sdfTol</a></th>
               <th><a href=#DD:standOffDist>DD:standOffDist</a></th>
-              <th><a href=#DD:aspectRatio>DD:aspectRatio</a></th>
               <th><a href=#DD:eqTNTW>DD:eqTNTW</a></th>
               <th><a href=#DD:calofDemand>DD:calofDemand</a></th>
               <th><a href=#TM:isSafeProb>TM:isSafeProb</a></th>
@@ -3745,6 +3754,7 @@
               <th><a href=#IM:nFL>IM:nFL</a></th>
               <th><a href=#IM:dimlessLoad>IM:dimlessLoad</a></th>
               <th><a href=#IM:tolLoad>IM:tolLoad</a></th>
+              <th><a href=#IM:aspectRatio>IM:aspectRatio</a></th>
               <th><a href=#IM:probOfBreak>IM:probOfBreak</a></th>
               <th><a href=#IM:calofCapacity>IM:calofCapacity</a></th>
               <th><a href=#IM:isSafePb>IM:isSafePb</a></th>

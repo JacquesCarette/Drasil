@@ -96,16 +96,6 @@ func input_constraints(_ inParams: inout InputParameters) throws -> Void {
         print(".")
         throw "InputError"
     }
-    if !(inParams.AR <= 5.0) {
-        print("AR has value ", terminator: "")
-        print(inParams.AR, terminator: "")
-        print(", but is expected to be ", terminator: "")
-        print("below ", terminator: "")
-        print(5.0, terminator: "")
-        print(" (AR_max)", terminator: "")
-        print(".")
-        throw "InputError"
-    }
     
     if !(inParams.a > 0.0) {
         print("a has value ", terminator: "")
@@ -173,15 +163,6 @@ func input_constraints(_ inParams: inout InputParameters) throws -> Void {
         print(", but is expected to be ", terminator: "")
         print("above ", terminator: "")
         print(0.0, terminator: "")
-        print(".")
-        throw "InputError"
-    }
-    if !(inParams.AR >= 1.0) {
-        print("AR has value ", terminator: "")
-        print(inParams.AR, terminator: "")
-        print(", but is expected to be ", terminator: "")
-        print("above ", terminator: "")
-        print(1.0, terminator: "")
         print(".")
         throw "InputError"
     }

@@ -71,16 +71,6 @@ public class InputConstraints {
             Console.WriteLine(".");
             throw new Exception("InputError");
         }
-        if (!(inParams.AR <= 5.0)) {
-            Console.Write("AR has value ");
-            Console.Write(inParams.AR);
-            Console.Write(", but is expected to be ");
-            Console.Write("below ");
-            Console.Write(5.0);
-            Console.Write(" (AR_max)");
-            Console.WriteLine(".");
-            throw new Exception("InputError");
-        }
         
         if (!(inParams.a > 0.0)) {
             Console.Write("a has value ");
@@ -148,15 +138,6 @@ public class InputConstraints {
             Console.Write(", but is expected to be ");
             Console.Write("above ");
             Console.Write(0.0);
-            Console.WriteLine(".");
-            throw new Exception("InputError");
-        }
-        if (!(inParams.AR >= 1.0)) {
-            Console.Write("AR has value ");
-            Console.Write(inParams.AR);
-            Console.Write(", but is expected to be ");
-            Console.Write("above ");
-            Console.Write(1.0);
             Console.WriteLine(".");
             throw new Exception("InputError");
         }

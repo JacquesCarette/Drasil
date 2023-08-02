@@ -7,6 +7,22 @@ using System.IO;
 
 public class Calculations {
     
+    /** \brief Calculates aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
+        \param inParams structure holding the input values
+        \return aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
+    */
+    public static double func_AR(InputParameters inParams) {
+        StreamWriter outfile;
+        outfile = new StreamWriter("log.txt", true);
+        outfile.WriteLine("function func_AR called with inputs: {");
+        outfile.Write("  inParams = ");
+        outfile.WriteLine("Instance of InputParameters object");
+        outfile.WriteLine("  }");
+        outfile.Close();
+        
+        return inParams.a / inParams.b;
+    }
+    
     /** \brief Calculates stress distribution factor (Function) based on Pbtol
         \param inParams structure holding the input values
         \return stress distribution factor (Function) based on Pbtol
@@ -60,43 +76,43 @@ public class Calculations {
     }
     
     /** \brief Calculates tolerable load
-        \param inParams structure holding the input values
+        \param AR aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
         \param J_tol stress distribution factor (Function) based on Pbtol
         \return tolerable load
     */
-    public static double func_q_hat_tol(InputParameters inParams, double J_tol) {
+    public static double func_q_hat_tol(double AR, double J_tol) {
         StreamWriter outfile;
         outfile = new StreamWriter("log.txt", true);
         outfile.WriteLine("function func_q_hat_tol called with inputs: {");
-        outfile.Write("  inParams = ");
-        outfile.Write("Instance of InputParameters object");
+        outfile.Write("  AR = ");
+        outfile.Write(AR);
         outfile.WriteLine(", ");
         outfile.Write("  J_tol = ");
         outfile.WriteLine(J_tol);
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return Interpolation.interpY("SDF.txt", inParams.AR, J_tol);
+        return Interpolation.interpY("SDF.txt", AR, J_tol);
     }
     
     /** \brief Calculates stress distribution factor (Function)
-        \param inParams structure holding the input values
+        \param AR aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
         \param q_hat dimensionless load
         \return stress distribution factor (Function)
     */
-    public static double func_J(InputParameters inParams, double q_hat) {
+    public static double func_J(double AR, double q_hat) {
         StreamWriter outfile;
         outfile = new StreamWriter("log.txt", true);
         outfile.WriteLine("function func_J called with inputs: {");
-        outfile.Write("  inParams = ");
-        outfile.Write("Instance of InputParameters object");
+        outfile.Write("  AR = ");
+        outfile.Write(AR);
         outfile.WriteLine(", ");
         outfile.Write("  q_hat = ");
         outfile.WriteLine(q_hat);
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return Interpolation.interpZ("SDF.txt", inParams.AR, q_hat);
+        return Interpolation.interpZ("SDF.txt", AR, q_hat);
     }
     
     /** \brief Calculates non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)

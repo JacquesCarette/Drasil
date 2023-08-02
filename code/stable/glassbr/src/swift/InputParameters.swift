@@ -19,7 +19,6 @@ class InputParameters {
     var LDF: Double = 0.0
     var GTF: Int = 0
     var SD: Double = 0.0
-    var AR: Double = 0.0
     var w_TNT: Double = 0.0
     
 }

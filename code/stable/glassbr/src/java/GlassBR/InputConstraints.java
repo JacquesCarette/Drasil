@@ -75,16 +75,6 @@ public class InputConstraints {
             System.out.println(".");
             throw new Exception("InputError");
         }
-        if (!(inParams.AR <= 5.0)) {
-            System.out.print("AR has value ");
-            System.out.print(inParams.AR);
-            System.out.print(", but is expected to be ");
-            System.out.print("below ");
-            System.out.print(5.0);
-            System.out.print(" (AR_max)");
-            System.out.println(".");
-            throw new Exception("InputError");
-        }
         
         if (!(inParams.a > 0.0)) {
             System.out.print("a has value ");
@@ -152,15 +142,6 @@ public class InputConstraints {
             System.out.print(", but is expected to be ");
             System.out.print("above ");
             System.out.print(0.0);
-            System.out.println(".");
-            throw new Exception("InputError");
-        }
-        if (!(inParams.AR >= 1.0)) {
-            System.out.print("AR has value ");
-            System.out.print(inParams.AR);
-            System.out.print(", but is expected to be ");
-            System.out.print("above ");
-            System.out.print(1.0);
             System.out.println(".");
             throw new Exception("InputError");
         }

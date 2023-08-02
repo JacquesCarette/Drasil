@@ -12,6 +12,12 @@
 using std::ofstream;
 using std::string;
 
+/** \brief Calculates aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
+    \param inParams structure holding the input values
+    \return aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
+*/
+double func_AR(InputParameters &inParams);
+
 /** \brief Calculates stress distribution factor (Function) based on Pbtol
     \param inParams structure holding the input values
     \return stress distribution factor (Function) based on Pbtol
@@ -32,18 +38,18 @@ double func_q(InputParameters &inParams);
 double func_q_hat(InputParameters &inParams, double q);
 
 /** \brief Calculates tolerable load
-    \param inParams structure holding the input values
+    \param AR aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
     \param J_tol stress distribution factor (Function) based on Pbtol
     \return tolerable load
 */
-double func_q_hat_tol(InputParameters &inParams, double J_tol);
+double func_q_hat_tol(double AR, double J_tol);
 
 /** \brief Calculates stress distribution factor (Function)
-    \param inParams structure holding the input values
+    \param AR aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
     \param q_hat dimensionless load
     \return stress distribution factor (Function)
 */
-double func_J(InputParameters &inParams, double q_hat);
+double func_J(double AR, double q_hat);
 
 /** \brief Calculates non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
     \param inParams structure holding the input values

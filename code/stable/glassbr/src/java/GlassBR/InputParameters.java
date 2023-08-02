@@ -21,7 +21,6 @@ public class InputParameters {
     public double LDF;
     public int GTF;
     public double SD;
-    public double AR;
     public double w_TNT;
     
 }

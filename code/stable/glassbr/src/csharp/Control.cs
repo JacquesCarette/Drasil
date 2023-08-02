@@ -22,6 +22,12 @@ public class Control {
         InputFormat.get_input(filename, inParams);
         DerivedValues.derived_values(inParams);
         InputConstraints.input_constraints(inParams);
+        double AR = Calculations.func_AR(inParams);
+        outfile = new StreamWriter("log.txt", true);
+        outfile.Write("var 'AR' assigned ");
+        outfile.Write(AR);
+        outfile.WriteLine(" in module Control");
+        outfile.Close();
         double J_tol = Calculations.func_J_tol(inParams);
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'J_tol' assigned ");
@@ -40,13 +46,13 @@ public class Control {
         outfile.Write(q_hat);
         outfile.WriteLine(" in module Control");
         outfile.Close();
-        double q_hat_tol = Calculations.func_q_hat_tol(inParams, J_tol);
+        double q_hat_tol = Calculations.func_q_hat_tol(AR, J_tol);
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'q_hat_tol' assigned ");
         outfile.Write(q_hat_tol);
         outfile.WriteLine(" in module Control");
         outfile.Close();
-        double J = Calculations.func_J(inParams, q_hat);
+        double J = Calculations.func_J(AR, q_hat);
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'J' assigned ");
         outfile.Write(J);

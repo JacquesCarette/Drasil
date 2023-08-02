@@ -11,6 +11,18 @@
 using std::ofstream;
 using std::string;
 
+double func_AR(InputParameters &inParams) {
+    ofstream outfile;
+    outfile.open("log.txt", std::fstream::app);
+    outfile << "function func_AR called with inputs: {" << std::endl;
+    outfile << "  inParams = ";
+    outfile << "Instance of InputParameters object" << std::endl;
+    outfile << "  }" << std::endl;
+    outfile.close();
+    
+    return inParams.a / inParams.b;
+}
+
 double func_J_tol(InputParameters &inParams) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
@@ -50,34 +62,34 @@ double func_q_hat(InputParameters &inParams, double q) {
     return q * pow(inParams.a * inParams.b, 2.0) / (7.17e10 * pow(inParams.h, 4.0) * inParams.GTF);
 }
 
-double func_q_hat_tol(InputParameters &inParams, double J_tol) {
+double func_q_hat_tol(double AR, double J_tol) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
     outfile << "function func_q_hat_tol called with inputs: {" << std::endl;
-    outfile << "  inParams = ";
-    outfile << "Instance of InputParameters object";
+    outfile << "  AR = ";
+    outfile << AR;
     outfile << ", " << std::endl;
     outfile << "  J_tol = ";
     outfile << J_tol << std::endl;
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return interpY("SDF.txt", inParams.AR, J_tol);
+    return interpY("SDF.txt", AR, J_tol);
 }
 
-double func_J(InputParameters &inParams, double q_hat) {
+double func_J(double AR, double q_hat) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
     outfile << "function func_J called with inputs: {" << std::endl;
-    outfile << "  inParams = ";
-    outfile << "Instance of InputParameters object";
+    outfile << "  AR = ";
+    outfile << AR;
     outfile << ", " << std::endl;
     outfile << "  q_hat = ";
     outfile << q_hat << std::endl;
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return interpZ("SDF.txt", inParams.AR, q_hat);
+    return interpZ("SDF.txt", AR, q_hat);
 }
 
 double func_NFL(InputParameters &inParams, double q_hat_tol) {

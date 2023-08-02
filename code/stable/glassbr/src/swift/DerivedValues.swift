@@ -225,35 +225,6 @@ func derived_values(_ inParams: InputParameters) throws -> Void {
         throw "Error closing file."
     }
     
-    inParams.AR = inParams.a / inParams.b
-    do {
-        outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-        try outfile.seekToEnd()
-    } catch {
-        throw "Error opening file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("var 'inParams.AR' assigned ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(String(inParams.AR).utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(" in module DerivedValues".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.close()
-    } catch {
-        throw "Error closing file."
-    }
-    
     inParams.w_TNT = inParams.w * inParams.TNT
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))

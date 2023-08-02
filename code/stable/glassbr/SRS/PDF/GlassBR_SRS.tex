@@ -687,45 +687,6 @@ RefBy & \hyperref[DD:calofDemand]{DD:calofDemand}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:aspectRatio}
-\phantomsection 
-\label{DD:aspectRatio}
-\\ \midrule
-Label & Aspect ratio
-        
-\\ \midrule
-Symbol & $\mathit{AR}$
-         
-\\ \midrule
-Units & Unitless
-        
-\\ \midrule
-Equation & \begin{displaymath}
-           \mathit{AR}=\frac{a}{b}
-           \end{displaymath}
-\\ \midrule
-Description & \begin{symbDescription}
-              \item{$\mathit{AR}$ is the aspect ratio (Unitless)}
-              \item{$a$ is the plate length (long dimension) (${\text{m}}$)}
-              \item{$b$ is the plate width (short dimension) (${\text{m}}$)}
-              \end{symbDescription}
-\\ \midrule
-Notes & $a$ and $b$ are the dimensions of the plate, where ($a\geq{}b$).
-        
-\\ \midrule
-Source & \cite{astm2009}
-         
-\\ \midrule
-RefBy & \hyperref[IM:tolLoad]{IM:tolLoad} and \hyperref[IM:stressDistFac]{IM:stressDistFac}
-        
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
-
-\vspace{\baselineskip}
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:eqTNTW}
 \phantomsection 
 \label{DD:eqTNTW}
@@ -901,7 +862,7 @@ Description & \begin{symbDescription}
 \\ \midrule
 Notes & $J$ is obtained by interpolating from data shown in \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect}.
         
-        $\mathit{AR}$ is defined in \hyperref[DD:aspectRatio]{DD:aspectRatio}.
+        $\mathit{AR}$ is defined in \hyperref[IM:aspectRatio]{IM:aspectRatio}.
         
         $\hat{q}$ is defined in \hyperref[IM:dimlessLoad]{IM:dimlessLoad}.
         
@@ -1065,7 +1026,7 @@ Description & \begin{symbDescription}
 \\ \midrule
 Notes & ${\hat{q}_{\text{tol}}}$ is obtained by interpolating from data shown in \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect}.
         
-        $\mathit{AR}$ is defined in \hyperref[DD:aspectRatio]{DD:aspectRatio}.
+        $\mathit{AR}$ is defined in \hyperref[IM:aspectRatio]{IM:aspectRatio}.
         
         ${J_{\text{tol}}}$ is defined in \hyperref[DD:sdfTol]{DD:sdfTol}.
         
@@ -1074,6 +1035,53 @@ Source & \cite{astm2009}
          
 \\ \midrule
 RefBy & \hyperref[IM:nFL]{IM:nFL}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{IM:aspectRatio}
+\phantomsection 
+\label{IM:aspectRatio}
+\\ \midrule
+Label & Aspect ratio
+        
+\\ \midrule
+Input & $a$, $b$
+        
+\\ \midrule
+Output & $\mathit{AR}$
+         
+\\ \midrule
+Input Constraints & \begin{displaymath}
+                    a\gt{}0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    0\lt{}b\leq{}a
+                    \end{displaymath}
+\\ \midrule
+Output Constraints & 
+\\ \midrule
+Equation & \begin{displaymath}
+           \mathit{AR}=\frac{a}{b}
+           \end{displaymath}
+\\ \midrule
+Description & \begin{symbDescription}
+              \item{$\mathit{AR}$ is the aspect ratio (Unitless)}
+              \item{$a$ is the plate length (long dimension) (${\text{m}}$)}
+              \item{$b$ is the plate width (short dimension) (${\text{m}}$)}
+              \end{symbDescription}
+\\ \midrule
+Notes & $a$ and $b$ are the dimensions of the plate, where ($a\geq{}b$).
+        
+\\ \midrule
+Source & \cite{astm2009}
+         
+\\ \midrule
+RefBy & \hyperref[IM:tolLoad]{IM:tolLoad} and \hyperref[IM:stressDistFac]{IM:stressDistFac}
         
 \\ \bottomrule
 \end{tabular}
@@ -1353,7 +1361,7 @@ $w$ & Charge weight & ${\text{kg}}$
 {colspec={l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Source} & \textbf{Units}
 \\
-$\mathit{AR}$ & Aspect ratio & \hyperref[DD:aspectRatio]{DD:aspectRatio} & --
+$\mathit{AR}$ & Aspect ratio & \hyperref[IM:aspectRatio]{IM:aspectRatio} & --
 \\
 $E$ & Modulus of elasticity of glass & \hyperref[assumpSV]{A:standardValues} & ${\text{Pa}}$
 \\
@@ -1379,7 +1387,7 @@ ${t_{\text{d}}}$ & Duration of load & \hyperref[assumpSV]{A:standardValues} & ${
 {colspec={l X[l] l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Source} & \textbf{Units}
 \\
-$\mathit{AR}$ & Aspect ratio & \hyperref[DD:aspectRatio]{DD:aspectRatio} & --
+$\mathit{AR}$ & Aspect ratio & \hyperref[IM:aspectRatio]{IM:aspectRatio} & --
 \\
 $B$ & Risk of failure & \hyperref[IM:riskFun]{IM:riskFun} & --
 \\
@@ -1478,8 +1486,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:standOffDist]{DD:standOffDist} &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:aspectRatio]{DD:aspectRatio} &  &  &  &  &  &  &  & 
-\\
 \hyperref[DD:eqTNTW]{DD:eqTNTW} &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:calofDemand]{DD:calofDemand} &  &  &  &  &  &  &  & 
@@ -1497,6 +1503,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[IM:dimlessLoad]{IM:dimlessLoad} &  &  &  & X &  &  &  & 
 \\
 \hyperref[IM:tolLoad]{IM:tolLoad} &  &  &  &  &  &  &  & 
+\\
+\hyperref[IM:aspectRatio]{IM:aspectRatio} &  &  &  &  &  &  &  & 
 \\
 \hyperref[IM:probOfBreak]{IM:probOfBreak} &  &  &  &  &  &  &  & 
 \\
@@ -1548,7 +1556,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Items and Other Sections}]
 {colspec={l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:minThick]{DD:minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD:loadDurFactor}} & \textbf{\hyperref[DD:gTF]{DD:gTF}} & \textbf{\hyperref[DD:sdfTol]{DD:sdfTol}} & \textbf{\hyperref[DD:standOffDist]{DD:standOffDist}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[DD:eqTNTW]{DD:eqTNTW}} & \textbf{\hyperref[DD:calofDemand]{DD:calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM:isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM:isSafeLoad}} & \textbf{\hyperref[IM:riskFun]{IM:riskFun}} & \textbf{\hyperref[IM:stressDistFac]{IM:stressDistFac}} & \textbf{\hyperref[IM:nFL]{IM:nFL}} & \textbf{\hyperref[IM:dimlessLoad]{IM:dimlessLoad}} & \textbf{\hyperref[IM:tolLoad]{IM:tolLoad}} & \textbf{\hyperref[IM:probOfBreak]{IM:probOfBreak}} & \textbf{\hyperref[IM:calofCapacity]{IM:calofCapacity}} & \textbf{\hyperref[IM:isSafePb]{IM:isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM:isSafeLR}}
+\textbf{} & \textbf{\hyperref[DD:minThick]{DD:minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD:loadDurFactor}} & \textbf{\hyperref[DD:gTF]{DD:gTF}} & \textbf{\hyperref[DD:sdfTol]{DD:sdfTol}} & \textbf{\hyperref[DD:standOffDist]{DD:standOffDist}} & \textbf{\hyperref[DD:eqTNTW]{DD:eqTNTW}} & \textbf{\hyperref[DD:calofDemand]{DD:calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM:isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM:isSafeLoad}} & \textbf{\hyperref[IM:riskFun]{IM:riskFun}} & \textbf{\hyperref[IM:stressDistFac]{IM:stressDistFac}} & \textbf{\hyperref[IM:nFL]{IM:nFL}} & \textbf{\hyperref[IM:dimlessLoad]{IM:dimlessLoad}} & \textbf{\hyperref[IM:tolLoad]{IM:tolLoad}} & \textbf{\hyperref[IM:aspectRatio]{IM:aspectRatio}} & \textbf{\hyperref[IM:probOfBreak]{IM:probOfBreak}} & \textbf{\hyperref[IM:calofCapacity]{IM:calofCapacity}} & \textbf{\hyperref[IM:isSafePb]{IM:isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM:isSafeLR}}
 \\
 \hyperref[DD:minThick]{DD:minThick} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1560,39 +1568,39 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:standOffDist]{DD:standOffDist} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:aspectRatio]{DD:aspectRatio} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
 \hyperref[DD:eqTNTW]{DD:eqTNTW} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:calofDemand]{DD:calofDemand} &  &  &  &  & X &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:calofDemand]{DD:calofDemand} &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[TM:isSafeProb]{TM:isSafeProb} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[TM:isSafeLoad]{TM:isSafeLoad} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:riskFun]{IM:riskFun} & X & X &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
+\hyperref[IM:riskFun]{IM:riskFun} & X & X &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:stressDistFac]{IM:stressDistFac} &  &  &  &  &  & X &  &  &  &  &  &  &  & X &  &  &  &  & 
+\hyperref[IM:stressDistFac]{IM:stressDistFac} &  &  &  &  &  &  &  &  &  &  &  &  & X &  & X &  &  &  & 
 \\
-\hyperref[IM:nFL]{IM:nFL} & X &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & 
+\hyperref[IM:nFL]{IM:nFL} & X &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & 
 \\
-\hyperref[IM:dimlessLoad]{IM:dimlessLoad} & X &  & X &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[IM:dimlessLoad]{IM:dimlessLoad} & X &  & X &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:tolLoad]{IM:tolLoad} &  &  &  & X &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[IM:tolLoad]{IM:tolLoad} &  &  &  & X &  &  &  &  &  &  &  &  &  &  & X &  &  &  & 
 \\
-\hyperref[IM:probOfBreak]{IM:probOfBreak} &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\hyperref[IM:aspectRatio]{IM:aspectRatio} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:calofCapacity]{IM:calofCapacity} &  &  & X &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
+\hyperref[IM:probOfBreak]{IM:probOfBreak} &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[IM:calofCapacity]{IM:calofCapacity} &  &  & X &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
 \hyperref[IM:isSafePb]{IM:isSafePb} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & X
 \\
-\hyperref[IM:isSafeLR]{IM:isSafeLR} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & X & X & 
+\hyperref[IM:isSafeLR]{IM:isSafeLR} &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & X & X & 
 \label{Table:TraceMatRefvsRef}
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
 {colspec={l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:minThick]{DD:minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD:loadDurFactor}} & \textbf{\hyperref[DD:gTF]{DD:gTF}} & \textbf{\hyperref[DD:sdfTol]{DD:sdfTol}} & \textbf{\hyperref[DD:standOffDist]{DD:standOffDist}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[DD:eqTNTW]{DD:eqTNTW}} & \textbf{\hyperref[DD:calofDemand]{DD:calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM:isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM:isSafeLoad}} & \textbf{\hyperref[IM:riskFun]{IM:riskFun}} & \textbf{\hyperref[IM:stressDistFac]{IM:stressDistFac}} & \textbf{\hyperref[IM:nFL]{IM:nFL}} & \textbf{\hyperref[IM:dimlessLoad]{IM:dimlessLoad}} & \textbf{\hyperref[IM:tolLoad]{IM:tolLoad}} & \textbf{\hyperref[IM:probOfBreak]{IM:probOfBreak}} & \textbf{\hyperref[IM:calofCapacity]{IM:calofCapacity}} & \textbf{\hyperref[IM:isSafePb]{IM:isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM:isSafeLR}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}} & \textbf{\hyperref[checkInputWithDataCons]{FR:Check-Input-with-Data\_Constraints}} & \textbf{\hyperref[outputValsAndKnownValues]{FR:Output-Values-and-Known-Values}} & \textbf{\hyperref[checkGlassSafety]{FR:Check-Glass-Safety}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[verifiable]{NFR:Verifiable}} & \textbf{\hyperref[understandable]{NFR:Understandable}} & \textbf{\hyperref[reusable]{NFR:Reusable}} & \textbf{\hyperref[maintainable]{NFR:Maintainable}} & \textbf{\hyperref[portable]{NFR:Portable}}
+\textbf{} & \textbf{\hyperref[DD:minThick]{DD:minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD:loadDurFactor}} & \textbf{\hyperref[DD:gTF]{DD:gTF}} & \textbf{\hyperref[DD:sdfTol]{DD:sdfTol}} & \textbf{\hyperref[DD:standOffDist]{DD:standOffDist}} & \textbf{\hyperref[DD:eqTNTW]{DD:eqTNTW}} & \textbf{\hyperref[DD:calofDemand]{DD:calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM:isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM:isSafeLoad}} & \textbf{\hyperref[IM:riskFun]{IM:riskFun}} & \textbf{\hyperref[IM:stressDistFac]{IM:stressDistFac}} & \textbf{\hyperref[IM:nFL]{IM:nFL}} & \textbf{\hyperref[IM:dimlessLoad]{IM:dimlessLoad}} & \textbf{\hyperref[IM:tolLoad]{IM:tolLoad}} & \textbf{\hyperref[IM:aspectRatio]{IM:aspectRatio}} & \textbf{\hyperref[IM:probOfBreak]{IM:probOfBreak}} & \textbf{\hyperref[IM:calofCapacity]{IM:calofCapacity}} & \textbf{\hyperref[IM:isSafePb]{IM:isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM:isSafeLR}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}} & \textbf{\hyperref[checkInputWithDataCons]{FR:Check-Input-with-Data\_Constraints}} & \textbf{\hyperref[outputValsAndKnownValues]{FR:Output-Values-and-Known-Values}} & \textbf{\hyperref[checkGlassSafety]{FR:Check-Glass-Safety}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[verifiable]{NFR:Verifiable}} & \textbf{\hyperref[understandable]{NFR:Understandable}} & \textbf{\hyperref[reusable]{NFR:Reusable}} & \textbf{\hyperref[maintainable]{NFR:Maintainable}} & \textbf{\hyperref[portable]{NFR:Portable}}
 \\
 \hyperref[willBreakGS]{GS:Predict-Glass-Withstands-Explosion} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\

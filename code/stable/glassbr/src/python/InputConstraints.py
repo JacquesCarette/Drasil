@@ -59,15 +59,6 @@ def input_constraints(inParams):
         print(" (SD_max)", end="")
         print(".")
         raise Exception("InputError")
-    if (not(inParams.AR <= 5.0)) :
-        print("AR has value ", end="")
-        print(inParams.AR, end="")
-        print(", but is expected to be ", end="")
-        print("below ", end="")
-        print(5.0, end="")
-        print(" (AR_max)", end="")
-        print(".")
-        raise Exception("InputError")
     
     if (not(inParams.a > 0.0)) :
         print("a has value ", end="")
@@ -129,13 +120,5 @@ def input_constraints(inParams):
         print(", but is expected to be ", end="")
         print("above ", end="")
         print(0.0, end="")
-        print(".")
-        raise Exception("InputError")
-    if (not(inParams.AR >= 1.0)) :
-        print("AR has value ", end="")
-        print(inParams.AR, end="")
-        print(", but is expected to be ", end="")
-        print("above ", end="")
-        print(1.0, end="")
         print(".")
         raise Exception("InputError")

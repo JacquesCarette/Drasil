@@ -21,8 +21,8 @@ import Drasil.GlassBR.Unitals {- temporarily import everything -}
 import Drasil.SRSDocument (Block (Parallel))
 
 iMods :: [InstanceModel]
-iMods = [risk, strDisFac, nonFL, dimLL, tolPre, probOfBreak, calofCapacity,
-  pbIsSafe, lrIsSafe]
+iMods = [risk, strDisFac, nonFL, dimLL, tolPre, aspRat, probOfBreak,
+  calofCapacity, pbIsSafe, lrIsSafe]
 
 symb :: [UnitalChunk]
 symb =  [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram, ucuc standOffDist metre, demand] -- this is temporary
@@ -119,6 +119,16 @@ tolPreQD = mkQuantDef tolLoad tolPreEq
 
 {--}
 
+aspRat :: InstanceModel
+aspRat = imNoDeriv (equationalModelN (aspectRatio ^. term) aspRatQD)
+  abInputConstraints (qw aspectRatio) [] [dRef astm2009] "aspectRatio"
+  [aGrtrThanB]
+
+aspRatQD :: SimpleQDef
+aspRatQD = mkQuantDef aspectRatio $ sy plateLen $/ sy plateWidth
+
+{--}
+
 probOfBreak :: InstanceModel
 probOfBreak = imNoDeriv (equationalModelN (probBr ^. term) probOfBreakQD)
   [qwUC risk] (qw probBr) [] (map dRef [astm2009, beasonEtAl1998]) "probOfBreak"
@@ -184,7 +194,8 @@ pbIsSafeDesc :: Sentence
 pbIsSafeDesc = iModDesc isSafePb
   (ch isSafePb `S.and_` ch isSafePb +:+ fromSource lrIsSafe)
 
-jRef, nonFLRef, probBRRef, qHtRef, qHtTlTolRef, riskRef :: Sentence
+arRef, jRef, nonFLRef, probBRRef, qHtRef, qHtTlTolRef, riskRef :: Sentence
+arRef       = definedIn aspRat
 jRef        = definedIn strDisFac
 nonFLRef    = definedIn nonFL
 probBRRef   = definedIn probOfBreak

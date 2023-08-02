@@ -72,13 +72,6 @@ public class DerivedValues {
         outfile.println(" in module DerivedValues");
         outfile.close();
         
-        inParams.AR = inParams.a / inParams.b;
-        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 'inParams.AR' assigned ");
-        outfile.print(inParams.AR);
-        outfile.println(" in module DerivedValues");
-        outfile.close();
-        
         inParams.w_TNT = inParams.w * inParams.TNT;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'inParams.w_TNT' assigned ");

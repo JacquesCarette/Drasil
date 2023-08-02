@@ -33,8 +33,8 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspectRatio, charWeight,
 ----------------------
 
 dataDefs :: [DataDefinition]
-dataDefs = [hFromt, loadDF, glaTyFac, tolStrDisFac, standOffDis, aspRat,
-  eqTNTWDD, calofDemand]
+dataDefs = [hFromt, loadDF, glaTyFac, tolStrDisFac, standOffDis, eqTNTWDD,
+  calofDemand]
 {--}
 
 hFromtEq :: Relation
@@ -106,17 +106,6 @@ standOffDis = ddE standOffDisQD [dRef astm2009] Nothing "standOffDist" []
 
 {--}
 
-aspRatEq :: Expr
-aspRatEq = sy plateLen $/ sy plateWidth
-
-aspRatQD :: SimpleQDef
-aspRatQD = mkQuantDef aspectRatio aspRatEq
-
-aspRat :: DataDefinition
-aspRat = ddE aspRatQD [dRef astm2009] Nothing "aspectRatio" [aGrtrThanB]
-
-{--}
-
 eqTNTWEq :: Expr
 eqTNTWEq = mulRe (sy charWeight) (sy tNT)
 
@@ -179,12 +168,11 @@ pbTolUsr = ch pbTol `S.is` S "entered by the" +:+. phrase user
 qRef :: Sentence
 qRef = ch demand `S.isThe` (demandq ^. defn) `sC` S "as given in" +:+. refS calofDemand
 
-arRef, gtfRef, hRef, jtolRef, ldfRef :: Sentence
-arRef       = definedIn  aspRat
-gtfRef      = definedIn  glaTyFac
-hRef        = definedIn' hFromt (S "and is based on the nominal thicknesses")
-jtolRef     = definedIn  tolStrDisFac
-ldfRef      = definedIn  loadDF
+gtfRef, hRef, jtolRef, ldfRef :: Sentence
+gtfRef  = definedIn  glaTyFac
+hRef    = definedIn' hFromt (S "and is based on the nominal thicknesses")
+jtolRef = definedIn  tolStrDisFac
+ldfRef  = definedIn  loadDF
 
 -- List of Configuration Files necessary for DataDefs.hs
 configFp :: [String]

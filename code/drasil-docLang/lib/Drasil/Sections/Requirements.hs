@@ -26,7 +26,6 @@ import Drasil.DocumentLanguage.Units (toSentence)
 
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap)
-import Data.List (nub)
 
 -- | Types of requirements that may be generated.
 data ReqType = InputReq Sentence
@@ -64,8 +63,8 @@ reqF = SRS.require [reqIntro]
 fullReqs :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j) =>
   [ReqType] -> [i] -> [(j, Sentence)] -> [ConceptInstance] -> [ConceptInstance]
 fullReqs []                _ _ r = r
-fullReqs ((InputReq s):rs) i o r = nub $ inReq (inReqDesc i s) : fullReqs rs i o r
-fullReqs [OutputReq]       _ o r = nub $ r ++ [outReq (outReqDesc o)]
+fullReqs ((InputReq s):rs) i o r = inReq (inReqDesc i s) : fullReqs rs i o r
+fullReqs [OutputReq]       _ o r = r ++ [outReq (outReqDesc o)]
 fullReqs _                 _ _ _ = error "ReqTypes not fully implemented"
 
 -- | Prepends given LabelledContent to an input-value table.

@@ -61,8 +61,8 @@ sysSetValsFollowingAssumpsTable = mkValsSourceTable (mkQRTupleRef r2AQs r2ARs ++
   where
     r2AQs = qw loadSF   : map qw (take 4 assumptionConstants)
     r2ARs = assumpGL : replicate 4 assumpSV
-    r2DDs = [loadDF, hFromt, standOffDis]
-    r2IMs = [aspRat, glaTyFac]
+    r2DDs = [loadDF, standOffDis]
+    r2IMs = [aspRat, glaTyFac, hFromt]
 
 --FIXME:should constants, LDF, and LSF have some sort of field that holds
 -- the assumption(s) that're being followed? (Issue #349)
@@ -86,11 +86,8 @@ outputValuesDesc :: Sentence
 outputValuesDesc = foldlSent [titleize output_, pluralNP (the value), S "from the table for", namedRef outputValuesTable (S "Required Outputs")]
 
 outputValuesTable :: LabelledContent
-outputValuesTable = mkValsSourceTable (mkQRTuple iMods ++ mkQRTuple r6DDs) "ReqOutputs"
+outputValuesTable = mkValsSourceTable (mkQRTuple iMods) "ReqOutputs"
                               (S "Required" +:+ titleize' output_ `follows` outputValues)
-  where
-    r6DDs :: [DataDefinition]
-    r6DDs = [hFromt]
 
 {--Nonfunctional Requirements--}
 

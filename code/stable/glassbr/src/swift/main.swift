@@ -39,7 +39,7 @@ var inParams: InputParameters = InputParameters()
 try get_input(filename, inParams)
 try derived_values(inParams)
 try input_constraints(&inParams)
-var GTF: Int = try func_GTF(&inParams)
+var h: Double = try func_h(&inParams)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -47,12 +47,12 @@ do {
     throw "Error opening file."
 }
 do {
-    try outfile.write(contentsOf: Data("var 'GTF' assigned ".utf8))
+    try outfile.write(contentsOf: Data("var 'h' assigned ".utf8))
 } catch {
     throw "Error printing to file."
 }
 do {
-    try outfile.write(contentsOf: Data(String(GTF).utf8))
+    try outfile.write(contentsOf: Data(String(h).utf8))
 } catch {
     throw "Error printing to file."
 }
@@ -67,7 +67,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var J_tol: Double = try func_J_tol(&inParams)
+var GTF: Int = try func_GTF(&inParams)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -75,12 +75,12 @@ do {
     throw "Error opening file."
 }
 do {
-    try outfile.write(contentsOf: Data("var 'J_tol' assigned ".utf8))
+    try outfile.write(contentsOf: Data("var 'GTF' assigned ".utf8))
 } catch {
     throw "Error printing to file."
 }
 do {
-    try outfile.write(contentsOf: Data(String(J_tol).utf8))
+    try outfile.write(contentsOf: Data(String(GTF).utf8))
 } catch {
     throw "Error printing to file."
 }
@@ -151,7 +151,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var q_hat: Double = try func_q_hat(&inParams, q, GTF)
+var q_hat: Double = try func_q_hat(&inParams, q, h, GTF)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -179,7 +179,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var q_hat_tol: Double = try func_q_hat_tol(AR, J_tol)
+var J_tol: Double = try func_J_tol(&inParams, h)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -187,12 +187,12 @@ do {
     throw "Error opening file."
 }
 do {
-    try outfile.write(contentsOf: Data("var 'q_hat_tol' assigned ".utf8))
+    try outfile.write(contentsOf: Data("var 'J_tol' assigned ".utf8))
 } catch {
     throw "Error printing to file."
 }
 do {
-    try outfile.write(contentsOf: Data(String(q_hat_tol).utf8))
+    try outfile.write(contentsOf: Data(String(J_tol).utf8))
 } catch {
     throw "Error printing to file."
 }
@@ -235,7 +235,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var NFL: Double = try func_NFL(&inParams, q_hat_tol)
+var q_hat_tol: Double = try func_q_hat_tol(AR, J_tol)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -243,12 +243,12 @@ do {
     throw "Error opening file."
 }
 do {
-    try outfile.write(contentsOf: Data("var 'NFL' assigned ".utf8))
+    try outfile.write(contentsOf: Data("var 'q_hat_tol' assigned ".utf8))
 } catch {
     throw "Error printing to file."
 }
 do {
-    try outfile.write(contentsOf: Data(String(NFL).utf8))
+    try outfile.write(contentsOf: Data(String(q_hat_tol).utf8))
 } catch {
     throw "Error printing to file."
 }
@@ -263,7 +263,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var B: Double = try func_B(&inParams, J)
+var B: Double = try func_B(&inParams, h, J)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -291,7 +291,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var LR: Double = try func_LR(NFL, GTF)
+var NFL: Double = try func_NFL(&inParams, q_hat_tol, h)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -299,12 +299,12 @@ do {
     throw "Error opening file."
 }
 do {
-    try outfile.write(contentsOf: Data("var 'LR' assigned ".utf8))
+    try outfile.write(contentsOf: Data("var 'NFL' assigned ".utf8))
 } catch {
     throw "Error printing to file."
 }
 do {
-    try outfile.write(contentsOf: Data(String(LR).utf8))
+    try outfile.write(contentsOf: Data(String(NFL).utf8))
 } catch {
     throw "Error printing to file."
 }
@@ -347,7 +347,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var isSafeLR: Bool = try func_isSafeLR(LR, q)
+var LR: Double = try func_LR(NFL, GTF)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -355,12 +355,12 @@ do {
     throw "Error opening file."
 }
 do {
-    try outfile.write(contentsOf: Data("var 'isSafeLR' assigned ".utf8))
+    try outfile.write(contentsOf: Data("var 'LR' assigned ".utf8))
 } catch {
     throw "Error printing to file."
 }
 do {
-    try outfile.write(contentsOf: Data(String(isSafeLR).utf8))
+    try outfile.write(contentsOf: Data(String(LR).utf8))
 } catch {
     throw "Error printing to file."
 }
@@ -389,6 +389,34 @@ do {
 }
 do {
     try outfile.write(contentsOf: Data(String(isSafePb).utf8))
+} catch {
+    throw "Error printing to file."
+}
+do {
+    try outfile.write(contentsOf: Data(" in module Control".utf8))
+    try outfile.write(contentsOf: Data("\n".utf8))
+} catch {
+    throw "Error printing to file."
+}
+do {
+    try outfile.close()
+} catch {
+    throw "Error closing file."
+}
+var isSafeLR: Bool = try func_isSafeLR(LR, q)
+do {
+    outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
+    try outfile.seekToEnd()
+} catch {
+    throw "Error opening file."
+}
+do {
+    try outfile.write(contentsOf: Data("var 'isSafeLR' assigned ".utf8))
+} catch {
+    throw "Error printing to file."
+}
+do {
+    try outfile.write(contentsOf: Data(String(isSafeLR).utf8))
 } catch {
     throw "Error printing to file."
 }

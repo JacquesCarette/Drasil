@@ -44,35 +44,6 @@ func derived_values(_ inParams: InputParameters) throws -> Void {
         throw "Error closing file."
     }
     
-    inParams.h = 1.0 / 1000.0 * (inParams.t == 2.5 ? 2.16 : inParams.t == 2.7 ? 2.59 : inParams.t == 3.0 ? 2.92 : inParams.t == 4.0 ? 3.78 : inParams.t == 5.0 ? 4.57 : inParams.t == 6.0 ? 5.56 : inParams.t == 8.0 ? 7.42 : inParams.t == 10.0 ? 9.02 : inParams.t == 12.0 ? 11.91 : inParams.t == 16.0 ? 15.09 : inParams.t == 19.0 ? 18.26 : 21.44)
-    do {
-        outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-        try outfile.seekToEnd()
-    } catch {
-        throw "Error opening file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("var 'inParams.h' assigned ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(String(inParams.h).utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(" in module DerivedValues".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.close()
-    } catch {
-        throw "Error closing file."
-    }
-    
     inParams.LDF = pow(3.0 / 60.0, 7.0 / 16.0)
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))

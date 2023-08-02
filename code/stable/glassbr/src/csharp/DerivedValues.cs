@@ -19,13 +19,6 @@ public class DerivedValues {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        inParams.h = 1.0 / 1000.0 * (inParams.t == 2.5 ? 2.16 : inParams.t == 2.7 ? 2.59 : inParams.t == 3.0 ? 2.92 : inParams.t == 4.0 ? 3.78 : inParams.t == 5.0 ? 4.57 : inParams.t == 6.0 ? 5.56 : inParams.t == 8.0 ? 7.42 : inParams.t == 10.0 ? 9.02 : inParams.t == 12.0 ? 11.91 : inParams.t == 16.0 ? 15.09 : inParams.t == 19.0 ? 18.26 : 21.44);
-        outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'inParams.h' assigned ");
-        outfile.Write(inParams.h);
-        outfile.WriteLine(" in module DerivedValues");
-        outfile.Close();
-        
         inParams.LDF = Math.Pow(3.0 / 60.0, 7.0 / 16.0);
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'inParams.LDF' assigned ");

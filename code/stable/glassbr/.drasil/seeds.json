@@ -182,9 +182,6 @@
             "loadDurFactor"
         ],
         [
-            "minThick"
-        ],
-        [
             "stdOffDist"
         ]
     ],
@@ -207,6 +204,9 @@
         ],
         [
             "lResistance"
+        ],
+        [
+            "minThick"
         ],
         [
             "nFL"

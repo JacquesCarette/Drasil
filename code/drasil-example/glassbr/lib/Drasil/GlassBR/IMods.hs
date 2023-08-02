@@ -21,8 +21,8 @@ import Drasil.GlassBR.Unitals {- temporarily import everything -}
 import Drasil.SRSDocument (Block (Parallel))
 
 iMods :: [InstanceModel]
-iMods = [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, aspRat,
-  probOfBreak, calofCapacity, pbIsSafe, lrIsSafe]
+iMods = [risk, hFromt, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac,
+  aspRat, probOfBreak, calofCapacity, pbIsSafe, lrIsSafe]
 
 symb :: [UnitalChunk]
 symb =  [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram, ucuc standOffDist metre, demand] -- this is temporary
@@ -55,6 +55,19 @@ riskQD :: SimpleQDef
 riskQD = mkQuantDef riskFun ((sy sflawParamK $/
   (mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- exactDbl 1))) `mulRe`
   ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac))
+
+{--}
+
+hFromt :: InstanceModel
+hFromt = imNoDeriv (equationalModelN (minThick ^. term) hFromtQD)
+  [qwUC nomThick] (qw minThick) [] [dRef astm2009] "minThick" [hMin]
+
+hFromtQD :: SimpleQDef
+hFromtQD = mkQuantDef minThick $ frac 1 1000 `mulRe` incompleteCase
+  (zipWith hFromtHelper actualThicknesses nominalThicknesses)
+  where
+    hFromtHelper :: Double -> Double -> (Expr, Relation)
+    hFromtHelper result condition = (dbl result, sy nomThick $= dbl condition)
 
 {--}
 
@@ -223,13 +236,15 @@ pbIsSafeDesc :: Sentence
 pbIsSafeDesc = iModDesc isSafePb
   (ch isSafePb `S.and_` ch isSafePb +:+ fromSource lrIsSafe)
 
-arRef, gtfRef, jRef, jtolRef, nonFLRef, probBRRef, qHtRef, qHtTlTolRef, riskRef :: Sentence
-arRef       = definedIn aspRat
-gtfRef      = definedIn glaTyFac
-jRef        = definedIn strDisFac
-jtolRef     = definedIn tolStrDisFac
-nonFLRef    = definedIn nonFL
-probBRRef   = definedIn probOfBreak
-qHtRef      = definedIn dimLL
-qHtTlTolRef = definedIn tolPre
-riskRef     = definedIn risk
+arRef, gtfRef, hRef, jRef, jtolRef, nonFLRef, probBRRef, qHtRef, qHtTlTolRef,
+  riskRef :: Sentence
+arRef       = definedIn  aspRat
+gtfRef      = definedIn  glaTyFac
+hRef        = definedIn' hFromt (S "and is based on the nominal thicknesses")
+jRef        = definedIn  strDisFac
+jtolRef     = definedIn  tolStrDisFac
+nonFLRef    = definedIn  nonFL
+probBRRef   = definedIn  probOfBreak
+qHtRef      = definedIn  dimLL
+qHtTlTolRef = definedIn  tolPre
+riskRef     = definedIn  risk

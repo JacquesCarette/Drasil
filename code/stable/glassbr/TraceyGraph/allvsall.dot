@@ -4,8 +4,8 @@ digraph allvsall {
 	loadDurFactor -> assumpLDFC;
 	demandq -> stdOffDist;
 	demandq -> eqTNTChar;
-	riskFun -> minThick;
 	riskFun -> loadDurFactor;
+	riskFun -> minThick;
 	riskFun -> stressDistFac;
 	stressDistFac -> dimlessLoad;
 	stressDistFac -> aR;
@@ -13,14 +13,14 @@ digraph allvsall {
 	nFL -> minThick;
 	nFL -> tolLoad;
 	dimlessLoad -> assumpSV;
-	dimlessLoad -> minThick;
 	dimlessLoad -> demandq;
+	dimlessLoad -> minThick;
 	dimlessLoad -> glassTypeFac;
 	tolLoad -> sdfTol;
 	tolLoad -> aR;
 	sdfTol -> assumpSV;
-	sdfTol -> minThick;
 	sdfTol -> loadDurFactor;
+	sdfTol -> minThick;
 	probBr -> riskFun;
 	lResistance -> nFL;
 	lResistance -> glassTypeFac;
@@ -56,7 +56,6 @@ digraph allvsall {
 	{assumpGT, assumpGC, assumpES, assumpSV, assumpGL, assumpBC, assumpRT, assumpLDFC}
 	}
 
-	minThick	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:minThick"];
 	loadDurFactor	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:loadDurFactor"];
 	stdOffDist	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:standOffDist"];
 	eqTNTChar	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:eqTNTW"];
@@ -64,7 +63,7 @@ digraph allvsall {
 
 	subgraph DD {
 	rank="same"
-	{minThick, loadDurFactor, stdOffDist, eqTNTChar, demandq}
+	{loadDurFactor, stdOffDist, eqTNTChar, demandq}
 	}
 
 	isSafeProb	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeProb"];
@@ -76,6 +75,7 @@ digraph allvsall {
 	}
 
 	riskFun	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:riskFun"];
+	minThick	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:minThick"];
 	stressDistFac	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:stressDistFac"];
 	nFL	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nFL"];
 	glassTypeFac	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:gTF"];
@@ -90,7 +90,7 @@ digraph allvsall {
 
 	subgraph IM {
 	rank="same"
-	{riskFun, stressDistFac, nFL, glassTypeFac, dimlessLoad, tolLoad, sdfTol, aR, probBr, lResistance, isSafePb, isSafeLR}
+	{riskFun, minThick, stressDistFac, nFL, glassTypeFac, dimlessLoad, tolLoad, sdfTol, aR, probBr, lResistance, isSafePb, isSafeLR}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

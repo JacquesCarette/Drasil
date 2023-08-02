@@ -15,7 +15,6 @@ public class InputParameters {
     public double SD_x;
     public double SD_y;
     public double SD_z;
-    public double h;
     public double LDF;
     public double SD;
     public double w_TNT;

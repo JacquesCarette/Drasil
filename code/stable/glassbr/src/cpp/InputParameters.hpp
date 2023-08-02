@@ -23,7 +23,6 @@ class InputParameters {
         double SD_x;
         double SD_y;
         double SD_z;
-        double h;
         double LDF;
         double SD;
         double w_TNT;

@@ -13,13 +13,6 @@ def derived_values(inParams):
     print("  }", file=outfile)
     outfile.close()
     
-    inParams.h = 1.0 / 1000.0 * (2.16 if inParams.t == 2.5 else 2.59 if inParams.t == 2.7 else 2.92 if inParams.t == 3.0 else 3.78 if inParams.t == 4.0 else 4.57 if inParams.t == 5.0 else 5.56 if inParams.t == 6.0 else 7.42 if inParams.t == 8.0 else 9.02 if inParams.t == 10.0 else 11.91 if inParams.t == 12.0 else 15.09 if inParams.t == 16.0 else 18.26 if inParams.t == 19.0 else 21.44)
-    outfile = open("log.txt", "a")
-    print("var 'inParams.h' assigned ", end="", file=outfile)
-    print(inParams.h, end="", file=outfile)
-    print(" in module DerivedValues", file=outfile)
-    outfile.close()
-    
     inParams.LDF = (3.0 / 60.0) ** (7.0 / 16.0)
     outfile = open("log.txt", "a")
     print("var 'inParams.LDF' assigned ", end="", file=outfile)

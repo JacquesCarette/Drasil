@@ -33,21 +33,7 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspectRatio, charWeight,
 ----------------------
 
 dataDefs :: [DataDefinition]
-dataDefs = [hFromt, loadDF, standOffDis, eqTNTWDD, calofDemand]
-{--}
-
-hFromtEq :: Relation
-hFromtEq = frac 1 1000 `mulRe` incompleteCase (zipWith hFromtHelper
-  actualThicknesses nominalThicknesses)
-
-hFromtHelper :: Double -> Double -> (Expr, Relation)
-hFromtHelper result condition = (dbl result, sy nomThick $= dbl condition)
-
-hFromtQD :: SimpleQDef
-hFromtQD = mkQuantDef minThick hFromtEq
-
-hFromt :: DataDefinition
-hFromt = ddE hFromtQD [dRef astm2009] Nothing "minThick" [hMin]
+dataDefs = [loadDF, standOffDis, eqTNTWDD, calofDemand]
 
 {--}
 
@@ -136,8 +122,7 @@ pbTolUsr = ch pbTol `S.is` S "entered by the" +:+. phrase user
 qRef :: Sentence
 qRef = ch demand `S.isThe` (demandq ^. defn) `sC` S "as given in" +:+. refS calofDemand
 
-hRef, ldfRef :: Sentence
-hRef   = definedIn' hFromt (S "and is based on the nominal thicknesses")
+ldfRef :: Sentence
 ldfRef = definedIn  loadDF
 
 -- List of Configuration Files necessary for DataDefs.hs

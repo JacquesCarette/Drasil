@@ -38,8 +38,8 @@ abInputConstraints :: [(QuantityDict, Maybe (RealInterval Expr Expr))]
 abInputConstraints = [qwC plateLen   $ UpFrom  (Exc, exactDbl 0),
                       qwC plateWidth $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen)]
 
-aspectRatioConstraint :: (QuantityDict, Maybe (RealInterval Expr Expr))
-aspectRatioConstraint = qwC aspectRatio (UpFrom (Inc, exactDbl 1))
+aspectRatioConstraint :: RealInterval Expr Expr
+aspectRatioConstraint = UpFrom (Inc, exactDbl 1)
 
 probConstraint :: RealInterval Expr Expr
 probConstraint = Bounded (Inc, exactDbl 0) (Inc, exactDbl 1)
@@ -76,7 +76,7 @@ hFromtQD = mkQuantDef minThick $ frac 1 1000 `mulRe` incompleteCase
 
 strDisFac :: InstanceModel
 strDisFac = imNoDeriv (equationalModelN (stressDistFac ^. term) strDisFacQD)
-  (aspectRatioConstraint : [qwUC dimlessLoad]) (qw stressDistFac)
+  (qwC aspectRatio aspectRatioConstraint : [qwUC dimlessLoad]) (qw stressDistFac)
   [Bounded (Inc, sy stressDistFacMin) (Inc, sy stressDistFacMax)]
   [dRef astm2009] "stressDistFac"
   [interpolating stressDistFac dimlessloadVsARFig, arRef, qHtRef]
@@ -137,8 +137,9 @@ dimLLQD = mkQuantDef dimlessLoad dimLLEq
 
 tolPre :: InstanceModel
 tolPre = imNoDeriv (equationalModelN (tolLoad ^. term) tolPreQD)
-  [aspectRatioConstraint, qwUC tolStrDisFac] (qw tolLoad) [] [dRef astm2009]
-  "tolLoad" [interpolating tolLoad dimlessloadVsARFig, arRef, jtolRef]
+  [qwC aspectRatio aspectRatioConstraint, qwUC tolStrDisFac] (qw tolLoad) []
+  [dRef astm2009] "tolLoad" [interpolating tolLoad dimlessloadVsARFig, arRef,
+    jtolRef]
 
 tolPreEq :: Expr
 --tolPreEq = apply (sy tolLoad) [sy sdfTol, (sy plateLen) / (sy plateWidth)]
@@ -166,8 +167,8 @@ tolStrDisFacQD = mkQuantDef sdfTol $ ln (ln (recip_ (exactDbl 1 $- sy pbTol))
 
 aspRat :: InstanceModel
 aspRat = imNoDeriv (equationalModelN (aspectRatio ^. term) aspRatQD)
-  abInputConstraints (qw aspectRatio) [] [dRef astm2009] "aspectRatio"
-  [aGrtrThanB]
+  abInputConstraints (qw aspectRatio) [aspectRatioConstraint] [dRef astm2009]
+  "aspectRatio" [aGrtrThanB]
 
 aspRatQD :: SimpleQDef
 aspRatQD = mkQuantDef aspectRatio $ sy plateLen $/ sy plateWidth

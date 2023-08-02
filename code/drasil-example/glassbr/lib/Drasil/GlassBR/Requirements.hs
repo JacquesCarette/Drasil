@@ -5,7 +5,6 @@ import Control.Lens ((^.))
 import Language.Drasil
 import Drasil.DocLang (inReq, mkQRTuple, mkQRTupleRef, mkValsSourceTable)
 import Drasil.DocLang.SRS (datCon, propCorSol)
-import Theory.Drasil (DataDefinition)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -23,9 +22,8 @@ import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)
 import Drasil.GlassBR.Concepts (glass)
-import Drasil.GlassBR.DataDefs {- temporarily import everything -}
-import Drasil.GlassBR.IMods {- temporarily import everything -}
--- import Drasil.GlassBR.TMods (lrIsSafe, pbIsSafe)
+import Drasil.GlassBR.DataDefs (loadDF, standOffDis)
+import Drasil.GlassBR.IMods (iMods, aspRat, glaTyFac, hFromt, pbIsSafe, lrIsSafe)
 import Drasil.GlassBR.Unitals (blast, isSafeLR, isSafePb, loadSF, notSafe,
   pbTolfail, safeMessage)
 
@@ -59,7 +57,7 @@ sysSetValsFollowingAssumpsTable :: LabelledContent
 sysSetValsFollowingAssumpsTable = mkValsSourceTable (mkQRTupleRef r2AQs r2ARs ++ mkQRTuple r2DDs ++ mkQRTuple r2IMs)
   "ReqAssignments" (S "Required Assignments" `follows` sysSetValsFollowingAssumps)
   where
-    r2AQs = qw loadSF   : map qw (take 4 assumptionConstants)
+    r2AQs = qw loadSF : map qw (take 4 assumptionConstants)
     r2ARs = assumpGL : replicate 4 assumpSV
     r2DDs = [loadDF, standOffDis]
     r2IMs = [aspRat, glaTyFac, hFromt]

@@ -1,6 +1,5 @@
-module Drasil.GlassBR.IMods {- temporarily export everything-}
--- (symb, iMods, pbIsSafe, lrIsSafe, instModIntro)
-  where
+module Drasil.GlassBR.IMods (symb, iMods, aspRat, glaTyFac, hFromt, pbIsSafe,
+  lrIsSafe, instModIntro, qDefns) where
 
 import Control.Lens ((^.))
 import Prelude hiding (exp)

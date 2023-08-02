@@ -5,25 +5,15 @@ import Control.Lens ((^.))
 import Language.Drasil
 import Prelude hiding (log, exp, sqrt)
 import Theory.Drasil (DataDefinition, ddE)
-import SysInfo.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Data.Drasil.Concepts.Documentation (datum, user)
 import Data.Drasil.Concepts.Math (parameter)
-import Data.Drasil.Concepts.PhysicalProperties (dimension)
-
-import Data.Drasil.Citations (campidelli)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpLDFC)
-import Drasil.GlassBR.Concepts (annealed, fullyT, glass, heatS)
-import Drasil.GlassBR.Figures (demandVsSDFig, dimlessloadVsARFig)
-import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
-import Drasil.GlassBR.Unitals (actualThicknesses, aspectRatio, charWeight,
-  demand, demandq, dimlessLoad, eqTNTWeight, gTF, glassType, glassTypeCon,
-  glassTypeFactors, lDurFac, lRe, loadDur, loadSF, minThick, modElas, nomThick,
-  nominalThicknesses, nonFactorL, pbTol, plateLen, plateWidth, probBr, riskFun,
-  sdfTol, sdx, sdy, sdz, sflawParamK, sflawParamM, standOffDist, stressDistFac,
-  tNT, tolLoad, interpY, interpZ)
+import Drasil.GlassBR.Figures (demandVsSDFig)
+import Drasil.GlassBR.References (astm2009)
+import Drasil.GlassBR.Unitals (charWeight, demand, demandq, eqTNTWeight,
+  interpY, lDurFac, loadDur, sdx, sdy, sdz, sflawParamM, standOffDist, tNT)
 
 ----------------------
 -- DATA DEFINITIONS --

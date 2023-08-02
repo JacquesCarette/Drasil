@@ -33,8 +33,8 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspectRatio, charWeight,
 ----------------------
 
 dataDefs :: [DataDefinition]
-dataDefs = [hFromt, loadDF, glaTyFac, tolPre, tolStrDisFac, standOffDis,
-  aspRat, eqTNTWDD, calofDemand]
+dataDefs = [hFromt, loadDF, glaTyFac, tolStrDisFac, standOffDis, aspRat,
+  eqTNTWDD, calofDemand]
 {--}
 
 hFromtEq :: Relation
@@ -76,19 +76,6 @@ glaTyFacQD = mkQuantDef gTF glaTyFacEq
 glaTyFac :: DataDefinition
 glaTyFac = ddE glaTyFacQD [dRef astm2009] Nothing "gTF"
   [anGlass, ftGlass, hsGlass]
-
-{--}
-
-tolPreEq :: Expr
---tolPreEq = apply (sy tolLoad) [sy sdfTol, (sy plateLen) / (sy plateWidth)]
-tolPreEq = apply interpY [str "SDF.txt", sy aspectRatio, sy sdfTol]
-
-tolPreQD :: SimpleQDef
-tolPreQD = mkQuantDef tolLoad tolPreEq
-
-tolPre :: DataDefinition
-tolPre = ddE tolPreQD [dRef astm2009] Nothing "tolLoad"
-  [interpolating tolLoad dimlessloadVsARFig, arRef, jtolRef]
 
 {--}
 
@@ -192,13 +179,12 @@ pbTolUsr = ch pbTol `S.is` S "entered by the" +:+. phrase user
 qRef :: Sentence
 qRef = ch demand `S.isThe` (demandq ^. defn) `sC` S "as given in" +:+. refS calofDemand
 
-arRef, gtfRef, hRef, jtolRef, ldfRef, qHtTlTolRef :: Sentence
+arRef, gtfRef, hRef, jtolRef, ldfRef :: Sentence
 arRef       = definedIn  aspRat
 gtfRef      = definedIn  glaTyFac
 hRef        = definedIn' hFromt (S "and is based on the nominal thicknesses")
 jtolRef     = definedIn  tolStrDisFac
 ldfRef      = definedIn  loadDF
-qHtTlTolRef = definedIn  tolPre
 
 -- List of Configuration Files necessary for DataDefs.hs
 configFp :: [String]

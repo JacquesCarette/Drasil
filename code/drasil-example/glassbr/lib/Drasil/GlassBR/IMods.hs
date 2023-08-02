@@ -21,8 +21,8 @@ import Drasil.GlassBR.Unitals {- temporarily import everything -}
 import Drasil.SRSDocument (Block (Parallel))
 
 iMods :: [InstanceModel]
-iMods = [risk, strDisFac, nonFL, dimLL, probOfBreak, calofCapacity, pbIsSafe,
-  lrIsSafe]
+iMods = [risk, strDisFac, nonFL, dimLL, tolPre, probOfBreak, calofCapacity,
+  pbIsSafe, lrIsSafe]
 
 symb :: [UnitalChunk]
 symb =  [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram, ucuc standOffDist metre, demand] -- this is temporary
@@ -37,6 +37,9 @@ qDefns = Parallel hFromtQD [glaTyFacQD] : --can be calculated on their own
 abInputConstraints :: [(QuantityDict, Maybe (RealInterval Expr Expr))]
 abInputConstraints = [qwC plateLen   $ UpFrom  (Exc, exactDbl 0),
                       qwC plateWidth $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen)]
+
+aspectRatioConstraint :: (QuantityDict, Maybe (RealInterval Expr Expr))
+aspectRatioConstraint = qwC aspectRatio (UpFrom (Inc, exactDbl 1))
 
 {--}
 
@@ -57,7 +60,7 @@ riskQD = mkQuantDef riskFun ((sy sflawParamK $/
 
 strDisFac :: InstanceModel
 strDisFac = imNoDeriv (equationalModelN (stressDistFac ^. term) strDisFacQD)
-  (qwC aspectRatio (UpFrom (Inc, exactDbl 1)) : [qwUC dimlessLoad]) (qw stressDistFac)
+  (aspectRatioConstraint : [qwUC dimlessLoad]) (qw stressDistFac)
   [Bounded (Inc, sy stressDistFacMin) (Inc, sy stressDistFacMax)]
   [dRef astm2009] "stressDistFac"
   [interpolating stressDistFac dimlessloadVsARFig, arRef, qHtRef]
@@ -99,6 +102,20 @@ dimLLEq = mulRe (sy demand) (square (mulRe (sy plateLen) (sy plateWidth)))
 
 dimLLQD :: SimpleQDef
 dimLLQD = mkQuantDef dimlessLoad dimLLEq
+
+{--}
+
+tolPre :: InstanceModel
+tolPre = imNoDeriv (equationalModelN (tolLoad ^. term) tolPreQD)
+  [aspectRatioConstraint, qwUC tolStrDisFac] (qw tolLoad) [] [dRef astm2009]
+  "tolLoad" [interpolating tolLoad dimlessloadVsARFig, arRef, jtolRef]
+
+tolPreEq :: Expr
+--tolPreEq = apply (sy tolLoad) [sy sdfTol, (sy plateLen) / (sy plateWidth)]
+tolPreEq = apply interpY [str "SDF.txt", sy aspectRatio, sy sdfTol]
+
+tolPreQD :: SimpleQDef
+tolPreQD = mkQuantDef tolLoad tolPreEq
 
 {--}
 
@@ -167,9 +184,10 @@ pbIsSafeDesc :: Sentence
 pbIsSafeDesc = iModDesc isSafePb
   (ch isSafePb `S.and_` ch isSafePb +:+ fromSource lrIsSafe)
 
-jRef, nonFLRef, probBRRef, qHtRef, riskRef :: Sentence
-jRef      = definedIn strDisFac
-nonFLRef  = definedIn nonFL
-probBRRef = definedIn probOfBreak
-qHtRef    = definedIn dimLL
-riskRef   = definedIn risk
+jRef, nonFLRef, probBRRef, qHtRef, qHtTlTolRef, riskRef :: Sentence
+jRef        = definedIn strDisFac
+nonFLRef    = definedIn nonFL
+probBRRef   = definedIn probOfBreak
+qHtRef      = definedIn dimLL
+qHtTlTolRef = definedIn tolPre
+riskRef     = definedIn risk

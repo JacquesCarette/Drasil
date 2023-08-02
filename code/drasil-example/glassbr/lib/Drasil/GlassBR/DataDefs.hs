@@ -33,8 +33,7 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspectRatio, charWeight,
 ----------------------
 
 dataDefs :: [DataDefinition]
-dataDefs = [hFromt, loadDF, glaTyFac, tolStrDisFac, standOffDis, eqTNTWDD,
-  calofDemand]
+dataDefs = [hFromt, loadDF, tolStrDisFac, standOffDis, eqTNTWDD, calofDemand]
 {--}
 
 hFromtEq :: Relation
@@ -61,21 +60,6 @@ loadDFQD = mkQuantDef lDurFac loadDFEq
 loadDF :: DataDefinition
 loadDF = ddE loadDFQD [dRef astm2009] Nothing "loadDurFactor"
   [stdVals [loadDur, sflawParamM], ldfConst]
-
-{--}
-
-glaTyFacEq :: Expr
-glaTyFacEq = incompleteCase (zipWith glaTyFacHelper glassTypeFactors $ map (getAccStr . snd) glassType)
-
-glaTyFacHelper :: Integer -> String -> (Expr, Relation)
-glaTyFacHelper result condition = (int result, sy glassTypeCon $= str condition)
-
-glaTyFacQD :: SimpleQDef
-glaTyFacQD = mkQuantDef gTF glaTyFacEq
-
-glaTyFac :: DataDefinition
-glaTyFac = ddE glaTyFacQD [dRef astm2009] Nothing "gTF"
-  [anGlass, ftGlass, hsGlass]
 
 {--}
 
@@ -168,8 +152,7 @@ pbTolUsr = ch pbTol `S.is` S "entered by the" +:+. phrase user
 qRef :: Sentence
 qRef = ch demand `S.isThe` (demandq ^. defn) `sC` S "as given in" +:+. refS calofDemand
 
-gtfRef, hRef, jtolRef, ldfRef :: Sentence
-gtfRef  = definedIn  glaTyFac
+hRef, jtolRef, ldfRef :: Sentence
 hRef    = definedIn' hFromt (S "and is based on the nominal thicknesses")
 jtolRef = definedIn  tolStrDisFac
 ldfRef  = definedIn  loadDF

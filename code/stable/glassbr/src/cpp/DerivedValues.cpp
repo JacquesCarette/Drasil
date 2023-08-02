@@ -33,34 +33,6 @@ void derived_values(InputParameters &inParams) {
     outfile << " in module DerivedValues" << std::endl;
     outfile.close();
     
-    if (inParams.g == "AN") {
-        inParams.GTF = 1;
-        outfile.open("log.txt", std::fstream::app);
-        outfile << "var 'inParams.GTF' assigned ";
-        outfile << inParams.GTF;
-        outfile << " in module DerivedValues" << std::endl;
-        outfile.close();
-    }
-    else if (inParams.g == "FT") {
-        inParams.GTF = 4;
-        outfile.open("log.txt", std::fstream::app);
-        outfile << "var 'inParams.GTF' assigned ";
-        outfile << inParams.GTF;
-        outfile << " in module DerivedValues" << std::endl;
-        outfile.close();
-    }
-    else if (inParams.g == "HS") {
-        inParams.GTF = 2;
-        outfile.open("log.txt", std::fstream::app);
-        outfile << "var 'inParams.GTF' assigned ";
-        outfile << inParams.GTF;
-        outfile << " in module DerivedValues" << std::endl;
-        outfile.close();
-    }
-    else {
-        throw("Undefined case encountered in function GTF");
-    }
-    
     inParams.SD = sqrt(pow(inParams.SD_x, 2.0) + pow(inParams.SD_y, 2.0) + pow(inParams.SD_z, 2.0));
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'inParams.SD' assigned ";

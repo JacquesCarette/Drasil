@@ -12,6 +12,33 @@ import java.io.PrintWriter;
 
 public class Calculations {
     
+    /** \brief Calculates glass type factor: a multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions
+        \param inParams structure holding the input values
+        \return glass type factor: a multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions
+    */
+    public static int func_GTF(InputParameters inParams) throws Exception, IOException {
+        PrintWriter outfile;
+        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
+        outfile.println("function func_GTF called with inputs: {");
+        outfile.print("  inParams = ");
+        outfile.println("Instance of InputParameters object");
+        outfile.println("  }");
+        outfile.close();
+        
+        if (inParams.g.equals("AN")) {
+            return 1;
+        }
+        else if (inParams.g.equals("FT")) {
+            return 4;
+        }
+        else if (inParams.g.equals("HS")) {
+            return 2;
+        }
+        else {
+            throw new Exception("Undefined case encountered in function func_GTF");
+        }
+    }
+    
     /** \brief Calculates aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
         \param inParams structure holding the input values
         \return aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
@@ -63,9 +90,10 @@ public class Calculations {
     /** \brief Calculates dimensionless load
         \param inParams structure holding the input values
         \param q applied load (demand): 3 second duration equivalent pressure (Pa)
+        \param GTF glass type factor: a multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions
         \return dimensionless load
     */
-    public static double func_q_hat(InputParameters inParams, double q) throws IOException {
+    public static double func_q_hat(InputParameters inParams, double q, int GTF) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_q_hat called with inputs: {");
@@ -73,11 +101,14 @@ public class Calculations {
         outfile.print("Instance of InputParameters object");
         outfile.println(", ");
         outfile.print("  q = ");
-        outfile.println(q);
+        outfile.print(q);
+        outfile.println(", ");
+        outfile.print("  GTF = ");
+        outfile.println(GTF);
         outfile.println("  }");
         outfile.close();
         
-        return q * Math.pow(inParams.a * inParams.b, 2.0) / (7.17e10 * Math.pow(inParams.h, 4.0) * inParams.GTF);
+        return q * Math.pow(inParams.a * inParams.b, 2.0) / (7.17e10 * Math.pow(inParams.h, 4.0) * GTF);
     }
     
     /** \brief Calculates tolerable load
@@ -161,23 +192,23 @@ public class Calculations {
     }
     
     /** \brief Calculates load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
-        \param inParams structure holding the input values
         \param NFL non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
+        \param GTF glass type factor: a multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions
         \return load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
     */
-    public static double func_LR(InputParameters inParams, double NFL) throws IOException {
+    public static double func_LR(double NFL, int GTF) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_LR called with inputs: {");
-        outfile.print("  inParams = ");
-        outfile.print("Instance of InputParameters object");
-        outfile.println(", ");
         outfile.print("  NFL = ");
-        outfile.println(NFL);
+        outfile.print(NFL);
+        outfile.println(", ");
+        outfile.print("  GTF = ");
+        outfile.println(GTF);
         outfile.println("  }");
         outfile.close();
         
-        return NFL * inParams.GTF * 1.0;
+        return NFL * GTF * 1.0;
     }
     
     /** \brief Calculates probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)

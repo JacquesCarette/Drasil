@@ -21,7 +21,7 @@ import Drasil.GlassBR.Unitals {- temporarily import everything -}
 import Drasil.SRSDocument (Block (Parallel))
 
 iMods :: [InstanceModel]
-iMods = [risk, strDisFac, nonFL, dimLL, tolPre, aspRat, probOfBreak,
+iMods = [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, aspRat, probOfBreak,
   calofCapacity, pbIsSafe, lrIsSafe]
 
 symb :: [UnitalChunk]
@@ -87,6 +87,20 @@ nonFLEq = mulRe (mulRe (sy tolLoad) (sy modElas)) (sy minThick $^ exactDbl 4) $/
 
 nonFLQD :: SimpleQDef
 nonFLQD = mkQuantDef nonFactorL nonFLEq
+
+{--}
+
+glaTyFac :: InstanceModel
+glaTyFac = imNoDeriv (equationalModelN (gTF ^. term) glaTyFacQD)
+  [qwUC glassTypeCon] (qw gTF) [] [dRef astm2009] "gTF"
+  [anGlass, ftGlass, hsGlass]
+
+glaTyFacQD :: SimpleQDef
+glaTyFacQD = mkQuantDef gTF $
+  incompleteCase (zipWith gtfHelper glassTypeFactors $ map (getAccStr . snd) glassType)
+  where
+    gtfHelper :: Integer -> String -> (Expr, Relation)
+    gtfHelper result condition = (int result, sy glassTypeCon $= str condition)
 
 {--}
 
@@ -194,8 +208,9 @@ pbIsSafeDesc :: Sentence
 pbIsSafeDesc = iModDesc isSafePb
   (ch isSafePb `S.and_` ch isSafePb +:+ fromSource lrIsSafe)
 
-arRef, jRef, nonFLRef, probBRRef, qHtRef, qHtTlTolRef, riskRef :: Sentence
+arRef, gtfRef, jRef, nonFLRef, probBRRef, qHtRef, qHtTlTolRef, riskRef :: Sentence
 arRef       = definedIn aspRat
+gtfRef      = definedIn  glaTyFac
 jRef        = definedIn strDisFac
 nonFLRef    = definedIn nonFL
 probBRRef   = definedIn probOfBreak

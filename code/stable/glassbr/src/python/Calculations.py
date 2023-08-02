@@ -5,6 +5,26 @@ import math
 
 import Interpolation
 
+## \brief Calculates glass type factor: a multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions
+# \param inParams structure holding the input values
+# \return glass type factor: a multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions
+def func_GTF(inParams):
+    outfile = open("log.txt", "a")
+    print("function func_GTF called with inputs: {", file=outfile)
+    print("  inParams = ", end="", file=outfile)
+    print("Instance of InputParameters object", file=outfile)
+    print("  }", file=outfile)
+    outfile.close()
+    
+    if (inParams.g == "AN") :
+        return 1
+    elif (inParams.g == "FT") :
+        return 4
+    elif (inParams.g == "HS") :
+        return 2
+    else :
+        raise Exception("Undefined case encountered in function func_GTF")
+
 ## \brief Calculates aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
 # \param inParams structure holding the input values
 # \return aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
@@ -47,19 +67,23 @@ def func_q(inParams):
 ## \brief Calculates dimensionless load
 # \param inParams structure holding the input values
 # \param q applied load (demand): 3 second duration equivalent pressure (Pa)
+# \param GTF glass type factor: a multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions
 # \return dimensionless load
-def func_q_hat(inParams, q):
+def func_q_hat(inParams, q, GTF):
     outfile = open("log.txt", "a")
     print("function func_q_hat called with inputs: {", file=outfile)
     print("  inParams = ", end="", file=outfile)
     print("Instance of InputParameters object", end="", file=outfile)
     print(", ", file=outfile)
     print("  q = ", end="", file=outfile)
-    print(q, file=outfile)
+    print(q, end="", file=outfile)
+    print(", ", file=outfile)
+    print("  GTF = ", end="", file=outfile)
+    print(GTF, file=outfile)
     print("  }", file=outfile)
     outfile.close()
     
-    return q * (inParams.a * inParams.b) ** 2.0 / (7.17e10 * inParams.h ** 4.0 * inParams.GTF)
+    return q * (inParams.a * inParams.b) ** 2.0 / (7.17e10 * inParams.h ** 4.0 * GTF)
 
 ## \brief Calculates tolerable load
 # \param AR aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
@@ -130,21 +154,21 @@ def func_B(inParams, J):
     return 2.86e-53 / (inParams.a * inParams.b) ** (7.0 - 1.0) * (7.17e10 * inParams.h ** 2.0) ** 7.0 * inParams.LDF * math.exp(J)
 
 ## \brief Calculates load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
-# \param inParams structure holding the input values
 # \param NFL non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
+# \param GTF glass type factor: a multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions
 # \return load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
-def func_LR(inParams, NFL):
+def func_LR(NFL, GTF):
     outfile = open("log.txt", "a")
     print("function func_LR called with inputs: {", file=outfile)
-    print("  inParams = ", end="", file=outfile)
-    print("Instance of InputParameters object", end="", file=outfile)
-    print(", ", file=outfile)
     print("  NFL = ", end="", file=outfile)
-    print(NFL, file=outfile)
+    print(NFL, end="", file=outfile)
+    print(", ", file=outfile)
+    print("  GTF = ", end="", file=outfile)
+    print(GTF, file=outfile)
     print("  }", file=outfile)
     outfile.close()
     
-    return NFL * inParams.GTF * 1.0
+    return NFL * GTF * 1.0
 
 ## \brief Calculates probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
 # \param B risk of failure

@@ -61,8 +61,8 @@ sysSetValsFollowingAssumpsTable = mkValsSourceTable (mkQRTupleRef r2AQs r2ARs ++
   where
     r2AQs = qw loadSF   : map qw (take 4 assumptionConstants)
     r2ARs = assumpGL : replicate 4 assumpSV
-    r2DDs = [loadDF, hFromt, glaTyFac, standOffDis]
-    r2IMs = [aspRat]
+    r2DDs = [loadDF, hFromt, standOffDis]
+    r2IMs = [aspRat, glaTyFac]
 
 --FIXME:should constants, LDF, and LSF have some sort of field that holds
 -- the assumption(s) that're being followed? (Issue #349)
@@ -90,7 +90,7 @@ outputValuesTable = mkValsSourceTable (mkQRTuple iMods ++ mkQRTuple r6DDs) "ReqO
                               (S "Required" +:+ titleize' output_ `follows` outputValues)
   where
     r6DDs :: [DataDefinition]
-    r6DDs = [glaTyFac, tolStrDisFac, hFromt]
+    r6DDs = [tolStrDisFac, hFromt]
 
 {--Nonfunctional Requirements--}
 

@@ -14,7 +14,7 @@ public class DerivedValues {
     /** \brief Calculates values that can be immediately derived from the inputs
         \param inParams structure holding the input values
     */
-    public static void derived_values(InputParameters inParams) throws Exception, IOException {
+    public static void derived_values(InputParameters inParams) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function derived_values called with inputs: {");
@@ -36,34 +36,6 @@ public class DerivedValues {
         outfile.print(inParams.LDF);
         outfile.println(" in module DerivedValues");
         outfile.close();
-        
-        if (inParams.g.equals("AN")) {
-            inParams.GTF = 1;
-            outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-            outfile.print("var 'inParams.GTF' assigned ");
-            outfile.print(inParams.GTF);
-            outfile.println(" in module DerivedValues");
-            outfile.close();
-        }
-        else if (inParams.g.equals("FT")) {
-            inParams.GTF = 4;
-            outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-            outfile.print("var 'inParams.GTF' assigned ");
-            outfile.print(inParams.GTF);
-            outfile.println(" in module DerivedValues");
-            outfile.close();
-        }
-        else if (inParams.g.equals("HS")) {
-            inParams.GTF = 2;
-            outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-            outfile.print("var 'inParams.GTF' assigned ");
-            outfile.print(inParams.GTF);
-            outfile.println(" in module DerivedValues");
-            outfile.close();
-        }
-        else {
-            throw new Exception("Undefined case encountered in function GTF");
-        }
         
         inParams.SD = Math.sqrt(Math.pow(inParams.SD_x, 2.0) + Math.pow(inParams.SD_y, 2.0) + Math.pow(inParams.SD_z, 2.0));
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));

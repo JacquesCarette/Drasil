@@ -33,6 +33,12 @@ int main(int argc, const char *argv[]) {
     get_input(filename, inParams);
     derived_values(inParams);
     input_constraints(inParams);
+    int GTF = func_GTF(inParams);
+    outfile.open("log.txt", std::fstream::app);
+    outfile << "var 'GTF' assigned ";
+    outfile << GTF;
+    outfile << " in module Control" << std::endl;
+    outfile.close();
     double AR = func_AR(inParams);
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'AR' assigned ";
@@ -51,7 +57,7 @@ int main(int argc, const char *argv[]) {
     outfile << q;
     outfile << " in module Control" << std::endl;
     outfile.close();
-    double q_hat = func_q_hat(inParams, q);
+    double q_hat = func_q_hat(inParams, q, GTF);
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'q_hat' assigned ";
     outfile << q_hat;
@@ -81,7 +87,7 @@ int main(int argc, const char *argv[]) {
     outfile << B;
     outfile << " in module Control" << std::endl;
     outfile.close();
-    double LR = func_LR(inParams, NFL);
+    double LR = func_LR(NFL, GTF);
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'LR' assigned ";
     outfile << LR;

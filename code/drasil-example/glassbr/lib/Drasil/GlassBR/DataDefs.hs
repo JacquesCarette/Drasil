@@ -1,8 +1,5 @@
-module Drasil.GlassBR.DataDefs {- temporarily export everything-}
-{- (aspRat, dataDefs, dimLL, qDefns, glaTyFac,
-  hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac,
-  eqTNTWDD, calofCapacity, calofDemand, pbTolUsr, qRef,configFp)-}
-  where
+module Drasil.GlassBR.DataDefs (dataDefs, loadDF, standOffDis, eqTNTWDD,
+  calofDemand, configFp, stdVals) where
 
 import Control.Lens ((^.))
 import Language.Drasil
@@ -90,50 +87,14 @@ calofDemandDesc =
   S "is defined in" +:+. refS eqTNTWDD, ch standOffDist `S.isThe`
   phrase standOffDist, S "as defined in", refS standOffDis]
 
-aGrtrThanB :: Sentence
-aGrtrThanB = ch plateLen `S.and_` ch plateWidth `S.are` (plural dimension `S.the_ofThe` S "plate") `sC`
-  S "where" +:+. sParen (eS rel)
-  where
-    rel :: ModelExpr
-    rel = sy plateLen $>= sy plateWidth
-
-anGlass :: Sentence
-anGlass = getAcc annealed `S.is` phrase annealed +:+. phrase glass
-
-ftGlass :: Sentence
-ftGlass = getAcc fullyT `S.is` phrase fullyT +:+. phrase glass
-
-hMin :: Sentence
-hMin = ch nomThick `S.is` S "a function that maps from the nominal thickness"
-  +:+. (sParen (ch minThick) `S.toThe` phrase minThick)
-
-hsGlass :: Sentence
-hsGlass = getAcc heatS `S.is` phrase heatS +:+. phrase glass
-
 ldfConst :: Sentence
 ldfConst = ch lDurFac `S.is` S "assumed to be constant" +:+. fromSource assumpLDFC
-
-lrCap :: Sentence
-lrCap = ch lRe +:+. S "is also called capacity"
-
-pbTolUsr :: Sentence
-pbTolUsr = ch pbTol `S.is` S "entered by the" +:+. phrase user
-
-qRef :: Sentence
-qRef = ch demand `S.isThe` (demandq ^. defn) `sC` S "as given in" +:+. refS calofDemand
-
-ldfRef :: Sentence
-ldfRef = definedIn  loadDF
 
 -- List of Configuration Files necessary for DataDefs.hs
 configFp :: [String]
 configFp = ["SDF.txt", "TSD.txt"]
 
---- Helpers
-interpolating :: (HasUID s, HasSymbol s, Referable f, HasShortName f) => s -> f -> Sentence
-interpolating s f = foldlSent [ch s `S.is` S "obtained by interpolating from",
-  plural datum, S "shown" `S.in_` refS f]
-
+--- Helper
 stdVals :: (HasSymbol s, HasUID s) => [s] -> Sentence
 stdVals s = foldlList Comma List (map ch s) +:+ sent +:+. refS assumpSV
   where sent = case s of [ ]   -> error "stdVals needs quantities"

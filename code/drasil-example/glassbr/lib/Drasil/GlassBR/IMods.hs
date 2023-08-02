@@ -10,7 +10,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Citations (campidelli)
-import Data.Drasil.Concepts.Documentation (goal)
+import Data.Drasil.Concepts.Documentation (goal, user, datum)
 import Data.Drasil.SI_Units
 
 import Drasil.GlassBR.DataDefs {- temporarily import everything -}
@@ -19,6 +19,8 @@ import Drasil.GlassBR.Goals (willBreakGS)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals {- temporarily import everything -}
 import Drasil.SRSDocument (Block (Parallel))
+import Drasil.GlassBR.Concepts
+import Data.Drasil.Concepts.PhysicalProperties (dimension)
 
 iMods :: [InstanceModel]
 iMods = [risk, hFromt, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac,
@@ -227,8 +229,34 @@ instModIntro = foldlSent [atStartNP (the goal), refS willBreakGS,
 
 -- Notes --
 
-capRef :: Sentence
-capRef = definedIn' calofCapacity (S "and is also called capacity")
+aGrtrThanB :: Sentence
+aGrtrThanB = ch plateLen `S.and_` ch plateWidth `S.are` (plural dimension `S.the_ofThe` S "plate") `sC`
+  S "where" +:+. sParen (eS rel)
+  where
+    rel :: ModelExpr
+    rel = sy plateLen $>= sy plateWidth
+
+anGlass :: Sentence
+anGlass = getAcc annealed `S.is` phrase annealed +:+. phrase glass
+
+ftGlass :: Sentence
+ftGlass = getAcc fullyT `S.is` phrase fullyT +:+. phrase glass
+
+hMin :: Sentence
+hMin = ch nomThick `S.is` S "a function that maps from the nominal thickness"
+  +:+. (sParen (ch minThick) `S.toThe` phrase minThick)
+
+hsGlass :: Sentence
+hsGlass = getAcc heatS `S.is` phrase heatS +:+. phrase glass
+
+lrCap :: Sentence
+lrCap = ch lRe +:+. S "is also called capacity"
+
+pbTolUsr :: Sentence
+pbTolUsr = ch pbTol `S.is` S "entered by the" +:+. phrase user
+
+qRef :: Sentence
+qRef = ch demand `S.isThe` (demandq ^. defn) `sC` S "as given in" +:+. refS calofDemand
 
 lrIsSafeDesc :: Sentence
 lrIsSafeDesc = iModDesc isSafeLR
@@ -238,15 +266,22 @@ pbIsSafeDesc :: Sentence
 pbIsSafeDesc = iModDesc isSafePb
   (ch isSafePb `S.and_` ch isSafePb +:+ fromSource lrIsSafe)
 
-arRef, gtfRef, hRef, jRef, jtolRef, nonFLRef, probBRRef, qHtRef, qHtTlTolRef,
-  riskRef :: Sentence
+arRef, capRef, gtfRef, hRef, jRef, jtolRef, ldfRef, nonFLRef, probBRRef,
+  qHtRef, qHtTlTolRef, riskRef :: Sentence
 arRef       = definedIn  aspRat
+capRef      = definedIn' calofCapacity (S "and is also called capacity")
 gtfRef      = definedIn  glaTyFac
 hRef        = definedIn' hFromt (S "and is based on the nominal thicknesses")
 jRef        = definedIn  strDisFac
 jtolRef     = definedIn  tolStrDisFac
+ldfRef      = definedIn  loadDF
 nonFLRef    = definedIn  nonFL
 probBRRef   = definedIn  probOfBreak
 qHtRef      = definedIn  dimLL
 qHtTlTolRef = definedIn  tolPre
 riskRef     = definedIn  risk
+
+-- Helper --
+interpolating :: (HasUID s, HasSymbol s, Referable f, HasShortName f) => s -> f -> Sentence
+interpolating s f = foldlSent [ch s `S.is` S "obtained by interpolating from",
+  plural datum, S "shown" `S.in_` refS f]

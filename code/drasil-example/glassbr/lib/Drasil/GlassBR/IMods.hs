@@ -34,14 +34,16 @@ qDefns = Parallel hFromtQD [glaTyFacQD] : --can be calculated on their own
   map (`Parallel` []) [dimLLQD, strDisFacQD, riskQD, tolStrDisFacQD, tolPreQD,
     nonFLQD]
 
+abInputConstraints :: [(QuantityDict, Maybe (RealInterval Expr Expr))]
+abInputConstraints = [qwC plateLen   $ UpFrom  (Exc, exactDbl 0),
+                      qwC plateWidth $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen)]
+
 {--}
 
 risk :: InstanceModel
 risk = imNoDeriv (equationalModelN (riskFun ^. term) riskQD)
   (qwUC modElas : qwUC lDurFac : qwUC stressDistFac :
-    map qwUC [sflawParamK, sflawParamM, minThick] ++ [
-      qwC plateLen   $ UpFrom  (Exc, exactDbl 0),
-      qwC plateWidth $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen)])
+    map qwUC [sflawParamK, sflawParamM, minThick] ++ abInputConstraints)
   (qw riskFun) [] [dRef astm2009, dRefInfo beasonEtAl1998 $ Equation [4, 5],
     dRefInfo campidelli $ Equation [14]] "riskFun" [aGrtrThanB, hRef, ldfRef, jRef]
 
@@ -72,9 +74,7 @@ strDisFacEq = apply interpZ [str "SDF.txt", sy aspectRatio, sy dimlessLoad]
 
 nonFL :: InstanceModel
 nonFL = imNoDeriv (equationalModelN (nonFactorL ^. term) nonFLQD)
-  (qwUC tolLoad : qwUC modElas : qwUC minThick :
-    [qwC plateLen   $ UpFrom  (Exc, exactDbl 0),
-     qwC plateWidth $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen)])
+  (qwUC tolLoad : qwUC modElas : qwUC minThick : abInputConstraints)
   (qw nonFactorL) [] [dRef astm2009] "nFL"
   [qHtTlTolRef, stdVals [modElas], hRef, aGrtrThanB]
 
@@ -89,9 +89,7 @@ nonFLQD = mkQuantDef nonFactorL nonFLEq
 
 dimLL :: InstanceModel
 dimLL = imNoDeriv (equationalModelN (dimlessLoad ^. term) dimLLQD)
-  (qwUC demand : qwUC modElas : qwUC minThick : qwUC gTF :
-    [qwC plateLen   $ UpFrom  (Exc, exactDbl 0),
-     qwC plateWidth $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen)])
+  (qwUC demand : qwUC modElas : qwUC minThick : qwUC gTF : abInputConstraints)
   (qw dimlessLoad) [] [dRef astm2009, dRefInfo campidelli $ Equation [7]]
   "dimlessLoad" [qRef, aGrtrThanB, stdVals [modElas], hRef, gtfRef]
 

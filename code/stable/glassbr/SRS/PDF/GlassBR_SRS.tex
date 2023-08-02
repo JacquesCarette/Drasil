@@ -1010,6 +1010,9 @@ Output & ${J_{\text{tol}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
+                    0\leq{}{P_{\text{b}\text{tol}}}\leq{}1
+                    \end{displaymath}
+                    \begin{displaymath}
                     a\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
@@ -1119,7 +1122,9 @@ Output & ${P_{\text{b}}}$
 \\ \midrule
 Input Constraints & 
 \\ \midrule
-Output Constraints & 
+Output Constraints & \begin{displaymath}
+                     0\leq{}{P_{\text{b}}}\leq{}1
+                     \end{displaymath}
 \\ \midrule
 Equation & \begin{displaymath}
            {P_{\text{b}}}=1-e^{-B}
@@ -1206,10 +1211,10 @@ Output & $\mathit{isSafePb}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    {P_{\text{b}}}\gt{}0
+                    0\leq{}{P_{\text{b}}}\leq{}1
                     \end{displaymath}
                     \begin{displaymath}
-                    {P_{\text{b}\text{tol}}}\gt{}0
+                    0\leq{}{P_{\text{b}\text{tol}}}\leq{}1
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 

@@ -41,6 +41,9 @@ abInputConstraints = [qwC plateLen   $ UpFrom  (Exc, exactDbl 0),
 aspectRatioConstraint :: (QuantityDict, Maybe (RealInterval Expr Expr))
 aspectRatioConstraint = qwC aspectRatio (UpFrom (Inc, exactDbl 1))
 
+probConstraint :: RealInterval Expr Expr
+probConstraint = Bounded (Inc, exactDbl 0) (Inc, exactDbl 1)
+
 {--}
 
 risk :: InstanceModel
@@ -148,7 +151,7 @@ tolPreQD = mkQuantDef tolLoad tolPreEq
 
 tolStrDisFac :: InstanceModel
 tolStrDisFac = imNoDeriv (equationalModelN (sdfTol ^. term) tolStrDisFacQD)
-  ((lDurFac, Nothing) : qwUC pbTol : qwUC modElas : abInputConstraints ++
+  ((lDurFac, Nothing) : qwC pbTol probConstraint : qwUC modElas : abInputConstraints ++
     map qwUC [sflawParamM, sflawParamK, minThick]) (qw sdfTol) []
   [dRef astm2009] "sdfTol" [pbTolUsr, aGrtrThanB, stdVals [sflawParamM,
       sflawParamK, mkUnitary modElas], hRef, ldfRef]  
@@ -173,7 +176,7 @@ aspRatQD = mkQuantDef aspectRatio $ sy plateLen $/ sy plateWidth
 
 probOfBreak :: InstanceModel
 probOfBreak = imNoDeriv (equationalModelN (probBr ^. term) probOfBreakQD)
-  [qwUC risk] (qw probBr) [] (map dRef [astm2009, beasonEtAl1998]) "probOfBreak"
+  [qwUC risk] (qw probBr) [probConstraint] (map dRef [astm2009, beasonEtAl1998]) "probOfBreak"
   [riskRef]
 
 probOfBreakQD :: SimpleQDef
@@ -193,10 +196,8 @@ calofCapacityQD = mkQuantDef lRe (sy nonFL `mulRe` sy glaTyFac `mulRe` sy loadSF
 
 pbIsSafe :: InstanceModel
 pbIsSafe = imNoDeriv (equationalModelN (nounPhraseSP "Safety Req-Pb") pbIsSafeQD)
-  [qwC probBr $ UpFrom (Exc, exactDbl 0), qwC pbTol $ UpFrom (Exc, exactDbl 0)]
-  (qw isSafePb) []
-  [dRef astm2009] "isSafePb"
-  [pbIsSafeDesc, probBRRef, pbTolUsr]
+  [qwC probBr probConstraint, qwC pbTol probConstraint] (qw isSafePb) []
+  [dRef astm2009] "isSafePb" [pbIsSafeDesc, probBRRef, pbTolUsr]
 
 pbIsSafeQD :: SimpleQDef
 pbIsSafeQD = mkQuantDef isSafePb (sy probBr $< sy pbTol)

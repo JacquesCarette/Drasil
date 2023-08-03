@@ -61,6 +61,7 @@ import Data.Function (on)
 import Data.List (nub, sortBy, sortOn)
 import qualified Data.Map as Map (elems, toList, assocs, keys)
 import Data.Char (isSpace)
+import Data.Maybe (maybeToList)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- * Main Function
@@ -368,17 +369,17 @@ mkSolChSpec si (SCSProg l) =
       SSD.thModF (siSys si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
       SSD.dataDefnF EmptyS $ map mkParagraph intro ++ concatMap f dds
-      where f e = [LlC $ ddefn fields si' e, derivation e]
+      where f e = LlC (ddefn fields si' e) : maybeToList (derivation e)
     mkSubSCS si' (DDs intro fields dds _) =
       SSD.dataDefnF EmptyS $ map mkParagraph intro ++ map f dds
       where f e = LlC $ ddefn fields si' e
     mkSubSCS si' (GDs intro fields gs' ShowDerivation) =
-      SSD.genDefnF $ map mkParagraph intro ++ concatMap (\x -> [LlC $ gdefn fields si' x, derivation x]) gs'
+      SSD.genDefnF $ map mkParagraph intro ++ concatMap (\x -> LlC (gdefn fields si' x) : maybeToList (derivation x)) gs'
     mkSubSCS si' (GDs intro fields gs' _) =
       SSD.genDefnF $ map mkParagraph intro ++ map (LlC . gdefn fields si') gs'
     mkSubSCS si' (IMs intro fields ims ShowDerivation) =
       SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub SSD.gdStub $ map mkParagraph intro ++
-      concatMap (\x -> [LlC $ instanceModel fields si' x, derivation x]) ims
+      concatMap (\x -> LlC (instanceModel fields si' x) : maybeToList (derivation x)) ims
     mkSubSCS si' (IMs intro fields ims _) =
       SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub SSD.gdStub $ map mkParagraph intro ++
       map (LlC . instanceModel fields si') ims

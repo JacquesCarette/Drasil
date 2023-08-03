@@ -8,7 +8,7 @@ module Language.Drasil.Chunk.Code (
   DefiningCodeExpr(..)
 ) where
 
-import Control.Lens ((^.), view)
+import Control.Lens (view)
 
 import Language.Drasil
 import Language.Drasil.Chunk.CodeBase
@@ -34,6 +34,6 @@ instance CodeIdea    CodeFuncChunk where
 -- | Combine an Object-type 'CodeChunk' with another 'CodeChunk' to create a new 
 -- 'CodeChunk' which represents a field of the first. ex. @ccObjVar obj f = obj.f@.
 ccObjVar :: CodeVarChunk -> CodeVarChunk -> CodeVarChunk
-ccObjVar c1 c2 = checkObj (c1 ^. typ)
+ccObjVar c1 c2 = checkObj (typ c1)
   where checkObj (Actor _) = CodeVC (codeChunk c2) (Just $ codeChunk c1)
         checkObj _ = error "First CodeChunk passed to ccObjVar must have Actor space"

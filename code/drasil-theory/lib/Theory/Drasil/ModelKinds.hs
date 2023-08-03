@@ -138,7 +138,7 @@ instance RequiresChecking (ModelKinds Expr) Expr Space where
   requiredChecks (NewDEModel dm)            = requiredChecks dm
   requiredChecks (DEModel _)                = mempty
   requiredChecks (EquationalConstraints cs) = requiredChecks cs
-  requiredChecks (EquationalModel qd)       = pure (qd ^. defnExpr, qd ^. typ)
+  requiredChecks (EquationalModel qd)       = pure (qd ^. defnExpr, typ qd)
   requiredChecks (EquationalRealm md)       = requiredChecks md
   requiredChecks (OthModel _)               = mempty
 

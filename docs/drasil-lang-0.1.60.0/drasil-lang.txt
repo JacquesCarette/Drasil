@@ -2265,7 +2265,7 @@ type Concept c = (Idea c, Definition c, ConceptDomain c)
 class HasSpace c
 
 -- | Provides a <tt>Lens</tt> to the <a>Space</a>.
-typ :: HasSpace c => Lens' c Space
+typ :: HasSpace c => c -> Space
 
 -- | Some chunks store a unit symbol.
 class HasUnitSymbol u

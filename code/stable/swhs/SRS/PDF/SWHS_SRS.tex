@@ -472,6 +472,7 @@ RefBy & \hyperref[GD:rocTempSimp]{GD:rocTempSimp}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -514,6 +515,7 @@ RefBy & \hyperref[IM:heatEInWtr]{IM:heatEInWtr} and \hyperref[IM:heatEInPCM]{IM:
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -554,6 +556,7 @@ RefBy & \hyperref[TM:sensHtE]{TM:sensHtE} and \hyperref[IM:heatEInPCM]{IM:heatEI
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -591,6 +594,7 @@ RefBy & \hyperref[GD:htFluxPCMFromWater]{GD:htFluxPCMFromWater} and \hyperref[GD
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \subsubsection{General Definitions}
 \label{Sec:GDs}
 This section collects the laws and equations that will be used to build the instance models.
@@ -631,6 +635,7 @@ RefBy & \hyperref[GD:rocTempSimp]{GD:rocTempSimp}, \hyperref[IM:eBalanceOnWtr]{I
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{Detailed derivation of simplified rate of change of temperature:}
 \label{GD:rocTempSimpDeriv}
 Integrating \hyperref[TM:consThermE]{TM:consThermE} over a volume ($V$), we have:
@@ -697,6 +702,7 @@ RefBy & \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -734,6 +740,7 @@ RefBy & \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr} and \hyperref[IM:eBalanceO
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
@@ -773,6 +780,7 @@ RefBy & \hyperref[findMass]{FR:Find-Mass}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -811,6 +819,7 @@ RefBy & \hyperref[findMass]{FR:Find-Mass}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -847,6 +856,7 @@ RefBy & \hyperref[DD:waterVolume.pcm]{DD:waterVolume\_pcm} and \hyperref[findMas
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -884,6 +894,7 @@ RefBy & \hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values} and \hyp
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -921,6 +932,7 @@ RefBy & \hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values} and \hyp
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -958,6 +970,7 @@ RefBy & \hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values} and \hyp
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -995,6 +1008,7 @@ RefBy & \hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values} and \hyp
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1033,6 +1047,7 @@ RefBy & \hyperref[DD:meltFrac]{DD:meltFrac} and \hyperref[IM:heatEInPCM]{IM:heat
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1074,6 +1089,7 @@ RefBy & \hyperref[TM:latentHtE]{TM:latentHtE} and \hyperref[IM:eBalanceOnPCM]{IM
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1108,6 +1124,7 @@ RefBy &
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in the \hyperref[Sec:ProbDesc]{problem description} into one which is expressed in mathematical terms. It uses concrete symbols defined in the \hyperref[Sec:DDs]{data definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{theoretical models} and \hyperref[Sec:GDs]{general definitions}.
@@ -1171,6 +1188,7 @@ RefBy & \hyperref[unlikeChgNIHG]{UC:No-Internal-Heat-Generation}, \hyperref[find
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{Detailed derivation of the energy balance on water:}
 \label{IM:eBalanceOnWtrDeriv}
 To find the rate of change of ${T_{\text{W}}}$, we look at the energy balance on water. The volume being considered is the volume of water in the tank ${V_{\text{W}}}$, which has mass ${m_{\text{W}}}$ and specific heat capacity, ${C_{\text{W}}}$. Heat transfer occurs in the water from the heating coil as ${q_{\text{C}}}$ (\hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil}) and from the water into the PCM as ${q_{\text{P}}}$ (\hyperref[GD:htFluxPCMFromWater]{GD:htFluxPCMFromWater}), over areas ${A_{\text{C}}}$ and ${A_{\text{P}}}$, respectively. The thermal flux is constant over ${A_{\text{C}}}$, since the temperature of the heating coil is assumed to not vary along its length (\hyperref[assumpTHCCoL]{A:Temp-Heating-Coil-Constant-over-Length}), and the thermal flux is constant over ${A_{\text{P}}}$, since the temperature of the PCM is the same throughout its volume (\hyperref[assumpTPCAV]{A:Temp-PCM-Constant-Across-Volume}) and the water is fully mixed (\hyperref[assumpCWTAT]{A:Constant-Water-Temp-Across-Tank}). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpPIT]{A:Perfect-Insulation-Tank}). Since the assumption is made that no internal heat is generated (\hyperref[assumpNIHGBWP]{A:No-Internal-Heat-Generation-By-Water-PCM}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD:rocTempSimp} can be written as:
@@ -1270,6 +1288,7 @@ RefBy & \hyperref[unlikeChgNIHG]{UC:No-Internal-Heat-Generation}, \hyperref[unli
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{Detailed derivation of the energy balance on the PCM during sensible heating phase:}
 \label{IM:eBalanceOnPCMDeriv}
 To find the rate of change of ${T_{\text{P}}}$, we look at the energy balance on the PCM. The volume being considered is the volume of PCM (${V_{\text{P}}}$). The derivation that follows is initially for the solid PCM. The mass of phase change material is ${m_{\text{P}}}$ and the specific heat capacity of PCM as a solid is ${{C_{\text{P}}}^{\text{S}}}$. The heat flux into the PCM from water is ${q_{\text{P}}}$ (\hyperref[GD:htFluxPCMFromWater]{GD:htFluxPCMFromWater}) over phase change material surface area ${A_{\text{P}}}$. The thermal flux is constant over ${A_{\text{P}}}$, since the temperature of the PCM is the same throughout its volume (\hyperref[assumpTPCAV]{A:Temp-PCM-Constant-Across-Volume}) and the water is fully mixed (\hyperref[assumpCWTAT]{A:Constant-Water-Temp-Across-Tank}). There is no heat flux output from the PCM. Assuming no volumetric heat generation per unit volume (\hyperref[assumpNIHGBWP]{A:No-Internal-Heat-Generation-By-Water-PCM}), $g=0$, the equation for \hyperref[GD:rocTempSimp]{GD:rocTempSimp} can be written as:
@@ -1347,6 +1366,7 @@ RefBy & \hyperref[findMass]{FR:Find-Mass} and \hyperref[calcChgHeatEnergyWtrOver
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1416,6 +1436,7 @@ RefBy & \hyperref[unlikeChgNGS]{UC:No-Gaseous-State}, \hyperref[findMass]{FR:Fin
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
 The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (\hyperref[assumpPIS]{A:PCM-Initially-Solid}). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is $\frac{2}{{h_{\text{min}}}}$, where ${h_{\text{min}}}$ is the thickness of a ``sheet'' of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.

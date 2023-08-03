@@ -25,7 +25,7 @@ module GOOL.Drasil.LanguageRenderer (
   surroundBody, getterName, setterName, intValue
 ) where
 
-import Utils.Drasil (blank, capitalize, indent, indentList, stringList, watermark)
+import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, Library, SValue, BodySym(Body), 
@@ -46,7 +46,7 @@ import Prelude hiding (break,print,last,sqrt,abs,log,exp,sin,cos,tan,asin,acos,
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
   space, brackets, parens, isEmpty, rbrace, lbrace, vcat, semi, equals, colon,
   comma)
-import Data.Drasil.DrasilMetaCall(drasilMeta, DrasilMeta(..))
+import Data.Drasil.DrasilMetaCall(drasilMeta, DrasilMeta(..), watermark)
 
 ----------------------------------------
 -- Syntax common to several renderers --

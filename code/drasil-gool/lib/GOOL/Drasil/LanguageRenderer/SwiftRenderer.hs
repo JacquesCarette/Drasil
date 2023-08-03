@@ -7,7 +7,7 @@ module GOOL.Drasil.LanguageRenderer.SwiftRenderer (
   SwiftCode(..), swiftName, swiftVersion
 ) where
 
-import Utils.Drasil (indent, stringList, watermark)
+import Utils.Drasil (indent, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable, 
@@ -105,7 +105,7 @@ import Data.Maybe (fromMaybe)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, lbrace, rbrace, braces, brackets, colon, space, doubleQuotes)
 import qualified Text.PrettyPrint.HughesPJ as D (float)
-import Data.Drasil.DrasilMetaCall (drasilMeta, DrasilMeta(..))
+import Data.Drasil.DrasilMetaCall (drasilMeta, DrasilMeta(..), watermark)
 
 swiftExt :: String
 swiftExt = "swift"

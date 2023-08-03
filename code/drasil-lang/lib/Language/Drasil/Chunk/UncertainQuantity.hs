@@ -42,7 +42,7 @@ instance NamedIdea         UncertainChunk where term = conc . term
 -- | Finds the idea contained in the 'ConstrainedChunk' used to make the 'UncertainChunk'.
 instance Idea              UncertainChunk where getA (UCh n _) = getA n
 -- | Finds the 'Space' of the 'ConstrainedChunk' used to make the 'UncertainChunk'.
-instance HasSpace          UncertainChunk where typ = conc . typ
+instance HasSpace          UncertainChunk where typ = typ . view conc
 -- | Finds the 'Symbol' of the 'ConstrainedChunk' used to make the 'UncertainChunk'.
 instance HasSymbol         UncertainChunk where symbol c = symbol (c^.conc)
 -- | 'UncertainChunk's have a 'Quantity'.
@@ -87,7 +87,7 @@ instance NamedIdea      UncertQ where term = coco . term
 -- | Finds the idea contained in the 'ConstrConcept' used to make the 'UncertQ'.
 instance Idea           UncertQ where getA (UQ q _) = getA q
 -- | Finds the 'Space' of the 'ConstrConcept' used to make the 'UncertQ'.
-instance HasSpace       UncertQ where typ = coco . typ
+instance HasSpace       UncertQ where typ = typ . view coco
 -- | Finds the 'Symbol' of the 'ConstrConcept' used to make the 'UncertQ'.
 instance HasSymbol      UncertQ where symbol c = symbol (c^.coco)
 -- | 'UncertQ's have a 'Quantity'.

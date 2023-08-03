@@ -23,7 +23,7 @@ instance NamedIdea   ParameterChunk where term = pcc . term
 -- | Finds the idea contained in the 'CodeChunk' used to make the 'ParameterChunk'.
 instance Idea        ParameterChunk where getA = getA . view pcc
 -- | Finds the 'Space' of the 'CodeChunk' used to make the 'ParameterChunk'.
-instance HasSpace    ParameterChunk where typ = pcc . typ
+instance HasSpace    ParameterChunk where typ = typ . view pcc
 -- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'ParameterChunk'.
 instance HasSymbol   ParameterChunk where symbol = symbol . view pcc
 -- | 'ParameterChunk's have a 'Quantity'.
@@ -39,7 +39,7 @@ instance MayHaveUnit ParameterChunk where getUnit = getUnit . view pcc
 
 -- | Automatically chooses 'PassBy' based on 'Space' ('Vect'ors and 'Actor's passed by reference).
 pcAuto :: (CodeIdea c) => c -> ParameterChunk
-pcAuto c = PC cdch (choosePB $ cdch ^. typ)
+pcAuto c = PC cdch (choosePB $ typ cdch)
   where cdch = codeChunk c
         choosePB (Vect _) = Ref
         choosePB (Actor _) = Ref

@@ -271,7 +271,7 @@ vecDepVar info = quantvar $ implVarUID (dv ^. uid) (dv ^. term) vecT
 -- be represented as one or else will hit type errors in GOOL.
 arrayVecDepVar :: ODEInfo -> CodeVarChunk
 arrayVecDepVar info = quantvar $ implVarUID (dv +++ "vec") (dv ^. term)
-  (dv ^. typ) (sub (symbol dv Implementation) (label "vec"))
+  (typ dv) (sub (symbol dv Implementation) (label "vec"))
   where dv = listToArray $ depVar info
 
 -- Apache Commons (Java)
@@ -575,7 +575,7 @@ odeMethodUnavailable = "Chosen ODE solving method is not available" ++
 -- | Change in @X@ chunk constructor (where @X@ is a given argument).
 diffCodeChunk :: CodeVarChunk -> CodeVarChunk
 diffCodeChunk c = quantvar $ implVarUID' (c +++ "d" )
-  (compoundPhrase (nounPhraseSP "change in") (c ^. term)) (getA c) (c ^. typ)
+  (compoundPhrase (nounPhraseSP "change in") (c ^. term)) (getA c) (typ c)
   (Concat [label "d", symbol c Implementation]) (getUnit c)
 
 -- FIXME: This is surely a hack, but I can't think of a better way right now.

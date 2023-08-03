@@ -61,7 +61,7 @@ instance HasUID           (MultiDefn e) where uid     = rUid
 instance HasSymbol        (MultiDefn e) where symbol  = symbol . (^. qd)
 instance NamedIdea        (MultiDefn e) where term    = qd . term
 instance Idea             (MultiDefn e) where getA    = getA . (^. qd)
-instance HasSpace         (MultiDefn e) where typ     = qd . typ
+instance HasSpace         (MultiDefn e) where typ     = typ . view qd
 instance Definition       (MultiDefn e) where defn    = rDesc
 instance Quantity         (MultiDefn e)
 instance MayHaveUnit      (MultiDefn e) where getUnit = getUnit . view qd
@@ -70,7 +70,7 @@ instance MayHaveUnit      (MultiDefn e) where getUnit = getUnit . view qd
 instance ConceptDomain    (MultiDefn e) where
   cdom = foldr1 union . NE.toList . NE.map (^. cd) . (^. rvs)
 instance RequiresChecking (MultiDefn Expr) Expr Space where
-  requiredChecks md = map (\x -> (x ^. expr, md ^. typ)) $ NE.toList $ md ^. rvs
+  requiredChecks md = map (\x -> (x ^. expr, typ md)) $ NE.toList $ md ^. rvs
 
 -- | The complete Relation of a MultiDefn is defined as the quantity and the
 --   related expressions being equal (e.g., `q $= a $= b $= ... $= z`)
@@ -105,7 +105,7 @@ multiDefnGenQD md de =
     (md ^. term)
     (md ^. defn)
     (symbol md)
-    (md ^. typ)
+    (typ md)
     (getUnit md)
     (de ^. expr)
 

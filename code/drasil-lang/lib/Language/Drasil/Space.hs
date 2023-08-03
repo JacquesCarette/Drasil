@@ -19,7 +19,6 @@ module Language.Drasil.Space (
 
 import qualified Data.List.NonEmpty        as NE
 
-import           Control.Lens              (Lens')
 import           Language.Drasil.Symbol    (Symbol)
 
 -- FIXME: These need to be spaces and not just types.
@@ -49,7 +48,7 @@ data Space =
 -- | HasSpace is anything which has a 'Space'.
 class HasSpace c where
   -- | Provides a 'Lens' to the 'Space'.
-  typ      :: Lens' c Space
+  typ      :: c -> Space
 
 type Primitive = Space
 

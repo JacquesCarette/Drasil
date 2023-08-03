@@ -90,7 +90,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
        ]
      ],
   ReqrmntSec $ ReqsProg
-    [ FReqsSub [InputReq EmptyS] []
+    [ FReqsSub [InputReq EmptyS, OutputReq] []
     , NonFReqsSub
     ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,

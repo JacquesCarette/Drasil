@@ -55,7 +55,7 @@ instance NamedIdea   CodeChunk where term = qc . term
 -- | Finds the idea contained in the 'QuantityDict' used to make the 'CodeChunk'.
 instance Idea        CodeChunk where getA = getA . view qc
 -- | Finds the 'Space' of the 'QuantityDict' used to make the 'CodeChunk'.
-instance HasSpace    CodeChunk where typ = qc . typ
+instance HasSpace    CodeChunk where typ = typ . view qc
 -- | Finds the 'Stage' dependent 'Symbol' of the 'QuantityDict' used to make the 'CodeChunk'.
 instance HasSymbol   CodeChunk where symbol = symbol . view qc
 -- | 'CodeChunk's have a 'Quantity'.
@@ -78,7 +78,7 @@ instance NamedIdea   CodeVarChunk where term = ccv . term
 -- | Finds the idea contained in the 'CodeChunk' used to make the 'CodeVarChunk'.
 instance Idea        CodeVarChunk where getA = getA . view ccv
 -- | Finds the 'Space' of the 'CodeChunk' used to make the 'CodeVarChunk'.
-instance HasSpace    CodeVarChunk where typ = ccv . typ
+instance HasSpace    CodeVarChunk where typ = typ . view ccv
 -- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'CodeVarChunk'.
 instance HasSymbol   CodeVarChunk where symbol = symbol . view ccv
 -- | 'CodeVarChunk's have a 'Quantity'.
@@ -99,7 +99,7 @@ instance NamedIdea   CodeFuncChunk where term = ccf . term
 -- | Finds the idea contained in the 'CodeChunk' used to make the 'CodeFuncChunk'.
 instance Idea        CodeFuncChunk where getA = getA . view ccf
 -- | Finds the 'Space' of the 'CodeChunk' used to make the 'CodeFuncChunk'.
-instance HasSpace    CodeFuncChunk where typ = ccf . typ
+instance HasSpace    CodeFuncChunk where typ = typ . view ccf
 -- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'CodeFuncChunk'.
 instance HasSymbol   CodeFuncChunk where symbol = symbol . view ccf
 -- | 'CodeFuncChunk's have a 'Quantity'.
@@ -114,7 +114,7 @@ instance MayHaveUnit CodeFuncChunk where getUnit = getUnit . view ccf
 -- FIXME: use show for the UID here? Perhaps need a different implVar function for UIDs
 -- Changes a 'CodeVarChunk'\'s space from 'Vect' to 'Array'.
 listToArray :: CodeVarChunk -> CodeVarChunk
-listToArray c = newSpc (c ^. typ) 
+listToArray c = newSpc (typ c) 
   where newSpc (Vect t) = CodeVC (CodeC (implVar' (show $ c +++ "_array")
           (c ^. term) (getA c) (Array t) (symbol c Implementation) (getUnit c)) 
           Var) (c ^. obv)

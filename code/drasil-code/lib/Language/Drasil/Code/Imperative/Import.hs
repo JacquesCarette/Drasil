@@ -58,7 +58,7 @@ import Control.Lens ((^.))
 -- | Gets a chunk's 'CodeType', by checking which 'CodeType' the user has chosen to 
 -- match the chunk's 'Space' to.
 codeType :: (HasSpace c) => c -> GenState CodeType
-codeType c = spaceCodeType (c ^. typ)
+codeType c = spaceCodeType (typ c)
 
 -- | Gets the 'CodeType' for a 'Space', based on the user's choice.
 spaceCodeType :: Space -> GenState CodeType

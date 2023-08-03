@@ -23,7 +23,7 @@ instance NamedIdea      NamedArgument where term = qtd . term
 -- | Finds the idea contained in the 'QuantityDict' used to make the 'NamedArgument'.
 instance Idea           NamedArgument where getA = getA . view qtd
 -- | Finds the 'Space' of the 'QuantityDict' used to make the 'NamedArgument'.
-instance HasSpace       NamedArgument where typ = qtd . typ
+instance HasSpace       NamedArgument where typ = typ . view qtd
 -- | Finds the 'Symbol' of the 'QuantityDict' used to make the 'NamedArgument'.
 instance HasSymbol      NamedArgument where symbol = symbol . view qtd
 -- | 'NamedArgument's have a 'Quantity'.

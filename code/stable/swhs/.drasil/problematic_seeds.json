@@ -292,6 +292,11 @@
         "concepts",
         "conceptInstances"
     ],
+    "calcValues": [
+        "references",
+        "concepts",
+        "conceptInstances"
+    ],
     "centigrade": [
         "units",
         "terms"
@@ -660,6 +665,11 @@
         "symbols"
     ],
     "outputInputDerivVals": [
+        "references",
+        "concepts",
+        "conceptInstances"
+    ],
+    "outputValues": [
         "references",
         "concepts",
         "conceptInstances"

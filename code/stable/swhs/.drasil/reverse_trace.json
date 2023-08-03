@@ -193,10 +193,16 @@
             "unlikeChgNGS"
         ],
         [
+            "outputValues"
+        ],
+        [
             "findMass"
         ],
         [
             "eBalanceOnWtrRC"
+        ],
+        [
+            "calcValues"
         ],
         [
             "calcTempPCMOverTime"
@@ -213,6 +219,9 @@
             "unlikeChgNIHG"
         ],
         [
+            "outputValues"
+        ],
+        [
             "findMass"
         ],
         [
@@ -220,6 +229,9 @@
         ],
         [
             "eBalanceOnPCMRC"
+        ],
+        [
+            "calcValues"
         ],
         [
             "calcTempWtrOverTime"
@@ -246,10 +258,16 @@
             "unlikeChgNGS"
         ],
         [
+            "outputValues"
+        ],
+        [
             "findMass"
         ],
         [
             "eBalanceOnPCMRC"
+        ],
+        [
+            "calcValues"
         ],
         [
             "calcChgHeatEnergyPCMOverTime"
@@ -257,7 +275,13 @@
     ],
     "heatEInWtrIM": [
         [
+            "outputValues"
+        ],
+        [
             "findMass"
+        ],
+        [
+            "calcValues"
         ],
         [
             "calcChgHeatEnergyWtrOverTime"

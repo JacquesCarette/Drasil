@@ -436,6 +436,11 @@
         "concepts",
         "conceptInstances"
     ],
+    "calcValues": [
+        "references",
+        "concepts",
+        "conceptInstances"
+    ],
     "calculation": [
         "terms"
     ],
@@ -1512,6 +1517,11 @@
         "terms"
     ],
     "outputInputDerivVals": [
+        "references",
+        "concepts",
+        "conceptInstances"
+    ],
+    "outputValues": [
         "references",
         "concepts",
         "conceptInstances"

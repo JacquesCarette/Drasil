@@ -74,8 +74,16 @@ digraph allvsall {
 	calcTempPCMOverTime -> eBalanceOnPCMRC;
 	calcChgHeatEnergyWtrOverTime -> heatEInWtrIM;
 	calcChgHeatEnergyPCMOverTime -> heatEInPCMRC;
+	calcValues -> eBalanceOnWtrRC;
+	calcValues -> eBalanceOnPCMRC;
+	calcValues -> heatEInWtrIM;
+	calcValues -> heatEInPCMRC;
 	calcPCMMeltBegin -> eBalanceOnPCMRC;
 	calcPCMMeltEnd -> eBalanceOnPCMRC;
+	outputValues -> eBalanceOnWtrRC;
+	outputValues -> eBalanceOnPCMRC;
+	outputValues -> heatEInWtrIM;
+	outputValues -> heatEInPCMRC;
 	likeChgUTP -> assumpTPCAV;
 	likeChgTCVOD -> assumpTHCCoT;
 	likeChgTCVOL -> assumpTHCCoL;
@@ -171,9 +179,11 @@ digraph allvsall {
 	calcTempPCMOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcTempPCMOverTime"];
 	calcChgHeatEnergyWtrOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcChgHeatEnergyWtrOverTime"];
 	calcChgHeatEnergyPCMOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcChgHeatEnergyPCMOverTime"];
+	calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcValues"];
 	verifyEnergyOutput	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyEnergyOutput"];
 	calcPCMMeltBegin	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcPCMMeltBegin"];
 	calcPCMMeltEnd	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcPCMMeltEnd"];
+	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
 	verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiable"];
 	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
@@ -182,7 +192,7 @@ digraph allvsall {
 
 	subgraph FR {
 	rank="same"
-	{inputValues, findMass, checkWithPhysConsts, outputInputDerivVals, calcTempWtrOverTime, calcTempPCMOverTime, calcChgHeatEnergyWtrOverTime, calcChgHeatEnergyPCMOverTime, verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd, correct, verifiable, understandable, reusable, maintainable}
+	{inputValues, findMass, checkWithPhysConsts, outputInputDerivVals, calcTempWtrOverTime, calcTempPCMOverTime, calcChgHeatEnergyWtrOverTime, calcChgHeatEnergyPCMOverTime, calcValues, verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd, outputValues, correct, verifiable, understandable, reusable, maintainable}
 	}
 
 	waterTempGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:waterTempGS"];

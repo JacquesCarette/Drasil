@@ -48,11 +48,12 @@ inReqDesc = foldlList Comma List [pluralNP (NP.the (combineNINI tank parameter))
 funcReqs :: [ConceptInstance]
 funcReqs = [findMass, checkWithPhysConsts, outputInputDerivVals,
   calcTempWtrOverTime, calcTempPCMOverTime, calcChgHeatEnergyWtrOverTime,
-  calcChgHeatEnergyPCMOverTime, verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd]
+  calcChgHeatEnergyPCMOverTime, calcValues, verifyEnergyOutput, calcPCMMeltBegin,
+  calcPCMMeltEnd, outputValues]
 
 findMass, checkWithPhysConsts, outputInputDerivVals, calcTempWtrOverTime,
   calcTempPCMOverTime, calcChgHeatEnergyWtrOverTime, calcChgHeatEnergyPCMOverTime,
-  verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd :: ConceptInstance
+  calcValues, verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd, outputValues :: ConceptInstance
 
 --
 findMass = findMassConstruct (inReq EmptyS) (plural mass) iMods 
@@ -114,6 +115,9 @@ calcChgHeatEnergyPCMOverTime = cic "calcChgHeatEnergyPCMOverTime" (foldlSent [
   phraseNP (NP.the (combineNINI simulation time)), fromSource heatEInPCM])
   "Calculate-Change-Heat_Energy-PCM-Over-Time" funcReqDom
 --
+calcValues = cic "calcValues" (S "Calculate the following" +: plural value +:+.
+  outputListSent) "Calculate-Values" funcReqDom
+--
 verifyEnergyOutput = cic "verifyEnergyOutput" (foldlSent [
   S "Verify that the", phrase energy, plural output_,
   sParen (ch watE :+: sParen (ch time) `S.and_` ch pcmE :+:
@@ -133,6 +137,15 @@ calcPCMMeltEnd = cic "calcPCMMeltEnd" (foldlSent [
   S "at which the", short phsChgMtrl, S "stops", phrase CT.melting,
   ch tFinalMelt, fromSource eBalanceOnPCM])
   "Calculate-PCM-Melt-End-Time" funcReqDom
+--
+outputValues = cic "outputValues" (titleize output_ +:+. outputListSent)
+  "Output-Values" funcReqDom
+
+outputListSent :: Sentence
+outputListSent = foldlList Comma List $
+  map (\(x, y) -> ch x :+: sParen (ch time) +:+ fromSource y)
+    [(tempW, eBalanceOnWtr), (tempPCM, eBalanceOnPCM), (watE, heatEInWtr),
+      (pcmE, heatEInPCM)]
 
 -- List structure same between all examples
 

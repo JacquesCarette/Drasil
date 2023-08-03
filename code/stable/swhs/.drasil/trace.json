@@ -54,6 +54,20 @@
             "eBalanceOnWtrRC"
         ]
     ],
+    "calcValues": [
+        [
+            "eBalanceOnWtrRC"
+        ],
+        [
+            "eBalanceOnPCMRC"
+        ],
+        [
+            "heatEInWtrIM"
+        ],
+        [
+            "heatEInPCMRC"
+        ]
+    ],
     "checkWithPhysConsts": [
         [
             "DataConstraintsLabel"
@@ -332,6 +346,20 @@
         ],
         [
             "tauLP"
+        ]
+    ],
+    "outputValues": [
+        [
+            "eBalanceOnWtrRC"
+        ],
+        [
+            "eBalanceOnPCMRC"
+        ],
+        [
+            "heatEInWtrIM"
+        ],
+        [
+            "heatEInPCMRC"
         ]
     ],
     "pcmEnergyGS": [],

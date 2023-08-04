@@ -11,7 +11,7 @@ import Language.Drasil hiding (organization, year, label, variable)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Math (graph, unit_)
-import Data.Drasil.Domains (documentc, softEng)
+import Metadata.Drasil.Domains (documentc, softEng)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Control.Lens ((^.))

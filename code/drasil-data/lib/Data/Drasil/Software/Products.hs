@@ -7,7 +7,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import Data.Drasil.Concepts.Documentation (game, video, open, source)
 import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Domains (progLanguage)
+import Metadata.Drasil.Domains (progLanguage)
 
 
 prodtcon :: [IdeaDict]

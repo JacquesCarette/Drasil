@@ -18,7 +18,7 @@ import Data.List (nub)
 import System.FilePath.Posix (takeExtension, takeBaseName)
 import Text.PrettyPrint.HughesPJ (Doc)
 import Utils.Drasil (capitalize)
-import Data.Drasil.DrasilMetaCall (drasilMeta, DrasilMeta(..), watermark)
+import Metadata.Drasil.DrasilMetaCall (drasilMeta, DrasilMeta(..), watermark)
 
 -- | Holds all the needed information to run a program.
 data CodeHarness = Ch {

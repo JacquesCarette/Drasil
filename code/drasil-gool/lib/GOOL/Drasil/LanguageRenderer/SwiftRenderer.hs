@@ -105,7 +105,7 @@ import Data.Maybe (fromMaybe)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, lbrace, rbrace, braces, brackets, colon, space, doubleQuotes)
 import qualified Text.PrettyPrint.HughesPJ as D (float)
-import Data.Drasil.DrasilMetaCall (drasilMeta, DrasilMeta(..), watermark)
+import Metadata.Drasil.DrasilMetaCall (drasilMeta, DrasilMeta(..), watermark)
 
 swiftExt :: String
 swiftExt = "swift"

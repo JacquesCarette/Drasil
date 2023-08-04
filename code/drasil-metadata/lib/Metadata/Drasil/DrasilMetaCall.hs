@@ -1,7 +1,7 @@
 {-#LANGUAGE TemplateHaskell#-}
-module Data.Drasil.DrasilMetaCall (drasilMeta, DrasilMeta(..), watermark)where
+module Metadata.Drasil.DrasilMetaCall (drasilMeta, DrasilMeta(..), watermark)where
 
-import Data.Drasil.DrasilMeta (drasilMetaCfg, DrasilMeta(..))
+import Metadata.Drasil.DrasilMeta (drasilMetaCfg, DrasilMeta(..))
 import Data.Maybe (fromMaybe)
 
 

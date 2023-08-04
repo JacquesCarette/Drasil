@@ -1,7 +1,7 @@
 module Drasil.SSP.Defs where --export all of this file
 
 import Language.Drasil
-import Data.Drasil.Domains (civilEng)
+import Metadata.Drasil.Domains (civilEng)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 

@@ -61,22 +61,10 @@
             "assumpWAL"
         ],
         [
-            "calcChgHeatEnergyPCMOverTime"
-        ],
-        [
-            "calcChgHeatEnergyWtrOverTime"
-        ],
-        [
             "calcPCMMeltBegin"
         ],
         [
             "calcPCMMeltEnd"
-        ],
-        [
-            "calcTempPCMOverTime"
-        ],
-        [
-            "calcTempWtrOverTime"
         ],
         [
             "calcValues"
@@ -216,22 +204,10 @@
             "assumpWAL"
         ],
         [
-            "calcChgHeatEnergyPCMOverTime"
-        ],
-        [
-            "calcChgHeatEnergyWtrOverTime"
-        ],
-        [
             "calcPCMMeltBegin"
         ],
         [
             "calcPCMMeltEnd"
-        ],
-        [
-            "calcTempPCMOverTime"
-        ],
-        [
-            "calcTempWtrOverTime"
         ],
         [
             "calcValues"
@@ -715,22 +691,10 @@
             "bueche1986"
         ],
         [
-            "calcChgHeatEnergyPCMOverTime"
-        ],
-        [
-            "calcChgHeatEnergyWtrOverTime"
-        ],
-        [
             "calcPCMMeltBegin"
         ],
         [
             "calcPCMMeltEnd"
-        ],
-        [
-            "calcTempPCMOverTime"
-        ],
-        [
-            "calcTempWtrOverTime"
         ],
         [
             "calcValues"

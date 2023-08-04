@@ -205,9 +205,6 @@
             "calcValues"
         ],
         [
-            "calcTempPCMOverTime"
-        ],
-        [
             "calcPCMMeltEnd"
         ],
         [
@@ -232,9 +229,6 @@
         ],
         [
             "calcValues"
-        ],
-        [
-            "calcTempWtrOverTime"
         ]
     ],
     "eta": [
@@ -268,9 +262,6 @@
         ],
         [
             "calcValues"
-        ],
-        [
-            "calcChgHeatEnergyPCMOverTime"
         ]
     ],
     "heatEInWtrIM": [
@@ -282,9 +273,6 @@
         ],
         [
             "calcValues"
-        ],
-        [
-            "calcChgHeatEnergyWtrOverTime"
         ]
     ],
     "htFluxC": [

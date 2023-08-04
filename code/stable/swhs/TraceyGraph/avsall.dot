@@ -116,10 +116,6 @@ digraph avsall {
 	findMass	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:findMass"];
 	checkWithPhysConsts	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkWithPhysConsts"];
 	outputInputDerivVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputInputDerivVals"];
-	calcTempWtrOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcTempWtrOverTime"];
-	calcTempPCMOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcTempPCMOverTime"];
-	calcChgHeatEnergyWtrOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcChgHeatEnergyWtrOverTime"];
-	calcChgHeatEnergyPCMOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcChgHeatEnergyPCMOverTime"];
 	calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcValues"];
 	verifyEnergyOutput	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyEnergyOutput"];
 	calcPCMMeltBegin	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcPCMMeltBegin"];
@@ -133,7 +129,7 @@ digraph avsall {
 
 	subgraph FR {
 	rank="same"
-	{inputValues, findMass, checkWithPhysConsts, outputInputDerivVals, calcTempWtrOverTime, calcTempPCMOverTime, calcChgHeatEnergyWtrOverTime, calcChgHeatEnergyPCMOverTime, calcValues, verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd, outputValues, correct, verifiable, understandable, reusable, maintainable}
+	{inputValues, findMass, checkWithPhysConsts, outputInputDerivVals, calcValues, verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd, outputValues, correct, verifiable, understandable, reusable, maintainable}
 	}
 
 	likeChgUTP	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:likeChgUTP"];

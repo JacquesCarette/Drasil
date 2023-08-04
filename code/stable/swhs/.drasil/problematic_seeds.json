@@ -262,32 +262,12 @@
         "terms",
         "symbols"
     ],
-    "calcChgHeatEnergyPCMOverTime": [
-        "references",
-        "concepts",
-        "conceptInstances"
-    ],
-    "calcChgHeatEnergyWtrOverTime": [
-        "references",
-        "concepts",
-        "conceptInstances"
-    ],
     "calcPCMMeltBegin": [
         "references",
         "concepts",
         "conceptInstances"
     ],
     "calcPCMMeltEnd": [
-        "references",
-        "concepts",
-        "conceptInstances"
-    ],
-    "calcTempPCMOverTime": [
-        "references",
-        "concepts",
-        "conceptInstances"
-    ],
-    "calcTempWtrOverTime": [
         "references",
         "concepts",
         "conceptInstances"

@@ -24,16 +24,6 @@
     "assumpVCMPN": [],
     "assumpVCN": [],
     "assumpWAL": [],
-    "calcChgHeatEnergyPCMOverTime": [
-        [
-            "heatEInPCMRC"
-        ]
-    ],
-    "calcChgHeatEnergyWtrOverTime": [
-        [
-            "heatEInWtrIM"
-        ]
-    ],
     "calcPCMMeltBegin": [
         [
             "eBalanceOnPCMRC"
@@ -42,16 +32,6 @@
     "calcPCMMeltEnd": [
         [
             "eBalanceOnPCMRC"
-        ]
-    ],
-    "calcTempPCMOverTime": [
-        [
-            "eBalanceOnPCMRC"
-        ]
-    ],
-    "calcTempWtrOverTime": [
-        [
-            "eBalanceOnWtrRC"
         ]
     ],
     "calcValues": [

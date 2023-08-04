@@ -17,6 +17,6 @@ class HasInputs c where
 -- | Members of this class may have outputs.
 class HasOutput c where
   -- | Provides a 'Lens' that holds a 'QuantityDict' for output.
-  output :: Lens' c QuantityDict
+  output :: c -> QuantityDict
   -- | Provides a 'Lens' that holds constraints on the output.
-  out_constraints :: Lens' c [RealInterval Expr Expr]
+  out_constraints :: c -> [RealInterval Expr Expr]

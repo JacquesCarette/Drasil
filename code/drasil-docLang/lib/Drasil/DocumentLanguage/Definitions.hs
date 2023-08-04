@@ -183,7 +183,7 @@ mkIMField i m l@(Description v u) fs = (show l,
 mkIMField i m l@RefBy fs = (show l, [mkParagraph $ helperRefs i m]) : fs --FIXME: fill this in
 mkIMField i _ l@Source fs = (show l, helperSources $ i ^. getDecRefs) : fs
 mkIMField i _ l@Output fs = (show l, [mkParagraph x]) : fs
-  where x = P . eqSymb $ i ^. output
+  where x = P . eqSymb $ output i
 mkIMField i _ l@Input fs =
   case map fst (i ^. inputs) of
     [] -> (show l, [mkParagraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?
@@ -193,8 +193,8 @@ mkIMField i _ l@InConstraints fs  =
   let ll = mapMaybe (\(x,y) -> y >>= (\z -> Just (x, z))) (i ^. inputs) in
   (show l, foldr ((:) . UlC . ulcc . EqnBlock . express . uncurry realInterval) [] ll) : fs
 mkIMField i _ l@OutConstraints fs =
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock . express . realInterval (i ^. output)) []
-    (i ^. out_constraints)) : fs
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock . express . realInterval (output i)) []
+    (out_constraints i)) : fs
 mkIMField i _ l@Notes fs =
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)
 mkIMField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++

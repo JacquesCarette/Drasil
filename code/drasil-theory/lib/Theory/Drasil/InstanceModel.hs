@@ -75,14 +75,14 @@ instance HasInputs          InstanceModel where
   inputs          = imInputs
 -- | Finds the outputs and output constraints of an 'InstanceModel'.
 instance HasOutput          InstanceModel where
-  output          = imOutput . _1
-  out_constraints = imOutput . _2
+  output          = view (imOutput . _1)
+  out_constraints = view (imOutput . _2)
 -- | Finds the output 'Symbol's of the 'InstanceModel'.
-instance HasSymbol          InstanceModel where symbol = symbol . view output -- FIXME: InstanceModels don't necessarily need to have a symbol.
+instance HasSymbol          InstanceModel where symbol = symbol . output -- FIXME: InstanceModels don't necessarily need to have a symbol.
 -- | Finds the output 'Space' of the 'InstanceModel'.
-instance HasSpace           InstanceModel where typ = typ . view output
+instance HasSpace           InstanceModel where typ = typ . output
 -- | Finds the units of the 'InstanceModel'.
-instance MayHaveUnit        InstanceModel where getUnit = getUnit . view output
+instance MayHaveUnit        InstanceModel where getUnit = getUnit . output
 
 -- | Expose all expressions that need to be type-checked.
 instance RequiresChecking InstanceModel Expr Space where

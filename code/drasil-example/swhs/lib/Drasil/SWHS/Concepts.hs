@@ -8,7 +8,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt,
   likelyChg, physSyst, requirement, refBy, refName, srs, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (ode, parameter, rightSide)
-import Metadata.Drasil.Domains (materialEng)
+import Data.Drasil.Domains (materialEng)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 con :: [ConceptChunk]

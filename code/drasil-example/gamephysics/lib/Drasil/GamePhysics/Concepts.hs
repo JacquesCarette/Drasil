@@ -7,7 +7,7 @@ import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.PhysicalProperties (ctrOfMass)
 import Data.Drasil.Concepts.Physics (threeD, twoD)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
-import Metadata.Drasil.Domains (physics)
+import Data.Drasil.Domains (physics)
 
 import Control.Lens ((^.))
 

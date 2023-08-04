@@ -1,5 +1,5 @@
 -- | Defines domains of knowledge for use in Drasil.
-module Metadata.Drasil.Domains where
+module Data.Drasil.Domains where
 
 import Language.Drasil (IdeaDict, mkIdea, cn')
 

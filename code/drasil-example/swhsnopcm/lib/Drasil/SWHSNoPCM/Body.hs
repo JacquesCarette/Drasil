@@ -34,7 +34,7 @@ import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 import Data.Drasil.Software.Products (prodtcon)
-import Metadata.Drasil.Domains (materialEng)
+import Data.Drasil.Domains (materialEng)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
 

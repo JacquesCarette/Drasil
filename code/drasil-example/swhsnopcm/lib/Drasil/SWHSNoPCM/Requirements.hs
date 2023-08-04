@@ -3,14 +3,14 @@ module Drasil.SWHSNoPCM.Requirements (funcReqs, inputInitValsTable) where
 import Language.Drasil
 import Drasil.DocLang (mkInputPropsTable)
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import Theory.Drasil (InstanceModel)
 
 import Data.Drasil.Concepts.Documentation (funcReqDom, input_, value)
-
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 
 import Drasil.SWHS.DataDefs (waterMass, tankVolume, balanceDecayRate)
-import Drasil.SWHS.Requirements (calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime,
-  checkWithPhysConsts, findMassConstruct, inReqDesc, oIDQConstruct)
+import Drasil.SWHS.Requirements (calcValues, checkWithPhysConsts,
+  findMassConstruct, inReqDesc, oIDQConstruct, outputValues, swhsOutputs)
 
 import Drasil.SWHSNoPCM.DataDefs (waterVolume)
 import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr)
@@ -49,7 +49,10 @@ inputInitValsTable = mkInputPropsTable inputs inputInitVals
 
 funcReqs :: [ConceptInstance]
 funcReqs = [inputInitVals, findMass, checkWithPhysConsts,
-        oIDQConstruct oIDQVals, calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime]
+  oIDQConstruct oIDQVals, calcValues noPCMOutputs, outputValues noPCMOutputs]
+
+noPCMOutputs :: [(ConstrConcept, InstanceModel)]
+noPCMOutputs = [head swhsOutputs, swhsOutputs!!2]
 
 -------------------------------------------
 --Section 5.2 : NON-FUNCTIONAL REQUIREMENTS

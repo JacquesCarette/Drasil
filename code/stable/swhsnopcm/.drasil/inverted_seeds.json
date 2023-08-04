@@ -407,12 +407,7 @@
     "boiling": [
         "terms"
     ],
-    "calcChgHeatEnergyWtrOverTime": [
-        "references",
-        "concepts",
-        "conceptInstances"
-    ],
-    "calcTempWtrOverTime": [
+    "calcValues": [
         "references",
         "concepts",
         "conceptInstances"
@@ -1443,6 +1438,11 @@
         "terms"
     ],
     "outputInputDerivVals": [
+        "references",
+        "concepts",
+        "conceptInstances"
+    ],
+    "outputValues": [
         "references",
         "concepts",
         "conceptInstances"

@@ -4,6 +4,7 @@ import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
+import Theory.Drasil (InstanceModel)
 
 import Drasil.DocLang (inReq)
 import Drasil.DocLang.SRS (datCon, propCorSol) 
@@ -48,12 +49,14 @@ inReqDesc = foldlList Comma List [pluralNP (NP.the (combineNINI tank parameter))
 funcReqs :: [ConceptInstance]
 funcReqs = [findMass, checkWithPhysConsts, outputInputDerivVals,
   calcTempWtrOverTime, calcTempPCMOverTime, calcChgHeatEnergyWtrOverTime,
-  calcChgHeatEnergyPCMOverTime, calcValues, verifyEnergyOutput, calcPCMMeltBegin,
-  calcPCMMeltEnd, outputValues]
+  calcChgHeatEnergyPCMOverTime, calcValues swhsOutputs, verifyEnergyOutput,
+  calcPCMMeltBegin, calcPCMMeltEnd, outputValues swhsOutputs]
 
 findMass, checkWithPhysConsts, outputInputDerivVals, calcTempWtrOverTime,
   calcTempPCMOverTime, calcChgHeatEnergyWtrOverTime, calcChgHeatEnergyPCMOverTime,
-  calcValues, verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd, outputValues :: ConceptInstance
+  verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd :: ConceptInstance
+
+calcValues, outputValues :: [(ConstrConcept, InstanceModel)] -> ConceptInstance
 
 --
 findMass = findMassConstruct (inReq EmptyS) (plural mass) iMods 
@@ -115,8 +118,8 @@ calcChgHeatEnergyPCMOverTime = cic "calcChgHeatEnergyPCMOverTime" (foldlSent [
   phraseNP (NP.the (combineNINI simulation time)), fromSource heatEInPCM])
   "Calculate-Change-Heat_Energy-PCM-Over-Time" funcReqDom
 --
-calcValues = cic "calcValues" (S "Calculate the following" +: plural value +:+.
-  outputListSent) "Calculate-Values" funcReqDom
+calcValues l = cic "calcValues" (S "Calculate the following" +: plural value +:+.
+  outputList l) "Calculate-Values" funcReqDom
 --
 verifyEnergyOutput = cic "verifyEnergyOutput" (foldlSent [
   S "Verify that the", phrase energy, plural output_,
@@ -138,14 +141,16 @@ calcPCMMeltEnd = cic "calcPCMMeltEnd" (foldlSent [
   ch tFinalMelt, fromSource eBalanceOnPCM])
   "Calculate-PCM-Melt-End-Time" funcReqDom
 --
-outputValues = cic "outputValues" (titleize output_ +:+. outputListSent)
+outputValues l = cic "outputValues" (titleize output_ +:+. outputList l)
   "Output-Values" funcReqDom
 
-outputListSent :: Sentence
-outputListSent = foldlList Comma List $
-  map (\(x, y) -> ch x :+: sParen (ch time) +:+ fromSource y)
-    [(tempW, eBalanceOnWtr), (tempPCM, eBalanceOnPCM), (watE, heatEInWtr),
-      (pcmE, heatEInPCM)]
+outputList :: [(ConstrConcept, InstanceModel)] -> Sentence
+outputList l = foldlList Comma List $
+  map (\(x, y) -> ch x :+: sParen (ch time) +:+ fromSource y) l
+
+swhsOutputs :: [(ConstrConcept, InstanceModel)]
+swhsOutputs = [(tempW, eBalanceOnWtr), (tempPCM, eBalanceOnPCM),
+  (watE, heatEInWtr), (pcmE, heatEInPCM)]
 
 -- List structure same between all examples
 

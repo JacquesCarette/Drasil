@@ -263,7 +263,7 @@ lrIsSafeDesc = iModDesc isSafeLR
 
 pbIsSafeDesc :: Sentence
 pbIsSafeDesc = iModDesc isSafePb
-  (ch isSafePb `S.and_` ch isSafePb +:+ fromSource lrIsSafe)
+  (ch isSafePb `S.and_` ch isSafeLR +:+ fromSource lrIsSafe)
 
 arRef, capRef, gtfRef, hRef, jRef, jtolRef, ldfRef, nonFLRef, probBRRef,
   qHtRef, qHtTlTolRef, riskRef :: Sentence

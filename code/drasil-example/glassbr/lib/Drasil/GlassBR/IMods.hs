@@ -7,19 +7,19 @@ import Language.Drasil
 import Theory.Drasil (InstanceModel, imNoDeriv, qwC, qwUC, equationalModelN)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.SRSDocument (Block (Parallel))
 
 import Data.Drasil.Citations (campidelli)
 import Data.Drasil.Concepts.Documentation (goal, user, datum)
+import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.SI_Units
 
-import Drasil.GlassBR.DataDefs {- temporarily import everything -}
+import Drasil.GlassBR.Concepts (annealed, fullyT, glass, heatS)
+import Drasil.GlassBR.DataDefs (calofDemand, loadDF, stdVals)
 import Drasil.GlassBR.Figures (dimlessloadVsARFig)
 import Drasil.GlassBR.Goals (willBreakGS)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
-import Drasil.GlassBR.Unitals {- temporarily import everything -}
-import Drasil.SRSDocument (Block (Parallel))
-import Drasil.GlassBR.Concepts
-import Data.Drasil.Concepts.PhysicalProperties (dimension)
+import Drasil.GlassBR.Unitals
 
 iMods :: [InstanceModel]
 iMods = [risk, hFromt, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac,

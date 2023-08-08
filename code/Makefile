@@ -155,10 +155,6 @@ GHCTHREADS ?= 2
 override GHCFLAGS += -Wall -j$(GHCTHREADS)
 override stackArgs += --ghc-options="$(GHCFLAGS)"
 
-# When running 'stack exec', the following stack arguments should be passed.
-STACK_EXEC_ARGS := --no-nix-pure
-STACK_EXEC := stack exec $(STACK_EXEC_ARGS)
-
 # Output amount control
 NOISY=no
 SUMMARIZE_TEX=no
@@ -180,7 +176,7 @@ install: ##@Examples Install all example project binaries into your local binary
 	stack install $(stackArgs)
 
 debug: stackArgs += $(PROFALL)
-debug: STACK_EXEC += $(PROFEXEC)
+debug: EXECARGS += $(PROFEXEC)
 debug: test ##@Examples Run test target with better debugging tools.
 
 pr_ready: all hot_hlint ##@General Check if your current work is ready to for a PR via `all` and `hot_hlint`.
@@ -271,13 +267,13 @@ $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
 $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
 	stack build $(stackArgs) "$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
-	cd "$(BUILD_FOLDER)$(EDIR)" && $(STACK_EXEC) -- "$(EEXE)"
+	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec $(EXECARGS) -- "$(EEXE)"
 
 # Compiles GOOL examples to concrete code (Java, C++, etc.)
 $(GOOLTEST)$(GEN_E_SUFFIX):
 	stack build $(stackArgs) "drasil-code:exe:$(GOOLTEST_EXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(GOOLTEST_DIR)"
-	cd "$(BUILD_FOLDER)$(GOOLTEST_DIR)" && $(STACK_EXEC) -- "$(GOOLTEST_EXE)"
+	cd "$(BUILD_FOLDER)$(GOOLTEST_DIR)" && stack exec $(EXECARGS) -- "$(GOOLTEST_EXE)"
 
 # Install individual Drasil examples
 $(filter %$(INSTALL_E_SUFFIX), $(INSTALL_EXAMPLES)): %$(INSTALL_E_SUFFIX):
@@ -289,7 +285,7 @@ $(filter %$(INSTALL_E_SUFFIX), $(INSTALL_EXAMPLES)): %$(INSTALL_E_SUFFIX):
 $(filter %$(TRACE_GRAPH_SUFFIX), $(TRACE_GRAPH_EXAMPLES)): %$(TRACE_GRAPH_SUFFIX): graphmod
 	stack build $(stackArgs) "$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
-	cd "$(BUILD_FOLDER)$(EDIR)" && $(STACK_EXEC) -- "$(EEXE)"
+	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec $(EXECARGS) -- "$(EEXE)"
 	@mkdir -p "$(TRACEY_GRAPHS_FOLDER)$(EDIR)"
 	@echo Making traceability graphs for "$(EEXE)"
 	@if [ -d "$(BUILD_FOLDER)$(EDIR)/$(TRACEY_GRAPH_FOLDER)" ]; then \
@@ -418,7 +414,7 @@ deploy_code_path: $(DCP_EXAMPLES) ##@GOOL Find all code file paths for all examp
 website: ##@Deploy First builds all Drasil packages, and then executes the drasil-website.
 	stack build $(stackArgs) "drasil-website"
 	CUR_DIR="$(PWD)/" \
-	DEPLOY_FOLDER="$(CUR_DIR)$(DEPLOY_FOLDER)" \
+	DEPLOY_FOLDER="$(CUR_DIR)$(DEPLOY_FOLDER)"  \
 	DOCS_FOLDER="$(DOCS_FOLDER)" \
 	DOX_FOLDER="doxygen/" \
 	EXAMPLES_FOLDER="examples/" \
@@ -428,7 +424,7 @@ website: ##@Deploy First builds all Drasil packages, and then executes the drasi
 	PACKAGES="$(PACKAGES)" \
 	TYPEGRAPH_FOLDER="$(TYPEGRAPH_FOLDER)" \
 	CLASSINST_GRAPH_FOLDER="$(CLASSINST_GRAPH_FOLDER)" \
-	$(STACK_EXEC) -- "website"
+	stack exec -- "website"
 
 # Deploys the Drasil website. Called by the deploy target.
 # If you have all the necessary generated targets listed
@@ -499,8 +495,6 @@ help:  ##@Help Show this help.
 	@echo "  X$(BC_E_SUFFIX)       Remove specific example from the build folder."
 	@echo "  X$(CODE_E_SUFFIX)              Generate individual example code."
 	@echo "  X$(DCP_E_SUFFIX)  Get all generated code file paths in the example."
-	@echo ""
-	@echo "Set a 'DEBUG_ENV' environment variable to 'true' if you want to check out the list of chunks in a Drasil run."
 	@echo ""
 	@echo "To get started with Drasil, try running \"make\"."
 

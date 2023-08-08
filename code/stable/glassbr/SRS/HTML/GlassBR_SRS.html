@@ -993,6 +993,76 @@
                 <p class="paragraph">
                   This section collects and defines all the data needed to build the instance models.
                 </p>
+                <div id="DD:minThick">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:minThick</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Minimum thickness</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>h</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph"><em>m</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[h=\frac{1}{1000} \begin{cases}
+                                           2.16, & t=2.5\\
+                                           2.59, & t=2.7\\
+                                           2.92, & t=3.0\\
+                                           3.78, & t=4.0\\
+                                           4.57, & t=5.0\\
+                                           5.56, & t=6.0\\
+                                           7.42, & t=8.0\\
+                                           9.02, & t=10.0\\
+                                           11.91, & t=12.0\\
+                                           15.09, & t=16.0\\
+                                           18.26, & t=19.0\\
+                                           21.44, & t=22.0
+                                           \end{cases}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>h</em> is the minimum thickness (<em>m</em>)</li>
+                          <li>
+                            <em>t</em> is the nominal thickness <em>t&thinsp;&isin;&thinsp;{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0}</em> (<em>mm</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>t</em> is a function that maps from the nominal thickness (<em>h</em>) to the minimum thickness.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:sdfTol>IM:sdfTol</a>, <a href=#IM:riskFun>IM:riskFun</a>, <a href=#IM:nFL>IM:nFL</a>, and <a href=#IM:dimlessLoad>IM:dimlessLoad</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
                 <div id="DD:loadDurFactor">
                   <table class="ddefn">
                     <tr>
@@ -1299,7 +1369,7 @@
                           <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
                         </p>
                         <p class="paragraph">
-                          <em>h</em> is defined in <a href=#IM:minThick>IM:minThick</a> and is based on the nominal thicknesses.
+                          <em>h</em> is defined in <a href=#DD:minThick>DD:minThick</a> and is based on the nominal thicknesses.
                         </p>
                         <p class="paragraph">
                           <em>LDF</em> is defined in <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.
@@ -1321,84 +1391,6 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph"><a href=#IM:probOfBreak>IM:probOfBreak</a></p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="IM:minThick">
-                  <table class="idefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>IM:minThick</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">Minimum thickness</p></td>
-                    </tr>
-                    <tr>
-                      <th>Input</th>
-                      <td><p class="paragraph"><em>t</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Output</th>
-                      <td><p class="paragraph"><em>h</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Input Constraints</th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th>Output Constraints</th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[h=\frac{1}{1000} \begin{cases}
-                                           2.16, & t=2.5\\
-                                           2.59, & t=2.7\\
-                                           2.92, & t=3.0\\
-                                           3.78, & t=4.0\\
-                                           4.57, & t=5.0\\
-                                           5.56, & t=6.0\\
-                                           7.42, & t=8.0\\
-                                           9.02, & t=10.0\\
-                                           11.91, & t=12.0\\
-                                           15.09, & t=16.0\\
-                                           18.26, & t=19.0\\
-                                           21.44, & t=22.0
-                                           \end{cases}\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li><em>h</em> is the minimum thickness (<em>m</em>)</li>
-                          <li>
-                            <em>t</em> is the nominal thickness <em>t&thinsp;&isin;&thinsp;{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0}</em> (<em>mm</em>)
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>t</em> is a function that maps from the nominal thickness (<em>h</em>) to the minimum thickness.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph">
-                          <a href=#IM:sdfTol>IM:sdfTol</a>, <a href=#IM:riskFun>IM:riskFun</a>, <a href=#IM:nFL>IM:nFL</a>, and <a href=#IM:dimlessLoad>IM:dimlessLoad</a>
-                        </p>
                       </td>
                     </tr>
                   </table>
@@ -1546,7 +1538,7 @@
                           <em>E</em> comes from <a href=#assumpSV>A:standardValues</a>.
                         </p>
                         <p class="paragraph">
-                          <em>h</em> is defined in <a href=#IM:minThick>IM:minThick</a> and is based on the nominal thicknesses.
+                          <em>h</em> is defined in <a href=#DD:minThick>DD:minThick</a> and is based on the nominal thicknesses.
                         </p>
                         <p class="paragraph">
                           <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
@@ -1706,7 +1698,7 @@
                           <em>E</em> comes from <a href=#assumpSV>A:standardValues</a>.
                         </p>
                         <p class="paragraph">
-                          <em>h</em> is defined in <a href=#IM:minThick>IM:minThick</a> and is based on the nominal thicknesses.
+                          <em>h</em> is defined in <a href=#DD:minThick>DD:minThick</a> and is based on the nominal thicknesses.
                         </p>
                         <p class="paragraph">
                           <em>GTF</em> is defined in <a href=#IM:gTF>IM:gTF</a>.
@@ -1891,7 +1883,7 @@
                           <em>m</em>, <em>k</em>, and <em>E</em> come from <a href=#assumpSV>A:standardValues</a>.
                         </p>
                         <p class="paragraph">
-                          <em>h</em> is defined in <a href=#IM:minThick>IM:minThick</a> and is based on the nominal thicknesses.
+                          <em>h</em> is defined in <a href=#DD:minThick>DD:minThick</a> and is based on the nominal thicknesses.
                         </p>
                         <p class="paragraph">
                           <em>LDF</em> is defined in <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.
@@ -2520,7 +2512,7 @@
                 <tr>
                   <td><em>h</em></td>
                   <td>Minimum thickness</td>
-                  <td><a href=#IM:minThick>IM:minThick</a></td>
+                  <td><a href=#DD:minThick>DD:minThick</a></td>
                   <td><em>m</em></td>
                 </tr>
                 <tr>
@@ -2593,7 +2585,7 @@
                 <tr>
                   <td><em>h</em></td>
                   <td>Minimum thickness</td>
-                  <td><a href=#IM:minThick>IM:minThick</a></td>
+                  <td><a href=#DD:minThick>DD:minThick</a></td>
                   <td><em>m</em></td>
                 </tr>
                 <tr>
@@ -2876,6 +2868,17 @@
               <th><a href=#assumpLDFC>A:ldfConstant</a></th>
             </tr>
             <tr>
+              <td><a href=#DD:minThick>DD:minThick</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#DD:loadDurFactor>DD:loadDurFactor</a></td>
               <td></td>
               <td></td>
@@ -2943,17 +2946,6 @@
             </tr>
             <tr>
               <td><a href=#IM:riskFun>IM:riskFun</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#IM:minThick>IM:minThick</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3318,6 +3310,7 @@
           <table class="table">
             <tr>
               <th></th>
+              <th><a href=#DD:minThick>DD:minThick</a></th>
               <th><a href=#DD:loadDurFactor>DD:loadDurFactor</a></th>
               <th><a href=#DD:standOffDist>DD:standOffDist</a></th>
               <th><a href=#DD:eqTNTW>DD:eqTNTW</a></th>
@@ -3325,7 +3318,6 @@
               <th><a href=#TM:isSafeProb>TM:isSafeProb</a></th>
               <th><a href=#TM:isSafeLoad>TM:isSafeLoad</a></th>
               <th><a href=#IM:riskFun>IM:riskFun</a></th>
-              <th><a href=#IM:minThick>IM:minThick</a></th>
               <th><a href=#IM:stressDistFac>IM:stressDistFac</a></th>
               <th><a href=#IM:nFL>IM:nFL</a></th>
               <th><a href=#IM:gTF>IM:gTF</a></th>
@@ -3337,6 +3329,28 @@
               <th><a href=#IM:calofCapacity>IM:calofCapacity</a></th>
               <th><a href=#IM:isSafePb>IM:isSafePb</a></th>
               <th><a href=#IM:isSafeLR>IM:isSafeLR</a></th>
+            </tr>
+            <tr>
+              <td><a href=#DD:minThick>DD:minThick</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:loadDurFactor>DD:loadDurFactor</a></td>
@@ -3407,9 +3421,9 @@
             <tr>
               <td><a href=#DD:calofDemand>DD:calofDemand</a></td>
               <td></td>
-              <td>X</td>
-              <td>X</td>
               <td></td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3473,13 +3487,6 @@
             <tr>
               <td><a href=#IM:riskFun>IM:riskFun</a></td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -3487,22 +3494,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#IM:minThick>IM:minThick</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3538,14 +3530,14 @@
             </tr>
             <tr>
               <td><a href=#IM:nFL>IM:nFL</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3582,14 +3574,14 @@
             </tr>
             <tr>
               <td><a href=#IM:dimlessLoad>IM:dimlessLoad</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td>X</td>
@@ -3627,13 +3619,13 @@
             <tr>
               <td><a href=#IM:sdfTol>IM:sdfTol</a></td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3676,8 +3668,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
               <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3739,8 +3731,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
               <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3765,6 +3757,7 @@
           <table class="table">
             <tr>
               <th></th>
+              <th><a href=#DD:minThick>DD:minThick</a></th>
               <th><a href=#DD:loadDurFactor>DD:loadDurFactor</a></th>
               <th><a href=#DD:standOffDist>DD:standOffDist</a></th>
               <th><a href=#DD:eqTNTW>DD:eqTNTW</a></th>
@@ -3772,7 +3765,6 @@
               <th><a href=#TM:isSafeProb>TM:isSafeProb</a></th>
               <th><a href=#TM:isSafeLoad>TM:isSafeLoad</a></th>
               <th><a href=#IM:riskFun>IM:riskFun</a></th>
-              <th><a href=#IM:minThick>IM:minThick</a></th>
               <th><a href=#IM:stressDistFac>IM:stressDistFac</a></th>
               <th><a href=#IM:nFL>IM:nFL</a></th>
               <th><a href=#IM:gTF>IM:gTF</a></th>

@@ -1,5 +1,5 @@
-module Drasil.GlassBR.DataDefs (dataDefs, loadDF, standOffDis, eqTNTWDD,
-  calofDemand, configFp, stdVals) where
+module Drasil.GlassBR.DataDefs (dataDefs, hFromt, hFromtQD, hRef, loadDF,
+  standOffDis, eqTNTWDD, calofDemand, configFp, stdVals) where
 
 import Control.Lens ((^.))
 import Language.Drasil
@@ -13,14 +13,29 @@ import Drasil.GlassBR.Assumptions (assumpSV, assumpLDFC)
 import Drasil.GlassBR.Figures (demandVsSDFig)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (charWeight, demand, demandq, eqTNTWeight,
-  interpY, lDurFac, loadDur, sdx, sdy, sdz, sflawParamM, standOffDist, tNT)
+  interpY, lDurFac, loadDur, sdx, sdy, sdz, sflawParamM, standOffDist, tNT, nomThick, minThick, nominalThicknesses, actualThicknesses)
 
 ----------------------
 -- DATA DEFINITIONS --
 ----------------------
 
 dataDefs :: [DataDefinition]
-dataDefs = [loadDF, standOffDis, eqTNTWDD, calofDemand]
+dataDefs = [hFromt, loadDF, standOffDis, eqTNTWDD, calofDemand]
+
+{--}
+
+hFromtEq :: Relation
+hFromtEq = frac 1 1000 `mulRe` incompleteCase (zipWith hFromtHelper
+  actualThicknesses nominalThicknesses)
+
+hFromtHelper :: Double -> Double -> (Expr, Relation)
+hFromtHelper result condition = (dbl result, sy nomThick $= dbl condition)
+
+hFromtQD :: SimpleQDef
+hFromtQD = mkQuantDef minThick hFromtEq
+
+hFromt :: DataDefinition
+hFromt = ddE hFromtQD [dRef astm2009] Nothing "minThick" [hMin]
 
 {--}
 
@@ -77,8 +92,15 @@ calofDemandDesc =
   S "is defined in" +:+. refS eqTNTWDD, ch standOffDist `S.isThe`
   phrase standOffDist, S "as defined in", refS standOffDis]
 
+hMin :: Sentence
+hMin = ch nomThick `S.is` S "a function that maps from the nominal thickness"
+  +:+. (sParen (ch minThick) `S.toThe` phrase minThick)
+
 ldfConst :: Sentence
 ldfConst = ch lDurFac `S.is` S "assumed to be constant" +:+. fromSource assumpLDFC
+
+hRef :: Sentence
+hRef = definedIn' hFromt (S "and is based on the nominal thicknesses")
 
 -- List of Configuration Files necessary for DataDefs.hs
 configFp :: [String]

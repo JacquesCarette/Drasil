@@ -1,20 +1,20 @@
 digraph refvsref {
 	demandq -> stdOffDist;
 	demandq -> eqTNTChar;
-	riskFun -> loadDurFactor;
 	riskFun -> minThick;
+	riskFun -> loadDurFactor;
 	riskFun -> stressDistFac;
 	stressDistFac -> dimlessLoad;
 	stressDistFac -> aR;
 	nFL -> minThick;
 	nFL -> tolLoad;
-	dimlessLoad -> demandq;
 	dimlessLoad -> minThick;
+	dimlessLoad -> demandq;
 	dimlessLoad -> glassTypeFac;
 	tolLoad -> sdfTol;
 	tolLoad -> aR;
-	sdfTol -> loadDurFactor;
 	sdfTol -> minThick;
+	sdfTol -> loadDurFactor;
 	probBr -> riskFun;
 	lResistance -> nFL;
 	lResistance -> glassTypeFac;
@@ -25,6 +25,7 @@ digraph refvsref {
 	isSafeLR -> isSafePb;
 
 
+	minThick	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:minThick"];
 	loadDurFactor	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:loadDurFactor"];
 	stdOffDist	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:standOffDist"];
 	eqTNTChar	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:eqTNTW"];
@@ -32,7 +33,7 @@ digraph refvsref {
 
 	subgraph DD {
 	rank="same"
-	{loadDurFactor, stdOffDist, eqTNTChar, demandq}
+	{minThick, loadDurFactor, stdOffDist, eqTNTChar, demandq}
 	}
 
 	isSafeProb	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeProb"];
@@ -44,7 +45,6 @@ digraph refvsref {
 	}
 
 	riskFun	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:riskFun"];
-	minThick	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:minThick"];
 	stressDistFac	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:stressDistFac"];
 	nFL	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nFL"];
 	glassTypeFac	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:gTF"];
@@ -59,7 +59,7 @@ digraph refvsref {
 
 	subgraph IM {
 	rank="same"
-	{riskFun, minThick, stressDistFac, nFL, glassTypeFac, dimlessLoad, tolLoad, sdfTol, aR, probBr, lResistance, isSafePb, isSafeLR}
+	{riskFun, stressDistFac, nFL, glassTypeFac, dimlessLoad, tolLoad, sdfTol, aR, probBr, lResistance, isSafePb, isSafeLR}
 	}
 
 }

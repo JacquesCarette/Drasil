@@ -8,6 +8,7 @@ import Drasil.DocLang.SRS (datCon, propCorSol)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
+import Theory.Drasil (DataDefinition)
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (assumption, characteristic, code,
@@ -22,8 +23,8 @@ import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)
 import Drasil.GlassBR.Concepts (glass)
-import Drasil.GlassBR.DataDefs (loadDF, standOffDis)
-import Drasil.GlassBR.IMods (iMods, aspRat, glaTyFac, hFromt, pbIsSafe, lrIsSafe)
+import Drasil.GlassBR.DataDefs (hFromt, loadDF, standOffDis)
+import Drasil.GlassBR.IMods (iMods, aspRat, glaTyFac, pbIsSafe, lrIsSafe)
 import Drasil.GlassBR.Unitals (blast, isSafeLR, isSafePb, loadSF, notSafe,
   pbTolfail, safeMessage)
 
@@ -59,8 +60,8 @@ sysSetValsFollowingAssumpsTable = mkValsSourceTable (mkQRTupleRef r2AQs r2ARs ++
   where
     r2AQs = qw loadSF : map qw (take 4 assumptionConstants)
     r2ARs = assumpGL : replicate 4 assumpSV
-    r2DDs = [loadDF, standOffDis]
-    r2IMs = [aspRat, glaTyFac, hFromt]
+    r2DDs = [loadDF, hFromt, standOffDis]
+    r2IMs = [aspRat, glaTyFac]
 
 --FIXME:should constants, LDF, and LSF have some sort of field that holds
 -- the assumption(s) that're being followed? (Issue #349)
@@ -84,8 +85,11 @@ outputValuesDesc :: Sentence
 outputValuesDesc = foldlSent [titleize output_, pluralNP (the value), S "from the table for", namedRef outputValuesTable (S "Required Outputs")]
 
 outputValuesTable :: LabelledContent
-outputValuesTable = mkValsSourceTable (mkQRTuple iMods) "ReqOutputs"
+outputValuesTable = mkValsSourceTable (mkQRTuple iMods ++ mkQRTuple r6DDs) "ReqOutputs"
                               (S "Required" +:+ titleize' output_ `follows` outputValues)
+  where
+    r6DDs :: [DataDefinition]
+    r6DDs = [hFromt]
 
 {--Nonfunctional Requirements--}
 

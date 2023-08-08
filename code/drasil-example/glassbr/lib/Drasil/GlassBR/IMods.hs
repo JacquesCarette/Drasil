@@ -1,4 +1,4 @@
-module Drasil.GlassBR.IMods (symb, iMods, aspRat, glaTyFac, hFromt, pbIsSafe,
+module Drasil.GlassBR.IMods (symb, iMods, aspRat, glaTyFac, pbIsSafe,
   lrIsSafe, instModIntro, qDefns) where
 
 import Control.Lens ((^.))
@@ -15,15 +15,15 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.SI_Units
 
 import Drasil.GlassBR.Concepts (annealed, fullyT, glass, heatS)
-import Drasil.GlassBR.DataDefs (calofDemand, loadDF, stdVals)
+import Drasil.GlassBR.DataDefs (calofDemand, hFromtQD, hRef, loadDF, stdVals)
 import Drasil.GlassBR.Figures (dimlessloadVsARFig)
 import Drasil.GlassBR.Goals (willBreakGS)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals
 
 iMods :: [InstanceModel]
-iMods = [risk, hFromt, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac,
-  aspRat, probOfBreak, calofCapacity, pbIsSafe, lrIsSafe]
+iMods = [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, aspRat,
+  probOfBreak, calofCapacity, pbIsSafe, lrIsSafe]
 
 symb :: [UnitalChunk]
 symb =  [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram, ucuc standOffDist metre, demand] -- this is temporary
@@ -59,19 +59,6 @@ riskQD :: SimpleQDef
 riskQD = mkQuantDef riskFun ((sy sflawParamK $/
   (mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- exactDbl 1))) `mulRe`
   ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac))
-
-{--}
-
-hFromt :: InstanceModel
-hFromt = imNoDeriv (equationalModelN (minThick ^. term) hFromtQD)
-  [qwUC nomThick] (qw minThick) [] [dRef astm2009] "minThick" [hMin]
-
-hFromtQD :: SimpleQDef
-hFromtQD = mkQuantDef minThick $ frac 1 1000 `mulRe` incompleteCase
-  (zipWith hFromtHelper actualThicknesses nominalThicknesses)
-  where
-    hFromtHelper :: Double -> Double -> (Expr, Relation)
-    hFromtHelper result condition = (dbl result, sy nomThick $= dbl condition)
 
 {--}
 
@@ -241,10 +228,6 @@ anGlass = getAcc annealed `S.is` phrase annealed +:+. phrase glass
 ftGlass :: Sentence
 ftGlass = getAcc fullyT `S.is` phrase fullyT +:+. phrase glass
 
-hMin :: Sentence
-hMin = ch nomThick `S.is` S "a function that maps from the nominal thickness"
-  +:+. (sParen (ch minThick) `S.toThe` phrase minThick)
-
 hsGlass :: Sentence
 hsGlass = getAcc heatS `S.is` phrase heatS +:+. phrase glass
 
@@ -265,12 +248,11 @@ pbIsSafeDesc :: Sentence
 pbIsSafeDesc = iModDesc isSafePb
   (ch isSafePb `S.and_` ch isSafeLR +:+ fromSource lrIsSafe)
 
-arRef, capRef, gtfRef, hRef, jRef, jtolRef, ldfRef, nonFLRef, probBRRef,
+arRef, capRef, gtfRef, jRef, jtolRef, ldfRef, nonFLRef, probBRRef,
   qHtRef, qHtTlTolRef, riskRef :: Sentence
 arRef       = definedIn  aspRat
 capRef      = definedIn' calofCapacity (S "and is also called capacity")
 gtfRef      = definedIn  glaTyFac
-hRef        = definedIn' hFromt (S "and is based on the nominal thicknesses")
 jRef        = definedIn  strDisFac
 jtolRef     = definedIn  tolStrDisFac
 ldfRef      = definedIn  loadDF

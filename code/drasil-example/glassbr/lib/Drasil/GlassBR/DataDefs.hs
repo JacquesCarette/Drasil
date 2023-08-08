@@ -1,6 +1,6 @@
 module Drasil.GlassBR.DataDefs (dataDefs, aspRat, glaTyFac, glaTyFacQD, gtfRef,
   hFromt, hFromtQD, loadDF, standOffDis, eqTNTWDD, calofDemand, aGrtrThanB,
-  arRef, hRef, configFp, stdVals) where
+  arRef, hRef, configFp, stdVals, r6DDs) where
 
 import Control.Lens ((^.))
 import Language.Drasil
@@ -23,6 +23,9 @@ import Drasil.GlassBR.Unitals
 
 dataDefs :: [DataDefinition]
 dataDefs = [hFromt, loadDF, glaTyFac, standOffDis, aspRat, eqTNTWDD, calofDemand]
+
+r6DDs :: [DataDefinition]
+r6DDs = [glaTyFac, hFromt, aspRat]
 
 {--}
 

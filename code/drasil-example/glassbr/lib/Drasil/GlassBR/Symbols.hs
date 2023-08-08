@@ -3,10 +3,10 @@ module Drasil.GlassBR.Symbols where
 import Language.Drasil (QuantityDict, qw)
 import Language.Drasil.Code (Mod(Mod), asVC)
 
-import Drasil.GlassBR.IMods (iMods)
+import Drasil.GlassBR.IMods (iMods, outputs)
 import Drasil.GlassBR.ModuleDefs (allMods, implVars)
-import Drasil.GlassBR.Unitals (inputDataConstraints, inputs, outputs, 
-  specParamVals, symbols, symbolsWithDefns, unitless, tmSymbols, interps)
+import Drasil.GlassBR.Unitals (inputDataConstraints, inputs, specParamVals,
+  symbols, symbolsWithDefns, unitless, tmSymbols, interps)
 
 import Data.List ((\\))
 

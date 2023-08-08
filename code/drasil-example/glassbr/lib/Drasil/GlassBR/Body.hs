@@ -38,15 +38,15 @@ import Drasil.GlassBR.DataDefs (configFp)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures
 import Drasil.GlassBR.Goals (goals)
-import Drasil.GlassBR.IMods (symb, iMods, instModIntro, qDefns)
+import Drasil.GlassBR.IMods (symb, iMods, outputs, instModIntro, qDefns)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations)
 import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
-  constrained, inputDataConstraints, inputs, outputs, specParamVals, glassTy,
-  glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
-  sD, termsWithAccDefn, termsWithDefsOnly, terms)
+  constrained, inputDataConstraints, inputs, specParamVals, glassTy, glassTypes,
+  glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, probBreak, sD,
+  stressDistFac, termsWithAccDefn, termsWithDefsOnly, terms)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -113,7 +113,7 @@ mkSRS = [TableOfContents,
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub [InputReq inReqDesc] funcReqsTables,
+    FReqsSub [InputReq inReqDesc, OutputReq] funcReqsTables,
     NonFReqsSub
   ],
   LCsSec,

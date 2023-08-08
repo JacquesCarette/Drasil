@@ -9,15 +9,15 @@ digraph refvsref {
 	nFL -> minThick;
 	nFL -> tolLoad;
 	dimlessLoad -> minThick;
-	dimlessLoad -> demandq;
 	dimlessLoad -> glassTypeFac;
+	dimlessLoad -> demandq;
 	tolLoad -> sdfTol;
 	tolLoad -> aR;
 	sdfTol -> minThick;
 	sdfTol -> loadDurFactor;
 	probBr -> riskFun;
-	lResistance -> nFL;
 	lResistance -> glassTypeFac;
+	lResistance -> nFL;
 	isSafePb -> probBr;
 	isSafePb -> isSafeLR;
 	isSafeLR -> demandq;
@@ -27,13 +27,14 @@ digraph refvsref {
 
 	minThick	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:minThick"];
 	loadDurFactor	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:loadDurFactor"];
+	glassTypeFac	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:gTF"];
 	stdOffDist	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:standOffDist"];
 	eqTNTChar	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:eqTNTW"];
 	demandq	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:calofDemand"];
 
 	subgraph DD {
 	rank="same"
-	{minThick, loadDurFactor, stdOffDist, eqTNTChar, demandq}
+	{minThick, loadDurFactor, glassTypeFac, stdOffDist, eqTNTChar, demandq}
 	}
 
 	isSafeProb	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeProb"];
@@ -47,7 +48,6 @@ digraph refvsref {
 	riskFun	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:riskFun"];
 	stressDistFac	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:stressDistFac"];
 	nFL	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nFL"];
-	glassTypeFac	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:gTF"];
 	dimlessLoad	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:dimlessLoad"];
 	tolLoad	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:tolLoad"];
 	sdfTol	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:sdfTol"];
@@ -59,7 +59,7 @@ digraph refvsref {
 
 	subgraph IM {
 	rank="same"
-	{riskFun, stressDistFac, nFL, glassTypeFac, dimlessLoad, tolLoad, sdfTol, aR, probBr, lResistance, isSafePb, isSafeLR}
+	{riskFun, stressDistFac, nFL, dimlessLoad, tolLoad, sdfTol, aR, probBr, lResistance, isSafePb, isSafeLR}
 	}
 
 }

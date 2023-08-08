@@ -102,6 +102,100 @@ func derived_values(_ inParams: InputParameters) throws -> Void {
         throw "Error closing file."
     }
     
+    if inParams.g == "AN" {
+        inParams.GTF = 1
+        do {
+            outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
+            try outfile.seekToEnd()
+        } catch {
+            throw "Error opening file."
+        }
+        do {
+            try outfile.write(contentsOf: Data("var 'inParams.GTF' assigned ".utf8))
+        } catch {
+            throw "Error printing to file."
+        }
+        do {
+            try outfile.write(contentsOf: Data(String(inParams.GTF).utf8))
+        } catch {
+            throw "Error printing to file."
+        }
+        do {
+            try outfile.write(contentsOf: Data(" in module DerivedValues".utf8))
+            try outfile.write(contentsOf: Data("\n".utf8))
+        } catch {
+            throw "Error printing to file."
+        }
+        do {
+            try outfile.close()
+        } catch {
+            throw "Error closing file."
+        }
+    }
+    else if inParams.g == "FT" {
+        inParams.GTF = 4
+        do {
+            outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
+            try outfile.seekToEnd()
+        } catch {
+            throw "Error opening file."
+        }
+        do {
+            try outfile.write(contentsOf: Data("var 'inParams.GTF' assigned ".utf8))
+        } catch {
+            throw "Error printing to file."
+        }
+        do {
+            try outfile.write(contentsOf: Data(String(inParams.GTF).utf8))
+        } catch {
+            throw "Error printing to file."
+        }
+        do {
+            try outfile.write(contentsOf: Data(" in module DerivedValues".utf8))
+            try outfile.write(contentsOf: Data("\n".utf8))
+        } catch {
+            throw "Error printing to file."
+        }
+        do {
+            try outfile.close()
+        } catch {
+            throw "Error closing file."
+        }
+    }
+    else if inParams.g == "HS" {
+        inParams.GTF = 2
+        do {
+            outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
+            try outfile.seekToEnd()
+        } catch {
+            throw "Error opening file."
+        }
+        do {
+            try outfile.write(contentsOf: Data("var 'inParams.GTF' assigned ".utf8))
+        } catch {
+            throw "Error printing to file."
+        }
+        do {
+            try outfile.write(contentsOf: Data(String(inParams.GTF).utf8))
+        } catch {
+            throw "Error printing to file."
+        }
+        do {
+            try outfile.write(contentsOf: Data(" in module DerivedValues".utf8))
+            try outfile.write(contentsOf: Data("\n".utf8))
+        } catch {
+            throw "Error printing to file."
+        }
+        do {
+            try outfile.close()
+        } catch {
+            throw "Error closing file."
+        }
+    }
+    else {
+        throw "Undefined case encountered in function GTF"
+    }
+    
     inParams.SD = sqrt(pow(inParams.SD_x, 2.0) + pow(inParams.SD_y, 2.0) + pow(inParams.SD_z, 2.0))
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))

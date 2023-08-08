@@ -23,8 +23,8 @@ import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)
 import Drasil.GlassBR.Concepts (glass)
-import Drasil.GlassBR.DataDefs (hFromt, loadDF, standOffDis)
-import Drasil.GlassBR.IMods (iMods, aspRat, glaTyFac, pbIsSafe, lrIsSafe)
+import Drasil.GlassBR.DataDefs (glaTyFac, hFromt, loadDF, standOffDis)
+import Drasil.GlassBR.IMods (iMods, aspRat, pbIsSafe, lrIsSafe)
 import Drasil.GlassBR.Unitals (blast, isSafeLR, isSafePb, loadSF, notSafe,
   pbTolfail, safeMessage)
 
@@ -60,8 +60,8 @@ sysSetValsFollowingAssumpsTable = mkValsSourceTable (mkQRTupleRef r2AQs r2ARs ++
   where
     r2AQs = qw loadSF : map qw (take 4 assumptionConstants)
     r2ARs = assumpGL : replicate 4 assumpSV
-    r2DDs = [loadDF, hFromt, standOffDis]
-    r2IMs = [aspRat, glaTyFac]
+    r2DDs = [loadDF, hFromt, glaTyFac, standOffDis]
+    r2IMs = [aspRat]
 
 --FIXME:should constants, LDF, and LSF have some sort of field that holds
 -- the assumption(s) that're being followed? (Issue #349)
@@ -89,7 +89,7 @@ outputValuesTable = mkValsSourceTable (mkQRTuple iMods ++ mkQRTuple r6DDs) "ReqO
                               (S "Required" +:+ titleize' output_ `follows` outputValues)
   where
     r6DDs :: [DataDefinition]
-    r6DDs = [hFromt]
+    r6DDs = [glaTyFac, hFromt]
 
 {--Nonfunctional Requirements--}
 

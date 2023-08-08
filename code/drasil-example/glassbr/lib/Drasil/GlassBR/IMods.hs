@@ -1,4 +1,4 @@
-module Drasil.GlassBR.IMods (symb, iMods, aspRat, glaTyFac, pbIsSafe,
+module Drasil.GlassBR.IMods (symb, iMods, aspRat, pbIsSafe,
   lrIsSafe, instModIntro, qDefns) where
 
 import Control.Lens ((^.))
@@ -14,15 +14,15 @@ import Data.Drasil.Concepts.Documentation (goal, user, datum)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.SI_Units
 
-import Drasil.GlassBR.Concepts (annealed, fullyT, glass, heatS)
-import Drasil.GlassBR.DataDefs (calofDemand, hFromtQD, hRef, loadDF, stdVals)
+import Drasil.GlassBR.DataDefs (calofDemand, glaTyFac, glaTyFacQD, gtfRef,
+  hFromtQD, hRef, loadDF, stdVals)
 import Drasil.GlassBR.Figures (dimlessloadVsARFig)
 import Drasil.GlassBR.Goals (willBreakGS)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals
 
 iMods :: [InstanceModel]
-iMods = [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, aspRat,
+iMods = [risk, strDisFac, nonFL, dimLL, tolPre, tolStrDisFac, aspRat,
   probOfBreak, calofCapacity, pbIsSafe, lrIsSafe]
 
 symb :: [UnitalChunk]
@@ -91,20 +91,6 @@ nonFLEq = mulRe (mulRe (sy tolLoad) (sy modElas)) (sy minThick $^ exactDbl 4) $/
 
 nonFLQD :: SimpleQDef
 nonFLQD = mkQuantDef nonFactorL nonFLEq
-
-{--}
-
-glaTyFac :: InstanceModel
-glaTyFac = imNoDeriv (equationalModelN (gTF ^. term) glaTyFacQD)
-  [qwUC glassTypeCon] (qw gTF) [] [dRef astm2009] "gTF"
-  [anGlass, ftGlass, hsGlass]
-
-glaTyFacQD :: SimpleQDef
-glaTyFacQD = mkQuantDef gTF $
-  incompleteCase (zipWith gtfHelper glassTypeFactors $ map (getAccStr . snd) glassType)
-  where
-    gtfHelper :: Integer -> String -> (Expr, Relation)
-    gtfHelper result condition = (int result, sy glassTypeCon $= str condition)
 
 {--}
 
@@ -222,15 +208,6 @@ aGrtrThanB = ch plateLen `S.and_` ch plateWidth `S.are` (plural dimension `S.the
     rel :: ModelExpr
     rel = sy plateLen $>= sy plateWidth
 
-anGlass :: Sentence
-anGlass = getAcc annealed `S.is` phrase annealed +:+. phrase glass
-
-ftGlass :: Sentence
-ftGlass = getAcc fullyT `S.is` phrase fullyT +:+. phrase glass
-
-hsGlass :: Sentence
-hsGlass = getAcc heatS `S.is` phrase heatS +:+. phrase glass
-
 lrCap :: Sentence
 lrCap = ch lRe +:+. S "is also called capacity"
 
@@ -248,11 +225,10 @@ pbIsSafeDesc :: Sentence
 pbIsSafeDesc = iModDesc isSafePb
   (ch isSafePb `S.and_` ch isSafeLR +:+ fromSource lrIsSafe)
 
-arRef, capRef, gtfRef, jRef, jtolRef, ldfRef, nonFLRef, probBRRef,
-  qHtRef, qHtTlTolRef, riskRef :: Sentence
+arRef, capRef, jRef, jtolRef, ldfRef, nonFLRef, probBRRef, qHtRef, qHtTlTolRef,
+  riskRef :: Sentence
 arRef       = definedIn  aspRat
 capRef      = definedIn' calofCapacity (S "and is also called capacity")
-gtfRef      = definedIn  glaTyFac
 jRef        = definedIn  strDisFac
 jtolRef     = definedIn  tolStrDisFac
 ldfRef      = definedIn  loadDF

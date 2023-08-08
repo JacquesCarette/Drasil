@@ -179,6 +179,9 @@
             "eqTNTChar"
         ],
         [
+            "glassTypeFac"
+        ],
+        [
             "loadDurFactor"
         ],
         [
@@ -195,9 +198,6 @@
         ],
         [
             "dimlessLoad"
-        ],
-        [
-            "glassTypeFac"
         ],
         [
             "isSafeLR"

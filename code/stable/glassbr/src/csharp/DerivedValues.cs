@@ -33,6 +33,34 @@ public class DerivedValues {
         outfile.WriteLine(" in module DerivedValues");
         outfile.Close();
         
+        if (inParams.g == "AN") {
+            inParams.GTF = 1;
+            outfile = new StreamWriter("log.txt", true);
+            outfile.Write("var 'inParams.GTF' assigned ");
+            outfile.Write(inParams.GTF);
+            outfile.WriteLine(" in module DerivedValues");
+            outfile.Close();
+        }
+        else if (inParams.g == "FT") {
+            inParams.GTF = 4;
+            outfile = new StreamWriter("log.txt", true);
+            outfile.Write("var 'inParams.GTF' assigned ");
+            outfile.Write(inParams.GTF);
+            outfile.WriteLine(" in module DerivedValues");
+            outfile.Close();
+        }
+        else if (inParams.g == "HS") {
+            inParams.GTF = 2;
+            outfile = new StreamWriter("log.txt", true);
+            outfile.Write("var 'inParams.GTF' assigned ");
+            outfile.Write(inParams.GTF);
+            outfile.WriteLine(" in module DerivedValues");
+            outfile.Close();
+        }
+        else {
+            throw new Exception("Undefined case encountered in function GTF");
+        }
+        
         inParams.SD = Math.Sqrt(Math.Pow(inParams.SD_x, 2.0) + Math.Pow(inParams.SD_y, 2.0) + Math.Pow(inParams.SD_z, 2.0));
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'inParams.SD' assigned ");

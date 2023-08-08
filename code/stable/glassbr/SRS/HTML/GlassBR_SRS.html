@@ -1126,6 +1126,65 @@
                     </tr>
                   </table>
                 </div>
+                <div id="DD:gTF">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:gTF</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Glass type factor</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>GTF</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">Unitless</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[\mathit{GTF}=\begin{cases}
+                                       1, & g=\text{``AN''}\\
+                                       4, & g=\text{``FT''}\\
+                                       2, & g=\text{``HS''}
+                                       \end{cases}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>GTF</em> is the glass type factor (Unitless)</li>
+                          <li><em>g</em> is the glass type (Unitless)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">AN is annealed glass.</p>
+                        <p class="paragraph">FT is fully tempered glass.</p>
+                        <p class="paragraph">HS is heat strengthened glass.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:calofCapacity>IM:calofCapacity</a> and <a href=#IM:dimlessLoad>IM:dimlessLoad</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
                 <div id="DD:standOffDist">
                   <table class="ddefn">
                     <tr>
@@ -1559,73 +1618,6 @@
                     </tr>
                   </table>
                 </div>
-                <div id="IM:gTF">
-                  <table class="idefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>IM:gTF</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">Glass type factor</p></td>
-                    </tr>
-                    <tr>
-                      <th>Input</th>
-                      <td><p class="paragraph"><em>g</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Output</th>
-                      <td><p class="paragraph"><em>GTF</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Input Constraints</th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th>Output Constraints</th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[\mathit{GTF}=\begin{cases}
-                                       1, & g=\text{``AN''}\\
-                                       4, & g=\text{``FT''}\\
-                                       2, & g=\text{``HS''}
-                                       \end{cases}\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li><em>GTF</em> is the glass type factor (Unitless)</li>
-                          <li><em>g</em> is the glass type (Unitless)</li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">AN is annealed glass.</p>
-                        <p class="paragraph">FT is fully tempered glass.</p>
-                        <p class="paragraph">HS is heat strengthened glass.</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph">
-                          <a href=#IM:calofCapacity>IM:calofCapacity</a> and <a href=#IM:dimlessLoad>IM:dimlessLoad</a>
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
                 <div id="IM:dimlessLoad">
                   <table class="idefn">
                     <tr>
@@ -1701,7 +1693,7 @@
                           <em>h</em> is defined in <a href=#DD:minThick>DD:minThick</a> and is based on the nominal thicknesses.
                         </p>
                         <p class="paragraph">
-                          <em>GTF</em> is defined in <a href=#IM:gTF>IM:gTF</a>.
+                          <em>GTF</em> is defined in <a href=#DD:gTF>DD:gTF</a>.
                         </p>
                       </td>
                     </tr>
@@ -2087,7 +2079,7 @@
                           <em>NFL</em> is defined in <a href=#IM:nFL>IM:nFL</a>.
                         </p>
                         <p class="paragraph">
-                          <em>GTF</em> is defined in <a href=#IM:gTF>IM:gTF</a>.
+                          <em>GTF</em> is defined in <a href=#DD:gTF>DD:gTF</a>.
                         </p>
                       </td>
                     </tr>
@@ -2506,7 +2498,7 @@
                 <tr>
                   <td><em>GTF</em></td>
                   <td>Glass type factor</td>
-                  <td><a href=#IM:gTF>IM:gTF</a></td>
+                  <td><a href=#DD:gTF>DD:gTF</a></td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -2579,7 +2571,7 @@
                 <tr>
                   <td><em>GTF</em></td>
                   <td>Glass type factor</td>
-                  <td><a href=#IM:gTF>IM:gTF</a></td>
+                  <td><a href=#DD:gTF>DD:gTF</a></td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -2890,6 +2882,17 @@
               <td>X</td>
             </tr>
             <tr>
+              <td><a href=#DD:gTF>DD:gTF</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#DD:standOffDist>DD:standOffDist</a></td>
               <td></td>
               <td></td>
@@ -2972,17 +2975,6 @@
               <td></td>
               <td></td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#IM:gTF>IM:gTF</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3312,6 +3304,7 @@
               <th></th>
               <th><a href=#DD:minThick>DD:minThick</a></th>
               <th><a href=#DD:loadDurFactor>DD:loadDurFactor</a></th>
+              <th><a href=#DD:gTF>DD:gTF</a></th>
               <th><a href=#DD:standOffDist>DD:standOffDist</a></th>
               <th><a href=#DD:eqTNTW>DD:eqTNTW</a></th>
               <th><a href=#DD:calofDemand>DD:calofDemand</a></th>
@@ -3320,7 +3313,6 @@
               <th><a href=#IM:riskFun>IM:riskFun</a></th>
               <th><a href=#IM:stressDistFac>IM:stressDistFac</a></th>
               <th><a href=#IM:nFL>IM:nFL</a></th>
-              <th><a href=#IM:gTF>IM:gTF</a></th>
               <th><a href=#IM:dimlessLoad>IM:dimlessLoad</a></th>
               <th><a href=#IM:tolLoad>IM:tolLoad</a></th>
               <th><a href=#IM:sdfTol>IM:sdfTol</a></th>
@@ -3354,6 +3346,28 @@
             </tr>
             <tr>
               <td><a href=#DD:loadDurFactor>DD:loadDurFactor</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:gTF>DD:gTF</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3422,9 +3436,9 @@
               <td><a href=#DD:calofDemand>DD:calofDemand</a></td>
               <td></td>
               <td></td>
-              <td>X</td>
-              <td>X</td>
               <td></td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3494,8 +3508,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
               <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3551,31 +3565,10 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#IM:gTF>IM:gTF</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#IM:dimlessLoad>IM:dimlessLoad</a></td>
               <td>X</td>
               <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td>X</td>
@@ -3584,7 +3577,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3669,8 +3661,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
               <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3686,14 +3678,14 @@
               <td><a href=#IM:calofCapacity>IM:calofCapacity</a></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -3732,8 +3724,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
               <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3759,6 +3751,7 @@
               <th></th>
               <th><a href=#DD:minThick>DD:minThick</a></th>
               <th><a href=#DD:loadDurFactor>DD:loadDurFactor</a></th>
+              <th><a href=#DD:gTF>DD:gTF</a></th>
               <th><a href=#DD:standOffDist>DD:standOffDist</a></th>
               <th><a href=#DD:eqTNTW>DD:eqTNTW</a></th>
               <th><a href=#DD:calofDemand>DD:calofDemand</a></th>
@@ -3767,7 +3760,6 @@
               <th><a href=#IM:riskFun>IM:riskFun</a></th>
               <th><a href=#IM:stressDistFac>IM:stressDistFac</a></th>
               <th><a href=#IM:nFL>IM:nFL</a></th>
-              <th><a href=#IM:gTF>IM:gTF</a></th>
               <th><a href=#IM:dimlessLoad>IM:dimlessLoad</a></th>
               <th><a href=#IM:tolLoad>IM:tolLoad</a></th>
               <th><a href=#IM:sdfTol>IM:sdfTol</a></th>

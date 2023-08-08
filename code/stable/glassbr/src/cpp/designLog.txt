@@ -15,10 +15,10 @@ Auxiliary Files selected as SampleInput ../../datafiles/glassbr/sampleInput.txt 
 Successfully matched String with String.
 Successfully matched Actor "Constants" with Object "Constants".
 Successfully matched Actor "InputParameters" with Object "InputParameters".
-Successfully matched Integer with Integer.
 Successfully matched Real with Double.
 Successfully matched Boolean with Boolean.
 Successfully matched Rational with Double.
+Successfully matched Integer with Integer.
 Successfully matched Function (String :| [Real,Real]) Real with Func [String] Double.
 Successfully matched Vect Real with List Double.
 Successfully matched Vect (Vect Real) with List (List Double).

@@ -12,12 +12,6 @@
 using std::ofstream;
 using std::string;
 
-/** \brief Calculates glass type factor: a multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions
-    \param inParams structure holding the input values
-    \return glass type factor: a multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions
-*/
-int func_GTF(InputParameters &inParams);
-
 /** \brief Calculates stress distribution factor (Function) based on Pbtol
     \param inParams structure holding the input values
     \return stress distribution factor (Function) based on Pbtol
@@ -39,10 +33,9 @@ double func_q(InputParameters &inParams);
 /** \brief Calculates dimensionless load
     \param inParams structure holding the input values
     \param q applied load (demand): 3 second duration equivalent pressure (Pa)
-    \param GTF glass type factor: a multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions
     \return dimensionless load
 */
-double func_q_hat(InputParameters &inParams, double q, int GTF);
+double func_q_hat(InputParameters &inParams, double q);
 
 /** \brief Calculates tolerable load
     \param AR aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
@@ -73,11 +66,11 @@ double func_NFL(InputParameters &inParams, double q_hat_tol);
 double func_B(InputParameters &inParams, double J);
 
 /** \brief Calculates load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
+    \param inParams structure holding the input values
     \param NFL non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
-    \param GTF glass type factor: a multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions
     \return load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
 */
-double func_LR(double NFL, int GTF);
+double func_LR(InputParameters &inParams, double NFL);
 
 /** \brief Calculates probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
     \param B risk of failure

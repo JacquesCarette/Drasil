@@ -11,29 +11,6 @@
 using std::ofstream;
 using std::string;
 
-int func_GTF(InputParameters &inParams) {
-    ofstream outfile;
-    outfile.open("log.txt", std::fstream::app);
-    outfile << "function func_GTF called with inputs: {" << std::endl;
-    outfile << "  inParams = ";
-    outfile << "Instance of InputParameters object" << std::endl;
-    outfile << "  }" << std::endl;
-    outfile.close();
-    
-    if (inParams.g == "AN") {
-        return 1;
-    }
-    else if (inParams.g == "FT") {
-        return 4;
-    }
-    else if (inParams.g == "HS") {
-        return 2;
-    }
-    else {
-        throw("Undefined case encountered in function func_GTF");
-    }
-}
-
 double func_J_tol(InputParameters &inParams) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
@@ -70,7 +47,7 @@ double func_q(InputParameters &inParams) {
     return interpY("TSD.txt", inParams.SD, inParams.w_TNT);
 }
 
-double func_q_hat(InputParameters &inParams, double q, int GTF) {
+double func_q_hat(InputParameters &inParams, double q) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
     outfile << "function func_q_hat called with inputs: {" << std::endl;
@@ -78,14 +55,11 @@ double func_q_hat(InputParameters &inParams, double q, int GTF) {
     outfile << "Instance of InputParameters object";
     outfile << ", " << std::endl;
     outfile << "  q = ";
-    outfile << q;
-    outfile << ", " << std::endl;
-    outfile << "  GTF = ";
-    outfile << GTF << std::endl;
+    outfile << q << std::endl;
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return q * pow(inParams.a * inParams.b, 2.0) / (7.17e10 * pow(inParams.h, 4.0) * GTF);
+    return q * pow(inParams.a * inParams.b, 2.0) / (7.17e10 * pow(inParams.h, 4.0) * inParams.GTF);
 }
 
 double func_q_hat_tol(double AR, double J_tol) {
@@ -148,19 +122,19 @@ double func_B(InputParameters &inParams, double J) {
     return 2.86e-53 / pow(inParams.a * inParams.b, 7.0 - 1.0) * pow(7.17e10 * pow(inParams.h, 2.0), 7.0) * inParams.LDF * exp(J);
 }
 
-double func_LR(double NFL, int GTF) {
+double func_LR(InputParameters &inParams, double NFL) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
     outfile << "function func_LR called with inputs: {" << std::endl;
-    outfile << "  NFL = ";
-    outfile << NFL;
+    outfile << "  inParams = ";
+    outfile << "Instance of InputParameters object";
     outfile << ", " << std::endl;
-    outfile << "  GTF = ";
-    outfile << GTF << std::endl;
+    outfile << "  NFL = ";
+    outfile << NFL << std::endl;
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return NFL * GTF * 1.0;
+    return NFL * inParams.GTF * 1.0;
 }
 
 double func_P_b(double B) {

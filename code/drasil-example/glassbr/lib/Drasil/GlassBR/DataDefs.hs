@@ -1,5 +1,6 @@
-module Drasil.GlassBR.DataDefs (dataDefs, hFromt, hFromtQD, hRef, loadDF,
-  standOffDis, eqTNTWDD, calofDemand, configFp, stdVals) where
+module Drasil.GlassBR.DataDefs (dataDefs, glaTyFac, glaTyFacQD, gtfRef, hFromt,
+  hFromtQD, hRef, loadDF, standOffDis, eqTNTWDD, calofDemand, configFp,
+  stdVals) where
 
 import Control.Lens ((^.))
 import Language.Drasil
@@ -12,15 +13,18 @@ import Data.Drasil.Concepts.Math (parameter)
 import Drasil.GlassBR.Assumptions (assumpSV, assumpLDFC)
 import Drasil.GlassBR.Figures (demandVsSDFig)
 import Drasil.GlassBR.References (astm2009)
-import Drasil.GlassBR.Unitals (charWeight, demand, demandq, eqTNTWeight,
-  interpY, lDurFac, loadDur, sdx, sdy, sdz, sflawParamM, standOffDist, tNT, nomThick, minThick, nominalThicknesses, actualThicknesses)
+import Drasil.GlassBR.Unitals (actualThicknesses, charWeight, demand, demandq,
+  eqTNTWeight, gTF, glassType, glassTypeCon, glassTypeFactors, interpY,
+  lDurFac, loadDur, minThick, nomThick, nominalThicknesses, sdx, sdy, sdz,
+  sflawParamM, standOffDist, tNT)
+import Drasil.GlassBR.Concepts (annealed, fullyT, glass, heatS)
 
 ----------------------
 -- DATA DEFINITIONS --
 ----------------------
 
 dataDefs :: [DataDefinition]
-dataDefs = [hFromt, loadDF, standOffDis, eqTNTWDD, calofDemand]
+dataDefs = [hFromt, loadDF, glaTyFac, standOffDis, eqTNTWDD, calofDemand]
 
 {--}
 
@@ -48,6 +52,21 @@ loadDFQD = mkQuantDef lDurFac loadDFEq
 loadDF :: DataDefinition
 loadDF = ddE loadDFQD [dRef astm2009] Nothing "loadDurFactor"
   [stdVals [loadDur, sflawParamM], ldfConst]
+
+{--}
+
+glaTyFacEq :: Expr
+glaTyFacEq = incompleteCase (zipWith glaTyFacHelper glassTypeFactors $ map (getAccStr . snd) glassType)
+
+glaTyFacHelper :: Integer -> String -> (Expr, Relation)
+glaTyFacHelper result condition = (int result, sy glassTypeCon $= str condition)
+
+glaTyFacQD :: SimpleQDef
+glaTyFacQD = mkQuantDef gTF glaTyFacEq
+
+glaTyFac :: DataDefinition
+glaTyFac = ddE glaTyFacQD [dRef astm2009] Nothing "gTF"
+  [anGlass, ftGlass, hsGlass]
 
 {--}
 
@@ -83,6 +102,15 @@ calofDemand :: DataDefinition
 calofDemand = ddE calofDemandQD [dRef astm2009] Nothing "calofDemand" [calofDemandDesc]
 
 --Additional Notes--
+anGlass :: Sentence
+anGlass = getAcc annealed `S.is` phrase annealed +:+. phrase glass
+
+ftGlass :: Sentence
+ftGlass = getAcc fullyT `S.is` phrase fullyT +:+. phrase glass
+
+hsGlass :: Sentence
+hsGlass = getAcc heatS `S.is` phrase heatS +:+. phrase glass
+
 calofDemandDesc :: Sentence
 calofDemandDesc =
   foldlSent [ch demand `sC` EmptyS `S.or_` phrase demandq `sC` EmptyS `S.isThe`
@@ -99,8 +127,9 @@ hMin = ch nomThick `S.is` S "a function that maps from the nominal thickness"
 ldfConst :: Sentence
 ldfConst = ch lDurFac `S.is` S "assumed to be constant" +:+. fromSource assumpLDFC
 
-hRef :: Sentence
-hRef = definedIn' hFromt (S "and is based on the nominal thicknesses")
+gtfRef, hRef :: Sentence
+gtfRef = definedIn  glaTyFac
+hRef   = definedIn' hFromt (S "and is based on the nominal thicknesses")
 
 -- List of Configuration Files necessary for DataDefs.hs
 configFp :: [String]

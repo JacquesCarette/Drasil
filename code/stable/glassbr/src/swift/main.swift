@@ -39,34 +39,6 @@ var inParams: InputParameters = InputParameters()
 try get_input(filename, inParams)
 try derived_values(inParams)
 try input_constraints(&inParams)
-var GTF: Int = try func_GTF(&inParams)
-do {
-    outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-    try outfile.seekToEnd()
-} catch {
-    throw "Error opening file."
-}
-do {
-    try outfile.write(contentsOf: Data("var 'GTF' assigned ".utf8))
-} catch {
-    throw "Error printing to file."
-}
-do {
-    try outfile.write(contentsOf: Data(String(GTF).utf8))
-} catch {
-    throw "Error printing to file."
-}
-do {
-    try outfile.write(contentsOf: Data(" in module Control".utf8))
-    try outfile.write(contentsOf: Data("\n".utf8))
-} catch {
-    throw "Error printing to file."
-}
-do {
-    try outfile.close()
-} catch {
-    throw "Error closing file."
-}
 var J_tol: Double = try func_J_tol(&inParams)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -151,7 +123,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var q_hat: Double = try func_q_hat(&inParams, q, GTF)
+var q_hat: Double = try func_q_hat(&inParams, q)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -291,7 +263,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var LR: Double = try func_LR(NFL, GTF)
+var LR: Double = try func_LR(&inParams, NFL)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()

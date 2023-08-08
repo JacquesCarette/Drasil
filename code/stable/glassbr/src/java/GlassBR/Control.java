@@ -27,12 +27,6 @@ public class Control {
         InputFormat.get_input(filename, inParams);
         DerivedValues.derived_values(inParams);
         InputConstraints.input_constraints(inParams);
-        int GTF = Calculations.func_GTF(inParams);
-        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 'GTF' assigned ");
-        outfile.print(GTF);
-        outfile.println(" in module Control");
-        outfile.close();
         double J_tol = Calculations.func_J_tol(inParams);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'J_tol' assigned ");
@@ -51,7 +45,7 @@ public class Control {
         outfile.print(q);
         outfile.println(" in module Control");
         outfile.close();
-        double q_hat = Calculations.func_q_hat(inParams, q, GTF);
+        double q_hat = Calculations.func_q_hat(inParams, q);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'q_hat' assigned ");
         outfile.print(q_hat);
@@ -81,7 +75,7 @@ public class Control {
         outfile.print(B);
         outfile.println(" in module Control");
         outfile.close();
-        double LR = Calculations.func_LR(NFL, GTF);
+        double LR = Calculations.func_LR(inParams, NFL);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'LR' assigned ");
         outfile.print(LR);

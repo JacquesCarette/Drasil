@@ -4,61 +4,6 @@
 */
 import Foundation
 
-/** Calculates glass type factor: a multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions
-    - Parameter inParams: structure holding the input values
-    - Returns: glass type factor: a multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions
-*/
-func func_GTF(_ inParams: inout InputParameters) throws -> Int {
-    var outfile: FileHandle
-    do {
-        outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-        try outfile.seekToEnd()
-    } catch {
-        throw "Error opening file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("function func_GTF called with inputs: {".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  inParams = ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("Instance of InputParameters object".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  }".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.close()
-    } catch {
-        throw "Error closing file."
-    }
-    
-    if inParams.g == "AN" {
-        return 1
-    }
-    else if inParams.g == "FT" {
-        return 4
-    }
-    else if inParams.g == "HS" {
-        return 2
-    }
-    else {
-        throw "Undefined case encountered in function func_GTF"
-    }
-}
-
 /** Calculates stress distribution factor (Function) based on Pbtol
     - Parameter inParams: structure holding the input values
     - Returns: stress distribution factor (Function) based on Pbtol
@@ -194,10 +139,9 @@ func func_q(_ inParams: inout InputParameters) throws -> Double {
 /** Calculates dimensionless load
     - Parameter inParams: structure holding the input values
     - Parameter q: applied load (demand): 3 second duration equivalent pressure (Pa)
-    - Parameter GTF: glass type factor: a multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions
     - Returns: dimensionless load
 */
-func func_q_hat(_ inParams: inout InputParameters, _ q: Double, _ GTF: Int) throws -> Double {
+func func_q_hat(_ inParams: inout InputParameters, _ q: Double) throws -> Double {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -234,22 +178,6 @@ func func_q_hat(_ inParams: inout InputParameters, _ q: Double, _ GTF: Int) thro
     }
     do {
         try outfile.write(contentsOf: Data(String(q).utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(", ".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  GTF = ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(String(GTF).utf8))
         try outfile.write(contentsOf: Data("\n".utf8))
     } catch {
         throw "Error printing to file."
@@ -266,7 +194,7 @@ func func_q_hat(_ inParams: inout InputParameters, _ q: Double, _ GTF: Int) thro
         throw "Error closing file."
     }
     
-    return q * pow(inParams.a * inParams.b, 2.0) / (7.17e10 * pow(inParams.h, 4.0) * Double(GTF))
+    return q * pow(inParams.a * inParams.b, 2.0) / (7.17e10 * pow(inParams.h, 4.0) * Double(inParams.GTF))
 }
 
 /** Calculates tolerable load
@@ -514,11 +442,11 @@ func func_B(_ inParams: inout InputParameters, _ J: Double) throws -> Double {
 }
 
 /** Calculates load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
+    - Parameter inParams: structure holding the input values
     - Parameter NFL: non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
-    - Parameter GTF: glass type factor: a multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions
     - Returns: load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
 */
-func func_LR(_ NFL: Double, _ GTF: Int) throws -> Double {
+func func_LR(_ inParams: inout InputParameters, _ NFL: Double) throws -> Double {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -533,12 +461,12 @@ func func_LR(_ NFL: Double, _ GTF: Int) throws -> Double {
         throw "Error printing to file."
     }
     do {
-        try outfile.write(contentsOf: Data("  NFL = ".utf8))
+        try outfile.write(contentsOf: Data("  inParams = ".utf8))
     } catch {
         throw "Error printing to file."
     }
     do {
-        try outfile.write(contentsOf: Data(String(NFL).utf8))
+        try outfile.write(contentsOf: Data("Instance of InputParameters object".utf8))
     } catch {
         throw "Error printing to file."
     }
@@ -549,12 +477,12 @@ func func_LR(_ NFL: Double, _ GTF: Int) throws -> Double {
         throw "Error printing to file."
     }
     do {
-        try outfile.write(contentsOf: Data("  GTF = ".utf8))
+        try outfile.write(contentsOf: Data("  NFL = ".utf8))
     } catch {
         throw "Error printing to file."
     }
     do {
-        try outfile.write(contentsOf: Data(String(GTF).utf8))
+        try outfile.write(contentsOf: Data(String(NFL).utf8))
         try outfile.write(contentsOf: Data("\n".utf8))
     } catch {
         throw "Error printing to file."
@@ -571,7 +499,7 @@ func func_LR(_ NFL: Double, _ GTF: Int) throws -> Double {
         throw "Error closing file."
     }
     
-    return NFL * Double(GTF) * 1.0
+    return NFL * Double(inParams.GTF) * 1.0
 }
 
 /** Calculates probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)

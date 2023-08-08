@@ -16,7 +16,7 @@ typeCheckSI
   (SI _ _ _ _ _ _ _ ims dds _ _ _ _ _ _ chks _ _)
   = do
     -- build a variable context (a map of UIDs to "Space"s [types])
-    let cxt = M.map (\(dict, _) -> typ dict) (symbolTable chks)
+    let cxt = M.map (\(dict, _) -> dict ^. typ) (symbolTable chks)
 
     -- dump out the list of variables
     putStr "Symbol Table: "

@@ -50,7 +50,7 @@ qdExpr = lens (\(QD _ _ e) -> e) (\(QD qua ins _) e' -> QD qua ins e')
 instance HasUID        (QDefinition e) where uid = qdQua . uid
 instance NamedIdea     (QDefinition e) where term = qdQua . term
 instance Idea          (QDefinition e) where getA = getA . (^. qdQua)
-instance HasSpace      (QDefinition e) where typ = typ . view qdQua
+instance HasSpace      (QDefinition e) where typ = qdQua . typ
 instance HasSymbol     (QDefinition e) where symbol = symbol . (^. qdQua)
 instance Definition    (QDefinition e) where defn = qdQua . defn
 instance Quantity      (QDefinition e) where
@@ -112,18 +112,18 @@ mkQDefSt u n s symb sp Nothing   e = fromEqnSt' u n s symb sp e
 
 -- | Used to help make 'QDefinition's when 'UID', term, and 'Symbol' come from the same source.
 mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
-mkQuantDef c = mkQDefSt (c ^. uid) (c ^. term) EmptyS (symbol c) (typ c) (getUnit c)
+mkQuantDef c = mkQDefSt (c ^. uid) (c ^. term) EmptyS (symbol c) (c ^. typ) (getUnit c)
 
 -- FIXME: See #2788.
 -- | Used to help make 'QDefinition's when 'UID' and 'Symbol' come from the same source, with the term separate.
 mkQuantDef' :: (Quantity c, MayHaveUnit c) => c -> NP -> e -> QDefinition e
-mkQuantDef' c t = mkQDefSt (c ^. uid) t EmptyS (symbol c) (typ c) (getUnit c)
+mkQuantDef' c t = mkQDefSt (c ^. uid) t EmptyS (symbol c) (c ^. typ) (getUnit c)
 
 -- HACK - makes the definition EmptyS !!! FIXME
 -- | Smart constructor for QDefinitions. Requires a quantity and its defining 
 -- equation. 
 ec :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
-ec c = QD (dqd' (cc' (nw c) EmptyS) (symbol c) (typ c) (getUnit c)) []
+ec c = QD (dqd' (cc' (nw c) EmptyS) (symbol c) (c ^. typ) (getUnit c)) []
 
 -- | Factored version of 'QDefinition' functions.
 mkFuncDef0 :: (HasUID f, HasSymbol f, HasSpace f,
@@ -131,7 +131,7 @@ mkFuncDef0 :: (HasUID f, HasSymbol f, HasSpace f,
   f -> NP -> Sentence -> Maybe UnitDefn -> [i] -> e -> QDefinition e
 mkFuncDef0 f n s u is = QD
   (dqd' (cc' (nw (ncUID (f ^. uid) n)) s) (symbol f)
-    (typ f) u) (map (^. uid) is)
+    (f ^. typ) u) (map (^. uid) is)
     -- (mkFunction (map (^. typ) is) (f ^. typ)) u) (map (^. uid) is)
 
 -- | Create a 'QDefinition' function with a symbol, name, term, list of inputs,

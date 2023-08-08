@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.Quantity (
   -- * Chunk Type
   QuantityDict,
   -- * Class
-  DefinesQuantity(lhs),
+  DefinesQuantity(defLhs),
   -- * Constructors
   codeVC, implVar, implVar', implVarUID, implVarUID', 
   mkQuant, mkQuant', qw, vc, vc'', vcSt, vcUnit) where
@@ -36,7 +36,7 @@ data QuantityDict = QD { _id' :: IdeaDict
 makeLenses ''QuantityDict
 
 class DefinesQuantity d where
-  lhs :: Getter d QuantityDict
+  defLhs :: Getter d QuantityDict
 
 -- | Finds the 'UID' of the 'IdeaDict' used to make the 'QuantityDict'.
 instance HasUID        QuantityDict where uid = id' . uid

@@ -67,34 +67,6 @@ do {
 } catch {
     throw "Error closing file."
 }
-var AR: Double = try func_AR(&inParams)
-do {
-    outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-    try outfile.seekToEnd()
-} catch {
-    throw "Error opening file."
-}
-do {
-    try outfile.write(contentsOf: Data("var 'AR' assigned ".utf8))
-} catch {
-    throw "Error printing to file."
-}
-do {
-    try outfile.write(contentsOf: Data(String(AR).utf8))
-} catch {
-    throw "Error printing to file."
-}
-do {
-    try outfile.write(contentsOf: Data(" in module Control".utf8))
-    try outfile.write(contentsOf: Data("\n".utf8))
-} catch {
-    throw "Error printing to file."
-}
-do {
-    try outfile.close()
-} catch {
-    throw "Error closing file."
-}
 var q: Double = try func_q(&inParams)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -151,7 +123,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var q_hat_tol: Double = try func_q_hat_tol(AR, J_tol)
+var q_hat_tol: Double = try func_q_hat_tol(&inParams, J_tol)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -179,7 +151,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var J: Double = try func_J(AR, q_hat)
+var J: Double = try func_J(&inParams, q_hat)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()

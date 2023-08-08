@@ -1,6 +1,6 @@
-module Drasil.GlassBR.DataDefs (dataDefs, glaTyFac, glaTyFacQD, gtfRef, hFromt,
-  hFromtQD, hRef, loadDF, standOffDis, eqTNTWDD, calofDemand, configFp,
-  stdVals) where
+module Drasil.GlassBR.DataDefs (dataDefs, aspRat, glaTyFac, glaTyFacQD, gtfRef,
+  hFromt, hFromtQD, loadDF, standOffDis, eqTNTWDD, calofDemand, aGrtrThanB,
+  arRef, hRef, configFp, stdVals) where
 
 import Control.Lens ((^.))
 import Language.Drasil
@@ -9,22 +9,20 @@ import Theory.Drasil (DataDefinition, ddE)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Math (parameter)
+import Data.Drasil.Concepts.PhysicalProperties (dimension)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpLDFC)
+import Drasil.GlassBR.Concepts (annealed, fullyT, glass, heatS)
 import Drasil.GlassBR.Figures (demandVsSDFig)
 import Drasil.GlassBR.References (astm2009)
-import Drasil.GlassBR.Unitals (actualThicknesses, charWeight, demand, demandq,
-  eqTNTWeight, gTF, glassType, glassTypeCon, glassTypeFactors, interpY,
-  lDurFac, loadDur, minThick, nomThick, nominalThicknesses, sdx, sdy, sdz,
-  sflawParamM, standOffDist, tNT)
-import Drasil.GlassBR.Concepts (annealed, fullyT, glass, heatS)
+import Drasil.GlassBR.Unitals
 
 ----------------------
 -- DATA DEFINITIONS --
 ----------------------
 
 dataDefs :: [DataDefinition]
-dataDefs = [hFromt, loadDF, glaTyFac, standOffDis, eqTNTWDD, calofDemand]
+dataDefs = [hFromt, loadDF, glaTyFac, standOffDis, aspRat, eqTNTWDD, calofDemand]
 
 {--}
 
@@ -81,6 +79,17 @@ standOffDis = ddE standOffDisQD [dRef astm2009] Nothing "standOffDist" []
 
 {--}
 
+aspRatEq :: Expr
+aspRatEq = sy plateLen $/ sy plateWidth
+
+aspRatQD :: SimpleQDef
+aspRatQD = mkQuantDef aspectRatio aspRatEq
+
+aspRat :: DataDefinition
+aspRat = ddE aspRatQD [dRef astm2009] Nothing "aspectRatio" [aGrtrThanB]
+
+{--}
+
 eqTNTWEq :: Expr
 eqTNTWEq = mulRe (sy charWeight) (sy tNT)
 
@@ -101,7 +110,12 @@ calofDemandQD = mkQuantDef demand calofDemandEq
 calofDemand :: DataDefinition
 calofDemand = ddE calofDemandQD [dRef astm2009] Nothing "calofDemand" [calofDemandDesc]
 
---Additional Notes--
+-- Additional Notes --
+aGrtrThanB :: Sentence
+aGrtrThanB = ch plateLen `S.and_` ch plateWidth `S.are`
+  (plural dimension `S.the_ofThe` S "plate") `sC` S "where" +:+.
+  sParen (eS $ sy plateLen $>= sy plateWidth)
+
 anGlass :: Sentence
 anGlass = getAcc annealed `S.is` phrase annealed +:+. phrase glass
 
@@ -127,7 +141,8 @@ hMin = ch nomThick `S.is` S "a function that maps from the nominal thickness"
 ldfConst :: Sentence
 ldfConst = ch lDurFac `S.is` S "assumed to be constant" +:+. fromSource assumpLDFC
 
-gtfRef, hRef :: Sentence
+arRef, gtfRef, hRef :: Sentence
+arRef  = definedIn  aspRat
 gtfRef = definedIn  glaTyFac
 hRef   = definedIn' hFromt (S "and is based on the nominal thicknesses")
 

@@ -39,12 +39,6 @@ int main(int argc, const char *argv[]) {
     outfile << J_tol;
     outfile << " in module Control" << std::endl;
     outfile.close();
-    double AR = func_AR(inParams);
-    outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'AR' assigned ";
-    outfile << AR;
-    outfile << " in module Control" << std::endl;
-    outfile.close();
     double q = func_q(inParams);
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'q' assigned ";
@@ -57,13 +51,13 @@ int main(int argc, const char *argv[]) {
     outfile << q_hat;
     outfile << " in module Control" << std::endl;
     outfile.close();
-    double q_hat_tol = func_q_hat_tol(AR, J_tol);
+    double q_hat_tol = func_q_hat_tol(inParams, J_tol);
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'q_hat_tol' assigned ";
     outfile << q_hat_tol;
     outfile << " in module Control" << std::endl;
     outfile.close();
-    double J = func_J(AR, q_hat);
+    double J = func_J(inParams, q_hat);
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'J' assigned ";
     outfile << J;

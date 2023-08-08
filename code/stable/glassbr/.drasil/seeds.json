@@ -173,6 +173,9 @@
     ],
     "dataDefinitions": [
         [
+            "aR"
+        ],
+        [
             "demandq"
         ],
         [
@@ -193,9 +196,6 @@
     ],
     "generalDefinitions": [],
     "instanceModels": [
-        [
-            "aR"
-        ],
         [
             "dimlessLoad"
         ],

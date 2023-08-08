@@ -68,6 +68,13 @@ void derived_values(InputParameters &inParams) {
     outfile << " in module DerivedValues" << std::endl;
     outfile.close();
     
+    inParams.AR = inParams.a / inParams.b;
+    outfile.open("log.txt", std::fstream::app);
+    outfile << "var 'inParams.AR' assigned ";
+    outfile << inParams.AR;
+    outfile << " in module DerivedValues" << std::endl;
+    outfile.close();
+    
     inParams.w_TNT = inParams.w * inParams.TNT;
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'inParams.w_TNT' assigned ";

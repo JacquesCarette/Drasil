@@ -68,6 +68,13 @@ public class DerivedValues {
         outfile.WriteLine(" in module DerivedValues");
         outfile.Close();
         
+        inParams.AR = inParams.a / inParams.b;
+        outfile = new StreamWriter("log.txt", true);
+        outfile.Write("var 'inParams.AR' assigned ");
+        outfile.Write(inParams.AR);
+        outfile.WriteLine(" in module DerivedValues");
+        outfile.Close();
+        
         inParams.w_TNT = inParams.w * inParams.TNT;
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'inParams.w_TNT' assigned ");

@@ -28,22 +28,6 @@ public class Calculations {
         return Math.log(Math.log(1.0 / (1.0 - inParams.P_btol)) * (Math.pow(inParams.a * inParams.b, 7.0 - 1.0) / (2.86e-53 * Math.pow(7.17e10 * Math.pow(inParams.h, 2.0), 7.0) * inParams.LDF)));
     }
     
-    /** \brief Calculates aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
-        \param inParams structure holding the input values
-        \return aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
-    */
-    public static double func_AR(InputParameters inParams) throws IOException {
-        PrintWriter outfile;
-        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.println("function func_AR called with inputs: {");
-        outfile.print("  inParams = ");
-        outfile.println("Instance of InputParameters object");
-        outfile.println("  }");
-        outfile.close();
-        
-        return inParams.a / inParams.b;
-    }
-    
     /** \brief Calculates applied load (demand): 3 second duration equivalent pressure (Pa)
         \param inParams structure holding the input values
         \return applied load (demand): 3 second duration equivalent pressure (Pa)
@@ -81,43 +65,43 @@ public class Calculations {
     }
     
     /** \brief Calculates tolerable load
-        \param AR aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
+        \param inParams structure holding the input values
         \param J_tol stress distribution factor (Function) based on Pbtol
         \return tolerable load
     */
-    public static double func_q_hat_tol(double AR, double J_tol) throws Exception, FileNotFoundException, IOException {
+    public static double func_q_hat_tol(InputParameters inParams, double J_tol) throws Exception, FileNotFoundException, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_q_hat_tol called with inputs: {");
-        outfile.print("  AR = ");
-        outfile.print(AR);
+        outfile.print("  inParams = ");
+        outfile.print("Instance of InputParameters object");
         outfile.println(", ");
         outfile.print("  J_tol = ");
         outfile.println(J_tol);
         outfile.println("  }");
         outfile.close();
         
-        return Interpolation.interpY("SDF.txt", AR, J_tol);
+        return Interpolation.interpY("SDF.txt", inParams.AR, J_tol);
     }
     
     /** \brief Calculates stress distribution factor (Function)
-        \param AR aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
+        \param inParams structure holding the input values
         \param q_hat dimensionless load
         \return stress distribution factor (Function)
     */
-    public static double func_J(double AR, double q_hat) throws Exception, FileNotFoundException, IOException {
+    public static double func_J(InputParameters inParams, double q_hat) throws Exception, FileNotFoundException, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_J called with inputs: {");
-        outfile.print("  AR = ");
-        outfile.print(AR);
+        outfile.print("  inParams = ");
+        outfile.print("Instance of InputParameters object");
         outfile.println(", ");
         outfile.print("  q_hat = ");
         outfile.println(q_hat);
         outfile.println("  }");
         outfile.close();
         
-        return Interpolation.interpZ("SDF.txt", AR, q_hat);
+        return Interpolation.interpZ("SDF.txt", inParams.AR, q_hat);
     }
     
     /** \brief Calculates non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)

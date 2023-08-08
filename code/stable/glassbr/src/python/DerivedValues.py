@@ -58,6 +58,13 @@ def derived_values(inParams):
     print(" in module DerivedValues", file=outfile)
     outfile.close()
     
+    inParams.AR = inParams.a / inParams.b
+    outfile = open("log.txt", "a")
+    print("var 'inParams.AR' assigned ", end="", file=outfile)
+    print(inParams.AR, end="", file=outfile)
+    print(" in module DerivedValues", file=outfile)
+    outfile.close()
+    
     inParams.w_TNT = inParams.w * inParams.TNT
     outfile = open("log.txt", "a")
     print("var 'inParams.w_TNT' assigned ", end="", file=outfile)

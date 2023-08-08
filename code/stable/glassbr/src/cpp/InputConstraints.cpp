@@ -70,6 +70,16 @@ void input_constraints(InputParameters &inParams) {
         std::cout << "." << std::endl;
         throw("InputError");
     }
+    if (!(inParams.AR <= 5.0)) {
+        std::cout << "AR has value ";
+        std::cout << inParams.AR;
+        std::cout << ", but is expected to be ";
+        std::cout << "below ";
+        std::cout << 5.0;
+        std::cout << " (AR_max)";
+        std::cout << "." << std::endl;
+        throw("InputError");
+    }
     
     if (!(inParams.a > 0.0)) {
         std::cout << "a has value ";
@@ -137,6 +147,15 @@ void input_constraints(InputParameters &inParams) {
         std::cout << ", but is expected to be ";
         std::cout << "above ";
         std::cout << 0.0;
+        std::cout << "." << std::endl;
+        throw("InputError");
+    }
+    if (!(inParams.AR >= 1.0)) {
+        std::cout << "AR has value ";
+        std::cout << inParams.AR;
+        std::cout << ", but is expected to be ";
+        std::cout << "above ";
+        std::cout << 1.0;
         std::cout << "." << std::endl;
         throw("InputError");
     }

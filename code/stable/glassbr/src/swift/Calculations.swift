@@ -48,50 +48,6 @@ func func_J_tol(_ inParams: inout InputParameters) throws -> Double {
     return log(log(1.0 / (1.0 - inParams.P_btol)) * (pow(inParams.a * inParams.b, 7.0 - 1.0) / (2.86e-53 * pow(7.17e10 * pow(inParams.h, 2.0), 7.0) * inParams.LDF)))
 }
 
-/** Calculates aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
-    - Parameter inParams: structure holding the input values
-    - Returns: aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
-*/
-func func_AR(_ inParams: inout InputParameters) throws -> Double {
-    var outfile: FileHandle
-    do {
-        outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-        try outfile.seekToEnd()
-    } catch {
-        throw "Error opening file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("function func_AR called with inputs: {".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  inParams = ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("Instance of InputParameters object".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  }".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.close()
-    } catch {
-        throw "Error closing file."
-    }
-    
-    return inParams.a / inParams.b
-}
-
 /** Calculates applied load (demand): 3 second duration equivalent pressure (Pa)
     - Parameter inParams: structure holding the input values
     - Returns: applied load (demand): 3 second duration equivalent pressure (Pa)
@@ -198,11 +154,11 @@ func func_q_hat(_ inParams: inout InputParameters, _ q: Double) throws -> Double
 }
 
 /** Calculates tolerable load
-    - Parameter AR: aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
+    - Parameter inParams: structure holding the input values
     - Parameter J_tol: stress distribution factor (Function) based on Pbtol
     - Returns: tolerable load
 */
-func func_q_hat_tol(_ AR: Double, _ J_tol: Double) throws -> Double {
+func func_q_hat_tol(_ inParams: inout InputParameters, _ J_tol: Double) throws -> Double {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -217,12 +173,12 @@ func func_q_hat_tol(_ AR: Double, _ J_tol: Double) throws -> Double {
         throw "Error printing to file."
     }
     do {
-        try outfile.write(contentsOf: Data("  AR = ".utf8))
+        try outfile.write(contentsOf: Data("  inParams = ".utf8))
     } catch {
         throw "Error printing to file."
     }
     do {
-        try outfile.write(contentsOf: Data(String(AR).utf8))
+        try outfile.write(contentsOf: Data("Instance of InputParameters object".utf8))
     } catch {
         throw "Error printing to file."
     }
@@ -255,15 +211,15 @@ func func_q_hat_tol(_ AR: Double, _ J_tol: Double) throws -> Double {
         throw "Error closing file."
     }
     
-    return try interpY("SDF.txt", AR, J_tol)
+    return try interpY("SDF.txt", inParams.AR, J_tol)
 }
 
 /** Calculates stress distribution factor (Function)
-    - Parameter AR: aspect ratio: the ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5
+    - Parameter inParams: structure holding the input values
     - Parameter q_hat: dimensionless load
     - Returns: stress distribution factor (Function)
 */
-func func_J(_ AR: Double, _ q_hat: Double) throws -> Double {
+func func_J(_ inParams: inout InputParameters, _ q_hat: Double) throws -> Double {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -278,12 +234,12 @@ func func_J(_ AR: Double, _ q_hat: Double) throws -> Double {
         throw "Error printing to file."
     }
     do {
-        try outfile.write(contentsOf: Data("  AR = ".utf8))
+        try outfile.write(contentsOf: Data("  inParams = ".utf8))
     } catch {
         throw "Error printing to file."
     }
     do {
-        try outfile.write(contentsOf: Data(String(AR).utf8))
+        try outfile.write(contentsOf: Data("Instance of InputParameters object".utf8))
     } catch {
         throw "Error printing to file."
     }
@@ -316,7 +272,7 @@ func func_J(_ AR: Double, _ q_hat: Double) throws -> Double {
         throw "Error closing file."
     }
     
-    return try interpZ("SDF.txt", AR, q_hat)
+    return try interpZ("SDF.txt", inParams.AR, q_hat)
 }
 
 /** Calculates non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)

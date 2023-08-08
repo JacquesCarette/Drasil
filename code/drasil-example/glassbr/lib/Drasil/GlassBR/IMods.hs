@@ -1,5 +1,5 @@
-module Drasil.GlassBR.IMods (symb, iMods, aspRat, pbIsSafe,
-  lrIsSafe, instModIntro, qDefns) where
+module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro,
+  qDefns) where
 
 import Control.Lens ((^.))
 import Prelude hiding (exp)
@@ -11,19 +11,18 @@ import Drasil.SRSDocument (Block (Parallel))
 
 import Data.Drasil.Citations (campidelli)
 import Data.Drasil.Concepts.Documentation (goal, user, datum)
-import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.SI_Units
 
-import Drasil.GlassBR.DataDefs (calofDemand, glaTyFac, glaTyFacQD, gtfRef,
-  hFromtQD, hRef, loadDF, stdVals)
+import Drasil.GlassBR.DataDefs (aGrtrThanB, arRef, calofDemand, glaTyFac,
+  glaTyFacQD, gtfRef, hFromtQD, hRef, loadDF, stdVals)
 import Drasil.GlassBR.Figures (dimlessloadVsARFig)
 import Drasil.GlassBR.Goals (willBreakGS)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals
 
 iMods :: [InstanceModel]
-iMods = [risk, strDisFac, nonFL, dimLL, tolPre, tolStrDisFac, aspRat,
-  probOfBreak, calofCapacity, pbIsSafe, lrIsSafe]
+iMods = [risk, strDisFac, nonFL, dimLL, tolPre, tolStrDisFac, probOfBreak,
+  calofCapacity, pbIsSafe, lrIsSafe]
 
 symb :: [UnitalChunk]
 symb =  [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram, ucuc standOffDist metre, demand] -- this is temporary
@@ -139,16 +138,6 @@ tolStrDisFacQD = mkQuantDef sdfTol $ ln (ln (recip_ (exactDbl 1 $- sy pbTol))
 
 {--}
 
-aspRat :: InstanceModel
-aspRat = imNoDeriv (equationalModelN (aspectRatio ^. term) aspRatQD)
-  abInputConstraints (qw aspectRatio) [aspectRatioConstraint] [dRef astm2009]
-  "aspectRatio" [aGrtrThanB]
-
-aspRatQD :: SimpleQDef
-aspRatQD = mkQuantDef aspectRatio $ sy plateLen $/ sy plateWidth
-
-{--}
-
 probOfBreak :: InstanceModel
 probOfBreak = imNoDeriv (equationalModelN (probBr ^. term) probOfBreakQD)
   [qwUC risk] (qw probBr) [probConstraint] (map dRef [astm2009, beasonEtAl1998]) "probOfBreak"
@@ -200,14 +189,6 @@ instModIntro = foldlSent [atStartNP (the goal), refS willBreakGS,
   S "is met by", refS pbIsSafe `sC` refS lrIsSafe]
 
 -- Notes --
-
-aGrtrThanB :: Sentence
-aGrtrThanB = ch plateLen `S.and_` ch plateWidth `S.are` (plural dimension `S.the_ofThe` S "plate") `sC`
-  S "where" +:+. sParen (eS rel)
-  where
-    rel :: ModelExpr
-    rel = sy plateLen $>= sy plateWidth
-
 lrCap :: Sentence
 lrCap = ch lRe +:+. S "is also called capacity"
 
@@ -225,9 +206,8 @@ pbIsSafeDesc :: Sentence
 pbIsSafeDesc = iModDesc isSafePb
   (ch isSafePb `S.and_` ch isSafeLR +:+ fromSource lrIsSafe)
 
-arRef, capRef, jRef, jtolRef, ldfRef, nonFLRef, probBRRef, qHtRef, qHtTlTolRef,
+capRef, jRef, jtolRef, ldfRef, nonFLRef, probBRRef, qHtRef, qHtTlTolRef,
   riskRef :: Sentence
-arRef       = definedIn  aspRat
 capRef      = definedIn' calofCapacity (S "and is also called capacity")
 jRef        = definedIn  strDisFac
 jtolRef     = definedIn  tolStrDisFac

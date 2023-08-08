@@ -5,7 +5,7 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
   -- * Oslo Library (C#)
   osloPckg, osloSymbols, arrayVecDepVar,
   -- * Apache Commons (Java)
-  apacheODEPckg, apacheODESymbols, 
+  apacheODEPckg, apacheODESymbols,
   -- * Odeint (C++)
   odeintPckg, odeintSymbols
 ) where
@@ -33,7 +33,7 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   customClassFill, implementationFill, constructorInfoFill, methodInfoFill,
   appendCurrSolFill, populateSolListFill, assignArrayIndexFill,
   assignSolFromObjFill, initSolListFromArrayFill, initSolListWithValFill,
-  solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill', 
+  solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill',
   CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, listToArray,
   ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, mkODELib,
   mkODELibNoPath, pubStateVar, privStateVar,
@@ -130,7 +130,7 @@ ut = quantvar $ implVar "ut_scipy"
   numpyArrayT (label "u_t")
 transpose = quantvar $ implVar "transpose_numpy"
   (nounPhrase "Numpy Array Transpose" "Numpy Array Transpose")
-  (Array Real) (label "u_t.T") -- (ccObjVar ut transpose) does not seem to work. 
+  (Array Real) (label "u_t.T") -- (ccObjVar ut transpose) does not seem to work.
 
 
 f, odefunc, setIntegrator, setInitVal, successful,
@@ -266,7 +266,7 @@ vecDepVar info = quantvar $ implVarUID (dv ^. uid) (dv ^. term) vecT
   (sub (symbol dv Implementation) (label "vec"))
   where dv = depVar info
 
--- Hack required because 
+-- Hack required because
 -- | Oslo's Vector type behaves like an array, so needs to
 -- be represented as one or else will hit type errors in GOOL.
 arrayVecDepVar :: ODEInfo -> CodeVarChunk

@@ -4,7 +4,7 @@ module Language.Drasil.Code.Imperative.ReadInput (
 ) where
 
 import Language.Drasil hiding (Data, Matrix, CodeVarChunk)
-import Language.Drasil.Code.DataDesc (DataDesc'(..), Data'(..), DataItem'(..), 
+import Language.Drasil.Code.DataDesc (DataDesc'(..), Data'(..), DataItem'(..),
   Delimiter, dataDesc, junk, list, singleton')
 import Language.Drasil.Chunk.Code (CodeVarChunk)
 import Language.Drasil.Expr.Development (Expr(Matrix))
@@ -13,19 +13,19 @@ import Data.List (intersperse, isPrefixOf, transpose)
 import Data.List.Split (splitOn)
 import Data.List.NonEmpty (NonEmpty(..), toList)
 
--- | Reads data from a file and converts the values to 'Expr's. The file must be 
+-- | Reads data from a file and converts the values to 'Expr's. The file must be
 -- formatted according to the 'DataDesc'' passed as a parameter.
 readWithDataDesc :: FilePath -> DataDesc' -> IO [Expr]
-readWithDataDesc fp ddsc = do 
+readWithDataDesc fp ddsc = do
   ins <- readFile fp
   let readDD :: DataDesc' -> String -> [Expr]
-      readDD (DD ds dlm dd) s = let (dat,rest) = splitAtFirst s dlm in 
+      readDD (DD ds dlm dd) s = let (dat,rest) = splitAtFirst s dlm in
         readData ds dat ++ readDD dd rest
       readDD (End d) s = readData d s
       readData :: Data' -> String -> [Expr]
       readData Junk _ = []
       readData (Datum d) s = [readDataItem d s]
-      readData (Data dis 0 d) s = zipWith readDataItem (toList dis) (splitOn d s) 
+      readData (Data dis 0 d) s = zipWith readDataItem (toList dis) (splitOn d s)
       readData (Data ((DI c [dlm1]):|_) 1 dlm2) s = map ((Matrix . (:[])) .
         map (strAsExpr (getInnerSpace $ typ c))) $ transpose $
         map (splitOn dlm2) $ splitOn dlm1 s
@@ -33,20 +33,20 @@ readWithDataDesc fp ddsc = do
         map (map (strAsExpr (getInnerSpace $ typ c)))) $ transpose $
         map (map (splitOn dlm3) . splitOn dlm2) $ splitOn dlm1 s
       readData (Data ((DI c [dlm1, dlm2]):|_) 2 dlm3) s = map (Matrix .
-        map (map (strAsExpr (getInnerSpace $ typ c))) . transpose) $ 
+        map (map (strAsExpr (getInnerSpace $ typ c))) . transpose) $
         transpose $ map (map (splitOn dlm3) . splitOn dlm2) $ splitOn dlm1 s
       readData _ _ = error "Invalid degree of intermixing in DataDesc or list with more than 2 dimensions (not yet supported)"
-      -- Below match is an attempt at a generic match for Data, but it doesn't 
+      -- Below match is an attempt at a generic match for Data, but it doesn't
       -- work because the following are needed:
       --   - 1-D Vect Expr constructor
       --   - A map function on Expr Vects (exprVectMap)
       --   - A transpose function on Expr Vects (exprVectTranspose)
-      -- readData (Data ((DI c dlms):dis) i dlm2) s = let (ls,rs) = splitAt i 
+      -- readData (Data ((DI c dlms):dis) i dlm2) s = let (ls,rs) = splitAt i
       --   dlms in transposeData i $ data (ls ++ [dlm] ++ rs) (getInnerType $ typ c) s
       readDataItem :: DataItem' -> String -> Expr
       readDataItem (DI c []) s = strAsExpr (typ c) s
       readDataItem (DI c [dlm]) s = strListAsExpr (typ c) (splitOn dlm s)
-      readDataItem (DI c [dlm1, dlm2]) s = strList2DAsExpr (typ c) 
+      readDataItem (DI c [dlm1, dlm2]) s = strList2DAsExpr (typ c)
         (map (splitOn dlm2) $ splitOn dlm1 s)
       -- FIXME: Since the representation for vectors in Expr is Matrix, and that constructor accepts a 2-D list, building a 3-D or higher matrix is not straightforward. This would be easier if Expr had a constructor for 1-D vectors, which could be nested to achieve n-dimensional structures.
       readDataItem (DI _ _) _ = error "readWithDataDesc does not yet support lists with 3 or more dimensions"
@@ -60,12 +60,12 @@ readWithDataDesc fp ddsc = do
 -- transposeData 1 = exprVectTranspose
 -- transposeData n = exprVectMap exprVectTranspose . transposeData (n-1)
 
--- | Defines the DataDesc for the file containing a sample data set, which a 
+-- | Defines the DataDesc for the file containing a sample data set, which a
 -- user must supply if they want to generate a sample input file.
 sampleInputDD :: [CodeVarChunk] -> DataDesc'
 sampleInputDD ds = dataDesc (junk : intersperse junk (map toData ds)) "\n"
   where toData d = toData' (typ d) d
-        toData' t@(Vect _) d = list d 
+        toData' t@(Vect _) d = list d
           (take (getDimension t) ([", ", "; "] ++ iterate (':':) ":"))
         toData' _ d = singleton' d
 
@@ -90,9 +90,9 @@ getDimension _ = 0
 splitAtFirst :: String -> Delimiter -> (String, String)
 splitAtFirst = splitAtFirst' []
   where splitAtFirst' acc [] _ = (acc, [])
-        splitAtFirst' acc s@(h:t) d = if d `isPrefixOf` s then 
+        splitAtFirst' acc s@(h:t) d = if d `isPrefixOf` s then
           (acc, dropDelim d s) else splitAtFirst' (acc++[h]) t d
-        dropDelim (d:ds) (s:ss) = if d == s then dropDelim ds ss 
+        dropDelim (d:ds) (s:ss) = if d == s then dropDelim ds ss
           else error "impossible"
         dropDelim [] s = s
         dropDelim _ [] = error "impossible"

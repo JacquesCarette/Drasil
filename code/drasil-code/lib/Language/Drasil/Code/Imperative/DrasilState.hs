@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell, TupleSections #-}
 module Language.Drasil.Code.Imperative.DrasilState (
-  GenState, DrasilState(..), designLog, inMod, MatchedSpaces, ModExportMap, 
+  GenState, DrasilState(..), designLog, inMod, MatchedSpaces, ModExportMap,
   ClassDefinitionMap, modExportMap, clsDefMap, addToDesignLog, addLoggedSpace
 ) where
 
@@ -10,13 +10,13 @@ import GOOL.Drasil (ScopeTag(..), CodeType)
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
 import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
-  AuxFile, Modularity(..), 
-  ImplementationType(..), Comments, Verbosity, MatchedConceptMap, 
-  ConstantRepr, ConstantStructure(..), ConstraintBehaviour, 
+  AuxFile, Modularity(..),
+  ImplementationType(..), Comments, Verbosity, MatchedConceptMap,
+  ConstantRepr, ConstantStructure(..), ConstraintBehaviour,
   InputModule(..), Logging, Structure(..), inputModule)
-import Language.Drasil.CodeSpec (Input, Const, Derived, Output, Def, 
+import Language.Drasil.CodeSpec (Input, Const, Derived, Output, Def,
   CodeSpec(..),  getConstraints)
-import Language.Drasil.Mod (Mod(..), Name, Version, Class(..), 
+import Language.Drasil.Mod (Mod(..), Name, Version, Class(..),
   StateVariable(..), fname)
 
 import Control.Lens ((^.), makeLenses, over)
@@ -66,7 +66,7 @@ data DrasilState = DrasilState {
   extLibMap :: ExtLibMap,
   libPaths :: [FilePath],
   eMap :: ModExportMap,
-  libEMap :: ModExportMap, 
+  libEMap :: ModExportMap,
   clsMap :: ClassDefinitionMap,
   defList :: [Name],
   getVal :: Int,
@@ -88,15 +88,15 @@ inMod ds = inMod' $ modular ds
 -- | Adds a message to the design log if the given 'Space'-'CodeType' match has not
 -- already been logged.
 addToDesignLog :: Space -> CodeType -> Doc -> DrasilState -> DrasilState
-addToDesignLog s t l ds = if (s,t) `elem` (ds ^. loggedSpaces) then ds 
+addToDesignLog s t l ds = if (s,t) `elem` (ds ^. loggedSpaces) then ds
   else over designLog ($$ l) ds
 
--- | Adds a 'Space'-'CodeType' pair to the loggedSpaces list in 'DrasilState' to prevent a duplicate 
+-- | Adds a 'Space'-'CodeType' pair to the loggedSpaces list in 'DrasilState' to prevent a duplicate
 -- log from being generated for that 'Space'-'CodeType' pair.
 addLoggedSpace :: Space -> CodeType -> DrasilState -> DrasilState
-addLoggedSpace s t = over loggedSpaces ((s,t):) 
+addLoggedSpace s t = over loggedSpaces ((s,t):)
 
--- | Builds the module export map, mapping each function and state variable name 
+-- | Builds the module export map, mapping each function and state variable name
 -- in the generated code to the name of the generated module that exports it.
 modExportMap :: CodeSpec -> Choices -> [Mod] -> ModExportMap
 modExportMap cs@CodeSpec {
@@ -123,7 +123,7 @@ modExportMap cs@CodeSpec {
         defModName Unmodular _ = prn
         defModName _ nm = nm
 
--- | Builds the class definition map, mapping each generated method and state 
+-- | Builds the class definition map, mapping each generated method and state
 -- variable name to the name of the generated class where it is defined.
 clsDefMap :: CodeSpec -> Choices -> [Mod] -> ClassDefinitionMap
 clsDefMap cs@CodeSpec {
@@ -137,9 +137,9 @@ clsDefMap cs@CodeSpec {
     ++ getDerivedCls chs ds
     ++ getConstraintsCls chs (getConstraints (cMap cs) ins)
     ++ getInputFormatCls chs extIns
-    where modClasses (Mod _ _ _ cls _) = concatMap (\cl -> 
+    where modClasses (Mod _ _ _ cls _) = concatMap (\cl ->
             let cln = className cl in
-            (cln, cln) : map (\sv -> (codeName (stVar sv), cln)) (stateVars cl) 
+            (cln, cln) : map (\sv -> (codeName (stVar sv), cln)) (stateVars cl)
               ++ map (\m -> (fname m, cln)) (methods cl)) cls
 
 -- | Module exports.
@@ -156,7 +156,7 @@ type ClassDef = (String, String)
 -- constructor is generated, thus "InputParameters" is added to map.
 getExpInput :: Name -> Choices -> [Input] -> [ModExp]
 getExpInput _ _ [] = []
-getExpInput prn chs ins = inExp (modularity $ architecture chs) (inputStructure $ dataInfo chs) 
+getExpInput prn chs ins = inExp (modularity $ architecture chs) (inputStructure $ dataInfo chs)
   where inExp _ Unbundled = []
         inExp Unmodular Bundled = (ipName, prn) : inVarDefs prn
         inExp (Modular Separated) Bundled = inVarDefs ipName
@@ -164,14 +164,14 @@ getExpInput prn chs ins = inExp (modularity $ architecture chs) (inputStructure 
         inVarDefs n = map ((, n) . codeName) ins
         ipName = "InputParameters"
 
--- | Gets input variables for classes for InputParameters module. 
+-- | Gets input variables for classes for InputParameters module.
 -- If no inputs, input variables will not be defined in any class.
 -- If 'Unbundled', input variables will not be defined in any class.
 -- If 'Bundled' and input modules are 'Combined', input variables and input constructor are defined in InputParameters.
 -- If 'Bundled' and input modules are 'Separated', input variables are defined in InputParameters but no constructor is generated.
 getInputCls :: Choices -> [Input] -> [ClassDef]
 getInputCls _ [] = []
-getInputCls chs ins = inCls (inputModule chs) (inputStructure $ dataInfo chs) 
+getInputCls chs ins = inCls (inputModule chs) (inputStructure $ dataInfo chs)
   where inCls _ Unbundled = []
         inCls Combined Bundled = (ipName, ipName) : inVarDefs
         inCls Separated Bundled = inVarDefs
@@ -186,7 +186,7 @@ getInputCls chs ins = inCls (inputModule chs) (inputStructure $ dataInfo chs)
 -- If 'Unbundled', constants are not exported by any module.
 getExpConstants :: Name -> Choices -> [Const] -> [ModExp]
 getExpConstants _ _ [] = []
-getExpConstants n chs cs = cExp (modularity $ architecture chs) (constStructure $ dataInfo chs) 
+getExpConstants n chs cs = cExp (modularity $ architecture chs) (constStructure $ dataInfo chs)
   (inputStructure $ dataInfo chs)
   where cExp Unmodular (Store Bundled) _ = zipCs $ repeat n
         cExp Unmodular WithInputs Bundled = zipCs $ repeat n

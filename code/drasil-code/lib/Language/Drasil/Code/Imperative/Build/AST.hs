@@ -20,11 +20,11 @@ data BuildDependencies = BcSource
                        | BcSingle BuildName
 
 -- | Build configuration. In the function parameter, the first parameter is the list of inputs,
--- 2nd parameter is the output file, 3rd parameter is additional name if needed. 
+-- 2nd parameter is the output file, 3rd parameter is additional name if needed.
 -- The two 'Maybe' 'BuildName's are the output file and the additional name.
 -- Also holds the build dependencies.
-data BuildConfig = BuildConfig 
-  ([CommandFragment] -> CommandFragment -> CommandFragment -> [BuildCommand]) 
+data BuildConfig = BuildConfig
+  ([CommandFragment] -> CommandFragment -> CommandFragment -> [BuildCommand])
   (Maybe BuildName) (Maybe BuildName) BuildDependencies
 
 -- | Run commands as they are or through an interpreter.
@@ -66,30 +66,30 @@ osClassDefault :: String -> String -> String -> CommandFragment
 osClassDefault = mkWindowsVar
 
 -- | Constructor for a build configuration. No additional name included.
-buildAll :: ([CommandFragment] -> CommandFragment -> [BuildCommand]) -> 
+buildAll :: ([CommandFragment] -> CommandFragment -> [BuildCommand]) ->
   BuildName -> Maybe BuildConfig
 buildAll f n = Just $ BuildConfig (\i o _ -> f i o) (Just n) Nothing BcSource
 
 -- | Constructor for a build configuration with an additional name included.
-buildAllAdditionalName :: ([CommandFragment] -> CommandFragment -> 
-  CommandFragment -> [BuildCommand]) -> BuildName -> BuildName -> 
+buildAllAdditionalName :: ([CommandFragment] -> CommandFragment ->
+  CommandFragment -> [BuildCommand]) -> BuildName -> BuildName ->
   Maybe BuildConfig
 buildAllAdditionalName f n a = Just $ BuildConfig f (Just n) (Just a) BcSource
 
 -- | Constructor for a build configuration.
 -- No additional name included, but takes in a single dependency.
-buildSingle :: ([CommandFragment] -> CommandFragment -> [BuildCommand]) -> 
+buildSingle :: ([CommandFragment] -> CommandFragment -> [BuildCommand]) ->
   BuildName -> BuildName -> Maybe BuildConfig
-buildSingle f n = Just . BuildConfig (\i o _ -> f i o) (Just n) Nothing . 
+buildSingle f n = Just . BuildConfig (\i o _ -> f i o) (Just n) Nothing .
   BcSingle
 
--- | Default runnable information. 
+-- | Default runnable information.
 nativeBinary :: Maybe Runnable
 nativeBinary = Just $ Runnable executable nameOpts Standalone
 
 -- | Default target extension is ".exe".
-executable :: BuildName 
-executable = BWithExt BPackName $ OtherExt $ 
+executable :: BuildName
+executable = BWithExt BPackName $ OtherExt $
   osClassDefault "TARGET_EXTENSION" ".exe" ""
 
 -- | Default library has the extentions ".dll, .dylib, .so".
@@ -132,5 +132,5 @@ cppCompiler = mkImplicitVar "CXX"
 
 -- | Helper for configuring doxygen documentation.
 doxygenDocConfig :: FilePath -> DocConfig
-doxygenDocConfig fp = DocConfig [makeS fp] 
+doxygenDocConfig fp = DocConfig [makeS fp]
   [mkCheckedCommand $ makeS $ "doxygen " ++ fp]

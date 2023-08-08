@@ -14,16 +14,16 @@ data DataDesc' = DD Data' Delimiter DataDesc' | End Data'
 
 -- Data can either contain a single 'DataItem'', 'Data', or 'Junk'. See @source@ for more details on each constructor.
 data Data' = Datum DataItem' -- ^ Single data item.
-  -- | To be used in cases where multiple list-type data have their 
+  -- | To be used in cases where multiple list-type data have their
   -- elements intermixed, and thus need to be described together.
-  | Data 
-    (NonEmpty DataItem') -- The DataItems being simultaneously described. 
-                -- The intra-list delimiters for any shared dimensions should 
-                -- be the same between the DataItems. For example, if mixing 2 
-                -- lists of same dimension, the intra-list delimiters must be 
-                -- the same between the two lists. If mixing a 1-D list with a 
-                -- 2-D list, the first delimiter must be the same, but the 2nd 
-                -- delimiter for the 2-D list is not constrained because there 
+  | Data
+    (NonEmpty DataItem') -- The DataItems being simultaneously described.
+                -- The intra-list delimiters for any shared dimensions should
+                -- be the same between the DataItems. For example, if mixing 2
+                -- lists of same dimension, the intra-list delimiters must be
+                -- the same between the two lists. If mixing a 1-D list with a
+                -- 2-D list, the first delimiter must be the same, but the 2nd
+                -- delimiter for the 2-D list is not constrained because there
                 -- is no corresponding delimiter for the 1-D list.
     Integer -- Degree of intermixing
             -- 0 <= degree of intermixing <= minimum dimension of the DataItems
@@ -34,12 +34,12 @@ data Data' = Datum DataItem' -- ^ Single data item.
     Delimiter -- Delimiter between elements from different lists
   | Junk -- ^ Data that can be ignored/skipped over.
 
--- | A piece of data that contains the datum described and delimeters between elements. 
+-- | A piece of data that contains the datum described and delimeters between elements.
 -- The size of the list of delimiters should be equal to the dimension of datum.
-data DataItem' = DI 
+data DataItem' = DI
   CodeVarChunk -- The datum being described
-  [Delimiter] -- Delimiters between list elements. 
-              -- Size of list should equal dimension of datum 
+  [Delimiter] -- Delimiters between list elements.
+              -- Size of list should equal dimension of datum
               -- Ex. a 1-D list needs 1 delimiter, a 2-D list needs 2 delimiters
               -- Outermost delimiter first, innermost last
 
@@ -51,7 +51,7 @@ type Delimiter = String
 -- | Organize a list of data with a given 'Delimiter' into a 'DataDesc''.
 dataDesc :: [Data'] -> Delimiter -> DataDesc'
 dataDesc [d] _ = End d
-dataDesc (d:ds) dlm = DD d dlm (dataDesc ds dlm) 
+dataDesc (d:ds) dlm = DD d dlm (dataDesc ds dlm)
 dataDesc [] _ = error "DataDesc must have at least one data item"
 
 -- | Constructor for creating a single datum.
@@ -82,7 +82,7 @@ type Delim = Char  -- delimiter
 data Data = Singleton DataItem                      -- ^ Single datum.
           | JunkData                                -- ^ Junk data (can be skipped).
           | Line LinePattern Delim                  -- ^ Single-line pattern of data with a delimiter.
-          | Lines LinePattern (Maybe Integer) Delim -- ^ Multi-line data. 
+          | Lines LinePattern (Maybe Integer) Delim -- ^ Multi-line data.
                                                     -- @Maybe Int@ determines the number of lines.
                                                     -- If it is Nothing, then it is unknown so go to end of file.
 -- | Determines the pattern of data.
@@ -101,7 +101,7 @@ junkLine = JunkData
 
 -- | Constructor for a single line of data.
 singleLine :: LinePattern -> Delim -> Data
-singleLine = Line 
+singleLine = Line
 
 -- | Constructor for an unknown amount of lines of data.
 multiLine :: LinePattern -> Delim -> Data

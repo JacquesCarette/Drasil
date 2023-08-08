@@ -44,7 +44,7 @@ defYes = defaultValSentence +:+. yes
 --     * Sets the OPTIMIZE_OUTPUT_JAVA field according to the OptimizeChoice parameter.
 --     * Sets the QUIET field according to the given Verbosity.
 makeDoxConfig :: ProjName -> GOOLState -> OptimizeChoice -> Verbosity -> Doc
-makeDoxConfig prog s opt v = 
+makeDoxConfig prog s opt v =
   let fs = nub (s ^. headers ++ maybeToList (s ^. mainMod))
   in vcat [
   text "# Doxyfile 1.8.15",

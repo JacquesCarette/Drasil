@@ -3,7 +3,7 @@ module Language.Drasil.Chunk.CodeDefinition (
   CodeDefinition, DefinitionType(..), qtoc, qtov, odeDef, auxExprs, defType,
 ) where
 
-import Language.Drasil 
+import Language.Drasil
 import Language.Drasil.Chunk.Code (quantvar, quantfunc)
 import Language.Drasil.CodeExpr.Development (expr, CanGenCode(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo(..), ODEOptions(..))
@@ -34,7 +34,7 @@ instance HasSymbol        CodeDefinition where symbol c = symbol (c ^. cchunk)
 -- | 'CodeDefinition's have a 'Quantity'.
 instance Quantity         CodeDefinition
 -- | Finds the code name of a 'CodeDefinition'.
--- 'Function' 'CodeDefinition's are named with the function prefix to distinguish 
+-- 'Function' 'CodeDefinition's are named with the function prefix to distinguish
 -- them from the corresponding variable version.
 instance CodeIdea         CodeDefinition where
   codeName (CD c@(CodeC _ Var) _ _ _) = codeName c
@@ -63,7 +63,7 @@ qtov q = CD (codeChunk $ quantvar q) (toCodeExpr $ q ^. defnExpr) [] Definition
 
 -- | Constructs a 'CodeDefinition' for an ODE.
 odeDef :: ODEInfo -> CodeDefinition
-odeDef info = CD 
+odeDef info = CD
   (codeChunk $ quantfunc $ depVar info)
   (matrix [odeSyst info])
   (matrix [initVal info]:

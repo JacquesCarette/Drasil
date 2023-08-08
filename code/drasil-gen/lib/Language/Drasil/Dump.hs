@@ -14,12 +14,24 @@ import qualified Data.Map.Strict as SM
 import Utils.Drasil (invert, atLeast2)
 import Database.Drasil (traceTable, refbyTable)
 import Control.Lens ((^.))
+import System.Environment (lookupEnv)
 
 type Path = String
 type TargetFile = String
 
+-- | For debugging purposes, if the system has a `DEBUG_ENV` environment
+--   variable set to anything, we can dump the chunk maps in a system to the
+--   host system.
 dumpEverything :: SystemInformation -> Path -> IO ()
-dumpEverything si targetPath = do
+dumpEverything si p = do
+  maybeDebugging <- lookupEnv "DEBUG_ENV"
+  case maybeDebugging of
+    (Just (_:_)) -> do
+      dumpEverything0 si p
+    _ -> mempty
+
+dumpEverything0 :: SystemInformation -> Path -> IO ()
+dumpEverything0 si targetPath = do
   createDirectoryIfMissing True targetPath
   let chunkDb = _sysinfodb si
       chunkDump = DB.dumpChunkDB chunkDb

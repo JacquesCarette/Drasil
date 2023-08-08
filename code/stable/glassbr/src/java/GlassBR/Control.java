@@ -93,6 +93,6 @@ public class Control {
         outfile.print(isSafePb);
         outfile.println(" in module Control");
         outfile.close();
-        OutputFormat.write_output(inParams, B, J, NFL, q_hat, q_hat_tol, J_tol, P_b, LR, isSafePb, isSafeLR);
+        OutputFormat.write_output(B, J, NFL, q_hat, q_hat_tol, J_tol, isSafePb, isSafeLR);
     }
 }

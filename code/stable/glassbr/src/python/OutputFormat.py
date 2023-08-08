@@ -2,23 +2,17 @@
 # \author Nikitha Krithnan and W. Spencer Smith
 # \brief Provides the function for writing outputs
 ## \brief Writes the output values to output.txt
-# \param inParams structure holding the input values
 # \param B risk of failure
 # \param J stress distribution factor (Function)
 # \param NFL non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
 # \param q_hat dimensionless load
 # \param q_hat_tol tolerable load
 # \param J_tol stress distribution factor (Function) based on Pbtol
-# \param P_b probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
-# \param LR load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
 # \param isSafePb Safety Req-Pb
 # \param isSafeLR Safety Req-LR
-def write_output(inParams, B, J, NFL, q_hat, q_hat_tol, J_tol, P_b, LR, isSafePb, isSafeLR):
+def write_output(B, J, NFL, q_hat, q_hat_tol, J_tol, isSafePb, isSafeLR):
     outfile = open("log.txt", "a")
     print("function write_output called with inputs: {", file=outfile)
-    print("  inParams = ", end="", file=outfile)
-    print("Instance of InputParameters object", end="", file=outfile)
-    print(", ", file=outfile)
     print("  B = ", end="", file=outfile)
     print(B, end="", file=outfile)
     print(", ", file=outfile)
@@ -36,12 +30,6 @@ def write_output(inParams, B, J, NFL, q_hat, q_hat_tol, J_tol, P_b, LR, isSafePb
     print(", ", file=outfile)
     print("  J_tol = ", end="", file=outfile)
     print(J_tol, end="", file=outfile)
-    print(", ", file=outfile)
-    print("  P_b = ", end="", file=outfile)
-    print(P_b, end="", file=outfile)
-    print(", ", file=outfile)
-    print("  LR = ", end="", file=outfile)
-    print(LR, end="", file=outfile)
     print(", ", file=outfile)
     print("  isSafePb = ", end="", file=outfile)
     print(isSafePb, end="", file=outfile)
@@ -64,18 +52,8 @@ def write_output(inParams, B, J, NFL, q_hat, q_hat_tol, J_tol, P_b, LR, isSafePb
     print(q_hat_tol, file=outputfile)
     print("J_tol = ", end="", file=outputfile)
     print(J_tol, file=outputfile)
-    print("P_b = ", end="", file=outputfile)
-    print(P_b, file=outputfile)
-    print("LR = ", end="", file=outputfile)
-    print(LR, file=outputfile)
     print("isSafePb = ", end="", file=outputfile)
     print(isSafePb, file=outputfile)
     print("isSafeLR = ", end="", file=outputfile)
     print(isSafeLR, file=outputfile)
-    print("GTF = ", end="", file=outputfile)
-    print(inParams.GTF, file=outputfile)
-    print("h = ", end="", file=outputfile)
-    print(inParams.h, file=outputfile)
-    print("AR = ", end="", file=outputfile)
-    print(inParams.AR, file=outputfile)
     outputfile.close()

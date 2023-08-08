@@ -14,7 +14,7 @@ import Data.Drasil.Concepts.Documentation (goal, user, datum)
 import Data.Drasil.SI_Units
 
 import Drasil.GlassBR.DataDefs (aGrtrThanB, arRef, calofDemand, glaTyFac,
-  glaTyFacQD, gtfRef, hFromtQD, hRef, loadDF, stdVals, r6DDs)
+  glaTyFacQD, gtfRef, hFromtQD, hRef, loadDF, stdVals)
 import Drasil.GlassBR.Figures (dimlessloadVsARFig)
 import Drasil.GlassBR.Goals (willBreakGS)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
@@ -24,8 +24,9 @@ iMods :: [InstanceModel]
 iMods = [risk, strDisFac, nonFL, dimLL, tolPre, tolStrDisFac, probOfBreak,
   calofCapacity, pbIsSafe, lrIsSafe]
 
-outputs :: [QuantityDict]
-outputs = map qw iMods ++ map qw r6DDs
+outputs :: [InstanceModel]
+outputs = [risk, strDisFac, nonFL, dimLL, tolPre, tolStrDisFac, pbIsSafe,
+  lrIsSafe]
 
 symb :: [UnitalChunk]
 symb =  [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram,

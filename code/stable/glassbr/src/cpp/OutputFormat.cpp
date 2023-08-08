@@ -4,18 +4,13 @@
 #include <iostream>
 #include <string>
 
-#include "InputParameters.hpp"
-
 using std::ofstream;
 using std::string;
 
-void write_output(InputParameters &inParams, double B, double J, double NFL, double q_hat, double q_hat_tol, double J_tol, double P_b, double LR, bool isSafePb, bool isSafeLR) {
+void write_output(double B, double J, double NFL, double q_hat, double q_hat_tol, double J_tol, bool isSafePb, bool isSafeLR) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
     outfile << "function write_output called with inputs: {" << std::endl;
-    outfile << "  inParams = ";
-    outfile << "Instance of InputParameters object";
-    outfile << ", " << std::endl;
     outfile << "  B = ";
     outfile << B;
     outfile << ", " << std::endl;
@@ -33,12 +28,6 @@ void write_output(InputParameters &inParams, double B, double J, double NFL, dou
     outfile << ", " << std::endl;
     outfile << "  J_tol = ";
     outfile << J_tol;
-    outfile << ", " << std::endl;
-    outfile << "  P_b = ";
-    outfile << P_b;
-    outfile << ", " << std::endl;
-    outfile << "  LR = ";
-    outfile << LR;
     outfile << ", " << std::endl;
     outfile << "  isSafePb = ";
     outfile << isSafePb;
@@ -62,19 +51,9 @@ void write_output(InputParameters &inParams, double B, double J, double NFL, dou
     outputfile << q_hat_tol << std::endl;
     outputfile << "J_tol = ";
     outputfile << J_tol << std::endl;
-    outputfile << "P_b = ";
-    outputfile << P_b << std::endl;
-    outputfile << "LR = ";
-    outputfile << LR << std::endl;
     outputfile << "isSafePb = ";
     outputfile << isSafePb << std::endl;
     outputfile << "isSafeLR = ";
     outputfile << isSafeLR << std::endl;
-    outputfile << "GTF = ";
-    outputfile << inParams.GTF << std::endl;
-    outputfile << "h = ";
-    outputfile << inParams.h << std::endl;
-    outputfile << "AR = ";
-    outputfile << inParams.AR << std::endl;
     outputfile.close();
 }

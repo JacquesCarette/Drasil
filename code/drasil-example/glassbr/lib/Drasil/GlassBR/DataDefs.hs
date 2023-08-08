@@ -116,14 +116,13 @@ aGrtrThanB = ch plateLen `S.and_` ch plateWidth `S.are`
   (plural dimension `S.the_ofThe` S "plate") `sC` S "where" +:+.
   sParen (eS $ sy plateLen $>= sy plateWidth)
 
-anGlass :: Sentence
-anGlass = getAcc annealed `S.is` phrase annealed +:+. phrase glass
+anGlass, ftGlass, hsGlass :: Sentence
+anGlass = glassTypeHelper annealed
+ftGlass = glassTypeHelper fullyT
+hsGlass = glassTypeHelper heatS
 
-ftGlass :: Sentence
-ftGlass = getAcc fullyT `S.is` phrase fullyT +:+. phrase glass
-
-hsGlass :: Sentence
-hsGlass = getAcc heatS `S.is` phrase heatS +:+. phrase glass
+glassTypeHelper :: CI -> Sentence
+glassTypeHelper t = getAcc t `S.is` phrase t +:+. phrase glass
 
 calofDemandDesc :: Sentence
 calofDemandDesc =

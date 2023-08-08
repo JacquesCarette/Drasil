@@ -4,6 +4,8 @@ digraph avsall {
 	theory:nFL -> assumpSV;
 	theory:dimlessLoad -> assumpSV;
 	theory:sdfTol -> assumpSV;
+	sysSetValsFollowingAssumps -> assumpSV;
+	sysSetValsFollowingAssumps -> assumpGL;
 	calcInternalBlastRisk -> assumpES;
 	varValsOfmkE -> assumpSV;
 	varValsOfmkE -> assumpLDFC;

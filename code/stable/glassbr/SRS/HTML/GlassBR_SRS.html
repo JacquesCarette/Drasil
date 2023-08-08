@@ -847,12 +847,12 @@
                   </p>
                   <p>
                     <div id="assumpSV">
-                      standardValues: The values provided in <a href=#Sec:AuxConstants>Sec:Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. (RefBy: <a href=#IM:sdfTol>IM:sdfTol</a>, <a href=#IM:nFL>IM:nFL</a>, <a href=#IM:dimlessLoad>IM:dimlessLoad</a>, <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a>, <a href=#DD:loadDurFactor>DD:loadDurFactor</a>, and <a href=#assumpLDFC>A:ldfConstant</a>.)
+                      standardValues: The values provided in <a href=#Sec:AuxConstants>Sec:Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. (RefBy: <a href=#IM:sdfTol>IM:sdfTol</a>, <a href=#IM:nFL>IM:nFL</a>, <a href=#IM:dimlessLoad>IM:dimlessLoad</a>, <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a>, <a href=#sysSetValsFollowingAssumps>FR:System-Set-Values-Following-Assumptions</a>, <a href=#DD:loadDurFactor>DD:loadDurFactor</a>, and <a href=#assumpLDFC>A:ldfConstant</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpGL">
-                      glassLite: Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: <a href=#accMoreThanSingleLite>LC:Accomodate-More-than-Single-Lite</a>.)
+                      glassLite: Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: <a href=#sysSetValsFollowingAssumps>FR:System-Set-Values-Following-Assumptions</a> and <a href=#accMoreThanSingleLite>LC:Accomodate-More-than-Single-Lite</a>.)
                     </div>
                   </p>
                   <p>
@@ -1057,7 +1057,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:sdfTol>IM:sdfTol</a>, <a href=#IM:riskFun>IM:riskFun</a>, <a href=#IM:nFL>IM:nFL</a>, and <a href=#IM:dimlessLoad>IM:dimlessLoad</a>
+                          <a href=#IM:sdfTol>IM:sdfTol</a>, <a href=#IM:riskFun>IM:riskFun</a>, <a href=#IM:nFL>IM:nFL</a>, <a href=#IM:dimlessLoad>IM:dimlessLoad</a>, and <a href=#sysSetValsFollowingAssumps>FR:System-Set-Values-Following-Assumptions</a>
                         </p>
                       </td>
                     </tr>
@@ -1120,7 +1120,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:sdfTol>IM:sdfTol</a> and <a href=#IM:riskFun>IM:riskFun</a>
+                          <a href=#IM:sdfTol>IM:sdfTol</a>, <a href=#IM:riskFun>IM:riskFun</a>, and <a href=#sysSetValsFollowingAssumps>FR:System-Set-Values-Following-Assumptions</a>
                         </p>
                       </td>
                     </tr>
@@ -1179,7 +1179,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:calofCapacity>IM:calofCapacity</a> and <a href=#IM:dimlessLoad>IM:dimlessLoad</a>
+                          <a href=#IM:calofCapacity>IM:calofCapacity</a>, <a href=#IM:dimlessLoad>IM:dimlessLoad</a>, and <a href=#sysSetValsFollowingAssumps>FR:System-Set-Values-Following-Assumptions</a>
                         </p>
                       </td>
                     </tr>
@@ -1233,7 +1233,9 @@
                     <tr>
                       <th>RefBy</th>
                       <td>
-                        <p class="paragraph"><a href=#DD:calofDemand>DD:calofDemand</a></p>
+                        <p class="paragraph">
+                          <a href=#sysSetValsFollowingAssumps>FR:System-Set-Values-Following-Assumptions</a> and <a href=#DD:calofDemand>DD:calofDemand</a>
+                        </p>
                       </td>
                     </tr>
                   </table>
@@ -1290,7 +1292,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:tolLoad>IM:tolLoad</a> and <a href=#IM:stressDistFac>IM:stressDistFac</a>
+                          <a href=#IM:tolLoad>IM:tolLoad</a>, <a href=#IM:stressDistFac>IM:stressDistFac</a>, and <a href=#sysSetValsFollowingAssumps>FR:System-Set-Values-Following-Assumptions</a>
                         </p>
                       </td>
                     </tr>
@@ -1507,7 +1509,9 @@
                     <tr>
                       <th>RefBy</th>
                       <td>
-                        <p class="paragraph"><a href=#IM:probOfBreak>IM:probOfBreak</a></p>
+                        <p class="paragraph">
+                          <a href=#IM:probOfBreak>IM:probOfBreak</a> and <a href=#outputValues>FR:Output-Values</a>
+                        </p>
                       </td>
                     </tr>
                   </table>
@@ -1580,7 +1584,9 @@
                     <tr>
                       <th>RefBy</th>
                       <td>
-                        <p class="paragraph"><a href=#IM:riskFun>IM:riskFun</a></p>
+                        <p class="paragraph">
+                          <a href=#IM:riskFun>IM:riskFun</a> and <a href=#outputValues>FR:Output-Values</a>
+                        </p>
                       </td>
                     </tr>
                   </table>
@@ -1670,7 +1676,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:calofCapacity>IM:calofCapacity</a>
+                          <a href=#IM:calofCapacity>IM:calofCapacity</a> and <a href=#outputValues>FR:Output-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1767,7 +1773,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:stressDistFac>IM:stressDistFac</a>
+                          <a href=#IM:stressDistFac>IM:stressDistFac</a> and <a href=#outputValues>FR:Output-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1842,7 +1848,11 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td><p class="paragraph"><a href=#IM:nFL>IM:nFL</a></p></td>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:nFL>IM:nFL</a> and <a href=#outputValues>FR:Output-Values</a>
+                        </p>
+                      </td>
                     </tr>
                   </table>
                 </div>
@@ -1947,7 +1957,9 @@
                     <tr>
                       <th>RefBy</th>
                       <td>
-                        <p class="paragraph"><a href=#IM:tolLoad>IM:tolLoad</a></p>
+                        <p class="paragraph">
+                          <a href=#IM:tolLoad>IM:tolLoad</a> and <a href=#outputValues>FR:Output-Values</a>
+                        </p>
                       </td>
                     </tr>
                   </table>
@@ -2161,7 +2173,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:isSafeLR>IM:isSafeLR</a> and <a href=#checkGlassSafety>FR:Check-Glass-Safety</a>
+                          <a href=#IM:isSafeLR>IM:isSafeLR</a>, <a href=#outputValues>FR:Output-Values</a>, and <a href=#checkGlassSafety>FR:Check-Glass-Safety</a>
                         </p>
                       </td>
                     </tr>
@@ -2234,7 +2246,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:isSafePb>IM:isSafePb</a> and <a href=#checkGlassSafety>FR:Check-Glass-Safety</a>
+                          <a href=#IM:isSafePb>IM:isSafePb</a>, <a href=#outputValues>FR:Output-Values</a>, and <a href=#checkGlassSafety>FR:Check-Glass-Safety</a>
                         </p>
                       </td>
                     </tr>
@@ -3045,8 +3057,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3820,11 +3832,11 @@
               <td>
                 <a href=#sysSetValsFollowingAssumps>FR:System-Set-Values-Following-Assumptions</a>
               </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3969,16 +3981,16 @@
               <td></td>
               <td></td>
               <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>

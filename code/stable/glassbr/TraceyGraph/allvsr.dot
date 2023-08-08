@@ -1,8 +1,21 @@
 digraph allvsr {
+	sysSetValsFollowingAssumps -> minThick;
+	sysSetValsFollowingAssumps -> loadDurFactor;
+	sysSetValsFollowingAssumps -> glassTypeFac;
+	sysSetValsFollowingAssumps -> stdOffDist;
+	sysSetValsFollowingAssumps -> aR;
 	outputValsAndKnownValues -> inputValues;
 	outputValsAndKnownValues -> sysSetValsFollowingAssumps;
 	checkGlassSafety -> theory:isSafePb;
 	checkGlassSafety -> theory:isSafeLR;
+	outputValues -> theory:riskFun;
+	outputValues -> theory:stressDistFac;
+	outputValues -> theory:nFL;
+	outputValues -> theory:dimlessLoad;
+	outputValues -> theory:tolLoad;
+	outputValues -> theory:sdfTol;
+	outputValues -> theory:isSafePb;
+	outputValues -> theory:isSafeLR;
 
 
 	assumpGT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpGT"];

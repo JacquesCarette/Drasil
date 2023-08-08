@@ -375,8 +375,8 @@ This section simplifies the original problem and helps in developing the theoret
 \item[glassType:\phantomsection\label{assumpGT}]{The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that: (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam; and (3) glass supported on one side acts as a cantilever.}
 \item[glassCondition:\phantomsection\label{assumpGC}]{Following \cite[(pg. 1)]{astm2009}, this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. (RefBy: \hyperref[accAlteredGlass]{UC:Accommodate-Altered-Glass}.)}
 \item[explainScenario:\phantomsection\label{assumpES}]{This system only considers the external explosion scenario for its calculations. (RefBy: \hyperref[calcInternalBlastRisk]{LC:Calculate-Internal-Blast-Risk}.)}
-\item[standardValues:\phantomsection\label{assumpSV}]{The values provided in \hyperref[Sec:AuxConstants]{Sec:Values of Auxiliary Constants} are assumed for the duration of load (${t_{\text{d}}}$), and the material properties of $m$, $k$, and $E$. (RefBy: \hyperref[IM:sdfTol]{IM:sdfTol}, \hyperref[IM:nFL]{IM:nFL}, \hyperref[IM:dimlessLoad]{IM:dimlessLoad}, \hyperref[varValsOfmkE]{LC:Variable-Values-of-m,k,E}, \hyperref[DD:loadDurFactor]{DD:loadDurFactor}, and \hyperref[assumpLDFC]{A:ldfConstant}.)}
-\item[glassLite:\phantomsection\label{assumpGL}]{Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: \hyperref[accMoreThanSingleLite]{LC:Accomodate-More-than-Single-Lite}.)}
+\item[standardValues:\phantomsection\label{assumpSV}]{The values provided in \hyperref[Sec:AuxConstants]{Sec:Values of Auxiliary Constants} are assumed for the duration of load (${t_{\text{d}}}$), and the material properties of $m$, $k$, and $E$. (RefBy: \hyperref[IM:sdfTol]{IM:sdfTol}, \hyperref[IM:nFL]{IM:nFL}, \hyperref[IM:dimlessLoad]{IM:dimlessLoad}, \hyperref[varValsOfmkE]{LC:Variable-Values-of-m,k,E}, \hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}, \hyperref[DD:loadDurFactor]{DD:loadDurFactor}, and \hyperref[assumpLDFC]{A:ldfConstant}.)}
+\item[glassLite:\phantomsection\label{assumpGL}]{Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: \hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions} and \hyperref[accMoreThanSingleLite]{LC:Accomodate-More-than-Single-Lite}.)}
 \item[boundaryConditions:\phantomsection\label{assumpBC}]{Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. (RefBy: \hyperref[accMoreBoundaryConditions]{LC:Accomodate-More-Boundary-Conditions}.)}
 \item[responseType:\phantomsection\label{assumpRT}]{The response type considered in GlassBR is flexural. (RefBy: \hyperref[considerMoreThanFlexGlass]{LC:Consider-More-than-Flexure-Glass}.)}
 \item[ldfConstant:\phantomsection\label{assumpLDFC}]{With reference to \hyperref[assumpSV]{A:standardValues}, the value of load duration factor ($\mathit{LDF}$) is a constant in GlassBR. (RefBy: \hyperref[varValsOfmkE]{LC:Variable-Values-of-m,k,E} and \hyperref[DD:loadDurFactor]{DD:loadDurFactor}.)}
@@ -502,7 +502,7 @@ Notes & $t$ is a function that maps from the nominal thickness ($h$) to the mini
 Source & \cite{astm2009}
          
 \\ \midrule
-RefBy & \hyperref[IM:sdfTol]{IM:sdfTol}, \hyperref[IM:riskFun]{IM:riskFun}, \hyperref[IM:nFL]{IM:nFL}, and \hyperref[IM:dimlessLoad]{IM:dimlessLoad}
+RefBy & \hyperref[IM:sdfTol]{IM:sdfTol}, \hyperref[IM:riskFun]{IM:riskFun}, \hyperref[IM:nFL]{IM:nFL}, \hyperref[IM:dimlessLoad]{IM:dimlessLoad}, and \hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}
         
 \\ \bottomrule
 \end{tabular}
@@ -543,7 +543,7 @@ Notes & ${t_{\text{d}}}$ and $m$ come from \hyperref[assumpSV]{A:standardValues}
 Source & \cite{astm2009}
          
 \\ \midrule
-RefBy & \hyperref[IM:sdfTol]{IM:sdfTol} and \hyperref[IM:riskFun]{IM:riskFun}
+RefBy & \hyperref[IM:sdfTol]{IM:sdfTol}, \hyperref[IM:riskFun]{IM:riskFun}, and \hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}
         
 \\ \bottomrule
 \end{tabular}
@@ -589,7 +589,7 @@ Notes & AN is annealed glass.
 Source & \cite{astm2009}
          
 \\ \midrule
-RefBy & \hyperref[IM:calofCapacity]{IM:calofCapacity} and \hyperref[IM:dimlessLoad]{IM:dimlessLoad}
+RefBy & \hyperref[IM:calofCapacity]{IM:calofCapacity}, \hyperref[IM:dimlessLoad]{IM:dimlessLoad}, and \hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}
         
 \\ \bottomrule
 \end{tabular}
@@ -626,7 +626,7 @@ Description & \begin{symbDescription}
 Source & \cite{astm2009}
          
 \\ \midrule
-RefBy & \hyperref[DD:calofDemand]{DD:calofDemand}
+RefBy & \hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions} and \hyperref[DD:calofDemand]{DD:calofDemand}
         
 \\ \bottomrule
 \end{tabular}
@@ -665,7 +665,7 @@ Notes & $a$ and $b$ are the dimensions of the plate, where ($a\geq{}b$).
 Source & \cite{astm2009}
          
 \\ \midrule
-RefBy & \hyperref[IM:tolLoad]{IM:tolLoad} and \hyperref[IM:stressDistFac]{IM:stressDistFac}
+RefBy & \hyperref[IM:tolLoad]{IM:tolLoad}, \hyperref[IM:stressDistFac]{IM:stressDistFac}, and \hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}
         
 \\ \bottomrule
 \end{tabular}
@@ -807,7 +807,7 @@ Notes & $a$ and $b$ are the dimensions of the plate, where ($a\geq{}b$).
 Source & \cite{astm2009}, \cite[(Eqs. 4-5)]{beasonEtAl1998}, and \cite[(Eq. 14)]{campidelli}
          
 \\ \midrule
-RefBy & \hyperref[IM:probOfBreak]{IM:probOfBreak}
+RefBy & \hyperref[IM:probOfBreak]{IM:probOfBreak} and \hyperref[outputValues]{FR:Output-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -859,7 +859,7 @@ Notes & $J$ is obtained by interpolating from data shown in \hyperref[Figure:dim
 Source & \cite{astm2009}
          
 \\ \midrule
-RefBy & \hyperref[IM:riskFun]{IM:riskFun}
+RefBy & \hyperref[IM:riskFun]{IM:riskFun} and \hyperref[outputValues]{FR:Output-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -916,7 +916,7 @@ Notes & ${\hat{q}_{\text{tol}}}$ is defined in \hyperref[IM:tolLoad]{IM:tolLoad}
 Source & \cite{astm2009}
          
 \\ \midrule
-RefBy & \hyperref[IM:calofCapacity]{IM:calofCapacity}
+RefBy & \hyperref[IM:calofCapacity]{IM:calofCapacity} and \hyperref[outputValues]{FR:Output-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -976,7 +976,7 @@ Notes & $q$ is the 3 second duration equivalent pressure, as given in \hyperref[
 Source & \cite{astm2009} and \cite[(Eq. 7)]{campidelli}
          
 \\ \midrule
-RefBy & \hyperref[IM:stressDistFac]{IM:stressDistFac}
+RefBy & \hyperref[IM:stressDistFac]{IM:stressDistFac} and \hyperref[outputValues]{FR:Output-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -1026,7 +1026,7 @@ Notes & ${\hat{q}_{\text{tol}}}$ is obtained by interpolating from data shown in
 Source & \cite{astm2009}
          
 \\ \midrule
-RefBy & \hyperref[IM:nFL]{IM:nFL}
+RefBy & \hyperref[IM:nFL]{IM:nFL} and \hyperref[outputValues]{FR:Output-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -1091,7 +1091,7 @@ Notes & ${P_{\text{b}\text{tol}}}$ is entered by the user.
 Source & \cite{astm2009}
          
 \\ \midrule
-RefBy & \hyperref[IM:tolLoad]{IM:tolLoad}
+RefBy & \hyperref[IM:tolLoad]{IM:tolLoad} and \hyperref[outputValues]{FR:Output-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -1235,7 +1235,7 @@ Notes & If $\mathit{isSafePb}$, the glass is considered safe. $\mathit{isSafePb}
 Source & \cite{astm2009}
          
 \\ \midrule
-RefBy & \hyperref[IM:isSafeLR]{IM:isSafeLR} and \hyperref[checkGlassSafety]{FR:Check-Glass-Safety}
+RefBy & \hyperref[IM:isSafeLR]{IM:isSafeLR}, \hyperref[outputValues]{FR:Output-Values}, and \hyperref[checkGlassSafety]{FR:Check-Glass-Safety}
         
 \\ \bottomrule
 \end{tabular}
@@ -1287,7 +1287,7 @@ Notes & If $\mathit{isSafeLR}$, the glass is considered safe. $\mathit{isSafePb}
 Source & \cite{astm2009}
          
 \\ \midrule
-RefBy & \hyperref[IM:isSafePb]{IM:isSafePb} and \hyperref[checkGlassSafety]{FR:Check-Glass-Safety}
+RefBy & \hyperref[IM:isSafePb]{IM:isSafePb}, \hyperref[outputValues]{FR:Output-Values}, and \hyperref[checkGlassSafety]{FR:Check-Glass-Safety}
         
 \\ \bottomrule
 \end{tabular}
@@ -1523,7 +1523,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  & 
 \\
-\hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions} &  &  &  &  &  &  &  & 
+\hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions} &  &  &  & X & X &  &  & 
 \\
 \hyperref[checkInputWithDataCons]{FR:Check-Input-with-Data\_Constraints} &  &  &  &  &  &  &  & 
 \\
@@ -1613,7 +1613,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions} & X & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[checkInputWithDataCons]{FR:Check-Input-with-Data\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1621,7 +1621,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[checkGlassSafety]{FR:Check-Glass-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  & X & X & X & X & X & X &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\

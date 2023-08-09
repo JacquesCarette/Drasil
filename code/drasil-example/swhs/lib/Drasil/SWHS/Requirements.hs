@@ -49,8 +49,7 @@ inReqDesc = foldlList Comma List [pluralNP (NP.the (combineNINI tank parameter))
 
 funcReqs :: [ConceptInstance]
 funcReqs = [findMass, checkWithPhysConsts, outputInputDerivVals,
-  calcValues swhsOutputs, verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd,
-  outputValues swhsOutputs]
+  calcValues swhsOutputs, verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd]
 
 findMass, checkWithPhysConsts, outputInputDerivVals, verifyEnergyOutput,
   calcPCMMeltBegin, calcPCMMeltEnd :: ConceptInstance

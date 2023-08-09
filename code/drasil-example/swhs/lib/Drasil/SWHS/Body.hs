@@ -48,12 +48,13 @@ import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
 import Drasil.SWHS.References (citations)
-import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements, verifyEnergyOutput)
+import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements,
+  swhsOutputs, verifyEnergyOutput)
 import Drasil.SWHS.TMods (tMods)
 import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
-  htFluxC, htFluxP, inputs, inputConstraints, outputs, pcmE, pcmHTC, pcmSA,
-  relTol, simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
-  tempW, thickness, unitalChuncks, watE)
+  htFluxC, htFluxP, inputs, inputConstraints, pcmE, pcmHTC, pcmSA, relTol,
+  simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM, tempW,
+  thickness, unitalChuncks, watE)
 
 -------------------------------------------------------------------------------
 
@@ -87,7 +88,7 @@ si = SI {
   _datadefs    = SWHS.dataDefs,
   _configFiles = [],
   _inputs      = inputs,
-  _outputs     = map qw outputs,
+  _outputs     = swhsOutputs,
   _defSequence = [] :: [Block SimpleQDef],
   _constraints = constrained,
   _constants   = specParamValList,
@@ -101,14 +102,14 @@ purp = foldlSent_ [S "investigate the effect" `S.of_` S "employing",
   short phsChgMtrl, S "within a", phrase sWHT]
 
 symbMap :: ChunkDB
-symbMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
-  (nw heatEInPCM : map nw symbols ++ map nw acronymsFull
+symbMap = cdb (map qw swhsOutputs ++ symbolsAll) -- swhsOutputs ?
+  (map nw swhsOutputs ++ map nw symbols ++ map nw acronymsFull
   ++ map nw thermocon ++ map nw units ++ map nw [m_2, m_3] ++ map nw [absTol, relTol]
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
   ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
-  (cw heatEInPCM : map cw symbols ++ srsDomains ++ map cw specParamValList) -- FIXME: heatEInPCM?
+  (map cw swhsOutputs ++ map cw symbols ++ srsDomains ++ map cw specParamValList) -- FIXME: swhsOutputs?
   (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns section [] []
 
 usedDB :: ChunkDB
@@ -153,7 +154,7 @@ mkSRS = [TableOfContents,
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub [InputReq inReqDesc] [],
+    FReqsSub [InputReq inReqDesc, OutputReq] [],
     NonFReqsSub
   ],
   LCsSec,

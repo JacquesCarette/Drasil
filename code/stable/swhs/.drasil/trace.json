@@ -330,16 +330,8 @@
     ],
     "outputValues": [
         [
-            "eBalanceOnWtrRC"
-        ],
-        [
-            "eBalanceOnPCMRC"
-        ],
-        [
-            "heatEInWtrIM"
-        ],
-        [
-            "heatEInPCMRC"
+            "doc",
+            "ReqOutputs"
         ]
     ],
     "pcmEnergyGS": [],

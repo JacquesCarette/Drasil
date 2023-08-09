@@ -420,6 +420,10 @@
         ],
         [
             "doc",
+            "ReqOutputs"
+        ],
+        [
+            "doc",
             "SysCon"
         ],
         [
@@ -878,6 +882,10 @@
         ],
         [
             "doc",
+            "ReqOutputs"
+        ],
+        [
+            "doc",
             "SysCon"
         ],
         [
@@ -1088,6 +1096,12 @@
             "diam"
         ],
         [
+            "eBalanceOnPCMRC"
+        ],
+        [
+            "eBalanceOnWtrRC"
+        ],
+        [
             "eta"
         ],
         [
@@ -1101,6 +1115,9 @@
         ],
         [
             "heatEInPCMRC"
+        ],
+        [
+            "heatEInWtrIM"
         ],
         [
             "htCapL"
@@ -1699,6 +1716,12 @@
             "documentation"
         ],
         [
+            "eBalanceOnPCMRC"
+        ],
+        [
+            "eBalanceOnWtrRC"
+        ],
+        [
             "effect"
         ],
         [
@@ -1853,6 +1876,9 @@
         ],
         [
             "heatEInPCMRC"
+        ],
+        [
+            "heatEInWtrIM"
         ],
         [
             "heatTrans"

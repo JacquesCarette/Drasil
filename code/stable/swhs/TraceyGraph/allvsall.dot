@@ -76,10 +76,6 @@ digraph allvsall {
 	calcValues -> heatEInPCMRC;
 	calcPCMMeltBegin -> eBalanceOnPCMRC;
 	calcPCMMeltEnd -> eBalanceOnPCMRC;
-	outputValues -> eBalanceOnWtrRC;
-	outputValues -> eBalanceOnPCMRC;
-	outputValues -> heatEInWtrIM;
-	outputValues -> heatEInPCMRC;
 	likeChgUTP -> assumpTPCAV;
 	likeChgTCVOD -> assumpTHCCoT;
 	likeChgTCVOL -> assumpTHCCoL;

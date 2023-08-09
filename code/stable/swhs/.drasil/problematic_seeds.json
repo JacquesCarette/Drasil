@@ -348,6 +348,10 @@
         "references",
         "labelledContent"
     ],
+    "doc:ReqOutputs": [
+        "references",
+        "labelledContent"
+    ],
     "doc:SysCon": [
         "references",
         "labelledContent"
@@ -409,11 +413,15 @@
         "labelledContent"
     ],
     "eBalanceOnPCMRC": [
+        "terms",
+        "symbols",
         "references",
         "labelledContent",
         "instanceModels"
     ],
     "eBalanceOnWtrRC": [
+        "terms",
+        "symbols",
         "references",
         "labelledContent",
         "instanceModels"
@@ -450,6 +458,8 @@
         "instanceModels"
     ],
     "heatEInWtrIM": [
+        "terms",
+        "symbols",
         "references",
         "labelledContent",
         "instanceModels"

@@ -19,10 +19,6 @@ digraph allvsr {
 	calcValues -> heatEInPCMRC;
 	calcPCMMeltBegin -> eBalanceOnPCMRC;
 	calcPCMMeltEnd -> eBalanceOnPCMRC;
-	outputValues -> eBalanceOnWtrRC;
-	outputValues -> eBalanceOnPCMRC;
-	outputValues -> heatEInWtrIM;
-	outputValues -> heatEInPCMRC;
 
 
 	assumpTEO	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTEO"];

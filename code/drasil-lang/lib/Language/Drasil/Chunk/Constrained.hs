@@ -47,7 +47,7 @@ instance NamedIdea     ConstrainedChunk where term = qd . term
 -- | Finds the idea contained in the 'QuantityDict' used to make the 'ConstrainedChunk'.
 instance Idea          ConstrainedChunk where getA = getA . view qd
 -- | Finds the 'Space' of the 'QuantityDict' used to make the 'ConstrainedChunk'.
-instance HasSpace      ConstrainedChunk where typ = typ . view qd
+instance HasSpace      ConstrainedChunk where typ = qd . typ
 -- | Finds the 'Symbol' of the 'QuantityDict' used to make the 'ConstrainedChunk'.
 instance HasSymbol     ConstrainedChunk where symbol c = symbol (c^.qd)
 -- | 'ConstrainedChunk's have a 'Quantity'. 
@@ -93,7 +93,7 @@ instance NamedIdea     ConstrConcept where term = defq . term
 -- | Finds the idea contained in the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance Idea          ConstrConcept where getA = getA . view defq
 -- | Finds the 'Space' of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
-instance HasSpace      ConstrConcept where typ = typ . view defq
+instance HasSpace      ConstrConcept where typ = defq . typ
 -- | Finds the 'Symbol' of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance HasSymbol     ConstrConcept where symbol c = symbol (c^.defq)
 -- | 'ConstrConcept's have a 'Quantity'. 

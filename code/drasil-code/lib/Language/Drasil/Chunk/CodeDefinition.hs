@@ -28,7 +28,7 @@ instance NamedIdea        CodeDefinition where term = cchunk . term
 -- | Finds the idea contained in the 'CodeChunk' used to make the 'CodeDefinition'.
 instance Idea             CodeDefinition where getA = getA . view cchunk
 -- | Finds the 'Space' of the 'CodeChunk' used to make the 'CodeDefinition'.
-instance HasSpace         CodeDefinition where typ = typ . view cchunk
+instance HasSpace         CodeDefinition where typ = cchunk . typ
 -- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'CodeDefinition'.
 instance HasSymbol        CodeDefinition where symbol c = symbol (c ^. cchunk)
 -- | 'CodeDefinition's have a 'Quantity'.

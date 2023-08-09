@@ -43,7 +43,7 @@ instance Definition    UnitalChunk where defn = defq' . defn
 -- | Finds the domain contained in the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
 instance ConceptDomain UnitalChunk where cdom = cdom . view defq'
 -- | Finds the 'Space' of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
-instance HasSpace      UnitalChunk where typ = typ . view defq'
+instance HasSpace      UnitalChunk where typ = defq' . typ
 -- | Finds the 'Symbol' of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
 instance HasSymbol     UnitalChunk where symbol c = symbol (c^.defq')
 -- | 'UnitalChunk's have a 'Quantity'.

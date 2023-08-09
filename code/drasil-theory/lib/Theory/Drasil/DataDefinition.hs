@@ -57,7 +57,7 @@ instance NamedIdea          DataDefinition where term = ddQD term term
 -- | Finds the idea contained in the 'QDefinition' used to make the 'DataDefinition where'.
 instance Idea               DataDefinition where getA = either getA getA . qdFromDD
 -- | Finds the Space of the 'QDefinition' used to make the 'DataDefinition where'.
-instance HasSpace           DataDefinition where typ = either typ typ . qdFromDD
+instance HasSpace           DataDefinition where typ = to $ either (^. typ) (^. typ) . qdFromDD
 -- | Finds the Symbol of the 'QDefinition' used to make the 'DataDefinition where'.
 instance HasSymbol          DataDefinition where symbol = either symbol symbol . qdFromDD
 -- | 'DataDefinition where's have a 'Quantity'.

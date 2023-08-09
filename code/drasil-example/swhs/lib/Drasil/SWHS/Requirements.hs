@@ -4,7 +4,7 @@ import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
-import Theory.Drasil (InstanceModel)
+import Theory.Drasil (InstanceModel, HasOutput(output))
 
 import Drasil.DocLang (inReq)
 import Drasil.DocLang.SRS (datCon, propCorSol) 
@@ -28,8 +28,9 @@ import Drasil.SWHS.DataDefs (waterMass, waterVolume, tankVolume,
 import Drasil.SWHS.Concepts (phsChgMtrl, tank)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, 
   iMods)
-import Drasil.SWHS.Unitals (consTol, pcmE, tFinalMelt, tInitMelt, tempPCM, 
-  tempW, watE)
+import Drasil.SWHS.Unitals (consTol, pcmE, tFinalMelt, tInitMelt, watE)
+
+import Control.Lens ((^.))
 
 ------------------------------
 -- Data Constraint: Table 1 --
@@ -54,7 +55,7 @@ funcReqs = [findMass, checkWithPhysConsts, outputInputDerivVals,
 findMass, checkWithPhysConsts, outputInputDerivVals, verifyEnergyOutput,
   calcPCMMeltBegin, calcPCMMeltEnd :: ConceptInstance
 
-calcValues, outputValues :: [(ConstrConcept, InstanceModel)] -> ConceptInstance
+calcValues, outputValues :: [InstanceModel] -> ConceptInstance
 
 --
 findMass = findMassConstruct (inReq EmptyS) (plural mass) iMods 
@@ -118,13 +119,12 @@ calcPCMMeltEnd = cic "calcPCMMeltEnd" (foldlSent [
 outputValues l = cic "outputValues" (titleize output_ +:+. outputList l)
   "Output-Values" funcReqDom
 
-outputList :: [(ConstrConcept, InstanceModel)] -> Sentence
+outputList :: [InstanceModel] -> Sentence
 outputList l = foldlList Comma List $
-  map (\(x, y) -> ch x :+: sParen (ch time) +:+ fromSource y) l
+  map (\x -> ch (x ^. output) :+: sParen (ch time) +:+ fromSource x) l
 
-swhsOutputs :: [(ConstrConcept, InstanceModel)]
-swhsOutputs = [(tempW, eBalanceOnWtr), (tempPCM, eBalanceOnPCM),
-  (watE, heatEInWtr), (pcmE, heatEInPCM)]
+swhsOutputs :: [InstanceModel]
+swhsOutputs = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 
 -- List structure same between all examples
 

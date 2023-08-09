@@ -19,7 +19,7 @@ import Theory.Drasil (HasOutput(output))
 
 import Data.Drasil.Concepts.Documentation (description, funcReqDom,
   functionalRequirement, input_, nonfunctionalRequirement, output_, reqInput,
-  section_, software, symbol_, value)
+  section_, software, source, symbol_, value)
 import Data.Drasil.Concepts.Math (unit_)
 
 import qualified Drasil.DocLang.SRS as SRS
@@ -131,8 +131,7 @@ inReqDesc i desc = foldlSent [atStart input_,  S "the", singleValHelper i value,
 
 -- | Creates a Sentence from a Referable. Output is of the form "Outputs the
 -- values from @reference@."
-outReqDesc :: (HasOutput j, HasShortName j, Referable j)
-  => [j] -> Sentence
+outReqDesc :: (HasOutput j, HasShortName j, Referable j) => [j] -> Sentence
 outReqDesc o = foldlSent [atStart output_, S "the", singleValHelper o value,
   S "from", refS (outTable o)]
 

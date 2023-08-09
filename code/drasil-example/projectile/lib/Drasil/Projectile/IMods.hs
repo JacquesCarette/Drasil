@@ -7,12 +7,13 @@ import Language.Drasil
 import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwC, equationalModelN)
 import Utils.Drasil (weave)
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 
 import Data.Drasil.Concepts.Documentation (value)
-import Data.Drasil.Concepts.Math (constraint, equation, xAxis)
+import Data.Drasil.Concepts.Math (calculation, constraint, equation, xAxis)
 
 import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.Physics (gravitationalAccelConst, iSpeed, ixPos,
@@ -39,13 +40,13 @@ outputs = [messageIM, offsetIM, timeIM]
 
 ---
 timeIM :: InstanceModel
-timeIM = imNoRefs (equationalModelN (flightDur ^. term) timeQD)
+timeIM = imNoRefs (equationalModelN (calculation `of_` flightDur) timeQD)
   [qwC launSpeed $ UpFrom (Exc, exactDbl 0)
   ,qwC launAngle $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)]
   (qw flightDur) [UpFrom (Exc, exactDbl 0)]
   (Just timeDeriv) "calOfLandingTime" [angleConstraintNote, gravitationalAccelConstNote, timeConsNote]
 
-timeQD :: SimpleQDef 
+timeQD :: SimpleQDef
 timeQD =  mkQuantDef flightDur E.flightDur'
 
 timeDeriv :: Derivation
@@ -78,7 +79,7 @@ timeDerivEqns = D.timeDeriv ++ [express timeQD]
 
 ---
 landPosIM :: InstanceModel
-landPosIM = imNoRefs (equationalModelN (landPos ^. term) landPosQD)
+landPosIM = imNoRefs (equationalModelN (calculation `of_` landPos) landPosQD)
   [qwC launSpeed $ UpFrom (Exc, exactDbl 0),
    qwC launAngle $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)]
   (qw landPos) [UpFrom (Exc, exactDbl 0)]
@@ -112,7 +113,7 @@ landPosDerivEqns = D.landPosDeriv ++ [express landPosQD]
 
 ---
 offsetIM :: InstanceModel
-offsetIM = imNoDerivNoRefs (equationalModelN (offset ^. term) offsetQD)
+offsetIM = imNoDerivNoRefs (equationalModelN (calculation `of_` offset) offsetQD)
   [qwC landPos $ UpFrom (Exc, exactDbl 0)
   ,qwC targPos $ UpFrom (Exc, exactDbl 0)]
   (qw offset) [] "offsetIM" [landPosNote, landAndTargPosConsNote]
@@ -121,7 +122,9 @@ offsetQD :: SimpleQDef
 offsetQD = mkQuantDef offset E.offset'
 ---
 messageIM :: InstanceModel
-messageIM = imNoDerivNoRefs (equationalModelN (message ^. term) messageQD)
+messageIM = imNoDerivNoRefs (equationalModelN
+     (nounPhraseSent (S "selection") `NP.of_` (message ^. term))
+     messageQD)
   [qwC offset $ UpFrom (Exc, neg (sy targPos))
   ,qwC targPos $ UpFrom (Exc, exactDbl 0)]
   (qw message)

@@ -474,9 +474,9 @@ func func_s(_ inParams: inout InputParameters, _ d_offset: Float) throws -> Stri
 }
 
 /** Writes the output values to output.txt
-    - Parameter s: output message as a string
-    - Parameter d_offset: offset: the distance between the target position and the landing position (m)
-    - Parameter t_flight: flight duration: the time when the projectile lands (s)
+    - Parameter s: selection of output message as a string
+    - Parameter d_offset: calculation of offset: the distance between the target position and the landing position (m)
+    - Parameter t_flight: calculation of flight duration: the time when the projectile lands (s)
 */
 func write_output(_ s: String, _ d_offset: Float, _ t_flight: Float) throws -> Void {
     var outfile: FileHandle

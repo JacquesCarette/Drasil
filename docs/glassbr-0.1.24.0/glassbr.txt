@@ -209,26 +209,22 @@ assumptionConstants :: [ConstQDef]
 assumptions :: [ConceptInstance]
 
 module Drasil.GlassBR.DataDefs
-aspRat :: DataDefinition
 dataDefs :: [DataDefinition]
-dimLL :: DataDefinition
-qDefns :: [Block SimpleQDef]
+aspRat :: DataDefinition
 glaTyFac :: DataDefinition
+glaTyFacQD :: SimpleQDef
+gtfRef :: Sentence
 hFromt :: DataDefinition
+hFromtQD :: SimpleQDef
 loadDF :: DataDefinition
-nonFL :: DataDefinition
-risk :: DataDefinition
 standOffDis :: DataDefinition
-strDisFac :: DataDefinition
-tolPre :: DataDefinition
-tolStrDisFac :: DataDefinition
 eqTNTWDD :: DataDefinition
-probOfBreak :: DataDefinition
-calofCapacity :: DataDefinition
 calofDemand :: DataDefinition
-pbTolUsr :: Sentence
-qRef :: Sentence
+aGrtrThanB :: Sentence
+arRef :: Sentence
+hRef :: Sentence
 configFp :: [String]
+stdVals :: (HasSymbol s, HasUID s) => [s] -> Sentence
 
 module Drasil.GlassBR.IMods
 symb :: [UnitalChunk]
@@ -236,6 +232,7 @@ iMods :: [InstanceModel]
 pbIsSafe :: InstanceModel
 lrIsSafe :: InstanceModel
 instModIntro :: Sentence
+qDefns :: [Block SimpleQDef]
 
 module Drasil.GlassBR.Symbols
 symbolsForTable :: [QuantityDict]

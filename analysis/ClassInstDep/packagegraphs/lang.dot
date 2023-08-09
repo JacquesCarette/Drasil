@@ -310,6 +310,7 @@ CodeIdea	[shape=oval, color=magenta, label="CodeIdea"];
 DefiningCodeExpr	[shape=oval, color=magenta, label="DefiningCodeExpr"];
 NamedIdea	[shape=oval, color=magenta, label="NamedIdea"];
 Idea	[shape=oval, color=magenta, label="Idea"];
+DefinesQuantity	[shape=oval, color=magenta, label="DefinesQuantity"];
 MayHaveUnit	[shape=oval, color=magenta, label="MayHaveUnit"];
 TempHasUnit	[shape=oval, color=magenta, label="TempHasUnit"];
 Unitary	[shape=oval, color=magenta, label="Unitary"];

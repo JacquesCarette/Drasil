@@ -690,8 +690,8 @@ type ContinuousDomainDesc a b = DomainDesc 'Continuous a b
 -- | HasSpace is anything which has a <a>Space</a>.
 class HasSpace c
 
--- | Provides a <tt>Lens</tt> to the <a>Space</a>.
-typ :: HasSpace c => c -> Space
+-- | Provides a <a>Getter</a> to the <a>Space</a>.
+typ :: HasSpace c => Getter c Space
 
 -- | Gets the name of an <a>Actor</a>.
 getActorName :: Space -> String
@@ -4883,6 +4883,8 @@ module Language.Drasil.Chunk.Quantity
 --   concept before we assign a space (Real numbers), a symbol (l), or
 --   units (cm, m, etc.).
 data QuantityDict
+class DefinesQuantity d
+defLhs :: DefinesQuantity d => Getter d QuantityDict
 
 -- | Makes a <a>QuantityDict</a> from an <a>Idea</a>, <a>Symbol</a>, and
 --   <a>Space</a>. <a>Symbol</a> is implementation-only.
@@ -6621,8 +6623,8 @@ type Concept c = (Idea c, Definition c, ConceptDomain c)
 -- | HasSpace is anything which has a <a>Space</a>.
 class HasSpace c
 
--- | Provides a <tt>Lens</tt> to the <a>Space</a>.
-typ :: HasSpace c => c -> Space
+-- | Provides a <a>Getter</a> to the <a>Space</a>.
+typ :: HasSpace c => Getter c Space
 
 -- | Some chunks store a unit symbol.
 class HasUnitSymbol u
@@ -6979,6 +6981,8 @@ makeASingleDE :: UnitalChunk -> ConstrConcept -> LHS -> Expr -> String -> NP -> 
 --   concept before we assign a space (Real numbers), a symbol (l), or
 --   units (cm, m, etc.).
 data QuantityDict
+class DefinesQuantity d
+defLhs :: DefinesQuantity d => Getter d QuantityDict
 
 -- | Smart constructor for a <a>QuantityDict</a> from another
 --   <a>Quantity</a> with units.

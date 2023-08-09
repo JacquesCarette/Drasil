@@ -76,10 +76,10 @@ digraph allvsall {
 	calcValues -> theory:heatEInPCMRC;
 	calcPCMMeltBegin -> theory:eBalanceOnPCMRC;
 	calcPCMMeltEnd -> theory:eBalanceOnPCMRC;
-	outputValues -> eBalanceOnWtrRC;
-	outputValues -> eBalanceOnPCMRC;
+	outputValues -> theory:eBalanceOnWtrRC;
+	outputValues -> theory:eBalanceOnPCMRC;
 	outputValues -> heatEInWtrIM;
-	outputValues -> heatEInPCMRC;
+	outputValues -> theory:heatEInPCMRC;
 	likeChgUTP -> assumpTPCAV;
 	likeChgTCVOD -> assumpTHCCoT;
 	likeChgTCVOL -> assumpTHCCoL;

@@ -1183,7 +1183,7 @@ Notes & ${T_{\text{P}}}$ is defined by \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOn
 Source & \cite{koothoor2013}
          
 \\ \midrule
-RefBy & \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[unlikeChgNIHG]{UC:No-Internal-Heat-Generation}, \hyperref[findMass]{FR:Find-Mass}, and \hyperref[calcValues]{FR:Calculate-Values}
+RefBy & \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[unlikeChgNIHG]{UC:No-Internal-Heat-Generation}, \hyperref[outputValues]{FR:Output-Values}, \hyperref[findMass]{FR:Find-Mass}, and \hyperref[calcValues]{FR:Calculate-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -1283,7 +1283,7 @@ Notes & ${T_{\text{W}}}$ is defined by \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOn
 Source & \cite{koothoor2013}
          
 \\ \midrule
-RefBy & \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[unlikeChgNIHG]{UC:No-Internal-Heat-Generation}, \hyperref[unlikeChgNGS]{UC:No-Gaseous-State}, \hyperref[findMass]{FR:Find-Mass}, \hyperref[calcValues]{FR:Calculate-Values}, \hyperref[calcPCMMeltEnd]{FR:Calculate-PCM-Melt-End-Time}, and \hyperref[calcPCMMeltBegin]{FR:Calculate-PCM-Melt-Begin-Time}
+RefBy & \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[unlikeChgNIHG]{UC:No-Internal-Heat-Generation}, \hyperref[unlikeChgNGS]{UC:No-Gaseous-State}, \hyperref[outputValues]{FR:Output-Values}, \hyperref[findMass]{FR:Find-Mass}, \hyperref[calcValues]{FR:Calculate-Values}, \hyperref[calcPCMMeltEnd]{FR:Calculate-PCM-Melt-End-Time}, and \hyperref[calcPCMMeltBegin]{FR:Calculate-PCM-Melt-Begin-Time}
         
 \\ \bottomrule
 \end{tabular}
@@ -1361,7 +1361,7 @@ Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM:sensHtE}.
 Source & \cite{koothoor2013}
          
 \\ \midrule
-RefBy & \hyperref[findMass]{FR:Find-Mass} and \hyperref[calcValues]{FR:Calculate-Values}
+RefBy & \hyperref[outputValues]{FR:Output-Values}, \hyperref[findMass]{FR:Find-Mass}, and \hyperref[calcValues]{FR:Calculate-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -1431,7 +1431,7 @@ Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM:sensHtE} an
 Source & \cite{koothoor2013}
          
 \\ \midrule
-RefBy & \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[unlikeChgNGS]{UC:No-Gaseous-State}, \hyperref[findMass]{FR:Find-Mass}, and \hyperref[calcValues]{FR:Calculate-Values}
+RefBy & \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[unlikeChgNGS]{UC:No-Gaseous-State}, \hyperref[outputValues]{FR:Output-Values}, \hyperref[findMass]{FR:Find-Mass}, and \hyperref[calcValues]{FR:Calculate-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -1583,13 +1583,13 @@ ${ρ_{\text{W}}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 {colspec={l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Source} & \textbf{Units}
 \\
-${E_{\text{P}}}$ & Change in heat energy in the PCM &  & ${\text{J}}$
+${E_{\text{P}}}$ & Change in heat energy in the PCM & \hyperref[IM:heatEInPCM]{IM:heatEInPCM} & ${\text{J}}$
 \\
-${E_{\text{W}}}$ & Change in heat energy in the water &  & ${\text{J}}$
+${E_{\text{W}}}$ & Change in heat energy in the water & \hyperref[IM:heatEInWtr]{IM:heatEInWtr} & ${\text{J}}$
 \\
-${T_{\text{P}}}$ & Temperature of the phase change material &  & ${{}^{\circ}\text{C}}$
+${T_{\text{P}}}$ & Temperature of the phase change material & \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM} & ${{}^{\circ}\text{C}}$
 \\
-${T_{\text{W}}}$ & Temperature of the water &  & ${{}^{\circ}\text{C}}$
+${T_{\text{W}}}$ & Temperature of the water & \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr} & ${{}^{\circ}\text{C}}$
 \label{Table:ReqOutputs}
 \end{longtblr}
 \subsection{Non-Functional Requirements}
@@ -1845,7 +1845,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[calcPCMMeltEnd]{FR:Calculate-PCM-Melt-End-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\

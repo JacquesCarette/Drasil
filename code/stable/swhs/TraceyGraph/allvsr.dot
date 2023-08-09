@@ -19,10 +19,10 @@ digraph allvsr {
 	calcValues -> theory:heatEInPCMRC;
 	calcPCMMeltBegin -> theory:eBalanceOnPCMRC;
 	calcPCMMeltEnd -> theory:eBalanceOnPCMRC;
-	outputValues -> eBalanceOnWtrRC;
-	outputValues -> eBalanceOnPCMRC;
+	outputValues -> theory:eBalanceOnWtrRC;
+	outputValues -> theory:eBalanceOnPCMRC;
 	outputValues -> heatEInWtrIM;
-	outputValues -> heatEInPCMRC;
+	outputValues -> theory:heatEInPCMRC;
 
 
 	assumpTEO	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTEO"];

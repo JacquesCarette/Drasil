@@ -126,7 +126,7 @@ instance ConceptDomain DifferentialModel where cdom = cdom . view dmconc
 instance Express       DifferentialModel where express = formStdODE
 
 instance RequiresChecking DifferentialModel Expr Space where
-  requiredChecks dmo = map (, typ (dmo ^. depVar)) $ formEquations (coeffVects dm) (unknownVect dm) (constantVect dm) (_depVar dmo)
+  requiredChecks dmo = map (, dmo ^. (depVar . typ)) $ formEquations (coeffVects dm) (unknownVect dm) (constantVect dm) (_depVar dmo)
     where dm = makeAODESolverFormat dmo
 
 -- | Set the expression be a system of linear ODE to Ax = b

@@ -17,7 +17,7 @@ import Language.Drasil.Stages (Stage)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.UID (HasUID(..))
 
-import Control.Lens ((^.), makeLenses, view)
+import Control.Lens ((^.), makeLenses)
 
 -- | A Unitary is a 'Quantity' that __must__ have a unit.
 class (Quantity c) => Unitary c where
@@ -38,7 +38,7 @@ instance NamedIdea     UnitaryChunk where term = quant . term
 -- | Finds the idea contained in the 'QuantityDict' used to make the 'UnitaryChunk'.
 instance Idea          UnitaryChunk where getA uc = getA $ uc ^. quant
 -- | Finds the 'Space' of the 'QuantityDict' used to make the 'UnitaryChunk'.
-instance HasSpace      UnitaryChunk where typ = typ . view quant
+instance HasSpace      UnitaryChunk where typ = quant . typ
 -- | Finds the 'Symbol' of the 'QuantityDict' used to make the 'UnitaryChunk'.
 instance HasSymbol     UnitaryChunk where symbol u = symbol (u^.quant)
 -- | 'UnitaryChunk's have a 'Quantity'.

@@ -179,22 +179,34 @@
             "demandq"
         ],
         [
-            "dimlessLoad"
-        ],
-        [
             "eqTNTChar"
         ],
         [
             "glassTypeFac"
         ],
         [
-            "lResistance"
-        ],
-        [
             "loadDurFactor"
         ],
         [
             "minThick"
+        ],
+        [
+            "stdOffDist"
+        ]
+    ],
+    "generalDefinitions": [],
+    "instanceModels": [
+        [
+            "dimlessLoad"
+        ],
+        [
+            "isSafeLR"
+        ],
+        [
+            "isSafePb"
+        ],
+        [
+            "lResistance"
         ],
         [
             "nFL"
@@ -209,22 +221,10 @@
             "sdfTol"
         ],
         [
-            "stdOffDist"
-        ],
-        [
             "stressDistFac"
         ],
         [
             "tolLoad"
-        ]
-    ],
-    "generalDefinitions": [],
-    "instanceModels": [
-        [
-            "isSafeLR"
-        ],
-        [
-            "isSafePb"
         ]
     ],
     "labelledContent": [

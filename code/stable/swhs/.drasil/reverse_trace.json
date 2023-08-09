@@ -193,13 +193,16 @@
             "unlikeChgNGS"
         ],
         [
+            "outputValues"
+        ],
+        [
             "findMass"
         ],
         [
             "eBalanceOnWtrRC"
         ],
         [
-            "calcTempPCMOverTime"
+            "calcValues"
         ],
         [
             "calcPCMMeltEnd"
@@ -213,6 +216,9 @@
             "unlikeChgNIHG"
         ],
         [
+            "outputValues"
+        ],
+        [
             "findMass"
         ],
         [
@@ -222,7 +228,7 @@
             "eBalanceOnPCMRC"
         ],
         [
-            "calcTempWtrOverTime"
+            "calcValues"
         ]
     ],
     "eta": [
@@ -246,21 +252,27 @@
             "unlikeChgNGS"
         ],
         [
+            "outputValues"
+        ],
+        [
             "findMass"
         ],
         [
             "eBalanceOnPCMRC"
         ],
         [
-            "calcChgHeatEnergyPCMOverTime"
+            "calcValues"
         ]
     ],
     "heatEInWtrIM": [
         [
+            "outputValues"
+        ],
+        [
             "findMass"
         ],
         [
-            "calcChgHeatEnergyWtrOverTime"
+            "calcValues"
         ]
     ],
     "htFluxC": [

@@ -2276,7 +2276,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#unlikeChgNIHG>UC:No-Internal-Heat-Generation</a>, <a href=#findMass>FR:Find-Mass</a>, <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>, and <a href=#calcTempWtrOverTime>FR:Calculate-Temperature-Water-Over-Time</a>
+                          <a href=#unlikeChgNIHG>UC:No-Internal-Heat-Generation</a>, <a href=#outputValues>FR:Output-Values</a>, <a href=#findMass>FR:Find-Mass</a>, <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>, and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -2414,7 +2414,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#unlikeChgNIHG>UC:No-Internal-Heat-Generation</a>, <a href=#unlikeChgNGS>UC:No-Gaseous-State</a>, <a href=#findMass>FR:Find-Mass</a>, <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, <a href=#calcTempPCMOverTime>FR:Calculate-Temperature-PCM-Over-Time</a>, <a href=#calcPCMMeltEnd>FR:Calculate-PCM-Melt-End-Time</a>, and <a href=#calcPCMMeltBegin>FR:Calculate-PCM-Melt-Begin-Time</a>
+                          <a href=#unlikeChgNIHG>UC:No-Internal-Heat-Generation</a>, <a href=#unlikeChgNGS>UC:No-Gaseous-State</a>, <a href=#outputValues>FR:Output-Values</a>, <a href=#findMass>FR:Find-Mass</a>, <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, <a href=#calcValues>FR:Calculate-Values</a>, <a href=#calcPCMMeltEnd>FR:Calculate-PCM-Melt-End-Time</a>, and <a href=#calcPCMMeltBegin>FR:Calculate-PCM-Melt-Begin-Time</a>
                         </p>
                       </td>
                     </tr>
@@ -2533,7 +2533,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#findMass>FR:Find-Mass</a> and <a href=#calcChgHeatEnergyWtrOverTime>FR:Calculate-Change-Heat_Energy-Water-Over-Time</a>
+                          <a href=#outputValues>FR:Output-Values</a>, <a href=#findMass>FR:Find-Mass</a>, and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -2654,7 +2654,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#unlikeChgNGS>UC:No-Gaseous-State</a>, <a href=#findMass>FR:Find-Mass</a>, <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>, and <a href=#calcChgHeatEnergyPCMOverTime>FR:Calculate-Change-Heat_Energy-PCM-Over-Time</a>
+                          <a href=#unlikeChgNGS>UC:No-Gaseous-State</a>, <a href=#outputValues>FR:Output-Values</a>, <a href=#findMass>FR:Find-Mass</a>, <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>, and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -2942,23 +2942,8 @@
                 </div>
               </p>
               <p>
-                <div id="calcTempWtrOverTime">
-                  Calculate-Temperature-Water-Over-Time: Calculate and output the temperature of the water (<em>T<sub>W</sub></em>(<em>t</em>)) over the simulation time (from <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>).
-                </div>
-              </p>
-              <p>
-                <div id="calcTempPCMOverTime">
-                  Calculate-Temperature-PCM-Over-Time: Calculate and output the temperature of the phase change material (<em>T<sub>P</sub></em>(<em>t</em>)) over the simulation time (from <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>).
-                </div>
-              </p>
-              <p>
-                <div id="calcChgHeatEnergyWtrOverTime">
-                  Calculate-Change-Heat_Energy-Water-Over-Time: Calculate and output the change in heat energy in the water (<em>E<sub>W</sub></em>(<em>t</em>)) over the simulation time (from <a href=#IM:heatEInWtr>IM:heatEInWtr</a>).
-                </div>
-              </p>
-              <p>
-                <div id="calcChgHeatEnergyPCMOverTime">
-                  Calculate-Change-Heat_Energy-PCM-Over-Time: Calculate and output the change in heat energy in the PCM (<em>E<sub>P</sub></em>(<em>t</em>)) over the simulation time (from <a href=#IM:heatEInPCM>IM:heatEInPCM</a>).
+                <div id="calcValues">
+                  Calculate-Values: Calculate the following values: <em>T<sub>W</sub></em>(<em>t</em>) (from <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>), <em>T<sub>P</sub></em>(<em>t</em>) (from <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>), <em>E<sub>W</sub></em>(<em>t</em>) (from <a href=#IM:heatEInWtr>IM:heatEInWtr</a>), and <em>E<sub>P</sub></em>(<em>t</em>) (from <a href=#IM:heatEInPCM>IM:heatEInPCM</a>).
                 </div>
               </p>
               <p>
@@ -2974,6 +2959,11 @@
               <p>
                 <div id="calcPCMMeltEnd">
                   Calculate-PCM-Melt-End-Time: Calculate and output the time at which the PCM stops melting <em>t<sub>melt</sub><sup>final</sup></em> (from <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>).
+                </div>
+              </p>
+              <p>
+                <div id="outputValues">
+                  Output-Values: Output <em>T<sub>W</sub></em>(<em>t</em>) (from <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>), <em>T<sub>P</sub></em>(<em>t</em>) (from <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>), <em>E<sub>W</sub></em>(<em>t</em>) (from <a href=#IM:heatEInWtr>IM:heatEInWtr</a>), and <em>E<sub>P</sub></em>(<em>t</em>) (from <a href=#IM:heatEInPCM>IM:heatEInPCM</a>).
                 </div>
               </p>
             </div>
@@ -4344,84 +4334,7 @@
               <td></td>
             </tr>
             <tr>
-              <td>
-                <a href=#calcTempWtrOverTime>FR:Calculate-Temperature-Water-Over-Time</a>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>
-                <a href=#calcTempPCMOverTime>FR:Calculate-Temperature-PCM-Over-Time</a>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>
-                <a href=#calcChgHeatEnergyWtrOverTime>FR:Calculate-Change-Heat_Energy-Water-Over-Time</a>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>
-                <a href=#calcChgHeatEnergyPCMOverTime>FR:Calculate-Change-Heat_Energy-PCM-Over-Time</a>
-              </td>
+              <td><a href=#calcValues>FR:Calculate-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4495,6 +4408,29 @@
             </tr>
             <tr>
               <td><a href=#calcPCMMeltEnd>FR:Calculate-PCM-Melt-End-Time</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#outputValues>FR:Output-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -5417,18 +5353,7 @@
               <th>
                 <a href=#outputInputDerivVals>FR:Output-Input-Derived-Values</a>
               </th>
-              <th>
-                <a href=#calcTempWtrOverTime>FR:Calculate-Temperature-Water-Over-Time</a>
-              </th>
-              <th>
-                <a href=#calcTempPCMOverTime>FR:Calculate-Temperature-PCM-Over-Time</a>
-              </th>
-              <th>
-                <a href=#calcChgHeatEnergyWtrOverTime>FR:Calculate-Change-Heat_Energy-Water-Over-Time</a>
-              </th>
-              <th>
-                <a href=#calcChgHeatEnergyPCMOverTime>FR:Calculate-Change-Heat_Energy-PCM-Over-Time</a>
-              </th>
+              <th><a href=#calcValues>FR:Calculate-Values</a></th>
               <th>
                 <a href=#verifyEnergyOutput>FR:Verify-Energy-Output-Follow-Conservation-of-Energy</a>
               </th>
@@ -5436,6 +5361,7 @@
                 <a href=#calcPCMMeltBegin>FR:Calculate-PCM-Melt-Begin-Time</a>
               </th>
               <th><a href=#calcPCMMeltEnd>FR:Calculate-PCM-Melt-End-Time</a></th>
+              <th><a href=#outputValues>FR:Output-Values</a></th>
               <th><a href=#correct>NFR:Correct</a></th>
               <th><a href=#verifiable>NFR:Verifiable</a></th>
               <th><a href=#understandable>NFR:Understandable</a></th>
@@ -5444,8 +5370,6 @@
             </tr>
             <tr>
               <td><a href=#waterTempGS>GS:Predict-Water-Temperature</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -5519,13 +5443,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#waterEnergyGS>GS:Predict-Water-Energy</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -5599,13 +5519,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#inputValues>FR:Input-Values</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -5679,15 +5595,11 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#checkWithPhysConsts>FR:Check-Input-with-Physical_Constraints</a>
               </td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -5763,13 +5675,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
-              <td>
-                <a href=#calcTempWtrOverTime>FR:Calculate-Temperature-Water-Over-Time</a>
-              </td>
+              <td><a href=#calcValues>FR:Calculate-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -5788,137 +5696,9 @@
               <td></td>
               <td></td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>
-                <a href=#calcTempPCMOverTime>FR:Calculate-Temperature-PCM-Over-Time</a>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>
-                <a href=#calcChgHeatEnergyWtrOverTime>FR:Calculate-Change-Heat_Energy-Water-Over-Time</a>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>
-                <a href=#calcChgHeatEnergyPCMOverTime>FR:Calculate-Change-Heat_Energy-PCM-Over-Time</a>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -5938,8 +5718,6 @@
               <td>
                 <a href=#verifyEnergyOutput>FR:Verify-Energy-Output-Follow-Conservation-of-Energy</a>
               </td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6015,8 +5793,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#calcPCMMeltEnd>FR:Calculate-PCM-Melt-End-Time</a></td>
@@ -6055,13 +5831,47 @@
               <td></td>
               <td></td>
               <td></td>
+            </tr>
+            <tr>
+              <td><a href=#outputValues>FR:Output-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
             </tr>
             <tr>
               <td><a href=#correct>NFR:Correct</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6135,13 +5945,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#understandable>NFR:Understandable</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6215,13 +6021,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#maintainable>NFR:Maintainable</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>

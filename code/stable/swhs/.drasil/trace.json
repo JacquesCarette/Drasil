@@ -24,16 +24,6 @@
     "assumpVCMPN": [],
     "assumpVCN": [],
     "assumpWAL": [],
-    "calcChgHeatEnergyPCMOverTime": [
-        [
-            "heatEInPCMRC"
-        ]
-    ],
-    "calcChgHeatEnergyWtrOverTime": [
-        [
-            "heatEInWtrIM"
-        ]
-    ],
     "calcPCMMeltBegin": [
         [
             "eBalanceOnPCMRC"
@@ -44,14 +34,18 @@
             "eBalanceOnPCMRC"
         ]
     ],
-    "calcTempPCMOverTime": [
-        [
-            "eBalanceOnPCMRC"
-        ]
-    ],
-    "calcTempWtrOverTime": [
+    "calcValues": [
         [
             "eBalanceOnWtrRC"
+        ],
+        [
+            "eBalanceOnPCMRC"
+        ],
+        [
+            "heatEInWtrIM"
+        ],
+        [
+            "heatEInPCMRC"
         ]
     ],
     "checkWithPhysConsts": [
@@ -332,6 +326,20 @@
         ],
         [
             "tauLP"
+        ]
+    ],
+    "outputValues": [
+        [
+            "eBalanceOnWtrRC"
+        ],
+        [
+            "eBalanceOnPCMRC"
+        ],
+        [
+            "heatEInWtrIM"
+        ],
+        [
+            "heatEInPCMRC"
         ]
     ],
     "pcmEnergyGS": [],

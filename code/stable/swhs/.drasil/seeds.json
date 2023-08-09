@@ -61,22 +61,13 @@
             "assumpWAL"
         ],
         [
-            "calcChgHeatEnergyPCMOverTime"
-        ],
-        [
-            "calcChgHeatEnergyWtrOverTime"
-        ],
-        [
             "calcPCMMeltBegin"
         ],
         [
             "calcPCMMeltEnd"
         ],
         [
-            "calcTempPCMOverTime"
-        ],
-        [
-            "calcTempWtrOverTime"
+            "calcValues"
         ],
         [
             "checkWithPhysConsts"
@@ -113,6 +104,9 @@
         ],
         [
             "outputInputDerivVals"
+        ],
+        [
+            "outputValues"
         ],
         [
             "pcmEnergyGS"
@@ -210,22 +204,13 @@
             "assumpWAL"
         ],
         [
-            "calcChgHeatEnergyPCMOverTime"
-        ],
-        [
-            "calcChgHeatEnergyWtrOverTime"
-        ],
-        [
             "calcPCMMeltBegin"
         ],
         [
             "calcPCMMeltEnd"
         ],
         [
-            "calcTempPCMOverTime"
-        ],
-        [
-            "calcTempWtrOverTime"
+            "calcValues"
         ],
         [
             "checkWithPhysConsts"
@@ -262,6 +247,9 @@
         ],
         [
             "outputInputDerivVals"
+        ],
+        [
+            "outputValues"
         ],
         [
             "pcmEnergyGS"
@@ -703,22 +691,13 @@
             "bueche1986"
         ],
         [
-            "calcChgHeatEnergyPCMOverTime"
-        ],
-        [
-            "calcChgHeatEnergyWtrOverTime"
-        ],
-        [
             "calcPCMMeltBegin"
         ],
         [
             "calcPCMMeltEnd"
         ],
         [
-            "calcTempPCMOverTime"
-        ],
-        [
-            "calcTempWtrOverTime"
+            "calcValues"
         ],
         [
             "checkWithPhysConsts"
@@ -809,6 +788,9 @@
         ],
         [
             "outputInputDerivVals"
+        ],
+        [
+            "outputValues"
         ],
         [
             "parnasClements1986"

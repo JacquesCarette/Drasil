@@ -162,7 +162,7 @@ eBalanceOnPCM = im (deModel' eBalanceOnPCMRC) [qwC tempMeltP $ UpFrom (Exc, sy t
 
 eBalanceOnPCMRC :: RelationConcept
 eBalanceOnPCMRC = makeRC "eBalanceOnPCMRC" (nounPhraseSP
-  "Energy Balance on PCM to find temperature of PCM")
+  "Energy balance on PCM to find temperature of PCM")
   (tempPCM ^. defn) balPCMRel -- eBalanceOnPCML
 
 balPCMRel :: ModelExpr

@@ -291,16 +291,16 @@ funcReqs :: [ConceptInstance]
 findMass :: ConceptInstance
 checkWithPhysConsts :: ConceptInstance
 outputInputDerivVals :: ConceptInstance
-calcTempWtrOverTime :: ConceptInstance
-calcTempPCMOverTime :: ConceptInstance
-calcChgHeatEnergyWtrOverTime :: ConceptInstance
-calcChgHeatEnergyPCMOverTime :: ConceptInstance
 verifyEnergyOutput :: ConceptInstance
 calcPCMMeltBegin :: ConceptInstance
 calcPCMMeltEnd :: ConceptInstance
+calcValues :: [InstanceModel] -> ConceptInstance
+outputValues :: [InstanceModel] -> ConceptInstance
 findMassConstruct :: (Referable r, HasShortName r, Referable s, HasShortName s, Referable t, HasShortName t) => r -> Sentence -> [s] -> [t] -> ConceptInstance
 oIDQConstruct :: [Sentence] -> ConceptInstance
 oIDQVals :: [Sentence]
+outputList :: [InstanceModel] -> Sentence
+swhsOutputs :: [InstanceModel]
 nfRequirements :: [ConceptInstance]
 correct :: ConceptInstance
 verifiable :: ConceptInstance

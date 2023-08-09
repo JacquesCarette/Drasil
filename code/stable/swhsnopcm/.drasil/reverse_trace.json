@@ -110,12 +110,14 @@
             "inputInitVals"
         ]
     ],
+    "doc:ReqOutputs": [
+        [
+            "outputValues"
+        ]
+    ],
     "eBalanceOnWtrRC": [
         [
             "unlikeChgNIHG"
-        ],
-        [
-            "outputValues"
         ],
         [
             "findMass"
@@ -130,9 +132,6 @@
         ]
     ],
     "heatEInWtrIM": [
-        [
-            "outputValues"
-        ],
         [
             "calcValues"
         ]

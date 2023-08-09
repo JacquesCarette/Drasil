@@ -11,7 +11,7 @@ import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Drasil.SWHS.DataDefs (waterMass, tankVolume, balanceDecayRate)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.SWHS.Requirements (calcValues, checkWithPhysConsts,
-  findMassConstruct, inReqDesc, oIDQConstruct, outputValues)
+  findMassConstruct, inReqDesc, oIDQConstruct)
 
 import Drasil.SWHSNoPCM.DataDefs (waterVolume)
 import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr)
@@ -50,7 +50,7 @@ inputInitValsTable = mkInputPropsTable inputs inputInitVals
 
 funcReqs :: [ConceptInstance]
 funcReqs = [inputInitVals, findMass, checkWithPhysConsts,
-  oIDQConstruct oIDQVals, calcValues noPCMOutputs, outputValues noPCMOutputs]
+  oIDQConstruct oIDQVals, calcValues noPCMOutputs]
 
 noPCMOutputs :: [InstanceModel]
 noPCMOutputs = [eBalanceOnWtr, heatEInWtr]

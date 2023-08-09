@@ -279,6 +279,10 @@
         ],
         [
             "doc",
+            "ReqOutputs"
+        ],
+        [
+            "doc",
             "SysCon"
         ],
         [
@@ -656,6 +660,10 @@
         [
             "doc",
             "ReqInputs"
+        ],
+        [
+            "doc",
+            "ReqOutputs"
         ],
         [
             "doc",

@@ -688,6 +688,10 @@
         "references",
         "labelledContent"
     ],
+    "doc:ReqOutputs": [
+        "references",
+        "labelledContent"
+    ],
     "doc:SysCon": [
         "references",
         "labelledContent"

@@ -146,10 +146,8 @@
     ],
     "outputValues": [
         [
-            "eBalanceOnWtrRC"
-        ],
-        [
-            "heatEInWtrIM"
+            "doc",
+            "ReqOutputs"
         ]
     ],
     "reusable": [],

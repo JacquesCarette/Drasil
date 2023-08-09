@@ -9,8 +9,6 @@ digraph allvsr {
 	outputInputDerivVals -> findMass;
 	calcValues -> eBalanceOnWtrRC;
 	calcValues -> heatEInWtrIM;
-	outputValues -> eBalanceOnWtrRC;
-	outputValues -> heatEInWtrIM;
 
 
 	assumpTEO	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTEO"];

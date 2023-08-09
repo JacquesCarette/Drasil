@@ -1486,7 +1486,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#unlikeChgNIHG>UC:No-Internal-Heat-Generation</a>, <a href=#outputValues>FR:Output-Values</a>, <a href=#findMass>FR:Find-Mass</a>, and <a href=#calcValues>FR:Calculate-Values</a>
+                          <a href=#unlikeChgNIHG>UC:No-Internal-Heat-Generation</a>, <a href=#findMass>FR:Find-Mass</a>, and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1594,7 +1594,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#outputValues>FR:Output-Values</a> and <a href=#calcValues>FR:Calculate-Values</a>
+                          <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1787,7 +1787,7 @@
               </p>
               <p>
                 <div id="outputValues">
-                  Output-Values: Output <em>T<sub>W</sub></em>(<em>t</em>) (from <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>) and <em>E<sub>W</sub></em>(<em>t</em>) (from <a href=#IM:heatEInWtr>IM:heatEInWtr</a>).
+                  Output-Values: Output the values from <a href=#Table:ReqOutputs>Tab:ReqOutputs</a>.
                 </div>
               </p>
             </div>
@@ -1865,6 +1865,31 @@
               </table>
               <p class="caption">
                 Required Inputs following <a href=#inputInitVals>FR:Input-Initial-Values</a>
+              </p>
+            </div>
+            <div id="Table:ReqOutputs">
+              <table class="table">
+                <tr>
+                  <th>Symbol</th>
+                  <th>Description</th>
+                  <th>Source</th>
+                  <th>Units</th>
+                </tr>
+                <tr>
+                  <td><em>E<sub>W</sub></em></td>
+                  <td>Change in heat energy in the water</td>
+                  <td></td>
+                  <td><em>J</em></td>
+                </tr>
+                <tr>
+                  <td><em>T<sub>W</sub></em></td>
+                  <td>Temperature of the water</td>
+                  <td></td>
+                  <td><em>&deg;C</em></td>
+                </tr>
+              </table>
+              <p class="caption">
+                Required Outputs following <a href=#outputValues>FR:Output-Values</a>
               </p>
             </div>
           </div>
@@ -3160,8 +3185,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
-              <td>X</td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

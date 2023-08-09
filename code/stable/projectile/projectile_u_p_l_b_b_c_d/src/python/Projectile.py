@@ -160,9 +160,9 @@ def func_s(inParams, d_offset):
         return "The projectile went long."
 
 ## \brief Writes the output values to output.txt
-# \param s selection of output message as a string
-# \param d_offset calculation of offset: the distance between the target position and the landing position (m)
-# \param t_flight calculation of flight duration: the time when the projectile lands (s)
+# \param s output message as a string
+# \param d_offset offset: the distance between the target position and the landing position (m)
+# \param t_flight flight duration: the time when the projectile lands (s)
 def write_output(s, d_offset, t_flight):
     outfile = open("log.txt", "a")
     print("function write_output called with inputs: {", file=outfile)

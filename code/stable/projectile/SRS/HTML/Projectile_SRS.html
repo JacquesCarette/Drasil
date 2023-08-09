@@ -642,7 +642,7 @@
                   </p>
                   <p>
                     <div id="posXDirection">
-                      posXDirection: The positive <em>x</em>-direction is from the launcher to the target. (RefBy: <a href=#IM:offsetIM>IM:offsetIM</a>, <a href=#IM:messageIM>IM:messageIM</a>, <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>, and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
+                      posXDirection: The positive <em>x</em>-direction is from the launcher to the target. (RefBy: <a href=#IM:calOfOffset>IM:calOfOffset</a>, <a href=#IM:selOfMessage>IM:selOfMessage</a>, <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>, and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
                     </div>
                   </p>
                   <p>
@@ -1414,7 +1414,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#outputValues>FR:Output-Values</a>, <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>, and <a href=#calcValues>FR:Calculate-Values</a>
+                          <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>, <a href=#outputValues>FR:Output-Values</a>, and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1521,7 +1521,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:offsetIM>IM:offsetIM</a> and <a href=#calcValues>FR:Calculate-Values</a>
+                          <a href=#IM:calOfOffset>IM:calOfOffset</a> and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1548,11 +1548,11 @@
                     \[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}\]
                   </div>
                 </div>
-                <div id="IM:offsetIM">
+                <div id="IM:calOfOffset">
                   <table class="idefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>IM:offsetIM</b></td>
+                      <td><b>IM:calOfOffset</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
@@ -1620,17 +1620,17 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#outputValues>FR:Output-Values</a>, <a href=#IM:messageIM>IM:messageIM</a>, and <a href=#calcValues>FR:Calculate-Values</a>
+                          <a href=#IM:selOfMessage>IM:selOfMessage</a>, <a href=#outputValues>FR:Output-Values</a>, and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
                   </table>
                 </div>
-                <div id="IM:messageIM">
+                <div id="IM:selOfMessage">
                   <table class="idefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>IM:messageIM</b></td>
+                      <td><b>IM:selOfMessage</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
@@ -1688,7 +1688,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>d<sub>offset</sub></em> is from <a href=#IM:offsetIM>IM:offsetIM</a>.
+                          <em>d<sub>offset</sub></em> is from <a href=#IM:calOfOffset>IM:calOfOffset</a>.
                         </p>
                         <p class="paragraph">
                           The constraint <em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em> is from <a href=#posXDirection>A:posXDirection</a>.
@@ -1816,7 +1816,7 @@
               </p>
               <p>
                 <div id="calcValues">
-                  Calculate-Values: Calculate the following values: <em>t<sub>flight</sub></em> (from <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>), <em>p<sub>land</sub></em> (from <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>), <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM:offsetIM</a>), and <em>s</em> (from <a href=#IM:messageIM>IM:messageIM</a>).
+                  Calculate-Values: Calculate the following values: <em>t<sub>flight</sub></em> (from <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>), <em>p<sub>land</sub></em> (from <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>), <em>d<sub>offset</sub></em> (from <a href=#IM:calOfOffset>IM:calOfOffset</a>), and <em>s</em> (from <a href=#IM:selOfMessage>IM:selOfMessage</a>).
                 </div>
               </p>
               <p>
@@ -1862,20 +1862,14 @@
                 </tr>
                 <tr>
                   <td><em>d<sub>offset</sub></em></td>
-<<<<<<< HEAD
-                  <td>
-                    Distance between the target position and the landing position
-                  </td>
-=======
                   <td>Offset</td>
->>>>>>> 05f9eb3216 (use names of unitals for names of IMs in Projectile)
-                  <td><a href=#IM:offsetIM>IM:offsetIM</a></td>
+                  <td><a href=#IM:calOfOffset>IM:calOfOffset</a></td>
                   <td><em>m</em></td>
                 </tr>
                 <tr>
                   <td><em>s</em></td>
                   <td>Output message as a string</td>
-                  <td><a href=#IM:messageIM>IM:messageIM</a></td>
+                  <td><a href=#IM:selOfMessage>IM:selOfMessage</a></td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -2449,7 +2443,7 @@
               <td>X</td>
             </tr>
             <tr>
-              <td><a href=#IM:offsetIM>IM:offsetIM</a></td>
+              <td><a href=#IM:calOfOffset>IM:calOfOffset</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2467,7 +2461,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#IM:messageIM>IM:messageIM</a></td>
+              <td><a href=#IM:selOfMessage>IM:selOfMessage</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2684,8 +2678,8 @@
               <th><a href=#GD:posVec>GD:posVec</a></th>
               <th><a href=#IM:calOfLandingTime>IM:calOfLandingTime</a></th>
               <th><a href=#IM:calOfLandingDist>IM:calOfLandingDist</a></th>
-              <th><a href=#IM:offsetIM>IM:offsetIM</a></th>
-              <th><a href=#IM:messageIM>IM:messageIM</a></th>
+              <th><a href=#IM:calOfOffset>IM:calOfOffset</a></th>
+              <th><a href=#IM:selOfMessage>IM:selOfMessage</a></th>
             </tr>
             <tr>
               <td><a href=#DD:vecMag>DD:vecMag</a></td>
@@ -2864,7 +2858,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#IM:offsetIM>IM:offsetIM</a></td>
+              <td><a href=#IM:calOfOffset>IM:calOfOffset</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2880,7 +2874,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#IM:messageIM>IM:messageIM</a></td>
+              <td><a href=#IM:selOfMessage>IM:selOfMessage</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2915,8 +2909,8 @@
               <th><a href=#GD:posVec>GD:posVec</a></th>
               <th><a href=#IM:calOfLandingTime>IM:calOfLandingTime</a></th>
               <th><a href=#IM:calOfLandingDist>IM:calOfLandingDist</a></th>
-              <th><a href=#IM:offsetIM>IM:offsetIM</a></th>
-              <th><a href=#IM:messageIM>IM:messageIM</a></th>
+              <th><a href=#IM:calOfOffset>IM:calOfOffset</a></th>
+              <th><a href=#IM:selOfMessage>IM:selOfMessage</a></th>
               <th><a href=#inputValues>FR:Input-Values</a></th>
               <th><a href=#verifyInVals>FR:Verify-Input-Values</a></th>
               <th><a href=#calcValues>FR:Calculate-Values</a></th>

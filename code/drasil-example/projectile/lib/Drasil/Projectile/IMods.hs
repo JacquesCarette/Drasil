@@ -116,19 +116,20 @@ offsetIM :: InstanceModel
 offsetIM = imNoDerivNoRefs (equationalModelN (calculation `of_` offset) offsetQD)
   [qwC landPos $ UpFrom (Exc, exactDbl 0)
   ,qwC targPos $ UpFrom (Exc, exactDbl 0)]
-  (qw offset) [] "offsetIM" [landPosNote, landAndTargPosConsNote]
+  (qw offset) [] "calOfOffset" [landPosNote, landAndTargPosConsNote]
 
 offsetQD :: SimpleQDef
 offsetQD = mkQuantDef offset E.offset'
+
 ---
 messageIM :: InstanceModel
 messageIM = imNoDerivNoRefs (equationalModelN
      (nounPhraseSent (S "selection") `NP.of_` (message ^. term))
      messageQD)
-  [qwC offset $ UpFrom (Exc, neg (sy targPos))
-  ,qwC targPos $ UpFrom (Exc, exactDbl 0)]
+  [qwC offset $ UpFrom (Exc, neg (sy targPos)),
+    qwC targPos $ UpFrom (Exc, exactDbl 0)]
   (qw message)
-  [] "messageIM" [offsetNote, targPosConsNote, offsetConsNote, tolNote]
+  [] "selOfMessage" [offsetNote, targPosConsNote, offsetConsNote, tolNote]
 
 messageQD :: SimpleQDef
 messageQD = mkQuantDef message E.message

@@ -74,9 +74,9 @@ double func_d_offset(InputParameters &inParams, double p_land);
 string func_s(InputParameters &inParams, double d_offset);
 
 /** \brief Writes the output values to output.txt
-    \param s selection of output message as a string
-    \param d_offset calculation of offset: the distance between the target position and the landing position (m)
-    \param t_flight calculation of flight duration: the time when the projectile lands (s)
+    \param s output message as a string
+    \param d_offset offset: the distance between the target position and the landing position (m)
+    \param t_flight flight duration: the time when the projectile lands (s)
 */
 void write_output(string s, double d_offset, double t_flight);
 

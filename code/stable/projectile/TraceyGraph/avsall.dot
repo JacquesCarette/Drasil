@@ -77,8 +77,8 @@ digraph avsall {
 
 	theory:flightduration	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingTime"];
 	theory:landingposition	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingDist"];
-	theory:offset	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:offsetIM"];
-	theory:message	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:messageIM"];
+	theory:offset	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfOffset"];
+	theory:message	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:selOfMessage"];
 
 	subgraph IM {
 	rank="same"

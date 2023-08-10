@@ -85,7 +85,11 @@ fullExList codePth srsDoxPth = Enumeration $ Bullet $ map (, Nothing) (allExampl
 allExampleList :: [Example] -> [ItemType]
 allExampleList = map (\x -> Nested (nameAndDesc x) $ Bullet $ map (, Nothing) (individualExList x))
   where
-    nameAndDesc E{sysInfoE = SI{_sys = sys}, descE = desc} = S (programName sys) +:+ desc
+    nameAndDesc E{sysInfoE = SI{_sys = sys, _purpose = purp}} = S "The purpose of" +:+ S (programName sys) +:+ S "is to" +:+ firstElementSent purp
+
+firstElementSent :: [Sentence] -> Sentence
+firstElementSent [] = EmptyS
+firstElementSent x = head x
 
 -- | Display the points for generated documents and call 'versionList' to display the code.
 individualExList :: Example -> [ItemType]

@@ -764,7 +764,7 @@ Notes & ${τ_{\text{W}}}$ is calculated from \hyperref[DD:balanceDecayRate]{DD:b
 Source & \cite[(with PCM removed)]{koothoor2013}
          
 \\ \midrule
-RefBy & \hyperref[unlikeChgNIHG]{UC:No-Internal-Heat-Generation}, \hyperref[findMass]{FR:Find-Mass}, and \hyperref[calcValues]{FR:Calculate-Values}
+RefBy & \hyperref[unlikeChgNIHG]{UC:No-Internal-Heat-Generation}, \hyperref[outputValues]{FR:Output-Values}, \hyperref[findMass]{FR:Find-Mass}, and \hyperref[calcValues]{FR:Calculate-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -836,7 +836,7 @@ Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM:sensHtE}.
 Source & \cite{koothoor2013}
          
 \\ \midrule
-RefBy & \hyperref[calcValues]{FR:Calculate-Values}
+RefBy & \hyperref[outputValues]{FR:Output-Values} and \hyperref[calcValues]{FR:Calculate-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -937,9 +937,9 @@ ${ρ_{\text{W}}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 {colspec={l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Source} & \textbf{Units}
 \\
-${E_{\text{W}}}$ & Change in heat energy in the water &  & ${\text{J}}$
+${E_{\text{W}}}$ & Change in heat energy in the water & \hyperref[IM:heatEInWtr]{IM:heatEInWtr} & ${\text{J}}$
 \\
-${T_{\text{W}}}$ & Temperature of the water &  & ${{}^{\circ}\text{C}}$
+${T_{\text{W}}}$ & Temperature of the water & \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr} & ${{}^{\circ}\text{C}}$
 \label{Table:ReqOutputs}
 \end{longtblr}
 \subsection{Non-Functional Requirements}
@@ -1118,7 +1118,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[calcValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\

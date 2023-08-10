@@ -7,7 +7,8 @@ import Language.Drasil.Development (showUID)
 import Language.Drasil.Display (Symbol(Variable))
 import Database.Drasil
 import SysInfo.Drasil hiding (sysinfodb)
-import Theory.Drasil (DataDefinition, HasOutput(output), qdEFromDD, getEqModQdsFromIm)
+import Theory.Drasil (DataDefinition, HasOutput(output), qdEFromDD,
+  getEqModQdsFromIm)
 
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,

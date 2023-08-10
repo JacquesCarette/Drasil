@@ -60,7 +60,7 @@ import qualified Drasil.SWHSNoPCM.DataDefs as NoPCM (dataDefs)
 import Drasil.SWHSNoPCM.Definitions (srsSWHS, htTrans)
 import Drasil.SWHSNoPCM.GenDefs (genDefs)
 import Drasil.SWHSNoPCM.Goals (goals)
-import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr, instModIntro)
+import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr, instModIntro, iMods)
 import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
 import Drasil.SWHSNoPCM.Requirements (funcReqs, inputInitValsTable)
@@ -186,7 +186,7 @@ si = SI {
   _datadefs    = NoPCM.dataDefs,
   _configFiles = [],
   _inputs      = inputs ++ [qw watE], --inputs ++ outputs?
-  _outputs     = map qw [tempW, watE],     --outputs
+  _outputs     = iMods,     --outputs
   _defSequence = [(\x -> Parallel (head x) (tail x)) qDefs],
   _constraints = map cnstrw constrained ++ map cnstrw [tempW, watE], --constrained
   _constants   = piConst : specParamValList,
@@ -208,13 +208,14 @@ refDB :: ReferenceDB
 refDB = rdb citations concIns
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsAll (nw progName : map nw symbols ++ map nw acronyms ++ map nw thermocon
+symbMap = cdb (map qw iMods ++ symbolsAll) (nw progName : map nw iMods
+  ++ map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived
   ++ map nw physicalcon ++ map nw unitalChuncks ++ map nw [absTol, relTol]
   ++ [nw srsSWHS, nw algorithm, nw inValue, nw htTrans, nw materialProprty, nw phsChgMtrl])
-  (map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
+  (map cw iMods ++ map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
   tMods concIns section labCon []
 
 usedDB :: ChunkDB

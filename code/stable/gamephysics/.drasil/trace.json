@@ -206,6 +206,12 @@
             "assumpOD"
         ]
     ],
+    "outputValues": [
+        [
+            "doc",
+            "ReqOutputs"
+        ]
+    ],
     "p_CM": [
         [
             "assumpOT"

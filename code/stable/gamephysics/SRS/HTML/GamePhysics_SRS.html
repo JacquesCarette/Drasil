@@ -2619,6 +2619,36 @@
                   Determine-Collision-Response-Over-Time: Determine the positions and velocities over a period of time of the 2D rigid bodies that have undergone a collision.
                 </div>
               </p>
+              <p>
+                <div id="outputValues">
+                  Output-Values: Output the values from <a href=#Table:ReqOutputs>Tab:ReqOutputs</a>.
+                </div>
+              </p>
+            </div>
+            <div id="Table:ReqOutputs">
+              <table class="table">
+                <tr>
+                  <th>Symbol</th>
+                  <th>Description</th>
+                  <th>Source</th>
+                  <th>Units</th>
+                </tr>
+                <tr>
+                  <td><em>v(t)</em></td>
+                  <td>Linear velocity</td>
+                  <td></td>
+                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>ω</em></td>
+                  <td>Angular velocity</td>
+                  <td></td>
+                  <td><em>\(\frac{\text{rad}}{\text{s}}\)</em></td>
+                </tr>
+              </table>
+              <p class="caption">
+                Required Outputs following <a href=#outputValues>FR:Output-Values</a>
+              </p>
             </div>
           </div>
         </div>
@@ -3162,6 +3192,16 @@
               <td>
                 <a href=#deterCollRespOverTime>FR:Determine-Collision-Response-Over-Time</a>
               </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#outputValues>FR:Output-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4029,6 +4069,7 @@
               <th>
                 <a href=#deterCollRespOverTime>FR:Determine-Collision-Response-Over-Time</a>
               </th>
+              <th><a href=#outputValues>FR:Output-Values</a></th>
               <th><a href=#performance>NFR:Performance</a></th>
               <th><a href=#correctness>NFR:Correctness</a></th>
               <th><a href=#usability>NFR:Usability</a></th>
@@ -4037,6 +4078,7 @@
             </tr>
             <tr>
               <td><a href=#linearGS>GS:Determine-Linear-Properties</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4114,9 +4156,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#simSpace>FR:Simulation-Space</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4194,6 +4238,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#inputSurfaceProps>FR:Input-Surface-Properties</a></td>
@@ -4234,9 +4279,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#verifyPhysCons>FR:Verify-Physical_Constraints</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4316,6 +4363,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
@@ -4358,9 +4406,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#deterColls>FR:Determine-Collisions</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4440,9 +4490,52 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#outputValues>FR:Output-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#performance>NFR:Performance</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4520,9 +4613,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#usability>NFR:Usability</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4600,9 +4695,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#maintainability>NFR:Maintainability</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

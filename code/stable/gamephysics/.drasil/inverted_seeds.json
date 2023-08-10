@@ -606,6 +606,10 @@
     "doc:ReqInputs": [
         "references"
     ],
+    "doc:ReqOutputs": [
+        "references",
+        "labelledContent"
+    ],
     "doc:TAbbAcc": [
         "references",
         "labelledContent"
@@ -1284,6 +1288,11 @@
     ],
     "output": [
         "terms"
+    ],
+    "outputValues": [
+        "references",
+        "concepts",
+        "conceptInstances"
     ],
     "p_CM": [
         "terms",

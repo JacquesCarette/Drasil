@@ -124,6 +124,7 @@ digraph allvsall {
 	calcRotOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcRotOverTime"];
 	deterColls	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:deterColls"];
 	deterCollRespOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:deterCollRespOverTime"];
+	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 	performance	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:performance"];
 	correctness	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correctness"];
 	usability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:usability"];
@@ -132,7 +133,7 @@ digraph allvsall {
 
 	subgraph FR {
 	rank="same"
-	{simSpace, inputInitialConds, inputSurfaceProps, verifyPhysCons, calcTransOverTime, calcRotOverTime, deterColls, deterCollRespOverTime, performance, correctness, usability, understandability, maintainability}
+	{simSpace, inputInitialConds, inputSurfaceProps, verifyPhysCons, calcTransOverTime, calcRotOverTime, deterColls, deterCollRespOverTime, outputValues, performance, correctness, usability, understandability, maintainability}
 	}
 
 	linearGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:linearGS"];

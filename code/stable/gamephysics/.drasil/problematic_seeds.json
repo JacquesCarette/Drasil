@@ -291,6 +291,10 @@
         "references",
         "labelledContent"
     ],
+    "doc:ReqOutputs": [
+        "references",
+        "labelledContent"
+    ],
     "doc:TAbbAcc": [
         "references",
         "labelledContent"
@@ -567,6 +571,11 @@
     "orientation": [
         "terms",
         "symbols"
+    ],
+    "outputValues": [
+        "references",
+        "concepts",
+        "conceptInstances"
     ],
     "p_CM": [
         "terms",

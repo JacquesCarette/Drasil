@@ -64,6 +64,9 @@
             "maintainability"
         ],
         [
+            "outputValues"
+        ],
+        [
             "performance"
         ],
         [
@@ -154,6 +157,9 @@
         ],
         [
             "maintainability"
+        ],
+        [
+            "outputValues"
         ],
         [
             "performance"
@@ -329,6 +335,10 @@
         [
             "doc",
             "OutDataConstraints"
+        ],
+        [
+            "doc",
+            "ReqOutputs"
         ],
         [
             "doc",
@@ -673,6 +683,9 @@
             "offShelfSolnsLabel"
         ],
         [
+            "outputValues"
+        ],
+        [
             "p_CM"
         ],
         [
@@ -749,6 +762,10 @@
         [
             "doc",
             "ReqInputs"
+        ],
+        [
+            "doc",
+            "ReqOutputs"
         ],
         [
             "doc",

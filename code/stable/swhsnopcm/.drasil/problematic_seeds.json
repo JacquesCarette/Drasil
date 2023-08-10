@@ -221,12 +221,7 @@
         "concepts",
         "conceptInstances"
     ],
-    "calcChgHeatEnergyWtrOverTime": [
-        "references",
-        "concepts",
-        "conceptInstances"
-    ],
-    "calcTempWtrOverTime": [
+    "calcValues": [
         "references",
         "concepts",
         "conceptInstances"
@@ -480,6 +475,11 @@
         "symbols"
     ],
     "outputInputDerivVals": [
+        "references",
+        "concepts",
+        "conceptInstances"
+    ],
+    "outputValues": [
         "references",
         "concepts",
         "conceptInstances"

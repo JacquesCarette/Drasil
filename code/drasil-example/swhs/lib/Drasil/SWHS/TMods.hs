@@ -87,7 +87,7 @@ sensHtETemplate pc desc = tm (equationalModel' qd)
 
 
 sensHtEQD :: PhaseChange -> ModelExpr -> Sentence -> ModelQDef
-sensHtEQD pc eqn desc = fromEqnSt'' "sensHeat" np desc (symbol sensHeat) (typ sensHeat) eqn
+sensHtEQD pc eqn desc = fromEqnSt'' "sensHeat" np desc (symbol sensHeat) (sensHeat ^. typ) eqn
   where np = nounPhraseSP ("Sensible heat energy" ++ case pc of
                                                        Liquid -> " (no state change)"
                                                        AllPhases -> "")

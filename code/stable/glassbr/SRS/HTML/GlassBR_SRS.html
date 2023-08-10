@@ -847,7 +847,7 @@
                   </p>
                   <p>
                     <div id="assumpSV">
-                      standardValues: The values provided in <a href=#Sec:AuxConstants>Sec:Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. (RefBy: <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a>, <a href=#DD:sdfTol>DD:sdfTol</a>, <a href=#DD:nFL>DD:nFL</a>, <a href=#DD:loadDurFactor>DD:loadDurFactor</a>, <a href=#DD:dimlessLoad>DD:dimlessLoad</a>, and <a href=#assumpLDFC>A:ldfConstant</a>.)
+                      standardValues: The values provided in <a href=#Sec:AuxConstants>Sec:Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. (RefBy: <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a>, <a href=#IM:sdfTol>IM:sdfTol</a>, <a href=#IM:nFL>IM:nFL</a>, <a href=#DD:loadDurFactor>DD:loadDurFactor</a>, <a href=#IM:dimlessLoad>IM:dimlessLoad</a>, and <a href=#assumpLDFC>A:ldfConstant</a>.)
                     </div>
                   </p>
                   <p>
@@ -925,11 +925,7 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td>
-                        <p class="paragraph">
-                          <a href=#checkGlassSafety>FR:Check-Glass-Safety</a>
-                        </p>
-                      </td>
+                      <td><p class="paragraph"></p></td>
                     </tr>
                   </table>
                 </div>
@@ -979,11 +975,7 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td>
-                        <p class="paragraph">
-                          <a href=#checkGlassSafety>FR:Check-Glass-Safety</a>
-                        </p>
-                      </td>
+                      <td><p class="paragraph"></p></td>
                     </tr>
                   </table>
                 </div>
@@ -1001,91 +993,6 @@
                 <p class="paragraph">
                   This section collects and defines all the data needed to build the instance models.
                 </p>
-                <div id="DD:riskFun">
-                  <table class="ddefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>DD:riskFun</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">Risk of failure</p></td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em>B</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph">Unitless</p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[B=\frac{k}{\left(a b\right)^{m-1}} \left(E h^{2}\right)^{m} \mathit{LDF} e^{J}\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li><em>B</em> is the risk of failure (Unitless)</li>
-                          <li>
-                            <em>k</em> is the surface flaw parameter (<em>\(\frac{\text{m}^{12}}{\text{N}^{7}}\)</em>)
-                          </li>
-                          <li>
-                            <em>a</em> is the plate length (long dimension) (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>b</em> is the plate width (short dimension) (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>m</em> is the surface flaw parameter (<em>\(\frac{\text{m}^{12}}{\text{N}^{7}}\)</em>)
-                          </li>
-                          <li>
-                            <em>E</em> is the modulus of elasticity of glass (<em>Pa</em>)
-                          </li>
-                          <li><em>h</em> is the minimum thickness (<em>m</em>)</li>
-                          <li><em>LDF</em> is the load duration factor (Unitless)</li>
-                          <li>
-                            <em>J</em> is the stress distribution factor (Function) (Unitless)
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
-                        </p>
-                        <p class="paragraph">
-                          <em>h</em> is defined in <a href=#DD:minThick>DD:minThick</a> and is based on the nominal thicknesses.
-                        </p>
-                        <p class="paragraph">
-                          <em>LDF</em> is defined in <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.
-                        </p>
-                        <p class="paragraph">
-                          <em>J</em> is defined in <a href=#DD:stressDistFac>DD:stressDistFac</a>.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td>
-                        <p class="paragraph">
-                          <a href=#astm2009>astm2009</a>, <a href=#beasonEtAl1998>beasonEtAl1998</a> (Eqs. 4-5), and <a href=#campidelli>campidelli</a> (Eq. 14)
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph"><a href=#DD:probOfBreak>DD:probOfBreak</a></p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
                 <div id="DD:minThick">
                   <table class="ddefn">
                     <tr>
@@ -1150,7 +1057,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#DD:sdfTol>DD:sdfTol</a>, <a href=#DD:riskFun>DD:riskFun</a>, <a href=#DD:nFL>DD:nFL</a>, and <a href=#DD:dimlessLoad>DD:dimlessLoad</a>
+                          <a href=#IM:sdfTol>IM:sdfTol</a>, <a href=#IM:riskFun>IM:riskFun</a>, <a href=#IM:nFL>IM:nFL</a>, and <a href=#IM:dimlessLoad>IM:dimlessLoad</a>
                         </p>
                       </td>
                     </tr>
@@ -1213,148 +1120,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#DD:sdfTol>DD:sdfTol</a> and <a href=#DD:riskFun>DD:riskFun</a>
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="DD:stressDistFac">
-                  <table class="ddefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>DD:stressDistFac</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td>
-                        <p class="paragraph">Stress distribution factor (Function)</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em>J</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph">Unitless</p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[J=\mathit{interpZ}\left(\text{``SDF.txt''},\mathit{AR},\hat{q}\right)\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li>
-                            <em>J</em> is the stress distribution factor (Function) (Unitless)
-                          </li>
-                          <li><em>interpZ</em> is the interpZ (Unitless)</li>
-                          <li><em>AR</em> is the aspect ratio (Unitless)</li>
-                          <li><em>q&#770;</em> is the dimensionless load (Unitless)</li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>J</em> is obtained by interpolating from data shown in <a href=#Figure:dimlessloadVSaspect>Fig:dimlessloadVSaspect</a>.
-                        </p>
-                        <p class="paragraph">
-                          <em>AR</em> is defined in <a href=#DD:aspectRatio>DD:aspectRatio</a>.
-                        </p>
-                        <p class="paragraph">
-                          <em>q&#770;</em> is defined in <a href=#DD:dimlessLoad>DD:dimlessLoad</a>.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph"><a href=#DD:riskFun>DD:riskFun</a></p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="DD:nFL">
-                  <table class="ddefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>DD:nFL</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">Non-factored load</p></td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em>NFL</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph"><em>Pa</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[\mathit{NFL}=\frac{{\hat{q}_{\text{tol}}} E h^{4}}{\left(a b\right)^{2}}\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li><em>NFL</em> is the non-factored load (<em>Pa</em>)</li>
-                          <li>
-                            <em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
-                          </li>
-                          <li>
-                            <em>E</em> is the modulus of elasticity of glass (<em>Pa</em>)
-                          </li>
-                          <li><em>h</em> is the minimum thickness (<em>m</em>)</li>
-                          <li>
-                            <em>a</em> is the plate length (long dimension) (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>b</em> is the plate width (short dimension) (<em>m</em>)
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>q&#770;<sub>tol</sub></em> is defined in <a href=#DD:tolLoad>DD:tolLoad</a>.
-                        </p>
-                        <p class="paragraph">
-                          <em>E</em> comes from <a href=#assumpSV>A:standardValues</a>.
-                        </p>
-                        <p class="paragraph">
-                          <em>h</em> is defined in <a href=#DD:minThick>DD:minThick</a> and is based on the nominal thicknesses.
-                        </p>
-                        <p class="paragraph">
-                          <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph">
-                          <a href=#DD:calofCapacity>DD:calofCapacity</a>
+                          <a href=#IM:sdfTol>IM:sdfTol</a> and <a href=#IM:riskFun>IM:riskFun</a>
                         </p>
                       </td>
                     </tr>
@@ -1413,243 +1179,8 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#DD:calofCapacity>DD:calofCapacity</a> and <a href=#DD:dimlessLoad>DD:dimlessLoad</a>
+                          <a href=#IM:calofCapacity>IM:calofCapacity</a> and <a href=#IM:dimlessLoad>IM:dimlessLoad</a>
                         </p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="DD:dimlessLoad">
-                  <table class="ddefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>DD:dimlessLoad</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">Dimensionless load</p></td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em>q&#770;</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph">Unitless</p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[\hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} \mathit{GTF}}\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li><em>q&#770;</em> is the dimensionless load (Unitless)</li>
-                          <li><em>q</em> is the applied load (demand) (<em>Pa</em>)</li>
-                          <li>
-                            <em>a</em> is the plate length (long dimension) (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>b</em> is the plate width (short dimension) (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>E</em> is the modulus of elasticity of glass (<em>Pa</em>)
-                          </li>
-                          <li><em>h</em> is the minimum thickness (<em>m</em>)</li>
-                          <li><em>GTF</em> is the glass type factor (Unitless)</li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>q</em> is the 3 second duration equivalent pressure, as given in <a href=#DD:calofDemand>DD:calofDemand</a>.
-                        </p>
-                        <p class="paragraph">
-                          <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
-                        </p>
-                        <p class="paragraph">
-                          <em>E</em> comes from <a href=#assumpSV>A:standardValues</a>.
-                        </p>
-                        <p class="paragraph">
-                          <em>h</em> is defined in <a href=#DD:minThick>DD:minThick</a> and is based on the nominal thicknesses.
-                        </p>
-                        <p class="paragraph">
-                          <em>GTF</em> is defined in <a href=#DD:gTF>DD:gTF</a>.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td>
-                        <p class="paragraph">
-                          <a href=#astm2009>astm2009</a> and <a href=#campidelli>campidelli</a> (Eq. 7)
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph">
-                          <a href=#DD:stressDistFac>DD:stressDistFac</a>
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="DD:tolLoad">
-                  <table class="ddefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>DD:tolLoad</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">Tolerable load</p></td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em>q&#770;<sub>tol</sub></em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph">Unitless</p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[{\hat{q}_{\text{tol}}}=\mathit{interpY}\left(\text{``SDF.txt''},\mathit{AR},{J_{\text{tol}}}\right)\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li>
-                            <em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
-                          </li>
-                          <li><em>interpY</em> is the interpY (Unitless)</li>
-                          <li><em>AR</em> is the aspect ratio (Unitless)</li>
-                          <li>
-                            <em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol (Unitless)
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>q&#770;<sub>tol</sub></em> is obtained by interpolating from data shown in <a href=#Figure:dimlessloadVSaspect>Fig:dimlessloadVSaspect</a>.
-                        </p>
-                        <p class="paragraph">
-                          <em>AR</em> is defined in <a href=#DD:aspectRatio>DD:aspectRatio</a>.
-                        </p>
-                        <p class="paragraph">
-                          <em>J<sub>tol</sub></em> is defined in <a href=#DD:sdfTol>DD:sdfTol</a>.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td><p class="paragraph"><a href=#DD:nFL>DD:nFL</a></p></td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="DD:sdfTol">
-                  <table class="ddefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>DD:sdfTol</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td>
-                        <p class="paragraph">
-                          Stress distribution factor (Function) based on Pbtol
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em>J<sub>tol</sub></em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph">Unitless</p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[{J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} \mathit{LDF}}\right)\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li>
-                            <em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol (Unitless)
-                          </li>
-                          <li>
-                            <em>P<sub>btol</sub></em> is the tolerable probability of breakage (Unitless)
-                          </li>
-                          <li>
-                            <em>a</em> is the plate length (long dimension) (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>b</em> is the plate width (short dimension) (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>m</em> is the surface flaw parameter (<em>\(\frac{\text{m}^{12}}{\text{N}^{7}}\)</em>)
-                          </li>
-                          <li>
-                            <em>k</em> is the surface flaw parameter (<em>\(\frac{\text{m}^{12}}{\text{N}^{7}}\)</em>)
-                          </li>
-                          <li>
-                            <em>E</em> is the modulus of elasticity of glass (<em>Pa</em>)
-                          </li>
-                          <li><em>h</em> is the minimum thickness (<em>m</em>)</li>
-                          <li><em>LDF</em> is the load duration factor (Unitless)</li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>P<sub>btol</sub></em> is entered by the user.
-                        </p>
-                        <p class="paragraph">
-                          <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
-                        </p>
-                        <p class="paragraph">
-                          <em>m</em>, <em>k</em>, and <em>E</em> come from <a href=#assumpSV>A:standardValues</a>.
-                        </p>
-                        <p class="paragraph">
-                          <em>h</em> is defined in <a href=#DD:minThick>DD:minThick</a> and is based on the nominal thicknesses.
-                        </p>
-                        <p class="paragraph">
-                          <em>LDF</em> is defined in <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph"><a href=#DD:tolLoad>DD:tolLoad</a></p>
                       </td>
                     </tr>
                   </table>
@@ -1759,7 +1290,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#DD:tolLoad>DD:tolLoad</a> and <a href=#DD:stressDistFac>DD:stressDistFac</a>
+                          <a href=#IM:tolLoad>IM:tolLoad</a> and <a href=#IM:stressDistFac>IM:stressDistFac</a>
                         </p>
                       </td>
                     </tr>
@@ -1807,120 +1338,6 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph"><a href=#DD:calofDemand>DD:calofDemand</a></p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="DD:probOfBreak">
-                  <table class="ddefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>DD:probOfBreak</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">Probability of breakage</p></td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em>P<sub>b</sub></em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph">Unitless</p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>\[{P_{\text{b}}}=1-e^{-B}\]</td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li>
-                            <em>P<sub>b</sub></em> is the probability of breakage (Unitless)
-                          </li>
-                          <li><em>B</em> is the risk of failure (Unitless)</li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>B</em> is defined in <a href=#DD:riskFun>DD:riskFun</a>.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td>
-                        <p class="paragraph">
-                          <a href=#astm2009>astm2009</a> and <a href=#beasonEtAl1998>beasonEtAl1998</a>
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph"><a href=#IM:isSafePb>IM:isSafePb</a></p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="DD:calofCapacity">
-                  <table class="ddefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>DD:calofCapacity</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">Load resistance</p></td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em>LR</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph"><em>Pa</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>\[\mathit{LR}=\mathit{NFL} \mathit{GTF} \mathit{LSF}\]</td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li><em>LR</em> is the load resistance (<em>Pa</em>)</li>
-                          <li><em>NFL</em> is the non-factored load (<em>Pa</em>)</li>
-                          <li><em>GTF</em> is the glass type factor (Unitless)</li>
-                          <li><em>LSF</em> is the load share factor (Unitless)</li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph"><em>LR</em> is also called capacity.</p>
-                        <p class="paragraph">
-                          <em>NFL</em> is defined in <a href=#DD:nFL>DD:nFL</a>.
-                        </p>
-                        <p class="paragraph">
-                          <em>GTF</em> is defined in <a href=#DD:gTF>DD:gTF</a>.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph"><a href=#IM:isSafeLR>IM:isSafeLR</a></p>
                       </td>
                     </tr>
                   </table>
@@ -1978,7 +1395,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:isSafeLR>IM:isSafeLR</a> and <a href=#DD:dimlessLoad>DD:dimlessLoad</a>
+                          <a href=#IM:isSafeLR>IM:isSafeLR</a> and <a href=#IM:dimlessLoad>IM:dimlessLoad</a>
                         </p>
                       </td>
                     </tr>
@@ -1995,6 +1412,678 @@
                 <p class="paragraph">
                   The goal <a href=#willBreakGS>GS:Predict-Glass-Withstands-Explosion</a> is met by <a href=#IM:isSafePb>IM:isSafePb</a>, <a href=#IM:isSafeLR>IM:isSafeLR</a>.
                 </p>
+                <div id="IM:riskFun">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:riskFun</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Risk of failure</p></td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>E</em>, <em>LDF</em>, <em>J</em>, <em>k</em>, <em>m</em>, <em>h</em>, <em>a</em>, <em>b</em>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>B</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td>
+                        \[a\gt{}0\]
+                        \[0\lt{}b\leq{}a\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[B=\frac{k}{\left(a b\right)^{m-1}} \left(E h^{2}\right)^{m} \mathit{LDF} e^{J}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>B</em> is the risk of failure (Unitless)</li>
+                          <li>
+                            <em>k</em> is the surface flaw parameter (<em>\(\frac{\text{m}^{12}}{\text{N}^{7}}\)</em>)
+                          </li>
+                          <li>
+                            <em>a</em> is the plate length (long dimension) (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>b</em> is the plate width (short dimension) (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>m</em> is the surface flaw parameter (<em>\(\frac{\text{m}^{12}}{\text{N}^{7}}\)</em>)
+                          </li>
+                          <li>
+                            <em>E</em> is the modulus of elasticity of glass (<em>Pa</em>)
+                          </li>
+                          <li><em>h</em> is the minimum thickness (<em>m</em>)</li>
+                          <li><em>LDF</em> is the load duration factor (Unitless)</li>
+                          <li>
+                            <em>J</em> is the stress distribution factor (Function) (Unitless)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
+                        </p>
+                        <p class="paragraph">
+                          <em>h</em> is defined in <a href=#DD:minThick>DD:minThick</a> and is based on the nominal thicknesses.
+                        </p>
+                        <p class="paragraph">
+                          <em>LDF</em> is defined in <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>J</em> is defined in <a href=#IM:stressDistFac>IM:stressDistFac</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#astm2009>astm2009</a>, <a href=#beasonEtAl1998>beasonEtAl1998</a> (Eqs. 4-5), and <a href=#campidelli>campidelli</a> (Eq. 14)
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#IM:probOfBreak>IM:probOfBreak</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="IM:stressDistFac">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:stressDistFac</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">Stress distribution factor (Function)</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td><p class="paragraph"><em>AR</em>, <em>q&#770;</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>J</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td>\[\mathit{AR}\geq{}1\]</td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td>\[{J_{\text{min}}}\leq{}J\leq{}{J_{\text{max}}}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[J=\mathit{interpZ}\left(\text{``SDF.txt''},\mathit{AR},\hat{q}\right)\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>J</em> is the stress distribution factor (Function) (Unitless)
+                          </li>
+                          <li><em>interpZ</em> is the interpZ (Unitless)</li>
+                          <li><em>AR</em> is the aspect ratio (Unitless)</li>
+                          <li><em>q&#770;</em> is the dimensionless load (Unitless)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>J</em> is obtained by interpolating from data shown in <a href=#Figure:dimlessloadVSaspect>Fig:dimlessloadVSaspect</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>AR</em> is defined in <a href=#DD:aspectRatio>DD:aspectRatio</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>q&#770;</em> is defined in <a href=#IM:dimlessLoad>IM:dimlessLoad</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#IM:riskFun>IM:riskFun</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="IM:nFL">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:nFL</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Non-factored load</p></td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>q&#770;<sub>tol</sub></em>, <em>E</em>, <em>h</em>, <em>a</em>, <em>b</em>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>NFL</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td>
+                        \[a\gt{}0\]
+                        \[0\lt{}b\leq{}a\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[\mathit{NFL}=\frac{{\hat{q}_{\text{tol}}} E h^{4}}{\left(a b\right)^{2}}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>NFL</em> is the non-factored load (<em>Pa</em>)</li>
+                          <li>
+                            <em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
+                          </li>
+                          <li>
+                            <em>E</em> is the modulus of elasticity of glass (<em>Pa</em>)
+                          </li>
+                          <li><em>h</em> is the minimum thickness (<em>m</em>)</li>
+                          <li>
+                            <em>a</em> is the plate length (long dimension) (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>b</em> is the plate width (short dimension) (<em>m</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>q&#770;<sub>tol</sub></em> is defined in <a href=#IM:tolLoad>IM:tolLoad</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>E</em> comes from <a href=#assumpSV>A:standardValues</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>h</em> is defined in <a href=#DD:minThick>DD:minThick</a> and is based on the nominal thicknesses.
+                        </p>
+                        <p class="paragraph">
+                          <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:calofCapacity>IM:calofCapacity</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="IM:dimlessLoad">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:dimlessLoad</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Dimensionless load</p></td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>q</em>, <em>E</em>, <em>h</em>, <em>GTF</em>, <em>a</em>, <em>b</em>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>q&#770;</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td>
+                        \[a\gt{}0\]
+                        \[0\lt{}b\leq{}a\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[\hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} \mathit{GTF}}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>q&#770;</em> is the dimensionless load (Unitless)</li>
+                          <li><em>q</em> is the applied load (demand) (<em>Pa</em>)</li>
+                          <li>
+                            <em>a</em> is the plate length (long dimension) (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>b</em> is the plate width (short dimension) (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>E</em> is the modulus of elasticity of glass (<em>Pa</em>)
+                          </li>
+                          <li><em>h</em> is the minimum thickness (<em>m</em>)</li>
+                          <li><em>GTF</em> is the glass type factor (Unitless)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>q</em> is the 3 second duration equivalent pressure, as given in <a href=#DD:calofDemand>DD:calofDemand</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
+                        </p>
+                        <p class="paragraph">
+                          <em>E</em> comes from <a href=#assumpSV>A:standardValues</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>h</em> is defined in <a href=#DD:minThick>DD:minThick</a> and is based on the nominal thicknesses.
+                        </p>
+                        <p class="paragraph">
+                          <em>GTF</em> is defined in <a href=#DD:gTF>DD:gTF</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#astm2009>astm2009</a> and <a href=#campidelli>campidelli</a> (Eq. 7)
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:stressDistFac>IM:stressDistFac</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="IM:tolLoad">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:tolLoad</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Tolerable load</p></td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td>
+                        <p class="paragraph"><em>AR</em>, <em>J<sub>tol</sub></em></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>q&#770;<sub>tol</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td>\[\mathit{AR}\geq{}1\]</td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[{\hat{q}_{\text{tol}}}=\mathit{interpY}\left(\text{``SDF.txt''},\mathit{AR},{J_{\text{tol}}}\right)\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
+                          </li>
+                          <li><em>interpY</em> is the interpY (Unitless)</li>
+                          <li><em>AR</em> is the aspect ratio (Unitless)</li>
+                          <li>
+                            <em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol (Unitless)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>q&#770;<sub>tol</sub></em> is obtained by interpolating from data shown in <a href=#Figure:dimlessloadVSaspect>Fig:dimlessloadVSaspect</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>AR</em> is defined in <a href=#DD:aspectRatio>DD:aspectRatio</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>J<sub>tol</sub></em> is defined in <a href=#IM:sdfTol>IM:sdfTol</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"><a href=#IM:nFL>IM:nFL</a></p></td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="IM:sdfTol">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:sdfTol</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">
+                          Stress distribution factor (Function) based on Pbtol
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>LDF</em>, <em>P<sub>btol</sub></em>, <em>E</em>, <em>a</em>, <em>b</em>, <em>m</em>, <em>k</em>, <em>h</em>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>J<sub>tol</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td>
+                        \[0\leq{}{P_{\text{b}\text{tol}}}\leq{}1\]
+                        \[a\gt{}0\]
+                        \[0\lt{}b\leq{}a\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[{J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} \mathit{LDF}}\right)\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol (Unitless)
+                          </li>
+                          <li>
+                            <em>P<sub>btol</sub></em> is the tolerable probability of breakage (Unitless)
+                          </li>
+                          <li>
+                            <em>a</em> is the plate length (long dimension) (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>b</em> is the plate width (short dimension) (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>m</em> is the surface flaw parameter (<em>\(\frac{\text{m}^{12}}{\text{N}^{7}}\)</em>)
+                          </li>
+                          <li>
+                            <em>k</em> is the surface flaw parameter (<em>\(\frac{\text{m}^{12}}{\text{N}^{7}}\)</em>)
+                          </li>
+                          <li>
+                            <em>E</em> is the modulus of elasticity of glass (<em>Pa</em>)
+                          </li>
+                          <li><em>h</em> is the minimum thickness (<em>m</em>)</li>
+                          <li><em>LDF</em> is the load duration factor (Unitless)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>P<sub>btol</sub></em> is entered by the user.
+                        </p>
+                        <p class="paragraph">
+                          <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
+                        </p>
+                        <p class="paragraph">
+                          <em>m</em>, <em>k</em>, and <em>E</em> come from <a href=#assumpSV>A:standardValues</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>h</em> is defined in <a href=#DD:minThick>DD:minThick</a> and is based on the nominal thicknesses.
+                        </p>
+                        <p class="paragraph">
+                          <em>LDF</em> is defined in <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#IM:tolLoad>IM:tolLoad</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="IM:probOfBreak">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:probOfBreak</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Probability of breakage</p></td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td><p class="paragraph"><em>B</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>P<sub>b</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td>\[0\leq{}{P_{\text{b}}}\leq{}1\]</td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[{P_{\text{b}}}=1-e^{-B}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>P<sub>b</sub></em> is the probability of breakage (Unitless)
+                          </li>
+                          <li><em>B</em> is the risk of failure (Unitless)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>B</em> is defined in <a href=#IM:riskFun>IM:riskFun</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#astm2009>astm2009</a> and <a href=#beasonEtAl1998>beasonEtAl1998</a>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#IM:isSafePb>IM:isSafePb</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="IM:calofCapacity">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:calofCapacity</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Load resistance</p></td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td>
+                        <p class="paragraph"><em>NFL</em>, <em>GTF</em>, <em>LSF</em></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>LR</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[\mathit{LR}=\mathit{NFL} \mathit{GTF} \mathit{LSF}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>LR</em> is the load resistance (<em>Pa</em>)</li>
+                          <li><em>NFL</em> is the non-factored load (<em>Pa</em>)</li>
+                          <li><em>GTF</em> is the glass type factor (Unitless)</li>
+                          <li><em>LSF</em> is the load share factor (Unitless)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph"><em>LR</em> is also called capacity.</p>
+                        <p class="paragraph">
+                          <em>NFL</em> is defined in <a href=#IM:nFL>IM:nFL</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>GTF</em> is defined in <a href=#DD:gTF>DD:gTF</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph"><a href=#astm2009>astm2009</a></p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#IM:isSafeLR>IM:isSafeLR</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
                 <div id="IM:isSafePb">
                   <table class="idefn">
                     <tr>
@@ -2020,8 +2109,8 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        \[{P_{\text{b}}}\gt{}0\]
-                        \[{P_{\text{b}\text{tol}}}\gt{}0\]
+                        \[0\leq{}{P_{\text{b}}}\leq{}1\]
+                        \[0\leq{}{P_{\text{b}\text{tol}}}\leq{}1\]
                       </td>
                     </tr>
                     <tr>
@@ -2054,10 +2143,10 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          If <em>isSafePb</em>, the glass is considered safe. <em>isSafePb</em> and <em>isSafePb</em> (from <a href=#IM:isSafeLR>IM:isSafeLR</a>) are either both True or both False.
+                          If <em>isSafePb</em>, the glass is considered safe. <em>isSafePb</em> and <em>isSafeLR</em> (from <a href=#IM:isSafeLR>IM:isSafeLR</a>) are either both True or both False.
                         </p>
                         <p class="paragraph">
-                          <em>P<sub>b</sub></em> is defined in <a href=#DD:probOfBreak>DD:probOfBreak</a>.
+                          <em>P<sub>b</sub></em> is defined in <a href=#IM:probOfBreak>IM:probOfBreak</a>.
                         </p>
                         <p class="paragraph">
                           <em>P<sub>btol</sub></em> is entered by the user.
@@ -2071,7 +2160,9 @@
                     <tr>
                       <th>RefBy</th>
                       <td>
-                        <p class="paragraph"><a href=#IM:isSafeLR>IM:isSafeLR</a></p>
+                        <p class="paragraph">
+                          <a href=#IM:isSafeLR>IM:isSafeLR</a> and <a href=#checkGlassSafety>FR:Check-Glass-Safety</a>
+                        </p>
                       </td>
                     </tr>
                   </table>
@@ -2128,7 +2219,7 @@
                           If <em>isSafeLR</em>, the glass is considered safe. <em>isSafePb</em> (from <a href=#IM:isSafePb>IM:isSafePb</a>) and <em>isSafeLR</em> are either both True or both False.
                         </p>
                         <p class="paragraph">
-                          <em>LR</em> is defined in <a href=#DD:calofCapacity>DD:calofCapacity</a> and is also called capacity.
+                          <em>LR</em> is defined in <a href=#IM:calofCapacity>IM:calofCapacity</a> and is also called capacity.
                         </p>
                         <p class="paragraph">
                           <em>q</em> is the 3 second duration equivalent pressure, as given in <a href=#DD:calofDemand>DD:calofDemand</a>.
@@ -2142,7 +2233,9 @@
                     <tr>
                       <th>RefBy</th>
                       <td>
-                        <p class="paragraph"><a href=#IM:isSafePb>IM:isSafePb</a></p>
+                        <p class="paragraph">
+                          <a href=#IM:isSafePb>IM:isSafePb</a> and <a href=#checkGlassSafety>FR:Check-Glass-Safety</a>
+                        </p>
                       </td>
                     </tr>
                   </table>
@@ -2298,7 +2391,7 @@
               </p>
               <p>
                 <div id="checkGlassSafety">
-                  Check-Glass-Safety: If <em>isSafePb &and; isSafeLR</em> (from <a href=#TM:isSafeProb>TM:isSafeProb</a> and <a href=#TM:isSafeLoad>TM:isSafeLoad</a>), output the message "For the given input parameters, the glass is considered safe." If the condition is false, then output the message "For the given input parameters, the glass is NOT considered safe."
+                  Check-Glass-Safety: If <em>isSafePb &and; isSafeLR</em> (from <a href=#IM:isSafePb>IM:isSafePb</a> and <a href=#IM:isSafeLR>IM:isSafeLR</a>), output the message "For the given input parameters, the glass is considered safe." If the condition is false, then output the message "For the given input parameters, the glass is NOT considered safe."
                 </div>
               </p>
               <p>
@@ -2461,7 +2554,7 @@
                 <tr>
                   <td><em>B</em></td>
                   <td>Risk of failure</td>
-                  <td><a href=#DD:riskFun>DD:riskFun</a></td>
+                  <td><a href=#IM:riskFun>IM:riskFun</a></td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -2491,31 +2584,43 @@
                 <tr>
                   <td><em>J</em></td>
                   <td>Stress distribution factor (Function)</td>
-                  <td><a href=#DD:stressDistFac>DD:stressDistFac</a></td>
+                  <td><a href=#IM:stressDistFac>IM:stressDistFac</a></td>
                   <td>--</td>
                 </tr>
                 <tr>
                   <td><em>J<sub>tol</sub></em></td>
                   <td>Stress distribution factor (Function) based on Pbtol</td>
-                  <td><a href=#DD:sdfTol>DD:sdfTol</a></td>
+                  <td><a href=#IM:sdfTol>IM:sdfTol</a></td>
                   <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>LR</em></td>
+                  <td>Load resistance</td>
+                  <td><a href=#IM:calofCapacity>IM:calofCapacity</a></td>
+                  <td><em>Pa</em></td>
                 </tr>
                 <tr>
                   <td><em>NFL</em></td>
                   <td>Non-factored load</td>
-                  <td><a href=#DD:nFL>DD:nFL</a></td>
+                  <td><a href=#IM:nFL>IM:nFL</a></td>
                   <td><em>Pa</em></td>
+                </tr>
+                <tr>
+                  <td><em>P<sub>b</sub></em></td>
+                  <td>Probability of breakage</td>
+                  <td><a href=#IM:probOfBreak>IM:probOfBreak</a></td>
+                  <td>--</td>
                 </tr>
                 <tr>
                   <td><em>q&#770;</em></td>
                   <td>Dimensionless load</td>
-                  <td><a href=#DD:dimlessLoad>DD:dimlessLoad</a></td>
+                  <td><a href=#IM:dimlessLoad>IM:dimlessLoad</a></td>
                   <td>--</td>
                 </tr>
                 <tr>
                   <td><em>q&#770;<sub>tol</sub></em></td>
                   <td>Tolerable load</td>
-                  <td><a href=#DD:tolLoad>DD:tolLoad</a></td>
+                  <td><a href=#IM:tolLoad>IM:tolLoad</a></td>
                   <td>--</td>
                 </tr>
               </table>
@@ -2744,17 +2849,6 @@
               <th><a href=#assumpLDFC>A:ldfConstant</a></th>
             </tr>
             <tr>
-              <td><a href=#DD:riskFun>DD:riskFun</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#DD:minThick>DD:minThick</a></td>
               <td></td>
               <td></td>
@@ -2777,66 +2871,11 @@
               <td>X</td>
             </tr>
             <tr>
-              <td><a href=#DD:stressDistFac>DD:stressDistFac</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#DD:nFL>DD:nFL</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#DD:gTF>DD:gTF</a></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#DD:dimlessLoad>DD:dimlessLoad</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#DD:tolLoad>DD:tolLoad</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#DD:sdfTol>DD:sdfTol</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -2876,28 +2915,6 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:probOfBreak>DD:probOfBreak</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#DD:calofCapacity>DD:calofCapacity</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#DD:calofDemand>DD:calofDemand</a></td>
               <td></td>
               <td></td>
@@ -2921,6 +2938,94 @@
             </tr>
             <tr>
               <td><a href=#TM:isSafeLoad>TM:isSafeLoad</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:riskFun>IM:riskFun</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:stressDistFac>IM:stressDistFac</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:nFL>IM:nFL</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:dimlessLoad>IM:dimlessLoad</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:tolLoad>IM:tolLoad</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:sdfTol>IM:sdfTol</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:probOfBreak>IM:probOfBreak</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:calofCapacity>IM:calofCapacity</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3186,47 +3291,25 @@
           <table class="table">
             <tr>
               <th></th>
-              <th><a href=#DD:riskFun>DD:riskFun</a></th>
               <th><a href=#DD:minThick>DD:minThick</a></th>
               <th><a href=#DD:loadDurFactor>DD:loadDurFactor</a></th>
-              <th><a href=#DD:stressDistFac>DD:stressDistFac</a></th>
-              <th><a href=#DD:nFL>DD:nFL</a></th>
               <th><a href=#DD:gTF>DD:gTF</a></th>
-              <th><a href=#DD:dimlessLoad>DD:dimlessLoad</a></th>
-              <th><a href=#DD:tolLoad>DD:tolLoad</a></th>
-              <th><a href=#DD:sdfTol>DD:sdfTol</a></th>
               <th><a href=#DD:standOffDist>DD:standOffDist</a></th>
               <th><a href=#DD:aspectRatio>DD:aspectRatio</a></th>
               <th><a href=#DD:eqTNTW>DD:eqTNTW</a></th>
-              <th><a href=#DD:probOfBreak>DD:probOfBreak</a></th>
-              <th><a href=#DD:calofCapacity>DD:calofCapacity</a></th>
               <th><a href=#DD:calofDemand>DD:calofDemand</a></th>
               <th><a href=#TM:isSafeProb>TM:isSafeProb</a></th>
               <th><a href=#TM:isSafeLoad>TM:isSafeLoad</a></th>
+              <th><a href=#IM:riskFun>IM:riskFun</a></th>
+              <th><a href=#IM:stressDistFac>IM:stressDistFac</a></th>
+              <th><a href=#IM:nFL>IM:nFL</a></th>
+              <th><a href=#IM:dimlessLoad>IM:dimlessLoad</a></th>
+              <th><a href=#IM:tolLoad>IM:tolLoad</a></th>
+              <th><a href=#IM:sdfTol>IM:sdfTol</a></th>
+              <th><a href=#IM:probOfBreak>IM:probOfBreak</a></th>
+              <th><a href=#IM:calofCapacity>IM:calofCapacity</a></th>
               <th><a href=#IM:isSafePb>IM:isSafePb</a></th>
               <th><a href=#IM:isSafeLR>IM:isSafeLR</a></th>
-            </tr>
-            <tr>
-              <td><a href=#DD:riskFun>DD:riskFun</a></td>
-              <td></td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:minThick>DD:minThick</a></td>
@@ -3273,120 +3356,10 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:stressDistFac>DD:stressDistFac</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#DD:nFL>DD:nFL</a></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#DD:gTF>DD:gTF</a></td>
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#DD:dimlessLoad>DD:dimlessLoad</a></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#DD:tolLoad>DD:tolLoad</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#DD:sdfTol>DD:sdfTol</a></td>
-              <td></td>
-              <td>X</td>
-              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3471,63 +3444,19 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:probOfBreak>DD:probOfBreak</a></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#DD:calofCapacity>DD:calofCapacity</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#DD:calofDemand>DD:calofDemand</a></td>
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
               <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3581,6 +3510,182 @@
               <td></td>
             </tr>
             <tr>
+              <td><a href=#IM:riskFun>IM:riskFun</a></td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:stressDistFac>IM:stressDistFac</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:nFL>IM:nFL</a></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:dimlessLoad>IM:dimlessLoad</a></td>
+              <td>X</td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:tolLoad>IM:tolLoad</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:sdfTol>IM:sdfTol</a></td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:probOfBreak>IM:probOfBreak</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#IM:calofCapacity>IM:calofCapacity</a></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#IM:isSafePb>IM:isSafePb</a></td>
               <td></td>
               <td></td>
@@ -3594,10 +3699,10 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td>X</td>
@@ -3610,6 +3715,9 @@
               <td></td>
               <td></td>
               <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3618,9 +3726,6 @@
               <td></td>
               <td></td>
               <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td></td>
               <td>X</td>
               <td></td>
             </tr>
@@ -3633,23 +3738,23 @@
           <table class="table">
             <tr>
               <th></th>
-              <th><a href=#DD:riskFun>DD:riskFun</a></th>
               <th><a href=#DD:minThick>DD:minThick</a></th>
               <th><a href=#DD:loadDurFactor>DD:loadDurFactor</a></th>
-              <th><a href=#DD:stressDistFac>DD:stressDistFac</a></th>
-              <th><a href=#DD:nFL>DD:nFL</a></th>
               <th><a href=#DD:gTF>DD:gTF</a></th>
-              <th><a href=#DD:dimlessLoad>DD:dimlessLoad</a></th>
-              <th><a href=#DD:tolLoad>DD:tolLoad</a></th>
-              <th><a href=#DD:sdfTol>DD:sdfTol</a></th>
               <th><a href=#DD:standOffDist>DD:standOffDist</a></th>
               <th><a href=#DD:aspectRatio>DD:aspectRatio</a></th>
               <th><a href=#DD:eqTNTW>DD:eqTNTW</a></th>
-              <th><a href=#DD:probOfBreak>DD:probOfBreak</a></th>
-              <th><a href=#DD:calofCapacity>DD:calofCapacity</a></th>
               <th><a href=#DD:calofDemand>DD:calofDemand</a></th>
               <th><a href=#TM:isSafeProb>TM:isSafeProb</a></th>
               <th><a href=#TM:isSafeLoad>TM:isSafeLoad</a></th>
+              <th><a href=#IM:riskFun>IM:riskFun</a></th>
+              <th><a href=#IM:stressDistFac>IM:stressDistFac</a></th>
+              <th><a href=#IM:nFL>IM:nFL</a></th>
+              <th><a href=#IM:dimlessLoad>IM:dimlessLoad</a></th>
+              <th><a href=#IM:tolLoad>IM:tolLoad</a></th>
+              <th><a href=#IM:sdfTol>IM:sdfTol</a></th>
+              <th><a href=#IM:probOfBreak>IM:probOfBreak</a></th>
+              <th><a href=#IM:calofCapacity>IM:calofCapacity</a></th>
               <th><a href=#IM:isSafePb>IM:isSafePb</a></th>
               <th><a href=#IM:isSafeLR>IM:isSafeLR</a></th>
               <th><a href=#inputValues>FR:Input-Values</a></th>
@@ -3866,10 +3971,10 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
-              <td>X</td>
               <td></td>
               <td></td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>

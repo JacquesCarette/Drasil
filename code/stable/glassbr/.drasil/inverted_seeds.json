@@ -602,7 +602,7 @@
         "symbols",
         "references",
         "labelledContent",
-        "dataDefinitions"
+        "instanceModels"
     ],
     "direction": [
         "terms"
@@ -1024,7 +1024,7 @@
         "symbols",
         "references",
         "labelledContent",
-        "dataDefinitions"
+        "instanceModels"
     ],
     "lShareFac": [
         "terms",
@@ -1186,7 +1186,7 @@
         "symbols",
         "references",
         "labelledContent",
-        "dataDefinitions"
+        "instanceModels"
     ],
     "name": [
         "terms"
@@ -1376,7 +1376,7 @@
         "symbols",
         "references",
         "labelledContent",
-        "dataDefinitions"
+        "instanceModels"
     ],
     "probFail": [
         "terms",
@@ -1501,7 +1501,7 @@
         "symbols",
         "references",
         "labelledContent",
-        "dataDefinitions"
+        "instanceModels"
     ],
     "safeMessage": [
         "terms"
@@ -1540,7 +1540,7 @@
         "symbols",
         "references",
         "labelledContent",
-        "dataDefinitions"
+        "instanceModels"
     ],
     "sdx": [
         "terms",
@@ -1683,7 +1683,7 @@
         "symbols",
         "references",
         "labelledContent",
-        "dataDefinitions"
+        "instanceModels"
     ],
     "stressDistFacMax": [
         "terms",
@@ -1779,7 +1779,7 @@
         "symbols",
         "references",
         "labelledContent",
-        "dataDefinitions"
+        "instanceModels"
     ],
     "traceyGraph": [
         "terms"

@@ -290,7 +290,7 @@
         "symbols",
         "references",
         "labelledContent",
-        "dataDefinitions"
+        "instanceModels"
     ],
     "doc:InDataConstraints": [
         "references",
@@ -472,7 +472,7 @@
         "symbols",
         "references",
         "labelledContent",
-        "dataDefinitions"
+        "instanceModels"
     ],
     "lShareFac": [
         "terms",
@@ -526,7 +526,7 @@
         "symbols",
         "references",
         "labelledContent",
-        "dataDefinitions"
+        "instanceModels"
     ],
     "newton": [
         "units",
@@ -581,7 +581,7 @@
         "symbols",
         "references",
         "labelledContent",
-        "dataDefinitions"
+        "instanceModels"
     ],
     "probFail": [
         "terms",
@@ -601,7 +601,7 @@
         "symbols",
         "references",
         "labelledContent",
-        "dataDefinitions"
+        "instanceModels"
     ],
     "sdMax": [
         "terms",
@@ -616,7 +616,7 @@
         "symbols",
         "references",
         "labelledContent",
-        "dataDefinitions"
+        "instanceModels"
     ],
     "sdx": [
         "terms",
@@ -654,7 +654,7 @@
         "symbols",
         "references",
         "labelledContent",
-        "dataDefinitions"
+        "instanceModels"
     ],
     "stressDistFacMax": [
         "terms",
@@ -678,7 +678,7 @@
         "symbols",
         "references",
         "labelledContent",
-        "dataDefinitions"
+        "instanceModels"
     ],
     "understandable": [
         "references",

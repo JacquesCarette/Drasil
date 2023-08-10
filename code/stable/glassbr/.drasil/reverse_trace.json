@@ -142,9 +142,7 @@
     "isSafeLR": [
         [
             "isSafePb"
-        ]
-    ],
-    "isSafeLoad": [
+        ],
         [
             "checkGlassSafety"
         ]
@@ -152,9 +150,7 @@
     "isSafePb": [
         [
             "isSafeLR"
-        ]
-    ],
-    "isSafeProb": [
+        ],
         [
             "checkGlassSafety"
         ]

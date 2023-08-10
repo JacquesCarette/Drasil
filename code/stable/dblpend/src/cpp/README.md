@@ -1,7 +1,7 @@
 # DblPend 
 > Author: Dong Chen
 
-> Purpose: Predict the motion of a pendulum.
+> Purpose: Predict the motion of a double pendulum.
 
 ------------------------------------------------------------
 ## Making Examples 

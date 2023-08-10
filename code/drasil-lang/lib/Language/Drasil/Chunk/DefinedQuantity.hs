@@ -46,7 +46,7 @@ instance Definition    DefinedQuantityDict where defn = con . defn
 -- | Finds the domain of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
 instance ConceptDomain DefinedQuantityDict where cdom = cdom . view con
 -- | Finds the 'Space' of the 'DefinedQuantityDict'.
-instance HasSpace      DefinedQuantityDict where typ = view spa
+instance HasSpace      DefinedQuantityDict where typ = spa
 -- | Finds the 'Stage' -> 'Symbol' of the 'DefinedQuantityDict'.
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
 -- | 'DefinedQuantityDict's have a 'Quantity'. 
@@ -70,12 +70,12 @@ dqd' = DQD
 
 -- | When the input already has all the necessary information. A 'projection' operator from some a type with instances of listed classes to a 'DefinedQuantityDict'.
 dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
-dqdWr c = DQD (cw c) (symbol c) (typ c) (getUnit c)
+dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
 
 -- | Temporary projection constructor, not to be used outside @drasil-lang@.
 tempdqdWr' :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
-tempdqdWr' c = DQD (cw c) (symbol c) (typ c) (getUnit c)
+tempdqdWr' c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
 
 -- | When we want to merge a quantity and a concept. This is suspicious.
 dqdQd :: (Quantity c, MayHaveUnit c) => c -> ConceptChunk -> DefinedQuantityDict
-dqdQd c cc = DQD cc (symbol c) (typ c) (getUnit c)
+dqdQd c cc = DQD cc (symbol c) (c ^. typ) (getUnit c)

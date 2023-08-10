@@ -42,10 +42,10 @@
     ],
     "checkGlassSafety": [
         [
-            "isSafeProb"
+            "isSafePb"
         ],
         [
-            "isSafeLoad"
+            "isSafeLR"
         ]
     ],
     "checkInputWithDataCons": [

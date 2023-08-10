@@ -1183,7 +1183,7 @@ Notes & ${T_{\text{P}}}$ is defined by \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOn
 Source & \cite{koothoor2013}
          
 \\ \midrule
-RefBy & \hyperref[unlikeChgNIHG]{UC:No-Internal-Heat-Generation}, \hyperref[findMass]{FR:Find-Mass}, \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, and \hyperref[calcTempWtrOverTime]{FR:Calculate-Temperature-Water-Over-Time}
+RefBy & \hyperref[unlikeChgNIHG]{UC:No-Internal-Heat-Generation}, \hyperref[outputValues]{FR:Output-Values}, \hyperref[findMass]{FR:Find-Mass}, \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, and \hyperref[calcValues]{FR:Calculate-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -1283,7 +1283,7 @@ Notes & ${T_{\text{W}}}$ is defined by \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOn
 Source & \cite{koothoor2013}
          
 \\ \midrule
-RefBy & \hyperref[unlikeChgNIHG]{UC:No-Internal-Heat-Generation}, \hyperref[unlikeChgNGS]{UC:No-Gaseous-State}, \hyperref[findMass]{FR:Find-Mass}, \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[calcTempPCMOverTime]{FR:Calculate-Temperature-PCM-Over-Time}, \hyperref[calcPCMMeltEnd]{FR:Calculate-PCM-Melt-End-Time}, and \hyperref[calcPCMMeltBegin]{FR:Calculate-PCM-Melt-Begin-Time}
+RefBy & \hyperref[unlikeChgNIHG]{UC:No-Internal-Heat-Generation}, \hyperref[unlikeChgNGS]{UC:No-Gaseous-State}, \hyperref[outputValues]{FR:Output-Values}, \hyperref[findMass]{FR:Find-Mass}, \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[calcValues]{FR:Calculate-Values}, \hyperref[calcPCMMeltEnd]{FR:Calculate-PCM-Melt-End-Time}, and \hyperref[calcPCMMeltBegin]{FR:Calculate-PCM-Melt-Begin-Time}
         
 \\ \bottomrule
 \end{tabular}
@@ -1361,7 +1361,7 @@ Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM:sensHtE}.
 Source & \cite{koothoor2013}
          
 \\ \midrule
-RefBy & \hyperref[findMass]{FR:Find-Mass} and \hyperref[calcChgHeatEnergyWtrOverTime]{FR:Calculate-Change-Heat\_Energy-Water-Over-Time}
+RefBy & \hyperref[outputValues]{FR:Output-Values}, \hyperref[findMass]{FR:Find-Mass}, and \hyperref[calcValues]{FR:Calculate-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -1431,7 +1431,7 @@ Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM:sensHtE} an
 Source & \cite{koothoor2013}
          
 \\ \midrule
-RefBy & \hyperref[unlikeChgNGS]{UC:No-Gaseous-State}, \hyperref[findMass]{FR:Find-Mass}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, and \hyperref[calcChgHeatEnergyPCMOverTime]{FR:Calculate-Change-Heat\_Energy-PCM-Over-Time}
+RefBy & \hyperref[unlikeChgNGS]{UC:No-Gaseous-State}, \hyperref[outputValues]{FR:Output-Values}, \hyperref[findMass]{FR:Find-Mass}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, and \hyperref[calcValues]{FR:Calculate-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -1526,13 +1526,11 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Find-Mass:\phantomsection\label{findMass}]{Use the inputs in \hyperref[inputValues]{FR:Input-Values} to find the masses needed for \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{IM:heatEInWtr}, and \hyperref[IM:heatEInPCM]{IM:heatEInPCM}, using \hyperref[DD:waterMass]{DD:waterMass}, \hyperref[DD:waterVolume.pcm]{DD:waterVolume\_pcm}, and \hyperref[DD:tankVolume]{DD:tankVolume}.}
 \item[Check-Input-with-Physical\_Constraints:\phantomsection\label{checkWithPhysConsts}]{Verify that the inputs satisfy the required \hyperref[Sec:DataConstraints]{physical constraints}.}
 \item[Output-Input-Derived-Values:\phantomsection\label{outputInputDerivVals}]{Output the input values and derived values in the following list: the values (from \hyperref[inputValues]{FR:Input-Values}), the masses (from \hyperref[findMass]{FR:Find-Mass}), ${τ_{\text{W}}}$ (from \hyperref[DD:balanceDecayRate]{DD:balanceDecayRate}), $η$ (from \hyperref[DD:balanceDecayTime]{DD:balanceDecayTime}), ${{τ_{\text{P}}}^{\text{S}}}$ (from \hyperref[DD:balanceSolidPCM]{DD:balanceSolidPCM}), and ${{τ_{\text{P}}}^{\text{L}}}$ (from \hyperref[DD:balanceLiquidPCM]{DD:balanceLiquidPCM}).}
-\item[Calculate-Temperature-Water-Over-Time:\phantomsection\label{calcTempWtrOverTime}]{Calculate and output the temperature of the water (${T_{\text{W}}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}).}
-\item[Calculate-Temperature-PCM-Over-Time:\phantomsection\label{calcTempPCMOverTime}]{Calculate and output the temperature of the phase change material (${T_{\text{P}}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}).}
-\item[Calculate-Change-Heat\_Energy-Water-Over-Time:\phantomsection\label{calcChgHeatEnergyWtrOverTime}]{Calculate and output the change in heat energy in the water (${E_{\text{W}}}$($t$)) over the simulation time (from \hyperref[IM:heatEInWtr]{IM:heatEInWtr}).}
-\item[Calculate-Change-Heat\_Energy-PCM-Over-Time:\phantomsection\label{calcChgHeatEnergyPCMOverTime}]{Calculate and output the change in heat energy in the PCM (${E_{\text{P}}}$($t$)) over the simulation time (from \hyperref[IM:heatEInPCM]{IM:heatEInPCM}).}
+\item[Calculate-Values:\phantomsection\label{calcValues}]{Calculate the following values: ${T_{\text{W}}}$($t$) (from \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}), ${T_{\text{P}}}$($t$) (from \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}), ${E_{\text{W}}}$($t$) (from \hyperref[IM:heatEInWtr]{IM:heatEInWtr}), and ${E_{\text{P}}}$($t$) (from \hyperref[IM:heatEInPCM]{IM:heatEInPCM}).}
 \item[Verify-Energy-Output-Follow-Conservation-of-Energy:\phantomsection\label{verifyEnergyOutput}]{Verify that the energy outputs (${E_{\text{W}}}$($t$) and ${E_{\text{P}}}$($t$)) follow the law of conservation of energy, as outlined in \hyperref[Sec:CorSolProps]{Properties of a Correct Solution}, with relative error no greater than ${C_{\text{tol}}}$.}
 \item[Calculate-PCM-Melt-Begin-Time:\phantomsection\label{calcPCMMeltBegin}]{Calculate and output the time at which the PCM begins to melt ${{t_{\text{melt}}}^{\text{init}}}$ (from \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}).}
 \item[Calculate-PCM-Melt-End-Time:\phantomsection\label{calcPCMMeltEnd}]{Calculate and output the time at which the PCM stops melting ${{t_{\text{melt}}}^{\text{final}}}$ (from \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}).}
+\item[Output-Values:\phantomsection\label{outputValues}]{Output ${T_{\text{W}}}$($t$) (from \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}), ${T_{\text{P}}}$($t$) (from \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}), ${E_{\text{W}}}$($t$) (from \hyperref[IM:heatEInWtr]{IM:heatEInWtr}), and ${E_{\text{P}}}$($t$) (from \hyperref[IM:heatEInPCM]{IM:heatEInPCM}).}
 \end{itemize}
 \begin{longtblr}
 [caption={Required Inputs following \hyperref[inputValues]{FR:Input-Values}}]
@@ -1717,19 +1715,15 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcTempWtrOverTime]{FR:Calculate-Temperature-Water-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[calcTempPCMOverTime]{FR:Calculate-Temperature-PCM-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[calcChgHeatEnergyWtrOverTime]{FR:Calculate-Change-Heat\_Energy-Water-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[calcChgHeatEnergyPCMOverTime]{FR:Calculate-Change-Heat\_Energy-PCM-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[verifyEnergyOutput]{FR:Verify-Energy-Output-Follow-Conservation-of-Energy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[calcPCMMeltBegin]{FR:Calculate-PCM-Melt-Begin-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[calcPCMMeltEnd]{FR:Calculate-PCM-Melt-End-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1810,48 +1804,44 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
-{colspec={l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:waterMass]{DD:waterMass}} & \textbf{\hyperref[DD:waterVolume.pcm]{DD:waterVolume\_pcm}} & \textbf{\hyperref[DD:tankVolume]{DD:tankVolume}} & \textbf{\hyperref[DD:balanceDecayRate]{DD:balanceDecayRate}} & \textbf{\hyperref[DD:balanceDecayTime]{DD:balanceDecayTime}} & \textbf{\hyperref[DD:balanceSolidPCM]{DD:balanceSolidPCM}} & \textbf{\hyperref[DD:balanceLiquidPCM]{DD:balanceLiquidPCM}} & \textbf{\hyperref[DD:htFusion]{DD:htFusion}} & \textbf{\hyperref[DD:meltFrac]{DD:meltFrac}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[TM:consThermE]{TM:consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM:sensHtE}} & \textbf{\hyperref[TM:latentHtE]{TM:latentHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM:nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD:rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil}} & \textbf{\hyperref[GD:htFluxPCMFromWater]{GD:htFluxPCMFromWater}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}} & \textbf{\hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}} & \textbf{\hyperref[IM:heatEInWtr]{IM:heatEInWtr}} & \textbf{\hyperref[IM:heatEInPCM]{IM:heatEInPCM}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[findMass]{FR:Find-Mass}} & \textbf{\hyperref[checkWithPhysConsts]{FR:Check-Input-with-Physical\_Constraints}} & \textbf{\hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values}} & \textbf{\hyperref[calcTempWtrOverTime]{FR:Calculate-Temperature-Water-Over-Time}} & \textbf{\hyperref[calcTempPCMOverTime]{FR:Calculate-Temperature-PCM-Over-Time}} & \textbf{\hyperref[calcChgHeatEnergyWtrOverTime]{FR:Calculate-Change-Heat\_Energy-Water-Over-Time}} & \textbf{\hyperref[calcChgHeatEnergyPCMOverTime]{FR:Calculate-Change-Heat\_Energy-PCM-Over-Time}} & \textbf{\hyperref[verifyEnergyOutput]{FR:Verify-Energy-Output-Follow-Conservation-of-Energy}} & \textbf{\hyperref[calcPCMMeltBegin]{FR:Calculate-PCM-Melt-Begin-Time}} & \textbf{\hyperref[calcPCMMeltEnd]{FR:Calculate-PCM-Melt-End-Time}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[verifiable]{NFR:Verifiable}} & \textbf{\hyperref[understandable]{NFR:Understandable}} & \textbf{\hyperref[reusable]{NFR:Reusable}} & \textbf{\hyperref[maintainable]{NFR:Maintainable}}
+{colspec={l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[DD:waterMass]{DD:waterMass}} & \textbf{\hyperref[DD:waterVolume.pcm]{DD:waterVolume\_pcm}} & \textbf{\hyperref[DD:tankVolume]{DD:tankVolume}} & \textbf{\hyperref[DD:balanceDecayRate]{DD:balanceDecayRate}} & \textbf{\hyperref[DD:balanceDecayTime]{DD:balanceDecayTime}} & \textbf{\hyperref[DD:balanceSolidPCM]{DD:balanceSolidPCM}} & \textbf{\hyperref[DD:balanceLiquidPCM]{DD:balanceLiquidPCM}} & \textbf{\hyperref[DD:htFusion]{DD:htFusion}} & \textbf{\hyperref[DD:meltFrac]{DD:meltFrac}} & \textbf{\hyperref[DD:aspectRatio]{DD:aspectRatio}} & \textbf{\hyperref[TM:consThermE]{TM:consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM:sensHtE}} & \textbf{\hyperref[TM:latentHtE]{TM:latentHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM:nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD:rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil}} & \textbf{\hyperref[GD:htFluxPCMFromWater]{GD:htFluxPCMFromWater}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}} & \textbf{\hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}} & \textbf{\hyperref[IM:heatEInWtr]{IM:heatEInWtr}} & \textbf{\hyperref[IM:heatEInPCM]{IM:heatEInPCM}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[findMass]{FR:Find-Mass}} & \textbf{\hyperref[checkWithPhysConsts]{FR:Check-Input-with-Physical\_Constraints}} & \textbf{\hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values}} & \textbf{\hyperref[calcValues]{FR:Calculate-Values}} & \textbf{\hyperref[verifyEnergyOutput]{FR:Verify-Energy-Output-Follow-Conservation-of-Energy}} & \textbf{\hyperref[calcPCMMeltBegin]{FR:Calculate-PCM-Melt-Begin-Time}} & \textbf{\hyperref[calcPCMMeltEnd]{FR:Calculate-PCM-Melt-End-Time}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[verifiable]{NFR:Verifiable}} & \textbf{\hyperref[understandable]{NFR:Understandable}} & \textbf{\hyperref[reusable]{NFR:Reusable}} & \textbf{\hyperref[maintainable]{NFR:Maintainable}}
 \\
-\hyperref[waterTempGS]{GS:Predict-Water-Temperature} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[waterTempGS]{GS:Predict-Water-Temperature} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[pcmTempGS]{GS:Predict-PCM-Temperature} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[pcmTempGS]{GS:Predict-PCM-Temperature} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[waterEnergyGS]{GS:Predict-Water-Energy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[waterEnergyGS]{GS:Predict-Water-Energy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[pcmEnergyGS]{GS:Predict-PCM-Energy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[pcmEnergyGS]{GS:Predict-PCM-Energy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[findMass]{FR:Find-Mass} & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[findMass]{FR:Find-Mass} & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[checkWithPhysConsts]{FR:Check-Input-with-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[checkWithPhysConsts]{FR:Check-Input-with-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values} &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values} &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcTempWtrOverTime]{FR:Calculate-Temperature-Water-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcTempPCMOverTime]{FR:Calculate-Temperature-PCM-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyEnergyOutput]{FR:Verify-Energy-Output-Follow-Conservation-of-Energy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcChgHeatEnergyWtrOverTime]{FR:Calculate-Change-Heat\_Energy-Water-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcPCMMeltBegin]{FR:Calculate-PCM-Melt-Begin-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcChgHeatEnergyPCMOverTime]{FR:Calculate-Change-Heat\_Energy-PCM-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcPCMMeltEnd]{FR:Calculate-PCM-Melt-End-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyEnergyOutput]{FR:Verify-Energy-Output-Follow-Conservation-of-Energy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcPCMMeltBegin]{FR:Calculate-PCM-Melt-Begin-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcPCMMeltEnd]{FR:Calculate-PCM-Melt-End-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifiable]{NFR:Verifiable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[understandable]{NFR:Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifiable]{NFR:Verifiable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[reusable]{NFR:Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[understandable]{NFR:Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[reusable]{NFR:Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[maintainable]{NFR:Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[maintainable]{NFR:Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatAllvsR}
 \end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.

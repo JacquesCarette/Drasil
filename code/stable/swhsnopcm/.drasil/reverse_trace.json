@@ -115,10 +115,13 @@
             "unlikeChgNIHG"
         ],
         [
+            "outputValues"
+        ],
+        [
             "findMass"
         ],
         [
-            "calcTempWtrOverTime"
+            "calcValues"
         ]
     ],
     "findMass": [
@@ -128,7 +131,10 @@
     ],
     "heatEInWtrIM": [
         [
-            "calcChgHeatEnergyWtrOverTime"
+            "outputValues"
+        ],
+        [
+            "calcValues"
         ]
     ],
     "htFluxC": [

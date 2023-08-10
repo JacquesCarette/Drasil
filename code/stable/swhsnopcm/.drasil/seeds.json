@@ -43,10 +43,7 @@
             "assumpWAL"
         ],
         [
-            "calcChgHeatEnergyWtrOverTime"
-        ],
-        [
-            "calcTempWtrOverTime"
+            "calcValues"
         ],
         [
             "checkWithPhysConsts"
@@ -77,6 +74,9 @@
         ],
         [
             "outputInputDerivVals"
+        ],
+        [
+            "outputValues"
         ],
         [
             "reusable"
@@ -144,10 +144,7 @@
             "assumpWAL"
         ],
         [
-            "calcChgHeatEnergyWtrOverTime"
-        ],
-        [
-            "calcTempWtrOverTime"
+            "calcValues"
         ],
         [
             "checkWithPhysConsts"
@@ -178,6 +175,9 @@
         ],
         [
             "outputInputDerivVals"
+        ],
+        [
+            "outputValues"
         ],
         [
             "reusable"
@@ -526,10 +526,7 @@
             "assumpWAL"
         ],
         [
-            "calcChgHeatEnergyWtrOverTime"
-        ],
-        [
-            "calcTempWtrOverTime"
+            "calcValues"
         ],
         [
             "checkWithPhysConsts"
@@ -590,6 +587,9 @@
         ],
         [
             "outputInputDerivVals"
+        ],
+        [
+            "outputValues"
         ],
         [
             "parnasClements1986"

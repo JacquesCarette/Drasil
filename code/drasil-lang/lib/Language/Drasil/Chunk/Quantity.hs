@@ -3,11 +3,13 @@
 module Language.Drasil.Chunk.Quantity (
   -- * Chunk Type
   QuantityDict,
+  -- * Class
+  DefinesQuantity(defLhs),
   -- * Constructors
   codeVC, implVar, implVar', implVarUID, implVarUID', 
   mkQuant, mkQuant', qw, vc, vc'', vcSt, vcUnit) where
 
-import Control.Lens ((^.),makeLenses,view)
+import Control.Lens (Getter, (^.), makeLenses, view)
 
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Quantity, Express(..))
@@ -33,6 +35,9 @@ data QuantityDict = QD { _id' :: IdeaDict
                        }
 makeLenses ''QuantityDict
 
+class DefinesQuantity d where
+  defLhs :: Getter d QuantityDict
+
 -- | Finds the 'UID' of the 'IdeaDict' used to make the 'QuantityDict'.
 instance HasUID        QuantityDict where uid = id' . uid
 -- | Finds the term ('NP') of the 'IdeaDict' used to make the 'QuantityDict'.
@@ -40,7 +45,7 @@ instance NamedIdea     QuantityDict where term = id' . term
 -- | Finds the idea contained in the 'IdeaDict' used to make the 'QuantityDict'.
 instance Idea          QuantityDict where getA  qd = getA (qd ^. id')
 -- | Finds the 'Space' of the 'QuantityDict'.
-instance HasSpace      QuantityDict where typ = view typ'
+instance HasSpace      QuantityDict where typ = typ'
 -- | Finds the 'Stage' dependent 'Symbol' of the 'QuantityDict'.
 instance HasSymbol     QuantityDict where symbol = view symb'
 -- | 'QuantityDict's have a 'Quantity'. 
@@ -54,7 +59,7 @@ instance Express       QuantityDict where express = sy
 
 -- | Smart constructor for a 'QuantityDict' from another 'Quantity' with units.
 qw :: (Quantity q, MayHaveUnit q) => q -> QuantityDict
-qw q = QD (nw q) (typ q) (symbol q) (getUnit q)
+qw q = QD (nw q) (q ^. typ) (symbol q) (getUnit q)
 
 -- | Make a 'QuantityDict' from a 'UID', 'NP', 'Symbol', 'Space', 
 -- 'Maybe' 'UnitDefn', and an abbreviation ('Maybe' 'String').

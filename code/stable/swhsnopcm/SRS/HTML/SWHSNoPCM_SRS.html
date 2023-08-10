@@ -1486,7 +1486,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#unlikeChgNIHG>UC:No-Internal-Heat-Generation</a>, <a href=#findMass>FR:Find-Mass</a>, and <a href=#calcTempWtrOverTime>FR:Calculate-Temperature-Water-Over-Time</a>
+                          <a href=#unlikeChgNIHG>UC:No-Internal-Heat-Generation</a>, <a href=#outputValues>FR:Output-Values</a>, <a href=#findMass>FR:Find-Mass</a>, and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1594,7 +1594,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#calcChgHeatEnergyWtrOverTime>FR:Calculate-Change-Heat_Energy-Water-Over-Time</a>
+                          <a href=#outputValues>FR:Output-Values</a> and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1781,13 +1781,13 @@
                 </div>
               </p>
               <p>
-                <div id="calcTempWtrOverTime">
-                  Calculate-Temperature-Water-Over-Time: Calculate and output the temperature of the water (<em>T<sub>W</sub></em>(<em>t</em>)) over the simulation time (from <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>).
+                <div id="calcValues">
+                  Calculate-Values: Calculate the following values: <em>T<sub>W</sub></em>(<em>t</em>) (from <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>) and <em>E<sub>W</sub></em>(<em>t</em>) (from <a href=#IM:heatEInWtr>IM:heatEInWtr</a>).
                 </div>
               </p>
               <p>
-                <div id="calcChgHeatEnergyWtrOverTime">
-                  Calculate-Change-Heat_Energy-Water-Over-Time: Calculate and output the change in heat energy in the water (<em>E<sub>W</sub></em>(<em>t</em>)) over the simulation time (from <a href=#IM:heatEInWtr>IM:heatEInWtr</a>).
+                <div id="outputValues">
+                  Output-Values: Output <em>T<sub>W</sub></em>(<em>t</em>) (from <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>) and <em>E<sub>W</sub></em>(<em>t</em>) (from <a href=#IM:heatEInWtr>IM:heatEInWtr</a>).
                 </div>
               </p>
             </div>
@@ -2535,9 +2535,7 @@
               <td></td>
             </tr>
             <tr>
-              <td>
-                <a href=#calcTempWtrOverTime>FR:Calculate-Temperature-Water-Over-Time</a>
-              </td>
+              <td><a href=#calcValues>FR:Calculate-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2554,9 +2552,7 @@
               <td></td>
             </tr>
             <tr>
-              <td>
-                <a href=#calcChgHeatEnergyWtrOverTime>FR:Calculate-Change-Heat_Energy-Water-Over-Time</a>
-              </td>
+              <td><a href=#outputValues>FR:Output-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2966,12 +2962,8 @@
               <th>
                 <a href=#outputInputDerivVals>FR:Output-Input-Derived-Values</a>
               </th>
-              <th>
-                <a href=#calcTempWtrOverTime>FR:Calculate-Temperature-Water-Over-Time</a>
-              </th>
-              <th>
-                <a href=#calcChgHeatEnergyWtrOverTime>FR:Calculate-Change-Heat_Energy-Water-Over-Time</a>
-              </th>
+              <th><a href=#calcValues>FR:Calculate-Values</a></th>
+              <th><a href=#outputValues>FR:Output-Values</a></th>
               <th><a href=#correct>NFR:Correct</a></th>
               <th><a href=#verifiable>NFR:Verifiable</a></th>
               <th><a href=#understandable>NFR:Understandable</a></th>
@@ -3133,9 +3125,7 @@
               <td></td>
             </tr>
             <tr>
-              <td>
-                <a href=#calcTempWtrOverTime>FR:Calculate-Temperature-Water-Over-Time</a>
-              </td>
+              <td><a href=#calcValues>FR:Calculate-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3146,7 +3136,7 @@
               <td></td>
               <td></td>
               <td>X</td>
-              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3160,9 +3150,7 @@
               <td></td>
             </tr>
             <tr>
-              <td>
-                <a href=#calcChgHeatEnergyWtrOverTime>FR:Calculate-Change-Heat_Energy-Water-Over-Time</a>
-              </td>
+              <td><a href=#outputValues>FR:Output-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3172,7 +3160,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
+              <td>X</td>
               <td>X</td>
               <td></td>
               <td></td>

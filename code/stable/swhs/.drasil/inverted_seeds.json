@@ -406,16 +406,6 @@
     "bueche1986": [
         "references"
     ],
-    "calcChgHeatEnergyPCMOverTime": [
-        "references",
-        "concepts",
-        "conceptInstances"
-    ],
-    "calcChgHeatEnergyWtrOverTime": [
-        "references",
-        "concepts",
-        "conceptInstances"
-    ],
     "calcPCMMeltBegin": [
         "references",
         "concepts",
@@ -426,12 +416,7 @@
         "concepts",
         "conceptInstances"
     ],
-    "calcTempPCMOverTime": [
-        "references",
-        "concepts",
-        "conceptInstances"
-    ],
-    "calcTempWtrOverTime": [
+    "calcValues": [
         "references",
         "concepts",
         "conceptInstances"
@@ -1512,6 +1497,11 @@
         "terms"
     ],
     "outputInputDerivVals": [
+        "references",
+        "concepts",
+        "conceptInstances"
+    ],
+    "outputValues": [
         "references",
         "concepts",
         "conceptInstances"

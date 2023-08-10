@@ -9,6 +9,7 @@ import Language.Drasil.Code.DataDesc (DataDesc'(..), Data'(..), DataItem'(..),
 import Language.Drasil.Chunk.Code (CodeVarChunk)
 import Language.Drasil.Expr.Development (Expr(Matrix))
 
+import Control.Lens ((^.))
 import Data.List (intersperse, isPrefixOf, transpose)
 import Data.List.Split (splitOn)
 import Data.List.NonEmpty (NonEmpty(..), toList)
@@ -27,13 +28,13 @@ readWithDataDesc fp ddsc = do
       readData (Datum d) s = [readDataItem d s]
       readData (Data dis 0 d) s = zipWith readDataItem (toList dis) (splitOn d s)
       readData (Data ((DI c [dlm1]):|_) 1 dlm2) s = map ((Matrix . (:[])) .
-        map (strAsExpr (getInnerSpace $ typ c))) $ transpose $
+        map (strAsExpr (getInnerSpace $ c ^. typ))) $ transpose $
         map (splitOn dlm2) $ splitOn dlm1 s
       readData (Data ((DI c [dlm1, dlm3]):|_) 1 dlm2) s = map (Matrix .
-        map (map (strAsExpr (getInnerSpace $ typ c)))) $ transpose $
+        map (map (strAsExpr (getInnerSpace $ c ^. typ)))) $ transpose $
         map (map (splitOn dlm3) . splitOn dlm2) $ splitOn dlm1 s
       readData (Data ((DI c [dlm1, dlm2]):|_) 2 dlm3) s = map (Matrix .
-        map (map (strAsExpr (getInnerSpace $ typ c))) . transpose) $
+        map (map (strAsExpr (getInnerSpace $ c ^. typ))) . transpose) $
         transpose $ map (map (splitOn dlm3) . splitOn dlm2) $ splitOn dlm1 s
       readData _ _ = error "Invalid degree of intermixing in DataDesc or list with more than 2 dimensions (not yet supported)"
       -- Below match is an attempt at a generic match for Data, but it doesn't
@@ -42,11 +43,11 @@ readWithDataDesc fp ddsc = do
       --   - A map function on Expr Vects (exprVectMap)
       --   - A transpose function on Expr Vects (exprVectTranspose)
       -- readData (Data ((DI c dlms):dis) i dlm2) s = let (ls,rs) = splitAt i
-      --   dlms in transposeData i $ data (ls ++ [dlm] ++ rs) (getInnerType $ typ c) s
+      --   dlms in transposeData i $ data (ls ++ [dlm] ++ rs) (getInnerType $ c ^. typ) s
       readDataItem :: DataItem' -> String -> Expr
-      readDataItem (DI c []) s = strAsExpr (typ c) s
-      readDataItem (DI c [dlm]) s = strListAsExpr (typ c) (splitOn dlm s)
-      readDataItem (DI c [dlm1, dlm2]) s = strList2DAsExpr (typ c)
+      readDataItem (DI c []) s = strAsExpr (c ^. typ) s
+      readDataItem (DI c [dlm]) s = strListAsExpr (c ^. typ) (splitOn dlm s)
+      readDataItem (DI c [dlm1, dlm2]) s = strList2DAsExpr (c ^. typ)
         (map (splitOn dlm2) $ splitOn dlm1 s)
       -- FIXME: Since the representation for vectors in Expr is Matrix, and that constructor accepts a 2-D list, building a 3-D or higher matrix is not straightforward. This would be easier if Expr had a constructor for 1-D vectors, which could be nested to achieve n-dimensional structures.
       readDataItem (DI _ _) _ = error "readWithDataDesc does not yet support lists with 3 or more dimensions"
@@ -64,7 +65,7 @@ readWithDataDesc fp ddsc = do
 -- user must supply if they want to generate a sample input file.
 sampleInputDD :: [CodeVarChunk] -> DataDesc'
 sampleInputDD ds = dataDesc (junk : intersperse junk (map toData ds)) "\n"
-  where toData d = toData' (typ d) d
+  where toData d = toData' (d ^. typ) d
         toData' t@(Vect _) d = list d
           (take (getDimension t) ([", ", "; "] ++ iterate (':':) ":"))
         toData' _ d = singleton' d

@@ -194,7 +194,7 @@ genArguments (Arg n (Class rs desc o ctor ci):as) (ClassF svs cif:afs) = do
   (c, is) <- genClassInfo o ctor an desc svs ci cif
   modify (addMod (packmodRequires an desc (rs ++ is) [c] []))
   fmap ((n, sy o):) (genArguments as afs)
-  where an = getActorName (typ o)
+  where an = getActorName (o ^. typ)
 genArguments (Arg n (Record (rq:|rqs) rn r fs):as) (RecordF es:afs) =
   if length fs /= length es then error recordFieldsMismatch else do
     modify (addFieldAsgs r fs es . addDef (new rn []) r .
@@ -236,7 +236,7 @@ genMethodInfo o c (CI desc ps ss) (CIF pfs is sfs) = do
 genMethodInfo _ _ (MI m desc ps rDesc ss) (MIF pfs sfs) = do
   let prms = genParameters ps pfs
   (fs, newS) <- withLocalState (zipWithM genStep (toList ss) (toList sfs))
-  return (funcDefParams (codeName m) desc prms (typ m) rDesc (
+  return (funcDefParams (codeName m) desc prms (m ^. typ) rDesc (
     newS ^. defs ++ fs), newS ^. imports)
 genMethodInfo _ _ _ _ = error methodInfoMismatch
 

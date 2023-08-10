@@ -22,6 +22,7 @@ import Language.Drasil.CodeExpr.Development
 import Language.Drasil.CodeExpr
 import Language.Drasil.Mod (FuncStmt(..), Description)
 
+import Control.Lens ((^.))
 import Data.List.NonEmpty (NonEmpty(..), fromList)
 
 -- | Condition for loops.
@@ -186,12 +187,12 @@ inlineNamedArg n t = Arg (Just n) $ Basic t Nothing
 -- | Specifies use-case-dependent argument whose value must be assigned to a
 --   variable before being passed in the call.
 preDefinedArg :: CodeVarChunk -> Argument
-preDefinedArg v = Arg Nothing $ Basic (typ v) (Just v)
+preDefinedArg v = Arg Nothing $ Basic (v ^. typ) (Just v)
 
 -- | Specifies use-case-dependent named argument whose value must be assigned to
 --   a variable before being passed in the call.
 preDefinedNamedArg :: NamedArgument -> CodeVarChunk -> Argument
-preDefinedNamedArg n v = Arg (Just n) $ Basic (typ v) (Just v)
+preDefinedNamedArg n v = Arg (Just n) $ Basic (v ^. typ) (Just v)
 
 -- | Specifies a function type argument, where the body consists of a single step.
 functionArg :: CodeFuncChunk -> [Parameter] -> Step -> Argument

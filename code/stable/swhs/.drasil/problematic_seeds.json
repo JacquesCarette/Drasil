@@ -262,16 +262,6 @@
         "terms",
         "symbols"
     ],
-    "calcChgHeatEnergyPCMOverTime": [
-        "references",
-        "concepts",
-        "conceptInstances"
-    ],
-    "calcChgHeatEnergyWtrOverTime": [
-        "references",
-        "concepts",
-        "conceptInstances"
-    ],
     "calcPCMMeltBegin": [
         "references",
         "concepts",
@@ -282,12 +272,7 @@
         "concepts",
         "conceptInstances"
     ],
-    "calcTempPCMOverTime": [
-        "references",
-        "concepts",
-        "conceptInstances"
-    ],
-    "calcTempWtrOverTime": [
+    "calcValues": [
         "references",
         "concepts",
         "conceptInstances"
@@ -660,6 +645,11 @@
         "symbols"
     ],
     "outputInputDerivVals": [
+        "references",
+        "concepts",
+        "conceptInstances"
+    ],
+    "outputValues": [
         "references",
         "concepts",
         "conceptInstances"

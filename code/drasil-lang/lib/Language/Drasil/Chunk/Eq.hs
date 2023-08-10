@@ -12,7 +12,7 @@ module Language.Drasil.Chunk.Eq (
   mkFuncDef, mkFuncDef', mkFuncDefByQ
 ) where
 
-import Control.Lens ((^.), view, lens, Lens')
+import Control.Lens ((^.), view, lens, Lens', to)
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDefn)
 
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
@@ -22,6 +22,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
 import Language.Drasil.Chunk.Concept (cc')
 import Language.Drasil.Chunk.NamedIdea (ncUID, mkIdea, nw)
+import Language.Drasil.Chunk.Quantity (DefinesQuantity(defLhs), qw)
 
 import Language.Drasil.Expr.Lang (Expr)
 import qualified Language.Drasil.Expr.Lang as E (Expr(C))
@@ -47,16 +48,17 @@ qdInputs = lens (\(QD _ ins _) -> ins) (\(QD qua _ e) ins' -> QD qua ins' e)
 qdExpr :: Lens' (QDefinition e) e
 qdExpr = lens (\(QD _ _ e) -> e) (\(QD qua ins _) e' -> QD qua ins e')
 
-instance HasUID        (QDefinition e) where uid = qdQua . uid
-instance NamedIdea     (QDefinition e) where term = qdQua . term
-instance Idea          (QDefinition e) where getA = getA . (^. qdQua)
-instance HasSpace      (QDefinition e) where typ = qdQua . typ
-instance HasSymbol     (QDefinition e) where symbol = symbol . (^. qdQua)
-instance Definition    (QDefinition e) where defn = qdQua . defn
-instance Quantity      (QDefinition e) where
-instance Eq            (QDefinition e) where a == b = a ^. uid == b ^. uid
-instance MayHaveUnit   (QDefinition e) where getUnit = getUnit . view qdQua
-instance DefiningExpr   QDefinition    where defnExpr = qdExpr
+instance HasUID          (QDefinition e) where uid = qdQua . uid
+instance NamedIdea       (QDefinition e) where term = qdQua . term
+instance Idea            (QDefinition e) where getA = getA . (^. qdQua)
+instance DefinesQuantity (QDefinition e) where defLhs = qdQua . to qw
+instance HasSpace        (QDefinition e) where typ = qdQua . typ
+instance HasSymbol       (QDefinition e) where symbol = symbol . (^. qdQua)
+instance Definition      (QDefinition e) where defn = qdQua . defn
+instance Quantity        (QDefinition e) where
+instance Eq              (QDefinition e) where a == b = a ^. uid == b ^. uid
+instance MayHaveUnit     (QDefinition e) where getUnit = getUnit . view qdQua
+instance DefiningExpr     QDefinition    where defnExpr = qdExpr
 instance Express e => Express (QDefinition e) where
   express q = f $ express $ q ^. defnExpr
     where

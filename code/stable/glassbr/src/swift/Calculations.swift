@@ -459,6 +459,50 @@ func func_LR(_ inParams: inout InputParameters, _ NFL: Double) throws -> Double 
     return NFL * Double(inParams.GTF) * 1.0
 }
 
+/** Calculates probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
+    - Parameter B: risk of failure
+    - Returns: probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
+*/
+func func_P_b(_ B: Double) throws -> Double {
+    var outfile: FileHandle
+    do {
+        outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
+        try outfile.seekToEnd()
+    } catch {
+        throw "Error opening file."
+    }
+    do {
+        try outfile.write(contentsOf: Data("function func_P_b called with inputs: {".utf8))
+        try outfile.write(contentsOf: Data("\n".utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outfile.write(contentsOf: Data("  B = ".utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outfile.write(contentsOf: Data(String(B).utf8))
+        try outfile.write(contentsOf: Data("\n".utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outfile.write(contentsOf: Data("  }".utf8))
+        try outfile.write(contentsOf: Data("\n".utf8))
+    } catch {
+        throw "Error printing to file."
+    }
+    do {
+        try outfile.close()
+    } catch {
+        throw "Error closing file."
+    }
+    
+    return 1.0 - exp(-B)
+}
+
 /** Calculates 3 second load equivalent resistance safety requirement
     - Parameter LR: load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
     - Parameter q: applied load (demand): 3 second duration equivalent pressure (Pa)
@@ -518,50 +562,6 @@ func func_isSafeLR(_ LR: Double, _ q: Double) throws -> Bool {
     }
     
     return LR > q
-}
-
-/** Calculates probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
-    - Parameter B: risk of failure
-    - Returns: probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
-*/
-func func_P_b(_ B: Double) throws -> Double {
-    var outfile: FileHandle
-    do {
-        outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-        try outfile.seekToEnd()
-    } catch {
-        throw "Error opening file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("function func_P_b called with inputs: {".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  B = ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(String(B).utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  }".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.close()
-    } catch {
-        throw "Error closing file."
-    }
-    
-    return 1.0 - exp(-B)
 }
 
 /** Calculates probability of glass breakage safety requirement

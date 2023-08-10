@@ -80,8 +80,8 @@ digraph avsall {
 	findMass	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:findMass"];
 	checkWithPhysConsts	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkWithPhysConsts"];
 	outputInputDerivVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputInputDerivVals"];
-	calcTempWtrOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcTempWtrOverTime"];
-	calcChgHeatEnergyWtrOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcChgHeatEnergyWtrOverTime"];
+	calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcValues"];
+	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
 	verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiable"];
 	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
@@ -90,7 +90,7 @@ digraph avsall {
 
 	subgraph FR {
 	rank="same"
-	{inputInitVals, findMass, checkWithPhysConsts, outputInputDerivVals, calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime, correct, verifiable, understandable, reusable, maintainable}
+	{inputInitVals, findMass, checkWithPhysConsts, outputInputDerivVals, calcValues, outputValues, correct, verifiable, understandable, reusable, maintainable}
 	}
 
 	likeChgTCVOD	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:likeChgTCVOD"];

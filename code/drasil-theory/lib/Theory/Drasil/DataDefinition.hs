@@ -7,6 +7,7 @@ import Control.Lens
 import Language.Drasil
 import Language.Drasil.Development (showUID)
 import Data.Drasil.TheoryConcepts (dataDefn)
+import Theory.Drasil.Classes (HasOutput(..))
 
 -- * Types
 
@@ -42,6 +43,20 @@ ddQD lqde lqdme = lens g s
     s (DDE  qd pkt) u = DDE  (qd & lqde .~ u)  pkt
     s (DDME qd pkt) u = DDME (qd & lqdme .~ u) pkt
 
+-- The type signature is really
+--
+--     ddQDGetter :: Getter SimpleQDef a -> Getter ModelQDef a -> Getter DataDefinition a
+--
+-- But we need this more general type signature to avoid GHC warning us of
+-- "redundant constraints"
+ddQDGetter :: (Profunctor p, Contravariant f) => Getter SimpleQDef a
+  -> Getter ModelQDef a
+  -> Optic' p f DataDefinition a
+ddQDGetter gsqd gmqd = to g
+  where
+    g (DDE qd _) = qd ^. gsqd
+    g (DDME qd _) = qd ^. gmqd
+
 ddPkt :: Lens' DDPkt a -> Lens' DataDefinition a
 ddPkt lpkt = lens g s
   where
@@ -56,8 +71,12 @@ instance HasUID             DataDefinition where uid = ddQD uid uid
 instance NamedIdea          DataDefinition where term = ddQD term term
 -- | Finds the idea contained in the 'QDefinition' used to make the 'DataDefinition where'.
 instance Idea               DataDefinition where getA = either getA getA . qdFromDD
+-- | Finds the output variable of the 'DataDefinition'
+instance HasOutput          DataDefinition where
+  output = ddQDGetter defLhs defLhs
+  out_constraints = to (const [])
 -- | Finds the Space of the 'QDefinition' used to make the 'DataDefinition where'.
-instance HasSpace           DataDefinition where typ = to $ either (^. typ) (^. typ) . qdFromDD
+instance HasSpace           DataDefinition where typ = ddQDGetter typ typ
 -- | Finds the Symbol of the 'QDefinition' used to make the 'DataDefinition where'.
 instance HasSymbol          DataDefinition where symbol = either symbol symbol . qdFromDD
 -- | 'DataDefinition where's have a 'Quantity'.

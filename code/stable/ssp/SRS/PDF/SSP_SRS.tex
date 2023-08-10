@@ -489,6 +489,7 @@ RefBy & \hyperref[GD:mobShr]{GD:mobShr}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -531,6 +532,7 @@ RefBy & \hyperref[GD:normForcEq]{GD:normForcEq}, \hyperref[GD:momentEql]{GD:mome
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -564,6 +566,7 @@ RefBy & \hyperref[GD:resShr]{GD:resShr}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -596,6 +599,7 @@ RefBy & \hyperref[GD:effNormF]{GD:effNormF}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -628,6 +632,7 @@ RefBy & \hyperref[GD:weight]{GD:weight}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \subsubsection{General Definitions}
 \label{Sec:GDs}
 This section collects the laws and equations that will be used to build the instance models.
@@ -676,6 +681,7 @@ RefBy & \hyperref[IM:fctSfty]{IM:fctSfty}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{}
 \label{GD:normForcEqDeriv}
 Normal force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} in \hyperref[Sec:PhysSyst]{Sec:Physical System Description}.
@@ -724,6 +730,7 @@ RefBy & \hyperref[IM:fctSfty]{IM:fctSfty}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{}
 \label{GD:bsShrFEqDeriv}
 Base shear force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} in \hyperref[Sec:PhysSyst]{Sec:Physical System Description}.
@@ -766,6 +773,7 @@ RefBy & \hyperref[GD:mobShr]{GD:mobShr}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{}
 \label{GD:resShrDeriv}
 Derived by substituting \hyperref[DD:normStress]{DD:normStress} and \hyperref[DD:tangStress]{DD:tangStress} into the Mohr-Coulomb shear strength, \hyperref[TM:mcShrStrgth]{TM:mcShrStrgth}, and multiplying both sides of the equation by the area of the slice in the shear-$z$ plane. Since the slope is assumed to extend infinitely in the $z$-direction (\hyperref[assumpPSC]{A:Plane-Strain-Conditions}), the resulting forces are expressed per metre in the $z$-direction. The effective angle of friction $φ'$ and the effective cohesion $c'$ are not indexed by $i$ because they are assumed to be isotropic (\hyperref[assumpSLI]{A:Soil-Layers-Isotropic}) and the soil is assumed to be homogeneous, with constant soil properties throughout (\hyperref[assumpSLH]{A:Soil-Layer-Homogeneous}, \hyperref[assumpSP]{A:Soil-Properties}).
@@ -810,6 +818,7 @@ RefBy & \hyperref[IM:fctSfty]{IM:fctSfty}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{}
 \label{GD:mobShrDeriv}
 Mobilized shear forces is derived by dividing the definition of the $\symbf{P}$ from \hyperref[GD:resShr]{GD:resShr} by the definition of the factor of safety from \hyperref[TM:factOfSafety]{TM:factOfSafety}. The factor of safety ${F_{\text{S}}}$ is not indexed by $i$ because it is assumed to be constant for the entire slip surface (\hyperref[assumpFOS]{A:Factor-of-Safety}).
@@ -849,6 +858,7 @@ RefBy &
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{}
 \label{GD:effNormFDeriv}
 Derived by substituting \hyperref[DD:normStress]{DD:normStress} into \hyperref[TM:effStress]{TM:effStress} and multiplying both sides of the equation by the area of the slice in the shear-$z$ plane. Since the slope is assumed to extend infinitely in the $z$-direction (\hyperref[assumpPSC]{A:Plane-Strain-Conditions}), the resulting forces are expressed per metre in the $z$-direction.
@@ -896,6 +906,7 @@ RefBy & \hyperref[IM:intsliceFs]{IM:intsliceFs} and \hyperref[IM:fctSfty]{IM:fct
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -935,6 +946,7 @@ RefBy & \hyperref[IM:intsliceFs]{IM:intsliceFs} and \hyperref[IM:fctSfty]{IM:fct
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -971,6 +983,7 @@ RefBy & \hyperref[IM:nrmShrFor]{IM:nrmShrFor} and \hyperref[IM:fctSfty]{IM:fctSf
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1018,6 +1031,7 @@ RefBy & \hyperref[IM:nrmShrFor]{IM:nrmShrFor}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{}
 \label{GD:momentEqlDeriv}
 Moment is equal to torque, so the equation from \hyperref[DD:torque]{DD:torque} will be used to calculate moments:
@@ -1122,6 +1136,7 @@ RefBy & \hyperref[GD:sliceWght]{GD:sliceWght} and \hyperref[GD:momentEql]{GD:mom
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{Detailed derivation of weight:}
 \label{GD:weightDeriv}
 Under the influence of gravity, and assuming a 2D Cartesian coordinate system with down as positive, an object has an acceleration vector of:
@@ -1191,6 +1206,7 @@ RefBy & \hyperref[GD:resShearWO]{GD:resShearWO}, \hyperref[GD:normForcEq]{GD:nor
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{}
 \label{GD:sliceWghtDeriv}
 For the case where the water table is above the slope surface, the weights come from the weight of the saturated soil. Substituting values for saturated soil into the equation for weight from \hyperref[GD:weight]{GD:weight} yields:
@@ -1258,6 +1274,7 @@ RefBy & \hyperref[GD:srfWtrF]{GD:srfWtrF} and \hyperref[GD:baseWtrF]{GD:baseWtrF
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1299,6 +1316,7 @@ RefBy & \hyperref[GD:resShearWO]{GD:resShearWO}, \hyperref[GD:effNormF]{GD:effNo
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{}
 \label{GD:baseWtrFDeriv}
 The base hydrostatic forces come from the hydrostatic pressure exerted by the water above the base of each slice. The equation for hydrostatic pressure from \hyperref[GD:hsPressure]{GD:hsPressure} is:
@@ -1359,6 +1377,7 @@ RefBy & \hyperref[GD:srfWtrF]{GD:srfWtrF}, \hyperref[GD:resShearWO]{GD:resShearW
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{}
 \label{GD:srfWtrFDeriv}
 The surface hydrostatic forces come from the hydrostatic pressure exerted by the water above the surface of each slice. The equation for hydrostatic pressure from \hyperref[GD:hsPressure]{GD:hsPressure} is:
@@ -1424,6 +1443,7 @@ RefBy & \hyperref[GD:resShearWO]{GD:resShearWO}, \hyperref[IM:nrmShrForNum]{IM:n
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1463,6 +1483,7 @@ RefBy & \hyperref[GD:resShearWO]{GD:resShearWO}, \hyperref[IM:nrmShrForNum]{IM:n
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1502,6 +1523,7 @@ RefBy & \hyperref[GD:resShearWO]{GD:resShearWO}, \hyperref[IM:nrmShrForNum]{IM:n
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1537,6 +1559,7 @@ RefBy & \hyperref[GD:sliceWght]{GD:sliceWght}, \hyperref[IM:nrmShrForNum]{IM:nrm
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1576,6 +1599,7 @@ RefBy & \hyperref[GD:resShr]{GD:resShr}, \hyperref[GD:resShearWO]{GD:resShearWO}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1615,6 +1639,7 @@ RefBy & \hyperref[GD:srfWtrF]{GD:srfWtrF}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1656,6 +1681,7 @@ RefBy & \hyperref[IM:nrmShrForNum]{IM:nrmShrForNum} and \hyperref[GD:momentEql]{
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1691,6 +1717,7 @@ RefBy & \hyperref[GD:resShr]{GD:resShr}, \hyperref[TM:effStress]{TM:effStress}, 
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1726,6 +1753,7 @@ RefBy & \hyperref[GD:resShr]{GD:resShr}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1764,6 +1792,7 @@ RefBy & \hyperref[GD:momentEql]{GD:momentEql}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1805,6 +1834,7 @@ RefBy & \hyperref[IM:nrmShrForDen]{IM:nrmShrForDen}, \hyperref[GD:normShrR]{GD:n
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1847,6 +1877,7 @@ RefBy & \hyperref[IM:intsliceFs]{IM:intsliceFs}, \hyperref[DD:convertFunc2]{DD:c
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1890,6 +1921,7 @@ RefBy & \hyperref[IM:intsliceFs]{IM:intsliceFs} and \hyperref[IM:fctSfty]{IM:fct
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1924,6 +1956,7 @@ RefBy &
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1958,6 +1991,7 @@ RefBy &
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1994,6 +2028,7 @@ RefBy & \hyperref[DD:slcHeight]{DD:slcHeight}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -2030,6 +2065,7 @@ RefBy & \hyperref[DD:slcHeight]{DD:slcHeight}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in the \hyperref[Sec:ProbDesc]{problem description} into one which is expressed in mathematical terms. It uses concrete symbols defined in the \hyperref[Sec:DDs]{data definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{theoretical models} and \hyperref[Sec:GDs]{general definitions}.
@@ -2084,6 +2120,7 @@ RefBy & \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[IM:intsliceFs]{IM:intsl
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{}
 \label{IM:fctSftyDeriv}
 The mobilized shear force defined in \hyperref[GD:bsShrFEq]{GD:bsShrFEq} can be substituted into the definition of mobilized shear force based on the factor of safety, from \hyperref[GD:mobShr]{GD:mobShr} yielding Equation (1) below:
@@ -2243,6 +2280,7 @@ RefBy & \hyperref[IM:nrmShrForNum]{IM:nrmShrForNum}, \hyperref[IM:nrmShrFor]{IM:
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{}
 \label{IM:nrmShrForDeriv}
 From the moment equilibrium of \hyperref[GD:momentEql]{GD:momentEql} with the primary assumption for the Morgenstern-Price method of \hyperref[assumpINSFL]{A:Interslice-Norm-Shear-Forces-Linear} and associated definition \hyperref[GD:normShrR]{GD:normShrR}, Equation (14) can be derived:
@@ -2322,6 +2360,7 @@ RefBy & \hyperref[IM:nrmShrFor]{IM:nrmShrFor}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{}
 \label{IM:nrmShrForNumDeriv}
 See \hyperref[IM:nrmShrFor]{IM:nrmShrFor} for the derivation of ${\symbf{C}_{\text{num}}}$.
@@ -2375,6 +2414,7 @@ RefBy & \hyperref[IM:nrmShrFor]{IM:nrmShrFor}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{}
 \label{IM:nrmShrForDenDeriv}
 See \hyperref[IM:nrmShrFor]{IM:nrmShrFor} for the derivation of ${\symbf{C}_{\text{den}}}$.
@@ -2430,6 +2470,7 @@ RefBy & \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[IM:intsliceFs]{IM:intsl
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{}
 \label{IM:intsliceFsDeriv}
 This derivation is identical to the derivation for \hyperref[IM:fctSfty]{IM:fctSfty} up until Equation (3) shown again below:
@@ -2485,6 +2526,7 @@ RefBy & \hyperref[displayGraph]{FR:Display-Graph} and \hyperref[determineCritSli
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
 The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.

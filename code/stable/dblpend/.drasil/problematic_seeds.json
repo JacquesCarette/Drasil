@@ -187,19 +187,19 @@
         "terms",
         "symbols"
     ],
-    "angleerationIM1": [
+    "angleIM1": [
         "symbols",
         "references",
         "labelledContent",
         "instanceModels"
     ],
-    "angleerationIM2": [
+    "angleIM2": [
         "symbols",
         "references",
         "labelledContent",
         "instanceModels"
     ],
-    "calcAngPos": [
+    "calcAng": [
         "references",
         "concepts",
         "conceptInstances"

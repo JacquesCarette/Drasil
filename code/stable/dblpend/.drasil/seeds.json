@@ -1,7 +1,7 @@
 {
     "conceptInstances": [
         [
-            "calcAngPos"
+            "calcAng"
         ],
         [
             "cartSys"
@@ -45,7 +45,7 @@
     ],
     "concepts": [
         [
-            "calcAngPos"
+            "calcAng"
         ],
         [
             "cartSys"
@@ -150,10 +150,10 @@
     ],
     "instanceModels": [
         [
-            "angleerationIM1"
+            "angleIM1"
         ],
         [
-            "angleerationIM2"
+            "angleIM2"
         ]
     ],
     "labelledContent": [
@@ -176,10 +176,10 @@
             "accelerationTM"
         ],
         [
-            "angleerationIM1"
+            "angleIM1"
         ],
         [
-            "angleerationIM2"
+            "angleIM2"
         ],
         [
             "force"
@@ -465,13 +465,13 @@
             "accelerationWiki"
         ],
         [
-            "angleerationIM1"
+            "angleIM1"
         ],
         [
-            "angleerationIM2"
+            "angleIM2"
         ],
         [
-            "calcAngPos"
+            "calcAng"
         ],
         [
             "cartSys"
@@ -829,10 +829,10 @@
             "alpha_y1"
         ],
         [
-            "angleerationIM1"
+            "angleIM1"
         ],
         [
-            "angleerationIM2"
+            "angleIM2"
         ],
         [
             "arrange_numpy"

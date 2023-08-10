@@ -11,50 +11,50 @@
     ],
     "a_x1": [
         [
-            "angleerationIM2"
+            "angleIM2"
         ]
     ],
     "a_x2": [
         [
-            "angleerationIM2"
+            "angleIM2"
         ]
     ],
     "a_y1": [
         [
-            "angleerationIM2"
+            "angleIM2"
         ]
     ],
     "a_y2": [
         [
-            "angleerationIM2"
+            "angleIM2"
         ]
     ],
-    "angleerationIM1": [
+    "angleIM1": [
         [
             "outputValues"
         ],
         [
-            "calcAngPos"
+            "calcAng"
         ],
         [
-            "angleerationIM2"
+            "angleIM2"
         ],
         [
-            "angleerationIM2"
+            "angleIM2"
         ]
     ],
-    "angleerationIM2": [
+    "angleIM2": [
         [
             "outputValues"
         ],
         [
-            "calcAngPos"
+            "calcAng"
         ],
         [
-            "angleerationIM2"
+            "angleIM2"
         ],
         [
-            "angleerationIM1"
+            "angleIM1"
         ]
     ],
     "doc:ReqInputs": [
@@ -112,28 +112,28 @@
     ],
     "xForce1": [
         [
-            "angleerationIM2"
+            "angleIM2"
         ]
     ],
     "xForce2": [
         [
-            "angleerationIM2"
+            "angleIM2"
         ],
         [
-            "angleerationIM2"
+            "angleIM2"
         ]
     ],
     "yForce1": [
         [
-            "angleerationIM2"
+            "angleIM2"
         ]
     ],
     "yForce2": [
         [
-            "angleerationIM2"
+            "angleIM2"
         ],
         [
-            "angleerationIM2"
+            "angleIM2"
         ]
     ]
 }

@@ -1345,7 +1345,7 @@ Notes & ${θ_{1}}$ is calculated by solving the ODE here together with the initi
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[outputValues]{FR:Output-Values}, \hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass}, and \hyperref[IM:calOfAngle2]{IM:calOfAngle2}
+RefBy & \hyperref[outputValues]{FR:Output-Values}, \hyperref[calcAng]{FR:Calculate-Angle-Of-Rod}, and \hyperref[IM:calOfAngle2]{IM:calOfAngle2}
         
 \\ \bottomrule
 \end{tabular}
@@ -1405,7 +1405,7 @@ Notes & ${θ_{2}}$ is calculated by solving the ODE here together with the initi
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[outputValues]{FR:Output-Values}, \hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass}, \hyperref[IM:calOfAngle2]{IM:calOfAngle2}, and \hyperref[IM:calOfAngle1]{IM:calOfAngle1}
+RefBy & \hyperref[outputValues]{FR:Output-Values}, \hyperref[calcAng]{FR:Calculate-Angle-Of-Rod}, \hyperref[IM:calOfAngle2]{IM:calOfAngle2}, and \hyperref[IM:calOfAngle1]{IM:calOfAngle1}
         
 \\ \bottomrule
 \end{tabular}
@@ -1494,8 +1494,8 @@ This section provides the functional requirements, the tasks and behaviours that
 \begin{itemize}
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}.}
 \item[Verify-Input-Values:\phantomsection\label{verifyInptVals}]{Check the entered input values to ensure that they do not exceed the \hyperref[Sec:DataConstraints]{data constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
-\item[Calculate-Angular-Position-Of-Mass:\phantomsection\label{calcAngPos}]{Calculate the following values: ${α_{1}}$ and ${α_{2}}$ (from \hyperref[IM:calOfAngle1]{IM:calOfAngle1}) (from \hyperref[IM:calOfAngle2]{IM:calOfAngle2}).}
-\item[Output-Values:\phantomsection\label{outputValues}]{Output ${α_{1}}$ and ${α_{2}}$ (from \hyperref[IM:calOfAngle1]{IM:calOfAngle1} and \hyperref[IM:calOfAngle2]{IM:calOfAngle2}).}
+\item[Calculate-Angle-Of-Rod:\phantomsection\label{calcAng}]{Calculate the following values: ${θ_{1}}$ and ${θ_{2}}$ (from \hyperref[IM:calOfAngle1]{IM:calOfAngle1} and \hyperref[IM:calOfAngle2]{IM:calOfAngle2}).}
+\item[Output-Values:\phantomsection\label{outputValues}]{Output ${θ_{1}}$ and ${θ_{2}}$ (from \hyperref[IM:calOfAngle1]{IM:calOfAngle1} and \hyperref[IM:calOfAngle2]{IM:calOfAngle2}).}
 \end{itemize}
 \begin{longtblr}
 [caption={Required Inputs following \hyperref[inputValues]{FR:Input-Values}}]
@@ -1600,7 +1600,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  &  &  &  & 
 \\
-\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass} &  &  &  &  &  &  & 
+\hyperref[calcAng]{FR:Calculate-Angle-Of-Rod} &  &  &  &  &  &  & 
 \\
 \hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  & 
 \\
@@ -1666,7 +1666,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
 {colspec={l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:positionGDD]{DD:positionGDD}} & \textbf{\hyperref[DD:positionXDD1]{DD:positionXDD1}} & \textbf{\hyperref[DD:positionYDD1]{DD:positionYDD1}} & \textbf{\hyperref[DD:positionXDD2]{DD:positionXDD2}} & \textbf{\hyperref[DD:positionYDD2]{DD:positionYDD2}} & \textbf{\hyperref[DD:accelerationGDD]{DD:accelerationGDD}} & \textbf{\hyperref[DD:forceGDD]{DD:forceGDD}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[GD:velocityX1]{GD:velocityX1}} & \textbf{\hyperref[GD:velocityY1]{GD:velocityY1}} & \textbf{\hyperref[GD:velocityX2]{GD:velocityX2}} & \textbf{\hyperref[GD:velocityY2]{GD:velocityY2}} & \textbf{\hyperref[GD:accelerationX1]{GD:accelerationX1}} & \textbf{\hyperref[GD:accelerationY1]{GD:accelerationY1}} & \textbf{\hyperref[GD:accelerationX2]{GD:accelerationX2}} & \textbf{\hyperref[GD:accelerationY2]{GD:accelerationY2}} & \textbf{\hyperref[GD:xForce1]{GD:xForce1}} & \textbf{\hyperref[GD:yForce1]{GD:yForce1}} & \textbf{\hyperref[GD:xForce2]{GD:xForce2}} & \textbf{\hyperref[GD:yForce2]{GD:yForce2}} & \textbf{\hyperref[IM:calOfAngle1]{IM:calOfAngle1}} & \textbf{\hyperref[IM:calOfAngle2]{IM:calOfAngle2}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInptVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[portable]{NFR:Portable}}
+\textbf{} & \textbf{\hyperref[DD:positionGDD]{DD:positionGDD}} & \textbf{\hyperref[DD:positionXDD1]{DD:positionXDD1}} & \textbf{\hyperref[DD:positionYDD1]{DD:positionYDD1}} & \textbf{\hyperref[DD:positionXDD2]{DD:positionXDD2}} & \textbf{\hyperref[DD:positionYDD2]{DD:positionYDD2}} & \textbf{\hyperref[DD:accelerationGDD]{DD:accelerationGDD}} & \textbf{\hyperref[DD:forceGDD]{DD:forceGDD}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[GD:velocityX1]{GD:velocityX1}} & \textbf{\hyperref[GD:velocityY1]{GD:velocityY1}} & \textbf{\hyperref[GD:velocityX2]{GD:velocityX2}} & \textbf{\hyperref[GD:velocityY2]{GD:velocityY2}} & \textbf{\hyperref[GD:accelerationX1]{GD:accelerationX1}} & \textbf{\hyperref[GD:accelerationY1]{GD:accelerationY1}} & \textbf{\hyperref[GD:accelerationX2]{GD:accelerationX2}} & \textbf{\hyperref[GD:accelerationY2]{GD:accelerationY2}} & \textbf{\hyperref[GD:xForce1]{GD:xForce1}} & \textbf{\hyperref[GD:yForce1]{GD:yForce1}} & \textbf{\hyperref[GD:xForce2]{GD:xForce2}} & \textbf{\hyperref[GD:yForce2]{GD:yForce2}} & \textbf{\hyperref[IM:calOfAngle1]{IM:calOfAngle1}} & \textbf{\hyperref[IM:calOfAngle2]{IM:calOfAngle2}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInptVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcAng]{FR:Calculate-Angle-Of-Rod}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[portable]{NFR:Portable}}
 \\
 \hyperref[motionMass]{GS:motionMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1674,7 +1674,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  & 
+\hyperref[calcAng]{FR:Calculate-Angle-Of-Rod} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  & 
 \\
 \hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  & 
 \\

@@ -325,13 +325,13 @@
     "angle": [
         "terms"
     ],
-    "angleerationIM1": [
+    "angleIM1": [
         "symbols",
         "references",
         "labelledContent",
         "instanceModels"
     ],
-    "angleerationIM2": [
+    "angleIM2": [
         "symbols",
         "references",
         "labelledContent",
@@ -382,7 +382,7 @@
     "body": [
         "terms"
     ],
-    "calcAngPos": [
+    "calcAng": [
         "references",
         "concepts",
         "conceptInstances"

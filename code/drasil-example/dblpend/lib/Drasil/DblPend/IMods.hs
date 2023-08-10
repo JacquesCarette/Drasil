@@ -60,7 +60,7 @@ angleIM_1 = imNoRefs angleMK_1
       plural condition `S.and_` refS angleIM_2]]
 
 angleMK_1 :: ModelKind Expr
-angleMK_1 = equationalModel "angleerationIM1"
+angleMK_1 = equationalModel "angleIM1"
   (nounPhraseSP "calculation of angle of first rod") angleFD_1
 
 angleFD_1 :: SimpleQDef
@@ -81,7 +81,7 @@ angleIM_2 = imNoRefs angleMK_2
       plural condition `S.and_` refS angleIM_1]]
 
 angleMK_2 :: ModelKind Expr
-angleMK_2 = equationalModel "angleerationIM2"
+angleMK_2 = equationalModel "angleIM2"
   (nounPhraseSP "calculation of angle of second rod") angleFD_2
 
 angleFD_2 :: SimpleQDef

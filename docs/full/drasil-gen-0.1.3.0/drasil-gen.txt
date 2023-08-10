@@ -12,7 +12,12 @@
 module Language.Drasil.Dump
 type Path = String
 type TargetFile = String
+
+-- | For debugging purposes, if the system has a <tt>DEBUG_ENV</tt>
+--   environment variable set to anything, we can dump the chunk maps in a
+--   system to the host system.
 dumpEverything :: SystemInformation -> Path -> IO ()
+dumpEverything0 :: SystemInformation -> Path -> IO ()
 dumpTo :: ToJSON a => a -> TargetFile -> IO ()
 
 
@@ -55,6 +60,10 @@ typeCheckSI :: SystemInformation -> IO ()
 -- | Defines Drasil generator functions.
 module Language.Drasil.Generate
 dumpTo :: ToJSON a => a -> TargetFile -> IO ()
+
+-- | For debugging purposes, if the system has a <tt>DEBUG_ENV</tt>
+--   environment variable set to anything, we can dump the chunk maps in a
+--   system to the host system.
 dumpEverything :: SystemInformation -> Path -> IO ()
 typeCheckSI :: SystemInformation -> IO ()
 

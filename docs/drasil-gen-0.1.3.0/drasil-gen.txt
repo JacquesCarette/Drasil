@@ -13,6 +13,10 @@
 -- | Defines Drasil generator functions.
 module Language.Drasil.Generate
 dumpTo :: ToJSON a => a -> TargetFile -> IO ()
+
+-- | For debugging purposes, if the system has a <tt>DEBUG_ENV</tt>
+--   environment variable set to anything, we can dump the chunk maps in a
+--   system to the host system.
 dumpEverything :: SystemInformation -> Path -> IO ()
 typeCheckSI :: SystemInformation -> IO ()
 

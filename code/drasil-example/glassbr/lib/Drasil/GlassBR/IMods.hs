@@ -4,7 +4,8 @@ module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro,
 import Control.Lens ((^.))
 import Prelude hiding (exp)
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoDeriv, qwC, qwUC, equationalModelN)
+import Theory.Drasil (InstanceModel, imNoDeriv, qwC, qwUC, equationalModelN,
+  HasOutput(output))
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.SRSDocument (Block (Parallel))
@@ -151,7 +152,7 @@ probOfBreakQD = mkQuantDef probBr (exactDbl 1 $- exp (neg (sy risk)))
 
 calofCapacity :: InstanceModel
 calofCapacity = imNoDeriv (equationalModelN (lRe ^. term) calofCapacityQD)
-  (qwUC nonFL : qwUC glaTyFac : [qwUC loadSF]) (qw lRe) []
+  (qwUC nonFL : qwUC (glaTyFac ^. output) : [qwUC loadSF]) (qw lRe) []
   [dRef astm2009] "calofCapacity" [lrCap, nonFLRef, gtfRef]
 
 calofCapacityQD :: SimpleQDef

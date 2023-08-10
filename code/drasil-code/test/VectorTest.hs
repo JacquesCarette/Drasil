@@ -7,7 +7,7 @@ import GOOL.Drasil (GSProgram, SVariable, SMethod, OOProg, ProgramSym(..),
   ModuleSym(..))
 
 vectorTest :: OOProg r => GSProgram r
-vectorTest = prog "VectorTest" [fileDoc $ buildModule "VectorTest" []
+vectorTest = prog "VectorTest" "" [fileDoc $ buildModule "VectorTest" []
   [main] []]
 
 v1 :: OOProg r => SVariable r

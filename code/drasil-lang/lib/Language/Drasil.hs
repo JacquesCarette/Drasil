@@ -87,7 +87,6 @@ module Language.Drasil (
   , (+++), (+++.), (+++!)
   , nc, ncUID, IdeaDict , mkIdea
   , nw -- bad name (historical)
-  -- Language.Drasil.Chunk.CodeBase
   , CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..)
   , obv, qc, ccf, ccv, listToArray, programName, funcPrefix, DefiningCodeExpr(..)
   -- Language.Drasil.Chunk.CommonIdea
@@ -95,9 +94,9 @@ module Language.Drasil (
 
   -- *** Concepts
   -- Language.Drasil.Chunk.Concept.Core
-  , ConceptChunk, CommonConcept, ConceptInstance, sDom
+  , ConceptChunk, ConceptInstance, sDom
   -- Language.Drasil.Chunk.Concept
-  , dcc, dcc', dccWDS, dccWDS', cc, cc', ccs, cw, cic
+  , dcc, dccWDS, cc, cc', ccs, cw, cic
   -- Language.Drasil.Chunk.Relation
   , RelationConcept, makeRC, addRelToCC
   -- Language.Drasil.Chunk.DifferentialModel
@@ -345,8 +344,9 @@ import Language.Drasil.Chunk.Citation (
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
   , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
   , cProceedings, cTechReport, cUnpublished)
-import Language.Drasil.Chunk.CodeBase (CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), 
-  VarOrFunc(..), obv, qc, ccf, ccv, listToArray, programName, funcPrefix, DefiningCodeExpr(..))
+import Language.Drasil.Chunk.CodeVar (CodeIdea(..), CodeChunk(..), 
+  CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..), obv, qc, ccf, ccv, 
+  listToArray, programName, funcPrefix, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Concept.Core (sDom) -- exported for drasil-database FIXME: move to development package?

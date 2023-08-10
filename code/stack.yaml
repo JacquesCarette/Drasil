@@ -42,6 +42,7 @@ packages:
 - drasil-gool
 - drasil-build
 - drasil-code
+- drasil-codeLang
 - drasil-sysinfo
 - drasil-theory
 - drasil-database
@@ -51,12 +52,12 @@ packages:
 - drasil-docLang
 - drasil-metadata
 - drasil-website
-- drasil-example/dblpendulum
-- drasil-example/sglpendulum
+- drasil-example/dblpend
+- drasil-example/sglpend
 - drasil-example/gamephysics
 - drasil-example/glassbr
 - drasil-example/hghc
-- drasil-example/nopcm
+- drasil-example/swhsnopcm
 - drasil-example/pdcontroller
 - drasil-example/projectile
 - drasil-example/ssp

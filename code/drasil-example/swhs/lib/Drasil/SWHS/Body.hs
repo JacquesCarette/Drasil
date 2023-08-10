@@ -1,6 +1,8 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SWHS.Body where
 
+import Control.Lens ((^.))
+
 import Language.Drasil hiding (organization, section, variable)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
@@ -8,8 +10,6 @@ import Theory.Drasil (GenDefn, InstanceModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
-
-import Control.Lens ((^.))
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (inModel)
@@ -132,7 +132,7 @@ mkSRS = [TableOfContents,
      IOrgSec inModel (SRS.inModel [] []) orgDocEnd
     ],
   GSDSec $ GSDProg
-    [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
+    [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets progName]
     , UsrChars [userChars progName]
     , SystCons [] []
     ],
@@ -199,9 +199,10 @@ introStart = foldlSent [S "Due to", foldlList Comma List (map S
   energy), S "storage technology"]
 
 introStartSWHS :: Sentence
-introStartSWHS = foldlSent [capSent (swhsPCM ^. defn), sParen (short phsChgMtrl),
-  S "use a renewable", phrase enerSrc `S.and_` S "provide a novel way of storing" +:+.
-  phrase energy, atStart swhsPCM, S "improve over the traditional", plural progName,
+introStartSWHS = foldlSent [capSent $ pluralNP $ progName ^. term, S "incorporating",
+  phrase phsChgMtrl, sParen (short phsChgMtrl), S "use a renewable",
+  phrase enerSrc `S.and_` S "provide a novel way of storing" +:+.  phrase energy,
+  atStart swhsPCM, S "improve over the traditional", plural progName,
   S "because of their smaller size. The smaller size is possible because of the ability" `S.of_`
   short phsChgMtrl, S "to store", phrase thermalEnergy, S "as", phrase latentHeat `sC`
   S "which allows higher", phrase thermalEnergy, S "storage capacity per",
@@ -306,9 +307,9 @@ sysCntxtRespIntro pro = foldlSPCol [short pro +:+. S "is mostly self-contained",
   S "interface", S "responsibilities" `S.the_ofTheC` phraseNP (user `andThe`
   system) `S.are` S "as follows"]
 
-systContRespBullets :: Contents
-systContRespBullets = UlC $ ulcc $ Enumeration $ bulletNested
-  [titleize user +: S "Responsibilities", short progName +: S "Responsibilities"]
+systContRespBullets :: CI -> Contents
+systContRespBullets prog = UlC $ ulcc $ Enumeration $ bulletNested
+  [titleize user +: S "Responsibilities", short prog +: S "Responsibilities"]
   $ map bulletFlat [userResp, swhsResp]
 
 userResp :: [Sentence]

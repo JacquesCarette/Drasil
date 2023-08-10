@@ -1,133 +1,267 @@
 {
     "AuxConstantsLabel": [
-        "message",
-        "gravAccelValue"
+        [
+            "message"
+        ],
+        [
+            "gravAccelValue"
+        ]
     ],
     "CorSolPropsLabel": [
-        "correct"
+        [
+            "correct"
+        ]
     ],
     "DataConstraintsLabel": [
-        "verifyInVals"
-    ],
-    "Launch": [
-        "landingposition",
-        "iyVel",
-        "ixVel",
-        "flightduration"
-    ],
-    "ReqInputs": [
-        "inputValues"
+        [
+            "verifyInVals"
+        ]
     ],
     "accelXZero": [
-        "landingposition",
-        "constAccel"
+        [
+            "landingposition"
+        ],
+        [
+            "constAccel"
+        ]
     ],
     "accelYGravity": [
-        "flightduration",
-        "constAccel"
+        [
+            "flightduration"
+        ],
+        [
+            "constAccel"
+        ]
     ],
     "accelerationTM": [
-        "projSpeed",
-        "projSpeed"
+        [
+            "projSpeed"
+        ],
+        [
+            "projSpeed"
+        ]
     ],
     "cartSyst": [
-        "velocity",
-        "position"
+        [
+            "velocity"
+        ],
+        [
+            "position"
+        ]
     ],
     "constAccel": [
-        "velocity",
-        "position"
+        [
+            "velocity"
+        ],
+        [
+            "position"
+        ]
+    ],
+    "doc:Launch": [
+        [
+            "landingposition"
+        ],
+        [
+            "iyVel"
+        ],
+        [
+            "ixVel"
+        ],
+        [
+            "flightduration"
+        ]
+    ],
+    "doc:ReqInputs": [
+        [
+            "inputValues"
+        ]
     ],
     "flightduration": [
-        "outputValues",
-        "landingposition",
-        "calcValues"
+        [
+            "outputValues"
+        ],
+        [
+            "landingposition"
+        ],
+        [
+            "calcValues"
+        ]
     ],
     "freeFlight": [
-        "constAccel"
+        [
+            "constAccel"
+        ]
     ],
     "gravAccelValue": [
-        "landingposition",
-        "flightduration"
+        [
+            "landingposition"
+        ],
+        [
+            "flightduration"
+        ]
     ],
     "ixVel": [
-        "landingposition"
+        [
+            "landingposition"
+        ]
     ],
     "iyVel": [
-        "flightduration"
+        [
+            "flightduration"
+        ]
     ],
     "landingposition": [
-        "offset",
-        "calcValues"
+        [
+            "offset"
+        ],
+        [
+            "calcValues"
+        ]
     ],
     "launchOrigin": [
-        "landingposition",
-        "flightduration"
+        [
+            "landingposition"
+        ],
+        [
+            "flightduration"
+        ]
     ],
     "message": [
-        "outputValues",
-        "calcValues"
+        [
+            "outputValues"
+        ],
+        [
+            "calcValues"
+        ]
     ],
     "neglectCurv": [
-        "targetXAxis",
-        "cartSyst"
+        [
+            "targetXAxis"
+        ],
+        [
+            "cartSyst"
+        ]
     ],
     "neglectDrag": [
-        "constAccel"
+        [
+            "constAccel"
+        ]
     ],
     "offset": [
-        "outputValues",
-        "message",
-        "calcValues"
+        [
+            "outputValues"
+        ],
+        [
+            "message"
+        ],
+        [
+            "calcValues"
+        ]
     ],
     "pointMass": [
-        "projSpeed",
-        "projPos"
+        [
+            "projSpeed"
+        ],
+        [
+            "projPos"
+        ]
     ],
     "posXDirection": [
-        "offset",
-        "message",
-        "message",
-        "landingposition",
-        "landingposition",
-        "flightduration"
+        [
+            "offset"
+        ],
+        [
+            "message"
+        ],
+        [
+            "message"
+        ],
+        [
+            "landingposition"
+        ],
+        [
+            "landingposition"
+        ],
+        [
+            "flightduration"
+        ]
     ],
     "position": [
-        "landingposition",
-        "flightduration"
+        [
+            "landingposition"
+        ],
+        [
+            "flightduration"
+        ]
     ],
     "projPos": [
-        "position"
+        [
+            "position"
+        ]
     ],
     "projSpeed": [
-        "velocity",
-        "projPos"
+        [
+            "velocity"
+        ],
+        [
+            "projPos"
+        ]
     ],
     "speed": [
-        "iyVel",
-        "ixVel"
+        [
+            "iyVel"
+        ],
+        [
+            "ixVel"
+        ]
     ],
     "targetXAxis": [
-        "flightduration"
+        [
+            "flightduration"
+        ]
     ],
     "timeStartZero": [
-        "velocity",
-        "projSpeed",
-        "projPos",
-        "position",
-        "flightduration"
+        [
+            "velocity"
+        ],
+        [
+            "projSpeed"
+        ],
+        [
+            "projPos"
+        ],
+        [
+            "position"
+        ],
+        [
+            "flightduration"
+        ]
     ],
     "twoDMotion": [
-        "velocity",
-        "position"
+        [
+            "velocity"
+        ],
+        [
+            "position"
+        ]
     ],
     "velocityTM": [
-        "projPos",
-        "projPos"
+        [
+            "projPos"
+        ],
+        [
+            "projPos"
+        ]
     ],
     "yAxisGravity": [
-        "landingposition",
-        "flightduration",
-        "accelYGravity"
+        [
+            "landingposition"
+        ],
+        [
+            "flightduration"
+        ],
+        [
+            "accelYGravity"
+        ]
     ]
 }

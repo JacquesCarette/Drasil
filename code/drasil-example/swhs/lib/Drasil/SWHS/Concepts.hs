@@ -19,10 +19,10 @@ con = [charging, coil, discharging, gaussDiv,
 ---Acronyms---
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
-  progName, physSyst, requirement, refBy, refName, srs, thModel, typUnc, unlikelyChg]
+  physSyst, requirement, refBy, refName, srs, thModel, typUnc, unlikelyChg]
 
 acronymsFull :: [CI]
-acronymsFull = acronyms ++ [phsChgMtrl, rightSide]
+acronymsFull = acronyms ++ [phsChgMtrl, rightSide, progName]
 
 phsChgMtrl, progName :: CI
 
@@ -80,13 +80,13 @@ tankPCM = dcc "tankPCM" (nounPhrase''
   CapFirst CapWords)
   "solar water heating tank incorporating phase change material"
 
-swhsPCM :: CommonConcept
+swhsPCM :: CI
 -- Nounphrase'' hack to get nounPhraseSP words to accept
 -- nounPhrases instead of strings
 -- Another capitalization hack.
-swhsPCM = dcc' "swhsPCM" (nounPhrase''
+swhsPCM = commonIdea "swhsPCM" (nounPhrase''
   (S "solar water heating systems" +:+ S "incorporating" +:+ short phsChgMtrl)
   (S "solar water heating systems" +:+ S "incorporating" +:+ short phsChgMtrl)
   CapFirst CapWords)
-  "solar water heating systems incorporating phase change material"
   "SWHS"
+  []

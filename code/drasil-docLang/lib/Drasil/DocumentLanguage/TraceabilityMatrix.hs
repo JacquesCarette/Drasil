@@ -77,7 +77,7 @@ tableShows r end = refS r +:+ S "shows the" +:+ plural dependency `S.ofThe` (end
 
 -- | Helper that finds the layout 'UID's of a traceability matrix.
 layoutUIDs :: [TraceViewCat] -> ChunkDB -> [UID] -> [UID]
-layoutUIDs a c e = filter (`elem` (Map.keys $ c ^. traceTable)) $ concatMap (\x -> x e c) a
+layoutUIDs a c e = concatMap (filter (`elem` (Map.keys $ c ^. traceTable)) . (\ x -> x e c)) a
 
 -- | Helper that filters a traceability matrix given a predicate and a 'ChunkDB' lens field.
 traceViewFilt :: HasUID a => (a -> Bool) -> Getting (UMap a) ChunkDB (UMap a) -> TraceViewCat

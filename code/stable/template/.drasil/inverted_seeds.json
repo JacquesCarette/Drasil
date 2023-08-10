@@ -57,8 +57,7 @@
         "references"
     ],
     "InDataConstraints": [
-        "terms",
-        "references"
+        "terms"
     ],
     "IndividualProdUCLabel": [
         "references"
@@ -85,8 +84,7 @@
         "terms"
     ],
     "OutDataConstraints": [
-        "terms",
-        "references"
+        "terms"
     ],
     "PhysSystLabel": [
         "sections",
@@ -115,8 +113,7 @@
         "references"
     ],
     "ReqInputs": [
-        "terms",
-        "references"
+        "terms"
     ],
     "ReqsScopeLabel": [
         "sections",
@@ -146,17 +143,14 @@
         "references"
     ],
     "TAbbAcc": [
-        "terms",
-        "references",
-        "labelledContent"
+        "terms"
     ],
     "TAbbAccLabel": [
         "sections",
         "references"
     ],
     "TAuxConsts": [
-        "terms",
-        "references"
+        "terms"
     ],
     "TMsLabel": [
         "sections",
@@ -173,62 +167,27 @@
         "sections",
         "references"
     ],
-    "ToS": [
-        "references",
-        "labelledContent"
-    ],
     "ToSLabel": [
         "sections",
         "references"
-    ],
-    "ToU": [
-        "references",
-        "labelledContent"
     ],
     "ToULabel": [
         "sections",
         "references"
     ],
-    "TraceGraphAllvsAll": [
-        "references"
-    ],
     "TraceGraphAllvsAllLink": [
-        "references"
-    ],
-    "TraceGraphAllvsR": [
         "references"
     ],
     "TraceGraphAllvsRLink": [
         "references"
     ],
-    "TraceGraphAvsA": [
-        "references"
-    ],
     "TraceGraphAvsALink": [
-        "references"
-    ],
-    "TraceGraphAvsAll": [
         "references"
     ],
     "TraceGraphAvsAllLink": [
         "references"
     ],
-    "TraceGraphRefvsRef": [
-        "references"
-    ],
     "TraceGraphRefvsRefLink": [
-        "references"
-    ],
-    "TraceMatAllvsR": [
-        "references"
-    ],
-    "TraceMatAvsA": [
-        "references"
-    ],
-    "TraceMatAvsAll": [
-        "references"
-    ],
-    "TraceMatRefvsRef": [
         "references"
     ],
     "TraceMatricesLabel": [
@@ -401,6 +360,57 @@
     ],
     "direction": [
         "terms"
+    ],
+    "doc:InDataConstraints": [
+        "references"
+    ],
+    "doc:OutDataConstraints": [
+        "references"
+    ],
+    "doc:ReqInputs": [
+        "references"
+    ],
+    "doc:TAbbAcc": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TAuxConsts": [
+        "references"
+    ],
+    "doc:ToS": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:ToU": [
+        "references",
+        "labelledContent"
+    ],
+    "doc:TraceGraphAllvsAll": [
+        "references"
+    ],
+    "doc:TraceGraphAllvsR": [
+        "references"
+    ],
+    "doc:TraceGraphAvsA": [
+        "references"
+    ],
+    "doc:TraceGraphAvsAll": [
+        "references"
+    ],
+    "doc:TraceGraphRefvsRef": [
+        "references"
+    ],
+    "doc:TraceMatAllvsR": [
+        "references"
+    ],
+    "doc:TraceMatAvsA": [
+        "references"
+    ],
+    "doc:TraceMatAvsAll": [
+        "references"
+    ],
+    "doc:TraceMatRefvsRef": [
+        "references"
     ],
     "document": [
         "terms"

@@ -14,9 +14,9 @@ import Control.Lens ((^.))
 ----- Acronyms -----
 
 acronyms :: [CI]
-acronyms = [assumption, centreMass, dataDefn, gamePhysics, genDefn, goalStmt, inModel,
+acronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt, inModel,
   likelyChg, ode, requirement, refBy, refName, srs, thModel, threeD, twoD, typUnc, unlikelyChg]
 
 centreMass, gamePhysics :: CI
 centreMass  = commonIdeaWithDict "centreMass"  (ctrOfMass ^. term) "CM" [physics]
-gamePhysics = commonIdeaWithDict "gamePhysics" (pn "game physics library") "Game Physics" [physics]
+gamePhysics = commonIdeaWithDict "gamePhysics" (pn "GamePhysics") "GamePhysics" [physics]

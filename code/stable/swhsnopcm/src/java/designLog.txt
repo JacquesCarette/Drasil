@@ -1,0 +1,31 @@
+Languages selected as Python Cpp CSharp Java.
+Modularity selected as Modular Combined.
+Input Structure selected as Unbundled.
+Constant Structure selected as Store Bundled.
+Constant Representation selected as Const.
+Implementation Type selected as Program.
+Software Constraint Behaviour selected as Warning.
+Physical Constraint Behaviour selected as Warning.
+Comments selected as CommentFunc CommentClass CommentMod.
+Dox Verbosity selected as Quiet.
+Dates selected as Hide.
+Log File Name selected as log.txt.
+Logging selected as None.
+Auxiliary Files selected as SampleInput ../../datafiles/swhsnopcm/sampleInput.txt ReadME.
+Language Java is not compatible with chosen library SciPy, trying next choice.
+Language Java is not compatible with chosen library OSLO, trying next choice.
+ODE Library package selected as Apache.
+Successfully matched String with String.
+Successfully matched Actor "Constants" with Object "Constants".
+Successfully matched Actor "InputParameters" with Object "InputParameters".
+Successfully matched Real with Double.
+Successfully matched Vect Real with List Double.
+Successfully matched Actor "ODEStepHandler" with Object "ODEStepHandler".
+Successfully matched Actor "ODE" with Object "ODE".
+Successfully matched Array Real with Array Double.
+Successfully matched Actor "FirstOrderIntegrator" with Object "FirstOrderIntegrator".
+Successfully matched Actor "DormandPrince54Integrator" with Object "DormandPrince54Integrator".
+Successfully matched Void with Void.
+Successfully matched Natural with Integer.
+Successfully matched Actor "StepInterpolator" with Object "StepInterpolator".
+Successfully matched Boolean with Boolean.

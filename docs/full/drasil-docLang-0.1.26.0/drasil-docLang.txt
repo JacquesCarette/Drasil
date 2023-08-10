@@ -1116,7 +1116,7 @@ inTable :: (Quantity i, MayHaveUnit i) => [i] -> LabelledContent
 --   section. Takes a list of wrapped variables and something that is
 --   <a>Referable</a>.
 mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> r -> LabelledContent
-mkQRTuple :: (Quantity i, MayHaveUnit i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
+mkQRTuple :: (HasOutput i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
 mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> [r] -> [(QuantityDict, Sentence)]
 
 -- | Creates a table for use in the Functional Requirments section. Takes a
@@ -2229,7 +2229,7 @@ inTable :: (Quantity i, MayHaveUnit i) => [i] -> LabelledContent
 --   section. Takes a list of wrapped variables and something that is
 --   <a>Referable</a>.
 mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> r -> LabelledContent
-mkQRTuple :: (Quantity i, MayHaveUnit i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
+mkQRTuple :: (HasOutput i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
 mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> [r] -> [(QuantityDict, Sentence)]
 
 -- | Creates a table for use in the Functional Requirments section. Takes a

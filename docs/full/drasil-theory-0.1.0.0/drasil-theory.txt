@@ -115,6 +115,7 @@ data DataDefinition
 [DDE] :: SimpleQDef -> DDPkt -> DataDefinition
 [DDME] :: ModelQDef -> DDPkt -> DataDefinition
 ddQD :: Lens' SimpleQDef a -> Lens' ModelQDef a -> Lens' DataDefinition a
+ddQDGetter :: (Profunctor p, Contravariant f) => Getter SimpleQDef a -> Getter ModelQDef a -> Optic' p f DataDefinition a
 ddPkt :: Lens' DDPkt a -> Lens' DataDefinition a
 
 -- | Smart constructor for data definitions.
@@ -135,6 +136,7 @@ qdEFromDD :: DataDefinition -> Maybe SimpleQDef
 instance Language.Drasil.UID.HasUID Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Chunk.NamedIdea.Idea Theory.Drasil.DataDefinition.DataDefinition
+instance Theory.Drasil.Classes.HasOutput Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Space.HasSpace Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Symbol.HasSymbol Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Classes.Quantity Theory.Drasil.DataDefinition.DataDefinition

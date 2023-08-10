@@ -1,7 +1,7 @@
 module Drasil.GamePhysics.DataDefs (dataDefs, ctrOfMassDD,
   linDispDD, linVelDD, linAccDD, angDispDD, angVelDD, angAccelDD, torqueDD,
   kEnergyDD, coeffRestitutionDD, reVelInCollDD, impulseVDD, momentOfInertiaDD,
-  collisionAssump, rightHandAssump, rigidTwoDAssump, potEnergyDD,) where
+  collisionAssump, rightHandAssump, rigidTwoDAssump, potEnergyDD, outputs) where
 
 import Language.Drasil
 
@@ -32,6 +32,9 @@ dataDefs :: [DataDefinition]
 dataDefs = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
  angVelDD, angAccelDD, chaslesDD, torqueDD, kEnergyDD, coeffRestitutionDD,
  reVelInCollDD, impulseVDD, potEnergyDD, momentOfInertiaDD]
+
+outputs :: [DataDefinition]
+outputs = [linVelDD, angVelDD]
 
 -- DD1 : Centre of mass --
 

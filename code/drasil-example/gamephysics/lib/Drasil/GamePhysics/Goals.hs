@@ -1,25 +1,26 @@
 module Drasil.GamePhysics.Goals (goals, linearGS, angularGS) where
 
 import Language.Drasil
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 import Data.Drasil.Concepts.Physics (time)
 
-import Drasil.GamePhysics.Unitals (inputSymbols, outputSymbols)
+import Data.Drasil.Quantities.Math (orientation)
+import Data.Drasil.Quantities.Physics (angularVelocity, position, velocity)
 
 goals :: [ConceptInstance]
 goals = [linearGS, angularGS]
 
 linearGS :: ConceptInstance
-linearGS = cic "linearGS" (goalStatementStruct (take 2 outputSymbols)
-  (S "their new") EmptyS) "Determine-Linear-Properties" goalStmtDom
+linearGS = cic "linearGS" (goalStatementStruct [position, velocity])
+  "Determine-Linear-Properties" goalStmtDom
 
 angularGS :: ConceptInstance
-angularGS = cic "angularGS" (goalStatementStruct (drop 3 $ take 5 inputSymbols)
-  (S "their new") EmptyS) "Determine-Angular-Properties" goalStmtDom
+angularGS = cic "angularGS" (goalStatementStruct [orientation, angularVelocity])
+  "Determine-Angular-Properties" goalStmtDom
 
-goalStatementStruct :: (NamedIdea a) => [a] -> Sentence -> Sentence -> Sentence
-goalStatementStruct outputs condition1 condition2 = foldlSent
-  [ S "Determine", condition1, listOfOutputs, S "over a period of",
-  phrase time, condition2]
-  where listOfOutputs       = foldlList Comma List $ map plural outputs
+goalStatementStruct :: (NamedIdea a) => [a] -> Sentence
+goalStatementStruct outputs = foldlSent
+  [S "Determine their new", foldlList Comma List $ map plural outputs,
+    S "over a period" `S.of_` phrase time]

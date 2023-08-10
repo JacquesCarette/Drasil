@@ -41,9 +41,9 @@ unitSymbs = map ucw unitalChunks ++ map ucw [iVect, jVect, normalVect,
 -- TABLE OF SYMBOLS --
 ----------------------
 
-symbols, symbolsAll, inputSymbols, outputSymbols :: [QuantityDict]
+symbols, symbolsAll, inputSymbols :: [QuantityDict]
 
-symbolsAll = symbols ++ inputSymbols ++ outputSymbols
+symbolsAll = symbols ++ inputSymbols
 
 symbols = map qw unitalChunks ++ 
   map qw unitless ++ 
@@ -53,10 +53,6 @@ inputSymbols = map qw [QP.position, QP.velocity, QP.force, QM.orientation,
   QP.angularVelocity, QP.linearVelocity, QP.gravitationalConst, QPP.mass, 
   QPP.len, QP.momentOfInertia, QP.torque, QP.kEnergy, QP.chgInVelocity, QP.potEnergy, QP.fOfGravity, QP.positionVec] ++
   [qw QP.restitutionCoef]
-
-outputSymbols = map qw [QP.position, QP.velocity, QM.orientation, 
-  QP.angularVelocity, QP.chgMomentum, QP.chgInVelocity]
-
 
 unitalChunks :: [UnitalChunk]
 unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel, 

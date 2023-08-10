@@ -35,14 +35,14 @@ import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 import Drasil.GamePhysics.Assumptions (assumptions)
 import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GamePhysics.Concepts (gamePhysics, acronyms, threeD, twoD)
-import Drasil.GamePhysics.DataDefs (dataDefs)
+import Drasil.GamePhysics.DataDefs (dataDefs, outputs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iMods, instModIntro)
 import Drasil.GamePhysics.References (citations)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs)
 import Drasil.GamePhysics.TMods (tMods)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
-  inputSymbols, outputSymbols, inputConstraints, defSymbols)
+  inputSymbols, inputConstraints, defSymbols)
 import Drasil.GamePhysics.GenDefs (generalDefns)
 
 srs :: Document
@@ -113,7 +113,7 @@ si = SI {
   _datadefs    = dataDefs,
   _configFiles = [],
   _inputs      = inputSymbols,
-  _outputs     = outputSymbols, 
+  _outputs     = outputs, 
   _defSequence = map (`Parallel` []) qDefs,
   _constraints = inputConstraints,
   _constants   = [],

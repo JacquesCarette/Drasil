@@ -5,8 +5,12 @@
     "a_y2": [],
     "acceleration": [],
     "accelerationTM": [],
-    "angularAccelerationIM1": [],
-    "angularAccelerationIM2": [
+    "angleerationIM1": [
+        [
+            "angleerationIM2"
+        ]
+    ],
+    "angleerationIM2": [
         [
             "xForce2"
         ],
@@ -38,18 +42,21 @@
             "a_y2"
         ],
         [
-            "angularAccelerationIM1"
+            "angleerationIM1"
         ],
         [
-            "angularAccelerationIM2"
+            "angleerationIM2"
+        ],
+        [
+            "angleerationIM1"
         ]
     ],
     "calcAngPos": [
         [
-            "angularAccelerationIM1"
+            "angleerationIM1"
         ],
         [
-            "angularAccelerationIM2"
+            "angleerationIM2"
         ]
     ],
     "cartSys": [],
@@ -71,10 +78,10 @@
     "newtonSL": [],
     "outputValues": [
         [
-            "angularAccelerationIM1"
+            "angleerationIM1"
         ],
         [
-            "angularAccelerationIM2"
+            "angleerationIM2"
         ]
     ],
     "p_x1": [

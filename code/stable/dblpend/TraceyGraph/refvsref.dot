@@ -7,16 +7,17 @@ digraph refvsref {
 	v_x2 -> p_x2;
 	v_y2 -> velocity;
 	v_y2 -> p_y2;
-	angularAccelerationIM2 -> a_x1;
-	angularAccelerationIM2 -> a_y1;
-	angularAccelerationIM2 -> a_x2;
-	angularAccelerationIM2 -> a_y2;
-	angularAccelerationIM2 -> xForce1;
-	angularAccelerationIM2 -> yForce1;
-	angularAccelerationIM2 -> xForce2;
-	angularAccelerationIM2 -> yForce2;
-	angularAccelerationIM2 -> angularAccelerationIM1;
-	angularAccelerationIM2 -> angularAccelerationIM2;
+	angleerationIM1 -> angleerationIM2;
+	angleerationIM2 -> a_x1;
+	angleerationIM2 -> a_y1;
+	angleerationIM2 -> a_x2;
+	angleerationIM2 -> a_y2;
+	angleerationIM2 -> xForce1;
+	angleerationIM2 -> yForce1;
+	angleerationIM2 -> xForce2;
+	angleerationIM2 -> yForce2;
+	angleerationIM2 -> angleerationIM1;
+	angleerationIM2 -> angleerationIM2;
 
 
 	velocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionGDD"];
@@ -59,12 +60,12 @@ digraph refvsref {
 	{v_x1, v_y1, v_x2, v_y2, a_x1, a_y1, a_x2, a_y2, xForce1, yForce1, xForce2, yForce2}
 	}
 
-	angularAccelerationIM1	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngularAcceleration1"];
-	angularAccelerationIM2	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngularAcceleration2"];
+	angleerationIM1	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngle1"];
+	angleerationIM2	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngle2"];
 
 	subgraph IM {
 	rank="same"
-	{angularAccelerationIM1, angularAccelerationIM2}
+	{angleerationIM1, angleerationIM2}
 	}
 
 }

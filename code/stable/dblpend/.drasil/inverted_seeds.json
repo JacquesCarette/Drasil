@@ -325,23 +325,23 @@
     "angle": [
         "terms"
     ],
+    "angleerationIM1": [
+        "symbols",
+        "references",
+        "labelledContent",
+        "instanceModels"
+    ],
+    "angleerationIM2": [
+        "symbols",
+        "references",
+        "labelledContent",
+        "instanceModels"
+    ],
     "angular": [
         "terms"
     ],
     "angularAcceleration": [
         "terms"
-    ],
-    "angularAccelerationIM1": [
-        "symbols",
-        "references",
-        "labelledContent",
-        "instanceModels"
-    ],
-    "angularAccelerationIM2": [
-        "symbols",
-        "references",
-        "labelledContent",
-        "instanceModels"
     ],
     "angularDisplacement": [
         "terms"

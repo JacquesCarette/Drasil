@@ -11,7 +11,7 @@ import Data.Drasil.Concepts.Documentation (datumConstraint, funcReqDom,
 --   requirement, srs, traceyMatrix, unlikelyChg, value, vavPlan)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.Software (errMsg)
-import Drasil.DblPend.IMods (angularAccelIM_1, angularAccelIM_2)
+import Drasil.DblPend.IMods (angleIM_1, angleIM_2)
 import Drasil.DblPend.Unitals (angularAccel_1, angularAccel_2)
 
 --Functional Requirements--
@@ -33,10 +33,10 @@ verifyInptValsDesc = foldlSent [S "Check the entered", plural inValue,
 
 calcAngPosDesc = foldlSent [S "Calculate the following" +: plural value,
   ch angularAccel_1 `S.and_` ch angularAccel_2,
-  sParen (S "from" +:+ refS angularAccelIM_1),
-  sParen (S "from" +:+ refS angularAccelIM_2)]
+  sParen (S "from" +:+ refS angleIM_1),
+  sParen (S "from" +:+ refS angleIM_2)]
 outputValuesDesc = foldlSent [atStart output_, ch angularAccel_1 `S.and_` ch angularAccel_2,
-  sParen (S "from" +:+ refS angularAccelIM_1 `S.and_` refS angularAccelIM_2)]
+  sParen (S "from" +:+ refS angleIM_1 `S.and_` refS angleIM_2)]
 
 --Nonfunctional Requirements--
 nonFuncReqs :: [ConceptInstance]

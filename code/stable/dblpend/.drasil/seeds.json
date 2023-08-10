@@ -150,10 +150,10 @@
     ],
     "instanceModels": [
         [
-            "angularAccelerationIM1"
+            "angleerationIM1"
         ],
         [
-            "angularAccelerationIM2"
+            "angleerationIM2"
         ]
     ],
     "labelledContent": [
@@ -176,10 +176,10 @@
             "accelerationTM"
         ],
         [
-            "angularAccelerationIM1"
+            "angleerationIM1"
         ],
         [
-            "angularAccelerationIM2"
+            "angleerationIM2"
         ],
         [
             "force"
@@ -465,10 +465,10 @@
             "accelerationWiki"
         ],
         [
-            "angularAccelerationIM1"
+            "angleerationIM1"
         ],
         [
-            "angularAccelerationIM2"
+            "angleerationIM2"
         ],
         [
             "calcAngPos"
@@ -829,10 +829,10 @@
             "alpha_y1"
         ],
         [
-            "angularAccelerationIM1"
+            "angleerationIM1"
         ],
         [
-            "angularAccelerationIM2"
+            "angleerationIM2"
         ],
         [
             "arrange_numpy"

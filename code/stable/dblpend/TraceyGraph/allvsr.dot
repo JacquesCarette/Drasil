@@ -1,8 +1,8 @@
 digraph allvsr {
-	calcAngPos -> angularAccelerationIM1;
-	calcAngPos -> angularAccelerationIM2;
-	outputValues -> angularAccelerationIM1;
-	outputValues -> angularAccelerationIM2;
+	calcAngPos -> angleerationIM1;
+	calcAngPos -> angleerationIM2;
+	outputValues -> angleerationIM1;
+	outputValues -> angleerationIM2;
 
 
 	twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
@@ -58,12 +58,12 @@ digraph allvsr {
 	{v_x1, v_y1, v_x2, v_y2, a_x1, a_y1, a_x2, a_y2, xForce1, yForce1, xForce2, yForce2}
 	}
 
-	angularAccelerationIM1	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngularAcceleration1"];
-	angularAccelerationIM2	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngularAcceleration2"];
+	angleerationIM1	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngle1"];
+	angleerationIM2	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngle2"];
 
 	subgraph IM {
 	rank="same"
-	{angularAccelerationIM1, angularAccelerationIM2}
+	{angleerationIM1, angleerationIM2}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

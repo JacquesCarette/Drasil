@@ -51,11 +51,11 @@ inputs :: HasInputs c => Lens' c [(QuantityDict, Maybe (RealInterval Expr Expr))
 -- | Members of this class may have outputs.
 class HasOutput c
 
--- | Provides a <tt>Lens</tt> that holds a <a>QuantityDict</a> for output.
-output :: HasOutput c => Lens' c QuantityDict
+-- | Provides a <a>Getter</a> that holds a <a>QuantityDict</a> for output.
+output :: HasOutput c => Getter c QuantityDict
 
--- | Provides a <tt>Lens</tt> that holds constraints on the output.
-out_constraints :: HasOutput c => Lens' c [RealInterval Expr Expr]
+-- | Provides a <a>Getter</a> that holds constraints on the output.
+out_constraints :: HasOutput c => Getter c [RealInterval Expr Expr]
 
 -- | <a>ConstraintSet</a>s are sets of invariants that always hold for
 --   underlying domains.

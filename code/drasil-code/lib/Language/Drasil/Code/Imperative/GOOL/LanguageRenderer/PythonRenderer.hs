@@ -5,11 +5,11 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
   PythonProject(..)
 ) where
 
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),PackageSym(..), 
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),PackageSym(..),
   AuxiliarySym(..))
-import qualified 
-  Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig, 
+import qualified
+  Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
+  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)

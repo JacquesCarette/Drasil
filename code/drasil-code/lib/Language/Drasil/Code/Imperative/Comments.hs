@@ -21,23 +21,23 @@ getTermDoc c = do
   let db = sysinfodb $ codeSpec g
   return $ sentenceDoc db Implementation Linear $ phraseNP $ codeChunk c ^. term
 
--- | Gets a plain rendering of the definition of a chunk, preceded by a colon 
--- as it is intended to follow the term for the chunk. Returns empty if the 
+-- | Gets a plain rendering of the definition of a chunk, preceded by a colon
+-- as it is intended to follow the term for the chunk. Returns empty if the
 -- chunk has no definition.
 getDefnDoc :: (CodeIdea c) => c -> GenState Doc
 getDefnDoc c = do
   g <- get
   let db = sysinfodb $ codeSpec g
-  return $ maybe empty ((<+>) colon . sentenceDoc db Implementation Linear . 
+  return $ maybe empty ((<+>) colon . sentenceDoc db Implementation Linear .
     (^. defn) . fst) (Map.lookup (codeChunk c ^. uid) $ defTable db)
 
--- | Gets a plain rendering of the unit of a chunk in parentheses, 
+-- | Gets a plain rendering of the unit of a chunk in parentheses,
 -- or empty if it has no unit.
 getUnitsDoc :: (CodeIdea c) => c -> Doc
-getUnitsDoc c = maybe empty (parens . unitDoc Linear . usymb) 
+getUnitsDoc c = maybe empty (parens . unitDoc Linear . usymb)
   (getUnit $ codeChunk c)
 
--- | Generates a comment string for a chunk, including the term, 
+-- | Generates a comment string for a chunk, including the term,
 -- definition (if applicable), and unit (if applicable).
 getComment :: (CodeIdea c) => c -> GenState String
 getComment l = do

@@ -97,7 +97,7 @@ generator l dt sd chs spec = DrasilState {
           (nonPrefChs ++ concLog ++ libLog)
 
 -- | Generates a package with the given 'DrasilState'. The passed
--- un-representation functions determine which target language the package will 
+-- un-representation functions determine which target language the package will
 -- be generated in.
 generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang ->
   (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) ->
@@ -116,11 +116,11 @@ generateCode l unReprProg unReprPack g = do
   createCodeFiles code
   setCurrentDirectory workingDir
 
--- | Generates a package, including a Makefile, sample input file, and Doxygen 
--- configuration file (all subject to the user's choices). 
--- The passed un-representation function determines which target language the 
+-- | Generates a package, including a Makefile, sample input file, and Doxygen
+-- configuration file (all subject to the user's choices).
+-- The passed un-representation function determines which target language the
 -- package will be generated in.
--- GOOL's static code analysis interpreter is called to initialize the state 
+-- GOOL's static code analysis interpreter is called to initialize the state
 -- used by the language renderer.
 genPackage :: (OOProg progRepr, PackageSym packRepr) =>
   (progRepr (Program progRepr) -> ProgData) ->
@@ -136,10 +136,10 @@ genPackage unRepr = do
       as = case codeSpec g of CodeSpec {authors = a} -> map name a
       cfp = configFiles $ codeSpec g
       db = sysinfodb $ codeSpec g
-      prps = show $ sentenceDoc db Implementation Linear 
+      prps = show $ sentenceDoc db Implementation Linear
         (foldlSent $ purpose $ codeSpec g)
-      bckgrnd = show $ sentenceDoc db Implementation Linear 
-        (foldlSent $ background $ codeSpec g)  
+      bckgrnd = show $ sentenceDoc db Implementation Linear
+        (foldlSent $ background $ codeSpec g)
   i <- genSampleInput
   d <- genDoxConfig s
   rm <- genReadMe ReadMeInfo {
@@ -167,7 +167,7 @@ genProgram = do
   let p = show $ sentenceDoc (sysinfodb $ codeSpec g) Implementation Linear $ foldlSent $ purpose $ codeSpec g
   return $ prog n p ms
 
--- | Generates either a single module or many modules, based on the users choice 
+-- | Generates either a single module or many modules, based on the users choice
 -- of modularity.
 chooseModules :: (OOProg r) => Modularity -> GenState [SFile r]
 chooseModules Unmodular = liftS genUnmodular

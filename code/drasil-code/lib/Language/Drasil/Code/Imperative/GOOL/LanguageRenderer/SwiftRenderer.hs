@@ -8,12 +8,12 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer (
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
   PackageSym(..), AuxiliarySym(..))
-import qualified 
-  Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
+import qualified
+  Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
   G (sampleInput, readMe, makefile, noRunIfLib, docIfEnabled)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
-import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
+import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   DocConfig(..), asFragment, buildAll, nativeBinary, executable, sharedLibrary)
 
 import GOOL.Drasil (onCodeList, swiftName, swiftVersion)

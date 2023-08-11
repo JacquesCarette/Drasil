@@ -14,7 +14,7 @@ import Text.Parsec.Perm ((<|?>), (<$?>), (<$$>), (<||>), permute)
 import qualified Text.Parsec.Token as P
 import Text.ParserCombinators.Parsec (Parser, ParseError, parse, try, noneOf)
 import Text.ParserCombinators.Parsec.Language (caseSensitive, reservedNames, reservedOpNames,
-  opLetter, opStart, identLetter, identStart, nestedComments, commentLine, commentStart, 
+  opLetter, opStart, identLetter, identStart, nestedComments, commentLine, commentStart,
   commentEnd, LanguageDef, emptyDef)
 
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (Options(..))

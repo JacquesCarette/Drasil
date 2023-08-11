@@ -5,11 +5,11 @@ module Language.Drasil.Data.ODEInfo (
 
 import Language.Drasil.Chunk.Code (CodeVarChunk)
 import Language.Drasil.CodeExpr.Development
-import Language.Drasil(makeAODESolverFormat, formEquations, 
+import Language.Drasil(makeAODESolverFormat, formEquations,
   DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..))
 import Language.Drasil.Chunk.CodeBase (quantvar)
 
--- This may be temporary, but need a structure to hold ODE info for now. 
+-- This may be temporary, but need a structure to hold ODE info for now.
 -- Goal will be for this info to be populated by the instance model for the ODE and the Choices structure.
 -- Probably doesn't belong here, but where?
 -- | Structure to hold ODE information.
@@ -31,16 +31,16 @@ data ODEInfo = ODEInfo {
 }
 
 -- | Basic 'ODEInfo' constructor.
-odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr -> 
+odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr ->
   [CodeExpr] -> [CodeExpr] -> ODEOptions -> ODEInfo
 odeInfo = ODEInfo
 
 -- | Create ODEInfo with Other variables, ODEOptions, DifferentialModel, and InitialValueProblem
 odeInfo' :: [CodeVarChunk] -> ODEOptions -> DifferentialModel -> InitialValueProblem -> ODEInfo
-odeInfo' ovs opt dm ivp = ODEInfo 
-  (quantvar $ _indepVar dm) 
-  (quantvar $ _depVar dm) 
-  ovs 
+odeInfo' ovs opt dm ivp = ODEInfo
+  (quantvar $ _indepVar dm)
+  (quantvar $ _depVar dm)
+  ovs
   (expr $ initTime ivp)
   (expr $ finalTime ivp)
   (map expr $ initValues ivp)

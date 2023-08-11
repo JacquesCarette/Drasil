@@ -2,15 +2,15 @@
 -- and write to files. See stable/gooltest for more details on what is generated through this.
 module FileTests (fileTests) where
 
-import GOOL.Drasil (GSProgram, MSBlock, MSStatement, SMethod, OOProg, 
-  ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), TypeSym(..), 
-  DeclStatement(..), IOStatement(..), VariableSym(..), Literal(..), 
+import GOOL.Drasil (GSProgram, MSBlock, MSStatement, SMethod, OOProg,
+  ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), TypeSym(..),
+  DeclStatement(..), IOStatement(..), VariableSym(..), Literal(..),
   VariableValue(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return, print, log, exp, sin, cos, tan)
 
 -- | Creates a program in GOOL to test reading and writing to files.
 fileTests :: (OOProg r) => GSProgram r
-fileTests = prog "FileTests" "" [fileDoc (buildModule "FileTests" [] 
+fileTests = prog "FileTests" "" [fileDoc (buildModule "FileTests" []
   [fileTestMethod] [])]
 
 -- | File test method starts with 'writeStory' and ends with 'goodBye'.
@@ -39,12 +39,12 @@ writeStory = block [
 
 -- | Generates functions to read from a file.
 readStory :: (OOProg r) => MSStatement r
-readStory = getFileInputAll (valueOf $ var "fileToRead" infile) 
+readStory = getFileInputAll (valueOf $ var "fileToRead" infile)
   (var "fileContents" (listType string))
 
 -- | Prints the result of the 'readStory' function. Should be the same as
 -- what was given in 'writeStory'.
 goodBye :: (OOProg r) => MSBlock r
 goodBye = block [
-  printLn (valueOf $ var "fileContents" (listType string)), 
+  printLn (valueOf $ var "fileContents" (listType string)),
   closeFile (valueOf $ var "fileToRead" infile)]

@@ -1,16 +1,16 @@
 {-# LANGUAGE LambdaCase #-}
 -- | Defines a language for specifying external library use scenarios
-module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..), 
-  FunctionInterface(..), Result(..), Argument(..), ArgumentInfo(..), 
-  Parameter(..), ClassInfo(..), MethodInfo(..), FuncType(..), externalLib, 
-  choiceSteps, choiceStep, mandatoryStep, mandatorySteps, callStep, 
-  libFunction, libMethod, libFunctionWithResult, libMethodWithResult, 
-  libConstructor, libConstructorMultiReqs, constructAndReturn, lockedArg, 
-  lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, preDefinedNamedArg, 
-  functionArg, customObjArg, recordArg, lockedParam, unnamedParam, customClass, 
-  implementation, constructorInfo, methodInfo, methodInfoNoReturn, 
-  appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj, 
-  initSolListFromArray, initSolListWithVal, solveAndPopulateWhile, 
+module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
+  FunctionInterface(..), Result(..), Argument(..), ArgumentInfo(..),
+  Parameter(..), ClassInfo(..), MethodInfo(..), FuncType(..), externalLib,
+  choiceSteps, choiceStep, mandatoryStep, mandatorySteps, callStep,
+  libFunction, libMethod, libFunctionWithResult, libMethodWithResult,
+  libConstructor, libConstructorMultiReqs, constructAndReturn, lockedArg,
+  lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, preDefinedNamedArg,
+  functionArg, customObjArg, recordArg, lockedParam, unnamedParam, customClass,
+  implementation, constructorInfo, methodInfo, methodInfoNoReturn,
+  appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj,
+  initSolListFromArray, initSolListWithVal, solveAndPopulateWhile,
   returnExprList, fixedReturn, fixedReturn', initSolWithVal
 ) where
 
@@ -38,7 +38,7 @@ type ExternalLibrary = [StepGroup]
 type StepGroup = NonEmpty [Step]
 
 -- | A step can be a call to an external library function or method.
-data Step = Call FunctionInterface 
+data Step = Call FunctionInterface
   -- | A while loop.
   -- The function calls in the condition, other conditions, and steps for the body of the loop.
   | Loop (NonEmpty FunctionInterface) ([CodeExpr] -> Condition) (NonEmpty Step)
@@ -55,21 +55,21 @@ data Result = Assign CodeVarChunk | Return
 data Argument = Arg (Maybe NamedArgument) ArgumentInfo -- Maybe named argument
 
 -- | Determines the context needed for an argument to work.
-data ArgumentInfo = 
+data ArgumentInfo =
   -- | An argument not dependent on use case.
-  LockedArg CodeExpr 
+  LockedArg CodeExpr
   -- | An argument dependent on the use case. Maybe is the variable if it needs
   --   to be declared and defined prior to calling.
-  | Basic Space (Maybe CodeVarChunk) 
+  | Basic Space (Maybe CodeVarChunk)
   -- | A function-type argument, with a single 'Step' for the body.
   | Fn CodeFuncChunk [Parameter] Step
-  -- | An argument that is an object of a class that must be implemented in the 
+  -- | An argument that is an object of a class that must be implemented in the
   --   calling program.
   --   Parameters: Requires, description, object, constructor, class info.
   | Class [Requires] Description CodeVarChunk CodeFuncChunk ClassInfo
   -- | An argument that is an object of a record class defined by the external
   --   library, where some fields need to be set by the calling program.
-  --   Parameters: Requires, constructor, object, fields. 
+  --   Parameters: Requires, constructor, object, fields.
   --   First Require should be where the record type is defined.
   | Record (NonEmpty Requires) CodeFuncChunk CodeVarChunk [CodeVarChunk]
 
@@ -93,13 +93,13 @@ data FuncType = Function | Method CodeVarChunk | Constructor
 externalLib :: [StepGroup] -> ExternalLibrary
 externalLib = id
 
--- | To be used when there are multiple options for a group of consecutive steps, 
+-- | To be used when there are multiple options for a group of consecutive steps,
 --   where a single use-case-specific factor decides which step group to use.
 choiceSteps :: [[Step]] -> StepGroup
 choiceSteps [] = error "choiceSteps should be called with a non-empty list"
 choiceSteps sg = fromList sg
 
--- | To be used when there are multiple options for a single step, where a 
+-- | To be used when there are multiple options for a single step, where a
 --   use-case-specific factor decides which step to use.
 choiceStep :: [Step] -> StepGroup
 choiceStep [] = error "choiceStep should be called with a non-empty list"
@@ -109,7 +109,7 @@ choiceStep ss = fromList $ map (: []) ss
 mandatoryStep :: Step -> StepGroup
 mandatoryStep f = [f] :| []
 
--- | Specifies multiple consecutive steps that all must exist in some form in 
+-- | Specifies multiple consecutive steps that all must exist in some form in
 --   every use case.
 mandatorySteps :: [Step] -> StepGroup
 mandatorySteps fs = fs :| []
@@ -118,7 +118,7 @@ mandatorySteps fs = fs :| []
 callStep :: FunctionInterface -> Step
 callStep = Call
 
--- | Specifies a step where an external library function or method is called in a 
+-- | Specifies a step where an external library function or method is called in a
 --   while-loop condition and in the loop body.
 loopStep :: [FunctionInterface] -> ([CodeExpr] -> Condition) -> [Step] -> Step
 loopStep [] _ _ = error "loopStep should be called with a non-empty list of FunctionInterface"
@@ -130,39 +130,39 @@ libFunction :: Requires -> CodeFuncChunk -> [Argument] -> FunctionInterface
 libFunction rq f ps = FI (rq :| []) Function f ps Nothing
 
 -- | Specifies a call to an external library method.
-libMethod :: Requires -> CodeVarChunk -> CodeFuncChunk -> [Argument] -> 
+libMethod :: Requires -> CodeVarChunk -> CodeFuncChunk -> [Argument] ->
   FunctionInterface
 libMethod rq o m ps = FI (rq :| []) (Method o) m ps Nothing
 
--- | Specifies a call to an external library function, where the result is 
+-- | Specifies a call to an external library function, where the result is
 --   assigned to a variable.
-libFunctionWithResult :: Requires -> CodeFuncChunk -> [Argument] -> 
+libFunctionWithResult :: Requires -> CodeFuncChunk -> [Argument] ->
   CodeVarChunk -> FunctionInterface
 libFunctionWithResult rq f ps r = FI (rq :| []) Function f ps (Just $ Assign r)
 
--- | Specifies a call to an external library method, where the result is 
+-- | Specifies a call to an external library method, where the result is
 --   assigned to a variable.
-libMethodWithResult :: Requires -> CodeVarChunk -> CodeFuncChunk -> [Argument] 
+libMethodWithResult :: Requires -> CodeVarChunk -> CodeFuncChunk -> [Argument]
   -> CodeVarChunk -> FunctionInterface
 libMethodWithResult rq o m ps r = FI (rq :| []) (Method o) m ps (Just $ Assign r)
 
--- | Specifies a call to an external library constructor, where the result is 
+-- | Specifies a call to an external library constructor, where the result is
 --   assigned to a variable.
-libConstructor :: Requires -> CodeFuncChunk -> [Argument] -> CodeVarChunk -> 
+libConstructor :: Requires -> CodeFuncChunk -> [Argument] -> CodeVarChunk ->
   FunctionInterface
 libConstructor rq c as r = FI (rq :| []) Constructor c as (Just $ Assign r)
 
 -- | Specifies a call to an external library function, where multiple modules from
 --   the external library are required, and the result is assigned to a variable.
-libConstructorMultiReqs :: [Requires] -> CodeFuncChunk -> [Argument] -> 
+libConstructorMultiReqs :: [Requires] -> CodeFuncChunk -> [Argument] ->
   CodeVarChunk -> FunctionInterface
 libConstructorMultiReqs [] _ _ _ = error $ "libConstructorMultiReqs should" ++
   " be called with a non-empty list of Requires"
-libConstructorMultiReqs rqs c as r = FI (fromList rqs) Constructor c as 
+libConstructorMultiReqs rqs c as r = FI (fromList rqs) Constructor c as
   (Just $ Assign r)
 
 -- | Specifies a call to an external library constructor, where the result is returned.
-constructAndReturn :: Requires -> CodeFuncChunk -> [Argument] -> 
+constructAndReturn :: Requires -> CodeFuncChunk -> [Argument] ->
   FunctionInterface
 constructAndReturn rq c as = FI (rq :| []) Constructor c as (Just Return)
 
@@ -174,22 +174,22 @@ lockedArg = Arg Nothing . LockedArg
 lockedNamedArg :: NamedArgument -> CodeExpr -> Argument
 lockedNamedArg n = Arg (Just n) . LockedArg
 
--- | Specifies a use-case-dependent argument whose value can be inlined in the 
+-- | Specifies a use-case-dependent argument whose value can be inlined in the
 --   call.
 inlineArg :: Space -> Argument
 inlineArg t = Arg Nothing $ Basic t Nothing
 
--- | Specifies a use-case-dependent named argument whose value can be inlined in 
+-- | Specifies a use-case-dependent named argument whose value can be inlined in
 --   the call.
 inlineNamedArg :: NamedArgument ->  Space -> Argument
 inlineNamedArg n t = Arg (Just n) $ Basic t Nothing
 
--- | Specifies use-case-dependent argument whose value must be assigned to a 
+-- | Specifies use-case-dependent argument whose value must be assigned to a
 --   variable before being passed in the call.
 preDefinedArg :: CodeVarChunk -> Argument
 preDefinedArg v = Arg Nothing $ Basic (v ^. typ) (Just v)
 
--- | Specifies use-case-dependent named argument whose value must be assigned to 
+-- | Specifies use-case-dependent named argument whose value must be assigned to
 --   a variable before being passed in the call.
 preDefinedNamedArg :: NamedArgument -> CodeVarChunk -> Argument
 preDefinedNamedArg n v = Arg (Just n) $ Basic (v ^. typ) (Just v)
@@ -198,16 +198,16 @@ preDefinedNamedArg n v = Arg (Just n) $ Basic (v ^. typ) (Just v)
 functionArg :: CodeFuncChunk -> [Parameter] -> Step -> Argument
 functionArg f ps b = Arg Nothing (Fn f ps b)
 
--- | Specifies an argument that is an object of a class that must be defined in 
+-- | Specifies an argument that is an object of a class that must be defined in
 --   the calling program.
-customObjArg :: [Requires] -> Description -> CodeVarChunk -> CodeFuncChunk -> 
+customObjArg :: [Requires] -> Description -> CodeVarChunk -> CodeFuncChunk ->
   ClassInfo -> Argument
 customObjArg rs d o c ci = Arg Nothing (Class rs d o c ci)
 
 -- | Specifies an argument that is an object of a class from the external library.
---   The list of [CodeVarChunk] represents fields of the object that must be set 
+--   The list of [CodeVarChunk] represents fields of the object that must be set
 --   in the calling program.
-recordArg :: Requires -> CodeFuncChunk -> CodeVarChunk -> [CodeVarChunk] -> 
+recordArg :: Requires -> CodeFuncChunk -> CodeVarChunk -> [CodeVarChunk] ->
   Argument
 recordArg rq c o fs = Arg Nothing (Record (rq :| []) c o fs)
 
@@ -232,13 +232,13 @@ constructorInfo :: CodeFuncChunk -> [Parameter] -> [Step] -> MethodInfo
 constructorInfo c = CI ("Constructor for " ++ codeName c ++ " objects")
 
 -- | Specifies a method.
-methodInfo :: CodeFuncChunk -> Description -> [Parameter] -> Description -> 
+methodInfo :: CodeFuncChunk -> Description -> [Parameter] -> Description ->
   [Step] -> MethodInfo
 methodInfo _ _ _ _ [] = error "methodInfo should be called with a non-empty list of Step"
 methodInfo m d ps rd ss = MI m d ps (Just rd) (fromList ss)
 
 -- | Specifies a method that does not return anything.
-methodInfoNoReturn :: CodeFuncChunk -> Description -> [Parameter] -> [Step] -> 
+methodInfoNoReturn :: CodeFuncChunk -> Description -> [Parameter] -> [Step] ->
   MethodInfo
 methodInfoNoReturn _ _ _ [] = error "methodInfoNoReturn should be called with a non-empty list of Step"
 methodInfoNoReturn m d ps ss = MI m d ps Nothing (fromList ss)
@@ -249,7 +249,7 @@ appendCurrSol curr = statementStep (\cdchs es -> case (cdchs, es) of
     ([s], []) -> appendCurrSolFS curr s
     (_,_) -> error "Fill for appendCurrSol should provide one CodeChunk and no Exprs")
 
--- | Specifies a statement where a solution list is populated by iterating 
+-- | Specifies a statement where a solution list is populated by iterating
 --   through a solution array.
 populateSolList :: CodeVarChunk -> CodeVarChunk -> CodeVarChunk -> [Step]
 populateSolList arr el fld = [statementStep (\cdchs es -> case (cdchs, es) of
@@ -266,14 +266,14 @@ assignArrayIndex = statementStep (\cdchs es -> case (cdchs, es) of
   ([a],vs) -> FMulti $ zipWith (FAsgIndex a) [0..] vs
   (_,_) -> error "Fill for assignArrayIndex should provide one CodeChunk")
 
--- | Specifies a statement where a solution is assigned from the field of an 
+-- | Specifies a statement where a solution is assigned from the field of an
 --   object.
 assignSolFromObj :: CodeVarChunk -> Step
 assignSolFromObj o = statementStep (\cdchs es -> case (cdchs, es) of
   ([s],[]) -> FAsg s (field o s)
   (_,_) -> error "Fill for assignSolFromObj should provide one CodeChunk and no Exprs")
 
--- | Specifies a statement where a solution list is initialized with the first 
+-- | Specifies a statement where a solution list is initialized with the first
 --   element of an array.
 initSolListFromArray :: CodeVarChunk -> Step
 initSolListFromArray a = statementStep (\cdchs es -> case (cdchs, es) of
@@ -286,14 +286,14 @@ initSolListWithVal = statementStep (\cdchs es -> case (cdchs, es) of
   ([s],[v]) -> FDecDef s (matrix [[idx v (int 0)]])
   (_,_) -> error "Fill for initSolListWithVal should provide one CodeChunk and one Expr")
 
--- | A solve and populate loop. 'FunctionInterface' for loop condition, 'CodeChunk' for solution object, 
---   'CodeChunk' for independent var, 'FunctionInterface' for solving, 
+-- | A solve and populate loop. 'FunctionInterface' for loop condition, 'CodeChunk' for solution object,
+--   'CodeChunk' for independent var, 'FunctionInterface' for solving,
 --   'CodeChunk' for soln array to populate with.
-solveAndPopulateWhile :: FunctionInterface -> CodeVarChunk -> CodeVarChunk -> 
+solveAndPopulateWhile :: FunctionInterface -> CodeVarChunk -> CodeVarChunk ->
   FunctionInterface -> CodeVarChunk -> Step
-solveAndPopulateWhile lc ob iv slv popArr = loopStep [lc] (\case 
+solveAndPopulateWhile lc ob iv slv popArr = loopStep [lc] (\case
   [ub] -> field ob iv $< ub
-  _ -> error "Fill for solveAndPopulateWhile should provide one Expr") 
+  _ -> error "Fill for solveAndPopulateWhile should provide one Expr")
   [callStep slv, appendCurrSol (field ob popArr)]
 
 -- | Specifies a statement where a list is returned, where each value of the list

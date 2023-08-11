@@ -35,7 +35,7 @@ instance RuleTransformer CodeHarness where
     let outnm = maybe (asFragment "") (renderBuildName s m nameOpts) onm
         addnm = maybe (asFragment "") (renderBuildName s m nameOpts) anm
     in [
-    mkRule ["Project Name: " ++ progName m, progPurpAdd m] 
+    mkRule ["Project Name: " ++ progName m, progPurpAdd m]
     buildTarget [outnm] [],
     mkFile [] outnm (map (makeS . filePath) (progMods m)) $
       map (mkCheckedCommand . foldr (+:+) mempty) $
@@ -52,7 +52,7 @@ instance RuleTransformer CodeHarness where
 
 -- | Helper that renders project purpose into a string if there is one.
 progPurpAdd :: ProgData -> String
-progPurpAdd m = if progPurp m /= [] then "Project Purpose: " ++ 
+progPurpAdd m = if progPurp m /= [] then "Project Purpose: " ++
                   capitalize (progPurp m)
                 else []
 

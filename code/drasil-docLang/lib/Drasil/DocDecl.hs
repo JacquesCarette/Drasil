@@ -25,7 +25,9 @@ import Data.Drasil.Concepts.Documentation (assumpDom, funcReqDom, goalStmtDom,
   nonFuncReqDom, likeChgDom, unlikeChgDom)
 
 import Control.Lens((^.), Getting)
+import Data.Foldable (toList)
 import Data.List (nub, sort)
+import Data.Sequence (fromList)
 
 -- * Types
 
@@ -125,8 +127,8 @@ mkDocDesc SI{_inputs = is, _outputs = os, _sysinfodb = db} = map sec where
   sec (OffShelfSolnsSec e) = DL.OffShelfSolnsSec e
   reqSec :: ReqsSub -> DL.ReqsSub
   reqSec (FReqsSub r t) = DL.FReqsSub
-    (nub $ fullReqs (sort r) is tempOutputs $ fromConcInsDB funcReqDom)
-    (fullTables (sort r) is tempOutputs t)
+    (nub . toList $ fullReqs   (sort r) is tempOutputs $ fromList $ fromConcInsDB funcReqDom)
+    (nub . toList $ fullTables (sort r) is tempOutputs $ fromList t)
   reqSec NonFReqsSub = DL.NonFReqsSub $ fromConcInsDB nonFuncReqDom
   tempOutputs = map (, EmptyS) os
   ssdSec :: SSDSub -> DL.SSDSub

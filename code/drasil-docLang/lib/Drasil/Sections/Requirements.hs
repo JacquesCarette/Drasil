@@ -27,6 +27,7 @@ import Drasil.DocumentLanguage.Units (toSentence)
 
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap)
+import Data.Sequence (Seq, (<|), (|>))
 
 -- | Types of requirements that may be generated.
 data ReqType = InputReq Sentence
@@ -62,18 +63,20 @@ reqF = SRS.require [reqIntro]
 -- | Prepends an input value requirement and appends an output value
 -- requirement to a list of the other requirements.
 fullReqs :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j) =>
-  [ReqType] -> [i] -> [(j, Sentence)] -> [ConceptInstance] -> [ConceptInstance]
+  [ReqType] -> [i] -> [(j, Sentence)] -> Seq ConceptInstance ->
+    Seq ConceptInstance
 fullReqs []                _ _ r = r
-fullReqs ((InputReq s):rs) i o r = inReq (inReqDesc i s) : fullReqs rs i o r
-fullReqs [OutputReq]       _ o r = r ++ [outReq (outReqDesc o)]
+fullReqs ((InputReq s):rs) i o r = inReq (inReqDesc i s) <| fullReqs rs i o r
+fullReqs [OutputReq]       _ o r = r |> outReq (outReqDesc o)
 fullReqs _                 _ _ _ = error "ReqTypes not fully implemented"
 
 -- | Prepends given LabelledContent to an input-value table.
 fullTables :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j) =>
-  [ReqType] -> [i] -> [(j, Sentence)] -> [LabelledContent] -> [LabelledContent]
+  [ReqType] -> [i] -> [(j, Sentence)] -> Seq LabelledContent ->
+    Seq LabelledContent
 fullTables []                _ _ t = t
-fullTables ((InputReq _):rs) i o t = inTable i : fullTables rs i o t
-fullTables [OutputReq]       _ o t = t ++ [outTable o]
+fullTables ((InputReq _):rs) i o t = inTable i <| fullTables rs i o t
+fullTables [OutputReq]       _ o t = t |> outTable o
 fullTables _                 _ _ _ = error "ReqTypes not fully implemented"
 
 -- | Creates a generalized input-value table for the Requirements section.

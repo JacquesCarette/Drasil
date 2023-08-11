@@ -653,7 +653,7 @@ Description & \begin{symbDescription}
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
+RefBy & \hyperref[IM:calOfAngle2]{IM:calOfAngle2}
         
 \\ \bottomrule
 \end{tabular}
@@ -715,7 +715,7 @@ Description & \begin{symbDescription}
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
+RefBy & \hyperref[IM:calOfAngle2]{IM:calOfAngle2}
         
 \\ \bottomrule
 \end{tabular}
@@ -778,7 +778,7 @@ Description & \begin{symbDescription}
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
+RefBy & \hyperref[IM:calOfAngle2]{IM:calOfAngle2}
         
 \\ \bottomrule
 \end{tabular}
@@ -836,7 +836,7 @@ Description & \begin{symbDescription}
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
+RefBy & \hyperref[IM:calOfAngle2]{IM:calOfAngle2}
         
 \\ \bottomrule
 \end{tabular}
@@ -895,7 +895,7 @@ Description & \begin{symbDescription}
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
+RefBy & \hyperref[IM:calOfAngle2]{IM:calOfAngle2}
         
 \\ \bottomrule
 \end{tabular}
@@ -939,7 +939,7 @@ Description & \begin{symbDescription}
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
+RefBy & \hyperref[IM:calOfAngle2]{IM:calOfAngle2}
         
 \\ \bottomrule
 \end{tabular}
@@ -979,7 +979,7 @@ Description & \begin{symbDescription}
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
+RefBy & \hyperref[IM:calOfAngle2]{IM:calOfAngle2}
         
 \\ \bottomrule
 \end{tabular}
@@ -1021,7 +1021,7 @@ Description & \begin{symbDescription}
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
+RefBy & \hyperref[IM:calOfAngle2]{IM:calOfAngle2}
         
 \\ \bottomrule
 \end{tabular}
@@ -1316,17 +1316,17 @@ This section transforms the problem defined in the \hyperref[Sec:ProbDesc]{probl
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{IM:calOfAngularAcceleration1}
+\toprule \textbf{Refname} & \textbf{IM:calOfAngle1}
 \phantomsection 
-\label{IM:calOfAngularAcceleration1}
+\label{IM:calOfAngle1}
 \\ \midrule
-Label & Calculation of angular acceleration
+Label & Calculation of angle of first rod
         
 \\ \midrule
 Input & ${L_{1}}$, ${L_{2}}$, ${m_{1}}$, ${m_{2}}$, ${θ_{1}}$, ${θ_{2}}$
         
 \\ \midrule
-Output & ${α_{1}}$
+Output & ${θ_{1}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
@@ -1342,9 +1342,7 @@ Input Constraints & \begin{displaymath}
                     {m_{2}}\gt{}0
                     \end{displaymath}
 \\ \midrule
-Output Constraints & \begin{displaymath}
-                     {α_{1}}\gt{}0
-                     \end{displaymath}
+Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
            {α_{1}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{-g \left(2 {m_{1}}+{m_{2}}\right) \sin\left({θ_{1}}\right)-{m_{2}} g \sin\left({θ_{1}}-2 {θ_{2}}\right)-2 \sin\left({θ_{1}}-{θ_{2}}\right) {m_{2}} \left({w_{2}}^{2} {L_{2}}+{w_{1}}^{2} {L_{1}} \cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{1}} \left(2 {m_{1}}+{m_{2}}-{m_{2}} \cos\left(2 {θ_{1}}-2 {θ_{2}}\right)\right)}
@@ -1363,10 +1361,13 @@ Description & \begin{symbDescription}
               \item{${L_{1}}$ is the length of the first rod (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule
+Notes & ${θ_{1}}$ is calculated by solving the ODE here together with the initial conditions and \hyperref[IM:calOfAngle2]{IM:calOfAngle2}.
+        
+\\ \midrule
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[outputValues]{FR:Output-Values}, \hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass}, and \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
+RefBy & \hyperref[outputValues]{FR:Output-Values}, \hyperref[calcAng]{FR:Calculate-Angle-Of-Rod}, and \hyperref[IM:calOfAngle2]{IM:calOfAngle2}
         
 \\ \bottomrule
 \end{tabular}
@@ -1376,17 +1377,17 @@ RefBy & \hyperref[outputValues]{FR:Output-Values}, \hyperref[calcAngPos]{FR:Calc
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{IM:calOfAngularAcceleration2}
+\toprule \textbf{Refname} & \textbf{IM:calOfAngle2}
 \phantomsection 
-\label{IM:calOfAngularAcceleration2}
+\label{IM:calOfAngle2}
 \\ \midrule
-Label & Calculation of angular acceleration
+Label & Calculation of angle of second rod
         
 \\ \midrule
 Input & ${L_{1}}$, ${L_{2}}$, ${m_{1}}$, ${m_{2}}$, ${θ_{1}}$, ${θ_{2}}$
         
 \\ \midrule
-Output & ${α_{2}}$
+Output & ${θ_{2}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
@@ -1402,9 +1403,7 @@ Input Constraints & \begin{displaymath}
                     {m_{2}}\gt{}0
                     \end{displaymath}
 \\ \midrule
-Output Constraints & \begin{displaymath}
-                     {α_{2}}\gt{}0
-                     \end{displaymath}
+Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
            {α_{2}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{2 \sin\left({θ_{1}}-{θ_{2}}\right) \left({w_{1}}^{2} {L_{1}} \left({m_{1}}+{m_{2}}\right)+g \left({m_{1}}+{m_{2}}\right) \cos\left({θ_{1}}\right)+{w_{2}}^{2} {L_{2}} {m_{2}} \cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{2}} \left(2 {m_{1}}+{m_{2}}-{m_{2}} \cos\left(2 {θ_{1}}-2 {θ_{2}}\right)\right)}
@@ -1423,17 +1422,20 @@ Description & \begin{symbDescription}
               \item{${L_{2}}$ is the length of the second rod (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule
+Notes & ${θ_{2}}$ is calculated by solving the ODE here together with the initial conditions and \hyperref[IM:calOfAngle1]{IM:calOfAngle1}.
+        
+\\ \midrule
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[outputValues]{FR:Output-Values}, \hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass}, and \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}
+RefBy & \hyperref[outputValues]{FR:Output-Values}, \hyperref[calcAng]{FR:Calculate-Angle-Of-Rod}, \hyperref[IM:calOfAngle2]{IM:calOfAngle2}, and \hyperref[IM:calOfAngle1]{IM:calOfAngle1}
         
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 
 \paragraph{Detailed derivation of angle of the second rod:}
-\label{IM:calOfAngularAcceleration2Deriv}
+\label{IM:calOfAngle2Deriv}
 By solving equations \hyperref[GD:xForce2]{GD:xForce2} and \hyperref[GD:yForce2]{GD:yForce2} for ${\symbf{T}_{2}} \sin\left({θ_{2}}\right)$ and ${\symbf{T}_{2}} \cos\left({θ_{2}}\right)$ and then substituting into equation \hyperref[GD:xForce1]{GD:xForce1} and \hyperref[GD:yForce1]{GD:yForce1} , We can get equations 1 and 2:
 
 \begin{displaymath}
@@ -1471,7 +1473,7 @@ which leads to equation 4
 \begin{displaymath}
 \sin\left({θ_{2}}\right) \left({m_{2}} {a_{\text{y}2}}+{m_{2}} g\right)=-\cos\left({θ_{2}}\right) {m_{2}} {a_{\text{x}2}}
 \end{displaymath}
-By giving equations \hyperref[GD:accelerationX1]{GD:accelerationX1} and \hyperref[GD:accelerationX2]{GD:accelerationX2} and \hyperref[GD:accelerationY1]{GD:accelerationY1} and \hyperref[GD:accelerationY2]{GD:accelerationY2} plus additional two equations, 3 and 4, we can get \hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1} and \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2} via a computer algebra program:
+By giving equations \hyperref[GD:accelerationX1]{GD:accelerationX1} and \hyperref[GD:accelerationX2]{GD:accelerationX2} and \hyperref[GD:accelerationY1]{GD:accelerationY1} and \hyperref[GD:accelerationY2]{GD:accelerationY2} plus additional two equations, 3 and 4, we can get \hyperref[IM:calOfAngle1]{IM:calOfAngle1} and \hyperref[IM:calOfAngle2]{IM:calOfAngle2} via a computer algebra program:
 
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
@@ -1516,8 +1518,8 @@ This section provides the functional requirements, the tasks and behaviours that
 \begin{itemize}
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}.}
 \item[Verify-Input-Values:\phantomsection\label{verifyInptVals}]{Check the entered input values to ensure that they do not exceed the \hyperref[Sec:DataConstraints]{data constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
-\item[Calculate-Angular-Position-Of-Mass:\phantomsection\label{calcAngPos}]{Calculate the following values: ${α_{1}}$ and ${α_{2}}$ (from \hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1}) (from \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}).}
-\item[Output-Values:\phantomsection\label{outputValues}]{Output ${α_{1}}$ and ${α_{2}}$ (from \hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1} and \hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}).}
+\item[Calculate-Angle-Of-Rod:\phantomsection\label{calcAng}]{Calculate the following values: ${θ_{1}}$ and ${θ_{2}}$ (from \hyperref[IM:calOfAngle1]{IM:calOfAngle1} and \hyperref[IM:calOfAngle2]{IM:calOfAngle2}).}
+\item[Output-Values:\phantomsection\label{outputValues}]{Output ${θ_{1}}$ and ${θ_{2}}$ (from \hyperref[IM:calOfAngle1]{IM:calOfAngle1} and \hyperref[IM:calOfAngle2]{IM:calOfAngle2}).}
 \end{itemize}
 \begin{longtblr}
 [caption={Required Inputs following \hyperref[inputValues]{FR:Input-Values}}]
@@ -1614,15 +1616,15 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[GD:yForce2]{GD:yForce2} &  &  &  &  &  &  & 
 \\
-\hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1} &  &  &  &  &  &  & 
+\hyperref[IM:calOfAngle1]{IM:calOfAngle1} &  &  &  &  &  &  & 
 \\
-\hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2} &  &  &  &  &  &  & 
+\hyperref[IM:calOfAngle2]{IM:calOfAngle2} &  &  &  &  &  &  & 
 \\
 \hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  & 
 \\
 \hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  &  &  &  & 
 \\
-\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass} &  &  &  &  &  &  & 
+\hyperref[calcAng]{FR:Calculate-Angle-Of-Rod} &  &  &  &  &  &  & 
 \\
 \hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  & 
 \\
@@ -1634,7 +1636,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Items and Other Sections}]
 {colspec={l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:positionGDD]{DD:positionGDD}} & \textbf{\hyperref[DD:positionXDD1]{DD:positionXDD1}} & \textbf{\hyperref[DD:positionYDD1]{DD:positionYDD1}} & \textbf{\hyperref[DD:positionXDD2]{DD:positionXDD2}} & \textbf{\hyperref[DD:positionYDD2]{DD:positionYDD2}} & \textbf{\hyperref[DD:accelerationGDD]{DD:accelerationGDD}} & \textbf{\hyperref[DD:forceGDD]{DD:forceGDD}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[GD:velocityX1]{GD:velocityX1}} & \textbf{\hyperref[GD:velocityY1]{GD:velocityY1}} & \textbf{\hyperref[GD:velocityX2]{GD:velocityX2}} & \textbf{\hyperref[GD:velocityY2]{GD:velocityY2}} & \textbf{\hyperref[GD:accelerationX1]{GD:accelerationX1}} & \textbf{\hyperref[GD:accelerationY1]{GD:accelerationY1}} & \textbf{\hyperref[GD:accelerationX2]{GD:accelerationX2}} & \textbf{\hyperref[GD:accelerationY2]{GD:accelerationY2}} & \textbf{\hyperref[GD:xForce1]{GD:xForce1}} & \textbf{\hyperref[GD:yForce1]{GD:yForce1}} & \textbf{\hyperref[GD:xForce2]{GD:xForce2}} & \textbf{\hyperref[GD:yForce2]{GD:yForce2}} & \textbf{\hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1}} & \textbf{\hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}}
+\textbf{} & \textbf{\hyperref[DD:positionGDD]{DD:positionGDD}} & \textbf{\hyperref[DD:positionXDD1]{DD:positionXDD1}} & \textbf{\hyperref[DD:positionYDD1]{DD:positionYDD1}} & \textbf{\hyperref[DD:positionXDD2]{DD:positionXDD2}} & \textbf{\hyperref[DD:positionYDD2]{DD:positionYDD2}} & \textbf{\hyperref[DD:accelerationGDD]{DD:accelerationGDD}} & \textbf{\hyperref[DD:forceGDD]{DD:forceGDD}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[GD:velocityX1]{GD:velocityX1}} & \textbf{\hyperref[GD:velocityY1]{GD:velocityY1}} & \textbf{\hyperref[GD:velocityX2]{GD:velocityX2}} & \textbf{\hyperref[GD:velocityY2]{GD:velocityY2}} & \textbf{\hyperref[GD:accelerationX1]{GD:accelerationX1}} & \textbf{\hyperref[GD:accelerationY1]{GD:accelerationY1}} & \textbf{\hyperref[GD:accelerationX2]{GD:accelerationX2}} & \textbf{\hyperref[GD:accelerationY2]{GD:accelerationY2}} & \textbf{\hyperref[GD:xForce1]{GD:xForce1}} & \textbf{\hyperref[GD:yForce1]{GD:yForce1}} & \textbf{\hyperref[GD:xForce2]{GD:xForce2}} & \textbf{\hyperref[GD:yForce2]{GD:yForce2}} & \textbf{\hyperref[IM:calOfAngle1]{IM:calOfAngle1}} & \textbf{\hyperref[IM:calOfAngle2]{IM:calOfAngle2}}
 \\
 \hyperref[DD:positionGDD]{DD:positionGDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1680,15 +1682,15 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[GD:yForce2]{GD:yForce2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[IM:calOfAngle1]{IM:calOfAngle1} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X
 \\
-\hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X & X & X & X & X & X & X
+\hyperref[IM:calOfAngle2]{IM:calOfAngle2} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X & X & X & X & X & X & X
 \label{Table:TraceMatRefvsRef}
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
 {colspec={l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:positionGDD]{DD:positionGDD}} & \textbf{\hyperref[DD:positionXDD1]{DD:positionXDD1}} & \textbf{\hyperref[DD:positionYDD1]{DD:positionYDD1}} & \textbf{\hyperref[DD:positionXDD2]{DD:positionXDD2}} & \textbf{\hyperref[DD:positionYDD2]{DD:positionYDD2}} & \textbf{\hyperref[DD:accelerationGDD]{DD:accelerationGDD}} & \textbf{\hyperref[DD:forceGDD]{DD:forceGDD}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[GD:velocityX1]{GD:velocityX1}} & \textbf{\hyperref[GD:velocityY1]{GD:velocityY1}} & \textbf{\hyperref[GD:velocityX2]{GD:velocityX2}} & \textbf{\hyperref[GD:velocityY2]{GD:velocityY2}} & \textbf{\hyperref[GD:accelerationX1]{GD:accelerationX1}} & \textbf{\hyperref[GD:accelerationY1]{GD:accelerationY1}} & \textbf{\hyperref[GD:accelerationX2]{GD:accelerationX2}} & \textbf{\hyperref[GD:accelerationY2]{GD:accelerationY2}} & \textbf{\hyperref[GD:xForce1]{GD:xForce1}} & \textbf{\hyperref[GD:yForce1]{GD:yForce1}} & \textbf{\hyperref[GD:xForce2]{GD:xForce2}} & \textbf{\hyperref[GD:yForce2]{GD:yForce2}} & \textbf{\hyperref[IM:calOfAngularAcceleration1]{IM:calOfAngularAcceleration1}} & \textbf{\hyperref[IM:calOfAngularAcceleration2]{IM:calOfAngularAcceleration2}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInptVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[portable]{NFR:Portable}}
+\textbf{} & \textbf{\hyperref[DD:positionGDD]{DD:positionGDD}} & \textbf{\hyperref[DD:positionXDD1]{DD:positionXDD1}} & \textbf{\hyperref[DD:positionYDD1]{DD:positionYDD1}} & \textbf{\hyperref[DD:positionXDD2]{DD:positionXDD2}} & \textbf{\hyperref[DD:positionYDD2]{DD:positionYDD2}} & \textbf{\hyperref[DD:accelerationGDD]{DD:accelerationGDD}} & \textbf{\hyperref[DD:forceGDD]{DD:forceGDD}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[GD:velocityX1]{GD:velocityX1}} & \textbf{\hyperref[GD:velocityY1]{GD:velocityY1}} & \textbf{\hyperref[GD:velocityX2]{GD:velocityX2}} & \textbf{\hyperref[GD:velocityY2]{GD:velocityY2}} & \textbf{\hyperref[GD:accelerationX1]{GD:accelerationX1}} & \textbf{\hyperref[GD:accelerationY1]{GD:accelerationY1}} & \textbf{\hyperref[GD:accelerationX2]{GD:accelerationX2}} & \textbf{\hyperref[GD:accelerationY2]{GD:accelerationY2}} & \textbf{\hyperref[GD:xForce1]{GD:xForce1}} & \textbf{\hyperref[GD:yForce1]{GD:yForce1}} & \textbf{\hyperref[GD:xForce2]{GD:xForce2}} & \textbf{\hyperref[GD:yForce2]{GD:yForce2}} & \textbf{\hyperref[IM:calOfAngle1]{IM:calOfAngle1}} & \textbf{\hyperref[IM:calOfAngle2]{IM:calOfAngle2}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInptVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcAng]{FR:Calculate-Angle-Of-Rod}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[portable]{NFR:Portable}}
 \\
 \hyperref[motionMass]{GS:motionMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1696,7 +1698,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  & 
+\hyperref[calcAng]{FR:Calculate-Angle-Of-Rod} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  & 
 \\
 \hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  & 
 \\

@@ -111,7 +111,7 @@ nomThick = cuc "nomThick"
   [{- TODO: add back constraint: enumc nominalThicknesses -}] $ exactDbl 8
 
 glassTypeCon  = constrainedNRV' (dqdNoUnit glassTy lG String) 
-  [{- TODO: add back constraint: EnumeratedStr Software $ map (getAccStr . snd) glassType -}]
+  [{- TODO: add back constraint: EnumeratedStr Software $ map (abrv . snd) glassType -}]
 
 {--}
 

@@ -6,6 +6,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
+import Theory.Drasil (TheoryModel)
 
 import Data.Drasil.Concepts.Computation (inValue, algorithm, inDatum, compcon)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
@@ -44,8 +45,6 @@ import Drasil.Projectile.IMods (iMods, outputs)
 import Drasil.Projectile.References (citations)
 import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs)
 import Drasil.Projectile.Unitals
-
-import Theory.Drasil (TheoryModel)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si

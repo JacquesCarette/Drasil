@@ -1,4 +1,5 @@
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE TupleSections #-}
 -- | Defines a DLPlate for tracability between pieces of information.
 module Drasil.TraceTable where
 
@@ -30,7 +31,7 @@ dependencyPlate = preorderFold $ purePlate {
     _ -> [],
   reqSub = Constant <$> \case
     (FReqsSub c t) -> getDependenciesOf [defs] c ++
-      map (\x -> getSourcesOf (x ^. accessContents)) t
+      concatMap (\x -> getSourcesOf (x ^. accessContents)) t
     (NonFReqsSub c) -> getDependenciesOf [defs] c,
   lcsSec = Constant . getDependenciesOf [defs] <$> \(LCsProg c) -> c,
   ucsSec = Constant . getDependenciesOf [defs] <$> \(UCsProg c) -> c
@@ -43,8 +44,8 @@ dependencyPlate = preorderFold $ purePlate {
   derivs x = maybe [] (\(Derivation h d) -> h : d) $ x ^. derivations
   notes :: HasAdditionalNotes a => a -> [Sentence]
   notes = (^. getNotes)
-  getSourcesOf :: RawContent -> (UID, [UID])
-  getSourcesOf (Table s1 s2 t _) = (last $ lnames' [t], lnames' $ isSource (s1, transpose s2))
+  getSourcesOf :: RawContent -> [(UID, [UID])]
+  getSourcesOf (Table s1 s2 t _) = map (, lnames' $ isSource (s1, transpose s2)) $ lnames' [t]
   getSourcesOf _ = error "Unexpected type of LabelledContent in Functional Requirement"
   isSource :: ([Sentence], [[Sentence]]) -> [Sentence]
   isSource (S "Source" : _, hd1 : _) = hd1

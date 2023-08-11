@@ -333,6 +333,7 @@ RefBy & \hyperref[GD:rectVel]{GD:rectVel}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -362,6 +363,7 @@ RefBy & \hyperref[GD:rectPos]{GD:rectPos}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \subsubsection{General Definitions}
 \label{Sec:GDs}
 This section collects the laws and equations that will be used to build the instance models.
@@ -399,6 +401,7 @@ RefBy & \hyperref[GD:velVec]{GD:velVec} and \hyperref[GD:rectPos]{GD:rectPos}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{Detailed derivation of rectilinear velocity:}
 \label{GD:rectVelDeriv}
 Assume we have rectilinear motion of a particle (of negligible size and shape, from \hyperref[pointMass]{A:pointMass}); that is, motion in a straight line. The velocity is $v$ and the acceleration is $a$. The motion in \hyperref[TM:acceleration]{TM:acceleration} is now one-dimensional with a constant acceleration, represented by ${a^{c}}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A:timeStartZero}) is represented by ${v^{\text{i}}}$. From \hyperref[TM:acceleration]{TM:acceleration} in 1D, and using the above symbols we have:
@@ -450,6 +453,7 @@ RefBy & \hyperref[GD:posVec]{GD:posVec}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{Detailed derivation of rectilinear position:}
 \label{GD:rectPosDeriv}
 Assume we have rectilinear motion of a particle (of negligible size and shape, from \hyperref[pointMass]{A:pointMass}); that is, motion in a straight line. The position is $p$ and the velocity is $v$. The motion in \hyperref[TM:velocity]{TM:velocity} is now one-dimensional. The initial position (at $t=0$, from \hyperref[timeStartZero]{A:timeStartZero}) is represented by ${p^{\text{i}}}$. From \hyperref[TM:velocity]{TM:velocity} in 1D, and using the above symbols we have:
@@ -509,6 +513,7 @@ RefBy &
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{Detailed derivation of velocity vector:}
 \label{GD:velVecDeriv}
 For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A:twoDMotion} and \hyperref[cartSyst]{A:cartSyst}), we can represent the velocity vector as $\symbf{v}\text{(}t\text{)}=\begin{bmatrix}
@@ -571,6 +576,7 @@ RefBy & \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[IM:cal
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{Detailed derivation of position vector:}
 \label{GD:posVecDeriv}
 For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A:twoDMotion} and \hyperref[cartSyst]{A:cartSyst}), we can represent the position vector as $\symbf{p}\text{(}t\text{)}=\begin{bmatrix}
@@ -637,6 +643,7 @@ RefBy & \hyperref[DD:speedIY]{DD:speedIY} and \hyperref[DD:speedIX]{DD:speedIX}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -677,6 +684,7 @@ RefBy & \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -717,6 +725,7 @@ RefBy & \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in the \hyperref[Sec:ProbDesc]{problem description} into one which is expressed in mathematical terms. It uses concrete symbols defined in the \hyperref[Sec:DDs]{data definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{theoretical models} and \hyperref[Sec:GDs]{general definitions}.
@@ -775,6 +784,7 @@ RefBy & \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[calcVa
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{Detailed derivation of flight duration:}
 \label{IM:calOfLandingTimeDeriv}
 We know that ${{p_{\text{y}}}^{\text{i}}}=0$ (\hyperref[launchOrigin]{A:launchOrigin}) and ${{a_{\text{y}}}^{\text{c}}}=-g$ (\hyperref[accelYGravity]{A:accelYGravity}). Substituting these values into the y-direction of \hyperref[GD:posVec]{GD:posVec} gives us:
@@ -856,6 +866,7 @@ RefBy & \hyperref[IM:offsetIM]{IM:offsetIM} and \hyperref[calcValues]{FR:Calcula
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{Detailed derivation of landing position:}
 \label{IM:calOfLandingDistDeriv}
 We know that ${{p_{\text{x}}}^{\text{i}}}=0$ (\hyperref[launchOrigin]{A:launchOrigin}) and ${{a_{\text{x}}}^{\text{c}}}=0$ (\hyperref[accelXZero]{A:accelXZero}). Substituting these values into the x-direction of \hyperref[GD:posVec]{GD:posVec} gives us:
@@ -927,6 +938,7 @@ RefBy & \hyperref[IM:messageIM]{IM:messageIM} and \hyperref[calcValues]{FR:Calcu
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -985,6 +997,7 @@ RefBy & \hyperref[calcValues]{FR:Calculate-Values}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
 The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.

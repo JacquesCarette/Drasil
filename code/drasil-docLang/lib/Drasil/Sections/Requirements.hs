@@ -15,6 +15,7 @@ import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
+import Theory.Drasil (HasOutput(output))
 
 import Data.Drasil.Concepts.Documentation (description, funcReqDom,
   functionalRequirement, input_, nonfunctionalRequirement, output_, reqInput,
@@ -176,9 +177,8 @@ mkValsSourceTable vals labl cap = llcc (makeTabRef labl) $
 
 -- | Pulls out the 'QuantityDict' and reference 'Sentence' into a tuple for
 -- each item in a list with both.
-mkQRTuple :: (Quantity i, MayHaveUnit i, HasShortName i, Referable i) => [i]
-  -> [(QuantityDict, Sentence)]
-mkQRTuple = map (\c -> (qw c, refS c))
+mkQRTuple :: (HasOutput i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
+mkQRTuple = map (\c -> (c ^. output, refS c))
 
 -- | Zips a list of items with 'QuantityDict's with a list of items with
 -- reference 'Sentence's.

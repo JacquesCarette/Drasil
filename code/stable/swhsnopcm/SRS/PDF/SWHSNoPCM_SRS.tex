@@ -382,6 +382,7 @@ RefBy & \hyperref[GD:rocTempSimp]{GD:rocTempSimp}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -415,6 +416,7 @@ RefBy & \hyperref[IM:heatEInWtr]{IM:heatEInWtr}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -452,6 +454,7 @@ RefBy & \hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \subsubsection{General Definitions}
 \label{Sec:GDs}
 This section collects the laws and equations that will be used to build the instance models.
@@ -492,6 +495,7 @@ RefBy & \hyperref[GD:rocTempSimp]{GD:rocTempSimp} and \hyperref[IM:eBalanceOnWtr
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{Detailed derivation of simplified rate of change of temperature:}
 \label{GD:rocTempSimpDeriv}
 Integrating \hyperref[TM:consThermE]{TM:consThermE} over a volume ($V$), we have:
@@ -558,6 +562,7 @@ RefBy & \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
@@ -597,6 +602,7 @@ RefBy & \hyperref[findMass]{FR:Find-Mass}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -634,6 +640,7 @@ RefBy & \hyperref[findMass]{FR:Find-Mass}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -670,6 +677,7 @@ RefBy & \hyperref[DD:waterVolume.nopcm]{DD:waterVolume\_nopcm} and \hyperref[fin
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -707,6 +715,7 @@ RefBy & \hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values} and \hyp
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in the \hyperref[Sec:ProbDesc]{problem description} into one which is expressed in mathematical terms. It uses concrete symbols defined in the \hyperref[Sec:DDs]{data definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{theoretical models} and \hyperref[Sec:GDs]{general definitions}.
@@ -760,6 +769,7 @@ RefBy & \hyperref[unlikeChgNIHG]{UC:No-Internal-Heat-Generation}, \hyperref[find
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{Detailed derivation of the energy balance on water:}
 \label{IM:eBalanceOnWtrDeriv}
 To find the rate of change of ${T_{\text{W}}}$, we look at the energy balance on water. The volume being considered is the volume of water in the tank ${V_{\text{W}}}$, which has mass ${m_{\text{W}}}$ and specific heat capacity, ${C_{\text{W}}}$. Heat transfer occurs in the water from the heating coil as ${q_{\text{C}}}$ (\hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil}), over area ${A_{\text{C}}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpPIT]{A:Perfect-Insulation-Tank}). Since the assumption is made that no internal heat is generated (\hyperref[assumpNIHGBW]{A:No-Internal-Heat-Generation-By-Water}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD:rocTempSimp} can be written as:
@@ -831,6 +841,7 @@ RefBy & \hyperref[calcValues]{FR:Calculate-Values}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
 The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.

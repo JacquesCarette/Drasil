@@ -416,6 +416,7 @@ RefBy &
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -447,6 +448,7 @@ RefBy &
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \subsubsection{General Definitions}
 \label{Sec:GDs}
 There are no general definitions.
@@ -505,6 +507,7 @@ RefBy & \hyperref[IM:sdfTol]{IM:sdfTol}, \hyperref[IM:riskFun]{IM:riskFun}, \hyp
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -545,6 +548,7 @@ RefBy & \hyperref[IM:sdfTol]{IM:sdfTol} and \hyperref[IM:riskFun]{IM:riskFun}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -590,6 +594,7 @@ RefBy & \hyperref[IM:calofCapacity]{IM:calofCapacity} and \hyperref[IM:dimlessLo
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -626,6 +631,7 @@ RefBy & \hyperref[DD:calofDemand]{DD:calofDemand}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -664,6 +670,7 @@ RefBy & \hyperref[IM:tolLoad]{IM:tolLoad} and \hyperref[IM:stressDistFac]{IM:str
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -699,6 +706,7 @@ RefBy & \hyperref[DD:calofDemand]{DD:calofDemand}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -738,6 +746,7 @@ RefBy & \hyperref[IM:isSafeLR]{IM:isSafeLR} and \hyperref[IM:dimlessLoad]{IM:dim
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in the \hyperref[Sec:ProbDesc]{problem description} into one which is expressed in mathematical terms. It uses concrete symbols defined in the \hyperref[Sec:DDs]{data definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{theoretical models} and \hyperref[Sec:GDs]{general definitions}.
@@ -803,6 +812,7 @@ RefBy & \hyperref[IM:probOfBreak]{IM:probOfBreak}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -854,6 +864,7 @@ RefBy & \hyperref[IM:riskFun]{IM:riskFun}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -910,6 +921,7 @@ RefBy & \hyperref[IM:calofCapacity]{IM:calofCapacity}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -969,6 +981,7 @@ RefBy & \hyperref[IM:stressDistFac]{IM:stressDistFac}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1018,6 +1031,7 @@ RefBy & \hyperref[IM:nFL]{IM:nFL}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1082,6 +1096,7 @@ RefBy & \hyperref[IM:tolLoad]{IM:tolLoad}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1125,6 +1140,7 @@ RefBy & \hyperref[IM:isSafePb]{IM:isSafePb}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1172,6 +1188,7 @@ RefBy & \hyperref[IM:isSafeLR]{IM:isSafeLR}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1223,6 +1240,7 @@ RefBy & \hyperref[IM:isSafeLR]{IM:isSafeLR} and \hyperref[checkGlassSafety]{FR:C
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -1274,6 +1292,7 @@ RefBy & \hyperref[IM:isSafePb]{IM:isSafePb} and \hyperref[checkGlassSafety]{FR:C
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
 The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The \hyperref[Sec:AuxConstants]{auxiliary constants} give the values of the specification parameters used in the \hyperref[Table:InDataConstraints]{Data Constraints Table}.

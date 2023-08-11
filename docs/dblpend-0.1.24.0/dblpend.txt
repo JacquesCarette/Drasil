@@ -210,17 +210,18 @@ yForceGD_2 :: GenDefn
 
 module Drasil.DblPend.IMods
 iMods :: [InstanceModel]
-angularAccelIM_1 :: InstanceModel
-angularAccelIM_2 :: InstanceModel
+angleIM_1 :: InstanceModel
+angleIM_2 :: InstanceModel
 
 module Drasil.DblPend.Requirements
 funcReqs :: [ConceptInstance]
 verifyInptVals :: ConceptInstance
-calcAngPos :: ConceptInstance
+calcAng :: ConceptInstance
 outputValues :: ConceptInstance
 verifyInptValsDesc :: Sentence
-calcAngPosDesc :: Sentence
+calcAngDesc :: Sentence
 outputValuesDesc :: Sentence
+outputList :: Sentence
 nonFuncReqs :: [ConceptInstance]
 correct :: ConceptInstance
 portable :: ConceptInstance

@@ -137,9 +137,7 @@ instance Language.Drasil.UID.HasUID Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Chunk.NamedIdea.Idea Theory.Drasil.DataDefinition.DataDefinition
 instance Theory.Drasil.Classes.HasOutput Theory.Drasil.DataDefinition.DataDefinition
-instance Language.Drasil.Space.HasSpace Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Symbol.HasSymbol Theory.Drasil.DataDefinition.DataDefinition
-instance Language.Drasil.Classes.Quantity Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.ExprClasses.Express Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.DecoratedReference.HasDecRef Theory.Drasil.DataDefinition.DataDefinition
 instance GHC.Classes.Eq Theory.Drasil.DataDefinition.DataDefinition

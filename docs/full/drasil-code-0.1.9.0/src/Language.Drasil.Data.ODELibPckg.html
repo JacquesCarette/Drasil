@@ -26,24 +26,24 @@
 </span><span id="line-22"></span><span>  </span><span class="hs-comment">-- | Library path.</span><span>
 </span><span id="line-23"></span><span>  </span><span id="libPath"><span class="annot"><span class="annottext">ODELibPckg -&gt; Maybe Name
 </span><a href="Language.Drasil.Data.ODELibPckg.html#libPath"><span class="hs-identifier hs-var hs-var">libPath</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span class="hs-special">,</span><span>
-</span><span id="line-24"></span><span>  </span><span class="hs-comment">-- It has been said that language information should be in language-related </span><span>
-</span><span id="line-25"></span><span>  </span><span class="hs-comment">-- file, but this needs more thought. The language would need to declare </span><span>
-</span><span id="line-26"></span><span>  </span><span class="hs-comment">-- which libraries it is compatible with, but how could it refer to a </span><span>
+</span><span id="line-24"></span><span>  </span><span class="hs-comment">-- It has been said that language information should be in language-related</span><span>
+</span><span id="line-25"></span><span>  </span><span class="hs-comment">-- file, but this needs more thought. The language would need to declare</span><span>
+</span><span id="line-26"></span><span>  </span><span class="hs-comment">-- which libraries it is compatible with, but how could it refer to a</span><span>
 </span><span id="line-27"></span><span>  </span><span class="hs-comment">-- library? Give libraries UID?</span><span>
-</span><span id="line-28"></span><span>  </span><span class="hs-comment">-- Also, this case seems different because ExternalLibraries are data. In </span><span>
-</span><span id="line-29"></span><span>  </span><span class="hs-comment">-- future, if a user defines a new external library, we wouldn't expect them </span><span>
-</span><span id="line-30"></span><span>  </span><span class="hs-comment">-- to update an internal Drasil file to add their library to a language's </span><span>
-</span><span id="line-31"></span><span>  </span><span class="hs-comment">-- compatible libraries. So maybe declaring compatible languages at library </span><span>
+</span><span id="line-28"></span><span>  </span><span class="hs-comment">-- Also, this case seems different because ExternalLibraries are data. In</span><span>
+</span><span id="line-29"></span><span>  </span><span class="hs-comment">-- future, if a user defines a new external library, we wouldn't expect them</span><span>
+</span><span id="line-30"></span><span>  </span><span class="hs-comment">-- to update an internal Drasil file to add their library to a language's</span><span>
+</span><span id="line-31"></span><span>  </span><span class="hs-comment">-- compatible libraries. So maybe declaring compatible languages at library</span><span>
 </span><span id="line-32"></span><span>  </span><span class="hs-comment">-- definition time really is the right way to do this.</span><span>
 </span><span id="line-33"></span><span>  </span><span class="hs-comment">-- | Compatible OO languages.</span><span>
 </span><span id="line-34"></span><span>  </span><span id="compatibleLangs"><span class="annot"><span class="annottext">ODELibPckg -&gt; [Lang]
 </span><a href="Language.Drasil.Data.ODELibPckg.html#compatibleLangs"><span class="hs-identifier hs-var hs-var">compatibleLangs</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.Lang.html#Lang"><span class="hs-identifier hs-type">Lang</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-35"></span><span class="hs-special">}</span><span>
 </span><span id="line-36"></span><span>
-</span><span id="line-37"></span><span class="hs-comment">-- | Makes an 'ODELibPckg' with the given name, 'ExternalLibrary' specification, </span><span>
-</span><span id="line-38"></span><span class="hs-comment">-- 'ExternalLibraryCall' specification parameterized by an 'ODEInfo', local file </span><span>
+</span><span id="line-37"></span><span class="hs-comment">-- | Makes an 'ODELibPckg' with the given name, 'ExternalLibrary' specification,</span><span>
+</span><span id="line-38"></span><span class="hs-comment">-- 'ExternalLibraryCall' specification parameterized by an 'ODEInfo', local file</span><span>
 </span><span id="line-39"></span><span class="hs-comment">-- path to the library, and list of compatible languages.</span><span>
-</span><span id="line-40"></span><span class="annot"><a href="Language.Drasil.Data.ODELibPckg.html#mkODELib"><span class="hs-identifier hs-type">mkODELib</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Name"><span class="hs-identifier hs-type">Name</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Version"><span class="hs-identifier hs-type">Version</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#ExternalLibrary"><span class="hs-identifier hs-type">ExternalLibrary</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEInfo"><span class="hs-identifier hs-type">ODEInfo</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
+</span><span id="line-40"></span><span class="annot"><a href="Language.Drasil.Data.ODELibPckg.html#mkODELib"><span class="hs-identifier hs-type">mkODELib</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Name"><span class="hs-identifier hs-type">Name</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Version"><span class="hs-identifier hs-type">Version</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#ExternalLibrary"><span class="hs-identifier hs-type">ExternalLibrary</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEInfo"><span class="hs-identifier hs-type">ODEInfo</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span>
 </span><span id="line-41"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibraryCall.html#ExternalLibraryCall"><span class="hs-identifier hs-type">ExternalLibraryCall</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.Lang.html#Lang"><span class="hs-identifier hs-type">Lang</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODELibPckg.html#ODELibPckg"><span class="hs-identifier hs-type">ODELibPckg</span></a></span><span>
 </span><span id="line-42"></span><span id="mkODELib"><span class="annot"><span class="annottext">mkODELib :: Name
 -&gt; Name
@@ -52,42 +52,12 @@
 -&gt; Name
 -&gt; [Lang]
 -&gt; ODELibPckg
-</span><a href="Language.Drasil.Data.ODELibPckg.html#mkODELib"><span class="hs-identifier hs-var hs-var">mkODELib</span></a></span></span><span> </span><span id="local-6989586621679254863"><span class="annot"><span class="annottext">Name
-</span><a href="#local-6989586621679254863"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679254862"><span class="annot"><span class="annottext">Name
-</span><a href="#local-6989586621679254862"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span id="local-6989586621679254861"><span class="annot"><span class="annottext">ExternalLibrary
-</span><a href="#local-6989586621679254861"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span id="local-6989586621679254860"><span class="annot"><span class="annottext">ODEInfo -&gt; ExternalLibraryCall
-</span><a href="#local-6989586621679254860"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679254859"><span class="annot"><span class="annottext">Name
-</span><a href="#local-6989586621679254859"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Name
--&gt; Name
--&gt; ExternalLibrary
--&gt; (ODEInfo -&gt; ExternalLibraryCall)
--&gt; Maybe Name
--&gt; [Lang]
--&gt; ODELibPckg
-</span><a href="Language.Drasil.Data.ODELibPckg.html#ODELib"><span class="hs-identifier hs-var">ODELib</span></a></span><span> </span><span class="annot"><span class="annottext">Name
-</span><a href="#local-6989586621679254863"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Name
-</span><a href="#local-6989586621679254862"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">ExternalLibrary
-</span><a href="#local-6989586621679254861"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="annottext">ODEInfo -&gt; ExternalLibraryCall
-</span><a href="#local-6989586621679254860"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
-</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Name
-</span><a href="#local-6989586621679254859"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-43"></span><span>
-</span><span id="line-44"></span><span class="hs-comment">-- | Makes an 'ODELibPckg' with the given name, 'ExternalLibrary' specification, </span><span>
-</span><span id="line-45"></span><span class="hs-comment">-- 'ExternalLibraryCall' specification parameterized by an 'ODEInfo', and list of </span><span>
-</span><span id="line-46"></span><span class="hs-comment">-- compatible languages.</span><span>
-</span><span id="line-47"></span><span class="annot"><a href="Language.Drasil.Data.ODELibPckg.html#mkODELibNoPath"><span class="hs-identifier hs-type">mkODELibNoPath</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Name"><span class="hs-identifier hs-type">Name</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Version"><span class="hs-identifier hs-type">Version</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#ExternalLibrary"><span class="hs-identifier hs-type">ExternalLibrary</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEInfo"><span class="hs-identifier hs-type">ODEInfo</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
-</span><span id="line-48"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibraryCall.html#ExternalLibraryCall"><span class="hs-identifier hs-type">ExternalLibraryCall</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.Lang.html#Lang"><span class="hs-identifier hs-type">Lang</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODELibPckg.html#ODELibPckg"><span class="hs-identifier hs-type">ODELibPckg</span></a></span><span>
-</span><span id="line-49"></span><span id="mkODELibNoPath"><span class="annot"><span class="annottext">mkODELibNoPath :: Name
--&gt; Name
--&gt; ExternalLibrary
--&gt; (ODEInfo -&gt; ExternalLibraryCall)
--&gt; [Lang]
--&gt; ODELibPckg
-</span><a href="Language.Drasil.Data.ODELibPckg.html#mkODELibNoPath"><span class="hs-identifier hs-var hs-var">mkODELibNoPath</span></a></span></span><span> </span><span id="local-6989586621679254858"><span class="annot"><span class="annottext">Name
+</span><a href="Language.Drasil.Data.ODELibPckg.html#mkODELib"><span class="hs-identifier hs-var hs-var">mkODELib</span></a></span></span><span> </span><span id="local-6989586621679254858"><span class="annot"><span class="annottext">Name
 </span><a href="#local-6989586621679254858"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679254857"><span class="annot"><span class="annottext">Name
 </span><a href="#local-6989586621679254857"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span id="local-6989586621679254856"><span class="annot"><span class="annottext">ExternalLibrary
 </span><a href="#local-6989586621679254856"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span id="local-6989586621679254855"><span class="annot"><span class="annottext">ODEInfo -&gt; ExternalLibraryCall
-</span><a href="#local-6989586621679254855"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Name
+</span><a href="#local-6989586621679254855"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679254854"><span class="annot"><span class="annottext">Name
+</span><a href="#local-6989586621679254854"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Name
 -&gt; Name
 -&gt; ExternalLibrary
 -&gt; (ODEInfo -&gt; ExternalLibraryCall)
@@ -98,5 +68,36 @@
 </span><a href="#local-6989586621679254858"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Name
 </span><a href="#local-6989586621679254857"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">ExternalLibrary
 </span><a href="#local-6989586621679254856"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="annottext">ODEInfo -&gt; ExternalLibraryCall
-</span><a href="#local-6989586621679254855"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
-</span><span class="hs-identifier hs-var">Nothing</span></span></pre></body></html>
+</span><a href="#local-6989586621679254855"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Name
+</span><a href="#local-6989586621679254854"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-43"></span><span>
+</span><span id="line-44"></span><span class="hs-comment">-- | Makes an 'ODELibPckg' with the given name, 'ExternalLibrary' specification,</span><span>
+</span><span id="line-45"></span><span class="hs-comment">-- 'ExternalLibraryCall' specification parameterized by an 'ODEInfo', and list of</span><span>
+</span><span id="line-46"></span><span class="hs-comment">-- compatible languages.</span><span>
+</span><span id="line-47"></span><span class="annot"><a href="Language.Drasil.Data.ODELibPckg.html#mkODELibNoPath"><span class="hs-identifier hs-type">mkODELibNoPath</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Name"><span class="hs-identifier hs-type">Name</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Version"><span class="hs-identifier hs-type">Version</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#ExternalLibrary"><span class="hs-identifier hs-type">ExternalLibrary</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Data.ODEInfo.html#ODEInfo"><span class="hs-identifier hs-type">ODEInfo</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><span id="line-48"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibraryCall.html#ExternalLibraryCall"><span class="hs-identifier hs-type">ExternalLibraryCall</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.Lang.html#Lang"><span class="hs-identifier hs-type">Lang</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Data.ODELibPckg.html#ODELibPckg"><span class="hs-identifier hs-type">ODELibPckg</span></a></span><span>
+</span><span id="line-49"></span><span id="mkODELibNoPath"><span class="annot"><span class="annottext">mkODELibNoPath :: Name
+-&gt; Name
+-&gt; ExternalLibrary
+-&gt; (ODEInfo -&gt; ExternalLibraryCall)
+-&gt; [Lang]
+-&gt; ODELibPckg
+</span><a href="Language.Drasil.Data.ODELibPckg.html#mkODELibNoPath"><span class="hs-identifier hs-var hs-var">mkODELibNoPath</span></a></span></span><span> </span><span id="local-6989586621679254853"><span class="annot"><span class="annottext">Name
+</span><a href="#local-6989586621679254853"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679254852"><span class="annot"><span class="annottext">Name
+</span><a href="#local-6989586621679254852"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span id="local-6989586621679254851"><span class="annot"><span class="annottext">ExternalLibrary
+</span><a href="#local-6989586621679254851"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span id="local-6989586621679254850"><span class="annot"><span class="annottext">ODEInfo -&gt; ExternalLibraryCall
+</span><a href="#local-6989586621679254850"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Name
+-&gt; Name
+-&gt; ExternalLibrary
+-&gt; (ODEInfo -&gt; ExternalLibraryCall)
+-&gt; Maybe Name
+-&gt; [Lang]
+-&gt; ODELibPckg
+</span><a href="Language.Drasil.Data.ODELibPckg.html#ODELib"><span class="hs-identifier hs-var">ODELib</span></a></span><span> </span><span class="annot"><span class="annottext">Name
+</span><a href="#local-6989586621679254853"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Name
+</span><a href="#local-6989586621679254852"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">ExternalLibrary
+</span><a href="#local-6989586621679254851"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="annottext">ODEInfo -&gt; ExternalLibraryCall
+</span><a href="#local-6989586621679254850"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-50"></span></pre></body></html>

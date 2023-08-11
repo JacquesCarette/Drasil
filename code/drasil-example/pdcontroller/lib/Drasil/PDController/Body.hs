@@ -38,8 +38,8 @@ import Drasil.PDController.References (citations)
 import Drasil.PDController.Requirements (funcReqs, nonfuncReqs)
 import Drasil.PDController.SpSysDesc (goals, sysFigure, sysGoalInput, sysParts)
 import Drasil.PDController.TModel (theoreticalModels)
-import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
-  inpConstrained, pidConstants, pidDqdConstants, opProcessVariable)
+import Drasil.PDController.Unitals (symbols, inputs, inputsUC, inpConstrained,
+  pidConstants, pidDqdConstants, opProcessVariable)
 import Drasil.PDController.ODEs (pidODEInfo)
 import Language.Drasil.Code (quantvar)
 import Data.Drasil.Concepts.Computation (os)
@@ -110,7 +110,7 @@ si = SI {
   _instModels = instanceModels,
   _configFiles = [],
   _inputs = inputs,
-  _outputs = outputs,
+  _outputs = instanceModels,
   _defSequence = [] :: [Block SimpleQDef],
   _constraints = map cnstrw inpConstrained,
   _constants = pidConstants,
@@ -129,12 +129,13 @@ symbolsAll = symbols ++ map qw pidDqdConstants ++ map qw pidConstants
   ++ map qw [listToArray $ quantvar opProcessVariable, arrayVecDepVar pidODEInfo]
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf])
-  (nw pdControllerApp : nw os : nw vavPlan :  [nw program, nw angular, nw linear]
+symbMap = cdb (map qw instanceModels ++ map qw physicscon ++ symbolsAll
+  ++ [qw mass, qw posInf, qw negInf]) (nw pdControllerApp : nw os : nw vavPlan
+   : map nw instanceModels ++ [nw program, nw angular, nw linear]
   ++ [nw sciCompS] ++ map nw doccon ++ map nw doccon' ++ concepts
   ++ map nw mathcon ++ map nw mathcon' ++ map nw [second, kilogram]
   ++ map nw symbols ++ map nw physicscon ++ map nw acronyms ++ map nw physicalcon)
-  (map cw inpConstrained ++ srsDomains)
+  (map cw instanceModels ++ map cw inpConstrained ++ srsDomains)
   (map unitWrapper [second, kilogram])
   dataDefinitions
   instanceModels

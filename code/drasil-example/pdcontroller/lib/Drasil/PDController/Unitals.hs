@@ -56,9 +56,6 @@ qdLaplaceTransform, qdFreqDomain, qdFxnTDomain,
 inputs :: [QuantityDict]
 inputs = [qdSetPointTD, qdDerivGain, qdPropGain, qdStepTime, qdSimTime]
 
-outputs :: [QuantityDict]
-outputs = [qdProcessVariableTD]
-
 inputsUC :: [UncertQ]
 inputsUC
   = [ipSetPtUnc, ipPropGainUnc, ipDerGainUnc, ipStepTimeUnc, ipSimTimeUnc]

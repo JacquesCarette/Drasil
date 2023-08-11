@@ -50,6 +50,8 @@ digraph allvsall {
 	col2DIM -> assumpCAJI;
 	col2DIM -> p_CM;
 	col2DIM -> theory:impulseS;
+	outputValues -> linearVelocity;
+	outputValues -> angularVelocity;
 	lcEC -> assumpCT;
 	lcID -> assumpDI;
 	lcIJC -> assumpCAJI;

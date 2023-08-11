@@ -724,7 +724,7 @@ Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[IM:transMot]{IM:transMot}
+RefBy & \hyperref[outputValues]{FR:Output-Values} and \hyperref[IM:transMot]{IM:transMot}
         
 \\ \bottomrule
 \end{tabular}
@@ -841,7 +841,7 @@ Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[IM:rotMot]{IM:rotMot}
+RefBy & \hyperref[outputValues]{FR:Output-Values} and \hyperref[IM:rotMot]{IM:rotMot}
         
 \\ \bottomrule
 \end{tabular}
@@ -1522,9 +1522,9 @@ This section provides the functional requirements, the tasks and behaviours that
 {colspec={l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Source} & \textbf{Units}
 \\
-$v\text{(}t\text{)}$ & Linear velocity &  & $\frac{\text{m}}{\text{s}}$
+$v\text{(}t\text{)}$ & Linear velocity & \hyperref[DD:linVel]{DD:linVel} & $\frac{\text{m}}{\text{s}}$
 \\
-$ω$ & Angular velocity &  & $\frac{\text{rad}}{\text{s}}$
+$ω$ & Angular velocity & \hyperref[DD:angVel]{DD:angVel} & $\frac{\text{rad}}{\text{s}}$
 \label{Table:ReqOutputs}
 \end{longtblr}
 \subsection{Non-Functional Requirements}
@@ -1774,7 +1774,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[deterCollRespOverTime]{FR:Determine-Collision-Response-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  & X &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[performance]{NFR:Performance} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\

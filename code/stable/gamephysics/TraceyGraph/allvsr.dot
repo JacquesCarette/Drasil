@@ -1,4 +1,6 @@
 digraph allvsr {
+	outputValues -> linearVelocity;
+	outputValues -> angularVelocity;
 
 
 	assumpOT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpOT"];

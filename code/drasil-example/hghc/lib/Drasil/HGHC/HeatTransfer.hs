@@ -9,7 +9,7 @@ import Data.Drasil.Units.Thermodynamics (heatTransferCoef)
 {--}
 
 symbols :: [QuantityDict]
-symbols = htOutputs ++ htInputs
+symbols = htInputs ++ map qw dataDefs
 
 dataDefs :: [DataDefinition]
 dataDefs = [htTransCladFuelDD, htTransCladCoolDD]
@@ -20,9 +20,8 @@ qDefs = [htTransCladFuel, htTransCladCool]
 htVars :: [QuantityDict]
 htVars = [cladThick, coolFilmCond, gapFilmCond, cladCond]
 
-htInputs, htOutputs :: [QuantityDict]
+htInputs :: [QuantityDict]
 htInputs = map qw htVars
-htOutputs = map qw qDefs
 
 cladThick, coolFilmCond, gapFilmCond, cladCond :: QuantityDict
 cladThick    = vc "cladThick"    (cn''' "clad thickness")

@@ -4,8 +4,8 @@ import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to
 import Drasil.SRSDocument
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Drasil.HGHC.HeatTransfer (fp, hghc, dataDefs, htInputs, htOutputs, 
-    nuclearPhys, symbols)
+import Drasil.HGHC.HeatTransfer (fp, hghc, dataDefs, htInputs, nuclearPhys,
+  symbols)
 
 import Data.Drasil.SI_Units (siUnits, fundamentals, derived, degree)
 import Data.Drasil.People (spencerSmith)
@@ -36,7 +36,7 @@ si = SI {
   _datadefs    = dataDefs,
   _configFiles = [],
   _inputs      = htInputs,
-  _outputs     = htOutputs,
+  _outputs     = dataDefs,
   _defSequence = [] :: [Block SimpleQDef],
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [],

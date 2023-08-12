@@ -68,9 +68,12 @@ reqSection l = map snd . filter (\x -> fst x == l)
 -- | Creates a Requirement based on its type, along with its location in the list
 genReq :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j) =>
   ReqType -> [i] -> [(j, Sentence)] -> (ReqLocation, ConceptInstance)
-genReq (InputReq s) i _ = (Before, inReq (inReqDesc i s))
-genReq OutputReq    _ o = (After, outReq (outReqDesc o))
-genReq _            _ _ = error "ReqTypes not fully implemented"
+genReq (InputReq _) [] _  = error "Input requirement cannot be generated without inputs"
+genReq (InputReq s) i  _  = (Before, inReq (inReqDesc i s))
+genReq OutputReq    _  [] = error "Output requirement cannot be generated without outputs"
+genReq OutputReq    _  o  = (After, outReq (outReqDesc o))
+genReq _            _  _  = error "ReqTypes not fully implemented"
+
 
 -- | Prepends generated requirements that should come first to the list of the
 -- other requirements and appends the rest to it.

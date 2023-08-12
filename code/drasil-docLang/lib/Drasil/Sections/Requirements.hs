@@ -27,7 +27,6 @@ import Drasil.DocumentLanguage.Units (toSentence)
 
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap)
-import Data.Sequence (Seq, (<|), (|>))
 
 -- | Types of requirements that may be generated.
 data ReqType = InputReq Sentence
@@ -63,6 +62,9 @@ reqF = SRS.require [reqIntro]
 -- | Where to add a given requirement (before the manually created ones or after)
 data ReqLocation = Before | After deriving Eq
 
+reqSection :: ReqLocation -> [(ReqLocation, b)] -> [b]
+reqSection l = map snd . filter (\x -> fst x == l)
+
 -- | Creates a Requirement based on its type, along with its location in the list
 genReq :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j) =>
   ReqType -> [i] -> [(j, Sentence)] -> (ReqLocation, ConceptInstance)
@@ -75,19 +77,28 @@ genReq _            _ _ = error "ReqTypes not fully implemented"
 fullReqs :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j)
   => [ReqType] -> [i] -> [(j, Sentence)] -> [ConceptInstance]
   -> [ConceptInstance]
-fullReqs r i o c = reqSection Before ++ c ++ reqSection After
+fullReqs r i o c = reqSection Before genReqs ++ c ++ reqSection After genReqs
   where
-    reqSection l = map snd . filter (\x -> fst x == l) $ generatedReqs
-    generatedReqs = map (\x -> genReq x i o) r
+    genReqs = map (\x -> genReq x i o) r
 
--- | Prepends given LabelledContent to an input-value table.
+-- | Creates a table for a given Requirmement type, along with its location in
+-- the list
+genReqTable :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j) =>
+  ReqType -> [i] -> [(j, Sentence)] -> (ReqLocation, LabelledContent)
+genReqTable (InputReq _) i _ = (Before, inTable i)
+genReqTable OutputReq    _ o = (After, outTable o)
+genReqTable _            _ _ = error "ReqTypes not fully implemented"
+
+-- | Prepends generated requirement tables that should come first to the list
+-- of the other requirement tables and appends the rest to it.
+-- This function looks very similar to 'fullReqs', but @samm82 is pretty sure
+-- it will change to be different in the future
 fullTables :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j)
-  => [ReqType] -> [i] -> [(j, Sentence)] -> Seq LabelledContent
-  -> Seq LabelledContent
-fullTables []                _ _ t = t
-fullTables ((InputReq _):rs) i o t = inTable i <| fullTables rs i o t
-fullTables [OutputReq]       _ o t = t |> outTable o
-fullTables _                 _ _ _ = error "ReqTypes not fully implemented"
+  => [ReqType] -> [i] -> [(j, Sentence)] -> [LabelledContent]
+  -> [LabelledContent]
+fullTables r i o c = reqSection Before genReqs ++ c ++ reqSection After genReqs
+  where
+    genReqs = map (\x -> genReqTable x i o) r
 
 -- | Creates a generalized input-value table for the Requirements section.
 inTable :: (Quantity i, MayHaveUnit i) => [i] -> LabelledContent

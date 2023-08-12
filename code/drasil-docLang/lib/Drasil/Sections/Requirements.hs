@@ -60,20 +60,30 @@ instance Ord ReqType where
 reqF :: [Section] -> Section
 reqF = SRS.require [reqIntro]
 
--- | Prepends an input value requirement and appends an output value
--- requirement to a list of the other requirements.
-fullReqs :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j) =>
-  [ReqType] -> [i] -> [(j, Sentence)] -> Seq ConceptInstance ->
-    Seq ConceptInstance
-fullReqs []                _ _ r = r
-fullReqs ((InputReq s):rs) i o r = inReq (inReqDesc i s) <| fullReqs rs i o r
-fullReqs [OutputReq]       _ o r = r |> outReq (outReqDesc o)
-fullReqs _                 _ _ _ = error "ReqTypes not fully implemented"
+-- | Where to add a given requirement (before the manually created ones or after)
+data ReqLocation = Before | After deriving Eq
+
+-- | Creates a Requirement based on its type, along with its location in the list
+genReq :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j) =>
+  ReqType -> [i] -> [(j, Sentence)] -> (ReqLocation, ConceptInstance)
+genReq (InputReq s) i _ = (Before, inReq (inReqDesc i s))
+genReq OutputReq    _ o = (After, outReq (outReqDesc o))
+genReq _            _ _ = error "ReqTypes not fully implemented"
+
+-- | Prepends generated requirements that should come first to the list of the
+-- other requirements and appends the rest to it.
+fullReqs :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j)
+  => [ReqType] -> [i] -> [(j, Sentence)] -> [ConceptInstance]
+  -> [ConceptInstance]
+fullReqs r i o c = reqSection Before ++ c ++ reqSection After
+  where
+    reqSection l = map snd . filter (\x -> fst x == l) $ generatedReqs
+    generatedReqs = map (\x -> genReq x i o) r
 
 -- | Prepends given LabelledContent to an input-value table.
-fullTables :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j) =>
-  [ReqType] -> [i] -> [(j, Sentence)] -> Seq LabelledContent ->
-    Seq LabelledContent
+fullTables :: (Quantity i, MayHaveUnit i, Quantity j, MayHaveUnit j)
+  => [ReqType] -> [i] -> [(j, Sentence)] -> Seq LabelledContent
+  -> Seq LabelledContent
 fullTables []                _ _ t = t
 fullTables ((InputReq _):rs) i o t = inTable i <| fullTables rs i o t
 fullTables [OutputReq]       _ o t = t |> outTable o

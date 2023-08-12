@@ -127,7 +127,7 @@ mkDocDesc SI{_inputs = is, _outputs = os, _sysinfodb = db} = map sec where
   sec (OffShelfSolnsSec e) = DL.OffShelfSolnsSec e
   reqSec :: ReqsSub -> DL.ReqsSub
   reqSec (FReqsSub r t) = DL.FReqsSub
-    (nub . toList $ fullReqs   (sort r) is tempOutputs $ fromList $ fromConcInsDB funcReqDom)
+    (nub $ fullReqs   (sort r) is tempOutputs $ fromConcInsDB funcReqDom)
     (nub . toList $ fullTables (sort r) is tempOutputs $ fromList t)
   reqSec NonFReqsSub = DL.NonFReqsSub $ fromConcInsDB nonFuncReqDom
   tempOutputs = map (, EmptyS) os

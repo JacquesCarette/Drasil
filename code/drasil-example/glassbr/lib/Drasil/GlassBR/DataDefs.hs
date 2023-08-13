@@ -54,7 +54,7 @@ loadDF = ddE loadDFQD [dRef astm2009] Nothing "loadDurFactor"
 {--}
 
 glaTyFacEq :: Expr
-glaTyFacEq = incompleteCase (zipWith glaTyFacHelper glassTypeFactors $ map (getAccStr . snd) glassType)
+glaTyFacEq = incompleteCase (zipWith glaTyFacHelper glassTypeFactors $ map (abrv . snd) glassType)
 
 glaTyFacHelper :: Integer -> String -> (Expr, Relation)
 glaTyFacHelper result condition = (int result, sy glassTypeCon $= str condition)

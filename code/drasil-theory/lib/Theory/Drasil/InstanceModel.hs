@@ -70,6 +70,9 @@ instance CommonIdea         InstanceModel where abrv _ = abrv inModel
 instance Referable          InstanceModel where
   refAdd      = ra
   renderRef l = RP (prepend $ abrv l) (refAdd l)
+-- | Finds the 'Quantity' of an 'InstanceModel'
+instance DefinesQuantity    InstanceModel where
+  defLhs = imOutput . _1
 -- | Finds the inputs of an 'InstanceModel'.
 instance HasInputs          InstanceModel where
   inputs          = imInputs

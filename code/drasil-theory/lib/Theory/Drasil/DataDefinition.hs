@@ -71,6 +71,9 @@ instance HasUID             DataDefinition where uid = ddQD uid uid
 instance NamedIdea          DataDefinition where term = ddQD term term
 -- | Finds the idea contained in the 'QDefinition' used to make the 'DataDefinition where'.
 instance Idea               DataDefinition where getA = either getA getA . qdFromDD
+-- | Finds the 'Quantity' defined by the 'DataDefinition'
+instance DefinesQuantity    DataDefinition where
+  defLhs = ddQDGetter defLhs defLhs
 -- | Finds the output variable of the 'DataDefinition'
 instance HasOutput          DataDefinition where
   output = ddQDGetter defLhs defLhs

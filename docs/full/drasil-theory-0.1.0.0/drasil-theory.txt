@@ -136,8 +136,8 @@ qdEFromDD :: DataDefinition -> Maybe SimpleQDef
 instance Language.Drasil.UID.HasUID Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Chunk.NamedIdea.Idea Theory.Drasil.DataDefinition.DataDefinition
+instance Language.Drasil.Chunk.Quantity.DefinesQuantity Theory.Drasil.DataDefinition.DataDefinition
 instance Theory.Drasil.Classes.HasOutput Theory.Drasil.DataDefinition.DataDefinition
-instance Language.Drasil.Symbol.HasSymbol Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.ExprClasses.Express Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.DecoratedReference.HasDecRef Theory.Drasil.DataDefinition.DataDefinition
 instance GHC.Classes.Eq Theory.Drasil.DataDefinition.DataDefinition
@@ -370,6 +370,7 @@ instance Language.Drasil.Classes.HasAdditionalNotes Theory.Drasil.InstanceModel.
 instance Language.Drasil.Classes.Quantity Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Classes.CommonIdea Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Label.Type.Referable Theory.Drasil.InstanceModel.InstanceModel
+instance Language.Drasil.Chunk.Quantity.DefinesQuantity Theory.Drasil.InstanceModel.InstanceModel
 instance Theory.Drasil.Classes.HasInputs Theory.Drasil.InstanceModel.InstanceModel
 instance Theory.Drasil.Classes.HasOutput Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Symbol.HasSymbol Theory.Drasil.InstanceModel.InstanceModel

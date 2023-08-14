@@ -4194,11 +4194,11 @@ chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
 
 -- | Takes a <a>HasSymbol</a> that is also <a>Referable</a> and outputs as
 --   a <a>Sentence</a>: "<tt>symbol</tt> is defined in <tt>reference</tt>."
-definedIn :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence
+definedIn :: (Referable r, HasShortName r, DefinesQuantity r) => r -> Sentence
 
 -- | Same as <a>definedIn</a>, but allows for additional information to be
 --   appended to the <a>Sentence</a>.
-definedIn' :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence -> Sentence
+definedIn' :: (Referable r, HasShortName r, DefinesQuantity r) => r -> Sentence -> Sentence
 
 -- | Takes a <a>Referable</a> and outputs as a <a>Sentence</a> "defined in
 --   <tt>reference</tt>" (no <a>HasSymbol</a>).
@@ -4275,7 +4275,7 @@ showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
 
 -- | Takes a list of <a>Referable</a>s and <a>Symbol</a>s and outputs as a
 --   Sentence "By substituting <tt>symbols</tt>, this can be written as:".
-substitute :: (Referable r, HasShortName r, HasSymbol r) => [r] -> Sentence
+substitute :: (Referable r, HasShortName r, DefinesQuantity r) => [r] -> Sentence
 
 -- | Extracts the typical uncertainty to be displayed from something that
 --   has an uncertainty.

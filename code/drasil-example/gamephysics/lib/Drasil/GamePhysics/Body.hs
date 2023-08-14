@@ -95,7 +95,7 @@ mkSRS = [TableOfContents,
     TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
     AuxConstntSec $ AuxConsProg gamePhysics [],
     Bibliography]
-      where tableOfSymbols = [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits]
+      where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
 
 si :: SystemInformation
 si = SI {
@@ -114,7 +114,7 @@ si = SI {
   _datadefs    = dataDefs,
   _configFiles = [],
   _inputs      = inputSymbols,
-  _outputs     = map (^. output) outputs,
+  _outputs     = outputs, 
   _defSequence = map (`Parallel` []) qDefs,
   _constraints = inputConstraints,
   _constants   = [],
@@ -177,9 +177,9 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
 
 para1_introduction_intro :: Sentence
 para1_introduction_intro = foldlSent
-  [S "Due to the rising cost of developing", plural videoGame `sC`
+  [S "Due to the rising cost of developing", plural videoGame `sC` 
   S "developers are looking for ways to save time and money for their" +:+.
-  plural project, S "Using an", phrase openSource,
+  plural project, S "Using an", phrase openSource, 
   phrase physLib,
   S "that is reliable and free will cut down development costs and lead",
   S "to better quality", plural product_]
@@ -198,7 +198,7 @@ scope = foldlSent_ [phraseNP (the physicalSim) `S.of_` getAcc twoD,
   plural CP.rigidBody, S "acted on by", plural QP.force]
 
 --scope_of_requirements_intro_p2 = EmptyS
-
+  
 {-scope_of_requirements_intro_p2 = foldlSent_ [S "simulates how these", 
   plural CP.rigidBody, S "interact with one another"]
 -}
@@ -227,13 +227,13 @@ sysCtxIntro = foldlSP
    `andIts` environment)]
 
 sysCtxFig1 :: LabelledContent
-sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont)
+sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont) 
   (resourcePath ++ "sysctx.png")
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_
    `andThe` user), S "is through an application programming" +:+.
-   phrase interface, S "The responsibilities of the", phraseNP (user
+   phrase interface, S "The responsibilities of the", phraseNP (user 
    `andThe` system), S "are as follows"]
 
 sysCtxUsrResp :: [Sentence]
@@ -299,14 +299,14 @@ probDescIntro = foldlSent_
   S "Creating a gaming", phrase physLib, S "is a difficult" +:+. phrase task, titleize' game,
   S "need",  plural physLib, S "that simulate", plural object, S "acting under various", phrase physical,
   plural condition `sC` S "while simultaneously being fast and efficient enough to work in soft",
-  phrase realtime, S "during the" +:+. phrase game, S "Developing a",
+  phrase realtime, S "during the" +:+. phrase game, S "Developing a", 
   phrase physLib, S "from scratch takes a long period" `S.of_` phrase QP.time `S.and_`
   S "is very costly" `sC` S "presenting barriers of entry which make it difficult for",
-  phrase game, S "developers to include", phrase Doc.physics, S "in their" +:+.
+  phrase game, S "developers to include", phrase Doc.physics, S "in their" +:+. 
   plural product_, S "There are a few free" `sC` phrase openSource `S.and_` S "high quality",
   namedRef (SRS.offShelfSol ([] :: [Contents]) ([] :: [Section])) (plural physLib),
   S "available to be used for", phrase consumer, plural product_]
-
+  
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------
@@ -337,10 +337,10 @@ terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CM.cartesian, CM.rightHand,
 generalDefinitionsIntro :: Contents
 -- general_definitions_GDefs :: [Contents]
 
-generalDefinitionsIntro = foldlSP
-  [S "This", phrase section_, S "collects the", pluralNP (CM.law `and_PP`
-  CM.equation), S "that will be used in deriving the",
-  plural dataDefn `sC` S "which in turn will be used to build the",
+generalDefinitionsIntro = foldlSP 
+  [S "This", phrase section_, S "collects the", pluralNP (CM.law `and_PP` 
+  CM.equation), S "that will be used in deriving the", 
+  plural dataDefn `sC` S "which in turn will be used to build the", 
   plural inModel]
 
 -- GDefs not yet implemented --
@@ -401,10 +401,10 @@ offShelfSols :: [Contents]
 offShelfSols = [offShelfSolsIntro, offShelfSols2DList,
                 offShelfSolsMid,   offShelfSols3DList]
 
-offShelfSolsIntro, offShelfSols2DList,
+offShelfSolsIntro, offShelfSols2DList, 
   offShelfSolsMid, offShelfSols3DList :: Contents
 
-offShelfSolsIntro = mkParagraph $ foldlSentCol
+offShelfSolsIntro = mkParagraph $ foldlSentCol 
   [S "As mentioned in the", namedRef (SRS.probDesc [] []) (phrase problemDescription) `sC`
   S "there already exist free", phrase openSource, phrase game +:+.
   plural physLib, S "Similar", getAcc twoD, plural physLib, S "are"]

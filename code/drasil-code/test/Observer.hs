@@ -1,9 +1,9 @@
 -- | Part of the PatternTest GOOL tests. Defines an Observer class.
 module Observer (observer, observerName, printNum, x) where
 
-import GOOL.Drasil (SFile, SVariable, SMethod, SClass, OOProg, FileSym(..), 
-  PermanenceSym(..), oneLiner, TypeSym(..), IOStatement(..), VariableSym(..), 
-  Literal(..), VariableValue(..), ScopeSym(..), MethodSym(..), initializer, StateVarSym(..), 
+import GOOL.Drasil (SFile, SVariable, SMethod, SClass, OOProg, FileSym(..),
+  PermanenceSym(..), oneLiner, TypeSym(..), IOStatement(..), VariableSym(..),
+  Literal(..), VariableValue(..), ScopeSym(..), MethodSym(..), initializer, StateVarSym(..),
   ClassSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 

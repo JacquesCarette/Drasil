@@ -34,7 +34,7 @@ instance IsArgumentName NamedArgument where
 instance Eq             NamedArgument where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds the units of the 'QuantityDict' used to make the 'NamedArgument'.
 instance MayHaveUnit    NamedArgument where getUnit = getUnit . view qtd
-  
+
 -- | Smart constructor for 'NamedArgument' .
 narg :: (Quantity q, MayHaveUnit q) => q -> NamedArgument
 narg = NA . qw

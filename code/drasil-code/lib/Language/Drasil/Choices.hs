@@ -1,8 +1,8 @@
 -- | Defines the design language for SCS.
 module Language.Drasil.Choices (
-  Choices(..), Architecture (..), makeArchit, DataInfo(..), makeData, Maps(..), 
-  makeMaps, spaceToCodeType, Constraints(..), makeConstraints, ODE(..), makeODE, 
-  DocConfig(..), makeDocConfig, LogConfig(..), makeLogConfig, OptionalFeatures(..), 
+  Choices(..), Architecture (..), makeArchit, DataInfo(..), makeData, Maps(..),
+  makeMaps, spaceToCodeType, Constraints(..), makeConstraints, ODE(..), makeODE,
+  DocConfig(..), makeDocConfig, LogConfig(..), makeLogConfig, OptionalFeatures(..),
   makeOptFeats, ExtLib(..), Modularity(..), InputModule(..), inputModule, Structure(..),
   ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap,
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
@@ -37,7 +37,7 @@ data Choices = Choices {
   optFeats :: OptionalFeatures,
   -- | Constraint violation behaviour. Exception or Warning.
   srsConstraints :: Constraints,
-  -- | List of external libraries what to utilize 
+  -- | List of external libraries what to utilize
   extLibs :: [ExtLib],
   -- | Number of folders to go up in order to obtain the image
   folderVal :: Int
@@ -62,7 +62,7 @@ makeArchit :: Modularity -> ImplementationType -> Architecture
 makeArchit = Archt
 
 -- | Modularity of a program.
-data Modularity = Modular InputModule -- ^ Different modules. For controller, 
+data Modularity = Modular InputModule -- ^ Different modules. For controller,
                                       -- input, calculations, output.
                 | Unmodular -- ^ All generated code is in one module/file.
 
@@ -76,8 +76,8 @@ instance RenderChoices Modularity where
 data InputModule = Combined -- ^ Input-related functions combined in one module.
                  | Separated -- ^ Input-related functions each in own module.
 
--- | Determines whether there is a 'Combined' input module or many 'Separated' input 
--- modules, based on a 'Choices' structure. An 'Unmodular' design implicitly means 
+-- | Determines whether there is a 'Combined' input module or many 'Separated' input
+-- modules, based on a 'Choices' structure. An 'Unmodular' design implicitly means
 -- that input modules are 'Combined'.
 inputModule :: Choices -> InputModule
 inputModule c = inputModule' $ modularity $ architecture c
@@ -118,7 +118,7 @@ instance RenderChoices Structure where
 -- | Constants options.
 data ConstantStructure = Inline -- ^ Inline values for constants.
                        | WithInputs -- ^ Store constants with inputs.
-                       | Store Structure -- ^ Store constants separately from 
+                       | Store Structure -- ^ Store constants separately from
                                          -- inputs, whether bundled or unbundled.
 
 -- | Renders the structure of constants in a program.
@@ -137,7 +137,7 @@ instance RenderChoices ConstantRepr where
   showChs Var = S "Var"
   showChs Const = S "Const"
 
--- | Maps for Concepts and Space 
+-- | Maps for Concepts and Space
 data Maps = Maps {
   -- | Map of 'UID's for Drasil concepts to code concepts.
   -- Matching a 'UID' to a code concept means the code concept should be used
@@ -152,10 +152,10 @@ data Maps = Maps {
 makeMaps :: ConceptMatchMap -> SpaceMatch -> Maps
 makeMaps = Maps
 
--- | Specifies matches between chunks and 'CodeConcept's, meaning the target 
--- language's pre-existing definition of the concept should be used instead of 
--- defining a new variable for the concept in the generated code. 
--- ['CodeConcept'] is preferentially-ordered, generator concretizes a 
+-- | Specifies matches between chunks and 'CodeConcept's, meaning the target
+-- language's pre-existing definition of the concept should be used instead of
+-- defining a new variable for the concept in the generated code.
+-- ['CodeConcept'] is preferentially-ordered, generator concretizes a
 -- 'ConceptMatchMap' to a 'MatchedConceptMap' by checking user's other choices.
 type ConceptMatchMap = Map UID [CodeConcept]
 -- | Concrete version of ConceptMatchMap dependent on user choices.
@@ -173,8 +173,8 @@ instance RenderChoices CodeConcept where
 matchConcepts :: (HasUID c) => [(c, [CodeConcept])] -> ConceptMatchMap
 matchConcepts = fromList . map (\(cnc,cdc) -> (cnc ^. uid, cdc))
 
--- | Specifies which 'CodeType' should be used to represent each mathematical 
--- 'Space'. ['CodeType'] is preferentially-ordered, first 'CodeType' that does not 
+-- | Specifies which 'CodeType' should be used to represent each mathematical
+-- 'Space'. ['CodeType'] is preferentially-ordered, first 'CodeType' that does not
 -- conflict with other choices will be selected.
 type SpaceMatch = Space -> [CodeType]
 
@@ -200,7 +200,7 @@ data OptionalFeatures = OptFeats{
 makeOptFeats :: DocConfig -> LogConfig -> [AuxFile] -> OptionalFeatures
 makeOptFeats = OptFeats
 
--- | Configuration for Doxygen documentation 
+-- | Configuration for Doxygen documentation
 data DocConfig = DocConfig {
   -- | Turns Doxygen comments for different code structures on or off.
   comments :: [Comments],
@@ -254,7 +254,7 @@ makeLogConfig :: [Logging] -> FilePath -> LogConfig
 makeLogConfig = LogConfig
 
 -- | Logging options for function calls and variable assignments.
--- Eq instances required for Logging and Comments because generator needs to 
+-- Eq instances required for Logging and Comments because generator needs to
 -- check membership of these elements in lists
 data Logging = LogFunc -- ^ Log messages generated for function calls.
              | LogVar -- ^ Log messages generated for variable assignments.
@@ -277,7 +277,7 @@ instance RenderChoices AuxFile where
   showChs (SampleInput fp) = S "SampleInput" +:+ S fp
   showChs ReadME = S "ReadME"
 
--- | Gets the file path to a sample input data set from a 'Choices' structure, if 
+-- | Gets the file path to a sample input data set from a 'Choices' structure, if
 -- the user chose to generate a sample input file.
 getSampleData :: Choices -> Maybe FilePath
 getSampleData chs = getSampleData' (auxFiles $ optFeats chs)
@@ -312,9 +312,9 @@ instance RenderChoices ConstraintBehaviour where
 -- | External Library Options
 newtype ExtLib = Math ODE
 
--- | All Information needed to solve an ODE 
+-- | All Information needed to solve an ODE
 data ODE = ODE{
-  -- FIXME: ODEInfos should be automatically built from Instance models when 
+  -- FIXME: ODEInfos should be automatically built from Instance models when
   -- needed, but we can't do that yet so I'm passing it through Choices instead.
   -- This choice should really just be for an ODEMethod
   -- | ODE information.
@@ -326,19 +326,19 @@ data ODE = ODE{
 makeODE :: [ODEInfo] -> [ODELibPckg] -> ODE
 makeODE = ODE
 
--- | Default choices to be used as the base from which design specifications 
+-- | Default choices to be used as the base from which design specifications
 -- can be built.
 defaultChoices :: Choices
 defaultChoices = Choices {
   lang = [Python],
   architecture = makeArchit (Modular Combined) Program,
   dataInfo = makeData Bundled Inline Const,
-  maps = makeMaps 
-    (matchConcepts ([] :: [(SimpleQDef, [CodeConcept])])) 
+  maps = makeMaps
+    (matchConcepts ([] :: [(SimpleQDef, [CodeConcept])]))
     spaceToCodeType,
-  optFeats = makeOptFeats 
-    (makeDocConfig [] Verbose Hide) 
-    (makeLogConfig [] "log.txt") 
+  optFeats = makeOptFeats
+    (makeDocConfig [] Verbose Hide)
+    (makeLogConfig [] "log.txt")
     [ReadME],
   srsConstraints = makeConstraints Exception Warning,
   extLibs = [],
@@ -348,19 +348,19 @@ defaultChoices = Choices {
 -- | Renders 'Choices' as 'Sentence's.
 choicesSent :: Choices -> [Sentence]
 choicesSent chs = map chsFieldSent [
-    (S "Languages",                     foldlSent_ $ map (S . show) $ lang chs), 
-    (S "Modularity",                    showChs $ modularity $ architecture chs), 
-    (S "Input Structure",               showChs $ inputStructure $ dataInfo chs), 
-    (S "Constant Structure",            showChs $ constStructure $ dataInfo chs), 
-    (S "Constant Representation",       showChs $ constRepr $ dataInfo chs), 
-    (S "Implementation Type",           showChs $ impType $ architecture chs), 
-    (S "Software Constraint Behaviour", showChs $ onSfwrConstraint $ srsConstraints chs), 
-    (S "Physical Constraint Behaviour", showChs $ onPhysConstraint $ srsConstraints chs), 
-    (S "Comments",                      showChsList $ comments $ docConfig $ optFeats chs), 
-    (S "Dox Verbosity",                 showChs $ doxVerbosity $ docConfig $ optFeats chs), 
-    (S "Dates",                         showChs $ dates $ docConfig $ optFeats chs), 
-    (S "Log File Name",                 S $ logFile $ logConfig $ optFeats chs), 
-    (S "Logging",                       showChsList $ logging $ logConfig $ optFeats chs), 
+    (S "Languages",                     foldlSent_ $ map (S . show) $ lang chs),
+    (S "Modularity",                    showChs $ modularity $ architecture chs),
+    (S "Input Structure",               showChs $ inputStructure $ dataInfo chs),
+    (S "Constant Structure",            showChs $ constStructure $ dataInfo chs),
+    (S "Constant Representation",       showChs $ constRepr $ dataInfo chs),
+    (S "Implementation Type",           showChs $ impType $ architecture chs),
+    (S "Software Constraint Behaviour", showChs $ onSfwrConstraint $ srsConstraints chs),
+    (S "Physical Constraint Behaviour", showChs $ onPhysConstraint $ srsConstraints chs),
+    (S "Comments",                      showChsList $ comments $ docConfig $ optFeats chs),
+    (S "Dox Verbosity",                 showChs $ doxVerbosity $ docConfig $ optFeats chs),
+    (S "Dates",                         showChs $ dates $ docConfig $ optFeats chs),
+    (S "Log File Name",                 S $ logFile $ logConfig $ optFeats chs),
+    (S "Logging",                       showChsList $ logging $ logConfig $ optFeats chs),
     (S "Auxiliary Files",               showChsList $ auxFiles $ optFeats chs)
   ]
 

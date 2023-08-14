@@ -20,6 +20,7 @@ module Language.Drasil.Document.Combinators (
 ) where
 
 import Language.Drasil.Chunk.Concept.Core ( ConceptChunk )
+import Language.Drasil.Chunk.Quantity (DefinesQuantity(defLhs))
 import Language.Drasil.Chunk.UnitDefn ( UnitDefn, MayHaveUnit(..) )
 import Language.Drasil.Chunk.Unital ( UnitalChunk )
 import Language.Drasil.Classes
@@ -93,17 +94,17 @@ fromReplace :: (Referable r, HasShortName r) => r -> UnitalChunk -> Sentence
 fromReplace src c = S "From" +:+ refS src `sC` S "we can replace" +: ch c
 
 -- | Takes a list of 'Referable's and 'Symbol's and outputs as a Sentence "By substituting @symbols@, this can be written as:".
-substitute :: (Referable r, HasShortName r, HasSymbol r) => [r] -> Sentence
+substitute :: (Referable r, HasShortName r, DefinesQuantity r) => [r] -> Sentence
 substitute s = S "By substituting" +: (foldlList Comma List l `sC` S "this can be written as")
-  where l = map (\x -> ch x +:+ fromSource x) s
+  where l = map (\x -> ch (x ^. defLhs) +:+ fromSource x) s
 
 -- | Takes a 'HasSymbol' that is also 'Referable' and outputs as a 'Sentence': "@symbol@ is defined in @reference@."
-definedIn :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence
-definedIn q = ch q `S.is` S "defined in" +:+. refS q
+definedIn :: (Referable r, HasShortName r, DefinesQuantity r) => r -> Sentence
+definedIn q = ch (q ^. defLhs) `S.is` S "defined in" +:+. refS q
 
 -- | Same as 'definedIn', but allows for additional information to be appended to the 'Sentence'.
-definedIn' :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence -> Sentence
-definedIn' q info = ch q `S.is` S "defined" `S.in_` refS q +:+. info 
+definedIn' :: (Referable r, HasShortName r, DefinesQuantity r) => r -> Sentence -> Sentence
+definedIn' q info = ch (q ^. defLhs) `S.is` S "defined" `S.in_` refS q +:+. info
 
 -- | Takes a 'Referable' and outputs as a 'Sentence' "defined in @reference@" (no 'HasSymbol').
 definedIn'' :: (Referable r, HasShortName r) => r -> Sentence

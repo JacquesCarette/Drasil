@@ -112,7 +112,7 @@ mkEnvArgSq nm args d =
 
 -- | Makes minipage environment.
 mkMinipage :: D -> D
-mkMinipage d = commandD "vspace" (command0 "baselineskip") $+$
+mkMinipage d = command0 "medskip" $+$
   command0 "noindent" $+$ mkEnvArgBr "minipage" "\\textwidth" d $+$ pure (text "")
 
 -- | For defining (LaTeX) macros.

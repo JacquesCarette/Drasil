@@ -1,6 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 
--- | Defines a package extension for GOOL, with functions for pairing a GOOL 
+-- | Defines a package extension for GOOL, with functions for pairing a GOOL
 -- program with auxiliary, non-source-code files.
 module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
   ReadMeInfo(..),
@@ -21,7 +21,7 @@ import Text.PrettyPrint.HughesPJ (Doc)
 -- | Members of this class must have all the information necessary for
 -- the 'AuxiliarySym' in addition to information necessary to create a package.
 class (AuxiliarySym r) => PackageSym r where
-  type Package r 
+  type Package r
   package :: ProgData -> [r (Auxiliary r)] -> r (Package r)
 
 -- | Members of this class must have a doxygen configuration, ReadMe file,
@@ -36,7 +36,7 @@ class AuxiliarySym r where
 
   optimizeDox :: r (AuxHelper r)
 
-  makefile :: [FilePath] -> ImplementationType -> [Comments] -> GOOLState -> 
+  makefile :: [FilePath] -> ImplementationType -> [Comments] -> GOOLState ->
     ProgData -> r (Auxiliary r)
 
   auxHelperDoc :: r (AuxHelper r) -> Doc
@@ -66,7 +66,7 @@ data ReadMeInfo = ReadMeInfo {
   implementType :: ImplementationType,
   extLibNV :: [(Name,Version)],
   extLibFP :: [FilePath],
-  contributors :: [Contributor], 
+  contributors :: [Contributor],
   configFP :: [FilePath],
   caseName :: CaseName,
   examplePurpose :: ExamplePurpose,

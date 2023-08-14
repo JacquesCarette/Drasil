@@ -1,9 +1,9 @@
--- | Defines description generators for common SCS functions, classes, and 
+-- | Defines description generators for common SCS functions, classes, and
 -- modules.
 module Language.Drasil.Code.Imperative.Descriptions (
-  modDesc, unmodularDesc, inputParametersDesc, inputConstructorDesc, 
-  inputFormatDesc, derivedValuesDesc, inputConstraintsDesc, constModDesc, 
-  outputFormatDesc, inputClassDesc, constClassDesc, inFmtFuncDesc, 
+  modDesc, unmodularDesc, inputParametersDesc, inputConstructorDesc,
+  inputFormatDesc, derivedValuesDesc, inputConstraintsDesc, constModDesc,
+  outputFormatDesc, inputClassDesc, constClassDesc, inFmtFuncDesc,
   inConsFuncDesc, dvFuncDesc, calcModDesc, woFuncDesc
 ) where
 
@@ -11,9 +11,9 @@ import Utils.Drasil (stringList)
 
 import Language.Drasil
 import Language.Drasil.Chunk.CodeBase
-import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   inMod)
-import Language.Drasil.Choices (ImplementationType(..), InputModule(..), 
+import Language.Drasil.Choices (ImplementationType(..), InputModule(..),
   Structure(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Mod (Description)
@@ -43,7 +43,7 @@ unmodularDesc = do
     foldlSent ([S "a", S (implTypeStr (implType g)), S "to"] ++ purpose spec)
 
 -- | Returns description of what is contained in the Input Parameters module.
--- If user chooses the 'Bundled' input parameter, this module will include the structure for holding the 
+-- If user chooses the 'Bundled' input parameter, this module will include the structure for holding the
 -- input values. Does not include the structure if they choose 'Unbundled'.
 -- If the user chooses the 'Combined' input parameter, this module includes the input-related functions.
 -- Does not inlcude those functions if they choose 'Separated'.
@@ -61,8 +61,8 @@ inputParametersDesc = do
       inDesc Unbundled = [""]
   return $ ipDesc im
 
--- | Returns a description of the input constructor, checking whether each 
--- possible method that may be called by the constructor is defined, and 
+-- | Returns a description of the input constructor, checking whether each
+-- possible method that may be called by the constructor is defined, and
 -- including it in the description if so.
 inputConstructorDesc :: GenState Description
 inputConstructorDesc = do
@@ -75,7 +75,7 @@ inputConstructorDesc = do
       icDesc False = ""
       icDesc True = "checking " ++ pAndS ++ " on the input"
       dl = defList g
-  return $ "Initializes input object by " ++ stringList [ 
+  return $ "Initializes input object by " ++ stringList [
     ifDesc ("get_input" `elem` dl),
     idDesc ("derived_values" `elem` dl),
     icDesc ("input_constraints" `elem` dl)]
@@ -105,7 +105,7 @@ inputConstraintsDesc = do
   g <- get
   pAndS <- physAndSfwrCons
   let icDesc False = ""
-      icDesc _ = "the function for checking the " ++ pAndS ++ 
+      icDesc _ = "the function for checking the " ++ pAndS ++
         " on the input"
   return $ icDesc $ "input_constraints" `elem` defList g
 
@@ -117,10 +117,10 @@ constModDesc = do
   let cname = "Constants"
       cDesc [] = ""
       cDesc _ = "the structure for holding constant values"
-  return $ cDesc $ filter (flip member (Map.filter (cname ==) 
+  return $ cDesc $ filter (flip member (Map.filter (cname ==)
     (clsMap g)) . codeName) (constants $ codeSpec g)
 
--- | Returns a description of what is contained in the Output Format module, 
+-- | Returns a description of what is contained in the Output Format module,
 -- if it exists.
 outputFormatDesc :: GenState Description
 outputFormatDesc = do
@@ -130,8 +130,8 @@ outputFormatDesc = do
   return $ ofDesc $ "write_output" `elem` defList g
 
 -- | Returns a description for the generated function that stores inputs,
--- if it exists. Checks whether explicit inputs, derived inputs, and constants 
--- are defined in the InputParameters class and includes each in the 
+-- if it exists. Checks whether explicit inputs, derived inputs, and constants
+-- are defined in the InputParameters class and includes each in the
 -- description if so.
 inputClassDesc :: GenState Description
 inputClassDesc = do
@@ -153,7 +153,7 @@ inputClassDesc = do
   return $ inClassD $ Map.null ipMap
 
 -- | Returns a description for the generated class that stores constants,
--- if it exists. If no constants are defined in the Constants class, then it 
+-- if it exists. If no constants are defined in the Constants class, then it
 -- does not exist and an empty description is returned.
 constClassDesc :: GenState Description
 constClassDesc = do
@@ -161,7 +161,7 @@ constClassDesc = do
   let cname = "Constants"
       ccDesc [] = ""
       ccDesc _ = "Structure for holding the constant values"
-  return $ ccDesc $ filter (flip member (Map.filter (cname ==) 
+  return $ ccDesc $ filter (flip member (Map.filter (cname ==)
     (clsMap g)) . codeName) (constants $ codeSpec g)
 
 -- | Returns a description for the generated function that reads input from a file,
@@ -205,14 +205,14 @@ woFuncDesc = do
       woDesc _ = "Writes the output values to output.txt"
   return $ woDesc $ "write_output" `elem` defList g
 
--- | Returns the phrase "physical constraints" if there are any physical 
--- constraints on the input and "software constraints" if there are any 
--- software constraints on the input. If there are both, 
+-- | Returns the phrase "physical constraints" if there are any physical
+-- constraints on the input and "software constraints" if there are any
+-- software constraints on the input. If there are both,
 -- "physical constraints and software constraints" is returned.
 physAndSfwrCons :: GenState Description
 physAndSfwrCons = do
   g <- get
-  let cns = concat $ mapMaybe ((`Map.lookup` (cMap $ codeSpec g)) . (^. uid)) 
+  let cns = concat $ mapMaybe ((`Map.lookup` (cMap $ codeSpec g)) . (^. uid))
         (inputs $ codeSpec g)
   return $ stringList [
     if not (any isPhysC cns) then "" else "physical constraints",

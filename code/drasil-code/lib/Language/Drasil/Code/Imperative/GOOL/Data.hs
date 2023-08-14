@@ -1,5 +1,5 @@
 -- | Defines the underlying data types used in the package extension.
-module Language.Drasil.Code.Imperative.GOOL.Data (AuxData(auxFilePath, auxDoc), 
+module Language.Drasil.Code.Imperative.GOOL.Data (AuxData(auxFilePath, auxDoc),
   ad, PackData(packProg, packAux), packD
 ) where
 

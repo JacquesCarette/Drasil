@@ -435,7 +435,7 @@ website: ##@Deploy First builds all Drasil packages, and then executes the drasi
 # in `deploy`, then this will skip the re-generation of 
 # those files. Currently, the deploy_stage.sh script does
 # not work for Windows Git Bash users.
-deploy_lite: ##@Deploy Deploy the Drasil website without regenerating artifacts. For local development.
+deploy_lite: website ##@Deploy Deploy the Drasil website without regenerating artifacts. For local development.
 	@mkdir -p "$(DEPLOY_FOLDER)"
 	@BUILD_FOLDER="$(BUILD_FOLDER)" DEPLOY_FOLDER="$(DEPLOY_FOLDER)" GRAPH_FOLDER="$(GRAPH_FOLDER)" \
 	EXAMPLE_DIRS="$(EXAMPLE_DIRS)" MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \

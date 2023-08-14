@@ -1,10 +1,10 @@
 -- | Main module to gather all the GOOL tests and generate them.
 module Main (main) where
 
-import GOOL.Drasil (Label, OOProg, ProgramSym(..), unCI, unJC, unPC, unCSC, 
+import GOOL.Drasil (Label, OOProg, ProgramSym(..), unCI, unJC, unPC, unCSC,
   unCPPC, unSC, FileData(..), ModData(..), ProgData(..), initialState)
 
-import Language.Drasil.Code (PackageSym(..), AuxiliarySym(..), AuxData(..), 
+import Language.Drasil.Code (PackageSym(..), AuxiliarySym(..), AuxData(..),
   PackData(..), unPP, unJP, unCSP, unCPPP, unSP, ImplementationType(..))
 
 import Text.PrettyPrint.HughesPJ (Doc, render)
@@ -31,7 +31,7 @@ main = do
   createDirectoryIfMissing False "python"
   setCurrentDirectory "python"
   genCode (classes unPC unPP)
-  setCurrentDirectory workingDir 
+  setCurrentDirectory workingDir
   createDirectoryIfMissing False "csharp"
   setCurrentDirectory "csharp"
   genCode (classes unCSC unCSP)
@@ -47,30 +47,30 @@ main = do
 
 -- | Gathers all information needed to generate code, sorts it, and calls the renderers.
 genCode :: [PackData] -> IO()
-genCode files = createCodeFiles (concatMap (\p -> replicate (length (progMods 
+genCode files = createCodeFiles (concatMap (\p -> replicate (length (progMods
   (packProg p)) + length (packAux p)) (progName $ packProg p)) files) $ makeCode (map (progMods . packProg) files) (map packAux files)
 
--- Cannot assign the list of tests in a where clause and re-use it because the 
--- "r" type variable needs to be instantiated to two different types 
+-- Cannot assign the list of tests in a where clause and re-use it because the
+-- "r" type variable needs to be instantiated to two different types
 -- (CodeInfo and a renderer) each time this function is called
 -- | Gathers the GOOL file tests and prepares them for rendering
-classes :: (OOProg r, PackageSym r') => (r (Program r) -> ProgData) -> 
+classes :: (OOProg r, PackageSym r') => (r (Program r) -> ProgData) ->
   (r' (Package r') -> PackData) -> [PackData]
-classes unRepr unRepr' = zipWith 
-  (\p gs -> let (p',gs') = runState p gs 
+classes unRepr unRepr' = zipWith
+  (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
-  in unRepr' $ package pd [makefile [] Program [] gs' pd]) 
+  in unRepr' $ package pd [makefile [] Program [] gs' pd])
   [helloWorld, patternTest, fileTests, vectorTest, nameGenTest]
   (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests, vectorTest, nameGenTest])
 
 -- | Formats code to be rendered.
 makeCode :: [[FileData]] -> [[AuxData]] -> [(FilePath, Doc)]
-makeCode files auxs = concat $ zipWith (++) 
-  (map (map (\fd -> (filePath fd, modDoc $ fileMod fd))) files) 
+makeCode files auxs = concat $ zipWith (++)
+  (map (map (\fd -> (filePath fd, modDoc $ fileMod fd))) files)
   (map (map (\ad -> (auxFilePath ad, auxDoc ad))) auxs)
-  
+
   -- zip (map filePath files) (map (modDoc . fileMod) files)
-  -- ++ zip (map auxFilePath auxs) (map auxDoc auxs) 
+  -- ++ zip (map auxFilePath auxs) (map auxDoc auxs)
 
 ------------------
 -- IO Functions --

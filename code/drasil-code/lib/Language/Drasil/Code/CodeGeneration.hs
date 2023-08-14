@@ -7,7 +7,7 @@ module Language.Drasil.Code.CodeGeneration (
 ) where
 
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..)) 
+import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..))
 
 import GOOL.Drasil (FileData(..), ModData(modDoc))
 

@@ -5,7 +5,7 @@ import Control.Lens ((^.))
 import Prelude hiding (exp)
 import Language.Drasil
 import Theory.Drasil (InstanceModel, imNoDeriv, qwC, qwUC, equationalModelN,
-  HasOutput(output))
+  output)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.SRSDocument (Block (Parallel))
@@ -112,7 +112,7 @@ dimLLQD = mkQuantDef dimlessLoad dimLLEq
 
 tolPre :: InstanceModel
 tolPre = imNoDeriv (equationalModelN (tolLoad ^. term) tolPreQD)
-  [qwC aspectRatio aspectRatioConstraint, qwUC tolStrDisFac] (qw tolLoad) []
+  [qwC aspectRatio aspectRatioConstraint, qwUC $ tolStrDisFac ^. output] (qw tolLoad) []
   [dRef astm2009] "tolLoad" [interpolating tolLoad dimlessloadVsARFig, arRef,
     jtolRef]
 
@@ -142,7 +142,7 @@ tolStrDisFacQD = mkQuantDef sdfTol $ ln (ln (recip_ (exactDbl 1 $- sy pbTol))
 
 probOfBreak :: InstanceModel
 probOfBreak = imNoDeriv (equationalModelN (probBr ^. term) probOfBreakQD)
-  [qwUC risk] (qw probBr) [probConstraint] (map dRef [astm2009, beasonEtAl1998]) "probOfBreak"
+  [qwUC $ risk ^. output] (qw probBr) [probConstraint] (map dRef [astm2009, beasonEtAl1998]) "probOfBreak"
   [riskRef]
 
 probOfBreakQD :: SimpleQDef
@@ -152,7 +152,7 @@ probOfBreakQD = mkQuantDef probBr (exactDbl 1 $- exp (neg (sy risk)))
 
 calofCapacity :: InstanceModel
 calofCapacity = imNoDeriv (equationalModelN (lRe ^. term) calofCapacityQD)
-  (qwUC nonFL : qwUC (glaTyFac ^. output) : [qwUC loadSF]) (qw lRe) []
+  (qwUC (nonFL ^. output) : qwUC (glaTyFac ^. output) : [qwUC loadSF]) (qw lRe) []
   [dRef astm2009] "calofCapacity" [lrCap, nonFLRef, gtfRef]
 
 calofCapacityQD :: SimpleQDef

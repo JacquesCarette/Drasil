@@ -82,8 +82,6 @@ instance HasOutput          InstanceModel where
 instance HasSymbol          InstanceModel where symbol = symbol . view output -- FIXME: InstanceModels don't necessarily need to have a symbol.
 -- | Finds the output 'Space' of the 'InstanceModel'.
 instance HasSpace           InstanceModel where typ = output . typ
--- | Finds the units of the 'InstanceModel'.
-instance MayHaveUnit        InstanceModel where getUnit = getUnit . view output
 
 -- | Expose all expressions that need to be type-checked.
 instance RequiresChecking InstanceModel Expr Space where

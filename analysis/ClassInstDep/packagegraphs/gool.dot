@@ -5,6 +5,7 @@ MethodData	[shape=oval, color=turquoise4, label="MethodData"];
 CppSrcCode	[shape=oval, color=turquoise4, label="CppSrcCode"];
 CppHdrCode	[shape=oval, color=turquoise4, label="CppHdrCode"];
 JavaCode	[shape=oval, color=turquoise4, label="JavaCode"];
+OptionalSpace	[shape=oval, color=turquoise4, label="OptionalSpace"];
 PythonCode	[shape=oval, color=turquoise4, label="PythonCode"];
 SwiftCode	[shape=oval, color=turquoise4, label="SwiftCode"];
 Terminator	[shape=oval, color=turquoise4, label="Terminator"];

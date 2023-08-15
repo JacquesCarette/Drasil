@@ -33,7 +33,7 @@ def func_d_offset(p_target, p_land):
 # \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
 # \return output message as a string
 def func_s(p_target, epsilon, d_offset):
-    if (math.fabs(d_offset / p_target) < epsilon) :
+    if (math.fabs(d_offset / p_target) < epsilon):
         return "The target was hit."
     elif (d_offset < 0.0) :
         return "The projectile fell short."

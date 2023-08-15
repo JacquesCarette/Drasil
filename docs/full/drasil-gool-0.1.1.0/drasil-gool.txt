@@ -1107,7 +1107,7 @@ returnStmt :: RenderSym r => Terminator -> SValue r -> MSStatement r
 valStmt :: RenderSym r => Terminator -> SValue r -> MSStatement r
 comment :: RenderSym r => Doc -> Label -> MSStatement r
 throw :: RenderSym r => (r (Value r) -> Doc) -> Terminator -> Label -> MSStatement r
-ifCond :: RenderSym r => (Doc -> Doc) -> Doc -> Doc -> Doc -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
+ifCond :: RenderSym r => (Doc -> Doc) -> Doc -> OptionalSpace -> Doc -> Doc -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 tryCatch :: RenderSym r => (r (Body r) -> r (Body r) -> Doc) -> MSBody r -> MSBody r -> MSStatement r
 construct :: RenderSym r => Label -> MS (r (Type r))
 param :: RenderSym r => (r (Variable r) -> Doc) -> SVariable r -> MSParameter r
@@ -1125,6 +1125,10 @@ commentedClass :: (RenderSym r, Monad r) => CS (r (BlockComment r)) -> SClass r 
 modFromData :: Label -> (Doc -> r (Module r)) -> FS Doc -> FSModule r
 fileDoc :: RenderSym r => String -> (r (Module r) -> r (Block r)) -> r (Block r) -> FSModule r -> SFile r
 docMod :: RenderSym r => ModuleDocRenderer -> String -> String -> [String] -> String -> SFile r -> SFile r
+newtype OptionalSpace
+OSpace :: Doc -> OptionalSpace
+[oSpace] :: OptionalSpace -> Doc
+defaultOptSpace :: OptionalSpace
 
 
 -- | Implementations defined here are valid in some, but not all, language

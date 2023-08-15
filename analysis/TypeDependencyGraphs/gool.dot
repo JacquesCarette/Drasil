@@ -490,6 +490,10 @@ digraph alltypes {
 		}
 	}
 	subgraph languagepolymorpich {
+		subgraph optionalspace{
+		OptionalSpace	[shape=oval, color=darkgreen, label="OptionalSpace"];
+		OptionalSpace -> Doc;
+		}
 	}
 	subgraph macros {
 	}

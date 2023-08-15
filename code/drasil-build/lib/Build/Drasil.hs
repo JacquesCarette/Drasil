@@ -6,7 +6,8 @@ module Build.Drasil (
     RuleTransformer(makeRule)
   -- ** Types and Functions
   -- AST
-  ,  Command, mkCheckedCommand, mkCommand, Dependencies, Rule, mkFile, mkRule
+  ,  Annotation, Command, mkCheckedCommand, mkCommand, Dependencies, Rule, 
+  mkFile, mkRule
     -- MakeString
   , MakeString, (+:+), makeS, mkFreeVar, mkImplicitVar, mkWindowsVar, mkOSVar
     -- ** Printers
@@ -14,7 +15,7 @@ module Build.Drasil (
   )
   where
 
-import Build.Drasil.Make.AST (Command, Dependencies, mkCheckedCommand, 
+import Build.Drasil.Make.AST (Annotation, Command, Dependencies, mkCheckedCommand, 
   mkCommand, mkFile, mkRule, Rule)
 import Build.Drasil.Make.Import (RuleTransformer(makeRule))
 import Build.Drasil.Make.MakeString ((+:+), makeS, MakeString, mkFreeVar, 

@@ -78,8 +78,6 @@ instance HasInputs          InstanceModel where
 instance HasOutput          InstanceModel where
   output          = imOutput . _1
   out_constraints = imOutput . _2
--- | Finds the output 'Space' of the 'InstanceModel'.
-instance HasSpace           InstanceModel where typ = output . typ
 -- | Finds the units of the 'InstanceModel'.
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view output
 

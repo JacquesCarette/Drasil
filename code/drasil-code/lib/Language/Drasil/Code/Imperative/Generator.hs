@@ -76,7 +76,6 @@ generator l dt sd chs spec = DrasilState {
   clsMap = cdm,
   defList = nub $ keys mem ++ keys cdm,
   getVal = folderVal chs,
-
   -- stateful
   currentModule = "",
   currentClass = "",

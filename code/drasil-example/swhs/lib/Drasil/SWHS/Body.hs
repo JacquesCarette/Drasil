@@ -6,7 +6,7 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (organization, section, variable)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
-import Theory.Drasil (GenDefn, InstanceModel)
+import Theory.Drasil (GenDefn, InstanceModel, output)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -101,7 +101,7 @@ purp = foldlSent_ [S "investigate the effect" `S.of_` S "employing",
   short phsChgMtrl, S "within a", phrase sWHT]
 
 symbMap :: ChunkDB
-symbMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
+symbMap = cdb (qw (heatEInPCM ^. output) : symbolsAll) -- heatEInPCM ?
   (nw heatEInPCM : map nw symbols ++ map nw acronymsFull
   ++ map nw thermocon ++ map nw units ++ map nw [m_2, m_3] ++ map nw [absTol, relTol]
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con

@@ -1,8 +1,10 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SglPend.Body where
 
+import Control.Lens ((^.))
+
 import Language.Drasil hiding (organization, section)
-import Theory.Drasil (TheoryModel)
+import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
@@ -125,7 +127,7 @@ si = SI {
 }
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw iMods ++ map qw symbols)
+symbMap = cdb (map (^. output) iMods ++ map qw symbols)
   (nw newtonSLR : nw progName : nw mass : nw len : nw kilogram : nw inValue : nw newton : nw degree : nw radian
     : nw unitVect : nw unitVectj : [nw errMsg, nw program] ++ map nw symbols ++
    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw physicCon' ++

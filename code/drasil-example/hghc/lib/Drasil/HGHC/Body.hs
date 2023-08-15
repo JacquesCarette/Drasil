@@ -11,6 +11,7 @@ import Data.Drasil.SI_Units (siUnits, fundamentals, derived, degree)
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Documentation (doccon, doccon')
 import Data.Drasil.Concepts.Math (mathcon)
+import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans)  
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
   
 srs :: Document
@@ -28,7 +29,7 @@ si = SI {
   _kind        = Doc.srs,
   _authors     = [spencerSmith],
   _quants      = symbols,
-  _purpose     = [],
+  _purpose     = [purp],
   _background  = [],
   _concepts    = [] :: [UnitalChunk],
   _instModels  = [], -- FIXME; empty _instModels
@@ -56,6 +57,9 @@ mkSRS = [TableOfContents,
           Description Verbose IncludeUnits] HideDerivation
         , IMs [] [] HideDerivation
       ]]]
+
+purp :: Sentence
+purp = foldlSent [S "describes", phrase CT.heatTrans, S "coefficients related to clad"]
 
 symbMap :: ChunkDB
 symbMap = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived

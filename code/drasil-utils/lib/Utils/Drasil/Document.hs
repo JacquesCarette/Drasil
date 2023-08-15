@@ -1,5 +1,6 @@
 -- | Common 'Doc'-related functions for writting printers with a little more clarity.
-module Utils.Drasil.Document (blank, indent, (+:+.), indentList, drasilImage, contSep) where
+module Utils.Drasil.Document (blank, indent, (+:+.), indentList, drasilImage, 
+  contSep) where
 
 import Text.PrettyPrint.HughesPJ (Doc, nest, text, vcat)
 

@@ -1,1 +1,0 @@
-describes the modelling of a solar water heating system without phase change material.

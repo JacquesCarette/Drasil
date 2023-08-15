@@ -74,12 +74,12 @@ copy_datafiles() {
   echo "FIXME: Drasil should copy needed images and resources to the appropriate output directory to avoid needing the entirety of datafiles (for HTML)."
   rm -rf datafiles
   mkdir -p datafiles
-  cp -r "$CUR_DIR"datafiles/. datafiles/
+  cp -r "$CUR_DIR/datafiles/" datafiles/
 }
 
 copy_graphs() {
   rm -rf "$GRAPH_FOLDER"
-  cp -r "$CUR_DIR$GRAPH_FOLDER". "$GRAPH_FOLDER"
+  cp -r "$CUR_DIR$GRAPH_FOLDER" "$GRAPH_FOLDER"
 }
 
 copy_examples() {
@@ -95,14 +95,14 @@ copy_examples() {
         cp "$example/"SRS/PDF/*.pdf "$EXAMPLE_DEST$example_name/$SRS_DEST"
       fi
       if [ -d "$example/"SRS/HTML ]; then
-        cp -r "$example/"SRS/HTML/. "$EXAMPLE_DEST$example_name/$SRS_DEST"
+        cp -r "$example/"SRS/HTML/ "$EXAMPLE_DEST$example_name/$SRS_DEST"
       fi
       if [ -d "$example/"src ]; then
         mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST"
         for lang in "$example/"src/*; do
           lang_name=$(basename "$lang")
           mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST$lang_name"
-          cp -r "$lang/"html/. "$EXAMPLE_DEST$example_name/$DOX_DEST$lang_name/"
+          cp -r "$lang/" "$EXAMPLE_DEST$example_name/$DOX_DEST$lang_name/"
         done
         src_stub
       fi
@@ -114,21 +114,23 @@ copy_examples() {
           for lang in "$v/"src/*; do
             lang_name=$(basename "$lang")
             mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST$v_name/$lang_name"
-            cp -r "$lang/"html/. "$EXAMPLE_DEST$example_name/$DOX_DEST$v_name/$lang_name/"
+            cp -r "$lang/" "$EXAMPLE_DEST$example_name/$DOX_DEST$v_name/$lang_name/"
           done
         done
         src_stub
       fi
     fi
-    src_stub() {
-      # We don't expose code in deploy. It's more conveneient to link to GitHub's directory
-      # We place a stub file which Hakyll will replace.
-      REL_PATH=$(cd "$CUR_DIR" && "$MAKE" deploy_code_path | grep "$example_name" | cut -d"$DEPLOY_CODE_PATH_KV_SEP" -f 2-)
-      # On a real deploy, `deploy` folder is itself a git repo, thus we need to ensure the path lookup is in the outer Drasil repo.
-      for p in $REL_PATH; do
-        ls -d "$(cd "$CUR_DIR" && git rev-parse --show-toplevel)/$p"*/ | rev | cut -d/ -f2 | rev | tr '\n' '\0' | xargs -0 printf "$p%s\n" >> "$EXAMPLE_DEST$example_name/src"
-      done
-    }
+  done
+}
+
+
+src_stub() {
+  # We don't expose code in deploy. It's more conveneient to link to GitHub's directory
+  # We place a stub file which Hakyll will replace.
+  REL_PATH=$(cd "$CUR_DIR" && "$MAKE" deploy_code_path | grep "$example_name" | cut -d"$DEPLOY_CODE_PATH_KV_SEP" -f 2-)
+  # On a real deploy, `deploy` folder is itself a git repo, thus we need to ensure the path lookup is in the outer Drasil repo.
+  for p in $REL_PATH; do
+    ls -d "$(cd "$CUR_DIR" && git rev-parse --show-toplevel)/$p"*/ | rev | cut -d/ -f2 | rev | tr '\n' '\0' | xargs -0 printf "$p%s\n" >> "$EXAMPLE_DEST$example_name/src"
   done
 }
 
@@ -137,8 +139,7 @@ copy_images() {
     rm -rf "$CUR_DIR"deploy/images
   fi
   mkdir -p "$CUR_DIR"deploy/images
-  cp -r "$CUR_DIR"drasil-website/WebInfo/images/* "$CUR_DIR"deploy/images
-  
+  cp -r "$CUR_DIR/drasil-website/WebInfo/images/" "$CUR_DIR/deploy"
 }
 
 copy_analysis() {
@@ -153,7 +154,7 @@ copy_traceygraphs() {
 
 copy_website() {
   cd "$CUR_DIR$DEPLOY_FOLDER"
-  cp -r "$CUR_DIR$WEBSITE_FOLDER". .
+  cp -r "$CUR_DIR$WEBSITE_FOLDER" .
 
   # src stubs were consumed by site generator; safe to delete those.
   rm "$EXAMPLE_DEST"*/src

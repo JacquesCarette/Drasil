@@ -105,6 +105,7 @@ import Data.Maybe (fromMaybe)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, lbrace, rbrace, braces, brackets, colon, space, doubleQuotes)
 import qualified Text.PrettyPrint.HughesPJ as D (float)
+import Metadata.Drasil.DrasilMetaCall (drasilMeta, DrasilMeta(..), watermark)
 
 swiftExt :: String
 swiftExt = "swift"
@@ -1161,7 +1162,7 @@ swiftModDoc desc as date m = m : [desc | not (null desc)] ++
   [swiftDocCommandInit ++ swiftAuthorDoc ++ swiftDocCommandSep ++ stringList as 
     | not (null as)]
   ++ [swiftDocCommandInit ++ swiftDateDoc ++ swiftDocCommandSep ++ date 
-    | not (null date)]
+    | not (null date)] ++ [swiftDocCommandInit ++ watermark ++ version drasilMeta]
 
 swiftDocCommandInit, swiftDocCommandSep, swiftParamDoc, swiftRetDoc,
   swiftAuthorDoc, swiftDateDoc :: String

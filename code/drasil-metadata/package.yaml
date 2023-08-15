@@ -11,7 +11,10 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
+- aeson
+- template-haskell
 - drasil-lang
+- drasil-utils
 
 ghc-options:
 - -Wall
@@ -21,6 +24,7 @@ library:
   source-dirs: lib
   exposed-modules:
   - Data.Drasil.Domains
+  - Metadata.Drasil.DrasilMetaCall
   when:
   - condition: false
     other-modules: Paths_drasil_metadata

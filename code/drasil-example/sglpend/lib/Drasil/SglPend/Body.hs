@@ -17,7 +17,7 @@ import Data.Drasil.Concepts.Documentation (srsDomains, doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
-import Data.Drasil.Concepts.Physics (physicCon, physicCon')
+import Data.Drasil.Concepts.Physics (physicCon, physicCon', motion, pendulum)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
 import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Domains (physics)
@@ -28,7 +28,7 @@ import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Data.Drasil.Quantities.Physics (physicscon)
 
 import Drasil.DblPend.Assumptions (assumpSingle)
-import Drasil.DblPend.Body (justification, charsOfReader, purp,
+import Drasil.DblPend.Body (justification, charsOfReader,
   sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,
   userCharacteristicsIntro)
 import qualified Drasil.DblPend.Body as DPD (tMods)
@@ -109,8 +109,8 @@ si = SI {
   _sys         = progName, 
   _kind        = Doc.srs,
   _authors     = [olu],
-  _purpose     = [],
-  _background  = [purp],
+  _purpose     = [purp],
+  _background  = [],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,
@@ -125,6 +125,9 @@ si = SI {
   _usedinfodb  = usedDB,
    refdb       = refDB
 }
+
+purp :: Sentence
+purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pendulum]
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbols)

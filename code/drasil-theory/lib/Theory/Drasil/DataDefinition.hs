@@ -90,8 +90,6 @@ instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. ui
 instance HasDerivation      DataDefinition where derivations = ddPkt pktMD
 -- | Finds any additional notes for the 'DataDefinition where'.
 instance HasAdditionalNotes DataDefinition where getNotes = ddPkt pktSS
--- | Finds the units of the 'QDefinition' used to make the 'DataDefinition where'.
-instance MayHaveUnit        DataDefinition where getUnit = either getUnit getUnit . qdFromDD
 -- | Finds the 'ShortName' of the 'DataDefinition where'.
 instance HasShortName       DataDefinition where shortname = (^. ddPkt pktSN)
 -- | Finds the reference address of a 'DataDefinition where'.

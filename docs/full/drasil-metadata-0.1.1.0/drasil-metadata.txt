@@ -57,3 +57,29 @@ documentc :: IdeaDict
 --   
 --   Various domains that are used in Drasil. May have an abbreviation.
 knowledgemng :: IdeaDict
+
+module Metadata.Drasil.DrasilMeta
+
+-- | Create DrasilMeta newtype
+newtype DrasilMeta
+DrasilMeta :: String -> DrasilMeta
+[version] :: DrasilMeta -> String
+
+-- | Configures drasilMeta at compile-time
+drasilMetaCfg :: Q Exp
+instance Language.Haskell.TH.Syntax.Lift Metadata.Drasil.DrasilMeta.DrasilMeta
+instance GHC.Show.Show Metadata.Drasil.DrasilMeta.DrasilMeta
+instance GHC.Generics.Generic Metadata.Drasil.DrasilMeta.DrasilMeta
+instance Data.Aeson.Types.ToJSON.ToJSON Metadata.Drasil.DrasilMeta.DrasilMeta
+instance Data.Aeson.Types.FromJSON.FromJSON Metadata.Drasil.DrasilMeta.DrasilMeta
+
+module Metadata.Drasil.DrasilMetaCall
+
+-- | Reads drasilMeta at compile-time
+drasilMeta :: DrasilMeta
+
+-- | Create DrasilMeta newtype
+newtype DrasilMeta
+DrasilMeta :: String -> DrasilMeta
+[version] :: DrasilMeta -> String
+watermark :: String

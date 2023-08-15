@@ -1,4 +1,12 @@
 digraph alltypes {
 	subgraph domains {
 	}
+	subgraph drailmetas {
+		subgraph drasilmeta{
+		DrasilMeta	[shape=oval, color=darkgreen, label="DrasilMeta"];
+		DrasilMeta -> String;
+		}
+	}
+	subgraph drailmetacalls {
+	}
 }

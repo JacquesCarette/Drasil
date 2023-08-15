@@ -1,0 +1,89 @@
+\hypertarget{class_dbl_pend_1_1_o_d_e}{}\doxysection{Dbl\+Pend.\+ODE Class Reference}
+\label{class_dbl_pend_1_1_o_d_e}\index{DblPend.ODE@{DblPend.ODE}}
+
+
+Class representing an \mbox{\hyperlink{class_dbl_pend_1_1_o_d_e}{ODE}} system.  
+
+
+Inheritance diagram for Dbl\+Pend.\+ODE\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_dbl_pend_1_1_o_d_e}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_dbl_pend_1_1_o_d_e_af3d70930b9c3fcdbf2e0e10b5a70ceae}{ODE}} (double m\+\_\+1, double m\+\_\+2, double L\+\_\+1, double L\+\_\+2)
+\begin{DoxyCompactList}\small\item\em Constructor for \mbox{\hyperlink{class_dbl_pend_1_1_o_d_e}{ODE}} objects. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_dbl_pend_1_1_o_d_e_aee71bc352dfa7906666983b317801ce4}{get\+Dimension}} ()
+\begin{DoxyCompactList}\small\item\em returns the \mbox{\hyperlink{class_dbl_pend_1_1_o_d_e}{ODE}} system dimension \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_dbl_pend_1_1_o_d_e_acc40a6cdef4c83f057b9379e9b2b01ce}{compute\+Derivatives}} (double t, double\mbox{[}$\,$\mbox{]} theta, double\mbox{[}$\,$\mbox{]} dtheta)
+\begin{DoxyCompactList}\small\item\em function representation of an \mbox{\hyperlink{class_dbl_pend_1_1_o_d_e}{ODE}} system \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class representing an \mbox{\hyperlink{class_dbl_pend_1_1_o_d_e}{ODE}} system. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_dbl_pend_1_1_o_d_e_af3d70930b9c3fcdbf2e0e10b5a70ceae}\label{class_dbl_pend_1_1_o_d_e_af3d70930b9c3fcdbf2e0e10b5a70ceae}} 
+\index{DblPend.ODE@{DblPend.ODE}!ODE@{ODE}}
+\index{ODE@{ODE}!DblPend.ODE@{DblPend.ODE}}
+\doxysubsubsection{\texorpdfstring{ODE()}{ODE()}}
+{\footnotesize\ttfamily Dbl\+Pend.\+ODE.\+ODE (\begin{DoxyParamCaption}\item[{double}]{m\+\_\+1,  }\item[{double}]{m\+\_\+2,  }\item[{double}]{L\+\_\+1,  }\item[{double}]{L\+\_\+2 }\end{DoxyParamCaption})}
+
+
+
+Constructor for \mbox{\hyperlink{class_dbl_pend_1_1_o_d_e}{ODE}} objects. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em m\+\_\+1} & mass of the first object (kg) \\
+\hline
+{\em m\+\_\+2} & mass of the second object (kg) \\
+\hline
+{\em L\+\_\+1} & length of the first rod (m) \\
+\hline
+{\em L\+\_\+2} & length of the second rod (m) \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_dbl_pend_1_1_o_d_e_acc40a6cdef4c83f057b9379e9b2b01ce}\label{class_dbl_pend_1_1_o_d_e_acc40a6cdef4c83f057b9379e9b2b01ce}} 
+\index{DblPend.ODE@{DblPend.ODE}!computeDerivatives@{computeDerivatives}}
+\index{computeDerivatives@{computeDerivatives}!DblPend.ODE@{DblPend.ODE}}
+\doxysubsubsection{\texorpdfstring{computeDerivatives()}{computeDerivatives()}}
+{\footnotesize\ttfamily void Dbl\+Pend.\+ODE.\+compute\+Derivatives (\begin{DoxyParamCaption}\item[{double}]{t,  }\item[{double\mbox{[}$\,$\mbox{]}}]{theta,  }\item[{double\mbox{[}$\,$\mbox{]}}]{dtheta }\end{DoxyParamCaption})}
+
+
+
+function representation of an \mbox{\hyperlink{class_dbl_pend_1_1_o_d_e}{ODE}} system 
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & current independent variable value in \mbox{\hyperlink{class_dbl_pend_1_1_o_d_e}{ODE}} solution \\
+\hline
+{\em theta} & dependent variables (rad) \\
+\hline
+{\em dtheta} & change in dependent variables (rad) \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_dbl_pend_1_1_o_d_e_aee71bc352dfa7906666983b317801ce4}\label{class_dbl_pend_1_1_o_d_e_aee71bc352dfa7906666983b317801ce4}} 
+\index{DblPend.ODE@{DblPend.ODE}!getDimension@{getDimension}}
+\index{getDimension@{getDimension}!DblPend.ODE@{DblPend.ODE}}
+\doxysubsubsection{\texorpdfstring{getDimension()}{getDimension()}}
+{\footnotesize\ttfamily int Dbl\+Pend.\+ODE.\+get\+Dimension (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+returns the \mbox{\hyperlink{class_dbl_pend_1_1_o_d_e}{ODE}} system dimension 
+
+\begin{DoxyReturn}{Returns}
+dimension of the \mbox{\hyperlink{class_dbl_pend_1_1_o_d_e}{ODE}} system 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Dbl\+Pend/\mbox{\hyperlink{_o_d_e_8java}{ODE.\+java}}\end{DoxyCompactItemize}

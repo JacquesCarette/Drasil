@@ -1,2 +1,7 @@
 digraph metadata{
+DrasilMeta	[shape=oval, color=turquoise4, label="DrasilMeta"];
+ToJSON	[shape=oval, color=pink, label="ToJSON"];
+FromJSON	[shape=oval, color=pink, label="FromJSON"];
+DrasilMeta -> ToJSON;
+DrasilMeta -> FromJSON;
 }

@@ -1,0 +1,70 @@
+\hypertarget{class_o_d_e}{}\doxysection{ODE Class Reference}
+\label{class_o_d_e}\index{ODE@{ODE}}
+
+
+Class representing an \mbox{\hyperlink{class_o_d_e}{ODE}} system.  
+
+
+
+
+{\ttfamily \#include $<$ODE.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_o_d_e_a0f9ea2bf87138ac16c42408cf1012420}{ODE}} (double K\+\_\+p, double K\+\_\+d, double r\+\_\+t)
+\begin{DoxyCompactList}\small\item\em Constructor for \mbox{\hyperlink{class_o_d_e}{ODE}} objects. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_o_d_e_afabe9f03639cd9a943e5c81ce5958059}{operator()}} (vector$<$ double $>$ y\+\_\+t, vector$<$ double $>$ \&dy\+\_\+t, double t)
+\begin{DoxyCompactList}\small\item\em function representation of \mbox{\hyperlink{class_o_d_e}{ODE}} system \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class representing an \mbox{\hyperlink{class_o_d_e}{ODE}} system. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_o_d_e_a0f9ea2bf87138ac16c42408cf1012420}\label{class_o_d_e_a0f9ea2bf87138ac16c42408cf1012420}} 
+\index{ODE@{ODE}!ODE@{ODE}}
+\index{ODE@{ODE}!ODE@{ODE}}
+\doxysubsubsection{\texorpdfstring{ODE()}{ODE()}}
+{\footnotesize\ttfamily ODE\+::\+ODE (\begin{DoxyParamCaption}\item[{double}]{K\+\_\+p,  }\item[{double}]{K\+\_\+d,  }\item[{double}]{r\+\_\+t }\end{DoxyParamCaption})}
+
+
+
+Constructor for \mbox{\hyperlink{class_o_d_e}{ODE}} objects. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em K\+\_\+p} & Proportional Gain\+: Gain constant of the proportional controller \\
+\hline
+{\em K\+\_\+d} & Derivative Gain\+: Gain constant of the derivative controller \\
+\hline
+{\em r\+\_\+t} & Set-\/\+Point\+: The desired value that the control system must reach. This also knows as the reference variable \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_o_d_e_afabe9f03639cd9a943e5c81ce5958059}\label{class_o_d_e_afabe9f03639cd9a943e5c81ce5958059}} 
+\index{ODE@{ODE}!operator()@{operator()}}
+\index{operator()@{operator()}!ODE@{ODE}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily void ODE\+::operator() (\begin{DoxyParamCaption}\item[{vector$<$ double $>$}]{y\+\_\+t,  }\item[{vector$<$ double $>$ \&}]{dy\+\_\+t,  }\item[{double}]{t }\end{DoxyParamCaption})}
+
+
+
+function representation of \mbox{\hyperlink{class_o_d_e}{ODE}} system 
+
+
+\begin{DoxyParams}{Parameters}
+{\em y\+\_\+t} & Process Variable\+: The output value from the power plant \\
+\hline
+{\em dy\+\_\+t} & change in Process Variable \\
+\hline
+{\em t} & current independent variable value in \mbox{\hyperlink{class_o_d_e}{ODE}} solution \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{_o_d_e_8hpp}{ODE.\+hpp}}\end{DoxyCompactItemize}

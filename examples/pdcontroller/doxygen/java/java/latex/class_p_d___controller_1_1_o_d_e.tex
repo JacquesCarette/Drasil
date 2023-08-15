@@ -1,0 +1,87 @@
+\hypertarget{class_p_d___controller_1_1_o_d_e}{}\doxysection{PD\+\_\+\+Controller.\+ODE Class Reference}
+\label{class_p_d___controller_1_1_o_d_e}\index{PD\_Controller.ODE@{PD\_Controller.ODE}}
+
+
+Class representing an \mbox{\hyperlink{class_p_d___controller_1_1_o_d_e}{ODE}} system.  
+
+
+Inheritance diagram for PD\+\_\+\+Controller.\+ODE\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_p_d___controller_1_1_o_d_e}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_p_d___controller_1_1_o_d_e_a88e183b3b9924581a52f37e0d81ea70a}{ODE}} (double K\+\_\+p, double K\+\_\+d, double r\+\_\+t)
+\begin{DoxyCompactList}\small\item\em Constructor for \mbox{\hyperlink{class_p_d___controller_1_1_o_d_e}{ODE}} objects. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_p_d___controller_1_1_o_d_e_a2c8e8e66682162d935e7c64fa5aff5a7}{get\+Dimension}} ()
+\begin{DoxyCompactList}\small\item\em returns the \mbox{\hyperlink{class_p_d___controller_1_1_o_d_e}{ODE}} system dimension \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_p_d___controller_1_1_o_d_e_a9c2ccc067fbe72c8a7aab1ae93facb93}{compute\+Derivatives}} (double t, double\mbox{[}$\,$\mbox{]} y\+\_\+t, double\mbox{[}$\,$\mbox{]} dy\+\_\+t)
+\begin{DoxyCompactList}\small\item\em function representation of an \mbox{\hyperlink{class_p_d___controller_1_1_o_d_e}{ODE}} system \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class representing an \mbox{\hyperlink{class_p_d___controller_1_1_o_d_e}{ODE}} system. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_p_d___controller_1_1_o_d_e_a88e183b3b9924581a52f37e0d81ea70a}\label{class_p_d___controller_1_1_o_d_e_a88e183b3b9924581a52f37e0d81ea70a}} 
+\index{PD\_Controller.ODE@{PD\_Controller.ODE}!ODE@{ODE}}
+\index{ODE@{ODE}!PD\_Controller.ODE@{PD\_Controller.ODE}}
+\doxysubsubsection{\texorpdfstring{ODE()}{ODE()}}
+{\footnotesize\ttfamily PD\+\_\+\+Controller.\+ODE.\+ODE (\begin{DoxyParamCaption}\item[{double}]{K\+\_\+p,  }\item[{double}]{K\+\_\+d,  }\item[{double}]{r\+\_\+t }\end{DoxyParamCaption})}
+
+
+
+Constructor for \mbox{\hyperlink{class_p_d___controller_1_1_o_d_e}{ODE}} objects. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em K\+\_\+p} & Proportional Gain\+: Gain constant of the proportional controller \\
+\hline
+{\em K\+\_\+d} & Derivative Gain\+: Gain constant of the derivative controller \\
+\hline
+{\em r\+\_\+t} & Set-\/\+Point\+: The desired value that the control system must reach. This also knows as the reference variable \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_p_d___controller_1_1_o_d_e_a9c2ccc067fbe72c8a7aab1ae93facb93}\label{class_p_d___controller_1_1_o_d_e_a9c2ccc067fbe72c8a7aab1ae93facb93}} 
+\index{PD\_Controller.ODE@{PD\_Controller.ODE}!computeDerivatives@{computeDerivatives}}
+\index{computeDerivatives@{computeDerivatives}!PD\_Controller.ODE@{PD\_Controller.ODE}}
+\doxysubsubsection{\texorpdfstring{computeDerivatives()}{computeDerivatives()}}
+{\footnotesize\ttfamily void PD\+\_\+\+Controller.\+ODE.\+compute\+Derivatives (\begin{DoxyParamCaption}\item[{double}]{t,  }\item[{double\mbox{[}$\,$\mbox{]}}]{y\+\_\+t,  }\item[{double\mbox{[}$\,$\mbox{]}}]{dy\+\_\+t }\end{DoxyParamCaption})}
+
+
+
+function representation of an \mbox{\hyperlink{class_p_d___controller_1_1_o_d_e}{ODE}} system 
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & current independent variable value in \mbox{\hyperlink{class_p_d___controller_1_1_o_d_e}{ODE}} solution \\
+\hline
+{\em y\+\_\+t} & Process Variable \\
+\hline
+{\em dy\+\_\+t} & change in Process Variable \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_p_d___controller_1_1_o_d_e_a2c8e8e66682162d935e7c64fa5aff5a7}\label{class_p_d___controller_1_1_o_d_e_a2c8e8e66682162d935e7c64fa5aff5a7}} 
+\index{PD\_Controller.ODE@{PD\_Controller.ODE}!getDimension@{getDimension}}
+\index{getDimension@{getDimension}!PD\_Controller.ODE@{PD\_Controller.ODE}}
+\doxysubsubsection{\texorpdfstring{getDimension()}{getDimension()}}
+{\footnotesize\ttfamily int PD\+\_\+\+Controller.\+ODE.\+get\+Dimension (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+returns the \mbox{\hyperlink{class_p_d___controller_1_1_o_d_e}{ODE}} system dimension 
+
+\begin{DoxyReturn}{Returns}
+dimension of the \mbox{\hyperlink{class_p_d___controller_1_1_o_d_e}{ODE}} system 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+PD\+\_\+\+Controller/\mbox{\hyperlink{_o_d_e_8java}{ODE.\+java}}\end{DoxyCompactItemize}

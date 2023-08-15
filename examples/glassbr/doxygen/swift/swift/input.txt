@@ -1,0 +1,20 @@
+# plate length (long dimension) (m)
+1.6
+# plate width (short dimension) (m)
+1.5
+# charge weight (kg)
+10.0
+# tolerable probability of breakage
+8.0e-3
+# TNT equivalent factor
+1.0
+# glass type
+HS
+# nominal thickness t is in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0} (mm)
+10.0
+# stand off distance (x-component) (m)
+0.0
+# stand off distance (y-component) (m)
+1.5
+# stand off distance (z-component) (m)
+11.0

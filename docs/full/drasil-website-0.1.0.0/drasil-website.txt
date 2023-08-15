@@ -187,14 +187,11 @@ module Drasil.Website.Example
 
 -- | Each Example gets placed in here.
 data Example
-E :: SystemInformation -> Sentence -> [Choices] -> FilePath -> FilePath -> Example
+E :: SystemInformation -> [Choices] -> FilePath -> FilePath -> Example
 
 -- | Example system information. Used to get the system name and
 --   abbreviation.
 [sysInfoE] :: Example -> SystemInformation
-
--- | System description. Currently hard-coded.
-[descE] :: Example -> Sentence
 
 -- | Some examples have generated code with specific choices. They may also
 --   have more than one set of choices, so we need a list.
@@ -209,20 +206,17 @@ E :: SystemInformation -> Sentence -> [Choices] -> FilePath -> FilePath -> Examp
 -- | Records example system information.
 allExampleSI :: [SystemInformation]
 
--- | Records example descriptions.
-allExampleDesc :: [Sentence]
-
 -- | Records example choices. The order of the list must match up with that
 --   in <a>allExampleSI</a>, or the Case Studies Table will be incorrect.
 allExampleChoices :: [[Choices]]
 
 -- | Combine system info, description, choices, and file paths into one
 --   nice package.
-allExamples :: [SystemInformation] -> [Sentence] -> [[Choices]] -> FilePath -> FilePath -> [Example]
+allExamples :: [SystemInformation] -> [[Choices]] -> FilePath -> FilePath -> [Example]
 
 -- | Calls <a>allExamples</a> on <a>allExampleSI</a>,
---   <a>allExampleDesc</a>, and <a>allExampleChoices</a>. Can be considered
---   a "default" version of <a>allExamples</a>.
+--   <tt>allExampleDesc</tt>, and <a>allExampleChoices</a>. Can be
+--   considered a "default" version of <a>allExamples</a>.
 examples :: FilePath -> FilePath -> [Example]
 
 -- | Create the full list of examples.
@@ -255,36 +249,6 @@ exampleTitle :: Sentence
 
 -- | Example section introduction.
 exampleIntro :: Sentence
-
--- | Project descriptions.
-sglPendulumDesc :: Sentence
-
--- | Project descriptions.
-dblPendulumDesc :: Sentence
-
--- | Project descriptions.
-gamePhysDesc :: Sentence
-
--- | Project descriptions.
-glassBRDesc :: Sentence
-
--- | Project descriptions.
-hghcDesc :: Sentence
-
--- | Project descriptions.
-noPCMDesc :: Sentence
-
--- | Project descriptions.
-pdControllerDesc :: Sentence
-
--- | Project descriptions.
-projectileDesc :: Sentence
-
--- | Project descriptions.
-sspDesc :: Sentence
-
--- | Project descriptions.
-swhsDesc :: Sentence
 
 -- | Example list titles.
 generatedCodeTitle :: String

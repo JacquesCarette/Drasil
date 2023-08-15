@@ -1,0 +1,135 @@
+\hypertarget{class_projectile_1_1_projectile}{}\doxysection{Projectile.\+Projectile Class Reference}
+\label{class_projectile_1_1_projectile}\index{Projectile.Projectile@{Projectile.Projectile}}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{class_projectile_1_1_projectile_ae80853b234b0e6a55dee2e0abed9d0a1}{main}} (String\mbox{[}$\,$\mbox{]} args)  throws File\+Not\+Found\+Exception, IOException 
+\begin{DoxyCompactList}\small\item\em Controls the flow of the program. \end{DoxyCompactList}\item 
+static float \mbox{\hyperlink{class_projectile_1_1_projectile_a34a7717e09a00a89d9153084d6c7dcef}{func\+\_\+t\+\_\+flight}} (Input\+Parameters in\+Params)  throws IOException 
+\begin{DoxyCompactList}\small\item\em Calculates flight duration\+: the time when the projectile lands (s) \end{DoxyCompactList}\item 
+static float \mbox{\hyperlink{class_projectile_1_1_projectile_a8212e2232b9fe4be924bb67fb479243a}{func\+\_\+p\+\_\+land}} (Input\+Parameters in\+Params)  throws IOException 
+\begin{DoxyCompactList}\small\item\em Calculates landing position\+: the distance from the launcher to the final position of the projectile (m) \end{DoxyCompactList}\item 
+static float \mbox{\hyperlink{class_projectile_1_1_projectile_a24e3432981007b7127a38ca663505de7}{func\+\_\+d\+\_\+offset}} (Input\+Parameters in\+Params, float p\+\_\+land)  throws IOException 
+\begin{DoxyCompactList}\small\item\em Calculates distance between the target position and the landing position\+: the offset between the target position and the landing position (m) \end{DoxyCompactList}\item 
+static String \mbox{\hyperlink{class_projectile_1_1_projectile_a3a698fc35ef74a82f8eaab0ec0e59ec6}{func\+\_\+s}} (Input\+Parameters in\+Params, float d\+\_\+offset)  throws IOException 
+\begin{DoxyCompactList}\small\item\em Calculates output message as a string. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{class_projectile_1_1_projectile_abd5fc833ded31443299ab63ecef34e2d}{write\+\_\+output}} (String s, float d\+\_\+offset, float t\+\_\+flight)  throws IOException 
+\begin{DoxyCompactList}\small\item\em Writes the output values to output.\+txt. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_projectile_1_1_projectile_a24e3432981007b7127a38ca663505de7}\label{class_projectile_1_1_projectile_a24e3432981007b7127a38ca663505de7}} 
+\index{Projectile.Projectile@{Projectile.Projectile}!func\_d\_offset@{func\_d\_offset}}
+\index{func\_d\_offset@{func\_d\_offset}!Projectile.Projectile@{Projectile.Projectile}}
+\doxysubsubsection{\texorpdfstring{func\_d\_offset()}{func\_d\_offset()}}
+{\footnotesize\ttfamily static float Projectile.\+Projectile.\+func\+\_\+d\+\_\+offset (\begin{DoxyParamCaption}\item[{Input\+Parameters}]{in\+Params,  }\item[{float}]{p\+\_\+land }\end{DoxyParamCaption}) throws IOException\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calculates distance between the target position and the landing position\+: the offset between the target position and the landing position (m) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em in\+Params} & structure holding the input values \\
+\hline
+{\em p\+\_\+land} & landing position\+: the distance from the launcher to the final position of the projectile (m) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+distance between the target position and the landing position\+: the offset between the target position and the landing position (m) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_projectile_1_1_projectile_a8212e2232b9fe4be924bb67fb479243a}\label{class_projectile_1_1_projectile_a8212e2232b9fe4be924bb67fb479243a}} 
+\index{Projectile.Projectile@{Projectile.Projectile}!func\_p\_land@{func\_p\_land}}
+\index{func\_p\_land@{func\_p\_land}!Projectile.Projectile@{Projectile.Projectile}}
+\doxysubsubsection{\texorpdfstring{func\_p\_land()}{func\_p\_land()}}
+{\footnotesize\ttfamily static float Projectile.\+Projectile.\+func\+\_\+p\+\_\+land (\begin{DoxyParamCaption}\item[{Input\+Parameters}]{in\+Params }\end{DoxyParamCaption}) throws IOException\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calculates landing position\+: the distance from the launcher to the final position of the projectile (m) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em in\+Params} & structure holding the input values \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+landing position\+: the distance from the launcher to the final position of the projectile (m) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_projectile_1_1_projectile_a3a698fc35ef74a82f8eaab0ec0e59ec6}\label{class_projectile_1_1_projectile_a3a698fc35ef74a82f8eaab0ec0e59ec6}} 
+\index{Projectile.Projectile@{Projectile.Projectile}!func\_s@{func\_s}}
+\index{func\_s@{func\_s}!Projectile.Projectile@{Projectile.Projectile}}
+\doxysubsubsection{\texorpdfstring{func\_s()}{func\_s()}}
+{\footnotesize\ttfamily static String Projectile.\+Projectile.\+func\+\_\+s (\begin{DoxyParamCaption}\item[{Input\+Parameters}]{in\+Params,  }\item[{float}]{d\+\_\+offset }\end{DoxyParamCaption}) throws IOException\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calculates output message as a string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em in\+Params} & structure holding the input values \\
+\hline
+{\em d\+\_\+offset} & distance between the target position and the landing position\+: the offset between the target position and the landing position (m) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+output message as a string 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_projectile_1_1_projectile_a34a7717e09a00a89d9153084d6c7dcef}\label{class_projectile_1_1_projectile_a34a7717e09a00a89d9153084d6c7dcef}} 
+\index{Projectile.Projectile@{Projectile.Projectile}!func\_t\_flight@{func\_t\_flight}}
+\index{func\_t\_flight@{func\_t\_flight}!Projectile.Projectile@{Projectile.Projectile}}
+\doxysubsubsection{\texorpdfstring{func\_t\_flight()}{func\_t\_flight()}}
+{\footnotesize\ttfamily static float Projectile.\+Projectile.\+func\+\_\+t\+\_\+flight (\begin{DoxyParamCaption}\item[{Input\+Parameters}]{in\+Params }\end{DoxyParamCaption}) throws IOException\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calculates flight duration\+: the time when the projectile lands (s) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em in\+Params} & structure holding the input values \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+flight duration\+: the time when the projectile lands (s) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_projectile_1_1_projectile_ae80853b234b0e6a55dee2e0abed9d0a1}\label{class_projectile_1_1_projectile_ae80853b234b0e6a55dee2e0abed9d0a1}} 
+\index{Projectile.Projectile@{Projectile.Projectile}!main@{main}}
+\index{main@{main}!Projectile.Projectile@{Projectile.Projectile}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily static void Projectile.\+Projectile.\+main (\begin{DoxyParamCaption}\item[{String\mbox{[}$\,$\mbox{]}}]{args }\end{DoxyParamCaption}) throws File\+Not\+Found\+Exception, IOException\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Controls the flow of the program. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em args} & List of command-\/line arguments \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_projectile_1_1_projectile_abd5fc833ded31443299ab63ecef34e2d}\label{class_projectile_1_1_projectile_abd5fc833ded31443299ab63ecef34e2d}} 
+\index{Projectile.Projectile@{Projectile.Projectile}!write\_output@{write\_output}}
+\index{write\_output@{write\_output}!Projectile.Projectile@{Projectile.Projectile}}
+\doxysubsubsection{\texorpdfstring{write\_output()}{write\_output()}}
+{\footnotesize\ttfamily static void Projectile.\+Projectile.\+write\+\_\+output (\begin{DoxyParamCaption}\item[{String}]{s,  }\item[{float}]{d\+\_\+offset,  }\item[{float}]{t\+\_\+flight }\end{DoxyParamCaption}) throws IOException\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Writes the output values to output.\+txt. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & output message as a string \\
+\hline
+{\em d\+\_\+offset} & distance between the target position and the landing position\+: the offset between the target position and the landing position (m) \\
+\hline
+{\em t\+\_\+flight} & flight duration\+: the time when the projectile lands (s) \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Projectile/\mbox{\hyperlink{_projectile_8java}{Projectile.\+java}}\end{DoxyCompactItemize}

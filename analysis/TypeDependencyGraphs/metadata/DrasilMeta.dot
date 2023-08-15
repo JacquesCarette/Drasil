@@ -1,0 +1,4 @@
+digraph drasilmeta{
+DrasilMeta	[shape=oval, color=darkgreen, label="DrasilMeta"];
+DrasilMeta -> String;
+}

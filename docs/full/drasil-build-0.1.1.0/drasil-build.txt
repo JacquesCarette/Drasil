@@ -222,6 +222,9 @@ module Build.Drasil
 class RuleTransformer c
 makeRule :: RuleTransformer c => c -> [Rule]
 
+-- | A Makefile Annotation is made of 0 or more <a>Comment</a>s
+type Annotation = [Comment]
+
 -- | A command is made up of <a>MakeString</a>s and command operators.
 data Command
 

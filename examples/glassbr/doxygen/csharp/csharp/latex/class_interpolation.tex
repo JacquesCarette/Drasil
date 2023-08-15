@@ -1,0 +1,133 @@
+\hypertarget{class_interpolation}{}\doxysection{Interpolation Class Reference}
+\label{class_interpolation}\index{Interpolation@{Interpolation}}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static double \mbox{\hyperlink{class_interpolation_a9ecf1a58082f238a3950afe1e8d49043}{lin\+\_\+interp}} (double x\+\_\+1, double y\+\_\+1, double x\+\_\+2, double y\+\_\+2, double x)
+\begin{DoxyCompactList}\small\item\em Performs linear interpolation. \end{DoxyCompactList}\item 
+static int \mbox{\hyperlink{class_interpolation_aa682d1ae3368c3dd5b12d6c9272a1591}{find}} (List$<$ double $>$ arr, double v)
+\begin{DoxyCompactList}\small\item\em Finds the array index for a value closest to the given value. \end{DoxyCompactList}\item 
+static List$<$ double $>$ \mbox{\hyperlink{class_interpolation_af87f82834f9257049e2fddfe3246ee93}{extract\+Column}} (List$<$ List$<$ double $>$$>$ mat, int j)
+\begin{DoxyCompactList}\small\item\em Extracts a column from a 2D matrix. \end{DoxyCompactList}\item 
+static double \mbox{\hyperlink{class_interpolation_a8d2c18e8fad1524567b95d48980c4ca6}{interpY}} (string filename, double x, double z)
+\begin{DoxyCompactList}\small\item\em Linearly interpolates a y value at given x and z values. \end{DoxyCompactList}\item 
+static double \mbox{\hyperlink{class_interpolation_a44182ba7b97ad0126819898dc0501719}{interpZ}} (string filename, double x, double y)
+\begin{DoxyCompactList}\small\item\em Linearly interpolates a z value at given x and y values. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_interpolation_af87f82834f9257049e2fddfe3246ee93}\label{class_interpolation_af87f82834f9257049e2fddfe3246ee93}} 
+\index{Interpolation@{Interpolation}!extractColumn@{extractColumn}}
+\index{extractColumn@{extractColumn}!Interpolation@{Interpolation}}
+\doxysubsubsection{\texorpdfstring{extractColumn()}{extractColumn()}}
+{\footnotesize\ttfamily static List$<$double$>$ Interpolation.\+extract\+Column (\begin{DoxyParamCaption}\item[{List$<$ List$<$ double $>$$>$}]{mat,  }\item[{int}]{j }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Extracts a column from a 2D matrix. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mat} & matrix from which column will be extracted \\
+\hline
+{\em j} & index \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+column of the given matrix at the given index 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_interpolation_aa682d1ae3368c3dd5b12d6c9272a1591}\label{class_interpolation_aa682d1ae3368c3dd5b12d6c9272a1591}} 
+\index{Interpolation@{Interpolation}!find@{find}}
+\index{find@{find}!Interpolation@{Interpolation}}
+\doxysubsubsection{\texorpdfstring{find()}{find()}}
+{\footnotesize\ttfamily static int Interpolation.\+find (\begin{DoxyParamCaption}\item[{List$<$ double $>$}]{arr,  }\item[{double}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Finds the array index for a value closest to the given value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arr} & array in which value should be found \\
+\hline
+{\em v} & value whose index will be found \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+index of given value in given array 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_interpolation_a8d2c18e8fad1524567b95d48980c4ca6}\label{class_interpolation_a8d2c18e8fad1524567b95d48980c4ca6}} 
+\index{Interpolation@{Interpolation}!interpY@{interpY}}
+\index{interpY@{interpY}!Interpolation@{Interpolation}}
+\doxysubsubsection{\texorpdfstring{interpY()}{interpY()}}
+{\footnotesize\ttfamily static double Interpolation.\+interpY (\begin{DoxyParamCaption}\item[{string}]{filename,  }\item[{double}]{x,  }\item[{double}]{z }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Linearly interpolates a y value at given x and z values. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & name of file with x y and z data \\
+\hline
+{\em x} & x-\/coordinate to interpolate at \\
+\hline
+{\em z} & z-\/coordinate to interpolate at \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+y value interpolated at given x and z values 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_interpolation_a44182ba7b97ad0126819898dc0501719}\label{class_interpolation_a44182ba7b97ad0126819898dc0501719}} 
+\index{Interpolation@{Interpolation}!interpZ@{interpZ}}
+\index{interpZ@{interpZ}!Interpolation@{Interpolation}}
+\doxysubsubsection{\texorpdfstring{interpZ()}{interpZ()}}
+{\footnotesize\ttfamily static double Interpolation.\+interpZ (\begin{DoxyParamCaption}\item[{string}]{filename,  }\item[{double}]{x,  }\item[{double}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Linearly interpolates a z value at given x and y values. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & name of file with x y and z data \\
+\hline
+{\em x} & x-\/coordinate to interpolate at \\
+\hline
+{\em y} & y-\/coordinate to interpolate at \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+z value interpolated at given x and y values 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_interpolation_a9ecf1a58082f238a3950afe1e8d49043}\label{class_interpolation_a9ecf1a58082f238a3950afe1e8d49043}} 
+\index{Interpolation@{Interpolation}!lin\_interp@{lin\_interp}}
+\index{lin\_interp@{lin\_interp}!Interpolation@{Interpolation}}
+\doxysubsubsection{\texorpdfstring{lin\_interp()}{lin\_interp()}}
+{\footnotesize\ttfamily static double Interpolation.\+lin\+\_\+interp (\begin{DoxyParamCaption}\item[{double}]{x\+\_\+1,  }\item[{double}]{y\+\_\+1,  }\item[{double}]{x\+\_\+2,  }\item[{double}]{y\+\_\+2,  }\item[{double}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Performs linear interpolation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x\+\_\+1} & lower x-\/coordinate \\
+\hline
+{\em y\+\_\+1} & lower y-\/coordinate \\
+\hline
+{\em x\+\_\+2} & upper x-\/coordinate \\
+\hline
+{\em y\+\_\+2} & upper y-\/coordinate \\
+\hline
+{\em x} & x-\/coordinate to interpolate at \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+y value interpolated at given x value 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{_interpolation_8cs}{Interpolation.\+cs}}\end{DoxyCompactItemize}

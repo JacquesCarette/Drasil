@@ -1,0 +1,249 @@
+\hypertarget{class_glass_b_r_1_1_calculations}{}\doxysection{Glass\+BR.\+Calculations Class Reference}
+\label{class_glass_b_r_1_1_calculations}\index{GlassBR.Calculations@{GlassBR.Calculations}}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static double \mbox{\hyperlink{class_glass_b_r_1_1_calculations_a6cc0d5718f6608b4019cf7226dd7f307}{func\+\_\+\+J\+\_\+tol}} (\mbox{\hyperlink{class_glass_b_r_1_1_input_parameters}{Input\+Parameters}} in\+Params)  throws IOException 
+\begin{DoxyCompactList}\small\item\em Calculates stress distribution factor (Function) based on Pbtol. \end{DoxyCompactList}\item 
+static double \mbox{\hyperlink{class_glass_b_r_1_1_calculations_a52504fca4f10fabfefff4c6794b87443}{func\+\_\+q}} (\mbox{\hyperlink{class_glass_b_r_1_1_input_parameters}{Input\+Parameters}} in\+Params)  throws Exception, File\+Not\+Found\+Exception, IOException 
+\begin{DoxyCompactList}\small\item\em Calculates applied load (demand)\+: 3 second duration equivalent pressure (Pa) \end{DoxyCompactList}\item 
+static double \mbox{\hyperlink{class_glass_b_r_1_1_calculations_ad6a814a5fbe19ea721ad85d7889d7215}{func\+\_\+q\+\_\+hat}} (\mbox{\hyperlink{class_glass_b_r_1_1_input_parameters}{Input\+Parameters}} in\+Params, double q)  throws IOException 
+\begin{DoxyCompactList}\small\item\em Calculates dimensionless load. \end{DoxyCompactList}\item 
+static double \mbox{\hyperlink{class_glass_b_r_1_1_calculations_a81c222dec10f9352263bac7e3602c76c}{func\+\_\+q\+\_\+hat\+\_\+tol}} (\mbox{\hyperlink{class_glass_b_r_1_1_input_parameters}{Input\+Parameters}} in\+Params, double J\+\_\+tol)  throws Exception, File\+Not\+Found\+Exception, IOException 
+\begin{DoxyCompactList}\small\item\em Calculates tolerable load. \end{DoxyCompactList}\item 
+static double \mbox{\hyperlink{class_glass_b_r_1_1_calculations_a3bf3bc4b0a1bceefd48bab25f52ef423}{func\+\_\+J}} (\mbox{\hyperlink{class_glass_b_r_1_1_input_parameters}{Input\+Parameters}} in\+Params, double q\+\_\+hat)  throws Exception, File\+Not\+Found\+Exception, IOException 
+\begin{DoxyCompactList}\small\item\em Calculates stress distribution factor (Function) \end{DoxyCompactList}\item 
+static double \mbox{\hyperlink{class_glass_b_r_1_1_calculations_a45272d5f53066abcb633dc2effa2e8ca}{func\+\_\+\+NFL}} (\mbox{\hyperlink{class_glass_b_r_1_1_input_parameters}{Input\+Parameters}} in\+Params, double q\+\_\+hat\+\_\+tol)  throws IOException 
+\begin{DoxyCompactList}\small\item\em Calculates non-\/factored load\+: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa) \end{DoxyCompactList}\item 
+static double \mbox{\hyperlink{class_glass_b_r_1_1_calculations_abb3c626b9ad0bce656cf947460d95e9e}{func\+\_\+B}} (\mbox{\hyperlink{class_glass_b_r_1_1_input_parameters}{Input\+Parameters}} in\+Params, double J)  throws IOException 
+\begin{DoxyCompactList}\small\item\em Calculates risk of failure. \end{DoxyCompactList}\item 
+static double \mbox{\hyperlink{class_glass_b_r_1_1_calculations_a3e88a57e188fa774d0cb1f91328c0374}{func\+\_\+\+LR}} (\mbox{\hyperlink{class_glass_b_r_1_1_input_parameters}{Input\+Parameters}} in\+Params, double NFL)  throws IOException 
+\begin{DoxyCompactList}\small\item\em Calculates load resistance\+: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref\+: astm2009 (Pa) \end{DoxyCompactList}\item 
+static double \mbox{\hyperlink{class_glass_b_r_1_1_calculations_a583dfcd274cfdc99e2b63d356e0a786a}{func\+\_\+\+P\+\_\+b}} (double B)  throws IOException 
+\begin{DoxyCompactList}\small\item\em Calculates probability of breakage\+: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref\+: astm2016) \end{DoxyCompactList}\item 
+static boolean \mbox{\hyperlink{class_glass_b_r_1_1_calculations_af74e27138a5e84b19ecd46c724b2d448}{func\+\_\+is\+Safe\+LR}} (double LR, double q)  throws IOException 
+\begin{DoxyCompactList}\small\item\em Calculates 3 second load equivalent resistance safety requirement. \end{DoxyCompactList}\item 
+static boolean \mbox{\hyperlink{class_glass_b_r_1_1_calculations_aa2ca8df4d38d915cc64c8f0ab602c199}{func\+\_\+is\+Safe\+Pb}} (\mbox{\hyperlink{class_glass_b_r_1_1_input_parameters}{Input\+Parameters}} in\+Params, double P\+\_\+b)  throws IOException 
+\begin{DoxyCompactList}\small\item\em Calculates probability of glass breakage safety requirement. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_glass_b_r_1_1_calculations_abb3c626b9ad0bce656cf947460d95e9e}\label{class_glass_b_r_1_1_calculations_abb3c626b9ad0bce656cf947460d95e9e}} 
+\index{GlassBR.Calculations@{GlassBR.Calculations}!func\_B@{func\_B}}
+\index{func\_B@{func\_B}!GlassBR.Calculations@{GlassBR.Calculations}}
+\doxysubsubsection{\texorpdfstring{func\_B()}{func\_B()}}
+{\footnotesize\ttfamily static double Glass\+BR.\+Calculations.\+func\+\_\+B (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_glass_b_r_1_1_input_parameters}{Input\+Parameters}}}]{in\+Params,  }\item[{double}]{J }\end{DoxyParamCaption}) throws IOException\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calculates risk of failure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em in\+Params} & structure holding the input values \\
+\hline
+{\em J} & stress distribution factor (Function) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+risk of failure 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_glass_b_r_1_1_calculations_af74e27138a5e84b19ecd46c724b2d448}\label{class_glass_b_r_1_1_calculations_af74e27138a5e84b19ecd46c724b2d448}} 
+\index{GlassBR.Calculations@{GlassBR.Calculations}!func\_isSafeLR@{func\_isSafeLR}}
+\index{func\_isSafeLR@{func\_isSafeLR}!GlassBR.Calculations@{GlassBR.Calculations}}
+\doxysubsubsection{\texorpdfstring{func\_isSafeLR()}{func\_isSafeLR()}}
+{\footnotesize\ttfamily static boolean Glass\+BR.\+Calculations.\+func\+\_\+is\+Safe\+LR (\begin{DoxyParamCaption}\item[{double}]{LR,  }\item[{double}]{q }\end{DoxyParamCaption}) throws IOException\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calculates 3 second load equivalent resistance safety requirement. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em LR} & load resistance\+: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref\+: astm2009 (Pa) \\
+\hline
+{\em q} & applied load (demand)\+: 3 second duration equivalent pressure (Pa) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+3 second load equivalent resistance safety requirement 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_glass_b_r_1_1_calculations_aa2ca8df4d38d915cc64c8f0ab602c199}\label{class_glass_b_r_1_1_calculations_aa2ca8df4d38d915cc64c8f0ab602c199}} 
+\index{GlassBR.Calculations@{GlassBR.Calculations}!func\_isSafePb@{func\_isSafePb}}
+\index{func\_isSafePb@{func\_isSafePb}!GlassBR.Calculations@{GlassBR.Calculations}}
+\doxysubsubsection{\texorpdfstring{func\_isSafePb()}{func\_isSafePb()}}
+{\footnotesize\ttfamily static boolean Glass\+BR.\+Calculations.\+func\+\_\+is\+Safe\+Pb (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_glass_b_r_1_1_input_parameters}{Input\+Parameters}}}]{in\+Params,  }\item[{double}]{P\+\_\+b }\end{DoxyParamCaption}) throws IOException\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calculates probability of glass breakage safety requirement. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em in\+Params} & structure holding the input values \\
+\hline
+{\em P\+\_\+b} & probability of breakage\+: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref\+: astm2016) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+probability of glass breakage safety requirement 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_glass_b_r_1_1_calculations_a3bf3bc4b0a1bceefd48bab25f52ef423}\label{class_glass_b_r_1_1_calculations_a3bf3bc4b0a1bceefd48bab25f52ef423}} 
+\index{GlassBR.Calculations@{GlassBR.Calculations}!func\_J@{func\_J}}
+\index{func\_J@{func\_J}!GlassBR.Calculations@{GlassBR.Calculations}}
+\doxysubsubsection{\texorpdfstring{func\_J()}{func\_J()}}
+{\footnotesize\ttfamily static double Glass\+BR.\+Calculations.\+func\+\_\+J (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_glass_b_r_1_1_input_parameters}{Input\+Parameters}}}]{in\+Params,  }\item[{double}]{q\+\_\+hat }\end{DoxyParamCaption}) throws Exception, File\+Not\+Found\+Exception, IOException\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calculates stress distribution factor (Function) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em in\+Params} & structure holding the input values \\
+\hline
+{\em q\+\_\+hat} & dimensionless load \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+stress distribution factor (Function) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_glass_b_r_1_1_calculations_a6cc0d5718f6608b4019cf7226dd7f307}\label{class_glass_b_r_1_1_calculations_a6cc0d5718f6608b4019cf7226dd7f307}} 
+\index{GlassBR.Calculations@{GlassBR.Calculations}!func\_J\_tol@{func\_J\_tol}}
+\index{func\_J\_tol@{func\_J\_tol}!GlassBR.Calculations@{GlassBR.Calculations}}
+\doxysubsubsection{\texorpdfstring{func\_J\_tol()}{func\_J\_tol()}}
+{\footnotesize\ttfamily static double Glass\+BR.\+Calculations.\+func\+\_\+\+J\+\_\+tol (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_glass_b_r_1_1_input_parameters}{Input\+Parameters}}}]{in\+Params }\end{DoxyParamCaption}) throws IOException\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calculates stress distribution factor (Function) based on Pbtol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em in\+Params} & structure holding the input values \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+stress distribution factor (Function) based on Pbtol 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_glass_b_r_1_1_calculations_a3e88a57e188fa774d0cb1f91328c0374}\label{class_glass_b_r_1_1_calculations_a3e88a57e188fa774d0cb1f91328c0374}} 
+\index{GlassBR.Calculations@{GlassBR.Calculations}!func\_LR@{func\_LR}}
+\index{func\_LR@{func\_LR}!GlassBR.Calculations@{GlassBR.Calculations}}
+\doxysubsubsection{\texorpdfstring{func\_LR()}{func\_LR()}}
+{\footnotesize\ttfamily static double Glass\+BR.\+Calculations.\+func\+\_\+\+LR (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_glass_b_r_1_1_input_parameters}{Input\+Parameters}}}]{in\+Params,  }\item[{double}]{NFL }\end{DoxyParamCaption}) throws IOException\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calculates load resistance\+: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref\+: astm2009 (Pa) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em in\+Params} & structure holding the input values \\
+\hline
+{\em NFL} & non-\/factored load\+: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+load resistance\+: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref\+: astm2009 (Pa) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_glass_b_r_1_1_calculations_a45272d5f53066abcb633dc2effa2e8ca}\label{class_glass_b_r_1_1_calculations_a45272d5f53066abcb633dc2effa2e8ca}} 
+\index{GlassBR.Calculations@{GlassBR.Calculations}!func\_NFL@{func\_NFL}}
+\index{func\_NFL@{func\_NFL}!GlassBR.Calculations@{GlassBR.Calculations}}
+\doxysubsubsection{\texorpdfstring{func\_NFL()}{func\_NFL()}}
+{\footnotesize\ttfamily static double Glass\+BR.\+Calculations.\+func\+\_\+\+NFL (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_glass_b_r_1_1_input_parameters}{Input\+Parameters}}}]{in\+Params,  }\item[{double}]{q\+\_\+hat\+\_\+tol }\end{DoxyParamCaption}) throws IOException\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calculates non-\/factored load\+: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em in\+Params} & structure holding the input values \\
+\hline
+{\em q\+\_\+hat\+\_\+tol} & tolerable load \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+non-\/factored load\+: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_glass_b_r_1_1_calculations_a583dfcd274cfdc99e2b63d356e0a786a}\label{class_glass_b_r_1_1_calculations_a583dfcd274cfdc99e2b63d356e0a786a}} 
+\index{GlassBR.Calculations@{GlassBR.Calculations}!func\_P\_b@{func\_P\_b}}
+\index{func\_P\_b@{func\_P\_b}!GlassBR.Calculations@{GlassBR.Calculations}}
+\doxysubsubsection{\texorpdfstring{func\_P\_b()}{func\_P\_b()}}
+{\footnotesize\ttfamily static double Glass\+BR.\+Calculations.\+func\+\_\+\+P\+\_\+b (\begin{DoxyParamCaption}\item[{double}]{B }\end{DoxyParamCaption}) throws IOException\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calculates probability of breakage\+: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref\+: astm2016) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em B} & risk of failure \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+probability of breakage\+: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref\+: astm2016) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_glass_b_r_1_1_calculations_a52504fca4f10fabfefff4c6794b87443}\label{class_glass_b_r_1_1_calculations_a52504fca4f10fabfefff4c6794b87443}} 
+\index{GlassBR.Calculations@{GlassBR.Calculations}!func\_q@{func\_q}}
+\index{func\_q@{func\_q}!GlassBR.Calculations@{GlassBR.Calculations}}
+\doxysubsubsection{\texorpdfstring{func\_q()}{func\_q()}}
+{\footnotesize\ttfamily static double Glass\+BR.\+Calculations.\+func\+\_\+q (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_glass_b_r_1_1_input_parameters}{Input\+Parameters}}}]{in\+Params }\end{DoxyParamCaption}) throws Exception, File\+Not\+Found\+Exception, IOException\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calculates applied load (demand)\+: 3 second duration equivalent pressure (Pa) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em in\+Params} & structure holding the input values \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+applied load (demand)\+: 3 second duration equivalent pressure (Pa) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_glass_b_r_1_1_calculations_ad6a814a5fbe19ea721ad85d7889d7215}\label{class_glass_b_r_1_1_calculations_ad6a814a5fbe19ea721ad85d7889d7215}} 
+\index{GlassBR.Calculations@{GlassBR.Calculations}!func\_q\_hat@{func\_q\_hat}}
+\index{func\_q\_hat@{func\_q\_hat}!GlassBR.Calculations@{GlassBR.Calculations}}
+\doxysubsubsection{\texorpdfstring{func\_q\_hat()}{func\_q\_hat()}}
+{\footnotesize\ttfamily static double Glass\+BR.\+Calculations.\+func\+\_\+q\+\_\+hat (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_glass_b_r_1_1_input_parameters}{Input\+Parameters}}}]{in\+Params,  }\item[{double}]{q }\end{DoxyParamCaption}) throws IOException\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calculates dimensionless load. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em in\+Params} & structure holding the input values \\
+\hline
+{\em q} & applied load (demand)\+: 3 second duration equivalent pressure (Pa) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+dimensionless load 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_glass_b_r_1_1_calculations_a81c222dec10f9352263bac7e3602c76c}\label{class_glass_b_r_1_1_calculations_a81c222dec10f9352263bac7e3602c76c}} 
+\index{GlassBR.Calculations@{GlassBR.Calculations}!func\_q\_hat\_tol@{func\_q\_hat\_tol}}
+\index{func\_q\_hat\_tol@{func\_q\_hat\_tol}!GlassBR.Calculations@{GlassBR.Calculations}}
+\doxysubsubsection{\texorpdfstring{func\_q\_hat\_tol()}{func\_q\_hat\_tol()}}
+{\footnotesize\ttfamily static double Glass\+BR.\+Calculations.\+func\+\_\+q\+\_\+hat\+\_\+tol (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_glass_b_r_1_1_input_parameters}{Input\+Parameters}}}]{in\+Params,  }\item[{double}]{J\+\_\+tol }\end{DoxyParamCaption}) throws Exception, File\+Not\+Found\+Exception, IOException\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calculates tolerable load. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em in\+Params} & structure holding the input values \\
+\hline
+{\em J\+\_\+tol} & stress distribution factor (Function) based on Pbtol \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+tolerable load 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Glass\+BR/\mbox{\hyperlink{_calculations_8java}{Calculations.\+java}}\end{DoxyCompactItemize}

@@ -1,0 +1,113 @@
+\hypertarget{class_s_w_h_s_no_p_c_m_1_1_calculations}{}\doxysection{SWHSNo\+PCM.\+Calculations Class Reference}
+\label{class_s_w_h_s_no_p_c_m_1_1_calculations}\index{SWHSNoPCM.Calculations@{SWHSNoPCM.Calculations}}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static double \mbox{\hyperlink{class_s_w_h_s_no_p_c_m_1_1_calculations_a771207120ca21d78728cdc47bcd25a55}{func\+\_\+\+V\+\_\+W}} (double V\+\_\+tank)
+\begin{DoxyCompactList}\small\item\em Calculates volume of water\+: the amount of space occupied by a given quantity of water (m$^\wedge$3) \end{DoxyCompactList}\item 
+static double \mbox{\hyperlink{class_s_w_h_s_no_p_c_m_1_1_calculations_aae8da8009799b12e83f04ccfce381512}{func\+\_\+m\+\_\+W}} (double rho\+\_\+W, double V\+\_\+W)
+\begin{DoxyCompactList}\small\item\em Calculates mass of water\+: the quantity of matter within the water (kg) \end{DoxyCompactList}\item 
+static double \mbox{\hyperlink{class_s_w_h_s_no_p_c_m_1_1_calculations_a89e87768da18448da459c78cb997a196}{func\+\_\+tau\+\_\+W}} (double C\+\_\+W, double h\+\_\+C, double A\+\_\+C, double m\+\_\+W)
+\begin{DoxyCompactList}\small\item\em Calculates \mbox{\hyperlink{class_s_w_h_s_no_p_c_m_1_1_o_d_e}{ODE}} parameter for water related to decay time\+: derived parameter based on rate of change of temperature of water (s) \end{DoxyCompactList}\item 
+static Array\+List$<$ Double $>$ \mbox{\hyperlink{class_s_w_h_s_no_p_c_m_1_1_calculations_ac1dab5b2f8fba42d4c7f042583ff4cc5}{func\+\_\+\+T\+\_\+W}} (double T\+\_\+C, double T\+\_\+init, double t\+\_\+final, double A\+\_\+tol, double R\+\_\+tol, double t\+\_\+step, double tau\+\_\+W)
+\begin{DoxyCompactList}\small\item\em Calculates temperature of the water\+: the average kinetic energy of the particles within the water (degreeC) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_s_w_h_s_no_p_c_m_1_1_calculations_aae8da8009799b12e83f04ccfce381512}\label{class_s_w_h_s_no_p_c_m_1_1_calculations_aae8da8009799b12e83f04ccfce381512}} 
+\index{SWHSNoPCM.Calculations@{SWHSNoPCM.Calculations}!func\_m\_W@{func\_m\_W}}
+\index{func\_m\_W@{func\_m\_W}!SWHSNoPCM.Calculations@{SWHSNoPCM.Calculations}}
+\doxysubsubsection{\texorpdfstring{func\_m\_W()}{func\_m\_W()}}
+{\footnotesize\ttfamily static double SWHSNo\+PCM.\+Calculations.\+func\+\_\+m\+\_\+W (\begin{DoxyParamCaption}\item[{double}]{rho\+\_\+W,  }\item[{double}]{V\+\_\+W }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calculates mass of water\+: the quantity of matter within the water (kg) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rho\+\_\+W} & density of water\+: mass per unit volume of water (kg/m$^\wedge$3) \\
+\hline
+{\em V\+\_\+W} & volume of water\+: the amount of space occupied by a given quantity of water (m$^\wedge$3) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+mass of water\+: the quantity of matter within the water (kg) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_s_w_h_s_no_p_c_m_1_1_calculations_ac1dab5b2f8fba42d4c7f042583ff4cc5}\label{class_s_w_h_s_no_p_c_m_1_1_calculations_ac1dab5b2f8fba42d4c7f042583ff4cc5}} 
+\index{SWHSNoPCM.Calculations@{SWHSNoPCM.Calculations}!func\_T\_W@{func\_T\_W}}
+\index{func\_T\_W@{func\_T\_W}!SWHSNoPCM.Calculations@{SWHSNoPCM.Calculations}}
+\doxysubsubsection{\texorpdfstring{func\_T\_W()}{func\_T\_W()}}
+{\footnotesize\ttfamily static Array\+List$<$Double$>$ SWHSNo\+PCM.\+Calculations.\+func\+\_\+\+T\+\_\+W (\begin{DoxyParamCaption}\item[{double}]{T\+\_\+C,  }\item[{double}]{T\+\_\+init,  }\item[{double}]{t\+\_\+final,  }\item[{double}]{A\+\_\+tol,  }\item[{double}]{R\+\_\+tol,  }\item[{double}]{t\+\_\+step,  }\item[{double}]{tau\+\_\+W }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calculates temperature of the water\+: the average kinetic energy of the particles within the water (degreeC) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em T\+\_\+C} & temperature of the heating coil\+: the average kinetic energy of the particles within the coil (degreeC) \\
+\hline
+{\em T\+\_\+init} & initial temperature\+: the temperature at the beginning of the simulation (degreeC) \\
+\hline
+{\em t\+\_\+final} & final time\+: the amount of time elapsed from the beginning of the simulation to its conclusion (s) \\
+\hline
+{\em A\+\_\+tol} & absolute tolerance \\
+\hline
+{\em R\+\_\+tol} & relative tolerance \\
+\hline
+{\em t\+\_\+step} & time step for simulation\+: the finite discretization of time used in the numerical method for solving the computational model (s) \\
+\hline
+{\em tau\+\_\+W} & \mbox{\hyperlink{class_s_w_h_s_no_p_c_m_1_1_o_d_e}{ODE}} parameter for water related to decay time\+: derived parameter based on rate of change of temperature of water (s) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+temperature of the water\+: the average kinetic energy of the particles within the water (degreeC) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_s_w_h_s_no_p_c_m_1_1_calculations_a89e87768da18448da459c78cb997a196}\label{class_s_w_h_s_no_p_c_m_1_1_calculations_a89e87768da18448da459c78cb997a196}} 
+\index{SWHSNoPCM.Calculations@{SWHSNoPCM.Calculations}!func\_tau\_W@{func\_tau\_W}}
+\index{func\_tau\_W@{func\_tau\_W}!SWHSNoPCM.Calculations@{SWHSNoPCM.Calculations}}
+\doxysubsubsection{\texorpdfstring{func\_tau\_W()}{func\_tau\_W()}}
+{\footnotesize\ttfamily static double SWHSNo\+PCM.\+Calculations.\+func\+\_\+tau\+\_\+W (\begin{DoxyParamCaption}\item[{double}]{C\+\_\+W,  }\item[{double}]{h\+\_\+C,  }\item[{double}]{A\+\_\+C,  }\item[{double}]{m\+\_\+W }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calculates \mbox{\hyperlink{class_s_w_h_s_no_p_c_m_1_1_o_d_e}{ODE}} parameter for water related to decay time\+: derived parameter based on rate of change of temperature of water (s) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em C\+\_\+W} & specific heat capacity of water\+: the amount of energy required to raise the temperature of a given unit mass of water by a given amount (J/(kg degreeC)) \\
+\hline
+{\em h\+\_\+C} & convective heat transfer coefficient between coil and water\+: the convective heat transfer coefficient that models the thermal flux from the coil to the surrounding water (W/(m$^\wedge$2 degreeC)) \\
+\hline
+{\em A\+\_\+C} & heating coil surface area\+: area covered by the outermost layer of the coil (m$^\wedge$2) \\
+\hline
+{\em m\+\_\+W} & mass of water\+: the quantity of matter within the water (kg) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{class_s_w_h_s_no_p_c_m_1_1_o_d_e}{ODE}} parameter for water related to decay time\+: derived parameter based on rate of change of temperature of water (s) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_s_w_h_s_no_p_c_m_1_1_calculations_a771207120ca21d78728cdc47bcd25a55}\label{class_s_w_h_s_no_p_c_m_1_1_calculations_a771207120ca21d78728cdc47bcd25a55}} 
+\index{SWHSNoPCM.Calculations@{SWHSNoPCM.Calculations}!func\_V\_W@{func\_V\_W}}
+\index{func\_V\_W@{func\_V\_W}!SWHSNoPCM.Calculations@{SWHSNoPCM.Calculations}}
+\doxysubsubsection{\texorpdfstring{func\_V\_W()}{func\_V\_W()}}
+{\footnotesize\ttfamily static double SWHSNo\+PCM.\+Calculations.\+func\+\_\+\+V\+\_\+W (\begin{DoxyParamCaption}\item[{double}]{V\+\_\+tank }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Calculates volume of water\+: the amount of space occupied by a given quantity of water (m$^\wedge$3) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em V\+\_\+tank} & volume of the cylindrical tank\+: the amount of space encompassed by a tank (m$^\wedge$3) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+volume of water\+: the amount of space occupied by a given quantity of water (m$^\wedge$3) 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+SWHSNo\+PCM/\mbox{\hyperlink{_calculations_8java}{Calculations.\+java}}\end{DoxyCompactItemize}

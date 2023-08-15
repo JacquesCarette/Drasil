@@ -1,0 +1,115 @@
+\hypertarget{class_input_parameters}{}\doxysection{Input\+Parameters Class Reference}
+\label{class_input_parameters}\index{InputParameters@{InputParameters}}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{class_input_parameters_ae9c9563a1b3f1c5d238133a4b33f88e6}{get\+\_\+input}} (string filename, out double A\+\_\+C, out double C\+\_\+W, out double h\+\_\+C, out double T\+\_\+init, out double t\+\_\+final, out double L, out double T\+\_\+C, out double t\+\_\+step, out double rho\+\_\+W, out double D, out double A\+\_\+tol, out double R\+\_\+tol, out double E\+\_\+W)
+\begin{DoxyCompactList}\small\item\em Reads input from a file with the given file name. \end{DoxyCompactList}\item 
+static double \mbox{\hyperlink{class_input_parameters_a79c303de399b0df1bf415349754dfbd4}{derived\+\_\+values}} (double D, double L)
+\begin{DoxyCompactList}\small\item\em Calculates values that can be immediately derived from the inputs. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{class_input_parameters_a76d9513262c91bd3753e47fe2741c362}{input\+\_\+constraints}} (double A\+\_\+C, double C\+\_\+W, double h\+\_\+C, double T\+\_\+init, double t\+\_\+final, double L, double T\+\_\+C, double t\+\_\+step, double rho\+\_\+W, double D, double E\+\_\+W)
+\begin{DoxyCompactList}\small\item\em Verifies that input values satisfy the physical constraints and software constraints. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_input_parameters_a79c303de399b0df1bf415349754dfbd4}\label{class_input_parameters_a79c303de399b0df1bf415349754dfbd4}} 
+\index{InputParameters@{InputParameters}!derived\_values@{derived\_values}}
+\index{derived\_values@{derived\_values}!InputParameters@{InputParameters}}
+\doxysubsubsection{\texorpdfstring{derived\_values()}{derived\_values()}}
+{\footnotesize\ttfamily static double Input\+Parameters.\+derived\+\_\+values (\begin{DoxyParamCaption}\item[{double}]{D,  }\item[{double}]{L }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Calculates values that can be immediately derived from the inputs. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em D} & diameter of tank\+: the diameter of the tank (m) \\
+\hline
+{\em L} & length of tank\+: the length of the tank (m) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+volume of the cylindrical tank\+: the amount of space encompassed by a tank (m$^\wedge$3) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_input_parameters_ae9c9563a1b3f1c5d238133a4b33f88e6}\label{class_input_parameters_ae9c9563a1b3f1c5d238133a4b33f88e6}} 
+\index{InputParameters@{InputParameters}!get\_input@{get\_input}}
+\index{get\_input@{get\_input}!InputParameters@{InputParameters}}
+\doxysubsubsection{\texorpdfstring{get\_input()}{get\_input()}}
+{\footnotesize\ttfamily static void Input\+Parameters.\+get\+\_\+input (\begin{DoxyParamCaption}\item[{string}]{filename,  }\item[{out double}]{A\+\_\+C,  }\item[{out double}]{C\+\_\+W,  }\item[{out double}]{h\+\_\+C,  }\item[{out double}]{T\+\_\+init,  }\item[{out double}]{t\+\_\+final,  }\item[{out double}]{L,  }\item[{out double}]{T\+\_\+C,  }\item[{out double}]{t\+\_\+step,  }\item[{out double}]{rho\+\_\+W,  }\item[{out double}]{D,  }\item[{out double}]{A\+\_\+tol,  }\item[{out double}]{R\+\_\+tol,  }\item[{out double}]{E\+\_\+W }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Reads input from a file with the given file name. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & name of the input file \\
+\hline
+{\em A\+\_\+C} & heating coil surface area\+: area covered by the outermost layer of the coil (m$^\wedge$2) \\
+\hline
+{\em C\+\_\+W} & specific heat capacity of water\+: the amount of energy required to raise the temperature of a given unit mass of water by a given amount (J/(kg degreeC)) \\
+\hline
+{\em h\+\_\+C} & convective heat transfer coefficient between coil and water\+: the convective heat transfer coefficient that models the thermal flux from the coil to the surrounding water (W/(m$^\wedge$2 degreeC)) \\
+\hline
+{\em T\+\_\+init} & initial temperature\+: the temperature at the beginning of the simulation (degreeC) \\
+\hline
+{\em t\+\_\+final} & final time\+: the amount of time elapsed from the beginning of the simulation to its conclusion (s) \\
+\hline
+{\em L} & length of tank\+: the length of the tank (m) \\
+\hline
+{\em T\+\_\+C} & temperature of the heating coil\+: the average kinetic energy of the particles within the coil (degreeC) \\
+\hline
+{\em t\+\_\+step} & time step for simulation\+: the finite discretization of time used in the numerical method for solving the computational model (s) \\
+\hline
+{\em rho\+\_\+W} & density of water\+: mass per unit volume of water (kg/m$^\wedge$3) \\
+\hline
+{\em D} & diameter of tank\+: the diameter of the tank (m) \\
+\hline
+{\em A\+\_\+tol} & absolute tolerance \\
+\hline
+{\em R\+\_\+tol} & relative tolerance \\
+\hline
+{\em E\+\_\+W} & change in heat energy in the water\+: change in thermal energy within the water (J) \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_input_parameters_a76d9513262c91bd3753e47fe2741c362}\label{class_input_parameters_a76d9513262c91bd3753e47fe2741c362}} 
+\index{InputParameters@{InputParameters}!input\_constraints@{input\_constraints}}
+\index{input\_constraints@{input\_constraints}!InputParameters@{InputParameters}}
+\doxysubsubsection{\texorpdfstring{input\_constraints()}{input\_constraints()}}
+{\footnotesize\ttfamily static void Input\+Parameters.\+input\+\_\+constraints (\begin{DoxyParamCaption}\item[{double}]{A\+\_\+C,  }\item[{double}]{C\+\_\+W,  }\item[{double}]{h\+\_\+C,  }\item[{double}]{T\+\_\+init,  }\item[{double}]{t\+\_\+final,  }\item[{double}]{L,  }\item[{double}]{T\+\_\+C,  }\item[{double}]{t\+\_\+step,  }\item[{double}]{rho\+\_\+W,  }\item[{double}]{D,  }\item[{double}]{E\+\_\+W }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Verifies that input values satisfy the physical constraints and software constraints. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em A\+\_\+C} & heating coil surface area\+: area covered by the outermost layer of the coil (m$^\wedge$2) \\
+\hline
+{\em C\+\_\+W} & specific heat capacity of water\+: the amount of energy required to raise the temperature of a given unit mass of water by a given amount (J/(kg degreeC)) \\
+\hline
+{\em h\+\_\+C} & convective heat transfer coefficient between coil and water\+: the convective heat transfer coefficient that models the thermal flux from the coil to the surrounding water (W/(m$^\wedge$2 degreeC)) \\
+\hline
+{\em T\+\_\+init} & initial temperature\+: the temperature at the beginning of the simulation (degreeC) \\
+\hline
+{\em t\+\_\+final} & final time\+: the amount of time elapsed from the beginning of the simulation to its conclusion (s) \\
+\hline
+{\em L} & length of tank\+: the length of the tank (m) \\
+\hline
+{\em T\+\_\+C} & temperature of the heating coil\+: the average kinetic energy of the particles within the coil (degreeC) \\
+\hline
+{\em t\+\_\+step} & time step for simulation\+: the finite discretization of time used in the numerical method for solving the computational model (s) \\
+\hline
+{\em rho\+\_\+W} & density of water\+: mass per unit volume of water (kg/m$^\wedge$3) \\
+\hline
+{\em D} & diameter of tank\+: the diameter of the tank (m) \\
+\hline
+{\em E\+\_\+W} & change in heat energy in the water\+: change in thermal energy within the water (J) \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{_input_parameters_8cs}{Input\+Parameters.\+cs}}\end{DoxyCompactItemize}

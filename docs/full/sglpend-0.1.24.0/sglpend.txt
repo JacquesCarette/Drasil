@@ -118,6 +118,7 @@ printSetting :: PrintingInformation
 mkSRS :: SRSDecl
 progName :: CI
 si :: SystemInformation
+purp :: Sentence
 symbMap :: ChunkDB
 usedDB :: ChunkDB
 refDB :: ReferenceDB

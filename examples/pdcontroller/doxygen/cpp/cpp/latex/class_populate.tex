@@ -1,0 +1,64 @@
+\hypertarget{class_populate}{}\doxysection{Populate Class Reference}
+\label{class_populate}\index{Populate@{Populate}}
+
+
+Class for populating a list during an \mbox{\hyperlink{class_o_d_e}{ODE}} solution process.  
+
+
+
+
+{\ttfamily \#include $<$Populate.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_populate_a22360298aa8a4a68907beef7fb1a63ac}{Populate}} (vector$<$ double $>$ \&y\+\_\+t)
+\begin{DoxyCompactList}\small\item\em Constructor for \mbox{\hyperlink{class_populate}{Populate}} objects. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_populate_aee9d5e3e5d8ea713d264784103279575}{operator()}} (vector$<$ double $>$ \&y, double t)
+\begin{DoxyCompactList}\small\item\em appends solution point for current \mbox{\hyperlink{class_o_d_e}{ODE}} solution step \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class for populating a list during an \mbox{\hyperlink{class_o_d_e}{ODE}} solution process. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_populate_a22360298aa8a4a68907beef7fb1a63ac}\label{class_populate_a22360298aa8a4a68907beef7fb1a63ac}} 
+\index{Populate@{Populate}!Populate@{Populate}}
+\index{Populate@{Populate}!Populate@{Populate}}
+\doxysubsubsection{\texorpdfstring{Populate()}{Populate()}}
+{\footnotesize\ttfamily Populate\+::\+Populate (\begin{DoxyParamCaption}\item[{vector$<$ double $>$ \&}]{y\+\_\+t }\end{DoxyParamCaption})}
+
+
+
+Constructor for \mbox{\hyperlink{class_populate}{Populate}} objects. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em y\+\_\+t} & Process Variable\+: The output value from the power plant \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_populate_aee9d5e3e5d8ea713d264784103279575}\label{class_populate_aee9d5e3e5d8ea713d264784103279575}} 
+\index{Populate@{Populate}!operator()@{operator()}}
+\index{operator()@{operator()}!Populate@{Populate}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily void Populate\+::operator() (\begin{DoxyParamCaption}\item[{vector$<$ double $>$ \&}]{y,  }\item[{double}]{t }\end{DoxyParamCaption})}
+
+
+
+appends solution point for current \mbox{\hyperlink{class_o_d_e}{ODE}} solution step 
+
+
+\begin{DoxyParams}{Parameters}
+{\em y} & current dependent variable value in \mbox{\hyperlink{class_o_d_e}{ODE}} solution \\
+\hline
+{\em t} & current independent variable value in \mbox{\hyperlink{class_o_d_e}{ODE}} solution \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{_populate_8hpp}{Populate.\+hpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,113 @@
+\hypertarget{class_calculations}{}\doxysection{Calculations Class Reference}
+\label{class_calculations}\index{Calculations@{Calculations}}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static double \mbox{\hyperlink{class_calculations_a50ce703a1e507a8d7b500e52a8cd64e2}{func\+\_\+\+V\+\_\+W}} (double V\+\_\+tank)
+\begin{DoxyCompactList}\small\item\em Calculates volume of water\+: the amount of space occupied by a given quantity of water (m$^\wedge$3) \end{DoxyCompactList}\item 
+static double \mbox{\hyperlink{class_calculations_ad7a7caff8c4cb3297b29e7291f64b0e4}{func\+\_\+m\+\_\+W}} (double rho\+\_\+W, double V\+\_\+W)
+\begin{DoxyCompactList}\small\item\em Calculates mass of water\+: the quantity of matter within the water (kg) \end{DoxyCompactList}\item 
+static double \mbox{\hyperlink{class_calculations_a41b41255a68b2b1c9044cfa188206baf}{func\+\_\+tau\+\_\+W}} (double C\+\_\+W, double h\+\_\+C, double A\+\_\+C, double m\+\_\+W)
+\begin{DoxyCompactList}\small\item\em Calculates ODE parameter for water related to decay time\+: derived parameter based on rate of change of temperature of water (s) \end{DoxyCompactList}\item 
+static List$<$ double $>$ \mbox{\hyperlink{class_calculations_a35a9c33728f49c19d90e6331e81dadcb}{func\+\_\+\+T\+\_\+W}} (double T\+\_\+C, double T\+\_\+init, double t\+\_\+final, double A\+\_\+tol, double R\+\_\+tol, double t\+\_\+step, double tau\+\_\+W)
+\begin{DoxyCompactList}\small\item\em Calculates temperature of the water\+: the average kinetic energy of the particles within the water (degreeC) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_calculations_ad7a7caff8c4cb3297b29e7291f64b0e4}\label{class_calculations_ad7a7caff8c4cb3297b29e7291f64b0e4}} 
+\index{Calculations@{Calculations}!func\_m\_W@{func\_m\_W}}
+\index{func\_m\_W@{func\_m\_W}!Calculations@{Calculations}}
+\doxysubsubsection{\texorpdfstring{func\_m\_W()}{func\_m\_W()}}
+{\footnotesize\ttfamily static double Calculations.\+func\+\_\+m\+\_\+W (\begin{DoxyParamCaption}\item[{double}]{rho\+\_\+W,  }\item[{double}]{V\+\_\+W }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Calculates mass of water\+: the quantity of matter within the water (kg) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rho\+\_\+W} & density of water\+: mass per unit volume of water (kg/m$^\wedge$3) \\
+\hline
+{\em V\+\_\+W} & volume of water\+: the amount of space occupied by a given quantity of water (m$^\wedge$3) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+mass of water\+: the quantity of matter within the water (kg) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_calculations_a35a9c33728f49c19d90e6331e81dadcb}\label{class_calculations_a35a9c33728f49c19d90e6331e81dadcb}} 
+\index{Calculations@{Calculations}!func\_T\_W@{func\_T\_W}}
+\index{func\_T\_W@{func\_T\_W}!Calculations@{Calculations}}
+\doxysubsubsection{\texorpdfstring{func\_T\_W()}{func\_T\_W()}}
+{\footnotesize\ttfamily static List$<$double$>$ Calculations.\+func\+\_\+\+T\+\_\+W (\begin{DoxyParamCaption}\item[{double}]{T\+\_\+C,  }\item[{double}]{T\+\_\+init,  }\item[{double}]{t\+\_\+final,  }\item[{double}]{A\+\_\+tol,  }\item[{double}]{R\+\_\+tol,  }\item[{double}]{t\+\_\+step,  }\item[{double}]{tau\+\_\+W }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Calculates temperature of the water\+: the average kinetic energy of the particles within the water (degreeC) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em T\+\_\+C} & temperature of the heating coil\+: the average kinetic energy of the particles within the coil (degreeC) \\
+\hline
+{\em T\+\_\+init} & initial temperature\+: the temperature at the beginning of the simulation (degreeC) \\
+\hline
+{\em t\+\_\+final} & final time\+: the amount of time elapsed from the beginning of the simulation to its conclusion (s) \\
+\hline
+{\em A\+\_\+tol} & absolute tolerance \\
+\hline
+{\em R\+\_\+tol} & relative tolerance \\
+\hline
+{\em t\+\_\+step} & time step for simulation\+: the finite discretization of time used in the numerical method for solving the computational model (s) \\
+\hline
+{\em tau\+\_\+W} & ODE parameter for water related to decay time\+: derived parameter based on rate of change of temperature of water (s) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+temperature of the water\+: the average kinetic energy of the particles within the water (degreeC) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_calculations_a41b41255a68b2b1c9044cfa188206baf}\label{class_calculations_a41b41255a68b2b1c9044cfa188206baf}} 
+\index{Calculations@{Calculations}!func\_tau\_W@{func\_tau\_W}}
+\index{func\_tau\_W@{func\_tau\_W}!Calculations@{Calculations}}
+\doxysubsubsection{\texorpdfstring{func\_tau\_W()}{func\_tau\_W()}}
+{\footnotesize\ttfamily static double Calculations.\+func\+\_\+tau\+\_\+W (\begin{DoxyParamCaption}\item[{double}]{C\+\_\+W,  }\item[{double}]{h\+\_\+C,  }\item[{double}]{A\+\_\+C,  }\item[{double}]{m\+\_\+W }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Calculates ODE parameter for water related to decay time\+: derived parameter based on rate of change of temperature of water (s) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em C\+\_\+W} & specific heat capacity of water\+: the amount of energy required to raise the temperature of a given unit mass of water by a given amount (J/(kg degreeC)) \\
+\hline
+{\em h\+\_\+C} & convective heat transfer coefficient between coil and water\+: the convective heat transfer coefficient that models the thermal flux from the coil to the surrounding water (W/(m$^\wedge$2 degreeC)) \\
+\hline
+{\em A\+\_\+C} & heating coil surface area\+: area covered by the outermost layer of the coil (m$^\wedge$2) \\
+\hline
+{\em m\+\_\+W} & mass of water\+: the quantity of matter within the water (kg) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+ODE parameter for water related to decay time\+: derived parameter based on rate of change of temperature of water (s) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_calculations_a50ce703a1e507a8d7b500e52a8cd64e2}\label{class_calculations_a50ce703a1e507a8d7b500e52a8cd64e2}} 
+\index{Calculations@{Calculations}!func\_V\_W@{func\_V\_W}}
+\index{func\_V\_W@{func\_V\_W}!Calculations@{Calculations}}
+\doxysubsubsection{\texorpdfstring{func\_V\_W()}{func\_V\_W()}}
+{\footnotesize\ttfamily static double Calculations.\+func\+\_\+\+V\+\_\+W (\begin{DoxyParamCaption}\item[{double}]{V\+\_\+tank }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Calculates volume of water\+: the amount of space occupied by a given quantity of water (m$^\wedge$3) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em V\+\_\+tank} & volume of the cylindrical tank\+: the amount of space encompassed by a tank (m$^\wedge$3) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+volume of water\+: the amount of space occupied by a given quantity of water (m$^\wedge$3) 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{_calculations_8cs}{Calculations.\+cs}}\end{DoxyCompactItemize}

@@ -3834,6 +3834,14 @@ digraph alltypes {
 	}
 	subgraph domains {
 	}
+	subgraph drailmetas {
+		subgraph drasilmeta{
+		DrasilMeta	[shape=oval, color=darkgreen, label="DrasilMeta"];
+		DrasilMeta -> String;
+		}
+	}
+	subgraph drailmetacalls {
+	}
 	subgraph print {
 		subgraph nodefamily{
 		NodeFamily	[shape=oval, color=cyan3, label="NodeFamily"];
@@ -4344,7 +4352,6 @@ digraph alltypes {
 		subgraph example{
 		Example	[shape=oval, color=cyan3, label="Example"];
 		Example -> SystemInformation;
-		Example -> Sentence;
 		Example -> Choices;
 		Example -> FilePath;
 		}

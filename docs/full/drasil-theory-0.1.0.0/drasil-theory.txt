@@ -143,7 +143,6 @@ instance Language.Drasil.DecoratedReference.HasDecRef Theory.Drasil.DataDefiniti
 instance GHC.Classes.Eq Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Derivation.HasDerivation Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Classes.HasAdditionalNotes Theory.Drasil.DataDefinition.DataDefinition
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.ShortName.HasShortName Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Label.Type.HasRefAddress Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.DataDefinition.DataDefinition
@@ -367,14 +366,12 @@ instance Language.Drasil.DecoratedReference.HasDecRef Theory.Drasil.InstanceMode
 instance Language.Drasil.ShortName.HasShortName Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Label.Type.HasRefAddress Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Classes.HasAdditionalNotes Theory.Drasil.InstanceModel.InstanceModel
-instance Language.Drasil.Classes.Quantity Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Classes.CommonIdea Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Label.Type.Referable Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Chunk.Quantity.DefinesQuantity Theory.Drasil.InstanceModel.InstanceModel
 instance Theory.Drasil.Classes.HasInputs Theory.Drasil.InstanceModel.InstanceModel
 instance Theory.Drasil.Classes.HasOutput Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Symbol.HasSymbol Theory.Drasil.InstanceModel.InstanceModel
-instance Language.Drasil.Space.HasSpace Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.WellTyped.RequiresChecking Theory.Drasil.InstanceModel.InstanceModel Language.Drasil.Expr.Lang.Expr Language.Drasil.Space.Space
 

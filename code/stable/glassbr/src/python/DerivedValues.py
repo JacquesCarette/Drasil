@@ -28,7 +28,7 @@ def derived_values(inParams):
     print(" in module DerivedValues", file=outfile)
     outfile.close()
     
-    if (inParams.g == "AN") :
+    if (inParams.g == "AN"):
         inParams.GTF = 1
         outfile = open("log.txt", "a")
         print("var 'inParams.GTF' assigned ", end="", file=outfile)

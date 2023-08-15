@@ -371,7 +371,6 @@ instance Language.Drasil.Label.Type.Referable Theory.Drasil.InstanceModel.Instan
 instance Language.Drasil.Chunk.Quantity.DefinesQuantity Theory.Drasil.InstanceModel.InstanceModel
 instance Theory.Drasil.Classes.HasInputs Theory.Drasil.InstanceModel.InstanceModel
 instance Theory.Drasil.Classes.HasOutput Theory.Drasil.InstanceModel.InstanceModel
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.WellTyped.RequiresChecking Theory.Drasil.InstanceModel.InstanceModel Language.Drasil.Expr.Lang.Expr Language.Drasil.Space.Space
 
 

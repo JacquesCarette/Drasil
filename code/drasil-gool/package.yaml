@@ -17,6 +17,7 @@ dependencies:
 - mtl
 - composition
 - drasil-codeLang
+- drasil-metadata
 - drasil-utils
 
 ghc-options:

@@ -62,8 +62,6 @@ instance HasShortName       InstanceModel where shortname = lb
 instance HasRefAddress      InstanceModel where getRefAdd l = RP (prepend $ abrv l) (ra l)
 -- | Finds any additional notes for the 'InstanceModel'.
 instance HasAdditionalNotes InstanceModel where getNotes = notes
--- | 'InstanceModel's have an 'Quantity'.
-instance Quantity           InstanceModel where
 -- | Finds the idea of an 'InstanceModel' (abbreviation).
 instance CommonIdea         InstanceModel where abrv _ = abrv inModel
 -- | Finds the reference address of an 'InstanceModel'.
@@ -82,8 +80,6 @@ instance HasOutput          InstanceModel where
   out_constraints = imOutput . _2
 -- | Finds the output 'Symbol's of the 'InstanceModel'.
 instance HasSymbol          InstanceModel where symbol = symbol . view output -- FIXME: InstanceModels don't necessarily need to have a symbol.
--- | Finds the output 'Space' of the 'InstanceModel'.
-instance HasSpace           InstanceModel where typ = output . typ
 -- | Finds the units of the 'InstanceModel'.
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view output
 

@@ -42,7 +42,7 @@ sampleInput db d sd = auxFromData sampleInputName (makeInputFile db d sd)
 -- | Defines a Makefile.
 makefile :: (AuxiliarySym r) => Maybe BuildConfig -> Maybe Runnable ->
   Maybe DocConfig -> GOOLState -> ProgData -> r (Auxiliary r)
-makefile bc r dc s p = auxFromData makefileName (makeBuild dc bc r s p)
+makefile bc r d s p = auxFromData makefileName (makeBuild d bc r s p)
 
 -- | Changes a 'Runnable' to 'Nothing' if the user chose 'Library' for the 'ImplementationType'.
 noRunIfLib :: ImplementationType -> Maybe Runnable -> Maybe Runnable

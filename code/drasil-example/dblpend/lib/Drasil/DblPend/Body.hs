@@ -1,8 +1,10 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPend.Body where
 
+import Control.Lens ((^.))
+
 import Language.Drasil hiding (organization, section)
-import Theory.Drasil (TheoryModel)
+import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS
 
@@ -125,14 +127,14 @@ si = SI {
 }
 
 purp :: Sentence
-purp = foldlSent_ [S "predict the", phraseNP (motion `ofA` pendulum)]
+purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum]
 
 symbolsAll :: [QuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
   ++ map qw [listToArray $ quantvar pendDisAngle, arrayVecDepVar dblPenODEInfo]
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw iMods ++ map qw symbolsAll)
+symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll)
   (nw newtonSLR : nw progName : nw mass : nw len : nw kilogram : nw inValue : nw newton : nw degree : nw radian
     : nw unitVect : nw unitVectj : [nw errMsg, nw program] ++ map nw symbols ++
    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw physicCon' ++

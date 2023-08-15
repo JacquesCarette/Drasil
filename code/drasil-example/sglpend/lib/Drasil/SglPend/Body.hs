@@ -1,8 +1,10 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SglPend.Body where
 
+import Control.Lens ((^.))
+
 import Language.Drasil hiding (organization, section)
-import Theory.Drasil (TheoryModel)
+import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
@@ -15,7 +17,7 @@ import Data.Drasil.Concepts.Documentation (srsDomains, doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
-import Data.Drasil.Concepts.Physics (physicCon, physicCon')
+import Data.Drasil.Concepts.Physics (physicCon, physicCon', motion, pendulum)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
 import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Domains (physics)
@@ -26,7 +28,7 @@ import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Data.Drasil.Quantities.Physics (physicscon)
 
 import Drasil.DblPend.Assumptions (assumpSingle)
-import Drasil.DblPend.Body (justification, charsOfReader, purp,
+import Drasil.DblPend.Body (justification, charsOfReader,
   sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,
   userCharacteristicsIntro)
 import qualified Drasil.DblPend.Body as DPD (tMods)
@@ -107,8 +109,8 @@ si = SI {
   _sys         = progName, 
   _kind        = Doc.srs,
   _authors     = [olu],
-  _purpose     = [],
-  _background  = [purp],
+  _purpose     = [purp],
+  _background  = [],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,
@@ -124,8 +126,11 @@ si = SI {
    refdb       = refDB
 }
 
+purp :: Sentence
+purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pendulum]
+
 symbMap :: ChunkDB
-symbMap = cdb (map qw iMods ++ map qw symbols)
+symbMap = cdb (map (^. output) iMods ++ map qw symbols)
   (nw newtonSLR : nw progName : nw mass : nw len : nw kilogram : nw inValue : nw newton : nw degree : nw radian
     : nw unitVect : nw unitVectj : [nw errMsg, nw program] ++ map nw symbols ++
    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw physicCon' ++

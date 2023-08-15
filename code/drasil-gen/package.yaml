@@ -23,6 +23,7 @@ dependencies:
 - drasil-database
 - drasil-docLang
 - drasil-gool
+- drasil-metadata
 - drasil-lang
 - drasil-printers
 - drasil-sysinfo

@@ -9,7 +9,7 @@ import Language.Drasil.Code.Imperative.Build.AST (asFragment, DocConfig(..),
 import GOOL.Drasil (FileData(..), ProgData(..), GOOLState(..), headers, sources,
   mainMod)
 
-import Build.Drasil ((+:+), genMake, makeS, MakeString, mkFile, mkRule,
+import Build.Drasil (Annotation, (+:+), genMake, makeS, MakeString, mkFile, mkRule,
   mkCheckedCommand, mkFreeVar, RuleTransformer(makeRule))
 
 import Control.Lens ((^.))
@@ -18,6 +18,7 @@ import Data.List (nub)
 import System.FilePath.Posix (takeExtension, takeBaseName)
 import Text.PrettyPrint.HughesPJ (Doc)
 import Utils.Drasil (capitalize)
+import Metadata.Drasil.DrasilMetaCall (drasilMeta, DrasilMeta(..), watermark)
 
 -- | Holds all the needed information to run a program.
 data CodeHarness = Ch {
@@ -29,14 +30,12 @@ data CodeHarness = Ch {
 
 -- | Transforms information in 'CodeHarness' into a list of Makefile rules.
 instance RuleTransformer CodeHarness where
-  makeRule (Ch b r s m d) = maybe [mkRule ["Project Name: " ++ progName m,
-    progPurpAdd m]  buildTarget [] []]
+  makeRule (Ch b r s m d) = maybe [mkRule (openingComments m) buildTarget [] []]
     (\(BuildConfig comp onm anm bt) ->
     let outnm = maybe (asFragment "") (renderBuildName s m nameOpts) onm
         addnm = maybe (asFragment "") (renderBuildName s m nameOpts) anm
     in [
-    mkRule ["Project Name: " ++ progName m, progPurpAdd m]
-    buildTarget [outnm] [],
+    mkRule (openingComments m) buildTarget [outnm] [],
     mkFile [] outnm (map (makeS . filePath) (progMods m)) $
       map (mkCheckedCommand . foldr (+:+) mempty) $
         comp (getCompilerInput bt s m) outnm addnm
@@ -49,6 +48,9 @@ instance RuleTransformer CodeHarness where
       mkRule [] (makeS "doc") (dps ++ getCommentedFiles s) cmds
     ]) d where
       buildTarget = makeS "build"
+
+openingComments :: ProgData -> Annotation
+openingComments m = [watermark ++ version drasilMeta,"Project Name: " ++ progName m, progPurpAdd m]
 
 -- | Helper that renders project purpose into a string if there is one.
 progPurpAdd :: ProgData -> String

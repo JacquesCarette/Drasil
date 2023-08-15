@@ -2,7 +2,7 @@
 
 # Project Name: DblPend
 
-# Project Purpose: Predict the motion of a pendulum.
+# Project Purpose: Predict the motion of a double pendulum.
 
 build:
 

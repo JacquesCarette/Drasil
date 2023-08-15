@@ -1,1 +1,0 @@
-describes the motion of a projectile object in free space.

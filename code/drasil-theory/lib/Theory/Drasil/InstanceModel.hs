@@ -78,8 +78,6 @@ instance HasInputs          InstanceModel where
 instance HasOutput          InstanceModel where
   output          = imOutput . _1
   out_constraints = imOutput . _2
--- | Finds the output 'Symbol's of the 'InstanceModel'.
-instance HasSymbol          InstanceModel where symbol = symbol . view output -- FIXME: InstanceModels don't necessarily need to have a symbol.
 -- | Finds the output 'Space' of the 'InstanceModel'.
 instance HasSpace           InstanceModel where typ = output . typ
 -- | Finds the units of the 'InstanceModel'.

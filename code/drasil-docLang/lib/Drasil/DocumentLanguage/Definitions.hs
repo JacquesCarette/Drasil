@@ -134,7 +134,7 @@ helperSources rs  = [mkParagraph $ foldlList Comma List $ map (\r -> Ref (r ^. u
 -- | Creates the fields for a definition from a 'QDefinition' (used by 'ddefn').
 mkDDField :: DataDefinition -> SystemInformation -> Field -> ModRow -> ModRow
 mkDDField d _ l@Label fs = (show l, [mkParagraph $ atStart d]) : fs
-mkDDField d _ l@Symbol fs = (show l, [mkParagraph . P $ eqSymb d]) : fs
+mkDDField d _ l@Symbol fs = (show l, [mkParagraph . P $ eqSymb $ d ^. defLhs]) : fs
 mkDDField d _ l@Units fs = (show l, [mkParagraph $ toSentenceUnitless $ d ^. defLhs]) : fs
 mkDDField d _ l@DefiningEquation fs = (show l, [unlbldExpr $ express d]) : fs
 mkDDField d m l@(Description v u) fs = (show l, buildDDescription' v u d m) : fs
@@ -203,9 +203,9 @@ mkIMField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
 -- | Used for making definitions. The first pair is the symbol of the quantity we are
 -- defining.
 firstPair' :: InclUnits -> DataDefinition -> ListTuple
-firstPair' IgnoreUnits d  = (P $ eqSymb d, Flat $ phrase d, Nothing)
+firstPair' IgnoreUnits d  = (P $ eqSymb $ d ^. defLhs, Flat $ phrase d, Nothing)
 firstPair' IncludeUnits d =
-  (P $ eqSymb d, Flat $ phrase d +:+ sParen (toSentenceUnitless $ d ^. defLhs), Nothing)
+  (P $ eqSymb $ d ^. defLhs, Flat $ phrase d +:+ sParen (toSentenceUnitless $ d ^. defLhs), Nothing)
 
 -- | Creates the descriptions for each symbol in the relation/equation.
 descPairs :: (Quantity q, MayHaveUnit q) => InclUnits -> [q] -> [ListTuple]

@@ -78,8 +78,6 @@ instance DefinesQuantity    DataDefinition where
 instance HasOutput          DataDefinition where
   output = ddQDGetter defLhs defLhs
   out_constraints = to (const [])
--- | Finds the Symbol of the 'QDefinition' used to make the 'DataDefinition where'.
-instance HasSymbol          DataDefinition where symbol = either symbol symbol . qdFromDD
 -- | Converts the defining expression of a 'DataDefinition where' into the model expression language.
 instance Express            DataDefinition where express = either express express . qdFromDD
 {-- Finds 'Reference's contained in the 'DataDefinition where'.

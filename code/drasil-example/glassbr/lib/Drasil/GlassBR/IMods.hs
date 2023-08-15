@@ -156,7 +156,7 @@ calofCapacity = imNoDeriv (equationalModelN (lRe ^. term) calofCapacityQD)
   [dRef astm2009] "calofCapacity" [lrCap, nonFLRef, gtfRef]
 
 calofCapacityQD :: SimpleQDef
-calofCapacityQD = mkQuantDef lRe (sy nonFL `mulRe` sy glaTyFac `mulRe` sy loadSF)
+calofCapacityQD = mkQuantDef lRe (sy nonFL `mulRe` sy (glaTyFac ^. defLhs) `mulRe` sy loadSF)
 
 {--}
 

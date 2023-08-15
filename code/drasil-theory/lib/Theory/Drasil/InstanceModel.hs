@@ -15,7 +15,7 @@ import Language.Drasil.Development (showUID)
 import Theory.Drasil.Classes (HasInputs(inputs), HasOutput(..))
 import Data.Drasil.TheoryConcepts (inModel)
 
-import Control.Lens ((^.), view, makeLenses, _1, _2) 
+import Control.Lens ((^.), makeLenses, _1, _2) 
 import Theory.Drasil.ModelKinds (ModelKind, getEqModQds)
 
 type Input = (QuantityDict, Maybe (RealInterval Expr Expr))
@@ -78,8 +78,6 @@ instance HasInputs          InstanceModel where
 instance HasOutput          InstanceModel where
   output          = imOutput . _1
   out_constraints = imOutput . _2
--- | Finds the units of the 'InstanceModel'.
-instance MayHaveUnit        InstanceModel where getUnit = getUnit . view output
 
 -- | Expose all expressions that need to be type-checked.
 instance RequiresChecking InstanceModel Expr Space where

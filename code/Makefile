@@ -89,6 +89,8 @@ BC_EXAMPLES = $(addsuffix $(BC_E_SUFFIX), $(EXAMPLES))
 TRACE_GRAPH_EXAMPLES = $(addsuffix $(TRACE_GRAPH_SUFFIX), $(EXAMPLES))
 INSTALL_EXAMPLES = $(addsuffix $(INSTALL_E_SUFFIX), $(EXAMPLES))
 TEST_WEBSITE = $(addsuffix $(TEST_E_SUFFIX), $(WEBSITE_FOLDER_NAME))
+STABILIZE_WEBSITE = $(addsuffix $(STABILIZE_E_SUFFIX), $(WEBSITE_FOLDER_NAME))
+BC_WEBSITE = $(addsuffix $(BC_E_SUFFIX), $(WEBSITE_FOLDER_NAME))
 
 EXAMPLE_GEN_TARGET = GEN TEST TEX CODE DCP
 
@@ -233,6 +235,7 @@ test: $(TEST_EXAMPLES) ##@Examples Run all examples and compare against the stab
 	@echo ----------------------------
 	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)log_check.sh"
 
+# Checks and compares website with the stable-website version.
 test_website: $(TEST_WEBSITE)
 	@echo ---------------------------------------
 	@echo Testing Website complete, checking logs
@@ -244,6 +247,11 @@ test_website: $(TEST_WEBSITE)
 stabilize: $(STABILIZE_EXAMPLES) ##@Examples Overwrites the stable folder with up-to-date artifacts.
 	@echo ----------------------------
 	@echo Stabilized all examples
+	@echo ----------------------------
+
+website_stabilize: $(STABILIZE_WEBSITE)
+	@echo ----------------------------
+	@echo Stabilized website
 	@echo ----------------------------
 
 # First builds all Drasil packages, runs examples with dot graphs,
@@ -316,7 +324,9 @@ $(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PRE
 	@mkdir -p "$(LOG_FOLDER)"
 	- $(DIFF) "$(STABLE_FOLDER)$*/" "$(BUILD_FOLDER)$(EDIR)/" > "$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX)"
 
-$(filter %$(TEST_E_SUFFIX), $(TEST_WEBSITE)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) 
+# Website diff tests. First builds the website and then compares the generated
+# contents in the build folder to those in the stable folder.
+$(filter %$(TEST_E_SUFFIX), $(TEST_WEBSITE)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) website
 	@mkdir -p "$(LOG_FOLDER)"
 	- $(DIFF) "$(STABLE_WEBSITE_FOLDER)$/" "$(WEBSITE_FOLDER)$/" > "$(LOG_FOLDER)$(WEBSITE_FOLDER_NAME)$(LOG_SUFFIX)"
 
@@ -325,12 +335,19 @@ $(filter %$(TEST_E_SUFFIX), $(TEST_WEBSITE)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREF
 $(filter %$(BC_E_SUFFIX), $(BC_EXAMPLES)): %$(BC_E_SUFFIX):
 	- rm -rf "$(BUILD_FOLDER)$(EDIR)"
 
+$(filter %$(BC_E_SUFFIX), $(BC_WEBSITE)): %$(BC_E_SUFFIX):
+	- rm -rf "$(WEBSITE_FOLDER)"
+
 # Individual example stabilization. First builds all Drasil packages,
 # runs all examples, and then copies contents from the build folder into stable.
 # Targets will have the form exampleName_stabilize.
 $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_EXAMPLES)): %$(STABILIZE_E_SUFFIX): %$(BC_E_SUFFIX) %$(GEN_E_SUFFIX)
 	- rm -rf "$(STABLE_FOLDER)$*/"
 	- cp -r "$(BUILD_FOLDER)$(EDIR)" "$(STABLE_FOLDER)$*/"
+
+$(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_WEBSITE)): %$(STABILIZE_E_SUFFIX): %$(BC_E_SUFFIX) website
+	- rm -rf "$(STABLE_WEBSITE_FOLDER)$/"
+	- cp -r "$(WEBSITE_FOLDER)$/" "$(STABLE_WEBSITE_FOLDER)$/"
 
 # Generate individual example pdfs. Needs Graphviz to work.
 # First builds all Drasil packages, runs examples with dot graphs,

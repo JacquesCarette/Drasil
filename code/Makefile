@@ -88,6 +88,7 @@ STABILIZE_EXAMPLES = $(addsuffix $(STABILIZE_E_SUFFIX), $(EXAMPLES))
 BC_EXAMPLES = $(addsuffix $(BC_E_SUFFIX), $(EXAMPLES))
 TRACE_GRAPH_EXAMPLES = $(addsuffix $(TRACE_GRAPH_SUFFIX), $(EXAMPLES))
 INSTALL_EXAMPLES = $(addsuffix $(INSTALL_E_SUFFIX), $(EXAMPLES))
+TEST_WEBSITE = $(addsuffix $(TEST_E_SUFFIX), $(WEBSITE_FOLDER_NAME))
 
 EXAMPLE_GEN_TARGET = GEN TEST TEX CODE DCP
 
@@ -113,7 +114,7 @@ BUILD_FOLDER = $(BUILD_FOLDER_NAME)/
 STABLE_FOLDER_NAME = stable
 STABLE_FOLDER = $(STABLE_FOLDER_NAME)/
 STABLE_WEBSITE_FOLDER_NAME = stable-website
-STABLE_WEBSITE_FOLDER = $(STABLE_WEBSITE_FOLDER_NAME)/
+STABLE_WEBSITE_FOLDER = $(STABLE_WEBSITE_FOLDER_NAME)/HTML/
 EXAMPLE_CODE_SUBFOLDER = src/
 LOG_FOLDER_NAME = logs
 LOG_FOLDER = $(LOG_FOLDER_NAME)/
@@ -232,6 +233,12 @@ test: $(TEST_EXAMPLES) ##@Examples Run all examples and compare against the stab
 	@echo ----------------------------
 	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)log_check.sh"
 
+test_website: $(TEST_WEBSITE)
+	@echo ---------------------------------------
+	@echo Testing Website complete, checking logs
+	@echo ---------------------------------------
+	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)log_check.sh"
+
 # First build all the Drasil packages, run all examples (no traceability graphs),
 # and then overwrite contents in the stable folder with currently generated ones.
 stabilize: $(STABILIZE_EXAMPLES) ##@Examples Overwrites the stable folder with up-to-date artifacts.
@@ -308,6 +315,10 @@ $(filter %$(TRACE_GRAPH_SUFFIX), $(TRACE_GRAPH_EXAMPLES)): %$(TRACE_GRAPH_SUFFIX
 $(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX)
 	@mkdir -p "$(LOG_FOLDER)"
 	- $(DIFF) "$(STABLE_FOLDER)$*/" "$(BUILD_FOLDER)$(EDIR)/" > "$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX)"
+
+$(filter %$(TEST_E_SUFFIX), $(TEST_WEBSITE)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) 
+	@mkdir -p "$(LOG_FOLDER)"
+	- $(DIFF) "$(STABLE_WEBSITE_FOLDER)$/" "$(WEBSITE_FOLDER)$/" > "$(LOG_FOLDER)$(WEBSITE_FOLDER_NAME)$(LOG_SUFFIX)"
 
 # Individual example build cleans. Removes a specific example from the build folder.
 # Targets will have the form exampleName_build_clean.
@@ -437,7 +448,7 @@ website: ##@Deploy First builds all Drasil packages, and then executes the drasi
 # in `deploy`, then this will skip the re-generation of 
 # those files. Currently, the deploy_stage.sh script does
 # not work for Windows Git Bash users.
-deploy_lite: website ##@Deploy Deploy the Drasil website without regenerating artifacts. For local development.
+deploy_lite: website test_website ##@Deploy Deploy the Drasil website without regenerating artifacts. For local development.
 	@mkdir -p "$(DEPLOY_FOLDER)"
 	@BUILD_FOLDER="$(BUILD_FOLDER)" DEPLOY_FOLDER="$(DEPLOY_FOLDER)" GRAPH_FOLDER="$(GRAPH_FOLDER)" \
 	EXAMPLE_DIRS="$(EXAMPLE_DIRS)" MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \

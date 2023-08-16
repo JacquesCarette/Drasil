@@ -88,6 +88,8 @@ STABILIZE_EXAMPLES = $(addsuffix $(STABILIZE_E_SUFFIX), $(EXAMPLES))
 BC_EXAMPLES = $(addsuffix $(BC_E_SUFFIX), $(EXAMPLES))
 TRACE_GRAPH_EXAMPLES = $(addsuffix $(TRACE_GRAPH_SUFFIX), $(EXAMPLES))
 INSTALL_EXAMPLES = $(addsuffix $(INSTALL_E_SUFFIX), $(EXAMPLES))
+
+# Website names with appropriate suffixes.
 TEST_WEBSITE = $(addsuffix $(TEST_E_SUFFIX), $(WEBSITE_FOLDER_NAME))
 STABILIZE_WEBSITE = $(addsuffix $(STABILIZE_E_SUFFIX), $(WEBSITE_FOLDER_NAME))
 BC_WEBSITE = $(addsuffix $(BC_E_SUFFIX), $(WEBSITE_FOLDER_NAME))
@@ -235,7 +237,8 @@ test: $(TEST_EXAMPLES) ##@Examples Run all examples and compare against the stab
 	@echo ----------------------------
 	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)log_check.sh"
 
-# Checks and compares website with the stable-website version.
+# First builds the website and then tests the generated contenst with those in
+# the stable-website folder.
 test_website: $(TEST_WEBSITE)
 	@echo ---------------------------------------
 	@echo Testing Website complete, checking logs
@@ -249,6 +252,8 @@ stabilize: $(STABILIZE_EXAMPLES) ##@Examples Overwrites the stable folder with u
 	@echo Stabilized all examples
 	@echo ----------------------------
 
+# First build the website, and then overwrite the contents in the stable-website
+# folder with currently generated ones.
 website_stabilize: $(STABILIZE_WEBSITE)
 	@echo ----------------------------
 	@echo Stabilized website
@@ -325,7 +330,8 @@ $(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PRE
 	- $(DIFF) "$(STABLE_FOLDER)$*/" "$(BUILD_FOLDER)$(EDIR)/" > "$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX)"
 
 # Website diff tests. First builds the website and then compares the generated
-# contents in the build folder to those in the stable folder.
+# contents in the Website folder to those in the stable-website folder. 
+# Target will have the form Website_diff.
 $(filter %$(TEST_E_SUFFIX), $(TEST_WEBSITE)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) website
 	@mkdir -p "$(LOG_FOLDER)"
 	- $(DIFF) "$(STABLE_WEBSITE_FOLDER)$/" "$(WEBSITE_FOLDER)$/" > "$(LOG_FOLDER)$(WEBSITE_FOLDER_NAME)$(LOG_SUFFIX)"
@@ -335,6 +341,8 @@ $(filter %$(TEST_E_SUFFIX), $(TEST_WEBSITE)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREF
 $(filter %$(BC_E_SUFFIX), $(BC_EXAMPLES)): %$(BC_E_SUFFIX):
 	- rm -rf "$(BUILD_FOLDER)$(EDIR)"
 
+# The website build cleans. 
+# Target will have the form Website_build_clean
 $(filter %$(BC_E_SUFFIX), $(BC_WEBSITE)): %$(BC_E_SUFFIX):
 	- rm -rf "$(WEBSITE_FOLDER)"
 
@@ -345,6 +353,9 @@ $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_EXAMPLES)): %$(STABILIZE_E_SUFFIX):
 	- rm -rf "$(STABLE_FOLDER)$*/"
 	- cp -r "$(BUILD_FOLDER)$(EDIR)" "$(STABLE_FOLDER)$*/"
 
+# The website stabilization. First builds the website, and then copies the
+# contents from the website folder into stable-website.
+# Target will have the form Website_stabilize.
 $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_WEBSITE)): %$(STABILIZE_E_SUFFIX): %$(BC_E_SUFFIX) website
 	- rm -rf "$(STABLE_WEBSITE_FOLDER)$/"
 	- cp -r "$(WEBSITE_FOLDER)$/" "$(STABLE_WEBSITE_FOLDER)$/"

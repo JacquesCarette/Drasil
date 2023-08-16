@@ -118,7 +118,7 @@ BUILD_FOLDER = $(BUILD_FOLDER_NAME)/
 STABLE_FOLDER_NAME = stable
 STABLE_FOLDER = $(STABLE_FOLDER_NAME)/
 STABLE_WEBSITE_FOLDER_NAME = stable-website
-STABLE_WEBSITE_FOLDER = $(STABLE_WEBSITE_FOLDER_NAME)/HTML/
+STABLE_WEBSITE_FOLDER = $(STABLE_WEBSITE_FOLDER_NAME)/
 EXAMPLE_CODE_SUBFOLDER = src/
 LOG_FOLDER_NAME = logs
 LOG_FOLDER = $(LOG_FOLDER_NAME)/
@@ -334,7 +334,7 @@ $(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PRE
 # Target will have the form Website_diff.
 $(filter %$(TEST_E_SUFFIX), $(TEST_WEBSITE)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) website
 	@mkdir -p "$(LOG_FOLDER)"
-	- $(DIFF) "$(STABLE_WEBSITE_FOLDER)$/" "$(WEBSITE_FOLDER)$/" > "$(LOG_FOLDER)$(WEBSITE_FOLDER_NAME)$(LOG_SUFFIX)"
+	- $(DIFF) "$(STABLE_WEBSITE_FOLDER)" "$(WEBSITE_FOLDER)" > "$(LOG_FOLDER)$(WEBSITE_FOLDER_NAME)$(LOG_SUFFIX)"
 
 # Individual example build cleans. Removes a specific example from the build folder.
 # Targets will have the form exampleName_build_clean.
@@ -357,8 +357,8 @@ $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_EXAMPLES)): %$(STABILIZE_E_SUFFIX):
 # contents from the website folder into stable-website.
 # Target will have the form Website_stabilize.
 $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_WEBSITE)): %$(STABILIZE_E_SUFFIX): %$(BC_E_SUFFIX) website
-	- rm -rf "$(STABLE_WEBSITE_FOLDER)$/"
-	- cp -r "$(WEBSITE_FOLDER)$/" "$(STABLE_WEBSITE_FOLDER)$/"
+	- rm -rf "$(STABLE_WEBSITE_FOLDER)"
+	- cp -r "$(WEBSITE_FOLDER)" "$(STABLE_WEBSITE_FOLDER)"
 
 # Generate individual example pdfs. Needs Graphviz to work.
 # First builds all Drasil packages, runs examples with dot graphs,
@@ -476,7 +476,7 @@ website: ##@Deploy First builds all Drasil packages, and then executes the drasi
 # in `deploy`, then this will skip the re-generation of 
 # those files. Currently, the deploy_stage.sh script does
 # not work for Windows Git Bash users.
-deploy_lite: website test_website ##@Deploy Deploy the Drasil website without regenerating artifacts. For local development.
+deploy_lite: website ##@Deploy Deploy the Drasil website without regenerating artifacts. For local development.
 	@mkdir -p "$(DEPLOY_FOLDER)"
 	@BUILD_FOLDER="$(BUILD_FOLDER)" DEPLOY_FOLDER="$(DEPLOY_FOLDER)" GRAPH_FOLDER="$(GRAPH_FOLDER)" \
 	EXAMPLE_DIRS="$(EXAMPLE_DIRS)" MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \

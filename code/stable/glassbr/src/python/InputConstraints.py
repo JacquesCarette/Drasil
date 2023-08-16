@@ -12,7 +12,7 @@ def input_constraints(inParams):
     print("  }", file=outfile)
     outfile.close()
     
-    if (not(0.1 <= inParams.a and inParams.a <= 5.0)) :
+    if (not(0.1 <= inParams.a and inParams.a <= 5.0)):
         print("a has value ", end="")
         print(inParams.a, end="")
         print(", but is expected to be ", end="")
@@ -24,7 +24,7 @@ def input_constraints(inParams):
         print(" (d_max)", end="")
         print(".")
         raise Exception("InputError")
-    if (not(0.1 <= inParams.b and inParams.b <= 5.0)) :
+    if (not(0.1 <= inParams.b and inParams.b <= 5.0)):
         print("b has value ", end="")
         print(inParams.b, end="")
         print(", but is expected to be ", end="")
@@ -36,7 +36,7 @@ def input_constraints(inParams):
         print(" (d_max)", end="")
         print(".")
         raise Exception("InputError")
-    if (not(4.5 <= inParams.w and inParams.w <= 910.0)) :
+    if (not(4.5 <= inParams.w and inParams.w <= 910.0)):
         print("w has value ", end="")
         print(inParams.w, end="")
         print(", but is expected to be ", end="")
@@ -48,7 +48,7 @@ def input_constraints(inParams):
         print(" (w_max)", end="")
         print(".")
         raise Exception("InputError")
-    if (not(6.0 <= inParams.SD and inParams.SD <= 130.0)) :
+    if (not(6.0 <= inParams.SD and inParams.SD <= 130.0)):
         print("SD has value ", end="")
         print(inParams.SD, end="")
         print(", but is expected to be ", end="")
@@ -60,7 +60,7 @@ def input_constraints(inParams):
         print(" (SD_max)", end="")
         print(".")
         raise Exception("InputError")
-    if (not(inParams.AR <= 5.0)) :
+    if (not(inParams.AR <= 5.0)):
         print("AR has value ", end="")
         print(inParams.AR, end="")
         print(", but is expected to be ", end="")
@@ -70,7 +70,7 @@ def input_constraints(inParams):
         print(".")
         raise Exception("InputError")
     
-    if (not(inParams.a > 0.0)) :
+    if (not(inParams.a > 0.0)):
         print("a has value ", end="")
         print(inParams.a, end="")
         print(", but is expected to be ", end="")
@@ -78,7 +78,7 @@ def input_constraints(inParams):
         print(0.0, end="")
         print(".")
         raise Exception("InputError")
-    if (not(inParams.a >= inParams.b)) :
+    if (not(inParams.a >= inParams.b)):
         print("a has value ", end="")
         print(inParams.a, end="")
         print(", but is expected to be ", end="")
@@ -87,7 +87,7 @@ def input_constraints(inParams):
         print(" (b)", end="")
         print(".")
         raise Exception("InputError")
-    if (not(0.0 < inParams.b and inParams.b <= inParams.a)) :
+    if (not(0.0 < inParams.b and inParams.b <= inParams.a)):
         print("b has value ", end="")
         print(inParams.b, end="")
         print(", but is expected to be ", end="")
@@ -98,7 +98,7 @@ def input_constraints(inParams):
         print(" (a)", end="")
         print(".")
         raise Exception("InputError")
-    if (not(inParams.w > 0.0)) :
+    if (not(inParams.w > 0.0)):
         print("w has value ", end="")
         print(inParams.w, end="")
         print(", but is expected to be ", end="")
@@ -106,7 +106,7 @@ def input_constraints(inParams):
         print(0.0, end="")
         print(".")
         raise Exception("InputError")
-    if (not(0.0 <= inParams.P_btol and inParams.P_btol <= 1.0)) :
+    if (not(0.0 <= inParams.P_btol and inParams.P_btol <= 1.0)):
         print("P_btol has value ", end="")
         print(inParams.P_btol, end="")
         print(", but is expected to be ", end="")
@@ -116,7 +116,7 @@ def input_constraints(inParams):
         print(1.0, end="")
         print(".")
         raise Exception("InputError")
-    if (not(inParams.TNT > 0.0)) :
+    if (not(inParams.TNT > 0.0)):
         print("TNT has value ", end="")
         print(inParams.TNT, end="")
         print(", but is expected to be ", end="")
@@ -124,7 +124,7 @@ def input_constraints(inParams):
         print(0.0, end="")
         print(".")
         raise Exception("InputError")
-    if (not(inParams.SD > 0.0)) :
+    if (not(inParams.SD > 0.0)):
         print("SD has value ", end="")
         print(inParams.SD, end="")
         print(", but is expected to be ", end="")
@@ -132,7 +132,7 @@ def input_constraints(inParams):
         print(0.0, end="")
         print(".")
         raise Exception("InputError")
-    if (not(inParams.AR >= 1.0)) :
+    if (not(inParams.AR >= 1.0)):
         print("AR has value ", end="")
         print(inParams.AR, end="")
         print(", but is expected to be ", end="")

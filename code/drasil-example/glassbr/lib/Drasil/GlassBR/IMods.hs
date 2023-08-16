@@ -146,7 +146,7 @@ probOfBreak = imNoDeriv (equationalModelN (probBr ^. term) probOfBreakQD)
   [riskRef]
 
 probOfBreakQD :: SimpleQDef
-probOfBreakQD = mkQuantDef probBr (exactDbl 1 $- exp (neg (sy risk)))
+probOfBreakQD = mkQuantDef probBr (exactDbl 1 $- exp (neg $ sy $ risk ^. output))
 
 {--}
 
@@ -156,7 +156,7 @@ calofCapacity = imNoDeriv (equationalModelN (lRe ^. term) calofCapacityQD)
   [dRef astm2009] "calofCapacity" [lrCap, nonFLRef, gtfRef]
 
 calofCapacityQD :: SimpleQDef
-calofCapacityQD = mkQuantDef lRe (sy nonFL `mulRe` sy (glaTyFac ^. defLhs) `mulRe` sy loadSF)
+calofCapacityQD = mkQuantDef lRe (sy (nonFL ^. output) `mulRe` sy (glaTyFac ^. defLhs) `mulRe` sy loadSF)
 
 {--}
 

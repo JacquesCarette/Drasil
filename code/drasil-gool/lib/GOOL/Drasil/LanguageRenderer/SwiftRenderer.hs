@@ -65,7 +65,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   increment, objDecNew, print, returnStmt, valStmt, comment, throw, ifCond,
   tryCatch, construct, param, method, getMethod, setMethod, initStmts,
   function, docFunc, buildClass, implementingClass, docClass, commentedClass,
-  modFromData, fileDoc, docMod, fileFromData)
+  modFromData, fileDoc, docMod, fileFromData, defaultOptSpace)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (classVar, 
   objVarSelf, intClass, buildModule, bindingError, extFuncAppMixedArgs, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, litArray, 
@@ -598,7 +598,7 @@ instance ControlStatement SwiftCode where
     modify setThrowUsed
     G.throw swiftThrowDoc Empty msg
 
-  ifCond = G.ifCond id bodyStart elseIfLabel bodyEnd
+  ifCond = G.ifCond id bodyStart G.defaultOptSpace elseIfLabel bodyEnd
   switch = C.switch (space <>) emptyStmt
 
   ifExists = M.ifExists

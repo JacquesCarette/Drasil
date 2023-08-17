@@ -1,11 +1,11 @@
 digraph allvsr {
-	calcValues -> flightduration;
-	calcValues -> landingposition;
-	calcValues -> offset;
-	calcValues -> message;
-	outputValues -> flightduration;
-	outputValues -> offset;
-	outputValues -> message;
+	calcValues -> theory:flightduration;
+	calcValues -> theory:landingposition;
+	calcValues -> theory:offset;
+	calcValues -> theory:message;
+	outputValues -> theory:flightduration;
+	outputValues -> theory:offset;
+	outputValues -> theory:message;
 
 
 	twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
@@ -46,24 +46,24 @@ digraph allvsr {
 	{accelerationTM, velocityTM}
 	}
 
-	projSpeed	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectVel"];
-	projPos	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectPos"];
-	velocity	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velVec"];
-	position	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:posVec"];
+	theory:projSpeed	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectVel"];
+	theory:projPos	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectPos"];
+	theory:velocity	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velVec"];
+	theory:position	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:posVec"];
 
 	subgraph GD {
 	rank="same"
-	{projSpeed, projPos, velocity, position}
+	{theory:projSpeed, theory:projPos, theory:velocity, theory:position}
 	}
 
-	flightduration	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingTime"];
-	landingposition	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingDist"];
-	offset	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:offsetIM"];
-	message	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:messageIM"];
+	theory:flightduration	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingTime"];
+	theory:landingposition	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingDist"];
+	theory:offset	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:offsetIM"];
+	theory:message	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:messageIM"];
 
 	subgraph IM {
 	rank="same"
-	{flightduration, landingposition, offset, message}
+	{theory:flightduration, theory:landingposition, theory:offset, theory:message}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

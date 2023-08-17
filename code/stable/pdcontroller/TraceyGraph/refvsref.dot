@@ -1,17 +1,17 @@
 digraph refvsref {
-	qdProcessErrorFD -> laplaceRC;
+	qdProcessErrorFD -> theory:laplaceRC;
 	qdPropControlFD -> qdProcessErrorFD;
-	qdPropControlFD -> laplaceRC;
+	qdPropControlFD -> theory:laplaceRC;
 	qdDerivativeControlFD -> qdProcessErrorFD;
-	qdDerivativeControlFD -> laplaceRC;
+	qdDerivativeControlFD -> theory:laplaceRC;
 	qdCtrlVarFD -> qdPropControlFD;
 	qdCtrlVarFD -> qdDerivativeControlFD;
-	gdPowerPlantRC -> laplaceRC;
-	gdPowerPlantRC -> tmSOSystemRC;
-	imPDRC -> qdProcessErrorFD;
-	imPDRC -> qdCtrlVarFD;
-	imPDRC -> invLaplaceRC;
-	imPDRC -> gdPowerPlantRC;
+	theory:gdPowerPlantRC -> theory:laplaceRC;
+	theory:gdPowerPlantRC -> theory:tmSOSystemRC;
+	theory:imPDRC -> qdProcessErrorFD;
+	theory:imPDRC -> qdCtrlVarFD;
+	theory:imPDRC -> theory:invLaplaceRC;
+	theory:imPDRC -> theory:gdPowerPlantRC;
 
 
 	qdProcessErrorFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddProcessError"];
@@ -24,27 +24,27 @@ digraph refvsref {
 	{qdProcessErrorFD, qdPropControlFD, qdDerivativeControlFD, qdCtrlVarFD}
 	}
 
-	laplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:laplaceTransform"];
-	invLaplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:invLaplaceTransform"];
-	tmSOSystemRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:tmSOSystem"];
+	theory:laplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:laplaceTransform"];
+	theory:invLaplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:invLaplaceTransform"];
+	theory:tmSOSystemRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:tmSOSystem"];
 
 	subgraph TM {
 	rank="same"
-	{laplaceRC, invLaplaceRC, tmSOSystemRC}
+	{theory:laplaceRC, theory:invLaplaceRC, theory:tmSOSystemRC}
 	}
 
-	gdPowerPlantRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:gdPowerPlant"];
+	theory:gdPowerPlantRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:gdPowerPlant"];
 
 	subgraph GD {
 	rank="same"
-	{gdPowerPlantRC}
+	{theory:gdPowerPlantRC}
 	}
 
-	imPDRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:pdEquationIM"];
+	theory:imPDRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:pdEquationIM"];
 
 	subgraph IM {
 	rank="same"
-	{imPDRC}
+	{theory:imPDRC}
 	}
 
 }

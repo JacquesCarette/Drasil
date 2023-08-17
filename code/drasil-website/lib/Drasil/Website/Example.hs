@@ -1,3 +1,5 @@
+{-# LANGUAGE TupleSections #-}
+
 -- | Create the list of Generated Examples for the Drasil website.
 module Drasil.Website.Example where
 
@@ -6,20 +8,21 @@ import SysInfo.Drasil (SystemInformation(..))
 import Language.Drasil.Code (Choices(..), Lang(..))
 import Data.Char (toLower, isSpace)
 
-import qualified Drasil.DblPendulum.Body as DblPendulum (fullSI)
+import qualified Drasil.DblPend.Body as DblPend (fullSI)
 import qualified Drasil.GamePhysics.Body as GamePhysics (fullSI)
 import qualified Drasil.GlassBR.Body as GlassBR (fullSI)
 import qualified Drasil.HGHC.Body as HGHC (fullSI)
-import qualified Drasil.NoPCM.Body as NoPCM (fullSI)
+import qualified Drasil.SWHSNoPCM.Body as NoPCM (fullSI)
 import qualified Drasil.PDController.Body as PDController (fullSI)
 import qualified Drasil.Projectile.Body as Projectile (fullSI)
-import qualified Drasil.SglPendulum.Body as SglPendulum (fullSI)
+import qualified Drasil.SglPend.Body as SglPend (fullSI)
 import qualified Drasil.SSP.Body as SSP (fullSI)
 import qualified Drasil.SWHS.Body as SWHS (fullSI)
 
 -- import choices for code generation
+import qualified Drasil.DblPend.Choices as DblPend (choices)
 import qualified Drasil.GlassBR.Choices as GlassBR (choices)
-import qualified Drasil.NoPCM.Choices as NoPCM (choices)
+import qualified Drasil.SWHSNoPCM.Choices as NoPCM (choices)
 import qualified Drasil.PDController.Choices as PDController (codeChoices)
 import qualified Drasil.Projectile.Choices as Projectile (codedDirName, choiceCombos)
 -- the other examples currently do not generate any code.
@@ -36,8 +39,6 @@ import qualified Drasil.Projectile.Choices as Projectile (codedDirName, choiceCo
 data Example = E {
   -- | Example system information. Used to get the system name and abbreviation.
   sysInfoE :: SystemInformation,
-  -- | System description. Currently hard-coded.
-  descE :: Sentence,
   -- | Some examples have generated code with specific choices.
   -- They may also have more than one set of choices, so we need a list.
   choicesE :: [Choices],
@@ -50,50 +51,46 @@ data Example = E {
 
 -- | Records example system information.
 allExampleSI :: [SystemInformation]
-allExampleSI = [DblPendulum.fullSI, GamePhysics.fullSI, GlassBR.fullSI, HGHC.fullSI, NoPCM.fullSI, PDController.fullSI, Projectile.fullSI, SglPendulum.fullSI, SSP.fullSI, SWHS.fullSI]
-
--- | Records example descriptions.
-allExampleDesc :: [Sentence]
-allExampleDesc = [dblPendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc, projectileDesc, sglPendulumDesc, sspDesc, swhsDesc]
+allExampleSI = [DblPend.fullSI, GamePhysics.fullSI, GlassBR.fullSI, HGHC.fullSI, NoPCM.fullSI, PDController.fullSI, Projectile.fullSI, SglPend.fullSI, SSP.fullSI, SWHS.fullSI]
 
 -- To developer: Fill this list in when more examples can run code. The list
 -- needs to be of this form since projectile comes with a list of choice combos.
 -- | Records example choices. The order of the list must match up with
 -- that in `allExampleSI`, or the Case Studies Table will be incorrect.
 allExampleChoices :: [[Choices]]
-allExampleChoices = [[], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.codeChoices], Projectile.choiceCombos, [], [], []]
+allExampleChoices = [[DblPend.choices], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.codeChoices], Projectile.choiceCombos, [], [], []]
 
 -- | Combine system info, description, choices, and file paths into one nice package.
-allExamples :: [SystemInformation] -> [Sentence] -> [[Choices]] -> FilePath -> FilePath -> [Example]
-allExamples si desc choi srsP doxP = zipWith3 (\x y z -> E x y z srsP doxP) si desc choi
+allExamples :: [SystemInformation] -> [[Choices]] -> FilePath -> FilePath -> [Example]
+allExamples si choi srsP doxP = zipWith (\x y -> E x y srsP doxP) si choi
 
 -- | Calls 'allExamples' on 'allExampleSI', 'allExampleDesc', and 'allExampleChoices'.
 -- Can be considered a "default" version of 'allExamples'.
 examples :: FilePath -> FilePath -> [Example]
-examples = allExamples allExampleSI allExampleDesc allExampleChoices
+examples = allExamples allExampleSI allExampleChoices
 
 -- * Functions to create the list of examples
 
 -- | Create the full list of examples.
 fullExList :: FilePath -> FilePath -> RawContent
-fullExList codePth srsDoxPth = Enumeration $ Bullet $ zip (allExampleList $ examples codePth srsDoxPth) $ repeat Nothing
+fullExList codePth srsDoxPth = Enumeration $ Bullet $ map (, Nothing) (allExampleList $ examples codePth srsDoxPth)
 
 -- | Create each example point and call 'individualExList' to do the rest.
 allExampleList :: [Example] -> [ItemType]
-allExampleList = map (\x -> Nested (nameAndDesc x) $ Bullet $ zip (individualExList x) $ repeat Nothing)
+allExampleList = map (\x -> Nested (nameAndDesc x) $ Bullet $ map (, Nothing) (individualExList x))
   where
-    nameAndDesc E{sysInfoE = SI{_sys = sys}, descE = desc} = S (abrv sys) +:+ desc
+    nameAndDesc E{sysInfoE = SI{_sys = sys, _purpose = purp}} = S (programName sys) +:+ S " - To" +:+. head purp
 
 -- | Display the points for generated documents and call 'versionList' to display the code.
 individualExList :: Example -> [ItemType]
 -- No choices mean no generated code, so we do not need to display generated code and thus do not call versionList.
 individualExList E{sysInfoE = SI{_sys = sys}, choicesE = [], codePath = srsP} = 
-  [Flat $ S (abrv sys ++ "_SRS") +:+ namedRef (getSRSRef srsP "html" $ abrv sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ abrv sys) (S "[PDF]")]
+  [Flat $ S (programName sys ++ "_SRS") +:+ namedRef (getSRSRef srsP "html" $ programName sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ programName sys) (S "[PDF]")]
 -- Anything else means we need to display program information, so use versionList.
 individualExList ex@E{sysInfoE = SI{_sys = sys}, codePath = srsP} = 
-  [Flat $ S (abrv sys ++ "_SRS") +:+ namedRef (getSRSRef srsP "html" $ abrv sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ abrv sys) (S "[PDF]"),
-  Nested (S generatedCodeTitle) $ Bullet $ zip (versionList getCodeRef ex) $ repeat Nothing,
-  Nested (S generatedCodeDocsTitle) $ Bullet $ zip (versionList getDoxRef noSwiftEx) $ repeat Nothing]
+  [Flat $ S (programName sys ++ "_SRS") +:+ namedRef (getSRSRef srsP "html" $ programName sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ programName sys) (S "[PDF]"),
+  Nested (S generatedCodeTitle) $ Bullet $ map (, Nothing) (versionList getCodeRef ex),
+  Nested (S generatedCodeDocsTitle) $ Bullet $ map (, Nothing) (versionList getDoxRef noSwiftEx)]
     where
       -- For now, swift does not generate any references using doxygen, so we pretend it doesn't exist in the doxygen list
       noSwiftEx = ex {choicesE = map (\x -> x {lang = filter (/= Swift) $ lang x}) $ choicesE ex}
@@ -116,9 +113,9 @@ versionList getRef ex@E{sysInfoE = SI{_sys = sys}, choicesE = chcs} =
     -- Determine the version name based on the system name and if there is more than one set of choices.
     verName chc = case chcs of
       -- If there is one set of choices, then the program does not have multiple versions.
-      [_] -> abrv sys
+      [_] -> programName sys
       -- If the above two don't match, we have more than one set of choices and must display every version.
-      _   -> Projectile.codedDirName (abrv sys) chc
+      _   -> Projectile.codedDirName (programName sys) chc
 
 -- | Show function to display program languages to user.
 showLang :: Lang -> String
@@ -147,22 +144,6 @@ exampleIntro = S "The development of Drasil follows an example-driven approach, 
   \through the creation of these examples, ranging from mechanics to thermodynamics. Each of the case studies \
   \implemented in Drasil contain their own generated PDF and HTML reports, and in some cases, \
   \their own generated code to solve the problem defined in their respective SRS documents."
-
--- | Project descriptions.
-sglPendulumDesc, dblPendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc,
-  projectileDesc, sspDesc, swhsDesc :: Sentence
-
-dblPendulumDesc  = S "describes the motion of a double pendulum in 2D."
-gamePhysDesc     = S "describes the modeling of an open source 2D rigid body physics library used for games."
-glassBRDesc      = S "predicts whether a given glass slab is likely to resist a specified blast."
-hghcDesc         = S "describes heat transfer coefficients related to clad."
-noPCMDesc        = S "describes the modelling of a solar water heating system without phase change material."
-pdControllerDesc = S ""
-projectileDesc   = S "describes the motion of a projectile object in free space."
-sglPendulumDesc  = S "describes the motion of a single pendulum in 2D."
-sspDesc          = S "describes the requirements of a slope stability analysis program."
-swhsDesc         = S "describes the modelling of a solar water heating system with phase change material."
--- templateDesc     = S "is an empty template document."
 
 -- | Example list titles.
 generatedCodeTitle, generatedCodeDocsTitle :: String
@@ -197,8 +178,8 @@ getCodeRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName =
 
     -- System name, different between one set of choices and multiple sets.
     sysName = case chcs of 
-      [_] -> map toLower $ filter (not.isSpace) $ abrv sys
-      _   -> map toLower (filter (not.isSpace) $ abrv sys) ++ "/" ++ verName
+      [_] -> map toLower $ filter (not.isSpace) $ programName sys
+      _   -> map toLower (filter (not.isSpace) $ programName sys) ++ "/" ++ verName
     -- Program language converted for use in file folder navigation.
     programLang = convertLang l
 
@@ -211,7 +192,7 @@ getDoxRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName =
     refURI = getDoxPath (srsDoxPath ex) sysName programLang
     refShortNm = shortname' $ S refUID
 
-    sysName = filter (not.isSpace) $ abrv sys
+    sysName = filter (not.isSpace) $ programName sys
     -- Here is the only difference from getCodeRef. When there is more than one set of choices,
     -- we append version name to program language since the organization of folders follows this way.
     programLang = case chcs of 
@@ -255,4 +236,4 @@ getDoxRefDB ex = concatMap (\x -> map (\y -> getDoxRef ex y $ verName x) $ lang 
 
 -- | Helper to pull the system name (abbreviation) from an 'Example'.
 getAbrv :: Example -> String
-getAbrv E{sysInfoE = SI{_sys=sys}} = abrv sys
+getAbrv E{sysInfoE = SI{_sys=sys}} = programName sys

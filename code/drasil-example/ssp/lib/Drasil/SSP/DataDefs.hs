@@ -48,7 +48,9 @@ intersliceWtrFEqn = completeCase [case1,case2,case3]
           sy waterWeight), inxi waterHght $>= inxi slopeHght)
 
         case2 = (half (square (inxi waterHght $- inxi slipHght))  `mulRe` sy waterWeight,
-                inxi slopeHght $> inxi waterHght $> inxi slipHght)
+                (inxi slopeHght $> inxi waterHght)
+                $&&
+                (inxi waterHght $> inxi slipHght))
 
         case3 = (exactDbl 0, inxi waterHght $<= inxi slipHght)
 
@@ -147,7 +149,7 @@ slcHeightQD :: SimpleQDef
 slcHeightQD = mkQuantDef midpntHght slcHeightEqn
 
 slcHeightEqn :: Expr
-slcHeightEqn = oneHalf `mulRe` (sy sliceHghtRight `addRe` sy sliceHghtLeft)
+slcHeightEqn = oneHalf `mulRe` (inxi sliceHghtRight `addRe` inxi sliceHghtLeft)
 
 slcHeightNotes :: [Sentence]
 slcHeightNotes = [S "This" +:+ phrase equation +:+ S "is based on the" +:+

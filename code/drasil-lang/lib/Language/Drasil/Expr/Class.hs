@@ -4,7 +4,8 @@ module Language.Drasil.Expr.Class (
   frac, recip_,
   square, half,
   oneHalf, oneThird,
-  apply1, apply2
+  apply1, apply2,
+  m2x2, vec2D, dgnl2x2, rowVec, columnVec
 ) where
 
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
@@ -15,12 +16,12 @@ import Language.Drasil.Symbol
 import Language.Drasil.Expr.Lang
 import Language.Drasil.Literal.Lang
 import Language.Drasil.Space (DomainDesc(..), RTopology(..), RealInterval)
-import Language.Drasil.Classes (IsArgumentName)
 import qualified Language.Drasil.ModelExpr.Lang as M
+import qualified Language.Drasil.CodeExpr.Lang as C
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.UID (HasUID(..))
 
--- TODO: figure out which ones can be moved outside of the ExprC class
+import Utils.Drasil (toColumn)
 
 -- | Smart constructor for fractions.
 frac :: (ExprC r, LiteralC r) => Integer -> Integer -> r
@@ -54,6 +55,34 @@ apply1 f a = apply f [sy a]
 apply2 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) 
     => f -> a -> b -> r
 apply2 f a b = apply f [sy a, sy b]
+
+-- | Create a two-by-two matrix from four given values. For example:
+--
+-- >>> m2x2 1 2 3 4
+-- [ [1,2],
+--   [3,4] ]
+m2x2 :: ExprC r => r -> r -> r -> r -> r
+m2x2 a b c d = matrix [[a,b],[c,d]]
+
+-- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
+vec2D :: ExprC r => r -> r -> r
+vec2D a b = matrix [[a],[b]]
+
+-- | Creates a diagonal two-by-two matrix. For example:
+--
+-- >>> dgnl2x2 1 2
+-- [ [1, 0],
+--   [0, 2] ]
+dgnl2x2 :: (ExprC r, LiteralC r) => r -> r -> r
+dgnl2x2 a = m2x2 a (int 0) (int 0)
+
+-- | Create a row vector
+rowVec :: ExprC r => [r] -> r
+rowVec a = matrix [a]
+
+-- | Create a column vector
+columnVec :: ExprC r => [r] -> r
+columnVec a = matrix $ toColumn a
 
 class ExprC r where
   infixr 8 $^
@@ -161,12 +190,18 @@ class ExprC r where
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
   euclidean :: [r] -> r
   
--- TODO:  sum' :: (Num a, Foldable t) => t a -> a
--- TODO:  sum' = foldr1 (+)
-    
   -- | Smart constructor to cross product two expressions.
   cross :: r -> r -> r
   
+  -- | Smart constructor for vector scaling
+  vScale :: r -> r -> r
+
+  -- | Vector Addition
+  vAdd :: r -> r -> r
+
+  -- | Vector Subtraction
+  vSub :: r -> r -> r
+
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase :: [(r, r)] -> r
   
@@ -174,39 +209,11 @@ class ExprC r where
   incompleteCase :: [(r, r)] -> r
   
   -- | Create a matrix.
-  -- TODO: Re-work later.
   matrix :: [[r]] -> r
 
-  -- TODO: The 3 below smart constructors can be re-built above without needing to be inside of this typeclass definition.
-
-  -- | Create a two-by-two matrix from four given values. For example:
-  --
-  -- >>> m2x2 1 2 3 4
-  -- [ [1,2],
-  --   [3,4] ]
-  m2x2 :: r -> r -> r -> r -> r
-  
-  -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
-  vec2D :: r -> r -> r
-  
-  -- | Creates a diagonal two-by-two matrix. For example:
-  --
-  -- >>> dgnl2x2 1 2
-  -- [ [1, 0],
-  --   [0, 2] ]
-  dgnl2x2 :: r -> r -> r
-  
-  -- Some helper functions to do function application
-  
-  -- FIXME: These constructors should check that the UID is associated with a
-  -- chunk that is actually callable.
   -- | Applies a given function with a list of parameters.
   apply :: (HasUID f, HasSymbol f) => f -> [r] -> r
-  
-  -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
-  applyWithNamedArgs :: (HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f 
-    -> [r] -> [(a, r)] -> r
-  
+   
   -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy :: (HasUID c, HasSymbol c) => c -> r
@@ -338,6 +345,8 @@ instance ExprC Expr where
   
   -- | Smart constructor for negating vectors.
   negVec = UnaryOpVV NegV
+  -- | And more general scaling
+  vScale = NVVBinaryOp Scale
   
   -- | Smart constructor for applying logical negation to an expression.
   not_ = UnaryOpB Not
@@ -357,11 +366,16 @@ instance ExprC Expr where
   -- | Smart constructor for 'real interval' membership.
   realInterval c = RealI (c ^. uid)
   
+  -- TODO: Move euclidean to smart constructor
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
   euclidean = sqrt . foldr1 addRe . map square
   
   -- | Smart constructor to cross product two expressions.
   cross = VVVBinaryOp Cross
+  -- | Adding vectors
+  vAdd  = VVVBinaryOp VAdd
+  -- | Subtracting vectors
+  vSub  = VVVBinaryOp VSub
   
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = Case Complete
@@ -371,35 +385,10 @@ instance ExprC Expr where
   
   matrix = Matrix
 
-  -- | Create a two-by-two matrix from four given values. For example:
-  --
-  -- >>> m2x2 1 2 3 4
-  -- [ [1,2],
-  --   [3,4] ]
-  m2x2 a b c d = matrix [[a,b],[c,d]]
-  
-  -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
-  vec2D a b    = matrix [[a],[b]]
-  
-  -- | Creates a diagonal two-by-two matrix. For example:
-  --
-  -- >>> dgnl2x2 1 2
-  -- [ [1, 0],
-  --   [0, 2] ]
-  dgnl2x2 a  = m2x2 a (int 0) (int 0)
-  
-  -- Some helper functions to do function application
-  
-  -- FIXME: These constructors should check that the UID is associated with a
-  -- chunk that is actually callable.
   -- | Applies a given function with a list of parameters.
-  apply f ps = FCall (f ^. uid) ps []
+  apply f [] = sy f
+  apply f ps = FCall (f ^. uid) ps
   
-  -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
-  applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns) 
-    (map snd ns))
-  
-  -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy x = C (x ^. uid)
   
@@ -530,6 +519,8 @@ instance ExprC M.ModelExpr where
 
   -- | Smart constructor for negating vectors.
   negVec = M.UnaryOpVV M.NegV
+  -- | More general scaling
+  vScale = M.NVVBinaryOp M.Scale
 
   -- | Smart constructor for applying logical negation to an expression.
   not_ = M.UnaryOpB M.Not
@@ -555,6 +546,11 @@ instance ExprC M.ModelExpr where
   -- | Smart constructor to cross product two expressions.
   cross = M.VVVBinaryOp M.Cross
 
+  -- | Adding vectors
+  vAdd  = M.VVVBinaryOp M.VAdd
+  -- | Subtracting vectors
+  vSub  = M.VVVBinaryOp M.VSub
+  
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = M.Case Complete
 
@@ -563,34 +559,186 @@ instance ExprC M.ModelExpr where
 
   matrix = M.Matrix
 
-  -- | Create a two-by-two matrix from four given values. For example:
-  --
-  -- >>> m2x2 1 2 3 4
-  -- [ [1,2],
-  --   [3,4] ]
-  m2x2 a b c d = matrix [[a,b],[c,d]]
-
-  -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
-  vec2D a b    = matrix [[a],[b]]
-
-  -- | Creates a diagonal two-by-two matrix. For example:
-  --
-  -- >>> dgnl2x2 1 2
-  -- [ [1, 0],
-  --   [0, 2] ]
-  dgnl2x2 a  = m2x2 a (int 0) (int 0)
-
-  -- Some helper functions to do function application
-
-  -- FIXME: These constructors should check that the UID is associated with a
-  -- chunk that is actually callable.
   -- | Applies a given function with a list of parameters.
-  apply f ps = M.FCall (f ^. uid) ps []
-
-  -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
-  applyWithNamedArgs f ps ns = M.FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns) 
-    (map snd ns))
+  apply f [] = sy f
+  apply f ps = M.FCall (f ^. uid) ps
 
   -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy x = M.C (x ^. uid)
+
+instance ExprC C.CodeExpr where
+  lit = C.Lit
+
+  -- | Smart constructor for equating two expressions.
+  ($=)  = C.EqBinaryOp C.Eq
+  -- | Smart constructor for showing that two expressions are not equal.
+  ($!=) = C.EqBinaryOp C.NEq
+  
+  -- | Smart constructor for ordering two equations.
+  -- | Less than.
+  ($<)  = C.OrdBinaryOp C.Lt
+  -- | Greater than.
+  ($>)  = C.OrdBinaryOp C.Gt
+  -- | Less than or equal to.
+  ($<=) = C.OrdBinaryOp C.LEq
+  -- | Greater than or equal to.
+  ($>=) = C.OrdBinaryOp C.GEq
+  
+  -- | Smart constructor for the dot product of two equations.
+  ($.) = C.VVNBinaryOp C.Dot
+  
+  -- | Add two expressions (Integers).
+  addI l (C.Lit (Int 0)) = l
+  addI (C.Lit (Int 0)) r = r
+  addI (C.AssocA C.AddI l) (C.AssocA C.AddI r) = C.AssocA C.AddI (l ++ r)
+  addI (C.AssocA C.AddI l) r = C.AssocA C.AddI (l ++ [r])
+  addI l (C.AssocA C.AddI r) = C.AssocA C.AddI (l : r)
+  addI l r = C.AssocA C.AddI [l, r]
+  
+  -- | Add two expressions (Real numbers).
+  addRe l (C.Lit (Dbl 0))= l
+  addRe (C.Lit(Dbl 0)) r      = r
+  addRe l (C.Lit (ExactDbl 0)) = l
+  addRe (C.Lit (ExactDbl 0)) r = r
+  addRe (C.AssocA C.AddRe l) (C.AssocA C.AddRe r) = C.AssocA C.AddRe (l ++ r)
+  addRe (C.AssocA C.AddRe l) r = C.AssocA C.AddRe (l ++ [r])
+  addRe l (C.AssocA C.AddRe r) = C.AssocA C.AddRe (l : r)
+  addRe l r = C.AssocA C.AddRe [l, r]
+  
+  -- | Multiply two expressions (Integers).
+  mulI l (C.Lit (Int 1)) = l
+  mulI (C.Lit (Int 1)) r = r
+  mulI (C.AssocA C.MulI l) (C.AssocA C.MulI r) = C.AssocA C.MulI (l ++ r)
+  mulI (C.AssocA C.MulI l) r = C.AssocA C.MulI (l ++ [r])
+  mulI l (C.AssocA C.MulI r) = C.AssocA C.MulI (l : r)
+  mulI l r = C.AssocA C.MulI [l, r]
+  
+  -- | Multiply two expressions (Real numbers).
+  mulRe l (C.Lit (Dbl 1))      = l
+  mulRe (C.Lit (Dbl 1)) r      = r
+  mulRe l (C.Lit (ExactDbl 1)) = l
+  mulRe (C.Lit (ExactDbl 1)) r = r
+  mulRe (C.AssocA C.MulRe l) (C.AssocA C.MulRe r) = C.AssocA C.MulRe (l ++ r)
+  mulRe (C.AssocA C.MulRe l) r = C.AssocA C.MulRe (l ++ [r])
+  mulRe l (C.AssocA C.MulRe r) = C.AssocA C.MulRe (l : r)
+  mulRe l r = C.AssocA C.MulRe [l, r]
+  
+  -- | Smart constructor for subtracting two expressions.
+  ($-) = C.ArithBinaryOp C.Subt
+  -- | Smart constructor for dividing two expressions.
+  ($/) = C.ArithBinaryOp C.Frac
+  -- | Smart constructor for rasing the first expression to the power of the second.
+  ($^) = C.ArithBinaryOp C.Pow
+  
+  -- | Smart constructor to show that one expression implies the other (conditional operator).
+  ($=>)  = C.BoolBinaryOp C.Impl
+  -- | Smart constructor to show that an expression exists if and only if another expression exists (biconditional operator).
+  ($<=>) = C.BoolBinaryOp C.Iff
+  
+  -- | Smart constructor for the boolean /and/ operator.
+  a $&& b = C.AssocB C.And [a, b]
+  -- | Smart constructor for the boolean /or/ operator.
+  a $|| b = C.AssocB C.Or  [a, b]
+  
+  -- | Smart constructor for taking the absolute value of an expression.
+  abs_ = C.UnaryOp C.Abs
+  
+  -- | Smart constructor for negating an expression.
+  neg = C.UnaryOp C.Neg
+  
+  -- | Smart constructor to take the log of an expression.
+  log = C.UnaryOp C.Log
+  
+  -- | Smart constructor to take the ln of an expression.
+  ln = C.UnaryOp C.Ln
+  
+  -- | Smart constructor to take the square root of an expression.
+  sqrt = C.UnaryOp C.Sqrt
+  
+  -- | Smart constructor to apply sin to an expression.
+  sin = C.UnaryOp C.Sin
+  
+  -- | Smart constructor to apply cos to an expression.
+  cos = C.UnaryOp C.Cos
+  
+  -- | Smart constructor to apply tan to an expression.
+  tan = C.UnaryOp C.Tan
+  
+  -- | Smart constructor to apply sec to an expression.
+  sec = C.UnaryOp C.Sec
+  
+  -- | Smart constructor to apply csc to an expression.
+  csc = C.UnaryOp C.Csc
+  
+  -- | Smart constructor to apply cot to an expression.
+  cot = C.UnaryOp C.Cot
+  
+  -- | Smart constructor to apply arcsin to an expression.
+  arcsin = C.UnaryOp C.Arcsin
+  
+  -- | Smart constructor to apply arccos to an expression.
+  arccos = C.UnaryOp C.Arccos
+  
+  -- | Smart constructor to apply arctan to an expression.
+  arctan = C.UnaryOp C.Arctan
+  
+  -- | Smart constructor for the exponential (base e) function.
+  exp = C.UnaryOp C.Exp
+  
+  -- | Smart constructor for calculating the dimension of a vector.
+  dim = C.UnaryOpVN C.Dim
+  
+  -- | Smart constructor for calculating the normal form of a vector.
+  norm = C.UnaryOpVN C.Norm
+  
+  -- | Smart constructor for negating vectors.
+  negVec = C.UnaryOpVV C.NegV
+  -- | And more general scaling
+  vScale = C.NVVBinaryOp C.Scale
+  
+  -- | Smart constructor for applying logical negation to an expression.
+  not_ = C.UnaryOpB C.Not
+  
+  -- | Smart constructor for indexing.
+  idx = C.LABinaryOp C.Index
+  
+  -- | Integrate over some expression with bounds (∫).
+  defint v low high = C.Operator C.AddRe (BoundedDD v Continuous low high)
+  
+  -- | Sum over some expression with bounds (∑).
+  defsum v low high = C.Operator C.AddRe (BoundedDD v Discrete low high)
+  
+  -- | Product over some expression with bounds (∏).
+  defprod v low high = C.Operator C.MulRe (BoundedDD v Discrete low high)
+  
+  -- | Smart constructor for 'real interval' membership.
+  realInterval c = C.RealI (c ^. uid)
+  
+  -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
+  euclidean = sqrt . foldr1 addRe . map square
+  
+  -- | Smart constructor to cross product two expressions.
+  cross = C.VVVBinaryOp C.Cross
+  
+  -- | Adding vectors
+  vAdd  = C.VVVBinaryOp C.VAdd
+  -- | Subtracting vectors
+  vSub  = C.VVVBinaryOp C.VSub
+
+  -- | Smart constructor for case statements with a complete set of cases.
+  completeCase = C.Case Complete
+  
+  -- | Smart constructor for case statements with an incomplete set of cases.
+  incompleteCase = C.Case Incomplete
+  
+  matrix = C.Matrix
+
+  -- | Applies a given function with a list of parameters.
+  apply f [] = sy f
+  apply f ps = C.FCall (f ^. uid) ps []
+  
+  -- Note how |sy| 'enforces' having a symbol
+  -- | Create an 'Expr' from a 'Symbol'ic Chunk.
+  sy x = C.C (x ^. uid)
+

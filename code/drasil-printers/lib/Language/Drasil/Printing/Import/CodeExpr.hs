@@ -6,7 +6,7 @@ module Language.Drasil.Printing.Import.CodeExpr (codeExpr) where
 import Language.Drasil (DomainDesc(..), Inclusive(..),
   RTopology(..), RealInterval(..), UID, LiteralC (int))
 import Language.Drasil.Display (Symbol(..))
-import Language.Drasil.Code.Expr.Development
+import Language.Drasil.CodeExpr.Development
 import Language.Drasil.Literal.Development
 
 import qualified Language.Drasil.Printing.AST as P
@@ -162,6 +162,9 @@ codeExpr (OrdBinaryOp LEq a b)    sm = mkBOp sm P.LEq a b
 codeExpr (OrdBinaryOp GEq a b)    sm = mkBOp sm P.GEq a b
 codeExpr (VVNBinaryOp Dot a b)    sm = mkBOp sm P.Dot a b
 codeExpr (VVVBinaryOp Cross a b)  sm = mkBOp sm P.Cross a b
+codeExpr (VVVBinaryOp VAdd a b)   sm = mkBOp sm P.VAdd a b
+codeExpr (VVVBinaryOp VSub a b)   sm = mkBOp sm P.VSub a b
+codeExpr (NVVBinaryOp Scale a b)  sm = mkBOp sm P.Scale a b
 codeExpr (Operator o d e)         sm = eop sm o d e
 codeExpr (RealI c ri)             sm = renderRealInt sm (lookupC (sm ^. stg)
   (sm ^. ckdb) c) ri

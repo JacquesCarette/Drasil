@@ -1,0 +1,12 @@
+\begin{haskell}{Example of Current Gathering Chunk Lists Into the Database}{curExampleGatherChunkListsIntoDB}{https://github.com/JacquesCarette/Drasil/blob/dc3674274edb00b1ae0d63e04ba03729e1dbc6f9/code/drasil-example/glassbr/lib/Drasil/GlassBR/Body.hs\#L128-L137}
+symbMap :: ChunkDB
+symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
+  ++ map nw con' ++ map nw terms ++ map nw doccon ++ map nw doccon' ++ map nw educon
+  ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'
+  ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad, nw materialProprty]
+   ++ [nw distance, nw algorithm] ++
+  map nw fundamentals ++ map nw derived ++ map nw physicalcon)
+  (map cw symb ++ terms ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
+  ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns section
+  labCon []
+\end{haskell}

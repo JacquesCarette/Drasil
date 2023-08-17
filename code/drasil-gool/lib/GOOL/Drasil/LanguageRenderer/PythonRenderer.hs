@@ -10,18 +10,20 @@ import Utils.Drasil (blank, indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue, 
-  VSFunction, MSStatement, MixedCtorCall, OOProg, ProgramSym(..), FileSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), 
-  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..), 
-  MathConstant(..), VariableValue(..), CommandLineArgs(..), 
-  NumericExpression(..), BooleanExpression(..), Comparison(..), 
-  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj, 
-  InternalValueExp(..), objMethodCall, FunctionSym(..), GetSet(..), List(..), 
-  InternalList(..), StatementSym(..), AssignStatement(..), (&=), 
-  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), switchAsIf, StatePattern(..), 
-  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  VSFunction, MSStatement, MixedCtorCall, OOProg, ProgramSym(..), FileSym(..),
+  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
+  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj,
+  InternalValueExp(..), objMethodCall, FunctionSym(..), GetSet(..), List(..),
+  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..),
+  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -49,17 +51,17 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
   mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, 
   unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, 
-  cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
-  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, 
-  arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList, 
-  objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
-  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess, 
-  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
-  subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, 
-  comment, throw, ifCond, tryCatch, construct, param, method, getMethod, 
-  setMethod, function, buildClass, implementingClass, commentedClass, 
-  modFromData, fileDoc, fileFromData)
+  multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
+  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
+  minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
+  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
+  objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
+  lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
+  setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
+  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
+  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
+  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
+  fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
   extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
@@ -71,18 +73,21 @@ import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists,
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
   notifyObservers', checkState)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
-  FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, 
-  updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..), 
-  td, ValData(..), vd, VarData(..), vard)
+  FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
+  updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
+  td, ValData(..), vd, VarData(..), vard, CommonThunk, pureValue, vectorize,
+  vectorize2, sumComponents, commonVecIndex, commonThunkElim, commonThunkDim)
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList, on2StateWrapped)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
   revFiles, addLangImportVS, getLangImports, addLibImportVS, 
   getLibImports, addModuleImport, addModuleImportVS, getModuleImports, 
-  setFileType, getClassName, setCurrMain, getClassMap, getMainDoc)
+  setFileType, getClassName, setCurrMain, getClassMap, getMainDoc, useVarName,
+  genLoopIndex)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
+import Control.Applicative (liftA2)
 import Control.Lens.Zoom (zoom)
 import Control.Monad (join)
 import Control.Monad.State (modify)
@@ -90,6 +95,7 @@ import Data.List (intercalate, sort)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty, quotes)
+import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 
 pyExt :: String
 pyExt = "py"
@@ -104,17 +110,16 @@ instance Applicative PythonCode where
   (PC f) <*> (PC x) = PC (f x)
 
 instance Monad PythonCode where
-  return = PC
   PC x >>= f = f x
 
 instance OOProg PythonCode
 
 instance ProgramSym PythonCode where
   type Program PythonCode = ProgData 
-  prog n files = do
+  prog n st files = do
     fs <- mapM (zoom lensGStoFS) files
     modify revFiles
-    return $ onCodeList (progD n) fs
+    pure $ onCodeList (progD n st) fs
 
 instance RenderSym PythonCode
 
@@ -246,7 +251,7 @@ instance VariableSym PythonCode where
   type Variable PythonCode = VarData
   var = G.var
   staticVar = G.staticVar
-  const = var
+  constant = var
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
   classVar = CP.classVar R.classVar
@@ -313,8 +318,8 @@ instance NumericExpression PythonCode where
     v2 <- v2'
     let pyDivision Integer Integer = binExpr (multPrec pyIntDiv)
         pyDivision _ _ = binExpr divideOp
-    pyDivision (getType $ valueType v1) (getType $ valueType v2) (return v1) 
-      (return v2)
+    pyDivision (getType $ valueType v1) (getType $ valueType v2) (pure v1) 
+      (pure v2)
   (#%) = binExpr moduloOp
   (#^) = binExpr powerOp
 
@@ -425,6 +430,39 @@ instance InternalListFunc PythonCode where
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
 
+instance ThunkSym PythonCode where
+  type Thunk PythonCode = CommonThunk VS
+
+instance ThunkAssign PythonCode where
+  thunkAssign v t = do
+    iName <- genLoopIndex
+    let
+      i = var iName int
+      dim = fmap pure $ t >>= commonThunkDim (fmap unPC . listSize . fmap pure) . unPC
+      loopInit = zoom lensMStoVS (fmap unPC t) >>= commonThunkElim
+        (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
+      loopBody = zoom lensMStoVS (fmap unPC t) >>= commonThunkElim
+        (valStmt . listSet (valueOf v) (valueOf i) . vecIndex (valueOf i) . pure . pure)
+        ((v &+=) . vecIndex (valueOf i) . pure . pure)
+    multi [loopInit,
+      forRange i (litInt 0) dim (litInt 1) $ body [block [loopBody]]]
+
+instance VectorType PythonCode where
+  vecType = listType
+
+instance VectorDecl PythonCode where
+  vecDec = listDec
+  vecDecDef = listDecDef
+
+instance VectorThunk PythonCode where
+  vecThunk = pure . pure . pureValue . fmap unPC . valueOf
+
+instance VectorExpression PythonCode where
+  vecScale k = fmap $ fmap $ vectorize (fmap unPC . (k #*) . fmap pure)
+  vecAdd = liftA2 $ liftA2 $ vectorize2 (\v1 v2 -> fmap unPC $ fmap pure v1 #+ fmap pure v2)
+  vecIndex i = (>>= fmap pure . commonVecIndex (fmap unPC . flip listAccess i . fmap pure) . unPC)
+  vecDot = liftA2 $ liftA2 $ fmap sumComponents <$> vectorize2 (\v1 v2 -> fmap unPC $ fmap pure v1 #* fmap pure v2)
+
 instance RenderFunction PythonCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
   
@@ -467,8 +505,14 @@ instance AssignStatement PythonCode where
   (&--) = M.decrement1
 
 instance DeclStatement PythonCode where
-  varDec _ = mkStmtNoEnd empty
-  varDecDef = assign
+  varDec v = do
+    v' <- zoom lensMStoVS v
+    modify $ useVarName (variableName v')
+    mkStmtNoEnd empty
+  varDecDef v e = do
+    v' <- zoom lensMStoVS v
+    modify $ useVarName (variableName v')
+    assign v e
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
   arrayDec = listDec
@@ -528,7 +572,7 @@ instance ControlStatement PythonCode where
 
   throw = G.throw pyThrow Empty
 
-  ifCond = G.ifCond parens pyBodyStart pyElseIf pyBodyEnd
+  ifCond = G.ifCond parens pyBodyStart pySpace pyElseIf pyBodyEnd
   switch = switchAsIf
 
   ifExists = M.ifExists
@@ -619,7 +663,7 @@ instance RenderMethod PythonCode where
     modify (if m then setCurrMain else id)
     bd <- b
     pms <- sequence ps
-    return $ toCode $ mthd $ pyFunction n pms bd
+    pure $ toCode $ mthd $ pyFunction n pms bd
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)
     
@@ -665,7 +709,7 @@ instance ModuleSym PythonCode where
     lis <- getLangImports
     libis <- getLibImports
     mis <- getModuleImports
-    return $ vibcat [
+    pure $ vibcat [
       vcat (map (RC.import' . 
         (langImport :: Label -> PythonCode (Import PythonCode))) lis),
       vcat (map (RC.import' . 
@@ -673,7 +717,7 @@ instance ModuleSym PythonCode where
         libis)),
       vcat (map (RC.import' . 
         (modImport :: Label -> PythonCode (Import PythonCode))) mis)]) 
-    (return empty) getMainDoc
+    (pure empty) getMainDoc
 
 instance RenderMod PythonCode where
   modFromData n = G.modFromData n (toCode . md n)
@@ -767,6 +811,9 @@ pyCommentStart = text "#"
 pyDocCommentStart = pyCommentStart <> pyCommentStart
 pyNamedArgSep = equals
 
+pySpace :: OptionalSpace
+pySpace = OSpace {oSpace = empty}
+
 pyNotOp :: (Monad r) => VSOp r
 pyNotOp = unOpPrec "not"
 
@@ -857,7 +904,7 @@ pyStringType = typeFromData String pyString (text pyString)
 
 pyExtNewObjMixedArgs :: (RenderSym r) => Library -> MixedCtorCall r
 pyExtNewObjMixedArgs l tp vs ns = tp >>= (\t -> call (Just l) Nothing 
-  (getTypeString t) (return t) vs ns)
+  (getTypeString t) (pure t) vs ns)
 
 pyPrint :: Bool -> Maybe (SValue PythonCode) -> SValue PythonCode -> 
   SValue PythonCode -> MSStatement PythonCode
@@ -916,7 +963,7 @@ pyListSlice vn vo beg end step = zoom lensMStoVS $ do
   b <- beg
   e <- end
   s <- step
-  return $ toCode $ RC.variable vnew <+> equals <+> RC.value vold <> 
+  pure $ toCode $ RC.variable vnew <+> equals <+> RC.value vold <> 
     brackets (RC.value b <> colon <> RC.value e <> colon <> RC.value s)
 
 pyMethod :: (RenderSym r) => Label -> r (Variable r) -> [r (Parameter r)] ->

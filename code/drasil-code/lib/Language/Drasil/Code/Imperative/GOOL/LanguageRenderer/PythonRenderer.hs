@@ -5,11 +5,11 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
   PythonProject(..)
 ) where
 
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),PackageSym(..), 
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),PackageSym(..),
   AuxiliarySym(..))
-import qualified 
-  Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig, 
+import qualified
+  Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
+  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
@@ -32,7 +32,6 @@ instance Applicative PythonProject where
   (PP f) <*> (PP x) = PP (f x)
 
 instance Monad PythonProject where
-  return = PP
   PP x >>= f = f x
 
 instance PackageSym PythonProject where
@@ -49,14 +48,14 @@ instance AuxiliarySym PythonProject where
         langVersion = pyVersion}
   sampleInput = G.sampleInput
 
-  optimizeDox = return yes
+  optimizeDox = pure yes
 
   makefile _ it cms = G.makefile Nothing (G.noRunIfLib it pyRunnable)
     (G.docIfEnabled cms G.doxDocConfig)
 
   auxHelperDoc = unPP
-  auxFromData fp d = return $ ad fp d
+  auxFromData fp d = pure $ ad fp d
 
 -- | Default runnable information for Python files.
 pyRunnable :: Maybe Runnable
-pyRunnable = interpMM "python"
+pyRunnable = interpMM "python3"

@@ -10,13 +10,13 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
   PackageSym(..), AuxiliarySym(..))
-import qualified 
-  Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig, 
+import qualified
+  Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
+  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, 
+import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad,
   PackData(..), packD)
-import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
+import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   asFragment, buildAll, cppCompiler, nativeBinary, executable, sharedLibrary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
 
@@ -36,7 +36,6 @@ instance Applicative CppProject where
   (CPPP f) <*> (CPPP x) = CPPP (f x)
 
 instance Monad CppProject where
-  return = CPPP
   CPPP x >>= f = f x
 
 instance PackageSym CppProject where
@@ -53,18 +52,18 @@ instance AuxiliarySym CppProject where
         langVersion = cppVersion}
   sampleInput = G.sampleInput
 
-  optimizeDox = return no
-  
+  optimizeDox = pure no
+
   makefile fs it cms = G.makefile (cppBuildConfig fs it) (G.noRunIfLib it cppRunnable) (G.docIfEnabled cms G.doxDocConfig)
-  
+
   auxHelperDoc = unCPPP
-  auxFromData fp d = return $ ad fp d
+  auxFromData fp d = pure $ ad fp d
 
 -- helpers
 -- | Create a build configuration for C++ files. Takes in 'FilePath's and the type of implementation.
 cppBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig
 cppBuildConfig fs it = buildAll (\i o -> [cppCompiler : i ++ map asFragment
-  ("--std=c++11" : target it ++ ["-o"]) ++ [o] ++ concatMap (\f -> map 
+  ("--std=c++11" : target it ++ ["-o"]) ++ [o] ++ concatMap (\f -> map
   asFragment ["-I", f]) fs]) (outName it)
   where target Library = ["-shared", "-fPIC"]
         target Program = []

@@ -22,6 +22,7 @@ import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
   PackageSym(..), AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer(sampleInputName)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
@@ -74,6 +75,7 @@ generator l dt sd chs spec = DrasilState {
   libEMap = lem,
   clsMap = cdm,
   defList = nub $ listStrIC (keys mem ++ keys cdm),
+  getVal = folderVal chs,
   -- stateful
   currentModule = "",
   currentClass = "",
@@ -95,7 +97,7 @@ generator l dt sd chs spec = DrasilState {
           (nonPrefChs ++ concLog ++ libLog)
 
 -- | Generates a package with the given 'DrasilState'. The passed
--- un-representation functions determine which target language the package will 
+-- un-representation functions determine which target language the package will
 -- be generated in.
 generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang ->
   (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) ->
@@ -105,17 +107,20 @@ generateCode l unReprProg unReprPack g = do
   createDirectoryIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
   let (pckg, ds) = runState (genPackage unReprProg) g
-      code = makeCode (progMods $ packProg $ unReprPack pckg)
-        ([ad "designLog.txt" (ds ^. designLog) | not $ isEmpty $
-          ds ^. designLog] ++ packAux (unReprPack pckg))
+      baseAux = [ad "designLog.txt" (ds ^. designLog) | not $ isEmpty $
+          ds ^. designLog] ++ packAux (unReprPack pckg)
+      aux
+        | l == Python = ad "__init__.py" mempty : baseAux
+        | otherwise   = baseAux
+      code = makeCode (progMods $ packProg $ unReprPack pckg) aux
   createCodeFiles code
   setCurrentDirectory workingDir
 
--- | Generates a package, including a Makefile, sample input file, and Doxygen 
--- configuration file (all subject to the user's choices). 
--- The passed un-representation function determines which target language the 
+-- | Generates a package, including a Makefile, sample input file, and Doxygen
+-- configuration file (all subject to the user's choices).
+-- The passed un-representation function determines which target language the
 -- package will be generated in.
--- GOOL's static code analysis interpreter is called to initialize the state 
+-- GOOL's static code analysis interpreter is called to initialize the state
 -- used by the language renderer.
 genPackage :: (OOProg progRepr, PackageSym packRepr) =>
   (progRepr (Program progRepr) -> ProgData) ->
@@ -130,6 +135,11 @@ genPackage unRepr = do
       m = makefile (libPaths g) (implType g) (commented g) s pd
       as = case codeSpec g of CodeSpec {authors = a} -> map name a
       cfp = configFiles $ codeSpec g
+      db = sysinfodb $ codeSpec g
+      prps = show $ sentenceDoc db Implementation Linear
+        (foldlSent $ purpose $ codeSpec g)
+      bckgrnd = show $ sentenceDoc db Implementation Linear
+        (foldlSent $ background $ codeSpec g)
   i <- genSampleInput
   d <- genDoxConfig s
   rm <- genReadMe ReadMeInfo {
@@ -141,7 +151,11 @@ genPackage unRepr = do
         extLibFP = libPaths g,
         contributors = as,
         configFP = cfp,
-        caseName = ""}
+        caseName = "",
+        examplePurpose = prps,
+        exampleDescr = bckgrnd,
+        folderNum = getVal g,
+        inputOutput = (sampleInputName, "output.txt")} -- This needs a more permanent solution
   return $ package pd (m:catMaybes [i,rm,d])
 
 -- | Generates an SCS program based on the problem and the user's design choices.
@@ -150,9 +164,10 @@ genProgram = do
   g <- get
   ms <- chooseModules $ modular g
   let n = pName $ codeSpec g
-  return $ prog n ms
+  let p = show $ sentenceDoc (sysinfodb $ codeSpec g) Implementation Linear $ foldlSent $ purpose $ codeSpec g
+  return $ prog n p ms
 
--- | Generates either a single module or many modules, based on the users choice 
+-- | Generates either a single module or many modules, based on the users choice
 -- of modularity.
 chooseModules :: (OOProg r) => Modularity -> GenState [SFile r]
 chooseModules Unmodular = liftS genUnmodular
@@ -165,7 +180,7 @@ genUnmodular = do
   umDesc <- unmodularDesc
   let n = pName $ codeSpec g
       cls = any (`member` clsMap g)
-        [genICFuncName GetInput, genICFuncName DerivedValues, 
+        [genICFuncName GetInput, genICFuncName DerivedValues,
           genICFuncName InputConstraints]
   genModuleWithImports n umDesc (concatMap (^. imports) (elems $ extLibMap g))
     (genMainFunc

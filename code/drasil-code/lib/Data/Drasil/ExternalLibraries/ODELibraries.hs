@@ -1,19 +1,19 @@
 -- | Define and collect information about ODEs and ODE solvers from various libraries.
 module Data.Drasil.ExternalLibraries.ODELibraries (
   -- * SciPy Library (Python)
-  scipyODEPckg, scipyODESymbols, scipyODELSodaPkg,
+  scipyODEPckg, scipyODESymbols,
   -- * Oslo Library (C#)
   osloPckg, osloSymbols, arrayVecDepVar,
   -- * Apache Commons (Java)
-  apacheODEPckg, apacheODESymbols, 
+  apacheODEPckg, apacheODESymbols,
   -- * Odeint (C++)
   odeintPckg, odeintSymbols
 ) where
 
 import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
-  QuantityDict, HasSpace(typ), Space(..), implVar, implVarUID, implVarUID', qw,
-  compoundPhrase, nounPhrase, nounPhraseSP, label, sub,
-  Idea(getA), NamedIdea(term), Stage(..), (+++))
+  QuantityDict, HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, Vect), implVar,
+  implVarUID, implVarUID', qw, compoundPhrase, nounPhrase, nounPhraseSP, label,
+  sub, Idea(getA), NamedIdea(term), Stage(..), (+++))
 import Language.Drasil.Display (Symbol(Label, Concat))
 
 import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
@@ -25,7 +25,7 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   implementation, constructorInfo, methodInfo, methodInfoNoReturn,
   appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj,
   initSolListFromArray, initSolListWithVal, solveAndPopulateWhile,
-  returnExprList, fixedReturn, initSolWithVal,
+  returnExprList, fixedReturn',
   ExternalLibraryCall, externalLibCall, choiceStepsFill, choiceStepFill,
   mandatoryStepFill, mandatoryStepsFill, callStepFill, libCallFill,
   userDefinedArgFill, basicArgFill, functionArgFill, customObjArgFill,
@@ -33,13 +33,13 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   customClassFill, implementationFill, constructorInfoFill, methodInfoFill,
   appendCurrSolFill, populateSolListFill, assignArrayIndexFill,
   assignSolFromObjFill, initSolListFromArrayFill, initSolListWithValFill,
-  solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill,
+  solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill',
   CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, listToArray,
   ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, mkODELib,
-  mkODELibNoPath, pubStateVar, privStateVar, initSolWithValFill,
+  mkODELibNoPath, pubStateVar, privStateVar,
   NamedArgument, narg)
 import Language.Drasil.CodeExpr
-import Language.Drasil.Code.Expr.Development
+import Language.Drasil.CodeExpr.Development
 
 import Control.Lens ((^.), _1, _2, over)
 
@@ -72,8 +72,8 @@ scipyCall info = externalLibCall [
     (returnExprListFill $ odeSyst info)],
   uncurry choiceStepFill (chooseMethod $ solveMethod $ odeOpts info),
   mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill
-      [initVal info, tInit info],
-    initSolListWithValFill (depVar info) (initVal info),
+      [matrix[initVal info], tInit info],
+    initSolListWithValFill (depVar info) (matrix[initVal info]),
     solveAndPopulateWhileFill (libCallFill []) (tFinal info)
       (libCallFill [basicArgFill (addI (field r t) (stepSize (odeOpts info)))])
       (depVar info)]]
@@ -83,40 +83,8 @@ scipyCall info = externalLibCall [
         solveMethodFill = callStepFill $ libCallFill $ map basicArgFill
           [absTol $ odeOpts info, relTol $ odeOpts info]
 
--- | This package solves a system of ODEs using the scipy odeint method.
--- The odeint method solves the ode using the LSoda solver.
-scipyODELSodaPkg :: ODELibPckg
-scipyODELSodaPkg = mkODELibNoPath "SciPy" "1.4.1" scipyLSodaODE scipyLSodaCall [Python]
-
-scipyLSodaODE :: ExternalLibrary
-scipyLSodaODE = externalLib [
-  mandatoryStep $ callStep $ libFunctionWithResult numpyImport
-    arange [inlineArg Real, inlineArg Real, inlineArg Real] xAxis,
-  mandatoryStep $ callStep $ libFunctionWithResult scipyImport
-    odeintFunc [
-      functionArg f (map unnamedParam [Array Real, Real])
-      returnExprList, inlineArg (Array Real), inlineArg (Array Real)] ut,
-  mandatoryStep initSolWithVal
-    ]
-
-scipyLSodaCall :: ODEInfo -> ExternalLibraryCall
-scipyLSodaCall info = externalLibCall [
-  mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill
-      [tInit info, tFinal info, stepSize $ odeOpts info]],
-  mandatoryStepFill $ callStepFill $ libCallFill [functionArgFill
-      (map unnamedParamFill [depVar info, indepVar info])
-      (returnExprListFill $ odeSyst info),
-      basicArgFill (matrix [[initVal info, initValFstOrd $ odeOpts info]]),
-      basicArgFill (sy xAxis)],
-  mandatoryStepFill $ initSolWithValFill (depVar info)
-      (idx (sy transpose) (int 0))
-    ]
-
 scipyImport :: String
 scipyImport = "scipy.integrate"
-
-numpyImport :: String
-numpyImport = "numpy"
 
 atol, rtol, vode :: Argument
 vode = lockedArg (str "vode")
@@ -162,7 +130,7 @@ ut = quantvar $ implVar "ut_scipy"
   numpyArrayT (label "u_t")
 transpose = quantvar $ implVar "transpose_numpy"
   (nounPhrase "Numpy Array Transpose" "Numpy Array Transpose")
-  (Array Real) (label "u_t.T") -- (ccObjVar ut transpose) does not seem to work. 
+  (Array Real) (label "u_t.T") -- (ccObjVar ut transpose) does not seem to work.
 
 
 f, odefunc, setIntegrator, setInitVal, successful,
@@ -214,7 +182,7 @@ oslo = externalLib [
 
 osloCall :: ODEInfo -> ExternalLibraryCall
 osloCall info = externalLibCall [
-  mandatoryStepFill $ callStepFill $ libCallFill [basicArgFill $ initVal info],
+  mandatoryStepFill $ callStepFill $ libCallFill [basicArgFill $ matrix[initVal info]],
   choiceStepFill (chooseMethod $ solveMethod $ odeOpts info) $ callStepFill $
     libCallFill [basicArgFill $ tInit info,
       functionArgFill (map unnamedParamFill [indepVar info, vecDepVar info]) $
@@ -298,7 +266,7 @@ vecDepVar info = quantvar $ implVarUID (dv ^. uid) (dv ^. term) vecT
   (sub (symbol dv Implementation) (label "vec"))
   where dv = depVar info
 
--- Hack required because 
+-- Hack required because
 -- | Oslo's Vector type behaves like an array, so needs to
 -- be represented as one or else will hit type errors in GOOL.
 arrayVecDepVar :: ODEInfo -> CodeVarChunk
@@ -337,7 +305,7 @@ apacheODE = externalLib [
       fode] "Class representing an ODE system" ode odeCtor (implementation fode
         [constructorInfo odeCtor [] [],
         methodInfo getDimension "returns the ODE system dimension"
-          [] "dimension of the ODE system" [fixedReturn (int 1)],
+          [] "dimension of the ODE system" [fixedReturn'],
         methodInfoNoReturn computeDerivatives
           "function representation of an ODE system"
           [lockedParam t, unnamedParam (Array Real), unnamedParam (Array Real)]
@@ -359,11 +327,11 @@ apacheODECall info = externalLibCall [
       (implementationFill [
         constructorInfoFill (map userDefinedParamFill $ otherVars info)
           (zip (otherVars info) (map sy $ otherVars info)) [],
-        methodInfoFill [] [fixedStatementFill],
+        methodInfoFill [] [fixedStatementFill' $ int $ toInteger $ length $ initVal info],
         methodInfoFill (map (unnamedParamFill . listToArray) [depVar info, ddep])
           [assignArrayIndexFill (listToArray ddep) (modifiedODESyst "array" info)]])
-      : map basicArgFill [tInit info, matrix [[initVal info]], tFinal info,
-        matrix [[initVal info]]],
+      : map basicArgFill [tInit info, matrix [initVal info], tFinal info,
+        matrix [initVal info]],
     assignSolFromObjFill $ depVar info]]
   where chooseMethod Adams = 0
         chooseMethod RK45 = 1
@@ -497,7 +465,7 @@ odeintCall info = externalLibCall [
         (zip (otherVars info) (map sy $ otherVars info)) [],
       methodInfoFill [unnamedParamPBVFill $ depVar info, unnamedParamFill ddep]
         [assignArrayIndexFill ddep (odeSyst info)]]) :
-    map basicArgFill [matrix [[initVal info]], tInit info, tFinal info,
+    map basicArgFill [matrix [initVal info], tInit info, tFinal info,
       stepSize $ odeOpts info] ++ [
     customObjArgFill [privStateVar $ depVar info] (customClassFill [
       constructorInfoFill [unnamedParamFill $ depVar info]

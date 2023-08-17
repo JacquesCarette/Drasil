@@ -5,10 +5,10 @@ import Control.Lens ((^.))
 import Language.Drasil
 import Drasil.DocLang (inReq, mkQRTuple, mkQRTupleRef, mkValsSourceTable)
 import Drasil.DocLang.SRS (datCon, propCorSol)
-import Theory.Drasil (DataDefinition)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
+import Theory.Drasil (DataDefinition)
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (assumption, characteristic, code,
@@ -23,10 +23,8 @@ import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)
 import Drasil.GlassBR.Concepts (glass)
-import Drasil.GlassBR.DataDefs (aspRat, dimLL, glaTyFac, hFromt, loadDF, nonFL, 
-  risk, standOffDis, strDisFac, tolPre, tolStrDisFac)
-import Drasil.GlassBR.IMods (iMods)
-import Drasil.GlassBR.TMods (lrIsSafe, pbIsSafe)
+import Drasil.GlassBR.DataDefs (aspRat, glaTyFac, hFromt, loadDF, standOffDis)
+import Drasil.GlassBR.IMods (iMods, pbIsSafe, lrIsSafe)
 import Drasil.GlassBR.Unitals (blast, isSafeLR, isSafePb, loadSF, notSafe,
   pbTolfail, safeMessage)
 
@@ -60,7 +58,7 @@ sysSetValsFollowingAssumpsTable :: LabelledContent
 sysSetValsFollowingAssumpsTable = mkValsSourceTable (mkQRTupleRef r2AQs r2ARs ++ mkQRTuple r2DDs) "ReqAssignments"
                                   (S "Required Assignments" `follows` sysSetValsFollowingAssumps)
   where
-    r2AQs = qw loadSF   : map qw (take 4 assumptionConstants)
+    r2AQs = qw loadSF : map qw (take 4 assumptionConstants)
     r2ARs = assumpGL : replicate 4 assumpSV
     r2DDs = [loadDF, hFromt, glaTyFac, standOffDis, aspRat]
 
@@ -90,7 +88,7 @@ outputValuesTable = mkValsSourceTable (mkQRTuple iMods ++ mkQRTuple r6DDs) "ReqO
                               (S "Required" +:+ titleize' output_ `follows` outputValues)
   where
     r6DDs :: [DataDefinition]
-    r6DDs = [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, hFromt, aspRat]
+    r6DDs = [glaTyFac, hFromt, aspRat]
 
 {--Nonfunctional Requirements--}
 

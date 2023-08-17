@@ -11,11 +11,14 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
+- aeson
 - lens
 - split
+- text
 - Decimal
 - unicode-names >= 3.2.0.0
 - drasil-utils
+- containers
 
 ghc-options:
 - -Wall
@@ -31,6 +34,8 @@ library:
   - Language.Drasil.Expr.Development
   - Language.Drasil.Literal.Development
   - Language.Drasil.ModelExpr.Development
+  - Language.Drasil.CodeExpr.Development
+  - Language.Drasil.CodeExpr
   - Language.Drasil.NounPhrase.Combinators
   - Language.Drasil.Sentence.Combinators
   - Language.Drasil.ShortHands

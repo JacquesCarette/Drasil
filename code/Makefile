@@ -7,7 +7,7 @@ SHELL = bash
 #--------------------------------------------#
 
 # List of all known packages
-PACKAGES = lang metadata code-base code docLang printers build theory gool data database gen utils website
+PACKAGES = lang metadata code docLang printers build theory gool data database gen utils website
 PACKAGES_E = $(PACKAGES) example
 
 # and associated package-level suffixes
@@ -27,44 +27,44 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 #--------------------------------------------#
 
 # Current list of examples
-SRC_EXAMPLES = glassbr nopcm projectile pdcontroller
-EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template dblpendulum sglpendulum 
+SRC_EXAMPLES = glassbr swhsnopcm projectile pdcontroller dblpend
+EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpend 
 GOOLTEST = codegenTest
 
 # where they live
 HGHC_DIR  = hghc
 GLASSBR_DIR = glassbr
-NOPCM_DIR = nopcm
+SWHSNOPCM_DIR = swhsnopcm
 SWHS_DIR  = swhs
 SSP_DIR   = ssp
 GAMEPHYSICS_DIR  = gamephysics
 PROJECTILE_DIR = projectile
 TEMPLATE_DIR = template
 GOOLTEST_DIR = gooltest
-DBLPENDULUM_DIR = dblpendulum
-SGLPENDULUM_DIR = sglpendulum
+DBLPEND_DIR = dblpend
+SGLPEND_DIR = sglpend
 PDCONTROLLER_DIR = pdcontroller
 
 # Directories for examples with multiple src versions
 MULTI_SRC_DIRS = $(PROJECTILE_DIR)
 
 # All example directories
-EXAMPLE_DIRS = $(MULTI_SRC_DIRS) $(HGHC_DIR) $(GLASSBR_DIR) $(NOPCM_DIR) \
-  $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR) $(DBLPENDULUM_DIR) $(SGLPENDULUM_DIR)\
+EXAMPLE_DIRS = $(MULTI_SRC_DIRS) $(HGHC_DIR) $(GLASSBR_DIR) $(SWHSNOPCM_DIR) \
+  $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR) $(DBLPEND_DIR) $(SGLPEND_DIR)\
   $(PDCONTROLLER_DIR)
 
 # and the name of their executables
 HGHC_EXE  = hghc
 GLASSBR_EXE = glassbr
-NOPCM_EXE = nopcm
+SWHSNOPCM_EXE = swhsnopcm
 SWHS_EXE  = swhs
 SSP_EXE   = ssp
 GAMEPHYSICS_EXE  = gamephysics
 PROJECTILE_EXE = projectile
 TEMPLATE_EXE = template
 GOOLTEST_EXE = codegenTest
-DBLPENDULUM_EXE = dblpendulum
-SGLPENDULUM_EXE = sglpendulum
+DBLPEND_EXE = dblpend
+SGLPEND_EXE = sglpend
 PDCONTROLLER_EXE = pdcontroller
 
 # and the associated per-example information generated
@@ -103,7 +103,7 @@ ALL_EXPANDED_TARGETS = $(foreach P, $(PACKAGE_GEN_TARGET), $($(P)_PACKAGES)) $(f
 #-------------------------------#
 
 # make variables/configuration
-DIFF = diff --strip-trailing-cr -r -X ../.gitignore -x '*.txt'
+DIFF = diff --strip-trailing-cr -r -X ../.gitignore
 LOG_SUFFIX = _log.log
 MIN_STACK_VER = 2.3.1  # Match stack.yaml see PR #2142 for more info.
 CACHED_MSV_FILE = .drasil-min-stack-ver
@@ -146,8 +146,8 @@ WEBSITE_FOLDER = $(WEBSITE_FOLDER_NAME)/HTML/
 FULL ?= 0
 
 # GHC debug options
-PROFALL = --executable-profiling --library-profiling
-PROFEXEC = +RTS -xc -P
+PROFALL = --profile
+PROFEXEC = --profile --rts-options '-xc -P'
 
 # GHC build options
 GHCTHREADS ?= 2
@@ -155,9 +155,18 @@ GHCTHREADS ?= 2
 override GHCFLAGS += -Wall -j$(GHCTHREADS)
 override stackArgs += --ghc-options="$(GHCFLAGS)"
 
+# When running 'stack exec', the following stack arguments should be passed.
+STACK_EXEC_ARGS := --no-nix-pure
+STACK_EXEC := stack exec $(STACK_EXEC_ARGS)
+
 # Output amount control
 NOISY=no
 SUMMARIZE_TEX=no
+
+# Some commands now prefer to have TERM defined when things go awry
+# and since this is going to be run in batch, 'dumb' is best default.
+# But don't set TERM itself, as it will make things ugly for interactive use.
+BATCHTERM=dumb
 
 ########################
 #--- Actual targets ---#
@@ -171,7 +180,7 @@ install: ##@Examples Install all example project binaries into your local binary
 	stack install $(stackArgs)
 
 debug: stackArgs += $(PROFALL)
-debug: EXECARGS += $(PROFEXEC)
+debug: STACK_EXEC += $(PROFEXEC)
 debug: test ##@Examples Run test target with better debugging tools.
 
 pr_ready: all hot_hlint ##@General Check if your current work is ready to for a PR via `all` and `hot_hlint`.
@@ -232,6 +241,14 @@ stabilize: $(STABILIZE_EXAMPLES) ##@Examples Overwrites the stable folder with u
 # then make pdfs from the generated TeX files.
 tex: $(TEX_EXAMPLES) ##@Examples Generate all example pdfs. Needs Graphviz to work.
 
+# Generate graph of package dependencies
+packagedeps: graphmod check_dot
+	@mkdir -p $(GRAPH_FOLDER)
+	@echo ----------------------------
+	@echo Generating package dependency graph
+	@echo ----------------------------
+	@stack dot --prune dblpend,gamephysics,glassbr,hghc,swhsnopcm,pdcontroller,projectile,sglpend,ssp,swhs,template,drasil-website | tred | dot -Tpng > "$(GRAPH_FOLDER)drasil-all-pkgs-deps".png	
+
 #--------------------------------------------------------------#
 #--- Targets that are used for individual packages/examples ---#
 #--------------------------------------------------------------#
@@ -254,7 +271,13 @@ $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
 $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
 	stack build $(stackArgs) "$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
-	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec -- "$(EEXE)" $(EXECARGS)
+	cd "$(BUILD_FOLDER)$(EDIR)" && $(STACK_EXEC) -- "$(EEXE)"
+
+# Compiles GOOL examples to concrete code (Java, C++, etc.)
+$(GOOLTEST)$(GEN_E_SUFFIX):
+	stack build $(stackArgs) "drasil-code:exe:$(GOOLTEST_EXE)"
+	@mkdir -p "$(BUILD_FOLDER)$(GOOLTEST_DIR)"
+	cd "$(BUILD_FOLDER)$(GOOLTEST_DIR)" && $(STACK_EXEC) -- "$(GOOLTEST_EXE)"
 
 # Install individual Drasil examples
 $(filter %$(INSTALL_E_SUFFIX), $(INSTALL_EXAMPLES)): %$(INSTALL_E_SUFFIX):
@@ -266,7 +289,7 @@ $(filter %$(INSTALL_E_SUFFIX), $(INSTALL_EXAMPLES)): %$(INSTALL_E_SUFFIX):
 $(filter %$(TRACE_GRAPH_SUFFIX), $(TRACE_GRAPH_EXAMPLES)): %$(TRACE_GRAPH_SUFFIX): graphmod
 	stack build $(stackArgs) "$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
-	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec -- "$(EEXE)" $(EXECARGS)
+	cd "$(BUILD_FOLDER)$(EDIR)" && $(STACK_EXEC) -- "$(EEXE)"
 	@mkdir -p "$(TRACEY_GRAPHS_FOLDER)$(EDIR)"
 	@echo Making traceability graphs for "$(EEXE)"
 	@if [ -d "$(BUILD_FOLDER)$(EDIR)/$(TRACEY_GRAPH_FOLDER)" ]; then \
@@ -302,13 +325,13 @@ $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_EXAMPLES)): %$(STABILIZE_E_SUFFIX):
 %$(TEX_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(TEX_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(TRACE_GRAPH_SUFFIX)
-	EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"tex_build.sh
+	EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE="$(MAKE)" TERM="$(BATCHTERM)" "$(SHELL)" "$(SCRIPT_FOLDER)"tex_build.sh
 
 #----------------------------------------------------------------------------------#
 #--- Generate analysis of module, class, datatype, and class instance structure ---#
 #----------------------------------------------------------------------------------#
 
-graphs: $(GRAPH_PACKAGES) ##@Analysis Generate all module dependency graphs.
+graphs: $(GRAPH_PACKAGES) packagedeps ##@Analysis Generate all module dependency graphs.
 	- echo "Graphs generated in local '$(GRAPH_FOLDER)' folder."
 	
 # Generate individual package module dependency graphs.
@@ -317,27 +340,25 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod ch
 	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | tee >(dot -Tpdf -o "$(GRAPH_FOLDER)drasil-$*.pdf") >(dot -Tsvg -o "$(GRAPH_FOLDER)drasil-$*.svg") | dot -Tpng -o "$(GRAPH_FOLDER)drasil-$*.png"
 
 # Dot graphs are currently generated for datatypes and class instance structures.
-# They are made using the default dot algorithm and the circo algorithm for options
-# and viewability. We also add example to these variables so that we can still
+# They are made using the default dot graph algorithm and viewability. 
+# We also add example to these variables so that we can still
 # make the graphs for that folder (although it's technically not a package itself).
 analysis: graphmod ##@Analysis Generate a table and some graphs to analyze Drasil's class, datatype, and instance structures.
 	- rm -rf "$(ANALYSIS_FOLDER)"
 	@mkdir -p "$(ANALYSIS_FOLDER)"
-	cd $(SCRIPT_FOLDER) && stack exec -- runghc ClassInstDepGen.hs
-	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeDepGen.hs
+	cd $(SCRIPT_FOLDER) && stack ClassInstDepGen.hs
+	cd $(SCRIPT_FOLDER) && stack TypeDepGen.hs
 	@echo "Analysis complete. Please see '$(ANALYSIS_FOLDER)' folder."
 
-convertAnalyzed: ##@Analysis Convert analyzed dot graphs into dot and circo SVGs.
-	@echo "Building dependency graphs in Dot and Circo formats. This may take a few minutes."
+convertAnalyzed: ##@Analysis Convert analyzed dot graphs into SVGs.
+	@echo "Building dependency graphs. This may take a few minutes."
 	@cd $(TYPEGRAPH_FOLDER) && for pack in $(ANALYSIS_PACKAGES); do \
-		echo "Converting type dot graph for '$$pack' into an svg, and creating a circo svg graph based on it" ; \
+		echo "Converting type dot graph for '$$pack' into an svg" ; \
 		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \
-		circo -Tsvg $$pack.dot > "./circo_$$pack.svg" ; \
 	done
 	@cd $(CLASSINST_GRAPH_FOLDER) && for pack in $(PACKAGES_E); do \
-		echo "Converting classInst dot graph for '$$pack' into an svg, and creating a circo svg graph based on it" ; \
+		echo "Converting classInst dot graph for '$$pack' into an svg" ; \
 		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \
-		circo -Tsvg $$pack.dot > "./circo_$$pack.svg" ; \
 	done
 	@echo "Dependency graphs built, check your '$(TYPEGRAPH_FOLDER)' and '$(CLASSINST_GRAPH_FOLDER)' folders."
 
@@ -397,7 +418,7 @@ deploy_code_path: $(DCP_EXAMPLES) ##@GOOL Find all code file paths for all examp
 website: ##@Deploy First builds all Drasil packages, and then executes the drasil-website.
 	stack build $(stackArgs) "drasil-website"
 	CUR_DIR="$(PWD)/" \
-	DEPLOY_FOLDER="$(CUR_DIR)$(DEPLOY_FOLDER)"  \
+	DEPLOY_FOLDER="$(CUR_DIR)$(DEPLOY_FOLDER)" \
 	DOCS_FOLDER="$(DOCS_FOLDER)" \
 	DOX_FOLDER="doxygen/" \
 	EXAMPLES_FOLDER="examples/" \
@@ -407,14 +428,14 @@ website: ##@Deploy First builds all Drasil packages, and then executes the drasi
 	PACKAGES="$(PACKAGES)" \
 	TYPEGRAPH_FOLDER="$(TYPEGRAPH_FOLDER)" \
 	CLASSINST_GRAPH_FOLDER="$(CLASSINST_GRAPH_FOLDER)" \
-	stack exec -- "website"
+	$(STACK_EXEC) -- "website"
 
 # Deploys the Drasil website. Called by the deploy target.
 # If you have all the necessary generated targets listed
 # in `deploy`, then this will skip the re-generation of 
 # those files. Currently, the deploy_stage.sh script does
 # not work for Windows Git Bash users.
-deploy_lite: ##@Deploy Deploy the Drasil website without regenerating artifacts. For local development.
+deploy_lite: website ##@Deploy Deploy the Drasil website without regenerating artifacts. For local development.
 	@mkdir -p "$(DEPLOY_FOLDER)"
 	@BUILD_FOLDER="$(BUILD_FOLDER)" DEPLOY_FOLDER="$(DEPLOY_FOLDER)" GRAPH_FOLDER="$(GRAPH_FOLDER)" \
 	EXAMPLE_DIRS="$(EXAMPLE_DIRS)" MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \
@@ -427,7 +448,7 @@ deploy_lite: ##@Deploy Deploy the Drasil website without regenerating artifacts.
 # files appear newer and thus PDF's are regenerated. If you want to "just generate the structure,
 # everything exists," (or you've run `deploy` once already) then `deploy_lite` does just that and is
 # what `deploy.bash` calls. 
-deploy: analysis graphs docs tex doxygen website ##@Deploy Generates all artifacts and the Drasil website locally.
+deploy: analysis graphs packagedeps docs tex doxygen website ##@Deploy Generates all artifacts and the Drasil website locally.
 	"$(MAKE)" deploy_lite
 
 #-----------------------#
@@ -451,6 +472,7 @@ clean: clean_artifacts ##@Cleaning Fully clean all generated builds, artifacts, 
 #--- Help & Information ---#
 #--------------------------#
 
+# Credits to "nowox" from StackOverflow: https://stackoverflow.com/a/30796664/16760741
 HELP_FUN = \
 	%help; while(<>){push@{$$help{$$2//'options'}},[$$1,$$3] \
 	if/^([\w-_]+)\s*:.*\#\#(?:@(\w+))?\s(.*)$$/}; \
@@ -477,6 +499,8 @@ help:  ##@Help Show this help.
 	@echo "  X$(BC_E_SUFFIX)       Remove specific example from the build folder."
 	@echo "  X$(CODE_E_SUFFIX)              Generate individual example code."
 	@echo "  X$(DCP_E_SUFFIX)  Get all generated code file paths in the example."
+	@echo ""
+	@echo "Set a 'DEBUG_ENV' environment variable to 'true' if you want to check out the list of chunks in a Drasil run."
 	@echo ""
 	@echo "To get started with Drasil, try running \"make\"."
 

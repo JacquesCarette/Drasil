@@ -5,7 +5,7 @@ module Language.Drasil.Printing.Import.ModelExpr where -- TODO: tighten exports
 
 -- TODO: tighten exports
 import Language.Drasil (UID, DomainDesc(..), RealInterval(..), Inclusive(..),
-  RTopology(..), Special(..), LiteralC(int))
+  RTopology(..), LiteralC(int))
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.Literal.Development (Literal(..))
 import Language.Drasil.ModelExpr.Development
@@ -70,11 +70,11 @@ indx sm (C c) i = f s
 indx sm a i = P.Row [P.Row [modelExpr a sm], P.Sub $ modelExpr i sm]
 
 -- | For printing expressions that call something.
-call :: PrintingInformation -> UID -> [ModelExpr] -> [(UID, ModelExpr)] -> P.Expr
-call sm f ps ns = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f,
-  parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`modelExpr` sm) ps ++
-  zipWith (\n a -> P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) n,
-  P.MO P.Eq, modelExpr a sm]) (map fst ns) (map snd ns)]
+call :: PrintingInformation -> UID -> [ModelExpr] -> P.Expr
+call sm f ps = P.Row [
+    symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f,
+    parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`modelExpr` sm) ps
+  ]
 
 -- | Helper function for addition 'EOperator's.
 eopAdds :: PrintingInformation -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> P.Expr
@@ -125,7 +125,7 @@ modelExpr (AssocA MulRe l)           sm = P.Row $ mulExpr l MulRe sm
 modelExpr (Deriv 0 Part a _)         sm = P.Row [modelExpr a sm]
 modelExpr (Deriv 0 Total a _)        sm = P.Row [modelExpr a sm]
 modelExpr (Deriv n Part a b)         sm =
-  let st = [P.Spc P.Thin, P.Spec Partial] in 
+  let st = [P.Spc P.Thin, P.MO P.Partial] in 
     P.Div (P.Row (st ++ sup n ++ [modelExpr a sm]))
     (P.Row (st ++ [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b] ++ sup n))
 modelExpr (Deriv n Total a b)        sm =
@@ -133,9 +133,9 @@ modelExpr (Deriv n Total a b)        sm =
     P.Div (P.Row (st ++ sup n ++ [modelExpr a sm]))
         (P.Row (st ++ [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b] ++ sup n))
 modelExpr (C c)                      sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
-modelExpr (FCall f [x] [])           sm =
+modelExpr (FCall f [x])              sm =
   P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ modelExpr x sm]
-modelExpr (FCall f l ns)             sm = call sm f l ns
+modelExpr (FCall f l)                sm = call sm f l
 modelExpr (Case _ ps)                sm =
   if length ps < 2
     then error "Attempting to use multi-case modelExpr incorrectly"
@@ -174,6 +174,9 @@ modelExpr (OrdBinaryOp LEq a b)      sm = mkBOp sm P.LEq a b
 modelExpr (OrdBinaryOp GEq a b)      sm = mkBOp sm P.GEq a b
 modelExpr (VVNBinaryOp Dot a b)      sm = mkBOp sm P.Dot a b
 modelExpr (VVVBinaryOp Cross a b)    sm = mkBOp sm P.Cross a b
+modelExpr (VVVBinaryOp VAdd a b)     sm = mkBOp sm P.VAdd a b
+modelExpr (VVVBinaryOp VSub a b)     sm = mkBOp sm P.VSub a b
+modelExpr (NVVBinaryOp Scale a b)    sm = mkBOp sm P.Scale a b
 modelExpr (Operator o d e)           sm = eop sm o d e
 modelExpr (RealI c ri)               sm = renderRealInt sm (lookupC (sm ^. stg)
   (sm ^. ckdb) c) ri
@@ -189,16 +192,12 @@ modelExpr (ForAll c s de)            sm = P.Row [
 assocExpr :: P.Ops -> Int -> [ModelExpr] -> PrintingInformation -> P.Expr
 assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (modelExpr' sm prec) exprs
 
--- | Helper for rendering printable expressions.
-addExpr :: [ModelExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
-addExpr exprs o sm = addExprFilter (map (modelExpr' sm (precA o)) exprs)
-
 -- | Add add symbol only when the second Expr is not negation 
-addExprFilter :: [P.Expr] -> [P.Expr]
-addExprFilter [] = []
-addExprFilter [x] = [x]
-addExprFilter (x1:P.Row[P.MO P.Neg, x2]:xs) = x1 : addExprFilter (P.Row[P.MO P.Neg, x2] : xs)
-addExprFilter (x:xs) = x : P.MO P.Add : addExprFilter xs
+addExpr :: [ModelExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
+addExpr [] _ _ = []
+addExpr [x] o sm = [modelExpr' sm (precA o) x]
+addExpr (x1:(UnaryOp Neg x2):xs) o sm = modelExpr' sm (precA o) x1 : addExpr (UnaryOp Neg x2:xs) o sm
+addExpr (x:xs) o sm = modelExpr' sm (precA o) x : P.MO P.Add: addExpr xs o sm
 
 -- | Helper for rendering printable expressions.
 mulExpr ::  [ModelExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]

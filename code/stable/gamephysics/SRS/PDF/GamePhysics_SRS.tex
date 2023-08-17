@@ -7,8 +7,8 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{unicode-math}
-\usepackage{tabu}
-\usepackage{longtable}
+\usepackage{tabularray}
+\usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{caption}
 \usepackage{graphics}
@@ -20,11 +20,10 @@
 \setmathfont{Latin Modern Math}
 \newcommand{\gt}{\ensuremath >}
 \newcommand{\lt}{\ensuremath <}
-\global\tabulinesep=1mm
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \bibliography{bibfile}
-\title{Software Requirements Specification for Game Physics}
+\title{Software Requirements Specification for GamePhysics}
 \author{Alex Halliwushka, Luthfi Mawarid, and Olu Owojaiye}
 \begin{document}
 \maketitle
@@ -36,14 +35,13 @@ This section records information for easy reference.
 
 \subsection{Table of Units}
 \label{Sec:ToU}
-The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the \hyperref[Table:ToU]{Table of Units} lists the symbol, a description and the SI name.
+The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the \hyperref[Table:ToU]{Table of Units} lists the symbol, a description, and the SI name.
 
-\begin{longtable}{l l l}
-\toprule
+\begin{longtblr}
+[caption={Table of Units}]
+{colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{SI Name}
 \\
-\midrule
-\endhead
 ${\text{J}}$ & energy & joule
 \\
 ${\text{kg}}$ & mass & kilogram
@@ -55,26 +53,22 @@ ${\text{N}}$ & force & newton
 ${\text{rad}}$ & angle & radian
 \\
 ${\text{s}}$ & time & second
-\\
-\bottomrule
-\caption{Table of Units}
 \label{Table:ToU}
-\end{longtable}
+\end{longtblr}
 \subsection{Table of Symbols}
 \label{Sec:ToS}
 The symbols used in this document are summarized in the \hyperref[Table:ToS]{Table of Symbols} along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
 
-\begin{longtabu}{l X[l] l}
-\toprule
+\begin{longtblr}
+[caption={Table of Symbols}]
+{colspec={l X[l] l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
-\midrule
-\endhead
-$\symbf{a}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+$a\text{(}t\text{)}$ & Linear acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-$\symbf{a}\text{(}t\text{)}$ & Linear acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+$\symbf{a}\text{(}t\text{)}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-${\symbf{a}_{j}}$ & J-Th Body's Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+${\symbf{a}\text{(}t\text{)}_{j}}$ & J-Th Body's Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 ${C_{\text{R}}}$ & Coefficient of restitution & --
 \\
@@ -140,11 +134,11 @@ $\|\symbf{n}\|$ & Length of the normal vector & ${\text{m}}$
 \\
 $PE$ & Potential energy & ${\text{J}}$
 \\
-$\symbf{p}$ & Position & ${\text{m}}$
+$\symbf{p}\text{(}t\text{)}$ & Position & ${\text{m}}$
 \\
-${\symbf{p}_{\text{CM}}}$ & Center of Mass & ${\text{m}}$
+${\symbf{p}\text{(}t\text{)}_{\text{CM}}}$ & Center of Mass & ${\text{m}}$
 \\
-${\symbf{p}_{j}}$ & Position Vector of the J-Th Particle & ${\text{m}}$
+${\symbf{p}\text{(}t\text{)}_{j}}$ & Position Vector of the J-Th Particle & ${\text{m}}$
 \\
 $\symbf{r}$ & Position vector & ${\text{m}}$
 \\
@@ -152,9 +146,9 @@ $t$ & Time & ${\text{s}}$
 \\
 ${t_{\text{c}}}$ & Denotes the time at collision & ${\text{s}}$
 \\
-$\symbf{u}$ & Displacement & ${\text{m}}$
+$u\text{(}t\text{)}$ & Linear displacement & ${\text{m}}$
 \\
-$\symbf{u}\text{(}t\text{)}$ & Linear displacement & ${\text{m}}$
+$\symbf{u}$ & Displacement & ${\text{m}}$
 \\
 $\|{\symbf{u}_{\text{A}\text{P}}}\text{*}\symbf{n}\|$ & Length of the Perpendicular Vector to the Contact Displacement Vector of Rigid Body A & ${\text{m}}$
 \\
@@ -162,31 +156,31 @@ $\|{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\|$ & Length of the Perpendicu
 \\
 ${\symbf{u}_{\text{O}\text{B}}}$ & Displacement vector between the origin and point B & ${\text{m}}$
 \\
-$\symbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
+$v\text{(}t\text{)}$ & Linear velocity & $\frac{\text{m}}{\text{s}}$
 \\
-$\symbf{v}\text{(}t\text{)}$ & Linear velocity & $\frac{\text{m}}{\text{s}}$
+$\symbf{v}\text{(}t\text{)}$ & Velocity & $\frac{\text{m}}{\text{s}}$
 \\
 $Δ\symbf{v}$ & Change in velocity & $\frac{\text{m}}{\text{s}}$
 \\
-${\symbf{v}^{\text{A}\text{P}}}$ & Velocity of the Point of Collision P in Body A & $\frac{\text{m}}{\text{s}}$
+${\symbf{v}\text{(}t\text{)}^{\text{A}\text{P}}}$ & Velocity of the Point of Collision P in Body A & $\frac{\text{m}}{\text{s}}$
 \\
-${\symbf{v}^{\text{B}\text{P}}}$ & Velocity of the Point of Collision P in Body B & $\frac{\text{m}}{\text{s}}$
+${\symbf{v}\text{(}t\text{)}^{\text{B}\text{P}}}$ & Velocity of the Point of Collision P in Body B & $\frac{\text{m}}{\text{s}}$
 \\
-${\symbf{v}_{1}}$ & Velocity of the First Body & $\frac{\text{m}}{\text{s}}$
+${\symbf{v}\text{(}t\text{)}_{1}}$ & Velocity of the First Body & $\frac{\text{m}}{\text{s}}$
 \\
-${\symbf{v}_{2}}$ & Velocity of the Second Body & $\frac{\text{m}}{\text{s}}$
+${\symbf{v}\text{(}t\text{)}_{2}}$ & Velocity of the Second Body & $\frac{\text{m}}{\text{s}}$
 \\
-${\symbf{v}_{\text{A}}}$ & Velocity at Point A & $\frac{\text{m}}{\text{s}}$
+${\symbf{v}\text{(}t\text{)}_{\text{A}}}$ & Velocity at Point A & $\frac{\text{m}}{\text{s}}$
 \\
-${\symbf{v}_{\text{B}}}$ & Velocity at Point B & $\frac{\text{m}}{\text{s}}$
+${\symbf{v}\text{(}t\text{)}_{\text{B}}}$ & Velocity at Point B & $\frac{\text{m}}{\text{s}}$
 \\
-${{\symbf{v}_{\text{f}}}^{\text{A}\text{B}}}$ & Final Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
+${{\symbf{v}\text{(}t\text{)}_{\text{f}}}^{\text{A}\text{B}}}$ & Final Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
 \\
-${{\symbf{v}_{\text{i}}}^{\text{A}\text{B}}}$ & Initial Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
+${{\symbf{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}$ & Initial Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
 \\
-${\symbf{v}_{j}}$ & Velocity of the J-Th Body & $\frac{\text{m}}{\text{s}}$
+${\symbf{v}\text{(}t\text{)}_{j}}$ & Velocity of the J-Th Body & $\frac{\text{m}}{\text{s}}$
 \\
-${\symbf{v}_{\text{O}}}$ & Velocity at Point Origin & $\frac{\text{m}}{\text{s}}$
+${\symbf{v}\text{(}t\text{)}_{\text{O}}}$ & Velocity at Point Origin & $\frac{\text{m}}{\text{s}}$
 \\
 $α$ & Angular acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
 \\
@@ -201,19 +195,15 @@ ${\symbf{τ}_{j}}$ & Torque applied to the j-th body & $\text{N}\text{m}$
 $ω$ & Angular velocity & $\frac{\text{rad}}{\text{s}}$
 \\
 $ϕ$ & Orientation & ${\text{rad}}$
-\\
-\bottomrule
-\caption{Table of Symbols}
 \label{Table:ToS}
-\end{longtabu}
+\end{longtblr}
 \subsection{Abbreviations and Acronyms}
 \label{Sec:TAbbAcc}
-\begin{longtable}{l l}
-\toprule
+\begin{longtblr}
+[caption={Abbreviations and Acronyms}]
+{colspec={l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Abbreviation} & \textbf{Full Form}
 \\
-\midrule
-\endhead
 2D & Two-Dimensional
 \\
 3D & Three-Dimensional
@@ -228,8 +218,6 @@ GD & General Definition
 \\
 GS & Goal Statement
 \\
-Game Physics & game physics library
-\\
 IM & Instance Model
 \\
 LC & Likely Change
@@ -238,6 +226,10 @@ ODE & Ordinary Differential Equation
 \\
 R & Requirement
 \\
+RefBy & Referenced by
+\\
+Refname & Reference Name
+\\
 SRS & Software Requirements Specification
 \\
 TM & Theoretical Model
@@ -245,20 +237,17 @@ TM & Theoretical Model
 UC & Unlikely Change
 \\
 Uncert. & Typical Uncertainty
-\\
-\bottomrule
-\caption{Abbreviations and Acronyms}
 \label{Table:TAbbAcc}
-\end{longtable}
+\end{longtblr}
 \section{Introduction}
 \label{Sec:Intro}
 Due to the rising cost of developing video games, developers are looking for ways to save time and money for their projects. Using an open source physics library that is reliable and free will cut down development costs and lead to better quality products.
 
-The following section provides an overview of the Software Requirements Specification (SRS) for Game Physics. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+The following section provides an overview of the Software Requirements Specification (SRS) for GamePhysics. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
-The primary purpose of this document is to record the requirements of the game physics library. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of Game Physics. With the exception of \hyperref[Sec:SysConstraints]{system constraints}, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+The primary purpose of this document is to record the requirements of GamePhysics. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of GamePhysics. With the exception of \hyperref[Sec:SysConstraints]{system constraints}, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
 
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 
@@ -268,11 +257,11 @@ The scope of the requirements includes the physical simulation of 2D rigid bodie
 
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
-Reviewers of this documentation should have an understanding of rigid body dynamics and high school calculus. The users of Game Physics can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Sec:User Characteristics}.
+Reviewers of this documentation should have an understanding of rigid body dynamics and high school calculus. The users of GamePhysics can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Sec:User Characteristics}.
 
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
-The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013} and \cite{smithLai2005}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{instance models} and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013}, \cite{smithLai2005}, \cite{smithEtAl2007}, and \cite{smithKoothoor2016}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{instance models} and trace back to find any additional information they require.
 
 The \hyperref[Sec:GoalStmt]{goal statements} are refined to the theoretical models and the \hyperref[Sec:TMs]{theoretical models} to the \hyperref[Sec:IMs]{instance models}.
 
@@ -282,7 +271,7 @@ This section provides general information about the system. It identifies the in
 
 \subsection{System Context}
 \label{Sec:SysContext}
-\hyperref[Figure:sysCtxDiag]{Fig:sysCtxDiag} shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (Game Physics). Arrows are used to show the data flow between the system and its environment.
+\hyperref[Figure:sysCtxDiag]{Fig:sysCtxDiag} shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (GamePhysics). Arrows are used to show the data flow between the system and its environment.
 
 \begin{figure}
 \begin{center}
@@ -300,7 +289,7 @@ The interaction between the product and the user is through an application progr
 \item{Ensure application programming interface use complies with the user guide.}
 \item{Ensure required \hyperref[Sec:Assumps]{software assumptions} are appropriate for any particular problem the software addresses.}
 \end{itemize}
-\item{Game Physics Responsibilities}
+\item{GamePhysics Responsibilities}
 \begin{itemize}
 \item{Determine if the inputs and simulation state satisfy the required \hyperref[Sec:DataConstraints]{physical and system constraints}.}
 \item{Calculate the new state of all rigid bodies within the simulation at each simulation step.}
@@ -309,7 +298,7 @@ The interaction between the product and the user is through an application progr
 \end{itemize}
 \subsection{User Characteristics}
 \label{Sec:UserChars}
-The end user of Game Physics should have an understanding of first year programming concepts and an understanding of high school physics.
+The end user of GamePhysics should have an understanding of first year programming concepts and an understanding of high school physics.
 
 \subsection{System Constraints}
 \label{Sec:SysConstraints}
@@ -321,7 +310,7 @@ This section first presents the problem description, which gives a high-level vi
 
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
-A system is needed to create a simple, lightweight, fast, and portable 2D rigid body physics library, which will allow for more accessible game development and the production of higher quality products. Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality \hyperref[Sec:offShelfSolns]{physics libraries} available to be used for consumer products.
+A system is needed to simulate 2D rigid body physics for use in game development in a simple, lightweight, fast, and portable manner, which will allow for the production of higher quality products. Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality \hyperref[Sec:offShelfSolns]{physics libraries} available to be used for consumer products.
 
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
@@ -347,7 +336,7 @@ Given the kinematic properties, and forces (including any collision forces) appl
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
-The instance models that govern Game Physics are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern GamePhysics are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
@@ -364,85 +353,87 @@ This section simplifies the original problem and helps in developing the theoret
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
-This section focuses on the general equations and laws that Game Physics is based on.
+This section focuses on the general equations and laws that GamePhysics is based on.
 
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:NewtonSecLawMot}
 \phantomsection 
 \label{TM:NewtonSecLawMot}
-\\ \midrule \\
+\\ \midrule
 Label & Newton's second law of motion
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}
+           \symbf{F}=m \symbf{a}\text{(}t\text{)}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\symbf{a}\text{(}t\text{)}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
-\\ \midrule \\
-Notes & The net force $\symbf{F}$ on a body is proportional to the acceleration $\symbf{a}$ of the body, where $m$ denotes the mass of the body as the constant of proportionality.
+\\ \midrule
+Notes & The net force $\symbf{F}$ on a body is proportional to the acceleration $\symbf{a}\text{(}t\text{)}$ of the body, where $m$ denotes the mass of the body as the constant of proportionality.
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[IM:transMot]{IM:transMot}
         
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\vspace{\baselineskip}
+
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:NewtonThirdLawMot}
 \phantomsection 
 \label{TM:NewtonThirdLawMot}
-\\ \midrule \\
+\\ \midrule
 Label & Newton's third law of motion
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            {\symbf{F}_{1}}=-{\symbf{F}_{2}}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{${\symbf{F}_{1}}$ is the force exerted by the first body (on another body) (${\text{N}}$)}
               \item{${\symbf{F}_{2}}$ is the force exerted by the second body (on another body) (${\text{N}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & Every action has an equal and opposite reaction. In other words, the force ${\symbf{F}_{1}}$ exerted on the second rigid body by the first is equal in magnitude and in the opposite direction to the force ${\symbf{F}_{2}}$ exerted on the first rigid body by the second.
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & 
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\vspace{\baselineskip}
+
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:UniversalGravLaw}
 \phantomsection 
 \label{TM:UniversalGravLaw}
-\\ \midrule \\
+\\ \midrule
 Label & Newton's law of universal gravitation
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            \symbf{F}=G \frac{{m_{1}} {m_{2}}}{\|\symbf{d}\|^{2}} \symbf{\hat{d}}=G \frac{{m_{1}} {m_{2}}}{\|\symbf{d}\|^{2}} \frac{\symbf{d}}{\|\symbf{d}\|}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$G$ is the gravitational constant ($\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}$)}
@@ -452,74 +443,76 @@ Description & \begin{symbDescription}
               \item{$\symbf{\hat{d}}$ is the unit vector directed from the center of the large mass to the center of the smaller mass (${\text{m}}$)}
               \item{$\symbf{d}$ is the distance between the center of mass of the rigid bodies (${\text{m}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & Two rigid bodies in the universe attract each other with a force $\symbf{F}$ that is directly proportional to the product of their masses, ${m_{1}}$ and ${m_{2}}$, and inversely proportional to the squared distance ${\|\symbf{d}\|^{2}}$ between them.
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[GD:accelGravity]{GD:accelGravity}
         
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\vspace{\baselineskip}
+
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:NewtonSecLawRotMot}
 \phantomsection 
 \label{TM:NewtonSecLawRotMot}
-\\ \midrule \\
+\\ \midrule
 Label & Newton's second law for rotational motion
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            \symbf{τ}=\symbf{I} α
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$\symbf{τ}$ is the torque ($\text{N}\text{m}$)}
               \item{$\symbf{I}$ is the moment of inertia ($\text{kg}\text{m}^{2}$)}
               \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & The net torque $\symbf{τ}$ on a rigid body is proportional to its angular acceleration $α$, where $\symbf{I}$ denotes the moment of inertia of the rigid body as the constant of proportionality.
         
         We also assume that all rigid bodies involved are two-dimensional (from \hyperref[assumpOD]{A:objectDimension}).
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[IM:rotMot]{IM:rotMot}
         
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \subsubsection{General Definitions}
 \label{Sec:GDs}
 This section collects the laws and equations that will be used to build the instance models.
 
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:accelGravity}
 \phantomsection 
 \label{GD:accelGravity}
-\\ \midrule \\
+\\ \midrule
 Label & Acceleration due to gravity
         
-\\ \midrule \\
+\\ \midrule
 Units & $\frac{\text{m}}{\text{s}^{2}}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            \symbf{g}=-\frac{G M}{\|\symbf{d}\|^{2}} \symbf{\hat{d}}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$G$ is the gravitational constant ($\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}$)}
@@ -527,18 +520,19 @@ Description & \begin{symbDescription}
               \item{$\|\symbf{d}\|$ is the Euclidean norm of the distance between the center of mass of two bodies (${\text{m}}$)}
               \item{$\symbf{\hat{d}}$ is the unit vector directed from the center of the large mass to the center of the smaller mass (${\text{m}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & If one of the masses is much larger than the other, it is convenient to define a gravitational field around the larger mass as shown above. The negative sign in the equation indicates that the force is an attractive force.
         
-\\ \midrule \\
+\\ \midrule
 Source & \hyperref{https://en.wikipedia.org/wiki/Gravitational_acceleration}{}{}{Definition of Gravitational Acceleration}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[IM:transMot]{IM:transMot}
         
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{Detailed derivation of gravitational acceleration:}
 \label{GD:accelGravityDeriv}
 From \hyperref[TM:UniversalGravLaw]{Newton's law of universal gravitation}, we have:
@@ -566,28 +560,28 @@ and thus the negative sign indicates that the force is an attractive force:
 \begin{displaymath}
 \symbf{g}=-G \frac{M}{{\|\symbf{d}\|^{2}}} \symbf{\hat{d}}
 \end{displaymath}
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:impulse}
 \phantomsection 
 \label{GD:impulse}
-\\ \midrule \\
+\\ \midrule
 Label & Impulse for Collision
         
-\\ \midrule \\
+\\ \midrule
 Units & $\text{N}\text{s}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
-           j=\frac{-\left(1+{C_{\text{R}}}\right) {{\symbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \|\symbf{n}\|^{2}+\frac{\|{\symbf{u}_{\text{A}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{A}}}}+\frac{\|{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{B}}}}}
+           j=\frac{-\left(1+{C_{\text{R}}}\right) {{\symbf{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \|\symbf{n}\|^{2}+\frac{\|{\symbf{u}_{\text{A}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{A}}}}+\frac{\|{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{B}}}}}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$j$ is the impulse (scalar) ($\text{N}\text{s}$)}
               \item{${C_{\text{R}}}$ is the coefficient of restitution (Unitless)}
-              \item{${{\symbf{v}_{\text{i}}}^{\text{A}\text{B}}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
+              \item{${{\symbf{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
               \item{$\symbf{n}$ is the collision normal vector (${\text{m}}$)}
               \item{${m_{\text{A}}}$ is the mass of rigid body A (${\text{kg}}$)}
               \item{${m_{\text{B}}}$ is the mass of rigid body B (${\text{kg}}$)}
@@ -597,17 +591,17 @@ Description & \begin{symbDescription}
               \item{$\|{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\|$ is the length of the perpendicular vector to the contact displacement vector of rigid body B (${\text{m}}$)}
               \item{${\symbf{I}_{\text{B}}}$ is the moment of inertia of rigid body B ($\text{kg}\text{m}^{2}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}) and two-dimensional (from \hyperref[assumpOD]{A:objectDimension}).
         
         A right-handed coordinate system is used (from \hyperref[assumpAD]{A:axesDefined}).
         
         All collisions are vertex-to-edge (from \hyperref[assumpCT]{A:collisionType}).
         
-\\ \midrule \\
+\\ \midrule
 Source & \hyperref{http://www.chrishecker.com/images/e/e7/Gdmphys3.pdf}{}{}{Impulse for Collision Ref}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[IM:col2D]{IM:col2D}
         
 \\ \bottomrule
@@ -618,614 +612,615 @@ RefBy & \hyperref[IM:col2D]{IM:col2D}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
 
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:ctrOfMass}
 \phantomsection 
 \label{DD:ctrOfMass}
-\\ \midrule \\
+\\ \midrule
 Label & Center of Mass
         
-\\ \midrule \\
-Symbol & ${\symbf{p}_{\text{CM}}}$
+\\ \midrule
+Symbol & ${\symbf{p}\text{(}t\text{)}_{\text{CM}}}$
          
-\\ \midrule \\
+\\ \midrule
 Units & ${\text{m}}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
-           {\symbf{p}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}} {\symbf{p}_{j}}}}{{m_{T}}}
+           {\symbf{p}\text{(}t\text{)}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}} {\symbf{p}\text{(}t\text{)}_{j}}}}{{m_{T}}}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
-              \item{${\symbf{p}_{\text{CM}}}$ is the Center of Mass (${\text{m}}$)}
+              \item{${\symbf{p}\text{(}t\text{)}_{\text{CM}}}$ is the Center of Mass (${\text{m}}$)}
               \item{${m_{j}}$ is the mass of the j-th particle (${\text{kg}}$)}
-              \item{${\symbf{p}_{j}}$ is the position vector of the j-th particle (${\text{m}}$)}
+              \item{${\symbf{p}\text{(}t\text{)}_{j}}$ is the position vector of the j-th particle (${\text{m}}$)}
               \item{${m_{T}}$ is the total mass of the rigid body (${\text{kg}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}).
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[IM:col2D]{IM:col2D} and \hyperref[IM:transMot]{IM:transMot}
         
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:linDisp}
 \phantomsection 
 \label{DD:linDisp}
-\\ \midrule \\
+\\ \midrule
 Label & Linear displacement
         
-\\ \midrule \\
-Symbol & $\symbf{u}\text{(}t\text{)}$
+\\ \midrule
+Symbol & $u\text{(}t\text{)}$
          
-\\ \midrule \\
+\\ \midrule
 Units & ${\text{m}}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
-           \symbf{u}\text{(}t\text{)}=\frac{\,d\symbf{p}\left(t\right)}{\,dt}
+           u\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}\left(t\right)}{\,dt}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
-              \item{$\symbf{u}\text{(}t\text{)}$ is the linear displacement (${\text{m}}$)}
+              \item{$u\text{(}t\text{)}$ is the linear displacement (${\text{m}}$)}
               \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{p}$ is the position (${\text{m}}$)}
+              \item{$\symbf{p}\text{(}t\text{)}$ is the position (${\text{m}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}).
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[IM:transMot]{IM:transMot}
         
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:linVel}
 \phantomsection 
 \label{DD:linVel}
-\\ \midrule \\
+\\ \midrule
 Label & Linear velocity
         
-\\ \midrule \\
-Symbol & $\symbf{v}\text{(}t\text{)}$
+\\ \midrule
+Symbol & $v\text{(}t\text{)}$
          
-\\ \midrule \\
+\\ \midrule
 Units & $\frac{\text{m}}{\text{s}}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
-           \symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{u}\left(t\right)}{\,dt}
+           v\text{(}t\text{)}=\frac{\,d\symbf{u}\left(t\right)}{\,dt}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
-              \item{$\symbf{v}\text{(}t\text{)}$ is the linear velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$v\text{(}t\text{)}$ is the linear velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (${\text{s}}$)}
               \item{$\symbf{u}$ is the displacement (${\text{m}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}).
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[IM:transMot]{IM:transMot}
         
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:linAcc}
 \phantomsection 
 \label{DD:linAcc}
-\\ \midrule \\
+\\ \midrule
 Label & Linear acceleration
         
-\\ \midrule \\
-Symbol & $\symbf{a}\text{(}t\text{)}$
+\\ \midrule
+Symbol & $a\text{(}t\text{)}$
          
-\\ \midrule \\
+\\ \midrule
 Units & $\frac{\text{m}}{\text{s}^{2}}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
-           \symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\left(t\right)}{\,dt}
+           a\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}\left(t\right)}{\,dt}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
-              \item{$\symbf{a}\text{(}t\text{)}$ is the linear acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$a\text{(}t\text{)}$ is the linear acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (${\text{s}}$)}
-              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\symbf{v}\text{(}t\text{)}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}).
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[IM:transMot]{IM:transMot}
         
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:angDisp}
 \phantomsection 
 \label{DD:angDisp}
-\\ \midrule \\
+\\ \midrule
 Label & Angular displacement
         
-\\ \midrule \\
+\\ \midrule
 Symbol & $θ$
          
-\\ \midrule \\
+\\ \midrule
 Units & ${\text{rad}}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            θ=\frac{\,dϕ\left(t\right)}{\,dt}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$θ$ is the angular displacement (${\text{rad}}$)}
               \item{$t$ is the time (${\text{s}}$)}
               \item{$ϕ$ is the orientation (${\text{rad}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}) and two-dimensional (from \hyperref[assumpOD]{A:objectDimension}).
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[IM:rotMot]{IM:rotMot}
         
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:angVel}
 \phantomsection 
 \label{DD:angVel}
-\\ \midrule \\
+\\ \midrule
 Label & Angular velocity
         
-\\ \midrule \\
+\\ \midrule
 Symbol & $ω$
          
-\\ \midrule \\
+\\ \midrule
 Units & $\frac{\text{rad}}{\text{s}}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            ω=\frac{\,dθ\left(t\right)}{\,dt}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
               \item{$t$ is the time (${\text{s}}$)}
               \item{$θ$ is the angular displacement (${\text{rad}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}) and two-dimensional (from \hyperref[assumpOD]{A:objectDimension}).
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[IM:rotMot]{IM:rotMot}
         
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:angAccel}
 \phantomsection 
 \label{DD:angAccel}
-\\ \midrule \\
+\\ \midrule
 Label & Angular acceleration
         
-\\ \midrule \\
+\\ \midrule
 Symbol & $α$
          
-\\ \midrule \\
+\\ \midrule
 Units & $\frac{\text{rad}}{\text{s}^{2}}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            α=\frac{\,dω\left(t\right)}{\,dt}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \item{$t$ is the time (${\text{s}}$)}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}) and two-dimensional (from \hyperref[assumpOD]{A:objectDimension}).
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & \hyperref[IM:rotMot]{IM:rotMot}
         
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:chaslesThm}
 \phantomsection 
 \label{DD:chaslesThm}
-\\ \midrule \\
+\\ \midrule
 Label & Chasles' theorem
         
-\\ \midrule \\
-Symbol & ${\symbf{v}_{\text{B}}}$
+\\ \midrule
+Symbol & ${\symbf{v}\text{(}t\text{)}_{\text{B}}}$
          
-\\ \midrule \\
+\\ \midrule
 Units & $\frac{\text{m}}{\text{s}}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
-           {\symbf{v}_{\text{B}}}={\symbf{v}_{\text{O}}}+ω\times{\symbf{u}_{\text{O}\text{B}}}
+           {\symbf{v}\text{(}t\text{)}_{\text{B}}}={\symbf{v}\text{(}t\text{)}_{\text{O}}}+ω\times{\symbf{u}_{\text{O}\text{B}}}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
-              \item{${\symbf{v}_{\text{B}}}$ is the velocity at point B ($\frac{\text{m}}{\text{s}}$)}
-              \item{${\symbf{v}_{\text{O}}}$ is the velocity at point origin ($\frac{\text{m}}{\text{s}}$)}
+              \item{${\symbf{v}\text{(}t\text{)}_{\text{B}}}$ is the velocity at point B ($\frac{\text{m}}{\text{s}}$)}
+              \item{${\symbf{v}\text{(}t\text{)}_{\text{O}}}$ is the velocity at point origin ($\frac{\text{m}}{\text{s}}$)}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
               \item{${\symbf{u}_{\text{O}\text{B}}}$ is the displacement vector between the origin and point B (${\text{m}}$)}
               \end{symbDescription}
-\\ \midrule \\
-Notes & The linear velocity ${\symbf{v}_{\text{B}}}$ of any point B in a rigid body is the sum of the linear velocity ${\symbf{v}_{\text{O}}}$ of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ and the displacement vector between the origin and point B ${\symbf{u}_{\text{O}\text{B}}}$.
+\\ \midrule
+Notes & The linear velocity ${\symbf{v}\text{(}t\text{)}_{\text{B}}}$ of any point B in a rigid body is the sum of the linear velocity ${\symbf{v}\text{(}t\text{)}_{\text{O}}}$ of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ and the displacement vector between the origin and point B ${\symbf{u}_{\text{O}\text{B}}}$.
         
         All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}).
         
-\\ \midrule \\
+\\ \midrule
 Source & \cite{chaslesWiki}
          
-\\ \midrule \\
+\\ \midrule
 RefBy & 
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:torque}
 \phantomsection 
 \label{DD:torque}
-\\ \midrule \\
+\\ \midrule
 Label & Torque
         
-\\ \midrule \\
+\\ \midrule
 Symbol & $\symbf{τ}$
          
-\\ \midrule \\
+\\ \midrule
 Units & $\text{N}\text{m}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            \symbf{τ}=\symbf{r}\times\symbf{F}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$\symbf{τ}$ is the torque ($\text{N}\text{m}$)}
               \item{$\symbf{r}$ is the position vector (${\text{m}}$)}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & The torque on a body measures the tendency of a force to rotate the body around an axis or pivot.
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & 
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:kEnergy}
 \phantomsection 
 \label{DD:kEnergy}
-\\ \midrule \\
+\\ \midrule
 Label & Kinetic energy
         
-\\ \midrule \\
+\\ \midrule
 Symbol & $KE$
          
-\\ \midrule \\
+\\ \midrule
 Units & ${\text{J}}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
-           KE=m \frac{\symbf{v}^{2}}{2}
+           KE=m \frac{\|\symbf{v}\text{(}t\text{)}\|^{2}}{2}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$KE$ is the kinetic energy (${\text{J}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\symbf{v}\text{(}t\text{)}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & Kinetic energy is the measure of the energy a body possesses due to its motion.
         
         All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}) and two-dimensional (from \hyperref[assumpOD]{A:objectDimension}).
         
         No damping occurs during the simulation (from \hyperref[assumpDI]{A:dampingInvolvement}).
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & 
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:coeffRestitution}
 \phantomsection 
 \label{DD:coeffRestitution}
-\\ \midrule \\
+\\ \midrule
 Label & Coefficient of restitution
         
-\\ \midrule \\
+\\ \midrule
 Symbol & ${C_{\text{R}}}$
          
-\\ \midrule \\
+\\ \midrule
 Units & Unitless
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
-           {C_{\text{R}}}=-\left(\frac{{{\symbf{v}_{\text{f}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}{{{\symbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}\right)
+           {C_{\text{R}}}=-\left(\frac{{{\symbf{v}\text{(}t\text{)}_{\text{f}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}{{{\symbf{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}\right)
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{${C_{\text{R}}}$ is the coefficient of restitution (Unitless)}
-              \item{${{\symbf{v}_{\text{f}}}^{\text{A}\text{B}}}$ is the final relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
+              \item{${{\symbf{v}\text{(}t\text{)}_{\text{f}}}^{\text{A}\text{B}}}$ is the final relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
               \item{$\symbf{n}$ is the collision normal vector (${\text{m}}$)}
-              \item{${{\symbf{v}_{\text{i}}}^{\text{A}\text{B}}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
+              \item{${{\symbf{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & The coefficient of restitution ${C_{\text{R}}}$ determines the elasticity of a collision between two rigid bodies. ${C_{\text{R}}}=1$ results in an elastic collision, ${C_{\text{R}}}\lt{}1$ results in an inelastic collision, and ${C_{\text{R}}}=0$ results in a totally inelastic collision.
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & 
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:reVeInColl}
 \phantomsection 
 \label{DD:reVeInColl}
-\\ \midrule \\
+\\ \midrule
 Label & Initial Relative Velocity Between Rigid Bodies of A and B
         
-\\ \midrule \\
-Symbol & ${{\symbf{v}_{\text{i}}}^{\text{A}\text{B}}}$
+\\ \midrule
+Symbol & ${{\symbf{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}$
          
-\\ \midrule \\
+\\ \midrule
 Units & $\frac{\text{m}}{\text{s}}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
-           {{\symbf{v}_{\text{i}}}^{\text{A}\text{B}}}={\symbf{v}^{\text{A}\text{P}}}-{\symbf{v}^{\text{B}\text{P}}}
+           {{\symbf{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}={\symbf{v}\text{(}t\text{)}^{\text{A}\text{P}}}-{\symbf{v}\text{(}t\text{)}^{\text{B}\text{P}}}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
-              \item{${{\symbf{v}_{\text{i}}}^{\text{A}\text{B}}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
-              \item{${\symbf{v}^{\text{A}\text{P}}}$ is the velocity of the point of collision P in body A ($\frac{\text{m}}{\text{s}}$)}
-              \item{${\symbf{v}^{\text{B}\text{P}}}$ is the velocity of the point of collision P in body B ($\frac{\text{m}}{\text{s}}$)}
+              \item{${{\symbf{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
+              \item{${\symbf{v}\text{(}t\text{)}^{\text{A}\text{P}}}$ is the velocity of the point of collision P in body A ($\frac{\text{m}}{\text{s}}$)}
+              \item{${\symbf{v}\text{(}t\text{)}^{\text{B}\text{P}}}$ is the velocity of the point of collision P in body B ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
-\\ \midrule \\
-Notes & In a collision, the velocity of a rigid body A colliding with another rigid body B relative to that body ${{\symbf{v}_{\text{i}}}^{\text{A}\text{B}}}$ is the difference between the velocities of A and B at point P.
+\\ \midrule
+Notes & In a collision, the velocity of a rigid body A colliding with another rigid body B relative to that body ${{\symbf{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}$ is the difference between the velocities of A and B at point P.
         
         All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}).
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & 
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:impulseV}
 \phantomsection 
 \label{DD:impulseV}
-\\ \midrule \\
+\\ \midrule
 Label & Impulse (vector)
         
-\\ \midrule \\
+\\ \midrule
 Symbol & $\symbf{J}$
          
-\\ \midrule \\
+\\ \midrule
 Units & $\text{N}\text{s}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            \symbf{J}=m Δ\symbf{v}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$\symbf{J}$ is the impulse (vector) ($\text{N}\text{s}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
               \item{$Δ\symbf{v}$ is the change in velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & An impulse (vector) $\symbf{J}$ occurs when a force $\symbf{F}$ acts over a body over an interval of time.
         
         All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}).
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & 
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{Detailed derivation of impulse (vector):}
 \label{DD:impulseVDeriv}
 Newton's second law of motion states:
 
 \begin{displaymath}
-\symbf{F}=m \symbf{a}=m \frac{\,d\symbf{v}}{\,dt}
+\symbf{F}=m \symbf{a}\text{(}t\text{)}=m \frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 Rearranging:
 
 \begin{displaymath}
-\int_{{t_{1}}}^{{t_{2}}}{\symbf{F}}\,dt=m \left(\int_{{\symbf{v}_{1}}}^{{\symbf{v}_{2}}}{1}\,d\symbf{v}\right)
+\int_{{t_{1}}}^{{t_{2}}}{\symbf{F}}\,dt=m \left(\int_{{\symbf{v}\text{(}t\text{)}_{1}}}^{{\symbf{v}\text{(}t\text{)}_{2}}}{1}\,d\symbf{v}\text{(}t\text{)}\right)
 \end{displaymath}
 Integrating the right hand side:
 
 \begin{displaymath}
-\int_{{t_{1}}}^{{t_{2}}}{\symbf{F}}\,dt=m {\symbf{v}_{2}}-m {\symbf{v}_{1}}=m Δ\symbf{v}
+\int_{{t_{1}}}^{{t_{2}}}{\symbf{F}}\,dt=m {\symbf{v}\text{(}t\text{)}_{2}}-m {\symbf{v}\text{(}t\text{)}_{1}}=m Δ\symbf{v}
 \end{displaymath}
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:potEnergy}
 \phantomsection 
 \label{DD:potEnergy}
-\\ \midrule \\
+\\ \midrule
 Label & Potential energy
         
-\\ \midrule \\
+\\ \midrule
 Symbol & $PE$
          
-\\ \midrule \\
+\\ \midrule
 Units & ${\text{J}}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            PE=m \symbf{g} h
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$PE$ is the potential energy (${\text{J}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
               \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$h$ is the height (${\text{m}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & The potential energy of an object is the energy held by an object because of its position to other objects.
         
         All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}) and two-dimensional (from \hyperref[assumpOD]{A:objectDimension}).
         
         No damping occurs during the simulation (from \hyperref[assumpDI]{A:dampingInvolvement}).
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & 
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:momentOfInertia}
 \phantomsection 
 \label{DD:momentOfInertia}
-\\ \midrule \\
+\\ \midrule
 Label & Moment of inertia
         
-\\ \midrule \\
+\\ \midrule
 Symbol & $\symbf{I}$
          
-\\ \midrule \\
+\\ \midrule
 Units & $\text{kg}\text{m}^{2}$
         
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            \symbf{I}=\displaystyle\sum{{m_{j}} {d_{j}}^{2}}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{$\symbf{I}$ is the moment of inertia ($\text{kg}\text{m}^{2}$)}
               \item{${m_{j}}$ is the mass of the j-th particle (${\text{kg}}$)}
               \item{${d_{j}}$ is the distance between the j-th particle and the axis of rotation (${\text{m}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & The moment of inertia $\symbf{I}$ of a body measures how much torque is needed for the body to achieve angular acceleration about the axis of rotation.
         
         All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}).
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & 
 \\ \bottomrule
 \end{tabular}
@@ -1237,25 +1232,25 @@ This section transforms the problem defined in the \hyperref[Sec:ProbDesc]{probl
 
 The goal \hyperref[linearGS]{GS:Determine-Linear-Properties} is met by \hyperref[IM:transMot]{IM:transMot} and \hyperref[IM:col2D]{IM:col2D}. The goal \hyperref[angularGS]{GS:Determine-Angular-Properties} is met by \hyperref[IM:rotMot]{IM:rotMot} and \hyperref[IM:col2D]{IM:col2D}.
 
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:transMot}
 \phantomsection 
 \label{IM:transMot}
-\\ \midrule \\
+\\ \midrule
 Label & J-Th Body's Acceleration
         
-\\ \midrule \\
-Input & ${\symbf{v}_{j}}$, $t$, $\symbf{g}$, ${\symbf{F}_{j}}$, ${m_{j}}$
+\\ \midrule
+Input & ${\symbf{v}\text{(}t\text{)}_{j}}$, $t$, $\symbf{g}$, ${\symbf{F}_{j}}$, ${m_{j}}$
         
-\\ \midrule \\
-Output & ${\symbf{a}_{j}}$
+\\ \midrule
+Output & ${\symbf{a}\text{(}t\text{)}_{j}}$
          
-\\ \midrule \\
+\\ \midrule
 Input Constraints & \begin{displaymath}
-                    {\symbf{v}_{j}}\gt{}0
+                    {\symbf{v}\text{(}t\text{)}_{j}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
                     t\gt{}0
@@ -1269,21 +1264,21 @@ Input Constraints & \begin{displaymath}
                     \begin{displaymath}
                     {m_{j}}\gt{}0
                     \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Output Constraints & 
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
-           {\symbf{a}_{j}}=\symbf{g}+\frac{{\symbf{F}_{j}}\left(t\right)}{{m_{j}}}
+           {\symbf{a}\text{(}t\text{)}_{j}}=\symbf{g}+\frac{{\symbf{F}_{j}}\left(t\right)}{{m_{j}}}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
-              \item{${\symbf{a}_{j}}$ is the j-th body's acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${\symbf{a}\text{(}t\text{)}_{j}}$ is the j-th body's acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${\symbf{F}_{j}}$ is the force applied to the j-th body at time t (${\text{N}}$)}
               \item{$t$ is the time (${\text{s}}$)}
               \item{${m_{j}}$ is the mass of the j-th particle (${\text{kg}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & The above equation expresses the total acceleration of the rigid body $j$ as the sum of gravitational acceleration (from \hyperref[GD:accelGravity]{GD:accelGravity}) and acceleration due to applied force ${\symbf{F}_{j}}\left(t\right)$ (from \hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}). The resultant outputs are then obtained from this equation using \hyperref[DD:linDisp]{DD:linDisp}, \hyperref[DD:linVel]{DD:linVel}, and \hyperref[DD:linAcc]{DD:linAcc}.
         
         The output of the instance model will be the functions of position and velocity over time that satisfy the ODE for the acceleration, with the given initial conditions for position and velocity. The motion is translational, so the position and velocity functions are for the centre of mass (from \hyperref[DD:ctrOfMass]{DD:ctrOfMass}).
@@ -1292,43 +1287,44 @@ Notes & The above equation expresses the total acceleration of the rigid body $j
         
         It is currently assumed that no damping occurs during the simulation (from \hyperref[assumpDI]{A:dampingInvolvement}) and that no constraints are involved (from \hyperref[assumpCAJI]{A:constraintsAndJointsInvolvement}).
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & 
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{Detailed derivation of j-th body's acceleration:}
 \label{IM:transMotDeriv}
 We may calculate the total acceleration of rigid body $j$ by calculating the derivative of it's velocity with respect to time (from \hyperref[DD:linAcc]{DD:linAcc}).
 
 \begin{displaymath}
-{α_{j}}=\frac{\,d{\symbf{v}_{j}}\left(t\right)}{\,dt}
+{α_{j}}=\frac{\,d{\symbf{v}\text{(}t\text{)}_{j}}\left(t\right)}{\,dt}
 \end{displaymath}
 Performing the derivative, we obtain:
 
 \begin{displaymath}
-{\symbf{a}_{j}}=\symbf{g}+\frac{{\symbf{F}_{j}}\left(t\right)}{{m_{j}}}
+{\symbf{a}\text{(}t\text{)}_{j}}=\symbf{g}+\frac{{\symbf{F}_{j}}\left(t\right)}{{m_{j}}}
 \end{displaymath}
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:rotMot}
 \phantomsection 
 \label{IM:rotMot}
-\\ \midrule \\
+\\ \midrule
 Label & J-Th Body's Angular Acceleration
         
-\\ \midrule \\
+\\ \midrule
 Input & $ω$, $t$, ${\symbf{τ}_{j}}$, $\symbf{I}$
         
-\\ \midrule \\
+\\ \midrule
 Output & ${α_{j}}$
          
-\\ \midrule \\
+\\ \midrule
 Input Constraints & \begin{displaymath}
                     ω\gt{}0
                     \end{displaymath}
@@ -1341,36 +1337,37 @@ Input Constraints & \begin{displaymath}
                     \begin{displaymath}
                     \symbf{I}\gt{}0
                     \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Output Constraints & \begin{displaymath}
                      {α_{j}}\gt{}0
                      \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
            {α_{j}}=\frac{{\symbf{τ}_{j}}\left(t\right)}{\symbf{I}}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
               \item{${α_{j}}$ is the j-th body's angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \item{${\symbf{τ}_{j}}$ is the torque applied to the j-th body ($\text{N}\text{m}$)}
               \item{$t$ is the time (${\text{s}}$)}
               \item{$\symbf{I}$ is the moment of inertia ($\text{kg}\text{m}^{2}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & The above equation for the total angular acceleration of the rigid body $j$ is derived from \hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}, and the resultant outputs are then obtained from this equation using \hyperref[DD:angDisp]{DD:angDisp}, \hyperref[DD:angVel]{DD:angVel}, and \hyperref[DD:angAccel]{DD:angAccel}.
         
         All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}) and two-dimensional (from \hyperref[assumpOD]{A:objectDimension}).
         
         A right-handed coordinate system is used (from \hyperref[assumpAD]{A:axesDefined}).
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & 
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
 \paragraph{Detailed derivation of j-th body's angular acceleration:}
 \label{IM:rotMotDeriv}
 We may calculate the total angular acceleration of rigid body $j$ by calculating the derivative of its angular velocity with respect to time (from \hyperref[DD:angAccel]{DD:angAccel}).
@@ -1383,23 +1380,23 @@ Performing the derivative, we obtain:
 \begin{displaymath}
 {α_{j}}=\frac{{\symbf{τ}_{j}}\left(t\right)}{\symbf{I}}
 \end{displaymath}
-\vspace{\baselineskip}
+\medskip
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:col2D}
 \phantomsection 
 \label{IM:col2D}
-\\ \midrule \\
+\\ \midrule
 Label & Collisions on 2D rigid bodies
         
-\\ \midrule \\
+\\ \midrule
 Input & $t$, $j$, ${m_{\text{A}}}$, $\symbf{n}$
         
-\\ \midrule \\
+\\ \midrule
 Output & ${t_{\text{c}}}$
          
-\\ \midrule \\
+\\ \midrule
 Input Constraints & \begin{displaymath}
                     t\gt{}0
                     \end{displaymath}
@@ -1412,24 +1409,24 @@ Input Constraints & \begin{displaymath}
                     \begin{displaymath}
                     \symbf{n}\gt{}0
                     \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Output Constraints & \begin{displaymath}
                      {t_{\text{c}}}\gt{}0
                      \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Equation & \begin{displaymath}
-           {\symbf{v}_{\text{A}}}\left({t_{\text{c}}}\right)={\symbf{v}_{\text{A}}}\left(t\right)+\frac{j}{{m_{\text{A}}}} \symbf{n}
+           {\symbf{v}\text{(}t\text{)}_{\text{A}}}\left({t_{\text{c}}}\right)={\symbf{v}\text{(}t\text{)}_{\text{A}}}\left(t\right)+\frac{j}{{m_{\text{A}}}} \symbf{n}
            \end{displaymath}
-\\ \midrule \\
+\\ \midrule
 Description & \begin{symbDescription}
-              \item{${\symbf{v}_{\text{A}}}$ is the velocity at point A ($\frac{\text{m}}{\text{s}}$)}
+              \item{${\symbf{v}\text{(}t\text{)}_{\text{A}}}$ is the velocity at point A ($\frac{\text{m}}{\text{s}}$)}
               \item{${t_{\text{c}}}$ is the denotes the time at collision (${\text{s}}$)}
               \item{$t$ is the time (${\text{s}}$)}
               \item{$j$ is the impulse (scalar) ($\text{N}\text{s}$)}
               \item{${m_{\text{A}}}$ is the mass of rigid body A (${\text{kg}}$)}
               \item{$\symbf{n}$ is the collision normal vector (${\text{m}}$)}
               \end{symbDescription}
-\\ \midrule \\
+\\ \midrule
 Notes & The output of the instance model will be the functions of position, velocity, orientation, and angular acceleration over time that satisfy the equations for the velocity and angular acceleration, with the given initial conditions for position, velocity, orientation, and angular acceleration. The motion is translational, so the position, velocity, orientation, and angular acceleration functions are for the centre of mass (from \hyperref[DD:ctrOfMass]{DD:ctrOfMass}).
         
         All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}) and two-dimensional (from \hyperref[assumpOD]{A:objectDimension}).
@@ -1442,10 +1439,10 @@ Notes & The output of the instance model will be the functions of position, velo
         
         $j$ is defined in \hyperref[GD:impulse]{GD:impulse}
         
-\\ \midrule \\
+\\ \midrule
 Source & --
          
-\\ \midrule \\
+\\ \midrule
 RefBy & 
 \\ \bottomrule
 \end{tabular}
@@ -1453,14 +1450,13 @@ RefBy &
 
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
 
-\begin{longtable}{l l l l l}
-\toprule
+\begin{longtblr}
+[caption={Input Data Constraints}]
+{colspec={l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
 \\
-\midrule
-\endhead
 ${C_{\text{R}}}$ & $0\leq{}{C_{\text{R}}}\leq{}1$ & -- & $0.8$ & 10$\%$
 \\
 $\symbf{F}$ & -- & -- & $98.1$ ${\text{N}}$ & 10$\%$
@@ -1473,42 +1469,35 @@ $L$ & $L\gt{}0$ & -- & $44.2$ ${\text{m}}$ & 10$\%$
 \\
 $m$ & $m\gt{}0$ & -- & $56.2$ ${\text{kg}}$ & 10$\%$
 \\
-$\symbf{p}$ & -- & -- & $0.412$ ${\text{m}}$ & 10$\%$
+$\symbf{p}\text{(}t\text{)}$ & -- & -- & $0.412$ ${\text{m}}$ & 10$\%$
 \\
-$\symbf{v}$ & -- & -- & $2.51$ $\frac{\text{m}}{\text{s}}$ & 10$\%$
+$\symbf{v}\text{(}t\text{)}$ & -- & -- & $2.51$ $\frac{\text{m}}{\text{s}}$ & 10$\%$
 \\
 $\symbf{τ}$ & -- & -- & $200$ $\text{N}\text{m}$ & 10$\%$
 \\
 $ω$ & -- & -- & $2.1$ $\frac{\text{rad}}{\text{s}}$ & 10$\%$
 \\
 $ϕ$ & -- & $0\leq{}ϕ\leq{}2 π$ & $\frac{π}{2}$ ${\text{rad}}$ & 10$\%$
-\\
-\bottomrule
-\caption{Input Data Constraints}
 \label{Table:InDataConstraints}
-\end{longtable}
+\end{longtblr}
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:CorSolProps}
 The \hyperref[Table:OutDataConstraints]{Data Constraints Table} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
 
-\begin{longtable}{l}
-\toprule
+\begin{longtblr}
+[caption={Output Data Constraints}]
+{colspec={l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Var}
 \\
-\midrule
-\endhead
-$\symbf{p}$
+$\symbf{p}\text{(}t\text{)}$
 \\
-$\symbf{v}$
+$\symbf{v}\text{(}t\text{)}$
 \\
 $ϕ$
 \\
 $ω$
-\\
-\bottomrule
-\caption{Output Data Constraints}
 \label{Table:OutDataConstraints}
-\end{longtable}
+\end{longtblr}
 \section{Requirements}
 \label{Sec:Requirements}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
@@ -1575,14 +1564,13 @@ Free open source 3D game physics libraries include:
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Tab:TraceMatAvsA} shows the dependencies of assumptions on the assumptions. \hyperref[Table:TraceMatAvsAll]{Tab:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Tab:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Tab:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Tab:TraceMatAvsA} shows the dependencies of the assumptions on each other. \hyperref[Table:TraceMatAvsAll]{Tab:TraceMatAvsAll} shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Tab:TraceMatRefvsRef} shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Table:TraceMatAllvsR]{Tab:TraceMatAllvsR} shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.
 
-\begin{longtable}{l l l l l l l l}
-\toprule
+\begin{longtblr}
+[caption={Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}]
+{colspec={l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{} & \textbf{\hyperref[assumpOT]{A:objectTy}} & \textbf{\hyperref[assumpOD]{A:objectDimension}} & \textbf{\hyperref[assumpCST]{A:coordinateSystemTy}} & \textbf{\hyperref[assumpAD]{A:axesDefined}} & \textbf{\hyperref[assumpCT]{A:collisionType}} & \textbf{\hyperref[assumpDI]{A:dampingInvolvement}} & \textbf{\hyperref[assumpCAJI]{A:constraintsAndJointsInvolvement}}
 \\
-\midrule
-\endhead
 \hyperref[assumpOT]{A:objectTy} &  &  &  &  &  &  & 
 \\
 \hyperref[assumpOD]{A:objectDimension} &  &  &  &  &  &  & 
@@ -1596,17 +1584,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[assumpDI]{A:dampingInvolvement} &  &  &  &  &  &  & 
 \\
 \hyperref[assumpCAJI]{A:constraintsAndJointsInvolvement} &  &  &  &  &  &  & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}
 \label{Table:TraceMatAvsA}
-\end{longtable}
-\begin{longtable}{l l l l l l l l}
-\toprule
+\end{longtblr}
+\begin{longtblr}
+[caption={Traceability Matrix Showing the Connections Between Assumptions and Other Items}]
+{colspec={l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{} & \textbf{\hyperref[assumpOT]{A:objectTy}} & \textbf{\hyperref[assumpOD]{A:objectDimension}} & \textbf{\hyperref[assumpCST]{A:coordinateSystemTy}} & \textbf{\hyperref[assumpAD]{A:axesDefined}} & \textbf{\hyperref[assumpCT]{A:collisionType}} & \textbf{\hyperref[assumpDI]{A:dampingInvolvement}} & \textbf{\hyperref[assumpCAJI]{A:constraintsAndJointsInvolvement}}
 \\
-\midrule
-\endhead
 \hyperref[DD:ctrOfMass]{DD:ctrOfMass} & X &  &  &  &  &  & 
 \\
 \hyperref[DD:linDisp]{DD:linDisp} & X &  &  &  &  &  & 
@@ -1696,17 +1680,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[ucCCS]{UC:Cartesian-Coordinate-System} &  &  &  &  &  &  & 
 \\
 \hyperref[ucORB]{UC:Objects-Rigid-Bodies} &  &  &  &  &  &  & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
 \label{Table:TraceMatAvsAll}
-\end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l}
-\toprule
+\end{longtblr}
+\begin{longtblr}
+[caption={Traceability Matrix Showing the Connections Between Items and Other Sections}]
+{colspec={l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD:ctrOfMass}} & \textbf{\hyperref[DD:linDisp]{DD:linDisp}} & \textbf{\hyperref[DD:linVel]{DD:linVel}} & \textbf{\hyperref[DD:linAcc]{DD:linAcc}} & \textbf{\hyperref[DD:angDisp]{DD:angDisp}} & \textbf{\hyperref[DD:angVel]{DD:angVel}} & \textbf{\hyperref[DD:angAccel]{DD:angAccel}} & \textbf{\hyperref[DD:chaslesThm]{DD:chaslesThm}} & \textbf{\hyperref[DD:torque]{DD:torque}} & \textbf{\hyperref[DD:kEnergy]{DD:kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD:coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD:reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD:impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD:potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD:momentOfInertia}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM:NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM:UniversalGravLaw}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}} & \textbf{\hyperref[GD:accelGravity]{GD:accelGravity}} & \textbf{\hyperref[GD:impulse]{GD:impulse}} & \textbf{\hyperref[IM:transMot]{IM:transMot}} & \textbf{\hyperref[IM:rotMot]{IM:rotMot}} & \textbf{\hyperref[IM:col2D]{IM:col2D}}
 \\
-\midrule
-\endhead
 \hyperref[DD:ctrOfMass]{DD:ctrOfMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:linDisp]{DD:linDisp} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1754,17 +1734,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[IM:rotMot]{IM:rotMot} &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & 
 \\
 \hyperref[IM:col2D]{IM:col2D} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
 \label{Table:TraceMatRefvsRef}
-\end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
-\toprule
+\end{longtblr}
+\begin{longtblr}
+[caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
+{colspec={l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD:ctrOfMass}} & \textbf{\hyperref[DD:linDisp]{DD:linDisp}} & \textbf{\hyperref[DD:linVel]{DD:linVel}} & \textbf{\hyperref[DD:linAcc]{DD:linAcc}} & \textbf{\hyperref[DD:angDisp]{DD:angDisp}} & \textbf{\hyperref[DD:angVel]{DD:angVel}} & \textbf{\hyperref[DD:angAccel]{DD:angAccel}} & \textbf{\hyperref[DD:chaslesThm]{DD:chaslesThm}} & \textbf{\hyperref[DD:torque]{DD:torque}} & \textbf{\hyperref[DD:kEnergy]{DD:kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD:coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD:reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD:impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD:potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD:momentOfInertia}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM:NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM:UniversalGravLaw}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}} & \textbf{\hyperref[GD:accelGravity]{GD:accelGravity}} & \textbf{\hyperref[GD:impulse]{GD:impulse}} & \textbf{\hyperref[IM:transMot]{IM:transMot}} & \textbf{\hyperref[IM:rotMot]{IM:rotMot}} & \textbf{\hyperref[IM:col2D]{IM:col2D}} & \textbf{\hyperref[simSpace]{FR:Simulation-Space}} & \textbf{\hyperref[inputInitialConds]{FR:Input-Initial-Conditions}} & \textbf{\hyperref[inputSurfaceProps]{FR:Input-Surface-Properties}} & \textbf{\hyperref[verifyPhysCons]{FR:Verify-Physical\_Constraints}} & \textbf{\hyperref[calcTransOverTime]{FR:Calculate-Translation-Over-Time}} & \textbf{\hyperref[calcRotOverTime]{FR:Calculate-Rotation-Over-Time}} & \textbf{\hyperref[deterColls]{FR:Determine-Collisions}} & \textbf{\hyperref[deterCollRespOverTime]{FR:Determine-Collision-Response-Over-Time}} & \textbf{\hyperref[performance]{NFR:Performance}} & \textbf{\hyperref[correctness]{NFR:Correctness}} & \textbf{\hyperref[usability]{NFR:Usability}} & \textbf{\hyperref[understandability]{NFR:Understandability}} & \textbf{\hyperref[maintainability]{NFR:Maintainability}}
 \\
-\midrule
-\endhead
 \hyperref[linearGS]{GS:Determine-Linear-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[angularGS]{GS:Determine-Angular-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1794,12 +1770,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[understandability]{NFR:Understandability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[maintainability]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}
 \label{Table:TraceMatAllvsR}
-\end{longtable}
-The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on the assumptions. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
+\end{longtblr}
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
 
 \begin{figure}
 \begin{center}
@@ -1859,7 +1832,7 @@ publisher={Mcgraw-Hill College},
 year={1986}}
 @mastersthesis{koothoor2013,
 author={Koothoor, Nirmitha},
-title={A document drive approach to certifying scientific computing software},
+title={A Document Driven Approach to Certifying Scientific Computing Software},
 school={McMaster University},
 year={2013},
 address={Hamilton, ON, Canada}}
@@ -1885,6 +1858,16 @@ title={Point},
 howpublished={\url{https://www.mathsisfun.com/geometry/point.html}},
 month=may,
 year={2017}}
+@article{smithKoothoor2016,
+author={Smith, W. Spencer and Koothoor, Nirmitha},
+title={A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis},
+journal={ Nuclear Engineering and Technology},
+year={2016},
+month=apr,
+volume={48},
+number={2},
+pages={404--418},
+howpublished={\url{http://www.sciencedirect.com/science/article/pii/S1738573315002582}}}
 @inproceedings{smithLai2005,
 author={Smith, W. Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
@@ -1894,6 +1877,16 @@ editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
 address={Paris, France},
 pages={107--121},
 note={In conjunction with 13th IEEE International Requirements Engineering Conference,}}
+@article{smithEtAl2007,
+author={Smith, W. Spencer and Lai, Lei and Khedri, Ridha},
+title={Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability},
+journal={Reliable Computing, Special Issue on Reliable Engineering Computation},
+year={2007},
+month=feb,
+volume={13},
+number={1},
+pages={83--107},
+howpublished={\url{https://doi.org/10.1007/s11155-006-9020-7}}}
 @misc{lineSource,
 author={The Editors of Encyclopaedia Britannica},
 title={Line},

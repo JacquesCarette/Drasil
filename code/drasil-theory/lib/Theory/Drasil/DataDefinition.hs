@@ -1,4 +1,5 @@
 {-# LANGUAGE RankNTypes, NoMonomorphismRestriction, GADTs, TemplateHaskell #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 -- | Defines types and functions for Data Definitions.
 module Theory.Drasil.DataDefinition where
 
@@ -6,6 +7,7 @@ import Control.Lens
 import Language.Drasil
 import Language.Drasil.Development (showUID)
 import Data.Drasil.TheoryConcepts (dataDefn)
+import Theory.Drasil.Classes (HasOutput(..))
 
 -- * Types
 
@@ -41,6 +43,20 @@ ddQD lqde lqdme = lens g s
     s (DDE  qd pkt) u = DDE  (qd & lqde .~ u)  pkt
     s (DDME qd pkt) u = DDME (qd & lqdme .~ u) pkt
 
+-- The type signature is really
+--
+--     ddQDGetter :: Getter SimpleQDef a -> Getter ModelQDef a -> Getter DataDefinition a
+--
+-- But we need this more general type signature to avoid GHC warning us of
+-- "redundant constraints"
+ddQDGetter :: (Profunctor p, Contravariant f) => Getter SimpleQDef a
+  -> Getter ModelQDef a
+  -> Optic' p f DataDefinition a
+ddQDGetter gsqd gmqd = to g
+  where
+    g (DDE qd _) = qd ^. gsqd
+    g (DDME qd _) = qd ^. gmqd
+
 ddPkt :: Lens' DDPkt a -> Lens' DataDefinition a
 ddPkt lpkt = lens g s
   where
@@ -55,15 +71,15 @@ instance HasUID             DataDefinition where uid = ddQD uid uid
 instance NamedIdea          DataDefinition where term = ddQD term term
 -- | Finds the idea contained in the 'QDefinition' used to make the 'DataDefinition where'.
 instance Idea               DataDefinition where getA = either getA getA . qdFromDD
--- | Finds the Space of the 'QDefinition' used to make the 'DataDefinition where'.
-instance HasSpace           DataDefinition where typ = ddQD typ typ
--- | Finds the Symbol of the 'QDefinition' used to make the 'DataDefinition where'.
-instance HasSymbol          DataDefinition where symbol = either symbol symbol . qdFromDD
--- | 'DataDefinition where's have a 'Quantity'.
-instance Quantity           DataDefinition where
+-- | Finds the 'Quantity' defined by the 'DataDefinition'
+instance DefinesQuantity    DataDefinition where
+  defLhs = ddQDGetter defLhs defLhs
+-- | Finds the output variable of the 'DataDefinition'
+instance HasOutput          DataDefinition where
+  output = ddQDGetter defLhs defLhs
+  out_constraints = to (const [])
 -- | Converts the defining expression of a 'DataDefinition where' into the model expression language.
-instance Express            DataDefinition where
-  express d = defines (sy d) (either (express . (^. defnExpr)) (^. defnExpr) (qdFromDD d))
+instance Express            DataDefinition where express = either express express . qdFromDD
 {-- Finds 'Reference's contained in the 'DataDefinition where'.
 instance HasReference       DataDefinition where getReferences = rf-}
 -- | Finds 'DecRef's contained in the 'DataDefinition where'.
@@ -74,8 +90,6 @@ instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. ui
 instance HasDerivation      DataDefinition where derivations = ddPkt pktMD
 -- | Finds any additional notes for the 'DataDefinition where'.
 instance HasAdditionalNotes DataDefinition where getNotes = ddPkt pktSS
--- | Finds the units of the 'QDefinition' used to make the 'DataDefinition where'.
-instance MayHaveUnit        DataDefinition where getUnit = either getUnit getUnit . qdFromDD
 -- | Finds the 'ShortName' of the 'DataDefinition where'.
 instance HasShortName       DataDefinition where shortname = (^. ddPkt pktSN)
 -- | Finds the reference address of a 'DataDefinition where'.
@@ -88,6 +102,10 @@ instance CommonIdea         DataDefinition where abrv _ = abrv dataDefn
 instance Referable          DataDefinition where
   refAdd      = (^. ddPkt pktS)
   renderRef l = RP (prepend $ abrv l) (refAdd l)
+-- | Expose all expressions that need to be type-checked.
+instance RequiresChecking DataDefinition Expr Space where
+  requiredChecks (DDE  qd _) = requiredChecks qd
+  requiredChecks  DDME {}    = []
 
 -- * Constructors
 

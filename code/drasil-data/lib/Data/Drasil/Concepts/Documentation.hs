@@ -1,4 +1,10 @@
 -- | Defines concepts used to create documentation.
+
+-- Changes to documentation-related named chunks and common ideas should be reflected in the 
+-- 'Creating Your Project in Drasil' tutorial found on the wiki:
+-- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
+
+
 module Data.Drasil.Concepts.Documentation where
 
 import Language.Drasil hiding (organization, year, label, variable)
@@ -11,40 +17,45 @@ import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 import Control.Lens ((^.))
 
 -- | Collects all documentation-related named chunks (not concept-level yet).
-doccon :: [NamedChunk]
-doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body, charOfIR, characteristic,
-  class_, client, code, column, company, component, concept, condition, connection,
-  consVals, constant, constraint, consumer, content, context, coordinate, coordinateSystem, 
-  corSol, customer, datum, datumConstraint, decision, definition, dependency, description,
-  design, designDoc, document, documentation, effect, element, emphasis, endUser,
-  environment, example, failure, figure, first, form, full, fullForm, functional,
-  functionalRequirement, game, general, generalSystemDescription, goal, guide, 
-  implementation, indPRCase, individual, information, input_, instance_, intReader,
-  interest, interface, introduction, issue, item, label, library, limitation,
-  literacy, loss, material_, mainIdea, message, method_, methAndAnls, model, module_, name_, 
-  nonfunctional, nonfunctionalRequirement, object, offShelf, offShelfSolution, open, orgOfDoc,
-  organization, output_, physical, physicalConstraint, physicalProperty, physicalSim,
-  physicalSystem, physics, plan, practice, priority, problem, problemDescription, procedure,
-  prodUCTable, productUC, product_, project, procForAnls, propOfCorSol, property, prpsOfDoc,
-  purpose, quantity, realtime, review, reference, refMat, reqInput, requirement_, response, result,
-  reviewer, safety, safetyReq, scenario, scope, scpOfReq, scpOfTheProjS, second_,
-  section_, simulation, software, softwareConstraint, softwareDoc, softwareReq,
-  softwareSys, softwareVAV, softwareVerif, solution, solutionCharSpec,
-  solutionCharacteristic, summary, source, specific, specification, specificsystemdescription,
-  stakeholder, standard, statement, symbol_, sysCont, system, systemConstraint,
-  systemdescription, tAuxConsts, tOfCont, tOfSymb, tOfUnit, inDatumConstraint, outDatumConstraint,
-  table_, task, template, termAndDef, term_,
-  terminology, theory, traceyGraph, traceyMandG, traceyMatrix, type_, uncertCol,
-  uncertainty, useCase, useCaseTable, user, userCharacteristic, userInput,
-  validation, value, variable, vav, vavPlan, verification, video, year]
+doccon :: [IdeaDict]
+doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body,
+  caseProb, charOfIR, characteristic, class_, client, code, column, company,
+  component, concept, condition, connection, consVals, constant, constraint,
+  consumer, content, context, coordinate, coordinateSystem, corSol, customer,
+  datum, datumConstraint, decision, definition, dependency, description,
+  design, designDoc, document, documentation, effect, element, emphasis,
+  endUser, environment, example, failure, figure, first, form, full,
+  fullForm, functional, functionalRequirement, game, general,
+  generalSystemDescription, goal, guide, implementation, indPRCase,
+  individual, information, input_, instance_, intReader, interest, interface,
+  introduction, issue, item, label, library, limitation, literacy, loss,
+  material_, mainIdea, message, method_, methAndAnls, model, module_, name_,
+  nonfunctional, nonfunctionalRequirement, object, offShelf,
+  offShelfSolution, open, orgOfDoc, organization, output_, physical,
+  physicalConstraint, physicalProperty, physicalSim, physicalSystem, physics,
+  plan, practice, priority, problem, problemDescription, problemIntro,
+  procedure, prodUCTable, productUC, product_, project, procForAnls,
+  propOfCorSol, property, prpsOfDoc, purpose, quantity, realtime, review,
+  reference, refMat, reqInput, requirement_, response, result, reviewer,
+  safety, safetyReq, scenario, scope, scpOfReq, scpOfTheProjS, second_,
+  section_, simulation, software, softwareConstraint, softwareDoc,
+  softwareReq, softwareSys, softwareVAV, softwareVerif, solution,
+  solutionCharSpec, solutionCharacteristic, summary, source, specific,
+  specification, specificsystemdescription, stakeholder, standard, statement,
+  symbol_, sysCont, system, systemConstraint, systemdescription, tAuxConsts,
+  tOfCont, tOfSymb, tOfUnit, inDatumConstraint, outDatumConstraint, table_,
+  task, template, termAndDef, term_, terminology, theory, traceyGraph,
+  traceyMandG, traceyMatrix, type_, uncertCol, uncertainty, useCase,
+  useCaseTable, user, userCharacteristic, userInput, validation, value,
+  variable, vav, vavPlan, verification, video, year]
 
 -- | Collects all documentation-related common ideas (like a concept, but with no definition).
 doccon' :: [CI]
 doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
-  likelyChg, mg, mis, notApp, physSyst, requirement, srs, thModel, typUnc, unlikelyChg, notebook]
+  likelyChg, learnObj, mg, mis, notApp, physSyst, requirement, srs, thModel, typUnc, unlikelyChg, notebook]
 
-assumption, desSpec, goalStmt, dataConst, likelyChg, unlikelyChg, physSyst, requirement,
-  mg, mis, notApp, srs, typUnc, sec, notebook :: CI
+assumption, desSpec, goalStmt, dataConst, likelyChg, learnObj, unlikelyChg, physSyst, requirement, 
+  mg, mis, notApp, srs, typUnc, sec, notebook, refBy, refName :: CI
 
 softReqSpec :: NP
 softReqSpec = fterms compoundPhraseP1 softwareReq specification
@@ -59,6 +70,7 @@ desSpec     = commonIdeaWithDict "desSpec"     (combineNINI design specification
 goalStmt    = commonIdeaWithDict "goalStmt"    (combineNINI goal statement)                          "GS"      [softEng]
 dataConst   = commonIdeaWithDict "dataConst"   (cn' "data constraint")                               "DC"      [softEng]
 likelyChg   = commonIdeaWithDict "likelyChg"   (cn' "likely change")                                 "LC"      [softEng]
+learnObj    = commonIdeaWithDict "learnObj"    (cn' "learning objective")                            "LO"      [documentc]
 unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")                               "UC"      [softEng]
 physSyst    = commonIdeaWithDict "physSyst"    (combineNINI physicalSystem description)              "PS"      [softEng]
 requirement = commonIdeaWithDict "requirement" (cn' "requirement")                                   "R"       [softEng]
@@ -69,6 +81,8 @@ typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")      
 sec         = commonIdeaWithDict "section"     (cn' "section")                                       "Sec"     [documentc]
 srs         = commonIdeaWithDict "srs"         softReqSpec                                           "SRS"     [softEng]
 notebook    = commonIdeaWithDict "notebook"    (cn' "notebook")                                      "NB"      [softEng]
+refBy       = commonIdeaWithDict "refBy"       (cn  "referenced by")                                 "RefBy"   [documentc]
+refName     = commonIdeaWithDict "refName"     (cn' "reference name")                                "Refname" [documentc]
 
 ---------------------------------------------------------------------
 
@@ -91,7 +105,7 @@ abbreviation, acronym, analysis, appendix, aspect, body, characteristic, class_,
   source, simulation, software, solution, summary, specific, specification, stakeholder,
   standard, statement, symbol_, system, table_, task, template, term_, terminology,
   theory, traceyGraph, traceyMatrix, type_, uncertainty, user, useCase, validation,
-  value, variable, video, verification, year :: NamedChunk
+  value, variable, video, verification, year :: IdeaDict
 
 abbreviation    = nc "abbreviation"   (cn'    "abbreviation"       )
 acronym         = nc "acronym"        (cn'    "acronym"            )
@@ -226,11 +240,12 @@ year            = nc "year"           (cn'    "year"               )
 scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- temporary generated for test
 
 
-abbAcc, charOfIR, consVals, corSol, methAndAnls, orgOfDoc, procForAnls, propOfCorSol, prpsOfDoc, 
+abbAcc, caseProb, charOfIR, consVals, corSol, methAndAnls, orgOfDoc, procForAnls, propOfCorSol, prpsOfDoc, 
   refMat, reqInput, scpOfReq, tAuxConsts, tOfSymb, tOfUnit,
-  termAndDef, traceyMandG, vav, tOfCont :: NamedChunk
+  termAndDef, traceyMandG, vav, tOfCont :: IdeaDict
 
 abbAcc              = nc "TAbbAcc"            (abbreviation `and_PP` acronym)
+caseProb            = nc "caseProb"           (cn' "case problem")
 consVals            = nc "consVals"           (cn "values of auxiliary constants")
 corSol              = nc "corSol"             (cn' "correct solution")
 charOfIR            = nc "charOfIR"           (characteristic `of_PS` intReader)
@@ -252,19 +267,19 @@ outDatumConstraint  = nc "OutDataConstraints" (cn' "output data constraint")
 traceyMandG         = nc "traceyMandG"        (and_TGen titleize' titleize' traceyMatrix graph)
 vav                 = nc "vav"                (verification `and_` validation)
 
-scpOfTheProj :: (NamedChunk -> Sentence) -> NamedChunk
+scpOfTheProj :: (IdeaDict -> Sentence) -> IdeaDict
 scpOfTheProj oper = nc "scpOfTheProj" (scope `of_NINP` theGen oper project) -- reasonable hack?
 
 -- ** Compound Chunks
 
 designDoc, fullForm, generalSystemDescription, moduleInterface, indPRCase,
-  physicalConstraint, physicalSystem, problemDescription, prodUCTable,
+  physicalConstraint, physicalSystem, problemDescription, problemIntro, prodUCTable,
   specificsystemdescription, systemdescription, systemConstraint, sysCont,
   userCharacteristic, coordinateSystem, datumConstraint, inDatumConstraint, 
   outDatumConstraint, functionalRequirement, nonfunctionalRequirement, safetyReq, 
   softwareConstraint, softwareDoc, softwareReq, softwareSys, softwareVerif, 
   softwareVAV, solutionCharSpec, solutionCharacteristic, offShelfSolution, 
-  physicalSim, productUC, useCaseTable, physicalProperty, vavPlan, uncertCol, userInput :: NamedChunk
+  physicalSim, productUC, useCaseTable, physicalProperty, vavPlan, uncertCol, userInput :: IdeaDict
  
 coordinateSystem             = compoundNC coordinate system
 datumConstraint              = compoundNCPP datum constraint
@@ -283,6 +298,7 @@ physicalProperty             = compoundNC physical property
 physicalSim                  = compoundNC physical simulation
 physicalSystem               = compoundNC physical system
 problemDescription           = compoundNC problem description
+problemIntro                 = compoundNC problem introduction
 prodUCTable                  = compoundNC productUC table_
 productUC                    = compoundNC product_ useCase
 safetyReq                    = compoundNC safety requirement_
@@ -310,17 +326,21 @@ vavPlan                      = compoundNC vav plan
 srsDom :: ConceptChunk
 srsDom = dcc "srsDom" (srs ^. term) "srs"
 
-goalStmtDom, assumpDom, reqDom, funcReqDom, nonFuncReqDom, chgProbDom, likeChgDom, unlikeChgDom :: ConceptChunk
-goalStmtDom   = ccs (mkIdea "goalStmtDom"   (goalStmt ^. term)                 $ Just "GS")  EmptyS [srsDom]
-assumpDom     = ccs (mkIdea "assumpDom"     (assumption ^. term)               $ Just "A")   EmptyS [srsDom]
-reqDom        = ccs (mkIdea "reqDom"        (requirement ^. term)              $ Just "R")   EmptyS [srsDom]
-funcReqDom    = ccs (mkIdea "funcReqDom"    (functionalRequirement ^. term)    $ Just "FR")  EmptyS [reqDom]
-nonFuncReqDom = ccs (mkIdea "nonFuncReqDom" (nonfunctionalRequirement ^. term) $ Just "NFR") EmptyS [reqDom]
-chgProbDom    = ccs (nc "chgProbDom" $ cn' "change")                                         EmptyS [srsDom]
-likeChgDom    = ccs (mkIdea "likeChgDom"    (likelyChg ^. term)                $ Just "LC")  EmptyS [chgProbDom]
-unlikeChgDom  = ccs (mkIdea "unlikeChgDom"  (unlikelyChg ^. term)              $ Just "UC")  EmptyS [chgProbDom]
+goalStmtDom, assumpDom, reqDom, funcReqDom, nonFuncReqDom, chgProbDom, 
+  likeChgDom, unlikeChgDom, refByDom, refNameDom :: ConceptChunk
+goalStmtDom   = ccs (mkIdea "goalStmtDom"   (goalStmt ^. term)                 $ Just "GS")       EmptyS [srsDom]
+assumpDom     = ccs (mkIdea "assumpDom"     (assumption ^. term)               $ Just "A")        EmptyS [srsDom]
+reqDom        = ccs (mkIdea "reqDom"        (requirement ^. term)              $ Just "R")        EmptyS [srsDom]
+funcReqDom    = ccs (mkIdea "funcReqDom"    (functionalRequirement ^. term)    $ Just "FR")       EmptyS [reqDom]
+nonFuncReqDom = ccs (mkIdea "nonFuncReqDom" (nonfunctionalRequirement ^. term) $ Just "NFR")      EmptyS [reqDom]
+chgProbDom    = ccs (nc "chgProbDom" $ cn' "change")                                              EmptyS [srsDom]
+likeChgDom    = ccs (mkIdea "likeChgDom"    (likelyChg ^. term)                $ Just "LC")       EmptyS [chgProbDom]
+unlikeChgDom  = ccs (mkIdea "unlikeChgDom"  (unlikelyChg ^. term)              $ Just "UC")       EmptyS [chgProbDom]
+refByDom      = ccs (mkIdea "refByDom"      (refBy ^. term)                    $ Just "RefBy")    EmptyS [srsDom]
+refNameDom    = ccs (mkIdea "refNameDom"    (refName ^. term)                  $ Just "RefName")  EmptyS [srsDom]
 
 -- | List of SRS-related concepts, including SRS.
 srsDomains :: [ConceptChunk]
-srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom, assumpDom, chgProbDom, likeChgDom, unlikeChgDom]
+srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom, 
+  assumpDom, chgProbDom, likeChgDom, unlikeChgDom, refByDom, refNameDom]
 

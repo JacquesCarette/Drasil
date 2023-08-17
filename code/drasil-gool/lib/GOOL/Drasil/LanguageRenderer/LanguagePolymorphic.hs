@@ -9,34 +9,34 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd, 
   listAppend, listAccess, listSet, getFunc, setFunc, 
-  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment, 
-  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond, 
-  tryCatch, construct, param, method, getMethod, setMethod, initStmts, 
-  function, docFuncRepr, docFunc, buildClass, implementingClass, 
-  docClass, commentedClass, modFromData, fileDoc, docMod
+  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment,
+  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
+  tryCatch, construct, param, method, getMethod, setMethod, initStmts,
+  function, docFuncRepr, docFunc, buildClass, implementingClass, docClass,
+  commentedClass, modFromData, fileDoc, docMod, OptionalSpace(..), defaultOptSpace
 ) where
 
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
-  VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, 
-  CSStateVar, SClass, FSModule, NamedArgs, Initializers, MixedCall, 
-  MixedCtorCall, FileSym(File), BodySym(Body), bodyStatements, oneLiner, 
-  BlockSym(Block), PermanenceSym(..), TypeSym(Type), 
-  TypeElim(getType, getTypeString), VariableSym(Variable), 
-  VariableElim(variableName, variableType), ValueSym(Value, valueType), 
-  NumericExpression((#-), (#/), sin, cos, tan), Comparison(..), funcApp, 
-  newObj, objMethodCallNoParams, ($.), StatementSym(multi), 
-  AssignStatement((&++)), (&=), 
-  IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
-  ifNoElse, ScopeSym(..), ModuleSym(Module), convType)
+  VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod,
+  CSStateVar, SClass, FSModule, NamedArgs, Initializers, MixedCall,
+  MixedCtorCall, FileSym(File), BodySym(Body), bodyStatements, oneLiner,
+  BlockSym(Block), PermanenceSym(..), TypeSym(Type), TypeElim(getType,
+  getTypeString), VariableSym(Variable), VariableElim(variableName,
+  variableType), ValueSym(Value, valueType), NumericExpression((#-), (#/), sin,
+  cos, tan), Comparison(..), funcApp, newObj, objMethodCallNoParams, ($.),
+  StatementSym(multi), AssignStatement((&++)), (&=), IOStatement(printStr,
+  printStrLn, printFile, printFileStr, printFileStrLn), ifNoElse, ScopeSym(..),
+  ModuleSym(Module), convType)
 import qualified GOOL.Drasil.ClassInterface as S (
-  TypeSym(int, double, char, string, listType, arrayType, listInnerType, funcType, void), 
-  VariableSym(var, objVarSelf), Literal(litInt, litFloat, litDouble, litString),
-  VariableValue(valueOf), FunctionSym(func), List(listSize, listAccess), 
-  StatementSym(valStmt), DeclStatement(varDecDef), IOStatement(print),
-  ControlStatement(returnStmt, for), ParameterSym(param), MethodSym(method))
+  TypeSym(int, double, char, string, listType, arrayType, listInnerType,
+  funcType, void), VariableSym(var, objVarSelf), Literal(litInt, litFloat,
+  litDouble, litString), VariableValue(valueOf), FunctionSym(func),
+  List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
+  IOStatement(print), ControlStatement(returnStmt, for), ParameterSym(param),
+  MethodSym(method))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(commentedMod),  
   RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
   RenderFunction(funcFromData), FunctionElim(functionType), 
@@ -66,16 +66,16 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, VSOp, unOpPrec, 
   compEqualPrec, compPrec, addPrec, multPrec)
 import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS, 
-  currMain, currFileType, modifyReturnFunc, addFile, setMainMod, setModuleName, 
-  getModuleName, addParameter, getParameters)
+  currMain, currFileType, addFile, setMainMod, setModuleName, getModuleName,
+  addParameter, getParameters, useVarName)
 
 import Prelude hiding (print,sin,cos,tan,(<>))
 import Data.Maybe (fromMaybe, maybeToList)
-import Control.Monad.State (modify, join)
+import Control.Monad.State (modify)
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
-  brackets, integer, vcat, comma, isEmpty)
+  brackets, integer, vcat, comma, isEmpty, space)
 import qualified Text.PrettyPrint.HughesPJ as D (char, double)
 
 -- Bodies --
@@ -386,18 +386,26 @@ throw f t l = do
   msg <- zoom lensMStoVS (S.litString l)
   stmtFromData (f msg) t
 
+newtype OptionalSpace = OSpace {oSpace :: Doc}
+
+defaultOptSpace :: OptionalSpace
+defaultOptSpace = OSpace {oSpace = space}
+
+optSpaceDoc :: OptionalSpace -> Doc
+optSpaceDoc OSpace {oSpace = sp} = sp
+
 -- ControlStatements --
 
 -- 1st parameter is a Doc function to use on the render of each condition (i.e. parens)
 -- 2nd parameter is the syntax for starting a block in an if-condition
 -- 3rd parameter is the keyword for an else-if statement
 -- 4th parameter is the syntax for ending a block in an if-condition
-ifCond :: (RenderSym r) => (Doc -> Doc) -> Doc -> Doc -> Doc -> 
+ifCond :: (RenderSym r) => (Doc -> Doc) -> Doc -> OptionalSpace -> Doc -> Doc ->
   [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
-ifCond _ _ _ _ [] _ = error "if condition created with no cases"
-ifCond f ifStart elif bEnd (c:cs) eBody =
+ifCond _ _ _ _ _ [] _ = error "if condition created with no cases"
+ifCond f ifStart os elif bEnd (c:cs) eBody =
     let ifSect (v, b) = on2StateValues (\val bd -> vcat [
-          ifLabel <+> f (RC.value val) <+> ifStart,
+          ifLabel <+> f (RC.value val) <> optSpaceDoc os <> ifStart,
           indent $ RC.body bd,
           bEnd]) (zoom lensMStoVS v) b
         elseIfSect (v, b) = on2StateValues (\val bd -> vcat [
@@ -422,8 +430,12 @@ construct n = zoom lensMStoVS $ typeFromData (Object n) n empty
 
 param :: (RenderSym r) => (r (Variable r) -> Doc) -> SVariable r -> 
   MSParameter r
-param f v' = join $ modifyReturnFunc (addParameter . variableName) 
-  (paramFromData v' . f) (zoom lensMStoVS v')
+param f v' = do
+  v <- zoom lensMStoVS v'
+  let n = variableName v
+  modify $ addParameter n
+  modify $ useVarName n
+  paramFromData v' $ f v
 
 method :: (RenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> VSType r 
   -> [MSParameter r] -> MSBody r -> SMethod r
@@ -492,8 +504,8 @@ fileDoc ext topb botb mdl = do
         (R.file (RC.block $ topb m) d (RC.block botb))) m
   S.fileFromData fp (toState updm)
 
-docMod :: (RenderSym r) => ModuleDocRenderer -> String -> String -> [String] -> 
-  String -> SFile r -> SFile r
+docMod :: (RenderSym r) => ModuleDocRenderer -> String -> String -> 
+  [String] -> String -> SFile r -> SFile r
 docMod mdr e d a dt fl = commentedMod fl (docComment $ mdr d a dt . addExt e 
   <$> getModuleName)
 
@@ -514,4 +526,4 @@ fileFromData f fpath mdl' = do
 -- Helper functions
 
 setEmpty :: (RenderSym r) => MSStatement r -> MSStatement r
-setEmpty s' = s' >>= mkStmtNoEnd . RC.statement 
+setEmpty s' = s' >>= mkStmtNoEnd . RC.statement

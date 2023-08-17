@@ -1,7 +1,10 @@
 module Drasil.GlassBR.Symbols where
 
+import Control.Lens ((^.))
+
 import Language.Drasil (QuantityDict, qw)
 import Language.Drasil.Code (Mod(Mod), asVC)
+import Theory.Drasil (output)
 
 import Drasil.GlassBR.IMods (iMods)
 import Drasil.GlassBR.ModuleDefs (allMods, implVars)
@@ -16,7 +19,7 @@ symbolsForTable = inputs ++ outputs ++ tmSymbols ++ map qw specParamVals ++
   map qw inputDataConstraints ++ interps
 
 thisSymbols :: [QuantityDict]
-thisSymbols = map qw iMods
+thisSymbols = map (^. output) iMods
   -- include all module functions as symbols
   ++ (map asVC (concatMap (\(Mod _ _ _ _ l) -> l) allMods) \\ symbolsForTable)
   ++ map qw implVars ++ symbolsForTable

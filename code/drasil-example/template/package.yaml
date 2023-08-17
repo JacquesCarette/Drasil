@@ -14,7 +14,6 @@ dependencies:
 - lens
 - directory
 - drasil-code
-- drasil-code-base
 - drasil-data
 - drasil-database
 - drasil-docLang

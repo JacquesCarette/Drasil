@@ -1,11 +1,13 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.Body (srs, si, symbMap, printSetting, fullSI) where
 
+import Control.Lens ((^.))
+
 import Language.Drasil hiding (Verb, number, organization, section, variable)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
-import Theory.Drasil (qdEFromDD)
+import Theory.Drasil (qdEFromDD, output)
 
 import Prelude hiding (sin, cos, tan)
 import Data.Maybe (mapMaybe)
@@ -14,11 +16,10 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
-  constant, document, effect, endUser, environment,
-  input_, interest, loss, method_, organization,
-  physical, physics, problem, software,
-  softwareSys, srsDomains, symbol_, sysCont, system,
-  template, type_, user, value, variable, doccon, doccon', datumConstraint)
+  constant, effect, endUser, environment, input_, interest, loss, method_,
+  physical, physics, problem, software, softwareSys, srsDomains, symbol_,
+  sysCont, system, type_, user, value, variable, doccon, doccon',
+  datumConstraint)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (inModel)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
@@ -31,11 +32,10 @@ import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce, 
   shearRes, solidcon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
-import Data.Drasil.Software.Products (sciCompS, prodtcon)
+import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (physicsTMs)
 
 import Data.Drasil.People (brooks, henryFrankis)
-import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
 
 import Drasil.SSP.Assumptions (assumptions)
@@ -73,7 +73,8 @@ si = SI {
   _sys         = ssp, 
   _kind        = Doc.srs, 
   _authors     = [henryFrankis, brooks],
-  _purpose     = purpDoc ssp Verbose,
+  _purpose     = [purp],
+  _background  = [],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = SSP.iMods,
@@ -100,7 +101,7 @@ mkSRS = [TableOfContents,
         [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
         phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics]
         [phrase soilMechanics]
-    , IOrgSec orgSecStart inModel (SRS.inModel [] []) orgSecEnd
+    , IOrgSec inModel (SRS.inModel [] []) orgSecEnd
     ],
     --FIXME: issue #235
   GSDSec $ GSDProg
@@ -109,7 +110,7 @@ mkSRS = [TableOfContents,
     ],
   SSDSec $
     SSDProg
-      [ SSDProblem $ PDProg prob []
+      [ SSDProblem $ PDProg purp []
         [ TermsAndDefs Nothing terms
         , PhySysDesc ssp physSystParts figPhysSyst physSystContents 
         , Goals goalsInputs]
@@ -133,6 +134,12 @@ mkSRS = [TableOfContents,
   AuxConstntSec $ AuxConsProg ssp [],
   Bibliography]
 
+purp :: Sentence
+purp = foldlSent_ [S "evaluate the", phrase fs `S.ofA` phrasePoss slope,
+  phrase slpSrf `S.and_` S "identify", phraseNP (crtSlpSrf `the_ofThe` slope) `sC`
+  S "as well as the", phrase intrslce, phraseNP (normForce `and_` shearForce),
+  S "along the", phrase crtSlpSrf]
+
 units :: [UnitDefn]
 units = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
 
@@ -150,7 +157,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 -- SYMBOL MAP HELPERS --
 symbMap :: ChunkDB
-symbMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
+symbMap = cdb (map (^. output) SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw generalDefinitions ++ map nw SSP.iMods
   ++ map nw defs ++ map nw defs' ++ map nw softwarecon ++ map nw physicCon 
   ++ map nw physicsTMs
@@ -228,12 +235,7 @@ scope = foldlSent_ [phraseNP (stabAnalysis `ofA` twoD), sParen (getAcc twoD),
 
 -- SECTION 2.4 --
 -- Organization automatically generated in IOrgSec
-orgSecStart, orgSecEnd :: Sentence
-orgSecStart = foldlSent [atStartNP (the organization), S "of this",
-  phrase document, S "follows the", phrase template, S "for an",
-  short Doc.srs `S.for` phrase sciCompS,
-  S "proposed by Koothoor", refS koothoor2013, S "as well as Smith" `S.and_`
-  S "Lai", refS smithLai2005]
+orgSecEnd :: Sentence
 orgSecEnd   = foldlSent_ [atStartNP' (the inModel), S "provide the set of",
   S "algebraic", plural equation, S "that must be solved"]
 
@@ -312,11 +314,8 @@ sysConstraints = foldlSP [atStartNP (NP.the (combineNINI morPrice method_)),
 -- SECTION 4 --
 
 -- SECTION 4.1 --
-prob :: Sentence
-prob = foldlSent_ [S "evaluate the", phrase fs `S.ofA` phrasePoss slope,
-  phrase slpSrf `S.and_` S "identify", phraseNP (crtSlpSrf `the_ofThe` slope) `sC`
-  S "as well as the", phrase intrslce, phraseNP (normForce `and_` shearForce),
-  S "along the", phrase crtSlpSrf]
+
+-- Introduction of the Problem Description section derives from purp
 
 {-
 From when solution was used in Problem Description:

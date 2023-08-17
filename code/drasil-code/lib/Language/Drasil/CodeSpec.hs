@@ -2,20 +2,19 @@
 -- | Defines the CodeSpec structure and related functions.
 module Language.Drasil.CodeSpec where
 
-import Language.Drasil hiding (None)
+import Language.Drasil hiding (None, new)
 import Language.Drasil.Development (showUID)
 import Language.Drasil.Display (Symbol(Variable))
 import Database.Drasil
 import SysInfo.Drasil hiding (sysinfodb)
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 
-import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
-  programName, quantvar, codevars, codevars', varResolve, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
   auxExprs)
 import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..))
-import Language.Drasil.Code.Expr.Development (expr, eNamesRI)
+import Language.Drasil.CodeExpr.Development (expr, eNamesRI)
+import Language.Drasil.Chunk.CodeBase
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 
 import Utils.Drasil (subsetOf)
@@ -45,6 +44,10 @@ data CodeSpec where
   pName :: Name,
   -- | Authors.
   authors :: [a],
+  -- | Purpose.
+  purpose :: Purpose,
+  -- | Example Background.
+  background :: Background,
   -- | All inputs.
   inputs :: [Input],
   -- | Explicit inputs (values to be supplied by a file).
@@ -55,7 +58,7 @@ data CodeSpec where
   outputs :: [Output],
   -- | List of files that must be in same directory for running the executable.
   configFiles :: [FilePath],
-  -- | Mathematical definitions, ordered so that they form a path from inputs to 
+  -- | Mathematical definitions, ordered so that they form a path from inputs to
   -- outputs.
   execOrder :: [Def],
   -- | Map from 'UID's to constraints for all constrained chunks used in the problem.
@@ -64,7 +67,7 @@ data CodeSpec where
   constants :: [Const],
   -- | Map containing all constants used in the problem.
   constMap :: ConstantMap,
-  -- | Additional modules required in the generated code, which Drasil cannot yet 
+  -- | Additional modules required in the generated code, which Drasil cannot yet
   -- automatically define.
   mods :: [Mod],  -- medium hack
   -- | The database of all chunks used in the problem.
@@ -94,6 +97,8 @@ mapODE (Just ode) = map odeDef $ odeInfo ode
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 codeSpec SI {_sys         = sys
            , _authors     = as
+           , _purpose     = ps
+           , _background  = bk
            , _instModels  = ims
            , _datadefs    = ddefs
            , _configFiles = cfp
@@ -117,6 +122,8 @@ codeSpec SI {_sys         = sys
   in  CodeSpec {
         pName = n,
         authors = as,
+        purpose = ps,
+        background = bk,
         inputs = allInputs,
         extInputs = inputs',
         derivedInputs = derived,
@@ -132,7 +139,7 @@ codeSpec SI {_sys         = sys
 
 -- medium hacks ---
 
--- | Convert a 'Func' to an implementation-stage 'QuantityDict' representing the 
+-- | Convert a 'Func' to an implementation-stage 'QuantityDict' representing the
 -- function.
 asVC :: Func -> QuantityDict
 asVC (FDef (FuncDef n _ _ _ _ _)) = implVar n (nounPhraseSP n) Real (Variable n)
@@ -143,8 +150,8 @@ asVC (FData (FuncData n _ _))     = implVar n (nounPhraseSP n) Real (Variable n)
 funcUID :: Func -> UID
 funcUID f = asVC f ^. uid
 
--- | Determines the derived inputs, which can be immediately calculated from the 
--- knowns (inputs and constants). If there are DDs, the derived inputs will 
+-- | Determines the derived inputs, which can be immediately calculated from the
+-- knowns (inputs and constants). If there are DDs, the derived inputs will
 -- come from those. If there are none, then the 'QDefinition's are used instead.
 getDerivedInputs :: [DataDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [SimpleQDef]
@@ -157,7 +164,7 @@ type Known = CodeVarChunk
 -- | Calculated values.
 type Need  = CodeVarChunk
 
--- | Orders a list of definitions such that they form a path between 'Known' values 
+-- | Orders a list of definitions such that they form a path between 'Known' values
 -- and values that 'Need' to be calculated.
 getExecOrder :: [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]
 getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')

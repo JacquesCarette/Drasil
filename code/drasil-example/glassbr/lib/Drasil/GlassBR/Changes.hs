@@ -24,13 +24,13 @@ likelyChgs = [calcInternalBlastRisk, varValsOfmkE, accMoreThanSingleLite,
 calcInternalBlastRisk, varValsOfmkE, accMoreThanSingleLite, accMoreBoundaryConditions,
   considerMoreThanFlexGlass :: ConceptInstance
 
-calcInternalBlastRisk     = cic "calcInternalBlastRisk"     (calcInternalBlastRiskDesc blastRisk) "Calculate-Internal-Blask-Risk"       likeChgDom
+calcInternalBlastRisk     = cic "calcInternalBlastRisk"     (calcInternalBlastRiskDesc blastRisk) "Calculate-Internal-Blast-Risk"       likeChgDom
 varValsOfmkE              = cic "varValsOfmkE"              varValsOfmkEDesc                      "Variable-Values-of-m,k,E"            likeChgDom
 accMoreThanSingleLite     = cic "accMoreThanSingleLite"     accMoreThanSingleLiteDesc             "Accomodate-More-than-Single-Lite"    likeChgDom
 accMoreBoundaryConditions = cic "accMoreBoundaryConditions" accMoreBoundaryConditionsDesc         "Accomodate-More-Boundary-Conditions" likeChgDom
 considerMoreThanFlexGlass = cic "considerMoreThanFlexGlass" considerMoreThanFlexGlassDesc         "Consider-More-than-Flexure-Glass"    likeChgDom
 
-calcInternalBlastRiskDesc :: NamedChunk -> Sentence
+calcInternalBlastRiskDesc :: NamedIdea n => n -> Sentence
 varValsOfmkEDesc, accMoreThanSingleLiteDesc, accMoreBoundaryConditionsDesc, considerMoreThanFlexGlassDesc :: Sentence
 
 calcInternalBlastRiskDesc mainConcept = foldlSent [chgsStart assumpES (S "The"),

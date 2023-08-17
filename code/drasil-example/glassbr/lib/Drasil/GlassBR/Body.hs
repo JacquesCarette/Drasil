@@ -10,13 +10,11 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum, compcon, algorithm)
-import Data.Drasil.Concepts.Documentation as Doc (appendix, aspect,
-  assumption, characteristic, company, condition, dataConst, datum,
-  definition, doccon, doccon', document, environment,
-  input_, interface, model, organization, physical, problem,
-  product_, software, softwareConstraint, softwareSys,
-  srsDomains, standard, sysCont, system, template, term_,
-  user, value, variable, reference)
+import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
+  characteristic, company, condition, dataConst, datum, doccon, doccon',
+  environment, input_, interface, model, physical, problem, product_,
+  software, softwareConstraint, softwareSys, srsDomains, standard, sysCont,
+  system, term_, user, value, variable, reference, definition)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (dataDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics,
@@ -28,7 +26,6 @@ import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability, softwarecon)
 import Data.Drasil.Software.Products (sciCompS)
 
-import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamentals,
   derived)
@@ -37,12 +34,12 @@ import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, glassBR, 
   ptOfExplsn, con, con', glass)
-import Drasil.GlassBR.DataDefs (qDefns, configFp)
+import Drasil.GlassBR.DataDefs (configFp)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures
 import Drasil.GlassBR.Goals (goals)
-import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
-import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012)
+import Drasil.GlassBR.IMods (symb, iMods, instModIntro, qDefns)
+import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations)
 import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
@@ -52,7 +49,7 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   sD, termsWithAccDefn, termsWithDefsOnly, terms)
 
 srs :: Document
-srs = mkDoc mkSRS  (S.forGen titleize phrase) si
+srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
 fullSI :: SystemInformation
 fullSI = fillcdbSRS mkSRS si
@@ -65,7 +62,8 @@ si = SI {
   _sys         = glassBR,
   _kind        = Doc.srs,
   _authors     = [nikitha, spencerSmith],
-  _purpose     = purpDoc glassBR Verbose,
+  _purpose     = [purp],
+  _background  = [],
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,
@@ -91,7 +89,7 @@ mkSRS = [TableOfContents,
     [IPurpose $ purpDoc glassBR Verbose,
      IScope scope,
      IChar [] (undIR ++ appStanddIR) [],
-     IOrgSec orgOfDocIntro Doc.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
+     IOrgSec Doc.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
   StkhldrSec $
     StkhldrProg
       [Client glassBR $ phraseNP (a_ company)
@@ -101,7 +99,7 @@ mkSRS = [TableOfContents,
     UsrChars [userCharacteristicsIntro], SystCons [] [] ],
   SSDSec $
     SSDProg
-      [SSDProblem $ PDProg prob [termsAndDesc]
+      [SSDProblem $ PDProg purp [termsAndDesc]
         [ PhySysDesc glassBR physSystParts physSystFig []
         , Goals goalInputs],
        SSDSolChSpec $ SCSProg
@@ -124,6 +122,10 @@ mkSRS = [TableOfContents,
   AuxConstntSec $ AuxConsProg glassBR auxiliaryConstants,
   Bibliography,
   AppndxSec $ AppndxProg [appdxIntro, LlC demandVsSDFig, LlC dimlessloadVsARFig]]
+
+purp :: Sentence
+purp = foldlSent_ [S "predict whether a", phrase glaSlab, S "can withstand a", 
+  phrase blast, S "under given", plural condition]
 
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
@@ -193,7 +195,7 @@ priorityNFReqs = [correctness, verifiability, understandability,
 
 {--INTRODUCTION--}
 
-startIntro :: NamedChunk -> Sentence -> CI -> Sentence
+startIntro :: (NamedIdea n) => n -> Sentence -> CI -> Sentence
 startIntro prgm sfwrPredicts progName = foldlSent [
   atStart prgm, S "is helpful to efficiently" `S.and_` S "correctly predict the"
   +:+. sfwrPredicts, underConsidertn blast,
@@ -222,15 +224,8 @@ scope = foldlSent_ [S "determining the safety of a", phrase glaSlab,
 
 {--Organization of Document--}
 
-orgOfDocIntro, orgOfDocIntroEnd :: Sentence
-orgOfDocIntro = foldlSent [atStartNP (the organization), S "of this",
-  phrase document, S "follows the", phrase template, S "for an", short Doc.srs
-  `S.for` phrase sciCompS, S "proposed by" +:+ refS koothoor2013
-  `S.and_` refS smithLai2005 `sC` S "with some", 
-  plural aspect, S "taken from Volere", phrase template,
-  S "16", refS rbrtsn2012]
-
-orgOfDocIntroEnd = foldlSent_ [atStartNP' (the Doc.dataDefn) `S.are`
+orgOfDocIntroEnd :: Sentence
+orgOfDocIntroEnd = foldlSent_ [atStartNP' (the dataDefn) `S.are`
   S "used to support", plural definition `S.the_ofThe` S "different", plural model]
 
 {--STAKEHOLDERS--}
@@ -301,10 +296,7 @@ userCharacteristicsIntro = enumBulletU $ map foldlSent
 
 {--PROBLEM DESCRIPTION--}
 
-prob :: Sentence
-prob = foldlSent_ [S "efficiently" `S.and_` S "correctly predict whether a",
-  phrase glaSlab, S "can withstand a", phrase blast, S "under given",
-  plural condition]
+--Introduction of Problem Description section derived from purp
 
 {--Terminology and Definitions--}
 

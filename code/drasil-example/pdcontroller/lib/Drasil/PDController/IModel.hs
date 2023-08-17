@@ -34,16 +34,22 @@ imPD
 
 imPDRC :: DifferentialModel
 imPDRC
-  = makeLinear
+  = makeASingleDE
       time
       opProcessVariable
-      [exactDbl 1 $* 2,
-      (exactDbl 1 `addRe` sy qdDerivGain) $* 1,
-      (exactDbl 20 `addRe` sy qdPropGain) $* 0]
-      (neg (sy qdSetPointTD) `mulRe` sy qdPropGain)
+      lhs
+      rhs
       "imPDRC"
       (nounPhraseSP "Computation of the Process Variable as a function of time")
       EmptyS
+      where lhs = [exactDbl 1 `addRe` sy qdDerivGain $* (opProcessVariable $^^ 1)]
+                  $+ (exactDbl 1 $* (opProcessVariable $^^ 2))
+                  $+ (exactDbl 20 `addRe` sy qdPropGain $* (opProcessVariable $^^ 0))
+            rhs = sy qdSetPointTD `mulRe` sy qdPropGain
+      -- Matrix form: 
+      -- coeffs = [[exactDbl 1, exactDbl 1 `addRe` sy qdDerivGain, exactDbl 20 `addRe` sy qdPropGain]]
+      -- unknowns = [2, 1, 0]
+      -- constants = [sy qdSetPointTD `mulRe` sy qdPropGain]
 
 imDeriv :: Derivation
 imDeriv

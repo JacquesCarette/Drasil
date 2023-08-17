@@ -104,7 +104,10 @@ unExpr = join .: on2StateValues (mkUnExpr unOpDocD)
 
 -- | Constructs a unary expression like -v, for some operator - and value v
 unExpr' :: (RenderSym r) => VSUnOp r -> SValue r -> SValue r
-unExpr' = join .: on2StateValues (mkUnExpr unOpDocD')
+unExpr' u' v'= do
+  u <- u'
+  v <- v'
+  (join .: on2StateValues (mkUnExpr (if maybe False (< uOpPrec u) (valuePrec v) then unOpDocD else unOpDocD'))) u' v'
 
 mkUnExpr :: (RenderSym r) => (Doc -> Doc -> Doc) -> r (UnaryOp r) -> 
   r (Value r) -> SValue r

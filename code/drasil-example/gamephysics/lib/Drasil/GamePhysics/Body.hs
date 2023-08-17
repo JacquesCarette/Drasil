@@ -1,21 +1,21 @@
 module Drasil.GamePhysics.Body where
 
+import Control.Lens ((^.))
 import Data.Maybe (mapMaybe)
 
 import Language.Drasil hiding (organization, section)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS
-import Theory.Drasil (qdEFromDD)
+import Theory.Drasil (qdEFromDD, output)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
-  condition, consumer, document, endUser, environment, game, guide,
-  input_, interface, object, organization, physical,
-  physicalSim, physics, problem, product_, project, quantity, realtime,
-  section_, simulation, software, softwareSys, srsDomains, system,
-  systemConstraint, sysCont, task, template, user, doccon, doccon',
+  condition, consumer, endUser, environment, game, guide, input_, interface,
+  object, physical, physicalSim, physics, problem, product_, project,
+  quantity, realtime, section_, simulation, software, softwareSys,
+  srsDomains, system, systemConstraint, sysCont, task, user, doccon, doccon',
   property, problemDescription)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (dataDefn, inModel)
@@ -25,7 +25,7 @@ import Data.Drasil.Concepts.Software (physLib, softwarecon)
 import Data.Drasil.People (alex, luthfi, olu)
 import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
   derived, fundamentals, joule)
-import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
+import Data.Drasil.Software.Products (openSource, prodtcon, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
 import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon, rigidBody, collision, damping)
@@ -39,7 +39,7 @@ import Drasil.GamePhysics.Concepts (gamePhysics, acronyms, threeD, twoD)
 import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iMods, instModIntro)
-import Drasil.GamePhysics.References (citations, koothoor2013, smithLai2005)
+import Drasil.GamePhysics.References (citations)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs)
 import Drasil.GamePhysics.TMods (tMods)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
@@ -65,7 +65,7 @@ mkSRS = [TableOfContents,
   [IPurpose $ purpDoc gamePhysics Verbose,
    IScope scope,
    IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
-   IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel [] []) EmptyS],
+   IOrgSec inModel (SRS.inModel [] []) EmptyS],
    GSDSec $ GSDProg [
     SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] []],
@@ -102,7 +102,8 @@ si = SI {
   _sys         = gamePhysics,
   _kind        = Doc.srs,
   _authors     = [alex, luthfi, olu],
-  _purpose     = purpDoc gamePhysics Verbose,
+  _purpose     = [purp],
+  _background  = [],
   -- FIXME: The _quants field should be filled in with all the symbols, however
   -- #1658 is why this is empty, otherwise we end up with unused (and probably
   -- should be removed) symbols. But that's for another time. This is "fine"
@@ -122,6 +123,10 @@ si = SI {
    refdb       = refDB
 }
   where qDefs = mapMaybe qdEFromDD dataDefs
+
+purp :: Sentence
+purp = foldlSent_ [S "simulate", getAcc twoD, phrase CP.rigidBody,
+  phrase Doc.physics, S "for use in", phrase game, S "development"]
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
@@ -143,9 +148,9 @@ units :: [UnitDefn] -- FIXME
 units = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [newton, radian]
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw iMods ++ map qw symbolsAll) (map nw symbolsAll
-  ++ map nw acronyms ++ map nw prodtcon ++ map nw generalDefns ++ map nw iMods
-  ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
+symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll) (nw gamePhysics :
+  map nw symbolsAll ++ map nw acronyms ++ map nw prodtcon ++ map nw generalDefns 
+  ++ map nw iMods ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon') 
   (map cw defSymbols ++ srsDomains ++ map cw iMods) units dataDefs
@@ -203,13 +208,6 @@ scope = foldlSent_ [phraseNP (the physicalSim) `S.of_` getAcc twoD,
 -------------------------------------
 -- 2.3 : Organization of Documents --
 -------------------------------------
-
-organizationOfDocumentsIntro :: Sentence
-organizationOfDocumentsIntro = foldlSent 
-  [atStartNP (the organization), S "of this", phrase document, 
-  S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
-  phrase sciCompS, S "proposed by", refS koothoor2013 `S.and_`
-  refS smithLai2005]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
@@ -295,9 +293,8 @@ userCharacteristicsIntro = foldlSP
 
 probDescIntro :: Sentence
 probDescIntro = foldlSent_
-  [S "create a", foldlList Comma List $ map S ["simple", "lightweight", "fast", "portable"],
-  getAcc twoD, phrase CP.rigidBody, phrase physLib `sC` S "which will allow for more accessible",
-  phrase game, S "development" `S.and_` S "the production of higher quality" +:+. plural product_,
+  [purp, S "in a", foldlList Comma List $ map S ["simple", "lightweight", "fast", "portable"],
+  S "manner" `sC` S "which will allow for the production of higher quality" +:+. plural product_,
   S "Creating a gaming", phrase physLib, S "is a difficult" +:+. phrase task, titleize' game,
   S "need",  plural physLib, S "that simulate", plural object, S "acting under various", phrase physical,
   plural condition `sC` S "while simultaneously being fast and efficient enough to work in soft",

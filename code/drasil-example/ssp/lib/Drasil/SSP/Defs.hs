@@ -6,7 +6,8 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (analysis, assumption, goalStmt,
-  likelyChg, physSyst, property, requirement, safety, srs, typUnc, unlikelyChg)
+  likelyChg, physSyst, property, requirement, refBy, refName, safety, srs, typUnc, 
+  unlikelyChg)
 import Data.Drasil.Concepts.Education (mechanics)
 import Data.Drasil.Concepts.Math (surface)
 import Data.Drasil.Concepts.Physics (twoD, threeD, force, stress)
@@ -17,12 +18,12 @@ import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 ----Acronyms-----
 acronyms :: [CI]
 acronyms = [twoD, threeD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
-  physSyst, requirement, srs, ssp, thModel, typUnc, unlikelyChg]
+  physSyst, requirement, refBy, refName, srs, ssp, thModel, typUnc, unlikelyChg]
 
 ssp :: CI
 ssp = commonIdeaWithDict "ssp" (pn' "Slope Stability analysis Program") "SSP"   [civilEng]
 
-defs :: [NamedChunk]
+defs :: [IdeaDict]
 defs = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice,
   soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics, 
   stabAnalysis, ssa]
@@ -32,7 +33,7 @@ defs' = [slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable]
 
 ----Other Common Phrases----
 soil, layer, material, intrslce, slip, slope, slice, stability,
-  morPrice :: NamedChunk
+  morPrice :: IdeaDict
 intrslce = nc "interslice" (cn' "interslice")
 layer    = nc "layer"      (cn' "layer")
 material = nc "material"   (cn' "material")
@@ -47,7 +48,7 @@ stability = nc "stability" (cn "stability")
 morPrice = nc "morPrice"   (pn  "Morgenstern-Price")
 
 soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics, 
-  stabAnalysis, ssa :: NamedChunk
+  stabAnalysis, ssa :: IdeaDict
 --slpSrf    = compoundNC slip surface
 soilPrpty = compoundNC soil     property
 mtrlPrpty = compoundNC material property
@@ -97,7 +98,7 @@ waterTable = dcc "water table" (cn' "water table") ("The upper boundary of a" ++
   " saturated zone in the ground")
 
 --
-factor :: NamedChunk --FIXME: this is here becuase this phrase is
+factor :: IdeaDict --FIXME: this is here becuase this phrase is
                      --used in datadefs and instance models
 factor = nc "factor" (cn' "factor") -- possible use this everywhere
                                       -- (fs, fs_rc, fsConcept...)

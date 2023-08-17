@@ -24,12 +24,12 @@ dependencies:
 - drasil-sysinfo
 - drasil-theory
 - drasil-utils
-- sglpendulum
-- dblpendulum
+- sglpend
+- dblpend
 - gamephysics
 - glassbr
 - hghc
-- nopcm
+- swhsnopcm
 - pdcontroller
 - projectile
 - ssp

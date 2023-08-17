@@ -6,9 +6,9 @@ module Language.Drasil.Chunk.CommonIdea (
   -- * Constructors
   commonIdea, commonIdeaWithDict,
   -- * Functions
-  getAcc, getAccStr, prependAbrv) where
+  getAcc, prependAbrv) where
 
-import Language.Drasil.Chunk.NamedIdea (IdeaDict, NamedChunk, nc)
+import Language.Drasil.Chunk.NamedIdea (IdeaDict, nc)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
  CommonIdea(abrv), ConceptDomain(cdom))
 import Language.Drasil.Misc (repUnd)
@@ -20,16 +20,16 @@ import Control.Lens (makeLenses, (^.), view)
 
 -- | The common idea (with 'NounPhrase') data type. It must have a 'UID',
 -- 'NounPhrase' for its term, an abbreviation ('String'), and a domain (['UID']).
--- It is similar to 'NamedChunk' and 'IdeaDict' in the sense that these are for things worth naming,
+-- It is similar to 'IdeaDict' and 'IdeaDict' in the sense that these are for things worth naming,
 -- but this type also carries an abbreviation and related domains of knowledge.
 --
 -- Ex. The term "Operating System" has the abbreviation "OS" and comes from the domain of computer science.
-data CI = CI { _nc' :: NamedChunk, _ab :: String, cdom' :: [UID]}
+data CI = CI { _nc' :: IdeaDict, _ab :: String, cdom' :: [UID]}
 makeLenses ''CI
 
--- | Finds 'UID' of the 'NamedChunk' used to make the 'CI'.
+-- | Finds 'UID' of the 'IdeaDict' used to make the 'CI'.
 instance HasUID        CI where uid  = nc' . uid
--- | Finds term ('NP') of the 'NamedChunk' used to make the 'CI'.
+-- | Finds term ('NP') of the 'IdeaDict' used to make the 'CI'.
 instance NamedIdea     CI where term = nc' . term
 -- | Finds the idea of a 'CI' (abbreviation).
 instance Idea          CI where getA = Just . view ab
@@ -50,10 +50,6 @@ commonIdeaWithDict x y z = commonIdea x y z . map (^.uid)
 -- | Get abbreviation in 'Sentence' form from a 'CI'.
 getAcc :: CI -> Sentence
 getAcc = S . abrv
-
--- | Get abbreviation in 'String' form from a 'CI'.
-getAccStr :: CI -> String
-getAccStr = abrv
 
 -- | Prepends the abbreviation from a 'CommonIdea' to a 'String'.
 prependAbrv :: CommonIdea c => c -> String -> String

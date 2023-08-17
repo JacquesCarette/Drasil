@@ -123,7 +123,7 @@
           <div class="subsection">
             <h2>Table of Units</h2>
             <p class="paragraph">
-              The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the <a href=#Table:ToU>Table of Units</a> lists the symbol, a description and the SI name.
+              The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the <a href=#Table:ToU>Table of Units</a> lists the symbol, a description, and the SI name.
             </p>
             <div id="Table:ToU">
               <table class="table">
@@ -717,7 +717,15 @@
                 </tr>
                 <tr>
                   <td>RHS</td>
-                  <td>Right Hand Side</td>
+                  <td>Right-Hand Side</td>
+                </tr>
+                <tr>
+                  <td>RefBy</td>
+                  <td>Referenced by</td>
+                </tr>
+                <tr>
+                  <td>Refname</td>
+                  <td>Reference Name</td>
                 </tr>
                 <tr>
                   <td>SRS</td>
@@ -759,7 +767,7 @@
           <div class="subsection">
             <h2>Purpose of Document</h2>
             <p class="paragraph">
-              The primary purpose of this document is to record the requirements of the Solar Water Heating System. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of SWHS. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+              The primary purpose of this document is to record the requirements of SWHS. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of SWHS. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
             </p>
             <p class="paragraph">
               This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
@@ -786,7 +794,7 @@
           <div class="subsection">
             <h2>Organization of Document</h2>
             <p class="paragraph">
-              The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a> and <a href=#smithLai2005>smithLai2005</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
+              The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
             </p>
             <p class="paragraph">
               The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>. The instance models to be solved are referred to as <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>, <a href=#IM:heatEInWtr>IM:heatEInWtr</a>, and <a href=#IM:heatEInPCM>IM:heatEInPCM</a>. The instance models provide the ordinary differential equations (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
@@ -1506,7 +1514,6 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
                 <div id="GD:htFluxPCMFromWater">
                   <table class="gdefn">
                     <tr>
@@ -1573,7 +1580,6 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
               </div>
             </div>
             <div id="Sec:DDs">
@@ -1630,7 +1636,6 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
                 <div id="DD:waterVolume.pcm">
                   <table class="ddefn">
                     <tr>
@@ -1689,7 +1694,6 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
                 <div id="DD:tankVolume">
                   <table class="ddefn">
                     <tr>
@@ -1741,7 +1745,6 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
                 <div id="DD:balanceDecayRate">
                   <table class="ddefn">
                     <tr>
@@ -1806,7 +1809,6 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
                 <div id="DD:balanceDecayTime">
                   <table class="ddefn">
                     <tr>
@@ -1871,7 +1873,6 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
                 <div id="DD:balanceSolidPCM">
                   <table class="ddefn">
                     <tr>
@@ -1936,7 +1937,6 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
                 <div id="DD:balanceLiquidPCM">
                   <table class="ddefn">
                     <tr>
@@ -2001,7 +2001,6 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
                 <div id="DD:htFusion">
                   <table class="ddefn">
                     <tr>
@@ -2064,7 +2063,6 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
                 <div id="DD:meltFrac">
                   <table class="ddefn">
                     <tr>
@@ -2129,7 +2127,6 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
                 <div id="DD:aspectRatio">
                   <table class="ddefn">
                     <tr>
@@ -2172,7 +2169,6 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
               </div>
             </div>
             <div id="Sec:IMs">
@@ -2280,7 +2276,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#unlikeChgNIHG>UC:No-Internal-Heat-Generation</a>, <a href=#findMass>FR:Find-Mass</a>, <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>, and <a href=#calcTempWtrOverTime>FR:Calculate-Temperature-Water-Over-Time</a>
+                          <a href=#unlikeChgNIHG>UC:No-Internal-Heat-Generation</a>, <a href=#outputValues>FR:Output-Values</a>, <a href=#findMass>FR:Find-Mass</a>, <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>, and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -2302,10 +2298,10 @@
                     </p>
                     \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)-\frac{{h_{\text{P}}} {A_{\text{P}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{W}}}-{T_{\text{P}}}\right)\]
                     <p class="paragraph">
-                      Factoring the negative sign out of the second term of the RHS of Equation (3) and multiplying it by <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> / <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> yields:
+                      Factoring the negative sign out of the second term of the right-hand side (RHS) of Equation (3) and multiplying it by <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> / <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> yields:
                     </p>
                     \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{{h_{\text{C}}} {A_{\text{C}}}}{{h_{\text{C}}} {A_{\text{C}}}} \frac{{h_{\text{P}}} {A_{\text{P}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{P}}}-{T_{\text{W}}}\right)\]
-                    <p class="paragraph">Rearraging this equation gives us:</p>
+                    <p class="paragraph">Rearranging this equation gives us:</p>
                     \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{{h_{\text{P}}} {A_{\text{P}}}}{{h_{\text{C}}} {A_{\text{C}}}} \frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{P}}}-{T_{\text{W}}}\right)\]
                     <p class="paragraph">
                       By substituting <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD:balanceDecayRate</a>) and <em>η</em> (from <a href=#DD:balanceDecayTime>DD:balanceDecayTime</a>), this can be written as:
@@ -2418,7 +2414,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#unlikeChgNIHG>UC:No-Internal-Heat-Generation</a>, <a href=#unlikeChgNGS>UC:No-Gaseous-State</a>, <a href=#findMass>FR:Find-Mass</a>, <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, <a href=#calcTempPCMOverTime>FR:Calculate-Temperature-PCM-Over-Time</a>, <a href=#calcPCMMeltEnd>FR:Calculate-PCM-Melt-End-Time</a>, and <a href=#calcPCMMeltBegin>FR:Calculate-PCM-Melt-Begin-Time</a>
+                          <a href=#unlikeChgNIHG>UC:No-Internal-Heat-Generation</a>, <a href=#unlikeChgNGS>UC:No-Gaseous-State</a>, <a href=#outputValues>FR:Output-Values</a>, <a href=#findMass>FR:Find-Mass</a>, <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, <a href=#calcValues>FR:Calculate-Values</a>, <a href=#calcPCMMeltEnd>FR:Calculate-PCM-Melt-End-Time</a>, and <a href=#calcPCMMeltBegin>FR:Calculate-PCM-Melt-Begin-Time</a>
                         </p>
                       </td>
                     </tr>
@@ -2537,13 +2533,12 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#findMass>FR:Find-Mass</a> and <a href=#calcChgHeatEnergyWtrOverTime>FR:Calculate-Change-Heat_Energy-Water-Over-Time</a>
+                          <a href=#outputValues>FR:Output-Values</a>, <a href=#findMass>FR:Find-Mass</a>, and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
                 <div id="IM:heatEInPCM">
                   <table class="idefn">
                     <tr>
@@ -2659,20 +2654,19 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#unlikeChgNGS>UC:No-Gaseous-State</a>, <a href=#findMass>FR:Find-Mass</a>, <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>, and <a href=#calcChgHeatEnergyPCMOverTime>FR:Calculate-Change-Heat_Energy-PCM-Over-Time</a>
+                          <a href=#unlikeChgNGS>UC:No-Gaseous-State</a>, <a href=#outputValues>FR:Output-Values</a>, <a href=#findMass>FR:Find-Mass</a>, <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>, and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
               </div>
             </div>
             <div id="Sec:DataConstraints">
               <div class="subsubsection">
                 <h3>Data Constraints</h3>
                 <p class="paragraph">
-                  The <a href=#Table:InDataConstraints>Data Constraints Table</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#assumpPIS>A:PCM-Initially-Solid</a>). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em>\(\frac{2}{{h_{\text{min}}}}\)</em>, where <em>h<sub>min</sub></em> is the thickness of a "sheet" of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
+                  The <a href=#Table:InDataConstraints>Data Constraints Table</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#assumpPIS>A:PCM-Initially-Solid</a>). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em>\(\frac{2}{{h_{\text{min}}}}\)</em>, where <em>h<sub>min</sub></em> is the thickness of a "sheet" of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
                 </p>
                 <div id="Table:InDataConstraints">
                   <table class="table">
@@ -2948,23 +2942,8 @@
                 </div>
               </p>
               <p>
-                <div id="calcTempWtrOverTime">
-                  Calculate-Temperature-Water-Over-Time: Calculate and output the temperature of the water (<em>T<sub>W</sub></em>(<em>t</em>)) over the simulation time (from <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>).
-                </div>
-              </p>
-              <p>
-                <div id="calcTempPCMOverTime">
-                  Calculate-Temperature-PCM-Over-Time: Calculate and output the temperature of the phase change material (<em>T<sub>P</sub></em>(<em>t</em>)) over the simulation time (from <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>).
-                </div>
-              </p>
-              <p>
-                <div id="calcChgHeatEnergyWtrOverTime">
-                  Calculate-Change-Heat_Energy-Water-Over-Time: Calculate and output the change in heat energy in the water (<em>E<sub>W</sub></em>(<em>t</em>)) over the simulation time (from <a href=#IM:heatEInWtr>IM:heatEInWtr</a>).
-                </div>
-              </p>
-              <p>
-                <div id="calcChgHeatEnergyPCMOverTime">
-                  Calculate-Change-Heat_Energy-PCM-Over-Time: Calculate and output the change in heat energy in the PCM (<em>E<sub>P</sub></em>(<em>t</em>)) over the simulation time (from <a href=#IM:heatEInPCM>IM:heatEInPCM</a>).
+                <div id="calcValues">
+                  Calculate-Values: Calculate the following values: <em>T<sub>W</sub></em>(<em>t</em>) (from <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>), <em>T<sub>P</sub></em>(<em>t</em>) (from <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>), <em>E<sub>W</sub></em>(<em>t</em>) (from <a href=#IM:heatEInWtr>IM:heatEInWtr</a>), and <em>E<sub>P</sub></em>(<em>t</em>) (from <a href=#IM:heatEInPCM>IM:heatEInPCM</a>).
                 </div>
               </p>
               <p>
@@ -2980,6 +2959,11 @@
               <p>
                 <div id="calcPCMMeltEnd">
                   Calculate-PCM-Melt-End-Time: Calculate and output the time at which the PCM stops melting <em>t<sub>melt</sub><sup>final</sup></em> (from <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>).
+                </div>
+              </p>
+              <p>
+                <div id="outputValues">
+                  Output-Values: Output <em>T<sub>W</sub></em>(<em>t</em>) (from <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>), <em>T<sub>P</sub></em>(<em>t</em>) (from <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>), <em>E<sub>W</sub></em>(<em>t</em>) (from <a href=#IM:heatEInWtr>IM:heatEInWtr</a>), and <em>E<sub>P</sub></em>(<em>t</em>) (from <a href=#IM:heatEInPCM>IM:heatEInPCM</a>).
                 </div>
               </p>
             </div>
@@ -3205,7 +3189,7 @@
       <div class="section">
         <h1>Traceability Matrices and Graphs</h1>
         <p class="paragraph">
-          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. <a href=#Table:TraceMatAvsA>Tab:TraceMatAvsA</a> shows the dependencies of assumptions on the assumptions. <a href=#Table:TraceMatAvsAll>Tab:TraceMatAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Tab:TraceMatRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Table:TraceMatAllvsR>Tab:TraceMatAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. <a href=#Table:TraceMatAvsA>Tab:TraceMatAvsA</a> shows the dependencies of the assumptions on each other. <a href=#Table:TraceMatAvsAll>Tab:TraceMatAvsAll</a> shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Tab:TraceMatRefvsRef</a> shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. <a href=#Table:TraceMatAllvsR>Tab:TraceMatAllvsR</a> shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.
         </p>
         <div id="Table:TraceMatAvsA">
           <table class="table">
@@ -4350,84 +4334,7 @@
               <td></td>
             </tr>
             <tr>
-              <td>
-                <a href=#calcTempWtrOverTime>FR:Calculate-Temperature-Water-Over-Time</a>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>
-                <a href=#calcTempPCMOverTime>FR:Calculate-Temperature-PCM-Over-Time</a>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>
-                <a href=#calcChgHeatEnergyWtrOverTime>FR:Calculate-Change-Heat_Energy-Water-Over-Time</a>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>
-                <a href=#calcChgHeatEnergyPCMOverTime>FR:Calculate-Change-Heat_Energy-PCM-Over-Time</a>
-              </td>
+              <td><a href=#calcValues>FR:Calculate-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4501,6 +4408,29 @@
             </tr>
             <tr>
               <td><a href=#calcPCMMeltEnd>FR:Calculate-PCM-Melt-End-Time</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#outputValues>FR:Output-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -5423,18 +5353,7 @@
               <th>
                 <a href=#outputInputDerivVals>FR:Output-Input-Derived-Values</a>
               </th>
-              <th>
-                <a href=#calcTempWtrOverTime>FR:Calculate-Temperature-Water-Over-Time</a>
-              </th>
-              <th>
-                <a href=#calcTempPCMOverTime>FR:Calculate-Temperature-PCM-Over-Time</a>
-              </th>
-              <th>
-                <a href=#calcChgHeatEnergyWtrOverTime>FR:Calculate-Change-Heat_Energy-Water-Over-Time</a>
-              </th>
-              <th>
-                <a href=#calcChgHeatEnergyPCMOverTime>FR:Calculate-Change-Heat_Energy-PCM-Over-Time</a>
-              </th>
+              <th><a href=#calcValues>FR:Calculate-Values</a></th>
               <th>
                 <a href=#verifyEnergyOutput>FR:Verify-Energy-Output-Follow-Conservation-of-Energy</a>
               </th>
@@ -5442,6 +5361,7 @@
                 <a href=#calcPCMMeltBegin>FR:Calculate-PCM-Melt-Begin-Time</a>
               </th>
               <th><a href=#calcPCMMeltEnd>FR:Calculate-PCM-Melt-End-Time</a></th>
+              <th><a href=#outputValues>FR:Output-Values</a></th>
               <th><a href=#correct>NFR:Correct</a></th>
               <th><a href=#verifiable>NFR:Verifiable</a></th>
               <th><a href=#understandable>NFR:Understandable</a></th>
@@ -5450,8 +5370,6 @@
             </tr>
             <tr>
               <td><a href=#waterTempGS>GS:Predict-Water-Temperature</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -5525,13 +5443,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#waterEnergyGS>GS:Predict-Water-Energy</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -5605,13 +5519,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#inputValues>FR:Input-Values</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -5685,15 +5595,11 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#checkWithPhysConsts>FR:Check-Input-with-Physical_Constraints</a>
               </td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -5769,13 +5675,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
-              <td>
-                <a href=#calcTempWtrOverTime>FR:Calculate-Temperature-Water-Over-Time</a>
-              </td>
+              <td><a href=#calcValues>FR:Calculate-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -5794,137 +5696,9 @@
               <td></td>
               <td></td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>
-                <a href=#calcTempPCMOverTime>FR:Calculate-Temperature-PCM-Over-Time</a>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>
-                <a href=#calcChgHeatEnergyWtrOverTime>FR:Calculate-Change-Heat_Energy-Water-Over-Time</a>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>
-                <a href=#calcChgHeatEnergyPCMOverTime>FR:Calculate-Change-Heat_Energy-PCM-Over-Time</a>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -5944,8 +5718,6 @@
               <td>
                 <a href=#verifyEnergyOutput>FR:Verify-Energy-Output-Follow-Conservation-of-Energy</a>
               </td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6021,8 +5793,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#calcPCMMeltEnd>FR:Calculate-PCM-Melt-End-Time</a></td>
@@ -6061,13 +5831,47 @@
               <td></td>
               <td></td>
               <td></td>
+            </tr>
+            <tr>
+              <td><a href=#outputValues>FR:Output-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
             </tr>
             <tr>
               <td><a href=#correct>NFR:Correct</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6141,13 +5945,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#understandable>NFR:Understandable</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6221,13 +6021,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#maintainable>NFR:Maintainable</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6270,7 +6066,7 @@
           </p>
         </div>
         <p class="paragraph">
-          The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TraceGraphAvsA>Fig:TraceGraphAvsA</a> shows the dependencies of assumptions on the assumptions. <a href=#Figure:TraceGraphAvsAll>Fig:TraceGraphAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Figure:TraceGraphRefvsRef>Fig:TraceGraphRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Figure:TraceGraphAllvsR>Fig:TraceGraphAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models. <a href=#Figure:TraceGraphAllvsAll>Fig:TraceGraphAllvsAll</a> shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
+          The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TraceGraphAvsA>Fig:TraceGraphAvsA</a> shows the dependencies of assumptions on each other. <a href=#Figure:TraceGraphAvsAll>Fig:TraceGraphAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Figure:TraceGraphRefvsRef>Fig:TraceGraphRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. <a href=#Figure:TraceGraphAllvsR>Fig:TraceGraphAllvsR</a> shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. <a href=#Figure:TraceGraphAllvsAll>Fig:TraceGraphAllvsAll</a> shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
         </p>
         <div id="Figure:TraceGraphAvsA">
           <figure>
@@ -6509,7 +6305,7 @@
         <ul class="hide-list-style">
           <li>
             <div id="bueche1986">
-              [1]: Bueche, J. Frederick. <em>Introduction to Physics for Scientists</em>. 4nd. ed., New York City, New York: McGraw Hill, 1986. Print.
+              [1]: Bueche, J. Frederick. <em>Introduction to Physics for Scientists</em>. 4th. ed., New York City, New York: McGraw Hill, 1986. Print.
             </div>
           </li>
           <li>
@@ -6519,7 +6315,7 @@
           </li>
           <li>
             <div id="koothoor2013">
-              [3]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+              [3]: Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
             </div>
           </li>
           <li>
@@ -6533,8 +6329,18 @@
             </div>
           </li>
           <li>
+            <div id="smithKoothoor2016">
+              [6]: Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em> Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
+            </div>
+          </li>
+          <li>
             <div id="smithLai2005">
-              [6]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+              [7]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+            </div>
+          </li>
+          <li>
+            <div id="smithEtAl2007">
+              [8]: Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
             </div>
           </li>
         </ul>

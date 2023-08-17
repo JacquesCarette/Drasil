@@ -1,0 +1,23 @@
+\begin{codeSnippet}{java}{Projectile: Java Main Method}{javaProjectileMain}{https://github.com/JacquesCarette/Drasil/blob/9c26b43d3e30c3f618e534a3f176a5152729af74/code/stable/projectile/Projectile_U_P_NoL_U_WI_V_D/src/java/Projectile/Projectile.java\#L16-L36}
+/** \brief Controls the flow of the program
+    \param args List of command-line arguments
+*/
+public static void main(String[] args) throws FileNotFoundException, IOException {
+    String filename = args[0];
+    double g_vect = 9.8;
+    double epsilon = 2.0e-2;
+    double v_launch;
+    double theta;
+    double p_target;
+    Object[] outputs = get_input(filename);
+    v_launch = (double)(outputs[0]);
+    theta = (double)(outputs[1]);
+    p_target = (double)(outputs[2]);
+    input_constraints(v_launch, theta, p_target);
+    double t_flight = func_t_flight(v_launch, theta, g_vect);
+    double p_land = func_p_land(v_launch, theta, g_vect);
+    double d_offset = func_d_offset(p_target, p_land);
+    String s = func_s(p_target, epsilon, d_offset);
+    write_output(s, d_offset);
+}
+\end{codeSnippet}

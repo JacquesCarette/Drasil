@@ -72,9 +72,10 @@ instanceModel fs m i = mkRawLC (Defini Instance (foldr (mkIMField i m) [] fs)) (
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program).
-derivation :: (HasDerivation c, HasShortName c, Referable c) => c -> Contents
-derivation c = maybe (mkParagraph EmptyS)
-  (\(Derivation h d) -> LlC $ llcc (ref c) $ DerivBlock h $ map makeDerivCons d) $ c ^. derivations
+derivation :: (HasDerivation c, HasShortName c, Referable c) => c -> Maybe Contents
+derivation c = fmap
+  (\(Derivation h d) -> LlC $ llcc (ref c) $ DerivBlock h $ map makeDerivCons d) $
+  c ^. derivations
 
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.
@@ -133,8 +134,8 @@ helperSources rs  = [mkParagraph $ foldlList Comma List $ map (\r -> Ref (r ^. u
 -- | Creates the fields for a definition from a 'QDefinition' (used by 'ddefn').
 mkDDField :: DataDefinition -> SystemInformation -> Field -> ModRow -> ModRow
 mkDDField d _ l@Label fs = (show l, [mkParagraph $ atStart d]) : fs
-mkDDField d _ l@Symbol fs = (show l, [mkParagraph . P $ eqSymb d]) : fs
-mkDDField d _ l@Units fs = (show l, [mkParagraph $ toSentenceUnitless d]) : fs
+mkDDField d _ l@Symbol fs = (show l, [mkParagraph . P $ eqSymb $ d ^. defLhs]) : fs
+mkDDField d _ l@Units fs = (show l, [mkParagraph $ toSentenceUnitless $ d ^. defLhs]) : fs
 mkDDField d _ l@DefiningEquation fs = (show l, [unlbldExpr $ express d]) : fs
 mkDDField d m l@(Description v u) fs = (show l, buildDDescription' v u d m) : fs
 mkDDField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
@@ -185,9 +186,9 @@ mkIMField i _ l@Output fs = (show l, [mkParagraph x]) : fs
   where x = P . eqSymb $ i ^. output
 mkIMField i _ l@Input fs =
   case map fst (i ^. inputs) of
-  [] -> (show l, [mkParagraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?
-  (_:_) -> (show l, [mkParagraph $ foldl sC x xs]) : fs
-  where (x:xs) = map (P . eqSymb . fst) $ i ^. inputs
+    [] -> (show l, [mkParagraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?
+    (_:_) -> (show l, [mkParagraph $ foldl1 sC xs]) : fs
+  where xs = map (P . eqSymb . fst) $ i ^. inputs
 mkIMField i _ l@InConstraints fs  =
   let ll = mapMaybe (\(x,y) -> y >>= (\z -> Just (x, z))) (i ^. inputs) in
   (show l, foldr ((:) . UlC . ulcc . EqnBlock . express . uncurry realInterval) [] ll) : fs
@@ -202,9 +203,9 @@ mkIMField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
 -- | Used for making definitions. The first pair is the symbol of the quantity we are
 -- defining.
 firstPair' :: InclUnits -> DataDefinition -> ListTuple
-firstPair' IgnoreUnits d  = (P $ eqSymb d, Flat $ phrase d, Nothing)
+firstPair' IgnoreUnits d  = (P $ eqSymb $ d ^. defLhs, Flat $ phrase d, Nothing)
 firstPair' IncludeUnits d =
-  (P $ eqSymb d, Flat $ phrase d +:+ sParen (toSentenceUnitless d), Nothing)
+  (P $ eqSymb $ d ^. defLhs, Flat $ phrase d +:+ sParen (toSentenceUnitless $ d ^. defLhs), Nothing)
 
 -- | Creates the descriptions for each symbol in the relation/equation.
 descPairs :: (Quantity q, MayHaveUnit q) => InclUnits -> [q] -> [ListTuple]

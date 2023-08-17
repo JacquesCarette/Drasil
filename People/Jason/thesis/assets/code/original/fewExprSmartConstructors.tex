@@ -1,0 +1,17 @@
+\begin{haskell}{Original: Snapshot of a few of Exprs Smart Constructors}{origFewExprSmartConstructors}{https://github.com/JacquesCarette/Drasil/blob/9c26b43d3e30c3f618e534a3f176a5152729af74/code/drasil-lang/Language/Drasil/Expr/Math.hs}
+-- | Smart constructor to apply tan to an expression
+tan :: Expr -> Expr
+tan = UnaryOp Tan
+
+-- | Smart constructor to apply sec to an expression
+sec :: Expr -> Expr 
+sec = UnaryOp Sec
+
+-- | Smart constructor to apply csc to an expression
+csc :: Expr -> Expr
+csc = UnaryOp Csc
+
+-- | Smart constructor to apply cot to an expression
+cot :: Expr -> Expr 
+cot = UnaryOp Cot
+\end{haskell}

@@ -3,6 +3,11 @@ module Utils.Drasil.Lists where
 
 import Data.List
 
+-- | Check if list has at least 2 elements.
+atLeast2 :: [a] -> Bool
+atLeast2 (_:_:_) = True
+atLeast2 _       = False
+
 -- | Replaces all elements of a target list that belong to a provided "bad"
 --   input list.
 replaceAll :: Eq a => [a] -> a -> [a] -> [a]
@@ -37,3 +42,7 @@ foldle1 _ _ []       = error "foldle1 cannot be used with empty list"
 foldle1 _ _ [x]      = x
 foldle1 _ g [x,y]    = g x y
 foldle1 f g (x:y:xs) = foldle f g (f x y) xs
+
+-- | Convert "row" of elements into "column" of elements.
+toColumn :: [a] -> [[a]]
+toColumn = map (: [])

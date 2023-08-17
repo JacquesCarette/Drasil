@@ -94,7 +94,7 @@ mkTableDataDef pinfo = mkTableFromLenses pinfo (view dataDefnTable)
   "Data Definitions" "UID" "Term" "Symbol"
     (text . showUID)
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
-        (symbolDoc . flip L.symbol (pinfo ^. stg))
+        (symbolDoc . flip L.symbol (pinfo ^. stg) . view defLhs)
 
 -- | Makes a table with all general definitions in the SRS.
 mkTableGenDef :: PrintingInformation -> Doc
@@ -154,6 +154,7 @@ mkTableLC pinfo = mkTableFromLenses pinfo (view labelledcontentTable)
     getContConst Figure{} = "Figure"
     getContConst Bib{} = "Bibliography"
     getContConst Graph{} = "Graph"
+    getContConst CodeBlock{} = "Code"
 
 -- | Makes a table with all references in the SRS.
 mkTableRef :: PrintingInformation -> Doc

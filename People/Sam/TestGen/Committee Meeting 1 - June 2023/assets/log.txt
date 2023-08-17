@@ -1,0 +1,13 @@
+diff --strip-trailing-cr -r -X ../.gitignore stable/projectile/SRS/HTML/Projectile_SRS.html
+build/projectile/SRS/HTML/Projectile_SRS.html
+5c5,7
+< <title>Software Requirements Specification for Projectile</title>
+---
+> <title>
+> Software Requirements Specification for Projectile Motion
+> </title>
+24c26
+< <h1>Software Requirements Specification for Projectile</h1>
+---
+> <h1>Software Requirements Specification for Projectile Motion</h1>
+...

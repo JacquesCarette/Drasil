@@ -9,13 +9,13 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
   PackageSym(..), AuxiliarySym(..))
-import qualified 
-  Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig, 
+import qualified
+  Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as
+  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig,
   docIfEnabled)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
-import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
+import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   asFragment, buildAll, nativeBinary, osClassDefault, executable, sharedLibrary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
 
@@ -36,7 +36,6 @@ instance Applicative CSharpProject where
   (CSP f) <*> (CSP x) = CSP (f x)
 
 instance Monad CSharpProject where
-  return = CSP
   CSP x >>= f = f x
 
 instance PackageSym CSharpProject where
@@ -54,17 +53,17 @@ instance AuxiliarySym CSharpProject where
         invalidOS = Just "All OS's except Windows"}
   sampleInput = G.sampleInput
 
-  optimizeDox = return no
+  optimizeDox = pure no
 
-  makefile fs it cms = G.makefile (csBuildConfig fs it) 
+  makefile fs it cms = G.makefile (csBuildConfig fs it)
     (G.noRunIfLib it csRunnable) (G.docIfEnabled cms G.doxDocConfig)
 
   auxHelperDoc = unCSP
-  auxFromData fp d = return $ ad fp d
+  auxFromData fp d = pure $ ad fp d
 
 -- | Create a build configuration for C# files. Takes in 'FilePath's and the type of implementation.
 csBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig
-csBuildConfig fs it = buildAll (\i o -> [osClassDefault "CSC" "csc" "mcs" 
+csBuildConfig fs it = buildAll (\i o -> [osClassDefault "CSC" "csc" "mcs"
   : target it ++ [asFragment "-out:" P.<> o] ++ map (asFragment . ("-r:" ++)) fs
   ++ i]) (outName it)
   where target Library = [asFragment "-t:library"]

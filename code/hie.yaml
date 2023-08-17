@@ -1,0 +1,118 @@
+cradle:
+  stack:
+    - path: "drasil-build/lib"
+      component: "drasil-build:lib"
+
+    - path: "drasil-code/lib"
+      component: "drasil-code:lib"
+
+    - path: "drasil-code/test"
+      component: "drasil-code:exe:codegenTest"
+    
+    - path: "drasil-codeLang/lib"
+      component: "drasil-codeLang:lib"
+
+    - path: "drasil-data/lib"
+      component: "drasil-data:lib"
+
+    - path: "drasil-database/lib"
+      component: "drasil-database:lib"
+
+    - path: "drasil-docLang/lib"
+      component: "drasil-docLang:lib"
+
+    - path: "drasil-example/dblpend/lib"
+      component: "dblpend:lib"
+
+    - path: "drasil-example/dblpend/app/Main.hs"
+      component: "dblpend:exe:dblpend"
+
+    - path: "drasil-example/gamephysics/lib"
+      component: "gamephysics:lib"
+
+    - path: "drasil-example/gamephysics/app/Main.hs"
+      component: "gamephysics:exe:gamephysics"
+
+    - path: "drasil-example/glassbr/lib"
+      component: "glassbr:lib"
+
+    - path: "drasil-example/glassbr/app/Main.hs"
+      component: "glassbr:exe:glassbr"
+
+    - path: "drasil-example/hghc/lib"
+      component: "hghc:lib"
+
+    - path: "drasil-example/hghc/app/Main.hs"
+      component: "hghc:exe:hghc"
+
+    - path: "drasil-example/swhsnopcm/lib"
+      component: "swhsnopcm:lib"
+
+    - path: "drasil-example/swhsnopcm/app/Main.hs"
+      component: "swhsnopcm:exe:swhsnopcm"
+
+    - path: "drasil-example/pdcontroller/lib"
+      component: "pdcontroller:lib"
+
+    - path: "drasil-example/pdcontroller/app/Main.hs"
+      component: "pdcontroller:exe:pdcontroller"
+
+    - path: "drasil-example/projectile/lib"
+      component: "projectile:lib"
+
+    - path: "drasil-example/projectile/app/Main.hs"
+      component: "projectile:exe:projectile"
+
+    - path: "drasil-example/sglpend/lib"
+      component: "sglpend:lib"
+
+    - path: "drasil-example/sglpend/app/Main.hs"
+      component: "sglpend:exe:sglpend"
+
+    - path: "drasil-example/ssp/lib"
+      component: "ssp:lib"
+
+    - path: "drasil-example/ssp/app/Main.hs"
+      component: "ssp:exe:ssp"
+
+    - path: "drasil-example/swhs/lib"
+      component: "swhs:lib"
+
+    - path: "drasil-example/swhs/app/Main.hs"
+      component: "swhs:exe:swhs"
+
+    - path: "drasil-example/template/lib"
+      component: "template:lib"
+
+    - path: "drasil-example/template/app/Main.hs"
+      component: "template:exe:template"
+
+    - path: "drasil-gen/lib"
+      component: "drasil-gen:lib"
+
+    - path: "drasil-gool/lib"
+      component: "drasil-gool:lib"
+
+    - path: "drasil-lang/lib"
+      component: "drasil-lang:lib"
+
+    - path: "drasil-metadata/lib"
+      component: "drasil-metadata:lib"
+
+    - path: "drasil-printers/lib"
+      component: "drasil-printers:lib"
+
+    - path: "drasil-sysinfo/lib"
+      component: "drasil-sysinfo:lib"
+
+    - path: "drasil-theory/lib"
+      component: "drasil-theory:lib"
+
+    - path: "drasil-utils/lib"
+      component: "drasil-utils:lib"
+
+    - path: "drasil-website/lib"
+      component: "drasil-website:lib"
+
+    - path: "drasil-website/app/Main.hs"
+      component: "drasil-website:exe:website"

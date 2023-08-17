@@ -19,7 +19,7 @@ secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
 secConPlate mCon mSec = preorderFold $ purePlate {
   refSec = Constant <$> \(RefProg c _) -> mCon [c],
   introSub = Constant <$> \case
-    (IOrgSec _ _ s _) -> mSec [s]
+    (IOrgSec _ s _) -> mSec [s]
     _ -> mempty,
   --gsdSec = Constant <$> \case
   --  (GSDProg _) -> mempty,
@@ -107,7 +107,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (IPurpose s) -> s
       (IScope s) -> [s]
       (IChar s1 s2 s3) -> concat [s1, s2, s3]
-      (IOrgSec s1 _ _ s2) -> [s1, s2],
+      (IOrgSec _ _ s1) -> [s1],
     stkSub = Constant . f <$> \case
       (Client _ s) -> [s]
       (Cstmr _) -> [],
@@ -119,7 +119,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (Goals s c) -> s ++ def c,
     scsSub = Constant . f <$> \case
       (Assumptions c) -> def c
-      (TMs s _ t) -> let r = mappend s . concatMap (\x -> def (x ^. operations) ++
+      (TMs s _ t) -> let r = (<>) s . concatMap (\x -> def (x ^. operations) ++
                              def (x ^. defined_quant) ++ notes [x] ++
                              r (x ^. valid_context)) in r t
       (DDs s _ d _) -> s ++ der d ++ notes d
@@ -169,6 +169,7 @@ getCon :: RawContent -> [Sentence]
 getCon (Table s1 s2 t _) = isVar (s1, transpose s2) ++ [t]
 getCon (Paragraph s)       = [s]
 getCon EqnBlock{}          = []
+getCon CodeBlock{}         = []
 getCon (DerivBlock h d)    = h : concatMap getCon d
 getCon (Enumeration lst)   = getLT lst
 getCon (Figure l _ _)    = [l]

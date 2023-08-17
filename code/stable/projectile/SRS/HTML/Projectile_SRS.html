@@ -47,7 +47,20 @@
           <li>
             <a href=#Sec:Intro>Introduction</a>
             <ul class="list">
+              <li><a href=#Sec:DocPurpose>Purpose of Document</a></li>
               <li><a href=#Sec:ReqsScope>Scope of Requirements</a></li>
+              <li>
+                <a href=#Sec:ReaderChars>Characteristics of Intended Reader</a>
+              </li>
+              <li><a href=#Sec:DocOrg>Organization of Document</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href=#Sec:GenSysDesc>General System Description</a>
+            <ul class="list">
+              <li><a href=#Sec:SysContext>System Context</a></li>
+              <li><a href=#Sec:UserChars>User Characteristics</a></li>
+              <li><a href=#Sec:SysConstraints>System Constraints</a></li>
             </ul>
           </li>
           <li>
@@ -104,7 +117,7 @@
           <div class="subsection">
             <h2>Table of Units</h2>
             <p class="paragraph">
-              The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the <a href=#Table:ToU>Table of Units</a> lists the symbol, a description and the SI name.
+              The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the <a href=#Table:ToU>Table of Units</a> lists the symbol, a description, and the SI name.
             </p>
             <div id="Table:ToU">
               <table class="table">
@@ -177,7 +190,7 @@
                   <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>a</b></em></td>
+                  <td><em><b>a</b>(t)</em></td>
                   <td>Acceleration</td>
                   <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
                 </tr>
@@ -194,13 +207,18 @@
                   <td><em>m</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>g</b></em></td>
-                  <td>Gravitational acceleration</td>
+                  <td><em>g</em></td>
+                  <td>Magnitude of gravitational acceleration</td>
                   <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
                 </tr>
                 <tr>
                   <td><em>p</em></td>
                   <td>Scalar position</td>
+                  <td><em>m</em></td>
+                </tr>
+                <tr>
+                  <td><em>p(t)</em></td>
+                  <td>1D position</td>
                   <td><em>m</em></td>
                 </tr>
                 <tr>
@@ -239,7 +257,7 @@
                   <td><em>m</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>p</b></em></td>
+                  <td><em><b>p</b>(t)</em></td>
                   <td>Position</td>
                   <td><em>m</em></td>
                 </tr>
@@ -261,6 +279,11 @@
                 <tr>
                   <td><em>v</em></td>
                   <td>Speed</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>v(t)</em></td>
+                  <td>1D speed</td>
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
@@ -294,13 +317,8 @@
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>v</b></em></td>
-                  <td>Velocity</td>
-                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
-                </tr>
-                <tr>
                   <td><em><b>v</b>(t)</em></td>
-                  <td>1D speed</td>
+                  <td>Velocity</td>
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
@@ -374,6 +392,14 @@
                   <td>Requirement</td>
                 </tr>
                 <tr>
+                  <td>RefBy</td>
+                  <td>Referenced by</td>
+                </tr>
+                <tr>
+                  <td>Refname</td>
+                  <td>Reference Name</td>
+                </tr>
+                <tr>
                   <td>SRS</td>
                   <td>Software Requirements Specification</td>
                 </tr>
@@ -396,17 +422,112 @@
       <div class="section">
         <h1>Introduction</h1>
         <p class="paragraph">
-          Projectile motion is a common problem in physics. Therefore, it is useful to have a program to solve and model these types of problems. The program documented here is called Projectile.
+          Projectile motion is a common problem in physics. Therefore, it is useful to have a program to solve and model these types of problems. Common examples of projectile motion include ballistics problems (missiles, bullets, etc.) and the flight of balls in various sports (baseball, golf, football, etc.). The program documented here is called Projectile.
         </p>
         <p class="paragraph">
           The following section provides an overview of the Software Requirements Specification (SRS) for Projectile. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
+        <div id="Sec:DocPurpose">
+          <div class="subsection">
+            <h2>Purpose of Document</h2>
+            <p class="paragraph">
+              The primary purpose of this document is to record the requirements of Projectile. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of Projectile. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+            </p>
+            <p class="paragraph">
+              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
+            </p>
+          </div>
+        </div>
         <div id="Sec:ReqsScope">
           <div class="subsection">
             <h2>Scope of Requirements</h2>
             <p class="paragraph">
               The scope of the requirements includes the analysis of a two-dimensional (2D) projectile motion problem with constant acceleration.
             </p>
+          </div>
+        </div>
+        <div id="Sec:ReaderChars">
+          <div class="subsection">
+            <h2>Characteristics of Intended Reader</h2>
+            <p class="paragraph">
+              Reviewers of this documentation should have an understanding of undergraduate level 1 physics and undergraduate level 1 calculus. The users of Projectile can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
+            </p>
+          </div>
+        </div>
+        <div id="Sec:DocOrg">
+          <div class="subsection">
+            <h2>Organization of Document</h2>
+            <p class="paragraph">
+              The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
+            </p>
+            <p class="paragraph">
+              The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="Sec:GenSysDesc">
+      <div class="section">
+        <h1>General System Description</h1>
+        <p class="paragraph">
+          This section provides general information about the system. It identifies the interfaces between the system and its environment, describes the user characteristics, and lists the system constraints.
+        </p>
+        <div id="Sec:SysContext">
+          <div class="subsection">
+            <h2>System Context</h2>
+            <p class="paragraph">
+              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (Projectile). Arrows are used to show the data flow between the system and its environment.
+            </p>
+            <div id="Figure:sysCtxDiag">
+              <figure>
+                <img src="../../../../datafiles/projectile/SystemContextFigure.png" alt="System Context" >
+                <figcaption>System Context</figcaption>
+              </figure>
+            </div>
+            <p class="paragraph">
+              The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:
+            </p>
+            <ul class="list">
+              <li>
+                User Responsibilities
+                <ul class="list">
+                  <li>
+                    Provide initial conditions of the physical state of the motion and the input data related to the Projectile, ensuring no errors in the data entry.
+                  </li>
+                  <li>Ensure that consistent units are used for input variables.</li>
+                  <li>
+                    Ensure required <a href=#Sec:Assumps>software assumptions</a> are appropriate for any particular problem input to the software.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Projectile Responsibilities
+                <ul class="list">
+                  <li>
+                    Detect data type mismatch, such as a string of characters input instead of a floating point number.
+                  </li>
+                  <li>
+                    Determine if the inputs satisfy the required physical and software constraints.
+                  </li>
+                  <li>Calculate the required outputs.</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div id="Sec:UserChars">
+          <div class="subsection">
+            <h2>User Characteristics</h2>
+            <p class="paragraph">
+              The end user of Projectile should have an understanding of high school physics and high school calculus.
+            </p>
+          </div>
+        </div>
+        <div id="Sec:SysConstraints">
+          <div class="subsection">
+            <h2>System Constraints</h2>
+            <p class="paragraph">There are no system constraints.</p>
           </div>
         </div>
       </div>
@@ -421,7 +542,7 @@
           <div class="subsection">
             <h2>Problem Description</h2>
             <p class="paragraph">
-              A system is needed to efficiently and correctly predict the landing position of a projectile.
+              A system is needed to predict whether a launched projectile hits its target.
             </p>
             <div id="Sec:TermDefs">
               <div class="subsubsection">
@@ -470,7 +591,7 @@
               <div class="subsubsection">
                 <h3>Goal Statements</h3>
                 <p class="paragraph">
-                  Given the initial velocity vector of the projectile, the goal statements are:
+                  Given the initial velocity vector of the projectile and the geometric layout of the launcher and target, the goal statement is:
                 </p>
                 <div class="list">
                   <p>
@@ -548,7 +669,7 @@
                   </p>
                   <p>
                     <div id="pointMass">
-                      pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: <a href=#GD:rectPos>GD:rectPos</a> and <a href=#GD:rectVel>GD:rectVel</a>.)
+                      pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: <a href=#GD:rectVel>GD:rectVel</a> and <a href=#GD:rectPos>GD:rectPos</a>.)
                     </div>
                   </p>
                   <p>
@@ -558,12 +679,12 @@
                   </p>
                   <p>
                     <div id="neglectCurv">
-                      neglectCurv: The distance is small enough that the curvature of the Earth can be neglected. (RefBy: <a href=#targetXAxis>A:targetXAxis</a> and <a href=#cartSyst>A:cartSyst</a>.)
+                      neglectCurv: The distance is small enough that the curvature of the celestial body can be neglected. (RefBy: <a href=#targetXAxis>A:targetXAxis</a> and <a href=#cartSyst>A:cartSyst</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="timeStartZero">
-                      timeStartZero: Time starts at zero. (RefBy: <a href=#GD:velVec>GD:velVec</a>, <a href=#GD:rectPos>GD:rectPos</a>, <a href=#GD:rectVel>GD:rectVel</a>, <a href=#GD:posVec>GD:posVec</a>, and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
+                      timeStartZero: Time starts at zero. (RefBy: <a href=#GD:velVec>GD:velVec</a>, <a href=#GD:rectVel>GD:rectVel</a>, <a href=#GD:rectPos>GD:rectPos</a>, <a href=#GD:posVec>GD:posVec</a>, and <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>.)
                     </div>
                   </p>
                   <p>
@@ -592,18 +713,20 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{a}=\frac{\,d\symbf{v}}{\,dt}\]</td>
+                      <td>
+                        \[\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}\]
+                      </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>a</b></em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li><em>t</em> is the time (<em>s</em>)</li>
                           <li>
-                            <em><b>v</b></em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>v</b>(t)</em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                         </ul>
                       </td>
@@ -636,17 +759,19 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{v}=\frac{\,d\symbf{p}}{\,dt}\]</td>
+                      <td>
+                        \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}\]
+                      </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>v</b></em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>v</b>(t)</em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li><em>t</em> is the time (<em>s</em>)</li>
-                          <li><em><b>p</b></em> is the position (<em>m</em>)</li>
+                          <li><em><b>p</b>(t)</em> is the position (<em>m</em>)</li>
                         </ul>
                       </td>
                     </tr>
@@ -694,14 +819,14 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{v}\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t\]</td>
+                      <td>\[v\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>v</b>(t)</em> is the 1D speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em>v(t)</em> is the 1D speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>v<sup>i</sup></em> is the initial speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
@@ -735,7 +860,7 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of rectilinear velocity:</h4>
                     <p class="paragraph">
-                      Assume we have rectilinear motion of a particle (of negligible size and shape, from <a href=#pointMass>A:pointMass</a>); that is, motion in a straight line. The velocity is <em>v</em> and the acceleration is <em>a</em>. The motion in <a href=#TM:acceleration>TM:acceleration</a> is now one-dimensional with a constant acceleration, represented by <em>a<sup>c</sup></em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A:timeStartZero</a>) is represented by <em>v<sup>i</sup></em>. From <a href=#TM:acceleration>TM:acceleration</a>, using the above symbols we have:
+                      Assume we have rectilinear motion of a particle (of negligible size and shape, from <a href=#pointMass>A:pointMass</a>); that is, motion in a straight line. The velocity is <em>v</em> and the acceleration is <em>a</em>. The motion in <a href=#TM:acceleration>TM:acceleration</a> is now one-dimensional with a constant acceleration, represented by <em>a<sup>c</sup></em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A:timeStartZero</a>) is represented by <em>v<sup>i</sup></em>. From <a href=#TM:acceleration>TM:acceleration</a> in 1D, and using the above symbols we have:
                     </p>
                     \[{a^{c}}=\frac{\,dv}{\,dt}\]
                     <p class="paragraph">Rearranging and integrating, we have:</p>
@@ -743,7 +868,7 @@
                     <p class="paragraph">
                       Performing the integration, we have the required equation:
                     </p>
-                    \[\symbf{v}\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t\]
+                    \[v\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t\]
                   </div>
                 </div>
                 <div id="GD:rectPos">
@@ -767,14 +892,14 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[p={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}\]
+                        \[p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}\]
                       </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em>p</em> is the scalar position (<em>m</em>)</li>
+                          <li><em>p(t)</em> is the 1D position (<em>m</em>)</li>
                           <li>
                             <em>p<sup>i</sup></em> is the initial position (<em>m</em>)
                           </li>
@@ -806,7 +931,7 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of rectilinear position:</h4>
                     <p class="paragraph">
-                      Assume we have rectilinear motion of a particle (of negligible size and shape, from <a href=#pointMass>A:pointMass</a>); that is, motion in a straight line. The position is <em>p</em> and the velocity is <em>v</em>. The motion in <a href=#TM:velocity>TM:velocity</a> is now one-dimensional. The initial position (at <em>t = 0</em>, from <a href=#timeStartZero>A:timeStartZero</a>) is represented by <em>p<sup>i</sup></em>. From <a href=#TM:velocity>TM:velocity</a>, using the above symbols we have:
+                      Assume we have rectilinear motion of a particle (of negligible size and shape, from <a href=#pointMass>A:pointMass</a>); that is, motion in a straight line. The position is <em>p</em> and the velocity is <em>v</em>. The motion in <a href=#TM:velocity>TM:velocity</a> is now one-dimensional. The initial position (at <em>t = 0</em>, from <a href=#timeStartZero>A:timeStartZero</a>) is represented by <em>p<sup>i</sup></em>. From <a href=#TM:velocity>TM:velocity</a> in 1D, and using the above symbols we have:
                     </p>
                     \[v=\frac{\,dp}{\,dt}\]
                     <p class="paragraph">Rearranging and integrating, we have:</p>
@@ -818,7 +943,7 @@
                     <p class="paragraph">
                       Performing the integration, we have the required equation:
                     </p>
-                    \[p={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}\]
+                    \[p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}\]
                   </div>
                 </div>
                 <div id="GD:velVec">
@@ -844,10 +969,10 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{v}=\begin{bmatrix}
-                                    {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}} t\\
-                                    {{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}} t
-                                    \end{bmatrix}\]
+                        \[\symbf{v}\text{(}t\text{)}=\begin{bmatrix}
+                                                     {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}} t\\
+                                                     {{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}} t
+                                                     \end{bmatrix}\]
                       </td>
                     </tr>
                     <tr>
@@ -855,7 +980,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>v</b></em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>v</b>(t)</em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>v<sub>x</sub><sup>i</sup></em> is the <em>x</em>-component of initial velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
@@ -887,24 +1012,24 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of velocity vector:</h4>
                     <p class="paragraph">
-                      For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A:twoDMotion</a> and <a href=#cartSyst>A:cartSyst</a>), we can represent the velocity vector as <em><b>v</b> = \(\begin{bmatrix}
-                                                                                                                                                                                                              {v_{\text{x}}}\\
-                                                                                                                                                                                                              {v_{\text{y}}}
-                                                                                                                                                                                                              \end{bmatrix}\)</em> and the acceleration vector as <em><b>a</b> = \(\begin{bmatrix}
-                                                                                                                                                                                                                                                                                   {a_{\text{x}}}\\
-                                                                                                                                                                                                                                                                                   {a_{\text{y}}}
-                                                                                                                                                                                                                                                                                   \end{bmatrix}\)</em>. The acceleration is assumed to be constant (<a href=#constAccel>A:constAccel</a>) and the constant acceleration vector is represented as <em><b>a</b><sup>c</sup> = \(\begin{bmatrix}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                               {{a_{\text{x}}}^{\text{c}}}\\
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                               {{a_{\text{y}}}^{\text{c}}}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                               \end{bmatrix}\)</em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A:timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = \(\begin{bmatrix}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              {{v_{\text{x}}}^{\text{i}}}\\
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              {{v_{\text{y}}}^{\text{i}}}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              \end{bmatrix}\)</em>. Since we have a Cartesian coordinate system, <a href=#GD:rectVel>GD:rectVel</a> can be applied to each coordinate of the velocity vector to yield the required equation:
+                      For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A:twoDMotion</a> and <a href=#cartSyst>A:cartSyst</a>), we can represent the velocity vector as <em><b>v</b>(t) = \(\begin{bmatrix}
+                                                                                                                                                                                                                 {v_{\text{x}}}\\
+                                                                                                                                                                                                                 {v_{\text{y}}}
+                                                                                                                                                                                                                 \end{bmatrix}\)</em> and the acceleration vector as <em><b>a</b>(t) = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                                         {a_{\text{x}}}\\
+                                                                                                                                                                                                                                                                                         {a_{\text{y}}}
+                                                                                                                                                                                                                                                                                         \end{bmatrix}\)</em>. The acceleration is assumed to be constant (<a href=#constAccel>A:constAccel</a>) and the constant acceleration vector is represented as <em><b>a</b><sup>c</sup> = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     {{a_{\text{x}}}^{\text{c}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     {{a_{\text{y}}}^{\text{c}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     \end{bmatrix}\)</em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A:timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{v_{\text{x}}}^{\text{i}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{v_{\text{y}}}^{\text{i}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \end{bmatrix}\)</em>. Since we have a Cartesian coordinate system, <a href=#GD:rectVel>GD:rectVel</a> can be applied to each coordinate of the velocity vector to yield the required equation:
                     </p>
-                    \[\symbf{v}=\begin{bmatrix}
-                                {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}} t\\
-                                {{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}} t
-                                \end{bmatrix}\]
+                    \[\symbf{v}\text{(}t\text{)}=\begin{bmatrix}
+                                                 {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}} t\\
+                                                 {{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}} t
+                                                 \end{bmatrix}\]
                   </div>
                 </div>
                 <div id="GD:posVec">
@@ -928,17 +1053,17 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{p}=\begin{bmatrix}
-                                    {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\
-                                    {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}
-                                    \end{bmatrix}\]
+                        \[\symbf{p}\text{(}t\text{)}=\begin{bmatrix}
+                                                     {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\
+                                                     {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}
+                                                     \end{bmatrix}\]
                       </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em><b>p</b></em> is the position (<em>m</em>)</li>
+                          <li><em><b>p</b>(t)</em> is the position (<em>m</em>)</li>
                           <li>
                             <em>p<sub>x</sub><sup>i</sup></em> is the <em>x</em>-component of initial position (<em>m</em>)
                           </li>
@@ -979,27 +1104,27 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of position vector:</h4>
                     <p class="paragraph">
-                      For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A:twoDMotion</a> and <a href=#cartSyst>A:cartSyst</a>), we can represent the position vector as <em><b>p</b> = \(\begin{bmatrix}
-                                                                                                                                                                                                              {p_{\text{x}}}\\
-                                                                                                                                                                                                              {p_{\text{y}}}
-                                                                                                                                                                                                              \end{bmatrix}\)</em>, the velocity vector as <em><b>v</b> = \(\begin{bmatrix}
-                                                                                                                                                                                                                                                                            {v_{\text{x}}}\\
-                                                                                                                                                                                                                                                                            {v_{\text{y}}}
-                                                                                                                                                                                                                                                                            \end{bmatrix}\)</em>, and the acceleration vector as <em><b>a</b> = \(\begin{bmatrix}
-                                                                                                                                                                                                                                                                                                                                                  {a_{\text{x}}}\\
-                                                                                                                                                                                                                                                                                                                                                  {a_{\text{y}}}
-                                                                                                                                                                                                                                                                                                                                                  \end{bmatrix}\)</em>. The acceleration is assumed to be constant (<a href=#constAccel>A:constAccel</a>) and the constant acceleration vector is represented as <em><b>a</b><sup>c</sup> = \(\begin{bmatrix}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              {{a_{\text{x}}}^{\text{c}}}\\
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              {{a_{\text{y}}}^{\text{c}}}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              \end{bmatrix}\)</em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A:timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = \(\begin{bmatrix}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             {{v_{\text{x}}}^{\text{i}}}\\
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             {{v_{\text{y}}}^{\text{i}}}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \end{bmatrix}\)</em>. Since we have a Cartesian coordinate system, <a href=#GD:rectPos>GD:rectPos</a> can be applied to each coordinate of the position vector to yield the required equation:
+                      For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A:twoDMotion</a> and <a href=#cartSyst>A:cartSyst</a>), we can represent the position vector as <em><b>p</b>(t) = \(\begin{bmatrix}
+                                                                                                                                                                                                                 {p_{\text{x}}}\\
+                                                                                                                                                                                                                 {p_{\text{y}}}
+                                                                                                                                                                                                                 \end{bmatrix}\)</em>, the velocity vector as <em><b>v</b>(t) = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                                  {v_{\text{x}}}\\
+                                                                                                                                                                                                                                                                                  {v_{\text{y}}}
+                                                                                                                                                                                                                                                                                  \end{bmatrix}\)</em>, and the acceleration vector as <em><b>a</b>(t) = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                           {a_{\text{x}}}\\
+                                                                                                                                                                                                                                                                                                                                                           {a_{\text{y}}}
+                                                                                                                                                                                                                                                                                                                                                           \end{bmatrix}\)</em>. The acceleration is assumed to be constant (<a href=#constAccel>A:constAccel</a>) and the constant acceleration vector is represented as <em><b>a</b><sup>c</sup> = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       {{a_{\text{x}}}^{\text{c}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       {{a_{\text{y}}}^{\text{c}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       \end{bmatrix}\)</em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A:timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = \(\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      {{v_{\text{x}}}^{\text{i}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      {{v_{\text{y}}}^{\text{i}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      \end{bmatrix}\)</em>. Since we have a Cartesian coordinate system, <a href=#GD:rectPos>GD:rectPos</a> can be applied to each coordinate of the position vector to yield the required equation:
                     </p>
-                    \[\symbf{p}=\begin{bmatrix}
-                                {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\
-                                {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}
-                                \end{bmatrix}\]
+                    \[\symbf{p}\text{(}t\text{)}=\begin{bmatrix}
+                                                 {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\
+                                                 {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}
+                                                 \end{bmatrix}\]
                   </div>
                 </div>
               </div>
@@ -1032,7 +1157,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[v=\|\symbf{v}\|\]</td>
+                      <td>\[v=\|\symbf{v}\text{(}t\text{)}\|\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1042,7 +1167,7 @@
                             <em>v</em> is the speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li>
-                            <em><b>v</b></em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>v</b>(t)</em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                         </ul>
                       </td>
@@ -1051,7 +1176,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          For a given velocity vector <em><b>v</b></em>, the magnitude of the vector (<em>||<b>v</b>||</em>) is the scalar called speed.
+                          For a given velocity vector <em><b>v</b>(t)</em>, the magnitude of the vector (<em>||<b>v</b>(t)||</em>) is the scalar called speed.
                         </p>
                       </td>
                     </tr>
@@ -1069,7 +1194,6 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
                 <div id="DD:speedIX">
                   <table class="ddefn">
                     <tr>
@@ -1139,7 +1263,6 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
                 <div id="DD:speedIY">
                   <table class="ddefn">
                     <tr>
@@ -1209,7 +1332,6 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
               </div>
             </div>
             <div id="Sec:IMs">
@@ -1252,7 +1374,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{\symbf{g}}\]
+                        \[{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{g}\]
                       </td>
                     </tr>
                     <tr>
@@ -1267,7 +1389,7 @@
                           </li>
                           <li><em>θ</em> is the launch angle (<em>rad</em>)</li>
                           <li>
-                            <em><b>g</b></em> is the gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em>g</em> is the magnitude of gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                         </ul>
                       </td>
@@ -1279,7 +1401,7 @@
                           The constraint <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;\(\frac{π}{2}\)</em> is from <a href=#posXDirection>A:posXDirection</a> and <a href=#yAxisGravity>A:yAxisGravity</a>, and is shown in <a href=#Figure:Launch>Fig:Launch</a>.
                         </p>
                         <p class="paragraph">
-                          <em><b>g</b></em> is defined in <a href=#gravAccelValue>A:gravAccelValue</a>.
+                          <em>g</em> is defined in <a href=#gravAccelValue>A:gravAccelValue</a>.
                         </p>
                         <p class="paragraph">
                           The constraint <em>t<sub>flight</sub>&thinsp;&gt;&thinsp;0</em> is from <a href=#timeStartZero>A:timeStartZero</a>.
@@ -1294,7 +1416,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a> and <a href=#calcValues>FR:Calculate-Values</a>
+                          <a href=#outputValues>FR:Output-Values</a>, <a href=#IM:calOfLandingDist>IM:calOfLandingDist</a>, and <a href=#calcValues>FR:Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1304,25 +1426,25 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of flight duration:</h4>
                     <p class="paragraph">
-                      We know that <em>p<sub>y</sub><sup>i</sup> = 0</em> (<a href=#launchOrigin>A:launchOrigin</a>) and <em>a<sub>y</sub><sup>c</sup> = &minus;<b>g</b></em> (<a href=#accelYGravity>A:accelYGravity</a>). Substituting these values into the y-direction of <a href=#GD:posVec>GD:posVec</a> gives us:
+                      We know that <em>p<sub>y</sub><sup>i</sup> = 0</em> (<a href=#launchOrigin>A:launchOrigin</a>) and <em>a<sub>y</sub><sup>c</sup> = &minus;g</em> (<a href=#accelYGravity>A:accelYGravity</a>). Substituting these values into the y-direction of <a href=#GD:posVec>GD:posVec</a> gives us:
                     </p>
-                    \[{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}} t-\frac{\symbf{g} t^{2}}{2}\]
+                    \[{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}} t-\frac{g t^{2}}{2}\]
                     <p class="paragraph">
                       To find the time that the projectile lands, we want to find the <em>t</em> value (<em>t<sub>flight</sub></em>) where <em>p<sub>y</sub> = 0</em> (since the target is on the <em>x</em>-axis from <a href=#targetXAxis>A:targetXAxis</a>). From the equation above we get:
                     </p>
-                    \[{{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{\symbf{g} {t_{\text{flight}}}^{2}}{2}=0\]
+                    \[{{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{g {t_{\text{flight}}}^{2}}{2}=0\]
                     <p class="paragraph">
                       Dividing by <em>t<sub>flight</sub></em> (with the constraint <em>t<sub>flight</sub>&thinsp;&gt;&thinsp;0</em>) gives us:
                     </p>
-                    \[{{v_{\text{y}}}^{\text{i}}}-\frac{\symbf{g} {t_{\text{flight}}}}{2}=0\]
+                    \[{{v_{\text{y}}}^{\text{i}}}-\frac{g {t_{\text{flight}}}}{2}=0\]
                     <p class="paragraph">
                       Solving for <em>t<sub>flight</sub></em> gives us:
                     </p>
-                    \[{t_{\text{flight}}}=\frac{2 {{v_{\text{y}}}^{\text{i}}}}{\symbf{g}}\]
+                    \[{t_{\text{flight}}}=\frac{2 {{v_{\text{y}}}^{\text{i}}}}{g}\]
                     <p class="paragraph">
                       From <a href=#DD:speedIY>DD:speedIY</a> (with <em>v<sup>i</sup> = v<sub>launch</sub></em>) we can replace <em>v<sub>y</sub><sup>i</sup></em>:
                     </p>
-                    \[{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{\symbf{g}}\]
+                    \[{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{g}\]
                   </div>
                 </div>
                 <div id="IM:calOfLandingDist">
@@ -1359,7 +1481,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\symbf{g}}\]
+                        \[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}\]
                       </td>
                     </tr>
                     <tr>
@@ -1374,7 +1496,7 @@
                           </li>
                           <li><em>θ</em> is the launch angle (<em>rad</em>)</li>
                           <li>
-                            <em><b>g</b></em> is the gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em>g</em> is the magnitude of gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                         </ul>
                       </td>
@@ -1386,7 +1508,7 @@
                           The constraint <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;\(\frac{π}{2}\)</em> is from <a href=#posXDirection>A:posXDirection</a> and <a href=#yAxisGravity>A:yAxisGravity</a>, and is shown in <a href=#Figure:Launch>Fig:Launch</a>.
                         </p>
                         <p class="paragraph">
-                          <em><b>g</b></em> is defined in <a href=#gravAccelValue>A:gravAccelValue</a>.
+                          <em>g</em> is defined in <a href=#gravAccelValue>A:gravAccelValue</a>.
                         </p>
                         <p class="paragraph">
                           The constraint <em>p<sub>land</sub>&thinsp;&gt;&thinsp;0</em> is from <a href=#posXDirection>A:posXDirection</a>.
@@ -1417,15 +1539,15 @@
                     <p class="paragraph">
                       To find the landing position, we want to find the <em>p<sub>x</sub></em> value (<em>p<sub>land</sub></em>) at flight duration (from <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>):
                     </p>
-                    \[{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{\symbf{g}}\]
+                    \[{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{g}\]
                     <p class="paragraph">
                       From <a href=#DD:speedIX>DD:speedIX</a> (with <em>v<sup>i</sup> = v<sub>launch</sub></em>) we can replace <em>v<sub>x</sub><sup>i</sup></em>:
                     </p>
-                    \[{p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{\symbf{g}}\]
+                    \[{p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{g}\]
                     <p class="paragraph">
                       Rearranging this gives us the required equation:
                     </p>
-                    \[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\symbf{g}}\]
+                    \[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}\]
                   </div>
                 </div>
                 <div id="IM:offsetIM">
@@ -1508,7 +1630,6 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
                 <div id="IM:messageIM">
                   <table class="idefn">
                     <tr>
@@ -1534,7 +1655,7 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        \[{d_{\text{offset}}}\gt{}-{p_{\text{land}}}\]
+                        \[{d_{\text{offset}}}\gt{}-{p_{\text{target}}}\]
                         \[{p_{\text{target}}}\gt{}0\]
                       </td>
                     </tr>
@@ -1577,7 +1698,7 @@
                           The constraint <em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em> is from <a href=#posXDirection>A:posXDirection</a>.
                         </p>
                         <p class="paragraph">
-                          The constraint <em>d<sub>offset</sub>&thinsp;&gt;&thinsp;&minus;p<sub>land</sub></em> is from the fact that <em>p<sub>land</sub>&thinsp;&gt;&thinsp;0</em>, from <a href=#posXDirection>A:posXDirection</a>.
+                          The constraint <em>d<sub>offset</sub>&thinsp;&gt;&thinsp;&minus;p<sub>target</sub></em> is from the fact that <em>p<sub>land</sub>&thinsp;&gt;&thinsp;0</em>, from <a href=#posXDirection>A:posXDirection</a>.
                         </p>
                         <p class="paragraph">
                           <em>ε</em> is defined in <a href=#Sec:AuxConstants>Sec:Values of Auxiliary Constants</a>.
@@ -1598,14 +1719,13 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
               </div>
             </div>
             <div id="Sec:DataConstraints">
               <div class="subsubsection">
                 <h3>Data Constraints</h3>
                 <p class="paragraph">
-                  The <a href=#Table:InDataConstraints>Data Constraints Table</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+                  The <a href=#Table:InDataConstraints>Data Constraints Table</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
                 </p>
                 <div id="Table:InDataConstraints">
                   <table class="table">
@@ -1659,8 +1779,12 @@
                     <tr>
                       <td><em>d<sub>offset</sub></em></td>
                       <td>
-                        <em>d<sub>offset</sub>&thinsp;&gt;&thinsp;&minus;p<sub>land</sub></em>
+                        <em>d<sub>offset</sub>&thinsp;&gt;&thinsp;&minus;p<sub>target</sub></em>
                       </td>
+                    </tr>
+                    <tr>
+                      <td><em>t<sub>flight</sub></em></td>
+                      <td><em>t<sub>flight</sub>&thinsp;&gt;&thinsp;0</em></td>
                     </tr>
                   </table>
                   <p class="caption">Output Data Constraints</p>
@@ -1701,7 +1825,7 @@
               </p>
               <p>
                 <div id="outputValues">
-                  Output-Values: Output <em>s</em> (from <a href=#IM:messageIM>IM:messageIM</a>) and <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM:offsetIM</a>).
+                  Output-Values: Output <em>t<sub>flight</sub></em> (from <a href=#IM:calOfLandingTime>IM:calOfLandingTime</a>), <em>s</em> (from <a href=#IM:messageIM>IM:messageIM</a>), and <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM:offsetIM</a>).
                 </div>
               </p>
             </div>
@@ -1776,7 +1900,7 @@
       <div class="section">
         <h1>Traceability Matrices and Graphs</h1>
         <p class="paragraph">
-          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. <a href=#Table:TraceMatAvsA>Tab:TraceMatAvsA</a> shows the dependencies of assumptions on the assumptions. <a href=#Table:TraceMatAvsAll>Tab:TraceMatAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Tab:TraceMatRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Table:TraceMatAllvsR>Tab:TraceMatAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. <a href=#Table:TraceMatAvsA>Tab:TraceMatAvsA</a> shows the dependencies of the assumptions on each other. <a href=#Table:TraceMatAvsAll>Tab:TraceMatAvsAll</a> shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Tab:TraceMatRefvsRef</a> shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. <a href=#Table:TraceMatAllvsR>Tab:TraceMatAllvsR</a> shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.
         </p>
         <div id="Table:TraceMatAvsA">
           <table class="table">
@@ -2886,7 +3010,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
+              <td>X</td>
               <td></td>
               <td>X</td>
               <td>X</td>
@@ -3063,7 +3187,7 @@
           </p>
         </div>
         <p class="paragraph">
-          The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TraceGraphAvsA>Fig:TraceGraphAvsA</a> shows the dependencies of assumptions on the assumptions. <a href=#Figure:TraceGraphAvsAll>Fig:TraceGraphAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Figure:TraceGraphRefvsRef>Fig:TraceGraphRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Figure:TraceGraphAllvsR>Fig:TraceGraphAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models. <a href=#Figure:TraceGraphAllvsAll>Fig:TraceGraphAllvsAll</a> shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
+          The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TraceGraphAvsA>Fig:TraceGraphAvsA</a> shows the dependencies of assumptions on each other. <a href=#Figure:TraceGraphAvsAll>Fig:TraceGraphAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Figure:TraceGraphRefvsRef>Fig:TraceGraphRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. <a href=#Figure:TraceGraphAllvsR>Fig:TraceGraphAllvsR</a> shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. <a href=#Figure:TraceGraphAllvsAll>Fig:TraceGraphAllvsAll</a> shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
         </p>
         <div id="Figure:TraceGraphAvsA">
           <figure>
@@ -3132,8 +3256,8 @@
               <th>Unit</th>
             </tr>
             <tr>
-              <td><em><b>g</b></em></td>
-              <td>gravitational acceleration</td>
+              <td><em>g</em></td>
+              <td>magnitude of gravitational acceleration</td>
               <td><em>9.8</em></td>
               <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
             </tr>
@@ -3164,18 +3288,43 @@
             </div>
           </li>
           <li>
+            <div id="koothoor2013">
+              [2]: Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+            </div>
+          </li>
+          <li>
+            <div id="parnasClements1986">
+              [3]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
+            </div>
+          </li>
+          <li>
+            <div id="smithKoothoor2016">
+              [4]: Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em> Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
+            </div>
+          </li>
+          <li>
+            <div id="smithLai2005">
+              [5]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+            </div>
+          </li>
+          <li>
+            <div id="smithEtAl2007">
+              [6]: Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
+            </div>
+          </li>
+          <li>
             <div id="accelerationWiki">
-              [2]: Wikipedia Contributors. <em>Acceleration</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Acceleration">https://en.wikipedia.org/wiki/Acceleration</a>.
+              [7]: Wikipedia Contributors. <em>Acceleration</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Acceleration">https://en.wikipedia.org/wiki/Acceleration</a>.
             </div>
           </li>
           <li>
             <div id="cartesianWiki">
-              [3]: Wikipedia Contributors. <em>Cartesian coordinate system</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">https://en.wikipedia.org/wiki/Cartesian_coordinate_system</a>.
+              [8]: Wikipedia Contributors. <em>Cartesian coordinate system</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">https://en.wikipedia.org/wiki/Cartesian_coordinate_system</a>.
             </div>
           </li>
           <li>
             <div id="velocityWiki">
-              [4]: Wikipedia Contributors. <em>Velocity</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Velocity">https://en.wikipedia.org/wiki/Velocity</a>.
+              [9]: Wikipedia Contributors. <em>Velocity</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Velocity">https://en.wikipedia.org/wiki/Velocity</a>.
             </div>
           </li>
         </ul>

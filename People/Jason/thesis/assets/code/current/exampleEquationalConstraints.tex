@@ -1,0 +1,26 @@
+\begin{haskell}{Example of Equational Constraints: Equilibrium}{exampleEquationalConstraints}{https://github.com/JacquesCarette/Drasil/blob/dc3674274edb00b1ae0d63e04ba03729e1dbc6f9/code/drasil-example/ssp/lib/Drasil/SSP/TMods.hs\#L49-L72}
+equilibrium :: TheoryModel
+equilibrium = tm (equationalConstraints' equilibriumCS)
+  [qw fx] ([] :: [ConceptChunk])
+  [] (map express equilibriumRels) [] [dRef fredlund1977] "equilibrium" [eqDesc]
+
+------------------------------------  
+
+equilibriumRels :: [ModelExpr]
+equilibriumRels = map (($= int 0) . sumAll (variable "i") . sy) [fx, fy, genericM]
+
+-- FIXME: variable "i" is a hack.  But we need to sum over something!
+equilibriumCS :: ConstraintSet ModelExpr
+equilibriumCS = mkConstraintSet
+  (dccWDS "equilibriumCS" (nounPhraseSP "equilibrium") eqDesc) $
+  NE.fromList equilibriumRels
+-- makeRC "equilibriumRC" (nounPhraseSP "equilibrium") eqDesc eqRel
+
+eqDesc :: Sentence
+eqDesc = foldlSent [S "For a body in static equilibrium, the net",
+  pluralNP (force `and_PP` genericM) +:+. S "acting on the body will cancel out",
+  S "Assuming a 2D problem", sParen (refS assumpENSL) `sC` S "the", getTandS fx `S.and_`
+  getTandS fy, S "will be equal to" +:+. eS (exactDbl 0), S "All", plural force,
+  S "and their", phrase distance, S "from the chosen point of rotation",
+  S "will create a net", phrase genericM, S "equal to" +:+ eS (exactDbl 0)]
+\end{haskell}

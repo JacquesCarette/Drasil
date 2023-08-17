@@ -1,23 +1,24 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SWHS.Body where
 
+import Control.Lens ((^.))
+
 import Language.Drasil hiding (organization, section, variable)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
-import Theory.Drasil (GenDefn, InstanceModel)
+import Theory.Drasil (GenDefn, InstanceModel, output)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Control.Lens ((^.))
-
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (inModel)
 import Data.Drasil.Concepts.Computation (algorithm, compcon)
-import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
-  constraint, corSol, datum, document, environment,input_, model, organization, 
-  output_, physical, physics, property, quantity, software, softwareSys, solution,
-  srsDomains, sysCont, system, user, value, variable, doccon, doccon')
+import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
+  condition, constraint, corSol, datum, document, environment,input_, model,
+  output_, physical, physics, property, quantity, software, softwareSys,
+  solution, srsDomains, sysCont, system, user, value, variable, doccon,
+  doccon')
 import Data.Drasil.Concepts.Education (calculus, educon, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_, mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
@@ -31,7 +32,7 @@ import Data.Drasil.Quantities.Math (surArea, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol)
 import Data.Drasil.Quantities.Physics (energy, time, physicscon)
 import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat)
-import Data.Drasil.Software.Products (sciCompS, prodtcon)
+import Data.Drasil.Software.Products (prodtcon)
 
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
@@ -46,7 +47,7 @@ import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater)
 import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
-import Drasil.SWHS.References (citations, koothoor2013, smithLai2005)
+import Drasil.SWHS.References (citations)
 import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements, verifyEnergyOutput)
 import Drasil.SWHS.TMods (tMods)
 import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
@@ -78,10 +79,11 @@ si = SI {
   _sys         = swhsPCM,
   _kind        = Doc.srs, 
   _authors     = [thulasi, brooks, spencerSmith],
-  _purpose     = purpDoc progName Verbose,
+  _purpose     = [purp],
+  _background  = [],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
-  _instModels  = [], -- FIXME; empty _instModels
+  _instModels  = insModel,
   _datadefs    = SWHS.dataDefs,
   _configFiles = [],
   _inputs      = inputs,
@@ -94,8 +96,12 @@ si = SI {
    refdb       = refDB
 }
 
+purp :: Sentence
+purp = foldlSent_ [S "investigate the effect" `S.of_` S "employing",
+  short phsChgMtrl, S "within a", phrase sWHT]
+
 symbMap :: ChunkDB
-symbMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
+symbMap = cdb (qw (heatEInPCM ^. output) : symbolsAll) -- heatEInPCM ?
   (nw heatEInPCM : map nw symbols ++ map nw acronymsFull
   ++ map nw thermocon ++ map nw units ++ map nw [m_2, m_3] ++ map nw [absTol, relTol]
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
@@ -123,16 +129,16 @@ mkSRS = [TableOfContents,
     [IPurpose $ purpDoc progName Verbose,
      IScope scope,
      IChar [] charsOfReader [],
-     IOrgSec orgDocIntro inModel (SRS.inModel [] []) orgDocEnd
+     IOrgSec inModel (SRS.inModel [] []) orgDocEnd
     ],
   GSDSec $ GSDProg
-    [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
+    [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets progName]
     , UsrChars [userChars progName]
     , SystCons [] []
     ],
   SSDSec $
     SSDProg 
-      [ SSDProblem $ PDProg probDescIntro []
+      [ SSDProblem $ PDProg purp []
         [ TermsAndDefs Nothing terms
         , PhySysDesc progName physSystParts figTank []
         , Goals goalInputs]
@@ -193,9 +199,10 @@ introStart = foldlSent [S "Due to", foldlList Comma List (map S
   energy), S "storage technology"]
 
 introStartSWHS :: Sentence
-introStartSWHS = foldlSent [capSent (swhsPCM ^. defn), sParen (short phsChgMtrl),
-  S "use a renewable", phrase enerSrc `S.and_` S "provide a novel way of storing" +:+.
-  phrase energy, atStart swhsPCM, S "improve over the traditional", plural progName,
+introStartSWHS = foldlSent [capSent $ pluralNP $ progName ^. term, S "incorporating",
+  phrase phsChgMtrl, sParen (short phsChgMtrl), S "use a renewable",
+  phrase enerSrc `S.and_` S "provide a novel way of storing" +:+.  phrase energy,
+  atStart swhsPCM, S "improve over the traditional", plural progName,
   S "because of their smaller size. The smaller size is possible because of the ability" `S.of_`
   short phsChgMtrl, S "to store", phrase thermalEnergy, S "as", phrase latentHeat `sC`
   S "which allows higher", phrase thermalEnergy, S "storage capacity per",
@@ -249,13 +256,6 @@ charReaderDE = plural de +:+ S "from level 1 and 2" +:+ phrase calculus
 ------------------------------------
 -- 2.4 : Organization of Document --
 ------------------------------------
-
-orgDocIntro :: Sentence
-orgDocIntro = foldlSent [atStartNP (the organization), S "of this",
-  phrase document, S "follows the template for an", short Doc.srs
-  `S.for` phrase sciCompS, S "proposed by", refS koothoor2013 `S.and_`
-  refS smithLai2005]
-
 orgDocEnd :: Sentence
 orgDocEnd = foldlSent_ [atStartNP' (the inModel), 
   S "to be solved are referred to as" +:+. 
@@ -307,9 +307,9 @@ sysCntxtRespIntro pro = foldlSPCol [short pro +:+. S "is mostly self-contained",
   S "interface", S "responsibilities" `S.the_ofTheC` phraseNP (user `andThe`
   system) `S.are` S "as follows"]
 
-systContRespBullets :: Contents
-systContRespBullets = UlC $ ulcc $ Enumeration $ bulletNested
-  [titleize user +: S "Responsibilities", short progName +: S "Responsibilities"]
+systContRespBullets :: CI -> Contents
+systContRespBullets prog = UlC $ ulcc $ Enumeration $ bulletNested
+  [titleize user +: S "Responsibilities", short prog +: S "Responsibilities"]
   $ map bulletFlat [userResp, swhsResp]
 
 userResp :: [Sentence]
@@ -352,9 +352,8 @@ userChars pro = foldlSP [S "The end", phrase user `S.of_` short pro,
 -------------------------------
 -- 4.1 : Problem Description --
 -------------------------------
-probDescIntro :: Sentence
-probDescIntro = foldlSent_ [S "investigate the effect" `S.of_` S "employing",
-  short phsChgMtrl, S "within a", phrase sWHT]
+
+-- Introduction of Problem Description section derived from purp
 
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --

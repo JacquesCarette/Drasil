@@ -69,7 +69,7 @@ newtonForceQuant = mkQuant' "force" (nounPhraseSP "Newton's law of universal gra
 -- sentence, supposed to include "6.673 `mulRe` 10^{-11} m/kgs^2" (line 187)).
 
 newtonLUGNotes :: [Sentence]
-newtonLUGNotes = map foldlSent [
+newtonLUGNotes = [foldlSent
   [S "Two", plural rigidBody `S.inThe` S "universe attract each other with a",
    getTandS force, S "that is directly proportional to the product of their",
    plural mass `sC` ch mass_1 `S.and_` ch mass_2 `sC` EmptyS `S.and_`

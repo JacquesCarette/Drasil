@@ -26,7 +26,7 @@ import qualified GOOL.Drasil.RendererClasses as S (
 import qualified GOOL.Drasil.RendererClasses as RC (BodyElim(..),
   StatementElim(statement))
 import GOOL.Drasil.Helpers (toCode, onStateValue, on2StateValues)
-import GOOL.Drasil.State (MS, lensMStoVS)
+import GOOL.Drasil.State (MS, lensMStoVS, genVarName, genLoopIndex)
 
 import Data.Maybe (fromMaybe)
 import Control.Lens.Zoom (zoom)
@@ -60,20 +60,20 @@ runStrategy l strats rv av = maybe
 
 listSlice :: (RenderSym r) => Maybe (SValue r) -> Maybe (SValue r) -> 
   Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
-listSlice b e s vnew vold = 
-  let l_temp = "temp"
-      var_temp = S.var l_temp (onStateValue variableType vnew)
-      v_temp = S.valueOf var_temp
-      l_i = "i_temp"
-      var_i = S.var l_i S.int
-      v_i = S.valueOf var_i
-  in
-    S.block [
-      S.listDec 0 var_temp,
-      S.for (S.varDecDef var_i (fromMaybe (S.litInt 0) b)) 
-        (v_i ?< fromMaybe (S.listSize vold) e) (maybe (var_i &++) (var_i &+=) s)
-        (oneLiner $ S.valStmt $ S.listAppend v_temp (S.listAccess vold v_i)),
-      vnew &= v_temp]
+listSlice b e s vnew vold = do
+  l_temp <- genVarName [] "temp"
+  l_i <- genLoopIndex
+  let
+    var_temp = S.var l_temp (onStateValue variableType vnew)
+    v_temp = S.valueOf var_temp
+    var_i = S.var l_i S.int
+    v_i = S.valueOf var_i
+  S.block [
+    S.listDec 0 var_temp,
+    S.for (S.varDecDef var_i (fromMaybe (S.litInt 0) b))
+      (v_i ?< fromMaybe (S.listSize vold) e) (maybe (var_i &++) (var_i &+=) s)
+      (oneLiner $ S.valStmt $ S.listAppend v_temp (S.listAccess vold v_i)),
+    vnew &= v_temp]
       
 stringListVals :: (RenderSym r) => [SVariable r] -> SValue r -> MSStatement r
 stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList 
@@ -86,26 +86,29 @@ stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList
           (S.listAccess sl (S.litInt n))) : assignVals vs (n+1)
 
 stringListLists :: (RenderSym r) => [SVariable r] -> SValue r -> MSStatement r
-stringListLists lsts sl = zoom lensMStoVS sl >>= (\slst -> checkList (getType $ 
-  valueType slst))
-  where checkList (List String) = mapM (zoom lensMStoVS) lsts >>= listVals . 
-          map (getType . variableType)
-        checkList _ = error 
-          "Value passed to stringListLists must be a list of strings"
-        listVals [] = loop
-        listVals (List _:vs) = listVals vs
-        listVals _ = error 
-          "All values passed to stringListLists must have list types"
-        loop = S.forRange var_i (S.litInt 0) (S.listSize sl #/ numLists) 
-          (S.litInt 1) (bodyStatements $ appendLists (map S.valueOf lsts) 0)
-        appendLists [] _ = []
-        appendLists (v:vs) n = S.valStmt (S.listAppend v (cast 
-          (S.listInnerType $ onStateValue valueType v)
-          (S.listAccess sl ((v_i #* numLists) #+ S.litInt n)))) 
-          : appendLists vs (n+1)
-        numLists = S.litInt (toInteger $ length lsts)
-        var_i = S.var "stringlist_i" S.int
-        v_i = S.valueOf var_i
+stringListLists lsts sl = do
+  slst <- zoom lensMStoVS sl
+  l_i <- genLoopIndex
+  let
+    checkList (List String) = mapM (zoom lensMStoVS) lsts >>= listVals .
+      map (getType . variableType)
+    checkList _ = error
+      "Value passed to stringListLists must be a list of strings"
+    listVals [] = loop
+    listVals (List _:vs) = listVals vs
+    listVals _ = error
+      "All values passed to stringListLists must have list types"
+    loop = S.forRange var_i (S.litInt 0) (S.listSize sl #/ numLists)
+      (S.litInt 1) (bodyStatements $ appendLists (map S.valueOf lsts) 0)
+    appendLists [] _ = []
+    appendLists (v:vs) n = S.valStmt (S.listAppend v (cast
+      (S.listInnerType $ onStateValue valueType v)
+      (S.listAccess sl ((v_i #* numLists) #+ S.litInt n))))
+      : appendLists vs (n+1)
+    numLists = S.litInt (toInteger $ length lsts)
+    var_i = S.var l_i S.int
+    v_i = S.valueOf var_i
+  checkList (getType $ valueType slst)
 
 forRange :: (RenderSym r) => SVariable r -> SValue r -> SValue r -> SValue r -> 
   MSBody r -> MSStatement r

@@ -18,13 +18,13 @@ newtype Code = Code { unCode :: [(FilePath, Doc)]}
 spaceToCodeType :: S.Space -> [CodeType]
 spaceToCodeType S.Integer        = [Integer]
 spaceToCodeType S.Natural        = [Integer]
-spaceToCodeType S.Radians        = [Double, Float]
 spaceToCodeType S.Real           = [Double, Float]
 spaceToCodeType S.Rational       = [Double, Float]
 spaceToCodeType S.Boolean        = [Boolean]
 spaceToCodeType S.Char           = [Char]
 spaceToCodeType S.String         = [String]
 spaceToCodeType (S.Vect s)       = map List (spaceToCodeType s)
+spaceToCodeType (S.Matrix _ _ s) = map (List . List) (spaceToCodeType s)
 spaceToCodeType (S.Array s)      = map Array (spaceToCodeType s)
 spaceToCodeType (S.Actor s)      = [Object s]
 spaceToCodeType (S.DiscreteD _)  = map List (spaceToCodeType S.Rational)

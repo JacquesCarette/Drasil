@@ -1,16 +1,14 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.CodeDefinition (
-  CodeDefinition, DefinitionType(..), qtoc, qtov, odeDef, auxExprs, defType, 
+  CodeDefinition, DefinitionType(..), qtoc, qtov, odeDef, auxExprs, defType,
 ) where
 
 import Language.Drasil
-import Language.Drasil.Chunk.Code (CodeChunk(..), CodeIdea(codeName, codeChunk),
-  VarOrFunc(..), quantvar, quantfunc, funcPrefix, DefiningCodeExpr(..))
-import Language.Drasil.CodeExpr (CodeExpr, expr)
+import Language.Drasil.Chunk.Code (quantvar, quantfunc)
+import Language.Drasil.CodeExpr.Development (expr, CanGenCode(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo(..), ODEOptions(..))
 
 import Control.Lens ((^.), makeLenses, view)
-import Language.Drasil.Code.Expr.Convert (CanGenCode(toCodeExpr))
 
 -- | The definition may be specialized to use ODEs.
 data DefinitionType = Definition | ODE
@@ -36,9 +34,9 @@ instance HasSymbol        CodeDefinition where symbol c = symbol (c ^. cchunk)
 -- | 'CodeDefinition's have a 'Quantity'.
 instance Quantity         CodeDefinition
 -- | Finds the code name of a 'CodeDefinition'.
--- 'Function' 'CodeDefinition's are named with the function prefix to distinguish 
+-- 'Function' 'CodeDefinition's are named with the function prefix to distinguish
 -- them from the corresponding variable version.
-instance CodeIdea         CodeDefinition where 
+instance CodeIdea         CodeDefinition where
   codeName (CD c@(CodeC _ Var) _ _ _) = codeName c
   codeName (CD c@(CodeC _ Func) _ _ _) = funcPrefix ++ codeName c
   codeChunk = view cchunk
@@ -65,6 +63,9 @@ qtov q = CD (codeChunk $ quantvar q) (toCodeExpr $ q ^. defnExpr) [] Definition
 
 -- | Constructs a 'CodeDefinition' for an ODE.
 odeDef :: ODEInfo -> CodeDefinition
-odeDef info = CD (codeChunk $ quantfunc $ depVar info) (matrix [odeSyst info])
-  (map ($ info) [tInit, tFinal, initVal, absTol . odeOpts, relTol . odeOpts, 
-  stepSize . odeOpts, initValFstOrd . odeOpts]) ODE
+odeDef info = CD
+  (codeChunk $ quantfunc $ depVar info)
+  (matrix [odeSyst info])
+  (matrix [initVal info]:
+    map ($ info) [tInit, tFinal, absTol . odeOpts, relTol . odeOpts, stepSize . odeOpts])
+  ODE

@@ -22,10 +22,10 @@ module Drasil.DocLang (
   -- | For generating Jupyter notebook lesson plans.
 
   -- *** Types
-  -- Drasil.DocumentLanguage.Notebook.NBDecl
-  NBDecl, NbSection(BibSec, IntrodSec, BodySec),
+  -- Drasil.DocumentLanguage.Notebook.LsnDecl
+  LsnDecl, LsnChapter(Intro, LearnObj, Review, CaseProb, Example, Smmry, BibSec, Apndx),
   -- Drasil.DocumentLanguage.Notebook.Core
-  IntrodSec(..), IntrodSub(..), BodySec(..), BodySub(..), SmmrySec(..), ApndxSec(..),
+  Intro(..), LearnObj(..), Review(..), CaseProb(..), Example(..), Smmry(..), Apndx(..),
   -- *** Functions
   -- Drasil.DocumentLanguage.Notebook.DocumentLanguage
   mkNb,
@@ -48,11 +48,11 @@ module Drasil.DocLang (
   purpDoc,
   -- ** Reference Material
   -- Drasil.Sections.ReferenceMaterial
-  intro,
+  intro, emptySectSentPlu, emptySectSentSing,
   -- Drasil.Sections.TableOfSymbols
   tsymb, tsymb'',
   -- Drasil.Sections.TableOfUnits
-  unitTableRef, tunit, tunit',
+  unitTableRef, tunit, tunit', tunitNone,
   -- ** Requirements
   -- Drasil.Sections.Requirements
   inReq, inTable, mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable, reqInputsRef,
@@ -77,10 +77,11 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   Literature(Doc', Lit,Manual), RefSec(..), RefTab(..), StkhldrSec(..),
   StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
   TSIntro(..), TUIntro(..))
-import Drasil.DocumentLanguage.Notebook.Core (IntrodSec(..), IntrodSub(..), BodySec(..), 
-  BodySub(..), ApndxSec(..), SmmrySec(..))
+import Drasil.DocumentLanguage.Notebook.Core (Intro(..), LearnObj(..), Review(..), 
+  CaseProb(..), Example(..), Smmry(..), Apndx(..))
 import Drasil.DocumentLanguage.Notebook.DocumentLanguage (mkNb)
-import Drasil.DocumentLanguage.Notebook.NBDecl (NBDecl, NbSection(BibSec, IntrodSec, BodySec))
+import Drasil.DocumentLanguage.Notebook.LsnDecl (LsnDecl, LsnChapter(Intro, LearnObj, Review, 
+  CaseProb, Example, Smmry, BibSec, Apndx))
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
   Verbosity(..), ddefn)
 --import Drasil.DocumentLanguage.TraceabilityMatrix
@@ -88,14 +89,14 @@ import Drasil.DocumentLanguage.TraceabilityGraph (mkGraphInfo, traceyGraphGetRef
 import Drasil.Sections.AuxiliaryConstants (tableOfConstants)
 --import Drasil.Sections.GeneralSystDesc
 import Drasil.Sections.Introduction (purpDoc)
-import Drasil.Sections.ReferenceMaterial (intro)
+import Drasil.Sections.ReferenceMaterial (intro, emptySectSentPlu, emptySectSentSing)
 import Drasil.Sections.Requirements (inReq, inTable, mkInputPropsTable,
   mkQRTuple, mkQRTupleRef, mkValsSourceTable, reqInputsRef)
 import Drasil.Sections.SpecificSystemDescription (auxSpecSent, termDefnF', inDataConstTbl, outDataConstTbl)
 --import Drasil.Sections.Stakeholders
 --import Drasil.Sections.TableOfAbbAndAcronyms
 import Drasil.Sections.TableOfSymbols (tsymb, tsymb'')
-import Drasil.Sections.TableOfUnits (unitTableRef, tunit, tunit')
+import Drasil.Sections.TableOfUnits (unitTableRef, tunit, tunit',tunitNone)
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard, traceMatOtherReq)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)

@@ -10,6 +10,7 @@ import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
 import Data.Drasil.Concepts.Software (program)
+import Data.Drasil.Software.Products (sciCompS)
 import Data.Drasil.ExternalLibraries.ODELibraries
        (apacheODESymbols, arrayVecDepVar, odeintSymbols, osloSymbols,
         scipyODESymbols)
@@ -19,10 +20,11 @@ import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.SI_Units (second, kilogram)
+import Data.Drasil.Quantities.Math (posInf, negInf)
 
 import Drasil.PDController.Assumptions (assumptions)
 import Drasil.PDController.Changes (likelyChgs)
-import Drasil.PDController.Concepts (acronyms, pidControllerSystem,
+import Drasil.PDController.Concepts (acronyms, pdControllerApp,
   pidC, concepts, defs)
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
@@ -30,17 +32,16 @@ import Drasil.PDController.GenSysDesc
        (gsdSysContextFig, gsdSysContextList, gsdSysContextP1, gsdSysContextP2,
         gsduserCharacteristics)
 import Drasil.PDController.IModel (instanceModels, imPD)
-import Drasil.PDController.IntroSection
-       (introDocOrg, introPara, introPurposeOfDoc, introUserChar1,
-        introUserChar2, introscopeOfReq)
+import Drasil.PDController.IntroSection (introPara, introPurposeOfDoc,
+       introUserChar1, introUserChar2, introscopeOfReq)
 import Drasil.PDController.References (citations)
 import Drasil.PDController.Requirements (funcReqs, nonfuncReqs)
-import Drasil.PDController.SpSysDesc
-       (goals, sysFigure, sysGoalInput, sysParts, sysProblemDesc)
+import Drasil.PDController.SpSysDesc (goals, sysFigure, sysGoalInput, sysParts)
 import Drasil.PDController.TModel (theoreticalModels)
 import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
-  inpConstrained, pidConstants, pidDqdConstants)
+  inpConstrained, pidConstants, pidDqdConstants, opProcessVariable)
 import Drasil.PDController.ODEs (pidODEInfo)
+import Language.Drasil.Code (quantvar)
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
@@ -59,10 +60,10 @@ mkSRS
   = [TableOfContents,
     RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
      IntroSec $
-       IntroProg introPara (phrase pidControllerSystem)
+       IntroProg introPara (phrase pdControllerApp)
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
-          IOrgSec introDocOrg IDict.dataDefn (SRS.inModel [] [])
+          IOrgSec IDict.dataDefn (SRS.inModel [] [])
             (S "The instance model referred as" +:+ refS imPD +:+
                S "provides an"
                +:+ titleize ode +:+ sParen (short ode)
@@ -77,9 +78,9 @@ mkSRS
      SSDSec $
        SSDProg
          [SSDProblem $
-            PDProg sysProblemDesc []
+            PDProg purp []
               [TermsAndDefs Nothing defs,
-               PhySysDesc pidControllerSystem sysParts sysFigure [],
+               PhySysDesc pdControllerApp sysParts sysFigure [],
                Goals sysGoalInput],
           SSDSolChSpec $
             SCSProg
@@ -96,63 +97,65 @@ mkSRS
      TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
 
 si :: SystemInformation
-si
-  = SI{_sys = pidControllerSystem, _kind = Doc.srs, _authors = [naveen],
-       _purpose = [], _quants = symbolsAll,
-       _concepts = [] :: [DefinedQuantityDict],
-       _datadefs = dataDefinitions, _instModels = [],
-       _configFiles = [], _inputs = inputs, _outputs = outputs,
-       _defSequence = [] :: [Block SimpleQDef],
-       _constraints = map cnstrw inpConstrained, _constants = pidConstants,
-       _sysinfodb = symbMap, _usedinfodb = usedDB, refdb = refDB}
+si = SI {
+  _sys = pdControllerApp,
+  _kind = Doc.srs,
+  _authors = [naveen],
+  _purpose = [purp],
+  _background  = [],
+  _quants = symbolsAll,
+  _concepts = [] :: [DefinedQuantityDict],
+  _datadefs = dataDefinitions,
+  _instModels = instanceModels,
+  _configFiles = [],
+  _inputs = inputs,
+  _outputs = outputs,
+  _defSequence = [] :: [Block SimpleQDef],
+  _constraints = map cnstrw inpConstrained,
+  _constants = pidConstants,
+  _sysinfodb = symbMap,
+  _usedinfodb = usedDB,
+   refdb = refDB}
+
+purp :: Sentence
+purp = foldlSent_ [S "provide a model of a", phrase pidC,
+         S "that can be used for the tuning of the gain constants before",
+         S "the deployment of the controller"]
 
 symbolsAll :: [QuantityDict]
-symbolsAll
-  = symbols ++
-      scipyODESymbols ++
-        osloSymbols ++
-          apacheODESymbols ++
-            odeintSymbols ++
-              map qw [arrayVecDepVar pidODEInfo] ++
-                map qw pidDqdConstants ++ map qw pidConstants
+symbolsAll = symbols ++ map qw pidDqdConstants ++ map qw pidConstants
+  ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
+  ++ map qw [listToArray $ quantvar opProcessVariable, arrayVecDepVar pidODEInfo]
 
 symbMap :: ChunkDB
-symbMap
-  = cdb (map qw physicscon ++ symbolsAll ++ map qw [mass])
-      (nw pidControllerSystem :
-         [nw program, nw angular, nw linear] ++
-           map nw doccon ++
-             map nw doccon' ++
-               concepts ++
-                 map nw mathcon ++
-                   map nw mathcon' ++
-                     map nw [second, kilogram] ++
-                       map nw symbols ++ map nw physicscon ++ map nw acronyms
-                       ++ map nw physicalcon)
-      (map cw inpConstrained ++ srsDomains)
-      (map unitWrapper [second, kilogram])
-      dataDefinitions
-      instanceModels
-      genDefns
-      theoreticalModels
-      conceptInstances
-      ([] :: [Section])
-      ([] :: [LabelledContent])
-      ([] :: [Reference])
+symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf])
+  (nw pdControllerApp : [nw program, nw angular, nw linear] ++ [nw sciCompS]
+  ++ map nw doccon ++ map nw doccon' ++ concepts ++ map nw mathcon
+  ++ map nw mathcon' ++ map nw [second, kilogram] ++ map nw symbols 
+  ++ map nw physicscon ++ map nw acronyms ++ map nw physicalcon)
+  (map cw inpConstrained ++ srsDomains)
+  (map unitWrapper [second, kilogram])
+  dataDefinitions
+  instanceModels
+  genDefns
+  theoreticalModels
+  conceptInstances
+  ([] :: [Section])
+  ([] :: [LabelledContent])
+  ([] :: [Reference])
 
 usedDB :: ChunkDB
-usedDB
-  = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbolsAll)
-      ([] :: [ConceptChunk])
-      ([] :: [UnitDefn])
-      ([] :: [DataDefinition])
-      ([] :: [InstanceModel])
-      ([] :: [GenDefn])
-      ([] :: [TheoryModel])
-      ([] :: [ConceptInstance])
-      ([] :: [Section])
-      ([] :: [LabelledContent])
-      ([] :: [Reference])
+usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbolsAll)
+  ([] :: [ConceptChunk])
+  ([] :: [UnitDefn])
+  ([] :: [DataDefinition])
+  ([] :: [InstanceModel])
+  ([] :: [GenDefn])
+  ([] :: [TheoryModel])
+  ([] :: [ConceptInstance])
+  ([] :: [Section])
+  ([] :: [LabelledContent])
+  ([] :: [Reference])
 
 refDB :: ReferenceDB
 refDB = rdb citations conceptInstances

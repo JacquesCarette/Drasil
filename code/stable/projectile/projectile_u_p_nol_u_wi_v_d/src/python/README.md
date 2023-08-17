@@ -1,6 +1,8 @@
 # Projectile 
 > Authors:  Samuel J. Crawford, Brooks MacLachlan, W. Spencer Smith
 
+> Purpose: Predict whether a launched projectile hits its target.
+
 ------------------------------------------------------------
 ## Making Examples 
  How to Run the Program:
@@ -15,6 +17,10 @@ In your terminal command line, enter the same directory as this README file. The
 make build
 ```
 
+How to Change Input:
+Projectile will take the inputs from `input.txt` and write the outputs to `output.txt`.
+Inputs can be changed by editing `input.txt`.
+
 ------------------------------------------------------------
 ## Version 
  `Python 3.5.1`
@@ -25,5 +31,5 @@ make build
 Copyright (c) 2021, Samuel J. Crawford, Brooks MacLachlan, W. Spencer Smith. All rights reserved. Please see the [full license](https://github.com/JacquesCarette/Drasil/blob/4b9ad0a3016fecb3c7a2aa82ab142f9e805b5cc8/LICENSE) for more details.
 
 <p align="center">
-<img src="../../../../drasil-website/WebInfo/images/Icon.png" alt="Drasil Tree" width="200" />
+<img src="../../../../../drasil-website/WebInfo/images/Icon.png" alt="Drasil Tree" width="200" />
 </p>

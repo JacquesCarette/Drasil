@@ -1,0 +1,6 @@
+\begin{pseudohaskell}{Broken QuantityDict Chunk Retriever}{brokenChunkRetriever}
+retrieveQD :: UID -> ChunkDB -> Maybe QuantityDict
+retrieveQD u cdb = do
+    (Chunk expectedQd) <- lookup u cdb
+    pure expectedQd
+\end{pseudohaskell}

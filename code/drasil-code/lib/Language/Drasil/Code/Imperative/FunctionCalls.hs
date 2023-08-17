@@ -1,13 +1,13 @@
 module Language.Drasil.Code.Imperative.FunctionCalls (
-  genAllInputCalls, genInputCall, genDerivedCall, genConstraintCall, 
+  genAllInputCalls, genInputCall, genDerivedCall, genConstraintCall,
   genCalcCall, genOutputCall
 ) where
 
 import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, fAppInOut)
 import Language.Drasil.Code.Imperative.Import (codeType, mkVal, mkVar)
 import Language.Drasil.Code.Imperative.Logging (maybeLog)
-import Language.Drasil.Code.Imperative.Parameters (getCalcParams, 
-  getConstraintParams, getDerivedIns, getDerivedOuts, getInputFormatIns, 
+import Language.Drasil.Code.Imperative.Parameters (getCalcParams,
+  getConstraintParams, getDerivedIns, getDerivedOuts, getInputFormatIns,
   getInputFormatOuts, getOutputParams)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar)
@@ -15,7 +15,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (InternalConcept(..), genICFuncName)
 
-import GOOL.Drasil (VSType, SValue, MSStatement, OOProg, TypeSym(..), 
+import GOOL.Drasil (VSType, SValue, MSStatement, OOProg, TypeSym(..),
   VariableValue(..), StatementSym(..), DeclStatement(..), convType)
 
 import Data.List ((\\), intersect)
@@ -24,8 +24,8 @@ import Data.Maybe (catMaybes)
 import Control.Applicative ((<|>))
 import Control.Monad.State (get)
 
--- | Generates calls to all of the input-related functions. First is the call to 
--- the function for reading inputs, then the function for calculating derived 
+-- | Generates calls to all of the input-related functions. First is the call to
+-- the function for reading inputs, then the function for calculating derived
 -- inputs, then the function for checking input constraints.
 genAllInputCalls :: (OOProg r) => GenState [MSStatement r]
 genAllInputCalls = do
@@ -48,7 +48,7 @@ genConstraintCall = do
   val <- genFuncCall (genICFuncName InputConstraints) void getConstraintParams
   return $ fmap valStmt val
 
--- | Generates a call to a calculation function, given the 'CodeDefinition' for the 
+-- | Generates a call to a calculation function, given the 'CodeDefinition' for the
 -- value being calculated.
 genCalcCall :: (OOProg r) => CodeDefinition -> GenState (Maybe (MSStatement r))
 genCalcCall c = do
@@ -64,9 +64,9 @@ genOutputCall = do
   val <- genFuncCall (genICFuncName WriteOutput) void getOutputParams
   return $ fmap valStmt val
 
--- | Generates a function call given the name, return type, and arguments to 
+-- | Generates a function call given the name, return type, and arguments to
 -- the function.
-genFuncCall :: (OOProg r) => Name -> VSType r -> 
+genFuncCall :: (OOProg r) => Name -> VSType r ->
   GenState [CodeVarChunk] -> GenState (Maybe (SValue r))
 genFuncCall n t funcPs = do
   mm <- genCall n
@@ -80,7 +80,7 @@ genFuncCall n t funcPs = do
 
 -- | Generates a function call given the name, inputs, and outputs for the
 -- function.
-genInOutCall :: (OOProg r) => Name -> GenState [CodeVarChunk] -> 
+genInOutCall :: (OOProg r) => Name -> GenState [CodeVarChunk] ->
   GenState [CodeVarChunk] -> GenState (Maybe (MSStatement r))
 genInOutCall n inFunc outFunc = do
   mm <- genCall n
@@ -94,12 +94,12 @@ genInOutCall n inFunc outFunc = do
         stmt <- fAppInOut m n (map valueOf ins) outs both
         return $ Just stmt
   genInOutCall' mm
-  
+
 -- | Gets the name of the module containing the function being called.
--- If the function is not in either the module export map or class definition map, 
+-- If the function is not in either the module export map or class definition map,
 --   return 'Nothing'.
--- If the function is not in module export map but is in the class definition map, 
--- that means it is a private function, so return 'Nothing' unless it is in the 
+-- If the function is not in module export map but is in the class definition map,
+-- that means it is a private function, so return 'Nothing' unless it is in the
 -- current class.
 genCall :: Name -> GenState (Maybe Name)
 genCall n = do
@@ -108,7 +108,7 @@ genCall n = do
       genCallExported Nothing = genCallInClass (Map.lookup n $ clsMap g)
       genCallExported m = return m
       genCallInClass Nothing = return Nothing
-      genCallInClass (Just c) = if c == currc then return $ Map.lookup c (eMap 
+      genCallInClass (Just c) = if c == currc then return $ Map.lookup c (eMap
         g) <|> error (c ++ " class missing from export map")
         else return Nothing
   genCallExported $ Map.lookup n (eMap g)

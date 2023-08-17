@@ -1,0 +1,294 @@
+\chapter{My Appendix}
+\label{appendix_a}
+
+This appendix lists tables and code to further explain some parts of this report.
+
+\section{Constructors of DifferentialModel}
+\label{const_de}
+
+% \begin{listing}[ht]
+\begin{haskell1}
+-- $K_d$ is qdDerivGain
+-- $y_t$ is opProcessVariable
+-- $K_p$ is qdPropGain
+-- $r_t$ is qdSetPointTD
+imPDRC :: DifferentialModel
+imPDRC = makeASingleDE
+	time
+	opProcessVariable
+	lhs
+	rhs
+	"imPDRC"
+	(nounPhraseSP "Computation of the Process Variable as a function of time")
+	EmptyS
+	where 
+	lhs = [exactDbl 1 `addRe` sy qdDerivGain $* (opProcessVariable $^^ 1)]
+	$+ (exactDbl 1 $* (opProcessVariable $^^ 2))
+	$+ (exactDbl 20 `addRe` sy qdPropGain $* (opProcessVariable $^^ 0))
+	rhs = sy qdSetPointTD `mulRe` sy qdPropGain
+\end{haskell1}
+\captionof{listing}{Using Input Language for the Example~\ref{eq_odeexmaple} in DifferentialModel}
+% \label{code_scexinputl}
+% \end{listing}
+
+% \begin{listing}[ht]
+% \begin{haskell1}
+% imPDRC :: DifferentialModel
+% imPDRC = makeASystemDE
+% 	time
+% 	opProcessVariable
+% 	coeffs = [[exactDbl 1, exactDbl 1 `addRe` sy qdDerivGain, exactDbl 20 `addRe` sy qdPropGain]]
+% 	unknowns = [2, 1, 0]
+% 	constants = [sy qdSetPointTD `mulRe` sy qdPropGain]
+% 	"imPDRC"
+% 	(nounPhraseSP "Computation of the Process Variable as a function of time")
+% 	EmptyS
+% \end{haskell1}
+% \captionof{listing}{Explicitly set values for the example~\ref{eq_odeexmaple} in DifferentialModel}
+% \label{code_scexmatrix}
+% \end{listing}
+
+\pagebreak
+
+\section{Numerical Solution Implementation}
+\label{numsol}
+
+% \begin{listing}[ht]
+\begin{python1}
+def func_y_t(K_d, K_p, r_t, t_sim, t_step):
+    def f(t, y_t):
+        return [y_t[1], -(1.0 + K_d) * y_t[1] + -(20.0 + K_p) * y_t[0] + r_t * K_p]
+    
+    r = scipy.integrate.ode(f)
+    r.set_integrator("dopri5", atol=Constants.Constants.AbsTol, rtol=Constants.Constants.RelTol)
+    r.set_initial_value([0.0, 0.0], 0.0)
+    y_t = [[0.0, 0.0][0]]
+    while r.successful() and r.t < t_sim:
+        r.integrate(r.t + t_step)
+        y_t.append(r.y[0])
+    
+    return y_t
+\end{python1}
+\captionof{listing}{Source Code of Solving PDController in Scipy}
+% \label{code_pythonscipy}
+% \end{listing}
+
+% \begin{listing}[ht]
+\begin{java1}
+public static ArrayList<Double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
+	ArrayList<Double> y_t;
+	ODEStepHandler stepHandler = new ODEStepHandler();
+	ODE ode = new ODE(K_p, K_d, r_t);
+	double[] curr_vals = {0.0, 0.0};
+
+	FirstOrderIntegrator it = new DormandPrince54Integrator(t_step, t_step, Constants.AbsTol, Constants.RelTol);
+	it.addStepHandler(stepHandler);
+	it.integrate(ode, 0.0, curr_vals, t_sim, curr_vals);
+	y_t = stepHandler.y_t;
+
+	return y_t;
+}
+\end{java1}
+\captionof{listing}{A Linear System of First-order Representation in ACM}
+% \label{code_javaacm}
+% \end{listing}
+
+% \begin{listing}
+\begin{cplusplus1}
+vector<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
+	vector<double> y_t;
+	ODE ode = ODE(K_p, K_d, r_t);
+	vector<double> currVals{0.0, 0.0};
+	Populate pop = Populate(y_t);
+		
+	boost::numeric::odeint::runge_kutta_dopri5<vector<double>> rk = boost::numeric::odeint::runge_kutta_dopri5<vector<double>>();
+	auto stepper = boost::numeric::odeint::make_controlled(Constants::AbsTol, Constants::RelTol, rk);
+	boost::numeric::odeint::integrate_const(stepper, ode, currVals, 0.0, t_sim, t_step, pop);
+	
+	return y_t;
+}	
+\end{cplusplus1}
+\captionof{listing}{A Linear System of First-order Representation in ODEINT}
+% \label{code_cplusplusodeint}
+% \end{listing}
+
+% \begin{listing}[ht]
+% \begin{csharp1}
+% public static List<double> func_y_t(double K_d, double K_p, double r_t, double t_sim, double t_step) {
+% 	List<double> y_t;
+% 	Func<double, Vector, Vector> f = (t, y_t_vec) => {
+% 		return new Vector(y_t_vec[1], -(1.0 + K_d) * y_t_vec[1] + -(20.0 + K_p) * y_t_vec[0] + r_t * K_p);
+% 	};
+% 	Options opts = new Options();
+% 	opts.AbsoluteTolerance = Constants.AbsTol;
+% 	opts.RelativeTolerance = Constants.RelTol;
+	
+% 	Vector initv = new Vector(new double[] {0.0, 0.0});
+% 	IEnumerable<SolPoint> sol = Ode.RK547M(0.0, initv, f, opts);
+% 	IEnumerable<SolPoint> points = sol.SolveFromToStep(0.0, t_sim, t_step);
+% 	y_t = new List<double> {};
+% 	foreach (SolPoint sp in points) {
+% 		y_t.Add(sp.X[0]);
+% 	}
+	
+% 	return y_t;
+% }
+% \end{csharp1}
+% \captionof{listing}{Source code of solving PDController in OSLO}
+% \label{code_csharposlo}
+% \end{listing}
+
+\pagebreak
+
+\section{Algorithm in External Libraries}
+\label{alg_externallib}
+
+\begin{table}[ht]
+\begin{tabular}{ p{0.2\textwidth} p{0.7\textwidth} }
+	\textbf{Name} & \textbf{Description} \\
+	\toprule
+	\verb|zvode| & Complex-valued Variable-coefficient Ordinary Differential Equation solver, with fixed-leading-coefficient implementation. It provides implicit Adams method (for non-stiff problems) and a method based on backward differentiation formulas (BDF) (for stiff problems).\\ \hline
+	\verb|lsoda| & Real-valued Variable-coefficient Ordinary Differential Equation solver, with fixed-leading-coefficient implementation. It provides automatic method switching between implicit Adams method (for non-stiff problems) and a method based on backward differentiation formulas (BDF) (for stiff problems).\\ \hline
+	\verb|dopri5| & This is an explicit runge-kutta method of order (4)5 due to Dormand \& Prince (with stepsize control and dense output).\\ \hline
+	\verb|dop853| & This is an explicit runge-kutta method of order 8(5,3) due to Dormand \& Prince (with stepsize control and dense output).\\
+	\bottomrule	
+\end{tabular}	
+\caption{Algorithm Options in Scipy - Python~\citep{scipyfun}}	
+\label{tab_algscipy}
+\end{table}
+
+\begin{table}[ht]
+\begin{tabular}{ p{0.2\textwidth} p{0.7\textwidth} }
+	\textbf{Name} & \textbf{Description} \\
+	\toprule
+	\verb|RK547M| & This method is most appropriate for solving non-stiff ODE systems. It is based on classical Runge-Kutta formulae with modifications for automatic error and step size control.\\ \hline
+	\verb|GearBDF| & It is an implementation of the Gear back differentiation method, a multi-step implicit method for stiff ODE systems solving.\\
+	\bottomrule	
+\end{tabular}	
+\caption{Algorithm Options in OSLO - C\#~\citep{oslofun}}	
+\label{tab_algodeint}
+\end{table}
+
+\begin{table}
+\begin{tabular}{ p{0.13\textwidth} | p{0.27\textwidth} p{0.57\textwidth} }
+	\textbf{Step Size} & \textbf{Name} & \textbf{Description} \\
+	\toprule
+	Fixed Step & \verb|Euler| & This class implements a simple Euler integrator for Ordinary Differential Equations.\\ \hline
+	& \verb|Midpoint| & This class implements a second order Runge-Kutta integrator for Ordinary Differential Equations.\\ \hline
+	& \verb|Classical RungeKutta| & This class implements the classical fourth order Runge-Kutta integrator for Ordinary Differential Equations (it is the most often used Runge-Kutta method).\\ \hline
+	& \verb|Gill| & This class implements the Gill fourth order Runge-Kutta integrator for Ordinary Differential Equations.\\ \hline
+	& \verb|Luther| & This class implements the Luther sixth order Runge-Kutta integrator for Ordinary Differential Equations.\\ \hline
+	Adaptive Stepsize & \verb|Higham and Hall| & This class implements the 5(4) Higham and Hall integrator for Ordinary Differential Equations.\\ \hline
+	& \verb|DormandPrince 5(4)| & This class implements the 5(4) Dormand-Prince integrator for Ordinary Differential Equations.\\ \hline
+	& \verb|DormandPrince 8(5,3)| & This class implements the 8(5,3) Dormand-Prince integrator for Ordinary Differential Equations.\\ \hline
+	& \verb|Gragg-Bulirsch-Stoer| & This class implements a Gragg-Bulirsch-Stoer integrator for Ordinary Differential Equations.\\ \hline
+	& \verb|Adams-Bashforth| & This class implements explicit Adams-Bashforth integrators for Ordinary Differential Equations.\\ \hline
+	& \verb|Adams-Moulton| & This class implements implicit Adams-Moulton integrators for Ordinary Differential Equations.\\
+	\bottomrule	
+\end{tabular}	
+\caption{Algorithm Options in Apache Commons Maths - Java~\citep{apachefun}}	
+\label{tab_algacm}
+\end{table}
+
+\begin{table}
+\begin{tabular}{ p{0.4\textwidth} p{0.5\textwidth} }
+	\textbf{Name} & \textbf{Description} \\
+	\toprule
+	\verb|euler| & Explicit Euler: Very simple, only for demonstrating purpose\\ \hline
+	\verb|runge_kutta4| & Runge-Kutta 4: The classical Runge Kutta scheme, good general scheme without error control.\\ \hline
+	\verb|runge_kutta_cash_karp54| & Cash-Karp: Good general scheme with error estimation.\\ \hline
+	\verb|runge_kutta_dopri5| & Dormand-Prince 5: Standard method with error control and dense output.\\ \hline
+	\verb|runge_kutta_fehlberg78| & Fehlberg 78: Good high order method with error estimation.\\ \hline
+	\verb|adams_bashforth_moulton| & Adams-Bashforth-Moulton: Multi-step method with high performance.\\ \hline
+	\verb|controlled_runge_kutta| & Controlled Error Stepper: Error control for the Runge-Kutta steppers.\\ \hline
+	\verb|dense_output_runge_kutta| & Dense Output Stepper: Dense output for the Runge-Kutta steppers.\\ \hline
+	\verb|bulirsch_stoer| & Bulirsch-Stoer: Stepper with step size, order control and dense output. Very good if high precision is required..\\ \hline
+	\verb|implicit_euler| & Implicit Euler: Basic implicit routine.\\ \hline
+	\verb|rosenbrock4| & Rosenbrock 4: Solver for stiff systems with error control and dense output.\\ \hline
+	\verb|symplectic_euler| & Symplectic Euler: Basic symplectic solver for separable Hamiltonian system.\\ \hline
+	\verb|symplectic_rkn_sb3a_mclachlan| & Symplectic RKN McLachlan: Symplectic solver for separable Hamiltonian system with order 6.\\
+	\bottomrule	
+\end{tabular}	
+\caption{Algorithm Options in ODEINT - C++~\citep{odeintfun}}	
+\label{tab_algodeint}
+\end{table}
+
+\pagebreak
+
+\section{Generated Code for Double Pendulum}
+\label{gencodedbl}
+ 
+We altered the source code to make it more readable. In Code~\ref{code_pythondbl} and Code~\ref{code_csharpdbl}, lines 2-12 are in one line. In Code~\ref{code_javadbl} and Code~\ref{code_cppdbl}, lines 4-5 are in one line. Lines 9-10 are in one line.
+\begin{listing}[ht]
+\begin{python1}
+def f(t, theta):
+	return [
+		theta[1],
+
+		(-9.8 * (2.0 * m_1 + m_2) * math.sin(theta[0]) - m_2 * 9.8 * math.sin(theta[0] - 2.0 * theta[2]) - 2.0 * math.sin(theta[0] - theta[2]) * m_2 * (theta[3] ** 2.0 * L_2 + theta[1] ** 2.0 * L_1 * math.cos(theta[0] - theta[2]))) 
+			/ (L_1 * (2.0 * m_1 + m_2 - m_2 * math.cos(2.0 * theta[0] - 2.0 * theta[2]))), 
+		
+		theta[3], 
+		
+		2.0 * math.sin(theta[0] - theta[2]) * (theta[1] ** 2.0 * L_1 * (m_1 + m_2) + 9.8 * (m_1 + m_2) * math.cos(theta[0]) + theta[3] ** 2.0 * L_2 * m_2 * math.cos(theta[0] - theta[2])) 
+			/ (L_2 * (2.0 * m_1 + m_2 - m_2 * math.cos(2.0 * theta[0] - 2.0 * theta[2])))
+		]
+\end{python1}
+\captionof{listing}{Generate Python Code for Double Pendulum}
+\label{code_pythondbl}
+\end{listing} 
+
+\begin{listing}[ht]
+\begin{csharp1}
+Func<double, Vector, Vector> f = (t, theta_vec) => {
+	return new Vector(
+		theta_vec[1], 
+
+		(-9.8 * (2.0 * m_1 + m_2) * Math.Sin(theta_vec[0]) - m_2 * 9.8 * Math.Sin(theta_vec[0] - 2.0 * theta_vec[2]) - 2.0 * Math.Sin(theta_vec[0] - theta_vec[2]) * m_2 * (Math.Pow(theta_vec[3], 2.0) * L_2 + Math.Pow(theta_vec[1], 2.0) * L_1 * Math.Cos(theta_vec[0] - theta_vec[2]))) 
+			/ (L_1 * (2.0 * m_1 + m_2 - m_2 * Math.Cos(2.0 * theta_vec[0] - 2.0 * theta_vec[2]))), 
+		
+		theta_vec[3], 
+
+		2.0 * Math.Sin(theta_vec[0] - theta_vec[2]) * (Math.Pow(theta_vec[1], 2.0) * L_1 * (m_1 + m_2) + 9.8 * (m_1 + m_2) * Math.Cos(theta_vec[0]) + Math.Pow(theta_vec[3], 2.0) * L_2 * m_2 * Math.Cos(theta_vec[0] - theta_vec[2])) 
+			/ (L_2 * (2.0 * m_1 + m_2 - m_2 * Math.Cos(2.0 * theta_vec[0] - 2.0 * theta_vec[2]))));
+};
+\end{csharp1}
+\captionof{listing}{Generate C\# Code for Double Pendulum}
+\label{code_csharpdbl}
+\end{listing} 
+
+\begin{listing}[ht]
+\begin{java1}
+public void computeDeriv(double t, double[] theta, double[] dtheta) {
+	dtheta[0] = theta[1];
+
+	dtheta[1] = (-9.8 * (2.0 * m_1 + m_2) * Math.sin(theta[0]) - m_2 * 9.8 * Math.sin(theta[0] - 2.0 * theta[2]) - 2.0 * Math.sin(theta[0] - theta[2]) * m_2 * (Math.pow(theta[3], 2.0) * L_2 + Math.pow(theta[1], 2.0) * L_1 * Math.cos(theta[0] - theta[2]))) 
+		/ (L_1 * (2.0 * m_1 + m_2 - m_2 * Math.cos(2.0 * theta[0] - 2.0 * theta[2])));
+	
+	dtheta[2] = theta[3];
+
+	dtheta[3] = 2.0 * Math.sin(theta[0] - theta[2]) * (Math.pow(theta[1], 2.0) * L_1 * (m_1 + m_2) + 9.8 * (m_1 + m_2) * Math.cos(theta[0]) + Math.pow(theta[3], 2.0) * L_2 * m_2 * Math.cos(theta[0] - theta[2])) 
+		/ (L_2 * (2.0 * m_1 + m_2 - m_2 * Math.cos(2.0 * theta[0] - 2.0 * theta[2])));
+}
+\end{java1}
+\captionof{listing}{Generate Java Code for Double Pendulum}
+\label{code_javadbl}
+\end{listing}
+
+\begin{listing}[ht]
+\begin{cplusplus1}
+void ODE::operator()(vector<double> theta, vector<double> &dtheta, double t) {
+	dtheta.at(0) = theta.at(1);
+
+	dtheta.at(1) = (-9.8 * (2.0 * m_1 + m_2) * sin(theta.at(0)) - m_2 * 9.8 * sin(theta.at(0) - 2.0 * theta.at(2)) - 2.0 * sin(theta.at(0) - theta.at(2)) * m_2 * (pow(theta.at(3), 2.0) * L_2 + pow(theta.at(1), 2.0) * L_1 * cos(theta.at(0) - theta.at(2)))) 
+		/ (L_1 * (2.0 * m_1 + m_2 - m_2 * cos(2.0 * theta.at(0) - 2.0 * theta.at(2))));
+	
+	dtheta.at(2) = theta.at(3);
+
+	dtheta.at(3) = 2.0 * sin(theta.at(0) - theta.at(2)) * (pow(theta.at(1), 2.0) * L_1 * (m_1 + m_2) + 9.8 * (m_1 + m_2) * cos(theta.at(0)) + pow(theta.at(3), 2.0) * L_2 * m_2 * cos(theta.at(0) - theta.at(2))) 
+		/ (L_2 * (2.0 * m_1 + m_2 - m_2 * cos(2.0 * theta.at(0) - 2.0 * theta.at(2))));
+}
+\end{cplusplus1}
+\captionof{listing}{Generate C\texttt{++} Code for Double Pendulum}
+\label{code_cppdbl}
+\end{listing} 

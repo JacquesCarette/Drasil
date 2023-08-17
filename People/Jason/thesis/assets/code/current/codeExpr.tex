@@ -1,0 +1,74 @@
+\begin{haskell}{CodeExpr Definition}{codeExprDefinition}{https://github.com/JacquesCarette/Drasil/blob/75db7d2bc8268e5d3600e8f36a960ced66fc4d60/code/drasil-code-base/lib/Language/Drasil/Code/Expr.hs\#L69-L137}
+-- | Expression language where all terms also denote a term in GOOL
+--   (i.e. translation is total and meaning preserving).
+data CodeExpr where
+  -- | Brings literals into the expression language.
+  Lit      :: Literal -> CodeExpr
+
+
+  -- | Takes an associative arithmetic operator with a list of expressions.
+  AssocA   :: AssocArithOper -> [CodeExpr] -> CodeExpr
+  -- | Takes an associative boolean operator with a list of expressions.
+  AssocB   :: AssocBoolOper  -> [CodeExpr] -> CodeExpr
+  -- | C stands for "Chunk", for referring to a chunk in an expression.
+  --   Implicitly assumes that the chunk has a symbol.
+  C        :: UID -> CodeExpr
+  -- | A function call accepts a list of parameters and a list of named parameters.
+  --   For example
+  --
+  --   * F(x) is (FCall F [x] []).
+  --   * F(x,y) would be (FCall F [x,y]).
+  --   * F(x,n=y) would be (FCall F [x] [(n,y)]).
+  FCall    :: UID -> [CodeExpr] -> [(UID, CodeExpr)] -> CodeExpr
+  -- | Actor creation given 'UID', parameters, and named parameters.
+  New      :: UID -> [CodeExpr] -> [(UID, CodeExpr)] -> CodeExpr
+  -- | Message an actor:
+  --
+  --   * 1st 'UID' is the actor,
+  --   * 2nd 'UID' is the method.
+  Message  :: UID -> UID -> [CodeExpr] -> [(UID, CodeExpr)] -> CodeExpr
+  -- | Access a field of an actor:
+  --
+  --   * 1st 'UID' is the actor,
+  --   * 2nd 'UID' is the field.
+  Field    :: UID -> UID -> CodeExpr
+  -- | For multi-case expressions, each pair represents one case.
+  Case     :: Completeness -> [(CodeExpr, CodeExpr)] -> CodeExpr
+  -- | Represents a matrix of expressions.
+  Matrix   :: [[CodeExpr]] -> CodeExpr
+  
+  -- | Unary operation for most functions (eg. sin, cos, log, etc.).
+  UnaryOp       :: UFunc -> CodeExpr -> CodeExpr
+  -- | Unary operation for @Bool -> Bool@ operations.
+  UnaryOpB      :: UFuncB -> CodeExpr -> CodeExpr
+  -- | Unary operation for @Vector -> Vector@ operations.
+  UnaryOpVV     :: UFuncVV -> CodeExpr -> CodeExpr
+  -- | Unary operation for @Vector -> Number@ operations.
+  UnaryOpVN     :: UFuncVN -> CodeExpr -> CodeExpr
+
+
+  -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
+  ArithBinaryOp :: ArithBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+  -- | Binary operator for boolean operators (implies, iff).
+  BoolBinaryOp  :: BoolBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+  -- | Binary operator for equality between expressions.
+  EqBinaryOp    :: EqBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+  -- | Binary operator for indexing two expressions.
+  LABinaryOp    :: LABinOp -> CodeExpr -> CodeExpr -> CodeExpr
+  -- | Binary operator for ordering expressions (less than, greater than, etc.).
+  OrdBinaryOp   :: OrdBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+  -- | Binary operator for @Vector x Vector -> Vector@ operations (cross product).
+  VVVBinaryOp   :: VVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+  -- | Binary operator for @Vector x Vector -> Number@ operations (dot product).
+  VVNBinaryOp   :: VVNBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+
+
+  -- | Operators are generalized arithmetic operators over a 'DomainDesc'
+  --   of an 'Expr'.  Could be called BigOp.
+  --   ex: Summation is represented via 'Add' over a discrete domain.
+  Operator :: AssocArithOper -> DiscreteDomainDesc CodeExpr CodeExpr -> CodeExpr -> CodeExpr
+  -- | The expression is an element of a space.
+  -- IsIn     :: Expr -> Space -> Expr
+  -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
+  RealI    :: UID -> RealInterval CodeExpr CodeExpr -> CodeExpr
+\end{haskell}

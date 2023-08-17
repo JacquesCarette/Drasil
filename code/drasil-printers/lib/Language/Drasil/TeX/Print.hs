@@ -72,6 +72,7 @@ lo (Graph ps w h c l)    _  = toText $ makeGraph
   (pure $ text $ maybe "" (\x -> "minimum height = " ++ show x ++ "em, ") h)
   (spec c) (spec l)
 lo (Cell _) _               = empty
+lo (CodeBlock _) _          = empty
 
 -- | Converts layout objects into a document form.
 print :: PrintingInformation -> [LayoutObj] -> D
@@ -147,12 +148,12 @@ pOps Dim      = command "mathsf" "dim"
 pOps Exp      = pure $ text "e"
 pOps Neg      = pure hyph
 pOps Cross    = texSym "times"
+pOps VAdd     = pure pls
+pOps VSub     = pure hyph -- unfortunately, hyphen and - are the same
 pOps Dot      = commandD "cdot" empty
+pOps Scale    = pure $ text " "
 pOps Eq       = pure assign
 pOps NEq      = commandD "neq" empty
--- Old way of doing less than and greater than
--- pOps Lt       = pure lt
--- pOps Gt       = pure gt
 pOps Lt       = commandD "lt" empty
 pOps Gt       = commandD "gt" empty
 pOps GEq      = commandD "geq" empty
@@ -172,6 +173,7 @@ pOps Perc     = texSym "%"
 pOps LArrow   = commandD "leftarrow"  empty
 pOps RArrow   = commandD "rightarrow" empty
 pOps ForAll   = commandD "ForAll"     empty
+pOps Partial  = commandD "partial"    empty
 
 -- | Prints fencing notation ("(),{},|,||").
 fence :: OpenClose -> Fence -> D
@@ -202,22 +204,17 @@ cases e  = vpunctuate dbs (map _case e)
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
 makeTable [] _ _ _ = error "Completely empty table (not even header)"
 makeTable [_] _ _ _ = empty -- table with no actual contents... don't error
-makeTable lls@(h:tlines) r bool t = mkEnvArgBr ltab (unwords $ anyBig lls) $
-  command0 "toprule"
+makeTable lls@(h:tlines) r bool t = mkEnv "longtblr" $
+  (if bool then sq $ pure (text "caption=") <> br t else empty)
+  %% br (pure (text "colspec=") <> br (pure $ text $ unwords $ anyBig lls)
+    <> pure (text ", rowhead=1, hline{1,Z}=\\heavyrulewidth, hline{2}=\\lightrulewidth"))
   %% makeHeaders h
-  %% command0 "midrule"
-  %% command0 "endhead"
   %% makeRows tlines
-  %% command0 "bottomrule"
-  %% (if bool then caption t else caption empty)
   %% label r
   where
-    --Only needed if "X[l]" is used
-    ltab = if anyLong lls then "longtabu" else "longtable"
     descr True  = "X[l]"
     descr False = "l"
     --returns "X[l]" for columns with long fields
-    anyLong = any longColumn . transpose
     anyBig = map (descr . longColumn) . transpose
     longColumn = any (\x -> specLength x > 50)
 
@@ -242,9 +239,10 @@ dontCount = "\\/[]{}()_^$:"
 makeHeaders :: [Spec] -> D
 makeHeaders ls = hpunctuate (text " & ") (map (bold . spec) ls) %% pure dbs
 
--- | Creates the rows for a table.
+-- | Create rows for a table with a single line break between them.
 makeRows :: [[Spec]] -> D
-makeRows = mconcat . map (\c -> makeColumns c %% pure dbs)
+makeRows [] = mempty
+makeRows lls = foldr1 ((%%) . (%% pure dbs)) $ map makeColumns lls
 
 -- | Creates the columns for a table.
 makeColumns :: [Spec] -> D
@@ -347,7 +345,7 @@ makeDefTable sm ps l = mkEnvArgBr "tabular" (col rr colAwidth ++ col (rr ++ "\\a
 makeDRows :: PrintingInformation -> [(String,[LayoutObj])] -> D
 makeDRows _  []         = error "No fields to create Defn table"
 makeDRows sm ls    = foldl1 (%%) $ map (\(f, d) -> dBoilerplate %%  pure (text (f ++ " & ")) <> print sm d) ls
-  where dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs
+  where dBoilerplate = pure $ dbs <+> text "\\midrule"
 
 -----------------------------------------------------------------
 ------------------ EQUATION PRINTING------------------------
@@ -455,9 +453,10 @@ makeBib sm bib = mkEnvArgBr "filecontents*" (bibFname ++ ".bib") (mkBibRef sm bi
   command "nocite" "*" %% command "bibstyle" bibStyleT %%
   command0 "printbibliography" <> sq (pure $ text "heading=none")
 
--- | Renders a bibliographical reference.
+-- | Renders a bibliographical reference with a single line break between
+-- entries.
 mkBibRef :: PrintingInformation -> BibRef -> D
-mkBibRef sm = mconcat . map (renderF sm)
+mkBibRef sm = foldr ((%%) . renderF sm) mempty
 
 -- | Helper that renders a citation.
 renderF :: PrintingInformation -> Citation -> D

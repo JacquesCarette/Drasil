@@ -8,7 +8,7 @@ module Language.Drasil.Sentence (
   -- ** Context Types
   SentenceStyle(..), RefInfo(..), TermCapitalization(..),
   -- * Functions
-  (+:+), (+:+.), (+:), (!.), capSent, ch, eS, eS', sC, sDash, sParen,
+  (+:+), (+:+.), (+:), (!.), capSent, headSent, ch, eS, eS', sC, sDash, sParen,
   sentencePlural, sentenceShort,
   sentenceSymb, sentenceTerm) where
 
@@ -92,7 +92,6 @@ instance Semigroup Sentence where
 -- | Sentences can be empty or directly concatenated.
 instance Monoid Sentence where
   mempty = EmptyS
-  mappend = (:+:)
 
 -- | Smart constructors for turning a 'UID' into a 'Sentence'.
 sentencePlural, sentenceShort, sentenceSymb, sentenceTerm :: UID -> Sentence
@@ -142,3 +141,7 @@ capSent (S (s:ss)) = S (toUpper s : ss)
 --capSent (plural x) = atStart' x
 capSent (a :+: b)  = capSent a :+: b
 capSent x          = x
+
+-- | Helper which creates a Header with size s of the 'Sentence'.
+headSent :: Int -> Sentence -> Sentence
+headSent s x = S (concat (replicate s "#")) :+: S " " :+: x

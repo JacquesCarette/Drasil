@@ -1,7 +1,7 @@
 {-# LANGUAGE TupleSections #-}
 module Drasil.Projectile.Choices where
 
-import Language.Drasil (Space(..), abrv)
+import Language.Drasil (Space(..), programName)
 import Language.Drasil.Code (Choices(..), Comments(..), 
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
@@ -24,7 +24,7 @@ import Data.Char (toLower)
 genCodeWithChoices :: [Choices] -> IO ()
 genCodeWithChoices [] = return ()
 genCodeWithChoices (c:cs) = let dir = map toLower $ codedDirName (getSysName fullSI) c
-                                getSysName SI{_sys = sysName} = abrv sysName
+                                getSysName SI{_sys = sysName} = programName sysName
   in do
     workingDir <- getCurrentDirectory
     createDirectoryIfMissing False dir
@@ -91,7 +91,8 @@ choiceCombos = [baseChoices,
     optFeats = makeOptFeats
       (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
       (makeLogConfig [LogVar, LogFunc] "log.txt")
-      [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME]
+      [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME],
+    folderVal = 5
   },
   baseChoices {
     dataInfo = makeData Bundled WithInputs Var,
@@ -99,11 +100,12 @@ choiceCombos = [baseChoices,
     optFeats = makeOptFeats
       (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
       (makeLogConfig [LogVar, LogFunc] "log.txt")
-      [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME]
+      [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME],
+    folderVal = 5
   }]
 
 matchToFloats :: SpaceMatch
-matchToFloats = matchSpaces (map (,[Float, Double]) [Real, Radians, Rational])
+matchToFloats = matchSpaces (map (,[Float, Double]) [Real, Rational])
 
 baseChoices :: Choices
 baseChoices = defaultChoices {
@@ -115,5 +117,6 @@ baseChoices = defaultChoices {
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
     (makeLogConfig [] "log.txt")
     [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME],
-  srsConstraints = makeConstraints Warning Warning
+  srsConstraints = makeConstraints Warning Warning,
+  folderVal = 5
 }

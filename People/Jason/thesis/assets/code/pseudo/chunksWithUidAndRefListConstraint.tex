@@ -1,0 +1,3 @@
+\begin{pseudohaskell}{Chunks with UID and Reference List Constraints}{chunksWithUidAndRefListConstraint}
+data Chunk = forall a. (Typeable a, HasUID a, HasReferences a) => Chunk a
+\end{pseudohaskell}

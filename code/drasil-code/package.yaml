@@ -19,10 +19,10 @@ dependencies:
 - filepath
 - split
 - drasil-build
-- drasil-code-base
 - drasil-database
 - drasil-gool
 - drasil-lang
+- drasil-metadata
 - drasil-printers
 - drasil-sysinfo
 - drasil-theory
@@ -39,6 +39,7 @@ library:
   - Data.Drasil.ExternalLibraries.ODELibraries
   other-modules:
     - Language.Drasil.Chunk.Code
+    - Language.Drasil.Chunk.CodeBase
     - Language.Drasil.Chunk.CodeDefinition
     - Language.Drasil.Chunk.ConstraintMap
     - Language.Drasil.Chunk.NamedArgument
@@ -89,7 +90,7 @@ library:
   - condition: false
     other-modules: Paths_drasil_code
 
-tests:
+executables:
   codegenTest:
     main: Main
     source-dirs: test
@@ -99,6 +100,8 @@ tests:
     - Helper
     - Observer
     - PatternTest
+    - VectorTest
+    - NameGenTest
     ghc-options:
     - -threaded
     - -O2

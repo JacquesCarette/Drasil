@@ -1,0 +1,8 @@
+# Length of the upper rod (m)
+2.0
+# Length of the bottom rod (m)
+1.0
+# Mass of the upper object(kg)
+0.5
+# Mass of the bottom object(kg)
+2.0

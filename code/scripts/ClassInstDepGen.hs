@@ -1,3 +1,12 @@
+#!/usr/bin/env stack
+{- stack script
+   --resolver lts-20.20
+   --package split
+   --package directory,filepath
+   --package text
+   --package containers
+-}
+
 -- FIXME: use real parser (Low Priority; see line 267)
 -- | Data table generator. Uses information from SourceCodeReader.hs 
 -- to organize all types, classes, and instances in Drasil.
@@ -209,9 +218,16 @@ isEntryEmpty :: SmallEntry -> Bool
 isEntryEmpty (SE [] [] [] []) = False
 isEntryEmpty _ = True
 
+escapeDotID :: String -> String
+escapeDotID = map go
+  where
+    go :: Char -> Char
+    go '.' = '_'
+    go c = c
+
 -- Helper to convert class instances into graph edges.
 mkPkgEdges :: [ClassInstance] -> [Edges]
-mkPkgEdges cis = concatOver2 $ map (\ClassInstance{dnType=typ, clsInstName=cls} -> (typ, [cls])) cis
+mkPkgEdges cis = concatOver2 $ map (\ClassInstance {dnType = typ, clsInstName = cls} -> (escapeDotID typ, [escapeDotID cls])) cis
 
 -- Helper to concatenate tuples based on the first part of the tuple
 -- (if two elements have the same thing for the first part of the tuple, concatenate the second parts)
@@ -375,7 +391,7 @@ compileEntryData ordClassInsts entry filename = do
 
 -- gets folder from dictionary using folder name (iff it exists in dictionary)
 getFolder :: Map.Map DC.FolderName DC.Folder -> DC.FolderName -> DC.Folder
-getFolder dict name = fromJust $ Map.lookup name dict
+getFolder dict name = fromMaybe (error $ "Could not find " ++ name) $ Map.lookup name dict
 
 -- converts list to dictionary list format (for use by drasil- directories only)
 toDictList :: DC.Folder -> (DC.FolderName,DC.Folder)

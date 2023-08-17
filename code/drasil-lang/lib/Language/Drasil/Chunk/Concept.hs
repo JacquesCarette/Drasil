@@ -3,16 +3,12 @@ module Language.Drasil.Chunk.Concept (
   -- * Concept Chunks
   -- ** From an idea ('IdeaDict')
   ConceptChunk, dcc, dccWDS, cc, cc', ccs, cw,
-  -- ** From a common idea ('CI')
-  CommonConcept, dcc', dccWDS',
   -- ** From a 'ConceptChunk'
   ConceptInstance, cic
   ) where
 
 import Language.Drasil.Classes (Idea, Definition(defn), ConceptDomain(cdom), Concept)
-import Language.Drasil.Chunk.CommonIdea (commonIdea)
-import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict),
-  ConceptInstance(ConInst), CommonConcept(ComConDict))
+import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict), ConceptInstance(ConInst))
 import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Chunk.NamedIdea(mkIdea,nw, nc)
 import Language.Drasil.NounPhrase (NP, pn)
@@ -29,18 +25,9 @@ dcc :: String -> NP -> String -> ConceptChunk
 dcc i ter des = ConDict (mkIdea i ter Nothing) (S des) []
 -- ^ Concept domain tagging is not yet implemented in this constructor.
 
--- | Identical to 'dcc', but takes an abbreviation ('String') and returns a 'CommonConcept' instead.
-dcc' :: String -> NP -> String -> String -> CommonConcept
-dcc' i t d a = ComConDict (commonIdea i t a []) (S d)
-
 -- | Similar to 'dcc', except the definition takes a 'Sentence'.
 dccWDS :: String -> NP -> Sentence -> ConceptChunk
 dccWDS i t d = ConDict (mkIdea i t Nothing) d []
-
--- | Similar to 'dcc', except the definition is a 'Sentence', takes
--- an abbreviation ('String') and returns a 'CommonConcept' instead.
-dccWDS' :: String -> NP -> Sentence -> String -> CommonConcept
-dccWDS' i t d a = ComConDict (commonIdea i t a []) d
 
 -- | Constructor for projecting an idea into a 'ConceptChunk'. Takes the definition of the 
 -- 'ConceptChunk' as a 'String'. Does not allow concept domain tagging.

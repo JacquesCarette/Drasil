@@ -1,0 +1,74 @@
+%------------------------------------------------------------------------------
+% Your Information
+%------------------------------------------------------------------------------
+
+\newcommand{\thesisType}{Thesis}
+
+\newcommand{\thesisTitle}{Adding Types and Theory Kinds to Drasil}
+\newcommand{\thesisHalfTitle}{\thesisTitle}
+
+\newcommand{\thesisAuthorName}{Jason Balaci}
+\newcommand{\thesisAuthorNameShort}{J.\ Balaci}
+\newcommand{\thesisAuthorCredentials}{B.Sc.}
+\newcommand{\thesisSupervisor}{Dr.\ Jacques Carette}
+
+\newcommand{\thesisTargetDegreeNameShort}{M.Sc.}
+\newcommand{\thesisTargetDegreeName}{Master of Science}
+
+\newcommand{\thesisTargetDegreeFocus}{Computer Science}
+\newcommand{\thesisTargetDegree}{\thesisTargetDegreeName{} in \thesisTargetDegreeFocus{}}
+
+\newcommand{\thesisInstitutionDepartmentShort}{Computing and Software}
+\newcommand{\thesisInstitutionGraduateStudies}{School of Graduate Studies}
+\newcommand{\thesisInstitutionDepartment}{Department of \thesisInstitutionDepartmentShort{}}
+\newcommand{\thesisInstitution}{McMaster University}
+\newcommand{\thesisCityProvince}{Hamilton, Ontario}
+
+\newcommand{\thesisSubmissionYear}{\the\year{}}
+\newcommand{\thesisSubmissionMonthYear}{\DTMtoday{}}
+
+%------------------------------------------------------------------------------
+% Metadata
+%------------------------------------------------------------------------------
+
+% The label placed on the last page of the front matter is used to find how many
+% pages belong in the front matter (which are numbered with roman numerals
+% instead of the traditional arabic numbering system). You only need to update
+% this label value IF the "Declaration of Academic Achievement" is not the last
+% page of your front matter.
+\newcommand{\thesisLastPageOfFrontMatterLabel}{chap:declaration_of_academic_achievement}
+
+%------------------------------------------------------------------------------
+% Options
+%------------------------------------------------------------------------------
+
+% - COMPILE FOR PRINTING THE PDF                              (default = false)
+%   If enabled, 'porthref'* links will appear in footnotes to assist readers.
+\newif\ifcompilingforprinting
+% \compilingforprintingtrue % Enable
+\compilingforprintingfalse % Disable
+
+% - DOUBLE SPACING                                            (default = 2x)
+% \newcommand{\thesisSpacing}{\doublespacing}
+% \newcommand{\thesisSpacing}{\singlespacing}
+\newcommand{\thesisSpacing}{\linespread{1}}
+
+% - QUESTION-DIRECTED WRITING & TO-DOS SWITCH                 (default = true)
+%   If enabled, "writing directive" boxes will be displayed in the PDF
+\newif\ifshowwritingdirectives
+% \showwritingdirectivestrue % Show questions and to-do notes
+\showwritingdirectivesfalse % Don't show questions and to-do notes
+
+% - RESET FOOTNOTE NUMBERING FOR EACH PAGE                    (default = false)
+%   If enabled, the footnote numbering will reset to 1 on each new page
+\newif\ifresetfootnotecounter
+% \resetfootnotecountertrue % Reset footnote numbering on each page
+\resetfootnotecounterfalse % Don't reset footnote numbering on each page
+
+% - MARGIN SIZES
+\newcommand{\thesisMarginTop}{3.8cm}                        % ("official" = 3.8cm)
+\newcommand{\thesisMarginBottom}{2.5cm}                     % ("official" = 2.5cm)
+\newcommand{\thesisMarginInner}{2.5cm}                      % ("official" = 3.8cm)
+\newcommand{\thesisMarginOuter}{2.5cm}                      % ("official" = 2.5cm)
+\newcommand{\thesisMarginHeadheight}{15pt}                  % (default = 15pt)
+\newcommand{\thesisTODOMarginSize}{2.25cm}                  % (default = 3.5cm)

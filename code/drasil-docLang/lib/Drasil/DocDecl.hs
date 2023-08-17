@@ -1,5 +1,10 @@
 {-# LANGUAGE GADTs #-}
 -- | Document declaration types and functions for generating Software Requirement Specifications.
+
+-- Changes to DocSection and its subections should be reflected in the 'Creating Your Project 
+-- in Drasil' tutorial found on the wiki:
+-- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
+
 module Drasil.DocDecl where
 
 import Drasil.DocumentLanguage.Core (DocDesc)

@@ -4,7 +4,8 @@ import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
-  notApp, physSyst, response, requirement, srs, type_, typUnc, unlikelyChg)
+  notApp, physSyst, response, requirement, refBy, refName, srs, type_, typUnc, 
+  unlikelyChg)
 import Data.Drasil.TheoryConcepts (dataDefn, inModel, thModel)
 
 {--}
@@ -16,20 +17,16 @@ con :: [CI]
 con = [annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
   lResistance, lShareFac, glassBR, stdOffDist, nFL]
 
-con' :: [NamedChunk]
+con' :: [IdeaDict]
 con' = [beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
   glass, ptOfExplsn, responseTy]
-
-{-glassBRProg :: CommonConcept
-glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")
-  "The glass safety analysis program" "GlassBR"-}
 
 {-Acronyms-}
 acronyms :: [CI]
 acronyms = [assumption, annealed, aR, dataDefn, fullyT, goalStmt, 
   glassTypeFac, heatS, iGlass, inModel, likelyChg, loadDurFactor, 
   lGlass, lResistance, lShareFac, notApp, nFL, physSyst, requirement, 
-  stdOffDist, srs, thModel, typUnc, unlikelyChg]
+  refBy, refName, stdOffDist, srs, thModel, typUnc, unlikelyChg]
 
 annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
   lResistance, lShareFac, glassBR, stdOffDist, nFL :: CI
@@ -54,7 +51,7 @@ nFL           = commonIdeaWithDict "nFL"           (nounPhraseSP "non-factored l
 -- TODO: See if we can make some of these terms less specific and/or parameterized.
  
 beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
-  glass, ptOfExplsn, responseTy :: NamedChunk
+  glass, ptOfExplsn, responseTy :: IdeaDict
 beam         = nc "beam"       (nounPhraseSP "beam")
 blastRisk    = nc "blastRisk"  (nounPhraseSP "blast risk")
 cantilever   = nc "cantilever" (nounPhraseSP "cantilever")

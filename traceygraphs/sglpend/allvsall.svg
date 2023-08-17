@@ -195,68 +195,50 @@
 <polygon fill="pink" stroke="black" points="1452.5,-36 1269.5,-36 1269.5,0 1452.5,0 1452.5,-36"/>
 <text text-anchor="middle" x="1361" y="-14.3" font-family="Times,serif" font-size="14.00">TM:NewtonSecLawMot</text>
 </g>
-<!-- xVel -->
+<!-- theory -->
 <g id="node20" class="node">
-<title>xVel</title>
-<polygon fill="palegreen" stroke="black" points="744,-108 630,-108 630,-72 744,-72 744,-108"/>
-<text text-anchor="middle" x="687" y="-86.3" font-family="Times,serif" font-size="14.00">GD:velocityIX</text>
-</g>
-<!-- yVel -->
-<g id="node21" class="node">
-<title>yVel</title>
-<polygon fill="palegreen" stroke="black" points="875.5,-108 762.5,-108 762.5,-72 875.5,-72 875.5,-108"/>
-<text text-anchor="middle" x="819" y="-86.3" font-family="Times,serif" font-size="14.00">GD:velocityIY</text>
-</g>
-<!-- xScalAcc -->
-<g id="node22" class="node">
-<title>xScalAcc</title>
-<polygon fill="palegreen" stroke="black" points="1040,-108 894,-108 894,-72 1040,-72 1040,-108"/>
-<text text-anchor="middle" x="967" y="-86.3" font-family="Times,serif" font-size="14.00">GD:accelerationIX</text>
-</g>
-<!-- yScalAcc -->
-<g id="node23" class="node">
-<title>yScalAcc</title>
-<polygon fill="palegreen" stroke="black" points="1203.5,-108 1058.5,-108 1058.5,-72 1203.5,-72 1203.5,-108"/>
-<text text-anchor="middle" x="1131" y="-86.3" font-family="Times,serif" font-size="14.00">GD:accelerationIY</text>
+<title>theory</title>
+<polygon fill="palegreen" stroke="black" points="775.5,-108 630.5,-108 630.5,-72 775.5,-72 775.5,-108"/>
+<text text-anchor="middle" x="703" y="-86.3" font-family="Times,serif" font-size="14.00">GD:accelerationIY</text>
 </g>
 <!-- hForceOnPendulum -->
-<g id="node24" class="node">
+<g id="node21" class="node">
 <title>hForceOnPendulum</title>
-<polygon fill="palegreen" stroke="black" points="1406,-108 1222,-108 1222,-72 1406,-72 1406,-108"/>
-<text text-anchor="middle" x="1314" y="-86.3" font-family="Times,serif" font-size="14.00">GD:hForceOnPendulum</text>
+<polygon fill="palegreen" stroke="black" points="978,-108 794,-108 794,-72 978,-72 978,-108"/>
+<text text-anchor="middle" x="886" y="-86.3" font-family="Times,serif" font-size="14.00">GD:hForceOnPendulum</text>
 </g>
 <!-- vForceOnPendulum -->
-<g id="node25" class="node">
+<g id="node22" class="node">
 <title>vForceOnPendulum</title>
-<polygon fill="palegreen" stroke="black" points="1607.5,-108 1424.5,-108 1424.5,-72 1607.5,-72 1607.5,-108"/>
-<text text-anchor="middle" x="1516" y="-86.3" font-family="Times,serif" font-size="14.00">GD:vForceOnPendulum</text>
+<polygon fill="palegreen" stroke="black" points="1179.5,-108 996.5,-108 996.5,-72 1179.5,-72 1179.5,-108"/>
+<text text-anchor="middle" x="1088" y="-86.3" font-family="Times,serif" font-size="14.00">GD:vForceOnPendulum</text>
 </g>
 <!-- inputValues -->
-<g id="node26" class="node">
+<g id="node23" class="node">
 <title>inputValues</title>
 <polygon fill="ivory" stroke="black" points="1413.5,-252 1288.5,-252 1288.5,-216 1413.5,-216 1413.5,-252"/>
 <text text-anchor="middle" x="1351" y="-230.3" font-family="Times,serif" font-size="14.00">FR:inputValues</text>
 </g>
 <!-- verifyInptVals -->
-<g id="node27" class="node">
+<g id="node24" class="node">
 <title>verifyInptVals</title>
 <polygon fill="ivory" stroke="black" points="1572.5,-252 1431.5,-252 1431.5,-216 1572.5,-216 1572.5,-252"/>
 <text text-anchor="middle" x="1502" y="-230.3" font-family="Times,serif" font-size="14.00">FR:verifyInptVals</text>
 </g>
 <!-- correct -->
-<g id="node28" class="node">
+<g id="node25" class="node">
 <title>correct</title>
 <polygon fill="ivory" stroke="black" points="1695,-252 1591,-252 1591,-216 1695,-216 1695,-252"/>
 <text text-anchor="middle" x="1643" y="-230.3" font-family="Times,serif" font-size="14.00">NFR:correct</text>
 </g>
 <!-- portable -->
-<g id="node29" class="node">
+<g id="node26" class="node">
 <title>portable</title>
 <polygon fill="ivory" stroke="black" points="1826.5,-252 1713.5,-252 1713.5,-216 1826.5,-216 1826.5,-252"/>
 <text text-anchor="middle" x="1770" y="-230.3" font-family="Times,serif" font-size="14.00">NFR:portable</text>
 </g>
 <!-- motionMass -->
-<g id="node30" class="node">
+<g id="node27" class="node">
 <title>motionMass</title>
 <polygon fill="#ffb90f" stroke="black" points="1973.5,-252 1844.5,-252 1844.5,-216 1973.5,-216 1973.5,-252"/>
 <text text-anchor="middle" x="1909" y="-230.3" font-family="Times,serif" font-size="14.00">GS:motionMass</text>

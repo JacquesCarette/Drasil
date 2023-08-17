@@ -6716,6 +6716,9 @@ data UID
 -- | Smart constructor for making a <a>UID</a> from a <a>Value</a>.
 mkUid :: String -> UID
 
+-- | Nest UID under a namespace
+nsUid :: String -> UID -> UID
+
 -- | For when we need to modify a UID. We first take the base chunk's UID
 --   and then append a suffix to it.
 (+++) :: HasUID a => a -> String -> UID

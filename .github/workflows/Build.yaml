@@ -86,7 +86,7 @@ jobs:
       - name: "Build website generator"
         run: make website
       - name: "Test Built Website against Stable Version"
-        run: make test_website
+        run: make test_website NOISY=yes
       - name: "Build website"
         run: |
           LABEL_FILE=/tmp/ci_build_failures \

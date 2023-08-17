@@ -167,8 +167,8 @@ STACK_EXEC_ARGS := --no-nix-pure
 STACK_EXEC := stack exec $(STACK_EXEC_ARGS)
 
 # Output amount control
-NOISY=no
-SUMMARIZE_TEX=no
+NOISY ?= no
+SUMMARIZE_TEX ?= no
 
 # Some commands now prefer to have TERM defined when things go awry
 # and since this is going to be run in batch, 'dumb' is best default.
@@ -256,7 +256,7 @@ stabilize: $(STABILIZE_EXAMPLES) ##@Examples Overwrites the stable folder with u
 # folder with currently generated ones.
 website_stabilize: $(STABILIZE_WEBSITE)
 	@echo ----------------------------
-	@echo Stabilized website
+	@echo Stabilized website artifacts
 	@echo ----------------------------
 
 # First builds all Drasil packages, runs examples with dot graphs,

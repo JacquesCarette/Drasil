@@ -8,7 +8,7 @@ module Language.Drasil.Choices (
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
-  choicesSent, showChs, InternalConcept(..), genICFuncName, listStrIC) where
+  choicesSent, showChs, InternalConcept(..), getICName, listStrIC) where
 
 import Language.Drasil hiding (None, Var)
 import Language.Drasil.Code.Code (spaceToCodeType)
@@ -403,5 +403,5 @@ defaultICName InputParameters = "InputParameters"
 defaultICName InputFormat = "InputFormat"
 
 -- | Returns user defined function Name
-genICFuncName :: Map InternalConcept Name -> InternalConcept -> Name
-genICFuncName names ic = Map.findWithDefault (defaultICName ic) ic names
+getICName :: Map InternalConcept Name -> InternalConcept -> Name
+getICName names ic = Map.findWithDefault (defaultICName ic) ic names

@@ -61,6 +61,7 @@ data DrasilState = DrasilState {
   logKind :: [Logging],
   auxiliaries :: [AuxFile],
   sampleData :: [Expr],
+  dsICNames :: Map InternalConcept Name,
   -- Reference materials
   modules :: [Mod],
   extLibNames :: [(Name,Version)],

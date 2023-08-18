@@ -409,11 +409,11 @@ ifCond f ifStart os elif bEnd (c:cs) eBody =
           indent $ RC.body bd,
           bEnd]) (zoom lensMStoVS v) b
         elseIfSect (v, b) = on2StateValues (\val bd -> vcat [
-          elif <+> f (RC.value val) <+> ifStart,
+          elif <+> f (RC.value val) <> optSpaceDoc os <> ifStart,
           indent $ RC.body bd,
           bEnd]) (zoom lensMStoVS v) b
         elseSect = onStateValue (\bd -> emptyIfEmpty (RC.body bd) $ vcat [
-          elseLabel <+> ifStart,
+          elseLabel <> optSpaceDoc os <> ifStart,
           indent $ RC.body bd,
           bEnd]) eBody
     in sequence (ifSect c : map elseIfSect cs ++ [elseSect]) 

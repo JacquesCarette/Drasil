@@ -17,7 +17,8 @@ import Language.Drasil.Data.ODEInfo (ODEInfo)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg)
 import Language.Drasil.Mod (Name)
 import Data.Maybe (mapMaybe)
-import Data.Map (Map, fromList, (!), lookup, toList)
+import Data.Map (Map)
+import qualified Data.Map as Map
 import Data.Tuple (swap)
 
 import GOOL.Drasil (CodeType)
@@ -176,7 +177,7 @@ instance RenderChoices CodeConcept where
 
 -- | Builds a 'ConceptMatchMap' from an association list of chunks and 'CodeConcepts'.
 matchConcepts :: (HasUID c) => [(c, [CodeConcept])] -> ConceptMatchMap
-matchConcepts = fromList . map (\(cnc,cdc) -> (cnc ^. uid, cdc))
+matchConcepts = Map.fromList . map (\(cnc,cdc) -> (cnc ^. uid, cdc))
 
 -- | Specifies which 'CodeType' should be used to represent each mathematical
 -- 'Space'. ['CodeType'] is preferentially-ordered, first 'CodeType' that does not
@@ -347,7 +348,7 @@ defaultChoices = Choices {
     [ReadME],
   srsConstraints = makeConstraints Exception Warning,
   extLibs = [],
-  functionNames = fnList,
+  functionNames = Map.empty,
   folderVal = 4
 }
 
@@ -377,7 +378,7 @@ chsFieldSent (rec, chc) = rec +:+ S "selected as" +:+. chc
 -- | List of user defined function names.
 -- List is populated with default values.
 fnList :: Map InternalConcept Name
-fnList = fromList [
+fnList = Map.fromList [
   (GetInput, "get_input"),
   (DerivedValues, "derived_values"),
   (InputConstraints, "input_constraints"),
@@ -387,12 +388,22 @@ fnList = fromList [
 
 -- | Helper function for InternalConcept String Map
 listStrIC :: [String] -> [InternalConcept]
-listStrIC = mapMaybe (flip Data.Map.lookup . fromList . map swap $ toList fnList)
+listStrIC = mapMaybe (flip Map.lookup . Map.fromList . map swap $ Map.toList fnList)
 
 -- | Data type of user defined concepts
 data InternalConcept = InputConstraints | WriteOutput | DerivedValues
   | GetInput | InputParameters | InputFormat deriving (Eq, Ord)
 
+defaultICName :: InternalConcept -> Name
+defaultICName GetInput = "get_input"
+defaultICName DerivedValues = "derived_values"
+defaultICName InputConstraints = "input_constraints"
+defaultICName WriteOutput = "write_output"
+defaultICName InputParameters = "InputParameters"
+defaultICName InputFormat = "InputFormat"
+
 -- | Returns user defined function Name
 genICFuncName :: InternalConcept -> Name
-genICFuncName ic = functionNames defaultChoices ! ic
+genICFuncName ic = case Map.lookup ic (functionNames defaultChoices) of
+  Just n -> n
+  Nothing -> defaultICName ic

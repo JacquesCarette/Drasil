@@ -12,9 +12,9 @@ import Utils.Drasil (stringList)
 import Language.Drasil
 import Language.Drasil.Chunk.CodeBase
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  inMod)
+  inMod, genICName)
 import Language.Drasil.Choices (ImplementationType(..), InputModule(..),
-  Structure(..), InternalConcept(..), genICFuncName)
+  Structure(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Mod (Description)
 import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
@@ -137,8 +137,8 @@ outputFormatDesc = do
 inputClassDesc :: GenState Description
 inputClassDesc = do
   g <- get
-  let cname = genICFuncName InputParameters
-      ipMap = Map.filter (cname ==) (clsMap g)
+  cname <- genICName InputParameters
+  let ipMap = Map.filter (cname ==) (clsMap g)
       inIPMap = filter ((`member` ipMap) . codeName)
       inClassD True = ""
       inClassD _ = "Structure for holding the " ++ stringList [

@@ -7,10 +7,10 @@ import Language.Drasil hiding (isIn, Var)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
 import Language.Drasil.Chunk.CodeBase
 import Language.Drasil.Choices (Structure(..), InputModule(..),
-  ConstantStructure(..), ConstantRepr(..), InternalConcept(..), genICFuncName)
+  ConstantStructure(..), ConstantRepr(..), InternalConcept(..))
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  inMod)
+  inMod, genICName)
 import Language.Drasil.CodeSpec (CodeSpec(..), constraintvars, getConstraints)
 import Language.Drasil.Mod (Name)
 
@@ -42,8 +42,9 @@ getInConstructorParams = do
   let cname = InputParameters
       getCParams False = []
       getCParams True = ifPs ++ dvPs ++ icPs
-  ps <- getParams (genICFuncName InputParameters) In $ getCParams (cname `elem` defList g)
-  return $ filter ((Just (genICFuncName InputParameters) /=) . flip Map.lookup (clsMap g) . codeName) ps
+  ipName <- genICName InputParameters
+  ps <- getParams ipName In $ getCParams (cname `elem` defList g)
+  return $ filter ((Just ipName /=) . flip Map.lookup (clsMap g) . codeName) ps
 
 -- | The inputs to the function for reading inputs are the input file name, and
 -- the 'inParams' object if inputs are bundled and input components are separated.
@@ -55,13 +56,15 @@ getInputFormatIns = do
   let getIns :: Structure -> InputModule -> [CodeVarChunk]
       getIns Bundled Separated = [quantvar inParams]
       getIns _ _ = []
-  getParams (genICFuncName GetInput) In $ quantvar inFileName : getIns (inStruct g) (inMod g)
+  giName <- genICName GetInput
+  getParams giName In $ quantvar inFileName : getIns (inStruct g) (inMod g)
 
 -- | The outputs from the function for reading inputs are the inputs.
 getInputFormatOuts :: GenState [CodeVarChunk]
 getInputFormatOuts = do
   g <- get
-  getParams (genICFuncName GetInput) Out $ extInputs $ codeSpec g
+  giName <- genICName GetInput
+  getParams giName Out $ extInputs $ codeSpec g
 
 -- | The inputs to the function for calculating derived inputs are any variables
 -- used in the equations for the derived inputs.
@@ -71,13 +74,15 @@ getDerivedIns = do
   let s = codeSpec g
       dvals = derivedInputs s
       reqdVals = concatMap (flip codevars (sysinfodb s) . (^. codeExpr)) dvals
-  getParams (genICFuncName DerivedValues) In reqdVals
+  dvName <- genICName DerivedValues
+  getParams dvName In reqdVals
 
 -- | The outputs from the function for calculating derived inputs are the derived inputs.
 getDerivedOuts :: GenState [CodeVarChunk]
 getDerivedOuts = do
   g <- get
-  getParams (genICFuncName DerivedValues) Out $ map codeChunk $ derivedInputs $ codeSpec g
+  dvName <- genICName DerivedValues
+  getParams dvName Out $ map codeChunk $ derivedInputs $ codeSpec g
 
 -- | The parameters to the function for checking constraints on the inputs are
 -- any inputs with constraints, and any variables used in the expressions of
@@ -90,7 +95,8 @@ getConstraintParams = do
       varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec g)
       reqdVals = nub $ varsList ++ map quantvar (concatMap (`constraintvars` db)
         (getConstraints cm varsList))
-  getParams (genICFuncName InputConstraints) In reqdVals
+  icName <- genICName InputConstraints
+  getParams icName In reqdVals
 
 -- | The parameters to a calculation function are any variables used in the
 -- expression representing the calculation.
@@ -104,7 +110,8 @@ getCalcParams c = do
 getOutputParams :: GenState [CodeVarChunk]
 getOutputParams = do
   g <- get
-  getParams (genICFuncName WriteOutput) In $ outputs $ codeSpec g
+  woName <- genICName WriteOutput
+  getParams woName In $ outputs $ codeSpec g
 
 -- | Passes parameters that are inputs to 'getInputVars' for further processing.
 -- Passes parameters that are constants to 'getConstVars' for further processing.
@@ -146,7 +153,7 @@ getInputVars _ _ _ _ [] = return []
 getInputVars _ _ Unbundled _ cs = return cs
 getInputVars n pt Bundled Var _ = do
   g <- get
-  let cname = genICFuncName InputParameters
+  cname <- genICName InputParameters
   return [quantvar inParams | Map.lookup n (clsMap g) /= Just cname && isIn pt]
 getInputVars _ _ Bundled Const _ = return []
 

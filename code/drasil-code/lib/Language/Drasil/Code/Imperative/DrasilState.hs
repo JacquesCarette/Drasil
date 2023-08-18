@@ -1,7 +1,8 @@
 {-# LANGUAGE TemplateHaskell, TupleSections #-}
 module Language.Drasil.Code.Imperative.DrasilState (
   GenState, DrasilState(..), designLog, inMod, MatchedSpaces, ModExportMap,
-  ClassDefinitionMap, modExportMap, clsDefMap, addToDesignLog, addLoggedSpace
+  ClassDefinitionMap, modExportMap, clsDefMap, addToDesignLog, addLoggedSpace,
+  genICName
 ) where
 
 import Language.Drasil
@@ -291,3 +292,7 @@ getExpOutput _ _ [] = []
 getExpOutput n chs _ = [(genICFuncName WriteOutput, oMod $ modularity $ architecture chs)]
   where oMod Unmodular = n
         oMod _ = "OutputFormat"
+
+-- | Get InternalConcept name using DrasilState
+genICName :: InternalConcept -> GenState Name
+genICName ic = pure $ genICFuncName ic

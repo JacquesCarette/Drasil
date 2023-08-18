@@ -18,7 +18,7 @@ import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstClass,
   genInputFormat, genMain, genMainFunc, genCalcMod, genCalcFunc,
   genOutputFormat, genOutputMod, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  designLog, inMod, modExportMap, clsDefMap)
+  designLog, inMod, modExportMap, clsDefMap, genICName)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
   PackageSym(..), AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
@@ -28,7 +28,7 @@ import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
   Visibility(..), DataInfo(..), Constraints(..), choicesSent, DocConfig(..),
-  LogConfig(..), OptionalFeatures(..), InternalConcept(..), genICFuncName, listStrIC)
+  LogConfig(..), OptionalFeatures(..), InternalConcept(..), listStrIC)
 import Language.Drasil.CodeSpec (CodeSpec(..), getODE)
 import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
 
@@ -178,10 +178,11 @@ genUnmodular :: (OOProg r) => GenState (SFile r)
 genUnmodular = do
   g <- get
   umDesc <- unmodularDesc
+  giName <- genICName GetInput
+  dvName <- genICName DerivedValues
+  icName <- genICName InputConstraints
   let n = pName $ codeSpec g
-      cls = any (`member` clsMap g)
-        [genICFuncName GetInput, genICFuncName DerivedValues,
-          genICFuncName InputConstraints]
+      cls = any (`member` clsMap g) [giName, dvName, icName]
   genModuleWithImports n umDesc (concatMap (^. imports) (elems $ extLibMap g))
     (genMainFunc
       : map (fmap Just) (map genCalcFunc (execOrder $ codeSpec g)

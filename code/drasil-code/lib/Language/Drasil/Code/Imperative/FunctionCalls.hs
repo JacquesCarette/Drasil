@@ -9,11 +9,12 @@ import Language.Drasil.Code.Imperative.Logging (maybeLog)
 import Language.Drasil.Code.Imperative.Parameters (getCalcParams,
   getConstraintParams, getDerivedIns, getDerivedOuts, getInputFormatIns,
   getInputFormatOuts, getOutputParams)
-import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
+  genICName)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
-import Language.Drasil.Choices (InternalConcept(..), genICFuncName)
+import Language.Drasil.Choices (InternalConcept(..))
 
 import GOOL.Drasil (VSType, SValue, MSStatement, OOProg, TypeSym(..),
   VariableValue(..), StatementSym(..), DeclStatement(..), convType)
@@ -36,16 +37,21 @@ genAllInputCalls = do
 
 -- | Generates a call to the function for reading inputs from a file.
 genInputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
-genInputCall = genInOutCall (genICFuncName GetInput) getInputFormatIns getInputFormatOuts
+genInputCall = do
+  giName <- genICName GetInput
+  genInOutCall giName getInputFormatIns getInputFormatOuts
 
 -- | Generates a call to the function for calculating derived inputs.
 genDerivedCall :: (OOProg r) => GenState (Maybe (MSStatement r))
-genDerivedCall = genInOutCall (genICFuncName DerivedValues) getDerivedIns getDerivedOuts
+genDerivedCall = do
+  dvName <- genICName DerivedValues
+  genInOutCall dvName getDerivedIns getDerivedOuts
 
 -- | Generates a call to the function for checking constraints on the input.
 genConstraintCall :: (OOProg r) => GenState (Maybe (MSStatement r))
 genConstraintCall = do
-  val <- genFuncCall (genICFuncName InputConstraints) void getConstraintParams
+  icName <- genICName InputConstraints
+  val <- genFuncCall icName void getConstraintParams
   return $ fmap valStmt val
 
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the
@@ -61,7 +67,8 @@ genCalcCall c = do
 -- | Generates a call to the function for printing outputs.
 genOutputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
 genOutputCall = do
-  val <- genFuncCall (genICFuncName WriteOutput) void getOutputParams
+  woName <- genICName WriteOutput
+  val <- genFuncCall woName void getOutputParams
   return $ fmap valStmt val
 
 -- | Generates a function call given the name, return type, and arguments to

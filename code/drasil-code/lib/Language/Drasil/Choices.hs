@@ -403,7 +403,5 @@ defaultICName InputParameters = "InputParameters"
 defaultICName InputFormat = "InputFormat"
 
 -- | Returns user defined function Name
-genICFuncName :: InternalConcept -> Name
-genICFuncName ic = case Map.lookup ic (functionNames defaultChoices) of
-  Just n -> n
-  Nothing -> defaultICName ic
+genICFuncName :: Map InternalConcept Name -> InternalConcept -> Name
+genICFuncName names ic = Map.findWithDefault (defaultICName ic) ic names

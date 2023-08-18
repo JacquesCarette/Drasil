@@ -44,7 +44,7 @@ data Choices = Choices {
   -- | List of external libraries what to utilize
   extLibs :: [ExtLib],
   -- | List of modifiable function names
-  functionNames :: Map InternalConcept Name,
+  icNames :: Map InternalConcept Name,
   -- | Number of folders to go up in order to obtain the image
   folderVal :: Int
 }
@@ -348,7 +348,7 @@ defaultChoices = Choices {
     [ReadME],
   srsConstraints = makeConstraints Exception Warning,
   extLibs = [],
-  functionNames = Map.empty,
+  icNames = Map.empty,
   folderVal = 4
 }
 

@@ -165,7 +165,7 @@ getExpInput prn chs ins = inExp (modularity $ architecture chs) (inputStructure 
         inExp (Modular Separated) Bundled = inVarDefs ipName
         inExp (Modular Combined) Bundled = (ipName , ipName) : inVarDefs ipName
         inVarDefs n = map ((, n) . codeName) ins
-        ipName = getICName (functionNames chs) InputParameters
+        ipName = getICName (icNames chs) InputParameters
 
 -- | Gets input variables for classes for InputParameters module.
 -- If no inputs, input variables will not be defined in any class.
@@ -179,7 +179,7 @@ getInputCls chs ins = inCls (inputModule chs) (inputStructure $ dataInfo chs)
         inCls Combined Bundled = (ipName, ipName) : inVarDefs
         inCls Separated Bundled = inVarDefs
         inVarDefs = map ((, ipName) . codeName) ins
-        ipName = getICName (functionNames chs) InputParameters
+        ipName = getICName (icNames chs) InputParameters
 
 -- | Gets constants to be exported for InputParameters or Constants module.
 -- If there are no constants, constants will not be exported.
@@ -194,7 +194,7 @@ getExpConstants n chs cs = cExp (modularity $ architecture chs) (constStructure 
   where cExp Unmodular (Store Bundled) _ = zipCs $ repeat n
         cExp Unmodular WithInputs Bundled = zipCs $ repeat n
         cExp _ (Store Bundled) _ = zipCs $ repeat "Constants"
-        cExp _ WithInputs Bundled = zipCs $ repeat (getICName (functionNames chs) InputParameters)
+        cExp _ WithInputs Bundled = zipCs $ repeat (getICName (icNames chs) InputParameters)
         cExp _ _ _ = []
         zipCs = zip (map codeName cs)
 
@@ -207,7 +207,7 @@ getConstantsCls :: Choices -> [Const] -> [ClassDef]
 getConstantsCls _ [] = []
 getConstantsCls chs cs = cnCls (constStructure $ dataInfo chs) (inputStructure $ dataInfo chs)
   where cnCls (Store Bundled) _ = zipCs $ repeat "Constants"
-        cnCls WithInputs Bundled = zipCs $ repeat (getICName (functionNames chs) InputParameters)
+        cnCls WithInputs Bundled = zipCs $ repeat (getICName (icNames chs) InputParameters)
         cnCls _ _ = []
         zipCs = zip (map codeName cs)
 
@@ -223,8 +223,8 @@ getExpDerived n chs _ = dMod (modularity $ architecture chs) (inputStructure $ d
   where dMod (Modular Separated) _ = [(dvNm, "DerivedValues")]
         dMod _ Bundled = []
         dMod Unmodular _ = [(dvNm, n)]
-        dMod (Modular Combined) _ = [(dvNm, getICName (functionNames chs) InputParameters)]
-        dvNm = getICName (functionNames chs) DerivedValues
+        dMod (Modular Combined) _ = [(dvNm, getICName (icNames chs) InputParameters)]
+        dvNm = getICName (icNames chs) DerivedValues
 
 -- | Get derived values defined in a class (for @derived_values@).
 -- If there are no derived inputs, derived_values is not defined in any class.
@@ -234,7 +234,7 @@ getExpDerived n chs _ = dMod (modularity $ architecture chs) (inputStructure $ d
 getDerivedCls :: Choices -> [Derived] -> [ClassDef]
 getDerivedCls _ [] = []
 getDerivedCls chs _ = dCls (inputModule chs) (inputStructure $ dataInfo chs)
-  where dCls Combined Bundled = [(getICName (functionNames chs) DerivedValues, getICName (functionNames chs) InputParameters)]
+  where dCls Combined Bundled = [(getICName (icNames chs) DerivedValues, getICName (icNames chs) InputParameters)]
         dCls _ _ = []
 
 -- | Get input constraints to be exported (for @input_constraints@).
@@ -245,15 +245,15 @@ getExpConstraints n chs _ = cMod (modularity $ architecture chs) (inputStructure
   where cMod (Modular Separated) _ = [(icNm, "InputConstraints")]
         cMod _ Bundled = []
         cMod Unmodular _ = [(icNm, n)]
-        cMod (Modular Combined) _ = [(icNm, getICName (functionNames chs) InputParameters)]
-        icNm = getICName (functionNames chs) InputConstraints
+        cMod (Modular Combined) _ = [(icNm, getICName (icNames chs) InputParameters)]
+        icNm = getICName (icNames chs) InputConstraints
 
 -- | Get constraints defined in a class (for @input_constraints@).
 -- See 'getDerivedCls' for full logic details.
 getConstraintsCls :: Choices -> [ConstraintCE] -> [ClassDef]
 getConstraintsCls _   [] = []
 getConstraintsCls chs _  = cCls (inputModule chs) (inputStructure $ dataInfo chs)
-  where cCls Combined Bundled = [(getICName (functionNames chs) InputConstraints, getICName (functionNames chs) InputParameters)]
+  where cCls Combined Bundled = [(getICName (icNames chs) InputConstraints, getICName (icNames chs) InputParameters)]
         cCls _ _ = []
 
 -- | Get input format to be exported (for @get_input@).
@@ -261,18 +261,18 @@ getConstraintsCls chs _  = cCls (inputModule chs) (inputStructure $ dataInfo chs
 getExpInputFormat :: Name -> Choices -> [Input] -> [ModExp]
 getExpInputFormat _ _ [] = []
 getExpInputFormat n chs _ = fMod (modularity $ architecture chs) (inputStructure $ dataInfo chs)
-  where fMod (Modular Separated) _ = [(giNm, getICName (functionNames chs) InputFormat)]
+  where fMod (Modular Separated) _ = [(giNm, getICName (icNames chs) InputFormat)]
         fMod _ Bundled = []
         fMod Unmodular _ = [(giNm, n)]
-        fMod (Modular Combined) _ = [(giNm, getICName (functionNames chs) InputParameters)]
-        giNm = getICName (functionNames chs) GetInput
+        fMod (Modular Combined) _ = [(giNm, getICName (icNames chs) InputParameters)]
+        giNm = getICName (icNames chs) GetInput
 
 -- | Get input format defined in a class (for @get_input@).
 -- See 'getDerivedCls' for full logic details.
 getInputFormatCls :: Choices -> [Input] -> [ClassDef]
 getInputFormatCls _ [] = []
 getInputFormatCls chs _ = ifCls (inputModule chs) (inputStructure $ dataInfo chs)
-  where ifCls Combined Bundled = [(getICName (functionNames chs) GetInput, getICName (functionNames chs) InputParameters)]
+  where ifCls Combined Bundled = [(getICName (icNames chs) GetInput, getICName (icNames chs) InputParameters)]
         ifCls _ _ = []
 
 -- | Gets exported calculations.
@@ -290,7 +290,7 @@ getExpCalcs n chs = map (\d -> (codeName d, calMod))
 -- Function is exported by OutputFormat module if program is 'Modular'.
 getExpOutput :: Name -> Choices -> [Output] -> [ModExp]
 getExpOutput _ _ [] = []
-getExpOutput n chs _ = [(getICName (functionNames chs) WriteOutput, oMod $ modularity $ architecture chs)]
+getExpOutput n chs _ = [(getICName (icNames chs) WriteOutput, oMod $ modularity $ architecture chs)]
   where oMod Unmodular = n
         oMod _ = "OutputFormat"
 

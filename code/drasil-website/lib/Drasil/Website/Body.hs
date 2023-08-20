@@ -1,6 +1,8 @@
 -- | Gathers and organizes all the information for the [Drasil website](https://jacquescarette.github.io/Drasil/).
 module Drasil.Website.Body where
 
+import Control.Lens ((^.))
+
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil
 import SysInfo.Drasil
@@ -14,6 +16,17 @@ import Drasil.Website.Example (exampleSec, exampleRefs, allExampleSI)
 import Drasil.Website.Documentation (docsSec, docRefs)
 import Drasil.Website.Analysis (analysisSec, analysisRefs)
 import Drasil.Website.GettingStarted (gettingStartedSec)
+import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody)
+import Data.Drasil.Concepts.Documentation (game, physics, condition, safety)
+import Drasil.GlassBR.Unitals (blast)
+import Drasil.GlassBR.Concepts (glaSlab)
+import Data.Drasil.Concepts.Thermodynamics (heatTrans)
+import Drasil.SWHS.Concepts (sWHT, water, phsChgMtrl)
+import Drasil.PDController.Concepts (pidC)
+import Drasil.Projectile.Concepts (target, projectile)
+import Drasil.SSP.Defs (crtSlpSrf, intrslce, slope, slpSrf, factor)
+import Data.Drasil.Concepts.SolidMechanics (shearForce, normForce)
+import Drasil.SSP.IMods (fctSfty)
 
 -- * Functions to Generate the Website Through Drasil
 
@@ -89,8 +102,12 @@ sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspac
 
 -- | Needed for references and terms to work.
 symbMap :: FolderLocation -> ChunkDB
-symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, web] ++ map getSysName allExampleSI)
-  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] $ allRefs fl
+symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, web, phsChgMtrl] ++ 
+  map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast, 
+  heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce, 
+  normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [game, physics, condition, glaSlab, intrslce,
+  slope, safety, factor]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] 
+  [] [] [] $ allRefs fl
 
 -- | Helper to get the system name as an 'IdeaDict' from 'SystemInformation'.
 getSysName :: SystemInformation -> IdeaDict
@@ -161,7 +178,7 @@ websiteTitle :: String
 gitHubInfoURL, imagePath :: FilePath
 websiteTitle = "Drasil - Generate All the Things!"
 gitHubInfoURL = "https://github.com/JacquesCarette/Drasil"
-imagePath = "./images/Icon.png"
+imagePath = "../images/Icon.png"
 
 -- * Footer Section
 

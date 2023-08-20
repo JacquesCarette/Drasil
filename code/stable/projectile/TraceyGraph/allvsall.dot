@@ -8,51 +8,51 @@ digraph allvsall {
 	accelYGravity -> yAxisGravity;
 	ixVel -> speed;
 	iyVel -> speed;
-	projSpeed -> pointMass;
-	projSpeed -> timeStartZero;
-	projSpeed -> accelerationTM;
-	projPos -> pointMass;
-	projPos -> timeStartZero;
-	projPos -> velocityTM;
-	projPos -> projSpeed;
-	velocity -> twoDMotion;
-	velocity -> cartSyst;
-	velocity -> constAccel;
-	velocity -> timeStartZero;
-	velocity -> projSpeed;
-	position -> twoDMotion;
-	position -> cartSyst;
-	position -> constAccel;
-	position -> timeStartZero;
-	position -> projPos;
-	flightduration -> yAxisGravity;
-	flightduration -> launchOrigin;
-	flightduration -> targetXAxis;
-	flightduration -> posXDirection;
-	flightduration -> accelYGravity;
-	flightduration -> timeStartZero;
-	flightduration -> gravAccelValue;
-	flightduration -> iyVel;
-	flightduration -> position;
-	landingposition -> yAxisGravity;
-	landingposition -> launchOrigin;
-	landingposition -> posXDirection;
-	landingposition -> accelXZero;
-	landingposition -> gravAccelValue;
-	landingposition -> ixVel;
-	landingposition -> position;
-	landingposition -> flightduration;
-	offset -> posXDirection;
-	offset -> landingposition;
-	message -> posXDirection;
-	message -> offset;
-	calcValues -> flightduration;
-	calcValues -> landingposition;
-	calcValues -> offset;
-	calcValues -> message;
-	outputValues -> flightduration;
-	outputValues -> offset;
-	outputValues -> message;
+	theory:projSpeed -> pointMass;
+	theory:projSpeed -> timeStartZero;
+	theory:projSpeed -> accelerationTM;
+	theory:projPos -> pointMass;
+	theory:projPos -> timeStartZero;
+	theory:projPos -> velocityTM;
+	theory:projPos -> theory:projSpeed;
+	theory:velocity -> twoDMotion;
+	theory:velocity -> cartSyst;
+	theory:velocity -> constAccel;
+	theory:velocity -> timeStartZero;
+	theory:velocity -> theory:projSpeed;
+	theory:position -> twoDMotion;
+	theory:position -> cartSyst;
+	theory:position -> constAccel;
+	theory:position -> timeStartZero;
+	theory:position -> theory:projPos;
+	theory:flightduration -> yAxisGravity;
+	theory:flightduration -> launchOrigin;
+	theory:flightduration -> targetXAxis;
+	theory:flightduration -> posXDirection;
+	theory:flightduration -> accelYGravity;
+	theory:flightduration -> timeStartZero;
+	theory:flightduration -> gravAccelValue;
+	theory:flightduration -> iyVel;
+	theory:flightduration -> theory:position;
+	theory:landingposition -> yAxisGravity;
+	theory:landingposition -> launchOrigin;
+	theory:landingposition -> posXDirection;
+	theory:landingposition -> accelXZero;
+	theory:landingposition -> gravAccelValue;
+	theory:landingposition -> ixVel;
+	theory:landingposition -> theory:position;
+	theory:landingposition -> theory:flightduration;
+	theory:offset -> posXDirection;
+	theory:offset -> theory:landingposition;
+	theory:message -> posXDirection;
+	theory:message -> theory:offset;
+	calcValues -> theory:flightduration;
+	calcValues -> theory:landingposition;
+	calcValues -> theory:offset;
+	calcValues -> theory:message;
+	outputValues -> theory:flightduration;
+	outputValues -> theory:offset;
+	outputValues -> theory:message;
 
 
 	twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
@@ -93,24 +93,24 @@ digraph allvsall {
 	{accelerationTM, velocityTM}
 	}
 
-	projSpeed	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectVel"];
-	projPos	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectPos"];
-	velocity	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velVec"];
-	position	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:posVec"];
+	theory:projSpeed	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectVel"];
+	theory:projPos	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectPos"];
+	theory:velocity	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velVec"];
+	theory:position	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:posVec"];
 
 	subgraph GD {
 	rank="same"
-	{projSpeed, projPos, velocity, position}
+	{theory:projSpeed, theory:projPos, theory:velocity, theory:position}
 	}
 
-	flightduration	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingTime"];
-	landingposition	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingDist"];
-	offset	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:offsetIM"];
-	message	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:messageIM"];
+	theory:flightduration	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingTime"];
+	theory:landingposition	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingDist"];
+	theory:offset	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:offsetIM"];
+	theory:message	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:messageIM"];
 
 	subgraph IM {
 	rank="same"
-	{flightduration, landingposition, offset, message}
+	{theory:flightduration, theory:landingposition, theory:offset, theory:message}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

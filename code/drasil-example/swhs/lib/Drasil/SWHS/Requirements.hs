@@ -85,10 +85,10 @@ oIDQVals :: [Sentence]
 oIDQVals = map foldlSent_ [
   [pluralNP (the value), fromSource (inReq EmptyS)],
   [pluralNP (the mass), fromSource findMass],
-  [ch balanceDecayRate, fromSource balanceDecayRate],
-  [ch balanceDecayTime, fromSource balanceDecayTime],
-  [ch balanceSolidPCM,  fromSource balanceSolidPCM],
-  [ch balanceLiquidPCM, fromSource balanceLiquidPCM]
+  [ch (balanceDecayRate ^. defLhs), fromSource balanceDecayRate],
+  [ch (balanceDecayTime ^. defLhs), fromSource balanceDecayTime],
+  [ch (balanceSolidPCM ^. defLhs),  fromSource balanceSolidPCM],
+  [ch (balanceLiquidPCM ^. defLhs), fromSource balanceLiquidPCM]
   ]
 
 --

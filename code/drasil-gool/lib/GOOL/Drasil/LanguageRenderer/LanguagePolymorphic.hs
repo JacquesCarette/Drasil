@@ -13,7 +13,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
   tryCatch, construct, param, method, getMethod, setMethod, initStmts,
   function, docFuncRepr, docFunc, buildClass, implementingClass, docClass,
-  commentedClass, modFromData, fileDoc, docMod
+  commentedClass, modFromData, fileDoc, docMod, OptionalSpace(..), defaultOptSpace
 ) where
 
 import Utils.Drasil (indent)
@@ -75,7 +75,7 @@ import Control.Monad.State (modify)
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
-  brackets, integer, vcat, comma, isEmpty)
+  brackets, integer, vcat, comma, isEmpty, space)
 import qualified Text.PrettyPrint.HughesPJ as D (char, double)
 
 -- Bodies --
@@ -386,18 +386,26 @@ throw f t l = do
   msg <- zoom lensMStoVS (S.litString l)
   stmtFromData (f msg) t
 
+newtype OptionalSpace = OSpace {oSpace :: Doc}
+
+defaultOptSpace :: OptionalSpace
+defaultOptSpace = OSpace {oSpace = space}
+
+optSpaceDoc :: OptionalSpace -> Doc
+optSpaceDoc OSpace {oSpace = sp} = sp
+
 -- ControlStatements --
 
 -- 1st parameter is a Doc function to use on the render of each condition (i.e. parens)
 -- 2nd parameter is the syntax for starting a block in an if-condition
 -- 3rd parameter is the keyword for an else-if statement
 -- 4th parameter is the syntax for ending a block in an if-condition
-ifCond :: (RenderSym r) => (Doc -> Doc) -> Doc -> Doc -> Doc -> 
+ifCond :: (RenderSym r) => (Doc -> Doc) -> Doc -> OptionalSpace -> Doc -> Doc ->
   [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
-ifCond _ _ _ _ [] _ = error "if condition created with no cases"
-ifCond f ifStart elif bEnd (c:cs) eBody =
+ifCond _ _ _ _ _ [] _ = error "if condition created with no cases"
+ifCond f ifStart os elif bEnd (c:cs) eBody =
     let ifSect (v, b) = on2StateValues (\val bd -> vcat [
-          ifLabel <+> f (RC.value val) <+> ifStart,
+          ifLabel <+> f (RC.value val) <> optSpaceDoc os <> ifStart,
           indent $ RC.body bd,
           bEnd]) (zoom lensMStoVS v) b
         elseIfSect (v, b) = on2StateValues (\val bd -> vcat [
@@ -496,8 +504,8 @@ fileDoc ext topb botb mdl = do
         (R.file (RC.block $ topb m) d (RC.block botb))) m
   S.fileFromData fp (toState updm)
 
-docMod :: (RenderSym r) => ModuleDocRenderer -> String -> String -> [String] -> 
-  String -> SFile r -> SFile r
+docMod :: (RenderSym r) => ModuleDocRenderer -> String -> String -> 
+  [String] -> String -> SFile r -> SFile r
 docMod mdr e d a dt fl = commentedMod fl (docComment $ mdr d a dt . addExt e 
   <$> getModuleName)
 

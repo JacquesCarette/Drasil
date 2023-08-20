@@ -95,6 +95,7 @@ import Data.List (intercalate, sort)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty, quotes)
+import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 
 pyExt :: String
 pyExt = "py"
@@ -571,7 +572,7 @@ instance ControlStatement PythonCode where
 
   throw = G.throw pyThrow Empty
 
-  ifCond = G.ifCond parens pyBodyStart pyElseIf pyBodyEnd
+  ifCond = G.ifCond parens pyBodyStart pySpace pyElseIf pyBodyEnd
   switch = switchAsIf
 
   ifExists = M.ifExists
@@ -809,6 +810,9 @@ pyBodyEnd = empty
 pyCommentStart = text "#"
 pyDocCommentStart = pyCommentStart <> pyCommentStart
 pyNamedArgSep = equals
+
+pySpace :: OptionalSpace
+pySpace = OSpace {oSpace = empty}
 
 pyNotOp :: (Monad r) => VSOp r
 pyNotOp = unOpPrec "not"

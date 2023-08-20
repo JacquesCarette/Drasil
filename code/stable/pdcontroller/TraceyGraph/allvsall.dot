@@ -5,30 +5,30 @@ digraph allvsall {
 	stiffnessCoeffSpring -> pwrPlant;
 	qdProcessErrorFD -> setPoint;
 	qdProcessErrorFD -> initialValue;
-	qdProcessErrorFD -> laplaceRC;
+	qdProcessErrorFD -> theory:laplaceRC;
 	qdPropControlFD -> qdProcessErrorFD;
-	qdPropControlFD -> laplaceRC;
+	qdPropControlFD -> theory:laplaceRC;
 	qdDerivativeControlFD -> unfilteredDerivative;
 	qdDerivativeControlFD -> qdProcessErrorFD;
-	qdDerivativeControlFD -> laplaceRC;
+	qdDerivativeControlFD -> theory:laplaceRC;
 	qdCtrlVarFD -> decoupled;
 	qdCtrlVarFD -> parallelEq;
 	qdCtrlVarFD -> qdPropControlFD;
 	qdCtrlVarFD -> qdDerivativeControlFD;
-	tmSOSystemRC -> pwrPlantTxFnx;
-	gdPowerPlantRC -> externalDisturb;
-	gdPowerPlantRC -> massSpring;
-	gdPowerPlantRC -> dampingCoeffSpring;
-	gdPowerPlantRC -> stiffnessCoeffSpring;
-	gdPowerPlantRC -> laplaceRC;
-	gdPowerPlantRC -> tmSOSystemRC;
-	imPDRC -> setPoint;
-	imPDRC -> qdProcessErrorFD;
-	imPDRC -> qdCtrlVarFD;
-	imPDRC -> invLaplaceRC;
-	imPDRC -> gdPowerPlantRC;
-	calculateValues -> imPDRC;
-	outputValues -> imPDRC;
+	theory:tmSOSystemRC -> pwrPlantTxFnx;
+	theory:gdPowerPlantRC -> externalDisturb;
+	theory:gdPowerPlantRC -> massSpring;
+	theory:gdPowerPlantRC -> dampingCoeffSpring;
+	theory:gdPowerPlantRC -> stiffnessCoeffSpring;
+	theory:gdPowerPlantRC -> theory:laplaceRC;
+	theory:gdPowerPlantRC -> theory:tmSOSystemRC;
+	theory:imPDRC -> setPoint;
+	theory:imPDRC -> qdProcessErrorFD;
+	theory:imPDRC -> qdCtrlVarFD;
+	theory:imPDRC -> theory:invLaplaceRC;
+	theory:imPDRC -> theory:gdPowerPlantRC;
+	calculateValues -> theory:imPDRC;
+	outputValues -> theory:imPDRC;
 	likeChgPP -> massSpring;
 	likeChgPP -> dampingCoeffSpring;
 	likeChgPP -> stiffnessCoeffSpring;
@@ -61,27 +61,27 @@ digraph allvsall {
 	{qdProcessErrorFD, qdPropControlFD, qdDerivativeControlFD, qdCtrlVarFD}
 	}
 
-	laplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:laplaceTransform"];
-	invLaplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:invLaplaceTransform"];
-	tmSOSystemRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:tmSOSystem"];
+	theory:laplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:laplaceTransform"];
+	theory:invLaplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:invLaplaceTransform"];
+	theory:tmSOSystemRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:tmSOSystem"];
 
 	subgraph TM {
 	rank="same"
-	{laplaceRC, invLaplaceRC, tmSOSystemRC}
+	{theory:laplaceRC, theory:invLaplaceRC, theory:tmSOSystemRC}
 	}
 
-	gdPowerPlantRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:gdPowerPlant"];
+	theory:gdPowerPlantRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:gdPowerPlant"];
 
 	subgraph GD {
 	rank="same"
-	{gdPowerPlantRC}
+	{theory:gdPowerPlantRC}
 	}
 
-	imPDRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:pdEquationIM"];
+	theory:imPDRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:pdEquationIM"];
 
 	subgraph IM {
 	rank="same"
-	{imPDRC}
+	{theory:imPDRC}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

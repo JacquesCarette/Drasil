@@ -11,92 +11,92 @@ digraph refvsref {
 	Psi -> f_i;
 	Psi -> Phi;
 	effectiveStressTM -> sigma;
-	normForcEq -> alpha_i;
-	normForcEq -> beta_i;
-	normForcEq -> equilibriumCS;
-	normForcEq -> sliceWght;
-	normForcEq -> srfWtrF;
-	bsShrFEq -> alpha_i;
-	bsShrFEq -> beta_i;
-	bsShrFEq -> equilibriumCS;
-	bsShrFEq -> sliceWght;
-	bsShrFEq -> srfWtrF;
-	resShr -> l_bi;
-	resShr -> sigma;
-	resShr -> tau;
-	resShr -> mcShrSrgth;
-	mobShr -> l_bi;
-	mobShr -> factOfSafetyTM;
-	mobShr -> resShr;
-	effNormF -> sigma;
-	effNormF -> effectiveStressTM;
-	effNormF -> baseWtrF;
-	resShearWO -> H_i;
-	resShearWO -> alpha_i;
-	resShearWO -> beta_i;
-	resShearWO -> l_bi;
-	resShearWO -> sliceWght;
-	resShearWO -> baseWtrF;
-	resShearWO -> srfWtrF;
-	mobShearWO -> H_i;
-	mobShearWO -> alpha_i;
-	mobShearWO -> beta_i;
-	mobShearWO -> sliceWght;
-	mobShearWO -> srfWtrF;
-	X_i -> f_i;
-	momentEql -> alpha_i;
-	momentEql -> beta_i;
-	momentEql -> b_i;
-	momentEql -> h_i;
-	momentEql -> torque;
-	momentEql -> equilibriumCS;
-	momentEql -> weight;
-	momentEql -> sliceWght;
-	momentEql -> srfWtrF;
-	weight -> newtonSL;
-	sliceWght -> b_i;
-	sliceWght -> weight;
-	baseWtrF -> l_bi;
-	baseWtrF -> pressure;
-	baseWtrF -> baseWtrF;
-	srfWtrF -> l_si;
-	srfWtrF -> pressure;
-	srfWtrF -> srfWtrF;
-	FS -> Phi;
-	FS -> Psi;
-	FS -> normForcEq;
-	FS -> bsShrFEq;
-	FS -> mobShr;
-	FS -> resShearWO;
-	FS -> mobShearWO;
-	FS -> X_i;
-	FS -> FS;
-	FS -> nrmShrForIM;
-	FS -> intsliceFsRC;
-	nrmShrForIM -> X_i;
-	nrmShrForIM -> momentEql;
-	nrmShrForIM -> FS;
+	theory:normForcEq -> alpha_i;
+	theory:normForcEq -> beta_i;
+	theory:normForcEq -> theory:equilibriumCS;
+	theory:normForcEq -> theory:sliceWght;
+	theory:normForcEq -> theory:srfWtrF;
+	theory:bsShrFEq -> alpha_i;
+	theory:bsShrFEq -> beta_i;
+	theory:bsShrFEq -> theory:equilibriumCS;
+	theory:bsShrFEq -> theory:sliceWght;
+	theory:bsShrFEq -> theory:srfWtrF;
+	theory:resShr -> l_bi;
+	theory:resShr -> sigma;
+	theory:resShr -> tau;
+	theory:resShr -> mcShrSrgth;
+	theory:mobShr -> l_bi;
+	theory:mobShr -> factOfSafetyTM;
+	theory:mobShr -> theory:resShr;
+	theory:effNormF -> sigma;
+	theory:effNormF -> effectiveStressTM;
+	theory:effNormF -> theory:baseWtrF;
+	theory:resShearWO -> H_i;
+	theory:resShearWO -> alpha_i;
+	theory:resShearWO -> beta_i;
+	theory:resShearWO -> l_bi;
+	theory:resShearWO -> theory:sliceWght;
+	theory:resShearWO -> theory:baseWtrF;
+	theory:resShearWO -> theory:srfWtrF;
+	theory:mobShearWO -> H_i;
+	theory:mobShearWO -> alpha_i;
+	theory:mobShearWO -> beta_i;
+	theory:mobShearWO -> theory:sliceWght;
+	theory:mobShearWO -> theory:srfWtrF;
+	theory:X_i -> f_i;
+	theory:momentEql -> alpha_i;
+	theory:momentEql -> beta_i;
+	theory:momentEql -> b_i;
+	theory:momentEql -> h_i;
+	theory:momentEql -> torque;
+	theory:momentEql -> theory:equilibriumCS;
+	theory:momentEql -> theory:weight;
+	theory:momentEql -> theory:sliceWght;
+	theory:momentEql -> theory:srfWtrF;
+	theory:weight -> newtonSL;
+	theory:sliceWght -> b_i;
+	theory:sliceWght -> theory:weight;
+	theory:baseWtrF -> l_bi;
+	theory:baseWtrF -> theory:pressure;
+	theory:baseWtrF -> theory:baseWtrF;
+	theory:srfWtrF -> l_si;
+	theory:srfWtrF -> theory:pressure;
+	theory:srfWtrF -> theory:srfWtrF;
+	theory:FS -> Phi;
+	theory:FS -> Psi;
+	theory:FS -> theory:normForcEq;
+	theory:FS -> theory:bsShrFEq;
+	theory:FS -> theory:mobShr;
+	theory:FS -> theory:resShearWO;
+	theory:FS -> theory:mobShearWO;
+	theory:FS -> theory:X_i;
+	theory:FS -> theory:FS;
+	theory:FS -> nrmShrForIM;
+	theory:FS -> theory:intsliceFsRC;
+	nrmShrForIM -> theory:X_i;
+	nrmShrForIM -> theory:momentEql;
+	nrmShrForIM -> theory:FS;
 	nrmShrForIM -> nrmShrForIM;
-	nrmShrForIM -> nrmShrForNumRC;
-	nrmShrForIM -> nrmShrForDenRC;
-	nrmShrForIM -> intsliceFsRC;
-	nrmShrForNumRC -> H_i;
-	nrmShrForNumRC -> alpha_i;
-	nrmShrForNumRC -> beta_i;
-	nrmShrForNumRC -> b_i;
-	nrmShrForNumRC -> h_i;
-	nrmShrForNumRC -> srfWtrF;
-	nrmShrForNumRC -> nrmShrForIM;
-	nrmShrForDenRC -> b_i;
-	nrmShrForDenRC -> f_i;
-	nrmShrForDenRC -> nrmShrForIM;
-	intsliceFsRC -> Phi;
-	intsliceFsRC -> Psi;
-	intsliceFsRC -> resShearWO;
-	intsliceFsRC -> mobShearWO;
-	intsliceFsRC -> FS;
-	intsliceFsRC -> nrmShrForIM;
-	intsliceFsRC -> intsliceFsRC;
+	nrmShrForIM -> theory:nrmShrForNumRC;
+	nrmShrForIM -> theory:nrmShrForDenRC;
+	nrmShrForIM -> theory:intsliceFsRC;
+	theory:nrmShrForNumRC -> H_i;
+	theory:nrmShrForNumRC -> alpha_i;
+	theory:nrmShrForNumRC -> beta_i;
+	theory:nrmShrForNumRC -> b_i;
+	theory:nrmShrForNumRC -> h_i;
+	theory:nrmShrForNumRC -> theory:srfWtrF;
+	theory:nrmShrForNumRC -> nrmShrForIM;
+	theory:nrmShrForDenRC -> b_i;
+	theory:nrmShrForDenRC -> f_i;
+	theory:nrmShrForDenRC -> nrmShrForIM;
+	theory:intsliceFsRC -> Phi;
+	theory:intsliceFsRC -> Psi;
+	theory:intsliceFsRC -> theory:resShearWO;
+	theory:intsliceFsRC -> theory:mobShearWO;
+	theory:intsliceFsRC -> theory:FS;
+	theory:intsliceFsRC -> nrmShrForIM;
+	theory:intsliceFsRC -> theory:intsliceFsRC;
 
 
 	H_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:intersliceWtrF"];
@@ -123,46 +123,46 @@ digraph refvsref {
 	}
 
 	factOfSafetyTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:factOfSafety"];
-	equilibriumCS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:equilibrium"];
+	theory:equilibriumCS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:equilibrium"];
 	mcShrSrgth	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:mcShrStrgth"];
 	effectiveStressTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:effStress"];
 	newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
 
 	subgraph TM {
 	rank="same"
-	{factOfSafetyTM, equilibriumCS, mcShrSrgth, effectiveStressTM, newtonSL}
+	{factOfSafetyTM, theory:equilibriumCS, mcShrSrgth, effectiveStressTM, newtonSL}
 	}
 
-	normForcEq	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:normForcEq"];
-	bsShrFEq	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:bsShrFEq"];
-	resShr	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:resShr"];
-	mobShr	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:mobShr"];
-	effNormF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:effNormF"];
-	resShearWO	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:resShearWO"];
-	mobShearWO	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:mobShearWO"];
-	X_i	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:normShrR"];
-	momentEql	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:momentEql"];
-	weight	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:weight"];
-	sliceWght	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:sliceWght"];
-	pressure	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:hsPressure"];
-	baseWtrF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:baseWtrF"];
-	srfWtrF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:srfWtrF"];
+	theory:normForcEq	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:normForcEq"];
+	theory:bsShrFEq	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:bsShrFEq"];
+	theory:resShr	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:resShr"];
+	theory:mobShr	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:mobShr"];
+	theory:effNormF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:effNormF"];
+	theory:resShearWO	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:resShearWO"];
+	theory:mobShearWO	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:mobShearWO"];
+	theory:X_i	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:normShrR"];
+	theory:momentEql	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:momentEql"];
+	theory:weight	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:weight"];
+	theory:sliceWght	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:sliceWght"];
+	theory:pressure	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:hsPressure"];
+	theory:baseWtrF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:baseWtrF"];
+	theory:srfWtrF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:srfWtrF"];
 
 	subgraph GD {
 	rank="same"
-	{normForcEq, bsShrFEq, resShr, mobShr, effNormF, resShearWO, mobShearWO, X_i, momentEql, weight, sliceWght, pressure, baseWtrF, srfWtrF}
+	{theory:normForcEq, theory:bsShrFEq, theory:resShr, theory:mobShr, theory:effNormF, theory:resShearWO, theory:mobShearWO, theory:X_i, theory:momentEql, theory:weight, theory:sliceWght, theory:pressure, theory:baseWtrF, theory:srfWtrF}
 	}
 
-	FS	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:fctSfty"];
+	theory:FS	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:fctSfty"];
 	nrmShrForIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nrmShrFor"];
-	nrmShrForNumRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nrmShrForNum"];
-	nrmShrForDenRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nrmShrForDen"];
-	intsliceFsRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:intsliceFs"];
-	crtSlpIdIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:crtSlpId"];
+	theory:nrmShrForNumRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nrmShrForNum"];
+	theory:nrmShrForDenRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nrmShrForDen"];
+	theory:intsliceFsRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:intsliceFs"];
+	theory:crtSlpIdIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:crtSlpId"];
 
 	subgraph IM {
 	rank="same"
-	{FS, nrmShrForIM, nrmShrForNumRC, nrmShrForDenRC, intsliceFsRC, crtSlpIdIM}
+	{theory:FS, nrmShrForIM, theory:nrmShrForNumRC, theory:nrmShrForDenRC, theory:intsliceFsRC, theory:crtSlpIdIM}
 	}
 
 }

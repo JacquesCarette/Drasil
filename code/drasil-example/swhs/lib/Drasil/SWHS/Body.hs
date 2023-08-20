@@ -6,7 +6,7 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (organization, section, variable)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
-import Theory.Drasil (GenDefn, InstanceModel)
+import Theory.Drasil (GenDefn, InstanceModel, output)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -88,7 +88,7 @@ si = SI {
   _datadefs    = SWHS.dataDefs,
   _configFiles = [],
   _inputs      = inputs,
-  _outputs     = swhsOutputs,
+  _outputs     = map (^. output) swhsOutputs,
   _defSequence = [] :: [Block SimpleQDef],
   _constraints = constrained,
   _constants   = specParamValList,
@@ -102,7 +102,7 @@ purp = foldlSent_ [S "investigate the effect" `S.of_` S "employing",
   short phsChgMtrl, S "within a", phrase sWHT]
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw swhsOutputs ++ symbolsAll) -- swhsOutputs ?
+symbMap = cdb (map (^. output) swhsOutputs ++ symbolsAll) -- swhsOutputs ?
   (map nw swhsOutputs ++ map nw symbols ++ map nw acronymsFull
   ++ map nw thermocon ++ map nw units ++ map nw [m_2, m_3] ++ map nw [absTol, relTol]
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con

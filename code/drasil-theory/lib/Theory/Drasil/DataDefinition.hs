@@ -71,12 +71,13 @@ instance HasUID             DataDefinition where uid = ddQD uid uid
 instance NamedIdea          DataDefinition where term = ddQD term term
 -- | Finds the idea contained in the 'QDefinition' used to make the 'DataDefinition where'.
 instance Idea               DataDefinition where getA = either getA getA . qdFromDD
+-- | Finds the 'Quantity' defined by the 'DataDefinition'
+instance DefinesQuantity    DataDefinition where
+  defLhs = ddQDGetter defLhs defLhs
 -- | Finds the output variable of the 'DataDefinition'
 instance HasOutput          DataDefinition where
   output = ddQDGetter defLhs defLhs
   out_constraints = to (const [])
--- | Finds the Symbol of the 'QDefinition' used to make the 'DataDefinition where'.
-instance HasSymbol          DataDefinition where symbol = either symbol symbol . qdFromDD
 -- | Converts the defining expression of a 'DataDefinition where' into the model expression language.
 instance Express            DataDefinition where express = either express express . qdFromDD
 {-- Finds 'Reference's contained in the 'DataDefinition where'.
@@ -89,8 +90,6 @@ instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. ui
 instance HasDerivation      DataDefinition where derivations = ddPkt pktMD
 -- | Finds any additional notes for the 'DataDefinition where'.
 instance HasAdditionalNotes DataDefinition where getNotes = ddPkt pktSS
--- | Finds the units of the 'QDefinition' used to make the 'DataDefinition where'.
-instance MayHaveUnit        DataDefinition where getUnit = either getUnit getUnit . qdFromDD
 -- | Finds the 'ShortName' of the 'DataDefinition where'.
 instance HasShortName       DataDefinition where shortname = (^. ddPkt pktSN)
 -- | Finds the reference address of a 'DataDefinition where'.

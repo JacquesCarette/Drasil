@@ -1,18 +1,18 @@
 digraph allvsr {
-	determineCritSlip -> FS;
+	determineCritSlip -> theory:FS;
 	determineCritSlip -> nrmShrForIM;
-	determineCritSlip -> intsliceFsRC;
-	determineCritSlip -> crtSlpIdIM;
-	displayGraph -> crtSlpIdIM;
-	displayFS -> FS;
+	determineCritSlip -> theory:intsliceFsRC;
+	determineCritSlip -> theory:crtSlpIdIM;
+	displayGraph -> theory:crtSlpIdIM;
+	displayFS -> theory:FS;
 	displayFS -> nrmShrForIM;
-	displayFS -> intsliceFsRC;
-	displayNormal -> FS;
+	displayFS -> theory:intsliceFsRC;
+	displayNormal -> theory:FS;
 	displayNormal -> nrmShrForIM;
-	displayNormal -> intsliceFsRC;
-	displayShear -> FS;
+	displayNormal -> theory:intsliceFsRC;
+	displayShear -> theory:FS;
 	displayShear -> nrmShrForIM;
-	displayShear -> intsliceFsRC;
+	displayShear -> theory:intsliceFsRC;
 	writeToFile -> displayInput;
 	writeToFile -> displayGraph;
 	writeToFile -> displayFS;
@@ -66,46 +66,46 @@ digraph allvsr {
 	}
 
 	factOfSafetyTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:factOfSafety"];
-	equilibriumCS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:equilibrium"];
+	theory:equilibriumCS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:equilibrium"];
 	mcShrSrgth	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:mcShrStrgth"];
 	effectiveStressTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:effStress"];
 	newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
 
 	subgraph TM {
 	rank="same"
-	{factOfSafetyTM, equilibriumCS, mcShrSrgth, effectiveStressTM, newtonSL}
+	{factOfSafetyTM, theory:equilibriumCS, mcShrSrgth, effectiveStressTM, newtonSL}
 	}
 
-	normForcEq	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:normForcEq"];
-	bsShrFEq	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:bsShrFEq"];
-	resShr	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:resShr"];
-	mobShr	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:mobShr"];
-	effNormF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:effNormF"];
-	resShearWO	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:resShearWO"];
-	mobShearWO	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:mobShearWO"];
-	X_i	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:normShrR"];
-	momentEql	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:momentEql"];
-	weight	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:weight"];
-	sliceWght	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:sliceWght"];
-	pressure	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:hsPressure"];
-	baseWtrF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:baseWtrF"];
-	srfWtrF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:srfWtrF"];
+	theory:normForcEq	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:normForcEq"];
+	theory:bsShrFEq	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:bsShrFEq"];
+	theory:resShr	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:resShr"];
+	theory:mobShr	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:mobShr"];
+	theory:effNormF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:effNormF"];
+	theory:resShearWO	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:resShearWO"];
+	theory:mobShearWO	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:mobShearWO"];
+	theory:X_i	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:normShrR"];
+	theory:momentEql	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:momentEql"];
+	theory:weight	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:weight"];
+	theory:sliceWght	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:sliceWght"];
+	theory:pressure	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:hsPressure"];
+	theory:baseWtrF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:baseWtrF"];
+	theory:srfWtrF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:srfWtrF"];
 
 	subgraph GD {
 	rank="same"
-	{normForcEq, bsShrFEq, resShr, mobShr, effNormF, resShearWO, mobShearWO, X_i, momentEql, weight, sliceWght, pressure, baseWtrF, srfWtrF}
+	{theory:normForcEq, theory:bsShrFEq, theory:resShr, theory:mobShr, theory:effNormF, theory:resShearWO, theory:mobShearWO, theory:X_i, theory:momentEql, theory:weight, theory:sliceWght, theory:pressure, theory:baseWtrF, theory:srfWtrF}
 	}
 
-	FS	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:fctSfty"];
+	theory:FS	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:fctSfty"];
 	nrmShrForIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nrmShrFor"];
-	nrmShrForNumRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nrmShrForNum"];
-	nrmShrForDenRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nrmShrForDen"];
-	intsliceFsRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:intsliceFs"];
-	crtSlpIdIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:crtSlpId"];
+	theory:nrmShrForNumRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nrmShrForNum"];
+	theory:nrmShrForDenRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nrmShrForDen"];
+	theory:intsliceFsRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:intsliceFs"];
+	theory:crtSlpIdIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:crtSlpId"];
 
 	subgraph IM {
 	rank="same"
-	{FS, nrmShrForIM, nrmShrForNumRC, nrmShrForDenRC, intsliceFsRC, crtSlpIdIM}
+	{theory:FS, nrmShrForIM, theory:nrmShrForNumRC, theory:nrmShrForDenRC, theory:intsliceFsRC, theory:crtSlpIdIM}
 	}
 
 	readAndStore	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:readAndStore"];

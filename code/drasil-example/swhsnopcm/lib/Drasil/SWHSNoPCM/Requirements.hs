@@ -1,5 +1,7 @@
 module Drasil.SWHSNoPCM.Requirements (funcReqs, inputInitValsTable) where
 
+import Control.Lens ((^.))
+
 import Language.Drasil
 import Drasil.DocLang (mkInputPropsTable)
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -42,7 +44,7 @@ oIDQVals :: [Sentence]
 oIDQVals = map foldlSent_ [
   [pluralNP (the value), fromSource inputInitVals],
   [phraseNP (the mass), fromSource findMass],
-  [ch balanceDecayRate, fromSource balanceDecayRate]
+  [ch (balanceDecayRate ^. defLhs), fromSource balanceDecayRate]
   ]
 
 inputInitValsTable :: LabelledContent

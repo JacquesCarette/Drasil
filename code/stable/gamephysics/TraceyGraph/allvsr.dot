@@ -36,30 +36,30 @@ digraph allvsr {
 	}
 
 	newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
-	force1	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonThirdLawMot"];
-	force	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:UniversalGravLaw"];
+	theory:force1	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonThirdLawMot"];
+	theory:force	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:UniversalGravLaw"];
 	newtonSLR	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawRotMot"];
 
 	subgraph TM {
 	rank="same"
-	{newtonSL, force1, force, newtonSLR}
+	{newtonSL, theory:force1, theory:force, newtonSLR}
 	}
 
-	gravitationalAccel	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelGravity"];
-	impulseS	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:impulse"];
+	theory:gravitationalAccel	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelGravity"];
+	theory:impulseS	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:impulse"];
 
 	subgraph GD {
 	rank="same"
-	{gravitationalAccel, impulseS}
+	{theory:gravitationalAccel, theory:impulseS}
 	}
 
-	accj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:transMot"];
-	angAccj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:rotMot"];
+	theory:accj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:transMot"];
+	theory:angAccj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:rotMot"];
 	col2DIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:col2D"];
 
 	subgraph IM {
 	rank="same"
-	{accj, angAccj, col2DIM}
+	{theory:accj, theory:angAccj, col2DIM}
 	}
 
 	simSpace	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:simSpace"];

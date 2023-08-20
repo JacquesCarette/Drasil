@@ -1,18 +1,18 @@
 digraph refvsref {
 	ixVel -> speed;
 	iyVel -> speed;
-	projSpeed -> accelerationTM;
-	projPos -> velocityTM;
-	projPos -> projSpeed;
-	velocity -> projSpeed;
-	position -> projPos;
-	flightduration -> iyVel;
-	flightduration -> position;
-	landingposition -> ixVel;
-	landingposition -> position;
-	landingposition -> flightduration;
-	offset -> landingposition;
-	message -> offset;
+	theory:projSpeed -> accelerationTM;
+	theory:projPos -> velocityTM;
+	theory:projPos -> theory:projSpeed;
+	theory:velocity -> theory:projSpeed;
+	theory:position -> theory:projPos;
+	theory:flightduration -> iyVel;
+	theory:flightduration -> theory:position;
+	theory:landingposition -> ixVel;
+	theory:landingposition -> theory:position;
+	theory:landingposition -> theory:flightduration;
+	theory:offset -> theory:landingposition;
+	theory:message -> theory:offset;
 
 
 	speed	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:vecMag"];
@@ -32,24 +32,24 @@ digraph refvsref {
 	{accelerationTM, velocityTM}
 	}
 
-	projSpeed	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectVel"];
-	projPos	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectPos"];
-	velocity	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velVec"];
-	position	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:posVec"];
+	theory:projSpeed	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectVel"];
+	theory:projPos	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectPos"];
+	theory:velocity	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velVec"];
+	theory:position	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:posVec"];
 
 	subgraph GD {
 	rank="same"
-	{projSpeed, projPos, velocity, position}
+	{theory:projSpeed, theory:projPos, theory:velocity, theory:position}
 	}
 
-	flightduration	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingTime"];
-	landingposition	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingDist"];
-	offset	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:offsetIM"];
-	message	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:messageIM"];
+	theory:flightduration	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingTime"];
+	theory:landingposition	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingDist"];
+	theory:offset	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:offsetIM"];
+	theory:message	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:messageIM"];
 
 	subgraph IM {
 	rank="same"
-	{flightduration, landingposition, offset, message}
+	{theory:flightduration, theory:landingposition, theory:offset, theory:message}
 	}
 
 }

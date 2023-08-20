@@ -1,11 +1,13 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.Body (srs, si, symbMap, printSetting, fullSI) where
 
+import Control.Lens ((^.))
+
 import Language.Drasil hiding (Verb, number, organization, section, variable)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
-import Theory.Drasil (qdEFromDD)
+import Theory.Drasil (qdEFromDD, output)
 
 import Prelude hiding (sin, cos, tan)
 import Data.Maybe (mapMaybe)
@@ -155,7 +157,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 -- SYMBOL MAP HELPERS --
 symbMap :: ChunkDB
-symbMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
+symbMap = cdb (map (^. output) SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw generalDefinitions ++ map nw SSP.iMods
   ++ map nw defs ++ map nw defs' ++ map nw softwarecon ++ map nw physicCon 
   ++ map nw physicsTMs

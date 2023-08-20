@@ -65,7 +65,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   increment, objDecNew, print, returnStmt, valStmt, comment, throw, ifCond,
   tryCatch, construct, param, method, getMethod, setMethod, initStmts,
   function, docFunc, buildClass, implementingClass, docClass, commentedClass,
-  modFromData, fileDoc, docMod, fileFromData)
+  modFromData, fileDoc, docMod, fileFromData, defaultOptSpace)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (classVar, 
   objVarSelf, intClass, buildModule, bindingError, extFuncAppMixedArgs, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, litArray, 
@@ -105,6 +105,7 @@ import Data.Maybe (fromMaybe)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, lbrace, rbrace, braces, brackets, colon, space, doubleQuotes)
 import qualified Text.PrettyPrint.HughesPJ as D (float)
+import Metadata.Drasil.DrasilMetaCall (drasilMeta, DrasilMeta(..), watermark)
 
 swiftExt :: String
 swiftExt = "swift"
@@ -597,7 +598,7 @@ instance ControlStatement SwiftCode where
     modify setThrowUsed
     G.throw swiftThrowDoc Empty msg
 
-  ifCond = G.ifCond id bodyStart elseIfLabel bodyEnd
+  ifCond = G.ifCond id bodyStart G.defaultOptSpace elseIfLabel bodyEnd
   switch = C.switch (space <>) emptyStmt
 
   ifExists = M.ifExists
@@ -1161,7 +1162,7 @@ swiftModDoc desc as date m = m : [desc | not (null desc)] ++
   [swiftDocCommandInit ++ swiftAuthorDoc ++ swiftDocCommandSep ++ stringList as 
     | not (null as)]
   ++ [swiftDocCommandInit ++ swiftDateDoc ++ swiftDocCommandSep ++ date 
-    | not (null date)]
+    | not (null date)] ++ [swiftDocCommandInit ++ watermark ++ version drasilMeta]
 
 swiftDocCommandInit, swiftDocCommandSep, swiftParamDoc, swiftRetDoc,
   swiftAuthorDoc, swiftDateDoc :: String

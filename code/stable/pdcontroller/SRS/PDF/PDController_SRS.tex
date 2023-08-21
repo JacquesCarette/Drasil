@@ -116,7 +116,7 @@ ${y_{\text{t}}}$ & Process Variable & --
 \\
 A & Assumption
 \\
-D & Derivative
+D & derivative
 \\
 DD & Data Definition
 \\
@@ -124,15 +124,15 @@ GD & General Definition
 \\
 GS & Goal Statement
 \\
-I & Integral
+I & integral
 \\
 IM & Instance Model
 \\
-P & Proportional
+P & proportional
 \\
-PD & Proportional Derivative
+PD & proportional derivative
 \\
-PID & Proportional Integral Derivative
+PID & proportional integral derivative
 \\
 PS & Physical System Description
 \\
@@ -282,21 +282,21 @@ This section simplifies the original problem and helps in developing the theoret
 \begin{itemize}
 \item[Power plant:\phantomsection\label{pwrPlant}]{The Power Plant and the Sensor are coupled as a single unit. (RefBy: \hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}, \hyperref[pwrPlantTxFnx]{A:Transfer Function}, \hyperref[massSpring]{A:Spring Mass}, and \hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}.)}
 \item[Decoupled equation:\phantomsection\label{decoupled}]{The decoupled form of the PD Controller equation used in this simulation. (RefBy: \hyperref[DD:ddCtrlVar]{DD:ddCtrlVar}.)}
-\item[Set-Point:\phantomsection\label{setPoint}]{The Set-Point is constant throughout the simulation. (RefBy: \hyperref[IM:pdEquationIM]{IM:pdEquationIM} and \hyperref[DD:ddProcessError]{DD:ddProcessError}.)}
+\item[Set-Point:\phantomsection\label{setPoint}]{The Set-Point is constant throughout the simulation. (RefBy: \hyperref[DD:ddProcessError]{DD:ddProcessError} and \hyperref[IM:pdEquationIM]{IM:pdEquationIM}.)}
 \item[External disturbance:\phantomsection\label{externalDisturb}]{There are no external disturbances to the Power Plant during the simulation. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}.)}
 \item[Initial Value:\phantomsection\label{initialValue}]{The initial value of the Process Variable is assumed to be zero. (RefBy: \hyperref[DD:ddProcessError]{DD:ddProcessError}.)}
 \item[Parallel Equation:\phantomsection\label{parallelEq}]{The Parallel form of the equation is used for the PD Controller. (RefBy: \hyperref[DD:ddCtrlVar]{DD:ddCtrlVar}.)}
 \item[Unfiltered Derivative:\phantomsection\label{unfilteredDerivative}]{A pure derivative function is used for this simulation; there are no filters applied. (RefBy: \hyperref[DD:ddDerivCtrl]{DD:ddDerivCtrl}.)}
 \item[Transfer Function:\phantomsection\label{pwrPlantTxFnx}]{The combined Power Plant and Sensor (\hyperref[pwrPlant]{A:Power plant}) are characterized by a Second Order mass-spring-damper System. (RefBy: \hyperref[TM:tmSOSystem]{TM:tmSOSystem}.)}
-\item[Spring Mass:\phantomsection\label{massSpring}]{The mass of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 1 kilogram. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and \hyperref[likeChgPP]{LC:DC Gain and Time Constant}.)}
-\item[Spring Damping Coefficient:\phantomsection\label{dampingCoeffSpring}]{The Damping Coefficient of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 1. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and \hyperref[likeChgPP]{LC:DC Gain and Time Constant}.)}
-\item[Spring Stiffness Coefficient:\phantomsection\label{stiffnessCoeffSpring}]{The Stiffness Coefficient of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 20. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and \hyperref[likeChgPP]{LC:DC Gain and Time Constant}.)}
+\item[Spring Mass:\phantomsection\label{massSpring}]{The mass of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 1 kilogram. (RefBy: \hyperref[likeChgPP]{LC:DC Gain and Time Constant} and \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}.)}
+\item[Spring Damping Coefficient:\phantomsection\label{dampingCoeffSpring}]{The Damping Coefficient of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 1. (RefBy: \hyperref[likeChgPP]{LC:DC Gain and Time Constant} and \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}.)}
+\item[Spring Stiffness Coefficient:\phantomsection\label{stiffnessCoeffSpring}]{The Stiffness Coefficient of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 20. (RefBy: \hyperref[likeChgPP]{LC:DC Gain and Time Constant} and \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}.)}
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
 This section focuses on the general equations and laws that PD Controller is based on.
 
-\medskip
+\vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -324,13 +324,12 @@ Notes & Bilateral Laplace Transform. The Laplace transforms are typically inferr
 Source & \cite{laplaceWiki}
          
 \\ \midrule
-RefBy & \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}, \hyperref[DD:ddPropCtrl]{DD:ddPropCtrl}, \hyperref[DD:ddProcessError]{DD:ddProcessError}, and \hyperref[DD:ddDerivCtrl]{DD:ddDerivCtrl}
+RefBy & \hyperref[DD:ddPropCtrl]{DD:ddPropCtrl}, \hyperref[DD:ddProcessError]{DD:ddProcessError}, \hyperref[DD:ddDerivCtrl]{DD:ddDerivCtrl}, and \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}
         
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-
-\medskip
+\vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -361,8 +360,7 @@ RefBy & \hyperref[IM:pdEquationIM]{IM:pdEquationIM}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-
-\medskip
+\vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -395,12 +393,11 @@ RefBy & \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-
 \subsubsection{General Definitions}
 \label{Sec:GDs}
 This section collects the laws and equations that will be used to build the instance models.
 
-\medskip
+\vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -430,12 +427,11 @@ RefBy & \hyperref[IM:pdEquationIM]{IM:pdEquationIM}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
 
-\medskip
+\vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -468,13 +464,13 @@ Notes & The Process Error is the difference between the Set-Point and Process Va
 Source & \cite{johnson2008}
          
 \\ \midrule
-RefBy & \hyperref[IM:pdEquationIM]{IM:pdEquationIM}, \hyperref[DD:ddPropCtrl]{DD:ddPropCtrl}, and \hyperref[DD:ddDerivCtrl]{DD:ddDerivCtrl}
+RefBy & \hyperref[DD:ddPropCtrl]{DD:ddPropCtrl}, \hyperref[DD:ddDerivCtrl]{DD:ddDerivCtrl}, and \hyperref[IM:pdEquationIM]{IM:pdEquationIM}
         
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 
-\medskip
+\vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -513,7 +509,7 @@ RefBy & \hyperref[DD:ddCtrlVar]{DD:ddCtrlVar}
 \end{tabular}
 \end{minipage}
 
-\medskip
+\vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -553,7 +549,7 @@ RefBy & \hyperref[DD:ddCtrlVar]{DD:ddCtrlVar}
 \end{tabular}
 \end{minipage}
 
-\medskip
+\vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -598,7 +594,7 @@ RefBy & \hyperref[IM:pdEquationIM]{IM:pdEquationIM}
 \label{Sec:IMs}
 This section transforms the problem defined in the \hyperref[Sec:ProbDesc]{problem description} into one which is expressed in mathematical terms. It uses concrete symbols defined in the \hyperref[Sec:DDs]{data definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{theoretical models} and \hyperref[Sec:GDs]{general definitions}.
 
-\medskip
+\vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -649,7 +645,6 @@ RefBy & \hyperref[outputValues]{FR:Output-Values} and \hyperref[calculateValues]
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-
 \paragraph{Detailed derivation of Process Variable:}
 \label{IM:pdEquationIMDeriv}
 The Process Variable ${Y_{\text{s}}}$ in a PD Control Loop is the product of the Process Error (from \hyperref[DD:ddProcessError]{DD:ddProcessError}), Control Variable (from \hyperref[DD:ddCtrlVar]{DD:ddCtrlVar}), and the Power Plant (from \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}).

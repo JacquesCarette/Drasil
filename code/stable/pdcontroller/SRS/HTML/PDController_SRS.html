@@ -292,7 +292,7 @@
                 </tr>
                 <tr>
                   <td>D</td>
-                  <td>Derivative</td>
+                  <td>derivative</td>
                 </tr>
                 <tr>
                   <td>DD</td>
@@ -308,7 +308,7 @@
                 </tr>
                 <tr>
                   <td>I</td>
-                  <td>Integral</td>
+                  <td>integral</td>
                 </tr>
                 <tr>
                   <td>IM</td>
@@ -316,15 +316,15 @@
                 </tr>
                 <tr>
                   <td>P</td>
-                  <td>Proportional</td>
+                  <td>proportional</td>
                 </tr>
                 <tr>
                   <td>PD</td>
-                  <td>Proportional Derivative</td>
+                  <td>proportional derivative</td>
                 </tr>
                 <tr>
                   <td>PID</td>
-                  <td>Proportional Integral Derivative</td>
+                  <td>proportional integral derivative</td>
                 </tr>
                 <tr>
                   <td>PS</td>
@@ -603,7 +603,7 @@
                   </p>
                   <p>
                     <div id="setPoint">
-                      Set-Point: The Set-Point is constant throughout the simulation. (RefBy: <a href=#IM:pdEquationIM>IM:pdEquationIM</a> and <a href=#DD:ddProcessError>DD:ddProcessError</a>.)
+                      Set-Point: The Set-Point is constant throughout the simulation. (RefBy: <a href=#DD:ddProcessError>DD:ddProcessError</a> and <a href=#IM:pdEquationIM>IM:pdEquationIM</a>.)
                     </div>
                   </p>
                   <p>
@@ -633,17 +633,17 @@
                   </p>
                   <p>
                     <div id="massSpring">
-                      Spring Mass: The mass of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 1 kilogram. (RefBy: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
+                      Spring Mass: The mass of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 1 kilogram. (RefBy: <a href=#likeChgPP>LC:DC Gain and Time Constant</a> and <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="dampingCoeffSpring">
-                      Spring Damping Coefficient: The Damping Coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 1. (RefBy: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
+                      Spring Damping Coefficient: The Damping Coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 1. (RefBy: <a href=#likeChgPP>LC:DC Gain and Time Constant</a> and <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="stiffnessCoeffSpring">
-                      Spring Stiffness Coefficient: The Stiffness Coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 20. (RefBy: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
+                      Spring Stiffness Coefficient: The Stiffness Coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 20. (RefBy: <a href=#likeChgPP>LC:DC Gain and Time Constant</a> and <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>.)
                     </div>
                   </p>
                 </div>
@@ -706,7 +706,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>, <a href=#DD:ddPropCtrl>DD:ddPropCtrl</a>, <a href=#DD:ddProcessError>DD:ddProcessError</a>, and <a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a>
+                          <a href=#DD:ddPropCtrl>DD:ddPropCtrl</a>, <a href=#DD:ddProcessError>DD:ddProcessError</a>, <a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a>, and <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>
                         </p>
                       </td>
                     </tr>
@@ -946,12 +946,13 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:pdEquationIM>IM:pdEquationIM</a>, <a href=#DD:ddPropCtrl>DD:ddPropCtrl</a>, and <a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a>
+                          <a href=#DD:ddPropCtrl>DD:ddPropCtrl</a>, <a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a>, and <a href=#IM:pdEquationIM>IM:pdEquationIM</a>
                         </p>
                       </td>
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:ddPropCtrl">
                   <table class="ddefn">
                     <tr>
@@ -1014,6 +1015,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:ddDerivCtrl">
                   <table class="ddefn">
                     <tr>
@@ -1077,6 +1079,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:ddCtrlVar">
                   <table class="ddefn">
                     <tr>
@@ -1145,6 +1148,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
               </div>
             </div>
             <div id="Sec:IMs">

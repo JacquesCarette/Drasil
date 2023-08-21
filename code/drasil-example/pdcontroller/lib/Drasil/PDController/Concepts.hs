@@ -15,11 +15,11 @@ pdControllerApp, pdControllerCI, proportionalCI, derivativeCI, integralCI,
                      pidCI :: CI
 
 pdControllerApp = commonIdeaWithDict "pdControllerApp" (pn "PD Controller")                    "PD Controller" []
-pdControllerCI  = commonIdeaWithDict "pdControllerCI"  (pn "Proportional Derivative")          "PD"            []
-proportionalCI  = commonIdeaWithDict "proportionalCI"  (pn "Proportional")                     "P"             []
-derivativeCI    = commonIdeaWithDict "derivativeCI"    (pn "Derivative")                       "D"             []
-integralCI      = commonIdeaWithDict "integralCI"      (pn "Integral")                         "I"             []
-pidCI           = commonIdeaWithDict "pidCI"           (pn "Proportional Integral Derivative") "PID"           []
+pdControllerCI  = commonIdeaWithDict "pdControllerCI"  (pn "proportional derivative")          "PD"            []
+proportionalCI  = commonIdeaWithDict "proportionalCI"  (pn "proportional")                     "P"             []
+derivativeCI    = commonIdeaWithDict "derivativeCI"    (pn "derivative")                       "D"             []
+integralCI      = commonIdeaWithDict "integralCI"      (pn "integral")                         "I"             []
+pidCI           = commonIdeaWithDict "pidCI"           (pn "proportional integral derivative") "PID"           []
 
 pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
       simulationTime, processVariable, setPoint, propGain, derGain, 

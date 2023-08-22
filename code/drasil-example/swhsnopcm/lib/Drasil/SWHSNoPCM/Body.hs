@@ -3,7 +3,7 @@ module Drasil.SWHSNoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI) where
 import Language.Drasil hiding (section)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
-import Theory.Drasil (TheoryModel)
+import Theory.Drasil (HasOutput(output), TheoryModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -67,6 +67,8 @@ import Drasil.SWHSNoPCM.Requirements (funcReqs, inputInitValsTable)
 import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
+
+import Control.Lens ((^.))
 
 srs :: Document
 srs = mkDoc mkSRS S.forT si
@@ -208,7 +210,7 @@ refDB :: ReferenceDB
 refDB = rdb citations concIns
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw iMods ++ symbolsAll) (nw progName : map nw iMods
+symbMap = cdb (map (qw . (^. output)) iMods ++ symbolsAll) (nw progName : map nw iMods
   ++ map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'

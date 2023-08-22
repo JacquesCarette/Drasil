@@ -31,7 +31,7 @@ digraph allvsall {
 	outputInputDerivVals -> findMass;
 	calcValues -> theory:eBalanceOnWtrRC;
 	calcValues -> heatEInWtrIM;
-	outputValues -> eBalanceOnWtrRC;
+	outputValues -> theory:eBalanceOnWtrRC;
 	outputValues -> heatEInWtrIM;
 	likeChgTCVOD -> assumpTHCCoT;
 	likeChgTCVOL -> assumpTHCCoL;

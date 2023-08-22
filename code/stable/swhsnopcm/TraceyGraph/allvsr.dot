@@ -9,7 +9,7 @@ digraph allvsr {
 	outputInputDerivVals -> findMass;
 	calcValues -> theory:eBalanceOnWtrRC;
 	calcValues -> heatEInWtrIM;
-	outputValues -> eBalanceOnWtrRC;
+	outputValues -> theory:eBalanceOnWtrRC;
 	outputValues -> heatEInWtrIM;
 
 

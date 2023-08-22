@@ -4552,6 +4552,11 @@
                   Write-Results-To-File: Provide the option of writing the output result data, as given in <a href=#displayInput>FR:Display-Input</a>, <a href=#displayGraph>FR:Display-Graph</a>, <a href=#displayFS>FR:Display-Factor-of-Safety</a>, <a href=#displayNormal>FR:Display-Interslice-Normal-Forces</a>, and <a href=#displayShear>FR:Display-Interslice-Shear-Forces</a>, to a file.
                 </div>
               </p>
+              <p>
+                <div id="outputValues">
+                  Output-Values: Output the value from <a href=#Table:ReqOutputs>Tab:ReqOutputs</a>.
+                </div>
+              </p>
             </div>
             <div id="Table:ReqInputs">
               <table class="table">
@@ -4686,6 +4691,25 @@
                 </tr>
               </table>
               <p class="caption">Inputs to be returned as output</p>
+            </div>
+            <div id="Table:ReqOutputs">
+              <table class="table">
+                <tr>
+                  <th>Symbol</th>
+                  <th>Description</th>
+                  <th>Source</th>
+                  <th>Units</th>
+                </tr>
+                <tr>
+                  <td><em>F<sub>S</sub></em></td>
+                  <td>Factor of safety</td>
+                  <td></td>
+                  <td>--</td>
+                </tr>
+              </table>
+              <p class="caption">
+                Required Output following <a href=#outputValues>FR:Output-Values</a>
+              </p>
             </div>
           </div>
         </div>
@@ -6114,6 +6138,25 @@
             </tr>
             <tr>
               <td><a href=#writeToFile>FR:Write-Results-To-File</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#outputValues>FR:Output-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -8315,6 +8358,7 @@
                 <a href=#displayShear>FR:Display-Interslice-Shear-Forces</a>
               </th>
               <th><a href=#writeToFile>FR:Write-Results-To-File</a></th>
+              <th><a href=#outputValues>FR:Output-Values</a></th>
               <th><a href=#correct>NFR:Correct</a></th>
               <th><a href=#understandable>NFR:Understandable</a></th>
               <th><a href=#reusable>NFR:Reusable</a></th>
@@ -8322,6 +8366,7 @@
             </tr>
             <tr>
               <td><a href=#identifyCritAndFS>GS:Identify-Crit-and-FS</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -8437,9 +8482,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#determineShearF>GS:Determine-Shear-Forces</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -8555,9 +8602,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#verifyInput>FR:Verify-Input</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -8675,9 +8724,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#verifyOutput>FR:Verify-Output</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -8793,6 +8844,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#displayGraph>FR:Display-Graph</a></td>
@@ -8852,6 +8904,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#displayFS>FR:Display-Factor-of-Safety</a></td>
@@ -8896,6 +8949,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -8972,6 +9026,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
@@ -9018,6 +9073,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -9092,9 +9148,71 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#outputValues>FR:Output-Values</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#correct>NFR:Correct</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -9210,6 +9328,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#reusable>NFR:Reusable</a></td>
@@ -9269,9 +9388,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#maintainable>NFR:Maintainable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

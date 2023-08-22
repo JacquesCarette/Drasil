@@ -2596,6 +2596,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Display-Interslice-Normal-Forces:\phantomsection\label{displayNormal}]{Using \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, and \hyperref[IM:intsliceFs]{IM:intsliceFs}, calculate and graphically display the interslice normal forces.}
 \item[Display-Interslice-Shear-Forces:\phantomsection\label{displayShear}]{Using \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, and \hyperref[IM:intsliceFs]{IM:intsliceFs}, calculate and graphically display the interslice shear forces.}
 \item[Write-Results-To-File:\phantomsection\label{writeToFile}]{Provide the option of writing the output result data, as given in \hyperref[displayInput]{FR:Display-Input}, \hyperref[displayGraph]{FR:Display-Graph}, \hyperref[displayFS]{FR:Display-Factor-of-Safety}, \hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}, and \hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}, to a file.}
+\item[Output-Values:\phantomsection\label{outputValues}]{Output the value from \hyperref[Table:ReqOutputs]{Tab:ReqOutputs}.}
 \end{itemize}
 \begin{longtblr}
 [caption={Required Inputs following \hyperref[readAndStore]{FR:Read-and-Store}}]
@@ -2656,6 +2657,14 @@ ${{y_{\text{slip}}}^{\text{max}}}$ & maximum $y$-coordinate
 \\
 ${{y_{\text{slip}}}^{\text{min}}}$ & minimum $y$-coordinate
 \label{Table:inputsToOutputTable}
+\end{longtblr}
+\begin{longtblr}
+[caption={Required Output following \hyperref[outputValues]{FR:Output-Values}}]
+{colspec={l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{Symbol} & \textbf{Description} & \textbf{Source} & \textbf{Units}
+\\
+${F_{\text{S}}}$ & Factor of safety &  & --
+\label{Table:ReqOutputs}
 \end{longtblr}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
@@ -2835,6 +2844,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[writeToFile]{FR:Write-Results-To-File} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
 \hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[understandable]{NFR:Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -2946,42 +2957,44 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
-{colspec={l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[DD:intersliceWtrF]{DD:intersliceWtrF}} & \textbf{\hyperref[DD:angleA]{DD:angleA}} & \textbf{\hyperref[DD:angleB]{DD:angleB}} & \textbf{\hyperref[DD:lengthB]{DD:lengthB}} & \textbf{\hyperref[DD:lengthLb]{DD:lengthLb}} & \textbf{\hyperref[DD:lengthLs]{DD:lengthLs}} & \textbf{\hyperref[DD:slcHeight]{DD:slcHeight}} & \textbf{\hyperref[DD:normStress]{DD:normStress}} & \textbf{\hyperref[DD:tangStress]{DD:tangStress}} & \textbf{\hyperref[DD:torque]{DD:torque}} & \textbf{\hyperref[DD:ratioVariation]{DD:ratioVariation}} & \textbf{\hyperref[DD:convertFunc1]{DD:convertFunc1}} & \textbf{\hyperref[DD:convertFunc2]{DD:convertFunc2}} & \textbf{\hyperref[DD:nrmForceSumDD]{DD:nrmForceSumDD}} & \textbf{\hyperref[DD:watForceSumDD]{DD:watForceSumDD}} & \textbf{\hyperref[DD:sliceHghtRightDD]{DD:sliceHghtRightDD}} & \textbf{\hyperref[DD:sliceHghtLeftDD]{DD:sliceHghtLeftDD}} & \textbf{\hyperref[TM:factOfSafety]{TM:factOfSafety}} & \textbf{\hyperref[TM:equilibrium]{TM:equilibrium}} & \textbf{\hyperref[TM:mcShrStrgth]{TM:mcShrStrgth}} & \textbf{\hyperref[TM:effStress]{TM:effStress}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[GD:normForcEq]{GD:normForcEq}} & \textbf{\hyperref[GD:bsShrFEq]{GD:bsShrFEq}} & \textbf{\hyperref[GD:resShr]{GD:resShr}} & \textbf{\hyperref[GD:mobShr]{GD:mobShr}} & \textbf{\hyperref[GD:effNormF]{GD:effNormF}} & \textbf{\hyperref[GD:resShearWO]{GD:resShearWO}} & \textbf{\hyperref[GD:mobShearWO]{GD:mobShearWO}} & \textbf{\hyperref[GD:normShrR]{GD:normShrR}} & \textbf{\hyperref[GD:momentEql]{GD:momentEql}} & \textbf{\hyperref[GD:weight]{GD:weight}} & \textbf{\hyperref[GD:sliceWght]{GD:sliceWght}} & \textbf{\hyperref[GD:hsPressure]{GD:hsPressure}} & \textbf{\hyperref[GD:baseWtrF]{GD:baseWtrF}} & \textbf{\hyperref[GD:srfWtrF]{GD:srfWtrF}} & \textbf{\hyperref[IM:fctSfty]{IM:fctSfty}} & \textbf{\hyperref[IM:nrmShrFor]{IM:nrmShrFor}} & \textbf{\hyperref[IM:nrmShrForNum]{IM:nrmShrForNum}} & \textbf{\hyperref[IM:nrmShrForDen]{IM:nrmShrForDen}} & \textbf{\hyperref[IM:intsliceFs]{IM:intsliceFs}} & \textbf{\hyperref[IM:crtSlpId]{IM:crtSlpId}} & \textbf{\hyperref[readAndStore]{FR:Read-and-Store}} & \textbf{\hyperref[verifyInput]{FR:Verify-Input}} & \textbf{\hyperref[determineCritSlip]{FR:Determine-Critical-Slip-Surface}} & \textbf{\hyperref[verifyOutput]{FR:Verify-Output}} & \textbf{\hyperref[displayInput]{FR:Display-Input}} & \textbf{\hyperref[displayGraph]{FR:Display-Graph}} & \textbf{\hyperref[displayFS]{FR:Display-Factor-of-Safety}} & \textbf{\hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}} & \textbf{\hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}} & \textbf{\hyperref[writeToFile]{FR:Write-Results-To-File}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[understandable]{NFR:Understandable}} & \textbf{\hyperref[reusable]{NFR:Reusable}} & \textbf{\hyperref[maintainable]{NFR:Maintainable}}
+{colspec={l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[DD:intersliceWtrF]{DD:intersliceWtrF}} & \textbf{\hyperref[DD:angleA]{DD:angleA}} & \textbf{\hyperref[DD:angleB]{DD:angleB}} & \textbf{\hyperref[DD:lengthB]{DD:lengthB}} & \textbf{\hyperref[DD:lengthLb]{DD:lengthLb}} & \textbf{\hyperref[DD:lengthLs]{DD:lengthLs}} & \textbf{\hyperref[DD:slcHeight]{DD:slcHeight}} & \textbf{\hyperref[DD:normStress]{DD:normStress}} & \textbf{\hyperref[DD:tangStress]{DD:tangStress}} & \textbf{\hyperref[DD:torque]{DD:torque}} & \textbf{\hyperref[DD:ratioVariation]{DD:ratioVariation}} & \textbf{\hyperref[DD:convertFunc1]{DD:convertFunc1}} & \textbf{\hyperref[DD:convertFunc2]{DD:convertFunc2}} & \textbf{\hyperref[DD:nrmForceSumDD]{DD:nrmForceSumDD}} & \textbf{\hyperref[DD:watForceSumDD]{DD:watForceSumDD}} & \textbf{\hyperref[DD:sliceHghtRightDD]{DD:sliceHghtRightDD}} & \textbf{\hyperref[DD:sliceHghtLeftDD]{DD:sliceHghtLeftDD}} & \textbf{\hyperref[TM:factOfSafety]{TM:factOfSafety}} & \textbf{\hyperref[TM:equilibrium]{TM:equilibrium}} & \textbf{\hyperref[TM:mcShrStrgth]{TM:mcShrStrgth}} & \textbf{\hyperref[TM:effStress]{TM:effStress}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[GD:normForcEq]{GD:normForcEq}} & \textbf{\hyperref[GD:bsShrFEq]{GD:bsShrFEq}} & \textbf{\hyperref[GD:resShr]{GD:resShr}} & \textbf{\hyperref[GD:mobShr]{GD:mobShr}} & \textbf{\hyperref[GD:effNormF]{GD:effNormF}} & \textbf{\hyperref[GD:resShearWO]{GD:resShearWO}} & \textbf{\hyperref[GD:mobShearWO]{GD:mobShearWO}} & \textbf{\hyperref[GD:normShrR]{GD:normShrR}} & \textbf{\hyperref[GD:momentEql]{GD:momentEql}} & \textbf{\hyperref[GD:weight]{GD:weight}} & \textbf{\hyperref[GD:sliceWght]{GD:sliceWght}} & \textbf{\hyperref[GD:hsPressure]{GD:hsPressure}} & \textbf{\hyperref[GD:baseWtrF]{GD:baseWtrF}} & \textbf{\hyperref[GD:srfWtrF]{GD:srfWtrF}} & \textbf{\hyperref[IM:fctSfty]{IM:fctSfty}} & \textbf{\hyperref[IM:nrmShrFor]{IM:nrmShrFor}} & \textbf{\hyperref[IM:nrmShrForNum]{IM:nrmShrForNum}} & \textbf{\hyperref[IM:nrmShrForDen]{IM:nrmShrForDen}} & \textbf{\hyperref[IM:intsliceFs]{IM:intsliceFs}} & \textbf{\hyperref[IM:crtSlpId]{IM:crtSlpId}} & \textbf{\hyperref[readAndStore]{FR:Read-and-Store}} & \textbf{\hyperref[verifyInput]{FR:Verify-Input}} & \textbf{\hyperref[determineCritSlip]{FR:Determine-Critical-Slip-Surface}} & \textbf{\hyperref[verifyOutput]{FR:Verify-Output}} & \textbf{\hyperref[displayInput]{FR:Display-Input}} & \textbf{\hyperref[displayGraph]{FR:Display-Graph}} & \textbf{\hyperref[displayFS]{FR:Display-Factor-of-Safety}} & \textbf{\hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}} & \textbf{\hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}} & \textbf{\hyperref[writeToFile]{FR:Write-Results-To-File}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[understandable]{NFR:Understandable}} & \textbf{\hyperref[reusable]{NFR:Reusable}} & \textbf{\hyperref[maintainable]{NFR:Maintainable}}
 \\
-\hyperref[identifyCritAndFS]{GS:Identify-Crit-and-FS} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[identifyCritAndFS]{GS:Identify-Crit-and-FS} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[determineNormalF]{GS:Determine-Normal-Forces} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[determineNormalF]{GS:Determine-Normal-Forces} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[determineShearF]{GS:Determine-Shear-Forces} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[determineShearF]{GS:Determine-Shear-Forces} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[readAndStore]{FR:Read-and-Store} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[readAndStore]{FR:Read-and-Store} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyInput]{FR:Verify-Input} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInput]{FR:Verify-Input} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[determineCritSlip]{FR:Determine-Critical-Slip-Surface} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[determineCritSlip]{FR:Determine-Critical-Slip-Surface} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyOutput]{FR:Verify-Output} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyOutput]{FR:Verify-Output} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[displayInput]{FR:Display-Input} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[displayInput]{FR:Display-Input} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[displayGraph]{FR:Display-Graph} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[displayGraph]{FR:Display-Graph} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[displayFS]{FR:Display-Factor-of-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[displayFS]{FR:Display-Factor-of-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[displayShear]{FR:Display-Interslice-Shear-Forces} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[displayShear]{FR:Display-Interslice-Shear-Forces} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[writeToFile]{FR:Write-Results-To-File} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X & X &  &  &  &  & 
+\hyperref[writeToFile]{FR:Write-Results-To-File} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X & X &  &  &  &  &  & 
 \\
-\hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[understandable]{NFR:Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[reusable]{NFR:Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[understandable]{NFR:Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[maintainable]{NFR:Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[reusable]{NFR:Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[maintainable]{NFR:Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatAllvsR}
 \end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.

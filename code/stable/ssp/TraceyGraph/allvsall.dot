@@ -258,6 +258,7 @@ digraph allvsall {
 	displayNormal	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:displayNormal"];
 	displayShear	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:displayShear"];
 	writeToFile	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:writeToFile"];
+	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
 	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
 	reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:reusable"];
@@ -265,7 +266,7 @@ digraph allvsall {
 
 	subgraph FR {
 	rank="same"
-	{readAndStore, verifyInput, determineCritSlip, verifyOutput, displayInput, displayGraph, displayFS, displayNormal, displayShear, writeToFile, correct, understandable, reusable, maintainable}
+	{readAndStore, verifyInput, determineCritSlip, verifyOutput, displayInput, displayGraph, displayFS, displayNormal, displayShear, writeToFile, outputValues, correct, understandable, reusable, maintainable}
 	}
 
 	identifyCritAndFS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:identifyCritAndFS"];

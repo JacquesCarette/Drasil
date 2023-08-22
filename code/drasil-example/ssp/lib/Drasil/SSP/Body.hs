@@ -46,13 +46,13 @@ import Drasil.SSP.Defs (acronyms, crtSlpSrf, defs, defs', effFandS, factor, fsCo
   soilLyr, soilMechanics, soilPrpty, ssa, ssp, stabAnalysis, waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (goals)
-import Drasil.SSP.IMods (instModIntro)
+import Drasil.SSP.IMods (instModIntro, outputs)
 import qualified Drasil.SSP.IMods as SSP (iMods)
 import Drasil.SSP.References (citations, morgenstern1965)
 import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs)
 import Drasil.SSP.TMods (tMods)
-import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
-  inputs, inputsWUncrtn, outputs, symbols)
+import Drasil.SSP.Unitals (constrained, constrOutputs, effCohesion, fricAngle,
+  fs, index, inputs, inputsWUncrtn, symbols)
 
 --Document Setup--
 
@@ -81,7 +81,7 @@ si = SI {
   _datadefs    = SSP.dataDefs,
   _configFiles = [],
   _inputs      = map qw inputs,
-  _outputs     = map qw outputs,
+  _outputs     = outputs,
   _defSequence = [(\x -> Parallel (head x) (tail x)) $ mapMaybe qdEFromDD SSP.dataDefs],
   _constraints = constrained,
   _constants   = [],
@@ -121,7 +121,7 @@ mkSRS = [TableOfContents,
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs instModIntro ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
         , Constraints EmptyS inputsWUncrtn --FIXME: issue #295
-        , CorrSolnPpties outputs []
+        , CorrSolnPpties constrOutputs []
         ]
       ],
   ReqrmntSec $ ReqsProg

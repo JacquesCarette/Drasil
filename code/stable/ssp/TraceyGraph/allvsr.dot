@@ -18,6 +18,7 @@ digraph allvsr {
 	writeToFile -> displayFS;
 	writeToFile -> displayNormal;
 	writeToFile -> displayShear;
+	outputValues -> theory:FS;
 
 
 	assumpSSC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSSC"];

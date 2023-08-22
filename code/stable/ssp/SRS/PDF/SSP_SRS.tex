@@ -2113,7 +2113,7 @@ Notes & $\symbf{R}$ is defined in \hyperref[GD:resShearWO]{GD:resShearWO}, $\sym
 Source & \cite{chen2005} and \cite{karchewski2012}
          
 \\ \midrule
-RefBy & \hyperref[IM:intsliceFs]{IM:intsliceFs}, \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}, \hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}, \hyperref[displayFS]{FR:Display-Factor-of-Safety}, and \hyperref[determineCritSlip]{FR:Determine-Critical-Slip-Surface}
+RefBy & \hyperref[IM:intsliceFs]{IM:intsliceFs}, \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[outputValues]{FR:Output-Values}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}, \hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}, \hyperref[displayFS]{FR:Display-Factor-of-Safety}, and \hyperref[determineCritSlip]{FR:Determine-Critical-Slip-Surface}
         
 \\ \bottomrule
 \end{tabular}
@@ -2663,7 +2663,7 @@ ${{y_{\text{slip}}}^{\text{min}}}$ & minimum $y$-coordinate
 {colspec={l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Source} & \textbf{Units}
 \\
-${F_{\text{S}}}$ & Factor of safety &  & --
+${F_{\text{S}}}$ & Factor of safety & \hyperref[IM:fctSfty]{IM:fctSfty} & --
 \label{Table:ReqOutputs}
 \end{longtblr}
 \subsection{Non-Functional Requirements}
@@ -2986,7 +2986,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[writeToFile]{FR:Write-Results-To-File} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X & X &  &  &  &  &  & 
 \\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\

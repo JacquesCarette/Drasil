@@ -153,6 +153,7 @@ digraph allvsall {
 	writeToFile -> displayFS;
 	writeToFile -> displayNormal;
 	writeToFile -> displayShear;
+	outputValues -> theory:FS;
 	LC_inhomogeneous -> assumpSLH;
 	LC_seismic -> assumpSF;
 	LC_external -> assumpSL;

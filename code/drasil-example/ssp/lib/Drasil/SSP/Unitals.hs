@@ -27,8 +27,8 @@ import Data.Drasil.Quantities.Physics (acceleration, displacement, distance,
 
 
 symbols :: [DefinedQuantityDict]
-symbols = map dqdWr inputs ++ map dqdWr outputs ++ 
-  map dqdWr units ++ map dqdWr unitless
+symbols = dqdWr coords : map dqdWr inputs ++ map dqdWr outputs
+  ++ map dqdWr units ++ map dqdWr unitless
 
 ---------------------------
 -- Imported UnitalChunks --
@@ -66,7 +66,7 @@ wiif  = "without the influence of interslice forces"
 --------------------------------
 
 constrained :: [ConstrainedChunk]
-constrained = map cnstrw inputsWUncrtn ++ map cnstrw outputs
+constrained = cnstrw coords : map cnstrw inputsWUncrtn ++ map cnstrw outputs
 
 inputsWUncrtn :: [UncertQ]
 inputsWUncrtn = [slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, 
@@ -80,7 +80,7 @@ inputs :: [DefinedQuantityDict]
 inputs = map dqdWr inputsWUncrtn ++ map dqdWr inputsNoUncrtn
 
 outputs :: [ConstrConcept]
-outputs = [fs, coords]
+outputs = [fs]
 
 {-
 monotonicIn :: [Constraint]  --FIXME: Move this?

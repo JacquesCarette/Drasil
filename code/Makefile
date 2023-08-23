@@ -29,6 +29,9 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 # Current list of examples
 SRC_EXAMPLES = glassbr swhsnopcm projectile pdcontroller dblpend
 EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpend 
+# Examples where output FR is generated with a source
+OUTPUT_FR_GEN_EXAMPLES = glassbr swhsnopcm projectile swhs ssp gamephysics 
+TEST_OUTPUT_FR_GEN_EXAMPLES = $(addsuffix $(TEST_E_SUFFIX), $(OUTPUT_FR_GEN_EXAMPLES))
 GOOLTEST = codegenTest
 
 # where they live
@@ -224,7 +227,7 @@ tracegraphs: $(TRACE_GRAPH_EXAMPLES) ##@Examples Run examples with traceability 
 
 # First build all the Drasil packages, run all examples (no traceability graphs),
 # and then test the generated contents with those in the stable folder.
-test: $(TEST_EXAMPLES) ##@Examples Run all examples and compare against the stable folder examples.
+test: $(TEST_OUTPUT_FR_GEN_EXAMPLES) ##@Examples Run all examples and compare against the stable folder examples.
 	@echo ----------------------------
 	@echo Make complete, checking logs
 	@echo ----------------------------

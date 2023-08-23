@@ -50,8 +50,7 @@ dependencyPlate = preorderFold $ purePlate {
   isSource :: ([Sentence], [[Sentence]]) -> [Sentence]
   isSource (S "Source" : _, hd1 : _) = hd1
   isSource (_ : tl, _ : tl1) = isSource (tl, tl1)
-  isSource ([], _) = []
-  isSource (_, []) = []
+  isSource _ = []
 
 -- | Creates a traceability map from document sections.
 generateTraceMap :: [DocSection] -> TraceMap

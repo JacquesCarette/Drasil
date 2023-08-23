@@ -2,14 +2,16 @@ module Drasil.HGHC.HeatTransfer where --whole file is used
 
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Theory.Drasil (DataDefinition, ddENoRefs)
+import Theory.Drasil (HasOutput(output), DataDefinition, ddENoRefs)
 
 import Data.Drasil.Units.Thermodynamics (heatTransferCoef)
+
+import Control.Lens ((^.))
 
 {--}
 
 symbols :: [QuantityDict]
-symbols = htInputs ++ map qw dataDefs
+symbols = htInputs ++ map (qw . (^. output)) dataDefs
 
 dataDefs :: [DataDefinition]
 dataDefs = [htTransCladFuelDD, htTransCladCoolDD]

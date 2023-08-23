@@ -27,7 +27,6 @@ import Drasil.DocumentLanguage.Units (toSentence)
 
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap)
-import Data.Sequence (Seq, (<|), (|>))
 
 -- | Types of requirements that may be generated.
 data ReqType = InputReq Sentence

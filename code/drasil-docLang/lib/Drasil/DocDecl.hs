@@ -25,9 +25,7 @@ import Data.Drasil.Concepts.Documentation (assumpDom, funcReqDom, goalStmtDom,
   nonFuncReqDom, likeChgDom, unlikeChgDom)
 
 import Control.Lens((^.), Getting)
-import Data.Foldable (toList)
 import Data.List (nub, sort)
-import Data.Sequence (fromList)
 
 -- * Types
 

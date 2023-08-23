@@ -19,7 +19,7 @@ import Theory.Drasil (HasOutput(output))
 
 import Data.Drasil.Concepts.Documentation (description, funcReqDom,
   functionalRequirement, input_, nonfunctionalRequirement, output_, reqInput,
-  section_, software, symbol_, value)
+  section_, software, source, symbol_, value)
 import Data.Drasil.Concepts.Math (unit_)
 
 import qualified Drasil.DocLang.SRS as SRS
@@ -199,7 +199,7 @@ reqInputsRef = makeTabRef' (reqInput ^. uid)
 mkValsSourceTable :: (Quantity j, MayHaveUnit j) =>
                           [(j, Sentence)] -> String -> Sentence -> LabelledContent
 mkValsSourceTable vals labl cap = llcc (makeTabRef labl) $
-  Table [atStart symbol_, atStart description, S "Source", atStart' unit_]
+  Table [atStart symbol_, atStart description, titleize source, atStart' unit_]
   (mkTable [ch . fst, atStart . fst, snd, toSentence . fst] $ sortBySymbolTuple vals) cap True
 
 -- | Pulls out the 'QuantityDict' and reference 'Sentence' into a tuple for

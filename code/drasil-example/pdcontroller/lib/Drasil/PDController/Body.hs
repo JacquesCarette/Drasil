@@ -1,11 +1,14 @@
 module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) where
 
 import Language.Drasil
+import Language.Drasil.Code (quantvar)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
+import Theory.Drasil (HasOutput(output), DataDefinition, GenDefn,
+  InstanceModel, TheoryModel)
 import qualified Language.Drasil.Sentence.Combinators as S
 
+import Data.Drasil.Concepts.Computation (os)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains, vavPlan)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
@@ -41,8 +44,8 @@ import Drasil.PDController.TModel (theoreticalModels)
 import Drasil.PDController.Unitals (symbols, inputs, inputsUC, inpConstrained,
   pidConstants, pidDqdConstants, opProcessVariable)
 import Drasil.PDController.ODEs (pidODEInfo)
-import Language.Drasil.Code (quantvar)
-import Data.Drasil.Concepts.Computation (os)
+
+import Control.Lens ((^.))
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
@@ -129,13 +132,13 @@ symbolsAll = symbols ++ map qw pidDqdConstants ++ map qw pidConstants
   ++ map qw [listToArray $ quantvar opProcessVariable, arrayVecDepVar pidODEInfo]
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw instanceModels ++ map qw physicscon ++ symbolsAll
+symbMap = cdb (map (qw . (^. output)) instanceModels ++ map qw physicscon ++ symbolsAll
   ++ [qw mass, qw posInf, qw negInf]) (nw pdControllerApp : nw os : nw vavPlan
-   : map nw instanceModels ++ [nw program, nw angular, nw linear]
+   : map (nw . (^. output)) instanceModels ++ [nw program, nw angular, nw linear]
   ++ [nw sciCompS] ++ map nw doccon ++ map nw doccon' ++ concepts
   ++ map nw mathcon ++ map nw mathcon' ++ map nw [second, kilogram]
   ++ map nw symbols ++ map nw physicscon ++ map nw acronyms ++ map nw physicalcon)
-  (map cw instanceModels ++ map cw inpConstrained ++ srsDomains)
+  (map cw inpConstrained ++ srsDomains)
   (map unitWrapper [second, kilogram])
   dataDefinitions
   instanceModels

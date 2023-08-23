@@ -198,7 +198,7 @@ reqInputsRef = makeTabRef' (reqInput ^. uid)
 mkTupleValsSourceTable :: (Quantity i, MayHaveUnit i) => 
                           [(i, Sentence)] -> String -> Sentence -> LabelledContent
 mkTupleValsSourceTable vals labl cap = llcc (makeTabRef labl) $ 
-  Table [atStart symbol_, atStart description, S "Source", atStart' unit_]
+  Table [atStart symbol_, atStart description, titleize source, atStart' unit_]
   (mkTable [ch . fst, atStart . fst, snd, toSentence . fst] $ sortBySymbolTuple vals) cap True
 
 -- | Creates a table for use in the Functional Requirements section. Takes a

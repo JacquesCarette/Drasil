@@ -30,7 +30,7 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 SRC_EXAMPLES = glassbr swhsnopcm projectile pdcontroller dblpend
 EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template sglpend 
 # Examples where output FR is generated with a source
-OUTPUT_FR_GEN_EXAMPLES = glassbr swhsnopcm projectile swhs ssp gamephysics 
+OUTPUT_FR_GEN_EXAMPLES = glassbr swhsnopcm projectile swhs ssp gamephysics template
 TEST_OUTPUT_FR_GEN_EXAMPLES = $(addsuffix $(TEST_E_SUFFIX), $(OUTPUT_FR_GEN_EXAMPLES))
 GOOLTEST = codegenTest
 

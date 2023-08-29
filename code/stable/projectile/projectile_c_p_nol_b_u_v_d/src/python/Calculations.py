@@ -33,7 +33,7 @@ def func_d_offset(inParams, p_land):
 def func_s(inParams, epsilon, d_offset):
     if (math.fabs(d_offset / inParams.p_target) < epsilon):
         return "The target was hit."
-    elif (d_offset < 0.0) :
+    elif (d_offset < 0.0):
         return "The projectile fell short."
-    else :
+    else:
         return "The projectile went long."

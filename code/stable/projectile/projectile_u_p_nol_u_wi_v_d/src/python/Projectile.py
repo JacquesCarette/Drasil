@@ -36,9 +36,9 @@ def func_d_offset(p_target, p_land):
 def func_s(p_target, epsilon, d_offset):
     if (math.fabs(d_offset / p_target) < epsilon):
         return "The target was hit."
-    elif (d_offset < 0.0) :
+    elif (d_offset < 0.0):
         return "The projectile fell short."
-    else :
+    else:
         return "The projectile went long."
 
 ## \brief Reads input from a file with the given file name

@@ -154,9 +154,9 @@ def func_s(inParams, d_offset):
     
     if (math.fabs(d_offset / inParams.p_target) < Constants.epsilon):
         return "The target was hit."
-    elif (d_offset < 0.0) :
+    elif (d_offset < 0.0):
         return "The projectile fell short."
-    else :
+    else:
         return "The projectile went long."
 
 ## \brief Writes the output values to output.txt

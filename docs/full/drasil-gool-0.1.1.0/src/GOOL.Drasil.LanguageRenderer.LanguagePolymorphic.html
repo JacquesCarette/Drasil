@@ -1574,7 +1574,10 @@ LensLike' (Zoomed m c) t s -&gt; m c -&gt; n c
 </span><a href="#local-6989586621679360214"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall (r :: * -&gt; *). ValueElim r =&gt; r (Value r) -&gt; Doc
 </span><a href="GOOL.Drasil.RendererClasses.html#value"><span class="hs-identifier hs-var">RC.value</span></a></span><span> </span><span class="annot"><span class="annottext">r (Value r)
 </span><a href="#local-6989586621679360182"><span class="hs-identifier hs-var">val</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
-</span><span class="hs-operator hs-var">&lt;+&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">OptionalSpace -&gt; Doc
+</span><a href="GOOL.Drasil.LanguageRenderer.LanguagePolymorphic.html#optSpaceDoc"><span class="hs-identifier hs-var">optSpaceDoc</span></a></span><span> </span><span class="annot"><span class="annottext">OptionalSpace
+</span><a href="#local-6989586621679360212"><span class="hs-identifier hs-var">os</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="#local-6989586621679360213"><span class="hs-identifier hs-var">ifStart</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-413"></span><span>          </span><span class="annot"><span class="annottext">Doc -&gt; Doc
 </span><span class="hs-identifier hs-var">indent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -1600,7 +1603,10 @@ LensLike' (Zoomed m c) t s -&gt; m c -&gt; n c
 </span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-416"></span><span>          </span><span class="annot"><span class="annottext">Doc
 </span><a href="GOOL.Drasil.LanguageRenderer.html#elseLabel"><span class="hs-identifier hs-var">elseLabel</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
-</span><span class="hs-operator hs-var">&lt;+&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">OptionalSpace -&gt; Doc
+</span><a href="GOOL.Drasil.LanguageRenderer.LanguagePolymorphic.html#optSpaceDoc"><span class="hs-identifier hs-var">optSpaceDoc</span></a></span><span> </span><span class="annot"><span class="annottext">OptionalSpace
+</span><a href="#local-6989586621679360212"><span class="hs-identifier hs-var">os</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="#local-6989586621679360213"><span class="hs-identifier hs-var">ifStart</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-417"></span><span>          </span><span class="annot"><span class="annottext">Doc -&gt; Doc
 </span><span class="hs-identifier hs-var">indent</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b

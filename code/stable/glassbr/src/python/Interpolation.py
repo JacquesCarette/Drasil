@@ -126,7 +126,7 @@ def interpY(filename, x, z):
     print(y_z_2, end="", file=outfile)
     print(" in module Interpolation", file=outfile)
     outfile.close()
-    try :
+    try:
         j = find(x_z_1, x)
         outfile = open("log.txt", "a")
         print("var 'j' assigned ", end="", file=outfile)
@@ -139,7 +139,7 @@ def interpY(filename, x, z):
         print(k_2, end="", file=outfile)
         print(" in module Interpolation", file=outfile)
         outfile.close()
-    except Exception :
+    except Exception:
         raise Exception("Interpolation of y failed")
     y_1 = lin_interp(x_z_1[j], y_z_1[j], x_z_1[j + 1], y_z_1[j + 1], x)
     outfile = open("log.txt", "a")
@@ -203,7 +203,7 @@ def interpZ(filename, x, y):
         print(y_z_2, end="", file=outfile)
         print(" in module Interpolation", file=outfile)
         outfile.close()
-        try :
+        try:
             j = find(x_z_1, x)
             outfile = open("log.txt", "a")
             print("var 'j' assigned ", end="", file=outfile)
@@ -216,7 +216,7 @@ def interpZ(filename, x, y):
             print(k_2, end="", file=outfile)
             print(" in module Interpolation", file=outfile)
             outfile.close()
-        except Exception :
+        except Exception:
             continue
         y_1 = lin_interp(x_z_1[j], y_z_1[j], x_z_1[j + 1], y_z_1[j + 1], x)
         outfile = open("log.txt", "a")

@@ -2,11 +2,11 @@ import Observer
 
 myFSM = "Off"
 myFSM = "On"
-if (myFSM == "Off") :
+if (myFSM == "Off"):
     print("Off")
-elif (myFSM == "On") :
+elif (myFSM == "On"):
     print("On")
-else :
+else:
     print("Neither")
 
 print("myStrat")

@@ -28,7 +28,7 @@ pkgs.mkShell {
     swift # Swift
 
     # Python + dependencies
-    (python310.withPackages (ps: with ps; [pandas nump scipy]))
+    (python310.withPackages (ps: with ps; [pandas numpy scipy]))
   ];
 
   # NOTE: If fonts are ever allowed here, we will want them.

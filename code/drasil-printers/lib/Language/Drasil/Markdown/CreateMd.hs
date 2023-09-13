@@ -8,16 +8,13 @@ module Language.Drasil.Markdown.CreateMd (
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, empty, isEmpty, vcat, text, (<+>),
-    (<>), comma, punctuate, hsep)
-import Utils.Drasil.Document (drasilImage, contSep)
+    (<>), punctuate, hsep)
 import Language.Drasil.Printing.Helpers (upcase)
-
--- | Separates document sections.
-type Separator = Doc
+import Utils.Drasil
 
 -- | Combines a list of sentences into a final Doc, also appends end note.
 makeMd :: [Doc] -> Doc
-makeMd = vcat . punctuate secSep . filtEmp
+makeMd = vcat . punctuate secSep . filterEmpty
 
 -- | Example title, authors, and maybe purpose section.
 introInfo :: String -> [String] -> Maybe String -> Doc
@@ -86,7 +83,7 @@ unsupOS = maybe empty (\uns-> regularSec (text "Unsupported Operating Systems")
 extLibSec:: [(String, String)] -> [String]-> Doc
 extLibSec libns libfps = 
     let libs = addListToTuple libns libfps
-        formattedLibs = (hsep . punctuate contSep . filtEmp . 
+        formattedLibs = (hsep . punctuate contSep . filterEmpty . 
             map libStatment) libs
     in if isEmpty formattedLibs then empty else 
             regularSec (text "External Libraries") formattedLibs
@@ -140,10 +137,16 @@ introSec hd ms1 l descr = text "#" <+> hd <+> contSep <> (if l == 1 then text ">
 regularSec :: Doc -> Doc -> Doc
 regularSec hd ms = text "##" <+> hd <+> contSep <+> ms
 
--- | Helper for 'makeMd' and 'extLibSec'.
-filtEmp :: [Doc] -> [Doc]
-filtEmp = filter (not . isEmpty) 
+-- Function to create the prefix for the path of the Drasil Logo
+buildPath :: Int -> String
+buildPath num = filter (/= ' ') $ unwords $ replicate num "../"
 
--- | Helper for authors and configuration files.
-listToDoc :: [String] -> Doc
-listToDoc = hsep . punctuate comma . map text
+-- | Drasil Tree icon. Uses HTML directly to format image since normal markdown doesn't support it.
+drasilImage :: Int -> Doc
+drasilImage num = alignImage (buildPath num ++
+  "drasil-website/WebInfo/images/Icon.png")
+
+-- | Aligns an image to the center using HTML, since markdown doesn't support it.
+alignImage :: FilePath -> Doc
+alignImage img = text "<p align=\"center\">" <> contSep <> text ("<img src=\"" 
+  ++ img ++ "\" alt=\"Drasil Tree\" width=\"200\" />") <> contSep <> text "</p>"

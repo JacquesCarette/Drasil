@@ -22,10 +22,12 @@ indent = nest 4
 indentList :: [Doc] -> Doc
 indentList = indent . vcat
 
--- | Helper for 'makeMd' and 'extLibSec'.
+-- | Filter blank `Doc`s from a list.
 filterEmpty :: [Doc] -> [Doc]
 filterEmpty = filter (not . isEmpty) 
 
--- | Helper for authors and configuration files.
+-- | Merge a list of `String`s into a `Doc` format:
+--
+-- e.g., `listToDoc [a,b,c,...] ~= a, b, c, ...`
 listToDoc :: [String] -> Doc
 listToDoc = hsep . punctuate comma . map text

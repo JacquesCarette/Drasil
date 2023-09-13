@@ -19,7 +19,7 @@ pkgs.mkShell {
     graphviz
     inkscape
     imagemagick
-    texlive.combined.scheme-medium
+    texlive.combined.scheme-full
 
     # Extra compilers needed for examples
     gcc # C/C++

@@ -90,7 +90,7 @@ copy_examples() {
     example_name=$(basename "$example")
     # Only copy actual examples
     if [[ "$EXAMPLE_DIRS" == *"$example_name"* ]]; then
-      target_srs_dir="./HTML/$EXAMPLE_DEST$example_name/$SRS_DEST"
+      target_srs_dir="./$EXAMPLE_DEST$example_name/$SRS_DEST"
       mkdir -p "$target_srs_dir"
       if [ -d "$example/SRS/PDF" ]; then
         cp "$example/SRS/PDF/"*.pdf "$target_srs_dir"

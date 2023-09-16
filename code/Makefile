@@ -557,4 +557,4 @@ help_packages: ##@Help Lists all packages.
 		echo "  $$package"; \
 	done
 
-.PHONY: help clean clean_artifacts cleanArtifacts gool code deps hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all install $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+.PHONY: help clean clean_artifacts cleanArtifacts gool code deps hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all install examples tracegraphs doxygen $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

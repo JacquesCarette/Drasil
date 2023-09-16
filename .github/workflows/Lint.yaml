@@ -1,7 +1,10 @@
 on:
   pull_request:
     branches: master
-    paths: 'code/drasil-**'
+    paths:
+      - 'code/drasil-**'
+      - 'code/scripts/**'
+      - 'code/Makefile'
 name: Linter
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -12,9 +15,27 @@ defaults:
     working-directory: code
 jobs:
   linter:
-    name: "HLint"
+    name: "Linter"
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - name: "HLint"
+      # Prepare more specific paths filters
+      - uses: dorny/paths-filter@v2.2.1
+        id: filter
+        with:
+          filters: |
+            hs:
+              - '**/*.hs'
+              - '**/*.lhs'
+            sh:
+              - '**/*.sh'
+      # If a [l]hs file was edited, then run HLint
+      - name: "Haskell via HLint"
+        if: ${{ steps.filter.outputs.hs == 'true' }}
         run: make hot_hlint
+      # If a sh script was edited, then run shellcheck
+      - name: "Shell scripts via ShellCheck"
+        if: ${{ steps.filter.outputs.sh == 'true' }}
+        uses: ludeeus/action-shellcheck@2.0.0
+        with:
+          scandir: './scripts'

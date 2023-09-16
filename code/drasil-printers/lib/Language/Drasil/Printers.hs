@@ -48,4 +48,4 @@ import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
   HasPrintingOptions(..), Notation(..), defaultConfiguration, piSys)
 import Language.Drasil.DOT.Print (outputDot, GraphInfo(..), NodeFamily(..))
-import Language.Drasil.Log.Print (printAllDebugInfo)
+import Language.Drasil.Debug.Print (printAllDebugInfo)

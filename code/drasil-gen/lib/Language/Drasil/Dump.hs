@@ -16,22 +16,25 @@ import Database.Drasil (traceTable, refbyTable)
 import Control.Lens ((^.))
 import System.Environment (lookupEnv)
 
+import Language.Drasil.Printers (PrintingInformation, printAllDebugInfo)
+import Text.PrettyPrint
+
 type Path = String
 type TargetFile = String
 
 -- | For debugging purposes, if the system has a `DEBUG_ENV` environment
 --   variable set to anything, we can dump the chunk maps in a system to the
 --   host system.
-dumpEverything :: SystemInformation -> Path -> IO ()
-dumpEverything si p = do
+dumpEverything :: SystemInformation -> PrintingInformation -> Path -> IO ()
+dumpEverything si pinfo p = do
   maybeDebugging <- lookupEnv "DEBUG_ENV"
   case maybeDebugging of
     (Just (_:_)) -> do
-      dumpEverything0 si p
+      dumpEverything0 si pinfo p
     _ -> mempty
 
-dumpEverything0 :: SystemInformation -> Path -> IO ()
-dumpEverything0 si targetPath = do
+dumpEverything0 :: SystemInformation -> PrintingInformation -> Path -> IO ()
+dumpEverything0 si pinfo targetPath = do
   createDirectoryIfMissing True targetPath
   let chunkDb = _sysinfodb si
       chunkDump = DB.dumpChunkDB chunkDb
@@ -46,9 +49,28 @@ dumpEverything0 si targetPath = do
   dumpTo traceDump $ targetPath ++ "trace.json"
   dumpTo refByDump $ targetPath ++ "reverse_trace.json"
 
+  dumpChunkTables pinfo $ targetPath ++ "tables.txt"
+
 -- FIXME: This is more of a general utility than it is drasil-database specific
 dumpTo :: ToJSON a => a -> TargetFile -> IO ()
 dumpTo d targetFile = do
   trg <- openFile targetFile WriteMode
   LB.hPutStrLn trg $ encodePretty d
   hClose trg
+
+dumpChunkTables :: PrintingInformation -> TargetFile -> IO ()
+dumpChunkTables pinfo targetFile = do
+  trg <- openFile targetFile WriteMode
+  mapM_ (hPutStrLn trg . render) $ printAllDebugInfo pinfo
+  hClose trg
+
+-- -- | Generates debugging logs to show all of the 'UID's used in an example.
+-- genLog :: SystemInformation -> PrintingInformation -> IO ()
+-- genLog SI{_sys = sysName} pinfo = do
+--   workingDir <- getCurrentDirectory
+--   createDirectoryIfMissing True $ "../../debug/" ++ filter (not.isSpace) (programName sysName) ++ "/SRSlogs"
+--   setCurrentDirectory $ "../../debug/" ++ filter (not.isSpace) (programName sysName) ++ "/SRSlogs"
+--   handle <- openFile (filter (not.isSpace) (programName sysName) ++ "_SRS.log") WriteMode
+--   mapM_ (hPutStrLn handle . render) $ printAllDebugInfo pinfo
+--   hClose handle
+--   setCurrentDirectory workingDir

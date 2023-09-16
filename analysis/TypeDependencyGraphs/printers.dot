@@ -60,10 +60,6 @@ digraph alltypes {
 	subgraph print {
 	}
 	subgraph createmd {
-		subgraph separator{
-		Separator	[shape=oval, color=red2, label="Separator"];
-		Separator -> Doc;
-		}
 	}
 	subgraph print {
 		subgraph linearity{

@@ -20,16 +20,20 @@ blank :: Doc
 -- | Indents a document (by 4 spaces).
 indent :: Doc -> Doc
 
--- | Helper which concatenates two Docs and appends a period.
-(+:+.) :: Doc -> Doc -> Doc
-
 -- | Indents a list of Docs and combines into one Doc.
 indentList :: [Doc] -> Doc
-
--- | Drasil Tree icon. Uses HTML directly to format image since normal
---   markdown doesn't support it.
-drasilImage :: Int -> Doc
 contSep :: Separator
+
+-- | Filter blank <a>Doc</a>s from a list.
+filterEmpty :: [Doc] -> [Doc]
+
+-- | Merge a list of <a>String</a>s into a <a>Doc</a> format:
+--   
+--   e.g., `listToDoc [a,b,c,...] ~= a, b, c, ...`
+listToDoc :: [String] -> Doc
+
+-- | Separates document sections.
+type Separator = Doc
 
 
 -- | Useful functions for working with English-related <a>String</a>s.
@@ -88,8 +92,7 @@ module Utils.Drasil.Strings
 toPlainName :: String -> String
 
 
--- | Gather Drasil's utility functions and re-export for easy use. For now,
---   does not include combinators (Sentence.hs, NounPhrase.hs, Concepts.hs)
+-- | Gather Drasil's utility functions and re-export for easy use.
 module Utils.Drasil
 
 -- | Creates a blank document with no text.
@@ -100,6 +103,18 @@ indent :: Doc -> Doc
 
 -- | Indents a list of Docs and combines into one Doc.
 indentList :: [Doc] -> Doc
+
+-- | Filter blank <a>Doc</a>s from a list.
+filterEmpty :: [Doc] -> [Doc]
+
+-- | Merge a list of <a>String</a>s into a <a>Doc</a> format:
+--   
+--   e.g., `listToDoc [a,b,c,...] ~= a, b, c, ...`
+listToDoc :: [String] -> Doc
+
+-- | Separates document sections.
+type Separator = Doc
+contSep :: Separator
 
 -- | String capitalization.
 capitalize :: String -> String

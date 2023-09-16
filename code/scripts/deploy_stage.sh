@@ -74,12 +74,12 @@ copy_datafiles() {
   echo "FIXME: Drasil should copy needed images and resources to the appropriate output directory to avoid needing the entirety of datafiles (for HTML)."
   rm -rf datafiles
   mkdir -p datafiles
-  cp -r "$CUR_DIR/datafiles/" datafiles/
+  cp -r "$CUR_DIR/datafiles/." datafiles/
 }
 
 copy_graphs() {
   rm -rf "$GRAPH_FOLDER"
-  cp -r "$CUR_DIR$GRAPH_FOLDER" "$GRAPH_FOLDER"
+  cp -r "$CUR_DIR$GRAPH_FOLDER." "$GRAPH_FOLDER"
 }
 
 copy_examples() {
@@ -90,19 +90,22 @@ copy_examples() {
     example_name=$(basename "$example")
     # Only copy actual examples
     if [[ "$EXAMPLE_DIRS" == *"$example_name"* ]]; then
-      mkdir -p "$EXAMPLE_DEST$example_name/$SRS_DEST"
-      if [ -d "$example/"SRS/PDF ]; then
-        cp "$example/"SRS/PDF/*.pdf "$EXAMPLE_DEST$example_name/$SRS_DEST"
+      target_srs_dir="./$EXAMPLE_DEST$example_name/$SRS_DEST"
+      mkdir -p "$target_srs_dir"
+      if [ -d "$example/SRS/PDF" ]; then
+        cp "$example/SRS/PDF/"*.pdf "$target_srs_dir"
       fi
-      if [ -d "$example/"SRS/HTML ]; then
-        cp -r "$example/"SRS/HTML/ "$EXAMPLE_DEST$example_name/$SRS_DEST"
+      if [ -d "$example/SRS/HTML" ]; then
+        cp -r "$example/SRS/HTML/." "$target_srs_dir"
       fi
-      if [ -d "$example/"src ]; then
+      if [ -d "$example/src" ]; then
         mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST"
-        for lang in "$example/"src/*; do
+        for lang in "$example/src/"*; do
           lang_name=$(basename "$lang")
-          mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST$lang_name"
-          cp -r "$lang/" "$EXAMPLE_DEST$example_name/$DOX_DEST$lang_name/"
+          if [ "$lang_name" != "swift" ]; then
+            mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST$lang_name"
+            cp -r "$lang/html/." "$EXAMPLE_DEST$example_name/$DOX_DEST$lang_name/"
+          fi
         done
         src_stub
       fi
@@ -113,8 +116,10 @@ copy_examples() {
           mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST$v_name/"
           for lang in "$v/"src/*; do
             lang_name=$(basename "$lang")
-            mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST$v_name/$lang_name"
-            cp -r "$lang/" "$EXAMPLE_DEST$example_name/$DOX_DEST$v_name/$lang_name/"
+            if [ "$lang_name" != "swift" ]; then
+              mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST$v_name/$lang_name"
+              cp -r "$lang/html/." "$EXAMPLE_DEST$example_name/$DOX_DEST$v_name/$lang_name/"
+            fi
           done
         done
         src_stub
@@ -123,9 +128,8 @@ copy_examples() {
   done
 }
 
-
 src_stub() {
-  # We don't expose code in deploy. It's more conveneient to link to GitHub's directory
+  # We don't expose code in deploy. It's more convenient to link to GitHub's directory
   # We place a stub file which Hakyll will replace.
   REL_PATH=$(cd "$CUR_DIR" && "$MAKE" deploy_code_path | grep "$example_name" | cut -d"$DEPLOY_CODE_PATH_KV_SEP" -f 2-)
   # On a real deploy, `deploy` folder is itself a git repo, thus we need to ensure the path lookup is in the outer Drasil repo.
@@ -135,10 +139,8 @@ src_stub() {
 }
 
 copy_images() {
-  if [ -d "$CUR_DIR"deploy/images ]; then
-    rm -rf "$CUR_DIR"deploy/images
-  fi
-  mkdir -p "$CUR_DIR"deploy/images
+  rm -rf "$CUR_DIR/deploy/images"
+  mkdir -p "$CUR_DIR/deploy/images"
   cp -r "$CUR_DIR/drasil-website/WebInfo/images/" "$CUR_DIR/deploy"
 }
 
@@ -154,7 +156,7 @@ copy_traceygraphs() {
 
 copy_website() {
   cd "$CUR_DIR$DEPLOY_FOLDER"
-  cp -r "$CUR_DIR$WEBSITE_FOLDER" .
+  cp -r "$CUR_DIR$WEBSITE_FOLDER". .
 
   # src stubs were consumed by site generator; safe to delete those.
   rm "$EXAMPLE_DEST"*/src

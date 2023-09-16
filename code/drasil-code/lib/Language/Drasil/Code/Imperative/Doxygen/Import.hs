@@ -12,7 +12,6 @@ import Data.List (intersperse, nub)
 import Data.Maybe (maybeToList)
 import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), text, hcat, vcat)
-import Utils.Drasil.Document ((+:+.))
 
 -- | A 'Doc' that holds optimized choices for configuring doxygen files.
 type OptimizeChoice = Doc
@@ -31,11 +30,14 @@ verbosityToDoc :: Verbosity -> Doc
 verbosityToDoc Verbose = no
 verbosityToDoc Quiet = yes
 
--- | Renderings of comments regarding the default tag values for various Doxygen settings.
+-- | Renderings of comments regarding the default tag values for various Doxygen
+-- settings.
+-- 
+-- TODO: `makeDoxConfig` needs access to a `ChunkDB` so that we can re-write
+-- these `Doc`s as `Sentence`s and render them back into `Doc`s appropriately.
 defNo, defYes :: Doc
-defNo = defaultValSentence +:+. no
-defYes = defaultValSentence +:+. yes
-
+defNo  = defaultValSentence <> no  <> text "."
+defYes = defaultValSentence <> yes <> text "."
 
 -- | Renders a Doxygen configuration file.
 --

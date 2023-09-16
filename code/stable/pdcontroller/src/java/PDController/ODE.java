@@ -1,4 +1,4 @@
-package PD_Controller;
+package PDController;
 
 /** \file ODE.java
     \author Naveen Ganesh Muralidharan

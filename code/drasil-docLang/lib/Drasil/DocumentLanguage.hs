@@ -60,7 +60,6 @@ import Control.Lens ((^.), set)
 import Data.Function (on)
 import Data.List (nub, sortBy, sortOn)
 import qualified Data.Map as Map (elems, toList, assocs, keys)
-import Data.Char (isSpace)
 import Data.Maybe (maybeToList)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
@@ -179,7 +178,7 @@ fillReferences dd si@SI{_sys = sys} = si2
     -- set new reference table in the chunk database
     chkdb2 = set refTable (idMap $ nub $ refsFromSRS ++ inRefs
       ++ map (ref.makeTabRef'.getTraceConfigUID) (traceMatStandard si) ++ secRefs -- secRefs can be removed once #946 is complete
-      ++ traceyGraphGetRefs (filter (not.isSpace) $ abrv sys) ++ map ref cites
+      ++ traceyGraphGetRefs (programName sys) ++ map ref cites
       ++ map ref conins ++ map ref ddefs ++ map ref gdefs ++ map ref imods
       ++ map ref tmods ++ map ref concIns ++ map ref secs ++ map ref lblCon
       ++ refs) chkdb
@@ -425,7 +424,7 @@ introChgs xs _ = foldlSP [S "This", phrase Doc.section_, S "lists the",
 mkTraceabilitySec :: TraceabilitySec -> SystemInformation -> Section
 mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
   (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) fProgs)
-  (map LlC trace) (filter (not.isSpace) $ abrv sys) []
+  (map LlC trace) (programName sys) []
   where
     trace = map (\(TraceConfig u _ desc cols rows) -> TM.generateTraceTableView
       u desc cols rows si) fProgs

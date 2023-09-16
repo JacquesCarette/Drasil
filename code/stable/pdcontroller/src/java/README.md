@@ -1,4 +1,4 @@
-# PD_Controller 
+# PDController 
 > Author: Naveen Ganesh Muralidharan
 
 > Purpose: Provide a model of a PD Controller that can be used for the tuning of the gain constants before the deployment of the controller.
@@ -18,7 +18,7 @@ make build
 ```
 
 How to Change Input:
-PD_Controller will take the inputs from `input.txt` and write the outputs to `output.txt`.
+PDController will take the inputs from `input.txt` and write the outputs to `output.txt`.
 Inputs can be changed by editing `input.txt`.
 
 ------------------------------------------------------------

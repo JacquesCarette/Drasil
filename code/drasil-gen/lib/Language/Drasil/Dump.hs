@@ -63,14 +63,3 @@ dumpChunkTables pinfo targetFile = do
   trg <- openFile targetFile WriteMode
   mapM_ (hPutStrLn trg . render) $ printAllDebugInfo pinfo
   hClose trg
-
--- -- | Generates debugging logs to show all of the 'UID's used in an example.
--- genLog :: SystemInformation -> PrintingInformation -> IO ()
--- genLog SI{_sys = sysName} pinfo = do
---   workingDir <- getCurrentDirectory
---   createDirectoryIfMissing True $ "../../debug/" ++ filter (not.isSpace) (programName sysName) ++ "/SRSlogs"
---   setCurrentDirectory $ "../../debug/" ++ filter (not.isSpace) (programName sysName) ++ "/SRSlogs"
---   handle <- openFile (filter (not.isSpace) (programName sysName) ++ "_SRS.log") WriteMode
---   mapM_ (hPutStrLn handle . render) $ printAllDebugInfo pinfo
---   hClose handle
---   setCurrentDirectory workingDir

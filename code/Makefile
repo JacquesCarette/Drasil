@@ -483,7 +483,7 @@ deploy_lite: website ##@Deploy Deploy the Drasil website without regenerating ar
 # Prepares a website folder deployable to GitHub Pages using freshly generated
 # artifacts. If you don't want to use freshly generated artifacts, consider
 # using theg `deploy_lite` target instead.
-deploy: analysis graphs packagedeps docs tex doxygen ##@Deploy Generates all artifacts and the Drasil website locally.
+deploy: analysis graphs convertAnalyzed packagedeps docs tex doxygen ##@Deploy Generates all artifacts and the Drasil website locally.
 	"$(MAKE)" deploy_lite
 
 #-----------------------#

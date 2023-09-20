@@ -489,7 +489,7 @@ deploy_lite: website ##@Deploy Deploy the Drasil website without regenerating ar
 # files appear newer and thus PDF's are regenerated. If you want to "just generate the structure,
 # everything exists," (or you've run `deploy` once already) then `deploy_lite` does just that and is
 # what `deploy.bash` calls. 
-deploy: analysis graphs packagedeps docs tex doxygen website ##@Deploy Generates all artifacts and the Drasil website locally.
+deploy: analysis graphs packagedeps docs tex doxygen ##@Deploy Generates all artifacts and the Drasil website locally.
 	"$(MAKE)" deploy_lite
 
 #-----------------------#

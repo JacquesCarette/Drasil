@@ -1,9 +1,9 @@
 -- | Gather Drasil's utility functions and re-export for easy use.
--- For now, does not include combinators (Sentence.hs, NounPhrase.hs, Concepts.hs)
 module Utils.Drasil (
   -- * Documents
   -- | From "Utils.Drasil.Document".
-  blank, indent, indentList,
+  blank, indent, indentList, filterEmpty, listToDoc,
+  Separator, contSep,
 
   -- * Language
   -- | From "Utils.Drasil.English".

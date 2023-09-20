@@ -1,43 +1,34 @@
-# Drasil development requirements
-# Installs everything except `Latin Modern` and `Latin Modern Math` font families.
-
-{ pkgs ? import (builtins.fetchGit {
-    name = "pinned-pkgs";   # Pinned at around ~Stack v2.5.1                       
-    url = "https://github.com/NixOS/nixpkgs/";                       
-    ref = "refs/heads/nixos-unstable";                     
-    rev = "046f8835dcb9082beb75bb471c28c832e1b067b6";                           
-  }) {}
-}:
-
-let
-  # Examples require some dependencies, these should eventually move into their respective artifact files
-  py-deps = python38-packages: with python38-packages; [
-    pandas
-    numpy
-    scipy
-  ]; 
-  py-with-deps = pkgs.python38.withPackages py-deps;
-in
+# A (nearly) fully featured development environment for working with Drasil. One
+# missing requirement is an installation of the `Latin Modern` and `Latin Modern
+# Math` font families (nix-shell understandably does not support installing
+# fonts).
+{pkgs ? import <nixpkgs> {}}:
 pkgs.mkShell {
   buildInputs = with pkgs; [
     # Stack is our full Haskell toolchain manager
     stack
 
+    # Raw GHC + HLS
+    haskell.compiler.ghc927
+    haskell.packages.ghc927.haskell-language-server
+
     # Makefile processor
     gnumake
-    
-    # Printing-related requirements (TeX + Graphs/Analysis)
+
+    # Document-related compilers needed for examples
     graphviz
     inkscape
     imagemagick
-    texlive.combined.scheme-medium
-    
-    # Compilers
-    gcc            #  C/C++
-    mono           #  C#
-    jdk8           #  Java
-    swift          #  Swift
-    py-with-deps   #  Python + dependencies for examples
+    texlive.combined.scheme-full
+
+    # Extra compilers needed for examples
+    gcc # C/C++
+    mono # C#
+    jdk8 # Java
+    swift # Swift
+
+    # Python + dependencies
+    (python310.withPackages (ps: with ps; [pandas numpy scipy]))
   ];
 
   # NOTE: If fonts are ever allowed here, we will want them.

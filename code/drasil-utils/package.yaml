@@ -22,7 +22,6 @@ library:
   source-dirs: lib
   exposed-modules:
   - Utils.Drasil
-  - Utils.Drasil.Document
   when:
   - condition: false
     other-modules: Paths_drasil_utils

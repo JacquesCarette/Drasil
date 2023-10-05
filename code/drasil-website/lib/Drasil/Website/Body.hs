@@ -178,7 +178,7 @@ websiteTitle :: String
 gitHubInfoURL, imagePath :: FilePath
 websiteTitle = "Drasil - Generate All the Things!"
 gitHubInfoURL = "https://github.com/JacquesCarette/Drasil"
-imagePath = "../images/Icon.png"
+imagePath = "./images/Icon.png"
 
 -- * Footer Section
 

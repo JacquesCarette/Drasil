@@ -34,7 +34,6 @@ import Language.Drasil.TypeCheck
 import Language.Drasil.Dump
 
 import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
-import Data.Char (isSpace)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()

@@ -187,6 +187,7 @@ install: ##@Examples Install all example project binaries into your local binary
 
 debug: stackArgs += $(PROFALL)
 debug: STACK_EXEC += $(PROFEXEC)
+debug: export DEBUG_ENV=1
 debug: test ##@Examples Run test target with better debugging tools.
 
 pr_ready: all hot_hlint ##@General Check if your current work is ready to for a PR via `all` and `hot_hlint`.

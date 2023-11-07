@@ -1,3 +1,4 @@
+{-# LANGUAGE RankNTypes #-}
 module Language.Drasil.Debug.Print where
 
 import           Language.Drasil hiding (symbol)
@@ -49,31 +50,75 @@ header :: Doc -> Doc
 header d = text (replicate 100 '-') $$ d $$ text (replicate 100 '-')
 
 -- ** Table Generators
--- | General function to make the debugging tables. Takes in printing information, a function
--- that extracts a certain field from the printing information, a title, three column headers,
--- and three functions that sort the data from the printing information field into the 
--- required display formats (often 'UID's, terms, shortnames, definitions, etc.).
+
+-- | General function to make the debugging tables. Takes in printing
+-- information, a function that extracts a certain field from the printing
+-- information, a title, three column headers, and three functions that sort the
+-- data from the printing information field into the required display formats
+-- (often 'UID's, terms, shortnames, definitions, etc.).
 mkTableFromLenses
-  :: PrintingInformation
+  :: HasUID a => PrintingInformation
   -> (ChunkDB -> UMap a)
   -> String
-  -> String
-  -> String
-  -> String
-  -> (a -> Doc)
-  -> (a -> Doc)
-  -> (a -> Doc)
+  -> [PrintingInformation -> (String, a -> Doc)]
   -> Doc
-mkTableFromLenses PI { _ckdb = db } tableLens ttle h1 h2 h3 l1 l2 l3 =
+mkTableFromLenses pin@PI { _ckdb = db } tableLens ttle hsNEs =
   text ttle <> colon
-  $$ header (text h1 $$ nest nestNum (text h2) $$ nest (nestNum * 3) (text h3))
-  $$ vcat (map chunkLayout chunks)
+  $$ hdr
+  $$ vcat (map col chunks)
   where
-    chunkLayout x = l1 x $$ nest nestNum (l2 x) $$ nest (nestNum * 3) (l3 x)
+    namedLenses = map ($ pin) hsNEs
+    ins :: [Int]
+    ins = [1..]
+
+    hdr   = foldr (\l r -> nest (nestNum * snd l) (text $ fst l) $$ r) (text "showUID")   (zip (map fst namedLenses) ins)
+    col a = foldr (\l r -> nest (nestNum * snd l) (fst l a)      $$ r) (text $ showUID a) (zip (map snd namedLenses) ins)
 
     chunks = map (fst . snd) (Map.assocs $ tableLens db)
 
     nestNum = 30
+
+openTerm :: NamedIdea a => PrintingInformation -> (String, a -> Doc)
+openTerm pinfo = ("Term", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
+
+openSymbol :: HasSymbol a =>PrintingInformation -> (String, a -> Doc)
+openSymbol pinfo = ("Symbol", symbolDoc . flip L.symbol (pinfo ^. stg))
+
+openDefSymbol :: DefinesQuantity s => PrintingInformation -> (String, s -> Doc)
+openDefSymbol pinfo = ("Symbol Defining", symbolDoc . flip L.symbol (pinfo ^. stg) . view defLhs)
+
+openAbbreviation :: Idea a => PrintingInformation -> (String, a -> Doc)
+openAbbreviation _ = ("Abbreviation", text . fromMaybe "" . getA)
+
+openDefinition :: Definition a => PrintingInformation -> (String, a -> Doc)
+openDefinition pinfo = ("Definition", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . view defn)
+
+openUnitSymbol :: HasUnitSymbol a => PrintingInformation -> (String, a -> Doc)
+openUnitSymbol pinfo = ("Unit Symbol", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . Sy . usymb)
+
+openShortName :: HasShortName a => PrintingInformation -> (String, a -> Doc)
+openShortName pinfo = ("Short Name", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . getSentSN . shortname)
+
+openTitle :: PrintingInformation -> (String, Section -> Doc)
+openTitle pinfo = ("Title", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . tle)
+
+cntntToStr :: RawContent -> String
+cntntToStr Table {} = "Table"
+cntntToStr Paragraph {} = "Paragraph"
+cntntToStr EqnBlock {} = "Equation"
+cntntToStr DerivBlock {} = "Derivation"
+cntntToStr Enumeration {} = "Enumeration"
+cntntToStr Defini {} = "Definition or Model"
+cntntToStr Figure {} = "Figure"
+cntntToStr Bib {} = "Bibliography"
+cntntToStr Graph {} = "Graph"
+cntntToStr CodeBlock {} = "Code"
+
+openContentType :: HasContents s => p -> (String, s -> Doc)
+openContentType _ = ("Content Type", text . cntntToStr . view accessContents)
+
+openRef :: HasRefAddress a => p -> (String, a -> Doc)
+openRef _ = ("Reference Address", text . getAdd . getRefAdd)
 
 -- | Makes a table with all symbolic quantities in the SRS.
 mkTableSymb :: PrintingInformation -> Doc
@@ -81,12 +126,7 @@ mkTableSymb pinfo = mkTableFromLenses
   pinfo
   symbolTable
   "Symbol Chunks"
-  "UID"
-  "Term"
-  "Symbol"
-  (text . showUID)
-  (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
-  (symbolDoc . flip L.symbol (pinfo ^. stg))
+  [openTerm, openSymbol]
 
 -- | Makes a table with terms in the SRS.
 mkTableOfTerms :: PrintingInformation -> Doc
@@ -94,12 +134,7 @@ mkTableOfTerms pinfo = mkTableFromLenses
   pinfo
   termTable
   "Term Chunks"
-  "UID"
-  "Term"
-  "Abbreviation"
-  (text . showUID)
-  (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
-  (text . fromMaybe "" . getA)
+  [openTerm, openAbbreviation]
 
 -- | Makes a table with all concepts in the SRS.
 mkTableConcepts :: PrintingInformation -> Doc
@@ -107,12 +142,7 @@ mkTableConcepts pinfo = mkTableFromLenses
   pinfo
   defTable
   "Concepts"
-  "UID"
-  "Term"
-  "Definition"
-  (text . showUID)
-  (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
-  (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . view defn)
+  [openTerm, openDefinition]
 
 -- | Makes a table with all units used in the SRS.
 mkTableUnitDefn :: PrintingInformation -> Doc
@@ -120,12 +150,7 @@ mkTableUnitDefn pinfo = mkTableFromLenses
   pinfo
   (view unitTable)
   "Unit Definitions"
-  "UID"
-  "Term"
-  "Unit Symbol"
-  (text . showUID)
-  (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
-  (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . Sy . usymb)
+  [openTerm, openUnitSymbol]
 
 -- | Makes a table with all data definitions in the SRS.
 mkTableDataDef :: PrintingInformation -> Doc
@@ -133,12 +158,7 @@ mkTableDataDef pinfo = mkTableFromLenses
   pinfo
   (view dataDefnTable)
   "Data Definitions"
-  "UID"
-  "Term"
-  "Symbol"
-  (text . showUID)
-  (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
-  (symbolDoc . flip L.symbol (pinfo ^. stg) . view defLhs)
+  [openTerm, openDefSymbol]
 
 -- | Makes a table with all general definitions in the SRS.
 mkTableGenDef :: PrintingInformation -> Doc
@@ -146,12 +166,7 @@ mkTableGenDef pinfo = mkTableFromLenses
   pinfo
   (view gendefTable)
   "General Definitions"
-  "UID"
-  "Term"
-  "Definition"
-  (text . showUID)
-  (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
-  (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . view defn)
+  [openTerm, openDefinition]
 
 -- | Makes a table with all theoretical models in the SRS.
 mkTableTMod :: PrintingInformation -> Doc
@@ -159,12 +174,7 @@ mkTableTMod pinfo = mkTableFromLenses
   pinfo
   (view theoryModelTable)
   "Theory Models"
-  "UID"
-  "Term"
-  "Definition"
-  (text . showUID)
-  (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
-  (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . view defn)
+  [openTerm, openDefinition]
 
 -- | Makes a table with all instance models in the SRS.
 mkTableIMod :: PrintingInformation -> Doc
@@ -172,12 +182,7 @@ mkTableIMod pinfo = mkTableFromLenses
   pinfo
   (view insmodelTable)
   "Instance Models"
-  "UID"
-  "Term"
-  "Definition"
-  (text . showUID)
-  (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
-  (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . view defn)
+  [openTerm, openDefinition]
 
 -- | Makes a table with all concept instances in the SRS.
 mkTableCI :: PrintingInformation -> Doc
@@ -185,12 +190,7 @@ mkTableCI pinfo = mkTableFromLenses
   pinfo
   (view conceptinsTable)
   "ConceptInstance"
-  "UID"
-  "Term"
-  "ShortName"
-  (text . showUID)
-  (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
-  (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . getSentSN . shortname)
+  [openTerm, openShortName]
 
 -- | Makes a table with all sections in the SRS.
 mkTableSec :: PrintingInformation -> Doc
@@ -198,12 +198,7 @@ mkTableSec pinfo = mkTableFromLenses
   pinfo
   (view sectionTable)
   "Sections"
-  "UID"
-  "Title"
-  "ShortName"
-  (text . showUID)
-  (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . tle)
-  (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . getSentSN . shortname)
+  [openTitle, openShortName]
 
 -- | Makes a table with all labelled content in the SRS.
 mkTableLC :: PrintingInformation -> Doc
@@ -211,24 +206,7 @@ mkTableLC pinfo = mkTableFromLenses
   pinfo
   (view labelledcontentTable)
   "LabelledContent"
-  "UID"
-  "ShortName"
-  "Type of Content"
-  (text . showUID)
-  (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . getSentSN . shortname)
-  (text . getContConst . view accessContents)
-  where
-    getContConst :: RawContent -> String
-    getContConst Table {} = "Table"
-    getContConst Paragraph {} = "Paragraph"
-    getContConst EqnBlock {} = "Equation"
-    getContConst DerivBlock {} = "Derivation"
-    getContConst Enumeration {} = "Enumeration"
-    getContConst Defini {} = "Definition or Model"
-    getContConst Figure {} = "Figure"
-    getContConst Bib {} = "Bibliography"
-    getContConst Graph {} = "Graph"
-    getContConst CodeBlock {} = "Code"
+  [openShortName, openContentType]
 
 -- | Makes a table with all references in the SRS.
 mkTableRef :: PrintingInformation -> Doc
@@ -236,12 +214,7 @@ mkTableRef pinfo = mkTableFromLenses
   pinfo
   (view refTable)
   "Reference"
-  "UID"
-  "Reference Address"
-  "ShortName"
-  (text . showUID)
-  (text . getAdd . getRefAdd)
-  (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . getSentSN . shortname)
+  [openRef, openShortName]
 
 -- | Chunks that depend on other chunks. An empty list means the chunks do not depend on anything.
 mkTableDepChunks :: PrintingInformation -> Doc

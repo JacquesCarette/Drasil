@@ -64,15 +64,15 @@ mkTableFromLenses
   -> Doc
 mkTableFromLenses pin@PI { _ckdb = db } tableLens ttle hsNEs =
   text ttle <> colon
-  $$ hdr
+  $$ header hdr
   $$ vcat (map col chunks)
   where
     namedLenses = map ($ pin) hsNEs
     ins :: [Int]
     ins = [1..]
 
-    hdr   = foldr (\l r -> nest (nestNum * snd l) (text $ fst l) $$ r) (text "showUID")   (zip (map fst namedLenses) ins)
-    col a = foldr (\l r -> nest (nestNum * snd l) (fst l a)      $$ r) (text $ showUID a) (zip (map snd namedLenses) ins)
+    hdr   = foldl (\r l -> r $$ nest (nestNum * snd l) (text $ fst l)) (text "UID")       (zip (map fst namedLenses) ins)
+    col a = foldl (\r l -> r $$ nest (nestNum * snd l) (fst l a)     ) (text $ showUID a) (zip (map snd namedLenses) ins)
 
     chunks = map (fst . snd) (Map.assocs $ tableLens db)
 

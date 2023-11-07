@@ -1,0 +1,56 @@
+digraph refvsref {
+	angularFrequency -> period;
+	period -> frequency;
+	angFrequencyGD -> frequency;
+	angFrequencyGD -> newtonSLR;
+	periodPendGD -> frequency;
+	periodPendGD -> angularFrequency;
+	periodPendGD -> period;
+	periodPendGD -> angFrequencyGD;
+	angularDisplacementIM -> newtonSLR;
+	angularDisplacementIM -> angFrequencyGD;
+
+
+	ixPos	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionIX"];
+	iyPos	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionIY"];
+	frequency	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:frequencyDD"];
+	angularFrequency	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angFrequencyDD"];
+	period	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:periodSHMDD"];
+
+	subgraph DD {
+	rank="same"
+	{ixPos, iyPos, frequency, angularFrequency, period}
+	}
+
+	accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];
+	velocityTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:velocity"];
+	newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
+	newtonSLR	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawRotMot"];
+
+	subgraph TM {
+	rank="same"
+	{accelerationTM, velocityTM, newtonSL, newtonSLR}
+	}
+
+	theory:xVel	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityIX"];
+	theory:yVel	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityIY"];
+	theory:xScalAcc	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationIX"];
+	theory:yScalAcc	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationIY"];
+	hForceOnPendulum	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:hForceOnPendulum"];
+	vForceOnPendulum	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:vForceOnPendulum"];
+	angFrequencyGD	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:angFrequencyGD"];
+	periodPendGD	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:periodPend"];
+
+	subgraph GD {
+	rank="same"
+	{theory:xVel, theory:yVel, theory:xScalAcc, theory:yScalAcc, hForceOnPendulum, vForceOnPendulum, angFrequencyGD, periodPendGD}
+	}
+
+	angularDisplacementIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngularDisplacement"];
+
+	subgraph IM {
+	rank="same"
+	{angularDisplacementIM}
+	}
+
+}

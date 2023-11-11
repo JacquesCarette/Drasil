@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PD_Controller: PD_Controller.Calculations Class Reference</title>
+<title>PDController: PDController.InputParameters Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">PD_Controller
+   <div id="projectname">PDController
    </div>
   </td>
  </tr>
@@ -61,27 +61,30 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>PD_Controller</b></li><li class="navelem"><a class="el" href="class_p_d___controller_1_1_calculations.html">Calculations</a></li>  </ul>
+<li class="navelem"><b>PDController</b></li><li class="navelem"><a class="el" href="class_p_d_controller_1_1_input_parameters.html">InputParameters</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="class_p_d___controller_1_1_calculations-members.html">List of all members</a>  </div>
+<a href="class_p_d_controller_1_1_input_parameters-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">PD_Controller.Calculations Class Reference</div>  </div>
+<div class="title">PDController.InputParameters Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:accaf214db34a0f8af421a61d013a2b71"><td class="memItemLeft" align="right" valign="top">static ArrayList&lt; Double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_d___controller_1_1_calculations.html#accaf214db34a0f8af421a61d013a2b71">func_y_t</a> (double K_d, double K_p, double r_t, double t_sim, double t_step)</td></tr>
-<tr class="memdesc:accaf214db34a0f8af421a61d013a2b71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates Process Variable: The output value from the power plant.  <a href="class_p_d___controller_1_1_calculations.html#accaf214db34a0f8af421a61d013a2b71">More...</a><br /></td></tr>
-<tr class="separator:accaf214db34a0f8af421a61d013a2b71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a030b6a0e24c895028200ffefd0654b33"><td class="memItemLeft" align="right" valign="top">static Object[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_d_controller_1_1_input_parameters.html#a030b6a0e24c895028200ffefd0654b33">get_input</a> (String filename)  throws FileNotFoundException </td></tr>
+<tr class="memdesc:a030b6a0e24c895028200ffefd0654b33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads input from a file with the given file name.  <a href="class_p_d_controller_1_1_input_parameters.html#a030b6a0e24c895028200ffefd0654b33">More...</a><br /></td></tr>
+<tr class="separator:a030b6a0e24c895028200ffefd0654b33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9b04a9bf248579ec83f14982da46917"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_d_controller_1_1_input_parameters.html#af9b04a9bf248579ec83f14982da46917">input_constraints</a> (double r_t, double K_d, double K_p, double t_step, double t_sim)  throws Exception </td></tr>
+<tr class="memdesc:af9b04a9bf248579ec83f14982da46917"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verifies that input values satisfy the physical constraints.  <a href="class_p_d_controller_1_1_input_parameters.html#af9b04a9bf248579ec83f14982da46917">More...</a><br /></td></tr>
+<tr class="separator:af9b04a9bf248579ec83f14982da46917"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="accaf214db34a0f8af421a61d013a2b71"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#accaf214db34a0f8af421a61d013a2b71">&#9670;&nbsp;</a></span>func_y_t()</h2>
+<a id="a030b6a0e24c895028200ffefd0654b33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a030b6a0e24c895028200ffefd0654b33">&#9670;&nbsp;</a></span>get_input()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -90,8 +93,59 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static ArrayList&lt;Double&gt; PD_Controller.Calculations.func_y_t </td>
+          <td class="memname">static Object [] PDController.InputParameters.get_input </td>
           <td>(</td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td> throws FileNotFoundException</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reads input from a file with the given file name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>name of the input file </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>array containing the following values: </dd>
+<dd>
+Set-Point: The desired value that the control system must reach. This also knows as the reference variable </dd>
+<dd>
+Derivative Gain: Gain constant of the derivative controller </dd>
+<dd>
+Proportional Gain: Gain constant of the proportional controller </dd>
+<dd>
+Step Time: Simulation step time (s) </dd>
+<dd>
+Simulation Time: Total execution time of the PD simulation (s) </dd></dl>
+
+</div>
+</div>
+<a id="af9b04a9bf248579ec83f14982da46917"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9b04a9bf248579ec83f14982da46917">&#9670;&nbsp;</a></span>input_constraints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void PDController.InputParameters.input_constraints </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>r_t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>K_d</em>, </td>
         </tr>
@@ -105,24 +159,18 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>r_t</em>, </td>
+          <td class="paramname"><em>t_step</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>t_sim</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>t_step</em>&#160;</td>
+          <td class="paramname"><em>t_sim</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> throws Exception</td>
         </tr>
       </table>
   </td>
@@ -132,23 +180,22 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Calculates Process Variable: The output value from the power plant. </p>
+<p>Verifies that input values satisfy the physical constraints. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">r_t</td><td>Set-Point: The desired value that the control system must reach. This also knows as the reference variable </td></tr>
     <tr><td class="paramname">K_d</td><td>Derivative Gain: Gain constant of the derivative controller </td></tr>
     <tr><td class="paramname">K_p</td><td>Proportional Gain: Gain constant of the proportional controller </td></tr>
-    <tr><td class="paramname">r_t</td><td>Set-Point: The desired value that the control system must reach. This also knows as the reference variable </td></tr>
-    <tr><td class="paramname">t_sim</td><td>Simulation Time: Total execution time of the PD simulation (s) </td></tr>
     <tr><td class="paramname">t_step</td><td>Step Time: Simulation step time (s) </td></tr>
+    <tr><td class="paramname">t_sim</td><td>Simulation Time: Total execution time of the PD simulation (s) </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Process Variable: The output value from the power plant </dd></dl>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>PD_Controller/<a class="el" href="_calculations_8java.html">Calculations.java</a></li>
+<li>PDController/<a class="el" href="_input_parameters_8java.html">InputParameters.java</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

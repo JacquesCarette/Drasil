@@ -584,7 +584,7 @@ ddefn :: Fields -> SystemInformation -> DataDefinition -> LabelledContent
 -- | Create a derivation from a chunk's attributes. This follows the TM,
 --   DD, GD, or IM definition automatically (called automatically by
 --   <tt>SCSSub</tt> program).
-derivation :: (HasDerivation c, HasShortName c, Referable c) => c -> Maybe Contents
+derivation :: (MayHaveDerivation c, HasShortName c, Referable c) => c -> Maybe Contents
 
 -- | Create a general definition using a list of fields, database of
 --   symbols, and a <a>GenDefn</a> (general definition) chunk (called

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['get_5finput_8',['get_input',['../class_p_d___controller_1_1_input_parameters.html#a7cd69e73f3385fdd15af90fd54b47955',1,'PD_Controller::InputParameters']]],
-  ['getdimension_9',['getDimension',['../class_p_d___controller_1_1_o_d_e.html#a2c8e8e66682162d935e7c64fa5aff5a7',1,'PD_Controller::ODE']]]
+  ['get_5finput_8',['get_input',['../class_p_d_controller_1_1_input_parameters.html#a030b6a0e24c895028200ffefd0654b33',1,'PDController::InputParameters']]],
+  ['getdimension_9',['getDimension',['../class_p_d_controller_1_1_o_d_e.html#a4459d55f686636ac9e9c1a3acca5a936',1,'PDController::ODE']]]
 ];

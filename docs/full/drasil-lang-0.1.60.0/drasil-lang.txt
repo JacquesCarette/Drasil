@@ -2744,10 +2744,10 @@ data Derivation
 Derivation :: Sentence -> [Sentence] -> Derivation
 
 -- | A class that might have a <a>Derivation</a>.
-class HasDerivation c
+class MayHaveDerivation c
 
 -- | Provides a <tt>Lens</tt> to a possible derivation.
-derivations :: HasDerivation c => Lens' c (Maybe Derivation)
+derivations :: MayHaveDerivation c => Lens' c (Maybe Derivation)
 
 -- | Smart constructor for creating a <a>Derivation</a>.
 mkDeriv :: Sentence -> [Sentence] -> Derivation
@@ -5400,8 +5400,11 @@ codeChunk :: CodeIdea c => c -> CodeChunk
 class CodeIdea c => DefiningCodeExpr c
 codeExpr :: DefiningCodeExpr c => Lens' c CodeExpr
 
--- | Convert the program name to an abbreviated <a>Space</a> without any
---   special characters.
+-- | Convert an abbreviation into one deemed 'code-friendly', removing
+--   spaces, and replacing special characters with underscores.
+--   
+--   FIXME: This should NOT be treated as a <tt>getter</tt>, but something
+--   we cache local to something that has a 'program name'.
 programName :: CommonIdea c => c -> String
 
 -- | Used when a function name needs to be distinguishable from a variable
@@ -6656,10 +6659,10 @@ class HasAdditionalNotes c
 getNotes :: HasAdditionalNotes c => Lens' c [Sentence]
 
 -- | A class that might have a <a>Derivation</a>.
-class HasDerivation c
+class MayHaveDerivation c
 
 -- | Provides a <tt>Lens</tt> to a possible derivation.
-derivations :: HasDerivation c => Lens' c (Maybe Derivation)
+derivations :: MayHaveDerivation c => Lens' c (Maybe Derivation)
 
 -- | Units are <a>Idea</a>s with a <a>Definition</a> which store a unit
 --   symbol. They must also be explicitly declared to be instances of
@@ -6792,8 +6795,11 @@ ccf :: Iso' CodeFuncChunk CodeChunk
 ccv :: Lens' CodeVarChunk CodeChunk
 listToArray :: CodeVarChunk -> CodeVarChunk
 
--- | Convert the program name to an abbreviated <a>Space</a> without any
---   special characters.
+-- | Convert an abbreviation into one deemed 'code-friendly', removing
+--   spaces, and replacing special characters with underscores.
+--   
+--   FIXME: This should NOT be treated as a <tt>getter</tt>, but something
+--   we cache local to something that has a 'program name'.
 programName :: CommonIdea c => c -> String
 
 -- | Used when a function name needs to be distinguishable from a variable

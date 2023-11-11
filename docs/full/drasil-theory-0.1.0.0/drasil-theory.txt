@@ -141,7 +141,7 @@ instance Theory.Drasil.Classes.HasOutput Theory.Drasil.DataDefinition.DataDefini
 instance Language.Drasil.ExprClasses.Express Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.DecoratedReference.HasDecRef Theory.Drasil.DataDefinition.DataDefinition
 instance GHC.Classes.Eq Theory.Drasil.DataDefinition.DataDefinition
-instance Language.Drasil.Derivation.HasDerivation Theory.Drasil.DataDefinition.DataDefinition
+instance Language.Drasil.Derivation.MayHaveDerivation Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Classes.HasAdditionalNotes Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.ShortName.HasShortName Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Label.Type.HasRefAddress Theory.Drasil.DataDefinition.DataDefinition
@@ -361,7 +361,7 @@ instance Language.Drasil.Chunk.NamedIdea.Idea Theory.Drasil.InstanceModel.Instan
 instance Language.Drasil.Classes.Definition Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.ExprClasses.Express Theory.Drasil.InstanceModel.InstanceModel
-instance Language.Drasil.Derivation.HasDerivation Theory.Drasil.InstanceModel.InstanceModel
+instance Language.Drasil.Derivation.MayHaveDerivation Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.DecoratedReference.HasDecRef Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.ShortName.HasShortName Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Label.Type.HasRefAddress Theory.Drasil.InstanceModel.InstanceModel
@@ -397,7 +397,7 @@ instance Language.Drasil.Chunk.NamedIdea.Idea Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.Definition Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.ExprClasses.Express Theory.Drasil.GenDefn.GenDefn
-instance Language.Drasil.Derivation.HasDerivation Theory.Drasil.GenDefn.GenDefn
+instance Language.Drasil.Derivation.MayHaveDerivation Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.DecoratedReference.HasDecRef Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.ShortName.HasShortName Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Label.Type.HasRefAddress Theory.Drasil.GenDefn.GenDefn

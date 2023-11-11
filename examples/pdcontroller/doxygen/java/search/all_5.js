@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['main_15',['main',['../class_p_d___controller_1_1_control.html#ac80fc841412ffb33b6b0fe632ddaa22e',1,'PD_Controller::Control']]]
+  ['main_15',['main',['../class_p_d_controller_1_1_control.html#aa54e4dff3743325a88e38691bc8e18eb',1,'PDController::Control']]]
 ];

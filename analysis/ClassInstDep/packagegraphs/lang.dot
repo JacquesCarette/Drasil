@@ -339,7 +339,7 @@ UnitEq	[shape=oval, color=magenta, label="UnitEq"];
 DefiningExpr	[shape=oval, color=magenta, label="DefiningExpr"];
 IsArgumentName	[shape=oval, color=magenta, label="IsArgumentName"];
 HasDecRef	[shape=oval, color=magenta, label="HasDecRef"];
-HasDerivation	[shape=oval, color=magenta, label="HasDerivation"];
+MayHaveDerivation	[shape=oval, color=magenta, label="MayHaveDerivation"];
 Express	[shape=oval, color=magenta, label="Express"];
 NounPhrase	[shape=oval, color=magenta, label="NounPhrase"];
 HasName	[shape=oval, color=magenta, label="HasName"];

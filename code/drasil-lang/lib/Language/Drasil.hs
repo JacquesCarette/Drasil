@@ -64,7 +64,7 @@ module Language.Drasil (
   , HasReasVal(reasVal)
   , Constrained(constraints)
   , HasAdditionalNotes(getNotes)
-  , HasDerivation(derivations)
+  , MayHaveDerivation(derivations)
   , IsUnit(getUnits)
   , DefiningExpr(defnExpr)
   , Express(express)
@@ -334,7 +334,7 @@ import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, 
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),
   HasReasVal(reasVal), DefiningExpr(defnExpr), Quantity, Callable,
   IsArgumentName, Express(..))
-import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader, HasDerivation(..))
+import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader, MayHaveDerivation(..))
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
     Citation, EntryID, BibRef

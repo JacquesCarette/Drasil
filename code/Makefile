@@ -471,25 +471,19 @@ website: ##@Deploy First builds all Drasil packages, and then executes the drasi
 	CLASSINST_GRAPH_FOLDER="$(CLASSINST_GRAPH_FOLDER)" \
 	$(STACK_EXEC) -- "website"
 
-# Deploys the Drasil website. Called by the deploy target.
-# If you have all the necessary generated targets listed
-# in `deploy`, then this will skip the re-generation of 
-# those files. Currently, the deploy_stage.sh script does
-# not work for Windows Git Bash users.
+# Prepares a website folder deployable to GitHub Pages using existing artifacts.
 deploy_lite: website ##@Deploy Deploy the Drasil website without regenerating artifacts. For local development.
 	@mkdir -p "$(DEPLOY_FOLDER)"
 	@BUILD_FOLDER="$(BUILD_FOLDER)" DEPLOY_FOLDER="$(DEPLOY_FOLDER)" GRAPH_FOLDER="$(GRAPH_FOLDER)" \
 	EXAMPLE_DIRS="$(EXAMPLE_DIRS)" MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \
 	TRACEY_GRAPHS_FOLDER="$(TRACEY_GRAPHS_FOLDER)" DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" \
 	WEBSITE_FOLDER="$(WEBSITE_FOLDER)" \
-	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"deploy_stage.sh
+	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)prepare_deployment.sh"
 
-# This rule is for use with developing deployment layout locally. As part of it, it ensures all needed
-# dependencies exist. One of the downsides is we ensure all files are re-generated which means the TeX
-# files appear newer and thus PDF's are regenerated. If you want to "just generate the structure,
-# everything exists," (or you've run `deploy` once already) then `deploy_lite` does just that and is
-# what `deploy.bash` calls. 
-deploy: analysis graphs packagedeps docs tex doxygen ##@Deploy Generates all artifacts and the Drasil website locally.
+# Prepares a website folder deployable to GitHub Pages using freshly generated
+# artifacts. If you don't want to use freshly generated artifacts, consider
+# using theg `deploy_lite` target instead.
+deploy: analysis graphs convertAnalyzed packagedeps docs tex doxygen ##@Deploy Generates all artifacts and the Drasil website locally.
 	"$(MAKE)" deploy_lite
 
 #-----------------------#

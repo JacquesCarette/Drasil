@@ -87,13 +87,8 @@ jobs:
         run: make website
       - name: "Test Built Website against Stable Version"
         run: make test_website NOISY=yes
-      - name: "Build website"
-        run: |
-          LABEL_FILE=/tmp/ci_build_failures \
-            MANAGED_LABEL_FILE=/tmp/ci_managed_labels \
-            ALL_FUNCTIONS_FILE=$(mktemp) \
-            SHELL_OPTS_FILE=$(mktemp) \
-            bash scripts/deploy_wrapper.bash
+      - name: "Prepare full website deployment environment"
+        run: make deploy_lite
       - name: "Deploy 🚀"
         if: ${{ fromJSON(env.is_deployment) }}
         uses: JamesIves/github-pages-deploy-action@v4.4.3

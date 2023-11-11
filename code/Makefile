@@ -179,9 +179,9 @@ BATCHTERM=dumb
 #--- Actual targets ---#
 ########################
 
-# Default `make` will just run examples and test them against stable.
-# See `test` target for more details.
-all: test ##@Examples Run examples and test against stable.
+# Default `make` will just run examples and test them against stable. See `test`
+# target for more details.
+all: test test_website ##@Examples Run examples and test against stable.
 
 install: ##@Examples Install all example project binaries into your local binary path (see $(stack path) for local-bin-path).
 	stack install $(stackArgs)
@@ -239,7 +239,7 @@ test: $(TEST_EXAMPLES) ##@Examples Run all examples and compare against the stab
 
 # First builds the website and then tests the generated contenst with those in
 # the stable-website folder.
-test_website: $(TEST_WEBSITE)
+test_website: $(TEST_WEBSITE) ##@Website Test freshly generated website against last known 'stable' copy.
 	@echo ---------------------------------------
 	@echo Testing Website complete, checking logs
 	@echo ---------------------------------------
@@ -254,7 +254,7 @@ stabilize: $(STABILIZE_EXAMPLES) ##@Examples Overwrites the stable folder with u
 
 # First build the website, and then overwrite the contents in the stable-website
 # folder with currently generated ones.
-website_stabilize: $(STABILIZE_WEBSITE)
+website_stabilize: $(STABILIZE_WEBSITE) ##@Website Stabilize a freshly generated copy of the website artifacts.
 	@echo ----------------------------
 	@echo Stabilized website artifacts
 	@echo ----------------------------

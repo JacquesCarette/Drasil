@@ -1,4 +1,4 @@
-package PD_Controller;
+package PDController;
 
 /** \file OutputFormat.java
     \author Naveen Ganesh Muralidharan

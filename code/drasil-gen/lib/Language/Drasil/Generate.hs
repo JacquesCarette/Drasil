@@ -34,7 +34,6 @@ import Language.Drasil.TypeCheck
 import Language.Drasil.Dump
 
 import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
-import Data.Char (isSpace)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
@@ -109,9 +108,9 @@ genDot si = do
 genLog :: SystemInformation -> PrintingInformation -> IO ()
 genLog SI{_sys = sysName} pinfo = do
   workingDir <- getCurrentDirectory
-  createDirectoryIfMissing True $ "../../debug/" ++ filter (not.isSpace) (programName sysName) ++ "/SRSlogs"
-  setCurrentDirectory $ "../../debug/" ++ filter (not.isSpace) (programName sysName) ++ "/SRSlogs"
-  handle <- openFile (filter (not.isSpace) (programName sysName) ++ "_SRS.log") WriteMode
+  createDirectoryIfMissing True $ "../../debug/" ++ programName sysName ++ "/SRSlogs"
+  setCurrentDirectory $ "../../debug/" ++ programName sysName ++ "/SRSlogs"
+  handle <- openFile (programName sysName ++ "_SRS.log") WriteMode
   mapM_ (hPutStrLn handle . render) $ printAllDebugInfo pinfo
   hClose handle
   setCurrentDirectory workingDir

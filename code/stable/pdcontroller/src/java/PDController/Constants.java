@@ -1,4 +1,4 @@
-package PD_Controller;
+package PDController;
 
 /** \file Constants.java
     \author Naveen Ganesh Muralidharan

@@ -6,7 +6,7 @@ module Drasil.Website.Example where
 import Language.Drasil hiding (E)
 import SysInfo.Drasil (SystemInformation(..))
 import Language.Drasil.Code (Choices(..), Lang(..))
-import Data.Char (toLower, isSpace)
+import Data.Char (toLower)
 
 import qualified Drasil.DblPend.Body as DblPend (fullSI)
 import qualified Drasil.GamePhysics.Body as GamePhysics (fullSI)
@@ -79,16 +79,16 @@ fullExList codePth srsDoxPth = Enumeration $ Bullet $ map (, Nothing) (allExampl
 allExampleList :: [Example] -> [ItemType]
 allExampleList = map (\x -> Nested (nameAndDesc x) $ Bullet $ map (, Nothing) (individualExList x))
   where
-    nameAndDesc E{sysInfoE = SI{_sys = sys, _purpose = purp}} = S (programName sys) +:+ S " - To" +:+. head purp
+    nameAndDesc E{sysInfoE = SI{_sys = sys, _purpose = purp}} = S (abrv sys) +:+ S " - To" +:+. head purp
 
 -- | Display the points for generated documents and call 'versionList' to display the code.
 individualExList :: Example -> [ItemType]
 -- No choices mean no generated code, so we do not need to display generated code and thus do not call versionList.
 individualExList E{sysInfoE = SI{_sys = sys}, choicesE = [], codePath = srsP} = 
-  [Flat $ S (programName sys ++ "_SRS") +:+ namedRef (getSRSRef srsP "html" $ programName sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ programName sys) (S "[PDF]")]
+  [Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP "html" $ programName sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ programName sys) (S "[PDF]")]
 -- Anything else means we need to display program information, so use versionList.
 individualExList ex@E{sysInfoE = SI{_sys = sys}, codePath = srsP} = 
-  [Flat $ S (programName sys ++ "_SRS") +:+ namedRef (getSRSRef srsP "html" $ programName sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ programName sys) (S "[PDF]"),
+  [Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP "html" $ programName sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ programName sys) (S "[PDF]"),
   Nested (S generatedCodeTitle) $ Bullet $ map (, Nothing) (versionList getCodeRef ex),
   Nested (S generatedCodeDocsTitle) $ Bullet $ map (, Nothing) (versionList getDoxRef noSwiftEx)]
     where
@@ -178,8 +178,8 @@ getCodeRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName =
 
     -- System name, different between one set of choices and multiple sets.
     sysName = case chcs of 
-      [_] -> map toLower $ filter (not.isSpace) $ programName sys
-      _   -> map toLower (filter (not.isSpace) $ programName sys) ++ "/" ++ verName
+      [_] -> map toLower $ programName sys
+      _   -> map toLower (programName sys) ++ "/" ++ verName
     -- Program language converted for use in file folder navigation.
     programLang = convertLang l
 
@@ -188,11 +188,11 @@ getDoxRef :: Example -> Lang -> String -> Reference
 getDoxRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName = 
   makeURI refUID refURI refShortNm
   where
-    refUID = "doxRef" ++ sysName ++ programLang
-    refURI = getDoxPath (srsDoxPath ex) sysName programLang
+    refUID = "doxRef" ++ progName ++ programLang
+    refURI = getDoxPath (srsDoxPath ex) progName programLang
     refShortNm = shortname' $ S refUID
 
-    sysName = filter (not.isSpace) $ programName sys
+    progName = programName sys
     -- Here is the only difference from getCodeRef. When there is more than one set of choices,
     -- we append version name to program language since the organization of folders follows this way.
     programLang = case chcs of 
@@ -208,15 +208,18 @@ getSRSRef path sufx ex = makeURI refUID (getSRSPath path (map toLower sufx) ex) 
 -- | Get the paths of where each reference exist for SRS files. Some example abbreviations have spaces,
 -- so we just filter those out. The suffix should only be either html or pdf.
 getSRSPath :: FilePath -> String -> String -> FilePath
-getSRSPath path sufx ex = path ++ map toLower (filter (not.isSpace) ex)
-  ++ "/SRS/srs/" ++ filter (not.isSpace) ex ++ "_SRS." ++ map toLower sufx
+getSRSPath path sufx ex = 
+  path
+  ++ map toLower ex -- FIXME: The majority of these `map toLower`s are implicit knowledge!!! 
+  ++ "/SRS/srs/"
+  ++ ex ++ "_SRS." ++ map toLower sufx
 
 -- | Get the file paths for generated code and doxygen locations.
 getCodePath, getDoxPath :: FilePath -> String -> String -> FilePath
 -- | Uses 'repoRt' path (codePath in this module).
-getCodePath path ex programLang = path ++ "code/stable/" ++ map toLower (filter (not.isSpace) ex) ++ "/src/" ++ programLang -- need repoCommit path
+getCodePath path ex programLang = path ++ "code/stable/" ++ map toLower ex ++ "/src/" ++ programLang -- need repoCommit path
 -- | Uses 'exRt' path (srsDoxPath in this module).
-getDoxPath path ex programLang = path ++ map toLower (filter (not.isSpace) ex) ++ "/doxygen/" ++ programLang ++ "/index.html" -- need example path
+getDoxPath path ex programLang = path ++ map toLower ex ++ "/doxygen/" ++ programLang ++ "/index.html" -- need example path
 
 -- | Gather all references used in making the Examples section.
 exampleRefs :: FilePath -> FilePath -> [Reference]

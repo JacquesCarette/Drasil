@@ -1,4 +1,4 @@
-package PD_Controller;
+package PDController;
 
 /** \file Calculations.java
     \author Naveen Ganesh Muralidharan

@@ -2,6 +2,7 @@
 -- | Defines chunk types for use in code generation.
 module Language.Drasil.Chunk.CodeVar where
 
+import Data.Char (isSpace)
 import Control.Lens ((^.), view, makeLenses, Lens')
 
 import Language.Drasil.Classes (CommonIdea(abrv), Quantity, Idea(getA), NamedIdea(..), Callable)
@@ -30,9 +31,13 @@ class CodeIdea c where
 class CodeIdea c => DefiningCodeExpr c where
   codeExpr  :: Lens' c CodeExpr
 
--- | Convert the program name to an abbreviated 'String' without any special characters.
+-- | Convert an abbreviation into one deemed 'code-friendly', removing spaces,
+--   and replacing special characters with underscores.
+--
+--   FIXME: This should NOT be treated as a 'getter', but something we cache
+--   local to something that has a 'program name'.
 programName :: CommonIdea c => c -> String
-programName = toPlainName . abrv
+programName = toPlainName . filter (not . isSpace) . abrv
 
 -- | Used when a function name needs to be distinguishable from a variable name.
 funcPrefix :: String

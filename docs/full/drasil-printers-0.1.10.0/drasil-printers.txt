@@ -1256,10 +1256,7 @@ showSymb :: Symbol -> String
 -- | Helper for printing a HasSymbol in Implementation Stage
 showHasSymbImpl :: HasSymbol x => x -> String
 
-
--- | Defines functions to help debug examples. Generated files appear in
---   .<i>code</i>debug.
-module Language.Drasil.Log.Print
+module Language.Drasil.Debug.Print
 
 -- | Gathers all printing functions and creates the debugging tables from
 --   them.
@@ -1277,7 +1274,18 @@ header :: Doc -> Doc
 --   functions that sort the data from the printing information field into
 --   the required display formats (often <a>UID</a>s, terms, shortnames,
 --   definitions, etc.).
-mkTableFromLenses :: PrintingInformation -> (ChunkDB -> UMap a) -> String -> String -> String -> String -> (a -> Doc) -> (a -> Doc) -> (a -> Doc) -> Doc
+mkTableFromLenses :: HasUID a => PrintingInformation -> (ChunkDB -> UMap a) -> String -> [PrintingInformation -> (String, a -> Doc)] -> Doc
+openTerm :: NamedIdea a => PrintingInformation -> (String, a -> Doc)
+openSymbol :: HasSymbol a => PrintingInformation -> (String, a -> Doc)
+openDefSymbol :: DefinesQuantity s => PrintingInformation -> (String, s -> Doc)
+openAbbreviation :: Idea a => PrintingInformation -> (String, a -> Doc)
+openDefinition :: Definition a => PrintingInformation -> (String, a -> Doc)
+openUnitSymbol :: HasUnitSymbol a => PrintingInformation -> (String, a -> Doc)
+openShortName :: HasShortName a => PrintingInformation -> (String, a -> Doc)
+openTitle :: PrintingInformation -> (String, Section -> Doc)
+cntntToStr :: RawContent -> String
+openContentType :: HasContents s => p -> (String, s -> Doc)
+openRef :: HasRefAddress a => p -> (String, a -> Doc)
 
 -- | Makes a table with all symbolic quantities in the SRS.
 mkTableSymb :: PrintingInformation -> Doc

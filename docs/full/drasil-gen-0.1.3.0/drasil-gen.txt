@@ -16,9 +16,10 @@ type TargetFile = String
 -- | For debugging purposes, if the system has a <tt>DEBUG_ENV</tt>
 --   environment variable set to anything, we can dump the chunk maps in a
 --   system to the host system.
-dumpEverything :: SystemInformation -> Path -> IO ()
-dumpEverything0 :: SystemInformation -> Path -> IO ()
+dumpEverything :: SystemInformation -> PrintingInformation -> Path -> IO ()
+dumpEverything0 :: SystemInformation -> PrintingInformation -> Path -> IO ()
 dumpTo :: ToJSON a => a -> TargetFile -> IO ()
+dumpChunkTables :: PrintingInformation -> TargetFile -> IO ()
 
 
 -- | Defines output formats for the different documents we can generate.
@@ -64,7 +65,7 @@ dumpTo :: ToJSON a => a -> TargetFile -> IO ()
 -- | For debugging purposes, if the system has a <tt>DEBUG_ENV</tt>
 --   environment variable set to anything, we can dump the chunk maps in a
 --   system to the host system.
-dumpEverything :: SystemInformation -> Path -> IO ()
+dumpEverything :: SystemInformation -> PrintingInformation -> Path -> IO ()
 typeCheckSI :: SystemInformation -> IO ()
 
 -- | Generate a number of artifacts based on a list of recipes.
@@ -75,10 +76,6 @@ genDot :: SystemInformation -> IO ()
 
 -- | Calls the code generator.
 genCode :: Choices -> CodeSpec -> IO ()
-
--- | Generates debugging logs to show all of the <a>UID</a>s used in an
---   example.
-genLog :: SystemInformation -> PrintingInformation -> IO ()
 
 -- | Document types include Software Requirements Specification and
 --   Website. Choosing SRS will generate both TeX and HTML files, while

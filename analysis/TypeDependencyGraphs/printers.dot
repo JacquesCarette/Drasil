@@ -20,6 +20,8 @@ digraph alltypes {
 		Label -> String;
 		}
 	}
+	subgraph print {
+	}
 	subgraph css {
 	}
 	subgraph helpers {
@@ -54,8 +56,6 @@ digraph alltypes {
 		Variation -> ba;
 		Variation -> Doc;
 		}
-	}
-	subgraph print {
 	}
 	subgraph print {
 	}

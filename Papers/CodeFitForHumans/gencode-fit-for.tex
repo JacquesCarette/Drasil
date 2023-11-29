@@ -216,6 +216,18 @@ si = SI {
 % The next step is to expand on the information above, and to add the design
 % decisions information, since that is not in SI
 
+% In a meeting on Jun 27, 2023, SS and JC discussed an approach for the analysis
+% where we look bottom-up instead of top-down.  In this analysis we look at the
+% outputs (the generated documentation and code) and ask what inputs are needed to
+% get us to those outputs.  We talked about doing this with Projectile.  What is
+% the ``information'' needed to produce Projectile.  We can look at each part of
+% the Projectile code and ask ``where does it come from?''  We thought that this
+% analysis would probably be best done on a blackboard.
+
+% The stopping criteria for knowledge capture is a practical criteria.  We stop
+% when the knowledge is no longer useful.  If we can't reuse the knowledge, then
+% we went too far.
+
 \section{Organize}
 \label{sec:organize}
 

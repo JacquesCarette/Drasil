@@ -56,9 +56,7 @@ This folder contains our working examples (implementations in Drasil of the prev
     in the https://github.com/smiths/caseStudies/tree/master/CaseStudies repo. 
 
 **template**
-  - An empty example for implementing future examples in Drasil
-  - This is a recreation of the original, manually-created version 
-    in the https://github.com/smiths/caseStudies/tree/master/CaseStudies repo. 
+  - An empty example for implementing future examples in Drasil 
 
 README.md
   - This file

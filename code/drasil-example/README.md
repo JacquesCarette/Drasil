@@ -13,7 +13,7 @@ This folder contains our working examples (implementations in Drasil of the prev
 **gamephysics**
   - Contains the current state of the Game Physics case study implemented in Drasil
   - This is a recreation of the original, manually-created version 
-    in the https://github.com/smiths/caseStudies/tree/master/CaseStudies/gamephys repo.
+    in the [gamephysics](https://github.com/smiths/caseStudies/tree/master/CaseStudies/gamephys) 2D Rigid Body Physics Library.
 
 **glassbr**
   - Contains the current state of the GlassBR case study implemented in Drasil

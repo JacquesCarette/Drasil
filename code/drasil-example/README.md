@@ -42,8 +42,6 @@ This folder contains our working examples (implementations in Drasil of the prev
 
 **sglpend**
   - Contains the current state of the Single Pendulum case study implemented in Drasil
-  - This is a recreation of the original, manually-created version 
-    in the https://github.com/smiths/caseStudies/tree/master/CaseStudies repo. 
 
 **ssp**
   - Contains the current state of the slope stability analysis case study implemented in Drasil

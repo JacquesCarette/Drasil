@@ -8,7 +8,7 @@ This folder contains our working examples (implementations in Drasil of the prev
 **dblpend**
   - Contains the current state of the Double Pendulum case study implemented in Drasil
   - This is a recreation of the original, manually-created version 
-    in the https://github.com/smiths/caseStudies/tree/master/CaseStudies repo.
+    in the [dblpend](https://github.com/Zhang-Zhi-ZZ/CAS741Project) Double Pendulum example.
 
 **gamephysics**
   - Contains the current state of the Game Physics case study implemented in Drasil
@@ -53,7 +53,7 @@ This folder contains our working examples (implementations in Drasil of the prev
 **swhs**
   - Contains the current state of the solar water heating system incorporating phase change material case study implemented in Drasil
   - This is a recreation of the original, manually-created version 
-    in the https://github.com/smiths/caseStudies/tree/master/CaseStudies repo. 
+    in the [swhs](https://github.com/smiths/swhs) Solar Water Heating System example. 
 
 **template**
   - An empty example for implementing future examples in Drasil

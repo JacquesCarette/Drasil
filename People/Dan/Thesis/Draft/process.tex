@@ -513,21 +513,22 @@ observation of the (structural) patterns within this SRS section confirms it.
 The reference section of the SRS provides a lot of knowledge in a very 
 straightforward and organized manner. The basic units provided in the table of 
 units give a prime example of fundamental, global knowledge shared across 
-domains. Nearly any system involving physical quantities will use some of these 
-units. On the other hand, the table of symbols provides system/problem-domain 
-specific knowledge that will not be useful across unrelated domains. For 
-example, the stress distribution factor $J$ from GlassBR may appear in several 
-related problems, but would be unlikely to be seen in something like SWHS, 
-NoPCM, or Projectile. Finally, acronyms are very context-dependent. They are 
-often specific to a given domain and, without a coinciding definition, it can 
-be very difficult for even the target audience to understand what they refer 
-to. Within one domain, there may be several acronyms meaning different things, 
-for example: PM can refer to a Product Manager, Project Manager, Program 
-Manager, Portfolio Manager, etc.
+domains. Nearly any system involving physical quantities will use one or more 
+of these units. On the other hand, the table of symbols provides 
+system/problem-domain specific knowledge that will not be useful across 
+unrelated domains. For example, the stress distribution factor $J$ from GlassBR 
+may appear in several related problems, but would be unlikely to be seen in 
+something like SWHS, NoPCM, or Projectile. Finally, acronyms are very 
+context-dependent. They are often specific to a given domain and, without a 
+coinciding definition, it can be very difficult for even the target audience to 
+understand what they refer to. Within one domain, there may be several acronyms 
+that look identical, but mean different things, for example: PM can refer to a 
+Product Manager, Project Manager, Program Manager, Portfolio Manager, etc.
 
 By continuing to breakdown the SRS and other \sfs{}, we are able to find many 
-more patterns. For example, we see the same concept being introduced in 
-multiple areas within a single artifact and across artifacts in a project.
+more patterns of knowledge repetition. For example, we see the same concept 
+being introduced in multiple areas within a single artifact and across 
+artifacts in a project.
 \fig{
 \centering
 \includegraphics[width=\textwidth]{figures/gb_dd_q.png}}
@@ -535,7 +536,7 @@ multiple areas within a single artifact and across artifacts in a project.
 {fig:gbrddq}
 Figure~\ref{fig:gbrddq} shows the data definition for $\hat{q}$ in \gb{}. That 
 same term was previously defined with fewer details in the table of symbols 
-(omitted here for simplicity), as well as showing up implicitly or in passing 
+(omitted here for brevity), as well as showing up implicitly or in passing 
 in the MG (Figure~\ref{fig:gbrmgcm} and the \emph{loadASTM} module 
 respectively), and implemented in the Source Code (Figure~\ref{fig:gbrsrccalc} 
 lines 11-14). It should be noted that the SRS contains many references to 
@@ -543,29 +544,6 @@ $\hat{q}$, such as in the data definitions of the Stress Distribution Factor
 ($J$) and Non-Factored Load ($NFL$). There are also implied references through 
 intermediate calculations, for example the Calculation of Capacity ($LR$) is 
 defined in terms of $NFL$ which relies on $\hat{q}$.
-
-\ds{expand above to discuss knowledge projection/transformation and why things 
-are the way they are above. word vomit:} %While $\hat{q}$ is only fully defined 
-%for a human audience once, we need to keep some reference to it for different 
-%audiences. It is expected each audience will understand the symbol in the 
-%context of this system, or will be able to refer to the SRS to understand it 
-%in more depth. For someone reading the SRS, the DD (and the reference 
-%material) are important to quickly understand the full definition in the 
-%context of the system's inputs, outputs, functional requirements, and 
-%acceptance criteria. The MG barely mentions it, except in passing when 
-%defining what the loadASTM and Calc modules are responsible for (the former 
-%being loading values from a file, the latter using those values for 
-%calculations). However the source code has a very detailed definition of it, 
-%to ensure the computer is able to execute the appropriate calculation(s). The 
-%varying level of detail throughout \sfs{} should not be too surprising as the 
-%audience of each \sf{} requires a different level of verbosity depending on 
-%their needs at any particular stage of the software development process. While 
-%the verbosity varies, the underlying information is the same, ie. we are 
-%always talking about $\hat{q}$ and what it represents regardless of the level 
-%of detail we include. We are simply projecting relevant portions of our 
-%knowledge of a given term based on our understanding of the context and our 
-%audience's needs.
-\ds{edited} 
 
 Although the full definition of $\hat{q}$ is initially provided 
 for a human audience only once, it is necessary to reference it in different 
@@ -577,41 +555,57 @@ complete definition of $\hat{q}$ in relation to the system's inputs, outputs,
 functional requirements, and acceptance criteria.
 
 The MG, on the other hand, briefly mentions $\hat{q}$ when defining the 
-responsibilities of both the loadASTM and Calc modules (the former being 
-responsible for loading values from a file, and the latter utilizing those 
-values for calculations), whereas the source code provides a highly detailed 
-definition to ensure accurate execution of the relevant calculation(s).
+responsibilities of both the \emph{loadASTM} and \emph{Calc} modules (the 
+former being responsible for loading values from a file, and the latter 
+utilizing those values for calculations), whereas the source code provides a 
+highly detailed definition to ensure accurate execution of the relevant 
+calculation(s).
 
 The varying level of detail across the \sfs{} should not come as a surprise 
 since each \sf{} targets a different audience and their specific needs at 
 various stages of the software development process. Although the level of 
 verbosity may differ, the core information remains consistent: the authors are 
-consistently referring to the definition of $\hat{q}$ via its representation, 
-regardless of the level of detail incorporated. The goal is to convey relevant 
-aspects of knowledge of a given term, while eliding that which is deemed 
-superfluous, based on the context and the specific requirements of our 
-audience. In other words, the authors only \emph{project} some portion of their 
-knowledge of given terms at a given time, depending on their needs (precision, 
-brevity, clarity, etc.), the expectations of the audience, and contextual 
-relevance. \footnote{We have only referred to the term as $\hat{q}$ in this 
-section to emphasize our argument and make the meta-point that the definition 
-is irrelevant to our audience in this example. What matters is the symbolic 
-reference, which we share a common understanding of.}
+consistently referring to the definition of $\hat{q}$ via its symbolic 
+representation, regardless of the level of detail incorporated. The goal is to 
+convey relevant aspects of knowledge of a given term, while eliding that which 
+is deemed superfluous, based on the context and the specific requirements of 
+our audience. In other words, the authors only \emph{project} some portion of 
+their knowledge of given terms at a given time, depending on their needs 
+(precision, brevity, clarity, etc.), the expectations of the audience, and 
+contextual relevance. \footnote{We have only referred to the term as $\hat{q}$ 
+in this section to emphasize our argument and make a meta-argument that the 
+definition is irrelevant to our audience in this example. What matters is the 
+symbolic reference, which we share a common understanding of.} The audience, on 
+the other hand, engages in \emph{knowledge transformation}, whereby they 
+consume the representation (projected knowledge) and transform it into their 
+own internal representation, based on their personal knowledge-base.
 
-\ds{something about glossary = common example of a knowledge base w/ terms used 
-for knowledge projections. That should go somewhere}
+Relying on common representations, eliding definitions, projecting and 
+transforming knowledge are fundamental to the way humans communicate. They are 
+the basis of all communications, whether written or oral, as we assign meaning 
+to given sounds and symbols (words) according to the agreed upon grammar of a 
+given language and use those words (knowledge projections) to simplify 
+communication to a given audience. A context-specific glossary, or more 
+generally a dictionary, is a prime example of a knowledge-base that we use for 
+communication via knowledge projections and transformations. By maintaining a 
+shared vocabulary, we can communicate using the symbolic representations 
+(words) instead of requiring terms to be decomposed (defined) to their most 
+basic form. However, communication of this sort is still imperfect, due to gaps 
+in shared knowledge between participants or misunderstanding of overloaded 
+terms. Interpersonal communications can involve nuance and context-dependent 
+interpretations, yet they still boil down to knowledge projection from the 
+communicator and knowledge transformation from the communicatee. The latter can 
+infer context, or be provided with explicit context, which affirms their use of 
+the appropriate knowledge transformations.
 
-\ds{It all boils down to: Common Knowledge (system specific, domain specific, 
-general/boilerplate) displayed via projections (decided on by artifact type and 
-audience relevance) + organizational patterns}
-
-If we broaden our view from a single system, to a software family, we can also 
-find patterns of commonality across the various \sfs{} of the family members 
-(For example the SWHS and NoPCM case studies) as they have been developed to 
-solve similar, or in our case nearly identical, problems. Software family 
-members are good examples to help determine what types of information or 
-knowledge provided in the \sfs{} belong to the system-domain, problem-domain, 
-or are simply general/boilerplate.
+Returning to the context of software systems, if we broaden our view from a 
+single system, to a software family, we can also find patterns of commonality 
+and repeated knowledge across the various \sfs{} of the family members (For 
+example the SWHS and NoPCM case studies) as they have been developed to solve 
+similar, or in our case nearly identical, problems. Software family members are 
+good examples to help determine what types of information or knowledge provided 
+in the \sfs{} belong to the system-domain, problem-domain, or are simply 
+general (boilerplate).
 
 Looking at SWHS and NoPCM, we can easily find identical theoretical models 
 (TMs) \ds{thermodynamics equations should look the same, use them here} as the 
@@ -623,29 +617,17 @@ amount of heat energy stored in the tank as shown in
 Figure~\ref{fig:swhsnopcmim} \ds{Add figure 
 showing the appropriate IM that has/lacks PCM in the equation}.
 
-\ds{Patterns outlined above are a small subset of examples, but are highly 
-generalizable}
-
 While the above examples are fairly small and specific, they are indicative of 
-a larger, more generalizable, set of patterns. Essentially, these patterns boil 
-down to: Common knowledge (common to a system, domain, or \sfs{} as a whole) 
-that has been transformed/projected through some means (incl. the identity 
-projection) to provide relevant (to the audience and \sf{}) information; and 
-patterns of organization within \sfs{}.
-
-- inter-project (repetition throughout different views + other patterns.)
-  vs intra-project knowledge (repetition across projects/family members,
-  minor modifications, but fundamentally the same + other patterns.)
-- Hint at chunkifying/parceling out the fundamental (system/view-agnostic)
-knowledge vs the specific knowledge
-
-\ds{\sout{Need to talk about knowledge projection/transformation in this section
-- Use a relevant example from Case studies, maybe from PCM? Something like 
-$\Delta{}U = Q - W$ is the same as ``Total energy within a closed system must 
-be conserved" but transformed for / projects out what is relevant to a given 
-audience.
-- This will be useful for the following section} Covered that with the 
-$\hat{q}$ example.}
+a larger, more generalizable, set of patterns of knowledge organization and 
+repetition. These patterns are at their core: the use of common knowledge that 
+has been projected through some means, and patterns of organization of those 
+knowledge projections within \sfs{}. Common knowledge, in this case, refers to 
+one of three categories of knowledge: system-specific, domain-specific, or 
+common to \sfs{} as a whole. It should also be noted that knowledge projections 
+may include the identity projection (ie. the full definition) as they are 
+dependent on the relevance to the audience of the given \sf{}. Regardless, the 
+captured knowledge fundamentally underlies these patterns of repetition, and is 
+where we need to focus if we intend to reduce unnecessary redundancy.
 
 \section{Organizing knowledge - a fluid approach}
   **Subsec roadmap:
@@ -666,6 +648,48 @@ and
 thus is so broad, yet relevant to everything we do, that we consider it 
 completely general. Things like stakeholders, characteristics of the intended 
 audience, etc.
+
+Given the patterns we have seen in the previous section, we can generalize the 
+types of knowledge repetition by the way they are projected. Identity 
+projections are direct repetitions of knowledge verbatim, essentially a 
+copy-and-paste approach the keeps the full definition of the piece of 
+knowledge. Non-identity projections require using representations that elide 
+some details of the knowledge at hand to make it more palatable for the 
+audience of the given \sf{}. 
+
+In both cases, we have a knowledge core that is fully defined and then we apply 
+a projection function to retrieve the relevant information for our \sf{}. We 
+can postulate that organizing our knowledge cores into some type of structure, 
+with some assortment of projection functions (ex. Looking up the full 
+definition would be done through the identity projection function) will allow 
+us to reduce the need for manual duplication and remove unnecessary 
+redundancies, as anything we need to include in our \sfs{} can be retrieved 
+from a given source with a given projection function.
+
+\ds{This is the spot for talking about knowledge in different contexts, the 
+naive "slap it all in one database" approach vs. context-specific organized 
+groups. This is also where the Domain/Common knowledge breakdown comes into 
+play -- talk about physics problems, SI units, Chemistry, etc}
+
+Some of the knowledge used in our \sfs{} is derived from other, more 
+fundamental, knowledge cores. For example, when using SI units, we may choose 
+to use a derived unit (newton, joule, radian, etc.) which 
+is a better fit for the application domain of the system being documented. 
+While we want to avoid unnecessary redundancy, we can argue that derived units 
+are good candidates for acceptable redundancy. For example, if anywhere we use 
+\emph{Joules} we replace that with the definition ($J = 
+\frac{kg\cdot{}m^2}{s^2}$) we then run into a problem of context and 
+complexity. Generally, the audience for a given \sf{} will have an internal 
+representation of context-specific knowledge, so even something as 
+straightforward as changing the units from $J$ to $\frac{kg\cdot{}m^2}{s^2}$ 
+will put unnecessary load on said audience and force them to engage in more 
+intensive knowledge transformations, while also potentially making the \sfs{} 
+harder to parse for experts in the domain. In these cases, we want to use the 
+derived knowledge in place of the core knowledge.
+
+We could define all derived knowledge through progressive applications of 
+projection functions. In fact, this seems like the most obvious solution to the 
+problem of removing useful redundancies. 
   
 \section{The seeds of Drasil}\ds{this'll probably get merged in to the previous 
 section as a conclusion paragraph or something instead, unless I think of 

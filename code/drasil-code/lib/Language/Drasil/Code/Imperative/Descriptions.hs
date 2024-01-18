@@ -17,7 +17,7 @@ import Language.Drasil.Choices (ImplementationType(..), InputModule(..),
   Structure(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Mod (Description)
-import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
+import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
 
 import Data.Map (member)
 import qualified Data.Map as Map (filter, lookup, null)
@@ -39,7 +39,7 @@ unmodularDesc = do
   let spec = codeSpec g
       implTypeStr Program = "program"
       implTypeStr Library = "library"
-  return $ show $ sentenceDoc (sysinfodb spec) Implementation Linear $ capSent $
+  return $ show $ sentenceDoc (sysinfodb spec) Implementation OneLine $ capSent $
     foldlSent ([S "a", S (implTypeStr (implType g)), S "to"] ++ purpose spec)
 
 -- | Returns description of what is contained in the Input Parameters module.

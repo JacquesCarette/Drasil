@@ -41,7 +41,7 @@ import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
   InputModule(..), Logging(..), Structure(..), hasSampleInput)
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
-import Language.Drasil.Printers (Linearity(Linear), codeExprDoc)
+import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc)
 
 import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement,
   SMethod, CSStateVar, SClass, OOProg, BodySym(..), bodyStatements, oneLiner,
@@ -404,7 +404,7 @@ printConstraint c = do
 -- If expression is more than just a literal, print it in parentheses.
 printExpr :: (OOProg r) => CodeExpr -> ChunkDB -> [MSStatement r]
 printExpr Lit{} _  = []
-printExpr e     db = [printStr $ " (" ++ render (codeExprDoc db Implementation Linear e) ++ ")"]
+printExpr e     db = [printStr $ " (" ++ render (codeExprDoc db Implementation OneLine e) ++ ")"]
 
 -- | | Generates a function for reading inputs from a file.
 genInputFormat :: (OOProg r) => ScopeTag ->

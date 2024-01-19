@@ -62,9 +62,9 @@ digraph alltypes {
 	subgraph createmd {
 	}
 	subgraph print {
-		subgraph linearity{
-		Linearity	[shape=oval, color=darkviolet, label="Linearity"];
-		Linearity -> PrintingConfiguration;
+		subgraph singleline{
+		SingleLine	[shape=oval, color=darkviolet, label="SingleLine"];
+		SingleLine -> PrintingConfiguration;
 		}
 	}
 	subgraph codeexpr {

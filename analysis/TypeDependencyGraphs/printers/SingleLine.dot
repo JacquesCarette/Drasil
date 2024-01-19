@@ -1,0 +1,4 @@
+digraph singleline{
+SingleLine	[shape=oval, color=darkviolet, label="SingleLine"];
+SingleLine -> PrintingConfiguration;
+}

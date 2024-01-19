@@ -7,7 +7,7 @@
 </span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Database.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">defTable</span></span><span class="hs-special">)</span><span>
 </span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html"><span class="hs-identifier">Language.Drasil.Code.Imperative.DrasilState</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier">GenState</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#DrasilState"><span class="hs-identifier">DrasilState</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.CodeSpec.html"><span class="hs-identifier">Language.Drasil.CodeSpec</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.CodeSpec.html#CodeSpec"><span class="hs-identifier">CodeSpec</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Printers</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Linearity</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Linear</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sentenceDoc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">unitDoc</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Printers</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">SingleLine</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">OneLine</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sentenceDoc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">unitDoc</span></span><span class="hs-special">)</span><span>
 </span><span id="line-11"></span><span>
 </span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Map</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">lookup</span></span><span class="hs-special">)</span><span>
 </span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Monad.State</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">get</span></span><span class="hs-special">)</span><span>
@@ -30,11 +30,11 @@
 </span><a href="#local-6989586621679253583"><span class="hs-identifier hs-var">g</span></a></span><span>
 </span><span id="line-22"></span><span>  </span><span class="annot"><span class="annottext">forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Stage -&gt; Linearity -&gt; Sentence -&gt; Doc
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Stage -&gt; SingleLine -&gt; Sentence -&gt; Doc
 </span><span class="hs-identifier hs-var">sentenceDoc</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 </span><a href="#local-6989586621679253582"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">Stage
-</span><span class="hs-identifier hs-var">Implementation</span></span><span> </span><span class="annot"><span class="annottext">Linearity
-</span><span class="hs-identifier hs-var">Linear</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-identifier hs-var">Implementation</span></span><span> </span><span class="annot"><span class="annottext">SingleLine
+</span><span class="hs-identifier hs-var">OneLine</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall c. CodeIdea c =&gt; c -&gt; CodeChunk
@@ -66,11 +66,11 @@
 </span><span class="hs-identifier hs-var">empty</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">(&lt;+&gt;)</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><span class="hs-identifier hs-var">colon</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Stage -&gt; Linearity -&gt; Sentence -&gt; Doc
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Stage -&gt; SingleLine -&gt; Sentence -&gt; Doc
 </span><span class="hs-identifier hs-var">sentenceDoc</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 </span><a href="#local-6989586621679253557"><span class="hs-identifier hs-var">db</span></a></span><span> </span><span class="annot"><span class="annottext">Stage
-</span><span class="hs-identifier hs-var">Implementation</span></span><span> </span><span class="annot"><span class="annottext">Linearity
-</span><span class="hs-identifier hs-var">Linear</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-identifier hs-var">Implementation</span></span><span> </span><span class="annot"><span class="annottext">SingleLine
+</span><span class="hs-identifier hs-var">OneLine</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span>
 </span><span id="line-32"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">forall c. Definition c =&gt; Lens' c Sentence
@@ -95,9 +95,9 @@
 </span><span class="hs-identifier hs-var">maybe</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><span class="hs-identifier hs-var">empty</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Doc -&gt; Doc
 </span><span class="hs-identifier hs-var">parens</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Linearity -&gt; USymb -&gt; Doc
-</span><span class="hs-identifier hs-var">unitDoc</span></span><span> </span><span class="annot"><span class="annottext">Linearity
-</span><span class="hs-identifier hs-var">Linear</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">SingleLine -&gt; USymb -&gt; Doc
+</span><span class="hs-identifier hs-var">unitDoc</span></span><span> </span><span class="annot"><span class="annottext">SingleLine
+</span><span class="hs-identifier hs-var">OneLine</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">forall u. HasUnitSymbol u =&gt; u -&gt; USymb
 </span><span class="hs-identifier hs-var">usymb</span></span><span class="hs-special">)</span><span>
 </span><span id="line-38"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn

@@ -226,15 +226,15 @@ Foldable t =&gt;
 </span><span id="line-82"></span><span id="openTerm"><span class="annot"><span class="annottext">openTerm :: forall a. NamedIdea a =&gt; PrintingInformation -&gt; (String, a -&gt; Doc)
 </span><a href="Language.Drasil.Debug.Print.html#openTerm"><span class="hs-identifier hs-var hs-var">openTerm</span></a></span></span><span> </span><span id="local-6989586621679099890"><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679099890"><span class="hs-identifier hs-var">pinfo</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Term&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Stage -&gt; Linearity -&gt; Sentence -&gt; Doc
+</span><span class="hs-string">&quot;Term&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Stage -&gt; SingleLine -&gt; Sentence -&gt; Doc
 </span><a href="Language.Drasil.Plain.Print.html#sentenceDoc"><span class="hs-identifier hs-var">sentenceDoc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679099890"><span class="hs-identifier hs-var">pinfo</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Lens' PrintingInformation ChunkDB
 </span><a href="Language.Drasil.Printing.PrintingInformation.html#ckdb"><span class="hs-identifier hs-var">ckdb</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679099890"><span class="hs-identifier hs-var">pinfo</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Lens' PrintingInformation Stage
-</span><a href="Language.Drasil.Printing.PrintingInformation.html#stg"><span class="hs-identifier hs-var">stg</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Linearity
-</span><a href="Language.Drasil.Plain.Print.html#Nonlinear"><span class="hs-identifier hs-var">Nonlinear</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><a href="Language.Drasil.Printing.PrintingInformation.html#stg"><span class="hs-identifier hs-var">stg</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SingleLine
+</span><a href="Language.Drasil.Plain.Print.html#MultiLine"><span class="hs-identifier hs-var">MultiLine</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
@@ -288,15 +288,15 @@ PrintingInformation -&gt; (String, s -&gt; Doc)
 </span><span id="line-94"></span><span id="openDefinition"><span class="annot"><span class="annottext">openDefinition :: forall a. Definition a =&gt; PrintingInformation -&gt; (String, a -&gt; Doc)
 </span><a href="Language.Drasil.Debug.Print.html#openDefinition"><span class="hs-identifier hs-var hs-var">openDefinition</span></a></span></span><span> </span><span id="local-6989586621679099854"><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679099854"><span class="hs-identifier hs-var">pinfo</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Definition&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Stage -&gt; Linearity -&gt; Sentence -&gt; Doc
+</span><span class="hs-string">&quot;Definition&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Stage -&gt; SingleLine -&gt; Sentence -&gt; Doc
 </span><a href="Language.Drasil.Plain.Print.html#sentenceDoc"><span class="hs-identifier hs-var">sentenceDoc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679099854"><span class="hs-identifier hs-var">pinfo</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Lens' PrintingInformation ChunkDB
 </span><a href="Language.Drasil.Printing.PrintingInformation.html#ckdb"><span class="hs-identifier hs-var">ckdb</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679099854"><span class="hs-identifier hs-var">pinfo</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Lens' PrintingInformation Stage
-</span><a href="Language.Drasil.Printing.PrintingInformation.html#stg"><span class="hs-identifier hs-var">stg</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Linearity
-</span><a href="Language.Drasil.Plain.Print.html#Linear"><span class="hs-identifier hs-var">Linear</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><a href="Language.Drasil.Printing.PrintingInformation.html#stg"><span class="hs-identifier hs-var">stg</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SingleLine
+</span><a href="Language.Drasil.Plain.Print.html#OneLine"><span class="hs-identifier hs-var">OneLine</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">forall c. Definition c =&gt; Lens' c Sentence
 </span><span class="hs-identifier hs-var">defn</span></span><span class="hs-special">)</span><span>
@@ -307,15 +307,15 @@ HasUnitSymbol a =&gt;
 PrintingInformation -&gt; (String, a -&gt; Doc)
 </span><a href="Language.Drasil.Debug.Print.html#openUnitSymbol"><span class="hs-identifier hs-var hs-var">openUnitSymbol</span></a></span></span><span> </span><span id="local-6989586621679099846"><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679099846"><span class="hs-identifier hs-var">pinfo</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Unit Symbol&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Stage -&gt; Linearity -&gt; Sentence -&gt; Doc
+</span><span class="hs-string">&quot;Unit Symbol&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Stage -&gt; SingleLine -&gt; Sentence -&gt; Doc
 </span><a href="Language.Drasil.Plain.Print.html#sentenceDoc"><span class="hs-identifier hs-var">sentenceDoc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679099846"><span class="hs-identifier hs-var">pinfo</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Lens' PrintingInformation ChunkDB
 </span><a href="Language.Drasil.Printing.PrintingInformation.html#ckdb"><span class="hs-identifier hs-var">ckdb</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679099846"><span class="hs-identifier hs-var">pinfo</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Lens' PrintingInformation Stage
-</span><a href="Language.Drasil.Printing.PrintingInformation.html#stg"><span class="hs-identifier hs-var">stg</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Linearity
-</span><a href="Language.Drasil.Plain.Print.html#Linear"><span class="hs-identifier hs-var">Linear</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><a href="Language.Drasil.Printing.PrintingInformation.html#stg"><span class="hs-identifier hs-var">stg</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SingleLine
+</span><a href="Language.Drasil.Plain.Print.html#OneLine"><span class="hs-identifier hs-var">OneLine</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">USymb -&gt; Sentence
 </span><span class="hs-identifier hs-var">Sy</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">forall u. HasUnitSymbol u =&gt; u -&gt; USymb
@@ -327,15 +327,15 @@ HasShortName a =&gt;
 PrintingInformation -&gt; (String, a -&gt; Doc)
 </span><a href="Language.Drasil.Debug.Print.html#openShortName"><span class="hs-identifier hs-var hs-var">openShortName</span></a></span></span><span> </span><span id="local-6989586621679099838"><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679099838"><span class="hs-identifier hs-var">pinfo</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Short Name&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Stage -&gt; Linearity -&gt; Sentence -&gt; Doc
+</span><span class="hs-string">&quot;Short Name&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Stage -&gt; SingleLine -&gt; Sentence -&gt; Doc
 </span><a href="Language.Drasil.Plain.Print.html#sentenceDoc"><span class="hs-identifier hs-var">sentenceDoc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679099838"><span class="hs-identifier hs-var">pinfo</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Lens' PrintingInformation ChunkDB
 </span><a href="Language.Drasil.Printing.PrintingInformation.html#ckdb"><span class="hs-identifier hs-var">ckdb</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679099838"><span class="hs-identifier hs-var">pinfo</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Lens' PrintingInformation Stage
-</span><a href="Language.Drasil.Printing.PrintingInformation.html#stg"><span class="hs-identifier hs-var">stg</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Linearity
-</span><a href="Language.Drasil.Plain.Print.html#Linear"><span class="hs-identifier hs-var">Linear</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><a href="Language.Drasil.Printing.PrintingInformation.html#stg"><span class="hs-identifier hs-var">stg</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SingleLine
+</span><a href="Language.Drasil.Plain.Print.html#OneLine"><span class="hs-identifier hs-var">OneLine</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">ShortName -&gt; Sentence
 </span><span class="hs-identifier hs-var">getSentSN</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">forall s. HasShortName s =&gt; s -&gt; ShortName
@@ -345,15 +345,15 @@ PrintingInformation -&gt; (String, a -&gt; Doc)
 </span><span id="line-103"></span><span id="openTitle"><span class="annot"><span class="annottext">openTitle :: PrintingInformation -&gt; (String, Section -&gt; Doc)
 </span><a href="Language.Drasil.Debug.Print.html#openTitle"><span class="hs-identifier hs-var hs-var">openTitle</span></a></span></span><span> </span><span id="local-6989586621679099834"><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679099834"><span class="hs-identifier hs-var">pinfo</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Title&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Stage -&gt; Linearity -&gt; Sentence -&gt; Doc
+</span><span class="hs-string">&quot;Title&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Stage -&gt; SingleLine -&gt; Sentence -&gt; Doc
 </span><a href="Language.Drasil.Plain.Print.html#sentenceDoc"><span class="hs-identifier hs-var">sentenceDoc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679099834"><span class="hs-identifier hs-var">pinfo</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Lens' PrintingInformation ChunkDB
 </span><a href="Language.Drasil.Printing.PrintingInformation.html#ckdb"><span class="hs-identifier hs-var">ckdb</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679099834"><span class="hs-identifier hs-var">pinfo</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Lens' PrintingInformation Stage
-</span><a href="Language.Drasil.Printing.PrintingInformation.html#stg"><span class="hs-identifier hs-var">stg</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Linearity
-</span><a href="Language.Drasil.Plain.Print.html#Nonlinear"><span class="hs-identifier hs-var">Nonlinear</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><a href="Language.Drasil.Printing.PrintingInformation.html#stg"><span class="hs-identifier hs-var">stg</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SingleLine
+</span><a href="Language.Drasil.Plain.Print.html#MultiLine"><span class="hs-identifier hs-var">MultiLine</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Section -&gt; Sentence
 </span><span class="hs-identifier hs-var">tle</span></span><span class="hs-special">)</span><span>
 </span><span id="line-104"></span><span>

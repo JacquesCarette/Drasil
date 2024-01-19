@@ -1,4 +1,0 @@
-digraph linearity{
-Linearity	[shape=oval, color=darkviolet, label="Linearity"];
-Linearity -> PrintingConfiguration;
-}

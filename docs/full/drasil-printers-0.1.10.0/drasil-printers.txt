@@ -1231,24 +1231,24 @@ makeDocument :: PrintingInformation -> Document -> Document
 module Language.Drasil.Plain.Print
 
 -- | Data is either linear or not.
-data Linearity
-Linear :: Linearity
-Nonlinear :: Linearity
+data SingleLine
+OneLine :: SingleLine
+MultiLine :: SingleLine
 
 -- | Create expressions for a document in <a>Doc</a> format.
-exprDoc :: ChunkDB -> Stage -> Linearity -> Expr -> Doc
+exprDoc :: ChunkDB -> Stage -> SingleLine -> Expr -> Doc
 
 -- | Create code expressions for a document in <a>Doc</a> format.
-codeExprDoc :: ChunkDB -> Stage -> Linearity -> CodeExpr -> Doc
+codeExprDoc :: ChunkDB -> Stage -> SingleLine -> CodeExpr -> Doc
 
 -- | Create sentences for a document in <a>Doc</a> format.
-sentenceDoc :: ChunkDB -> Stage -> Linearity -> Sentence -> Doc
+sentenceDoc :: ChunkDB -> Stage -> SingleLine -> Sentence -> Doc
 
 -- | Create symbols for a document in <a>Doc</a> format.
 symbolDoc :: Symbol -> Doc
 
 -- | Helper for printing units in <a>Doc</a> format.
-unitDoc :: Linearity -> USymb -> Doc
+unitDoc :: SingleLine -> USymb -> Doc
 
 -- | Helper for printing Symbols
 showSymb :: Symbol -> String
@@ -1849,24 +1849,24 @@ endNote :: Int -> [String] -> Doc
 whatInfo :: Maybe String -> Doc
 
 -- | Data is either linear or not.
-data Linearity
-Linear :: Linearity
-Nonlinear :: Linearity
+data SingleLine
+OneLine :: SingleLine
+MultiLine :: SingleLine
 
 -- | Create sentences for a document in <a>Doc</a> format.
-sentenceDoc :: ChunkDB -> Stage -> Linearity -> Sentence -> Doc
+sentenceDoc :: ChunkDB -> Stage -> SingleLine -> Sentence -> Doc
 
 -- | Create expressions for a document in <a>Doc</a> format.
-exprDoc :: ChunkDB -> Stage -> Linearity -> Expr -> Doc
+exprDoc :: ChunkDB -> Stage -> SingleLine -> Expr -> Doc
 
 -- | Create code expressions for a document in <a>Doc</a> format.
-codeExprDoc :: ChunkDB -> Stage -> Linearity -> CodeExpr -> Doc
+codeExprDoc :: ChunkDB -> Stage -> SingleLine -> CodeExpr -> Doc
 
 -- | Create symbols for a document in <a>Doc</a> format.
 symbolDoc :: Symbol -> Doc
 
 -- | Helper for printing units in <a>Doc</a> format.
-unitDoc :: Linearity -> USymb -> Doc
+unitDoc :: SingleLine -> USymb -> Doc
 
 -- | Helper for printing Symbols
 showSymb :: Symbol -> String

@@ -105,7 +105,7 @@ import Data.Maybe (fromMaybe)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, lbrace, rbrace, braces, brackets, colon, space, doubleQuotes)
 import qualified Text.PrettyPrint.HughesPJ as D (float)
-import Metadata.Drasil.DrasilMetaCall (drasilMeta, DrasilMeta(..), watermark)
+import Metadata.Drasil.DrasilMetaCall (watermark)
 
 swiftExt :: String
 swiftExt = "swift"
@@ -1159,19 +1159,25 @@ swiftClassDoc desc = [desc | not (null desc)]
 
 swiftModDoc :: ModuleDocRenderer
 swiftModDoc desc as date m = m : [desc | not (null desc)] ++ 
-  [swiftDocCommandInit ++ swiftAuthorDoc ++ swiftDocCommandSep ++ stringList as 
-    | not (null as)]
-  ++ [swiftDocCommandInit ++ swiftDateDoc ++ swiftDocCommandSep ++ date 
-    | not (null date)] ++ [swiftDocCommandInit ++ watermark ++ version drasilMeta]
+     [swiftDocField swiftAuthorDoc (stringList as) | not (null as)]
+  ++ [swiftDocField swiftDateDoc date | not (null date)]
+  ++ [swiftDocField swiftNoteDoc watermark]
 
 swiftDocCommandInit, swiftDocCommandSep, swiftParamDoc, swiftRetDoc,
-  swiftAuthorDoc, swiftDateDoc :: String
+  swiftAuthorDoc, swiftDateDoc, swiftNoteDoc :: String
 swiftDocCommandInit = "- "
 swiftDocCommandSep = ": "
 swiftParamDoc = "Parameter"
 swiftRetDoc = "Returns"
 swiftAuthorDoc = "Authors"
 swiftDateDoc = "Date"
+swiftNoteDoc = "Note"
+
+-- | Create an arbitrary Swift-DocC Markup field for documentation. Takes two
+-- strings, one for the field type ('ty'), and another for the field information
+-- ('info').
+swiftDocField :: String -> String -> String
+swiftDocField ty info = swiftDocCommandInit ++ ty ++ swiftDocCommandSep ++ info
 
 typeDfltVal :: (RenderSym r) => CodeType -> SValue r
 typeDfltVal Boolean = litFalse

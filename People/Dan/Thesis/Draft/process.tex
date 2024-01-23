@@ -582,21 +582,21 @@ own internal representation, based on their personal knowledge-base.
 
 Relying on common representations, eliding definitions, projecting and 
 transforming knowledge are fundamental to the way humans communicate. They are 
-the basis of all communications, whether written or oral, as we assign meaning 
-to given sounds and symbols (words) according to the agreed upon grammar of a 
-given language and use those words (knowledge projections) to simplify 
-communication to a given audience. A context-specific glossary, or more 
-generally a dictionary, is a prime example of a knowledge-base that we use for 
-communication via knowledge projections and transformations. By maintaining a 
-shared vocabulary, we can communicate using the symbolic representations 
+readily observable in all forms of communications, whether written or oral, as 
+we assign meaning to given sounds and symbols (words) according to the agreed 
+upon grammar of a given language and use those words (knowledge projections) to 
+simplify communication to a given audience. A context-specific glossary, or 
+more generally a dictionary, is a prime example of a knowledge-base that we use 
+for communication via knowledge projections and transformations. By maintaining 
+a shared vocabulary, we can communicate using the symbolic representations 
 (words) instead of requiring terms to be decomposed (defined) to their most 
 basic form. However, communication of this sort is still imperfect, due to gaps 
 in shared knowledge between participants or misunderstanding of overloaded 
 terms. Interpersonal communications can involve nuance and context-dependent 
-interpretations, yet they still boil down to knowledge projection from the 
-communicator and knowledge transformation from the communicatee. The latter can 
-infer context, or be provided with explicit context, which affirms their use of 
-the appropriate knowledge transformations.
+interpretations, yet they still boil down to knowledge projection on the part of
+the communicator and knowledge transformation on the part of the communicatee.
+The latter can infer context, or be provided with explicit context, which 
+affirms their use of the appropriate knowledge transformations.
 
 Returning to the context of software systems, if we broaden our view from a 
 single system, to a software family, we can also find patterns of commonality 
@@ -607,15 +607,40 @@ good examples to help determine what types of information or knowledge provided
 in the \sfs{} belong to the system-domain, problem-domain, or are simply 
 general (boilerplate).
 
+\fig{
+\centering
+\includegraphics[width=\textwidth]{figures/swhs_TM1.png}}
+{Theoretical Model of conservation of thermal energy found in both the SWHS and 
+NoPCM SRS}
+{fig:swhstm1}
+
 Looking at SWHS and NoPCM, we can easily find identical theoretical models 
-(TMs) \ds{thermodynamics equations should look the same, use them here} as the 
-underlying theory for each system is based on the problem domain.
+(TMs) as the underlying theory for each system is based on the problem domain 
+(see example in Figure~\ref{fig:swhstm1}).
 However, when we follow the derivations from the TMs to the Instance Models 
 (IMs), we find the resulting equations have changed due to the context of the 
 system; the lack of PCM has changed the relevant equations for calculating the 
-amount of heat energy stored in the tank as shown in 
-Figure~\ref{fig:swhsnopcmim} \ds{Add figure 
-showing the appropriate IM that has/lacks PCM in the equation}.
+energy balance on water in the tank as shown in Figure~\ref{fig:swhsnopcmim1}.
+
+\fig{
+\centering
+%\emph{Figure showing the Ref Section of one case 
+%			study, split into multiple subfigures - case study TBD}
+\begin{subfigure}{\textwidth}
+\centering
+\fbox{\includegraphics[width=0.8\textwidth]{figures/swhs_IM1.png}}
+\caption{SWHS Instance Model for Energy Balance on Water}
+\label{fig:swhs_im1}
+\end{subfigure}
+\begin{subfigure}{\textwidth}
+\centering
+\fbox{\includegraphics[width=0.8\textwidth]{figures/nopcm_IM1.png}}
+\caption{NoPCM Instance Model for Energy Balance on Water}
+\label{fig:nopcm_im1}
+\end{subfigure}
+}
+{Instance Model difference between SWHS and NoPCM }
+{fig:swhsnopcmim1}
 
 While the above examples are fairly small and specific, they are indicative of 
 a larger, more generalizable, set of patterns of knowledge organization and 
@@ -624,52 +649,78 @@ has been projected through some means, and patterns of organization of those
 knowledge projections within \sfs{}. Common knowledge, in this case, refers to 
 one of three categories of knowledge: system-specific, domain-specific, or 
 common to \sfs{} as a whole. It should also be noted that knowledge projections 
-may include the identity projection (ie. the full definition) as they are 
-dependent on the relevance to the audience of the given \sf{}. Regardless, the 
-captured knowledge fundamentally underlies these patterns of repetition, and is 
-where we need to focus if we intend to reduce unnecessary redundancy.
+may include the identity projection (ie. the full, unabridged definition) as 
+they are dependent on the relevance to the audience of the given \sf{}. 
+Regardless, the captured knowledge fundamentally underlies these patterns of 
+repetition, and is where we need to focus if we intend to reduce unnecessary 
+redundancy.
 
 \section{Organizing knowledge - a fluid approach}
-  **Subsec roadmap:
-    - We see the patterns above, we can generalize a lot of that
-    - Direct repetition (copy-paste) vs indirect repetition (view-changes)
-    require us to pull together knowledge from all artifacts into one place
-    - Some can be derived automatically, the rest must be explicitly stated
-    - We need to create a categorization system (hint at chunks) that is both
-    robust and extensible to cover a wide variety of use cases.
-    - Finally the templates give us structure
+%  **Subsec roadmap:
+%    - We see the patterns above, we can generalize a lot of that
+%    - Direct repetition (copy-paste) vs indirect repetition (view-changes)
+%    require us to pull together knowledge from all artifacts into one place
+%    - Some can be derived automatically, the rest must be explicitly stated
+%    - We need to create a categorization system (hint at chunks) that is both
+%    robust and extensible to cover a wide variety of use cases.
+%    - Finally the templates give us structure
+%
+%  **NOTE: Under the hood section should explain the process of how we 
+%determined
+%  what we needed to do. What we ended up doing should come in the following
+%  section(s) - no 'real' implementation details, only conceptual stuff here.
+%
+%- Some ``boilerplate" information is actually in the domain of \sf{} writing 
+%and 
+%thus is so broad, yet relevant to everything we do, that we consider it 
+%completely general. Things like stakeholders, characteristics of the intended 
+%audience, etc.
 
-  **NOTE: Under the hood section should explain the process of how we determined
-  what we needed to do. What we ended up doing should come in the following
-  section(s) - no 'real' implementation details, only conceptual stuff here.
-
-- Some ``boilerplate" information is actually in the domain of \sf{} writing 
-and 
-thus is so broad, yet relevant to everything we do, that we consider it 
-completely general. Things like stakeholders, characteristics of the intended 
-audience, etc.
-
-Given the patterns we have seen in the previous section, we can generalize the 
-types of knowledge repetition by the way they are projected. Identity 
-projections are direct repetitions of knowledge verbatim, essentially a 
-copy-and-paste approach the keeps the full definition of the piece of 
-knowledge. Non-identity projections require using representations that elide 
-some details of the knowledge at hand to make it more palatable for the 
-audience of the given \sf{}. 
+Given the knowledge categories and patterns of use across \sfs{} we have seen 
+in the previous section, we can generalize knowledge projections by their 
+projection functions. Identity projection functions directly repeat knowledge 
+verbatim i.e. $p(K) \equiv K$ for some piece of knowledge $k$. For example a 
+copy-and-paste approach would be an identity projection.  It should be noted in 
+our case that as long as the projection used contains the full definition and 
+context of a piece of knowledge, that projection is considered an identity 
+projection regardless of changes to notation (ex. ``$x = y$" vs ``$y = x$") or 
+language (ex. ``$x = y$" vs ``$x$ is equal to $y$" vs ``x est \'egal \`a y"). 
+\ds{Please correct my French if I'm wrong here}
+Non-identity projections require using representations that elide some details 
+of the knowledge at hand to make it more palatable for the audience of the 
+given \sf{} i.e. $p(K) \subset K$. Similarly, we can have multivariant 
+projection functions (whether identity or not) which project knowledge from 
+several places into one form, i.e. $p(K,L,M) \subseteq K\cup L\cup M$.
 
 In both cases, we have a knowledge core that is fully defined and then we apply 
-a projection function to retrieve the relevant information for our \sf{}. We 
+a projection function to retrieve the necessary information for our \sf{}. We 
 can postulate that organizing our knowledge cores into some type of structure, 
 with some assortment of projection functions (ex. Looking up the full 
-definition would be done through the identity projection function) will allow 
+definition would be done through an identity projection function) will allow 
 us to reduce the need for manual duplication and remove unnecessary 
 redundancies, as anything we need to include in our \sfs{} can be retrieved 
 from a given source with a given projection function.
 
-\ds{This is the spot for talking about knowledge in different contexts, the 
-naive "slap it all in one database" approach vs. context-specific organized 
-groups. This is also where the Domain/Common knowledge breakdown comes into 
-play -- talk about physics problems, SI units, Chemistry, etc}
+Keeping in mind that our core knowledge is used across all \sfs{} via 
+projections, we may naively choose to consolidate all knowledge cores into one 
+database. This naive approach works well enough for a limited set of examples, 
+but it quickly becomes apparent (refer to the PM example from 
+Section~\ref{sec:patterns}) that context is highly important and the sheer 
+scope of knowledge to be organized may become unwieldy. After breaking down 
+multiple case studies, we believe collecting knowledge cores into categories 
+based on their domain(s) is a more easily navigable and maintainable approach. 
+This also allows us to keep some context information at a meta-level (ex. 
+Physics knowledge would be categorized into a Physics knowledge-base). Then for 
+any given system, we would likely only need to reference across a handful of 
+contexts (knowledge-bases) relevant to the domain.
+
+There is knowledge fundamental to all \sfs{} as it is contextual to the domain 
+of \sf{} writing itself. This kind of meta-knowledge would be useful to have 
+readily available in its own knowledge-base. The same could be said for things 
+like SI Unit definitions, while they only apply to measuring physical 
+properties, we see some domains built off of physics that operate at a higher 
+level of assumed understanding (ex. Chemistry abstracts some of the physics 
+details, while being directly reliant on them).
 
 Some of the knowledge used in our \sfs{} is derived from other, more 
 fundamental, knowledge cores. For example, when using SI units, we may choose 
@@ -687,9 +738,20 @@ intensive knowledge transformations, while also potentially making the \sfs{}
 harder to parse for experts in the domain. In these cases, we want to use the 
 derived knowledge in place of the core knowledge.
 
-We could define all derived knowledge through progressive applications of 
-projection functions. In fact, this seems like the most obvious solution to the 
-problem of removing useful redundancies. 
+Being able to specify our level of abstraction through the progressive 
+application of projection functions eludes to another necessary piece of 
+knowledge organization: the projection functions themselves. As we project out 
+core knowledge that we know of as otherwise commonly derived concepts (like the 
+Joule example above), we should also like to store them. For example, derived 
+units may end up in the same context as the SI Units, defined by specific 
+projection functions applied to SI Units. Continuing the Joule example, we 
+would be applying a projection function across core knowledge related to energy 
+and specific SI Units, then calling that projection \emph{Joule} and giving it 
+a symbolic representation $J$ that we can refer to later.
+
+\ds{Next section needs to summarize "we need to capture knowledge", "store 
+knowledge", "project knowledge", and have the framework to support that across 
+multiple \sf{} domains and multiple code langs}
   
 \section{The seeds of Drasil}\ds{this'll probably get merged in to the previous 
 section as a conclusion paragraph or something instead, unless I think of 

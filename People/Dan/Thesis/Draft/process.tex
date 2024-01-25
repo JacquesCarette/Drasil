@@ -678,7 +678,9 @@ redundancy.
 
 Given the knowledge categories and patterns of use across \sfs{} we have seen 
 in the previous section, we can generalize knowledge projections by their 
-projection functions. Identity projection functions directly repeat knowledge 
+projection functions. \ds{What follows is very rough and may need some 
+definitions/tweaking to be more clear, but it makes sense in my head} Identity 
+projection functions directly repeat knowledge 
 verbatim i.e. $p(K) \equiv K$ for some piece of knowledge $k$. For example a 
 copy-and-paste approach would be an identity projection.  It should be noted in 
 our case that as long as the projection used contains the full definition and 
@@ -749,25 +751,64 @@ would be applying a projection function across core knowledge related to energy
 and specific SI Units, then calling that projection \emph{Joule} and giving it 
 a symbolic representation $J$ that we can refer to later.
 
+We want to take a fluid and practical approach to organizing knowledge, such 
+that we can keep domain-related knowledge cores together with useful 
+derivations. We want to separate knowledge in unrelated domains, such that it 
+is straightforward to look up whatever we need with relative ease. The 
+specific implementation for organization will be detailed later (See 
+Chapter~\ref{sec:kc}).
+
 \ds{Next section needs to summarize "we need to capture knowledge", "store 
 knowledge", "project knowledge", and have the framework to support that across 
 multiple \sf{} domains and multiple code langs}
   
-\section{The seeds of Drasil}\ds{this'll probably get merged in to the previous 
-section as a conclusion paragraph or something instead, unless I think of 
-something big}
-  **Subsec roadmap:
-    -- Summarize the above subsections and lead into next section
-    -- Add relevant information that doesn't quite fit above 
-      and isn't implementation related
-    -- 'Relevant buckshot section'
+\section{Summary - The seeds of Drasil}
+%  **Subsec roadmap:
+%    -- Summarize the above subsections and lead into next section
+%    -- Add relevant information that doesn't quite fit above 
+%      and isn't implementation related
+%    -- 'Relevant buckshot section'
 
-- We see patterns boil down to ``Give me relevant info on X for this \sf{} and 
-audience" and ``Organize it in a reasonable way".
+Through this chapter, as part of our effort to reduce unnecessary redundancy 
+across the software development process, we have taken an approach to breaking 
+down \sfs{} to the core knowledge they present and looked for commonalities in 
+that knowledge between them. We use several case study systems that fit our 
+scope (input $\rightarrow$ process $\rightarrow$ output) as examples to give a 
+concrete, applied base to the work.
 
-- Everything boils down to knowledge we are trying to convey, audience 
-(context), and organizational structure. The latter can be 
-handled through a number of means (deterministic generation / templates / 
-blueprints). The former is more interesting as it essentially boils down to a 
-particular grouping of information (knowledge-base) and some way to transform 
-or project out what is relevant given a set of characteristics or expectations.
+Generally, we see \sfs{} for a given system have a lot in common, namely they 
+require the same core knowledge tailored to a specific audience for each \sf{}. 
+This knowledge is organized in a meaningful way, and portions relevant to the 
+context of the \sf{} are presented to the audience.
+
+We delved into the idea of knowledge cores and projection functions for 
+producing context-relevant pieces of knowledge that are consumable by a given 
+audience. We have also explored strategies for organizing that knowledge in a 
+practical manner. 
+
+We have determined the three main components necessary for any useful \sf{}: 
+knowledge, context (ie. audience), and organizational structure. From here we 
+can operationalize each component in a reusable and (relatively) 
+redundancy-free manner. This operationalization informs the initial design for 
+our framework Drasil which will be covered in depth in Chapter~\ref{c:drasil}. 
+
+Effectively, we want to automate the generation of \sfs{} through applying 
+projections to knowledge and presenting it in a given structure. The structure 
+of \sfs{} is relatively straightforward to deal with, we can use templates, 
+blueprints, or deterministic generation which rely on relatively common 
+technologies. The knowledge-capture and projection is much more interesting as 
+it relies on some yet-to-be-determined knowledge-capture mechanism that can 
+provide us with chunks (borrowing the term from LP) of knowledge that can then 
+be fed to projection functions in some context-aware manner.
+
+\ds{Want to work in something about "our framework needs to be developed with 
+consistency in mind, so we take a practical, example-driven (case studies) 
+approach to minimize introducing new errors and inconsistencies." Could also 
+fit in Drasil section, but I feel like introducing it here would be better.}
+
+%- Everything boils down to knowledge we are trying to convey, audience 
+%(context), and organizational structure. The latter can be 
+%handled through a number of means (deterministic generation / templates / 
+%blueprints). The former is more interesting as it essentially boils down to a 
+%particular grouping of information (knowledge-base) and some way to transform 
+%or project out what is relevant given a set of characteristics or expectations.

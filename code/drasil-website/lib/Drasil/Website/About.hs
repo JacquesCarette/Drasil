@@ -8,13 +8,14 @@ import Language.Drasil
 
 -- | Creates the about section.
 aboutSec :: Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> 
-  Reference -> Reference -> Section
-aboutSec csRef docRef analysisSecRef repoRef wikiRef infoEncodingWiki chunksWiki recipesWiki paperGOOL papersWiki = 
+  Reference -> Reference -> Reference -> Reference -> Reference -> Section
+aboutSec csRef docRef analysisSecRef repoRef wikiRef infoEncodingWiki chunksWiki recipesWiki paperGOOL papersWiki 
+  oldPaperWiki posterWiki newPaperWiki = 
   section (S "About") -- Title
   (map mkParagraph [aboutParagraph1 repoRef wikiRef, aboutParagraph2 csRef docRef analysisSecRef, aboutParagraph3] 
   ++ [currentlyGeneratedArtifacts] ++ [mkParagraph aboutParagraph4] ++ [futureGeneratedArtifacts] ++ map mkParagraph 
   [aboutParagraph5 infoEncodingWiki, aboutParagraph6 chunksWiki, aboutParagraph7 recipesWiki, aboutParagraph8 paperGOOL, 
-  aboutParagraph9 papersWiki]) -- Contents
+  aboutParagraph9 papersWiki, aboutParagraph10 oldPaperWiki posterWiki, aboutParagraph11 newPaperWiki]) -- Contents
   [] $ makeSecRef "About" $ S "About" -- Section reference
 
 -- | Paragraph to about Drasil and its goals.
@@ -102,3 +103,12 @@ aboutParagraph8 paperGOOL = S "As described in the" +:+ namedRef paperGOOL (S "G
 aboutParagraph9 :: Reference -> Sentence
 aboutParagraph9 papersWiki = S "A list of papers and documents written about Drasil can be found in the" +:+ namedRef papersWiki (S "Drasil Papers \
   \and Documents") +:+ S "wiki page"
+
+-- | Paragraph providing a link to the old position's Drasil paper, and a Drasil poster
+aboutParagraph10 :: Reference -> Reference -> Sentence
+aboutParagraph10 oldPaperWiki posterWiki = S "We wrote an" +:+ namedRef oldPaperWiki (S "Old Position Paper") +:+ S "detailing our \
+  \original ideas - but this is getting somewhat obsolete now. You can also take a look at " +:+ namedRef posterWiki (S "Drasil Poster")
+
+-- | Paragraph providing a link to the new position's Well-Understood paper
+aboutParagraph11 :: Reference -> Sentence
+aboutParagraph11 newPaperWiki = S "The new Well-Understood paper is available at" +:+ namedRef newPaperWiki (S "Well-Understood Paper")

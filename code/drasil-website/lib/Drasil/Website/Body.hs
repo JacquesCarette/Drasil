@@ -168,8 +168,7 @@ posterWiki :: Reference
 posterWiki = makeURI "posterWiki" (danContributionPath
   ++ "/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf") (shortname' $ S "posterWiki")
 newPaperWiki :: Reference
-newPaperWiki = makeURI "newPaperWiki" (gitHubInfoURL
-  ++ "/blob/master/Papers/WellUnderstood/wu.pdf") (shortname' $ S "newPaperWiki")
+newPaperWiki = makeURI "newPaperWiki" (gitHubInfoURL ++ "/blob/master/Papers/WellUnderstood/wu.pdf") (shortname' $ S "newPaperWiki")
 quickStartWiki :: Reference
 quickStartWiki = makeURI "quickStartWiki" (gitHubInfoURL ++ "#quick-start") (shortname' $ S "quickStartWiki")
 newWorkspaceSetupWiki :: Reference

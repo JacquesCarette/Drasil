@@ -106,9 +106,10 @@ aboutParagraph9 papersWiki = S "A list of papers and documents written about Dra
 
 -- | Paragraph providing a link to the old position's Drasil paper, and a Drasil poster
 aboutParagraph10 :: Reference -> Reference -> Sentence
-aboutParagraph10 oldPaperWiki posterWiki = S "We wrote an" +:+ namedRef oldPaperWiki (S "Old Position Paper") +:+ S "detailing our \
-  \original ideas - but this is getting somewhat obsolete now. You can also take a look at" +:+ namedRef posterWiki (S "Drasil Poster")
+aboutParagraph10 oldPaperWiki posterWiki = S "Our original ideas can be found at" +:+. namedRef oldPaperWiki (S "Old Position Paper") +:+ S " \
+  \And there is a design summary" +:+ namedRef posterWiki (S "Drasil Poster")
 
 -- | Paragraph providing a link to the new position's Well-Understood paper
 aboutParagraph11 :: Reference -> Sentence
-aboutParagraph11 newPaperWiki = S "The new Well-Understood paper is available at" +:+ namedRef newPaperWiki (S "Well-Understood Paper")
+aboutParagraph11 newPaperWiki = S "Information of well-understood domains and our refurbishments of original \
+  \ideas are available at" +:+ namedRef newPaperWiki (S "Well-Understood Paper")

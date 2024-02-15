@@ -5,9 +5,9 @@
 */
 import Foundation
 
-/** Calculates Tolerable stress distribution factor
+/** Calculates tolerable stress distribution factor
     - Parameter inParams: structure holding the input values
-    - Returns: Tolerable stress distribution factor
+    - Returns: tolerable stress distribution factor
 */
 func func_J_tol(_ inParams: inout InputParameters) throws -> Double {
     var outfile: FileHandle
@@ -156,7 +156,7 @@ func func_q_hat(_ inParams: inout InputParameters, _ q: Double) throws -> Double
 
 /** Calculates tolerable load
     - Parameter inParams: structure holding the input values
-    - Parameter J_tol: Tolerable stress distribution factor
+    - Parameter J_tol: tolerable stress distribution factor
     - Returns: tolerable load
 */
 func func_q_hat_tol(_ inParams: inout InputParameters, _ J_tol: Double) throws -> Double {

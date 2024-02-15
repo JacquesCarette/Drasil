@@ -5,9 +5,9 @@
 */
 import Foundation
 
-/** Calculates stress distribution factor (Function) based on Pbtol
+/** Calculates stress distribution factor (Function)
     - Parameter inParams: structure holding the input values
-    - Returns: stress distribution factor (Function) based on Pbtol
+    - Returns: stress distribution factor (Function)
 */
 func func_J_tol(_ inParams: inout InputParameters) throws -> Double {
     var outfile: FileHandle
@@ -156,7 +156,7 @@ func func_q_hat(_ inParams: inout InputParameters, _ q: Double) throws -> Double
 
 /** Calculates tolerable load
     - Parameter inParams: structure holding the input values
-    - Parameter J_tol: stress distribution factor (Function) based on Pbtol
+    - Parameter J_tol: stress distribution factor (Function)
     - Returns: tolerable load
 */
 func func_q_hat_tol(_ inParams: inout InputParameters, _ J_tol: Double) throws -> Double {

@@ -8,9 +8,9 @@ using System.IO;
 
 public class Calculations {
     
-    /** \brief Calculates stress distribution factor (Function) based on Pbtol
+    /** \brief Calculates stress distribution factor (Function)
         \param inParams structure holding the input values
-        \return stress distribution factor (Function) based on Pbtol
+        \return stress distribution factor (Function)
     */
     public static double func_J_tol(InputParameters inParams) {
         StreamWriter outfile;
@@ -62,7 +62,7 @@ public class Calculations {
     
     /** \brief Calculates tolerable load
         \param inParams structure holding the input values
-        \param J_tol stress distribution factor (Function) based on Pbtol
+        \param J_tol stress distribution factor (Function)
         \return tolerable load
     */
     public static double func_q_hat_tol(InputParameters inParams, double J_tol) {

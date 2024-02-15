@@ -6,9 +6,9 @@ import math
 
 import Interpolation
 
-## \brief Calculates stress distribution factor (Function)
+## \brief Calculates Tolerable stress distribution factor
 # \param inParams structure holding the input values
-# \return stress distribution factor (Function)
+# \return Tolerable stress distribution factor
 def func_J_tol(inParams):
     outfile = open("log.txt", "a")
     print("function func_J_tol called with inputs: {", file=outfile)
@@ -51,7 +51,7 @@ def func_q_hat(inParams, q):
 
 ## \brief Calculates tolerable load
 # \param inParams structure holding the input values
-# \param J_tol stress distribution factor (Function)
+# \param J_tol Tolerable stress distribution factor
 # \return tolerable load
 def func_q_hat_tol(inParams, J_tol):
     outfile = open("log.txt", "a")

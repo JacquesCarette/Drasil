@@ -13,9 +13,9 @@ import java.io.PrintWriter;
 
 public class Calculations {
     
-    /** \brief Calculates stress distribution factor (Function)
+    /** \brief Calculates Tolerable stress distribution factor
         \param inParams structure holding the input values
-        \return stress distribution factor (Function)
+        \return Tolerable stress distribution factor
     */
     public static double func_J_tol(InputParameters inParams) throws IOException {
         PrintWriter outfile;
@@ -67,7 +67,7 @@ public class Calculations {
     
     /** \brief Calculates tolerable load
         \param inParams structure holding the input values
-        \param J_tol stress distribution factor (Function)
+        \param J_tol Tolerable stress distribution factor
         \return tolerable load
     */
     public static double func_q_hat_tol(InputParameters inParams, double J_tol) throws Exception, FileNotFoundException, IOException {

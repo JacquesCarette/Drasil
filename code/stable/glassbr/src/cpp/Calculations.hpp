@@ -13,9 +13,9 @@
 using std::ofstream;
 using std::string;
 
-/** \brief Calculates stress distribution factor (Function) based on Pbtol
+/** \brief Calculates tolerable stress distribution factor
     \param inParams structure holding the input values
-    \return stress distribution factor (Function) based on Pbtol
+    \return tolerable stress distribution factor
 */
 double func_J_tol(InputParameters &inParams);
 
@@ -34,7 +34,7 @@ double func_q_hat(InputParameters &inParams, double q);
 
 /** \brief Calculates tolerable load
     \param inParams structure holding the input values
-    \param J_tol stress distribution factor (Function) based on Pbtol
+    \param J_tol tolerable stress distribution factor
     \return tolerable load
 */
 double func_q_hat_tol(InputParameters &inParams, double J_tol);

@@ -262,7 +262,7 @@ loadSF        = dqdNoUnit loadShareFac (variable "LSF") Real
 
 riskFun = vc "riskFun" (nounPhraseSP "risk of failure") cB Real
 
-sdfTol = vc "sdfTol" (nounPhraseSP "stress distribution factor (Function) based on Pbtol") 
+sdfTol = vc "sdfTol" (nounPhraseSP "tolerable stress distribution factor")
   (sub (eqSymb stressDistFac) lTol) Real
 
 tolLoad = vc "tolLoad" (nounPhraseSP "tolerable load")

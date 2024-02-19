@@ -6,7 +6,7 @@ module Language.Drasil.UnitLang (
   , fromUDefn, compUSymb, getUSymb, getDefn
   ) where
 
-import Language.Drasil.Symbol (Symbol, compsy)
+import Language.Drasil.Symbol (Symbol)
 
 -- UName for the base cases, otherwise build up.
 -- Probably a 7-vector would be better (less error-prone!)
@@ -32,7 +32,7 @@ fromUDefn (UShift _ s) = s
 compUSymb :: USymb -> USymb -> Ordering
 compUSymb (US l)  (US m)  = foldl mappend EQ $ zipWith comp l m
   where
-    comp (s1, i1) (s2, i2) = compsy s1 s2 `mappend` compare i1 i2
+    comp (s1, i1) (s2, i2) = compare s1 s2 `mappend` compare i1 i2
 
 -- | When we define units, they come in three flavours:
 -- SI (base) units, derived SI units (aka synonyms), and defined units.

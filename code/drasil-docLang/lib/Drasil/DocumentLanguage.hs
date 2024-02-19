@@ -21,7 +21,6 @@ import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)
 
 import Language.Drasil hiding (kind)
-import Language.Drasil.Display (compsy)
 
 import Database.Drasil hiding (cdb)
 import SysInfo.Drasil
@@ -290,7 +289,7 @@ mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
   [e] -> LFunc -> [TSIntro] -> Section
 mkTSymb v f c = SRS.tOfSymb [tsIntro c,
   LlC $ table Equational
-    (sortBy (compsy `on` eqSymb) $ filter (`hasStageSymbol` Equational) (nub v))
+    (sortBy (compare `on` eqSymb) $ filter (`hasStageSymbol` Equational) (nub v))
     (lf f)] 
     []
   where lf Term = atStart

@@ -3,9 +3,7 @@ module Language.Drasil.Symbol (
   -- * Types
   Decoration(..), Symbol(..),
   -- * Classes
-  HasSymbol(..),
-  -- * Ordering Function
-  compsy
+  HasSymbol(..)
 ) where
 
 import Language.Drasil.Stages (Stage)
@@ -77,30 +75,27 @@ instance Semigroup Symbol where
 instance Monoid Symbol where
   mempty = Empty
 
--- | Gives an 'Ordering' of two lists of 'Symbol's.
-complsy :: [Symbol] -> [Symbol] -> Ordering
-complsy [] [] = EQ
-complsy [] _  = LT
-complsy _  [] = GT
-complsy (x : xs) (y : ys) = compsy x y <> complsy xs ys
+instance Ord Symbol where
+  compare = compsy
 
--- | The default compare function that sorts all the lower case symbols after the upper case ones.
+-- | The default compare function that sorts all the lower case symbols after
+-- the upper case ones.
 --
--- Comparation is used twice for each `Atomic` case,
--- once for making sure they are the same letter, once for case sensitive.
--- As far as this comparison is considered, `Δ` is a "decoration" and ignored
--- unless the compared symbols are the exact same, in which case it is ordered
--- after the undecorated symbol.
+-- Comparation is used twice for each `Atomic` case, once for making sure they
+-- are the same letter, once for case sensitive. As far as this comparison is
+-- considered, `Δ` is a "decoration" and ignored unless the compared symbols are
+-- the exact same, in which case it is ordered after the undecorated symbol.
 --
--- Superscripts and subscripts are ordered after the base symbols (because they add additional context to a symbol). 
--- For example: `v_f^{AB}` (expressed in LaTeX
--- notation for clarity), where `v_f` is a final velocity, and the `^{AB}` adds context that it is the
--- final velocity between points `A` and `B`. In these cases, the sorting of `v_f^{AB}` should be
--- following `v_f` as it is logical to place it with its parent concept.
+-- Superscripts and subscripts are ordered after the base symbols (because they
+-- add additional context to a symbol). For example: `v_f^{AB}` (expressed in
+-- LaTeX notation for clarity), where `v_f` is a final velocity, and the `^{AB}`
+-- adds context that it is the final velocity between points `A` and `B`. In
+-- these cases, the sorting of `v_f^{AB}` should be following `v_f` as it is
+-- logical to place it with its parent concept.
 compsy :: Symbol -> Symbol -> Ordering
-compsy (Concat x) (Concat y) = complsy x y
-compsy (Concat a) b = complsy a [b]
-compsy b (Concat a) = complsy [b] a
+compsy (Concat x) (Concat y) = compare x y
+compsy (Concat a) b = compare a [b]
+compsy b (Concat a) = compare [b] a
 compsy (Atop d1 a) (Atop d2 a') = 
   case compsy a a' of
     EQ -> compare d1 d2
@@ -130,8 +125,8 @@ compsy (Corners [] [] ur [] (Corners [] [] [] lr b)) a = compsy (Corners [] [] u
 compsy a (Corners [] [] ur [] (Corners [] [] [] lr b)) = compsy a (Corners [] [] ur lr b)
 compsy (Corners _ _ u l b) (Corners _ _ u' l' b')  =
   case compsy b b' of
-    EQ -> case complsy l l' of
-      EQ -> complsy u u'
+    EQ -> case compare l l' of
+      EQ -> compare u u'
       other -> other
     other -> other
 compsy a (Corners _ _ _ _ b) =

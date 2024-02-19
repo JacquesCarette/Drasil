@@ -104,12 +104,12 @@ aboutParagraph9 :: Reference -> Sentence
 aboutParagraph9 papersWiki = S "A list of papers and documents written about Drasil can be found in the" +:+ namedRef papersWiki (S "Drasil Papers \
   \and Documents") +:+ S "wiki page"
 
--- | Paragraph providing a link to the old position's Drasil paper, and a Drasil poster
+-- | Paragraph providing a link to Drasil's old position's paper, and a poster summarizing Drasil's basic information
 aboutParagraph10 :: Reference -> Reference -> Sentence
 aboutParagraph10 oldPaperWiki posterWiki = S "Our original ideas can be found at" +:+. namedRef oldPaperWiki (S "Old Position Paper") +:+ S " \
   \And there is a design summary" +:+ namedRef posterWiki (S "Drasil Poster")
 
--- | Paragraph providing a link to the new position's Well-Understood paper
+-- | Paragraph providing a link to the newly published Well-Understood essay
 aboutParagraph11 :: Reference -> Sentence
 aboutParagraph11 newPaperWiki = S "Information of well-understood domains and our refurbishments of original \
   \ideas are available at" +:+ namedRef newPaperWiki (S "Well-Understood Paper")

@@ -30,10 +30,6 @@ module Language.Drasil (
   , DerivType
   , ModelExprC(..)
 
-  --Language.Drasil.CodeExpr
-  , CodeExpr
-  , CodeExprC(..)
-
   -- ** Unicode symbols
   -- | Some expressions need special unicode characters.
 
@@ -87,8 +83,6 @@ module Language.Drasil (
   , (+++), (+++.), (+++!)
   , nc, ncUID, IdeaDict , mkIdea
   , nw -- bad name (historical)
-  , CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..)
-  , obv, qc, ccf, ccv, listToArray, programName, funcPrefix, DefiningCodeExpr(..)
   -- Language.Drasil.Chunk.CommonIdea
   , CI, commonIdea, getAcc, commonIdeaWithDict, prependAbrv
 
@@ -312,8 +306,6 @@ import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal)
 import Language.Drasil.ModelExpr.Class (ModelExprC(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr, DerivType)
-import Language.Drasil.CodeExpr.Lang (CodeExpr)
-import Language.Drasil.CodeExpr.Class (CodeExprC(..))
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC, extractSection
@@ -344,9 +336,6 @@ import Language.Drasil.Chunk.Citation (
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
   , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
   , cProceedings, cTechReport, cUnpublished)
-import Language.Drasil.Chunk.CodeVar (CodeIdea(..), CodeChunk(..), 
-  CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..), obv, qc, ccf, ccv, 
-  listToArray, programName, funcPrefix, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Concept.Core (sDom) -- exported for drasil-database FIXME: move to development package?

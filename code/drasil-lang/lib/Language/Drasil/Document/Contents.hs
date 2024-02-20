@@ -20,8 +20,8 @@ import Language.Drasil.Document.Core
      ListTuple,
      ItemType(Flat),
      ListType(Simple))
+import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.Reference (Reference)
 import Language.Drasil.Sentence (Sentence (..))
 import Language.Drasil.Document.Combinators (bulletFlat, mkEnumAbbrevList)
@@ -38,11 +38,11 @@ unlbldExpr :: ModelExpr -> Contents
 unlbldExpr c = UlC $ ulcc $ EqnBlock c
 
 -- | Unlabelled code expression
-unlbldCode :: CodeExpr -> Contents
+unlbldCode :: Expr -> Contents
 unlbldCode c = UlC $ ulcc $ CodeBlock c
 
 -- | Creates a bulleted list.
-enumBullet :: Reference -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
+enumBullet :: Reference -> [Sentence] -> LabelledContent -- FIXME: should Enumeration be labelled?
 enumBullet lb s = llcc lb $ Enumeration $ bulletFlat s
 
 -- | Same as 'enumBullet' but unlabelled.

@@ -4,10 +4,10 @@ module Language.Drasil.Document.Core where
 
 import Language.Drasil.Chunk.Citation (BibRef)
 
-import Language.Drasil.UID (HasUID(..))
+import Language.Drasil.UID (HasUID (..))
 import Language.Drasil.ShortName (HasShortName(shortname))
+import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.Label.Type (getAdd, prepend, IRefProg,
   LblType(..), Referable(..), HasRefAddress(..))
 import Language.Drasil.Reference (Reference)
@@ -73,8 +73,7 @@ data RawContent =
   | Figure Lbl Filepath MaxWidthPercent      -- ^ For creating figures in a document. Should use relative file path.
   | Bib BibRef                               -- ^ Grants the ability to reference something.
   | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl -- ^ Contain a graph with coordinates ('Sentence's), maybe a width and height, and a label ('Sentence').
-  | CodeBlock CodeExpr                       -- ^ Block for codes
-               -- TODO: Fill this one in.
+  | CodeBlock Expr                           -- ^ Block for codes (temporarily just mathematical expressions that will be convered into code).
 
 -- | An identifier is just a 'String'.
 type Identifier = String

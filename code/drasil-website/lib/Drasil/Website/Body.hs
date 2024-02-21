@@ -97,7 +97,7 @@ sections :: FolderLocation -> [Section]
 sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspaceSetupWiki contribGuideWiki workflowWiki 
   createProjWiki debuggingWiki, aboutSec (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ analysisSec (analysisRt fl) 
   (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl) gitHubRef wikiRef infoEncodingWiki chunksWiki recipesWiki 
-  paperGOOL papersWiki oldPaperWiki posterWiki newPaperWiki, exampleSec (repoRt fl) (exRt fl), caseStudySec, docsSec (docsRt fl),
+  paperGOOL papersWiki icsePositionPaper danPoster wellUnderstoodPaper, exampleSec (repoRt fl) (exRt fl), caseStudySec, docsSec (docsRt fl),
   analysisSec (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl, footer fl]
 
 -- | Needed for references and terms to work.
@@ -122,7 +122,7 @@ usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
 allRefs :: FolderLocation -> [Reference]
 allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, paperGOOL, papersWiki, 
   quickStartWiki, newWorkspaceSetupWiki, contribGuideWiki, workflowWiki, createProjWiki, debuggingWiki,
-  oldPaperWiki, newPaperWiki, posterWiki] 
+  icsePositionPaper, danPoster, wellUnderstoodPaper] 
   ++ exampleRefs (repoRt fl) (exRt fl) 
   ++ docRefs (docsRt fl) 
   ++ analysisRefs (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) (packages fl)
@@ -161,15 +161,15 @@ paperGOOL :: Reference
 paperGOOL = makeURI "GOOLPaper" (gitHubInfoURL ++ "/blob/master/Papers/GOOL/GOOL.pdf") (shortname' $ S "GOOLPaper")
 papersWiki :: Reference
 papersWiki = makeURI "papersWiki" (gitHubInfoURL ++ "/wiki/Drasil-Papers-and-Documents") (shortname' $ S "papersWiki")
-oldPaperWiki :: Reference
-oldPaperWiki = makeURI "oldPaperWiki" (danContributionPath
-  ++ "/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf") (shortname' $ S "oldPaperWiki")
-posterWiki :: Reference
-posterWiki = makeURI "posterWiki" (danContributionPath
-  ++ "/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf") (shortname' $ S "posterWiki")
-newPaperWiki :: Reference
-newPaperWiki = makeURI "newPaperWiki" (gitHubInfoURL 
-  ++ "/blob/master/Papers/WellUnderstood/wu.pdf") (shortname' $ S "newPaperWiki")
+icsePositionPaper :: Reference
+icsePositionPaper = makeURI "icsePositionPaper" (danContributionPath
+  ++ "/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf") (shortname' $ S "icsePositionPaper")
+danPoster :: Reference
+danPoster = makeURI "danPoster" (danContributionPath
+  ++ "/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf") (shortname' $ S "danPoster")
+wellUnderstoodPaper :: Reference
+wellUnderstoodPaper = makeURI "wellUnderstoodPaper" (gitHubInfoURL 
+  ++ "/blob/master/Papers/WellUnderstood/wu.pdf") (shortname' $ S "wellUnderstoodPaper")
 quickStartWiki :: Reference
 quickStartWiki = makeURI "quickStartWiki" (gitHubInfoURL ++ "#quick-start") (shortname' $ S "quickStartWiki")
 newWorkspaceSetupWiki :: Reference

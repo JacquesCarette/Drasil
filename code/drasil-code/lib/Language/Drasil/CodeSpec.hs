@@ -2,7 +2,7 @@
 -- | Defines the CodeSpec structure and related functions.
 module Language.Drasil.CodeSpec where
 
-import Language.Drasil hiding (None, new)
+import Language.Drasil hiding (None)
 import Language.Drasil.Development (showUID)
 import Language.Drasil.Display (Symbol(Variable))
 import Database.Drasil
@@ -12,6 +12,7 @@ import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
   auxExprs)
+import Language.Drasil.Chunk.CodeVar
 import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..))
 import Language.Drasil.CodeExpr.Development (expr, eNamesRI)
 import Language.Drasil.Chunk.CodeBase
@@ -107,8 +108,7 @@ codeSpec SI {_sys         = sys
            , _constraints = cs
            , _constants   = cnsts
            , _sysinfodb   = db} chs ms =
-  let n = programName sys
-      inputs' = map quantvar ins
+  let inputs' = map quantvar ins
       const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
         cnsts)
       derived = map qtov $ getDerivedInputs ddefs inputs' const' db
@@ -120,7 +120,7 @@ codeSpec SI {_sys         = sys
       allInputs = nub $ inputs' ++ map quantvar derived
       exOrder = getExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
   in  CodeSpec {
-        pName = n,
+        pName = abrv sys,
         authors = as,
         purpose = ps,
         background = bk,

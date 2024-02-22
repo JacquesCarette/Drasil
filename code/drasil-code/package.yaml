@@ -41,6 +41,7 @@ library:
     - Language.Drasil.Chunk.Code
     - Language.Drasil.Chunk.CodeBase
     - Language.Drasil.Chunk.CodeDefinition
+    - Language.Drasil.Chunk.CodeVar
     - Language.Drasil.Chunk.ConstraintMap
     - Language.Drasil.Chunk.NamedArgument
     - Language.Drasil.Chunk.Parameter
@@ -81,6 +82,13 @@ library:
     - Language.Drasil.Code.Imperative.Parameters
     - Language.Drasil.Code.Imperative.DrasilState
     - Language.Drasil.Code.CodeGeneration
+    - Language.Drasil.CodeExpr
+    - Language.Drasil.CodeExpr.Class
+    - Language.Drasil.CodeExpr.Convert
+    - Language.Drasil.CodeExpr.Development
+    - Language.Drasil.CodeExpr.Extract
+    - Language.Drasil.CodeExpr.Lang
+    - Language.Drasil.CodeExpr.Precedence
     - Language.Drasil.Data.ODEInfo
     - Language.Drasil.Data.ODELibPckg
     - Language.Drasil.Choices

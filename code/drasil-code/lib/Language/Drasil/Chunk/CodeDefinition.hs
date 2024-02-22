@@ -4,7 +4,9 @@ module Language.Drasil.Chunk.CodeDefinition (
 ) where
 
 import Language.Drasil
+import Language.Drasil.CodeExpr
 import Language.Drasil.Chunk.Code (quantvar, quantfunc)
+import Language.Drasil.Chunk.CodeVar
 import Language.Drasil.CodeExpr.Development (expr, CanGenCode(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo(..), ODEOptions(..))
 

@@ -5,15 +5,8 @@ module Language.Drasil.Chunk.CodeVar where
 import Data.Char (isSpace)
 import Control.Lens ((^.), view, makeLenses, Lens')
 
-import Language.Drasil.Classes (CommonIdea(abrv), Quantity, Idea(getA), NamedIdea(..), Callable)
-import Language.Drasil.Chunk.Quantity (QuantityDict, implVar')
-import Language.Drasil.Space (HasSpace(..), Space(..))
-import Language.Drasil.Symbol (HasSymbol(symbol))
-import Language.Drasil.UID (HasUID(uid), (+++))
-import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
-import Language.Drasil.Stages (Stage(..))
-
-import Language.Drasil.CodeExpr.Lang (CodeExpr)
+import Language.Drasil
+import Language.Drasil.CodeExpr.Lang
 
 import Utils.Drasil (toPlainName)
 
@@ -30,14 +23,6 @@ class CodeIdea c where
 --   defined in the CodeExpr language.
 class CodeIdea c => DefiningCodeExpr c where
   codeExpr  :: Lens' c CodeExpr
-
--- | Convert an abbreviation into one deemed 'code-friendly', removing spaces,
---   and replacing special characters with underscores.
---
---   FIXME: This should NOT be treated as a 'getter', but something we cache
---   local to something that has a 'program name'.
-programName :: CommonIdea c => c -> String
-programName = toPlainName . filter (not . isSpace) . abrv
 
 -- | Used when a function name needs to be distinguishable from a variable name.
 funcPrefix :: String

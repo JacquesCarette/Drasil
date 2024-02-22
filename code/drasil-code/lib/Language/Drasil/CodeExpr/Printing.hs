@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs #-}
 
 -- | Defines functions to render 'CodeExpr's as printable 'P.Expr's.
-module Language.Drasil.Printing.Import.CodeExpr (codeExpr) where
+module Language.Drasil.CodeExpr.Printing (codeExpr) where
 
 import Language.Drasil (DomainDesc(..), Inclusive(..),
   RTopology(..), RealInterval(..), UID, LiteralC (int))

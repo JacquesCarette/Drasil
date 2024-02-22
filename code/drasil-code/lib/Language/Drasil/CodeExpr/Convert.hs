@@ -4,9 +4,9 @@ module Language.Drasil.CodeExpr.Convert (
     CanGenCode(..)
 ) where
 
-import Language.Drasil.Space (RealInterval(..), DiscreteDomainDesc, DomainDesc(BoundedDD))
-import Language.Drasil.Constraint (Constraint(..), ConstraintE)
-import qualified Language.Drasil.Expr.Lang as E
+import Language.Drasil (Constraint (..), ConstraintE, DiscreteDomainDesc, 
+  DomainDesc (BoundedDD), RealInterval (..), Expr)
+
 import qualified Language.Drasil.Expr.Development as LD
 import qualified Language.Drasil.Literal.Development as LL
 
@@ -48,7 +48,7 @@ expr (LD.Operator aao dd e)    = Operator (assocArithOp aao) (renderDomainDesc d
 expr (LD.RealI u ri)           = RealI u (realInterval ri)
 
 -- | Convert 'RealInterval' 'Expr' 'Expr's into 'RealInterval' 'CodeExpr' 'CodeExpr's.
-realInterval :: RealInterval E.Expr E.Expr -> RealInterval CodeExpr CodeExpr
+realInterval :: RealInterval Expr Expr -> RealInterval CodeExpr CodeExpr
 realInterval (Bounded (il, el) (ir, er)) = Bounded (il, expr el) (ir, expr er)
 realInterval (UpTo (i, e))               = UpTo (i, expr e)
 realInterval (UpFrom (i, e))             = UpFrom (i, expr e)
@@ -58,7 +58,7 @@ constraint :: ConstraintE -> Constraint CodeExpr
 constraint (Range r ri) = Range r (realInterval ri)
 
 -- | Convert 'DomainDesc Expr Expr' into 'DomainDesc CodeExpr CodeExpr's.
-renderDomainDesc :: DiscreteDomainDesc E.Expr E.Expr -> DiscreteDomainDesc CodeExpr CodeExpr
+renderDomainDesc :: DiscreteDomainDesc Expr Expr -> DiscreteDomainDesc CodeExpr CodeExpr
 renderDomainDesc (BoundedDD s t l r) = BoundedDD s t (expr l) (expr r)
 
 arithBinOp :: LD.ArithBinOp -> ArithBinOp

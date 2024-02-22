@@ -3,9 +3,7 @@ module Language.Drasil.CodeExpr.Extract (
     eNamesRI, eNamesRI'
 ) where
 
-import Language.Drasil.Space (RealInterval(..))
-import Language.Drasil.UID (UID)
-
+import Language.Drasil (UID, RealInterval(..))
 import Language.Drasil.CodeExpr.Lang (CodeExpr(..))
 
 import Data.List (nub)

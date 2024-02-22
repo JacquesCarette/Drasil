@@ -3,17 +3,16 @@ module Language.Drasil.Plain.Print (
   -- * Types
   SingleLine(..),
   -- * Functions
-  exprDoc, codeExprDoc, sentenceDoc, symbolDoc, unitDoc, showSymb,
-  showHasSymbImpl
+  exprDoc, sentenceDoc, symbolDoc, unitDoc, showSymb,
+  showHasSymbImpl, pExprDoc, plainConfiguration
 ) where
 
 import Database.Drasil (ChunkDB)
 import Language.Drasil (Sentence, Special(..), Stage(..), Symbol, USymb(..))
 import qualified Language.Drasil as L (Expr, HasSymbol(..))
-import qualified Language.Drasil.CodeExpr.Development as C (CodeExpr)
 import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..), 
   OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
-import Language.Drasil.Printing.Import (expr, codeExpr, spec, symbol)
+import Language.Drasil.Printing.Import (expr, spec, symbol)
 import Language.Drasil.Printing.PrintingInformation (PrintingConfiguration(..), 
   PrintingInformation(..), Notation(Scientific))
 
@@ -35,10 +34,6 @@ plainConfiguration = PC Scientific
 -- | Create expressions for a document in 'Doc' format.
 exprDoc :: ChunkDB -> Stage -> SingleLine -> L.Expr -> Doc
 exprDoc db st f e = pExprDoc f (expr e (PI db st plainConfiguration))
-
--- | Create code expressions for a document in 'Doc' format.
-codeExprDoc :: ChunkDB -> Stage -> SingleLine -> C.CodeExpr -> Doc
-codeExprDoc db st f e = pExprDoc f (codeExpr e (PI db st plainConfiguration))
 
 -- | Create sentences for a document in 'Doc' format.
 sentenceDoc :: ChunkDB -> Stage -> SingleLine -> Sentence -> Doc

@@ -41,7 +41,9 @@ import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
   InputModule(..), Logging(..), Structure(..), hasSampleInput)
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
-import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc)
+import Language.Drasil.Printers
+    ( SingleLine(OneLine), PrintingInformation(..), pExprDoc, plainConfiguration)
+import Language.Drasil.CodeExpr.Printing (codeExpr)
 
 import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement,
   SMethod, CSStateVar, SClass, OOProg, BodySym(..), bodyStatements, oneLiner,
@@ -59,7 +61,7 @@ import Data.Maybe (maybeToList, catMaybes)
 import Control.Monad (liftM2, zipWithM)
 import Control.Monad.State (get, gets)
 import Control.Lens ((^.))
-import Text.PrettyPrint.HughesPJ (render)
+import Text.PrettyPrint.HughesPJ (render, Doc)
 
 type ConstraintCE = Constraint CodeExpr
 
@@ -398,6 +400,10 @@ printConstraint c = do
         lb <- convExpr e
         return $ [printStr "above ", print lb] ++ printExpr e db ++ [printStrLn "."]
   printConstraint' c
+
+-- | Create code expressions for a document in 'Doc' format.
+codeExprDoc :: ChunkDB -> Stage -> SingleLine -> CodeExpr -> Doc
+codeExprDoc db st f e = pExprDoc f (codeExpr e (PI db st plainConfiguration))
 
 -- | Don't print expressions that are just literals, because that would be
 -- redundant (the values are already printed by printConstraint).

@@ -4,11 +4,14 @@ module Language.Drasil.CodeExpr.Lang where
 
 import Prelude hiding (sqrt)
 
-import Language.Drasil.Expr.Lang (Completeness)
-import Language.Drasil.Literal.Class (LiteralC(..))
-import Language.Drasil.Literal.Lang (Literal(..))
-import Language.Drasil.Space (RealInterval, DiscreteDomainDesc)
-import Language.Drasil.UID (UID)
+import Language.Drasil (Completeness, ExprC(..), LiteralC(..),
+  RealInterval, DiscreteDomainDesc, RealInterval, DiscreteDomainDesc, UID,
+  HasUID(..), DomainDesc (..), RTopology (..), square)
+
+import Language.Drasil.Literal.Development (Literal(..))
+
+import Control.Lens
+import Language.Drasil.Expr.Development (Completeness(..))
 
 -- * Operators (mostly binary)
 
@@ -84,28 +87,28 @@ data CodeExpr where
   AssocB   :: AssocBoolOper  -> [CodeExpr] -> CodeExpr
   -- | C stands for "Chunk", for referring to a chunk in an expression.
   --   Implicitly assumes that the chunk has a symbol.
-  C        :: UID -> CodeExpr
+  C        :: Language.Drasil.UID -> CodeExpr
   -- | A function call accepts a list of parameters and a list of named parameters.
   --   For example
   --
   --   * F(x) is (FCall F [x] []).
   --   * F(x,y) would be (FCall F [x,y]).
   --   * F(x,n=y) would be (FCall F [x] [(n,y)]).
-  FCall    :: UID -> [CodeExpr] -> [(UID, CodeExpr)] -> CodeExpr
-  -- | Actor creation given 'UID', parameters, and named parameters.
-  New      :: UID -> [CodeExpr] -> [(UID, CodeExpr)] -> CodeExpr
+  FCall    :: Language.Drasil.UID -> [CodeExpr] -> [(Language.Drasil.UID, CodeExpr)] -> CodeExpr
+  -- | Actor creation given 'Language.Drasil.UID', parameters, and named parameters.
+  New      :: Language.Drasil.UID -> [CodeExpr] -> [(Language.Drasil.UID, CodeExpr)] -> CodeExpr
   -- | Message an actor:
   --
-  --   * 1st 'UID' is the actor,
-  --   * 2nd 'UID' is the method.
-  Message  :: UID -> UID -> [CodeExpr] -> [(UID, CodeExpr)] -> CodeExpr
+  --   * 1st 'Language.Drasil.UID' is the actor,
+  --   * 2nd 'Language.Drasil.UID' is the method.
+  Message  :: Language.Drasil.UID -> Language.Drasil.UID -> [CodeExpr] -> [(Language.Drasil.UID, CodeExpr)] -> CodeExpr
   -- | Access a field of an actor:
   --
-  --   * 1st 'UID' is the actor,
-  --   * 2nd 'UID' is the field.
-  Field    :: UID -> UID -> CodeExpr
+  --   * 1st 'Language.Drasil.UID' is the actor,
+  --   * 2nd 'Language.Drasil.UID' is the field.
+  Field    :: Language.Drasil.UID -> Language.Drasil.UID -> CodeExpr
   -- | For multi-case expressions, each pair represents one case.
-  Case     :: Completeness -> [(CodeExpr, CodeExpr)] -> CodeExpr
+  Case     :: Language.Drasil.Completeness -> [(CodeExpr, CodeExpr)] -> CodeExpr
   -- | Represents a matrix of expressions.
   Matrix   :: [[CodeExpr]] -> CodeExpr
   
@@ -138,20 +141,20 @@ data CodeExpr where
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.
   --   ex: Summation is represented via 'Add' over a discrete domain.
-  Operator :: AssocArithOper -> DiscreteDomainDesc CodeExpr CodeExpr -> CodeExpr -> CodeExpr
+  Operator :: AssocArithOper -> Language.Drasil.DiscreteDomainDesc CodeExpr CodeExpr -> CodeExpr -> CodeExpr
   -- | The expression is an element of a space.
   -- IsIn     :: Expr -> Space -> Expr
-  -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
-  RealI    :: UID -> RealInterval CodeExpr CodeExpr -> CodeExpr
+  -- | A different kind of 'IsIn'. A 'Language.Drasil.UID' is an element of an interval.
+  RealI    :: Language.Drasil.UID -> Language.Drasil.RealInterval CodeExpr CodeExpr -> CodeExpr
 
-instance LiteralC CodeExpr where
-  str      = Lit . str
-  int      = Lit . int
-  dbl      = Lit . dbl
-  exactDbl = Lit . exactDbl
-  perc l r = Lit $ perc l r
+instance Language.Drasil.LiteralC CodeExpr where
+  str      = Lit . Language.Drasil.str
+  int      = Lit . Language.Drasil.int
+  dbl      = Lit . Language.Drasil.dbl
+  exactDbl = Lit . Language.Drasil.exactDbl
+  perc l r = Lit $ Language.Drasil.perc l r
 
-instance ExprC CodeExpr where
+instance Language.Drasil.ExprC CodeExpr where
   lit = Lit
 
   -- \| Smart constructor for equating two expressions.
@@ -306,10 +309,10 @@ instance ExprC CodeExpr where
   defprod v low high = Operator MulRe (BoundedDD v Discrete low high)
 
   -- \| Smart constructor for 'real interval' membership.
-  realInterval c = RealI (c ^. uid)
+  realInterval c = RealI (c ^. Language.Drasil.uid)
 
   -- \| Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
-  euclidean = sqrt . foldr1 addRe . map square
+  euclidean = Language.Drasil.sqrt . foldr1 Language.Drasil.addRe . map square
 
   -- \| Smart constructor to cross product two expressions.
   cross = VVVBinaryOp Cross
@@ -329,9 +332,9 @@ instance ExprC CodeExpr where
   matrix = Matrix
 
   -- \| Applies a given function with a list of parameters.
-  apply f [] = sy f
-  apply f ps = FCall (f ^. uid) ps []
+  apply f [] = Language.Drasil.sy f
+  apply f ps = FCall (f ^. Language.Drasil.uid) ps []
 
   -- Note how |sy| 'enforces' having a symbol
   -- \| Create an 'Expr' from a 'Symbol'ic Chunk.
-  sy x = C (x ^. uid)
+  sy x = C (x ^. Language.Drasil.uid)

@@ -5,6 +5,8 @@ import Database.Drasil (ChunkDB, symbResolve)
 import Language.Drasil
 import Language.Drasil.CodeExpr.Development
 
+import Language.Drasil.Chunk.CodeVar
+
 import Data.List (nub)
 
 -- | Construct a 'CodeVarChunk' from a 'Quantity'.

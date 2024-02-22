@@ -18,6 +18,7 @@ import Language.Drasil.CodeSpec (Input, Const, Derived, Output, Def,
   CodeSpec(..),  getConstraints)
 import Language.Drasil.Mod (Mod(..), Name, Version, Class(..),
   StateVariable(..), fname)
+import Language.Drasil.Chunk.CodeVar
 
 import Control.Lens ((^.), makeLenses, over)
 import Control.Monad.State (State)

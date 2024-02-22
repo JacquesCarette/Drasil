@@ -1,4 +1,5 @@
 {-# LANGUAGE GADTs, TemplateHaskell, RankNTypes #-}
+{-# LANGUAGE InstanceSigs #-}
 -- | Define types and functions related to creating a system information database.
 
 -- Changes to SystemInformation should be reflected in the 'Creating Your Project 
@@ -23,15 +24,17 @@ module SysInfo.Drasil.SystemInformation (
   citationDB, conceptDB,
   ) where
 
-import Language.Drasil
-import Theory.Drasil
-import Database.Drasil (ChunkDB)
-
-import Control.Lens ((^.), makeLenses)
+import Control.Lens ((^.), makeLenses, Lens', lens)
+import Data.Char (isSpace)
 import Data.Function (on)
 import Data.List (groupBy, sortBy)
 import Data.Maybe (mapMaybe)
 import qualified Data.Map as Map
+
+import Utils.Drasil (toPlainName)
+import Database.Drasil (ChunkDB)
+import Language.Drasil
+import Theory.Drasil
 
 
 -- | Data structure for holding all of the requisite information about a system
@@ -65,6 +68,18 @@ data SystemInformation where
   , refdb        :: ReferenceDB
   } -> SystemInformation
 
+instance HasUID SystemInformation where
+  uid :: Lens' SystemInformation UID
+  uid = lens (\(SI{_sys=s}) -> s ^. uid) (error "see #3524, UIDs are read-only")
+
+instance NamedIdea SystemInformation where
+  term :: Lens' SystemInformation NP
+  term = lens (\(SI {_sys = s}) -> s ^. term) (error "no.")
+
+instance CommonIdea SystemInformation where
+  -- | The abbreviation of a SystemInformation is effectively its 'code name'
+  abrv :: SystemInformation -> String
+  abrv SI {_sys = s} = toPlainName $ filter (not . isSpace) $ abrv s
 
 -- | Project Example purpose.
 type Purpose = [Sentence]

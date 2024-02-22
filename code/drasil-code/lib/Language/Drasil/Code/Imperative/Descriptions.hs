@@ -11,6 +11,7 @@ import Utils.Drasil (stringList)
 
 import Language.Drasil
 import Language.Drasil.Chunk.CodeBase
+import Language.Drasil.Chunk.CodeVar
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   inMod)
 import Language.Drasil.Choices (ImplementationType(..), InputModule(..),

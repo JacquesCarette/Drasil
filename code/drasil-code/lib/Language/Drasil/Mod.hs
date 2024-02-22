@@ -7,10 +7,11 @@ module Language.Drasil.Mod (Class(..), StateVariable(..), Func(..),
   funcDefParams, packmod, packmodRequires
 ) where
 
-import Language.Drasil (Space, MayHaveUnit, Quantity, CodeExpr, LiteralC(..))
+import Language.Drasil (Space, MayHaveUnit, Quantity, LiteralC(..))
 import Database.Drasil (ChunkDB)
 import GOOL.Drasil (ScopeTag(..))
 
+import Language.Drasil.CodeExpr (CodeExpr)
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codevars,
   codevars', quantvar)
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)

@@ -1,11 +1,8 @@
 module Language.Drasil.CodeExpr.Class where
 
-import Language.Drasil.Classes(IsArgumentName, Callable)
-import Language.Drasil.UID (HasUID(..))
-import Language.Drasil.Symbol (HasSymbol)
-import Language.Drasil.Space (Space(Actor), HasSpace(..))
+import Language.Drasil (ExprC(..), IsArgumentName, Callable, HasUID(..),
+  HasSymbol, Space(Actor), HasSpace(..))
 import Language.Drasil.Chunk.CodeVar (CodeIdea, CodeVarChunk)
-import Language.Drasil.Expr.Class (ExprC(..))
 import Language.Drasil.CodeExpr.Lang (CodeExpr(FCall, New, Message, Field))
 
 import Control.Lens ( (^.) )

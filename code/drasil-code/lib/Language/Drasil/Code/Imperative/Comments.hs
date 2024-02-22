@@ -5,6 +5,7 @@ module Language.Drasil.Code.Imperative.Comments (
 
 import Language.Drasil
 import Database.Drasil (defTable)
+import Language.Drasil.Chunk.CodeVar
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, unitDoc)

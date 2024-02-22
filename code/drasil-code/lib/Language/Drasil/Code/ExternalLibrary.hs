@@ -14,7 +14,7 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
   returnExprList, fixedReturn, fixedReturn', initSolWithVal
 ) where
 
-import Language.Drasil (Space, HasSpace(typ))
+import Language.Drasil (Space, HasSpace(typ), ExprC(..), LiteralC(..))
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName)
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument)

@@ -4,7 +4,7 @@
 module Language.Drasil.Chunk.Code (
   CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..),
   VarOrFunc(..), obv, quantvar, quantfunc, ccObjVar, codevars, codevars',
-  funcResolve, varResolve, listToArray, programName, funcPrefix,
+  funcResolve, varResolve, listToArray, funcPrefix,
   DefiningCodeExpr(..)
 ) where
 
@@ -12,6 +12,7 @@ import Control.Lens ((^.), view)
 
 import Language.Drasil
 import Language.Drasil.Chunk.CodeBase
+import Language.Drasil.Chunk.CodeVar
 import Language.Drasil.Printers (symbolDoc)
 
 import Text.PrettyPrint.HughesPJ (render)

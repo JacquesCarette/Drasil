@@ -7,9 +7,9 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 ) where
 
 import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
-  Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..))
+  Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..),
+  sy, ($<), ($>), ($<=), ($>=), ($&&))
 import Database.Drasil (symbResolve)
-import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&))
 import Language.Drasil.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
   AssocArithOper(..), AssocBoolOper(..), BoolBinOp(..), EqBinOp(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),

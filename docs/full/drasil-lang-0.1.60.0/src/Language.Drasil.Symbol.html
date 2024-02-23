@@ -57,9 +57,9 @@ compare :: Decoration -&gt; Decoration -&gt; Ordering
 $ccompare :: Decoration -&gt; Decoration -&gt; Ordering
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">)</span><span>
 </span><span id="line-25"></span><span>
-</span><span id="line-26"></span><span class="hs-comment">-- | A 'Symbol' is actually going to be a graphical description of what</span><span>
-</span><span id="line-27"></span><span class="hs-comment">-- gets rendered as a (unique) symbol.  This is actually NOT based on</span><span>
-</span><span id="line-28"></span><span class="hs-comment">-- semantics at all, but just a description of how things look.</span><span>
+</span><span id="line-26"></span><span class="hs-comment">-- | A 'Symbol' is actually going to be a graphical description of what gets</span><span>
+</span><span id="line-27"></span><span class="hs-comment">-- rendered as a (unique) symbol.  This is actually NOT based on semantics at</span><span>
+</span><span id="line-28"></span><span class="hs-comment">-- all, but just a description of how things look.</span><span>
 </span><span id="line-29"></span><span class="hs-comment">-- </span><span>
 </span><span id="line-30"></span><span class="hs-comment">-- Symbols can be:</span><span>
 </span><span id="line-31"></span><span class="hs-comment">-- </span><span>
@@ -149,118 +149,119 @@ $c== :: Symbol -&gt; Symbol -&gt; Bool
 </span><a href="#local-6989586621679411638"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">[Symbol]
 </span><a href="#local-6989586621679411636"><span class="hs-identifier hs-var">ys</span></a></span><span>
 </span><span id="line-86"></span><span>
-</span><span id="line-87"></span><span class="hs-comment">-- | The default compare function that sorts all the lower case symbols after the upper case ones.</span><span>
-</span><span id="line-88"></span><span class="hs-comment">--</span><span>
-</span><span id="line-89"></span><span class="hs-comment">-- Comparation is used twice for each `Atomic` case,</span><span>
-</span><span id="line-90"></span><span class="hs-comment">-- once for making sure they are the same letter, once for case sensitive.</span><span>
-</span><span id="line-91"></span><span class="hs-comment">-- As far as this comparison is considered, `&#916;` is a &quot;decoration&quot; and ignored</span><span>
-</span><span id="line-92"></span><span class="hs-comment">-- unless the compared symbols are the exact same, in which case it is ordered</span><span>
-</span><span id="line-93"></span><span class="hs-comment">-- after the undecorated symbol.</span><span>
+</span><span id="line-87"></span><span class="hs-comment">-- | The default compare function that sorts all the lower case symbols after</span><span>
+</span><span id="line-88"></span><span class="hs-comment">-- the upper case ones.</span><span>
+</span><span id="line-89"></span><span class="hs-comment">--</span><span>
+</span><span id="line-90"></span><span class="hs-comment">-- Comparation is used twice for each `Atomic` case, once for making sure they</span><span>
+</span><span id="line-91"></span><span class="hs-comment">-- are the same letter, once for case sensitive. As far as this comparison is</span><span>
+</span><span id="line-92"></span><span class="hs-comment">-- considered, `&#916;` is a &quot;decoration&quot; and ignored unless the compared symbols are</span><span>
+</span><span id="line-93"></span><span class="hs-comment">-- the exact same, in which case it is ordered after the undecorated symbol.</span><span>
 </span><span id="line-94"></span><span class="hs-comment">--</span><span>
-</span><span id="line-95"></span><span class="hs-comment">-- Superscripts and subscripts are ordered after the base symbols (because they add additional context to a symbol). </span><span>
-</span><span id="line-96"></span><span class="hs-comment">-- For example: `v_f^{AB}` (expressed in LaTeX</span><span>
-</span><span id="line-97"></span><span class="hs-comment">-- notation for clarity), where `v_f` is a final velocity, and the `^{AB}` adds context that it is the</span><span>
-</span><span id="line-98"></span><span class="hs-comment">-- final velocity between points `A` and `B`. In these cases, the sorting of `v_f^{AB}` should be</span><span>
-</span><span id="line-99"></span><span class="hs-comment">-- following `v_f` as it is logical to place it with its parent concept.</span><span>
-</span><span id="line-100"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-type">compsy</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Symbol.html#Symbol"><span class="hs-identifier hs-type">Symbol</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Symbol.html#Symbol"><span class="hs-identifier hs-type">Symbol</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Ordering</span></span><span>
-</span><span id="line-101"></span><span id="compsy"><span class="annot"><span class="annottext">compsy :: Symbol -&gt; Symbol -&gt; Ordering
+</span><span id="line-95"></span><span class="hs-comment">-- Superscripts and subscripts are ordered after the base symbols (because they</span><span>
+</span><span id="line-96"></span><span class="hs-comment">-- add additional context to a symbol). For example: `v_f^{AB}` (expressed in</span><span>
+</span><span id="line-97"></span><span class="hs-comment">-- LaTeX notation for clarity), where `v_f` is a final velocity, and the `^{AB}`</span><span>
+</span><span id="line-98"></span><span class="hs-comment">-- adds context that it is the final velocity between points `A` and `B`. In</span><span>
+</span><span id="line-99"></span><span class="hs-comment">-- these cases, the sorting of `v_f^{AB}` should be following `v_f` as it is</span><span>
+</span><span id="line-100"></span><span class="hs-comment">-- logical to place it with its parent concept.</span><span>
+</span><span id="line-101"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-type">compsy</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Symbol.html#Symbol"><span class="hs-identifier hs-type">Symbol</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Symbol.html#Symbol"><span class="hs-identifier hs-type">Symbol</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Ordering</span></span><span>
+</span><span id="line-102"></span><span id="compsy"><span class="annot"><span class="annottext">compsy :: Symbol -&gt; Symbol -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var hs-var">compsy</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Concat"><span class="hs-identifier hs-type">Concat</span></a></span><span> </span><span id="local-6989586621679411635"><span class="annot"><span class="annottext">[Symbol]
 </span><a href="#local-6989586621679411635"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Concat"><span class="hs-identifier hs-type">Concat</span></a></span><span> </span><span id="local-6989586621679411634"><span class="annot"><span class="annottext">[Symbol]
 </span><a href="#local-6989586621679411634"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Symbol] -&gt; [Symbol] -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#complsy"><span class="hs-identifier hs-var">complsy</span></a></span><span> </span><span class="annot"><span class="annottext">[Symbol]
 </span><a href="#local-6989586621679411635"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[Symbol]
 </span><a href="#local-6989586621679411634"><span class="hs-identifier hs-var">y</span></a></span><span>
-</span><span id="line-102"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Concat"><span class="hs-identifier hs-type">Concat</span></a></span><span> </span><span id="local-6989586621679411633"><span class="annot"><span class="annottext">[Symbol]
+</span><span id="line-103"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Concat"><span class="hs-identifier hs-type">Concat</span></a></span><span> </span><span id="local-6989586621679411633"><span class="annot"><span class="annottext">[Symbol]
 </span><a href="#local-6989586621679411633"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679411632"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411632"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Symbol] -&gt; [Symbol] -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#complsy"><span class="hs-identifier hs-var">complsy</span></a></span><span> </span><span class="annot"><span class="annottext">[Symbol]
 </span><a href="#local-6989586621679411633"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411632"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-103"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span id="local-6989586621679411631"><span class="annot"><span class="annottext">Symbol
+</span><span id="line-104"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span id="local-6989586621679411631"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411631"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Concat"><span class="hs-identifier hs-type">Concat</span></a></span><span> </span><span id="local-6989586621679411630"><span class="annot"><span class="annottext">[Symbol]
 </span><a href="#local-6989586621679411630"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Symbol] -&gt; [Symbol] -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#complsy"><span class="hs-identifier hs-var">complsy</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411631"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Symbol]
 </span><a href="#local-6989586621679411630"><span class="hs-identifier hs-var">a</span></a></span><span>
-</span><span id="line-104"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Atop"><span class="hs-identifier hs-type">Atop</span></a></span><span> </span><span id="local-6989586621679411629"><span class="annot"><span class="annottext">Decoration
+</span><span id="line-105"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Atop"><span class="hs-identifier hs-type">Atop</span></a></span><span> </span><span id="local-6989586621679411629"><span class="annot"><span class="annottext">Decoration
 </span><a href="#local-6989586621679411629"><span class="hs-identifier hs-var">d1</span></a></span></span><span> </span><span id="local-6989586621679411628"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411628"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Atop"><span class="hs-identifier hs-type">Atop</span></a></span><span> </span><span id="local-6989586621679411627"><span class="annot"><span class="annottext">Decoration
 </span><a href="#local-6989586621679411627"><span class="hs-identifier hs-var">d2</span></a></span></span><span> </span><span id="local-6989586621679411626"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411626"><span class="hs-identifier hs-var">a'</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span>
-</span><span id="line-105"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
+</span><span id="line-106"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411628"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411626"><span class="hs-identifier hs-var">a'</span></a></span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-106"></span><span>    </span><span class="annot"><span class="annottext">Ordering
+</span><span id="line-107"></span><span>    </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">EQ</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Ordering
 </span><span class="hs-identifier hs-var">compare</span></span><span> </span><span class="annot"><span class="annottext">Decoration
 </span><a href="#local-6989586621679411629"><span class="hs-identifier hs-var">d1</span></a></span><span> </span><span class="annot"><span class="annottext">Decoration
 </span><a href="#local-6989586621679411627"><span class="hs-identifier hs-var">d2</span></a></span><span>
-</span><span id="line-107"></span><span>    </span><span id="local-6989586621679411624"><span class="annot"><span class="annottext">Ordering
+</span><span id="line-108"></span><span>    </span><span id="local-6989586621679411624"><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411624"><span class="hs-identifier hs-var">other</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411624"><span class="hs-identifier hs-var">other</span></a></span><span>
-</span><span id="line-108"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span id="local-6989586621679411623"><span class="annot"><span class="annottext">Symbol
+</span><span id="line-109"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span id="local-6989586621679411623"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411623"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Atop"><span class="hs-identifier hs-type">Atop</span></a></span><span> </span><span class="annot"><span class="annottext">Decoration
 </span><a href="Language.Drasil.Symbol.html#Magnitude"><span class="hs-identifier hs-var">Magnitude</span></a></span><span> </span><span id="local-6989586621679411622"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411622"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-109"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
+</span><span id="line-110"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411623"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411622"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-110"></span><span>    </span><span class="annot"><span class="annottext">Ordering
+</span><span id="line-111"></span><span>    </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">EQ</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">LT</span></span><span>
-</span><span id="line-111"></span><span>    </span><span id="local-6989586621679411621"><span class="annot"><span class="annottext">Ordering
+</span><span id="line-112"></span><span>    </span><span id="local-6989586621679411621"><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411621"><span class="hs-identifier hs-var">other</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411621"><span class="hs-identifier hs-var">other</span></a></span><span>
-</span><span id="line-112"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Atop"><span class="hs-identifier hs-type">Atop</span></a></span><span> </span><span class="annot"><span class="annottext">Decoration
+</span><span id="line-113"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Atop"><span class="hs-identifier hs-type">Atop</span></a></span><span> </span><span class="annot"><span class="annottext">Decoration
 </span><a href="Language.Drasil.Symbol.html#Magnitude"><span class="hs-identifier hs-var">Magnitude</span></a></span><span> </span><span id="local-6989586621679411620"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411620"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679411619"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411619"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-113"></span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
+</span><span id="line-114"></span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411620"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411619"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-114"></span><span>    </span><span class="annot"><span class="annottext">Ordering
+</span><span id="line-115"></span><span>    </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">EQ</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">GT</span></span><span>
-</span><span id="line-115"></span><span>    </span><span id="local-6989586621679411618"><span class="annot"><span class="annottext">Ordering
+</span><span id="line-116"></span><span>    </span><span id="local-6989586621679411618"><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411618"><span class="hs-identifier hs-var">other</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411618"><span class="hs-identifier hs-var">other</span></a></span><span>
-</span><span id="line-116"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span id="local-6989586621679411617"><span class="annot"><span class="annottext">Symbol
+</span><span id="line-117"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span id="local-6989586621679411617"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411617"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Atop"><span class="hs-identifier hs-type">Atop</span></a></span><span> </span><span class="annot"><span class="annottext">Decoration
 </span><a href="Language.Drasil.Symbol.html#Delta"><span class="hs-identifier hs-var">Delta</span></a></span><span> </span><span id="local-6989586621679411616"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411616"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-117"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
+</span><span id="line-118"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411617"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411616"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-118"></span><span>    </span><span class="annot"><span class="annottext">Ordering
+</span><span id="line-119"></span><span>    </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">EQ</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">LT</span></span><span>
-</span><span id="line-119"></span><span>    </span><span id="local-6989586621679411615"><span class="annot"><span class="annottext">Ordering
+</span><span id="line-120"></span><span>    </span><span id="local-6989586621679411615"><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411615"><span class="hs-identifier hs-var">other</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411615"><span class="hs-identifier hs-var">other</span></a></span><span>
-</span><span id="line-120"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Atop"><span class="hs-identifier hs-type">Atop</span></a></span><span> </span><span class="annot"><span class="annottext">Decoration
+</span><span id="line-121"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Atop"><span class="hs-identifier hs-type">Atop</span></a></span><span> </span><span class="annot"><span class="annottext">Decoration
 </span><a href="Language.Drasil.Symbol.html#Delta"><span class="hs-identifier hs-var">Delta</span></a></span><span> </span><span id="local-6989586621679411614"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411614"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679411613"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411613"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-121"></span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
+</span><span id="line-122"></span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411614"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411613"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-122"></span><span>    </span><span class="annot"><span class="annottext">Ordering
+</span><span id="line-123"></span><span>    </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">EQ</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">GT</span></span><span>
-</span><span id="line-123"></span><span>    </span><span id="local-6989586621679411612"><span class="annot"><span class="annottext">Ordering
+</span><span id="line-124"></span><span>    </span><span id="local-6989586621679411612"><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411612"><span class="hs-identifier hs-var">other</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411612"><span class="hs-identifier hs-var">other</span></a></span><span>
-</span><span id="line-124"></span><span class="hs-comment">-- The next two cases are very specific (but common) patterns where a superscript is added</span><span>
-</span><span id="line-125"></span><span class="hs-comment">-- to some &quot;conceptual&quot; base symbol to add further context. For example: `v_f^{AB}` (expressed in LaTeX</span><span>
-</span><span id="line-126"></span><span class="hs-comment">-- notation for clarity), where `v_f` is a final velocity, and the `^{AB}` adds context that it is the</span><span>
-</span><span id="line-127"></span><span class="hs-comment">-- final velocity between points `A` and `B`. In these cases, the sorting of `v_f^{AB}` should be</span><span>
-</span><span id="line-128"></span><span class="hs-comment">-- following `v_f` as it is logical to place it with its parent concept.</span><span>
-</span><span id="line-129"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Corners"><span class="hs-identifier hs-type">Corners</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span id="local-6989586621679411611"><span class="annot"><span class="annottext">[Symbol]
+</span><span id="line-125"></span><span class="hs-comment">-- The next two cases are very specific (but common) patterns where a superscript is added</span><span>
+</span><span id="line-126"></span><span class="hs-comment">-- to some &quot;conceptual&quot; base symbol to add further context. For example: `v_f^{AB}` (expressed in LaTeX</span><span>
+</span><span id="line-127"></span><span class="hs-comment">-- notation for clarity), where `v_f` is a final velocity, and the `^{AB}` adds context that it is the</span><span>
+</span><span id="line-128"></span><span class="hs-comment">-- final velocity between points `A` and `B`. In these cases, the sorting of `v_f^{AB}` should be</span><span>
+</span><span id="line-129"></span><span class="hs-comment">-- following `v_f` as it is logical to place it with its parent concept.</span><span>
+</span><span id="line-130"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Corners"><span class="hs-identifier hs-type">Corners</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span id="local-6989586621679411611"><span class="annot"><span class="annottext">[Symbol]
 </span><a href="#local-6989586621679411611"><span class="hs-identifier hs-var">ur</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Corners"><span class="hs-identifier hs-type">Corners</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span id="local-6989586621679411610"><span class="annot"><span class="annottext">[Symbol]
 </span><a href="#local-6989586621679411610"><span class="hs-identifier hs-var">lr</span></a></span></span><span> </span><span id="local-6989586621679411609"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411609"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679411608"><span class="annot"><span class="annottext">Symbol
@@ -271,7 +272,7 @@ $c== :: Symbol -&gt; Symbol -&gt; Bool
 </span><a href="#local-6989586621679411610"><span class="hs-identifier hs-var">lr</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411609"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411608"><span class="hs-identifier hs-var">a</span></a></span><span>
-</span><span id="line-130"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span id="local-6989586621679411607"><span class="annot"><span class="annottext">Symbol
+</span><span id="line-131"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span id="local-6989586621679411607"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411607"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Corners"><span class="hs-identifier hs-type">Corners</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span id="local-6989586621679411606"><span class="annot"><span class="annottext">[Symbol]
 </span><a href="#local-6989586621679411606"><span class="hs-identifier hs-var">ur</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Corners"><span class="hs-identifier hs-type">Corners</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span id="local-6989586621679411605"><span class="annot"><span class="annottext">[Symbol]
 </span><a href="#local-6989586621679411605"><span class="hs-identifier hs-var">lr</span></a></span></span><span> </span><span id="local-6989586621679411604"><span class="annot"><span class="annottext">Symbol
@@ -282,7 +283,7 @@ $c== :: Symbol -&gt; Symbol -&gt; Bool
 </span><a href="#local-6989586621679411606"><span class="hs-identifier hs-var">ur</span></a></span><span> </span><span class="annot"><span class="annottext">[Symbol]
 </span><a href="#local-6989586621679411605"><span class="hs-identifier hs-var">lr</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411604"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-131"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Corners"><span class="hs-identifier hs-type">Corners</span></a></span><span> </span><span class="annot"><span class="annottext">[Symbol]
+</span><span id="line-132"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Corners"><span class="hs-identifier hs-type">Corners</span></a></span><span> </span><span class="annot"><span class="annottext">[Symbol]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[Symbol]
 </span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679411603"><span class="annot"><span class="annottext">[Symbol]
 </span><a href="#local-6989586621679411603"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span id="local-6989586621679411602"><span class="annot"><span class="annottext">[Symbol]
@@ -293,89 +294,89 @@ $c== :: Symbol -&gt; Symbol -&gt; Bool
 </span><a href="#local-6989586621679411600"><span class="hs-identifier hs-var">u'</span></a></span></span><span> </span><span id="local-6989586621679411599"><span class="annot"><span class="annottext">[Symbol]
 </span><a href="#local-6989586621679411599"><span class="hs-identifier hs-var">l'</span></a></span></span><span> </span><span id="local-6989586621679411598"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411598"><span class="hs-identifier hs-var">b'</span></a></span></span><span class="hs-special">)</span><span>  </span><span class="hs-glyph">=</span><span>
-</span><span id="line-132"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
+</span><span id="line-133"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411601"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411598"><span class="hs-identifier hs-var">b'</span></a></span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-133"></span><span>    </span><span class="annot"><span class="annottext">Ordering
+</span><span id="line-134"></span><span>    </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">EQ</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">[Symbol] -&gt; [Symbol] -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#complsy"><span class="hs-identifier hs-var">complsy</span></a></span><span> </span><span class="annot"><span class="annottext">[Symbol]
 </span><a href="#local-6989586621679411602"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">[Symbol]
 </span><a href="#local-6989586621679411599"><span class="hs-identifier hs-var">l'</span></a></span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-134"></span><span>      </span><span class="annot"><span class="annottext">Ordering
+</span><span id="line-135"></span><span>      </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">EQ</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Symbol] -&gt; [Symbol] -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#complsy"><span class="hs-identifier hs-var">complsy</span></a></span><span> </span><span class="annot"><span class="annottext">[Symbol]
 </span><a href="#local-6989586621679411603"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="annot"><span class="annottext">[Symbol]
 </span><a href="#local-6989586621679411600"><span class="hs-identifier hs-var">u'</span></a></span><span>
-</span><span id="line-135"></span><span>      </span><span id="local-6989586621679411597"><span class="annot"><span class="annottext">Ordering
+</span><span id="line-136"></span><span>      </span><span id="local-6989586621679411597"><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411597"><span class="hs-identifier hs-var">other</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411597"><span class="hs-identifier hs-var">other</span></a></span><span>
-</span><span id="line-136"></span><span>    </span><span id="local-6989586621679411596"><span class="annot"><span class="annottext">Ordering
+</span><span id="line-137"></span><span>    </span><span id="local-6989586621679411596"><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411596"><span class="hs-identifier hs-var">other</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411596"><span class="hs-identifier hs-var">other</span></a></span><span>
-</span><span id="line-137"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span id="local-6989586621679411595"><span class="annot"><span class="annottext">Symbol
+</span><span id="line-138"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span id="local-6989586621679411595"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411595"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Corners"><span class="hs-identifier hs-type">Corners</span></a></span><span> </span><span class="annot"><span class="annottext">[Symbol]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[Symbol]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[Symbol]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[Symbol]
 </span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679411594"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411594"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-138"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
+</span><span id="line-139"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411595"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411594"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-139"></span><span>    </span><span class="annot"><span class="annottext">Ordering
+</span><span id="line-140"></span><span>    </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">EQ</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">LT</span></span><span>
-</span><span id="line-140"></span><span>    </span><span id="local-6989586621679411593"><span class="annot"><span class="annottext">Ordering
+</span><span id="line-141"></span><span>    </span><span id="local-6989586621679411593"><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411593"><span class="hs-identifier hs-var">other</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411593"><span class="hs-identifier hs-var">other</span></a></span><span>
-</span><span id="line-141"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Corners"><span class="hs-identifier hs-type">Corners</span></a></span><span> </span><span class="annot"><span class="annottext">[Symbol]
+</span><span id="line-142"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Corners"><span class="hs-identifier hs-type">Corners</span></a></span><span> </span><span class="annot"><span class="annottext">[Symbol]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[Symbol]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[Symbol]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[Symbol]
 </span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679411592"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411592"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679411591"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411591"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-142"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
+</span><span id="line-143"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411592"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411591"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-143"></span><span>    </span><span class="annot"><span class="annottext">Ordering
+</span><span id="line-144"></span><span>    </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">EQ</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">GT</span></span><span>
-</span><span id="line-144"></span><span>    </span><span id="local-6989586621679411590"><span class="annot"><span class="annottext">Ordering
+</span><span id="line-145"></span><span>    </span><span id="local-6989586621679411590"><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411590"><span class="hs-identifier hs-var">other</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411590"><span class="hs-identifier hs-var">other</span></a></span><span>
-</span><span id="line-145"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span id="local-6989586621679411589"><span class="annot"><span class="annottext">Symbol
+</span><span id="line-146"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span id="local-6989586621679411589"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411589"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Atop"><span class="hs-identifier hs-type">Atop</span></a></span><span> </span><span class="annot"><span class="annottext">Decoration
 </span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679411588"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411588"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-146"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
+</span><span id="line-147"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411589"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411588"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-147"></span><span>    </span><span class="annot"><span class="annottext">Ordering
+</span><span id="line-148"></span><span>    </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">EQ</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">LT</span></span><span>
-</span><span id="line-148"></span><span>    </span><span id="local-6989586621679411587"><span class="annot"><span class="annottext">Ordering
+</span><span id="line-149"></span><span>    </span><span id="local-6989586621679411587"><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411587"><span class="hs-identifier hs-var">other</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411587"><span class="hs-identifier hs-var">other</span></a></span><span>
-</span><span id="line-149"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Atop"><span class="hs-identifier hs-type">Atop</span></a></span><span> </span><span class="annot"><span class="annottext">Decoration
+</span><span id="line-150"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Atop"><span class="hs-identifier hs-type">Atop</span></a></span><span> </span><span class="annot"><span class="annottext">Decoration
 </span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679411586"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411586"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679411585"><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411585"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-150"></span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
+</span><span id="line-151"></span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411586"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="#local-6989586621679411585"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-151"></span><span>    </span><span class="annot"><span class="annottext">Ordering
+</span><span id="line-152"></span><span>    </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">EQ</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">GT</span></span><span>
-</span><span id="line-152"></span><span>    </span><span id="local-6989586621679411584"><span class="annot"><span class="annottext">Ordering
+</span><span id="line-153"></span><span>    </span><span id="local-6989586621679411584"><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411584"><span class="hs-identifier hs-var">other</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411584"><span class="hs-identifier hs-var">other</span></a></span><span>
-</span><span id="line-153"></span><span class="hs-comment">{-
+</span><span id="line-154"></span><span class="hs-comment">{-
 compsy a (Atop d b) =
   case d of
     Magnitude -&gt; case compsy a b of
@@ -398,82 +399,82 @@ compsy (Atop d a) b =
     _ -&gt; case compsy a b of
                   EQ -&gt; GT
                   other -&gt; other-}</span><span>
-</span><span id="line-176"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Special"><span class="hs-identifier hs-type">Special</span></a></span><span> </span><span id="local-6989586621679411583"><span class="annot"><span class="annottext">Special
+</span><span id="line-177"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Special"><span class="hs-identifier hs-type">Special</span></a></span><span> </span><span id="local-6989586621679411583"><span class="annot"><span class="annottext">Special
 </span><a href="#local-6989586621679411583"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">)</span><span>  </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Special"><span class="hs-identifier hs-type">Special</span></a></span><span> </span><span id="local-6989586621679411582"><span class="annot"><span class="annottext">Special
 </span><a href="#local-6989586621679411582"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Ordering
 </span><span class="hs-identifier hs-var">compare</span></span><span> </span><span class="annot"><span class="annottext">Special
 </span><a href="#local-6989586621679411583"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Special
 </span><a href="#local-6989586621679411582"><span class="hs-identifier hs-var">b</span></a></span><span>
-</span><span id="line-177"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Integ"><span class="hs-identifier hs-type">Integ</span></a></span><span>    </span><span id="local-6989586621679411581"><span class="annot"><span class="annottext">Int
+</span><span id="line-178"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Integ"><span class="hs-identifier hs-type">Integ</span></a></span><span>    </span><span id="local-6989586621679411581"><span class="annot"><span class="annottext">Int
 </span><a href="#local-6989586621679411581"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Integ"><span class="hs-identifier hs-type">Integ</span></a></span><span>    </span><span id="local-6989586621679411580"><span class="annot"><span class="annottext">Int
 </span><a href="#local-6989586621679411580"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Ordering
 </span><span class="hs-identifier hs-var">compare</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><a href="#local-6989586621679411581"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Int
 </span><a href="#local-6989586621679411580"><span class="hs-identifier hs-var">y</span></a></span><span>
-</span><span id="line-178"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Variable"><span class="hs-identifier hs-type">Variable</span></a></span><span> </span><span id="local-6989586621679411579"><span class="annot"><span class="annottext">[Char]
+</span><span id="line-179"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Variable"><span class="hs-identifier hs-type">Variable</span></a></span><span> </span><span id="local-6989586621679411579"><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411579"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Variable"><span class="hs-identifier hs-type">Variable</span></a></span><span> </span><span id="local-6989586621679411578"><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411578"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#compsyLower"><span class="hs-identifier hs-var">compsyLower</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411579"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411578"><span class="hs-identifier hs-var">y</span></a></span><span>
-</span><span id="line-179"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Variable"><span class="hs-identifier hs-type">Variable</span></a></span><span> </span><span id="local-6989586621679411576"><span class="annot"><span class="annottext">[Char]
+</span><span id="line-180"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Variable"><span class="hs-identifier hs-type">Variable</span></a></span><span> </span><span id="local-6989586621679411576"><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411576"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Label"><span class="hs-identifier hs-type">Label</span></a></span><span> </span><span id="local-6989586621679411575"><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411575"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">)</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#compsyLower"><span class="hs-identifier hs-var">compsyLower</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411576"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411575"><span class="hs-identifier hs-var">y</span></a></span><span>
-</span><span id="line-180"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Label"><span class="hs-identifier hs-type">Label</span></a></span><span> </span><span id="local-6989586621679411574"><span class="annot"><span class="annottext">[Char]
+</span><span id="line-181"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Label"><span class="hs-identifier hs-type">Label</span></a></span><span> </span><span id="local-6989586621679411574"><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411574"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Variable"><span class="hs-identifier hs-type">Variable</span></a></span><span> </span><span id="local-6989586621679411573"><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411573"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#compsyLower"><span class="hs-identifier hs-var">compsyLower</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411574"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411573"><span class="hs-identifier hs-var">y</span></a></span><span>
-</span><span id="line-181"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Label"><span class="hs-identifier hs-type">Label</span></a></span><span> </span><span id="local-6989586621679411572"><span class="annot"><span class="annottext">[Char]
+</span><span id="line-182"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Label"><span class="hs-identifier hs-type">Label</span></a></span><span> </span><span id="local-6989586621679411572"><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411572"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Label"><span class="hs-identifier hs-type">Label</span></a></span><span> </span><span id="local-6989586621679411571"><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411571"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">)</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#compsyLower"><span class="hs-identifier hs-var">compsyLower</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411572"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411571"><span class="hs-identifier hs-var">y</span></a></span><span>
-</span><span id="line-182"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Special"><span class="hs-identifier hs-type">Special</span></a></span><span> </span><span class="annot"><span class="annottext">Special
+</span><span id="line-183"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Special"><span class="hs-identifier hs-type">Special</span></a></span><span> </span><span class="annot"><span class="annottext">Special
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span>  </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">LT</span></span><span>
-</span><span id="line-183"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><span id="line-184"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Special"><span class="hs-identifier hs-type">Special</span></a></span><span> </span><span class="annot"><span class="annottext">Special
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">GT</span></span><span>
-</span><span id="line-184"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Integ"><span class="hs-identifier hs-type">Integ</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span id="line-185"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Integ"><span class="hs-identifier hs-type">Integ</span></a></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier">_</span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">LT</span></span><span>
-</span><span id="line-185"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><span id="line-186"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Integ"><span class="hs-identifier hs-type">Integ</span></a></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">GT</span></span><span>
-</span><span id="line-186"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Variable"><span class="hs-identifier hs-type">Variable</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><span id="line-187"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Variable"><span class="hs-identifier hs-type">Variable</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">LT</span></span><span>
-</span><span id="line-187"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><span id="line-188"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Variable"><span class="hs-identifier hs-type">Variable</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">GT</span></span><span>
-</span><span id="line-188"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Label"><span class="hs-identifier hs-type">Label</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><span id="line-189"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Label"><span class="hs-identifier hs-type">Label</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier">_</span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">LT</span></span><span>
-</span><span id="line-189"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><span id="line-190"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Symbol.html#Label"><span class="hs-identifier hs-type">Label</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">GT</span></span><span>
-</span><span id="line-190"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><span id="line-191"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsy"><span class="hs-identifier hs-var">compsy</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="Language.Drasil.Symbol.html#Empty"><span class="hs-identifier hs-var">Empty</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="Language.Drasil.Symbol.html#Empty"><span class="hs-identifier hs-var">Empty</span></a></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">EQ</span></span><span>
-</span><span id="line-191"></span><span>
-</span><span id="line-192"></span><span class="hs-comment">-- | Helper for 'compsy' that compares lower case 'String's.</span><span>
-</span><span id="line-193"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsyLower"><span class="hs-identifier hs-type">compsyLower</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Ordering</span></span><span>
-</span><span id="line-194"></span><span id="compsyLower"><span class="annot"><span class="annottext">compsyLower :: [Char] -&gt; [Char] -&gt; Ordering
+</span><span id="line-192"></span><span>
+</span><span id="line-193"></span><span class="hs-comment">-- | Helper for 'compsy' that compares lower case 'String's.</span><span>
+</span><span id="line-194"></span><span class="annot"><a href="Language.Drasil.Symbol.html#compsyLower"><span class="hs-identifier hs-type">compsyLower</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Ordering</span></span><span>
+</span><span id="line-195"></span><span id="compsyLower"><span class="annot"><span class="annottext">compsyLower :: [Char] -&gt; [Char] -&gt; Ordering
 </span><a href="Language.Drasil.Symbol.html#compsyLower"><span class="hs-identifier hs-var hs-var">compsyLower</span></a></span></span><span> </span><span id="local-6989586621679411570"><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411570"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679411569"><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411569"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Ordering
@@ -484,12 +485,12 @@ compsy (Atop d a) b =
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Char
 </span><span class="hs-identifier hs-var">toLower</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411569"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-195"></span><span>  </span><span class="annot"><span class="annottext">Ordering
+</span><span id="line-196"></span><span>  </span><span class="annot"><span class="annottext">Ordering
 </span><span class="hs-identifier hs-var">EQ</span></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Ordering
 </span><span class="hs-identifier hs-var">compare</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411570"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679411569"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span>
-</span><span id="line-196"></span><span>  </span><span id="local-6989586621679411568"><span class="annot"><span class="annottext">Ordering
+</span><span id="line-197"></span><span>  </span><span id="local-6989586621679411568"><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411568"><span class="hs-identifier hs-var">other</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Ordering
 </span><a href="#local-6989586621679411568"><span class="hs-identifier hs-var">other</span></a></span><span>
-</span><span id="line-197"></span></pre></body></html>
+</span><span id="line-198"></span></pre></body></html>

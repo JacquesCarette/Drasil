@@ -103,7 +103,7 @@ aboutParagraph8 paperGOOL = S "As described in the" +:+ namedRef paperGOOL (S "G
 aboutParagraph9 :: Reference -> Reference -> Reference -> Reference -> Sentence
 aboutParagraph9 papersWiki icsePositionPaper danPoster wellUnderstoodPaper = 
   S "A list of papers and documents written about Drasil can be found in the" +:+ 
-  namedRef papersWiki (S "Drasil Papers and Documents") +:+ S "wiki page. In particular, there is a " +:+ 
-  namedRef icsePositionPaper (S "Old Position Paper") +:+ S "outlining our original ideas, a " +:+ 
-  namedRef danPoster (S "Drasil Poster") +:+ S ", and a " +:+ 
+  namedRef papersWiki (S "Drasil Papers and Documents") +:+ S "wiki page. In particular, there is a" +:+ 
+  namedRef icsePositionPaper (S "Old Position Paper") +:+ S "outlining our original ideas, a" +:+ 
+  namedRef danPoster (S "Drasil Poster") +:+ S ", and a" +:+ 
   namedRef wellUnderstoodPaper (S "Well-Understood Paper") +:+ S "discussing key concepts."

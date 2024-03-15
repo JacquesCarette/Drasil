@@ -23,9 +23,9 @@ data Decoration =
   | Magnitude -- ^ Places @||@ before and after a symbol.
   deriving (Eq, Ord)
 
--- | A 'Symbol' is actually going to be a graphical description of what
--- gets rendered as a (unique) symbol.  This is actually NOT based on
--- semantics at all, but just a description of how things look.
+-- | A 'Symbol' is actually going to be a graphical description of what gets
+-- rendered as a (unique) symbol.  This is actually NOT based on semantics at
+-- all, but just a description of how things look.
 -- 
 -- Symbols can be:
 -- 
@@ -84,19 +84,20 @@ complsy [] _  = LT
 complsy _  [] = GT
 complsy (x : xs) (y : ys) = compsy x y <> complsy xs ys
 
--- | The default compare function that sorts all the lower case symbols after the upper case ones.
+-- | The default compare function that sorts all the lower case symbols after
+-- the upper case ones.
 --
--- Comparation is used twice for each `Atomic` case,
--- once for making sure they are the same letter, once for case sensitive.
--- As far as this comparison is considered, `Δ` is a "decoration" and ignored
--- unless the compared symbols are the exact same, in which case it is ordered
--- after the undecorated symbol.
+-- Comparation is used twice for each `Atomic` case, once for making sure they
+-- are the same letter, once for case sensitive. As far as this comparison is
+-- considered, `Δ` is a "decoration" and ignored unless the compared symbols are
+-- the exact same, in which case it is ordered after the undecorated symbol.
 --
--- Superscripts and subscripts are ordered after the base symbols (because they add additional context to a symbol). 
--- For example: `v_f^{AB}` (expressed in LaTeX
--- notation for clarity), where `v_f` is a final velocity, and the `^{AB}` adds context that it is the
--- final velocity between points `A` and `B`. In these cases, the sorting of `v_f^{AB}` should be
--- following `v_f` as it is logical to place it with its parent concept.
+-- Superscripts and subscripts are ordered after the base symbols (because they
+-- add additional context to a symbol). For example: `v_f^{AB}` (expressed in
+-- LaTeX notation for clarity), where `v_f` is a final velocity, and the `^{AB}`
+-- adds context that it is the final velocity between points `A` and `B`. In
+-- these cases, the sorting of `v_f^{AB}` should be following `v_f` as it is
+-- logical to place it with its parent concept.
 compsy :: Symbol -> Symbol -> Ordering
 compsy (Concat x) (Concat y) = complsy x y
 compsy (Concat a) b = complsy a [b]

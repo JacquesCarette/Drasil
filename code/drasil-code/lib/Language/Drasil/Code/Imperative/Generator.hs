@@ -18,7 +18,7 @@ import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstClass,
   genInputFormat, genMain, genMainFunc, genCalcMod, genCalcFunc,
   genOutputFormat, genOutputMod, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  designLog, inMod, modExportMap, clsDefMap)
+  designLog, inMod, modExportMap, clsDefMap, genICName)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
   PackageSym(..), AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
@@ -28,7 +28,7 @@ import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
   Visibility(..), DataInfo(..), Constraints(..), choicesSent, DocConfig(..),
-  LogConfig(..), OptionalFeatures(..))
+  LogConfig(..), OptionalFeatures(..), InternalConcept(..), listStrIC)
 import Language.Drasil.CodeSpec (CodeSpec(..), getODE)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
 
@@ -67,6 +67,7 @@ generator l dt sd chs spec = DrasilState {
   logName = logFile $ logConfig $ optFeats chs,
   auxiliaries = auxFiles $ optFeats chs,
   sampleData = sd,
+  dsICNames = icNames chs,
   modules = modules',
   extLibNames = nms,
   extLibMap = fromList elmap,
@@ -74,7 +75,7 @@ generator l dt sd chs spec = DrasilState {
   eMap = mem,
   libEMap = lem,
   clsMap = cdm,
-  defList = nub $ keys mem ++ keys cdm,
+  defList = nub $ listStrIC (keys mem ++ keys cdm),
   getVal = folderVal chs,
   -- stateful
   currentModule = "",
@@ -178,9 +179,11 @@ genUnmodular :: (OOProg r) => GenState (SFile r)
 genUnmodular = do
   g <- get
   umDesc <- unmodularDesc
+  giName <- genICName GetInput
+  dvName <- genICName DerivedValues
+  icName <- genICName InputConstraints
   let n = pName $ codeSpec g
-      cls = any (`member` clsMap g)
-        ["get_input", "derived_values", "input_constraints"]
+      cls = any (`member` clsMap g) [giName, dvName, icName]
   genModuleWithImports n umDesc (concatMap (^. imports) (elems $ extLibMap g))
     (genMainFunc
       : map (fmap Just) (map genCalcFunc (execOrder $ codeSpec g)

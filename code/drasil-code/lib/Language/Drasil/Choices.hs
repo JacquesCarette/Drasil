@@ -8,18 +8,22 @@ module Language.Drasil.Choices (
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
-  choicesSent, showChs) where
+  choicesSent, showChs, InternalConcept(..), getICName, listStrIC) where
 
 import Language.Drasil hiding (None, Var)
 import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg)
+import Language.Drasil.Mod (Name)
+import Data.Maybe (mapMaybe)
+import Data.Map (Map)
+import qualified Data.Map as Map
+import Data.Tuple (swap)
 
 import GOOL.Drasil (CodeType)
 
 import Control.Lens ((^.))
-import Data.Map (Map, fromList)
 
 -- | The instruction indicates how the generated program should be written down.
 -- Full details of Choices documentation https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator
@@ -39,6 +43,8 @@ data Choices = Choices {
   srsConstraints :: Constraints,
   -- | List of external libraries what to utilize
   extLibs :: [ExtLib],
+  -- | List of modifiable function names
+  icNames :: Map InternalConcept Name,
   -- | Number of folders to go up in order to obtain the image
   folderVal :: Int
 }
@@ -171,7 +177,7 @@ instance RenderChoices CodeConcept where
 
 -- | Builds a 'ConceptMatchMap' from an association list of chunks and 'CodeConcepts'.
 matchConcepts :: (HasUID c) => [(c, [CodeConcept])] -> ConceptMatchMap
-matchConcepts = fromList . map (\(cnc,cdc) -> (cnc ^. uid, cdc))
+matchConcepts = Map.fromList . map (\(cnc,cdc) -> (cnc ^. uid, cdc))
 
 -- | Specifies which 'CodeType' should be used to represent each mathematical
 -- 'Space'. ['CodeType'] is preferentially-ordered, first 'CodeType' that does not
@@ -342,6 +348,7 @@ defaultChoices = Choices {
     [ReadME],
   srsConstraints = makeConstraints Exception Warning,
   extLibs = [],
+  icNames = Map.empty,
   folderVal = 4
 }
 
@@ -367,3 +374,34 @@ choicesSent chs = map chsFieldSent [
 -- | Helper to combine pairs of 'Sentence's for rendering 'Choices'.
 chsFieldSent :: (Sentence, Sentence) -> Sentence
 chsFieldSent (rec, chc) = rec +:+ S "selected as" +:+. chc
+
+-- | List of user defined function names.
+-- List is populated with default values.
+fnList :: Map InternalConcept Name
+fnList = Map.fromList [
+  (GetInput, "get_input"),
+  (DerivedValues, "derived_values"),
+  (InputConstraints, "input_constraints"),
+  (WriteOutput, "write_output"),
+  (InputParameters, "InputParameters"),
+  (InputFormat, "InputFormat")]
+
+-- | Helper function for InternalConcept String Map
+listStrIC :: [String] -> [InternalConcept]
+listStrIC = mapMaybe (flip Map.lookup . Map.fromList . map swap $ Map.toList fnList)
+
+-- | Data type of user defined concepts
+data InternalConcept = InputConstraints | WriteOutput | DerivedValues
+  | GetInput | InputParameters | InputFormat deriving (Eq, Ord)
+
+defaultICName :: InternalConcept -> Name
+defaultICName GetInput = "get_input"
+defaultICName DerivedValues = "derived_values"
+defaultICName InputConstraints = "input_constraints"
+defaultICName WriteOutput = "write_output"
+defaultICName InputParameters = "InputParameters"
+defaultICName InputFormat = "InputFormat"
+
+-- | Returns user defined function Name
+getICName :: Map InternalConcept Name -> InternalConcept -> Name
+getICName names ic = Map.findWithDefault (defaultICName ic) ic names

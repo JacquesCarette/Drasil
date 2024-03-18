@@ -13,8 +13,8 @@ import Language.Drasil.Code.Imperative.Descriptions (constClassDesc,
   constModDesc, derivedValuesDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc,
   inputClassDesc, inputConstraintsDesc, inputConstructorDesc, inputFormatDesc,
   inputParametersDesc, modDesc, outputFormatDesc, woFuncDesc, calcModDesc)
-import Language.Drasil.Code.Imperative.FunctionCalls (getCalcCall,
-  getAllInputCalls, getOutputCall)
+import Language.Drasil.Code.Imperative.FunctionCalls (genCalcCall,
+  genAllInputCalls, genOutputCall)
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), genModule,
   genModuleWithImports, primaryClass, auxClass)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
@@ -25,7 +25,8 @@ import Language.Drasil.Code.Imperative.Logging (maybeLog, varLogFile)
 import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
   getDerivedIns, getDerivedOuts, getInConstructorParams, getInputFormatIns,
   getInputFormatOuts, getCalcParams, getOutputParams)
-import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
+  genICName)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar,
   DefiningCodeExpr(..))
@@ -38,7 +39,8 @@ import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.Code.ExtLibImport (defs, imports, steps)
 import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
   ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..),
-  InputModule(..), Logging(..), Structure(..), hasSampleInput)
+  InputModule(..), Logging(..), Structure(..), hasSampleInput,
+  InternalConcept(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
 import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc)
@@ -84,9 +86,9 @@ genMainFunc = do
           logInFile <- maybeLog v_filename
           co <- initConsts
           ip <- getInputDecl
-          ics <- getAllInputCalls
-          varDef <- mapM getCalcCall (execOrder $ codeSpec g)
-          wo <- getOutputCall
+          ics <- genAllInputCalls
+          varDef <- mapM genCalcCall (execOrder $ codeSpec g)
+          wo <- genOutputCall
           return $ Just $ (if CommentFunc `elem` commented g then docMain else
             mainFunction) $ bodyStatements $ initLogFileVar (logKind g)
             ++ varDecDef v_filename (arg 0)
@@ -111,8 +113,8 @@ getInputDecl = do
   v_params <- mkVar (quantvar inParams)
   constrParams <- getInConstructorParams
   cps <- mapM mkVal constrParams
-  let cname = "InputParameters"
-      getDecl ([],[]) = constIns (partition (flip member (eMap g) .
+  cname <- genICName InputParameters
+  let getDecl ([],[]) = constIns (partition (flip member (eMap g) .
         codeName) (map quantvar $ constants $ codeSpec g)) (conRepr g)
         (conStruct g)
       getDecl ([],ins) = do
@@ -185,9 +187,11 @@ genInputModSeparated = do
   ifDesc <- modDesc (liftS inputFormatDesc)
   dvDesc <- modDesc (liftS derivedValuesDesc)
   icDesc <- modDesc (liftS inputConstraintsDesc)
+  ipName <- genICName InputParameters
+  ifName <- genICName InputFormat
   sequence
-    [genModule "InputParameters" ipDesc [] [genInputClass Primary],
-    genModule "InputFormat" ifDesc [genInputFormat Pub] [],
+    [genModule ipName ipDesc [] [genInputClass Primary],
+    genModule ifName ifDesc [genInputFormat Pub] [],
     genModule "DerivedValues" dvDesc [genInputDerived Pub] [],
     genModule "InputConstraints" icDesc [genInputConstraints Pub] []]
 
@@ -195,8 +199,8 @@ genInputModSeparated = do
 genInputModCombined :: (OOProg r) => GenState [SFile r]
 genInputModCombined = do
   ipDesc <- modDesc inputParametersDesc
-  let cname = "InputParameters"
-      genMod :: (OOProg r) => Maybe (SClass r) ->
+  cname <- genICName InputParameters
+  let genMod :: (OOProg r) => Maybe (SClass r) ->
         GenState (SFile r)
       genMod Nothing = genModule cname ipDesc [genInputFormat Pub,
         genInputDerived Pub, genInputConstraints Pub] []
@@ -223,12 +227,13 @@ genInputClass :: (OOProg r) => ClassType ->
   GenState (Maybe (SClass r))
 genInputClass scp = do
   g <- get
+  cname <- genICName InputParameters
   let ins = inputs $ codeSpec g
       cs = constants $ codeSpec g
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter ((Just cname ==) . flip Map.lookup (clsMap g) . codeName)
       methods :: (OOProg r) => GenState [SMethod r]
-      methods = if cname `elem` defList g
+      methods = if InputParameters `elem` defList g
         then concat <$> mapM (fmap maybeToList) [genInputConstructor,
         genInputFormat Priv, genInputDerived Priv, genInputConstraints Priv]
         else return []
@@ -249,7 +254,6 @@ genInputClass scp = do
         c <- f cname Nothing icDesc (inputVars ++ constVars) methods
         return $ Just c
   genClass (filt ins) (filt cs)
-  where cname = "InputParameters"
 
 -- | Generates a constructor for the input class, where the constructor calls the
 -- input-related functions. Returns 'Nothing' if no input-related functions are
@@ -257,23 +261,25 @@ genInputClass scp = do
 genInputConstructor :: (OOProg r) => GenState (Maybe (SMethod r))
 genInputConstructor = do
   g <- get
+  ipName <- genICName InputParameters
   let dl = defList g
       genCtor False = return Nothing
       genCtor True = do
         cdesc <- inputConstructorDesc
         cparams <- getInConstructorParams
-        ics <- getAllInputCalls
-        ctor <- genConstructor "InputParameters" cdesc (map pcAuto cparams)
+        ics <- genAllInputCalls
+        ctor <- genConstructor ipName cdesc (map pcAuto cparams)
           [block ics]
         return $ Just ctor
-  genCtor $ any (`elem` dl) ["get_input", "derived_values",
-    "input_constraints"]
+  genCtor $ any (`elem` dl) [GetInput,
+    DerivedValues, InputConstraints]
 
 -- | Generates a function for calculating derived inputs.
 genInputDerived :: (OOProg r) => ScopeTag ->
   GenState (Maybe (SMethod r))
 genInputDerived s = do
   g <- get
+  dvName <- genICName DerivedValues
   let dvals = derivedInputs $ codeSpec g
       getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
@@ -285,15 +291,16 @@ genInputDerived s = do
         outs <- getDerivedOuts
         bod <- mapM (\x -> genCalcBlock CalcAssign x (x ^. codeExpr)) dvals
         desc <- dvFuncDesc
-        mthd <- getFunc s "derived_values" desc ins outs bod
+        mthd <- getFunc s dvName desc ins outs bod
         return $ Just mthd
-  genDerived $ "derived_values" `elem` defList g
+  genDerived $ DerivedValues `elem` defList g
 
 -- | Generates function that checks constraints on the input.
 genInputConstraints :: (OOProg r) => ScopeTag ->
   GenState (Maybe (SMethod r))
 genInputConstraints s = do
   g <- get
+  icName <- genICName InputConstraints
   let cm = cMap $ codeSpec g
       getFunc Pub = publicFunc
       getFunc Priv = privateMethod
@@ -308,10 +315,10 @@ genInputConstraints s = do
         sf <- sfwrCBody sfwrCs
         ph <- physCBody physCs
         desc <- inConsFuncDesc
-        mthd <- getFunc s "input_constraints" void desc (map pcAuto parms)
+        mthd <- getFunc s icName void desc (map pcAuto parms)
           Nothing [block sf, block ph]
         return $ Just mthd
-  genConstraints $ "input_constraints" `elem` defList g
+  genConstraints $ InputConstraints `elem` defList g
 
 -- | Generates input constraints code block for checking software constraints.
 sfwrCBody :: (OOProg r) => [(CodeVarChunk, [ConstraintCE])] ->
@@ -412,6 +419,7 @@ genInputFormat :: (OOProg r) => ScopeTag ->
 genInputFormat s = do
   g <- get
   dd <- genDataDesc
+  giName <- genICName GetInput
   let getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
       genInFormat :: (OOProg r) => Bool -> GenState
@@ -422,9 +430,9 @@ genInputFormat s = do
         outs <- getInputFormatOuts
         bod <- readData dd
         desc <- inFmtFuncDesc
-        mthd <- getFunc s "get_input" desc ins outs bod
+        mthd <- getFunc s giName desc ins outs bod
         return $ Just mthd
-  genInFormat $ "get_input" `elem` defList g
+  genInFormat $ GetInput `elem` defList g
 
 -- | Defines the 'DataDesc' for the format we require for input files. When we make
 -- input format a design variability, this will read the user's design choices
@@ -562,6 +570,7 @@ genOutputMod = do
 genOutputFormat :: (OOProg r) => GenState (Maybe (SMethod r))
 genOutputFormat = do
   g <- get
+  woName <- genICName WriteOutput
   let genOutput :: (OOProg r) => Maybe String -> GenState
         (Maybe (SMethod r))
       genOutput Nothing = return Nothing
@@ -576,10 +585,10 @@ genOutputFormat = do
                    printFileLn v_outfile v
                  ] ) (outputs $ codeSpec g)
         desc <- woFuncDesc
-        mthd <- publicFunc "write_output" void desc (map pcAuto parms) Nothing
+        mthd <- publicFunc woName void desc (map pcAuto parms) Nothing
           [block $ [
           varDec var_outfile,
           openFileW var_outfile (litString "output.txt") ] ++
           concat outp ++ [ closeFile v_outfile ]]
         return $ Just mthd
-  genOutput $ Map.lookup "write_output" (eMap g)
+  genOutput $ Map.lookup woName (eMap g)

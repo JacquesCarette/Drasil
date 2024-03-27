@@ -8,13 +8,14 @@ import Language.Drasil
 
 -- | Creates the about section.
 aboutSec :: Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> 
-  Reference -> Reference -> Section
-aboutSec csRef docRef analysisSecRef repoRef wikiRef infoEncodingWiki chunksWiki recipesWiki paperGOOL papersWiki = 
+  Reference -> Reference -> Reference -> Reference -> Reference -> Section
+aboutSec csRef docRef analysisSecRef repoRef wikiRef infoEncodingWiki chunksWiki recipesWiki paperGOOL papersWiki 
+  icsePositionPaper danPoster wellUnderstoodPaper = 
   section (S "About") -- Title
   (map mkParagraph [aboutParagraph1 repoRef wikiRef, aboutParagraph2 csRef docRef analysisSecRef, aboutParagraph3] 
   ++ [currentlyGeneratedArtifacts] ++ [mkParagraph aboutParagraph4] ++ [futureGeneratedArtifacts] ++ map mkParagraph 
   [aboutParagraph5 infoEncodingWiki, aboutParagraph6 chunksWiki, aboutParagraph7 recipesWiki, aboutParagraph8 paperGOOL, 
-  aboutParagraph9 papersWiki]) -- Contents
+  aboutParagraph9 papersWiki icsePositionPaper danPoster wellUnderstoodPaper]) -- Contents
   [] $ makeSecRef "About" $ S "About" -- Section reference
 
 -- | Paragraph to about Drasil and its goals.
@@ -99,6 +100,10 @@ aboutParagraph8 paperGOOL = S "As described in the" +:+ namedRef paperGOOL (S "G
   \generation, allowing Drasil to more efficiently generate code in several languages, including Python, Java, C-Sharp, and C++."
 
 -- | Paragraph providing a link to Drasil papers and documents
-aboutParagraph9 :: Reference -> Sentence
-aboutParagraph9 papersWiki = S "A list of papers and documents written about Drasil can be found in the" +:+ namedRef papersWiki (S "Drasil Papers \
-  \and Documents") +:+ S "wiki page"
+aboutParagraph9 :: Reference -> Reference -> Reference -> Reference -> Sentence
+aboutParagraph9 papersWiki icsePositionPaper danPoster wellUnderstoodPaper = 
+  S "A list of papers and documents written about Drasil can be found in the" +:+ 
+  namedRef papersWiki (S "Drasil Papers and Documents") +:+ S "wiki page. In particular, there is a" +:+ 
+  namedRef icsePositionPaper (S "Old Position Paper") +:+ S "outlining our original ideas, a" +:+ 
+  namedRef danPoster (S "Drasil Poster") +:+ S ", and a" +:+ 
+  namedRef wellUnderstoodPaper (S "Well-Understood Paper") +:+ S "discussing key concepts."

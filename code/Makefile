@@ -492,16 +492,17 @@ deploy: analysis graphs convertAnalyzed packagedeps docs tex doxygen ##@Deploy G
 
 # Removes all generated folders.
 $(filter $(CLEAN_GF_PREFIX)%, $(CLEAN_FOLDERS)): $(CLEAN_GF_PREFIX)%:
-	- rm -rf "./$*/"
+	rm -rf "./$*/"
 
 clean_artifacts: $(CLEAN_FOLDERS) ##@Cleaning Remove generated artifacts & folders. (alt.: cleanArtifacts)
-	- rm -f "$(CACHED_MSV_FILE)"
+	rm -f "./$(CACHED_MSV_FILE)"
 
 # TODO: HELP_FUN's pattern match ignores targets with aliases, this is a temporary exterior alias until we fix it.
 cleanArtifacts: clean_artifacts
 
 clean: clean_artifacts ##@Cleaning Fully clean all generated builds, artifacts, & folders.
-	- stack clean
+	find . -type d -name '.hie' -exec rm -rf {} + 
+	stack clean
 
 #--------------------------#
 #--- Help & Information ---#

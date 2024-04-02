@@ -18,6 +18,9 @@
 resolver:
   url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/20/20.yaml
 
+ghc-options:
+  "$everything": -fwrite-ide-info -hiedir=.hie
+
 # User packages to be built.
 # Various formats can be used as shown in the example below.
 #

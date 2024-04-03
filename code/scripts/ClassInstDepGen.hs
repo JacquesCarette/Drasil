@@ -1,6 +1,6 @@
 #!/usr/bin/env stack
 {- stack script
-   --resolver lts-20.20
+   --resolver lts-20.26
    --package split
    --package directory,filepath
    --package text

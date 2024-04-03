@@ -11,7 +11,7 @@
 --   minimal set of transitive dependencies, since it is intended to be
 --   depended upon by user code.
 @package ghc-boot-th
-@version 9.2.7
+@version 9.2.8
 
 module GHC.ForeignSrcLang.Type
 

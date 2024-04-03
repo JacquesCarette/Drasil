@@ -6,6 +6,7 @@ desktop.ini
 # Editors
 .idea
 .vscode
+.direnv
 
 # Drasil/Haskell
 *.cabal

@@ -6,6 +6,12 @@ import Language.Drasil
 
 -- * About Section
 
+-- | Reusable wiki page sentence.
+wikiSentenceComma :: Sentence
+wikiSentenceComma = S "wiki page,"
+wikiSentence :: Sentence
+wikiSentence = S "wiki page"
+
 -- | Creates the about section.
 aboutSec :: Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> 
   Reference -> Reference -> Reference -> Reference -> Reference -> Section
@@ -69,8 +75,8 @@ futureGeneratedArtifacts = enumBulletU $ map foldlSent_
 
 -- | Paragraph describing information encoding
 aboutParagraph5 :: Reference -> Sentence
-aboutParagraph5 infoEncodingWiki = S "As described in the" +:+ namedRef infoEncodingWiki (S "Information Encoding") +:+ S " wiki page, \
-  \Drasil uses specific terminology to address types of \
+aboutParagraph5 infoEncodingWiki = S "As described in the" +:+ namedRef infoEncodingWiki (S "Information Encoding") +:+ S " " +:+ 
+  wikiSentenceComma +:+ S "Drasil uses specific terminology to address types of \
   \knowledge for the purpose of encoding information, since we know that we want to eventually generate words, sentences, paragraphs, \
   \whole documents with headings, references, formulas, tables, graphs, and code. This is done by trying to understand the basic 'units' \
   \of all artifacts, and methods for composing larger structures from these units. The removal of duplicate units is an important feature \
@@ -79,7 +85,8 @@ aboutParagraph5 infoEncodingWiki = S "As described in the" +:+ namedRef infoEnco
 
 -- | Paragraph describing chunks
 aboutParagraph6 :: Reference -> Sentence
-aboutParagraph6 chunksWiki = S "As described in the" +:+ namedRef chunksWiki (S "Chunks") +:+ S "wiki page, a chunk is a data type specialized \
+aboutParagraph6 chunksWiki = S "As described in the" +:+ namedRef chunksWiki (S "Chunks") +:+ wikiSentenceComma +:+
+  S "a chunk is a data type specialized \
   \in holding a specific type of information for \
   \a specific purpose so that knowledge may be used in generated models, definitions, and theories. Chunks are usually made up of several \
   \lower-level types that hold lower-lever information; when contained together, these pieces of lower-level information hold a new specific \
@@ -88,7 +95,8 @@ aboutParagraph6 chunksWiki = S "As described in the" +:+ namedRef chunksWiki (S 
 
 -- | Paragraph describing recipes
 aboutParagraph7 :: Reference -> Sentence
-aboutParagraph7 recipesWiki= S "As described in the" +:+ namedRef recipesWiki (S "Recipes") +:+ S "wiki page, recipes are instructions that \
+aboutParagraph7 recipesWiki= S "As described in the" +:+ namedRef recipesWiki (S "Recipes") +:+ wikiSentenceComma +:+
+  S "recipes are instructions that \
   \unpackage necessary information from chunks and send \
   \that information to Drasil generators/printers to build complete artifacts. When an artifact needs to be changed, the recipe is modified to \
   \unpackage the additional necessary information from a chunk, or alternatively to omit unpackaging information that is no longer required."
@@ -103,7 +111,7 @@ aboutParagraph8 paperGOOL = S "As described in the" +:+ namedRef paperGOOL (S "G
 aboutParagraph9 :: Reference -> Reference -> Reference -> Reference -> Sentence
 aboutParagraph9 papersWiki icsePositionPaper danPoster wellUnderstoodPaper = 
   S "A list of papers and documents written about Drasil can be found in the" +:+ 
-  namedRef papersWiki (S "Drasil Papers and Documents") +:+ S "wiki page. In particular, there is a" +:+ 
+  namedRef papersWiki (S "Drasil Papers and Documents") +:+. wikiSentence +:+ S "In particular, there is a" +:+ 
   namedRef icsePositionPaper (S "Old Position Paper") +:+ S "outlining our original ideas, a" +:+ 
   namedRef danPoster (S "Drasil Poster") +:+ S ", and a" +:+ 
   namedRef wellUnderstoodPaper (S "Well-Understood Paper") +:+ S "discussing key concepts."

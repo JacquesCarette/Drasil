@@ -133,11 +133,75 @@ SmithSciSoft, the two generators are defined using finer components:
    programming language options (amongst other generic software project options,
    e.g., modularity, logging, etc.).
 
+Note that these 3 terms do _not_ appear in the code. They are only discussed for
+the purposes of this document for the sake of explaining the real "story" the
+code is telling.
+
+## Taking a Closer Look at Drasil
+
+### Inputs
+
+<hr>
+
+TODO: Discuss:
+* `drasil-example`
+* `drasil-sysinfo`
+* `drasil-database`
+* `drasil-theory`
+* `drasil-lang`
+* `drasil-data`
+* `drasil-docLang`
+
+<hr>
+
+### Outputs
+
+<hr>
+
+TODO: Discuss:
+* `drasil-build`
+* `drasil-gool`
+* `drasil-printers`
+
+<hr>
+
+### Mapping
+
+The following code is from Projectile's [Main generation orchestration
+code](../code/drasil-example/projectile/app/Main.hs) (the important bits,
+rather):
+```haskell
+main :: IO ()
+main = do
+  ...
+  gen (DocSpec (docChoices SRS [HTML, TeX, JSON]) "Projectile_SRS") srs printSetting
+  gen (DocSpec (docChoices Jupyter [])      "Projectile Lesson") PL.nb PL.printSetting
+  genCodeWithChoices choiceCombos
+  ...
+```
+
+The two `gen` IO operations correspond to DocRender, while `genCodeWithChoices`
+here more so correspond to
 
 <hr>
 
 TODO:
 * Discuss the flow of each of the "big" generators at a finer grain, discussing
   the packages related to them.
+* `drasil-code`
+* `drasil-codeLang`
+* `drasil-gen`
+* `drasil-metadata`
+* `drasil-printers`
+
+<hr>
+
+### Extras
+
+<hr>
+
+TODO: Discuss:
+* `drasil-utils`
+* `drasil-website`
 
 <hr>

@@ -33,11 +33,13 @@ occurs and a derivation of said calculations from physics theory.
 
 ### Mathematics
 
-<hr>
-
-TODO: Basic drawing of the mathematics related to Projectile.
-
-<hr>
+Given a target position distance ($p_{target}$, in $m$ from the launcher), and
+launch speed ($v_i$) and angle ($\theta$), we can calculate the landing position
+of the projectile ($p_{land}$) and determine if the projectile successfully hit
+the target ($h$) within a reasonable tolerance ($\epsilon$) using the following
+system of equations:
+1. $p_{land} = \frac{2 v_i \sin{}(\theta{})\cos{}(\theta{})}{g}$
+2. $h = |p_{land} - p_{target}| < \epsilon$
 
 ### Drasil
 

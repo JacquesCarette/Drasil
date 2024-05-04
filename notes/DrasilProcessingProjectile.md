@@ -1,4 +1,4 @@
-# Understanding Drasil's implementation through examining how Drasil processes case studies
+# How Drasil's Implementation Works: Examining Projectile
 
 ## DOCUMENT META-INFORMATION
 
@@ -14,7 +14,7 @@ Key assumptions and notes:
 * Drasil-specific terminology and acronyms will either be common (and assumed)
   or created (and defined) for the purposes of this document.
 
-However, it is not assumed that:
+However, we will not assume that:
 * Readers understand the background theory of Drasil (unimportant to this
   document).
 * Readers understand how Drasil's implementation works (the objective of this
@@ -43,9 +43,10 @@ system of equations:
 
 ### Drasil
 
-Modelled after an original, manually created Software Requirements
-Specifications (SRS) and corresponding software artifacts, the Projectile case
-study was reconstructed in Drasil.
+Modelled after an
+[original](https://github.com/smiths/caseStudies/tree/master/CaseStudies/projectile)
+project containing manually created Software Requirements Specifications (SRS)
+and software artifacts, the Projectile case study was reconstructed in Drasil.
 
 #### Outputs
 
@@ -110,7 +111,7 @@ TODO:
 
 #### Mapping
 
-The generation of the outputs is enabled through two major sub-generators:
+Two major sub-generators enable the production of the outputs:
 1. a rendering of the Scientific Computing Software (SCS) SRS-related knowledge
    into HTML/LaTeX/JN (_DocRender_), and
 2. a knowledge-extraction transformation alongside user-defined polyfills that
@@ -122,8 +123,8 @@ Together, these two generators form the major SCS product family compiler
 SmithSciSoft, the two generators are defined using finer components:
 
 1. DocRender is enabled by first building the layout using the SRS document
-   language description language, transforming it into the generic document
-   language, and then finally rendering that artifact into the document flavours
+   description language, transforming it into the generic document language, and
+   then finally rendering that artifact into the document flavours
    (HTML/LaTeX/JN).
 2. CodeGen is enabled by first extracting the system of equations derived in an
    SCS SRS (SCSRS?) and, where needed, applying user-defined polyfills, such
@@ -137,22 +138,24 @@ Note that these 3 terms do _not_ appear in the code. They are only discussed for
 the purposes of this document for the sake of explaining the real "story" the
 code is telling.
 
-## Taking a Closer Look at Drasil
+## Taking a Closer Look at Drasil & its Packages
 
 ### Inputs
 
-<hr>
-
-TODO: Discuss:
+The true "inputs" to Drasil are:
 * `drasil-example`
+* `drasil-data`
+
+The packages most relevant to gathering everything nicely to tell a final
+"large" story are:
 * `drasil-sysinfo`
 * `drasil-database`
+
+The packages most relevant to _defining_ the structure of the SRS inputs and
+scientific knowledge are:
 * `drasil-theory`
 * `drasil-lang`
-* `drasil-data`
 * `drasil-docLang`
-
-<hr>
 
 ### Outputs
 

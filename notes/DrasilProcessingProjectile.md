@@ -282,6 +282,12 @@ code is telling.
 
 ## Taking a Closer Look at Drasil & its Packages
 
+Conflating "Drasil" with SSS, we can 
+
+
+Now, we can take a look at the aforementioned 3 key points of interest in Drasil
+and where they're found in the codebase.
+
 ### Inputs
 
 The true "inputs" to Drasil are:

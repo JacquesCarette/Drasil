@@ -469,8 +469,9 @@ data DocSection = TableOfContents                       -- ^ Table of Contents
 <summary>
 
 `drasil-sysinfo` contains the definition of the `SystemInformation` chunk type,
-declaring a single input-calculate-output “system,” which is the only kind of
-system that Drasil currently generates (executable) code for.
+declaring a single input-calculate-output “system” (a specific category of SCS),
+which is the only kind of system that Drasil currently generates (executable)
+code for.
 
 </summary>
 
@@ -588,16 +589,42 @@ main = do
 The two `gen` IO operations correspond to DocRender, while `genCodeWithChoices`
 corresponds to CodeGen.
 
-<hr>
+#### `drasil-code`
 
-TODO: Discuss the flow of each of the “large” generators at a finer grain,
-discussing the packages related to them:
-* `drasil-code`
-* `drasil-docLang`
-* `drasil-gen`
-* `drasil-printers`
+`drasil-code` corresponds with CodeGen, consisting of a few important
+components:
+1. an encoding of ICO-style problems (and their solution schematics) called
+   [`CodeSpec`](../code/drasil-code/lib/Language/Drasil/CodeSpec.hs), focused on
+   their representation in “code,”
+2. a [renderer of said
+   encodings](../code/drasil-code/lib/Language/Drasil/CodeSpec.hs) (1) into GOOL
+   programs using an off-the-shelf design and including user-provided code
+   polyfills, and
+3. an extraction tool that attempts to create (1) using the knowledge gathered
+   in the abstract SCS system.
 
-<hr>
+#### `drasil-docLang`
+
+`drasil-docLang` corresponds to DocRender, containing a language for building
+SRS documents (`SRSDecl`), tools to help the construction of them (smart
+constructors), and a renderer (`mkDoc`) for the SRS documents to the generic
+printing language of `drasil-printers`.
+
+#### `drasil-gen`
+
+`drasil-gen` wraps all of our transformers and renderers into a handful of tools
+that, together, make up SmithSciSoft.
+
+#### `drasil-printers`
+
+As mentioned earlier, `drasil-printers` contains renderers that transform
+various mathematical constructions, symbols, natural language, and other
+SRS-related content into its generic document language for further printing into
+one of the supported output document flavours:
+* LaTeX,
+* HTML,
+* Jupyter Notebooks, and
+* a plaintext variant for debugging purposes.
 
 ### Extras
 

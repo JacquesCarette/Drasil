@@ -364,14 +364,16 @@ related to the SRS and common concepts in science.
 By and large, `drasil-example` and `drasil-data` contain *instances* of
 knowledge that is used *by* Drasil to do whatever we ask of Drasil to do (i.e.,
 generate software artifacts). However, in order for Drasil to understand how to
-work with this “external” data, we need to define their structure (syntax). This
-is largely done through the chunks defined in `drasil-theory`, `drasil-lang`,
-and `drasil-docLang`.
+work with this “external” data, we need to define their structure (syntax).
+Other than these two projects, all other `drasil-*` projects relate to inner
+workings and capabilities of Drasil. As related to the “inputs” to Drasil, is
+largely done through the chunks defined in `drasil-theory`, `drasil-lang`, and
+`drasil-docLang`.
 
 #### `drasil-theory`
 
-`drasil-theory` defines the concepts related to the “theory” types found in the
-SRS format:
+`drasil-theory` defines the concepts related to the “theory” *types* found in
+the SRS:
 * `DataDefinition`: Definitions that we just assume of mathematical variables in
   the project.
 * `TheoryModel`: Theories from textbooks that we use to logically develop

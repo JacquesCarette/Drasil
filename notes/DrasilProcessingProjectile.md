@@ -62,7 +62,7 @@ artifacts](../code/stable/projectile/):
 * An SRS (describing the problem) in...
   * LaTeX,
   * HTML, and
-  * the work-in-progress Jupyter Notebooks (JN).
+  * (work-in-progress) Jupyter Notebooks (JN).
 * A corresponding software (the solution) in various languages (Java, C++,
   Python, Swift, and C#) and with various options for each language...
   * program modularity (splitting up the code into several files for
@@ -280,6 +280,13 @@ Note that these 3 terms do _not_ appear in the code. They are only discussed for
 the purposes of this document for the sake of explaining the real “story” the
 code is telling.
 
+#### Limitations
+
+The most important limitation to note is that Drasil is currently limited to
+generating code for Input-Calculate-Output (ICO) style scientific problems, with
+further restrictions on what calculations and expressions it supports (e.g.,
+vectors and matrices are insufficiently supported).
+
 ## Taking a Closer Look at Drasil & its Packages
 
 Assuming that Drasil is largely focused on building SmithSciSoft (i.e., ignoring
@@ -292,6 +299,7 @@ The true “inputs” (i.e., in the sense that this is the _data_ that Drasil
 manipulates at runtime) to Drasil are:
 * `drasil-example`
 * `drasil-data`
+* `drasil-metadata`
 
 The packages most relevant to _defining_ the structure of the SRS inputs and
 scientific knowledge are:
@@ -361,14 +369,21 @@ repository of knowledge fragments that can be imported and used. For example, it
 contains theories and constants related to physics, and a myriad of concepts
 related to the SRS and common concepts in science.
 
-By and large, `drasil-example` and `drasil-data` contain *instances* of
-knowledge that is used *by* Drasil to do whatever we ask of Drasil to do (i.e.,
-generate software artifacts). However, in order for Drasil to understand how to
-work with this “external” data, we need to define their structure (syntax).
-Other than these two projects, all other `drasil-*` projects relate to inner
-workings and capabilities of Drasil. As related to the “inputs” to Drasil, is
-largely done through the chunks defined in `drasil-theory`, `drasil-lang`, and
-`drasil-docLang`.
+#### `drasil-metadata`
+
+Similar to `drasil-data`, `drasil-metadata` contains “data,” however the nature
+of the data in `drasil-metadata` is intended to be “meta” to the other packages.
+Currently, that largely coincides with concepts/terminology used _in_ the
+Haskell code and Drasil's version information (for use in Drasil's artifacts).
+
+By and large, `drasil-example`, `drasil-data`, `drasil-metadata` contain
+*instances* of knowledge that are used *by* Drasil to do whatever we ask of
+Drasil to do (i.e., generate software artifacts). However, in order for Drasil
+to understand how to work with this “external” data, we need to define their
+structure (syntax). Other than these two projects, all other `drasil-*` projects
+relate to inner workings and capabilities of Drasil. As related to the “inputs”
+to Drasil, is largely done through the chunks defined in `drasil-theory`,
+`drasil-lang`, and `drasil-docLang`.
 
 #### `drasil-theory`
 
@@ -389,30 +404,171 @@ theories, for use in inter-document references and discussion in the SRS.
 
 #### `drasil-lang`
 
-TODO
+Most of the other packages were extracted from `drasil-lang`, but the action of
+moving away all relevant chunks and files out of `drasil-lang` has not quite
+been completed. Currently, `drasil-lang` contains a variety of chunks related
+to:
+* declaring concepts (`ConceptInstance`, `ConceptChunk`, `IdeaDict`),
+* building natural language expressions (`Sentence`, `NounPhrase`,
+  `Capitalization`, `NP`, etc.),
+* declaring references to people (`People`),
+* building URIs (`URI`),
+* math:
+  * declaring pretty mathematical symbols (`Symbol`),
+  * declaring quantities (`QuantityDict`, `UnitaryChunk` [enforces units]),
+  * defining quantities (`QDefinition`, `DefinedQuantityDict`, `UnitalChunk`
+    [defined quantity with a unit]),
+  * building mathematical expressions (`Expr`, `ModelExpr`) and literals
+    (`Literal`),
+  * mathematical types (`Space`),
+  * building mathematical derivations (`Derivation`),
+  * declaring units (`UDefn`, `UnitDefn`, `UnitEquation`),
+  * constraints and uncertainties around quantities (`Uncertainty`,
+    `ConstrainedChunk`, `ConstrConcept`),
+  * mathematical relations (`RelationConcept`),
+  * ODEs (`DifferentialModel`),
+* (SRS-biased) documents: content, references, citations, etc.,
+* the code generator: `CodeVarChunk`, `CodeChunk`, and
+* Unique (chunk) Identifiers (`UID`).
+
+`drasil-lang` is not used for any kind of rendering, only declaring chunks and
+languages.
 
 #### `drasil-docLang`
 
-TODO
+`drasil-docLang` declares the structure of an SRS document (declaring the
+sections of the SRS) and includes a renderer for said SRS into `Doc`s and tools
+to populate the SRS with information from a `SystemInformation`. This structure
+is used to configure how we want to present an abstract SCS system as an SRS.
+
+```haskell
+-- | A Software Requirements Specification Declaration is made up of all necessary sections ('DocSection's).
+type SRSDecl = [DocSection]
+
+-- | Contains all the different sections needed for a full SRS ('SRSDecl').
+data DocSection = TableOfContents                       -- ^ Table of Contents
+                | RefSec DL.RefSec                      -- ^ Reference.
+                | IntroSec DL.IntroSec                  -- ^ Introduction.
+                | StkhldrSec DL.StkhldrSec              -- ^ Stakeholders.
+                | GSDSec DL.GSDSec                      -- ^ General System Description.
+                | SSDSec SSDSec                         -- ^ Specific System Description.
+                | ReqrmntSec ReqrmntSec                 -- ^ Requirements.
+                | LCsSec                                -- ^ Likely Changes.
+                | UCsSec                                -- ^ Unlikely Changes.
+                | TraceabilitySec DL.TraceabilitySec    -- ^ Traceability.
+                | AuxConstntSec DL.AuxConstntSec        -- ^ Auxiliary Constants.
+                | Bibliography                          -- ^ Bibliography.
+                | AppndxSec DL.AppndxSec                -- ^ Appendix.
+                | OffShelfSolnsSec DL.OffShelfSolnsSec  -- ^ Off the Shelf Solutions.
+```
 
 #### `drasil-sysinfo`
 
-TODO
+<details>
+
+<summary>
+
+`drasil-sysinfo` contains the definition of the `SystemInformation` chunk type,
+declaring a single input-calculate-output “system,” which is the only kind of
+system that Drasil currently generates (executable) code for.
+
+</summary>
+
+```haskell
+-- | Data structure for holding all of the requisite information about a system
+-- to be used in artifact generation.
+data SystemInformation where
+ SI :: (CommonIdea a, Idea a, Idea b, HasName c,
+  Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f,
+  Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i,
+  HasUID j, Constrained j) => 
+  { _sys         :: a
+  , _kind        :: b
+  , _authors     :: [c]
+  , _purpose     :: Purpose
+  , _background  :: Background
+  , _quants      :: [e]
+  , _concepts    :: [f]
+  , _instModels  :: [InstanceModel]
+  , _datadefs    :: [DataDefinition]
+  , _configFiles :: [String]
+  , _inputs      :: [h]
+  , _outputs     :: [i]
+  , _defSequence :: [Block SimpleQDef]
+  , _constraints :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
+  , _constants   :: [ConstQDef]
+  , _sysinfodb   :: ChunkDB
+  , _usedinfodb  :: ChunkDB
+  , refdb        :: ReferenceDB
+  } -> SystemInformation
+```
+
+</details>
 
 #### `drasil-database`
 
-TODO
+`drasil-database` contains the `ChunkDB` type definition, the in-memory chunk
+database we use to record all chunks we use in a project. Currently, that is the
+extent to which `ChunkDB` is used. However, `ChunkDB` [will
+eventually](https://github.com/JacquesCarette/Drasil/issues/2873) support some
+desired features:
+* gradual `ChunkDB` growth,
+* unrestricted types permitted (right now it has a limited number of chunk types
+  that can be appended to it),
+* ensuring added chunks all have their chunk dependencies also contained in the
+  `ChunkDB` (i.e., recorded), and
+* running “checks” not expressible with Haskell's type system against each added
+  chunk (i.e., complex constraints, such as multiplicity of attributes,
+  type-checking, etc.).
 
 ### Outputs
 
-<hr>
-
-TODO: Discuss:
+All “outputs” (software artifacts) of Drasil are rendered into
+[`Doc`s](https://hackage.haskell.org/package/pretty-1.1.3.6/docs/Text-PrettyPrint.html)
+before being written to the host machine. Only a handful of Drasil's libraries
+deal with external software artifacts:
 * `drasil-build`
+* `drasil-code`
 * `drasil-gool`
 * `drasil-printers`
 
-<hr>
+#### `drasil-build`
+
+`drasil-build` contains a partial (non-spec.) encoding of
+[Makefiles](https://www.gnu.org/software/make/manual/make.html). Other packages
+can use `drasil-build` to construct abstract Makefiles and then also use
+`drasil-build` to render the Makefile ASTs into `Doc`s.
+
+#### `drasil-code`
+
+For the purposes of the *outputs*, `drasil-code` contains a
+[copy](../code/drasil-code/lib/Language/Drasil/Code/Imperative/Doxygen/Import.hs)
+of the default [Doxygen](https://www.doxygen.nl/) configuration file.
+
+#### `drasil-gool`
+
+`drasil-gool` contains the AST of GOOL in addition to several GOOL renderers (to
+`Doc`s, not other ASTs):
+* Python
+* Java
+* C++
+* C#
+* Swift
+
+To recall, [GOOL](https://arxiv.org/abs/1911.11824) is the Generic
+Object-Oriented Language that Drasil uses to compile abstract OO programs into
+various OO programming language flavours.
+
+#### `drasil-printers`
+
+`drasil-printers` contains:
+* a renderer that dumps chunk information from a `ChunkDB`,
+* a [GraphViz DOT](https://graphviz.org/) language AST and `Doc` renderer,
+* shallow, (math-related software)-biased encodings of HTML, Markdown, and TeX
+  that produces `Doc`s, and
+* an abstract (math-related software)-biased document AST and `Doc` renderer, as
+  well as renderers to TeX and HTML, and from various chunk types from
+  `drasil-lang` (e.g., `Expr`, `Symbol`) and other packages.
 
 ### Mapping
 
@@ -430,26 +586,40 @@ main = do
 ```
 
 The two `gen` IO operations correspond to DocRender, while `genCodeWithChoices`
-here more so correspond to
+corresponds to CodeGen.
 
 <hr>
 
 TODO: Discuss the flow of each of the “large” generators at a finer grain,
 discussing the packages related to them:
 * `drasil-code`
-* `drasil-codeLang`
+* `drasil-docLang`
 * `drasil-gen`
-* `drasil-metadata`
 * `drasil-printers`
 
 <hr>
 
 ### Extras
 
-<hr>
+#### `drasil-utils`
 
-TODO: Discuss:
-* `drasil-utils`
-* `drasil-website`
+As with most programming projects, a “utilities” folder is helpful. For us, it
+is important to heed two notes, however:
+1. none of the utilities can involve chunks at all,
+2. the utilities are restricted in scope to supplementing the standard `base`
+   library for our common needs.
 
-<hr>
+#### `drasil-website`
+
+`drasil-website` is the Drasil-based project we use to generate the website. It
+is a work-in-progress, pending analysis to better understand its needs and make
+sure we're building the project “the Drasil way.”
+
+#### `drasil-codeLang`
+
+This package has not quite found its meaning yet, it currently houses only the
+following type alias:
+
+```haskell
+type Comment = String
+```

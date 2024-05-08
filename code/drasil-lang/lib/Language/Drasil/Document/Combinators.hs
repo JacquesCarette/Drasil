@@ -21,8 +21,8 @@ module Language.Drasil.Document.Combinators (
 
 import Language.Drasil.Chunk.Concept.Core ( ConceptChunk )
 import Language.Drasil.Chunk.Quantity (DefinesQuantity(defLhs))
-import Language.Drasil.Chunk.UnitDefn ( UnitDefn, MayHaveUnit(..) )
-import Language.Drasil.Chunk.Unital ( UnitalChunk )
+import Language.Drasil.Chunk.UnitDefn (UnitDefn, MayHaveUnit(..))
+import Language.Drasil.Chunk.Unital (Unital)
 import Language.Drasil.Classes
     ( HasUnitSymbol(usymb),
       Quantity,
@@ -89,8 +89,8 @@ eqN n = S "Equation" +:+ sParen (S $ show n)
 eqnWSource :: (Referable r, HasShortName r) => ModelExpr -> r -> Sentence
 eqnWSource a b = eS a +:+ sParen (refS b)
 
--- | Takes a 'Referable' source and a 'UnitalChunk' and outputs as a 'Sentence': "From @source@ we can replace @symbol@:".
-fromReplace :: (Referable r, HasShortName r) => r -> UnitalChunk -> Sentence
+-- | Takes a 'Referable' source and a 'Unital' and outputs as a 'Sentence': "From @source@ we can replace @symbol@:".
+fromReplace :: (Referable r, HasShortName r) => r -> Unital -> Sentence
 fromReplace src c = S "From" +:+ refS src `sC` S "we can replace" +: ch c
 
 -- | Takes a list of 'Referable's and 'Symbol's and outputs as a Sentence "By substituting @symbols@, this can be written as:".

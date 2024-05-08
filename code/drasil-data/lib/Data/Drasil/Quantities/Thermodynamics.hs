@@ -11,7 +11,7 @@ import Data.Drasil.Units.Thermodynamics as UT (heatCapSpec, thermalFlux)
 
 -- * With Units
 
-boilPt, temp, heatCapSpec, htFlux, latentHeat, meltPt, sensHeat :: UnitalChunk
+boilPt, temp, heatCapSpec, htFlux, latentHeat, meltPt, sensHeat :: Unital
 
 boilPt        = uc CT.boilPt      (sub cT (label "boil")) Real centigrade
 temp          = uc CT.temp        cT                      Real centigrade

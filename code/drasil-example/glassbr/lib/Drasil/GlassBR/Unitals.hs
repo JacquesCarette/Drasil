@@ -22,10 +22,10 @@ import Drasil.GlassBR.Units (sFlawPU)
 
 {--}
 
-symbolsWithDefns :: [UnitalChunk]
+symbolsWithDefns :: [Unital]
 symbolsWithDefns = [modElas]
 
-modElas :: UnitalChunk
+modElas :: Unital
 modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")
   (S "the ratio of tensile stress to tensile strain of glass") cE Real pascal
 
@@ -190,7 +190,7 @@ symbols = [minThick, sflawParamK, sflawParamM, loadDur] ++
 
 minThick, sflawParamK, sflawParamM, sdx, sdy, sdz, loadDur :: UnitaryChunk
 
-demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight :: UnitalChunk
+demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight :: Unital
 
 demand      = uc demandq lQ Real pascal --correct Space used?
 

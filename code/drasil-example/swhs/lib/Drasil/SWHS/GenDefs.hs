@@ -76,7 +76,7 @@ htFluxPCMFromWaterQD = mkQuantDef htFluxP htFluxPCMFromWaterExpr
 htFluxPCMFromWaterExpr :: ModelExpr
 htFluxPCMFromWaterExpr = sy pcmHTC `mulRe` (apply1 tempW time $- apply1 tempPCM time)
 
-newtonLawNote :: UnitalChunk -> ConceptInstance -> ConceptChunk -> Sentence
+newtonLawNote :: Unital -> ConceptInstance -> ConceptChunk -> Sentence
 newtonLawNote u a c = foldlSent [ch u `S.is` S "found by assuming that",
   phrase lawConvCooling, S "applies" +:+. sParen (refS a), S "This law",
   sParen (S "defined" `S.in_` refS nwtnCooling) `S.is` S "used on",

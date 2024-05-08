@@ -27,7 +27,7 @@ defSymbols :: [DefinedQuantityDict]
 defSymbols = map dqdWr unitSymbs ++ map dqdWr inputConstraints ++
   map dqdWr outputConstraints
 
-unitSymbs :: [UnitalChunk]
+unitSymbs :: [Unital]
 unitSymbs = map ucw unitalChunks ++ map ucw [iVect, jVect, normalVect,
   force_1, force_2, forcej, mass_1, mass_2,
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
@@ -58,7 +58,7 @@ outputSymbols = map qw [QP.position, QP.velocity, QM.orientation,
   QP.angularVelocity, QP.chgMomentum, QP.chgInVelocity]
 
 
-unitalChunks :: [UnitalChunk]
+unitalChunks :: [Unital]
 unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel, 
   QP.impulseV, QP.impulseS, iVect, jVect, normalVect, QP.distance, QP.displacement, 
   QP.time, QP.angularDisplacement, posCM, posj, massj, mTot, accj, velj,
@@ -76,7 +76,7 @@ unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
 -----------------------
 --FIXME: parametrized hack
 --FIXME: "A" is not being capitalized when it should be.
-forceParam, massParam, timeParam :: String -> String -> Symbol -> UnitalChunk
+forceParam, massParam, timeParam :: String -> String -> Symbol -> Unital
 forceParam n w s = uc
  (dccWDS ("force" ++ n) (cn $ "force exerted by the " ++ w ++ 
   " body (on another body)") (phrase QP.force)) 
@@ -90,14 +90,14 @@ timeParam n w s = uc
  (dccWDS ("time" ++ n) (cn $ "time at a point in " ++ w ++ " body ") 
   (phrase QP.time)) (sub (eqSymb QP.time) s) Real second
 
-contParam :: String -> String -> Symbol -> Symbol -> UnitalChunk
+contParam :: String -> String -> Symbol -> Symbol -> Unital
 contParam n m w s = uc
  (dccWDS ("r_" ++ n ++ m) contdispN (phrase QP.displacement))
   (sub (eqSymb QP.displacement) (Concat [w, s])) Real metre
   where contdispN = cn $ "displacement vector between the centre of mass of rigid body " ++
                          n ++ " and contact point " ++ m
 
-angParam, momtParam, perpParam, rigidParam, velBodyParam, velParam :: String -> Symbol -> UnitalChunk
+angParam, momtParam, perpParam, rigidParam, velBodyParam, velParam :: String -> Symbol -> Unital
 
 angParam n w = uc
  (dccWDS ("angular velocity" ++ n) (compoundPhrase'
@@ -138,7 +138,7 @@ iVect, jVect, normalVect, force_1, force_2, forcej, mass_1, mass_2,
   massA, massB, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
   momtInertK, pointOfCollision, contDispK, collisionImpulse, finRelVel,
-  velAP, velBP, time_1, time_2, velo_1, velo_2, rRot, mLarger, distMass, dVect :: UnitalChunk
+  velAP, velBP, time_1, time_2, velo_1, velo_2, rRot, mLarger, distMass, dVect :: Unital
 
 iVect = uc (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) 

@@ -27,17 +27,17 @@ inputs = map qw [lenRod, QPP.mass, QP.angularAccel, pendDisplacementAngle, initi
 outputs :: [QuantityDict]
 outputs = [qw pendDisplacementAngle]
 
-units :: [UnitalChunk]
+units :: [Unital]
 units = map ucw unitalChunks
 
-unitalChunks :: [UnitalChunk]
+unitalChunks :: [Unital]
 unitalChunks = [lenRod, QPP.mass, QP.force, QP.ixPos, QP.xPos, QP.yPos,
    QP.angularVelocity, QP.angularAccel, QP.gravitationalAccel, QP.tension, QP.acceleration,
    QP.yAccel, QP.xAccel, QP.yVel, QP.xVel, QP.iyPos, QP.time, QP.velocity, QP.position, QP.torque,
    QP.momentOfInertia, QP.angularDisplacement, QP.angularVelocity, initialPendAngle,
    QP.angularFrequency, QP.frequency, QP.period, lenRod, pendDisplacementAngle, initialPendAngle]
 
-lenRod, pendDisplacementAngle, initialPendAngle :: UnitalChunk
+lenRod, pendDisplacementAngle, initialPendAngle :: Unital
 
 lenRod = uc' "l_rod" (cn "length of the rod")
         (phraseNP (len `the_ofThe` rod))

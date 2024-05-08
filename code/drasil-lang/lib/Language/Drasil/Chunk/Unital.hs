@@ -2,7 +2,7 @@
 -- | Defines chunks to add units to a quantity. Similar to 'UnitaryChunk'.
 module Language.Drasil.Chunk.Unital (
   -- * Chunk Type
-  UnitalChunk(..),
+  Unital(..),
   -- * Constructors
   uc, uc', ucStaged, ucStaged', ucuc, ucw) where
 
@@ -22,72 +22,72 @@ import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.UID (HasUID(..))
 
--- | Similar to a `DefinedQuantityDict`, UnitalChunks are concepts
+-- | Similar to a `DefinedQuantityDict`, Unitals are concepts
 -- with quantities that must have a unit definition.
 -- Contains 'DefinedQuantityDict's and a 'UnitDefn'.
 --
 -- Ex. A pendulum arm is a tangible object with a symbol (l) and units (cm, m, etc.).
-data UnitalChunk = UC { _defq' :: DefinedQuantityDict
+data Unital = UC { _defq' :: DefinedQuantityDict
                       , _uni :: UnitDefn
                       }
-makeLenses ''UnitalChunk
+makeLenses ''Unital
 
--- | Finds 'UID' of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
-instance HasUID        UnitalChunk where uid = defq' . uid
--- | Finds term ('NP') of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
-instance NamedIdea     UnitalChunk where term = defq' . term
--- | Finds the idea contained in the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
-instance Idea          UnitalChunk where getA (UC qc _) = getA qc
--- | Finds definition of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
-instance Definition    UnitalChunk where defn = defq' . defn
--- | Finds the domain contained in the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
-instance ConceptDomain UnitalChunk where cdom = cdom . view defq'
--- | Finds the 'Space' of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
-instance HasSpace      UnitalChunk where typ = defq' . typ
--- | Finds the 'Symbol' of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
-instance HasSymbol     UnitalChunk where symbol c = symbol (c^.defq')
--- | 'UnitalChunk's have a 'Quantity'.
-instance Quantity      UnitalChunk where 
--- | Finds the unit definition of a 'UnitalChunk'.
-instance Unitary       UnitalChunk where unit = view uni
--- | Finds the units used to make the 'UnitalChunk'.
-instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
--- | Finds the units used to make the 'UnitalChunk'.
-instance TempHasUnit       UnitalChunk where findUnit = view uni   
+-- | Finds 'UID' of the 'DefinedQuantityDict' used to make the 'Unital'.
+instance HasUID        Unital where uid = defq' . uid
+-- | Finds term ('NP') of the 'DefinedQuantityDict' used to make the 'Unital'.
+instance NamedIdea     Unital where term = defq' . term
+-- | Finds the idea contained in the 'DefinedQuantityDict' used to make the 'Unital'.
+instance Idea          Unital where getA (UC qc _) = getA qc
+-- | Finds definition of the 'DefinedQuantityDict' used to make the 'Unital'.
+instance Definition    Unital where defn = defq' . defn
+-- | Finds the domain contained in the 'DefinedQuantityDict' used to make the 'Unital'.
+instance ConceptDomain Unital where cdom = cdom . view defq'
+-- | Finds the 'Space' of the 'DefinedQuantityDict' used to make the 'Unital'.
+instance HasSpace      Unital where typ = defq' . typ
+-- | Finds the 'Symbol' of the 'DefinedQuantityDict' used to make the 'Unital'.
+instance HasSymbol     Unital where symbol c = symbol (c^.defq')
+-- | 'Unital's have a 'Quantity'.
+instance Quantity      Unital where 
+-- | Finds the unit definition of a 'Unital'.
+instance Unitary       Unital where unit = view uni
+-- | Finds the units used to make the 'Unital'.
+instance MayHaveUnit   Unital where getUnit = Just . view uni
+-- | Finds the units used to make the 'Unital'.
+instance TempHasUnit       Unital where findUnit = view uni   
 -- | Equal if 'UID's are equal.
-instance Eq            UnitalChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
--- | Convert the symbol of the 'UnitalChunk' to a 'ModelExpr'.
-instance Express       UnitalChunk where express = sy
+instance Eq            Unital where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+-- | Convert the symbol of the 'Unital' to a 'ModelExpr'.
+instance Express       Unital where express = sy
 
 --{BEGIN HELPER FUNCTIONS}--
 
--- | Used to create a 'UnitalChunk' from a 'Concept', 'Symbol', and 'Unit'.
-uc :: (Concept c, IsUnit u) => c -> Symbol -> Space -> u -> UnitalChunk
+-- | Used to create a 'Unital' from a 'Concept', 'Symbol', and 'Unit'.
+uc :: (Concept c, IsUnit u) => c -> Symbol -> Space -> u -> Unital
 uc a sym space c = UC (dqd (cw a) sym space un) un
  where un = unitWrapper c
 
--- | Similar to 'uc', except it builds the 'Concept' portion of the 'UnitalChunk'
+-- | Similar to 'uc', except it builds the 'Concept' portion of the 'Unital'
 -- from a given 'UID', term, and definition (as a 'Sentence') which are its first three arguments.
-uc' :: (IsUnit u) => String -> NP -> Sentence -> Symbol -> Space -> u -> UnitalChunk
+uc' :: (IsUnit u) => String -> NP -> Sentence -> Symbol -> Space -> u -> Unital
 uc' i t d sym space u = UC (dqd (dccWDS i t d) sym space un) un
  where un = unitWrapper u
 
 -- | Similar to 'uc', but 'Symbol' is dependent on the 'Stage'.
 ucStaged :: (Concept c, IsUnit u) => c ->  (Stage -> Symbol) ->
-  Space -> u -> UnitalChunk
+  Space -> u -> Unital
 ucStaged a sym space u = UC (dqd' (cw a) sym space (Just un)) un
  where un = unitWrapper u
 
 -- | Similar to 'uc'', but 'Symbol' is dependent on the 'Stage'.
 ucStaged' :: (IsUnit u) => String -> NP -> Sentence -> (Stage -> Symbol) ->
-  Space -> u -> UnitalChunk
+  Space -> u -> Unital
 ucStaged' i t d sym space u = UC (dqd' (dccWDS i t d) sym space (Just un)) un
  where un = unitWrapper u
 
 -- | Attach units to a chunk that has a symbol and definition.
-ucuc :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitDefn -> UnitalChunk
+ucuc :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitDefn -> Unital
 ucuc c = UC (tempdqdWr' c)
 
--- | Constructs a UnitalChunk from a 'Concept' with 'Units'.
-ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> UnitalChunk
+-- | Constructs a Unital from a 'Concept' with 'Units'.
+ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> Unital
 ucw c = ucuc c (unit c)

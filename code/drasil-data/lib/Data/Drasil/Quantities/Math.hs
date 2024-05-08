@@ -28,7 +28,7 @@ euclidNorm  = dqdNoUnit CM.euclidN  (Atop Magnitude $ vec lD) Real
 
 -- * With Units
 
-area, diameter, surface, surArea, orientation :: UnitalChunk
+area, diameter, surface, surArea, orientation :: Unital
 
 area        = uc CM.area     cA   Real m_2
 diameter    = uc CM.diameter lD   Real metre

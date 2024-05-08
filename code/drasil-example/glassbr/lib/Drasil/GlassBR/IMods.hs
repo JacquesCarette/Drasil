@@ -25,7 +25,7 @@ iMods :: [InstanceModel]
 iMods = [risk, strDisFac, nonFL, dimLL, tolPre, tolStrDisFac, probOfBreak,
   calofCapacity, pbIsSafe, lrIsSafe]
 
-symb :: [UnitalChunk]
+symb :: [Unital]
 symb =  [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram,
   ucuc standOffDist metre, demand] -- this is temporary
 -- ++

@@ -31,7 +31,7 @@ symbols = dqdWr coords : map dqdWr inputs ++ map dqdWr outputs
   ++ map dqdWr units ++ map dqdWr unitless
 
 ---------------------------
--- Imported UnitalChunks --
+-- Imported Unitals --
 ---------------------------
 {-
 SM.mobShear, SM.shearRes <- currently not used
@@ -196,7 +196,7 @@ coords = constrainedNRV' (uc' "(x,y)" (cn "cartesian position coordinates")
 -- START OF UNITALCHUNKS --
 ---------------------------
 
-units :: [UnitalChunk]
+units :: [Unital]
 units = map ucw [accel, genericMass, genericF, genericA, genericM, genericV,
   genericW, genericSpWght, gravAccel, dens, genericH, genericP, genericR, 
   genericT, nrmShearNum, nrmShearDen, slipHght, xi, yi, zcoord, critCoords, 
@@ -217,7 +217,7 @@ accel, genericMass, genericF, genericA, genericM, genericV, genericW,
   impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, fx, fy, fn, ft, 
   nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, porePressure, 
   intNormForce, shrStress, totNormStress, tangStress, effectiveStress, 
-  effNormStress, dryVol, satVol, rotForce, momntArm, posVec :: UnitalChunk
+  effNormStress, dryVol, satVol, rotForce, momntArm, posVec :: Unital
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}

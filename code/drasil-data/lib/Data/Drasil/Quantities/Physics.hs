@@ -21,7 +21,7 @@ restitutionCoef :: DefinedQuantityDict
 restitutionCoef = dqdNoUnit CP.restitutionCoef (sub cC (label "R")) Real
 
 -- | Collects all physical quantities defined in this file for easy use in Drasil.
-physicscon :: [UnitalChunk]
+physicscon :: [Unital]
 physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
   chgInVelocity, constAccel, constAccelV, displacement, distance, energy, frequency,
   fSpeed, fVel, force, gravitationalAccel, gravitationalConst, gravitationalMagnitude,
@@ -42,7 +42,7 @@ acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   potEnergy, pressure, scalarAccel, scalarPos, speed, time, torque, velocity, weight, 
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist, yPos, 
   yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angularFrequency, 
-  period, frequency, chgMomentum :: UnitalChunk
+  period, frequency, chgMomentum :: Unital
 
 acceleration           = uc CP.acceleration           (Concat [vec lA, label "(", lT, label ")"]) (Vect Real) accelU
 angularAccel           = uc CP.angAccel               lAlpha                                      Real        angAccelU

@@ -32,7 +32,7 @@ symbolsAll = map qw symbols ++ map qw specParamValList ++
 
 -- Symbols with Units --
 
-units :: [UnitalChunk]
+units :: [Unital]
 units = map ucw [inSA, outSA, heatCapSpec, htCapL,
   htCapS, htCapV, sensHeat, pcmInitMltE,
   volHtGen, htTransCoeff, pcmMass, wMass, htFlux, latentHeat,
@@ -42,7 +42,7 @@ units = map ucw [inSA, outSA, heatCapSpec, htCapL,
   density, tau, tauLP, tauSP, tauW, thickness] ++
   map ucw [mass, time] -- ++ [tankLength, diam, coilSA]
 
-unitalChuncks :: [UnitalChunk]
+unitalChuncks :: [Unital]
 unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
   pcmInitMltE, volHtGen, htTransCoeff,
   pcmMass, wMass,
@@ -57,7 +57,7 @@ inSA, outSA, htCapL, htCapS, htCapV,
   thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
   tempEnv, tInitMelt,
   tFinalMelt, tankVol, wVol, deltaT,
-  tau, tauLP, tauSP, tauW, simTime, thickness:: UnitalChunk
+  tau, tauLP, tauSP, tauW, simTime, thickness:: Unital
 
 ---------------------
 -- Regular Symbols --

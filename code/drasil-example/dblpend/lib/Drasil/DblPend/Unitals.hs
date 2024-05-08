@@ -38,10 +38,10 @@ outputs = [qw pendDisAngle]
 constants :: [ConstQDef]
 constants = [gravitationalAccelConst]
 
-units :: [UnitalChunk]
+units :: [Unital]
 units = map ucw unitalChunks
 
-unitalChunks :: [UnitalChunk]
+unitalChunks :: [Unital]
 unitalChunks = [ 
   lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2,
   pendDisAngle_1, pendDisAngle_2, xVel_1, xVel_2, yVel_1, yVel_2,
@@ -54,7 +54,7 @@ lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2,
   pendDisAngle_1, pendDisAngle_2,
   xPos_1, xPos_2, yPos_1, yPos_2, xVel_1, yVel_1, xVel_2, yVel_2, xAccel_1,
   yAccel_1, xAccel_2, yAccel_2,
-  angularAccel_1, angularAccel_2, tension_1, tension_2 :: UnitalChunk
+  angularAccel_1, angularAccel_2, tension_1, tension_2 :: Unital
 
 lenRod_1 = uc' "l_1" (len `ofThe` firstRod)
         (phraseNP (len `the_ofThe` firstRod)) -- Fix me, can have more information 

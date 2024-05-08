@@ -13,10 +13,10 @@ import Data.Drasil.Units.Physics (velU)
 import qualified Drasil.Projectile.Concepts as C (flightDur, offset,
   flightDur, landPos, launAngle, launSpeed, offset, targPos, projSpeed, projPos)
 
-projSpeed :: UnitalChunk
+projSpeed :: Unital
 projSpeed = uc C.projSpeed (Concat [lV, label "(", lT, label ")"]) Real velU
 
-projPos :: UnitalChunk
+projPos :: Unital
 projPos = uc C.projPos (Concat [lP, label "(", lT, label ")"]) Real metre
 
 ---

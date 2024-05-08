@@ -9,7 +9,7 @@ import Data.Drasil.Concepts.PhysicalProperties as CPP (density, specWeight, len,
 import Data.Drasil.SI_Units (kilogram, metre, m_3, specificWeight)
 import Data.Drasil.Units.PhysicalProperties (densityU)
 
-density, specWeight, mass, len, vol :: UnitalChunk
+density, specWeight, mass, len, vol :: Unital
 density    = uc CPP.density    lRho   Real densityU
 specWeight = uc CPP.specWeight lGamma Real specificWeight
 mass       = uc CPP.mass       lM     Real kilogram

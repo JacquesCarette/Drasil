@@ -20,7 +20,7 @@ import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Expr.Lang (Expr(..))
-import Language.Drasil.Chunk.Unital (UnitalChunk)
+import Language.Drasil.Chunk.Unital (Unital)
 import Language.Drasil.ModelExpr.Class (ModelExprC(nthderiv, equiv))
 import Language.Drasil.Expr.Class (ExprC(..), columnVec)
 import Language.Drasil.Chunk.Constrained (ConstrConcept)
@@ -75,7 +75,7 @@ type LHS = [Term]
 -- | Describe the structural content of a system of linear ODEs with six necessary fields
 data DifferentialModel = SystemOfLinearODEs {
   -- | independent variable, often time
-  _indepVar :: UnitalChunk,
+  _indepVar :: Unital,
   -- | dependent variable
   _depVar :: ConstrConcept,
   -- | coefficients matrix
@@ -150,11 +150,11 @@ filterZeroCoeff :: [Expr] -> [ModelExpr] -> [(Expr, ModelExpr)]
 filterZeroCoeff es mes = filter (\x -> fst x /= exactDbl 0) $ zip es mes
 
 -- | Form all derivatives for the displaying purpose
-formAllUnknown :: [Unknown] -> ConstrConcept -> UnitalChunk -> [ModelExpr]
+formAllUnknown :: [Unknown] -> ConstrConcept -> Unital -> [ModelExpr]
 formAllUnknown unks dep ind = map (\x -> formAUnknown x dep ind) unks
 
 -- | Form a derivative for the displaying purpose
-formAUnknown :: Unknown -> ConstrConcept-> UnitalChunk -> ModelExpr
+formAUnknown :: Unknown -> ConstrConcept-> Unital -> ModelExpr
 formAUnknown unk'' dep = nthderiv (toInteger unk'') (sy (qw dep))
 
 -- |   Create a 'DifferentialModel' by giving a independent variable, a dependent variable a canonical matrix form, and conceptChuck.
@@ -166,7 +166,7 @@ formAUnknown unk'' dep = nthderiv (toInteger unk'') (sy (qw dep))
   conceptChuck: 
     uid ('String'), term ('NP'), definition ('Sentence').
 -}
-makeASystemDE :: UnitalChunk -> ConstrConcept -> [[Expr]] -> [Unknown] -> [Expr]-> String -> NP -> Sentence -> DifferentialModel
+makeASystemDE :: Unital -> ConstrConcept -> [[Expr]] -> [Unknown] -> [Expr]-> String -> NP -> Sentence -> DifferentialModel
 makeASystemDE indepVar' depVar' coeffs unks const' id' term' defn'
  | length coeffs /= length const' =
   error "Length of coefficients matrix should equal to the length of the constant vector"
@@ -177,7 +177,7 @@ makeASystemDE indepVar' depVar' coeffs unks const' id' term' defn'
  | otherwise = SystemOfLinearODEs indepVar' depVar' coeffs unks const'(dccWDS id' term' defn')
 
 -- | Create a 'DifferentialModel' by the input language
-makeASingleDE :: UnitalChunk -> ConstrConcept -> LHS -> Expr-> String -> NP -> Sentence -> DifferentialModel
+makeASingleDE :: Unital -> ConstrConcept -> LHS -> Expr-> String -> NP -> Sentence -> DifferentialModel
 makeASingleDE indepVar'' depVar'' lhs const'' id'' term'' defn''
  | length coeffs /= length [const''] =
   error "Length of coefficients matrix should equal to the length of the constant vector"

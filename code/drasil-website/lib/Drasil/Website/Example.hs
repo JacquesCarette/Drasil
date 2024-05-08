@@ -245,7 +245,7 @@ exampleRefs codePth srsDoxPth =
   concatMap getDoxRefDB (examples codePth srsDoxPth) ++ 
   map (getSRSRef srsDoxPth "html" . getAbrv) (examples codePth srsDoxPth) ++ 
   map (getSRSRef srsDoxPth "pdf" . getAbrv) (examples codePth srsDoxPth) ++ 
-  map (getSourceCodeRef) (examples codePth srsDoxPth)
+  map getSourceCodeRef (examples codePth srsDoxPth)
 
 -- | Helpers to pull code and doxygen references from an example.
 -- Creates a reference for every possible choice in every possible language.

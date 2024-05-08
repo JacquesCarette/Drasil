@@ -87,7 +87,7 @@ module Language.Drasil (
   , (+++), (+++.), (+++!)
   , nc, ncUID, IdeaDict , mkIdea
   , nw -- bad name (historical)
-  , CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..)
+  , CodeIdea(..), Code(..), CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..)
   , obv, qc, ccf, ccv, listToArray, programName, funcPrefix, DefiningCodeExpr(..)
   -- Language.Drasil.Chunk.CommonIdea
   , CI, commonIdea, getAcc, commonIdeaWithDict, prependAbrv
@@ -344,7 +344,7 @@ import Language.Drasil.Chunk.Citation (
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
   , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
   , cProceedings, cTechReport, cUnpublished)
-import Language.Drasil.Chunk.CodeVar (CodeIdea(..), CodeChunk(..), 
+import Language.Drasil.Chunk.CodeVar (CodeIdea(..), Code(..), 
   CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..), obv, qc, ccf, ccv, 
   listToArray, programName, funcPrefix, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CommonIdea

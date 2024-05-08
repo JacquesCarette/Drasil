@@ -13,23 +13,23 @@ import Control.Lens ((^.), makeLenses, view)
 -- | The definition may be specialized to use ODEs.
 data DefinitionType = Definition | ODE
 
--- | A chunk for pairing a mathematical definition with a 'CodeChunk'.
-data CodeDefinition = CD { _cchunk   :: CodeChunk
+-- | A chunk for pairing a mathematical definition with a 'Code'.
+data CodeDefinition = CD { _cchunk   :: Code
                          , _def      :: CodeExpr
                          , _auxExprs :: [CodeExpr]
                          , _defType  :: DefinitionType
                          }
 makeLenses ''CodeDefinition
 
--- | Finds the 'UID' of the 'CodeChunk' used to make the 'CodeDefinition'.
+-- | Finds the 'UID' of the 'Code' used to make the 'CodeDefinition'.
 instance HasUID           CodeDefinition where uid = cchunk . uid
--- | Finds the term ('NP') of the 'CodeChunk' used to make the 'CodeDefinition'.
+-- | Finds the term ('NP') of the 'Code' used to make the 'CodeDefinition'.
 instance NamedIdea        CodeDefinition where term = cchunk . term
--- | Finds the idea contained in the 'CodeChunk' used to make the 'CodeDefinition'.
+-- | Finds the idea contained in the 'Code' used to make the 'CodeDefinition'.
 instance Idea             CodeDefinition where getA = getA . view cchunk
--- | Finds the 'Space' of the 'CodeChunk' used to make the 'CodeDefinition'.
+-- | Finds the 'Space' of the 'Code' used to make the 'CodeDefinition'.
 instance HasSpace         CodeDefinition where typ = cchunk . typ
--- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'CodeDefinition'.
+-- | Finds the 'Stage' dependent 'Symbol' of the 'Code' used to make the 'CodeDefinition'.
 instance HasSymbol        CodeDefinition where symbol c = symbol (c ^. cchunk)
 -- | 'CodeDefinition's have a 'Quantity'.
 instance Quantity         CodeDefinition
@@ -42,7 +42,7 @@ instance CodeIdea         CodeDefinition where
   codeChunk = view cchunk
 -- | Equal if 'UID's are equal.
 instance Eq               CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
--- | Finds the units of the 'CodeChunk' used to make the 'CodeDefinition'.
+-- | Finds the units of the 'Code' used to make the 'CodeDefinition'.
 instance MayHaveUnit      CodeDefinition where getUnit = getUnit . view cchunk
 -- | Finds the defining expression of a CodeDefinition.
 instance DefiningCodeExpr CodeDefinition where codeExpr = def
@@ -53,11 +53,11 @@ instance DefiningCodeExpr CodeDefinition where codeExpr = def
 -- TODO: These below 3 functions that generate ``CodeDefinitions'' should be generalized
 --       It _might_ be good to create make a ``CanGenCodeDefinition''-like typeclass
 
--- | Constructs a 'CodeDefinition' where the underlying 'CodeChunk' is for a function.
+-- | Constructs a 'CodeDefinition' where the underlying 'Code' is for a function.
 qtoc :: (Quantity (q Expr), MayHaveUnit (q Expr), DefiningExpr q) => q Expr -> CodeDefinition
 qtoc q = CD (codeChunk $ quantfunc q) (expr $ q ^. defnExpr) [] Definition
 
--- | Constructs a 'CodeDefinition' where the underlying 'CodeChunk' is for a variable.
+-- | Constructs a 'CodeDefinition' where the underlying 'Code' is for a variable.
 qtov :: CanGenCode e => QDefinition e -> CodeDefinition
 qtov q = CD (codeChunk $ quantvar q) (toCodeExpr $ q ^. defnExpr) [] Definition
 

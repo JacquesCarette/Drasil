@@ -24,7 +24,7 @@ class CodeIdea c where
   -- | Name of the idea.
   codeName  :: c -> String
   -- | Code chunk associated with the idea.
-  codeChunk :: c -> CodeChunk
+  codeChunk :: c -> Code
 
 -- | A 'DefiningCodeExpr' must have it's underlying chunk 
 --   defined in the CodeExpr language.
@@ -48,64 +48,64 @@ data VarOrFunc = Var | Func
 
 -- | Basic chunk representation in the code generation context.
 -- Contains a QuantityDict and the kind of code (variable or function).
-data CodeChunk = CodeC { _qc  :: QuantityDict
+data Code = CodeC { _qc  :: QuantityDict
                        , kind :: VarOrFunc  -- TODO: Jason: Once we have function spaces, I believe we won't need to store this
                        }
-makeLenses ''CodeChunk
+makeLenses ''Code
 
--- | Finds the 'UID' of the 'QuantityDict' used to make the 'CodeChunk'.
-instance HasUID      CodeChunk where uid = qc . uid
--- | Finds the term ('NP') of the 'QuantityDict' used to make the 'CodeChunk'.
-instance NamedIdea   CodeChunk where term = qc . term
--- | Finds the idea contained in the 'QuantityDict' used to make the 'CodeChunk'.
-instance Idea        CodeChunk where getA = getA . view qc
--- | Finds the 'Space' of the 'QuantityDict' used to make the 'CodeChunk'.
-instance HasSpace    CodeChunk where typ = qc . typ
--- | Finds the 'Stage' dependent 'Symbol' of the 'QuantityDict' used to make the 'CodeChunk'.
-instance HasSymbol   CodeChunk where symbol = symbol . view qc
--- | 'CodeChunk's have a 'Quantity'.
-instance Quantity    CodeChunk
+-- | Finds the 'UID' of the 'QuantityDict' used to make the 'Code'.
+instance HasUID      Code where uid = qc . uid
+-- | Finds the term ('NP') of the 'QuantityDict' used to make the 'Code'.
+instance NamedIdea   Code where term = qc . term
+-- | Finds the idea contained in the 'QuantityDict' used to make the 'Code'.
+instance Idea        Code where getA = getA . view qc
+-- | Finds the 'Space' of the 'QuantityDict' used to make the 'Code'.
+instance HasSpace    Code where typ = qc . typ
+-- | Finds the 'Stage' dependent 'Symbol' of the 'QuantityDict' used to make the 'Code'.
+instance HasSymbol   Code where symbol = symbol . view qc
+-- | 'Code's have a 'Quantity'.
+instance Quantity    Code
 -- | Equal if 'UID's are equal.
-instance Eq          CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
--- | Finds the units of the 'QuantityDict' used to make the 'CodeChunk'.
-instance MayHaveUnit CodeChunk where getUnit = getUnit . view qc
+instance Eq          Code where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+-- | Finds the units of the 'QuantityDict' used to make the 'Code'.
+instance MayHaveUnit Code where getUnit = getUnit . view qc
 
 -- | Chunk representing a variable. The @obv@ field represents the object containing 
 -- this variable, if it is an object field.
-data CodeVarChunk = CodeVC {_ccv :: CodeChunk,
-                            _obv :: Maybe CodeChunk}
+data CodeVarChunk = CodeVC {_ccv :: Code,
+                            _obv :: Maybe Code}
 makeLenses ''CodeVarChunk
 
--- | Finds the 'UID' of the 'CodeChunk' used to make the 'CodeVarChunk'.
+-- | Finds the 'UID' of the 'Code' used to make the 'CodeVarChunk'.
 instance HasUID      CodeVarChunk where uid = ccv . uid
--- | Finds the term ('NP') of the 'CodeChunk' used to make the 'CodeVarChunk'.
+-- | Finds the term ('NP') of the 'Code' used to make the 'CodeVarChunk'.
 instance NamedIdea   CodeVarChunk where term = ccv . term
--- | Finds the idea contained in the 'CodeChunk' used to make the 'CodeVarChunk'.
+-- | Finds the idea contained in the 'Code' used to make the 'CodeVarChunk'.
 instance Idea        CodeVarChunk where getA = getA . view ccv
--- | Finds the 'Space' of the 'CodeChunk' used to make the 'CodeVarChunk'.
+-- | Finds the 'Space' of the 'Code' used to make the 'CodeVarChunk'.
 instance HasSpace    CodeVarChunk where typ = ccv . typ
--- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'CodeVarChunk'.
+-- | Finds the 'Stage' dependent 'Symbol' of the 'Code' used to make the 'CodeVarChunk'.
 instance HasSymbol   CodeVarChunk where symbol = symbol . view ccv
 -- | 'CodeVarChunk's have a 'Quantity'.
 instance Quantity    CodeVarChunk
 -- | Equal if 'UID's are equal.
 instance Eq          CodeVarChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
--- | Finds the units of the 'CodeChunk' used to make the 'CodeVarChunk'.
+-- | Finds the units of the 'Code' used to make the 'CodeVarChunk'.
 instance MayHaveUnit CodeVarChunk where getUnit = getUnit . view ccv
 
 -- | Chunk representing a function.
-newtype CodeFuncChunk = CodeFC {_ccf :: CodeChunk}
+newtype CodeFuncChunk = CodeFC {_ccf :: Code}
 makeLenses ''CodeFuncChunk
 
--- | Finds the 'UID' of the 'CodeChunk' used to make the 'CodeFuncChunk'.
+-- | Finds the 'UID' of the 'Code' used to make the 'CodeFuncChunk'.
 instance HasUID      CodeFuncChunk where uid = ccf . uid
--- | Finds the term ('NP') of the 'CodeChunk' used to make the 'CodeFuncChunk'.
+-- | Finds the term ('NP') of the 'Code' used to make the 'CodeFuncChunk'.
 instance NamedIdea   CodeFuncChunk where term = ccf . term
--- | Finds the idea contained in the 'CodeChunk' used to make the 'CodeFuncChunk'.
+-- | Finds the idea contained in the 'Code' used to make the 'CodeFuncChunk'.
 instance Idea        CodeFuncChunk where getA = getA . view ccf
--- | Finds the 'Space' of the 'CodeChunk' used to make the 'CodeFuncChunk'.
+-- | Finds the 'Space' of the 'Code' used to make the 'CodeFuncChunk'.
 instance HasSpace    CodeFuncChunk where typ = ccf . typ
--- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'CodeFuncChunk'.
+-- | Finds the 'Stage' dependent 'Symbol' of the 'Code' used to make the 'CodeFuncChunk'.
 instance HasSymbol   CodeFuncChunk where symbol = symbol . view ccf
 -- | 'CodeFuncChunk's have a 'Quantity'.
 instance Quantity    CodeFuncChunk
@@ -113,7 +113,7 @@ instance Quantity    CodeFuncChunk
 instance Callable    CodeFuncChunk
 -- | Equal if 'UID's are equal.
 instance Eq          CodeFuncChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
--- | Finds the units of the 'CodeChunk' used to make the 'CodeFuncChunk'.
+-- | Finds the units of the 'Code' used to make the 'CodeFuncChunk'.
 instance MayHaveUnit CodeFuncChunk where getUnit = getUnit . view ccf
 
 -- FIXME: use show for the UID here? Perhaps need a different implVar function for UIDs

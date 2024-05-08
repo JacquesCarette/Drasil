@@ -185,11 +185,11 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
 
 
--- | Get a list of 'Constraint's for a list of 'CodeChunk's.
+-- | Get a list of 'Constraint's for a list of 'Code's.
 getConstraints :: (HasUID c) => ConstraintCEMap -> [c] -> [ConstraintCE]
 getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 
--- | Get a list of 'CodeChunk's from a constraint.
-constraintvars :: ConstraintCE -> ChunkDB -> [CodeChunk]
+-- | Get a list of 'Code's from a constraint.
+constraintvars :: ConstraintCE -> ChunkDB -> [Code]
 constraintvars (Range _ ri) m =
   map (codeChunk . varResolve m) $ nub $ eNamesRI ri

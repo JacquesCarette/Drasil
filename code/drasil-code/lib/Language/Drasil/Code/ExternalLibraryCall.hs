@@ -13,7 +13,7 @@ module Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
 ) where
 
 import Language.Drasil.Chunk.Code (CodeVarChunk)
-import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto, pcVal)
+import Language.Drasil.Chunk.Parameter (Param, pcAuto, pcVal)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument)
 import Language.Drasil (CodeExpr)
 import Language.Drasil.Mod (Initializer, StateVariable)
@@ -46,7 +46,7 @@ data ArgumentFill = UserDefinedArgF (Maybe NamedArgument) CodeExpr -- ^ For argu
   | RecordF [CodeExpr]                                             -- ^ Fills in the field values.
 
 -- | Mirrors ExternalLibrary's 'Parameter'.
-data ParameterFill = NameableParamF ParameterChunk | UserDefined ParameterChunk
+data ParameterFill = NameableParamF Param | UserDefined Param
 
 -- | Mirrors ExternalLibrary's 'ClassInfo'.
 data ClassInfoFill = RegularF [MethodInfoFill] | ImplementsF [MethodInfoFill]

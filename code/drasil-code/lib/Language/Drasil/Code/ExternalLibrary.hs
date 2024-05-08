@@ -16,7 +16,7 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
 
 import Language.Drasil (Space, HasSpace(typ))
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName)
-import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
+import Language.Drasil.Chunk.Parameter (Param, pcAuto)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument)
 import Language.Drasil.CodeExpr.Development
 import Language.Drasil.CodeExpr
@@ -74,7 +74,7 @@ data ArgumentInfo =
   | Record (NonEmpty Requires) CodeFuncChunk CodeVarChunk [CodeVarChunk]
 
 -- | Function parameter may or may not be dependent on use case.
-data Parameter = LockedParam ParameterChunk | NameableParam Space
+data Parameter = LockedParam Param | NameableParam Space
 
 -- | For classes that need to be generated in the calling program. May be a
 --   regular class or a class that implements an interface from the external

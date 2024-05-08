@@ -13,7 +13,7 @@ import GOOL.Drasil (ScopeTag(..))
 
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codevars,
   codevars', quantvar)
-import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
+import Language.Drasil.Chunk.Parameter (Param, pcAuto)
 import Language.Drasil.Code.DataDesc (DataDesc)
 
 import Utils.Drasil (toPlainName)
@@ -90,15 +90,15 @@ funcDef :: (Quantity c, MayHaveUnit c) => Name -> Description -> [c] ->
 funcDef s desc i t returnDesc fs = FDef $ FuncDef (toPlainName s) desc
   (map (pcAuto . quantvar) i) t returnDesc fs
 
--- | Like 'funcDef' but uses 'ParameterChunk's to represent the parameters.
-funcDefParams :: Name -> Description -> [ParameterChunk] -> Space ->
+-- | Like 'funcDef' but uses 'Param's to represent the parameters.
+funcDefParams :: Name -> Description -> [Param] -> Space ->
   Maybe Description -> [FuncStmt] -> Func
 funcDefParams s desc ps t returnDesc fs = FDef $ FuncDef (toPlainName s) desc
   ps t returnDesc fs
 
 -- | Define a constructor, with the given name, description, parameters,
 -- initializers (variable-value pairs), and 'FuncStmt's for the body.
-ctorDef :: Name -> Description -> [ParameterChunk] -> [Initializer] ->
+ctorDef :: Name -> Description -> [Param] -> [Initializer] ->
   [FuncStmt] -> Func
 ctorDef n desc ps is fs = FDef $ CtorDef n desc ps is fs
 
@@ -109,9 +109,9 @@ data FuncData where
 -- | Defines a function.
 data FuncDef where
   -- | Parameters are: Name, description, parameters, return type, return description, statements.
-  FuncDef :: Name -> Description -> [ParameterChunk] -> Space ->
+  FuncDef :: Name -> Description -> [Param] -> Space ->
     Maybe Description -> [FuncStmt] -> FuncDef
-  CtorDef :: Name -> Description -> [ParameterChunk] -> [Initializer] ->
+  CtorDef :: Name -> Description -> [Param] -> [Initializer] ->
     [FuncStmt] -> FuncDef
 
 -- | Variable-value pair.
@@ -131,7 +131,7 @@ data FuncStmt where
   FTry      :: [FuncStmt] -> [FuncStmt] -> FuncStmt
   FContinue :: FuncStmt
   FDecDef   :: CodeVarChunk -> CodeExpr -> FuncStmt
-  FFuncDef  :: CodeFuncChunk -> [ParameterChunk] -> [FuncStmt] -> FuncStmt
+  FFuncDef  :: CodeFuncChunk -> [Param] -> [FuncStmt] -> FuncStmt
   FVal      :: CodeExpr -> FuncStmt
   FMulti    :: [FuncStmt] -> FuncStmt
   -- slight hack, for now

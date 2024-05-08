@@ -23,7 +23,7 @@ import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, obv,
   quantvar, quantfunc, ccObjVar, DefiningCodeExpr(..))
-import Language.Drasil.Chunk.Parameter (ParameterChunk(..), PassBy(..), pcAuto)
+import Language.Drasil.Chunk.Parameter (Param(..), PassBy(..), pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Choices (Comments(..), ConstantRepr(..),
   ConstantStructure(..), Structure(..))
@@ -185,8 +185,8 @@ mkVar v = do
           (var (codeName v) (convType t))
   toGOOLVar (v ^. obv)
 
--- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
-mkParam :: (OOProg r) => ParameterChunk -> GenState (MSParameter r)
+-- | Generates a GOOL Parameter for a parameter represented by a 'Param'.
+mkParam :: (OOProg r) => Param -> GenState (MSParameter r)
 mkParam p = do
   v <- mkVar (quantvar p)
   return $ paramFunc (passBy p) v
@@ -195,19 +195,19 @@ mkParam p = do
 
 -- | Generates a public function.
 publicFunc :: (OOProg r) => Label -> VSType r -> Description ->
-  [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
+  [Param] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
 publicFunc n t = genMethod (function n public t) n
 
 -- | Generates a public method.
 publicMethod :: (OOProg r) => Label -> VSType r -> Description ->
-  [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
+  [Param] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
 publicMethod n t = genMethod (method n public dynamic t) n
 
 -- | Generates a private method.
 privateMethod :: (OOProg r) => Label -> VSType r -> Description ->
-  [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
+  [Param] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
 privateMethod n t = genMethod (method n private dynamic t) n
 
@@ -222,12 +222,12 @@ privateInOutMethod :: (OOProg r) => Label -> Description -> [CodeVarChunk] ->
 privateInOutMethod n = genInOutFunc (inOutMethod n private dynamic) (docInOutMethod n private dynamic) n
 
 -- | Generates a constructor.
-genConstructor :: (OOProg r) => Label -> Description -> [ParameterChunk] ->
+genConstructor :: (OOProg r) => Label -> Description -> [Param] ->
   [MSBlock r] -> GenState (SMethod r)
 genConstructor n desc p = genMethod nonInitConstructor n desc p Nothing
 
 -- | Generates a constructor that includes initialization of variables.
-genInitConstructor :: (OOProg r) => Label -> Description -> [ParameterChunk]
+genInitConstructor :: (OOProg r) => Label -> Description -> [Param]
   -> Initializers r -> [MSBlock r] -> GenState (SMethod r)
 genInitConstructor n desc p is = genMethod (`constructor` is) n desc p
   Nothing
@@ -236,7 +236,7 @@ genInitConstructor n desc p is = genMethod (`constructor` is) n desc p
 -- parameters are the method's name, description, list of parameters,
 -- description of what is returned (if applicable), and body.
 genMethod :: (OOProg r) => ([MSParameter r] -> MSBody r -> SMethod r) ->
-  Label -> Description -> [ParameterChunk] -> Maybe Description -> [MSBlock r]
+  Label -> Description -> [Param] -> Maybe Description -> [MSBlock r]
   -> GenState (SMethod r)
 genMethod f n desc p r b = do
   g <- get
@@ -499,7 +499,7 @@ genClass f (M.ClassDef n i desc svs ms) = let svar Pub = pubDVar
 -- variable declaration statements for any undeclared variables. For methods,
 -- the list of StateVariables is needed so they can be included in the list of
 -- declared variables.
-genFunc :: (OOProg r) => (Name -> VSType r -> Description -> [ParameterChunk]
+genFunc :: (OOProg r) => (Name -> VSType r -> Description -> [Param]
   -> Maybe Description -> [MSBlock r] -> GenState (SMethod r)) ->
   [StateVariable] -> Func -> GenState (SMethod r)
 genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do

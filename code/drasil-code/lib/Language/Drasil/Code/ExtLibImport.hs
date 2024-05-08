@@ -8,7 +8,7 @@ import Language.Drasil (HasSpace(typ), getActorName)
 
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName,
   ccObjVar)
-import Language.Drasil.Chunk.Parameter (ParameterChunk)
+import Language.Drasil.Chunk.Parameter (Param)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument)
 import Language.Drasil.CodeExpr (CodeExpr, ($&&), applyWithNamedArgs,
   msgWithNamedArgs, new, newWithNamedArgs, sy)
@@ -78,10 +78,10 @@ addDef e c s = if n `elem` (s ^. defined)
   where n = codeName c
 
 -- | Adds a defining statement for a local function, represented by the given
--- 'CodeFuncChunk', 'ParameterChunk's, and 'FuncStmt's, to the 'ExtLibState', and adds
+-- 'CodeFuncChunk', 'Param's, and 'FuncStmt's, to the 'ExtLibState', and adds
 -- the function's name to the defined field, but only if it was not already in
 -- the defined field.
-addFuncDef :: CodeFuncChunk -> [ParameterChunk] -> [FuncStmt] -> ExtLibState ->
+addFuncDef :: CodeFuncChunk -> [Param] -> [FuncStmt] -> ExtLibState ->
   ExtLibState
 addFuncDef c ps b s = if n `elem` (s ^. defined) then s else over defs
   (++ [FFuncDef c ps b]) (addDefined n s)
@@ -241,8 +241,8 @@ genMethodInfo _ _ (MI m desc ps rDesc ss) (MIF pfs sfs) = do
 genMethodInfo _ _ _ _ = error methodInfoMismatch
 
 -- | Interprets a list of 'Parameter' and a list of 'ParameterFill', resulting in
--- 'ParameterChunk's.
-genParameters :: [Parameter] -> [ParameterFill] -> [ParameterChunk]
+-- 'Param's.
+genParameters :: [Parameter] -> [ParameterFill] -> [Param]
 genParameters (LockedParam c:ps) pfs = c : genParameters ps pfs
 genParameters ps (UserDefined c:pfs) = c : genParameters ps pfs
 genParameters (NameableParam _:ps) (NameableParamF c:pfs) = c :

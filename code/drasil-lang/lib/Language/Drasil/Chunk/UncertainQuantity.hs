@@ -2,7 +2,7 @@
 -- | For adding an uncertainty value to quantities with constraints.
 module Language.Drasil.Chunk.UncertainQuantity (
   -- * Chunk Types
-  UncertQ, UncertainChunk(..),
+  UncertQ, Uncertain(..),
   -- * Constructors
   uq, uqc,
   uqcND, uncrtnChunk, uvc, uncrtnw) where
@@ -26,49 +26,49 @@ import Control.Lens ((^.), makeLenses, view)
 
 {- The order of the following two implementations is the same as in Constrained -}
 
--- | UncertainChunk is a symbolic quantity with constraints, a typical value, and an uncertainty. 
+-- | Uncertain is a symbolic quantity with constraints, a typical value, and an uncertainty. 
 -- Contains a 'ConstrainedChunk' and an 'Uncertainty'.
 --
 -- Ex. Measuring the length of a pendulum arm may be recorded with an uncertainty value.
-data UncertainChunk  = UCh { _conc :: ConstrainedChunk , _unc' :: Uncertainty }
-makeLenses ''UncertainChunk
+data Uncertain  = UCh { _conc :: ConstrainedChunk , _unc' :: Uncertainty }
+makeLenses ''Uncertain
 
--- | Finds 'UID' of the 'ConstrainedChunk' used to make the 'UncertainChunk'.
-instance HasUID            UncertainChunk where uid = conc . uid
+-- | Finds 'UID' of the 'ConstrainedChunk' used to make the 'Uncertain'.
+instance HasUID            Uncertain where uid = conc . uid
 -- | Equal if 'UID's are equal.
-instance Eq                UncertainChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
--- | Finds term ('NP') of the 'ConstrainedChunk' used to make the 'UncertainChunk'.
-instance NamedIdea         UncertainChunk where term = conc . term
--- | Finds the idea contained in the 'ConstrainedChunk' used to make the 'UncertainChunk'.
-instance Idea              UncertainChunk where getA (UCh n _) = getA n
--- | Finds the 'Space' of the 'ConstrainedChunk' used to make the 'UncertainChunk'.
-instance HasSpace          UncertainChunk where typ = conc . typ
--- | Finds the 'Symbol' of the 'ConstrainedChunk' used to make the 'UncertainChunk'.
-instance HasSymbol         UncertainChunk where symbol c = symbol (c^.conc)
--- | 'UncertainChunk's have a 'Quantity'.
-instance Quantity          UncertainChunk where
--- | Finds the 'Constraint's of the 'ConstrainedChunk' used to make the 'UncertainChunk'.
-instance Constrained       UncertainChunk where constraints = conc . constraints
--- | Finds a reasonable value for the 'ConstrainedChunk' used to make the 'UncertainChunk'.
-instance HasReasVal        UncertainChunk where reasVal = conc . reasVal
--- | Finds the uncertainty of an 'UncertainChunk'.
-instance HasUncertainty    UncertainChunk where unc = unc'
--- | Finds units contained in the 'ConstrainedChunk' used to make the 'UncertainChunk'.
-instance MayHaveUnit       UncertainChunk where getUnit = getUnit . view conc
+instance Eq                Uncertain where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+-- | Finds term ('NP') of the 'ConstrainedChunk' used to make the 'Uncertain'.
+instance NamedIdea         Uncertain where term = conc . term
+-- | Finds the idea contained in the 'ConstrainedChunk' used to make the 'Uncertain'.
+instance Idea              Uncertain where getA (UCh n _) = getA n
+-- | Finds the 'Space' of the 'ConstrainedChunk' used to make the 'Uncertain'.
+instance HasSpace          Uncertain where typ = conc . typ
+-- | Finds the 'Symbol' of the 'ConstrainedChunk' used to make the 'Uncertain'.
+instance HasSymbol         Uncertain where symbol c = symbol (c^.conc)
+-- | 'Uncertain's have a 'Quantity'.
+instance Quantity          Uncertain where
+-- | Finds the 'Constraint's of the 'ConstrainedChunk' used to make the 'Uncertain'.
+instance Constrained       Uncertain where constraints = conc . constraints
+-- | Finds a reasonable value for the 'ConstrainedChunk' used to make the 'Uncertain'.
+instance HasReasVal        Uncertain where reasVal = conc . reasVal
+-- | Finds the uncertainty of an 'Uncertain'.
+instance HasUncertainty    Uncertain where unc = unc'
+-- | Finds units contained in the 'ConstrainedChunk' used to make the 'Uncertain'.
+instance MayHaveUnit       Uncertain where getUnit = getUnit . view conc
 
 {-- Constructors --}
--- | Smart constructor that can project to an 'UncertainChunk' (also given an 'Uncertainty').
+-- | Smart constructor that can project to an 'Uncertain' (also given an 'Uncertainty').
 uncrtnChunk :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 
-  c -> Uncertainty -> UncertainChunk
+  c -> Uncertainty -> Uncertain
 uncrtnChunk q = UCh (cnstrw q)
 
 -- | Creates an uncertain variable chunk. Takes 'UID', term ('NP'),
 -- 'Symbol', 'Space', 'Constrains', 'Expr', and 'Uncertainty'.
-uvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertainChunk
+uvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Expr -> Uncertainty -> Uncertain
 uvc nam trm sym space cs val = uncrtnChunk (cvc nam trm sym space cs (Just val))
 
--- | Projection function into an 'UncertainChunk' from 'UncertQ' or an 'UncertainChunk'.
-uncrtnw :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> UncertainChunk
+-- | Projection function into an 'Uncertain' from 'UncertQ' or an 'Uncertain'.
+uncrtnw :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> Uncertain
 uncrtnw c = UCh (cnstrw c) (c ^. unc)
 
 -- | UncertQs are conceptual symbolic quantities with constraints and an 'Uncertainty'.

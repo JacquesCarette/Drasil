@@ -13,7 +13,7 @@ import Drasil.SWHS.Unitals (absTol, arMax, arMin, coilHTC, coilHTCMax,
 inputs :: [QuantityDict]
 inputs = map qw constrained ++ map qw unconstrained
 
-unconstrained :: [UncertainChunk]
+unconstrained :: [Uncertain]
 unconstrained = [absTol, relTol]
 
 constrained :: [UncertQ]

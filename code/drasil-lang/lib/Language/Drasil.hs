@@ -135,7 +135,7 @@ module Language.Drasil (
   , cuc, cvc, constrained', cuc', cuc'', constrainedNRV'
   , cnstrw, cnstrw'
   -- Language.Drasil.Chunk.UncertainQuantity
-  , UncertainChunk(..), UncertQ, uq, uqc, uqcND, uncrtnChunk, uvc
+  , Uncertain(..), UncertQ, uq, uqc, uqcND, uncrtnChunk, uvc
   , uncrtnw
   -- Language.Drasil.Uncertainty
   , Uncertainty, uncty, HasUncertainty(..)

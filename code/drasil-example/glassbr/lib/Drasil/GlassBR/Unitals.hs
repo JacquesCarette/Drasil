@@ -36,7 +36,7 @@ constrained = map cnstrw inputDataConstraints ++
   [cnstrw probBr, cnstrw probFail, cnstrw stressDistFac] 
 
 plateLen, plateWidth, aspectRatio, charWeight, standOffDist :: UncertQ
-pbTol, tNT :: UncertainChunk
+pbTol, tNT :: Uncertain
 nomThick :: ConstrainedChunk
 glassTypeCon :: ConstrConcept
 
@@ -55,7 +55,7 @@ derivedInsWUnitsUncrtn :: [UncertQ]
 derivedInsWUnitsUncrtn = [standOffDist]
 
 --inputs with uncertainties and no units
-inputsWUncrtn :: [UncertainChunk]
+inputsWUncrtn :: [Uncertain]
 inputsWUncrtn = [pbTol, tNT]
 
 --derived inputs with uncertainties and no units
@@ -66,7 +66,7 @@ derivedInsWUncrtn = [aspectRatio]
 inputsNoUncrtn :: [ConstrainedChunk]
 inputsNoUncrtn = [cnstrw glassTypeCon, nomThick]
 
-inputDataConstraints :: [UncertainChunk]
+inputDataConstraints :: [Uncertain]
 inputDataConstraints = map uncrtnw inputsWUnitsUncrtn ++ 
   map uncrtnw inputsWUncrtn ++ map uncrtnw derivedInsWUnitsUncrtn ++ 
   map uncrtnw derivedInsWUncrtn

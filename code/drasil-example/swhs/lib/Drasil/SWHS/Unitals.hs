@@ -441,7 +441,7 @@ pcmE = cuc' "pcmE" (nounPhraseSP "change in heat energy in the PCM")
 -- Uncertainties with no Units --
 ---------------------------------
 
-absTol, relTol :: UncertainChunk
+absTol, relTol :: Uncertain
 
 absTol = uvc "absTol" (nounPhraseSP "absolute tolerance") 
   (sub cA lTol) Real

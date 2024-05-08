@@ -184,11 +184,11 @@ stressDistFacMax = mkQuantDef (vc "stressDistFacMax" (nounPhraseSP "maximum valu
   (subMax (eqSymb stressDistFac)) Real) (exactDbl 32)
 {--}
 
-symbols :: [UnitaryChunk]
+symbols :: [Unit]
 symbols = [minThick, sflawParamK, sflawParamM, loadDur] ++ 
   map mkUnitary [demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight]
 
-minThick, sflawParamK, sflawParamM, sdx, sdy, sdz, loadDur :: UnitaryChunk
+minThick, sflawParamK, sflawParamM, sdx, sdy, sdz, loadDur :: Unit
 
 demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight :: Unital
 
@@ -403,7 +403,7 @@ constantLoadSF  = mkQuantDef loadSF      $ exactDbl 1
 sdVectorSent :: Sentence
 sdVectorSent = foldlsC (map ch sdVector)
 
-sdVector :: [UnitaryChunk]
+sdVector :: [Unit]
 sdVector = [sdx, sdy, sdz]
 
 --

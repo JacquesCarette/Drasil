@@ -1,12 +1,12 @@
 module Language.Drasil.Code.DataDesc where
 
-import Language.Drasil.Chunk.Code (CodeVarChunk)
+import Language.Drasil.Chunk.Code (CodeVar)
 
 import Data.List (nub)
 import Data.List.NonEmpty (NonEmpty(..), fromList)
 
--- | A 'DataItem' is just a 'CodeVarChunk' (a piece of data).
-type DataItem = CodeVarChunk
+-- | A 'DataItem' is just a 'CodeVar' (a piece of data).
+type DataItem = CodeVar
 
 -- New DataDesc
 -- | A data description either has data connected to other pieces of data, or a single piece of data.
@@ -37,7 +37,7 @@ data Data' = Datum DataItem' -- ^ Single data item.
 -- | A piece of data that contains the datum described and delimeters between elements.
 -- The size of the list of delimiters should be equal to the dimension of datum.
 data DataItem' = DI
-  CodeVarChunk -- The datum being described
+  CodeVar -- The datum being described
   [Delimiter] -- Delimiters between list elements.
               -- Size of list should equal dimension of datum
               -- Ex. a 1-D list needs 1 delimiter, a 2-D list needs 2 delimiters
@@ -55,11 +55,11 @@ dataDesc (d:ds) dlm = DD d dlm (dataDesc ds dlm)
 dataDesc [] _ = error "DataDesc must have at least one data item"
 
 -- | Constructor for creating a single datum.
-singleton' :: CodeVarChunk -> Data'
+singleton' :: CodeVar -> Data'
 singleton' d = Datum $ DI d []
 
 -- | Constructor for creating data from a description of the data and a list of delimiters with a size equal to the dimension.
-list :: CodeVarChunk -> [Delimiter] -> Data'
+list :: CodeVar -> [Delimiter] -> Data'
 list d dlms = Datum $ DI d dlms
 
 -- | Weaves elements of data together given a list of data items, a degree of intermixing, and a delimiter for the data.

@@ -34,7 +34,7 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   appendCurrSolFill, populateSolListFill, assignArrayIndexFill,
   assignSolFromObjFill, initSolListFromArrayFill, initSolListWithValFill,
   solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill',
-  CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, listToArray,
+  CodeVar, CodeFuncChunk, quantvar, quantfunc, listToArray,
   ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, mkODELib,
   mkODELibNoPath, pubStateVar, privStateVar,
   NamedArgument, narg)
@@ -120,7 +120,7 @@ rtolArg = narg $ implVar "rtol_scipy" (nounPhrase
   Real (label "rtol")
 
 
-r, xAxis, ut, transpose :: CodeVarChunk
+r, xAxis, ut, transpose :: CodeVar
 r = quantvar $ implVar "r_scipy" (nounPhrase "ODE object" "ODE objects")
   odeT (label "r")
 xAxis = quantvar $ implVar "x_numpy" (nounPhrase "Numpy value" "Numpy value")
@@ -214,7 +214,7 @@ osloSymbols :: [QuantityDict]
 osloSymbols = map qw [initv, opts, aTol, rTol, sol, points, sp, x] ++
   map qw [fOslo, options, vector, rk547m, gearBDF, solveFromToStep]
 
-initv, opts, aTol, rTol, sol, points, sp, x :: CodeVarChunk
+initv, opts, aTol, rTol, sol, points, sp, x :: CodeVar
 initv = quantvar $ implVar "initv_oslo" (nounPhrase
   "vector containing the initial values of the dependent variables"
   "vectors containing the initial values of the dependent variables")
@@ -261,7 +261,7 @@ solveFromToStep = quantfunc $ implVar "SolveFromToStep_oslo" (nounPhrase
   "methods for solving an ODE given a time range")
   solT (label "SolveFromToStep")
 
-vecDepVar :: ODEInfo -> CodeVarChunk
+vecDepVar :: ODEInfo -> CodeVar
 vecDepVar info = quantvar $ implVarUID (dv ^. uid) (dv ^. term) vecT
   (sub (symbol dv Implementation) (label "vec"))
   where dv = depVar info
@@ -269,7 +269,7 @@ vecDepVar info = quantvar $ implVarUID (dv ^. uid) (dv ^. term) vecT
 -- Hack required because
 -- | Oslo's Vector type behaves like an array, so needs to
 -- be represented as one or else will hit type errors in GOOL.
-arrayVecDepVar :: ODEInfo -> CodeVarChunk
+arrayVecDepVar :: ODEInfo -> CodeVar
 arrayVecDepVar info = quantvar $ implVarUID (dv +++ "vec") (dv ^. term)
   (dv ^. typ) (sub (symbol dv Implementation) (label "vec"))
   where dv = listToArray $ depVar info
@@ -361,7 +361,7 @@ apacheODESymbols = map qw [it, currVals, stepHandler, t0, y0, t, interpolator,
   initMethod, handleStep, getInterpState, integrate, odeCtor, getDimension,
   computeDerivatives]
 
-it, currVals, stepHandler, t0, y0, interpolator, isLast, curr :: CodeVarChunk
+it, currVals, stepHandler, t0, y0, interpolator, isLast, curr :: CodeVar
 it = quantvar $ implVar "it_apache" (nounPhrase "integrator for solving ODEs"
   "integrators for solving ODEs") (Actor foi) (label "it")
 currVals = quantvar $ implVar "curr_vals_apache" (nounPhrase
@@ -492,7 +492,7 @@ odeintSymbols = map qw [odeintCurrVals, rk, stepper, pop, t, y, ode] ++ map qw
   [rkdp5C, makeControlled, adamsBashC, integrateConst, odeCtor, odeOp, popCtor,
   popOp]
 
-odeintCurrVals, rk, stepper, pop :: CodeVarChunk
+odeintCurrVals, rk, stepper, pop :: CodeVar
 odeintCurrVals = quantvar $ implVar "currVals_odeint" (nounPhrase
   "vector holding ODE solution values for the current step"
   "vectors holding ODE solution values for the current step")
@@ -541,7 +541,7 @@ popOp = quantfunc $ implVar "pop_operator_odeint" (nounPhrase
 
 -- 'CodeChunk's used in multiple external ODE libraries
 
-ode, t, y :: CodeVarChunk
+ode, t, y :: CodeVar
 -- | ODE object & definition.
 ode = quantvar $ implVar "ode_obj" (nounPhrase
   "object representing an ODE system" "objects representing an ODE system")
@@ -573,7 +573,7 @@ odeMethodUnavailable = "Chosen ODE solving method is not available" ++
           " in chosen ODE solving library"
 
 -- | Change in @X@ chunk constructor (where @X@ is a given argument).
-diffCodeChunk :: CodeVarChunk -> CodeVarChunk
+diffCodeChunk :: CodeVar -> CodeVar
 diffCodeChunk c = quantvar $ implVarUID' (c +++ "d" )
   (compoundPhrase (nounPhraseSP "change in") (c ^. term)) (getA c) (c ^. typ)
   (Concat [label "d", symbol c Implementation]) (getUnit c)

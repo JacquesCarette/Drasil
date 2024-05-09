@@ -10,7 +10,7 @@ import Language.Drasil.Code.Imperative.Parameters (getCalcParams,
   getConstraintParams, getDerivedIns, getDerivedOuts, getInputFormatIns,
   getInputFormatOuts, getOutputParams)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
-import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar)
+import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVar, quantvar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
 
@@ -66,7 +66,7 @@ getOutputCall = do
 -- | Generates a function call given the name, return type, and arguments to
 -- the function.
 getFuncCall :: (OOProg r) => Name -> VSType r ->
-  GenState [CodeVarChunk] -> GenState (Maybe (SValue r))
+  GenState [CodeVar] -> GenState (Maybe (SValue r))
 getFuncCall n t funcPs = do
   mm <- getCall n
   let getFuncCall' Nothing = return Nothing
@@ -79,8 +79,8 @@ getFuncCall n t funcPs = do
 
 -- | Generates a function call given the name, inputs, and outputs for the
 -- function.
-getInOutCall :: (OOProg r) => Name -> GenState [CodeVarChunk] ->
-  GenState [CodeVarChunk] -> GenState (Maybe (MSStatement r))
+getInOutCall :: (OOProg r) => Name -> GenState [CodeVar] ->
+  GenState [CodeVar] -> GenState (Maybe (MSStatement r))
 getInOutCall n inFunc outFunc = do
   mm <- getCall n
   let getInOutCall' Nothing = return Nothing

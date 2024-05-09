@@ -3,10 +3,10 @@ module Language.Drasil.Code.Imperative.ReadInput (
   sampleInputDD, readWithDataDesc
 ) where
 
-import Language.Drasil hiding (Data, Matrix, CodeVarChunk)
+import Language.Drasil hiding (Data, Matrix, CodeVar)
 import Language.Drasil.Code.DataDesc (DataDesc'(..), Data'(..), DataItem'(..),
   Delimiter, dataDesc, junk, list, singleton')
-import Language.Drasil.Chunk.Code (CodeVarChunk)
+import Language.Drasil.Chunk.Code (CodeVar)
 import Language.Drasil.Expr.Development (Expr(Matrix))
 
 import Control.Lens ((^.))
@@ -63,7 +63,7 @@ readWithDataDesc fp ddsc = do
 
 -- | Defines the DataDesc for the file containing a sample data set, which a
 -- user must supply if they want to generate a sample input file.
-sampleInputDD :: [CodeVarChunk] -> DataDesc'
+sampleInputDD :: [CodeVar] -> DataDesc'
 sampleInputDD ds = dataDesc (junk : intersperse junk (map toData ds)) "\n"
   where toData d = toData' (d ^. typ) d
         toData' t@(Vect _) d = list d

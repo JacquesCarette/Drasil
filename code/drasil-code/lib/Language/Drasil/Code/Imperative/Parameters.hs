@@ -33,7 +33,7 @@ isIn = (In ==)
 -- since they are already in scope.
 -- If InputParameters is not in the definition list, then the default
 -- constructor is used, which takes no parameters.
-getInConstructorParams :: GenState [CodeVarChunk]
+getInConstructorParams :: GenState [CodeVar]
 getInConstructorParams = do
   g <- get
   ifPs <- getInputFormatIns
@@ -49,23 +49,23 @@ getInConstructorParams = do
 -- the 'inParams' object if inputs are bundled and input components are separated.
 -- The latter is needed because we want to populate the object through state
 -- transitions, not by returning it.
-getInputFormatIns :: GenState [CodeVarChunk]
+getInputFormatIns :: GenState [CodeVar]
 getInputFormatIns = do
   g <- get
-  let getIns :: Structure -> InputModule -> [CodeVarChunk]
+  let getIns :: Structure -> InputModule -> [CodeVar]
       getIns Bundled Separated = [quantvar inParams]
       getIns _ _ = []
   getParams "get_input" In $ quantvar inFileName : getIns (inStruct g) (inMod g)
 
 -- | The outputs from the function for reading inputs are the inputs.
-getInputFormatOuts :: GenState [CodeVarChunk]
+getInputFormatOuts :: GenState [CodeVar]
 getInputFormatOuts = do
   g <- get
   getParams "get_input" Out $ extInputs $ codeSpec g
 
 -- | The inputs to the function for calculating derived inputs are any variables
 -- used in the equations for the derived inputs.
-getDerivedIns :: GenState [CodeVarChunk]
+getDerivedIns :: GenState [CodeVar]
 getDerivedIns = do
   g <- get
   let s = codeSpec g
@@ -74,7 +74,7 @@ getDerivedIns = do
   getParams "derived_values" In reqdVals
 
 -- | The outputs from the function for calculating derived inputs are the derived inputs.
-getDerivedOuts :: GenState [CodeVarChunk]
+getDerivedOuts :: GenState [CodeVar]
 getDerivedOuts = do
   g <- get
   getParams "derived_values" Out $ map codeChunk $ derivedInputs $ codeSpec g
@@ -82,7 +82,7 @@ getDerivedOuts = do
 -- | The parameters to the function for checking constraints on the inputs are
 -- any inputs with constraints, and any variables used in the expressions of
 -- the constraints.
-getConstraintParams :: GenState [CodeVarChunk]
+getConstraintParams :: GenState [CodeVar]
 getConstraintParams = do
   g <- get
   let cm = cMap $ codeSpec g
@@ -94,14 +94,14 @@ getConstraintParams = do
 
 -- | The parameters to a calculation function are any variables used in the
 -- expression representing the calculation.
-getCalcParams :: CodeDefinition -> GenState [CodeVarChunk]
+getCalcParams :: CodeDefinition -> GenState [CodeVar]
 getCalcParams c = do
   g <- get
   getParams (codeName c) In $ delete (quantvar c) $ concatMap (`codevars'`
     (sysinfodb $ codeSpec g)) (c ^. codeExpr : c ^. auxExprs)
 
 -- | The parameters to the function for printing outputs are the outputs.
-getOutputParams :: GenState [CodeVarChunk]
+getOutputParams :: GenState [CodeVar]
 getOutputParams = do
   g <- get
   getParams "write_output" In $ outputs $ codeSpec g
@@ -111,7 +111,7 @@ getOutputParams = do
 -- Other parameters are put into the returned parameter list as long as they
 -- are not matched to a code concept.
 getParams :: (Quantity c, MayHaveUnit c) => Name -> ParamType -> [c] ->
-  GenState [CodeVarChunk]
+  GenState [CodeVar]
 getParams n pt cs' = do
   g <- get
   let cs = map quantvar cs'
@@ -141,7 +141,7 @@ getParams n pt cs' = do
 -- constant variables are static and can be accessed through the class, without
 -- an object, so no parameters are required.
 getInputVars :: Name -> ParamType -> Structure -> ConstantRepr ->
-  [CodeVarChunk] -> GenState [CodeVarChunk]
+  [CodeVar] -> GenState [CodeVar]
 getInputVars _ _ _ _ [] = return []
 getInputVars _ _ Unbundled _ cs = return cs
 getInputVars n pt Bundled Var _ = do
@@ -164,7 +164,7 @@ getInputVars _ _ Bundled Const _ = return []
 -- constant variables are static and can be accessed through the class, without
 -- an object, so no parameters are required.
 getConstVars :: Name -> ParamType -> ConstantStructure -> ConstantRepr ->
-  [CodeVarChunk] -> GenState [CodeVarChunk]
+  [CodeVar] -> GenState [CodeVar]
 getConstVars _ _ _ _ [] = return []
 getConstVars _ _ (Store Unbundled) _ cs = return cs
 getConstVars _ pt (Store Bundled) Var _ = return [quantvar consts | isIn pt]

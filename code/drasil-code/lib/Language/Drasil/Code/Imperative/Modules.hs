@@ -27,7 +27,7 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
   getInputFormatOuts, getCalcParams, getOutputParams)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
-import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar,
+import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVar, quantvar,
   DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, DefinitionType(..),
   defType)
@@ -232,7 +232,7 @@ genInputClass scp = do
         then concat <$> mapM (fmap maybeToList) [genInputConstructor,
         genInputFormat Priv, genInputDerived Priv, genInputConstraints Priv]
         else return []
-      genClass :: (OOProg r) => [CodeVarChunk] -> [CodeDefinition] ->
+      genClass :: (OOProg r) => [CodeVar] -> [CodeDefinition] ->
         GenState (Maybe (SClass r))
       genClass [] [] = return Nothing
       genClass inps csts = do
@@ -314,7 +314,7 @@ genInputConstraints s = do
   genConstraints $ "input_constraints" `elem` defList g
 
 -- | Generates input constraints code block for checking software constraints.
-sfwrCBody :: (OOProg r) => [(CodeVarChunk, [ConstraintCE])] ->
+sfwrCBody :: (OOProg r) => [(CodeVar, [ConstraintCE])] ->
   GenState [MSStatement r]
 sfwrCBody cs = do
   g <- get
@@ -322,7 +322,7 @@ sfwrCBody cs = do
   chooseConstr cb cs
 
 -- | Generates input constraints code block for checking physical constraints.
-physCBody :: (OOProg r) => [(CodeVarChunk, [ConstraintCE])] ->
+physCBody :: (OOProg r) => [(CodeVar, [ConstraintCE])] ->
   GenState [MSStatement r]
 physCBody cs = do
   g <- get
@@ -332,7 +332,7 @@ physCBody cs = do
 -- | Generates conditional statements for checking constraints, where the
 -- bodies depend on user's choice of constraint violation behaviour.
 chooseConstr :: (OOProg r) => ConstraintBehaviour ->
-  [(CodeVarChunk, [ConstraintCE])] -> GenState [MSStatement r]
+  [(CodeVar, [ConstraintCE])] -> GenState [MSStatement r]
 chooseConstr cb cs = do
   conds <- mapM (\(q,cns) -> mapM (convExpr . renderC q) cns) cs
   bods <- mapM (chooseCB cb) cs
@@ -344,7 +344,7 @@ chooseConstr cb cs = do
 -- | Generates body defining constraint violation behaviour if Warning chosen from 'chooseConstr'.
 -- Prints a \"Warning\" message followed by a message that says
 -- what value was \"suggested\".
-constrWarn :: (OOProg r) => (CodeVarChunk, [ConstraintCE]) ->
+constrWarn :: (OOProg r) => (CodeVar, [ConstraintCE]) ->
   GenState [MSBody r]
 constrWarn c = do
   let q = fst c
@@ -355,7 +355,7 @@ constrWarn c = do
 -- | Generates body defining constraint violation behaviour if Exception chosen from 'chooseConstr'.
 -- Prints a message that says what value was \"expected\",
 -- followed by throwing an exception.
-constrExc :: (OOProg r) => (CodeVarChunk, [ConstraintCE]) ->
+constrExc :: (OOProg r) => (CodeVar, [ConstraintCE]) ->
   GenState [MSBody r]
 constrExc c = do
   let q = fst c
@@ -366,7 +366,7 @@ constrExc c = do
 -- | Generates statements that print a message for when a constraint is violated.
 -- Message includes the name of the cosntraint quantity, its value, and a
 -- description of the constraint that is violated.
-constraintViolatedMsg :: (OOProg r) => CodeVarChunk -> String ->
+constraintViolatedMsg :: (OOProg r) => CodeVar -> String ->
   ConstraintCE -> GenState [MSStatement r]
 constraintViolatedMsg q s c = do
   pc <- printConstraint c

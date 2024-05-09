@@ -37,7 +37,7 @@ module Language.Drasil.Code (
   Lang(..),
   PackageSym(..), AuxiliarySym(..),
   AuxData(..), PackData(..),
-  Code, CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, ccObjVar,
+  Code, CodeVar, CodeFuncChunk, quantvar, quantfunc, ccObjVar,
   listToArray,
   field,
   ODEInfo(..), odeInfo, odeInfo', ODEOptions(..), odeOptions, ODEMethod(..),
@@ -103,7 +103,7 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..),
 
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), PackData(..))
 
-import Language.Drasil.Chunk.Code (Code, CodeVarChunk, CodeFuncChunk,
+import Language.Drasil.Chunk.Code (Code, CodeVar, CodeFuncChunk,
   quantvar, quantfunc, ccObjVar, listToArray)
 
 import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)

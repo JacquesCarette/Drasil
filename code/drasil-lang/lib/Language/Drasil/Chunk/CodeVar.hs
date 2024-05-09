@@ -72,26 +72,26 @@ instance MayHaveUnit Code where getUnit = getUnit . view qc
 
 -- | Chunk representing a variable. The @obv@ field represents the object containing 
 -- this variable, if it is an object field.
-data CodeVarChunk = CodeVC {_ccv :: Code,
+data CodeVar = CodeVC {_ccv :: Code,
                             _obv :: Maybe Code}
-makeLenses ''CodeVarChunk
+makeLenses ''CodeVar
 
--- | Finds the 'UID' of the 'Code' used to make the 'CodeVarChunk'.
-instance HasUID      CodeVarChunk where uid = ccv . uid
--- | Finds the term ('NP') of the 'Code' used to make the 'CodeVarChunk'.
-instance NamedIdea   CodeVarChunk where term = ccv . term
--- | Finds the idea contained in the 'Code' used to make the 'CodeVarChunk'.
-instance Idea        CodeVarChunk where getA = getA . view ccv
--- | Finds the 'Space' of the 'Code' used to make the 'CodeVarChunk'.
-instance HasSpace    CodeVarChunk where typ = ccv . typ
--- | Finds the 'Stage' dependent 'Symbol' of the 'Code' used to make the 'CodeVarChunk'.
-instance HasSymbol   CodeVarChunk where symbol = symbol . view ccv
--- | 'CodeVarChunk's have a 'Quantity'.
-instance Quantity    CodeVarChunk
+-- | Finds the 'UID' of the 'Code' used to make the 'CodeVar'.
+instance HasUID      CodeVar where uid = ccv . uid
+-- | Finds the term ('NP') of the 'Code' used to make the 'CodeVar'.
+instance NamedIdea   CodeVar where term = ccv . term
+-- | Finds the idea contained in the 'Code' used to make the 'CodeVar'.
+instance Idea        CodeVar where getA = getA . view ccv
+-- | Finds the 'Space' of the 'Code' used to make the 'CodeVar'.
+instance HasSpace    CodeVar where typ = ccv . typ
+-- | Finds the 'Stage' dependent 'Symbol' of the 'Code' used to make the 'CodeVar'.
+instance HasSymbol   CodeVar where symbol = symbol . view ccv
+-- | 'CodeVar's have a 'Quantity'.
+instance Quantity    CodeVar
 -- | Equal if 'UID's are equal.
-instance Eq          CodeVarChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
--- | Finds the units of the 'Code' used to make the 'CodeVarChunk'.
-instance MayHaveUnit CodeVarChunk where getUnit = getUnit . view ccv
+instance Eq          CodeVar where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+-- | Finds the units of the 'Code' used to make the 'CodeVar'.
+instance MayHaveUnit CodeVar where getUnit = getUnit . view ccv
 
 -- | Chunk representing a function.
 newtype CodeFuncChunk = CodeFC {_ccf :: Code}
@@ -117,8 +117,8 @@ instance Eq          CodeFuncChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit CodeFuncChunk where getUnit = getUnit . view ccf
 
 -- FIXME: use show for the UID here? Perhaps need a different implVar function for UIDs
--- Changes a 'CodeVarChunk'\'s space from 'Vect' to 'Array'.
-listToArray :: CodeVarChunk -> CodeVarChunk
+-- Changes a 'CodeVar'\'s space from 'Vect' to 'Array'.
+listToArray :: CodeVar -> CodeVar
 listToArray c = newSpc (c ^. typ)
   where newSpc (Vect t) = CodeVC (CodeC (implVar' (show $ c +++ "_array")
           (c ^. term) (getA c) (Array t) (symbol c Implementation) (getUnit c)) 

@@ -6,7 +6,7 @@ module Language.Drasil.Code.ExtLibImport (ExtLibState(..), auxMods, defs,
 
 import Language.Drasil (HasSpace(typ), getActorName)
 
-import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName,
+import Language.Drasil.Chunk.Code (CodeVar, CodeFuncChunk, codeName,
   ccObjVar)
 import Language.Drasil.Chunk.Parameter (Param)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument)
@@ -68,10 +68,10 @@ initELS = ELS {
 addMod :: Mod -> ExtLibState -> ExtLibState
 addMod m = over auxMods (m:)
 
--- | Adds a defining statement for the given 'CodeVarChunk' and 'CodeExpr' to the
--- 'ExtLibState' and adds the 'CodeVarChunk''s name to the defined field of the
+-- | Adds a defining statement for the given 'CodeVar' and 'CodeExpr' to the
+-- 'ExtLibState' and adds the 'CodeVar''s name to the defined field of the
 -- state, but only if it was not already in the defined field.
-addDef :: CodeExpr -> CodeVarChunk -> ExtLibState -> ExtLibState
+addDef :: CodeExpr -> CodeVar -> ExtLibState -> ExtLibState
 addDef e c s = if n `elem` (s ^. defined)
                then s
                else over defs (++ [FDecDef c e]) (addDefined n s)
@@ -88,9 +88,9 @@ addFuncDef c ps b s = if n `elem` (s ^. defined) then s else over defs
   where n = codeName c
 
 -- | Adds to the 'ExtLibState' statements for initializing fields, represented by
--- the list of 'CodeVarChunk', of a record, represented by the 'CodeVarChunk', with
+-- the list of 'CodeVar', of a record, represented by the 'CodeVar', with
 -- values, represented by the list of 'CodeExpr'.
-addFieldAsgs :: CodeVarChunk -> [CodeVarChunk] -> [CodeExpr] -> ExtLibState ->
+addFieldAsgs :: CodeVar -> [CodeVar] -> [CodeExpr] -> ExtLibState ->
   ExtLibState
 addFieldAsgs o cs es = over defs (++ zipWith FAsg (map (ccObjVar o) cs) es)
 
@@ -204,11 +204,11 @@ genArguments [] [] = return []
 genArguments _ _ = error argumentMismatch
 
 -- | Interprets a 'ClassInfo' and 'ClassInfoFill'. These are required when a
--- 'customObjArg' is needed for an external library call, so the 'CodeVarChunk'
+-- 'customObjArg' is needed for an external library call, so the 'CodeVar'
 -- parameter represents the object of the class. The 'CodeFuncChunk' represents
 -- the class's constructor. Other parameters are the name, description, and
 -- state variables for the class.
-genClassInfo :: CodeVarChunk -> CodeFuncChunk -> Name -> Description ->
+genClassInfo :: CodeVar -> CodeFuncChunk -> Name -> Description ->
   [StateVariable] -> ClassInfo -> ClassInfoFill ->
   State ExtLibState (Class, [String])
 genClassInfo o c n desc svs ci cif = let (mis, mifs, f) = genCI ci cif in
@@ -222,10 +222,10 @@ genClassInfo o c n desc svs ci cif = let (mis, mifs, f) = genCI ci cif in
         genCI _ _ = error classInfoMismatch
 
 -- | Interprets a 'MethodInfo' and 'MethodInfoFill'. These are required when a
--- 'customObjArg' is needed for an external library call, so the 'CodeVarChunk'
+-- 'customObjArg' is needed for an external library call, so the 'CodeVar'
 -- parameter represents the object of the class. The 'CodeFuncChunk' represents
 -- the class's constructor.
-genMethodInfo :: CodeVarChunk -> CodeFuncChunk -> MethodInfo ->
+genMethodInfo :: CodeVar -> CodeFuncChunk -> MethodInfo ->
   MethodInfoFill -> State ExtLibState (Func, [String])
 genMethodInfo o c (CI desc ps ss) (CIF pfs is sfs) = do
   let prms = genParameters ps pfs

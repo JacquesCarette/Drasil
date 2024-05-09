@@ -3,7 +3,7 @@ module Language.Drasil.Data.ODEInfo (
   ODEInfo(..), odeInfo, odeInfo', ODEOptions(..), odeOptions, ODEMethod(..)
 ) where
 
-import Language.Drasil.Chunk.Code (CodeVarChunk)
+import Language.Drasil.Chunk.Code (CodeVar)
 import Language.Drasil.CodeExpr.Development
 import Language.Drasil(makeAODESolverFormat, formEquations,
   DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..))
@@ -15,11 +15,11 @@ import Language.Drasil.Chunk.CodeBase (quantvar)
 -- | Structure to hold ODE information.
 data ODEInfo = ODEInfo {
   -- | Independent variable.
-  indepVar :: CodeVarChunk,
+  indepVar :: CodeVar,
   -- | Dependent variable.
-  depVar :: CodeVarChunk,
+  depVar :: CodeVar,
   -- | Other variables in the ODE.
-  otherVars :: [CodeVarChunk],
+  otherVars :: [CodeVar],
   tInit :: CodeExpr,
   tFinal :: CodeExpr,
   -- | Initial value of an ODE.
@@ -31,12 +31,12 @@ data ODEInfo = ODEInfo {
 }
 
 -- | Basic 'ODEInfo' constructor.
-odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr ->
+odeInfo :: CodeVar -> CodeVar -> [CodeVar] -> CodeExpr -> CodeExpr ->
   [CodeExpr] -> [CodeExpr] -> ODEOptions -> ODEInfo
 odeInfo = ODEInfo
 
 -- | Create ODEInfo with Other variables, ODEOptions, DifferentialModel, and InitialValueProblem
-odeInfo' :: [CodeVarChunk] -> ODEOptions -> DifferentialModel -> InitialValueProblem -> ODEInfo
+odeInfo' :: [CodeVar] -> ODEOptions -> DifferentialModel -> InitialValueProblem -> ODEInfo
 odeInfo' ovs opt dm ivp = ODEInfo
   (quantvar $ _indepVar dm)
   (quantvar $ _depVar dm)

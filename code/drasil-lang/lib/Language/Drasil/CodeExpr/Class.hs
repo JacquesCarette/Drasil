@@ -4,7 +4,7 @@ import Language.Drasil.Classes(IsArgumentName, Callable)
 import Language.Drasil.UID (HasUID(..))
 import Language.Drasil.Symbol (HasSymbol)
 import Language.Drasil.Space (Space(Actor), HasSpace(..))
-import Language.Drasil.Chunk.CodeVar (CodeIdea, CodeVarChunk)
+import Language.Drasil.Chunk.CodeVar (CodeIdea, CodeVar)
 import Language.Drasil.Expr.Class (ExprC(..))
 import Language.Drasil.CodeExpr.Lang (CodeExpr(FCall, New, Message, Field))
 
@@ -28,7 +28,7 @@ class CodeExprC r where
     r
   
   -- | Constructs a CodeExpr representing the field of an actor
-  field :: CodeVarChunk -> CodeVarChunk -> r
+  field :: CodeVar -> CodeVar -> r
 
   -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
   applyWithNamedArgs :: (HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f 

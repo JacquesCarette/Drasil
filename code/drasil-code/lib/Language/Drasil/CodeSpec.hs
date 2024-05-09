@@ -27,9 +27,9 @@ import Data.Maybe (mapMaybe)
 import Prelude hiding (const)
 
 -- | Program input.
-type Input = CodeVarChunk
+type Input = CodeVar
 -- | Program output.
-type Output = CodeVarChunk
+type Output = CodeVar
 -- | Constants in the problem.
 type Const = CodeDefinition
 -- | Derived inputs.
@@ -160,9 +160,9 @@ getDerivedInputs ddefs ins cnsts sm =
   where refSet = ins ++ map quantvar cnsts
 
 -- | Known values.
-type Known = CodeVarChunk
+type Known = CodeVar
 -- | Calculated values.
-type Need  = CodeVarChunk
+type Need  = CodeVar
 
 -- | Orders a list of definitions such that they form a path between 'Known' values
 -- and values that 'Need' to be calculated.

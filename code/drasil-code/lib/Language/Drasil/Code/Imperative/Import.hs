@@ -21,7 +21,7 @@ import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, ctorCall,
 import Language.Drasil.Code.Imperative.Helpers (lookupC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
-import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, obv,
+import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVar, obv,
   quantvar, quantfunc, ccObjVar, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.Parameter (Param(..), PassBy(..), pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
@@ -163,8 +163,8 @@ classVariable c v = do
     maybe (error $ "Variable " ++ nm ++ " missing from export map")
       checkCurrent (Map.lookup nm (eMap g)) (onStateValue variableType c) v
 
--- | Generates a GOOL Value for a variable represented by a 'CodeVarChunk'.
-mkVal :: (OOProg r) => CodeVarChunk -> GenState (SValue r)
+-- | Generates a GOOL Value for a variable represented by a 'CodeVar'.
+mkVal :: (OOProg r) => CodeVar -> GenState (SValue r)
 mkVal v = do
   t <- codeType v
   let toGOOLVal Nothing = value (v ^. uid) (codeName v) (convType t)
@@ -174,8 +174,8 @@ mkVal v = do
           (var (codeName v) (convType t))
   toGOOLVal (v ^. obv)
 
--- | Generates a GOOL Variable for a variable represented by a 'CodeVarChunk'.
-mkVar :: (OOProg r) => CodeVarChunk -> GenState (SVariable r)
+-- | Generates a GOOL Variable for a variable represented by a 'CodeVar'.
+mkVar :: (OOProg r) => CodeVar -> GenState (SVariable r)
 mkVar v = do
   t <- codeType v
   let toGOOLVar Nothing = variable (codeName v) (convType t)
@@ -212,13 +212,13 @@ privateMethod :: (OOProg r) => Label -> VSType r -> Description ->
 privateMethod n t = genMethod (method n private dynamic t) n
 
 -- | Generates a public function, defined by its inputs and outputs.
-publicInOutFunc :: (OOProg r) => Label -> Description -> [CodeVarChunk] ->
-  [CodeVarChunk] -> [MSBlock r] -> GenState (SMethod r)
+publicInOutFunc :: (OOProg r) => Label -> Description -> [CodeVar] ->
+  [CodeVar] -> [MSBlock r] -> GenState (SMethod r)
 publicInOutFunc n = genInOutFunc (inOutFunc n public) (docInOutFunc n public) n
 
 -- | Generates a private method, defined by its inputs and outputs.
-privateInOutMethod :: (OOProg r) => Label -> Description -> [CodeVarChunk] ->
-  [CodeVarChunk] -> [MSBlock r] -> GenState (SMethod r)
+privateInOutMethod :: (OOProg r) => Label -> Description -> [CodeVar] ->
+  [CodeVar] -> [MSBlock r] -> GenState (SMethod r)
 privateInOutMethod n = genInOutFunc (inOutMethod n private dynamic) (docInOutMethod n private dynamic) n
 
 -- | Generates a constructor.
@@ -256,7 +256,7 @@ genInOutFunc :: (OOProg r) => ([SVariable r] -> [SVariable r] ->
     [SVariable r] -> MSBody r -> SMethod r) ->
   (String -> [(String, SVariable r)] -> [(String, SVariable r)] ->
     [(String, SVariable r)] -> MSBody r -> SMethod r)
-  -> Label -> Description -> [CodeVarChunk] -> [CodeVarChunk] ->
+  -> Label -> Description -> [CodeVar] -> [CodeVar] ->
   [MSBlock r] -> GenState (SMethod r)
 genInOutFunc f docf n desc ins' outs' b = do
   g <- get

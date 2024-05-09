@@ -12,7 +12,7 @@ module Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
   fixedStatementFill, fixedStatementFill', initSolWithValFill
 ) where
 
-import Language.Drasil.Chunk.Code (CodeVarChunk)
+import Language.Drasil.Chunk.Code (CodeVar)
 import Language.Drasil.Chunk.Parameter (Param, pcAuto, pcVal)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument)
 import Language.Drasil (CodeExpr)
@@ -34,7 +34,7 @@ data StepGroupFill = SGF Int [StepFill]
 -- | Mirrors ExternalLibrary's 'Step'. A StepFill can be a call to an external library function or method.
 data StepFill = CallF FunctionIntFill
   | LoopF (NonEmpty FunctionIntFill) [CodeExpr] (NonEmpty StepFill)
-  | StatementF [CodeVarChunk] [CodeExpr]
+  | StatementF [CodeVar] [CodeExpr]
 
 -- | Mirrors ExternalLibrary's 'FunctionInterface'.
 newtype FunctionIntFill = FIF [ArgumentFill]
@@ -115,19 +115,19 @@ customObjArgFill = ClassF
 recordArgFill :: [CodeExpr] -> ArgumentFill
 recordArgFill = RecordF
 
--- | Corresponds to ExternalLibrary's 'unnamedParam'. Provides the 'CodeVarChunk'
+-- | Corresponds to ExternalLibrary's 'unnamedParam'. Provides the 'CodeVar'
 -- representing the parameter.
-unnamedParamFill :: CodeVarChunk -> ParameterFill
+unnamedParamFill :: CodeVar -> ParameterFill
 unnamedParamFill = NameableParamF . pcAuto
 
--- | Corresponds to ExternalLibrary's 'unnamedParam'. Provides the 'CodeVarChunk'
+-- | Corresponds to ExternalLibrary's 'unnamedParam'. Provides the 'CodeVar'
 -- representing the parameter. Specifies that the parameter is passed by value.
-unnamedParamPBVFill :: CodeVarChunk -> ParameterFill
+unnamedParamPBVFill :: CodeVar -> ParameterFill
 unnamedParamPBVFill = NameableParamF . pcVal
 
 -- | Does not correspond to anything in ExternalLibrary. To be used when the
 -- presence of a parameter is only a consequence of the use case.
-userDefinedParamFill :: CodeVarChunk -> ParameterFill
+userDefinedParamFill :: CodeVar -> ParameterFill
 userDefinedParamFill = UserDefined . pcAuto
 
 -- | Corresponds to ExternalLibrary's 'customClass'.
@@ -149,43 +149,43 @@ methodInfoFill :: [ParameterFill] -> [StepFill] -> MethodInfoFill
 methodInfoFill _ [] = error "methodInfoFill should be called with non-empty list of StepFill"
 methodInfoFill pfs sfs = MIF pfs (fromList sfs)
 
--- | Corresponds to ExternalLibrary's 'appendCurrSol'. Provides the 'CodeVarChunk'
+-- | Corresponds to ExternalLibrary's 'appendCurrSol'. Provides the 'CodeVar'
 -- for the solution list.
-appendCurrSolFill :: CodeVarChunk -> StepFill
+appendCurrSolFill :: CodeVar -> StepFill
 appendCurrSolFill s = statementStepFill [s] []
 
--- | Corresponds to ExternalLibrary's 'populateSolList'. Provides the 'CodeVarChunk'
+-- | Corresponds to ExternalLibrary's 'populateSolList'. Provides the 'CodeVar'
 -- for the solution list.
-populateSolListFill :: CodeVarChunk -> [StepFill]
+populateSolListFill :: CodeVar -> [StepFill]
 populateSolListFill s = replicate 2 (statementStepFill [s] [])
 
--- | Corresponds to ExternalLibrary's 'assignArrayIndex'. Provides the 'CodeVarChunk'
+-- | Corresponds to ExternalLibrary's 'assignArrayIndex'. Provides the 'CodeVar'
 -- for the array variable. Provides the 'CodeExpr's for the values to assign to each
 -- array index.
-assignArrayIndexFill :: CodeVarChunk-> [CodeExpr] -> StepFill
+assignArrayIndexFill :: CodeVar-> [CodeExpr] -> StepFill
 assignArrayIndexFill a = statementStepFill [a]
 
--- | Corresponds to ExternalLibrary's 'assignSolFromObj'. Provides the 'CodeVarChunk'
+-- | Corresponds to ExternalLibrary's 'assignSolFromObj'. Provides the 'CodeVar'
 -- for the variable that the solution should be assigned to.
-assignSolFromObjFill :: CodeVarChunk -> StepFill
+assignSolFromObjFill :: CodeVar -> StepFill
 assignSolFromObjFill s = statementStepFill [s] []
 
 -- | Corresponds to ExternalLibrary's 'initSolListFromArray'. Provides the
--- 'CodeVarChunk' for the solution list.
-initSolListFromArrayFill :: CodeVarChunk -> StepFill
+-- 'CodeVar' for the solution list.
+initSolListFromArrayFill :: CodeVar -> StepFill
 initSolListFromArrayFill s = statementStepFill [s] []
 
 -- | Corresponds to ExternalLibrary's 'initSolListWithVal'. Provides the
--- 'CodeVarChunk' for the solution list and the 'CodeExpr' for the initial element of
+-- 'CodeVar' for the solution list and the 'CodeExpr' for the initial element of
 -- the solution list
-initSolListWithValFill :: CodeVarChunk -> CodeExpr -> StepFill
+initSolListWithValFill :: CodeVar -> CodeExpr -> StepFill
 initSolListWithValFill s v = statementStepFill [s] [v]
 
 -- | Corresponds to ExternalLibrary's 'solveAndPopulateWhile'. Provides the 'CodeExpr'
--- for the upper bound in the while loop condition and the 'CodeVarChunk' for the
+-- for the upper bound in the while loop condition and the 'CodeVar' for the
 -- solution list.
 solveAndPopulateWhileFill :: FunctionIntFill -> CodeExpr -> FunctionIntFill ->
-  CodeVarChunk -> StepFill
+  CodeVar -> StepFill
 solveAndPopulateWhileFill lcf ub slvf s = loopStepFill [lcf] [ub]
   [callStepFill slvf, appendCurrSolFill s]
 
@@ -195,8 +195,8 @@ returnExprListFill :: [CodeExpr] -> StepFill
 returnExprListFill = statementStepFill []
 
 -- | Corresponds to ExternalLibrary's 'statementStep'. Provides the
--- use-case-specific 'CodeVarChunk's and 'CodeExpr's that parameterize the statement.
-statementStepFill :: [CodeVarChunk] -> [CodeExpr] -> StepFill
+-- use-case-specific 'CodeVar's and 'CodeExpr's that parameterize the statement.
+statementStepFill :: [CodeVar] -> [CodeExpr] -> StepFill
 statementStepFill = StatementF
 
 -- | Corresponds to ExternalLibrary's 'fixedReturn'.
@@ -210,7 +210,7 @@ fixedStatementFill' :: CodeExpr -> StepFill
 fixedStatementFill' a = StatementF [] [a]
 
 -- | Corresponds to ExternalLibrary's 'initSolWithVal'. Provides the
--- 'CodeVarChunk' for one solution and one 'CodeExpr' for the initial element of
+-- 'CodeVar' for one solution and one 'CodeExpr' for the initial element of
 -- the solution list
-initSolWithValFill :: CodeVarChunk -> CodeExpr -> StepFill
+initSolWithValFill :: CodeVar -> CodeExpr -> StepFill
 initSolWithValFill s v = statementStepFill [s] [v]

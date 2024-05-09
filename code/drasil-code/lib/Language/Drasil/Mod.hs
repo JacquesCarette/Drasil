@@ -11,7 +11,7 @@ import Language.Drasil (Space, MayHaveUnit, Quantity, CodeExpr, LiteralC(..))
 import Database.Drasil (ChunkDB)
 import GOOL.Drasil (ScopeTag(..))
 
-import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codevars,
+import Language.Drasil.Chunk.Code (CodeVar, CodeFuncChunk, codevars,
   codevars', quantvar)
 import Language.Drasil.Chunk.Parameter (Param, pcAuto)
 import Language.Drasil.Code.DataDesc (DataDesc)
@@ -49,17 +49,17 @@ data Class = ClassDef {
   stateVars :: [StateVariable],
   methods :: [Func]}
 
--- | State variables hold attach a 'ScopeTag' to a 'CodeVarChunk'.
+-- | State variables hold attach a 'ScopeTag' to a 'CodeVar'.
 data StateVariable = SV {
   svScope :: ScopeTag,
-  stVar :: CodeVarChunk}
+  stVar :: CodeVar}
 
--- | Define a public state variable based on the given 'CodeVarChunk'.
-pubStateVar :: CodeVarChunk -> StateVariable
+-- | Define a public state variable based on the given 'CodeVar'.
+pubStateVar :: CodeVar -> StateVariable
 pubStateVar = SV Pub
 
--- | Define a private state variable based on the given 'CodeVarChunk'.
-privStateVar :: CodeVarChunk -> StateVariable
+-- | Define a private state variable based on the given 'CodeVar'.
+privStateVar :: CodeVar -> StateVariable
 privStateVar = SV Priv
 
 -- | Define a class with the given 'Name', 'Description', state variables, and
@@ -115,22 +115,22 @@ data FuncDef where
     [FuncStmt] -> FuncDef
 
 -- | Variable-value pair.
-type Initializer = (CodeVarChunk, CodeExpr)
+type Initializer = (CodeVar, CodeExpr)
 
 data FuncStmt where
-  FAsg      :: CodeVarChunk -> CodeExpr -> FuncStmt
-  FAsgIndex :: CodeVarChunk -> Integer -> CodeExpr -> FuncStmt
+  FAsg      :: CodeVar -> CodeExpr -> FuncStmt
+  FAsgIndex :: CodeVar -> Integer -> CodeExpr -> FuncStmt
   -- | For-loop; Variable, Start, Stop, Step, Body.
-  FFor      :: CodeVarChunk -> CodeExpr -> CodeExpr -> CodeExpr
+  FFor      :: CodeVar -> CodeExpr -> CodeExpr -> CodeExpr
                 -> [FuncStmt] -> FuncStmt
-  FForEach  :: CodeVarChunk -> CodeExpr -> [FuncStmt] -> FuncStmt
+  FForEach  :: CodeVar -> CodeExpr -> [FuncStmt] -> FuncStmt
   FWhile    :: CodeExpr -> [FuncStmt] -> FuncStmt
   FCond     :: CodeExpr -> [FuncStmt] -> [FuncStmt] -> FuncStmt
   FRet      :: CodeExpr -> FuncStmt
   FThrow    :: String -> FuncStmt
   FTry      :: [FuncStmt] -> [FuncStmt] -> FuncStmt
   FContinue :: FuncStmt
-  FDecDef   :: CodeVarChunk -> CodeExpr -> FuncStmt
+  FDecDef   :: CodeVar -> CodeExpr -> FuncStmt
   FFuncDef  :: CodeFuncChunk -> [Param] -> [FuncStmt] -> FuncStmt
   FVal      :: CodeExpr -> FuncStmt
   FMulti    :: [FuncStmt] -> FuncStmt
@@ -158,12 +158,12 @@ fforRange v = FFor (quantvar v)
 fDecDef :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> FuncStmt
 fDecDef v  = FDecDef (quantvar v)
 
--- | Returns the list of 'CodeVarChunk's that are used in the list of 'FuncStmt's
+-- | Returns the list of 'CodeVar's that are used in the list of 'FuncStmt's
 -- but are not declared in any of the 'FuncStmt's.
-fstdecl :: ChunkDB -> [FuncStmt] -> [CodeVarChunk]
+fstdecl :: ChunkDB -> [FuncStmt] -> [CodeVar]
 fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declared ctx) fsts)
   where
-    fstvars :: ChunkDB -> FuncStmt -> [CodeVarChunk]
+    fstvars :: ChunkDB -> FuncStmt -> [CodeVar]
     fstvars sm (FDecDef cch e) = cch:codevars' e sm
     fstvars sm (FFuncDef cch ps sts) = quantvar cch : map quantvar ps
       ++ concatMap (fstvars sm) sts
@@ -182,7 +182,7 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
     fstvars sm (FMulti ss) = concatMap (fstvars sm) ss
     fstvars sm (FAppend a b) = nub (codevars a sm ++ codevars b sm)
 
-    declared :: ChunkDB -> FuncStmt -> [CodeVarChunk]
+    declared :: ChunkDB -> FuncStmt -> [CodeVar]
     declared _  (FDecDef cch _) = [cch]
     declared sm (FFuncDef cch ps sts) = quantvar cch : map quantvar ps
       ++ concatMap (declared sm) sts

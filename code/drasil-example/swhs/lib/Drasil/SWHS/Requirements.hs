@@ -10,18 +10,15 @@ import Drasil.DocLang (inReq)
 import Drasil.DocLang.SRS (datCon, propCorSol) 
 
 import Data.Drasil.Concepts.Computation (inValue)
-import Data.Drasil.Concepts.Documentation (assumption, code, condition,
-  funcReqDom, input_, likelyChg, mg, mis, module_, nonFuncReqDom, output_,
-  physicalConstraint, property, propOfCorSol, requirement, srs, traceyMatrix,
-  unlikelyChg, value, vavPlan)
+import Data.Drasil.Concepts.Documentation (code, condition,
+  funcReqDom, input_, mg, mis, nonFuncReqDom, output_,
+  physicalConstraint, property, propOfCorSol, value, vavPlan)
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 import Data.Drasil.Concepts.Thermodynamics as CT (lawConsEnergy, melting)
 
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (energy, time)
-
-import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.SWHS.DataDefs (waterMass, waterVolume, tankVolume, 
   balanceDecayRate, balanceDecayTime, balanceSolidPCM, balanceLiquidPCM)
@@ -159,11 +156,11 @@ reusable = cic "reusable" (foldlSent [
   atStartNP (the code), S "is modularized"]) "Reusable" nonFuncReqDom
 
 maintainable :: ConceptInstance
-maintainable = cic "maintainable" (foldlSent [
-  S "The traceability between", foldlList Comma List [plural requirement,
-  plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
-  plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
-  plural traceyMatrix, S "in the", getAcc srs `S.and_` phrase mg]) "Maintainable" nonFuncReqDom
+maintainable = cic "maintainability" (foldlSent [
+  S "If a likely change is made" `S.toThe` S "finished software, it will take", 
+  addPercent (10 :: Integer), S "percent" `S.ofThe` S "original development time,",
+  S "assuming the same development resources are available"
+  ]) "Maintainability" nonFuncReqDom
 
 -- The second sentence of the above paragraph is repeated in all examples (not
 -- exactly, but the general idea is). The first sentence is not always

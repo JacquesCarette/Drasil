@@ -11,15 +11,12 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (DataDefinition)
 
 import Data.Drasil.Concepts.Computation (inValue)
-import Data.Drasil.Concepts.Documentation (assumption, characteristic, code,
-  condition, datumConstraint, environment, funcReqDom, likelyChg, message, mg,
-  mis, module_, nonFuncReqDom, output_, property, requirement, srs, system,
-  traceyMatrix, type_, unlikelyChg, value, vavPlan)
+import Data.Drasil.Concepts.Documentation (characteristic, code,
+  condition, datumConstraint, environment, funcReqDom, message, mg,
+  mis, nonFuncReqDom, output_, property, system, type_, value, vavPlan)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Software (errMsg)
-
-import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)
 import Drasil.GlassBR.Concepts (glass)
@@ -116,11 +113,11 @@ reusable = cic "reusable" (foldlSent [
   atStartNP (the code), S "is modularized"]) "Reusable" nonFuncReqDom
 
 maintainable :: ConceptInstance
-maintainable = cic "maintainable" (foldlSent [
-  S "The traceability between", foldlList Comma List [plural requirement,
-  plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
-  plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
-  plural traceyMatrix `S.inThe` getAcc srs `S.and_` phrase mg]) "Maintainable" nonFuncReqDom
+maintainable = cic "maintainability" (foldlSent [
+  S "If a likely change is made" `S.toThe` S "finished software, it will take", 
+  addPercent (10 :: Integer), S "percent" `S.ofThe` S "original development time,",
+  S "assuming the same development resources are available"
+  ]) "Maintainability" nonFuncReqDom
 
 portable :: ConceptInstance
 portable = cic "portable" (foldlSent [

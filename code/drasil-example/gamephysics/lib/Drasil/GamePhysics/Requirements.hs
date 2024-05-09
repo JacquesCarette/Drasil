@@ -132,7 +132,8 @@ understandability = cic "understandability" (foldlSent [
 
 maintainability :: ConceptInstance
 maintainability = cic "maintainability" (foldlSent [
-  S "development time for any" `S.the_ofTheC` S "likely changes should not exceed", 
-  addPercent (10 :: Integer), S "percent of the original development time"
+  S "If a likely change is made" `S.toThe` S "finished software, it will take", 
+  addPercent (10 :: Integer), S "percent" `S.ofThe` S "original development time,",
+  S "assuming the same development resources are available"
   ]) "Maintainability" nonFuncReqDom
 

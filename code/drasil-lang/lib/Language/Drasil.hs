@@ -131,7 +131,7 @@ module Language.Drasil (
   , ConstraintReason(..), Constraint(..), ConstraintE
   , physc, sfwrc, isPhysC, isSfwrC
   -- Language.Drasil.Chunk.Constrained
-  , ConstrainedChunk(..), ConstrConcept(..)
+  , Constrain(..), ConstrConcept(..)
   , cuc, cvc, constrained', cuc', cuc'', constrainedNRV'
   , cnstrw, cnstrw'
   -- Language.Drasil.Chunk.UncertainQuantity

@@ -8,7 +8,7 @@ module Language.Drasil.Chunk.UncertainQuantity (
   uqcND, uncrtnChunk, uvc, uncrtnw) where
  
 import Language.Drasil.Chunk.DefinedQuantity (dqdWr)
-import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrainedChunk, cuc', cnstrw, cvc)
+import Language.Drasil.Chunk.Constrained (ConstrConcept(..), Constrain, cuc', cnstrw, cvc)
 import Language.Drasil.Symbol
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity,
@@ -27,33 +27,33 @@ import Control.Lens ((^.), makeLenses, view)
 {- The order of the following two implementations is the same as in Constrained -}
 
 -- | Uncertain is a symbolic quantity with constraints, a typical value, and an uncertainty. 
--- Contains a 'ConstrainedChunk' and an 'Uncertainty'.
+-- Contains a 'Constrain' and an 'Uncertainty'.
 --
 -- Ex. Measuring the length of a pendulum arm may be recorded with an uncertainty value.
-data Uncertain  = UCh { _conc :: ConstrainedChunk , _unc' :: Uncertainty }
+data Uncertain  = UCh { _conc :: Constrain , _unc' :: Uncertainty }
 makeLenses ''Uncertain
 
--- | Finds 'UID' of the 'ConstrainedChunk' used to make the 'Uncertain'.
+-- | Finds 'UID' of the 'Constrain' used to make the 'Uncertain'.
 instance HasUID            Uncertain where uid = conc . uid
 -- | Equal if 'UID's are equal.
 instance Eq                Uncertain where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
--- | Finds term ('NP') of the 'ConstrainedChunk' used to make the 'Uncertain'.
+-- | Finds term ('NP') of the 'Constrain' used to make the 'Uncertain'.
 instance NamedIdea         Uncertain where term = conc . term
--- | Finds the idea contained in the 'ConstrainedChunk' used to make the 'Uncertain'.
+-- | Finds the idea contained in the 'Constrain' used to make the 'Uncertain'.
 instance Idea              Uncertain where getA (UCh n _) = getA n
--- | Finds the 'Space' of the 'ConstrainedChunk' used to make the 'Uncertain'.
+-- | Finds the 'Space' of the 'Constrain' used to make the 'Uncertain'.
 instance HasSpace          Uncertain where typ = conc . typ
--- | Finds the 'Symbol' of the 'ConstrainedChunk' used to make the 'Uncertain'.
+-- | Finds the 'Symbol' of the 'Constrain' used to make the 'Uncertain'.
 instance HasSymbol         Uncertain where symbol c = symbol (c^.conc)
 -- | 'Uncertain's have a 'Quantity'.
 instance Quantity          Uncertain where
--- | Finds the 'Constraint's of the 'ConstrainedChunk' used to make the 'Uncertain'.
+-- | Finds the 'Constraint's of the 'Constrain' used to make the 'Uncertain'.
 instance Constrained       Uncertain where constraints = conc . constraints
--- | Finds a reasonable value for the 'ConstrainedChunk' used to make the 'Uncertain'.
+-- | Finds a reasonable value for the 'Constrain' used to make the 'Uncertain'.
 instance HasReasVal        Uncertain where reasVal = conc . reasVal
 -- | Finds the uncertainty of an 'Uncertain'.
 instance HasUncertainty    Uncertain where unc = unc'
--- | Finds units contained in the 'ConstrainedChunk' used to make the 'Uncertain'.
+-- | Finds units contained in the 'Constrain' used to make the 'Uncertain'.
 instance MayHaveUnit       Uncertain where getUnit = getUnit . view conc
 
 {-- Constructors --}

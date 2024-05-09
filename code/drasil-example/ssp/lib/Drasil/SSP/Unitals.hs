@@ -65,7 +65,7 @@ wiif  = "without the influence of interslice forces"
 -- START OF CONSTRAINEDCHUNKS --
 --------------------------------
 
-constrained :: [ConstrainedChunk]
+constrained :: [Constrain]
 constrained = cnstrw coords : map cnstrw inputsWUncrtn ++ map cnstrw outputs
 
 inputsWUncrtn :: [UncertQ]

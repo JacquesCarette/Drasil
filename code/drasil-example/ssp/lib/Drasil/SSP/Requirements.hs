@@ -8,12 +8,10 @@ import Drasil.DocLang (mkInputPropsTable)
 import Drasil.DocLang.SRS (datCon, propCorSol) 
 
 import Data.Drasil.Concepts.Computation (inDatum)
-import Data.Drasil.Concepts.Documentation (assumption, code,
-  datum, funcReqDom, input_, likelyChg, mg, mis, module_, name_, nonFuncReqDom,
-  output_, physicalConstraint, property, requirement, srs, symbol_,
-  traceyMatrix, unlikelyChg, user, value, propOfCorSol)
+import Data.Drasil.Concepts.Documentation (code,
+  datum, funcReqDom, input_, mg, mis, name_, nonFuncReqDom,
+  output_, physicalConstraint, property, symbol_, user, value, propOfCorSol)
 import Data.Drasil.Concepts.Physics (twoD)
-import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.SSP.Defs (crtSlpSrf, slope, slpSrf)
 import Drasil.SSP.IMods (fctSfty, nrmShrFor, intsliceFs, crtSlpId)
@@ -125,8 +123,8 @@ reusable = cic "reusable" (foldlSent [
   atStartNP (the code), S "is modularized"]) "Reusable" nonFuncReqDom
 
 maintainable :: ConceptInstance
-maintainable = cic "maintainable" (foldlSent [
-  S "The traceability between", foldlList Comma List [plural requirement,
-  plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
-  plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
-  plural traceyMatrix `S.inThe` getAcc srs `S.and_` phrase mg]) "Maintainable" nonFuncReqDom
+maintainable = cic "maintainability" (foldlSent [
+  S "If a likely change is made" `S.toThe` S "finished software, it will take", 
+  addPercent (10 :: Integer), S "percent" `S.ofThe` S "original development time,",
+  S "assuming the same development resources are available"
+  ]) "Maintainability" nonFuncReqDom

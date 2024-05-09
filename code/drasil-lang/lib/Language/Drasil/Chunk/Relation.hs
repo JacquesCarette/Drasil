@@ -8,7 +8,7 @@ module Language.Drasil.Chunk.Relation (
 
 import Control.Lens (makeLenses, (^.), view, set)
 
-import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS, cw)
+import Language.Drasil.Chunk.Concept (Conception, dccWDS, cw)
 import Language.Drasil.Classes (Express(..), Concept,
   ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
@@ -16,25 +16,25 @@ import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (HasUID(..), mkUid)
 
--- | For a concept ('ConceptChunk') that also has a 'Relation' ('ModelExpr') attached.
+-- | For a concept ('Conception') that also has a 'Relation' ('ModelExpr') attached.
 --
 -- Ex. We can describe a pendulum arm and then apply an associated equation so that we know its behaviour.
-data RelationConcept = RC { _conc :: ConceptChunk
+data RelationConcept = RC { _conc :: Conception
                           , _rel  :: ModelExpr
                           }
 makeLenses ''RelationConcept
 
--- | Finds the 'UID' of the 'ConceptChunk' used to make the 'RelationConcept'.
+-- | Finds the 'UID' of the 'Conception' used to make the 'RelationConcept'.
 instance HasUID        RelationConcept where uid = conc . uid
 -- | Equal if 'UID's are equal.
 instance Eq            RelationConcept where a == b = (a ^. uid) == (b ^. uid)
--- | Finds the term ('NP') of the 'ConceptChunk' used to make the 'RelationConcept'.
+-- | Finds the term ('NP') of the 'Conception' used to make the 'RelationConcept'.
 instance NamedIdea     RelationConcept where term = conc . term
--- | Finds the idea contained in the 'ConceptChunk' used to make the 'RelationConcept'.
+-- | Finds the idea contained in the 'Conception' used to make the 'RelationConcept'.
 instance Idea          RelationConcept where getA = getA . view conc
--- | Finds the definition contained in the 'ConceptChunk' used to make the 'RelationConcept'.
+-- | Finds the definition contained in the 'Conception' used to make the 'RelationConcept'.
 instance Definition    RelationConcept where defn = conc . defn
--- | Finds the domain of the 'ConceptChunk' used to make the 'RelationConcept'.
+-- | Finds the domain of the 'Conception' used to make the 'RelationConcept'.
 instance ConceptDomain RelationConcept where cdom = cdom . view conc
 -- | Convert the 'RelationConcept' into the model expression language.
 instance Express       RelationConcept where express = (^. rel)

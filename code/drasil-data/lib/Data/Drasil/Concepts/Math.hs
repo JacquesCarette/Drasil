@@ -9,7 +9,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 -- | Collects all math-related concepts.
-mathcon :: [ConceptChunk]
+mathcon :: [Conception]
 mathcon = [amplitude, angle, area, axis, calculation, cartesian, centre, change, component,
   constraint, diameter, direction, equation, euclidN, euclidSpace, gradient, graph, laplaceTransform, law, line, matrix,
   norm, normal, normalV, number, orient, origin, parameter, perp, perpV, pi_, negInf, posInf, positive, negative,
@@ -26,7 +26,7 @@ amplitude, angle, area, axis, calculation, cartesian, centre, change, component,
   direction, equation, euclidN, euclidSpace, gradient, graph, laplaceTransform, law, line, matrix, norm, normal, normalV, 
   number, orient, origin, parameter, perp, perpV, pi_, negInf, posInf, positive, negative, point, probability,
   rOfChng, rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp, xDir,
-  yAxis, yCoord,  yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle :: ConceptChunk
+  yAxis, yCoord,  yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle :: Conception
 
   
 amplitude   = dcc "amplitude"    (nounPhraseSP "amplitude")      "The peak deviation of a function from zero"

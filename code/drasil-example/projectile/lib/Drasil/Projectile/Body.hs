@@ -246,7 +246,7 @@ userCharacteristicsIntro = foldlSP
 -- Terminology and Definitions --
 ---------------------------------
 
-terms :: [ConceptChunk]
+terms :: [Conception]
 terms = [launcher, projectile, target, gravity, cartesian, rectilinear]
 
 ---------------------------------

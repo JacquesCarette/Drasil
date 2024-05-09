@@ -12,7 +12,7 @@ module Language.Drasil.Chunk.DifferentialModel (
 ) where
 
 import Control.Lens (makeLenses, (^.), view)
-import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS)
+import Language.Drasil.Chunk.Concept (Conception, dccWDS)
 import Language.Drasil.UID (HasUID(uid))
 import Language.Drasil.Classes (Express(..),
   ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..))
@@ -85,7 +85,7 @@ data DifferentialModel = SystemOfLinearODEs {
   -- | constant column vector 
   _dmConstants :: [Expr],
   -- | meta data
-  _dmconc :: ConceptChunk
+  _dmconc :: Conception
 }
 makeLenses ''DifferentialModel
 
@@ -110,17 +110,17 @@ data ODESolverFormat = X'{
   constantVect :: [Expr]
 }
 
--- | Finds the 'UID' of the 'ConceptChunk' used to make the 'DifferentialModel'.
+-- | Finds the 'UID' of the 'Conception' used to make the 'DifferentialModel'.
 instance HasUID        DifferentialModel where uid = dmconc . uid
 -- | Equal if 'UID's are equal.
 instance Eq            DifferentialModel where a == b = (a ^. uid) == (b ^. uid)
--- | Finds the term ('NP') of the 'ConceptChunk' used to make the 'DifferentialModel'.
+-- | Finds the term ('NP') of the 'Conception' used to make the 'DifferentialModel'.
 instance NamedIdea     DifferentialModel where term = dmconc . term
--- | Finds the idea contained in the 'ConceptChunk' used to make the 'DifferentialModel'.
+-- | Finds the idea contained in the 'Conception' used to make the 'DifferentialModel'.
 instance Idea          DifferentialModel where getA = getA . view dmconc
--- | Finds the definition contained in the 'ConceptChunk' used to make the 'DifferentialModel'.
+-- | Finds the definition contained in the 'Conception' used to make the 'DifferentialModel'.
 instance Definition    DifferentialModel where defn = dmconc . defn
--- | Finds the domain of the 'ConceptChunk' used to make the 'DifferentialModel'.
+-- | Finds the domain of the 'Conception' used to make the 'DifferentialModel'.
 instance ConceptDomain DifferentialModel where cdom = cdom . view dmconc
 -- | Convert the 'DifferentialModel' into the model expression language.
 instance Express       DifferentialModel where express = formStdODE

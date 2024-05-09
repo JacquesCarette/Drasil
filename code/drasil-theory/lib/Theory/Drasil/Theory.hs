@@ -22,7 +22,7 @@ class Theory t where
   valid_context :: Lens' t [TheoryModel]
   spaces        :: Lens' t [SpaceDefn]
   quantities    :: Lens' t [QuantityDict]
-  operations    :: Lens' t [ConceptChunk] -- FIXME: Should not be Concept
+  operations    :: Lens' t [Conception] -- FIXME: Should not be Concept
   defined_quant :: Lens' t [ModelQDef]
   invariants    :: Lens' t [ModelExpr]
   defined_fun   :: Lens' t [ModelQDef]
@@ -32,11 +32,11 @@ data SpaceDefn -- FIXME: This should be defined.
 -- | A TheoryModel is a collection of:
 --
 --      * tUid - a UID,
---      * con - a ConceptChunk,
+--      * con - a Conception,
 --      * vctx - definition context ('TheoryModel's),
 --      * spc - type definitions ('SpaceDefn's),
 --      * quan - quantities ('QuantityDict's),
---      * ops - operations ('ConceptChunk's),
+--      * ops - operations ('Conception's),
 --      * defq - definitions ('QDefinition's),
 --      * invs - invariants ('ModelExpr's),
 --      * dfun - defined functions ('QDefinition's),
@@ -52,7 +52,7 @@ data TheoryModel = TM
   , _vctx  :: [TheoryModel]
   , _spc   :: [SpaceDefn]
   , _quan  :: [QuantityDict]
-  , _ops   :: [ConceptChunk]
+  , _ops   :: [Conception]
   , _defq  :: [ModelQDef]
   , _invs  :: [ModelExpr]
   , _dfun  :: [ModelQDef]
@@ -67,15 +67,15 @@ makeLenses ''TheoryModel
 instance HasUID             TheoryModel where uid = mk . uid
 -- | Finds the term ('NP') of the 'TheoryModel'.
 instance NamedIdea          TheoryModel where term = mk . term
--- | Finds the idea of the 'ConceptChunk' contained in the 'TheoryModel'.
+-- | Finds the idea of the 'Conception' contained in the 'TheoryModel'.
 instance Idea               TheoryModel where getA = getA . view mk
--- | Finds the definition of the 'ConceptChunk' contained in a 'TheoryModel'.
+-- | Finds the definition of the 'Conception' contained in a 'TheoryModel'.
 instance Definition         TheoryModel where defn = mk . defn
 {-- | Finds 'Reference's contained in the 'TheoryModel'.
 instance HasReference       TheoryModel where getReferences l = map ref $ rf l-}
 -- | Finds 'DecRef's contained in the 'TheoryModel'.
 instance HasDecRef          TheoryModel where getDecRefs = rf
--- | Finds the domain of the 'ConceptChunk' contained in a 'TheoryModel'.
+-- | Finds the domain of the 'Conception' contained in a 'TheoryModel'.
 instance ConceptDomain      TheoryModel where cdom = cdom . view mk
 -- | Finds any additional notes for the 'TheoryModel'.
 instance HasAdditionalNotes TheoryModel where getNotes = notes

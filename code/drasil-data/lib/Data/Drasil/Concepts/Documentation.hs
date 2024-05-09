@@ -323,11 +323,11 @@ vavPlan                      = compoundNC vav plan
 -- * Domains
 
 -- | Root SRS Domain.
-srsDom :: ConceptChunk
+srsDom :: Conception
 srsDom = dcc "srsDom" (srs ^. term) "srs"
 
 goalStmtDom, assumpDom, reqDom, funcReqDom, nonFuncReqDom, chgProbDom, 
-  likeChgDom, unlikeChgDom, refByDom, refNameDom :: ConceptChunk
+  likeChgDom, unlikeChgDom, refByDom, refNameDom :: Conception
 goalStmtDom   = ccs (mkIdea "goalStmtDom"   (goalStmt ^. term)                 $ Just "GS")       EmptyS [srsDom]
 assumpDom     = ccs (mkIdea "assumpDom"     (assumption ^. term)               $ Just "A")        EmptyS [srsDom]
 reqDom        = ccs (mkIdea "reqDom"        (requirement ^. term)              $ Just "R")        EmptyS [srsDom]
@@ -340,7 +340,7 @@ refByDom      = ccs (mkIdea "refByDom"      (refBy ^. term)                    $
 refNameDom    = ccs (mkIdea "refNameDom"    (refName ^. term)                  $ Just "RefName")  EmptyS [srsDom]
 
 -- | List of SRS-related concepts, including SRS.
-srsDomains :: [ConceptChunk]
+srsDomains :: [Conception]
 srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom, 
   assumpDom, chgProbDom, likeChgDom, unlikeChgDom, refByDom, refNameDom]
 

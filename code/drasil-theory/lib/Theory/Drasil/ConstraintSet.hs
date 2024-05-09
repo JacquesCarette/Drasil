@@ -21,7 +21,7 @@ import           Language.Drasil
 
 -- | 'ConstraintSet's are sets of invariants that always hold for underlying domains.
 data ConstraintSet e = CL {
-  _con  :: ConceptChunk,
+  _con  :: Conception,
   _invs :: NE.NonEmpty e
 }
 
@@ -46,5 +46,5 @@ instance RequiresChecking (ConstraintSet Expr) Expr Space where
   requiredChecks cs = map (,Boolean) $ NE.toList (cs ^. invs)
 
 -- | Smart constructor for building ConstraintSets
-mkConstraintSet :: ConceptChunk -> NE.NonEmpty e -> ConstraintSet e
+mkConstraintSet :: Conception -> NE.NonEmpty e -> ConstraintSet e
 mkConstraintSet = CL

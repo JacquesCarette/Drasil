@@ -12,12 +12,12 @@ import Data.Drasil.Concepts.Math (equation)
 -- * Common Software Concepts
 
 -- | Collects all software-related concepts.
-softwarecon :: [ConceptChunk]
+softwarecon :: [Conception]
 softwarecon = [correctness, verifiability, physLib,
   understandability, reusability, maintainability, portability,
   performance, program, errMsg, accuracy, reliability]
 
-c, errMsg, physLib, program :: ConceptChunk
+c, errMsg, physLib, program :: Conception
 
 c       = dcc "c" (pn "C") 
   "the C programming language"
@@ -31,7 +31,7 @@ errMsg  = dcc "errMsg" (cn' "error message")
 -- * Non-functional Requirements 
 
 accuracy, correctness, maintainability, performance, performanceSpd, portability,
-  reliability, reusability, understandability, verifiability :: ConceptChunk
+  reliability, reusability, understandability, verifiability :: Conception
 
 qualOfBeing :: String -> String
 qualOfBeing s = "the quality or state of being" ++ s
@@ -72,12 +72,12 @@ verifiability     = dcc "verifiability"     (nounPhraseSP "verifiability")
 -- MODULES Concepts (Maybe move to D.D.C.Software.Modules ?)
 
 --FIXME: "hiding" is not a noun.
-hwHiding :: ConceptChunk
+hwHiding :: Conception
 hwHiding = dcc "hwHiding" (cn "hardware hiding")
   ("hides the exact details of the hardware, and provides a uniform interface" ++
    " for the rest of the system to use")
 
-modBehavHiding :: ConceptChunk
+modBehavHiding :: Conception
 modBehavHiding = dccWDS "modBehavHiding" (cn "behaviour hiding") (foldlSent_
   [S "includes programs that provide externally visible behaviour of the", 
    S "system as specified in the", phrase srs, sParen $ short srs +:+. S "documents",
@@ -85,82 +85,82 @@ modBehavHiding = dccWDS "modBehavHiding" (cn "behaviour hiding") (foldlSent_
    S "and the software decision module. The programs in this module will need",
    S "to change if there are changes in the", short srs])
 
-modControl :: ConceptChunk
+modControl :: Conception
 modControl = dcc "modControl" (cn' "control module") "provides the main program"
 
-modSfwrDecision :: ConceptChunk
+modSfwrDecision :: Conception
 modSfwrDecision = dccWDS "modSfwrDecision" (cn' "software decision module") (foldlSent_
   [S "includes", plural dataStruct `S.and_` plural algorithm,
    S "used in the system that do not provide direct interaction with the user"])
 
-modInputFormat :: ConceptChunk
+modInputFormat :: Conception
 modInputFormat = dcc "modInputFormat" (cn' "input format module")
   "converts the input data into the data structure used by the input parameters module"
   
-modInputParam :: ConceptChunk
+modInputParam :: Conception
 modInputParam = dccWDS "modInputParam" (cn' "input parameter module") (foldlSent_
   [S "stores the parameters needed for the program, including" +:+. foldlList Comma List
    [S "material properties", S "processing conditions", S "numerical parameters"],
    S "The values can be read as needed. This module knows how many parameters it stores"])
 
-modInputConstraint :: ConceptChunk
+modInputConstraint :: Conception
 modInputConstraint = dcc "modInputConstraint" (cn' "input constraint module") 
   ("defines the constraints on the input data and gives an error if " ++
    "a constraint is violated")
 
-modInputVerif :: ConceptChunk
+modInputVerif :: Conception
 modInputVerif = dccWDS "modInputVerif" (cn' "input verification module") (foldlSent
   [S "verifies that the", plural inParam, S "comply with", phrase physical `S.and_`
    plural softwareConstraint, S "Throws an error if a parameter violates a" +:+.
    phrase physicalConstraint, S "Throws a warning if a parameter violates a",
    phrase softwareConstraint])
 
-modDerivedVal :: ConceptChunk
+modDerivedVal :: Conception
 modDerivedVal = dccWDS "modDerivedVal" (cn' "derived value module") (foldlSent_
   [S "defines the", plural equation, S "transforming the initial", plural input_,
    S "into derived", plural quantity])
 
-modInterpolation :: ConceptChunk
+modInterpolation :: Conception
 modInterpolation = dccWDS "modInterpolation" (cn "interpolation module") (foldlSent_
   [S "provides the", plural equation, S "that take the", plural inParam `S.and_`
    S "interpolation data" `S.and_` S "return an interpolated value"])
 
-modInterpDatum :: ConceptChunk
+modInterpDatum :: Conception
 modInterpDatum = dccWDS "modInterpDatum" (cn "interpolation datum module") (foldlSent_
   [S "converts the input interpolation data into the", phrase dataStruct,
    S "used by the", phrase modInterpolation])
 
 {-- Concept Chunks for Modules  --}
 
-modSeqServ :: ConceptChunk
+modSeqServ :: Conception
 modSeqServ = dccWDS "modSeqServ" (cn' "sequence data structure")
   (S "Provides array manipulation operations, such as" +:+ foldlList Comma List
    [S "building an array", S "accessing a specific entry", S "slicing an array"])
 
-modLinkedServ :: ConceptChunk
+modLinkedServ :: Conception
 modLinkedServ = dccWDS "modLinkedServ" (cn' "linked data structure")
   (S "Provides tree manipulation operations, such as" +:+ foldlList Comma List
    [S "building a tree", S "accessing a specific entry"])
 
-modAssocServ :: ConceptChunk
+modAssocServ :: Conception
 modAssocServ = dccWDS "modAssocServ" (cn' "associative data structure")
   (S "Provides operations on hash tables, such as" +:+ foldlList Comma List
    [S "building a hash table", S "accessing a specific entry"])
 
-modVectorServ :: ConceptChunk
+modVectorServ :: Conception
 modVectorServ = dccWDS "modVectorServ" (cn' "vector")
   (S "Provides vector operations such as" +:+ foldlList Comma List [S "addition",
    S "scalar and vector multiplication", S "dot and cross products", S "rotations"])
   
-modPlotDesc :: ConceptChunk
+modPlotDesc :: Conception
 modPlotDesc = dcc "modPlotDesc" (cn' "plotting") "provides a plot function"
 
-modOutputfDescFun :: Sentence -> ConceptChunk
+modOutputfDescFun :: Sentence -> Conception
 modOutputfDescFun desc = dccWDS "modOutputfDescFun" (cn' "output format")
   (S "outputs the results of the calculations, including the" +:+ desc)
 
 -- ODE Solver Module
-modOdeDesc :: ConceptChunk
+modOdeDesc :: Conception
 modOdeDesc = dccWDS "modOdeDesc" (nounPhraseSP "ODE solver")
   (S "provides solvers that take the" +:+ foldlList Comma List
    [S "governing equation", S "initial conditions", S "numerical parameters"] `S.and_`

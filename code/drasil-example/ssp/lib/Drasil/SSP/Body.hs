@@ -169,7 +169,7 @@ symbMap = cdb (map (^. output) SSP.iMods ++ map qw symbols) (map nw symbols
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+ ([] :: [Conception]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
@@ -324,7 +324,7 @@ From when solution was used in Problem Description:
 -}
 
 -- SECTION 4.1.1 --
-terms :: [ConceptChunk]
+terms :: [Conception]
 terms = [fsConcept, slpSrf, crtSlpSrf, waterTable, stress, strain, normForce,
   shearForce, mobShear, shearRes, effFandS, cohesion, isotropy, plnStrn]
 

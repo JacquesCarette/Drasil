@@ -23,7 +23,7 @@ tmLaplace
   = tm (othModel' laplaceRC)
       [qw qdLaplaceTransform, qw qdFreqDomain, qw time, qw posInf,
        qw qdFxnTDomain]
-      ([] :: [ConceptChunk])
+      ([] :: [Conception])
       []
       [express laplaceRel]
       []
@@ -55,7 +55,7 @@ tmInvLaplace
   = tm (othModel' invlaplaceRC)
       [qw qdLaplaceTransform, qw qdFreqDomain, qw time, qw posInf,
        qw qdFxnTDomain]
-      ([] :: [ConceptChunk])
+      ([] :: [Conception])
       []
       [express invLaplaceRel]
       []
@@ -84,7 +84,7 @@ tmSOSystem :: TheoryModel
 tmSOSystem
   = tm (othModel' tmSOSystemRC)
       [qw mass, qw qdDampingCoeff, qw qdStiffnessCoeff, qw qdFreqDomain]
-      ([] :: [ConceptChunk])
+      ([] :: [Conception])
       []
       [express soSystemRel]
       []

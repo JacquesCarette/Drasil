@@ -64,10 +64,10 @@ purp = foldlSent [S "describes", phrase CT.heatTrans, S "coefficients related to
 symbMap :: ChunkDB
 symbMap = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
   ++ [nw fp, nw nuclearPhys, nw hghc, nw degree] ++ map nw doccon' ++ map nw mathcon)
-  ([] :: [ConceptChunk])-- FIXME: Fill in concepts
+  ([] :: [Conception])-- FIXME: Fill in concepts
   siUnits dataDefs [] [] [] [] [] [] []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols)
-           ([] :: [ConceptChunk]) ([] :: [UnitDefn])
+           ([] :: [Conception]) ([] :: [UnitDefn])
            [] [] [] [] [] [] [] ([] :: [Reference])

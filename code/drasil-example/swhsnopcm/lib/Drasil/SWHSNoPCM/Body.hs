@@ -219,7 +219,7 @@ symbMap = cdb symbolsAll (nw progName : map nw symbols ++ map nw acronyms ++ map
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw symbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+ ([] :: [Conception]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 --------------------------
 --Section 2 : INTRODUCTION
@@ -297,7 +297,7 @@ sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
 
 --Introduction of Problem Description section derived from purp
 
-terms :: [ConceptChunk]
+terms :: [Conception]
 terms = [htFlux, heatCapSpec, thermalConduction, transient]
 
 figTank :: LabelledContent

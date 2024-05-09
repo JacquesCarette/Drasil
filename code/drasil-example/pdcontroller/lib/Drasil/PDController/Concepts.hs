@@ -25,7 +25,7 @@ pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
       simulationTime, processVariable, setPoint, propGain, derGain, 
       propControl, derControl, simulation,ccFrequencyDomain, ccTimeDomain,
       ccLaplaceTransform, controlVariable, stepTime, ccAbsTolerance, 
-      ccRelTolerance, ccTransferFxn, ccDampingCoeff, ccStiffCoeff :: ConceptChunk
+      ccRelTolerance, ccTransferFxn, ccDampingCoeff, ccStiffCoeff :: Conception
 pidCL
   = dcc "pdCtrlLoop" (nounPhraseSP "PD Control Loop") ("Closed-Loop control " ++
         "system with PD Controller, Summing Point and Power Plant")
@@ -132,7 +132,7 @@ ccStiffCoeff
 concepts :: [IdeaDict]
 concepts = map nw defs
 
-defs :: [ConceptChunk]
+defs :: [Conception]
 defs
   = [pidCL, pidC, summingPt, powerPlant, secondOrderSystem, processError,
      simulationTime, processVariable, setPoint, propGain, derGain, propControl,

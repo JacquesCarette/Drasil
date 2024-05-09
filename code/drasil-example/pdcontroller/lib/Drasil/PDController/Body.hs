@@ -146,7 +146,7 @@ symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbolsAll)
-  ([] :: [ConceptChunk])
+  ([] :: [Conception])
   ([] :: [UnitDefn])
   ([] :: [DataDefinition])
   ([] :: [InstanceModel])

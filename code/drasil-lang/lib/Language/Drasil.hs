@@ -94,7 +94,7 @@ module Language.Drasil (
 
   -- *** Concepts
   -- Language.Drasil.Chunk.Concept.Core
-  , ConceptChunk, ConceptInstance, sDom
+  , Conception, ConceptInstance, sDom
   -- Language.Drasil.Chunk.Concept
   , dcc, dccWDS, cc, cc', ccs, cw, cic
   -- Language.Drasil.Chunk.Relation

@@ -276,7 +276,7 @@ lDur   = label "d"
 lFail  = label "f"
 lTol   = label "tol"
 
-terms :: [ConceptChunk]
+terms :: [Conception]
 terms = [aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
   glTyFac, lateral, load, specDeLoad, loadResis, longDurLoad, nonFactoredL,
   glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar,
@@ -287,7 +287,7 @@ aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
   glTyFac, lateral, load, specDeLoad, loadResis, longDurLoad, nonFactoredL,
   glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar,
   sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,
-  explosion :: ConceptChunk
+  explosion :: Conception
 
 annealedGl    = cc' annealed
   (S "a flat, monolithic, glass lite which has uniform thickness where" +:+
@@ -408,7 +408,7 @@ sdVector = [sdx, sdy, sdz]
 
 --
 --Pulled to be used in "Terms And Definitions" Section--
-termsWithDefsOnly, termsWithAccDefn, loadTypes, glassTypes :: [ConceptChunk]
+termsWithDefsOnly, termsWithAccDefn, loadTypes, glassTypes :: [Conception]
 
 glassTypes = [annealedGl, fTemperedGl, hStrengthGl]
 termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla, eqTNTChar]

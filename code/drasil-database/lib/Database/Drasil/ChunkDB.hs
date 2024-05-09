@@ -47,7 +47,7 @@ type UMap a = Map.Map UID (a, Int)
 type SymbolMap  = UMap QuantityDict
 
 -- | A map of all concepts, normally used for retrieving definitions.
-type ConceptMap = UMap ConceptChunk
+type ConceptMap = UMap Conception
 
 -- | A map of all the units used. Should be restricted to base units/synonyms.
 type UnitMap = UMap UnitDefn
@@ -132,7 +132,7 @@ unitLookup :: UID -> UnitMap -> UnitDefn
 unitLookup = uMapLookup "Unit" "UnitMap"
 
 -- | Looks up a 'UID' in the definition table from the 'ChunkDB'. If nothing is found, an error is thrown.
-defResolve :: ChunkDB -> UID -> ConceptChunk
+defResolve :: ChunkDB -> UID -> Conception
 defResolve m x = uMapLookup "Concept" "ConceptMap" x $ defTable m
 
 -- | Looks up a 'UID' in the datadefinition table. If nothing is found, an error is thrown.

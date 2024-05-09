@@ -11,7 +11,7 @@ import Data.Drasil.Concepts.Math (ode, parameter, rightSide)
 import Data.Drasil.Domains (materialEng)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
-con :: [ConceptChunk]
+con :: [Conception]
 con = [charging, coil, discharging, gaussDiv,
   perfectInsul, phaseChangeMaterial, tank,
   tankPCM, transient, water, sWHT, tankParam]
@@ -37,11 +37,11 @@ full = nc "full" (progName `with` phsChgMtrl)
 -- I want to include SI as an acronym, but I can't find a way for the
 -- description to have accents when using dcc.
 
----ConceptChunks---
+---Conceptions---
 
 charging, coil, discharging, gaussDiv,
   perfectInsul, phaseChangeMaterial, tank,
-  tankPCM, transient, water, sWHT, tankParam :: ConceptChunk
+  tankPCM, transient, water, sWHT, tankParam :: Conception
 
 charging = dcc "charging" (nounPhraseSP "charging") "charging of the tank"
 

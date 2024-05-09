@@ -19,7 +19,7 @@ module Language.Drasil.Document.Combinators (
   zipSentList
 ) where
 
-import Language.Drasil.Chunk.Concept.Core ( ConceptChunk )
+import Language.Drasil.Chunk.Concept.Core (Conception)
 import Language.Drasil.Chunk.Quantity (DefinesQuantity(defLhs))
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, MayHaveUnit(..))
 import Language.Drasil.Chunk.Unital (Unital)
@@ -203,7 +203,7 @@ showingCxnBw traceyVar contents = titleize traceyVar +:+
   S "Showing the Connections Between" +:+ contents
 
 -- | Returns the 'Sentence' "The @chunk@ under consideration is @chunkDefinition@".
-underConsidertn :: ConceptChunk -> Sentence
+underConsidertn :: Conception -> Sentence
 underConsidertn chunk = S "The" +:+ phrase chunk +:+ 
   S "under consideration is" +:+. (chunk ^. defn)
 

@@ -23,7 +23,7 @@ module Language.Drasil.Chunk.UnitDefn (
 import Control.Lens ((^.), makeLenses, view)
 import Control.Arrow (second)
 
-import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
+import Language.Drasil.Chunk.Concept (Conception, dcc, cc')
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn, getUnits))
 import Language.Drasil.NounPhrase (cn,cn',NP)
@@ -33,30 +33,30 @@ import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift),
 import Language.Drasil.UID (UID, HasUID(..), mkUid)
 
 -- | For defining units.
--- It has a 'ConceptChunk' (that defines what kind of unit it is),
+-- It has a 'Conception' (that defines what kind of unit it is),
 -- a unit symbol, maybe another (when it is a synonym),
 -- perhaps a definition, and a list of 'UID' of the units that make up
 -- the definition.
 --
 -- Ex. Meter is a unit of length defined by the symbol (m).
-data UnitDefn = UD { _vc :: ConceptChunk 
+data UnitDefn = UD { _vc :: Conception 
                    , _cas :: UnitSymbol
                    , _cu :: [UID] }
 makeLenses ''UnitDefn
 
--- | Finds 'UID' of the 'ConceptChunk' used to make the 'UnitDefn'.
+-- | Finds 'UID' of the 'Conception' used to make the 'UnitDefn'.
 instance HasUID        UnitDefn where uid = vc . uid
--- | Finds term ('NP') of the 'ConceptChunk' used to make the 'UnitDefn'.
+-- | Finds term ('NP') of the 'Conception' used to make the 'UnitDefn'.
 instance NamedIdea     UnitDefn where term   = vc . term
--- | Finds the idea contained in the 'ConceptChunk' used to make the 'UnitDefn'.
+-- | Finds the idea contained in the 'Conception' used to make the 'UnitDefn'.
 instance Idea          UnitDefn where getA c = getA (c ^. vc)
--- | Finds definition of the 'ConceptChunk' used to make the 'UnitDefn'.
+-- | Finds definition of the 'Conception' used to make the 'UnitDefn'.
 instance Definition    UnitDefn where defn = vc . defn
 -- | Equal if 'Symbol's are equal.
 instance Eq            UnitDefn where a == b = usymb a == usymb b
--- | Finds the domain contained in the 'ConceptChunk' used to make the 'UnitDefn'.
+-- | Finds the domain contained in the 'Conception' used to make the 'UnitDefn'.
 instance ConceptDomain UnitDefn where cdom = cdom . view vc
--- | Finds unit symbol of the 'ConceptChunk' used to make the 'UnitDefn'.
+-- | Finds unit symbol of the 'Conception' used to make the 'UnitDefn'.
 instance HasUnitSymbol UnitDefn where usymb = getUSymb . view cas
 -- | Gets the UnitDefn and contributing units. 
 instance IsUnit        UnitDefn where 
@@ -83,7 +83,7 @@ getCu :: UnitEquation -> [UID]
 getCu = view contributingUnit
 
 -- | Create a derived unit chunk from a concept and a unit equation.
-makeDerU :: ConceptChunk -> UnitEquation -> UnitDefn
+makeDerU :: Conception -> UnitEquation -> UnitDefn
 makeDerU concept eqn = UD concept (Defined (usymb eqn) (USynonym $ usymb eqn)) (getCu eqn)
 
 -- FIXME: Shouldn't need to use the UID constructor here.
@@ -113,7 +113,7 @@ derUC'' a b c s u = UD (dcc a b c) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
 --FIXME: Make this use a meaningful identifier.
 -- | Helper for fundamental unit concept chunk creation. Uses the same 'String'
 -- for the identifier, term, and definition.
-unitCon :: String -> ConceptChunk
+unitCon :: String -> Conception
 unitCon s = dcc s (cn' s) s
 ---------------------------------------------------------
 

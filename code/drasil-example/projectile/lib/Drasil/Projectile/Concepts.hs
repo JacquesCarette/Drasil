@@ -30,10 +30,10 @@ projMotion :: IdeaDict
 projMotion = compoundNC projectile motion
 ---
 
-defs :: [ConceptChunk]
+defs :: [Conception]
 defs = [launcher, projectile, target, projSpeed, projPos]
 
-launcher, projectile, target, projSpeed, projPos :: ConceptChunk
+launcher, projectile, target, projSpeed, projPos :: Conception
 launcher   = dcc "launcher"   (nounPhraseSP "launcher")  ("where the projectile is launched from " ++
                                                           "and the device that does the launching")
 projectile = dcc "projectile" (nounPhraseSP "projectile") "the object to be launched at the target"
@@ -42,7 +42,7 @@ target     = dcc "target"     (nounPhraseSP "target")     "where the projectile 
 projSpeed  = dccWDS "projSpeed" (nounPhraseSP "1D speed")    (getAcc oneD +:+ phrase speed +:+ S "under" +:+ phrase constant +:+ phrase acceleration)
 projPos    = dccWDS "projPos"   (nounPhraseSP "1D position") (getAcc oneD +:+ phrase position +:+ S "under" +:+ phrase constant +:+ phrase speed)
 
-landPos, launAngle, launSpeed, offset, targPos, flightDur :: ConceptChunk
+landPos, launAngle, launSpeed, offset, targPos, flightDur :: Conception
 landPos = cc' landingPosNC
   (foldlSent_ [phraseNP (the distance) `S.fromThe` phrase launcher `S.toThe`
             S "final", phraseNP (position `ofThe` projectile)])

@@ -34,12 +34,12 @@ ccss s e c = nub $ concatMap (`combine` c) s ++ concatMap (`combine'` c) e
 ccss' :: [Sentence] -> [ModelExpr] -> ChunkDB -> [QuantityDict]
 ccss' s e c = nub $ concatMap (`vars'` c) s ++ concatMap (`vars` c) e
 
--- | Gets a list of concepts ('ConceptChunk') from a 'Sentence' in order to print.
-concpt :: Sentence -> ChunkDB -> [ConceptChunk]
+-- | Gets a list of concepts ('Conception') from a 'Sentence' in order to print.
+concpt :: Sentence -> ChunkDB -> [Conception]
 concpt a m = map (defResolve m) $ sdep a
 
--- | Gets a list of concepts ('ConceptChunk') from an expression in order to print.
-concpt' :: ModelExpr -> ChunkDB -> [ConceptChunk]
+-- | Gets a list of concepts ('Conception') from an expression in order to print.
+concpt' :: ModelExpr -> ChunkDB -> [Conception]
 concpt' a m = map (defResolve m) $ meDep a
 
 -- | Gets a list of ideas ('IdeaDict') from a 'Sentence' in order to print.

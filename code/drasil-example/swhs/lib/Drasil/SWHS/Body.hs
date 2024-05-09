@@ -113,7 +113,7 @@ symbMap = cdb (qw (heatEInPCM ^. output) : symbolsAll) -- heatEInPCM ?
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronymsFull)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+ ([] :: [Conception]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
@@ -179,7 +179,7 @@ section = extractSection srs
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
-priorityNFReqs :: [ConceptChunk]
+priorityNFReqs :: [Conception]
 priorityNFReqs = [correctness, verifiability, understandability, reusability,
   maintainability]
 -- It is sometimes hard to remember to add new sections both here and above.
@@ -359,7 +359,7 @@ userChars pro = foldlSP [S "The end", phrase user `S.of_` short pro,
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------
 
-terms :: [ConceptChunk]
+terms :: [Conception]
 terms = map cw [htFlux, phaseChangeMaterial, cw heatCapSpec, thermalConduction, transient]
 
 -- Included heat flux and specific heat in NamedChunks even though they are
@@ -374,10 +374,10 @@ physSystParts = map foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFlux
   [short phsChgMtrl, S "suspended in" +:+. phrase tank,
   sParen (ch htFluxP +:+ S "represents the" +:+. phrase htFluxP)]]
 
-physSyst1 :: ConceptChunk -> ConceptChunk -> [Sentence]
+physSyst1 :: Conception -> Conception -> [Sentence]
 physSyst1 ta wa = [atStart ta, S "containing" +:+. phrase wa]
 
-physSyst2 :: ConceptChunk -> ConceptChunk -> Unital -> [Sentence]
+physSyst2 :: Conception -> Conception -> Unital -> [Sentence]
 physSyst2 co ta hfc = [atStart co, S "at bottom of" +:+. phrase ta,
   sParen (ch hfc +:+ S "represents the" +:+. phrase hfc)]
 
@@ -516,8 +516,8 @@ propsDeriv = [
   propCorSolDeriv4,
   propCorSolDeriv5 equation progName rightSide]
 
-propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => ConceptChunk -> b -> Unital ->
-  ConceptChunk -> CI -> GenDefn -> GenDefn -> h -> ConceptChunk -> Contents
+propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => Conception -> b -> Unital ->
+  Conception -> CI -> GenDefn -> GenDefn -> h -> Conception -> Contents
 propCorSolDeriv1 lce ewat en co pcmat g1hfc g2hfp su ht  =
   foldlSPCol [atStartNP (a_ corSol), S "must exhibit" +:+.
   phraseNP (the lce), S "This means that", phraseNP (the ewat),
@@ -538,7 +538,7 @@ propCorSolDeriv2 = unlbldExpr
   (sy pcmHTC `mulRe` sy pcmSA `mulRe` (apply1 tempW time $-
   apply1 tempPCM time)))
 
-propCorSolDeriv3 :: NamedIdea a => a -> Unital -> CI -> ConceptChunk -> Contents
+propCorSolDeriv3 :: NamedIdea a => a -> Unital -> CI -> Conception -> Contents
 propCorSolDeriv3 epcm en pcmat wa =
   foldlSP_ [S "In addition, the", phrase epcm, S "should equal the",
   phrase en, phrase input_, S "to the", short pcmat,
@@ -550,7 +550,7 @@ propCorSolDeriv4 = unlbldExpr
   (sy pcmHTC `mulRe` sy pcmSA `mulRe` (apply1 tempW time $- 
   apply1 tempPCM time)))
 
-propCorSolDeriv5 :: ConceptChunk -> CI -> CI -> Contents
+propCorSolDeriv5 :: Conception -> CI -> CI -> Contents
 propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)" 
   `S.and_` S "(FIXME: Equation 8) can be used as", Quote (S "sanity") +:+
   S "checks to gain confidence in any", phrase solution,

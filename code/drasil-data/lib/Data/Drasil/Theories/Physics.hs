@@ -26,7 +26,7 @@ physicsTMs = [newtonSL]
 
 newtonSL :: TheoryModel
 newtonSL = tmNoRefs (equationalModelU "newtonSL" newtonSLQD)
-  [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [ConceptChunk])
+  [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [Conception])
   [newtonSLQD] [] [] "NewtonSecLawMot" [newtonSLDesc]
 
 -- * Weight
@@ -125,7 +125,7 @@ vecMag = ddENoRefs vecMagQD Nothing "vecMag" [magNote]
 newtonSLR :: TheoryModel
 newtonSLR = tmNoRefs (equationalModelU "newtonSLR" newtonSLRQD)
   [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
-  ([] :: [ConceptChunk]) [newtonSLRQD] [] [] "NewtonSecLawRotMot" newtonSLRNotes
+  ([] :: [Conception]) [newtonSLRQD] [] [] "NewtonSecLawRotMot" newtonSLRNotes
 
 newtonSLRQD :: ModelQDef
 newtonSLRQD = mkQuantDef' QP.torque (nounPhraseSP "Newton's second law for rotational motion") newtonSLRExpr
@@ -144,12 +144,12 @@ newtonSLRNotes = [foldlSent
 
 accelerationTM :: TheoryModel
 accelerationTM = tm (equationalModelU "accelerationTM" accelerationQD)
-  [qw QP.acceleration, qw QP.velocity, qw QP.time] ([] :: [ConceptChunk]) [accelerationQD] [] []
+  [qw QP.acceleration, qw QP.velocity, qw QP.time] ([] :: [Conception]) [accelerationQD] [] []
   [dRef accelerationWiki] "acceleration" []
 
 -- * Velocity
 
 velocityTM :: TheoryModel
 velocityTM = tm (equationalModelU "velocityTM" velocityQD)
-  [qw QP.velocity, qw QP.position, qw QP.time] ([] :: [ConceptChunk]) [velocityQD] [] []
+  [qw QP.velocity, qw QP.position, qw QP.time] ([] :: [Conception]) [velocityQD] [] []
   [dRef velocityWiki] "velocity" []

@@ -35,10 +35,10 @@ secondRod       = compoundNC second_ rod
 firstObject     = compoundNC first object
 secondObject    = compoundNC second_ object
 
-defs :: [ConceptChunk]
+defs :: [Conception]
 defs = [arcLen]
 
-arcLen :: ConceptChunk
+arcLen :: Conception
 arcLen = dcc "arc length" (nounPhraseSP "arc length") "the distance between two points on a curve"
 
 progName :: CI

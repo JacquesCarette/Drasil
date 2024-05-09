@@ -2,7 +2,7 @@
 module Data.Drasil.Concepts.Computation where
 
 import Language.Drasil (dcc, nc, cn', commonIdeaWithDict, Sentence,
-  ConceptChunk, CI, IdeaDict, dccWDS)
+  Conception, CI, IdeaDict, dccWDS)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_, 
@@ -10,13 +10,13 @@ import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_,
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.Domains (compScience)
 
-algorithm, absTolerance, relTolerance:: ConceptChunk
+algorithm, absTolerance, relTolerance:: Conception
 algorithm = dcc "algorithm" (cn' "algorithm")
   "a series of steps to be followed in calculations and problem-solving operations"
 absTolerance = dcc "absTolerance"   (cn' "Absolute tolerance") "a fixed number that is used to make direct comparisons"
 relTolerance = dcc "relTolerance"   (cn' "Relative tolerance") " maximum amount of error that the user is willing to allow in the solution"
 
-modCalcDesc :: Sentence -> ConceptChunk
+modCalcDesc :: Sentence -> Conception
 modCalcDesc = dccWDS "modCalcDesc" (cn' "calculation")
 
 -- | Collects all computing-related named chunks (not concept-level yet).

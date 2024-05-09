@@ -28,7 +28,7 @@ defs = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice,
   soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics, 
   stabAnalysis, ssa]
 
-defs' :: [ConceptChunk]
+defs' :: [Conception]
 defs' = [slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable]
 
 ----Other Common Phrases----
@@ -59,7 +59,7 @@ soilMechanics = compoundNC soil mechanics
 stabAnalysis = compoundNC stability analysis
 ssa = compoundNC slope stabAnalysis
 
-effFandS, slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable :: ConceptChunk
+effFandS, slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable :: Conception
 effFandS = dccWDS "effective forces and stresses" 
   (cn "effective forces and stresses") 
   (atStartNP (the normForce) `S.or_` phrase nrmStrss +:+

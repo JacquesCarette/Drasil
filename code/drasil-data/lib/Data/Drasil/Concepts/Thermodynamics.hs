@@ -9,7 +9,7 @@ import Data.Drasil.Concepts.Documentation (source, theory)
 import Data.Drasil.Concepts.Physics (energy)
 
 -- | Collects all thermodynamics-related concepts.
-thermocon :: [ConceptChunk]
+thermocon :: [Conception]
 thermocon = [boilPt, boiling, degree_', enerSrc, heat, heatCapSpec, heatTrans,
   htFlux, htTransTheo, latentHeat, lawConsEnergy, lawConvCooling, meltPt,
   melting, phaseChange, sensHeat, temp, thermalAnalysis, thermalConduction,
@@ -18,7 +18,7 @@ thermocon = [boilPt, boiling, degree_', enerSrc, heat, heatCapSpec, heatTrans,
 boilPt, boiling, degree_', enerSrc, heat, heatCapSpec, heatTrans, htFlux,
   htTransTheo, latentHeat, lawConsEnergy, lawConvCooling, meltPt, melting,
   phaseChange, sensHeat, temp, thermalAnalysis, thermalConduction,
-  thermalConductor, thermalEnergy :: ConceptChunk
+  thermalConductor, thermalEnergy :: Conception
   
 -- FIXME: "Boiling" is not a noun. How should we deal with it?
 --    Same for "Melting"

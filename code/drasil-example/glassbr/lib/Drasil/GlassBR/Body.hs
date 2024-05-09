@@ -146,7 +146,7 @@ labCon = funcReqsTables ++ [demandVsSDFig, dimlessloadVsARFig]
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+ ([] :: [Conception]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
@@ -167,7 +167,7 @@ termsAndDescBullets = UlC $ ulcc $ Enumeration$
       ++ termsAndDescBulletsLoadSubSec 
       ++ map tAndDWAcc termsWithAccDefn 
       ++ [tAndDWSym probBreak probBr]
-   --FIXME: merge? Needs 2 arguments because there is no instance for (SymbolForm ConceptChunk)...
+   --FIXME: merge? Needs 2 arguments because there is no instance for (SymbolForm Conception)...
 
 termsAndDescBulletsGlTySubSec, termsAndDescBulletsLoadSubSec :: [ItemType]
 
@@ -187,7 +187,7 @@ auxiliaryConstants :: [ConstQDef]
 auxiliaryConstants = assumptionConstants ++ specParamVals
 
 --Used in "Non-Functional Requirements" Section--
-priorityNFReqs :: [ConceptChunk]
+priorityNFReqs :: [Conception]
 priorityNFReqs = [correctness, verifiability, understandability,
   reusability, maintainability, portability]
 

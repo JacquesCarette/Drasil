@@ -2,8 +2,8 @@
 module Drasil.PDController.Requirements where
 
 import Data.Drasil.Concepts.Documentation (funcReqDom, nonFuncReqDom, datumConstraint)
-
 import Drasil.DocLang.SRS (datCon)
+import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.PDController.Concepts
 import Drasil.PDController.IModel
@@ -60,14 +60,11 @@ security
       nonFuncReqDom
 
 maintainability :: ConceptInstance
-maintainability
-  = cic "maintainability"
-      (foldlSent
-         [S "The dependencies among the instance models, requirements,",
-            S "likely changes, assumptions and all other relevant sections of",
-            S "this document shall be traceable to each other in the trace matrix"])
-      "Maintainable"
-      nonFuncReqDom
+maintainability = cic "maintainability" (foldlSent [
+  S "If a likely change is made" `S.toThe` S "finished software, it will take", 
+  addPercent (10 :: Integer), S "percent" `S.ofThe` S "original development time,",
+  S "assuming the same development resources are available"
+  ]) "Maintainability" nonFuncReqDom
 
 verifiability :: ConceptInstance
 verifiability

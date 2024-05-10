@@ -185,16 +185,16 @@ getCodeRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName =
     -- Program language converted for use in file folder navigation.
     programLang = convertLang l
 
--- | Similar to 'getCodeRef', but builds the source code references 
--- and uses 'getExampleSrcCodePath' instead.
+-- | Similar to 'getCodeRef', but builds the source code references
 buildDrasilExSrcRef :: Example -> Reference
 buildDrasilExSrcRef ex@E{sysInfoE=SI{_sys = sys}} = 
   makeURI refUID refURI refShortNm
   where
     refUID = "srcCodeRef" ++ sysName
-    refURI = getExampleSrcCodePath (codePath ex) sysName
+    refURI = path ++ "code/drasil-example/" ++ sysName
     refShortNm = shortname' $ S refUID
     sysName = map toLower $ programName sys
+    path = codePath ex
 
 -- | Similar to 'getCodeRef', but gets the doxygen references and uses 'getDoxRef' instead.
 getDoxRef :: Example -> Lang -> String -> Reference
@@ -233,11 +233,6 @@ getCodePath, getDoxPath :: FilePath -> String -> String -> FilePath
 getCodePath path ex programLang = path ++ "code/stable/" ++ map toLower ex ++ "/src/" ++ programLang -- need repoCommit path
 -- | Uses 'exRt' path (srsDoxPath in this module).
 getDoxPath path ex programLang = path ++ map toLower ex ++ "/doxygen/" ++ programLang ++ "/index.html" -- need example path
-
--- | Get the paths for the source code located in the code/drasil-example directory.
-getExampleSrcCodePath :: FilePath -> String -> FilePath
--- | Uses 'repoRt' path (codePath in this module).
-getExampleSrcCodePath path ex = path ++ "code/drasil-example/" ++ map toLower ex
 
 -- | Gather all references used in making the Examples section.
 exampleRefs :: FilePath -> FilePath -> [Reference]

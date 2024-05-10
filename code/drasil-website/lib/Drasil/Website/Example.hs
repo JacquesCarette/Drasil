@@ -192,7 +192,7 @@ getSourceCodeRef ex@E{sysInfoE=SI{_sys = sys}} =
   makeURI refUID refURI refShortNm
   where
     refUID = "srcCodeRef" ++ sysName
-    refURI = getSourceCodePath (codePath ex) sysName
+    refURI = getExampleSrcCodePath (codePath ex) sysName
     refShortNm = shortname' $ S refUID
     sysName = map toLower $ programName sys
 
@@ -234,9 +234,10 @@ getCodePath path ex programLang = path ++ "code/stable/" ++ map toLower ex ++ "/
 -- | Uses 'exRt' path (srsDoxPath in this module).
 getDoxPath path ex programLang = path ++ map toLower ex ++ "/doxygen/" ++ programLang ++ "/index.html" -- need example path
 
--- | Get the paths for the source code locations
-getSourceCodePath :: FilePath -> String -> FilePath
-getSourceCodePath path ex = path ++ "code/drasil-example/" ++ map toLower ex
+-- | Get the paths for the source code located in the code/drasil-example directory.
+getExampleSrcCodePath :: FilePath -> String -> FilePath
+-- | Uses 'repoRt' path (codePath in this module).
+getExampleSrcCodePath path ex = path ++ "code/drasil-example/" ++ map toLower ex
 
 -- | Gather all references used in making the Examples section.
 exampleRefs :: FilePath -> FilePath -> [Reference]

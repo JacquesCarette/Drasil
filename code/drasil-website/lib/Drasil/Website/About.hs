@@ -107,8 +107,12 @@ aboutParagraph8 paperGOOL = S "As described in the" +:+ namedRef paperGOOL (S "G
 -- | Paragraph providing a link to Drasil papers and documents
 aboutParagraph9 :: Reference -> Reference -> Reference -> Reference -> Sentence
 aboutParagraph9 papersWiki icsePositionPaper danPoster wellUnderstoodPaper = 
-  S "A list of papers and documents written about Drasil can be found in the" +:+ 
-  foldlList Comma List [namedRef papersWiki (S "Drasil Papers and Documents") +:+. wikiSentence +:+ S "In particular", S "there is a" +:+ 
-  namedRef icsePositionPaper (S "Old Position Paper") +:+ S "outlining our original ideas", S " a" +:+ 
-  namedRef danPoster (S "Drasil Poster"), S " a" +:+ namedRef wellUnderstoodPaper (S "Well-Understood Paper") +:+ 
-  S "discussing key concepts."]
+  S "A list of papers and documents written about Drasil can be found on the" +:+
+  namedRef papersWiki (S "Drasil papers and documents") +:+. wikiSentence +:+
+  S "In particular" `sC` S "there is" +:+. foldlList Comma List [
+    S "an" +:+ namedRef icsePositionPaper (S "Old Position paper") +:+
+      S "outlining our original ideas",
+    S "a" +:+ namedRef danPoster (S "Drasil poster"),
+    S "a" +:+ namedRef wellUnderstoodPaper (S "Well-Understood paper") +:+
+      S "discussing key concepts"
+  ]

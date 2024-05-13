@@ -71,11 +71,11 @@ reusable :: ConceptInstance
 reusable = cic "reusable" (foldlSent [atStartNP (the code), S "is modularized"]) "Reusable" nonFuncReqDom
 
 maintainable :: ConceptInstance
-maintainable = cic "maintainability" (foldlSent [
+maintainable = cic "maintainable" (foldlSent [
   S "If a likely change is made" `S.toThe` S "finished software, it will take", 
   addPercent (10 :: Integer), S "percent" `S.ofThe` S "original development time,",
   S "assuming the same development resources are available"
-  ]) "Maintainability" nonFuncReqDom
+  ]) "Maintainable" nonFuncReqDom
 
 portable :: ConceptInstance
 portable = cic "portable" (foldlSent [

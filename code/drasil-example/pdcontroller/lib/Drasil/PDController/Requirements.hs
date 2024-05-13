@@ -64,7 +64,7 @@ maintainability = cic "maintainability" (foldlSent [
   S "If a likely change is made" `S.toThe` S "finished software, it will take", 
   addPercent (10 :: Integer), S "percent" `S.ofThe` S "original development time,",
   S "assuming the same development resources are available"
-  ]) "Maintainability" nonFuncReqDom
+  ]) "Maintainable" nonFuncReqDom
 
 verifiability :: ConceptInstance
 verifiability

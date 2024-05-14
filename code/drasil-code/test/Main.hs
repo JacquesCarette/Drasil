@@ -13,24 +13,25 @@ import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurre
 import System.FilePath.Posix (takeDirectory)
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
+import SuperSimple (superSimple)
 import HelloWorld (helloWorld)
 import PatternTest (patternTest)
 import FileTests (fileTests)
 import VectorTest (vectorTest)
 import NameGenTest (nameGenTest)
 
--- | Renders five GOOL tests (FileTests, HelloWorld, PatternTest, VectorTest, and NameGenTest)
+-- | Renders five GOOL tests (FileTests, SuperSimple, HelloWorld, PatternTest, VectorTest, and NameGenTest)
 -- in Java, Python, C#, C++, and Swift.
 main :: IO()
 main = do
   workingDir <- getCurrentDirectory
-  createDirectoryIfMissing False "java"
+  {-createDirectoryIfMissing False "java"
   setCurrentDirectory "java"
   genCode (classes unJC unJP)
-  setCurrentDirectory workingDir
+  setCurrentDirectory workingDir-}
   createDirectoryIfMissing False "python"
   setCurrentDirectory "python"
-  genCode (classes unPC unPP)
+  genCode (classes unPC unPP){-
   setCurrentDirectory workingDir
   createDirectoryIfMissing False "csharp"
   setCurrentDirectory "csharp"
@@ -42,7 +43,7 @@ main = do
   setCurrentDirectory workingDir
   createDirectoryIfMissing False "swift"
   setCurrentDirectory "swift"
-  genCode (classes unSC unSP)
+  genCode (classes unSC unSP)-}
   setCurrentDirectory workingDir
 
 -- | Gathers all information needed to generate code, sorts it, and calls the renderers.
@@ -60,8 +61,8 @@ classes unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
   in unRepr' $ package pd [makefile [] Program [] gs' pd])
-  [helloWorld, patternTest, fileTests, vectorTest, nameGenTest]
-  (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests, vectorTest, nameGenTest])
+  [superSimple{-, helloWorld, patternTest, fileTests, vectorTest, nameGenTest-}]
+  (map (unCI . (`evalState` initialState)) [superSimple{-, helloWorld, patternTest, fileTests, vectorTest, nameGenTest-}])
 
 -- | Formats code to be rendered.
 makeCode :: [[FileData]] -> [[AuxData]] -> [(FilePath, Doc)]

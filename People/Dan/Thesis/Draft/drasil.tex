@@ -14,33 +14,29 @@
 In this chapter we introduce the Drasil framework and some details of its 
 implementation including knowledge-capture mechanisms, the domain specific 
 languages used throughout, and how all of these pieces are brought together in 
-a human-usable way to generate \sfs{}. The name Drasil is derived from 
-Yggdrasil (the world tree of Norse mythology) whose branches spread across the 
-many realms. So too does Drasil spread across the many domains and contexts 
-relevant to software generation.
+a human-usable way to generate \sfs{}. The name Drasil, derived from Norse 
+Mythology's world tree Yggdrasil whose branches spread across the 
+many realms, is representative of how our framework spreads across the many 
+domains and contexts relevant to software generation.
       
-\section{What Drasil is and isn't}
-  * Basically just restating some things from the intro in more depth
-  - Not a silver bullet
-  - Built around a specific set of assumptions, for a particular class of problems
-  - NOT an ontology / ontology builder
+\section{Drasil in a nutshell}
 
-Manually writing and maintaining a full range of \sfs{} is
-redundant, tedious, and often \sfs{} fall our of sync with each other. 
-Drasil is a framework built to tackle these problems.
+Manually writing and maintaining a full range of \sfs{} is redundant, tedious, 
+and often leads to divergent \sfs{}. Drasil is a purpose-built framework 
+created to tackle these problems.
 
 Contrary to documentation generators like Doxygen, Javadoc, and Pandoc
 which take a code-centric view of the problem and rely on manual redundancy -- 
 i.e. natural-language explanations written as specially delimited
 comments which can then be weaved into API documentation alongside code -- 
-Drasil takes a knowledge-centric, redundancy-limiting, fully traceable single 
-source approach to generating all \sfs{}.
+Drasil takes a knowledge-centric, redundancy-limiting, fully traceable, single 
+source approach to generating \sfs{}.
 
-However, Drasil is not a panacea for all the woes of software development. Even 
-the seemingly well-defined issues of unnecessary redundancy and manual 
-duplication turn out to be large, many-headed beasts existing across a 
-multitude of software domains; each with their own benefits, drawbacks, and 
-challenges.
+However, Drasil is not, nor is it intended to be, a panacea for all the woes of 
+software development. Even the seemingly well-defined problems of unnecessary 
+redundancy and manual duplication turn out to be large, many-headed beasts 
+which exist across a multitude of software domains; each with their own 
+benefits, drawbacks, and challenges.
 
 To reiterate: Drasil has not been designed as a silver-bullet. It is a 
 specialized tool meant to be used in well-understood domains for software that 
@@ -52,12 +48,12 @@ have focused on SC software that follows the input $\rightarrow$ process
 $\rightarrow$ output pattern. SC software has the benefit of being relatively 
 slow to change, so models used today may not be updated or invalidated for some 
 time, if ever. Should that happen, the models will likely still be applicable 
-given a set of assumptions or assuming certain margin for error.
+given a set of assumptions or assuming certain acceptable margins for error.
 
 With Drasil being built around this specific class of problems, we remain aware 
-that there are likely many in-built assumptions that could affect its 
-applicability to other domains in its current state. Expanding Drasil's reach 
-is an avenue for future work.
+that there are likely many in-built assumptions in its current state that could 
+affect its applicability to other domains. As such, we consider expanding 
+Drasil's reach as an avenue for future work.
 
 The Drasil framework relies on a knowledge-centric approach to software 
 specification and development. We attempt to codify the foundational theory 
@@ -66,23 +62,112 @@ the use of generative technologies. By doing so, we can reuse common knowledge
 across projects and maintain a single source of truth in our knowledge database.
 
 Given how important knowledge is to Drasil, one might think we are building 
-ontologies or ontology generators. This is \emph{not} the case. We are not 
-attempting to create a source for all knowledge and relationships inside a 
-given field. We are merely using the information we have available to build up 
-knowledge as needed to solve problems. Over time, this may take on the 
-appearance of an ontology, but Drasil does not currently enforce any strict 
-rules on how knowledge should be captured, outside of its type system and some 
-best practice recommendations. We will explore knowledge capture in more depth 
-in Section~\ref{sec:kc}.
+ontologies or ontology generators. We must make it clear this is \emph{not} the 
+case. We are not attempting to create a source for all knowledge and 
+relationships inside a given field. We are merely using the information we have 
+available to build up knowledge as needed to solve problems. Over time, this 
+may take on the appearance of an ontology, but Drasil does not currently 
+enforce any strict rules on how knowledge should be captured, outside of its 
+type system and some best practice recommendations. We will explore knowledge 
+capture in more depth in Section~\ref{sec:kc}.
 
 \section{Our Ingredients: Organizing and Capturing Knowledge}
 \label{sec:kc}
-  - Organization of knowledge implies a need for knowledge-capture mechanisms 
-    at different levels (different levels of abstraction / specificity)
-  - segues right into chunks/hierarchy
-   - project-specific vs “DB of knowledge”
-   - Make it clear this is NOT an ontology
-   - Look for interesting examples (synonyms, acronyms, complexity) from case studies and refer to them here (again if was covered in Organizing Knowledge)
+
+For Drasil to function as intended, we need a means of capturing and organizing 
+the underlying knowledge of the software systems we are trying to build 
+alongside common knowledge that would be relevant across our entire target 
+domain of SC software. This knowledge capture method must also be robust enough 
+to be operationalized by a multi-faceted generation framework.
+
+Before we can design a knowledge capture mechanism, we must first define what 
+exactly we believe we need to capture. It is nearly impossible to consider 
+every case of knowledge that could be used in the domain of SC software, not to 
+mention an extremely large undertaking to begin with ''all the things". As 
+such, we have decided to take an iterative, progressive refinement approach to 
+our knowledge capture mechanisms which should be no surprise and follows from 
+our general process for developing the Drasil framework.
+
+\subsection{Capturing Knowledge via Chunks}
+
+We begin by borrowing and re-purposing the \emph{chunk} term from Literate 
+Programming (LP) and use it to create a simplified, extensible, and ever 
+expanding hierarchy  of chunks based on the requirements for capturing a single 
+piece of knowledge. Our base chunk, \codeH{NamedChunk} is defined in 
+Figure~\ref{fig:namedchunk} and can be thought of as any uniquely identifiable 
+term. It is composed of a \codeH{UID}, or unique identifier, and a 
+\codeH{NP}, or noun phrase, representing the term.
+
+\fig{
+\lstinputlisting[language=Haskell, firstline=33, 
+lastline=43, firstnumber=33]{code/NamedIdea.hs}
+}{NamedChunk Definition}{fig:namedchunk}
+
+A single node does not a hierarchy make, but now with the root \codeH{NamedChunk} defined, 
+we can begin to progressively extend it to cover any new chunk types we may need for our 
+knowledge capture requirements. For example, if we want to capture a simple term with its 
+definition, we need more than just a \codeH{NamedChunk}. We need to extend 
+\codeH{NamedChunk} to include a definition, and we refer to this particular variant chunk as 
+a \codeH{ConceptChunk}. For ease of creation, we define a number of semantic, so-called 
+\emph{smart constructors} for each chunk type which allow us to more simply define our 
+chunks and their intermediary datatypes (ie: \codeH{UID} and \codeH{NP} from the 
+\codeH{NamedChunk} example). An example of such smart constructors being used to create some 
+simple \codeH{ConceptChunk} instances can be seen in Figure~\ref{fig:conceptchunk}. Note 
+there are smart constructors for each datatype when multiple variants exist and could be 
+used in a given place. Looking at the \codeH{ConceptChunk} example, we can see two different 
+smart constructors (\codeH{cnIES} and \codeH{cn'}) being used to create the \codeH{NP} 
+instance. Both smart constructors create an instance of \codeH{NP}, but in this case the 
+smart constructor used defines given properties (ie. pluralization rules of the noun phrase 
+used as a term) for the instance to simplify construction.
+
+\fig{
+\lstinputlisting[language=Haskell, firstline=76, 
+lastline=82]{code/Math.hs}
+}{Some example instances of \codeH{ConceptChunk} using the \codeH{dcc} smart 
+constructor}{fig:conceptchunk}
+
+These simple chunks are fine as a starting point, however, knowing the SC domain we can 
+already foresee the need for a variety of other chunks. For brevity, we will only expand 
+upon the chunks needed for the examples used in this paper. More information, including 
+detailed definitions of all the types and current state of Drasil can be found in the wiki 
+(\href{https://github.com/JacquesCarette/Drasil/wiki/}
+{https://github.com/JacquesCarette/Drasil/wiki/})
+ or the Haddock documentation which can be generated from the source code or found online at 
+\href{https://jacquescarette.github.io/Drasil/docs/full/}
+{https://jacquescarette.github.io/Drasil/docs/full/}
+
+\subsection{Chunk Combinatorics}
+\ds{Would we call out chunk hierarchy a DSL? Or would the DSL be more along the lines of 
+Expr and Sentence which make up our chunks?}
+
+Even with extremely simple chunks we have seen the need for multiple chunk types and a 
+number of ways to construct instances of those types. The more we extend our chunk 
+hierarchy, the larger the number of possible combinations we will need to account for. This 
+is not only relevant to chunks themselves, but also to the information they encode. Take, 
+for instance, a term definition that relies on other terminology that has been captured. In 
+our effort to reduce duplication and maintain a single source of information, we intend to 
+be able to create chunks with references to other chunks such that the definition can use 
+the known terminology.
+
+To define a term with references to other terms, we need to ensure we are creating our 
+definitions by projecting relevant knowledge into the definition, but also ensuring we have
+the flexibility to extend that knowledge. With that in mind, we created a Domain Specific 
+Language (DSL) for creating and combining (English language) sentences aptly called 
+\codeH{Sentence}. In its most basic form, \codeH{Sentence} will simply wrap a string. 
+However, by defining a number of helper functions and other useful utilities, our 
+\codeH{Sentence} DSL can be used to combine, change case, pluralize, and more. A simple 
+example of a series of chunks that utilize the \codeH{Sentence} DSL to derive their 
+definitions can be seen in Figure~\ref{fig:acceleration}. We use the \codeH{phrase} helper 
+function to pull the appropriate sentence out of the \codeH{velocity} chunk and the 
+combinator (\codeH{+:+}) to concatenate the sentences. Note that position uses a different 
+smart constructor (for non-derived definitions) and so doesn't require the sentence 
+constructor (\codeH{S}) around its definition.
+
+\fig{
+\lstinputlisting[language=Haskell, linerange={59-60,135-136,174-175}]{code/Physics.hs}
+}{Projecting knowledge into a chunk's definition}{fig:acceleration}
+
+These simple chunks don't 
 
 \section{Recipes: Codifying Structure}
   - Organized knowledge is fine, but is essentially just a collection of (collections of) definitions. Pretty meaningless on its own so we need the structure (in our case from the templates / case studies) to have meaning.

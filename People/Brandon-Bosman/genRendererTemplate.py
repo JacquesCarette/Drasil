@@ -14,9 +14,10 @@ outFilePath = "drasil-gool/lib/GOOL/Drasil/LanguageRenderer/TemplateJuliaRendere
 oldName = "SwiftCode"
 newName = "JuliaCode"
 
+# The datatype for an instance: it has a declaration, some types, and some methods
 def newInstance(line: str):
     return {
-        "top" : line.replace(oldName, newName),
+        "declaration" : line.replace(oldName, newName),
         "types" : [], 
         "methods" : []
     }
@@ -30,17 +31,22 @@ instances = []
 inInstance = False
 
 for line in lines:
+
+    # Detect an instance declaration
     if line.startswith("instance"):
         inInstance = True
         instances.append(newInstance(line))
         continue
     
     if inInstance:
+
+        # Unindented code means the current instance is finished
         if not line.isspace() and not line.startswith("  "):
             inInstance = False
             print("Not instance: " + line)
             continue
 
+        # Skim over blank lines and lines indented more than once
         if line.isspace():
             print("All space: " + line)
             continue
@@ -49,13 +55,14 @@ for line in lines:
             print("Nested indent: " + line)
             continue
 
-        start = 2
-        # while start < len(line)-1 and line[start] == " ":
-        #     start += 1
+        start = 2 # the first character after the indent
 
+        # Add types and methods
         if line[start:].startswith("type"):
             instances[-1]["types"].append(line.replace(oldName, newName))
         else:
+            # Add everything before the 'main' = sign ('main' determined by 
+            # brackets), then add undefined after the = sign.
             end = start + 1
             brackets = 0
             while end <= len(line) and (line[end-1] != "=" or brackets != 0):
@@ -66,12 +73,13 @@ for line in lines:
                 end += 1
             instances[-1]["methods"].append(line[0:end] + " undefined")
 
+# Output findings
 with open(outFilePath, "w") as outFile:
     outFile.write("")
 
 with open(outFilePath, "a") as outFile:
     for instance in instances:
-        outFile.write(instance["top"])
+        outFile.write(instance["declaration"])
         for type in instance["types"]:
             outFile.write(type + "\n")
         for method in instance["methods"]:

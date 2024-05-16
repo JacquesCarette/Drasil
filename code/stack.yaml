@@ -73,7 +73,7 @@ extra-deps:
 - unicode-names-3.2.0.0@sha256:fef7241d93170e26265e84553090253a5e8ee207645d47cf271816f5834d07d2
 - unicode-properties-3.2.0.0@sha256:239766a6ac4322329353f6b9cd546024fd8c5f0235c8e32b3cba2d6bd245a699
 
-# The following packages are dependencies for 'stan'
+# The following packages are dependencies for 'stan', specifically tested against GHC 9.4.8.
 - clay-0.14.0@sha256:a50ba73137a39c55e89f24a7792107ec40ba07320b2c5ff7932049845c50ffc9,2204
 - dir-traverse-0.2.3.0@sha256:adcc128f201ff95131b15ffe41365dc99c50dc3fa3a910f021521dc734013bfa,2137
 - extensions-0.1.0.0@sha256:b8105dc43a57b0b3b54879e8dbb905676dfee3e8b59301fefbf2409a0fe95710,4447
@@ -84,14 +84,6 @@ extra-deps:
 - validation-selective-0.2.0.0@sha256:e1ab5482dede8bf676d729a09109c7c5f798363b9d458e4197a27afb8b48fdd3,3907
 - colourista-0.1.0.2@sha256:87b6c096563c3dc5afb1161f06891235370862fc3406406f1f10f1864e55e0a1,3364
 - slist-0.2.1.0@sha256:679013d3a03ed1f09fc46cc6ef87f94cc36a1320b2bf4fe4f91d102f85277528,3513
-
-# This configuration option allows the use of newer versions of dependencies than what is specified
-allow-newer: true
-
-# This configuration option specifies a list of dependencies for which newer versions are allowed.
-# In this case, it's allowing newer versions of the 'stan' package.
-allow-newer-deps:
-- stan
 
 # Used only for a basic set of flags for haddock
 build:

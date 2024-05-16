@@ -1,5 +1,10 @@
 ## Purpose: generates a template with unimplemented instances of all the classes
 #           in the target file.
+#  Instructions: Modify the strings under # Inputs: inFilePath, outFilePath, oldName, newName.
+#                  inFilePath should be a path to an existing renderer (e.g. SwiftRenderer.hs)
+#                  oldName should be the name of the main type for the existing renderer (e.g. SwiftRenderer)
+#                  newFilePath and newName should be pretty self-explanatory.
+#                Then run the file with your python3 interpreter.
 #  Created by Brandon Bosman
 #  Date: May 16, 2024
 

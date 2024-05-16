@@ -1,4 +1,5 @@
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE InstanceSigs #-}
 
 -- | The logic to render Julia code is contained in this module
 module GOOL.Drasil.LanguageRenderer.JuliaRenderer (
@@ -6,25 +7,22 @@ module GOOL.Drasil.LanguageRenderer.JuliaRenderer (
   JuliaCode(..), jlName, jlVersion
 ) where
 
-import Utils.Drasil (blank, indent)
+import Utils.Drasil (stringList)
 
 -- TODO: Sort the dependencies to match the other modules
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue, 
-  VSFunction, MSStatement, MixedCtorCall, OOProg, ProgramSym(..), FileSym(..),
-  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
-  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
+import GOOL.Drasil.ClassInterface (VSType, SValue, OOProg, ProgramSym(..),
+  FileSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..),
+  TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
+  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj,
-  InternalValueExp(..), objMethodCall, FunctionSym(..), GetSet(..), List(..),
-  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  ValueExpression(..), InternalValueExp(..), FunctionSym(..), GetSet(..),
+  List(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..),
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -40,39 +38,30 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block, 
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
-import GOOL.Drasil.LanguageRenderer (listSep)
-import qualified GOOL.Drasil.LanguageRenderer as R (body, addComments, dynamic,
-  commentedMod)
-import GOOL.Drasil.LanguageRenderer.Constructors ()
-import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (block,
-  multiBlock, multiBody, fileFromData, fileDoc, listInnerType, obj)
-import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (string',
-  bindingError, doxMod, funcType)
+import GOOL.Drasil.LanguageRenderer (listSep, ModuleDocRenderer)
+import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp, sin, cos, tan, asin, acos, atan, 
+  floor, ceil, commentedMod)
+import GOOL.Drasil.LanguageRenderer.Constructors (mkStateVal, VSOp, unOpPrec, powerPrec)
+import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
+  listInnerType, obj, litChar, litDouble, litInt, litString, negateOp, equalOp,
+  notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
+  multOp, divideOp, modFromData, fileDoc, docMod, moduloOp, fileFromData)
+import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (string', funcType, litArray)
+import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
+  litFloat, notOp, andOp, orOp)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M ()
-import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
-  FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
-  updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
-  td, ValData(..), vd, VarData(..), vard, CommonThunk, pureValue, vectorize,
-  vectorize2, sumComponents, commonVecIndex, commonThunkElim, commonThunkDim)
-import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
-  onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList, on2StateWrapped)
-import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
-  revFiles, addLangImportVS, getLangImports, addLibImportVS, 
-  getLibImports, addModuleImport, addModuleImportVS, getModuleImports, 
-  setFileType, getClassName, setCurrMain, getClassMap, getMainDoc, useVarName,
-  genLoopIndex)
+import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, FuncData(..), ModData(..),
+  md, updateMod, MethodData(..), OpData(..), ParamData(..), ProgData(..), TypeData(..), td,
+  ValData(..), VarData(..), CommonThunk, progD)
+import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, on2CodeValues, on2StateValues, onCodeList)
+import GOOL.Drasil.State (VS, lensGStoFS, revFiles, setFileType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Data.Maybe (fromMaybe)
-import Control.Applicative (liftA2)
 import Control.Lens.Zoom (zoom)
-import Control.Monad (join)
 import Control.Monad.State (modify)
-import Data.List (intercalate, sort)
-import qualified Data.Map as Map (lookup)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
-  vcat, colon, brackets, isEmpty, quotes)
-import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
+import Data.List (intercalate)
+import Text.PrettyPrint.HughesPJ (Doc, text, empty, brackets, quotes)
+import Metadata.Drasil.DrasilMetaCall (watermark)
 
 jlExt :: String
 jlExt = "jl"
@@ -91,63 +80,69 @@ instance Monad JuliaCode where
 
 instance OOProg JuliaCode
 
-instance ProgramSym CodeInfo where
+-- I have no clue what this does, but most of the other targets do it...
+instance ProgramSym JuliaCode where
   type Program JuliaCode = ProgData
-  prog _ _ _ = error
+  prog n st files = do
+    fs <- mapM (zoom lensGStoFS) files
+    modify revFiles
+    pure $ onCodeList (progD n st) fs
 
 instance RenderSym JuliaCode
 
 instance FileSym JuliaCode where
   type File JuliaCode = FileData
-  fileDoc _ = error
-  docMod = error
+  fileDoc m = do
+    modify (setFileType Combined)
+    G.fileDoc jlExt top bottom m
+  docMod = G.docMod jlModDoc jlExt
 
 instance RenderFile JuliaCode where
-  top _ = error
-  bottom = error
+  top _ = toCode empty
+  bottom = toCode empty
 
-  commentedMod = error
+  commentedMod = on2StateValues (on2CodeValues R.commentedMod)
 
-  fileFromData = error
+  fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym JuliaCode where
   type Import JuliaCode = Doc
-  langImport _ = error
-  modImport = error
+  langImport _ = undefined
+  modImport = undefined
 
 instance ImportElim JuliaCode where
-  import' = error
+  import' = undefined
 
 instance PermanenceSym JuliaCode where
   type Permanence JuliaCode = Doc
-  static = error
-  dynamic = error
+  static = undefined
+  dynamic = undefined
 
 instance PermElim JuliaCode where
-  perm = error
-  binding = error
+  perm = undefined
+  binding = undefined
 
 instance BodySym JuliaCode where
   type Body JuliaCode = Doc
-  body = error
+  body = undefined
 
-  addComments _ = error
+  addComments _ = undefined
 
 instance RenderBody JuliaCode where
-  multibody = error
+  multiBody = undefined
 
 instance BodyElim JuliaCode where
-  body = error
+  body = undefined
 
 instance BlockSym JuliaCode where
   type Block JuliaCode = Doc
-  block = error
+  block = undefined
 
 instance RenderBlock JuliaCode where
-  multiBlock = error
+  multiBlock = undefined
 
 instance BlockElim JuliaCode where
-  block = error
+  block = undefined
 
 -- Actually implemented stuff!!!
 instance TypeSym JuliaCode where
@@ -179,7 +174,7 @@ instance RenderType JuliaCode where
   typeFromData t s d = toState $ toCode $ td t s d
 
 instance InternalTypeElim JuliaCode where
-  type' = typeDoc . un JLC
+  type' = typeDoc . unJLC
 
 instance UnaryOpSym JuliaCode where
   type UnaryOp JuliaCode = OpData
@@ -218,41 +213,41 @@ instance BinaryOpSym JuliaCode where
 
 -- Back to unimplemented methods :(
 instance OpElim JuliaCode where
-  uOp = error
-  bOp = error
-  uOpPrec = error
-  bOpPrec = error
+  uOp = undefined
+  bOp = undefined
+  uOpPrec = undefined
+  bOpPrec = undefined
 
 instance VariableSym JuliaCode where
   type Variable JuliaCode = VarData
-  var = error
-  staticVar = error
-  constant = error
-  extVar _ = error
-  self = error
-  classVar = error
-  extClassVar = error
-  objVar = error
-  objVarSelf = error
-  arrayElem _ = error
+  var = undefined
+  staticVar = undefined
+  constant = undefined
+  extVar _ = undefined
+  self = undefined
+  classVar = undefined
+  extClassVar = undefined
+  objVar = undefined
+  objVarSelf = undefined
+  arrayElem _ = undefined
 
 instance VariableElim JuliaCode where
-  variableName = error
-  variableType = error
+  variableName = undefined
+  variableType = undefined
 
 instance InternalVarElim JuliaCode where
-  variableBine = error
-  variable = error
+  variableBind = undefined
+  variable = undefined
 
 instance RenderVariable JuliaCode where
-  varFromData _ _ _ _ = error
+  varFromData _ _ _ _ = undefined
 
 instance ValueSym JuliaCode where
   type Value JuliaCode = ValData
-  valueType = error
+  valueType = undefined
 
 instance Argument JuliaCode where
-  pointerArg = error
+  pointerArg = undefined
 
 -- I just had to implement this though
 instance Literal JuliaCode where
@@ -267,121 +262,359 @@ instance Literal JuliaCode where
   litList = litArray
 
 instance MathConstant JuliaCode where
+  pi :: SValue JuliaCode
   pi = mkStateVal double jlPi
 
 -- More unimplemented :(
 instance VariableValue JuliaCode where
-  valueOf = error
+  valueOf = undefined
 
 instance CommandLineArgs JuliaCode where
-  arg _ = error
-  argsList = error
-  argExists _ = error
+  arg _ = undefined
+  argsList = undefined
+  argExists _ = undefined
 
 instance NumericExpression JuliaCode where
-  (#~) = error
-  (#/^) = error
-  (#|) = error
-  (#+) = error
-  (#-) = error
-  (#*) = error
-  (#/) = error -- Julia has integer division via `÷` or `div()`
-  (#%) = error
-  (#^) = error
+  (#~) = undefined
+  (#/^) = undefined
+  (#|) = undefined
+  (#+) = undefined
+  (#-) = undefined
+  (#*) = undefined
+  (#/) = undefined -- Julia has integer division via `÷` or `div()`
+  (#%) = undefined
+  (#^) = undefined
 
-  log = error
-  ln = error
-  exp = error
-  sin = error
-  cos = error
-  tan = error
-  csc = error
-  sec = error
-  cot = error
-  arcsin = error
-  arccos = error
-  arctan = error
-  floor = error
-  ceil = error
+  log = undefined
+  ln = undefined
+  exp = undefined
+  sin = undefined
+  cos = undefined
+  tan = undefined
+  csc = undefined
+  sec = undefined
+  cot = undefined
+  arcsin = undefined
+  arccos = undefined
+  arctan = undefined
+  floor = undefined
+  ceil = undefined
 
 instance BooleanExpression JuliaCode where
-  (?!) = error
-  (?&&) = error
-  (?||) = error
+  (?!) = undefined
+  (?&&) = undefined
+  (?||) = undefined
 
-instance Comparision JuliaCode where
-  (?<) = error
-  (?<=) = error
-  (?>) = error
-  (?>=) = error
-  (?==) = error
-  (?!=) = error
+instance Comparison JuliaCode where
+  (?<) = undefined
+  (?<=) = undefined
+  (?>) = undefined
+  (?>=) = undefined
+  (?==) = undefined
+  (?!=) = undefined
 
 instance ValueExpression JuliaCode where
-  inlineIf = error
+  inlineIf = undefined
 
-  funcAppMixedArgs = error
-  selfFuncAppMixedArgs = error
-  extFuncAppMixedArgs = error
-  libFuncAppMixedArgs = error
-  newObjMixedArgs = error
-  extNewObjMixedArgs _ _ _ _ = error
-  libNewObjMixedArgs = error
+  funcAppMixedArgs = undefined
+  selfFuncAppMixedArgs = undefined
+  extFuncAppMixedArgs = undefined
+  libFuncAppMixedArgs = undefined
+  newObjMixedArgs = undefined
+  extNewObjMixedArgs _ _ _ _ = undefined
+  libNewObjMixedArgs = undefined
 
-  lambda = error
+  lambda = undefined
 
-  notNull = error
+  notNull = undefined
 
 instance RenderValue JuliaCode where
-  inputFunc = error
-  printFunc = error
-  printLnFunc = error
-  printFileFunc _ = error
-  printFileLnFunc _ = error
+  inputFunc = undefined
+  printFunc = undefined
+  printLnFunc = undefined
+  printFileFunc _ = undefined
+  printFileLnFunc _ = undefined
 
-  cast = error
+  cast = undefined
 
-  call _ _ _ _ _ _ = error
+  call _ _ _ _ _ _ = undefined
 
-  valFromData _ _ _ = error
+  valFromData _ _ _ = undefined
 
 instance ValueElim JuliaCode where
-  valuePrec = error
-  value = error
+  valuePrec = undefined
+  value = undefined
 
 instance InternalValueExp JuliaCode where
-  objMethodCallMixedArgs' = error
+  objMethodCallMixedArgs' = undefined
 
 instance FunctionSym JuliaCode where
   type Function JuliaCode = FuncData
-  func = error
-  objAccess = error
+  func = undefined
+  objAccess = undefined
 
 instance GetSet JuliaCode where
-  get = error
-  set = error
+  get = undefined
+  set = undefined
 
 instance List JuliaCode where
-  listSize = error
-  listAdd = error
-  listAppend = error
-  listAccess = error
-  listSet = error
-  indexOf = error
+  listSize = undefined
+  listAdd = undefined
+  listAppend = undefined
+  listAccess = undefined
+  listSet = undefined
+  indexOf = undefined
 
 instance InternalList JuliaCode where
-  listSlice' _ _ _ _ _ = error
+  listSlice' _ _ _ _ _ = undefined
 
 instance InternalGetSet JuliaCode where
-  getFunc = error
-  setFunc = error
+  getFunc = undefined
+  setFunc = undefined
 
 instance InternalListFunc JuliaCode where
-  listSizeFunc = error
-  listAddFunc = error
-  listAppendFunc = error
-  listAccessFunc = error
-  listSetFunc = error
+  listSizeFunc = undefined
+  listAddFunc = undefined
+  listAppendFunc = undefined
+  listAccessFunc = undefined
+  listSetFunc = undefined
+
+instance ThunkSym JuliaCode where
+  type Thunk JuliaCode = CommonThunk VS
+
+instance ThunkAssign JuliaCode where
+  thunkAssign _ _ = undefined
+
+instance VectorType JuliaCode where
+  vecType = listType
+
+instance VectorDecl JuliaCode where
+  vecDec = undefined
+  vecDecDef = undefined
+
+instance VectorThunk JuliaCode where
+  vecThunk = undefined
+
+instance VectorExpression JuliaCode where
+  vecScale _ = undefined
+  vecAdd = undefined
+  vecIndex _ = undefined
+  vecDot = undefined
+
+instance RenderFunction JuliaCode where
+  funcFromData _ = undefined
+
+instance FunctionElim JuliaCode where
+  functionType = undefined
+  function :: JuliaCode (Function JuliaCode) -> Doc
+  function = undefined
+
+instance InternalAssignStmt JuliaCode where
+  multiAssign = undefined
+
+instance InternalIOStmt JuliaCode where
+  printSt = undefined
+
+instance InternalControlStmt JuliaCode where
+  multiReturn = undefined
+
+instance RenderStatement JuliaCode where
+  stmt = undefined
+  loopStmt = undefined
+  emptyStmt = undefined
+  stmtFromData _ _ = undefined
+
+instance StatementElim JuliaCode where
+  statement = undefined
+  statementTerm = undefined
+
+instance StatementSym JuliaCode where
+  type Statement JuliaCode = (Doc, Terminator)
+  valStmt = undefined
+  multi = undefined
+
+instance AssignStatement JuliaCode where
+  assign = undefined
+  (&-=) = undefined
+  (&+=) = undefined
+  (&++) = undefined
+  (&--) = undefined
+
+instance DeclStatement JuliaCode where
+  varDec = undefined
+  varDecDef = undefined
+  listDec _ = undefined
+  listDecDef = undefined
+  arrayDec = undefined
+  arrayDecDef = undefined
+  objDecDef = undefined
+  objDecNew = undefined
+  extObjDecNew = undefined
+  constDecDef _ _ = undefined
+  funcDecDef = undefined
+
+instance IOStatement JuliaCode where
+  print      = undefined
+  printLn    = undefined
+  printStr   = undefined
+  printStrLn = undefined
+  printFile _      = undefined
+  printFileLn _    = undefined
+  printFileStr _   = undefined
+  printFileStrLn _ = undefined
+  getInput _ = undefined
+  discardInput = undefined
+  getFileInput _ _ = undefined
+  discardFileInput _ = undefined
+  openFileR _ _ = undefined
+  openFileW = undefined
+  openFileA = undefined
+  closeFile = undefined
+  getFileInputLine _ _ = undefined
+  discardFileLine _ = undefined
+  getFileInputAll _ _ = undefined
+
+instance StringStatement JuliaCode where
+  stringSplit _ _ _ = undefined
+  stringListVals = undefined
+  stringListLists = undefined
+
+instance FuncAppStatement JuliaCode where
+  inOutCall = undefined
+  selfInOutCall = undefined
+  extInOutCall _ = undefined
+
+instance CommentStatement JuliaCode where
+  comment = undefined
+
+instance ControlStatement JuliaCode where
+  break = undefined
+  continue = undefined
+  returnStmt = undefined
+  throw _ = undefined
+  ifCond = undefined
+  switch = undefined
+  ifExists = undefined
+  for _ _ _ _ = undefined
+  forRange _ _ _ _ = undefined
+  forEach = undefined
+  while = undefined
+  tryCatch = undefined
+
+instance StatePattern JuliaCode where 
+  checkState = undefined
+
+instance ObserverPattern JuliaCode where
+  notifyObservers = undefined
+
+instance StrategyPattern JuliaCode where
+  runStrategy = undefined
+
+instance ScopeSym JuliaCode where
+  type Scope JuliaCode = Doc
+
+  private = undefined
+  public = undefined
+
+instance RenderScope JuliaCode where
+  scopeFromData _ = undefined
+
+instance ScopeElim JuliaCode where
+  scope = undefined
+
+instance MethodTypeSym JuliaCode where
+  type MethodType JuliaCode = TypeData
+
+  mType = undefined
+  construct = undefined
+
+instance ParameterSym JuliaCode where
+  type Parameter JuliaCode = ParamData
+
+  param = undefined
+  pointerParam = undefined
+
+instance RenderParam JuliaCode where
+  paramFromData _ _ = undefined
+
+instance ParamElim JuliaCode where
+  parameterName = undefined
+  parameterType = undefined
+  parameter = undefined
+
+instance MethodSym JuliaCode where
+  type Method JuliaCode = MethodData
+
+  method = undefined
+  getMethod = undefined
+  setMethod = undefined
+  constructor = undefined
+  docMain = undefined
+  function = undefined
+  mainFunction = undefined
+  docFunc = undefined
+  inOutMethod _ _ _ = undefined
+  docInOutMethod _ _ _ = undefined
+  inOutFunc _ _ = undefined
+  docInOutFunc _ _ = undefined
+
+instance RenderMethod JuliaCode where
+  intMethod _ = undefined
+  intFunc _ _ _ _ = undefined
+  commentedFunc _ _ = undefined
+  destructor _ = undefined
+  mthdFromData _ _ = undefined
+
+instance MethodElim JuliaCode where
+  method = undefined
+
+instance StateVarSym JuliaCode where
+  type StateVar JuliaCode = Doc
+
+  stateVar _ _ _ = undefined
+  stateVarDef = undefined
+  constVar = undefined
+
+instance StateVarElim JuliaCode where
+  stateVar = undefined
+
+instance ClassSym JuliaCode where
+  type Class JuliaCode = Doc
+
+  buildClass = undefined
+  extraClass = undefined
+  implementingClass = undefined
+  docClass = undefined
+
+instance RenderClass JuliaCode where
+  intClass = undefined
+  inherit = undefined
+  implements = undefined
+  commentedClass = undefined
+
+instance ClassElim JuliaCode where
+  class' = undefined
+
+instance ModuleSym JuliaCode where
+  type Module JuliaCode = ModData
+
+  buildModule n is fs cs = do
+
+instance RenderMod JuliaCode where
+  modFromData n = G.modFromData n (toCode . md n)
+  updateModuleDoc f = onCodeValue (updateMod f)
+
+instance ModuleElim JuliaCode where
+  module' = undefined
+
+instance BlockCommentSym JuliaCode where
+  type BlockComment JuliaCode = Doc
+
+  blockComment _ = undefined
+  docComment = undefined
+
+instance BlockCommentElim JuliaCode where
+  blockComment' = undefined
 
 -- convenience
 jlName, jlVersion :: String
@@ -408,10 +641,8 @@ jlPower :: String
 jlPower = "^"
 
 -- Constants
-jlPi = "pi"
-
--- Comments and other stuff
-jlCommentStart = text "#"
+jlPi :: Doc
+jlPi = text "pi"
 
 -- Type names specific to Julia (there's a lot of them)
 jlIntType :: (RenderSym r) => VSType r
@@ -440,3 +671,23 @@ jlListType t' = do
 
 jlVoidType :: (RenderSym r) => VSType r
 jlVoidType = typeFromData Void jlVoid (text jlVoid)
+
+-- Documentation
+jlModDoc :: ModuleDocRenderer
+jlModDoc desc as date m = m : [desc | not (null desc)] ++
+      [jlDocField jlAuthorDoc (stringList as) | not (null as)] ++
+      [jlDocField jlDateDoc date | not (null date)] ++
+      [jlDocField jlNoteDoc watermark]
+
+jlDocCommandInit, jlDocCommandSep, jlAuthorDoc, jlDateDoc, jlNoteDoc :: String
+jlDocCommandInit = "- "
+jlDocCommandSep = ": "
+jlAuthorDoc = "Authors"
+jlDateDoc = "Date"
+jlNoteDoc = "Note"
+
+-- | Creates an arbitrary Julia-DocC Markup field for documentation.
+-- Takes two strings, one for the field type ('ty'), and another for the
+-- field information ('info')
+jlDocField :: String -> String -> String
+jlDocField ty info = jlDocCommandInit ++ ty ++ jlDocCommandSep ++ info

@@ -2,10 +2,10 @@
 module Main (main) where
 
 import GOOL.Drasil (Label, OOProg, ProgramSym(..), unCI, unJC, unPC, unCSC,
-  unCPPC, unSC, FileData(..), ModData(..), ProgData(..), initialState)
+  unCPPC, unSC, unJLC, FileData(..), ModData(..), ProgData(..), initialState)
 
 import Language.Drasil.Code (PackageSym(..), AuxiliarySym(..), AuxData(..),
-  PackData(..), unPP, unJP, unCSP, unCPPP, unSP, ImplementationType(..))
+  PackData(..), unPP, unJP, unCSP, unCPPP, unSP, unJLP, ImplementationType(..))
 
 import Text.PrettyPrint.HughesPJ (Doc, render)
 import Control.Monad.State (evalState, runState)
@@ -21,18 +21,24 @@ import VectorTest (vectorTest)
 import NameGenTest (nameGenTest)
 
 -- | Renders five GOOL tests (FileTests, SuperSimple, HelloWorld, PatternTest, VectorTest, and NameGenTest)
--- in Java, Python, C#, C++, and Swift.
+-- in Java, Python, Julia, C#, C++, and Swift.
 main :: IO()
 main = do
   workingDir <- getCurrentDirectory
-  {-createDirectoryIfMissing False "java"
+  createDirectoryIfMissing False "java"
   setCurrentDirectory "java"
   genCode (classes unJC unJP)
-  setCurrentDirectory workingDir-}
+  setCurrentDirectory workingDir
   createDirectoryIfMissing False "python"
   setCurrentDirectory "python"
-  genCode (classes unPC unPP){-
+  genCode (classes unPC unPP)
   setCurrentDirectory workingDir
+  -- Julia - might need fixing or smth
+  createDirectoryIfMissing False "julia"
+  setCurrentDirectory "julia"
+  genCode (classes unJLC unJLP)
+  setCurrentDirectory workingDir
+  -- Moving on
   createDirectoryIfMissing False "csharp"
   setCurrentDirectory "csharp"
   genCode (classes unCSC unCSP)
@@ -43,7 +49,7 @@ main = do
   setCurrentDirectory workingDir
   createDirectoryIfMissing False "swift"
   setCurrentDirectory "swift"
-  genCode (classes unSC unSP)-}
+  genCode (classes unSC unSP)
   setCurrentDirectory workingDir
 
 -- | Gathers all information needed to generate code, sorts it, and calls the renderers.
@@ -62,7 +68,7 @@ classes unRepr unRepr' = zipWith
                 pd = unRepr p'
   in unRepr' $ package pd [makefile [] Program [] gs' pd])
   [superSimple{-, helloWorld, patternTest, fileTests, vectorTest, nameGenTest-}]
-  (map (unCI . (`evalState` initialState)) [superSimple{-, helloWorld, patternTest, fileTests, vectorTest, nameGenTest-}])
+  (map (unCI . (`evalState` initialState)) [superSimple, helloWorld{-, patternTest, fileTests, vectorTest, nameGenTest-}])
 
 -- | Formats code to be rendered.
 makeCode :: [[FileData]] -> [[AuxData]] -> [(FilePath, Doc)]

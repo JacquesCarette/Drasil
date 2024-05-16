@@ -42,7 +42,7 @@ module Language.Drasil.Code (
   field,
   ODEInfo(..), odeInfo, odeInfo', ODEOptions(..), odeOptions, ODEMethod(..),
   ODELibPckg(..), mkODELib, mkODELibNoPath,
-  unPP, unJP, unCSP, unCPPP, unSP
+  unPP, unJP, unCSP, unCPPP, unSP, unJLP
   -- Language.Drasil.Chunk.NamedArgument
   , NamedArgument, narg
 ) where
@@ -120,3 +120,4 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (unJP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (unCSP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (unCPPP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer (unSP)
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer (unJLP)

@@ -22,8 +22,8 @@ module GOOL.Drasil (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   convType, ProgData(..), FileData(..), ModData(..), ScopeTag(..),
   CodeType(..), GOOLState(..), lensMStoVS, headers, sources, mainMod,
   initialState, onStateValue, onCodeList, unCI, unPC, unJC, unCSC, unCPPC,
-  unSC, pyName, pyVersion, jName, jVersion, csName, csVersion, cppName,
-  cppVersion, swiftName, swiftVersion
+  unSC, unJLC, pyName, pyVersion, jName, jVersion, csName, csVersion, cppName,
+  cppVersion, swiftName, swiftVersion, jlName, jlVersion
 ) where
 
 import GOOL.Drasil.ClassInterface (Label, GSProgram, SFile, MSBody, MSBlock, 
@@ -65,3 +65,4 @@ import GOOL.Drasil.LanguageRenderer.PythonRenderer (unPC, pyName, pyVersion)
 import GOOL.Drasil.LanguageRenderer.CSharpRenderer (unCSC, csName, csVersion)
 import GOOL.Drasil.LanguageRenderer.CppRenderer (unCPPC, cppName, cppVersion)
 import GOOL.Drasil.LanguageRenderer.SwiftRenderer (unSC, swiftName, swiftVersion)
+import GOOL.Drasil.LanguageRenderer.JuliaRenderer (unJLC, jlName, jlVersion)

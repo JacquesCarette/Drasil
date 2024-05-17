@@ -11,7 +11,7 @@ import Utils.Drasil (stringList)
 
 -- TODO: Sort the dependencies to match the other modules
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (VSType, SValue, MSStatement, OOProg, ProgramSym(..),
+import GOOL.Drasil.ClassInterface (Label, VSType, SValue, MSStatement, OOProg, ProgramSym(..),
   FileSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
@@ -40,28 +40,31 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (printLabel, listSep, listSep', ModuleDocRenderer)
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp, sin, cos, tan, asin, acos, atan, 
-  floor, ceil, commentedMod)
+  floor, ceil, body, addComments, blockCmt, docCmt, commentedMod)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStateVal, VSOp, unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr, typeBinExpr, mkStmtNoEnd)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  listInnerType, obj, litChar, litDouble, litInt, litString, negateOp, equalOp,
+  block, listInnerType, obj, litChar, litDouble, litInt, litString, negateOp, equalOp,
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
-  multOp, divideOp, modFromData, fileDoc, docMod, moduloOp, fileFromData, csc, sec, cot, assign, increment, subAssign, print)
-import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (string', funcType, litArray)
+  multOp, divideOp, modFromData, fileDoc, docMod, moduloOp, fileFromData, csc, 
+  sec, cot, stmt, loopStmt, emptyStmt, assign, increment, subAssign, print, comment)
+import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (string', funcType, buildModule, litArray, mainBody)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
   litFloat, notOp, andOp, orOp, inlineIf)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1, decrement1)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, FuncData(..), ModData(..),
-  md, updateMod, MethodData(..), OpData(..), ParamData(..), ProgData(..), TypeData(..), td,
+  md, updateMod, MethodData(..), mthd, OpData(..), ParamData(..), ProgData(..), TypeData(..), td,
   ValData(..), VarData(..), CommonThunk, progD)
-import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, on2CodeValues, on2StateValues, onCodeList, emptyIfEmpty)
-import GOOL.Drasil.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS)
+import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
+  on2StateValues, onCodeList, onStateList, emptyIfEmpty)
+import GOOL.Drasil.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS, 
+  getModuleImports, getUsing, getLangImports, getLibImports, getMainDoc)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
-import Data.List (intercalate)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), empty, brackets, quotes, parens)
+import Data.List (intercalate, sort)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), empty, brackets, vcat, quotes, parens)
 import Metadata.Drasil.DrasilMetaCall (watermark)
 
 jlExt :: String
@@ -125,25 +128,25 @@ instance PermElim JuliaCode where
 
 instance BodySym JuliaCode where
   type Body JuliaCode = Doc
-  body = undefined
+  body = onStateList (onCodeList R.body)
 
-  addComments _ = undefined
+  addComments s = onStateValue (onCodeValue (R.addComments s jlCmtStart))
 
 instance RenderBody JuliaCode where
   multiBody = undefined
 
 instance BodyElim JuliaCode where
-  body = undefined
+  body = unJLC
 
 instance BlockSym JuliaCode where
   type Block JuliaCode = Doc
-  block = undefined
+  block = G.block
 
 instance RenderBlock JuliaCode where
   multiBlock = undefined
 
 instance BlockElim JuliaCode where
-  block = undefined
+  block = unJLC
 
 instance TypeSym JuliaCode where
   type Type JuliaCode = TypeData
@@ -423,14 +426,14 @@ instance InternalControlStmt JuliaCode where
   multiReturn = undefined
 
 instance RenderStatement JuliaCode where
-  stmt = undefined
-  loopStmt = undefined
-  emptyStmt = undefined
-  stmtFromData _ _ = undefined
+  stmt = G.stmt
+  loopStmt = G.loopStmt
+  emptyStmt = G.emptyStmt
+  stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim JuliaCode where
-  statement = undefined
-  statementTerm = undefined
+  statement = fst . unJLC
+  statementTerm = snd . unJLC
 
 instance StatementSym JuliaCode where
   type Statement JuliaCode = (Doc, Terminator)
@@ -491,7 +494,7 @@ instance FuncAppStatement JuliaCode where
   extInOutCall _ = undefined
 
 instance CommentStatement JuliaCode where
-  comment = undefined
+  comment = G.comment jlCmtStart
 
 instance ControlStatement JuliaCode where
   break = undefined
@@ -548,16 +551,16 @@ instance ParamElim JuliaCode where
   parameterType = undefined
   parameter = undefined
 
+-- TODO: I'm just following the other languages, some of this is likely wrong.
 instance MethodSym JuliaCode where
   type Method JuliaCode = MethodData
-
   method = undefined
   getMethod = undefined
   setMethod = undefined
   constructor = undefined
   docMain = undefined
   function = undefined
-  mainFunction = undefined
+  mainFunction = CP.mainBody
   docFunc = undefined
   inOutMethod _ _ _ = undefined
   docInOutMethod _ _ _ = undefined
@@ -569,10 +572,10 @@ instance RenderMethod JuliaCode where
   intFunc _ _ _ _ = undefined
   commentedFunc _ _ = undefined
   destructor _ = undefined
-  mthdFromData _ _ = undefined
+  mthdFromData _ d = toState $ toCode $ mthd d -- TODO: anything referring to methods (and possibly classes to) is likely to need to change.
 
 instance MethodElim JuliaCode where
-  method = undefined
+  method = mthdDoc . unJLC
 
 instance StateVarSym JuliaCode where
   type StateVar JuliaCode = Doc
@@ -604,20 +607,34 @@ instance ClassElim JuliaCode where
 instance ModuleSym JuliaCode where
   type Module JuliaCode = ModData
 
-  buildModule n is fs cs = undefined
+  buildModule n is = CP.buildModule n (do
+    lis <- getLangImports
+    libis <- getLibImports
+    mis <- getModuleImports
+    us <- getUsing
+    pure $ vibcat [
+      vcat (map (RC.import' . li) lis),
+      vcat (map (RC.import' . li) (sort $ is ++ libis)),
+      vcat (map (RC.import' . mi) mis),
+      vcat (map usingModule us)])
+    (pure empty) getMainDoc
+    where mi, li :: Label -> JuliaCode (Import JuliaCode)
+          mi = modImport
+          li = langImport
 
 instance RenderMod JuliaCode where
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
 
 instance ModuleElim JuliaCode where
-  module' = undefined
+  module' = modDoc . unJLC
 
 instance BlockCommentSym JuliaCode where
   type BlockComment JuliaCode = Doc
 
-  blockComment _ = undefined
-  docComment = undefined
+  blockComment lns = toCode $ R.blockCmt lns jlBlockCmtStart jlBlockCmtEnd
+  docComment = onStateValue (\lns -> toCode $ R.docCmt lns jlDocCmtStart 
+    jlBlockCmtEnd)
 
 instance BlockCommentElim JuliaCode where
   blockComment' = undefined
@@ -651,6 +668,17 @@ jlIntDiv = "÷" -- `div()` is also allowed - should we give a choice or anything
 jlPi :: Doc
 jlPi = text "pi"
 
+-- Comments
+jlCmtStart, jlBlockCmtStart, jlBlockCmtEnd, jlDocCmtStart :: Doc
+jlCmtStart  = text "#"
+jlBlockCmtStart = text "#="
+jlBlockCmtEnd   = text "=#"
+jlDocCmtStart   = text "#=="
+
+-- Control structures
+jlEndStmt :: Doc
+jlEndStmt = text "end"
+
 -- Type names specific to Julia (there's a lot of them)
 jlIntType :: (RenderSym r) => VSType r
 jlIntType = typeFromData Integer jlInt (text jlInt)
@@ -679,6 +707,13 @@ jlListType t' = do
 jlVoidType :: (RenderSym r) => VSType r
 jlVoidType = typeFromData Void jlVoid (text jlVoid)
 
+-- Modules
+using :: Doc
+using = text "using" -- TODO: merge with C++
+
+usingModule :: Label -> Doc -- TODO: see if you need to add context for package vs file
+usingModule n = using <+> text n
+
 -- IO
 jlPrint :: Bool -> Maybe (SValue JuliaCode) -> SValue JuliaCode ->
   SValue JuliaCode -> MSStatement JuliaCode
@@ -689,7 +724,6 @@ jlPrint _ f' p' v' = do
   v <- zoom lensMStoVS v' -- The value to print
   let fl = emptyIfEmpty (RC.value f) $ RC.value f <> listSep'
   mkStmtNoEnd $ RC.value prf <> parens (fl <> RC.value v)
-
 
 -- jlPrint can handle lists, so don't use G.print for lists
 jlOut :: (RenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r ->

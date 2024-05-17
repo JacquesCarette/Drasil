@@ -11,7 +11,7 @@ import Utils.Drasil (stringList)
 
 -- TODO: Sort the dependencies to match the other modules
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (VSType, SValue, OOProg, ProgramSym(..),
+import GOOL.Drasil.ClassInterface (VSType, SValue, MSStatement, OOProg, ProgramSym(..),
   FileSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
@@ -41,20 +41,20 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
 import GOOL.Drasil.LanguageRenderer (listSep, ModuleDocRenderer)
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp, sin, cos, tan, asin, acos, atan, 
   floor, ceil, commentedMod)
-import GOOL.Drasil.LanguageRenderer.Constructors (mkStateVal, VSOp, unOpPrec, powerPrec)
+import GOOL.Drasil.LanguageRenderer.Constructors (mkStateVal, VSOp, unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr, typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   listInnerType, obj, litChar, litDouble, litInt, litString, negateOp, equalOp,
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
-  multOp, divideOp, modFromData, fileDoc, docMod, moduloOp, fileFromData)
+  multOp, divideOp, modFromData, fileDoc, docMod, moduloOp, fileFromData, csc, sec, cot, assign, increment, subAssign, print)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (string', funcType, litArray)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
-  litFloat, notOp, andOp, orOp)
-import qualified GOOL.Drasil.LanguageRenderer.Macros as M ()
+  litFloat, notOp, andOp, orOp, inlineIf)
+import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1, decrement1)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, FuncData(..), ModData(..),
   md, updateMod, MethodData(..), OpData(..), ParamData(..), ProgData(..), TypeData(..), td,
   ValData(..), VarData(..), CommonThunk, progD)
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, on2CodeValues, on2StateValues, onCodeList)
-import GOOL.Drasil.State (VS, lensGStoFS, revFiles, setFileType)
+import GOOL.Drasil.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
@@ -144,7 +144,6 @@ instance RenderBlock JuliaCode where
 instance BlockElim JuliaCode where
   block = undefined
 
--- Actually implemented stuff!!!
 instance TypeSym JuliaCode where
   type Type JuliaCode = TypeData
   bool = typeFromData Boolean "Bool" (text "Bool") -- TODO: merge with Swift
@@ -211,7 +210,7 @@ instance BinaryOpSym JuliaCode where
   andOp = C.andOp
   orOp = C.orOp
 
--- Back to unimplemented methods :(
+
 instance OpElim JuliaCode where
   uOp = undefined
   bOp = undefined
@@ -249,7 +248,6 @@ instance ValueSym JuliaCode where
 instance Argument JuliaCode where
   pointerArg = undefined
 
--- I just had to implement this though
 instance Literal JuliaCode where
   litTrue = C.litTrue
   litFalse = C.litFalse
@@ -265,7 +263,6 @@ instance MathConstant JuliaCode where
   pi :: SValue JuliaCode
   pi = mkStateVal double jlPi
 
--- More unimplemented :(
 instance VariableValue JuliaCode where
   valueOf = undefined
 
@@ -275,46 +272,52 @@ instance CommandLineArgs JuliaCode where
   argExists _ = undefined
 
 instance NumericExpression JuliaCode where
-  (#~) = undefined
-  (#/^) = undefined
-  (#|) = undefined
-  (#+) = undefined
-  (#-) = undefined
-  (#*) = undefined
-  (#/) = undefined -- Julia has integer division via `÷` or `div()`
-  (#%) = undefined
-  (#^) = undefined
+  (#~) = unExpr' negateOp
+  (#/^) = unExpr sqrtOp
+  (#|) = unExpr absOp
+  (#+) = binExpr plusOp
+  (#-) = binExpr minusOp
+  (#*) = binExpr multOp
+  (#/) v1' v2' = do -- Julia has integer division via `÷` or `div()`
+    v1 <- v1'
+    v2 <- v2'
+    let jlDivision Integer Integer = binExpr (multPrec jlIntDiv)
+        jlDivision _ _ = binExpr divideOp
+    jlDivision (getType $ valueType v1) (getType $ valueType v2) 
+        (pure v1) (pure v2)
+  (#%) = binExpr moduloOp
+  (#^) = binExpr powerOp
 
-  log = undefined
-  ln = undefined
-  exp = undefined
-  sin = undefined
-  cos = undefined
-  tan = undefined
-  csc = undefined
-  sec = undefined
-  cot = undefined
-  arcsin = undefined
-  arccos = undefined
-  arctan = undefined
-  floor = undefined
-  ceil = undefined
+  log = unExpr logOp
+  ln = unExpr lnOp
+  exp = unExpr expOp
+  sin = unExpr sinOp
+  cos = unExpr cosOp
+  tan = unExpr tanOp
+  csc = G.csc
+  sec = G.sec
+  cot = G.cot
+  arcsin = unExpr asinOp
+  arccos = unExpr acosOp
+  arctan = unExpr atanOp
+  floor = unExpr floorOp
+  ceil = unExpr ceilOp
 
 instance BooleanExpression JuliaCode where
-  (?!) = undefined
-  (?&&) = undefined
-  (?||) = undefined
+  (?!) = typeUnExpr notOp bool
+  (?&&) = typeBinExpr andOp bool
+  (?||) = typeBinExpr orOp bool
 
 instance Comparison JuliaCode where
-  (?<) = undefined
-  (?<=) = undefined
-  (?>) = undefined
-  (?>=) = undefined
-  (?==) = undefined
-  (?!=) = undefined
+  (?<) = typeBinExpr lessOp bool
+  (?<=) = typeBinExpr lessEqualOp bool
+  (?>) = typeBinExpr greaterOp bool
+  (?>=) = typeBinExpr greaterEqualOp bool
+  (?==) = typeBinExpr equalOp bool
+  (?!=) = typeBinExpr notEqualOp bool
 
 instance ValueExpression JuliaCode where
-  inlineIf = undefined
+  inlineIf = C.inlineIf
 
   funcAppMixedArgs = undefined
   selfFuncAppMixedArgs = undefined
@@ -413,7 +416,7 @@ instance InternalAssignStmt JuliaCode where
   multiAssign = undefined
 
 instance InternalIOStmt JuliaCode where
-  printSt = undefined
+  printSt = jlPrint
 
 instance InternalControlStmt JuliaCode where
   multiReturn = undefined
@@ -434,11 +437,11 @@ instance StatementSym JuliaCode where
   multi = undefined
 
 instance AssignStatement JuliaCode where
-  assign = undefined
-  (&-=) = undefined
-  (&+=) = undefined
-  (&++) = undefined
-  (&--) = undefined
+  assign = G.assign Empty
+  (&-=) = G.subAssign Empty
+  (&+=) = G.increment
+  (&++) = M.increment1
+  (&--) = M.decrement1
 
 instance DeclStatement JuliaCode where
   varDec = undefined
@@ -454,7 +457,7 @@ instance DeclStatement JuliaCode where
   funcDecDef = undefined
 
 instance IOStatement JuliaCode where
-  print      = undefined
+  print      = jlOut False Nothing printFunc
   printLn    = undefined
   printStr   = undefined
   printStrLn = undefined
@@ -598,7 +601,7 @@ instance ClassElim JuliaCode where
 instance ModuleSym JuliaCode where
   type Module JuliaCode = ModData
 
-  buildModule n is fs cs = do
+  buildModule n is fs cs = undefined
 
 instance RenderMod JuliaCode where
   modFromData n = G.modFromData n (toCode . md n)
@@ -637,8 +640,9 @@ jlTuple ts = "Tuple{" ++ intercalate listSep ts ++ "}"
 jlUnaryMath :: (Monad r) => String -> VSOp r
 jlUnaryMath = unOpPrec
 
-jlPower :: String
+jlPower, jlIntDiv :: String
 jlPower = "^"
+jlIntDiv = "÷" -- `div()` is also allowed - should we give a choice or anything?
 
 -- Constants
 jlPi :: Doc
@@ -671,6 +675,26 @@ jlListType t' = do
 
 jlVoidType :: (RenderSym r) => VSType r
 jlVoidType = typeFromData Void jlVoid (text jlVoid)
+
+-- IO
+jlPrint :: Bool -> Maybe (SValue JuliaCode) -> SValue JuliaCode ->
+  SValue JuliaCode -> MSStatement JuliaCode
+-- Printing to console
+jlPrint newLn Nothing _ v = do
+  let s = litString "" :: SValue JuliaCode
+      nl = [(var jlTerm string, s) | not newLn]
+  valStmt $ funcAppMixedArgs printLabel void [v] nl
+jlPrint newLn (Just f) _ v' = undefined
+  
+
+
+-- jlPrint can handle lists, so don't use G.print for lists
+jlOut :: (RenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r ->
+  MSStatement r
+jlOut newLn f printFn v = zoom lensMStoVS v >>= jlOut' . getType . valueType
+  where jlOut' (List _) = printSt newLn f printFn v
+        jlOut' _ = G.print newLn f printFn v
+        -- Do we need an exception for objects?
 
 -- Documentation
 jlModDoc :: ModuleDocRenderer

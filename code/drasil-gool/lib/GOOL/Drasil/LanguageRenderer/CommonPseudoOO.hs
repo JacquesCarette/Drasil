@@ -129,7 +129,7 @@ intClass f n s i svrs mths = do
   ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) mths)
   return $ onCodeValue (\p -> f n p (RC.scope s) svs ms) i 
 
--- Python, Java, C++, and Julia --
+-- Python, Java, and C++ --
 
 funcType :: (RenderSym r) => [VSType r] -> VSType r -> VSType r
 funcType ps' r' =  do 
@@ -432,7 +432,6 @@ float = typeFromData Float floatRender (text floatRender)
 stringRender' :: String
 stringRender' = "String"
 
--- Java, Swift, and Julia
 string' :: (RenderSym r) => VSType r
 string' = typeFromData String stringRender' (text stringRender')
 

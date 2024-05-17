@@ -13,7 +13,6 @@ import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurre
 import System.FilePath.Posix (takeDirectory)
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
-import SuperSimple (superSimple)
 import HelloWorld (helloWorld)
 import PatternTest (patternTest)
 import FileTests (fileTests)

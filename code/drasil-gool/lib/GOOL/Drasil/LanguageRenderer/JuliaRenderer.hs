@@ -47,7 +47,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
   multOp, divideOp, modFromData, fileDoc, docMod, moduloOp, fileFromData, csc, 
   sec, cot, stmt, loopStmt, emptyStmt, assign, increment, subAssign, print, comment)
-import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (string', funcType, buildModule, litArray, mainBody)
+import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (string', 
+  bool, funcType, buildModule, docMod', litArray, mainBody)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
   litFloat, notOp, andOp, orOp, inlineIf)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1, decrement1)
@@ -99,7 +100,7 @@ instance FileSym JuliaCode where
   fileDoc m = do
     modify (setFileType Combined)
     G.fileDoc jlExt top bottom m
-  docMod = G.docMod jlModDoc jlExt
+  docMod = CP.docMod' jlExt
 
 instance RenderFile JuliaCode where
   top _ = toCode empty
@@ -150,7 +151,7 @@ instance BlockElim JuliaCode where
 
 instance TypeSym JuliaCode where
   type Type JuliaCode = TypeData
-  bool = typeFromData Boolean "Bool" (text "Bool") -- TODO: merge with Swift
+  bool = CP.bool
   int = jlIntType
   float = jlFloatType
   double = jlDoubleType
@@ -551,7 +552,6 @@ instance ParamElim JuliaCode where
   parameterType = undefined
   parameter = undefined
 
--- TODO: I'm just following the other languages, some of this is likely wrong.
 instance MethodSym JuliaCode where
   type Method JuliaCode = MethodData
   method = undefined
@@ -645,7 +645,7 @@ jlName = "Julia"
 jlVersion = "1.10.3"
 
 jlInt, jlFloat, jlDouble, jlChar, jlFile, jlList, jlVoid :: String
-jlInt = "Int32" -- TODO: Do we use concrete or abstract types?
+jlInt = "Int32" -- Q: Do we use concrete or abstract types?
 jlFloat = "Float32"
 jlDouble = "Float64"
 jlChar = "Char"
@@ -732,23 +732,3 @@ jlOut newLn f printFn v = zoom lensMStoVS v >>= jlOut' . getType . valueType
   where jlOut' (List _) = printSt newLn f printFn v
         jlOut' _ = G.print newLn f printFn v
         -- Do we need an exception for objects?
-
--- Documentation
-jlModDoc :: ModuleDocRenderer
-jlModDoc desc as date m = m : [desc | not (null desc)] ++
-      [jlDocField jlAuthorDoc (stringList as) | not (null as)] ++
-      [jlDocField jlDateDoc date | not (null date)] ++
-      [jlDocField jlNoteDoc watermark]
-
-jlDocCommandInit, jlDocCommandSep, jlAuthorDoc, jlDateDoc, jlNoteDoc :: String
-jlDocCommandInit = "- "
-jlDocCommandSep = ": "
-jlAuthorDoc = "Authors"
-jlDateDoc = "Date"
-jlNoteDoc = "Note"
-
--- | Creates an arbitrary Julia-DocC Markup field for documentation.
--- Takes two strings, one for the field type ('ty'), and another for the
--- field information ('info')
-jlDocField :: String -> String -> String
-jlDocField ty info = jlDocCommandInit ++ ty ++ jlDocCommandSep ++ info

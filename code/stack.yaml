@@ -17,6 +17,9 @@
 #  location: "./custom-snapshot.yaml"
 resolver: lts-20.26
 
+ghc-options:
+  "$everything": -fwrite-ide-info -hiedir=.hie
+
 # User packages to be built.
 # Various formats can be used as shown in the example below.
 #

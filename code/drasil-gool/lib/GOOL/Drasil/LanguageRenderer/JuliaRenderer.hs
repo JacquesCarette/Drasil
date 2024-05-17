@@ -38,10 +38,10 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block, 
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
-import GOOL.Drasil.LanguageRenderer (listSep, ModuleDocRenderer)
+import GOOL.Drasil.LanguageRenderer (printLabel, listSep, listSep', ModuleDocRenderer)
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp, sin, cos, tan, asin, acos, atan, 
   floor, ceil, commentedMod)
-import GOOL.Drasil.LanguageRenderer.Constructors (mkStateVal, VSOp, unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr, typeBinExpr)
+import GOOL.Drasil.LanguageRenderer.Constructors (mkStateVal, VSOp, unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr, typeBinExpr, mkStmtNoEnd)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   listInnerType, obj, litChar, litDouble, litInt, litString, negateOp, equalOp,
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
@@ -53,14 +53,15 @@ import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1, decrement
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, FuncData(..), ModData(..),
   md, updateMod, MethodData(..), OpData(..), ParamData(..), ProgData(..), TypeData(..), td,
   ValData(..), VarData(..), CommonThunk, progD)
-import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, on2CodeValues, on2StateValues, onCodeList)
+import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, on2CodeValues, on2StateValues, onCodeList, emptyIfEmpty)
 import GOOL.Drasil.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
+import Data.Maybe (fromMaybe)
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 import Data.List (intercalate)
-import Text.PrettyPrint.HughesPJ (Doc, text, empty, brackets, quotes)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), empty, brackets, quotes, parens)
 import Metadata.Drasil.DrasilMetaCall (watermark)
 
 jlExt :: String
@@ -458,13 +459,15 @@ instance DeclStatement JuliaCode where
 
 instance IOStatement JuliaCode where
   print      = jlOut False Nothing printFunc
-  printLn    = undefined
-  printStr   = undefined
-  printStrLn = undefined
-  printFile _      = undefined
-  printFileLn _    = undefined
-  printFileStr _   = undefined
-  printFileStrLn _ = undefined
+  printLn    = jlOut True  Nothing printLnFunc
+  printStr   = jlOut False Nothing printFunc   . litString
+  printStrLn = jlOut True  Nothing printLnFunc . litString
+
+  printFile f      = jlOut False (Just f) printFunc
+  printFileLn f    = jlOut True (Just f) printLnFunc
+  printFileStr f   = printFile   f . litString
+  printFileStrLn f = printFileLn f . litString
+  
   getInput _ = undefined
   discardInput = undefined
   getFileInput _ _ = undefined
@@ -680,12 +683,12 @@ jlVoidType = typeFromData Void jlVoid (text jlVoid)
 jlPrint :: Bool -> Maybe (SValue JuliaCode) -> SValue JuliaCode ->
   SValue JuliaCode -> MSStatement JuliaCode
 -- Printing to console
-jlPrint newLn Nothing _ v = do
-  let s = litString "" :: SValue JuliaCode
-      nl = [(var jlTerm string, s) | not newLn]
-  valStmt $ funcAppMixedArgs printLabel void [v] nl
-jlPrint newLn (Just f) _ v' = undefined
-  
+jlPrint _ f' p' v' = do
+  f <- zoom lensMStoVS $ fromMaybe (mkStateVal void empty) f' -- The file to print to
+  prf <- zoom lensMStoVS p' -- The print function to use
+  v <- zoom lensMStoVS v' -- The value to print
+  let fl = emptyIfEmpty (RC.value f) $ RC.value f <> listSep'
+  mkStmtNoEnd $ RC.value prf <> parens (fl <> RC.value v)
 
 
 -- jlPrint can handle lists, so don't use G.print for lists

@@ -2,10 +2,10 @@
 module Main (main) where
 
 import GOOL.Drasil (Label, OOProg, ProgramSym(..), unCI, unJC, unPC, unCSC,
-  unCPPC, unSC, unJLC, FileData(..), ModData(..), ProgData(..), initialState)
+  unCPPC, unSC, FileData(..), ModData(..), ProgData(..), initialState)
 
 import Language.Drasil.Code (PackageSym(..), AuxiliarySym(..), AuxData(..),
-  PackData(..), unPP, unJP, unCSP, unCPPP, unSP, unJLP, ImplementationType(..))
+  PackData(..), unPP, unJP, unCSP, unCPPP, unSP, ImplementationType(..))
 
 import Text.PrettyPrint.HughesPJ (Doc, render)
 import Control.Monad.State (evalState, runState)
@@ -14,14 +14,13 @@ import System.FilePath.Posix (takeDirectory)
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import HelloWorld (helloWorld)
-import SuperSimple (superSimple)
 import PatternTest (patternTest)
 import FileTests (fileTests)
 import VectorTest (vectorTest)
 import NameGenTest (nameGenTest)
 
--- | Renders five GOOL tests (FileTests, SuperSimple, HelloWorld, PatternTest, VectorTest, and NameGenTest)
--- in Java, Python, Julia, C#, C++, and Swift.
+-- | Renders five GOOL tests (FileTests, HelloWorld, PatternTest, VectorTest, and NameGenTest)
+-- in Java, Python, C#, C++, and Swift.
 main :: IO()
 main = do
   workingDir <- getCurrentDirectory
@@ -33,12 +32,6 @@ main = do
   setCurrentDirectory "python"
   genCode (classes unPC unPP)
   setCurrentDirectory workingDir
-  -- Julia - might need fixing or smth
-  createDirectoryIfMissing False "julia"
-  setCurrentDirectory "julia"
-  genCode (classes unJLC unJLP)
-  setCurrentDirectory workingDir
-  -- Moving on
   createDirectoryIfMissing False "csharp"
   setCurrentDirectory "csharp"
   genCode (classes unCSC unCSP)
@@ -67,8 +60,8 @@ classes unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
   in unRepr' $ package pd [makefile [] Program [] gs' pd])
-  [superSimple{-, helloWorld, patternTest, fileTests, vectorTest, nameGenTest-}]
-  (map (unCI . (`evalState` initialState)) [superSimple, helloWorld{-, patternTest, fileTests, vectorTest, nameGenTest-}])
+  [helloWorld, patternTest, fileTests, vectorTest, nameGenTest]
+  (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests, vectorTest, nameGenTest])
 
 -- | Formats code to be rendered.
 makeCode :: [[FileData]] -> [[AuxData]] -> [(FilePath, Doc)]

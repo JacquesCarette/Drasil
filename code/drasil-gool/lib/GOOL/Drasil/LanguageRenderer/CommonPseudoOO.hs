@@ -452,7 +452,7 @@ bool :: (RenderSym r) => VSType r
 bool = typeFromData Boolean boolRender (text boolRender)
 
 docMod' :: (RenderSym r) => String -> String -> [String] -> String -> SFile r -> SFile r
-docMod' ext = docMod modDoc' ext
+docMod' = docMod modDoc'
 
 -- | Generates a doc comment for a language that isn't supported by Doxygen.
 -- Since Doxygen doesn't support the language, it uses dashes instead of backslashes.

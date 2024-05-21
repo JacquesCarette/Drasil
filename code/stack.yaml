@@ -85,6 +85,14 @@ extra-deps:
 - colourista-0.1.0.2@sha256:87b6c096563c3dc5afb1161f06891235370862fc3406406f1f10f1864e55e0a1,3364
 - slist-0.2.1.0@sha256:679013d3a03ed1f09fc46cc6ef87f94cc36a1320b2bf4fe4f91d102f85277528,3513
 
+# This configuration option allows the use of newer versions of dependencies than what is specified
+allow-newer: true
+
+# This configuration option specifies a list of dependencies for which newer versions are allowed.
+# In this case, it's allowing newer versions of the 'stan' package.
+allow-newer-deps:
+- stan
+
 # Used only for a basic set of flags for haddock
 build:
   haddock-deps: false

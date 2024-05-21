@@ -99,75 +99,89 @@ term. It is composed of a \codeH{UID}, or unique identifier, and a
 \codeH{NP}, or noun phrase, representing the term.
 
 \fig{
-\lstinputlisting[language=Haskell, firstline=33, 
-lastline=43, firstnumber=33]{code/NamedIdea.hs}
-}{NamedChunk Definition}{fig:namedchunk}
+\lstinputlisting[language=Haskell, firstline=33, lastline=43, 
+firstnumber=33]{code/NamedIdea.hs}}{NamedChunk Definition}{fig:namedchunk}
 
-A single node does not a hierarchy make, but now with the root \codeH{NamedChunk} defined, 
-we can begin to progressively extend it to cover any new chunk types we may need for our 
-knowledge capture requirements. For example, if we want to capture a simple term with its 
-definition, we need more than just a \codeH{NamedChunk}. We need to extend 
-\codeH{NamedChunk} to include a definition, and we refer to this particular variant chunk as 
-a \codeH{ConceptChunk}. For ease of creation, we define a number of semantic, so-called 
-\emph{smart constructors} for each chunk type which allow us to more simply define our 
-chunks and their intermediary datatypes (ie: \codeH{UID} and \codeH{NP} from the 
-\codeH{NamedChunk} example). An example of such smart constructors being used to create some 
-simple \codeH{ConceptChunk} instances can be seen in Figure~\ref{fig:conceptchunk}. Note 
-there are smart constructors for each datatype when multiple variants exist and could be 
-used in a given place. Looking at the \codeH{ConceptChunk} example, we can see two different 
-smart constructors (\codeH{cnIES} and \codeH{cn'}) being used to create the \codeH{NP} 
-instance. Both smart constructors create an instance of \codeH{NP}, but in this case the 
-smart constructor used defines given properties (ie. pluralization rules of the noun phrase 
-used as a term) for the instance to simplify construction.
+A single node does not a hierarchy make, but now with the root 
+\codeH{NamedChunk} defined, we can begin to progressively extend it to cover 
+any new chunk types we may need for our knowledge capture requirements. For 
+example, if we want to capture a simple term with its definition, we need more 
+than just a \codeH{NamedChunk}. We need to extend \codeH{NamedChunk} to include 
+a definition, and we refer to this particular variant chunk as a 
+\codeH{ConceptChunk}. For ease of creation, we define a number of semantic, 
+so-called \emph{smart constructors} for each chunk type which allow us to more 
+simply define our chunks and their intermediary datatypes (ie: \codeH{UID} and 
+\codeH{NP} from the \codeH{NamedChunk} example). An example of such smart 
+constructors being used to create some simple \codeH{ConceptChunk} instances 
+can be seen in Figure~\ref{fig:conceptchunk}. Note there are smart constructors 
+for each datatype when multiple variants exist and could be used in a given 
+place. Looking at the \codeH{ConceptChunk} example, we can see two different 
+smart constructors (\codeH{cnIES} and \codeH{cn'}) being used to create the 
+\codeH{NP} instance. Both smart constructors create an instance of \codeH{NP}, 
+but in this case the smart constructor used defines given properties (ie. 
+pluralization rules of the noun phrase used as a term) for the instance to 
+simplify construction.
 
 \fig{
 \lstinputlisting[language=Haskell, firstline=76, 
-lastline=82]{code/Math.hs}
-}{Some example instances of \codeH{ConceptChunk} using the \codeH{dcc} smart 
-constructor}{fig:conceptchunk}
+lastline=82]{code/Math.hs}}{Some example instances of \codeH{ConceptChunk} 
+using the \codeH{dcc} smart constructor}{fig:conceptchunk}
 
-These simple chunks are fine as a starting point, however, knowing the SC domain we can 
-already foresee the need for a variety of other chunks. For brevity, we will only expand 
-upon the chunks needed for the examples used in this paper. More information, including 
-detailed definitions of all the types and current state of Drasil can be found in the wiki 
+These simple chunks are fine as a starting point, however, knowing the SC 
+domain we can already foresee the need for a variety of other chunks. For 
+brevity, we will only expand upon the chunks needed for the examples used in 
+this paper. More information, including detailed definitions of all the types 
+and current state of Drasil can be found in the wiki 
 (\href{https://github.com/JacquesCarette/Drasil/wiki/}
-{https://github.com/JacquesCarette/Drasil/wiki/})
- or the Haddock documentation which can be generated from the source code or found online at 
+{https://github.com/JacquesCarette/Drasil/wiki/}) or the Haddock documentation 
+which can be generated from the source code or found online at 
 \href{https://jacquescarette.github.io/Drasil/docs/full/}
 {https://jacquescarette.github.io/Drasil/docs/full/}
 
 \subsection{Chunk Combinatorics}
-\ds{Would we call out chunk hierarchy a DSL? Or would the DSL be more along the lines of 
-Expr and Sentence which make up our chunks?}
+\ds{Would we call out chunk hierarchy a DSL? Or would the DSL be more along the 
+lines of Expr and Sentence which make up our chunks?}
 
-Even with extremely simple chunks we have seen the need for multiple chunk types and a 
-number of ways to construct instances of those types. The more we extend our chunk 
-hierarchy, the larger the number of possible combinations we will need to account for. This 
-is not only relevant to chunks themselves, but also to the information they encode. Take, 
-for instance, a term definition that relies on other terminology that has been captured. In 
-our effort to reduce duplication and maintain a single source of information, we intend to 
-be able to create chunks with references to other chunks such that the definition can use 
-the known terminology.
+Even with extremely simple chunks we have seen the need for multiple chunk 
+types and a number of ways to construct instances of those types. The more we 
+extend our chunk hierarchy, the larger the number of possible combinations we 
+will need to account for. This is not only relevant to chunks themselves, but 
+also to the information they encode. Take, for instance, a term definition that 
+relies on other terminology that has been captured. In our effort to reduce 
+duplication and maintain a single source of information, we intend to be able 
+to create chunks with references to other chunks such that the definition can 
+use the known terminology.
 
-To define a term with references to other terms, we need to ensure we are creating our 
-definitions by projecting relevant knowledge into the definition, but also ensuring we have
-the flexibility to extend that knowledge. With that in mind, we created a Domain Specific 
-Language (DSL) for creating and combining (English language) sentences aptly called 
-\codeH{Sentence}. In its most basic form, \codeH{Sentence} will simply wrap a string. 
-However, by defining a number of helper functions and other useful utilities, our 
-\codeH{Sentence} DSL can be used to combine, change case, pluralize, and more. A simple 
-example of a series of chunks that utilize the \codeH{Sentence} DSL to derive their 
-definitions can be seen in Figure~\ref{fig:acceleration}. We use the \codeH{phrase} helper 
-function to pull the appropriate sentence out of the \codeH{velocity} chunk and the 
-combinator (\codeH{+:+}) to concatenate the sentences. Note that position uses a different 
-smart constructor (for non-derived definitions) and so doesn't require the sentence 
-constructor (\codeH{S}) around its definition.
+To define a term with references to other terms, we need to ensure we are 
+creating our definitions by projecting relevant knowledge into the definition, 
+but also ensuring we have the flexibility to extend that knowledge. With that 
+in mind, we created a Domain Specific Language (DSL) for creating and combining 
+(English language) sentences aptly called \codeH{Sentence}. In its most basic 
+form, \codeH{Sentence} will simply wrap a string. However, by defining a number 
+of helper functions and other useful utilities, our \codeH{Sentence} DSL can be 
+used to combine, change case, pluralize, and more. A simple example of a series 
+of chunks that utilize the \codeH{Sentence} DSL to derive their definitions can 
+be seen in Figure~\ref{fig:acceleration}. We use the \codeH{phrase} helper 
+function to pull the appropriate sentence out of the \codeH{velocity} chunk and 
+the combinator (\codeH{+:+}) to concatenate the sentences. Note that position 
+uses a different smart constructor (for non-derived definitions) and so doesn't 
+require the sentence constructor (\codeH{S}) around its definition.
 
 \fig{
 \lstinputlisting[language=Haskell, linerange={59-60,135-136,174-175}]{code/Physics.hs}
 }{Projecting knowledge into a chunk's definition}{fig:acceleration}
 
-These simple chunks don't 
+Looking back at our examples of the types of knowledge we are interested in 
+from Figure~\ref{fig:gbrddq} we can see that the simple chunks we've defined so 
+far do not even start to cover the full spectrum of our needs. We can see a lot 
+of information missing such as a symbolic representation ($\hat{q}$) and 
+equation ($\hat{q} = \frac{q(ab)^2}{Eh^4\text{GTF}}$). As that is a relatively
+complex example, we will start by looking at something far simpler: Newton's 
+2nd Law of motion\citep{Newton1687} which, roughly translated, states "the net 
+force on a body at any instant of time is equal to the body's acceleration 
+multiplied by its mass or, equivalently, the rate at which the body's momentum 
+is changing with time"  or as most physics students recognize it $F=ma$ 
+provided we have definitions for $F$, $m$, and $a$.
 
 \section{Recipes: Codifying Structure}
   - Organized knowledge is fine, but is essentially just a collection of (collections of) definitions. Pretty meaningless on its own so we need the structure (in our case from the templates / case studies) to have meaning.

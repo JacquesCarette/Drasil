@@ -454,15 +454,16 @@ bool = typeFromData Boolean boolRender (text boolRender)
 docMod' :: (RenderSym r) => String -> String -> [String] -> String -> SFile r -> SFile r
 docMod' = docMod modDoc'
 
--- | Generates a doc comment for a language that isn't supported by Doxygen.
--- Since Doxygen doesn't support the language, it uses dashes instead of backslashes.
+-- | Generates Markdown/DocC style doc comment.  Useful for Swift, which follows
+-- DocC, Julia, which uses Markdown, and any other language that doesn't have
+-- Support for a document generator.
 modDoc' :: ModuleDocRenderer
 modDoc' desc as date m = m : [desc | not (null desc)] ++
       [docField authorDoc (stringList as) | not (null as)] ++
       [docField dateDoc date | not (null date)] ++
       [docField noteDoc watermark]
 
--- | Creates an arbitrary DocC Markup field for documentation.
+-- | Creates an arbitrary Markdown/DocC style field for documentation.
 -- Takes two strings, one for the field type ('ty'), and another
 -- for the field documentation ('info')
 docField :: String -> String -> String

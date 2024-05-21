@@ -33,7 +33,7 @@ main = do
   setCurrentDirectory "python"
   genCode (classes unPC unPP)
   setCurrentDirectory workingDir
-  -- Julia - might need fixing or smth
+  -- Julia - work in progress
   createDirectoryIfMissing False "julia"
   setCurrentDirectory "julia"
   genCode (classes unJLC unJLP)
@@ -68,7 +68,7 @@ classes unRepr unRepr' = zipWith
                 pd = unRepr p'
   in unRepr' $ package pd [makefile [] Program [] gs' pd])
   [superSimple{-, helloWorld, patternTest, fileTests, vectorTest, nameGenTest-}]
-  (map (unCI . (`evalState` initialState)) [superSimple, helloWorld{-, patternTest, fileTests, vectorTest, nameGenTest-}])
+  (map (unCI . (`evalState` initialState)) [superSimple{-, helloWorld, patternTest, fileTests, vectorTest, nameGenTest-}])
 
 -- | Formats code to be rendered.
 makeCode :: [[FileData]] -> [[AuxData]] -> [(FilePath, Doc)]

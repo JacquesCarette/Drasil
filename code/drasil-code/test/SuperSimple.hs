@@ -1,6 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
--- | GOOL test program for various OO program functionality.
--- Should run print statements, basic loops, math, and create a helper module without errors.
+-- | Tests basic GOOL functions. It *might* run without errors.
 module SuperSimple (superSimple) where
 
 import GOOL.Drasil (GSProgram, MSBody, MSBlock, MSStatement, SMethod, OOProg,
@@ -8,7 +7,7 @@ import GOOL.Drasil (GSProgram, MSBody, MSBlock, MSStatement, SMethod, OOProg,
   BlockSym(..), listSlice, TypeSym(..), StatementSym(..), AssignStatement(..), (&=),
   DeclStatement(..), IOStatement(..), StringStatement(..), CommentStatement(..), ControlStatement(..),
   VariableSym(..), listVar, Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), extFuncApp, List(..),
+  ValueExpression(..), funcApp, extFuncApp, List(..),
   MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 
@@ -32,14 +31,14 @@ superSimpleMain = mainFunction (body [ helloInitVariables{-,
 
 -- | Initialize variables used in the generated program.
 helloInitVariables :: (OOProg r) => MSBlock r
-helloInitVariables = block [comment "Initializing variables"]{-},
+helloInitVariables = block [comment "Initializing variables",
   varDec $ var "a" int,
   varDecDef (var "b" int) (litInt 5),
   listDecDef (var "myOtherList" (listType double)) [litDouble 1.0,
     litDouble 1.5],
   varDecDef (var "oneIndex" int) (indexOf (valueOf $ var "myOtherList"
     (listType double)) (litDouble 1.0)),
-  printLn (valueOf $ var "oneIndex" int),
+  printLn (valueOf $ var "oneIndex" int){-,
   var "a" int &= listSize (valueOf $ var "myOtherList" (listType double)),
   valStmt (listAdd (valueOf $ var "myOtherList" (listType double))
     (litInt 2) (litDouble 2.0)),
@@ -56,4 +55,4 @@ helloInitVariables = block [comment "Initializing variables"]{-},
   listDecDef (var "boringList" (listType bool))
     [litFalse, litFalse, litFalse, litFalse, litFalse],
   printLn (valueOf $ var "boringList" (listType bool)),
-  listDec 2 $ var "mySlicedList" (listType double)]-}
+  listDec 2 $ var "mySlicedList" (listType double)-}]

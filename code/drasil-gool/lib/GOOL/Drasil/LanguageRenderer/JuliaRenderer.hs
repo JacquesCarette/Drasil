@@ -16,13 +16,14 @@ import GOOL.Drasil.ClassInterface (Label, VSType, SValue, MSStatement, OOProg, P
   TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), InternalValueExp(..), FunctionSym(..), GetSet(..),
+  ValueExpression(..), funcApp, InternalValueExp(..), FunctionSym(..), GetSet(..),
   List(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+import qualified GOOL.Drasil.ClassInterface as S (listInnerType)
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -38,34 +39,34 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block, 
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
-import GOOL.Drasil.LanguageRenderer (printLabel, listSep, listSep', ModuleDocRenderer)
+import GOOL.Drasil.LanguageRenderer (printLabel, listSep, listSep', ModuleDocRenderer, variableList)
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp, sin, cos, tan, asin, acos, atan, 
   floor, ceil, body, addComments, blockCmt, docCmt, commentedMod)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStateVal, VSOp, unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr, typeBinExpr, mkStmtNoEnd)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  block, listInnerType, obj, litChar, litDouble, litInt, litString, negateOp, equalOp,
+  block, listInnerType, obj, litChar, litDouble, litInt, litString, valueOf, negateOp, equalOp,
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp,
-  multOp, divideOp, modFromData, fileDoc, docMod, moduloOp, fileFromData, csc, 
+  multOp, divideOp, moduloOp, var, call, funcAppMixedArgs, selfFuncAppMixedArgs, lambda, modFromData, fileDoc, docMod, fileFromData, csc, 
   sec, cot, stmt, loopStmt, emptyStmt, assign, increment, subAssign, print, comment)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (string', 
-  bool, funcType, buildModule, docMod', litArray, mainBody)
+  bool, funcType, buildModule, docMod', litArray, listDec, listDecDef, mainBody)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
   litFloat, notOp, andOp, orOp, inlineIf)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1, decrement1)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, FuncData(..), ModData(..),
   md, updateMod, MethodData(..), mthd, OpData(..), ParamData(..), ProgData(..), TypeData(..), td,
-  ValData(..), VarData(..), CommonThunk, progD)
+  ValData(..), vd, VarData(..), vard, CommonThunk, progD)
 import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
   on2StateValues, onCodeList, onStateList, emptyIfEmpty)
 import GOOL.Drasil.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS, 
-  getModuleImports, getUsing, getLangImports, getLibImports, getMainDoc)
+  getModuleImports, getUsing, getLangImports, getLibImports, getMainDoc, useVarName)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 import Data.List (intercalate, sort)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), empty, brackets, vcat, quotes, parens)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), empty, brackets, vcat, quotes, parens, equals)
 import Metadata.Drasil.DrasilMetaCall (watermark)
 
 jlExt :: String
@@ -217,14 +218,14 @@ instance BinaryOpSym JuliaCode where
 
 
 instance OpElim JuliaCode where
-  uOp = undefined
-  bOp = undefined
-  uOpPrec = undefined
-  bOpPrec = undefined
+  uOp = opDoc . unJLC
+  bOp = opDoc . unJLC
+  uOpPrec = opPrec . unJLC
+  bOpPrec = opPrec . unJLC
 
 instance VariableSym JuliaCode where
   type Variable JuliaCode = VarData
-  var = undefined
+  var = G.var
   staticVar = undefined
   constant = undefined
   extVar _ = undefined
@@ -236,19 +237,21 @@ instance VariableSym JuliaCode where
   arrayElem _ = undefined
 
 instance VariableElim JuliaCode where
-  variableName = undefined
-  variableType = undefined
+  variableName = varName . unJLC
+  variableType = onCodeValue varType
 
 instance InternalVarElim JuliaCode where
-  variableBind = undefined
-  variable = undefined
+  variableBind = varBind . unJLC
+  variable = varDoc . unJLC
 
 instance RenderVariable JuliaCode where
-  varFromData _ _ _ _ = undefined
+  varFromData b n t' d = do
+    t <- t'
+    toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym JuliaCode where
   type Value JuliaCode = ValData
-  valueType = undefined
+  valueType = onCodeValue valType
 
 instance Argument JuliaCode where
   pointerArg = undefined
@@ -269,7 +272,7 @@ instance MathConstant JuliaCode where
   pi = mkStateVal double jlPi
 
 instance VariableValue JuliaCode where
-  valueOf = undefined
+  valueOf = G.valueOf
 
 instance CommandLineArgs JuliaCode where
   arg _ = undefined
@@ -324,7 +327,7 @@ instance Comparison JuliaCode where
 instance ValueExpression JuliaCode where
   inlineIf = C.inlineIf
 
-  funcAppMixedArgs = undefined
+  funcAppMixedArgs = G.funcAppMixedArgs
   selfFuncAppMixedArgs = undefined
   extFuncAppMixedArgs = undefined
   libFuncAppMixedArgs = undefined
@@ -332,26 +335,28 @@ instance ValueExpression JuliaCode where
   extNewObjMixedArgs _ _ _ _ = undefined
   libNewObjMixedArgs = undefined
 
-  lambda = undefined
+  lambda = G.lambda jlLambda
 
   notNull = undefined
 
 instance RenderValue JuliaCode where
   inputFunc = undefined
-  printFunc = undefined
-  printLnFunc = undefined
+  printFunc = mkStateVal void jlPrintFunc
+  printLnFunc = mkStateVal void jlPrintLnFunc
   printFileFunc _ = undefined
   printFileLnFunc _ = undefined
 
   cast = undefined
 
-  call _ _ _ _ _ _ = undefined
+  call = G.call jlNamedArgSep
 
-  valFromData _ _ _ = undefined
+  valFromData p t' d = do
+    t <- t'
+    toState $ on2CodeValues (vd p) t (toCode d)
 
 instance ValueElim JuliaCode where
-  valuePrec = undefined
-  value = undefined
+  valuePrec = valPrec . unJLC
+  value = val . unJLC
 
 instance InternalValueExp JuliaCode where
   objMethodCallMixedArgs' = undefined
@@ -371,7 +376,17 @@ instance List JuliaCode where
   listAppend = undefined
   listAccess = undefined
   listSet = undefined
-  indexOf = undefined
+  indexOf :: SValue JuliaCode -> SValue JuliaCode -> SValue JuliaCode
+  indexOf l v = do
+    v' <- v
+    let t = return $ valueType v'
+    funcApp jlIndex t [lambda [(var "x" t)] (valueOf (var "x" t) ?== v), l] #- litInt 1
+    
+  
+  -- let
+  --   t :: VSType JuliaCode
+  --   t = RC.type l -- TODO: this is wrong, I'm just testing how wrong
+  --   in funcApp jlIndex int [lambda [(var "x" t)] (valueOf (var "x" t) ?== v), l]
 
 instance InternalList JuliaCode where
   listSlice' _ _ _ _ _ = undefined
@@ -449,12 +464,18 @@ instance AssignStatement JuliaCode where
   (&--) = M.decrement1
 
 instance DeclStatement JuliaCode where
-  varDec = undefined
-  varDecDef = undefined
-  listDec _ = undefined
-  listDecDef = undefined
-  arrayDec = undefined
-  arrayDecDef = undefined
+  varDec v = do -- TODO: Merge with Python
+    v' <- zoom lensMStoVS v
+    modify $ useVarName (variableName v')
+    mkStmtNoEnd empty
+  varDecDef v e = do -- TODO: Merge with Python
+    v' <- zoom lensMStoVS v
+    modify $ useVarName (variableName v')
+    assign v e
+  listDec _ = CP.listDec
+  listDecDef = CP.listDecDef
+  arrayDec = listDec
+  arrayDecDef = listDecDef
   objDecDef = undefined
   objDecNew = undefined
   extObjDecNew = undefined
@@ -634,7 +655,7 @@ instance BlockCommentSym JuliaCode where
 
   blockComment lns = toCode $ R.blockCmt lns jlBlockCmtStart jlBlockCmtEnd
   docComment = onStateValue (\lns -> toCode $ R.docCmt lns jlDocCmtStart 
-    jlBlockCmtEnd)
+    jlDocCmtEnd)
 
 instance BlockCommentElim JuliaCode where
   blockComment' = undefined
@@ -644,7 +665,7 @@ jlName, jlVersion :: String
 jlName = "Julia"
 jlVersion = "1.10.3"
 
-jlInt, jlFloat, jlDouble, jlChar, jlFile, jlList, jlVoid :: String
+jlInt, jlFloat, jlDouble, jlChar, jlFile, jlList, jlVoid, jlIndex :: String
 jlInt = "Int32" -- Q: Do we use concrete or abstract types?
 jlFloat = "Float32"
 jlDouble = "Float64"
@@ -652,6 +673,15 @@ jlChar = "Char"
 jlFile = "IOStream"
 jlList = "Vector"
 jlVoid = "Nothing"
+jlIndex = "findfirst"
+
+jlPrintFunc, jlPrintLnFunc :: Doc
+jlPrintFunc = text printLabel
+jlPrintLnFunc = text "println"
+
+arrow, jlNamedArgSep :: Doc
+arrow = text "->"
+jlNamedArgSep = equals -- TODO: Merge with Python
 
 jlTuple :: [String] -> String
 jlTuple ts = "Tuple{" ++ intercalate listSep ts ++ "}"
@@ -669,13 +699,17 @@ jlPi :: Doc
 jlPi = text "pi"
 
 -- Comments
-jlCmtStart, jlBlockCmtStart, jlBlockCmtEnd, jlDocCmtStart :: Doc
-jlCmtStart  = text "#"
+jlCmtStart, jlBlockCmtStart, jlBlockCmtEnd, jlDocCmtStart, jlDocCmtEnd :: Doc
+jlCmtStart      = text "#"
 jlBlockCmtStart = text "#="
 jlBlockCmtEnd   = text "=#"
-jlDocCmtStart   = text "#=="
+jlDocCmtStart   = text "\"\"\""
+jlDocCmtEnd     = text "\"\"\""
 
 -- Control structures
+jlLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
+jlLambda ps ex = variableList ps <+> arrow <+> RC.value ex
+
 jlEndStmt :: Doc
 jlEndStmt = text "end"
 

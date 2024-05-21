@@ -25,6 +25,7 @@ dist
 stack.yaml.lock
 .hlint*
 .envrc
+.hie
 
 # Drasil supported programming languages
 __pycache__

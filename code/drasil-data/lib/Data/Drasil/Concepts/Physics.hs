@@ -144,7 +144,7 @@ potEnergy = dccWDS "potEnergy" (cn "potential energy")
 pressure = dccWDS "pressure" (cn' "pressure")
   (S "a" +:+ phrase force +:+ S "exerted over an area")
 rectilinear = dcc "rectilinear" (cn "rectilinear")
-  "occuring in one dimension"
+  "occurring in one dimension"
 rigidBody = dcc "rigidBody" (cnIES "rigid body")
   "a solid body in which deformation is neglected"
 space = dcc "space" (cn' "space")

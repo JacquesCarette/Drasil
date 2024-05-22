@@ -60,7 +60,7 @@ security
       nonFuncReqDom
 
 maintainability :: ConceptInstance
-maintainability = mkMaintainableNFR "maintainability" (10 :: Integer) "Maintainable"
+maintainability = mkMaintainableNFR "maintainability" 10 "Maintainable"
 
 verifiability :: ConceptInstance
 verifiability

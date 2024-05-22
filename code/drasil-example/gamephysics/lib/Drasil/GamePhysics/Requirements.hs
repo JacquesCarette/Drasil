@@ -132,4 +132,4 @@ understandability = cic "understandability" (foldlSent [
   ]) "Understandability" nonFuncReqDom
 
 maintainability :: ConceptInstance
-maintainability = mkMaintainableNFR "maintainability" (10 :: Integer) "Maintainability"
+maintainability = mkMaintainableNFR "maintainability" 10 "Maintainability"

@@ -157,4 +157,4 @@ reusable = cic "reusable" (foldlSent [
   atStartNP (the code), S "is modularized"]) "Reusable" nonFuncReqDom
 
 maintainable :: ConceptInstance
-maintainable = mkMaintainableNFR "maintainable" (10 :: Integer) "Maintainable"
+maintainable = mkMaintainableNFR "maintainable" 10 "Maintainable"

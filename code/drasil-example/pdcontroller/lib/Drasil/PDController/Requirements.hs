@@ -4,6 +4,7 @@ module Drasil.PDController.Requirements where
 import Data.Drasil.Concepts.Documentation (funcReqDom, nonFuncReqDom, datumConstraint)
 import Drasil.DocLang.SRS (datCon)
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.Sections.Requirements (mkMaintainableNFR)
 
 import Drasil.PDController.Concepts
 import Drasil.PDController.IModel
@@ -60,11 +61,7 @@ security
       nonFuncReqDom
 
 maintainability :: ConceptInstance
-maintainability = cic "maintainability" (foldlSent [
-  S "If a likely change is made" `S.toThe` S "finished software, it will take", 
-  addPercent (10 :: Integer), S "percent" `S.ofThe` S "original development time,",
-  S "assuming the same development resources are available"
-  ]) "Maintainable" nonFuncReqDom
+maintainability = mkMaintainableNFR "maintainability" (10 :: Integer) "Maintainable"
 
 verifiability :: ConceptInstance
 verifiability

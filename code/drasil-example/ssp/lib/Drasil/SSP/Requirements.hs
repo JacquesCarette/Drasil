@@ -6,6 +6,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.DocLang (mkInputPropsTable)
 import Drasil.DocLang.SRS (datCon, propCorSol) 
+import Drasil.Sections.Requirements (mkMaintainableNFR)
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (code,
@@ -123,8 +124,4 @@ reusable = cic "reusable" (foldlSent [
   atStartNP (the code), S "is modularized"]) "Reusable" nonFuncReqDom
 
 maintainable :: ConceptInstance
-maintainable = cic "maintainable" (foldlSent [
-  S "If a likely change is made" `S.toThe` S "finished software, it will take", 
-  addPercent (10 :: Integer), S "percent" `S.ofThe` S "original development time,",
-  S "assuming the same development resources are available"
-  ]) "Maintainable" nonFuncReqDom
+maintainable = mkMaintainableNFR "maintainable" (10 :: Integer) "Maintainable"

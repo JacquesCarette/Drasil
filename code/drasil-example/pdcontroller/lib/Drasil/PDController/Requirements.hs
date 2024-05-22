@@ -3,7 +3,6 @@ module Drasil.PDController.Requirements where
 
 import Data.Drasil.Concepts.Documentation (funcReqDom, nonFuncReqDom, datumConstraint)
 import Drasil.DocLang.SRS (datCon)
-import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sections.Requirements (mkMaintainableNFR)
 
 import Drasil.PDController.Concepts

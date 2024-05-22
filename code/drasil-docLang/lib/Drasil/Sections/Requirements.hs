@@ -106,7 +106,7 @@ nfReqIntro _  = mkParagraph $ reqIntroStart +:+. nfrReqIntroBody
 mkMaintainableNFR :: String -> Integer -> String -> ConceptInstance
 mkMaintainableNFR refAddress percent lbl = cic refAddress (foldlSent [
   S "If a likely change is made" `S.toThe` 
-  S "finished software, it will take", addPercent percent, EmptyS `S.ofThe`
+  S "finished software, it will take", addPercent percent `S.ofThe`
   S "original development time,",
   S "assuming the same development resources are available"
   ]) lbl nonFuncReqDom

@@ -4,7 +4,7 @@ import Language.Drasil
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.Sections.Requirements (mkMaintainableNFR)
+import Drasil.DocLang (mkMaintainableNFR)
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (code, datumConstraint,

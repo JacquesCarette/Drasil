@@ -4,9 +4,8 @@ import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Drasil.DocLang (mkInputPropsTable)
+import Drasil.DocLang (mkInputPropsTable, mkMaintainableNFR)
 import Drasil.DocLang.SRS (datCon, propCorSol) 
-import Drasil.Sections.Requirements (mkMaintainableNFR)
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (code,

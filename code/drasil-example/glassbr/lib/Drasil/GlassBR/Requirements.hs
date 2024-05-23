@@ -3,13 +3,12 @@ module Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, inReqDesc, nonfunc
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Drasil.DocLang (inReq, mkQRTuple, mkQRTupleRef, mkValsSourceTable)
+import Drasil.DocLang (inReq, mkQRTuple, mkQRTupleRef, mkValsSourceTable, mkMaintainableNFR)
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (DataDefinition)
-import Drasil.Sections.Requirements (mkMaintainableNFR)
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (characteristic, code,

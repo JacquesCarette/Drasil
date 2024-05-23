@@ -6,9 +6,8 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (InstanceModel, HasOutput(output))
 
-import Drasil.DocLang (inReq)
+import Drasil.DocLang (inReq, mkMaintainableNFR)
 import Drasil.DocLang.SRS (datCon, propCorSol) 
-import Drasil.Sections.Requirements (mkMaintainableNFR)
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (code, condition,

@@ -584,7 +584,7 @@ instance MethodSym JuliaCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
-  constructor ps is b = getClassName >>= (\n -> jlConstructor n ps is b)
+  constructor ps is b = getClassName >>= (\n -> CP.constructor n ps is b)
   docMain = undefined
   function = undefined
   mainFunction = CP.mainBody
@@ -741,10 +741,10 @@ jlDocCmtEnd     = text "\"\"\""
 
 -- | Constructor method.  Exists because Julia's constructors need to be 
 --   completely different from other 'methods' in Julia.
-jlConstructor :: (RenderSym r) => Label -> [MSParameter r] -> Initializers r ->
-  MSBody r -> SMethod r
-jlConstructor fName ps is b = getClassName >>= (\c -> jlConstructorMethod fName
-  (S.construct c) ps (S.multiBody [initStmt is, b]))
+-- jlConstructor :: (RenderSym r) => Label -> [MSParameter r] -> Initializers r ->
+--   MSBody r -> SMethod r
+-- jlConstructor fName ps is b = getClassName >>= (\c -> jlConstructorMethod fName
+--   (S.construct c) ps (S.multiBody [initStmt is, b]))
 
 jlLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 jlLambda ps ex = variableList ps <+> arrow <+> RC.value ex

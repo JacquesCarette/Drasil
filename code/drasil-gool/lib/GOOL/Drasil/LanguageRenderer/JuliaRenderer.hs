@@ -11,11 +11,12 @@ import Utils.Drasil (blank, indent, stringList)
 
 -- TODO: Sort the dependencies to match the other modules
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, VSType, SValue, SVariable, MSStatement, OOProg, ProgramSym(..),
+import GOOL.Drasil.ClassInterface (Label, VSType, SValue, SVariable, 
+  MSStatement, OOProg, ProgramSym(..), SMethod, MSBody, MSParameter, Initializers,
   FileSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..), 
   ValueExpression(..), funcApp, InternalValueExp(..), FunctionSym(..), GetSet(..),
   List(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
@@ -29,16 +30,17 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
   RenderValue(..), ValueElim(valuePrec), InternalGetSet(..), 
-  InternalListFunc(..), RenderFunction(..), 
+  InternalListFunc(..), RenderFunction(..), MSMthdType,
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..), 
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm), 
   RenderScope(..), ScopeElim, MethodTypeSym(..), RenderParam(..), 
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
   StateVarElim, RenderClass(..), ClassElim, RenderMod(..), ModuleElim, 
   BlockCommentSym(..), BlockCommentElim)
-import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block, 
-  type', uOp, bOp, variable, value, function, statement, scope, parameter,
-  method, stateVar, class', module', blockComment')
+import qualified GOOL.Drasil.RendererClasses as RC (RenderBody(multiBody), 
+  import', perm, body, block, type', uOp, bOp, variable, value, function, 
+  statement, scope, parameter, method, stateVar, class', module', blockComment',
+  construct)
 import GOOL.Drasil.LanguageRenderer (printLabel, listSep, listSep', 
   ModuleDocRenderer, ClassDocRenderer, variableList, parameterList)
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp, sin, cos, tan, asin, acos, atan,
@@ -54,7 +56,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   sec, cot, stmt, loopStmt, emptyStmt, assign, increment, subAssign, print, 
   comment, valStmt, listAccess, func, objAccess, listSet, docClass, 
   commentedClass, buildClass, method, getMethod, setMethod, returnStmt, objVar, 
-  construct, param, defaultOptSpace, ifCond)
+  construct, param, defaultOptSpace, ifCond, initStmts)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (string',
   bool, funcType, buildModule, docMod', litArray, listDec, listDecDef, mainBody,
   listAccessFunc, listSetFunc, intClass, stateVar, bindingError, constructor)
@@ -584,7 +586,7 @@ instance MethodSym JuliaCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
-  constructor ps is b = getClassName >>= (\n -> CP.constructor n ps is b)
+  constructor ps is b = getClassName >>= (\n -> jlConstructor n ps is b)
   docMain = undefined
   function = undefined
   mainFunction = CP.mainBody
@@ -741,10 +743,13 @@ jlDocCmtEnd     = text "\"\"\""
 
 -- | Constructor method.  Exists because Julia's constructors need to be 
 --   completely different from other 'methods' in Julia.
--- jlConstructor :: (RenderSym r) => Label -> [MSParameter r] -> Initializers r ->
---   MSBody r -> SMethod r
--- jlConstructor fName ps is b = getClassName >>= (\c -> jlConstructorMethod fName
---   (S.construct c) ps (S.multiBody [initStmt is, b]))
+jlConstructor :: (RenderSym r) => Label -> [MSParameter r] -> Initializers r ->
+  MSBody r -> SMethod r
+jlConstructor fName ps is b = getClassName >>= (\c -> jlConstructorMethod fName
+  (RC.construct c) ps (RC.multiBody [G.initStmts is, b]))
+
+jlConstructorMethod :: Label -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
+jlConstructorMethod = undefined
 
 jlLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 jlLambda ps ex = variableList ps <+> arrow <+> RC.value ex

@@ -14,11 +14,11 @@ import System.FilePath.Posix (takeDirectory)
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import HelloWorld (helloWorld)
-import SuperSimple (superSimple)
 import PatternTest (patternTest)
 import FileTests (fileTests)
 import VectorTest (vectorTest)
 import NameGenTest (nameGenTest)
+import SuperSimple (superSimple)
 
 -- | Renders five GOOL tests (FileTests, SuperSimple, HelloWorld, PatternTest, VectorTest, and NameGenTest)
 -- in Java, Python, Julia, C#, C++, and Swift.
@@ -33,12 +33,6 @@ main = do
   setCurrentDirectory "python"
   genCode (classes unPC unPP)
   setCurrentDirectory workingDir
-  -- Julia - work in progress
-  createDirectoryIfMissing False "julia"
-  setCurrentDirectory "julia"
-  genCode (classes unJLC unJLP)
-  setCurrentDirectory workingDir
-  -- Moving on
   createDirectoryIfMissing False "csharp"
   setCurrentDirectory "csharp"
   genCode (classes unCSC unCSP)
@@ -50,6 +44,10 @@ main = do
   createDirectoryIfMissing False "swift"
   setCurrentDirectory "swift"
   genCode (classes unSC unSP)
+  setCurrentDirectory workingDir
+  createDirectoryIfMissing False "julia"
+  setCurrentDirectory "julia"
+  genCode (classes unJLC unJLP)
   setCurrentDirectory workingDir
 
 -- | Gathers all information needed to generate code, sorts it, and calls the renderers.

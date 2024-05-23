@@ -2,20 +2,20 @@
 -- | Tests basic GOOL functions. It *might* run without errors.
 module SuperSimple (superSimple) where
 
-import GOOL.Drasil (GSProgram, MSBody, MSBlock, MSStatement, SMethod, OOProg,
-  ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner,
-  BlockSym(..), listSlice, TypeSym(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..), CommentStatement(..), ControlStatement(..),
-  VariableSym(..), listVar, Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, List(..),
+import GOOL.Drasil (GSProgram, MSBlock, SMethod, OOProg,
+  ProgramSym(..), FileSym(..), BodySym(..),
+  BlockSym(..), TypeSym(..), StatementSym(..), (&=),
+  DeclStatement(..), IOStatement(..), CommentStatement(..),
+  VariableSym(..), Literal(..), VariableValue(..), List(..),
   MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
+import SimpleClass (simpleClass, simpleName)
 
 -- | Creates the SuperSimple program and necessary files.
 superSimple :: (OOProg r) => GSProgram r
 superSimple = prog "SuperSimple" "" [docMod description
   ["Brooks MacLachlan"] "" $ fileDoc (buildModule "SuperSimple" []
-  [superSimpleMain] [])]
+  [superSimpleMain] []), simpleClass]
 
 -- | Description of program.
 description :: String
@@ -38,7 +38,7 @@ helloInitVariables = block [comment "Initializing variables",
     litDouble 1.5],
   varDecDef (var "oneIndex" int) (indexOf (valueOf $ var "myOtherList"
     (listType double)) (litDouble 1.0)),
-  printLn (valueOf $ var "oneIndex" int){-,
+  printLn (valueOf $ var "oneIndex" int),
   var "a" int &= listSize (valueOf $ var "myOtherList" (listType double)),
   valStmt (listAdd (valueOf $ var "myOtherList" (listType double))
     (litInt 2) (litDouble 2.0)),
@@ -48,7 +48,7 @@ helloInitVariables = block [comment "Initializing variables",
   var "e" int &= listAccess (valueOf $ var "myOtherList"
     (listType double)) (litInt 1),
   valStmt (listSet (valueOf $ var "myOtherList" (listType double))
-    (litInt 1) (litDouble 17.4)),
+    (litInt 1) (litDouble 17.4)){-,
   listDec 7 (var "myName" (listType string)),
   stringSplit ' ' (var "myName" (listType string)) (litString "Brooks Mac"),
   printLn (valueOf $ var "myName" (listType string)),

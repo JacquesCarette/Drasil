@@ -4,7 +4,7 @@ module Observer (observer, observerName, printNum, x) where
 import GOOL.Drasil (SFile, SVariable, SMethod, SClass, OOProg, FileSym(..),
   PermanenceSym(..), oneLiner, TypeSym(..), IOStatement(..), VariableSym(..),
   Literal(..), VariableValue(..), ScopeSym(..), MethodSym(..), initializer, StateVarSym(..),
-  ClassSym(..), ModuleSym(..))
+  ClassSym(..), ModuleSym(..), ParameterSym (param), CodeType (..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 observerName, observerDesc, printNum :: String
@@ -39,5 +39,5 @@ observerConstructor = initializer [] [(x, litInt 5)]
 
 -- | Create the @printNum@ method.
 printNumMethod :: (MethodSym r, IOStatement r, VariableValue r) => SMethod r
-printNumMethod = method printNum public dynamic void [] $
+printNumMethod = method printNum public dynamic void [param $ var "cond" bool] $
   oneLiner $ printLn $ valueOf selfX

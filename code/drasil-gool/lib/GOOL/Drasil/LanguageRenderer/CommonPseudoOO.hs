@@ -306,13 +306,15 @@ litArray :: (RenderSym r) => (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
 litArray f t es = sequence es >>= (\elems -> mkStateVal (S.arrayType t) 
   (f $ valueList elems))
 
--- Python, C#, C++, and Swift --
+-- Python, C#, C++, Swift, and Julia --
 
 listSetFunc :: (RenderSym r) => (Doc -> Doc -> Doc) -> SValue r -> SValue r -> 
   SValue r -> VSFunction r
 listSetFunc f v idx setVal = join $ on2StateValues (\i toVal -> funcFromData 
   (f (RC.value i) (RC.value toVal)) (onStateValue valueType v)) (intValue idx) 
   setVal
+
+-- Python, C#, C++, and Swift
 
 extraClass :: (RenderSym r) =>  Label -> Maybe Label -> [CSStateVar r] -> 
   [SMethod r] -> SClass r

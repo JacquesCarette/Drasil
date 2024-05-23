@@ -1139,6 +1139,7 @@ constructor :: RenderSym r => Label -> [MSParameter r] -> Initializers r -> MSBo
 doxFunc :: RenderSym r => String -> [String] -> Maybe String -> SMethod r -> SMethod r
 doxClass :: RenderSym r => String -> SClass r -> SClass r
 doxMod :: RenderSym r => String -> String -> [String] -> String -> SFile r -> SFile r
+docMod' :: RenderSym r => String -> String -> [String] -> String -> SFile r -> SFile r
 extVar :: RenderSym r => Label -> Label -> VSType r -> SVariable r
 classVar :: RenderSym r => (Doc -> Doc -> Doc) -> VSType r -> SVariable r -> SVariable r
 objVarSelf :: RenderSym r => SVariable r -> SVariable r
@@ -1193,6 +1194,8 @@ forLoopError :: String -> String
 mainBody :: RenderSym r => MSBody r -> SMethod r
 inOutFunc :: RenderSym r => (VSType r -> [MSParameter r] -> MSBody r -> SMethod r) -> [SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r
 docInOutFunc' :: RenderSym r => FuncDocRenderer -> ([SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r) -> String -> [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
+boolRender :: String
+bool :: RenderSym r => VSType r
 floatRender :: String
 float :: RenderSym r => VSType r
 stringRender' :: String

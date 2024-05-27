@@ -2,12 +2,12 @@
 -- | Tests basic GOOL functions. It *might* run without errors.
 module SuperSimple (superSimple) where
 
-import GOOL.Drasil (GSProgram, MSBlock, SMethod, OOProg,
-  ProgramSym(..), FileSym(..), BodySym(..),
-  BlockSym(..), TypeSym(..), StatementSym(..), (&=),
-  DeclStatement(..), IOStatement(..), CommentStatement(..),
-  VariableSym(..), Literal(..), VariableValue(..), List(..),
-  MethodSym(..), ModuleSym(..))
+import GOOL.Drasil (GSProgram, MSBody, MSBlock, SMethod, OOProg,
+  ProgramSym(..), FileSym(..), BodySym(..), ControlStatement(..), 
+  CommandLineArgs(..), BlockSym(..), TypeSym(..), StatementSym(..), 
+  Comparison(..), (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
+  CommentStatement(..), VariableSym(..), Literal(..), VariableValue(..), 
+  List(..), MethodSym(..), ModuleSym(..), listSlice, bodyStatements)
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import SimpleClass (simpleClass, simpleName)
 
@@ -23,8 +23,8 @@ description = "Tests basic GOOL functions. It *might* run without errors."
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 superSimpleMain :: (OOProg r) => SMethod r
-superSimpleMain = mainFunction (body [ helloInitVariables{-,
-    helloListSlice,
+superSimpleMain = mainFunction (body [ helloInitVariables,
+    helloListSlice{-,
     block [ifCond [(valueOf (var "b" int) ?>= litInt 6, bodyStatements [varDecDef (var "dummy" string) (litString "dummy")]),
       (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody, helloIfExists,
     helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch]-}])
@@ -48,11 +48,21 @@ helloInitVariables = block [comment "Initializing variables",
   var "e" int &= listAccess (valueOf $ var "myOtherList"
     (listType double)) (litInt 1),
   valStmt (listSet (valueOf $ var "myOtherList" (listType double))
-    (litInt 1) (litDouble 17.4)){-,
+    (litInt 1) (litDouble 17.4)),
   listDec 7 (var "myName" (listType string)),
   stringSplit ' ' (var "myName" (listType string)) (litString "Brooks Mac"),
   printLn (valueOf $ var "myName" (listType string)),
   listDecDef (var "boringList" (listType bool))
     [litFalse, litFalse, litFalse, litFalse, litFalse],
   printLn (valueOf $ var "boringList" (listType bool)),
-  listDec 2 $ var "mySlicedList" (listType double)-}]
+  listDec 2 $ var "mySlicedList" (listType double)]
+
+-- | Initialize and assign a value to a new variable @mySlicedList@.
+helloListSlice :: (OOProg r) => MSBlock r
+helloListSlice = listSlice (var "mySlicedList" (listType double))
+  (valueOf $ var "myOtherList" (listType double)) (Just (litInt 9))
+  Nothing (Just (litInt (-1)))
+
+-- | Print the 5th given argument.
+helloElseBody :: (OOProg r) => MSBody r
+helloElseBody = bodyStatements [printLn (arg 5)]

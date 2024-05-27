@@ -20,12 +20,20 @@ simpleClass = fileDoc (buildModule simpleName [] [] [docClass simpleDesc
 x :: (VariableSym r) => SVariable r
 x = var "x" int
 
-buildSimpleClass :: (OOProg r) => SClass r
-buildSimpleClass = buildClass Nothing [stateVar public dynamic x] [simpleConstructor, getMethod x, setMethod x, printXMethod]
+-- | Makes a variable @y@
+y :: (VariableSym r) => SVariable r
+y = var "y" int
 
--- | Devault value for simple class is 5
+buildSimpleClass :: (OOProg r) => SClass r
+buildSimpleClass = buildClass Nothing [stateVar public dynamic x, stateVar public dynamic y] [simpleConstructor, simpleConstructor2, getMethod x, setMethod x, printXMethod]
+
+-- | Devault value for simple class is y=3
 simpleConstructor :: (MethodSym r, Literal r) => SMethod r
 simpleConstructor = initializer [] [(x, litInt 5)]
+
+-- | Devault value for simple class is y=3
+simpleConstructor2 :: (MethodSym r, Literal r, VariableValue r) => SMethod r
+simpleConstructor2 = initializer [param x] [(x, valueOf $ var "x" int), (y, litInt 3)]
 
 -- | Create the @printNum@ method.
 printXMethod :: (OOProg r) => SMethod r

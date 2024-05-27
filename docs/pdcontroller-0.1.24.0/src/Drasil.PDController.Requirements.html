@@ -2,8 +2,8 @@
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.PDController.Requirements</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">funcReqDom</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">nonFuncReqDom</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">datumConstraint</span></span><span class="hs-special">)</span><span>
-</span><span id="line-5"></span><span>
-</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DocLang.SRS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">datCon</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DocLang.SRS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">datCon</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DocLang</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">mkMaintainableNFR</span></span><span class="hs-special">)</span><span>
 </span><span id="line-7"></span><span>
 </span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.Concepts.html"><span class="hs-identifier">Drasil.PDController.Concepts</span></a></span><span>
 </span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.IModel.html"><span class="hs-identifier">Drasil.PDController.IModel</span></a></span><span>
@@ -148,41 +148,25 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span id="line-61"></span><span>
 </span><span id="line-62"></span><span class="annot"><a href="Drasil.PDController.Requirements.html#maintainability"><span class="hs-identifier hs-type">maintainability</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
 </span><span id="line-63"></span><span id="maintainability"><span class="annot"><span class="annottext">maintainability :: ConceptInstance
-</span><a href="Drasil.PDController.Requirements.html#maintainability"><span class="hs-identifier hs-var hs-var">maintainability</span></a></span></span><span>
-</span><span id="line-64"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
-Concept c =&gt;
-String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
-</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;maintainability&quot;</span></span><span>
-</span><span id="line-65"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
-</span><span class="hs-identifier hs-var">foldlSent</span></span><span>
-</span><span id="line-66"></span><span>         </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;The dependencies among the instance models, requirements,&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-67"></span><span>            </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;likely changes, assumptions and all other relevant sections of&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-68"></span><span>            </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;this document shall be traceable to each other in the trace matrix&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-69"></span><span>      </span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.PDController.Requirements.html#maintainability"><span class="hs-identifier hs-var hs-var">maintainability</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Integer -&gt; String -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">mkMaintainableNFR</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;maintainability&quot;</span></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><span class="hs-number">10</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Maintainable&quot;</span></span><span>
-</span><span id="line-70"></span><span>      </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">nonFuncReqDom</span></span><span>
-</span><span id="line-71"></span><span>
-</span><span id="line-72"></span><span class="annot"><a href="Drasil.PDController.Requirements.html#verifiability"><span class="hs-identifier hs-type">verifiability</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-73"></span><span id="verifiability"><span class="annot"><span class="annottext">verifiability :: ConceptInstance
+</span><span id="line-64"></span><span>
+</span><span id="line-65"></span><span class="annot"><a href="Drasil.PDController.Requirements.html#verifiability"><span class="hs-identifier hs-type">verifiability</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-66"></span><span id="verifiability"><span class="annot"><span class="annottext">verifiability :: ConceptInstance
 </span><a href="Drasil.PDController.Requirements.html#verifiability"><span class="hs-identifier hs-var hs-var">verifiability</span></a></span></span><span>
-</span><span id="line-74"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
+</span><span id="line-67"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
 Concept c =&gt;
 String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;verifiability&quot;</span></span><span>
-</span><span id="line-75"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-68"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The code shall be verifiable against a Verification and Validation plan&quot;</span></span><span> </span><span class="hs-operator">!.</span><span class="hs-special">)</span><span>
-</span><span id="line-76"></span><span>      </span><span class="annot"><span class="annottext">String
+</span><span id="line-69"></span><span>      </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Verifiable&quot;</span></span><span>
-</span><span id="line-77"></span><span>      </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span id="line-70"></span><span>      </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">nonFuncReqDom</span></span><span>
-</span><span id="line-78"></span></pre></body></html>
+</span><span id="line-71"></span></pre></body></html>

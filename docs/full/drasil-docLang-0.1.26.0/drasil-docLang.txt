@@ -1128,6 +1128,11 @@ mkValsSourceTable :: (Quantity i, MayHaveUnit i) => [(i, Sentence)] -> String ->
 --   section. Takes in the contents of that section.
 nfReqF :: [Contents] -> Section
 
+-- | Common Non-Functional Requirement for Maintainability. Takes in a
+--   Reference Address (<a>Space</a>), a percent value (<a>Space</a>), and
+--   a label (<a>Space</a>).
+mkMaintainableNFR :: String -> Integer -> String -> ConceptInstance
+
 
 -- | Document declaration types and functions for generating Software
 --   Requirement Specifications.
@@ -2239,6 +2244,11 @@ mkValsSourceTable :: (Quantity i, MayHaveUnit i) => [(i, Sentence)] -> String ->
 
 -- | Reference for the Required Inputs table.
 reqInputsRef :: Reference
+
+-- | Common Non-Functional Requirement for Maintainability. Takes in a
+--   Reference Address (<a>Space</a>), a percent value (<a>Space</a>), and
+--   a label (<a>Space</a>).
+mkMaintainableNFR :: String -> Integer -> String -> ConceptInstance
 
 -- | General <a>Sentence</a> that describes some auxiliary specifications
 --   of the system.

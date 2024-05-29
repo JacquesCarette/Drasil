@@ -22,7 +22,7 @@ import SysInfo.Drasil
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators as NC
 import Language.Drasil.Sentence.Combinators as S
-import Data.Foldable(foldl')
+import Data.Foldable (foldl')
 
 -- | Makes a Traceability Table/Matrix that contains Items of Different Sections.
 generateTraceTable :: SystemInformation -> LabelledContent

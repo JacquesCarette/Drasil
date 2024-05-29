@@ -37,7 +37,7 @@ import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (%%), ($+$),
   hpunctuate, lub, runPrint, switch, toMath, toText, unPL, vcat, vpunctuate)
 import Language.Drasil.TeX.Preamble (genPreamble)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
-import Data.Foldable(foldl')
+import Data.Foldable (foldl')
 
 -- | Generates a LaTeX document.
 genTeX :: L.Document -> PrintingInformation -> TP.Doc

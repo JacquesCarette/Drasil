@@ -7,7 +7,7 @@ module Language.Drasil.Generate (
   -- * Generator Functions
   gen, genDot, genCode,
   -- * Types (Printing Options)
-  DocType(..), DocSpec(DocSpec), Format(TeX, HTML, JSON), DocChoices(DC),
+  DocType(..), DocSpec(DocSpec), Format(TeX, HTML, JSON, Markdown), DocChoices(DC),
   -- * Constructor
   docChoices) where
 
@@ -23,7 +23,7 @@ import Build.Drasil (genMake)
 import Language.Drasil
 import Drasil.DocLang (mkGraphInfo)
 import SysInfo.Drasil (SystemInformation)
-import Language.Drasil.Printers (DocType(SRS, Website, Jupyter), Format(TeX, HTML, JSON),
+import Language.Drasil.Printers (DocType(SRS, Website, Jupyter), Format(TeX, HTML, JSON, Markdown),
  makeCSS, genHTML, genTeX, genJSON, PrintingInformation, outputDot)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD,
@@ -57,6 +57,7 @@ prntDoc d pinfo fn dtype fmt =
     TeX -> do prntDoc' dtype (show dtype ++ "/PDF") fn TeX d pinfo
               prntMake $ DocSpec (DC dtype []) fn
     JSON -> do prntDoc' dtype (show dtype ++ "/JSON") fn JSON d pinfo
+    Markdown -> do prntDoc' dtype (show dtype ++ "/Markdown") fn Markdown d pinfo
     _ -> mempty
 
 -- | Helper that takes the document type, directory name, document name, format of documents,
@@ -70,6 +71,7 @@ prntDoc' dt dt' fn format body' sm = do
   where getExt TeX  = ".tex"
         getExt HTML = ".html"
         getExt JSON = ".ipynb"
+        getExt Markdown = ".md"
         getExt _    = error "We can only write in TeX, HTML and Jupyter Notebook (for now)."
 
 -- | Helper for writing the Makefile(s).
@@ -94,6 +96,7 @@ writeDoc :: PrintingInformation -> DocType -> Format -> Filename -> Document -> 
 writeDoc s _  TeX  _  doc = genTeX doc s
 writeDoc s _  HTML fn doc = genHTML s fn doc
 writeDoc s dt JSON _  doc = genJSON s dt doc
+writeDoc s dt Markdown _  doc = genJSON s dt doc
 writeDoc _ _  _    _  _   = error "we can only write TeX/HTML/JSON (for now)"
 
 -- | Generates traceability graphs as .dot files.

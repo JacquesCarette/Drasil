@@ -50,7 +50,7 @@ printMath = (`runPrint` Math)
 -- printLO is used for generating SRS
 printLO :: LayoutObj -> Doc
 printLO (Header n contents l)            = empty $$ (h (n + 1) <> pSpec contents)
-printLO (Cell layoutObs)                 = markdownCell $ vcat (map printLO layoutObs)
+-- printLO (Cell layoutObs)                 = markdownCell $ vcat (map printLO layoutObs)
 printLO (HDiv _ layoutObs _)             = vcat (map printLO layoutObs)
 printLO (Paragraph contents)             = empty $$ (stripnewLine (show(pSpec contents)))
 printLO (EqnBlock contents)              = mathEqn
@@ -60,7 +60,7 @@ printLO (EqnBlock contents)              = mathEqn
     mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
 printLO (Table _ rows r _ _)            = empty $$ makeTable rows (pSpec r)
 printLO (Definition dt ssPs l)          = (text "<br>") $$ makeDefn dt ssPs (pSpec l)
-printLO (List t)                        = empty $$ makeList t False
+printLO (List t)                        = empty $$ makeList t 0
 printLO (Figure r c f wp)               = makeFigure (pSpec r) (pSpec c) (text f) wp
 printLO (Bib bib)                       = makeBib bib
 printLO Graph{}                         = empty 
@@ -80,7 +80,7 @@ printLO' (EqnBlock contents)              = mathEqn
     mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
 printLO' (Table _ rows r _ _)            = markdownCell $ makeTable rows (pSpec r)
 printLO' Definition {}                   = empty
-printLO' (List t)                        = markdownCell $ makeList t False
+printLO' (List t)                        = markdownCell $ makeList t 0
 printLO' (Figure r c f wp)               = markdownCell $ makeFigure (pSpec r) (pSpec c) (text f) wp
 printLO' (Bib bib)                       = markdownCell $ makeBib bib
 printLO' Graph{}                         = empty 
@@ -120,25 +120,7 @@ cSpec _      = empty
 
 -- | Renders expressions in JSON (called by multiple functions)
 pExpr :: Expr -> Doc
-pExpr (Dbl d)        = text $ showEFloat Nothing d ""
-pExpr (Int i)        = text $ show i
-pExpr (Str s)        = doubleQuotes $ text s
-pExpr (Div n d)      = mkDiv "frac" (pExpr n) (pExpr d)
-pExpr (Row l)        = hcat $ map pExpr l
-pExpr (Ident s)      = text s
-pExpr (Label s)      = text s
-pExpr (Spec s)       = text $ unPH $ L.special s
-pExpr (Sub e)        = unders <> pExpr e
-pExpr (Sup e)        = hat <> pExpr e
-pExpr (Over Hat s)   = pExpr s <> text "&#770;"
-pExpr (MO o)         = text $ pOps o
-pExpr (Fenced l r e) = text (fence Open l) <> pExpr e <> text (fence Close r)
-pExpr (Font Bold e)  = pExpr e
---pExpr (Font Bold e)  = bold $ pExpr e -- used before
---pExpr (Font Emph e)  = text "<em>" <> pExpr e <> text "</em>" -- HTML used
---pExpr (Spc Thin)     = text "&#8239;" -- HTML used
--- Uses TeX for Mathjax for all other exprs 
-pExpr e              = printMath $ toMath $ TeX.pExpr e
+pExpr e = printMath $ toMath $ TeX.pExpr e
 
 
 
@@ -239,7 +221,7 @@ makeDRows ((f,d):ps) = tr ((th (text f)) $$ td (vcat $ map printLO d)) $$ makeDR
 
 
 -- | Renders lists
-makeList :: ListType -> Bool -> Doc -- FIXME: ref id's should be folded into the li
+makeList :: ListType -> Int -> Doc -- FIXME: ref id's should be folded into the li
 makeList (Simple items) _      = vcat $ 
   map (\(b,e,l) -> mlref l $ (pSpec b <> text ": " <> sItem e) $$ empty) items
 makeList (Desc items) bl       = vcat $ 
@@ -255,15 +237,15 @@ mlref :: Maybe Label -> Doc -> Doc
 mlref = maybe id $ refwrap . pSpec
 
 -- | Helper for rendering list items
-pItem :: ItemType ->  Bool -> Doc
-pItem (Flat s)     b = (if b then text " - " else text "- ") <> pSpec s
-pItem (Nested s l) _ = vcat [text "- " <> pSpec s, makeList l True]
+pItem :: ItemType ->  Int -> Doc
+pItem (Flat s)     i = text (replicate i ' ') <> text "- " <> pSpec s
+pItem (Nested s l) i = vcat [text (replicate i ' ') <> text "- " <> pSpec s, makeList l (i+2)]
   --where listIndent = strBreak "\"" (show $ makeList l)
 --indent <> text "\"- " <> pSpec s <> text "\\n\","
 
 sItem :: ItemType -> Doc
 sItem (Flat s)     = pSpec s
-sItem (Nested s l) = vcat [pSpec s, makeList l False]
+sItem (Nested s l) = vcat [pSpec s, makeList l 0]
 
 -- | Renders figures in HTML
 makeFigure :: Doc -> Doc -> Doc -> L.MaxWidthPercent -> Doc

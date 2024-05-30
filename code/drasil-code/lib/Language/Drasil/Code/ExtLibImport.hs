@@ -25,7 +25,7 @@ import Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
 import Control.Lens (makeLenses, (^.), over)
 import Control.Monad (zipWithM)
 import Control.Monad.State (State, execState, get, modify)
-import Data.List (nub, partition)
+import Data.List (partition)
 import qualified Data.Set as SET (fromList, toList)
 import Data.List.NonEmpty (NonEmpty(..), (!!), toList)
 import Data.Maybe (isJust)

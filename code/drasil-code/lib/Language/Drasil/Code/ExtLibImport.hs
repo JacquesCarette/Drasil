@@ -26,6 +26,7 @@ import Control.Lens (makeLenses, (^.), over)
 import Control.Monad (zipWithM)
 import Control.Monad.State (State, execState, get, modify)
 import Data.List (nub, partition)
+import qualified Data.Set as SET (fromList, toList)
 import Data.List.NonEmpty (NonEmpty(..), (!!), toList)
 import Data.Maybe (isJust)
 import Prelude hiding ((!!))
@@ -100,7 +101,7 @@ addDefined n = over defined (n:)
 
 -- | Adds a list of imports to the 'ExtLibState'.
 addImports :: [String] -> ExtLibState -> ExtLibState
-addImports is = over imports (\l -> nub $ l ++ is)
+addImports is = over imports (\l -> SET.toList $ SET.fromList (l ++ is))
 
 -- | Adds to the 'ExtLibState' an association between a library function/method and
 -- the library's module that exports it.

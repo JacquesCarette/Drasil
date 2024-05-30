@@ -42,7 +42,7 @@ import Control.Lens (Lens', (^.), lens, makeLenses, over, set, _1, _2, both, at)
 import Control.Monad.State (State, modify, gets)
 import Data.Char (isDigit)
 import Data.List (nub, delete)
-import Data.Foldable (foldl')
+import Data.Set (fromList, toList)
 import Data.Maybe (isNothing, fromMaybe)
 import Data.Map (Map)
 import qualified Data.Map as Map
@@ -470,7 +470,7 @@ callMapTransClosure = over callMap tClosure
         traceCalls :: Map QualifiedName [QualifiedName] -> [QualifiedName] -> 
           [QualifiedName]
         traceCalls _ [] = []
-        traceCalls cm (c:cs) = nub $ c : traceCalls cm (nub $ cs ++ 
+        traceCalls cm (c:cs) = toList . fromList $ c : traceCalls cm (toList . fromList $ cs ++ 
           Map.findWithDefault [] c cm)
 
 updateMEMWithCalls :: GOOLState -> GOOLState

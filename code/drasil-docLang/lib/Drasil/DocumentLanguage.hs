@@ -59,6 +59,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
 import Control.Lens ((^.), set)
 import Data.Function (on)
 import Data.List (nub, sortBy, sortOn)
+import Data.Set (fromList, toList)
 import qualified Data.Map as Map (elems, toList, assocs, keys)
 import Data.Maybe (maybeToList)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
@@ -434,7 +435,7 @@ mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
 
 -- | Helper to get headers of rows and columns
 header :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]
-header f = TM.traceMHeader (f . nub . Map.keys . (^. refbyTable))
+header f = TM.traceMHeader (f . toList . fromList . Map.keys . (^. refbyTable))
 
 -- ** Off the Shelf Solutions
 

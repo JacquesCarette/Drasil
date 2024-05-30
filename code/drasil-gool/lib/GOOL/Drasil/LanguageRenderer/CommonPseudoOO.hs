@@ -306,15 +306,13 @@ litArray :: (RenderSym r) => (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
 litArray f t es = sequence es >>= (\elems -> mkStateVal (S.arrayType t) 
   (f $ valueList elems))
 
--- Python, C#, C++, Swift, and Julia --
+-- Python, C#, C++, and Swift --
 
 listSetFunc :: (RenderSym r) => (Doc -> Doc -> Doc) -> SValue r -> SValue r -> 
   SValue r -> VSFunction r
 listSetFunc f v idx setVal = join $ on2StateValues (\i toVal -> funcFromData 
   (f (RC.value i) (RC.value toVal)) (onStateValue valueType v)) (intValue idx) 
   setVal
-
--- Python, C#, C++, and Swift
 
 extraClass :: (RenderSym r) =>  Label -> Maybe Label -> [CSStateVar r] -> 
   [SMethod r] -> SClass r
@@ -454,17 +452,18 @@ bool :: (RenderSym r) => VSType r
 bool = typeFromData Boolean boolRender (text boolRender)
 
 docMod' :: (RenderSym r) => String -> String -> [String] -> String -> SFile r -> SFile r
-docMod' ext = docMod modDoc' ext
+docMod' = docMod modDoc'
 
--- | Generates a doc comment for a language that isn't supported by Doxygen.
--- Since Doxygen doesn't support the language, it uses dashes instead of backslashes.
+-- | Generates Markdown/DocC style doc comment.  Useful for Swift, which follows
+-- DocC, Julia, which uses Markdown, and any other language that doesn't have
+-- Support for a document generator.
 modDoc' :: ModuleDocRenderer
 modDoc' desc as date m = m : [desc | not (null desc)] ++
       [docField authorDoc (stringList as) | not (null as)] ++
       [docField dateDoc date | not (null date)] ++
       [docField noteDoc watermark]
 
--- | Creates an arbitrary DocC Markup field for documentation.
+-- | Creates an arbitrary Markdown/DocC style field for documentation.
 -- Takes two strings, one for the field type ('ty'), and another
 -- for the field documentation ('info')
 docField :: String -> String -> String

@@ -774,7 +774,7 @@ jlIntClass n _ i svrs mths = do
   ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) outerMths)
   cs <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) cnstrs)
   return $ onCodeValue (\_ -> jlClass n svs ms cs) i 
-  where isMthd _ = False
+  where isMthd _ = True
 
 -- | Creates the doc for a class.
 -- | n is the name of the class.

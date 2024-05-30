@@ -2,7 +2,7 @@
 module Language.Drasil.Markdown.Helpers where
 
 import Prelude hiding ((<>))
-import Text.PrettyPrint (Doc, text, empty, (<>), vcat, hcat)
+import Text.PrettyPrint (Doc, text, empty, (<>), ($$), vcat, hcat)
 import Data.List (intersperse)
 import Data.List.Split (splitOn)
 
@@ -11,7 +11,7 @@ import qualified Language.Drasil.Printing.Helpers as H
 import Language.Drasil.HTML.Helpers (img)
 import Numeric (showHex)
 
-data Variation = Class | Id
+data Variation = Class | Id | Align
 
 tr, td, figure, li, pa, ba :: Doc -> Doc
 -- | Table row tag wrapper
@@ -34,6 +34,9 @@ ol       = wrap "ol"
 ul       = wrap "ul"
 -- | Table tag wrapper
 table    = wrap "table"
+
+bold :: Doc -> Doc
+bold t = text "**" <> t <> text "**"
 
 -- FIXME: Why are we using a Doc if we use 'show'?
 nbformat :: Doc -> Doc
@@ -71,6 +74,10 @@ wrapGen' sepf _ s _ [] = \x ->
   let tb c = text $ "<" ++ c ++ ">"
   --in sepf [quote(tb s), x, quote(tb $ '/':s)]
   in if s == "li" then sepf [tb s, x, tb $ '/':s] else sepf [tb s, x, tb $ '/':s]
+wrapGen' sepf Align s ti _ = \x ->
+  let tb c = text ("<" ++ c ++ " align=\"") <> ti <> text "\">"
+      te c = text $ "</" ++ c ++ ">"
+  in  sepf [tb s, x, te s]
 wrapGen' sepf Class s _ ts = \x ->
   let tb c = text $ "<" ++ c ++ " class=\\\"" ++ foldr1 (++) (intersperse " " ts) ++ "\\\">"
   in let te c = text $ "</" ++ c ++ ">\n"
@@ -108,7 +115,12 @@ reflinkURI ref txt = sq txt <> paren ref
 
 -- | Helper for setting up figures
 image :: Doc -> Doc -> Doc
-image f c =  text "!" <> reflinkURI f c
+image f c =  text "!" <> (reflinkURI f c) $$ bold (caption c)
+
+caption :: Doc -> Doc
+caption = wrapGen' hcat Align "p" (text "center") [""]
+-- caption = flip (wrapGen' hcat Align "p") [""]
+
 
 h :: Int -> Doc
 h n       | n < 1 = error "Illegal header (too small)"

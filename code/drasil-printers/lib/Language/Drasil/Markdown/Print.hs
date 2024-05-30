@@ -22,12 +22,12 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
 import Language.Drasil.HTML.Monad (unPH)
-import Language.Drasil.HTML.Helpers (th, bold)
+import Language.Drasil.HTML.Helpers (th)
 import Language.Drasil.HTML.Print(renderCite, OpenClose(Open, Close), fence)
 
 import Language.Drasil.Markdown.Helpers (makeMetadata, h, stripnewLine, nbformat, codeformat,
  tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, reflinkInfo, mkDiv, 
- markdownB, markdownB', markdownE, markdownE', markdownCell, codeCell)
+ markdownB, markdownB', markdownE, markdownE', markdownCell, codeCell, caption, bold)
 
 -- | Generate a python notebook document (using json).
 -- build : build the SRS document in JSON format
@@ -58,7 +58,7 @@ printLO (EqnBlock contents)              = mathEqn
     toMathHelper (PL g) = PL (\_ -> g Math)
     mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$" 
     mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
-printLO (Table _ rows r _ _)            = empty $$ makeTable rows (pSpec r)
+printLO (Table _ rows r b t)            = empty $$ makeTable rows (pSpec r) b (pSpec t)
 printLO (Definition dt ssPs l)          = (text "<br>\n") $$ makeDefn dt ssPs (pSpec l)
 printLO (List t)                        = empty $$ makeList t 0
 printLO (Figure r c f wp)               = makeFigure (pSpec r) (pSpec c) (text f) wp
@@ -78,7 +78,7 @@ printLO' (EqnBlock contents)              = mathEqn
     toMathHelper (PL g) = PL (\_ -> g Math)
     mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$" 
     mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
-printLO' (Table _ rows r _ _)            = markdownCell $ makeTable rows (pSpec r)
+printLO' (Table _ rows r b t)            = markdownCell $ makeTable rows (pSpec r) b (pSpec t)
 printLO' Definition {}                   = empty
 printLO' (List t)                        = markdownCell $ makeList t 0
 printLO' (Figure r c f wp)               = markdownCell $ makeFigure (pSpec r) (pSpec c) (text f) wp
@@ -179,9 +179,9 @@ pOps Partial  = "&part;"
 
 
 -- | Renders Markdown table, called by 'printLO'
-makeTable :: [[Spec]] -> Doc -> Doc
-makeTable [] _      = error "No table to print"
-makeTable (l:lls) r = refwrap r (empty $$ (makeHeaderCols l $$ makeRows lls) $$ empty)
+makeTable :: [[Spec]] -> Doc -> Bool -> Doc -> Doc
+makeTable [] _ _ _      = error "No table to print"
+makeTable (l:lls) r b t = refwrap r (empty $$ (makeHeaderCols l $$ makeRows lls) $$ if b then text "\n" <> bold (caption t) else empty)
 
 -- | Helper for creating table rows
 makeRows :: [[Spec]] -> Doc

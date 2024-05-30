@@ -107,9 +107,9 @@ pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr 
     escapeChars c = [c]
 pSpec (Sp s)    = text $ unPH $ L.special s
 pSpec HARDNL    = empty
-pSpec (Ref Internal r a)      = reflink     r $ pSpec a
-pSpec (Ref (Cite2 n)   r a)    = reflinkInfo r (pSpec a) (pSpec n)
-pSpec (Ref External r a)      = reflinkURI  r $ pSpec a
+pSpec (Ref Internal r a)      = reflink     (text r) (pSpec a)
+pSpec (Ref (Cite2 n)   r a)    = reflinkInfo (text r) (pSpec a) (pSpec n)
+pSpec (Ref External r a)      = reflinkURI  (text r) (pSpec a)
 pSpec EmptyS    = text "" -- Expected in the output
 pSpec (Quote q) = doubleQuotes $ pSpec q
 
@@ -190,12 +190,12 @@ makeRows = foldr (($$) . makeColumns) empty
 -- | makeHeaderCols: Helper for creating table header row (each of the column header cells)
 -- | makeColumns: Helper for creating table columns
 makeHeaderCols, makeColumns :: [Spec] -> Doc
-makeHeaderCols l = (text header) $$ (text $ genMDtable ++ "|")
-  where header = show(text "|" <> hcat(punctuate (text "|") (map pSpec l)) <> text "|")        
+makeHeaderCols l = (text header) $$ (text genMDtable <> pipe)
+  where header = show(pipe <> hcat(punctuate pipe (map pSpec l)) <> pipe)        
         c = count '|' header
         genMDtable = concat (replicate (c-1) "|:--- ")
 
-makeColumns ls = (text "|" <> hcat(punctuate (text "|") (map pSpec ls)) <> text "|")
+makeColumns ls = (pipe <> hcat(punctuate pipe (map pSpec ls)) <> pipe)
 
 count :: Char -> String -> Int
 count _ [] = 0

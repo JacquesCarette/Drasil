@@ -86,22 +86,29 @@ refwrap = flip (wrapGen' vcat Id "div") [""]
 refID :: Doc -> Doc
 refID i = text "<div id=\"" <> i <> text "\"></div>\n"
 
+sq :: Doc -> Doc
+sq t = text "[" <> t <> text "]" 
+
+paren :: Doc -> Doc
+paren t = text "(" <> t <> text ")" 
+
 -- | Helper for setting up links to references
-reflink :: String -> Doc -> Doc
-reflink ref txt = text "[" <> txt <> text ("](#" ++ ref ++ ")")
+reflink :: Doc -> Doc -> Doc
+reflink ref txt = sq txt <> paren (text "#" <> ref)
+-- reflink ref txt = text "[" <> txt <> text ("](#" ++ ref ++ ")")
 --reflink ref txt = text ("<a href=#" ++ ref ++ ">") <> txt <> text "</a>"
 
 -- | Helper for setting up links to references with additional information.
-reflinkInfo :: String -> Doc -> Doc -> Doc
+reflinkInfo :: Doc -> Doc -> Doc -> Doc
 reflinkInfo rf txt info = reflink rf txt <> info
 
 -- | Helper for setting up links to external URIs
-reflinkURI :: String -> Doc -> Doc
-reflinkURI ref txt = text "[" <> txt <> text ("](" ++ ref ++ ")")
+reflinkURI :: Doc -> Doc -> Doc
+reflinkURI ref txt = sq txt <> paren ref
 
 -- | Helper for setting up figures
 image :: Doc -> Doc -> Doc
-image f c =  text "![" <> c <> text "](" <> f <> text ")"
+image f c =  text "!" <> reflinkURI f c
 
 h :: Int -> Doc
 h n       | n < 1 = error "Illegal header (too small)"

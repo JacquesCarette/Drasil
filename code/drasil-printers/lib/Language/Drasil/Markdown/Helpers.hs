@@ -76,7 +76,7 @@ wrapGen' sepf Class s _ ts = \x ->
   in let te c = text $ "</" ++ c ++ ">\n"
   in sepf [tb s, x, te s]
 wrapGen' sepf Id s ti _ = \x ->
-  let tb c = text ("\n<" ++ c ++ " id=\"") <> ti <> text "\">\n"
+  let tb c = text ("<" ++ c ++ " id=\"") <> ti <> text "\">\n"
       te c = text $ "\n</" ++ c ++ ">\n"
   in  sepf [tb s, x, te s]
 

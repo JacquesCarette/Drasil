@@ -7,7 +7,7 @@ import Data.Char (toUpper, toLower)
 import Language.Drasil.Printing.Citation ( CiteField(HowPublished), HP (..) )
 
 -- | Basic text-rendering helper function.
-bslash,dbs,assign,eq,lt,gt,leq,geq,dlr,ast,pls,hat,slash,hyph,tab,unders :: Doc
+bslash,dbs,assign,eq,lt,gt,leq,geq,dlr,ast,pls,hat,slash,hyph,tab,unders,pipe :: Doc
 -- | Single backslash.
 bslash = text "\\"
 -- | Double backslash.
@@ -40,6 +40,8 @@ hyph   = text "-"
 tab    = text "\t"
 -- | Underscore.
 unders = text "_"
+-- | Pipe
+pipe = text "|"
 
 -- | Text-rendering helper for wrapping strings with brackets/braces.
 sq,br :: String -> Doc

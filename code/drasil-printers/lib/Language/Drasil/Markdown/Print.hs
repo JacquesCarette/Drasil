@@ -16,7 +16,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),
   Fonts(Bold), OverSymb(Hat), Label, LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
-import Language.Drasil.Printing.Helpers (sqbrac, unders, hat)
+import Language.Drasil.Printing.Helpers (sqbrac, unders, hat, pipe, dbs, sq)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
@@ -59,7 +59,7 @@ printLO (EqnBlock contents)              = mathEqn
     mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$" 
     mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
 printLO (Table _ rows r _ _)            = empty $$ makeTable rows (pSpec r)
-printLO (Definition dt ssPs l)          = (text "<br>") $$ makeDefn dt ssPs (pSpec l)
+printLO (Definition dt ssPs l)          = (text "<br>\n") $$ makeDefn dt ssPs (pSpec l)
 printLO (List t)                        = empty $$ makeList t 0
 printLO (Figure r c f wp)               = makeFigure (pSpec r) (pSpec c) (text f) wp
 printLO (Bib bib)                       = makeBib bib
@@ -206,19 +206,27 @@ count c (x:xs)
 -- | Renders definition tables (Data, General, Theory, etc.)
 makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
 makeDefn _ [] _  = error "L.Empty definition"
-makeDefn dt ps l = refID l $$ table [dtag dt]
-  (tr ((th (text "Refname")) $$ td ((bold l))) $$ makeDRows ps)
-  where dtag L.General  = "gdefn"
-        dtag L.Instance = "idefn"
-        dtag L.Theory   = "tdefn"
-        dtag L.Data     = "ddefn"
+makeDefn dt ps l = makeDHeader (text "Refname") l $$ makeDRows ps
+-- makeDefn dt ps l = refID l $$ table [dtag dt]
+--   (tr ((th (text "Refname")) $$ td ((bold l))) $$ makeDRows ps)
+--   where dtag L.General  = "gdefn"
+--         dtag L.Instance = "idefn"
+--         dtag L.Theory   = "tdefn"
+--         dtag L.Data     = "ddefn"
 
 -- | Helper for making the definition table rows
+-- makeDRows :: [(String,[LayoutObj])] -> Doc
+-- makeDRows []         = error "No fields to create defn table"
+-- makeDRows [(f,d)]    = tr ((th (text f)) $$ td (vcat $ map printLO d))
+-- makeDRows ((f,d):ps) = tr ((th (text f)) $$ td (vcat $ map printLO d)) $$ makeDRows ps
+
+makeDHeader :: Doc -> Doc -> Doc
+makeDHeader lbl txt = pipe <> lbl <> pipe <> txt <> pipe $$ text "|:--- |:--- |" 
+
 makeDRows :: [(String,[LayoutObj])] -> Doc
 makeDRows []         = error "No fields to create defn table"
-makeDRows [(f,d)]    = tr ((th (text f)) $$ td (vcat $ map printLO d))
-makeDRows ((f,d):ps) = tr ((th (text f)) $$ td (vcat $ map printLO d)) $$ makeDRows ps
-
+makeDRows [(f,d)]    = pipe <> text f <> pipe <> (hcat $ map printLO d) <> pipe
+makeDRows ((f,d):ps) = pipe <> text f <> pipe <> (hcat $ map printLO d) <> pipe $$ makeDRows ps
 
 -- | Renders lists
 makeList :: ListType -> Int -> Doc -- FIXME: ref id's should be folded into the li
@@ -230,7 +238,7 @@ makeList (Ordered items) bl    = vcat $ map (\(i,l) -> mlref l $ pItem i bl) ite
 makeList (Unordered items) bl  = vcat $ map (\(i,l) -> mlref l $ pItem i bl) items
 --makeList (Definitions items) _ = ul ["hide-list-style-no-indent"] $ vcat $ 
   --map (\(b,e,l) -> li $ mlref l $ quote(pSpec b <> text " is the" <+> sItem e)) items
-makeList (Definitions items) _ = vcat $ map (\(b,e,l) -> li $ mlref l $ pSpec b <> text " is the" <+> sItem e) items
+makeList (Definitions items) _ = hcat $ map (\(b,e,l) -> li $ mlref l $ pSpec b <> text " is the" <+> sItem e) items
 
 -- | Helper for setting up references
 mlref :: Maybe Label -> Doc -> Doc

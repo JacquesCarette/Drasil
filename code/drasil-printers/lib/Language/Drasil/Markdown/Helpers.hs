@@ -73,7 +73,7 @@ wrapGen' sepf _ s _ [] = \x ->
   in if s == "li" then sepf [tb s, x, tb $ '/':s] else sepf [tb s, x, tb $ '/':s]
 wrapGen' sepf Class s _ ts = \x ->
   let tb c = text $ "<" ++ c ++ " class=\\\"" ++ foldr1 (++) (intersperse " " ts) ++ "\\\">"
-  in let te c = text $ "</" ++ c ++ ">"
+  in let te c = text $ "</" ++ c ++ ">\n"
   in sepf [tb s, x, te s]
 wrapGen' sepf Id s ti _ = \x ->
   let tb c = text ("\n<" ++ c ++ " id=\"") <> ti <> text "\">\n"
@@ -90,6 +90,10 @@ refID i = text "<div id=\"" <> i <> text "\"></div>\n"
 reflink :: String -> Doc -> Doc
 reflink ref txt = text "[" <> txt <> text ("](#" ++ ref ++ ")")
 --reflink ref txt = text ("<a href=#" ++ ref ++ ">") <> txt <> text "</a>"
+
+-- | Helper for setting up links to references with additional information.
+reflinkInfo :: String -> Doc -> Doc -> Doc
+reflinkInfo rf txt info = reflink rf txt <> info
 
 -- | Helper for setting up links to external URIs
 reflinkURI :: String -> Doc -> Doc

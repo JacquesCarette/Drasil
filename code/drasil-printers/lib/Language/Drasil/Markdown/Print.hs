@@ -22,11 +22,11 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
 import Language.Drasil.HTML.Monad (unPH)
-import Language.Drasil.HTML.Helpers (th, bold, reflinkInfo)
+import Language.Drasil.HTML.Helpers (th, bold)
 import Language.Drasil.HTML.Print(renderCite, OpenClose(Open, Close), fence)
 
 import Language.Drasil.Markdown.Helpers (makeMetadata, h, stripnewLine, nbformat, codeformat,
- tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv, 
+ tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, reflinkInfo, mkDiv, 
  markdownB, markdownB', markdownE, markdownE', markdownCell, codeCell)
 
 -- | Generate a python notebook document (using json).

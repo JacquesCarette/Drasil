@@ -206,7 +206,7 @@ count c (x:xs)
 -- | Renders definition tables (Data, General, Theory, etc.)
 makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
 makeDefn _ [] _  = error "L.Empty definition"
-makeDefn dt ps l = makeDHeader (text "Refname") l $$ makeDRows ps
+makeDefn dt ps l = refwrap l $ makeDHeader (text "Refname") l $$ makeDRows ps
 -- makeDefn dt ps l = refID l $$ table [dtag dt]
 --   (tr ((th (text "Refname")) $$ td ((bold l))) $$ makeDRows ps)
 --   where dtag L.General  = "gdefn"

@@ -6,7 +6,6 @@ import Language.Drasil
 import Language.Drasil.CodeExpr.Development
 
 import Data.List (nub)
-import Data.Set (fromList, toList)
 
 -- | Construct a 'CodeVarChunk' from a 'Quantity'.
 quantvar :: (Quantity c, MayHaveUnit c) => c -> CodeVarChunk

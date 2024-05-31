@@ -621,12 +621,11 @@ type SClass a = CS (a (Class a))
 
 class (MethodSym r, StateVarSym r) => ClassSym r where
   type Class r
-  buildClass :: Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
-    SClass r
+  buildClass :: Maybe Label -> [CSStateVar r] -> [SMethod r] -> SClass r
   extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
-    SClass r
+    [SMethod r] -> SClass r
   implementingClass :: Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> 
-    SClass r
+    [SMethod r] -> SClass r
 
   docClass :: String -> SClass r -> SClass r
 

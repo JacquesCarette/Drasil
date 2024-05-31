@@ -123,11 +123,11 @@ discardFileLine n f = S.valStmt $ objMethodCallNoParams S.string f n
 
 intClass :: (RenderSym r, Monad r) => (Label -> Doc -> Doc -> Doc -> Doc -> 
   Doc) -> Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] 
-  -> CS (r Doc)
-intClass f n s i svrs mths = do
+  -> [SMethod r] -> CS (r Doc)
+intClass f n s i svrs cstrs mths = do
   modify (setClassName n) 
   svs <- onStateList (R.stateVarList . map RC.stateVar) svrs
-  ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) mths)
+  ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) (cstrs ++ mths))
   return $ onCodeValue (\p -> f n p (RC.scope s) svs ms) i 
 
 -- Python, Java, and C++ --
@@ -141,12 +141,12 @@ funcType ps' r' =  do
 -- Python and C++ --
 
 -- Parameters: Module name, Doc for imports, Doc to put at top of module (but 
--- after imports), Doc to put at bottom of module, methods, classes
+-- after imports), Doc to put at bottom of module, constructors, methods, classes
 buildModule :: (RenderSym r) => Label -> FS Doc -> FS Doc -> FS Doc -> 
-  [SMethod r] -> [SClass r] -> FSModule r
-buildModule n imps top bot fs cs = S.modFromData n (do
-  cls <- mapM (zoom lensFStoCS) cs
-  fns <- mapM (zoom lensFStoMS) fs
+  [SMethod r] -> [SMethod r] -> [SClass r] -> FSModule r
+buildModule n imps top bot cstrs funcs classes = S.modFromData n (do
+  cls <- mapM (zoom lensFStoCS) classes
+  fns <- mapM (zoom lensFStoMS) (cstrs ++ funcs)
   is <- imps
   tp <- top
   bt <- bot
@@ -215,11 +215,18 @@ mainFunction s n = S.intFunc True n public static (mType S.void)
   [S.param (S.var args (s >>= (\argT -> typeFromData (List String) 
   (render (RC.type' argT) ++ array) (RC.type' argT <> array'))))]
 
+-- | Used by the language renderers to build the module.
+--   n is the module name
+--   inc is the include statements I believe
+--   is is the import statements
+--   cstrs is the class constructors
+--   mthds is the class methods
+--   cs is the classes
 buildModule' :: (RenderSym r) => Label -> (String -> r (Import r)) -> [Label] 
-  -> [SMethod r] -> [SClass r] -> FSModule r
-buildModule' n inc is ms cs = S.modFromData n (do
-  cls <- mapM (zoom lensFStoCS) 
-          (if null ms then cs else S.buildClass Nothing [] ms : cs) 
+  -> [SMethod r] -> [SMethod r] -> [SClass r] -> FSModule r
+buildModule' n inc is cstrs mthds cs = S.modFromData n (do
+  cls <- mapM (zoom lensFStoCS)
+          (if null mthds then cs else S.buildClass Nothing [] cstrs mthds : cs)
   lis <- getLangImports
   libis <- getLibImports
   mis <- getModuleImports
@@ -315,7 +322,7 @@ listSetFunc f v idx setVal = join $ on2StateValues (\i toVal -> funcFromData
   setVal
 
 extraClass :: (RenderSym r) =>  Label -> Maybe Label -> [CSStateVar r] -> 
-  [SMethod r] -> SClass r
+  [SMethod r] -> [SMethod r] -> SClass r
 extraClass n = S.intClass n public . S.inherit
 
 -- Python, C#, and Swift --

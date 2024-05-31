@@ -68,12 +68,9 @@ caption = wrapGen' hcat Align "p" (text "center") [""]
 h :: Int -> Doc
 h n       | n < 1 = error "Illegal header (too small)"
           | n > 4 = error "Illegal header (too large)"
-          | otherwise = text (hash n)
-              where hash 1 = "# "
-                    hash 2 = "## "
-                    hash 3 = "### "
-                    hash 4 = "#### "
-                    hash _ = "Illegal header"
+          | n < 4 = text "# "
+          | n == 4 = text "#### "
+          | otherwise = text "Illegal header"
 
 -- | Curly braces.
 br :: Doc -> Doc

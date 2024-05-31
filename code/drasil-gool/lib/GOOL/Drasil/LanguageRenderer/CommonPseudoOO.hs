@@ -143,10 +143,10 @@ funcType ps' r' =  do
 -- Parameters: Module name, Doc for imports, Doc to put at top of module (but 
 -- after imports), Doc to put at bottom of module, constructors, methods, classes
 buildModule :: (RenderSym r) => Label -> FS Doc -> FS Doc -> FS Doc -> 
-  [SMethod r] -> [SMethod r] -> [SClass r] -> FSModule r
-buildModule n imps top bot cstrs funcs classes = S.modFromData n (do
-  cls <- mapM (zoom lensFStoCS) classes
-  fns <- mapM (zoom lensFStoMS) (cstrs ++ funcs)
+  [SMethod r] -> [SClass r] -> FSModule r
+buildModule n imps top bot fs cs = S.modFromData n (do
+  cls <- mapM (zoom lensFStoCS) cs
+  fns <- mapM (zoom lensFStoMS) fs
   is <- imps
   tp <- top
   bt <- bot
@@ -223,10 +223,10 @@ mainFunction s n = S.intFunc True n public static (mType S.void)
 --   mthds is the class methods
 --   cs is the classes
 buildModule' :: (RenderSym r) => Label -> (String -> r (Import r)) -> [Label] 
-  -> [SMethod r] -> [SMethod r] -> [SClass r] -> FSModule r
-buildModule' n inc is cstrs mthds cs = S.modFromData n (do
+  -> [SMethod r] -> [SClass r] -> FSModule r
+buildModule' n inc is ms cs = S.modFromData n (do
   cls <- mapM (zoom lensFStoCS)
-          (if null mthds then cs else S.buildClass Nothing [] cstrs mthds : cs)
+          (if null ms then cs else S.buildClass Nothing [] [] ms : cs)
   lis <- getLangImports
   libis <- getLibImports
   mis <- getModuleImports

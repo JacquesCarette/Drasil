@@ -716,13 +716,12 @@ instance ClassElim SwiftCode where
 
 instance ModuleSym SwiftCode where
   type Module SwiftCode = ModData
-  buildModule n is cnstrs funcs classes = do
+  buildModule n is fs cs = do
     modify (setModuleName n) -- This needs to be set before the functions/
                              -- classes are evaluated. CP.buildModule will 
                              -- reset it to the proper name.
-    cstrs <- mapM (zoom lensFStoMS) cnstrs
-    fns <- mapM (zoom lensFStoMS) funcs
-    cls <- mapM (zoom lensFStoCS) classes
+    fns <- mapM (zoom lensFStoMS) fs
+    cls <- mapM (zoom lensFStoCS) cs
     mn <- getCurrMain
     let modName = if mn then swiftMain else n
     CP.buildModule modName (do
@@ -731,7 +730,7 @@ instance ModuleSym SwiftCode where
       pure $ vcat $ map (RC.import' . 
           (langImport :: Label -> SwiftCode (Import SwiftCode))) 
           (sort $ lis ++ is ++ libis)) 
-      (zoom lensFStoMS swiftStringError) getMainDoc (map pure cstrs) 
+      (zoom lensFStoMS swiftStringError) getMainDoc 
         (map pure fns) (map pure cls)
   
 instance RenderMod SwiftCode where

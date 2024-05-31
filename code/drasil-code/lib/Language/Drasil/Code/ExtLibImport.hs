@@ -215,7 +215,7 @@ genClassInfo o c n desc svs ci cif = let (mis, mifs, f) = genCI ci cif in
   if length mis /= length mifs then error methodInfoNumberMismatch else do
     ms <- zipWithM (genMethodInfo o c) mis mifs
     modify (if any isConstructor mis then id else addDef (new c []) o)
-    return (f desc svs (map fst ms), concatMap snd ms)
+    return (f desc svs [] (map fst ms), concatMap snd ms) -- TODO: that empty list is blatently wrong.
   where genCI (Regular mis') (RegularF mifs') = (mis', mifs', classDef n)
         genCI (Implements intn mis') (ImplementsF mifs') = (mis', mifs',
           classImplements n intn)

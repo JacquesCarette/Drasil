@@ -429,10 +429,9 @@ instance ClassSym CodeInfo where
 
 instance ModuleSym CodeInfo where
   type Module CodeInfo = ()
-  buildModule n _ cstrs funcs classes = do
+  buildModule n _ funcs classes = do
     modify (setModuleName n)
-    mapM_ (zoom lensFStoCS) classes
-    mapM_ (zoom lensFStoMS) cstrs 
+    mapM_ (zoom lensFStoCS) classes 
     mapM_ (zoom lensFStoMS) funcs
     modifyReturn (updateClassMap n) (toCode ())
 

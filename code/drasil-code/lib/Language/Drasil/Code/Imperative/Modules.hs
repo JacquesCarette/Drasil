@@ -227,8 +227,10 @@ genInputClass scp = do
       cs = constants $ codeSpec g
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter ((Just cname ==) . flip Map.lookup (clsMap g) . codeName)
+      constructors :: (OOProg r) => GenState [SMethod r]
+      constructors = return [] -- TODO: this is wrong
       methods :: (OOProg r) => GenState [SMethod r]
-      methods = if cname `elem` defList g
+      methods = if cname `elem` defList g --TODO: so is this
         then concat <$> mapM (fmap maybeToList) [genInputConstructor,
         genInputFormat Priv, genInputDerived Priv, genInputConstraints Priv]
         else return []
@@ -246,7 +248,7 @@ genInputClass scp = do
             getFunc Auxiliary = auxClass
             f = getFunc scp
         icDesc <- inputClassDesc
-        c <- f cname Nothing icDesc (inputVars ++ constVars) methods
+        c <- f cname Nothing icDesc (inputVars ++ constVars) constructors methods
         return $ Just c
   genClass (filt ins) (filt cs)
   where cname = "InputParameters"
@@ -470,7 +472,7 @@ genConstClass scp = do
             getFunc Auxiliary = auxClass
             f = getFunc scp
         cDesc <- constClassDesc
-        cls <- f cname Nothing cDesc constVars (return [])
+        cls <- f cname Nothing cDesc constVars (return []) (return [])
         return $ Just cls
   genClass $ filter (flip member (Map.filter (cname ==) (clsMap g))
     . codeName) cs

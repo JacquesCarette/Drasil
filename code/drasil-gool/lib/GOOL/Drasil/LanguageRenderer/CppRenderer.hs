@@ -782,11 +782,10 @@ instance (Pair p) => ClassElim (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
-  buildModule n is cstrs mthds cls = do 
+  buildModule n is ms cs = do 
     modify (setModuleName n)
-    pair3Lists (buildModule n is) (buildModule n is) 
-     (map (zoom lensFStoMS) cstrs) (map (zoom lensFStoMS) mthds) 
-     (map (zoom lensFStoCS) cls)
+    pair2Lists (buildModule n is) (buildModule n is) 
+      (map (zoom lensFStoMS) ms) (map (zoom lensFStoCS) cs)
   
 instance (Pair p) => RenderMod (p CppSrcCode CppHdrCode) where
   modFromData n d = on2StateValues pair (modFromData n d) (modFromData n d)

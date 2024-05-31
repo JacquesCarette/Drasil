@@ -81,7 +81,6 @@ mkClass s n l desc vs cstrs mths = do
   g <- get
   modify (\ds -> ds {currentClass = n})
   cs <- cstrs
-  modify (\ds -> ds {currentClass = ""})
   ms <- mths
   modify (\ds -> ds {currentClass = ""})
   let getFunc Primary = getFunc' l

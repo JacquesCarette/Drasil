@@ -120,8 +120,17 @@ makeDHeader lbl txt = pipe <> lbl <> pipe <> txt <> pipe $$ text "|:--- |:--- |"
 
 makeDRows :: [(String,[LayoutObj])] -> Doc
 makeDRows []         = error "No fields to create defn table"
-makeDRows [(f,d)]    = pipe <> text f <> pipe <> (hcat $ map printLO d) <> pipe
-makeDRows ((f,d):ps) = pipe <> text f <> pipe <> (hcat $ map printLO d) <> pipe $$ makeDRows ps
+makeDRows [(f,d)]    = (makeDRow f d)
+makeDRows ((f,d):ps) = (makeDRow f d) $$ makeDRows ps
+
+makeDRow :: String -> [LayoutObj] -> Doc
+makeDRow f d = pipe <> text f <> pipe <> 
+  if f=="Notes" then ul (hcat $ map (processDefnLO f) d) 
+  else (hcat $ map (processDefnLO f) d)
+
+processDefnLO :: String -> LayoutObj -> Doc
+processDefnLO "Notes" (Paragraph con) = li $ pSpec con
+processDefnLO _ lo                    = printLO lo
 
 -- | Renders lists
 makeList :: ListType -> Int -> Doc -- FIXME: ref id's should be folded into the li

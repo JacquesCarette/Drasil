@@ -21,7 +21,7 @@ import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintL
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Print(renderCite)
 
-import Language.Drasil.Markdown.Helpers (h, stripnewLine, image, li, pa, ba, refwrap, reflink, reflinkURI, reflinkInfo, caption, bold)
+import Language.Drasil.Markdown.Helpers (h, stripnewLine, image, li, pa, ba, refwrap, reflink, reflinkURI, reflinkInfo, caption, bold, ul)
 
 -- | Generate a python notebook document (using json).
 -- build : build the SRS document in JSON format
@@ -131,7 +131,7 @@ makeList (Desc items) bl       = vcat $
   map (\(b,e,l) -> pa $ mlref l $ ba $ pSpec b <> text ": " <> pItem e bl) items
 makeList (Ordered items) bl    = vcat $ map (\(i,l) -> mlref l $ pItem i bl) items
 makeList (Unordered items) bl  = vcat $ map (\(i,l) -> mlref l $ pItem i bl) items
-makeList (Definitions items) _ = hcat $ map (\(b,e,l) -> li $ mlref l $ pSpec b <> text " is the" <+> sItem e) items
+makeList (Definitions items) _ = ul $ hcat $ map (\(b,e,l) -> li $ mlref l $ pSpec b <> text " is the" <+> sItem e) items
 
 -- | Helper for setting up references
 mlref :: Maybe Label -> Doc -> Doc

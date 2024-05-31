@@ -3,27 +3,25 @@ module Language.Drasil.Markdown.Helpers where
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint (Doc, text, empty, (<>), ($$), vcat, hcat)
-import Data.List (intersperse)
 import Data.List.Split (splitOn)
 
-data Variation = Class | Id | Align
+data Variation =  Id | Align
 
-li, pa, ba :: Doc -> Doc
+li, pa, ba, ul :: Doc -> Doc
 -- | List tag wrapper
-li         = wrap' "li" []
+li         = wrap "li" []
 -- | Paragraph in list tag wrapper
 pa         = wrap "p" []
 -- | Bring attention to element wrapper.
 ba         = wrap "b" []
+-- | Unordered list tag wrapper.
+ul         = wrap "ul" []
 
 bold :: Doc -> Doc
 bold t = text "**" <> t <> text "**"
 
 wrap :: String -> [String] -> Doc -> Doc
-wrap a = wrapGen' vcat Class a empty
-
-wrap' :: String -> [String] -> Doc -> Doc
-wrap' a = wrapGen' hcat Class a empty
+wrap a = wrapGen' hcat Id a empty
 
 wrapGen' :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
 wrapGen' sepf _ s _ [] = \x ->
@@ -34,10 +32,6 @@ wrapGen' sepf Align s ti _ = \x ->
   let tb c = text ("<" ++ c ++ " align=\"") <> ti <> text "\">"
       te c = text $ "</" ++ c ++ ">"
   in  sepf [tb s, x, te s]
-wrapGen' sepf Class s _ ts = \x ->
-  let tb c = text $ "<" ++ c ++ " class=\\\"" ++ foldr1 (++) (intersperse " " ts) ++ "\\\">"
-  in let te c = text $ "</" ++ c ++ ">\n"
-  in sepf [tb s, x, te s]
 wrapGen' sepf Id s ti _ = \x ->
   let tb c = text ("<" ++ c ++ " id=\"") <> ti <> text "\">\n"
       te c = text $ "\n</" ++ c ++ ">\n"

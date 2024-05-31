@@ -1389,9 +1389,11 @@ getCtx :: PrintLaTeX MathContext
 
 -- | Since Text.PrettyPrint steals &lt;&gt;, use %% instead for $$.
 (%%) :: D -> D -> D
+infixl 5 %%
 
 -- | Lifts Text.PrettyPrint's $+$. Above, with no overlapping. Associative.
 ($+$) :: D -> D -> D
+infixr 6 $+$
 
 -- | Concatenates a list of <a>D</a> using a function from [<a>Doc</a>]
 --   -&gt; <a>Doc</a>.

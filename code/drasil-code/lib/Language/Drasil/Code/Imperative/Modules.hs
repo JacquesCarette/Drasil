@@ -228,11 +228,13 @@ genInputClass scp = do
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter ((Just cname ==) . flip Map.lookup (clsMap g) . codeName)
       constructors :: (OOProg r) => GenState [SMethod r]
-      constructors = return [] -- TODO: this is wrong
+      constructors = if cname `elem` defList g
+        then concat <$> mapM (fmap maybeToList) [genInputConstructor]
+        else return []
       methods :: (OOProg r) => GenState [SMethod r]
-      methods = if cname `elem` defList g --TODO: so is this
-        then concat <$> mapM (fmap maybeToList) [genInputConstructor,
-        genInputFormat Priv, genInputDerived Priv, genInputConstraints Priv]
+      methods = if cname `elem` defList g
+        then concat <$> mapM (fmap maybeToList) [genInputFormat Priv,
+        genInputDerived Priv, genInputConstraints Priv]
         else return []
       genClass :: (OOProg r) => [CodeVarChunk] -> [CodeDefinition] ->
         GenState (Maybe (SClass r))

@@ -121,6 +121,9 @@ listAddFunc f i v = S.func f (S.listType $ onStateValue valueType v)
 discardFileLine :: (RenderSym r) => Label -> SValue r -> MSStatement r
 discardFileLine n f = S.valStmt $ objMethodCallNoParams S.string f n 
 
+-- | An internal function for creating a class.
+--   Parameters: render function, class name, scope, parent, class variables,
+--               constructor(s), methods
 intClass :: (RenderSym r, Monad r) => (Label -> Doc -> Doc -> Doc -> Doc -> 
   Doc) -> Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] 
   -> [SMethod r] -> CS (r Doc)
@@ -141,7 +144,7 @@ funcType ps' r' =  do
 -- Python and C++ --
 
 -- Parameters: Module name, Doc for imports, Doc to put at top of module (but 
--- after imports), Doc to put at bottom of module, constructors, methods, classes
+-- after imports), Doc to put at bottom of module, methods, classes
 buildModule :: (RenderSym r) => Label -> FS Doc -> FS Doc -> FS Doc -> 
   [SMethod r] -> [SClass r] -> FSModule r
 buildModule n imps top bot fs cs = S.modFromData n (do
@@ -217,10 +220,9 @@ mainFunction s n = S.intFunc True n public static (mType S.void)
 
 -- | Used by the language renderers to build the module.
 --   n is the module name
---   inc is the include statements I believe
+--   inc is the include
 --   is is the import statements
---   cstrs is the class constructors
---   mthds is the class methods
+--   ms is the class methods
 --   cs is the classes
 buildModule' :: (RenderSym r) => Label -> (String -> r (Import r)) -> [Label] 
   -> [SMethod r] -> [SClass r] -> FSModule r

@@ -2,10 +2,10 @@
 module Main (main) where
 
 import GOOL.Drasil (Label, OOProg, ProgramSym(..), unCI, unJC, unPC, unCSC,
-  unCPPC, unSC, FileData(..), ModData(..), ProgData(..), initialState)
+  unCPPC, unSC, unJLC, FileData(..), ModData(..), ProgData(..), initialState)
 
 import Language.Drasil.Code (PackageSym(..), AuxiliarySym(..), AuxData(..),
-  PackData(..), unPP, unJP, unCSP, unCPPP, unSP, ImplementationType(..))
+  PackData(..), unPP, unJP, unCSP, unCPPP, unSP, unJLP, ImplementationType(..))
 
 import Text.PrettyPrint.HughesPJ (Doc, render)
 import Control.Monad.State (evalState, runState)

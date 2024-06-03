@@ -25,7 +25,7 @@ y :: (VariableSym r) => SVariable r
 y = var "y" int
 
 buildSimpleClass :: (OOProg r) => SClass r
-buildSimpleClass = buildClass Nothing [stateVar public dynamic x, stateVar public dynamic y] [simpleConstructor, simpleConstructor2, getMethod x, setMethod x, printXMethod]
+buildSimpleClass = buildClass Nothing [stateVar public dynamic x, stateVar public dynamic y] [simpleConstructor, simpleConstructor2] [getMethod x, setMethod x, printXMethod]
 
 -- | Devault value for simple class is y=3
 simpleConstructor :: (MethodSym r, Literal r) => SMethod r

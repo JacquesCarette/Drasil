@@ -764,15 +764,18 @@ jlDocCmtEnd     = text "\"\"\""
 
 -- Control structures
 
-
+-- | Creates a 'class' in Julia.
+--   GOOL classes are manifested quite differently in Julia, since it's not an
+--   OO language.  Variables and constructors go inside the body of a struct,
+--   and methods become functions that take an instance of the struct as their 
+--   first argument.
 jlIntClass :: (RenderSym r, Monad r) => Label -> r (Scope r) -> r ParentSpec -> 
-  [CSStateVar r] -> [SMethod r] -> CS (r Doc)
-jlIntClass n _ i svrs mths = do
+  [CSStateVar r] -> [SMethod r] -> [SMethod r] -> CS (r Doc)
+jlIntClass n _ i svrs cstrs mths = do
   modify (setClassName n) 
   svs <- onStateList (R.stateVarList . map RC.stateVar) svrs
-  let (outerMths, cnstrs) = partition isMthd mths
-  ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) outerMths)
-  cs <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) cnstrs)
+  ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) mths)
+  cs <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) cstrs)
   return $ onCodeValue (\_ -> jlClass n svs ms cs) i 
   where isMthd _ = True
 

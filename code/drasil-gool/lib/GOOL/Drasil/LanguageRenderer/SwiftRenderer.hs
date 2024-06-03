@@ -730,8 +730,8 @@ instance ModuleSym SwiftCode where
       pure $ vcat $ map (RC.import' . 
           (langImport :: Label -> SwiftCode (Import SwiftCode))) 
           (sort $ lis ++ is ++ libis)) 
-      (zoom lensFStoMS swiftStringError) getMainDoc (map pure fns) 
-        (map pure cls)
+      (zoom lensFStoMS swiftStringError) getMainDoc 
+        (map pure fns) (map pure cls)
   
 instance RenderMod SwiftCode where
   modFromData n = G.modFromData n (toCode . md n)

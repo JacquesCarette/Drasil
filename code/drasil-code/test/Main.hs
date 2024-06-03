@@ -2,10 +2,10 @@
 module Main (main) where
 
 import GOOL.Drasil (Label, OOProg, ProgramSym(..), unCI, unJC, unPC, unCSC,
-  unCPPC, unSC, unJLC, FileData(..), ModData(..), ProgData(..), initialState)
+  unCPPC, unSC, FileData(..), ModData(..), ProgData(..), initialState)
 
 import Language.Drasil.Code (PackageSym(..), AuxiliarySym(..), AuxData(..),
-  PackData(..), unPP, unJP, unCSP, unCPPP, unSP, unJLP, ImplementationType(..))
+  PackData(..), unPP, unJP, unCSP, unCPPP, unSP, ImplementationType(..))
 
 import Text.PrettyPrint.HughesPJ (Doc, render)
 import Control.Monad.State (evalState, runState)
@@ -20,8 +20,8 @@ import VectorTest (vectorTest)
 import NameGenTest (nameGenTest)
 import SuperSimple (superSimple)
 
--- | Renders five GOOL tests (FileTests, SuperSimple, HelloWorld, PatternTest, VectorTest, and NameGenTest)
--- in Java, Python, Julia, C#, C++, and Swift.
+-- | Renders five GOOL tests (FileTests, HelloWorld, PatternTest, VectorTest, and NameGenTest)
+-- in Java, Python, C#, C++, and Swift.
 main :: IO()
 main = do
   workingDir <- getCurrentDirectory

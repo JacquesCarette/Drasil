@@ -13,7 +13,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: spenserblack/actions-wiki@v0.3.0
-        with:
-          path: wiki
-          token: ${{ secrets.BOT_TOKEN }}
+
+      - name: "Ensuring no new directories in ./wiki/"
+        run: |
+          if git diff --name-only --diff-filter=A HEAD^ | grep -q '^wiki/.*/'; then
+            echo "New directory detected in wiki folder. This is not allowed."
+            exit 1
+          fi
+
+      - name: "Configure git client"
+        run: |
+          git config --global user.name "${{ secrets.BOT_NAME }}"
+          git config --global user.email "${{ secrets.BOT_EMAIL }}"
+
+      - name: "Clone .wiki repository"
+        run: |
+          git clone https://x-access-token:${{ secrets.BOT_TOKEN }}@github.com/${{ github.repository }}.wiki.git
+
+      - name: "Copy wiki contents"
+        run: |
+          cp -r wiki/* ${GITHUB_REPOSITORY##*/}.wiki/
+
+      - name: "Commit and push changes"
+        run: |
+          cd ${GITHUB_REPOSITORY##*/}.wiki
+          git add .
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -m "Update wiki content at ${{ github.sha }}"
+            git push origin master
+          else
+            echo "No changes to commit"
+          fi

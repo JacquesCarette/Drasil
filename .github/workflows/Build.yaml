@@ -1,7 +1,9 @@
 on:
   push:
+    paths: [code/**]
   pull_request:
     branches: master
+    paths: [code/**]
   workflow_dispatch:
 name: Build
 defaults:

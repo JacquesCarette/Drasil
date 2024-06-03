@@ -1,0 +1,66 @@
+name: Wiki
+on:
+  push:
+    branches: [master]
+    paths: [wiki/**, .github/workflows/Wiki.yaml]
+  pull_request:
+    branches: [master]
+    paths: [wiki/**, .github/workflows/Wiki.yaml]
+permissions:
+  contents: write
+jobs:
+  check_directories:
+    name: "Audit changes"
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: "Ensuring no new directories in ./wiki/"
+        run: |
+          if git diff --name-only --diff-filter=A origin/master... | grep -q '^wiki/.*/'; then
+            echo "New directory detected in wiki folder. This is not allowed."
+            exit 1
+          fi
+
+  wiki:
+    name: "Publish changes"
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+        with: # Fetch enough history to resolve HEAD^ -- https://github.com/actions/checkout?tab=readme-ov-file#checkout-head
+          fetch-depth: 2
+
+      - name: "Ensuring no new directories in ./wiki/"
+        run: |
+          if git diff --name-only --diff-filter=A HEAD^ | grep -q '^wiki/.*/'; then
+            echo "New directory detected in wiki folder. This is not allowed."
+            exit 1
+          fi
+
+      - name: "Configure git client"
+        run: |
+          git config --global user.name "${{ secrets.BOT_NAME }}"
+          git config --global user.email "${{ secrets.BOT_EMAIL }}"
+
+      - name: "Clone .wiki repository"
+        run: |
+          git clone https://x-access-token:${{ secrets.BOT_TOKEN }}@github.com/${{ github.repository }}.wiki.git
+
+      - name: "Copy wiki contents"
+        run: |
+          cp -r wiki/* ${GITHUB_REPOSITORY##*/}.wiki/
+
+      - name: "Commit and push changes"
+        run: |
+          cd ${GITHUB_REPOSITORY##*/}.wiki
+          git add .
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -m "Update wiki content at ${{ github.sha }}"
+            git push origin master
+          else
+            echo "No changes to commit"
+          fi

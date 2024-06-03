@@ -10,18 +10,18 @@ import Language.Drasil.Printing.Import (makeDocument)
 import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
   Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)), 
-  Label, LinkType(Internal, Cite2, External))
+  Label, LinkType(Internal, Cite2, External), OverSymb(Hat), Fonts(Emph, Bold), Spacing(Thin), Fence(Norm, Abs, Curly, Paren))
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
-import Language.Drasil.Printing.Helpers (sqbrac, pipe)
+import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, brace, unders, hat)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
-import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
+import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr, fence, OpenClose(..))
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Print(renderCite)
 
-import Language.Drasil.Markdown.Helpers (h, stripnewLine, image, li, pa, ba, refwrap, reflink, reflinkURI, reflinkInfo, caption, bold, ul)
+import Language.Drasil.Markdown.Helpers (h, stripnewLine, image, li, pa, ba, refwrap, reflink, reflinkURI, reflinkInfo, caption, bold, ul, br)
 
 -- | Generate a python notebook document (using json).
 -- build : build the SRS document in JSON format
@@ -49,9 +49,8 @@ printLO (HDiv _ layoutObs _)             = vcat (map printLO layoutObs)
 printLO (Paragraph contents)             = empty $$ (stripnewLine (show(pSpec contents)))
 printLO (EqnBlock contents)              = mathEqn
   where
-    toMathHelper (PL g) = PL (\_ -> g Math)
-    mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$" 
-    mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
+    mjDelimDisp d  = text "\\\\[" <> stripnewLine (show d) <> text "\\\\]" 
+    mathEqn = mjDelimDisp $ spec contents
 printLO (Table _ rows r b t)            = empty $$ makeTable rows (pSpec r) b (pSpec t)
 printLO (Definition _ ssPs l)          = (text "<br>\n") $$ makeDefn ssPs (pSpec l)
 printLO (List t)                        = empty $$ makeList t 0
@@ -66,7 +65,7 @@ print :: [LayoutObj] -> Doc
 print = foldr (($$) . printLO) empty
 
 pSpec :: Spec -> Doc
-pSpec (E e)  = text "$" <> pExpr e <> text "$" -- symbols used
+pSpec (E e)  = text "\\\\(" <> pExpr e <> text "\\\\)" -- symbols used
 pSpec (a :+: b) = pSpec a <> pSpec b
 pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr s invalid
   where
@@ -81,9 +80,73 @@ pSpec (Ref External r a)      = reflinkURI  (text r) (pSpec a)
 pSpec EmptyS    = text "" -- Expected in the output
 pSpec (Quote q) = doubleQuotes $ pSpec q
 
--- | Renders expressions in JSON (called by multiple functions)
+-- | Print an expression to a document.
 pExpr :: Expr -> Doc
-pExpr e = printMath $ toMath $ TeX.pExpr e
+pExpr (Str s)        = text "\\text{" <> (quote (text s)) <> text "}"
+pExpr (Div n d)      = command2D "frac" (pExpr n) (pExpr d)
+pExpr (Case ps)      = mkEnv "cases" (cases ps) --
+pExpr (Mtx a)        = mkEnv "bmatrix" (pMatrix a)
+pExpr (Row [x])      = br $ pExpr x -- FIXME: Hack needed for symbols with multiple subscripts, etc.
+pExpr (Row l)        = foldl1 (<>) (map pExpr l)
+pExpr (Sub e)        = unders <> br (pExpr e)
+pExpr (Sup e)        = hat    <> br (pExpr e)
+pExpr (Over Hat s)   = commandD "hat" (pExpr s)
+pExpr (Fenced l r m) = fence TeX.Open l <> pExpr m <> fence TeX.Close r
+pExpr (Font Bold e)  = commandD "boldsymbol" (pExpr e) --
+pExpr (Font Emph e)  = pExpr e -- Emph is ignored here because we're in Math mode
+pExpr (Spc Thin)     = text "\\\\," --
+pExpr (Sqrt e)       = commandD "sqrt" (pExpr e)
+pExpr e              = printMath $ toMath $ TeX.pExpr e
+
+spec :: Spec -> Doc
+spec (E ex) = pExpr ex
+spec e = printMath $ toMathHelper $ TeX.spec e
+  where
+    toMathHelper (PL g) = PL (\_ -> g Math)
+
+commandD :: String -> Doc -> Doc
+commandD s c = (bslash <> text s) <> br c
+
+command2D :: String -> Doc -> Doc -> Doc
+command2D s a0 a1 = (bslash <> text s) <> br a0 <> br a1
+
+fence :: TeX.OpenClose -> Fence -> Doc
+fence _ Abs = printMath $ pure $ text "\\|"
+fence a b   = printMath $ TeX.fence a b
+
+-- | For printing a Matrix.
+pMatrix :: [[Expr]] -> Doc
+pMatrix e = vpunctuate (text "\\\\\\\\") (map pIn e)
+  where pIn x = hpunctuate (text " & ") (map pExpr x)
+
+-- | Helper for printing case expression.
+cases :: [(Expr,Expr)] -> Doc
+cases [] = error "Attempt to create case expression without cases"
+cases e  = vpunctuate (text "\\\\\\\\") (map _case e)
+  where _case (x, y) = hpunctuate (text ", & ") (map pExpr [x, y])
+
+-- Combine 'TP.vcat' and 'TP.punctuate'.
+vpunctuate :: Doc -> [Doc] -> Doc
+vpunctuate x = vcat . punctuate x
+
+-- Combine 'TP.hcat' and 'TP.punctuate'.
+hpunctuate :: Doc -> [Doc] -> Doc
+hpunctuate x = hcat . punctuate x
+
+-- | Helper for adding fencing symbols.
+quote :: Doc -> Doc
+quote x = lq <> x <> rq
+  where
+  lq = text "\\\\(\\``\\\\)"
+  rq = text "''"
+
+-- | Encapsulate environments.
+mkEnv :: String -> Doc -> Doc
+mkEnv nm d =
+  (text ("\\begin" ++ brace nm)) $$ 
+  d $$
+  (text ("\\end" ++ brace nm))
+  
 
 -- | Renders Markdown table, called by 'printLO'
 makeTable :: [[Spec]] -> Doc -> Bool -> Doc -> Doc

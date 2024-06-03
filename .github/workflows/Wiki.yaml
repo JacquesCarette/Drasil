@@ -16,3 +16,4 @@ jobs:
       - uses: spenserblack/actions-wiki@v0.3.0
         with:
           path: wiki
+          token: ${{ secrets.BOT_TOKEN }}

@@ -23,6 +23,8 @@ ghc-options:
 
 library:
   source-dirs: lib
+  default-extensions:
+  - StrictData
   exposed-modules:
   - Data.Drasil.People
   - Data.Drasil.Citations

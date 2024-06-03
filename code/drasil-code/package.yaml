@@ -34,6 +34,8 @@ ghc-options:
 
 library:
   source-dirs: lib
+  default-extensions:
+  - StrictData
   exposed-modules:
   - Language.Drasil.Code
   - Data.Drasil.ExternalLibraries.ODELibraries

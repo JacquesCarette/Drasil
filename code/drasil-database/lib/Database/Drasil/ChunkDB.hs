@@ -80,7 +80,7 @@ type ReferenceMap = UMap Reference
 
 -- | General chunk database map constructor. Creates a 'UMap' from a function that converts something with 'UID's into another type and a list of something with 'UID's.
 cdbMap :: HasUID a => (a -> b) -> [a] -> Map.Map UID (b, Int)
-cdbMap fn = Map.fromList . map (\(x,y) -> (x ^. uid, (fn x, y))) . flip zip [1..]
+cdbMap fn xs = Map.fromList $ zipWith (\ x i -> ((^. uid) x, (fn x, i))) xs [1..length xs]
 
 -- | Smart constructor for a 'SymbolMap'.
 symbolMap :: (Quantity c, MayHaveUnit c) => [c] -> SymbolMap
@@ -145,7 +145,7 @@ insmodelLookup = uMapLookup "InstanceModel" "InsModelMap"
 
 -- | Looks up a 'UID' in the general definition table. If nothing is found, an error is thrown.
 gendefLookup :: UID -> GendefMap -> GenDefn
-gendefLookup = uMapLookup "GenDefn" "GenDefnMap" 
+gendefLookup = uMapLookup "GenDefn" "GenDefnMap"
 
 -- | Looks up a 'UID' in the theory model table. If nothing is found, an error is thrown.
 theoryModelLookup :: UID -> TheoryModelMap -> TheoryModel
@@ -171,7 +171,7 @@ asOrderedList = map fst . sortOn snd . map snd . Map.toList
 -- In turn, these maps must contain every chunk definition or concept 
 -- used in its respective example, else an error is thrown.
 data ChunkDB = CDB { symbolTable           :: SymbolMap
-                   , termTable             :: TermMap 
+                   , termTable             :: TermMap
                    , defTable              :: ConceptMap
                    , _unitTable            :: UnitMap
                    , _traceTable           :: TraceMap

@@ -9,7 +9,7 @@ module GOOL.Drasil.LanguageRenderer.JuliaRenderer (
 
 import Utils.Drasil (blank, indent, indentList)
 
--- TODO: Sort the dependencies to match the other modules
+-- TODO: Make these pretty once their contents are stable
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, Library, VSType, SValue, SVariable, VSFunction,
   MSStatement, MixedCtorCall, OOProg, ProgramSym(..), SMethod, MSBody, MSParameter, Initializers,
@@ -69,7 +69,7 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, FuncD
   ScopeTag(..), pd)
 import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, on2CodeValues,
   on2StateValues, onCodeList, onStateList, emptyIfEmpty, on2StateWrapped)
-import GOOL.Drasil.State (MS, VS, CS, lensGStoFS, revFiles, setFileType, lensCStoMS,
+import GOOL.Drasil.State (MS, VS, CS, lensGStoFS, lensFStoCS, lensFStoMS, revFiles, setFileType, lensCStoMS,
   lensMStoVS, lensVStoMS, getModuleImports, getUsing, getLangImports,
   getLibImports, getMainDoc, useVarName, getClassName, setClassName, addLibImportVS)
 
@@ -77,7 +77,7 @@ import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
-import Data.List (intercalate, sort, partition)
+import Data.List (intercalate, sort)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), empty, brackets, vcat,
   quotes, doubleQuotes, parens, equals, colon)
 
@@ -669,13 +669,14 @@ instance ModuleSym JuliaCode where
     mis <- getModuleImports
     us <- getUsing
     pure $ vibcat [
+      jlModStart n,
       vcat (map (RC.import' . li) lis),
       vcat (map (RC.import' . li) (sort $ is ++ libis)),
       vcat (map (RC.import' . mi) mis),
       vcat (map usingModule us)])
-    (pure $ jlModStart n) (do
-      mainDoc <- getMainDoc
-      return $ vcat [mainDoc, blank, jlEnd])
+      (pure empty) (do
+        mainDoc <- getMainDoc
+        return $ vcat [mainDoc, blank, jlEnd])
     where mi, li :: Label -> JuliaCode (Import JuliaCode)
           mi = modImport
           li = langImport

@@ -10,7 +10,7 @@ import GOOL.Drasil (GSProgram, MSBody, MSBlock, SMethod, OOProg,
   List(..), MethodSym(..), ModuleSym(..), VSType, SVariable, ValueExpression, 
   SValue, listSlice, bodyStatements, extNewObj)
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
-import SimpleClass (simpleClass, simpleName)
+import SimpleClass (simpleClass, simpleClassName)
 
 -- | Creates the SuperSimple program and necessary files.
 superSimple :: (OOProg r) => GSProgram r
@@ -24,8 +24,7 @@ description = "Tests basic GOOL functions. It *might* run without errors."
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 superSimpleMain :: (OOProg r) => SMethod r
-superSimpleMain = mainFunction (body [ helloInitVariables,
-    helloListSlice, objTest{-,
+superSimpleMain = mainFunction (body [ helloInitVariables, objTest{-,
     block [ifCond [(valueOf (var "b" int) ?>= litInt 6, bodyStatements [varDecDef (var "dummy" string) (litString "dummy")]),
       (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody, helloIfExists,
     helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch]-}])
@@ -66,17 +65,17 @@ helloListSlice = listSlice (var "mySlicedList" (listType double))
 
 -- | Test object functionality
 simpleClassType :: (TypeSym r) => VSType r
-simpleClassType = obj simpleName
+simpleClassType = obj simpleClassName
 
 s :: (VariableSym r) => SVariable r
 s = var "s" simpleClassType
 
 newSimpleClass :: (ValueExpression r) => SValue r
-newSimpleClass = extNewObj simpleName simpleClassType []
+newSimpleClass = extNewObj simpleClassName simpleClassType []
 
 objTest :: (OOProg r) => MSBlock r
 objTest = block [
-  s &= newSimpleClass]
+  varDecDef s newSimpleClass]
 
 -- | Print the 5th given argument.
 helloElseBody :: (OOProg r) => MSBody r

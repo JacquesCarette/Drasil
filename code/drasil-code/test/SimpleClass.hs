@@ -1,19 +1,19 @@
 {-# LANGUAGE PostfixOperators #-}
 -- | Tests GOOL classes.  It **might** run without errors
-module SimpleClass (simpleClass, simpleName) where
+module SimpleClass (simpleClass, simpleClassName) where
 
 import GOOL.Drasil (OOProg, SFile, FileSym (fileDoc), ModuleSym (buildModule), ClassSym (docClass, buildClass), VariableValue (valueOf), SClass, StateVarSym (stateVar), ScopeSym (public), PermanenceSym (dynamic), VariableSym (var, objVarSelf), SVariable, TypeSym (int, void, bool), MethodSym (getMethod, method, setMethod), Literal (litInt, litTrue), SMethod, initializer, IOStatement (printLn), oneLiner, ParameterSym (param), BodySym (body), BlockSym (block), ControlStatement (ifCond), Comparison ((?==)), (&=))
 import Prelude hiding (return, print, log, exp, sin, cos, tan, const)
 
-simpleName, simpleDesc :: String
+simpleClassName, simpleDesc :: String
 -- | Class name
-simpleName = "SimpleClass"
+simpleClassName = "SimpleClass"
 -- | Class description
 simpleDesc = "A test class for GOOL.  It **might** run without errors"
 
 -- | Creates the simple class
 simpleClass :: (OOProg r) => SFile r
-simpleClass = fileDoc (buildModule simpleName [] [] [docClass simpleDesc 
+simpleClass = fileDoc (buildModule simpleClassName [] [] [docClass simpleDesc 
   buildSimpleClass])
 
 -- | Makes a variable @x@

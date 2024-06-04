@@ -7,7 +7,8 @@ import GOOL.Drasil (GSProgram, MSBody, MSBlock, SMethod, OOProg,
   CommandLineArgs(..), BlockSym(..), TypeSym(..), StatementSym(..), 
   Comparison(..), (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
   CommentStatement(..), VariableSym(..), Literal(..), VariableValue(..), 
-  List(..), MethodSym(..), ModuleSym(..), listSlice, bodyStatements)
+  List(..), MethodSym(..), ModuleSym(..), VSType, SVariable, ValueExpression, 
+  SValue, listSlice, bodyStatements, extNewObj)
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import SimpleClass (simpleClass, simpleName)
 
@@ -24,7 +25,7 @@ description = "Tests basic GOOL functions. It *might* run without errors."
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 superSimpleMain :: (OOProg r) => SMethod r
 superSimpleMain = mainFunction (body [ helloInitVariables,
-    helloListSlice{-,
+    helloListSlice, objTest{-,
     block [ifCond [(valueOf (var "b" int) ?>= litInt 6, bodyStatements [varDecDef (var "dummy" string) (litString "dummy")]),
       (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody, helloIfExists,
     helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch]-}])
@@ -62,6 +63,20 @@ helloListSlice :: (OOProg r) => MSBlock r
 helloListSlice = listSlice (var "mySlicedList" (listType double))
   (valueOf $ var "myOtherList" (listType double)) (Just (litInt 9))
   Nothing (Just (litInt (-1)))
+
+-- | Test object functionality
+simpleClassType :: (TypeSym r) => VSType r
+simpleClassType = obj simpleName
+
+s :: (VariableSym r) => SVariable r
+s = var "s" simpleClassType
+
+newSimpleClass :: (ValueExpression r) => SValue r
+newSimpleClass = extNewObj simpleName simpleClassType []
+
+objTest :: (OOProg r) => MSBlock r
+objTest = block [
+  s &= newSimpleClass]
 
 -- | Print the 5th given argument.
 helloElseBody :: (OOProg r) => MSBody r

@@ -11,8 +11,8 @@ import Utils.Drasil (blank, indent, indentList)
 
 -- TODO: Sort the dependencies to match the other modules
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, VSType, SValue, SVariable, VSFunction,
-  MSStatement, OOProg, ProgramSym(..), SMethod, MSBody, MSParameter, Initializers,
+import GOOL.Drasil.ClassInterface (Label, Library, VSType, SValue, SVariable, VSFunction,
+  MSStatement, MixedCtorCall, OOProg, ProgramSym(..), SMethod, MSBody, MSParameter, Initializers,
   FileSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
@@ -40,7 +40,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
 import qualified GOOL.Drasil.RendererClasses as RC (RenderBody(multiBody),
   import', perm, body, block, type', uOp, bOp, variable, value, function,
   statement, scope, parameter, method, stateVar, class', module', blockComment')
-import GOOL.Drasil.LanguageRenderer (printLabel, listSep, listSep',
+import GOOL.Drasil.LanguageRenderer (printLabel, listSep, listSep', new,
   ClassDocRenderer, variableList, parameterList)
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp, 
   sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, addComments,
@@ -71,7 +71,7 @@ import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, 
   on2StateValues, onCodeList, onStateList, emptyIfEmpty, on2StateWrapped)
 import GOOL.Drasil.State (MS, VS, CS, lensGStoFS, revFiles, setFileType, lensCStoMS,
   lensMStoVS, lensVStoMS, getModuleImports, getUsing, getLangImports,
-  getLibImports, getMainDoc, useVarName, getClassName, setClassName)
+  getLibImports, getMainDoc, useVarName, getClassName, setClassName, addLibImportVS)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -79,7 +79,7 @@ import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 import Data.List (intercalate, sort, partition)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), empty, brackets, vcat,
-  quotes, parens, equals, colon)
+  quotes, doubleQuotes, parens, equals, colon)
 
 jlExt :: String
 jlExt = "jl"
@@ -125,11 +125,14 @@ instance RenderFile JuliaCode where
 
 instance ImportSym JuliaCode where
   type Import JuliaCode = Doc
-  langImport _ = undefined
+  langImport n = let modName = text n
+                     fileName = text $ n ++ '.' : jlExt
+    in toCode $ vcat [includeLabel <> parens (doubleQuotes fileName), 
+      importLabel <+> text "." <> modName] -- TODO: we want a dot only when the import is locally defined.
   modImport = undefined
 
 instance ImportElim JuliaCode where
-  import' = undefined
+  import' = unJLC
 
 instance PermanenceSym JuliaCode where
   type Permanence JuliaCode = Doc
@@ -344,7 +347,9 @@ instance ValueExpression JuliaCode where
   extFuncAppMixedArgs = undefined
   libFuncAppMixedArgs = undefined
   newObjMixedArgs = undefined
-  extNewObjMixedArgs _ _ _ _ = undefined
+  extNewObjMixedArgs l tp ps ns = do
+    modify (addLibImportVS l)
+    jlExtNewObjMixedArgs l tp ps ns
   libNewObjMixedArgs = undefined
 
   lambda = G.lambda jlLambda
@@ -668,7 +673,9 @@ instance ModuleSym JuliaCode where
       vcat (map (RC.import' . li) (sort $ is ++ libis)),
       vcat (map (RC.import' . mi) mis),
       vcat (map usingModule us)])
-    (pure empty) getMainDoc
+    (pure $ jlModStart n) (do
+      mainDoc <- getMainDoc
+      return $ vcat [mainDoc, blank, jlEnd])
     where mi, li :: Label -> JuliaCode (Import JuliaCode)
           mi = modImport
           li = langImport
@@ -777,7 +784,6 @@ jlIntClass n _ i svrs cstrs mths = do
   ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) mths)
   cs <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) cstrs)
   return $ onCodeValue (\_ -> jlClass n svs ms cs) i 
-  where isMthd _ = True
 
 -- | Creates the doc for a class.
 -- | n is the name of the class.
@@ -802,7 +808,7 @@ jlConstructor :: (RenderSym r) => Label -> [MSParameter r] -> Initializers r ->
 jlConstructor fName ps initStmts b = jlConstructorMethod fName
   ps (RC.multiBody [jlCallConstructor, b])
   where args = map (\(_, vl) -> vl) initStmts
-        constructorFunc = funcApp fName (obj fName)
+        constructorFunc = funcApp new (obj fName)
         jlCallConstructor = bodyStatements [returnStmt $ constructorFunc args]
 
 jlConstructorMethod :: (RenderSym r) =>
@@ -810,16 +816,24 @@ jlConstructorMethod :: (RenderSym r) =>
 jlConstructorMethod n ps b = do
   pms <- sequence ps
   bod <- b
-  name <- getClassName
   mthdFromData Pub (vcat [
     jlFunc <+> text n <> parens (parameterList pms),
     indent $ RC.body bod,
     jlEnd])
 
+jlExtNewObjMixedArgs :: (RenderSym r) => Library -> MixedCtorCall r
+jlExtNewObjMixedArgs l tp vs ns = tp >>= (\t -> call (Just l) Nothing
+  (getTypeString t) (pure t) vs ns)
+
 jlLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 jlLambda ps ex = variableList ps <+> arrow <+> RC.value ex
 
-elseIfLabel, jlFunc, jlStart, jlEnd :: Doc
+includeLabel, importLabel :: Doc
+includeLabel = text "include"
+importLabel = text "import"
+
+jlMod, elseIfLabel, jlFunc, jlStart, jlEnd :: Doc
+jlMod       = text "module"
 elseIfLabel = text "elseif"
 jlFunc      = text "function"
 jlStart     = text "start"
@@ -870,6 +884,11 @@ jlVoidType :: (RenderSym r) => VSType r
 jlVoidType = typeFromData Void jlVoid (text jlVoid)
 
 -- Modules
+-- | Creates the text for the start of a module.
+--   n is the name of the module.
+jlModStart :: Label -> Doc
+jlModStart n = jlMod <+> text n
+
 using :: Doc
 using = text "using" -- TODO: merge with C++
 

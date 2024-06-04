@@ -7,7 +7,7 @@ import Prelude hiding (return, print, log, exp, sin, cos, tan, const)
 
 simpleName, simpleDesc :: String
 -- | Class name
-simpleName = "simpleClass"
+simpleName = "SimpleClass"
 -- | Class description
 simpleDesc = "A test class for GOOL.  It **might** run without errors"
 
@@ -29,7 +29,7 @@ buildSimpleClass = buildClass Nothing [stateVar public dynamic x, stateVar publi
 
 -- | Devault value for simple class is y=3
 simpleConstructor :: (MethodSym r, Literal r) => SMethod r
-simpleConstructor = initializer [] [(x, litInt 5)]
+simpleConstructor = initializer [] [(x, litInt 5), (y, litInt 3)]
 
 -- | Devault value for simple class is y=3
 simpleConstructor2 :: (MethodSym r, Literal r, VariableValue r) => SMethod r

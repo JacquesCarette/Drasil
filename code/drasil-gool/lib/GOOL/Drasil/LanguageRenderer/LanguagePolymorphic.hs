@@ -504,6 +504,14 @@ fileDoc ext topb botb mdl = do
         (R.file (RC.block $ topb m) d (RC.block botb))) m
   S.fileFromData fp (toState updm)
 
+-- | Generates a file for a documented module.
+--   mdr is a function that takes description, author, and module name and 
+--                                                     returns a doc comment
+--   e is the file extension
+--   d is the description (I think)
+--   a is a list of authors
+--   dt is the date
+--   fl is the file
 docMod :: (RenderSym r) => ModuleDocRenderer -> String -> String -> 
   [String] -> String -> SFile r -> SFile r
 docMod mdr e d a dt fl = commentedMod fl (docComment $ mdr d a dt . addExt e 

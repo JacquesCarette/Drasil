@@ -1,0 +1,1 @@
+This page will outline the progress of [#3086](https://github.com/JacquesCarette/Drasil/issues/3086) to document how we currently use chunks to see if we are doing it "correctly." Each chunk will be discussed in subpages, and any overarching discussion will be tracked here.

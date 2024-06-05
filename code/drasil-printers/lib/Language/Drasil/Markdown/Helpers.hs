@@ -2,7 +2,7 @@
 module Language.Drasil.Markdown.Helpers where
 
 import Prelude hiding ((<>))
-import Text.PrettyPrint (Doc, text, empty, (<>), ($$), vcat, hcat)
+import Text.PrettyPrint (Doc, text, empty, (<>), ($$), hcat)
 import Data.List.Split (splitOn)
 
 data Variation =  Id | Align
@@ -33,12 +33,12 @@ wrapGen' sepf Align s ti _ = \x ->
       te c = text $ "</" ++ c ++ ">"
   in  sepf [tb s, x, te s]
 wrapGen' sepf Id s ti _ = \x ->
-  let tb c = text ("<" ++ c ++ " id=\"") <> ti <> text "\">\n"
-      te c = text $ "\n</" ++ c ++ ">\n"
+  let tb c = text ("<" ++ c ++ " id=\"") <> ti <> text "\">"
+      te c = text $ "</" ++ c ++ ">\n"
   in  sepf [tb s, x, te s]
 
 refwrap :: Doc -> Doc -> Doc
-refwrap = flip (wrapGen' vcat Id "div") [""]
+refwrap = flip (wrapGen' hcat Id "div") [""]
 
 sq :: Doc -> Doc
 sq t = text "[" <> t <> text "]" 
@@ -60,7 +60,7 @@ reflinkURI ref txt = sq txt <> paren ref
 
 -- | Helper for setting up figures
 image :: Doc -> Doc -> Doc
-image f c =  text "!" <> (reflinkURI f c) $$ bold (caption c)
+image f c =  text "!" <> (reflinkURI f c) $$ bold (caption c) <> text "\n"
 
 caption :: Doc -> Doc
 caption = wrapGen' hcat Align "p" (text "center") [""]
@@ -79,3 +79,6 @@ br x = text "{" <> x <> text "}"
 -- Maybe use "lines" instead (Data.List @lines :: String -> [String])
 stripnewLine :: String -> Doc
 stripnewLine s = hcat (map text (splitOn "\n" s))
+
+stripTabs :: Doc -> Doc
+stripTabs d = hcat (map text (splitOn "\t" (show d)))

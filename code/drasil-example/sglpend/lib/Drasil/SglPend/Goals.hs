@@ -17,7 +17,7 @@
  goals = [motionMass]
 
  goalsInputs :: [Sentence]
- goalsInputs = [phraseNP (the CPP.mass `NP.and_` (CPP.len  `ofThe` rod)) `sC` 
+ goalsInputs = [phraseNP (the CPP.mass `NP.and_` (CPP.len `ofThe` rod)) `sC` 
          phraseNP (iAngle `ofThe` CPP.mass) `S.and_` phraseNP (the gravitationalConst) ]
 
  motionMass :: ConceptInstance

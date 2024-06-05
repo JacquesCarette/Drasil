@@ -196,13 +196,13 @@ priorityNFReqs = [correctness, verifiability, understandability,
 {--INTRODUCTION--}
 
 startIntro :: (NamedIdea n) => n -> Sentence -> CI -> Sentence
-startIntro prgm sfwrPredicts progName = foldlSent [
-  atStart prgm, S "is helpful to efficiently" `S.and_` S "correctly predict the"
-  +:+. sfwrPredicts, underConsidertn blast,
-  atStartNP (the prgm) `sC` S "herein called", short progName `sC`
-  S "aims to predict the", sfwrPredicts, S "using an intuitive",
-  phrase interface]
-
+startIntro prgm _ progName = foldlSent [
+  atStart' explosion, S "in downtown areas are dangerous from the", phrase blast, S "itself" `S.and_`
+  S "also potentially from the secondary effect of falling glass. Therefore" `sC` phrase prgm, 
+  S "is needed to predict whether a",phrase glaSlab, S "can withstand a", phrase blast, S "under given conditions. For",
+  S "example" `sC` S "we might wish to know whether a pane of", phrase glass, S "from a gas main", phrase explosion,
+  S "from a small fertilizer truck bomb. The program documented here is called", 
+  short progName]
 undIR, appStanddIR :: [Sentence]
 undIR = [phrase scndYrCalculus, phrase structuralMechanics, phrase glBreakage,
   phrase blastRisk, pluralNP (computerApp `in_PS` Edu.civilEng)]

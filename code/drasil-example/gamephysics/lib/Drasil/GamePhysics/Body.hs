@@ -108,7 +108,7 @@ si = SI {
   -- #1658 is why this is empty, otherwise we end up with unused (and probably
   -- should be removed) symbols. But that's for another time. This is "fine"
   -- because _quants are only used relative to #1658.
-  _quants      =  [] :: [QuantityDict], -- map qw iMods ++ map qw symbolsAll,
+  _quants      = [] :: [QuantityDict], -- map qw iMods ++ map qw symbolsAll,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,
   _datadefs    = dataDefs,
@@ -277,9 +277,9 @@ userCharacteristicsIntro = foldlSP
   S "should have an understanding of", phrase frstYr, S "programming",
   plural concept `S.and_` S "an understanding of", phrase highSchoolPhysics]
 
--------------------------------
--- 3.3 : System Constraints  --
--------------------------------
+------------------------------
+-- 3.3 : System Constraints --
+------------------------------
 
 ---------------------------------------------
 -- SECTION 4 : SPECIFIC SYSTEM DESCRIPTION --
@@ -297,7 +297,7 @@ probDescIntro = foldlSent_
   [purp, S "in a", foldlList Comma List $ map S ["simple", "lightweight", "fast", "portable"],
   S "manner" `sC` S "which will allow for the production of higher quality" +:+. plural product_,
   S "Creating a gaming", phrase physLib, S "is a difficult" +:+. phrase task, titleize' game,
-  S "need",  plural physLib, S "that simulate", plural object, S "acting under various", phrase physical,
+  S "need", plural physLib, S "that simulate", plural object, S "acting under various", phrase physical,
   plural condition `sC` S "while simultaneously being fast and efficient enough to work in soft",
   phrase realtime, S "during the" +:+. phrase game, S "Developing a", 
   phrase physLib, S "from scratch takes a long period" `S.of_` phrase QP.time `S.and_`
@@ -399,7 +399,7 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 
 offShelfSols :: [Contents]
 offShelfSols = [offShelfSolsIntro, offShelfSols2DList,
-                offShelfSolsMid,   offShelfSols3DList]
+                offShelfSolsMid, offShelfSols3DList]
 
 offShelfSolsIntro, offShelfSols2DList, 
   offShelfSolsMid, offShelfSols3DList :: Contents
@@ -420,9 +420,9 @@ offShelfSols3DList = enumBulletU [
   S "Open Dynamics Engine: http://www.ode.org/",
   S "Newton Game Dynamics: http://newtondynamics.com/"]
 
------------------------------------------------------
--- SECTION 8 : Traceability Matrices and Graph    --
------------------------------------------------------
+-------------------------------------------------
+-- SECTION 8 : Traceability Matrices and Graph --
+-------------------------------------------------
 
 -----------------------------------
 -- VALUES OF AUXILIARY CONSTANTS --

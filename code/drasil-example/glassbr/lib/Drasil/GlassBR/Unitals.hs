@@ -110,7 +110,7 @@ nomThick = cuc "nomThick"
   lT millimetre {-Discrete nominalThicknesses, but not implemented-} Rational 
   [{- TODO: add back constraint: enumc nominalThicknesses -}] $ exactDbl 8
 
-glassTypeCon  = constrainedNRV' (dqdNoUnit glassTy lG String) 
+glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String) 
   [{- TODO: add back constraint: EnumeratedStr Software $ map (abrv . snd) glassType -}]
 
 {--}
@@ -451,4 +451,4 @@ glassThickness =
 
 --Below are present in this file temporarily--
 lateralLoad :: IdeaDict
-lateralLoad  = compoundNC lateral load
+lateralLoad = compoundNC lateral load

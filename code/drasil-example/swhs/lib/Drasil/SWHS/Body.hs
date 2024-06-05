@@ -201,7 +201,7 @@ introStart = foldlSent [S "Due to", foldlList Comma List (map S
 introStartSWHS :: Sentence
 introStartSWHS = foldlSent [capSent $ pluralNP $ progName ^. term, S "incorporating",
   phrase phsChgMtrl, sParen (short phsChgMtrl), S "use a renewable",
-  phrase enerSrc `S.and_` S "provide a novel way of storing" +:+.  phrase energy,
+  phrase enerSrc `S.and_` S "provide a novel way of storing" +:+. phrase energy,
   atStart swhsPCM, S "improve over the traditional", plural progName,
   S "because of their smaller size. The smaller size is possible because of the ability" `S.of_`
   short phsChgMtrl, S "to store", phrase thermalEnergy, S "as", phrase latentHeat `sC`
@@ -248,7 +248,7 @@ charsOfReader = [charReaderHTT, charReaderDE]
 
 charReaderHTT :: Sentence
 charReaderHTT = foldlSent_ [phrase htTransTheo, S "from level 3 or 4",
-  S "mechanical",  phrase engineering]
+  S "mechanical", phrase engineering]
 
 charReaderDE :: Sentence
 charReaderDE = plural de +:+ S "from level 1 and 2" +:+ phrase calculus
@@ -395,7 +395,7 @@ figTank = llcc (makeFigRef "Tank") $ fig (
 -----------------------------
 
 goalInputs :: [Sentence]
-goalInputs  = [phraseNP (the tempC),
+goalInputs = [phraseNP (the tempC),
   S "the initial" +:+ plural condition +:+ S "for the" +:+ phraseNP (tempW `andThe` tempPCM),
   S "the material" +:+ plural property]
 
@@ -518,7 +518,7 @@ propsDeriv = [
 
 propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => ConceptChunk -> b -> UnitalChunk ->
   ConceptChunk -> CI -> GenDefn -> GenDefn -> h -> ConceptChunk -> Contents
-propCorSolDeriv1 lce ewat en co pcmat g1hfc g2hfp su ht  =
+propCorSolDeriv1 lce ewat en co pcmat g1hfc g2hfp su ht =
   foldlSPCol [atStartNP (a_ corSol), S "must exhibit" +:+.
   phraseNP (the lce), S "This means that", phraseNP (the ewat),
   S "should equal the difference between the total", phrase en,
@@ -586,9 +586,9 @@ propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)"
 ------------------------
 -- Traceabilty Graphs --
 ------------------------
--------------------------------------------------
--- Section 8 :  Specification Parameter Values --
--------------------------------------------------
+------------------------------------------------
+-- Section 8 : Specification Parameter Values --
+------------------------------------------------
 ----------------------------
 -- Section 9 : References --
 ----------------------------

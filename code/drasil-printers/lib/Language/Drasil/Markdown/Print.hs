@@ -3,6 +3,7 @@ module Language.Drasil.Markdown.Print(genMD) where
 
 import Prelude hiding (print, (<>))
 import Text.PrettyPrint hiding (Str)
+import Data.List (transpose)
 
 import qualified Language.Drasil as L
 
@@ -155,27 +156,40 @@ mkEnv nm d =
 -- | Renders Markdown table, called by 'printLO'
 makeTable :: [[Spec]] -> Doc -> Bool -> Doc -> Doc
 makeTable [] _ _ _      = error "No table to print"
-makeTable (l:lls) r b t = (refwrap r empty) $$ (empty $$ (makeHeaderCols l $$ makeRows lls) <> text "\n" $$ if b then bold (caption t) <> text "\n" else empty)
+makeTable (l:lls) r b t = (refwrap r empty)
+  $$ (empty $$ (makeHeaderCols l sizes $$ makeRows lls sizes) <> text "\n" 
+  $$ if b then bold (caption t) <> text "\n" else empty)
+    where
+      sizes = columnSize (l:lls)
 
 -- | Helper for creating table rows
-makeRows :: [[Spec]] -> Doc
-makeRows = foldr (($$) . makeColumns) empty
+makeRows :: [[Spec]] -> [Int] -> Doc
+makeRows lls sizes = foldr (($$) . (flip makeColumns sizes)) empty lls
+
+columnSize :: [[Spec]] -> [Int]
+columnSize = map (maximum . map (docLength . pSpec)) . transpose
+
+docLength :: Doc -> Int
+docLength d = length $ show d
 
 -- | makeHeaderCols: Helper for creating table header row (each of the column header cells)
 -- | makeColumns: Helper for creating table columns
-makeHeaderCols, makeColumns :: [Spec] -> Doc
-makeHeaderCols l = (text header) $$ (text genMDtable <> pipe)
-  where header = show(pipe <> hcat(punctuate pipe (map pSpec l)) <> pipe)        
-        c = count '|' header
-        genMDtable = concat (replicate (c-1) "|:--- ")
+makeHeaderCols, makeColumns :: [Spec] -> [Int] -> Doc
+makeHeaderCols l sizes = header $$ genMDtable
+  where header = pipe <> hcat(punctuate pipe (zipWith makeCell l sizes)) <> pipe        
+        genMDtable = pipe <> hcat(punctuate pipe (map makeDashColumns sizes)) <> pipe
 
-makeColumns ls = (pipe <> hcat(punctuate pipe (map pSpec ls)) <> pipe)
+makeDashColumns :: Int -> Doc
+makeDashColumns size = text ":" <> text (replicate (size - 1) '-')
 
-count :: Char -> String -> Int
-count _ [] = 0
-count c (x:xs) 
-  | c == x = 1 + count c xs
-  | otherwise = count c xs
+makeColumns ls sizes = (pipe <> hcat(punctuate pipe (zipWith makeCell ls sizes)) <> pipe)
+
+makeCell :: Spec -> Int -> Doc
+makeCell ls size = content <> spaces
+  where
+    content = pSpec ls
+    numOfSpaces = size - docLength content
+    spaces = text $ replicate numOfSpaces ' '
 
 -- | Renders definition tables (Data, General, Theory, etc.)
 makeDefn :: [(String,[LayoutObj])] -> Doc -> Doc
@@ -183,14 +197,12 @@ makeDefn [] _  = error "L.Empty definition"
 makeDefn ps l = makeDHeader ps l $$ makeDHeaderRow (text "Refname") l $$ makeDRows ps
 
 makeDHeader :: [(String, [LayoutObj])] -> Doc -> Doc
-makeDHeader ps l = case lo of
-  Just layoutObj -> text "## " <> label <+> br (text "#" <> l) <> text "\n"
-    -- text "<h2 align=\"center\">" $$ text "\n" $$ label <> text "</h2>\n"
-    where
-      label = hcat $ map printLO' layoutObj
-  Nothing -> text "## " <> l
+makeDHeader ps l = text "## " <> label <+> br (text "#" <> l) <> text "\n"
   where
     lo = lookup "Label" ps
+    label = case lo of
+      Just layoutObj -> hcat $ map printLO' layoutObj
+      Nothing -> l
 
 makeDHeaderRow :: Doc -> Doc -> Doc
 makeDHeaderRow lbl txt = pipe <> lbl <> pipe <> txt <> pipe $$ text "|:--- |:--- |" 

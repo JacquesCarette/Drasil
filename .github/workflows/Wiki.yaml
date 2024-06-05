@@ -43,9 +43,9 @@ jobs:
         run: |
           git clone https://x-access-token:${{ secrets.BOT_TOKEN }}@github.com/${{ github.repository }}.wiki.git
 
-      - name: "Copy wiki contents"
+      - name: "Update ~.wiki.git contents"
         run: |
-          cp -r wiki/* ${GITHUB_REPOSITORY##*/}.wiki/
+          rsync -av --delete --exclude '.git' wiki/ ${GITHUB_REPOSITORY##*/}.wiki/
 
       - name: "Commit and push changes"
         run: |

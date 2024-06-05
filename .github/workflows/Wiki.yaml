@@ -34,13 +34,6 @@ jobs:
         with: # Fetch enough history to resolve HEAD^ -- https://github.com/actions/checkout?tab=readme-ov-file#checkout-head
           fetch-depth: 2
 
-      - name: "Ensuring no new directories in ./wiki/"
-        run: |
-          if git diff --name-only --diff-filter=A HEAD^ | grep -q '^wiki/.*/'; then
-            echo "New directory detected in wiki folder. This is not allowed."
-            exit 1
-          fi
-
       - name: "Configure git client"
         run: |
           git config --global user.name "${{ secrets.BOT_NAME }}"

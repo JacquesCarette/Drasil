@@ -1,7 +1,9 @@
 on:
   push:
+    paths: [code/**]
   pull_request:
     branches: master
+    paths: [code/**]
   workflow_dispatch:
 name: Build
 defaults:
@@ -45,7 +47,7 @@ jobs:
         run: sudo apt-get install -y --fix-missing libgmp-dev python3 graphviz doxygen fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-xetex texlive-luatex g++ default-jdk mono-devel inkscape
 
       - name: "Install Stack"
-        uses: haskell/actions/setup@v2
+        uses: haskell-actions/setup@v2
         with:
           enable-stack: true
           stack-no-global: true

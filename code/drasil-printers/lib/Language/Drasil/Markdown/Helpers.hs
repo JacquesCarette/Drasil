@@ -82,3 +82,6 @@ stripnewLine s = hcat (map text (splitOn "\n" s))
 
 stripTabs :: Doc -> Doc
 stripTabs d = hcat (map text (splitOn "\t" (show d)))
+
+docLength :: Doc -> Int
+docLength d = length $ show d

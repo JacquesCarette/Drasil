@@ -10,8 +10,9 @@ import qualified Language.Drasil as L
 import Language.Drasil.Printing.Import (makeDocument)
 import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
-  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)), 
-  Label, LinkType(Internal, Cite2, External), OverSymb(Hat), Fonts(Emph, Bold), Spacing(Thin), Fence(Abs))
+  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)), Label, 
+  LinkType(Internal, Cite2, External), OverSymb(Hat), Fonts(Emph, Bold), 
+  Spacing(Thin), Fence(Abs))
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, brace, unders, hat)
@@ -22,68 +23,82 @@ import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintL
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Print(renderCite)
 
-import Language.Drasil.Markdown.Helpers (h, stripnewLine, image, li, pa, ba, refwrap, reflink, reflinkURI, reflinkInfo, caption, bold, ul, br, stripTabs)
+import Language.Drasil.Markdown.Helpers (h, stripnewLine, image, li, pa, ba, refwrap, 
+  reflink, reflinkURI, reflinkInfo, caption, bold, ul, br, stripTabs, docLength)
 
--- | Generate a python notebook document (using json).
--- build : build the SRS document in JSON format
--- build': build the general Jupyter Notbook document
+-- | Generate a Markdown SRS
 genMD :: PrintingInformation -> L.Document -> Doc
 genMD sm doc = build (makeDocument sm doc)
 
--- | Build the JSON Document, called by genJSON
+-- | Build the Markdown Document, called by genMD
 build :: Document -> Doc
 build (Document t a c) = 
   text "# " <> pSpec t $$
   text "## " <> pSpec a <> text "\n" $$
   print c 
 
--- | Helper for rendering a D from Latex print
-printMath :: D -> Doc
-printMath = (`runPrint` Math)
+-- | Called by build, uses 'printLO' to render the layout objects in Doc format.
+print :: [LayoutObj] -> Doc
+print = foldr (($$) . printLO) empty
+
+-----------------------------------------------------------------
+------------------- LAYOUT OBJECT PRINTING ----------------------
+-----------------------------------------------------------------
 
 -- | Helper for rendering LayoutObjects into JSON
 -- printLO is used for generating SRS
 printLO :: LayoutObj -> Doc
-printLO (Header n contents _)            = empty $$ (h (n + 1) <> pSpec contents) <> text "\n"
-printLO (Cell layoutObs)                 = vcat (map printLO layoutObs)
-printLO (HDiv _ layoutObs _)             = vcat (map printLO layoutObs)
-printLO (Paragraph contents)             = empty $$ (stripnewLine (show(pSpec contents))) <> text "\n"
-printLO (EqnBlock contents)              = mathEqn <> text "\n"
+printLO (Header n contents _)   = empty $$ (h (n + 1) <> pSpec contents) <> text "\n"
+printLO (Cell layoutObs)        = vcat (map printLO layoutObs)
+printLO (HDiv _ layoutObs _)    = vcat (map printLO layoutObs)
+printLO (Paragraph contents)    = empty $$ (stripnewLine (show(pSpec contents))) <> text "\n"
+printLO (EqnBlock contents)     = mathEqn <> text "\n"
   where
     mjDelimDisp d  = text "\\\\[" <> stripnewLine (show d) <> text "\\\\]" 
     mathEqn = mjDelimDisp $ spec contents
-printLO (Table _ rows r b t)            = empty $$ makeTable rows (pSpec r) b (pSpec t)
-printLO (Definition _ ssPs l)           = empty $$ makeDefn ssPs (pSpec l) <> text "\n"
-printLO (List t)                        = empty $$ makeList t 0 <> text "\n"
-printLO (Figure r c f _)                = makeFigure (pSpec r) (pSpec c) (text f)
-printLO (Bib bib)                       = makeBib bib
-printLO Graph{}                         = empty 
-printLO CodeBlock {}                    = empty
+printLO (Table _ rows r b t)    = empty $$ makeTable rows (pSpec r) b (pSpec t)
+printLO (Definition _ ssPs l)   = empty $$ makeDefn ssPs (pSpec l) <> text "\n"
+printLO (List t)                = empty $$ makeList t 0 <> text "\n"
+printLO (Figure r c f _)        = makeFigure (pSpec r) (pSpec c) (text f)
+printLO (Bib bib)               = makeBib bib
+printLO Graph{}                 = empty 
+printLO CodeBlock {}            = empty
 
 printLO' :: LayoutObj -> Doc
 printLO' e = stripnewLine $ show (printLO e)
 
-
--- | Called by build, uses 'printLO' to render the layout
--- objects in Doc format.
-print :: [LayoutObj] -> Doc
-print = foldr (($$) . printLO) empty
+-----------------------------------------------------------------
+----------------------- SPEC PRINTING ---------------------------
+-----------------------------------------------------------------
 
 pSpec :: Spec -> Doc
-pSpec (E e)  = text "\\\\(" <> pExpr e <> text "\\\\)" -- symbols used
-pSpec (a :+: b) = pSpec a <> pSpec b
-pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr s invalid
+pSpec (E e)                = text "\\\\(" <> pExpr e <> text "\\\\)" -- symbols used
+pSpec (a :+: b)            = pSpec a <> pSpec b
+pSpec (S s)                = either error (text . concatMap escapeChars) $ L.checkValidStr s invalid
   where
     invalid = ['<', '>']
     escapeChars '&' = "\\&"
     escapeChars c = [c]
-pSpec (Sp s)    = text $ unPH $ L.special s
-pSpec HARDNL    = empty
-pSpec (Ref Internal r a)      = reflink     (text r) (pSpec a)
-pSpec (Ref (Cite2 n)   r a)    = reflinkInfo (text r) (pSpec a) (pSpec n)
-pSpec (Ref External r a)      = reflinkURI  (text r) (pSpec a)
-pSpec EmptyS    = text "" -- Expected in the output
-pSpec (Quote q) = doubleQuotes $ pSpec q
+pSpec (Sp s)               = text $ unPH $ L.special s
+pSpec HARDNL               = empty
+pSpec (Ref Internal  r a)  = reflink     (text r) (pSpec a)
+pSpec (Ref (Cite2 n) r a)  = reflinkInfo (text r) (pSpec a) (pSpec n)
+pSpec (Ref External  r a)  = reflinkURI  (text r) (pSpec a)
+pSpec EmptyS               = text "" 
+pSpec (Quote q)            = doubleQuotes $ pSpec q
+
+spec :: Spec -> Doc
+spec (E ex) = pExpr ex
+spec e = printMath $ toMathHelper $ TeX.spec e
+  where
+    toMathHelper (PL g) = PL (\_ -> g Math)
+
+-----------------------------------------------------------------
+-------------------- EXPRESSION PRINTING ------------------------
+-----------------------------------------------------------------
+
+-- | FIXME: currently, just overiding TeX functions which are 
+-- different for markdown. look for more elageant way
 
 -- | Print an expression to a document.
 pExpr :: Expr -> Doc
@@ -103,11 +118,9 @@ pExpr (Spc Thin)     = text "\\\\," --
 pExpr (Sqrt e)       = commandD "sqrt" (pExpr e)
 pExpr e              = printMath $ toMath $ TeX.pExpr e
 
-spec :: Spec -> Doc
-spec (E ex) = pExpr ex
-spec e = printMath $ toMathHelper $ TeX.spec e
-  where
-    toMathHelper (PL g) = PL (\_ -> g Math)
+-- | Helper for rendering a D from Latex print
+printMath :: D -> Doc
+printMath = (`runPrint` Math)
 
 commandD :: String -> Doc -> Doc
 commandD s c = (bslash <> text s) <> br c
@@ -151,14 +164,17 @@ mkEnv nm d =
   (text ("\\begin" ++ brace nm)) $$ 
   d $$
   (text ("\\end" ++ brace nm))
-  
+
+-----------------------------------------------------------------
+-------------------- TABLE PRINTING -----------------------------
+-----------------------------------------------------------------
 
 -- | Renders Markdown table, called by 'printLO'
 makeTable :: [[Spec]] -> Doc -> Bool -> Doc -> Doc
-makeTable [] _ _ _      = error "No table to print"
-makeTable (l:lls) r b t = (refwrap r empty)
-  $$ (empty $$ (makeHeaderCols l sizes $$ makeRows lls sizes) <> text "\n" 
-  $$ if b then bold (caption t) <> text "\n" else empty)
+makeTable []      _ _ _  = error "No table to print"
+makeTable (l:lls) r b t  = (refwrap r empty) $$
+  (empty $$ (makeHeaderCols l sizes $$ makeRows lls sizes) <> text "\n" $$
+  if b then bold (caption t) <> text "\n" else empty)
     where
       sizes = columnSize (l:lls)
 
@@ -166,30 +182,34 @@ makeTable (l:lls) r b t = (refwrap r empty)
 makeRows :: [[Spec]] -> [Int] -> Doc
 makeRows lls sizes = foldr (($$) . (flip makeColumns sizes)) empty lls
 
+-- | Helper for getting table column size
 columnSize :: [[Spec]] -> [Int]
 columnSize = map (maximum . map (docLength . pSpec)) . transpose
 
-docLength :: Doc -> Int
-docLength d = length $ show d
-
 -- | makeHeaderCols: Helper for creating table header row (each of the column header cells)
--- | makeColumns: Helper for creating table columns
 makeHeaderCols, makeColumns :: [Spec] -> [Int] -> Doc
 makeHeaderCols l sizes = header $$ genMDtable
-  where header = pipe <> hcat(punctuate pipe (zipWith makeCell l sizes)) <> pipe        
+  where header     = pipe <> hcat(punctuate pipe (zipWith makeCell l sizes)) <> pipe        
         genMDtable = pipe <> hcat(punctuate pipe (map makeDashColumns sizes)) <> pipe
 
+-- | makeColumns: Helper for creating table columns
+makeColumns ls sizes = (pipe <> hcat(punctuate pipe (zipWith makeCell ls sizes)) <> pipe)
+
+-- | Helper for making table heading seperation 
 makeDashColumns :: Int -> Doc
 makeDashColumns size = text ":" <> text (replicate (size - 1) '-')
 
-makeColumns ls sizes = (pipe <> hcat(punctuate pipe (zipWith makeCell ls sizes)) <> pipe)
-
+-- | Helper for rendering a table cell
 makeCell :: Spec -> Int -> Doc
 makeCell ls size = content <> spaces
   where
-    content = pSpec ls
+    content     = pSpec ls
     numOfSpaces = size - docLength content
-    spaces = text $ replicate numOfSpaces ' '
+    spaces      = text $ replicate numOfSpaces ' '
+
+-----------------------------------------------------------------
+-------------------- DEFINITION PRINTING ------------------------
+-----------------------------------------------------------------
 
 -- | Renders definition tables (Data, General, Theory, etc.)
 makeDefn :: [(String,[LayoutObj])] -> Doc -> Doc
@@ -198,20 +218,24 @@ makeDefn ps l = makeDHeader ps l $$ makeDHeaderRow l size $$ makeDRows ps size
   where
     size = defnCSize ps
 
+-- | Calculates the maximum cell size of each column in
+-- the definition table
 defnCSize :: [(String,[LayoutObj])] -> (Int, Int)
 defnCSize ps = (longestString, longestLO)
   where
     longestString = maximum $ map (length . fst) ps
-    longestLO = maximum $ map (length . show . makeLO) ps
+    longestLO     = maximum $ map (length . show . makeLO) ps
 
+-- | Renders the title/header of the definition table
 makeDHeader :: [(String, [LayoutObj])] -> Doc -> Doc
 makeDHeader ps l = text "## " <> label <+> br (text "#" <> l) <> text "\n"
   where
-    lo = lookup "Label" ps
+    lo    = lookup "Label" ps
     label = case lo of
       Just layoutObj -> hcat $ map printLO' layoutObj
       Nothing -> l
 
+-- | Renders the header rows of the definition table
 makeDHeaderRow :: Doc -> (Int, Int) -> Doc
 makeDHeaderRow lbl size = pipe <> lh <> pipe <> rh <> pipe $$ ls <> rs 
   where
@@ -220,64 +244,77 @@ makeDHeaderRow lbl size = pipe <> lh <> pipe <> rh <> pipe $$ ls <> rs
     ls = text "|:" <> text (replicate (fst size - 1) '-') <> pipe
     rs = text ":" <> text (replicate (snd size - 1) '-') <> pipe
 
+-- | Renders the rows of the definition table
 makeDRows :: [(String,[LayoutObj])] -> (Int, Int) -> Doc
-makeDRows [] _  = error "No fields to create defn table"
-makeDRows [(f,d)] size   = makeDRow (f,d) size
+makeDRows []         _    = error "No fields to create defn table"
+makeDRows [(f,d)]    size = makeDRow (f,d) size
 makeDRows ((f,d):ps) size = makeDRow (f,d) size $$ makeDRows ps size
 
+-- | Converts the [LayoutObj] to a Doc
 makeLO :: (String, [LayoutObj]) -> Doc
 makeLO (f,d) =
       if f=="Notes" then ul (hcat $ map (processDefnLO f) d) 
       else (hcat $ map (processDefnLO f) d)
 
+-- | Renders a single row of the definition table
 makeDRow :: (String,[LayoutObj]) -> (Int, Int) -> Doc
 makeDRow (f,d) size = pipe <> left <> pipe <> right <> pipe
   where
     label = text f
-    lo =  makeLO (f,d)
-    left = label <> text (replicate (fst size - docLength label) ' ')
+    lo    =  makeLO (f,d)
+    left  = label <> text (replicate (fst size - docLength label) ' ')
     right = lo <> text (replicate (snd size - docLength lo) ' ')
 
 processDefnLO :: String -> LayoutObj -> Doc
 processDefnLO "Notes" (Paragraph con) = li $ pSpec con
 processDefnLO _ lo                    = printLO' lo
 
+-----------------------------------------------------------------
+----------------------- LIST PRINTING ---------------------------
+-----------------------------------------------------------------
+
 -- | Renders lists
 makeList :: ListType -> Int -> Doc -- FIXME: ref id's should be folded into the li
-makeList (Simple items) _      = vcat $ 
+makeList (Simple      items) _  = vcat $ 
   map (\(b,e,l) -> (mlref l empty) $$ (pSpec b <> text ": " <> sItem e <> text "\n") $$ empty) items
-makeList (Desc items) bl       = vcat $ 
-  map (\(b,e,l) -> pa $ ba $ pSpec b <> text ": " <> pItem e bl) items
-makeList (Ordered items) bl    = vcat $ map (\(i,l) -> mlref l $ pItem i bl) items
-makeList (Unordered items) bl  = vcat $ map (\(i,l) -> mlref l $ pItem i bl) items
-makeList (Definitions items) _ = ul $ hcat $ map (\(b,e,l) -> li $ mlref l $ pSpec b <> text " is the" <+> sItem e) items
+makeList (Desc        items) bl = vcat $ 
+  map (\(b,e,l) -> pa $ ba $ pSpec b <> text ": " <> pItem e bl) items -- | LOOK INTO WHAT THIS IS
+makeList (Ordered     items) bl = vcat $ map (\(i,l) -> mlref l $ pItem i bl) items
+makeList (Unordered   items) bl = vcat $ map (\(i,l) -> mlref l $ pItem i bl) items
+makeList (Definitions items) _  = ul $ hcat $ map (\(b,e,l) -> li $ mlref l $ pSpec b <> text " is the" <+> sItem e) items
 
--- | Helper for setting up references
+-- | Helper for setting up reference anchors
 mlref :: Maybe Label -> Doc -> Doc
 mlref = maybe id $ refwrap . pSpec
 
--- divref :: Maybe Label -> Doc
--- divref = maybe id $ refwrap . empty
-
--- | Helper for rendering list items
+-- | Helper for rendering bulleted markdown list items
 pItem :: ItemType ->  Int -> Doc
-pItem (Flat s)     i = text (replicate i ' ') <> text "- " <> pSpec s
+pItem (Flat   s)   i = text (replicate i ' ') <> text "- " <> pSpec s
 pItem (Nested s l) i = vcat [text (replicate i ' ') <> text "- " <> pSpec s, makeList l (i+2)]
-  --where listIndent = strBreak "\"" (show $ makeList l)
---indent <> text "\"- " <> pSpec s <> text "\\n\","
 
+-- | Helper for non-bulleted markdown list items
 sItem :: ItemType -> Doc
-sItem (Flat s)     = pSpec s
+sItem (Flat   s)   = pSpec s
 sItem (Nested s l) = vcat [pSpec s, makeList l 0]
+
+-----------------------------------------------------------------
+---------------------- FIGURE PRINTING --------------------------
+-----------------------------------------------------------------
 
 -- | Renders figures in HTML
 makeFigure :: Doc -> Doc -> Doc -> Doc
 makeFigure r c f = (refwrap r empty) $$ (image f c)
 
+-----------------------------------------------------------------
+------------------ Bibliography Printing ------------------------
+-----------------------------------------------------------------
+
 -- | Renders assumptions, requirements, likely changes
 makeRefList :: Doc -> Doc -> Doc -> Doc
 makeRefList a l i = refwrap l (i <> text ": " <> a)
 
+-- | Renders the bibliography
+-- | FIXME: currently uses HTML, change to Markdown
 makeBib :: BibRef -> Doc
 makeBib = vcat .
   zipWith (curry (\(x,(y,z)) -> makeRefList z y x))

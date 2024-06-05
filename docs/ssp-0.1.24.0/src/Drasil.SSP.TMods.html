@@ -25,9 +25,9 @@
 </span><span id="line-25"></span><span>  </span><span class="annot"><a href="Drasil.SSP.Unitals.html#resistiveShear"><span class="hs-identifier">resistiveShear</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#shrStress"><span class="hs-identifier">shrStress</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#totNormStress"><span class="hs-identifier">totNormStress</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-26"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SSP.DataDefs.html"><span class="hs-identifier">Drasil.SSP.DataDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SSP.DataDefs.html#normStressDD"><span class="hs-identifier">normStressDD</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-27"></span><span>
-</span><span id="line-28"></span><span class="hs-comment">--------------------------</span><span>
-</span><span id="line-29"></span><span class="hs-comment">--  Theoretical Models  --</span><span>
-</span><span id="line-30"></span><span class="hs-comment">--------------------------</span><span>
+</span><span id="line-28"></span><span class="hs-comment">------------------------</span><span>
+</span><span id="line-29"></span><span class="hs-comment">-- Theoretical Models --</span><span>
+</span><span id="line-30"></span><span class="hs-comment">------------------------</span><span>
 </span><span id="line-31"></span><span class="annot"><a href="Drasil.SSP.TMods.html#tMods"><span class="hs-identifier hs-type">tMods</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span class="hs-special">]</span><span>
 </span><span id="line-32"></span><span id="tMods"><span class="annot"><span class="annottext">tMods :: [TheoryModel]
 </span><a href="Drasil.SSP.TMods.html#tMods"><span class="hs-identifier hs-var hs-var">tMods</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TheoryModel
@@ -143,7 +143,7 @@ r -&gt; DecRef
 </span><a href="Drasil.SSP.Unitals.html#fy"><span class="hs-identifier hs-var">fy</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#genericM"><span class="hs-identifier hs-var">genericM</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-58"></span><span>
-</span><span id="line-59"></span><span class="hs-comment">-- FIXME: variable &quot;i&quot; is a hack.  But we need to sum over something!</span><span>
+</span><span id="line-59"></span><span class="hs-comment">-- FIXME: variable &quot;i&quot; is a hack. But we need to sum over something!</span><span>
 </span><span id="line-60"></span><span class="annot"><a href="Drasil.SSP.TMods.html#equilibriumCS"><span class="hs-identifier hs-type">equilibriumCS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstraintSet</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
 </span><span id="line-61"></span><span id="equilibriumCS"><span class="annot"><span class="annottext">equilibriumCS :: ConstraintSet ModelExpr
 </span><a href="Drasil.SSP.TMods.html#equilibriumCS"><span class="hs-identifier hs-var hs-var">equilibriumCS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall e. ConceptChunk -&gt; NonEmpty e -&gt; ConstraintSet e

@@ -296,7 +296,7 @@ Sentence -&gt; [c] -&gt; SCSSub
 </span><span id="line-109"></span><span>  </span><span class="hs-comment">-- should be removed) symbols. But that's for another time. This is &quot;fine&quot;</span><span>
 </span><span id="line-110"></span><span>  </span><span class="hs-comment">-- because _quants are only used relative to #1658.</span><span>
 </span><span id="line-111"></span><span>  </span><span class="annot"><span class="annottext">_quants :: [QuantityDict]
-</span><span class="hs-identifier hs-var">_quants</span></span><span>      </span><span class="hs-glyph">=</span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="hs-comment">-- map qw iMods ++ map qw symbolsAll,</span><span>
+</span><span class="hs-identifier hs-var">_quants</span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="hs-comment">-- map qw iMods ++ map qw symbolsAll,</span><span>
 </span><span id="line-112"></span><span>  </span><span class="annot"><span class="annottext">_concepts :: [DefinedQuantityDict]
 </span><span class="hs-identifier hs-var">_concepts</span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-113"></span><span>  </span><span class="annot"><span class="annottext">_instModels :: [InstanceModel]
@@ -957,9 +957,9 @@ r -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">highSchoolPhysics</span></span><span class="hs-special">]</span><span>
 </span><span id="line-279"></span><span>
-</span><span id="line-280"></span><span class="hs-comment">-------------------------------</span><span>
-</span><span id="line-281"></span><span class="hs-comment">-- 3.3 : System Constraints  --</span><span>
-</span><span id="line-282"></span><span class="hs-comment">-------------------------------</span><span>
+</span><span id="line-280"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-281"></span><span class="hs-comment">-- 3.3 : System Constraints --</span><span>
+</span><span id="line-282"></span><span class="hs-comment">------------------------------</span><span>
 </span><span id="line-283"></span><span>
 </span><span id="line-284"></span><span class="hs-comment">---------------------------------------------</span><span>
 </span><span id="line-285"></span><span class="hs-comment">-- SECTION 4 : SPECIFIC SYSTEM DESCRIPTION --</span><span>
@@ -1013,7 +1013,7 @@ r -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">game</span></span><span class="hs-special">,</span><span>
 </span><span id="line-300"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;need&quot;</span></span><span class="hs-special">,</span><span>  </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;need&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">physLib</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -1229,7 +1229,7 @@ secCollisionDiagram = Paragraph $ foldlSent [ S &quot;This section presents an i
 </span><a href="Drasil.GamePhysics.Body.html#offShelfSolsIntro"><span class="hs-identifier hs-var">offShelfSolsIntro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Contents
 </span><a href="Drasil.GamePhysics.Body.html#offShelfSols2DList"><span class="hs-identifier hs-var">offShelfSols2DList</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-402"></span><span>                </span><span class="annot"><span class="annottext">Contents
-</span><a href="Drasil.GamePhysics.Body.html#offShelfSolsMid"><span class="hs-identifier hs-var">offShelfSolsMid</span></a></span><span class="hs-special">,</span><span>   </span><span class="annot"><span class="annottext">Contents
+</span><a href="Drasil.GamePhysics.Body.html#offShelfSolsMid"><span class="hs-identifier hs-var">offShelfSolsMid</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Contents
 </span><a href="Drasil.GamePhysics.Body.html#offShelfSols3DList"><span class="hs-identifier hs-var">offShelfSols3DList</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-403"></span><span>
 </span><span id="line-404"></span><span class="annot"><a href="Drasil.GamePhysics.Body.html#offShelfSolsIntro"><span class="hs-identifier hs-type">offShelfSolsIntro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Body.html#offShelfSols2DList"><span class="hs-identifier hs-type">offShelfSols2DList</span></a></span><span class="hs-special">,</span><span> </span><span>
@@ -1315,9 +1315,9 @@ Foldable t =&gt;
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Newton Game Dynamics: http://newtondynamics.com/&quot;</span></span><span class="hs-special">]</span><span>
 </span><span id="line-422"></span><span>
-</span><span id="line-423"></span><span class="hs-comment">-----------------------------------------------------</span><span>
-</span><span id="line-424"></span><span class="hs-comment">-- SECTION 8 : Traceability Matrices and Graph    --</span><span>
-</span><span id="line-425"></span><span class="hs-comment">-----------------------------------------------------</span><span>
+</span><span id="line-423"></span><span class="hs-comment">-------------------------------------------------</span><span>
+</span><span id="line-424"></span><span class="hs-comment">-- SECTION 8 : Traceability Matrices and Graph --</span><span>
+</span><span id="line-425"></span><span class="hs-comment">-------------------------------------------------</span><span>
 </span><span id="line-426"></span><span>
 </span><span id="line-427"></span><span class="hs-comment">-----------------------------------</span><span>
 </span><span id="line-428"></span><span class="hs-comment">-- VALUES OF AUXILIARY CONSTANTS --</span><span>

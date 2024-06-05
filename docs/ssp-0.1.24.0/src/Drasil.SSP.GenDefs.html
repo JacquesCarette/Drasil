@@ -44,9 +44,9 @@
 </span><span id="line-44"></span><span>  </span><span class="annot"><a href="Drasil.SSP.Unitals.html#surfAngle"><span class="hs-identifier">surfAngle</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#surfLngth"><span class="hs-identifier">surfLngth</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#surfLoad"><span class="hs-identifier">surfLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#watrForce"><span class="hs-identifier">watrForce</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#waterHght"><span class="hs-identifier">waterHght</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#waterWeight"><span class="hs-identifier">waterWeight</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#dryVol"><span class="hs-identifier">dryVol</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-45"></span><span>  </span><span class="annot"><a href="Drasil.SSP.Unitals.html#satVol"><span class="hs-identifier">satVol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#yi"><span class="hs-identifier">yi</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Unitals.html#zcoord"><span class="hs-identifier">zcoord</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-46"></span><span>
-</span><span id="line-47"></span><span class="hs-comment">---------------------------</span><span>
-</span><span id="line-48"></span><span class="hs-comment">--  General Definitions  --</span><span>
-</span><span id="line-49"></span><span class="hs-comment">---------------------------</span><span>
+</span><span id="line-47"></span><span class="hs-comment">-------------------------</span><span>
+</span><span id="line-48"></span><span class="hs-comment">-- General Definitions --</span><span>
+</span><span id="line-49"></span><span class="hs-comment">-------------------------</span><span>
 </span><span id="line-50"></span><span class="annot"><a href="Drasil.SSP.GenDefs.html#generalDefinitions"><span class="hs-identifier hs-type">generalDefinitions</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span class="hs-special">]</span><span>
 </span><span id="line-51"></span><span id="generalDefinitions"><span class="annot"><span class="annottext">generalDefinitions :: [GenDefn]
 </span><a href="Drasil.SSP.GenDefs.html#generalDefinitions"><span class="hs-identifier hs-var hs-var">generalDefinitions</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">GenDefn
@@ -642,7 +642,7 @@ r -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">equation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;by&quot;</span></span><span class="hs-special">,</span><span>  </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;by&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#genericA"><span class="hs-identifier hs-var">genericA</span></a></span><span> </span><span class="annot"><span class="annottext">forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
@@ -2993,7 +2993,7 @@ r -&gt; Sentence
 </span><span class="hs-identifier hs-var">weight</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;dry portions&quot;</span></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-string">&quot;dry portions&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">weight</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -3157,7 +3157,7 @@ r -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Drasil.SSP.Unitals.html#slcWght"><span class="hs-identifier hs-var">slcWght</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="Drasil.SSP.Unitals.html#slcWght"><span class="hs-identifier hs-var">slcWght</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;are defined as&quot;</span></span><span class="hs-special">]</span><span>
 </span><span id="line-568"></span><span>

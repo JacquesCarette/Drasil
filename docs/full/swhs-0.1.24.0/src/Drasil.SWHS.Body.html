@@ -679,7 +679,7 @@ Sentence -&gt; [c] -&gt; SCSSub
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;provide a novel way of storing&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+.</span></span><span>  </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">energy</span></span><span class="hs-special">,</span><span>
 </span><span id="line-205"></span><span>  </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -811,7 +811,7 @@ Sentence -&gt; [c] -&gt; SCSSub
 </span><span class="hs-string">&quot;from level 3 or 4&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-251"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;mechanical&quot;</span></span><span class="hs-special">,</span><span>  </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;mechanical&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">engineering</span></span><span class="hs-special">]</span><span>
 </span><span id="line-252"></span><span>
@@ -1296,7 +1296,7 @@ r -&gt; Sentence
 </span><span id="line-396"></span><span>
 </span><span id="line-397"></span><span class="annot"><a href="Drasil.SWHS.Body.html#goalInputs"><span class="hs-identifier hs-type">goalInputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-398"></span><span id="goalInputs"><span class="annot"><span class="annottext">goalInputs :: Purpose
-</span><a href="Drasil.SWHS.Body.html#goalInputs"><span class="hs-identifier hs-var hs-var">goalInputs</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><a href="Drasil.SWHS.Body.html#goalInputs"><span class="hs-identifier hs-var hs-var">goalInputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#tempC"><span class="hs-identifier hs-var">tempC</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
@@ -1629,7 +1629,7 @@ ConceptChunk
 </span><a href="#local-6989586621679088590"><span class="hs-identifier hs-var">g1hfc</span></a></span></span><span> </span><span id="local-6989586621679088589"><span class="annot"><span class="annottext">GenDefn
 </span><a href="#local-6989586621679088589"><span class="hs-identifier hs-var">g2hfp</span></a></span></span><span> </span><span id="local-6989586621679088588"><span class="annot"><span class="annottext">h
 </span><a href="#local-6989586621679088588"><span class="hs-identifier hs-var">su</span></a></span></span><span> </span><span id="local-6989586621679088587"><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679088587"><span class="hs-identifier hs-var">ht</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span>
+</span><a href="#local-6989586621679088587"><span class="hs-identifier hs-var">ht</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-522"></span><span>  </span><span class="annot"><span class="annottext">Purpose -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSPCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall t. NamedIdea t =&gt; t -&gt; NP
@@ -1923,9 +1923,9 @@ r -&gt; Sentence
 </span><span id="line-586"></span><span class="hs-comment">------------------------</span><span>
 </span><span id="line-587"></span><span class="hs-comment">-- Traceabilty Graphs --</span><span>
 </span><span id="line-588"></span><span class="hs-comment">------------------------</span><span>
-</span><span id="line-589"></span><span class="hs-comment">-------------------------------------------------</span><span>
-</span><span id="line-590"></span><span class="hs-comment">-- Section 8 :  Specification Parameter Values --</span><span>
-</span><span id="line-591"></span><span class="hs-comment">-------------------------------------------------</span><span>
+</span><span id="line-589"></span><span class="hs-comment">------------------------------------------------</span><span>
+</span><span id="line-590"></span><span class="hs-comment">-- Section 8 : Specification Parameter Values --</span><span>
+</span><span id="line-591"></span><span class="hs-comment">------------------------------------------------</span><span>
 </span><span id="line-592"></span><span class="hs-comment">----------------------------</span><span>
 </span><span id="line-593"></span><span class="hs-comment">-- Section 9 : References --</span><span>
 </span><span id="line-594"></span><span class="hs-comment">----------------------------</span><span>

@@ -180,10 +180,20 @@ count c (x:xs)
 -- | Renders definition tables (Data, General, Theory, etc.)
 makeDefn :: [(String,[LayoutObj])] -> Doc -> Doc
 makeDefn [] _  = error "L.Empty definition"
-makeDefn ps l = (refwrap l empty) $$ makeDHeader (text "Refname") l $$ makeDRows ps
+makeDefn ps l = makeDHeader ps l $$ makeDHeaderRow (text "Refname") l $$ makeDRows ps
 
-makeDHeader :: Doc -> Doc -> Doc
-makeDHeader lbl txt = pipe <> lbl <> pipe <> txt <> pipe $$ text "|:--- |:--- |" 
+makeDHeader :: [(String, [LayoutObj])] -> Doc -> Doc
+makeDHeader ps l = case lo of
+  Just layoutObj -> text "## " <> label <+> br (text "#" <> l) <> text "\n"
+    -- text "<h2 align=\"center\">" $$ text "\n" $$ label <> text "</h2>\n"
+    where
+      label = hcat $ map printLO' layoutObj
+  Nothing -> text "## " <> l
+  where
+    lo = lookup "Label" ps
+
+makeDHeaderRow :: Doc -> Doc -> Doc
+makeDHeaderRow lbl txt = pipe <> lbl <> pipe <> txt <> pipe $$ text "|:--- |:--- |" 
 
 makeDRows :: [(String,[LayoutObj])] -> Doc
 makeDRows []         = error "No fields to create defn table"

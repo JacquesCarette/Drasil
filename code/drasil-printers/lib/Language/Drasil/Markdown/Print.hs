@@ -194,7 +194,15 @@ makeCell ls size = content <> spaces
 -- | Renders definition tables (Data, General, Theory, etc.)
 makeDefn :: [(String,[LayoutObj])] -> Doc -> Doc
 makeDefn [] _  = error "L.Empty definition"
-makeDefn ps l = makeDHeader ps l $$ makeDHeaderRow (text "Refname") l $$ makeDRows ps
+makeDefn ps l = makeDHeader ps l $$ makeDHeaderRow l size $$ makeDRows ps size
+  where
+    size = defnCSize ps
+
+defnCSize :: [(String,[LayoutObj])] -> (Int, Int)
+defnCSize ps = (longestString, longestLO)
+  where
+    longestString = maximum $ map (length . fst) ps
+    longestLO = maximum $ map (length . show . makeLO) ps
 
 makeDHeader :: [(String, [LayoutObj])] -> Doc -> Doc
 makeDHeader ps l = text "## " <> label <+> br (text "#" <> l) <> text "\n"
@@ -204,20 +212,31 @@ makeDHeader ps l = text "## " <> label <+> br (text "#" <> l) <> text "\n"
       Just layoutObj -> hcat $ map printLO' layoutObj
       Nothing -> l
 
-makeDHeaderRow :: Doc -> Doc -> Doc
-makeDHeaderRow lbl txt = pipe <> lbl <> pipe <> txt <> pipe $$ text "|:--- |:--- |" 
-
-makeDRows :: [(String,[LayoutObj])] -> Doc
-makeDRows []         = error "No fields to create defn table"
-makeDRows [(f,d)]    = (makeDRow f d)
-makeDRows ((f,d):ps) = (makeDRow f d) $$ makeDRows ps
-
-makeDRow :: String -> [LayoutObj] -> Doc
-makeDRow f d = pipe <> text f <> pipe <> content <> pipe
+makeDHeaderRow :: Doc -> (Int, Int) -> Doc
+makeDHeaderRow lbl size = pipe <> lh <> pipe <> rh <> pipe $$ ls <> rs 
   where
-    content =
+    lh = text "Refname" <> text (replicate (fst size - 7) ' ')
+    rh = lbl <> text (replicate (snd size - docLength lbl) ' ')
+    ls = text "|:" <> text (replicate (fst size - 1) '-') <> pipe
+    rs = text ":" <> text (replicate (snd size - 1) '-') <> pipe
+
+makeDRows :: [(String,[LayoutObj])] -> (Int, Int) -> Doc
+makeDRows [] _  = error "No fields to create defn table"
+makeDRows [(f,d)] size   = makeDRow (f,d) size
+makeDRows ((f,d):ps) size = makeDRow (f,d) size $$ makeDRows ps size
+
+makeLO :: (String, [LayoutObj]) -> Doc
+makeLO (f,d) =
       if f=="Notes" then ul (hcat $ map (processDefnLO f) d) 
       else (hcat $ map (processDefnLO f) d)
+
+makeDRow :: (String,[LayoutObj]) -> (Int, Int) -> Doc
+makeDRow (f,d) size = pipe <> left <> pipe <> right <> pipe
+  where
+    label = text f
+    lo =  makeLO (f,d)
+    left = label <> text (replicate (fst size - docLength label) ' ')
+    right = lo <> text (replicate (snd size - docLength lo) ' ')
 
 processDefnLO :: String -> LayoutObj -> Doc
 processDefnLO "Notes" (Paragraph con) = li $ pSpec con

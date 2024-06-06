@@ -202,8 +202,8 @@ startIntro prgm _ progName = foldlSent [
   +:+ S "effect of falling glass. Therefore" `sC` phrase prgm, S "is needed to" 
   +:+ S "predict whether a", phrase glaSlab, S "can withstand a", phrase blast, 
   S "under given conditions.", S "For example" `sC` 
-  S "we might wish to know whether a pane of", phrase glass, S "from a gas main",
-  phrase explosion, S "from a small fertilizer truck bomb." +:+ 
+  S "we might wish to know whether a pane of", phrase glass, S "fails from a gas main",
+  phrase explosion `S.or_` S "from a small fertilizer truck bomb." +:+ 
   S"The program documented here is called", short progName]
 
 undIR, appStanddIR :: [Sentence]

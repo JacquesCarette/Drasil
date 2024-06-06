@@ -314,7 +314,7 @@ demandq       = dcc "demandq"     (nounPhraseSP "applied load (demand)")
   "3 second duration equivalent pressure"
 eqTNTChar     = dcc "eqTNTChar"   (nounPhraseSP "equivalent TNT charge mass")
   "mass of TNT placed on the ground in a hemisphere that represents the design explosive threat"
-explosion     = dcc "explosion"   (nounPhraseSP "explosion") 
+explosion     = dcc "explosion"   (cn' "explosion") 
   "a destructive shattering of something"
 fTemperedGl   = cc' fullyT
   (foldlSent_ [S "a flat, monolithic, glass lite of uniform thickness that has",

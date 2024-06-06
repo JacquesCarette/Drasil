@@ -60,7 +60,7 @@ velocityDerivSent1, velocityIXDerivSent2, velocityDerivSent3,
 velocityDerivSent1 = S "At a given point in time" `sC` phrase velocity +:+ S "may be defined as"
 velocityIXDerivSent2 = S "We also know the" +:+ phrase horizontalPos
 velocityDerivSent3 = S "Applying this,"
-velocityDerivSent4 = eS' lenRod `S.is` S "constant" `S.wrt` S  "time, so"
+velocityDerivSent4 = eS' lenRod `S.is` S "constant" `S.wrt` S "time, so"
 velocityDerivSent5 = S "Therefore, using the chain rule,"
 
 ---------------------
@@ -227,7 +227,7 @@ periodPendDerivSents = [periodPendDerivSent1, periodPendDerivSent2]
 periodPendDerivSent1, periodPendDerivSent2 :: Sentence
 periodPendDerivSent1 = atStartNP (period `the_ofThe` pendulum) +:+ S "can be defined from the general definition for the" +:+ phrase equation `S.of_`
                 namedRef angFrequencyGD (phrase angFrequencyDD)
-periodPendDerivSent2 =  S "Therefore from the data definition of the" +:+ phrase equation `S.for` namedRef angFrequencyDD (phrase angFrequencyDD) `sC` S "we have"
+periodPendDerivSent2 = S "Therefore from the data definition of the" +:+ phrase equation `S.for` namedRef angFrequencyDD (phrase angFrequencyDD) `sC` S "we have"
 
 periodPendNotes :: Sentence
 periodPendNotes = atStartNP (NP.the (frequency `and_` period)) +:+ S "are defined in the data definitions for" +:+ namedRef frequencyDD (phrase frequencyDD) `S.and_`

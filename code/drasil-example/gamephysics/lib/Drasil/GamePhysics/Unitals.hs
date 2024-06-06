@@ -310,7 +310,7 @@ numParticles = vc "n" (nounPhraseSP "number of particles in a rigid body") lN In
 
 lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
   angVeloCons, forceCons, torqueCons, veloCons, restCoefCons, veloOutCons,
-  angVeloOutCons, orientOutCons, posOutCons  :: ConstrConcept
+  angVeloOutCons, orientOutCons, posOutCons :: ConstrConcept
 
 inputConstraints :: [UncertQ]
 inputConstraints = map (`uq` defaultUncrt)

@@ -56,7 +56,7 @@ motionContextP2
        S "These equations can be applied for both the", phrase verticalMotion `S.andThe`
        phrase horizontalMotion :+: S ", as follows:"]
 
-hMintro, hMequations, hMconcl, vMintro, vMequations, vMconcl, summary:: Contents
+hMintro, hMequations, hMconcl, vMintro, vMequations, vMconcl, summary :: Contents
 hMintro = foldlSP_ [
             S "For", phrase projMotion +:+ S "the", phrase acceleration, 
             S "in the horizontal direction is and equal to zero" +:+. 
@@ -89,7 +89,7 @@ summary = foldlSP [S "In addition to knowing that the horizontal component of", 
 procforAnls :: Contents
 procforAnls = foldlSP [S "Free-flight", phrase projMotion, S "problems can be solved using the following", phrase procedure]
 
-procforAnlsHead, stepOneHead, stepTwoHead, stepThreeHead, stepFourHead, stepFourOneHead, stepFourTwoHead, stepFiveHead:: Contents
+procforAnlsHead, stepOneHead, stepTwoHead, stepThreeHead, stepFourHead, stepFourOneHead, stepFourTwoHead, stepFiveHead :: Contents
 procforAnlsHead = foldlSP_ [headSent 2 (S "Procedure for Analysis")]
 stepOneHead     = foldlSP_ [headSent 3 (S "Step 1: Coordinate System")]
 stepTwoHead     = foldlSP_ [headSent 3 (S "Step 2: Identify Knowns")] 

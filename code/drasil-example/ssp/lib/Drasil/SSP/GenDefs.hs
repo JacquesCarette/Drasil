@@ -44,9 +44,9 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
   surfAngle, surfLngth, surfLoad, watrForce, waterHght, waterWeight, dryVol,
   satVol, yi, zcoord)
 
----------------------------
---  General Definitions  --
----------------------------
+-------------------------
+-- General Definitions --
+-------------------------
 generalDefinitions :: [GenDefn]
 generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD,
  effNormFGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD, weightGD,
@@ -137,7 +137,7 @@ resShrDeriv :: Derivation
 resShrDeriv = mkDerivNoHeader [foldlSent [S "Derived by substituting",
   refS normStressDD `S.and_` refS tangStressDD, S "into the Mohr-Coulomb", phrase shrStress `sC`
   refS mcShrStrgth `sC` S "and multiplying both sides of the",
-  phrase equation, S "by",  phraseNP (genericA `the_ofThe` slice) `S.in_`
+  phrase equation, S "by", phraseNP (genericA `the_ofThe` slice) `S.in_`
   S "the shear-" :+: ch zcoord +:+. S "plane", S "Since", phraseNP (the slope),
   S "is assumed to extend infinitely in", phraseNP (the zDir),
   sParen (refS assumpPSC) `sC` S "the resulting", plural force,
@@ -545,7 +545,7 @@ sliceWghtDerivDryCaseSliceEqn = inxi slcWght $= inxi baseWthX `mulRe` oneHalf `m
 sliceWghtDerivMixCaseIntroSentence = [S "For the case where the",
   phrase waterTable, S "is between", phraseNP (NP.the (slopeSrf `and_`
   slpSrf)) `sC` phraseNP (the slcWght), S "are the sums of",
-  plural weight `S.the_ofThe` S "dry portions"  `S.and_` plural weight `S.ofThe`
+  plural weight `S.the_ofThe` S "dry portions" `S.and_` plural weight `S.ofThe`
   S "saturated portions of the" +:+. phrase soil,
   S "Substituting", plural value, S "for dry and saturated", phrase soil,
   S "into", phraseNP (NP.the (equation `for` weight)),
@@ -564,7 +564,7 @@ sliceWghtDerivMixCase2DSentence = [refS assumpPSC, S "again allows for",
   phrase slice +:+. S "edges", S "For the saturated portion, the parallel",
   S "sides of the trapezoid are", pluralNP (the len), S "between the",
   phraseNP (waterTable `and_` slpSrf), S "at", phraseNP (the slice) +:+.
-  S "edges", S "Thus" `sC` phraseNP (the slcWght),  S "are defined as"]
+  S "edges", S "Thus" `sC` phraseNP (the slcWght), S "are defined as"]
 
 sliceWghtDerivMixCaseWeightEqn = inxi slcWght $= inxi dryVol `mulRe` sy dryWeight `addRe`
   (inxi satVol `mulRe` sy satWeight)

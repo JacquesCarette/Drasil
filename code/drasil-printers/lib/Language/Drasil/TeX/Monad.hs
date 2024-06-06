@@ -85,10 +85,12 @@ instance Monoid (PrintLaTeX TP.Doc) where
 
 -- may revisit later
 -- | Since Text.PrettyPrint steals <>, use %% instead for $$.
+infixl 5 %%
 (%%) :: D -> D -> D
 (%%) = liftA2 (TP.$$)
 
 -- | Lifts Text.PrettyPrint's $+$. Above, with no overlapping. Associative.
+infixr 6 $+$
 ($+$) :: D -> D -> D
 ($+$) = liftA2 (TP.$+$)
 

@@ -66,7 +66,7 @@ sliceExpr n = idx (sy intNormForce) (int n) `mulRe` idx (sy shrResC) (int n) $=
 
 momExpr :: (ExprC r, LiteralC r) => (r -> r -> r) -> r
 momExpr _e_ = (neg (inxi intNormForce) `mulRe` (inxi sliceHght `addRe`(half (inxi baseWthX)
-  `mulRe`  tan (inxi baseAngle))) `addRe` (inxiM1 intNormForce `mulRe` (inxiM1 sliceHght $-
+  `mulRe` tan (inxi baseAngle))) `addRe` (inxiM1 intNormForce `mulRe` (inxiM1 sliceHght $-
   (half (inxi baseWthX) `mulRe` tan (inxi baseAngle)))) $-
   (inxi watrForce `mulRe` (oneThird `mulRe` inxi sliceHghtW `addRe` (half (inxi baseWthX) `mulRe`
   tan (inxi baseAngle)))) `addRe` (inxiM1 watrForce `mulRe` (oneThird `mulRe` inxiM1 sliceHghtW $-
@@ -77,7 +77,7 @@ momExpr _e_ = (neg (inxi intNormForce) `mulRe` (inxi sliceHght `addRe`(half (inx
 
 momExprNoKQ :: (ExprC r, LiteralC r) => (r -> r -> r) -> r
 momExprNoKQ _e_ = (neg (inxi intNormForce) `mulRe` (inxi sliceHght `addRe`(half (inxi baseWthX)
-  `mulRe`  tan (inxi baseAngle))) `addRe` (inxiM1 intNormForce `mulRe` (inxiM1 sliceHght $-
+  `mulRe` tan (inxi baseAngle))) `addRe` (inxiM1 intNormForce `mulRe` (inxiM1 sliceHght $-
   (half (inxi baseWthX) `mulRe` tan (inxi baseAngle)))) $-
   (inxi watrForce `mulRe` (oneThird `mulRe` inxi sliceHghtW `addRe` (half (inxi baseWthX) `mulRe`
   tan (inxi baseAngle)))) `addRe` (inxiM1 watrForce `mulRe` (oneThird `mulRe` inxiM1 sliceHghtW $-

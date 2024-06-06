@@ -9,7 +9,7 @@ import           Utils.Drasil (stringList)
 import qualified Data.Map as Map
 import           Control.Lens ((^.), view)
 import           Data.List (nub, sort, sortBy)
-import           Data.Foldable(foldl')
+import           Data.Foldable (foldl')
 import           Data.Maybe (fromMaybe)
 import           Data.Bifunctor (second)
 import           Data.Function (on)

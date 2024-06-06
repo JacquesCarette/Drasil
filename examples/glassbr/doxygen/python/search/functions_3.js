@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['interpy_51',['interpY',['../_interpolation_8py.html#ae254328be2a81cbbdf7cba16c415bbb5',1,'python::Interpolation']]],
-  ['interpz_52',['interpZ',['../_interpolation_8py.html#ac408e57bb3cf19bf56de2511deaff832',1,'python::Interpolation']]]
+  ['get_5finput_55',['get_input',['../_input_format_8py.html#aec0d2990a751b4f6fac08e3b3ed9430f',1,'python::InputFormat']]]
 ];

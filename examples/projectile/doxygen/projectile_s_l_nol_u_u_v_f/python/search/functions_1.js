@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['input_5fconstraints_17',['input_constraints',['../_input_constraints_8py.html#a16f79e2fda29266d96f6dc85be51c65f',1,'python::InputConstraints']]]
+  ['get_5finput_19',['get_input',['../_input_format_8py.html#a9e7c7e0bd69142eb445ddf0d48175bb8',1,'python::InputFormat']]]
 ];

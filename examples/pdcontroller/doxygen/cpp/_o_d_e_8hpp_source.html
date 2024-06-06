@@ -66,27 +66,27 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <a href="_o_d_e_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#ifndef ODE_h</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#define ODE_h</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">using</span> std::vector;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="class_o_d_e.html">   15</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_o_d_e.html">ODE</a> {</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="class_o_d_e.html#a0f9ea2bf87138ac16c42408cf1012420">   22</a></span>&#160;        <a class="code" href="class_o_d_e.html#a0f9ea2bf87138ac16c42408cf1012420">ODE</a>(<span class="keywordtype">double</span> K_p, <span class="keywordtype">double</span> K_d, <span class="keywordtype">double</span> r_t);</div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="class_o_d_e.html#afabe9f03639cd9a943e5c81ce5958059">   28</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_o_d_e.html#afabe9f03639cd9a943e5c81ce5958059">operator()</a>(vector&lt;double&gt; y_t, vector&lt;double&gt; &amp;dy_t, <span class="keywordtype">double</span> t);</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keywordtype">double</span> K_p;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keywordtype">double</span> K_d;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keywordtype">double</span> r_t;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;};</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="ttc" id="aclass_o_d_e_html"><div class="ttname"><a href="class_o_d_e.html">ODE</a></div><div class="ttdoc">Class representing an ODE system.</div><div class="ttdef"><b>Definition:</b> ODE.hpp:15</div></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#ifndef ODE_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#define ODE_h</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">using</span> std::vector;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="class_o_d_e.html">   16</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_o_d_e.html">ODE</a> {</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="class_o_d_e.html#a0f9ea2bf87138ac16c42408cf1012420">   23</a></span>&#160;        <a class="code" href="class_o_d_e.html#a0f9ea2bf87138ac16c42408cf1012420">ODE</a>(<span class="keywordtype">double</span> K_p, <span class="keywordtype">double</span> K_d, <span class="keywordtype">double</span> r_t);</div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="class_o_d_e.html#afabe9f03639cd9a943e5c81ce5958059">   29</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_o_d_e.html#afabe9f03639cd9a943e5c81ce5958059">operator()</a>(vector&lt;double&gt; y_t, vector&lt;double&gt; &amp;dy_t, <span class="keywordtype">double</span> t);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keywordtype">double</span> K_p;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keywordtype">double</span> K_d;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keywordtype">double</span> r_t;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;};</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclass_o_d_e_html"><div class="ttname"><a href="class_o_d_e.html">ODE</a></div><div class="ttdoc">Class representing an ODE system.</div><div class="ttdef"><b>Definition:</b> ODE.hpp:16</div></div>
 <div class="ttc" id="aclass_o_d_e_html_a0f9ea2bf87138ac16c42408cf1012420"><div class="ttname"><a href="class_o_d_e.html#a0f9ea2bf87138ac16c42408cf1012420">ODE::ODE</a></div><div class="ttdeci">ODE(double K_p, double K_d, double r_t)</div><div class="ttdoc">Constructor for ODE objects.</div></div>
 <div class="ttc" id="aclass_o_d_e_html_afabe9f03639cd9a943e5c81ce5958059"><div class="ttname"><a href="class_o_d_e.html#afabe9f03639cd9a943e5c81ce5958059">ODE::operator()</a></div><div class="ttdeci">void operator()(vector&lt; double &gt; y_t, vector&lt; double &gt; &amp;dy_t, double t)</div><div class="ttdoc">function representation of ODE system</div></div>
 </div><!-- fragment --></div><!-- contents -->

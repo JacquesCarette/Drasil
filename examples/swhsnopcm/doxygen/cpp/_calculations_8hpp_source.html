@@ -66,25 +66,25 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <a href="_calculations_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#ifndef Calculations_h</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#define Calculations_h</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_o_d_e_8hpp.html">ODE.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_populate_8hpp.html">Populate.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">using</span> std::vector;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="_calculations_8hpp.html#a2817160664dab6b6ce1793df2785ece9">   20</a></span>&#160;<span class="keywordtype">double</span> <a class="code" href="_calculations_8hpp.html#a2817160664dab6b6ce1793df2785ece9">func_V_W</a>(<span class="keywordtype">double</span> V_tank);</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="_calculations_8hpp.html#ac7cc80d0475509aa1a5c5d29db493439">   27</a></span>&#160;<span class="keywordtype">double</span> <a class="code" href="_calculations_8hpp.html#ac7cc80d0475509aa1a5c5d29db493439">func_m_W</a>(<span class="keywordtype">double</span> rho_W, <span class="keywordtype">double</span> V_W);</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="_calculations_8hpp.html#a39ec7018a0cfe991ca97326b8f04ab6a">   36</a></span>&#160;<span class="keywordtype">double</span> <a class="code" href="_calculations_8hpp.html#a39ec7018a0cfe991ca97326b8f04ab6a">func_tau_W</a>(<span class="keywordtype">double</span> C_W, <span class="keywordtype">double</span> h_C, <span class="keywordtype">double</span> A_C, <span class="keywordtype">double</span> m_W);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="_calculations_8hpp.html#a34a76c60825b7b027a2b3973479bec64">   48</a></span>&#160;vector&lt;double&gt; <a class="code" href="_calculations_8hpp.html#a34a76c60825b7b027a2b3973479bec64">func_T_W</a>(<span class="keywordtype">double</span> T_C, <span class="keywordtype">double</span> T_init, <span class="keywordtype">double</span> t_final, <span class="keywordtype">double</span> A_tol, <span class="keywordtype">double</span> R_tol, <span class="keywordtype">double</span> t_step, <span class="keywordtype">double</span> tau_W);</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#ifndef Calculations_h</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#define Calculations_h</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_o_d_e_8hpp.html">ODE.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_populate_8hpp.html">Populate.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">using</span> std::vector;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="_calculations_8hpp.html#a2817160664dab6b6ce1793df2785ece9">   21</a></span>&#160;<span class="keywordtype">double</span> <a class="code" href="_calculations_8hpp.html#a2817160664dab6b6ce1793df2785ece9">func_V_W</a>(<span class="keywordtype">double</span> V_tank);</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="_calculations_8hpp.html#ac7cc80d0475509aa1a5c5d29db493439">   28</a></span>&#160;<span class="keywordtype">double</span> <a class="code" href="_calculations_8hpp.html#ac7cc80d0475509aa1a5c5d29db493439">func_m_W</a>(<span class="keywordtype">double</span> rho_W, <span class="keywordtype">double</span> V_W);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="_calculations_8hpp.html#a39ec7018a0cfe991ca97326b8f04ab6a">   37</a></span>&#160;<span class="keywordtype">double</span> <a class="code" href="_calculations_8hpp.html#a39ec7018a0cfe991ca97326b8f04ab6a">func_tau_W</a>(<span class="keywordtype">double</span> C_W, <span class="keywordtype">double</span> h_C, <span class="keywordtype">double</span> A_C, <span class="keywordtype">double</span> m_W);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="_calculations_8hpp.html#a34a76c60825b7b027a2b3973479bec64">   49</a></span>&#160;vector&lt;double&gt; <a class="code" href="_calculations_8hpp.html#a34a76c60825b7b027a2b3973479bec64">func_T_W</a>(<span class="keywordtype">double</span> T_C, <span class="keywordtype">double</span> T_init, <span class="keywordtype">double</span> t_final, <span class="keywordtype">double</span> A_tol, <span class="keywordtype">double</span> R_tol, <span class="keywordtype">double</span> t_step, <span class="keywordtype">double</span> tau_W);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="a_calculations_8hpp_html_a2817160664dab6b6ce1793df2785ece9"><div class="ttname"><a href="_calculations_8hpp.html#a2817160664dab6b6ce1793df2785ece9">func_V_W</a></div><div class="ttdeci">double func_V_W(double V_tank)</div><div class="ttdoc">Calculates volume of water: the amount of space occupied by a given quantity of water (m^3)</div></div>
 <div class="ttc" id="a_calculations_8hpp_html_a34a76c60825b7b027a2b3973479bec64"><div class="ttname"><a href="_calculations_8hpp.html#a34a76c60825b7b027a2b3973479bec64">func_T_W</a></div><div class="ttdeci">vector&lt; double &gt; func_T_W(double T_C, double T_init, double t_final, double A_tol, double R_tol, double t_step, double tau_W)</div><div class="ttdoc">Calculates temperature of the water: the average kinetic energy of the particles within the water (de...</div></div>
 <div class="ttc" id="a_calculations_8hpp_html_a39ec7018a0cfe991ca97326b8f04ab6a"><div class="ttname"><a href="_calculations_8hpp.html#a39ec7018a0cfe991ca97326b8f04ab6a">func_tau_W</a></div><div class="ttdeci">double func_tau_W(double C_W, double h_C, double A_C, double m_W)</div><div class="ttdoc">Calculates ODE parameter for water related to decay time: derived parameter based on rate of change o...</div></div>

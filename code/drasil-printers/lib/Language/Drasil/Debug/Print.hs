@@ -9,6 +9,7 @@ import           Utils.Drasil (stringList)
 import qualified Data.Map as Map
 import           Control.Lens ((^.), view)
 import           Data.List (nub, sort, sortBy)
+import           Data.Foldable (foldl')
 import           Data.Maybe (fromMaybe)
 import           Data.Bifunctor (second)
 import           Data.Function (on)
@@ -71,8 +72,8 @@ mkTableFromLenses pin@PI { _ckdb = db } tableLens ttle hsNEs =
     ins :: [Int]
     ins = [1..]
 
-    hdr   = foldl (\r l -> r $$ nest (nestNum * snd l) (text $ fst l)) (text "UID")       (zip (map fst namedLenses) ins)
-    col a = foldl (\r l -> r $$ nest (nestNum * snd l) (fst l a)     ) (text $ showUID a) (zip (map snd namedLenses) ins)
+    hdr   = foldl' (\r l -> r $$ nest (nestNum * snd l) (text $ fst l)) (text "UID")       (zip (map fst namedLenses) ins)
+    col a = foldl' (\r l -> r $$ nest (nestNum * snd l) (fst l a)     ) (text $ showUID a) (zip (map snd namedLenses) ins)
 
     chunks = map (fst . snd) (Map.assocs $ tableLens db)
 

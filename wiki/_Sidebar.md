@@ -61,7 +61,7 @@
   * [Forking Drasil & Deploying to your GitHub Pages](Forking-Drasil-&-Deploying-to-your-GitHub-Pages)
   * [Getting Started with Org Mode](Getting-Started-with-Org-Mode)
   * [Promoting Drasil](Promoting-Drasil)
-  * [Power of Drasil](Power-of-Drasil)
+  * [Benefits of Drasil](Benefits-of-Drasil)
 * WIP Projects
   * [Jason: Typed Exprs](Typed-Exprs)
   * [Sam: Chunk Investigation](Chunk-Investigation)

@@ -4,6 +4,7 @@ module Language.Drasil.Markdown.Print(genMD) where
 import Prelude hiding (print, (<>))
 import Text.PrettyPrint hiding (Str)
 import Data.List (transpose)
+import Data.Maybe (fromMaybe)
 
 import qualified Language.Drasil as L
 
@@ -97,9 +98,6 @@ spec e = printMath $ toMathHelper $ TeX.spec e
 -------------------- EXPRESSION PRINTING ------------------------
 -----------------------------------------------------------------
 
--- | FIXME: currently, just overiding TeX functions which are 
--- different for markdown. look for more elageant way
-
 -- | Print an expression to a document.
 pExpr :: Expr -> Doc
 pExpr (Str s)        = text "\\text{" <> (quote (text s)) <> text "}"
@@ -172,38 +170,45 @@ mkEnv nm d =
 -- | Renders Markdown table, called by 'printLO'
 makeTable :: [[Spec]] -> Doc -> Bool -> Doc -> Doc
 makeTable []      _ _ _  = error "No table to print"
-makeTable (l:lls) r b t  = (refwrap r empty) $$
-  (empty $$ (makeHeaderCols l sizes $$ makeRows lls sizes) <> text "\n" $$
-  if b then bold (caption t) <> text "\n" else empty)
+makeTable ls r b t  = 
+  refwrap r empty $$
+  makeHeaderCols (matrix !! 0) sizes $$
+  makeRows (tail matrix) sizes <> text "\n" $$
+  capt
     where
-      sizes = columnSize (l:lls)
+      matrix = mkDocMatrix ls
+      sizes = columnSize matrix
+      capt = if b then bold (caption t) <> text "\n" else empty
 
--- | Helper for creating table rows
-makeRows :: [[Spec]] -> [Int] -> Doc
-makeRows lls sizes = foldr (($$) . (flip makeColumns sizes)) empty lls
+-- | Helper for creating a Doc matrix
+mkDocMatrix :: [[Spec]] -> [[Doc]]
+mkDocMatrix ls = map (map pSpec) ls
 
 -- | Helper for getting table column size
-columnSize :: [[Spec]] -> [Int]
-columnSize = map (maximum . map (docLength . pSpec)) . transpose
+columnSize :: [[Doc]] -> [Int]
+columnSize = map (maximum . map docLength) . transpose
 
--- | makeHeaderCols: Helper for creating table header row (each of the column header cells)
-makeHeaderCols, makeColumns :: [Spec] -> [Int] -> Doc
-makeHeaderCols l sizes = header $$ genMDtable
-  where header     = pipe <> hcat(punctuate pipe (zipWith makeCell l sizes)) <> pipe        
-        genMDtable = pipe <> hcat(punctuate pipe (map makeDashColumns sizes)) <> pipe
+-- | Helper for creating table rows
+makeRows :: [[Doc]] -> [Int] -> Doc
+makeRows lls sizes = foldr (($$) . (flip makeColumns sizes)) empty lls
 
+-- | makeHeaderCols: Helper for creating table header row
 -- | makeColumns: Helper for creating table columns
-makeColumns ls sizes = (pipe <> hcat(punctuate pipe (zipWith makeCell ls sizes)) <> pipe)
+makeHeaderCols, makeColumns :: [Doc] -> [Int] -> Doc
+makeHeaderCols l sizes = header $$ seperators
+  where header     = pipe <> hcat (punctuate pipe (zipWith makeCell l sizes)) <> pipe        
+        seperators = pipe <> hcat (punctuate pipe (map makeDashCell sizes)) <> pipe
 
--- | Helper for making table heading seperation 
-makeDashColumns :: Int -> Doc
-makeDashColumns size = text ":" <> text (replicate (size - 1) '-')
+makeColumns ls sizes = pipe <> hcat (punctuate pipe (zipWith makeCell ls sizes)) <> pipe
+
+-- | Helper for making table seperation row
+makeDashCell :: Int -> Doc
+makeDashCell size = text ":" <> text (replicate (size - 1) '-')
 
 -- | Helper for rendering a table cell
-makeCell :: Spec -> Int -> Doc
-makeCell ls size = content <> spaces
+makeCell :: Doc -> Int -> Doc
+makeCell content size = content <> spaces
   where
-    content     = pSpec ls
     numOfSpaces = size - docLength content
     spaces      = text $ replicate numOfSpaces ' '
 
@@ -213,57 +218,60 @@ makeCell ls size = content <> spaces
 
 -- | Renders definition tables (Data, General, Theory, etc.)
 makeDefn :: [(String,[LayoutObj])] -> Doc -> Doc
-makeDefn [] _  = error "L.Empty definition"
-makeDefn ps l = makeDHeader ps l $$ makeDHeaderRow l size $$ makeDRows ps size
+makeDefn [] _ = error "L.Empty definition"
+makeDefn ps l = 
+  makeDHeaderText docDefn l $$ 
+  makeDHeaderRow l size $$ 
+  makeDRows docDefn size
   where
-    size = defnCSize ps
+    docDefn = mkDocDefn ps
+    size = defnCSize docDefn
+
+-- | Helper for convering definition to Doc
+mkDocDefn :: [(String,[LayoutObj])] -> [(Doc, Doc)]
+mkDocDefn ps = map (\(f, d) -> (text f, makeLO (f,d))) ps
 
 -- | Calculates the maximum cell size of each column in
 -- the definition table
-defnCSize :: [(String,[LayoutObj])] -> (Int, Int)
-defnCSize ps = (longestString, longestLO)
+defnCSize :: [(Doc, Doc)] -> (Int, Int)
+defnCSize ps = (longestLabel, longestLO)
   where
-    longestString = maximum $ map (length . fst) ps
-    longestLO     = maximum $ map (length . show . makeLO) ps
+    longestLabel = maximum $ map (docLength . fst) ps
+    longestLO    = maximum $ map (docLength . snd) ps
 
 -- | Renders the title/header of the definition table
-makeDHeader :: [(String, [LayoutObj])] -> Doc -> Doc
-makeDHeader ps l = text "## " <> label <+> br (text "#" <> l) <> text "\n"
+makeDHeaderText :: [(Doc, Doc)] -> Doc -> Doc
+makeDHeaderText ps l = text "## " <> fromMaybe l lo <+> br (text "#" <> l) <> text "\n"
   where
-    lo    = lookup "Label" ps
-    label = case lo of
-      Just layoutObj -> hcat $ map printLO' layoutObj
-      Nothing -> l
+    lo = lookup (text "Label") ps
 
 -- | Renders the header rows of the definition table
 makeDHeaderRow :: Doc -> (Int, Int) -> Doc
-makeDHeaderRow lbl size = pipe <> lh <> pipe <> rh <> pipe $$ ls <> rs 
+makeDHeaderRow lbl (l,r) = pipe <> lh <> pipe <> rh <> pipe $$ ls <> rs 
   where
-    lh = text "Refname" <> text (replicate (fst size - 7) ' ')
-    rh = lbl <> text (replicate (snd size - docLength lbl) ' ')
-    ls = text "|:" <> text (replicate (fst size - 1) '-') <> pipe
-    rs = text ":" <> text (replicate (snd size - 1) '-') <> pipe
+    lh = text "Refname" <> text (replicate (l - 7) ' ')
+    rh = lbl <> text (replicate (r - docLength lbl) ' ')
+    ls = text "|:" <> text (replicate (l - 1) '-') <> pipe
+    rs = text ":" <> text (replicate (r - 1) '-') <> pipe
 
 -- | Renders the rows of the definition table
-makeDRows :: [(String,[LayoutObj])] -> (Int, Int) -> Doc
+makeDRows :: [(Doc, Doc)] -> (Int, Int) -> Doc
 makeDRows []         _    = error "No fields to create defn table"
 makeDRows [(f,d)]    size = makeDRow (f,d) size
 makeDRows ((f,d):ps) size = makeDRow (f,d) size $$ makeDRows ps size
+
+-- | Renders a single row of the definition table
+makeDRow :: (Doc, Doc) -> (Int, Int) -> Doc
+makeDRow (f,d) (l,r) = pipe <> left <> pipe <> right <> pipe
+  where
+    left  = f <> text (replicate (l - docLength f) ' ')
+    right = d <> text (replicate (r - docLength d) ' ')
 
 -- | Converts the [LayoutObj] to a Doc
 makeLO :: (String, [LayoutObj]) -> Doc
 makeLO (f,d) =
       if f=="Notes" then ul (hcat $ map (processDefnLO f) d) 
       else (hcat $ map (processDefnLO f) d)
-
--- | Renders a single row of the definition table
-makeDRow :: (String,[LayoutObj]) -> (Int, Int) -> Doc
-makeDRow (f,d) size = pipe <> left <> pipe <> right <> pipe
-  where
-    label = text f
-    lo    =  makeLO (f,d)
-    left  = label <> text (replicate (fst size - docLength label) ' ')
-    right = lo <> text (replicate (snd size - docLength lo) ' ')
 
 processDefnLO :: String -> LayoutObj -> Doc
 processDefnLO "Notes" (Paragraph con) = li $ pSpec con
@@ -274,7 +282,7 @@ processDefnLO _ lo                    = printLO' lo
 -----------------------------------------------------------------
 
 -- | Renders lists
-makeList :: ListType -> Int -> Doc -- FIXME: ref id's should be folded into the li
+makeList :: ListType -> Int -> Doc
 makeList (Simple      items) _  = vcat $ 
   map (\(b,e,l) -> (mlref l empty) $$ (pSpec b <> text ": " <> sItem e <> text "\n") $$ empty) items
 makeList (Desc        items) bl = vcat $ 

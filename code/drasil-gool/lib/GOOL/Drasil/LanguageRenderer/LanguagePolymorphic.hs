@@ -218,7 +218,7 @@ argsList :: (RenderSym r) => String -> SValue r
 argsList l = mkStateVal (S.arrayType S.string) (text l)
 
 -- | First parameter is separator between name and value for named arguments, 
--- rest similar to call from ClassInterface
+-- rest similar to call from RendererClasses
 call :: (RenderSym r) => Doc -> Maybe Library -> Maybe Doc -> MixedCall r
 call sep lib o n t pas nas = do
   pargs <- sequence pas

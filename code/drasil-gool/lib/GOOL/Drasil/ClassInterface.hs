@@ -300,21 +300,31 @@ exists :: (ValueExpression r) => SValue r -> SValue r
 exists = notNull
 
 class (FunctionSym r) => InternalValueExp r where
+  -- | Generic function for calling an object method.
+  --   Takes the function name, the return type, the object, a list of 
+  --   positional arguments, and a list of named arguments.
   objMethodCallMixedArgs' :: Label -> VSType r -> SValue r -> [SValue r] -> 
     NamedArgs r -> SValue r
 
+-- | Default function for calling an object method.
+--   t is the return type of the method, o is the object, f is the method name,
+--   and ps is a list of positional arguments.
 objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label -> 
   [SValue r] -> SValue r
 objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
 
+-- | Function for calling an object method with named arguments.
 objMethodCallNamedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
   -> NamedArgs r -> SValue r
 objMethodCallNamedArgs t o f = objMethodCallMixedArgs' f t o []
 
+-- | Function for calling an object method with a mix of positional
+--   and named arguments.
 objMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
   -> [SValue r] -> NamedArgs r -> SValue r
 objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
 
+-- | Function for calling an object method with no parameters.
 objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r -> Label 
   -> SValue r
 objMethodCallNoParams t o f = objMethodCall t o f []

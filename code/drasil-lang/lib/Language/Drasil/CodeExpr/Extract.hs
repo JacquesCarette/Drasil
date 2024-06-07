@@ -9,7 +9,7 @@ import Language.Drasil.UID (UID)
 import Language.Drasil.CodeExpr.Lang (CodeExpr(..))
 
 import Data.List (nub)
-import Data.Set (fromList, toList)
+import Data.Set (fromList, Set)
 
 -- | Generic traverse of all expressions that could lead to names.
 eNames :: CodeExpr -> [UID]
@@ -90,8 +90,8 @@ eNamesRI' (UpFrom il)     = eNames' (snd il)
 -- And now implement the exported traversals all in terms of the above
 
 -- | Get dependencies from an equation.
-eDep :: CodeExpr -> [UID]
-eDep = toList . fromList . eNames
+eDep :: CodeExpr -> Set UID
+eDep = fromList . eNames
 
 -- | Get dependencies from an equation, without functions.
 eDep' :: CodeExpr -> [UID]

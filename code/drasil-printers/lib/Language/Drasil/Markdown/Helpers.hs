@@ -7,13 +7,9 @@ import Data.List.Split (splitOn)
 
 data Variation =  Id | Align
 
-li, pa, ba, ul :: Doc -> Doc
+li, ul :: Doc -> Doc
 -- | List tag wrapper
 li         = wrap "li" []
--- | Paragraph in list tag wrapper
-pa         = wrap "p" []
--- | Bring attention to element wrapper.
-ba         = wrap "b" []
 -- | Unordered list tag wrapper.
 ul         = wrap "ul" []
 
@@ -21,24 +17,23 @@ bold :: Doc -> Doc
 bold t = text "**" <> t <> text "**"
 
 wrap :: String -> [String] -> Doc -> Doc
-wrap a = wrapGen' hcat Id a empty
+wrap a = wrapGen hcat Id a empty
 
-wrapGen' :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
-wrapGen' sepf _ s _ [] = \x ->
+wrapGen :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
+wrapGen sepf _ s _ [] = \x ->
   let tb c = text $ "<" ++ c ++ ">"
-  --in sepf [quote(tb s), x, quote(tb $ '/':s)]
   in sepf [tb s, x, tb $ '/':s]
-wrapGen' sepf Align s ti _ = \x ->
+wrapGen sepf Align s ti _ = \x ->
   let tb c = text ("<" ++ c ++ " align=\"") <> ti <> text "\">"
       te c = text $ "</" ++ c ++ ">"
   in  sepf [tb s, x, te s]
-wrapGen' sepf Id s ti _ = \x ->
+wrapGen sepf Id s ti _ = \x ->
   let tb c = text ("<" ++ c ++ " id=\"") <> ti <> text "\">"
       te c = text $ "</" ++ c ++ ">\n"
   in  sepf [tb s, x, te s]
 
-refwrap :: Doc -> Doc -> Doc
-refwrap = flip (wrapGen' hcat Id "div") [""]
+divTag :: Doc -> Doc
+divTag l = wrapGen hcat Id "div" l [""] empty
 
 sq :: Doc -> Doc
 sq t = text "[" <> t <> text "]" 
@@ -63,7 +58,7 @@ image :: Doc -> Doc -> Doc
 image f c =  text "!" <> (reflinkURI f c) $$ bold (caption c) <> text "\n"
 
 caption :: Doc -> Doc
-caption = wrapGen' hcat Align "p" (text "center") [""]
+caption = wrapGen hcat Align "p" (text "center") [""]
 
 h :: Int -> Doc
 h n       | n < 1 = error "Illegal header (too small)"

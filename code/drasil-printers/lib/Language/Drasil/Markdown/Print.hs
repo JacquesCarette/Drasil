@@ -16,7 +16,8 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),
   Spacing(Thin), Fence(Abs))
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
-import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, brace, unders, hat)
+import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, brace, 
+  unders, hat, hyph, dot)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr, fence, OpenClose(..))
@@ -24,8 +25,8 @@ import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintL
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Print(renderCite)
 
-import Language.Drasil.Markdown.Helpers (h, stripnewLine, image, li, pa, ba, refwrap, 
-  reflink, reflinkURI, reflinkInfo, caption, bold, ul, br, stripTabs, docLength)
+import Language.Drasil.Markdown.Helpers (h, stripnewLine, image, li, 
+  reflink, reflinkURI, reflinkInfo, caption, bold, ul, br, stripTabs, docLength, divTag)
 
 -- | Generate a Markdown SRS
 genMD :: PrintingInformation -> L.Document -> Doc
@@ -127,7 +128,7 @@ command2D :: String -> Doc -> Doc -> Doc
 command2D s a0 a1 = (bslash <> text s) <> br a0 <> br a1
 
 fence :: TeX.OpenClose -> Fence -> Doc
-fence _ Abs = printMath $ pure $ text "\\|"
+fence _ Abs = text "\\|"
 fence a b   = printMath $ TeX.fence a b
 
 -- | For printing a Matrix.
@@ -169,9 +170,9 @@ mkEnv nm d =
 
 -- | Renders Markdown table, called by 'printLO'
 makeTable :: [[Spec]] -> Doc -> Bool -> Doc -> Doc
-makeTable []      _ _ _  = error "No table to print"
+makeTable [] _ _ _  = error "No table to print"
 makeTable ls r b t  = 
-  refwrap r empty $$
+  divTag r $$
   makeHeaderCols (matrix !! 0) sizes $$
   makeRows (tail matrix) sizes <> text "\n" $$
   capt
@@ -241,7 +242,7 @@ defnCSize ps = (longestLabel, longestLO)
 
 -- | Renders the title/header of the definition table
 makeDHeaderText :: [(Doc, Doc)] -> Doc -> Doc
-makeDHeaderText ps l = text "## " <> fromMaybe l lo <+> br (text "#" <> l) <> text "\n"
+makeDHeaderText ps l = text "##" <+> fromMaybe l lo <+> br (text "#" <> l) <> text "\n"
   where
     lo = lookup (text "Label") ps
 
@@ -284,21 +285,31 @@ processDefnLO _ lo                    = printLO' lo
 -- | Renders lists
 makeList :: ListType -> Int -> Doc
 makeList (Simple      items) _  = vcat $ 
-  map (\(b,e,l) -> (mlref l empty) $$ (pSpec b <> text ": " <> sItem e <> text "\n") $$ empty) items
-makeList (Desc        items) bl = vcat $ 
-  map (\(b,e,l) -> pa $ ba $ pSpec b <> text ": " <> pItem e bl) items -- | LOOK INTO WHAT THIS IS
-makeList (Ordered     items) bl = vcat $ map (\(i,l) -> mlref l $ pItem i bl) items
-makeList (Unordered   items) bl = vcat $ map (\(i,l) -> mlref l $ pItem i bl) items
-makeList (Definitions items) _  = ul $ hcat $ map (\(b,e,l) -> li $ mlref l $ pSpec b <> text " is the" <+> sItem e) items
+  map (\(b,e,l) -> (mlref l) $$ (pSpec b <> text ":" <+> sItem e <> text "\n")) items
+makeList (Desc        items) _  = vcat $ 
+  map (\(b,e,l) -> (mlref l) $$ (bold (pSpec b) <> text ":" <+> sItem e <> text "\n")) items -- | LOOK INTO WHAT THIS IS
+makeList (Ordered     items) bl = vcat $ 
+  zipWith (\(i,_) n -> oItem i bl n) items [1..]
+makeList (Unordered   items) bl = vcat $ 
+  map (\(i,_) -> uItem i bl) items
+makeList (Definitions items) _  = ul $ hcat $ 
+  map (\(b,e,_) -> li $ pSpec b <> text " is the" <+> sItem e) items
 
 -- | Helper for setting up reference anchors
-mlref :: Maybe Label -> Doc -> Doc
-mlref = maybe id $ refwrap . pSpec
+mlref :: Maybe Label -> Doc
+mlref ml = case ml of
+  Just l -> divTag $ pSpec l
+  Nothing -> empty
 
--- | Helper for rendering bulleted markdown list items
-pItem :: ItemType ->  Int -> Doc
-pItem (Flat   s)   i = text (replicate i ' ') <> text "- " <> pSpec s
-pItem (Nested s l) i = vcat [text (replicate i ' ') <> text "- " <> pSpec s, makeList l (i+2)]
+-- | Helper for rendering unordered list items
+uItem :: ItemType -> Int -> Doc
+uItem (Flat   s)   i = text (replicate i ' ') <> hyph <+> pSpec s
+uItem (Nested s l) i = vcat [text (replicate i ' ') <> hyph <+> pSpec s, makeList l (i+2)]
+
+-- | Helper for rendering ordered list items
+oItem :: ItemType -> Int -> Int -> Doc
+oItem (Flat   s)   i n = text (replicate i ' ') <> dot (text $ show n) <+> pSpec s
+oItem (Nested s l) i n = vcat [text (replicate i ' ') <> dot (text $ show n) <+> pSpec s, makeList l (i+3)]
 
 -- | Helper for non-bulleted markdown list items
 sItem :: ItemType -> Doc
@@ -311,7 +322,7 @@ sItem (Nested s l) = vcat [pSpec s, makeList l 0]
 
 -- | Renders figures in HTML
 makeFigure :: Doc -> Doc -> Doc -> Doc
-makeFigure r c f = (refwrap r empty) $$ (image f c)
+makeFigure r c f = divTag r $$ (image f c)
 
 -----------------------------------------------------------------
 ------------------ Bibliography Printing ------------------------
@@ -319,7 +330,7 @@ makeFigure r c f = (refwrap r empty) $$ (image f c)
 
 -- | Renders assumptions, requirements, likely changes
 makeRefList :: Doc -> Doc -> Doc -> Doc
-makeRefList a l i = refwrap l (i <> text ": " <> a)
+makeRefList a l i = divTag l $$ (i <> text ": " <> a) <> text "\n"
 
 -- | Renders the bibliography
 -- | FIXME: currently uses HTML, change to Markdown

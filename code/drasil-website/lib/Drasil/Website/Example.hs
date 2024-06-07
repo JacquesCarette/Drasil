@@ -84,11 +84,13 @@ allExampleList = map (\x -> Nested (nameAndDesc x) $ Bullet $ map (, Nothing) (i
 -- | Display the points for generated documents and call 'versionList' to display the code.
 individualExList :: Example -> [ItemType]
 -- No choices mean no generated code, so we do not need to display generated code and thus do not call versionList.
-individualExList E{sysInfoE = SI{_sys = sys}, choicesE = [], codePath = srsP} = 
-  [Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP "html" $ programName sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ programName sys) (S "[PDF]")]
+individualExList ex@E{sysInfoE = SI{_sys = sys}, choicesE = [], codePath = srsP} = 
+  [Flat $ namedRef (buildDrasilExSrcRef ex) (S "Drasil Source Code"),
+  Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP "html" $ programName sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ programName sys) (S "[PDF]")]
 -- Anything else means we need to display program information, so use versionList.
 individualExList ex@E{sysInfoE = SI{_sys = sys}, codePath = srsP} = 
-  [Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP "html" $ programName sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ programName sys) (S "[PDF]"),
+  [Flat $ namedRef (buildDrasilExSrcRef ex) (S "Drasil Source Code"),
+  Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP "html" $ programName sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ programName sys) (S "[PDF]"),
   Nested (S generatedCodeTitle) $ Bullet $ map (, Nothing) (versionList getCodeRef ex),
   Nested (S generatedCodeDocsTitle) $ Bullet $ map (, Nothing) (versionList getDoxRef noSwiftEx)]
     where
@@ -183,6 +185,17 @@ getCodeRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName =
     -- Program language converted for use in file folder navigation.
     programLang = convertLang l
 
+-- | Similar to 'getCodeRef', but builds the source code references
+buildDrasilExSrcRef :: Example -> Reference
+buildDrasilExSrcRef ex@E{sysInfoE=SI{_sys = sys}} = 
+  makeURI refUID refURI refShortNm
+  where
+    refUID = "srcCodeRef" ++ sysName
+    refURI = path ++ "code/drasil-example/" ++ sysName
+    refShortNm = shortname' $ S refUID
+    sysName = map toLower $ programName sys
+    path = codePath ex
+
 -- | Similar to 'getCodeRef', but gets the doxygen references and uses 'getDoxRef' instead.
 getDoxRef :: Example -> Lang -> String -> Reference
 getDoxRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName = 
@@ -223,9 +236,12 @@ getDoxPath path ex programLang = path ++ map toLower ex ++ "/doxygen/" ++ progra
 
 -- | Gather all references used in making the Examples section.
 exampleRefs :: FilePath -> FilePath -> [Reference]
-exampleRefs codePth srsDoxPth = concatMap getCodeRefDB (examples codePth srsDoxPth) ++
-  concatMap getDoxRefDB (examples codePth srsDoxPth) ++
-  map (getSRSRef srsDoxPth "html" . getAbrv) (examples codePth srsDoxPth) ++ map (getSRSRef srsDoxPth "pdf" . getAbrv) (examples codePth srsDoxPth)
+exampleRefs codePth srsDoxPth = 
+  concatMap getCodeRefDB (examples codePth srsDoxPth) ++ 
+  concatMap getDoxRefDB (examples codePth srsDoxPth) ++ 
+  map (getSRSRef srsDoxPth "html" . getAbrv) (examples codePth srsDoxPth) ++ 
+  map (getSRSRef srsDoxPth "pdf" . getAbrv) (examples codePth srsDoxPth) ++ 
+  map buildDrasilExSrcRef (examples codePth srsDoxPth)
 
 -- | Helpers to pull code and doxygen references from an example.
 -- Creates a reference for every possible choice in every possible language.

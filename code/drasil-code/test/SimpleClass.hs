@@ -7,7 +7,7 @@ import Prelude hiding (return, print, log, exp, sin, cos, tan, const)
 
 simpleClassName, simpleDesc :: String
 -- | Class name
-simpleClassName = "SimpleClass"
+simpleClassName = "SimpleData"
 -- | Class description
 simpleDesc = "A test class for GOOL.  It **might** run without errors"
 
@@ -25,7 +25,7 @@ y :: (VariableSym r) => SVariable r
 y = var "y" int
 
 buildSimpleClass :: (OOProg r) => SClass r
-buildSimpleClass = buildClass Nothing [stateVar public dynamic x, stateVar public dynamic y] [simpleConstructor, simpleConstructor2] [getMethod x, setMethod x, printXMethod]
+buildSimpleClass = buildClass Nothing [stateVar public dynamic x, stateVar public dynamic y] [simpleConstructor{-, simpleConstructor2-}] [getMethod x, setMethod x, resetXMethod]
 
 -- | Devault value for simple class is y=3
 simpleConstructor :: (MethodSym r, Literal r) => SMethod r
@@ -36,6 +36,6 @@ simpleConstructor2 :: (MethodSym r, Literal r, VariableValue r) => SMethod r
 simpleConstructor2 = initializer [param x] [(x, valueOf $ var "x" int), (y, litInt 3)]
 
 -- | Create the @printNum@ method.
-printXMethod :: (OOProg r) => SMethod r
-printXMethod = method "resetXIfTrue" public dynamic void [param $ var "cond" bool] $
+resetXMethod :: (OOProg r) => SMethod r
+resetXMethod = method "resetXIfTrue" public dynamic void [param $ var "cond" bool] $
   body [block [ifCond [(valueOf (var "cond" bool), body [block [objVarSelf x &= litInt 5]])] (body [])]]

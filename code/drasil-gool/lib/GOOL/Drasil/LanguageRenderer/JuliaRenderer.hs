@@ -59,7 +59,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   construct, param, defaultOptSpace, ifCond, initStmts)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (string',
   bool, funcType, buildModule, docMod', litArray, listDec, listDecDef, mainBody,
-  listAccessFunc, listSetFunc, intClass, bindingError)
+  listAccessFunc, listSetFunc, intClass, bindingError, extraClass)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
   litFloat, notOp, andOp, orOp, inlineIf)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1, decrement1)
@@ -69,9 +69,9 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, FuncD
   ScopeTag(..), pd)
 import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, on2CodeValues,
   on2StateValues, onCodeList, onStateList, emptyIfEmpty, on2StateWrapped)
-import GOOL.Drasil.State (MS, VS, CS, lensGStoFS, lensFStoCS, lensFStoMS, revFiles, setFileType, lensCStoMS,
+import GOOL.Drasil.State (MS, VS, CS, lensGStoFS, lensFStoCS, lensCStoFS, lensFStoMS, revFiles, setFileType, lensCStoMS,
   lensMStoVS, lensVStoMS, getModuleImports, getUsing, getLangImports,
-  getLibImports, getMainDoc, useVarName, getClassName, setClassName, addLibImportVS)
+  getLibImports, getMainDoc, useVarName, getModuleName, getClassName, setClassName, addLibImportVS)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -98,7 +98,6 @@ instance Monad JuliaCode where
 
 instance OOProg JuliaCode
 
--- I have no clue what this does, but most of the other targets do it...
 instance ProgramSym JuliaCode where
   type Program JuliaCode = ProgData
   prog n st files = do
@@ -381,7 +380,7 @@ instance InternalValueExp JuliaCode where
 instance FunctionSym JuliaCode where
   type Function JuliaCode = FuncData
   func = G.func
-  objAccess = G.objAccess -- TODO: this is probably wrong :(
+  objAccess = G.objAccess
 
 instance GetSet JuliaCode where
   get = undefined
@@ -611,14 +610,14 @@ instance RenderMethod JuliaCode where
     tp  <- t
     pms <- sequence ps
     bod <- b
-    name <- getClassName
+    nm <- getClassName
     let pmlst = parameterList pms
         oneParam = emptyIfEmpty pmlst listSep'
         self' :: SVariable JuliaCode
         self' = self
     sl <- zoom lensMStoVS self'
     mthdFromData Pub (vcat [
-      jlFunc <+> text n <> parens (RC.variable sl <> jlType <> text name <>
+      jlFunc <+> text n <> parens (RC.variable sl <> jlType <> text nm <>
         oneParam <> pmlst) <> jlType <> RC.type' tp,
       indent $ RC.body bod,
       jlEnd])
@@ -644,8 +643,10 @@ instance StateVarElim JuliaCode where
 instance ClassSym JuliaCode where
   type Class JuliaCode = Doc
 
-  buildClass = G.buildClass
-  extraClass = undefined
+  buildClass p stVars constructors methods = do 
+    n <- zoom lensCStoFS getModuleName
+    intClass (n ++ "Class") public (inherit p) stVars constructors methods
+  extraClass = CP.extraClass
   implementingClass = undefined
   docClass = G.docClass jlClassDoc
 
@@ -669,7 +670,7 @@ instance ModuleSym JuliaCode where
     mis <- getModuleImports
     us <- getUsing
     pure $ vibcat [
-      jlModStart n,
+      jlModStart (n ++ "Mod"),
       vcat (map (RC.import' . li) lis),
       vcat (map (RC.import' . li) (sort $ is ++ libis)),
       vcat (map (RC.import' . mi) mis),
@@ -824,7 +825,7 @@ jlConstructorMethod n ps b = do
 
 jlExtNewObjMixedArgs :: (RenderSym r) => Library -> MixedCtorCall r
 jlExtNewObjMixedArgs l tp vs ns = tp >>= (\t -> call (Just l) Nothing
-  (getTypeString t) (pure t) vs ns)
+  (getTypeString t ++ "Class") (pure t) vs ns)
 
 jlLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 jlLambda ps ex = variableList ps <+> arrow <+> RC.value ex

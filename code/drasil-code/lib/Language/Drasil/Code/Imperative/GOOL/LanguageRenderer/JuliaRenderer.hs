@@ -5,7 +5,6 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer (
   JuliaProject(..)
 ) where
 
-import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
   PackageSym(..), AuxiliarySym(..))
 import qualified 

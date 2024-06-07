@@ -8,7 +8,7 @@ import GOOL.Drasil (GSProgram, MSBody, MSBlock, SMethod, OOProg,
   Comparison(..), (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
   CommentStatement(..), VariableSym(..), Literal(..), VariableValue(..), 
   List(..), MethodSym(..), ModuleSym(..), VSType, SVariable, ValueExpression, 
-  SValue, listSlice, bodyStatements, extNewObj)
+  SValue, listSlice, bodyStatements, extNewObj, objVar, objMethodCall, objMethodCallNoParams)
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import SimpleClass (simpleClass, simpleClassName)
 
@@ -70,12 +70,22 @@ simpleClassType = obj simpleClassName
 s :: (VariableSym r) => SVariable r
 s = var "s" simpleClassType
 
+x :: (VariableSym r) => SVariable r
+x = var "x" int
+
 newSimpleClass :: (ValueExpression r) => SValue r
 newSimpleClass = extNewObj simpleClassName simpleClassType []
 
 objTest :: (OOProg r) => MSBlock r
 objTest = block [
-  varDecDef s newSimpleClass]
+  varDecDef s newSimpleClass,
+  printLn $ valueOf s,                                                        -- Print s directly
+  varDecDef x $ objMethodCallNoParams int (valueOf s) "getX",     -- Store s.getX() in x
+  printLn $ valueOf x,                                                        -- Print x
+  valStmt $ objMethodCall int (valueOf s) "setX" [litInt 2],
+  printLn $ objMethodCallNoParams int (valueOf s) "getX",
+  valStmt $ objMethodCallNoParams void (valueOf s) "printXMethod",
+  printLn $ objMethodCallNoParams int (valueOf s) "getX"]         -- Print s.getX()
 
 -- | Print the 5th given argument.
 helloElseBody :: (OOProg r) => MSBody r

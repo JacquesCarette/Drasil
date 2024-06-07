@@ -264,6 +264,9 @@ convertLang :: Lang -> String
 --   to find the code path.
 getCodeRef :: Example -> Lang -> String -> Reference
 
+-- | Similar to <a>getCodeRef</a>, but builds the source code references
+buildDrasilExSrcRef :: Example -> Reference
+
 -- | Similar to <a>getCodeRef</a>, but gets the doxygen references and uses
 --   <a>getDoxRef</a> instead.
 getDoxRef :: Example -> Lang -> String -> Reference

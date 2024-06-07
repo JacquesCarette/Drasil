@@ -2,7 +2,7 @@
 -- chunk database in order to render terms, symbols, and references properly.
 module Language.Drasil.Sentence.Extract(sdep, shortdep, lnames, lnames') where
 
-import Data.Set (fromList, toList)
+import Data.Set (fromList, Set)
 
 import Language.Drasil.UID (UID)
 import Language.Drasil.Sentence(Sentence(..), SentenceStyle(..))
@@ -45,12 +45,12 @@ getUIDshort EmptyS              = []
 -----------------------------------------------------------------------------
 -- And now implement the exported traversals all in terms of the above
 -- | This is to collect /symbolic/ 'UID's that are printed out as a 'Symbol'.
-sdep :: Sentence -> [UID]
-sdep = toList . fromList . getUIDs
+sdep :: Sentence -> Set UID
+sdep = fromList . getUIDs
 
 -- This is to collect symbolic 'UID's that are printed out as an /abbreviation/.
-shortdep :: Sentence -> [UID]
-shortdep = toList . fromList . getUIDshort
+shortdep :: Sentence -> Set UID
+shortdep = fromList . getUIDshort
 
 -- | Generic traverse of all positions that could lead to /reference/ 'UID's from 'Sentence's.
 lnames :: Sentence -> [UID]

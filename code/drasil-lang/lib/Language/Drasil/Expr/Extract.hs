@@ -1,7 +1,7 @@
 -- | Extract UIDs from an expression so that they can be looked up in the chunk database and rendered.
 module Language.Drasil.Expr.Extract where
 
-import Data.Set (fromList, toList)
+import Data.Set (Set, fromList)
 
 import Language.Drasil.Expr.Lang (Expr(..))
 import Language.Drasil.Space (RealInterval(..))
@@ -75,5 +75,5 @@ eNamesRI' (UpFrom il)     = eNames' (snd il)
 -- And now implement the exported traversals all in terms of the above
 
 -- | Get dependencies from an equation.  
-eDep :: Expr -> [UID]
-eDep = toList . fromList . eNames
+eDep :: Expr -> Set UID
+eDep = fromList . eNames

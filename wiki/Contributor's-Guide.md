@@ -44,7 +44,7 @@ If you are new to GitHub, a summer student, or want more in-depth instructions, 
   - Use a meaningful title for your issue (this is what people will be reading when they search the issues in the future).
   - Do not introduce new issues within an existing issue.  We should keep the discussion focused so that it relates to the current issue.  Once an issue is resolved, it should be closed.  Related issues should be created as separate issues, rather than being incorporated into the discussion. (Related issues can be linked to the current issue via a hashtag `#` followed by the number of the other issue.)
   - Make your issue as specific as possible.  Ideally, closing an issue should be possible with a few days of effort.  This doesn't always happen, but it is something to strive for.
-- When **closing** an issue, please provide rationale and relevant links to other issues, PRs, or specific commit hashes. For instance, when something is considered fixed, please give a pointer to the fix, so that others can inspect your fixes.
+- When **closing** an issue, please provide rationale and relevant links to other issues, Pull Requests (PRs), or specific commit hashes. For instance, when something is considered fixed, please give a pointer to the fix, so that others can inspect your fixes.
 - In GitHub, Markdown can be used to annotate Issues, Pull Requests, Comments, Wiki pages, and any other documents. Here is a useful [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
 
 ## Coding Style
@@ -86,14 +86,7 @@ In the [Workflow](Workflow) article, there is a section detailing the [GitHub Wo
 Note: If changes are made that intentionally modify the generated documentation/code, it is imperative to [update the stable folder](https://github.com/JacquesCarette/Drasil/wiki/Workflow#updating-stable-folder) in order to prevent any CI errors.
 
 ## Editing this Wiki
-You can either use GitHub's webpage to update the wiki, or, like Drasil, you can clone the wiki project locally, and edit it with your preferred code editor; simply run the following in your shell:
-
-```
-git clone git@github.com:JacquesCarette/Drasil.wiki.git
-```
-(note: the extra `.wiki`!)
-
-Afterwards, you can edit and commit as you would normally with git.
+We do not use the same web-based workflow that most GitHub repositories follow. Rather, we carry a copy of our wiki _in_ our repo. Specifically, in the `./wiki/` folder. **To edit this wiki, please use the standard "commit and PR" workflow we follow, as with everything else in the repo.** The benefit of this approach is that we can review wiki changes through the PR workflow and tie them to tickets filed about the wiki.
 
 ## Important Notes (Windows Users read this!)
 - if you are using the Git Bash App (on Windows), remember to **always** run the command `chcp.com 65001` or `chcp 65001` each time you open an instance of git bash. This will set the encoding of the terminal to UTF-8. This is required because unicode symbols are in the Drasil source code. This is how Drasil handles Greek letters.

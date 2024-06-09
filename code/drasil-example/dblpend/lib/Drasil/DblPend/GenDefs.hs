@@ -54,7 +54,7 @@ velDerivSent1, velXDerivSent2_1, velDerivSent3, velDerivSent4, velDerivSent5 :: 
 velDerivSent1 = S "At a given point in time" `sC` phrase velocity `S.is` definedIn'' positionGDD
 velXDerivSent2_1 = S "We also know the" +:+ phrase horizontalPos +:+ S "that" `S.is` definedIn'' positionXDD_1
 velDerivSent3 = S "Applying this,"
-velDerivSent4 = eS' lenRod_1 `S.is` S "constant" `S.wrt` S  "time, so"
+velDerivSent4 = eS' lenRod_1 `S.is` S "constant" `S.wrt` S "time, so"
 velDerivSent5 = S "Therefore, using the chain rule,"
 
 ------------------------------------------------
@@ -130,10 +130,10 @@ accelXQD_1 :: ModelQDef
 accelXQD_1 = mkQuantDef' xAccel_1 (the xComp `NP.of_` (acceleration `ofThe` firstObject)) E.accelXExpr_1
 
 accelXDeriv_1:: Derivation
-accelXDeriv_1= mkDerivName (phraseNP (NP.the (xComp `of_` acceleration))) (weave [accelXDerivSents_1, accelXDerivEqns_1])
+accelXDeriv_1 = mkDerivName (phraseNP (NP.the (xComp `of_` acceleration))) (weave [accelXDerivSents_1, accelXDerivEqns_1])
 
 accelXDerivSents_1:: [Sentence]
-accelXDerivSents_1= [accelDerivSent1, accelXDerivSent2_1, accelDerivSent3, accelDerivSent4, accelDerivSent5]
+accelXDerivSents_1 = [accelDerivSent1, accelXDerivSent2_1, accelDerivSent3, accelDerivSent4, accelDerivSent5]
 
 accelXDerivEqns_1 :: [Sentence]
 accelXDerivEqns_1 = eS D.accelDerivEqn1 : eS' velXQD_1 : map eS [D.accelXDerivEqn3_1, D.accelXDerivEqn4_1] ++ [eS' accelXQD_1]
@@ -156,7 +156,7 @@ accelYQD_1 :: ModelQDef
 accelYQD_1 = mkQuantDef' yAccel_1 (the yComp `NP.of_` (acceleration `ofThe` firstObject)) E.accelYExpr_1
 
 accelYDeriv_1:: Derivation
-accelYDeriv_1= mkDerivName (phraseNP (NP.the (yComp `of_` acceleration))) (weave [accelYDerivSents_1, accelYDerivEqns_1])
+accelYDeriv_1 = mkDerivName (phraseNP (NP.the (yComp `of_` acceleration))) (weave [accelYDerivSents_1, accelYDerivEqns_1])
 
 accelYDerivSents_1 :: [Sentence]
 accelYDerivSents_1 = [accelDerivSent1, accelYDerivSent2_1, accelDerivSent3, accelDerivSent4, accelDerivSent5]
@@ -177,10 +177,10 @@ accelXQD_2 :: ModelQDef
 accelXQD_2 = mkQuantDef' xAccel_2 (the xComp `NP.of_` (acceleration `ofThe` secondObject)) E.accelXExpr_2
 
 accelXDeriv_2:: Derivation
-accelXDeriv_2= mkDerivName (phraseNP (NP.the (xComp `of_` acceleration))) (weave [accelXDerivSents_2, accelXDerivEqns_2])
+accelXDeriv_2 = mkDerivName (phraseNP (NP.the (xComp `of_` acceleration))) (weave [accelXDerivSents_2, accelXDerivEqns_2])
 
 accelXDerivSents_2:: [Sentence]
-accelXDerivSents_2= [accelDerivSent1, accelXDerivSent2_2, accelDerivSent3, accelDerivSent4]
+accelXDerivSents_2 = [accelDerivSent1, accelXDerivSent2_2, accelDerivSent3, accelDerivSent4]
 
 accelXDerivEqns_2 :: [Sentence]
 accelXDerivEqns_2 = eS D.accelDerivEqn1 : eS' velXQD_2 : [eS D.accelXDerivEqn3_2, eS' accelXQD_2]
@@ -198,10 +198,10 @@ accelYQD_2 :: ModelQDef
 accelYQD_2 = mkQuantDef' yAccel_2 (the yComp `NP.of_` (acceleration `ofThe` secondObject)) E.accelYExpr_2
 
 accelYDeriv_2:: Derivation
-accelYDeriv_2= mkDerivName (phraseNP (NP.the (yComp `of_` acceleration))) (weave [accelYDerivSents_2, accelYDerivEqns_2])
+accelYDeriv_2 = mkDerivName (phraseNP (NP.the (yComp `of_` acceleration))) (weave [accelYDerivSents_2, accelYDerivEqns_2])
 
 accelYDerivSents_2:: [Sentence]
-accelYDerivSents_2= [accelDerivSent1, accelYDerivSent2_2, accelDerivSent3, accelDerivSent4]
+accelYDerivSents_2 = [accelDerivSent1, accelYDerivSent2_2, accelDerivSent3, accelDerivSent4]
 
 accelYDerivEqns_2 :: [Sentence]
 accelYDerivEqns_2 = eS D.accelDerivEqn1 : eS' velYQD_2 : [eS D.accelYDerivEqn3_2, eS' accelYQD_2]

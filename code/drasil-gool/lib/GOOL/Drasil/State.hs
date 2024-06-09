@@ -41,6 +41,7 @@ import Control.Lens (Lens', (^.), lens, makeLenses, over, set, _1, _2, both, at)
 import Control.Monad.State (State, modify, gets)
 import Data.Char (isDigit)
 import Data.List (nub, delete)
+import Data.Foldable (foldl')
 import Data.Maybe (isNothing, fromMaybe)
 import Data.Map (Map)
 import qualified Data.Map as Map
@@ -348,7 +349,7 @@ addLibImportVS :: String -> ValueState -> ValueState
 addLibImportVS i = over (lensVStoFS . libImports) (\is -> nubSort $ i:is)
 
 addLibImports :: [String] -> MethodState -> MethodState
-addLibImports is s = foldl (flip addLibImport) s is
+addLibImports is s = foldl' (flip addLibImport) s is
 
 getLibImports :: FS [String]
 getLibImports = gets (^. libImports)

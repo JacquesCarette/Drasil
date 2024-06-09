@@ -22,7 +22,7 @@ import Data.Drasil.Quantities.Math (area, pi_, unitVectj)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight, 
   vol)
 import Data.Drasil.Quantities.Physics (acceleration, displacement, distance,
-  force,  gravitationalAccel, height, moment2D, pressure, subX, subY, subZ, 
+  force, gravitationalAccel, height, moment2D, pressure, subX, subY, subZ, 
   supMax, supMin, torque, weight, positionVec)
 
 
@@ -59,7 +59,7 @@ posVec = positionVec
 -- HELPERS --
 -------------
 wiif :: String
-wiif  = "without the influence of interslice forces"
+wiif = "without the influence of interslice forces"
 
 --------------------------------
 -- START OF CONSTRAINEDCHUNKS --
@@ -241,7 +241,7 @@ xi = uc' "x_i" (nounPhraseSent $ phrase xCoord)
 yi = uc' "y_i" (nounPhraseSent $ phrase yCoord)
   (phraseNP (NP.the (yCoord `inThe` cartesian))) lY Real metre
 
-zcoord = uc' "z"   (nounPhraseSent $ phrase zCoord)
+zcoord = uc' "z" (nounPhraseSent $ phrase zCoord)
   (phraseNP (NP.the (zCoord `inThe` cartesian))) lZ Real metre
 
 -- FIXME: the 'symbol' for this should not have { and } embedded in it.
@@ -278,7 +278,7 @@ shrResI = uc' "shrRes" (cn "resistive shear forces")
 
 shearFNoIntsl = uc' "T_i" (cn ("mobilized shear forces " ++ wiif)) 
   (pluralNP (the mobilizedShear) +:+ S "per meter" +:+ S wiif `S.inThe`
-   phrase zDir +:+  S "for each slice")
+   phrase zDir +:+ S "for each slice")
   (vec cT) (Vect Real) forcePerMeterU
 
 shearRNoIntsl = uc' "R_i" (cn ("resistive shear forces " ++ wiif))

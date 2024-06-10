@@ -1,6 +1,6 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
 module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc, 
-  doxClass, doxMod, docMod', extVar, classVar, objVarSelf, indexOf, listAddFunc, 
+  doxClass, doxMod, docMod', functionDoc, extVar, classVar, objVarSelf, indexOf, listAddFunc, 
   discardFileLine, intClass, funcType, buildModule, arrayType, pi, printSt, 
   arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction, 
   buildModule', call', listSizeFunc, listAccessFunc', string, constDecDef, 
@@ -133,7 +133,7 @@ intClass f n s i svrs cstrs mths = do
   ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) (cstrs ++ mths))
   return $ onCodeValue (\p -> f n p (RC.scope s) svs ms) i 
 
--- Python, Java, and C++ --
+-- Python, Java, C++, and Julia --
 
 funcType :: (RenderSym r) => [VSType r] -> VSType r -> VSType r
 funcType ps' r' =  do 
@@ -463,7 +463,7 @@ bool = typeFromData Boolean boolRender (text boolRender)
 docMod' :: (RenderSym r) => String -> String -> [String] -> String -> SFile r -> SFile r
 docMod' = docMod modDoc'
 
--- | Generates Markdown/DocC style doc comment.  Useful for Swift, which follows
+-- | Generates Markdown/DocC style module doc comment.  Useful for Swift, which follows
 -- DocC, Julia, which uses Markdown, and any other language that doesn't have
 -- Support for a document generator.
 modDoc' :: ModuleDocRenderer
@@ -478,9 +478,19 @@ modDoc' desc as date m = m : [desc | not (null desc)] ++
 docField :: String -> String -> String
 docField ty info = docCommandInit ++ ty ++ docCommandSep ++ info
 
-docCommandInit, docCommandSep, authorDoc, dateDoc, noteDoc :: String
+-- | Generates Markdown/DocC style function doc comment.
+functionDoc :: FuncDocRenderer
+functionDoc desc params returns = [desc | not (null desc)]
+  ++ map (\(v, vDesc) -> docCommandInit ++ paramDoc ++ " " ++
+    v ++ docCommandSep ++ vDesc) params
+  ++ map ((docCommandInit ++ returnDoc ++ docCommandSep) ++) returns
+
+docCommandInit, docCommandSep, authorDoc, dateDoc, 
+  noteDoc, paramDoc, returnDoc :: String
 docCommandInit = "- "
 docCommandSep = ": "
 authorDoc = "Authors"
 dateDoc = "Date"
 noteDoc = "Note"
+paramDoc = "Parameter"
+returnDoc = "Returns"

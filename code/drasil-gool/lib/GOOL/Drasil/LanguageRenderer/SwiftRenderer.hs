@@ -72,7 +72,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (classVar,
   listSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR, 
   openFileW, self, multiAssign, multiReturn, listDec, funcDecDef, 
   inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', bool, float, 
-  stringRender', string', inherit, implements)
+  stringRender', string', inherit, implements, functionDoc)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (notOp, andOp, orOp, 
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, 
   listSize, varDecDef, extObjDecNew, switch, while)
@@ -661,15 +661,15 @@ instance MethodSym SwiftCode where
   function = G.function
   mainFunction = CP.mainBody
 
-  docFunc = G.docFunc swiftFunctionDoc
+  docFunc = G.docFunc CP.functionDoc
 
   inOutMethod n s p = CP.inOutFunc (method n s p)
 
-  docInOutMethod n s p = CP.docInOutFunc' swiftFunctionDoc (inOutMethod n s p)
+  docInOutMethod n s p = CP.docInOutFunc' CP.functionDoc (inOutMethod n s p)
 
   inOutFunc n s = CP.inOutFunc (function n s)
 
-  docInOutFunc n s = CP.docInOutFunc' swiftFunctionDoc (inOutFunc n s)
+  docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
 instance RenderMethod SwiftCode where
   intMethod _ = swiftMethod
@@ -1143,20 +1143,8 @@ swiftStringError = do
     pure (swiftExtension <+> RC.type' str <> swiftConforms <+> swiftError <+> bodyStart <> bodyEnd)
   else pure empty
 
-swiftFunctionDoc :: FuncDocRenderer
-swiftFunctionDoc desc params returns = [desc | not (null desc)]
-  ++ map (\(v, vDesc) -> swiftDocCommandInit ++ swiftParamDoc ++ " " ++ 
-    v ++ swiftDocCommandSep ++ vDesc) params
-  ++ map ((swiftDocCommandInit ++ swiftRetDoc ++ swiftDocCommandSep) ++) returns
-
 swiftClassDoc :: ClassDocRenderer
 swiftClassDoc desc = [desc | not (null desc)]
-
-swiftDocCommandInit, swiftDocCommandSep, swiftParamDoc, swiftRetDoc :: String
-swiftDocCommandInit = "- "
-swiftDocCommandSep = ": "
-swiftParamDoc = "Parameter"
-swiftRetDoc = "Returns"
 
 typeDfltVal :: (RenderSym r) => CodeType -> SValue r
 typeDfltVal Boolean = litFalse

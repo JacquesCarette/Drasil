@@ -65,9 +65,9 @@ type LHS = [Term]
 -- | Operation represent plus (collection Terms)
 {-
   e.g. [exactDbl 1 $* (opProcessVariable $^^ 2)]
-       $+ (exactDbl 1 `addRe` sy qdDerivGain $* (opProcessVariable $^^ 1))
+       $+ (exactDbl 1 `add` sy qdDerivGain $* (opProcessVariable $^^ 1))
   [exactDbl 1 $* (opProcessVariable $^^ 2)] is a collection with a single Term, 
-  (exactDbl 1 `addRe` sy qdDerivGain $* (opProcessVariable $^^ 1)) is the appended element
+  (exactDbl 1 `add` sy qdDerivGain $* (opProcessVariable $^^ 1)) is the appended element
 -}
 ($+) :: [Term] -> Term -> LHS
 ($+) xs x  = xs ++ [x]
@@ -142,7 +142,7 @@ formStdODE d
 -- | Set the single ODE to a flat equation form, "left hand side" = "right hand side"
 formASingleODE :: [Expr] -> [ModelExpr] -> [Expr] -> ModelExpr
 formASingleODE coeffs unks consts = equiv (lhs : rhs)
-  where lhs = foldl1 addRe (map (\x-> express (fst x) `mulRe` snd x) $ filterZeroCoeff coeffs unks)
+  where lhs = foldl1 add (map (\x-> express (fst x) `mulRe` snd x) $ filterZeroCoeff coeffs unks)
         rhs = map express consts
 
 -- | Remove zero coefficients for the displaying purpose
@@ -297,11 +297,11 @@ formEquations [] _ _ _ = []
 formEquations _ [] _ _ = []
 formEquations _ _ [] _ = []
 formEquations (ex:exs) unks (y:ys) depVa =
-  (if y == exactDbl 0 then finalExpr else finalExpr `addRe` y) : formEquations exs unks ys depVa
+  (if y == exactDbl 0 then finalExpr else finalExpr `add` y) : formEquations exs unks ys depVa
   where indexUnks = map (idx (sy depVa) . int) unks -- create X
         filteredExprs = filter (\x -> fst x /= exactDbl 0) (zip ex indexUnks) -- remove zero coefficients
         termExprs = map (uncurry mulRe) filteredExprs -- multiple coefficient with depend variables
-        finalExpr = foldl1 addRe termExprs -- add terms together
+        finalExpr = foldl1 add termExprs -- add terms together
 
 -- Construct an InitialValueProblem.
 {-

@@ -199,7 +199,7 @@ chasles = mkQuantDef' velB (nounPhraseSP "Chasles' theorem") chaslesEqn
 
 -- The last two terms in the denominator should be cross products.
 chaslesEqn :: Expr
-chaslesEqn = sy velO `addRe` cross (sy  QP.angularVelocity) (sy rOB)
+chaslesEqn = sy velO `add` cross (sy  QP.angularVelocity) (sy rOB)
 
 chaslesThmNote :: Sentence
 chaslesThmNote = foldlSent [atStartNP (the QP.linearVelocity),

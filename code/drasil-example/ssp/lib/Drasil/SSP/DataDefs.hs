@@ -44,7 +44,7 @@ intersliceWtrFQD = mkQuantDef watrForce intersliceWtrFEqn
 intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = completeCase [case1,case2,case3]
   where case1 = (half (square (inxi slopeHght $- inxi slipHght)) `mulRe`
-          sy waterWeight `addRe` (square (inxi waterHght $- inxi slopeHght) `mulRe`
+          sy waterWeight `add` (square (inxi waterHght $- inxi slopeHght) `mulRe`
           sy waterWeight), inxi waterHght $>= inxi slopeHght)
 
         case2 = (half (square (inxi waterHght $- inxi slipHght)) `mulRe` sy waterWeight,
@@ -149,7 +149,7 @@ slcHeightQD :: SimpleQDef
 slcHeightQD = mkQuantDef midpntHght slcHeightEqn
 
 slcHeightEqn :: Expr
-slcHeightEqn = oneHalf `mulRe` (inxi sliceHghtRight `addRe` inxi sliceHghtLeft)
+slcHeightEqn = oneHalf `mulRe` (inxi sliceHghtRight `add` inxi sliceHghtLeft)
 
 slcHeightNotes :: [Sentence]
 slcHeightNotes = [S "This" +:+ phrase equation +:+ S "is based on the" +:+
@@ -209,7 +209,7 @@ convertFunc1QD = mkQuantDef shrResC convertFunc1Eqn
 convertFunc1Eqn :: Expr
 convertFunc1Eqn = (sy normToShear `mulRe` inxi scalFunc `mulRe`
   cos (inxi baseAngle) $- sin (inxi baseAngle)) `mulRe` tan (sy fricAngle) $-
-  ((sy normToShear `mulRe` inxi scalFunc `mulRe` sin (inxi baseAngle) `addRe`
+  ((sy normToShear `mulRe` inxi scalFunc `mulRe` sin (inxi baseAngle) `add`
   cos (inxi baseAngle)) `mulRe` sy fs)
 
 convertFunc1Notes :: Sentence
@@ -227,7 +227,7 @@ convertFunc2QD = mkQuantDef mobShrC convertFunc2Eqn
 convertFunc2Eqn :: Expr
 convertFunc2Eqn = ((sy normToShear `mulRe` inxi scalFunc `mulRe`
   cos (inxi baseAngle) $- sin (inxi baseAngle)) `mulRe` tan (sy fricAngle) $-
-  ((sy normToShear `mulRe` inxi scalFunc `mulRe` sin (inxi baseAngle) `addRe`
+  ((sy normToShear `mulRe` inxi scalFunc `mulRe` sin (inxi baseAngle) `add`
   cos (inxi baseAngle)) `mulRe` sy fs)) $/
   inxiM1 shrResC
 
@@ -247,12 +247,12 @@ resShearWOQD :: QDefinition
 resShearWOQD = mkQuantDef shearRNoIntsl resShearWOEqn
 
 resShearWOEqn :: Expr
-resShearWOEqn = (((inxi slcWght) `addRe` (inxi surfHydroForce) *
-  (cos (inxi surfAngle)) `addRe` (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) *
-  (cos (inxi baseAngle)) `addRe` (negate (sy earthqkLoadFctr) `mulRe` (inxi slcWght) -
-  (inxi watrForceDif) `addRe` (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) +
+resShearWOEqn = (((inxi slcWght) `add` (inxi surfHydroForce) *
+  (cos (inxi surfAngle)) `add` (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) *
+  (cos (inxi baseAngle)) `add` (negate (sy earthqkLoadFctr) `mulRe` (inxi slcWght) -
+  (inxi watrForceDif) `add` (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) +
   (inxi surfLoad) `mulRe` (sin (inxi impLoadAngle))) `mulRe` (sin (inxi baseAngle)) -
-  (inxi baseHydroForce)) `mulRe` tan (inxi fricAngle) `addRe` (inxi effCohesion) *
+  (inxi baseHydroForce)) `mulRe` tan (inxi fricAngle) `add` (inxi effCohesion) *
   (inxi baseWthX) `mulRe` sec (inxi baseAngle)
 
 resShr_deriv_ssp :: Derivation
@@ -269,10 +269,10 @@ mobShearWOQD :: QDefinition
 mobShearWOQD = mkQuantDef shearFNoIntsl mobShearWOEqn
 
 mobShearWOEqn :: Expr 
-mobShearWOEqn = ((inxi slcWght) `addRe` (inxi surfHydroForce) *
-  (cos (inxi surfAngle)) `addRe` (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) *
+mobShearWOEqn = ((inxi slcWght) `add` (inxi surfHydroForce) *
+  (cos (inxi surfAngle)) `add` (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) *
   (sin (inxi baseAngle)) - (negate (sy earthqkLoadFctr) `mulRe` (inxi slcWght) -
-  (inxi watrForceDif) `addRe` (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) +
+  (inxi watrForceDif) `add` (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) +
   (inxi surfLoad) `mulRe` (sin (inxi impLoadAngle))) `mulRe` (cos (inxi baseAngle))
 
 mobShr_deriv_ssp :: Derivation
@@ -294,10 +294,10 @@ sliceHghtLeftDD = ddE sliceHghtLeftQD [dRef fredlund1977] Nothing
   "sliceHghtLeftDD" []--Notes
 
 nrmForceSumQD :: SimpleQDef
-nrmForceSumQD = ec nrmForceSum (inxi intNormForce `addRe` inxiM1 intNormForce)
+nrmForceSumQD = ec nrmForceSum (inxi intNormForce `add` inxiM1 intNormForce)
 
 watForceSumQD :: SimpleQDef
-watForceSumQD = ec watForceSum (inxi watrForce `addRe` inxiM1 watrForce)
+watForceSumQD = ec watForceSum (inxi watrForce `add` inxiM1 watrForce)
 
 sliceHghtRightQD :: SimpleQDef
 sliceHghtRightQD = ec sliceHghtRight (inxi slopeHght $- inxi slipHght)
@@ -348,31 +348,31 @@ resShr_deriv_eqns_ssp = [eq1, eq2, eq3, eq8]
 
 eq1, eq2, eq3, eq8 :: Expr
 eq1 = (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -> x -
-  inxiM1 intShrForce `addRe` inxi intShrForce `addRe` y) - inxi baseHydroForce
+  inxiM1 intShrForce `add` inxi intShrForce `add` y) - inxi baseHydroForce
 
-eq2 = (inxi nrmFNoIntsl) $= (((inxi slcWght) `addRe` (inxi surfHydroForce) *
-  (cos (inxi surfAngle)) `addRe` (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) *
-  (cos (inxi baseAngle)) `addRe` (negate (sy earthqkLoadFctr) `mulRe` (inxi slcWght) -
-  (inxi watrForce) `addRe` (inxiM1 watrForce) `addRe` (inxi surfHydroForce) *
-  sin (inxi surfAngle) `addRe` (inxi surfLoad) `mulRe` (sin (inxi impLoadAngle))) *
+eq2 = (inxi nrmFNoIntsl) $= (((inxi slcWght) `add` (inxi surfHydroForce) *
+  (cos (inxi surfAngle)) `add` (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) *
+  (cos (inxi baseAngle)) `add` (negate (sy earthqkLoadFctr) `mulRe` (inxi slcWght) -
+  (inxi watrForce) `add` (inxiM1 watrForce) `add` (inxi surfHydroForce) *
+  sin (inxi surfAngle) `add` (inxi surfLoad) `mulRe` (sin (inxi impLoadAngle))) *
   (sin (inxi baseAngle)) - (inxi baseHydroForce))
 
 eq3 = inxi shearRNoIntsl $= (inxi nrmFNoIntsl) `mulRe` tan (inxi fricAngle) +
   (inxi effCohesion) `mulRe` (inxi baseWthX) `mulRe` sec (inxi baseAngle) $=
-  (((inxi slcWght) `addRe` (inxi surfHydroForce) `mulRe` (cos (inxi surfAngle)) +
+  (((inxi slcWght) `add` (inxi surfHydroForce) `mulRe` (cos (inxi surfAngle)) +
   (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) `mulRe` (cos (inxi baseAngle)) +
   (negate (sy earthqkLoadFctr) `mulRe` (inxi slcWght) - (inxi watrForceDif) +
-  (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) `addRe` (inxi surfLoad) *
+  (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) `add` (inxi surfLoad) *
   (sin (inxi impLoadAngle))) `mulRe` (sin (inxi baseAngle)) -
-  (inxi baseHydroForce)) `mulRe` tan (inxi fricAngle) `addRe` (inxi effCohesion) *
+  (inxi baseHydroForce)) `mulRe` tan (inxi fricAngle) `add` (inxi effCohesion) *
   (inxi baseWthX) `mulRe` sec (inxi baseAngle)
 
 eq8 = inxi shearRNoIntsl $=
-  (((inxi slcWght) `addRe` (inxi surfHydroForce) `mulRe` (cos (inxi surfAngle))) `mulRe` (cos (inxi baseAngle)) +
+  (((inxi slcWght) `add` (inxi surfHydroForce) `mulRe` (cos (inxi surfAngle))) `mulRe` (cos (inxi baseAngle)) +
   (- (inxi watrForceDif) +
-  (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) `addRe` (inxi surfLoad) *
+  (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) `add` (inxi surfLoad) *
   (sin (inxi impLoadAngle))) `mulRe` (sin (inxi baseAngle)) -
-  (inxi baseHydroForce)) `mulRe` tan (inxi fricAngle) `addRe` (inxi effCohesion) *
+  (inxi baseHydroForce)) `mulRe` tan (inxi fricAngle) `add` (inxi effCohesion) *
   (inxi baseWthX) `mulRe` sec (inxi baseAngle)
 
 -------old chunk---------
@@ -388,7 +388,7 @@ resShrDerivation = [
   S "of", refS effStress, S "shown in", eqN 5],
   
   eqUnR' $ (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -> x -
-  inxiM1 intShrForce `addRe` inxi intShrForce `addRe` y) - inxi baseHydroForce,
+  inxiM1 intShrForce `add` inxi intShrForce `add` y) - inxi baseHydroForce,
   
   foldlSP [plural value `the_ofThe'` S "interslice forces",
   ch intNormForce `S.and_` ch intShrForce, S "in the", phrase equation,
@@ -399,11 +399,11 @@ resShrDerivation = [
   S "to obtain a solvable value as done for", ch nrmFNoIntsl, S "in", eqN 2],
 
   eqUnR' $
-  (inxi nrmFNoIntsl) $= (((inxi slcWght) `addRe` (inxi surfHydroForce) *
-  (cos (inxi surfAngle)) `addRe` (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) *
-  (cos (inxi baseAngle)) `addRe` (negate (sy earthqkLoadFctr) `mulRe` (inxi slcWght) -
-  (inxi watrForce) `addRe` (inxiM1 watrForce) `addRe` (inxi surfHydroForce) *
-  sin (inxi surfAngle) `addRe` (inxi surfLoad) `mulRe` (sin (inxi impLoadAngle))) *
+  (inxi nrmFNoIntsl) $= (((inxi slcWght) `add` (inxi surfHydroForce) *
+  (cos (inxi surfAngle)) `add` (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) *
+  (cos (inxi baseAngle)) `add` (negate (sy earthqkLoadFctr) `mulRe` (inxi slcWght) -
+  (inxi watrForce) `add` (inxiM1 watrForce) `add` (inxi surfHydroForce) *
+  sin (inxi surfAngle) `add` (inxi surfLoad) `mulRe` (sin (inxi impLoadAngle))) *
   (sin (inxi baseAngle)) - (inxi baseHydroForce)),
   
   foldlSP [S "Using", ch nrmFNoIntsl `sC` S "a", phrase shearRNoIntsl,
@@ -413,12 +413,12 @@ resShrDerivation = [
   eqUnR' $
   inxi shearRNoIntsl $= (inxi nrmFNoIntsl) `mulRe` tan (inxi fricAngle) +
   (inxi effCohesion) `mulRe` (inxi baseWthX) `mulRe` sec (inxi baseAngle) $=
-  (((inxi slcWght) `addRe` (inxi surfHydroForce) `mulRe` (cos (inxi surfAngle)) +
+  (((inxi slcWght) `add` (inxi surfHydroForce) `mulRe` (cos (inxi surfAngle)) +
   (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) `mulRe` (cos (inxi baseAngle)) +
   (negate (sy earthqkLoadFctr) `mulRe` (inxi slcWght) - (inxi watrForceDif) +
-  (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) `addRe` (inxi surfLoad) *
+  (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) `add` (inxi surfLoad) *
   (sin (inxi impLoadAngle))) `mulRe` (sin (inxi baseAngle)) -
-  (inxi baseHydroForce)) `mulRe` tan (inxi fricAngle) `addRe` (inxi effCohesion) *
+  (inxi baseHydroForce)) `mulRe` tan (inxi fricAngle) `add` (inxi effCohesion) *
   (inxi baseWthX) `mulRe` sec (inxi baseAngle)
 
   ]
@@ -454,18 +454,18 @@ mobShr_deriv_eqns_ssp = [eq4, eq5, eq6]
 
 eq4, eq5, eq6:: Expr
 eq4 = inxi mobShrI $= eqlExpr sin cos
-    (\x y -> x - inxiM1 intShrForce `addRe` inxi intShrForce `addRe` y)
+    (\x y -> x - inxiM1 intShrForce `add` inxi intShrForce `add` y)
 
-eq5 = inxi shearFNoIntsl $= ((inxi slcWght) `addRe` (inxi surfHydroForce) *
-  (cos (inxi surfAngle)) `addRe` (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) *
+eq5 = inxi shearFNoIntsl $= ((inxi slcWght) `add` (inxi surfHydroForce) *
+  (cos (inxi surfAngle)) `add` (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) *
   (sin (inxi baseAngle)) - (negate (sy earthqkLoadFctr) `mulRe` (inxi slcWght) -
-  (inxi watrForceDif) `addRe` (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) +
+  (inxi watrForceDif) `add` (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) +
   (inxi surfLoad) `mulRe` (sin (inxi impLoadAngle))) `mulRe` (cos (inxi baseAngle))
 
-eq6 = inxi shearFNoIntsl $= ((inxi slcWght) `addRe` (inxi surfHydroForce) *
+eq6 = inxi shearFNoIntsl $= ((inxi slcWght) `add` (inxi surfHydroForce) *
   (cos (inxi surfAngle))) *
   (sin (inxi baseAngle)) -
-  ((inxi watrForceDif) `addRe` (inxi surfHydroForce) `mulRe` sin (inxi surfAngle)) `mulRe` (cos (inxi baseAngle))
+  ((inxi watrForceDif) `add` (inxi surfHydroForce) `mulRe` sin (inxi surfAngle)) `mulRe` (cos (inxi baseAngle))
 
   ------old chunk-----
 mobShrDerivation :: [Contents]
@@ -476,7 +476,7 @@ mobShrDerivation = [
   S "also shown in", eqN 4],
   
   eqUnR' $ inxi mobShrI $= eqlExpr sin cos
-    (\x y -> x - inxiM1 intShrForce `addRe` inxi intShrForce `addRe` y),
+    (\x y -> x - inxiM1 intShrForce `add` inxi intShrForce `add` y),
   
   foldlSP [S "The", phrase equation, S "is unsolvable, containing the unknown",
   getTandS intNormForce, S "and" +:+. getTandS intShrForce,
@@ -484,10 +484,10 @@ mobShrDerivation = [
   getTandS shearFNoIntsl `sC` S "as done in", eqN 5],
   
   eqUnR' $
-  inxi shearFNoIntsl $= ((inxi slcWght) `addRe` (inxi surfHydroForce) *
-  (cos (inxi surfAngle)) `addRe` (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) *
+  inxi shearFNoIntsl $= ((inxi slcWght) `add` (inxi surfHydroForce) *
+  (cos (inxi surfAngle)) `add` (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) *
   (sin (inxi baseAngle)) - (negate (sy earthqkLoadFctr) `mulRe` (inxi slcWght) -
-  (inxi watrForceDif) `addRe` (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) +
+  (inxi watrForceDif) `add` (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) +
   (inxi surfLoad) `mulRe` (sin (inxi impLoadAngle))) `mulRe` (cos (inxi baseAngle)),
   
   foldlSP [S "The", plural value, S "of", ch shearRNoIntsl `S.and_`

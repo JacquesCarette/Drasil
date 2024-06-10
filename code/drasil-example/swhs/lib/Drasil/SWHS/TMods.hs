@@ -50,7 +50,7 @@ consThermECS = mkConstraintSet consCC rels
         rels   = NE.fromList [consThermERel]
 
 consThermERel :: ModelExpr
-consThermERel = negVec (sy gradient) $. sy thFluxVect `addRe` sy volHtGen $=
+consThermERel = negVec (sy gradient) $. sy thFluxVect `add` sy volHtGen $=
   sy density `mulRe` sy heatCapSpec `mulRe` pderiv (sy temp) time
 
 -- the second argument is a 'ShortName'...

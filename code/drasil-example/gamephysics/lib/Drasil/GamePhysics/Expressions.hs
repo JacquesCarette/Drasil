@@ -7,7 +7,7 @@ import Data.Drasil.Quantities.Physics (time, momentOfInertia,
     gravitationalAccel, angularVelocity)
 
 transMotExpr :: PExpr
-transMotExpr = sy gravitationalAccel `addRe` (apply1 forcej time $/ sy massj)
+transMotExpr = sy gravitationalAccel `add` (apply1 forcej time $/ sy massj)
 
 transMotExprDeriv1 :: (ModelExprC r, ExprC r) => r
 transMotExprDeriv1 = defines (sy angAccj) $ deriv (apply1 velj time) time

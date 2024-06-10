@@ -177,7 +177,7 @@ func find(_ arr: inout [Double], _ v: Double) throws -> Int {
     }
     
     for i in [Int](stride(from: 0, to: arr.count - 1, by: 1)) {
-        if arr[i] <= v && v <= arr[i + 1] {
+        if arr[i + 0] <= v && v <= arr[i + 1] {
             return i
         }
     }
@@ -366,7 +366,7 @@ func interpY(_ filename: String, _ x: Double, _ z: Double) throws -> Double {
     } catch {
         throw "Error closing file."
     }
-    x_z_1 = try extractColumn(&x_matrix, i)
+    x_z_1 = try extractColumn(&x_matrix, i + 0)
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -394,7 +394,7 @@ func interpY(_ filename: String, _ x: Double, _ z: Double) throws -> Double {
     } catch {
         throw "Error closing file."
     }
-    y_z_1 = try extractColumn(&y_matrix, i)
+    y_z_1 = try extractColumn(&y_matrix, i + 0)
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -538,7 +538,7 @@ func interpY(_ filename: String, _ x: Double, _ z: Double) throws -> Double {
     } catch {
         throw "Interpolation of y failed"
     }
-    y_1 = try lin_interp(x_z_1[j], y_z_1[j], x_z_1[j + 1], y_z_1[j + 1], x)
+    y_1 = try lin_interp(x_z_1[j + 0], y_z_1[j + 0], x_z_1[j + 1], y_z_1[j + 1], x)
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -566,7 +566,7 @@ func interpY(_ filename: String, _ x: Double, _ z: Double) throws -> Double {
     } catch {
         throw "Error closing file."
     }
-    y_2 = try lin_interp(x_z_2[k_2], y_z_2[k_2], x_z_2[k_2 + 1], y_z_2[k_2 + 1], x)
+    y_2 = try lin_interp(x_z_2[k_2 + 0], y_z_2[k_2 + 0], x_z_2[k_2 + 1], y_z_2[k_2 + 1], x)
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -594,7 +594,7 @@ func interpY(_ filename: String, _ x: Double, _ z: Double) throws -> Double {
     } catch {
         throw "Error closing file."
     }
-    return try lin_interp(z_vector[i], y_1, z_vector[i + 1], y_2, z)
+    return try lin_interp(z_vector[i + 0], y_1, z_vector[i + 1], y_2, z)
 }
 
 /** Linearly interpolates a z value at given x and y values
@@ -686,7 +686,7 @@ func interpZ(_ filename: String, _ x: Double, _ y: Double) throws -> Double {
     var z_vector: [Double] = []
     try read_table(filename, &z_vector, &x_matrix, &y_matrix)
     for i in [Int](stride(from: 0, to: z_vector.count - 1, by: 1)) {
-        x_z_1 = try extractColumn(&x_matrix, i)
+        x_z_1 = try extractColumn(&x_matrix, i + 0)
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
             try outfile.seekToEnd()
@@ -714,7 +714,7 @@ func interpZ(_ filename: String, _ x: Double, _ y: Double) throws -> Double {
         } catch {
             throw "Error closing file."
         }
-        y_z_1 = try extractColumn(&y_matrix, i)
+        y_z_1 = try extractColumn(&y_matrix, i + 0)
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
             try outfile.seekToEnd()
@@ -858,7 +858,7 @@ func interpZ(_ filename: String, _ x: Double, _ y: Double) throws -> Double {
         } catch {
             continue
         }
-        y_1 = try lin_interp(x_z_1[j], y_z_1[j], x_z_1[j + 1], y_z_1[j + 1], x)
+        y_1 = try lin_interp(x_z_1[j + 0], y_z_1[j + 0], x_z_1[j + 1], y_z_1[j + 1], x)
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
             try outfile.seekToEnd()
@@ -886,7 +886,7 @@ func interpZ(_ filename: String, _ x: Double, _ y: Double) throws -> Double {
         } catch {
             throw "Error closing file."
         }
-        y_2 = try lin_interp(x_z_2[k_2], y_z_2[k_2], x_z_2[k_2 + 1], y_z_2[k_2 + 1], x)
+        y_2 = try lin_interp(x_z_2[k_2 + 0], y_z_2[k_2 + 0], x_z_2[k_2 + 1], y_z_2[k_2 + 1], x)
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
             try outfile.seekToEnd()
@@ -915,7 +915,7 @@ func interpZ(_ filename: String, _ x: Double, _ y: Double) throws -> Double {
             throw "Error closing file."
         }
         if y_1 <= y && y <= y_2 {
-            return try lin_interp(y_1, z_vector[i], y_2, z_vector[i + 1], y)
+            return try lin_interp(y_1, z_vector[i + 0], y_2, z_vector[i + 1], y)
         }
     }
     throw "Interpolation of z failed"

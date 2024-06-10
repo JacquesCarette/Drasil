@@ -17,28 +17,28 @@ velYExpr_1 = sy angularVel_1 `mulRe` positionXEqn_1
 
 -- Velocity X/Y Second Object
 velXExpr_2, velYExpr_2 :: PExpr
-velXExpr_2 = sy xVel_1 `addRe` (sy angularVel_2 `mulRe` sy lenRod_2 `mulRe` cos (sy pendDisAngle_2))
-velYExpr_2 = sy yVel_1 `addRe` (sy angularVel_2 `mulRe` sy lenRod_2 `mulRe` sin (sy pendDisAngle_2))
+velXExpr_2 = sy xVel_1 `add` (sy angularVel_2 `mulRe` sy lenRod_2 `mulRe` cos (sy pendDisAngle_2))
+velYExpr_2 = sy yVel_1 `add` (sy angularVel_2 `mulRe` sy lenRod_2 `mulRe` sin (sy pendDisAngle_2))
 
 -- Acceleration X/Y First Object
 accelXExpr_1, accelYExpr_1 :: PExpr
 accelXExpr_1 = neg (square (sy angularVel_1) `mulRe` sy lenRod_1 `mulRe` sin (sy pendDisAngle_1))
-                `addRe` (sy angularAccel_1 `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1))
+                `add` (sy angularAccel_1 `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1))
 accelYExpr_1 = (square (sy angularVel_1) `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1))
-                `addRe` (sy angularAccel_1 `mulRe` sy lenRod_1 `mulRe` sin (sy pendDisAngle_1))
+                `add` (sy angularAccel_1 `mulRe` sy lenRod_1 `mulRe` sin (sy pendDisAngle_1))
 
 -- Acceleration X/Y Second Object
 accelXExpr_2, accelYExpr_2 :: PExpr
 accelXExpr_2 = sy xAccel_1 $-
                 (square (sy angularVel_2) `mulRe` sy lenRod_2 `mulRe` sin (sy pendDisAngle_2))
-                `addRe` (sy angularAccel_2 `mulRe` sy lenRod_2 `mulRe` cos (sy pendDisAngle_2))
-accelYExpr_2 = sy yAccel_1 `addRe`
+                `add` (sy angularAccel_2 `mulRe` sy lenRod_2 `mulRe` cos (sy pendDisAngle_2))
+accelYExpr_2 = sy yAccel_1 `add`
                 (square (sy angularVel_2) `mulRe` sy lenRod_2 `mulRe` cos (sy pendDisAngle_2))
-                `addRe` (sy angularAccel_2 `mulRe` sy lenRod_2 `mulRe` sin (sy pendDisAngle_2))
+                `add` (sy angularAccel_2 `mulRe` sy lenRod_2 `mulRe` sin (sy pendDisAngle_2))
 
 -- Horizontal/Vertical force acting on the first object
 xForceWithAngle_1 :: PExpr
-xForceWithAngle_1 = neg (sy tension_1 `mulRe` sin (sy pendDisAngle_1)) `addRe`
+xForceWithAngle_1 = neg (sy tension_1 `mulRe` sin (sy pendDisAngle_1)) `add`
                     (sy tension_2 `mulRe` sin (sy pendDisAngle_2))
 
 yForceWithAngle_1 :: PExpr
@@ -57,18 +57,18 @@ yForceWithAngle_2 = sy tension_2 `mulRe` cos (sy pendDisAngle_2) $-
 -- Angular acceleration acting on the first object
 angularAccelExpr_1 :: PExpr
 angularAccelExpr_1 = neg(sy gravitationalMagnitude) `mulRe`
-                   (exactDbl 2 `mulRe` sy massObj_1 `addRe` sy massObj_2) `mulRe` sin (sy pendDisAngle_1 ) $-
+                   (exactDbl 2 `mulRe` sy massObj_1 `add` sy massObj_2) `mulRe` sin (sy pendDisAngle_1 ) $-
                    (sy massObj_2 `mulRe` sy gravitationalMagnitude `mulRe`
                    sin (sy pendDisAngle_1 $- (exactDbl 2 `mulRe` sy pendDisAngle_2))) $-
                    ((exactDbl 2 `mulRe` sin (sy pendDisAngle_1 $- sy pendDisAngle_2 )) `mulRe` sy massObj_2 `mulRe`
                    (
-                       square (sy angularVel_2) `mulRe` sy lenRod_2 `addRe` 
+                       square (sy angularVel_2) `mulRe` sy lenRod_2 `add` 
                        (square (sy angularVel_1) `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1 $- sy pendDisAngle_2))
                    ))
                    $/
                    sy lenRod_1 `mulRe` 
                    (
-                       exactDbl 2 `mulRe` sy massObj_1 `addRe` sy massObj_2 $- 
+                       exactDbl 2 `mulRe` sy massObj_1 `add` sy massObj_2 $- 
                        (sy massObj_2 `mulRe` 
                        cos (exactDbl 2 `mulRe` sy pendDisAngle_1  $- (exactDbl 2 `mulRe` sy pendDisAngle_2)))
                    )
@@ -77,15 +77,15 @@ angularAccelExpr_1 = neg(sy gravitationalMagnitude) `mulRe`
 angularAccelExpr_2 :: PExpr
 angularAccelExpr_2 = exactDbl 2 `mulRe` sin (sy pendDisAngle_1 $- sy pendDisAngle_2) `mulRe`
                    (
-                       square (sy angularVel_1) `mulRe` sy lenRod_1 `mulRe` (sy massObj_1 `addRe` sy massObj_2 ) `addRe`
-                       (sy gravitationalMagnitude `mulRe` (sy massObj_1 `addRe` sy massObj_2 ) `mulRe` cos (sy pendDisAngle_1)) `addRe`
+                       square (sy angularVel_1) `mulRe` sy lenRod_1 `mulRe` (sy massObj_1 `add` sy massObj_2 ) `add`
+                       (sy gravitationalMagnitude `mulRe` (sy massObj_1 `add` sy massObj_2 ) `mulRe` cos (sy pendDisAngle_1)) `add`
                        (square (sy angularVel_2) `mulRe` sy lenRod_2 `mulRe` sy massObj_2 `mulRe` 
                        cos (sy pendDisAngle_1 $- sy pendDisAngle_2 ))
                    )
                    $/
                    sy lenRod_2 `mulRe` 
                    (
-                       exactDbl 2 `mulRe` sy massObj_1 `addRe` sy massObj_2 $- 
+                       exactDbl 2 `mulRe` sy massObj_1 `add` sy massObj_2 $- 
                        (sy massObj_2 `mulRe` 
                        cos (exactDbl 2 `mulRe` sy pendDisAngle_1  $- (exactDbl 2 `mulRe` sy pendDisAngle_2)))
                    )

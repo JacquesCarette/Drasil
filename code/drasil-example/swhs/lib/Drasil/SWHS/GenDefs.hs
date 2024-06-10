@@ -47,7 +47,7 @@ rocTempSimpRC = makeRC "rocTempSimpRC" (nounPhraseSP $ "Simplified rate " ++
 rocTempSimpRel :: ModelExpr
 rocTempSimpRel = sy QPP.mass `mulRe` sy QT.heatCapSpec `mulRe`
   deriv (sy QT.temp) QP.time $= (sy htFluxIn `mulRe` sy inSA $-
-  (sy htFluxOut `mulRe` sy outSA)) `addRe` (sy volHtGen `mulRe` sy QPP.vol)
+  (sy htFluxOut `mulRe` sy outSA)) `add` (sy volHtGen `mulRe` sy QPP.vol)
 
 ----
 
@@ -132,27 +132,27 @@ rocTempDerivDens = [S "Using the fact that", ch density :+: S "=" :+: ch mass :+
 rocTempDerivIntegEq, rocTempDerivGaussEq, rocTempDerivArbVolEq,
   rocTempDerivConsFlxEq, rocTempDerivDensEq :: ModelExpr
 
-rocTempDerivIntegEq = neg (intAll (eqSymb vol) (sy gradient $. sy thFluxVect)) `addRe`
+rocTempDerivIntegEq = neg (intAll (eqSymb vol) (sy gradient $. sy thFluxVect)) `add`
   intAll (eqSymb vol) (sy volHtGen) $=
   intAll (eqSymb vol) (sy density
   `mulRe` sy QT.heatCapSpec `mulRe` pderiv (sy QT.temp) time)
 
-rocTempDerivGaussEq = neg (intAll (eqSymb surface) (sy thFluxVect $. sy uNormalVect)) `addRe`
+rocTempDerivGaussEq = neg (intAll (eqSymb surface) (sy thFluxVect $. sy uNormalVect)) `add`
   intAll (eqSymb vol) (sy volHtGen) $= 
   intAll (eqSymb vol)
   (sy density `mulRe` sy QT.heatCapSpec `mulRe` pderiv (sy QT.temp) time)
 
 rocTempDerivArbVolEq = (sy htFluxIn `mulRe` sy inSA $- (sy htFluxOut `mulRe`
-  sy outSA)) `addRe` (sy volHtGen `mulRe` sy vol) $= 
+  sy outSA)) `add` (sy volHtGen `mulRe` sy vol) $= 
   intAll (eqSymb vol) (sy density `mulRe` sy QT.heatCapSpec `mulRe` pderiv (sy QT.temp) time)
 
 rocTempDerivConsFlxEq = sy density `mulRe` sy QT.heatCapSpec `mulRe` sy vol `mulRe` deriv
   (sy QT.temp) time $= (sy htFluxIn `mulRe` sy inSA $- (sy htFluxOut `mulRe`
-  sy outSA)) `addRe` (sy volHtGen `mulRe` sy vol)
+  sy outSA)) `add` (sy volHtGen `mulRe` sy vol)
 
 rocTempDerivDensEq = sy mass `mulRe` sy QT.heatCapSpec `mulRe` deriv (sy QT.temp)
   time $= (sy htFluxIn `mulRe` sy inSA $- (sy htFluxOut
-  `mulRe` sy outSA)) `addRe` (sy volHtGen `mulRe` sy vol)
+  `mulRe` sy outSA)) `add` (sy volHtGen `mulRe` sy vol)
 
 rocTempSimpDerivEqns :: [ModelExpr]
 rocTempSimpDerivEqns = [rocTempDerivIntegEq, rocTempDerivGaussEq, rocTempDerivArbVolEq, rocTempDerivConsFlxEq,

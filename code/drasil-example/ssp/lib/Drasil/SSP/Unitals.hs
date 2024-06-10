@@ -514,7 +514,7 @@ inx :: (ExprC r, LiteralC r, Quantity e) => e -> Integer -> r
 inx e n 
   | n < 0     = idx (sy e) (sy index $- int (-n))
   | n == 0    = idx (sy e) (sy index)
-  | otherwise = idx (sy e) (sy index `addI` int n)
+  | otherwise = idx (sy e) (sy index `add` int n)
 
 sum1toN :: (ExprC r, LiteralC r) => r -> r
 sum1toN = defsum (eqSymb index) (int 1) (sy numbSlices)

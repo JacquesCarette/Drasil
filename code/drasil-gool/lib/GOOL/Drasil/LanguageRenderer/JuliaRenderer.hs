@@ -42,7 +42,7 @@ import qualified GOOL.Drasil.RendererClasses as RC (RenderBody(multiBody),
   statement, scope, parameter, method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (printLabel, listSep, listSep', new,
   ClassDocRenderer, variableList, parameterList, FuncDocRenderer)
-import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp, 
+import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp,
   sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, addComments,
   blockCmt, docCmt, commentedMod, listSetFunc, dynamic, stateVar, stateVarList,
   commentedItem)
@@ -57,16 +57,16 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   sec, cot, stmt, loopStmt, emptyStmt, assign, increment, subAssign, print,
   comment, valStmt, listAccess, func, objAccess, listSet, docClass, function,
   commentedClass, buildClass, method, getMethod, setMethod, returnStmt, objVar,
-  construct, param, defaultOptSpace, ifCond, initStmts, docFunc)
+  construct, param, defaultOptSpace, ifCond, initStmts, docFunc, newObjMixedArgs)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (string',
   bool, funcType, buildModule, docMod', litArray, listDec, listDecDef, mainBody,
-  listAccessFunc, listSetFunc, intClass, bindingError, extraClass, doxFunc, 
-  extFuncAppMixedArgs)
+  listAccessFunc, listSetFunc, intClass, bindingError, extraClass, doxFunc,
+  extFuncAppMixedArgs, functionDoc)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
   litFloat, notOp, andOp, orOp, inlineIf)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1, decrement1)
-import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
-  FuncData(..), ModData(..), md, updateMod, MethodData(..), mthd, OpData(..), 
+import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
+  FuncData(..), ModData(..), md, updateMod, MethodData(..), mthd, OpData(..),
   ParamData(..), ProgData(..), TypeData(..), td, ValData(..), vd, VarData(..),
   vard, CommonThunk, progD, fd, ScopeTag(..), pd, updateMthd)
 import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, on2CodeValues,
@@ -130,7 +130,7 @@ instance ImportSym JuliaCode where
   type Import JuliaCode = Doc
   langImport n = let modName = text n
                      fileName = text $ n ++ '.' : jlExt
-    in toCode $ vcat [includeLabel <> parens (doubleQuotes fileName), 
+    in toCode $ vcat [includeLabel <> parens (doubleQuotes fileName),
       importLabel <+> text "." <> modName] -- TODO: we want a dot only when the import is locally defined.
   modImport = langImport
 
@@ -187,7 +187,10 @@ instance TypeSym JuliaCode where
 
 instance TypeElim JuliaCode where
   getType = cType . unJLC
-  getTypeString = typeString . unJLC
+  getTypeString v = let tp = typeString $ unJLC v in
+    case cType $ unJLC v of
+      (Object _) -> tp ++ jlClassAppend
+      _ -> tp
 
 instance RenderType JuliaCode where
   multiType ts = do
@@ -197,7 +200,10 @@ instance RenderType JuliaCode where
   typeFromData t s d = toState $ toCode $ td t s d
 
 instance InternalTypeElim JuliaCode where
-  type' = typeDoc . unJLC
+  type' v = let t = typeDoc $ unJLC v in
+    case cType $ unJLC v of
+      (Object _) -> t <> text jlClassAppend
+      _ -> t
 
 instance UnaryOpSym JuliaCode where
   type UnaryOp JuliaCode = OpData
@@ -351,7 +357,7 @@ instance ValueExpression JuliaCode where
     modify (addModuleImportVS l)
     CP.extFuncAppMixedArgs l n t ps ns
   libFuncAppMixedArgs = undefined
-  newObjMixedArgs = undefined
+  newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs l tp ps ns = do
     modify (addLibImportVS l)
     jlExtNewObjMixedArgs l tp ps ns
@@ -381,7 +387,7 @@ instance ValueElim JuliaCode where
   value = val . unJLC
 
 instance InternalValueExp JuliaCode where
-  objMethodCallMixedArgs' f t ob vs ns = call Nothing Nothing f t (ob:vs) ns
+  objMethodCallMixedArgs' f t ob vs = call Nothing Nothing f t (ob:vs)
 
 instance FunctionSym JuliaCode where
   type Function JuliaCode = FuncData
@@ -605,20 +611,19 @@ instance MethodSym JuliaCode where
   docMain = undefined
   function = G.function
   mainFunction = CP.mainBody
-  docFunc = G.docFunc jlFunctionDoc
+  docFunc = G.docFunc CP.functionDoc
   inOutMethod _ _ _ = undefined
   docInOutMethod _ _ _ = undefined
   inOutFunc _ _ = undefined
   docInOutFunc _ _ = undefined
 
 instance RenderMethod JuliaCode where
-  intMethod _ n _ _ _ ps b = jlIntMethod n ps b
+  intMethod _ n _ _ _ = jlIntMethod n
   intFunc _ n _ _ _ ps b = do
     pms <- sequence ps
-    bod <- b
-    pure $ toCode $ mthd $ jlIntFunc n pms bod
-    
-  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
+    toCode . mthd . jlIntFunc n pms <$> b
+
+  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
   destructor _ = undefined
   mthdFromData _ d = toState $ toCode $ mthd d
@@ -640,9 +645,9 @@ instance StateVarElim JuliaCode where
 instance ClassSym JuliaCode where
   type Class JuliaCode = Doc
 
-  buildClass p stVars constructors methods = do 
+  buildClass p stVars constructors methods = do
     n <- zoom lensCStoFS getModuleName
-    intClass (n ++ "Class") public (inherit p) stVars constructors methods
+    intClass (n ++ jlClassAppend) public (inherit p) stVars constructors methods
   extraClass = CP.extraClass
   implementingClass = undefined
   docClass = G.docClass jlClassDoc
@@ -775,14 +780,14 @@ jlDocCmtEnd     = text "\"\"\""
 --   OO language.  Variables and constructors go inside the body of a struct,
 --   and methods become functions that take an instance of the struct as their 
 --   first argument.
-jlIntClass :: (RenderSym r, Monad r) => Label -> r (Scope r) -> r ParentSpec -> 
+jlIntClass :: (RenderSym r, Monad r) => Label -> r (Scope r) -> r ParentSpec ->
   [CSStateVar r] -> [SMethod r] -> [SMethod r] -> CS (r Doc)
 jlIntClass n _ i svrs cstrs mths = do
-  modify (setClassName n) 
+  modify (setClassName n)
   svs <- onStateList (R.stateVarList . map RC.stateVar) svrs
   ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) mths)
   cs <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) cstrs)
-  return $ onCodeValue (\_ -> jlClass n svs ms cs) i 
+  return $ onCodeValue (\_ -> jlClass n svs ms cs) i
 
 -- | Creates the doc for a class.
 -- | n is the name of the class.
@@ -806,7 +811,7 @@ jlConstructor :: (RenderSym r) => Label -> [MSParameter r] -> Initializers r ->
   MSBody r -> SMethod r
 jlConstructor fName ps initStmts b = jlConstructorMethod fName
   ps (RC.multiBody [jlCallConstructor, b])
-  where args = map (\(_, vl) -> vl) initStmts
+  where args = map snd initStmts
         constructorFunc = funcApp new (obj fName)
         jlCallConstructor = bodyStatements [returnStmt $ constructorFunc args]
 
@@ -820,7 +825,7 @@ jlConstructorMethod n ps b = do
     indent $ RC.body bod,
     jlEnd])
 
-jlIntMethod :: (RenderSym r) => Label -> [MSParameter r] -> 
+jlIntMethod :: (RenderSym r) => Label -> [MSParameter r] ->
   MSBody r -> SMethod r
 jlIntMethod n ps b = do
   pms <- sequence ps
@@ -839,22 +844,19 @@ jlIntMethod n ps b = do
 
 jlExtNewObjMixedArgs :: (RenderSym r) => Library -> MixedCtorCall r
 jlExtNewObjMixedArgs l tp vs ns = tp >>= (\t -> call (Just l) Nothing
-  (getTypeString t ++ "Class") (pure t) vs ns)
+  (getTypeString t) (pure t) vs ns)
+
+jlClassAppend :: String
+jlClassAppend = "Class"
 
 -- Functions
 -- | Creates a function.  n is function name, pms is list of parameters, and 
 --   bod is body.
-jlIntFunc :: (RenderSym r) => Label -> [r (Parameter r)] -> 
+jlIntFunc :: (RenderSym r) => Label -> [r (Parameter r)] ->
   r (Body r) -> Doc
 jlIntFunc n pms bod = do
-  vcat [jlFunc <+> text n <> parens (parameterList pms), 
+  vcat [jlFunc <+> text n <> parens (parameterList pms),
     indent $ RC.body bod, jlEnd]
-
-jlFunctionDoc :: FuncDocRenderer
-jlFunctionDoc desc params returns = [desc | not (null desc)]
-  ++ map (\(v, vDesc) -> swiftDocCommandInit ++ swiftParamDoc ++ " " ++ 
-    v ++ swiftDocCommandSep ++ vDesc) params
-  ++ map ((swiftDocCommandInit ++ swiftRetDoc ++ swiftDocCommandSep) ++) returns
 
 jlLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 jlLambda ps ex = variableList ps <+> arrow <+> RC.value ex
@@ -943,4 +945,3 @@ jlOut :: (RenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r ->
 jlOut newLn f printFn v = zoom lensMStoVS v >>= jlOut' . getType . valueType
   where jlOut' (List _) = printSt newLn f printFn v
         jlOut' _ = G.print newLn f printFn v
-        -- Do we need an exception for objects?

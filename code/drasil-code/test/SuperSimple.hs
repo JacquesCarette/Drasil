@@ -11,7 +11,7 @@ import GOOL.Drasil (GSProgram, MSBody, MSBlock, SMethod, OOProg,
   SValue, listSlice, bodyStatements, extFuncApp, extNewObj, objVar,
   objMethodCall, objMethodCallNoParams)
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
-import SimpleClass (simpleClass, simpleClassName)
+import SimpleClass (simpleClass, simpleClassName, simpleClassType)
 
 -- | Creates the SuperSimple program and necessary files.
 superSimple :: (OOProg r) => GSProgram r
@@ -25,7 +25,7 @@ description = "Tests basic GOOL functions. It *might* run without errors."
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 superSimpleMain :: (OOProg r) => SMethod r
-superSimpleMain = mainFunction (body [ helloInitVariables, objTest{-,
+superSimpleMain = mainFunction (body [ helloInitVariables, objTest, objTest2{-,
     block [ifCond [(valueOf (var "b" int) ?>= litInt 6, bodyStatements [varDecDef (var "dummy" string) (litString "dummy")]),
       (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody, helloIfExists,
     helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch]-}])
@@ -64,14 +64,9 @@ helloListSlice = listSlice (var "mySlicedList" (listType double))
   (valueOf $ var "myOtherList" (listType double)) (Just (litInt 9))
   Nothing (Just (litInt (-1)))
 
--- | Test object functionality
-simpleClassType :: (TypeSym r) => VSType r
-simpleClassType = obj simpleClassName
-
-s :: (VariableSym r) => SVariable r
+s, s2, x :: (VariableSym r) => SVariable r
 s = var "s" simpleClassType
-
-x :: (VariableSym r) => SVariable r
+s2 = var "s2" simpleClassType
 x = var "x" int
 
 newSimpleClass :: (ValueExpression r) => SValue r
@@ -82,12 +77,20 @@ objTest = block [
   varDecDef s newSimpleClass,
   printLn $ valueOf s,
   printLn $ objMethodCallNoParams int (valueOf s) "getX",
-  valStmt $ objMethodCall int (valueOf s) "setX" [litInt 2],
+  valStmt $ objMethodCall void (valueOf s) "setX" [litInt 2],
   printLn $ objMethodCallNoParams int (valueOf s) "getX",
   valStmt $ objMethodCall void (valueOf s) "resetXIfTrue" [litTrue],
   printLn $ objMethodCallNoParams int (valueOf s) "getX",
-  varDecDef (var "n" double) (extFuncApp "SimpleData" "doubleAndAdd" double 
-    [litDouble 2, litDouble 1.0])]
+  printLn $ extFuncApp "SimpleData" "doubleAndAdd" double 
+    [litDouble 2, litDouble 1.0]]
+
+objTest2 :: (OOProg r) => MSBlock r
+objTest2 = block [
+  varDecDef s2 $ extFuncApp "SimpleData" "makeSimpleData" simpleClassType 
+    [litInt 4],
+  printLn $ objMethodCallNoParams int (valueOf s2) "getX",
+  valStmt $ extFuncApp "SimpleData" "updateSimpleData" void [valueOf s2, litInt 8],
+  printLn $ objMethodCallNoParams int (valueOf s2) "getX"]
 
 -- | Print the 5th given argument.
 helloElseBody :: (OOProg r) => MSBody r

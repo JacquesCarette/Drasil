@@ -59,7 +59,7 @@ mkSRS = [TableOfContents,
       ]]]
 
 purp :: Sentence
-purp = foldlSent [S "describes", phrase CT.heatTrans, S "coefficients related to clad"]
+purp = foldlSent [S "describe", phrase CT.heatTrans, S "coefficients related to clad"]
 
 symbMap :: ChunkDB
 symbMap = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived

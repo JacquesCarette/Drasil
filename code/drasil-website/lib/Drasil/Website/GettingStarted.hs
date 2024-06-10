@@ -50,7 +50,7 @@ newWorkspaceTitle = S "New Workspace Setup"
 
 -- | Link to new workspace Wiki.
 newWorkspaceDesc :: Reference -> Sentence
-newWorkspaceDesc newWorkspaceSetupWiki = S "Workspace recommendations are available in the" +:+ namedRef 
+newWorkspaceDesc newWorkspaceSetupWiki = S "Workspace recommendations are available on the" +:+ namedRef 
   newWorkspaceSetupWiki (S "New Workspace Setup") +:+ S "page."
 
 -- | Contributor's Guide and Workflow subsection.
@@ -99,5 +99,5 @@ debuggingDrasilTitle = S "Debugging Drasil"
 
 -- | Debugging Drasil Wiki.
 debuggingDrasilDesc :: Reference -> Sentence
-debuggingDrasilDesc debuggingWiki = S "Debugging information can be found in the" +:+ namedRef 
+debuggingDrasilDesc debuggingWiki = S "Debugging information can be found on the" +:+ namedRef 
   debuggingWiki (S "Debugging in Drasil") +:+ S "page."

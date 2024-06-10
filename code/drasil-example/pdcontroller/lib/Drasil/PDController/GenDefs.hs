@@ -35,7 +35,7 @@ gdPowerPlantRC
 
 gdPowerPlantEqn :: Expr
 gdPowerPlantEqn
-  = recip_ (square (sy qdFreqDomain) `addRe` sy qdFreqDomain `addRe` exactDbl 20)
+  = recip_ (square (sy qdFreqDomain) `add` sy qdFreqDomain `add` exactDbl 20)
 
 gdPowerPlantNote :: Sentence
 gdPowerPlantNote

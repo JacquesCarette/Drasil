@@ -23,6 +23,7 @@ import Language.Drasil.UID (HasUID(..))
 
 import Utils.Drasil (toColumn)
 
+
 -- | Smart constructor for fractions.
 frac :: (ExprC r, LiteralC r) => Integer -> Integer -> r
 frac n d = exactDbl n $/ exactDbl d
@@ -103,11 +104,8 @@ class ExprC r where
   -- | Smart constructor for the dot product of two equations.
   ($.) :: r -> r -> r
   
-  -- | Add two expressions (Integers).
-  addI :: r -> r -> r
-  
-  -- | Add two expressions (Real numbers).
-  addRe :: r -> r -> r
+  -- | Add two expressions.
+  add :: r -> r -> r
   
   -- | Multiply two expressions (Integers).
   mulI :: r -> r -> r
@@ -239,23 +237,11 @@ instance ExprC Expr where
   -- | Smart constructor for the dot product of two equations.
   ($.) = VVNBinaryOp Dot
   
-  -- | Add two expressions (Integers).
-  addI l (Lit (Int 0)) = l
-  addI (Lit (Int 0)) r = r
-  addI (AssocA AddI l) (AssocA AddI r) = AssocA AddI (l ++ r)
-  addI (AssocA AddI l) r = AssocA AddI (l ++ [r])
-  addI l (AssocA AddI r) = AssocA AddI (l : r)
-  addI l r = AssocA AddI [l, r]
-  
-  -- | Add two expressions (Real numbers).
-  addRe l (Lit (Dbl 0))= l
-  addRe (Lit(Dbl 0)) r      = r
-  addRe l (Lit (ExactDbl 0)) = l
-  addRe (Lit (ExactDbl 0)) r = r
-  addRe (AssocA AddRe l) (AssocA AddRe r) = AssocA AddRe (l ++ r)
-  addRe (AssocA AddRe l) r = AssocA AddRe (l ++ [r])
-  addRe l (AssocA AddRe r) = AssocA AddRe (l : r)
-  addRe l r = AssocA AddRe [l, r]
+  add (Lit (Int i1)) (Lit (Int i2)) = Lit (Int (i1 + i2))
+  add (Lit (Dbl r1)) (Lit (Dbl r2)) = Lit (Dbl (r1 + r2))
+  add (Lit (Int i)) (Lit (Dbl r)) = Lit (Dbl (fromIntegral i + r))
+  add (Lit (Dbl r)) (Lit (Int i)) = Lit (Dbl (r + fromIntegral i))
+  add l r = AssocA AddI [l, r]
   
   -- | Multiply two expressions (Integers).
   mulI l (Lit (Int 1)) = l
@@ -368,7 +354,7 @@ instance ExprC Expr where
   
   -- TODO: Move euclidean to smart constructor
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
-  euclidean = sqrt . foldr1 addRe . map square
+  euclidean = sqrt . foldr1 add . map square
   
   -- | Smart constructor to cross product two expressions.
   cross = VVVBinaryOp Cross
@@ -413,23 +399,11 @@ instance ExprC M.ModelExpr where
   -- | Smart constructor for the dot product of two equations.
   ($.) = M.VVNBinaryOp M.Dot
 
-  -- | Add two expressions (Integers).
-  addI l (M.Lit (Int 0)) = l
-  addI (M.Lit (Int 0)) r = r
-  addI (M.AssocA M.AddI l) (M.AssocA M.AddI r) = M.AssocA M.AddI (l ++ r)
-  addI (M.AssocA M.AddI l) r = M.AssocA M.AddI (l ++ [r])
-  addI l (M.AssocA M.AddI r) = M.AssocA M.AddI (l : r)
-  addI l r = M.AssocA M.AddI [l, r]
-
-  -- | Add two expressions (Real numbers).
-  addRe l (M.Lit (Dbl 0))      = l
-  addRe (M.Lit (Dbl 0)) r      = r
-  addRe l (M.Lit (ExactDbl 0)) = l
-  addRe (M.Lit (ExactDbl 0)) r = r
-  addRe (M.AssocA M.AddRe l) (M.AssocA M.AddRe r) = M.AssocA M.AddRe (l ++ r)
-  addRe (M.AssocA M.AddRe l) r = M.AssocA M.AddRe (l ++ [r])
-  addRe l (M.AssocA M.AddRe r) = M.AssocA M.AddRe (l : r)
-  addRe l r = M.AssocA M.AddRe [l, r]
+  add (M.Lit (Int i1)) (M.Lit (Int i2)) = M.Lit (Int (i1 + i2))
+  add (M.Lit (Dbl r1)) (M.Lit (Dbl r2)) = M.Lit (Dbl (r1 + r2))
+  add (M.Lit (Int i)) (M.Lit (Dbl r)) = M.Lit (Dbl (fromIntegral i + r))
+  add (M.Lit (Dbl r)) (M.Lit (Int i)) = M.Lit (Dbl (r + fromIntegral i))
+  add l r = M.AssocA M.AddI [l, r]
 
   -- | Multiply two expressions (Integers).
   mulI l (M.Lit (Int 1)) = l
@@ -541,7 +515,7 @@ instance ExprC M.ModelExpr where
   realInterval c = M.RealI (c ^. uid)
 
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
-  euclidean = sqrt . foldr1 addRe . map square
+  euclidean = sqrt . foldr1 add . map square
 
   -- | Smart constructor to cross product two expressions.
   cross = M.VVVBinaryOp M.Cross
@@ -588,23 +562,12 @@ instance ExprC C.CodeExpr where
   -- | Smart constructor for the dot product of two equations.
   ($.) = C.VVNBinaryOp C.Dot
   
-  -- | Add two expressions (Integers).
-  addI l (C.Lit (Int 0)) = l
-  addI (C.Lit (Int 0)) r = r
-  addI (C.AssocA C.AddI l) (C.AssocA C.AddI r) = C.AssocA C.AddI (l ++ r)
-  addI (C.AssocA C.AddI l) r = C.AssocA C.AddI (l ++ [r])
-  addI l (C.AssocA C.AddI r) = C.AssocA C.AddI (l : r)
-  addI l r = C.AssocA C.AddI [l, r]
-  
-  -- | Add two expressions (Real numbers).
-  addRe l (C.Lit (Dbl 0))= l
-  addRe (C.Lit(Dbl 0)) r      = r
-  addRe l (C.Lit (ExactDbl 0)) = l
-  addRe (C.Lit (ExactDbl 0)) r = r
-  addRe (C.AssocA C.AddRe l) (C.AssocA C.AddRe r) = C.AssocA C.AddRe (l ++ r)
-  addRe (C.AssocA C.AddRe l) r = C.AssocA C.AddRe (l ++ [r])
-  addRe l (C.AssocA C.AddRe r) = C.AssocA C.AddRe (l : r)
-  addRe l r = C.AssocA C.AddRe [l, r]
+  -- | Add two expressions.
+  add (C.Lit (Int i1)) (C.Lit (Int i2)) = C.Lit (Int (i1 + i2))
+  add (C.Lit (Dbl r1)) (C.Lit (Dbl r2)) = C.Lit (Dbl (r1 + r2))
+  add (C.Lit (Int i)) (C.Lit (Dbl r)) = C.Lit (Dbl (fromIntegral i + r))
+  add (C.Lit (Dbl r)) (C.Lit (Int i)) = C.Lit (Dbl (r + fromIntegral i))
+  add l r = C.AssocA C.AddI [l, r]
   
   -- | Multiply two expressions (Integers).
   mulI l (C.Lit (Int 1)) = l
@@ -716,7 +679,7 @@ instance ExprC C.CodeExpr where
   realInterval c = C.RealI (c ^. uid)
   
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
-  euclidean = sqrt . foldr1 addRe . map square
+  euclidean = sqrt . foldr1 add . map square
   
   -- | Smart constructor to cross product two expressions.
   cross = C.VVVBinaryOp C.Cross

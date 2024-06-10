@@ -65,7 +65,7 @@ public class Interpolation {
         outfile.close();
         
         for (int i = 0; i < arr.size() - 1; i += 1) {
-            if (arr.get(i) <= v && v <= arr.get(i + 1)) {
+            if (arr.get(i + 0) <= v && v <= arr.get(i + 1)) {
                 return i;
             }
         }
@@ -137,13 +137,13 @@ public class Interpolation {
         outfile.print(i);
         outfile.println(" in module Interpolation");
         outfile.close();
-        x_z_1 = extractColumn(x_matrix, i);
+        x_z_1 = extractColumn(x_matrix, i + 0);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'x_z_1' assigned ");
         outfile.print(x_z_1);
         outfile.println(" in module Interpolation");
         outfile.close();
-        y_z_1 = extractColumn(y_matrix, i);
+        y_z_1 = extractColumn(y_matrix, i + 0);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'y_z_1' assigned ");
         outfile.print(y_z_1);
@@ -177,19 +177,19 @@ public class Interpolation {
         } catch (Exception exc) {
             throw new Exception("Interpolation of y failed");
         }
-        y_1 = lin_interp(x_z_1.get(j), y_z_1.get(j), x_z_1.get(j + 1), y_z_1.get(j + 1), x);
+        y_1 = lin_interp(x_z_1.get(j + 0), y_z_1.get(j + 0), x_z_1.get(j + 1), y_z_1.get(j + 1), x);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'y_1' assigned ");
         outfile.print(y_1);
         outfile.println(" in module Interpolation");
         outfile.close();
-        y_2 = lin_interp(x_z_2.get(k_2), y_z_2.get(k_2), x_z_2.get(k_2 + 1), y_z_2.get(k_2 + 1), x);
+        y_2 = lin_interp(x_z_2.get(k_2 + 0), y_z_2.get(k_2 + 0), x_z_2.get(k_2 + 1), y_z_2.get(k_2 + 1), x);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'y_2' assigned ");
         outfile.print(y_2);
         outfile.println(" in module Interpolation");
         outfile.close();
-        return lin_interp(z_vector.get(i), y_1, z_vector.get(i + 1), y_2, z);
+        return lin_interp(z_vector.get(i + 0), y_1, z_vector.get(i + 1), y_2, z);
     }
     
     /** \brief Linearly interpolates a z value at given x and y values
@@ -227,13 +227,13 @@ public class Interpolation {
         ArrayList<Double> z_vector = new ArrayList<Double>(0);
         ReadTable.read_table(filename, z_vector, x_matrix, y_matrix);
         for (int i = 0; i < z_vector.size() - 1; i += 1) {
-            x_z_1 = extractColumn(x_matrix, i);
+            x_z_1 = extractColumn(x_matrix, i + 0);
             outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
             outfile.print("var 'x_z_1' assigned ");
             outfile.print(x_z_1);
             outfile.println(" in module Interpolation");
             outfile.close();
-            y_z_1 = extractColumn(y_matrix, i);
+            y_z_1 = extractColumn(y_matrix, i + 0);
             outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
             outfile.print("var 'y_z_1' assigned ");
             outfile.print(y_z_1);
@@ -267,20 +267,20 @@ public class Interpolation {
             } catch (Exception exc) {
                 continue;
             }
-            y_1 = lin_interp(x_z_1.get(j), y_z_1.get(j), x_z_1.get(j + 1), y_z_1.get(j + 1), x);
+            y_1 = lin_interp(x_z_1.get(j + 0), y_z_1.get(j + 0), x_z_1.get(j + 1), y_z_1.get(j + 1), x);
             outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
             outfile.print("var 'y_1' assigned ");
             outfile.print(y_1);
             outfile.println(" in module Interpolation");
             outfile.close();
-            y_2 = lin_interp(x_z_2.get(k_2), y_z_2.get(k_2), x_z_2.get(k_2 + 1), y_z_2.get(k_2 + 1), x);
+            y_2 = lin_interp(x_z_2.get(k_2 + 0), y_z_2.get(k_2 + 0), x_z_2.get(k_2 + 1), y_z_2.get(k_2 + 1), x);
             outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
             outfile.print("var 'y_2' assigned ");
             outfile.print(y_2);
             outfile.println(" in module Interpolation");
             outfile.close();
             if (y_1 <= y && y <= y_2) {
-                return lin_interp(y_1, z_vector.get(i), y_2, z_vector.get(i + 1), y);
+                return lin_interp(y_1, z_vector.get(i + 0), y_2, z_vector.get(i + 1), y);
             }
         }
         throw new Exception("Interpolation of z failed");

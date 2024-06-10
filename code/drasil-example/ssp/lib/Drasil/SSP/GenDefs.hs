@@ -86,7 +86,7 @@ normForcEq = makeRC "normForcEq" (nounPhraseSP "normal force equilibrium")
 
 nmFEqRel :: Relation
 nmFEqRel = inxi totNrmForce $= eqlExprN cos sin
-  (\x y -> x $- inxiM1 intShrForce `addRe` inxi intShrForce `addRe` y)
+  (\x y -> x $- inxiM1 intShrForce `add` inxi intShrForce `add` y)
 
 nmFEqDesc :: Sentence
 nmFEqDesc = foldlSent [S "This equation satisfies", refS equilibrium +:+.
@@ -106,7 +106,7 @@ bsShrFEq = makeRC "bsShrFEq" (nounPhraseSP "base shear force equilibrium")
 
 bShFEqRel :: Relation
 bShFEqRel = inxi mobShrI $= eqlExpr sin cos
-  (\x y -> x $- inxiM1 intShrForce `addRe` inxi intShrForce `addRe` y)
+  (\x y -> x $- inxiM1 intShrForce `add` inxi intShrForce `add` y)
 
 bShFEqDesc :: Sentence
 bShFEqDesc = foldlSent [S "This equation satisfies", refS equilibrium +:+.
@@ -120,7 +120,7 @@ bShFEqDeriv = mkDerivNoHeader [foldlSent [atStart bsShrFEq `S.is`
   (refS figForceActing `S.in_` refS (SRS.physSyst [] []))]]
 --
 shrResEqn :: Expr
-shrResEqn = inxi nrmFSubWat `mulRe` tan (inxi fricAngle) `addRe` (inxi effCohesion `mulRe`
+shrResEqn = inxi nrmFSubWat `mulRe` tan (inxi fricAngle) `add` (inxi effCohesion `mulRe`
   inxi baseLngth)
 
 resShr :: RelationConcept
@@ -207,10 +207,10 @@ resShearWO = makeRC "resShearWO"
 
 resShearWORel :: Relation
 resShearWORel = inxi shearRNoIntsl $=
-  ((inxi slcWght `addRe` (inxi surfHydroForce `mulRe` cos (inxi surfAngle))) `mulRe`
-  cos (inxi baseAngle) `addRe` (neg (inxi watrForce) `addRe` inxiM1 watrForce `addRe`
+  ((inxi slcWght `add` (inxi surfHydroForce `mulRe` cos (inxi surfAngle))) `mulRe`
+  cos (inxi baseAngle) `add` (neg (inxi watrForce) `add` inxiM1 watrForce `add`
   (inxi surfHydroForce `mulRe` sin (inxi surfAngle)) `mulRe` sin (inxi baseAngle) $-
-  inxi baseHydroForce) `mulRe` tan (inxi fricAngle) `addRe` (inxi effCohesion `mulRe`
+  inxi baseHydroForce) `mulRe` tan (inxi fricAngle) `add` (inxi effCohesion `mulRe`
   inxi baseLngth))
 
 resShearWODesc :: Sentence
@@ -229,9 +229,9 @@ mobShearWO = makeRC "mobShearWO"
   (nounPhraseSP "mobilized shear force, without interslice normal and shear forces") mobShearWODesc mobShearWORel
 
 mobShearWORel :: Relation
-mobShearWORel = inxi shearFNoIntsl $= ((inxi slcWght `addRe` (inxi surfHydroForce `mulRe`
-  cos (inxi surfAngle))) `mulRe` sin (inxi baseAngle) $- ((neg (inxi watrForce) `addRe`
-  inxiM1 watrForce `addRe` (inxi surfHydroForce `mulRe` sin (inxi surfAngle))) `mulRe` cos (inxi baseAngle)))
+mobShearWORel = inxi shearFNoIntsl $= ((inxi slcWght `add` (inxi surfHydroForce `mulRe`
+  cos (inxi surfAngle))) `mulRe` sin (inxi baseAngle) $- ((neg (inxi watrForce) `add`
+  inxiM1 watrForce `add` (inxi surfHydroForce `mulRe` sin (inxi surfAngle))) `mulRe` cos (inxi baseAngle)))
 
 mobShearWODesc :: Sentence
 mobShearWODesc = (foldlList Comma List [slcWght `definedIn'''` sliceWghtGD,
@@ -247,8 +247,8 @@ momentEqlModel = equationalConstraints' $
   NE.fromList [express momEqlExpr]
 
 momEqlExpr :: Expr
-momEqlExpr = exactDbl 0 $= momExpr (\ x y -> x `addRe`
-  (half (inxi baseWthX) `mulRe` (inxi intShrForce `addRe` inxiM1 intShrForce)) `addRe` y)
+momEqlExpr = exactDbl 0 $= momExpr (\ x y -> x `add`
+  (half (inxi baseWthX) `mulRe` (inxi intShrForce `add` inxiM1 intShrForce)) `add` y)
 
 momEqlDesc :: Sentence
 momEqlDesc = foldlSent [S "This", phrase equation, S "satisfies",
@@ -409,16 +409,16 @@ momEqlDerivTorqueEqn = sy torque $= cross (sy displacement) (sy force)
 
 momEqlDerivMomentEqn = sy genericM $= sy rotForce `mulRe` sy momntArm
 
-momEqlDerivNormaliEqn = neg (inxi intNormForce) `mulRe` (inxi sliceHght `addRe`
+momEqlDerivNormaliEqn = neg (inxi intNormForce) `mulRe` (inxi sliceHght `add`
   (half (inxi baseWthX) `mulRe` tan (inxi baseAngle)))
 
 momEqlDerivNormaliM1Eqn = inxiM1 intNormForce `mulRe` (inxiM1 sliceHght $-
   (half (inxi baseWthX) `mulRe` tan (inxi baseAngle)))
 
-momEqlDerivWateriEqn = neg (inxi watrForce) `mulRe` (frac 1 3 `mulRe` inxi sliceHghtW `addRe`
+momEqlDerivWateriEqn = neg (inxi watrForce) `mulRe` (frac 1 3 `mulRe` inxi sliceHghtW `add`
   (half (inxi baseWthX) `mulRe` tan (inxi baseAngle)))
 
-momEqlDerivWateriM1Eqn = inxiM1 watrForce `mulRe` (frac 1 3 `mulRe` inxiM1 sliceHghtW `addRe`
+momEqlDerivWateriM1Eqn = inxiM1 watrForce `mulRe` (frac 1 3 `mulRe` inxiM1 sliceHghtW `add`
   (half (inxi baseWthX) `mulRe` tan (inxi baseAngle)))
 
 momEqlDerivSheariEqn = inxi intShrForce `mulRe` half (inxi baseWthX)
@@ -439,8 +439,8 @@ momEqlDerivHydroEqn = inxi surfHydroForce `mulRe` sin (inxi surfAngle) `mulRe`
 
 momEqlDerivExtEqn = inxi surfLoad `mulRe` sin (inxi impLoadAngle) `mulRe` inxi midpntHght
 
-momEqlDerivFinalEqn = exactDbl 0 $= momExpr (\ x y -> x `addRe`
-  (half (inxi baseWthX) `mulRe` (inxi intShrForce `addRe` inxiM1 intShrForce)) `addRe` y)
+momEqlDerivFinalEqn = exactDbl 0 $= momExpr (\ x y -> x `add`
+  (half (inxi baseWthX) `mulRe` (inxi intShrForce `add` inxiM1 intShrForce)) `add` y)
 
 --
 
@@ -450,17 +450,17 @@ sliceWght = makeRC "sliceWght" (nounPhraseSP "slice weight") sliceWghtNotes
 
 sliceWghtEqn :: Expr
 sliceWghtEqn = inxi slcWght $= inxi baseWthX `mulRe` oneHalf `mulRe` completeCase [case1, case2, case3]
-  where case1 = (((inxi slopeHght $- inxi slipHght) `addRe`
+  where case1 = (((inxi slopeHght $- inxi slipHght) `add`
           (inxiM1 slopeHght $- inxiM1 slipHght)) `mulRe` sy satWeight,
           (inxi waterHght $> inxi slopeHght) $||
           (inxiM1 waterHght $> inxiM1 slopeHght))
-        case2 = (((inxi slopeHght $- inxi waterHght) `addRe`
-          (inxiM1 slopeHght $- inxiM1 waterHght)) `mulRe` sy dryWeight `addRe`
-          (((inxi waterHght $- inxi slipHght) `addRe`
+        case2 = (((inxi slopeHght $- inxi waterHght) `add`
+          (inxiM1 slopeHght $- inxiM1 waterHght)) `mulRe` sy dryWeight `add`
+          (((inxi waterHght $- inxi slipHght) `add`
           (inxiM1 waterHght $- inxiM1 slipHght)) `mulRe` sy satWeight),
           (inxi slopeHght $>= inxi waterHght $>= inxi slipHght) $&&
           (inxiM1 slopeHght $>= inxiM1 waterHght $>= inxiM1 slipHght))
-        case3 = (((inxi slopeHght $- inxi slipHght) `addRe`
+        case3 = (((inxi slopeHght $- inxi slipHght) `add`
           (inxiM1 slopeHght $- inxiM1 slipHght)) `mulRe` sy dryWeight,
           (inxi waterHght $< inxi slipHght) $||
           (inxiM1 waterHght $< inxiM1 slipHght))
@@ -521,7 +521,7 @@ sliceWghtDerivSatCase2DSentence = [S "Due to", refS assumpPSC `sC`
 sliceWghtDerivSatCaseWeightEqn = inxi slcWght $= inxi satVol `mulRe` sy satWeight
 
 sliceWghtDerivSatCaseSliceEqn = inxi slcWght $= inxi baseWthX `mulRe` oneHalf `mulRe`
-  ((inxi slopeHght $- inxi slipHght) `addRe` (inxiM1 slopeHght $- inxiM1 slipHght)) `mulRe` sy satWeight
+  ((inxi slopeHght $- inxi slipHght) `add` (inxiM1 slopeHght $- inxiM1 slipHght)) `mulRe` sy satWeight
 
 sliceWghtDerivDryCaseIntroSentence = [S "For the case where the",
   phrase waterTable, S "is below", phraseNP (the slpSrf) `sC`
@@ -540,7 +540,7 @@ sliceWghtDerivDryCase2DSentence = [refS assumpPSC, S "again allows for",
 sliceWghtDerivDryCaseWeightEqn = inxi slcWght $= inxi dryVol `mulRe` sy dryWeight
 
 sliceWghtDerivDryCaseSliceEqn = inxi slcWght $= inxi baseWthX `mulRe` oneHalf `mulRe`
-  ((inxi slopeHght $- inxi slipHght) `addRe` (inxiM1 slopeHght $- inxiM1 slipHght)) `mulRe` sy dryWeight
+  ((inxi slopeHght $- inxi slipHght) `add` (inxiM1 slopeHght $- inxiM1 slipHght)) `mulRe` sy dryWeight
 
 sliceWghtDerivMixCaseIntroSentence = [S "For the case where the",
   phrase waterTable, S "is between", phraseNP (NP.the (slopeSrf `and_`
@@ -566,13 +566,13 @@ sliceWghtDerivMixCase2DSentence = [refS assumpPSC, S "again allows for",
   phraseNP (waterTable `and_` slpSrf), S "at", phraseNP (the slice) +:+.
   S "edges", S "Thus" `sC` phraseNP (the slcWght), S "are defined as"]
 
-sliceWghtDerivMixCaseWeightEqn = inxi slcWght $= inxi dryVol `mulRe` sy dryWeight `addRe`
+sliceWghtDerivMixCaseWeightEqn = inxi slcWght $= inxi dryVol `mulRe` sy dryWeight `add`
   (inxi satVol `mulRe` sy satWeight)
 
 sliceWghtDerivMixCaseSliceEqn = inxi slcWght $= (inxi baseWthX `mulRe` oneHalf `mulRe`
-  (((inxi slopeHght $- inxi waterHght) `addRe`
-  (inxiM1 slopeHght $- inxiM1 waterHght)) `mulRe` sy dryWeight `addRe`
-  (((inxi waterHght $- inxi slipHght) `addRe`
+  (((inxi slopeHght $- inxi waterHght) `add`
+  (inxiM1 slopeHght $- inxiM1 waterHght)) `mulRe` sy dryWeight `add`
+  (((inxi waterHght $- inxi slipHght) `add`
   (inxiM1 waterHght $- inxiM1 slipHght)) `mulRe` sy satWeight)))
 
 -- 
@@ -584,7 +584,7 @@ baseWtrF = makeRC "baseWtrF" (nounPhraseSP "base hydrostatic force")
 bsWtrFEqn :: Expr
 bsWtrFEqn = inxi baseHydroForce $= inxi baseLngth `mulRe` sy waterWeight `mulRe` oneHalf `mulRe`
   completeCase [case1, case2]
-  where case1 = ((inxi waterHght $- inxi slipHght) `addRe`
+  where case1 = ((inxi waterHght $- inxi slipHght) `add`
           (inxiM1 waterHght $- inxiM1 slipHght),
           (inxi waterHght $> inxi slipHght) $||
           (inxiM1 waterHght $> inxiM1 slipHght))
@@ -653,7 +653,7 @@ bsWtrFDerivEndSentence = [foldlSent [S "This", phrase equation `S.is`
 
 bsWtrFDerivWeightEqn = sy pressure $= sy specWeight `mulRe` sy height
 
-bsWtrFDerivHeightEqn = oneHalf `mulRe` ((inxi waterHght $- inxi slipHght) `addRe` (inxiM1 waterHght $- inxiM1 slipHght))
+bsWtrFDerivHeightEqn = oneHalf `mulRe` ((inxi waterHght $- inxi slipHght) `add` (inxiM1 waterHght $- inxiM1 slipHght))
 
 bsWtrFDerivSliceEqn = inxi baseHydroForce $= inxi baseLngth `mulRe` sy waterWeight `mulRe`
   bsWtrFDerivHeightEqn
@@ -667,7 +667,7 @@ srfWtrF = makeRC "srfWtrF" (nounPhraseSP "surface hydrostatic force")
 srfWtrFEqn :: Relation
 srfWtrFEqn = inxi surfHydroForce $= inxi surfLngth `mulRe` sy waterWeight `mulRe` oneHalf `mulRe`
   completeCase [case1, case2]
-  where case1 = ((inxi waterHght $- inxi slopeHght) `addRe`
+  where case1 = ((inxi waterHght $- inxi slopeHght) `add`
           (inxiM1 waterHght $- inxiM1 slopeHght),
           (inxi waterHght $> inxi slopeHght) $||
           (inxiM1 waterHght $> inxiM1 slopeHght))
@@ -736,7 +736,7 @@ srfWtrFDerivEndSentence = [foldlSent [S "This" +:+ phrase equation `S.is`
 
 srfWtrFDerivWeightEqn = sy pressure $= sy specWeight `mulRe` sy height
 
-srfWtrFDerivHeightEqn = oneHalf `mulRe` ((inxi waterHght $- inxi slopeHght) `addRe` (inxiM1 waterHght $- inxiM1 slopeHght))
+srfWtrFDerivHeightEqn = oneHalf `mulRe` ((inxi waterHght $- inxi slopeHght) `add` (inxiM1 waterHght $- inxiM1 slopeHght))
 
 srfWtrFDerivSliceEqn = inxi surfHydroForce $= inxi surfLngth `mulRe` sy waterWeight `mulRe`
   srfWtrFDerivHeightEqn

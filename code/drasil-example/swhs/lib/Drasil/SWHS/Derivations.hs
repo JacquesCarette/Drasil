@@ -27,23 +27,23 @@ eBalanceOnWtrDerivEqn3 = deriv (sy tempW) time $=
 
 eBalanceOnWtrDerivEqn4 = deriv (sy tempW) time $=
   (sy coilHTC `mulRe` sy coilSA $/
-  (sy wMass `mulRe` sy htCapW)) `mulRe`  (sy tempC $- sy tempW) `addRe`
+  (sy wMass `mulRe` sy htCapW)) `mulRe`  (sy tempC $- sy tempW) `add`
   ((sy coilHTC `mulRe` sy coilSA $/
   (sy coilHTC `mulRe` sy coilSA)) `mulRe` (sy pcmHTC `mulRe` sy pcmSA $/
   (sy wMass `mulRe` sy htCapW)) `mulRe` (sy tempPCM $- sy tempW))
 
 eBalanceOnWtrDerivEqn5 = deriv (sy tempW) time $=
   (sy coilHTC `mulRe` sy coilSA $/
-  (sy wMass `mulRe` sy htCapW)) `mulRe`  (sy tempC $- sy tempW) `addRe`
+  (sy wMass `mulRe` sy htCapW)) `mulRe`  (sy tempC $- sy tempW) `add`
   ((sy pcmHTC `mulRe` sy pcmSA $/
   (sy coilHTC `mulRe` sy coilSA)) `mulRe` (sy coilHTC `mulRe` sy coilSA $/
   (sy wMass `mulRe` sy htCapW)) `mulRe` (sy tempPCM $- sy tempW))
 
 eBalanceOnWtrDerivEqn6 = deriv (sy tempW) time $=
-  recip_ (sy tauW) `mulRe` (sy tempC $- sy tempW) `addRe` ((sy eta $/ sy tauW) `mulRe` (sy tempPCM $- sy tempW))
+  recip_ (sy tauW) `mulRe` (sy tempC $- sy tempW) `add` ((sy eta $/ sy tauW) `mulRe` (sy tempPCM $- sy tempW))
 
 eBalanceOnWtrDerivEqn7 = deriv (sy tempW) time $=
-  recip_ (sy tauW) `mulRe` ((sy tempC $- sy tempW) `addRe` (sy eta `mulRe` (sy tempPCM $- sy tempW)))
+  recip_ (sy tauW) `mulRe` ((sy tempC $- sy tempW) `add` (sy eta `mulRe` (sy tempPCM $- sy tempW)))
 
 eBalanceOnWtrDerivEqnsIM1 :: [ModelExpr]
 eBalanceOnWtrDerivEqnsIM1 = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2,

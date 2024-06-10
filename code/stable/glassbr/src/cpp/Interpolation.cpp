@@ -56,7 +56,7 @@ int find(vector<double> &arr, double v) {
     outfile.close();
     
     for (int i = 0; i < (int)(arr.size()) - 1; i += 1) {
-        if (arr.at(i) <= v && v <= arr.at(i + 1)) {
+        if (arr.at(i + 0) <= v && v <= arr.at(i + 1)) {
             return i;
         }
     }
@@ -141,7 +141,7 @@ double interpY(string filename, double x, double z) {
     outfile << i;
     outfile << " in module Interpolation" << std::endl;
     outfile.close();
-    x_z_1 = extractColumn(x_matrix, i);
+    x_z_1 = extractColumn(x_matrix, i + 0);
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'x_z_1' assigned ";
     outfile << "[";
@@ -155,7 +155,7 @@ double interpY(string filename, double x, double z) {
     outfile << "]";
     outfile << " in module Interpolation" << std::endl;
     outfile.close();
-    y_z_1 = extractColumn(y_matrix, i);
+    y_z_1 = extractColumn(y_matrix, i + 0);
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'y_z_1' assigned ";
     outfile << "[";
@@ -213,19 +213,19 @@ double interpY(string filename, double x, double z) {
     } catch (...) {
         throw("Interpolation of y failed");
     }
-    y_1 = lin_interp(x_z_1.at(j), y_z_1.at(j), x_z_1.at(j + 1), y_z_1.at(j + 1), x);
+    y_1 = lin_interp(x_z_1.at(j + 0), y_z_1.at(j + 0), x_z_1.at(j + 1), y_z_1.at(j + 1), x);
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'y_1' assigned ";
     outfile << y_1;
     outfile << " in module Interpolation" << std::endl;
     outfile.close();
-    y_2 = lin_interp(x_z_2.at(k_2), y_z_2.at(k_2), x_z_2.at(k_2 + 1), y_z_2.at(k_2 + 1), x);
+    y_2 = lin_interp(x_z_2.at(k_2 + 0), y_z_2.at(k_2 + 0), x_z_2.at(k_2 + 1), y_z_2.at(k_2 + 1), x);
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'y_2' assigned ";
     outfile << y_2;
     outfile << " in module Interpolation" << std::endl;
     outfile.close();
-    return lin_interp(z_vector.at(i), y_1, z_vector.at(i + 1), y_2, z);
+    return lin_interp(z_vector.at(i + 0), y_1, z_vector.at(i + 1), y_2, z);
 }
 
 double interpZ(string filename, double x, double y) {
@@ -257,7 +257,7 @@ double interpZ(string filename, double x, double y) {
     vector<double> z_vector(0);
     read_table(filename, z_vector, x_matrix, y_matrix);
     for (int i = 0; i < (int)(z_vector.size()) - 1; i += 1) {
-        x_z_1 = extractColumn(x_matrix, i);
+        x_z_1 = extractColumn(x_matrix, i + 0);
         outfile.open("log.txt", std::fstream::app);
         outfile << "var 'x_z_1' assigned ";
         outfile << "[";
@@ -271,7 +271,7 @@ double interpZ(string filename, double x, double y) {
         outfile << "]";
         outfile << " in module Interpolation" << std::endl;
         outfile.close();
-        y_z_1 = extractColumn(y_matrix, i);
+        y_z_1 = extractColumn(y_matrix, i + 0);
         outfile.open("log.txt", std::fstream::app);
         outfile << "var 'y_z_1' assigned ";
         outfile << "[";
@@ -329,20 +329,20 @@ double interpZ(string filename, double x, double y) {
         } catch (...) {
             continue;
         }
-        y_1 = lin_interp(x_z_1.at(j), y_z_1.at(j), x_z_1.at(j + 1), y_z_1.at(j + 1), x);
+        y_1 = lin_interp(x_z_1.at(j + 0), y_z_1.at(j + 0), x_z_1.at(j + 1), y_z_1.at(j + 1), x);
         outfile.open("log.txt", std::fstream::app);
         outfile << "var 'y_1' assigned ";
         outfile << y_1;
         outfile << " in module Interpolation" << std::endl;
         outfile.close();
-        y_2 = lin_interp(x_z_2.at(k_2), y_z_2.at(k_2), x_z_2.at(k_2 + 1), y_z_2.at(k_2 + 1), x);
+        y_2 = lin_interp(x_z_2.at(k_2 + 0), y_z_2.at(k_2 + 0), x_z_2.at(k_2 + 1), y_z_2.at(k_2 + 1), x);
         outfile.open("log.txt", std::fstream::app);
         outfile << "var 'y_2' assigned ";
         outfile << y_2;
         outfile << " in module Interpolation" << std::endl;
         outfile.close();
         if (y_1 <= y && y <= y_2) {
-            return lin_interp(y_1, z_vector.at(i), y_2, z_vector.at(i + 1), y);
+            return lin_interp(y_1, z_vector.at(i + 0), y_2, z_vector.at(i + 1), y);
         }
     }
     throw("Interpolation of z failed");

@@ -354,7 +354,7 @@ physSysConv = foldlSP [atStart morPrice, phrase analysis, refS morgenstern1965
   phrase value, S "for a single", phrase slice `sC` S "and an", phrase intrslce, 
   phrase value, S "at a given", phrase index, ch index, S "refers to the",
   phrase value, S "between", phrase slice, ch index `S.and_` S "adjacent", phrase slice,
-  eS $ sy index `addI` int 1]
+  eS $ sy index `add` int 1]
 
 figIndexConv :: LabelledContent
 figIndexConv = llcc (makeFigRef "IndexConvention") $ 

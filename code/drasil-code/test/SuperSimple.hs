@@ -8,7 +8,8 @@ import GOOL.Drasil (GSProgram, MSBody, MSBlock, SMethod, OOProg,
   Comparison(..), (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
   CommentStatement(..), VariableSym(..), Literal(..), VariableValue(..), 
   List(..), MethodSym(..), ModuleSym(..), VSType, SVariable, ValueExpression, 
-  SValue, listSlice, bodyStatements, extNewObj, objVar, objMethodCall, objMethodCallNoParams)
+  SValue, listSlice, bodyStatements, extFuncApp, extNewObj, objVar,
+  objMethodCall, objMethodCallNoParams)
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import SimpleClass (simpleClass, simpleClassName)
 
@@ -79,13 +80,14 @@ newSimpleClass = extNewObj simpleClassName simpleClassType []
 objTest :: (OOProg r) => MSBlock r
 objTest = block [
   varDecDef s newSimpleClass,
-  printLn $ valueOf s,                                                        -- Print s directly
-  varDecDef x $ objMethodCallNoParams int (valueOf s) "getX",     -- Store s.getX() in x
-  printLn $ valueOf x,                                                        -- Print x
+  printLn $ valueOf s,
+  printLn $ objMethodCallNoParams int (valueOf s) "getX",
   valStmt $ objMethodCall int (valueOf s) "setX" [litInt 2],
   printLn $ objMethodCallNoParams int (valueOf s) "getX",
-  valStmt $ objMethodCallNoParams void (valueOf s) "printXMethod",
-  printLn $ objMethodCallNoParams int (valueOf s) "getX"]         -- Print s.getX()
+  valStmt $ objMethodCall void (valueOf s) "resetXIfTrue" [litTrue],
+  printLn $ objMethodCallNoParams int (valueOf s) "getX",
+  varDecDef (var "n" double) (extFuncApp "SimpleData" "doubleAndAdd" double 
+    [litDouble 2, litDouble 1.0])]
 
 -- | Print the 5th given argument.
 helloElseBody :: (OOProg r) => MSBody r

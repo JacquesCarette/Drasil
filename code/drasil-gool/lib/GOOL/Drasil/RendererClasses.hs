@@ -230,8 +230,12 @@ class ParamElim r where
 
 class (MethodTypeSym r, BlockCommentSym r) => 
   RenderMethod r where
+  -- | Main method?, name, public/private, static/dynamic, 
+  --   return type, parameters, body
   intMethod     :: Bool -> Label -> r (Scope r) -> r (Permanence r) -> 
     MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
+  -- | Main function?, name, public/private, static/dynamic, 
+  --   return type, parameters, body
   intFunc       :: Bool -> Label -> r (Scope r) -> r (Permanence r) 
     -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
   commentedFunc :: MS (r (BlockComment r)) -> SMethod r -> SMethod r

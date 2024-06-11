@@ -1,5 +1,5 @@
 module Language.Drasil.Code.Imperative.Modules (
-  genMain, genMainFunc, chooseInModule, genInputClass, genInputDerived,
+  genMain, genMainFunc, genInputClass, genInputDerived, genInputMod,
   genInputConstraints, genInputFormat, genConstMod, genConstClass, genCalcMod,
   genCalcFunc, genOutputMod, genOutputFormat, genSampleInput
 ) where
@@ -37,8 +37,8 @@ import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.Code.ExtLibImport (defs, imports, steps)
 import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
-  ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..),
-  InputModule(..), Logging(..), Structure(..), hasSampleInput)
+  ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..), 
+  Logging(..), Structure(..), hasSampleInput)
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
 import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc)
@@ -171,29 +171,9 @@ initLogFileVar l = [varDec varLogFile | LogVar `elem` l]
 
 ------- INPUT ----------
 
--- | Generates either a single module containing all input-related components, or
--- separate modules for each input-related component, depending on the user's
--- modularity choice.
-chooseInModule :: (OOProg r) => InputModule -> GenState [SFile r]
-chooseInModule Combined = genInputModCombined
-chooseInModule Separated = genInputModSeparated
-
--- | Generates separate modules for each input-related component.
-genInputModSeparated :: (OOProg r) => GenState [SFile r]
-genInputModSeparated = do
-  ipDesc <- modDesc inputParametersDesc
-  ifDesc <- modDesc (liftS inputFormatDesc)
-  dvDesc <- modDesc (liftS derivedValuesDesc)
-  icDesc <- modDesc (liftS inputConstraintsDesc)
-  sequence
-    [genModule "InputParameters" ipDesc [] [genInputClass Primary],
-    genModule "InputFormat" ifDesc [genInputFormat Pub] [],
-    genModule "DerivedValues" dvDesc [genInputDerived Pub] [],
-    genModule "InputConstraints" icDesc [genInputConstraints Pub] []]
-
 -- | Generates a single module containing all input-related components.
-genInputModCombined :: (OOProg r) => GenState [SFile r]
-genInputModCombined = do
+genInputMod :: (OOProg r) => GenState [SFile r]
+genInputMod = do
   ipDesc <- modDesc inputParametersDesc
   let cname = "InputParameters"
       genMod :: (OOProg r) => Maybe (SClass r) ->

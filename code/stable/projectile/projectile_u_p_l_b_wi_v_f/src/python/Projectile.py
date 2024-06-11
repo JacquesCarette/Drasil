@@ -13,24 +13,32 @@ class InputParameters:
     
     ## \brief Initializes input object by reading inputs and checking physical constraints on the input
     # \param filename name of the input file
-    def __init__(self, filename):
+    # \param inParams structure holding the input values
+    def __init__(self, filename, inParams):
         outfile = open("log.txt", "a")
         print("function InputParameters called with inputs: {", file=outfile)
         print("  filename = ", end="", file=outfile)
-        print(filename, file=outfile)
+        print(filename, end="", file=outfile)
+        print(", ", file=outfile)
+        print("  inParams = ", end="", file=outfile)
+        print("Instance of InputParameters object", file=outfile)
         print("  }", file=outfile)
         outfile.close()
         
-        self.get_input(filename)
+        self.get_input(filename, inParams)
         self.input_constraints()
     
     ## \brief Reads input from a file with the given file name
     # \param filename name of the input file
-    def get_input(self, filename):
+    # \param inParams structure holding the input values
+    def get_input(self, filename, inParams):
         outfile = open("log.txt", "a")
         print("function get_input called with inputs: {", file=outfile)
         print("  filename = ", end="", file=outfile)
-        print(filename, file=outfile)
+        print(filename, end="", file=outfile)
+        print(", ", file=outfile)
+        print("  inParams = ", end="", file=outfile)
+        print("Instance of InputParameters object", file=outfile)
         print("  }", file=outfile)
         outfile.close()
         
@@ -191,7 +199,7 @@ print("var 'filename' assigned ", end="", file=outfile)
 print(filename, end="", file=outfile)
 print(" in module Projectile", file=outfile)
 outfile.close()
-inParams = InputParameters(filename)
+inParams = InputParameters(filename, inParams)
 t_flight = func_t_flight(inParams)
 outfile = open("log.txt", "a")
 print("var 't_flight' assigned ", end="", file=outfile)

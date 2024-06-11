@@ -4,7 +4,7 @@ module Drasil.HGHC.Choices where
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
 --   Modularity(..), Structure(..), ConstantStructure(..), 
---   ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), 
+--   ConstantRepr(..), matchConcepts, AuxFile(..), 
 --   Visibility(..), defaultChoices)
 -- import Drasil.HGHC.Body (fullSI)
 
@@ -15,7 +15,7 @@ module Drasil.HGHC.Choices where
 thisChoices :: Choices
 thisChoices = defaultChoices {
   lang             = [Python, Cpp, CSharp, Java],
-  modularity       = Modular Combined,
+  modularity       = Modular,
   impType          = Program,
   logFile          = "log.txt",
   logging          = [],

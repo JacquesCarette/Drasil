@@ -22,13 +22,13 @@ endif
 
 build: GlassBR$(TARGET_EXTENSION)
 
-GlassBR$(TARGET_EXTENSION): Control.cs InputParameters.cs InputFormat.cs DerivedValues.cs InputConstraints.cs Calculations.cs OutputFormat.cs ReadTable.cs Interpolation.cs
-	$(CSC) -out:GlassBR$(TARGET_EXTENSION) Control.cs InputParameters.cs InputFormat.cs DerivedValues.cs InputConstraints.cs Calculations.cs OutputFormat.cs ReadTable.cs Interpolation.cs
+GlassBR$(TARGET_EXTENSION): Control.cs InputParameters.cs Calculations.cs OutputFormat.cs ReadTable.cs Interpolation.cs
+	$(CSC) -out:GlassBR$(TARGET_EXTENSION) Control.cs InputParameters.cs Calculations.cs OutputFormat.cs ReadTable.cs Interpolation.cs
 
 run: build
 	./GlassBR$(TARGET_EXTENSION) $(RUNARGS)
 
-doc: doxConfig Control.cs InputParameters.cs InputFormat.cs DerivedValues.cs InputConstraints.cs Calculations.cs OutputFormat.cs ReadTable.cs Interpolation.cs
+doc: doxConfig Control.cs InputParameters.cs Calculations.cs OutputFormat.cs ReadTable.cs Interpolation.cs
 	doxygen doxConfig
 
 .PHONY: build run doc

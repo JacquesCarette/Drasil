@@ -140,8 +140,7 @@ modularityLegend :: CSLegend
 modularityLegend = CSL{
   ttle = modularityTitle,
   symbAndDefs = [ ("U", "Unmodular"),
-                  ("C", "Modular with Combined input module"),
-                  ("S", "Modular with Separated input module")]
+                  ("M", "Modular")]
 }
 
 -- | Software implementation type.
@@ -203,8 +202,7 @@ realNumRepLegend = CSL {
 
 getMod :: Modularity -> Sentence
 getMod Unmodular = S "U"
-getMod (Modular Combined) = S "C"
-getMod (Modular Separated) = S "S"
+getMod Modular   = S "M"
 
 getImp :: ImplementationType -> Sentence
 getImp Program = S "P"

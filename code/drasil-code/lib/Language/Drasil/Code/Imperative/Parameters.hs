@@ -47,9 +47,7 @@ getInConstructorParams = do
 -- | The inputs to the function for reading inputs are the input file name.
 getInputFormatIns :: GenState [CodeVarChunk]
 getInputFormatIns = do
-  let getIns :: [CodeVarChunk]
-      getIns = []
-  getParams "get_input" In $ quantvar inFileName : getIns
+  getParams "get_input" In [quantvar inFileName]
 
 -- | The outputs from the function for reading inputs are the inputs.
 getInputFormatOuts :: GenState [CodeVarChunk]

@@ -28,7 +28,7 @@ int main(int argc, const char *argv[]) {
     outfile << filename;
     outfile << " in module Control" << std::endl;
     outfile.close();
-    InputParameters inParams = InputParameters(filename, inParams);
+    InputParameters inParams = InputParameters(filename);
     double J_tol = func_J_tol(inParams);
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'J_tol' assigned ";

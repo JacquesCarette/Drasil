@@ -17,18 +17,16 @@ class InputParameters {
     
     /** Initializes input object by reading inputs and checking physical constraints on the input
         - Parameter filename: name of the input file
-        - Parameter inParams: structure holding the input values
     */
-    init(_ filename: String, _ inParams: inout InputParameters) throws {
-        try self.get_input(filename, inParams)
+    init(_ filename: String) throws {
+        try self.get_input(filename)
         self.input_constraints()
     }
     
     /** Reads input from a file with the given file name
         - Parameter filename: name of the input file
-        - Parameter inParams: structure holding the input values
     */
-    private func get_input(_ filename: String, _ inParams: InputParameters) throws -> Void {
+    private func get_input(_ filename: String) throws -> Void {
         var infile: URL
         infile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(filename)
         var goolContents: [[String]]

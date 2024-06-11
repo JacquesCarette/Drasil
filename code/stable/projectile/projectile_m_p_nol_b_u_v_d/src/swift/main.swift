@@ -7,7 +7,7 @@
 var filename: String = CommandLine.arguments[0]
 var g: Double = 9.8
 var epsilon: Double = 2.0e-2
-var inParams: InputParameters = try InputParameters(filename, inParams)
+var inParams: InputParameters = try InputParameters(filename)
 var t_flight: Double = func_t_flight(&inParams, g)
 var p_land: Double = func_p_land(&inParams, g)
 var d_offset: Double = func_d_offset(&inParams, p_land)

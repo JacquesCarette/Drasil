@@ -9,33 +9,25 @@ import math
 class InputParameters:
     ## \brief Initializes input object by reading inputs, calculating derived values, and checking physical constraints and software constraints on the input
     # \param filename name of the input file
-    # \param inParams structure holding the input values
-    def __init__(self, filename, inParams):
+    def __init__(self, filename):
         outfile = open("log.txt", "a")
         print("function InputParameters called with inputs: {", file=outfile)
         print("  filename = ", end="", file=outfile)
-        print(filename, end="", file=outfile)
-        print(", ", file=outfile)
-        print("  inParams = ", end="", file=outfile)
-        print("Instance of InputParameters object", file=outfile)
+        print(filename, file=outfile)
         print("  }", file=outfile)
         outfile.close()
         
-        self.get_input(filename, inParams)
+        self.get_input(filename)
         self.derived_values()
         self.input_constraints()
     
     ## \brief Reads input from a file with the given file name
     # \param filename name of the input file
-    # \param inParams structure holding the input values
-    def get_input(self, filename, inParams):
+    def get_input(self, filename):
         outfile = open("log.txt", "a")
         print("function get_input called with inputs: {", file=outfile)
         print("  filename = ", end="", file=outfile)
-        print(filename, end="", file=outfile)
-        print(", ", file=outfile)
-        print("  inParams = ", end="", file=outfile)
-        print("Instance of InputParameters object", file=outfile)
+        print(filename, file=outfile)
         print("  }", file=outfile)
         outfile.close()
         

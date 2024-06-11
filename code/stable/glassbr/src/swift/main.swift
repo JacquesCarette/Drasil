@@ -37,7 +37,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var inParams: InputParameters = try InputParameters(filename, inParams)
+var inParams: InputParameters = try InputParameters(filename)
 var J_tol: Double = try func_J_tol(&inParams)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))

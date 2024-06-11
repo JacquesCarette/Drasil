@@ -35,38 +35,30 @@ public class InputParameters {
     
     /** \brief Initializes input object by reading inputs, calculating derived values, and checking physical constraints and software constraints on the input
         \param filename name of the input file
-        \param inParams structure holding the input values
     */
-    public InputParameters(String filename, InputParameters inParams) throws Exception, FileNotFoundException, IOException {
+    public InputParameters(String filename) throws Exception, FileNotFoundException, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function InputParameters called with inputs: {");
         outfile.print("  filename = ");
-        outfile.print(filename);
-        outfile.println(", ");
-        outfile.print("  inParams = ");
-        outfile.println("Instance of InputParameters object");
+        outfile.println(filename);
         outfile.println("  }");
         outfile.close();
         
-        this.get_input(filename, inParams);
+        this.get_input(filename);
         this.derived_values();
         this.input_constraints();
     }
     
     /** \brief Reads input from a file with the given file name
         \param filename name of the input file
-        \param inParams structure holding the input values
     */
-    private void get_input(String filename, InputParameters inParams) throws FileNotFoundException, IOException {
+    private void get_input(String filename) throws FileNotFoundException, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function get_input called with inputs: {");
         outfile.print("  filename = ");
-        outfile.print(filename);
-        outfile.println(", ");
-        outfile.print("  inParams = ");
-        outfile.println("Instance of InputParameters object");
+        outfile.println(filename);
         outfile.println("  }");
         outfile.close();
         

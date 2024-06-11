@@ -25,7 +25,7 @@ public class Control {
         outfile.print(filename);
         outfile.println(" in module Control");
         outfile.close();
-        InputParameters inParams = new InputParameters(filename, inParams);
+        InputParameters inParams = new InputParameters(filename);
         double J_tol = Calculations.func_J_tol(inParams);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'J_tol' assigned ");

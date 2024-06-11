@@ -26,7 +26,7 @@ public class Projectile {
         outfile.print(filename);
         outfile.println(" in module Projectile");
         outfile.close();
-        InputParameters inParams = new InputParameters(filename, inParams);
+        InputParameters inParams = new InputParameters(filename);
         float t_flight = func_t_flight(inParams);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 't_flight' assigned ");
@@ -177,37 +177,29 @@ class InputParameters {
     
     /** \brief Initializes input object by reading inputs and checking physical constraints on the input
         \param filename name of the input file
-        \param inParams structure holding the input values
     */
-    public InputParameters(String filename, InputParameters inParams) throws FileNotFoundException, IOException {
+    public InputParameters(String filename) throws FileNotFoundException, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function InputParameters called with inputs: {");
         outfile.print("  filename = ");
-        outfile.print(filename);
-        outfile.println(", ");
-        outfile.print("  inParams = ");
-        outfile.println("Instance of InputParameters object");
+        outfile.println(filename);
         outfile.println("  }");
         outfile.close();
         
-        this.get_input(filename, inParams);
+        this.get_input(filename);
         this.input_constraints();
     }
     
     /** \brief Reads input from a file with the given file name
         \param filename name of the input file
-        \param inParams structure holding the input values
     */
-    private void get_input(String filename, InputParameters inParams) throws FileNotFoundException, IOException {
+    private void get_input(String filename) throws FileNotFoundException, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function get_input called with inputs: {");
         outfile.print("  filename = ");
-        outfile.print(filename);
-        outfile.println(", ");
-        outfile.print("  inParams = ");
-        outfile.println("Instance of InputParameters object");
+        outfile.println(filename);
         outfile.println("  }");
         outfile.close();
         

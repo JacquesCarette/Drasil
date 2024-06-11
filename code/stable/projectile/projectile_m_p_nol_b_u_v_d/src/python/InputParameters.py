@@ -9,15 +9,13 @@ import math
 class InputParameters:
     ## \brief Initializes input object by reading inputs and checking physical constraints on the input
     # \param filename name of the input file
-    # \param inParams structure holding the input values
-    def __init__(self, filename, inParams):
-        self.get_input(filename, inParams)
+    def __init__(self, filename):
+        self.get_input(filename)
         self.input_constraints()
     
     ## \brief Reads input from a file with the given file name
     # \param filename name of the input file
-    # \param inParams structure holding the input values
-    def get_input(self, filename, inParams):
+    def get_input(self, filename):
         infile = open(filename, "r")
         infile.readline()
         self.v_launch = float(infile.readline())

@@ -16,18 +16,16 @@ public class InputParameters {
     
     /** \brief Initializes input object by reading inputs and checking physical constraints on the input
         \param filename name of the input file
-        \param inParams structure holding the input values
     */
-    public InputParameters(string filename, InputParameters inParams) {
-        this.get_input(filename, inParams);
+    public InputParameters(string filename) {
+        this.get_input(filename);
         this.input_constraints();
     }
     
     /** \brief Reads input from a file with the given file name
         \param filename name of the input file
-        \param inParams structure holding the input values
     */
-    private void get_input(string filename, InputParameters inParams) {
+    private void get_input(string filename) {
         StreamReader infile;
         infile = new StreamReader(filename);
         infile.ReadLine();

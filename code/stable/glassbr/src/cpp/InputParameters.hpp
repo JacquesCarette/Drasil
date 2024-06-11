@@ -9,8 +9,6 @@
 
 #include <string>
 
-#include "InputParameters.hpp"
-
 using std::ifstream;
 using std::ofstream;
 using std::string;
@@ -38,16 +36,14 @@ class InputParameters {
         
         /** \brief Initializes input object by reading inputs, calculating derived values, and checking physical constraints and software constraints on the input
             \param filename name of the input file
-            \param inParams structure holding the input values
         */
-        InputParameters(string filename, InputParameters &inParams);
+        InputParameters(string filename);
     
     private:
         /** \brief Reads input from a file with the given file name
             \param filename name of the input file
-            \param inParams structure holding the input values
         */
-        void get_input(string filename, InputParameters &inParams);
+        void get_input(string filename);
         /** \brief Calculates values that can be immediately derived from the inputs
         */
         void derived_values();

@@ -20,7 +20,7 @@ public class Projectile {
         outfile.Write(filename);
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
-        InputParameters inParams = new InputParameters(filename, inParams);
+        InputParameters inParams = new InputParameters(filename);
         double t_flight = func_t_flight(inParams);
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 't_flight' assigned ");
@@ -169,37 +169,29 @@ public class InputParameters {
     
     /** \brief Initializes input object by reading inputs and checking physical constraints on the input
         \param filename name of the input file
-        \param inParams structure holding the input values
     */
-    public InputParameters(string filename, InputParameters inParams) {
+    public InputParameters(string filename) {
         StreamWriter outfile;
         outfile = new StreamWriter("log.txt", true);
         outfile.WriteLine("function InputParameters called with inputs: {");
         outfile.Write("  filename = ");
-        outfile.Write(filename);
-        outfile.WriteLine(", ");
-        outfile.Write("  inParams = ");
-        outfile.WriteLine("Instance of InputParameters object");
+        outfile.WriteLine(filename);
         outfile.WriteLine("  }");
         outfile.Close();
         
-        this.get_input(filename, inParams);
+        this.get_input(filename);
         this.input_constraints();
     }
     
     /** \brief Reads input from a file with the given file name
         \param filename name of the input file
-        \param inParams structure holding the input values
     */
-    private void get_input(string filename, InputParameters inParams) {
+    private void get_input(string filename) {
         StreamWriter outfile;
         outfile = new StreamWriter("log.txt", true);
         outfile.WriteLine("function get_input called with inputs: {");
         outfile.Write("  filename = ");
-        outfile.Write(filename);
-        outfile.WriteLine(", ");
-        outfile.Write("  inParams = ");
-        outfile.WriteLine("Instance of InputParameters object");
+        outfile.WriteLine(filename);
         outfile.WriteLine("  }");
         outfile.Close();
         

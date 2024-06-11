@@ -21,7 +21,7 @@ int main(int argc, const char *argv[]) {
     string filename = argv[1];
     double g = 9.8;
     double epsilon = 2.0e-2;
-    InputParameters inParams = InputParameters(filename, inParams);
+    InputParameters inParams = InputParameters(filename);
     double t_flight = func_t_flight(inParams, g);
     double p_land = func_p_land(inParams, g);
     double d_offset = func_d_offset(inParams, p_land);

@@ -12,12 +12,12 @@
 using std::ifstream;
 using std::string;
 
-InputParameters::InputParameters(string filename, InputParameters &inParams) {
-    this->get_input(filename, inParams);
+InputParameters::InputParameters(string filename) {
+    this->get_input(filename);
     this->input_constraints();
 }
 
-void InputParameters::get_input(string filename, InputParameters &inParams) {
+void InputParameters::get_input(string filename) {
     ifstream infile;
     infile.open(filename, std::fstream::in);
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');

@@ -17,9 +17,8 @@ class InputParameters {
     
     /** Initializes input object by reading inputs and checking physical constraints on the input
         - Parameter filename: name of the input file
-        - Parameter inParams: structure holding the input values
     */
-    init(_ filename: String, _ inParams: inout InputParameters) throws {
+    init(_ filename: String) throws {
         var outfile: FileHandle
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -40,22 +39,6 @@ class InputParameters {
         }
         do {
             try outfile.write(contentsOf: Data(filename.utf8))
-        } catch {
-            throw "Error printing to file."
-        }
-        do {
-            try outfile.write(contentsOf: Data(", ".utf8))
-            try outfile.write(contentsOf: Data("\n".utf8))
-        } catch {
-            throw "Error printing to file."
-        }
-        do {
-            try outfile.write(contentsOf: Data("  inParams = ".utf8))
-        } catch {
-            throw "Error printing to file."
-        }
-        do {
-            try outfile.write(contentsOf: Data("Instance of InputParameters object".utf8))
             try outfile.write(contentsOf: Data("\n".utf8))
         } catch {
             throw "Error printing to file."
@@ -72,15 +55,14 @@ class InputParameters {
             throw "Error closing file."
         }
         
-        try self.get_input(filename, inParams)
+        try self.get_input(filename)
         try self.input_constraints()
     }
     
     /** Reads input from a file with the given file name
         - Parameter filename: name of the input file
-        - Parameter inParams: structure holding the input values
     */
-    private func get_input(_ filename: String, _ inParams: InputParameters) throws -> Void {
+    private func get_input(_ filename: String) throws -> Void {
         var outfile: FileHandle
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -101,22 +83,6 @@ class InputParameters {
         }
         do {
             try outfile.write(contentsOf: Data(filename.utf8))
-        } catch {
-            throw "Error printing to file."
-        }
-        do {
-            try outfile.write(contentsOf: Data(", ".utf8))
-            try outfile.write(contentsOf: Data("\n".utf8))
-        } catch {
-            throw "Error printing to file."
-        }
-        do {
-            try outfile.write(contentsOf: Data("  inParams = ".utf8))
-        } catch {
-            throw "Error printing to file."
-        }
-        do {
-            try outfile.write(contentsOf: Data("Instance of InputParameters object".utf8))
             try outfile.write(contentsOf: Data("\n".utf8))
         } catch {
             throw "Error printing to file."
@@ -663,7 +629,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var inParams: InputParameters = try InputParameters(filename, inParams)
+var inParams: InputParameters = try InputParameters(filename)
 var t_flight: Double = try func_t_flight(&inParams)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))

@@ -19,18 +19,16 @@ public class InputParameters {
     
     /** \brief Initializes input object by reading inputs and checking physical constraints on the input
         \param filename name of the input file
-        \param inParams structure holding the input values
     */
-    public InputParameters(String filename, InputParameters inParams) throws FileNotFoundException {
-        this.get_input(filename, inParams);
+    public InputParameters(String filename) throws FileNotFoundException {
+        this.get_input(filename);
         this.input_constraints();
     }
     
     /** \brief Reads input from a file with the given file name
         \param filename name of the input file
-        \param inParams structure holding the input values
     */
-    private void get_input(String filename, InputParameters inParams) throws FileNotFoundException {
+    private void get_input(String filename) throws FileNotFoundException {
         Scanner infile;
         infile = new Scanner(new File(filename));
         infile.nextLine();

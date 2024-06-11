@@ -11,32 +11,26 @@ using std::ifstream;
 using std::ofstream;
 using std::string;
 
-InputParameters::InputParameters(string filename, InputParameters &inParams) {
+InputParameters::InputParameters(string filename) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
     outfile << "function InputParameters called with inputs: {" << std::endl;
     outfile << "  filename = ";
-    outfile << filename;
-    outfile << ", " << std::endl;
-    outfile << "  inParams = ";
-    outfile << "Instance of InputParameters object" << std::endl;
+    outfile << filename << std::endl;
     outfile << "  }" << std::endl;
     outfile.close();
     
-    this->get_input(filename, inParams);
+    this->get_input(filename);
     this->derived_values();
     this->input_constraints();
 }
 
-void InputParameters::get_input(string filename, InputParameters &inParams) {
+void InputParameters::get_input(string filename) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
     outfile << "function get_input called with inputs: {" << std::endl;
     outfile << "  filename = ";
-    outfile << filename;
-    outfile << ", " << std::endl;
-    outfile << "  inParams = ";
-    outfile << "Instance of InputParameters object" << std::endl;
+    outfile << filename << std::endl;
     outfile << "  }" << std::endl;
     outfile.close();
     

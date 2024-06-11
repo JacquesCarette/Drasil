@@ -10,9 +10,9 @@ import Database.Drasil (ChunkDB)
 import Language.Drasil.CodeExpr.Development
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.Descriptions (constClassDesc,
-  constModDesc, derivedValuesDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc,
-  inputClassDesc, inputConstraintsDesc, inputConstructorDesc, inputFormatDesc,
-  inputParametersDesc, modDesc, outputFormatDesc, woFuncDesc, calcModDesc)
+  constModDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, inputClassDesc,
+  inputConstructorDesc, inputParametersDesc, modDesc, outputFormatDesc,
+  woFuncDesc, calcModDesc)
 import Language.Drasil.Code.Imperative.FunctionCalls (getCalcCall,
   getAllInputCalls, getOutputCall)
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), genModule,

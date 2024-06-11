@@ -1,6 +1,8 @@
 {-# LANGUAGE GADTs                 #-}
 {-# LANGUAGE InstanceSigs          #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE TypeFamilies #-}
+{-# OPTIONS_GHC -Wno-overlapping-patterns #-}
 
 -- | The Drasil Expression language
 module Language.Drasil.Expr.Lang where
@@ -60,7 +62,7 @@ data NVVBinOp = Scale
 
 -- TODO: I suppose these can be merged to just Add and Mul?
 -- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
-data AssocArithOper = AddI | AddRe | MulI | MulRe
+data AssocArithOper = Add | Mul
   deriving Eq
 
 -- | Associative boolean operators (and, or).
@@ -211,10 +213,14 @@ instance LiteralC Expr where
   perc l r = Lit $ perc l r
 
 assocArithOperToTy :: AssocArithOper -> Space
-assocArithOperToTy AddI  = S.Integer
-assocArithOperToTy MulI  = S.Integer
-assocArithOperToTy AddRe = S.Real
-assocArithOperToTy MulRe = S.Real
+assocArithOperToTy Add  = S.Integer
+assocArithOperToTy Add = S.Real
+assocArithOperToTy Add = S.Natural
+assocArithOperToTy Add = S.Rational
+assocArithOperToTy Mul  = S.Integer
+assocArithOperToTy Mul = S.Real
+assocArithOperToTy Mul = S.Natural
+assocArithOperToTy Mul = S.Rational
 
 -- helper function for typechecking to help reduce duplication
 vvvInfer :: TypingContext Space -> VVVBinOp -> Expr -> Expr -> Either Space TypeError

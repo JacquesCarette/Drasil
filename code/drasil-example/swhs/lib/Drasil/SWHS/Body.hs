@@ -533,9 +533,9 @@ propCorSolDeriv1 lce ewat en co pcmat g1hfc g2hfp su ht =
 propCorSolDeriv2 :: Contents
 propCorSolDeriv2 = unlbldExpr
   (sy watE $= defint (eqSymb time) (exactDbl 0) (sy time)
-  (sy coilHTC `mulRe` sy coilSA `mulRe` (sy tempC $- apply1 tempW time))
+  (sy coilHTC `mul` sy coilSA `mul` (sy tempC $- apply1 tempW time))
   $- defint (eqSymb time) (exactDbl 0) (sy time)
-  (sy pcmHTC `mulRe` sy pcmSA `mulRe` (apply1 tempW time $-
+  (sy pcmHTC `mul` sy pcmSA `mul` (apply1 tempW time $-
   apply1 tempPCM time)))
 
 propCorSolDeriv3 :: NamedIdea a => a -> UnitalChunk -> CI -> ConceptChunk -> Contents
@@ -547,7 +547,7 @@ propCorSolDeriv3 epcm en pcmat wa =
 propCorSolDeriv4 :: Contents
 propCorSolDeriv4 = unlbldExpr
   (sy pcmE $= defint (eqSymb time) (exactDbl 0) (sy time)
-  (sy pcmHTC `mulRe` sy pcmSA `mulRe` (apply1 tempW time $- 
+  (sy pcmHTC `mul` sy pcmSA `mul` (apply1 tempW time $- 
   apply1 tempPCM time)))
 
 propCorSolDeriv5 :: ConceptChunk -> CI -> CI -> Contents

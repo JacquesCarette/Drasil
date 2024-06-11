@@ -55,7 +55,7 @@ eBalanceOnWtrRC =
     (tempW ^. defn)
     where coeffs = [[exactDbl 1, recip_ (sy tauW)]]
           unknowns = [1, 0]
-          constants = [recip_ (sy tauW) `mulRe` sy tempC]
+          constants = [recip_ (sy tauW) `mul` sy tempC]
 
 balWtrNotes :: [Sentence]
 balWtrNotes = map foldlSent [

@@ -10,10 +10,8 @@ import qualified Language.Drasil.Expr.Lang as E
 import Language.Drasil.ModelExpr.Lang
 
 assocArithOper :: E.AssocArithOper -> AssocArithOper 
-assocArithOper E.AddI  = AddI
-assocArithOper E.AddRe = AddRe
-assocArithOper E.MulI  = MulI
-assocArithOper E.MulRe = MulRe
+assocArithOper E.Add  = Add
+assocArithOper E.Mul  = Mul
 
 assocBoolOper :: E.AssocBoolOper -> AssocBoolOper
 assocBoolOper E.And = And

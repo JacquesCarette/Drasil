@@ -47,7 +47,7 @@ data NVVBinOp = Scale
   deriving Eq
 
 -- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
-data AssocArithOper = AddI | AddRe | MulI | MulRe
+data AssocArithOper = Add | Mul
   deriving Eq
 
 -- | Associative boolean operators (and, or).

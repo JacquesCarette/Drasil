@@ -49,10 +49,8 @@ prec2NVV _ = 190
 
 -- | precA - precedence for arithmetic-related Binary-Associative (Commutative) operators.
 precA :: AssocArithOper -> Int
-precA MulI  = 190
-precA MulRe = 190
-precA AddI  = 180
-precA AddRe = 180
+precA Mul  = 190
+precA Add = 180
 
 -- | precB - precedence for boolean-related Binary-Associative (Commutative) operators.
 precB :: AssocBoolOper -> Int

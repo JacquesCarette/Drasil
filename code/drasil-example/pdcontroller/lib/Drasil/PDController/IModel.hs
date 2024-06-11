@@ -45,11 +45,11 @@ imPDRC
       where lhs = [exactDbl 1 `add` sy qdDerivGain $* (opProcessVariable $^^ 1)]
                   $+ (exactDbl 1 $* (opProcessVariable $^^ 2))
                   $+ (exactDbl 20 `add` sy qdPropGain $* (opProcessVariable $^^ 0))
-            rhs = sy qdSetPointTD `mulRe` sy qdPropGain
+            rhs = sy qdSetPointTD `mul` sy qdPropGain
       -- Matrix form: 
       -- coeffs = [[exactDbl 1, exactDbl 1 `add` sy qdDerivGain, exactDbl 20 `add` sy qdPropGain]]
       -- unknowns = [2, 1, 0]
-      -- constants = [sy qdSetPointTD `mulRe` sy qdPropGain]
+      -- constants = [sy qdSetPointTD `mul` sy qdPropGain]
 
 imDeriv :: Derivation
 imDeriv
@@ -74,19 +74,19 @@ derivEqn1 :: ModelExpr
 derivEqn1
   = sy qdProcessVariableFD
       $= (sy qdSetPointFD $- sy qdProcessVariableFD)
-      `mulRe` (sy qdPropGain `add` (sy qdDerivGain `mulRe` sy qdFreqDomain))
-      `mulRe` recip_ (square (sy qdFreqDomain) `add` sy qdFreqDomain `add` exactDbl 20)
+      `mul` (sy qdPropGain `add` (sy qdDerivGain `mul` sy qdFreqDomain))
+      `mul` recip_ (square (sy qdFreqDomain) `add` sy qdFreqDomain `add` exactDbl 20)
 
 derivStmt2 :: Sentence
 derivStmt2 = (S "Substituting the values and rearranging the equation" !.)
 
 derivEqn2 :: ModelExpr
 derivEqn2
-  = square (sy qdFreqDomain) `mulRe` sy qdProcessVariableFD
-      `add` ((exactDbl 1 `add` sy qdDerivGain) `mulRe` sy qdProcessVariableFD `mulRe` sy qdFreqDomain)
-      `add` ((exactDbl 20 `add` sy qdPropGain) `mulRe` sy qdProcessVariableFD)
-      $- (sy qdSetPointFD `mulRe` sy qdFreqDomain `mulRe` sy qdDerivGain)
-      $- (sy qdSetPointFD `mulRe` sy qdPropGain) $= exactDbl 0
+  = square (sy qdFreqDomain) `mul` sy qdProcessVariableFD
+      `add` ((exactDbl 1 `add` sy qdDerivGain) `mul` sy qdProcessVariableFD `mul` sy qdFreqDomain)
+      `add` ((exactDbl 20 `add` sy qdPropGain) `mul` sy qdProcessVariableFD)
+      $- (sy qdSetPointFD `mul` sy qdFreqDomain `mul` sy qdDerivGain)
+      $- (sy qdSetPointFD `mul` sy qdPropGain) $= exactDbl 0
 
 derivStmt3 :: Sentence
 derivStmt3
@@ -96,10 +96,10 @@ derivStmt3
 derivEqn3 :: ModelExpr
 derivEqn3
   = deriv (deriv (sy qdProcessVariableTD) time) time `add`
-      (((exactDbl 1 `add` sy qdDerivGain) `mulRe` deriv (sy qdProcessVariableTD) time)
-      `add` ((exactDbl 20 `add` sy qdPropGain) `mulRe` sy qdProcessVariableTD))
-      $- (sy qdDerivGain `mulRe` deriv (sy qdSetPointTD) time)
-      $- (sy qdSetPointTD `mulRe` sy qdPropGain) $= exactDbl 0
+      (((exactDbl 1 `add` sy qdDerivGain) `mul` deriv (sy qdProcessVariableTD) time)
+      `add` ((exactDbl 20 `add` sy qdPropGain) `mul` sy qdProcessVariableTD))
+      $- (sy qdDerivGain `mul` deriv (sy qdSetPointTD) time)
+      $- (sy qdSetPointTD `mul` sy qdPropGain) $= exactDbl 0
 
 derivStmt4 :: Sentence
 derivStmt4
@@ -113,6 +113,6 @@ derivStmt4
 derivEqn4 :: ModelExpr
 derivEqn4
   = deriv (deriv (sy qdProcessVariableTD) time) time `add`
-      ((exactDbl 1 `add` sy qdDerivGain) `mulRe` deriv (sy qdProcessVariableTD) time)
-      `add` ((exactDbl 20 `add` sy qdPropGain) `mulRe` sy qdProcessVariableTD)
-      $- (sy qdSetPointTD `mulRe` sy qdPropGain) $= exactDbl 0
+      ((exactDbl 1 `add` sy qdDerivGain) `mul` deriv (sy qdProcessVariableTD) time)
+      `add` ((exactDbl 20 `add` sy qdPropGain) `mul` sy qdProcessVariableTD)
+      $- (sy qdSetPointTD `mul` sy qdPropGain) $= exactDbl 0

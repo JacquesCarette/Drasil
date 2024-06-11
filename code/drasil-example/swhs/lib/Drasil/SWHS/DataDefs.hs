@@ -37,7 +37,7 @@ waterMassQD :: SimpleQDef
 waterMassQD = mkQuantDef wMass waterMassEqn
 
 waterMassEqn :: Expr
-waterMassEqn = sy wVol `mulRe` sy wDensity
+waterMassEqn = sy wVol `mul` sy wDensity
 
 waterMassNotes :: Sentence
 waterMassNotes = foldlSent [ch wVol, S "is defined in", refS waterVolume]
@@ -67,7 +67,7 @@ tankVolumeQD :: SimpleQDef
 tankVolumeQD = mkQuantDef tankVol tankVolumeEqn
 
 tankVolumeEqn :: Expr
-tankVolumeEqn = sy pi_ `mulRe` square (half $ sy diam) `mulRe` sy tankLength
+tankVolumeEqn = sy pi_ `mul` square (half $ sy diam) `mul` sy tankLength
 
 tankVolume :: DataDefinition
 tankVolume = ddENoRefs tankVolumeQD Nothing "tankVolume" []
@@ -78,7 +78,7 @@ balanceDecayRateQD :: SimpleQDef
 balanceDecayRateQD = mkQuantDef tauW balanceDecayRateEqn
 
 balanceDecayRateEqn :: Expr
-balanceDecayRateEqn = sy wMass `mulRe` sy htCapW $/ (sy coilHTC `mulRe` sy coilSA)
+balanceDecayRateEqn = sy wMass `mul` sy htCapW $/ (sy coilHTC `mul` sy coilSA)
 
 balanceDecayRateNotes :: Sentence
 balanceDecayRateNotes = foldlSent [ch wMass, S "is defined in", 
@@ -94,7 +94,7 @@ balanceDecayTimeQD :: SimpleQDef
 balanceDecayTimeQD = mkQuantDef eta balanceDecayTimeEqn
 
 balanceDecayTimeEqn :: Expr
-balanceDecayTimeEqn = sy pcmHTC `mulRe` sy pcmSA $/ (sy coilHTC `mulRe` sy coilSA)
+balanceDecayTimeEqn = sy pcmHTC `mul` sy pcmSA $/ (sy coilHTC `mul` sy coilSA)
 
 balanceDecayTime :: DataDefinition
 balanceDecayTime = ddE balanceDecayTimeQD [dRef koothoor2013]
@@ -106,8 +106,8 @@ balanceSolidPCMQD :: SimpleQDef
 balanceSolidPCMQD = mkQuantDef tauSP balanceSolidPCMEqn
 
 balanceSolidPCMEqn :: Expr
-balanceSolidPCMEqn = (sy pcmMass `mulRe` sy htCapSP) $/
-  (sy pcmHTC `mulRe` sy pcmSA)
+balanceSolidPCMEqn = (sy pcmMass `mul` sy htCapSP) $/
+  (sy pcmHTC `mul` sy pcmSA)
 
 balanceSolidPCM :: DataDefinition
 balanceSolidPCM = ddE balanceSolidPCMQD [dRef lightstone2012]
@@ -119,8 +119,8 @@ balanceLiquidPCMQD :: SimpleQDef
 balanceLiquidPCMQD = mkQuantDef tauLP balanceLiquidPCMEqn
 
 balanceLiquidPCMEqn :: Expr
-balanceLiquidPCMEqn = (sy pcmMass `mulRe` sy htCapLP) $/
-  (sy pcmHTC `mulRe` sy pcmSA)
+balanceLiquidPCMEqn = (sy pcmMass `mul` sy htCapLP) $/
+  (sy pcmHTC `mul` sy pcmSA)
 
 balanceLiquidPCM :: DataDefinition
 balanceLiquidPCM = ddE balanceLiquidPCMQD [dRef lightstone2012]
@@ -155,7 +155,7 @@ ddMeltFracQD = mkQuantDef meltFrac meltFracEqn
   -- produced according to CaseStudies' original
 
 meltFracEqn :: Expr
-meltFracEqn = sy latentEP $/ (sy htFusion `mulRe` sy pcmMass)
+meltFracEqn = sy latentEP $/ (sy htFusion `mul` sy pcmMass)
 
 ddMeltFrac :: DataDefinition
 ddMeltFrac = ddE ddMeltFracQD [dRef koothoor2013]

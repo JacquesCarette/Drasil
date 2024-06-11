@@ -51,7 +51,7 @@ consThermECS = mkConstraintSet consCC rels
 
 consThermERel :: ModelExpr
 consThermERel = negVec (sy gradient) $. sy thFluxVect `add` sy volHtGen $=
-  sy density `mulRe` sy heatCapSpec `mulRe` pderiv (sy temp) time
+  sy density `mul` sy heatCapSpec `mul` pderiv (sy temp) time
 
 -- the second argument is a 'ShortName'...
 consThemESrc :: Reference
@@ -100,12 +100,12 @@ sensHtESrc = makeURI "sensHtESrc"
 sensHtEEqn :: PhaseChange -> ModelExpr
 sensHtEEqn pChange = case pChange of
   Liquid -> liquidFormula
-  AllPhases -> incompleteCase [(sy htCapS `mulRe` sy mass `mulRe` sy deltaT,
+  AllPhases -> incompleteCase [(sy htCapS `mul` sy mass `mul` sy deltaT,
       sy temp $< sy meltPt), (liquidFormula, sy meltPt $< sy temp $<
-      sy boilPt), (sy htCapV `mulRe` sy mass `mulRe`
+      sy boilPt), (sy htCapV `mul` sy mass `mul`
       sy deltaT, sy boilPt $< sy temp)]
   where
-    liquidFormula = sy htCapL `mulRe` sy mass `mulRe` sy deltaT
+    liquidFormula = sy htCapL `mul` sy mass `mul` sy deltaT
 
 --When to call with C? When to call with U, S, Sy, etc? Sometimes confusing.
 
@@ -178,7 +178,7 @@ nwtnCoolingFD :: ModelQDef
 nwtnCoolingFD = mkFuncDefByQ htFlux [time] nwtnCoolingExpr
 
 nwtnCoolingExpr :: ModelExpr
-nwtnCoolingExpr = sy htTransCoeff `mulRe` apply1 deltaT time
+nwtnCoolingExpr = sy htTransCoeff `mul` apply1 deltaT time
 
 nwtnCoolingNotes :: [Sentence]
 nwtnCoolingNotes = map foldlSent [

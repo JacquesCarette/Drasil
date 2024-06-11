@@ -8,7 +8,7 @@ import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density,
 
 -- * Weight equation derivation
 weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn, weightDerivSpecWeightEqn :: ModelExpr
-weightDerivNewtonEqn      = sy QP.weight $= mulRe (sy QPP.mass) (sy QP.gravitationalAccel)
-weightDerivReplaceMassEqn = sy QP.weight $= mulRe (sy QPP.density) (sy QPP.vol `mulRe` sy QP.gravitationalAccel)
-weightDerivSpecWeightEqn  = sy QP.weight $= mulRe (sy QPP.vol) (sy QPP.specWeight)
-weightDerivAccelEqn = sy QP.acceleration $= vec2D (exactDbl 0) (sy QP.gravitationalAccel `mulRe` sy QM.unitVectj)
+weightDerivNewtonEqn      = sy QP.weight $= mul (sy QPP.mass) (sy QP.gravitationalAccel)
+weightDerivReplaceMassEqn = sy QP.weight $= mul (sy QPP.density) (sy QPP.vol `mul` sy QP.gravitationalAccel)
+weightDerivSpecWeightEqn  = sy QP.weight $= mul (sy QPP.vol) (sy QPP.specWeight)
+weightDerivAccelEqn = sy QP.acceleration $= vec2D (exactDbl 0) (sy QP.gravitationalAccel `mul` sy QM.unitVectj)

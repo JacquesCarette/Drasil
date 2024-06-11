@@ -85,7 +85,7 @@ mcShrStrgthQD = fromEqnSt' (shrStress ^. uid) (nounPhraseSP "Mohr-Coulumb shear 
  mcShrStrgthDesc (symbol shrStress) Real mcShrStrgthExpr
 
 mcShrStrgthExpr :: PExpr
-mcShrStrgthExpr = sy effNormStress `mulRe` tan (sy fricAngle) `add` sy effCohesion
+mcShrStrgthExpr = sy effNormStress `mul` tan (sy fricAngle) `add` sy effCohesion
 
 mcShrStrgthDesc :: Sentence
 mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",

@@ -97,7 +97,7 @@ slope (x1, y1) (x2, y2) = (y2 $- y1) $/ (x2 $- x1)
 -- Given two points (x1,y1) and (x2,y2), and an x ordinate, return
 -- extrapoled y on the straight line in between
 onLine :: (CodeExpr, CodeExpr) -> (CodeExpr, CodeExpr) -> CodeExpr -> CodeExpr
-onLine p1@(x1, y1) p2 x_ = (m `mulRe` (x_ $- x1)) `add` y1
+onLine p1@(x1, y1) p2 x_ = (m `mul` (x_ $- x1)) `add` y1
                  where m = slope p1 p2
 
 ------------------------------------------------------------------------------------------

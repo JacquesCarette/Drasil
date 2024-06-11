@@ -11,25 +11,25 @@ import Drasil.SglPend.Unitals (lenRod, pendDisplacementAngle, initialPendAngle)
 
 -- Velocity IX/IY
 velocityIXExpr, velocityIYExpr :: Expr
-velocityIXExpr = sy angularVelocity `mulRe` sy lenRod `mulRe` cos (sy pendDisplacementAngle)
-velocityIYExpr = sy angularVelocity `mulRe` sy lenRod `mulRe` sin (sy pendDisplacementAngle)
+velocityIXExpr = sy angularVelocity `mul` sy lenRod `mul` cos (sy pendDisplacementAngle)
+velocityIYExpr = sy angularVelocity `mul` sy lenRod `mul` sin (sy pendDisplacementAngle)
 
 -- Acceleration IX/IY
 accelerationIXExpr, accelerationIYExpr :: Expr
-accelerationIXExpr = neg (square (sy angularVelocity) `mulRe` sy lenRod `mulRe` sin (sy pendDisplacementAngle))
-                    `add` (sy angularAccel `mulRe` sy lenRod `mulRe` cos (sy pendDisplacementAngle))
-accelerationIYExpr = (square (sy angularVelocity) `mulRe` sy lenRod `mulRe` cos (sy pendDisplacementAngle))
-                    `add` (sy angularAccel `mulRe` sy lenRod `mulRe` sin (sy pendDisplacementAngle))
+accelerationIXExpr = neg (square (sy angularVelocity) `mul` sy lenRod `mul` sin (sy pendDisplacementAngle))
+                    `add` (sy angularAccel `mul` sy lenRod `mul` cos (sy pendDisplacementAngle))
+accelerationIYExpr = (square (sy angularVelocity) `mul` sy lenRod `mul` cos (sy pendDisplacementAngle))
+                    `add` (sy angularAccel `mul` sy lenRod `mul` sin (sy pendDisplacementAngle))
 
 -- Horizontal/Vertical force acting on the pendulum
 hForceOnPendulumViaComponent, hForceOnPendulumViaAngle :: Expr
-hForceOnPendulumViaComponent = sy mass `mulRe` sy xAccel
-hForceOnPendulumViaAngle = neg (sy tension `mulRe` sin (sy pendDisplacementAngle))
+hForceOnPendulumViaComponent = sy mass `mul` sy xAccel
+hForceOnPendulumViaAngle = neg (sy tension `mul` sin (sy pendDisplacementAngle))
 
 vForceOnPendulumViaComponent, vForceOnPendulumViaAngle :: Expr
-vForceOnPendulumViaComponent = sy mass `mulRe` sy yAccel
-vForceOnPendulumViaAngle = sy tension `mulRe` cos (sy pendDisplacementAngle)
-                            $- (sy mass `mulRe` sy gravitationalAccel)
+vForceOnPendulumViaComponent = sy mass `mul` sy yAccel
+vForceOnPendulumViaAngle = sy tension `mul` cos (sy pendDisplacementAngle)
+                            $- (sy mass `mul` sy gravitationalAccel)
 
 -- Angular Frequency Of Pendulum
 angFrequencyExpr :: Expr
@@ -37,8 +37,8 @@ angFrequencyExpr = sqrt (sy gravitationalAccel $/ sy lenRod)
 
 -- Period of Pendulum Motion
 periodPendExpr :: Expr
-periodPendExpr = exactDbl 2 `mulRe` sy QM.pi_ `mulRe` sqrt (sy lenRod $/ sy gravitationalAccel)
+periodPendExpr = exactDbl 2 `mul` sy QM.pi_ `mul` sqrt (sy lenRod $/ sy gravitationalAccel)
 
 -- Angular Displacement
 angularDisplacementExpr :: Expr
-angularDisplacementExpr = sy initialPendAngle `mulRe` cos (sy angularFrequency `mulRe` sy time)
+angularDisplacementExpr = sy initialPendAngle `mul` cos (sy angularFrequency `mul` sy time)

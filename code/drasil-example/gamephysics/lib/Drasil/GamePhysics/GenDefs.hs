@@ -75,8 +75,8 @@ accelGravityDesc = foldlSent [S "If one of the", plural QPP.mass, S "is much lar
   phrase QP.force]
 
 accelGravityExpr :: PExpr
-accelGravityExpr = neg ((sy QP.gravitationalConst `mulRe` sy mLarger $/
-  square (sy dispNorm)) `mulRe` sy dVect)
+accelGravityExpr = neg ((sy QP.gravitationalConst `mul` sy mLarger $/
+  square (sy dispNorm)) `mul` sy dVect)
 
 accelGravitySrc :: Reference
 accelGravitySrc = makeURI "accelGravitySrc" "https://en.wikipedia.org/wiki/Gravitational_acceleration" $
@@ -120,22 +120,22 @@ accelGravityDerivSentence5 = [S "and thus the negative sign indicates that the",
                                S "an attractive", phrase QP.force]
 
 accelGravityDerivEqn1 :: PExpr
-accelGravityDerivEqn1 = sy QP.force $= (sy QP.gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2) $/
-                        sy sqrDist) `mulRe` sy dVect
+accelGravityDerivEqn1 = sy QP.force $= (sy QP.gravitationalConst `mul` (sy mass_1 `mul` sy mass_2) $/
+                        sy sqrDist) `mul` sy dVect
 
 accelGravityDerivEqn2 :: PExpr
 accelGravityDerivEqn2 = sy dVect $= (sy distMass $/ sy dispNorm)
 
 accelGravityDerivEqn3 :: PExpr
-accelGravityDerivEqn3 = sy QP.fOfGravity $= sy QP.gravitationalConst `mulRe`
-                         (sy mLarger `mulRe` sy QPP.mass $/ sy sqrDist) `mulRe` sy dVect
-                         $= sy QPP.mass `mulRe` sy QP.gravitationalAccel
+accelGravityDerivEqn3 = sy QP.fOfGravity $= sy QP.gravitationalConst `mul`
+                         (sy mLarger `mul` sy QPP.mass $/ sy sqrDist) `mul` sy dVect
+                         $= sy QPP.mass `mul` sy QP.gravitationalAccel
 
 accelGravityDerivEqn4 :: PExpr
-accelGravityDerivEqn4 = sy QP.gravitationalConst `mulRe`  (sy mLarger $/ sy sqrDist) `mulRe` sy dVect $= sy QP.gravitationalAccel
+accelGravityDerivEqn4 = sy QP.gravitationalConst `mul`  (sy mLarger $/ sy sqrDist) `mul` sy dVect $= sy QP.gravitationalAccel
 
 accelGravityDerivEqn5 :: PExpr
-accelGravityDerivEqn5 = sy QP.gravitationalAccel $= neg (sy QP.gravitationalConst `mulRe`  (sy mLarger $/ sy sqrDist)) `mulRe` sy dVect
+accelGravityDerivEqn5 = sy QP.gravitationalAccel $= neg (sy QP.gravitationalConst `mul`  (sy mLarger $/ sy sqrDist)) `mul` sy dVect
 
 accelGravityDerivEqns :: (ExprC r, LiteralC r) => [r]
 accelGravityDerivEqns = [accelGravityDerivEqn1, accelGravityDerivEqn2, accelGravityDerivEqn3,
@@ -153,8 +153,8 @@ impulseQD :: ModelQDef
 impulseQD = mkQuantDef' QP.impulseS (nounPhraseSP "Impulse for Collision") impulseExpr
 
 impulseExpr :: PExpr
-impulseExpr = (neg (exactDbl 1 `add` sy QP.restitutionCoef) `mulRe` sy initRelVel $.
-  sy normalVect) $/ ((recip_ (sy massA) `add` recip_ (sy massB)) `mulRe`
+impulseExpr = (neg (exactDbl 1 `add` sy QP.restitutionCoef) `mul` sy initRelVel $.
+  sy normalVect) $/ ((recip_ (sy massA) `add` recip_ (sy massB)) `mul`
   square (sy normalLen) `add`
   (square (sy perpLenA) $/ sy momtInertA) `add`
   (square (sy perpLenB) $/ sy momtInertB))

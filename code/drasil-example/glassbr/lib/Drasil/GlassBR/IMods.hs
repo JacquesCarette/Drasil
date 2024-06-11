@@ -58,8 +58,8 @@ risk = imNoDeriv (equationalModelN (riskFun ^. term) riskQD)
 -- FIXME [4] !!!
 riskQD :: SimpleQDef
 riskQD = mkQuantDef riskFun ((sy sflawParamK $/
-  (mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- exactDbl 1))) `mulRe`
-  ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac))
+  (mul (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- exactDbl 1))) `mul`
+  ((sy modElas `mul` square (sy minThick)) $^ sy sflawParamM) `mul` sy lDurFac `mul` exp (sy stressDistFac))
 
 {--}
 
@@ -87,8 +87,8 @@ nonFL = imNoDeriv (equationalModelN (nonFactorL ^. term) nonFLQD)
   [qHtTlTolRef, stdVals [modElas], hRef, aGrtrThanB]
 
 nonFLEq :: Expr
-nonFLEq = mulRe (mulRe (sy tolLoad) (sy modElas)) (sy minThick $^ exactDbl 4) $/
-  square (mulRe (sy plateLen) (sy plateWidth))
+nonFLEq = mul (mul (sy tolLoad) (sy modElas)) (sy minThick $^ exactDbl 4) $/
+  square (mul (sy plateLen) (sy plateWidth))
 
 nonFLQD :: SimpleQDef
 nonFLQD = mkQuantDef nonFactorL nonFLEq
@@ -102,8 +102,8 @@ dimLL = imNoDeriv (equationalModelN (dimlessLoad ^. term) dimLLQD)
   "dimlessLoad" [qRef, aGrtrThanB, stdVals [modElas], hRef, gtfRef]
 
 dimLLEq :: Expr
-dimLLEq = mulRe (sy demand) (square (mulRe (sy plateLen) (sy plateWidth)))
-  $/ mulRe (mulRe (sy modElas) (sy minThick $^ exactDbl 4)) (sy gTF)
+dimLLEq = mul (sy demand) (square (mul (sy plateLen) (sy plateWidth)))
+  $/ mul (mul (sy modElas) (sy minThick $^ exactDbl 4)) (sy gTF)
 
 dimLLQD :: SimpleQDef
 dimLLQD = mkQuantDef dimlessLoad dimLLEq
@@ -134,9 +134,9 @@ tolStrDisFac = imNoDeriv (equationalModelN (sdfTol ^. term) tolStrDisFacQD)
 
 tolStrDisFacQD :: SimpleQDef
 tolStrDisFacQD = mkQuantDef sdfTol $ ln (ln (recip_ (exactDbl 1 $- sy pbTol))
-  `mulRe` ((sy plateLen `mulRe` sy plateWidth) $^ (sy sflawParamM $- exactDbl 1) $/
-    (sy sflawParamK `mulRe` ((sy modElas `mulRe`
-    square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac)))
+  `mul` ((sy plateLen `mul` sy plateWidth) $^ (sy sflawParamM $- exactDbl 1) $/
+    (sy sflawParamK `mul` ((sy modElas `mul`
+    square (sy minThick)) $^ sy sflawParamM) `mul` sy lDurFac)))
 
 {--}
 
@@ -156,7 +156,7 @@ calofCapacity = imNoDeriv (equationalModelN (lRe ^. term) calofCapacityQD)
   [dRef astm2009] "calofCapacity" [lrCap, nonFLRef, gtfRef]
 
 calofCapacityQD :: SimpleQDef
-calofCapacityQD = mkQuantDef lRe (sy (nonFL ^. output) `mulRe` sy (glaTyFac ^. defLhs) `mulRe` sy loadSF)
+calofCapacityQD = mkQuantDef lRe (sy (nonFL ^. output) `mul` sy (glaTyFac ^. defLhs) `mul` sy loadSF)
 
 {--}
 

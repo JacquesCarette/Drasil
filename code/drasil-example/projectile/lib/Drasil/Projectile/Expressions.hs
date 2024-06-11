@@ -15,7 +15,7 @@ import Data.Drasil.Quantities.Physics (gravitationalAccel, gravitationalAccelCon
 import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, tol, landPos, offset)
 
 flightDur', iyPos, yConstAccel, iSpeed :: PExpr
-flightDur' = exactDbl 2 `mulRe` sy launSpeed `mulRe` sin (sy launAngle) $/ sy gravitationalAccelConst
+flightDur' = exactDbl 2 `mul` sy launSpeed `mul` sin (sy launAngle) $/ sy gravitationalAccelConst
 iyPos = exactDbl 0                              -- launchOrigin
 yConstAccel = neg $ sy gravitationalAccelConst  -- accelYGravity
 iSpeed = sy launSpeed
@@ -31,27 +31,27 @@ message = completeCase [case1, case2, case3]
 
 --
 speed' :: PExpr
-speed' = sy QP.iSpeed `add` (sy QP.constAccel `mulRe` sy time)
+speed' = sy QP.iSpeed `add` (sy QP.constAccel `mul` sy time)
 
 scalarPos' :: PExpr
-scalarPos' = sy iPos `add` (sy QP.iSpeed `mulRe` sy time `add` half (sy QP.constAccel `mulRe` square (sy time)))
+scalarPos' = sy iPos `add` (sy QP.iSpeed `mul` sy time `add` half (sy QP.constAccel `mul` square (sy time)))
 
 rectNoTime :: PExpr
-rectNoTime = square (sy speed) $= square (sy QP.iSpeed) `add` (exactDbl 2 `mulRe` sy QP.constAccel `mulRe` (sy scalarPos $- sy iPos))
+rectNoTime = square (sy speed) $= square (sy QP.iSpeed) `add` (exactDbl 2 `mul` sy QP.constAccel `mul` (sy scalarPos $- sy iPos))
 
 --
 velVecExpr :: PExpr
-velVecExpr = vec2D (sy ixVel `add` (sy QP.xConstAccel `mulRe` sy time)) (sy iyVel `add` (sy QP.yConstAccel `mulRe` sy time))
+velVecExpr = vec2D (sy ixVel `add` (sy QP.xConstAccel `mul` sy time)) (sy iyVel `add` (sy QP.yConstAccel `mul` sy time))
 
 --
 posVecExpr :: PExpr
 posVecExpr = vec2D
-              (sy QP.ixPos `add` (sy ixVel `mulRe` sy time) `add` half (sy QP.xConstAccel `mulRe` square (sy time)))
-              (sy QP.iyPos `add` (sy iyVel `mulRe` sy time) `add` half (sy QP.yConstAccel `mulRe` square (sy time)))
+              (sy QP.ixPos `add` (sy ixVel `mul` sy time) `add` half (sy QP.xConstAccel `mul` square (sy time)))
+              (sy QP.iyPos `add` (sy iyVel `mul` sy time) `add` half (sy QP.yConstAccel `mul` square (sy time)))
 
 --
 landPosExpr :: PExpr
-landPosExpr = exactDbl 2 `mulRe` square (sy launSpeed) `mulRe` sin (sy launAngle) `mulRe` cos (sy launAngle) $/ sy gravitationalAccelConst
+landPosExpr = exactDbl 2 `mul` square (sy launSpeed) `mul` sin (sy launAngle) `mul` cos (sy launAngle) $/ sy gravitationalAccelConst
 
 -- Helper expressions that represent the vectors of quantities as components
 positionXY, velocityXY, accelerationXY, constAccelXY :: PExpr
@@ -63,12 +63,12 @@ constAccelXY   = sy constAccelV  $= vec2D (sy QP.xConstAccel) (sy QP.yConstAccel
 -- Expressions for Lesson
 horizVel, horizPos :: PExpr
 horizVel = sy xVel $= sy ixVel
-horizPos = sy xPos $= sy QP.ixPos `add` (sy ixVel `mulRe` sy time)
+horizPos = sy xPos $= sy QP.ixPos `add` (sy ixVel `mul` sy time)
 
 vertVel, vertPos, vertNoTime :: PExpr
-vertVel = sy yVel $= sy iyVel $- (sy gravitationalAccel `mulRe` sy time)
-vertPos = sy yPos $= sy QP.iyPos `add` (sy iyVel `mulRe` sy time) $- (sy gravitationalAccel `mulRe` square (sy time) $/ exactDbl 2)
-vertNoTime = square (sy yVel) $= square (sy iyVel) $- (exactDbl 2 `mulRe` sy gravitationalAccel `mulRe` (sy yPos $- sy QP.iyPos)) 
+vertVel = sy yVel $= sy iyVel $- (sy gravitationalAccel `mul` sy time)
+vertPos = sy yPos $= sy QP.iyPos `add` (sy iyVel `mul` sy time) $- (sy gravitationalAccel `mul` square (sy time) $/ exactDbl 2)
+vertNoTime = square (sy yVel) $= square (sy iyVel) $- (exactDbl 2 `mul` sy gravitationalAccel `mul` (sy yPos $- sy QP.iyPos)) 
 
 lcrectVel, lcrectPos, lcrectNoTime, lchorizVel, lchorizPos, lcvertVel, lcvertPos, lcvertNoTime :: LabelledContent
 lcrectVel = lbldExpr (sy speed $= speed') (makeEqnRef "rectVel")

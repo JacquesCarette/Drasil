@@ -107,12 +107,9 @@ class ExprC r where
   -- | Add two expressions.
   add :: r -> r -> r
   
-  -- | Multiply two expressions (Integers).
-  mulI :: r -> r -> r
-  
-  -- | Multiply two expressions (Real numbers).
-  mulRe :: r -> r -> r
-  
+  -- | Multiply two expressions.
+  mul :: r -> r -> r
+
   ($-), ($/), ($^) :: r -> r -> r
   
   ($=>), ($<=>) :: r -> r -> r
@@ -237,30 +234,34 @@ instance ExprC Expr where
   -- | Smart constructor for the dot product of two equations.
   ($.) = VVNBinaryOp Dot
   
+  -- | Add two expressions.
+  add (Lit (Int 0)) r = r
+  add l (Lit (Int 0)) = l
+  add (Lit (Dbl 0)) r = r
+  add l (Lit (Dbl 0)) = l
+  add l (Lit (ExactDbl 0)) = l
+  add (Lit (ExactDbl 0)) r = r
   add (Lit (Int i1)) (Lit (Int i2)) = Lit (Int (i1 + i2))
   add (Lit (Dbl r1)) (Lit (Dbl r2)) = Lit (Dbl (r1 + r2))
   add (Lit (Int i)) (Lit (Dbl r)) = Lit (Dbl (fromIntegral i + r))
   add (Lit (Dbl r)) (Lit (Int i)) = Lit (Dbl (r + fromIntegral i))
-  add l r = AssocA AddI [l, r]
-  
-  -- | Multiply two expressions (Integers).
-  mulI l (Lit (Int 1)) = l
-  mulI (Lit (Int 1)) r = r
-  mulI (AssocA MulI l) (AssocA MulI r) = AssocA MulI (l ++ r)
-  mulI (AssocA MulI l) r = AssocA MulI (l ++ [r])
-  mulI l (AssocA MulI r) = AssocA MulI (l : r)
-  mulI l r = AssocA MulI [l, r]
-  
-  -- | Multiply two expressions (Real numbers).
-  mulRe l (Lit (Dbl 1))      = l
-  mulRe (Lit (Dbl 1)) r      = r
-  mulRe l (Lit (ExactDbl 1)) = l
-  mulRe (Lit (ExactDbl 1)) r = r
-  mulRe (AssocA MulRe l) (AssocA MulRe r) = AssocA MulRe (l ++ r)
-  mulRe (AssocA MulRe l) r = AssocA MulRe (l ++ [r])
-  mulRe l (AssocA MulRe r) = AssocA MulRe (l : r)
-  mulRe l r = AssocA MulRe [l, r]
-  
+  add l r = AssocA Add [l, r]
+
+  -- | Multiply two expressions.
+  mul (Lit (Int 1)) r = r
+  mul l (Lit (Int 1)) = l
+  mul (Lit (Dbl 1.0)) r = r
+  mul l (Lit (Dbl 1.0)) = l
+  mul l (Lit (ExactDbl 1)) = l
+  mul (Lit (ExactDbl 1)) r = r
+  mul (Lit (Int i1)) (Lit (Int i2)) = Lit (Int (i1 * i2))
+  mul (Lit (Dbl r1)) (Lit (Dbl r2)) = Lit (Dbl (r1 * r2))
+  mul (Lit (Int i)) (Lit (Dbl r)) = Lit (Dbl (fromIntegral i * r))
+  mul (Lit (Dbl r)) (Lit (Int i)) = Lit (Dbl (r * fromIntegral i))
+  mul (AssocA Mul l) (AssocA Mul r) = AssocA Mul (l ++ r)
+  mul (AssocA Mul l) (AssocA Mul r) = AssocA Mul (l ++ r)
+  mul l r = AssocA Mul [l,r]
+
   -- | Smart constructor for subtracting two expressions.
   ($-) = ArithBinaryOp Subt
   -- | Smart constructor for dividing two expressions.
@@ -341,13 +342,13 @@ instance ExprC Expr where
   idx = LABinaryOp Index
   
   -- | Integrate over some expression with bounds (∫).
-  defint v low high = Operator AddRe (BoundedDD v Continuous low high)
+  defint v low high = Operator Add (BoundedDD v Continuous low high)
   
   -- | Sum over some expression with bounds (∑).
-  defsum v low high = Operator AddRe (BoundedDD v Discrete low high)
+  defsum v low high = Operator Add (BoundedDD v Discrete low high)
   
   -- | Product over some expression with bounds (∏).
-  defprod v low high = Operator MulRe (BoundedDD v Discrete low high)
+  defprod v low high = Operator Mul (BoundedDD v Discrete low high)
   
   -- | Smart constructor for 'real interval' membership.
   realInterval c = RealI (c ^. uid)
@@ -399,30 +400,33 @@ instance ExprC M.ModelExpr where
   -- | Smart constructor for the dot product of two equations.
   ($.) = M.VVNBinaryOp M.Dot
 
+  -- | Add two expressions.
+  add (M.Lit (Int 0)) r = r
+  add l (M.Lit (Int 0)) = l
+  add (M.Lit (Dbl 0)) r = r
+  add l (M.Lit (Dbl 0)) = l
+  add l (M.Lit (ExactDbl 0)) = l
+  add (M.Lit (ExactDbl 0)) r = r
   add (M.Lit (Int i1)) (M.Lit (Int i2)) = M.Lit (Int (i1 + i2))
   add (M.Lit (Dbl r1)) (M.Lit (Dbl r2)) = M.Lit (Dbl (r1 + r2))
   add (M.Lit (Int i)) (M.Lit (Dbl r)) = M.Lit (Dbl (fromIntegral i + r))
   add (M.Lit (Dbl r)) (M.Lit (Int i)) = M.Lit (Dbl (r + fromIntegral i))
-  add l r = M.AssocA M.AddI [l, r]
+  add l r = M.AssocA M.Add [l, r]
 
-  -- | Multiply two expressions (Integers).
-  mulI l (M.Lit (Int 1)) = l
-  mulI (M.Lit (Int 1)) r = r
-  mulI (M.AssocA M.MulI l) (M.AssocA M.MulI r) = M.AssocA M.MulI (l ++ r)
-  mulI (M.AssocA M.MulI l) r = M.AssocA M.MulI (l ++ [r])
-  mulI l (M.AssocA M.MulI r) = M.AssocA M.MulI (l : r)
-  mulI l r = M.AssocA M.MulI [l, r]
-
-  -- | Multiply two expressions (Real numbers).
-  mulRe l (M.Lit (Dbl 1))      = l
-  mulRe (M.Lit (Dbl 1)) r      = r
-  mulRe l (M.Lit (ExactDbl 1)) = l
-  mulRe (M.Lit (ExactDbl 1)) r = r
-  mulRe (M.AssocA M.MulRe l) (M.AssocA M.MulRe r) = M.AssocA M.MulRe (l ++ r)
-  mulRe (M.AssocA M.MulRe l) r = M.AssocA M.MulRe (l ++ [r])
-  mulRe l (M.AssocA M.MulRe r) = M.AssocA M.MulRe (l : r)
-  mulRe l r = M.AssocA M.MulRe [l, r]
-
+  -- | Multiply two expressions.
+  mul (M.Lit (Int 1)) r = r
+  mul l (M.Lit (Int 1)) = l
+  mul (M.Lit (Dbl 1.0)) r = r
+  mul l (M.Lit (Dbl 1.0)) = l
+  mul l (M.Lit (ExactDbl 1)) = l
+  mul (M.Lit (ExactDbl 1)) r = r
+  mul (M.Lit (Int i1)) (M.Lit (Int i2)) = M.Lit (Int (i1 * i2))
+  mul (M.Lit (Dbl r1)) (M.Lit (Dbl r2)) = M.Lit (Dbl (r1 * r2))
+  mul (M.Lit (Int i)) (M.Lit (Dbl r)) = M.Lit (Dbl (fromIntegral i * r))
+  mul (M.Lit (Dbl r)) (M.Lit (Int i)) = M.Lit (Dbl (r * fromIntegral i))
+  mul (M.AssocA M.Mul l) (M.AssocA M.Mul r) = M.AssocA M.Mul (l ++ r)
+  mul (M.AssocA M.Mul l) (M.AssocA M.Mul r) = M.AssocA M.Mul (l ++ r)
+  mul l r = M.AssocA M.Mul [l,r]
   -- | Smart constructor for subtracting two expressions.
   ($-) = M.ArithBinaryOp M.Subt
   -- | Smart constructor for dividing two expressions.
@@ -503,13 +507,13 @@ instance ExprC M.ModelExpr where
   idx = M.LABinaryOp M.Index
 
   -- | Integrate over some expression with bounds (∫).
-  defint v low high = M.Operator M.AddRe (BoundedDD v Continuous low high)
+  defint v low high = M.Operator M.Add (BoundedDD v Continuous low high)
 
   -- | Sum over some expression with bounds (∑).
-  defsum v low high = M.Operator M.AddRe (BoundedDD v Discrete low high)
+  defsum v low high = M.Operator M.Add (BoundedDD v Discrete low high)
 
   -- | Product over some expression with bounds (∏).
-  defprod v low high = M.Operator M.MulRe (BoundedDD v Discrete low high)
+  defprod v low high = M.Operator M.Mul (BoundedDD v Discrete low high)
 
   -- | Smart constructor for 'real interval' membership.
   realInterval c = M.RealI (c ^. uid)
@@ -563,29 +567,32 @@ instance ExprC C.CodeExpr where
   ($.) = C.VVNBinaryOp C.Dot
   
   -- | Add two expressions.
+  add (C.Lit (Int 0)) r = r
+  add l (C.Lit (Int 0)) = l
+  add (C.Lit (Dbl 0)) r = r
+  add l (C.Lit (Dbl 0)) = l
+  add l (C.Lit (ExactDbl 0)) = l
+  add (C.Lit (ExactDbl 0)) r = r
   add (C.Lit (Int i1)) (C.Lit (Int i2)) = C.Lit (Int (i1 + i2))
   add (C.Lit (Dbl r1)) (C.Lit (Dbl r2)) = C.Lit (Dbl (r1 + r2))
   add (C.Lit (Int i)) (C.Lit (Dbl r)) = C.Lit (Dbl (fromIntegral i + r))
   add (C.Lit (Dbl r)) (C.Lit (Int i)) = C.Lit (Dbl (r + fromIntegral i))
-  add l r = C.AssocA C.AddI [l, r]
-  
-  -- | Multiply two expressions (Integers).
-  mulI l (C.Lit (Int 1)) = l
-  mulI (C.Lit (Int 1)) r = r
-  mulI (C.AssocA C.MulI l) (C.AssocA C.MulI r) = C.AssocA C.MulI (l ++ r)
-  mulI (C.AssocA C.MulI l) r = C.AssocA C.MulI (l ++ [r])
-  mulI l (C.AssocA C.MulI r) = C.AssocA C.MulI (l : r)
-  mulI l r = C.AssocA C.MulI [l, r]
-  
-  -- | Multiply two expressions (Real numbers).
-  mulRe l (C.Lit (Dbl 1))      = l
-  mulRe (C.Lit (Dbl 1)) r      = r
-  mulRe l (C.Lit (ExactDbl 1)) = l
-  mulRe (C.Lit (ExactDbl 1)) r = r
-  mulRe (C.AssocA C.MulRe l) (C.AssocA C.MulRe r) = C.AssocA C.MulRe (l ++ r)
-  mulRe (C.AssocA C.MulRe l) r = C.AssocA C.MulRe (l ++ [r])
-  mulRe l (C.AssocA C.MulRe r) = C.AssocA C.MulRe (l : r)
-  mulRe l r = C.AssocA C.MulRe [l, r]
+  add l r = C.AssocA C.Add [l, r]
+
+  -- | Multiply two expressions.
+  mul (C.Lit (Int 1)) r = r
+  mul l (C.Lit (Int 1)) = l
+  mul (C.Lit (Dbl 1.0)) r = r
+  mul l (C.Lit (Dbl 1.0)) = l
+  mul l (C.Lit (ExactDbl 1)) = l
+  mul (C.Lit (ExactDbl 1)) r = r
+  mul (C.Lit (Int i1)) (C.Lit (Int i2)) = C.Lit (Int (i1 * i2))
+  mul (C.Lit (Dbl r1)) (C.Lit (Dbl r2)) = C.Lit (Dbl (r1 * r2))
+  mul (C.Lit (Int i)) (C.Lit (Dbl r)) = C.Lit (Dbl (fromIntegral i * r))
+  mul (C.Lit (Dbl r)) (C.Lit (Int i)) = C.Lit (Dbl (r * fromIntegral i))
+  mul (C.AssocA C.Mul l) (C.AssocA C.Mul r) = C.AssocA C.Mul (l ++ r)
+  mul (C.AssocA C.Mul l) (C.AssocA C.Mul r) = C.AssocA C.Mul (l ++ r)
+  mul l r = C.AssocA C.Mul [l,r]
   
   -- | Smart constructor for subtracting two expressions.
   ($-) = C.ArithBinaryOp C.Subt
@@ -667,13 +674,13 @@ instance ExprC C.CodeExpr where
   idx = C.LABinaryOp C.Index
   
   -- | Integrate over some expression with bounds (∫).
-  defint v low high = C.Operator C.AddRe (BoundedDD v Continuous low high)
+  defint v low high = C.Operator C.Add (BoundedDD v Continuous low high)
   
   -- | Sum over some expression with bounds (∑).
-  defsum v low high = C.Operator C.AddRe (BoundedDD v Discrete low high)
+  defsum v low high = C.Operator C.Add (BoundedDD v Discrete low high)
   
   -- | Product over some expression with bounds (∏).
-  defprod v low high = C.Operator C.MulRe (BoundedDD v Discrete low high)
+  defprod v low high = C.Operator C.Mul (BoundedDD v Discrete low high)
   
   -- | Smart constructor for 'real interval' membership.
   realInterval c = C.RealI (c ^. uid)

@@ -9,7 +9,7 @@ module Language.Drasil.Expr.Lang where
 import           Language.Drasil.Literal.Class (LiteralC (..))
 import           Language.Drasil.Literal.Lang  (Literal (..))
 import           Language.Drasil.Space         (DiscreteDomainDesc,
-                                                RealInterval, Space, isBasicNumSpace)
+                                                RealInterval, Space)
 import qualified Language.Drasil.Space         as S
 import           Language.Drasil.UID           (UID)
 import           Language.Drasil.WellTyped

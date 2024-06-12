@@ -4,7 +4,6 @@ module Language.Drasil.Markdown.Print(genMD) where
 import Prelude hiding (print, (<>))
 import Text.PrettyPrint hiding (Str)
 import Data.List (transpose)
-import Data.Maybe (fromMaybe)
 
 import qualified Language.Drasil as L
 
@@ -221,53 +220,24 @@ makeCell content size = content <> spaces
 makeDefn :: [(String,[LayoutObj])] -> Doc -> Doc
 makeDefn [] _ = error "L.Empty definition"
 makeDefn ps l = 
-  makeDHeaderText docDefn l $$ 
-  makeDHeaderRow l size $$ 
-  makeDRows docDefn size
+  makeDHeaderText ps l $$ 
+  makeHeaderCols [text "Refname", l] size $$ 
+  makeRows docDefn size
   where
     docDefn = mkDocDefn ps
-    size = defnCSize docDefn
+    size = columnSize docDefn
 
--- | Helper for convering definition to Doc
-mkDocDefn :: [(String,[LayoutObj])] -> [(Doc, Doc)]
-mkDocDefn ps = map (\(f, d) -> (text f, makeLO (f,d))) ps
-
--- | Calculates the maximum cell size of each column in
--- the definition table
-defnCSize :: [(Doc, Doc)] -> (Int, Int)
-defnCSize ps = (longestLabel, longestLO)
-  where
-    longestLabel = maximum $ map (docLength . fst) ps
-    longestLO    = maximum $ map (docLength . snd) ps
+-- | Helper for convering definition to Doc matrix
+mkDocDefn :: [(String,[LayoutObj])] -> [[Doc]]
+mkDocDefn ps = map (\(f, d) -> [text f, makeLO (f,d)]) ps
 
 -- | Renders the title/header of the definition table
-makeDHeaderText :: [(Doc, Doc)] -> Doc -> Doc
+makeDHeaderText :: [(String, [LayoutObj])] -> Doc -> Doc
 makeDHeaderText ps l = defnHTag header <> nl
   where
-    lo = lookup (text "Label") ps
-    header = text "\n##" <+> fromMaybe l lo <+> br (text "#" <> l) <> nl
-
--- | Renders the header rows of the definition table
-makeDHeaderRow :: Doc -> (Int, Int) -> Doc
-makeDHeaderRow lbl (l,r) = pipe <> lh <> pipe <> rh <> pipe $$ ls <> rs 
-  where
-    lh = text "Refname" <> text (replicate (l - 7) ' ')
-    rh = lbl <> text (replicate (r - docLength lbl) ' ')
-    ls = text "|:" <> text (replicate (l - 1) '-') <> pipe
-    rs = text ":" <> text (replicate (r - 1) '-') <> pipe
-
--- | Renders the rows of the definition table
-makeDRows :: [(Doc, Doc)] -> (Int, Int) -> Doc
-makeDRows []         _    = error "No fields to create defn table"
-makeDRows [(f,d)]    size = makeDRow (f,d) size
-makeDRows ((f,d):ps) size = makeDRow (f,d) size $$ makeDRows ps size
-
--- | Renders a single row of the definition table
-makeDRow :: (Doc, Doc) -> (Int, Int) -> Doc
-makeDRow (f,d) (l,r) = pipe <> left <> pipe <> right <> pipe
-  where
-    left  = f <> text (replicate (l - docLength f) ' ')
-    right = d <> text (replicate (r - docLength d) ' ')
+    lo = lookup "Label" ps
+    c = maybe l (\lo' -> makeLO ("Label", lo')) lo 
+    header = text "\n##" <+> c <+> br (text "#" <> l) <> nl
 
 -- | Converts the [LayoutObj] to a Doc
 makeLO :: (String, [LayoutObj]) -> Doc

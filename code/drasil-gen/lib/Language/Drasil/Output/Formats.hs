@@ -30,7 +30,7 @@ instance RuleTransformer DocSpec where
         lualatex = mkCheckedCommand . (+:+) (makeS "lualatex" +:+ mkFreeVar "TEXFLAGS") . makeS
         bibtex = mkCommand . (+:+) (makeS "bibtex" +:+ mkFreeVar "BIBTEXFLAGS") . makeS
         pdfName = makeS $ fn ++ ".pdf"
-             
+
 -- | LaTeX helper.
 data DocClass = DocClass (Maybe String) String
 -- | LaTeX helper for adding packages. Wraps a list of package names.

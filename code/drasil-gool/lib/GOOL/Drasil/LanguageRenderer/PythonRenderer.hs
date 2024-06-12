@@ -950,9 +950,9 @@ pyWhile v b = vcat [
 
 pyTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
 pyTryCatch tryB catchB = vcat [
-  tryLabel <+> colon,
+  tryLabel <> colon,
   indent $ RC.body tryB,
-  pyExcept <+> exceptionObj' <+> colon,
+  pyExcept <+> exceptionObj' <> colon,
   indent $ RC.body catchB]
 
 pyListSlice :: (RenderSym r, Monad r) => SVariable r -> SValue r -> SValue r -> 

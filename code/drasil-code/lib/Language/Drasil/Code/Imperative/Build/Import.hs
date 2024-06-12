@@ -18,7 +18,7 @@ import Data.List (nub)
 import System.FilePath.Posix (takeExtension, takeBaseName)
 import Text.PrettyPrint.HughesPJ (Doc)
 import Utils.Drasil (capitalize)
-import Metadata.Drasil.DrasilMetaCall (drasilMeta, DrasilMeta(..), watermark)
+import Metadata.Drasil.DrasilMetaCall (watermark)
 
 -- | Holds all the needed information to run a program.
 data CodeHarness = Ch {
@@ -50,7 +50,7 @@ instance RuleTransformer CodeHarness where
       buildTarget = makeS "build"
 
 openingComments :: ProgData -> Annotation
-openingComments m = [watermark ++ version drasilMeta,"Project Name: " ++ progName m, progPurpAdd m]
+openingComments m = [watermark,"Project Name: " ++ progName m, progPurpAdd m]
 
 -- | Helper that renders project purpose into a string if there is one.
 progPurpAdd :: ProgData -> String

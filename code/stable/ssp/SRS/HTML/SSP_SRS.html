@@ -179,13 +179,6 @@
                   <th>Units</th>
                 </tr>
                 <tr>
-                  <td><em>(x,y)</em></td>
-                  <td>
-                    Cartesian Position Coordinates: <em>y</em> is considered parallel to the direction of the force of gravity and <em>x</em> is considered perpendicular to <em>y</em>.
-                  </td>
-                  <td><em>m</em></td>
-                </tr>
-                <tr>
                   <td><em>A</em></td>
                   <td>Area: A part of an object or surface.</td>
                   <td><em>m<sup>2</sup></em></td>
@@ -1191,7 +1184,7 @@
                   </p>
                   <p>
                     <div id="assumpINSFL">
-                      Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and Price (<a href=#morgenstern1965>morgenstern1965</a>), interslice normal forces and interslice shear forces have a proportional relationship, depending on a proportionality constant (<em>λ</em>) and a function (<em><b>f</b></em>) describing variation depending on <em>x</em> position. (RefBy: <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#GD:normShrR>GD:normShrR</a>, <a href=#UC_normshearlinear>UC:Normal-And-Shear-Linear-Only</a>, and <a href=#IM:fctSfty>IM:fctSfty</a>.)
+                      Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and Price (<a href=#morgenstern1965>morgenstern1965</a>), interslice normal forces and interslice shear forces have a proportional relationship, depending on a proportionality constant (<em>λ</em>) and a function (<em><b>f</b></em>) describing variation depending on <em>x</em> position. (RefBy: <a href=#GD:normShrR>GD:normShrR</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, and <a href=#UC_normshearlinear>UC:Normal-And-Shear-Linear-Only</a>.)
                     </div>
                   </p>
                   <p>
@@ -1206,22 +1199,22 @@
                   </p>
                   <p>
                     <div id="assumpSBSBISL">
-                      Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice are approximated as straight lines. (RefBy: <a href=#GD:srfWtrF>GD:srfWtrF</a>, <a href=#GD:sliceWght>GD:sliceWght</a>, <a href=#TM:mcShrStrgth>TM:mcShrStrgth</a>, <a href=#DD:slcHeight>DD:slcHeight</a>, <a href=#DD:angleB>DD:angleB</a>, <a href=#GD:baseWtrF>GD:baseWtrF</a>, and <a href=#DD:angleA>DD:angleA</a>.)
+                      Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice are approximated as straight lines. (RefBy: <a href=#GD:srfWtrF>GD:srfWtrF</a>, <a href=#GD:sliceWght>GD:sliceWght</a>, <a href=#GD:baseWtrF>GD:baseWtrF</a>, <a href=#TM:mcShrStrgth>TM:mcShrStrgth</a>, <a href=#DD:slcHeight>DD:slcHeight</a>, <a href=#DD:angleB>DD:angleB</a>, and <a href=#DD:angleA>DD:angleA</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpES">
-                      Edge-Slices: The interslice forces at the 0th and <em>n</em>th interslice interfaces are zero. (RefBy: <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#IM:intsliceFs>IM:intsliceFs</a>, and <a href=#IM:fctSfty>IM:fctSfty</a>.)
+                      Edge-Slices: The interslice forces at the 0th and <em>n</em>th interslice interfaces are zero. (RefBy: <a href=#IM:intsliceFs>IM:intsliceFs</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, and <a href=#IM:nrmShrFor>IM:nrmShrFor</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpSF">
-                      Seismic-Force: There is no seismic force acting on the slope. (RefBy: <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#LC_seismic>LC:Calculate-Seismic-Force</a>, and <a href=#IM:fctSfty>IM:fctSfty</a>.)
+                      Seismic-Force: There is no seismic force acting on the slope. (RefBy: <a href=#IM:fctSfty>IM:fctSfty</a>, <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, and <a href=#LC_seismic>LC:Calculate-Seismic-Force</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpSL">
-                      Surface-Load: There is no imposed surface load, and therefore no external forces, acting on the slope. (RefBy: <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#LC_external>LC:Calculate-External-Force</a>, and <a href=#IM:fctSfty>IM:fctSfty</a>.)
+                      Surface-Load: There is no imposed surface load, and therefore no external forces, acting on the slope. (RefBy: <a href=#IM:fctSfty>IM:fctSfty</a>, <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, and <a href=#LC_external>LC:Calculate-External-Force</a>.)
                     </div>
                   </p>
                   <p>
@@ -2090,7 +2083,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:nrmShrFor>IM:nrmShrFor</a> and <a href=#IM:fctSfty>IM:fctSfty</a>
+                          <a href=#IM:fctSfty>IM:fctSfty</a> and <a href=#IM:nrmShrFor>IM:nrmShrFor</a>
                         </p>
                       </td>
                     </tr>
@@ -2791,7 +2784,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#GD:resShearWO>GD:resShearWO</a>, <a href=#IM:nrmShrForNum>IM:nrmShrForNum</a>, <a href=#GD:normForcEq>GD:normForcEq</a>, <a href=#GD:momentEql>GD:momentEql</a>, <a href=#GD:mobShearWO>GD:mobShearWO</a>, <a href=#DD:lengthLb>DD:lengthLb</a>, <a href=#GD:bsShrFEq>GD:bsShrFEq</a>, <a href=#DD:convertFunc2>DD:convertFunc2</a>, and <a href=#DD:convertFunc1>DD:convertFunc1</a>
+                          <a href=#GD:resShearWO>GD:resShearWO</a>, <a href=#IM:nrmShrForNum>IM:nrmShrForNum</a>, <a href=#GD:normForcEq>GD:normForcEq</a>, <a href=#GD:momentEql>GD:momentEql</a>, <a href=#GD:mobShearWO>GD:mobShearWO</a>, <a href=#GD:bsShrFEq>GD:bsShrFEq</a>, <a href=#DD:lengthLb>DD:lengthLb</a>, <a href=#DD:convertFunc2>DD:convertFunc2</a>, and <a href=#DD:convertFunc1>DD:convertFunc1</a>
                         </p>
                       </td>
                     </tr>
@@ -2854,7 +2847,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#GD:resShearWO>GD:resShearWO</a>, <a href=#IM:nrmShrForNum>IM:nrmShrForNum</a>, <a href=#GD:normForcEq>GD:normForcEq</a>, <a href=#GD:momentEql>GD:momentEql</a>, <a href=#GD:mobShearWO>GD:mobShearWO</a>, <a href=#DD:lengthLs>DD:lengthLs</a>, and <a href=#GD:bsShrFEq>GD:bsShrFEq</a>
+                          <a href=#GD:resShearWO>GD:resShearWO</a>, <a href=#IM:nrmShrForNum>IM:nrmShrForNum</a>, <a href=#GD:normForcEq>GD:normForcEq</a>, <a href=#GD:momentEql>GD:momentEql</a>, <a href=#GD:mobShearWO>GD:mobShearWO</a>, <a href=#GD:bsShrFEq>GD:bsShrFEq</a>, and <a href=#DD:lengthLs>DD:lengthLs</a>
                         </p>
                       </td>
                     </tr>
@@ -3146,7 +3139,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#GD:resShr>GD:resShr</a>, <a href=#TM:effStress>TM:effStress</a>, and <a href=#GD:effNormF>GD:effNormF</a>
+                          <a href=#GD:resShr>GD:resShr</a>, <a href=#GD:effNormF>GD:effNormF</a>, and <a href=#TM:effStress>TM:effStress</a>
                         </p>
                       </td>
                     </tr>
@@ -3384,7 +3377,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:intsliceFs>IM:intsliceFs</a>, <a href=#DD:convertFunc2>DD:convertFunc2</a>, and <a href=#IM:fctSfty>IM:fctSfty</a>
+                          <a href=#IM:intsliceFs>IM:intsliceFs</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, and <a href=#DD:convertFunc2>DD:convertFunc2</a>
                         </p>
                       </td>
                     </tr>
@@ -3779,7 +3772,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#IM:intsliceFs>IM:intsliceFs</a>, <a href=#displayShear>FR:Display-Interslice-Shear-Forces</a>, <a href=#displayNormal>FR:Display-Interslice-Normal-Forces</a>, <a href=#displayFS>FR:Display-Factor-of-Safety</a>, <a href=#determineCritSlip>FR:Determine-Critical-Slip-Surface</a>, and <a href=#IM:fctSfty>IM:fctSfty</a>
+                          <a href=#IM:intsliceFs>IM:intsliceFs</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#displayShear>FR:Display-Interslice-Shear-Forces</a>, <a href=#displayNormal>FR:Display-Interslice-Normal-Forces</a>, <a href=#displayFS>FR:Display-Factor-of-Safety</a>, and <a href=#determineCritSlip>FR:Determine-Critical-Slip-Surface</a>
                         </p>
                       </td>
                     </tr>
@@ -3948,7 +3941,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:nrmShrForNum>IM:nrmShrForNum</a>, <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#IM:nrmShrForDen>IM:nrmShrForDen</a>, <a href=#IM:intsliceFs>IM:intsliceFs</a>, <a href=#displayShear>FR:Display-Interslice-Shear-Forces</a>, <a href=#displayNormal>FR:Display-Interslice-Normal-Forces</a>, <a href=#displayFS>FR:Display-Factor-of-Safety</a>, <a href=#determineCritSlip>FR:Determine-Critical-Slip-Surface</a>, and <a href=#IM:fctSfty>IM:fctSfty</a>
+                          <a href=#IM:nrmShrForNum>IM:nrmShrForNum</a>, <a href=#IM:nrmShrForDen>IM:nrmShrForDen</a>, <a href=#IM:intsliceFs>IM:intsliceFs</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#displayShear>FR:Display-Interslice-Shear-Forces</a>, <a href=#displayNormal>FR:Display-Interslice-Normal-Forces</a>, <a href=#displayFS>FR:Display-Factor-of-Safety</a>, and <a href=#determineCritSlip>FR:Determine-Critical-Slip-Surface</a>
                         </p>
                       </td>
                     </tr>
@@ -4263,7 +4256,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#IM:intsliceFs>IM:intsliceFs</a>, <a href=#displayShear>FR:Display-Interslice-Shear-Forces</a>, <a href=#displayNormal>FR:Display-Interslice-Normal-Forces</a>, <a href=#displayFS>FR:Display-Factor-of-Safety</a>, <a href=#determineCritSlip>FR:Determine-Critical-Slip-Surface</a>, and <a href=#IM:fctSfty>IM:fctSfty</a>
+                          <a href=#IM:intsliceFs>IM:intsliceFs</a>, <a href=#IM:fctSfty>IM:fctSfty</a>, <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#displayShear>FR:Display-Interslice-Shear-Forces</a>, <a href=#displayNormal>FR:Display-Interslice-Normal-Forces</a>, <a href=#displayFS>FR:Display-Factor-of-Safety</a>, and <a href=#determineCritSlip>FR:Determine-Critical-Slip-Surface</a>
                         </p>
                       </td>
                     </tr>
@@ -4487,10 +4480,6 @@
                       <td><em>F<sub>S</sub></em></td>
                       <td><em>F<sub>S</sub>&thinsp;&gt;&thinsp;0</em></td>
                     </tr>
-                    <tr>
-                      <td><em>(x,y)</em></td>
-                      <td>--</td>
-                    </tr>
                   </table>
                   <p class="caption">Output Data Constraints</p>
                 </div>
@@ -4696,7 +4685,9 @@
                   <td>minimum <em>y</em>-coordinate</td>
                 </tr>
               </table>
-              <p class="caption">Inputs to be returned as output</p>
+              <p class="caption">
+                Inputs to be Returned as Output following <a href=#displayInput>FR:Display-Input</a>
+              </p>
             </div>
           </div>
         </div>
@@ -4720,7 +4711,7 @@
               <p><div id="reusable">Reusable: The code is modularized.</div></p>
               <p>
                 <div id="maintainable">
-                  Maintainable: The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.
+                  Maintainable: If a likely change is made to the finished software, it will take at most 10<em>%</em> of the original development time, assuming the same development resources are available.
                 </div>
               </p>
             </div>

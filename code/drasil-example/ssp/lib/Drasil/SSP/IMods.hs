@@ -41,9 +41,9 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
   waterDist, waterHght, waterWeight, watForceSum, xi, xMaxExtSlip, xMaxEtrSlip,
   xMinExtSlip, xMinEtrSlip, yi, yMaxSlip, yMinSlip)
 
------------------------
---  Instance Models  --
------------------------
+---------------------
+-- Instance Models --
+---------------------
 
 iMods :: [InstanceModel]
 iMods = [fctSfty, nrmShrFor, nrmShrForNum, nrmShrForDen, intsliceFs, crtSlpId]

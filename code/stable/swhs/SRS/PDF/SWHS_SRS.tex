@@ -412,22 +412,22 @@ This section simplifies the original problem and helps in developing the theoret
 \item[Thermal-Energy-Only:\phantomsection\label{assumpTEO}]{The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible. (RefBy: \hyperref[TM:consThermE]{TM:consThermE}.)}
 \item[Heat-Transfer-Coeffs-Constant:\phantomsection\label{assumpHTCC}]{All heat transfer coefficients are constant over time. (RefBy: \hyperref[TM:nwtnCooling]{TM:nwtnCooling}.)}
 \item[Constant-Water-Temp-Across-Tank:\phantomsection\label{assumpCWTAT}]{The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. (RefBy: \hyperref[GD:rocTempSimp]{GD:rocTempSimp}, \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, and \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}.)}
-\item[Temp-PCM-Constant-Across-Volume:\phantomsection\label{assumpTPCAV}]{The temperature of the phase change material is the same throughout the volume of PCM. (RefBy: \hyperref[GD:rocTempSimp]{GD:rocTempSimp}, \hyperref[likeChgUTP]{LC:Uniform-Temperature-PCM}, \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, and \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}.)}
+\item[Temp-PCM-Constant-Across-Volume:\phantomsection\label{assumpTPCAV}]{The temperature of the phase change material is the same throughout the volume of PCM. (RefBy: \hyperref[GD:rocTempSimp]{GD:rocTempSimp}, \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, and \hyperref[likeChgUTP]{LC:Uniform-Temperature-PCM}.)}
 \item[Density-Water-PCM-Constant-over-Volume:\phantomsection\label{assumpDWPCoV}]{The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume. (RefBy: \hyperref[GD:rocTempSimp]{GD:rocTempSimp}.)}
 \item[Specific-Heat-Energy-Constant-over-Volume:\phantomsection\label{assumpSHECov}]{The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume. (RefBy: \hyperref[GD:rocTempSimp]{GD:rocTempSimp}.)}
 \item[Newton-Law-Convective-Cooling-Coil-Water:\phantomsection\label{assumpLCCCW}]{Newton's law of convective cooling applies between the heating coil and the water. (RefBy: \hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil}.)}
-\item[Temp-Heating-Coil-Constant-over-Time:\phantomsection\label{assumpTHCCoT}]{The temperature of the heating coil is constant over time. (RefBy: \hyperref[likeChgTCVOD]{LC:Temperature-Coil-Variable-Over-Day} and \hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil}.)}
-\item[Temp-Heating-Coil-Constant-over-Length:\phantomsection\label{assumpTHCCoL}]{The temperature of the heating coil does not vary along its length. (RefBy: \hyperref[likeChgTCVOL]{LC:Temperature-Coil-Variable-Over-Length} and \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}.)}
+\item[Temp-Heating-Coil-Constant-over-Time:\phantomsection\label{assumpTHCCoT}]{The temperature of the heating coil is constant over time. (RefBy: \hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil} and \hyperref[likeChgTCVOD]{LC:Temperature-Coil-Variable-Over-Day}.)}
+\item[Temp-Heating-Coil-Constant-over-Length:\phantomsection\label{assumpTHCCoL}]{The temperature of the heating coil does not vary along its length. (RefBy: \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr} and \hyperref[likeChgTCVOL]{LC:Temperature-Coil-Variable-Over-Length}.)}
 \item[Law-Convective-Cooling-Water-PCM:\phantomsection\label{assumpLCCWP}]{Newton's law of convective cooling applies between the water and the PCM. (RefBy: \hyperref[GD:htFluxPCMFromWater]{GD:htFluxPCMFromWater}.)}
-\item[Charging-Tank-No-Temp-Discharge:\phantomsection\label{assumpCTNOD}]{The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature \hyperref[assumpSITWP]{A:Same-Initial-Temp-Water-PCM} is less than (or equal) to the temperature of the heating coil. (RefBy: \hyperref[likeChgDT]{LC:Discharging-Tank} and \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}.)}
-\item[Same-Initial-Temp-Water-PCM:\phantomsection\label{assumpSITWP}]{The initial temperature of the water and the PCM is the same. (RefBy: \hyperref[likeChgDITPW]{LC:Different-Initial-Temps-PCM-Water}, \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, and \hyperref[assumpCTNOD]{A:Charging-Tank-No-Temp-Discharge}.)}
+\item[Charging-Tank-No-Temp-Discharge:\phantomsection\label{assumpCTNOD}]{The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature \hyperref[assumpSITWP]{A:Same-Initial-Temp-Water-PCM} is less than (or equal) to the temperature of the heating coil. (RefBy: \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr} and \hyperref[likeChgDT]{LC:Discharging-Tank}.)}
+\item[Same-Initial-Temp-Water-PCM:\phantomsection\label{assumpSITWP}]{The initial temperature of the water and the PCM is the same. (RefBy: \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[likeChgDITPW]{LC:Different-Initial-Temps-PCM-Water}, and \hyperref[assumpCTNOD]{A:Charging-Tank-No-Temp-Discharge}.)}
 \item[PCM-Initially-Solid:\phantomsection\label{assumpPIS}]{The simulation will start with the PCM in a solid state. (RefBy: \hyperref[IM:heatEInPCM]{IM:heatEInPCM} and \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}.)}
-\item[Water-Always-Liquid:\phantomsection\label{assumpWAL}]{The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (RefBy: \hyperref[unlikeChgWPFS]{UC:Water-PCM-Fixed-States}, \hyperref[IM:heatEInWtr]{IM:heatEInWtr}, and \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}.)}
-\item[Perfect-Insulation-Tank:\phantomsection\label{assumpPIT}]{The tank is perfectly insulated so that there is no heat loss from the tank. (RefBy: \hyperref[likeChgTLH]{LC:Tank-Lose-Heat} and \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}.)}
-\item[No-Internal-Heat-Generation-By-Water-PCM:\phantomsection\label{assumpNIHGBWP}]{No internal heat is generated by either the water or the PCM; therefore, the volumetric heat generation per unit volume is zero. (RefBy: \hyperref[unlikeChgNIHG]{UC:No-Internal-Heat-Generation}, \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, and \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}.)}
+\item[Water-Always-Liquid:\phantomsection\label{assumpWAL}]{The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (RefBy: \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[unlikeChgWPFS]{UC:Water-PCM-Fixed-States}, and \hyperref[IM:heatEInWtr]{IM:heatEInWtr}.)}
+\item[Perfect-Insulation-Tank:\phantomsection\label{assumpPIT}]{The tank is perfectly insulated so that there is no heat loss from the tank. (RefBy: \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr} and \hyperref[likeChgTLH]{LC:Tank-Lose-Heat}.)}
+\item[No-Internal-Heat-Generation-By-Water-PCM:\phantomsection\label{assumpNIHGBWP}]{No internal heat is generated by either the water or the PCM; therefore, the volumetric heat generation per unit volume is zero. (RefBy: \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, and \hyperref[unlikeChgNIHG]{UC:No-Internal-Heat-Generation}.)}
 \item[Volume-Change-Melting-PCM-Negligible:\phantomsection\label{assumpVCMPN}]{The volume change of the PCM due to melting is negligible. (RefBy: \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}.)}
-\item[No-Gaseous-State-PCM:\phantomsection\label{assumpNGSP}]{The PCM is either in a liquid state or a solid state but not a gaseous state. (RefBy: \hyperref[unlikeChgWPFS]{UC:Water-PCM-Fixed-States}, \hyperref[unlikeChgNGS]{UC:No-Gaseous-State}, \hyperref[IM:heatEInPCM]{IM:heatEInPCM}, and \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}.)}
-\item[Atmospheric-Pressure-Tank:\phantomsection\label{assumpAPT}]{The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${{}^{\circ}\text{C}}$ and 100${{}^{\circ}\text{C}}$, respectively. (RefBy: \hyperref[IM:heatEInWtr]{IM:heatEInWtr} and \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}.)}
+\item[No-Gaseous-State-PCM:\phantomsection\label{assumpNGSP}]{The PCM is either in a liquid state or a solid state but not a gaseous state. (RefBy: \hyperref[IM:heatEInPCM]{IM:heatEInPCM}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[unlikeChgWPFS]{UC:Water-PCM-Fixed-States}, and \hyperref[unlikeChgNGS]{UC:No-Gaseous-State}.)}
+\item[Atmospheric-Pressure-Tank:\phantomsection\label{assumpAPT}]{The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${{}^{\circ}\text{C}}$ and 100${{}^{\circ}\text{C}}$, respectively. (RefBy: \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr} and \hyperref[IM:heatEInWtr]{IM:heatEInWtr}.)}
 \item[Volume-Coil-Negligible:\phantomsection\label{assumpVCN}]{When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible. (RefBy: \hyperref[DD:waterVolume.pcm]{DD:waterVolume\_pcm}.)}
 \end{itemize}
 \subsubsection{Theoretical Models}
@@ -510,7 +510,7 @@ Notes & Sensible heating occurs as long as the material does not reach a tempera
 Source & \hyperref{http://en.wikipedia.org/wiki/Sensible_heat}{}{}{Definition of Sensible Heat}
          
 \\ \midrule
-RefBy & \hyperref[IM:heatEInWtr]{IM:heatEInWtr} and \hyperref[IM:heatEInPCM]{IM:heatEInPCM}
+RefBy & \hyperref[IM:heatEInPCM]{IM:heatEInPCM} and \hyperref[IM:heatEInWtr]{IM:heatEInWtr}
         
 \\ \bottomrule
 \end{tabular}
@@ -889,7 +889,7 @@ Description & \begin{symbDescription}
 Source & \cite{koothoor2013}
          
 \\ \midrule
-RefBy & \hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values} and \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}
+RefBy & \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr} and \hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -927,7 +927,7 @@ Description & \begin{symbDescription}
 Source & \cite{koothoor2013}
          
 \\ \midrule
-RefBy & \hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values} and \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}
+RefBy & \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr} and \hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -965,7 +965,7 @@ Description & \begin{symbDescription}
 Source & \cite{lightstone2012}
          
 \\ \midrule
-RefBy & \hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values} and \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}
+RefBy & \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM} and \hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -1003,7 +1003,7 @@ Description & \begin{symbDescription}
 Source & \cite{lightstone2012}
          
 \\ \midrule
-RefBy & \hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values} and \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}
+RefBy & \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM} and \hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -1042,7 +1042,7 @@ Notes & The specific latent heat of fusion (also known as the enthalpy of fusion
 Source & \cite[(pg. 282)]{bueche1986}
          
 \\ \midrule
-RefBy & \hyperref[DD:meltFrac]{DD:meltFrac} and \hyperref[IM:heatEInPCM]{IM:heatEInPCM}
+RefBy & \hyperref[IM:heatEInPCM]{IM:heatEInPCM} and \hyperref[DD:meltFrac]{DD:meltFrac}
         
 \\ \bottomrule
 \end{tabular}
@@ -1084,7 +1084,7 @@ Notes & The value of $ϕ$ is constrained to $0\leq{}ϕ\leq{}1$.
 Source & \cite{koothoor2013}
          
 \\ \midrule
-RefBy & \hyperref[TM:latentHtE]{TM:latentHtE} and \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}
+RefBy & \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM} and \hyperref[TM:latentHtE]{TM:latentHtE}
         
 \\ \bottomrule
 \end{tabular}
@@ -1183,7 +1183,7 @@ Notes & ${T_{\text{P}}}$ is defined by \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOn
 Source & \cite{koothoor2013}
          
 \\ \midrule
-RefBy & \hyperref[unlikeChgNIHG]{UC:No-Internal-Heat-Generation}, \hyperref[outputValues]{FR:Output-Values}, \hyperref[findMass]{FR:Find-Mass}, \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, and \hyperref[calcValues]{FR:Calculate-Values}
+RefBy & \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[unlikeChgNIHG]{UC:No-Internal-Heat-Generation}, \hyperref[outputValues]{FR:Output-Values}, \hyperref[findMass]{FR:Find-Mass}, and \hyperref[calcValues]{FR:Calculate-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -1283,7 +1283,7 @@ Notes & ${T_{\text{W}}}$ is defined by \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOn
 Source & \cite{koothoor2013}
          
 \\ \midrule
-RefBy & \hyperref[unlikeChgNIHG]{UC:No-Internal-Heat-Generation}, \hyperref[unlikeChgNGS]{UC:No-Gaseous-State}, \hyperref[outputValues]{FR:Output-Values}, \hyperref[findMass]{FR:Find-Mass}, \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[calcValues]{FR:Calculate-Values}, \hyperref[calcPCMMeltEnd]{FR:Calculate-PCM-Melt-End-Time}, and \hyperref[calcPCMMeltBegin]{FR:Calculate-PCM-Melt-Begin-Time}
+RefBy & \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[unlikeChgNIHG]{UC:No-Internal-Heat-Generation}, \hyperref[unlikeChgNGS]{UC:No-Gaseous-State}, \hyperref[outputValues]{FR:Output-Values}, \hyperref[findMass]{FR:Find-Mass}, \hyperref[calcValues]{FR:Calculate-Values}, \hyperref[calcPCMMeltEnd]{FR:Calculate-PCM-Melt-End-Time}, and \hyperref[calcPCMMeltBegin]{FR:Calculate-PCM-Melt-Begin-Time}
         
 \\ \bottomrule
 \end{tabular}
@@ -1431,7 +1431,7 @@ Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM:sensHtE} an
 Source & \cite{koothoor2013}
          
 \\ \midrule
-RefBy & \hyperref[unlikeChgNGS]{UC:No-Gaseous-State}, \hyperref[outputValues]{FR:Output-Values}, \hyperref[findMass]{FR:Find-Mass}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, and \hyperref[calcValues]{FR:Calculate-Values}
+RefBy & \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[unlikeChgNGS]{UC:No-Gaseous-State}, \hyperref[outputValues]{FR:Output-Values}, \hyperref[findMass]{FR:Find-Mass}, and \hyperref[calcValues]{FR:Calculate-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -1587,7 +1587,7 @@ This section provides the non-functional requirements, the qualities that the so
 \item[Verifiable:\phantomsection\label{verifiable}]{The code is tested with complete verification and validation plan.}
 \item[Understandable:\phantomsection\label{understandable}]{The code is modularized with complete module guide and module interface specification.}
 \item[Reusable:\phantomsection\label{reusable}]{The code is modularized.}
-\item[Maintainable:\phantomsection\label{maintainable}]{The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.}
+\item[Maintainable:\phantomsection\label{maintainable}]{If a likely change is made to the finished software, it will take at most 10$\%$ of the original development time, assuming the same development resources are available.}
 \end{itemize}
 \section{Likely Changes}
 \label{Sec:LCs}

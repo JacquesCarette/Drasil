@@ -1,5 +1,4 @@
-resolver:
-  url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/20/20.yaml
+resolver: lts-20.26
 
 packages:
 - .

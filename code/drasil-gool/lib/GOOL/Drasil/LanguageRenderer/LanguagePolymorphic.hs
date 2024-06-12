@@ -218,7 +218,7 @@ argsList :: (RenderSym r) => String -> SValue r
 argsList l = mkStateVal (S.arrayType S.string) (text l)
 
 -- | First parameter is separator between name and value for named arguments, 
--- rest similar to call from ClassInterface
+-- rest similar to call from RendererClasses
 call :: (RenderSym r) => Doc -> Maybe Library -> Maybe Doc -> MixedCall r
 call sep lib o n t pas nas = do
   pargs <- sequence pas
@@ -409,11 +409,11 @@ ifCond f ifStart os elif bEnd (c:cs) eBody =
           indent $ RC.body bd,
           bEnd]) (zoom lensMStoVS v) b
         elseIfSect (v, b) = on2StateValues (\val bd -> vcat [
-          elif <+> f (RC.value val) <+> ifStart,
+          elif <+> f (RC.value val) <> optSpaceDoc os <> ifStart,
           indent $ RC.body bd,
           bEnd]) (zoom lensMStoVS v) b
         elseSect = onStateValue (\bd -> emptyIfEmpty (RC.body bd) $ vcat [
-          elseLabel <+> ifStart,
+          elseLabel <> optSpaceDoc os <> ifStart,
           indent $ RC.body bd,
           bEnd]) eBody
     in sequence (ifSect c : map elseIfSect cs ++ [elseSect]) 

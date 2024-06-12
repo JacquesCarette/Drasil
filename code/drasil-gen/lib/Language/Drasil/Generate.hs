@@ -5,7 +5,7 @@ module Language.Drasil.Generate (
   -- * Type checking
   typeCheckSI,
   -- * Generator Functions
-  gen, genDot, genCode, genLog,
+  gen, genDot, genCode,
   -- * Types (Printing Options)
   DocType(..), DocSpec(DocSpec), Format(TeX, HTML, JSON), DocChoices(DC),
   -- * Constructor
@@ -22,9 +22,9 @@ import Data.Time.Calendar (showGregorian)
 import Build.Drasil (genMake)
 import Language.Drasil
 import Drasil.DocLang (mkGraphInfo)
-import SysInfo.Drasil (SystemInformation(SI, _sys))
+import SysInfo.Drasil (SystemInformation)
 import Language.Drasil.Printers (DocType(SRS, Website, Jupyter), Format(TeX, HTML, JSON),
- makeCSS, genHTML, genTeX, genJSON, PrintingInformation, outputDot, printAllDebugInfo)
+ makeCSS, genHTML, genTeX, genJSON, PrintingInformation, outputDot)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD,
   unPP, unJP, unCSP, unCPPP, unSP)
@@ -34,7 +34,6 @@ import Language.Drasil.TypeCheck
 import Language.Drasil.Dump
 
 import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
-import Data.Char (isSpace)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
@@ -104,17 +103,6 @@ genDot si = do
     let gi = mkGraphInfo si
     outputDot "TraceyGraph" gi
     setCurrentDirectory workingDir
-
--- | Generates debugging logs to show all of the 'UID's used in an example.
-genLog :: SystemInformation -> PrintingInformation -> IO ()
-genLog SI{_sys = sysName} pinfo = do
-  workingDir <- getCurrentDirectory
-  createDirectoryIfMissing True $ "../../debug/" ++ filter (not.isSpace) (programName sysName) ++ "/SRSlogs"
-  setCurrentDirectory $ "../../debug/" ++ filter (not.isSpace) (programName sysName) ++ "/SRSlogs"
-  handle <- openFile (filter (not.isSpace) (programName sysName) ++ "_SRS.log") WriteMode
-  mapM_ (hPutStrLn handle . render) $ printAllDebugInfo pinfo
-  hClose handle
-  setCurrentDirectory workingDir
 
 -- | Calls the code generator.
 genCode :: Choices -> CodeSpec -> IO ()

@@ -6,6 +6,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import qualified Drasil.DocLang.SRS as SRS (solCharSpec)
+import Drasil.DocLang (mkMaintainableNFR)
 import Data.Drasil.Concepts.Documentation as Doc (body, funcReqDom, input_, 
   nonFuncReqDom, output_, physicalConstraint, physicalSim, property, solutionCharSpec)
 
@@ -131,8 +132,4 @@ understandability = cic "understandability" (foldlSent [
   ]) "Understandability" nonFuncReqDom
 
 maintainability :: ConceptInstance
-maintainability = cic "maintainability" (foldlSent [
-  S "development time for any" `S.the_ofTheC` S "likely changes should not exceed", 
-  addPercent (10 :: Integer), S "percent of the original development time"
-  ]) "Maintainability" nonFuncReqDom
-
+maintainability = mkMaintainableNFR "maintainability" 10 "Maintainability"

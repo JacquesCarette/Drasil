@@ -1,28 +1,28 @@
 digraph refvsref {
 	demandq -> stdOffDist;
 	demandq -> eqTNTChar;
-	riskFun -> minThick;
-	riskFun -> loadDurFactor;
-	riskFun -> stressDistFac;
-	stressDistFac -> aR;
-	stressDistFac -> dimlessLoad;
-	nFL -> minThick;
-	nFL -> tolLoad;
-	dimlessLoad -> minThick;
-	dimlessLoad -> glassTypeFac;
-	dimlessLoad -> demandq;
-	tolLoad -> aR;
-	tolLoad -> sdfTol;
-	sdfTol -> minThick;
-	sdfTol -> loadDurFactor;
-	probBr -> riskFun;
-	lResistance -> glassTypeFac;
-	lResistance -> nFL;
-	isSafePb -> probBr;
-	isSafePb -> isSafeLR;
-	isSafeLR -> demandq;
-	isSafeLR -> lResistance;
-	isSafeLR -> isSafePb;
+	theory:riskFun -> minThick;
+	theory:riskFun -> loadDurFactor;
+	theory:riskFun -> theory:stressDistFac;
+	theory:stressDistFac -> aR;
+	theory:stressDistFac -> theory:dimlessLoad;
+	theory:nFL -> minThick;
+	theory:nFL -> theory:tolLoad;
+	theory:dimlessLoad -> minThick;
+	theory:dimlessLoad -> glassTypeFac;
+	theory:dimlessLoad -> demandq;
+	theory:tolLoad -> aR;
+	theory:tolLoad -> theory:sdfTol;
+	theory:sdfTol -> minThick;
+	theory:sdfTol -> loadDurFactor;
+	theory:probBr -> theory:riskFun;
+	theory:lResistance -> glassTypeFac;
+	theory:lResistance -> theory:nFL;
+	theory:isSafePb -> theory:probBr;
+	theory:isSafePb -> theory:isSafeLR;
+	theory:isSafeLR -> demandq;
+	theory:isSafeLR -> theory:lResistance;
+	theory:isSafeLR -> theory:isSafePb;
 
 
 	minThick	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:minThick"];
@@ -38,28 +38,28 @@ digraph refvsref {
 	{minThick, loadDurFactor, glassTypeFac, stdOffDist, aR, eqTNTChar, demandq}
 	}
 
-	isSafeProb	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeProb"];
-	isSafeLoad	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeLoad"];
+	theory:isSafeProb	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeProb"];
+	theory:isSafeLoad	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeLoad"];
 
 	subgraph TM {
 	rank="same"
-	{isSafeProb, isSafeLoad}
+	{theory:isSafeProb, theory:isSafeLoad}
 	}
 
-	riskFun	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:riskFun"];
-	stressDistFac	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:stressDistFac"];
-	nFL	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nFL"];
-	dimlessLoad	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:dimlessLoad"];
-	tolLoad	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:tolLoad"];
-	sdfTol	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:sdfTol"];
-	probBr	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:probOfBreak"];
-	lResistance	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calofCapacity"];
-	isSafePb	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafePb"];
-	isSafeLR	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafeLR"];
+	theory:riskFun	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:riskFun"];
+	theory:stressDistFac	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:stressDistFac"];
+	theory:nFL	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nFL"];
+	theory:dimlessLoad	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:dimlessLoad"];
+	theory:tolLoad	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:tolLoad"];
+	theory:sdfTol	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:sdfTol"];
+	theory:probBr	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:probOfBreak"];
+	theory:lResistance	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calofCapacity"];
+	theory:isSafePb	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafePb"];
+	theory:isSafeLR	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafeLR"];
 
 	subgraph IM {
 	rank="same"
-	{riskFun, stressDistFac, nFL, dimlessLoad, tolLoad, sdfTol, probBr, lResistance, isSafePb, isSafeLR}
+	{theory:riskFun, theory:stressDistFac, theory:nFL, theory:dimlessLoad, theory:tolLoad, theory:sdfTol, theory:probBr, theory:lResistance, theory:isSafePb, theory:isSafeLR}
 	}
 
 }

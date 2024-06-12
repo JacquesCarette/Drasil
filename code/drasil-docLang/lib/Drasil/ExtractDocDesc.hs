@@ -139,7 +139,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
   } where
     def :: Definition a => [a] -> [Sentence]
     def = map (^. defn)
-    der :: HasDerivation a => [a] -> [Sentence]
+    der :: MayHaveDerivation a => [a] -> [Sentence]
     der = concatMap (getDerivSent . (^. derivations))
     getDerivSent :: Maybe Derivation -> [Sentence]
     getDerivSent Nothing = []

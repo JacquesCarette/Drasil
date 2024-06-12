@@ -51,13 +51,13 @@ startOriginDescDouble = atStartNP (the firstRod) `S.is` S "attached" `S.toThe` (
 startOriginDescSingle :: Sentence
 startOriginDescSingle = atStartNP (the pendulum) `S.is` S "attached" `S.toThe` (phrase origin !.)
 
-firstPendDesc:: Sentence
+firstPendDesc :: Sentence
 firstPendDesc = foldlSent[
   atStartNP (the firstRod) +:+. S "has two sides", 
   S "One side attaches" `S.toThe` (phrase origin !.), 
   S "Another side attaches" `S.toThe` phrase firstObject]
 
-secondPendDesc:: Sentence
+secondPendDesc :: Sentence
 secondPendDesc = foldlSent[
   atStartNP (the secondRod) +:+. S "has two sides", 
   S "One side attaches" `S.toThe` (phrase firstObject !.),

@@ -1,6 +1,8 @@
 -- | Gathers and organizes all the information for the [Drasil website](https://jacquescarette.github.io/Drasil/).
 module Drasil.Website.Body where
 
+import Control.Lens ((^.))
+
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil
 import SysInfo.Drasil
@@ -103,7 +105,7 @@ symbMap :: FolderLocation -> ChunkDB
 symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, web, phsChgMtrl] ++ 
   map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast, 
   heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce, 
-  normForce, slpSrf, cw fctSfty] ++ [game, physics, condition, glaSlab, intrslce, 
+  normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [game, physics, condition, glaSlab, intrslce,
   slope, safety, factor]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] 
   [] [] [] $ allRefs fl
 
@@ -176,7 +178,7 @@ websiteTitle :: String
 gitHubInfoURL, imagePath :: FilePath
 websiteTitle = "Drasil - Generate All the Things!"
 gitHubInfoURL = "https://github.com/JacquesCarette/Drasil"
-imagePath = "../images/Icon.png"
+imagePath = "./images/Icon.png"
 
 -- * Footer Section
 

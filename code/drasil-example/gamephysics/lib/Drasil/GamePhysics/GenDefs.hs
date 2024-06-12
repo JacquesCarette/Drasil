@@ -106,17 +106,17 @@ accelGravityDerivSentence2 = [(S "The above equation governs the gravitational a
         S "Then our", getTandS dVect, S "for the x or y axes is"]
 
 accelGravityDerivSentence3 :: [Sentence]
-accelGravityDerivSentence3 =  [S "Given the above assumptions" `sC` S "let", ch mLarger `S.and_` ch QPP.mass,
+accelGravityDerivSentence3 = [S "Given the above assumptions" `sC` S "let", ch mLarger `S.and_` ch QPP.mass,
         S "be", phrase QPP.mass `S.the_ofThe` (S "massive and light body respectively" !.),
         S "Equating", ch QP.force, S "above with Newton's second law",
         S "for the", phrase QP.force, S "experienced by the light body" `sC` S "we get"]
 
 accelGravityDerivSentence4 :: [Sentence]
-accelGravityDerivSentence4 =  [S "where", (ch QP.gravitationalAccel `S.isThe` phrase QP.gravitationalAccel !.),
+accelGravityDerivSentence4 = [S "where", (ch QP.gravitationalAccel `S.isThe` phrase QP.gravitationalAccel !.),
         S "Dividing the above equation by", ch QPP.mass `sC` S " we have"]
 
 accelGravityDerivSentence5 :: [Sentence]
-accelGravityDerivSentence5 =  [S "and thus the negative sign indicates that the", phrase QP.force `S.is`
+accelGravityDerivSentence5 = [S "and thus the negative sign indicates that the", phrase QP.force `S.is`
                                S "an attractive", phrase QP.force]
 
 accelGravityDerivEqn1 :: PExpr

@@ -76,7 +76,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       SystCons [] []],                            
   SSDSec $ 
     SSDProg
-      [ SSDProblem $ PDProg purp []                --  This adds a is used to define the problem your system will solve
+      [ SSDProblem $ PDProg purp []                -- This adds a is used to define the problem your system will solve
         [ TermsAndDefs Nothing terms               -- This is used to define the terms to be defined in terminology sub section
       , PhySysDesc progName physSystParts figMotion [] -- This defines the Physicalsystem sub-section, define the parts
                                                           -- of the system using physSysParts, figMotion is a function in figures for the image
@@ -97,7 +97,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
-     AuxConsProg progName [],  --Adds Auxilliary constraint section
+     AuxConsProg progName [],  -- Adds Auxilliary constraint section
   Bibliography                    -- Adds reference section
   ]
 
@@ -170,9 +170,9 @@ concIns = assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs
 -- 2.4 : Organization of Documents --
 -------------------------------------
 
---------------------------------------------
+-------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
---------------------------------------------
+-------------------------------------------
 -- Description of Genreal System automatically generated in GSDProg
 
 --------------------------
@@ -183,9 +183,9 @@ concIns = assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs
 -- 3.2 : User Characteristics --
 --------------------------------
 
--------------------------------
--- 3.3 : System Constraints  --
--------------------------------
+------------------------------
+-- 3.3 : System Constraints --
+------------------------------
 -- System Constraints automatically generated in SystCons
 
 
@@ -194,9 +194,9 @@ concIns = assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs
 --------------------------------------------
 -- Description of Specific System automatically generated in SSDProg
 
--------------------------------
--- 4.1 : System Constraints  --
--------------------------------
+------------------------------
+-- 4.1 : System Constraints --
+------------------------------
 
 ---------------------------------
 -- 4.1.1 Terminology and Definitions --
@@ -278,9 +278,9 @@ tMods = DPD.tMods ++ [newtonSLR]
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
 --------------------------------------------------
 
--------------------------------------------------
--- Section 8 :  Specification Parameter Values --
--------------------------------------------------
+------------------------------------------------
+-- Section 8 : Specification Parameter Values --
+------------------------------------------------
 
 ----------------------------
 -- Section 9 : References --

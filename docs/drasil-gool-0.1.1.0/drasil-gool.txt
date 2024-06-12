@@ -290,7 +290,20 @@ newObj :: ValueExpression r => PosCtorCall r
 extNewObj :: ValueExpression r => Library -> PosCtorCall r
 libNewObj :: ValueExpression r => Library -> PosCtorCall r
 exists :: ValueExpression r => SValue r -> SValue r
+
+-- | Calling an object method. t is the return type of the method, o is the
+--   object, f is the method name, and ps is a list of positional
+--   arguments.
+objMethodCall :: InternalValueExp r => VSType r -> SValue r -> Label -> [SValue r] -> SValue r
+
+-- | Calling a method with named arguments.
+objMethodCallNamedArgs :: InternalValueExp r => VSType r -> SValue r -> Label -> NamedArgs r -> SValue r
+
+-- | Calling a method with a mix of positional and named arguments.
 objMethodCallMixedArgs :: InternalValueExp r => VSType r -> SValue r -> Label -> [SValue r] -> NamedArgs r -> SValue r
+
+-- | Calling a method with no parameters.
+objMethodCallNoParams :: InternalValueExp r => VSType r -> SValue r -> Label -> SValue r
 class (ValueSym r) => FunctionSym r where {
     type Function r;
 }

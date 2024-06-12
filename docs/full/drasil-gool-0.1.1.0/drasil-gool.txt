@@ -444,10 +444,24 @@ extNewObj :: ValueExpression r => Library -> PosCtorCall r
 libNewObj :: ValueExpression r => Library -> PosCtorCall r
 exists :: ValueExpression r => SValue r -> SValue r
 class (FunctionSym r) => InternalValueExp r
+
+-- | Generic function for calling an object method. Takes the function
+--   name, the return type, the object, a list of positional arguments, and
+--   a list of named arguments.
 objMethodCallMixedArgs' :: InternalValueExp r => Label -> VSType r -> SValue r -> [SValue r] -> NamedArgs r -> SValue r
+
+-- | Calling an object method. t is the return type of the method, o is the
+--   object, f is the method name, and ps is a list of positional
+--   arguments.
 objMethodCall :: InternalValueExp r => VSType r -> SValue r -> Label -> [SValue r] -> SValue r
+
+-- | Calling a method with named arguments.
 objMethodCallNamedArgs :: InternalValueExp r => VSType r -> SValue r -> Label -> NamedArgs r -> SValue r
+
+-- | Calling a method with a mix of positional and named arguments.
 objMethodCallMixedArgs :: InternalValueExp r => VSType r -> SValue r -> Label -> [SValue r] -> NamedArgs r -> SValue r
+
+-- | Calling a method with no parameters.
 objMethodCallNoParams :: InternalValueExp r => VSType r -> SValue r -> Label -> SValue r
 class (ValueSym r) => FunctionSym r where {
     type Function r;
@@ -1076,7 +1090,7 @@ arg :: RenderSym r => SValue r -> SValue r -> SValue r
 argsList :: RenderSym r => String -> SValue r
 
 -- | First parameter is separator between name and value for named
---   arguments, rest similar to call from ClassInterface
+--   arguments, rest similar to call from RendererClasses
 call :: RenderSym r => Doc -> Maybe Library -> Maybe Doc -> MixedCall r
 funcAppMixedArgs :: RenderSym r => MixedCall r
 selfFuncAppMixedArgs :: RenderSym r => Doc -> SVariable r -> MixedCall r
@@ -2272,7 +2286,20 @@ newObj :: ValueExpression r => PosCtorCall r
 extNewObj :: ValueExpression r => Library -> PosCtorCall r
 libNewObj :: ValueExpression r => Library -> PosCtorCall r
 exists :: ValueExpression r => SValue r -> SValue r
+
+-- | Calling an object method. t is the return type of the method, o is the
+--   object, f is the method name, and ps is a list of positional
+--   arguments.
+objMethodCall :: InternalValueExp r => VSType r -> SValue r -> Label -> [SValue r] -> SValue r
+
+-- | Calling a method with named arguments.
+objMethodCallNamedArgs :: InternalValueExp r => VSType r -> SValue r -> Label -> NamedArgs r -> SValue r
+
+-- | Calling a method with a mix of positional and named arguments.
 objMethodCallMixedArgs :: InternalValueExp r => VSType r -> SValue r -> Label -> [SValue r] -> NamedArgs r -> SValue r
+
+-- | Calling a method with no parameters.
+objMethodCallNoParams :: InternalValueExp r => VSType r -> SValue r -> Label -> SValue r
 class (ValueSym r) => FunctionSym r where {
     type Function r;
 }

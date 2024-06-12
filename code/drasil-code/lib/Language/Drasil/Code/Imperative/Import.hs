@@ -291,10 +291,10 @@ convExpr (Lit (Perc a b)) = do
       getLiteral Float = litFloat . realToFrac
       getLiteral _ = error "convExpr: Rational space matched to invalid CodeType; should be Double or Float"
   return $ getLiteral sm (fromIntegral a / (10 ** fromIntegral b))
-convExpr (AssocA Add l)  = foldl1 (#+)  <$> mapM convExpr l
+convExpr (AssocA Add l) = foldl1 (#+)  <$> mapM convExpr l
 convExpr (AssocA Mul l) = foldl1 (#*)  <$> mapM convExpr l
-convExpr (AssocB And l)   = foldl1 (?&&) <$> mapM convExpr l
-convExpr (AssocB Or l)    = foldl1 (?||) <$> mapM convExpr l
+convExpr (AssocB And l) = foldl1 (?&&) <$> mapM convExpr l
+convExpr (AssocB Or l)  = foldl1 (?||) <$> mapM convExpr l
 convExpr (C c)   = do
   g <- get
   let v = quantvar (lookupC g c)

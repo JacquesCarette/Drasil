@@ -98,6 +98,6 @@ The Makefile used to build the Drasil framework all at once, but again, that pro
 
 # FAQ
 
-**Q:** My code is there but an example isn't building properly/ I'm getting an import error when everything should work/ The Travis CI build of `master` passes, but my local machine has errors.
+**Q:** My code is there but an example isn't building properly/ I'm getting an import error when everything should work/ The Travis CI build of `main` passes, but my local machine has errors.
 
 **A:** First try running `make clean`, then running `make` again. This forces your machine to recompile, using the packages on your local branch.

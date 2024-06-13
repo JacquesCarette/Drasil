@@ -84,12 +84,12 @@ One of the following commands may help if you find you made some changes to a co
 
 ## Pull Requests 
 This is a common process for fetching the latest data from the remote repository, making some changes, and then contributing back to the remote repository. A pull request is a method for telling the owners/maintainers of a remote repo that you wish to add your changes.
-1. Make sure your master branch is up to date by switching to it (using `git switch master`) and using `git pull` 
+1. Make sure your main branch is up to date by switching to it (using `git switch main`) and using `git pull` 
 2. From there, create a new branch using: `git checkout -b <branch-name>` 
 3. Make the needed changes in that branch.
 4. Specific to this repo, check that the changes you made do not break the program by navigating to the `code` folder (using `cd code`) and running the `make` command. If there are errors, you may need to check the [Debugging page](https://github.com/JacquesCarette/Drasil/wiki/Debugging-in-Drasil). Your pull request will not be accepted if there are any errors in the code.
 5. Create commit as previously explained in the [section above](#commits). 
-6. Push branch to master: `git push -u origin <branch-name>` if the branch is new, otherwise use `git push`.
+6. Push branch to main: `git push -u origin <branch-name>` if the branch is new, otherwise use `git push`.
 7. Go to the [home page](https://github.com/JacquesCarette/Drasil) of the remote repo you are working on and click “Create Pull Request” for the branch you just pushed.  
 8. Add a title and appropriate description. 
 9. If your changes were made in response to an issue, add one of the following comments: 
@@ -101,9 +101,9 @@ This is a common process for fetching the latest data from the remote repository
 Merge conflicts will likely appear if more than one person is working on a repo (which is quite often). A merge conflict occurs when git cannot figure out which parts of code to include and which parts to leave out. Many times, this happens when two different changes are made to the same line of code at the same time. Unfortunately, there is no automatic fix for merge conflicts. It must be manually resolved by one of the developers or contributors.
 
 To merge a branch, follow these steps:
-1. Perform `git pull` on master.
+1. Perform `git pull` on main.
 2. Use `git switch` or `git checkout -b` to get into the desired branch.
-3. Call `git merge master` to merge any new changes from master into your current branch. If your terminal does not complain, that means the merge was successful and you do not have to continue this procedure. Otherwise, continue.
+3. Call `git merge main` to merge any new changes from main into your current branch. If your terminal does not complain, that means the merge was successful and you do not have to continue this procedure. Otherwise, continue.
 4. Your terminal should now tell you if there are any merge conflicts. If so, follow the link to the file with conflicts. The files where the merge conflict happened will appear with the following syntax: 
 
     ```
@@ -111,14 +111,14 @@ To merge a branch, follow these steps:
     current changes (changes you just made on your branch)
     (If you’re in VSCode this will be highlighted green.) 
     ======= 
-    incoming changes (new changes from master)
+    incoming changes (new changes from main)
     (If you’re in VSCode this will be highlighted blue.) 
     >>>>>>>
     ```
 
 5. At this point, you can now look through and edit the code by hand to combine the current changes and the changes you made to resolve the conflict. After editing, you can chose to accept either “incoming changes”, “current changes”, or just manually delete the `<`,`>`, and `=` symbols. 
 6. Continue as if you were making a new commit: `git add .`, `git add *`, or `git add -u`.
-7. `git commit -m “merge master to branchName”`.
+7. `git commit -m “merge main to branchName”`.
 8. `git push` to send your changes to the remote repo.
 
 
@@ -161,11 +161,11 @@ Most of the commands using git bash are similar to that of Unix style operating 
 
 ### Starting a new branch
 Follow these steps:
-- `git checkout master`
+- `git checkout main`
 - `git pull`
 - `git checkout -b <yourNewBranchName>`
 
-### Renaming a branch you already pushed to master
+### Renaming a branch you already pushed to main
 Follow these steps:
 - `git branch -m new-name` (must currently be on that branch) or `git branch -m old-name new-name` (if you’re not on that branch) 
 - `git push origin old-name new-name` 
@@ -180,7 +180,7 @@ Follow these steps:
 - `git pull` - Updates your local branch with any changes made in the remote branch.
 - `git checkout <branchName>` - Same as `git switch <branchName>`.
 - `git push --set-upstream origin <new branch name>` or `git push -u <new branch name>` - For pushing your local branch if a corresponding branch does not already exist on your origin repo.  
-- `git reset --hard origin/master` - Run on master branch to reset to upstream master. 
+- `git reset --hard origin/main` - Run on main branch to reset to upstream main. 
 - (Specific to this repo), `make clean`- Runs `make` from scratch by stack clean in all directories. 
 - `git clone <link to repo>` - Clones the repo for use and modification locally. 
 - `git branch -d <local-branch>` - Delete a branch. 

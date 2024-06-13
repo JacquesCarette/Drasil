@@ -101,8 +101,8 @@ soSystemRel :: Relation
 soSystemRel
   = exactDbl 1 
     $/ (sy mass $*  square (sy qdFreqDomain) 
-    `add` (sy qdDampingCoeff $*  sy qdFreqDomain)
-    `add` sy qdStiffnessCoeff)
+    $+ (sy qdDampingCoeff $*  sy qdFreqDomain)
+    $+ sy qdStiffnessCoeff)
 
 soSystemDesc :: Sentence
 soSystemDesc

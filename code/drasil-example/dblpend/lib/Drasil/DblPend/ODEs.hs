@@ -22,21 +22,21 @@ dblPenODEInfo = odeInfo
   [dbl 1.3463968515384828, exactDbl 0, dbl 2.356194490192345, exactDbl 0] -- unit in radian [3*pi/7, 0, 3*pi/4, 0]
   [ o1,
     neg g $* 
-      (two $*  m1 `add` m2) $*  sin t1 $-
+      (two $*  m1 $+ m2) $*  sin t1 $-
       (m2 $*  g $*  sin (t1 $- (two $*  t2))) $-
       ((two $*  sin (t1 $- t2 )) $*  m2 $* 
-      (square o2 $*  l2 `add`
+      (square o2 $*  l2 $+
       (square o1 $*  l1 $*  cos (t1 $- t2))))
       $/
-      l1 $* (two $*  m1 `add` m2 $-
+      l1 $* (two $*  m1 $+ m2 $-
       (m2 $*  cos (two $*  t1  $- (two $*  t2)))),
     o2,
     two $*  sin (t1 $- t2) $* 
-      (square o1 $*  l1 $*  (m1 `add` m2 ) `add`
-      (g $*  (m1 `add` m2 ) $*  cos t1) `add`
+      (square o1 $*  l1 $*  (m1 $+ m2 ) $+
+      (g $*  (m1 $+ m2 ) $*  cos t1) $+
       (square o2 $*  l2 $*  m2 $*  cos (t1 $- t2 )))
       $/
-      l2 $* (two $*  m1 `add` m2 $-
+      l2 $* (two $*  m1 $+ m2 $-
       (m2 $*  cos (two $*  t1  $- (two $*  t2))))
     ]
   dblPenODEOpts

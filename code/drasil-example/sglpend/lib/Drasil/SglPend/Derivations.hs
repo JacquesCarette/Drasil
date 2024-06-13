@@ -39,7 +39,7 @@ accelerationIXDerivEqn4 = sy xAccel $= deriv (sy angularVelocity) time $*  sy le
 accelerationIYDerivEqn3, accelerationIYDerivEqn4 :: ModelExpr
 accelerationIYDerivEqn3 = sy yAccel $= deriv (sy angularVelocity $*  sy lenRod $*  sin (sy pendDisplacementAngle)) time
 accelerationIYDerivEqn4 = sy yAccel $= deriv (sy angularVelocity) time $*  sy lenRod $*  sin (sy pendDisplacementAngle)
-                        `add` (sy angularVelocity $*  sy lenRod $*  cos (sy pendDisplacementAngle) $*  deriv (sy pendDisplacementAngle) time)
+                        $+ (sy angularVelocity $*  sy lenRod $*  cos (sy pendDisplacementAngle) $*  deriv (sy pendDisplacementAngle) time)
 
 -- Angular Frequency Of Pendulum
 angFrequencyDerivEqns :: [ModelExpr]
@@ -77,6 +77,6 @@ angularDisplacementDerivEqn1, angularDisplacementDerivEqn2, angularDisplacementD
 angularDisplacementDerivEqn1 = sy torque $= sy momentOfInertia $*  sy angularAccel
 angularDisplacementDerivEqn2 = neg (sy mass $*  sy gravitationalAccel $*  sin (sy pendDisplacementAngle) $*  sy lenRod) $= (sy mass $*  square (sy lenRod))
                                 $*  deriv (deriv (sy pendDisplacementAngle) time) time
-angularDisplacementDerivEqn3 = deriv (deriv (sy pendDisplacementAngle) time) time `add` ((sy gravitationalAccel $/ sy lenRod) $*  sin (sy pendDisplacementAngle)) $= exactDbl 0
-angularDisplacementDerivEqn4 = deriv (deriv (sy pendDisplacementAngle) time) time `add` ((sy gravitationalAccel $/ sy lenRod) $*  sy pendDisplacementAngle) $= exactDbl 0
+angularDisplacementDerivEqn3 = deriv (deriv (sy pendDisplacementAngle) time) time $+ ((sy gravitationalAccel $/ sy lenRod) $*  sin (sy pendDisplacementAngle)) $= exactDbl 0
+angularDisplacementDerivEqn4 = deriv (deriv (sy pendDisplacementAngle) time) time $+ ((sy gravitationalAccel $/ sy lenRod) $*  sy pendDisplacementAngle) $= exactDbl 0
 angularDisplacementDerivEqn5 = apply1 pendDisplacementAngle time $= sy initialPendAngle $*  cos ( sy angularFrequency $*  sy time)

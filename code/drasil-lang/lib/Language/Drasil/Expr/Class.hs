@@ -105,7 +105,7 @@ class ExprC r where
   ($.) :: r -> r -> r
   
   -- | Add two expressions.
-  add :: r -> r -> r
+  ($+) :: r -> r -> r
   
   -- | Multiply two expressions.
   ($*) :: r -> r -> r
@@ -235,17 +235,17 @@ instance ExprC Expr where
   ($.) = VVNBinaryOp Dot
   
   -- | Add two expressions.
-  add (Lit (Int 0)) r = r
-  add l (Lit (Int 0)) = l
-  add (Lit (Dbl 0)) r = r
-  add l (Lit (Dbl 0)) = l
-  add l (Lit (ExactDbl 0)) = l
-  add (Lit (ExactDbl 0)) r = r
-  add (Lit (Int i1)) (Lit (Int i2)) = Lit (Int (i1 + i2))
-  add (Lit (Dbl r1)) (Lit (Dbl r2)) = Lit (Dbl (r1 + r2))
-  add (Lit (Int i)) (Lit (Dbl r)) = Lit (Dbl (fromIntegral i + r))
-  add (Lit (Dbl r)) (Lit (Int i)) = Lit (Dbl (r + fromIntegral i))
-  add l r = AssocA Add [l, r]
+  ($+) (Lit (Int 0)) r = r
+  ($+) l (Lit (Int 0)) = l
+  ($+) (Lit (Dbl 0)) r = r
+  ($+) l (Lit (Dbl 0)) = l
+  ($+) l (Lit (ExactDbl 0)) = l
+  ($+) (Lit (ExactDbl 0)) r = r
+  ($+) (Lit (Int i1)) (Lit (Int i2)) = Lit (Int (i1 + i2))
+  ($+) (Lit (Dbl r1)) (Lit (Dbl r2)) = Lit (Dbl (r1 + r2))
+  ($+) (Lit (Int i)) (Lit (Dbl r)) = Lit (Dbl (fromIntegral i + r))
+  ($+) (Lit (Dbl r)) (Lit (Int i)) = Lit (Dbl (r + fromIntegral i))
+  ($+) l r = AssocA Add [l, r]
 
   -- | Multiply two expressions.
   ($*) (Lit (Int 1)) r = r
@@ -355,7 +355,7 @@ instance ExprC Expr where
   
   -- TODO: Move euclidean to smart constructor
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
-  euclidean = sqrt . foldr1 add . map square
+  euclidean = sqrt . foldr1 ($+) . map square
   
   -- | Smart constructor to cross product two expressions.
   cross = VVVBinaryOp Cross
@@ -401,17 +401,17 @@ instance ExprC M.ModelExpr where
   ($.) = M.VVNBinaryOp M.Dot
 
   -- | Add two expressions.
-  add (M.Lit (Int 0)) r = r
-  add l (M.Lit (Int 0)) = l
-  add (M.Lit (Dbl 0)) r = r
-  add l (M.Lit (Dbl 0)) = l
-  add l (M.Lit (ExactDbl 0)) = l
-  add (M.Lit (ExactDbl 0)) r = r
-  add (M.Lit (Int i1)) (M.Lit (Int i2)) = M.Lit (Int (i1 + i2))
-  add (M.Lit (Dbl r1)) (M.Lit (Dbl r2)) = M.Lit (Dbl (r1 + r2))
-  add (M.Lit (Int i)) (M.Lit (Dbl r)) = M.Lit (Dbl (fromIntegral i + r))
-  add (M.Lit (Dbl r)) (M.Lit (Int i)) = M.Lit (Dbl (r + fromIntegral i))
-  add l r = M.AssocA M.Add [l, r]
+  ($+) (M.Lit (Int 0)) r = r
+  ($+) l (M.Lit (Int 0)) = l
+  ($+) (M.Lit (Dbl 0)) r = r
+  ($+) l (M.Lit (Dbl 0)) = l
+  ($+) l (M.Lit (ExactDbl 0)) = l
+  ($+) (M.Lit (ExactDbl 0)) r = r
+  ($+) (M.Lit (Int i1)) (M.Lit (Int i2)) = M.Lit (Int (i1 + i2))
+  ($+) (M.Lit (Dbl r1)) (M.Lit (Dbl r2)) = M.Lit (Dbl (r1 + r2))
+  ($+) (M.Lit (Int i)) (M.Lit (Dbl r)) = M.Lit (Dbl (fromIntegral i + r))
+  ($+) (M.Lit (Dbl r)) (M.Lit (Int i)) = M.Lit (Dbl (r + fromIntegral i))
+  ($+) l r = M.AssocA M.Add [l, r]
 
   -- | Multiply two expressions.
   ($*) (M.Lit (Int 1)) r = r
@@ -519,7 +519,7 @@ instance ExprC M.ModelExpr where
   realInterval c = M.RealI (c ^. uid)
 
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
-  euclidean = sqrt . foldr1 add . map square
+  euclidean = sqrt . foldr1 ($+) . map square
 
   -- | Smart constructor to cross product two expressions.
   cross = M.VVVBinaryOp M.Cross
@@ -567,17 +567,17 @@ instance ExprC C.CodeExpr where
   ($.) = C.VVNBinaryOp C.Dot
   
   -- | Add two expressions.
-  add (C.Lit (Int 0)) r = r
-  add l (C.Lit (Int 0)) = l
-  add (C.Lit (Dbl 0)) r = r
-  add l (C.Lit (Dbl 0)) = l
-  add l (C.Lit (ExactDbl 0)) = l
-  add (C.Lit (ExactDbl 0)) r = r
-  add (C.Lit (Int i1)) (C.Lit (Int i2)) = C.Lit (Int (i1 + i2))
-  add (C.Lit (Dbl r1)) (C.Lit (Dbl r2)) = C.Lit (Dbl (r1 + r2))
-  add (C.Lit (Int i)) (C.Lit (Dbl r)) = C.Lit (Dbl (fromIntegral i + r))
-  add (C.Lit (Dbl r)) (C.Lit (Int i)) = C.Lit (Dbl (r + fromIntegral i))
-  add l r = C.AssocA C.Add [l, r]
+  ($+) (C.Lit (Int 0)) r = r
+  ($+) l (C.Lit (Int 0)) = l
+  ($+) (C.Lit (Dbl 0)) r = r
+  ($+) l (C.Lit (Dbl 0)) = l
+  ($+) l (C.Lit (ExactDbl 0)) = l
+  ($+) (C.Lit (ExactDbl 0)) r = r
+  ($+) (C.Lit (Int i1)) (C.Lit (Int i2)) = C.Lit (Int (i1 + i2))
+  ($+) (C.Lit (Dbl r1)) (C.Lit (Dbl r2)) = C.Lit (Dbl (r1 + r2))
+  ($+) (C.Lit (Int i)) (C.Lit (Dbl r)) = C.Lit (Dbl (fromIntegral i + r))
+  ($+) (C.Lit (Dbl r)) (C.Lit (Int i)) = C.Lit (Dbl (r + fromIntegral i))
+  ($+) l r = C.AssocA C.Add [l, r]
 
   -- | Multiply two expressions.
   ($*) (C.Lit (Int 1)) r = r
@@ -686,7 +686,7 @@ instance ExprC C.CodeExpr where
   realInterval c = C.RealI (c ^. uid)
   
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
-  euclidean = sqrt . foldr1 add . map square
+  euclidean = sqrt . foldr1 ($+) . map square
   
   -- | Smart constructor to cross product two expressions.
   cross = C.VVVBinaryOp C.Cross

@@ -69,7 +69,7 @@ glaTyFac = ddE glaTyFacQD [dRef astm2009] Nothing "gTF"
 {--}
 
 standOffDisEq :: Expr
-standOffDisEq = sqrt (square (sy sdx) `add` square (sy sdy) `add` square (sy sdz))
+standOffDisEq = sqrt (square (sy sdx) $+ square (sy sdy) $+ square (sy sdz))
 
 standOffDisQD :: SimpleQDef
 standOffDisQD = mkQuantDef standOffDist standOffDisEq

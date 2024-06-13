@@ -59,7 +59,7 @@ risk = imNoDeriv (equationalModelN (riskFun ^. term) riskQD)
 riskQD :: SimpleQDef
 riskQD = mkQuantDef riskFun ((sy sflawParamK $/
   (($*) (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- exactDbl 1))) $* 
-  ((sy modElas $*  square (sy minThick)) $^ sy sflawParamM) $*  sy lDurFac $*  exp (sy stressDistFac))
+  ((sy modElas $* square (sy minThick)) $^ sy sflawParamM) $* sy lDurFac $* exp (sy stressDistFac))
 
 {--}
 
@@ -134,9 +134,9 @@ tolStrDisFac = imNoDeriv (equationalModelN (sdfTol ^. term) tolStrDisFacQD)
 
 tolStrDisFacQD :: SimpleQDef
 tolStrDisFacQD = mkQuantDef sdfTol $ ln (ln (recip_ (exactDbl 1 $- sy pbTol))
-  $*  ((sy plateLen $*  sy plateWidth) $^ (sy sflawParamM $- exactDbl 1) $/
-    (sy sflawParamK $*  ((sy modElas $* 
-    square (sy minThick)) $^ sy sflawParamM) $*  sy lDurFac)))
+  $* ((sy plateLen $* sy plateWidth) $^ (sy sflawParamM $- exactDbl 1) $/
+    (sy sflawParamK $* ((sy modElas $* 
+    square (sy minThick)) $^ sy sflawParamM) $* sy lDurFac)))
 
 {--}
 
@@ -156,7 +156,7 @@ calofCapacity = imNoDeriv (equationalModelN (lRe ^. term) calofCapacityQD)
   [dRef astm2009] "calofCapacity" [lrCap, nonFLRef, gtfRef]
 
 calofCapacityQD :: SimpleQDef
-calofCapacityQD = mkQuantDef lRe (sy (nonFL ^. output) $*  sy (glaTyFac ^. defLhs) $*  sy loadSF)
+calofCapacityQD = mkQuantDef lRe (sy (nonFL ^. output) $* sy (glaTyFac ^. defLhs) $* sy loadSF)
 
 {--}
 

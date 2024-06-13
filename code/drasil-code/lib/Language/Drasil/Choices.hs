@@ -8,7 +8,7 @@ module Language.Drasil.Choices (
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
-  choicesSent, showChs, InternalConcept(..), getICName, listStrIC) where
+  choicesSent, showChs, InternalConcept(..), listStrIC) where
 
 import Language.Drasil hiding (None, Var)
 import Language.Drasil.Code.Code (spaceToCodeType)
@@ -43,8 +43,8 @@ data Choices = Choices {
   srsConstraints :: Constraints,
   -- | List of external libraries what to utilize
   extLibs :: [ExtLib],
-  -- | List of modifiable function names
-  icNames :: Map InternalConcept Name,
+  -- | Function to get modifiable function names
+  icNames :: InternalConcept -> Name,
   -- | Number of folders to go up in order to obtain the image
   folderVal :: Int
 }
@@ -348,7 +348,7 @@ defaultChoices = Choices {
     [ReadME],
   srsConstraints = makeConstraints Exception Warning,
   extLibs = [],
-  icNames = Map.empty,
+  icNames = defaultICName,
   folderVal = 4
 }
 
@@ -401,7 +401,3 @@ defaultICName InputConstraints = "input_constraints"
 defaultICName WriteOutput = "write_output"
 defaultICName InputParameters = "InputParameters"
 defaultICName InputFormat = "InputFormat"
-
--- | Returns user defined function Name
-getICName :: Map InternalConcept Name -> InternalConcept -> Name
-getICName names ic = Map.findWithDefault (defaultICName ic) ic names

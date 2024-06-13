@@ -236,11 +236,11 @@ instance Typed Expr Space where
   infer cxt (AssocA _ exs) = 
     case sp of
       Left spaceValue -> 
-        -- If sp is a Space, proceed with calling allOfType'
-        allOfType' cxt exs (Left spaceValue) spaceValue
+        -- If sp is a Left value containing a Space, call allOfType with spaceValue
+        allOfType cxt exs spaceValue spaceValue
           "Associative arithmetic operation expects all operands to be of the same expected type."
       Right typeError ->
-        -- If sp is a TypeError, handle the error accordingly
+        -- If sp is a Right value containing a TypeError, handle the error accordingly
         Right $ "Encountered a type error: " ++ show typeError
     where
       sp = infer cxt (head exs)

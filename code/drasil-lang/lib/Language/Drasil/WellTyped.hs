@@ -67,17 +67,6 @@ allOfType cxt es expect ret s
       Right _ -> False) allTs
     dumpAllTs = intercalate "\n" $ map (("- " ++) . either show ("ERROR: " ++)) allTs
 
-allOfType' :: Typed e t => TypingContext t -> [e] -> Either t TypeError -> t -> TypeError -> Either t TypeError
-allOfType' cxt es expect ret s
-  | allTsAreSp = Left ret
-  | otherwise  = Right $ temporaryIndent "  " (s ++ "\nReceived:\n" ++ dumpAllTs)
-  where
-    allTs = map (infer cxt) es
-    allTsAreSp = all (\case
-      Left t -> either (== t) (const False) expect
-      Right _ -> False) allTs
-    dumpAllTs = intercalate "\n" $ map (("- " ++) . either show ("ERROR: " ++)) allTs
-
 -- | A temporary, hacky, indentation function. It should be removed when we
 -- switch to using something else for error messages, which can be later
 -- formatted nicely.

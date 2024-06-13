@@ -77,6 +77,7 @@ STABILIZE_E_SUFFIX = _stabilize
 BC_E_SUFFIX = _build_clean
 TRACE_GRAPH_SUFFIX = _trace_graph
 INSTALL_E_SUFFIX = _install
+DEBUG_E_SUFFIX = _debug
 
 # add example names with the appropriate suffixes to create per-example targets
 GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES))
@@ -88,6 +89,7 @@ STABILIZE_EXAMPLES = $(addsuffix $(STABILIZE_E_SUFFIX), $(EXAMPLES))
 BC_EXAMPLES = $(addsuffix $(BC_E_SUFFIX), $(EXAMPLES))
 TRACE_GRAPH_EXAMPLES = $(addsuffix $(TRACE_GRAPH_SUFFIX), $(EXAMPLES))
 INSTALL_EXAMPLES = $(addsuffix $(INSTALL_E_SUFFIX), $(EXAMPLES))
+DEBUG_EXAMPLES = $(addsuffix $(DEBUG_E_SUFFIX), $(EXAMPLES))
 
 # Website names with appropriate suffixes.
 TEST_WEBSITE = $(addsuffix $(TEST_E_SUFFIX), $(WEBSITE_FOLDER_NAME))
@@ -185,10 +187,13 @@ all: test test_website ##@Examples Run examples and test against stable.
 install: ##@Examples Install all example project binaries into your local binary path (see $(stack path) for local-bin-path).
 	stack install $(stackArgs)
 
-debug: stackArgs += $(PROFALL)
-debug: STACK_EXEC += $(PROFEXEC)
-debug: export DEBUG_ENV=1
+%debug: stackArgs += $(PROFALL)
+%debug: STACK_EXEC += $(PROFEXEC)
+%debug: export DEBUG_ENV=1
 debug: test ##@Examples Run test target with better debugging tools.
+
+# Debugging individual examples
+$(DEBUG_EXAMPLES): %$(DEBUG_E_SUFFIX): %$(TEST_E_SUFFIX)
 
 pr_ready: all hot_hlint ##@General Check if your current work is ready to for a PR via `all` and `hot_hlint`.
 	- echo "Your build/ and stable/ match, and your code currently passes HLint tests."
@@ -528,6 +533,7 @@ help:  ##@Help Show this help.
 	@echo "Example-specific targets where X is the example. Run \"make help_examples\" to see a list of possible examples:"
 	@echo "  X$(GEN_E_SUFFIX)               Generate individual example in HTML and LaTeX format."
 	@echo "  X$(TEST_E_SUFFIX)              Generate individual example and create a comparison against stable in the log folder."
+	@echo "  X$(DEBUG_E_SUFFIX)             $(TEST_E_SUFFIX), but in debug mode."
 	@echo "  X$(INSTALL_E_SUFFIX)           Install individual example executable(s) into your local binary path."
 	@echo "  X$(STABILIZE_E_SUFFIX)         Generate individual example and overwrite the contents of stable with the new version."
 	@echo "  X$(TEX_E_SUFFIX)               Generate individual example as a PDF (from LaTeX files)."

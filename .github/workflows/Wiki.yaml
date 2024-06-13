@@ -27,8 +27,8 @@ jobs:
 
       - name: "Ensure edit disclaimers were not manually added"
         run: |
-          html='<i>Warning for Drasil Authors: This wiki should not be edited through the web GUI.'
-          if grep -r "$html" wiki; then
+          notice='Warning: Wiki should not be edited directly'
+          if grep -r "$notice" wiki; then
             echo "Edit disclaimers are automatically prepended. Please remove those manually added."
             exit 1
           fi
@@ -49,10 +49,10 @@ jobs:
 
       - name: "Prepend wiki edit warnings"
         run: |
-          html='<small><i>Warning for Drasil Authors: This wiki should not be edited through the web GUI. Please use the wiki/ folder in the repository and follow the normal commit-PR workflow.</i></small>'
+          notice='_Warning: Wiki should not be edited directly. Edit the files in the ./wiki/ folder instead and make a PR._'
           for file in wiki/*.md; do
             [ "$(basename "$file")" = "_Sidebar.md" ] && continue
-            sed -i '1s|^|'"$html"'\n\n|' "$file"
+            sed -i '1s|^|'"$notice"'\n\n|' "$file"
           done
 
       - name: "Clone .wiki repository"

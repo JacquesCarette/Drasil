@@ -3,12 +3,13 @@ module Language.Drasil.Choices (
   Choices(..), Architecture (..), makeArchit, DataInfo(..), makeData, Maps(..),
   makeMaps, spaceToCodeType, Constraints(..), makeConstraints, ODE(..), makeODE,
   DocConfig(..), makeDocConfig, LogConfig(..), makeLogConfig, OptionalFeatures(..),
-  makeOptFeats, ExtLib(..), Modularity(..), InputStructure(..), UValidation(..),
-  ConstantStructure(..), ConstStoreStructure(..), ConstantRepr(..), 
-  ConceptMatchMap, MatchedConceptMap, CodeConcept(..), matchConcepts,
-  SpaceMatch, matchSpaces, ImplementationType(..), ConstraintBehaviour(..),
-  Comments(..), Verbosity(..), Visibility(..), Logging(..), AuxFile(..),
-  getSampleData, hasSampleInput, defaultChoices, choicesSent, showChs) where
+  makeOptFeats, ExtLib(..), Modularity(..), InputStructure(..), isInterleaved,
+  UValidation(..), ConstantStructure(..), ConstStoreStructure(..), 
+  ConstantRepr(..), ConceptMatchMap, MatchedConceptMap, CodeConcept(..), 
+  matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..), 
+  ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..), 
+  Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices, 
+  choicesSent, showChs) where
 
 import Language.Drasil hiding (None, Var)
 import Language.Drasil.Code.Code (spaceToCodeType)
@@ -102,9 +103,15 @@ instance RenderChoices InputStructure where
   showChs (UnbundledIns _) = S "Unbundled"
   showChs BundledIns = S "Bundled"
 
+-- | Checks to see if an InputStructure has interleaved inputs
+isInterleaved :: InputStructure -> Bool
+isInterleaved (UnbundledIns UInterleaved) = True
+isInterleaved _ = False
+
 -- | Validation location optinons for 'Unbundled' inputs
 data UValidation = UInterleaved -- ^ Validate inputs as they are parsed
                  | USeparate -- ^ Validate inputs in a separate function
+                   deriving Eq
 
 -- | Constants options.
 data ConstantStructure = Inline -- ^ Inline values for constants.

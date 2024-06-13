@@ -25,9 +25,7 @@ void get_input(string filename, float &v_launch, float &theta, float &p_target) 
     infile >> p_target;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile.close();
-}
-
-void input_constraints(float v_launch, float theta, float p_target) {
+    
     if (!(v_launch > 0.0f)) {
         std::cout << "Warning: ";
         std::cout << "v_launch has value ";

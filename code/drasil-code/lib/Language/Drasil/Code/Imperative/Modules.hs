@@ -36,9 +36,9 @@ import Language.Drasil.Chunk.Parameter (pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.Code.ExtLibImport (defs, imports, steps)
-import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
-  ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..), 
-  Logging(..), InputStructure(..), ConstStoreStructure(..), hasSampleInput)
+import Language.Drasil.Choices (Comments(..), InputStructure(..), isInterleaved,
+  ConstantStructure(..), ConstStoreStructure(..), ConstantRepr(..),
+  ConstraintBehaviour(..), ImplementationType(..), Logging(..), hasSampleInput)
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
 import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc)
@@ -392,19 +392,35 @@ genInputFormat :: (OOProg r) => ScopeTag ->
 genInputFormat s = do
   g <- get
   dd <- genDataDesc
-  let getFunc Pub = publicInOutFunc
+  let dvals = derivedInputs $ codeSpec g
+      cm = cMap $ codeSpec g
+      getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
-      genInFormat :: (OOProg r) => Bool -> GenState
+      genInFormat :: (OOProg r) => Bool -> Bool -> GenState
         (Maybe (SMethod r))
-      genInFormat False = return Nothing
-      genInFormat _ = do
+      genInFormat False _ = return Nothing
+      genInFormat _ il = do
         ins <- getInputFormatIns
         outs <- getInputFormatOuts
-        bod <- readData dd
+        formatBod <- readData dd
         desc <- inFmtFuncDesc
+        -- Derived inputs
+        derivedBod <- mapM (\x -> genCalcBlock CalcAssign x (x ^. codeExpr)) dvals
+        -- Input constraints
+        let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec g)
+            sfwrCs   = map (sfwrLookup cm) varsList
+            physCs   = map (physLookup cm) varsList
+        sf <- sfwrCBody sfwrCs
+        ph <- physCBody physCs
+        let constraintsBod = [block sf, block ph]
+        -- Wrap it up
+        let bod = if il 
+                    then do
+                      formatBod ++ derivedBod ++ constraintsBod
+                    else formatBod
         mthd <- getFunc s "get_input" desc ins outs bod
         return $ Just mthd
-  genInFormat $ "get_input" `elem` defList g
+  genInFormat ("get_input" `elem` defList g) (isInterleaved $ inStruct g)
 
 -- | Defines the 'DataDesc' for the format we require for input files. When we make
 -- input format a design variability, this will read the user's design choices

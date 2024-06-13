@@ -13,7 +13,7 @@ import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
   AuxFile, Modularity(..),
   ImplementationType(..), Comments, Verbosity, MatchedConceptMap,
   ConstantRepr, ConstantStructure(..), ConstraintBehaviour, Logging, 
-  InputStructure(..), ConstStoreStructure(..))
+  InputStructure(..), isInterleaved, ConstStoreStructure(..))
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output, Def,
   CodeSpec(..),  getConstraints)
 import Language.Drasil.Mod (Mod(..), Name, Version, Class(..),
@@ -204,12 +204,14 @@ getConstantsCls chs cs = cnCls (constStructure $ dataInfo chs) (inputStructure $
 -- If inputs are 'Bundled', derived_values will be a private method, not exported.
 -- If inputs are 'Unbundled', derived_values will be exported.
 -- Similar logic for input_constraints and get_input below.
-getExpDerived :: Name -> Choices -> [Derived] -> [ModExp]
+getExpDerived :: Name -> Choices -> [Derived] -> [ModExp] --TODO
 getExpDerived _ _ [] = []
-getExpDerived n chs _ = dMod (modularity $ architecture chs) (inputStructure $ dataInfo chs)
-  where dMod _ BundledIns = []
-        dMod Unmodular _ = [(dvNm, n)]
-        dMod Modular _ = [(dvNm, "InputParameters")]
+getExpDerived n chs _ = dMod (modularity $ architecture chs) 
+  (inputStructure $ dataInfo chs) (isInterleaved $ inputStructure $ dataInfo chs)
+  where dMod _ BundledIns _ = []
+        dMod _ _ True = []
+        dMod Unmodular _ _ = [(dvNm, n)]
+        dMod Modular _ _ = [(dvNm, "InputParameters")]
         dvNm = "derived_values"
 
 -- | Get derived values defined in a class (for @derived_values@).
@@ -227,10 +229,12 @@ getDerivedCls chs _ = dCls (inputStructure $ dataInfo chs)
 -- See 'getExpDerived' for full logic details.
 getExpConstraints :: Name -> Choices -> [ConstraintCE] -> [ModExp]
 getExpConstraints _ _ [] = []
-getExpConstraints n chs _ = cMod (modularity $ architecture chs) (inputStructure $ dataInfo chs)
-  where cMod _ BundledIns = []
-        cMod Unmodular _ = [(icNm, n)]
-        cMod Modular _ = [(icNm, "InputParameters")]
+getExpConstraints n chs _ = cMod (modularity $ architecture chs) 
+  (inputStructure $ dataInfo chs) (isInterleaved $ inputStructure $ dataInfo chs)
+  where cMod _ BundledIns _ = []
+        cMod _ _ True = []
+        cMod Unmodular _ _ = [(icNm, n)]
+        cMod Modular _ _ = [(icNm, "InputParameters")]
         icNm = "input_constraints"
 
 -- | Get constraints defined in a class (for @input_constraints@).

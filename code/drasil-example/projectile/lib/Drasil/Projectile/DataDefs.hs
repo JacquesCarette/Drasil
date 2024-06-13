@@ -21,8 +21,8 @@ speedIX = ddENoRefs speedIXQD Nothing "speedIX" [speedRef, figRef]
 speedIY = ddENoRefs speedIYQD Nothing "speedIY" [speedRef, figRef]
 
 speedIXQD, speedIYQD :: SimpleQDef
-speedIXQD = mkQuantDef ixVel $ sy iSpeed `mul` cos (sy launAngle)
-speedIYQD = mkQuantDef iyVel $ sy iSpeed `mul` sin (sy launAngle)
+speedIXQD = mkQuantDef ixVel $ sy iSpeed $*  cos (sy launAngle)
+speedIYQD = mkQuantDef iyVel $ sy iSpeed $*  sin (sy launAngle)
 
 ----------
 speedRef :: Sentence

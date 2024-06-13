@@ -43,7 +43,7 @@ ctrOfMass = mkQuantDef posCM ctrOfMassEqn
 
 -- FIXME (variable "i") is a horrible hack
 ctrOfMassEqn :: ModelExpr
-ctrOfMassEqn = sumAll (variable "j") (sy massj `mul` sy posj) $/ sy mTot
+ctrOfMassEqn = sumAll (variable "j") (sy massj $*  sy posj) $/ sy mTot
 
 -- DD2 : Linear displacement --
 
@@ -218,7 +218,7 @@ impulseV :: SimpleQDef
 impulseV = mkQuantDef QP.impulseV impulseVEqn
 
 impulseVEqn :: Expr
-impulseVEqn = sy QPP.mass `mul` sy QP.chgInVelocity
+impulseVEqn = sy QPP.mass $*  sy QP.chgInVelocity
 
 impulseVDesc :: Sentence
 impulseVDesc = foldlSent [S "An", getTandS QP.impulseV, S "occurs when a",
@@ -289,7 +289,7 @@ kEnergy :: SimpleQDef
 kEnergy = mkQuantDef QP.kEnergy kEnergyEqn
 
 kEnergyEqn :: Expr
-kEnergyEqn = sy QPP.mass `mul` half (square (norm (sy QP.velocity)))
+kEnergyEqn = sy QPP.mass $*  half (square (norm (sy QP.velocity)))
 
 kEnergyDesc :: Sentence
 kEnergyDesc = foldlSent [atStart QP.kEnergy `S.is` (QP.kEnergy ^. defn)]
@@ -303,7 +303,7 @@ momentOfInertia :: ModelQDef
 momentOfInertia = mkQuantDef QP.momentOfInertia momentOfInertiaEqn
 
 momentOfInertiaEqn :: ModelExpr
-momentOfInertiaEqn = sumAll (variable "j") $ sy massj `mul` square (sy rRot)
+momentOfInertiaEqn = sumAll (variable "j") $ sy massj $*  square (sy rRot)
 
 momentOfInertiaDesc :: Sentence
 momentOfInertiaDesc = foldlSent [S "The", getTandS QP.momentOfInertia,
@@ -320,7 +320,7 @@ potEnergy :: SimpleQDef
 potEnergy = mkQuantDef QP.potEnergy potEnergyEqn
 
 potEnergyEqn :: Expr
-potEnergyEqn = sy QPP.mass `mul` sy QP.gravitationalAccel `mul` sy QP.height
+potEnergyEqn = sy QPP.mass $*  sy QP.gravitationalAccel $*  sy QP.height
 
 potEnergyDesc :: Sentence
 potEnergyDesc = foldlSent [atStartNP (the QP.potEnergy) `S.of_`

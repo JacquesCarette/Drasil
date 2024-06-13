@@ -27,7 +27,7 @@ positionIXQD :: SimpleQDef
 positionIXQD = mkQuantDef QP.ixPos positionIXEqn
 
 positionIXEqn :: Expr
-positionIXEqn = sy lenRod `mul` sin (sy initialPendAngle)
+positionIXEqn = sy lenRod $*  sin (sy initialPendAngle)
 
 figRef :: Sentence
 figRef = ch QP.ixPos `S.is` S "shown in" +:+. refS figMotion
@@ -43,7 +43,7 @@ positionIYQD :: SimpleQDef
 positionIYQD = mkQuantDef QP.iyPos positionIYEqn
 
 positionIYEqn :: Expr
-positionIYEqn = neg (sy lenRod `mul` cos (sy initialPendAngle))
+positionIYEqn = neg (sy lenRod $*  cos (sy initialPendAngle))
 
 figReff :: Sentence
 figReff = ch QP.iyPos `S.is` S "shown in" +:+. refS figMotion
@@ -75,7 +75,7 @@ angFrequencyDDQD :: SimpleQDef
 angFrequencyDDQD = mkQuantDef QP.angularFrequency angFrequencyDDEqn
 
 angFrequencyDDEqn :: Expr
-angFrequencyDDEqn = exactDbl 2 `mul` sy QM.pi_ $/ sy QP.period
+angFrequencyDDEqn = exactDbl 2 $*  sy QM.pi_ $/ sy QP.period
 
 angFrequencyRef :: Sentence
 angFrequencyRef = ch QP.period `S.is` S "from" +:+ refS periodSHMDD

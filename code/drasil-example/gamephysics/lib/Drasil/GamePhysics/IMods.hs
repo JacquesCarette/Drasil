@@ -137,7 +137,7 @@ col2DNP = nounPhraseSP "Collisions on 2D rigid bodies"
 
 col2DExpr {-, im3Rel2, im3Rel3, im3Rel4 -} :: Expr -- FIXME: add proper equation
 col2DExpr = apply1 velA time `add`
-  ((sy impulseS $/ sy massA) `mul` sy normalVect)
+  ((sy impulseS $/ sy massA) $*  sy normalVect)
 
 
 col2DOutputs, impulseNote :: Sentence

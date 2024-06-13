@@ -13,18 +13,18 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, htCapW, htFluxC, tauW, tempC,
 ----------------------------------------------
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4 :: ModelExpr
 
-eBalanceOnWtrDerivEqn1 = sy wMass `mul` sy htCapW `mul` deriv (sy tempW) time $=
-  sy htFluxC `mul` sy coilSA
+eBalanceOnWtrDerivEqn1 = sy wMass $*  sy htCapW $*  deriv (sy tempW) time $=
+  sy htFluxC $*  sy coilSA
 
-eBalanceOnWtrDerivEqn2 = sy wMass `mul` sy htCapW `mul` deriv (sy tempW) time $=
-  sy coilHTC `mul` sy coilSA `mul`  (sy tempC $- sy tempW)
+eBalanceOnWtrDerivEqn2 = sy wMass $*  sy htCapW $*  deriv (sy tempW) time $=
+  sy coilHTC $*  sy coilSA $*   (sy tempC $- sy tempW)
 
 eBalanceOnWtrDerivEqn3 = deriv (sy tempW) time $=
-  (sy coilHTC `mul` sy coilSA $/
-  (sy wMass `mul` sy htCapW)) `mul`  (sy tempC $- sy tempW)
+  (sy coilHTC $*  sy coilSA $/
+  (sy wMass $*  sy htCapW)) $*   (sy tempC $- sy tempW)
 
 eBalanceOnWtrDerivEqn4 =
-  deriv (sy tempW) time $= recip_ (sy tauW) `mul` (sy tempC $- sy tempW)
+  deriv (sy tempW) time $= recip_ (sy tauW) $*  (sy tempC $- sy tempW)
 
 eBalanceOnWtrDerivEqns :: [ModelExpr]
 eBalanceOnWtrDerivEqns = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4]

@@ -47,8 +47,8 @@ htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP
   EmptyS (sub lH lClad) Real heatTransferCoef htTransCladCoolEq
 
 htTransCladCoolEq =
-  exactDbl 2 `mul` sy cladCond `mul` sy coolFilmCond $/ (exactDbl 2 `mul` sy cladCond `add` (sy cladThick 
-  `mul` sy coolFilmCond))
+  exactDbl 2 $*  sy cladCond $*  sy coolFilmCond $/ (exactDbl 2 $*  sy cladCond `add` (sy cladThick 
+  $*  sy coolFilmCond))
 
 ---
 
@@ -60,8 +60,8 @@ htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP
   "effective heat transfer coefficient between clad and fuel surface")
   EmptyS (sub lH lEffective) Real heatTransferCoef htTransCladFuelEq
 
-htTransCladFuelEq = (exactDbl 2 `mul` sy cladCond `mul` sy gapFilmCond) $/ (exactDbl 2 `mul` sy cladCond
-  `add` (sy cladThick `mul` sy gapFilmCond))
+htTransCladFuelEq = (exactDbl 2 $*  sy cladCond $*  sy gapFilmCond) $/ (exactDbl 2 $*  sy cladCond
+  `add` (sy cladThick $*  sy gapFilmCond))
 
 ---
 

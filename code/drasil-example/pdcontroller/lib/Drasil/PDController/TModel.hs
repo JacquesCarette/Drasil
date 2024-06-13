@@ -38,7 +38,7 @@ laplaceRel :: Relation
 laplaceRel
   = sy qdLaplaceTransform $=
       defint (eqSymb time) (sy negInf) (sy posInf) (sy qdFxnTDomain 
-      `mul` DrasilLang.exp (neg (sy qdFreqDomain) `mul` sy time))
+      $*  DrasilLang.exp (neg (sy qdFreqDomain) $*  sy time))
 
 laplaceDesc :: Sentence
 laplaceDesc
@@ -100,8 +100,8 @@ tmSOSystemRC
 soSystemRel :: Relation
 soSystemRel
   = exactDbl 1 
-    $/ (sy mass `mul` square (sy qdFreqDomain) 
-    `add` (sy qdDampingCoeff `mul` sy qdFreqDomain)
+    $/ (sy mass $*  square (sy qdFreqDomain) 
+    `add` (sy qdDampingCoeff $*  sy qdFreqDomain)
     `add` sy qdStiffnessCoeff)
 
 soSystemDesc :: Sentence

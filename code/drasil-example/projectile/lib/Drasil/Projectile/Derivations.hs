@@ -19,19 +19,19 @@ timeDeriv :: [ModelExpr]
 timeDeriv = [timeDerivEqn1, timeDerivEqn2, timeDerivEqn3, timeDerivEqn4]
 
 timeDerivEqn1, timeDerivEqn2, timeDerivEqn3, timeDerivEqn4 :: ModelExpr
-timeDerivEqn1 = sy yPos $= (sy iyVel `mul` sy time) $- half (sy gravitationalAccelConst `mul` square (sy time))
-timeDerivEqn2 = (sy iyVel `mul` sy flightDur) $- half (sy gravitationalAccelConst `mul` square (sy flightDur)) $= exactDbl 0
-timeDerivEqn3 = sy iyVel $- half (sy gravitationalAccelConst `mul` sy flightDur) $= exactDbl 0
-timeDerivEqn4 = sy flightDur $= exactDbl 2 `mul` sy iyVel $/ sy gravitationalAccelConst
+timeDerivEqn1 = sy yPos $= (sy iyVel $*  sy time) $- half (sy gravitationalAccelConst $*  square (sy time))
+timeDerivEqn2 = (sy iyVel $*  sy flightDur) $- half (sy gravitationalAccelConst $*  square (sy flightDur)) $= exactDbl 0
+timeDerivEqn3 = sy iyVel $- half (sy gravitationalAccelConst $*  sy flightDur) $= exactDbl 0
+timeDerivEqn4 = sy flightDur $= exactDbl 2 $*  sy iyVel $/ sy gravitationalAccelConst
 
 --
 landPosDeriv :: [ModelExpr]
 landPosDeriv = [landPosDerivEqn1, landPosDerivEqn2, landPosDerivEqn3]
 
 landPosDerivEqn1, landPosDerivEqn2, landPosDerivEqn3 :: ModelExpr
-landPosDerivEqn1 = sy xPos    $= sy ixVel `mul` sy time
-landPosDerivEqn2 = sy landPos $= sy ixVel `mul` exactDbl 2 `mul` sy launSpeed `mul` sin (sy launAngle) $/ sy gravitationalAccelConst
-landPosDerivEqn3 = sy landPos $= sy launSpeed `mul` cos (sy launAngle) `mul` exactDbl 2 `mul` sy launSpeed `mul` sin (sy launAngle) $/ sy gravitationalAccelConst
+landPosDerivEqn1 = sy xPos    $= sy ixVel $*  sy time
+landPosDerivEqn2 = sy landPos $= sy ixVel $*  exactDbl 2 $*  sy launSpeed $*  sin (sy launAngle) $/ sy gravitationalAccelConst
+landPosDerivEqn3 = sy landPos $= sy launSpeed $*  cos (sy launAngle) $*  exactDbl 2 $*  sy launSpeed $*  sin (sy launAngle) $/ sy gravitationalAccelConst
 
 
 --
@@ -52,4 +52,4 @@ rectPosDerivEqn1 = sy speed $= deriv (sy scalarPos) time
 rectPosDerivEqn2 = defint (eqSymb scalarPos) (sy iPos) (sy scalarPos) (exactDbl 1) $=
                    defint (eqSymb time) (exactDbl 0) (sy time) (sy speed)
 rectPosDerivEqn3 = defint (eqSymb scalarPos) (sy iPos) (sy scalarPos) (exactDbl 1) $=
-                   defint (eqSymb time) (exactDbl 0) (sy time) (sy QP.iSpeed `add` (sy QP.constAccel `mul` sy time))
+                   defint (eqSymb time) (exactDbl 0) (sy time) (sy QP.iSpeed `add` (sy QP.constAccel $*  sy time))

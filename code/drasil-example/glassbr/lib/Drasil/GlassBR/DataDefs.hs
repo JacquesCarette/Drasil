@@ -27,7 +27,7 @@ dataDefs = [hFromt, loadDF, glaTyFac, standOffDis, aspRat, eqTNTWDD, calofDemand
 {--}
 
 hFromtEq :: Relation
-hFromtEq = frac 1 1000 `mul` incompleteCase (zipWith hFromtHelper
+hFromtEq = frac 1 1000 $*  incompleteCase (zipWith hFromtHelper
   actualThicknesses nominalThicknesses)
 
 hFromtHelper :: Double -> Double -> (Expr, Relation)
@@ -91,7 +91,7 @@ aspRat = ddE aspRatQD [dRef astm2009] Nothing "aspectRatio" [aGrtrThanB]
 {--}
 
 eqTNTWEq :: Expr
-eqTNTWEq = mul (sy charWeight) (sy tNT)
+eqTNTWEq = ($*) (sy charWeight) (sy tNT)
 
 eqTNTWQD :: SimpleQDef
 eqTNTWQD = mkQuantDef eqTNTWeight eqTNTWEq

@@ -295,4 +295,4 @@ getExpOutput n chs _ = [(icNames chs WriteOutput, oMod $ modularity $ architectu
 
 -- | Get InternalConcept name using DrasilState
 genICName :: InternalConcept -> GenState Name
-genICName ic = gets (\ds -> dsICNames ds ic)
+genICName ic = gets (`dsICNames` ic)

@@ -233,9 +233,9 @@ instance Typed Expr Space where
   infer cxt (Lit lit) = infer cxt lit
 
   infer cxt (AssocA _ exs) = 
-    case sp of
+    case infer cxt (head exs) of
       Left spaceValue | S.isBasicNumSpace spaceValue -> 
-          -- If sp is a Left value containing a valid Space, call allOfType with spaceValue
+          -- If the inferred type of e is a valid Space, call allOfType with spaceValue
           allOfType cxt exs spaceValue spaceValue 
               "Associative arithmetic operation expects all operands to be of the same expected type."
       Left _ ->
@@ -244,9 +244,7 @@ instance Typed Expr Space where
       Right r ->
           -- If sp is a Right value containing a TypeError
           Right r
-    where
-        e:_ = exs
-        sp = infer cxt e
+
 
   infer cxt (AssocB _ exs) = allOfType cxt exs S.Boolean S.Boolean
     $ "Associative boolean operation expects all operands to be of the same type (" ++ show S.Boolean ++ ")."

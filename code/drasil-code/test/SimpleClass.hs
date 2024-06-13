@@ -67,7 +67,7 @@ makeSimpleData = docFunc "This function creates an instance of SimpleData."
 -- | Updates values of a SimpleData object
 updateSimpleData :: (OOProg r) => SMethod r
 updateSimpleData = docFunc "This function updates the values of a SimpleData object."
-  ["Value for x, and half of value for y"] Nothing $
+  ["Instance of " ++ simpleClassName, "Value for x, and half of value for y"] Nothing $
   function "updateSimpleData" public void [param sObj, param x]
   (bodyStatements [valStmt $ objMethodCall void (valueOf sObj) "setX" [valueOf x],
     valStmt $ objMethodCall void (valueOf sObj) "setY" [valueOf x #* litInt 2]])

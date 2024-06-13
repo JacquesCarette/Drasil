@@ -232,8 +232,8 @@ instance Typed Expr Space where
   infer :: TypingContext Space -> Expr -> Either Space TypeError
   infer cxt (Lit lit) = infer cxt lit
 
-  infer cxt (AssocA _ exs) = 
-    case infer cxt (head exs) of
+  infer cxt (AssocA _ (e:exs)) = 
+    case infer cxt e of
       Left spaceValue | S.isBasicNumSpace spaceValue -> 
           -- If the inferred type of e is a valid Space, call allOfType with spaceValue
           allOfType cxt exs spaceValue spaceValue 
@@ -245,6 +245,15 @@ instance Typed Expr Space where
           -- If sp is a Right value containing a TypeError
           Right r
 
+  infer _ (AssocA op exs) = 
+    case (op, exs) of
+      (Add, []) -> 
+        -- Return a default value or an error for empty addition
+        Right "Associative addition requires at least one operand."
+      (Mul, []) -> 
+        -- Return a default value or an error for empty multiplication
+        Right "Associative multiplication requires at least one operand."
+      -- Other cases...
 
   infer cxt (AssocB _ exs) = allOfType cxt exs S.Boolean S.Boolean
     $ "Associative boolean operation expects all operands to be of the same type (" ++ show S.Boolean ++ ")."

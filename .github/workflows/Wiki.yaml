@@ -69,7 +69,7 @@ jobs:
           git add .
           if [ -n "$(git status --porcelain)" ]; then
             git commit -m "Update wiki content at ${{ github.sha }}"
-            git push origin main
+            git push origin master
           else
             echo "No changes to commit"
           fi

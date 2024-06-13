@@ -73,7 +73,7 @@ positionXQD_2 :: SimpleQDef
 positionXQD_2 = mkQuantDef xPos_2 positionXEqn_2
 
 positionXEqn_2 :: PExpr
-positionXEqn_2 = sy (positionXDD_1 ^. defLhs) `add` (sy lenRod_2 $*  sin (sy pendDisAngle_2))
+positionXEqn_2 = sy (positionXDD_1 ^. defLhs) $+ (sy lenRod_2 $*  sin (sy pendDisAngle_2))
 
 positionXFigRef_2 :: Sentence
 positionXFigRef_2 = ch xPos_2 `S.is` S "shown in" +:+. refS figMotion
@@ -91,7 +91,7 @@ positionYQD_2 :: SimpleQDef
 positionYQD_2 = mkQuantDef yPos_2 positionYEqn_2
 
 positionYEqn_2 :: PExpr
-positionYEqn_2 = sy (positionYDD_1 ^. defLhs) `add` neg (sy lenRod_2 $*  cos (sy pendDisAngle_2))
+positionYEqn_2 = sy (positionYDD_1 ^. defLhs) $+ neg (sy lenRod_2 $*  cos (sy pendDisAngle_2))
 
 positionYFigRef_2 :: Sentence
 positionYFigRef_2 = ch yPos_2 `S.is` S "shown in" +:+. refS figMotion

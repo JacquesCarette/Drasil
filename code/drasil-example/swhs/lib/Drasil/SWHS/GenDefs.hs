@@ -47,7 +47,7 @@ rocTempSimpRC = makeRC "rocTempSimpRC" (nounPhraseSP $ "Simplified rate " ++
 rocTempSimpRel :: ModelExpr
 rocTempSimpRel = sy QPP.mass $*  sy QT.heatCapSpec $* 
   deriv (sy QT.temp) QP.time $= (sy htFluxIn $*  sy inSA $-
-  (sy htFluxOut $*  sy outSA)) `add` (sy volHtGen $*  sy QPP.vol)
+  (sy htFluxOut $*  sy outSA)) $+ (sy volHtGen $*  sy QPP.vol)
 
 ----
 
@@ -132,27 +132,27 @@ rocTempDerivDens = [S "Using the fact that", ch density :+: S "=" :+: ch mass :+
 rocTempDerivIntegEq, rocTempDerivGaussEq, rocTempDerivArbVolEq,
   rocTempDerivConsFlxEq, rocTempDerivDensEq :: ModelExpr
 
-rocTempDerivIntegEq = neg (intAll (eqSymb vol) (sy gradient $. sy thFluxVect)) `add`
+rocTempDerivIntegEq = neg (intAll (eqSymb vol) (sy gradient $. sy thFluxVect)) $+
   intAll (eqSymb vol) (sy volHtGen) $=
   intAll (eqSymb vol) (sy density
   $*  sy QT.heatCapSpec $*  pderiv (sy QT.temp) time)
 
-rocTempDerivGaussEq = neg (intAll (eqSymb surface) (sy thFluxVect $. sy uNormalVect)) `add`
+rocTempDerivGaussEq = neg (intAll (eqSymb surface) (sy thFluxVect $. sy uNormalVect)) $+
   intAll (eqSymb vol) (sy volHtGen) $= 
   intAll (eqSymb vol)
   (sy density $*  sy QT.heatCapSpec $*  pderiv (sy QT.temp) time)
 
 rocTempDerivArbVolEq = (sy htFluxIn $*  sy inSA $- (sy htFluxOut $* 
-  sy outSA)) `add` (sy volHtGen $*  sy vol) $= 
+  sy outSA)) $+ (sy volHtGen $*  sy vol) $= 
   intAll (eqSymb vol) (sy density $*  sy QT.heatCapSpec $*  pderiv (sy QT.temp) time)
 
 rocTempDerivConsFlxEq = sy density $*  sy QT.heatCapSpec $*  sy vol $*  deriv
   (sy QT.temp) time $= (sy htFluxIn $*  sy inSA $- (sy htFluxOut $* 
-  sy outSA)) `add` (sy volHtGen $*  sy vol)
+  sy outSA)) $+ (sy volHtGen $*  sy vol)
 
 rocTempDerivDensEq = sy mass $*  sy QT.heatCapSpec $*  deriv (sy QT.temp)
   time $= (sy htFluxIn $*  sy inSA $- (sy htFluxOut
-  $*  sy outSA)) `add` (sy volHtGen $*  sy vol)
+  $*  sy outSA)) $+ (sy volHtGen $*  sy vol)
 
 rocTempSimpDerivEqns :: [ModelExpr]
 rocTempSimpDerivEqns = [rocTempDerivIntegEq, rocTempDerivGaussEq, rocTempDerivArbVolEq, rocTempDerivConsFlxEq,

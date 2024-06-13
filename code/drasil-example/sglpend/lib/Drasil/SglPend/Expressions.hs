@@ -17,9 +17,9 @@ velocityIYExpr = sy angularVelocity $*  sy lenRod $*  sin (sy pendDisplacementAn
 -- Acceleration IX/IY
 accelerationIXExpr, accelerationIYExpr :: Expr
 accelerationIXExpr = neg (square (sy angularVelocity) $*  sy lenRod $*  sin (sy pendDisplacementAngle))
-                    `add` (sy angularAccel $*  sy lenRod $*  cos (sy pendDisplacementAngle))
+                    $+ (sy angularAccel $*  sy lenRod $*  cos (sy pendDisplacementAngle))
 accelerationIYExpr = (square (sy angularVelocity) $*  sy lenRod $*  cos (sy pendDisplacementAngle))
-                    `add` (sy angularAccel $*  sy lenRod $*  sin (sy pendDisplacementAngle))
+                    $+ (sy angularAccel $*  sy lenRod $*  sin (sy pendDisplacementAngle))
 
 -- Horizontal/Vertical force acting on the pendulum
 hForceOnPendulumViaComponent, hForceOnPendulumViaAngle :: Expr

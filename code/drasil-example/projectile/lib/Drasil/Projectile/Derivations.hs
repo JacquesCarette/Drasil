@@ -52,4 +52,4 @@ rectPosDerivEqn1 = sy speed $= deriv (sy scalarPos) time
 rectPosDerivEqn2 = defint (eqSymb scalarPos) (sy iPos) (sy scalarPos) (exactDbl 1) $=
                    defint (eqSymb time) (exactDbl 0) (sy time) (sy speed)
 rectPosDerivEqn3 = defint (eqSymb scalarPos) (sy iPos) (sy scalarPos) (exactDbl 1) $=
-                   defint (eqSymb time) (exactDbl 0) (sy time) (sy QP.iSpeed `add` (sy QP.constAccel $*  sy time))
+                   defint (eqSymb time) (exactDbl 0) (sy time) (sy QP.iSpeed $+ (sy QP.constAccel $*  sy time))

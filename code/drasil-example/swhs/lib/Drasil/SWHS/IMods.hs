@@ -60,7 +60,7 @@ balWtrRel :: ModelExpr
 balWtrRel = deriv (sy tempW) time $= express balWtrExpr
 
 balWtrExpr :: Expr
-balWtrExpr = recip_ (sy tauW) $*  ((sy tempC $- apply1 tempW time) `add`
+balWtrExpr = recip_ (sy tauW) $*  ((sy tempC $- apply1 tempW time) $+
   (sy eta $*  (apply1 tempPCM time $- apply1 tempW time)))
 
 balWtrDesc :: [Sentence]
@@ -313,11 +313,11 @@ htPCMRel = sy pcmE $= completeCase [case1, case2, case3]
   where case1 = (sy htCapSP $*  sy pcmMass $*  (apply1 tempPCM time $-
           sy tempInit), realInterval tempPCM (UpTo (Exc, sy tempMeltP)))
 
-        case2 = (sy pcmInitMltE `add` (sy htFusion $*  sy pcmMass) `add`
+        case2 = (sy pcmInitMltE $+ (sy htFusion $*  sy pcmMass) $+
           (sy htCapLP $*  sy pcmMass $*  (apply1 tempPCM time $-
           sy tempMeltP)), realInterval tempPCM (UpFrom (Exc, sy tempMeltP)))
 
-        case3 = (sy pcmInitMltE `add` apply1 latentEP time,
+        case3 = (sy pcmInitMltE $+ apply1 latentEP time,
           sy tempPCM $= sy tempMeltP $&& realInterval meltFrac (Bounded (Exc, exactDbl 0) (Exc, exactDbl 1)))
 
 htPCMNotes :: [Sentence]

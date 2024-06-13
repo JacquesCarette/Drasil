@@ -31,23 +31,23 @@ message = completeCase [case1, case2, case3]
 
 --
 speed' :: PExpr
-speed' = sy QP.iSpeed `add` (sy QP.constAccel $*  sy time)
+speed' = sy QP.iSpeed $+ (sy QP.constAccel $*  sy time)
 
 scalarPos' :: PExpr
-scalarPos' = sy iPos `add` (sy QP.iSpeed $*  sy time `add` half (sy QP.constAccel $*  square (sy time)))
+scalarPos' = sy iPos $+ (sy QP.iSpeed $*  sy time $+ half (sy QP.constAccel $*  square (sy time)))
 
 rectNoTime :: PExpr
-rectNoTime = square (sy speed) $= square (sy QP.iSpeed) `add` (exactDbl 2 $*  sy QP.constAccel $*  (sy scalarPos $- sy iPos))
+rectNoTime = square (sy speed) $= square (sy QP.iSpeed) $+ (exactDbl 2 $*  sy QP.constAccel $*  (sy scalarPos $- sy iPos))
 
 --
 velVecExpr :: PExpr
-velVecExpr = vec2D (sy ixVel `add` (sy QP.xConstAccel $*  sy time)) (sy iyVel `add` (sy QP.yConstAccel $*  sy time))
+velVecExpr = vec2D (sy ixVel $+ (sy QP.xConstAccel $*  sy time)) (sy iyVel $+ (sy QP.yConstAccel $*  sy time))
 
 --
 posVecExpr :: PExpr
 posVecExpr = vec2D
-              (sy QP.ixPos `add` (sy ixVel $*  sy time) `add` half (sy QP.xConstAccel $*  square (sy time)))
-              (sy QP.iyPos `add` (sy iyVel $*  sy time) `add` half (sy QP.yConstAccel $*  square (sy time)))
+              (sy QP.ixPos $+ (sy ixVel $*  sy time) $+ half (sy QP.xConstAccel $*  square (sy time)))
+              (sy QP.iyPos $+ (sy iyVel $*  sy time) $+ half (sy QP.yConstAccel $*  square (sy time)))
 
 --
 landPosExpr :: PExpr
@@ -63,11 +63,11 @@ constAccelXY   = sy constAccelV  $= vec2D (sy QP.xConstAccel) (sy QP.yConstAccel
 -- Expressions for Lesson
 horizVel, horizPos :: PExpr
 horizVel = sy xVel $= sy ixVel
-horizPos = sy xPos $= sy QP.ixPos `add` (sy ixVel $*  sy time)
+horizPos = sy xPos $= sy QP.ixPos $+ (sy ixVel $*  sy time)
 
 vertVel, vertPos, vertNoTime :: PExpr
 vertVel = sy yVel $= sy iyVel $- (sy gravitationalAccel $*  sy time)
-vertPos = sy yPos $= sy QP.iyPos `add` (sy iyVel $*  sy time) $- (sy gravitationalAccel $*  square (sy time) $/ exactDbl 2)
+vertPos = sy yPos $= sy QP.iyPos $+ (sy iyVel $*  sy time) $- (sy gravitationalAccel $*  square (sy time) $/ exactDbl 2)
 vertNoTime = square (sy yVel) $= square (sy iyVel) $- (exactDbl 2 $*  sy gravitationalAccel $*  (sy yPos $- sy QP.iyPos)) 
 
 lcrectVel, lcrectPos, lcrectNoTime, lchorizVel, lchorizPos, lcvertVel, lcvertPos, lcvertNoTime :: LabelledContent

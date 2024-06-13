@@ -27,7 +27,7 @@ dataDefs = [hFromt, loadDF, glaTyFac, standOffDis, aspRat, eqTNTWDD, calofDemand
 {--}
 
 hFromtEq :: Relation
-hFromtEq = frac 1 1000 $*  incompleteCase (zipWith hFromtHelper
+hFromtEq = frac 1 1000 $* incompleteCase (zipWith hFromtHelper
   actualThicknesses nominalThicknesses)
 
 hFromtHelper :: Double -> Double -> (Expr, Relation)

@@ -74,19 +74,19 @@ derivEqn1 :: ModelExpr
 derivEqn1
   = sy qdProcessVariableFD
       $= (sy qdSetPointFD $- sy qdProcessVariableFD)
-      $*  (sy qdPropGain $+ (sy qdDerivGain $*  sy qdFreqDomain))
-      $*  recip_ (square (sy qdFreqDomain) $+ sy qdFreqDomain $+ exactDbl 20)
+      $* (sy qdPropGain $+ (sy qdDerivGain $* sy qdFreqDomain))
+      $* recip_ (square (sy qdFreqDomain) $+ sy qdFreqDomain $+ exactDbl 20)
 
 derivStmt2 :: Sentence
 derivStmt2 = (S "Substituting the values and rearranging the equation" !.)
 
 derivEqn2 :: ModelExpr
 derivEqn2
-  = square (sy qdFreqDomain) $*  sy qdProcessVariableFD
-      $+ ((exactDbl 1 $+ sy qdDerivGain) $*  sy qdProcessVariableFD $*  sy qdFreqDomain)
-      $+ ((exactDbl 20 $+ sy qdPropGain) $*  sy qdProcessVariableFD)
-      $- (sy qdSetPointFD $*  sy qdFreqDomain $*  sy qdDerivGain)
-      $- (sy qdSetPointFD $*  sy qdPropGain) $= exactDbl 0
+  = square (sy qdFreqDomain) $* sy qdProcessVariableFD
+      $+ ((exactDbl 1 $+ sy qdDerivGain) $* sy qdProcessVariableFD $* sy qdFreqDomain)
+      $+ ((exactDbl 20 $+ sy qdPropGain) $* sy qdProcessVariableFD)
+      $- (sy qdSetPointFD $* sy qdFreqDomain $* sy qdDerivGain)
+      $- (sy qdSetPointFD $* sy qdPropGain) $= exactDbl 0
 
 derivStmt3 :: Sentence
 derivStmt3
@@ -96,10 +96,10 @@ derivStmt3
 derivEqn3 :: ModelExpr
 derivEqn3
   = deriv (deriv (sy qdProcessVariableTD) time) time $+
-      (((exactDbl 1 $+ sy qdDerivGain) $*  deriv (sy qdProcessVariableTD) time)
-      $+ ((exactDbl 20 $+ sy qdPropGain) $*  sy qdProcessVariableTD))
-      $- (sy qdDerivGain $*  deriv (sy qdSetPointTD) time)
-      $- (sy qdSetPointTD $*  sy qdPropGain) $= exactDbl 0
+      (((exactDbl 1 $+ sy qdDerivGain) $* deriv (sy qdProcessVariableTD) time)
+      $+ ((exactDbl 20 $+ sy qdPropGain) $* sy qdProcessVariableTD))
+      $- (sy qdDerivGain $* deriv (sy qdSetPointTD) time)
+      $- (sy qdSetPointTD $* sy qdPropGain) $= exactDbl 0
 
 derivStmt4 :: Sentence
 derivStmt4
@@ -114,5 +114,5 @@ derivEqn4 :: ModelExpr
 derivEqn4
   = deriv (deriv (sy qdProcessVariableTD) time) time $+
       ((exactDbl 1 $+ sy qdDerivGain) $* deriv (sy qdProcessVariableTD) time)
-      $+ ((exactDbl 20 $+ sy qdPropGain) $*  sy qdProcessVariableTD)
-      $- (sy qdSetPointTD $*  sy qdPropGain) $= exactDbl 0
+      $+ ((exactDbl 20 $+ sy qdPropGain) $* sy qdProcessVariableTD)
+      $- (sy qdSetPointTD $* sy qdPropGain) $= exactDbl 0

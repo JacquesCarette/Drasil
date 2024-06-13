@@ -38,7 +38,7 @@ import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.Code.ExtLibImport (defs, imports, steps)
 import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
   ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..), 
-  Logging(..), Structure(..), hasSampleInput)
+  Logging(..), InputStructure(..), ConstStoreStructure(..), hasSampleInput)
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
 import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc)
@@ -145,10 +145,10 @@ initConsts = do
   v_consts <- mkVar (quantvar consts)
   let cname = "Constants"
       cs = constants $ codeSpec g
-      getDecl (Store Unbundled) _ = declVars
-      getDecl (Store Bundled) _ = gets (declObj cs . conRepr)
-      getDecl WithInputs Unbundled = declVars
-      getDecl WithInputs Bundled = return Nothing
+      getDecl (Store UnbundledConsts) _ = declVars
+      getDecl (Store BundledConsts) _ = gets (declObj cs . conRepr)
+      getDecl WithInputs UnbundledIns = declVars
+      getDecl WithInputs BundledIns = return Nothing
       getDecl Inline _ = return Nothing
       declVars = do
         vars <- mapM (mkVar . quantvar) cs

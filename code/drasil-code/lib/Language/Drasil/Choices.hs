@@ -3,12 +3,12 @@ module Language.Drasil.Choices (
   Choices(..), Architecture (..), makeArchit, DataInfo(..), makeData, Maps(..),
   makeMaps, spaceToCodeType, Constraints(..), makeConstraints, ODE(..), makeODE,
   DocConfig(..), makeDocConfig, LogConfig(..), makeLogConfig, OptionalFeatures(..),
-  makeOptFeats, ExtLib(..), Modularity(..), Structure(..),
-  ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap,
-  CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
-  ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
-  Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
-  choicesSent, showChs) where
+  makeOptFeats, ExtLib(..), Modularity(..), InputStructure(..), 
+  ConstStoreStructure(..), ConstantStructure(..), ConstantRepr(..), 
+  ConceptMatchMap, MatchedConceptMap, CodeConcept(..), matchConcepts,
+  SpaceMatch, matchSpaces, ImplementationType(..), ConstraintBehaviour(..),
+  Comments(..), Verbosity(..), Visibility(..), Logging(..), AuxFile(..),
+  getSampleData, hasSampleInput, defaultChoices, choicesSent, showChs) where
 
 import Language.Drasil hiding (None, Var)
 import Language.Drasil.Code.Code (spaceToCodeType)
@@ -83,37 +83,45 @@ instance RenderChoices ImplementationType where
 -- | Data of a program - how information should be encoded.
 data DataInfo = DataInfo {
   -- | Structure of inputs (bundled or not).
-  inputStructure :: Structure,
+  inputStructure :: InputStructure,
   -- | Structure of constants (inlined or bundled or not, or stored with inputs).
   constStructure :: ConstantStructure,
   -- | Representation of constants (as variables or as constants).
   constRepr :: ConstantRepr
 }
 -- | Constructor to create a DataInfo
-makeData :: Structure -> ConstantStructure -> ConstantRepr -> DataInfo
+makeData :: InputStructure -> ConstantStructure -> ConstantRepr -> DataInfo
 makeData = DataInfo
 
--- | Variable structure options.
-data Structure = Unbundled -- ^ Individual variables
-               | Bundled -- ^ Variables bundled in a class
+-- | Input structure options.
+data InputStructure = UnbundledIns -- ^ Individual variables
+                    | BundledIns -- ^ Variables bundled in a class
 
--- | Renders the structure of variables in a program.
-instance RenderChoices Structure where
-  showChs Unbundled = S "Unbundled"
-  showChs Bundled = S "Bundled"
+-- | Renders the structure of inputs in a program.
+instance RenderChoices InputStructure where
+  showChs UnbundledIns = S "Unbundled"
+  showChs BundledIns = S "Bundled"
 
 -- | Constants options.
 data ConstantStructure = Inline -- ^ Inline values for constants.
                        | WithInputs -- ^ Store constants with inputs.
-                       | Store Structure -- ^ Store constants separately from
+                       | Store ConstStoreStructure -- ^ Store constants separately from
                                          -- inputs, whether bundled or unbundled.
+
+-- | Constant store structure options.
+data ConstStoreStructure = UnbundledConsts -- ^ Individual constants
+                         | BundledConsts -- ^ Constants bundled in a class
+
+-- | Renders the structure of constants in a program.
+instance RenderChoices ConstStoreStructure where
+  showChs UnbundledConsts = S "Unbundled"
+  showChs BundledConsts = S "Bundled"
 
 -- | Renders the structure of constants in a program.
 instance RenderChoices ConstantStructure where
   showChs Inline = S "Inline"
   showChs WithInputs = S "WithInputs"
-  showChs (Store Unbundled) = S "Store Unbundled"
-  showChs (Store Bundled) = S "Store Bundled"
+  showChs (Store b) = S "Store" +:+ showChs b
 
 -- | Options for representing constants in a program.
 data ConstantRepr = Var -- ^ Constants represented as regular variables.
@@ -319,7 +327,7 @@ defaultChoices :: Choices
 defaultChoices = Choices {
   lang = [Python],
   architecture = makeArchit Modular Program,
-  dataInfo = makeData Bundled Inline Const,
+  dataInfo = makeData BundledIns Inline Const,
   maps = makeMaps
     (matchConcepts ([] :: [(SimpleQDef, [CodeConcept])]))
     spaceToCodeType,

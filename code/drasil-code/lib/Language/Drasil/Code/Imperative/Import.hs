@@ -26,7 +26,7 @@ import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, obv,
 import Language.Drasil.Chunk.Parameter (ParameterChunk(..), PassBy(..), pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Choices (Comments(..), ConstantRepr(..),
-  ConstantStructure(..), Structure(..))
+  ConstantStructure(..), InputStructure(..), ConstStoreStructure(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight),
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
@@ -112,15 +112,15 @@ variable s t = do
 -- WithInputs for constant structure, inputs are 'Bundled', and constant
 -- representation is 'Const'. Variable should be accessed through class, so
 -- 'classVariable' is called.
-inputVariable :: (OOProg r) => Structure -> ConstantRepr -> SVariable r ->
+inputVariable :: (OOProg r) => InputStructure -> ConstantRepr -> SVariable r ->
   GenState (SVariable r)
-inputVariable Unbundled _ v = return v
-inputVariable Bundled Var v = do
+inputVariable UnbundledIns _ v = return v
+inputVariable BundledIns Var v = do
   g <- get
   let inClsName = "InputParameters"
   ip <- mkVar (quantvar inParams)
   return $ if currentClass g == inClsName then objVarSelf v else ip $-> v
-inputVariable Bundled Const v = do
+inputVariable BundledIns Const v = do
   ip <- mkVar (quantvar inParams)
   classVariable ip v
 
@@ -134,11 +134,11 @@ inputVariable Bundled Const v = do
 -- variable for one of the constants.
 constVariable :: (OOProg r) => ConstantStructure -> ConstantRepr ->
   SVariable r -> GenState (SVariable r)
-constVariable (Store Unbundled) _ v = return v
-constVariable (Store Bundled) Var v = do
+constVariable (Store UnbundledConsts) _ v = return v
+constVariable (Store BundledConsts) Var v = do
   cs <- mkVar (quantvar consts)
   return $ cs $-> v
-constVariable (Store Bundled) Const v = do
+constVariable (Store BundledConsts) Const v = do
   cs <- mkVar (quantvar consts)
   classVariable cs v
 constVariable WithInputs cr v = do

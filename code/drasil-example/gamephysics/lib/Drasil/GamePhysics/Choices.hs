@@ -3,8 +3,8 @@ module Drasil.GamePhysics.Choices where
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
---   Modularity(..), Structure(..), ConstantStructure(..), 
---   ConstantRepr(..), matchConcepts, AuxFile(..), 
+--   Modularity(..), InputStructure(..), ConstStoreStructure(..), 
+--   ConstantStructure(..), ConstantRepr(..), matchConcepts, AuxFile(..), 
 --   Visibility(..), defaultChoices)
 -- import Drasil.GamePhysics.Body (fullSI)
 
@@ -23,7 +23,7 @@ module Drasil.GamePhysics.Choices where
 --   dates            = Hide,
 --   onSfwrConstraint = Warning,
 --   onPhysConstraint = Warning,
---   inputStructure   = Unbundled,
+--   inputStructure   = UnbundledIns,
 --   constStructure   = Inline,
 --   constRepr        = Const,
 --   conceptMatch     = matchConcepts ([] :: [QDefinition]) [],

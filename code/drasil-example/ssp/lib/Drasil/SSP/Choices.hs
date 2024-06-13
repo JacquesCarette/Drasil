@@ -3,8 +3,8 @@ module Drasil.SSP.Choices where
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
---   Modularity(..), Structure(..), ConstantStructure(..), 
---   ConstantRepr(..), matchConcepts, AuxFile(..), 
+--   Modularity(..), InputStructure(..), ConstStoreStructure(..),
+--   ConstantStructure(..), ConstantRepr(..), matchConcepts, AuxFile(..), 
 --   Visibility(..), defaultChoices)
 -- import Drasil.SSP.Body (fullSI)
 
@@ -23,8 +23,8 @@ module Drasil.SSP.Choices where
 --   dates = Hide,      -- Show, Hide
 --   onSfwrConstraint = Warning,  -- Warning, Exception
 --   onPhysConstraint = Warning,  -- Warning, Exception
---   inputStructure = Unbundled,    -- Unbundled, Bundled
---   constStructure = Inline,   -- Inline, WithInputs, Store Structure
+--   inputStructure = UnbundledIns,    -- UnbundledIns, BundledIns
+--   constStructure = Inline,   -- Inline, WithInputs, Store ConstStoreStructure
 --   constRepr = Const,    -- Var, Const
 --   conceptMatch = matchConcepts ([] :: [QDefinition]) [],
 --   auxFiles = [SampleInput "../../datafiles/ssp/sampleInput.txt"]

@@ -3,7 +3,7 @@ module Drasil.HGHC.Choices where
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
---   Modularity(..), Structure(..), ConstantStructure(..), 
+--   Modularity(..), InputStructure(..), ConstantStructure(..), 
 --   ConstantRepr(..), matchConcepts, AuxFile(..), 
 --   Visibility(..), defaultChoices)
 -- import Drasil.HGHC.Body (fullSI)
@@ -24,7 +24,7 @@ thisChoices = defaultChoices {
   dates            = Hide,
   onSfwrConstraint = Warning,
   onPhysConstraint = Warning,
-  inputStructure   = Bundled,
+  inputStructure   = BundledIns,
   constStructure   = Inline,
   constRepr        = Const,
   conceptMatch     = matchConcepts ([] :: [QDefinition]) [],

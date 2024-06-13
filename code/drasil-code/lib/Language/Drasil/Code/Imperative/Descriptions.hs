@@ -12,7 +12,7 @@ import Utils.Drasil (stringList)
 import Language.Drasil
 import Language.Drasil.Chunk.CodeBase
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
-import Language.Drasil.Choices (ImplementationType(..), Structure(..))
+import Language.Drasil.Choices (ImplementationType(..), InputStructure(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Mod (Description)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
@@ -52,8 +52,8 @@ inputParametersDesc = do
   icDesc <- inputConstraintsDesc
   let st = inStruct g
       ipDesc = inDesc st ++ [ifDesc, dvDesc, icDesc]
-      inDesc Bundled = ["the structure for holding input values"]
-      inDesc Unbundled = [""]
+      inDesc BundledIns = ["the structure for holding input values"]
+      inDesc UnbundledIns = [""]
   return ipDesc
 
 -- | Returns a description of the input constructor, checking whether each

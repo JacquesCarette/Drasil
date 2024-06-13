@@ -13,7 +13,7 @@ import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
   AuxFile, Modularity(..),
   ImplementationType(..), Comments, Verbosity, MatchedConceptMap,
   ConstantRepr, ConstantStructure(..), ConstraintBehaviour, Logging, 
-  Structure(..))
+  InputStructure(..), ConstStoreStructure(..))
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output, Def,
   CodeSpec(..),  getConstraints)
 import Language.Drasil.Mod (Mod(..), Name, Version, Class(..),
@@ -46,7 +46,7 @@ data DrasilState = DrasilState {
   -- Choices
   modular :: Modularity,
   implType :: ImplementationType,
-  inStruct :: Structure,
+  inStruct :: InputStructure,
   conStruct :: ConstantStructure,
   conRepr :: ConstantRepr,
   concMatches :: MatchedConceptMap,
@@ -151,9 +151,9 @@ type ClassDef = (String, String)
 getExpInput :: Name -> Choices -> [Input] -> [ModExp]
 getExpInput _ _ [] = []
 getExpInput prn chs ins = inExp (modularity $ architecture chs) (inputStructure $ dataInfo chs)
-  where inExp _ Unbundled = []
-        inExp Unmodular Bundled = (ipName, prn) : inVarDefs prn
-        inExp Modular Bundled = (ipName , ipName) : inVarDefs ipName
+  where inExp _ UnbundledIns = []
+        inExp Unmodular BundledIns = (ipName, prn) : inVarDefs prn
+        inExp Modular BundledIns = (ipName , ipName) : inVarDefs ipName
         inVarDefs n = map ((, n) . codeName) ins
         ipName = "InputParameters"
 
@@ -164,8 +164,8 @@ getExpInput prn chs ins = inExp (modularity $ architecture chs) (inputStructure 
 getInputCls :: Choices -> [Input] -> [ClassDef]
 getInputCls _ [] = []
 getInputCls chs ins = inCls (inputStructure $ dataInfo chs)
-  where inCls Unbundled = []
-        inCls Bundled = (ipName, ipName) : inVarDefs
+  where inCls UnbundledIns = []
+        inCls BundledIns = (ipName, ipName) : inVarDefs
         inVarDefs = map ((, ipName) . codeName) ins
         ipName = "InputParameters"
 
@@ -179,10 +179,10 @@ getExpConstants :: Name -> Choices -> [Const] -> [ModExp]
 getExpConstants _ _ [] = []
 getExpConstants n chs cs = cExp (modularity $ architecture chs) (constStructure $ dataInfo chs)
   (inputStructure $ dataInfo chs)
-  where cExp Unmodular (Store Bundled) _ = zipCs $ repeat n
-        cExp Unmodular WithInputs Bundled = zipCs $ repeat n
-        cExp _ (Store Bundled) _ = zipCs $ repeat "Constants"
-        cExp _ WithInputs Bundled = zipCs $ repeat "InputParameters"
+  where cExp Unmodular (Store BundledConsts) _ = zipCs $ repeat n
+        cExp Unmodular WithInputs BundledIns = zipCs $ repeat n
+        cExp _ (Store BundledConsts) _ = zipCs $ repeat "Constants"
+        cExp _ WithInputs BundledIns = zipCs $ repeat "InputParameters"
         cExp _ _ _ = []
         zipCs = zip (map codeName cs)
 
@@ -194,8 +194,8 @@ getExpConstants n chs cs = cExp (modularity $ architecture chs) (constStructure 
 getConstantsCls :: Choices -> [Const] -> [ClassDef]
 getConstantsCls _ [] = []
 getConstantsCls chs cs = cnCls (constStructure $ dataInfo chs) (inputStructure $ dataInfo chs)
-  where cnCls (Store Bundled) _ = zipCs $ repeat "Constants"
-        cnCls WithInputs Bundled = zipCs $ repeat "InputParameters"
+  where cnCls (Store BundledConsts) _ = zipCs $ repeat "Constants"
+        cnCls WithInputs BundledIns = zipCs $ repeat "InputParameters"
         cnCls _ _ = []
         zipCs = zip (map codeName cs)
 
@@ -207,7 +207,7 @@ getConstantsCls chs cs = cnCls (constStructure $ dataInfo chs) (inputStructure $
 getExpDerived :: Name -> Choices -> [Derived] -> [ModExp]
 getExpDerived _ _ [] = []
 getExpDerived n chs _ = dMod (modularity $ architecture chs) (inputStructure $ dataInfo chs)
-  where dMod _ Bundled = []
+  where dMod _ BundledIns = []
         dMod Unmodular _ = [(dvNm, n)]
         dMod Modular _ = [(dvNm, "InputParameters")]
         dvNm = "derived_values"
@@ -220,7 +220,7 @@ getExpDerived n chs _ = dMod (modularity $ architecture chs) (inputStructure $ d
 getDerivedCls :: Choices -> [Derived] -> [ClassDef]
 getDerivedCls _ [] = []
 getDerivedCls chs _ = dCls (inputStructure $ dataInfo chs)
-  where dCls Bundled = [("derived_values", "InputParameters")]
+  where dCls BundledIns = [("derived_values", "InputParameters")]
         dCls _ = []
 
 -- | Get input constraints to be exported (for @input_constraints@).
@@ -228,7 +228,7 @@ getDerivedCls chs _ = dCls (inputStructure $ dataInfo chs)
 getExpConstraints :: Name -> Choices -> [ConstraintCE] -> [ModExp]
 getExpConstraints _ _ [] = []
 getExpConstraints n chs _ = cMod (modularity $ architecture chs) (inputStructure $ dataInfo chs)
-  where cMod _ Bundled = []
+  where cMod _ BundledIns = []
         cMod Unmodular _ = [(icNm, n)]
         cMod Modular _ = [(icNm, "InputParameters")]
         icNm = "input_constraints"
@@ -238,7 +238,7 @@ getExpConstraints n chs _ = cMod (modularity $ architecture chs) (inputStructure
 getConstraintsCls :: Choices -> [ConstraintCE] -> [ClassDef]
 getConstraintsCls _   [] = []
 getConstraintsCls chs _  = cCls (inputStructure $ dataInfo chs)
-  where cCls Bundled = [("input_constraints", "InputParameters")]
+  where cCls BundledIns = [("input_constraints", "InputParameters")]
         cCls _ = []
 
 -- | Get input format to be exported (for @get_input@).
@@ -246,7 +246,7 @@ getConstraintsCls chs _  = cCls (inputStructure $ dataInfo chs)
 getExpInputFormat :: Name -> Choices -> [Input] -> [ModExp]
 getExpInputFormat _ _ [] = []
 getExpInputFormat n chs _ = fMod (modularity $ architecture chs) (inputStructure $ dataInfo chs)
-  where fMod _ Bundled = []
+  where fMod _ BundledIns = []
         fMod Unmodular _ = [(giNm, n)]
         fMod Modular _ = [(giNm, "InputParameters")]
         giNm = "get_input"
@@ -256,7 +256,7 @@ getExpInputFormat n chs _ = fMod (modularity $ architecture chs) (inputStructure
 getInputFormatCls :: Choices -> [Input] -> [ClassDef]
 getInputFormatCls _ [] = []
 getInputFormatCls chs _ = ifCls (inputStructure $ dataInfo chs)
-  where ifCls Bundled = [("get_input", "InputParameters")]
+  where ifCls BundledIns = [("get_input", "InputParameters")]
         ifCls _ = []
 
 -- | Gets exported calculations.

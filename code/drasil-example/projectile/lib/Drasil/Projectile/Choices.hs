@@ -4,12 +4,12 @@ module Drasil.Projectile.Choices where
 import Language.Drasil (Space(..), programName)
 import Language.Drasil.Code (Choices(..), Comments(..), 
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
-  Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
-  ConstantRepr(..), CodeConcept(..), matchConcepts, SpaceMatch,
-  matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec, makeArchit, 
-  Architecture(..), makeData, DataInfo(..), Maps(..), makeMaps, spaceToCodeType,
-  makeConstraints, makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..), 
-  makeOptFeats)
+  Logging(..), Modularity(..), InputStructure(..), ConstStoreStructure(..),
+  ConstantStructure(..), ConstantRepr(..), CodeConcept(..), matchConcepts, 
+  SpaceMatch, matchSpaces, AuxFile(..), Visibility(..), defaultChoices, 
+  codeSpec, makeArchit, Architecture(..), makeData, DataInfo(..), Maps(..), 
+  makeMaps, spaceToCodeType, makeConstraints, makeDocConfig, makeLogConfig, 
+  LogConfig(..), OptionalFeatures(..), makeOptFeats)
 import Language.Drasil.Generate (genCode)
 import GOOL.Drasil (CodeType(..))
 import Data.Drasil.Quantities.Math (piConst)
@@ -39,9 +39,10 @@ codedDirName n Choices {
   optFeats = o,
   dataInfo = d,
   maps = m} = 
-  intercalate "_" [n, codedMod $ modularity a, codedImpTp $ impType a, codedLog $ logging $ logConfig o, 
-    codedStruct $ inputStructure d, codedConStruct $ constStructure d, 
-    codedConRepr $ constRepr d, codedSpaceMatch $ spaceMatch m]
+  intercalate "_" [n, codedMod $ modularity a, codedImpTp $ impType a, 
+    codedLog $ logging $ logConfig o, codedInputStruct $ inputStructure d, 
+    codedConStruct $ constStructure d, codedConRepr $ constRepr d,
+    codedSpaceMatch $ spaceMatch m]
 
 codedMod :: Modularity -> String
 codedMod Unmodular = "U"
@@ -55,14 +56,18 @@ codedLog :: [Logging] -> String
 codedLog [] = "NoL"
 codedLog _ = "L"
 
-codedStruct :: Structure -> String
-codedStruct Bundled = "B"
-codedStruct Unbundled = "U"
+codedInputStruct :: InputStructure -> String
+codedInputStruct BundledIns = "B"
+codedInputStruct UnbundledIns = "U"
+
+codedConstStoreStruct :: ConstStoreStructure -> String
+codedConstStoreStruct BundledConsts = "B"
+codedConstStoreStruct UnbundledConsts = "U"
 
 codedConStruct :: ConstantStructure -> String
 codedConStruct Inline = "I"
 codedConStruct WithInputs = "WI"
-codedConStruct (Store s) = codedStruct s
+codedConStruct (Store s) = codedConstStoreStruct s
 
 codedConRepr :: ConstantRepr -> String
 codedConRepr Var = "V"
@@ -78,15 +83,15 @@ choiceCombos :: [Choices]
 choiceCombos = [baseChoices, 
   baseChoices {
     architecture = makeArchit Modular Program,
-    dataInfo = makeData Bundled (Store Unbundled) Var
+    dataInfo = makeData BundledIns (Store UnbundledConsts) Var
   },
   baseChoices {
     architecture = makeArchit Modular Library,
-    dataInfo = makeData Unbundled (Store Unbundled) Var,
+    dataInfo = makeData UnbundledIns (Store UnbundledConsts) Var,
     maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats
   },
   baseChoices {
-    dataInfo = makeData Bundled (Store Bundled) Const,
+    dataInfo = makeData BundledIns (Store BundledConsts) Const,
     optFeats = makeOptFeats
       (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
       (makeLogConfig [LogVar, LogFunc] "log.txt")
@@ -94,7 +99,7 @@ choiceCombos = [baseChoices,
     folderVal = 5
   },
   baseChoices {
-    dataInfo = makeData Bundled WithInputs Var,
+    dataInfo = makeData BundledIns WithInputs Var,
     maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats,
     optFeats = makeOptFeats
       (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
@@ -110,7 +115,7 @@ baseChoices :: Choices
 baseChoices = defaultChoices {
   lang = [Python, Cpp, CSharp, Java, Swift],
   architecture = makeArchit Unmodular Program,
-  dataInfo = makeData Unbundled WithInputs Var,
+  dataInfo = makeData UnbundledIns WithInputs Var,
   maps = makeMaps (matchConcepts [(piConst, [Pi])]) spaceToCodeType,
   optFeats = makeOptFeats
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)

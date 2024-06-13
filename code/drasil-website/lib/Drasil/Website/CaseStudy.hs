@@ -212,15 +212,15 @@ getLog :: [Logging] -> Sentence
 getLog [] = S "NoL"
 getLog _ = S "L"
 
-getInstr :: Structure -> Sentence
-getInstr Bundled = S "B"
-getInstr Unbundled = S "U"
+getInstr :: InputStructure -> Sentence
+getInstr BundledIns = S "B"
+getInstr UnbundledIns = S "U"
 
 getConstr :: ConstantStructure -> Sentence
 getConstr Inline = S "I"
 getConstr WithInputs = S "WI"
-getConstr (Store Bundled) = S "B"
-getConstr (Store Unbundled) = S "U"
+getConstr (Store BundledConsts) = S "B"
+getConstr (Store UnbundledConsts) = S "U"
 
 getConRep :: ConstantRepr -> Sentence
 getConRep Var = S "V"

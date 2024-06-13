@@ -6,8 +6,8 @@ module Language.Drasil.Code.Imperative.Parameters(getInConstructorParams,
 import Language.Drasil hiding (isIn, Var)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
 import Language.Drasil.Chunk.CodeBase
-import Language.Drasil.Choices (Structure(..), ConstantStructure(..), 
-  ConstantRepr(..))
+import Language.Drasil.Choices (InputStructure(..), ConstStoreStructure(..),
+  ConstantStructure(..), ConstantRepr(..))
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), constraintvars, getConstraints)
@@ -132,15 +132,15 @@ getParams n pt cs' = do
 -- have chosen 'Bundled' inputs and a constant const representation, then the
 -- constant variables are static and can be accessed through the class, without
 -- an object, so no parameters are required.
-getInputVars :: Name -> ParamType -> Structure -> ConstantRepr ->
+getInputVars :: Name -> ParamType -> InputStructure -> ConstantRepr ->
   [CodeVarChunk] -> GenState [CodeVarChunk]
 getInputVars _ _ _ _ [] = return []
-getInputVars _ _ Unbundled _ cs = return cs
-getInputVars n pt Bundled Var _ = do
+getInputVars _ _ UnbundledIns _ cs = return cs
+getInputVars n pt BundledIns Var _ = do
   g <- get
   let cname = "InputParameters"
   return [quantvar inParams | Map.lookup n (clsMap g) /= Just cname && isIn pt]
-getInputVars _ _ Bundled Const _ = return []
+getInputVars _ _ BundledIns Const _ = return []
 
 -- | If the passed list of constant variables is empty, then return empty list.
 -- If the user has chosen 'Unbundled' constants, then the constant variables are
@@ -158,9 +158,9 @@ getInputVars _ _ Bundled Const _ = return []
 getConstVars :: Name -> ParamType -> ConstantStructure -> ConstantRepr ->
   [CodeVarChunk] -> GenState [CodeVarChunk]
 getConstVars _ _ _ _ [] = return []
-getConstVars _ _ (Store Unbundled) _ cs = return cs
-getConstVars _ pt (Store Bundled) Var _ = return [quantvar consts | isIn pt]
-getConstVars _ _ (Store Bundled) Const _ = return []
+getConstVars _ _ (Store UnbundledConsts) _ cs = return cs
+getConstVars _ pt (Store BundledConsts) Var _ = return [quantvar consts | isIn pt]
+getConstVars _ _ (Store BundledConsts) Const _ = return []
 getConstVars n pt WithInputs cr cs = do
   g <- get
   getInputVars n pt (inStruct g) cr cs

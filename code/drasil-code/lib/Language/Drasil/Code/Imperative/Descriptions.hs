@@ -53,7 +53,7 @@ inputParametersDesc = do
   let st = inStruct g
       ipDesc = inDesc st ++ [ifDesc, dvDesc, icDesc]
       inDesc BundledIns = ["the structure for holding input values"]
-      inDesc UnbundledIns = [""]
+      inDesc (UnbundledIns _) = [""]
   return ipDesc
 
 -- | Returns a description of the input constructor, checking whether each

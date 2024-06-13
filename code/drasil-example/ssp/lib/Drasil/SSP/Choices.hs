@@ -23,7 +23,7 @@ module Drasil.SSP.Choices where
 --   dates = Hide,      -- Show, Hide
 --   onSfwrConstraint = Warning,  -- Warning, Exception
 --   onPhysConstraint = Warning,  -- Warning, Exception
---   inputStructure = UnbundledIns,    -- UnbundledIns, BundledIns
+--   inputStructure = UnbundledIns USeparate,    -- UnbundledIns UValidation, BundledIns
 --   constStructure = Inline,   -- Inline, WithInputs, Store ConstStoreStructure
 --   constRepr = Const,    -- Var, Const
 --   conceptMatch = matchConcepts ([] :: [QDefinition]) [],

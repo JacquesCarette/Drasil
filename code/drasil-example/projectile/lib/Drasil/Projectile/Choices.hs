@@ -4,8 +4,8 @@ module Drasil.Projectile.Choices where
 import Language.Drasil (Space(..), programName)
 import Language.Drasil.Code (Choices(..), Comments(..), 
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
-  Logging(..), Modularity(..), InputStructure(..), ConstStoreStructure(..),
-  ConstantStructure(..), ConstantRepr(..), CodeConcept(..), matchConcepts, 
+  Logging(..), Modularity(..), InputStructure(..), UValidation(..),
+  ConstantStructure(..), ConstStoreStructure(..), ConstantRepr(..), CodeConcept(..), matchConcepts, 
   SpaceMatch, matchSpaces, AuxFile(..), Visibility(..), defaultChoices, 
   codeSpec, makeArchit, Architecture(..), makeData, DataInfo(..), Maps(..), 
   makeMaps, spaceToCodeType, makeConstraints, makeDocConfig, makeLogConfig, 
@@ -58,7 +58,7 @@ codedLog _ = "L"
 
 codedInputStruct :: InputStructure -> String
 codedInputStruct BundledIns = "B"
-codedInputStruct UnbundledIns = "U"
+codedInputStruct (UnbundledIns _) = "U"
 
 codedConstStoreStruct :: ConstStoreStructure -> String
 codedConstStoreStruct BundledConsts = "B"
@@ -87,7 +87,7 @@ choiceCombos = [baseChoices,
   },
   baseChoices {
     architecture = makeArchit Modular Library,
-    dataInfo = makeData UnbundledIns (Store UnbundledConsts) Var,
+    dataInfo = makeData (UnbundledIns UInterleaved) (Store UnbundledConsts) Var,
     maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats
   },
   baseChoices {
@@ -115,7 +115,7 @@ baseChoices :: Choices
 baseChoices = defaultChoices {
   lang = [Python, Cpp, CSharp, Java, Swift],
   architecture = makeArchit Unmodular Program,
-  dataInfo = makeData UnbundledIns WithInputs Var,
+  dataInfo = makeData (UnbundledIns USeparate) WithInputs Var,
   maps = makeMaps (matchConcepts [(piConst, [Pi])]) spaceToCodeType,
   optFeats = makeOptFeats
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)

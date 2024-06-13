@@ -214,7 +214,7 @@ getLog _ = S "L"
 
 getInstr :: InputStructure -> Sentence
 getInstr BundledIns = S "B"
-getInstr UnbundledIns = S "U"
+getInstr (UnbundledIns _) = S "U"
 
 getConstr :: ConstantStructure -> Sentence
 getConstr Inline = S "I"

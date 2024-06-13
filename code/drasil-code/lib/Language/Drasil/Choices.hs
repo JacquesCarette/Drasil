@@ -3,8 +3,8 @@ module Language.Drasil.Choices (
   Choices(..), Architecture (..), makeArchit, DataInfo(..), makeData, Maps(..),
   makeMaps, spaceToCodeType, Constraints(..), makeConstraints, ODE(..), makeODE,
   DocConfig(..), makeDocConfig, LogConfig(..), makeLogConfig, OptionalFeatures(..),
-  makeOptFeats, ExtLib(..), Modularity(..), InputStructure(..), 
-  ConstStoreStructure(..), ConstantStructure(..), ConstantRepr(..), 
+  makeOptFeats, ExtLib(..), Modularity(..), InputStructure(..), UValidation(..),
+  ConstantStructure(..), ConstStoreStructure(..), ConstantRepr(..), 
   ConceptMatchMap, MatchedConceptMap, CodeConcept(..), matchConcepts,
   SpaceMatch, matchSpaces, ImplementationType(..), ConstraintBehaviour(..),
   Comments(..), Verbosity(..), Visibility(..), Logging(..), AuxFile(..),
@@ -94,13 +94,17 @@ makeData :: InputStructure -> ConstantStructure -> ConstantRepr -> DataInfo
 makeData = DataInfo
 
 -- | Input structure options.
-data InputStructure = UnbundledIns -- ^ Individual variables
+data InputStructure = UnbundledIns UValidation -- ^ Individual variables
                     | BundledIns -- ^ Variables bundled in a class
 
 -- | Renders the structure of inputs in a program.
 instance RenderChoices InputStructure where
-  showChs UnbundledIns = S "Unbundled"
+  showChs (UnbundledIns _) = S "Unbundled"
   showChs BundledIns = S "Bundled"
+
+-- | Validation location optinons for 'Unbundled' inputs
+data UValidation = UInterleaved -- ^ Validate inputs as they are parsed
+                 | USeparate -- ^ Validate inputs in a separate function
 
 -- | Constants options.
 data ConstantStructure = Inline -- ^ Inline values for constants.

@@ -3,9 +3,9 @@ module Drasil.PDController.Choices where
 import Language.Drasil.Code (AuxFile(..), Choices(..), CodeSpec, Comments(..), 
   ConstantRepr(..), ConstantStructure(..), ConstraintBehaviour(..), 
   ImplementationType(..), Lang(..), Modularity(..), InputStructure(..), 
-  ConstStoreStructure(..), Verbosity(..), Visibility(..), codeSpec, 
-  defaultChoices, makeArchit, makeData, makeConstraints, makeODE, makeDocConfig, 
-  makeLogConfig, makeOptFeats, ExtLib(..))
+  UValidation(..), ConstStoreStructure(..), Verbosity(..), Visibility(..), 
+  codeSpec, defaultChoices, makeArchit, makeData, makeConstraints, makeODE, 
+  makeDocConfig, makeLogConfig, makeOptFeats, ExtLib(..))
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg,
   apacheODEPckg, odeintPckg)
@@ -18,7 +18,7 @@ codeChoices :: Choices
 codeChoices = defaultChoices{
   lang = [Python, CSharp, Java, Cpp],
   architecture = makeArchit Modular Program,
-  dataInfo = makeData UnbundledIns (Store BundledConsts) Const,
+  dataInfo = makeData (UnbundledIns USeparate) (Store BundledConsts) Const,
   optFeats = makeOptFeats
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Verbose Hide)
     (makeLogConfig [] "log.txt")

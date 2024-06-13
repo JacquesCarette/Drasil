@@ -23,7 +23,7 @@ module Drasil.GamePhysics.Choices where
 --   dates            = Hide,
 --   onSfwrConstraint = Warning,
 --   onPhysConstraint = Warning,
---   inputStructure   = UnbundledIns,
+--   inputStructure   = UnbundledIns USeparate,
 --   constStructure   = Inline,
 --   constRepr        = Const,
 --   conceptMatch     = matchConcepts ([] :: [QDefinition]) [],

@@ -2,8 +2,8 @@ module Drasil.DblPend.Choices where
 
 import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
-  Modularity(..), InputStructure(..), ConstStoreStructure(..),
-  ConstantStructure(..), ConstantRepr(..), AuxFile(..), Visibility(..),
+  Modularity(..), InputStructure(..), UValidation(..), ConstantStructure(..),
+  ConstStoreStructure(..), ConstantRepr(..), AuxFile(..), Visibility(..),
   defaultChoices, makeArchit, makeData, makeConstraints, makeODE, makeDocConfig,
   makeLogConfig, makeOptFeats, ExtLib(..))
 
@@ -19,7 +19,7 @@ choices :: Choices
 choices = defaultChoices {
   lang = [Python, Cpp, CSharp, Java],
   architecture = makeArchit Modular Program,
-  dataInfo = makeData UnbundledIns (Store BundledConsts) Const,
+  dataInfo = makeData (UnbundledIns USeparate) (Store BundledConsts) Const,
   optFeats = makeOptFeats
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
     (makeLogConfig [] "log.txt")

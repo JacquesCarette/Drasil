@@ -135,7 +135,7 @@ getParams n pt cs' = do
 getInputVars :: Name -> ParamType -> InputStructure -> ConstantRepr ->
   [CodeVarChunk] -> GenState [CodeVarChunk]
 getInputVars _ _ _ _ [] = return []
-getInputVars _ _ UnbundledIns _ cs = return cs
+getInputVars _ _ (UnbundledIns _) _ cs = return cs
 getInputVars n pt BundledIns Var _ = do
   g <- get
   let cname = "InputParameters"

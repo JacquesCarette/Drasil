@@ -151,7 +151,7 @@ type ClassDef = (String, String)
 getExpInput :: Name -> Choices -> [Input] -> [ModExp]
 getExpInput _ _ [] = []
 getExpInput prn chs ins = inExp (modularity $ architecture chs) (inputStructure $ dataInfo chs)
-  where inExp _ UnbundledIns = []
+  where inExp _ (UnbundledIns _) = []
         inExp Unmodular BundledIns = (ipName, prn) : inVarDefs prn
         inExp Modular BundledIns = (ipName , ipName) : inVarDefs ipName
         inVarDefs n = map ((, n) . codeName) ins
@@ -164,7 +164,7 @@ getExpInput prn chs ins = inExp (modularity $ architecture chs) (inputStructure 
 getInputCls :: Choices -> [Input] -> [ClassDef]
 getInputCls _ [] = []
 getInputCls chs ins = inCls (inputStructure $ dataInfo chs)
-  where inCls UnbundledIns = []
+  where inCls (UnbundledIns _) = []
         inCls BundledIns = (ipName, ipName) : inVarDefs
         inVarDefs = map ((, ipName) . codeName) ins
         ipName = "InputParameters"

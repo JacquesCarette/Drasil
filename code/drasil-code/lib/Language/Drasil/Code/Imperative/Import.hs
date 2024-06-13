@@ -114,7 +114,7 @@ variable s t = do
 -- 'classVariable' is called.
 inputVariable :: (OOProg r) => InputStructure -> ConstantRepr -> SVariable r ->
   GenState (SVariable r)
-inputVariable UnbundledIns _ v = return v
+inputVariable (UnbundledIns _) _ v = return v
 inputVariable BundledIns Var v = do
   g <- get
   let inClsName = "InputParameters"

@@ -23,7 +23,6 @@ import Language.Drasil.UID (HasUID(..))
 
 import Utils.Drasil (toColumn)
 
-
 -- | Smart constructor for fractions.
 frac :: (ExprC r, LiteralC r) => Integer -> Integer -> r
 frac n d = exactDbl n $/ exactDbl d
@@ -241,10 +240,9 @@ instance ExprC Expr where
   ($+) l (Lit (Dbl 0)) = l
   ($+) l (Lit (ExactDbl 0)) = l
   ($+) (Lit (ExactDbl 0)) r = r
-  ($+) (Lit (Int i1)) (Lit (Int i2)) = Lit (Int (i1 + i2))
-  ($+) (Lit (Dbl r1)) (Lit (Dbl r2)) = Lit (Dbl (r1 + r2))
-  ($+) (Lit (Int i)) (Lit (Dbl r)) = Lit (Dbl (fromIntegral i + r))
-  ($+) (Lit (Dbl r)) (Lit (Int i)) = Lit (Dbl (r + fromIntegral i))
+  ($+) (AssocA Add l) (AssocA Add r) = AssocA Add (l ++ r)
+  ($+) (AssocA Add l) r = AssocA Add (l ++ [r])
+  ($+) l (AssocA Add r) = AssocA Add (l : r)
   ($+) l r = AssocA Add [l, r]
 
   -- | Multiply two expressions.
@@ -254,13 +252,10 @@ instance ExprC Expr where
   ($*) l (Lit (Dbl 1.0)) = l
   ($*) l (Lit (ExactDbl 1)) = l
   ($*) (Lit (ExactDbl 1)) r = r
-  ($*) (Lit (Int i1)) (Lit (Int i2)) = Lit (Int (i1 * i2))
-  ($*) (Lit (Dbl r1)) (Lit (Dbl r2)) = Lit (Dbl (r1 * r2))
-  ($*) (Lit (Int i)) (Lit (Dbl r)) = Lit (Dbl (fromIntegral i * r))
-  ($*) (Lit (Dbl r)) (Lit (Int i)) = Lit (Dbl (r * fromIntegral i))
   ($*) (AssocA Mul l) (AssocA Mul r) = AssocA Mul (l ++ r)
-  ($*) (AssocA Mul l) (AssocA Mul r) = AssocA Mul (l ++ r)
-  ($*) l r = AssocA Mul [l,r]
+  ($*) (AssocA Mul l) r = AssocA Mul (l ++ [r])
+  ($*) l (AssocA Mul r) = AssocA Mul (l : r)
+  ($*) l r = AssocA Mul [l, r]
 
   -- | Smart constructor for subtracting two expressions.
   ($-) = ArithBinaryOp Subt
@@ -407,10 +402,9 @@ instance ExprC M.ModelExpr where
   ($+) l (M.Lit (Dbl 0)) = l
   ($+) l (M.Lit (ExactDbl 0)) = l
   ($+) (M.Lit (ExactDbl 0)) r = r
-  ($+) (M.Lit (Int i1)) (M.Lit (Int i2)) = M.Lit (Int (i1 + i2))
-  ($+) (M.Lit (Dbl r1)) (M.Lit (Dbl r2)) = M.Lit (Dbl (r1 + r2))
-  ($+) (M.Lit (Int i)) (M.Lit (Dbl r)) = M.Lit (Dbl (fromIntegral i + r))
-  ($+) (M.Lit (Dbl r)) (M.Lit (Int i)) = M.Lit (Dbl (r + fromIntegral i))
+  ($+) (M.AssocA M.Add l) (M.AssocA M.Add r) = M.AssocA M.Add (l ++ r)
+  ($+) (M.AssocA M.Add l) r = M.AssocA M.Add (l ++ [r])
+  ($+) l (M.AssocA M.Add r) = M.AssocA M.Add (l : r)
   ($+) l r = M.AssocA M.Add [l, r]
 
   -- | Multiply two expressions.
@@ -420,12 +414,9 @@ instance ExprC M.ModelExpr where
   ($*) l (M.Lit (Dbl 1.0)) = l
   ($*) l (M.Lit (ExactDbl 1)) = l
   ($*) (M.Lit (ExactDbl 1)) r = r
-  ($*) (M.Lit (Int i1)) (M.Lit (Int i2)) = M.Lit (Int (i1 * i2))
-  ($*) (M.Lit (Dbl r1)) (M.Lit (Dbl r2)) = M.Lit (Dbl (r1 * r2))
-  ($*) (M.Lit (Int i)) (M.Lit (Dbl r)) = M.Lit (Dbl (fromIntegral i * r))
-  ($*) (M.Lit (Dbl r)) (M.Lit (Int i)) = M.Lit (Dbl (r * fromIntegral i))
   ($*) (M.AssocA M.Mul l) (M.AssocA M.Mul r) = M.AssocA M.Mul (l ++ r)
-  ($*) (M.AssocA M.Mul l) (M.AssocA M.Mul r) = M.AssocA M.Mul (l ++ r)
+  ($*) (M.AssocA M.Mul l) r = M.AssocA M.Mul (l ++ [r])
+  ($*) l (M.AssocA M.Mul r) = M.AssocA M.Mul (l : r)
   ($*) l r = M.AssocA M.Mul [l,r]
   -- | Smart constructor for subtracting two expressions.
   ($-) = M.ArithBinaryOp M.Subt
@@ -573,10 +564,9 @@ instance ExprC C.CodeExpr where
   ($+) l (C.Lit (Dbl 0)) = l
   ($+) l (C.Lit (ExactDbl 0)) = l
   ($+) (C.Lit (ExactDbl 0)) r = r
-  ($+) (C.Lit (Int i1)) (C.Lit (Int i2)) = C.Lit (Int (i1 + i2))
-  ($+) (C.Lit (Dbl r1)) (C.Lit (Dbl r2)) = C.Lit (Dbl (r1 + r2))
-  ($+) (C.Lit (Int i)) (C.Lit (Dbl r)) = C.Lit (Dbl (fromIntegral i + r))
-  ($+) (C.Lit (Dbl r)) (C.Lit (Int i)) = C.Lit (Dbl (r + fromIntegral i))
+  ($+) (C.AssocA C.Add l) (C.AssocA C.Add r) = C.AssocA C.Add (l ++ r)
+  ($+) (C.AssocA C.Add l) r = C.AssocA C.Add (l ++ [r])
+  ($+) l (C.AssocA C.Add r) = C.AssocA C.Add (l : r)
   ($+) l r = C.AssocA C.Add [l, r]
 
   -- | Multiply two expressions.
@@ -586,12 +576,9 @@ instance ExprC C.CodeExpr where
   ($*) l (C.Lit (Dbl 1.0)) = l
   ($*) l (C.Lit (ExactDbl 1)) = l
   ($*) (C.Lit (ExactDbl 1)) r = r
-  ($*) (C.Lit (Int i1)) (C.Lit (Int i2)) = C.Lit (Int (i1 * i2))
-  ($*) (C.Lit (Dbl r1)) (C.Lit (Dbl r2)) = C.Lit (Dbl (r1 * r2))
-  ($*) (C.Lit (Int i)) (C.Lit (Dbl r)) = C.Lit (Dbl (fromIntegral i * r))
-  ($*) (C.Lit (Dbl r)) (C.Lit (Int i)) = C.Lit (Dbl (r * fromIntegral i))
   ($*) (C.AssocA C.Mul l) (C.AssocA C.Mul r) = C.AssocA C.Mul (l ++ r)
-  ($*) (C.AssocA C.Mul l) (C.AssocA C.Mul r) = C.AssocA C.Mul (l ++ r)
+  ($*) (C.AssocA C.Mul l) r = C.AssocA C.Mul (l ++ [r])
+  ($*) l (C.AssocA C.Mul r) = C.AssocA C.Mul (l : r)
   ($*) l r = C.AssocA C.Mul [l,r]
   
   -- | Smart constructor for subtracting two expressions.

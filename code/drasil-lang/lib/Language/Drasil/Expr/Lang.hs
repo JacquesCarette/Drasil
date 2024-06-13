@@ -1,7 +1,6 @@
 {-# LANGUAGE GADTs                 #-}
 {-# LANGUAGE InstanceSigs          #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE StrictData #-}
 
 -- | The Drasil Expression language
 module Language.Drasil.Expr.Lang where
@@ -235,15 +234,19 @@ instance Typed Expr Space where
 
   infer cxt (AssocA _ exs) = 
     case sp of
-      Left spaceValue -> 
-        -- If sp is a Left value containing a Space, call allOfType with spaceValue
-        allOfType cxt exs spaceValue spaceValue
-          "Associative arithmetic operation expects all operands to be of the same expected type."
-      Right typeError ->
-        -- If sp is a Right value containing a TypeError, handle the error accordingly
-        Right $ "Encountered a type error: " ++ show typeError
+      Left spaceValue | S.isBasicNumSpace spaceValue -> 
+          -- If sp is a Left value containing a valid Space, call allOfType with spaceValue
+          allOfType cxt exs spaceValue spaceValue 
+              "Associative arithmetic operation expects all operands to be of the same expected type."
+      Left _ ->
+          -- Handle the case when sp is a Left value but spaceValue is invalid
+          Right "Invalid spaceValue encountered."
+      Right r ->
+          -- If sp is a Right value containing a TypeError
+          Right r
     where
-      sp = infer cxt (head exs)
+        e:_ = exs
+        sp = infer cxt e
 
   infer cxt (AssocB _ exs) = allOfType cxt exs S.Boolean S.Boolean
     $ "Associative boolean operation expects all operands to be of the same type (" ++ show S.Boolean ++ ")."

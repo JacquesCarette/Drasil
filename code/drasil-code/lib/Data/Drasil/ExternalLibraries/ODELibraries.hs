@@ -75,7 +75,7 @@ scipyCall info = externalLibCall [
       [matrix[initVal info], tInit info],
     initSolListWithValFill (depVar info) (matrix[initVal info]),
     solveAndPopulateWhileFill (libCallFill []) (tFinal info)
-    (libCallFill [basicArgFill (($+) (field r t) (stepSize (odeOpts info)))])
+    (libCallFill [basicArgFill ((field r t) $+ (stepSize (odeOpts info)))])
     (depVar info)]]
   where chooseMethod Adams = (0, solveMethodFill)
         chooseMethod BDF = (1, solveMethodFill)

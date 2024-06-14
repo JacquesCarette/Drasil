@@ -2,6 +2,7 @@ on:
   pull_request:
     branches: main
     paths: 'code/drasil-**'
+  workflow_dispatch:
 name: Linter
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

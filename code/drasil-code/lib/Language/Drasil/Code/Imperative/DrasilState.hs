@@ -22,6 +22,7 @@ import Language.Drasil.Mod (Mod(..), Name, Version, Class(..),
 import Control.Lens ((^.), makeLenses, over)
 import Control.Monad.State (State, gets)
 import Data.List (nub)
+import Data.Set (Set)
 import Data.Map (Map, fromList)
 import Text.PrettyPrint.HughesPJ (Doc, ($$))
 
@@ -69,7 +70,7 @@ data DrasilState = DrasilState {
   eMap :: ModExportMap,
   libEMap :: ModExportMap,
   clsMap :: ClassDefinitionMap,
-  defList :: [InternalConcept],
+  defList :: Set Name,
   getVal :: Int,
 
   -- Stateful
@@ -162,7 +163,7 @@ getExpInput prn chs ins = inExp (modularity $ architecture chs) (inputStructure 
   where inExp _ Unbundled = []
         inExp Unmodular Bundled = (ipName, prn) : inVarDefs prn
         inExp (Modular Separated) Bundled = inVarDefs ipName
-        inExp (Modular Combined) Bundled = (ipName , ipName) : inVarDefs ipName
+        inExp (Modular Combined) Bundled = (ipName, ipName) : inVarDefs ipName
         inVarDefs n = map ((, n) . codeName) ins
         ipName = icNames chs InputParameters
 
@@ -192,7 +193,7 @@ getExpConstants n chs cs = cExp (modularity $ architecture chs) (constStructure 
   (inputStructure $ dataInfo chs)
   where cExp Unmodular (Store Bundled) _ = zipCs $ repeat n
         cExp Unmodular WithInputs Bundled = zipCs $ repeat n
-        cExp _ (Store Bundled) _ = zipCs $ repeat "Constants"
+        cExp _ (Store Bundled) _ = zipCs $ repeat (icNames chs Constants)
         cExp _ WithInputs Bundled = zipCs $ repeat (icNames chs InputParameters)
         cExp _ _ _ = []
         zipCs = zip (map codeName cs)
@@ -205,10 +206,10 @@ getExpConstants n chs cs = cExp (modularity $ architecture chs) (constStructure 
 getConstantsCls :: Choices -> [Const] -> [ClassDef]
 getConstantsCls _ [] = []
 getConstantsCls chs cs = cnCls (constStructure $ dataInfo chs) (inputStructure $ dataInfo chs)
-  where cnCls (Store Bundled) _ = zipCs $ repeat "Constants"
-        cnCls WithInputs Bundled = zipCs $ repeat (icNames chs InputParameters)
+  where cnCls (Store Bundled) _ = zipCs Constants
+        cnCls WithInputs Bundled = zipCs InputParameters
         cnCls _ _ = []
-        zipCs = zip (map codeName cs)
+        zipCs ic = zip (map codeName cs) $ repeat (icNames chs ic)
 
 -- | Get derived input functions (for @derived_values@).
 -- If there are no derived inputs, a derived inputs function is not generated.
@@ -219,11 +220,11 @@ getConstantsCls chs cs = cnCls (constStructure $ dataInfo chs) (inputStructure $
 getExpDerived :: Name -> Choices -> [Derived] -> [ModExp]
 getExpDerived _ _ [] = []
 getExpDerived n chs _ = dMod (modularity $ architecture chs) (inputStructure $ dataInfo chs)
-  where dMod (Modular Separated) _ = [(dvNm, "DerivedValues")]
+  where dMod (Modular Separated) _ = [(dvNm, icNames chs DerivedValuesMod)]
         dMod _ Bundled = []
         dMod Unmodular _ = [(dvNm, n)]
         dMod (Modular Combined) _ = [(dvNm, icNames chs InputParameters)]
-        dvNm = icNames chs DerivedValues
+        dvNm = icNames chs DerivedValuesFn
 
 -- | Get derived values defined in a class (for @derived_values@).
 -- If there are no derived inputs, derived_values is not defined in any class.
@@ -233,7 +234,7 @@ getExpDerived n chs _ = dMod (modularity $ architecture chs) (inputStructure $ d
 getDerivedCls :: Choices -> [Derived] -> [ClassDef]
 getDerivedCls _ [] = []
 getDerivedCls chs _ = dCls (inputModule chs) (inputStructure $ dataInfo chs)
-  where dCls Combined Bundled = [(icNames chs DerivedValues, icNames chs InputParameters)]
+  where dCls Combined Bundled = [(icNames chs DerivedValuesFn, icNames chs InputParameters)]
         dCls _ _ = []
 
 -- | Get input constraints to be exported (for @input_constraints@).
@@ -241,18 +242,18 @@ getDerivedCls chs _ = dCls (inputModule chs) (inputStructure $ dataInfo chs)
 getExpConstraints :: Name -> Choices -> [ConstraintCE] -> [ModExp]
 getExpConstraints _ _ [] = []
 getExpConstraints n chs _ = cMod (modularity $ architecture chs) (inputStructure $ dataInfo chs)
-  where cMod (Modular Separated) _ = [(icNm, "InputConstraints")]
+  where cMod (Modular Separated) _ = [(icNm, icNames chs InputConstraintsMod)]
         cMod _ Bundled = []
         cMod Unmodular _ = [(icNm, n)]
         cMod (Modular Combined) _ = [(icNm, icNames chs InputParameters)]
-        icNm =  icNames chs InputConstraints
+        icNm =  icNames chs InputConstraintsFn
 
 -- | Get constraints defined in a class (for @input_constraints@).
 -- See 'getDerivedCls' for full logic details.
 getConstraintsCls :: Choices -> [ConstraintCE] -> [ClassDef]
 getConstraintsCls _   [] = []
 getConstraintsCls chs _  = cCls (inputModule chs) (inputStructure $ dataInfo chs)
-  where cCls Combined Bundled = [(icNames chs InputConstraints, icNames chs InputParameters)]
+  where cCls Combined Bundled = [(icNames chs InputConstraintsFn, icNames chs InputParameters)]
         cCls _ _ = []
 
 -- | Get input format to be exported (for @get_input@).
@@ -281,7 +282,7 @@ getExpCalcs :: Name -> Choices -> [Def] -> [ModExp]
 getExpCalcs n chs = map (\d -> (codeName d, calMod))
   where calMod = cMod $ modularity $ architecture chs
         cMod Unmodular = n
-        cMod _ = "Calculations"
+        cMod _ = icNames chs Calculations
 
 -- | Get exported outputs (for @write_output@).
 -- No output function is exported if there are no outputs.
@@ -291,7 +292,7 @@ getExpOutput :: Name -> Choices -> [Output] -> [ModExp]
 getExpOutput _ _ [] = []
 getExpOutput n chs _ = [(icNames chs WriteOutput, oMod $ modularity $ architecture chs)]
   where oMod Unmodular = n
-        oMod _ = "OutputFormat"
+        oMod _ = icNames chs OutputFormat
 
 -- | Get InternalConcept name using DrasilState
 genICName :: InternalConcept -> GenState Name

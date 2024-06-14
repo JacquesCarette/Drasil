@@ -8,7 +8,7 @@ module Language.Drasil.Choices (
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices,
-  choicesSent, showChs, InternalConcept(..), listStrIC) where
+  choicesSent, showChs, InternalConcept(..)) where
 
 import Language.Drasil hiding (None, Var)
 import Language.Drasil.Code.Code (spaceToCodeType)
@@ -16,10 +16,8 @@ import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg)
 import Language.Drasil.Mod (Name)
-import Data.Maybe (mapMaybe)
 import Data.Map (Map)
 import qualified Data.Map as Map
-import Data.Tuple (swap)
 
 import GOOL.Drasil (CodeType)
 
@@ -375,29 +373,31 @@ choicesSent chs = map chsFieldSent [
 chsFieldSent :: (Sentence, Sentence) -> Sentence
 chsFieldSent (rec, chc) = rec +:+ S "selected as" +:+. chc
 
--- | List of user defined function names.
--- List is populated with default values.
-fnList :: Map InternalConcept Name
-fnList = Map.fromList [
-  (GetInput, "get_input"),
-  (DerivedValues, "derived_values"),
-  (InputConstraints, "input_constraints"),
-  (WriteOutput, "write_output"),
-  (InputParameters, "InputParameters"),
-  (InputFormat, "InputFormat")]
+-- | Data type of internal concepts
+data InternalConcept = 
+    InputConstraintsFn
+  | InputConstraintsMod
+  | WriteOutput 
+  | DerivedValuesFn
+  | DerivedValuesMod
+  | GetInput 
+  | InputParameters
+  | InputFormat
+  | OutputFormat
+  | Calculations
+  | Constants
+  deriving (Eq, Ord)
 
--- | Helper function for InternalConcept String Map
-listStrIC :: [String] -> [InternalConcept]
-listStrIC = mapMaybe (flip Map.lookup . Map.fromList . map swap $ Map.toList fnList)
-
--- | Data type of user defined concepts
-data InternalConcept = InputConstraints | WriteOutput | DerivedValues
-  | GetInput | InputParameters | InputFormat deriving (Eq, Ord)
-
+-- | Function to get default InternalConcept names
 defaultICName :: InternalConcept -> Name
-defaultICName GetInput = "get_input"
-defaultICName DerivedValues = "derived_values"
-defaultICName InputConstraints = "input_constraints"
-defaultICName WriteOutput = "write_output"
-defaultICName InputParameters = "InputParameters"
-defaultICName InputFormat = "InputFormat"
+defaultICName InputConstraintsFn  = "input_constraints"
+defaultICName InputConstraintsMod = "InputConstraints"
+defaultICName WriteOutput         = "write_output"
+defaultICName DerivedValuesFn     = "derived_values"
+defaultICName DerivedValuesMod    = "DerivedValues"
+defaultICName GetInput            = "get_input"
+defaultICName InputParameters     = "InputParameters"
+defaultICName InputFormat         = "InputFormat"
+defaultICName OutputFormat        = "OutputFormat"
+defaultICName Calculations        = "Calculations"
+defaultICName Constants           = "Constants"

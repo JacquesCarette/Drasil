@@ -39,11 +39,10 @@ getInConstructorParams = do
   ifPs <- getInputFormatIns
   dvPs <- getDerivedIns
   icPs <- getConstraintParams
-  let cname = InputParameters
-      getCParams False = []
-      getCParams True = ifPs ++ dvPs ++ icPs
   ipName <- genICName InputParameters
-  ps <- getParams ipName In $ getCParams (cname `elem` defList g)
+  let getCParams False = []
+      getCParams True = ifPs ++ dvPs ++ icPs
+  ps <- getParams ipName In $ getCParams (ipName `elem` defList g)
   return $ filter ((Just ipName /=) . flip Map.lookup (clsMap g) . codeName) ps
 
 -- | The inputs to the function for reading inputs are the input file name, and
@@ -74,14 +73,14 @@ getDerivedIns = do
   let s = codeSpec g
       dvals = derivedInputs s
       reqdVals = concatMap (flip codevars (sysinfodb s) . (^. codeExpr)) dvals
-  dvName <- genICName DerivedValues
+  dvName <- genICName DerivedValuesFn
   getParams dvName In reqdVals
 
 -- | The outputs from the function for calculating derived inputs are the derived inputs.
 getDerivedOuts :: GenState [CodeVarChunk]
 getDerivedOuts = do
   g <- get
-  dvName <- genICName DerivedValues
+  dvName <- genICName DerivedValuesFn
   getParams dvName Out $ map codeChunk $ derivedInputs $ codeSpec g
 
 -- | The parameters to the function for checking constraints on the inputs are
@@ -95,7 +94,7 @@ getConstraintParams = do
       varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec g)
       reqdVals = nub $ varsList ++ map quantvar (concatMap (`constraintvars` db)
         (getConstraints cm varsList))
-  icName <- genICName InputConstraints
+  icName <- genICName InputConstraintsFn
   getParams icName In reqdVals
 
 -- | The parameters to a calculation function are any variables used in the

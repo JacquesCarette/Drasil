@@ -145,8 +145,8 @@ initConsts :: (OOProg r) => GenState (Maybe (MSStatement r))
 initConsts = do
   g <- get
   v_consts <- mkVar (quantvar consts)
-  let cname = "Constants"
-      cs = constants $ codeSpec g
+  cname <- genICName Constants
+  let cs = constants $ codeSpec g
       getDecl (Store Unbundled) _ = declVars
       getDecl (Store Bundled) _ = gets (declObj cs . conRepr)
       getDecl WithInputs Unbundled = declVars
@@ -189,11 +189,13 @@ genInputModSeparated = do
   icDesc <- modDesc (liftS inputConstraintsDesc)
   ipName <- genICName InputParameters
   ifName <- genICName InputFormat
+  dvName <- genICName DerivedValuesMod
+  icName <- genICName InputConstraintsMod
   sequence
     [genModule ipName ipDesc [] [genInputClass Primary],
     genModule ifName ifDesc [genInputFormat Pub] [],
-    genModule "DerivedValues" dvDesc [genInputDerived Pub] [],
-    genModule "InputConstraints" icDesc [genInputConstraints Pub] []]
+    genModule dvName dvDesc [genInputDerived Pub] [],
+    genModule icName icDesc [genInputConstraints Pub] []]
 
 -- | Generates a single module containing all input-related components.
 genInputModCombined :: (OOProg r) => GenState [SFile r]
@@ -233,7 +235,7 @@ genInputClass scp = do
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter ((Just cname ==) . flip Map.lookup (clsMap g) . codeName)
       methods :: (OOProg r) => GenState [SMethod r]
-      methods = if InputParameters `elem` defList g
+      methods = if cname `elem` defList g
         then concat <$> mapM (fmap maybeToList) [genInputConstructor,
         genInputFormat Priv, genInputDerived Priv, genInputConstraints Priv]
         else return []
@@ -262,6 +264,9 @@ genInputConstructor :: (OOProg r) => GenState (Maybe (SMethod r))
 genInputConstructor = do
   g <- get
   ipName <- genICName InputParameters
+  giName <- genICName GetInput
+  dvName <- genICName DerivedValuesFn
+  icName <- genICName InputConstraintsFn
   let dl = defList g
       genCtor False = return Nothing
       genCtor True = do
@@ -271,15 +276,15 @@ genInputConstructor = do
         ctor <- genConstructor ipName cdesc (map pcAuto cparams)
           [block ics]
         return $ Just ctor
-  genCtor $ any (`elem` dl) [GetInput,
-    DerivedValues, InputConstraints]
+  genCtor $ any (`elem` dl) [giName,
+    dvName, icName]
 
 -- | Generates a function for calculating derived inputs.
 genInputDerived :: (OOProg r) => ScopeTag ->
   GenState (Maybe (SMethod r))
 genInputDerived s = do
   g <- get
-  dvName <- genICName DerivedValues
+  dvName <- genICName DerivedValuesFn
   let dvals = derivedInputs $ codeSpec g
       getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
@@ -293,14 +298,14 @@ genInputDerived s = do
         desc <- dvFuncDesc
         mthd <- getFunc s dvName desc ins outs bod
         return $ Just mthd
-  genDerived $ DerivedValues `elem` defList g
+  genDerived $ dvName `elem` defList g
 
 -- | Generates function that checks constraints on the input.
 genInputConstraints :: (OOProg r) => ScopeTag ->
   GenState (Maybe (SMethod r))
 genInputConstraints s = do
   g <- get
-  icName <- genICName InputConstraints
+  icName <- genICName InputConstraintsFn
   let cm = cMap $ codeSpec g
       getFunc Pub = publicFunc
       getFunc Priv = privateMethod
@@ -318,7 +323,7 @@ genInputConstraints s = do
         mthd <- getFunc s icName void desc (map pcAuto parms)
           Nothing [block sf, block ph]
         return $ Just mthd
-  genConstraints $ InputConstraints `elem` defList g
+  genConstraints $ icName `elem` defList g
 
 -- | Generates input constraints code block for checking software constraints.
 sfwrCBody :: (OOProg r) => [(CodeVarChunk, [ConstraintCE])] ->
@@ -432,7 +437,7 @@ genInputFormat s = do
         desc <- inFmtFuncDesc
         mthd <- getFunc s giName desc ins outs bod
         return $ Just mthd
-  genInFormat $ GetInput `elem` defList g
+  genInFormat $ giName `elem` defList g
 
 -- | Defines the 'DataDesc' for the format we require for input files. When we make
 -- input format a design variability, this will read the user's design choices
@@ -458,7 +463,8 @@ genSampleInput = do
 genConstMod :: (OOProg r) => GenState [SFile r]
 genConstMod = do
   cDesc <- modDesc $ liftS constModDesc
-  liftS $ genModule "Constants" cDesc [] [genConstClass Primary]
+  cName <- genICName Constants
+  liftS $ genModule cName cDesc [] [genConstClass Primary]
 
 -- | Generates a class to store constants, if constants are mapped to the
 -- Constants class in the class definition map, otherwise returns Nothing.
@@ -466,6 +472,7 @@ genConstClass :: (OOProg r) => ClassType ->
   GenState (Maybe (SClass r))
 genConstClass scp = do
   g <- get
+  cname <- genICName Constants
   let cs = constants $ codeSpec g
       genClass :: (OOProg r) => [CodeDefinition] -> GenState
         (Maybe (SClass r))
@@ -482,7 +489,6 @@ genConstClass scp = do
         return $ Just cls
   genClass $ filter (flip member (Map.filter (cname ==) (clsMap g))
     . codeName) cs
-  where cname = "Constants"
 
 ------- CALC ----------
 
@@ -490,8 +496,9 @@ genConstClass scp = do
 genCalcMod :: (OOProg r) => GenState (SFile r)
 genCalcMod = do
   g <- get
+  cName <- genICName Calculations
   let elmap = extLibMap g
-  genModuleWithImports "Calculations" calcModDesc (concatMap (^. imports) $
+  genModuleWithImports cName calcModDesc (concatMap (^. imports) $
     elems elmap) (map (fmap Just . genCalcFunc) (execOrder $ codeSpec g)) []
 
 -- | Generates a calculation function corresponding to the 'CodeDefinition'.
@@ -563,8 +570,9 @@ genCaseBlock t v c cs = do
 -- | Generates a module containing the function for printing outputs.
 genOutputMod :: (OOProg r) => GenState [SFile r]
 genOutputMod = do
+  ofName <- genICName OutputFormat
   ofDesc <- modDesc $ liftS outputFormatDesc
-  liftS $ genModule "OutputFormat" ofDesc [genOutputFormat] []
+  liftS $ genModule ofName ofDesc [genOutputFormat] []
 
 -- | Generates a function for printing output values.
 genOutputFormat :: (OOProg r) => GenState (Maybe (SMethod r))

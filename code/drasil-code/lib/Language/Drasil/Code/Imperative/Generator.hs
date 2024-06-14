@@ -28,7 +28,7 @@ import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
   Visibility(..), DataInfo(..), Constraints(..), choicesSent, DocConfig(..),
-  LogConfig(..), OptionalFeatures(..), InternalConcept(..), listStrIC)
+  LogConfig(..), OptionalFeatures(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), getODE)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
 
@@ -39,7 +39,7 @@ import System.Directory (setCurrentDirectory, createDirectoryIfMissing,
   getCurrentDirectory)
 import Control.Lens ((^.))
 import Control.Monad.State (get, evalState, runState)
-import Data.List (nub)
+import qualified Data.Set as Set (fromList)
 import Data.Map (fromList, member, keys, elems)
 import Data.Maybe (maybeToList, catMaybes)
 import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
@@ -75,7 +75,7 @@ generator l dt sd chs spec = DrasilState {
   eMap = mem,
   libEMap = lem,
   clsMap = cdm,
-  defList = nub $ listStrIC (keys mem ++ keys cdm),
+  defList = Set.fromList $ keys mem ++ keys cdm,
   getVal = folderVal chs,
   -- stateful
   currentModule = "",
@@ -180,8 +180,8 @@ genUnmodular = do
   g <- get
   umDesc <- unmodularDesc
   giName <- genICName GetInput
-  dvName <- genICName DerivedValues
-  icName <- genICName InputConstraints
+  dvName <- genICName DerivedValuesFn
+  icName <- genICName InputConstraintsFn
   let n = pName $ codeSpec g
       cls = any (`member` clsMap g) [giName, dvName, icName]
   genModuleWithImports n umDesc (concatMap (^. imports) (elems $ extLibMap g))

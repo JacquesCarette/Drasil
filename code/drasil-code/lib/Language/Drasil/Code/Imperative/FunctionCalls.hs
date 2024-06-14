@@ -44,13 +44,13 @@ genInputCall = do
 -- | Generates a call to the function for calculating derived inputs.
 genDerivedCall :: (OOProg r) => GenState (Maybe (MSStatement r))
 genDerivedCall = do
-  dvName <- genICName DerivedValues
+  dvName <- genICName DerivedValuesFn
   genInOutCall dvName getDerivedIns getDerivedOuts
 
 -- | Generates a call to the function for checking constraints on the input.
 genConstraintCall :: (OOProg r) => GenState (Maybe (MSStatement r))
 genConstraintCall = do
-  icName <- genICName InputConstraints
+  icName <- genICName InputConstraintsFn
   val <- genFuncCall icName void getConstraintParams
   return $ fmap valStmt val
 

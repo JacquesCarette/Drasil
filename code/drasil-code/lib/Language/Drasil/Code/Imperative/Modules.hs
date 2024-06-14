@@ -210,7 +210,7 @@ genInputClass scp = do
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter ((Just cname ==) . flip Map.lookup (clsMap g) . codeName)
       methods :: (OOProg r) => GenState [SMethod r]
-      methods = if cname `elem` defList g
+      methods = if cname `elem` defSet g
         then concat <$> mapM (fmap maybeToList) [genInputConstructor,
         genInputFormat Priv, genInputDerived Priv, genInputConstraints Priv]
         else return []
@@ -242,7 +242,7 @@ genInputConstructor = do
   giName <- genICName GetInput
   dvName <- genICName DerivedValuesFn
   icName <- genICName InputConstraintsFn
-  let dl = defList g
+  let ds = defSet g
       genCtor False = return Nothing
       genCtor True = do
         cdesc <- inputConstructorDesc
@@ -251,7 +251,7 @@ genInputConstructor = do
         ctor <- genConstructor ipName cdesc (map pcAuto cparams)
           [block ics]
         return $ Just ctor
-  genCtor $ any (`elem` dl) [giName,
+  genCtor $ any (`elem` ds) [giName,
     dvName, icName]
 
 -- | Generates a function for calculating derived inputs.
@@ -273,7 +273,7 @@ genInputDerived s = do
         desc <- dvFuncDesc
         mthd <- getFunc s dvName desc ins outs bod
         return $ Just mthd
-  genDerived $ dvName `elem` defList g
+  genDerived $ dvName `elem` defSet g
 
 -- | Generates function that checks constraints on the input.
 genInputConstraints :: (OOProg r) => ScopeTag ->
@@ -298,7 +298,7 @@ genInputConstraints s = do
         mthd <- getFunc s icName void desc (map pcAuto parms)
           Nothing [block sf, block ph]
         return $ Just mthd
-  genConstraints $ icName `elem` defList g
+  genConstraints $ icName `elem` defSet g
 
 -- | Generates input constraints code block for checking software constraints.
 sfwrCBody :: (OOProg r) => [(CodeVarChunk, [ConstraintCE])] ->
@@ -412,7 +412,7 @@ genInputFormat s = do
         desc <- inFmtFuncDesc
         mthd <- getFunc s giName desc ins outs bod
         return $ Just mthd
-  genInFormat $ giName `elem` defList g
+  genInFormat $ giName `elem` defSet g
 
 -- | Defines the 'DataDesc' for the format we require for input files. When we make
 -- input format a design variability, this will read the user's design choices

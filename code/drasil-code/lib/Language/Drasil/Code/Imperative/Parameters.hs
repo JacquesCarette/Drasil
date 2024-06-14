@@ -42,7 +42,7 @@ getInConstructorParams = do
   ipName <- genICName InputParameters
   let getCParams False = []
       getCParams True = ifPs ++ dvPs ++ icPs
-  ps <- getParams ipName In $ getCParams (ipName `elem` defList g)
+  ps <- getParams ipName In $ getCParams (ipName `elem` defSet g)
   return $ filter ((Just ipName /=) . flip Map.lookup (clsMap g) . codeName) ps
 
 -- | The inputs to the function for reading inputs are the input file name.

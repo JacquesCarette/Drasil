@@ -70,7 +70,7 @@ data DrasilState = DrasilState {
   eMap :: ModExportMap,
   libEMap :: ModExportMap,
   clsMap :: ClassDefinitionMap,
-  defList :: Set Name,
+  defSet :: Set Name,
   getVal :: Int,
 
   -- Stateful

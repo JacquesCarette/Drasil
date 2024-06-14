@@ -75,7 +75,7 @@ generator l dt sd chs spec = DrasilState {
   eMap = mem,
   libEMap = lem,
   clsMap = cdm,
-  defList = Set.fromList $ keys mem ++ keys cdm,
+  defSet = Set.fromList $ keys mem ++ keys cdm,
   getVal = folderVal chs,
   -- stateful
   currentModule = "",

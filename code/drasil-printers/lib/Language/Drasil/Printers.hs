@@ -18,7 +18,7 @@ module Language.Drasil.Printers (
   , introInfo, verInfo, unsupOS, regularSec, instDoc, extLibSec, endNote, whatInfo
   -- * Plain
   -- ** Types
-  , Linearity(..)
+  , SingleLine(..)
   -- ** Functions
   , sentenceDoc, exprDoc, codeExprDoc, symbolDoc, unitDoc, showSymb,
   showHasSymbImpl
@@ -42,10 +42,10 @@ import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.JSON.Print (genJSON)
 import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS,
   extLibSec, instDoc, regularSec, endNote, whatInfo)
-import Language.Drasil.Plain.Print (Linearity(..), sentenceDoc, exprDoc,
+import Language.Drasil.Plain.Print (SingleLine(..), sentenceDoc, exprDoc,
   codeExprDoc, symbolDoc, unitDoc, showSymb, showHasSymbImpl)
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
   HasPrintingOptions(..), Notation(..), defaultConfiguration, piSys)
 import Language.Drasil.DOT.Print (outputDot, GraphInfo(..), NodeFamily(..))
-import Language.Drasil.Log.Print (printAllDebugInfo)
+import Language.Drasil.Debug.Print (printAllDebugInfo)

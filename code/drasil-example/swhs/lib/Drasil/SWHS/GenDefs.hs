@@ -23,9 +23,9 @@ import Drasil.SWHS.TMods (consThermE, nwtnCooling)
 import Drasil.SWHS.Unitals (coilHTC, htFluxC, htFluxIn, htFluxOut, htFluxP,
   inSA, outSA, pcmHTC, tempC, tempPCM, tempW, thFluxVect, volHtGen)
 
----------------------------
---  General Definitions  --
----------------------------
+-------------------------
+-- General Definitions --
+-------------------------
 
 --FIXME: genDefs, nwtnCoolingGD, and rocTempSimpGD were added--
 --since referencing implementation for RelationConcept hasn't--
@@ -82,9 +82,9 @@ newtonLawNote u a c = foldlSent [ch u `S.is` S "found by assuming that",
   sParen (S "defined" `S.in_` refS nwtnCooling) `S.is` S "used on",
   phraseNP (surface `the_ofThe` c)]
 
---------------------------------------
---  General Definitions Derivation  --
---------------------------------------
+------------------------------------
+-- General Definitions Derivation --
+------------------------------------
 
 rocTempSimpDeriv :: Sentence -> [ConceptInstance] -> Derivation
 rocTempSimpDeriv s a = mkDerivName (S "simplified" +:+ phraseNP (rOfChng `of_` temp))

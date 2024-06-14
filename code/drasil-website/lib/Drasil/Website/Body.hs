@@ -157,7 +157,7 @@ chunksWiki = makeURI "chunksWiki" (gitHubInfoURL ++ "/wiki/Chunks") (shortname' 
 recipesWiki :: Reference
 recipesWiki = makeURI "recipesWiki" (gitHubInfoURL ++ "/wiki/Recipes") (shortname' $ S "recipesWiki")
 paperGOOL :: Reference
-paperGOOL = makeURI "GOOLPaper" (gitHubInfoURL ++ "/blob/master/Papers/GOOL/GOOL.pdf") (shortname' $ S "GOOLPaper")
+paperGOOL = makeURI "GOOLPaper" (gitHubInfoURL ++ "/blob/main/Papers/GOOL/GOOL.pdf") (shortname' $ S "GOOLPaper")
 papersWiki :: Reference
 papersWiki = makeURI "papersWiki" (gitHubInfoURL ++ "/wiki/Drasil-Papers-and-Documents") (shortname' $ S "papersWiki")
 quickStartWiki :: Reference
@@ -178,7 +178,7 @@ websiteTitle :: String
 gitHubInfoURL, imagePath :: FilePath
 websiteTitle = "Drasil - Generate All the Things!"
 gitHubInfoURL = "https://github.com/JacquesCarette/Drasil"
-imagePath = "../images/Icon.png"
+imagePath = "./images/Icon.png"
 
 -- * Footer Section
 

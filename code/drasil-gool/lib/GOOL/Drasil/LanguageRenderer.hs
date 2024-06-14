@@ -46,7 +46,7 @@ import Prelude hiding (break,print,last,sqrt,abs,log,exp,sin,cos,tan,asin,acos,
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
   space, brackets, parens, isEmpty, rbrace, lbrace, vcat, semi, equals, colon,
   comma)
-import Metadata.Drasil.DrasilMetaCall(drasilMeta, DrasilMeta(..), watermark)
+import Metadata.Drasil.DrasilMetaCall(watermark)
 
 ----------------------------------------
 -- Syntax common to several renderers --
@@ -416,10 +416,10 @@ moduleDox desc as date m = (doxFile ++ m) :
   [doxAuthor ++ stringList as | not (null as)] ++
   [doxDate ++ date | not (null date)] ++ 
   [doxBrief ++ desc | not (null desc)] ++ 
-  [doxCommand ++ watermark ++ version drasilMeta]
+  [doxNote ++ watermark]
 
 commentedMod :: FileData -> Doc -> FileData
-commentedMod m cmt = updateFileMod (updateMod (commentedItem cmt) (fileMod m)) m
+commentedMod m cmt = updateFileMod (updateMod (commentedItem $ cmt $+$ blank) (fileMod m)) m
 
 -- Helper Functions --
 
@@ -458,7 +458,7 @@ intValue i = i >>= intValue' . getType . valueType
   where intValue' Integer = i
         intValue' _ = error "Value passed to intValue must be Integer"
 
-doxCommand, doxBrief, doxParam, doxReturn, doxFile, doxAuthor, doxDate :: String
+doxCommand, doxBrief, doxParam, doxReturn, doxFile, doxAuthor, doxDate, doxNote :: String
 doxCommand = "\\"
 doxBrief = doxCommand ++ "brief "
 doxParam = doxCommand ++ "param "
@@ -466,3 +466,4 @@ doxReturn = doxCommand ++ "return "
 doxFile = doxCommand  ++ "file "
 doxAuthor = doxCommand ++ "author "
 doxDate = doxCommand ++ "date "
+doxNote = doxCommand ++ "note "

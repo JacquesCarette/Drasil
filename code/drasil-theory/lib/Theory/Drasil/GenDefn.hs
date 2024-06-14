@@ -40,7 +40,7 @@ instance ConceptDomain      GenDefn where cdom        = cdom . (^. mk)
 -- | Converts the 'GenDefn's related expression into a 'ModelExpr'.
 instance Express            GenDefn where express     = express . (^. mk)
 -- | Finds the derivation of the 'GenDefn'. May contain Nothing.
-instance HasDerivation      GenDefn where derivations = deri
+instance MayHaveDerivation  GenDefn where derivations = deri
 {-- | Finds 'Reference's contained in the 'GenDefn'.
 instance HasReference       GenDefn where getReferences = rf-}
 -- | Finds 'DecRef's contained in the 'GenDefn'.

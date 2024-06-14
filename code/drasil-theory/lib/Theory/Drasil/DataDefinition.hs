@@ -87,7 +87,7 @@ instance HasDecRef          DataDefinition where getDecRefs = ddPkt pktDR
 -- | Equal if 'UID's are equal.
 instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds the derivation of the 'DataDefinition where'. May contain Nothing.
-instance HasDerivation      DataDefinition where derivations = ddPkt pktMD
+instance MayHaveDerivation  DataDefinition where derivations = ddPkt pktMD
 -- | Finds any additional notes for the 'DataDefinition where'.
 instance HasAdditionalNotes DataDefinition where getNotes = ddPkt pktSS
 -- | Finds the 'ShortName' of the 'DataDefinition where'.

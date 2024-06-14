@@ -32,7 +32,7 @@ DOXYFILE_ENCODING      = UTF-8
 # title of most generated pages and in a few other places.
 # The default value is: My Project.
 
-PROJECT_NAME           = "PD_Controller"
+PROJECT_NAME           = "PDController"
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number. This
 # could be handy for archiving the generated documentation or if some version
@@ -799,7 +799,7 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = PD_Controller/Control.java PD_Controller/InputParameters.java PD_Controller/Constants.java PD_Controller/Calculations.java PD_Controller/OutputFormat.java PD_Controller/ODE.java PD_Controller/ODEStepHandler.java
+INPUT                  = PDController/Control.java PDController/InputParameters.java PDController/Constants.java PDController/Calculations.java PDController/OutputFormat.java PDController/ODE.java PDController/ODEStepHandler.java
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses

@@ -75,7 +75,7 @@ sortBySymbol = sortBy compareBySymbol
 sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]
 sortBySymbolTuple = sortBy (compareBySymbol `on` fst)
 
--- | Compares two 'Symbol's and returns their order. See 'compsy' for more information.
+-- | Compare the equational 'Symbol' of two things.
 compareBySymbol :: HasSymbol a => a -> a -> Ordering
 compareBySymbol a b = compsy (eqSymb a) (eqSymb b)
 

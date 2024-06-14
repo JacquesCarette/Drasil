@@ -1,10 +1,9 @@
 on:
   pull_request:
-    branches: master
+    branches: main
     paths:
       - 'code/drasil-**'
       - 'code/scripts/**'
-      - 'code/Makefile'
 name: Linter
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

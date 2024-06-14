@@ -104,7 +104,7 @@ ${J_{\text{max}}}$ & Maximum value for the stress distribution factor & --
 \\
 ${J_{\text{min}}}$ & Minimum value for the stress distribution factor & --
 \\
-${J_{\text{tol}}}$ & Stress distribution factor (Function) based on Pbtol & --
+${J_{\text{tol}}}$ & Tolerable stress distribution factor & --
 \\
 $k$ & Surface flaw parameter & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
@@ -223,7 +223,7 @@ Uncert. & Typical Uncertainty
 \end{longtblr}
 \section{Introduction}
 \label{Sec:Intro}
-Software is helpful to efficiently and correctly predict the blast risk involved with the glass slab. The blast under consideration is any kind of man-made explosion. The software, herein called GlassBR, aims to predict the blast risk involved with the glass slab using an intuitive interface.
+Explosions in downtown areas are dangerous from the blast itself and also potentially from the secondary effect of falling glass. Therefore, software is needed to predict whether a glass slab can withstand a blast under given conditions. For example, we might wish to know whether a pane of glass fails from a gas main explosion or from a small fertilizer truck bomb. The program documented here is called GlassBR.
 
 The following section provides an overview of the Software Requirements Specification (SRS) for GlassBR. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
@@ -1013,7 +1013,7 @@ Description & \begin{symbDescription}
               \item{${\hat{q}_{\text{tol}}}$ is the tolerable load (Unitless)}
               \item{$\mathit{interpY}$ is the interpY (Unitless)}
               \item{$\mathit{AR}$ is the aspect ratio (Unitless)}
-              \item{${J_{\text{tol}}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
+              \item{${J_{\text{tol}}}$ is the tolerable stress distribution factor (Unitless)}
               \end{symbDescription}
 \\ \midrule
 Notes & ${\hat{q}_{\text{tol}}}$ is obtained by interpolating from data shown in \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect}.
@@ -1040,7 +1040,7 @@ RefBy & \hyperref[IM:nFL]{IM:nFL}
 \phantomsection 
 \label{IM:sdfTol}
 \\ \midrule
-Label & Stress distribution factor (Function) based on Pbtol
+Label & Tolerable stress distribution factor
         
 \\ \midrule
 Input & $\mathit{LDF}$, ${P_{\text{b}\text{tol}}}$, $E$, $a$, $b$, $m$, $k$, $h$
@@ -1066,7 +1066,7 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{${J_{\text{tol}}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
+              \item{${J_{\text{tol}}}$ is the tolerable stress distribution factor (Unitless)}
               \item{${P_{\text{b}\text{tol}}}$ is the tolerable probability of breakage (Unitless)}
               \item{$a$ is the plate length (long dimension) (${\text{m}}$)}
               \item{$b$ is the plate width (short dimension) (${\text{m}}$)}
@@ -1418,7 +1418,7 @@ $\mathit{isSafePb}$ & Probability of glass breakage safety requirement & \hyperr
 \\
 $J$ & Stress distribution factor (Function) & \hyperref[IM:stressDistFac]{IM:stressDistFac} & --
 \\
-${J_{\text{tol}}}$ & Stress distribution factor (Function) based on Pbtol & \hyperref[IM:sdfTol]{IM:sdfTol} & --
+${J_{\text{tol}}}$ & Tolerable stress distribution factor & \hyperref[IM:sdfTol]{IM:sdfTol} & --
 \\
 $\mathit{LR}$ & Load resistance & \hyperref[IM:calofCapacity]{IM:calofCapacity} & ${\text{Pa}}$
 \\
@@ -1440,7 +1440,7 @@ This section provides the non-functional requirements, the qualities that the so
 \item[Verifiable:\phantomsection\label{verifiable}]{The code is tested with complete verification and validation plan.}
 \item[Understandable:\phantomsection\label{understandable}]{The code is modularized with complete module guide and module interface specification.}
 \item[Reusable:\phantomsection\label{reusable}]{The code is modularized.}
-\item[Maintainable:\phantomsection\label{maintainable}]{The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.}
+\item[Maintainable:\phantomsection\label{maintainable}]{If a likely change is made to the finished software, it will take at most 10$\%$ of the original development time, assuming the same development resources are available.}
 \item[Portable:\phantomsection\label{portable}]{The code is able to be run in different environments.}
 \end{itemize}
 \section{Likely Changes}

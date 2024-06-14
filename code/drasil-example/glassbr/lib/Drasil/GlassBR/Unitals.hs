@@ -110,7 +110,7 @@ nomThick = cuc "nomThick"
   lT millimetre {-Discrete nominalThicknesses, but not implemented-} Rational 
   [{- TODO: add back constraint: enumc nominalThicknesses -}] $ exactDbl 8
 
-glassTypeCon  = constrainedNRV' (dqdNoUnit glassTy lG String) 
+glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String) 
   [{- TODO: add back constraint: EnumeratedStr Software $ map (abrv . snd) glassType -}]
 
 {--}
@@ -262,7 +262,7 @@ loadSF        = dqdNoUnit loadShareFac (variable "LSF") Real
 
 riskFun = vc "riskFun" (nounPhraseSP "risk of failure") cB Real
 
-sdfTol = vc "sdfTol" (nounPhraseSP "stress distribution factor (Function) based on Pbtol") 
+sdfTol = vc "sdfTol" (nounPhraseSP "tolerable stress distribution factor")
   (sub (eqSymb stressDistFac) lTol) Real
 
 tolLoad = vc "tolLoad" (nounPhraseSP "tolerable load")
@@ -314,7 +314,7 @@ demandq       = dcc "demandq"     (nounPhraseSP "applied load (demand)")
   "3 second duration equivalent pressure"
 eqTNTChar     = dcc "eqTNTChar"   (nounPhraseSP "equivalent TNT charge mass")
   "mass of TNT placed on the ground in a hemisphere that represents the design explosive threat"
-explosion     = dcc "explosion"   (nounPhraseSP "explosion") 
+explosion     = dcc "explosion"   (cn' "explosion") 
   "a destructive shattering of something"
 fTemperedGl   = cc' fullyT
   (foldlSent_ [S "a flat, monolithic, glass lite of uniform thickness that has",
@@ -451,4 +451,4 @@ glassThickness =
 
 --Below are present in this file temporarily--
 lateralLoad :: IdeaDict
-lateralLoad  = compoundNC lateral load
+lateralLoad = compoundNC lateral load

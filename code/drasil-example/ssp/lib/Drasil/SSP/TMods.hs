@@ -25,9 +25,9 @@ import Drasil.SSP.Unitals (effCohesion, effNormStress, effectiveStress,
   resistiveShear, shrStress, totNormStress)
 import Drasil.SSP.DataDefs (normStressDD)
 
---------------------------
---  Theoretical Models  --
---------------------------
+------------------------
+-- Theoretical Models --
+------------------------
 tMods :: [TheoryModel]
 tMods = [factOfSafety, equilibrium, mcShrStrgth, effStress, newtonSL]
 
@@ -56,7 +56,7 @@ equilibrium = tm (equationalConstraints' equilibriumCS)
 equilibriumRels :: [ModelExpr]
 equilibriumRels = map (($= int 0) . sumAll (variable "i") . sy) [fx, fy, genericM]
 
--- FIXME: variable "i" is a hack.  But we need to sum over something!
+-- FIXME: variable "i" is a hack. But we need to sum over something!
 equilibriumCS :: ConstraintSet ModelExpr
 equilibriumCS = mkConstraintSet
   (dccWDS "equilibriumCS" (nounPhraseSP "equilibrium") eqDesc) $

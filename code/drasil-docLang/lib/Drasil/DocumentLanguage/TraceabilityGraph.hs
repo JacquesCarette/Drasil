@@ -18,7 +18,7 @@ import Data.Maybe (fromMaybe)
 import Data.Drasil.Concepts.Math (graph)
 import Data.Drasil.Concepts.Documentation (traceyGraph, component, dependency, reference, purpose, traceyMatrix)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Data.Char (isSpace, toLower)
+import Data.Char (toLower)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- * Main Functions
@@ -187,10 +187,10 @@ traceyGraphPath :: String -> String -> String
 
 traceGFiles = ["avsa", "avsall", "refvsref", "allvsr", "allvsall"]
 traceGUIDs = map mkUid ["TraceGraphAvsA", "TraceGraphAvsAll", "TraceGraphRefvsRef", "TraceGraphAllvsR", "TraceGraphAllvsAll"]
-traceyGraphPaths ex = map (\x -> resourcePath ++ map toLower (filter (not.isSpace) ex) ++ "/" ++ x ++ ".svg") traceGFiles
-traceyGraphGetRefs ex = map makeFigRef' traceGUIDs ++ zipWith (\x y -> Reference (x +++. "Link") (URI y) (shortname' $ S $ show x)) traceGUIDs (traceyGraphPaths $ map toLower $ filter (not.isSpace) ex)
+traceyGraphPaths ex = map (\x -> resourcePath ++ map toLower ex ++ "/" ++ x ++ ".svg") traceGFiles
+traceyGraphGetRefs ex = map makeFigRef' traceGUIDs ++ zipWith (\x y -> Reference (x +++. "Link") (URI y) (shortname' $ S $ show x)) traceGUIDs (traceyGraphPaths $ map toLower ex)
 -- for actual use in creating the graph figures
-traceyGraphPath ex f = resourcePath ++ map toLower (filter (not.isSpace) ex) ++ "/" ++ f ++ ".svg"
+traceyGraphPath ex f = resourcePath ++ map toLower ex ++ "/" ++ f ++ ".svg"
 
 -- | Traceability graphs reference path.
 resourcePath :: String

@@ -4,14 +4,14 @@ import Language.Drasil
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
+import Drasil.DocLang (mkMaintainableNFR)
 
 import Data.Drasil.Concepts.Computation (inValue)
-import Data.Drasil.Concepts.Documentation (assumption, code, datumConstraint,
-  environment, funcReqDom, likelyChg, mg, mis, module_, nonFuncReqDom, output_,
-  property, requirement, srs, traceyMatrix, unlikelyChg, value, vavPlan, propOfCorSol)
+import Data.Drasil.Concepts.Documentation (code, datumConstraint,
+  environment, funcReqDom, mg, mis, nonFuncReqDom, output_,
+  property, value, vavPlan, propOfCorSol)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.Software (errMsg)
-import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.Projectile.IMods (landPosIM, messageIM, offsetIM, timeIM)
 import Drasil.Projectile.Unitals (flightDur, landPos, message, offset)
@@ -72,13 +72,10 @@ reusable :: ConceptInstance
 reusable = cic "reusable" (foldlSent [atStartNP (the code), S "is modularized"]) "Reusable" nonFuncReqDom
 
 maintainable :: ConceptInstance
-maintainable = cic "maintainable" (foldlSent [
-  S "The traceability between", foldlList Comma List [plural requirement,
-  plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
-  plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
-  plural traceyMatrix, S "in the", getAcc srs `S.and_` phrase mg]) "Maintainable" nonFuncReqDom
+maintainable = mkMaintainableNFR "maintainable" 10 "Maintainable"
 
 portable :: ConceptInstance
 portable = cic "portable" (foldlSent [
   atStartNP (the code), S "is able to be run in different", plural environment])
   "Portable" nonFuncReqDom
+  

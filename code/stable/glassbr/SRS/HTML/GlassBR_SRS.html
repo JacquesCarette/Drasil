@@ -283,7 +283,7 @@
                 </tr>
                 <tr>
                   <td><em>J<sub>tol</sub></em></td>
-                  <td>Stress distribution factor (Function) based on Pbtol</td>
+                  <td>Tolerable stress distribution factor</td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -552,7 +552,7 @@
       <div class="section">
         <h1>Introduction</h1>
         <p class="paragraph">
-          Software is helpful to efficiently and correctly predict the blast risk involved with the glass slab. The blast under consideration is any kind of man-made explosion. The software, herein called GlassBR, aims to predict the blast risk involved with the glass slab using an intuitive interface.
+          Explosions in downtown areas are dangerous from the blast itself and also potentially from the secondary effect of falling glass. Therefore, software is needed to predict whether a glass slab can withstand a blast under given conditions. For example, we might wish to know whether a pane of glass fails from a gas main explosion or from a small fertilizer truck bomb. The program documented here is called GlassBR.
         </p>
         <p class="paragraph">
           The following section provides an overview of the Software Requirements Specification (SRS) for GlassBR. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
@@ -1817,7 +1817,7 @@
                           <li><em>interpY</em> is the interpY (Unitless)</li>
                           <li><em>AR</em> is the aspect ratio (Unitless)</li>
                           <li>
-                            <em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol (Unitless)
+                            <em>J<sub>tol</sub></em> is the tolerable stress distribution factor (Unitless)
                           </li>
                         </ul>
                       </td>
@@ -1855,9 +1855,7 @@
                     <tr>
                       <th>Label</th>
                       <td>
-                        <p class="paragraph">
-                          Stress distribution factor (Function) based on Pbtol
-                        </p>
+                        <p class="paragraph">Tolerable stress distribution factor</p>
                       </td>
                     </tr>
                     <tr>
@@ -1895,7 +1893,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol (Unitless)
+                            <em>J<sub>tol</sub></em> is the tolerable stress distribution factor (Unitless)
                           </li>
                           <li>
                             <em>P<sub>btol</sub></em> is the tolerable probability of breakage (Unitless)
@@ -2589,7 +2587,7 @@
                 </tr>
                 <tr>
                   <td><em>J<sub>tol</sub></em></td>
-                  <td>Stress distribution factor (Function) based on Pbtol</td>
+                  <td>Tolerable stress distribution factor</td>
                   <td><a href=#IM:sdfTol>IM:sdfTol</a></td>
                   <td>--</td>
                 </tr>
@@ -2655,7 +2653,7 @@
               <p><div id="reusable">Reusable: The code is modularized.</div></p>
               <p>
                 <div id="maintainable">
-                  Maintainable: The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.
+                  Maintainable: If a likely change is made to the finished software, it will take at most 10<em>%</em> of the original development time, assuming the same development resources are available.
                 </div>
               </p>
               <p>

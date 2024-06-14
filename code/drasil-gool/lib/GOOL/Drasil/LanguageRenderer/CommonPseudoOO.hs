@@ -1,6 +1,6 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
 module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc, 
-  doxClass, doxMod, extVar, classVar, objVarSelf, indexOf, listAddFunc, 
+  doxClass, doxMod, docMod', extVar, classVar, objVarSelf, indexOf, listAddFunc, 
   discardFileLine, intClass, funcType, buildModule, arrayType, pi, printSt, 
   arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction, 
   buildModule', call', listSizeFunc, listAccessFunc', string, constDecDef, 
@@ -8,11 +8,11 @@ module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   destructorError, stateVarDef, constVar, litArray, listSetFunc, extraClass, 
   listAccessFunc, doubleRender, double, openFileR, openFileW, stateVar, self, 
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
-  mainBody, inOutFunc, docInOutFunc', floatRender, float, stringRender', 
+  mainBody, inOutFunc, docInOutFunc', boolRender, bool, floatRender, float, stringRender', 
   string', inherit, implements
 ) where
 
-import Utils.Drasil (indent)
+import Utils.Drasil (indent, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, VSType, 
@@ -45,7 +45,7 @@ import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..),
 import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, 
   on2StateValues, onStateList)
 import GOOL.Drasil.LanguageRenderer (array', new', args, array, listSep, access,
-  mathFunc, FuncDocRenderer, functionDox, classDox, moduleDox, variableList, valueList, intValue)
+  mathFunc, ModuleDocRenderer, FuncDocRenderer, functionDox, classDox, moduleDox, variableList, valueList, intValue)
 import qualified GOOL.Drasil.LanguageRenderer as R (self, self', module', 
   print, stateVar, stateVarList, constDecDef, extVar, listAccessFunc)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
@@ -67,6 +67,7 @@ import qualified Control.Lens as L (set)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
   brackets, braces, colon, vcat, equals)
+import Metadata.Drasil.DrasilMetaCall (watermark)
 
 -- Python, Java, C#, and C++ --
 
@@ -442,3 +443,35 @@ inherit n = toCode $ maybe empty ((colon <+>) . text) n
 
 implements :: (Monad r) => [Label] -> r ParentSpec
 implements is = toCode $ colon <+> text (intercalate listSep is)
+
+-- Swift and Julia --
+boolRender :: String
+boolRender = "Bool"
+
+bool :: (RenderSym r) => VSType r
+bool = typeFromData Boolean boolRender (text boolRender)
+
+docMod' :: (RenderSym r) => String -> String -> [String] -> String -> SFile r -> SFile r
+docMod' = docMod modDoc'
+
+-- | Generates Markdown/DocC style doc comment.  Useful for Swift, which follows
+-- DocC, Julia, which uses Markdown, and any other language that doesn't have
+-- Support for a document generator.
+modDoc' :: ModuleDocRenderer
+modDoc' desc as date m = m : [desc | not (null desc)] ++
+      [docField authorDoc (stringList as) | not (null as)] ++
+      [docField dateDoc date | not (null date)] ++
+      [docField noteDoc watermark]
+
+-- | Creates an arbitrary Markdown/DocC style field for documentation.
+-- Takes two strings, one for the field type ('ty'), and another
+-- for the field documentation ('info')
+docField :: String -> String -> String
+docField ty info = docCommandInit ++ ty ++ docCommandSep ++ info
+
+docCommandInit, docCommandSep, authorDoc, dateDoc, noteDoc :: String
+docCommandInit = "- "
+docCommandSep = ": "
+authorDoc = "Authors"
+dateDoc = "Date"
+noteDoc = "Note"

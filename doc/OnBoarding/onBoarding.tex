@@ -1,0 +1,426 @@
+\documentclass[12pt]{article}
+
+\usepackage[round]{natbib}
+\usepackage{url}
+\usepackage{hyperref}
+
+\hypersetup{
+bookmarks=true,     % show bookmarks bar?
+colorlinks=true,    % false: boxed links; true: colored links
+linkcolor=blue,     % color of internal links (change box color with linkbordercolor)
+citecolor=blue,     % color of links to bibliography
+filecolor=magenta,  % color of file links
+urlcolor=cyan       % color of external links
+}
+
+\usepackage{authblk}
+
+\begin{document}
+
+\title{Drasil Onboarding New Project Members}
+
+\author{Spencer Smith: \href{mailto:smiths@mcmaster.ca}{smiths@mcmaster.ca}}
+\date{\today}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+
+This document describes the onboarding process for new members of the Drasil
+team.  The new members could be summer students, Masters students, PhD students,
+volunteers, etc.  If a contributor is keen to begin, some of these tasks can be
+started before their official start date, although there is no expectation to do
+so.
+
+Below you will find the following: a summary of your work colleagues
+(Section~\ref{SecIntroductions}), practical information for summer research
+assistants (Section~\ref{SecPractInfo}), a summary of the relevant repositories
+(Section~\ref{SecRepos}), a list of initial tasks
+(Section~\ref{SecInitialTasks}), advice from previous contributors
+(Section~\ref{SecAdvice}) and a list of ``to do''s for Drs.\ Carette and Smith
+(Section~\ref{SecToDo}). 
+
+The details of your initial tasks are in Section~\ref{SecInitialTasks}.  The
+first tasks listed are related to GitHub and GitLab access.  As described in
+Section~\ref{SecInitialTasks}, please do the following as your first tasks:
+
+\begin{itemize}
+\item send Drs.\ Carette and Smith your GitHub username
+\item register for GitLab (if you haven't already done so)
+\end{itemize}
+
+The most important getting-started advice is to remind you of the importance of
+communication.  We'll do our best to communicate our requirements and
+expectations.  You should likewise do your best to communicate when you are
+confused, frustrated, bored etc.  Our goal is to keep you busy with a fun and
+rewarding experience.
+
+\section{Introductions} \label{SecIntroductions}
+
+In addition to \href{https://www.cas.mcmaster.ca/~carette/} {Dr.\ Jacques
+Carette} and \href{https://www.cas.mcmaster.ca/~smiths/} {Dr.\ Spencer Smith}
+(smiths@mcmaster.ca), here is a list of the current (as of the date of
+generating this document) members of the Drasil team:
+
+\begin{itemize}
+\item Jason Balaci, PhD candidate
+\item Samuel Crawford, MASc candidate
+\item Jiaming (Levi) Shao, MEng candidate
+\item Mohammad Bilal, Summer research assistant
+\item Noah Cardoso, Summer research assistant
+\item Brandon Bosman, Summer research assistant
+\item Xinlu Yan, Mitacs research assistant (starts July 15, 2024)
+\end{itemize}
+
+\section{Summer Research Assistant Practical Information} \label{SecPractInfo}
+
+\begin{description}
+
+\item [Start date:] Monday, May 6, 2023
+
+\item [End date:] Friday, Aug 23, 2023
+
+\item [Workspace:] ITB/236. You will need a proximity card to access your
+office.  You will need to go to JHE 216A (Engineering Support Services
+(\href{https://www.eng.mcmaster.ca/engineering-support-services-hub/} {The
+Hub})) to get your card.  A deposit is required for the card.  If there are any
+problems, please coordinate with the Departmental Administrator (Ms.\ Laurie
+LeBlanc).  
+
+\item [First day:] Come to ITB/167 to see Dr.\ Smith at 9:30 am.  We won't have
+a meeting at this time, just a brief exchange about the practical details of
+your first day.  You will want to get your access card, claim a spot in your office,
+and begin reviewing these onBoarding instructions.
+
+\item [Working from home:] Once we get our summer work rhythm established, you
+can potentially work from home on some days, but please discuss this with Drs.\
+Carette and Smith.
+
+\item [Hours:] 35 hours per week, 7 hours per day (Monday to Friday) with a
+one-hour unpaid lunch.  You can take a half-hour lunch if you prefer, but a
+lunch break is required. We will maintain a regular work day.  There is some
+flexibility on the start time.  Any time between 8:30 am and 9:30 am is fine.
+In some cases, you may need to alter your work schedule for personal reasons.
+This is fine, but we need to discuss the proposed alternatives.
+
+Please use a spreadsheet to keep track of your hours and the tasks that you
+spend your time on.  For the first week, please e-mail the spreadsheet to Drs.\
+Smith and Carette at the end of each day.  The purpose of communicating this
+information is to help advise and understand; it is not to ``check up on you.''
+
+\item [Overview meeting:] Monday, May 6 at 1:30 pm in ITB/225.  Dr.\ Smith,
+Jason Balaci and Sam Crawford will
+\href{https://github.com/JacquesCarette/Drasil/issues/3715} {present} an
+overview of Drasil's purpose and its implementation.  Dr.\ Carette will attend
+if available.
+
+\item [``All hands'' meetings:] Monday, May 6 at 3:00 pm.
+\href{https://github.com/JacquesCarette/Drasil/issues/3714} {First meeting} of
+the full summer research Drasil team.
+
+\end{description}
+For meetings, we prefer in-person whenever feasible.
+
+\section {Repos} \label{SecRepos}
+
+We use several repos for our work.  They are listed below in roughly in order of
+importance.  In some cases, you will need to create an account or access will
+have to be given.  The specific access-related tasks are given in the next
+section (Section~\ref{SecInitialTasks}).
+
+\subsection{GitHub}
+
+\subsubsection{Drasil}
+\begin{itemize}
+\item \href{https://github.com/JacquesCarette/Drasil} {Drasil Repo}
+\item public repo
+\item the source code and documentation for Drasil
+\item any code or documentation you write on Drasil will be here
+\item you cannot push to ``main''
+\item all contributions will be done through pull requests
+\item this is the repo where you will be doing most of your work
+\item you will need to be added as a contributor (see Section~\ref{SecInitialTasks})
+\end{itemize}
+
+\subsubsection{Drasil Generated Case Studies and Documentation}
+\begin{itemize}
+\item \href{https://jacquescarette.github.io/Drasil/} {Drasil Case Studies and Documentation}
+\item not actually a repo, but generated from Drasil
+\item the automated versions of the Drasil case studies are built frequently and
+pushed to this web-page
+\item the Haskell dependency graphs are also provided here
+\item the \href{https://jacquescarette.github.io/Drasil/docs/index.html}
+{documentation} for Drasil is available
+\item \href{https://jacquescarette.github.io/Drasil/} {package dependency
+graphs} are available at the bottom of this web page
+\end{itemize}
+
+\subsection{GitLab (CAS server)}
+
+\subsubsection{Publications}
+\begin{itemize}
+\item \href{https://gitlab.cas.mcmaster.ca/smiths/pub} {Publications}
+\item private (within CAS) repo
+\item bibliographic information (in BibTeX) for papers and other resources
+relevant to our project
+\item pdf versions of papers that are hard to find online
+\item when you create a bib file, look here (in the \texttt{References.bib}
+file) first to see if the bib data is already available
+\item if you find a new reference, please add it to the References.bib file,
+along with a pdf version, if you don't have a link to an online version
+\item citations should be named using the Author Year style.  For one or two
+authors their last names are listed and then the year.  For more than two
+authors, the
+\href{https://www.mcgill.ca/library/files/library/cse-name-year-citation-style-guide.pdf}
+{first author's last name is listed followed by Et al.}
+\item contributors can push to ``main''
+\item you need to be added as a contributor to this repo
+\end{itemize}
+
+\subsubsection{Software Engineering Course Notes}
+\begin{itemize}
+\item \href{https://gitlab.cas.mcmaster.ca/smiths/se2aa4_cs2me3} {SE2AA4/CS2ME3 Course Notes}
+\item public repo
+\item on some occasions, we may refer to some of the concepts or technology from
+software engineering; this repo might be referenced in those situations
+\item you cannot push, but you can do a pull request, if necessary
+\end{itemize}
+
+\subsubsection{Software Engineering for Science}
+\begin{itemize}
+\item \href{https://gitlab.cas.mcmaster.ca/SEforSC/se4sc} {se4sc repo}
+\item private repo
+\item resources 
+\item grad student and undergrad student work
+\item paper drafts
+\item research proposal drafts
+\item any documents you write that aren't part of Drasil will be put in this repo
+\item contributors can push to ``main''
+\item depending on your work you might not need this resource; we will let you
+know when it is relevant
+\item in case it is relevant, you will be added as a contributor to this repo
+\end{itemize}
+
+\section{Initial Tasks} \label{SecInitialTasks}
+
+If you have questions or challenges while completing the steps below, please
+make a record of your challenge.  We are always working to improve our
+onboarding instructions and contributor's guide.  Please let us know of any
+problems with the documentation so that can address the problem in the future.
+There is a good chance we'll ask you to update the documentation, so the better
+your notes, the easier the task will be.
+
+Once you get settled, you can begin with the tasks listed here.  These tasks
+should be done in roughly the order listed.  Some of the later tasks do not need
+to be done when you start (like learning LaTeX).  They are tasks you can return
+to throughout the summer when you need something to do or when you are feeling
+like a change of pace, or waiting for feedback on your work.
+
+\begin{enumerate} 
+    
+\item Verify you can access all GitLab accounts on the CAS server.  You can
+access GitLab at the \href{https://gitlab.cas.mcmaster.ca/users/sign_in} {sign
+in page}.  For CAS students, you can follow the instructions on the screen to
+create an account, if you haven't already.  For the nonCAS students, we'll work
+on getting you added by asking Derek (Sys Admin for CAS).  Please let Dr.\ Smith
+know if you need us to request an account for you.
+
+\item GitHub account.  If you do not have one, please create one.  Send your
+account username to Dr.\ Smith and Dr.\ Carette.  Verify that you can access all
+of the GitHub repos listed above.
+
+\item Consent to Provide Limited Personal Information about Highly Qualified
+Personnel (HQP) to NSERC.  Dr.\ Smith will send a separate e-mail about this.
+
+\item Connect with Drs.\ Carette and Smith over \href{https://www.linkedin.com/}
+{Linked-In}
+
+\item Familiarize yourself with Drasil, review the quick start guide and set up
+your new Drasil workspace.  The relevant links are as follows:
+
+\begin{itemize}
+
+\item \href{https://github.com/JacquesCarette/Drasil/wiki} {wiki}
+
+\item \href{https://github.com/JacquesCarette/Drasil/wiki#what-is-drasil-cont}
+{wiki - what is Drasil?}
+
+\item \href{https://github.com/JacquesCarette/Drasil#quick-start} {quick start}
+
+\item \href{https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup}
+{new workspace setup}
+
+\end{itemize}
+
+The last link is particularly practical and useful.  You'll want to follow the
+new workspace setup instructions to have a sane build environment.  If you have
+any problems setting up your Drasil workspace, post an issue on GitHub.  The
+issue should include the details of your OS, what you have tried, and any
+relevant screenshots.
+
+\item Learn the basics of git (if you don't already know them).  An overview of
+git can be found from the following resources:
+
+\begin{itemize} \item
+\href{https://mcmasteru365.sharepoint.com/:v:/r/sites/SummerDrasil/Shared\%20Documents/General/Recordings/Git\%20Tutorial-20220912_143247-Meeting\%20Recording.mp4?csf=1&web=1&e=AmDDmv}
+{Capstone tutorial by Sam Crawford on Teams}
+
+\item
+\href{https://gitlab.cas.mcmaster.ca/courses/capstone/-/tree/main/Tutorials/T01_GitGitHub}
+{Capstone Tutorial Info}
+
+\item
+\href{https://gitlab.cas.mcmaster.ca/courses/capstone/-/blob/main/Tutorials/T01_GitGitHub/Git\%20Cheatsheet.pdf}
+{Capstone Cheat Sheet (also by Sam)}
+
+\item
+\href{https://gitlab.cas.mcmaster.ca/smiths/se2aa4_cs2me3/-/tree/master/Tutorials/T01a-VM-VersionControl/slides}
+{2AA4/2ME3 Tutorial}
+
+\item \href{https://github.com/JacquesCarette/Drasil/wiki/Git2Know-for-Drasil}
+{Git2Know for Drasil} 
+\end{itemize}
+
+\item Review the \href{https://github.com/JacquesCarette/Drasil/wiki/Contributor's-Guide} {Contributor's Guide}
+
+Issue tracking is also described in the Contributor's Guide.  Please follow the
+issue tracking guidelines. You should also review the existing issues in Drasil,
+especially those that are currently open.
+
+\item Once you have reviewed the material on git and contributing, please
+complete the
+\href{https://github.com/JacquesCarette/Drasil/blob/main/doc/Contributor's\%20Test/ContributorTest.pdf}
+{Contributor's Test}.  Complete the version without answers and then compare
+your answers to the correct ones.  If you have any questions, please ask.
+
+\item We will be using Haskell this summer.  A good introductory text for
+Haskell is available at \href{https://learnyouahaskell.github.io/} {Learn You a Haskell
+for Great Good}.  You should have installed Haskell as part of the
+\href{https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup} {New
+Workspace Setup}.  Other Haskell resources include:
+
+\begin{itemize}
+\item Coursera course on
+\href{https://www.coursera.org/learn/programming-languages} {Programming
+Languages, Part A} (The course isn't specifically on Haskell, but the languages
+used are similar enough)
+
+\item McMaster Univ
+\href{https://www.youtube.com/watch?v=eGwR_MiIT_A&list=PLknslYp7IpnJYHyJd02cOsp0ZBKxWBXK9}
+{Comp Sci 1JC3 online lectures} 
+
+\item McMaster Univ
+\href{https://www.youtube.com/watch?v=7WxbuAztuFs&list=PLHRF-X-NtQR4MZBvm05NshPIEI8ELID5m}
+{Comp Sci 1JC3 online tutorials} 
+
+\end{itemize}
+
+\item Start working on any issues assigned to you.  We usually start with the
+issues labelled ``newcomers''.  Please do not hesitate to ask for help with (a)
+solving issues (b) finding new issues.  You are also welcome to explore the
+issue tracker to find other issue that interest you.
+
+\item Read and review the following Drasil-related papers.  One paper describes
+the Drasil framework.  Another is a book chapter that gives an overview of
+rational documentation for scientific software.  The final paper provides an
+overview of GOOL (Generic Object Oriented Library).  Well Understood paper.
+
+\begin{itemize}
+
+\item
+\href{https://gitlab.cas.mcmaster.ca/smiths/pub/-/blob/master/SzymczakEtAl2016.pdf}
+{Drasil Position Paper} 
+
+\item \href{https://arxiv.org/abs/2302.00740} {Generating Software for
+Well-Understood Domains}
+
+\item \href{https://arxiv.org/abs/1911.11824} {GOOL paper}, if relevant to
+your work, you can look at the.
+
+\end{itemize}
+
+\item If you are new to software development tools, you will want to review the
+lessons on \href{http://software-carpentry.org/lessons/} {Software Carpentry}.
+In particular, the lessons on the Unix Shell and make would be a good start.
+
+\item Learn basics of LaTeX.  We will be using LaTeX for our written documents.
+You can find an overview in the
+\href{https://gitlab.cas.mcmaster.ca/smiths/se2aa4_cs2me3/-/tree/master/Tutorials\%2FT02a-LaTeX}
+{SE2AA4/CS2MED tutorial}.
+
+\end{enumerate}
+
+\section{Advice from Previous Year's Research Assistants} \label{SecAdvice}
+
+\begin{itemize}
+
+\item ``Don't be afraid to ask questions.''
+
+\item ``You rarely have to implement at a low level, chances are many of the
+things you want to implement have already been implemented (i.e. check existing
+modules and packages there might be similar functions).''
+
+\item
+\href{https://github.com/JacquesCarette/Drasil/wiki/Contributor's-Guide#note-to-future-summer-research-students}
+{Contributor's Guide notes for summer research students}
+
+\end{itemize}
+
+\section{Drs.\ Carette and Smith To Do for New Contributors} \label{SecToDo}
+
+\begin{itemize}
+\item add contributor to Drasil repo (GitHub)
+\item add contributor to se4sc and pub repos (GitLab)
+\item request CAS accounts for non-CAS contributors
+\item add contributor to Discord 
+\item schedule meetings
+\item assign initial Drasil issues
+\item request Consent to Provide Limited Personal Information about Highly
+Qualified Personnel (HQP) to NSERC e-mail
+\item add contributors to Teams (Rsch Stdnt Meeting Team)
+\end{itemize}
+
+\end{document}
+
+**** NOTES ***** 
+
+* Advice from previous summer students *
+
+Things I wish I knew
+
+When I first started Drasil I thought that to use git all I needed to know was
+branching and adding/committing/pushing/pulling. However you actually need to
+know a bit more, things like what is the difference between a remote branch and
+local branch, what is origin, how to reverse commits, what is head, which branch
+are you pulling from when you "git pull". You need to be confident in using the
+command line.
+
+The original book that we read was "Learn you a Haskell," you really do need to
+learn a fair bit conceptually. Sections like the IO section are perhaps not
+important, but having a strong understanding of the concepts (especially monads
+and lensing, and a little bit of states and zoom) is important or you will get
+confused when reading Drasil code. Practice is not as important as you can
+always use those resources as reference. This is because in the issues that I
+have done, it is not the implementation that takes time but rather figuring out
+the code structure and then what to code, so nowadays I just use those resources
+as reference.
+
+Don't be afraid to ask questions
+
+You rarely have to implement at a low level, chances are many of the things you
+want to implement have already been implemented (i.e. check existing modules and
+packages there might be similar functions).
+
+*******
+
+- ask Laurie to book a room - room 236.  You will need a prox card to access
+your office.  This can be picked up from Engineering Support Services (The Hub)
+(http://www.eng.mcmaster.ca/services.html).  A deposit is required for the card.
+
+on-going meeting.  In addition, for at least the first two weeks of the summer
+you will have a meeting each morning (likely at 9:30 am) with Dan in your office
+(ITB/134).  The purpose of this meeting is to ensure you on track each day.
+
+\end{document}

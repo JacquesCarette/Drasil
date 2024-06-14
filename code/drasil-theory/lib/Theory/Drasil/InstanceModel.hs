@@ -51,7 +51,7 @@ instance ConceptDomain      InstanceModel where cdom = cdom . (^. mk)
 -- | Converts the 'InstanceModel's related expression into the display language.
 instance Express            InstanceModel where express = express . (^. mk)
 -- | Finds the derivation of the 'InstanceModel'. May contain Nothing.
-instance HasDerivation      InstanceModel where derivations = deri
+instance MayHaveDerivation  InstanceModel where derivations = deri
 {--- | Finds 'Reference's contained in the 'InstanceModel'.
 instance HasReference       InstanceModel where getReferences = rf-}
 -- | Finds 'DecRef's contained in the 'InstanceModel'.

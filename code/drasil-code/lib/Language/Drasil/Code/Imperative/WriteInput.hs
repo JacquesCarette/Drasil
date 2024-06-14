@@ -8,7 +8,7 @@ import Language.Drasil hiding (space, Matrix)
 import Language.Drasil.Code.DataDesc (DataDesc, Data(..), Delim,
   LinePattern(..), getDataInputs, isJunk)
 import Language.Drasil.Expr.Development (Expr(Matrix))
-import Language.Drasil.Printers (Linearity(Linear), exprDoc, sentenceDoc,
+import Language.Drasil.Printers (SingleLine(OneLine), exprDoc, sentenceDoc,
   unitDoc)
 
 import Control.Lens (view)
@@ -89,14 +89,14 @@ getMtxLists :: Expr -> [[Expr]]
 getMtxLists (Matrix l) = l
 getMtxLists _ = error "makeInputFile encountered unexpected type, expected matrix"
 
--- | Creates a 'Linear' 'Implementation'-stage 'sentenceDoc'.
+-- | Creates a 'OneLine' 'Implementation'-stage 'sentenceDoc'.
 sDoc :: ChunkDB -> Sentence -> Doc
-sDoc db = sentenceDoc db Implementation Linear
+sDoc db = sentenceDoc db Implementation OneLine
 
--- | Creates a 'Linear' 'Implementation'-stage 'exprDoc'.
+-- | Creates a 'OneLine' 'Implementation'-stage 'exprDoc'.
 eDoc :: ChunkDB -> Expr -> Doc
-eDoc db = exprDoc db Implementation Linear
+eDoc db = exprDoc db Implementation OneLine
 
--- | Creates a 'Linear' 'unitDoc'.
+-- | Creates a 'OneLine' 'unitDoc'.
 uDoc :: USymb -> Doc
-uDoc = unitDoc Linear
+uDoc = unitDoc OneLine

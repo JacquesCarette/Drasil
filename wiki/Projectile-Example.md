@@ -2,7 +2,7 @@ This wiki page is for keeping track of progress on the Projectile example, as we
 
 # SRS
 
-_Sam:_ I managed to create a [blank SRS template](https://github.com/JacquesCarette/Drasil/blob/master/code/drasil-example/Drasil/Template/Body.hs) that will be useful in the future for generating new documents/examples. I started a rough copy of the SSD in [this PR](https://github.com/JacquesCarette/Drasil/pull/1405).
+_Sam:_ I managed to create a [blank SRS template](https://github.com/JacquesCarette/Drasil/blob/main/code/drasil-example/Drasil/Template/Body.hs) that will be useful in the future for generating new documents/examples. I started a rough copy of the SSD in [this PR](https://github.com/JacquesCarette/Drasil/pull/1405).
 
 The following four "chunks of information" can reference each other according to this graph:
 
@@ -60,4 +60,4 @@ When adding the DDs, the list of concepts (ie. angle of projectile) for them had
 
 # Code
 
-_Sam:_ I used the generated source code for GlassBR as a guide and made (working?) code for Projectile (found in the [src/](https://github.com/JacquesCarette/Drasil/tree/master/code/drasil-example/Drasil/Projectile/src) folder in Projectile) with (manual) test cases.
+_Sam:_ I used the generated source code for GlassBR as a guide and made (working?) code for Projectile (found in the [src/](https://github.com/JacquesCarette/Drasil/tree/main/code/drasil-example/Drasil/Projectile/src) folder in Projectile) with (manual) test cases.

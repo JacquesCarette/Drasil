@@ -27,8 +27,8 @@ jobs:
 
       - name: "No manually added disclaimers"
         run: |
-          html='Warning: Wiki should not be edited directly'
-          bad_files=$(grep -rl "$html" wiki || true)
+          notice='Warning: Wiki should not be edited directly'
+          bad_files=$(grep -rl "$notice" wiki || true)
           if [ -n "$bad_files" ]; then
             echo "Edit disclaimers are automatically prepended. Please remove those manually added. Bad files:"
             echo "$bad_files"

@@ -91,7 +91,7 @@ aspRat = ddE aspRatQD [dRef astm2009] Nothing "aspectRatio" [aGrtrThanB]
 {--}
 
 eqTNTWEq :: Expr
-eqTNTWEq = ($*) (sy charWeight) (sy tNT)
+eqTNTWEq = sy charWeight $* sy tNT
 
 eqTNTWQD :: SimpleQDef
 eqTNTWQD = mkQuantDef eqTNTWeight eqTNTWEq

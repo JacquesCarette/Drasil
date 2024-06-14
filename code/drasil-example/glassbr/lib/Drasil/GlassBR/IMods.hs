@@ -58,7 +58,7 @@ risk = imNoDeriv (equationalModelN (riskFun ^. term) riskQD)
 -- FIXME [4] !!!
 riskQD :: SimpleQDef
 riskQD = mkQuantDef riskFun ((sy sflawParamK $/
-  (($*) (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- exactDbl 1))) $* 
+  ((sy plateLen) $* (sy plateWidth) $^ (sy sflawParamM $- exactDbl 1))) $* 
   ((sy modElas $* square (sy minThick)) $^ sy sflawParamM) $* sy lDurFac $* exp (sy stressDistFac))
 
 {--}
@@ -87,8 +87,8 @@ nonFL = imNoDeriv (equationalModelN (nonFactorL ^. term) nonFLQD)
   [qHtTlTolRef, stdVals [modElas], hRef, aGrtrThanB]
 
 nonFLEq :: Expr
-nonFLEq = ($*) (($*) (sy tolLoad) (sy modElas)) (sy minThick $^ exactDbl 4) $/
-  square (($*) (sy plateLen) (sy plateWidth))
+nonFLEq = ((sy tolLoad) $* (sy modElas)) $* (sy minThick $^ exactDbl 4) $/
+  square ((sy plateLen) $* (sy plateWidth))
 
 nonFLQD :: SimpleQDef
 nonFLQD = mkQuantDef nonFactorL nonFLEq
@@ -102,8 +102,8 @@ dimLL = imNoDeriv (equationalModelN (dimlessLoad ^. term) dimLLQD)
   "dimlessLoad" [qRef, aGrtrThanB, stdVals [modElas], hRef, gtfRef]
 
 dimLLEq :: Expr
-dimLLEq = ($*) (sy demand) (square (($*) (sy plateLen) (sy plateWidth)))
-  $/ ($*) (($*) (sy modElas) (sy minThick $^ exactDbl 4)) (sy gTF)
+dimLLEq = sy demand $* (square ((sy plateLen) $* (sy plateWidth)))
+  $/ ((sy modElas) $* (sy minThick $^ exactDbl 4)) $* (sy gTF)
 
 dimLLQD :: SimpleQDef
 dimLLQD = mkQuantDef dimlessLoad dimLLEq

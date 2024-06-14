@@ -407,7 +407,7 @@ instance GetSet PythonCode where
   set = G.set
 
 instance List PythonCode where
-  listSize = on2StateWrapped(\f v-> mkVal (functionType f) 
+  listSize = on2StateWrapped (\f v -> mkVal (functionType f) 
     (pyListSize (RC.value v) (RC.function f))) listSizeFunc
   listAdd = G.listAdd
   listAppend = G.listAppend

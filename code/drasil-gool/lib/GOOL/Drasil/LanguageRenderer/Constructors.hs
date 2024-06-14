@@ -210,7 +210,7 @@ exprRender' f b' v1' v2' = do
   toState $ f b v1 v2
 
 mkExpr :: (RenderSym r) => Int -> r (Type r) -> Doc -> SValue r
-mkExpr p t= valFromData (Just p) (toState t)
+mkExpr p t = valFromData (Just p) (toState t)
 
 binOpDocDRend :: (RenderSym r) => r (BinaryOp r) -> r (Value r) -> 
   r (Value r) -> Doc

@@ -50,14 +50,15 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStateVal, mkStateVar, VSOp,
   unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
   typeBinExpr, mkStmtNoEnd, mkVal)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  block, listInnerType, obj, litChar, litDouble, litInt, litString, valueOf,
-  negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp,
-  plusOp, minusOp, multOp, divideOp, moduloOp, var, call, funcAppMixedArgs,
-  objMethodCall, lambda, modFromData, fileDoc, fileFromData, csc, multiBody,
-  sec, cot, stmt, loopStmt, emptyStmt, assign, increment, subAssign, print,
-  comment, valStmt, listAccess, func, objAccess, listSet, docClass, function,
-  commentedClass, buildClass, method, getMethod, setMethod, returnStmt, objVar,
-  construct, param, defaultOptSpace, ifCond, initStmts, docFunc, newObjMixedArgs)
+  block, multiBlock, listInnerType, obj, litChar, litDouble, litInt, litString, 
+  valueOf, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
+  lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, call, 
+  funcAppMixedArgs, objMethodCall, lambda, modFromData, fileDoc, fileFromData, 
+  csc, multiBody, sec, cot, stmt, loopStmt, emptyStmt, assign, increment, 
+  subAssign, print, comment, valStmt, listAccess, func, objAccess, listSet, 
+  docClass, function, commentedClass, buildClass, method, getMethod, setMethod, 
+  returnStmt, objVar, construct, param, defaultOptSpace, ifCond, initStmts, 
+  docFunc, newObjMixedArgs)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (string',
   bool, funcType, buildModule, docMod', litArray, listDec, listDecDef, mainBody,
   listAccessFunc, listSetFunc, intClass, bindingError, extraClass, doxFunc,
@@ -163,7 +164,7 @@ instance BlockSym JuliaCode where
   block = G.block
 
 instance RenderBlock JuliaCode where
-  multiBlock = undefined
+  multiBlock = G.multiBlock
 
 instance BlockElim JuliaCode where
   block = unJLC
@@ -677,9 +678,10 @@ instance ModuleSym JuliaCode where
       vcat (map (RC.import' . li) (sort $ is ++ libis)),
       vcat (map (RC.import' . mi) mis),
       vcat (map usingModule us)])
-      (pure empty) (do
-        mainDoc <- getMainDoc
-        return $ vcat [mainDoc, blank, jlEnd])
+    (pure empty) (do
+      mainDoc <- getMainDoc
+      let whiteSpace = emptyIfEmpty mainDoc blank
+      return $ vcat [mainDoc, whiteSpace, jlEnd])
     where mi, li :: Label -> JuliaCode (Import JuliaCode)
           mi = modImport
           li = langImport

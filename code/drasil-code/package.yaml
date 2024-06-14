@@ -105,6 +105,7 @@ executables:
     - NameGenTest
     - SuperSimple
     - SimpleClass
+    - SimpleLib
     ghc-options:
     - -threaded
     - -O2

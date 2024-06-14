@@ -234,10 +234,11 @@ class (MethodTypeSym r, BlockCommentSym r) =>
   --   return type, parameters, body
   intMethod     :: Bool -> Label -> r (Scope r) -> r (Permanence r) -> 
     MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
-  -- | Main function?, name, public/private, static/dynamic, 
+  -- | True for main function, name, public/private, static/dynamic, 
   --   return type, parameters, body
   intFunc       :: Bool -> Label -> r (Scope r) -> r (Permanence r) 
     -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
+  -- | Takes a BlockComment and a method and generates a function.
   commentedFunc :: MS (r (BlockComment r)) -> SMethod r -> SMethod r
     
   destructor :: [CSStateVar r] -> SMethod r
@@ -274,6 +275,7 @@ class ModuleElim r where
 class BlockCommentSym r where
   type BlockComment r
   blockComment :: [String] -> r (BlockComment r)
+  -- | Converts a list of strings into a block comment
   docComment :: State a [String] -> State a (r (BlockComment r))
 
 class BlockCommentElim r where

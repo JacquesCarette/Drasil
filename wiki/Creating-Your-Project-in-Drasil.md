@@ -48,7 +48,7 @@
 ## Getting Started: 
 
 - Instructions on how to build a virtual machine for [Linux on Windows](https://docs.microsoft.com/en-us/windows/wsl/install-win10) (optional)
-- Instructions on how to fork the Drasil repo and enable [continuous integration](https://gitlab.cas.mcmaster.ca/smiths/cas741/-/tree/master/Tools/VM_Instructions). This is required to create your project in Drasil. Also check out this [pull request](https://github.com/JacquesCarette/Drasil/pull/2461) for more information on setting up your own bot for GitHub Actions.
+- Instructions on how to fork the Drasil repo and enable [continuous integration](https://gitlab.cas.mcmaster.ca/smiths/cas741/-/tree/main/Tools/VM_Instructions). This is required to create your project in Drasil. Also check out this [pull request](https://github.com/JacquesCarette/Drasil/pull/2461) for more information on setting up your own bot for GitHub Actions.
 - [Setting up your workspace](https://github.com/JacquesCarette/Drasil/wiki/New-Workspace-Setup)
 
 ## Sub-packages in Drasil:
@@ -307,7 +307,7 @@ mkSRS = [
 ```
 You must also `import Data.Drasil.Concepts.Documentation as Doc (doccon, doccon')` at the top of `Body.hs`.
 
-symbMap maps references the the chunk database. Please review the [GlassBR](https://github.com/JacquesCarette/Drasil/blob/master/code/drasil-example/glassbr/lib/Drasil/GlassBR/Body.hs), [NoPCM](https://github.com/JacquesCarette/Drasil/blob/master/code/drasil-example/nopcm/lib/Drasil/NoPCM/Body.hs), and [Projectile](https://github.com/JacquesCarette/Drasil/blob/master/code/drasil-example/projectile/lib/Drasil/Projectile/Body.hs) examples to understand how to populate it.   
+symbMap maps references the the chunk database. Please review the [GlassBR](https://github.com/JacquesCarette/Drasil/blob/main/code/drasil-example/glassbr/lib/Drasil/GlassBR/Body.hs), [NoPCM](https://github.com/JacquesCarette/Drasil/blob/main/code/drasil-example/nopcm/lib/Drasil/NoPCM/Body.hs), and [Projectile](https://github.com/JacquesCarette/Drasil/blob/main/code/drasil-example/projectile/lib/Drasil/Projectile/Body.hs) examples to understand how to populate it.   
 
 8. You may choose to build your program every so often to keep track of errors easily.
 
@@ -714,7 +714,7 @@ correctDesc, portableDesc :: Sentence
 
 ## Adding Likely and Unlikely Changes Section
 
-Please review [PDController's Body.hs](https://github.com/JacquesCarette/Drasil/blob/master/code/drasil-example/pdcontroller/lib/Drasil/PDController/Body.hs) to see an example of this section.
+Please review [PDController's Body.hs](https://github.com/JacquesCarette/Drasil/blob/main/code/drasil-example/pdcontroller/lib/Drasil/PDController/Body.hs) to see an example of this section.
 
 1. Follow above similar steps to add likely and unlikely changes sections where applicable. See sample below.
 2. Add all the required imports.
@@ -728,7 +728,7 @@ Please review [PDController's Body.hs](https://github.com/JacquesCarette/Drasil/
 
 ## Adding Other Sections
 
-Please review [GamePhysics' Body.hs](https://github.com/JacquesCarette/Drasil/blob/master/code/drasil-example/gamephysics/lib/Drasil/GamePhysics/Body.hs) to see an example of this section.
+Please review [GamePhysics' Body.hs](https://github.com/JacquesCarette/Drasil/blob/main/code/drasil-example/gamephysics/lib/Drasil/GamePhysics/Body.hs) to see an example of this section.
 
 1. You can add other sections not included explicitly in this manual into your SRS body. For example, to add an "Off the Shelf Solution" section use:
 ```Haskell

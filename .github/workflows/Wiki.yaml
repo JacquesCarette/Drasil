@@ -1,10 +1,10 @@
 name: Wiki
 on:
   push:
-    branches: [master]
+    branches: [main]
     paths: [wiki/**, .github/workflows/Wiki.yaml]
   pull_request:
-    branches: [master]
+    branches: [main]
     paths: [wiki/**, .github/workflows/Wiki.yaml]
 permissions:
   contents: write
@@ -20,14 +20,14 @@ jobs:
 
       - name: "No new directories in ./wiki/"
         run: |
-          if git diff --name-only --diff-filter=A origin/master... | grep -q '^wiki/.*/'; then
+          if git diff --name-only --diff-filter=A origin/main... | grep -q '^wiki/.*/'; then
             echo "New directory detected in wiki folder. This is not allowed."
             exit 1
           fi
 
       - name: "No manually added disclaimers"
         run: |
-          html='<i>Warning for Drasil Authors: This wiki should not be edited through the web GUI.'
+          html='Warning: Wiki should not be edited directly'
           bad_files=$(grep -rl "$html" wiki || true)
           if [ -n "$bad_files" ]; then
             echo "Edit disclaimers are automatically prepended. Please remove those manually added. Bad files:"
@@ -47,7 +47,7 @@ jobs:
   wiki:
     name: "Publish changes"
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
         with: # Fetch enough history to resolve HEAD^ -- https://github.com/actions/checkout?tab=readme-ov-file#checkout-head
@@ -60,10 +60,10 @@ jobs:
 
       - name: "Prepend wiki edit warnings"
         run: |
-          html='<small><i>Warning for Drasil Authors: This wiki should not be edited through the web GUI. Please use the wiki/ folder in the repository and follow the normal commit-PR workflow.</i></small>'
+          notice='_Warning: Wiki should not be edited directly. Edit the files in the ./wiki/ folder instead and make a PR._'
           for file in wiki/*.md; do
             [ "$(basename "$file")" = "_Sidebar.md" ] && continue
-            sed -i '1s|^|'"$html"'\n\n|' "$file"
+            sed -i '1s|^|'"$notice"'\n\n|' "$file"
           done
 
       - name: "Clone .wiki repository"

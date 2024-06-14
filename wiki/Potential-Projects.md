@@ -332,7 +332,7 @@ Here are some good checklists to start with, in rough order of preference:
 
 We also have a list of more [checklists](https://gitlab.cas.mcmaster.ca/SEforSC/se4sc/-/wikis/Advice-and-Checklists-for-Repos-(including-a-list-of-recommended-artifacts)).
 
-The common artifacts recommended by the different software development guidelines are summarized in Table 3 of the "[Digging Deeper](https://github.com/smiths/AIMSS/blob/master/StateOfPractice/Papers/ICCS-2022-SOP_MethodologyPlusExamples/DigDeep.pdf)" paper.
+The common artifacts recommended by the different software development guidelines are summarized in Table 3 of the "[Digging Deeper](https://github.com/smiths/AIMSS/blob/main/StateOfPractice/Papers/ICCS-2022-SOP_MethodologyPlusExamples/DigDeep.pdf)" paper.
 
 This project can be split into sub-projects:
 

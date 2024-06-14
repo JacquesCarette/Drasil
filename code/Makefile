@@ -12,11 +12,9 @@ PACKAGES_E = $(PACKAGES) example
 
 # and associated package-level suffixes
 BUILD_P_SUFFIX = _build
-DOC_P_SUFFIX = _doc
 GRAPH_P_SUFFIX = _graph
 
 BUILD_PACKAGES = $(addsuffix $(BUILD_P_SUFFIX), $(PACKAGES))
-DOC_PACKAGES = $(addsuffix $(DOC_P_SUFFIX), $(PACKAGES))
 GRAPH_PACKAGES = $(addsuffix $(GRAPH_P_SUFFIX), $(PACKAGES_E)) 
 ANALYSIS_PACKAGES = drasil $(PACKAGES_E)
 
@@ -522,7 +520,6 @@ help:  ##@Help Show this help.
 	@perl -e '$(HELP_FUN)' $(MAKEFILE_LIST)
 	@echo "Build-specific targets where X is a drasil package name. Run \"make help_packages\" to see a list of possible packages:"
 	@echo "  X$(BUILD_P_SUFFIX)             Builds a given \"drasil-\" package."
-	@echo "  X$(DOC_P_SUFFIX)               Currently unused."
 	@echo "  X$(GRAPH_P_SUFFIX)             Creates a package dependency graph."
 	@echo ""
 	@echo "Example-specific targets where X is the example. Run \"make help_examples\" to see a list of possible examples:"

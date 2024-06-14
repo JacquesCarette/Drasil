@@ -6,11 +6,11 @@ module Language.Drasil.Code.Imperative.Parameters(getInConstructorParams,
 import Language.Drasil hiding (isIn, Var)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
 import Language.Drasil.Chunk.CodeBase
-import Language.Drasil.Choices (Structure(..), InputModule(..),
-  ConstantStructure(..), ConstantRepr(..), InternalConcept(..))
+import Language.Drasil.Choices (Structure(..), ConstantStructure(..), 
+  ConstantRepr(..), InternalConcept(..))
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
-import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  inMod, genICName)
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
+  genICName)
 import Language.Drasil.CodeSpec (CodeSpec(..), constraintvars, getConstraints)
 import Language.Drasil.Mod (Name)
 
@@ -45,18 +45,11 @@ getInConstructorParams = do
   ps <- getParams ipName In $ getCParams (ipName `elem` defList g)
   return $ filter ((Just ipName /=) . flip Map.lookup (clsMap g) . codeName) ps
 
--- | The inputs to the function for reading inputs are the input file name, and
--- the 'inParams' object if inputs are bundled and input components are separated.
--- The latter is needed because we want to populate the object through state
--- transitions, not by returning it.
+-- | The inputs to the function for reading inputs are the input file name.
 getInputFormatIns :: GenState [CodeVarChunk]
 getInputFormatIns = do
-  g <- get
-  let getIns :: Structure -> InputModule -> [CodeVarChunk]
-      getIns Bundled Separated = [quantvar inParams]
-      getIns _ _ = []
   giName <- genICName GetInput
-  getParams giName In $ quantvar inFileName : getIns (inStruct g) (inMod g)
+  getParams giName In [quantvar inFileName]
 
 -- | The outputs from the function for reading inputs are the inputs.
 getInputFormatOuts :: GenState [CodeVarChunk]

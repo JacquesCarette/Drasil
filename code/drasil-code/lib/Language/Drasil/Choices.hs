@@ -3,7 +3,7 @@ module Language.Drasil.Choices (
   Choices(..), Architecture (..), makeArchit, DataInfo(..), makeData, Maps(..),
   makeMaps, spaceToCodeType, Constraints(..), makeConstraints, ODE(..), makeODE,
   DocConfig(..), makeDocConfig, LogConfig(..), makeLogConfig, OptionalFeatures(..),
-  makeOptFeats, ExtLib(..), Modularity(..), InputModule(..), inputModule, Structure(..),
+  makeOptFeats, ExtLib(..), Modularity(..), Structure(..),
   ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap,
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..),
@@ -66,27 +66,14 @@ makeArchit :: Modularity -> ImplementationType -> Architecture
 makeArchit = Archt
 
 -- | Modularity of a program.
-data Modularity = Modular InputModule -- ^ Different modules. For controller,
-                                      -- input, calculations, output.
+data Modularity = Modular   -- ^ Different modules. For controller,
+                              -- input, calculations, output.
                 | Unmodular -- ^ All generated code is in one module/file.
 
 -- | Renders the modularity of a program.
 instance RenderChoices Modularity where
   showChs Unmodular = S "Unmodular"
-  showChs (Modular Combined) = S "Modular Combined"
-  showChs (Modular Separated)= S "Modular Separated"
-
--- | Options for input modules.
-data InputModule = Combined -- ^ Input-related functions combined in one module.
-                 | Separated -- ^ Input-related functions each in own module.
-
--- | Determines whether there is a 'Combined' input module or many 'Separated' input
--- modules, based on a 'Choices' structure. An 'Unmodular' design implicitly means
--- that input modules are 'Combined'.
-inputModule :: Choices -> InputModule
-inputModule c = inputModule' $ modularity $ architecture c
-  where inputModule' Unmodular = Combined
-        inputModule' (Modular im) = im
+  showChs Modular = S "Modular"
 
 -- | Program implementation options.
 data ImplementationType = Library -- ^ Generated code does not include Controller.
@@ -335,7 +322,7 @@ makeODE = ODE
 defaultChoices :: Choices
 defaultChoices = Choices {
   lang = [Python],
-  architecture = makeArchit (Modular Combined) Program,
+  architecture = makeArchit Modular Program,
   dataInfo = makeData Bundled Inline Const,
   maps = makeMaps
     (matchConcepts ([] :: [(SimpleQDef, [CodeConcept])]))

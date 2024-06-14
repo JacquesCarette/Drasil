@@ -11,10 +11,10 @@ import Utils.Drasil (stringList)
 
 import Language.Drasil
 import Language.Drasil.Chunk.CodeBase
-import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  inMod, genICName)
-import Language.Drasil.Choices (ImplementationType(..), InputModule(..),
-  Structure(..), InternalConcept(..))
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
+  genICName)
+import Language.Drasil.Choices (ImplementationType(..), Structure(..), 
+  InternalConcept(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Mod (Description)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
@@ -43,24 +43,20 @@ unmodularDesc = do
     foldlSent ([S "a", S (implTypeStr (implType g)), S "to"] ++ purpose spec)
 
 -- | Returns description of what is contained in the Input Parameters module.
--- If user chooses the 'Bundled' input parameter, this module will include the
--- structure for holding the input values. Does not include the structure if
--- they choose 'Unbundled'. If the user chooses the 'Combined' input parameter,
--- this module includes the input-related functions.
--- Does not inlcude those functions if they choose 'Separated'.
+-- If user chooses the 'Bundled' input parameter, this module will include the structure for holding the
+-- input values. Does not include the structure if they choose 'Unbundled'.
+-- This module includes the input-related functions.
 inputParametersDesc :: GenState [Description]
 inputParametersDesc = do
   g <- get
   ifDesc <- inputFormatDesc
   dvDesc <- derivedValuesDesc
   icDesc <- inputConstraintsDesc
-  let im = inMod g
-      st = inStruct g
-      ipDesc Separated = inDesc st
-      ipDesc Combined = inDesc st ++ [ifDesc, dvDesc, icDesc]
+  let st = inStruct g
+      ipDesc = inDesc st ++ [ifDesc, dvDesc, icDesc]
       inDesc Bundled = ["the structure for holding input values"]
       inDesc Unbundled = [""]
-  return $ ipDesc im
+  return ipDesc
 
 -- | Returns a description of the input constructor, checking whether each
 -- possible method that may be called by the constructor is defined, and

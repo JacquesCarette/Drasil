@@ -1,5 +1,5 @@
 module Language.Drasil.Code.Imperative.Modules (
-  genMain, genMainFunc, chooseInModule, genInputClass, genInputDerived,
+  genMain, genMainFunc, genInputClass, genInputDerived, genInputMod,
   genInputConstraints, genInputFormat, genConstMod, genConstClass, genCalcMod,
   genCalcFunc, genOutputMod, genOutputFormat, genSampleInput
 ) where
@@ -10,9 +10,9 @@ import Database.Drasil (ChunkDB)
 import Language.Drasil.CodeExpr.Development
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.Descriptions (constClassDesc,
-  constModDesc, derivedValuesDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc,
-  inputClassDesc, inputConstraintsDesc, inputConstructorDesc, inputFormatDesc,
-  inputParametersDesc, modDesc, outputFormatDesc, woFuncDesc, calcModDesc)
+  constModDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, inputClassDesc,
+  inputConstructorDesc, inputParametersDesc, modDesc, outputFormatDesc,
+  woFuncDesc, calcModDesc)
 import Language.Drasil.Code.Imperative.FunctionCalls (genCalcCall,
   genAllInputCalls, genOutputCall)
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), genModule,
@@ -38,9 +38,8 @@ import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.Code.ExtLibImport (defs, imports, steps)
 import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
-  ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..),
-  InputModule(..), Logging(..), Structure(..), hasSampleInput,
-  InternalConcept(..))
+  ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..), 
+  Logging(..), Structure(..), hasSampleInput, InternalConcept(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
 import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc)
@@ -173,33 +172,9 @@ initLogFileVar l = [varDec varLogFile | LogVar `elem` l]
 
 ------- INPUT ----------
 
--- | Generates either a single module containing all input-related components, or
--- separate modules for each input-related component, depending on the user's
--- modularity choice.
-chooseInModule :: (OOProg r) => InputModule -> GenState [SFile r]
-chooseInModule Combined = genInputModCombined
-chooseInModule Separated = genInputModSeparated
-
--- | Generates separate modules for each input-related component.
-genInputModSeparated :: (OOProg r) => GenState [SFile r]
-genInputModSeparated = do
-  ipDesc <- modDesc inputParametersDesc
-  ifDesc <- modDesc (liftS inputFormatDesc)
-  dvDesc <- modDesc (liftS derivedValuesDesc)
-  icDesc <- modDesc (liftS inputConstraintsDesc)
-  ipName <- genICName InputParameters
-  ifName <- genICName InputFormat
-  dvName <- genICName DerivedValuesMod
-  icName <- genICName InputConstraintsMod
-  sequence
-    [genModule ipName ipDesc [] [genInputClass Primary],
-    genModule ifName ifDesc [genInputFormat Pub] [],
-    genModule dvName dvDesc [genInputDerived Pub] [],
-    genModule icName icDesc [genInputConstraints Pub] []]
-
 -- | Generates a single module containing all input-related components.
-genInputModCombined :: (OOProg r) => GenState [SFile r]
-genInputModCombined = do
+genInputMod :: (OOProg r) => GenState [SFile r]
+genInputMod = do
   ipDesc <- modDesc inputParametersDesc
   cname <- genICName InputParameters
   let genMod :: (OOProg r) => Maybe (SClass r) ->

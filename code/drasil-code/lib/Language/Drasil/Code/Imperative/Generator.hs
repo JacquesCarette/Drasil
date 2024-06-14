@@ -13,12 +13,12 @@ import Language.Drasil.Code.Imperative.GenODE (chooseODELib)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
 import Language.Drasil.Code.Imperative.Import (genModDef, genModFuncs,
   genModClasses)
-import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstClass,
+import Language.Drasil.Code.Imperative.Modules (genInputMod, genConstClass,
   genConstMod, genInputClass, genInputConstraints, genInputDerived,
   genInputFormat, genMain, genMainFunc, genCalcMod, genCalcFunc,
   genOutputFormat, genOutputMod, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  designLog, inMod, modExportMap, clsDefMap, genICName)
+  designLog, modExportMap, clsDefMap, genICName)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
   PackageSym(..), AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
@@ -172,7 +172,7 @@ genProgram = do
 -- of modularity.
 chooseModules :: (OOProg r) => Modularity -> GenState [SFile r]
 chooseModules Unmodular = liftS genUnmodular
-chooseModules (Modular _) = genModules
+chooseModules Modular = genModules
 
 -- | Generates an entire SCS program as a single module.
 genUnmodular :: (OOProg r) => GenState (SFile r)
@@ -198,7 +198,7 @@ genModules :: (OOProg r) => GenState [SFile r]
 genModules = do
   g <- get
   mn     <- genMain
-  inp    <- chooseInModule $ inMod g
+  inp    <- genInputMod
   con    <- genConstMod
   cal    <- genCalcMod
   out    <- genOutputMod

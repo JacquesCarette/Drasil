@@ -10,7 +10,7 @@ Given that we may expand Drasil in the future so that it can generate org mode f
 
 [Musas: A Life Configuring Emacs](https://alhassy.github.io/emacs.d/)
 
-[Elisp Cheat Sheet](https://github.com/alhassy/ElispCheatSheet/blob/master/CheatSheet.pdf)
+[Elisp Cheat Sheet](https://github.com/alhassy/ElispCheatSheet/blob/main/CheatSheet.pdf)
 
 
 ## Org Mode links
@@ -31,7 +31,7 @@ Given that we may expand Drasil in the future so that it can generate org mode f
 
 ## Projectile example
 
-To learn org mode, and to provide an illustrative example, the [Jupyter Notebook version](https://github.com/smiths/caseStudies/blob/master/CaseStudies/projectile/projectileLesson/ProjectileLesson.ipynb) of the projectile motion lesson has been converted into an [org mode version](https://github.com/smiths/caseStudies/blob/master/CaseStudies/projectile/projectileLesson/orgModeVersion/projMotLesson.org).
+To learn org mode, and to provide an illustrative example, the [Jupyter Notebook version](https://github.com/smiths/caseStudies/blob/main/CaseStudies/projectile/projectileLesson/ProjectileLesson.ipynb) of the projectile motion lesson has been converted into an [org mode version](https://github.com/smiths/caseStudies/blob/main/CaseStudies/projectile/projectileLesson/orgModeVersion/projMotLesson.org).
 
 ## Technical Notes
 

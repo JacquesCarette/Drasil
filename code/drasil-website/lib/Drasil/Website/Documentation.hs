@@ -19,7 +19,7 @@ haddockDocsTitle = S "Haddock Documentation"
 
 -- | Body paragraph that directs users to the Haddock documentation and a variant with fully exposed modules.
 haddockDocsDesc :: FilePath -> Sentence
-haddockDocsDesc path = S "Drasil's framework is primarily written in Haskell, \
+haddockDocsDesc path = S "Drasil's framework is primariliy written in Haskell, \
   \so we use Haddock to document our code. The following link will take you \
   \to the current" +:+ namedRef (docsRef path) (S "Haddock documentation") 
   +:+ S "for the Drasil framework. A variant with"

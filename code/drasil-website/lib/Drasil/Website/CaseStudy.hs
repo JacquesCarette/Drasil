@@ -31,7 +31,7 @@ caseStudiesDesc = "Drasil allows some design decisions to be made by the user wh
   \study, followed by a guide giving the meaning of the short-forms used in the \
   \table:"
 -- | Introduce the Case Study Table Legend as a list.
-legendIntro = "The legend for the Case Studies Table is listed below according to the column header:"
+legendIntro = "The legend for the Case Studies Table is listed below according to column header:"
 
 -- | Creates the Case Study Table
 mkCaseTable :: RawContent

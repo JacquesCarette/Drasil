@@ -7,7 +7,7 @@ module GOOL.Drasil.LanguageRenderer.SwiftRenderer (
   SwiftCode(..), swiftName, swiftVersion
 ) where
 
-import Utils.Drasil (indent, stringList)
+import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable, 
@@ -46,7 +46,7 @@ import GOOL.Drasil.LanguageRenderer (dot, blockCmtStart, blockCmtEnd,
   docCmtStart, bodyStart, bodyEnd, commentStart, elseIfLabel, forLabel, 
   inLabel, tryLabel, catchLabel, throwLabel, throwsLabel, importLabel, listSep',
   printLabel, listSep, piLabel, access, tuple, FuncDocRenderer, 
-  ClassDocRenderer, ModuleDocRenderer, parameterList)
+  ClassDocRenderer, parameterList)
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp, 
   sin, cos, tan, asin, acos, atan, floor, ceil, pow, class', multiStmt, body, 
   classVar, func, listSetFunc, castObj, static, dynamic, break, continue, 
@@ -65,13 +65,13 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   increment, objDecNew, print, returnStmt, valStmt, comment, throw, ifCond,
   tryCatch, construct, param, method, getMethod, setMethod, initStmts,
   function, docFunc, buildClass, implementingClass, docClass, commentedClass,
-  modFromData, fileDoc, docMod, fileFromData, defaultOptSpace)
+  modFromData, fileDoc, fileFromData, defaultOptSpace)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (classVar, 
-  objVarSelf, intClass, buildModule, bindingError, extFuncAppMixedArgs, 
+  objVarSelf, intClass, buildModule, docMod', bindingError, extFuncAppMixedArgs, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, litArray, 
   listSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR, 
   openFileW, self, multiAssign, multiReturn, listDec, funcDecDef, 
-  inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', float, 
+  inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', bool, float, 
   stringRender', string', inherit, implements)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (notOp, andOp, orOp, 
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, 
@@ -105,7 +105,6 @@ import Data.Maybe (fromMaybe)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, lbrace, rbrace, braces, brackets, colon, space, doubleQuotes)
 import qualified Text.PrettyPrint.HughesPJ as D (float)
-import Metadata.Drasil.DrasilMetaCall (drasilMeta, DrasilMeta(..), watermark)
 
 swiftExt :: String
 swiftExt = "swift"
@@ -139,7 +138,7 @@ instance FileSym SwiftCode where
     modify (setFileType Combined)
     G.fileDoc swiftExt top bottom m
 
-  docMod = G.docMod swiftModDoc swiftExt
+  docMod = CP.docMod' swiftExt
 
 instance RenderFile SwiftCode where
   top _ = toCode empty
@@ -190,7 +189,7 @@ instance BlockElim SwiftCode where
 
 instance TypeSym SwiftCode where
   type Type SwiftCode = TypeData
-  bool = swiftBoolType
+  bool = CP.bool
   int = swiftIntType
   float = CP.float
   double = CP.double
@@ -784,9 +783,6 @@ swiftContentsVal, swiftLineVal :: SValue SwiftCode
 swiftContentsVal = valueOf swiftContentsVar
 swiftLineVal = valueOf swiftLineVar
 
-swiftBoolType :: (RenderSym r) => VSType r
-swiftBoolType = typeFromData Boolean swiftBool (text swiftBool)
-
 swiftIntType :: (RenderSym r) => VSType r
 swiftIntType = typeFromData Integer swiftInt (text swiftInt)
 
@@ -847,7 +843,7 @@ swiftNoLabel = text "_"
 swiftRetType' = text swiftRetType
 swiftUnwrap' = text swiftUnwrap
 
-swiftMain, swiftFoundation, swiftMath, swiftNil, swiftBool, swiftInt, swiftChar,
+swiftMain, swiftFoundation, swiftMath, swiftNil, swiftInt, swiftChar,
   swiftURL, swiftFileHdl, swiftRetType, swiftVoid, swiftCommLine, 
   swiftSearchDir, swiftPathMask, swiftArgs, swiftWrite, swiftIndex, 
   swiftStride, swiftMap, swiftListAdd, swiftListAppend, swiftReadLine, 
@@ -859,7 +855,6 @@ swiftMain = "main"
 swiftFoundation = "Foundation"
 swiftMath = swiftFoundation
 swiftNil = "nil"
-swiftBool = "Bool"
 swiftInt = "Int"
 swiftChar = "Character"
 swiftURL = "URL"
@@ -1157,21 +1152,11 @@ swiftFunctionDoc desc params returns = [desc | not (null desc)]
 swiftClassDoc :: ClassDocRenderer
 swiftClassDoc desc = [desc | not (null desc)]
 
-swiftModDoc :: ModuleDocRenderer
-swiftModDoc desc as date m = m : [desc | not (null desc)] ++ 
-  [swiftDocCommandInit ++ swiftAuthorDoc ++ swiftDocCommandSep ++ stringList as 
-    | not (null as)]
-  ++ [swiftDocCommandInit ++ swiftDateDoc ++ swiftDocCommandSep ++ date 
-    | not (null date)] ++ [swiftDocCommandInit ++ watermark ++ version drasilMeta]
-
-swiftDocCommandInit, swiftDocCommandSep, swiftParamDoc, swiftRetDoc,
-  swiftAuthorDoc, swiftDateDoc :: String
+swiftDocCommandInit, swiftDocCommandSep, swiftParamDoc, swiftRetDoc :: String
 swiftDocCommandInit = "- "
 swiftDocCommandSep = ": "
 swiftParamDoc = "Parameter"
 swiftRetDoc = "Returns"
-swiftAuthorDoc = "Authors"
-swiftDateDoc = "Date"
 
 typeDfltVal :: (RenderSym r) => CodeType -> SValue r
 typeDfltVal Boolean = litFalse

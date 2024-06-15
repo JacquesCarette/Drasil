@@ -35,7 +35,7 @@ Drasil is based on a combination of the following ideas:
 
 To better understand the requirements for Drasil, we follow an example-driven approach, based on a set of [case studies](https://github.com/smiths/caseStudies). This is akin to test-driven engineering, but at the system level.  The [currently generated examples](https://jacquescarette.github.io/Drasil/) serve as a good introduction to what we mean.
 
-We wrote a [position paper](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf) detailing our original ideas - but this is getting somewhat obsolete now. You can also take a look at [a poster](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf). For more information on the details of Drasil, please see the [Drasil Wiki](https://github.com/JacquesCarette/Drasil/wiki). A collection of Drasil-related papers can be found [here](https://github.com/JacquesCarette/Drasil/wiki/Drasil-Papers-and-Documents). To contribute to this project, visit the [Contributor's Guide](https://github.com/JacquesCarette/Drasil/wiki/Contributor's-Guide).
+We wrote a [position paper](https://github.com/JacquesCarette/Drasil/blob/main/People/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf) detailing our original ideas - but this is getting somewhat obsolete now. You can also take a look at [a poster](https://github.com/JacquesCarette/Drasil/blob/main/People/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf). For more information on the details of Drasil, please see the [Drasil Wiki](https://github.com/JacquesCarette/Drasil/wiki). A collection of Drasil-related papers can be found [here](https://github.com/JacquesCarette/Drasil/wiki/Drasil-Papers-and-Documents). To contribute to this project, visit the [Contributor's Guide](https://github.com/JacquesCarette/Drasil/wiki/Contributor's-Guide).
 
 ## Quick Start
 
@@ -108,7 +108,7 @@ generated Makefile (in the same folder as the tex file).
 
 You can run `make docs` from the **./code/** folder to build the documentation. **Note**: this process can take about 10-12 minutes (MacOS estimate).
 
-See the [README](https://github.com/JacquesCarette/Drasil/tree/master/code#building-up-to-date-documentation) in **./code/** for more information.
+See the [README](https://github.com/JacquesCarette/Drasil/tree/main/code#building-up-to-date-documentation) in **./code/** for more information.
 
 ## Citation
 

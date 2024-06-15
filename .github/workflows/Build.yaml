@@ -1,7 +1,9 @@
 on:
   push:
+    paths: [code/**]
   pull_request:
-    branches: master
+    branches: main
+    paths: [code/**]
   workflow_dispatch:
 name: Build
 defaults:
@@ -9,17 +11,17 @@ defaults:
     shell: bash
     working-directory: code
 env:
-  is_deployment: ${{ github.ref == 'refs/heads/master' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
+  is_deployment: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
 jobs:
   auto-cancel:
     if: | 
       github.event_name == 'pull_request'
       || github.event_name == 'workflow_dispatch'
-      || (github.event_name == 'push' && (github.ref == 'refs/heads/master' || contains(github.event.head_commit.message, '[workflow-trigger]')))
+      || (github.event_name == 'push' && (github.ref == 'refs/heads/main' || contains(github.event.head_commit.message, '[workflow-trigger]')))
     runs-on: ubuntu-22.04
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.0
+        uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ github.token }}
   build:
@@ -28,19 +30,31 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
+
       - name: "Update apt package list"
         run: |
           sudo apt-get update 
+
+      - name: "Search changes for applicable tests"
+        uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            tex:
+              - 'code/stable/**/*.tex'
+
       - name: "Install system requirements"
         run: sudo apt-get install -y --fix-missing libgmp-dev python3 graphviz doxygen fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-xetex texlive-luatex g++ default-jdk mono-devel inkscape
+
       - name: "Install Stack"
-        uses: haskell/actions/setup@v2
+        uses: haskell-actions/setup@v2
         with:
           enable-stack: true
           stack-no-global: true
           stack-version: 'latest'
+
       - name: "Cache dependencies"
-        uses: actions/cache@v3.3.2
+        uses: actions/cache@v4.0.2
         with:
           path: |
             ~/.stack
@@ -50,52 +64,71 @@ jobs:
             code/website/.stack-work/
             ~/.local/bin/graphmod
           key: ${{ runner.os }}-store-${{ hashFiles('code/stack.yaml') }}
+
       - name: "Clean previous run"
         run: make clean
+
       - name: "Update PATH"
         run: |
           echo "$HOME/.local/bin" >> $GITHUB_PATH
           echo "$HOME/.swift/usr/bin" >> $GITHUB_PATH
+
       - name: "Install dependencies"
         run: make stackArgs="--no-terminal" deps
+
       - name: "Build"
         run: make code stackArgs="--no-terminal" GHCFLAGS="-Werror"
+
       - name: "Test built artifacts against stable"
         run: make stackArgs="--no-terminal" GHCFLAGS="-Werror" NOISY=yes
+
       - name: "Compile GOOL examples"
         run: make codegenTest
+
       - name: "Compile generated TeX artifacts"
         run: make tex SUMMARIZE_TEX=yes
+        if: steps.changes.tex.src == 'true'
+
       - name: "Compile generated software artifacts"
         run: make gool
+
       - name: "Create Doxygen for generated software artifacts"
         run: make doxygen
+
       - name: "Generate Haddock docs (as test)"
         run: make docs
         if: ${{ !fromJSON(env.is_deployment) }}
+
       - name: "Generate Haddock docs (full + std)"
         run: FULL=1 make docs
         if: ${{ fromJSON(env.is_deployment) }}
+
       - name: "Generate module dependency graphs"
         run: make graphs
+
       - name: "Analyze Drasil code"
         run: make analysis
+
       - name: "Convert analysis graphs into dot and circo SVGs" # only needed in deployments, not required for tests
         run: make convertAnalyzed
         if: ${{ fromJSON(env.is_deployment) }}
+
       - name: "Build website generator"
         run: make website
+
       - name: "Test Built Website against Stable Version"
         run: make test_website NOISY=yes
+
       - name: "Prepare full website deployment environment"
         run: make deploy_lite
+
       - name: "Deploy 🚀"
         if: ${{ fromJSON(env.is_deployment) }}
-        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        uses: JamesIves/github-pages-deploy-action@v4.6.1
         with:
           git-config-name: ${{ secrets.BOT_NAME }}
           git-config-email: ${{ secrets.BOT_EMAIL }}
           token: ${{ secrets.BOT_TOKEN }}
           branch: gh-pages
           folder: code/deploy
-          commit-message: "${{ secrets.BOT_NAME }} deploy of master@${{ github.sha }}"
+          commit-message: "${{ secrets.BOT_NAME }} deploy of main@${{ github.sha }}"

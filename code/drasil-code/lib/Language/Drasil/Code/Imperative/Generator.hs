@@ -30,7 +30,7 @@ import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
   Visibility(..), DataInfo(..), Constraints(..), choicesSent, DocConfig(..),
   LogConfig(..), OptionalFeatures(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), getODE)
-import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
+import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
 
 import GOOL.Drasil (GSProgram, SFile, OOProg, ProgramSym(..), ScopeTag(..),
   ProgData(..), initialState, unCI)
@@ -93,7 +93,7 @@ generator l dt sd chs spec = DrasilState {
         cdm = clsDefMap spec chs modules'
         modules' = mods spec ++ concatMap (^. auxMods) els
         nonPrefChs = choicesSent chs
-        des = vcat . map (sentenceDoc (sysinfodb spec) Implementation Linear) $
+        des = vcat . map (sentenceDoc (sysinfodb spec) Implementation OneLine) $
           (nonPrefChs ++ concLog ++ libLog)
 
 -- | Generates a package with the given 'DrasilState'. The passed
@@ -136,9 +136,9 @@ genPackage unRepr = do
       as = case codeSpec g of CodeSpec {authors = a} -> map name a
       cfp = configFiles $ codeSpec g
       db = sysinfodb $ codeSpec g
-      prps = show $ sentenceDoc db Implementation Linear
+      prps = show $ sentenceDoc db Implementation OneLine
         (foldlSent $ purpose $ codeSpec g)
-      bckgrnd = show $ sentenceDoc db Implementation Linear
+      bckgrnd = show $ sentenceDoc db Implementation OneLine
         (foldlSent $ background $ codeSpec g)
   i <- genSampleInput
   d <- genDoxConfig s
@@ -164,7 +164,7 @@ genProgram = do
   g <- get
   ms <- chooseModules $ modular g
   let n = pName $ codeSpec g
-  let p = show $ sentenceDoc (sysinfodb $ codeSpec g) Implementation Linear $ foldlSent $ purpose $ codeSpec g
+  let p = show $ sentenceDoc (sysinfodb $ codeSpec g) Implementation OneLine $ foldlSent $ purpose $ codeSpec g
   return $ prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice

@@ -37,6 +37,7 @@ import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (%%), ($+$),
   hpunctuate, lub, runPrint, switch, toMath, toText, unPL, vcat, vpunctuate)
 import Language.Drasil.TeX.Preamble (genPreamble)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
+import Data.Foldable (foldl')
 
 -- | Generates a LaTeX document.
 genTeX :: L.Document -> PrintingInformation -> TP.Doc
@@ -315,7 +316,7 @@ pUnit (L.US ls) = formatu t b
     pow (n,1) = p_symb n
     pow (n,p) = toMath $ superscript (p_symb n) (pure $ text $ show p)
     -- printing of unit symbols is done weirdly... FIXME?
-    p_symb (LD.Concat s) = foldl (<>) empty $ map p_symb s
+    p_symb (LD.Concat s) = foldl' (<>) empty $ map p_symb s
     p_symb n = let cn = symbolNeeds n in switch (const cn) $ pExpr $ I.symbol n
 
 -----------------------------------------------------------------

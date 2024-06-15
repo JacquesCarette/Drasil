@@ -8,7 +8,7 @@ module Drasil.Sections.Requirements (
   fullReqs, fullTables, inReq, inTable,
   mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
   -- * Non-functional Requirements
-  nfReqF
+  nfReqF, mkMaintainableNFR
   ) where
 
 import Language.Drasil
@@ -17,7 +17,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 import Theory.Drasil (HasOutput(output))
 
-import Data.Drasil.Concepts.Documentation (description, funcReqDom,
+import Data.Drasil.Concepts.Documentation (description, funcReqDom, nonFuncReqDom,
   functionalRequirement, input_, nonfunctionalRequirement, {-output_,-} section_,
   software, symbol_, value, reqInput)
 import Data.Drasil.Concepts.Math (unit_)
@@ -99,6 +99,17 @@ fReqIntro _  = mkParagraph $ reqIntroStart +:+. frReqIntroBody
 nfReqIntro :: [Contents] -> Contents
 nfReqIntro [] = mkParagraph $ emptySectSentPlu [nonfunctionalRequirement]
 nfReqIntro _  = mkParagraph $ reqIntroStart +:+. nfrReqIntroBody
+
+-- | Common Non-Functional Requirement for Maintainability.
+-- Takes in a Reference Address ('String'), a percent value ('Integer'), 
+-- and a label ('String').
+mkMaintainableNFR :: String -> Integer -> String -> ConceptInstance
+mkMaintainableNFR refAddress percent lbl = cic refAddress (foldlSent [
+  S "If a likely change is made" `S.toThe` 
+  S "finished software, it will take at most", addPercent percent `S.ofThe`
+  S "original development time,",
+  S "assuming the same development resources are available"
+  ]) lbl nonFuncReqDom
 
 -- | Creates an Input Data Table for use in the Functional Requirments section. Takes a list of wrapped variables and something that is 'Referable'.
 mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => 

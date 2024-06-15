@@ -6,9 +6,30 @@ cradle:
     - path: "drasil-code/lib"
       component: "drasil-code:lib"
 
-    - path: "drasil-code/test"
+    - path: "drasil-code/test/Main.hs"
       component: "drasil-code:exe:codegenTest"
-    
+
+    - path: "drasil-code/test/FileTests.hs"
+      component: "drasil-code:exe:codegenTest"
+
+    - path: "drasil-code/test/HelloWorld.hs"
+      component: "drasil-code:exe:codegenTest"
+
+    - path: "drasil-code/test/Helper.hs"
+      component: "drasil-code:exe:codegenTest"
+
+    - path: "drasil-code/test/Observer.hs"
+      component: "drasil-code:exe:codegenTest"
+
+    - path: "drasil-code/test/PatternTest.hs"
+      component: "drasil-code:exe:codegenTest"
+
+    - path: "drasil-code/test/VectorTest.hs"
+      component: "drasil-code:exe:codegenTest"
+
+    - path: "drasil-code/test/NameGenTest.hs"
+      component: "drasil-code:exe:codegenTest"
+
     - path: "drasil-codeLang/lib"
       component: "drasil-codeLang:lib"
 
@@ -45,12 +66,6 @@ cradle:
     - path: "drasil-example/hghc/app/Main.hs"
       component: "hghc:exe:hghc"
 
-    - path: "drasil-example/swhsnopcm/lib"
-      component: "swhsnopcm:lib"
-
-    - path: "drasil-example/swhsnopcm/app/Main.hs"
-      component: "swhsnopcm:exe:swhsnopcm"
-
     - path: "drasil-example/pdcontroller/lib"
       component: "pdcontroller:lib"
 
@@ -80,6 +95,12 @@ cradle:
 
     - path: "drasil-example/swhs/app/Main.hs"
       component: "swhs:exe:swhs"
+
+    - path: "drasil-example/swhsnopcm/lib"
+      component: "swhsnopcm:lib"
+
+    - path: "drasil-example/swhsnopcm/app/Main.hs"
+      component: "swhsnopcm:exe:swhsnopcm"
 
     - path: "drasil-example/template/lib"
       component: "template:lib"

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['derived_5fvalues_58',['derived_values',['../class_glass_b_r_1_1_derived_values.html#a1ff7a212cc4fa3ad6257da2883dbeaae',1,'GlassBR::DerivedValues']]]
+  ['extractcolumn_43',['extractColumn',['../class_glass_b_r_1_1_interpolation.html#a655814585270e5f37503e5747259713e',1,'GlassBR::Interpolation']]]
 ];

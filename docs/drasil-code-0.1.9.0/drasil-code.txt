@@ -45,7 +45,7 @@ sampleInputDD :: [CodeVarChunk] -> DataDesc'
 --   down. Full details of Choices documentation
 --   <a>https://github.com/JacquesCarette/Drasil/wiki/The-Code-Generator</a>
 data Choices
-Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> Int -> Choices
+Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Constraints -> [ExtLib] -> (InternalConcept -> Name) -> Int -> Choices
 
 -- | Target languages. Choosing multiple means program will be generated in
 --   multiple languages.
@@ -70,6 +70,9 @@ Choices :: [Lang] -> Architecture -> DataInfo -> Maps -> OptionalFeatures -> Con
 
 -- | List of external libraries what to utilize
 [extLibs] :: Choices -> [ExtLib]
+
+-- | Function to get modifiable function names
+[icNames] :: Choices -> InternalConcept -> Name
 
 -- | Number of folders to go up in order to obtain the image
 [folderVal] :: Choices -> Int
@@ -211,7 +214,7 @@ LogVar :: Logging
 data Modularity
 
 -- | Different modules. For controller, input, calculations, output.
-Modular :: InputModule -> Modularity
+Modular :: Modularity
 
 -- | All generated code is in one module/file.
 Unmodular :: Modularity
@@ -245,15 +248,6 @@ Var :: ConstantRepr
 
 -- | Use target language's mechanism for defining constants.
 Const :: ConstantRepr
-
--- | Options for input modules.
-data InputModule
-
--- | Input-related functions combined in one module.
-Combined :: InputModule
-
--- | Input-related functions each in own module.
-Separated :: InputModule
 
 -- | Code concepts. For now, just pi.
 data CodeConcept

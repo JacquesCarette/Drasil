@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['read_5ftable_60',['read_table',['../_read_table_8py.html#ad88f368375001515e5f58033f1e01d27',1,'python::ReadTable']]]
+  ['lin_5finterp_55',['lin_interp',['../_interpolation_8py.html#a60f623f715c7a2b7497be4795f9c8d89',1,'python::Interpolation']]]
 ];

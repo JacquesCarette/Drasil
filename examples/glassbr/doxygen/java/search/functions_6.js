@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['main_77',['main',['../class_glass_b_r_1_1_control.html#a6d5741c59546453c87a1f54404a249ae',1,'GlassBR::Control']]]
+  ['write_5foutput_62',['write_output',['../class_glass_b_r_1_1_output_format.html#abd61c612718155fbe51a2bf80b500d61',1,'GlassBR::OutputFormat']]]
 ];

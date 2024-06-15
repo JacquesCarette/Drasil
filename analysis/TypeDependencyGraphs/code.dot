@@ -292,12 +292,14 @@ digraph alltypes {
 		DrasilState -> Logging;
 		DrasilState -> AuxFile;
 		DrasilState -> Expr;
+		DrasilState -> InternalConceptName;
 		DrasilState -> Mod;
 		DrasilState -> Name;
 		DrasilState -> ExtLibMap;
 		DrasilState -> FilePath;
 		DrasilState -> ModExportMap;
 		DrasilState -> ClassDefinitionMap;
+		DrasilState -> SetName;
 		DrasilState -> Int;
 		DrasilState -> Doc;
 		DrasilState -> Space;
@@ -622,6 +624,7 @@ digraph alltypes {
 		Choices -> OptionalFeatures;
 		Choices -> Constraints;
 		Choices -> ExtLib;
+		Choices -> InternalConceptName;
 		Choices -> Int;
 		}
 		subgraph architecture{
@@ -663,10 +666,6 @@ digraph alltypes {
 		}
 		subgraph modularity{
 		Modularity	[shape=oval, color=darkviolet, label="Modularity"];
-		Modularity -> InputModule;
-		}
-		subgraph inputmodule{
-		InputModule	[shape=oval, color=darkviolet, label="InputModule"];
 		}
 		subgraph implementationtype{
 		ImplementationType	[shape=oval, color=darkviolet, label="ImplementationType"];
@@ -701,6 +700,9 @@ digraph alltypes {
 		}
 		subgraph constraintbehaviour{
 		ConstraintBehaviour	[shape=oval, color=darkviolet, label="ConstraintBehaviour"];
+		}
+		subgraph internalconcept{
+		InternalConcept	[shape=oval, color=darkviolet, label="InternalConcept"];
 		}
 		subgraph extlib{
 		ExtLib	[shape=oval, color=darkgreen, label="ExtLib"];

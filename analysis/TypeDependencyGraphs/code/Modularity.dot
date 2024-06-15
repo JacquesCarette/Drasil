@@ -1,4 +1,3 @@
 digraph modularity{
 Modularity	[shape=oval, color=darkviolet, label="Modularity"];
-Modularity -> InputModule;
 }

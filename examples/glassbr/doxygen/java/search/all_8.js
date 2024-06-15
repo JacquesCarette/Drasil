@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['outputformat_34',['OutputFormat',['../class_glass_b_r_1_1_output_format.html',1,'GlassBR']]],
-  ['outputformat_2ejava_35',['OutputFormat.java',['../_output_format_8java.html',1,'']]]
+  ['write_5foutput_30',['write_output',['../class_glass_b_r_1_1_output_format.html#abd61c612718155fbe51a2bf80b500d61',1,'GlassBR::OutputFormat']]]
 ];

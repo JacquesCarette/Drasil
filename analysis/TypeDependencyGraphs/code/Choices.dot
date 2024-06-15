@@ -7,5 +7,6 @@ Choices -> Maps;
 Choices -> OptionalFeatures;
 Choices -> Constraints;
 Choices -> ExtLib;
+Choices -> InternalConceptName;
 Choices -> Int;
 }

@@ -1,0 +1,3 @@
+digraph internalconcept{
+InternalConcept	[shape=oval, color=darkviolet, label="InternalConcept"];
+}

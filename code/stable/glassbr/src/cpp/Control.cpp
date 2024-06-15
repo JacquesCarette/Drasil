@@ -9,9 +9,6 @@
 #include <string>
 
 #include "Calculations.hpp"
-#include "DerivedValues.hpp"
-#include "InputConstraints.hpp"
-#include "InputFormat.hpp"
 #include "InputParameters.hpp"
 #include "OutputFormat.hpp"
 
@@ -31,10 +28,7 @@ int main(int argc, const char *argv[]) {
     outfile << filename;
     outfile << " in module Control" << std::endl;
     outfile.close();
-    InputParameters inParams = InputParameters();
-    get_input(filename, inParams);
-    derived_values(inParams);
-    input_constraints(inParams);
+    InputParameters inParams = InputParameters(filename);
     double J_tol = func_J_tol(inParams);
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'J_tol' assigned ";

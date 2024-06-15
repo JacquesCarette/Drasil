@@ -5,7 +5,7 @@ A `DefinedQuantityDict` is created by taking a `ConceptChunk` and adding the par
 
 # "Issues" with DQD currently:
 ## `ConceptChunk`s made only to be used in a DQD
-Sometimes, as in Projectile (see below), we create a `ConceptChunk` that is only used in a DQD. What is the rationale for this? Couldn't we just define the `ConceptChunk` locally in the constructor for the DQD, or is there some reason (e.g., to support future changes that might need just the `ConceptChunk` for something else) that we define the `ConceptChunk` separately? I was able to migrate this specific example to just using a local `ConceptChunk` and it worked without a problem, although the code got a bit harder to read (which might be a valid enough reason for this method of building DQDs). (The concept is defined [here](https://github.com/JacquesCarette/Drasil/blob/master/code/drasil-example/projectile/lib/Drasil/Projectile/Concepts.hs) and the `DefinedQuantityDict` is defined [here](https://github.com/JacquesCarette/Drasil/blob/master/code/drasil-example/projectile/lib/Drasil/Projectile/Unitals.hs)).
+Sometimes, as in Projectile (see below), we create a `ConceptChunk` that is only used in a DQD. What is the rationale for this? Couldn't we just define the `ConceptChunk` locally in the constructor for the DQD, or is there some reason (e.g., to support future changes that might need just the `ConceptChunk` for something else) that we define the `ConceptChunk` separately? I was able to migrate this specific example to just using a local `ConceptChunk` and it worked without a problem, although the code got a bit harder to read (which might be a valid enough reason for this method of building DQDs). (The concept is defined [here](https://github.com/JacquesCarette/Drasil/blob/main/code/drasil-example/projectile/lib/Drasil/Projectile/Concepts.hs) and the `DefinedQuantityDict` is defined [here](https://github.com/JacquesCarette/Drasil/blob/main/code/drasil-example/projectile/lib/Drasil/Projectile/Unitals.hs)).
 
 ```haskell
 -- Concepts.hs
@@ -30,7 +30,7 @@ It is called on the following chunks in the examples:
 - In NoPCM: `concepts`, `constrained`, `tempW`, `watE`, and `surface`
 - In SSP: `coords`, `inputs`, `xMaxExtSlip`, `xMaxEtrSlip`, `xMinExtSlip`, `xMinEtrSlip`, `yMaxSlip`, `yMinSlip`, `outputs`, `units`, `unitless`, `inputsWUncrtn`, `inputsNoUncrtn`, `constrained`, and `surface`
 
-Occurences from [`SSP.Unitals`](https://github.com/JacquesCarette/Drasil/blob/master/code/drasil-example/ssp/lib/Drasil/SSP/Unitals.hs) (with only relevant code included):
+Occurences from [`SSP.Unitals`](https://github.com/JacquesCarette/Drasil/blob/main/code/drasil-example/ssp/lib/Drasil/SSP/Unitals.hs) (with only relevant code included):
 ```haskell
 symbols :: [DefinedQuantityDict]
 symbols = map dqdWr inputs -- :: [DefinedQuantityDict]

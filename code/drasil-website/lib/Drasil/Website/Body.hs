@@ -158,7 +158,7 @@ chunksWiki = makeURI "chunksWiki" (gitHubInfoURL ++ "/wiki/Chunks") (shortname' 
 recipesWiki :: Reference
 recipesWiki = makeURI "recipesWiki" (gitHubInfoURL ++ "/wiki/Recipes") (shortname' $ S "recipesWiki")
 paperGOOL :: Reference
-paperGOOL = makeURI "GOOLPaper" (gitHubInfoURL ++ "/blob/master/Papers/GOOL/GOOL.pdf") (shortname' $ S "GOOLPaper")
+paperGOOL = makeURI "GOOLPaper" (gitHubInfoURL ++ "/blob/main/Papers/GOOL/GOOL.pdf") (shortname' $ S "GOOLPaper")
 papersWiki :: Reference
 papersWiki = makeURI "papersWiki" (gitHubInfoURL ++ "/wiki/Drasil-Papers-and-Documents") (shortname' $ S "papersWiki")
 icsePositionPaper :: Reference

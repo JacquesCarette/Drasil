@@ -5,7 +5,7 @@
 > https://gitlab.cas.mcmaster.ca/SEforSC/se4sc/blob/c9a468aaf3b9d062cc5dd145884697acce477155/SciCompAndSoftEngPapers/JohansonAndHasselbring2018.pdf
 >
 > ~~https://gitlab.cas.mcmaster.ca/SEforSC/se4sc/blob/git-svn/SciCompAndSoftEngPapers/Smith2018.pdf~~ -- link moved to:
-> https://gitlab.cas.mcmaster.ca/smiths/pub/-/blob/master/Smith2018.pdf 
+> https://gitlab.cas.mcmaster.ca/smiths/pub/-/blob/main/Smith2018.pdf 
 
 Courtesy of Spencer Smith, taken from issue [#630](https://github.com/JacquesCarette/Drasil/issues/630)
 

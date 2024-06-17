@@ -1,7 +1,7 @@
 module GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vicat, vibcat, 
   vmap, vimap, emptyIfEmpty, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
-  onCodeList, onStateList, on2StateLists, getInnerType, on2StateWrapped, 
+  onCodeList, onStateList, on2StateLists, getInnerType, on2StateWrapped,
   getNestDegree
 ) where
 

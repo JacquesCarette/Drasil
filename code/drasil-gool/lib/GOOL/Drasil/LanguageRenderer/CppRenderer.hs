@@ -436,9 +436,9 @@ instance (Pair p) => InternalGetSet (p CppSrcCode CppHdrCode) where
   setFunc = pair3 setFunc setFunc
 
 instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where  
-  listSizeFunc = on2StateValues pair listSizeFunc listSizeFunc
+  listSizeFunc = pair1 listSizeFunc listSizeFunc
   listAddFunc = pair3 listAddFunc listAddFunc
-  listAppendFunc = pair1 listAppendFunc listAppendFunc
+  listAppendFunc = pair2 listAppendFunc listAppendFunc
   listAccessFunc = pair2 listAccessFunc listAccessFunc
   listSetFunc = pair3 listSetFunc listSetFunc
 
@@ -1323,9 +1323,9 @@ instance InternalGetSet CppSrcCode where
   setFunc = G.setFunc
 
 instance InternalListFunc CppSrcCode where
-  listSizeFunc = CP.listSizeFunc
+  listSizeFunc _ = CP.listSizeFunc
   listAddFunc = cppListAddFunc
-  listAppendFunc = G.listAppendFunc cppListAppend
+  listAppendFunc _ = G.listAppendFunc cppListAppend
   listAccessFunc = CP.listAccessFunc' cppListAccess
   listSetFunc = CP.listSetFunc cppListSetDoc
 
@@ -1987,9 +1987,9 @@ instance InternalGetSet CppHdrCode where
   setFunc _ _ _ = funcFromData empty void
 
 instance InternalListFunc CppHdrCode where
-  listSizeFunc = funcFromData empty void
+  listSizeFunc _ = funcFromData empty void
   listAddFunc _ _ _ = funcFromData empty void
-  listAppendFunc _ = funcFromData empty void
+  listAppendFunc _ _ = funcFromData empty void
   listAccessFunc _ _ = funcFromData empty void
   listSetFunc _ _ _ = funcFromData empty void
 

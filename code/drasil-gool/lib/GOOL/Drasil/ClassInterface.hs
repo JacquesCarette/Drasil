@@ -349,6 +349,7 @@ class (ValueSym r, VariableSym r) => GetSet r where
 
 class (ValueSym r) => List r where
   listSize   :: SValue r -> SValue r
+  -- | List, Index, NewValue
   listAdd    :: SValue r -> SValue r -> SValue r -> SValue r
   listAppend :: SValue r -> SValue r -> SValue r
   listAccess :: SValue r -> SValue r -> SValue r

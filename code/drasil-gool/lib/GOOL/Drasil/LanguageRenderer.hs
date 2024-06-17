@@ -17,12 +17,12 @@ module GOOL.Drasil.LanguageRenderer (
   param, method, stateVar, constVar, stateVarList, switch, assign, 
   addAssign, subAssign, increment, decrement, listDec, getTerm, return', 
   comment, var, extVar, arg, classVar, objVar, unOpDocD, unOpDocD', binOpDocD, 
-  binOpDocD', constDecDef, func, cast, listAccessFunc, listSetFunc, objAccess, 
-  castObj, break, continue, static, dynamic, private, public, blockCmt, docCmt, 
-  commentedItem, addComments, FuncDocRenderer, functionDox, ClassDocRenderer,
-  classDox, ModuleDocRenderer, moduleDox, commentedMod, valueList, 
-  variableList, parameterList, namedArgList, prependToBody, appendToBody, 
-  surroundBody, getterName, setterName, intValue
+  binOpDocD', nOpDocD, constDecDef, func, cast, listAccessFunc, listSetFunc, 
+  objAccess, castObj, break, continue, static, dynamic, private, public, 
+  blockCmt, docCmt, commentedItem, addComments, FuncDocRenderer, functionDox,
+  ClassDocRenderer, classDox, ModuleDocRenderer, moduleDox, commentedMod, 
+  valueList, variableList, parameterList, namedArgList, prependToBody, 
+  appendToBody, surroundBody, getterName, setterName, intValue
 ) where
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
@@ -317,6 +317,9 @@ binOpDocD op v1 v2 = v1 <+> op <+> v2
 
 binOpDocD' :: Doc -> Doc -> Doc -> Doc
 binOpDocD' op v1 v2 = op <> parens (v1 <> comma <+> v2)
+
+nOpDocD :: Doc -> [Doc] -> Doc
+nOpDocD op vs = op <> parens (hicat listSep' vs)
 
 -- Functions --
 

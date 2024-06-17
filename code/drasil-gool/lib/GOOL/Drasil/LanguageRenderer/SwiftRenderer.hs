@@ -431,11 +431,11 @@ instance InternalGetSet SwiftCode where
   setFunc = G.setFunc
 
 instance InternalListFunc SwiftCode where
-  listSizeFunc = funcFromData (R.func swiftListSize) int
+  listSizeFunc _ = funcFromData (R.func swiftListSize) int
   listAddFunc _ i v = do
     f <- swiftListAddFunc i v 
     funcFromData (R.func (RC.value f)) (pure $ valueType f)
-  listAppendFunc = G.listAppendFunc swiftListAppend
+  listAppendFunc _ = G.listAppendFunc swiftListAppend
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
 

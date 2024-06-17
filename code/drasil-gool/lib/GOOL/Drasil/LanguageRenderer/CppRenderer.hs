@@ -19,14 +19,14 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, InternalValueExp(..),
-  objMethodCall, FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..),
-  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
-  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), pubMethod, StateVarSym(..), ClassSym(..),
-  ModuleSym(..))
+  objMethodCall, FunctionSym(..), ($.), GetSet(..), List(..), 
+  IndexingScheme(..), InternalList(..), ThunkSym(..), VectorType(..), 
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..), 
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..), 
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
+  ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..), 
+  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), pubMethod, 
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -416,6 +416,8 @@ instance (Pair p) => GetSet (p CppSrcCode CppHdrCode) where
   set = pair3 set set
 
 instance (Pair p) => List (p CppSrcCode CppHdrCode) where
+  type IScheme (p CppSrcCode CppHdrCode) = IndexingScheme
+  indexingScheme = pair indexingScheme indexingScheme
   listSize = pair1 listSize listSize
   listAdd = pair3 listAdd listAdd
   listAppend = pair2 listAppend listAppend
@@ -1307,6 +1309,8 @@ instance GetSet CppSrcCode where
   set = G.set
 
 instance List CppSrcCode where
+  type IScheme CppSrcCode = IndexingScheme
+  indexingScheme = toCode ZeroIndexed
   listSize v = cast int (C.listSize v)
   listAdd = G.listAdd
   listAppend = G.listAppend 
@@ -1971,6 +1975,8 @@ instance GetSet CppHdrCode where
   set _ _ _ = mkStateVal void empty
 
 instance List CppHdrCode where
+  type IScheme CppHdrCode = IndexingScheme
+  indexingScheme = toCode ZeroIndexed
   listSize _ = mkStateVal void empty
   listAdd _ _ _ = mkStateVal void empty
   listAppend _ _ = mkStateVal void empty

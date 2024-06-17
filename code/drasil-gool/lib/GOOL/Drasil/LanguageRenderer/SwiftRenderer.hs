@@ -19,14 +19,14 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp,
   newObj, InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
-  objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..),
-  listSlice, InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), StatePattern(..), ObserverPattern(..),
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..), convType)
+  objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), 
+  IndexingScheme(..), listSlice, InternalList(..), ThunkSym(..), VectorType(..), 
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..), 
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
+  IOStatement(..), StringStatement(..), FuncAppStatement(..), 
+  CommentStatement(..), ControlStatement(..), StatePattern(..), 
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), convType)
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, 
   RenderFile(..), ImportSym(..), ImportElim, PermElim(binding), RenderBody(..), 
   BodyElim, RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
@@ -415,6 +415,8 @@ instance GetSet SwiftCode where
   set = G.set
 
 instance List SwiftCode where
+  type IScheme SwiftCode = IndexingScheme
+  indexingScheme = toCode ZeroIndexed
   listSize = C.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend

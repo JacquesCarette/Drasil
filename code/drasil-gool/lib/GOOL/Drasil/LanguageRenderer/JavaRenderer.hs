@@ -18,9 +18,9 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
   selfFuncApp, extFuncApp, newObj, InternalValueExp(..), FunctionSym(..), ($.),
-  GetSet(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  GetSet(..), List(..), IndexingScheme(..), InternalList(..), ThunkSym(..), 
+  VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..), 
+  ThunkAssign(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
   IOStatement(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), StatePattern(..),
   ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
@@ -430,6 +430,8 @@ instance GetSet JavaCode where
   set = G.set
 
 instance List JavaCode where
+  type IScheme JavaCode = IndexingScheme
+  indexingScheme = toCode ZeroIndexed
   listSize = C.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend

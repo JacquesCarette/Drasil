@@ -17,13 +17,13 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj,
   InternalValueExp(..), objMethodCall, FunctionSym(..), GetSet(..), List(..),
-  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..),
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  IndexingScheme(..), InternalList(..), ThunkSym(..), VectorType(..), 
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..), 
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
+  IOStatement(..), StringStatement(..), FuncAppStatement(..), 
+  CommentStatement(..), ControlStatement(..), switchAsIf, StatePattern(..), 
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -407,6 +407,8 @@ instance GetSet PythonCode where
   set = G.set
 
 instance List PythonCode where
+  type IScheme PythonCode = IndexingScheme
+  indexingScheme = toCode ZeroIndexed
   listSize = CP.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend

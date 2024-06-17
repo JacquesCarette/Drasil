@@ -16,7 +16,7 @@ module GOOL.Drasil.ClassInterface (
   extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists,
   InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
   objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..), ($.),
-  selfAccess, GetSet(..), List(..), InternalList(..), listSlice,
+  selfAccess, GetSet(..), List(..), IndexingScheme(..), InternalList(..), listSlice,
   listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
@@ -345,7 +345,12 @@ class (ValueSym r, VariableSym r) => GetSet r where
   get :: SValue r -> SVariable r -> SValue r
   set :: SValue r -> SVariable r -> SValue r -> SValue r
 
+data IndexingScheme = ZeroIndexed -- Stores whether the language's list API
+                    | OneIndexed  -- is 0- or 1-indexed.
+
 class (ValueSym r) => List r where
+  type IScheme r
+  indexingScheme :: r (IScheme r)
   -- | Finds the size of a list.
   --   Arguments are: List
   listSize   :: SValue r -> SValue r
@@ -364,6 +369,16 @@ class (ValueSym r) => List r where
   -- | Finds the index of the first occurrence of a value in a list.
   --   Arguments are: List, Value
   indexOf :: SValue r -> SValue r -> SValue r
+
+intToIndex :: (Literal r, NumericExpression r) => 
+  SValue r -> IndexingScheme -> SValue r
+intToIndex i ZeroIndexed = i
+intToIndex i OneIndexed = i #+ (litInt 1)
+
+indexToInt :: (Literal r, NumericExpression r) =>
+  SValue r -> IndexingScheme -> SValue r
+indexToInt i ZeroIndexed = i
+indexToInt i OneIndexed = i #- (litInt 1)
 
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) 

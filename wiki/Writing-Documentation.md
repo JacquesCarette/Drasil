@@ -1,0 +1,3 @@
+As far as code comments go, one of the best resources is [Best practices for writing code comments](https://stackoverflow.blog/2021/07/05/best-practices-for-writing-code-comments/).
+
+Also, be aware of the misuse of [low information content phrases](https://www.webpages.uidaho.edu/range357/extra-refs/empty-words.htm#:~:text=Empty%20Words&text=%22Empty%22%20words%20refer%20to%20Low,of%2C%20to%2C%20and%20with.).

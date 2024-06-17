@@ -57,7 +57,7 @@ eBalanceOnPCMEqn1 = sy pcmMass `mulRe` sy htCapSP `mulRe` deriv (sy tempPCM) tim
 eBalanceOnPCMEqn2 = sy pcmMass `mulRe` sy htCapSP `mulRe` deriv (sy tempPCM) time $=
   sy pcmHTC `mulRe` sy pcmSA `mulRe` (sy tempW $- sy tempPCM)
 eBalanceOnPCMEqn3 = deriv (sy tempPCM) time $=
-  ((sy pcmHTC `mulRe` sy pcmSA) $/ (sy pcmMass `mulRe` sy htCapSP)) `mulRe`  (sy tempW $- sy tempPCM)
+  ((sy pcmHTC `mulRe` sy pcmSA) $/ (sy pcmMass `mulRe` sy htCapSP)) `mulRe` (sy tempW $- sy tempPCM)
 eBalanceOnPCMEqn4 = deriv (sy tempPCM) time $=
   recip_ (sy tauSP) `mulRe` (sy tempW $- sy tempPCM)
 

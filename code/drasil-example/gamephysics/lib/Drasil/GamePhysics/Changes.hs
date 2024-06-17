@@ -13,9 +13,9 @@ import qualified Data.Drasil.Concepts.Physics as CP (collision, damping, joint)
 
 import Drasil.GamePhysics.Assumptions (assumpCT, assumpDI, assumpCAJI)
 
----------------------
---  LIKELY CHANGES --
----------------------
+--------------------
+-- LIKELY CHANGES --
+--------------------
 
 likelyChangesStmt1, likelyChangesStmt2, likelyChangesStmt3,
   likelyChangesStmt4 :: Sentence

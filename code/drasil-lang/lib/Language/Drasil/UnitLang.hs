@@ -7,6 +7,7 @@ module Language.Drasil.UnitLang (
   ) where
 
 import Language.Drasil.Symbol (Symbol, compsy)
+import Data.Foldable (foldl')
 
 -- UName for the base cases, otherwise build up.
 -- Probably a 7-vector would be better (less error-prone!)
@@ -30,7 +31,7 @@ fromUDefn (UShift _ s) = s
 -- | Hand-rolled version of compare. Should assume 'USymb' is normalized, so
 -- that some redundant EQ cases can be removed.
 compUSymb :: USymb -> USymb -> Ordering
-compUSymb (US l)  (US m)  = foldl mappend EQ $ zipWith comp l m
+compUSymb (US l)  (US m)  = foldl' mappend EQ $ zipWith comp l m
   where
     comp (s1, i1) (s2, i2) = compsy s1 s2 `mappend` compare i1 i2
 

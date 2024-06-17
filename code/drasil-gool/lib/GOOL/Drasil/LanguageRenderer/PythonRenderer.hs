@@ -407,7 +407,9 @@ instance GetSet PythonCode where
   set = G.set
 
 instance List PythonCode where
-  listSize = CP.listSize
+  listSize l = do
+    f <- listSizeFunc l
+    mkVal (functionType f) (RC.function f)
   listAdd = G.listAdd
   listAppend = G.listAppend
   listAccess = G.listAccess
@@ -423,7 +425,9 @@ instance InternalGetSet PythonCode where
   setFunc = G.setFunc
 
 instance InternalListFunc PythonCode where
-  listSizeFunc _ = funcFromData pyListSizeFunc int --TODO: update this
+  listSizeFunc l = do
+    f <- funcApp pyListSize int [l]
+    funcFromData (RC.value f) int
   listAddFunc _ = CP.listAddFunc pyInsert
   listAppendFunc _ = G.listAppendFunc pyAppendFunc
   listAccessFunc = CP.listAccessFunc
@@ -774,13 +778,13 @@ pyPi = text $ pyMath `access` piLabel
 pySys :: String
 pySys = "sys"
 
-pyInputFunc, pyPrintFunc, pyListSizeFunc :: Doc
+pyInputFunc, pyPrintFunc :: Doc
 pyInputFunc = text "input()" -- raw_input() for < Python 3.0
 pyPrintFunc = text printLabel
-pyListSizeFunc = text "len"
 
-pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyOpen, pyClose, 
+pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyOpen, pyClose, 
   pyRead, pyWrite, pyAppend, pySplit, pyRange, pyRstrip, pyMath :: String
+pyListSize = "len"
 pyIndex = "index"
 pyInsert = "insert"
 pyAppendFunc = "append"

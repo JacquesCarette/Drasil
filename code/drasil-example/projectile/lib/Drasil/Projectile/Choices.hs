@@ -5,7 +5,7 @@ import Language.Drasil (Space(..), programName)
 import Language.Drasil.Code (Choices(..), Comments(..), 
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
-  ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch,
+  ConstantRepr(..), CodeConcept(..), matchConcepts, SpaceMatch,
   matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec, makeArchit, 
   Architecture(..), makeData, DataInfo(..), Maps(..), makeMaps, spaceToCodeType,
   makeConstraints, makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..), 
@@ -45,8 +45,7 @@ codedDirName n Choices {
 
 codedMod :: Modularity -> String
 codedMod Unmodular = "U"
-codedMod (Modular Combined) = "C"
-codedMod (Modular Separated) = "S"
+codedMod Modular = "M"
 
 codedImpTp :: ImplementationType -> String
 codedImpTp Program = "P"
@@ -78,11 +77,11 @@ codedSpaceMatch sm = case sm Real of [Double, Float] -> "D"
 choiceCombos :: [Choices]
 choiceCombos = [baseChoices, 
   baseChoices {
-    architecture = makeArchit (Modular Combined) Program,
+    architecture = makeArchit Modular Program,
     dataInfo = makeData Bundled (Store Unbundled) Var
   },
   baseChoices {
-    architecture = makeArchit (Modular Separated) Library,
+    architecture = makeArchit Modular Library,
     dataInfo = makeData Unbundled (Store Unbundled) Var,
     maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats
   },

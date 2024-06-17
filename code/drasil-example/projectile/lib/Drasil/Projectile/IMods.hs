@@ -39,7 +39,7 @@ timeIM = imNoRefs (equationalModelN (nounPhraseSP "calculation of landing time")
   (Just timeDeriv) "calOfLandingTime" [angleConstraintNote, gravitationalAccelConstNote, timeConsNote]
 
 timeQD :: SimpleQDef 
-timeQD =  mkQuantDef flightDur E.flightDur'
+timeQD = mkQuantDef flightDur E.flightDur'
 
 timeDeriv :: Derivation
 timeDeriv = mkDerivName (phrase flightDur) (weave [timeDerivSents, map eS timeDerivEqns])

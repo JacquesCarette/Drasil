@@ -139,9 +139,9 @@ qdProcessErrorFD = vc "qdProcessErrorFD" (processError `inThe` ccFrequencyDomain
 
 qdPropControlFD  = vc "qdPropControlFD" (propControl `inThe` ccFrequencyDomain) symPS Real
 
-qdDerivativeControlFD = vc "qdDerivativeControlFD" (derControl  `inThe` ccFrequencyDomain) symDS Real
+qdDerivativeControlFD = vc "qdDerivativeControlFD" (derControl `inThe` ccFrequencyDomain) symDS Real
 
-qdTransferFunctionFD = vc "qdTransferFunctionFD" (ccTransferFxn  `inThe` ccFrequencyDomain) symHS Real
+qdTransferFunctionFD = vc "qdTransferFunctionFD" (ccTransferFxn `inThe` ccFrequencyDomain) symHS Real
 
 qdCtrlVarTD
   = vc "qdCtrlVarTD" (nounPhraseSent (S "Control Variable in the time domain"))

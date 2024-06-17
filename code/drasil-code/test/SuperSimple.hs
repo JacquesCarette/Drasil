@@ -36,20 +36,20 @@ helloInitVariables :: (OOProg r) => MSBlock r
 helloInitVariables = block [comment "Initializing variables",
   varDec $ var "a" int,
   varDecDef (var "b" int) (litInt 5),
-  listDecDef (var "myOtherList" (listType double)) [litDouble 1.0,
+  listDecDef (var "myList" (listType double)) [litDouble 1.0,
     litDouble 1.5],
-  varDecDef (var "oneIndex" int) (indexOf (valueOf $ var "myOtherList"
+  varDecDef (var "oneIndex" int) (indexOf (valueOf $ var "myList"
     (listType double)) (litDouble 1.0)),
   printLn (valueOf $ var "oneIndex" int),
-  var "a" int &= listSize (valueOf $ var "myOtherList" (listType double)),
-  valStmt (listAdd (valueOf $ var "myOtherList" (listType double))
+  var "a" int &= listSize (valueOf $ var "myList" (listType double)),
+  valStmt (listAdd (valueOf $ var "myList" (listType double))
     (litInt 2) (litDouble 2.0)),
-  valStmt (listAppend (valueOf $ var "myOtherList" (listType double))
+  valStmt (listAppend (valueOf $ var "myList" (listType double))
     (litDouble 2.5)),
   varDec $ var "e" double,
-  var "e" int &= listAccess (valueOf $ var "myOtherList"
+  var "e" int &= listAccess (valueOf $ var "myList"
     (listType double)) (litInt 1),
-  valStmt (listSet (valueOf $ var "myOtherList" (listType double))
+  valStmt (listSet (valueOf $ var "myList" (listType double))
     (litInt 1) (litDouble 17.4)),
   listDec 7 (var "myName" (listType string)),
   stringSplit ' ' (var "myName" (listType string)) (litString "Brooks Mac"),
@@ -62,7 +62,7 @@ helloInitVariables = block [comment "Initializing variables",
 -- | Initialize and assign a value to a new variable @mySlicedList@.
 helloListSlice :: (OOProg r) => MSBlock r
 helloListSlice = listSlice (var "mySlicedList" (listType double))
-  (valueOf $ var "myOtherList" (listType double)) (Just (litInt 9))
+  (valueOf $ var "myList" (listType double)) (Just (litInt 9))
   Nothing (Just (litInt (-1)))
 
 s, s2, x :: (VariableSym r) => SVariable r

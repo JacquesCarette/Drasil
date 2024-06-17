@@ -11,13 +11,13 @@ import Utils.Drasil (blank, indent, indentList)
 
 -- TODO: Make these pretty once their contents are stable
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, Library, VSType, SValue, SVariable, VSFunction,
+import GOOL.Drasil.ClassInterface (Label, Library, VSType, SValue, SVariable,
   MSStatement, MixedCtorCall, OOProg, ProgramSym(..), SMethod, MSBody, MSParameter, Initializers,
   FileSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..), CSStateVar,
-  ValueExpression(..), funcApp, funcAppNamedArgs, bodyStatements, InternalValueExp(..), FunctionSym(..), GetSet(..),
+  ValueExpression(..), funcApp, bodyStatements, InternalValueExp(..), FunctionSym(..), GetSet(..),
   List(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
@@ -41,28 +41,28 @@ import qualified GOOL.Drasil.RendererClasses as RC (RenderBody(multiBody),
   import', perm, body, block, type', uOp, bOp, variable, value, function,
   statement, scope, parameter, method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (printLabel, listSep, listSep', new,
-  ClassDocRenderer, variableList, parameterList, FuncDocRenderer)
+  ClassDocRenderer, variableList, parameterList)
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp,
   sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, addComments,
   blockCmt, docCmt, commentedMod, listSetFunc, dynamic, stateVar, stateVarList,
   commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStateVal, mkStateVar, VSOp,
   unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
-  typeBinExpr, mkStmtNoEnd, mkVal)
+  typeBinExpr, mkStmtNoEnd)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   block, multiBlock, listInnerType, obj, litChar, litDouble, litInt, litString, 
   valueOf, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
   lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, call, 
-  funcAppMixedArgs, objMethodCall, lambda, modFromData, fileDoc, fileFromData, 
+  funcAppMixedArgs, lambda, modFromData, fileDoc, fileFromData, 
   csc, multiBody, sec, cot, stmt, loopStmt, emptyStmt, assign, increment, 
   subAssign, print, comment, valStmt, listAccess, func, objAccess, listSet, 
-  docClass, function, commentedClass, buildClass, method, getMethod, setMethod, 
-  returnStmt, objVar, construct, param, defaultOptSpace, ifCond, initStmts, 
+  docClass, function, commentedClass, method, getMethod, setMethod, 
+  returnStmt, objVar, construct, param, defaultOptSpace, ifCond, 
   docFunc, newObjMixedArgs)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (string',
   bool, funcType, buildModule, docMod', litArray, listDec, listDecDef, mainBody,
-  listAccessFunc, listSetFunc, intClass, bindingError, extraClass, doxFunc,
-  extFuncAppMixedArgs, functionDoc)
+  listAccessFunc, listSetFunc, bindingError, extraClass,
+  extFuncAppMixedArgs, functionDoc, listSize, listAdd)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
   litFloat, notOp, andOp, orOp, inlineIf)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1, decrement1)
@@ -71,9 +71,8 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   ParamData(..), ProgData(..), TypeData(..), td, ValData(..), vd, VarData(..),
   vard, CommonThunk, progD, fd, ScopeTag(..), pd, updateMthd)
 import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, on2CodeValues,
-  on2StateValues, onCodeList, onStateList, emptyIfEmpty, on2StateWrapped)
-import GOOL.Drasil.State (MS, VS, CS, lensGStoFS, lensFStoCS, lensCStoFS,
-  lensFStoMS, revFiles, setFileType, lensCStoMS, lensMStoVS, lensVStoMS,
+  on2StateValues, onCodeList, onStateList, emptyIfEmpty)
+import GOOL.Drasil.State (MS, VS, CS, lensGStoFS, lensCStoFS, revFiles, setFileType, lensCStoMS, lensMStoVS, lensVStoMS,
   getModuleImports, addModuleImportVS, getUsing, getLangImports, getLibImports,
   getMainDoc, useVarName, getModuleName, getClassName, setClassName,
   addLibImportVS)
@@ -392,7 +391,7 @@ instance InternalValueExp JuliaCode where
 
 instance FunctionSym JuliaCode where
   type Function JuliaCode = FuncData
-  func = G.func
+  func l t vs = funcApp l t vs >>= ((`funcFromData` t) . RC.value)
   objAccess = G.objAccess
 
 instance GetSet JuliaCode where
@@ -400,9 +399,8 @@ instance GetSet JuliaCode where
   set = undefined
 
 instance List JuliaCode where
-  listSize = on2StateWrapped (\f v -> mkVal (functionType f) -- TODO: merge with Python
-    (jlListSize (RC.value v) (RC.function f))) listSizeFunc
-  listAdd l i v = funcApp jlListInsert void [l, i #+ litInt 1, v]
+  listSize = CP.listSize
+  listAdd = CP.listAdd
   listAppend l v = funcApp jlListAppend void [l, v]
   listAccess l i = G.listAccess l (i #+ litInt 1)
   listSet l i = G.listSet l (i #+ litInt 1)
@@ -425,9 +423,9 @@ instance InternalGetSet JuliaCode where
   setFunc = undefined
 
 instance InternalListFunc JuliaCode where
-  listSizeFunc = funcFromData jlListSizeFunc int
-  listAddFunc = undefined
-  listAppendFunc = undefined
+  listSizeFunc _ = funcFromData (text jlListSize) int -- TODO: update this
+  listAddFunc l i v = func jlListAdd void [l, i, v]
+  listAppendFunc l v = func jlListAppend void [l, v]
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
 
@@ -717,16 +715,11 @@ jlFile = "IOStream"
 jlList = "AbstractArray"
 jlVoid = "Nothing"
 
-jlListInsert, jlListAppend, jlListIndex :: String
-jlListInsert = "insert!"
+jlListSize, jlListAdd, jlListAppend, jlListIndex :: Label
+jlListSize = "length"
+jlListAdd = "insert!"
 jlListAppend = "append!"
 jlListIndex    = "findfirst"
-
-jlListSizeFunc :: Doc
-jlListSizeFunc = text "length"
-
-jlListSize :: Doc -> Doc -> Doc
-jlListSize v f = f <> parens v
 
 jlListSlice :: (RenderSym r, Monad r) => SVariable r -> SValue r -> SValue r ->
   SValue r -> SValue r -> MS (r Doc)

@@ -407,8 +407,8 @@ instance GetSet PythonCode where
   set = G.set
 
 instance List PythonCode where
-  listSize = on2StateWrapped(\f v-> mkVal (functionType f) 
-    (pyListSize (RC.value v) (RC.function f))) listSizeFunc
+  listSize l = on2StateWrapped(\f v -> mkVal (functionType f) 
+    (pyListSize (RC.value v) (RC.function f))) (listSizeFunc l) l
   listAdd = G.listAdd
   listAppend = G.listAppend
   listAccess = G.listAccess
@@ -424,9 +424,9 @@ instance InternalGetSet PythonCode where
   setFunc = G.setFunc
 
 instance InternalListFunc PythonCode where
-  listSizeFunc = funcFromData pyListSizeFunc int
+  listSizeFunc _ = funcFromData pyListSizeFunc int --TODO: update this
   listAddFunc _ = CP.listAddFunc pyInsert
-  listAppendFunc = G.listAppendFunc pyAppendFunc
+  listAppendFunc _ = G.listAppendFunc pyAppendFunc
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
 

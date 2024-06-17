@@ -275,7 +275,7 @@ listAdd :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 listAdd v i vToAdd = v $. S.listAddFunc v i vToAdd
 
 listAppend :: (RenderSym r) => SValue r -> SValue r -> SValue r
-listAppend v vToApp = v $. S.listAppendFunc vToApp
+listAppend v vToApp = v $. S.listAppendFunc v vToApp
 
 listAccess :: (RenderSym r) => SValue r -> SValue r -> SValue r
 listAccess v i = do

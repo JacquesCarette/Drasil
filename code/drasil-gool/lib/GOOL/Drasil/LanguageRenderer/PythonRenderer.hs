@@ -407,9 +407,7 @@ instance GetSet PythonCode where
   set = G.set
 
 instance List PythonCode where
-  listSize l = do
-    f <- listSizeFunc l
-    mkVal (functionType f) (RC.function f)
+  listSize = CP.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend
   listAccess = G.listAccess

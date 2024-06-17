@@ -9,7 +9,7 @@ module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   listAccessFunc, doubleRender, double, openFileR, openFileW, stateVar, self,
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError,
   mainBody, inOutFunc, docInOutFunc', boolRender, bool, floatRender, float, stringRender',
-  string', inherit, implements, listSize, listAdd
+  string', inherit, implements, listSize, listAdd, listAppend
 ) where
 
 import Utils.Drasil (indent, stringList)
@@ -38,23 +38,23 @@ import qualified GOOL.Drasil.RendererClasses as S (RenderBody(multiBody),
   RenderValue(call), RenderStatement(stmt), InternalAssignStmt(multiAssign),
   InternalControlStmt(multiReturn), MethodTypeSym(construct),
   RenderMethod(intFunc), RenderClass(intClass, inherit), RenderMod(modFromData),
-  InternalListFunc(listSizeFunc, listAddFunc))
+  InternalListFunc(listSizeFunc, listAddFunc, listAppendFunc))
 import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..),
   PermElim(..), BodyElim(..), InternalTypeElim(..), InternalVarElim(variable),
   ValueElim(..), StatementElim(statement), ScopeElim(..), MethodElim(..),
   StateVarElim(..), ClassElim(..), FunctionElim(..))
 import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
-  on2StateValues, onStateList, onStateWrapped, on2StateWrapped, on3StateWrapped, on4StateWrapped)
+  on2StateValues, onStateList)
 import GOOL.Drasil.LanguageRenderer (array', new', args, array, listSep, access,
   mathFunc, ModuleDocRenderer, FuncDocRenderer, functionDox, classDox,
-  moduleDox, variableList, valueList, intValue, unOpDocD, nOpDocD)
+  moduleDox, variableList, valueList, intValue)
 import qualified GOOL.Drasil.LanguageRenderer as R (self, self', module',
   print, stateVar, stateVarList, constDecDef, extVar, listAccessFunc)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkStateVar, mkVal)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
   call, initStmts, docFunc, docFuncRepr, docClass, docMod)
-import GOOL.Drasil.AST (ScopeTag(..), FuncData (funcDoc))
+import GOOL.Drasil.AST (ScopeTag(..))
 import GOOL.Drasil.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports,
   getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc,
@@ -499,11 +499,17 @@ returnDoc = "Returns"
 
 -- Python, Julia, and MATLAB --
 listSize :: (RenderSym r) => SValue r -> SValue r
-listSize l = on2StateWrapped (\f l -> mkVal (RC.functionType f) 
-  (unOpDocD (RC.function f) (RC.value l))) (S.listSizeFunc l) l
+listSize l = do
+  f <- S.listSizeFunc l
+  mkVal (RC.functionType f) (RC.function f)
 
 -- Julia and MATLAB --
 listAdd :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
-listAdd l i v = onStateWrapped (\f -> mkVal (RC.functionType f)
-  (RC.function f)) (S.listAddFunc l i v)
+listAdd l i v = do
+  f <- S.listAddFunc l i v
+  mkVal (RC.functionType f) (RC.function f)
 
+listAppend :: (RenderSym r) => SValue r -> SValue r -> SValue r
+listAppend l v = do
+  f <- S.listAppendFunc l v
+  mkVal (RC.functionType f) (RC.function f)

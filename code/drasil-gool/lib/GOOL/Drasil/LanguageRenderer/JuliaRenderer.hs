@@ -18,13 +18,13 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SValue, SVariable,
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..), CSStateVar,
   ValueExpression(..), funcApp, bodyStatements, InternalValueExp(..), FunctionSym(..), GetSet(..),
-  List(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
-  (&=))
+  List(..), IndexingScheme(..), InternalList(..), ThunkSym(..), VectorType(..), 
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..), 
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..), 
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
+  ControlStatement(..), StatePattern(..), ObserverPattern(..), 
+  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
+  StateVarSym(..), ClassSym(..), ModuleSym(..), (&=))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
@@ -55,14 +55,14 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, call, 
   funcAppMixedArgs, lambda, modFromData, fileDoc, fileFromData, 
   csc, multiBody, sec, cot, stmt, loopStmt, emptyStmt, assign, increment, 
-  subAssign, print, comment, valStmt, listAccess, func, objAccess, listSet, 
+  subAssign, print, comment, valStmt, listAccess, objAccess, listSet, 
   docClass, function, commentedClass, method, getMethod, setMethod, 
   returnStmt, objVar, construct, param, defaultOptSpace, ifCond, 
   docFunc, newObjMixedArgs)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (string',
   bool, funcType, buildModule, docMod', litArray, listDec, listDecDef, mainBody,
   listAccessFunc, listSetFunc, bindingError, extraClass,
-  extFuncAppMixedArgs, functionDoc, listSize, listAdd)
+  extFuncAppMixedArgs, functionDoc, listSize, listAdd, listAppend)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
   litFloat, notOp, andOp, orOp, inlineIf)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1, decrement1)
@@ -399,9 +399,11 @@ instance GetSet JuliaCode where
   set = undefined
 
 instance List JuliaCode where
+  type IScheme JuliaCode = IndexingScheme
+  indexingScheme = toCode OneIndexed
   listSize = CP.listSize
   listAdd = CP.listAdd
-  listAppend l v = funcApp jlListAppend void [l, v]
+  listAppend = CP.listAppend
   listAccess l i = G.listAccess l (i #+ litInt 1)
   listSet l i = G.listSet l (i #+ litInt 1)
   indexOf l v = do
@@ -423,7 +425,7 @@ instance InternalGetSet JuliaCode where
   setFunc = undefined
 
 instance InternalListFunc JuliaCode where
-  listSizeFunc _ = funcFromData (text jlListSize) int -- TODO: update this
+  listSizeFunc l = func jlListSize int [l]
   listAddFunc l i v = func jlListAdd void [l, i, v]
   listAppendFunc l v = func jlListAppend void [l, v]
   listAccessFunc = CP.listAccessFunc

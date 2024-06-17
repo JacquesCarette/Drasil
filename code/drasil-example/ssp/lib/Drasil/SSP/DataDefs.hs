@@ -22,9 +22,9 @@ import Drasil.SSP.Unitals (baseAngle, baseLngth, baseWthX, constF, fricAngle,
   slopeHght, surfAngle, surfLngth, totNormStress, tangStress, nrmForceSum,
   watForceSum, sliceHghtRight, sliceHghtLeft, waterHght, waterWeight, watrForce)
 
-------------------------
---  Data Definitions  --
-------------------------
+----------------------
+-- Data Definitions --
+----------------------
 
 dataDefs :: [DataDefinition]
 dataDefs = [intersliceWtrF, angleA, angleB, lengthB, lengthLb, lengthLs,
@@ -47,7 +47,7 @@ intersliceWtrFEqn = completeCase [case1,case2,case3]
           sy waterWeight `addRe` (square (inxi waterHght $- inxi slopeHght) `mulRe`
           sy waterWeight), inxi waterHght $>= inxi slopeHght)
 
-        case2 = (half (square (inxi waterHght $- inxi slipHght))  `mulRe` sy waterWeight,
+        case2 = (half (square (inxi waterHght $- inxi slipHght)) `mulRe` sy waterWeight,
                 (inxi slopeHght $> inxi waterHght)
                 $&&
                 (inxi waterHght $> inxi slipHght))

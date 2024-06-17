@@ -63,7 +63,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     RefProg intro      -- This add the introduction blob to the reference section  
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
-      --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
+      -- introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
       , TAandA         -- Add table of abbreviation and acronym section
       ],
   IntroSec $
@@ -79,7 +79,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       SystCons [] []],                            
   SSDSec $ 
     SSDProg
-      [ SSDProblem $ PDProg purp []                --  This adds a is used to define the problem your system will solve
+      [ SSDProblem $ PDProg purp []                -- This adds a is used to define the problem your system will solve
         [ TermsAndDefs Nothing terms               -- This is used to define the terms to be defined in terminology sub section
       , PhySysDesc progName physSystParts figMotion [] -- This defines the Physicalsystem sub-section, define the parts
                                                           -- of the system using physSysParts, figMotion is a function in figures for the image
@@ -100,7 +100,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
-     AuxConsProg progName [],  --Adds Auxilliary constraint section
+     AuxConsProg progName [],  -- Adds Auxilliary constraint section
   Bibliography                    -- Adds reference section
   ]
 
@@ -348,17 +348,17 @@ tMods = [accelerationTM, velocityTM, newtonSL]
 -- SECTION 6 : LIKELY CHANGES --
 --------------------------------
 
---------------------------------
+-----------------------------------
 -- SECTION 6b : UNLIKELY CHANGES --
---------------------------------
+-----------------------------------
 
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
 --------------------------------------------------
 
--------------------------------------------------
--- Section 8 :  Specification Parameter Values --
--------------------------------------------------
+------------------------------------------------
+-- Section 8 : Specification Parameter Values --
+------------------------------------------------
 
 ----------------------------
 -- Section 9 : References --

@@ -11,7 +11,7 @@ import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 
 
 impulseVDerivEqn1 :: ModelExpr
-impulseVDerivEqn1 =  sy QP.force $= sy QPP.mass `mulRe` sy QP.acceleration
+impulseVDerivEqn1 = sy QP.force $= sy QPP.mass `mulRe` sy QP.acceleration
                      $= sy QPP.mass `mulRe` deriv (sy QP.velocity) QP.time
 
 impulseVDerivEqn2 :: ModelExpr -- TODO: Why does defint take a symbol as an argument? Shouldn't it be a UID?

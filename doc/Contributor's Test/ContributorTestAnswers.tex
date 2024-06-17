@@ -274,18 +274,18 @@ What is \lstinline{origin}?
 \begin{enumerate}
     \item the latest branch created
     \item a basic template branch
-    \item the master branch \marker
+    \item the main branch \marker
     \item none of the above
 \end{enumerate}
 Explain your answer here.
-\answer{Sample Answer: \lstinline{origin} is the original or \lstinline{master} branch into which all changes made on all other branches are made into. It is the master copy of a remote repo.}{0cm}{1.5cm}
+\answer{Sample Answer: \lstinline{origin} is default name of the remote we cloned a repository from. It is the ``original'' copy of sorts, often where one attempts to upstream their work to.}{0cm}{1.5cm}
 
 \question{1 mark}
 What is \lstinline{HEAD}?
 
 \begin{enumerate}
     \item the latest commit in your current branch
-    \item the base/master branch of your remote repo
+    \item the base/main branch of your remote repo
     \item the active item referenced by your current repo
     \item A. and C. \marker
 \end{enumerate}
@@ -305,19 +305,19 @@ Which branch are you pulling from when you execute the following commands:
 
 \begin{lstlisting}
 git branch
-git switch master
+git switch main
 git switch sample
 git pull
 \end{lstlisting}
 
 \begin{enumerate}
-    \item master
+    \item main
     \item sample \marker
-    \item both master and sample
-    \item neither master nor sample
+    \item both main and sample
+    \item neither main nor sample
 \end{enumerate}
 Explain your answer here.
-\answer{Sample Answer: \lstinline{git branch} displays a list of all existing branches on the current repo. \lstinline{git switch master} and \lstinline{git switch sample} switch the active branch to master, and then to sample. \lstinline{git pull} pulls from and updates the active branch, which would be sample.}{0cm}{3cm}
+\answer{Sample Answer: \lstinline{git branch} displays a list of all existing branches on the current repo. \lstinline{git switch main} and \lstinline{git switch sample} switch the active branch to \lstinline{main}, and then to sample. \lstinline{git pull} pulls from and updates the active branch, which would be sample.}{0cm}{3cm}
 
 \question{1 mark}
 Suppose that your have created a new branch on your local repo \textbf{only}. Which of the following commands would you use to push your new branch onto the remote repo?

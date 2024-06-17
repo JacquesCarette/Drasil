@@ -1,7 +1,9 @@
 on:
   push:
+    paths: [code/**]
   pull_request:
-    branches: master
+    branches: main
+    paths: [code/**]
   workflow_dispatch:
 name: Build
 defaults:
@@ -9,13 +11,13 @@ defaults:
     shell: bash
     working-directory: code
 env:
-  is_deployment: ${{ github.ref == 'refs/heads/master' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
+  is_deployment: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
 jobs:
   auto-cancel:
     if: | 
       github.event_name == 'pull_request'
       || github.event_name == 'workflow_dispatch'
-      || (github.event_name == 'push' && (github.ref == 'refs/heads/master' || contains(github.event.head_commit.message, '[workflow-trigger]')))
+      || (github.event_name == 'push' && (github.ref == 'refs/heads/main' || contains(github.event.head_commit.message, '[workflow-trigger]')))
     runs-on: ubuntu-22.04
     steps:
       - name: Cancel Previous Runs
@@ -45,7 +47,7 @@ jobs:
         run: sudo apt-get install -y --fix-missing libgmp-dev python3 graphviz doxygen fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-xetex texlive-luatex g++ default-jdk mono-devel inkscape
 
       - name: "Install Stack"
-        uses: haskell/actions/setup@v2
+        uses: haskell-actions/setup@v2
         with:
           enable-stack: true
           stack-no-global: true
@@ -129,4 +131,4 @@ jobs:
           token: ${{ secrets.BOT_TOKEN }}
           branch: gh-pages
           folder: code/deploy
-          commit-message: "${{ secrets.BOT_NAME }} deploy of master@${{ github.sha }}"
+          commit-message: "${{ secrets.BOT_NAME }} deploy of main@${{ github.sha }}"

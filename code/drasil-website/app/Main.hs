@@ -29,7 +29,7 @@ main = do
   -- Because we want to be able to test site building locally, we fill in these stubs with
   -- (sometimes correct) assumptions.
   repoSlug <- fromMaybe "JacquesCarette/Drasil" <$> lookupEnv "GITHUB_REPOSITORY"
-  tree <- fromMaybe "master" <$> lookupEnv "DRASIL_WEBSITE_TREE"
+  tree <- fromMaybe "main" <$> lookupEnv "DRASIL_WEBSITE_TREE"
   -- Next two are metadata used to produce the footer.
   buildNumber <- fromMaybe "0" <$> lookupEnv "GITHUB_RUN_NUMBER"
   buildId <- lookupEnv "GITHUB_RUN_ID"

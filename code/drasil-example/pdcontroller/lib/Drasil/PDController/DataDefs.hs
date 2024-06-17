@@ -73,7 +73,7 @@ ddDerivCtrlDefn = mkQuantDef qdDerivativeControlFD ddDerivCtrlEqn
 
 ddDerivCtrlEqn :: Expr
 ddDerivCtrlEqn
-  =  sy qdDerivGain `mulRe` sy qdProcessErrorFD `mulRe` sy qdFreqDomain
+  = sy qdDerivGain `mulRe` sy qdProcessErrorFD `mulRe` sy qdFreqDomain
 
 ddDerivCtrlNote :: Sentence
 ddDerivCtrlNote
@@ -96,7 +96,7 @@ ddCtrlVarDefn = mkQuantDef qdCtrlVarFD ddCtrlEqn
 
 ddCtrlEqn :: Expr
 ddCtrlEqn
-  =  sy qdProcessErrorFD `mulRe` (sy qdPropGain `addRe` 
+  = sy qdProcessErrorFD `mulRe` (sy qdPropGain `addRe` 
         (sy qdDerivGain `mulRe` sy qdFreqDomain))
 
 ddCtrlNote :: Sentence

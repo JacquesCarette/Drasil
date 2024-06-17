@@ -419,7 +419,7 @@ moduleDox desc as date m = (doxFile ++ m) :
   [doxNote ++ watermark]
 
 commentedMod :: FileData -> Doc -> FileData
-commentedMod m cmt = updateFileMod (updateMod (commentedItem cmt) (fileMod m)) m
+commentedMod m cmt = updateFileMod (updateMod (commentedItem $ cmt $+$ blank) (fileMod m)) m
 
 -- Helper Functions --
 

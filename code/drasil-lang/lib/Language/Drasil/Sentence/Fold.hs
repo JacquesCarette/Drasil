@@ -22,7 +22,7 @@ import Language.Drasil.Sentence
     ( Sentence(S, E, EmptyS, (:+:)), sParen, (+:+), sC, (+:+.), (+:) )
 import qualified Language.Drasil.Sentence.Combinators as S (and_, or_)
 import Utils.Drasil
-
+import Data.Foldable (foldl')
 -- TODO: This looks like it should be moved to wherever uses it, it's too specific.
 -- | Helper for formatting a list of constraints.
 foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
@@ -38,7 +38,7 @@ foldlSent = foldle (+:+) (+:+.) EmptyS
 
 -- | 'foldlSent' but does not add a period.
 foldlSent_ :: [Sentence] -> Sentence
-foldlSent_ = foldl (+:+) EmptyS
+foldlSent_ = foldl' (+:+) EmptyS
 
 -- | 'foldlSent' but ends with colon.
 foldlSentCol :: [Sentence] -> Sentence

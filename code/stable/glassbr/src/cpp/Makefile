@@ -19,13 +19,13 @@ endif
 
 build: GlassBR$(TARGET_EXTENSION)
 
-GlassBR$(TARGET_EXTENSION): InputParameters.hpp InputFormat.hpp DerivedValues.hpp InputConstraints.hpp Calculations.hpp OutputFormat.hpp ReadTable.hpp Interpolation.hpp Control.cpp InputFormat.cpp DerivedValues.cpp InputConstraints.cpp Calculations.cpp OutputFormat.cpp ReadTable.cpp Interpolation.cpp
-	"$(CXX)" Control.cpp InputFormat.cpp DerivedValues.cpp InputConstraints.cpp Calculations.cpp OutputFormat.cpp ReadTable.cpp Interpolation.cpp --std=c++11 -o GlassBR$(TARGET_EXTENSION)
+GlassBR$(TARGET_EXTENSION): InputParameters.hpp Calculations.hpp OutputFormat.hpp ReadTable.hpp Interpolation.hpp Control.cpp InputParameters.cpp Calculations.cpp OutputFormat.cpp ReadTable.cpp Interpolation.cpp
+	"$(CXX)" Control.cpp InputParameters.cpp Calculations.cpp OutputFormat.cpp ReadTable.cpp Interpolation.cpp --std=c++11 -o GlassBR$(TARGET_EXTENSION)
 
 run: build
 	./GlassBR$(TARGET_EXTENSION) $(RUNARGS)
 
-doc: doxConfig InputParameters.hpp InputFormat.hpp DerivedValues.hpp InputConstraints.hpp Calculations.hpp OutputFormat.hpp ReadTable.hpp Interpolation.hpp Control.cpp
+doc: doxConfig InputParameters.hpp Calculations.hpp OutputFormat.hpp ReadTable.hpp Interpolation.hpp Control.cpp
 	doxygen doxConfig
 
 .PHONY: build run doc

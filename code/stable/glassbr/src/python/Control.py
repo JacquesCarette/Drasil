@@ -6,9 +6,6 @@
 import sys
 
 import Calculations
-import DerivedValues
-import InputConstraints
-import InputFormat
 import InputParameters
 import OutputFormat
 
@@ -18,10 +15,7 @@ print("var 'filename' assigned ", end="", file=outfile)
 print(filename, end="", file=outfile)
 print(" in module Control", file=outfile)
 outfile.close()
-inParams = InputParameters.InputParameters()
-InputFormat.get_input(filename, inParams)
-DerivedValues.derived_values(inParams)
-InputConstraints.input_constraints(inParams)
+inParams = InputParameters.InputParameters(filename)
 J_tol = Calculations.func_J_tol(inParams)
 outfile = open("log.txt", "a")
 print("var 'J_tol' assigned ", end="", file=outfile)

@@ -9,7 +9,8 @@ import GOOL.Drasil (GSProgram, MSBody, MSBlock, SMethod, OOProg,
   CommentStatement(..), VariableSym(..), Literal(..), VariableValue(..), 
   List(..), MethodSym(..), ModuleSym(..), VSType, SVariable, ValueExpression, 
   SValue, listSlice, bodyStatements, extFuncApp, extNewObj, objVar,
-  objMethodCall, objMethodCallNoParams, stateVar, ScopeSym(..), PermanenceSym(..))
+  objMethodCall, objMethodCallNoParams, stateVar, ScopeSym(..), 
+  PermanenceSym(..), oneLiner)
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import SimpleClass (simpleClass, simpleClassName, simpleClassType)
 import SimpleLib (simpleLib, doubleAndAdd)
@@ -26,7 +27,9 @@ description = "Tests basic GOOL functions. It *might* run without errors."
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 superSimpleMain :: (OOProg r) => SMethod r
-superSimpleMain = mainFunction (body [ helloInitVariables{-, objTest, objTest2,
+superSimpleMain = mainFunction (body [ helloInitVariables, helloListSlice, 
+    block [printLn (valueOf (var "myList" (listType double))),
+    printLn (valueOf (var "mySlicedList" (listType double)))]{-, objTest, objTest2,
     block [ifCond [(valueOf (var "b" int) ?>= litInt 6, bodyStatements [varDecDef (var "dummy" string) (litString "dummy")]),
       (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody, helloIfExists,
     helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch]-}])
@@ -62,8 +65,8 @@ helloInitVariables = block [comment "Initializing variables",
 -- | Initialize and assign a value to a new variable @mySlicedList@.
 helloListSlice :: (OOProg r) => MSBlock r
 helloListSlice = listSlice (var "mySlicedList" (listType double))
-  (valueOf $ var "myList" (listType double)) (Just (litInt 9))
-  Nothing (Just (litInt (-1)))
+  (valueOf $ var "myList" (listType double)) (Just (litInt 1))
+  Nothing (Just (litInt 2))
 
 s, s2, x :: (VariableSym r) => SVariable r
 s = var "s" simpleClassType

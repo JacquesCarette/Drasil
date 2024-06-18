@@ -18,13 +18,13 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SValue, SVariable,
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..), CSStateVar,
   ValueExpression(..), funcApp, bodyStatements, InternalValueExp(..), FunctionSym(..), GetSet(..),
-  List(..), IndexingScheme(..), InternalList(..), ThunkSym(..), VectorType(..), 
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..), 
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..), 
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
-  ControlStatement(..), StatePattern(..), ObserverPattern(..), 
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..), (&=))
+  List(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..),
+  ModuleSym(..), (&=))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
@@ -62,7 +62,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (string',
   bool, funcType, buildModule, docMod', litArray, listDec, listDecDef, mainBody,
   listAccessFunc, listSetFunc, bindingError, extraClass,
-  extFuncAppMixedArgs, functionDoc, listSize, listAdd, listAppend)
+  extFuncAppMixedArgs, functionDoc, listSize, listAdd, listAppend, intToIndex',
+  indexToInt')
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
   litFloat, notOp, andOp, orOp, inlineIf)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1, decrement1)
@@ -399,25 +400,26 @@ instance GetSet JuliaCode where
   set = undefined
 
 instance List JuliaCode where
-  type IScheme JuliaCode = IndexingScheme
-  indexingScheme = toCode OneIndexed
+  intToIndex = CP.intToIndex'
+  indexToInt = CP.indexToInt'
   listSize = CP.listSize
   listAdd = CP.listAdd
   listAppend = CP.listAppend
-  listAccess l i = G.listAccess l (i #+ litInt 1)
-  listSet l i = G.listSet l (i #+ litInt 1)
+  listAccess = G.listAccess
+  listSet = G.listSet
   indexOf l v = do
     v' <- v
-    let t = return $ valueType v'
-    funcApp jlListIndex t [lambda [var "x" t] (valueOf (var "x" t) ?== v), l] #- litInt 1
+    let t = toCode $ valueType v'
+    indexToInt $ funcApp
+      jlListIndex t [lambda [var "x" t] (valueOf (var "x" t) ?== v), l]
 
 instance InternalList JuliaCode where
   -- TODO: This has the same behaviour as all except Python, which does it right.
   listSlice' b e s vn vo = jlListSlice vn vo (bIndex b) (eIndex e) (getVal s)
     where bIndex Nothing = mkStateVal void jlStart
-          bIndex (Just x) = x #+ litInt 1
+          bIndex (Just x) = intToIndex x
           eIndex Nothing = mkStateVal void jlEnd
-          eIndex (Just x) = x #+ litInt 1
+          eIndex (Just x) = intToIndex x
           getVal = fromMaybe $ mkStateVal void empty
 
 instance InternalGetSet JuliaCode where

@@ -238,22 +238,14 @@ instance Typed Expr Space where
           -- If the inferred type of e is a valid Space, call allOfType with spaceValue
           allOfType cxt exs spaceValue spaceValue 
               "Associative arithmetic operation expects all operands to be of the same expected type."
-      Left _ ->
+      Left l ->
           -- Handle the case when sp is a Left value but spaceValue is invalid
-          Right "Invalid spaceValue encountered."
+          Right ("Expected all operands in addition/multiplication to be numeric, but found " ++ show l)
       Right r ->
           -- If sp is a Right value containing a TypeError
           Right r
-
-  infer _ (AssocA op exs) = 
-    case (op, exs) of
-      (Add, []) -> 
-        -- Return a default value or an error for empty addition
-        Right "Associative addition requires at least one operand."
-      (Mul, []) -> 
-        -- Return a default value or an error for empty multiplication
-        Right "Associative multiplication requires at least one operand."
-      -- Other cases...
+  infer _ (AssocA Add _) = Right "Associative addition requires at least one operand."
+  infer _ (AssocA Mul _) = Right "Associative multiplication requires at least one operand."
 
   infer cxt (AssocB _ exs) = allOfType cxt exs S.Boolean S.Boolean
     $ "Associative boolean operation expects all operands to be of the same type (" ++ show S.Boolean ++ ")."

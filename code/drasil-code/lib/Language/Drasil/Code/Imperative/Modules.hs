@@ -392,35 +392,47 @@ genInputFormat :: (OOProg r) => ScopeTag ->
 genInputFormat s = do
   g <- get
   dd <- genDataDesc
-  let dvals = derivedInputs $ codeSpec g
-      cm = cMap $ codeSpec g
-      getFunc Pub = publicInOutFunc
+  let getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
       genInFormat :: (OOProg r) => Bool -> Bool -> GenState
         (Maybe (SMethod r))
       genInFormat False _ = return Nothing
-      genInFormat _ il = do
+      genInFormat _ False = do
         ins <- getInputFormatIns
         outs <- getInputFormatOuts
-        formatBod <- readData dd
+        bod <- readData dd
         desc <- inFmtFuncDesc
-        -- Derived inputs
-        derivedBod <- mapM (\x -> genCalcBlock CalcAssign x (x ^. codeExpr)) dvals
-        -- Input constraints
-        let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec g)
-            sfwrCs   = map (sfwrLookup cm) varsList
-            physCs   = map (physLookup cm) varsList
-        sf <- sfwrCBody sfwrCs
-        ph <- physCBody physCs
-        let constraintsBod = [block sf, block ph]
-        -- Wrap it up
-        let bod = if il 
-                    then do
-                      formatBod ++ derivedBod ++ constraintsBod
-                    else formatBod
         mthd <- getFunc s "get_input" desc ins outs bod
         return $ Just mthd
+      genInFormat _ True = genInputInterleaved s
   genInFormat ("get_input" `elem` defList g) (isInterleaved $ inStruct g)
+
+genInputInterleaved :: (OOProg r) => ScopeTag -> GenState (Maybe (SMethod r))
+genInputInterleaved s = do
+  g <- get
+  let getFunc Pub = publicInOutFunc
+      getFunc Priv = privateInOutMethod
+  -- Input Format
+  dd <- genDataDesc
+  ins <- getInputFormatIns
+  outs <- getInputFormatOuts
+  formatBod <- readData dd
+  desc <- inFmtFuncDesc
+  -- Derived inputs
+  let dvals = derivedInputs $ codeSpec g
+  derivedBod <- mapM (\x -> genCalcBlock CalcAssign x (x ^. codeExpr)) dvals
+  -- Input constraints
+  let cm = cMap $ codeSpec g
+      varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec g)
+      sfwrCs   = map (sfwrLookup cm) varsList
+      physCs   = map (physLookup cm) varsList
+  sf <- sfwrCBody sfwrCs
+  ph <- physCBody physCs
+  let constraintsBod = [block sf, block ph]
+  -- Wrap it up
+  let bod = formatBod ++ derivedBod ++ constraintsBod
+  mthd <- getFunc s "get_input" desc ins outs bod
+  return $ Just mthd
 
 -- | Defines the 'DataDesc' for the format we require for input files. When we make
 -- input format a design variability, this will read the user's design choices

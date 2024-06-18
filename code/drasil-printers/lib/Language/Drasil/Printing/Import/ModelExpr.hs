@@ -212,8 +212,8 @@ withParens prI a b = P.Row [parens (modelExpr a prI), P.Sup (modelExpr b prI)]
 
 -- | Helper for properly rendering exponents.
 pow :: PrintingInformation -> ModelExpr -> ModelExpr -> P.Expr
-pow prI a@(AssocA Add _)          b = withParens prI a b
-pow prI a@(AssocA Mul _)         b = withParens prI a b
+pow prI a@(AssocA Add _)           b = withParens prI a b
+pow prI a@(AssocA Mul _)           b = withParens prI a b
 pow prI a@(ArithBinaryOp Subt _ _) b = withParens prI a b
 pow prI a@(ArithBinaryOp Frac _ _) b = withParens prI a b
 pow prI a@(ArithBinaryOp Pow _ _)  b = withParens prI a b

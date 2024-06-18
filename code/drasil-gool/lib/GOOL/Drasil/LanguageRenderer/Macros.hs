@@ -68,8 +68,8 @@ listSlice b e s vnew vold = do
     v_temp = S.valueOf var_temp
     var_i = S.var l_i S.int
     v_i = S.valueOf var_i
-    begin = S.intToIndex $ (fromMaybe (S.litInt 0) b)
-    end = S.intToIndex $ (fromMaybe (S.listSize vold) e)
+    begin = S.intToIndex $ fromMaybe (S.litInt 0) b
+    end = S.intToIndex $ fromMaybe (S.listSize vold) e
   S.block [
     S.listDec 0 var_temp,
     S.for (S.varDecDef var_i begin)

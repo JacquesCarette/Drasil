@@ -17,13 +17,13 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj,
   InternalValueExp(..), objMethodCall, FunctionSym(..), GetSet(..), List(..),
-  IndexingScheme(..), InternalList(..), ThunkSym(..), VectorType(..), 
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..), 
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
-  IOStatement(..), StringStatement(..), FuncAppStatement(..), 
-  CommentStatement(..), ControlStatement(..), switchAsIf, StatePattern(..), 
-  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..), 
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..), 
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..),
+  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -68,7 +68,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   funcType, buildModule, bindingError, notNull, listDecDef, destructorError, 
   stateVarDef, constVar, litArray, listSetFunc, extraClass, listAccessFunc, 
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
-  mainBody, inOutFunc, docInOutFunc', listSize)
+  mainBody, inOutFunc, docInOutFunc', listSize, intToIndex, indexToInt)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
   notifyObservers', checkState)
@@ -407,8 +407,8 @@ instance GetSet PythonCode where
   set = G.set
 
 instance List PythonCode where
-  type IScheme PythonCode = IndexingScheme
-  indexingScheme = toCode ZeroIndexed
+  intToIndex = CP.intToIndex
+  indexToInt = CP.indexToInt
   listSize = CP.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend

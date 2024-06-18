@@ -20,13 +20,13 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, InternalValueExp(..),
   objMethodCall, FunctionSym(..), ($.), GetSet(..), List(..), 
-  IndexingScheme(..), InternalList(..), ThunkSym(..), VectorType(..), 
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..), 
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..), 
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
-  ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..), 
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), pubMethod, 
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
+  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), pubMethod, StateVarSym(..), ClassSym(..),
+  ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -71,7 +71,7 @@ import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, funcType, buildModule, litArray, 
   call', listSizeFunc, listAccessFunc', string, constDecDef, docInOutFunc, 
-  listSetFunc, extraClass)
+  listSetFunc, extraClass, intToIndex, indexToInt)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float, 
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse, 
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, 
@@ -416,8 +416,8 @@ instance (Pair p) => GetSet (p CppSrcCode CppHdrCode) where
   set = pair3 set set
 
 instance (Pair p) => List (p CppSrcCode CppHdrCode) where
-  type IScheme (p CppSrcCode CppHdrCode) = IndexingScheme
-  indexingScheme = pair indexingScheme indexingScheme
+  intToIndex = pair1 intToIndex intToIndex
+  indexToInt = pair1 indexToInt indexToInt
   listSize = pair1 listSize listSize
   listAdd = pair3 listAdd listAdd
   listAppend = pair2 listAppend listAppend
@@ -1309,8 +1309,8 @@ instance GetSet CppSrcCode where
   set = G.set
 
 instance List CppSrcCode where
-  type IScheme CppSrcCode = IndexingScheme
-  indexingScheme = toCode ZeroIndexed
+  intToIndex = CP.intToIndex
+  indexToInt = CP.indexToInt
   listSize v = cast int (C.listSize v)
   listAdd = G.listAdd
   listAppend = G.listAppend 
@@ -1975,8 +1975,8 @@ instance GetSet CppHdrCode where
   set _ _ _ = mkStateVal void empty
 
 instance List CppHdrCode where
-  type IScheme CppHdrCode = IndexingScheme
-  indexingScheme = toCode ZeroIndexed
+  intToIndex _ = mkStateVal void empty
+  indexToInt _ = mkStateVal void empty
   listSize _ = mkStateVal void empty
   listAdd _ _ _ = mkStateVal void empty
   listAppend _ _ = mkStateVal void empty

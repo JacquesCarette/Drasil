@@ -486,8 +486,6 @@ docCommandSep = ": "
 authorDoc = "Authors"
 dateDoc = "Date"
 noteDoc = "Note"
-paramDoc = "Parameter"
-returnDoc = "Returns"
 
 -- Python, Julia, and MATLAB --
 listSize :: (RenderSym r) => SValue r -> SValue r

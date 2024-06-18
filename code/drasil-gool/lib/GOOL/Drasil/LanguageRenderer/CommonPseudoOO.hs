@@ -74,9 +74,13 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
 import Metadata.Drasil.DrasilMetaCall (watermark)
 
 -- Python, Java, C#, C++, and Swift --
+-- | Convert an integer to an index in a 0-indexed language
+--   Since GOOL is 0-indexed, no adjustments need be made
 intToIndex :: SValue r -> SValue r
 intToIndex = id
 
+-- | Convert an index to an integer in a 0-indexed language
+--   Since GOOL is 0-indexed, no adjustments need be made
 indexToInt :: SValue r -> SValue r
 indexToInt = id
 
@@ -488,24 +492,31 @@ dateDoc = "Date"
 noteDoc = "Note"
 
 -- Python, Julia, and MATLAB --
+-- | Call to get the size of a list in a language where this is not a method.
 listSize :: (RenderSym r) => SValue r -> SValue r
 listSize l = do
   f <- S.listSizeFunc l
   mkVal (RC.functionType f) (RC.function f)
 
 -- Julia and MATLAB --
+-- | Call to insert a value into a list in a language where this is not a method.
 listAdd :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 listAdd l i v = do
   f <- S.listAddFunc l (S.intToIndex i) v
   mkVal (RC.functionType f) (RC.function f)
 
+-- | Call to append a value to a list in a language where this is not a method.
 listAppend :: (RenderSym r) => SValue r -> SValue r -> SValue r
 listAppend l v = do
   f <- S.listAppendFunc l v
   mkVal (RC.functionType f) (RC.function f)
 
+-- | Convert an integer to an index in a 1-indexed language
+--   Since GOOL is 0-indexed, we need to add 1
 intToIndex' :: (RenderSym r) => SValue r -> SValue r
 intToIndex' = (#+ S.litInt 1)
 
+-- | Convert an index to an integer in a 1-indexed language
+--   Since GOOL is 0-indexed, we need to subtract 1
 indexToInt' :: (RenderSym r) => SValue r -> SValue r
 indexToInt' = (#- S.litInt 1)

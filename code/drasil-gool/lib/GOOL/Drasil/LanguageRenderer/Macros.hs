@@ -17,7 +17,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
 import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block), 
   TypeSym(int, string, listInnerType), VariableSym(var), Literal(litInt), 
   VariableValue(valueOf), ValueExpression(notNull), 
-  List(listSize, listAppend, listAccess), StatementSym(valStmt), 
+  List(listSize, listAppend, listAccess, intToIndex), StatementSym(valStmt), 
   AssignStatement(assign), DeclStatement(varDecDef, listDec), 
   ControlStatement(ifCond, switch, for, forRange))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderValue(cast))
@@ -68,10 +68,12 @@ listSlice b e s vnew vold = do
     v_temp = S.valueOf var_temp
     var_i = S.var l_i S.int
     v_i = S.valueOf var_i
+    begin = S.intToIndex $ (fromMaybe (S.litInt 0) b)
+    end = S.intToIndex $ (fromMaybe (S.listSize vold) e)
   S.block [
     S.listDec 0 var_temp,
-    S.for (S.varDecDef var_i (fromMaybe (S.litInt 0) b))
-      (v_i ?< fromMaybe (S.listSize vold) e) (maybe (var_i &++) (var_i &+=) s)
+    S.for (S.varDecDef var_i begin)
+      (v_i ?< end) (maybe (var_i &++) (var_i &+=) s)
       (oneLiner $ S.valStmt $ S.listAppend v_temp (S.listAccess vold v_i)),
     vnew &= v_temp]
       

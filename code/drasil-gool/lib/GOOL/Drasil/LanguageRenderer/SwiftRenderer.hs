@@ -20,13 +20,13 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp,
   newObj, InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
   objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), 
-  IndexingScheme(..), listSlice, InternalList(..), ThunkSym(..), VectorType(..), 
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..), 
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
-  IOStatement(..), StringStatement(..), FuncAppStatement(..), 
-  CommentStatement(..), ControlStatement(..), StatePattern(..), 
-  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), convType)
+  listSlice, InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), StatePattern(..), ObserverPattern(..), 
+  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  StateVarSym(..), ClassSym(..), ModuleSym(..), convType)
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, 
   RenderFile(..), ImportSym(..), ImportElim, PermElim(binding), RenderBody(..), 
   BodyElim, RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
@@ -72,7 +72,8 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (classVar,
   listSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR, 
   openFileW, self, multiAssign, multiReturn, listDec, funcDecDef, 
   inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', bool, float, 
-  stringRender', string', inherit, implements, functionDoc)
+  stringRender', string', inherit, implements, functionDoc, intToIndex,
+  indexToInt)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (notOp, andOp, orOp, 
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, 
   listSize, varDecDef, extObjDecNew, switch, while)
@@ -415,8 +416,8 @@ instance GetSet SwiftCode where
   set = G.set
 
 instance List SwiftCode where
-  type IScheme SwiftCode = IndexingScheme
-  indexingScheme = toCode ZeroIndexed
+  intToIndex = CP.intToIndex
+  indexToInt = CP.indexToInt
   listSize = C.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend

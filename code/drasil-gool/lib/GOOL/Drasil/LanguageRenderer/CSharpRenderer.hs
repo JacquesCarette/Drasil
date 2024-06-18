@@ -18,9 +18,9 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp,
   newObj, InternalValueExp(..), objMethodCallNoParams, FunctionSym(..), ($.),
-  GetSet(..), List(..), IndexingScheme(..), InternalList(..), ThunkSym(..), 
-  VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..), 
-  ThunkAssign(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  GetSet(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
   IOStatement(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), StatePattern(..),
   ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
@@ -70,7 +70,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   mainFunction, buildModule', string, constDecDef, docInOutFunc, bindingError, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, listSetFunc, 
   extraClass, listAccessFunc, doubleRender, openFileR, openFileW, stateVar, 
-  inherit, implements)
+  inherit, implements, intToIndex, indexToInt)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -399,8 +399,8 @@ instance GetSet CSharpCode where
   set = G.set
 
 instance List CSharpCode where
-  type IScheme CSharpCode = IndexingScheme
-  indexingScheme = toCode ZeroIndexed
+  intToIndex = CP.intToIndex
+  indexToInt = CP.indexToInt
   listSize = C.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend

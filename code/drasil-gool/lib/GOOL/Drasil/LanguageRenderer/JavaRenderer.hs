@@ -18,9 +18,9 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
   selfFuncApp, extFuncApp, newObj, InternalValueExp(..), FunctionSym(..), ($.),
-  GetSet(..), List(..), IndexingScheme(..), InternalList(..), ThunkSym(..), 
-  VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..), 
-  ThunkAssign(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  GetSet(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
   IOStatement(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), StatePattern(..),
   ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
@@ -74,7 +74,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   docMain, mainFunction, buildModule', bindingError, listDecDef, 
   destructorError, stateVarDef, constVar, litArray, call', listSizeFunc, 
   listAccessFunc', notNull, doubleRender, double, openFileR, openFileW, 
-  stateVar, floatRender, float, string')
+  stateVar, floatRender, float, string', intToIndex, indexToInt)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -430,8 +430,8 @@ instance GetSet JavaCode where
   set = G.set
 
 instance List JavaCode where
-  type IScheme JavaCode = IndexingScheme
-  indexingScheme = toCode ZeroIndexed
+  intToIndex = CP.intToIndex
+  indexToInt = CP.indexToInt
   listSize = C.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend

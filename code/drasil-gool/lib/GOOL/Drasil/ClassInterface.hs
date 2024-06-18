@@ -16,7 +16,7 @@ module GOOL.Drasil.ClassInterface (
   extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists,
   InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
   objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..), ($.),
-  selfAccess, GetSet(..), List(..), IndexingScheme(..), InternalList(..), listSlice,
+  selfAccess, GetSet(..), List(..), InternalList(..), listSlice,
   listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
@@ -345,12 +345,13 @@ class (ValueSym r, VariableSym r) => GetSet r where
   get :: SValue r -> SVariable r -> SValue r
   set :: SValue r -> SVariable r -> SValue r -> SValue r
 
-data IndexingScheme = ZeroIndexed -- Stores whether the language's list API
-                    | OneIndexed  -- is 0- or 1-indexed.
-
 class (ValueSym r) => List r where
-  type IScheme r
-  indexingScheme :: r (IScheme r)
+  -- | Does any necessary conversions from GOOL's zero-indexed assumptions to
+  --   the target language's assumptions
+  intToIndex :: SValue r -> SValue r
+  -- | Does any necessary conversions from the target language's indexing
+  --   assumptions assumptions to GOOL's zero-indexed assumptions
+  indexToInt :: SValue r -> SValue r
   -- | Finds the size of a list.
   --   Arguments are: List
   listSize   :: SValue r -> SValue r
@@ -370,20 +371,13 @@ class (ValueSym r) => List r where
   --   Arguments are: List, Value
   indexOf :: SValue r -> SValue r -> SValue r
 
-intToIndex :: (Literal r, NumericExpression r) => 
-  SValue r -> IndexingScheme -> SValue r
-intToIndex i ZeroIndexed = i
-intToIndex i OneIndexed = i #+ (litInt 1)
-
-indexToInt :: (Literal r, NumericExpression r) =>
-  SValue r -> IndexingScheme -> SValue r
-indexToInt i ZeroIndexed = i
-indexToInt i OneIndexed = i #- (litInt 1)
-
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) 
     -> SVariable r -> SValue r -> MSBlock r
-  
+
+-- | Creates a slice of a list and assigns it to a variable.
+--   Arguments are: Variable to assign, list to read from,
+--   [Start index], [End index], [Step]
 listSlice :: (InternalList r) => SVariable r -> SValue r -> Maybe (SValue r) -> 
   Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listSlice vnew vold b e s = listSlice' b e s vnew vold

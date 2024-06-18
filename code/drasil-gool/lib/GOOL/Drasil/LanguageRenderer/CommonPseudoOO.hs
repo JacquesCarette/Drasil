@@ -9,7 +9,8 @@ module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   listAccessFunc, doubleRender, double, openFileR, openFileW, stateVar, self,
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError,
   mainBody, inOutFunc, docInOutFunc', boolRender, bool, floatRender, float, stringRender',
-  string', inherit, implements, listSize, listAdd, listAppend
+  string', inherit, implements, listSize, listAdd, listAppend, intToIndex,
+  indexToInt, intToIndex', indexToInt'
 ) where
 
 import Utils.Drasil (indent, stringList)
@@ -21,12 +22,13 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, VSType,
   oneLiner, TypeSym(infile, outfile, listInnerType, obj),
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType),
   ValueSym(valueType), Comparison(..), objMethodCallNoParams, (&=),
-  ControlStatement(returnStmt), ScopeSym(..), MethodSym(function))
+  ControlStatement(returnStmt), ScopeSym(..), MethodSym(function),
+  NumericExpression((#+), (#-)))
 import qualified GOOL.Drasil.ClassInterface as S (
   TypeSym(int, double, string, listType, arrayType, void),
-  VariableSym(var, self, objVar), Literal(litTrue, litFalse, litList),
+  VariableSym(var, self, objVar), Literal(litTrue, litFalse, litList, litInt),
   VariableValue(valueOf), FunctionSym(func, objAccess), StatementSym(valStmt),
-  DeclStatement(varDec, varDecDef, constDecDef),
+  DeclStatement(varDec, varDecDef, constDecDef), List(intToIndex, indexToInt),
   ParameterSym(param, pointerParam), MethodSym(mainFunction),
   ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (RenderSym, ImportSym(..), RenderBody(..),
@@ -71,6 +73,13 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
   brackets, braces, colon, vcat, equals)
 import Metadata.Drasil.DrasilMetaCall (watermark)
 
+-- Python, Java, C#, C++, and Swift --
+intToIndex :: SValue r -> SValue r
+intToIndex = id
+
+indexToInt :: SValue r -> SValue r
+indexToInt = id
+
 -- Python, Java, C#, and C++ --
 
 intRender :: String
@@ -114,7 +123,7 @@ objVarSelf :: (RenderSym r) => SVariable r -> SVariable r
 objVarSelf = S.objVar S.self
 
 indexOf :: (RenderSym r) => Label -> SValue r -> SValue r -> SValue r
-indexOf f l v = S.objAccess l (S.func f S.int [v])
+indexOf f l v = S.indexToInt $ S.objAccess l (S.func f S.int [v])
 
 listAddFunc :: (RenderSym r) => Label -> SValue r -> SValue r -> VSFunction r
 listAddFunc f i v = S.func f (S.listType $ onStateValue valueType v)
@@ -506,10 +515,16 @@ listSize l = do
 -- Julia and MATLAB --
 listAdd :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 listAdd l i v = do
-  f <- S.listAddFunc l i v
+  f <- S.listAddFunc l (S.intToIndex i) v
   mkVal (RC.functionType f) (RC.function f)
 
 listAppend :: (RenderSym r) => SValue r -> SValue r -> SValue r
 listAppend l v = do
   f <- S.listAppendFunc l v
   mkVal (RC.functionType f) (RC.function f)
+
+intToIndex' :: (RenderSym r) => SValue r -> SValue r
+intToIndex' = (#+ (S.litInt 1))
+
+indexToInt' :: (RenderSym r) => SValue r -> SValue r
+indexToInt' = (#- (S.litInt 1))

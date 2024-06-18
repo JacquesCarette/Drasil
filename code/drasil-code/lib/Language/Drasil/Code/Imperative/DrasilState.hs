@@ -199,7 +199,7 @@ getConstantsCls chs cs = cnCls (constStructure $ dataInfo chs) (inputStructure $
   where cnCls (Store Bundled) _ = zipCs Constants
         cnCls WithInputs Bundled = zipCs InputParameters
         cnCls _ _ = []
-        zipCs ic = zip (map codeName cs) $ repeat (icNames chs ic)
+        zipCs ic = map (, icNames chs ic) (map codeName cs)
 
 -- | Get derived input functions (for @derived_values@).
 -- If there are no derived inputs, a derived inputs function is not generated.

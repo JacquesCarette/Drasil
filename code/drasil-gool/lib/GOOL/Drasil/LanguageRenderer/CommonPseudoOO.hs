@@ -1,6 +1,6 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
 module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
-  doxClass, doxMod, docMod', functionDoc, extVar, classVar, objVarSelf, indexOf, listAddFunc,
+  doxClass, doxMod, docMod', extVar, classVar, objVarSelf, indexOf, listAddFunc,
   discardFileLine, intClass, funcType, buildModule, arrayType, pi, printSt,
   arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction,
   buildModule', call', listSizeFunc, listAccessFunc', string, constDecDef,
@@ -51,7 +51,7 @@ import GOOL.Drasil.LanguageRenderer (array', new', args, array, listSep, access,
 import qualified GOOL.Drasil.LanguageRenderer as R (self, self', module',
   print, stateVar, stateVarList, constDecDef, extVar, listAccessFunc)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
-  mkStateVal, mkStateVar)
+  mkStateVal, mkStateVar, mkVal)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
   call, initStmts, docFunc, docFuncRepr, docClass, docMod)
 import GOOL.Drasil.AST (ScopeTag(..))

@@ -68,7 +68,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   funcType, buildModule, bindingError, notNull, listDecDef, destructorError, 
   stateVarDef, constVar, litArray, listSetFunc, extraClass, listAccessFunc, 
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
-  mainBody, inOutFunc, docInOutFunc')
+  mainBody, inOutFunc, docInOutFunc', listSize)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
   notifyObservers', checkState)

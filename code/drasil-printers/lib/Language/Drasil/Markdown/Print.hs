@@ -4,7 +4,6 @@ module Language.Drasil.Markdown.Print(genMD, genMD') where
 import Prelude hiding (print, (<>))
 import Text.PrettyPrint hiding (Str)
 import Data.List (transpose)
-import Data.Map (Map, fromList)
 
 import qualified Language.Drasil as L
 
@@ -17,14 +16,17 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..),
   Filepath)
-import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, brace, 
-  unders, hat, hyph, dot, nl, tab)
+import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, unders, 
+  hat, hyph, dot, nl, tab)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
-import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr, fence, OpenClose(..))
-import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
+import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr, fence, OpenClose(..),
+  pMatrix, cases)
+import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL),
+  toText)
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Print(renderCite)
+import Language.Drasil.TeX.Helpers(commandD, command2D, mkEnv)
 
 import Language.Drasil.Markdown.Helpers (h, stripStr, image, li, 
   reflink, reflinkURI, reflinkInfo, caption, bold, ul, br, docLength, divTag, defnHTag)
@@ -48,7 +50,7 @@ print :: [LayoutObj] -> Doc
 print = foldr (($$) . printLO) empty
 
 build' :: Document -> [(Filepath, Doc)]
-build' (Document t a c) = convert c
+build' (Document _ _ c) = convert c
 
 extractHDivs :: Int -> LayoutObj -> [(Filepath, Doc)]
 extractHDivs depth lo@(HDiv _ objs label) 
@@ -124,68 +126,33 @@ spec e = printMath $ toMathHelper $ TeX.spec e
 
 -- | Print an expression to a document.
 pExpr :: Expr -> Doc
-pExpr (Str s)        = text "\\text{" <> (quote (text s)) <> text "}"
-pExpr (Div n d)      = command2D "frac" (pExpr n) (pExpr d)
-pExpr (Case ps)      = mkEnv "cases" (cases ps) --
-pExpr (Mtx a)        = stripStr (mkEnv "bmatrix" (pMatrix a)) tab
-pExpr (Row [x])      = br $ pExpr x -- FIXME: Hack needed for symbols with multiple subscripts, etc.
+pExpr (Str s)        = printMath $ toText $ pure $ lq <> text s <> rq
+  where lq = text "\\\\(\\``\\\\)"
+        rq = text "''"
+pExpr (Div n d)      = printMath $ command2D "frac" (pure $ pExpr n) (pure $ pExpr d)
+pExpr (Case ps)      = printMath $ mkEnv "cases" (TeX.cases ps expNl (pure . pExpr))
+pExpr (Mtx a)        = stripStr (printMath $ mkEnv "bmatrix" (TeX.pMatrix a expNl (pure . pExpr))) tab
+pExpr (Row [x])      = br $ pExpr x 
 pExpr (Row l)        = foldl1 (<>) (map pExpr l)
 pExpr (Sub e)        = unders <> br (pExpr e)
 pExpr (Sup e)        = hat    <> br (pExpr e)
-pExpr (Over Hat s)   = commandD "hat" (pExpr s)
+pExpr (Over Hat s)   = printMath $ commandD "hat" (pure $ pExpr s)
+pExpr (MO o)         = bslash <> (printMath $ TeX.pExpr (MO o))
 pExpr (Fenced l r m) = fence TeX.Open l <> pExpr m <> fence TeX.Close r
-pExpr (Font Bold e)  = commandD "boldsymbol" (pExpr e) --
-pExpr (Font Emph e)  = pExpr e -- Emph is ignored here because we're in Math mode
+  where fence _ Abs = text "\\|"
+        fence a b   = printMath $ TeX.fence a b
+pExpr (Font Bold e)  = printMath $ commandD "boldsymbol" (pure $ pExpr e) --
+pExpr (Font Emph e)  = pExpr e
 pExpr (Spc Thin)     = text "\\\\," --
-pExpr (Sqrt e)       = commandD "sqrt" (pExpr e)
-pExpr e              = printMath $ toMath $ TeX.pExpr e
+pExpr (Sqrt e)       = printMath $ commandD "sqrt" (pure $ pExpr e)
+pExpr e              = printMath $ TeX.pExpr e
 
 -- | Helper for rendering a D from Latex print
 printMath :: D -> Doc
-printMath = (`runPrint` Math)
+printMath = (`runPrint` Math) . toMath
 
-commandD :: String -> Doc -> Doc
-commandD s c = (bslash <> text s) <> br c
-
-command2D :: String -> Doc -> Doc -> Doc
-command2D s a0 a1 = (bslash <> text s) <> br a0 <> br a1
-
-fence :: TeX.OpenClose -> Fence -> Doc
-fence _ Abs = text "\\|"
-fence a b   = printMath $ TeX.fence a b
-
--- | For printing a Matrix.
-pMatrix :: [[Expr]] -> Doc
-pMatrix e = vpunctuate (text "\\\\\\\\") (map pIn e)
-  where pIn x = hpunctuate (text " & ") (map pExpr x)
-
--- | Helper for printing case expression.
-cases :: [(Expr,Expr)] -> Doc
-cases [] = error "Attempt to create case expression without cases"
-cases e  = vpunctuate (text "\\\\\\\\") (map _case e)
-  where _case (x, y) = hpunctuate (text ", & ") (map pExpr [x, y])
-
--- Combine 'TP.vcat' and 'TP.punctuate'.
-vpunctuate :: Doc -> [Doc] -> Doc
-vpunctuate x = vcat . punctuate x
-
--- Combine 'TP.hcat' and 'TP.punctuate'.
-hpunctuate :: Doc -> [Doc] -> Doc
-hpunctuate x = hcat . punctuate x
-
--- | Helper for adding fencing symbols.
-quote :: Doc -> Doc
-quote x = lq <> x <> rq
-  where
-  lq = text "\\\\(\\``\\\\)"
-  rq = text "''"
-
--- | Encapsulate environments.
-mkEnv :: String -> Doc -> Doc
-mkEnv nm d =
-  (text ("\\begin" ++ brace nm)) $$ 
-  d $$
-  (text ("\\end" ++ brace nm))
+expNl :: Doc
+expNl = text "\\\\\\\\"
 
 -----------------------------------------------------------------
 -------------------- TABLE PRINTING -----------------------------

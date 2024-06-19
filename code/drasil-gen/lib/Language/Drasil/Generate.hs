@@ -65,9 +65,9 @@ prntDoc d pinfo fn dtype fmt =
 prntDoc' :: DocType -> String -> String -> Format -> Document -> PrintingInformation -> IO ()
 prntDoc' dt dt' fn Markdown body' sm = do
   createDirectoryIfMissing True dt'
-  mapM_ writeDocToFile cons
+  mapM_ writeDocToFile con
   where 
-    cons = writeDoc' sm dt Markdown fn body'
+    con = writeDoc' sm dt Markdown fn body'
     writeDocToFile (fp, d) = do
       outh <- openFile (dt' ++ "/" ++ fp ++ ".md") WriteMode
       hPutStrLn outh $ render $ d

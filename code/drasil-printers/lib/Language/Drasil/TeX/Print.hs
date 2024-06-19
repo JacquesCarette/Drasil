@@ -1,5 +1,6 @@
 -- | Defines main LaTeX printer functions. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.TeX.Print.html).
-module Language.Drasil.TeX.Print(genTeX, pExpr, pUnit, spec, fence, OpenClose(..)) where
+module Language.Drasil.TeX.Print(genTeX, pExpr, pUnit, spec, fence, OpenClose(..),
+  pMatrix, cases) where
 
 import Prelude hiding (print)
 import Data.Bifunctor (bimap)
@@ -103,8 +104,8 @@ pExpr (Dbl d)        = pure . text $ showEFloat Nothing d ""
 pExpr (Int i)        = pure (integer i)
 pExpr (Str s)        = toText . quote . pure $ text s
 pExpr (Div n d)      = command2D "frac" (pExpr n) (pExpr d)
-pExpr (Case ps)      = mkEnv "cases" (cases ps)
-pExpr (Mtx a)        = mkEnv "bmatrix" (pMatrix a)
+pExpr (Case ps)      = mkEnv "cases" (cases ps dbs pExpr)
+pExpr (Mtx a)        = mkEnv "bmatrix" (pMatrix a dbs pExpr)
 pExpr (Row [x])      = br $ pExpr x -- FIXME: Hack needed for symbols with multiple subscripts, etc.
 pExpr (Row l)        = foldl1 (<>) (map pExpr l)
 pExpr (Ident s@[_])  = pure . text . escapeIdentSymbols $ s
@@ -185,15 +186,15 @@ fence _ Abs       = pure $ text "|"
 fence _ Norm      = pure $ text "\\|"
 
 -- | For printing a Matrix.
-pMatrix :: [[Expr]] -> D
-pMatrix e = vpunctuate dbs (map pIn e)
-  where pIn x = hpunctuate (text " & ") (map pExpr x)
+pMatrix :: [[Expr]] -> TP.Doc -> (Expr -> D) -> D
+pMatrix e esc f = vpunctuate esc (map pIn e)
+  where pIn x = hpunctuate (text " & ") (map f x)
 
 -- | Helper for printing case expression.
-cases :: [(Expr,Expr)] -> D
-cases [] = error "Attempt to create case expression without cases"
-cases e  = vpunctuate dbs (map _case e)
-  where _case (x, y) = hpunctuate (text ", & ") (map pExpr [x, y])
+cases :: [(Expr,Expr)] -> TP.Doc -> (Expr -> D) -> D
+cases [] _ _ = error "Attempt to create case expression without cases"
+cases e esc f = vpunctuate esc (map _case e)
+  where _case (x, y) = hpunctuate (text ", & ") (map f [x, y])
 
 -----------------------------------------------------------------
 ------------------ TABLE PRINTING---------------------------

@@ -1,9 +1,10 @@
 -- | Defines main Markdown printer functions.
-module Language.Drasil.Markdown.Print(genMD) where
+module Language.Drasil.Markdown.Print(genMD, genMD') where
 
 import Prelude hiding (print, (<>))
 import Text.PrettyPrint hiding (Str)
 import Data.List (transpose)
+import Data.Map (Map, fromList)
 
 import qualified Language.Drasil as L
 
@@ -14,7 +15,8 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),
   LinkType(Internal, Cite2, External), OverSymb(Hat), Fonts(Emph, Bold), 
   Spacing(Thin), Fence(Abs))
 import Language.Drasil.Printing.Citation (BibRef)
-import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
+import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..),
+  Filepath)
 import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, brace, 
   unders, hat, hyph, dot, nl, tab)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
@@ -31,6 +33,9 @@ import Language.Drasil.Markdown.Helpers (h, stripStr, image, li,
 genMD :: PrintingInformation -> L.Document -> Doc
 genMD sm doc = build (makeDocument sm doc)
 
+genMD' :: PrintingInformation -> L.Document -> [(Filepath, Doc)]
+genMD' sm doc = build' $ makeDocument sm doc
+
 -- | Build the Markdown Document, called by genMD
 build :: Document -> Doc
 build (Document t a c) = 
@@ -41,6 +46,25 @@ build (Document t a c) =
 -- | Called by build, uses 'printLO' to render the layout objects in Doc format.
 print :: [LayoutObj] -> Doc
 print = foldr (($$) . printLO) empty
+
+build' :: Document -> [(Filepath, Doc)]
+build' (Document t a c) = convert c
+
+extractHDivs :: Int -> LayoutObj -> [(Filepath, Doc)]
+extractHDivs depth lo@(HDiv _ objs label) 
+  | depth > 2 = [(show $ pSpec label, 
+                printLO lo)]
+  | otherwise = (show $ pSpec label, 
+                vcat (map printLO (filter (not . isHDiv) objs))) : 
+                concatMap (extractHDivs (depth + 1)) objs
+extractHDivs _ _ = []
+
+isHDiv :: LayoutObj -> Bool
+isHDiv (HDiv _ _ _) = True
+isHDiv _ = False
+
+convert :: [LayoutObj] -> [(Filepath, Doc)]
+convert = concatMap (extractHDivs 1)
 
 -----------------------------------------------------------------
 ------------------- LAYOUT OBJECT PRINTING ----------------------

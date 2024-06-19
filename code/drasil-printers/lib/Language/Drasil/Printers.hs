@@ -28,6 +28,7 @@ module Language.Drasil.Printers (
   , genJSON
   -- * Markdown
   , genMD
+  , genMD'
   -- * Log
   , printAllDebugInfo
   -- * Printing Information and Options
@@ -42,7 +43,7 @@ import Language.Drasil.Format (DocType(SRS, Website, Jupyter), Format(TeX, HTML,
 import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.JSON.Print (genJSON)
-import Language.Drasil.Markdown.Print (genMD)
+import Language.Drasil.Markdown.Print (genMD, genMD')
 import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS,
   extLibSec, instDoc, regularSec, endNote, whatInfo)
 import Language.Drasil.Plain.Print (SingleLine(..), sentenceDoc, exprDoc,

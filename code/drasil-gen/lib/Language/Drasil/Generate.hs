@@ -24,7 +24,7 @@ import Language.Drasil
 import Drasil.DocLang (mkGraphInfo)
 import SysInfo.Drasil (SystemInformation)
 import Language.Drasil.Printers (DocType(SRS, Website, Jupyter), Format(TeX, HTML, JSON, Markdown),
- makeCSS, genHTML, genTeX, genJSON, genMD, PrintingInformation, outputDot)
+ makeCSS, genHTML, genTeX, genJSON, genMD, genMD', PrintingInformation, outputDot)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD,
   unPP, unJP, unCSP, unCPPP, unSP)
@@ -63,6 +63,15 @@ prntDoc d pinfo fn dtype fmt =
 -- | Helper that takes the document type, directory name, document name, format of documents,
 -- document information and printing information. Then generates the document file.
 prntDoc' :: DocType -> String -> String -> Format -> Document -> PrintingInformation -> IO ()
+prntDoc' dt dt' fn Markdown body' sm = do
+  createDirectoryIfMissing True dt'
+  mapM_ writeDocToFile cons
+  where 
+    cons = writeDoc' sm dt Markdown fn body'
+    writeDocToFile (fp, d) = do
+      outh <- openFile (dt' ++ "/" ++ fp ++ ".md") WriteMode
+      hPutStrLn outh $ render $ d
+      hClose outh
 prntDoc' dt dt' fn format body' sm = do
   createDirectoryIfMissing True dt'
   outh <- openFile (dt' ++ "/" ++ fn ++ getExt format) WriteMode
@@ -98,6 +107,10 @@ writeDoc s _  HTML     fn doc = genHTML s fn doc
 writeDoc s dt JSON     _  doc = genJSON s dt doc
 writeDoc s _  Markdown _  doc = genMD s doc
 writeDoc _ _  _        _  _   = error "we can only write TeX/HTML/JSON (for now)"
+
+writeDoc' :: PrintingInformation -> DocType -> Format -> Filename -> Document -> [(String, Doc)]
+writeDoc' s _ Markdown _ doc = genMD' s doc
+writeDoc' _ _ _ _ _ = [("", mempty)]
 
 -- | Generates traceability graphs as .dot files.
 genDot :: SystemInformation -> IO ()

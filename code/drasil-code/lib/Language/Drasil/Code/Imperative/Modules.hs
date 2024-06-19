@@ -148,7 +148,7 @@ initConsts = do
       getDecl (Store UnbundledConsts) _ = declVars
       getDecl (Store BundledConsts) _ = gets (declObj cs . conRepr)
       getDecl WithInputs (UnbundledIns _) = declVars
-      getDecl WithInputs BundledIns = return Nothing
+      getDecl WithInputs (BundledIns _) = return Nothing
       getDecl Inline _ = return Nothing
       declVars = do
         vars <- mapM (mkVar . quantvar) cs

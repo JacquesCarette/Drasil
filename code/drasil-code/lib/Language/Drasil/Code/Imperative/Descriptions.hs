@@ -52,7 +52,7 @@ inputParametersDesc = do
   icDesc <- inputConstraintsDesc
   let st = inStruct g
       ipDesc = inDesc st ++ [ifDesc, dvDesc, icDesc]
-      inDesc BundledIns = ["the structure for holding input values"]
+      inDesc (BundledIns _) = ["the structure for holding input values"]
       inDesc (UnbundledIns _) = [""]
   return ipDesc
 

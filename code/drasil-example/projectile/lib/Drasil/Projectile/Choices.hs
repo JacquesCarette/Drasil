@@ -4,7 +4,7 @@ module Drasil.Projectile.Choices where
 import Language.Drasil (Space(..), programName)
 import Language.Drasil.Code (Choices(..), Comments(..), 
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
-  Logging(..), Modularity(..), InputStructure(..), UValidation(..),
+  Logging(..), Modularity(..), InputStructure(..), UValidation(..), LogicLoc(..),
   ConstantStructure(..), ConstStoreStructure(..), ConstantRepr(..), CodeConcept(..), matchConcepts, 
   SpaceMatch, matchSpaces, AuxFile(..), Visibility(..), defaultChoices, 
   codeSpec, makeArchit, Architecture(..), makeData, DataInfo(..), Maps(..), 
@@ -57,8 +57,9 @@ codedLog [] = "NoL"
 codedLog _ = "L"
 
 codedInputStruct :: InputStructure -> String
-codedInputStruct BundledIns = "B"
-codedInputStruct (UnbundledIns _) = "U"
+codedInputStruct (BundledIns InMthd) = "BM"
+codedInputStruct (UnbundledIns UInterleaved) = "UI"
+codedInputStruct (UnbundledIns USeparate) = "US"
 
 codedConstStoreStruct :: ConstStoreStructure -> String
 codedConstStoreStruct BundledConsts = "B"
@@ -83,7 +84,7 @@ choiceCombos :: [Choices]
 choiceCombos = [baseChoices, 
   baseChoices {
     architecture = makeArchit Modular Program,
-    dataInfo = makeData BundledIns (Store UnbundledConsts) Var
+    dataInfo = makeData (BundledIns InMthd) (Store UnbundledConsts) Var
   },
   baseChoices {
     architecture = makeArchit Modular Library,
@@ -91,7 +92,7 @@ choiceCombos = [baseChoices,
     maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats
   },
   baseChoices {
-    dataInfo = makeData BundledIns (Store BundledConsts) Const,
+    dataInfo = makeData (BundledIns InMthd) (Store BundledConsts) Const,
     optFeats = makeOptFeats
       (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
       (makeLogConfig [LogVar, LogFunc] "log.txt")
@@ -99,7 +100,7 @@ choiceCombos = [baseChoices,
     folderVal = 5
   },
   baseChoices {
-    dataInfo = makeData BundledIns WithInputs Var,
+    dataInfo = makeData (BundledIns InMthd) WithInputs Var,
     maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats,
     optFeats = makeOptFeats
       (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)

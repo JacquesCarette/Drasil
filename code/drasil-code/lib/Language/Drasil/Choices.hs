@@ -3,8 +3,8 @@ module Language.Drasil.Choices (
   Choices(..), Architecture (..), makeArchit, DataInfo(..), makeData, Maps(..),
   makeMaps, spaceToCodeType, Constraints(..), makeConstraints, ODE(..), makeODE,
   DocConfig(..), makeDocConfig, LogConfig(..), makeLogConfig, OptionalFeatures(..),
-  makeOptFeats, ExtLib(..), Modularity(..), InputStructure(..), isInterleaved,
-  UValidation(..), ConstantStructure(..), ConstStoreStructure(..), 
+  makeOptFeats, ExtLib(..), Modularity(..), InputStructure(..), LogicLoc(..),
+  isInterleaved, UValidation(..), ConstantStructure(..), ConstStoreStructure(..), 
   ConstantRepr(..), ConceptMatchMap, MatchedConceptMap, CodeConcept(..), 
   matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..), 
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..), 
@@ -96,22 +96,34 @@ makeData = DataInfo
 
 -- | Input structure options.
 data InputStructure = UnbundledIns UValidation -- ^ Individual variables
-                    | BundledIns -- ^ Variables bundled in a class
+                    | BundledIns LogicLoc -- ^ Variables bundled in a class
 
 -- | Renders the structure of inputs in a program.
 instance RenderChoices InputStructure where
-  showChs (UnbundledIns _) = S "Unbundled"
-  showChs BundledIns = S "Bundled"
+  showChs (UnbundledIns v) = S "Unbundled" +:+ showChs v
+  showChs (BundledIns p) = S "Bundled" +:+ showChs p
 
 -- | Checks to see if an InputStructure has interleaved inputs
 isInterleaved :: InputStructure -> Bool
 isInterleaved (UnbundledIns UInterleaved) = True
 isInterleaved _ = False
 
--- | Validation location optinons for 'Unbundled' inputs
+-- | Validation location options for 'Unbundled' inputs
 data UValidation = UInterleaved -- ^ Validate inputs as they are parsed
                  | USeparate -- ^ Validate inputs in a separate function
                    deriving Eq
+
+-- | Renders the location of validation of bundled inputs
+instance RenderChoices UValidation where
+  showChs UInterleaved = S "Interleaved"
+  showChs USeparate = S "Separate"
+
+-- | Location of a particular piece of logic
+data LogicLoc = InMthd -- ^ Logic done in a method
+
+-- | Renders the location of a piece of logic for unbundled inputs
+instance RenderChoices LogicLoc where
+  showChs InMthd = S "Method"
 
 -- | Constants options.
 data ConstantStructure = Inline -- ^ Inline values for constants.
@@ -338,7 +350,7 @@ defaultChoices :: Choices
 defaultChoices = Choices {
   lang = [Python],
   architecture = makeArchit Modular Program,
-  dataInfo = makeData BundledIns Inline Const,
+  dataInfo = makeData (BundledIns InMthd) Inline Const,
   maps = makeMaps
     (matchConcepts ([] :: [(SimpleQDef, [CodeConcept])]))
     spaceToCodeType,

@@ -7,7 +7,7 @@ import Language.Drasil hiding (isIn, Var)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
 import Language.Drasil.Chunk.CodeBase
 import Language.Drasil.Choices (InputStructure(..), ConstStoreStructure(..),
-  ConstantStructure(..), ConstantRepr(..))
+  ConstantStructure(..), ConstantRepr(..), LogicLoc(..))
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), constraintvars, getConstraints)
@@ -136,11 +136,11 @@ getInputVars :: Name -> ParamType -> InputStructure -> ConstantRepr ->
   [CodeVarChunk] -> GenState [CodeVarChunk]
 getInputVars _ _ _ _ [] = return []
 getInputVars _ _ (UnbundledIns _) _ cs = return cs
-getInputVars n pt BundledIns Var _ = do
+getInputVars n pt (BundledIns InMthd) Var _ = do
   g <- get
   let cname = "InputParameters"
   return [quantvar inParams | Map.lookup n (clsMap g) /= Just cname && isIn pt]
-getInputVars _ _ BundledIns Const _ = return []
+getInputVars _ _ (BundledIns InMthd) Const _ = return []
 
 -- | If the passed list of constant variables is empty, then return empty list.
 -- If the user has chosen 'Unbundled' constants, then the constant variables are

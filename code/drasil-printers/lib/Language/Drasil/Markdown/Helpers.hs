@@ -24,6 +24,10 @@ paren t = text "(" <> t <> text ")"
 bold :: Doc -> Doc
 bold t = ast <> ast <> t <> ast <> ast
 
+-- | Italicized text
+em :: Doc -> Doc
+em t = ast <> t <> ast
+
 li, ul :: Doc -> Doc
 -- | List tag wrapper
 li         = wrap "li" []

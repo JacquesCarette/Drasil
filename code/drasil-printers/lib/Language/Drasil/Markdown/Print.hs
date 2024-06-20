@@ -25,10 +25,11 @@ import qualified Language.Drasil.TeX.Print as TeX (pExpr, fence, OpenClose(..),
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, toText)
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Print(renderCite)
+import Language.Drasil.HTML.Helpers(BibFormatter(..))
 import Language.Drasil.TeX.Helpers(commandD, command2D, mkEnv)
 
-import Language.Drasil.Markdown.Helpers (h, stripStr, image, li, 
-  reflink, reflinkURI, reflinkInfo, caption, bold, ul, br, docLength, divTag, defnHTag)
+import Language.Drasil.Markdown.Helpers (h, stripStr, image, li, reflink, reflinkURI, 
+  reflinkInfo, caption, bold, ul, br, docLength, divTag, defnHTag, em)
 
 -- | Generate a single-page Markdown SRS
 genMD :: PrintingInformation -> L.Document -> Doc
@@ -108,20 +109,20 @@ printLO' e = stripStr (printLO e) nl
 
 -- | Helper for rendering Specs into Markdown
 pSpec :: Spec -> Doc
-pSpec (E e)                = text "\\\\(" <> pExpr e <> text "\\\\)" -- symbols used
-pSpec (a :+: b)            = pSpec a <> pSpec b
-pSpec (S s)                = either error (text . concatMap escapeChars) $ L.checkValidStr s invalid
+pSpec (E e)     = text "\\\\(" <> pExpr e <> text "\\\\)" -- symbols used
+pSpec (a :+: b) = pSpec a <> pSpec b
+pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr s invalid
   where
     invalid = ['<', '>']
     escapeChars '&' = "\\&"
     escapeChars c = [c]
-pSpec (Sp s)               = text $ unPH $ L.special s
-pSpec HARDNL               = nl
-pSpec (Ref Internal  r a)  = reflink     (text r) (pSpec a)
-pSpec (Ref (Cite2 n) r a)  = reflinkInfo (text r) (pSpec a) (pSpec n)
-pSpec (Ref External  r a)  = reflinkURI  (text r) (pSpec a)
-pSpec EmptyS               = text "" 
-pSpec (Quote q)            = doubleQuotes $ pSpec q
+pSpec (Sp s)    = text $ unPH $ L.special s
+pSpec HARDNL    = nl
+pSpec (Ref Internal  r a) = reflink     (text r) (pSpec a)
+pSpec (Ref (Cite2 n) r a) = reflinkInfo (text r) (pSpec a) (pSpec n)
+pSpec (Ref External  r a) = reflinkURI  (text r) (pSpec a)
+pSpec EmptyS    = text "" 
+pSpec (Quote q) = doubleQuotes $ pSpec q
 
 -----------------------------------------------------------------
 -------------------- EXPRESSION PRINTING ------------------------
@@ -198,7 +199,7 @@ makeRows lls sizes = foldr (($$) . (flip makeColumns sizes)) empty lls
 makeHeaderCols, makeColumns :: [Doc] -> [Int] -> Doc
 makeHeaderCols l sizes = header $$ seperators
   where header     = pipe <> hcat (punctuate pipe (zipWith makeCell l sizes)) <> pipe        
-        seperators = pipe <> hcat (punctuate pipe (map makeDashCell sizes)) <> pipe
+        seperators = pipe <> hcat (punctuate pipe (map makeDashCell sizes))   <> pipe
 
 makeColumns ls sizes = pipe <> hcat (punctuate pipe (zipWith makeCell ls sizes)) <> pipe
 
@@ -301,7 +302,14 @@ makeFigure r c f = divTag r $$ (image f c)
 ------------------ Bibliography Printing ------------------------
 -----------------------------------------------------------------
 
--- | Renders assumptions, requirements, likely changes
+-- | Markdown specific bib rendering functions
+mdBibFormatter :: BibFormatter
+mdBibFormatter = BibFormatter {
+  emph = em,
+  spec = pSpec
+}
+
+-- | Renders the reference list
 makeRefList :: Doc -> Doc -> Doc -> Doc
 makeRefList a l i = divTag l $$ (i <> text ": " <> a) <> nl
 
@@ -310,4 +318,4 @@ makeRefList a l i = divTag l $$ (i <> text ": " <> a) <> nl
 makeBib :: BibRef -> Doc
 makeBib = vcat .
   zipWith (curry (\(x,(y,z)) -> makeRefList z y x))
-  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map renderCite
+  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map (renderCite mdBibFormatter)

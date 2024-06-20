@@ -23,7 +23,8 @@ import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (th, bold, reflinkInfo)
-import Language.Drasil.HTML.Print(renderCite, OpenClose(Open, Close), fence)
+import Language.Drasil.HTML.Print(renderCite, OpenClose(Open, Close), fence,
+  htmlBibFormatter)
 
 import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat, codeformat,
  tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv, 
@@ -295,4 +296,4 @@ makeRefList a l i = refID l $$ nbformat (i <> text ": " <> a)
 makeBib :: BibRef -> Doc
 makeBib = vcat .
   zipWith (curry (\(x,(y,z)) -> makeRefList z y x))
-  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map renderCite
+  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map (renderCite htmlBibFormatter)

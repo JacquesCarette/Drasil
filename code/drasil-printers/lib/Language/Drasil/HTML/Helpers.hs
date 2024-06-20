@@ -9,7 +9,16 @@ import Data.List (intersperse)
 import Language.Drasil hiding (Expr)
 
 --import Language.Drasil.Document (Document, MaxWidthPercent)
-import Language.Drasil.Printing.AST (Expr)
+import Language.Drasil.Printing.AST (Expr, Spec)
+
+-- | Data type that carries functions that vary
+-- for bib printing
+data BibFormatter = BibFormatter {
+  -- | Emphasis (italics) rendering
+  emph :: Doc -> Doc,
+  -- | Spec rendering
+  spec :: Spec -> Doc
+}
 
 html, headTag, body, title, paragraph, code, tr, th, td, figure,
   figcaption, li, pa, ba :: Doc -> Doc

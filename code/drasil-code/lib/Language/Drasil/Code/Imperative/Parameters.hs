@@ -75,14 +75,16 @@ getDerivedOuts = do
 -- any inputs with constraints, and any variables used in the expressions of
 -- the constraints.
 getConstraintParams :: GenState [CodeVarChunk]
-getConstraintParams = do
+getConstraintParams = do -- If this is replaced with `return []`, things work again.
   g <- get
   let cm = cMap $ codeSpec g
       db = sysinfodb $ codeSpec g
       varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec g)
-      reqdVals = nub $ varsList ++ map quantvar (concatMap (`constraintvars` db)
-        (getConstraints cm varsList))
-  getParams "input_constraints" In reqdVals
+      reqdVals = nub $ varsList ++ map quantvar (concatMap (`constraintvars` db) 
+          (getConstraints cm varsList))
+  -- If there's no input_constraints function, don't look for parameters.
+  if "input_constraints" `notElem` defList g then return []
+  else getParams "input_constraints" In reqdVals
 
 -- | The parameters to a calculation function are any variables used in the
 -- expression representing the calculation.
@@ -136,11 +138,11 @@ getInputVars :: Name -> ParamType -> InputStructure -> ConstantRepr ->
   [CodeVarChunk] -> GenState [CodeVarChunk]
 getInputVars _ _ _ _ [] = return []
 getInputVars _ _ (UnbundledIns _) _ cs = return cs
-getInputVars n pt (BundledIns InMthd) Var _ = do
+getInputVars n pt (BundledIns InMthd _) Var _ = do
   g <- get
   let cname = "InputParameters"
   return [quantvar inParams | Map.lookup n (clsMap g) /= Just cname && isIn pt]
-getInputVars _ _ (BundledIns InMthd) Const _ = return []
+getInputVars _ _ (BundledIns InMthd _) Const _ = return []
 
 -- | If the passed list of constant variables is empty, then return empty list.
 -- If the user has chosen 'Unbundled' constants, then the constant variables are

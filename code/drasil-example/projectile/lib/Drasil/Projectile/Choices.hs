@@ -4,12 +4,13 @@ module Drasil.Projectile.Choices where
 import Language.Drasil (Space(..), programName)
 import Language.Drasil.Code (Choices(..), Comments(..), 
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
-  Logging(..), Modularity(..), InputStructure(..), UValidation(..), LogicLoc(..),
-  ConstantStructure(..), ConstStoreStructure(..), ConstantRepr(..), CodeConcept(..), matchConcepts, 
-  SpaceMatch, matchSpaces, AuxFile(..), Visibility(..), defaultChoices, 
-  codeSpec, makeArchit, Architecture(..), makeData, DataInfo(..), Maps(..), 
-  makeMaps, spaceToCodeType, makeConstraints, makeDocConfig, makeLogConfig, 
-  LogConfig(..), OptionalFeatures(..), makeOptFeats)
+  Logging(..), Modularity(..), InputStructure(..), BValidation(..),
+  UValidation(..), LogicLoc(..), ConstantStructure(..), ConstStoreStructure(..),
+  ConstantRepr(..), CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces,
+  AuxFile(..), Visibility(..), defaultChoices, codeSpec, makeArchit,
+  Architecture(..), makeData, DataInfo(..), Maps(..), makeMaps, spaceToCodeType,
+  makeConstraints, makeDocConfig, makeLogConfig, LogConfig(..),
+  OptionalFeatures(..), makeOptFeats)
 import Language.Drasil.Generate (genCode)
 import GOOL.Drasil (CodeType(..))
 import Data.Drasil.Quantities.Math (piConst)
@@ -57,9 +58,14 @@ codedLog [] = "NoL"
 codedLog _ = "L"
 
 codedInputStruct :: InputStructure -> String
-codedInputStruct (BundledIns InMthd) = "BM"
+codedInputStruct (BundledIns p (BSeparate v)) = 'B' : codedLogicLoc p
+                                                   ++ codedLogicLoc v
+codedInputStruct (BundledIns p BInterleaved) = 'B' : codedLogicLoc p ++ "I"
 codedInputStruct (UnbundledIns UInterleaved) = "UI"
 codedInputStruct (UnbundledIns USeparate) = "US"
+
+codedLogicLoc :: LogicLoc -> String
+codedLogicLoc InMthd = "M"
 
 codedConstStoreStruct :: ConstStoreStructure -> String
 codedConstStoreStruct BundledConsts = "B"
@@ -84,7 +90,8 @@ choiceCombos :: [Choices]
 choiceCombos = [baseChoices, 
   baseChoices {
     architecture = makeArchit Modular Program,
-    dataInfo = makeData (BundledIns InMthd) (Store UnbundledConsts) Var
+    dataInfo = makeData (BundledIns InMthd (BSeparate InMthd))
+     (Store UnbundledConsts) Var
   },
   baseChoices {
     architecture = makeArchit Modular Library,
@@ -92,7 +99,8 @@ choiceCombos = [baseChoices,
     maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats
   },
   baseChoices {
-    dataInfo = makeData (BundledIns InMthd) (Store BundledConsts) Const,
+    dataInfo = makeData (BundledIns InMthd (BSeparate InMthd))
+     (Store BundledConsts) Const,
     optFeats = makeOptFeats
       (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
       (makeLogConfig [LogVar, LogFunc] "log.txt")
@@ -100,7 +108,7 @@ choiceCombos = [baseChoices,
     folderVal = 5
   },
   baseChoices {
-    dataInfo = makeData (BundledIns InMthd) WithInputs Var,
+    dataInfo = makeData (BundledIns InMthd BInterleaved) WithInputs Var,
     maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats,
     optFeats = makeOptFeats
       (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)

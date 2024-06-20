@@ -7,7 +7,7 @@ module Language.Drasil.Code (
   Architecture(..), DataInfo(..), makeData, Maps(..), makeMaps, spaceToCodeType,
   makeConstraints, makeODE, makeDocConfig, makeLogConfig, LogConfig(..),
   OptionalFeatures(..), makeOptFeats, ExtLib(..), ImplementationType(..), Logging(..),
-  Modularity(..), InputStructure(..), UValidation(..), LogicLoc(..),
+  Modularity(..), InputStructure(..), BValidation(..), UValidation(..), LogicLoc(..),
   ConstantStructure(..), ConstStoreStructure(..), ConstantRepr(..), 
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), 
   getSampleData, Visibility(..), defaultChoices, CodeSpec(..), funcUID, asVC,
@@ -86,12 +86,13 @@ import Language.Drasil.Code.Lang (Lang(..))
 
 import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
   ConstraintBehaviour(..), ImplementationType(..), Logging(..), Modularity(..),
-  InputStructure(..), UValidation(..), LogicLoc(..), ConstantStructure(..),
-  ConstStoreStructure(..), ConstantRepr(..), CodeConcept(..), matchConcepts, 
-  SpaceMatch, matchSpaces, AuxFile(..), getSampleData, Visibility(..), 
-  defaultChoices, makeArchit, Architecture(..), DataInfo(..), makeData, 
-  Maps(..), makeMaps, spaceToCodeType, makeConstraints, makeODE, makeDocConfig,
-  makeLogConfig, LogConfig(..), OptionalFeatures(..), makeOptFeats, ExtLib(..))
+  InputStructure(..), BValidation(..), UValidation(..), LogicLoc(..),
+  ConstantStructure(..), ConstStoreStructure(..), ConstantRepr(..), 
+  CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, AuxFile(..),
+  getSampleData, Visibility(..), defaultChoices, makeArchit, Architecture(..), 
+  DataInfo(..), makeData, Maps(..), makeMaps, spaceToCodeType, makeConstraints,
+  makeODE, makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..),
+  makeOptFeats, ExtLib(..))
 
 import Language.Drasil.CodeSpec (CodeSpec(..), funcUID, asVC, codeSpec)
 

@@ -163,8 +163,14 @@ loggingLegend = CSL {
 inputStrLegend :: CSLegend
 inputStrLegend = CSL {
   ttle = inStructTitle,
-  symbAndDefs = [ ("B", "Inputs are Bundled in a class"),
-                  ("U", "Inputs are Unbundled")]
+  symbAndDefs = [ ("B_ _", "Inputs are Bundled in a class.  The second " ++
+                    "letter gives parsing location (Constructor, Method, " ++
+                    "or Function), and the third letter gives constraint-" ++
+                    "checking location (Constructor, Method, Function, or " ++
+                    "Interleaved with parsing)."),
+                  ("U _", "Inputs are Unbundled.  The second letter gives " ++
+                    "constraint-checking location (Separate function or " ++
+                    "Interleaved with parsing).")]
 }
 
 -- | Constant value structure.
@@ -213,8 +219,13 @@ getLog [] = S "NoL"
 getLog _ = S "L"
 
 getInstr :: InputStructure -> Sentence
-getInstr BundledIns = S "B"
-getInstr (UnbundledIns _) = S "U"
+getInstr (BundledIns p (BSeparate v)) = S "B" :+: getLogicLoc p :+: getLogicLoc v
+getInstr (BundledIns p BInterleaved) = S "B" :+: getLogicLoc p :+: S "I"
+getInstr (UnbundledIns UInterleaved) = S "UI"
+getInstr (UnbundledIns USeparate) = S "US"
+
+getLogicLoc :: LogicLoc -> Sentence
+getLogicLoc InMthd = S "M"
 
 getConstr :: ConstantStructure -> Sentence
 getConstr Inline = S "I"

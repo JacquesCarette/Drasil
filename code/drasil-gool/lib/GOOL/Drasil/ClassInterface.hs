@@ -422,6 +422,8 @@ class (VariableSym r, StatementSym r) => DeclStatement r where
   arrayDec     :: Integer -> SVariable r -> MSStatement r
   arrayDecDef  :: SVariable r -> [SValue r] -> MSStatement r
   objDecDef    :: SVariable r -> SValue r -> MSStatement r
+  -- | Create a new object
+  --   Parameters are: Variable to store object in, constructor arguments
   objDecNew    :: SVariable r -> [SValue r] -> MSStatement r
   extObjDecNew :: Library -> SVariable r -> [SValue r] -> MSStatement r
   constDecDef  :: SVariable r -> SValue r -> MSStatement r

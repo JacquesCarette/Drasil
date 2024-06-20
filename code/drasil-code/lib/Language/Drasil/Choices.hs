@@ -4,7 +4,7 @@ module Language.Drasil.Choices (
   makeMaps, spaceToCodeType, Constraints(..), makeConstraints, ODE(..), makeODE,
   DocConfig(..), makeDocConfig, LogConfig(..), makeLogConfig, OptionalFeatures(..),
   makeOptFeats, ExtLib(..), Modularity(..), InputStructure(..), LogicLoc(..),
-  isInterleaved, UValidation(..), ConstantStructure(..), ConstStoreStructure(..), 
+  isInterleaved, BValidation(..), UValidation(..), ConstantStructure(..), ConstStoreStructure(..), 
   ConstantRepr(..), ConceptMatchMap, MatchedConceptMap, CodeConcept(..), 
   matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..), 
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..), 
@@ -96,16 +96,18 @@ makeData = DataInfo
 
 -- | Input structure options.
 data InputStructure = UnbundledIns UValidation -- ^ Individual variables
-                    | BundledIns LogicLoc -- ^ Variables bundled in a class
+                    | BundledIns LogicLoc BValidation -- ^ Variables bundled in a class
 
 -- | Renders the structure of inputs in a program.
 instance RenderChoices InputStructure where
-  showChs (UnbundledIns v) = S "Unbundled" +:+ showChs v
-  showChs (BundledIns p) = S "Bundled" +:+ showChs p
+  showChs (UnbundledIns v) = S "Unbundled -" +:+ showChs v
+  showChs (BundledIns p v) = S "Bundled - parsing in" +:+ showChs p :+:
+    S "," +:+ showChs v
 
 -- | Checks to see if an InputStructure has interleaved inputs
 isInterleaved :: InputStructure -> Bool
 isInterleaved (UnbundledIns UInterleaved) = True
+isInterleaved (BundledIns _ BInterleaved) = True
 isInterleaved _ = False
 
 -- | Validation location options for 'Unbundled' inputs
@@ -113,10 +115,19 @@ data UValidation = UInterleaved -- ^ Validate inputs as they are parsed
                  | USeparate -- ^ Validate inputs in a separate function
                    deriving Eq
 
--- | Renders the location of validation of bundled inputs
+-- | Renders the location of validation of 'Unbundled' inputs
 instance RenderChoices UValidation where
-  showChs UInterleaved = S "Interleaved"
-  showChs USeparate = S "Separate"
+  showChs UInterleaved = S "validation Interleaved"
+  showChs USeparate = S "validation in Separate function"
+
+-- | Validation options for 'Bundled' inputs
+data BValidation = BInterleaved -- ^ Validate inputs as they are parsed
+                 | BSeparate LogicLoc -- ^ Validate inputs in their own location
+
+-- Renders the location of validation of 'Bundled' inputs
+instance RenderChoices BValidation where
+  showChs BInterleaved = S "validation Interleaved"
+  showChs (BSeparate v) = S "validation in Separate" +:+ showChs v
 
 -- | Location of a particular piece of logic
 data LogicLoc = InMthd -- ^ Logic done in a method
@@ -350,7 +361,7 @@ defaultChoices :: Choices
 defaultChoices = Choices {
   lang = [Python],
   architecture = makeArchit Modular Program,
-  dataInfo = makeData (BundledIns InMthd) Inline Const,
+  dataInfo = makeData (BundledIns InMthd (BSeparate InMthd)) Inline Const,
   maps = makeMaps
     (matchConcepts ([] :: [(SimpleQDef, [CodeConcept])]))
     spaceToCodeType,

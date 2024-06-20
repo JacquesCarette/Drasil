@@ -115,12 +115,12 @@ variable s t = do
 inputVariable :: (OOProg r) => InputStructure -> ConstantRepr -> SVariable r ->
   GenState (SVariable r)
 inputVariable (UnbundledIns _) _ v = return v
-inputVariable (BundledIns _) Var v = do
+inputVariable (BundledIns _ _) Var v = do
   g <- get
   let inClsName = "InputParameters"
   ip <- mkVar (quantvar inParams)
   return $ if currentClass g == inClsName then objVarSelf v else ip $-> v
-inputVariable (BundledIns _) Const v = do
+inputVariable (BundledIns _ _) Const v = do
   ip <- mkVar (quantvar inParams)
   classVariable ip v
 

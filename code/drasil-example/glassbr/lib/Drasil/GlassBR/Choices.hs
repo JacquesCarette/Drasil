@@ -2,7 +2,7 @@ module Drasil.GlassBR.Choices where
 
 import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
-  Logging(..), Modularity(..), InputStructure(..), LogicLoc(..),
+  Logging(..), Modularity(..), InputStructure(..), BValidation(..), LogicLoc(..),
   ConstantStructure(..), ConstantRepr(..), AuxFile(..), Visibility(..), 
   makeArchit, makeData, makeConstraints, makeDocConfig, makeLogConfig, 
   makeOptFeats, defaultChoices)
@@ -17,7 +17,7 @@ choices :: Choices
 choices = defaultChoices {
   lang = [Python, Cpp, CSharp, Java, Swift],
   architecture = makeArchit Modular Program,
-  dataInfo = makeData (BundledIns InMthd) Inline Const,
+  dataInfo = makeData (BundledIns InMthd (BSeparate InMthd)) Inline Const,
   optFeats = makeOptFeats
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
     (makeLogConfig [LogVar, LogFunc] "log.txt")

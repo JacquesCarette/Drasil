@@ -376,8 +376,14 @@ class (ValueSym r) => InternalList r where
     -> SVariable r -> SValue r -> MSBlock r
 
 -- | Creates a slice of a list and assigns it to a variable.
---   Arguments are: Variable to assign, list to read from,
---   [Start index], [End index], [Step]
+--   Arguments are: 
+--   Variable to assign
+--   List to read from
+--   [Start index] inclusive.
+--      (if Nothing, then list start if step > 0, list end if step < 0)
+--   [End index] exclusive.
+--      (if Nothing, then list end if step > 0, list start if step > 0)
+--   [Step] (if Nothing, then defaults to 1)
 listSlice :: (InternalList r) => SVariable r -> SValue r -> Maybe (SValue r) -> 
   Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listSlice vnew vold b e s = listSlice' b e s vnew vold

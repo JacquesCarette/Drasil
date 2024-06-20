@@ -3,13 +3,14 @@
 -- Should run print statements, basic loops, math, and create a helper module without errors.
 module HelloWorld (helloWorld) where
 
-import GOOL.Drasil (GSProgram, MSBody, MSBlock, MSStatement, SMethod, OOProg,
-  ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner,
-  BlockSym(..), listSlice, TypeSym(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..), CommentStatement(..), ControlStatement(..),
-  VariableSym(..), listVar, Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), extFuncApp, List(..),
-  MethodSym(..), ModuleSym(..))
+import GOOL.Drasil (GSProgram, MSBody, MSBlock, MSStatement, SMethod, SVariable,
+  OOProg, ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner,
+  BlockSym(..), listSlice, TypeSym(..), StatementSym(..), AssignStatement(..), 
+  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
+  CommentStatement(..), ControlStatement(..), VariableSym(..), listVar,
+  Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), extFuncApp,
+  List(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Helper (helper)
 
@@ -23,47 +24,151 @@ helloWorld = prog "HelloWorld" "" [docMod description
 description :: String
 description = "Tests various GOOL functions. It should run without errors."
 
+-- | Variable for a list of doubles
+myOtherList :: (OOProg r) => SVariable r
+myOtherList = var "myOtherList" (listType double)
+
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 helloWorldMain :: (OOProg r) => SMethod r
-helloWorldMain = mainFunction (body [ helloInitVariables,
-    helloListSlice,
-    block [ifCond [(valueOf (var "b" int) ?>= litInt 6, bodyStatements [varDecDef (var "dummy" string) (litString "dummy")]),
+helloWorldMain = mainFunction (body ([ helloInitVariables] ++ listSliceTests ++
+    [block [printLn $ litString "", ifCond [(valueOf (var "b" int) ?>= litInt 6, 
+      bodyStatements [varDecDef (var "dummy" string) (litString "dummy")]),
       (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody, helloIfExists,
-    helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch]])
+    helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch]]))
 
 -- | Initialize variables used in the generated program.
 helloInitVariables :: (OOProg r) => MSBlock r
 helloInitVariables = block [comment "Initializing variables",
   varDec $ var "a" int,
   varDecDef (var "b" int) (litInt 5),
-  listDecDef (var "myOtherList" (listType double)) [litDouble 1.0,
+  listDecDef myOtherList [litDouble 1.0,
     litDouble 1.5],
-  varDecDef (var "oneIndex" int) (indexOf (valueOf $ var "myOtherList"
-    (listType double)) (litDouble 1.0)),
+  varDecDef (var "oneIndex" int) (indexOf (valueOf myOtherList) (litDouble 1.0)),
   printLn (valueOf $ var "oneIndex" int),
-  var "a" int &= listSize (valueOf $ var "myOtherList" (listType double)),
-  valStmt (listAdd (valueOf $ var "myOtherList" (listType double))
+  var "a" int &= listSize (valueOf myOtherList),
+  valStmt (listAdd (valueOf myOtherList)
     (litInt 2) (litDouble 2.0)),
-  valStmt (listAppend (valueOf $ var "myOtherList" (listType double))
+  valStmt (listAppend (valueOf myOtherList)
     (litDouble 2.5)),
   varDec $ var "e" double,
-  var "e" int &= listAccess (valueOf $ var "myOtherList"
-    (listType double)) (litInt 1),
-  valStmt (listSet (valueOf $ var "myOtherList" (listType double))
+  var "e" int &= listAccess (valueOf myOtherList) (litInt 1),
+  valStmt (listSet (valueOf myOtherList)
     (litInt 1) (litDouble 17.4)),
   listDec 7 (var "myName" (listType string)),
   stringSplit ' ' (var "myName" (listType string)) (litString "Brooks Mac"),
   printLn (valueOf $ var "myName" (listType string)),
   listDecDef (var "boringList" (listType bool))
     [litFalse, litFalse, litFalse, litFalse, litFalse],
-  printLn (valueOf $ var "boringList" (listType bool)),
-  listDec 2 $ var "mySlicedList" (listType double)]
+  printLn (valueOf $ var "boringList" (listType bool))]
 
--- | Initialize and assign a value to a new variable @mySlicedList@.
-helloListSlice :: (OOProg r) => MSBlock r
-helloListSlice = listSlice (var "mySlicedList" (listType double))
-  (valueOf $ var "myOtherList" (listType double)) (Just (litInt 1))
-  (Just (litInt 3)) Nothing
+mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
+  mySlicedList6, mySlicedList7, mySlicedList8,
+  mySlicedList9 :: (OOProg r) => SVariable r
+mySlicedList = var "mySlicedList" (listType double)
+mySlicedList2 = var "mySlicedList2" (listType double)
+mySlicedList3 = var "mySlicedList3" (listType double)
+mySlicedList4 = var "mySlicedList4" (listType double)
+mySlicedList5 = var "mySlicedList5" (listType double)
+mySlicedList6 = var "mySlicedList6" (listType double)
+mySlicedList7 = var "mySlicedList7" (listType double)
+mySlicedList8 = var "mySlicedList8" (listType double)
+mySlicedList9 = var "mySlicedList9" (listType double)
+
+listSliceTests :: (OOProg r) => [MSBlock r]
+listSliceTests = [
+
+  -- | Declare variables for list slices
+  block [
+    comment "List slicing tests",
+    comment "Create variables for list slices",
+    listDec 2 mySlicedList,
+    listDec 2 mySlicedList2,
+    listDec 3 mySlicedList3,
+    listDec 0 mySlicedList4,
+    listDec 2 mySlicedList5,
+    listDec 2 mySlicedList6,
+    listDec 4 mySlicedList7,
+    listDec 3 mySlicedList8,
+    listDec 2 mySlicedList9],
+
+  -- | Initialize and assign any variables necessary for list slices
+  block [
+    comment "Create some variables for later tests",
+    varDecDef (var "x" int) (litInt (3)),
+    varDecDef (var "y" int) (litInt (1)),
+    varDecDef (var "z" int) (litInt (-1))],
+
+  -- | Initialize and assign a value to a new variable @mySlicedList@.
+  --   Both bounds are set, end > start, with step defaulting to 1
+  listSlice mySlicedList
+    (valueOf myOtherList) (Just (litInt 1))
+    (Just (litInt 3)) Nothing,
+
+  -- List slicing with step > 1
+  listSlice mySlicedList2
+    (valueOf myOtherList) (Just (litInt 1))
+    (Just (litInt 4)) (Just (litInt 2)),
+
+  -- List slicing with positive step, no end given
+  listSlice mySlicedList3
+    (valueOf myOtherList) (Just (litInt 1))
+    Nothing Nothing,
+
+  -- | List slicing with start > end but positive step
+  listSlice mySlicedList4
+    (valueOf myOtherList) (Just (litInt 3))
+    (Just (litInt 1)) Nothing,
+
+  -- | List slicing with start > end and negative step
+  listSlice mySlicedList5
+    (valueOf myOtherList) (Just (litInt 3))
+    (Just (litInt 1)) (Just (litInt (-1))),
+
+  -- | List slicing with no start given and negative step
+  listSlice mySlicedList6
+    (valueOf myOtherList) Nothing
+    (Just (litInt 1)) (Just (litInt (-1))),
+
+  -- | List slicing with no end given and negative step
+  listSlice mySlicedList7
+    (valueOf myOtherList) (Just (litInt 3))
+    Nothing (Just (litInt (-1))),
+
+  -- | List slicing where the step is a variable with negative value
+  listSlice mySlicedList8
+    (valueOf myOtherList) (Just (litInt 3))
+    (Just (litInt 0)) (Just (valueOf (var "z" int))),
+
+  -- | List slicing where the bounds are variables with start > end, and step is a variable < 0
+  listSlice mySlicedList9
+    (valueOf myOtherList) (Just (valueOf (var "x" int)))
+    (Just (valueOf (var "y" int))) (Just (valueOf (var "z" int))),
+
+  -- | Print results of list slicing tests
+  block [
+    comment "Print results of list slicing tests",
+    printLn $ litString "",
+    printLn $ litString "List slicing:",
+    print $ litString "myOtherList: ",
+    printLn $ valueOf myOtherList,
+    print $ litString "mySlicedList: ",
+    printLn $ valueOf mySlicedList,
+    print $ litString "mySlicedList2: ",
+    printLn $ valueOf mySlicedList2,
+    print $ litString "mySlicedList3: ",
+    printLn $ valueOf mySlicedList3,
+    print $ litString "mySlicedList4: ",
+    printLn $ valueOf mySlicedList4,
+    print $ litString "mySlicedList5: ",
+    printLn $ valueOf mySlicedList5,
+    print $ litString "mySlicedList6: ",
+    printLn $ valueOf mySlicedList6,
+    print $ litString "mySlicedList7: ",
+    printLn $ valueOf mySlicedList7,
+    print $ litString "mySlicedList8: ",
+    printLn $ valueOf mySlicedList8,
+    print $ litString "mySlicedList9: ",
+    printLn $ valueOf mySlicedList9]]
 
 -- | Create an If statement.
 {-# ANN module "HLint: ignore Evaluate" #-}
@@ -93,7 +198,7 @@ helloIfBody = addComments "If body" (body [
     printLn (valueOf $ var "b" int),
     printLn (valueOf $ var "c" int),
     printLn (valueOf $ var "d" int),
-    printLn (valueOf $ var "myOtherList" (listType double)),
+    printLn (valueOf myOtherList),
     printLn (valueOf $ var "mySlicedList" (listType double)),
 
     printStrLn "Type an int",

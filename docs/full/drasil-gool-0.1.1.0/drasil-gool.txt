@@ -475,11 +475,25 @@ class (ValueSym r, VariableSym r) => GetSet r
 get :: GetSet r => SValue r -> SVariable r -> SValue r
 set :: GetSet r => SValue r -> SVariable r -> SValue r -> SValue r
 class (ValueSym r) => List r
+
+-- | Finds the size of a list. Arguments are: List
 listSize :: List r => SValue r -> SValue r
+
+-- | Inserts a value into a list. Arguments are: List, Index, Value
 listAdd :: List r => SValue r -> SValue r -> SValue r -> SValue r
+
+-- | Appens a value to a list. Arguments are: List, Value
 listAppend :: List r => SValue r -> SValue r -> SValue r
+
+-- | Gets the value of an index of a list. Arguments are: List, Index
 listAccess :: List r => SValue r -> SValue r -> SValue r
+
+-- | Sets the value of an index of a list. Arguments are: List, Index,
+--   Value
 listSet :: List r => SValue r -> SValue r -> SValue r -> SValue r
+
+-- | Finds the index of the first occurrence of a value in a list.
+--   Arguments are: List, Value
 indexOf :: List r => SValue r -> SValue r -> SValue r
 class (ValueSym r) => InternalList r
 listSlice' :: InternalList r => Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
@@ -740,9 +754,9 @@ class InternalGetSet r
 getFunc :: InternalGetSet r => SVariable r -> VSFunction r
 setFunc :: InternalGetSet r => VSType r -> SVariable r -> SValue r -> VSFunction r
 class InternalListFunc r
-listSizeFunc :: InternalListFunc r => VSFunction r
+listSizeFunc :: InternalListFunc r => SValue r -> VSFunction r
 listAddFunc :: InternalListFunc r => SValue r -> SValue r -> SValue r -> VSFunction r
-listAppendFunc :: InternalListFunc r => SValue r -> VSFunction r
+listAppendFunc :: InternalListFunc r => SValue r -> SValue r -> VSFunction r
 listAccessFunc :: InternalListFunc r => VSType r -> SValue r -> VSFunction r
 listSetFunc :: InternalListFunc r => SValue r -> SValue r -> SValue r -> VSFunction r
 class RenderFunction r
@@ -2312,11 +2326,25 @@ class (ValueSym r, VariableSym r) => GetSet r
 get :: GetSet r => SValue r -> SVariable r -> SValue r
 set :: GetSet r => SValue r -> SVariable r -> SValue r -> SValue r
 class (ValueSym r) => List r
+
+-- | Finds the size of a list. Arguments are: List
 listSize :: List r => SValue r -> SValue r
+
+-- | Inserts a value into a list. Arguments are: List, Index, Value
 listAdd :: List r => SValue r -> SValue r -> SValue r -> SValue r
+
+-- | Appens a value to a list. Arguments are: List, Value
 listAppend :: List r => SValue r -> SValue r -> SValue r
+
+-- | Gets the value of an index of a list. Arguments are: List, Index
 listAccess :: List r => SValue r -> SValue r -> SValue r
+
+-- | Sets the value of an index of a list. Arguments are: List, Index,
+--   Value
 listSet :: List r => SValue r -> SValue r -> SValue r -> SValue r
+
+-- | Finds the index of the first occurrence of a value in a list.
+--   Arguments are: List, Value
 indexOf :: List r => SValue r -> SValue r -> SValue r
 listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r

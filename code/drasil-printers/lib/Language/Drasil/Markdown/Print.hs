@@ -8,7 +8,7 @@ import Data.List (transpose)
 import qualified Language.Drasil as L
 
 import Language.Drasil.Printing.Import (makeDocument)
-import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
+import Language.Drasil.Printing.AST (ItemType(Flat, Nested),  
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
   Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)), Label, 
   LinkType(Internal, Cite2, External), OverSymb(Hat), Fonts(Emph, Bold), 
@@ -118,9 +118,10 @@ pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr 
     escapeChars c = [c]
 pSpec (Sp s)    = text $ unPH $ L.special s
 pSpec HARDNL    = nl
-pSpec (Ref Internal  r a) = reflink     (text r) (pSpec a)
-pSpec (Ref (Cite2 n) r a) = reflinkInfo (text r) (pSpec a) (pSpec n)
-pSpec (Ref External  r a) = reflinkURI  (text r) (pSpec a)
+pSpec (Ref Internal       r a) = reflink     (text r) (pSpec a)
+pSpec (Ref (Cite2 EmptyS) r a) = reflink     (text r) (pSpec a)
+pSpec (Ref (Cite2 n)      r a) = reflinkInfo (text r) (pSpec a) (pSpec n)
+pSpec (Ref External       r a) = reflinkURI  (text r) (pSpec a)
 pSpec EmptyS    = text "" 
 pSpec (Quote q) = doubleQuotes $ pSpec q
 

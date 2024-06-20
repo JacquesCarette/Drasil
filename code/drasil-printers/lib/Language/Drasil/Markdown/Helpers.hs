@@ -2,7 +2,7 @@
 module Language.Drasil.Markdown.Helpers where
 
 import Prelude hiding ((<>))
-import Text.PrettyPrint (Doc, text, empty, (<>), ($$), hcat, vcat)
+import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), ($$), hcat, vcat)
 import Data.List.Split (splitOn)
 import Language.Drasil.Printing.Helpers(ast)
 
@@ -20,6 +20,10 @@ sq t = text "[" <> t <> text "]"
 paren :: Doc -> Doc
 paren t = text "(" <> t <> text ")" 
 
+-- | Angled brackets
+ang :: Doc -> Doc
+ang t = text "<" <> t <> text ">"
+
 -- | Bold text
 bold :: Doc -> Doc
 bold t = ast <> ast <> t <> ast <> ast
@@ -30,9 +34,9 @@ em t = ast <> t <> ast
 
 li, ul :: Doc -> Doc
 -- | List tag wrapper
-li         = wrap "li" []
+li = wrap "li" []
 -- | Unordered list tag wrapper.
-ul         = wrap "ul" []
+ul = wrap "ul" []
 
 -- | helper for wrapping HTML lists
 wrap :: String -> [String] -> Doc -> Doc
@@ -66,11 +70,12 @@ reflink ref txt = sq txt <> paren (text "#" <> ref)
 
 -- | Helper for setting up links to references with additional information.
 reflinkInfo :: Doc -> Doc -> Doc -> Doc
-reflinkInfo rf txt info = reflink rf txt <> info
+reflinkInfo rf txt info = reflink rf txt <+> info
 
 -- | Helper for setting up links to external URIs
 reflinkURI :: Doc -> Doc -> Doc
-reflinkURI ref txt = sq txt <> paren ref
+reflinkURI ref txt = if ref==txt then ang ref
+  else sq txt <> paren ref
 
 -- | Helper for setting up figures
 image :: Doc -> Doc -> Doc

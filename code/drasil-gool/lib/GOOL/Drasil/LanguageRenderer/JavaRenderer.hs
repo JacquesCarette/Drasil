@@ -445,9 +445,9 @@ instance InternalGetSet JavaCode where
   setFunc = G.setFunc
 
 instance InternalListFunc JavaCode where
-  listSizeFunc = CP.listSizeFunc
+  listSizeFunc _ = CP.listSizeFunc
   listAddFunc _ = CP.listAddFunc jListAdd
-  listAppendFunc = G.listAppendFunc jListAdd
+  listAppendFunc _ = G.listAppendFunc jListAdd
   listAccessFunc = CP.listAccessFunc' jListAccess
   listSetFunc = jListSetFunc
 

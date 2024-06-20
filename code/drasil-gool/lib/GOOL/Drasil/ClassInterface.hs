@@ -346,12 +346,23 @@ class (ValueSym r, VariableSym r) => GetSet r where
   set :: SValue r -> SVariable r -> SValue r -> SValue r
 
 class (ValueSym r) => List r where
+  -- | Finds the size of a list.
+  --   Arguments are: List
   listSize   :: SValue r -> SValue r
+  -- | Inserts a value into a list.
+  --   Arguments are: List, Index, Value
   listAdd    :: SValue r -> SValue r -> SValue r -> SValue r
+  -- | Appens a value to a list.
+  --   Arguments are: List, Value
   listAppend :: SValue r -> SValue r -> SValue r
+  -- | Gets the value of an index of a list.
+  --   Arguments are: List, Index
   listAccess :: SValue r -> SValue r -> SValue r
+  -- | Sets the value of an index of a list.
+  --   Arguments are: List, Index, Value
   listSet    :: SValue r -> SValue r -> SValue r -> SValue r
-  
+  -- | Finds the index of the first occurrence of a value in a list.
+  --   Arguments are: List, Value
   indexOf :: SValue r -> SValue r -> SValue r
 
 class (ValueSym r) => InternalList r where

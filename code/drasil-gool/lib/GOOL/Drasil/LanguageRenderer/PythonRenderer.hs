@@ -407,8 +407,9 @@ instance GetSet PythonCode where
   set = G.set
 
 instance List PythonCode where
-  listSize = on2StateWrapped(\f v-> mkVal (functionType f) 
-    (pyListSize (RC.value v) (RC.function f))) listSizeFunc
+  listSize l = do
+    f <- listSizeFunc l
+    mkVal (functionType f) (RC.function f)
   listAdd = G.listAdd
   listAppend = G.listAppend
   listAccess = G.listAccess
@@ -424,9 +425,11 @@ instance InternalGetSet PythonCode where
   setFunc = G.setFunc
 
 instance InternalListFunc PythonCode where
-  listSizeFunc = funcFromData pyListSizeFunc int
+  listSizeFunc l = do
+    f <- funcApp pyListSize int [l]
+    funcFromData (RC.value f) int
   listAddFunc _ = CP.listAddFunc pyInsert
-  listAppendFunc = G.listAppendFunc pyAppendFunc
+  listAppendFunc _ = G.listAppendFunc pyAppendFunc
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
 
@@ -775,13 +778,13 @@ pyPi = text $ pyMath `access` piLabel
 pySys :: String
 pySys = "sys"
 
-pyInputFunc, pyPrintFunc, pyListSizeFunc :: Doc
+pyInputFunc, pyPrintFunc :: Doc
 pyInputFunc = text "input()" -- raw_input() for < Python 3.0
 pyPrintFunc = text printLabel
-pyListSizeFunc = text "len"
 
-pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyOpen, pyClose, 
+pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyOpen, pyClose, 
   pyRead, pyWrite, pyAppend, pySplit, pyRange, pyRstrip, pyMath :: String
+pyListSize = "len"
 pyIndex = "index"
 pyInsert = "insert"
 pyAppendFunc = "append"
@@ -895,9 +898,6 @@ pyInlineIf c' v1' v2' = do
 
 pyLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 pyLambda ps ex = pyLambdaDec <+> variableList ps <> colon <+> RC.value ex
-
-pyListSize :: Doc -> Doc -> Doc
-pyListSize v f = f <> parens v
 
 pyStringType :: (RenderSym r) => VSType r
 pyStringType = typeFromData String pyString (text pyString)

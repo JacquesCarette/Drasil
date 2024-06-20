@@ -519,6 +519,9 @@ class (BodySym r, VariableSym r) => ControlStatement r where
 
   throw :: Label -> MSStatement r
 
+  -- | String of if-else statements.
+  --   Arguments: List of predicates and bodies (if this then that),
+  --   Body for else branch
   ifCond     :: [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
   switch     :: SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 

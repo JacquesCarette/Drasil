@@ -93,7 +93,7 @@ import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getLangImports, getLibImports, setFileType, getClassName, setModuleName, 
   getModuleName, getCurrMain, getMethodExcMap, getMainDoc, setThrowUsed, 
   getThrowUsed, setErrorDefined, getErrorDefined, incrementLine, incrementWord, 
-  getLineIndex, getWordIndex, resetIndices, useVarName, genLoopIndex)
+  getLineIndex, getWordIndex, resetIndices, useVarName, genLoopIndex, genVarName)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Applicative (liftA2)
@@ -102,7 +102,7 @@ import Control.Monad.State (modify)
 import Data.Composition ((.:))
 import Data.List (intercalate, sort)
 import Data.Map (findWithDefault)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, isJust, isNothing)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, lbrace, rbrace, braces, brackets, colon, space, doubleQuotes)
 import qualified Text.PrettyPrint.HughesPJ as D (float)
@@ -426,8 +426,7 @@ instance List SwiftCode where
   indexOf = swiftIndexOf
   
 instance InternalList SwiftCode where
-  listSlice' b e s vn vo = swiftListSlice vn vo (fromMaybe (litInt 0) b) 
-    (fromMaybe (listSize vo) e) (fromMaybe (litInt 1) s)
+  listSlice' b e s vn vo = swiftListSlice vn vo b e (fromMaybe (litInt 1) s)
 
 instance InternalGetSet SwiftCode where
   getFunc = G.getFunc
@@ -981,11 +980,35 @@ swiftJoinedFunc d s = let sepArg = var swiftSep char
 swiftIndexOf :: (RenderSym r) => SValue r -> SValue r -> SValue r
 swiftIndexOf = swiftUnwrapVal .: swiftIndexFunc
 
-swiftListSlice :: (RenderSym r) => SVariable r -> SValue r -> SValue r -> 
-  SValue r -> SValue r -> MSBlock r
-swiftListSlice vn vo beg end step = let i = var "i" int 
-  in block [vn &= swiftMapFunc (swiftStrideFunc beg end step) (lambda [i] 
-    (listAccess vo (valueOf i)))]
+-- | Swift's syntactic sugar for list slicing.
+--   All but the last two lines are used to manually set the bounds based on
+--   whether `step` is positive or negative, if either bound is not given
+swiftListSlice :: (RenderSym r) => SVariable r -> SValue r -> 
+  Maybe (SValue r) -> Maybe (SValue r) -> SValue r -> MSBlock r
+swiftListSlice vn vo beg' end' step = do
+  bName <- if isJust beg' then pure ""
+           else genVarName [] "begIdx"
+  eName <- if isJust end' then pure ""
+           else genVarName [] "endIdx"
+  let begVar = var bName int
+      endVar = var eName int
+      begVal = case beg' of (Just b) -> b
+                            Nothing -> valueOf begVar
+      endVal = case end' of (Just e) -> e
+                            Nothing -> valueOf endVar
+      varDecls = (if isNothing beg' then [varDec begVar] else []) ++ 
+                 (if isNothing end' then [varDec endVar] else [])
+      ifStmt = if isJust beg' && isJust end' then []
+        else [ifCond [(step ?> (litInt 0), posStepAssigns)] negStepAssigns]
+      posStepAssigns = body [block $
+        (if isNothing beg' then [begVar &= (litInt 0)] else []) ++ 
+        (if isNothing end' then [endVar &= (listSize vo)] else [])]
+      negStepAssigns = body [block $
+        (if isNothing beg' then [begVar &= (listSize vo) #- litInt 1] else []) ++ 
+        (if isNothing end' then [endVar &= (litInt (-1))] else [])]
+      i = var "i" int
+  block $ varDecls ++ ifStmt ++ [vn &= swiftMapFunc 
+    (swiftStrideFunc begVal endVal step) (lambda [i] (listAccess vo (valueOf i)))]
 
 swiftPrint :: Bool -> Maybe (SValue SwiftCode) -> SValue SwiftCode -> 
   SValue SwiftCode -> MSStatement SwiftCode

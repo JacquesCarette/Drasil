@@ -146,9 +146,6 @@ units = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [ne
 concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs
 
-section :: [Section]
-section = extractSection srs
-
 labCon :: [LabelledContent]
 labCon = [figPhysSyst, figIndexConv, figForceActing] ++ funcReqTables
 

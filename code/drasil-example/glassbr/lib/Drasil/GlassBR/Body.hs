@@ -151,9 +151,6 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols)
 refDB :: ReferenceDB
 refDB = rdb citations concIns
 
-section :: [Section]
-section = extractSection srs
-
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 

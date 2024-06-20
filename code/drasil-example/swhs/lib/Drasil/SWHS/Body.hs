@@ -173,9 +173,6 @@ concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
   ++ nfRequirements
 
-section :: [Section]
-section = extractSection srs
-
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 

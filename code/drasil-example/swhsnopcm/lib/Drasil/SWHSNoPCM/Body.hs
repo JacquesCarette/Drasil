@@ -164,9 +164,6 @@ concIns = goals ++ funcReqs ++ nfRequirements ++ assumptions ++
 labCon :: [LabelledContent]
 labCon = [inputInitValsTable]
 
-section :: [Section]
-section = extractSection srs
-
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 

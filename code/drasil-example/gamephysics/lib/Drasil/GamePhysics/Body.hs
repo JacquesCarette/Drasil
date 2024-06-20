@@ -131,9 +131,6 @@ purp = foldlSent_ [S "simulate", getAcc twoD, phrase CP.rigidBody,
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
 
-section :: [Section]
-section = extractSection srs
-
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 

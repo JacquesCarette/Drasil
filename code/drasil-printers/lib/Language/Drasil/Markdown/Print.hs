@@ -10,7 +10,7 @@ import qualified Language.Drasil as L
 import Language.Drasil.Printing.Import (makeDocument)
 import Language.Drasil.Printing.AST (ItemType(Flat, Nested),  
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
-  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)), Label, 
+  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, E, (:+:)), Label, 
   LinkType(Internal, Cite2, External), OverSymb(Hat), Fonts(Emph, Bold), 
   Spacing(Thin), Fence(Abs), Ops(Perc))
 import Language.Drasil.Printing.Citation (BibRef)
@@ -23,8 +23,7 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import qualified Language.Drasil.TeX.Print as TeX (pExpr, fence, OpenClose(..),
   pMatrix, cases)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, toText)
-import Language.Drasil.HTML.Monad (unPH)
-import Language.Drasil.HTML.Print(renderCite)
+import qualified Language.Drasil.HTML.Print as HTML (renderCite, pSpec)
 import Language.Drasil.HTML.Helpers(BibFormatter(..))
 import Language.Drasil.TeX.Helpers(commandD, command2D, mkEnv)
 
@@ -111,19 +110,13 @@ printLO' e = stripStr (printLO e) nl
 pSpec :: Spec -> Doc
 pSpec (E e)     = text "\\\\(" <> pExpr e <> text "\\\\)" -- symbols used
 pSpec (a :+: b) = pSpec a <> pSpec b
-pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr s invalid
-  where
-    invalid = ['<', '>']
-    escapeChars '&' = "\\&"
-    escapeChars c = [c]
-pSpec (Sp s)    = text $ unPH $ L.special s
 pSpec HARDNL    = nl
 pSpec (Ref Internal       r a) = reflink     (text r) (pSpec a)
 pSpec (Ref (Cite2 EmptyS) r a) = reflink     (text r) (pSpec a)
 pSpec (Ref (Cite2 n)      r a) = reflinkInfo (text r) (pSpec a) (pSpec n)
 pSpec (Ref External       r a) = reflinkURI  (text r) (pSpec a)
-pSpec EmptyS    = text "" 
 pSpec (Quote q) = doubleQuotes $ pSpec q
+pSpec s         = HTML.pSpec s 
 
 -----------------------------------------------------------------
 -------------------- EXPRESSION PRINTING ------------------------
@@ -319,4 +312,4 @@ makeRefList a l i = divTag l $$ (i <> text ": " <> a) <> nl
 makeBib :: BibRef -> Doc
 makeBib = vcat .
   zipWith (curry (\(x,(y,z)) -> makeRefList z y x))
-  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map (renderCite mdBibFormatter)
+  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map (HTML.renderCite mdBibFormatter)

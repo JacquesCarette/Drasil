@@ -6,6 +6,8 @@ module Language.Drasil.HTML.Print(
   renderCite,
   -- * HTML Bib Formatter
   htmlBibFormatter,
+  -- * HTML Spec Printing
+  pSpec,
   -- * Term Fencing Helpers
   OpenClose(Open, Close), 
   fence) where

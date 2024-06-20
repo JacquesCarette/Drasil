@@ -215,7 +215,7 @@ symbMap = cdb symbolsAll (nw progName : map nw symbols ++ map nw acronyms ++ map
   ++ map nw physicalcon ++ map nw unitalChuncks ++ map nw [absTol, relTol]
   ++ [nw srsSWHS, nw algorithm, nw inValue, nw htTrans, nw materialProprty, nw phsChgMtrl])
   (map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
-  tMods concIns section labCon []
+  tMods concIns [] labCon []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw symbols ++ map nw acronyms)

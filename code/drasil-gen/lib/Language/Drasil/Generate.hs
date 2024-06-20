@@ -64,12 +64,13 @@ prntDoc d pinfo fn dtype fmt =
 -- document information and printing information. Then generates the document file.
 prntDoc' :: DocType -> String -> String -> Format -> Document -> PrintingInformation -> IO ()
 prntDoc' dt dt' fn Markdown body' sm = do
-  createDirectoryIfMissing True dt'
+  createDirectoryIfMissing True dir
   mapM_ writeDocToFile con
   where 
     con = writeDoc' sm dt Markdown fn body'
+    dir = dt' ++ "/src"
     writeDocToFile (fp, d) = do
-      outh <- openFile (dt' ++ "/" ++ fp ++ ".md") WriteMode
+      outh <- openFile (dir ++ "/" ++ fp ++ ".md") WriteMode
       hPutStrLn outh $ render $ d
       hClose outh
 prntDoc' dt dt' fn format body' sm = do

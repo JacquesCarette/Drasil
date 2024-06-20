@@ -394,9 +394,9 @@ arccos :: NumericExpression r => SValue r -> SValue r
 arctan :: NumericExpression r => SValue r -> SValue r
 floor :: NumericExpression r => SValue r -> SValue r
 ceil :: NumericExpression r => SValue r -> SValue r
+infixl 5 #+
 infixl 5 #-
 infixl 6 #/
-infixl 5 #+
 infixl 6 #*
 infixl 8 #~
 infixl 7 #/^
@@ -476,6 +476,14 @@ get :: GetSet r => SValue r -> SVariable r -> SValue r
 set :: GetSet r => SValue r -> SVariable r -> SValue r -> SValue r
 class (ValueSym r) => List r
 
+-- | Does any necessary conversions from GOOL's zero-indexed assumptions to
+--   the target language's assumptions
+intToIndex :: List r => SValue r -> SValue r
+
+-- | Does any necessary conversions from the target language's indexing
+--   assumptions assumptions to GOOL's zero-indexed assumptions
+indexToInt :: List r => SValue r -> SValue r
+
 -- | Finds the size of a list. Arguments are: List
 listSize :: List r => SValue r -> SValue r
 
@@ -497,6 +505,10 @@ listSet :: List r => SValue r -> SValue r -> SValue r -> SValue r
 indexOf :: List r => SValue r -> SValue r -> SValue r
 class (ValueSym r) => InternalList r
 listSlice' :: InternalList r => Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
+
+-- | Creates a slice of a list and assigns it to a variable. Arguments are:
+--   Variable to assign, list to read from, [Start index], [End index],
+--   [Step]
 listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 at :: List r => SValue r -> SValue r -> SValue r
@@ -1230,6 +1242,34 @@ stringRender' :: String
 string' :: RenderSym r => VSType r
 inherit :: Monad r => Maybe Label -> r ParentSpec
 implements :: Monad r => [Label] -> r ParentSpec
+
+-- | Call to get the size of a list in a language where this is not a
+--   method.
+listSize :: RenderSym r => SValue r -> SValue r
+
+-- | Call to insert a value into a list in a language where this is not a
+--   method.
+listAdd :: RenderSym r => SValue r -> SValue r -> SValue r -> SValue r
+
+-- | Call to append a value to a list in a language where this is not a
+--   method.
+listAppend :: RenderSym r => SValue r -> SValue r -> SValue r
+
+-- | Convert an integer to an index in a 0-indexed language Since GOOL is
+--   0-indexed, no adjustments need be made
+intToIndex :: SValue r -> SValue r
+
+-- | Convert an index to an integer in a 0-indexed language Since GOOL is
+--   0-indexed, no adjustments need be made
+indexToInt :: SValue r -> SValue r
+
+-- | Convert an integer to an index in a 1-indexed language Since GOOL is
+--   0-indexed, we need to add 1
+intToIndex' :: RenderSym r => SValue r -> SValue r
+
+-- | Convert an index to an integer in a 1-indexed language Since GOOL is
+--   0-indexed, we need to subtract 1
+indexToInt' :: RenderSym r => SValue r -> SValue r
 
 
 -- | The logic to render Python code is contained in this module
@@ -2251,9 +2291,9 @@ arccos :: NumericExpression r => SValue r -> SValue r
 arctan :: NumericExpression r => SValue r -> SValue r
 floor :: NumericExpression r => SValue r -> SValue r
 ceil :: NumericExpression r => SValue r -> SValue r
+infixl 5 #+
 infixl 5 #-
 infixl 6 #/
-infixl 5 #+
 infixl 6 #*
 infixl 8 #~
 infixl 7 #/^
@@ -2327,6 +2367,14 @@ get :: GetSet r => SValue r -> SVariable r -> SValue r
 set :: GetSet r => SValue r -> SVariable r -> SValue r -> SValue r
 class (ValueSym r) => List r
 
+-- | Does any necessary conversions from GOOL's zero-indexed assumptions to
+--   the target language's assumptions
+intToIndex :: List r => SValue r -> SValue r
+
+-- | Does any necessary conversions from the target language's indexing
+--   assumptions assumptions to GOOL's zero-indexed assumptions
+indexToInt :: List r => SValue r -> SValue r
+
 -- | Finds the size of a list. Arguments are: List
 listSize :: List r => SValue r -> SValue r
 
@@ -2346,6 +2394,10 @@ listSet :: List r => SValue r -> SValue r -> SValue r -> SValue r
 -- | Finds the index of the first occurrence of a value in a list.
 --   Arguments are: List, Value
 indexOf :: List r => SValue r -> SValue r -> SValue r
+
+-- | Creates a slice of a list and assigns it to a variable. Arguments are:
+--   Variable to assign, list to read from, [Start index], [End index],
+--   [Step]
 listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 at :: List r => SValue r -> SValue r -> SValue r

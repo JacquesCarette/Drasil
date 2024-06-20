@@ -92,7 +92,7 @@
 </span><span class="hs-identifier hs-var">intro</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RefTab
 </span><span class="hs-identifier hs-var">TUnits</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[TSIntro] -&gt; RefTab
 </span><span class="hs-identifier hs-var">tsymb</span></span><span> </span><span class="annot"><span class="annottext">[TSIntro]
-</span><a href="#local-6989586621679067346"><span class="hs-identifier hs-var">tableOfSymbols</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">RefTab
+</span><a href="#local-6989586621679067355"><span class="hs-identifier hs-var">tableOfSymbols</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">RefTab
 </span><span class="hs-identifier hs-var">TAandA</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-64"></span><span>  </span><span class="annot"><span class="annottext">IntroSec -&gt; DocSection
 </span><span class="hs-identifier hs-var">IntroSec</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -263,8 +263,8 @@ Sentence -&gt; [c] -&gt; SCSSub
 </span><a href="Drasil.GamePhysics.Concepts.html#gamePhysics"><span class="hs-identifier hs-var">gamePhysics</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-97"></span><span>    </span><span class="annot"><span class="annottext">DocSection
 </span><span class="hs-identifier hs-var">Bibliography</span></span><span class="hs-special">]</span><span>
-</span><span id="line-98"></span><span>      </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679067346"><span class="annot"><span class="annottext">tableOfSymbols :: [TSIntro]
-</span><a href="#local-6989586621679067346"><span class="hs-identifier hs-var hs-var">tableOfSymbols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TSIntro
+</span><span id="line-98"></span><span>      </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679067355"><span class="annot"><span class="annottext">tableOfSymbols :: [TSIntro]
+</span><a href="#local-6989586621679067355"><span class="hs-identifier hs-var hs-var">tableOfSymbols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TSIntro
 </span><span class="hs-identifier hs-var">TSPurpose</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[TConvention] -&gt; TSIntro
 </span><span class="hs-identifier hs-var">TypogConvention</span></span><span class="hs-special">[</span><span class="annot"><span class="annottext">Emphasis -&gt; TConvention
 </span><span class="hs-identifier hs-var">Vector</span></span><span> </span><span class="annot"><span class="annottext">Emphasis
@@ -317,7 +317,7 @@ Sentence -&gt; [c] -&gt; SCSSub
 </span><span class="hs-identifier hs-var">_defSequence</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. a -&gt; [a] -&gt; Block a
 </span><span class="hs-operator hs-var">`Parallel`</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[SimpleQDef]
-</span><a href="#local-6989586621679067252"><span class="hs-identifier hs-var">qDefs</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679067261"><span class="hs-identifier hs-var">qDefs</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-119"></span><span>  </span><span class="annot"><span class="annottext">_constraints :: [UncertQ]
 </span><span class="hs-identifier hs-var">_constraints</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[UncertQ]
 </span><a href="Drasil.GamePhysics.Unitals.html#inputConstraints"><span class="hs-identifier hs-var">inputConstraints</span></a></span><span class="hs-special">,</span><span>
@@ -333,8 +333,8 @@ Sentence -&gt; [c] -&gt; SCSSub
 </span><span class="hs-identifier hs-var">refdb</span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ReferenceDB
 </span><a href="Drasil.GamePhysics.Body.html#refDB"><span class="hs-identifier hs-var">refDB</span></a></span><span>
 </span><span id="line-124"></span><span class="hs-special">}</span><span>
-</span><span id="line-125"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679067252"><span class="annot"><span class="annottext">qDefs :: [SimpleQDef]
-</span><a href="#local-6989586621679067252"><span class="hs-identifier hs-var hs-var">qDefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; Maybe b) -&gt; [a] -&gt; [b]
+</span><span id="line-125"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679067261"><span class="annot"><span class="annottext">qDefs :: [SimpleQDef]
+</span><a href="#local-6989586621679067261"><span class="hs-identifier hs-var hs-var">qDefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; Maybe b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">mapMaybe</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Maybe SimpleQDef
 </span><span class="hs-identifier hs-var">qdEFromDD</span></span><span> </span><span class="annot"><span class="annottext">[DataDefinition]
 </span><a href="Drasil.GamePhysics.DataDefs.html#dataDefs"><span class="hs-identifier hs-var">dataDefs</span></a></span><span>

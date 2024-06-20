@@ -241,9 +241,9 @@ arccos :: NumericExpression r => SValue r -> SValue r
 arctan :: NumericExpression r => SValue r -> SValue r
 floor :: NumericExpression r => SValue r -> SValue r
 ceil :: NumericExpression r => SValue r -> SValue r
+infixl 5 #+
 infixl 5 #-
 infixl 6 #/
-infixl 5 #+
 infixl 6 #*
 infixl 8 #~
 infixl 7 #/^
@@ -317,6 +317,14 @@ get :: GetSet r => SValue r -> SVariable r -> SValue r
 set :: GetSet r => SValue r -> SVariable r -> SValue r -> SValue r
 class (ValueSym r) => List r
 
+-- | Does any necessary conversions from GOOL's zero-indexed assumptions to
+--   the target language's assumptions
+intToIndex :: List r => SValue r -> SValue r
+
+-- | Does any necessary conversions from the target language's indexing
+--   assumptions assumptions to GOOL's zero-indexed assumptions
+indexToInt :: List r => SValue r -> SValue r
+
 -- | Finds the size of a list. Arguments are: List
 listSize :: List r => SValue r -> SValue r
 
@@ -336,6 +344,10 @@ listSet :: List r => SValue r -> SValue r -> SValue r -> SValue r
 -- | Finds the index of the first occurrence of a value in a list.
 --   Arguments are: List, Value
 indexOf :: List r => SValue r -> SValue r -> SValue r
+
+-- | Creates a slice of a list and assigns it to a variable. Arguments are:
+--   Variable to assign, list to read from, [Start index], [End index],
+--   [Step]
 listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 at :: List r => SValue r -> SValue r -> SValue r

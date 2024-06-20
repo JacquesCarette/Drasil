@@ -76,7 +76,7 @@
 </span><a href="Drasil.DblPend.DataDefs.html#positionXEqn_1"><span class="hs-identifier hs-var hs-var">positionXEqn_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#lenRod_1"><span class="hs-identifier hs-var">lenRod_1</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#pendDisAngle_1"><span class="hs-identifier hs-var">pendDisAngle_1</span></a></span><span class="hs-special">)</span><span>
@@ -131,7 +131,7 @@ r -&gt; Sentence
 </span><span class="hs-identifier hs-var">neg</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#lenRod_1"><span class="hs-identifier hs-var">lenRod_1</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#pendDisAngle_1"><span class="hs-identifier hs-var">pendDisAngle_1</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
@@ -187,10 +187,10 @@ r -&gt; Sentence
 </span><a href="Drasil.DblPend.DataDefs.html#positionXDD_1"><span class="hs-identifier hs-var">positionXDD_1</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">forall d. DefinesQuantity d =&gt; Getter d QuantityDict
 </span><span class="hs-identifier hs-var">defLhs</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#lenRod_2"><span class="hs-identifier hs-var">lenRod_2</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#pendDisAngle_2"><span class="hs-identifier hs-var">pendDisAngle_2</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
@@ -246,11 +246,11 @@ r -&gt; Sentence
 </span><a href="Drasil.DblPend.DataDefs.html#positionYDD_1"><span class="hs-identifier hs-var">positionYDD_1</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">forall d. DefinesQuantity d =&gt; Getter d QuantityDict
 </span><span class="hs-identifier hs-var">defLhs</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">neg</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#lenRod_2"><span class="hs-identifier hs-var">lenRod_2</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#pendDisAngle_2"><span class="hs-identifier hs-var">pendDisAngle_2</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>

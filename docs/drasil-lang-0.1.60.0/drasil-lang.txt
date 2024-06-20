@@ -643,7 +643,7 @@ data ModelExpr
 
 -- | Operators are generalized arithmetic operators over a
 --   <a>DomainDesc</a> of an <tt>Expr</tt>. Could be called BigOp. ex:
---   Summation is represented via <tt>Add</tt> over a discrete domain.
+--   Summation is represented via <a>Add</a> over a discrete domain.
 [Operator] :: AssocArithOper -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> ModelExpr
 
 -- | A different kind of <a>IsIn</a>. A <a>UID</a> is an element of an
@@ -739,10 +739,8 @@ Scale :: NVVBinOp
 -- | Associative operators (adding and multiplication). Also specifies
 --   whether it is for integers or for real numbers.
 data AssocArithOper
-AddI :: AssocArithOper
-AddRe :: AssocArithOper
-MulI :: AssocArithOper
-MulRe :: AssocArithOper
+Add :: AssocArithOper
+Mul :: AssocArithOper
 
 -- | Associative boolean operators (and, or).
 data AssocBoolOper
@@ -876,7 +874,7 @@ data Expr
 
 -- | Operators are generalized arithmetic operators over a
 --   <tt>DomainDesc</tt> of an <a>Expr</a>. Could be called BigOp. ex:
---   Summation is represented via <tt>Add</tt> over a discrete domain.
+--   Summation is represented via <a>Add</a> over a discrete domain.
 [Operator] :: AssocArithOper -> DiscreteDomainDesc Expr Expr -> Expr -> Expr
 
 -- | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an element of an
@@ -961,10 +959,8 @@ Scale :: NVVBinOp
 -- | Associative operators (adding and multiplication). Also specifies
 --   whether it is for integers or for real numbers.
 data AssocArithOper
-AddI :: AssocArithOper
-AddRe :: AssocArithOper
-MulI :: AssocArithOper
-MulRe :: AssocArithOper
+Add :: AssocArithOper
+Mul :: AssocArithOper
 
 -- | Associative boolean operators (and, or).
 data AssocBoolOper
@@ -1553,7 +1549,7 @@ data CodeExpr
 
 -- | Operators are generalized arithmetic operators over a
 --   <tt>DomainDesc</tt> of an <tt>Expr</tt>. Could be called BigOp. ex:
---   Summation is represented via <tt>Add</tt> over a discrete domain.
+--   Summation is represented via <a>Add</a> over a discrete domain.
 [Operator] :: AssocArithOper -> DiscreteDomainDesc CodeExpr CodeExpr -> CodeExpr -> CodeExpr
 
 -- | The expression is an element of a space. IsIn :: Expr -&gt; Space
@@ -1608,10 +1604,8 @@ Scale :: NVVBinOp
 -- | Associative operators (adding and multiplication). Also specifies
 --   whether it is for integers or for real numbers.
 data AssocArithOper
-AddI :: AssocArithOper
-AddRe :: AssocArithOper
-MulI :: AssocArithOper
-MulRe :: AssocArithOper
+Add :: AssocArithOper
+Mul :: AssocArithOper
 
 -- | Associative boolean operators (and, or).
 data AssocBoolOper
@@ -1758,17 +1752,11 @@ lit :: ExprC r => Literal -> r
 -- | Smart constructor for the dot product of two equations.
 ($.) :: ExprC r => r -> r -> r
 
--- | Add two expressions (Integers).
-addI :: ExprC r => r -> r -> r
+-- | Add two expressions.
+($+) :: ExprC r => r -> r -> r
 
--- | Add two expressions (Real numbers).
-addRe :: ExprC r => r -> r -> r
-
--- | Multiply two expressions (Integers).
-mulI :: ExprC r => r -> r -> r
-
--- | Multiply two expressions (Real numbers).
-mulRe :: ExprC r => r -> r -> r
+-- | Multiply two expressions.
+($*) :: ExprC r => r -> r -> r
 ($-) :: ExprC r => r -> r -> r
 ($/) :: ExprC r => r -> r -> r
 ($^) :: ExprC r => r -> r -> r
@@ -1927,17 +1915,11 @@ lit :: ExprC r => Literal -> r
 -- | Smart constructor for the dot product of two equations.
 ($.) :: ExprC r => r -> r -> r
 
--- | Add two expressions (Integers).
-addI :: ExprC r => r -> r -> r
+-- | Add two expressions.
+($+) :: ExprC r => r -> r -> r
 
--- | Add two expressions (Real numbers).
-addRe :: ExprC r => r -> r -> r
-
--- | Multiply two expressions (Integers).
-mulI :: ExprC r => r -> r -> r
-
--- | Multiply two expressions (Real numbers).
-mulRe :: ExprC r => r -> r -> r
+-- | Multiply two expressions.
+($*) :: ExprC r => r -> r -> r
 ($-) :: ExprC r => r -> r -> r
 ($/) :: ExprC r => r -> r -> r
 ($^) :: ExprC r => r -> r -> r
@@ -2598,10 +2580,10 @@ IVP :: Expr -> Expr -> [Expr] -> InitialValueProblem
 ($^^) :: ConstrConcept -> Integer -> Unknown
 
 -- | Operation represent multiple
-($*) :: Expr -> Unknown -> Term
+($**) :: Expr -> Unknown -> Term
 
 -- | Operation represent plus (collection Terms)
-($+) :: [Term] -> Term -> LHS
+($++) :: [Term] -> Term -> LHS
 
 -- | Construct an ODESolverFormat for solving the ODE.
 makeAODESolverFormat :: DifferentialModel -> ODESolverFormat

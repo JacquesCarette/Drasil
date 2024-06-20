@@ -67,7 +67,7 @@
 </span><a href="Drasil.SWHS.DataDefs.html#waterMassEqn"><span class="hs-identifier hs-var hs-var">waterMassEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#wVol"><span class="hs-identifier hs-var">wVol</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#wDensity"><span class="hs-identifier hs-var">wDensity</span></a></span><span>
 </span><span id="line-41"></span><span>
@@ -157,13 +157,13 @@ r -&gt; Sentence
 </span><a href="Drasil.SWHS.DataDefs.html#tankVolumeEqn"><span class="hs-identifier hs-var hs-var">tankVolumeEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><span class="hs-identifier hs-var">pi_</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">half</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#diam"><span class="hs-identifier hs-var">diam</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#tankLength"><span class="hs-identifier hs-var">tankLength</span></a></span><span>
 </span><span id="line-71"></span><span>
@@ -190,13 +190,13 @@ r -&gt; Sentence
 </span><a href="Drasil.SWHS.DataDefs.html#balanceDecayRateEqn"><span class="hs-identifier hs-var hs-var">balanceDecayRateEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#wMass"><span class="hs-identifier hs-var">wMass</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#htCapW"><span class="hs-identifier hs-var">htCapW</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#coilHTC"><span class="hs-identifier hs-var">coilHTC</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#coilSA"><span class="hs-identifier hs-var">coilSA</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-82"></span><span>
@@ -246,13 +246,13 @@ r -&gt; DecRef
 </span><a href="Drasil.SWHS.DataDefs.html#balanceDecayTimeEqn"><span class="hs-identifier hs-var hs-var">balanceDecayTimeEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#pcmHTC"><span class="hs-identifier hs-var">pcmHTC</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#pcmSA"><span class="hs-identifier hs-var">pcmSA</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#coilHTC"><span class="hs-identifier hs-var">coilHTC</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#coilSA"><span class="hs-identifier hs-var">coilSA</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-98"></span><span>
@@ -288,14 +288,14 @@ r -&gt; DecRef
 </span><a href="Drasil.SWHS.DataDefs.html#balanceSolidPCMEqn"><span class="hs-identifier hs-var hs-var">balanceSolidPCMEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#pcmMass"><span class="hs-identifier hs-var">pcmMass</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#htCapSP"><span class="hs-identifier hs-var">htCapSP</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$/</span></span><span>
 </span><span id="line-110"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#pcmHTC"><span class="hs-identifier hs-var">pcmHTC</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#pcmSA"><span class="hs-identifier hs-var">pcmSA</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-111"></span><span>
@@ -331,14 +331,14 @@ r -&gt; DecRef
 </span><a href="Drasil.SWHS.DataDefs.html#balanceLiquidPCMEqn"><span class="hs-identifier hs-var hs-var">balanceLiquidPCMEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#pcmMass"><span class="hs-identifier hs-var">pcmMass</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#htCapLP"><span class="hs-identifier hs-var">htCapLP</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$/</span></span><span>
 </span><span id="line-123"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#pcmHTC"><span class="hs-identifier hs-var">pcmHTC</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#pcmSA"><span class="hs-identifier hs-var">pcmSA</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-124"></span><span>
@@ -461,7 +461,7 @@ r -&gt; RefInfo -&gt; DecRef
 </span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#htFusion"><span class="hs-identifier hs-var">htFusion</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#pcmMass"><span class="hs-identifier hs-var">pcmMass</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-159"></span><span>
@@ -482,13 +482,13 @@ r -&gt; DecRef
 </span><span id="line-162"></span><span>  </span><span class="annot"><span class="annottext">forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;meltFrac&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679084573"><span class="hs-identifier hs-var">meltFracConst</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall r.
+</span><a href="#local-6989586621679084528"><span class="hs-identifier hs-var">meltFracConst</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#ddHtFusion"><span class="hs-identifier hs-var">ddHtFusion</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-163"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679084573"><span class="annot"><span class="annottext">meltFracConst :: Sentence
-</span><a href="#local-6989586621679084573"><span class="hs-identifier hs-var hs-var">meltFracConst</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span id="line-163"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679084528"><span class="annot"><span class="annottext">meltFracConst :: Sentence
+</span><a href="#local-6989586621679084528"><span class="hs-identifier hs-var hs-var">meltFracConst</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">value</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence

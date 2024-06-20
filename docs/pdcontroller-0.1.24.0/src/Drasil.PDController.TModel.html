@@ -98,12 +98,12 @@ String -&gt; NP -&gt; Sentence -&gt; e -&gt; RelationConcept
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdFxnTDomain"><span class="hs-identifier hs-var">qdFxnTDomain</span></a></span><span> </span><span>
 </span><span id="line-41"></span><span>      </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">DrasilLang.exp</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">neg</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-42"></span><span>
@@ -292,19 +292,19 @@ String -&gt; NP -&gt; Sentence -&gt; e -&gt; RelationConcept
 </span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">mass</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-104"></span><span>    </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdDampingCoeff"><span class="hs-identifier hs-var">qdDampingCoeff</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-105"></span><span>    </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdStiffnessCoeff"><span class="hs-identifier hs-var">qdStiffnessCoeff</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-106"></span><span>

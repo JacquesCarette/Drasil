@@ -81,11 +81,11 @@ r -&gt; DecRef
 </span><span id="line-45"></span><span id="intersliceWtrFEqn"><span class="annot"><span class="annottext">intersliceWtrFEqn :: Expr
 </span><a href="Drasil.SSP.DataDefs.html#intersliceWtrFEqn"><span class="hs-identifier hs-var hs-var">intersliceWtrFEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; [(r, r)] -&gt; r
 </span><span class="hs-identifier hs-var">completeCase</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(Expr, Expr)
-</span><a href="#local-6989586621679081688"><span class="hs-identifier hs-var">case1</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">(Expr, Expr)
-</span><a href="#local-6989586621679081687"><span class="hs-identifier hs-var">case2</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">(Expr, Expr)
-</span><a href="#local-6989586621679081686"><span class="hs-identifier hs-var">case3</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-46"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679081688"><span class="annot"><span class="annottext">case1 :: (Expr, Expr)
-</span><a href="#local-6989586621679081688"><span class="hs-identifier hs-var hs-var">case1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><a href="#local-6989586621679081649"><span class="hs-identifier hs-var">case1</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">(Expr, Expr)
+</span><a href="#local-6989586621679081648"><span class="hs-identifier hs-var">case2</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">(Expr, Expr)
+</span><a href="#local-6989586621679081647"><span class="hs-identifier hs-var">case3</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-46"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679081649"><span class="annot"><span class="annottext">case1 :: (Expr, Expr)
+</span><a href="#local-6989586621679081649"><span class="hs-identifier hs-var hs-var">case1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">half</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UncertQ
@@ -93,18 +93,18 @@ r -&gt; DecRef
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#slipHght"><span class="hs-identifier hs-var">slipHght</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span>
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span>
 </span><span id="line-47"></span><span>          </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SSP.Unitals.html#waterWeight"><span class="hs-identifier hs-var">waterWeight</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SSP.Unitals.html#waterHght"><span class="hs-identifier hs-var">waterHght</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SSP.Unitals.html#slopeHght"><span class="hs-identifier hs-var">slopeHght</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span>
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span>
 </span><span id="line-48"></span><span>          </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SSP.Unitals.html#waterWeight"><span class="hs-identifier hs-var">waterWeight</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
@@ -114,8 +114,8 @@ r -&gt; DecRef
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SSP.Unitals.html#slopeHght"><span class="hs-identifier hs-var">slopeHght</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-49"></span><span>
-</span><span id="line-50"></span><span>        </span><span id="local-6989586621679081687"><span class="annot"><span class="annottext">case2 :: (Expr, Expr)
-</span><a href="#local-6989586621679081687"><span class="hs-identifier hs-var hs-var">case2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><span id="line-50"></span><span>        </span><span id="local-6989586621679081648"><span class="annot"><span class="annottext">case2 :: (Expr, Expr)
+</span><a href="#local-6989586621679081648"><span class="hs-identifier hs-var hs-var">case2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">half</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UncertQ
@@ -123,7 +123,7 @@ r -&gt; DecRef
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#slipHght"><span class="hs-identifier hs-var">slipHght</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SSP.Unitals.html#waterWeight"><span class="hs-identifier hs-var">waterWeight</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-51"></span><span>                </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
@@ -141,8 +141,8 @@ r -&gt; DecRef
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#slipHght"><span class="hs-identifier hs-var">slipHght</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-54"></span><span>
-</span><span id="line-55"></span><span>        </span><span id="local-6989586621679081686"><span class="annot"><span class="annottext">case3 :: (Expr, Expr)
-</span><a href="#local-6989586621679081686"><span class="hs-identifier hs-var hs-var">case3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
+</span><span id="line-55"></span><span>        </span><span id="local-6989586621679081647"><span class="annot"><span class="annottext">case3 :: (Expr, Expr)
+</span><a href="#local-6989586621679081647"><span class="hs-identifier hs-var hs-var">case3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UncertQ
@@ -374,7 +374,7 @@ r -&gt; DecRef
 </span><a href="Drasil.SSP.DataDefs.html#lengthLbEqn"><span class="hs-identifier hs-var hs-var">lengthLbEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseWthX"><span class="hs-identifier hs-var">baseWthX</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">sec</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span>
@@ -430,7 +430,7 @@ r -&gt; DecRef
 </span><a href="Drasil.SSP.DataDefs.html#lengthLsEqn"><span class="hs-identifier hs-var hs-var">lengthLsEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseWthX"><span class="hs-identifier hs-var">baseWthX</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">sec</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#surfAngle"><span class="hs-identifier hs-var">surfAngle</span></a></span><span class="hs-special">)</span><span>
@@ -485,10 +485,10 @@ r -&gt; DecRef
 </span><span id="line-152"></span><span id="slcHeightEqn"><span class="annot"><span class="annottext">slcHeightEqn :: Expr
 </span><a href="Drasil.SSP.DataDefs.html#slcHeightEqn"><span class="hs-identifier hs-var hs-var">slcHeightEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r
 </span><span class="hs-identifier hs-var">oneHalf</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#sliceHghtRight"><span class="hs-identifier hs-var">sliceHghtRight</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#sliceHghtLeft"><span class="hs-identifier hs-var">sliceHghtLeft</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-153"></span><span>
@@ -649,21 +649,21 @@ r -&gt; DecRef
 </span><span id="line-194"></span><span id="ratioVarEqn"><span class="annot"><span class="annottext">ratioVarEqn :: Expr
 </span><a href="Drasil.SSP.DataDefs.html#ratioVarEqn"><span class="hs-identifier hs-var hs-var">ratioVarEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; [(r, r)] -&gt; r
 </span><span class="hs-identifier hs-var">completeCase</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(Expr, Expr)
-</span><a href="#local-6989586621679081560"><span class="hs-identifier hs-var">case1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(Expr, Expr)
-</span><a href="#local-6989586621679081559"><span class="hs-identifier hs-var">case2</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-195"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679081560"><span class="annot"><span class="annottext">case1 :: (Expr, Expr)
-</span><a href="#local-6989586621679081560"><span class="hs-identifier hs-var hs-var">case1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
+</span><a href="#local-6989586621679081521"><span class="hs-identifier hs-var">case1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(Expr, Expr)
+</span><a href="#local-6989586621679081520"><span class="hs-identifier hs-var">case2</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-195"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679081521"><span class="annot"><span class="annottext">case1 :: (Expr, Expr)
+</span><a href="#local-6989586621679081521"><span class="hs-identifier hs-var hs-var">case1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#constF"><span class="hs-identifier hs-var">constF</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-196"></span><span>
-</span><span id="line-197"></span><span>        </span><span id="local-6989586621679081559"><span class="annot"><span class="annottext">case2 :: (Expr, Expr)
-</span><a href="#local-6989586621679081559"><span class="hs-identifier hs-var hs-var">case2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
+</span><span id="line-197"></span><span>        </span><span id="local-6989586621679081520"><span class="annot"><span class="annottext">case2 :: (Expr, Expr)
+</span><a href="#local-6989586621679081520"><span class="hs-identifier hs-var hs-var">case2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><span class="hs-identifier hs-var">QM.pi_</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#slipDist"><span class="hs-identifier hs-var">slipDist</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
@@ -721,10 +721,10 @@ r -&gt; DecRef
 </span><a href="Drasil.SSP.DataDefs.html#convertFunc1Eqn"><span class="hs-identifier hs-var hs-var">convertFunc1Eqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#normToShear"><span class="hs-identifier hs-var">normToShear</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#scalFunc"><span class="hs-identifier hs-var">scalFunc</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span>
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span>
 </span><span id="line-211"></span><span>  </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -733,7 +733,7 @@ r -&gt; DecRef
 </span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">tan</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SSP.Unitals.html#fricAngle"><span class="hs-identifier hs-var">fricAngle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
@@ -741,19 +741,19 @@ r -&gt; DecRef
 </span><span id="line-212"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#normToShear"><span class="hs-identifier hs-var">normToShear</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#scalFunc"><span class="hs-identifier hs-var">scalFunc</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`addRe`</span></span><span>
+</span><span class="hs-operator hs-var">$+</span></span><span>
 </span><span id="line-213"></span><span>  </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.SSP.Unitals.html#fs"><span class="hs-identifier hs-var">fs</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-214"></span><span>
@@ -808,10 +808,10 @@ r -&gt; DecRef
 </span><a href="Drasil.SSP.DataDefs.html#convertFunc2Eqn"><span class="hs-identifier hs-var hs-var">convertFunc2Eqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#normToShear"><span class="hs-identifier hs-var">normToShear</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#scalFunc"><span class="hs-identifier hs-var">scalFunc</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span>
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span>
 </span><span id="line-229"></span><span>  </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -820,7 +820,7 @@ r -&gt; DecRef
 </span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">tan</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SSP.Unitals.html#fricAngle"><span class="hs-identifier hs-var">fricAngle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
@@ -828,19 +828,19 @@ r -&gt; DecRef
 </span><span id="line-230"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#normToShear"><span class="hs-identifier hs-var">normToShear</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#scalFunc"><span class="hs-identifier hs-var">scalFunc</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`addRe`</span></span><span>
+</span><span class="hs-operator hs-var">$+</span></span><span>
 </span><span id="line-231"></span><span>  </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.SSP.Unitals.html#fs"><span class="hs-identifier hs-var">fs</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$/</span></span><span>
@@ -883,13 +883,13 @@ resShearWOQD :: QDefinition
 resShearWOQD = mkQuantDef shearRNoIntsl resShearWOEqn
 
 resShearWOEqn :: Expr
-resShearWOEqn = (((inxi slcWght) `addRe` (inxi surfHydroForce) *
-  (cos (inxi surfAngle)) `addRe` (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) *
-  (cos (inxi baseAngle)) `addRe` (negate (sy earthqkLoadFctr) `mulRe` (inxi slcWght) -
-  (inxi watrForceDif) `addRe` (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) +
-  (inxi surfLoad) `mulRe` (sin (inxi impLoadAngle))) `mulRe` (sin (inxi baseAngle)) -
-  (inxi baseHydroForce)) `mulRe` tan (inxi fricAngle) `addRe` (inxi effCohesion) *
-  (inxi baseWthX) `mulRe` sec (inxi baseAngle)
+resShearWOEqn = (((inxi slcWght) $+ (inxi surfHydroForce) *
+  (cos (inxi surfAngle)) $+ (inxi surfLoad) $* (cos (inxi impLoadAngle))) *
+  (cos (inxi baseAngle)) $+ (negate (sy earthqkLoadFctr) $* (inxi slcWght) -
+  (inxi watrForceDif) $+ (inxi surfHydroForce) $* sin (inxi surfAngle) +
+  (inxi surfLoad) $* (sin (inxi impLoadAngle))) $* (sin (inxi baseAngle)) -
+  (inxi baseHydroForce)) $* tan (inxi fricAngle) $+ (inxi effCohesion) *
+  (inxi baseWthX) $* sec (inxi baseAngle)
 
 resShr_deriv_ssp :: Derivation
 resShr_deriv_ssp = weave [resShrDerivation_sentence, map E resShr_deriv_eqns_ssp]
@@ -905,11 +905,11 @@ mobShearWOQD :: QDefinition
 mobShearWOQD = mkQuantDef shearFNoIntsl mobShearWOEqn
 
 mobShearWOEqn :: Expr 
-mobShearWOEqn = ((inxi slcWght) `addRe` (inxi surfHydroForce) *
-  (cos (inxi surfAngle)) `addRe` (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) *
-  (sin (inxi baseAngle)) - (negate (sy earthqkLoadFctr) `mulRe` (inxi slcWght) -
-  (inxi watrForceDif) `addRe` (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) +
-  (inxi surfLoad) `mulRe` (sin (inxi impLoadAngle))) `mulRe` (cos (inxi baseAngle))
+mobShearWOEqn = ((inxi slcWght) $+ (inxi surfHydroForce) *
+  (cos (inxi surfAngle)) $+ (inxi surfLoad) $* (cos (inxi impLoadAngle))) *
+  (sin (inxi baseAngle)) - (negate (sy earthqkLoadFctr) $* (inxi slcWght) -
+  (inxi watrForceDif) $+ (inxi surfHydroForce) $* sin (inxi surfAngle) +
+  (inxi surfLoad) $* (sin (inxi impLoadAngle))) $* (cos (inxi baseAngle))
 
 mobShr_deriv_ssp :: Derivation
 mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ssp])-}</span><span>
@@ -992,7 +992,7 @@ r -&gt; DecRef
 </span><a href="Drasil.SSP.Unitals.html#nrmForceSum"><span class="hs-identifier hs-var">nrmForceSum</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#intNormForce"><span class="hs-identifier hs-var">intNormForce</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxiM1"><span class="hs-identifier hs-var">inxiM1</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#intNormForce"><span class="hs-identifier hs-var">intNormForce</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-298"></span><span>
@@ -1003,7 +1003,7 @@ r -&gt; DecRef
 </span><a href="Drasil.SSP.Unitals.html#watForceSum"><span class="hs-identifier hs-var">watForceSum</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#watrForce"><span class="hs-identifier hs-var">watrForce</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxiM1"><span class="hs-identifier hs-var">inxiM1</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#watrForce"><span class="hs-identifier hs-var">watrForce</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-301"></span><span>
@@ -1072,32 +1072,32 @@ resShr_deriv_eqns_ssp = [eq1, eq2, eq3, eq8]
 
 eq1, eq2, eq3, eq8 :: Expr
 eq1 = (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -&gt; x -
-  inxiM1 intShrForce `addRe` inxi intShrForce `addRe` y) - inxi baseHydroForce
+  inxiM1 intShrForce $+ inxi intShrForce $+ y) - inxi baseHydroForce
 
-eq2 = (inxi nrmFNoIntsl) $= (((inxi slcWght) `addRe` (inxi surfHydroForce) *
-  (cos (inxi surfAngle)) `addRe` (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) *
-  (cos (inxi baseAngle)) `addRe` (negate (sy earthqkLoadFctr) `mulRe` (inxi slcWght) -
-  (inxi watrForce) `addRe` (inxiM1 watrForce) `addRe` (inxi surfHydroForce) *
-  sin (inxi surfAngle) `addRe` (inxi surfLoad) `mulRe` (sin (inxi impLoadAngle))) *
+eq2 = (inxi nrmFNoIntsl) $= (((inxi slcWght) $+ (inxi surfHydroForce) *
+  (cos (inxi surfAngle)) $+ (inxi surfLoad) $* (cos (inxi impLoadAngle))) *
+  (cos (inxi baseAngle)) $+ (negate (sy earthqkLoadFctr) $* (inxi slcWght) -
+  (inxi watrForce) $+ (inxiM1 watrForce) $+ (inxi surfHydroForce) *
+  sin (inxi surfAngle) $+ (inxi surfLoad) $* (sin (inxi impLoadAngle))) *
   (sin (inxi baseAngle)) - (inxi baseHydroForce))
 
-eq3 = inxi shearRNoIntsl $= (inxi nrmFNoIntsl) `mulRe` tan (inxi fricAngle) +
-  (inxi effCohesion) `mulRe` (inxi baseWthX) `mulRe` sec (inxi baseAngle) $=
-  (((inxi slcWght) `addRe` (inxi surfHydroForce) `mulRe` (cos (inxi surfAngle)) +
-  (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) `mulRe` (cos (inxi baseAngle)) +
-  (negate (sy earthqkLoadFctr) `mulRe` (inxi slcWght) - (inxi watrForceDif) +
-  (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) `addRe` (inxi surfLoad) *
-  (sin (inxi impLoadAngle))) `mulRe` (sin (inxi baseAngle)) -
-  (inxi baseHydroForce)) `mulRe` tan (inxi fricAngle) `addRe` (inxi effCohesion) *
-  (inxi baseWthX) `mulRe` sec (inxi baseAngle)
+eq3 = inxi shearRNoIntsl $= (inxi nrmFNoIntsl) $* tan (inxi fricAngle) +
+  (inxi effCohesion) $* (inxi baseWthX) $* sec (inxi baseAngle) $=
+  (((inxi slcWght) $+ (inxi surfHydroForce) $* (cos (inxi surfAngle)) +
+  (inxi surfLoad) $* (cos (inxi impLoadAngle))) $* (cos (inxi baseAngle)) +
+  (negate (sy earthqkLoadFctr) $* (inxi slcWght) - (inxi watrForceDif) +
+  (inxi surfHydroForce) $* sin (inxi surfAngle) $+ (inxi surfLoad) *
+  (sin (inxi impLoadAngle))) $* (sin (inxi baseAngle)) -
+  (inxi baseHydroForce)) $* tan (inxi fricAngle) $+ (inxi effCohesion) *
+  (inxi baseWthX) $* sec (inxi baseAngle)
 
 eq8 = inxi shearRNoIntsl $=
-  (((inxi slcWght) `addRe` (inxi surfHydroForce) `mulRe` (cos (inxi surfAngle))) `mulRe` (cos (inxi baseAngle)) +
+  (((inxi slcWght) $+ (inxi surfHydroForce) $* (cos (inxi surfAngle))) $* (cos (inxi baseAngle)) +
   (- (inxi watrForceDif) +
-  (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) `addRe` (inxi surfLoad) *
-  (sin (inxi impLoadAngle))) `mulRe` (sin (inxi baseAngle)) -
-  (inxi baseHydroForce)) `mulRe` tan (inxi fricAngle) `addRe` (inxi effCohesion) *
-  (inxi baseWthX) `mulRe` sec (inxi baseAngle)
+  (inxi surfHydroForce) $* sin (inxi surfAngle) $+ (inxi surfLoad) *
+  (sin (inxi impLoadAngle))) $* (sin (inxi baseAngle)) -
+  (inxi baseHydroForce)) $* tan (inxi fricAngle) $+ (inxi effCohesion) *
+  (inxi baseWthX) $* sec (inxi baseAngle)
 
 -------old chunk---------
 
@@ -1112,7 +1112,7 @@ resShrDerivation = [
   S &quot;of&quot;, refS effStress, S &quot;shown in&quot;, eqN 5],
   
   eqUnR' $ (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -&gt; x -
-  inxiM1 intShrForce `addRe` inxi intShrForce `addRe` y) - inxi baseHydroForce,
+  inxiM1 intShrForce $+ inxi intShrForce $+ y) - inxi baseHydroForce,
   
   foldlSP [plural value `the_ofThe'` S &quot;interslice forces&quot;,
   ch intNormForce `S.and_` ch intShrForce, S &quot;in the&quot;, phrase equation,
@@ -1123,11 +1123,11 @@ resShrDerivation = [
   S &quot;to obtain a solvable value as done for&quot;, ch nrmFNoIntsl, S &quot;in&quot;, eqN 2],
 
   eqUnR' $
-  (inxi nrmFNoIntsl) $= (((inxi slcWght) `addRe` (inxi surfHydroForce) *
-  (cos (inxi surfAngle)) `addRe` (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) *
-  (cos (inxi baseAngle)) `addRe` (negate (sy earthqkLoadFctr) `mulRe` (inxi slcWght) -
-  (inxi watrForce) `addRe` (inxiM1 watrForce) `addRe` (inxi surfHydroForce) *
-  sin (inxi surfAngle) `addRe` (inxi surfLoad) `mulRe` (sin (inxi impLoadAngle))) *
+  (inxi nrmFNoIntsl) $= (((inxi slcWght) $+ (inxi surfHydroForce) *
+  (cos (inxi surfAngle)) $+ (inxi surfLoad) $* (cos (inxi impLoadAngle))) *
+  (cos (inxi baseAngle)) $+ (negate (sy earthqkLoadFctr) $* (inxi slcWght) -
+  (inxi watrForce) $+ (inxiM1 watrForce) $+ (inxi surfHydroForce) *
+  sin (inxi surfAngle) $+ (inxi surfLoad) $* (sin (inxi impLoadAngle))) *
   (sin (inxi baseAngle)) - (inxi baseHydroForce)),
   
   foldlSP [S &quot;Using&quot;, ch nrmFNoIntsl `sC` S &quot;a&quot;, phrase shearRNoIntsl,
@@ -1135,15 +1135,15 @@ resShrDerivation = [
   plural value, S &quot;as done in&quot;, eqN 3],
   
   eqUnR' $
-  inxi shearRNoIntsl $= (inxi nrmFNoIntsl) `mulRe` tan (inxi fricAngle) +
-  (inxi effCohesion) `mulRe` (inxi baseWthX) `mulRe` sec (inxi baseAngle) $=
-  (((inxi slcWght) `addRe` (inxi surfHydroForce) `mulRe` (cos (inxi surfAngle)) +
-  (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) `mulRe` (cos (inxi baseAngle)) +
-  (negate (sy earthqkLoadFctr) `mulRe` (inxi slcWght) - (inxi watrForceDif) +
-  (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) `addRe` (inxi surfLoad) *
-  (sin (inxi impLoadAngle))) `mulRe` (sin (inxi baseAngle)) -
-  (inxi baseHydroForce)) `mulRe` tan (inxi fricAngle) `addRe` (inxi effCohesion) *
-  (inxi baseWthX) `mulRe` sec (inxi baseAngle)
+  inxi shearRNoIntsl $= (inxi nrmFNoIntsl) $* tan (inxi fricAngle) +
+  (inxi effCohesion) $* (inxi baseWthX) $* sec (inxi baseAngle) $=
+  (((inxi slcWght) $+ (inxi surfHydroForce) $* (cos (inxi surfAngle)) +
+  (inxi surfLoad) $* (cos (inxi impLoadAngle))) $* (cos (inxi baseAngle)) +
+  (negate (sy earthqkLoadFctr) $* (inxi slcWght) - (inxi watrForceDif) +
+  (inxi surfHydroForce) $* sin (inxi surfAngle) $+ (inxi surfLoad) *
+  (sin (inxi impLoadAngle))) $* (sin (inxi baseAngle)) -
+  (inxi baseHydroForce)) $* tan (inxi fricAngle) $+ (inxi effCohesion) *
+  (inxi baseWthX) $* sec (inxi baseAngle)
 
   ]
 
@@ -1178,18 +1178,18 @@ mobShr_deriv_eqns_ssp = [eq4, eq5, eq6]
 
 eq4, eq5, eq6:: Expr
 eq4 = inxi mobShrI $= eqlExpr sin cos
-    (\x y -&gt; x - inxiM1 intShrForce `addRe` inxi intShrForce `addRe` y)
+    (\x y -&gt; x - inxiM1 intShrForce $+ inxi intShrForce $+ y)
 
-eq5 = inxi shearFNoIntsl $= ((inxi slcWght) `addRe` (inxi surfHydroForce) *
-  (cos (inxi surfAngle)) `addRe` (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) *
-  (sin (inxi baseAngle)) - (negate (sy earthqkLoadFctr) `mulRe` (inxi slcWght) -
-  (inxi watrForceDif) `addRe` (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) +
-  (inxi surfLoad) `mulRe` (sin (inxi impLoadAngle))) `mulRe` (cos (inxi baseAngle))
+eq5 = inxi shearFNoIntsl $= ((inxi slcWght) $+ (inxi surfHydroForce) *
+  (cos (inxi surfAngle)) $+ (inxi surfLoad) $* (cos (inxi impLoadAngle))) *
+  (sin (inxi baseAngle)) - (negate (sy earthqkLoadFctr) $* (inxi slcWght) -
+  (inxi watrForceDif) $+ (inxi surfHydroForce) $* sin (inxi surfAngle) +
+  (inxi surfLoad) $* (sin (inxi impLoadAngle))) $* (cos (inxi baseAngle))
 
-eq6 = inxi shearFNoIntsl $= ((inxi slcWght) `addRe` (inxi surfHydroForce) *
+eq6 = inxi shearFNoIntsl $= ((inxi slcWght) $+ (inxi surfHydroForce) *
   (cos (inxi surfAngle))) *
   (sin (inxi baseAngle)) -
-  ((inxi watrForceDif) `addRe` (inxi surfHydroForce) `mulRe` sin (inxi surfAngle)) `mulRe` (cos (inxi baseAngle))
+  ((inxi watrForceDif) $+ (inxi surfHydroForce) $* sin (inxi surfAngle)) $* (cos (inxi baseAngle))
 
   ------old chunk-----
 mobShrDerivation :: [Contents]
@@ -1200,7 +1200,7 @@ mobShrDerivation = [
   S &quot;also shown in&quot;, eqN 4],
   
   eqUnR' $ inxi mobShrI $= eqlExpr sin cos
-    (\x y -&gt; x - inxiM1 intShrForce `addRe` inxi intShrForce `addRe` y),
+    (\x y -&gt; x - inxiM1 intShrForce $+ inxi intShrForce $+ y),
   
   foldlSP [S &quot;The&quot;, phrase equation, S &quot;is unsolvable, containing the unknown&quot;,
   getTandS intNormForce, S &quot;and&quot; +:+. getTandS intShrForce,
@@ -1208,11 +1208,11 @@ mobShrDerivation = [
   getTandS shearFNoIntsl `sC` S &quot;as done in&quot;, eqN 5],
   
   eqUnR' $
-  inxi shearFNoIntsl $= ((inxi slcWght) `addRe` (inxi surfHydroForce) *
-  (cos (inxi surfAngle)) `addRe` (inxi surfLoad) `mulRe` (cos (inxi impLoadAngle))) *
-  (sin (inxi baseAngle)) - (negate (sy earthqkLoadFctr) `mulRe` (inxi slcWght) -
-  (inxi watrForceDif) `addRe` (inxi surfHydroForce) `mulRe` sin (inxi surfAngle) +
-  (inxi surfLoad) `mulRe` (sin (inxi impLoadAngle))) `mulRe` (cos (inxi baseAngle)),
+  inxi shearFNoIntsl $= ((inxi slcWght) $+ (inxi surfHydroForce) *
+  (cos (inxi surfAngle)) $+ (inxi surfLoad) $* (cos (inxi impLoadAngle))) *
+  (sin (inxi baseAngle)) - (negate (sy earthqkLoadFctr) $* (inxi slcWght) -
+  (inxi watrForceDif) $+ (inxi surfHydroForce) $* sin (inxi surfAngle) +
+  (inxi surfLoad) $* (sin (inxi impLoadAngle))) $* (cos (inxi baseAngle)),
   
   foldlSP [S &quot;The&quot;, plural value, S &quot;of&quot;, ch shearRNoIntsl `S.and_`
   ch shearFNoIntsl, S &quot;are now defined completely in terms of the&quot;,

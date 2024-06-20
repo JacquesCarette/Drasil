@@ -12,35 +12,35 @@
 </span><a href="Data.Drasil.Equations.Defining.Derivations.html#weightDerivNewtonEqn"><span class="hs-identifier hs-var hs-var">weightDerivNewtonEqn</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Data.Drasil.Quantities.Physics.html#weight"><span class="hs-identifier hs-var">QP.weight</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">mulRe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#mass"><span class="hs-identifier hs-var">QPP.mass</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#mass"><span class="hs-identifier hs-var">QPP.mass</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccel"><span class="hs-identifier hs-var">QP.gravitationalAccel</span></a></span><span class="hs-special">)</span><span>
+</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccel"><span class="hs-identifier hs-var">QP.gravitationalAccel</span></a></span><span>
 </span><span id="line-12"></span><span id="weightDerivReplaceMassEqn"><span class="annot"><span class="annottext">weightDerivReplaceMassEqn :: ModelExpr
 </span><a href="Data.Drasil.Equations.Defining.Derivations.html#weightDerivReplaceMassEqn"><span class="hs-identifier hs-var hs-var">weightDerivReplaceMassEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Data.Drasil.Quantities.Physics.html#weight"><span class="hs-identifier hs-var">QP.weight</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">mulRe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#density"><span class="hs-identifier hs-var">QPP.density</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#density"><span class="hs-identifier hs-var">QPP.density</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Data.Drasil.Quantities.PhysicalProperties.html#vol"><span class="hs-identifier hs-var">QPP.vol</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccel"><span class="hs-identifier hs-var">QP.gravitationalAccel</span></a></span><span class="hs-special">)</span><span>
+</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccel"><span class="hs-identifier hs-var">QP.gravitationalAccel</span></a></span><span>
 </span><span id="line-13"></span><span id="weightDerivSpecWeightEqn"><span class="annot"><span class="annottext">weightDerivSpecWeightEqn :: ModelExpr
 </span><a href="Data.Drasil.Equations.Defining.Derivations.html#weightDerivSpecWeightEqn"><span class="hs-identifier hs-var hs-var">weightDerivSpecWeightEqn</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Data.Drasil.Quantities.Physics.html#weight"><span class="hs-identifier hs-var">QP.weight</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">mulRe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#vol"><span class="hs-identifier hs-var">QPP.vol</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#vol"><span class="hs-identifier hs-var">QPP.vol</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#specWeight"><span class="hs-identifier hs-var">QPP.specWeight</span></a></span><span class="hs-special">)</span><span>
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#specWeight"><span class="hs-identifier hs-var">QPP.specWeight</span></a></span><span>
 </span><span id="line-14"></span><span id="weightDerivAccelEqn"><span class="annot"><span class="annottext">weightDerivAccelEqn :: ModelExpr
 </span><a href="Data.Drasil.Equations.Defining.Derivations.html#weightDerivAccelEqn"><span class="hs-identifier hs-var hs-var">weightDerivAccelEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -51,7 +51,7 @@
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccel"><span class="hs-identifier hs-var">QP.gravitationalAccel</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Data.Drasil.Quantities.Math.html#unitVectj"><span class="hs-identifier hs-var">QM.unitVectj</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-15"></span></pre></body></html>

@@ -148,7 +148,7 @@ r -&gt; DecRef
 </span><a href="Drasil.PDController.DataDefs.html#ddPropCtrlEqn"><span class="hs-identifier hs-var hs-var">ddPropCtrlEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdProcessErrorFD"><span class="hs-identifier hs-var">qdProcessErrorFD</span></a></span><span>
 </span><span id="line-55"></span><span>
@@ -219,10 +219,10 @@ r -&gt; DecRef
 </span><span id="line-76"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-var">qdDerivGain</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdProcessErrorFD"><span class="hs-identifier hs-var">qdProcessErrorFD</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span>
 </span><span id="line-77"></span><span>
@@ -305,14 +305,14 @@ r -&gt; DecRef
 </span><span id="line-99"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdProcessErrorFD"><span class="hs-identifier hs-var">qdProcessErrorFD</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span>
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span>
 </span><span id="line-100"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-var">qdDerivGain</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-101"></span><span>

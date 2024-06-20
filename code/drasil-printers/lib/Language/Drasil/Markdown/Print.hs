@@ -71,8 +71,8 @@ sepSRS _ _ = []
 
 -- | Helper for checking whether a LayoutObj is an HDiv
 isHDiv :: LayoutObj -> Bool
-isHDiv (HDiv _ _ _) = True
-isHDiv _ = False
+isHDiv HDiv {} = True
+isHDiv _       = False
 
 -----------------------------------------------------------------
 ------------------- LAYOUT OBJECT PRINTING ----------------------
@@ -83,7 +83,7 @@ printLO :: LayoutObj -> Doc
 printLO (Header n contents _)   = (h (n + 1) <> pSpec contents) <> nl
 printLO (Cell layoutObs)        = vcat (map printLO layoutObs)
 printLO (HDiv _ layoutObs _)    = vcat (map printLO layoutObs)
-printLO (Paragraph contents)    = (stripStr (pSpec contents) nl) <> nl
+printLO (Paragraph contents)    = stripStr (pSpec contents) nl <> nl
 printLO (EqnBlock contents)     = mathEqn <> nl
   where
     mjDelimDisp d  = text "\\\\[" <> stripStr d nl <> text "\\\\]" 
@@ -136,7 +136,7 @@ pExpr (Row l)        = foldl1 (<>) (map pExpr l)
 pExpr (Sub e)        = bslash <> unders <> br (pExpr e)
 pExpr (Sup e)        = hat    <> br (pExpr e)
 pExpr (Over Hat s)   = printMath $ commandD "hat" (pExpr' s)
-pExpr (MO Perc)      = bslash <> (printMath $ TeX.pExpr (MO Perc))
+pExpr (MO Perc)      = bslash <> printMath (TeX.pExpr (MO Perc))
 pExpr (Fenced l r m) = fence TeX.Open l <> pExpr m <> fence TeX.Close r
   where 
     fence _ Abs = text "\\|"
@@ -168,7 +168,7 @@ makeTable :: [[Spec]] -> Doc -> Bool -> Doc -> Doc
 makeTable [] _ _ _  = error "No table to print"
 makeTable ls r b t  = 
   divTag r $$
-  makeHeaderCols (matrix !! 0) sizes $$
+  makeHeaderCols (head matrix) sizes $$
   makeRows (tail matrix) sizes <> nl $$
   capt
     where
@@ -178,7 +178,7 @@ makeTable ls r b t  =
 
 -- | Helper for creating a Doc matrix
 mkDocMatrix :: [[Spec]] -> [[Doc]]
-mkDocMatrix ls = map (map pSpec) ls
+mkDocMatrix = map (map pSpec)
 
 -- | Helper for getting table column size
 columnSize :: [[Doc]] -> [Int]
@@ -186,7 +186,7 @@ columnSize = map (maximum . map docLength) . transpose
 
 -- | Helper for creating table rows
 makeRows :: [[Doc]] -> [Int] -> Doc
-makeRows lls sizes = foldr (($$) . (flip makeColumns sizes)) empty lls
+makeRows lls sizes = foldr (($$) . (`makeColumns` sizes)) empty lls
 
 -- | makeHeaderCols: Helper for creating table header row
 -- | makeColumns: Helper for creating table columns
@@ -225,7 +225,7 @@ makeDefn ps l =
 
 -- | Helper for convering definition to Doc matrix
 mkDocDefn :: [(String,[LayoutObj])] -> [[Doc]]
-mkDocDefn ps = map (\(f, d) -> [text f, makeLO (f,d)]) ps
+mkDocDefn = map (\(f, d) -> [text f, makeLO (f,d)])
 
 -- | Renders the title/header of the definition table
 makeDHeaderText :: [(String, [LayoutObj])] -> Doc -> Doc
@@ -239,7 +239,7 @@ makeDHeaderText ps l = defnHTag header <> nl
 makeLO :: (String, [LayoutObj]) -> Doc
 makeLO (f,d) =
       if f=="Notes" then ul (hcat $ map (processDefnLO f) d) 
-      else (hcat $ map (processDefnLO f) d)
+      else hcat $ map (processDefnLO f) d
 
 -- | Processes the LayoutObjs in the defn
 processDefnLO :: String -> LayoutObj -> Doc
@@ -253,9 +253,9 @@ processDefnLO _ lo                    = printLO' lo
 -- | Renders lists into Markdown
 makeList :: ListType -> Int -> Doc
 makeList (Simple      items) _  = vcat $ 
-  map (\(b,e,l) -> (mlref l) $$ (pSpec b <> text ":" <+> sItem e <> nl)) items
+  map (\(b,e,l) -> mlref l $$ (pSpec b <> text ":" <+> sItem e <> nl)) items
 makeList (Desc        items) _  = vcat $ 
-  map (\(b,e,l) -> (mlref l) $$ (bold (pSpec b) <> text ":" <+> sItem e <> nl)) items
+  map (\(b,e,l) -> mlref l $$ (bold (pSpec b) <> text ":" <+> sItem e <> nl)) items
 makeList (Ordered     items) bl = vcat $ 
   zipWith (\(i,_) n -> oItem i bl n) items [1..]
 makeList (Unordered   items) bl = vcat $ 
@@ -290,7 +290,7 @@ sItem (Nested s l) = vcat [pSpec s, makeList l 0]
 
 -- | Renders figures in Markdown
 makeFigure :: Doc -> Doc -> Doc -> Doc
-makeFigure r c f = divTag r $$ (image f c)
+makeFigure r c f = divTag r $$ image f c
 
 -----------------------------------------------------------------
 ------------------ Bibliography Printing ------------------------

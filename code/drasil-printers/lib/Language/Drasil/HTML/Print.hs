@@ -436,38 +436,38 @@ useStyleArtcl f Chicago = artclChicago f
 -- FIXME: move these show functions and use tags, combinators
 -- | Cite books in MLA format.
 bookMLA :: BibFormatter -> CiteField -> Doc
-bookMLA f (Address   s) = (spec f) s <> text ":"
+bookMLA f (Address   s) = spec f s <> text ":"
 bookMLA _ (Edition   s) = comm $ text $ show s ++ sufxer s ++ " ed."
-bookMLA f (Series    s) = dot $ (emph f) $ (spec f) s
-bookMLA f (Title     s) = dot $ (emph f) $ (spec f) s --If there is a series or collection, this should be in quotes, not italics
+bookMLA f (Series    s) = dot $ emph f $ spec f s
+bookMLA f (Title     s) = dot $ emph f $ spec f s --If there is a series or collection, this should be in quotes, not italics
 bookMLA _ (Volume    s) = comm $ text $ "vol. " ++ show s
-bookMLA f (Publisher s) = comm $ (spec f) s
-bookMLA f (Author    p) = dot $ (spec f) (rendPeople' p)
+bookMLA f (Publisher s) = comm $ spec f s
+bookMLA f (Author    p) = dot $ spec f (rendPeople' p)
 bookMLA _ (Year      y) = dot $ text $ show y
 --bookMLA _ (Date    d m y) = dot $ unwords [show d, show m, show y]
 --bookMLA f (URLdate d m y) = "Web. " ++ bookMLA f (Date d m y) sm
-bookMLA f (BookTitle s) = dot $ (emph f) $ (spec f) s
-bookMLA f (Journal   s) = comm $ (emph f) $ (spec f) s
+bookMLA f (BookTitle s) = dot $ emph f $ spec f s
+bookMLA f (Journal   s) = comm $ emph f $ spec f s
 bookMLA _ (Pages   [p]) = dot $ text $ "pg. " ++ show p
 bookMLA _ (Pages     p) = dot $ text "pp. " <> foldPages p
-bookMLA f (Note      s) = (spec f) s
+bookMLA f (Note      s) = spec f s
 bookMLA _ (Number    n) = comm $ text ("no. " ++ show n)
-bookMLA f (School    s) = comm $ (spec f) s
+bookMLA f (School    s) = comm $ spec f s
 --bookMLA _ (Thesis     t)  = comm $ show t
---bookMLA f (URL        s)  = dot $ (spec f) s
-bookMLA f (HowPublished (Verb s))      = comm $ (spec f) s
-bookMLA f (HowPublished (URL l@(S s))) = dot  $ (spec f) $ Ref External s l
-bookMLA f (HowPublished (URL s))       = dot  $ (spec f) s
+--bookMLA f (URL        s)  = dot $ spec f s
+bookMLA f (HowPublished (Verb s))      = comm $ spec f s
+bookMLA f (HowPublished (URL l@(S s))) = dot  $ spec f $ Ref External s l
+bookMLA f (HowPublished (URL s))       = dot  $ spec f s
 bookMLA _ (Editor       p) = comm $ text "Edited by " <> foldPeople p
 bookMLA _ (Chapter      _) = text ""
-bookMLA f (Institution  i) = comm $ (spec f) i
-bookMLA f (Organization i) = comm $ (spec f) i
+bookMLA f (Institution  i) = comm $ spec f i
+bookMLA f (Organization i) = comm $ spec f i
 bookMLA _ (Month        m) = comm $ text $ show m
-bookMLA f (Type         t) = comm $ (spec f) t
+bookMLA f (Type         t) = comm $ spec f t
 
 -- | Cite books in APA format.
 bookAPA :: BibFormatter -> CiteField -> Doc --FIXME: year needs to come after author in L.APA
-bookAPA f (Author   p) = (spec f) (rendPeople L.rendPersLFM' p) --L.APA uses initals rather than full name
+bookAPA f (Author   p) = spec f (rendPeople L.rendPersLFM' p) --L.APA uses initals rather than full name
 bookAPA _ (Year     y) = dot $ text $ paren $ show y --L.APA puts "()" around the year
 --bookAPA _ (Date _ _ y) = bookAPA (Year y) --L.APA doesn't care about the day or month
 --bookAPA _ (URLdate d m y) = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
@@ -477,7 +477,7 @@ bookAPA f i = bookMLA f i --Most items are rendered the same as L.MLA
 
 -- | Cite books in Chicago format.
 bookChicago :: BibFormatter -> CiteField -> Doc
-bookChicago f (Author   p) = (spec f) (rendPeople L.rendPersLFM'' p) --L.APA uses middle initals rather than full name
+bookChicago f (Author   p) = spec f (rendPeople L.rendPersLFM'' p) --L.APA uses middle initals rather than full name
 bookChicago _ (Pages    p) = dot $ foldPages p
 bookChicago _ (Editor   p) = dot $ foldPeople p <> text (toPlural p " ed")
 bookChicago f i = bookMLA f i --Most items are rendered the same as L.MLA
@@ -485,12 +485,12 @@ bookChicago f i = bookMLA f i --Most items are rendered the same as L.MLA
 -- for article renderings
 -- | Cite articles in MLA format.
 artclMLA :: BibFormatter -> CiteField -> Doc
-artclMLA f (Title s) = doubleQuotes $ dot $ (spec f) s
+artclMLA f (Title s) = doubleQuotes $ dot $ spec f s
 artclMLA f i         = bookMLA f i
 
 -- | Cite articles in APA format.
 artclAPA :: BibFormatter -> CiteField -> Doc
-artclAPA f (Title  s)  = dot $ (spec f) s
+artclAPA f (Title  s)  = dot $ spec f s
 artclAPA _ (Volume n)  = em $ text $ show n
 artclAPA _ (Number  n) = comm $ text $ paren $ show n
 artclAPA f i           = bookAPA f i

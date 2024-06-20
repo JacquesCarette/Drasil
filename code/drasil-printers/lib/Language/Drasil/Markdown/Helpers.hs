@@ -79,7 +79,7 @@ reflinkURI ref txt = if ref==txt then ang ref
 
 -- | Helper for setting up figures
 image :: Doc -> Doc -> Doc
-image f c =  text "!" <> (reflinkURI f c) $$ bold (caption c) <> text "\n"
+image f c =  text "!" <> reflinkURI f c $$ bold (caption c) <> text "\n"
 
 -- | Helper for setting up captions
 caption :: Doc -> Doc

@@ -71,7 +71,7 @@ prntDoc' dt dt' fn Markdown body' sm = do
     dir = dt' ++ "/src"
     writeDocToFile (fp, d) = do
       outh <- openFile (dir ++ "/" ++ fp ++ ".md") WriteMode
-      hPutStrLn outh $ render $ d
+      hPutStrLn outh $ render d
       hClose outh
 prntDoc' dt dt' fn format body' sm = do
   createDirectoryIfMissing True dt'

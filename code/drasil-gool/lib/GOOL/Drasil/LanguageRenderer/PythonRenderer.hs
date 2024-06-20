@@ -17,8 +17,8 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj,
   InternalValueExp(..), objMethodCall, FunctionSym(..), GetSet(..), List(..),
-  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..), 
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..), 
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..),
@@ -68,7 +68,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   funcType, buildModule, bindingError, notNull, listDecDef, destructorError, 
   stateVarDef, constVar, litArray, listSetFunc, extraClass, listAccessFunc, 
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
-  mainBody, inOutFunc, docInOutFunc')
+  mainBody, inOutFunc, docInOutFunc', listSize, intToIndex, indexToInt)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
   notifyObservers', checkState)
@@ -407,9 +407,9 @@ instance GetSet PythonCode where
   set = G.set
 
 instance List PythonCode where
-  listSize l = do
-    f <- listSizeFunc l
-    mkVal (functionType f) (RC.function f)
+  intToIndex = CP.intToIndex
+  indexToInt = CP.indexToInt
+  listSize = CP.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend
   listAccess = G.listAccess

@@ -219,6 +219,8 @@ instance GetSet CodeInfo where
   set v _ = execute2 v
 
 instance List CodeInfo where
+  intToIndex = execute1
+  indexToInt = execute1
   listSize   = execute1
   listAdd    = execute3
   listAppend = execute2

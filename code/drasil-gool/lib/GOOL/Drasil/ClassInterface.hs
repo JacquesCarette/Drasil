@@ -346,6 +346,12 @@ class (ValueSym r, VariableSym r) => GetSet r where
   set :: SValue r -> SVariable r -> SValue r -> SValue r
 
 class (ValueSym r) => List r where
+  -- | Does any necessary conversions from GOOL's zero-indexed assumptions to
+  --   the target language's assumptions
+  intToIndex :: SValue r -> SValue r
+  -- | Does any necessary conversions from the target language's indexing
+  --   assumptions assumptions to GOOL's zero-indexed assumptions
+  indexToInt :: SValue r -> SValue r
   -- | Finds the size of a list.
   --   Arguments are: List
   listSize   :: SValue r -> SValue r
@@ -368,7 +374,10 @@ class (ValueSym r) => List r where
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) 
     -> SVariable r -> SValue r -> MSBlock r
-  
+
+-- | Creates a slice of a list and assigns it to a variable.
+--   Arguments are: Variable to assign, list to read from,
+--   [Start index], [End index], [Step]
 listSlice :: (InternalList r) => SVariable r -> SValue r -> Maybe (SValue r) -> 
   Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listSlice vnew vold b e s = listSlice' b e s vnew vold

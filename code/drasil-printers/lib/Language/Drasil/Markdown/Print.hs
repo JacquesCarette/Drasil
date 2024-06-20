@@ -12,7 +12,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
   Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)), Label, 
   LinkType(Internal, Cite2, External), OverSymb(Hat), Fonts(Emph, Bold), 
-  Spacing(Thin), Fence(Abs))
+  Spacing(Thin), Fence(Abs), Ops(Perc))
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..),
   Filepath)
@@ -20,10 +20,9 @@ import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, unders,
   hat, hyph, dot, nl, tab)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
-import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr, fence, OpenClose(..),
+import qualified Language.Drasil.TeX.Print as TeX (pExpr, fence, OpenClose(..),
   pMatrix, cases)
-import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL),
-  toText)
+import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, toText)
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Print(renderCite)
 import Language.Drasil.TeX.Helpers(commandD, command2D, mkEnv)
@@ -31,42 +30,49 @@ import Language.Drasil.TeX.Helpers(commandD, command2D, mkEnv)
 import Language.Drasil.Markdown.Helpers (h, stripStr, image, li, 
   reflink, reflinkURI, reflinkInfo, caption, bold, ul, br, docLength, divTag, defnHTag)
 
--- | Generate a Markdown SRS
+-- | Generate a single-page Markdown SRS
 genMD :: PrintingInformation -> L.Document -> Doc
 genMD sm doc = build (makeDocument sm doc)
 
+-- | Generate a multi-page Markdown SRS
 genMD' :: PrintingInformation -> L.Document -> [(Filepath, Doc)]
 genMD' sm doc = build' $ makeDocument sm doc
 
--- | Build the Markdown Document, called by genMD
+-- | Build a single-page Markdown Document, called by genMD
 build :: Document -> Doc
 build (Document t a c) = 
   text "# " <> pSpec t $$
   text "## " <> pSpec a <> nl $$
   print c 
 
--- | Called by build, uses 'printLO' to render the layout objects in Doc format.
+-- | Build multi-page Markdown Documents, called by genMD'
+build' :: Document -> [(Filepath, Doc)]
+build' (Document _ _ c) = print' c
+
+-- | Called by build, uses 'printLO' to render the layout objects 
+-- into a single Doc
 print :: [LayoutObj] -> Doc
 print = foldr (($$) . printLO) empty
 
-build' :: Document -> [(Filepath, Doc)]
-build' (Document _ _ c) = convert c
+-- | Called by build', uses 'printLO' to render the layout objects 
+-- into a multiple Docs, seperated by sections
+print' :: [LayoutObj] -> [(Filepath, Doc)]
+print' = concatMap (sepSRS 1)
 
-extractHDivs :: Int -> LayoutObj -> [(Filepath, Doc)]
-extractHDivs depth lo@(HDiv _ objs label) 
-  | depth > 2 = [(show $ pSpec label, 
+-- | Helper for seperating SRS section into seperate Docs
+sepSRS :: Int -> LayoutObj -> [(Filepath, Doc)]
+sepSRS d lo@(HDiv _ los l) 
+  | d > 2     = [(show $ pSpec l, 
                 printLO lo)]
-  | otherwise = (show $ pSpec label, 
-                vcat (map printLO (filter (not . isHDiv) objs))) : 
-                concatMap (extractHDivs (depth + 1)) objs
-extractHDivs _ _ = []
+  | otherwise = (show $ pSpec l, 
+                vcat (map printLO (filter (not . isHDiv) los))) : 
+                concatMap (sepSRS (d + 1)) los
+sepSRS _ _ = []
 
+-- | Helper for checking whether a LayoutObj is an HDiv
 isHDiv :: LayoutObj -> Bool
 isHDiv (HDiv _ _ _) = True
 isHDiv _ = False
-
-convert :: [LayoutObj] -> [(Filepath, Doc)]
-convert = concatMap (extractHDivs 1)
 
 -----------------------------------------------------------------
 ------------------- LAYOUT OBJECT PRINTING ----------------------
@@ -81,7 +87,9 @@ printLO (Paragraph contents)    = (stripStr (pSpec contents) nl) <> nl
 printLO (EqnBlock contents)     = mathEqn <> nl
   where
     mjDelimDisp d  = text "\\\\[" <> stripStr d nl <> text "\\\\]" 
-    mathEqn = mjDelimDisp $ spec contents
+    mathEqn = mjDelimDisp $ rndr contents
+    rndr (E e) = pExpr e
+    rndr c = pSpec c
 printLO (Table _ rows r b t)    = makeTable rows (pSpec r) b (pSpec t)
 printLO (Definition _ ssPs l)   = makeDefn ssPs (pSpec l) <> nl
 printLO (List t)                = makeList t 0 <> nl
@@ -98,6 +106,7 @@ printLO' e = stripStr (printLO e) nl
 ----------------------- SPEC PRINTING ---------------------------
 -----------------------------------------------------------------
 
+-- | Helper for rendering Specs into Markdown
 pSpec :: Spec -> Doc
 pSpec (E e)                = text "\\\\(" <> pExpr e <> text "\\\\)" -- symbols used
 pSpec (a :+: b)            = pSpec a <> pSpec b
@@ -114,45 +123,46 @@ pSpec (Ref External  r a)  = reflinkURI  (text r) (pSpec a)
 pSpec EmptyS               = text "" 
 pSpec (Quote q)            = doubleQuotes $ pSpec q
 
-spec :: Spec -> Doc
-spec (E ex) = pExpr ex
-spec e = printMath $ toMathHelper $ TeX.spec e
-  where
-    toMathHelper (PL g) = PL (\_ -> g Math)
-
 -----------------------------------------------------------------
 -------------------- EXPRESSION PRINTING ------------------------
 -----------------------------------------------------------------
 
--- | Print an expression to a document.
+-- | Helper for rendering Exprs into mdBook compatiable Mathjax
 pExpr :: Expr -> Doc
 pExpr (Str s)        = printMath $ toText $ pure $ lq <> text s <> rq
-  where lq = text "\\\\(\\``\\\\)"
-        rq = text "''"
-pExpr (Div n d)      = printMath $ command2D "frac" (pure $ pExpr n) (pure $ pExpr d)
-pExpr (Case ps)      = printMath $ mkEnv "cases" (TeX.cases ps expNl (pure . pExpr))
-pExpr (Mtx a)        = stripStr (printMath $ mkEnv "bmatrix" (TeX.pMatrix a expNl (pure . pExpr))) tab
+  where 
+    lq = text "\\\\(\\``\\\\)"
+    rq = text "''"
+pExpr (Div n d)      = printMath $ command2D "frac" (pExpr' n) (pExpr' d)
+pExpr (Case ps)      = printMath $ mkEnv "cases" (TeX.cases ps lnl pExpr')
+pExpr (Mtx a)        = stripStr (printMath $ mkEnv "bmatrix" (TeX.pMatrix a lnl pExpr')) tab
 pExpr (Row [x])      = br $ pExpr x 
 pExpr (Row l)        = foldl1 (<>) (map pExpr l)
-pExpr (Sub e)        = unders <> br (pExpr e)
+pExpr (Sub e)        = bslash <> unders <> br (pExpr e)
 pExpr (Sup e)        = hat    <> br (pExpr e)
-pExpr (Over Hat s)   = printMath $ commandD "hat" (pure $ pExpr s)
-pExpr (MO o)         = bslash <> (printMath $ TeX.pExpr (MO o))
+pExpr (Over Hat s)   = printMath $ commandD "hat" (pExpr' s)
+pExpr (MO Perc)      = bslash <> (printMath $ TeX.pExpr (MO Perc))
 pExpr (Fenced l r m) = fence TeX.Open l <> pExpr m <> fence TeX.Close r
-  where fence _ Abs = text "\\|"
-        fence a b   = printMath $ TeX.fence a b
-pExpr (Font Bold e)  = printMath $ commandD "boldsymbol" (pure $ pExpr e) --
+  where 
+    fence _ Abs = text "\\|"
+    fence a b   = printMath $ TeX.fence a b
+pExpr (Font Bold e)  = printMath $ commandD "boldsymbol" (pExpr' e)
 pExpr (Font Emph e)  = pExpr e
-pExpr (Spc Thin)     = text "\\\\," --
-pExpr (Sqrt e)       = printMath $ commandD "sqrt" (pure $ pExpr e)
+pExpr (Spc Thin)     = text "\\\\,"
+pExpr (Sqrt e)       = printMath $ commandD "sqrt" (pExpr' e)
 pExpr e              = printMath $ TeX.pExpr e
 
--- | Helper for rendering a D from Latex print
+-- | Print an expression to a LaTeX D
+pExpr' :: Expr -> D
+pExpr' = pure . pExpr
+
+-- | Helper for rendering a D from LaTeX print
 printMath :: D -> Doc
 printMath = (`runPrint` Math) . toMath
 
-expNl :: Doc
-expNl = text "\\\\\\\\"
+-- | LaTeX newline command
+lnl :: Doc
+lnl = text "\\\\\\\\"
 
 -----------------------------------------------------------------
 -------------------- TABLE PRINTING -----------------------------
@@ -245,12 +255,12 @@ processDefnLO _ lo                    = printLO' lo
 ----------------------- LIST PRINTING ---------------------------
 -----------------------------------------------------------------
 
--- | Renders lists
+-- | Renders lists into Markdown
 makeList :: ListType -> Int -> Doc
 makeList (Simple      items) _  = vcat $ 
   map (\(b,e,l) -> (mlref l) $$ (pSpec b <> text ":" <+> sItem e <> nl)) items
 makeList (Desc        items) _  = vcat $ 
-  map (\(b,e,l) -> (mlref l) $$ (bold (pSpec b) <> text ":" <+> sItem e <> nl)) items -- | LOOK INTO WHAT THIS IS
+  map (\(b,e,l) -> (mlref l) $$ (bold (pSpec b) <> text ":" <+> sItem e <> nl)) items
 makeList (Ordered     items) bl = vcat $ 
   zipWith (\(i,_) n -> oItem i bl n) items [1..]
 makeList (Unordered   items) bl = vcat $ 
@@ -283,7 +293,7 @@ sItem (Nested s l) = vcat [pSpec s, makeList l 0]
 ---------------------- FIGURE PRINTING --------------------------
 -----------------------------------------------------------------
 
--- | Renders figures in HTML
+-- | Renders figures in Markdown
 makeFigure :: Doc -> Doc -> Doc -> Doc
 makeFigure r c f = divTag r $$ (image f c)
 

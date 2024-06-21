@@ -631,9 +631,14 @@ class (MethodSym r, StateVarSym r) => ClassSym r where
   type Class r
   -- | Main external method for creating a class.
   --   Inputs: parent class, variables, constructor(s), methods
-  buildClass :: Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
+  buildClass :: Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
+    [SMethod r] -> SClass r
+  -- | Creates an extra class.
+  --   Inputs: class name, the rest are the same as buildClass.
   extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
     [SMethod r] -> SClass r
+  -- | Creates a class implementing interfaces.
+  --   Inputs: class name, interface names, variables, constructor(s), methods
   implementingClass :: Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> 
     [SMethod r] -> SClass r
 

@@ -222,7 +222,7 @@ mainFunction s n = S.intFunc True n public static (mType S.void)
 --   n is the module name
 --   inc is the include
 --   is is the import statements
---   ms is the class methods
+--   ms is the module functions
 --   cs is the classes
 buildModule' :: (RenderSym r) => Label -> (String -> r (Import r)) -> [Label] 
   -> [SMethod r] -> [SClass r] -> FSModule r

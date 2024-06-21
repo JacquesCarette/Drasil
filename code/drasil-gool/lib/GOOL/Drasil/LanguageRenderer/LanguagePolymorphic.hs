@@ -67,7 +67,7 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   compEqualPrec, compPrec, addPrec, multPrec)
 import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS, 
   currMain, currFileType, addFile, setMainMod, setModuleName, getModuleName,
-  addParameter, getParameters, useVarName)
+  addParameter, getParameters, useVarName, setIsLiteral)
 
 import Prelude hiding (print,sin,cos,tan,(<>))
 import Data.Maybe (fromMaybe, maybeToList)
@@ -197,7 +197,9 @@ litDouble :: (RenderSym r) => Double -> SValue r
 litDouble d = mkStateVal S.double (D.double d)
 
 litInt :: (RenderSym r) => Integer -> SValue r
-litInt i = mkStateVal S.int (integer i)
+litInt i = do
+  modify $ setIsLiteral True
+  mkStateVal S.int (integer i)
 
 litString :: (RenderSym r) => String -> SValue r
 litString s = mkStateVal S.string (doubleQuotedText s)

@@ -30,13 +30,13 @@ import Language.Drasil.TeX.Helpers(commandD, command2D, mkEnv)
 import Language.Drasil.Markdown.Helpers (h, stripStr, image, li, reflink, reflinkURI, 
   reflinkInfo, caption, bold, ul, br, docLength, divTag, defnHTag, em)
 
+-----------------------------------------------------------------
+----------------------- SINGLE-PAGE SRS -------------------------
+-----------------------------------------------------------------
+
 -- | Generate a single-page Markdown SRS
 genMD :: PrintingInformation -> L.Document -> Doc
 genMD sm doc = build (makeDocument sm doc)
-
--- | Generate a multi-page Markdown SRS
-genMD' :: PrintingInformation -> L.Document -> [(Filepath, Doc)]
-genMD' sm doc = build' $ makeDocument sm doc
 
 -- | Build a single-page Markdown Document, called by genMD
 build :: Document -> Doc
@@ -45,14 +45,22 @@ build (Document t a c) =
   text "## " <> pSpec a <> nl $$
   print c 
 
--- | Build multi-page Markdown Documents, called by genMD'
-build' :: Document -> [(Filepath, Doc)]
-build' (Document _ _ c) = print' c
-
 -- | Called by build, uses 'printLO' to render the layout objects 
 -- into a single Doc
 print :: [LayoutObj] -> Doc
 print = foldr (($$) . printLO) empty
+
+-----------------------------------------------------------------
+------------------------ MULTI-PAGE SRS -------------------------
+-----------------------------------------------------------------
+
+-- | Generate a multi-page Markdown SRS
+genMD' :: PrintingInformation -> L.Document -> [(Filepath, Doc)]
+genMD' sm doc = build' $ makeDocument sm doc
+
+-- | Build multi-page Markdown Documents, called by genMD'
+build' :: Document -> [(Filepath, Doc)]
+build' (Document _ _ c) = print' c
 
 -- | Called by build', uses 'printLO' to render the layout objects 
 -- into a multiple Docs, seperated by sections

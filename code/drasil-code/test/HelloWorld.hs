@@ -96,8 +96,8 @@ listSliceTests = [
   -- | Initialize and assign any variables necessary for list slices
   block [
     comment "Create some variables for later tests",
-    varDecDef (var "x" int) (litInt (3)),
-    varDecDef (var "y" int) (litInt (1)),
+    varDecDef (var "x" int) (litInt 3),
+    varDecDef (var "y" int) (litInt 1),
     varDecDef (var "z" int) (litInt (-1))],
 
   -- | Initialize and assign a value to a new variable @mySlicedList@.

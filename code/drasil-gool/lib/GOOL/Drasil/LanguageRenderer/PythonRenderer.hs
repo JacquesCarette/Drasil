@@ -28,7 +28,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
-  RenderValue(..), ValueElim(valuePrec), InternalGetSet(..), 
+  RenderValue(..), ValueElim(valuePrec, valueInt), InternalGetSet(..), 
   InternalListFunc(..), RenderFunction(..), 
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..), 
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm), 
@@ -386,12 +386,13 @@ instance RenderValue PythonCode where
   
   call = G.call pyNamedArgSep
 
-  valFromData p t' d = do 
+  valFromData p i t' d = do 
     t <- t'
-    toState $ on2CodeValues (vd p) t (toCode d)
+    toState $ on2CodeValues (vd p i) t (toCode d)
 
 instance ValueElim PythonCode where
   valuePrec = valPrec . unPC
+  valueInt = valInt . unPC
   value = val . unPC
 
 instance InternalValueExp PythonCode where
@@ -893,7 +894,7 @@ pyInlineIf c' v1' v2' = do
   c <- c'
   v1 <- v1'
   v2 <- v2'
-  valFromData (valuePrec c) (toState $ valueType v1) 
+  valFromData (valuePrec c) (valueInt c) (toState $ valueType v1) 
     (RC.value v1 <+> ifLabel <+> RC.value c <+> elseLabel <+> RC.value v2)
 
 pyLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc

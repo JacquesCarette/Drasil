@@ -28,7 +28,7 @@ module GOOL.Drasil.State (
   setMainDoc, getMainDoc, setScope, getScope, setCurrMainFunc, getCurrMainFunc, 
   setThrowUsed, getThrowUsed, setErrorDefined, getErrorDefined, addIter, 
   getIter, resetIter, incrementLine, incrementWord, getLineIndex, getWordIndex, 
-  resetIndices, useVarName, genVarName, genLoopIndex, getIsLiteral, setIsLiteral
+  resetIndices, useVarName, genVarName, genLoopIndex
 ) where
 
 import GOOL.Drasil.AST (FileType(..), ScopeTag(..), QualifiedName, qualName)
@@ -132,9 +132,8 @@ makeLenses ''MethodState
 -- This was once used, but now is not. However it would be a pain to revert all 
 -- of the types back to MS from VS, and it is likely that this level of state 
 -- will be useful in the future, so I'm just putting in a placeholder.
-data ValueState = VS {
-  _methodState :: MethodState,
-  _isLiteral :: Bool
+newtype ValueState = VS {
+  _methodState :: MethodState
 }
 makeLenses ''ValueState
 
@@ -272,8 +271,7 @@ initialMS = MS {
 
 initialVS :: ValueState
 initialVS = VS {
-  _methodState = initialMS,
-  _isLiteral = False
+  _methodState = initialMS
 }
 
 -------------------------------
@@ -570,12 +568,6 @@ genVarName candidates backup = do
 
 genLoopIndex :: MS String
 genLoopIndex = genVarName ["i", "j", "k"] "i"
-
-getIsLiteral :: VS Bool
-getIsLiteral = gets (^. isLiteral)
-
-setIsLiteral :: Bool -> ValueState -> ValueState
-setIsLiteral = set isLiteral
 
 -- Helpers
 

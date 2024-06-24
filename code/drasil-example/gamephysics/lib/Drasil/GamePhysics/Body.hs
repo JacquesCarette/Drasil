@@ -131,9 +131,6 @@ purp = foldlSent_ [S "simulate", getAcc twoD, phrase CP.rigidBody,
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
 
-section :: [Section]
-section = extractSection srs
-
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
@@ -155,7 +152,7 @@ symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll) (nw gamePhysics :
   ++ [nw algorithm] ++ map nw derived ++ map nw fundamentals
   ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw defSymbols ++ srsDomains ++ map cw iMods) units dataDefs
-  iMods generalDefns tMods concIns section [] []
+  iMods generalDefns tMods concIns [] [] []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)

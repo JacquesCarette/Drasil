@@ -146,9 +146,6 @@ units = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [ne
 concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs
 
-section :: [Section]
-section = extractSection srs
-
 labCon :: [LabelledContent]
 labCon = [figPhysSyst, figIndexConv, figForceActing] ++ funcReqTables
 
@@ -165,7 +162,7 @@ symbMap = cdb (map (^. output) SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw units)
   (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units SSP.dataDefs SSP.iMods
-  generalDefinitions tMods concIns section labCon []
+  generalDefinitions tMods concIns [] labCon []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)

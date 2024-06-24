@@ -100,10 +100,17 @@ tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
 
 standOffDist = uq (constrained' (uc sD (variable "SD") Real metre)
   [ gtZeroConstr,
-    sfwrRange $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
+    sfwrc $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
+
+nomThick' :: ConstrainedChunk
+nomThick' = cuc "nomThick" 
+  (nounPhraseSent $ S "nominal thickness")
+  lT millimetre Rational 
+  [] $ exactDbl 0
 
 nomThick = cuc "nomThick" 
-  (nounPhraseSent $ S "nominal thickness t is in" +:+ eS (Spc $ DiscreteD nominalThicknesses))
+  (nounPhraseSent $ S "nominal thickness" +:+ displayDblConstrntsAsSet 
+    nomThick' nominalThicknesses)
   lT millimetre {-Discrete nominalThicknesses, but not implemented-} Rational 
   [sfwrElem $ mkSet (map dbl nominalThicknesses)] $ exactDbl 8 -- for testing
 

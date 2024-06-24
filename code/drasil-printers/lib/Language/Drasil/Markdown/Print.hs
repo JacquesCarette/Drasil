@@ -7,15 +7,15 @@ import Data.List (transpose)
 
 import qualified Language.Drasil as L
 
-import Language.Drasil.Printing.Import (makeDocument)
+import Language.Drasil.Printing.Import (makeDocument, makeProject)
 import Language.Drasil.Printing.AST (ItemType(Flat, Nested),  
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
   Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, E, (:+:)), Label, 
   LinkType(Internal, Cite2, External), OverSymb(Hat), Fonts(Emph, Bold), 
   Spacing(Thin), Fence(Abs), Ops(Perc))
 import Language.Drasil.Printing.Citation (BibRef)
-import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..),
-  Filepath)
+import Language.Drasil.Printing.LayoutObj (Project(Project), Document(Document), 
+  LayoutObj(..), Filepath)
 import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, unders, 
   hat, hyph, dot, nl, tab)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
@@ -36,7 +36,7 @@ import Language.Drasil.Markdown.Helpers (h, stripStr, image, li, reflink, reflin
 
 -- | Generate a single-page Markdown SRS
 genMD :: PrintingInformation -> L.Document -> Doc
-genMD sm doc = build (makeDocument sm doc)
+genMD sm doc = build $ makeDocument sm doc
 
 -- | Build a single-page Markdown Document, called by genMD
 build :: Document -> Doc
@@ -56,31 +56,14 @@ print = foldr (($$) . printLO) empty
 
 -- | Generate a multi-page Markdown SRS
 genMD' :: PrintingInformation -> L.Document -> [(Filepath, Doc)]
-genMD' sm doc = build' $ makeDocument sm doc
+genMD' sm doc = build' $ makeProject sm doc
 
 -- | Build multi-page Markdown Documents, called by genMD'
-build' :: Document -> [(Filepath, Doc)]
-build' (Document _ _ c) = print' c
+build' :: Project -> [(Filepath, Doc)]
+build' (Project _ _ d) = map print' d
 
--- | Called by build', uses 'printLO' to render the layout objects 
--- into a multiple Docs, seperated by sections
-print' :: [LayoutObj] -> [(Filepath, Doc)]
-print' = concatMap (sepSRS 1)
-
--- | Helper for seperating SRS section into seperate Docs
-sepSRS :: Int -> LayoutObj -> [(Filepath, Doc)]
-sepSRS d lo@(HDiv _ los l) 
-  | d > 2     = [(show $ pSpec l, 
-                printLO lo)]
-  | otherwise = (show $ pSpec l, 
-                vcat (map printLO (filter (not . isHDiv) los))) : 
-                concatMap (sepSRS (d + 1)) los
-sepSRS _ _ = []
-
--- | Helper for checking whether a LayoutObj is an HDiv
-isHDiv :: LayoutObj -> Bool
-isHDiv HDiv {} = True
-isHDiv _       = False
+print' :: Document -> (Filepath, Doc)
+print' (Document _ p c) = (show (pSpec p), print c)
 
 -----------------------------------------------------------------
 ------------------- LAYOUT OBJECT PRINTING ----------------------

@@ -26,7 +26,19 @@ makeDocument sm (Document titleLb authorName _ sections) =
 makeDocument sm (Notebook titleLb authorName sections) =
   T.Document (spec sm titleLb) (spec sm authorName) (createLayout' sm sections)
 
+-- | Translates from 'Document' to a printable representation of 'T.Project'.
+makeProject :: PrintingInformation -> Document -> T.Project
+makeProject _ Notebook {} = error "Unsupported format: Notebook"
+makeProject sm (Document titleLb authorName _ sections) =
+  T.Project (spec sm titleLb) (spec sm authorName) (createDocs sm sections)
+
 -- * Helpers
+
+-- | Helper function for creating sections as documents.
+createDocs :: PrintingInformation -> [Section] -> [T.Document]
+createDocs sm secs = map (doc sm 0) secs'
+  where
+    secs' = concat (map (extractSubS 0) secs)
 
 -- | Helper function for creating sections as layout objects.
 createLayout :: PrintingInformation -> [Section] -> [T.LayoutObj]
@@ -34,6 +46,27 @@ createLayout sm = map (sec sm 0)
 
 createLayout' :: PrintingInformation -> [Section] -> [T.LayoutObj]
 createLayout' sm = map (cel sm 0)
+
+-- | Helper for extracting subsections into their own sections.
+extractSubS :: Int -> Section -> [Section]
+extractSubS d x@(Section tl c r)
+  | d > 1 = [x]
+  | otherwise = Section tl (filter isCon c) r : 
+      concatMap (sepSub (d + 1)) c
+  where 
+    isCon (Con _)        = True
+    isCon  _             = False
+    sepSub _   (Con _)   = []
+    sepSub dep (Sub s) = extractSubS dep s
+
+-- | Helper for converting a Section to a Document
+doc :: PrintingInformation -> Int -> Section -> T.Document
+doc sm d x@(Section titleLb contents _) = 
+  T.Document (spec sm titleLb) refr los
+  where
+    refr = P.S $ refAdd x
+    los = T.Header d (spec sm titleLb) refr :
+      map (layout sm d) contents
 
 -- | Helper function for creating sections at the appropriate depth.
 sec :: PrintingInformation -> Int -> Section -> T.LayoutObj

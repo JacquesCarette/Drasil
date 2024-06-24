@@ -23,7 +23,7 @@ ghc-options:
 - -Wredundant-constraints
 
 default-extensions:
-  - StrictData
+- StrictData
 
 library:
   source-dirs: lib

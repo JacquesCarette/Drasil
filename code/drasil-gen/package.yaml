@@ -34,6 +34,9 @@ ghc-options:
 - -Wall
 - -Wredundant-constraints
 
+default-extensions:
+- StrictData
+
 library:
   source-dirs: lib
   exposed-modules:

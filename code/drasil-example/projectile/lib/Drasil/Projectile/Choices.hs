@@ -101,6 +101,9 @@ choiceCombos = [baseChoices,
       (makeLogConfig [LogVar, LogFunc] "log.txt")
       [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME],
     folderVal = 5
+  },
+  baseChoices {
+    lang = [Python, Cpp, CSharp, Java, Swift, Julia]
   }]
 
 matchToFloats :: SpaceMatch

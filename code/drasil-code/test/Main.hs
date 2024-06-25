@@ -18,7 +18,6 @@ import PatternTest (patternTest)
 import FileTests (fileTests)
 import VectorTest (vectorTest)
 import NameGenTest (nameGenTest)
-import SuperSimple (superSimple)
 
 -- | Renders five GOOL tests (FileTests, HelloWorld, PatternTest, VectorTest, and NameGenTest)
 -- in Java, Python, C#, C++, and Swift.
@@ -47,7 +46,7 @@ main = do
   setCurrentDirectory workingDir
   createDirectoryIfMissing False "julia"
   setCurrentDirectory "julia"
-  genCode (classes unJLC unJLP)
+  genCode (jlClasses unJLC unJLP)
   setCurrentDirectory workingDir
 
 -- | Gathers all information needed to generate code, sorts it, and calls the renderers.
@@ -65,8 +64,18 @@ classes unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
   in unRepr' $ package pd [makefile [] Program [] gs' pd])
-  [superSimple{-, helloWorld, patternTest, fileTests, vectorTest, nameGenTest-}]
-  (map (unCI . (`evalState` initialState)) [superSimple{-, helloWorld, patternTest, fileTests, vectorTest, nameGenTest-}])
+  [helloWorld, patternTest, fileTests, vectorTest, nameGenTest]
+  (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests, vectorTest, nameGenTest])
+
+-- Classes that Julia is currently able to render
+jlClasses :: (OOProg r, PackageSym r') => (r (Program r) -> ProgData) ->
+  (r' (Package r') -> PackData) -> [PackData]
+jlClasses unRepr unRepr' = zipWith
+  (\p gs -> let (p',gs') = runState p gs
+                pd = unRepr p'
+  in unRepr' $ package pd [makefile [] Program [] gs' pd])
+  [helloWorld{-, patternTest, fileTests, vectorTest, nameGenTest-}]
+  (map (unCI . (`evalState` initialState)) [helloWorld{-, patternTest, fileTests, vectorTest, nameGenTest-}])
 
 -- | Formats code to be rendered.
 makeCode :: [[FileData]] -> [[AuxData]] -> [(FilePath, Doc)]

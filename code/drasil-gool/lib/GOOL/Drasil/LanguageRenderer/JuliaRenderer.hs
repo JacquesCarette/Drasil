@@ -24,7 +24,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SValue, SVariable,
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..),
-  ModuleSym(..), (&=))
+  ModuleSym(..), (&=), switchAsIf)
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
@@ -41,32 +41,34 @@ import qualified GOOL.Drasil.RendererClasses as RC (RenderBody(multiBody),
   import', perm, body, block, type', uOp, bOp, variable, value, function,
   statement, scope, parameter, method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (printLabel, listSep, listSep', new,
-  ClassDocRenderer, variableList, parameterList)
+  ClassDocRenderer, variableList, parameterList, functionDox, forLabel, inLabel,
+  tryLabel, catchLabel, ifLabel, elseLabel, constDec')
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp,
   sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, addComments,
   blockCmt, docCmt, commentedMod, listSetFunc, dynamic, stateVar, stateVarList,
-  commentedItem)
-import GOOL.Drasil.LanguageRenderer.Constructors (mkStateVal, mkStateVar, VSOp,
-  unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
-  typeBinExpr, mkStmtNoEnd)
+  commentedItem, break, continue)
+import GOOL.Drasil.LanguageRenderer.Constructors (mkVal, mkStateVal, mkStateVar,
+  VSOp, unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
+  typeBinExpr, mkStmt, mkStmtNoEnd)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   block, multiBlock, listInnerType, obj, litChar, litDouble, litInt, litString, 
   valueOf, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
   lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, call, 
-  funcAppMixedArgs, lambda, modFromData, fileDoc, fileFromData, 
+  funcAppMixedArgs, lambda, modFromData, fileDoc, fileFromData, tryCatch, 
   csc, multiBody, sec, cot, stmt, loopStmt, emptyStmt, assign, increment, 
   subAssign, print, comment, valStmt, listAccess, objAccess, listSet, 
   docClass, function, commentedClass, method, getMethod, setMethod, 
   returnStmt, objVar, construct, param, defaultOptSpace, ifCond, 
-  docFunc, newObjMixedArgs)
+  docFunc, newObjMixedArgs, throw, arg, argsList)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (string',
-  bool, funcType, buildModule, docMod', litArray, listDec, listDecDef, mainBody,
-  listAccessFunc, listSetFunc, bindingError, extraClass,
-  extFuncAppMixedArgs, functionDoc, listSize, listAdd, listAppend, intToIndex',
-  indexToInt')
+  bool, boolRender, funcType, buildModule, docMod', litArray, listDec, 
+  listDecDef, mainBody, listAccessFunc, listSetFunc, bindingError, extraClass, 
+  notNull, extFuncAppMixedArgs, functionDoc, listSize, listAdd, listAppend, 
+  intToIndex', indexToInt', inOutFunc, docInOutFunc', forLoopError, constDecDef)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
-  litFloat, notOp, andOp, orOp, inlineIf)
-import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1, decrement1)
+  litFloat, notOp, andOp, orOp, inlineIf, while)
+import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1, 
+  decrement1, ifExists)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), ModData(..), md, updateMod, MethodData(..), mthd, OpData(..),
   ParamData(..), ProgData(..), TypeData(..), td, ValData(..), vd, VarData(..),
@@ -252,7 +254,7 @@ instance VariableSym JuliaCode where
   type Variable JuliaCode = VarData
   var = G.var
   staticVar = undefined
-  constant = undefined
+  constant = var
   extVar _ = undefined
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar jlSelf (obj l) (text jlSelf))
   classVar = undefined
@@ -300,9 +302,9 @@ instance VariableValue JuliaCode where
   valueOf = G.valueOf
 
 instance CommandLineArgs JuliaCode where
-  arg _ = undefined
-  argsList = undefined
-  argExists _ = undefined
+  arg n = G.arg (litInt $ n+1) argsList
+  argsList = G.argsList jlArgs
+  argExists i = listSize argsList ?> litInt (fromIntegral $ i+1) -- TODO: merge with Python
 
 instance NumericExpression JuliaCode where
   (#~) = unExpr' negateOp
@@ -366,10 +368,10 @@ instance ValueExpression JuliaCode where
 
   lambda = G.lambda jlLambda
 
-  notNull = undefined
+  notNull = CP.notNull jlNull
 
 instance RenderValue JuliaCode where
-  inputFunc = undefined
+  inputFunc = mkStateVal string jlInputFunc
   printFunc = mkStateVal void jlPrintFunc
   printLnFunc = mkStateVal void jlPrintLnFunc
   printFileFunc _ = undefined
@@ -411,7 +413,7 @@ instance List JuliaCode where
     v' <- v
     let t = toCode $ valueType v'
     indexToInt $ funcApp
-      jlListIndex t [lambda [var "x" t] (valueOf (var "x" t) ?== v), l]
+      jlListAbsdex t [lambda [var "x" t] (valueOf (var "x" t) ?== v), l]
 
 instance InternalList JuliaCode where
   -- TODO: This has the same behaviour as all except Python, which does it right.
@@ -506,10 +508,10 @@ instance DeclStatement JuliaCode where
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
-  objDecDef = undefined
+  objDecDef = varDecDef
   objDecNew = undefined
   extObjDecNew = undefined
-  constDecDef _ _ = undefined
+  constDecDef = jlConstDecDef
   funcDecDef = undefined
 
 instance IOStatement JuliaCode where
@@ -523,8 +525,8 @@ instance IOStatement JuliaCode where
   printFileStr f   = printFile   f . litString
   printFileStrLn f = printFileLn f . litString
 
-  getInput _ = undefined
-  discardInput = undefined
+  getInput = jlInput inputFunc
+  discardInput = valStmt inputFunc
   getFileInput _ _ = undefined
   discardFileInput _ = undefined
   openFileR _ _ = undefined
@@ -549,18 +551,35 @@ instance CommentStatement JuliaCode where
   comment = G.comment jlCmtStart
 
 instance ControlStatement JuliaCode where
-  break = undefined
-  continue = undefined
+  break = mkStmtNoEnd R.break
+  continue = mkStmtNoEnd R.continue
   returnStmt = G.returnStmt Empty
-  throw _ = undefined
-  ifCond = G.ifCond id empty G.defaultOptSpace elseIfLabel jlEnd -- TODO: make Python use id instead of parens
-  switch = undefined
-  ifExists = undefined
-  for _ _ _ _ = undefined
-  forRange _ _ _ _ = undefined
-  forEach = undefined
-  while = undefined
-  tryCatch = undefined
+  throw = G.throw jlThrow Empty
+  ifCond [] _ = error "if condition created with no cases"
+  ifCond (c:cs) eBody =
+      let ifSect (v, b) = on2StateValues (\val bd -> vcat [
+            ifLabel <+> RC.value val,
+            indent $ RC.body bd]) (zoom lensMStoVS v) b
+          elseIfSect (v, b) = on2StateValues (\val bd -> vcat [
+            elseIfLabel <+> RC.value val,
+            indent $ RC.body bd]) (zoom lensMStoVS v) b
+          elseSect = onStateValue (\bd -> vcat [
+            elseLabel,
+            indent $ RC.body bd,
+            jlEnd]) eBody
+      in sequence (ifSect c : map elseIfSect cs ++ [elseSect]) 
+        >>= (mkStmtNoEnd . vcat)
+  switch = switchAsIf
+  ifExists = M.ifExists
+  for _ _ _ _ = error $ CP.forLoopError jlName
+  forRange i initv finalv stepv = forEach i (jlRange initv finalv stepv)
+  forEach i' v' b' = do
+    i <- zoom lensMStoVS i'
+    v <- zoom lensMStoVS v'
+    b <- b'
+    mkStmtNoEnd (jlForEach i v b) -- TODO: merge with Python and Swift
+  while = C.while id empty jlEnd
+  tryCatch = G.tryCatch jlTryCatch
 
 instance StatePattern JuliaCode where
   checkState = undefined
@@ -611,14 +630,14 @@ instance MethodSym JuliaCode where
   getMethod = G.getMethod
   setMethod = G.setMethod
   constructor ps is b = getClassName >>= (\n -> jlConstructor n ps is b)
-  docMain = undefined
+  docMain = mainFunction
   function = G.function
   mainFunction = CP.mainBody
   docFunc = G.docFunc CP.functionDoc
-  inOutMethod _ _ _ = undefined
-  docInOutMethod _ _ _ = undefined
-  inOutFunc _ _ = undefined
-  docInOutFunc _ _ = undefined
+  inOutMethod n s p = CP.inOutFunc (method n s p)
+  docInOutMethod n s p = CP.docInOutFunc' functionDox (inOutMethod n s p)
+  inOutFunc n s = CP.inOutFunc (function n s)
+  docInOutFunc n s = CP.docInOutFunc' functionDox (inOutFunc n s)
 
 instance RenderMethod JuliaCode where
   intMethod _ n _ _ _ = jlIntMethod n
@@ -710,20 +729,34 @@ jlName, jlVersion :: String
 jlName = "Julia"
 jlVersion = "1.10.3"
 
-jlInt, jlFloat, jlDouble, jlChar, jlFile, jlList, jlVoid :: String
-jlInt = "Integer" -- Q: Do we use concrete or abstract types?
-jlFloat = "AbstractFloat"
-jlDouble = "AbstractFloat"
-jlChar = "AbstractChar"
+-- Abstract and concrete versions of each Julia datatype
+jlIntAbs, jlIntConc, jlFloatAbs, jlFloatConc, jlDoubleAbs, jlDoubleConc, jlCharAbs,
+  jlCharConc, jlListAbs, jlListConc, jlFile, jlVoid :: String
+jlIntAbs = "Integer"
+jlIntConc = "Int64"
+jlFloatAbs = "AbstractFloat"
+jlFloatConc = "Float32"
+jlDoubleAbs = "AbstractFloat"
+jlDoubleConc = "Float64"
+jlCharAbs = "AbstractChar"
+jlCharConc = "Char"
+jlListAbs = "AbstractArray"
+jlListConc = "Array"
 jlFile = "IOStream"
-jlList = "AbstractArray"
 jlVoid = "Nothing"
 
-jlListSize, jlListAdd, jlListAppend, jlListIndex :: Label
+jlConstDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
+jlConstDecDef v' def' = do
+  v <- zoom lensMStoVS v'
+  def <- zoom lensMStoVS def'
+  modify $ useVarName $ variableName v
+  mkStmt $ constDec' <+> RC.variable v <+> equals <+> RC.value def
+
+jlListSize, jlListAdd, jlListAppend, jlListAbsdex :: Label
 jlListSize = "length"
 jlListAdd = "insert!"
 jlListAppend = "append!"
-jlListIndex    = "findfirst"
+jlListAbsdex    = "findfirst"
 
 jlListSlice :: (RenderSym r, Monad r) => SVariable r -> SValue r -> SValue r ->
   SValue r -> SValue r -> MS (r Doc)
@@ -737,12 +770,23 @@ jlListSlice vn vo beg end step = zoom lensMStoVS $ do
   pure $ toCode $ RC.variable vnew <+> equals <+> RC.value vold <>
     brackets (RC.value b <> step' <> colon <> RC.value e)
 
+jlRange :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
+jlRange initv finalv stepv = do
+  t <- listType int
+  iv <- initv
+  sv <- stepv
+  fv <- finalv
+  mkVal t (RC.value iv <> colon <> RC.value sv <> colon <> RC.value fv)
+
 jlSplit :: String
 jlSplit = "split"
 
 jlPrintFunc, jlPrintLnFunc :: Doc
 jlPrintFunc = text printLabel
 jlPrintLnFunc = text "println"
+
+jlParseFunc :: Label
+jlParseFunc = "parse"
 
 jlType, arrow, jlNamedArgSep :: Doc
 jlType = colon <> colon
@@ -758,7 +802,7 @@ jlUnaryMath = unOpPrec
 
 jlPower, jlIntDiv :: String
 jlPower = "^"
-jlIntDiv = "÷" -- `div()` is also allowed - should we give a choice or anything?
+jlIntDiv = "÷"
 
 -- Constants
 jlPi :: Doc
@@ -773,6 +817,13 @@ jlDocCmtStart   = text "\"\"\""
 jlDocCmtEnd     = text "\"\"\""
 
 -- Control structures
+
+-- | Creates a for each loop in Julia
+jlForEach :: (RenderSym r) => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
+jlForEach i lstVar b = vcat [
+  forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar,
+  indent $ RC.body b,
+  jlEnd]
 
 -- | Creates a 'class' in Julia.
 --   GOOL classes are manifested quite differently in Julia, since it's not an
@@ -860,16 +911,32 @@ jlIntFunc n pms bod = do
 jlLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 jlLambda ps ex = variableList ps <+> arrow <+> RC.value ex
 
+-- Exceptions
+jlThrow :: (RenderSym r) => r (Value r) -> Doc
+jlThrow errMsg = jlThrowLabel <> parens (RC.value errMsg)
+
+jlTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
+jlTryCatch tryB catchB = vcat [
+  tryLabel,
+  indent $ RC.body tryB,
+  catchLabel <+> jlException,
+  indent $ RC.body catchB,
+  jlEnd]
+
+jlException :: Doc
+jlException = text "ErrorException"
+
 includeLabel, importLabel :: Doc
 includeLabel = text "include"
 importLabel = text "import"
 
-jlMod, elseIfLabel, jlFunc, jlStart, jlEnd :: Doc
-jlMod       = text "module"
-elseIfLabel = text "elseif"
-jlFunc      = text "function"
-jlStart     = text "start"
-jlEnd       = text "end"
+jlMod, elseIfLabel, jlFunc, jlStart, jlEnd, jlThrowLabel :: Doc
+jlMod        = text "module"
+elseIfLabel  = text "elseif"
+jlFunc       = text "function"
+jlStart      = text "start"
+jlEnd        = text "end"
+jlThrowLabel = text "error" -- TODO: this hints at an underdeveloped exception system
 
 jlSelf :: String
 jlSelf = "self" -- TODO: this is a placeholder (or maybe it's fine)
@@ -889,16 +956,16 @@ varDec' v' = do
 
 -- Type names specific to Julia (there's a lot of them)
 jlIntType :: (RenderSym r) => VSType r
-jlIntType = typeFromData Integer jlInt (text jlInt)
+jlIntType = typeFromData Integer jlIntAbs (text jlIntAbs)
 
 jlFloatType :: (RenderSym r) => VSType r
-jlFloatType = typeFromData Float jlFloat (text jlFloat)
+jlFloatType = typeFromData Float jlFloatAbs (text jlFloatAbs)
 
 jlDoubleType :: (RenderSym r) => VSType r
-jlDoubleType = typeFromData Double jlDouble (text jlDouble)
+jlDoubleType = typeFromData Double jlDoubleAbs (text jlDoubleAbs)
 
 jlCharType :: (RenderSym r) => VSType r
-jlCharType = typeFromData Char jlChar (text jlChar)
+jlCharType = typeFromData Char jlCharAbs (text jlCharAbs)
 
 jlInfileType :: (RenderSym r) => VSType r
 jlInfileType = typeFromData InFile jlFile (text jlFile)
@@ -909,11 +976,14 @@ jlOutfileType = typeFromData OutFile jlFile (text jlFile)
 jlListType :: (RenderSym r) => VSType r -> VSType r
 jlListType t' = do
   t <- t'
-  let typeName = jlList ++ "{" ++ getTypeString t ++ "}"
+  let typeName = jlListAbs ++ "{" ++ getTypeString t ++ "}"
   typeFromData (List $ getType t) typeName (text typeName)
 
 jlVoidType :: (RenderSym r) => VSType r
 jlVoidType = typeFromData Void jlVoid (text jlVoid)
+
+jlNull :: Label
+jlNull = "nothing"
 
 -- Modules
 -- | Creates the text for the start of a module.
@@ -944,3 +1014,24 @@ jlOut :: (RenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r ->
 jlOut newLn f printFn v = zoom lensMStoVS v >>= jlOut' . getType . valueType
   where jlOut' (List _) = printSt newLn f printFn v
         jlOut' _ = G.print newLn f printFn v
+
+jlInput :: SValue JuliaCode -> SVariable JuliaCode -> MSStatement JuliaCode
+jlInput inSrc v = v &= (v >>= jlInput' . getType . variableType)
+  where jlInput' Integer = jlParse jlIntConc int inSrc
+        jlInput' Float = jlParse jlFloatConc float inSrc
+        jlInput' Double = jlParse jlDoubleConc double inSrc
+        jlInput' Boolean = jlParse CP.boolRender bool inSrc 
+        jlInput' String = inSrc
+        jlInput' Char = jlParse jlCharConc char inSrc
+        jlInput' _ = error "Attempt to read a value of unreadable type"
+
+jlInputFunc :: Doc
+jlInputFunc = text "readline()"
+
+jlArgs :: Label
+jlArgs = "ARGS"
+
+jlParse :: (RenderSym r) => Label -> VSType r -> SValue r -> SValue r
+jlParse tl tp v = let
+  typeLabel = mkStateVal void (text tl)
+  in funcApp jlParseFunc tp [typeLabel, v]

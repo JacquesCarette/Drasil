@@ -1,6 +1,8 @@
 -- | Defines types similar to content types in "Language.Drasil" but better suited for printing.
 module Language.Drasil.Printing.LayoutObj where
 
+import Data.Map (Map)
+
 import Language.Drasil hiding (ListType, Contents, BibRef, Document)
 
 import Language.Drasil.Printing.AST (ListType, Spec, Title, Label)
@@ -8,8 +10,8 @@ import Language.Drasil.Printing.Citation (BibRef)
 
 -- | A document must contain a title, author, and contents (as 'LayoutObj's).
 data Document = Document Title Author [LayoutObj]
-
-data Project = Project Title Author [Document]
+-- | A Project must contain a title, author, RefMap, and Documents.
+data Project  = Project Title Author RefMap [Document]
 -- | An author is just a sentence ('Spec').
 type Author   = Spec
 -- | Contents are just a sentence ('Spec').
@@ -26,8 +28,12 @@ type Width    = Float
 type Height   = Float
 -- | Holds a file path.
 type Filepath = String
+-- | Holds a file name.
+type Filename = String
 -- | A caption is just a sentence ('Spec').
 type Caption  = Spec
+-- | A mapping of refs to filenames.
+type RefMap   = Map String Filename
 
 data LayoutObj = 
      Table Tags [[Spec]] Label Bool Caption                          -- ^ Holds all information needed for a table.

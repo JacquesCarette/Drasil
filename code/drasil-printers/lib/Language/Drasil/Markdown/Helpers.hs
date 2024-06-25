@@ -1,10 +1,12 @@
 -- | Defines helper functions for creating Markdown files.
 module Language.Drasil.Markdown.Helpers where
 
-import Prelude hiding ((<>))
+import Prelude hiding ((<>), lookup)
 import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), ($$), hcat, vcat)
 import Data.List.Split (splitOn)
-import Language.Drasil.Printing.Helpers(ast)
+import Data.Map (lookup)
+import Language.Drasil.Printing.Helpers (ast)
+import Language.Drasil.Printing.LayoutObj (RefMap)
 
 data Variation =  Id | Align
 
@@ -65,12 +67,16 @@ defnHTag :: Doc -> Doc
 defnHTag = wrapGen vcat Align "div" (text "center") [""]
 
 -- | Helper for setting up links to references
-reflink :: Doc -> Doc -> Doc
-reflink ref txt = sq txt <> paren (text "#" <> ref)
+reflink :: RefMap -> String -> Doc -> Doc
+reflink rm ref txt = sq txt <> paren rp
+  where
+    fn = maybe empty fp (lookup ref rm)
+    fp s = text $ "./" ++ s ++ ".md"
+    rp = fn <> (text $ "#" ++ ref)
 
 -- | Helper for setting up links to references with additional information.
-reflinkInfo :: Doc -> Doc -> Doc -> Doc
-reflinkInfo rf txt info = reflink rf txt <+> info
+reflinkInfo :: RefMap -> String -> Doc -> Doc -> Doc
+reflinkInfo rm rf txt info = reflink rm rf txt <+> info
 
 -- | Helper for setting up links to external URIs
 reflinkURI :: Doc -> Doc -> Doc
@@ -86,12 +92,14 @@ caption :: Doc -> Doc
 caption = wrapGen hcat Align "p" (text "center") [""]
 
 -- | Helper for setting up headings
-h :: Int -> Doc
-h n       | n < 1 = error "Illegal header (too small)"
-          | n > 4 = error "Illegal header (too large)"
-          | n < 4 = text "# "
-          | n == 4 = text "#### "
-          | otherwise = text "Illegal header"
+heading :: Int -> Doc -> Doc -> Doc
+heading d t l = h d <+> t <+> (br $ text "#" <> l)
+  where 
+    h n
+      | n < 1     = error "Illegal header (too small)"
+      | n > 4     = error "Illegal header (too large)"
+      | n < 4     = text "#"
+      | otherwise = text "####"
 
 -- | Helper for stripping Docs
 stripStr :: Doc -> Doc -> Doc

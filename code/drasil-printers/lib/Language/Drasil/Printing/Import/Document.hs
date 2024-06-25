@@ -1,6 +1,8 @@
 -- | Defines functions to transform Drasil-based documents into a printable version.
 module Language.Drasil.Printing.Import.Document where
 
+import Data.Map (fromList)
+
 import Language.Drasil hiding (neg, sec, symbol, isIn, codeExpr)
 import Language.Drasil.Development (showUID)
 
@@ -30,7 +32,10 @@ makeDocument sm (Notebook titleLb authorName sections) =
 makeProject :: PrintingInformation -> Document -> T.Project
 makeProject _ Notebook {} = error "Unsupported format: Notebook"
 makeProject sm (Document titleLb authorName _ sections) =
-  T.Project (spec sm titleLb) (spec sm authorName) (createDocs sm sections)
+  T.Project (spec sm titleLb) (spec sm authorName) refMap docs
+  where
+    docs   = createDocs sm sections
+    refMap = fromList $ concat $ map createRefMap' docs
 
 -- * Helpers
 
@@ -39,6 +44,37 @@ createDocs :: PrintingInformation -> [Section] -> [T.Document]
 createDocs sm secs = map (doc sm 0) secs'
   where
     secs' = concat (map (extractSubS 0) secs)
+
+-- | Helper function for creating a RefMap for a Document.
+createRefMap' :: T.Document -> [(String, T.Filename)]
+createRefMap' (T.Document _ (P.S l) c) = concat (map (createRefMap l) c)
+createRefMap' _ = []
+
+-- | Helper function for creating a RefMap for a LayoutObj
+createRefMap :: T.Filename -> T.LayoutObj -> [(String, T.Filename)]
+createRefMap fn (T.Header _ _ l)     = createRef fn l
+createRefMap fn (T.HDiv   _ _ l)     = createRef fn l
+createRefMap fn (T.Table  _ _ l _ _) = createRef fn l
+createRefMap fn (T.Definition _ _ l) = createRef fn l
+createRefMap fn (T.List t)           = pass t
+  where
+    pass (P.Ordered ls)     = process  ls
+    pass (P.Unordered ls)   = process  ls
+    pass (P.Simple ls)      = process' ls
+    pass (P.Desc ls)        = process' ls
+    pass (P.Definitions ls) = process' ls
+    process  = concatMap (\(_, l)    -> maybe [] (createRef fn) l)
+    process' = concatMap (\(_, _, l) -> maybe [] (createRef fn) l)
+createRefMap fn (T.Figure l _ _ _)   = createRef fn l
+createRefMap fn (T.Bib ls)           = map bibRefs ls
+  where 
+    bibRefs (P.Cite l _ _) = (l, fn)
+createRefMap _ _                     = []
+
+-- | Helper function for mapping a Label to a Filename
+createRef :: T.Filename -> P.Label -> [(String, T.Filename)]
+createRef fn (P.S l) = [(l, fn)]
+createRef _   _      = []
 
 -- | Helper function for creating sections as layout objects.
 createLayout :: PrintingInformation -> [Section] -> [T.LayoutObj]

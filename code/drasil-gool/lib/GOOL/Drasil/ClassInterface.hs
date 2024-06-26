@@ -257,6 +257,8 @@ type PosCtorCall r = VSType r -> [SValue r] -> SValue r
 
 -- for values that can include expressions
 class (VariableSym r, ValueSym r) => ValueExpression r where
+  -- An inline if-statement, aka the ternary operator.  Inputs:
+  -- Condition, True-value, False-value
   inlineIf     :: SValue r -> SValue r -> SValue r -> SValue r
   
   funcAppMixedArgs     ::            MixedCall r

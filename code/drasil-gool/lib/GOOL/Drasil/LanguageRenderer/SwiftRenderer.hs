@@ -997,15 +997,12 @@ swiftListSlice vn vo beg' end' step = do
       -- runtime and store in a variable.
       begVar = var bName int
       endVar = var eName int
-      varDecls = [varDec begVar | isNothing beg' && needIf] ++
-                 [varDec endVar | isNothing end' && needIf]
-      ifStmt = ([ifCond [(step ?> litInt 0, posStepAssigns)] negStepAssigns | needIf])
-      posStepAssigns = body [block $
-        [begVar &= litInt 0 | isNothing beg'] ++
-        [endVar &= listSize vo | isNothing end']]
-      negStepAssigns = body [block $
-        [begVar &= listSize vo #- litInt 1 | isNothing beg'] ++
-        [endVar &= litInt (-1) | isNothing end']]
+      findBounds = [setBeg | isNothing beg' && needIf] ++
+                 [setEnd | isNothing end' && needIf]
+      setBeg = varDecDef begVar (inlineIf (step ?> litInt 0) 
+                                (litInt 0) (listSize vo #- litInt 1))
+      setEnd = varDecDef endVar (inlineIf (step ?> litInt 0) 
+                                (listSize vo) (litInt (-1)))
       -- If step is a litInt, use its value to compute beg and end directly
       computedBeg = valueInt stepV >>= (\s -> if s > 0 then pure $ litInt 0
                                               else pure $ listSize vo #- litInt 1)
@@ -1015,7 +1012,7 @@ swiftListSlice vn vo beg' end' step = do
       begVal = fromMaybe (fromMaybe (valueOf begVar) computedBeg) beg'
       endVal = fromMaybe (fromMaybe (valueOf endVar) computedEnd) end'
       i = var "i" int
-  block $ varDecls ++ ifStmt ++ [vn &= swiftMapFunc
+  block $ findBounds ++ [vn &= swiftMapFunc
     (swiftStrideFunc begVal endVal step) (lambda [i] (listAccess vo (valueOf i)))]
 
 swiftPrint :: Bool -> Maybe (SValue SwiftCode) -> SValue SwiftCode ->

@@ -62,13 +62,7 @@ mySlicedList8 = [Int](stride(from: 3, to: 0, by: z)).map({(i: Int) -> Double in 
 
 mySlicedList9 = [Int](stride(from: x, to: y, by: z)).map({(i: Int) -> Double in myOtherList[i]})
 
-var endIdx: Int
-if z > 0 {
-    endIdx = myOtherList.count
-}
-else {
-    endIdx = -1
-}
+var endIdx: Int = z > 0 ? myOtherList.count : -1
 mySlicedList10 = [Int](stride(from: 2, to: endIdx, by: z)).map({(i: Int) -> Double in myOtherList[i]})
 
 // Print results of list slicing tests

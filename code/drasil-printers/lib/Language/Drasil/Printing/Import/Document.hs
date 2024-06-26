@@ -32,23 +32,22 @@ makeDocument sm (Notebook titleLb authorName sections) =
 makeProject :: PrintingInformation -> Document -> T.Project
 makeProject _ Notebook {} = error "Unsupported format: Notebook"
 makeProject sm (Document titleLb authorName _ sections) =
-  T.Project (spec sm titleLb) (spec sm authorName) refMap docs
+  T.Project (spec sm titleLb) (spec sm authorName) refMap files
   where
-    docs   = createDocs sm sections
-    refMap = fromList $ concat $ map createRefMap' docs
+    files   = createFiles sm sections
+    refMap = fromList $ concat $ map createRefMap' files
 
 -- * Helpers
 
--- | Helper function for creating sections as documents.
-createDocs :: PrintingInformation -> [Section] -> [T.Document]
-createDocs sm secs = map (doc sm 0) secs'
+-- | Helper function for creating sections as Files.
+createFiles :: PrintingInformation -> [Section] -> [T.File]
+createFiles sm secs = map (file sm) secs'
   where
     secs' = concat (map (extractSubS 0) secs)
 
 -- | Helper function for creating a RefMap for a Document.
-createRefMap' :: T.Document -> [(String, T.Filename)]
-createRefMap' (T.Document _ (P.S l) c) = concat (map (createRefMap l) c)
-createRefMap' _ = []
+createRefMap' :: T.File -> [(String, T.Filename)]
+createRefMap' (T.File _ l _ c) = concat (map (createRefMap l) c)
 
 -- | Helper function for creating a RefMap for a LayoutObj
 createRefMap :: T.Filename -> T.LayoutObj -> [(String, T.Filename)]
@@ -84,10 +83,10 @@ createLayout' :: PrintingInformation -> [Section] -> [T.LayoutObj]
 createLayout' sm = map (cel sm 0)
 
 -- | Helper for extracting subsections into their own sections.
-extractSubS :: Int -> Section -> [Section]
+extractSubS :: Int -> Section -> [(T.Depth, Section)]
 extractSubS d x@(Section tl c r)
-  | d > 1 = [x]
-  | otherwise = Section tl (filter isCon c) r : 
+  | d > 1 = [(d, x)]
+  | otherwise = (d, Section tl (filter isCon c) r) : 
       concatMap (sepSub (d + 1)) c
   where 
     isCon (Con _)        = True
@@ -95,13 +94,13 @@ extractSubS d x@(Section tl c r)
     sepSub _   (Con _)   = []
     sepSub dep (Sub s) = extractSubS dep s
 
--- | Helper for converting a Section to a Document
-doc :: PrintingInformation -> Int -> Section -> T.Document
-doc sm d x@(Section titleLb contents _) = 
-  T.Document (spec sm titleLb) refr los
+-- | Helper for converting a Section to a File
+file :: PrintingInformation -> (T.Depth, Section) -> T.File
+file sm (d, x@(Section titleLb contents _)) = 
+  T.File (spec sm titleLb) refr d los
   where
-    refr = P.S $ refAdd x
-    los = T.Header d (spec sm titleLb) refr :
+    refr = refAdd x
+    los = T.Header d (spec sm titleLb) (P.S refr) :
       map (layout sm d) contents
 
 -- | Helper function for creating sections at the appropriate depth.

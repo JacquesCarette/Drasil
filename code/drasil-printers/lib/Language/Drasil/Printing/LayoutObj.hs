@@ -10,8 +10,10 @@ import Language.Drasil.Printing.Citation (BibRef)
 
 -- | A document must contain a title, author, and contents (as 'LayoutObj's).
 data Document = Document Title Author [LayoutObj]
--- | A Project must contain a title, author, RefMap, and Documents.
-data Project  = Project Title Author RefMap [Document]
+-- | A Project must contain a title, author, RefMap, and Files.
+data Project  = Project Title Author RefMap [File]
+-- | A File must contain a title, filename, depth, and contents (as 'LayoutObj's).
+data File     = File Title Filename Depth [LayoutObj]
 -- | An author is just a sentence ('Spec').
 type Author   = Spec
 -- | Contents are just a sentence ('Spec').
@@ -32,7 +34,7 @@ type Filepath = String
 type Filename = String
 -- | A caption is just a sentence ('Spec').
 type Caption  = Spec
--- | A mapping of refs to filenames.
+-- | A mapping of refs to the file that contains them.
 type RefMap   = Map String Filename
 
 data LayoutObj = 

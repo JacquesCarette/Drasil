@@ -16,7 +16,7 @@ import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   Spacing(Thin), Fence(Abs), Ops(Perc))
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Project(Project), Document(Document), 
-  LayoutObj(..), Filename, RefMap)
+  LayoutObj(..), Filename, RefMap, File(File))
 import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, unders, 
   hat, hyph, dot, nl, tab)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
@@ -28,8 +28,9 @@ import qualified Language.Drasil.HTML.Print as HTML (renderCite, pSpec)
 import Language.Drasil.HTML.Helpers(BibFormatter(..))
 import Language.Drasil.TeX.Helpers(commandD, command2D, mkEnv)
 
-import Language.Drasil.Markdown.Helpers (heading, stripStr, image, li, reflink, 
-  reflinkURI, reflinkInfo, caption, bold, ul, br, docLength, divTag, defnHTag, em)
+import Language.Drasil.Markdown.Helpers (heading, stripStr, image, li, reflink, sq,
+  reflinkURI, reflinkInfo, caption, bold, ul, br, docLength, divTag, defnHTag, em,
+  paren)
 
 -----------------------------------------------------------------
 ----------------------- SINGLE-PAGE SRS -------------------------
@@ -60,12 +61,26 @@ print rm = foldr (($$) . printLO rm) empty
 genMD' :: PrintingInformation -> L.Document -> [(Filename, Doc)]
 genMD' sm doc = build' $ makeProject sm doc
 
--- | Build multi-page Markdown Documents, called by genMD'
+-- | Build multi-page Markdown Docs, called by genMD'
 build' :: Project -> [(Filename, Doc)]
-build' (Project _ _ rm d) = map (print' rm) d
+build' (Project _ _ rm d) = printSummary rm d : map (print' rm) d
 
-print' :: RefMap -> Document -> (Filename, Doc)
-print' rm (Document _ p c) = (show (pSpec rm p), print rm c)
+-- | Called by buld', uses 'printLO' to render a File 
+-- into a single Doc
+print' :: RefMap -> File -> (Filename, Doc)
+print' rm (File _ n _ c) = (n, print rm c)
+
+-- | Renders a 'SUMMARY.md' file
+printSummary :: RefMap -> [File] -> (Filename, Doc)
+printSummary rm f = ("SUMMARY", vcat $ map (summaryItem rm) f)
+
+-- | Helper for rendering a 'SUMMARY.md' item
+summaryItem :: RefMap -> File -> Doc
+summaryItem rm (File t n d _) = bullet <+> item <> ref
+  where
+    bullet = text (replicate (d*2) ' ') <> text "-"
+    item   = sq $ pSpec rm t
+    ref    = paren $ text $ "./" ++ n ++ ".md"
 
 -----------------------------------------------------------------
 ------------------- LAYOUT OBJECT PRINTING ----------------------

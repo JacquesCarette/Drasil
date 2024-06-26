@@ -164,4 +164,71 @@ class Section {
     cons :: [SecCons]
 }
 
+class Choices {
+    lang :: [Lang]
+    architecture :: Architecture
+    dataInfo :: DataInfo
+    maps :: Maps
+    optFeats :: OptionalFeatures
+    srsConstraints :: Constraints
+    extLibs :: [ExtLib]
+    icNames :: InternalConcept -> Name
+    folderVal :: Int
+}
+Choices <|-- "Choices" Lang
+Choices <|-- "Choices" Architecture
+Choices <|-- "Choices" DataInfo
+Choices <|-- "Choices" Maps
+Choices <|-- "Choices" OptionalFeatures
+Choices <|-- "Choices" Constraints
+
+class Lang {
+    Cpp | CSharp | Java | Python | Swift
+}
+
+class Architecture {
+    modularity :: Modularity
+    impType :: ImplementationType
+}
+
+class DataInfo {
+    inputStructure :: Structure
+    constStructure :: ConstantStructure
+    constRepr :: ConstantRepr
+}
+
+class Maps {
+    conceptMatch :: ConceptMatchMap
+    spaceMatch :: SpaceMatch
+}
+
+class OptionalFeatures {
+    docConfig :: DocConfig
+    logConfig :: LogConfig
+    auxFiles :: [AuxFile]
+}
+
+class Constraints {
+    onSfwrConstraint :: ConstraintBehaviour
+    onPhysConstraint :: ConstraintBehaviour
+}
+
+
+Theory
+style ConstraintSete fill:#7030A0,stroke:#333,stroke-width:4px
+style DataDefinition fill:#7030A0,stroke:#333,stroke-width:4px
+style MultiDefne fill:#7030A0,stroke:#333,stroke-width:4px
+style MultiDefn e fill:#7030A0,stroke:#333,stroke-width:4px
+
+Code
+style NamedArgument fill:#00B050,stroke:#333,stroke-width:4px
+style CodeDefinition fill:#00B050,stroke:#333,stroke-width:4px
+style ParameterChunk fill:#00B050,stroke:#333,stroke-width:4px
+style Choices fill:#00B050,stroke:#333,stroke-width:4px
+style Lang fill:#00B050,stroke:#333,stroke-width:4px
+style Architecture fill:#00B050,stroke:#333,stroke-width:4px
+style DataInfo fill:#00B050,stroke:#333,stroke-width:4px
+style Maps fill:#00B050,stroke:#333,stroke-width:4px
+style OptionalFeatures fill:#00B050,stroke:#333,stroke-width:4px
+style Constraints fill:#00B050,stroke:#333,stroke-width:4px
 ```

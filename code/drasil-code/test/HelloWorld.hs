@@ -9,7 +9,7 @@ import GOOL.Drasil (GSProgram, MSBody, MSBlock, MSStatement, SMethod, OOProg,
   DeclStatement(..), IOStatement(..), StringStatement(..), CommentStatement(..), ControlStatement(..),
   VariableSym(..), listVar, Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), extFuncApp, List(..),
-  MethodSym(..), ModuleSym(..))
+  MethodSym(..), ModuleSym(..), ScopeSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Helper (helper)
 
@@ -17,7 +17,7 @@ import Helper (helper)
 helloWorld :: (OOProg r) => GSProgram r
 helloWorld = prog "HelloWorld" "" [docMod description
   ["Brooks MacLachlan"] "" $ fileDoc (buildModule "HelloWorld" []
-  [helloWorldMain] []), helper]
+  [helloWorldMain, helloWorldFunc] []), helper]
 
 -- | Description of program.
 description :: String
@@ -30,6 +30,9 @@ helloWorldMain = mainFunction (body [ helloInitVariables,
     block [ifCond [(valueOf (var "b" int) ?>= litInt 6, bodyStatements [varDecDef (var "dummy" string) (litString "dummy")]),
       (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody, helloIfExists,
     helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch]])
+
+helloWorldFunc :: (OOProg r) => SMethod r
+helloWorldFunc = function "helloFunc" public int [] (oneLiner (returnStmt (litInt 2)))
 
 -- | Initialize variables used in the generated program.
 helloInitVariables :: (OOProg r) => MSBlock r

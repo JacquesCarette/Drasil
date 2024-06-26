@@ -42,7 +42,7 @@ import qualified GOOL.Drasil.RendererClasses as RC (RenderBody(multiBody),
   statement, scope, parameter, method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (printLabel, listSep, listSep', new,
   ClassDocRenderer, variableList, parameterList, functionDox, forLabel, inLabel,
-  tryLabel, catchLabel, ifLabel, elseLabel, constDec')
+  tryLabel, catchLabel, ifLabel, elseLabel, constDec', mainFunc)
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp,
   sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, addComments,
   blockCmt, docCmt, commentedMod, listSetFunc, dynamic, stateVar, stateVarList,
@@ -58,13 +58,13 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   csc, multiBody, sec, cot, stmt, loopStmt, emptyStmt, assign, increment, 
   subAssign, print, comment, valStmt, listAccess, objAccess, listSet, 
   docClass, function, commentedClass, method, getMethod, setMethod, 
-  returnStmt, objVar, construct, param, defaultOptSpace, ifCond, 
-  docFunc, newObjMixedArgs, throw, arg, argsList)
+  returnStmt, objVar, construct, param, docFunc, newObjMixedArgs, throw, arg,
+  argsList)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (string',
   bool, boolRender, funcType, buildModule, docMod', litArray, listDec, 
-  listDecDef, mainBody, listAccessFunc, listSetFunc, bindingError, extraClass, 
+  listDecDef, listAccessFunc, listSetFunc, bindingError, extraClass, 
   notNull, extFuncAppMixedArgs, functionDoc, listSize, listAdd, listAppend, 
-  intToIndex', indexToInt', inOutFunc, docInOutFunc', forLoopError, constDecDef)
+  intToIndex', indexToInt', inOutFunc, docInOutFunc', forLoopError)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
   litFloat, notOp, andOp, orOp, inlineIf, while)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1, 
@@ -77,8 +77,8 @@ import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, 
   on2StateValues, onCodeList, onStateList, emptyIfEmpty)
 import GOOL.Drasil.State (MS, VS, CS, lensGStoFS, lensCStoFS, revFiles, setFileType, lensCStoMS, lensMStoVS, lensVStoMS,
   getModuleImports, addModuleImportVS, getUsing, getLangImports, getLibImports,
-  getMainDoc, useVarName, getModuleName, getClassName, setClassName,
-  addLibImportVS)
+  useVarName, getModuleName, getClassName, setClassName, setCurrMain,
+  getMainDoc, setMainDoc, addLibImportVS)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -416,7 +416,7 @@ instance List JuliaCode where
       jlListAbsdex t [lambda [var "x" t] (valueOf (var "x" t) ?== v), l]
 
 instance InternalList JuliaCode where
-  -- TODO: This has the same behaviour as all except Python, which does it right.
+  -- TODO: Update for negative step
   listSlice' b e s vn vo = jlListSlice vn vo (bIndex b) (eIndex e) (getVal s)
     where bIndex Nothing = mkStateVal void jlStart
           bIndex (Just x) = intToIndex x
@@ -557,11 +557,11 @@ instance ControlStatement JuliaCode where
   throw = G.throw jlThrow Empty
   ifCond [] _ = error "if condition created with no cases"
   ifCond (c:cs) eBody =
-      let ifSect (v, b) = on2StateValues (\val bd -> vcat [
-            ifLabel <+> RC.value val,
+      let ifSect (v, b) = on2StateValues (\vl bd -> vcat [
+            ifLabel <+> RC.value vl,
             indent $ RC.body bd]) (zoom lensMStoVS v) b
-          elseIfSect (v, b) = on2StateValues (\val bd -> vcat [
-            elseIfLabel <+> RC.value val,
+          elseIfSect (v, b) = on2StateValues (\vl bd -> vcat [
+            elseIfLabel <+> RC.value vl,
             indent $ RC.body bd]) (zoom lensMStoVS v) b
           elseSect = onStateValue (\bd -> vcat [
             elseLabel,
@@ -632,7 +632,11 @@ instance MethodSym JuliaCode where
   constructor ps is b = getClassName >>= (\n -> jlConstructor n ps is b)
   docMain = mainFunction
   function = G.function
-  mainFunction = CP.mainBody
+  mainFunction b = do
+    modify setCurrMain
+    main <- jlIntFunc mainFunc [] <$> b
+    modify (setMainDoc main)
+    mthdFromData Pub empty
   docFunc = G.docFunc CP.functionDoc
   inOutMethod n s p = CP.inOutFunc (method n s p)
   docInOutMethod n s p = CP.docInOutFunc' functionDox (inOutMethod n s p)
@@ -702,7 +706,8 @@ instance ModuleSym JuliaCode where
     (pure empty) (do
       mainDoc <- getMainDoc
       let whiteSpace = emptyIfEmpty mainDoc blank
-      return $ vcat [mainDoc, whiteSpace, jlEnd])
+          callMain = emptyIfEmpty mainDoc (text mainFunc <> parens empty)
+      return $ vcat [mainDoc, whiteSpace, callMain, whiteSpace, jlEnd])
     where mi, li :: Label -> JuliaCode (Import JuliaCode)
           mi = modImport
           li = langImport
@@ -750,7 +755,7 @@ jlConstDecDef v' def' = do
   v <- zoom lensMStoVS v'
   def <- zoom lensMStoVS def'
   modify $ useVarName $ variableName v
-  mkStmt $ constDec' <+> RC.variable v <+> equals <+> RC.value def
+  mkStmt $ RC.variable v <+> equals <+> RC.value def --TODO: prepend `constDec' ` when in global scope
 
 jlListSize, jlListAdd, jlListAppend, jlListAbsdex :: Label
 jlListSize = "length"

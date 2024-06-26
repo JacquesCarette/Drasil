@@ -7,8 +7,8 @@ import Data.Ord (comparing)
 -- Constraint checks, structured as (needs, body)
 -- Derived values, structured as (provides, needs, body)
 -- Output structure is (provides, body)
-sortInputStatements :: [(Set String, String)] -> [(Set String, String)] -> [(Set String, Set String, String)] -> [(Set String, String)]
-sortInputStatements = sortIStmts []
+sortInputStatements :: [(Set String, String)] -> [(Set String, String)] -> [(Set String, Set String, String)] -> [String]
+sortInputStatements ps cs ds = map snd (sortIStmts [] ps cs ds)
   where 
     sortIStmts :: [(Set String, String)] -> [(Set String, String)] -> [(Set String, String)] -> [(Set String, Set String, String)] -> [(Set String, String)]
     sortIStmts ord [] [] [] = ord
@@ -41,10 +41,7 @@ tests = [
   ([(fromList ["a"], "a = 1"), (fromList ["b"], "b = 2")], [(fromList ["a", "b"], "a > b"), (fromList ["b"], "b < 30")], [])
   ]
 
-cleanTests :: [(Set String, String)] -> [String]
-cleanTests = map snd
-
 runTests :: IO ()
 runTests = do
-  let results = map (\(p, c, d) -> "Test:" : cleanTests (sortInputStatements p c d) ++ [""]) tests
+  let results = map (\(p, c, d) -> "Test:" : sortInputStatements p c d ++ [""]) tests
   putStrLn $ intercalate "\n" (concat results)

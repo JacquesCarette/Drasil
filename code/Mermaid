@@ -1,0 +1,167 @@
+```mermaid
+
+classDiagram
+
+Hollow arrow means instance of 
+
+class IdeaDict {
+    UID
+    NP
+    Maybe String
+}
+IdeaDict <|-- "IdeaDict" QuantityDict
+IdeaDict <|-- "IdeaDict" ConceptChunk
+
+class QuantityDict{
+    typ :: Space 
+    symb :: Symbol
+    unit :: UnitDefn
+}
+QuantityDict <|-- "QuantityDict" UnitaryChunk
+QuantityDict <|-- "QuantityDict" CodeChunk
+QuantityDict <|-- "QuantityDict" NamedArgument
+QuantityDict <|-- "QuantityDict" ConstrainedChunk
+QuantityDict <|-- "QuantityDict" MultiDefn e
+
+class ConceptChunk{
+    defn :: Sentence
+    cdom :: [UID]
+}
+ConceptChunk <|-- "ConceptChunk" ConstraintSet e
+ConceptChunk <|-- "ConceptChunk" RelationConcept
+ConceptChunk <|-- "ConceptChunk" DefinedQuantityDict
+ConceptChunk <|-- "ConceptChunk" ConceptInstance
+ConceptChunk <|-- "ConceptChunk" UnitDefn
+ConceptChunk <|-- "ConceptChunk" DifferentialModel
+
+class UnitaryChunk {
+    unitdefn :: UnitDefn
+}
+
+class CodeChunk {
+    kind :: VarOrFunc
+}
+CodeChunk <|-- "CodeChunk" CodeDefinition
+CodeChunk <|-- "CodeChunk" CodeVarChunk
+CodeChunk <|-- "CodeChunk" CodeIdea
+CodeChunk <|-- "CodeChunk" ParameterChunk
+
+class NamedArgument
+
+class ConstrainedChunk {
+    constr :: [ConstraintE]
+    reasV :: Maybe Expr
+}
+ConstrainedChunk <|-- "ConstrainedChunk" UncertainChunk
+
+class MultiDefn e {
+    rUid :: UID
+    rDesc :: Sentence
+    rvs :: NonEmpty (DefiningExpr e)
+}
+
+class ConstraintSet e {
+    exp :: e
+}
+
+class RelationConcept {
+    relation :: ModelExpr
+}
+
+class DefinedQuantityDict {
+    symb :: Symbol
+    spa :: Space
+    unit :: Mabye UnitDefn
+}
+DefinedQuantityDict <|-- "DefinedQuantityDict" QDefinition e
+DefinedQuantityDict <|-- "DefinedQuantityDict" ConstrConcept
+DefinedQuantityDict <|-- "DefinedQuantityDict" UnitalChunk
+
+class ConceptInstance {
+    ra :: String
+    shnm :: ShortName
+}
+
+class UnitDefn {
+    cas :: UnitSymbol
+    cu :: [UID]
+}
+
+class DifferentialModel {
+    depVar :: ConstrConcept
+    indepVar :: UnitalChunk
+    coefficients :: [[Expr]]
+    unknowns :: [Unknown]
+    constant :: [Expr]
+}
+
+class QDefinition e {
+    QDef Expression :: e
+    cdom :: [UID]
+}
+QDefinition e <|-- "QDefinition" DataDefinition 
+
+class ConstrConcept {
+    constr :: [ConstraintE]
+    reasV :: Maybe Expr
+}
+ConstrConcept <|-- "ConstrConcept" UncertQ 
+
+class UnitalChunk {
+    unitdef :: UnitDefn
+}
+
+class CodeDefinition {
+    defn :: CodeExpr
+    auxExprs :: [CodeExpr]
+    defType  :: DefinitionType
+}
+
+class CodeVarChunk {
+    obv :: Maybe CodeChunk
+}
+
+class CodeIdea {
+    codeName :: String
+    codeExpr :: CodeExpr
+}
+
+class ParameterChunk {
+    passBy :: PassBy
+}
+
+class UncertainChunk {
+    unc :: Uncertainty
+}
+
+class DataDefinition {
+    pktST :: ScopeType
+    pktDR :: [DecRef]
+    pktMD :: Maybe Derivation
+    pktSN :: ShortName
+    pktS  :: String
+    pktSS :: [Sentence]
+}
+
+class UncertQ {
+    unc :: Uncertainty
+}
+
+class Reference {
+    ui :: UID
+    ra :: LblType
+    sn :: ShortName
+}
+Reference <|-- "Reference" LabelledContent
+Reference <|-- "Reference" Section
+
+class LabelledContent {
+    ctype :: RawContent
+}
+
+class Section {
+    tle  :: Title
+    cons :: [SecCons]
+}
+
+```

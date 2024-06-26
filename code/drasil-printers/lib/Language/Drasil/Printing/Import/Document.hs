@@ -97,9 +97,10 @@ extractSubS d x@(Section tl c r)
 -- | Helper for converting a Section to a File
 file :: PrintingInformation -> (T.Depth, Section) -> T.File
 file sm (d, x@(Section titleLb contents _)) = 
-  T.File (spec sm titleLb) refr d los
+  T.File (spec sm titleLb) fn d los
   where
     refr = refAdd x
+    fn = filter (/= ':') refr
     los = T.Header d (spec sm titleLb) (P.S refr) :
       map (layout sm d) contents
 

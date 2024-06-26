@@ -92,14 +92,15 @@ caption :: Doc -> Doc
 caption = wrapGen hcat Align "p" (text "center") [""]
 
 -- | Helper for setting up headings
-heading :: Int -> Doc -> Doc -> Doc
-heading d t l = h d <+> t <+> (br $ text "#" <> l)
-  where 
-    h n
-      | n < 1     = error "Illegal header (too small)"
-      | n > 4     = error "Illegal header (too large)"
-      | n < 4     = text "#"
-      | otherwise = text "####"
+heading ::  Doc -> Doc -> Doc
+heading t l = t <+> (br $ text "#" <> l)
+
+h :: Int -> Doc
+h n
+  | n < 1     = error "Illegal header (too small)"
+  | n > 4     = error "Illegal header (too large)"
+  | n < 4     = text "#"
+  | otherwise = text "####"
 
 -- | Helper for stripping Docs
 stripStr :: Doc -> Doc -> Doc

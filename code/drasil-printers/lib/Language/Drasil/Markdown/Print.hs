@@ -30,7 +30,7 @@ import Language.Drasil.TeX.Helpers(commandD, command2D, mkEnv)
 
 import Language.Drasil.Markdown.Helpers (heading, stripStr, image, li, reflink, sq,
   reflinkURI, reflinkInfo, caption, bold, ul, br, docLength, divTag, defnHTag, em,
-  paren)
+  paren, h)
 
 -----------------------------------------------------------------
 ----------------------- SINGLE-PAGE SRS -------------------------
@@ -43,8 +43,8 @@ genMD sm doc = build $ makeDocument sm doc
 -- | Build a single-page Markdown Document, called by genMD
 build :: Document -> Doc
 build (Document t a c) = 
-  text "# " <> pSpec rm t $$
-  text "## " <> pSpec rm a <> nl $$
+  text "#" <+> pSpec rm t $$
+  pSpec rm a <> nl $$
   print rm c 
   where rm = Map.empty
 
@@ -88,7 +88,7 @@ summaryItem rm (File t n d _) = bullet <+> item <> ref
 
 -- | Helper for rendering LayoutObjects into Markdown
 printLO :: RefMap -> LayoutObj -> Doc
-printLO rm (Header n contents l) = heading (n + 1) (pSpec rm contents) (pSpec rm l) <> nl
+printLO rm (Header n contents l) = h (n+1) <+> heading (pSpec rm contents) (pSpec rm l) <> nl
 printLO rm (Cell layoutObs)      = vcat $ map (printLO rm) layoutObs
 printLO rm (HDiv _ layoutObs _)  = vcat $ map (printLO rm) layoutObs
 printLO rm (Paragraph contents)  = stripStr (pSpec rm contents) nl <> nl
@@ -103,7 +103,7 @@ printLO rm (Definition _ ssPs l) = makeDefn rm ssPs (pSpec rm l) <> nl
 printLO rm (List t)              = makeList rm t 0 <> nl
 printLO rm (Figure r c f _)      = makeFigure (pSpec rm r) (pSpec rm c) (text f)
 printLO rm (Bib bib)             = makeBib rm bib
-printLO _ Graph{}                = empty 
+printLO _ Graph {}               = empty 
 printLO _ CodeBlock {}           = empty
 
 -- | Helper for rendering LayoutObj into Markdown Tables
@@ -241,7 +241,7 @@ makeDHeaderText rm ps l = defnHTag header <> nl
   where
     lo = lookup "Label" ps
     c = maybe l (\lo' -> makeLO rm ("Label", lo')) lo 
-    header = nl <> heading 1 c l <> nl
+    header = nl <> text "##" <+> heading c l <> nl
 
 -- | Converts the [LayoutObj] to a Doc
 makeLO :: RefMap -> (String, [LayoutObj]) -> Doc

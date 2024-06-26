@@ -213,12 +213,60 @@ class Constraints {
     onPhysConstraint :: ConstraintBehaviour
 }
 
+class ModelKind e {
+    mk     :: ModelKinds e
+    mkUID  :: UID
+    mkTerm :: NP
+}
+ModelKind e <|-- "ModelKind e" InstanceModel
+ModelKind e <|-- "ModelKind e" GenDefn
+ModelKind e <|-- "ModelKind e" TheoryModel
+
+class TheoryModel {
+    mk    :: ModelKind ModelExpr
+    vctx  :: [TheoryModel]
+    spc   :: [SpaceDefn]
+    quan  :: [QuantityDict]
+    ops   :: [ConceptChunk]
+    defq  :: [ModelQDef]
+    invs  :: [ModelExpr]
+    dfun  :: [ModelQDef]
+    rf    :: [DecRef]
+    lb    :: ShortName
+    ra    :: String
+    notes :: [Sentence]
+}
+
+class GenDefn {
+    mk :: ModelKind ModelExpr
+    gdUnit :: Maybe UnitDefn
+    deri :: Maybe Derivation
+    rf :: [DecRef]
+    sn :: ShortName
+    ra :: String
+    notes :: [Sentence]
+}
+
+class InstanceModel {
+    mk :: ModelKind Expr
+    imInputes :: Inputs
+    imOutput :: (Output, OutputConstraints)
+    rf :: [DecRef]
+    deri :: Maybe Derivation
+    lb :: ShortName
+    ra :: String
+    notes :: [Sentence]
+}
+
 
 Theory
 style ConstraintSete fill:#7030A0,stroke:#333,stroke-width:4px
 style DataDefinition fill:#7030A0,stroke:#333,stroke-width:4px
 style MultiDefne fill:#7030A0,stroke:#333,stroke-width:4px
-style MultiDefn e fill:#7030A0,stroke:#333,stroke-width:4px
+style ModelKinde fill:#7030A0,stroke:#333,stroke-width:4px
+style InstanceModel fill:#7030A0,stroke:#333,stroke-width:4px
+style TheoryModel fill:#7030A0,stroke:#333,stroke-width:4px
+style GenDefn fill:#7030A0,stroke:#333,stroke-width:4px
 
 Code
 style NamedArgument fill:#00B050,stroke:#333,stroke-width:4px

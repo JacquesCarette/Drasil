@@ -1,5 +1,5 @@
 -- | Defines main Markdown printer functions.
-module Language.Drasil.Markdown.Print(genMD, genMD') where
+module Language.Drasil.Markdown.Print(genMD, genMD', pSpec) where
 
 import Prelude hiding (print, (<>))
 import Text.PrettyPrint hiding (Str)

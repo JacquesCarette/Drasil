@@ -994,7 +994,7 @@ swiftListSlice vn vo beg' end' step = do
   eName <- if isJust end' || not needIf then pure ""
            else genVarName [] "endIdx"
   let -- If beg or end aren't given and step isn't a litInt, calculate them at
-      --  and store in a variable.
+      -- runtime and store in a variable.
       begVar = var bName int
       endVar = var eName int
       varDecls = [varDec begVar | isNothing beg' && needIf] ++

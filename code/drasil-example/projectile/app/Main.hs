@@ -16,7 +16,7 @@ main = do
   setLocaleEncoding utf8
   dumpEverything fullSI printSetting ".drasil/"
   typeCheckSI fullSI
-  gen (DocSpec (docChoices SRS [HTML, TeX, JSON, Markdown]) "Projectile_SRS") srs printSetting
+  gen (DocSpec (docChoices SRS [HTML, TeX, JSON, Markdown, MDBook]) "Projectile_SRS") srs printSetting
   gen (DocSpec (docChoices Jupyter [])      "Projectile Lesson") PL.nb PL.printSetting
   genCodeWithChoices choiceCombos
   genDot fullSI

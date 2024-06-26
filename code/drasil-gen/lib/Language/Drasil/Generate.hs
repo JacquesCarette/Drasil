@@ -7,7 +7,8 @@ module Language.Drasil.Generate (
   -- * Generator Functions
   gen, genDot, genCode,
   -- * Types (Printing Options)
-  DocType(..), DocSpec(DocSpec), Format(TeX, HTML, JSON, Markdown), DocChoices(DC),
+  DocType(..), DocSpec(DocSpec), DocChoices(DC),
+  Format(TeX, HTML, JSON, Markdown, MDBook),
   -- * Constructor
   docChoices) where
 
@@ -23,8 +24,9 @@ import Build.Drasil (genMake)
 import Language.Drasil
 import Drasil.DocLang (mkGraphInfo)
 import SysInfo.Drasil (SystemInformation)
-import Language.Drasil.Printers (DocType(SRS, Website, Jupyter), Format(TeX, HTML, JSON, Markdown),
- makeCSS, genHTML, genTeX, genJSON, genMD, genMD', PrintingInformation, outputDot, makeBook)
+import Language.Drasil.Printers (DocType(SRS, Website, Jupyter), makeCSS, genHTML, 
+  genTeX, Format(TeX, HTML, JSON, Markdown, MDBook), genJSON, genMD, genMDBook, 
+  PrintingInformation, outputDot, makeBook)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD,
   unPP, unJP, unCSP, unCPPP, unSP)
@@ -58,17 +60,18 @@ prntDoc d pinfo fn dtype fmt =
                    prntMake $ DocSpec (DC dtype []) fn
     JSON     -> do prntDoc' dtype (show dtype ++ "/JSON") fn JSON d pinfo
     Markdown -> do prntDoc' dtype (show dtype ++ "/Markdown") fn Markdown d pinfo
+    MDBook   -> do prntDoc' dtype (show dtype ++ "/mdBook") fn MDBook d pinfo
     _        -> mempty
 
 -- | Helper that takes the document type, directory name, document name, format of documents,
 -- document information and printing information. Then generates the document file.
 prntDoc' :: DocType -> String -> String -> Format -> Document -> PrintingInformation -> IO ()
-prntDoc' _ dt' _ Markdown body' sm = do
+prntDoc' _ dt' _ MDBook body' sm = do
   createDirectoryIfMissing True dir
   mapM_ writeDocToFile con
   printBook dt' body' sm
   where 
-    con = writeDoc' sm Markdown body'
+    con = writeDoc' sm MDBook body'
     dir = dt' ++ "/src"
     writeDocToFile (fp, d) = do
       outh <- openFile (dir ++ "/" ++ fp ++ ".md") WriteMode
@@ -121,7 +124,7 @@ writeDoc _ _  _        _  _   = error "we can only write TeX/HTML/JSON (for now)
 
 -- | Renders multi-page documents.
 writeDoc' :: PrintingInformation -> Format -> Document -> [(String, Doc)]
-writeDoc' s Markdown doc = genMD' s doc
+writeDoc' s MDBook doc = genMDBook s doc
 writeDoc' _ _        _   = []
 
 -- | Generates traceability graphs as .dot files.

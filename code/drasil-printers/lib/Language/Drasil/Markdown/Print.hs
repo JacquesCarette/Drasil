@@ -1,5 +1,5 @@
 -- | Defines main Markdown printer functions.
-module Language.Drasil.Markdown.Print(genMD, genMD', pSpec) where
+module Language.Drasil.Markdown.Print(genMD, genMDBook, pSpec) where
 
 import Prelude hiding (print, (<>))
 import Text.PrettyPrint hiding (Str)
@@ -58,8 +58,8 @@ print rm = foldr (($$) . printLO rm) empty
 -----------------------------------------------------------------
 
 -- | Generate a multi-page Markdown SRS
-genMD' :: PrintingInformation -> L.Document -> [(Filename, Doc)]
-genMD' sm doc = build' $ makeProject sm doc
+genMDBook :: PrintingInformation -> L.Document -> [(Filename, Doc)]
+genMDBook sm doc = build' $ makeProject sm doc
 
 -- | Build multi-page Markdown Docs, called by genMD'
 build' :: Project -> [(Filename, Doc)]

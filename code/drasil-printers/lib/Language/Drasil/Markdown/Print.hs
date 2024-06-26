@@ -63,7 +63,10 @@ genMD' sm doc = build' $ makeProject sm doc
 
 -- | Build multi-page Markdown Docs, called by genMD'
 build' :: Project -> [(Filename, Doc)]
-build' (Project _ _ rm d) = printSummary rm d : map (print' rm) d
+build' p@(Project _ _ rm d) = 
+  printSummary rm files : map (print' rm) files
+  where
+    files = createTitleFile p : d
 
 -- | Called by buld', uses 'printLO' to render a File 
 -- into a single Doc
@@ -81,6 +84,11 @@ summaryItem rm (File t n d _) = bullet <+> item <> ref
     bullet = text (replicate (d*2) ' ') <> text "-"
     item   = sq $ pSpec rm t
     ref    = paren $ text $ "./" ++ n ++ ".md"
+
+createTitleFile :: Project -> File
+createTitleFile (Project t a _ _) = File t "title" 0 cons
+  where 
+    cons = [Header 0 t EmptyS, Paragraph a]
 
 -----------------------------------------------------------------
 ------------------- LAYOUT OBJECT PRINTING ----------------------
@@ -261,9 +269,11 @@ processDefnLO rm _ lo                    = printLO' rm lo
 -- | Renders lists into Markdown
 makeList :: RefMap -> ListType -> Int -> Doc
 makeList rm (Simple      items) _  = vcat $ 
-  map (\(b,e,l) -> mlref rm l $$ (pSpec rm b <> text ":" <+> sItem rm e <> nl)) items
+  map (\(b,e,l) -> mlref rm l $$ 
+    (pSpec rm b <> text ":" <+> sItem rm e <> nl)) items
 makeList rm (Desc        items) _  = vcat $ 
-  map (\(b,e,l) -> mlref rm l $$ (bold (pSpec rm b) <> text ":" <+> sItem rm e <> nl)) items
+  map (\(b,e,l) -> mlref rm l $$ 
+    (bold (pSpec rm b) <> text ":" <+> sItem rm e <> nl)) items
 makeList rm (Ordered     items) bl = vcat $ 
   zipWith (\(i,_) n -> oItem rm i bl n) items [1..]
 makeList rm (Unordered   items) bl = vcat $ 
@@ -279,13 +289,21 @@ mlref rm ml = case ml of
 
 -- | Helper for rendering unordered list items
 uItem :: RefMap -> ItemType -> Int -> Doc
-uItem rm (Flat   s)   i = text (replicate i ' ') <> hyph <+> pSpec rm s
-uItem rm (Nested s l) i = vcat [text (replicate i ' ') <> hyph <+> pSpec rm s, makeList rm l (i+2)]
+uItem rm (Flat   s)   i = text (replicate i ' ') 
+  <> hyph <+> pSpec rm s
+uItem rm (Nested s l) i = vcat [
+  text (replicate i ' ') <> hyph <+> pSpec rm s, 
+  makeList rm l (i+2)
+  ]
 
 -- | Helper for rendering ordered list items
 oItem :: RefMap -> ItemType -> Int -> Int -> Doc
-oItem rm (Flat   s)   i n = text (replicate i ' ') <> dot (text $ show n) <+> pSpec rm s
-oItem rm (Nested s l) i n = vcat [text (replicate i ' ') <> dot (text $ show n) <+> pSpec rm s, makeList rm l (i+3)]
+oItem rm (Flat   s)   i n = text (replicate i ' ') 
+  <> dot (text $ show n) <+> pSpec rm s
+oItem rm (Nested s l) i n = vcat [
+  text (replicate i ' ') <> dot (text $ show n) <+> pSpec rm s, 
+  makeList rm l (i+3)
+  ]
 
 -- | Helper for non-bulleted markdown list items
 sItem :: RefMap -> ItemType -> Doc

@@ -93,7 +93,7 @@ import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getLangImports, getLibImports, setFileType, getClassName, setModuleName,
   getModuleName, getCurrMain, getMethodExcMap, getMainDoc, setThrowUsed,
   getThrowUsed, setErrorDefined, getErrorDefined, incrementLine, incrementWord,
-  getLineIndex, getWordIndex, resetIndices, useVarName, genLoopIndex, genVarName)
+  getLineIndex, getWordIndex, resetIndices, useVarName, genLoopIndex)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Applicative (liftA2)
@@ -102,7 +102,7 @@ import Control.Monad.State (modify)
 import Data.Composition ((.:))
 import Data.List (intercalate, sort)
 import Data.Map (findWithDefault)
-import Data.Maybe (fromMaybe, isJust, isNothing)
+import Data.Maybe (fromMaybe)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, lbrace, rbrace, braces, brackets, colon, space, doubleQuotes)
 import qualified Text.PrettyPrint.HughesPJ as D (float)
@@ -982,38 +982,29 @@ swiftIndexOf :: (RenderSym r) => SValue r -> SValue r -> SValue r
 swiftIndexOf = swiftUnwrapVal .: swiftIndexFunc
 
 -- | Swift's syntactic sugar for list slicing.
---   All but the last two lines are used to manually set the bounds based on
---   whether `step` is positive or negative, if either bound is not given
 swiftListSlice :: (RenderSym r) => SVariable r -> SValue r ->
   Maybe (SValue r) -> Maybe (SValue r) -> SValue r -> MSBlock r
-swiftListSlice vn vo beg' end' step = do
+swiftListSlice vn vo beg end step = do
   stepV <- zoom lensMStoVS step
-  let needIf = (isNothing beg' || isNothing end') && isNothing (valueInt stepV)
-  bName <- if isJust beg' || not needIf then pure ""
-           else genVarName [] "begIdx"
-  eName <- if isJust end' || not needIf then pure ""
-           else genVarName [] "endIdx"
-  let -- If beg or end aren't given and step isn't a litInt, calculate them at
-      -- runtime and store in a variable.
-      begVar = var bName int
-      endVar = var eName int
-      findBounds = [setBeg | isNothing beg' && needIf] ++
-                 [setEnd | isNothing end' && needIf]
-      setBeg = varDecDef begVar (inlineIf (step ?> litInt 0) 
-                                (litInt 0) (listSize vo #- litInt 1))
-      setEnd = varDecDef endVar (inlineIf (step ?> litInt 0) 
-                                (listSize vo) (litInt (-1)))
-      -- If step is a litInt, use its value to compute beg and end directly
-      computedBeg = valueInt stepV >>= (\s -> if s > 0 then pure $ litInt 0
-                                              else pure $ listSize vo #- litInt 1)
-      computedEnd = valueInt stepV >>= (\s -> if s > 0 then pure $ listSize vo
-                                                       else pure $ litInt (-1))
-      -- Choose the values to use for beg and end based on given information
-      begVal = fromMaybe (fromMaybe (valueOf begVar) computedBeg) beg'
-      endVal = fromMaybe (fromMaybe (valueOf endVar) computedEnd) end'
+
+  let mbStepV = valueInt stepV
+      (setBeg, begVal) = makeSetterVal "begIdx" mbStepV beg (litInt 0)    (listSize vo #- litInt 1)
+      (setEnd, endVal) = makeSetterVal "endIdx" mbStepV end (listSize vo) (litInt (-1))
+      
       i = var "i" int
-  block $ findBounds ++ [vn &= swiftMapFunc
-    (swiftStrideFunc begVal endVal step) (lambda [i] (listAccess vo (valueOf i)))]
+      setToSlice = vn &= swiftMapFunc (swiftStrideFunc begVal endVal step) (lambda [i] (listAccess vo (valueOf i)))
+  block [
+      setBeg,
+      setEnd,
+      setToSlice
+    ]
+  where
+    makeSetterVal _     _       (Just v) _  _  = (emptyStmt, v)
+    makeSetterVal _    (Just s) _        lb rb = (emptyStmt, if s > 0 then lb else rb)
+    makeSetterVal vName _       _        lb rb = 
+      let theVar = var vName int
+          theSetter = varDecDef theVar $ inlineIf (step ?> litInt 0) lb rb
+      in (theSetter, valueOf theVar)
 
 swiftPrint :: Bool -> Maybe (SValue SwiftCode) -> SValue SwiftCode ->
   SValue SwiftCode -> MSStatement SwiftCode

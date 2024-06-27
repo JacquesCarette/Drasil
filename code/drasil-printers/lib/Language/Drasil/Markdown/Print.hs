@@ -31,7 +31,7 @@ import Language.Drasil.TeX.Helpers(commandD, command2D, mkEnv)
 
 import Language.Drasil.Markdown.Helpers (heading, stripStr, image, li, reflink, sq,
   reflinkURI, reflinkInfo, caption, bold, ul, br, docLength, divTag, defnHTag, em,
-  paren, h)
+  paren, h, h')
 
 -----------------------------------------------------------------
 ------------------------- Markdown SRS --------------------------
@@ -253,7 +253,7 @@ makeDHeaderText rm ps l = defnHTag header <> nl
   where
     lo = lookup "Label" ps
     c = maybe l (\lo' -> makeLO rm ("Label", lo')) lo 
-    header = nl <> text "##" <+> heading c l <> nl
+    header = nl <> h' 2 <+> heading c l <> nl
 
 -- | Converts the [LayoutObj] to a Doc
 makeLO :: RefMap -> (String, [LayoutObj]) -> Doc

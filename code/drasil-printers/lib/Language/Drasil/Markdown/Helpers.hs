@@ -101,13 +101,22 @@ caption = wrapGen hcat Align "p" (text "center")
 heading ::  Doc -> Doc -> Doc
 heading t l = t <+> br (text "#" <> l)
 
--- | Helper for setting up heading weights.
+-- | Helper for setting up heading weights in mdBook.
 h :: Int -> Doc
 h n
   | n < 1     = error "Illegal header (header weigth must be > 0)."
   | n > 4     = error "Illegal header (header weight must be < 5)"
-  | n < 4     = text "#"
-  | otherwise = text "####"
+  | n < 4     = h' 1
+  | otherwise = h' n
+
+-- | Helper for setting up heading weights in normal Markdown.
+h' :: Int -> Doc
+h' n
+  | n == 1    = text "#"
+  | n == 2    = text "##"
+  | n == 3    = text "###"
+  | n == 4    = text "####"
+  | otherwise = error "Illegal header (header weight must 0 < n < 5)"
 
 -- | Helper for stripping Docs
 stripStr :: Doc -> Doc -> Doc

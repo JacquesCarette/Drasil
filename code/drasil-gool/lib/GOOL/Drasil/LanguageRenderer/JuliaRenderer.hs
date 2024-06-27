@@ -17,14 +17,14 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SValue, SVariable,
   TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..), CSStateVar,
-  ValueExpression(..), funcApp, bodyStatements, InternalValueExp(..), FunctionSym(..), GetSet(..),
-  List(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..),
-  ModuleSym(..), (&=), switchAsIf)
+  ValueExpression(..), funcApp, extFuncApp, bodyStatements,
+  InternalValueExp(..), FunctionSym(..), GetSet(..), List(..), InternalList(..),
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), StatePattern(..),
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), (&=), switchAsIf)
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
@@ -41,8 +41,8 @@ import qualified GOOL.Drasil.RendererClasses as RC (RenderBody(multiBody),
   import', perm, body, block, type', uOp, bOp, variable, value, function,
   statement, scope, parameter, method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (printLabel, listSep, listSep', new,
-  ClassDocRenderer, variableList, parameterList, functionDox, forLabel, inLabel,
-  tryLabel, catchLabel, ifLabel, elseLabel, constDec', mainFunc)
+  ClassDocRenderer, variableList, parameterList, forLabel, inLabel,
+  tryLabel, catchLabel, ifLabel, elseLabel, mainFunc)
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp,
   sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, addComments,
   blockCmt, docCmt, commentedMod, listSetFunc, dynamic, stateVar, stateVarList,
@@ -60,13 +60,14 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   docClass, function, commentedClass, method, getMethod, setMethod, 
   returnStmt, objVar, construct, param, docFunc, newObjMixedArgs, throw, arg,
   argsList)
-import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (string',
-  bool, boolRender, funcType, buildModule, docMod', litArray, listDec, 
-  listDecDef, listAccessFunc, listSetFunc, bindingError, extraClass, 
-  notNull, extFuncAppMixedArgs, functionDoc, listSize, listAdd, listAppend, 
-  intToIndex', indexToInt', inOutFunc, docInOutFunc', forLoopError)
+import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (bool,
+  boolRender, funcType, buildModule, docMod', litArray, listDec, listDecDef,
+  listAccessFunc, listSetFunc, bindingError, extraClass, notNull,
+  extFuncAppMixedArgs, functionDoc, listSize, listAdd, listAppend, intToIndex',
+  indexToInt', inOutFunc, docInOutFunc', forLoopError, openFileR', openFileW',
+  openFileA', multiReturn, multiAssign, inOutCall)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
-  litFloat, notOp, andOp, orOp, inlineIf, while)
+  notOp, andOp, orOp, inlineIf, while)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1, 
   decrement1, ifExists)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
@@ -85,8 +86,9 @@ import Data.Maybe (fromMaybe)
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 import Data.List (intercalate, sort)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), empty, brackets, vcat,
-  quotes, doubleQuotes, parens, equals, colon)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($+$), empty,
+  brackets, vcat, quotes, doubleQuotes, parens, equals, colon)
+import qualified Text.PrettyPrint.HughesPJ as D (float)
 
 jlExt :: String
 jlExt = "jl"
@@ -178,7 +180,7 @@ instance TypeSym JuliaCode where
   float = jlFloatType
   double = jlDoubleType
   char = jlCharType
-  string = CP.string'
+  string = jlStringType
   infile = jlInfileType
   outfile = jlOutfileType
   listType = jlListType
@@ -288,7 +290,7 @@ instance Literal JuliaCode where
   litFalse = C.litFalse
   litChar = G.litChar quotes
   litDouble = G.litDouble
-  litFloat = C.litFloat
+  litFloat = jlLitFloat
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray brackets
@@ -371,7 +373,7 @@ instance ValueExpression JuliaCode where
   notNull = CP.notNull jlNull
 
 instance RenderValue JuliaCode where
-  inputFunc = mkStateVal string jlInputFunc
+  inputFunc = mkStateVal string (jlReadLine <> parens empty)
   printFunc = mkStateVal void jlPrintFunc
   printLnFunc = mkStateVal void jlPrintLnFunc
   printFileFunc _ = undefined
@@ -465,13 +467,13 @@ instance FunctionElim JuliaCode where
   function = funcDoc . unJLC
 
 instance InternalAssignStmt JuliaCode where
-  multiAssign = undefined
+  multiAssign = CP.multiAssign id
 
 instance InternalIOStmt JuliaCode where
   printSt = jlPrint
 
 instance InternalControlStmt JuliaCode where
-  multiReturn = undefined
+  multiReturn = CP.multiReturn id
 
 instance RenderStatement JuliaCode where
   stmt = G.stmt
@@ -527,15 +529,15 @@ instance IOStatement JuliaCode where
 
   getInput = jlInput inputFunc
   discardInput = valStmt inputFunc
-  getFileInput _ _ = undefined
-  discardFileInput _ = undefined
-  openFileR _ _ = undefined
-  openFileW = undefined
-  openFileA = undefined
-  closeFile = undefined
-  getFileInputLine _ _ = undefined
-  discardFileLine _ = undefined
-  getFileInputAll _ _ = undefined
+  getFileInput f = jlInput (readLine f)
+  discardFileInput f = valStmt (readLine f)
+  openFileR f n = f &= CP.openFileR' n
+  openFileW f n = f &= CP.openFileW' n
+  openFileA f n = f &= CP.openFileA' n
+  closeFile f = valStmt $ funcApp jlCloseFunc void [f]
+  getFileInputLine = getFileInput
+  discardFileLine = discardFileInput
+  getFileInputAll f v = v &= readLines f
 
 instance StringStatement JuliaCode where
   stringSplit d vnew s = vnew &= funcApp jlSplit (listType string) [s, litString [d]]
@@ -543,9 +545,9 @@ instance StringStatement JuliaCode where
   stringListLists = undefined
 
 instance FuncAppStatement JuliaCode where
-  inOutCall = undefined
+  inOutCall = CP.inOutCall funcApp
   selfInOutCall = undefined
-  extInOutCall _ = undefined
+  extInOutCall m = CP.inOutCall (extFuncApp m)
 
 instance CommentStatement JuliaCode where
   comment = G.comment jlCmtStart
@@ -563,10 +565,9 @@ instance ControlStatement JuliaCode where
           elseIfSect (v, b) = on2StateValues (\vl bd -> vcat [
             elseIfLabel <+> RC.value vl,
             indent $ RC.body bd]) (zoom lensMStoVS v) b
-          elseSect = onStateValue (\bd -> vcat [
+          elseSect = onStateValue (\bd -> emptyIfEmpty (RC.body bd) (vcat [
             elseLabel,
-            indent $ RC.body bd,
-            jlEnd]) eBody
+            indent $ RC.body bd]) $+$ jlEnd) eBody
       in sequence (ifSect c : map elseIfSect cs ++ [elseSect]) 
         >>= (mkStmtNoEnd . vcat)
   switch = switchAsIf
@@ -639,9 +640,9 @@ instance MethodSym JuliaCode where
     mthdFromData Pub empty
   docFunc = G.docFunc CP.functionDoc
   inOutMethod n s p = CP.inOutFunc (method n s p)
-  docInOutMethod n s p = CP.docInOutFunc' functionDox (inOutMethod n s p)
+  docInOutMethod n s p = CP.docInOutFunc' CP.functionDoc (inOutMethod n s p)
   inOutFunc n s = CP.inOutFunc (function n s)
-  docInOutFunc n s = CP.docInOutFunc' functionDox (inOutFunc n s)
+  docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
 instance RenderMethod JuliaCode where
   intMethod _ n _ _ _ = jlIntMethod n
@@ -735,8 +736,9 @@ jlName = "Julia"
 jlVersion = "1.10.3"
 
 -- Abstract and concrete versions of each Julia datatype
-jlIntAbs, jlIntConc, jlFloatAbs, jlFloatConc, jlDoubleAbs, jlDoubleConc, jlCharAbs,
-  jlCharConc, jlListAbs, jlListConc, jlFile, jlVoid :: String
+jlIntAbs, jlIntConc, jlFloatAbs, jlFloatConc, jlDoubleAbs, jlDoubleConc, 
+  jlCharAbs, jlCharConc, jlStringAbs, jlStringConc, jlListAbs, jlListConc,
+  jlFile, jlVoid :: String
 jlIntAbs = "Integer"
 jlIntConc = "Int64"
 jlFloatAbs = "AbstractFloat"
@@ -745,10 +747,15 @@ jlDoubleAbs = "AbstractFloat"
 jlDoubleConc = "Float64"
 jlCharAbs = "AbstractChar"
 jlCharConc = "Char"
+jlStringAbs = "AbstractString"
+jlStringConc = "String"
 jlListAbs = "AbstractArray"
 jlListConc = "Array"
 jlFile = "IOStream"
 jlVoid = "Nothing"
+
+jlLitFloat :: (RenderSym r) => Float -> SValue r
+jlLitFloat f = mkStateVal float (D.float f <> text "f0")
 
 jlConstDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 jlConstDecDef v' def' = do
@@ -972,6 +979,9 @@ jlDoubleType = typeFromData Double jlDoubleAbs (text jlDoubleAbs)
 jlCharType :: (RenderSym r) => VSType r
 jlCharType = typeFromData Char jlCharAbs (text jlCharAbs)
 
+jlStringType :: (RenderSym r) => VSType r
+jlStringType = typeFromData String jlStringAbs (text jlStringAbs)
+
 jlInfileType :: (RenderSym r) => VSType r
 jlInfileType = typeFromData InFile jlFile (text jlFile)
 
@@ -1030,8 +1040,17 @@ jlInput inSrc v = v &= (v >>= jlInput' . getType . variableType)
         jlInput' Char = jlParse jlCharConc char inSrc
         jlInput' _ = error "Attempt to read a value of unreadable type"
 
-jlInputFunc :: Doc
-jlInputFunc = text "readline()"
+readLine, readLines :: (RenderSym r) => SValue r -> SValue r
+readLine f = funcApp jlReadLineFunc string [f]
+readLines f = funcApp jlReadLinesFunc (listType string) [f]
+
+jlReadLine :: Doc
+jlReadLine = text jlReadLineFunc
+
+jlReadLineFunc, jlReadLinesFunc, jlCloseFunc :: Label
+jlReadLineFunc = "readline"
+jlReadLinesFunc = "readlines"
+jlCloseFunc = "close"
 
 jlArgs :: Label
 jlArgs = "ARGS"

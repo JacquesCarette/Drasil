@@ -68,7 +68,8 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   funcType, buildModule, bindingError, notNull, listDecDef, destructorError, 
   stateVarDef, constVar, litArray, listSetFunc, extraClass, listAccessFunc, 
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
-  mainBody, inOutFunc, docInOutFunc', listSize, intToIndex, indexToInt)
+  mainBody, inOutFunc, docInOutFunc', listSize, intToIndex, indexToInt,
+  openFileR', openFileW', openFileA')
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
   notifyObservers', checkState)
@@ -544,9 +545,9 @@ instance IOStatement PythonCode where
   getFileInput f = pyInput (readline f)
   discardFileInput f = valStmt (readline f)
 
-  openFileR f n = f &= openRead n
-  openFileW f n = f &= openWrite n
-  openFileA f n = f &= openAppend n
+  openFileR f n = f &= CP.openFileR' n
+  openFileW f n = f &= CP.openFileW' n
+  openFileA f n = f &= CP.openFileA' n
   closeFile = G.closeFile pyClose
 
   getFileInputLine = getFileInput
@@ -782,19 +783,15 @@ pyInputFunc, pyPrintFunc :: Doc
 pyInputFunc = text "input()" -- raw_input() for < Python 3.0
 pyPrintFunc = text printLabel
 
-pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyOpen, pyClose, 
-  pyRead, pyWrite, pyAppend, pySplit, pyRange, pyRstrip, pyMath :: String
+pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyClose, 
+  pySplit, pyRange, pyRstrip, pyMath :: String
 pyListSize = "len"
 pyIndex = "index"
 pyInsert = "insert"
 pyAppendFunc = "append"
 pyReadline = "readline"
 pyReadlines = "readlines"
-pyOpen = "open"
 pyClose = "close"
-pyRead = "r"
-pyWrite = "w"
-pyAppend = "a"
 pySplit = "split"
 pyRange = "range"
 pyRstrip = "rstrip"
@@ -867,11 +864,6 @@ mathFunc = addmathImport . unOpPrec . access pyMath
 
 splitFunc :: (RenderSym r) => Char -> VSFunction r
 splitFunc d = func pySplit (listType string) [litString [d]]
-
-openRead, openWrite, openAppend :: (RenderSym r) => SValue r -> SValue r
-openRead n = funcApp pyOpen infile [n, litString pyRead]
-openWrite n = funcApp pyOpen outfile [n, litString pyWrite]
-openAppend n = funcApp pyOpen outfile [n, litString pyAppend]
 
 readline, readlines :: (RenderSym r) => SValue r -> SValue r
 readline f = objMethodCall string f pyReadline []

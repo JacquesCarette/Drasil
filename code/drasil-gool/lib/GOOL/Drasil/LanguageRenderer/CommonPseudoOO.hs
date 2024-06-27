@@ -10,7 +10,7 @@ module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError,
   mainBody, inOutFunc, docInOutFunc', boolRender, bool, floatRender, float, stringRender',
   string', inherit, implements, listSize, listAdd, listAppend, intToIndex,
-  indexToInt, intToIndex', indexToInt'
+  indexToInt, intToIndex', indexToInt', openFileR', openFileW', openFileA'
 ) where
 
 import Utils.Drasil (indent, stringList)
@@ -23,14 +23,14 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, VSType,
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType),
   ValueSym(valueType), Comparison(..), objMethodCallNoParams, (&=),
   ControlStatement(returnStmt), ScopeSym(..), MethodSym(function),
-  NumericExpression((#+), (#-)))
+  NumericExpression((#+), (#-)), funcApp)
 import qualified GOOL.Drasil.ClassInterface as S (
   TypeSym(int, double, string, listType, arrayType, void),
-  VariableSym(var, self, objVar), Literal(litTrue, litFalse, litList, litInt),
-  VariableValue(valueOf), FunctionSym(func, objAccess), StatementSym(valStmt),
-  DeclStatement(varDec, varDecDef, constDecDef), List(intToIndex, indexToInt),
-  ParameterSym(param, pointerParam), MethodSym(mainFunction),
-  ClassSym(buildClass))
+  VariableSym(var, self, objVar), Literal(litTrue, litFalse, litList, litInt,
+  litString), VariableValue(valueOf), FunctionSym(func, objAccess),
+  StatementSym(valStmt), DeclStatement(varDec, varDecDef, constDecDef),
+  List(intToIndex, indexToInt), ParameterSym(param, pointerParam),
+  MethodSym(mainFunction), ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (RenderSym, ImportSym(..), RenderBody(..),
   RenderType(..), RenderVariable(varFromData), InternalVarElim(variableBind),
   RenderFunction(funcFromData), MethodTypeSym(mType),
@@ -505,6 +505,18 @@ dateDoc = "Date"
 noteDoc = "Note"
 paramDoc = "Parameter"
 returnDoc = "Returns"
+
+-- Python and Julia
+fileOpen, fileR, fileW, fileA :: Label
+fileOpen = "open"
+fileR = "r"
+fileW = "w"
+fileA = "a"
+
+openFileR', openFileW', openFileA' :: (RenderSym r) => SValue r -> SValue r
+openFileR' n = funcApp fileOpen infile [n, S.litString fileR]
+openFileW' n = funcApp fileOpen infile [n, S.litString fileW]
+openFileA' n = funcApp fileOpen infile [n, S.litString fileA]
 
 -- Python, Julia, and MATLAB --
 listSize :: (RenderSym r) => SValue r -> SValue r

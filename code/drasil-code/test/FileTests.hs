@@ -33,7 +33,7 @@ writeStory = block [
   varDec $ var "fileToRead" infile,
   openFileR (var "fileToRead" infile) (litString "testText.txt"),
   varDec $ var "fileLine" string,
-  getFileInputLine (valueOf $ var "fileToRead" infile) (var "fileLine" string),
+  getFileInput (valueOf $ var "fileToRead" infile) (var "fileLine" string),
   discardFileLine (valueOf $ var "fileToRead" infile),
   listDec 0 (var "fileContents" (listType string))]
 

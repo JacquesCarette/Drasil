@@ -161,6 +161,7 @@ convertLang CSharp = "csharp"
 convertLang Java = "java"
 convertLang Python = "python"
 convertLang Swift = "swift"
+convertLang Julia = "julia"
 
 -- | Generate a reference towards the code folder. Uses 'getCodePath' to find the code path.
 getCodeRef :: Example -> Lang -> String -> Reference

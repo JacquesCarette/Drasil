@@ -81,6 +81,7 @@ choiceCombos = [baseChoices,
     dataInfo = makeData Bundled (Store Unbundled) Var
   },
   baseChoices {
+    lang = [Python, Cpp, CSharp, Java, Swift, Julia],
     architecture = makeArchit Modular Library,
     dataInfo = makeData Unbundled (Store Unbundled) Var,
     maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats
@@ -104,6 +105,12 @@ choiceCombos = [baseChoices,
   },
   baseChoices {
     lang = [Python, Cpp, CSharp, Java, Swift, Julia]
+  },
+  baseChoices {
+    lang = [Python, Cpp, CSharp, Java, Swift, Julia],
+    architecture = makeArchit Modular Program,
+    dataInfo = makeData Unbundled (Store Unbundled) Var,
+    maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats
   }]
 
 matchToFloats :: SpaceMatch

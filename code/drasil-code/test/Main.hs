@@ -74,8 +74,8 @@ jlClasses unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
   in unRepr' $ package pd [makefile [] Program [] gs' pd])
-  [helloWorld{-, patternTest, fileTests, vectorTest, nameGenTest-}]
-  (map (unCI . (`evalState` initialState)) [helloWorld{-, patternTest, fileTests, vectorTest, nameGenTest-}])
+  [helloWorld{-, patternTest-}, fileTests{-, vectorTest, nameGenTest-}]
+  (map (unCI . (`evalState` initialState)) [helloWorld{-, patternTest-}, fileTests{-, vectorTest, nameGenTest-}])
 
 -- | Formats code to be rendered.
 makeCode :: [[FileData]] -> [[AuxData]] -> [(FilePath, Doc)]

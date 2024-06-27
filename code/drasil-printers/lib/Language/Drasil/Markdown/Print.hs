@@ -4,6 +4,7 @@ module Language.Drasil.Markdown.Print(genMD, genMDBook, pSpec) where
 import Prelude hiding (print, (<>))
 import Text.PrettyPrint hiding (Str)
 import Data.List (transpose)
+import Data.List.Utils (replace)
 import qualified Data.Map as Map (empty)
 
 import qualified Language.Drasil as L
@@ -149,6 +150,8 @@ pExpr (Case ps)      = printMath $ mkEnv "cases" (TeX.cases ps lnl pExpr')
 pExpr (Mtx a)        = stripStr (printMath $ mkEnv "bmatrix" (TeX.pMatrix a lnl pExpr')) tab
 pExpr (Row [x])      = br $ pExpr x 
 pExpr (Row l)        = foldl1 (<>) (map pExpr l)
+pExpr (Label s)      = printMath $ TeX.pExpr (Label s')
+  where s' = replace "*" "\\*" (replace "_" "\\_" s)
 pExpr (Sub e)        = bslash <> unders <> br (pExpr e)
 pExpr (Sup e)        = hat    <> br (pExpr e)
 pExpr (Over Hat s)   = printMath $ commandD "hat" (pExpr' s)

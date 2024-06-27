@@ -25,6 +25,6 @@ makeBook (Document t _ _ _) sm = vcat [
 makeBook _ _ = error "Type not supported: Notebook."
 
 mkTitle :: PrintingInformation -> Sentence -> Doc
-mkTitle sm t = text "\"" <> (pSpec empty ts) <> text "\""
+mkTitle sm t = text "\"" <> pSpec empty ts <> text "\""
   where 
     ts = spec sm t

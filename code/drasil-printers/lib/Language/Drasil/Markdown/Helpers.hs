@@ -72,7 +72,7 @@ reflink rm ref txt = sq txt <> paren rp
   where
     fn = maybe empty fp (lookup ref rm)
     fp s = text $ "./" ++ s ++ ".md"
-    rp = fn <> (text $ "#" ++ ref)
+    rp = fn <> text ("#" ++ ref)
 
 -- | Helper for setting up links to references with additional information.
 reflinkInfo :: RefMap -> String -> Doc -> Doc -> Doc
@@ -93,7 +93,7 @@ caption = wrapGen hcat Align "p" (text "center") [""]
 
 -- | Helper for setting up headings
 heading ::  Doc -> Doc -> Doc
-heading t l = t <+> (br $ text "#" <> l)
+heading t l = t <+> br (text "#" <> l)
 
 h :: Int -> Doc
 h n

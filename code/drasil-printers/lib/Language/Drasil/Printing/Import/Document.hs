@@ -35,7 +35,7 @@ makeProject sm (Document titleLb authorName _ sections) =
   T.Project (spec sm titleLb) (spec sm authorName) refMap files
   where
     files   = createFiles sm sections
-    refMap = fromList $ concat $ map createRefMap' files
+    refMap = fromList $ concatMap createRefMap' files
 
 -- * Helpers
 
@@ -43,11 +43,11 @@ makeProject sm (Document titleLb authorName _ sections) =
 createFiles :: PrintingInformation -> [Section] -> [T.File]
 createFiles sm secs = map (file sm) secs'
   where
-    secs' = concat (map (extractSubS 0) secs)
+    secs' = concatMap (extractSubS 0) secs
 
 -- | Helper function for creating a RefMap for a Document.
 createRefMap' :: T.File -> [(String, T.Filename)]
-createRefMap' (T.File _ l _ c) = concat (map (createRefMap l) c)
+createRefMap' (T.File _ l _ c) = concatMap (createRefMap l) c
 
 -- | Helper function for creating a RefMap for a LayoutObj
 createRefMap :: T.Filename -> T.LayoutObj -> [(String, T.Filename)]

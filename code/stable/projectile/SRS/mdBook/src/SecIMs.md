@@ -1,0 +1,120 @@
+# Instance Models {#Sec:IMs}
+
+This section transforms the problem defined in the [problem description](./SecProbDesc.md#Sec:ProbDesc) into one which is expressed in mathematical terms. It uses concrete symbols defined in the [data definitions](./SecDDs.md#Sec:DDs) to replace the abstract symbols in the models identified in [theoretical models](./SecTMs.md#Sec:TMs) and [general definitions](./SecGDs.md#Sec:GDs).
+
+<div align="center">
+
+## Calculation of landing time {#IM:calOfLandingTime}
+
+</div>
+
+|Refname           |IM:calOfLandingTime                                                                                                                                                                                                                                                                                                                                                                                                                          |
+|:-----------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Label             |Calculation of landing time                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|Input             |\\({v\_{\text{launch}}}\\), \\(θ\\)                                                                                                                                                                                                                                                                                                                                                                                                          |
+|Output            |\\({t\_{\text{flight}}}\\)                                                                                                                                                                                                                                                                                                                                                                                                                   |
+|Input Constraints |\\[{v\_{\text{launch}}}\gt{}0\\]\\[0\lt{}θ\lt{}\frac{π}{2}\\]                                                                                                                                                                                                                                                                                                                                                                                |
+|Output Constraints|\\[{t\_{\text{flight}}}\gt{}0\\]                                                                                                                                                                                                                                                                                                                                                                                                             |
+|Equation          |\\[{t\_{\text{flight}}}=\frac{2 {v\_{\text{launch}}} \sin\left(θ\right)}{g}\\]                                                                                                                                                                                                                                                                                                                                                               |
+|Description       |<ul><li>\\({t\_{\text{flight}}}\\) is the flight duration (\\({\text{s}}\\))</li><li>\\({v\_{\text{launch}}}\\) is the launch speed (\\(\frac{\text{m}}{\text{s}}\\))</li><li>\\(θ\\) is the launch angle (\\({\text{rad}}\\))</li><li>\\(g\\) is the magnitude of gravitational acceleration (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li></ul>                                                                                                |
+|Notes             |<ul><li>The constraint \\(0\lt{}θ\lt{}\frac{π}{2}\\) is from [A:posXDirection](./SecAssumps.md#posXDirection) and [A:yAxisGravity](./SecAssumps.md#yAxisGravity), and is shown in [Fig:Launch](./SecPhysSyst.md#Figure:Launch).</li><li>\\(g\\) is defined in [A:gravAccelValue](./SecAssumps.md#gravAccelValue).</li><li>The constraint \\({t\_{\text{flight}}}\gt{}0\\) is from [A:timeStartZero](./SecAssumps.md#timeStartZero).</li></ul>|
+|Source            |--                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+|RefBy             |[IM:calOfLandingDist](./SecIMs.md#IM:calOfLandingDist), [FR:Output-Values](./SecFRs.md#outputValues), and [FR:Calculate-Values](./SecFRs.md#calcValues)                                                                                                                                                                                                                                                                                      |
+
+#### Detailed derivation of flight duration: {#IM:calOfLandingTimeDeriv}
+
+We know that \\({{p\_{\text{y}}}^{\text{i}}}=0\\) ([A:launchOrigin](./SecAssumps.md#launchOrigin)) and \\({{a\_{\text{y}}}^{\text{c}}}=-g\\) ([A:accelYGravity](./SecAssumps.md#accelYGravity)). Substituting these values into the y-direction of [GD:posVec](./SecGDs.md#GD:posVec) gives us:
+
+\\[{p\_{\text{y}}}={{v\_{\text{y}}}^{\text{i}}} t-\frac{g t^{2}}{2}\\]
+
+To find the time that the projectile lands, we want to find the \\(t\\) value (\\({t\_{\text{flight}}}\\)) where \\({p\_{\text{y}}}=0\\) (since the target is on the \\(x\\)-axis from [A:targetXAxis](./SecAssumps.md#targetXAxis)). From the equation above we get:
+
+\\[{{v\_{\text{y}}}^{\text{i}}} {t\_{\text{flight}}}-\frac{g {t\_{\text{flight}}}^{2}}{2}=0\\]
+
+Dividing by \\({t\_{\text{flight}}}\\) (with the constraint \\({t\_{\text{flight}}}\gt{}0\\)) gives us:
+
+\\[{{v\_{\text{y}}}^{\text{i}}}-\frac{g {t\_{\text{flight}}}}{2}=0\\]
+
+Solving for \\({t\_{\text{flight}}}\\) gives us:
+
+\\[{t\_{\text{flight}}}=\frac{2 {{v\_{\text{y}}}^{\text{i}}}}{g}\\]
+
+From [DD:speedIY](./SecDDs.md#DD:speedIY) (with \\({v^{\text{i}}}={v\_{\text{launch}}}\\)) we can replace \\({{v\_{\text{y}}}^{\text{i}}}\\):
+
+\\[{t\_{\text{flight}}}=\frac{2 {v\_{\text{launch}}} \sin\left(θ\right)}{g}\\]
+
+<div align="center">
+
+## Calculation of landing position {#IM:calOfLandingDist}
+
+</div>
+
+|Refname           |IM:calOfLandingDist                                                                                                                                                                                                                                                                                                                                                                                                                        |
+|:-----------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Label             |Calculation of landing position                                                                                                                                                                                                                                                                                                                                                                                                            |
+|Input             |\\({v\_{\text{launch}}}\\), \\(θ\\)                                                                                                                                                                                                                                                                                                                                                                                                        |
+|Output            |\\({p\_{\text{land}}}\\)                                                                                                                                                                                                                                                                                                                                                                                                                   |
+|Input Constraints |\\[{v\_{\text{launch}}}\gt{}0\\]\\[0\lt{}θ\lt{}\frac{π}{2}\\]                                                                                                                                                                                                                                                                                                                                                                              |
+|Output Constraints|\\[{p\_{\text{land}}}\gt{}0\\]                                                                                                                                                                                                                                                                                                                                                                                                             |
+|Equation          |\\[{p\_{\text{land}}}=\frac{2 {v\_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}\\]                                                                                                                                                                                                                                                                                                                                        |
+|Description       |<ul><li>\\({p\_{\text{land}}}\\) is the landing position (\\({\text{m}}\\))</li><li>\\({v\_{\text{launch}}}\\) is the launch speed (\\(\frac{\text{m}}{\text{s}}\\))</li><li>\\(θ\\) is the launch angle (\\({\text{rad}}\\))</li><li>\\(g\\) is the magnitude of gravitational acceleration (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li></ul>                                                                                               |
+|Notes             |<ul><li>The constraint \\(0\lt{}θ\lt{}\frac{π}{2}\\) is from [A:posXDirection](./SecAssumps.md#posXDirection) and [A:yAxisGravity](./SecAssumps.md#yAxisGravity), and is shown in [Fig:Launch](./SecPhysSyst.md#Figure:Launch).</li><li>\\(g\\) is defined in [A:gravAccelValue](./SecAssumps.md#gravAccelValue).</li><li>The constraint \\({p\_{\text{land}}}\gt{}0\\) is from [A:posXDirection](./SecAssumps.md#posXDirection).</li></ul>|
+|Source            |--                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+|RefBy             |[IM:offsetIM](./SecIMs.md#IM:offsetIM) and [FR:Calculate-Values](./SecFRs.md#calcValues)                                                                                                                                                                                                                                                                                                                                                   |
+
+#### Detailed derivation of landing position: {#IM:calOfLandingDistDeriv}
+
+We know that \\({{p\_{\text{x}}}^{\text{i}}}=0\\) ([A:launchOrigin](./SecAssumps.md#launchOrigin)) and \\({{a\_{\text{x}}}^{\text{c}}}=0\\) ([A:accelXZero](./SecAssumps.md#accelXZero)). Substituting these values into the x-direction of [GD:posVec](./SecGDs.md#GD:posVec) gives us:
+
+\\[{p\_{\text{x}}}={{v\_{\text{x}}}^{\text{i}}} t\\]
+
+To find the landing position, we want to find the \\({p\_{\text{x}}}\\) value (\\({p\_{\text{land}}}\\)) at flight duration (from [IM:calOfLandingTime](./SecIMs.md#IM:calOfLandingTime)):
+
+\\[{p\_{\text{land}}}=\frac{{{v\_{\text{x}}}^{\text{i}}}\cdot{}2 {v\_{\text{launch}}} \sin\left(θ\right)}{g}\\]
+
+From [DD:speedIX](./SecDDs.md#DD:speedIX) (with \\({v^{\text{i}}}={v\_{\text{launch}}}\\)) we can replace \\({{v\_{\text{x}}}^{\text{i}}}\\):
+
+\\[{p\_{\text{land}}}=\frac{{v\_{\text{launch}}} \cos\left(θ\right)\cdot{}2 {v\_{\text{launch}}} \sin\left(θ\right)}{g}\\]
+
+Rearranging this gives us the required equation:
+
+\\[{p\_{\text{land}}}=\frac{2 {v\_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}\\]
+
+<div align="center">
+
+## Offset {#IM:offsetIM}
+
+</div>
+
+|Refname           |IM:offsetIM                                                                                                                                                                                                                                                                                  |
+|:-----------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Label             |Offset                                                                                                                                                                                                                                                                                       |
+|Input             |\\({p\_{\text{land}}}\\), \\({p\_{\text{target}}}\\)                                                                                                                                                                                                                                         |
+|Output            |\\({d\_{\text{offset}}}\\)                                                                                                                                                                                                                                                                   |
+|Input Constraints |\\[{p\_{\text{land}}}\gt{}0\\]\\[{p\_{\text{target}}}\gt{}0\\]                                                                                                                                                                                                                               |
+|Output Constraints|                                                                                                                                                                                                                                                                                             |
+|Equation          |\\[{d\_{\text{offset}}}={p\_{\text{land}}}-{p\_{\text{target}}}\\]                                                                                                                                                                                                                           |
+|Description       |<ul><li>\\({d\_{\text{offset}}}\\) is the distance between the target position and the landing position (\\({\text{m}}\\))</li><li>\\({p\_{\text{land}}}\\) is the landing position (\\({\text{m}}\\))</li><li>\\({p\_{\text{target}}}\\) is the target position (\\({\text{m}}\\))</li></ul>|
+|Notes             |<ul><li>\\({p\_{\text{land}}}\\) is from [IM:calOfLandingDist](./SecIMs.md#IM:calOfLandingDist).</li><li>The constraints \\({p\_{\text{land}}}\gt{}0\\) and \\({p\_{\text{target}}}\gt{}0\\) are from [A:posXDirection](./SecAssumps.md#posXDirection).</li></ul>                            |
+|Source            |--                                                                                                                                                                                                                                                                                           |
+|RefBy             |[IM:messageIM](./SecIMs.md#IM:messageIM), [FR:Output-Values](./SecFRs.md#outputValues), and [FR:Calculate-Values](./SecFRs.md#calcValues)                                                                                                                                                    |
+
+<div align="center">
+
+## Output message {#IM:messageIM}
+
+</div>
+
+|Refname           |IM:messageIM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|:-----------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Label             |Output message                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+|Input             |\\({d\_{\text{offset}}}\\), \\({p\_{\text{target}}}\\)                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+|Output            |\\(s\\)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+|Input Constraints |\\[{d\_{\text{offset}}}\gt{}-{p\_{\text{target}}}\\]\\[{p\_{\text{target}}}\gt{}0\\]                                                                                                                                                                                                                                                                                                                                                                                                                             |
+|Output Constraints|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+|Equation          |\\[s=\begin{cases}  \text{\\(\``\\)The target was hit.''}, & \|\frac{{d\_{\text{offset}}}}{{p\_{\text{target}}}}\|\lt{}ε\\\\  \text{\\(\``\\)The projectile fell short.''}, & {d\_{\text{offset}}}\lt{}0\\\\  \text{\\(\``\\)The projectile went long.''}, & {d\_{\text{offset}}}\gt{}0  \end{cases}\\]                                                                                                                                                                                                          |
+|Description       |<ul><li>\\(s\\) is the output message as a string (Unitless)</li><li>\\({d\_{\text{offset}}}\\) is the distance between the target position and the landing position (\\({\text{m}}\\))</li><li>\\({p\_{\text{target}}}\\) is the target position (\\({\text{m}}\\))</li><li>\\(ε\\) is the hit tolerance (Unitless)</li></ul>                                                                                                                                                                                   |
+|Notes             |<ul><li>\\({d\_{\text{offset}}}\\) is from [IM:offsetIM](./SecIMs.md#IM:offsetIM).</li><li>The constraint \\({p\_{\text{target}}}\gt{}0\\) is from [A:posXDirection](./SecAssumps.md#posXDirection).</li><li>The constraint \\({d\_{\text{offset}}}\gt{}-{p\_{\text{target}}}\\) is from the fact that \\({p\_{\text{land}}}\gt{}0\\), from [A:posXDirection](./SecAssumps.md#posXDirection).</li><li>\\(ε\\) is defined in [Sec:Values of Auxiliary Constants](./SecAuxConstants.md#Sec:AuxConstants).</li></ul>|
+|Source            |--                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+|RefBy             |[FR:Output-Values](./SecFRs.md#outputValues) and [FR:Calculate-Values](./SecFRs.md#calcValues)                                                                                                                                                                                                                                                                                                                                                                                                                   |
+

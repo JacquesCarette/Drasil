@@ -80,7 +80,7 @@ reflinkInfo rm rf txt info = reflink rm rf txt <+> info
 
 -- | Helper for setting up links to external URIs
 reflinkURI :: Doc -> Doc -> Doc
-reflinkURI ref txt = if ref==txt then ang ref
+reflinkURI ref txt = if ref == txt then ang ref
   else sq txt <> paren ref
 
 -- | Helper for setting up figures
@@ -95,10 +95,11 @@ caption = wrapGen hcat Align "p" (text "center") [""]
 heading ::  Doc -> Doc -> Doc
 heading t l = t <+> br (text "#" <> l)
 
+-- | Helper for setting up heading weights.
 h :: Int -> Doc
 h n
-  | n < 1     = error "Illegal header (too small)"
-  | n > 4     = error "Illegal header (too large)"
+  | n < 1     = error "Illegal header (header weigth must be > 0)."
+  | n > 4     = error "Illegal header (header weight must be < 5)"
   | n < 4     = text "#"
   | otherwise = text "####"
 

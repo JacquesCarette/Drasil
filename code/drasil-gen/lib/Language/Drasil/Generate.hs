@@ -61,6 +61,7 @@ prntDoc d pinfo fn dtype fmt =
     JSON     -> do prntDoc' dtype (show dtype ++ "/JSON") fn JSON d pinfo
     Markdown -> do prntDoc' dtype (show dtype ++ "/Markdown") fn Markdown d pinfo
     MDBook   -> do prntDoc' dtype (show dtype ++ "/mdBook") fn MDBook d pinfo
+                   printBook dtype d pinfo
     _        -> mempty
 
 -- | Helper that takes the document type, directory name, document name, format of documents,
@@ -69,7 +70,6 @@ prntDoc' :: DocType -> String -> String -> Format -> Document -> PrintingInforma
 prntDoc' _ dt' _ MDBook body' sm = do
   createDirectoryIfMissing True dir
   mapM_ writeDocToFile con
-  printBook dt' body' sm
   where 
     con = writeDoc' sm MDBook body'
     dir = dt' ++ "/src"
@@ -86,7 +86,7 @@ prntDoc' dt dt' fn format body' sm = do
         getExt HTML = ".html"
         getExt JSON = ".ipynb"
         getExt Markdown = ".md"
-        getExt _    = error "We can only write in TeX, HTML and Jupyter Notebook (for now)."
+        getExt _    = error "We can only write in TeX, HTML, Jupyter Notebook, Markdown, and mdBook (for now)."
 
 -- | Helper for writing the Makefile(s).
 prntMake :: DocSpec -> IO ()
@@ -106,13 +106,13 @@ prntCSS docType fn body = do
     getFD dtype = show dtype ++ "/HTML/"
 
 -- | Helper for generating the .toml config file for mdBook.
-printBook :: String -> Document -> PrintingInformation -> IO()
-printBook dir doc sm = do
+printBook :: DocType -> Document -> PrintingInformation -> IO()
+printBook dt doc sm = do
   outh <- openFile fp WriteMode
   hPutStrLn outh $ render (makeBook doc sm)
   hClose outh
   where
-    fp = dir ++ "/book.toml"
+    fp = show dt ++ "/mdBook" ++ "/book.toml"
 
 -- | Renders single-page documents.
 writeDoc :: PrintingInformation -> DocType -> Format -> Filename -> Document -> Doc
@@ -120,12 +120,12 @@ writeDoc s _  TeX      _  doc = genTeX doc s
 writeDoc s _  HTML     fn doc = genHTML s fn doc
 writeDoc s dt JSON     _  doc = genJSON s dt doc
 writeDoc s _  Markdown _  doc = genMD s doc
-writeDoc _ _  _        _  _   = error "we can only write TeX/HTML/JSON (for now)"
+writeDoc _ _  _        _  _   = error "we can only write TeX/HTML/JSON/Markdown/MDBook (for now)"
 
 -- | Renders multi-page documents.
 writeDoc' :: PrintingInformation -> Format -> Document -> [(String, Doc)]
 writeDoc' s MDBook doc = genMDBook s doc
-writeDoc' _ _        _   = []
+writeDoc' _ _      _   = error "we can only write TeX/HTML/JSON/Markdown/MDBook (for now)"
 
 -- | Generates traceability graphs as .dot files.
 genDot :: SystemInformation -> IO ()

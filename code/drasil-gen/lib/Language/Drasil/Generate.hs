@@ -61,8 +61,12 @@ prntDoc d pinfo fn dtype fmt =
     JSON     -> do prntDoc' dtype (show dtype ++ "/JSON") fn JSON d pinfo
     Markdown -> do prntDoc' dtype (show dtype ++ "/Markdown") fn Markdown d pinfo
     MDBook   -> do prntDoc' dtype (show dtype ++ "/mdBook") fn MDBook d pinfo
-                   printBook dtype d pinfo
+                   prntBook dtype d pinfo
     _        -> mempty
+
+-- | Helper function to produce an error when an incorrect SRS format is used. 
+srsFormatError :: a
+srsFormatError = error "We can only write TeX/HTML/JSON/Markdown/MDBook (for now)."
 
 -- | Helper that takes the document type, directory name, document name, format of documents,
 -- document information and printing information. Then generates the document file.
@@ -82,11 +86,14 @@ prntDoc' dt dt' fn format body' sm = do
   outh <- openFile (dt' ++ "/" ++ fn ++ getExt format) WriteMode
   hPutStrLn outh $ render $ writeDoc sm dt format fn body'
   hClose outh
-  where getExt TeX  = ".tex"
-        getExt HTML = ".html"
-        getExt JSON = ".ipynb"
-        getExt Markdown = ".md"
-        getExt _    = error "We can only write in TeX, HTML, Jupyter Notebook, Markdown, and mdBook (for now)."
+  where 
+    -- | Gets extension for a particular format.
+    -- MDBook case is handled above.
+    getExt TeX      = ".tex"
+    getExt HTML     = ".html"
+    getExt JSON     = ".ipynb"
+    getExt Markdown = ".md"
+    getExt _        = srsFormatError
 
 -- | Helper for writing the Makefile(s).
 prntMake :: DocSpec -> IO ()
@@ -106,8 +113,8 @@ prntCSS docType fn body = do
     getFD dtype = show dtype ++ "/HTML/"
 
 -- | Helper for generating the .toml config file for mdBook.
-printBook :: DocType -> Document -> PrintingInformation -> IO()
-printBook dt doc sm = do
+prntBook :: DocType -> Document -> PrintingInformation -> IO()
+prntBook dt doc sm = do
   outh <- openFile fp WriteMode
   hPutStrLn outh $ render (makeBook doc sm)
   hClose outh
@@ -120,12 +127,12 @@ writeDoc s _  TeX      _  doc = genTeX doc s
 writeDoc s _  HTML     fn doc = genHTML s fn doc
 writeDoc s dt JSON     _  doc = genJSON s dt doc
 writeDoc s _  Markdown _  doc = genMD s doc
-writeDoc _ _  _        _  _   = error "we can only write TeX/HTML/JSON/Markdown/MDBook (for now)"
+writeDoc _ _  _        _  _   = srsFormatError
 
 -- | Renders multi-page documents.
-writeDoc' :: PrintingInformation -> Format -> Document -> [(String, Doc)]
+writeDoc' :: PrintingInformation -> Format -> Document -> [(Filename, Doc)]
 writeDoc' s MDBook doc = genMDBook s doc
-writeDoc' _ _      _   = error "we can only write TeX/HTML/JSON/Markdown/MDBook (for now)"
+writeDoc' _ _      _   = srsFormatError
 
 -- | Generates traceability graphs as .dot files.
 genDot :: SystemInformation -> IO ()

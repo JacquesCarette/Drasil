@@ -2,7 +2,6 @@
 module Utils.Drasil.Lists where
 
 import Data.List
-import Data.Set (fromList, toList)
 
 -- | Check if list has at least 2 elements.
 atLeast2 :: [a] -> Bool
@@ -22,7 +21,7 @@ xs `subsetOf` ys = all (`elem` ys) xs
 
 -- | Sort a list, removing all duplicates
 nubSort :: Ord a => [a] -> [a]
-nubSort = toList . fromList . sort
+nubSort = nub . sort
 
 -- | Interweaves two lists together @[[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]@.
 weave :: [[a]] -> [a]

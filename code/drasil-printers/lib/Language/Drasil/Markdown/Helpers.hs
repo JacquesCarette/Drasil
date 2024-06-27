@@ -96,7 +96,8 @@ image f c =  text "!" <> reflinkURI f c $$ bold (caption c) <> text "\n"
 caption :: Doc -> Doc
 caption = wrapGen hcat Align "p" (text "center")
 
--- | Helper for setting up headings
+-- | Helper for setting up headings with an id attribute.
+-- id attribute will only work for mdBook.
 heading ::  Doc -> Doc -> Doc
 heading t l = t <+> br (text "#" <> l)
 

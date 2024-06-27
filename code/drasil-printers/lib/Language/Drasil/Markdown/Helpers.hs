@@ -8,7 +8,7 @@ import Data.Map (lookup)
 import Language.Drasil.Printing.Helpers (ast)
 import Language.Drasil.Printing.LayoutObj (RefMap)
 
-data Variation =  Id | Align
+data Variation =  Id | Align | None
 
 -- | Curly braces.
 br :: Doc -> Doc
@@ -36,35 +36,40 @@ em t = ast <> t <> ast
 
 li, ul :: Doc -> Doc
 -- | List tag wrapper
-li = wrap "li" []
+li = wrap "li"
 -- | Unordered list tag wrapper.
-ul = wrap "ul" []
+ul = wrap "ul"
 
--- | helper for wrapping HTML lists
-wrap :: String -> [String] -> Doc -> Doc
-wrap a = wrapGen hcat Id a empty
+-- | Helper for wrapping HTML lists
+wrap :: String -> Doc -> Doc
+wrap a = wrapGen hcat None a empty
 
 -- | Helper for setting up HTML tags
-wrapGen :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
-wrapGen sepf _ s _ [] = \x ->
+-- ([Doc] -> Doc): Doc concatenation function.
+-- Variation: HTML tag attribute.
+-- String: HTML tag.
+-- Doc: HTML tag attribute value.
+-- Doc: Content being wrapped.
+wrapGen :: ([Doc] -> Doc) -> Variation -> String -> Doc -> Doc -> Doc
+wrapGen sepf None s _ = \x ->
   let tb c = text $ "<" ++ c ++ ">"
   in sepf [tb s, x, tb $ '/':s]
-wrapGen sepf Align s ti _ = \x ->
+wrapGen sepf Align s ti = \x ->
   let tb c = text ("<" ++ c ++ " align=\"") <> ti <> text "\">"
       te c = text $ "</" ++ c ++ ">"
   in  sepf [tb s, x, te s]
-wrapGen sepf Id s ti _ = \x ->
+wrapGen sepf Id s ti = \x ->
   let tb c = text ("<" ++ c ++ " id=\"") <> ti <> text "\">"
       te c = text $ "</" ++ c ++ ">\n"
   in  sepf [tb s, x, te s]
 
 -- | Helper for setting up section div
 divTag :: Doc -> Doc
-divTag l = wrapGen hcat Id "div" l [""] empty
+divTag l = wrapGen hcat Id "div" l empty
 
 -- | Helper for setting up div for defn heading
 defnHTag :: Doc -> Doc
-defnHTag = wrapGen vcat Align "div" (text "center") [""]
+defnHTag = wrapGen vcat Align "div" (text "center")
 
 -- | Helper for setting up links to references
 reflink :: RefMap -> String -> Doc -> Doc
@@ -89,7 +94,7 @@ image f c =  text "!" <> reflinkURI f c $$ bold (caption c) <> text "\n"
 
 -- | Helper for setting up captions
 caption :: Doc -> Doc
-caption = wrapGen hcat Align "p" (text "center") [""]
+caption = wrapGen hcat Align "p" (text "center")
 
 -- | Helper for setting up headings
 heading ::  Doc -> Doc -> Doc

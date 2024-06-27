@@ -470,7 +470,7 @@ callMapTransClosure = over callMap tClosure
         traceCalls :: Map QualifiedName [QualifiedName] -> [QualifiedName] -> 
           [QualifiedName]
         traceCalls _ [] = []
-        traceCalls cm (c:cs) = toList . fromList $ c : traceCalls cm ( cs ++ 
+        traceCalls cm (c:cs) = c : traceCalls cm ( cs ++ 
           Map.findWithDefault [] c cm)
 
 updateMEMWithCalls :: GOOLState -> GOOLState

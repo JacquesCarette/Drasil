@@ -34,14 +34,14 @@ import Language.Drasil.Markdown.Helpers (heading, stripStr, image, li, reflink, 
   paren, h)
 
 -----------------------------------------------------------------
------------------------ SINGLE-PAGE SRS -------------------------
+------------------------- Markdown SRS --------------------------
 -----------------------------------------------------------------
 
--- | Generate a single-page Markdown SRS
+-- | Generate a Markdown SRS
 genMD :: PrintingInformation -> L.Document -> Doc
 genMD sm doc = build $ makeDocument sm doc
 
--- | Build a single-page Markdown Document, called by genMD
+-- | Build a Markdown Doc, called by genMD
 build :: Document -> Doc
 build (Document t a c) = 
   text "#" <+> pSpec rm t $$
@@ -55,21 +55,21 @@ print :: RefMap -> [LayoutObj] -> Doc
 print rm = foldr (($$) . printLO rm) empty
 
 -----------------------------------------------------------------
------------------------- MULTI-PAGE SRS -------------------------
+------------------------- mdBook SRS ----------------------------
 -----------------------------------------------------------------
 
--- | Generate a multi-page Markdown SRS
+-- | Generate a mdBook SRS
 genMDBook :: PrintingInformation -> L.Document -> [(Filename, Doc)]
 genMDBook sm doc = build' $ makeProject sm doc
 
--- | Build multi-page Markdown Docs, called by genMD'
+-- | Build the mdBook Docs, called by genMD'
 build' :: Project -> [(Filename, Doc)]
 build' p@(Project _ _ rm d) = 
   printSummary rm files : map (print' rm) files
   where
     files = createTitleFile p : d
 
--- | Called by buld', uses 'printLO' to render a File 
+-- | Called by build', uses 'printLO' to render a File 
 -- into a single Doc
 print' :: RefMap -> File -> (Filename, Doc)
 print' rm (File _ n _ c) = (n, print rm c)
@@ -86,6 +86,7 @@ summaryItem rm (File t n d _) = bullet <+> item <> ref
     item   = sq $ pSpec rm t
     ref    = paren $ text $ "./" ++ n ++ ".md"
 
+-- | Create a title page file for a Project
 createTitleFile :: Project -> File
 createTitleFile (Project t a _ _) = File t "title" 0 cons
   where 

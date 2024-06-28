@@ -537,7 +537,7 @@ listAppend l v = do
   mkVal (RC.functionType f) (RC.function f)
 
 intToIndex' :: (RenderSym r) => SValue r -> SValue r
-intToIndex' = (#+ (S.litInt 1))
+intToIndex' = (#+ S.litInt 1)
 
 indexToInt' :: (RenderSym r) => SValue r -> SValue r
-indexToInt' = (#- (S.litInt 1))
+indexToInt' = (#- S.litInt 1)

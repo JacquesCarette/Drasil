@@ -9,6 +9,6 @@ build:
 run: build
 	julia Control.jl $(RUNARGS)
 
-doc: Control.jl InputParameters.jl Constants.jl Calculations.jl OutputFormat.jl
+doc: Control.jl InputParameters.jl Calculations.jl OutputFormat.jl
 
 .PHONY: build run doc

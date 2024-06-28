@@ -6,6 +6,6 @@
 
 build:
 
-doc: Control.jl InputParameters.jl Constants.jl Calculations.jl OutputFormat.jl
+doc: InputParameters.jl Calculations.jl OutputFormat.jl
 
 .PHONY: build doc

@@ -24,7 +24,8 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SValue, SVariable,
   DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), StatePattern(..),
   ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), (&=), switchAsIf)
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), (&=), switchAsIf,
+  SClass, FSModule)
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
@@ -51,13 +52,13 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkVal, mkStateVal, mkStateVar,
   VSOp, unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
   typeBinExpr, mkStmt, mkStmtNoEnd)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  block, multiBlock, listInnerType, obj, litChar, litDouble, litInt, litString, 
-  valueOf, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
-  lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, call, 
-  funcAppMixedArgs, lambda, modFromData, fileDoc, fileFromData, tryCatch, 
-  csc, multiBody, sec, cot, stmt, loopStmt, emptyStmt, assign, increment, 
-  subAssign, print, comment, valStmt, listAccess, objAccess, listSet, 
-  docClass, function, commentedClass, method, getMethod, setMethod, objDecNew, 
+  block, multiBlock, listInnerType, obj, litChar, litDouble, litInt, litString,
+  valueOf, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp,
+  lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, call,
+  funcAppMixedArgs, lambda, modFromData, fileDoc, fileFromData, tryCatch,
+  csc, multiBody, sec, cot, stmt, loopStmt, emptyStmt, assign, increment,
+  subAssign, print, comment, valStmt, listAccess, objAccess, listSet,
+  docClass, function, commentedClass, method, getMethod, setMethod, objDecNew,
   returnStmt, objVar, construct, param, docFunc, newObjMixedArgs, throw, arg,
   argsList)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (bool,
@@ -68,7 +69,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (bool,
   openFileA', multiReturn, multiAssign, inOutCall, stateVar, stateVarDef, mainBody)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
   notOp, andOp, orOp, inlineIf, while)
-import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1, 
+import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1,
   decrement1, ifExists)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), ModData(..), md, updateMod, MethodData(..), mthd, OpData(..),
@@ -83,6 +84,7 @@ import GOOL.Drasil.State (MS, VS, CS, lensGStoFS, lensCStoFS, revFiles, setFileT
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
+import Data.Functor ((<&>))
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 import Data.List (intercalate, sort)
@@ -571,7 +573,7 @@ instance ControlStatement JuliaCode where
           elseSect = onStateValue (\bd -> emptyIfEmpty (RC.body bd) (vcat [
             elseLabel,
             indent $ RC.body bd]) $+$ jlEnd) eBody
-      in sequence (ifSect c : map elseIfSect cs ++ [elseSect]) 
+      in sequence (ifSect c : map elseIfSect cs ++ [elseSect])
         >>= (mkStmtNoEnd . vcat)
   switch = switchAsIf
   ifExists = M.ifExists
@@ -633,7 +635,7 @@ instance MethodSym JuliaCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
-  constructor ps is b = getClassName >>= 
+  constructor ps is b = getClassName >>=
     (\n -> jlConstructor n ps is b)
   docMain = mainFunction
   function = G.function
@@ -691,25 +693,9 @@ instance ClassElim JuliaCode where
 
 instance ModuleSym JuliaCode where
   type Module JuliaCode = ModData
-
-  buildModule n is = CP.buildModule n (do
-    lis <- getLangImports
-    libis <- getLibImports
-    mis <- getModuleImports
-    us <- getUsing
-    pure $ vibcat [
-      jlModStart n,
-      vcat (map (RC.import' . li) lis),
-      vcat (map (RC.import' . li) (sort $ is ++ libis)),
-      vcat (map (RC.import' . mi) mis),
-      vcat (map usingModule us)])
-    (pure empty) (do
-      mainDoc <- getMainDoc
-      let whiteSpace = emptyIfEmpty mainDoc blank
-      return $ vcat [mainDoc, whiteSpace, jlEnd])
-    where mi, li :: Label -> JuliaCode (Import JuliaCode)
-          mi = modImport
-          li = langImport
+  -- Before: jlModStart n; After: jlEnd
+  buildModule n is fs cs = jlModContents n is fs cs <&>
+    updateModuleDoc (\m -> emptyIfEmpty m (vibcat [jlModStart n, m, jlEnd]))
 
 instance RenderMod JuliaCode where
   modFromData n = G.modFromData n (toCode . md n)
@@ -734,7 +720,7 @@ jlName = "Julia"
 jlVersion = "1.10.3"
 
 -- Abstract and concrete versions of each Julia datatype
-jlIntAbs, jlIntConc, jlFloatAbs, jlFloatConc, jlDoubleAbs, jlDoubleConc, 
+jlIntAbs, jlIntConc, jlFloatAbs, jlFloatConc, jlDoubleAbs, jlDoubleConc,
   jlCharAbs, jlCharConc, jlStringAbs, jlStringConc, jlListAbs, jlListConc,
   jlFile, jlVoid :: String
 jlIntAbs = "Integer"
@@ -835,6 +821,24 @@ jlForEach i lstVar b = vcat [
   indent $ RC.body b,
   jlEnd]
 
+-- | Creates the contents of a module in Julia
+jlModContents :: Label -> [Label] -> [SMethod JuliaCode] ->
+  [SClass JuliaCode] -> FSModule JuliaCode
+jlModContents n is = CP.buildModule n (do
+  lis <- getLangImports
+  libis <- getLibImports
+  mis <- getModuleImports
+  us <- getUsing
+  pure $ vibcat [
+    vcat (map (RC.import' . li) lis),
+    vcat (map (RC.import' . li) (sort $ is ++ libis)),
+    vcat (map (RC.import' . mi) mis),
+    vcat (map usingModule us)])
+  (pure empty) (do getMainDoc)
+  where mi, li :: Label -> JuliaCode (Import JuliaCode)
+        mi = modImport
+        li = langImport
+
 -- | Creates a 'class' in Julia.
 --   GOOL classes are manifested quite differently in Julia, since it's not an
 --   OO language.  Variables and constructors go inside the body of a struct,
@@ -898,7 +902,7 @@ jlIntMethod n ps b = do
       self' = self
   sl <- zoom lensMStoVS self'
   mthdFromData Pub (vcat [
-    jlFunc <+> text n <> parens (RC.variable sl <> jlType <> 
+    jlFunc <+> text n <> parens (RC.variable sl <> jlType <>
       text nm <> oneParam <> pmlst),
     indent $ RC.body bod,
     jlEnd])
@@ -1041,7 +1045,7 @@ jlInput inSrc v = v &= (v >>= jlInput' . getType . variableType)
   where jlInput' Integer = jlParse jlIntConc int inSrc
         jlInput' Float = jlParse jlFloatConc float inSrc
         jlInput' Double = jlParse jlDoubleConc double inSrc
-        jlInput' Boolean = jlParse CP.boolRender bool inSrc 
+        jlInput' Boolean = jlParse CP.boolRender bool inSrc
         jlInput' String = inSrc
         jlInput' Char = jlParse jlCharConc char inSrc
         jlInput' _ = error "Attempt to read a value of unreadable type"

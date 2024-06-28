@@ -95,7 +95,8 @@ choiceCombos = [baseChoices,
     folderVal = 5
   },
   baseChoices {
-    dataInfo = makeData Bundled WithInputs Var,
+    lang = [Python, Cpp, CSharp, Java, Swift, Julia],
+    dataInfo = makeData Bundled (Store Unbundled) Var,
     maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats,
     optFeats = makeOptFeats
       (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)

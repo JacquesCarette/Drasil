@@ -692,7 +692,7 @@ instance StateVarSym SwiftCode where
   stateVar s p vr = do
     v <- zoom lensCStoVS vr
     stateVarDef s p vr (typeDfltVal $ getType $ variableType v)
-  stateVarDef = CP.stateVarDef
+  stateVarDef = CP.stateVarDef varDecDef
   constVar = CP.constVar (RC.perm (static :: SwiftCode (Permanence SwiftCode)))
   
 instance StateVarElim SwiftCode where

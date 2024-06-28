@@ -17,7 +17,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SValue, SVariable,
   TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..), CSStateVar,
-  ValueExpression(..), funcApp, extFuncApp, bodyStatements,
+  ValueExpression(..), funcApp, extFuncApp, selfFuncApp, bodyStatements,
   InternalValueExp(..), FunctionSym(..), GetSet(..), List(..), InternalList(..),
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
@@ -42,10 +42,10 @@ import qualified GOOL.Drasil.RendererClasses as RC (RenderBody(multiBody),
   statement, scope, parameter, method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (printLabel, listSep, listSep', new,
   ClassDocRenderer, variableList, parameterList, forLabel, inLabel,
-  tryLabel, catchLabel, ifLabel, elseLabel, mainFunc)
+  tryLabel, catchLabel, ifLabel, elseLabel)
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp,
   sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, addComments,
-  blockCmt, docCmt, commentedMod, listSetFunc, dynamic, stateVar, stateVarList,
+  blockCmt, docCmt, commentedMod, listSetFunc, dynamic, stateVarList,
   commentedItem, break, continue)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkVal, mkStateVal, mkStateVar,
   VSOp, unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
@@ -57,7 +57,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   funcAppMixedArgs, lambda, modFromData, fileDoc, fileFromData, tryCatch, 
   csc, multiBody, sec, cot, stmt, loopStmt, emptyStmt, assign, increment, 
   subAssign, print, comment, valStmt, listAccess, objAccess, listSet, 
-  docClass, function, commentedClass, method, getMethod, setMethod, 
+  docClass, function, commentedClass, method, getMethod, setMethod, objDecNew, 
   returnStmt, objVar, construct, param, docFunc, newObjMixedArgs, throw, arg,
   argsList)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (bool,
@@ -65,7 +65,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (bool,
   listAccessFunc, listSetFunc, bindingError, extraClass, notNull,
   extFuncAppMixedArgs, functionDoc, listSize, listAdd, listAppend, intToIndex',
   indexToInt', inOutFunc, docInOutFunc', forLoopError, openFileR', openFileW',
-  openFileA', multiReturn, multiAssign, inOutCall)
+  openFileA', multiReturn, multiAssign, inOutCall, stateVar, stateVarDef, mainBody)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
   notOp, andOp, orOp, inlineIf, while)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1, 
@@ -78,8 +78,8 @@ import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, 
   on2StateValues, onCodeList, onStateList, emptyIfEmpty)
 import GOOL.Drasil.State (MS, VS, CS, lensGStoFS, lensCStoFS, revFiles, setFileType, lensCStoMS, lensMStoVS, lensVStoMS,
   getModuleImports, addModuleImportVS, getUsing, getLangImports, getLibImports,
-  useVarName, getModuleName, getClassName, setClassName, setCurrMain,
-  getMainDoc, setMainDoc, addLibImportVS)
+  useVarName, getModuleName, getClassName, setClassName, getMainDoc,
+  addLibImportVS)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -186,7 +186,8 @@ instance TypeSym JuliaCode where
   listType = jlListType
   arrayType = listType -- Treat arrays and lists the same, as in Python
   listInnerType = G.listInnerType
-  obj = G.obj -- Julia's not OO, but I *think* this is fine
+  obj n = typeFromData (Object n') n (text n)
+    where n' = n ++ jlClassAppend
   funcType = CP.funcType -- Julia's functions support multiple-dispatch, so we might need to revisit this
   void = jlVoidType
 
@@ -283,7 +284,7 @@ instance ValueSym JuliaCode where
   valueType = onCodeValue valType
 
 instance Argument JuliaCode where
-  pointerArg = undefined
+  pointerArg = id
 
 instance Literal JuliaCode where
   litTrue = C.litTrue
@@ -357,7 +358,9 @@ instance ValueExpression JuliaCode where
   inlineIf = C.inlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
-  selfFuncAppMixedArgs = undefined
+  selfFuncAppMixedArgs n t vs ns = do
+    let slf = valueOf self
+    call Nothing Nothing n t (slf:vs) ns
   extFuncAppMixedArgs l n t ps ns = do
     modify (addModuleImportVS l)
     CP.extFuncAppMixedArgs l n t ps ns
@@ -511,7 +514,7 @@ instance DeclStatement JuliaCode where
   arrayDec = listDec
   arrayDecDef = listDecDef
   objDecDef = varDecDef
-  objDecNew = undefined
+  objDecNew = G.objDecNew
   extObjDecNew = undefined
   constDecDef = jlConstDecDef
   funcDecDef = undefined
@@ -546,7 +549,7 @@ instance StringStatement JuliaCode where
 
 instance FuncAppStatement JuliaCode where
   inOutCall = CP.inOutCall funcApp
-  selfInOutCall = undefined
+  selfInOutCall = CP.inOutCall selfFuncApp
   extInOutCall m = CP.inOutCall (extFuncApp m)
 
 instance CommentStatement JuliaCode where
@@ -613,7 +616,7 @@ instance ParameterSym JuliaCode where
   type Parameter JuliaCode = ParamData
 
   param = G.param jlParam
-  pointerParam = undefined
+  pointerParam = param
 
 instance RenderParam JuliaCode where
   paramFromData v' d = do
@@ -630,14 +633,11 @@ instance MethodSym JuliaCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
-  constructor ps is b = getClassName >>= (\n -> jlConstructor n ps is b)
+  constructor ps is b = getClassName >>= 
+    (\n -> jlConstructor n ps is b)
   docMain = mainFunction
   function = G.function
-  mainFunction b = do
-    modify setCurrMain
-    main <- jlIntFunc mainFunc [] <$> b
-    modify (setMainDoc main)
-    mthdFromData Pub empty
+  mainFunction = CP.mainBody
   docFunc = G.docFunc CP.functionDoc
   inOutMethod n s p = CP.inOutFunc (method n s p)
   docInOutMethod n s p = CP.docInOutFunc' CP.functionDoc (inOutMethod n s p)
@@ -661,9 +661,8 @@ instance MethodElim JuliaCode where
 instance StateVarSym JuliaCode where
   type StateVar JuliaCode = Doc
 
-  stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
-    (RC.scope s) (RC.perm p) . RC.statement) (stmt $ varDec' v)
-  stateVarDef = undefined
+  stateVar = CP.stateVar varDec'
+  stateVarDef = CP.stateVarDef varDecDef'
   constVar = undefined
 
 instance StateVarElim JuliaCode where
@@ -675,7 +674,7 @@ instance ClassSym JuliaCode where
   buildClass p stVars constructors methods = do
     n <- zoom lensCStoFS getModuleName
     intClass (n ++ jlClassAppend) public (inherit p) stVars constructors methods
-  extraClass = CP.extraClass
+  extraClass n = intClass (n ++ jlClassAppend) public . inherit
   implementingClass = undefined
   docClass = G.docClass jlClassDoc
 
@@ -707,8 +706,7 @@ instance ModuleSym JuliaCode where
     (pure empty) (do
       mainDoc <- getMainDoc
       let whiteSpace = emptyIfEmpty mainDoc blank
-          callMain = emptyIfEmpty mainDoc (text mainFunc <> parens empty)
-      return $ vcat [mainDoc, whiteSpace, callMain, whiteSpace, jlEnd])
+      return $ vcat [mainDoc, whiteSpace, jlEnd])
     where mi, li :: Label -> JuliaCode (Import JuliaCode)
           mi = modImport
           li = langImport
@@ -755,7 +753,7 @@ jlFile = "IOStream"
 jlVoid = "Nothing"
 
 jlLitFloat :: (RenderSym r) => Float -> SValue r
-jlLitFloat f = mkStateVal float (D.float f <> text "f0")
+jlLitFloat f = mkStateVal float (text jlFloatConc <> parens (D.float f))
 
 jlConstDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 jlConstDecDef v' def' = do
@@ -872,10 +870,11 @@ jlClassDoc desc = [desc | not (null desc)]
 jlConstructor :: (RenderSym r) => Label -> [MSParameter r] -> Initializers r ->
   MSBody r -> SMethod r
 jlConstructor fName ps initStmts b = jlConstructorMethod fName
-  ps (RC.multiBody [jlCallConstructor, b])
+  ps (RC.multiBody [createSelf, b, returnSelf])
   where args = map snd initStmts
         constructorFunc = funcApp new (obj fName)
-        jlCallConstructor = bodyStatements [returnStmt $ constructorFunc args]
+        createSelf = bodyStatements [varDecDef (var jlSelf (obj fName)) (constructorFunc args)]
+        returnSelf = bodyStatements [returnStmt $ valueOf (var jlSelf (obj fName))]
 
 jlConstructorMethod :: (RenderSym r) =>
   Label -> [MSParameter r] -> MSBody r -> SMethod r
@@ -899,8 +898,8 @@ jlIntMethod n ps b = do
       self' = self
   sl <- zoom lensMStoVS self'
   mthdFromData Pub (vcat [
-    jlFunc <+> text n <> parens (RC.variable sl <> jlType <> text nm <>
-      oneParam <> pmlst),
+    jlFunc <+> text n <> parens (RC.variable sl <> jlType <> 
+      text nm <> oneParam <> pmlst),
     indent $ RC.body bod,
     jlEnd])
 
@@ -908,8 +907,8 @@ jlExtNewObjMixedArgs :: (RenderSym r) => Library -> MixedCtorCall r
 jlExtNewObjMixedArgs l tp vs ns = tp >>= (\t -> call (Just l) Nothing
   (getTypeString t) (pure t) vs ns)
 
-jlClassAppend :: String
-jlClassAppend = "Class"
+jlClassAppend :: String -- Julia modules and structs cannot
+jlClassAppend = "Class" -- have the same name, hence the hack
 
 -- Functions
 -- | Creates a function.  n is function name, pms is list of parameters, and 
@@ -965,6 +964,13 @@ varDec' v' = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
   mkStmtNoEnd (RC.variable v <> jlType <> RC.type' (variableType v))
+
+varDecDef' :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
+varDecDef' v e = do
+  v' <- zoom lensMStoVS v
+  e' <- zoom lensMStoVS e
+  modify $ useVarName (variableName v')
+  mkStmtNoEnd (RC.variable v' <> jlType <> RC.type' (variableType v') <+> equals <+> RC.value e')
 
 -- Type names specific to Julia (there's a lot of them)
 jlIntType :: (RenderSym r) => VSType r

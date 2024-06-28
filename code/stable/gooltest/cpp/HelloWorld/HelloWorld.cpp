@@ -102,37 +102,38 @@ int main(int argc, const char *argv[]) {
     mySlicedList4 = temp2;
     
     vector<double> temp3(0);
-    for (int i1 = 3; i1 < 1; i1 += -1) {
+    for (int i1 = 3; i1 > 1; i1 += -1) {
         temp3.push_back(myOtherList.at(i1));
     }
     mySlicedList5 = temp3;
     
     vector<double> temp4(0);
-    for (int i2 = 0; i2 < 1; i2 += -1) {
+    for (int i2 = (int)(myOtherList.size()) - 1; i2 > 1; i2 += -1) {
         temp4.push_back(myOtherList.at(i2));
     }
     mySlicedList6 = temp4;
     
     vector<double> temp5(0);
-    for (int i3 = 3; i3 < (int)(myOtherList.size()); i3 += -1) {
+    for (int i3 = 3; i3 > -1; i3 += -1) {
         temp5.push_back(myOtherList.at(i3));
     }
     mySlicedList7 = temp5;
     
     vector<double> temp6(0);
-    for (int i4 = 3; i4 < 0; i4 += z) {
+    for (int i4 = 3; 0 < i4 && i4 <= 3; i4 += z) {
         temp6.push_back(myOtherList.at(i4));
     }
     mySlicedList8 = temp6;
     
     vector<double> temp7(0);
-    for (int i5 = x; i5 < y; i5 += z) {
+    for (int i5 = x; x <= i5 && i5 < y || y < i5 && i5 <= x; i5 += z) {
         temp7.push_back(myOtherList.at(i5));
     }
     mySlicedList9 = temp7;
     
     vector<double> temp8(0);
-    for (int i6 = 2; i6 < (int)(myOtherList.size()); i6 += z) {
+    int endIdx = z > 0 ? (int)(myOtherList.size()) : -1;
+    for (int i6 = 2; 2 <= i6 && i6 < endIdx || endIdx < i6 && i6 <= 2; i6 += z) {
         temp8.push_back(myOtherList.at(i6));
     }
     mySlicedList10 = temp8;

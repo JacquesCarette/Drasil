@@ -3,7 +3,7 @@
 -- | Language-polymorphic functions that are defined by GOOL code
 module GOOL.Drasil.LanguageRenderer.Macros (
   ifExists, decrement1, increment, increment1, runStrategy, 
-  listSlice, stringListVals, stringListLists, forRange, notifyObservers,
+  listSlice, makeSetterVal, stringListVals, stringListLists, forRange, notifyObservers,
   notifyObservers', checkState
 ) where
 
@@ -11,16 +11,17 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable, 
   SValue, VSFunction, MSStatement, bodyStatements, oneLiner, TypeElim(getType),
   VariableElim(variableType), listOf, ValueSym(valueType), 
-  NumericExpression((#+), (#*), (#/)), Comparison(..), at, ($.),
-  StatementSym(multi), AssignStatement((&+=), (&-=), (&++)), (&=), 
-  observerListName)
+  NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
+  BooleanExpression((?&&), (?||)), at, ($.), StatementSym(multi),
+  AssignStatement((&+=), (&-=), (&++)), (&=), observerListName)
 import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block), 
   TypeSym(int, string, listInnerType), VariableSym(var), Literal(litInt), 
   VariableValue(valueOf), ValueExpression(notNull), 
   List(listSize, listAppend, listAccess, intToIndex), StatementSym(valStmt), 
   AssignStatement(assign), DeclStatement(varDecDef, listDec), 
-  ControlStatement(ifCond, switch, for, forRange))
-import GOOL.Drasil.RendererClasses (RenderSym, RenderValue(cast))
+  ControlStatement(ifCond, switch, for, forRange), ValueExpression(inlineIf))
+import GOOL.Drasil.RendererClasses (RenderSym, RenderValue(cast), 
+  ValueElim(valueInt))
 import qualified GOOL.Drasil.RendererClasses as S (
   RenderStatement(stmt, emptyStmt))
 import qualified GOOL.Drasil.RendererClasses as RC (BodyElim(..),
@@ -60,22 +61,57 @@ runStrategy l strats rv av = maybe
 
 listSlice :: (RenderSym r) => Maybe (SValue r) -> Maybe (SValue r) -> 
   Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
-listSlice b e s vnew vold = do
+listSlice beg end step vnew vold = do
+  
   l_temp <- genVarName [] "temp"
   l_i <- genLoopIndex
-  let
-    var_temp = S.var l_temp (onStateValue variableType vnew)
-    v_temp = S.valueOf var_temp
-    var_i = S.var l_i S.int
-    v_i = S.valueOf var_i
-    begin = S.intToIndex $ fromMaybe (S.litInt 0) b
-    end = S.intToIndex $ fromMaybe (S.listSize vold) e
+  let var_temp = S.var l_temp (onStateValue variableType vnew)
+      v_temp = S.valueOf var_temp
+      var_i = S.var l_i S.int
+      v_i = S.valueOf var_i
+
+  let step' = fromMaybe (S.litInt 1) step
+  stepV <- zoom lensMStoVS step'
+  let mbStepV = valueInt stepV
+      (setBeg, begVal) = makeSetterVal "begIdx" step' mbStepV beg (S.litInt 0)    (S.listSize vold #- S.litInt 1)
+      (setEnd, endVal) = makeSetterVal "endIdx" step' mbStepV end (S.listSize vold) (S.litInt (-1))
+
+  mbBegV <- case beg of
+        Nothing -> pure Nothing
+        (Just b) -> zoom lensMStoVS b >>= (\begV -> pure $ valueInt begV)
+  mbEndV <- case end of
+        Nothing -> pure Nothing
+        (Just e) -> zoom lensMStoVS e >>= (\endV -> pure $ valueInt endV)
+  -- Get the condition for the for-loop
+  let cond = case mbStepV of
+              -- If step is a litInt, do a one-sided check
+              (Just s) -> if s > 0 then v_i ?< endVal else v_i ?> endVal
+              Nothing -> case (mbBegV, mbEndV) of
+                -- If both bounds are litInt's, do a two-sided check
+                (Just b, Just e) -> if e >= b 
+                    then begVal ?<= v_i ?&& v_i ?< endVal
+                    else endVal ?< v_i ?&& v_i ?<= begVal
+                -- If bounds are not litInt's, do both two-sided checks
+                _ ->  begVal ?<= v_i ?&& v_i ?< endVal ?|| 
+                      endVal ?< v_i ?&& v_i ?<= begVal
+
   S.block [
     S.listDec 0 var_temp,
-    S.for (S.varDecDef var_i begin)
-      (v_i ?< end) (maybe (var_i &++) (var_i &+=) s)
+    setBeg, setEnd,
+    S.for (S.varDecDef var_i begVal) cond (maybe (var_i &++) (var_i &+=) step)
       (oneLiner $ S.valStmt $ S.listAppend v_temp (S.listAccess vold v_i)),
     vnew &= v_temp]
+
+-- Java, C#, C++, and Swift --
+-- | Gets the expression and code for setting bounds in a list slice
+-- If anyone wants to figure out the return type, be my guest
+-- makeSetterVal :: Label -> Maybe Integer -> SValue r -> Maybe (SValue r) -> SValue r -> SValue r -> something
+makeSetterVal _     _    _      (Just v) _  _  = (S.emptyStmt, v)
+makeSetterVal _     _   (Just s) _       lb rb = (S.emptyStmt, if s > 0 then lb else rb)
+makeSetterVal vName step _       _       lb rb = 
+  let theVar = S.var vName S.int
+      theSetter = S.varDecDef theVar $ S.inlineIf (step ?> S.litInt 0) lb rb
+  in (theSetter, S.valueOf theVar)
       
 stringListVals :: (RenderSym r) => [SVariable r] -> SValue r -> MSStatement r
 stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList 

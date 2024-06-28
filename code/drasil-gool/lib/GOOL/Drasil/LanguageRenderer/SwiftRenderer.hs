@@ -72,14 +72,13 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (classVar,
   listSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR,
   openFileW, self, multiAssign, multiReturn, listDec, funcDecDef,
   inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', bool, float,
-  stringRender', string', inherit, implements, intToIndex,
-  indexToInt)
+  stringRender', string', inherit, implements, intToIndex, indexToInt)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (notOp, andOp, orOp,
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs,
   listSize, varDecDef, extObjDecNew, switch, while)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement1,
   increment1, runStrategy, stringListVals, stringListLists, notifyObservers',
-  checkState)
+  checkState, makeSetterVal)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
@@ -988,8 +987,8 @@ swiftListSlice vn vo beg end step = do
   stepV <- zoom lensMStoVS step
 
   let mbStepV = valueInt stepV
-      (setBeg, begVal) = makeSetterVal "begIdx" mbStepV beg (litInt 0)    (listSize vo #- litInt 1)
-      (setEnd, endVal) = makeSetterVal "endIdx" mbStepV end (listSize vo) (litInt (-1))
+      (setBeg, begVal) = M.makeSetterVal "begIdx" step mbStepV beg (litInt 0)    (listSize vo #- litInt 1)
+      (setEnd, endVal) = M.makeSetterVal "endIdx" step mbStepV end (listSize vo) (litInt (-1))
       
       i = var "i" int
       setToSlice = vn &= swiftMapFunc (swiftStrideFunc begVal endVal step) (lambda [i] (listAccess vo (valueOf i)))
@@ -998,13 +997,6 @@ swiftListSlice vn vo beg end step = do
       setEnd,
       setToSlice
     ]
-  where
-    makeSetterVal _     _       (Just v) _  _  = (emptyStmt, v)
-    makeSetterVal _    (Just s) _        lb rb = (emptyStmt, if s > 0 then lb else rb)
-    makeSetterVal vName _       _        lb rb = 
-      let theVar = var vName int
-          theSetter = varDecDef theVar $ inlineIf (step ?> litInt 0) lb rb
-      in (theSetter, valueOf theVar)
 
 swiftPrint :: Bool -> Maybe (SValue SwiftCode) -> SValue SwiftCode ->
   SValue SwiftCode -> MSStatement SwiftCode

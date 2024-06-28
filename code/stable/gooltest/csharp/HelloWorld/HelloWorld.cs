@@ -87,37 +87,38 @@ public class HelloWorld {
         mySlicedList4 = temp2;
         
         List<double> temp3 = new List<double>(0);
-        for (int i1 = 3; i1 < 1; i1 += -1) {
+        for (int i1 = 3; i1 > 1; i1 += -1) {
             temp3.Add(myOtherList[i1]);
         }
         mySlicedList5 = temp3;
         
         List<double> temp4 = new List<double>(0);
-        for (int i2 = 0; i2 < 1; i2 += -1) {
+        for (int i2 = myOtherList.Count - 1; i2 > 1; i2 += -1) {
             temp4.Add(myOtherList[i2]);
         }
         mySlicedList6 = temp4;
         
         List<double> temp5 = new List<double>(0);
-        for (int i3 = 3; i3 < myOtherList.Count; i3 += -1) {
+        for (int i3 = 3; i3 > -1; i3 += -1) {
             temp5.Add(myOtherList[i3]);
         }
         mySlicedList7 = temp5;
         
         List<double> temp6 = new List<double>(0);
-        for (int i4 = 3; i4 < 0; i4 += z) {
+        for (int i4 = 3; 0 < i4 && i4 <= 3; i4 += z) {
             temp6.Add(myOtherList[i4]);
         }
         mySlicedList8 = temp6;
         
         List<double> temp7 = new List<double>(0);
-        for (int i5 = x; i5 < y; i5 += z) {
+        for (int i5 = x; x <= i5 && i5 < y || y < i5 && i5 <= x; i5 += z) {
             temp7.Add(myOtherList[i5]);
         }
         mySlicedList9 = temp7;
         
         List<double> temp8 = new List<double>(0);
-        for (int i6 = 2; i6 < myOtherList.Count; i6 += z) {
+        int endIdx = z > 0 ? myOtherList.Count : -1;
+        for (int i6 = 2; 2 <= i6 && i6 < endIdx || endIdx < i6 && i6 <= 2; i6 += z) {
             temp8.Add(myOtherList[i6]);
         }
         mySlicedList10 = temp8;

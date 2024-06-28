@@ -74,37 +74,38 @@ public class HelloWorld {
         mySlicedList4 = temp2;
         
         ArrayList<Double> temp3 = new ArrayList<Double>(0);
-        for (int i1 = 3; i1 < 1; i1 += -1) {
+        for (int i1 = 3; i1 > 1; i1 += -1) {
             temp3.add(myOtherList.get(i1));
         }
         mySlicedList5 = temp3;
         
         ArrayList<Double> temp4 = new ArrayList<Double>(0);
-        for (int i2 = 0; i2 < 1; i2 += -1) {
+        for (int i2 = myOtherList.size() - 1; i2 > 1; i2 += -1) {
             temp4.add(myOtherList.get(i2));
         }
         mySlicedList6 = temp4;
         
         ArrayList<Double> temp5 = new ArrayList<Double>(0);
-        for (int i3 = 3; i3 < myOtherList.size(); i3 += -1) {
+        for (int i3 = 3; i3 > -1; i3 += -1) {
             temp5.add(myOtherList.get(i3));
         }
         mySlicedList7 = temp5;
         
         ArrayList<Double> temp6 = new ArrayList<Double>(0);
-        for (int i4 = 3; i4 < 0; i4 += z) {
+        for (int i4 = 3; 0 < i4 && i4 <= 3; i4 += z) {
             temp6.add(myOtherList.get(i4));
         }
         mySlicedList8 = temp6;
         
         ArrayList<Double> temp7 = new ArrayList<Double>(0);
-        for (int i5 = x; i5 < y; i5 += z) {
+        for (int i5 = x; x <= i5 && i5 < y || y < i5 && i5 <= x; i5 += z) {
             temp7.add(myOtherList.get(i5));
         }
         mySlicedList9 = temp7;
         
         ArrayList<Double> temp8 = new ArrayList<Double>(0);
-        for (int i6 = 2; i6 < myOtherList.size(); i6 += z) {
+        int endIdx = z > 0 ? myOtherList.size() : -1;
+        for (int i6 = 2; 2 <= i6 && i6 < endIdx || endIdx < i6 && i6 <= 2; i6 += z) {
             temp8.add(myOtherList.get(i6));
         }
         mySlicedList10 = temp8;

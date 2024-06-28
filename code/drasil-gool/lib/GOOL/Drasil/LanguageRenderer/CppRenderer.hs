@@ -19,10 +19,10 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, InternalValueExp(..),
-  objMethodCall, FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..),
-  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..),
+  objMethodCall, FunctionSym(..), ($.), GetSet(..), List(..), 
+  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf,
   StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
   ParameterSym(..), MethodSym(..), pubMethod, StateVarSym(..), ClassSym(..),
@@ -71,7 +71,7 @@ import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, funcType, buildModule, litArray, 
   call', listSizeFunc, listAccessFunc', string, constDecDef, docInOutFunc, 
-  listSetFunc, extraClass)
+  listSetFunc, extraClass, intToIndex, indexToInt)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float, 
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse, 
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, 
@@ -416,6 +416,8 @@ instance (Pair p) => GetSet (p CppSrcCode CppHdrCode) where
   set = pair3 set set
 
 instance (Pair p) => List (p CppSrcCode CppHdrCode) where
+  intToIndex = pair1 intToIndex intToIndex
+  indexToInt = pair1 indexToInt indexToInt
   listSize = pair1 listSize listSize
   listAdd = pair3 listAdd listAdd
   listAppend = pair2 listAppend listAppend
@@ -436,9 +438,9 @@ instance (Pair p) => InternalGetSet (p CppSrcCode CppHdrCode) where
   setFunc = pair3 setFunc setFunc
 
 instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where  
-  listSizeFunc = on2StateValues pair listSizeFunc listSizeFunc
+  listSizeFunc = pair1 listSizeFunc listSizeFunc
   listAddFunc = pair3 listAddFunc listAddFunc
-  listAppendFunc = pair1 listAppendFunc listAppendFunc
+  listAppendFunc = pair2 listAppendFunc listAppendFunc
   listAccessFunc = pair2 listAccessFunc listAccessFunc
   listSetFunc = pair3 listSetFunc listSetFunc
 
@@ -1307,6 +1309,8 @@ instance GetSet CppSrcCode where
   set = G.set
 
 instance List CppSrcCode where
+  intToIndex = CP.intToIndex
+  indexToInt = CP.indexToInt
   listSize v = cast int (C.listSize v)
   listAdd = G.listAdd
   listAppend = G.listAppend 
@@ -1322,9 +1326,9 @@ instance InternalGetSet CppSrcCode where
   setFunc = G.setFunc
 
 instance InternalListFunc CppSrcCode where
-  listSizeFunc = CP.listSizeFunc
+  listSizeFunc _ = CP.listSizeFunc
   listAddFunc = cppListAddFunc
-  listAppendFunc = G.listAppendFunc cppListAppend
+  listAppendFunc _ = G.listAppendFunc cppListAppend
   listAccessFunc = CP.listAccessFunc' cppListAccess
   listSetFunc = CP.listSetFunc cppListSetDoc
 
@@ -1971,6 +1975,8 @@ instance GetSet CppHdrCode where
   set _ _ _ = mkStateVal void empty
 
 instance List CppHdrCode where
+  intToIndex _ = mkStateVal void empty
+  indexToInt _ = mkStateVal void empty
   listSize _ = mkStateVal void empty
   listAdd _ _ _ = mkStateVal void empty
   listAppend _ _ = mkStateVal void empty
@@ -1986,9 +1992,9 @@ instance InternalGetSet CppHdrCode where
   setFunc _ _ _ = funcFromData empty void
 
 instance InternalListFunc CppHdrCode where
-  listSizeFunc = funcFromData empty void
+  listSizeFunc _ = funcFromData empty void
   listAddFunc _ _ _ = funcFromData empty void
-  listAppendFunc _ = funcFromData empty void
+  listAppendFunc _ _ = funcFromData empty void
   listAccessFunc _ _ = funcFromData empty void
   listSetFunc _ _ _ = funcFromData empty void
 

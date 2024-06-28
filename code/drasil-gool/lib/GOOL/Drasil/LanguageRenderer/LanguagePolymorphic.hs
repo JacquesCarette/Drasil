@@ -36,7 +36,7 @@ import qualified GOOL.Drasil.ClassInterface as S (
   litDouble, litString), VariableValue(valueOf), FunctionSym(func),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
   IOStatement(print), ControlStatement(returnStmt, for), ParameterSym(param),
-  MethodSym(method))
+  MethodSym(method), List(intToIndex))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(commentedMod),  
   RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
   RenderFunction(funcFromData), FunctionElim(functionType), 
@@ -218,7 +218,7 @@ argsList :: (RenderSym r) => String -> SValue r
 argsList l = mkStateVal (S.arrayType S.string) (text l)
 
 -- | First parameter is separator between name and value for named arguments, 
--- rest similar to call from ClassInterface
+-- rest similar to call from RendererClasses
 call :: (RenderSym r) => Doc -> Maybe Library -> Maybe Doc -> MixedCall r
 call sep lib o n t pas nas = do
   pargs <- sequence pas
@@ -272,23 +272,24 @@ set :: (RenderSym r) => SValue r -> SVariable r -> SValue r -> SValue r
 set v vToSet toVal = v $. S.setFunc (onStateValue valueType v) vToSet toVal
 
 listAdd :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
-listAdd v i vToAdd = v $. S.listAddFunc v i vToAdd
+listAdd v i vToAdd = v $. S.listAddFunc v (S.intToIndex i) vToAdd
 
 listAppend :: (RenderSym r) => SValue r -> SValue r -> SValue r
-listAppend v vToApp = v $. S.listAppendFunc vToApp
+listAppend v vToApp = v $. S.listAppendFunc v vToApp
 
 listAccess :: (RenderSym r) => SValue r -> SValue r -> SValue r
 listAccess v i = do
   v' <- v
-  let checkType (List _) = S.listAccessFunc (S.listInnerType $ return $ 
-        valueType v') i
-      checkType (Array _) = i >>= (\ix -> funcFromData (brackets (RC.value ix)) 
+  let i' = S.intToIndex i
+      checkType (List _) = S.listAccessFunc (S.listInnerType $ return $ 
+        valueType v') i'
+      checkType (Array _) = i' >>= (\ix -> funcFromData (brackets (RC.value ix)) 
         (S.listInnerType $ return $ valueType v'))
       checkType _ = error "listAccess called on non-list-type value"
   v $. checkType (getType (valueType v'))
 
 listSet :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
-listSet v i toVal = v $. S.listSetFunc v i toVal
+listSet v i toVal = v $. S.listSetFunc v (S.intToIndex i) toVal
 
 getFunc :: (RenderSym r) => SVariable r -> VSFunction r
 getFunc v = v >>= (\vr -> S.func (getterName $ variableName vr) 

@@ -20,13 +20,14 @@ import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, ctorCall,
   genModuleWithImports, primaryClass)
 import Language.Drasil.Code.Imperative.Helpers (lookupC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
-import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
+  genICName)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, obv,
   quantvar, quantfunc, ccObjVar, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.Parameter (ParameterChunk(..), PassBy(..), pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Choices (Comments(..), ConstantRepr(..),
-  ConstantStructure(..), Structure(..))
+  ConstantStructure(..), Structure(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight),
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
@@ -117,7 +118,7 @@ inputVariable :: (OOProg r) => Structure -> ConstantRepr -> SVariable r ->
 inputVariable Unbundled _ v = return v
 inputVariable Bundled Var v = do
   g <- get
-  let inClsName = "InputParameters"
+  inClsName <- genICName InputParameters
   ip <- mkVar (quantvar inParams)
   return $ if currentClass g == inClsName then objVarSelf v else ip $-> v
 inputVariable Bundled Const v = do
@@ -291,12 +292,10 @@ convExpr (Lit (Perc a b)) = do
       getLiteral Float = litFloat . realToFrac
       getLiteral _ = error "convExpr: Rational space matched to invalid CodeType; should be Double or Float"
   return $ getLiteral sm (fromIntegral a / (10 ** fromIntegral b))
-convExpr (AssocA AddI l)  = foldl1 (#+)  <$> mapM convExpr l
-convExpr (AssocA AddRe l) = foldl1 (#+)  <$> mapM convExpr l
-convExpr (AssocA MulI l)  = foldl1 (#*)  <$> mapM convExpr l
-convExpr (AssocA MulRe l) = foldl1 (#*)  <$> mapM convExpr l
-convExpr (AssocB And l)   = foldl1 (?&&) <$> mapM convExpr l
-convExpr (AssocB Or l)    = foldl1 (?||) <$> mapM convExpr l
+convExpr (AssocA Add l) = foldl1 (#+)  <$> mapM convExpr l
+convExpr (AssocA Mul l) = foldl1 (#*)  <$> mapM convExpr l
+convExpr (AssocB And l) = foldl1 (?&&) <$> mapM convExpr l
+convExpr (AssocB Or l)  = foldl1 (?||) <$> mapM convExpr l
 convExpr (C c)   = do
   g <- get
   let v = quantvar (lookupC g c)

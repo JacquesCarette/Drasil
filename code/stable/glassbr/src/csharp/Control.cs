@@ -20,10 +20,7 @@ public class Control {
         outfile.Write(filename);
         outfile.WriteLine(" in module Control");
         outfile.Close();
-        InputParameters inParams = new InputParameters();
-        InputFormat.get_input(filename, inParams);
-        DerivedValues.derived_values(inParams);
-        InputConstraints.input_constraints(inParams);
+        InputParameters inParams = new InputParameters(filename);
         double J_tol = Calculations.func_J_tol(inParams);
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'J_tol' assigned ");

@@ -21,11 +21,11 @@
 ## Git Workflow
 ### Branches
 #### Creating a new branch
-One of the most common first tasks when starting new work is creating a new branch to house your work. Generally, you will always be branching off of the `master` branch. However, at times, others will be working on similar or related things which may have code conflicts with your soon-to-be work. As such, when you would like to start new work, you should first check if anyone is doing related and/or conflicting work. If there is existing work that heavily changes what you would be writing, you should discuss with the maintainers of that conflicting work and the project maintainers to decide if you should be branching off of `master` or off their branch.
+One of the most common first tasks when starting new work is creating a new branch to house your work. Generally, you will always be branching off of the `main` branch. However, at times, others will be working on similar or related things which may have code conflicts with your soon-to-be work. As such, when you would like to start new work, you should first check if anyone is doing related and/or conflicting work. If there is existing work that heavily changes what you would be writing, you should discuss with the maintainers of that conflicting work and the project maintainers to decide if you should be branching off of `main` or off their branch.
  
 When you've decided which branch to start writing your code on top of, the commands you will run are as follows:
 ```bash
-git checkout <master/yourPreferredBaseBranch>
+git checkout <main/yourPreferredBaseBranch>
 git pull
 git checkout -b <yourNewBranchName>
 ```
@@ -33,7 +33,7 @@ git checkout -b <yourNewBranchName>
 
 This ensures your new branch is created from an up-to-date base branch. Please see [`git2know`](https://github.com/JacquesCarette/Drasil/wiki/Git2Know-for-Drasil#starting-a-new-branch) for more details.
 - For changes that are unlikely to break anything, it's ok to have a "long-lived" branch (2-3 days) that accumulate commits. Once you're done, you then submit a pull request. To make sure your code will pass the Pull Request tests performed, you should run `make pr_ready` and resolve any errors (if any) locally first.
-- For changes that are likely to conflict, make small edits, update stable, commit, then [merge master](https://github.com/JacquesCarette/Drasil/wiki/Git2Know-for-Drasil#merge-conflicts) to your branch. Make sure to separate non-cohesive changes in different commits, in order to document what changed where. Constantly keep your branch up to date with master to minimize conflicts.
+- For changes that are likely to conflict, make small edits, update stable, commit, then [merge main](https://github.com/JacquesCarette/Drasil/wiki/Git2Know-for-Drasil#merge-conflicts) to your branch. Make sure to separate non-cohesive changes in different commits, in order to document what changed where. Constantly keep your branch up to date with main to minimize conflicts.
 
 #### Pruning branches
 `git remote prune origin` deletes the refs to the branches that don't exist on the remote; by adding the `--dry-run` flag, one can view all the branches that will be pruned before the action is completed.
@@ -45,8 +45,8 @@ Ensure you are on the branch you want to apply the commit to using `git checkout
 From your local machine, use `git reset --hard x` where `x` is the commit hash of the commit you want to restore your local repo to (i.e. everything after commit `x` will be removed).
 
 ### Pull Requests
-- Continuously keep your branch up to date with `master` to keep merge conflicts to a minimum, especially before starting a new branch. This can be done by using `git pull` on the `master` branch, or `git pull origin master` if you'd like to make sure your working branch is mergeable into master.
-- Wait until something is "complete" in a branch before making a [pull request](https://github.com/JacquesCarette/Drasil/wiki/Git2Know-for-Drasil#pull-requests) (PR). It's fine to have lots of work that is incomplete in a branch (even multiple branches), but PRs should be done when it is expected that they can be incorporated "right away" into master. Before making a PR, you should check `make pr_ready` to ensure that it will pass the automated tests necessary to get your code merged in right away.
+- Continuously keep your branch up to date with `main` to keep merge conflicts to a minimum, especially before starting a new branch. This can be done by using `git pull` on the `main` branch, or `git pull origin main` if you'd like to make sure your working branch is mergeable into main.
+- Wait until something is "complete" in a branch before making a [pull request](https://github.com/JacquesCarette/Drasil/wiki/Git2Know-for-Drasil#pull-requests) (PR). It's fine to have lots of work that is incomplete in a branch (even multiple branches), but PRs should be done when it is expected that they can be incorporated "right away" into main. Before making a PR, you should check `make pr_ready` to ensure that it will pass the automated tests necessary to get your code merged in right away.
 - If you would like to draft your code, please convert your PRs to Draft PRs before creating them so that maintainers know that the code is not yet ready for merging, and is pending more work/discussion.
 - Keep PRs as small as possible.
 - You should avoid submitting a pull request then keep adding commits to it. You should be doing that work locally instead, and submit a pull request when it is ready to be merged.
@@ -55,7 +55,7 @@ From your local machine, use `git reset --hard x` where `x` is the commit hash o
     - "Closes issue #ID" or "Closes #ID" → links issue to PR, and closes issue when PR is merged (required keywords: closes, #ID).
 - I am working on an issue that requires multiple pull requests to complete, some of which are dependent on others. I have created one branch that I intend to use for my multiple pull requests for the same issue.
     - This can be done; however, it is problematic, as outlined in [this comment](https://github.com/JacquesCarette/Drasil/pull/2157#issuecomment-637079762); instead, follow the advice given in the [same comment](https://github.com/JacquesCarette/Drasil/pull/2157#issuecomment-637079762). In summary, create a new branch for each PR to avoid confusion.
-- I am working on an issue that has resulted in a long-lived branch with many accumulated commits; now this branch is out-of-date with the master branch. How do I update my branch to be up-to-date with the master branch without losing my commits?
+- I am working on an issue that has resulted in a long-lived branch with many accumulated commits; now this branch is out-of-date with the main branch. How do I update my branch to be up-to-date with the main branch without losing my commits?
     1. First, ensure that you are on your out-of-date branch:
        - Change your working directory to `./Drasil/`. For info on how to do this, refer to the second step in the [Quick Start Guide](https://github.com/JacquesCarette/Drasil#quick-start).
        - Run the command `git branch` to check that you are on the correct branch (current branch should be highlighted).
@@ -65,23 +65,23 @@ From your local machine, use `git reset --hard x` where `x` is the commit hash o
        - If yes, run the following commands:
        	```
        git fetch
-       git merge master
+       git merge main
        ```
        - If no, run the following commands:
         ```
        git fetch
-       git rebase origin/master
+       git rebase origin/main
        ```
-    3. Running these commands should make your current branch up-to-date with the master branch.
+    3. Running these commands should make your current branch up-to-date with the main branch.
 - Please see this wiki article on [PRs](https://github.com/JacquesCarette/Drasil/wiki/Git2Know-for-Drasil#pull-requests) for more details.
 
 ### Merging Pull Requests
 - **(Who should do it)** Please allow one of the supervisors to do the actual merge.
-- **(Dependent changes)** If your work requires the changes made to a branch that has not yet been merged into `master` (i.e. when creating multiple pull requests that are dependent on one another), refer to [this comment](https://github.com/JacquesCarette/Drasil/pull/2157#issuecomment-637079762) and [this comment](https://github.com/JacquesCarette/Drasil/pull/2157#issuecomment-637108852) for further clarification regarding how it should be done.
+- **(Dependent changes)** If your work requires the changes made to a branch that has not yet been merged into `main` (i.e. when creating multiple pull requests that are dependent on one another), refer to [this comment](https://github.com/JacquesCarette/Drasil/pull/2157#issuecomment-637079762) and [this comment](https://github.com/JacquesCarette/Drasil/pull/2157#issuecomment-637108852) for further clarification regarding how it should be done.
 - **(Independent changes)** Independent changes should each get their own branch and pull request.
 
 ## Continuous Integration (CI) - GitHub Actions / Builds & Tests
-We use GitHub Actions as a means of testing PRs to ensure that changes do not break our stable `master` branch.
+We use GitHub Actions as a means of testing PRs to ensure that changes do not break our stable `main` branch.
 - When you create a PR, GitHub Actions will automatically create a build for your branch at time of PR creation, and will also create a build/test for each commit you created on your source branch after PR creation. It might result in a "build failure", but don't worry (!), you can grab the logs and see what went awry. To ensure your code won't fail the CI tests, you should run `make pr_ready` and resolve any automatically found errors before creating your pull request.
 - Alternatively, you may include `[workflow-trigger]` anywhere in a commit message to your source branch to have the GitHub Actions build & test script run on your source branch without having a PR around to automatically test it. 
 - If you would like to manually run or re-run a workflow script, please visit the ["Actions"](https://github.com/JacquesCarette/Drasil/actions) tab's workflow dispatch area.

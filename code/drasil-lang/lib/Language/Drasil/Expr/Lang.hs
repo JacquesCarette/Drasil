@@ -60,7 +60,7 @@ data NVVBinOp = Scale
 
 -- TODO: I suppose these can be merged to just Add and Mul?
 -- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
-data AssocArithOper = AddI | AddRe | MulI | MulRe
+data AssocArithOper = Add | Mul
   deriving Eq
 
 -- | Associative boolean operators (and, or).
@@ -210,16 +210,11 @@ instance LiteralC Expr where
   exactDbl = Lit . exactDbl
   perc l r = Lit $ perc l r
 
-assocArithOperToTy :: AssocArithOper -> Space
-assocArithOperToTy AddI  = S.Integer
-assocArithOperToTy MulI  = S.Integer
-assocArithOperToTy AddRe = S.Real
-assocArithOperToTy MulRe = S.Real
 
 -- helper function for typechecking to help reduce duplication
 vvvInfer :: TypingContext Space -> VVVBinOp -> Expr -> Expr -> Either Space TypeError
 vvvInfer ctx op l r = case (infer ctx l, infer ctx r) of
-    (Left lt@(S.Vect lsp), Left (S.Vect rsp)) -> 
+    (Left lt@(S.Vect lsp), Left (S.Vect rsp)) ->
       if lsp == rsp && S.isBasicNumSpace lsp then
         if op == VSub && (lsp == S.Natural || rsp == S.Natural) then
           Right $ "Vector subtraction expects both operands to be vectors of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
@@ -229,6 +224,7 @@ vvvInfer ctx op l r = case (infer ctx l, infer ctx r) of
     (_       , Right re) -> Right re
     (Right le, _       ) -> Right le
 
+
 instance Typed Expr Space where
   check :: TypingContext Space -> Expr -> Space -> Either Space TypeError
   check = typeCheckByInfer
@@ -236,10 +232,20 @@ instance Typed Expr Space where
   infer :: TypingContext Space -> Expr -> Either Space TypeError
   infer cxt (Lit lit) = infer cxt lit
 
-  infer cxt (AssocA op exs) = allOfType cxt exs sp sp
-      $ "Associative arithmetic operation expects all operands to be of the same expected type (" ++ show sp ++ ")."
-    where
-      sp = assocArithOperToTy op
+  infer cxt (AssocA _ (e:exs)) = 
+    case infer cxt e of
+      Left spaceValue | S.isBasicNumSpace spaceValue -> 
+          -- If the inferred type of e is a valid Space, call allOfType with spaceValue
+          allOfType cxt exs spaceValue spaceValue 
+              "Associative arithmetic operation expects all operands to be of the same expected type."
+      Left l ->
+          -- Handle the case when sp is a Left value but spaceValue is invalid
+          Right ("Expected all operands in addition/multiplication to be numeric, but found " ++ show l)
+      Right r ->
+          -- If sp is a Right value containing a TypeError
+          Right r
+  infer _ (AssocA Add _) = Right "Associative addition requires at least one operand."
+  infer _ (AssocA Mul _) = Right "Associative multiplication requires at least one operand."
 
   infer cxt (AssocB _ exs) = allOfType cxt exs S.Boolean S.Boolean
     $ "Associative boolean operation expects all operands to be of the same type (" ++ show S.Boolean ++ ")."
@@ -391,8 +397,8 @@ instance Typed Expr Space where
     (_, Right rx) -> Right rx
     (Right lx, _) -> Right lx
 
-  infer cxt (Operator aao (S.BoundedDD _ _ bot top) body) = 
-    let expTy = assocArithOperToTy aao in
+  infer cxt (Operator _ (S.BoundedDD _ _ bot top) body) =
+    let expTy = S.Integer in
     case (infer cxt bot, infer cxt top, infer cxt body) of
       (Left botTy, Left topTy, Left bodyTy) -> if botTy == S.Integer
         then if topTy == S.Integer
@@ -405,7 +411,7 @@ instance Typed Expr Space where
       (_         , Right x   , _          ) -> Right x
       (Right x   , _         , _          ) -> Right x
 
-  infer cxt (RealI uid ri) = 
+  infer cxt (RealI uid ri) =
     case (inferFromContext cxt uid, riTy ri) of
       (Left S.Real, Left riSp) -> if riSp == S.Real
         then Left S.Boolean

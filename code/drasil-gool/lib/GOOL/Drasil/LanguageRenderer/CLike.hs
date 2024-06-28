@@ -121,7 +121,7 @@ libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >>
 -- Functions --
 
 listSize :: (RenderSym r) => SValue r -> SValue r
-listSize v = v $. S.listSizeFunc
+listSize v = v $. S.listSizeFunc v
 
 -- Statements --
 

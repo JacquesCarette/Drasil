@@ -19,12 +19,12 @@ endif
 
 build: GlassBR$(TARGET_EXTENSION)
 
-GlassBR$(TARGET_EXTENSION): main.swift InputParameters.swift InputFormat.swift DerivedValues.swift InputConstraints.swift Calculations.swift OutputFormat.swift ReadTable.swift Interpolation.swift
-	swiftc main.swift InputParameters.swift InputFormat.swift DerivedValues.swift InputConstraints.swift Calculations.swift OutputFormat.swift ReadTable.swift Interpolation.swift -o GlassBR$(TARGET_EXTENSION)
+GlassBR$(TARGET_EXTENSION): main.swift InputParameters.swift Calculations.swift OutputFormat.swift ReadTable.swift Interpolation.swift
+	swiftc main.swift InputParameters.swift Calculations.swift OutputFormat.swift ReadTable.swift Interpolation.swift -o GlassBR$(TARGET_EXTENSION)
 
 run: build
 	./GlassBR$(TARGET_EXTENSION) $(RUNARGS)
 
-doc: main.swift InputParameters.swift InputFormat.swift DerivedValues.swift InputConstraints.swift Calculations.swift OutputFormat.swift ReadTable.swift Interpolation.swift
+doc: main.swift InputParameters.swift Calculations.swift OutputFormat.swift ReadTable.swift Interpolation.swift
 
 .PHONY: build run doc

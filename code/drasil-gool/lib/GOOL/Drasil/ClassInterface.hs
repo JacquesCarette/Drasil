@@ -300,21 +300,29 @@ exists :: (ValueExpression r) => SValue r -> SValue r
 exists = notNull
 
 class (FunctionSym r) => InternalValueExp r where
+  -- | Generic function for calling an object method.
+  --   Takes the function name, the return type, the object, a list of 
+  --   positional arguments, and a list of named arguments.
   objMethodCallMixedArgs' :: Label -> VSType r -> SValue r -> [SValue r] -> 
     NamedArgs r -> SValue r
 
+-- | Calling an object method. t is the return type of the method, o is the
+--   object, f is the method name, and ps is a list of positional arguments.
 objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label -> 
   [SValue r] -> SValue r
 objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
 
+-- | Calling a method with named arguments.
 objMethodCallNamedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
   -> NamedArgs r -> SValue r
 objMethodCallNamedArgs t o f = objMethodCallMixedArgs' f t o []
 
+-- | Calling a method with a mix of positional and named arguments.
 objMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
   -> [SValue r] -> NamedArgs r -> SValue r
 objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
 
+-- | Calling a method with no parameters.
 objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r -> Label 
   -> SValue r
 objMethodCallNoParams t o f = objMethodCall t o f []
@@ -338,18 +346,38 @@ class (ValueSym r, VariableSym r) => GetSet r where
   set :: SValue r -> SVariable r -> SValue r -> SValue r
 
 class (ValueSym r) => List r where
+  -- | Does any necessary conversions from GOOL's zero-indexed assumptions to
+  --   the target language's assumptions
+  intToIndex :: SValue r -> SValue r
+  -- | Does any necessary conversions from the target language's indexing
+  --   assumptions assumptions to GOOL's zero-indexed assumptions
+  indexToInt :: SValue r -> SValue r
+  -- | Finds the size of a list.
+  --   Arguments are: List
   listSize   :: SValue r -> SValue r
+  -- | Inserts a value into a list.
+  --   Arguments are: List, Index, Value
   listAdd    :: SValue r -> SValue r -> SValue r -> SValue r
+  -- | Appens a value to a list.
+  --   Arguments are: List, Value
   listAppend :: SValue r -> SValue r -> SValue r
+  -- | Gets the value of an index of a list.
+  --   Arguments are: List, Index
   listAccess :: SValue r -> SValue r -> SValue r
+  -- | Sets the value of an index of a list.
+  --   Arguments are: List, Index, Value
   listSet    :: SValue r -> SValue r -> SValue r -> SValue r
-  
+  -- | Finds the index of the first occurrence of a value in a list.
+  --   Arguments are: List, Value
   indexOf :: SValue r -> SValue r -> SValue r
 
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) 
     -> SVariable r -> SValue r -> MSBlock r
-  
+
+-- | Creates a slice of a list and assigns it to a variable.
+--   Arguments are: Variable to assign, list to read from,
+--   [Start index], [End index], [Step]
 listSlice :: (InternalList r) => SVariable r -> SValue r -> Maybe (SValue r) -> 
   Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listSlice vnew vold b e s = listSlice' b e s vnew vold

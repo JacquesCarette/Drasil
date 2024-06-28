@@ -11,10 +11,10 @@ import Utils.Drasil (stringList)
 
 import Language.Drasil
 import Language.Drasil.Chunk.CodeBase
-import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  inMod)
-import Language.Drasil.Choices (ImplementationType(..), InputModule(..),
-  Structure(..))
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
+  genICName)
+import Language.Drasil.Choices (ImplementationType(..), Structure(..), 
+  InternalConcept(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Mod (Description)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
@@ -45,21 +45,18 @@ unmodularDesc = do
 -- | Returns description of what is contained in the Input Parameters module.
 -- If user chooses the 'Bundled' input parameter, this module will include the structure for holding the
 -- input values. Does not include the structure if they choose 'Unbundled'.
--- If the user chooses the 'Combined' input parameter, this module includes the input-related functions.
--- Does not inlcude those functions if they choose 'Separated'.
+-- This module includes the input-related functions.
 inputParametersDesc :: GenState [Description]
 inputParametersDesc = do
   g <- get
   ifDesc <- inputFormatDesc
   dvDesc <- derivedValuesDesc
   icDesc <- inputConstraintsDesc
-  let im = inMod g
-      st = inStruct g
-      ipDesc Separated = inDesc st
-      ipDesc Combined = inDesc st ++ [ifDesc, dvDesc, icDesc]
+  let st = inStruct g
+      ipDesc = inDesc st ++ [ifDesc, dvDesc, icDesc]
       inDesc Bundled = ["the structure for holding input values"]
       inDesc Unbundled = [""]
-  return $ ipDesc im
+  return ipDesc
 
 -- | Returns a description of the input constructor, checking whether each
 -- possible method that may be called by the constructor is defined, and
@@ -68,54 +65,60 @@ inputConstructorDesc :: GenState Description
 inputConstructorDesc = do
   g <- get
   pAndS <- physAndSfwrCons
+  giName <- genICName GetInput
+  dvName <- genICName DerivedValuesFn
+  icName <- genICName InputConstraintsFn
   let ifDesc False = ""
       ifDesc True = "reading inputs"
       idDesc False = ""
       idDesc True = "calculating derived values"
       icDesc False = ""
       icDesc True = "checking " ++ pAndS ++ " on the input"
-      dl = defList g
+      ds = defSet g
   return $ "Initializes input object by " ++ stringList [
-    ifDesc ("get_input" `elem` dl),
-    idDesc ("derived_values" `elem` dl),
-    icDesc ("input_constraints" `elem` dl)]
+    ifDesc (giName `elem` ds),
+    idDesc (dvName `elem` ds),
+    icDesc (icName `elem` ds)]
 
 -- | Returns a description of what is contained in the Input Format module,
 -- if it exists.
 inputFormatDesc :: GenState Description
 inputFormatDesc = do
   g <- get
+  giName <- genICName GetInput
   let ifDesc False = ""
       ifDesc _ = "the function for reading inputs"
-  return $ ifDesc $ "get_input" `elem` defList g
+  return $ ifDesc $ giName `elem` defSet g
 
 -- | Returns a description of what is contained in the Derived Values module,
 -- if it exists.
 derivedValuesDesc :: GenState Description
 derivedValuesDesc = do
   g <- get
+  dvName <- genICName DerivedValuesFn
   let dvDesc False = ""
       dvDesc _ = "the function for calculating derived values"
-  return $ dvDesc $ "derived_values" `elem` defList g
+  return $ dvDesc $ dvName `elem` defSet g
 
--- | Returns a description of what is contained in the Input Constraints module,
--- if it exists.
+-- | Returns a description of what is contained in the Input Constraints
+-- module, if it exists.
 inputConstraintsDesc :: GenState Description
 inputConstraintsDesc = do
   g <- get
+  icName <- genICName InputConstraintsFn
   pAndS <- physAndSfwrCons
   let icDesc False = ""
       icDesc _ = "the function for checking the " ++ pAndS ++
         " on the input"
-  return $ icDesc $ "input_constraints" `elem` defList g
+  return $ icDesc $ icName `elem` defSet g
 
 -- | Returns a description of what is contained in the Constants module,
 -- if it exists.
 constModDesc :: GenState Description
 constModDesc = do
   g <- get
-  let cname = "Constants"
-      cDesc [] = ""
+  cname <- genICName Constants
+  let cDesc [] = ""
       cDesc _ = "the structure for holding constant values"
   return $ cDesc $ filter (flip member (Map.filter (cname ==)
     (clsMap g)) . codeName) (constants $ codeSpec g)
@@ -125,9 +128,10 @@ constModDesc = do
 outputFormatDesc :: GenState Description
 outputFormatDesc = do
   g <- get
+  woName <- genICName WriteOutput
   let ofDesc False = ""
       ofDesc _ = "the function for writing outputs"
-  return $ ofDesc $ "write_output" `elem` defList g
+  return $ ofDesc $ woName `elem` defSet g
 
 -- | Returns a description for the generated function that stores inputs,
 -- if it exists. Checks whether explicit inputs, derived inputs, and constants
@@ -136,8 +140,8 @@ outputFormatDesc = do
 inputClassDesc :: GenState Description
 inputClassDesc = do
   g <- get
-  let cname = "InputParameters"
-      ipMap = Map.filter (cname ==) (clsMap g)
+  cname <- genICName InputParameters
+  let ipMap = Map.filter (cname ==) (clsMap g)
       inIPMap = filter ((`member` ipMap) . codeName)
       inClassD True = ""
       inClassD _ = "Structure for holding the " ++ stringList [
@@ -158,40 +162,43 @@ inputClassDesc = do
 constClassDesc :: GenState Description
 constClassDesc = do
   g <- get
-  let cname = "Constants"
-      ccDesc [] = ""
+  cname <- genICName Constants
+  let ccDesc [] = ""
       ccDesc _ = "Structure for holding the constant values"
   return $ ccDesc $ filter (flip member (Map.filter (cname ==)
     (clsMap g)) . codeName) (constants $ codeSpec g)
 
--- | Returns a description for the generated function that reads input from a file,
--- if it exists.
+-- | Returns a description for the generated function that reads input from a
+-- file, if it exists.
 inFmtFuncDesc :: GenState Description
 inFmtFuncDesc = do
   g <- get
+  giName <- genICName GetInput
   let ifDesc False = ""
       ifDesc _ = "Reads input from a file with the given file name"
-  return $ ifDesc $ "get_input" `elem` defList g
+  return $ ifDesc $ giName `elem` defSet g
 
--- | Returns a description for the generated function that checks input constraints,
--- if it exists.
+-- | Returns a description for the generated function that checks input
+-- constraints, if it exists.
 inConsFuncDesc :: GenState Description
 inConsFuncDesc = do
   g <- get
+  icName <- genICName InputConstraintsFn
   pAndS <- physAndSfwrCons
   let icDesc False = ""
       icDesc _ = "Verifies that input values satisfy the " ++ pAndS
-  return $ icDesc $ "input_constraints" `elem` defList g
+  return $ icDesc $ icName `elem` defSet g
 
--- | Returns a description for the generated function that calculates derived inputs,
--- if it exists.
+-- | Returns a description for the generated function that calculates derived
+-- inputs, if it exists.
 dvFuncDesc :: GenState Description
 dvFuncDesc = do
   g <- get
+  dvName <- genICName DerivedValuesFn
   let dvDesc False = ""
-      dvDesc _ = "Calculates values that can be immediately derived from the" ++
-        " inputs"
-  return $ dvDesc $ "derived_values" `elem` defList g
+      dvDesc _ = "Calculates values that can be immediately derived from the"
+        ++ " inputs"
+  return $ dvDesc $ dvName `elem` defSet g
 
 -- | Description of the generated Calculations module.
 calcModDesc :: Description
@@ -201,9 +208,10 @@ calcModDesc = "Provides functions for calculating the outputs"
 woFuncDesc :: GenState Description
 woFuncDesc = do
   g <- get
+  woName <- genICName WriteOutput
   let woDesc False = ""
       woDesc _ = "Writes the output values to output.txt"
-  return $ woDesc $ "write_output" `elem` defList g
+  return $ woDesc $ woName `elem` defSet g
 
 -- | Returns the phrase "physical constraints" if there are any physical
 -- constraints on the input and "software constraints" if there are any

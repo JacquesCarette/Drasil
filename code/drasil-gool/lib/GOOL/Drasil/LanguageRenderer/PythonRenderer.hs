@@ -17,8 +17,8 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj,
   InternalValueExp(..), objMethodCall, FunctionSym(..), GetSet(..), List(..),
-  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..), 
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..), 
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..),
@@ -68,7 +68,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   funcType, buildModule, bindingError, notNull, listDecDef, destructorError, 
   stateVarDef, constVar, litArray, listSetFunc, extraClass, listAccessFunc, 
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
-  mainBody, inOutFunc, docInOutFunc')
+  mainBody, inOutFunc, docInOutFunc', listSize, intToIndex, indexToInt)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
   notifyObservers', checkState)
@@ -407,8 +407,9 @@ instance GetSet PythonCode where
   set = G.set
 
 instance List PythonCode where
-  listSize = on2StateWrapped(\f v-> mkVal (functionType f) 
-    (pyListSize (RC.value v) (RC.function f))) listSizeFunc
+  intToIndex = CP.intToIndex
+  indexToInt = CP.indexToInt
+  listSize = CP.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend
   listAccess = G.listAccess
@@ -424,9 +425,11 @@ instance InternalGetSet PythonCode where
   setFunc = G.setFunc
 
 instance InternalListFunc PythonCode where
-  listSizeFunc = funcFromData pyListSizeFunc int
+  listSizeFunc l = do
+    f <- funcApp pyListSize int [l]
+    funcFromData (RC.value f) int
   listAddFunc _ = CP.listAddFunc pyInsert
-  listAppendFunc = G.listAppendFunc pyAppendFunc
+  listAppendFunc _ = G.listAppendFunc pyAppendFunc
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
 
@@ -775,13 +778,13 @@ pyPi = text $ pyMath `access` piLabel
 pySys :: String
 pySys = "sys"
 
-pyInputFunc, pyPrintFunc, pyListSizeFunc :: Doc
+pyInputFunc, pyPrintFunc :: Doc
 pyInputFunc = text "input()" -- raw_input() for < Python 3.0
 pyPrintFunc = text printLabel
-pyListSizeFunc = text "len"
 
-pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyOpen, pyClose, 
+pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyOpen, pyClose, 
   pyRead, pyWrite, pyAppend, pySplit, pyRange, pyRstrip, pyMath :: String
+pyListSize = "len"
 pyIndex = "index"
 pyInsert = "insert"
 pyAppendFunc = "append"
@@ -895,9 +898,6 @@ pyInlineIf c' v1' v2' = do
 
 pyLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 pyLambda ps ex = pyLambdaDec <+> variableList ps <> colon <+> RC.value ex
-
-pyListSize :: Doc -> Doc -> Doc
-pyListSize v f = f <> parens v
 
 pyStringType :: (RenderSym r) => VSType r
 pyStringType = typeFromData String pyString (text pyString)

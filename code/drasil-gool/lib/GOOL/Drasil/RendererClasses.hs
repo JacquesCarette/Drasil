@@ -172,9 +172,9 @@ class InternalGetSet r where
   setFunc :: VSType r -> SVariable r -> SValue r -> VSFunction r
 
 class InternalListFunc r where
-  listSizeFunc   :: VSFunction r
+  listSizeFunc   :: SValue r -> VSFunction r
   listAddFunc    :: SValue r -> SValue r -> SValue r -> VSFunction r
-  listAppendFunc :: SValue r -> VSFunction r
+  listAppendFunc :: SValue r -> SValue r -> VSFunction r
   listAccessFunc :: VSType r -> SValue r -> VSFunction r
   listSetFunc    :: SValue r -> SValue r -> SValue r -> VSFunction r
 

@@ -24,10 +24,11 @@
   * [Quantifying Productivity and Ease of Use](Quantifying-Productivity-and-Ease-of-Use)
 * Design
   * [Attributes and Chunks](Attributes-and-Chunks)
-    * [June 7th, 2023 Meeting Notes](Attributes-and-Chunks%3a-Meeting-June-7th,-2023)
+    * [June 7th, 2023 Meeting Notes](Attributes-and-Chunks,-Meeting-June-7th,-2023)
     * [Investigation of Abbreviation Functions](Investigation-of-Abbreviation-Functions)
   * [Attributes of Datatypes](Attributes-of-Data-Types)
   * [Code Generation](Code-Generation)
+  * [Converting GOOL Classes into Struct Libraries for Procedural Languages](Converting-GOOL-Classes-into-Struct-Libraries-for-Procedural-Languages)
   * [Design Choices](Design-Choices)
   * [Explicitly Grouped Expressions](Explicit-Grouping-of-Expressions)
   * [General Definitions](General-Definitions)
@@ -61,6 +62,7 @@
   * [Forking Drasil & Deploying to your GitHub Pages](Forking-Drasil-&-Deploying-to-your-GitHub-Pages)
   * [Getting Started with Org Mode](Getting-Started-with-Org-Mode)
   * [Promoting Drasil](Promoting-Drasil)
+  * [Benefits of Drasil](Benefits-of-Drasil)
 * WIP Projects
   * [Jason: Typed Exprs](Typed-Exprs)
   * [Sam: Chunk Investigation](Chunk-Investigation)

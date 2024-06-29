@@ -106,7 +106,7 @@ standOffDist = uq (constrained' (uc sD (variable "SD") Real metre)
 
 nomThick = cuc "nomThick" 
   (nounPhraseSent $ S "nominal thickness" +:+ displayDblConstrntsAsSet 
-    nomThick nominalThicknesses)
+    (mkQuant "nomThick" (nounPhraseSent $ S "nominal thickness") lT Rational Nothing Nothing) nominalThicknesses)
   lT millimetre {-Discrete nominalThicknesses, but not implemented-} Rational 
   [{- TODO: add back constraint: enumc nominalThicknesses -}] $ exactDbl 8
 

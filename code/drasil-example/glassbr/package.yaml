@@ -26,6 +26,9 @@ dependencies:
 - drasil-theory
 - drasil-utils
 
+default-extensions:
+- StrictData
+
 library:
   source-dirs: lib
   when:

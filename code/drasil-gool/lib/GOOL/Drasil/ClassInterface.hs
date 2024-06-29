@@ -257,6 +257,8 @@ type PosCtorCall r = VSType r -> [SValue r] -> SValue r
 
 -- for values that can include expressions
 class (VariableSym r, ValueSym r) => ValueExpression r where
+  -- An inline if-statement, aka the ternary operator.  Inputs:
+  -- Condition, True-value, False-value
   inlineIf     :: SValue r -> SValue r -> SValue r -> SValue r
   
   funcAppMixedArgs     ::            MixedCall r
@@ -376,8 +378,14 @@ class (ValueSym r) => InternalList r where
     -> SVariable r -> SValue r -> MSBlock r
 
 -- | Creates a slice of a list and assigns it to a variable.
---   Arguments are: Variable to assign, list to read from,
---   [Start index], [End index], [Step]
+--   Arguments are: 
+--   Variable to assign
+--   List to read from
+--   [Start index] inclusive.
+--      (if Nothing, then list start if step > 0, list end if step < 0)
+--   [End index] exclusive.
+--      (if Nothing, then list end if step > 0, list start if step > 0)
+--   [Step] (if Nothing, then defaults to 1)
 listSlice :: (InternalList r) => SVariable r -> SValue r -> Maybe (SValue r) -> 
   Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listSlice vnew vold b e s = listSlice' b e s vnew vold
@@ -513,6 +521,9 @@ class (BodySym r, VariableSym r) => ControlStatement r where
 
   throw :: Label -> MSStatement r
 
+  -- | String of if-else statements.
+  --   Arguments: List of predicates and bodies (if this then that),
+  --   Body for else branch
   ifCond     :: [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
   switch     :: SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 

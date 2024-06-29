@@ -106,7 +106,7 @@ inlineIf c' v1' v2' = do
   c <- c'
   v1 <- v1'
   v2 <- v2' 
-  valFromData (prec c) (toState $ valueType v1) 
+  valFromData (prec c) Nothing (toState $ valueType v1) 
     (RC.value c <+> text "?" <+> RC.value v1 <+> text ":" <+> RC.value v2) 
   where prec cd = valuePrec cd <|> Just 0
 

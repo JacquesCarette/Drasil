@@ -29,7 +29,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
-  RenderValue(..), ValueElim(valuePrec),  InternalGetSet(..), 
+  RenderValue(..), ValueElim(valuePrec, valueInt),  InternalGetSet(..), 
   InternalListFunc(..), RenderFunction(..), FunctionElim(functionType), 
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), 
   RenderStatement(..), StatementElim(statementTerm), RenderScope(..), 
@@ -404,12 +404,13 @@ instance RenderValue JavaCode where
 
   call = CP.call' jName
   
-  valFromData p t' d = do 
+  valFromData p i t' d = do 
     t <- t'
-    toState $ on2CodeValues (vd p) t (toCode d)
+    toState $ on2CodeValues (vd p i) t (toCode d)
 
 instance ValueElim JavaCode where
   valuePrec = valPrec . unJC
+  valueInt = valInt . unJC
   value = val . unJC
 
 instance InternalValueExp JavaCode where

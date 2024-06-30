@@ -1,0 +1,4 @@
+# Characteristics of Intended Reader {#Sec:ReaderChars}
+
+Reviewers of this documentation should have an understanding of second year calculus, structural mechanics, glass breakage, blast risk, computer applications in civil engineering, and applicable standards for constructions using glass from [astm2009](./SecReferences.md#astm2009), [astm2012](./SecReferences.md#astm2012), and [astm2016](./SecReferences.md#astm2016) in [references](./SecReferences.md#Sec:References). The users of GlassBR can have a lower level of expertise, as explained in [Sec:User Characteristics](./SecUserChars.md#Sec:UserChars).
+

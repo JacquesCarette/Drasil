@@ -1,6 +1,8 @@
 -- | Defines functions to transform Drasil-based documents into a printable version.
 module Language.Drasil.Printing.Import.Document where
 
+import Data.Map (fromList)
+
 import Language.Drasil hiding (neg, sec, symbol, isIn, codeExpr)
 import Language.Drasil.Development (showUID)
 
@@ -26,7 +28,52 @@ makeDocument sm (Document titleLb authorName _ sections) =
 makeDocument sm (Notebook titleLb authorName sections) =
   T.Document (spec sm titleLb) (spec sm authorName) (createLayout' sm sections)
 
+-- | Translates from 'Document' to a printable representation of 'T.Project'.
+makeProject :: PrintingInformation -> Document -> T.Project
+makeProject _ Notebook {} = error "Unsupported format: Notebook"
+makeProject sm (Document titleLb authorName _ sections) =
+  T.Project (spec sm titleLb) (spec sm authorName) refMap files
+  where
+    files   = createFiles sm sections
+    refMap = fromList $ concatMap createRefMap' files
+
 -- * Helpers
+
+-- | Helper function for creating sections as Files.
+createFiles :: PrintingInformation -> [Section] -> [T.File]
+createFiles sm secs = map (file sm) secs'
+  where
+    secs' = concatMap (extractSubS 0) secs
+
+-- | Helper function for creating a RefMap for a Document.
+createRefMap' :: T.File -> [(String, T.Filename)]
+createRefMap' (T.File _ l _ c) = concatMap (createRefMap l) c
+
+-- | Helper function for creating a RefMap for a LayoutObj
+createRefMap :: T.Filename -> T.LayoutObj -> [(String, T.Filename)]
+createRefMap fn (T.Header _ _ l)     = createRef fn l
+createRefMap fn (T.HDiv   _ _ l)     = createRef fn l
+createRefMap fn (T.Table  _ _ l _ _) = createRef fn l
+createRefMap fn (T.Definition _ _ l) = createRef fn l
+createRefMap fn (T.List t)           = pass t
+  where
+    pass (P.Ordered ls)     = process  ls
+    pass (P.Unordered ls)   = process  ls
+    pass (P.Simple ls)      = process' ls
+    pass (P.Desc ls)        = process' ls
+    pass (P.Definitions ls) = process' ls
+    process  = concatMap (\(_, l)    -> maybe [] (createRef fn) l)
+    process' = concatMap (\(_, _, l) -> maybe [] (createRef fn) l)
+createRefMap fn (T.Figure l _ _ _)   = createRef fn l
+createRefMap fn (T.Bib ls)           = map bibRefs ls
+  where 
+    bibRefs (P.Cite l _ _) = (l, fn)
+createRefMap _ _                     = []
+
+-- | Helper function for mapping a Label to a Filename
+createRef :: T.Filename -> P.Label -> [(String, T.Filename)]
+createRef fn (P.S l) = [(l, fn)]
+createRef _   _      = []
 
 -- | Helper function for creating sections as layout objects.
 createLayout :: PrintingInformation -> [Section] -> [T.LayoutObj]
@@ -34,6 +81,28 @@ createLayout sm = map (sec sm 0)
 
 createLayout' :: PrintingInformation -> [Section] -> [T.LayoutObj]
 createLayout' sm = map (cel sm 0)
+
+-- | Helper for extracting subsections into their own sections.
+extractSubS :: Int -> Section -> [(T.Depth, Section)]
+extractSubS d x@(Section tl c r)
+  | d > 1 = [(d, x)]
+  | otherwise = (d, Section tl (filter isCon c) r) : 
+      concatMap (sepSub (d + 1)) c
+  where 
+    isCon (Con _)        = True
+    isCon  _             = False
+    sepSub _   (Con _)   = []
+    sepSub dep (Sub s) = extractSubS dep s
+
+-- | Helper for converting a Section to a File
+file :: PrintingInformation -> (T.Depth, Section) -> T.File
+file sm (d, x@(Section titleLb contents _)) = 
+  T.File (spec sm titleLb) fn d los
+  where
+    refr = refAdd x
+    fn = filter (/= ':') refr
+    los = T.Header d (spec sm titleLb) (P.S refr) :
+      map (layout sm d) contents
 
 -- | Helper function for creating sections at the appropriate depth.
 sec :: PrintingInformation -> Int -> Section -> T.LayoutObj

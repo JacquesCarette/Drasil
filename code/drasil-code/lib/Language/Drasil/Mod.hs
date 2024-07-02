@@ -47,6 +47,7 @@ data Class = ClassDef {
   implements :: Maybe Name,
   classDesc :: Description,
   stateVars :: [StateVariable],
+  constructors :: [Func],
   methods :: [Func]}
 
 -- | State variables hold attach a 'ScopeTag' to a 'CodeVarChunk'.
@@ -62,15 +63,15 @@ pubStateVar = SV Pub
 privStateVar :: CodeVarChunk -> StateVariable
 privStateVar = SV Priv
 
--- | Define a class with the given 'Name', 'Description', state variables, and
--- methods.
-classDef :: Name -> Description -> [StateVariable] -> [Func] -> Class
+-- | Define a class with the given 'Name', 'Description', state variables, 
+-- constructors, and methods.
+classDef :: Name -> Description -> [StateVariable] -> [Func] -> [Func] -> Class
 classDef n = ClassDef n Nothing
 
--- | Define a class that implements an interface. 1st 'Name' is class name, 2nd is
--- interface name.
+-- | Define a class that implements an interface. 1st 'Name' is class name, 2nd
+-- is interface name.  First 'Func' is constructors, second is methods.
 classImplements :: Name -> Name -> Description -> [StateVariable] -> [Func] ->
-  Class
+  [Func] -> Class
 classImplements n i = ClassDef n (Just i)
 
 -- | Holds a function definition or function data.

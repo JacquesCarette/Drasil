@@ -249,8 +249,11 @@ class StateVarElim r where
 type ParentSpec = Doc
 
 class (BlockCommentSym r) => RenderClass r where
+  -- | Converts a class to an SClass (Doc with State in all renderers)
+  --   Parameters: name, scope (public/private), parent (inherit/implement),
+  --   variables, constructor(s), methods
   intClass :: Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] 
-    -> [SMethod r] -> SClass r
+    -> [SMethod r] -> [SMethod r] -> SClass r
     
   inherit :: Maybe Label -> r ParentSpec
   implements :: [Label] -> r ParentSpec

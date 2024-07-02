@@ -211,11 +211,18 @@ genArguments _ _ = error argumentMismatch
 genClassInfo :: CodeVarChunk -> CodeFuncChunk -> Name -> Description ->
   [StateVariable] -> ClassInfo -> ClassInfoFill ->
   State ExtLibState (Class, [String])
-genClassInfo o c n desc svs ci cif = let (mis, mifs, f) = genCI ci cif in
-  if length mis /= length mifs then error methodInfoNumberMismatch else do
-    ms <- zipWithM (genMethodInfo o c) mis mifs
-    modify (if any isConstructor mis then id else addDef (new c []) o)
-    return (f desc svs (map fst ms), concatMap snd ms)
+genClassInfo o c n desc svs ci cif = let 
+  (mis, mifs, f) = genCI ci cif 
+  zMs = zip mis mifs
+  (zCtrs, zMths) = partition (\(mi, _) -> isConstructor mi) zMs
+  (ctrIs, ctrIFs) = unzip zCtrs
+  (mthIs, mthIFs) = unzip zMths 
+  in
+    if length mis /= length mifs then error methodInfoNumberMismatch else do
+      cs <- zipWithM (genMethodInfo o c) ctrIs ctrIFs
+      ms <- zipWithM (genMethodInfo o c) mthIs mthIFs
+      modify (if any isConstructor mis then id else addDef (new c []) o)
+      return (f desc svs (map fst cs) (map fst ms), concatMap snd ms)
   where genCI (Regular mis') (RegularF mifs') = (mis', mifs', classDef n)
         genCI (Implements intn mis') (ImplementsF mifs') = (mis', mifs',
           classImplements n intn)

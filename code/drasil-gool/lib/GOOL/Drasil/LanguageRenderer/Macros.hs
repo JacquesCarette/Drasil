@@ -114,8 +114,7 @@ listSlice beg end step vnew vold = do
 --   - SValue: value of bound if bound not given and step is positive
 --   - SValue: value of bound if bound not given and step is negative
 --   Output: (MSStatement, SValue): (setter, value) of bound
--- If anyone wants to figure out the return type, be my guest
--- makeSetterVal :: Label -> SValue r -> Maybe Integer -> Maybe (SValue r) -> SValue r -> SValue r -> something
+makeSetterVal :: RenderSym r => Label -> SValue r -> Maybe Integer -> Maybe (SValue r) -> SValue r -> SValue r -> (MSStatement r, SValue r)
 makeSetterVal _     _    _      (Just v) _  _  = (S.emptyStmt, v)
 makeSetterVal _     _   (Just s) _       lb rb = (S.emptyStmt, if s > 0 then lb else rb)
 makeSetterVal vName step _       _       lb rb = 

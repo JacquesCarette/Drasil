@@ -71,6 +71,7 @@ int main(int argc, const char *argv[]) {
     vector<double> mySlicedList8(3);
     vector<double> mySlicedList9(2);
     vector<double> mySlicedList10(3);
+    vector<double> mySlicedList11(0);
     
     // Create some variables for later tests
     int x = 3;
@@ -137,6 +138,12 @@ int main(int argc, const char *argv[]) {
         temp8.push_back(myOtherList.at(i6));
     }
     mySlicedList10 = temp8;
+    
+    vector<double> temp9(0);
+    for (int i7 = y; y <= i7 && i7 < x || x < i7 && i7 <= y; i7 += z) {
+        temp9.push_back(myOtherList.at(i7));
+    }
+    mySlicedList11 = temp9;
     
     // Print results of list slicing tests
     std::cout << "" << std::endl;
@@ -249,6 +256,16 @@ int main(int argc, const char *argv[]) {
     }
     if ((int)(mySlicedList10.size()) > 0) {
         std::cout << mySlicedList10.at((int)(mySlicedList10.size()) - 1);
+    }
+    std::cout << "]" << std::endl;
+    std::cout << "mySlicedList11: ";
+    std::cout << "[";
+    for (int list_i1 = 0; list_i1 < (int)(mySlicedList11.size()) - 1; list_i1++) {
+        std::cout << mySlicedList11.at(list_i1);
+        std::cout << ", ";
+    }
+    if ((int)(mySlicedList11.size()) > 0) {
+        std::cout << mySlicedList11.at((int)(mySlicedList11.size()) - 1);
     }
     std::cout << "]" << std::endl;
     

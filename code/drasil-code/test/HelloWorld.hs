@@ -63,7 +63,7 @@ helloInitVariables = block [comment "Initializing variables",
 
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9, 
-  mySlicedList10 :: (OOProg r) => SVariable r
+  mySlicedList10, mySlicedList11 :: (OOProg r) => SVariable r
 mySlicedList = var "mySlicedList" (listType double)
 mySlicedList2 = var "mySlicedList2" (listType double)
 mySlicedList3 = var "mySlicedList3" (listType double)
@@ -74,6 +74,7 @@ mySlicedList7 = var "mySlicedList7" (listType double)
 mySlicedList8 = var "mySlicedList8" (listType double)
 mySlicedList9 = var "mySlicedList9" (listType double)
 mySlicedList10 = var "mySlicedList10" (listType double)
+mySlicedList11 = var "mySlicedList11" (listType double)
 
 listSliceTests :: (OOProg r) => [MSBlock r]
 listSliceTests = [
@@ -91,7 +92,8 @@ listSliceTests = [
     listDec 4 mySlicedList7,
     listDec 3 mySlicedList8,
     listDec 2 mySlicedList9,
-    listDec 3 mySlicedList10],
+    listDec 3 mySlicedList10,
+    listDec 0 mySlicedList11],
 
   -- | Initialize and assign any variables necessary for list slices
   block [
@@ -151,6 +153,11 @@ listSliceTests = [
     (valueOf myOtherList) (Just (litInt 2))
     Nothing (Just (valueOf (var "z" int))),
 
+  -- | List slicing where end > beg, but step is a variable < 0
+  listSlice mySlicedList11
+    (valueOf myOtherList) (Just (valueOf (var "y" int)))
+    (Just (valueOf (var "x" int))) (Just (valueOf (var "z" int))),
+
   -- | Print results of list slicing tests
   block [
     comment "Print results of list slicing tests",
@@ -177,7 +184,9 @@ listSliceTests = [
     print $ litString "mySlicedList9: ",
     printLn $ valueOf mySlicedList9,
     print $ litString "mySlicedList10: ",
-    printLn $ valueOf mySlicedList10]]
+    printLn $ valueOf mySlicedList10,
+    print $ litString "mySlicedList11: ",
+    printLn $ valueOf mySlicedList11]]
 
 -- | Create an If statement.
 {-# ANN module "HLint: ignore Evaluate" #-}

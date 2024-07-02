@@ -43,6 +43,7 @@ public class HelloWorld {
         ArrayList<Double> mySlicedList8 = new ArrayList<Double>(3);
         ArrayList<Double> mySlicedList9 = new ArrayList<Double>(2);
         ArrayList<Double> mySlicedList10 = new ArrayList<Double>(3);
+        ArrayList<Double> mySlicedList11 = new ArrayList<Double>(0);
         
         // Create some variables for later tests
         int x = 3;
@@ -110,6 +111,12 @@ public class HelloWorld {
         }
         mySlicedList10 = temp8;
         
+        ArrayList<Double> temp9 = new ArrayList<Double>(0);
+        for (int i7 = y; y <= i7 && i7 < x || x < i7 && i7 <= y; i7 += z) {
+            temp9.add(myOtherList.get(i7));
+        }
+        mySlicedList11 = temp9;
+        
         // Print results of list slicing tests
         System.out.println("");
         System.out.println("List slicing:");
@@ -135,6 +142,8 @@ public class HelloWorld {
         System.out.println(mySlicedList9);
         System.out.print("mySlicedList10: ");
         System.out.println(mySlicedList10);
+        System.out.print("mySlicedList11: ");
+        System.out.println(mySlicedList11);
         
         System.out.println("");
         if (b >= 6) {

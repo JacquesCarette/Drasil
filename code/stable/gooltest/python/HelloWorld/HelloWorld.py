@@ -36,6 +36,7 @@ mySlicedList7 = []
 mySlicedList8 = []
 mySlicedList9 = []
 mySlicedList10 = []
+mySlicedList11 = []
 
 # Create some variables for later tests
 x = 3
@@ -62,6 +63,8 @@ mySlicedList9 = myOtherList[x:y:z]
 
 mySlicedList10 = myOtherList[2::z]
 
+mySlicedList11 = myOtherList[y:x:z]
+
 # Print results of list slicing tests
 print("")
 print("List slicing:")
@@ -87,6 +90,8 @@ print("mySlicedList9: ", end="")
 print(mySlicedList9)
 print("mySlicedList10: ", end="")
 print(mySlicedList10)
+print("mySlicedList11: ", end="")
+print(mySlicedList11)
 
 print("")
 if (b >= 6):

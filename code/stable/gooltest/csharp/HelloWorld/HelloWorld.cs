@@ -56,6 +56,7 @@ public class HelloWorld {
         List<double> mySlicedList8 = new List<double>(3);
         List<double> mySlicedList9 = new List<double>(2);
         List<double> mySlicedList10 = new List<double>(3);
+        List<double> mySlicedList11 = new List<double>(0);
         
         // Create some variables for later tests
         int x = 3;
@@ -122,6 +123,12 @@ public class HelloWorld {
             temp8.Add(myOtherList[i6]);
         }
         mySlicedList10 = temp8;
+        
+        List<double> temp9 = new List<double>(0);
+        for (int i7 = y; y <= i7 && i7 < x || x < i7 && i7 <= y; i7 += z) {
+            temp9.Add(myOtherList[i7]);
+        }
+        mySlicedList11 = temp9;
         
         // Print results of list slicing tests
         Console.WriteLine("");
@@ -234,6 +241,16 @@ public class HelloWorld {
         }
         if (mySlicedList10.Count > 0) {
             Console.Write(mySlicedList10[mySlicedList10.Count - 1]);
+        }
+        Console.WriteLine("]");
+        Console.Write("mySlicedList11: ");
+        Console.Write("[");
+        for (int list_i1 = 0; list_i1 < mySlicedList11.Count - 1; list_i1++) {
+            Console.Write(mySlicedList11[list_i1]);
+            Console.Write(", ");
+        }
+        if (mySlicedList11.Count > 0) {
+            Console.Write(mySlicedList11[mySlicedList11.Count - 1]);
         }
         Console.WriteLine("]");
         

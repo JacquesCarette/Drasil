@@ -38,6 +38,7 @@ var mySlicedList7: [Double] = []
 var mySlicedList8: [Double] = []
 var mySlicedList9: [Double] = []
 var mySlicedList10: [Double] = []
+var mySlicedList11: [Double] = []
 
 // Create some variables for later tests
 var x: Int = 3
@@ -65,6 +66,8 @@ mySlicedList9 = [Int](stride(from: x, to: y, by: z)).map({(i: Int) -> Double in 
 var endIdx: Int = z > 0 ? myOtherList.count : -1
 mySlicedList10 = [Int](stride(from: 2, to: endIdx, by: z)).map({(i: Int) -> Double in myOtherList[i]})
 
+mySlicedList11 = [Int](stride(from: y, to: x, by: z)).map({(i: Int) -> Double in myOtherList[i]})
+
 // Print results of list slicing tests
 print("")
 print("List slicing:")
@@ -90,6 +93,8 @@ print("mySlicedList9: ", terminator: "")
 print(mySlicedList9)
 print("mySlicedList10: ", terminator: "")
 print(mySlicedList10)
+print("mySlicedList11: ", terminator: "")
+print(mySlicedList11)
 
 print("")
 if b >= 6 {

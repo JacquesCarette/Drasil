@@ -1,0 +1,282 @@
+```mermaid
+
+classDiagram
+
+Hollow arrow means instance of 
+
+class IdeaDict {
+    UID
+    NP
+    Maybe String
+}
+IdeaDict <|-- "IdeaDict" QuantityDict
+IdeaDict <|-- "IdeaDict" ConceptChunk
+
+class QuantityDict{
+    typ :: Space 
+    symb :: Symbol
+    unit :: UnitDefn
+}
+QuantityDict <|-- "QuantityDict" UnitaryChunk
+QuantityDict <|-- "QuantityDict" CodeChunk
+QuantityDict <|-- "QuantityDict" NamedArgument
+QuantityDict <|-- "QuantityDict" ConstrainedChunk
+QuantityDict <|-- "QuantityDict" MultiDefn e
+
+class ConceptChunk{
+    defn :: Sentence
+    cdom :: [UID]
+}
+ConceptChunk <|-- "ConceptChunk" ConstraintSet e
+ConceptChunk <|-- "ConceptChunk" RelationConcept
+ConceptChunk <|-- "ConceptChunk" DefinedQuantityDict
+ConceptChunk <|-- "ConceptChunk" ConceptInstance
+ConceptChunk <|-- "ConceptChunk" UnitDefn
+ConceptChunk <|-- "ConceptChunk" DifferentialModel
+
+class UnitaryChunk {
+    unitdefn :: UnitDefn
+}
+
+class CodeChunk {
+    kind :: VarOrFunc
+}
+CodeChunk <|-- "CodeChunk" CodeDefinition
+CodeChunk <|-- "CodeChunk" CodeVarChunk
+CodeChunk <|-- "CodeChunk" CodeIdea
+CodeChunk <|-- "CodeChunk" ParameterChunk
+
+class NamedArgument
+
+class ConstrainedChunk {
+    constr :: [ConstraintE]
+    reasV :: Maybe Expr
+}
+ConstrainedChunk <|-- "ConstrainedChunk" UncertainChunk
+
+class MultiDefn e {
+    rUid :: UID
+    rDesc :: Sentence
+    rvs :: NonEmpty (DefiningExpr e)
+}
+
+class ConstraintSet e {
+    exp :: e
+}
+
+class RelationConcept {
+    relation :: ModelExpr
+}
+
+class DefinedQuantityDict {
+    symb :: Symbol
+    spa :: Space
+    unit :: Mabye UnitDefn
+}
+DefinedQuantityDict <|-- "DefinedQuantityDict" QDefinition e
+DefinedQuantityDict <|-- "DefinedQuantityDict" ConstrConcept
+DefinedQuantityDict <|-- "DefinedQuantityDict" UnitalChunk
+
+class ConceptInstance {
+    ra :: String
+    shnm :: ShortName
+}
+
+class UnitDefn {
+    cas :: UnitSymbol
+    cu :: [UID]
+}
+
+class DifferentialModel {
+    depVar :: ConstrConcept
+    indepVar :: UnitalChunk
+    coefficients :: [[Expr]]
+    unknowns :: [Unknown]
+    constant :: [Expr]
+}
+
+class QDefinition e {
+    QDef Expression :: e
+    cdom :: [UID]
+}
+QDefinition e <|-- "QDefinition" DataDefinition 
+
+class ConstrConcept {
+    constr :: [ConstraintE]
+    reasV :: Maybe Expr
+}
+ConstrConcept <|-- "ConstrConcept" UncertQ 
+
+class UnitalChunk {
+    unitdef :: UnitDefn
+}
+
+class CodeDefinition {
+    defn :: CodeExpr
+    auxExprs :: [CodeExpr]
+    defType  :: DefinitionType
+}
+
+class CodeVarChunk {
+    obv :: Maybe CodeChunk
+}
+
+class CodeIdea {
+    codeName :: String
+    codeExpr :: CodeExpr
+}
+
+class ParameterChunk {
+    passBy :: PassBy
+}
+
+class UncertainChunk {
+    unc :: Uncertainty
+}
+
+class DataDefinition {
+    pktST :: ScopeType
+    pktDR :: [DecRef]
+    pktMD :: Maybe Derivation
+    pktSN :: ShortName
+    pktS  :: String
+    pktSS :: [Sentence]
+}
+
+class UncertQ {
+    unc :: Uncertainty
+}
+
+class Reference {
+    ui :: UID
+    ra :: LblType
+    sn :: ShortName
+}
+Reference <|-- "Reference" LabelledContent
+Reference <|-- "Reference" Section
+
+class LabelledContent {
+    ctype :: RawContent
+}
+
+class Section {
+    tle  :: Title
+    cons :: [SecCons]
+}
+
+class Choices {
+    lang :: [Lang]
+    architecture :: Architecture
+    dataInfo :: DataInfo
+    maps :: Maps
+    optFeats :: OptionalFeatures
+    srsConstraints :: Constraints
+    extLibs :: [ExtLib]
+    icNames :: InternalConcept -> Name
+    folderVal :: Int
+}
+Choices <|-- "Choices" Lang
+Choices <|-- "Choices" Architecture
+Choices <|-- "Choices" DataInfo
+Choices <|-- "Choices" Maps
+Choices <|-- "Choices" OptionalFeatures
+Choices <|-- "Choices" Constraints
+
+class Lang {
+    Cpp | CSharp | Java | Python | Swift
+}
+
+class Architecture {
+    modularity :: Modularity
+    impType :: ImplementationType
+}
+
+class DataInfo {
+    inputStructure :: Structure
+    constStructure :: ConstantStructure
+    constRepr :: ConstantRepr
+}
+
+class Maps {
+    conceptMatch :: ConceptMatchMap
+    spaceMatch :: SpaceMatch
+}
+
+class OptionalFeatures {
+    docConfig :: DocConfig
+    logConfig :: LogConfig
+    auxFiles :: [AuxFile]
+}
+
+class Constraints {
+    onSfwrConstraint :: ConstraintBehaviour
+    onPhysConstraint :: ConstraintBehaviour
+}
+
+class ModelKind e {
+    mk     :: ModelKinds e
+    mkUID  :: UID
+    mkTerm :: NP
+}
+ModelKind e <|-- "ModelKind e" InstanceModel
+ModelKind e <|-- "ModelKind e" GenDefn
+ModelKind e <|-- "ModelKind e" TheoryModel
+
+class TheoryModel {
+    mk    :: ModelKind ModelExpr
+    vctx  :: [TheoryModel]
+    spc   :: [SpaceDefn]
+    quan  :: [QuantityDict]
+    ops   :: [ConceptChunk]
+    defq  :: [ModelQDef]
+    invs  :: [ModelExpr]
+    dfun  :: [ModelQDef]
+    rf    :: [DecRef]
+    lb    :: ShortName
+    ra    :: String
+    notes :: [Sentence]
+}
+
+class GenDefn {
+    mk :: ModelKind ModelExpr
+    gdUnit :: Maybe UnitDefn
+    deri :: Maybe Derivation
+    rf :: [DecRef]
+    sn :: ShortName
+    ra :: String
+    notes :: [Sentence]
+}
+
+class InstanceModel {
+    mk :: ModelKind Expr
+    imInputes :: Inputs
+    imOutput :: (Output, OutputConstraints)
+    rf :: [DecRef]
+    deri :: Maybe Derivation
+    lb :: ShortName
+    ra :: String
+    notes :: [Sentence]
+}
+
+
+Theory
+style ConstraintSete fill:#7030A0,stroke:#333,stroke-width:4px
+style DataDefinition fill:#7030A0,stroke:#333,stroke-width:4px
+style MultiDefne fill:#7030A0,stroke:#333,stroke-width:4px
+style ModelKinde fill:#7030A0,stroke:#333,stroke-width:4px
+style InstanceModel fill:#7030A0,stroke:#333,stroke-width:4px
+style TheoryModel fill:#7030A0,stroke:#333,stroke-width:4px
+style GenDefn fill:#7030A0,stroke:#333,stroke-width:4px
+
+Code
+style NamedArgument fill:#00B050,stroke:#333,stroke-width:4px
+style CodeDefinition fill:#00B050,stroke:#333,stroke-width:4px
+style ParameterChunk fill:#00B050,stroke:#333,stroke-width:4px
+style Choices fill:#00B050,stroke:#333,stroke-width:4px
+style Lang fill:#00B050,stroke:#333,stroke-width:4px
+style Architecture fill:#00B050,stroke:#333,stroke-width:4px
+style DataInfo fill:#00B050,stroke:#333,stroke-width:4px
+style Maps fill:#00B050,stroke:#333,stroke-width:4px
+style OptionalFeatures fill:#00B050,stroke:#333,stroke-width:4px
+style Constraints fill:#00B050,stroke:#333,stroke-width:4px
+```

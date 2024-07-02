@@ -36,11 +36,11 @@ mkStmtNoEnd = flip stmtFromData Empty
 
 -- | Constructs a value in a stateful context
 mkStateVal :: (RenderSym r) => VSType r -> Doc -> SValue r
-mkStateVal = valFromData Nothing
+mkStateVal = valFromData Nothing Nothing
 
 -- | Constructs a value in a non-stateful context
 mkVal :: (RenderSym r) => r (Type r) -> Doc -> SValue r
-mkVal t = valFromData Nothing (toState t)
+mkVal t = valFromData Nothing Nothing (toState t)
 
 -- Variables --
 
@@ -210,7 +210,7 @@ exprRender' f b' v1' v2' = do
   toState $ f b v1 v2
 
 mkExpr :: (RenderSym r) => Int -> r (Type r) -> Doc -> SValue r
-mkExpr p t= valFromData (Just p) (toState t)
+mkExpr p t= valFromData (Just p) Nothing (toState t)
 
 binOpDocDRend :: (RenderSym r) => r (BinaryOp r) -> r (Value r) -> 
   r (Value r) -> Doc

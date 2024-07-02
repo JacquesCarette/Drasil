@@ -31,6 +31,8 @@ resolver: lts-20.26
 packages:
 - .
 - ../drasil-codeLang
+- ../drasil-lang
+- ../drasil-metadata
 - ../drasil-utils
 
 # Dependency packages to be pulled from upstream that are not in the resolver.

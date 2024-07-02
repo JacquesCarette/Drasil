@@ -31,7 +31,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
-  RenderValue(..), ValueElim(valuePrec), InternalGetSet(..), 
+  RenderValue(..), ValueElim(valuePrec, valueInt), InternalGetSet(..), 
   InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   RenderStatement(..), StatementElim(statementTerm), RenderScope(..),
@@ -394,11 +394,12 @@ instance (Pair p) => RenderValue (p CppSrcCode CppHdrCode) where
 
   call l o n = pair1Val3Lists (call l o n) (call l o n)
 
-  valFromData p t' d = pair1 (\t -> valFromData p t d) 
-    (\t -> valFromData p t d) t'
+  valFromData p i t' d = pair1 (\t -> valFromData p i t d) 
+    (\t -> valFromData p i t d) t'
 
 instance (Pair p) => ValueElim (p CppSrcCode CppHdrCode) where
   valuePrec v = valuePrec $ pfst v
+  valueInt v = valueInt $ pfst v
   value v = RC.value $ pfst v
 
 instance (Pair p) => InternalValueExp (p CppSrcCode CppHdrCode) where
@@ -1288,12 +1289,13 @@ instance RenderValue CppSrcCode where
 
   call = CP.call' cppName
 
-  valFromData p t' d = do 
+  valFromData p i t' d = do 
     t <- t'
-    toState $ on2CodeValues (vd p) t (toCode d)
+    toState $ on2CodeValues (vd p i) t (toCode d)
   
 instance ValueElim CppSrcCode where
   valuePrec = valPrec . unCPPSC
+  valueInt = valInt . unCPPSC
   value = val . unCPPSC
 
 instance InternalValueExp CppSrcCode where
@@ -1954,12 +1956,13 @@ instance RenderValue CppHdrCode where
   
   call _ _ _ _ _ _ = mkStateVal void empty
 
-  valFromData p t' d = do 
+  valFromData p i t' d = do 
     t <- t' 
-    toState $ on2CodeValues (vd p) t (toCode d)
+    toState $ on2CodeValues (vd p i) t (toCode d)
   
 instance ValueElim CppHdrCode where
   valuePrec = valPrec . unCPPHC
+  valueInt = valInt . unCPPHC
   value = val . unCPPHC
   
 instance InternalValueExp CppHdrCode where

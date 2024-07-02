@@ -106,26 +106,26 @@ public class HelloWorld {
         mySlicedList7 = temp5;
         
         List<double> temp6 = new List<double>(0);
-        for (int i4 = 3; 0 < i4 && i4 <= 3; i4 += z) {
+        for (int i4 = 3; 0 < i4 && i4 <= 3 && z < 0; i4 += z) {
             temp6.Add(myOtherList[i4]);
         }
         mySlicedList8 = temp6;
         
         List<double> temp7 = new List<double>(0);
-        for (int i5 = x; x <= i5 && i5 < y || y < i5 && i5 <= x; i5 += z) {
+        for (int i5 = x; x <= i5 && i5 < y && z > 0 || y < i5 && i5 <= x && z < 0; i5 += z) {
             temp7.Add(myOtherList[i5]);
         }
         mySlicedList9 = temp7;
         
         List<double> temp8 = new List<double>(0);
         int endIdx = z > 0 ? myOtherList.Count : -1;
-        for (int i6 = 2; 2 <= i6 && i6 < endIdx || endIdx < i6 && i6 <= 2; i6 += z) {
+        for (int i6 = 2; 2 <= i6 && i6 < endIdx && z > 0 || endIdx < i6 && i6 <= 2 && z < 0; i6 += z) {
             temp8.Add(myOtherList[i6]);
         }
         mySlicedList10 = temp8;
         
         List<double> temp9 = new List<double>(0);
-        for (int i7 = y; y <= i7 && i7 < x || x < i7 && i7 <= y; i7 += z) {
+        for (int i7 = y; y <= i7 && i7 < x && z > 0 || x < i7 && i7 <= y && z < 0; i7 += z) {
             temp9.Add(myOtherList[i7]);
         }
         mySlicedList11 = temp9;

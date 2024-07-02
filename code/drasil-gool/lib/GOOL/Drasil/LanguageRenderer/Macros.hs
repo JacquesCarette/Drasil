@@ -86,15 +86,16 @@ listSlice beg end step vnew vold = do
   -- Get the condition for the for-loop
   let cond = case mbStepV of
               -- If step is a litInt, do a one-sided check
-              (Just s) -> if s > 0 then v_i ?< endVal else v_i ?> endVal
+              (Just s) -> if s >= 0 then v_i ?< endVal else v_i ?> endVal
               Nothing -> case (mbBegV, mbEndV) of
-                -- If both bounds are litInt's, do a two-sided check
+                -- If both bounds are litInt's, do a two-sided check.
+                -- Also, make sure step is in same direction as check.
                 (Just b, Just e) -> if e >= b 
-                    then begVal ?<= v_i ?&& v_i ?< endVal
-                    else endVal ?< v_i ?&& v_i ?<= begVal
+                    then begVal ?<= v_i ?&& v_i ?< endVal ?&& step' ?> S.litInt 0
+                    else endVal ?< v_i ?&& v_i ?<= begVal ?&& step' ?< S.litInt 0
                 -- If bounds are not litInt's, do both two-sided checks
-                _ ->  begVal ?<= v_i ?&& v_i ?< endVal ?|| 
-                      endVal ?< v_i ?&& v_i ?<= begVal
+                _ ->  begVal ?<= v_i ?&& v_i ?< endVal ?&& step' ?> S.litInt 0 ?|| 
+                      endVal ?< v_i ?&& v_i ?<= begVal ?&& step' ?< S.litInt 0
 
   S.block [
     S.listDec 0 var_temp,

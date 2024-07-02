@@ -30,6 +30,7 @@ import GOOL.Drasil.Helpers (toCode, onStateValue, on2StateValues)
 import GOOL.Drasil.State (MS, lensMStoVS, genVarName, genLoopIndex)
 
 import Data.Maybe (fromMaybe)
+import Data.Functor ((<&>))
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, vcat)
 
@@ -78,10 +79,10 @@ listSlice beg end step vnew vold = do
 
   mbBegV <- case beg of
         Nothing -> pure Nothing
-        (Just b) -> zoom lensMStoVS b >>= (\begV -> pure $ valueInt begV)
+        (Just b) -> zoom lensMStoVS b <&> valueInt
   mbEndV <- case end of
         Nothing -> pure Nothing
-        (Just e) -> zoom lensMStoVS e >>= (\endV -> pure $ valueInt endV)
+        (Just e) -> zoom lensMStoVS e <&> valueInt
   -- Get the condition for the for-loop
   let cond = case mbStepV of
               -- If step is a litInt, do a one-sided check
@@ -104,14 +105,22 @@ listSlice beg end step vnew vold = do
 
 -- Java, C#, C++, and Swift --
 -- | Gets the expression and code for setting bounds in a list slice
+--   Input: 
+--   - String: Variable name for bound (to be created if necessary),
+--   - SValue: step value
+--   - Maybe Integer: literal value of step, if exists
+--   - Maybe SValue: given value of bound
+--   - SValue: value of bound if bound not given and step is positive
+--   - SValue: value of bound if bound not given and step is negative
+--   Output: (MSStatement, SValue): (setter, value) of bound
 -- If anyone wants to figure out the return type, be my guest
--- makeSetterVal :: Label -> Maybe Integer -> SValue r -> Maybe (SValue r) -> SValue r -> SValue r -> something
+-- makeSetterVal :: Label -> SValue r -> Maybe Integer -> Maybe (SValue r) -> SValue r -> SValue r -> something
 makeSetterVal _     _    _      (Just v) _  _  = (S.emptyStmt, v)
 makeSetterVal _     _   (Just s) _       lb rb = (S.emptyStmt, if s > 0 then lb else rb)
 makeSetterVal vName step _       _       lb rb = 
   let theVar = S.var vName S.int
       theSetter = S.varDecDef theVar $ S.inlineIf (step ?> S.litInt 0) lb rb
-  in (theSetter, S.valueOf theVar)
+  in (theSetter, S.intToIndex $ S.valueOf theVar)
       
 stringListVals :: (RenderSym r) => [SVariable r] -> SValue r -> MSStatement r
 stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList 

@@ -76,8 +76,8 @@ BC_E_SUFFIX = _build_clean
 TRACE_GRAPH_SUFFIX = _trace_graph
 INSTALL_E_SUFFIX = _install
 DEBUG_E_SUFFIX = _debug
-MDBOOK_BUILD_E_SUFFIX = _mdBook_build
-MDBOOK_SERVER_E_SUFFIX = _mdBook_server
+MDBOOK_BUILD_E_SUFFIX = _mdbook_build
+MDBOOK_SERVER_E_SUFFIX = _mdbook_server
 
 # add example names with the appropriate suffixes to create per-example targets
 GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES))
@@ -280,7 +280,7 @@ packagedeps: graphmod check_dot
 
 # First build all the Drasil packages, run all examples (no traceability graphs),
 # and then build the generated mdBook projects.
-mdBook_build: $(MDBOOK_BUILD_EXAMPLES) ##@Examples Build all generated mdBook projects.
+mdbook_build: $(MDBOOK_BUILD_EXAMPLES) ##@Examples Build all generated mdBook projects.
 
 #--------------------------------------------------------------#
 #--- Targets that are used for individual packages/examples ---#

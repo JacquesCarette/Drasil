@@ -63,13 +63,13 @@ pubStateVar = SV Pub
 privStateVar :: CodeVarChunk -> StateVariable
 privStateVar = SV Priv
 
--- | Define a class with the given 'Name', 'Description', state variables, 
--- constructors, and methods.
+-- | Define a class with the given 'Name', 'Description', state variables, and
+-- methods.
 classDef :: Name -> Description -> [StateVariable] -> [Func] -> [Func] -> Class
 classDef n = ClassDef n Nothing
 
--- | Define a class that implements an interface. 1st 'Name' is class name, 2nd
--- is interface name.  First 'Func' is constructors, second is methods.
+-- | Define a class that implements an interface. 1st 'Name' is class name, 2nd is
+-- interface name.
 classImplements :: Name -> Name -> Description -> [StateVariable] -> [Func] ->
   [Func] -> Class
 classImplements n i = ClassDef n (Just i)

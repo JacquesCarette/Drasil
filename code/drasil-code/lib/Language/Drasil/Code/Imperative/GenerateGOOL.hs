@@ -72,8 +72,8 @@ getReadMe auxl rmi = if ReadME `elem` auxl then Just (readMe rmi) else Nothing
 data ClassType = Primary | Auxiliary
 
 -- | Generates a primary or auxiliary class with the given name, description,
--- state variables, and constructors, and methods. The 'Maybe' 'Name' parameter
--- is the name of the interface the class implements, if applicable.
+-- state variables, and methods. The 'Maybe' 'Name' parameter is the name of the
+-- interface the class implements, if applicable.
 mkClass :: (OOProg r) => ClassType -> Name -> Maybe Name -> Description ->
   [CSStateVar r] -> GenState [SMethod r] -> GenState [SMethod r] ->
   GenState (SClass r)

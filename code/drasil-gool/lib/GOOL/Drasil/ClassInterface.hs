@@ -575,7 +575,7 @@ class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r
     [MSParameter r] -> MSBody r -> SMethod r
   getMethod   :: SVariable r -> SMethod r
   setMethod   :: SVariable r -> SMethod r 
-  -- Parameters are: constructor name, parameters, initializers, body
+  -- Parameters are: parameters, initializers, body
   constructor :: [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
 
   docMain :: MSBody r -> SMethod r
@@ -632,14 +632,9 @@ class (MethodSym r, StateVarSym r) => ClassSym r where
   type Class r
   -- | Main external method for creating a class.
   --   Inputs: parent class, variables, constructor(s), methods
-  buildClass :: Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
-    [SMethod r] -> SClass r
-  -- | Creates an extra class.
-  --   Inputs: class name, the rest are the same as buildClass.
+  buildClass :: Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
   extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
     [SMethod r] -> SClass r
-  -- | Creates a class implementing interfaces.
-  --   Inputs: class name, interface names, variables, constructor(s), methods
   implementingClass :: Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> 
     [SMethod r] -> SClass r
 

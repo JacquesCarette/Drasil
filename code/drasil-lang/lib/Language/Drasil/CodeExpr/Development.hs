@@ -8,7 +8,7 @@ module Language.Drasil.CodeExpr.Development (
     -- Class
     CodeExprC(..),
     -- Extract
-    eDep, eDep',
+    eNames, eDep',
     eNamesRI, eNamesRI',
     -- Precedence
     eprec, precA, precB,
@@ -22,6 +22,6 @@ import Language.Drasil.CodeExpr.Lang (CodeExpr(..),
     VVVBinOp(..), OrdBinOp(..), LABinOp(..), BoolBinOp(..), EqBinOp(..),
     ArithBinOp(..))
 import Language.Drasil.CodeExpr.Class (CodeExprC(..))
-import Language.Drasil.CodeExpr.Extract (eDep, eDep', eNamesRI, eNamesRI')
+import Language.Drasil.CodeExpr.Extract (eNames, eDep', eNamesRI, eNamesRI')
 import Language.Drasil.CodeExpr.Precedence (eprec, precA, precB)
 import Language.Drasil.CodeExpr.Convert (expr, realInterval, constraint, CanGenCode(..))

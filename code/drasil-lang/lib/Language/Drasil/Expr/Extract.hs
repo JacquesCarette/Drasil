@@ -73,7 +73,3 @@ eNamesRI' (UpFrom il)     = eNames' (snd il)
 
 ---------------------------------------------------------------------------
 -- And now implement the exported traversals all in terms of the above
-
--- | Get dependencies from an equation.  
-eDep :: Expr -> Set UID
-eDep = eNames

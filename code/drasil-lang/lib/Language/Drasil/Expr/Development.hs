@@ -6,11 +6,11 @@ module Language.Drasil.Expr.Development (
   , AssocArithOper(..), AssocBoolOper(..)
   , Completeness(..), Relation
   -- Expr.Extract
-  , eDep, eNames, eNames', eNamesRI
+  , eNames, eNames', eNamesRI
   -- Expr.Precedence
   , precA, precB, eprec
 ) where
 
 import Language.Drasil.Expr.Lang
-import Language.Drasil.Expr.Extract (eDep, eNames, eNames', eNamesRI)
+import Language.Drasil.Expr.Extract (eNames, eNames', eNamesRI)
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)

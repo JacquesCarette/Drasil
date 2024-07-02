@@ -17,7 +17,7 @@ quantfunc c = CodeFC $ CodeC (qw c) Func
 
 -- | Get a list of 'CodeChunk's from an equation.
 codevars :: CodeExpr -> ChunkDB -> [CodeVarChunk]
-codevars e m = map (varResolve m) $ toList $ eDep e
+codevars e m = map (varResolve m) $ toList $ eNames e
 
 -- | Get a list of 'CodeChunk's from an equation (no functions).
 codevars' :: CodeExpr -> ChunkDB -> [CodeVarChunk]

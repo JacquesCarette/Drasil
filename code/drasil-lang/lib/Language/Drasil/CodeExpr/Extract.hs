@@ -1,5 +1,5 @@
 module Language.Drasil.CodeExpr.Extract (
-    eDep, eDep',
+    eNames, eDep',
     eNamesRI, eNamesRI'
 ) where
 
@@ -85,10 +85,6 @@ eNamesRI' (UpFrom il)     = eNames' (snd il)
 
 ---------------------------------------------------------------------------
 -- And now implement the exported traversals all in terms of the above
-
--- | Get dependencies from an equation.
-eDep :: CodeExpr -> Set UID
-eDep = eNames
 
 -- | Get dependencies from an equation, without functions.
 eDep' :: CodeExpr -> [UID]

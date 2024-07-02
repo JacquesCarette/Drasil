@@ -4,7 +4,7 @@ module Helper (helper) where
 import GOOL.Drasil (SFile, SMethod,
   OOProg, FileSym(..), bodyStatements, TypeSym(..),
   DeclStatement(..), ControlStatement(..), (&=), VariableSym(..),
-  Literal(..), VariableValue(..), NumericExpression(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  Literal(..), VariableValue(..), NumericExpression(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
   ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 

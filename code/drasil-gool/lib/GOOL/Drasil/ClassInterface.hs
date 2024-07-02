@@ -26,7 +26,7 @@ module GOOL.Drasil.ClassInterface (
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   StatePattern(..), initState, changeState, ObserverPattern(..),
   observerListName, initObserverList, addObserver, StrategyPattern(..),
-  ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..),
+  ifNoElse, switchAsIf, VisibilitySym(..), ParameterSym(..), MethodSym(..),
   privMethod, pubMethod, initializer, nonInitConstructor,
   StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..),
   convType, convTypeOO
@@ -503,10 +503,10 @@ initState fsmName initialState = varDecDef (var fsmName string)
 changeState :: (AssignStatement r, Literal r) => Label -> Label -> MSStatement r
 changeState fsmName toState = var fsmName string &= litString toState
 
-class ScopeSym r where
-  type Scope r
-  private :: r (Scope r)
-  public  :: r (Scope r)
+class VisibilitySym r where
+  type Visibility r
+  private :: r (Visibility r)
+  public  :: r (Visibility r)
 
 type MSParameter a = MS (a (Parameter a))
 
@@ -527,10 +527,10 @@ type InOutFunc r = [SVariable r] -> [SVariable r] -> [SVariable r] ->
 type DocInOutFunc r = String -> [(String, SVariable r)] -> 
   [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
 
-class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r 
+class (BodySym r, ParameterSym r, VisibilitySym r, PermanenceSym r) => MethodSym r 
   where
   type Method r
-  method      :: Label -> r (Scope r) -> r (Permanence r) -> VSType r -> 
+  method      :: Label -> r (Visibility r) -> r (Permanence r) -> VSType r -> 
     [MSParameter r] -> MSBody r -> SMethod r
   getMethod   :: SVariable r -> SMethod r
   setMethod   :: SVariable r -> SMethod r 
@@ -538,7 +538,7 @@ class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r
 
   docMain :: MSBody r -> SMethod r
 
-  function :: Label -> r (Scope r) -> VSType r -> [MSParameter r] -> 
+  function :: Label -> r (Visibility r) -> VSType r -> [MSParameter r] -> 
     MSBody r -> SMethod r
   mainFunction  :: MSBody r -> SMethod r
   -- Parameters are: function description, parameter descriptions, 
@@ -546,11 +546,11 @@ class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r
   docFunc :: String -> [String] -> Maybe String -> SMethod r -> SMethod r
 
   -- inOutMethod and docInOutMethod both need the Permanence parameter
-  inOutMethod :: Label -> r (Scope r) -> r (Permanence r) -> InOutFunc r
-  docInOutMethod :: Label -> r (Scope r) -> r (Permanence r) -> DocInOutFunc r
+  inOutMethod :: Label -> r (Visibility r) -> r (Permanence r) -> InOutFunc r
+  docInOutMethod :: Label -> r (Visibility r) -> r (Permanence r) -> DocInOutFunc r
   -- inOutFunc and docInOutFunc both do not need the Permanence parameter
-  inOutFunc :: Label -> r (Scope r) -> InOutFunc r
-  docInOutFunc :: Label -> r (Scope r) -> DocInOutFunc r
+  inOutFunc :: Label -> r (Visibility r) -> InOutFunc r
+  docInOutFunc :: Label -> r (Visibility r) -> DocInOutFunc r
 
 privMethod :: (MethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r 
   -> SMethod r
@@ -568,12 +568,12 @@ nonInitConstructor ps = constructor ps []
 
 type CSStateVar a = CS (a (StateVar a))
 
-class (ScopeSym r, PermanenceSym r, VariableSym r) => StateVarSym r where
+class (VisibilitySym r, PermanenceSym r, VariableSym r) => StateVarSym r where
   type StateVar r
-  stateVar :: r (Scope r) -> r (Permanence r) -> SVariable r -> CSStateVar r
-  stateVarDef :: r (Scope r) -> r (Permanence r) -> SVariable r -> 
+  stateVar :: r (Visibility r) -> r (Permanence r) -> SVariable r -> CSStateVar r
+  stateVarDef :: r (Visibility r) -> r (Permanence r) -> SVariable r -> 
     SValue r -> CSStateVar r
-  constVar :: r (Scope r) ->  SVariable r -> SValue r -> CSStateVar r
+  constVar :: r (Visibility r) ->  SVariable r -> SValue r -> CSStateVar r
 
 privDVar :: (StateVarSym r) => SVariable r -> CSStateVar r
 privDVar = stateVar private dynamic

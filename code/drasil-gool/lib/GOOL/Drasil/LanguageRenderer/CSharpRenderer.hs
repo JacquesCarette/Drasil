@@ -24,7 +24,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   ThunkAssign(..), StatementSym(..), AssignStatement(..), (&=),
   DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), StatePattern(..),
-  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
+  ObserverPattern(..), StrategyPattern(..), VisibilitySym(..), ParameterSym(..),
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
@@ -33,12 +33,12 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalGetSet(..),
   InternalListFunc(..),  RenderFunction(..), FunctionElim(functionType),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
-  RenderStatement(..), StatementElim(statementTerm), RenderScope(..),
-  ScopeElim, MethodTypeSym(..), RenderParam(..), ParamElim(parameterName,
+  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
+  VisibilityElim, MethodTypeSym(..), RenderParam(..), ParamElim(parameterName,
   parameterType), RenderMethod(..), MethodElim, StateVarElim, RenderClass(..),
   ClassElim, RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp, variable, value, function, statement, scope, parameter,
+  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
@@ -594,16 +594,16 @@ instance ObserverPattern CSharpCode where
 instance StrategyPattern CSharpCode where
   runStrategy = M.runStrategy
 
-instance ScopeSym CSharpCode where
-  type Scope CSharpCode = Doc
+instance VisibilitySym CSharpCode where
+  type Visibility CSharpCode = Doc
   private = toCode R.private
   public = toCode R.public
 
-instance RenderScope CSharpCode where
-  scopeFromData _ = toCode
+instance RenderVisibility CSharpCode where
+  visibilityFromData _ = toCode
   
-instance ScopeElim CSharpCode where
-  scope = unCSC
+instance VisibilityElim CSharpCode where
+  visibility = unCSC
 
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = TypeData

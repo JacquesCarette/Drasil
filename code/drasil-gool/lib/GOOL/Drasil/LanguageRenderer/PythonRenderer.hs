@@ -23,7 +23,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..),
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  StrategyPattern(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
   StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
@@ -33,12 +33,12 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   InternalListFunc(..), RenderFunction(..), 
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..), 
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm), 
-  RenderScope(..), ScopeElim, MethodTypeSym(..), RenderParam(..), 
+  RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..), 
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
   StateVarElim, RenderClass(..), ClassElim, RenderMod(..), ModuleElim, 
   BlockCommentSym(..), BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block, 
-  type', uOp, bOp, variable, value, function, statement, scope, parameter,
+  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (classDec, dot, ifLabel, elseLabel, 
   forLabel, inLabel, whileLabel, tryLabel, importLabel, exceptionObj', listSep',
@@ -615,16 +615,16 @@ instance ObserverPattern PythonCode where
 instance StrategyPattern PythonCode where
   runStrategy = M.runStrategy
 
-instance ScopeSym PythonCode where
-  type Scope PythonCode = Doc
+instance VisibilitySym PythonCode where
+  type Visibility PythonCode = Doc
   private = toCode empty
   public = toCode empty
 
-instance RenderScope PythonCode where
-  scopeFromData _ = toCode
+instance RenderVisibility PythonCode where
+  visibilityFromData _ = toCode
 
-instance ScopeElim PythonCode where
-  scope = unPC
+instance VisibilityElim PythonCode where
+  visibility = unPC
 
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypeData

@@ -15,18 +15,18 @@ module GOOL.Drasil (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   OOVariableValue, CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..),
   OOValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp,
-  libFuncApp, newObj, extNewObj, libNewObj, exists, objMethodCall, objMethodCallNamedArgs,
-  objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..), ($.),
-  selfAccess, GetSet(..), List(..),  listSlice, listIndexExists, at,
-  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), privMethod, pubMethod, initializer,
-  nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..),
-  ModuleSym(..), convType, convTypeOO, ProgData(..), FileData(..), ModData(..),
-  ScopeTag(..), CodeType(..), GOOLState(..), lensMStoVS, headers, sources,
-  mainMod, initialState, onStateValue, onCodeList, unCI, unPC, unJC, unCSC,
-  unCPPC, unSC, pyName, pyVersion, jName, jVersion, csName, csVersion, cppName,
-  cppVersion, swiftName, swiftVersion
-) where
+  libFuncApp, newObj, extNewObj, libNewObj, exists, objMethodCall,
+  objMethodCallNamedArgs, objMethodCallMixedArgs, objMethodCallNoParams,
+  FunctionSym(..), ($.), selfAccess, GetSet(..), List(..),  listSlice,
+  listIndexExists, at, StatePattern(..), ObserverPattern(..),
+  StrategyPattern(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
+  privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..),
+  privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), convType, convTypeOO,
+  ProgData(..), FileData(..), ModData(..), VisibilityTag(..), CodeType(..),
+  GOOLState(..), lensMStoVS, headers, sources, mainMod, initialState,
+  onStateValue, onCodeList, unCI, unPC, unJC, unCSC, unCPPC, unSC, pyName,
+  pyVersion, jName, jVersion, csName, csVersion, cppName, cppVersion, swiftName,
+  swiftVersion) where
 
 import GOOL.Drasil.ClassInterface (Label, GSProgram, SFile, MSBody, MSBlock, 
   VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod,
@@ -48,12 +48,12 @@ import GOOL.Drasil.ClassInterface (Label, GSProgram, SFile, MSBody, MSBlock,
   objMethodCallNamedArgs, objMethodCallMixedArgs,
   objMethodCallNoParams, FunctionSym(..), ($.), selfAccess, GetSet(..),
   List(..), listSlice, listIndexExists, at, StatePattern(..),
-  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
+  ObserverPattern(..), StrategyPattern(..), VisibilitySym(..), ParameterSym(..),
   MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
   StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..),
   convType, convTypeOO)
 
-import GOOL.Drasil.AST (FileData(..), ModData(..), ProgData(..), ScopeTag(..))
+import GOOL.Drasil.AST (FileData(..), ModData(..), ProgData(..), VisibilityTag(..))
 
 import GOOL.Drasil.CodeType (CodeType(..))
 

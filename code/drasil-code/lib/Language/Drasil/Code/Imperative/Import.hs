@@ -45,8 +45,8 @@ import GOOL.Drasil (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
   Comparison(..), ValueExpression(..), OOValueExpression(..),
   objMethodCallMixedArgs, List(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), IOStatement(..), StringStatement(..), ControlStatement(..),
-  ifNoElse, ScopeSym(..), ParameterSym(..), MethodSym(..), pubDVar, privDVar,
-  nonInitConstructor, convTypeOO, ScopeTag(..), CodeType(..),
+  ifNoElse, VisibilitySym(..), ParameterSym(..), MethodSym(..), pubDVar, privDVar,
+  nonInitConstructor, convTypeOO, VisibilityTag(..), CodeType(..),
   onStateValue)
 import qualified GOOL.Drasil as C (CodeType(List, Array))
 
@@ -252,7 +252,7 @@ genMethod f n desc p r b = do
 
 -- | Generates a function or method defined by its inputs and outputs.
 -- Parameters are: the GOOL constructor to use, the equivalent GOOL constructor
--- for a documented function/method, the scope, permanence, name, description,
+-- for a documented function/method, the visibility, permanence, name, description,
 -- list of inputs, list of outputs, and body.
 genInOutFunc :: (OOProg r) => ([SVariable r] -> [SVariable r] ->
     [SVariable r] -> MSBody r -> SMethod r) ->

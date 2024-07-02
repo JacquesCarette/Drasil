@@ -24,7 +24,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), StatePattern(..), ObserverPattern(..),
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  StrategyPattern(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
   StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
@@ -33,13 +33,13 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderValue(..), ValueElim(valuePrec, valueInt),  InternalGetSet(..), 
   InternalListFunc(..), RenderFunction(..), FunctionElim(functionType), 
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), 
-  RenderStatement(..), StatementElim(statementTerm), RenderScope(..), 
-  ScopeElim, MethodTypeSym(..), RenderParam(..), 
+  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..), 
+  VisibilityElim, MethodTypeSym(..), RenderParam(..), 
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
   StateVarElim, RenderClass(..), ClassElim, RenderMod(..), ModuleElim, 
   BlockCommentSym(..), BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp, variable, value, function, statement, scope, parameter,
+  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (dot, new, elseIfLabel, forLabel, tryLabel,
   catchLabel, throwLabel, throwsLabel, importLabel, blockCmtStart, blockCmtEnd, 
@@ -84,7 +84,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char,
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   runStrategy, listSlice, stringListVals, stringListLists, forRange, 
   notifyObservers, checkState)
-import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..), 
+import GOOL.Drasil.AST (Terminator(..), VisibilityTag(..), qualName, FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard,
@@ -626,16 +626,16 @@ instance ObserverPattern JavaCode where
 instance StrategyPattern JavaCode where
   runStrategy = M.runStrategy
 
-instance ScopeSym JavaCode where
-  type Scope JavaCode = Doc
+instance VisibilitySym JavaCode where
+  type Visibility JavaCode = Doc
   private = toCode R.private
   public = toCode R.public
 
-instance RenderScope JavaCode where
-  scopeFromData _ = toCode
+instance RenderVisibility JavaCode where
+  visibilityFromData _ = toCode
   
-instance ScopeElim JavaCode where
-  scope = unJC
+instance VisibilityElim JavaCode where
+  visibility = unJC
 
 instance MethodTypeSym JavaCode where
   type MethodType JavaCode = TypeData
@@ -976,10 +976,10 @@ jStringSplit :: (RenderSym r) => SVariable r -> SValue r -> VS Doc
 jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+> 
   new' <+> RC.type' (variableType vnew) <> parens (RC.value s))
 
-jMethod :: (RenderSym r) => Label -> [String] -> r (Scope r) -> r (Permanence r)
+jMethod :: (RenderSym r) => Label -> [String] -> r (Visibility r) -> r (Permanence r)
   -> r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 jMethod n es s p t ps b = vcat [
-  RC.scope s <+> RC.perm p <+> RC.type' t <+> text n <> 
+  RC.visibility s <+> RC.perm p <+> RC.type' t <+> text n <> 
     parens (parameterList ps) <+> emptyIfNull es (throwsLabel <+> 
     text (intercalate listSep (sort es))) <+> lbrace,
   indent $ RC.body b,
@@ -1052,7 +1052,7 @@ jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (map fst $ bs ++ is)
 
 jExtraClass :: (RenderSym r) => Label -> Maybe Label -> [CSStateVar r] -> 
   [SMethod r] -> SClass r
-jExtraClass n = intClass n (scopeFromData Priv empty) . inherit
+jExtraClass n = intClass n (visibilityFromData Priv empty) . inherit
 
 addCallExcsCurrMod :: String -> VS ()
 addCallExcsCurrMod n = do

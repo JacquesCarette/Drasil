@@ -26,7 +26,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), StatePattern(..), ObserverPattern(..),
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  StrategyPattern(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
   StateVarSym(..), ClassSym(..), ModuleSym(..), convTypeOO)
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym,
   RenderFile(..), ImportSym(..), ImportElim, PermElim(binding), RenderBody(..),
@@ -36,12 +36,12 @@ import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym,
   InternalGetSet(..), InternalListFunc(..), RenderFunction(..),
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
-  RenderScope(..), ScopeElim, MethodTypeSym(..), RenderParam(..),
+  RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   StateVarElim, RenderClass(..), ClassElim, RenderMod(..), ModuleElim,
   BlockCommentSym(..), BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp, variable, value, function, statement, scope, parameter,
+  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (dot, blockCmtStart, blockCmtEnd,
   docCmtStart, bodyStart, bodyEnd, commentStart, elseIfLabel, forLabel,
@@ -80,7 +80,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CLike as C (notOp, andOp, orOp,
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement1,
   increment1, runStrategy, stringListVals, stringListLists, notifyObservers',
   checkState, makeSetterVal)
-import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..),
+import GOOL.Drasil.AST (Terminator(..), VisibilityTag(..), qualName, FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), td, ValData(..), vd, Binding(..), VarData(..), vard,
@@ -631,16 +631,16 @@ instance ObserverPattern SwiftCode where
 instance StrategyPattern SwiftCode where
   runStrategy = M.runStrategy
 
-instance ScopeSym SwiftCode where
-  type Scope SwiftCode = Doc
+instance VisibilitySym SwiftCode where
+  type Visibility SwiftCode = Doc
   private = toCode R.private
   public = toCode empty
 
-instance RenderScope SwiftCode where
-  scopeFromData _ = toCode
-
-instance ScopeElim SwiftCode where
-  scope = unSC
+instance RenderVisibility SwiftCode where
+  visibilityFromData _ = toCode
+  
+instance VisibilityElim SwiftCode where
+  visibility = unSC
 
 instance MethodTypeSym SwiftCode where
   type MethodType SwiftCode = TypeData
@@ -1123,8 +1123,8 @@ swiftParam :: (RenderSym r) => Doc -> r (Variable r) -> Doc
 swiftParam io v = swiftNoLabel <+> RC.variable v <> swiftTypeSpec <+> io
   <+> RC.type' (variableType v)
 
-swiftMethod :: Label -> SwiftCode (Scope SwiftCode) ->
-  SwiftCode (Permanence SwiftCode) -> MSMthdType SwiftCode ->
+swiftMethod :: Label -> SwiftCode (Visibility SwiftCode) -> 
+  SwiftCode (Permanence SwiftCode) -> MSMthdType SwiftCode -> 
   [MSParameter SwiftCode] -> MSBody SwiftCode -> SMethod SwiftCode
 swiftMethod n s p t ps b = do
   tp <- t
@@ -1134,8 +1134,8 @@ swiftMethod n s p t ps b = do
   mn <- zoom lensMStoFS getModuleName
   let excs = findWithDefault [] (qualName mn n) mem
   mthdFromData Pub (vcat [
-    RC.scope s <+> RC.perm p <+> swiftFunc <+> text n <>
-      parens (parameterList pms) <+> emptyIfNull excs throwsLabel <+>
+    RC.visibility s <+> RC.perm p <+> swiftFunc <+> text n <> 
+      parens (parameterList pms) <+> emptyIfNull excs throwsLabel <+> 
       swiftRetType' <+> RC.type' tp <+> bodyStart,
     indent $ RC.body bod,
     bodyEnd])

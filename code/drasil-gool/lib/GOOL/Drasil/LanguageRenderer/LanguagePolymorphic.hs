@@ -28,8 +28,8 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock,
   variableType), ValueSym(Value, valueType), NumericExpression((#-), (#/), sin,
   cos, tan), Comparison(..), funcApp, newObj, objMethodCallNoParams, ($.),
   StatementSym(multi), AssignStatement((&++)), (&=), IOStatement(printStr,
-  printStrLn, printFile, printFileStr, printFileStrLn), ifNoElse, ScopeSym(..),
-  ModuleSym(Module), convTypeOO)
+  printStrLn, printFile, printFileStr, printFileStrLn), ifNoElse,
+  VisibilitySym(..), ModuleSym(Module), convTypeOO)
 import qualified GOOL.Drasil.ClassInterface as S (
   TypeSym(int, double, char, string, listType, arrayType, listInnerType,
   funcType, void), VariableSym(var), OOVariableSym(objVarSelf),
@@ -439,7 +439,7 @@ param f v' = do
   modify $ useVarName n
   paramFromData v' $ f v
 
-method :: (RenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> VSType r 
+method :: (RenderSym r) => Label -> r (Visibility r) -> r (Permanence r) -> VSType r 
   -> [MSParameter r] -> MSBody r -> SMethod r
 method n s p t = intMethod False n s p (mType t)
 
@@ -456,7 +456,7 @@ setMethod v = zoom lensMStoVS v >>= (\vr -> S.method (setterName $ variableName
 initStmts :: (RenderSym r) => Initializers r -> MSBody r
 initStmts = bodyStatements . map (\(vr, vl) -> S.objVarSelf vr &= vl)
 
-function :: (RenderSym r) => Label -> r (Scope r) -> VSType r -> 
+function :: (RenderSym r) => Label -> r (Visibility r) -> VSType r -> 
   [MSParameter r] -> MSBody r -> SMethod r
 function n s t = S.intFunc False n s static (mType t)
   

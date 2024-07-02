@@ -15,10 +15,10 @@ import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement,
   ThunkAssign(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
   IOStatement(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..),
-  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
+  StatePattern(..), ObserverPattern(..), StrategyPattern(..), VisibilitySym(..),
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
-import GOOL.Drasil.AST (ScopeTag(..), qualName)
+import GOOL.Drasil.AST (VisibilityTag(..), qualName)
 import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
 import GOOL.Drasil.Helpers (toCode, toState)
 import GOOL.Drasil.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -375,8 +375,8 @@ instance StrategyPattern CodeInfo where
     _ <- zoom lensMStoVS $ fromMaybe noInfo vl
     noInfo
 
-instance ScopeSym CodeInfo where
-  type Scope CodeInfo = ScopeTag
+instance VisibilitySym CodeInfo where
+  type Visibility CodeInfo = VisibilityTag
   private = toCode Priv
   public  = toCode Pub
 

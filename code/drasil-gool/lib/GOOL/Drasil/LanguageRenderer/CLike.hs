@@ -14,7 +14,8 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable, 
   SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall, 
   PermanenceSym(..), TypeElim(getType, getTypeString), 
-  VariableElim(..), ValueSym(Value, valueType), extNewObj, ($.), ScopeSym(..))
+  VariableElim(..), ValueSym(Value, valueType), extNewObj, ($.),
+  VisibilitySym(..))
 import qualified GOOL.Drasil.ClassInterface as S (TypeSym(bool, float),
   OOTypeSym(obj), ValueExpression(funcAppMixedArgs),
   OOValueExpression(newObjMixedArgs), DeclStatement(varDec, varDecDef))
@@ -206,7 +207,7 @@ while f bStart bEnd v' b'= do
 
 -- Methods --
 
-intFunc :: (RenderSym r) => Bool -> Label -> r (Scope r) -> r (Permanence r) -> 
+intFunc :: (RenderSym r) => Bool -> Label -> r (Visibility r) -> r (Permanence r) -> 
   MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
 intFunc = intMethod
 

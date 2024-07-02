@@ -22,7 +22,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, VSType,
   oneLiner, TypeSym(infile, outfile, listInnerType), OOTypeSym(obj),
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType),
   ValueSym(valueType), Comparison(..), objMethodCallNoParams, (&=),
-  ControlStatement(returnStmt), ScopeSym(..), MethodSym(function),
+  ControlStatement(returnStmt), VisibilitySym(..), MethodSym(function),
   NumericExpression((#+), (#-)))
 import qualified GOOL.Drasil.ClassInterface as S (
   TypeSym(int, double, string, listType, arrayType, void),
@@ -44,7 +44,7 @@ import qualified GOOL.Drasil.RendererClasses as S (RenderBody(multiBody),
   InternalListFunc(listSizeFunc, listAddFunc, listAppendFunc))
 import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..),
   PermElim(..), BodyElim(..), InternalTypeElim(..), InternalVarElim(variable),
-  ValueElim(..), StatementElim(statement), ScopeElim(..), MethodElim(..),
+  ValueElim(..), StatementElim(statement), VisibilityElim(..), MethodElim(..),
   StateVarElim(..), ClassElim(..), FunctionElim(..))
 import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2StateValues, onStateList)
@@ -57,7 +57,7 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkStateVar, mkVal)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
   call, initStmts, docFunc, docFuncRepr, docClass, docMod)
-import GOOL.Drasil.AST (ScopeTag(..))
+import GOOL.Drasil.AST (VisibilityTag(..))
 import GOOL.Drasil.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports,
   getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc,
@@ -138,13 +138,13 @@ discardFileLine :: (RenderSym r) => Label -> SValue r -> MSStatement r
 discardFileLine n f = S.valStmt $ objMethodCallNoParams S.string f n 
 
 intClass :: (RenderSym r, Monad r) => (Label -> Doc -> Doc -> Doc -> Doc -> 
-  Doc) -> Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] 
+  Doc) -> Label -> r (Visibility r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] 
   -> CS (r Doc)
 intClass f n s i svrs mths = do
   modify (setClassName n) 
   svs <- onStateList (R.stateVarList . map RC.stateVar) svrs
   ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) mths)
-  return $ onCodeValue (\p -> f n p (RC.scope s) svs ms) i 
+  return $ onCodeValue (\p -> f n p (RC.visibility s) svs ms) i 
 
 -- Python, Java, and C++ --
 
@@ -306,15 +306,15 @@ listDecDef v vals = do
 destructorError :: String -> String
 destructorError l = "Destructors not allowed in " ++ l
 
-stateVarDef :: (RenderSym r, Monad r) => r (Scope r) -> r (Permanence r) -> 
+stateVarDef :: (RenderSym r, Monad r) => r (Visibility r) -> r (Permanence r) -> 
   SVariable r -> SValue r -> CS (r Doc)
 stateVarDef s p vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar 
-  (RC.scope s) (RC.perm p) . RC.statement) (S.stmt $ S.varDecDef vr vl)
+  (RC.visibility s) (RC.perm p) . RC.statement) (S.stmt $ S.varDecDef vr vl)
   
-constVar :: (RenderSym r, Monad r) => Doc -> r (Scope r) -> SVariable r -> 
+constVar :: (RenderSym r, Monad r) => Doc -> r (Visibility r) -> SVariable r -> 
   SValue r -> CS (r Doc)
 constVar p s vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar 
-  (RC.scope s) p . RC.statement) (S.stmt $ S.constDecDef vr vl)
+  (RC.visibility s) p . RC.statement) (S.stmt $ S.constDecDef vr vl)
 
 -- Python, Java, C++, and Swift --
 
@@ -355,10 +355,10 @@ openFileW :: (RenderSym r) => (SValue r -> VSType r -> SValue r -> SValue r) ->
   SVariable r -> SValue r -> MSStatement r
 openFileW f vr vl = vr &= f vl outfile S.litFalse
 
-stateVar :: (RenderSym r, Monad r) => r (Scope r) -> r (Permanence r) -> 
+stateVar :: (RenderSym r, Monad r) => r (Visibility r) -> r (Permanence r) -> 
   SVariable r -> CS (r Doc)
 stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar 
-  (RC.scope s) (RC.perm p) . RC.statement) (S.stmt $ S.varDec v)
+  (RC.visibility s) (RC.perm p) . RC.statement) (S.stmt $ S.varDec v)
 
 -- Python and Swift --
 

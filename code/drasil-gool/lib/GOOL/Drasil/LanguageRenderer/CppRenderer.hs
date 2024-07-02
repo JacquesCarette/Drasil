@@ -25,7 +25,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), switchAsIf, StatePattern(..),
-  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
+  ObserverPattern(..), StrategyPattern(..), VisibilitySym(..), ParameterSym(..),
   MethodSym(..), pubMethod, StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
@@ -34,13 +34,13 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalGetSet(..), 
   InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
-  RenderStatement(..), StatementElim(statementTerm), RenderScope(..),
-  ScopeElim, MSMthdType, MethodTypeSym(..), RenderParam(..),
+  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
+  VisibilityElim, MSMthdType, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   StateVarElim, ParentSpec, RenderClass(..), ClassElim, RenderMod(..),
   ModuleElim, BlockCommentSym(..), BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp, variable, value, function, statement, scope, parameter,
+  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (addExt, classDec, dot, blockCmtStart, 
   blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, 
@@ -79,7 +79,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float,
   for, while, intFunc, multiAssignError, multiReturnError, multiTypeError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (runStrategy, 
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
-import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), Binding(..), onBinding, 
+import GOOL.Drasil.AST (Terminator(..), VisibilityTag(..), Binding(..), onBinding, 
   BindData(..), bd, FileType(..), FileData(..), fileD, FuncData(..), fd,
   ModData(..), md, updateMod, OpData(..), ParamData(..), pd, ProgData(..),
   progD, emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd,
@@ -98,7 +98,7 @@ import GOOL.Drasil.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getHeaderModImports, addDefine, getDefines, addHeaderDefine, 
   getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing, 
   setFileType, getModuleName, setModuleName, setClassName, getClassName, setCurrMain, 
-  getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, getCurrMainFunc,
+  getCurrMain, getClassMap, setVisibility, getVisibility, setCurrMainFunc, getCurrMainFunc,
   addIter, getIter, resetIter, useVarName, genLoopIndex)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,log,exp,mod,max)
@@ -660,16 +660,16 @@ instance (Pair p) => StrategyPattern (p CppSrcCode CppHdrCode) where
     (\s -> runStrategy l (zip (map fst strats) s) (fmap (onStateValue psnd) rv) 
       (fmap (onStateValue psnd) av)) (map snd strats)
 
-instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
-  type Scope (p CppSrcCode CppHdrCode) = (Doc, ScopeTag)
+instance (Pair p) => VisibilitySym (p CppSrcCode CppHdrCode) where
+  type Visibility (p CppSrcCode CppHdrCode) = (Doc, VisibilityTag)
   private = pair private private
   public = pair public public
 
-instance (Pair p) => RenderScope (p CppSrcCode CppHdrCode) where
-  scopeFromData s d = pair (scopeFromData s d) (scopeFromData s d)
+instance (Pair p) => RenderVisibility (p CppSrcCode CppHdrCode) where
+  visibilityFromData s d = pair (visibilityFromData s d) (visibilityFromData s d)
   
-instance (Pair p) => ScopeElim (p CppSrcCode CppHdrCode) where
-  scope s = RC.scope $ pfst s
+instance (Pair p) => VisibilityElim (p CppSrcCode CppHdrCode) where
+  visibility s = RC.visibility $ pfst s
 
 instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) where
   type MethodType (p CppSrcCode CppHdrCode) = TypeData
@@ -1547,16 +1547,16 @@ instance ObserverPattern CppSrcCode where
 instance StrategyPattern CppSrcCode where
   runStrategy = M.runStrategy
 
-instance ScopeSym CppSrcCode where
-  type Scope CppSrcCode = (Doc, ScopeTag)
+instance VisibilitySym CppSrcCode where
+  type Visibility CppSrcCode = (Doc, VisibilityTag)
   private = toCode (R.private, Priv)
   public = toCode (R.public, Pub)
 
-instance RenderScope CppSrcCode where
-  scopeFromData s d = toCode (d, s)
+instance RenderVisibility CppSrcCode where
+  visibilityFromData s d = toCode (d, s)
   
-instance ScopeElim CppSrcCode where
-  scope = fst . unCPPSC
+instance VisibilityElim CppSrcCode where
+  visibility = fst . unCPPSC
 
 instance MethodTypeSym CppSrcCode where
   type MethodType CppSrcCode = TypeData
@@ -2174,16 +2174,16 @@ instance ObserverPattern CppHdrCode where
 instance StrategyPattern CppHdrCode where
   runStrategy _ _ _ _ = toState $ toCode empty
 
-instance ScopeSym CppHdrCode where
-  type Scope CppHdrCode = (Doc, ScopeTag)
+instance VisibilitySym CppHdrCode where
+  type Visibility CppHdrCode = (Doc, VisibilityTag)
   private = toCode (R.private, Priv)
   public = toCode (R.public, Pub)
 
-instance RenderScope CppHdrCode where
-  scopeFromData s d = toCode (d, s)
+instance RenderVisibility CppHdrCode where
+  visibilityFromData s d = toCode (d, s)
   
-instance ScopeElim CppHdrCode where
-  scope = fst . unCPPHC
+instance VisibilityElim CppHdrCode where
+  visibility = fst . unCPPHC
 
 instance MethodTypeSym CppHdrCode where
   type MethodType CppHdrCode = TypeData
@@ -2221,7 +2221,7 @@ instance MethodSym CppHdrCode where
   docMain = mainFunction
 
   function = G.function
-  mainFunction _ = modifyReturn (setScope Pub) $ toCode $ mthd Pub empty
+  mainFunction _ = modifyReturn (setVisibility Pub) $ toCode $ mthd Pub empty
 
   docFunc = CP.doxFunc
 
@@ -2235,7 +2235,7 @@ instance MethodSym CppHdrCode where
 
 instance RenderMethod CppHdrCode where
   intMethod _ n s _ t ps _ = do
-    modify (setScope (snd $ unCPPHC s)) 
+    modify (setVisibility (snd $ unCPPHC s)) 
     tp <- t
     pms <- sequence ps
     pure $ toCode $ mthd (snd $ unCPPHC s) $ cpphMethod n tp pms
@@ -2341,9 +2341,9 @@ getParam v = zoom lensMStoVS v >>= (\v' -> getParamFunc ((getType .
         getParamFunc (Object _) = pointerParam
         getParamFunc _ = param
  
-data MethodData = MthD {getMthdScp :: ScopeTag, mthdDoc :: Doc}
+data MethodData = MthD {getMthdScp :: VisibilityTag, mthdDoc :: Doc}
 
-mthd :: ScopeTag -> Doc -> MethodData
+mthd :: VisibilityTag -> Doc -> MethodData
 mthd = MthD 
 
 addAlgorithmImport :: MS a -> MS a 
@@ -2698,7 +2698,7 @@ cppsMethod is n c t ps b = emptyIfEmpty (RC.body b <> initList) $
 cppConstructor :: [MSParameter CppSrcCode] -> NamedArgs CppSrcCode -> 
   MSBody CppSrcCode -> SMethod CppSrcCode
 cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals 
-  bod -> if null is then CP.constructor n ps is b else modify (setScope Pub) >> 
+  bod -> if null is then CP.constructor n ps is b else modify (setVisibility Pub) >> 
   toState (toCode $ mthd Pub (cppsMethod (zipWith (\ivar ival -> RC.variable 
   ivar <> parens (RC.value ival)) ivars ivals) n n tp pms bod))) <$> construct 
   n <*> sequence ps <*> mapM (zoom lensMStoVS . fst) is <*> mapM (zoom 
@@ -2713,10 +2713,10 @@ cppsFunction n t ps b = vcat [
   
 cppsIntFunc :: (CppSrcCode (Type CppSrcCode) -> 
   [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> Doc) 
-  -> CppSrcCode (Scope CppSrcCode) -> MSMthdType CppSrcCode -> 
+  -> CppSrcCode (Visibility CppSrcCode) -> MSMthdType CppSrcCode -> 
   [MSParameter CppSrcCode] -> MSBody CppSrcCode -> SMethod CppSrcCode
 cppsIntFunc f s t ps b = do
-  modify (setScope (snd $ unCPPSC s))
+  modify (setVisibility (snd $ unCPPSC s))
   tp <- t
   pms <- sequence ps
   toCode . mthd (snd $ unCPPSC s) . f tp pms <$> b
@@ -2730,7 +2730,7 @@ cppCommentedFunc :: (RenderSym r, Monad r) => FileType ->
 cppCommentedFunc ft cmt fn = do
   f <- fn
   mn <- getCurrMainFunc
-  scp <- getScope
+  scp <- getVisibility
   cmnt <- cmt
   let cf = pure (onCodeValue (mthd scp . R.commentedItem 
         (RC.blockComment' cmnt) . mthdDoc) f)
@@ -2739,7 +2739,7 @@ cppCommentedFunc ft cmt fn = do
       ret Combined = error "Combined passed to cppCommentedFunc"
   ret ft
 
-cppsStateVarDef :: Doc -> CppSrcCode (Scope CppSrcCode) -> 
+cppsStateVarDef :: Doc -> CppSrcCode (Visibility CppSrcCode) -> 
   CppSrcCode (Permanence CppSrcCode) -> SVariable CppSrcCode -> 
   SValue CppSrcCode -> CSStateVar CppSrcCode
 cppsStateVarDef cns s p vr' vl' = do
@@ -2759,12 +2759,12 @@ cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (RC.perm p) .
   RC.statement) (zoom lensCStoMS $ stmt $ onBinding (binding p) (varDec 
   vr) (varDecDef vr vl)) 
 
-cpphVarsFuncsList :: ScopeTag -> [CppHdrCode (StateVar CppHdrCode)] -> 
+cpphVarsFuncsList :: VisibilityTag -> [CppHdrCode (StateVar CppHdrCode)] -> 
   [CppHdrCode (Method CppHdrCode)] -> Doc
 cpphVarsFuncsList st vs fs = 
-  let scopedVs = [RC.stateVar v | v <- vs, getStVarScp (unCPPHC v) == st]
-      scopedFs = [RC.method f | f <- fs, getMthdScp (unCPPHC f) == st]
-  in vcat $ scopedVs ++ (if null scopedVs then empty else blank) : scopedFs
+  let visVs = [RC.stateVar v | v <- vs, getStVarScp (unCPPHC v) == st]
+      visFs = [RC.method f | f <- fs, getMthdScp (unCPPHC f) == st]
+  in vcat $ visVs ++ (if null visVs then empty else blank) : visFs
 
 cppsClass :: [CppSrcCode (StateVar CppSrcCode)] -> 
   [CppSrcCode (Method CppSrcCode)] -> CppSrcCode (Class CppSrcCode)
@@ -2774,16 +2774,16 @@ cppsClass vs fs = toCode $ vibcat $ vcat vars : funcs
 
 cpphClass :: Label -> CppHdrCode ParentSpec -> 
   [CppHdrCode (StateVar CppHdrCode)] -> [CppHdrCode (Method CppHdrCode)] -> 
-  CppHdrCode (Scope CppHdrCode) -> CppHdrCode (Scope CppHdrCode) -> 
+  CppHdrCode (Visibility CppHdrCode) -> CppHdrCode (Visibility CppHdrCode) -> 
   CppHdrCode (Class CppHdrCode)
 cpphClass n ps vars funcs pub priv = let 
   pubs  = cpphVarsFuncsList Pub vars funcs
   privs = cpphVarsFuncsList Priv vars funcs
   ifEmptyPubs  = emptyIfEmpty pubs
   ifEmptyPrivs = emptyIfEmpty privs
-  indLi = [ifEmptyPubs (RC.scope pub <> colon), ifEmptyPubs (indent pubs),
+  indLi = [ifEmptyPubs (RC.visibility pub <> colon), ifEmptyPubs (indent pubs),
           ifEmptyPubs (ifEmptyPrivs blank),
-          ifEmptyPrivs (RC.scope priv <> colon), ifEmptyPrivs (indent privs)]
+          ifEmptyPrivs (RC.visibility priv <> colon), ifEmptyPrivs (indent privs)]
   in onCodeValue (\p -> vcat [ 
     classDec <+> text n <+> p <+> bodyStart,
     indentList indLi,

@@ -25,13 +25,13 @@ module GOOL.Drasil.State (
   updateMethodExcMap, getMethodExcMap, updateCallMap, callMapTransClosure, 
   updateMEMWithCalls, addParameter, getParameters, setOutputsDeclared, 
   isOutputsDeclared, addException, addExceptions, getExceptions, addCall, 
-  setMainDoc, getMainDoc, setScope, getScope, setCurrMainFunc, getCurrMainFunc, 
+  setMainDoc, getMainDoc, setVisibility, getVisibility, setCurrMainFunc, getCurrMainFunc, 
   setThrowUsed, getThrowUsed, setErrorDefined, getErrorDefined, addIter, 
   getIter, resetIter, incrementLine, incrementWord, getLineIndex, getWordIndex, 
   resetIndices, useVarName, genVarName, genLoopIndex
 ) where
 
-import GOOL.Drasil.AST (FileType(..), ScopeTag(..), QualifiedName, qualName)
+import GOOL.Drasil.AST (FileType(..), VisibilityTag(..), QualifiedName, qualName)
 import GOOL.Drasil.CodeAnalysis (Exception, ExceptionType, printExc, hasLoc)
 import GOOL.Drasil.CodeType (ClassName)
 
@@ -116,7 +116,7 @@ data MethodState = MS {
   _calls :: [QualifiedName], -- Used to build CallMap
   
   -- Only used for C++
-  _currScope :: ScopeTag, -- Used to maintain correct scope when adding 
+  _currVisibility :: VisibilityTag, -- Used to maintain correct visibility when adding 
                           -- documentation to function in C++
   _currMainFunc :: Bool, -- Used by C++ to put documentation for the main
                         -- function in source instead of header file
@@ -262,7 +262,7 @@ initialMS = MS {
   _exceptions = [],
   _calls = [],
 
-  _currScope = Priv,
+  _currVisibility = Priv,
   _currMainFunc = False,
   _iterators = [],
 
@@ -506,11 +506,11 @@ getExceptions = gets (^. exceptions)
 addCall :: QualifiedName -> ValueState -> ValueState
 addCall f = over (methodState . calls) (f:)
 
-setScope :: ScopeTag -> MethodState -> MethodState
-setScope = set currScope
+setVisibility :: VisibilityTag -> MethodState -> MethodState
+setVisibility = set currVisibility
 
-getScope :: MS ScopeTag
-getScope = gets (^. currScope)
+getVisibility :: MS VisibilityTag
+getVisibility = gets (^. currVisibility)
 
 setCurrMainFunc :: Bool -> MethodState -> MethodState
 setCurrMainFunc = set currMainFunc

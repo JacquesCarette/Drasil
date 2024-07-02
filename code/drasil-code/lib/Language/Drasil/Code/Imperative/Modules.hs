@@ -50,8 +50,8 @@ import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement,
   VariableValue(..), CommandLineArgs(..), BooleanExpression(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), objDecNewNoParams,
   extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse,
-  ScopeSym(..), MethodSym(..), StateVarSym(..), pubDVar, convTypeOO,
-  ScopeTag(..))
+  VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convTypeOO,
+  VisibilityTag(..))
 
 import Prelude hiding (print)
 import Data.List (intersperse, partition)
@@ -256,7 +256,7 @@ genInputConstructor = do
     dvName, icName]
 
 -- | Generates a function for calculating derived inputs.
-genInputDerived :: (OOProg r) => ScopeTag ->
+genInputDerived :: (OOProg r) => VisibilityTag ->
   GenState (Maybe (SMethod r))
 genInputDerived s = do
   g <- get
@@ -277,7 +277,7 @@ genInputDerived s = do
   genDerived $ dvName `elem` defSet g
 
 -- | Generates function that checks constraints on the input.
-genInputConstraints :: (OOProg r) => ScopeTag ->
+genInputConstraints :: (OOProg r) => VisibilityTag ->
   GenState (Maybe (SMethod r))
 genInputConstraints s = do
   g <- get
@@ -395,7 +395,7 @@ printExpr Lit{} _  = []
 printExpr e     db = [printStr $ " (" ++ render (codeExprDoc db Implementation OneLine e) ++ ")"]
 
 -- | | Generates a function for reading inputs from a file.
-genInputFormat :: (OOProg r) => ScopeTag ->
+genInputFormat :: (OOProg r) => VisibilityTag ->
   GenState (Maybe (SMethod r))
 genInputFormat s = do
   g <- get

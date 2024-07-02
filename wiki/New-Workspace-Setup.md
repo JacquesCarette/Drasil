@@ -12,6 +12,7 @@ In order, you should be installing:
 
 Optionally, some functions will be limited without:
 1. [Doxygen](#doxygen)
+2. [mdBook](#mdBook)
 
 **Notes**: 
 1. It is [**recommended**](https://github.com/JacquesCarette/Drasil/issues/2913#issuecomment-987300398) for Windows users to install the following tools using Linux on Windows/Windows WSL. If you choose to install using Windows WSL, you can safely ignore all Windows installation notes (except for that regarding Unicode support), and follow the instructions for Linux machines with the *apt*-package manager (e.g., Debian, Ubuntu, etc). From experience, installations with Windows WSL over native installations provide better tools, quicker installs, and an overall smoother experience.
@@ -493,6 +494,41 @@ The [Doxygen download page](https://www.doxygen.nl/download.html) has a Windows 
 <summary><h4>Mac</h4></summary>
 
 The [Doxygen download page](https://www.doxygen.nl/download.html) has a disk image download for Mac OS. Open it and follow the on-screen instructions.
+
+</details>
+
+## mdBook
+
+mdBook is a command line tool designed for creating books with Markdown. Drasil currently generates mdBook projects as a format for the SRS documentation. The installation of mdBook is a prerequisite for locally executing and building the mdBook projects that have been generated.
+
+### Installation Instructions
+Please visit the [mdBook website](https://rust-lang.github.io/mdBook/guide/installation.html) for more detailed instructions. For convenience, we have a summary for Linux, Windows, and Mac below.
+
+<details>
+
+<summary><h4>Mac & Linux</h4></summary>
+
+Install Rust and Cargo using the following command:
+```
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+Once you have installed Rust, the following command can be used to build and install mdBook:
+```
+cargo install mdbook
+```
+
+</details>
+
+<details>
+
+<summary><h4>Windows</h4></summary>
+
+Download and run [`rustup-init.exe`](https://static.rust-lang.org/rustup/dist/i686-pc-windows-gnu/rustup-init.exe).
+
+Once you have installed Rust, the following command can be used to build and install mdBook:
+```
+cargo install mdbook
+```
 
 </details>
 

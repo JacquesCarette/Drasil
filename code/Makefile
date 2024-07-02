@@ -76,6 +76,8 @@ BC_E_SUFFIX = _build_clean
 TRACE_GRAPH_SUFFIX = _trace_graph
 INSTALL_E_SUFFIX = _install
 DEBUG_E_SUFFIX = _debug
+MDBOOK_BUILD_E_SUFFIX = _mdBook_build
+MDBOOK_SERVER_E_SUFFIX = _mdBook_server
 
 # add example names with the appropriate suffixes to create per-example targets
 GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES))
@@ -88,6 +90,8 @@ BC_EXAMPLES = $(addsuffix $(BC_E_SUFFIX), $(EXAMPLES))
 TRACE_GRAPH_EXAMPLES = $(addsuffix $(TRACE_GRAPH_SUFFIX), $(EXAMPLES))
 INSTALL_EXAMPLES = $(addsuffix $(INSTALL_E_SUFFIX), $(EXAMPLES))
 DEBUG_EXAMPLES = $(addsuffix $(DEBUG_E_SUFFIX), $(EXAMPLES))
+MDBOOK_BUILD_EXAMPLES = $(addsuffix $(MDBOOK_BUILD_E_SUFFIX), $(EXAMPLES))
+MDBOOK_SERVER_EXAMPLES = $(addsuffix $(MDBOOK_SERVER_E_SUFFIX), $(EXAMPLES))
 
 # Website names with appropriate suffixes.
 TEST_WEBSITE = $(addsuffix $(TEST_E_SUFFIX), $(WEBSITE_FOLDER_NAME))
@@ -274,6 +278,10 @@ packagedeps: graphmod check_dot
 	@echo ----------------------------
 	@stack dot --prune dblpend,gamephysics,glassbr,hghc,swhsnopcm,pdcontroller,projectile,sglpend,ssp,swhs,template,drasil-website | tred | dot -Tpng > "$(GRAPH_FOLDER)drasil-all-pkgs-deps".png	
 
+# First build all the Drasil packages, run all examples (no traceability graphs),
+# and then build the generated mdBook projects.
+mdBook_build: $(MDBOOK_BUILD_EXAMPLES) ##@Examples Build all generated mdBook projects.
+
 #--------------------------------------------------------------#
 #--- Targets that are used for individual packages/examples ---#
 #--------------------------------------------------------------#
@@ -281,8 +289,8 @@ packagedeps: graphmod check_dot
 # with an appended suffix (first argument of filter).
 
 # Variables needed to create individual example targets using filter.
-%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX) %$(MDBOOK_BUILD_E_SUFFIX) %$(MDBOOK_SERVER_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX) %$(MDBOOK_BUILD_E_SUFFIX) %$(MDBOOK_SERVER_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 %$(GEN_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
 
 # Build individual Drasil packages. Each package will have the target packageName_build.
@@ -370,6 +378,16 @@ $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_WEBSITE)): %$(STABILIZE_E_SUFFIX): 
 %$(TEX_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(TRACE_GRAPH_SUFFIX)
 	EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE="$(MAKE)" TERM="$(BATCHTERM)" "$(SHELL)" "$(SCRIPT_FOLDER)"tex_build.sh
+
+# Build individual example mdBook SRSs.
+# Targets will have the form exampleName_mdBook_build.
+$(filter %$(MDBOOK_BUILD_E_SUFFIX), $(MDBOOK_BUILD_EXAMPLES)): %$(MDBOOK_BUILD_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX)
+	- mdbook build "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook"
+
+# Launch local server for individual example mdBook SRSs.
+# Targets will have the form exampleName_mdBook_server.
+$(filter %$(MDBOOK_SERVER_E_SUFFIX), $(MDBOOK_SERVER_EXAMPLES)): %$(MDBOOK_SERVER_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX)
+	- mdbook serve --open "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook"
 
 #----------------------------------------------------------------------------------#
 #--- Generate analysis of module, class, datatype, and class instance structure ---#
@@ -538,6 +556,8 @@ help:  ##@Help Show this help.
 	@echo "  X$(BC_E_SUFFIX)       Remove specific example from the build folder."
 	@echo "  X$(CODE_E_SUFFIX)              Generate individual example code."
 	@echo "  X$(DCP_E_SUFFIX)  Get all generated code file paths in the example."
+	@echo "  X$(MDBOOK_BUILD_E_SUFFIX)      Build the mdBook SRS of an individual example."
+	@echo "  X$(MDBOOK_SERVER_E_SUFFIX)     Launch local server for the mdBook SRS of an individual example."
 	@echo ""
 	@echo "Set a 'DEBUG_ENV' environment variable to 'true' if you want to check out the list of chunks in a Drasil run."
 	@echo ""

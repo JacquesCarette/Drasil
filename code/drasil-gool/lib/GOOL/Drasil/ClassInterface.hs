@@ -575,6 +575,7 @@ class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r
     [MSParameter r] -> MSBody r -> SMethod r
   getMethod   :: SVariable r -> SMethod r
   setMethod   :: SVariable r -> SMethod r 
+  -- Parameters are: constructor name, parameters, initializers, body
   constructor :: [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
 
   docMain :: MSBody r -> SMethod r
@@ -602,10 +603,10 @@ pubMethod :: (MethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r
 pubMethod n = method n public dynamic
 
 initializer :: (MethodSym r) => [MSParameter r] -> Initializers r -> SMethod r
-initializer ps is = constructor ps is (body [])
+initializer ps is = getClassName >>= (\n -> constructor n ps is (body []))
 
 nonInitConstructor :: (MethodSym r) => [MSParameter r] -> MSBody r -> SMethod r
-nonInitConstructor ps = constructor ps []
+nonInitConstructor ps = getClassName >>= (\n -> constructor n ps [])
 
 type CSStateVar a = CS (a (StateVar a))
 

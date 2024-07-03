@@ -4,7 +4,7 @@ module Language.Drasil.Constraint (
   -- * Types
   Constraint(..), ConstraintE, ConstraintReason(..),
   -- * Functions
-  physc, sfwrc, isPhysC, isSfwrC
+  physc, sfwrc, elem, isPhysC, isSfwrC
   ) where
 
 import Language.Drasil.Expr.Lang
@@ -28,8 +28,8 @@ data Constraint a where
 physc :: RealInterval Expr Expr -> ConstraintE
 physc = Range Physical
 
-enumc :: Set Expr -> ConstraintE
-enumc = Elem Physical
+elem :: Set Expr -> ConstraintE
+elem = Elem Physical
 
 -- | Smart constructor for range of 'Software' constraints between two given expressions.
 sfwrc :: RealInterval Expr Expr -> ConstraintE

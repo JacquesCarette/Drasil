@@ -108,7 +108,7 @@ nomThick = cuc "nomThick"
   (nounPhraseSent $ S "nominal thickness" +:+ displayDblConstrntsAsSet 
     nomThick nominalThicknesses)
   lT millimetre {-Discrete nominalThicknesses, but not implemented-} Rational 
-  [{- TODO: add back constraint: enumc nominalThicknesses -}] $ exactDbl 8
+  [{- TODO: add back constraint: elem nominalThicknesses -}] $ exactDbl 8
 
 glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String) 
   [{- TODO: add back constraint: EnumeratedStr Software $ map (abrv . snd) glassType -}]

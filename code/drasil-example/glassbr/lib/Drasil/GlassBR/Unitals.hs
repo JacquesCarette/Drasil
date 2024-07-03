@@ -327,7 +327,7 @@ glassGeo      = dccWDS "glassGeo"    (cnIES "glass geometry")
 glassTy       = dcc "glassTy"     (cn' "glass type") "type of glass"
 glassWL       = dcc "glassWL"     (nounPhraseSP "glass weight load")
   "the dead load component of the glass weight"
-glBreakage    = dcc "glBreakage"  (cn' "glass breakage")
+glBreakage    = dcc "glBreakage"  (nounPhraseSP "glass breakage")
   "the fracture or breakage of any lite or ply in monolithic, laminated, or insulating glass"
 glTyFac       = cc' glassTypeFac
   (foldlSent_ [S "a multiplying factor for adjusting the", getAcc lResistance, 

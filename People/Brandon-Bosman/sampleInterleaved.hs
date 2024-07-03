@@ -1,47 +1,60 @@
-import Data.Set (Set, isSubsetOf, unions, empty, fromList, toList, size)
-import Data.List (partition, intercalate, sortBy)
+import Data.Set (Set, isSubsetOf, unions, empty, fromList, size)
+import Data.List (intercalate, sortBy, find, delete)
 import Data.Ord (comparing)
 
--- | Sort input statements.  Inputs are:
--- Given inputs, structured as (provides, body)
--- Constraint checks, structured as (needs, body)
--- Derived values, structured as (provides, needs, body)
--- Output structure is (provides, body)
-sortInputStatements :: [(Set String, String)] -> [(Set String, String)] -> [(Set String, Set String, String)] -> [String]
-sortInputStatements ps cs ds = map snd (sortIStmts [] ps cs ds)
-  where 
-    sortIStmts :: [(Set String, String)] -> [(Set String, String)] -> [(Set String, String)] -> [(Set String, Set String, String)] -> [(Set String, String)]
-    sortIStmts ord [] [] [] = ord
-    sortIStmts ord ps cs ds = let
-      know = unions $ map fst ord
-      (newCs, oldCs) = partition (\(needs, _) -> needs `isSubsetOf` know) cs
-      (newDs, oldDs) = partition (\(_, needs, _) -> needs `isSubsetOf` know) ds
-      in 
-        -- If constraints can be checked, do that
-        if not $ null newCs then
-              -- Sort statements by number of dependencies
-          let sortedNewCs = sortBy (\(needs1, _) (needs2, _) -> comparing size needs1 needs2) newCs
-              newOrd = map (\(_, bod) -> (empty, bod)) sortedNewCs in
-          sortIStmts (ord ++ newOrd) ps oldCs ds
-        -- Or if derived inputs can be calculated, do that
-        else if not $ null newDs then
-              -- Sort statements by number of dependencies
-          let sortedNewds = sortBy (\(_, needs1, _) (_, needs2, _) -> comparing size needs1 needs2) newDs
-              newOrd = map (\(prov, _, bod) -> (prov, bod)) newDs in
-          sortIStmts (ord ++ newOrd) ps cs oldDs
-        -- If nothing else, parse the next input
-        else case ps of
-          (p:ps') -> sortIStmts (ord ++ [p]) ps' cs ds
-          -- If no inputs to parse, give up
-          _ -> error "Cannot resolve input dependencies."
+data StmtType = Parse | Constraint | Derived
+  deriving Eq
 
-tests :: [([(Set String, String)], [(Set String, String)], [(Set String, Set String, String)])]
+instance Ord StmtType where
+  compare a b = comparing ordVal a b
+    where ordVal Constraint = 1
+          ordVal Derived = 2
+          ordVal Parse = 3
+
+-- | Sort input statements.  Inputs are:
+-- Statements, structured as (statement type, provides, needs, body)
+-- Output structure is body
+sortInputStatements :: [(StmtType, Set String, Set String, String)] -> [String]
+sortInputStatements stmts = map snd (sortIStmts [] sortedStmts)
+  where
+    sortIStmts :: [(Set String, String)] -> 
+      [(StmtType, Set String, Set String, String)] -> [(Set String, String)]
+    sortIStmts ord [] = ord
+    sortIStmts ord smts = let 
+      know = unions $ map fst ord
+      -- Pick the first element that has all its dependencies,
+      -- and add it to the ordering.
+      smt = find (\(_, _, needs, _) -> needs `isSubsetOf` know) smts
+      rest = smt >>= (\s -> pure $ delete s smts)
+      in case (smt, rest) of
+        (Just s, Just r) -> sortIStmts (ord ++ [cleanup s]) r
+        (_, _) -> error "Cannot resolve input dependencies."
+    cleanup = \(_, provides, _, bod) -> (provides, bod)
+    -- Represents an 'ideal' sorting of the statements: constraints first, then
+    -- derived values, then parsing, all sorted by number of dependencies.
+    sortedStmts = sortBy (\(sTp1, _, needs1, _) (sTp2, _, needs2, _) ->
+                            case compare sTp1 sTp2 of
+                              EQ -> comparing size needs1 needs2
+                              o  -> o) stmts
+
+tests :: [[(StmtType, Set String, Set String, String)]]
 tests = [
-  ([(fromList ["a"], "a = 1"), (fromList ["b"], "b = 2")], [(fromList ["a"], "a > 0"), (fromList ["a", "b"], "a > 2 * b"), (fromList ["c"], "c < 100")], [(fromList ["c"], fromList ["a"], "c = a / 2")]),
-  ([(fromList ["a"], "a = 1"), (fromList ["b"], "b = 2")], [(fromList ["a", "b"], "a > b"), (fromList ["b"], "b < 30")], [])
-  ]
+  [
+    (Parse, fromList ["a"], empty, "a = 1"),
+    (Parse, fromList ["b"], empty, "b = 2"),
+    (Constraint, empty, fromList ["a"], "a > 0"),
+    (Constraint, empty, fromList ["a", "b"], "a > 2 * b"),
+    (Constraint, empty, fromList ["c"], "c < 100"),
+    (Derived, fromList ["c"], fromList ["a"], "c = a / 2")
+  ],
+  [
+    (Parse, fromList ["a"], empty, "a = 1"),
+    (Parse, fromList ["b"], empty, "b = 2"),
+    (Constraint, empty, fromList ["a", "b"], "a > b"),
+    (Constraint, empty, fromList ["b"], "b < 30")
+  ]]
 
 runTests :: IO ()
 runTests = do
-  let results = map (\(p, c, d) -> "Test:" : sortInputStatements p c d ++ [""]) tests
+  let results = map (\stmts -> "Test:" : sortInputStatements stmts ++ [""]) tests
   putStrLn $ intercalate "\n" (concat results)

@@ -523,7 +523,7 @@ cargo install mdbook
 
 <summary><h4>Windows</h4></summary>
 
-Download and run [`rustup-init.exe`](https://static.rust-lang.org/rustup/dist/i686-pc-windows-gnu/rustup-init.exe).
+Follow the instructions on the [Rust website](https://www.rust-lang.org/tools/install) to install Rust.
 
 Once you have installed Rust, the following command can be used to build and install mdBook:
 ```

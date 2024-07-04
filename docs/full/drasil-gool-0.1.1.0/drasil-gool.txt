@@ -95,7 +95,7 @@ svd :: ScopeTag -> Doc -> (Doc, Terminator) -> StateVarData
 data TypeData
 td :: CodeType -> String -> Doc -> TypeData
 data ValData
-vd :: Maybe Int -> TypeData -> Doc -> ValData
+vd :: Maybe Int -> Maybe Integer -> TypeData -> Doc -> ValData
 updateValDoc :: (Doc -> Doc) -> ValData -> ValData
 data VarData
 vard :: Binding -> String -> TypeData -> Doc -> VarData
@@ -407,9 +407,9 @@ class (ValueSym r) => BooleanExpression r
 (?!) :: BooleanExpression r => SValue r -> SValue r
 (?&&) :: BooleanExpression r => SValue r -> SValue r -> SValue r
 (?||) :: BooleanExpression r => SValue r -> SValue r -> SValue r
-infixr 6 ?!
 infixl 2 ?&&
 infixl 1 ?||
+infixr 6 ?!
 class (ValueSym r) => Comparison r
 (?<) :: Comparison r => SValue r -> SValue r -> SValue r
 (?<=) :: Comparison r => SValue r -> SValue r -> SValue r
@@ -507,8 +507,10 @@ class (ValueSym r) => InternalList r
 listSlice' :: InternalList r => Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
 
 -- | Creates a slice of a list and assigns it to a variable. Arguments are:
---   Variable to assign, list to read from, [Start index], [End index],
---   [Step]
+--   Variable to assign List to read from [Start index] inclusive. (if
+--   Nothing, then list start if step &gt; 0, list end if step &lt; 0) [End
+--   index] exclusive. (if Nothing, then list end if step &gt; 0, list
+--   start if step &gt; 0) [Step] (if Nothing, then defaults to 1)
 listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 at :: List r => SValue r -> SValue r -> SValue r
@@ -596,6 +598,9 @@ break :: ControlStatement r => MSStatement r
 continue :: ControlStatement r => MSStatement r
 returnStmt :: ControlStatement r => SValue r -> MSStatement r
 throw :: ControlStatement r => Label -> MSStatement r
+
+-- | String of if-else statements. Arguments: List of predicates and bodies
+--   (if this then that), Body for else branch
 ifCond :: ControlStatement r => [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 switch :: ControlStatement r => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 ifExists :: ControlStatement r => SValue r -> MSBody r -> MSBody r -> MSStatement r
@@ -758,9 +763,10 @@ cast :: RenderValue r => VSType r -> SValue r -> SValue r
 --   external module, maybe Doc for object variable (including separator
 --   between object and function) for method calls.
 call :: RenderValue r => Maybe Library -> Maybe Doc -> MixedCall r
-valFromData :: RenderValue r => Maybe Int -> VSType r -> Doc -> SValue r
+valFromData :: RenderValue r => Maybe Int -> Maybe Integer -> VSType r -> Doc -> SValue r
 class ValueElim r
 valuePrec :: ValueElim r => r (Value r) -> Maybe Int
+valueInt :: ValueElim r => r (Value r) -> Maybe Integer
 value :: ValueElim r => r (Value r) -> Doc
 class InternalGetSet r
 getFunc :: InternalGetSet r => SVariable r -> VSFunction r
@@ -846,6 +852,15 @@ increment :: RenderSym r => SVariable r -> SValue r -> MSStatement r
 increment1 :: RenderSym r => SVariable r -> MSStatement r
 runStrategy :: (RenderSym r, Monad r) => Label -> [(Label, MSBody r)] -> Maybe (SValue r) -> Maybe (SVariable r) -> MS (r Doc)
 listSlice :: RenderSym r => Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
+
+-- | Gets the expression and code for setting bounds in a list slice Input:
+--   - String: Variable name for bound (to be created if necessary), -
+--   SValue: step value - Maybe Integer: literal value of step, if exists -
+--   Maybe SValue: given value of bound - SValue: value of bound if bound
+--   not given and step is positive - SValue: value of bound if bound not
+--   given and step is negative Output: (MSStatement, SValue): (setter,
+--   value) of bound
+makeSetterVal :: RenderSym r => Label -> SValue r -> Maybe Integer -> Maybe (SValue r) -> SValue r -> SValue r -> (MSStatement r, SValue r)
 stringListVals :: RenderSym r => [SVariable r] -> SValue r -> MSStatement r
 stringListLists :: RenderSym r => [SVariable r] -> SValue r -> MSStatement r
 forRange :: RenderSym r => SVariable r -> SValue r -> SValue r -> SValue r -> MSBody r -> MSStatement r
@@ -2213,6 +2228,9 @@ break :: ControlStatement r => MSStatement r
 continue :: ControlStatement r => MSStatement r
 returnStmt :: ControlStatement r => SValue r -> MSStatement r
 throw :: ControlStatement r => Label -> MSStatement r
+
+-- | String of if-else statements. Arguments: List of predicates and bodies
+--   (if this then that), Body for else branch
 ifCond :: ControlStatement r => [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 switch :: ControlStatement r => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 ifExists :: ControlStatement r => SValue r -> MSBody r -> MSBody r -> MSStatement r
@@ -2304,9 +2322,9 @@ class (ValueSym r) => BooleanExpression r
 (?!) :: BooleanExpression r => SValue r -> SValue r
 (?&&) :: BooleanExpression r => SValue r -> SValue r -> SValue r
 (?||) :: BooleanExpression r => SValue r -> SValue r -> SValue r
-infixr 6 ?!
 infixl 2 ?&&
 infixl 1 ?||
+infixr 6 ?!
 class (ValueSym r) => Comparison r
 (?<) :: Comparison r => SValue r -> SValue r -> SValue r
 (?<=) :: Comparison r => SValue r -> SValue r -> SValue r
@@ -2396,8 +2414,10 @@ listSet :: List r => SValue r -> SValue r -> SValue r -> SValue r
 indexOf :: List r => SValue r -> SValue r -> SValue r
 
 -- | Creates a slice of a list and assigns it to a variable. Arguments are:
---   Variable to assign, list to read from, [Start index], [End index],
---   [Step]
+--   Variable to assign List to read from [Start index] inclusive. (if
+--   Nothing, then list start if step &gt; 0, list end if step &lt; 0) [End
+--   index] exclusive. (if Nothing, then list end if step &gt; 0, list
+--   start if step &gt; 0) [Step] (if Nothing, then defaults to 1)
 listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 at :: List r => SValue r -> SValue r -> SValue r

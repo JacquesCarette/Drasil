@@ -2583,6 +2583,7 @@ digraph alltypes {
 		subgraph valdata{
 		ValData	[shape=oval, color=cyan3, label="ValData"];
 		ValData -> MaybeInt;
+		ValData -> MaybeInteger;
 		ValData -> TypeData;
 		ValData -> Doc;
 		}

@@ -163,6 +163,9 @@ break :: ControlStatement r => MSStatement r
 continue :: ControlStatement r => MSStatement r
 returnStmt :: ControlStatement r => SValue r -> MSStatement r
 throw :: ControlStatement r => Label -> MSStatement r
+
+-- | String of if-else statements. Arguments: List of predicates and bodies
+--   (if this then that), Body for else branch
 ifCond :: ControlStatement r => [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 switch :: ControlStatement r => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 ifExists :: ControlStatement r => SValue r -> MSBody r -> MSBody r -> MSStatement r
@@ -254,9 +257,9 @@ class (ValueSym r) => BooleanExpression r
 (?!) :: BooleanExpression r => SValue r -> SValue r
 (?&&) :: BooleanExpression r => SValue r -> SValue r -> SValue r
 (?||) :: BooleanExpression r => SValue r -> SValue r -> SValue r
-infixr 6 ?!
 infixl 2 ?&&
 infixl 1 ?||
+infixr 6 ?!
 class (ValueSym r) => Comparison r
 (?<) :: Comparison r => SValue r -> SValue r -> SValue r
 (?<=) :: Comparison r => SValue r -> SValue r -> SValue r
@@ -346,8 +349,10 @@ listSet :: List r => SValue r -> SValue r -> SValue r -> SValue r
 indexOf :: List r => SValue r -> SValue r -> SValue r
 
 -- | Creates a slice of a list and assigns it to a variable. Arguments are:
---   Variable to assign, list to read from, [Start index], [End index],
---   [Step]
+--   Variable to assign List to read from [Start index] inclusive. (if
+--   Nothing, then list start if step &gt; 0, list end if step &lt; 0) [End
+--   index] exclusive. (if Nothing, then list end if step &gt; 0, list
+--   start if step &gt; 0) [Step] (if Nothing, then defaults to 1)
 listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 at :: List r => SValue r -> SValue r -> SValue r

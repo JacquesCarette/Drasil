@@ -9,7 +9,7 @@
 module Language.Drasil.Space (
   -- * Types
   Space(..), Primitive,
-  RealInterval(..), Inclusive(..),
+  RealInterval(..), Inclusive(..), Set(..),
   DomainDesc(..), RTopology(..), DiscreteDomainDesc, ContinuousDomainDesc,
   -- * Class
   HasSpace(..),
@@ -80,6 +80,9 @@ data RealInterval a b where
   Bounded :: (Inclusive, a) -> (Inclusive, b) -> RealInterval a b -- ^ Interval from (x .. y).
   UpTo    :: (Inclusive, a) -> RealInterval a b                   -- ^ Interval from (-infinity .. x).
   UpFrom  :: (Inclusive, b) -> RealInterval a b                   -- ^ Interval from (x .. infinity).
+
+data Set a where
+  MkSet :: a -> Set a
 
 -- | Gets the name of an 'Actor'.
 getActorName :: Space -> String

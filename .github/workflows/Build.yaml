@@ -46,6 +46,11 @@ jobs:
       - name: "Install system requirements"
         run: sudo apt-get install -y --fix-missing libgmp-dev python3 graphviz doxygen fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-xetex texlive-luatex g++ default-jdk mono-devel inkscape
 
+      - name: "Update PATH"
+        run: |
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          echo "$HOME/.swift/usr/bin" >> $GITHUB_PATH
+
       - name: "Install Stack"
         uses: haskell-actions/setup@v2
         with:
@@ -67,11 +72,6 @@ jobs:
 
       - name: "Clean previous run"
         run: make clean
-
-      - name: "Update PATH"
-        run: |
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-          echo "$HOME/.swift/usr/bin" >> $GITHUB_PATH
 
       - name: "Install dependencies"
         run: make stackArgs="--no-terminal" deps

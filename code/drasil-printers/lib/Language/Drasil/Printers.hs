@@ -1,7 +1,8 @@
 module Language.Drasil.Printers (
   -- * Formats
   DocType(SRS, Website, Jupyter), 
-  Format(TeX, HTML, JSON, Markdown, MDBook)
+  Format(TeX, HTML, JSON, Markdown, MDBook),
+  MDFlavour(GitHub)
   -- * DOT
   -- ** Types
   , GraphInfo(..), NodeFamily(..)
@@ -40,7 +41,7 @@ module Language.Drasil.Printers (
   where
 
 import Language.Drasil.Format (DocType(SRS, Website, Jupyter), 
-  Format(TeX, HTML, JSON, Markdown, MDBook))
+  Format(TeX, HTML, JSON, Markdown, MDBook), MDFlavour(GitHub))
 import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.JSON.Print (genJSON)

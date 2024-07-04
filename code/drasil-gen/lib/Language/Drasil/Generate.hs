@@ -9,6 +9,7 @@ module Language.Drasil.Generate (
   -- * Types (Printing Options)
   DocType(..), DocSpec(DocSpec), DocChoices(DC),
   Format(TeX, HTML, JSON, Markdown, MDBook),
+  MDFlavour(GitHub),
   -- * Constructor
   docChoices) where
 
@@ -26,7 +27,7 @@ import Drasil.DocLang (mkGraphInfo)
 import SysInfo.Drasil (SystemInformation)
 import Language.Drasil.Printers (DocType(SRS, Website, Jupyter), makeCSS, genHTML, 
   genTeX, Format(TeX, HTML, JSON, Markdown, MDBook), genJSON, genMD, genMDBook, 
-  PrintingInformation, outputDot, makeBook)
+  PrintingInformation, outputDot, makeBook, MDFlavour(GitHub))
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD,
   unPP, unJP, unCSP, unCPPP, unSP)
@@ -54,19 +55,19 @@ prntDoc :: Document -> PrintingInformation -> String -> DocType -> Format -> IO 
 prntDoc d pinfo fn Jupyter _ = prntDoc' Jupyter "Jupyter" fn JSON d pinfo
 prntDoc d pinfo fn dtype fmt =
   case fmt of
-    HTML     -> do prntDoc' dtype (show dtype ++ "/HTML") fn HTML d pinfo
-                   prntCSS dtype fn d
-    TeX      -> do prntDoc' dtype (show dtype ++ "/PDF") fn TeX d pinfo
-                   prntMake $ DocSpec (DC dtype []) fn
-    JSON     -> do prntDoc' dtype (show dtype ++ "/JSON") fn JSON d pinfo
-    Markdown -> do prntDoc' dtype (show dtype ++ "/Markdown") fn Markdown d pinfo
-    MDBook   -> do prntDoc' dtype (show dtype ++ "/mdBook") fn MDBook d pinfo
-                   prntBook dtype d pinfo
-    _        -> mempty
+    HTML              -> do prntDoc' dtype (show dtype ++ "/HTML") fn HTML d pinfo
+                            prntCSS dtype fn d
+    TeX               -> do prntDoc' dtype (show dtype ++ "/PDF") fn TeX d pinfo
+                            prntMake $ DocSpec (DC dtype []) fn
+    JSON              -> do prntDoc' dtype (show dtype ++ "/JSON") fn JSON d pinfo
+    (Markdown GitHub) -> do prntDoc' dtype (show dtype ++ "/Markdown") fn (Markdown GitHub) d pinfo
+    MDBook            -> do prntDoc' dtype (show dtype ++ "/mdBook") fn MDBook d pinfo
+                            prntBook dtype d pinfo
+    _                 -> mempty
 
 -- | Helper function to produce an error when an incorrect SRS format is used. 
 srsFormatError :: a
-srsFormatError = error "We can only write TeX/HTML/JSON/Markdown/MDBook (for now)."
+srsFormatError = error "We can only write TeX/HTML/JSON/Markdown(GitHub)/MDBook (for now)."
 
 -- | Helper that takes the document type, directory name, document name, format of documents,
 -- document information and printing information. Then generates the document file.
@@ -89,11 +90,11 @@ prntDoc' dt dt' fn format body' sm = do
   where 
     -- | Gets extension for a particular format.
     -- MDBook case is handled above.
-    getExt TeX      = ".tex"
-    getExt HTML     = ".html"
-    getExt JSON     = ".ipynb"
-    getExt Markdown = ".md"
-    getExt _        = srsFormatError
+    getExt  TeX         = ".tex"
+    getExt  HTML        = ".html"
+    getExt  JSON        = ".ipynb"
+    getExt (Markdown _) = ".md"
+    getExt _            = srsFormatError
 
 -- | Helper for writing the Makefile(s).
 prntMake :: DocSpec -> IO ()
@@ -123,11 +124,11 @@ prntBook dt doc sm = do
 
 -- | Renders single-page documents.
 writeDoc :: PrintingInformation -> DocType -> Format -> Filename -> Document -> Doc
-writeDoc s _  TeX      _  doc = genTeX doc s
-writeDoc s _  HTML     fn doc = genHTML s fn doc
-writeDoc s dt JSON     _  doc = genJSON s dt doc
-writeDoc s _  Markdown _  doc = genMD s doc
-writeDoc _ _  _        _  _   = srsFormatError
+writeDoc s _  TeX               _  doc = genTeX doc s
+writeDoc s _  HTML              fn doc = genHTML s fn doc
+writeDoc s dt JSON              _  doc = genJSON s dt doc
+writeDoc s _  (Markdown GitHub) _  doc = genMD s doc
+writeDoc _ _  _                 _  _   = srsFormatError
 
 -- | Renders multi-page documents.
 writeDoc' :: PrintingInformation -> Format -> Document -> [(Filename, Doc)]

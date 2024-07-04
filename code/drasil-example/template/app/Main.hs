@@ -2,11 +2,11 @@ module Main (main) where
 
 import GHC.IO.Encoding
 import Language.Drasil.Generate (gen, DocSpec(DocSpec), DocType(SRS), 
-  Format(..), docChoices, dumpEverything)
+  Format(..), docChoices, dumpEverything, MDFlavour(GitHub))
 import Drasil.Template.Body (fullSI, srs, printSetting)
 
 main :: IO()
 main = do
   setLocaleEncoding utf8
   dumpEverything fullSI printSetting ".drasil/"
-  gen (DocSpec (docChoices SRS [HTML, TeX, JSON, Markdown, MDBook]) "Template_SRS") srs printSetting
+  gen (DocSpec (docChoices SRS [HTML, TeX, JSON, Markdown GitHub, MDBook]) "Template_SRS") srs printSetting

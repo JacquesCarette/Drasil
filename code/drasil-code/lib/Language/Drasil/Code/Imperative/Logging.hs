@@ -8,7 +8,7 @@ import Language.Drasil.Choices (Logging(..))
 import GOOL.Drasil (Label, MSBody, MSBlock, SVariable, SValue, MSStatement,
   OOProg, BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..),
   VariableElim(..), Literal(..), VariableValue(..), StatementSym(..),
-  DeclStatement(..), IOStatement(..), lensMStoVS)
+  DeclStatement(..), IOStatement(..), lensMStoVS, ScopeSym(..))
 
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (get)
@@ -69,7 +69,7 @@ loggedMethod lName n vars = block [
 
 -- | The variable representing the log file in write mode.
 varLogFile :: (OOProg r) => SVariable r
-varLogFile = var "outfile" outfile
+varLogFile = var "outfile" outfile global
 
 -- | The value of the variable representing the log file in write mode.
 valLogFile :: (OOProg r) => SValue r

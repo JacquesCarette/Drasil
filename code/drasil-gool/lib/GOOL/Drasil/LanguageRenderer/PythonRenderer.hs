@@ -24,7 +24,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..),
   StrategyPattern(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  StateVarSym(..), ClassSym(..), ModuleSym(..), ScopeSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -250,15 +250,20 @@ instance OpElim PythonCode where
   uOpPrec = opPrec . unPC
   bOpPrec = opPrec . unPC
 
+instance ScopeSym PythonCode where
+  type Scope PythonCode = Doc
+  local = toCode empty
+  global = toCode empty
+
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
-  var = G.var
+  var n t _ = G.var n t
   constant = var
-  extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
+  extVar l n t _ = modify (addModuleImportVS l) >> CP.extVar l n t
   arrayElem i = G.arrayElem (litInt i)
 
 instance OOVariableSym PythonCode where
-  staticVar = G.staticVar
+  staticVar n t _ = G.staticVar n t
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
   classVar = CP.classVar R.classVar
   extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify . 
@@ -452,7 +457,7 @@ instance ThunkAssign PythonCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = var iName int
+      i = var iName int local
       dim = fmap pure $ t >>= commonThunkDim (fmap unPC . listSize . fmap pure) . unPC
       loopInit = zoom lensMStoVS (fmap unPC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)

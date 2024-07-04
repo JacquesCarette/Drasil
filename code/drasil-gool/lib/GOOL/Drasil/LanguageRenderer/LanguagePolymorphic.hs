@@ -37,7 +37,7 @@ import qualified GOOL.Drasil.ClassInterface as S (
   FunctionSym(func), List(listSize, listAccess), StatementSym(valStmt),
   DeclStatement(varDecDef), IOStatement(print),
   ControlStatement(returnStmt, for), ParameterSym(param), MethodSym(method),
-  List(intToIndex))
+  List(intToIndex), ScopeSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(commentedMod),  
   RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
   RenderFunction(funcFromData), FunctionElim(functionType), 
@@ -349,7 +349,7 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
     prFn (S.listAccess v (S.listSize v #- S.litInt 1)))], 
   prLnFn "]"]
   where l_i = "list_i" ++ show n
-        i = S.var l_i S.int
+        i = S.var l_i S.int S.local
 
 printObj :: ClassName -> (String -> MSStatement r) -> MSStatement r
 printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"

@@ -9,8 +9,8 @@ module GOOL.Drasil.ClassInterface (
   -- Typeclasses
   OOProg, ProcProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   bodyStatements, oneLiner, BlockSym(..), TypeSym(..), OOTypeSym(..), TypeElim(..), 
-  VariableSym(..), OOVariableSym(..), VariableElim(..), ($->), listOf, listVar,
-  ValueSym(..), OOValueSym, Argument(..), Literal(..), litZero,
+  VariableSym(..), OOVariableSym(..), ScopeSym(..), VariableElim(..), ($->),
+  listOf, listVar, ValueSym(..), OOValueSym, Argument(..), Literal(..), litZero,
   MathConstant(..), VariableValue(..), OOVariableValue, CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), OOValueExpression(..), funcApp, funcAppNamedArgs,
@@ -130,13 +130,18 @@ class (TypeSym r) => TypeElim r where
   getType :: r (Type r) -> CodeType
   getTypeString :: r (Type r) -> String
 
+class ScopeSym r where
+  type Scope r
+  global :: r (Scope r)
+  local  :: r (Scope r)
+
 type SVariable a = VS (a (Variable a))
 
-class (TypeSym r) => VariableSym r where
+class (TypeSym r, ScopeSym r) => VariableSym r where
   type Variable r
-  var          :: Label -> VSType r -> SVariable r
-  constant     :: Label -> VSType r -> SVariable r
-  extVar       :: Library -> Label -> VSType r -> SVariable r
+  var          :: Label -> VSType r -> r (Scope r) -> SVariable r
+  constant     :: Label -> VSType r -> r (Scope r) -> SVariable r
+  extVar       :: Library -> Label -> VSType r -> r (Scope r) -> SVariable r
   arrayElem    :: Integer -> SVariable r -> SVariable r
   
 class (VariableSym r) => VariableElim r where
@@ -148,7 +153,7 @@ infixl 9 $->
 ($->) = objVar
 
 listVar :: (VariableSym r) => Label -> VSType r -> SVariable r
-listVar n t = var n (listType t)
+listVar n t = var n (listType t) local
 
 listOf :: (VariableSym r) => Label -> VSType r -> SVariable r
 listOf = listVar
@@ -497,11 +502,11 @@ class (BodySym r) => StatePattern r where
     MSStatement r
 
 initState :: (DeclStatement r, Literal r) => Label -> Label -> MSStatement r
-initState fsmName initialState = varDecDef (var fsmName string) 
+initState fsmName initialState = varDecDef (var fsmName string local) 
   (litString initialState)
 
 changeState :: (AssignStatement r, Literal r) => Label -> Label -> MSStatement r
-changeState fsmName toState = var fsmName string &= litString toState
+changeState fsmName toState = var fsmName string local &= litString toState
 
 class VisibilitySym r where
   type Visibility r

@@ -25,7 +25,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), StatePattern(..), ObserverPattern(..),
   StrategyPattern(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  StateVarSym(..), ClassSym(..), ModuleSym(..), ScopeSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -264,15 +264,20 @@ instance OpElim JavaCode where
   uOpPrec = opPrec . unJC
   bOpPrec = opPrec . unJC
 
+instance ScopeSym JavaCode where
+  type Scope JavaCode = Doc
+  local = toCode empty
+  global = toCode empty
+
 instance VariableSym JavaCode where
   type Variable JavaCode = VarData
-  var = G.var
+  var n t _ = G.var n t
   constant = var
-  extVar = CP.extVar
+  extVar l n t _ = CP.extVar l n t
   arrayElem i = G.arrayElem (litInt i)
 
 instance OOVariableSym JavaCode where
-  staticVar = G.staticVar
+  staticVar n t _ = G.staticVar n t _
   self = C.self
   classVar = CP.classVar R.classVar
   extClassVar = classVar
@@ -472,7 +477,7 @@ instance ThunkAssign JavaCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = var iName int
+      i = var iName int local
       dim = fmap pure $ t >>= commonThunkDim (fmap unJC . listSize . fmap pure) . unJC
       loopInit = zoom lensMStoVS (fmap unJC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
@@ -986,7 +991,7 @@ jMethod n es s p t ps b = vcat [
   rbrace]
 
 outputs :: SVariable JavaCode
-outputs = var "outputs" jArrayType
+outputs = var "outputs" jArrayType local
 
 jAssignFromArray :: Integer -> [SVariable JavaCode] -> [MSStatement JavaCode]
 jAssignFromArray _ [] = []

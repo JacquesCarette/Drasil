@@ -9,7 +9,7 @@ module GOOL.Drasil (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   assignToListIndex, DeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
   IOStatement(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), initState, changeState, initObserverList, addObserver,
-  ControlStatement(..), ifNoElse, switchAsIf, VariableSym(..),
+  ControlStatement(..), ifNoElse, switchAsIf, VariableSym(..), ScopeSym(..),
   OOVariableSym(..), VariableElim(..), ($->), listOf, listVar, ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   OOVariableValue, CommandLineArgs(..), NumericExpression(..),
@@ -51,7 +51,7 @@ import GOOL.Drasil.ClassInterface (Label, GSProgram, SFile, MSBody, MSBlock,
   ObserverPattern(..), StrategyPattern(..), VisibilitySym(..), ParameterSym(..),
   MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
   StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..),
-  convType, convTypeOO)
+  convType, convTypeOO, ScopeSym(..))
 
 import GOOL.Drasil.AST (FileData(..), ModData(..), ProgData(..), VisibilityTag(..))
 

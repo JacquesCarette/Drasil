@@ -27,7 +27,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), StatePattern(..), ObserverPattern(..),
   StrategyPattern(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..), convTypeOO)
+  StateVarSym(..), ClassSym(..), ModuleSym(..), convTypeOO, ScopeSym(..))
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym,
   RenderFile(..), ImportSym(..), ImportElim, PermElim(binding), RenderBody(..),
   BodyElim, RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim,
@@ -262,15 +262,20 @@ instance OpElim SwiftCode where
   uOpPrec = opPrec . unSC
   bOpPrec = opPrec . unSC
 
+instance ScopeSym SwiftCode where
+  type Scope SwiftCode = Doc
+  local = toCode empty
+  global = toCode empty
+
 instance VariableSym SwiftCode where
   type Variable SwiftCode = VarData
-  var = G.var
+  var n t _ = G.var n t
   constant = var
   extVar _ = var
   arrayElem i = G.arrayElem (litInt i)
 
 instance OOVariableSym SwiftCode where
-  staticVar = G.staticVar
+  staticVar n t _ = G.staticVar n t
   self = CP.self
   classVar = CP.classVar R.classVar
   extClassVar = classVar
@@ -459,7 +464,7 @@ instance ThunkAssign SwiftCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = var iName int
+      i = var iName int local
       dim = fmap pure $ t >>= commonThunkDim (fmap unSC . listSize . fmap pure) . unSC
       loopInit = zoom lensMStoVS (fmap unSC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
@@ -579,8 +584,8 @@ instance IOStatement SwiftCode where
   discardFileLine _ = modify incrementLine >> emptyStmt
   getFileInputAll _ v = do
     li <- getLineIndex
-    let l = var "l" (listType string)
-    slc <- listSlice swiftContentsVar swiftContentsVal
+    let l = var "l" (listType string) local
+    slc <- listSlice swiftContentsVar swiftContentsVal 
       (Just $ litInt (li+1)) Nothing Nothing
     multi [mkStmtNoEnd $ RC.block slc,
       v &= swiftMapFunc swiftContentsVal
@@ -789,8 +794,8 @@ swiftArgVal v' = do
 
 -- Putting "gool" in these names to avoid name conflicts
 swiftContentsVar, swiftLineVar :: SVariable SwiftCode
-swiftContentsVar = var "goolContents" (listType $ listType string)
-swiftLineVar = var "goolLine" (listType string)
+swiftContentsVar = var "goolContents" (listType $ listType string) local
+swiftLineVar = var "goolLine" (listType string) local
 
 swiftContentsVal, swiftLineVal :: SValue SwiftCode
 swiftContentsVal = valueOf swiftContentsVar
@@ -948,44 +953,44 @@ swiftIndexFunc :: (RenderSym r) => SValue r -> SValue r -> SValue r
 swiftIndexFunc l v' = do
   v <- v'
   let t = pure $ valueType v
-      ofArg = var swiftOf t
+      ofArg = var swiftOf t local
   objMethodCallNamedArgs int l swiftIndex [(ofArg, pure v)]
 
 swiftStrideFunc :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
-swiftStrideFunc beg end step = let t = listType int
-                                   fromArg = var swiftFrom int
-                                   toArg = var swiftTo int
-                                   byArg = var swiftBy int
-  in cast t (funcAppNamedArgs swiftStride t
+swiftStrideFunc beg end step = let t = listType int 
+                                   fromArg = var swiftFrom int local
+                                   toArg = var swiftTo int local
+                                   byArg = var swiftBy int local
+  in cast t (funcAppNamedArgs swiftStride t 
     [(fromArg, beg), (toArg, end), (byArg, step)])
 
 swiftMapFunc :: (RenderSym r) => SValue r -> SValue r -> SValue r
 swiftMapFunc lst f = objMethodCall (onStateValue valueType lst) lst swiftMap [f]
 
 swiftListAddFunc :: (RenderSym r) => SValue r -> SValue r -> SValue r
-swiftListAddFunc i v = let atArg = var swiftAt int
-  in funcAppMixedArgs swiftListAdd (listType $ onStateValue valueType v)
+swiftListAddFunc i v = let atArg = var swiftAt int local
+  in funcAppMixedArgs swiftListAdd (listType $ onStateValue valueType v) 
     [v] [(atArg, i)]
 
 swiftWriteFunc :: (RenderSym r) => SValue r -> SValue r -> SValue r
-swiftWriteFunc v f = let contentsArg = var swiftContentsOf (obj swiftData)
-  in swiftTryVal $ objMethodCallNamedArgs void f swiftWrite
-    [(contentsArg, newObj (obj swiftData) [v $. funcFromData (R.func swiftUTF8)
+swiftWriteFunc v f = let contentsArg = var swiftContentsOf (obj swiftData) local
+  in swiftTryVal $ objMethodCallNamedArgs void f swiftWrite 
+    [(contentsArg, newObj (obj swiftData) [v $. funcFromData (R.func swiftUTF8) 
     (obj swiftEncoding)])]
 
 swiftReadLineFunc :: (RenderSym r) => SValue r
 swiftReadLineFunc = swiftUnwrapVal $ funcApp swiftReadLine string []
 
 swiftReadFileFunc :: (RenderSym r) => SValue r -> SValue r
-swiftReadFileFunc v = let contentsArg = var swiftContentsOf infile
+swiftReadFileFunc v = let contentsArg = var swiftContentsOf infile local
   in swiftTryVal $ funcAppNamedArgs CP.stringRender' string [(contentsArg, v)]
 
 swiftSplitFunc :: (RenderSym r) => Char -> SValue r -> SValue r
-swiftSplitFunc d s = let sepArg = var swiftSepBy char
+swiftSplitFunc d s = let sepArg = var swiftSepBy char local
   in objMethodCallNamedArgs (listType string) s swiftSplit [(sepArg, litChar d)]
 
 swiftJoinedFunc :: (RenderSym r) => Char -> SValue r -> SValue r
-swiftJoinedFunc d s = let sepArg = var swiftSep char
+swiftJoinedFunc d s = let sepArg = var swiftSep char local
   in objMethodCallNamedArgs string s swiftJoined [(sepArg, litChar d)]
 
 swiftIndexOf :: (RenderSym r) => SValue r -> SValue r -> SValue r
@@ -1001,7 +1006,7 @@ swiftListSlice vn vo beg end step = do
       (setBeg, begVal) = M.makeSetterVal "begIdx" step mbStepV beg (litInt 0)    (listSize vo #- litInt 1)
       (setEnd, endVal) = M.makeSetterVal "endIdx" step mbStepV end (listSize vo) (litInt (-1))
       
-      i = var "i" int
+      i = var "i" int local
       setToSlice = vn &= swiftMapFunc (swiftStrideFunc begVal endVal step) (lambda [i] (listAccess vo (valueOf i)))
   block [
       setBeg,
@@ -1013,7 +1018,7 @@ swiftPrint :: Bool -> Maybe (SValue SwiftCode) -> SValue SwiftCode ->
   SValue SwiftCode -> MSStatement SwiftCode
 swiftPrint newLn Nothing _ v = do
   let s = litString "" :: SValue SwiftCode
-      nl = [(var swiftTerm string, s) | not newLn]
+      nl = [(var swiftTerm string local, s) | not newLn]
   valStmt $ funcAppMixedArgs printLabel void [v] nl
 swiftPrint newLn (Just f) _ v' = do
   v <- zoom lensMStoVS v'
@@ -1043,17 +1048,17 @@ swiftInput vr vl = do
   swiftInput' (getType $ variableType vr')
 
 swiftOpenFile :: (RenderSym r) => SValue r -> VSType r -> SValue r
-swiftOpenFile n t = let forArg = var swiftFor (obj swiftSearchDir)
+swiftOpenFile n t = let forArg = var swiftFor (obj swiftSearchDir) local
                         dirVal = mkStateVal (obj swiftSearchDir) swiftDocDir
-                        inArg = var swiftIn (obj swiftPathMask)
+                        inArg = var swiftIn (obj swiftPathMask) local
                         maskVal = mkStateVal (obj swiftPathMask) swiftUserMask
   in objMethodCall t (swiftUnwrapVal $
     funcAppNamedArgs swiftUrls (listType t) [(forArg, dirVal), (inArg, maskVal)]
     $. funcFromData (R.func swiftFirst) t) swiftAppendPath [n]
 
 swiftOpenFileHdl :: (RenderSym r) => SValue r -> VSType r -> SValue r
-swiftOpenFileHdl n t = let forWritingArg = var swiftWriteTo swiftFileType
-  in swiftTryVal $ funcAppNamedArgs swiftFileHdl outfile
+swiftOpenFileHdl n t = let forWritingArg = var swiftWriteTo swiftFileType local
+  in swiftTryVal $ funcAppNamedArgs swiftFileHdl outfile 
     [(forWritingArg, swiftOpenFile n t)]
 
 swiftOpenFileWA :: (RenderSym r) => Bool -> SVariable r -> SValue r ->
@@ -1081,9 +1086,9 @@ swiftCloseFile f' = do
   swClose (getType $ valueType f)
 
 swiftReadFile :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-swiftReadFile v f = let l = var "l" string
-  in tryCatch
-  (oneLiner $ v &= swiftMapFunc (swiftSplitFunc '\n' $ swiftReadFileFunc f)
+swiftReadFile v f = let l = var "l" string local
+  in tryCatch 
+  (oneLiner $ v &= swiftMapFunc (swiftSplitFunc '\n' $ swiftReadFileFunc f) 
     (lambda [l] (swiftSplitFunc ' ' (valueOf l))))
   (oneLiner $ throw "Error reading from file.")
 

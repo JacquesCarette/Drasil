@@ -16,7 +16,7 @@ import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement,
   IOStatement(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..),
   StatePattern(..), ObserverPattern(..), StrategyPattern(..), VisibilitySym(..),
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), ScopeSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (VisibilityTag(..), qualName)
 import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
@@ -101,12 +101,17 @@ instance TypeElim CodeInfo where
   getType _     = Void
   getTypeString = unCI
 
+instance ScopeSym CodeInfo where
+  type Scope CodeInfo = ()
+  local = toCode ()
+  global = toCode ()
+
 instance VariableSym CodeInfo where
   type Variable CodeInfo = ()
-  var         _ _   = noInfo
-  constant    _ _   = noInfo
-  extVar      _ _ _ = noInfo
-  arrayElem   _ _   = noInfo
+  var         _ _ _   = noInfo
+  constant    _ _ _   = noInfo
+  extVar      _ _ _ _ = noInfo
+  arrayElem   _ _     = noInfo
   
 instance OOVariableSym CodeInfo where
   staticVar   _ _   = noInfo

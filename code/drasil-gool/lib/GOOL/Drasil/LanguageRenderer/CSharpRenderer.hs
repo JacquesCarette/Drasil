@@ -25,7 +25,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), StatePattern(..),
   ObserverPattern(..), StrategyPattern(..), VisibilitySym(..), ParameterSym(..),
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), ScopeSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -257,15 +257,20 @@ instance OpElim CSharpCode where
   uOpPrec = opPrec . unCSC
   bOpPrec = opPrec . unCSC
 
+instance ScopeSym CSharpCode where
+  type Scope CSharpCode = Doc
+  local = toCode empty
+  global = toCode empty
+
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
-  var = G.var
+  var n t _ = G.var n t
   constant = var
-  extVar = CP.extVar
+  extVar l n t _ = CP.extVar l n t
   arrayElem i = G.arrayElem (litInt i)
 
 instance OOVariableSym CSharpCode where
-  staticVar = G.staticVar
+  staticVar n t _ = G.staticVar n t
   self = C.self
   classVar = CP.classVar R.classVar
   extClassVar = classVar
@@ -441,7 +446,7 @@ instance ThunkAssign CSharpCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = var iName int
+      i = var iName int local
       dim = fmap pure $ t >>= commonThunkDim (fmap unCSC . listSize . fmap pure) . unCSC
       loopInit = zoom lensMStoVS (fmap unCSC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)

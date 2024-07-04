@@ -15,8 +15,8 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   BooleanExpression((?&&), (?||)), at, ($.), StatementSym(multi),
   AssignStatement((&+=), (&-=), (&++)), (&=), observerListName)
 import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block), 
-  TypeSym(int, string, listInnerType), VariableSym(var), Literal(litInt), 
-  VariableValue(valueOf), ValueExpression(notNull), 
+  TypeSym(int, string, listInnerType), ScopeSym(..), VariableSym(var),
+  Literal(litInt), VariableValue(valueOf), ValueExpression(notNull), 
   List(listSize, listAppend, listAccess, intToIndex), StatementSym(valStmt), 
   AssignStatement(assign), DeclStatement(varDecDef, listDec), 
   ControlStatement(ifCond, switch, for, forRange), ValueExpression(inlineIf))
@@ -66,9 +66,9 @@ listSlice beg end step vnew vold = do
   
   l_temp <- genVarName [] "temp"
   l_i <- genLoopIndex
-  let var_temp = S.var l_temp (onStateValue variableType vnew)
+  let var_temp = S.var l_temp (onStateValue variableType vnew) S.local
       v_temp = S.valueOf var_temp
-      var_i = S.var l_i S.int
+      var_i = S.var l_i S.int S.local
       v_i = S.valueOf var_i
 
   let step' = fromMaybe (S.litInt 1) step
@@ -153,7 +153,7 @@ stringListLists lsts sl = do
       (S.listAccess sl ((v_i #* numLists) #+ S.litInt n))))
       : appendLists vs (n+1)
     numLists = S.litInt (toInteger $ length lsts)
-    var_i = S.var l_i S.int
+    var_i = S.var l_i S.int S.local
     v_i = S.valueOf var_i
   checkList (getType $ valueType slst)
 
@@ -163,7 +163,7 @@ forRange i initv finalv stepv = S.for (S.varDecDef i initv) (S.valueOf i ?<
   finalv) (i &+= stepv)
 
 observerIndex :: (RenderSym r) => SVariable r
-observerIndex = S.var "observerIndex" S.int
+observerIndex = S.var "observerIndex" S.int S.local
 
 observerIdxVal :: (RenderSym r) => SValue r
 observerIdxVal = S.valueOf observerIndex
@@ -186,4 +186,4 @@ notifyObservers' f t = S.forRange observerIndex initv (S.listSize $ obsList t)
         
 checkState :: (RenderSym r) => Label -> [(SValue r, MSBody r)] -> MSBody r -> 
   MSStatement r
-checkState l = S.switch (S.valueOf $ S.var l S.string)
+checkState l = S.switch (S.valueOf $ S.var l S.string S.local)

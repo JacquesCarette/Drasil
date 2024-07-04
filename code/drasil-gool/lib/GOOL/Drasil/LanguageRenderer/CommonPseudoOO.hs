@@ -23,7 +23,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, VSType,
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType),
   ValueSym(valueType), Comparison(..), objMethodCallNoParams, (&=),
   ControlStatement(returnStmt), VisibilitySym(..), MethodSym(function),
-  NumericExpression((#+), (#-)))
+  NumericExpression((#+), (#-)), ScopeSym(..))
 import qualified GOOL.Drasil.ClassInterface as S (
   TypeSym(int, double, string, listType, arrayType, void),
   VariableSym(var), OOVariableSym(self, objVar),
@@ -229,7 +229,7 @@ docMain b = commentedFunc (docComment $ toState $ functionDox
 mainFunction :: (RenderSym r) => VSType r -> Label -> MSBody r -> SMethod r
 mainFunction s n = S.intFunc True n public static (mType S.void)
   [S.param (S.var args (s >>= (\argT -> typeFromData (List String) 
-  (render (RC.type' argT) ++ array) (RC.type' argT <> array'))))]
+  (render (RC.type' argT) ++ array) (RC.type' argT <> array'))) local)]
 
 buildModule' :: (RenderSym r) => Label -> (String -> r (Import r)) -> [Label] 
   -> [SMethod r] -> [SClass r] -> FSModule r
@@ -295,7 +295,7 @@ extFuncAppMixedArgs :: (RenderSym r) => Library -> MixedCall r
 extFuncAppMixedArgs l = S.call (Just l) Nothing
 
 notNull :: (RenderSym r) => String -> SValue r -> SValue r
-notNull nil v = v ?!= S.valueOf (S.var nil $ onStateValue valueType v)
+notNull nil v = v ?!= S.valueOf (S.var nil (onStateValue valueType v) local)
 
 listDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
 listDecDef v vals = do

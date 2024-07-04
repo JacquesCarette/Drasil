@@ -197,7 +197,7 @@ litDouble :: (RenderSym r) => Double -> SValue r
 litDouble d = mkStateVal S.double (D.double d)
 
 litInt :: (RenderSym r) => Integer -> SValue r
-litInt i = mkStateVal S.int (integer i)
+litInt i = valFromData Nothing (Just i) S.int (integer i)
 
 litString :: (RenderSym r) => String -> SValue r
 litString s = mkStateVal S.string (doubleQuotedText s)
@@ -249,7 +249,7 @@ lambda f ps' ex' = do
   ps <- sequence ps'
   ex <- ex'
   let ft = S.funcType (map (return . variableType) ps) (return $ valueType ex)
-  valFromData (Just 0) ft (f ps ex)
+  valFromData (Just 0) Nothing ft (f ps ex)
 
 objAccess :: (RenderSym r) => SValue r -> VSFunction r -> SValue r
 objAccess = on2StateWrapped (\v f-> mkVal (functionType f) 

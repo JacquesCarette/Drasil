@@ -161,10 +161,11 @@ class RenderValue r where
   -- calls.
   call :: Maybe Library -> Maybe Doc -> MixedCall r
 
-  valFromData :: Maybe Int -> VSType r -> Doc -> SValue r
+  valFromData :: Maybe Int -> Maybe Integer -> VSType r -> Doc -> SValue r
 
 class ValueElim r where
   valuePrec :: r (Value r) -> Maybe Int
+  valueInt :: r (Value r) -> Maybe Integer
   value :: r (Value r) -> Doc
 
 class InternalGetSet r where

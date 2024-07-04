@@ -104,7 +104,7 @@ heading t l = t <+> br (text "#" <> l)
 -- | Helper for setting up heading weights in mdBook.
 h :: Int -> Doc
 h n
-  | n < 1     = error "Illegal header (header weigth must be > 0)."
+  | n < 1     = error "Illegal header (header weight must be > 0)."
   | n > 4     = error "Illegal header (header weight must be < 5)"
   | n < 4     = h' 1
   | otherwise = h' n
@@ -116,7 +116,7 @@ h' n
   | n == 2    = text "##"
   | n == 3    = text "###"
   | n == 4    = text "####"
-  | otherwise = error "Illegal header (header weight must 0 < n < 5)"
+  | otherwise = error "Illegal header (header weight must be between 0 and 5)"
 
 -- | Helper for stripping Docs
 stripStr :: Doc -> Doc -> Doc

@@ -163,7 +163,7 @@ This section provides general information about the system. It identifies the in
 
 <div id="Figure:sysCtxDiag"></div>
 
-![System Context](../../../../datafiles/projectile/SystemContextFigure.png)
+![System Context](../../../../../datafiles/projectile/SystemContextFigure.png)
 **<p align="center">System Context</p>**
 
 The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:
@@ -217,7 +217,7 @@ PS3: The target.
 
 <div id="Figure:Launch"></div>
 
-![The physical system](../../../../datafiles/projectile/Launch.jpg)
+![The physical system](../../../../../datafiles/projectile/Launch.jpg)
 **<p align="center">The physical system</p>**
 
 # Goal Statements {#Sec:GoalStmt}
@@ -803,27 +803,27 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 <div id="Figure:TraceGraphAvsA"></div>
 
-![TraceGraphAvsA](../../../../traceygraphs/projectile/avsa.svg)
+![TraceGraphAvsA](../../../../../traceygraphs/projectile/avsa.svg)
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
-![TraceGraphAvsAll](../../../../traceygraphs/projectile/avsall.svg)
+![TraceGraphAvsAll](../../../../../traceygraphs/projectile/avsall.svg)
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
-![TraceGraphRefvsRef](../../../../traceygraphs/projectile/refvsref.svg)
+![TraceGraphRefvsRef](../../../../../traceygraphs/projectile/refvsref.svg)
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
-![TraceGraphAllvsR](../../../../traceygraphs/projectile/allvsr.svg)
+![TraceGraphAllvsR](../../../../../traceygraphs/projectile/allvsr.svg)
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
-![TraceGraphAllvsAll](../../../../traceygraphs/projectile/allvsall.svg)
+![TraceGraphAllvsAll](../../../../../traceygraphs/projectile/allvsall.svg)
 **<p align="center">TraceGraphAllvsAll</p>**
 
 For convenience, the following graphs can be found at the links below:

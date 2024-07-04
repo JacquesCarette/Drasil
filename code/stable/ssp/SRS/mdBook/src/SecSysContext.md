@@ -4,7 +4,7 @@
 
 <div id="Figure:sysCtxDiag"></div>
 
-![System Context](../../../../datafiles/ssp/SystemContextFigure.png)
+![System Context](../../../../../datafiles/ssp/SystemContextFigure.png)
 **<p align="center">System Context</p>**
 
 The responsibilities of the user and the system are as follows:

@@ -151,7 +151,7 @@ This section provides general information about the system. It identifies the in
 
 <div id="Figure:systemContextDiag"></div>
 
-![System Context](../../../../datafiles/pdcontroller/Fig_SystemContext.png)
+![System Context](../../../../../datafiles/pdcontroller/Fig_SystemContext.png)
 **<p align="center">System Context</p>**
 
 PD Controller is self-contained. The only external interaction is with the user. The responsibilities of the user and the system are as follows:
@@ -221,7 +221,7 @@ PS3: The Power Plant.
 
 <div id="Figure:pidSysDiagram"></div>
 
-![The physical system](../../../../datafiles/pdcontroller/Fig_PDController.png)
+![The physical system](../../../../../datafiles/pdcontroller/Fig_PDController.png)
 **<p align="center">The physical system</p>**
 
 # Goal Statements {#Sec:GoalStmt}
@@ -632,27 +632,27 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 <div id="Figure:TraceGraphAvsA"></div>
 
-![TraceGraphAvsA](../../../../traceygraphs/pdcontroller/avsa.svg)
+![TraceGraphAvsA](../../../../../traceygraphs/pdcontroller/avsa.svg)
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
-![TraceGraphAvsAll](../../../../traceygraphs/pdcontroller/avsall.svg)
+![TraceGraphAvsAll](../../../../../traceygraphs/pdcontroller/avsall.svg)
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
-![TraceGraphRefvsRef](../../../../traceygraphs/pdcontroller/refvsref.svg)
+![TraceGraphRefvsRef](../../../../../traceygraphs/pdcontroller/refvsref.svg)
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
-![TraceGraphAllvsR](../../../../traceygraphs/pdcontroller/allvsr.svg)
+![TraceGraphAllvsR](../../../../../traceygraphs/pdcontroller/allvsr.svg)
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
-![TraceGraphAllvsAll](../../../../traceygraphs/pdcontroller/allvsall.svg)
+![TraceGraphAllvsAll](../../../../../traceygraphs/pdcontroller/allvsall.svg)
 **<p align="center">TraceGraphAllvsAll</p>**
 
 For convenience, the following graphs can be found at the links below:

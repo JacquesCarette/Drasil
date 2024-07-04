@@ -227,7 +227,7 @@ This section provides general information about the system. It identifies the in
 
 <div id="Figure:sysCtxDiag"></div>
 
-![System Context](../../../../datafiles/ssp/SystemContextFigure.png)
+![System Context](../../../../../datafiles/ssp/SystemContextFigure.png)
 **<p align="center">System Context</p>**
 
 The responsibilities of the user and the system are as follows:
@@ -289,21 +289,21 @@ PS2: A water table, which may or may not exist.
 
 <div id="Figure:PhysicalSystem"></div>
 
-![An example slope for analysis by SSP, where the dashed line represents the water table](../../../../datafiles/ssp/PhysSyst.png)
+![An example slope for analysis by SSP, where the dashed line represents the water table](../../../../../datafiles/ssp/PhysSyst.png)
 **<p align="center">An example slope for analysis by SSP, where the dashed line represents the water table</p>**
 
 Morgenstern-Price analysis [morgenstern1965](#morgenstern1965) of the slope involves representing the slope as a series of vertical slices. As shown in [Fig:IndexConvention](#Figure:IndexConvention), the index \\(i\\) is used to denote a value for a single slice, and an interslice value at a given index \\(i\\) refers to the value between slice \\(i\\) and adjacent slice \\(i+1\\).
 
 <div id="Figure:IndexConvention"></div>
 
-![Index convention for slice and interslice values](../../../../datafiles/ssp/IndexConvention.png)
+![Index convention for slice and interslice values](../../../../../datafiles/ssp/IndexConvention.png)
 **<p align="center">Index convention for slice and interslice values</p>**
 
 A free body diagram of the forces acting on a slice is displayed in [Fig:ForceDiagram](#Figure:ForceDiagram). The specific forces and symbols will be discussed in detail in [Sec:General Definitions](#Sec:GDs) and [Sec:Data Definitions](#Sec:DDs).
 
 <div id="Figure:ForceDiagram"></div>
 
-![Free body diagram of forces acting on a slice](../../../../datafiles/ssp/ForceDiagram.png)
+![Free body diagram of forces acting on a slice](../../../../../datafiles/ssp/ForceDiagram.png)
 **<p align="center">Free body diagram of forces acting on a slice</p>**
 
 # Goal Statements {#Sec:GoalStmt}
@@ -1741,27 +1741,27 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 <div id="Figure:TraceGraphAvsA"></div>
 
-![TraceGraphAvsA](../../../../traceygraphs/ssp/avsa.svg)
+![TraceGraphAvsA](../../../../../traceygraphs/ssp/avsa.svg)
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
-![TraceGraphAvsAll](../../../../traceygraphs/ssp/avsall.svg)
+![TraceGraphAvsAll](../../../../../traceygraphs/ssp/avsall.svg)
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
-![TraceGraphRefvsRef](../../../../traceygraphs/ssp/refvsref.svg)
+![TraceGraphRefvsRef](../../../../../traceygraphs/ssp/refvsref.svg)
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
-![TraceGraphAllvsR](../../../../traceygraphs/ssp/allvsr.svg)
+![TraceGraphAllvsR](../../../../../traceygraphs/ssp/allvsr.svg)
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
-![TraceGraphAllvsAll](../../../../traceygraphs/ssp/allvsall.svg)
+![TraceGraphAllvsAll](../../../../../traceygraphs/ssp/allvsall.svg)
 **<p align="center">TraceGraphAllvsAll</p>**
 
 For convenience, the following graphs can be found at the links below:

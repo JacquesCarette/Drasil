@@ -4,7 +4,7 @@
 
 <div id="Figure:sysCtxDiag"></div>
 
-![System Context](../../../../datafiles/gamephysics/sysctx.png)
+![System Context](../../../../../datafiles/gamephysics/sysctx.png)
 **<p align="center">System Context</p>**
 
 The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:

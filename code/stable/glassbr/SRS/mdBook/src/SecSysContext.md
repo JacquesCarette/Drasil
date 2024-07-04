@@ -4,7 +4,7 @@
 
 <div id="Figure:sysCtxDiag"></div>
 
-![System Context](../../../../datafiles/glassbr/SystemContextFigure.png)
+![System Context](../../../../../datafiles/glassbr/SystemContextFigure.png)
 **<p align="center">System Context</p>**
 
 The interaction between the product and the user is through a user interface. The responsibilities of the user and the system are as follows:

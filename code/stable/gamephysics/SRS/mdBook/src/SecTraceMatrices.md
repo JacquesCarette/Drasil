@@ -125,27 +125,27 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 <div id="Figure:TraceGraphAvsA"></div>
 
-![TraceGraphAvsA](../../../../traceygraphs/gamephysics/avsa.svg)
+![TraceGraphAvsA](../../../../../traceygraphs/gamephysics/avsa.svg)
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
-![TraceGraphAvsAll](../../../../traceygraphs/gamephysics/avsall.svg)
+![TraceGraphAvsAll](../../../../../traceygraphs/gamephysics/avsall.svg)
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
-![TraceGraphRefvsRef](../../../../traceygraphs/gamephysics/refvsref.svg)
+![TraceGraphRefvsRef](../../../../../traceygraphs/gamephysics/refvsref.svg)
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
-![TraceGraphAllvsR](../../../../traceygraphs/gamephysics/allvsr.svg)
+![TraceGraphAllvsR](../../../../../traceygraphs/gamephysics/allvsr.svg)
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
-![TraceGraphAllvsAll](../../../../traceygraphs/gamephysics/allvsall.svg)
+![TraceGraphAllvsAll](../../../../../traceygraphs/gamephysics/allvsall.svg)
 **<p align="center">TraceGraphAllvsAll</p>**
 
 For convenience, the following graphs can be found at the links below:

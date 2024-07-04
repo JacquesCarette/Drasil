@@ -187,7 +187,7 @@ This section provides general information about the system. It identifies the in
 
 <div id="Figure:SysCon"></div>
 
-![[Fig:SysCon](#Figure:SysCon): System Context](../../../../datafiles/swhsnopcm/SystemContextFigure.png)
+![[Fig:SysCon](#Figure:SysCon): System Context](../../../../../datafiles/swhsnopcm/SystemContextFigure.png)
 **<p align="center">[Fig:SysCon](#Figure:SysCon): System Context</p>**
 
 SWHSNoPCM is mostly self-contained. The only external interaction is through the user interface. The responsibilities of the user and the system are as follows:
@@ -236,7 +236,7 @@ PS2: Heating coil at bottom of tank. (\\({q\_{\text{C}}}\\) represents the heat 
 
 <div id="Figure:Tank"></div>
 
-![Solar water heating tank, with heat flux from heating coil of \\({q\_{\text{C}}}\\)](../../../../datafiles/swhsnopcm/TankWaterOnly.png)
+![Solar water heating tank, with heat flux from heating coil of \\({q\_{\text{C}}}\\)](../../../../../datafiles/swhsnopcm/TankWaterOnly.png)
 **<p align="center">Solar water heating tank, with heat flux from heating coil of \\({q\_{\text{C}}}\\)</p>**
 
 # Goal Statements {#Sec:GoalStmt}
@@ -800,27 +800,27 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 <div id="Figure:TraceGraphAvsA"></div>
 
-![TraceGraphAvsA](../../../../traceygraphs/swhsnopcm/avsa.svg)
+![TraceGraphAvsA](../../../../../traceygraphs/swhsnopcm/avsa.svg)
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
-![TraceGraphAvsAll](../../../../traceygraphs/swhsnopcm/avsall.svg)
+![TraceGraphAvsAll](../../../../../traceygraphs/swhsnopcm/avsall.svg)
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
-![TraceGraphRefvsRef](../../../../traceygraphs/swhsnopcm/refvsref.svg)
+![TraceGraphRefvsRef](../../../../../traceygraphs/swhsnopcm/refvsref.svg)
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
-![TraceGraphAllvsR](../../../../traceygraphs/swhsnopcm/allvsr.svg)
+![TraceGraphAllvsR](../../../../../traceygraphs/swhsnopcm/allvsr.svg)
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
-![TraceGraphAllvsAll](../../../../traceygraphs/swhsnopcm/allvsall.svg)
+![TraceGraphAllvsAll](../../../../../traceygraphs/swhsnopcm/allvsall.svg)
 **<p align="center">TraceGraphAllvsAll</p>**
 
 For convenience, the following graphs can be found at the links below:

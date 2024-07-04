@@ -159,7 +159,7 @@ This section provides general information about the system. It identifies the in
 
 <div id="Figure:sysCtxDiag"></div>
 
-![System Context](../../../../datafiles/sglpend/SystemContextFigure.png)
+![System Context](../../../../../datafiles/sglpend/SystemContextFigure.png)
 **<p align="center">System Context</p>**
 
 The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:
@@ -208,7 +208,7 @@ PS2: The mass.
 
 <div id="Figure:sglpend"></div>
 
-![The physical system](../../../../datafiles/sglpend/sglpend.jpg)
+![The physical system](../../../../../datafiles/sglpend/sglpend.jpg)
 **<p align="center">The physical system</p>**
 
 # Goal Statements {#Sec:GoalStmt}
@@ -873,27 +873,27 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 <div id="Figure:TraceGraphAvsA"></div>
 
-![TraceGraphAvsA](../../../../traceygraphs/sglpend/avsa.svg)
+![TraceGraphAvsA](../../../../../traceygraphs/sglpend/avsa.svg)
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
-![TraceGraphAvsAll](../../../../traceygraphs/sglpend/avsall.svg)
+![TraceGraphAvsAll](../../../../../traceygraphs/sglpend/avsall.svg)
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
-![TraceGraphRefvsRef](../../../../traceygraphs/sglpend/refvsref.svg)
+![TraceGraphRefvsRef](../../../../../traceygraphs/sglpend/refvsref.svg)
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
-![TraceGraphAllvsR](../../../../traceygraphs/sglpend/allvsr.svg)
+![TraceGraphAllvsR](../../../../../traceygraphs/sglpend/allvsr.svg)
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
-![TraceGraphAllvsAll](../../../../traceygraphs/sglpend/allvsall.svg)
+![TraceGraphAllvsAll](../../../../../traceygraphs/sglpend/allvsall.svg)
 **<p align="center">TraceGraphAllvsAll</p>**
 
 For convenience, the following graphs can be found at the links below:

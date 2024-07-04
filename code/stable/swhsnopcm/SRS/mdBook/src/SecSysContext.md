@@ -4,7 +4,7 @@
 
 <div id="Figure:SysCon"></div>
 
-![[Fig:SysCon](./SecSysContext.md#Figure:SysCon): System Context](../../../../datafiles/swhsnopcm/SystemContextFigure.png)
+![[Fig:SysCon](./SecSysContext.md#Figure:SysCon): System Context](../../../../../datafiles/swhsnopcm/SystemContextFigure.png)
 **<p align="center">[Fig:SysCon](./SecSysContext.md#Figure:SysCon): System Context</p>**
 
 SWHSNoPCM is mostly self-contained. The only external interaction is through the user interface. The responsibilities of the user and the system are as follows:

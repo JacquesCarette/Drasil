@@ -11,6 +11,6 @@ PS3: The target.
 
 <div id="Figure:Launch"></div>
 
-![The physical system](../../../../datafiles/projectile/Launch.jpg)
+![The physical system](../../../../../datafiles/projectile/Launch.jpg)
 **<p align="center">The physical system</p>**
 

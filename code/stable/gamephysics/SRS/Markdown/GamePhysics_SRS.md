@@ -201,7 +201,7 @@ This section provides general information about the system. It identifies the in
 
 <div id="Figure:sysCtxDiag"></div>
 
-![System Context](../../../../datafiles/gamephysics/sysctx.png)
+![System Context](../../../../../datafiles/gamephysics/sysctx.png)
 **<p align="center">System Context</p>**
 
 The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:
@@ -1057,27 +1057,27 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 <div id="Figure:TraceGraphAvsA"></div>
 
-![TraceGraphAvsA](../../../../traceygraphs/gamephysics/avsa.svg)
+![TraceGraphAvsA](../../../../../traceygraphs/gamephysics/avsa.svg)
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
-![TraceGraphAvsAll](../../../../traceygraphs/gamephysics/avsall.svg)
+![TraceGraphAvsAll](../../../../../traceygraphs/gamephysics/avsall.svg)
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
-![TraceGraphRefvsRef](../../../../traceygraphs/gamephysics/refvsref.svg)
+![TraceGraphRefvsRef](../../../../../traceygraphs/gamephysics/refvsref.svg)
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
-![TraceGraphAllvsR](../../../../traceygraphs/gamephysics/allvsr.svg)
+![TraceGraphAllvsR](../../../../../traceygraphs/gamephysics/allvsr.svg)
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
-![TraceGraphAllvsAll](../../../../traceygraphs/gamephysics/allvsall.svg)
+![TraceGraphAllvsAll](../../../../../traceygraphs/gamephysics/allvsall.svg)
 **<p align="center">TraceGraphAllvsAll</p>**
 
 For convenience, the following graphs can be found at the links below:

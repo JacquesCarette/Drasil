@@ -170,27 +170,27 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 <div id="Figure:TraceGraphAvsA"></div>
 
-![TraceGraphAvsA](../../../../traceygraphs/ssp/avsa.svg)
+![TraceGraphAvsA](../../../../../traceygraphs/ssp/avsa.svg)
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
-![TraceGraphAvsAll](../../../../traceygraphs/ssp/avsall.svg)
+![TraceGraphAvsAll](../../../../../traceygraphs/ssp/avsall.svg)
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
-![TraceGraphRefvsRef](../../../../traceygraphs/ssp/refvsref.svg)
+![TraceGraphRefvsRef](../../../../../traceygraphs/ssp/refvsref.svg)
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
-![TraceGraphAllvsR](../../../../traceygraphs/ssp/allvsr.svg)
+![TraceGraphAllvsR](../../../../../traceygraphs/ssp/allvsr.svg)
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
-![TraceGraphAllvsAll](../../../../traceygraphs/ssp/allvsall.svg)
+![TraceGraphAllvsAll](../../../../../traceygraphs/ssp/allvsall.svg)
 **<p align="center">TraceGraphAllvsAll</p>**
 
 For convenience, the following graphs can be found at the links below:

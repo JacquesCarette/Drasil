@@ -4,7 +4,7 @@
 
 <div id="Figure:systemContextDiag"></div>
 
-![System Context](../../../../datafiles/pdcontroller/Fig_SystemContext.png)
+![System Context](../../../../../datafiles/pdcontroller/Fig_SystemContext.png)
 **<p align="center">System Context</p>**
 
 PD Controller is self-contained. The only external interaction is with the user. The responsibilities of the user and the system are as follows:

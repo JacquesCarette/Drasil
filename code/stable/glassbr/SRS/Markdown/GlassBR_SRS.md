@@ -207,7 +207,7 @@ This section provides general information about the system. It identifies the in
 
 <div id="Figure:sysCtxDiag"></div>
 
-![System Context](../../../../datafiles/glassbr/SystemContextFigure.png)
+![System Context](../../../../../datafiles/glassbr/SystemContextFigure.png)
 **<p align="center">System Context</p>**
 
 The interaction between the product and the user is through a user interface. The responsibilities of the user and the system are as follows:
@@ -277,7 +277,7 @@ PS2: The point of explosion. Where the bomb, or any kind of man-made explosion, 
 
 <div id="Figure:physSystImage"></div>
 
-![The physical system](../../../../datafiles/glassbr/physicalsystimage.png)
+![The physical system](../../../../../datafiles/glassbr/physicalsystimage.png)
 **<p align="center">The physical system</p>**
 
 # Goal Statements {#Sec:GoalStmt}
@@ -984,27 +984,27 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 <div id="Figure:TraceGraphAvsA"></div>
 
-![TraceGraphAvsA](../../../../traceygraphs/glassbr/avsa.svg)
+![TraceGraphAvsA](../../../../../traceygraphs/glassbr/avsa.svg)
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
-![TraceGraphAvsAll](../../../../traceygraphs/glassbr/avsall.svg)
+![TraceGraphAvsAll](../../../../../traceygraphs/glassbr/avsall.svg)
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
-![TraceGraphRefvsRef](../../../../traceygraphs/glassbr/refvsref.svg)
+![TraceGraphRefvsRef](../../../../../traceygraphs/glassbr/refvsref.svg)
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
-![TraceGraphAllvsR](../../../../traceygraphs/glassbr/allvsr.svg)
+![TraceGraphAllvsR](../../../../../traceygraphs/glassbr/allvsr.svg)
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
-![TraceGraphAllvsAll](../../../../traceygraphs/glassbr/allvsall.svg)
+![TraceGraphAllvsAll](../../../../../traceygraphs/glassbr/allvsall.svg)
 **<p align="center">TraceGraphAllvsAll</p>**
 
 For convenience, the following graphs can be found at the links below:
@@ -1088,11 +1088,11 @@ This appendix holds the graphs ([Fig:demandVSsod](#Figure:demandVSsod) and [Fig:
 
 <div id="Figure:demandVSsod"></div>
 
-![3 second duration equivalent pressure (\\(q\\)) versus Stand off distance (SD) versus Charge weight (\\(w\\))](../../../../datafiles/glassbr/ASTM_F2248-09.png)
+![3 second duration equivalent pressure (\\(q\\)) versus Stand off distance (SD) versus Charge weight (\\(w\\))](../../../../../datafiles/glassbr/ASTM_F2248-09.png)
 **<p align="center">3 second duration equivalent pressure (\\(q\\)) versus Stand off distance (SD) versus Charge weight (\\(w\\))</p>**
 
 <div id="Figure:dimlessloadVSaspect"></div>
 
-![Non dimensional lateral applied load (demand) or pressure (\\(\hat{q}\\)) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (\\(J\\))](../../../../datafiles/glassbr/ASTM_F2248-09_BeasonEtAl.png)
+![Non dimensional lateral applied load (demand) or pressure (\\(\hat{q}\\)) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (\\(J\\))](../../../../../datafiles/glassbr/ASTM_F2248-09_BeasonEtAl.png)
 **<p align="center">Non dimensional lateral applied load (demand) or pressure (\\(\hat{q}\\)) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (\\(J\\))</p>**
 

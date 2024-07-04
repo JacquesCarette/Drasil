@@ -113,6 +113,10 @@ jobs:
         run: make convertAnalyzed
         if: ${{ fromJSON(env.is_deployment) }}
 
+      - name: "Build trace graphs" # only needed in deployments, not required for tests
+        run: make tracegraphs
+        if: ${{ fromJSON(env.is_deployment) }}
+
       - name: "Build website generator"
         run: make website
 

@@ -27,20 +27,22 @@ data Constraint a where
 physc :: RealInterval Expr Expr -> ConstraintE
 physc = Range Physical
 
-elem :: Set Expr -> ConstraintE
-elem = Elem Physical
+constrElem :: Set Expr -> ConstraintE
+constrElem = Elem Physical
 
 -- | Smart constructor for range of 'Software' constraints between two given expressions.
 sfwrc :: RealInterval Expr Expr -> ConstraintE
 sfwrc = Range Software
 
-isPhysC, isSfwrC :: Constraint e -> Bool
+isPhysC, isSfwrC, isConstrElem :: Constraint e -> Bool
 
 -- | Helpful for filtering for Physical constraints. True if constraint is 'Physical'.
 isPhysC (Range Physical _) = True
-isPhysC (Elem Physical _) = True
 isPhysC _ = False
 
 -- | Helpful for filtering for Software constraints. True if constraint is 'Software'.
 isSfwrC (Range Software _) = True
 isSfwrC _ = False
+
+isConstrElem (Elem Physical _) = True
+isConstrElem _ = False

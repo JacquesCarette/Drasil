@@ -1,9 +1,9 @@
 on:
   push:
-    paths: [code/**]
+    paths: [code/**, .github/workflows/Build.yaml]
   pull_request:
     branches: main
-    paths: [code/**]
+    paths: [code/**, .github/workflows/Build.yaml]
   workflow_dispatch:
 name: Build
 defaults:

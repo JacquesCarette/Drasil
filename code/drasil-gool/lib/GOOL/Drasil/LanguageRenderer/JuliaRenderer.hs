@@ -12,18 +12,18 @@ import Utils.Drasil (blank, indent, indentList)
 -- TODO: Make these pretty once their contents are stable
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, Library, VSType, SValue, SVariable,
-  MSStatement, MixedCtorCall, OOProg, ProgramSym(..), SMethod, MSBody, MSParameter, Initializers,
+  MSStatement, MixedCtorCall, ProcProg, ProgramSym(..), SMethod, MSBody, MSParameter, Initializers,
   FileSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..), CSStateVar,
   ValueExpression(..), funcApp, extFuncApp, selfFuncApp, bodyStatements,
-  InternalValueExp(..), FunctionSym(..), GetSet(..), List(..), InternalList(..),
+  FunctionSym(..), List(..), InternalList(..),
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), StatePattern(..),
-  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
+  ScopeSym(..), ParameterSym(..),
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), (&=), switchAsIf,
   SClass, FSModule)
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
@@ -107,7 +107,7 @@ instance Applicative JuliaCode where
 instance Monad JuliaCode where
   JLC x >>= f = f x
 
-instance OOProg JuliaCode
+instance ProcProg JuliaCode
 
 instance ProgramSym JuliaCode where
   type Program JuliaCode = ProgData
@@ -146,7 +146,7 @@ instance ImportElim JuliaCode where
 
 instance PermanenceSym JuliaCode where
   type Permanence JuliaCode = Doc
-  static = toCode empty -- TODO: merge with Python
+  static = toCode empty
   dynamic = toCode R.dynamic
 
 instance PermElim JuliaCode where
@@ -188,8 +188,7 @@ instance TypeSym JuliaCode where
   listType = jlListType
   arrayType = listType -- Treat arrays and lists the same, as in Python
   listInnerType = G.listInnerType
-  obj n = typeFromData (Object n') n (text n)
-    where n' = n ++ jlClassAppend
+  obj = undefined
   funcType = CP.funcType -- Julia's functions support multiple-dispatch, so we might need to revisit this
   void = jlVoidType
 
@@ -360,17 +359,13 @@ instance ValueExpression JuliaCode where
   inlineIf = C.inlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
-  selfFuncAppMixedArgs n t vs ns = do
-    let slf = valueOf self
-    call Nothing Nothing n t (slf:vs) ns
+  selfFuncAppMixedArgs = undefined
   extFuncAppMixedArgs l n t ps ns = do
     modify (addModuleImportVS l)
     CP.extFuncAppMixedArgs l n t ps ns
   libFuncAppMixedArgs = undefined
-  newObjMixedArgs = G.newObjMixedArgs ""
-  extNewObjMixedArgs l tp ps ns = do
-    modify (addLibImportVS l)
-    jlExtNewObjMixedArgs l tp ps ns
+  newObjMixedArgs = undefined
+  extNewObjMixedArgs = undefined
   libNewObjMixedArgs = undefined
 
   lambda = G.lambda jlLambda
@@ -396,17 +391,10 @@ instance ValueElim JuliaCode where
   valuePrec = valPrec . unJLC
   value = val . unJLC
 
-instance InternalValueExp JuliaCode where
-  objMethodCallMixedArgs' f t ob vs = call Nothing Nothing f t (ob:vs)
-
 instance FunctionSym JuliaCode where
   type Function JuliaCode = FuncData
   func l t vs = funcApp l t vs >>= ((`funcFromData` t) . RC.value)
-  objAccess = G.objAccess
-
-instance GetSet JuliaCode where
-  get = undefined
-  set = undefined
+  objAccess = G.objAccess -- Can we abstract this to object/struct?  Or is that a bad idea?
 
 instance List JuliaCode where
   intToIndex = CP.intToIndex'
@@ -515,8 +503,8 @@ instance DeclStatement JuliaCode where
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
-  objDecDef = varDecDef
-  objDecNew = G.objDecNew
+  objDecDef = undefined
+  objDecNew = undefined
   extObjDecNew = undefined
   constDecDef = jlConstDecDef
   funcDecDef = undefined
@@ -551,7 +539,7 @@ instance StringStatement JuliaCode where
 
 instance FuncAppStatement JuliaCode where
   inOutCall = CP.inOutCall funcApp
-  selfInOutCall = CP.inOutCall selfFuncApp
+  selfInOutCall = undefined
   extInOutCall m = CP.inOutCall (extFuncApp m)
 
 instance CommentStatement JuliaCode where
@@ -589,12 +577,6 @@ instance ControlStatement JuliaCode where
 
 instance StatePattern JuliaCode where
   checkState = undefined
-
-instance ObserverPattern JuliaCode where
-  notifyObservers = undefined
-
-instance StrategyPattern JuliaCode where
-  runStrategy = undefined
 
 instance ScopeSym JuliaCode where
   type Scope JuliaCode = Doc

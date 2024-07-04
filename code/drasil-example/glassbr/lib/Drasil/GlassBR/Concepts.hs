@@ -36,15 +36,15 @@ annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass,
 annealed      = commonIdeaWithDict "annealed"      (nounPhraseSP "annealed")                "AN"       [idglass]
 aR            = commonIdeaWithDict "aR"            (nounPhraseSP "aspect ratio")            "AR"       [idglass]
 fullyT        = commonIdeaWithDict "fullyT"        (nounPhraseSP "fully tempered")          "FT"       [idglass]
-glassTypeFac  = commonIdeaWithDict "glassTypeFac"  (cn' "glass type factor")                "GTF"      [idglass]
+glassTypeFac  = commonIdeaWithDict "glassTypeFac"  (nounPhraseSP "glass type factor")                "GTF"      [idglass]
 heatS         = commonIdeaWithDict "heatS"         (nounPhraseSP "heat strengthened")       "HS"       [idglass]
 iGlass        = commonIdeaWithDict "iGlass"        (nounPhraseSP "insulating glass")        "IG"       [idglass]
 lGlass        = commonIdeaWithDict "lGlass"        (nounPhraseSP "laminated glass")         "LG"       [idglass]
-lResistance   = commonIdeaWithDict "lResistance"   (cn' "load resistance")                  "LR"       [idglass]
-lShareFac     = commonIdeaWithDict "lShareFac"     (cn' "load share factor")                "LSF"      [idglass]
+lResistance   = commonIdeaWithDict "lResistance"   (nounPhraseSP "load resistance")                  "LR"       [idglass]
+lShareFac     = commonIdeaWithDict "lShareFac"     (nounPhraseSP "load share factor")                "LSF"      [idglass]
 glassBR       = commonIdeaWithDict "glassBR"       (pn "GlassBR")                           "GlassBR"  [idglass]
 stdOffDist    = commonIdeaWithDict "stdOffDist"    (nounPhraseSP "stand off distance")      "SD"       [idglass]
-loadDurFactor = commonIdeaWithDict "loadDurFactor" (cn' "load duration factor")             "LDF"      [idglass]
+loadDurFactor = commonIdeaWithDict "loadDurFactor" (nounPhraseSP "load duration factor")             "LDF"      [idglass]
 nFL           = commonIdeaWithDict "nFL"           (nounPhraseSP "non-factored load")       "NFL"      [idglass]
 
 {-Terminology-}
@@ -58,7 +58,7 @@ cantilever   = nc "cantilever" (nounPhraseSP "cantilever")
 edge         = nc "edge"       (cn'          "edge")
 glass        = nc "glass"      (nounPhraseSP "glass")
 glaSlab      = nc "glaSlab"    (cn' "glass slab")
-plane        = nc "plane"      (nounPhraseSP "plane")
+plane        = nc "plane"      (cn' "plane")
 
 ptOfExplsn   = nc "ptOfExplsn" (cn' "point of explosion")
 

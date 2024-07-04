@@ -27,66 +27,66 @@ pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
       ccLaplaceTransform, controlVariable, stepTime, ccAbsTolerance, 
       ccRelTolerance, ccTransferFxn, ccDampingCoeff, ccStiffCoeff :: ConceptChunk
 pidCL
-  = dcc "pdCtrlLoop" (cn' "PD Control Loop") ("Closed-Loop control " ++
+  = dcc "pdCtrlLoop" (nounPhraseSP "PD Control Loop") ("Closed-Loop control " ++
         "system with PD Controller, Summing Point and Power Plant")
 
 pidC
-  = dcc "pdController" (cn' "PD Controller") 
+  = dcc "pdController" (nounPhraseSP "PD Controller") 
         "Proportional-Derivative Controller"
 
 summingPt
-  = dcc "summingPoint" (cn' "Summing Point") ("Control block where " ++
+  = dcc "summingPoint" (nounPhraseSP "Summing Point") ("Control block where " ++
         "the difference between the Set-Point and the Process Variable " ++
         "is computed")
 
 powerPlant
-  = dcc "powerPlant" (cn' "Power Plant") 
+  = dcc "powerPlant" (nounPhraseSP "Power Plant") 
       "A second order system to be controlled"
 
 secondOrderSystem
-  = dcc "secondOrderSystem" (cn' "Second Order System") 
+  = dcc "secondOrderSystem" (nounPhraseSP "Second Order System") 
       ("A system whose input-output relationship is denoted by a second-order "
          ++ "differential equation")
 
 processError
-  = dcc "processError" (cn' "Process Error") 
+  = dcc "processError" (nounPhraseSP "Process Error") 
       ("Input to the PID controller. Process Error is the difference between the "
          ++ "Set-Point and the Process Variable")
 
 stepTime = dcc "stepTime" (nounPhraseSP "Step Time") "Simulation step time"
 
 simulationTime
-  = dcc "simulationTime" (cn' "Simulation Time") 
+  = dcc "simulationTime" (nounPhraseSP "Simulation Time") 
       "Total execution time of the PD simulation"
 
 processVariable
-  = dcc "processVariable" (cn' "Process Variable") 
+  = dcc "processVariable" (nounPhraseSP "Process Variable") 
       "The output value from the power plant"
 
 controlVariable
-  = dcc "controlVariable" (cn' "Control Variable") 
+  = dcc "controlVariable" (nounPhraseSP "Control Variable") 
       "The Control Variable is the output of the PD controller"
 
 setPoint
-  = dcc "setPoint" (cn' "Set-Point") 
+  = dcc "setPoint" (nounPhraseSP "Set-Point") 
       ("The desired value that the control system must reach. This also knows "
          ++ "as the reference variable")
 
 propGain
-  = dcc "propGain" (cn' "Proportional Gain") 
+  = dcc "propGain" (nounPhraseSP "Proportional Gain") 
       "Gain constant of the proportional controller"
 
 derGain
-  = dcc "derGain" (cn' "Derivative Gain") 
+  = dcc "derGain" (nounPhraseSP "Derivative Gain") 
       "Gain constant of the derivative controller"
 
 propControl
-  = dcc "propControl" (cn' "Proportional control")
+  = dcc "propControl" (nounPhraseSP "Proportional control")
       ("A linear feedback control system where correction is applied to the controlled " ++
       "variable which is proportional to the difference between desired and measured values")
 
 derControl
-  = dcc "derControl" (cn' "Derivative control")
+  = dcc "derControl" (nounPhraseSP "Derivative control")
       ("Monitors the rate of change of the error signal and contributes a component " ++ 
       "of the output signal (proportional to a derivative of the error signal)")
 
@@ -117,7 +117,7 @@ ccRelTolerance
       "Relative tolerance for the integrator"
 
 ccTransferFxn
-  = dcc "transferFxn" (cn' "Transfer Function")
+  = dcc "transferFxn" (nounPhraseSP "Transfer Function")
       ("The Transfer Function of a system is the ratio of the output to the input"
          ++ " functions in the frequency domain")
 

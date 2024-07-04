@@ -417,7 +417,7 @@ effectiveStress = uc' "sigma'" (cn' "effective stress")
    "average stress carried by the soil skeleton")
   (prime lSigma) Real pascal
 
-effNormStress = uc' "sigmaN'" (cn' "effective normal stress")
+effNormStress = uc' "sigmaN'" (nounPhraseSP "effective normal stress")
   (S $ "the normal stress in a soil mass that is effective in causing volume " ++
    "changes; represents the average normal stress carried by the soil skeleton")
   (prime $ sub lSigma cN) Real pascal
@@ -448,17 +448,17 @@ unitless = [earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction,
 earthqkLoadFctr, normToShear, scalFunc, numbSlices,
   minFunction, mobShrC, shrResC, index, varblV :: DefinedQuantityDict
 
-earthqkLoadFctr = dqd' (dcc "K_c" (cn' "seismic coefficient")
+earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP "seismic coefficient")
   ("the proportionality factor of force that weight pushes outwards; " ++
    "caused by seismic earth movements"))
   (const $ sub cK lCoeff) Real Nothing 
 
-normToShear = dqd' (dcc "lambda" (cn' "proportionality constant")
+normToShear = dqd' (dcc "lambda" (nounPhraseSP "proportionality constant")
   "the ratio of the interslice normal to the interslice shear force")
   (const lLambda) Real Nothing
 
 scalFunc = dqd' (dccWDS "f_i" 
-  (cn' "interslice normal to shear force ratio variation function")
+  (nounPhraseSP "interslice normal to shear force ratio variation function")
   (S "a function" `S.of_` phraseNP (distance `inThe` xDir) +:+
    S "that describes the variation of the interslice normal to shear ratio"))
   (const (vec lF)) Real Nothing 
@@ -469,7 +469,7 @@ numbSlices = dqd' (dcc "n" (nounPhraseSP "number of slices")
   (const lN) Integer Nothing
 
 -- horrible hack, but it's only used once, so...
-minFunction = dqd' (dcc "Upsilon" (cn' "minimization function")
+minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "minimization function")
   "generic minimization function or algorithm")
   (const cUpsilon) (mkFunction (replicate 10 Real) Real) Nothing
 

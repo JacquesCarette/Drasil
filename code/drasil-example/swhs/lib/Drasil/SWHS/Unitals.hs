@@ -114,20 +114,20 @@ pcmMass = uc' "pcmMass" (nounPhraseSP "mass of phase change material")
 wMass = uc' "wMass" (nounPhraseSP "mass of water")
   (S "the quantity of matter within the water") (sub (eqSymb mass) lWater) Real kilogram
 
-thFluxVect = uc' "thFluxVect" (nounPhraseSP "thermal flux vector")
+thFluxVect = uc' "thFluxVect" (cn' "thermal flux vector")
   (S "vector denoting the direction of thermal flux through a surface")
   (vec lQ) Real UT.thermalFlux
 
 htFluxC = uc' "htFluxC"
-  (nounPhraseSP "heat flux into the water from the coil")
+  (cn' "heat flux into the water from the coil")
   (S "the rate of heat energy transfer into the water from the coil per unit time")
   (sub (eqSymb htFlux) lCoil) Real UT.thermalFlux
 
-htFluxIn = uc' "htFluxIn" (nounPhraseSP "heat flux input")
+htFluxIn = uc' "htFluxIn" (cn' "heat flux input")
   (S "the rate of heat energy transfer into an object per unit time")
   (sub (eqSymb htFlux) lIn) Real UT.thermalFlux
 
-htFluxOut = uc' "htFluxOut" (nounPhraseSP "heat flux output")
+htFluxOut = uc' "htFluxOut" (cn' "heat flux output")
   (S "the rate of heat energy transfer into an object per unit time")
   (sub (eqSymb htFlux) lOut) Real UT.thermalFlux
 
@@ -157,7 +157,7 @@ tFinalMelt = uc' "tFinalMelt"
     "finishes changes from a solid to a liquid")
   (sup (sub (eqSymb time) lMelt) lFinal) Real second
   
-tankVol = uc' "tankVol" (nounPhraseSP "volume of the cylindrical tank")
+tankVol = uc' "tankVol" (cn' "volume of the cylindrical tank")
   (S "the amount of space encompassed by a tank")
   (sub (eqSymb vol) lTank) Real m_3
 
@@ -165,7 +165,7 @@ wVol = uc' "wVol" (vol `of_` water)
   (S "the amount of space occupied by a given quantity of water")
   (sub (eqSymb vol) lWater) Real m_3
 
-deltaT = uc' "deltaT" (nounPhraseSP "change in temperature")
+deltaT = uc' "deltaT" (cn' "change in temperature")
   (S "change in the average kinetic energy of a given material")
   (Atop Delta $ eqSymb temp) Real centigrade
 
@@ -210,7 +210,7 @@ eta = dqd' (dcc "eta" (nounPhraseSP "ODE parameter related to decay rate")
   "derived parameter based on rate of change of temperature of water")
   (const lEta) Real Nothing
 
-meltFrac = dqd' (dcc "meltFrac" (nounPhraseSP "melt fraction")
+meltFrac = dqd' (dcc "meltFrac" (cn' "melt fraction")
   "ratio of thermal energy to amount of mass melted")
   --FIXME: Not sure if definition is exactly correct
   (const lPhi) Real Nothing
@@ -226,16 +226,16 @@ consTol = dqd' (dcc "consTol"
   (const $ sub cC lTol) Real Nothing
 
 aspectRatio = dqd' (dcc "aspectRatio" 
-  (nounPhraseSP "aspect ratio")
+  (cn' "aspect ratio")
   "ratio of tank diameter to tank length")
    (const $ variable "AR") Real Nothing
 
 aspectRatioMin = dqd' (dcc "aspectRatioMin" 
-  (nounPhraseSP "minimum aspect ratio") "minimum aspect ratio")
+  (cn' "minimum aspect ratio") "minimum aspect ratio")
    (const $ subMin (eqSymb aspectRatio)) Real Nothing
 
 aspectRatioMax = dqd' (dcc "aspectRatioMax" 
-  (nounPhraseSP "maximum aspect ratio") "maximum aspect ratio")
+  (cn' "maximum aspect ratio") "maximum aspect ratio")
    (const $ subMax (eqSymb aspectRatio)) Real Nothing
 
 -----------------
@@ -261,14 +261,14 @@ tankLength, diam, pcmVol, pcmSA, pcmDensity, tempMeltP,
 tempPCM, tempW, watE, pcmE :: ConstrConcept
 
 -- Constraint 1
-tankLength = uqc "tankLength" (nounPhraseSP "length of tank")
+tankLength = uqc "tankLength" (cn' "length of tank")
   "the length of the tank" cL metre Real
   [gtZeroConstr,
   sfwrc $ Bounded (Inc, sy tankLengthMin) (Inc, sy tankLengthMax)] (dbl 1.5)
   defaultUncrt
 
 -- Constraint 2
-diam = uqc "diam" (nounPhraseSP "diameter of tank")
+diam = uqc "diam" (cn' "diameter of tank")
   "the diameter of the tank" cD metre Real
   [gtZeroConstr, sfwrc $ Bounded (Inc, sy arMin) (Inc, sy arMax)]
   (dbl 0.412) defaultUncrt
@@ -347,7 +347,7 @@ coilSA = uqc "coilSA"
   sfwrc $ UpTo (Inc, sy coilSAMax)] (dbl 0.12) defaultUncrt
 
 -- Constraint 11
-tempC = uqc "tempC" (nounPhraseSP "temperature of the heating coil")
+tempC = uqc "tempC" (cn' "temperature of the heating coil")
   "the average kinetic energy of the particles within the coil"
   (sub (eqSymb temp) lCoil) centigrade Real
   [physc $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 100)] (exactDbl 50) defaultUncrt
@@ -386,13 +386,13 @@ pcmHTC = uqc "pcmHTC"
   sfwrc $ Bounded (Inc, sy pcmHTCMin) (Inc, sy pcmHTCMax)] (exactDbl 1000) defaultUncrt
   
 -- Constraint 16
-tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
+tempInit = uqc "tempInit" (cn' "initial temperature")
   "the temperature at the beginning of the simulation"
   (sub (eqSymb temp) lInit) centigrade Real
   [physc $ Bounded (Exc, exactDbl 0) (Exc, sy meltPt)] (exactDbl 40) defaultUncrt
   
 -- Constraint 17
-timeFinal = uqc "timeFinal" (nounPhraseSP "final time")
+timeFinal = uqc "timeFinal" (cn' "final time")
   ("the amount of time elapsed from the beginning of the " ++
    "simulation to its conclusion") (sub (eqSymb time) 
   lFinal) second Real
@@ -474,11 +474,11 @@ consTolAux = mkQuantDef consTol $ perc 1 5
 
 -- Used in Constraint 1
 tankLengthMin = mkQuantDef (unitary "tankLengthMin"
-  (nounPhraseSP "minimum length of tank")
+  (cn' "minimum length of tank")
   (subMin (eqSymb tankLength)) metre Real) $ dbl 0.1
 
 tankLengthMax = mkQuantDef (unitary "tankLengthMax"
-  (nounPhraseSP "maximum length of tank")
+  (cn' "maximum length of tank")
   (subMax (eqSymb tankLength)) metre Real) $ exactDbl 50
 
 fracMinAux = mkQuantDef fracMin $ dbl 1.0e-6
@@ -524,7 +524,7 @@ htFusionMax = mkQuantDef (unitary "htFusionMax"
 
 -- Used in Constraint 10
 coilSAMax = mkQuantDef (unitary' "coilSAMax"
-  (nounPhraseSP "maximum surface area of coil") (staged (supMax (eqSymb coilSA))
+  (cn' "maximum surface area of coil") (staged (supMax (eqSymb coilSA))
   (subMax (eqSymb coilSA))) m_2 Real) $ exactDbl 100000
 
 -- Used in Constraint 12

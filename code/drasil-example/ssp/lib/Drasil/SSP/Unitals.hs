@@ -448,17 +448,17 @@ unitless = [earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction,
 earthqkLoadFctr, normToShear, scalFunc, numbSlices,
   minFunction, mobShrC, shrResC, index, varblV :: DefinedQuantityDict
 
-earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP "seismic coefficient")
+earthqkLoadFctr = dqd' (dcc "K_c" (cn' "seismic coefficient")
   ("the proportionality factor of force that weight pushes outwards; " ++
    "caused by seismic earth movements"))
   (const $ sub cK lCoeff) Real Nothing 
 
-normToShear = dqd' (dcc "lambda" (nounPhraseSP "proportionality constant")
+normToShear = dqd' (dcc "lambda" (cn' "proportionality constant")
   "the ratio of the interslice normal to the interslice shear force")
   (const lLambda) Real Nothing
 
 scalFunc = dqd' (dccWDS "f_i" 
-  (nounPhraseSP "interslice normal to shear force ratio variation function")
+  (cn' "interslice normal to shear force ratio variation function")
   (S "a function" `S.of_` phraseNP (distance `inThe` xDir) +:+
    S "that describes the variation of the interslice normal to shear ratio"))
   (const (vec lF)) Real Nothing 
@@ -469,7 +469,7 @@ numbSlices = dqd' (dcc "n" (nounPhraseSP "number of slices")
   (const lN) Integer Nothing
 
 -- horrible hack, but it's only used once, so...
-minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "minimization function")
+minFunction = dqd' (dcc "Upsilon" (cn' "minimization function")
   "generic minimization function or algorithm")
   (const cUpsilon) (mkFunction (replicate 10 Real) Real) Nothing
 
@@ -489,12 +489,12 @@ shrResC = dqd' (dcc "Phi"
 -- Index Function --
 --------------------
 
-varblV = dqd' (dcc "varblV" (nounPhraseSP "local index")
+varblV = dqd' (dcc "varblV" (cn' "local index")
   "used as a bound variable index in calculations")
   (const lV) Natural Nothing
 
 -- As we do arithmetic on index, must type it 'Integer' right now
-index = dqd' (dcc "index" (nounPhraseSP "index")
+index = dqd' (dcc "index" (cn' "index")
   "a number representing a single slice")
   (const lI) Integer Nothing 
 

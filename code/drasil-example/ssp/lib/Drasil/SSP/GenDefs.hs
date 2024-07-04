@@ -124,7 +124,7 @@ shrResEqn = inxi nrmFSubWat $* tan (inxi fricAngle) $+ (inxi effCohesion $*
   inxi baseLngth)
 
 resShr :: RelationConcept
-resShr = makeRC "resShr" (nounPhraseSP "resistive shear force")
+resShr = makeRC "resShr" (cn' "resistive shear force")
   resShrDesc resShrRel -- genDef3Label
 
 resShrRel :: Relation
@@ -169,7 +169,7 @@ mobShrDeriv = mkDerivNoHeader [foldlSent_ [atStart' mobShrI `S.is` S "derived by
 --
 effNormF :: RelationConcept
 effNormF = makeRC "effNormF"
-  (nounPhraseSP "effective normal force") effNormFDesc effNormFRel
+  (cn' "effective normal force") effNormFDesc effNormFRel
 
 effNormFRel :: Relation
 effNormFRel = inxi nrmFSubWat $= inxi totNrmForce $- inxi baseHydroForce
@@ -445,7 +445,7 @@ momEqlDerivFinalEqn = exactDbl 0 $= momExpr (\ x y -> x $+
 --
 
 sliceWght :: RelationConcept
-sliceWght = makeRC "sliceWght" (nounPhraseSP "slice weight") sliceWghtNotes
+sliceWght = makeRC "sliceWght" (cn' "slice weight") sliceWghtNotes
   sliceWghtEqn
 
 sliceWghtEqn :: Expr
@@ -578,7 +578,7 @@ sliceWghtDerivMixCaseSliceEqn = inxi slcWght $= (inxi baseWthX $* oneHalf $*
 -- 
 
 baseWtrF :: RelationConcept
-baseWtrF = makeRC "baseWtrF" (nounPhraseSP "base hydrostatic force")
+baseWtrF = makeRC "baseWtrF" (cn' "base hydrostatic force")
   bsWtrFNotes bsWtrFEqn
 
 bsWtrFEqn :: Expr
@@ -661,7 +661,7 @@ bsWtrFDerivSliceEqn = inxi baseHydroForce $= inxi baseLngth $* sy waterWeight $*
 --
 
 srfWtrF :: RelationConcept
-srfWtrF = makeRC "srfWtrF" (nounPhraseSP "surface hydrostatic force")
+srfWtrF = makeRC "srfWtrF" (cn' "surface hydrostatic force")
   srfWtrFNotes srfWtrFEqn
 
 srfWtrFEqn :: Relation

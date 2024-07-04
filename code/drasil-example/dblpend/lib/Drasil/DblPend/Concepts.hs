@@ -39,7 +39,7 @@ defs :: [ConceptChunk]
 defs = [arcLen]
 
 arcLen :: ConceptChunk
-arcLen = dcc "arc length" (nounPhraseSP "arc length") "the distance between two points on a curve"
+arcLen = dcc "arc length" (cn' "arc length") "the distance between two points on a curve"
 
 progName :: CI
 progName = commonIdeaWithDict "dblPendulum" (pn "Double Pendulum") "DblPend" [physics]

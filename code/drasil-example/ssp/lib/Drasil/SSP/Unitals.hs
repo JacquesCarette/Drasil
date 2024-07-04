@@ -489,12 +489,12 @@ shrResC = dqd' (dcc "Phi"
 -- Index Function --
 --------------------
 
-varblV = dqd' (dcc "varblV" (cn' "local index")
+varblV = dqd' (dcc "varblV" (nounPhraseSP "local index")
   "used as a bound variable index in calculations")
   (const lV) Natural Nothing
 
 -- As we do arithmetic on index, must type it 'Integer' right now
-index = dqd' (dcc "index" (cn' "index")
+index = dqd' (dcc "index" (nounPhraseSP "index")
   "a number representing a single slice")
   (const lI) Integer Nothing 
 

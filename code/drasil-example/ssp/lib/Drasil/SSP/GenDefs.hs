@@ -445,7 +445,7 @@ momEqlDerivFinalEqn = exactDbl 0 $= momExpr (\ x y -> x $+
 --
 
 sliceWght :: RelationConcept
-sliceWght = makeRC "sliceWght" (cn' "slice weight") sliceWghtNotes
+sliceWght = makeRC "sliceWght" (nounPhraseSP "slice weight") sliceWghtNotes
   sliceWghtEqn
 
 sliceWghtEqn :: Expr

@@ -29,14 +29,15 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock,
   cos, tan), Comparison(..), funcApp, newObj, objMethodCallNoParams, ($.),
   StatementSym(multi), AssignStatement((&++)), (&=), IOStatement(printStr,
   printStrLn, printFile, printFileStr, printFileStrLn), ifNoElse, ScopeSym(..),
-  ModuleSym(Module), convType)
+  ModuleSym(Module), convTypeOO)
 import qualified GOOL.Drasil.ClassInterface as S (
   TypeSym(int, double, char, string, listType, arrayType, listInnerType,
-  funcType, void), VariableSym(var, objVarSelf), Literal(litInt, litFloat,
-  litDouble, litString), VariableValue(valueOf), FunctionSym(func),
-  List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
-  IOStatement(print), ControlStatement(returnStmt, for), ParameterSym(param),
-  MethodSym(method), List(intToIndex))
+  funcType, void), VariableSym(var), OOVariableSym(objVarSelf),
+  Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
+  FunctionSym(func), List(listSize, listAccess), StatementSym(valStmt),
+  DeclStatement(varDecDef), IOStatement(print),
+  ControlStatement(returnStmt, for), ParameterSym(param), MethodSym(method),
+  List(intToIndex))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(commentedMod),  
   RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
   RenderFunction(funcFromData), FunctionElim(functionType), 
@@ -94,7 +95,7 @@ multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 -- Types --
 
 listInnerType :: (RenderSym r) => VSType r -> VSType r
-listInnerType t = t >>= (convType . getInnerType . getType)
+listInnerType t = t >>= (convTypeOO . getInnerType . getType)
 
 obj :: (RenderSym r) => ClassName -> VSType r
 obj n = typeFromData (Object n) n (text n)

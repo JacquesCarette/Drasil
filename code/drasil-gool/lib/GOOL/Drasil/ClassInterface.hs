@@ -9,25 +9,27 @@ module GOOL.Drasil.ClassInterface (
   -- Typeclasses
   OOProg, ProcProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   bodyStatements, oneLiner, BlockSym(..), TypeSym(..), OOTypeSym(..), TypeElim(..), 
-  VariableSym(..), VariableElim(..), ($->), listOf, listVar, ValueSym(..), 
-  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
-  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp,
-  extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists,
+  VariableSym(..), OOVariableSym(..), VariableElim(..), ($->), listOf, listVar,
+  ValueSym(..), OOValueSym, Argument(..), Literal(..), litZero,
+  MathConstant(..), VariableValue(..), OOVariableValue, CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), OOValueExpression(..), funcApp, funcAppNamedArgs,
+  selfFuncApp, extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists,
   InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
   objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..), ($.),
   selfAccess, GetSet(..), List(..), InternalList(..), listSlice,
-  listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
-  objDecNewNoParams, extObjDecNewNoParams, IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), StatePattern(..), initState, changeState,
-  ObserverPattern(..), observerListName, initObserverList, addObserver,
-  StrategyPattern(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..),
-  MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
+  listIndexExists, at, ThunkSym(..),
+  VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
+  ThunkAssign(..), StatementSym(..), AssignStatement(..), (&=),
+  assignToListIndex, DeclStatement(..), objDecNewNoParams,
+  extObjDecNewNoParams, IOStatement(..), StringStatement(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  StatePattern(..), initState, changeState, ObserverPattern(..),
+  observerListName, initObserverList, addObserver, StrategyPattern(..),
+  ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..),
+  privMethod, pubMethod, initializer, nonInitConstructor,
   StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..),
-  convType
+  convType, convTypeOO
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
@@ -48,12 +50,12 @@ type GSProgram a = GS (a (Program a))
 -- Functions in GOOL's interface beginning with "ext" are to be used to access items from other modules in the same program/project
 -- Functions in GOOL's interface beginning with "lib" are to be used to access items from different libraries/projects
 
-class (ProgramSym r, VectorType r, VectorDecl r, VectorThunk r,
+class (ProgramSym r, OOVariableValue r, VectorType r, VectorDecl r, VectorThunk r,
   VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r,
   IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r,
   ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r,
   VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
-  Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r,
+  Comparison r, OOValueExpression r, InternalValueExp r, GetSet r, List r,
   StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r,
   VariableElim r) => OOProg r
 
@@ -133,21 +135,15 @@ type SVariable a = VS (a (Variable a))
 class (TypeSym r) => VariableSym r where
   type Variable r
   var          :: Label -> VSType r -> SVariable r
-  staticVar    :: Label -> VSType r -> SVariable r
   constant     :: Label -> VSType r -> SVariable r
   extVar       :: Library -> Label -> VSType r -> SVariable r
-  self         :: SVariable r
-  classVar     :: VSType r -> SVariable r -> SVariable r
-  extClassVar  :: VSType r -> SVariable r -> SVariable r
-  objVar       :: SVariable r -> SVariable r -> SVariable r
-  objVarSelf   :: SVariable r -> SVariable r
   arrayElem    :: Integer -> SVariable r -> SVariable r
   
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
   variableType :: r (Variable r) -> r (Type r)
 
-($->) :: (VariableSym r) => SVariable r -> SVariable r -> SVariable r
+($->) :: (OOVariableSym r) => SVariable r -> SVariable r -> SVariable r
 infixl 9 $->
 ($->) = objVar
 
@@ -274,9 +270,6 @@ class (VariableSym r, ValueSym r) => ValueExpression r where
   selfFuncAppMixedArgs ::            MixedCall r
   extFuncAppMixedArgs  :: Library -> MixedCall r
   libFuncAppMixedArgs  :: Library -> MixedCall r
-  newObjMixedArgs      ::            MixedCtorCall r
-  extNewObjMixedArgs   :: Library -> MixedCtorCall r
-  libNewObjMixedArgs   :: Library -> MixedCtorCall r
 
   lambda :: [SVariable r] -> SValue r -> SValue r
 
@@ -297,15 +290,6 @@ extFuncApp l n t vs = extFuncAppMixedArgs l n t vs []
 
 libFuncApp       :: (ValueExpression r) => Library -> PosCall r
 libFuncApp l n t vs = libFuncAppMixedArgs l n t vs []
-
-newObj           :: (ValueExpression r) =>            PosCtorCall r
-newObj t vs = newObjMixedArgs t vs []
-
-extNewObj        :: (ValueExpression r) => Library -> PosCtorCall r
-extNewObj l t vs = extNewObjMixedArgs l t vs []
-
-libNewObj        :: (ValueExpression r) => Library -> PosCtorCall r
-libNewObj l t vs = libNewObjMixedArgs l t vs []
 
 exists :: (ValueExpression r) => SValue r -> SValue r
 exists = notNull
@@ -624,6 +608,34 @@ class (ClassSym r) => ModuleSym r where
 class (TypeSym r) => OOTypeSym r where
   obj :: ClassName -> VSType r
 
+class (ValueSym r, OOTypeSym r) => OOValueSym r
+
+class (VariableSym r, OOTypeSym r) => OOVariableSym r where
+  staticVar    :: Label -> VSType r -> SVariable r -- I *think* this is OO-only
+  self         :: SVariable r
+  classVar     :: VSType r -> SVariable r -> SVariable r
+  extClassVar  :: VSType r -> SVariable r -> SVariable r
+  objVar       :: SVariable r -> SVariable r -> SVariable r
+  objVarSelf   :: SVariable r -> SVariable r
+
+-- for values that can include expressions
+class (ValueExpression r, OOVariableSym r, OOValueSym r) => OOValueExpression r where
+  newObjMixedArgs      ::            MixedCtorCall r
+  extNewObjMixedArgs   :: Library -> MixedCtorCall r
+  libNewObjMixedArgs   :: Library -> MixedCtorCall r
+
+newObj           :: (OOValueExpression r) =>            PosCtorCall r
+newObj t vs = newObjMixedArgs t vs []
+
+extNewObj        :: (OOValueExpression r) => Library -> PosCtorCall r
+extNewObj l t vs = extNewObjMixedArgs l t vs []
+
+libNewObj        :: (OOValueExpression r) => Library -> PosCtorCall r
+libNewObj l t vs = libNewObjMixedArgs l t vs []
+
+
+class (VariableValue r, OOVariableSym r) => OOVariableValue r
+
 class (StatementSym r, FunctionSym r) => ObserverPattern r where
   notifyObservers :: VSFunction r -> VSType r -> MSStatement r
 
@@ -633,7 +645,7 @@ observerListName = "observerList"
 initObserverList :: (DeclStatement r) => VSType r -> [SValue r] -> MSStatement r
 initObserverList t = listDecDef (var observerListName (listType t))
 
-addObserver :: (StatementSym r, VariableValue r, List r) => SValue r -> 
+addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r -> 
   MSStatement r
 addObserver o = valStmt $ listAdd obsList lastelem o
   where obsList = valueOf $ observerListName `listOf` onStateValue valueType o
@@ -682,7 +694,7 @@ class (ValueSym r) => FunctionSym r where
 infixl 9 $.
 ($.) = objAccess
 
-selfAccess :: (VariableValue r, FunctionSym r) => VSFunction r -> SValue r
+selfAccess :: (OOVariableValue r, FunctionSym r) => VSFunction r -> SValue r
 selfAccess = objAccess (valueOf self)
 
 class (ValueSym r, VariableSym r) => GetSet r where
@@ -700,8 +712,12 @@ convType Char = char
 convType String = string
 convType (List t) = listType (convType t)
 convType (Array t) = arrayType (convType t)
-convType (Object n) = obj n
 convType (Func ps r) = funcType (map convType ps) (convType r)
 convType Void = void
 convType InFile = infile
 convType OutFile = outfile
+convType (Object _) = error "Objects not supported"
+
+convTypeOO :: (OOTypeSym r) => CodeType -> VSType r
+convTypeOO (Object n) = obj n
+convTypeOO t = convType t

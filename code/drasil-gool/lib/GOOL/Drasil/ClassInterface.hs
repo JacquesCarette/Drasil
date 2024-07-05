@@ -7,8 +7,8 @@ module GOOL.Drasil.ClassInterface (
   FSModule, NamedArgs, Initializers, MixedCall, MixedCtorCall, PosCall,
   PosCtorCall,
   -- Typeclasses
-  OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
-  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), 
+  OOProg, ProcProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
+  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), OOTypeSym(..), TypeElim(..), 
   VariableSym(..), VariableElim(..), ($->), listOf, listVar, ValueSym(..), 
   Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
@@ -56,6 +56,16 @@ class (ProgramSym r, VectorType r, VectorDecl r, VectorThunk r,
   Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r,
   StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r,
   VariableElim r) => OOProg r
+
+class (ProgramSym r, VectorType r, VectorDecl r, VectorThunk r,
+  VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r,
+  IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r,
+  ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r,
+  VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
+  Comparison r, ValueExpression r, List r, StatePattern r, TypeElim r,
+  VariableElim r) => ProcProg r
+
+-- Shared between OO and Procedural --
 
 class (FileSym r) => ProgramSym r where
   type Program r
@@ -111,7 +121,6 @@ class TypeSym r where
   listType      :: VSType r -> VSType r
   arrayType     :: VSType r -> VSType r
   listInnerType :: VSType r -> VSType r
-  obj           :: ClassName -> VSType r
   funcType      :: [VSType r] -> VSType r -> VSType r
   void          :: VSType r
 
@@ -300,52 +309,6 @@ libNewObj l t vs = libNewObjMixedArgs l t vs []
 
 exists :: (ValueExpression r) => SValue r -> SValue r
 exists = notNull
-
-class (FunctionSym r) => InternalValueExp r where
-  -- | Generic function for calling an object method.
-  --   Takes the function name, the return type, the object, a list of 
-  --   positional arguments, and a list of named arguments.
-  objMethodCallMixedArgs' :: Label -> VSType r -> SValue r -> [SValue r] -> 
-    NamedArgs r -> SValue r
-
--- | Calling an object method. t is the return type of the method, o is the
---   object, f is the method name, and ps is a list of positional arguments.
-objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label -> 
-  [SValue r] -> SValue r
-objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
-
--- | Calling a method with named arguments.
-objMethodCallNamedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
-  -> NamedArgs r -> SValue r
-objMethodCallNamedArgs t o f = objMethodCallMixedArgs' f t o []
-
--- | Calling a method with a mix of positional and named arguments.
-objMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
-  -> [SValue r] -> NamedArgs r -> SValue r
-objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
-
--- | Calling a method with no parameters.
-objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r -> Label 
-  -> SValue r
-objMethodCallNoParams t o f = objMethodCall t o f []
-
-type VSFunction a = VS (a (Function a))
-
-class (ValueSym r) => FunctionSym r where
-  type Function r
-  func :: Label -> VSType r -> [SValue r] -> VSFunction r
-  objAccess :: SValue r -> VSFunction r -> SValue r
-
-($.) :: (FunctionSym r) => SValue r -> VSFunction r -> SValue r
-infixl 9 $.
-($.) = objAccess
-
-selfAccess :: (VariableValue r, FunctionSym r) => VSFunction r -> SValue r
-selfAccess = objAccess (valueOf self)
-
-class (ValueSym r, VariableSym r) => GetSet r where
-  get :: SValue r -> SVariable r -> SValue r
-  set :: SValue r -> SVariable r -> SValue r -> SValue r
 
 class (ValueSym r) => List r where
   -- | Does any necessary conversions from GOOL's zero-indexed assumptions to
@@ -556,25 +519,6 @@ initState fsmName initialState = varDecDef (var fsmName string)
 changeState :: (AssignStatement r, Literal r) => Label -> Label -> MSStatement r
 changeState fsmName toState = var fsmName string &= litString toState
 
-class (StatementSym r, FunctionSym r) => ObserverPattern r where
-  notifyObservers :: VSFunction r -> VSType r -> MSStatement r
-
-observerListName :: Label
-observerListName = "observerList"
-
-initObserverList :: (DeclStatement r) => VSType r -> [SValue r] -> MSStatement r
-initObserverList t = listDecDef (var observerListName (listType t))
-
-addObserver :: (StatementSym r, VariableValue r, List r) => SValue r -> 
-  MSStatement r
-addObserver o = valStmt $ listAdd obsList lastelem o
-  where obsList = valueOf $ observerListName `listOf` onStateValue valueType o
-        lastelem = listSize obsList
-
-class (BodySym r, VariableSym r) => StrategyPattern r where
-  runStrategy     :: Label -> [(Label, MSBody r)] -> Maybe (SValue r) -> 
-    Maybe (SVariable r) -> MSBlock r
-
 class ScopeSym r where
   type Scope r
   private :: r (Scope r)
@@ -674,6 +618,76 @@ type FSModule a = FS (a (Module a))
 class (ClassSym r) => ModuleSym r where
   type Module r
   buildModule :: Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
+
+-- OO Only --
+
+class (TypeSym r) => OOTypeSym r where
+  obj :: ClassName -> VSType r
+
+class (StatementSym r, FunctionSym r) => ObserverPattern r where
+  notifyObservers :: VSFunction r -> VSType r -> MSStatement r
+
+observerListName :: Label
+observerListName = "observerList"
+
+initObserverList :: (DeclStatement r) => VSType r -> [SValue r] -> MSStatement r
+initObserverList t = listDecDef (var observerListName (listType t))
+
+addObserver :: (StatementSym r, VariableValue r, List r) => SValue r -> 
+  MSStatement r
+addObserver o = valStmt $ listAdd obsList lastelem o
+  where obsList = valueOf $ observerListName `listOf` onStateValue valueType o
+        lastelem = listSize obsList
+
+class (BodySym r, VariableSym r) => StrategyPattern r where
+  runStrategy     :: Label -> [(Label, MSBody r)] -> Maybe (SValue r) -> 
+    Maybe (SVariable r) -> MSBlock r
+
+class (FunctionSym r) => InternalValueExp r where
+  -- | Generic function for calling a method.
+  --   Takes the function name, the return type, the object, a list of 
+  --   positional arguments, and a list of named arguments.
+  objMethodCallMixedArgs' :: Label -> VSType r -> SValue r -> [SValue r] -> 
+    NamedArgs r -> SValue r
+
+-- | Calling a method. t is the return type of the method, o is the
+--   object, f is the method name, and ps is a list of positional arguments.
+objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label -> 
+  [SValue r] -> SValue r
+objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
+
+-- | Calling a method with named arguments.
+objMethodCallNamedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
+  -> NamedArgs r -> SValue r
+objMethodCallNamedArgs t o f = objMethodCallMixedArgs' f t o []
+
+-- | Calling a method with a mix of positional and named arguments.
+objMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
+  -> [SValue r] -> NamedArgs r -> SValue r
+objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
+
+-- | Calling a method with no parameters.
+objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r -> Label 
+  -> SValue r
+objMethodCallNoParams t o f = objMethodCall t o f []
+
+type VSFunction a = VS (a (Function a))
+
+class (ValueSym r) => FunctionSym r where
+  type Function r
+  func :: Label -> VSType r -> [SValue r] -> VSFunction r
+  objAccess :: SValue r -> VSFunction r -> SValue r
+
+($.) :: (FunctionSym r) => SValue r -> VSFunction r -> SValue r
+infixl 9 $.
+($.) = objAccess
+
+selfAccess :: (VariableValue r, FunctionSym r) => VSFunction r -> SValue r
+selfAccess = objAccess (valueOf self)
+
+class (ValueSym r, VariableSym r) => GetSet r where
+  get :: SValue r -> SVariable r -> SValue r
+  set :: SValue r -> SVariable r -> SValue r -> SValue r
 
 -- Utility
 

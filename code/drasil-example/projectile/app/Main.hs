@@ -17,7 +17,7 @@ main = do
   dumpEverything fullSI printSetting ".drasil/"
   typeCheckSI fullSI
   gen (DocSpec (docChoices SRS [HTML, TeX, Jupyter]) "Projectile_SRS") srs printSetting
-  gen (DocSpec (docChoices Lesson [])      "Projectile Lesson") PL.nb PL.printSetting
+  gen (DocSpec (docChoices Lesson [])      "Projectile_Lesson") PL.nb PL.printSetting
   genCodeWithChoices choiceCombos
   genDot fullSI
   -- if the chunkDB had a mutable state, then this would make more sense.

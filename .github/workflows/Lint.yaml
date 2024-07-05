@@ -1,7 +1,7 @@
 on:
   pull_request:
     branches: main
-    paths: 'code/drasil-**'
+    paths: [code/drasil-**, .github/workflows/Lint.yaml]
 name: Linter
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

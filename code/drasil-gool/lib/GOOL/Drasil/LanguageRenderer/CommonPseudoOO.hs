@@ -515,9 +515,17 @@ listAppend l v = do
 -- | Convert an integer to an index in a 1-indexed language
 --   Since GOOL is 0-indexed, we need to add 1
 intToIndex' :: (RenderSym r) => SValue r -> SValue r
-intToIndex' = (#+ S.litInt 1)
+intToIndex' v = do 
+  v' <- v
+  case RC.valueInt v' of
+    (Just i) -> S.litInt (i + 1)
+    Nothing -> v #+ S.litInt 1
 
 -- | Convert an index to an integer in a 1-indexed language
 --   Since GOOL is 0-indexed, we need to subtract 1
 indexToInt' :: (RenderSym r) => SValue r -> SValue r
-indexToInt' = (#- S.litInt 1)
+indexToInt' v = do
+  v' <- v
+  case RC.valueInt v' of
+    (Just i) -> S.litInt (i - 1)
+    Nothing -> v #- S.litInt 1

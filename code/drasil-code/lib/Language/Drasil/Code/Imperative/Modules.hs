@@ -50,7 +50,8 @@ import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement,
   VariableValue(..), CommandLineArgs(..), BooleanExpression(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), objDecNewNoParams,
   extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse,
-  ScopeSym(..), MethodSym(..), StateVarSym(..), pubDVar, convType, ScopeTag(..))
+  ScopeSym(..), MethodSym(..), StateVarSym(..), pubDVar, convTypeOO,
+  ScopeTag(..))
 
 import Prelude hiding (print)
 import Data.List (intersperse, partition)
@@ -219,10 +220,10 @@ genInputClass scp = do
       genClass [] [] = return Nothing
       genClass inps csts = do
         vals <- mapM (convExpr . (^. codeExpr)) csts
-        inputVars <- mapM (\x -> fmap (pubDVar . var (codeName x) . convType)
+        inputVars <- mapM (\x -> fmap (pubDVar . var (codeName x) . convTypeOO)
           (codeType x)) inps
         constVars <- zipWithM (\c vl -> fmap (\t -> constVarFunc (conRepr g)
-          (var (codeName c) (convType t)) vl) (codeType c))
+          (var (codeName c) (convTypeOO t)) vl) (codeType c))
           csts vals
         let getFunc Primary = primaryClass
             getFunc Auxiliary = auxClass
@@ -454,7 +455,7 @@ genConstClass scp = do
       genClass [] = return Nothing
       genClass vs = do
         vals <- mapM (convExpr . (^. codeExpr)) vs
-        vars <- mapM (\x -> fmap (var (codeName x) . convType) (codeType x)) vs
+        vars <- mapM (\x -> fmap (var (codeName x) . convTypeOO) (codeType x)) vs
         let constVars = zipWith (constVarFunc (conRepr g)) vars vals
             getFunc Primary = primaryClass
             getFunc Auxiliary = auxClass
@@ -501,7 +502,7 @@ genCalcFunc cdef = do
   desc <- getComment cdef
   publicFunc
     nm
-    (convType tp)
+    (convTypeOO tp)
     ("Calculates " ++ desc)
     (map pcAuto parms)
     (Just desc)

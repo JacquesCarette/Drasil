@@ -13,20 +13,21 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   SValue, MSStatement, MSParameter, SMethod, OOProg, Initializers,
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), oneLiner,
-  bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp,
+  bodyStatements, BlockSym(..), TypeSym(..), OOTypeSym(..),
+  TypeElim(..), VariableSym(..), OOVariableSym(..), VariableElim(..),
+  ValueSym(..), OOValueSym, Argument(..), Literal(..), litZero, MathConstant(..),
+  VariableValue(..), OOVariableValue, CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..),
+  OOValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp,
   newObj, InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
-  objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..),
-  listSlice, InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), listSlice,
+  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), StatePattern(..), ObserverPattern(..),
   StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..), convType)
+  StateVarSym(..), ClassSym(..), ModuleSym(..), convTypeOO)
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym,
   RenderFile(..), ImportSym(..), ImportElim, PermElim(binding), RenderBody(..),
   BodyElim, RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim,
@@ -200,9 +201,11 @@ instance TypeSym SwiftCode where
   listType = swiftListType
   arrayType = listType -- For now, treating arrays and lists the same, like we do for Python
   listInnerType = G.listInnerType
-  obj = G.obj
   funcType = swiftFuncType
   void = swiftVoidType
+
+instance OOTypeSym SwiftCode where
+  obj = G.obj
 
 instance TypeElim SwiftCode where
   getType = cType . unSC
@@ -262,15 +265,17 @@ instance OpElim SwiftCode where
 instance VariableSym SwiftCode where
   type Variable SwiftCode = VarData
   var = G.var
-  staticVar = G.staticVar
   constant = var
   extVar _ = var
+  arrayElem i = G.arrayElem (litInt i)
+
+instance OOVariableSym SwiftCode where
+  staticVar = G.staticVar
   self = CP.self
   classVar = CP.classVar R.classVar
   extClassVar = classVar
   objVar = G.objVar
   objVarSelf = CP.objVarSelf
-  arrayElem i = G.arrayElem (litInt i)
 
 instance VariableElim SwiftCode where
   variableName = varName . unSC
@@ -288,6 +293,8 @@ instance RenderVariable SwiftCode where
 instance ValueSym SwiftCode where
   type Value SwiftCode = ValData
   valueType = onCodeValue valType
+
+instance OOValueSym SwiftCode
 
 instance Argument SwiftCode where
   pointerArg = swiftArgVal
@@ -308,6 +315,8 @@ instance MathConstant SwiftCode where
 
 instance VariableValue SwiftCode where
   valueOf = G.valueOf
+
+instance OOVariableValue SwiftCode
 
 instance CommandLineArgs SwiftCode where
   arg n = G.arg (litInt n) argsList
@@ -367,15 +376,17 @@ instance ValueExpression SwiftCode where
   selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
   extFuncAppMixedArgs = CP.extFuncAppMixedArgs
   libFuncAppMixedArgs = C.libFuncAppMixedArgs
+
+  lambda = G.lambda swiftLambda
+
+  notNull = CP.notNull swiftNil
+
+instance OOValueExpression SwiftCode where
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs m tp vs ns = do
     t <- tp
     call (Just m) Nothing (getTypeString t) (pure t) vs ns
   libNewObjMixedArgs = C.libNewObjMixedArgs
-
-  lambda = G.lambda swiftLambda
-
-  notNull = CP.notNull swiftNil
 
 instance RenderValue SwiftCode where
   inputFunc = mkStateVal string empty
@@ -1179,6 +1190,6 @@ typeDfltVal Float = litFloat 0.0
 typeDfltVal Double = litDouble 0.0
 typeDfltVal Char = litChar ' '
 typeDfltVal String = litString ""
-typeDfltVal (List t) = litList (convType t) []
-typeDfltVal (Array t) = litArray (convType t) []
+typeDfltVal (List t) = litList (convTypeOO t) []
+typeDfltVal (Array t) = litArray (convTypeOO t) []
 typeDfltVal _ = error "Attempt to get default value for type with none."

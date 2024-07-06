@@ -13,18 +13,19 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
   VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass, OOProg,
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), oneLiner,
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  selfFuncApp, extFuncApp, newObj, InternalValueExp(..), FunctionSym(..), ($.),
-  GetSet(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
-  IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), StatePattern(..),
-  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  BlockSym(..), TypeSym(..), OOTypeSym(..), TypeElim(..), VariableSym(..),
+  OOVariableSym(..), VariableElim(..), ValueSym(..), OOValueSym, Argument(..),
+  Literal(..), litZero, MathConstant(..), VariableValue(..), OOVariableValue,
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), OOValueExpression(..), funcApp, selfFuncApp, extFuncApp,
+  newObj, InternalValueExp(..), FunctionSym(..), ($.), GetSet(..), List(..),
+  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), StatePattern(..), ObserverPattern(..),
+  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -205,10 +206,12 @@ instance TypeSym JavaCode where
   listType = jListType
   arrayType = CP.arrayType
   listInnerType = G.listInnerType
-  obj = G.obj
   funcType = CP.funcType
   void = C.void
 
+instance OOTypeSym JavaCode where
+  obj = G.obj
+  
 instance TypeElim JavaCode where
   getType = cType . unJC
   getTypeString = typeString . unJC
@@ -264,15 +267,17 @@ instance OpElim JavaCode where
 instance VariableSym JavaCode where
   type Variable JavaCode = VarData
   var = G.var
-  staticVar = G.staticVar
   constant = var
   extVar = CP.extVar
+  arrayElem i = G.arrayElem (litInt i)
+
+instance OOVariableSym JavaCode where
+  staticVar = G.staticVar
   self = C.self
   classVar = CP.classVar R.classVar
   extClassVar = classVar
   objVar = G.objVar
   objVarSelf = CP.objVarSelf
-  arrayElem i = G.arrayElem (litInt i)
 
 instance VariableElim JavaCode where
   variableName = varName . unJC
@@ -290,6 +295,8 @@ instance RenderVariable JavaCode where
 instance ValueSym JavaCode where
   type Value JavaCode = ValData
   valueType = onCodeValue valType
+
+instance OOValueSym JavaCode
 
 instance Argument JavaCode where
   pointerArg = id
@@ -313,6 +320,8 @@ instance MathConstant JavaCode where
 
 instance VariableValue JavaCode where
   valueOf = G.valueOf
+
+instance OOVariableValue JavaCode
 
 instance CommandLineArgs JavaCode where
   arg n = G.arg (litInt n) argsList
@@ -376,6 +385,12 @@ instance ValueExpression JavaCode where
     modify (maybe id addExceptions (Map.lookup (qualName l n) mem))
     CP.extFuncAppMixedArgs l n t vs ns
   libFuncAppMixedArgs = C.libFuncAppMixedArgs
+
+  lambda = G.lambda jLambda
+
+  notNull = CP.notNull nullLabel
+
+instance OOValueExpression JavaCode where
   newObjMixedArgs ot vs ns = addConstructorCallExcsCurrMod ot (\t -> 
     G.newObjMixedArgs (new ++ " ") t vs ns)
   extNewObjMixedArgs l ot vs ns = do
@@ -385,10 +400,6 @@ instance ValueExpression JavaCode where
     modify (maybe id addExceptions (Map.lookup (qualName l tp) mem))
     newObjMixedArgs (toState t) vs ns
   libNewObjMixedArgs = C.libNewObjMixedArgs
-
-  lambda = G.lambda jLambda
-
-  notNull = CP.notNull nullLabel
 
 instance RenderValue JavaCode where
   inputFunc = modify (addLangImportVS $ utilImport jScanner) >> mkStateVal 

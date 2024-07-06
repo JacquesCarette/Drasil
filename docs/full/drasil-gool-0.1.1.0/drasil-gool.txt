@@ -279,7 +279,8 @@ type MixedCall r = Label -> VSType r -> [SValue r] -> NamedArgs r -> SValue r
 type MixedCtorCall r = VSType r -> [SValue r] -> NamedArgs r -> SValue r
 type PosCall r = Label -> VSType r -> [SValue r] -> SValue r
 type PosCtorCall r = VSType r -> [SValue r] -> SValue r
-class (ProgramSym r, VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
+class (ProgramSym r, OOVariableValue r, VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, OOValueExpression r, InternalValueExp r, GetSet r, List r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
+class (ProgramSym r, VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, List r, StatePattern r, TypeElim r, VariableElim r) => ProcProg r
 class (FileSym r) => ProgramSym r where {
     type Program r;
 }
@@ -319,9 +320,10 @@ outfile :: TypeSym r => VSType r
 listType :: TypeSym r => VSType r -> VSType r
 arrayType :: TypeSym r => VSType r -> VSType r
 listInnerType :: TypeSym r => VSType r -> VSType r
-obj :: TypeSym r => ClassName -> VSType r
 funcType :: TypeSym r => [VSType r] -> VSType r -> VSType r
 void :: TypeSym r => VSType r
+class (TypeSym r) => OOTypeSym r
+obj :: OOTypeSym r => ClassName -> VSType r
 class (TypeSym r) => TypeElim r
 getType :: TypeElim r => r (Type r) -> CodeType
 getTypeString :: TypeElim r => r (Type r) -> String
@@ -329,19 +331,20 @@ class (TypeSym r) => VariableSym r where {
     type Variable r;
 }
 var :: VariableSym r => Label -> VSType r -> SVariable r
-staticVar :: VariableSym r => Label -> VSType r -> SVariable r
 constant :: VariableSym r => Label -> VSType r -> SVariable r
 extVar :: VariableSym r => Library -> Label -> VSType r -> SVariable r
-self :: VariableSym r => SVariable r
-classVar :: VariableSym r => VSType r -> SVariable r -> SVariable r
-extClassVar :: VariableSym r => VSType r -> SVariable r -> SVariable r
-objVar :: VariableSym r => SVariable r -> SVariable r -> SVariable r
-objVarSelf :: VariableSym r => SVariable r -> SVariable r
 arrayElem :: VariableSym r => Integer -> SVariable r -> SVariable r
+class (VariableSym r, OOTypeSym r) => OOVariableSym r
+staticVar :: OOVariableSym r => Label -> VSType r -> SVariable r
+self :: OOVariableSym r => SVariable r
+classVar :: OOVariableSym r => VSType r -> SVariable r -> SVariable r
+extClassVar :: OOVariableSym r => VSType r -> SVariable r -> SVariable r
+objVar :: OOVariableSym r => SVariable r -> SVariable r -> SVariable r
+objVarSelf :: OOVariableSym r => SVariable r -> SVariable r
 class (VariableSym r) => VariableElim r
 variableName :: VariableElim r => r (Variable r) -> String
 variableType :: VariableElim r => r (Variable r) -> r (Type r)
-($->) :: VariableSym r => SVariable r -> SVariable r -> SVariable r
+($->) :: OOVariableSym r => SVariable r -> SVariable r -> SVariable r
 infixl 9 $->
 listOf :: VariableSym r => Label -> VSType r -> SVariable r
 listVar :: VariableSym r => Label -> VSType r -> SVariable r
@@ -349,6 +352,7 @@ class (TypeSym r) => ValueSym r where {
     type Value r;
 }
 valueType :: ValueSym r => r (Value r) -> r (Type r)
+class (ValueSym r, OOTypeSym r) => OOValueSym r
 class (ValueSym r) => Argument r
 pointerArg :: Argument r => SValue r -> SValue r
 class (ValueSym r) => Literal r
@@ -366,6 +370,7 @@ class (ValueSym r) => MathConstant r
 pi :: MathConstant r => SValue r
 class (VariableSym r, ValueSym r) => VariableValue r
 valueOf :: VariableValue r => SVariable r -> SValue r
+class (VariableValue r, OOVariableSym r) => OOVariableValue r
 class (ValueSym r) => CommandLineArgs r
 arg :: CommandLineArgs r => Integer -> SValue r
 argsList :: CommandLineArgs r => SValue r
@@ -429,30 +434,30 @@ funcAppMixedArgs :: ValueExpression r => MixedCall r
 selfFuncAppMixedArgs :: ValueExpression r => MixedCall r
 extFuncAppMixedArgs :: ValueExpression r => Library -> MixedCall r
 libFuncAppMixedArgs :: ValueExpression r => Library -> MixedCall r
-newObjMixedArgs :: ValueExpression r => MixedCtorCall r
-extNewObjMixedArgs :: ValueExpression r => Library -> MixedCtorCall r
-libNewObjMixedArgs :: ValueExpression r => Library -> MixedCtorCall r
 lambda :: ValueExpression r => [SVariable r] -> SValue r -> SValue r
 notNull :: ValueExpression r => SValue r -> SValue r
+class (ValueExpression r, OOVariableSym r, OOValueSym r) => OOValueExpression r
+newObjMixedArgs :: OOValueExpression r => MixedCtorCall r
+extNewObjMixedArgs :: OOValueExpression r => Library -> MixedCtorCall r
+libNewObjMixedArgs :: OOValueExpression r => Library -> MixedCtorCall r
 funcApp :: ValueExpression r => PosCall r
 funcAppNamedArgs :: ValueExpression r => Label -> VSType r -> NamedArgs r -> SValue r
 selfFuncApp :: ValueExpression r => PosCall r
 extFuncApp :: ValueExpression r => Library -> PosCall r
 libFuncApp :: ValueExpression r => Library -> PosCall r
-newObj :: ValueExpression r => PosCtorCall r
-extNewObj :: ValueExpression r => Library -> PosCtorCall r
-libNewObj :: ValueExpression r => Library -> PosCtorCall r
+newObj :: OOValueExpression r => PosCtorCall r
+extNewObj :: OOValueExpression r => Library -> PosCtorCall r
+libNewObj :: OOValueExpression r => Library -> PosCtorCall r
 exists :: ValueExpression r => SValue r -> SValue r
 class (FunctionSym r) => InternalValueExp r
 
--- | Generic function for calling an object method. Takes the function
---   name, the return type, the object, a list of positional arguments, and
---   a list of named arguments.
+-- | Generic function for calling a method. Takes the function name, the
+--   return type, the object, a list of positional arguments, and a list of
+--   named arguments.
 objMethodCallMixedArgs' :: InternalValueExp r => Label -> VSType r -> SValue r -> [SValue r] -> NamedArgs r -> SValue r
 
--- | Calling an object method. t is the return type of the method, o is the
---   object, f is the method name, and ps is a list of positional
---   arguments.
+-- | Calling a method. t is the return type of the method, o is the object,
+--   f is the method name, and ps is a list of positional arguments.
 objMethodCall :: InternalValueExp r => VSType r -> SValue r -> Label -> [SValue r] -> SValue r
 
 -- | Calling a method with named arguments.
@@ -470,7 +475,7 @@ func :: FunctionSym r => Label -> VSType r -> [SValue r] -> VSFunction r
 objAccess :: FunctionSym r => SValue r -> VSFunction r -> SValue r
 ($.) :: FunctionSym r => SValue r -> VSFunction r -> SValue r
 infixl 9 $.
-selfAccess :: (VariableValue r, FunctionSym r) => VSFunction r -> SValue r
+selfAccess :: (OOVariableValue r, FunctionSym r) => VSFunction r -> SValue r
 class (ValueSym r, VariableSym r) => GetSet r
 get :: GetSet r => SValue r -> SVariable r -> SValue r
 set :: GetSet r => SValue r -> SVariable r -> SValue r -> SValue r
@@ -617,7 +622,7 @@ class (StatementSym r, FunctionSym r) => ObserverPattern r
 notifyObservers :: ObserverPattern r => VSFunction r -> VSType r -> MSStatement r
 observerListName :: Label
 initObserverList :: DeclStatement r => VSType r -> [SValue r] -> MSStatement r
-addObserver :: (StatementSym r, VariableValue r, List r) => SValue r -> MSStatement r
+addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r -> MSStatement r
 class (BodySym r, VariableSym r) => StrategyPattern r
 runStrategy :: StrategyPattern r => Label -> [(Label, MSBody r)] -> Maybe (SValue r) -> Maybe (SVariable r) -> MSBlock r
 ifNoElse :: ControlStatement r => [(SValue r, MSBody r)] -> MSStatement r
@@ -672,9 +677,10 @@ class (ClassSym r) => ModuleSym r where {
 }
 buildModule :: ModuleSym r => Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
 convType :: TypeSym r => CodeType -> VSType r
+convTypeOO :: OOTypeSym r => CodeType -> VSType r
 
 module GOOL.Drasil.RendererClasses
-class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, InternalList r, VectorExpression r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r, RenderClass r, ClassElim r, RenderFile r, InternalGetSet r, InternalListFunc r, RenderFunction r, FunctionElim r, RenderMethod r, MethodElim r, RenderMod r, ModuleElim r, OpElim r, RenderParam r, ParamElim r, PermElim r, RenderScope r, ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, RenderStatement r, StatementElim r, StateVarElim r, RenderType r, InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable r, InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r, BlockCommentElim r) => RenderSym r
+class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, InternalValueExp r, GetSet r, List r, InternalList r, VectorExpression r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r, RenderClass r, ClassElim r, RenderFile r, InternalGetSet r, InternalListFunc r, RenderFunction r, FunctionElim r, RenderMethod r, MethodElim r, RenderMod r, ModuleElim r, OpElim r, RenderParam r, ParamElim r, PermElim r, RenderScope r, ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, RenderStatement r, StatementElim r, StateVarElim r, RenderType r, InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable r, InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r, BlockCommentElim r, OOVariableValue r, OOValueExpression r) => RenderSym r
 class (BlockCommentSym r) => RenderFile r
 top :: RenderFile r => r (Module r) -> r (Block r)
 bottom :: RenderFile r => r (Block r)
@@ -1313,6 +1319,7 @@ instance GOOL.Drasil.ClassInterface.BlockSym GOOL.Drasil.LanguageRenderer.Python
 instance GOOL.Drasil.RendererClasses.RenderBlock GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.RendererClasses.BlockElim GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.ClassInterface.TypeSym GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
+instance GOOL.Drasil.ClassInterface.OOTypeSym GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.ClassInterface.TypeElim GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.RendererClasses.RenderType GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.RendererClasses.InternalTypeElim GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
@@ -1320,19 +1327,23 @@ instance GOOL.Drasil.RendererClasses.UnaryOpSym GOOL.Drasil.LanguageRenderer.Pyt
 instance GOOL.Drasil.RendererClasses.BinaryOpSym GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.RendererClasses.OpElim GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.ClassInterface.VariableSym GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
+instance GOOL.Drasil.ClassInterface.OOVariableSym GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.ClassInterface.VariableElim GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.RendererClasses.InternalVarElim GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.RendererClasses.RenderVariable GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.ClassInterface.ValueSym GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
+instance GOOL.Drasil.ClassInterface.OOValueSym GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.ClassInterface.Argument GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.ClassInterface.Literal GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.ClassInterface.MathConstant GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.ClassInterface.VariableValue GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
+instance GOOL.Drasil.ClassInterface.OOVariableValue GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.ClassInterface.CommandLineArgs GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.ClassInterface.NumericExpression GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.ClassInterface.BooleanExpression GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.ClassInterface.Comparison GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.ClassInterface.ValueExpression GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
+instance GOOL.Drasil.ClassInterface.OOValueExpression GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.RendererClasses.RenderValue GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.RendererClasses.ValueElim GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
 instance GOOL.Drasil.ClassInterface.InternalValueExp GOOL.Drasil.LanguageRenderer.PythonRenderer.PythonCode
@@ -1449,6 +1460,7 @@ instance GOOL.Drasil.ClassInterface.BlockSym GOOL.Drasil.LanguageRenderer.SwiftR
 instance GOOL.Drasil.RendererClasses.RenderBlock GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.RendererClasses.BlockElim GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.ClassInterface.TypeSym GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
+instance GOOL.Drasil.ClassInterface.OOTypeSym GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.ClassInterface.TypeElim GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.RendererClasses.RenderType GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.RendererClasses.InternalTypeElim GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
@@ -1456,19 +1468,23 @@ instance GOOL.Drasil.RendererClasses.UnaryOpSym GOOL.Drasil.LanguageRenderer.Swi
 instance GOOL.Drasil.RendererClasses.BinaryOpSym GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.RendererClasses.OpElim GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.ClassInterface.VariableSym GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
+instance GOOL.Drasil.ClassInterface.OOVariableSym GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.ClassInterface.VariableElim GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.RendererClasses.InternalVarElim GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.RendererClasses.RenderVariable GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.ClassInterface.ValueSym GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
+instance GOOL.Drasil.ClassInterface.OOValueSym GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.ClassInterface.Argument GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.ClassInterface.Literal GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.ClassInterface.MathConstant GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.ClassInterface.VariableValue GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
+instance GOOL.Drasil.ClassInterface.OOVariableValue GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.ClassInterface.CommandLineArgs GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.ClassInterface.NumericExpression GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.ClassInterface.BooleanExpression GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.ClassInterface.Comparison GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.ClassInterface.ValueExpression GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
+instance GOOL.Drasil.ClassInterface.OOValueExpression GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.RendererClasses.RenderValue GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.RendererClasses.ValueElim GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
 instance GOOL.Drasil.ClassInterface.InternalValueExp GOOL.Drasil.LanguageRenderer.SwiftRenderer.SwiftCode
@@ -1550,6 +1566,7 @@ instance GOOL.Drasil.ClassInterface.BlockSym GOOL.Drasil.LanguageRenderer.JavaRe
 instance GOOL.Drasil.RendererClasses.RenderBlock GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.RendererClasses.BlockElim GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.ClassInterface.TypeSym GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
+instance GOOL.Drasil.ClassInterface.OOTypeSym GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.ClassInterface.TypeElim GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.RendererClasses.RenderType GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.RendererClasses.InternalTypeElim GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
@@ -1557,19 +1574,23 @@ instance GOOL.Drasil.RendererClasses.UnaryOpSym GOOL.Drasil.LanguageRenderer.Jav
 instance GOOL.Drasil.RendererClasses.BinaryOpSym GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.RendererClasses.OpElim GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.ClassInterface.VariableSym GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
+instance GOOL.Drasil.ClassInterface.OOVariableSym GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.ClassInterface.VariableElim GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.RendererClasses.InternalVarElim GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.RendererClasses.RenderVariable GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.ClassInterface.ValueSym GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
+instance GOOL.Drasil.ClassInterface.OOValueSym GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.ClassInterface.Argument GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.ClassInterface.Literal GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.ClassInterface.MathConstant GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.ClassInterface.VariableValue GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
+instance GOOL.Drasil.ClassInterface.OOVariableValue GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.ClassInterface.CommandLineArgs GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.ClassInterface.NumericExpression GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.ClassInterface.BooleanExpression GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.ClassInterface.Comparison GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.ClassInterface.ValueExpression GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
+instance GOOL.Drasil.ClassInterface.OOValueExpression GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.RendererClasses.RenderValue GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.RendererClasses.ValueElim GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
 instance GOOL.Drasil.ClassInterface.InternalValueExp GOOL.Drasil.LanguageRenderer.JavaRenderer.JavaCode
@@ -1664,6 +1685,7 @@ instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.BlockSym (p GO
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.RendererClasses.RenderBlock (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.RendererClasses.BlockElim (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.TypeSym (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
+instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.OOTypeSym (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.TypeElim (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.RendererClasses.RenderType (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.RendererClasses.InternalTypeElim (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
@@ -1671,19 +1693,23 @@ instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.RendererClasses.UnaryOpSym (p
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.RendererClasses.BinaryOpSym (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.RendererClasses.OpElim (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.VariableSym (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
+instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.OOVariableSym (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.VariableElim (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.RendererClasses.InternalVarElim (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.RendererClasses.RenderVariable (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.ValueSym (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
+instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.OOValueSym (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.Argument (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.Literal (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.MathConstant (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.VariableValue (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
+instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.OOVariableValue (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.CommandLineArgs (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.NumericExpression (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.BooleanExpression (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.Comparison (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.ValueExpression (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
+instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.OOValueExpression (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.RendererClasses.RenderValue (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.RendererClasses.ValueElim (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GOOL.Drasil.Classes.Pair p => GOOL.Drasil.ClassInterface.InternalValueExp (p GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode)
@@ -1753,6 +1779,7 @@ instance GOOL.Drasil.ClassInterface.BlockSym GOOL.Drasil.LanguageRenderer.CppRen
 instance GOOL.Drasil.RendererClasses.RenderBlock GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.RendererClasses.BlockElim GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.ClassInterface.TypeSym GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
+instance GOOL.Drasil.ClassInterface.OOTypeSym GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.ClassInterface.TypeElim GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.RendererClasses.RenderType GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.RendererClasses.InternalTypeElim GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
@@ -1760,19 +1787,23 @@ instance GOOL.Drasil.RendererClasses.UnaryOpSym GOOL.Drasil.LanguageRenderer.Cpp
 instance GOOL.Drasil.RendererClasses.BinaryOpSym GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.RendererClasses.OpElim GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.ClassInterface.VariableSym GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
+instance GOOL.Drasil.ClassInterface.OOVariableSym GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.ClassInterface.VariableElim GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.RendererClasses.InternalVarElim GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.RendererClasses.RenderVariable GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.ClassInterface.ValueSym GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
+instance GOOL.Drasil.ClassInterface.OOValueSym GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.ClassInterface.Argument GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.ClassInterface.Literal GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.ClassInterface.MathConstant GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.ClassInterface.VariableValue GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
+instance GOOL.Drasil.ClassInterface.OOVariableValue GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.ClassInterface.CommandLineArgs GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.ClassInterface.NumericExpression GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.ClassInterface.BooleanExpression GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.ClassInterface.Comparison GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.ClassInterface.ValueExpression GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
+instance GOOL.Drasil.ClassInterface.OOValueExpression GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.RendererClasses.RenderValue GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.RendererClasses.ValueElim GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
 instance GOOL.Drasil.ClassInterface.InternalValueExp GOOL.Drasil.LanguageRenderer.CppRenderer.CppHdrCode
@@ -1842,6 +1873,7 @@ instance GOOL.Drasil.ClassInterface.BlockSym GOOL.Drasil.LanguageRenderer.CppRen
 instance GOOL.Drasil.RendererClasses.RenderBlock GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.RendererClasses.BlockElim GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.ClassInterface.TypeSym GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
+instance GOOL.Drasil.ClassInterface.OOTypeSym GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.ClassInterface.TypeElim GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.RendererClasses.RenderType GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.RendererClasses.InternalTypeElim GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
@@ -1849,19 +1881,23 @@ instance GOOL.Drasil.RendererClasses.UnaryOpSym GOOL.Drasil.LanguageRenderer.Cpp
 instance GOOL.Drasil.RendererClasses.BinaryOpSym GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.RendererClasses.OpElim GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.ClassInterface.VariableSym GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
+instance GOOL.Drasil.ClassInterface.OOVariableSym GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.ClassInterface.VariableElim GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.RendererClasses.InternalVarElim GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.RendererClasses.RenderVariable GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.ClassInterface.ValueSym GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
+instance GOOL.Drasil.ClassInterface.OOValueSym GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.ClassInterface.Argument GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.ClassInterface.Literal GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.ClassInterface.MathConstant GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.ClassInterface.VariableValue GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
+instance GOOL.Drasil.ClassInterface.OOVariableValue GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.ClassInterface.CommandLineArgs GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.ClassInterface.NumericExpression GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.ClassInterface.BooleanExpression GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.ClassInterface.Comparison GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.ClassInterface.ValueExpression GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
+instance GOOL.Drasil.ClassInterface.OOValueExpression GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.RendererClasses.RenderValue GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.RendererClasses.ValueElim GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
 instance GOOL.Drasil.ClassInterface.InternalValueExp GOOL.Drasil.LanguageRenderer.CppRenderer.CppSrcCode
@@ -1943,6 +1979,7 @@ instance GOOL.Drasil.ClassInterface.BlockSym GOOL.Drasil.LanguageRenderer.CSharp
 instance GOOL.Drasil.RendererClasses.RenderBlock GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.RendererClasses.BlockElim GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.ClassInterface.TypeSym GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
+instance GOOL.Drasil.ClassInterface.OOTypeSym GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.ClassInterface.TypeElim GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.RendererClasses.RenderType GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.RendererClasses.InternalTypeElim GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
@@ -1950,19 +1987,23 @@ instance GOOL.Drasil.RendererClasses.UnaryOpSym GOOL.Drasil.LanguageRenderer.CSh
 instance GOOL.Drasil.RendererClasses.BinaryOpSym GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.RendererClasses.OpElim GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.ClassInterface.VariableSym GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
+instance GOOL.Drasil.ClassInterface.OOVariableSym GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.ClassInterface.VariableElim GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.RendererClasses.InternalVarElim GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.RendererClasses.RenderVariable GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.ClassInterface.ValueSym GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
+instance GOOL.Drasil.ClassInterface.OOValueSym GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.ClassInterface.Argument GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.ClassInterface.Literal GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.ClassInterface.MathConstant GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.ClassInterface.VariableValue GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
+instance GOOL.Drasil.ClassInterface.OOVariableValue GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.ClassInterface.CommandLineArgs GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.ClassInterface.NumericExpression GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.ClassInterface.BooleanExpression GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.ClassInterface.Comparison GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.ClassInterface.ValueExpression GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
+instance GOOL.Drasil.ClassInterface.OOValueExpression GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.RendererClasses.RenderValue GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.RendererClasses.ValueElim GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
 instance GOOL.Drasil.ClassInterface.InternalValueExp GOOL.Drasil.LanguageRenderer.CSharpRenderer.CSharpCode
@@ -2032,19 +2073,24 @@ instance GOOL.Drasil.ClassInterface.PermanenceSym GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.BodySym GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.BlockSym GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.TypeSym GOOL.Drasil.CodeInfo.CodeInfo
+instance GOOL.Drasil.ClassInterface.OOTypeSym GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.TypeElim GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.VariableSym GOOL.Drasil.CodeInfo.CodeInfo
+instance GOOL.Drasil.ClassInterface.OOVariableSym GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.VariableElim GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.ValueSym GOOL.Drasil.CodeInfo.CodeInfo
+instance GOOL.Drasil.ClassInterface.OOValueSym GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.Argument GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.Literal GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.MathConstant GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.VariableValue GOOL.Drasil.CodeInfo.CodeInfo
+instance GOOL.Drasil.ClassInterface.OOVariableValue GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.CommandLineArgs GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.NumericExpression GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.BooleanExpression GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.Comparison GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.ValueExpression GOOL.Drasil.CodeInfo.CodeInfo
+instance GOOL.Drasil.ClassInterface.OOValueExpression GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.InternalValueExp GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.FunctionSym GOOL.Drasil.CodeInfo.CodeInfo
 instance GOOL.Drasil.ClassInterface.GetSet GOOL.Drasil.CodeInfo.CodeInfo
@@ -2094,7 +2140,7 @@ type SClass a = CS (a (Class a))
 type FSModule a = FS (a (Module a))
 type NamedArgs r = [(SVariable r, SValue r)]
 type Initializers r = [(SVariable r, SValue r)]
-class (ProgramSym r, VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
+class (ProgramSym r, OOVariableValue r, VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, OOValueExpression r, InternalValueExp r, GetSet r, List r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
 class (FileSym r) => ProgramSym r where {
     type Program r;
 }
@@ -2134,9 +2180,10 @@ outfile :: TypeSym r => VSType r
 listType :: TypeSym r => VSType r -> VSType r
 arrayType :: TypeSym r => VSType r -> VSType r
 listInnerType :: TypeSym r => VSType r -> VSType r
-obj :: TypeSym r => ClassName -> VSType r
 funcType :: TypeSym r => [VSType r] -> VSType r -> VSType r
 void :: TypeSym r => VSType r
+class (TypeSym r) => OOTypeSym r
+obj :: OOTypeSym r => ClassName -> VSType r
 class (TypeSym r) => TypeElim r
 getType :: TypeElim r => r (Type r) -> CodeType
 getTypeString :: TypeElim r => r (Type r) -> String
@@ -2222,7 +2269,7 @@ comment :: CommentStatement r => Comment -> MSStatement r
 initState :: (DeclStatement r, Literal r) => Label -> Label -> MSStatement r
 changeState :: (AssignStatement r, Literal r) => Label -> Label -> MSStatement r
 initObserverList :: DeclStatement r => VSType r -> [SValue r] -> MSStatement r
-addObserver :: (StatementSym r, VariableValue r, List r) => SValue r -> MSStatement r
+addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r -> MSStatement r
 class (BodySym r, VariableSym r) => ControlStatement r
 break :: ControlStatement r => MSStatement r
 continue :: ControlStatement r => MSStatement r
@@ -2245,19 +2292,20 @@ class (TypeSym r) => VariableSym r where {
     type Variable r;
 }
 var :: VariableSym r => Label -> VSType r -> SVariable r
-staticVar :: VariableSym r => Label -> VSType r -> SVariable r
 constant :: VariableSym r => Label -> VSType r -> SVariable r
 extVar :: VariableSym r => Library -> Label -> VSType r -> SVariable r
-self :: VariableSym r => SVariable r
-classVar :: VariableSym r => VSType r -> SVariable r -> SVariable r
-extClassVar :: VariableSym r => VSType r -> SVariable r -> SVariable r
-objVar :: VariableSym r => SVariable r -> SVariable r -> SVariable r
-objVarSelf :: VariableSym r => SVariable r -> SVariable r
 arrayElem :: VariableSym r => Integer -> SVariable r -> SVariable r
+class (VariableSym r, OOTypeSym r) => OOVariableSym r
+staticVar :: OOVariableSym r => Label -> VSType r -> SVariable r
+self :: OOVariableSym r => SVariable r
+classVar :: OOVariableSym r => VSType r -> SVariable r -> SVariable r
+extClassVar :: OOVariableSym r => VSType r -> SVariable r -> SVariable r
+objVar :: OOVariableSym r => SVariable r -> SVariable r -> SVariable r
+objVarSelf :: OOVariableSym r => SVariable r -> SVariable r
 class (VariableSym r) => VariableElim r
 variableName :: VariableElim r => r (Variable r) -> String
 variableType :: VariableElim r => r (Variable r) -> r (Type r)
-($->) :: VariableSym r => SVariable r -> SVariable r -> SVariable r
+($->) :: OOVariableSym r => SVariable r -> SVariable r -> SVariable r
 infixl 9 $->
 listOf :: VariableSym r => Label -> VSType r -> SVariable r
 listVar :: VariableSym r => Label -> VSType r -> SVariable r
@@ -2281,6 +2329,7 @@ class (ValueSym r) => MathConstant r
 pi :: MathConstant r => SValue r
 class (VariableSym r, ValueSym r) => VariableValue r
 valueOf :: VariableValue r => SVariable r -> SValue r
+class (VariableValue r, OOVariableSym r) => OOVariableValue r
 class (ValueSym r) => CommandLineArgs r
 arg :: CommandLineArgs r => Integer -> SValue r
 argsList :: CommandLineArgs r => SValue r
@@ -2344,24 +2393,24 @@ funcAppMixedArgs :: ValueExpression r => MixedCall r
 selfFuncAppMixedArgs :: ValueExpression r => MixedCall r
 extFuncAppMixedArgs :: ValueExpression r => Library -> MixedCall r
 libFuncAppMixedArgs :: ValueExpression r => Library -> MixedCall r
-newObjMixedArgs :: ValueExpression r => MixedCtorCall r
-extNewObjMixedArgs :: ValueExpression r => Library -> MixedCtorCall r
-libNewObjMixedArgs :: ValueExpression r => Library -> MixedCtorCall r
 lambda :: ValueExpression r => [SVariable r] -> SValue r -> SValue r
 notNull :: ValueExpression r => SValue r -> SValue r
+class (ValueExpression r, OOVariableSym r, OOValueSym r) => OOValueExpression r
+newObjMixedArgs :: OOValueExpression r => MixedCtorCall r
+extNewObjMixedArgs :: OOValueExpression r => Library -> MixedCtorCall r
+libNewObjMixedArgs :: OOValueExpression r => Library -> MixedCtorCall r
 funcApp :: ValueExpression r => PosCall r
 funcAppNamedArgs :: ValueExpression r => Label -> VSType r -> NamedArgs r -> SValue r
 selfFuncApp :: ValueExpression r => PosCall r
 extFuncApp :: ValueExpression r => Library -> PosCall r
 libFuncApp :: ValueExpression r => Library -> PosCall r
-newObj :: ValueExpression r => PosCtorCall r
-extNewObj :: ValueExpression r => Library -> PosCtorCall r
-libNewObj :: ValueExpression r => Library -> PosCtorCall r
+newObj :: OOValueExpression r => PosCtorCall r
+extNewObj :: OOValueExpression r => Library -> PosCtorCall r
+libNewObj :: OOValueExpression r => Library -> PosCtorCall r
 exists :: ValueExpression r => SValue r -> SValue r
 
--- | Calling an object method. t is the return type of the method, o is the
---   object, f is the method name, and ps is a list of positional
---   arguments.
+-- | Calling a method. t is the return type of the method, o is the object,
+--   f is the method name, and ps is a list of positional arguments.
 objMethodCall :: InternalValueExp r => VSType r -> SValue r -> Label -> [SValue r] -> SValue r
 
 -- | Calling a method with named arguments.
@@ -2379,7 +2428,7 @@ func :: FunctionSym r => Label -> VSType r -> [SValue r] -> VSFunction r
 objAccess :: FunctionSym r => SValue r -> VSFunction r -> SValue r
 ($.) :: FunctionSym r => SValue r -> VSFunction r -> SValue r
 infixl 9 $.
-selfAccess :: (VariableValue r, FunctionSym r) => VSFunction r -> SValue r
+selfAccess :: (OOVariableValue r, FunctionSym r) => VSFunction r -> SValue r
 class (ValueSym r, VariableSym r) => GetSet r
 get :: GetSet r => SValue r -> SVariable r -> SValue r
 set :: GetSet r => SValue r -> SVariable r -> SValue r -> SValue r
@@ -2477,6 +2526,7 @@ class (ClassSym r) => ModuleSym r where {
 }
 buildModule :: ModuleSym r => Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
 convType :: TypeSym r => CodeType -> VSType r
+convTypeOO :: OOTypeSym r => CodeType -> VSType r
 data ProgData
 data FileData
 data ModData

@@ -29,7 +29,7 @@ type SClass a = CS (a (Class a))
 type FSModule a = FS (a (Module a))
 type NamedArgs r = [(SVariable r, SValue r)]
 type Initializers r = [(SVariable r, SValue r)]
-class (ProgramSym r, VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
+class (ProgramSym r, OOVariableValue r, VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, OOValueExpression r, InternalValueExp r, GetSet r, List r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
 class (FileSym r) => ProgramSym r where {
     type Program r;
 }
@@ -69,9 +69,10 @@ outfile :: TypeSym r => VSType r
 listType :: TypeSym r => VSType r -> VSType r
 arrayType :: TypeSym r => VSType r -> VSType r
 listInnerType :: TypeSym r => VSType r -> VSType r
-obj :: TypeSym r => ClassName -> VSType r
 funcType :: TypeSym r => [VSType r] -> VSType r -> VSType r
 void :: TypeSym r => VSType r
+class (TypeSym r) => OOTypeSym r
+obj :: OOTypeSym r => ClassName -> VSType r
 class (TypeSym r) => TypeElim r
 getType :: TypeElim r => r (Type r) -> CodeType
 getTypeString :: TypeElim r => r (Type r) -> String
@@ -157,7 +158,7 @@ comment :: CommentStatement r => Comment -> MSStatement r
 initState :: (DeclStatement r, Literal r) => Label -> Label -> MSStatement r
 changeState :: (AssignStatement r, Literal r) => Label -> Label -> MSStatement r
 initObserverList :: DeclStatement r => VSType r -> [SValue r] -> MSStatement r
-addObserver :: (StatementSym r, VariableValue r, List r) => SValue r -> MSStatement r
+addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r -> MSStatement r
 class (BodySym r, VariableSym r) => ControlStatement r
 break :: ControlStatement r => MSStatement r
 continue :: ControlStatement r => MSStatement r
@@ -180,19 +181,20 @@ class (TypeSym r) => VariableSym r where {
     type Variable r;
 }
 var :: VariableSym r => Label -> VSType r -> SVariable r
-staticVar :: VariableSym r => Label -> VSType r -> SVariable r
 constant :: VariableSym r => Label -> VSType r -> SVariable r
 extVar :: VariableSym r => Library -> Label -> VSType r -> SVariable r
-self :: VariableSym r => SVariable r
-classVar :: VariableSym r => VSType r -> SVariable r -> SVariable r
-extClassVar :: VariableSym r => VSType r -> SVariable r -> SVariable r
-objVar :: VariableSym r => SVariable r -> SVariable r -> SVariable r
-objVarSelf :: VariableSym r => SVariable r -> SVariable r
 arrayElem :: VariableSym r => Integer -> SVariable r -> SVariable r
+class (VariableSym r, OOTypeSym r) => OOVariableSym r
+staticVar :: OOVariableSym r => Label -> VSType r -> SVariable r
+self :: OOVariableSym r => SVariable r
+classVar :: OOVariableSym r => VSType r -> SVariable r -> SVariable r
+extClassVar :: OOVariableSym r => VSType r -> SVariable r -> SVariable r
+objVar :: OOVariableSym r => SVariable r -> SVariable r -> SVariable r
+objVarSelf :: OOVariableSym r => SVariable r -> SVariable r
 class (VariableSym r) => VariableElim r
 variableName :: VariableElim r => r (Variable r) -> String
 variableType :: VariableElim r => r (Variable r) -> r (Type r)
-($->) :: VariableSym r => SVariable r -> SVariable r -> SVariable r
+($->) :: OOVariableSym r => SVariable r -> SVariable r -> SVariable r
 infixl 9 $->
 listOf :: VariableSym r => Label -> VSType r -> SVariable r
 listVar :: VariableSym r => Label -> VSType r -> SVariable r
@@ -216,6 +218,7 @@ class (ValueSym r) => MathConstant r
 pi :: MathConstant r => SValue r
 class (VariableSym r, ValueSym r) => VariableValue r
 valueOf :: VariableValue r => SVariable r -> SValue r
+class (VariableValue r, OOVariableSym r) => OOVariableValue r
 class (ValueSym r) => CommandLineArgs r
 arg :: CommandLineArgs r => Integer -> SValue r
 argsList :: CommandLineArgs r => SValue r
@@ -279,24 +282,24 @@ funcAppMixedArgs :: ValueExpression r => MixedCall r
 selfFuncAppMixedArgs :: ValueExpression r => MixedCall r
 extFuncAppMixedArgs :: ValueExpression r => Library -> MixedCall r
 libFuncAppMixedArgs :: ValueExpression r => Library -> MixedCall r
-newObjMixedArgs :: ValueExpression r => MixedCtorCall r
-extNewObjMixedArgs :: ValueExpression r => Library -> MixedCtorCall r
-libNewObjMixedArgs :: ValueExpression r => Library -> MixedCtorCall r
 lambda :: ValueExpression r => [SVariable r] -> SValue r -> SValue r
 notNull :: ValueExpression r => SValue r -> SValue r
+class (ValueExpression r, OOVariableSym r, OOValueSym r) => OOValueExpression r
+newObjMixedArgs :: OOValueExpression r => MixedCtorCall r
+extNewObjMixedArgs :: OOValueExpression r => Library -> MixedCtorCall r
+libNewObjMixedArgs :: OOValueExpression r => Library -> MixedCtorCall r
 funcApp :: ValueExpression r => PosCall r
 funcAppNamedArgs :: ValueExpression r => Label -> VSType r -> NamedArgs r -> SValue r
 selfFuncApp :: ValueExpression r => PosCall r
 extFuncApp :: ValueExpression r => Library -> PosCall r
 libFuncApp :: ValueExpression r => Library -> PosCall r
-newObj :: ValueExpression r => PosCtorCall r
-extNewObj :: ValueExpression r => Library -> PosCtorCall r
-libNewObj :: ValueExpression r => Library -> PosCtorCall r
+newObj :: OOValueExpression r => PosCtorCall r
+extNewObj :: OOValueExpression r => Library -> PosCtorCall r
+libNewObj :: OOValueExpression r => Library -> PosCtorCall r
 exists :: ValueExpression r => SValue r -> SValue r
 
--- | Calling an object method. t is the return type of the method, o is the
---   object, f is the method name, and ps is a list of positional
---   arguments.
+-- | Calling a method. t is the return type of the method, o is the object,
+--   f is the method name, and ps is a list of positional arguments.
 objMethodCall :: InternalValueExp r => VSType r -> SValue r -> Label -> [SValue r] -> SValue r
 
 -- | Calling a method with named arguments.
@@ -314,7 +317,7 @@ func :: FunctionSym r => Label -> VSType r -> [SValue r] -> VSFunction r
 objAccess :: FunctionSym r => SValue r -> VSFunction r -> SValue r
 ($.) :: FunctionSym r => SValue r -> VSFunction r -> SValue r
 infixl 9 $.
-selfAccess :: (VariableValue r, FunctionSym r) => VSFunction r -> SValue r
+selfAccess :: (OOVariableValue r, FunctionSym r) => VSFunction r -> SValue r
 class (ValueSym r, VariableSym r) => GetSet r
 get :: GetSet r => SValue r -> SVariable r -> SValue r
 set :: GetSet r => SValue r -> SVariable r -> SValue r -> SValue r
@@ -412,6 +415,7 @@ class (ClassSym r) => ModuleSym r where {
 }
 buildModule :: ModuleSym r => Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
 convType :: TypeSym r => CodeType -> VSType r
+convTypeOO :: OOTypeSym r => CodeType -> VSType r
 data ProgData
 data FileData
 data ModData

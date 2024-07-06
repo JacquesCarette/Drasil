@@ -2678,10 +2678,6 @@ digraph alltypes {
 		PosCtorCallr	[shape=oval, color=red2, label="PosCtorCallr"];
 		PosCtorCallr -> VSTyperSValuerSValuer;
 		}
-		subgraph vsfunctiona{
-		VSFunctiona	[shape=oval, color=red2, label="VSFunctiona"];
-		VSFunctiona -> VSaFunctiona;
-		}
 		subgraph vsthunka{
 		VSThunka	[shape=oval, color=red2, label="VSThunka"];
 		VSThunka -> VSaThunka;
@@ -2725,6 +2721,10 @@ digraph alltypes {
 		subgraph fsmodulea{
 		FSModulea	[shape=oval, color=red2, label="FSModulea"];
 		FSModulea -> FSaModulea;
+		}
+		subgraph vsfunctiona{
+		VSFunctiona	[shape=oval, color=red2, label="VSFunctiona"];
+		VSFunctiona -> VSaFunctiona;
 		}
 	}
 	subgraph clasess {

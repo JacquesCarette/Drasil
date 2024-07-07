@@ -8,10 +8,9 @@ module Language.Drasil.Code (
   makeConstraints, makeODE, makeDocConfig, makeLogConfig, LogConfig(..),
   OptionalFeatures(..), makeOptFeats, ExtLib(..), ImplementationType(..), Logging(..),
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..),
-  InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces,
-  AuxFile(..), getSampleData, Visibility(..), defaultChoices,
-  CodeSpec(..), funcUID, asVC, codeSpec,
-  ($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), pubStateVar,
+  CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, AuxFile(..),
+  getSampleData, Visibility(..), defaultChoices, CodeSpec(..), funcUID, asVC,
+  codeSpec, ($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), pubStateVar,
   privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod,
   junkLine, multiLine, repeated, singleLine, singleton,
   ExternalLibrary, Step, FunctionInterface, Argument, externalLib, choiceSteps,
@@ -86,11 +85,11 @@ import Language.Drasil.Code.Lang (Lang(..))
 
 import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
   ConstraintBehaviour(..), ImplementationType(..), Logging(..), Modularity(..),
-  Structure(..), ConstantStructure(..), ConstantRepr(..), InputModule(..),
-  CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, AuxFile(..),
-  getSampleData, Visibility(..), defaultChoices, makeArchit, Architecture(..),
-  DataInfo(..), makeData, Maps(..), makeMaps, spaceToCodeType, makeConstraints,
-  makeODE, makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..),
+  Structure(..), ConstantStructure(..), ConstantRepr(..), CodeConcept(..),
+  matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), getSampleData,
+  Visibility(..), defaultChoices, makeArchit, Architecture(..), DataInfo(..),
+  makeData, Maps(..), makeMaps, spaceToCodeType, makeConstraints, makeODE,
+  makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..),
   makeOptFeats, ExtLib(..))
 
 import Language.Drasil.CodeSpec (CodeSpec(..), funcUID, asVC, codeSpec)

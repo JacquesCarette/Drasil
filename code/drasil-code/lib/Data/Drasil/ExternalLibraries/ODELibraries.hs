@@ -72,11 +72,11 @@ scipyCall info = externalLibCall [
     (returnExprListFill $ odeSyst info)],
   uncurry choiceStepFill (chooseMethod $ solveMethod $ odeOpts info),
   mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill
-      [matrix[initVal info], tInit info],
-    initSolListWithValFill (depVar info) (matrix[initVal info]),
+      [matrix [initVal info], tInit info],
+    initSolListWithValFill (depVar info) (matrix [initVal info]),
     solveAndPopulateWhileFill (libCallFill []) (tFinal info)
-      (libCallFill [basicArgFill (addI (field r t) (stepSize (odeOpts info)))])
-      (depVar info)]]
+    (libCallFill [basicArgFill (field r t $+ stepSize (odeOpts info))])
+    (depVar info)]]
   where chooseMethod Adams = (0, solveMethodFill)
         chooseMethod BDF = (1, solveMethodFill)
         chooseMethod RK45 = (2, solveMethodFill)
@@ -182,7 +182,7 @@ oslo = externalLib [
 
 osloCall :: ODEInfo -> ExternalLibraryCall
 osloCall info = externalLibCall [
-  mandatoryStepFill $ callStepFill $ libCallFill [basicArgFill $ matrix[initVal info]],
+  mandatoryStepFill $ callStepFill $ libCallFill [basicArgFill $ matrix [initVal info]],
   choiceStepFill (chooseMethod $ solveMethod $ odeOpts info) $ callStepFill $
     libCallFill [basicArgFill $ tInit info,
       functionArgFill (map unnamedParamFill [indepVar info, vecDepVar info]) $

@@ -1,6 +1,6 @@
 module Language.Drasil.Code.Imperative.FunctionCalls (
-  getAllInputCalls, getInputCall, getDerivedCall, getConstraintCall,
-  getCalcCall, getOutputCall
+  genAllInputCalls, genInputCall, genDerivedCall, genConstraintCall,
+  genCalcCall, genOutputCall
 ) where
 
 import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, fAppInOut)
@@ -9,13 +9,15 @@ import Language.Drasil.Code.Imperative.Logging (maybeLog)
 import Language.Drasil.Code.Imperative.Parameters (getCalcParams,
   getConstraintParams, getDerivedIns, getDerivedOuts, getInputFormatIns,
   getInputFormatOuts, getOutputParams)
-import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
+  genICName)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
+import Language.Drasil.Choices (InternalConcept(..))
 
 import GOOL.Drasil (VSType, SValue, MSStatement, OOProg, TypeSym(..),
-  VariableValue(..), StatementSym(..), DeclStatement(..), convType)
+  VariableValue(..), StatementSym(..), DeclStatement(..), convTypeOO)
 
 import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
@@ -26,65 +28,71 @@ import Control.Monad.State (get)
 -- | Generates calls to all of the input-related functions. First is the call to
 -- the function for reading inputs, then the function for calculating derived
 -- inputs, then the function for checking input constraints.
-getAllInputCalls :: (OOProg r) => GenState [MSStatement r]
-getAllInputCalls = do
-  gi <- getInputCall
-  dv <- getDerivedCall
-  ic <- getConstraintCall
+genAllInputCalls :: (OOProg r) => GenState [MSStatement r]
+genAllInputCalls = do
+  gi <- genInputCall
+  dv <- genDerivedCall
+  ic <- genConstraintCall
   return $ catMaybes [gi, dv, ic]
 
 -- | Generates a call to the function for reading inputs from a file.
-getInputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
-getInputCall = getInOutCall "get_input" getInputFormatIns getInputFormatOuts
+genInputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
+genInputCall = do
+  giName <- genICName GetInput
+  genInOutCall giName getInputFormatIns getInputFormatOuts
 
 -- | Generates a call to the function for calculating derived inputs.
-getDerivedCall :: (OOProg r) => GenState (Maybe (MSStatement r))
-getDerivedCall = getInOutCall "derived_values" getDerivedIns getDerivedOuts
+genDerivedCall :: (OOProg r) => GenState (Maybe (MSStatement r))
+genDerivedCall = do
+  dvName <- genICName DerivedValuesFn
+  genInOutCall dvName getDerivedIns getDerivedOuts
 
 -- | Generates a call to the function for checking constraints on the input.
-getConstraintCall :: (OOProg r) => GenState (Maybe (MSStatement r))
-getConstraintCall = do
-  val <- getFuncCall "input_constraints" void getConstraintParams
+genConstraintCall :: (OOProg r) => GenState (Maybe (MSStatement r))
+genConstraintCall = do
+  icName <- genICName InputConstraintsFn
+  val <- genFuncCall icName void getConstraintParams
   return $ fmap valStmt val
 
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the
 -- value being calculated.
-getCalcCall :: (OOProg r) => CodeDefinition -> GenState (Maybe (MSStatement r))
-getCalcCall c = do
+genCalcCall :: (OOProg r) => CodeDefinition -> GenState (Maybe (MSStatement r))
+genCalcCall c = do
   t <- codeType c
-  val <- getFuncCall (codeName c) (convType t) (getCalcParams c)
+  val <- genFuncCall (codeName c) (convTypeOO t) (getCalcParams c)
   v <- mkVar $ quantvar c
   l <- maybeLog v
   return $ fmap (multi . (: l) . varDecDef v) val
 
 -- | Generates a call to the function for printing outputs.
-getOutputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
-getOutputCall = do
-  val <- getFuncCall "write_output" void getOutputParams
+genOutputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
+genOutputCall = do
+  woName <- genICName WriteOutput
+  val <- genFuncCall woName void getOutputParams
   return $ fmap valStmt val
 
 -- | Generates a function call given the name, return type, and arguments to
 -- the function.
-getFuncCall :: (OOProg r) => Name -> VSType r ->
+genFuncCall :: (OOProg r) => Name -> VSType r ->
   GenState [CodeVarChunk] -> GenState (Maybe (SValue r))
-getFuncCall n t funcPs = do
-  mm <- getCall n
-  let getFuncCall' Nothing = return Nothing
-      getFuncCall' (Just m) = do
+genFuncCall n t funcPs = do
+  mm <- genCall n
+  let genFuncCall' Nothing = return Nothing
+      genFuncCall' (Just m) = do
         cs <- funcPs
         pvals <- mapM mkVal cs
         val <- fApp m n t pvals []
         return $ Just val
-  getFuncCall' mm
+  genFuncCall' mm
 
 -- | Generates a function call given the name, inputs, and outputs for the
 -- function.
-getInOutCall :: (OOProg r) => Name -> GenState [CodeVarChunk] ->
+genInOutCall :: (OOProg r) => Name -> GenState [CodeVarChunk] ->
   GenState [CodeVarChunk] -> GenState (Maybe (MSStatement r))
-getInOutCall n inFunc outFunc = do
-  mm <- getCall n
-  let getInOutCall' Nothing = return Nothing
-      getInOutCall' (Just m) = do
+genInOutCall n inFunc outFunc = do
+  mm <- genCall n
+  let genInOutCall' Nothing = return Nothing
+      genInOutCall' (Just m) = do
         ins' <- inFunc
         outs' <- outFunc
         ins <- mapM mkVar (ins' \\ outs')
@@ -92,7 +100,7 @@ getInOutCall n inFunc outFunc = do
         both <- mapM mkVar (ins' `intersect` outs')
         stmt <- fAppInOut m n (map valueOf ins) outs both
         return $ Just stmt
-  getInOutCall' mm
+  genInOutCall' mm
 
 -- | Gets the name of the module containing the function being called.
 -- If the function is not in either the module export map or class definition map,
@@ -100,14 +108,14 @@ getInOutCall n inFunc outFunc = do
 -- If the function is not in module export map but is in the class definition map,
 -- that means it is a private function, so return 'Nothing' unless it is in the
 -- current class.
-getCall :: Name -> GenState (Maybe Name)
-getCall n = do
+genCall :: Name -> GenState (Maybe Name)
+genCall n = do
   g <- get
   let currc = currentClass g
-      getCallExported Nothing = getCallInClass (Map.lookup n $ clsMap g)
-      getCallExported m = return m
-      getCallInClass Nothing = return Nothing
-      getCallInClass (Just c) = if c == currc then return $ Map.lookup c (eMap
+      genCallExported Nothing = genCallInClass (Map.lookup n $ clsMap g)
+      genCallExported m = return m
+      genCallInClass Nothing = return Nothing
+      genCallInClass (Just c) = if c == currc then return $ Map.lookup c (eMap
         g) <|> error (c ++ " class missing from export map")
         else return Nothing
-  getCallExported $ Map.lookup n (eMap g)
+  genCallExported $ Map.lookup n (eMap g)

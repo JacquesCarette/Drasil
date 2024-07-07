@@ -43,7 +43,7 @@ ctrOfMass = mkQuantDef posCM ctrOfMassEqn
 
 -- FIXME (variable "i") is a horrible hack
 ctrOfMassEqn :: ModelExpr
-ctrOfMassEqn = sumAll (variable "j") (sy massj `mulRe` sy posj) $/ sy mTot
+ctrOfMassEqn = sumAll (variable "j") (sy massj $* sy posj) $/ sy mTot
 
 -- DD2 : Linear displacement --
 
@@ -199,7 +199,7 @@ chasles = mkQuantDef' velB (nounPhraseSP "Chasles' theorem") chaslesEqn
 
 -- The last two terms in the denominator should be cross products.
 chaslesEqn :: Expr
-chaslesEqn = sy velO `addRe` cross (sy  QP.angularVelocity) (sy rOB)
+chaslesEqn = sy velO $+ cross (sy  QP.angularVelocity) (sy rOB)
 
 chaslesThmNote :: Sentence
 chaslesThmNote = foldlSent [atStartNP (the QP.linearVelocity),
@@ -218,7 +218,7 @@ impulseV :: SimpleQDef
 impulseV = mkQuantDef QP.impulseV impulseVEqn
 
 impulseVEqn :: Expr
-impulseVEqn = sy QPP.mass `mulRe` sy QP.chgInVelocity
+impulseVEqn = sy QPP.mass $* sy QP.chgInVelocity
 
 impulseVDesc :: Sentence
 impulseVDesc = foldlSent [S "An", getTandS QP.impulseV, S "occurs when a",
@@ -289,7 +289,7 @@ kEnergy :: SimpleQDef
 kEnergy = mkQuantDef QP.kEnergy kEnergyEqn
 
 kEnergyEqn :: Expr
-kEnergyEqn = sy QPP.mass `mulRe` half (square (norm (sy QP.velocity)))
+kEnergyEqn = sy QPP.mass $* half (square (norm (sy QP.velocity)))
 
 kEnergyDesc :: Sentence
 kEnergyDesc = foldlSent [atStart QP.kEnergy `S.is` (QP.kEnergy ^. defn)]
@@ -303,7 +303,7 @@ momentOfInertia :: ModelQDef
 momentOfInertia = mkQuantDef QP.momentOfInertia momentOfInertiaEqn
 
 momentOfInertiaEqn :: ModelExpr
-momentOfInertiaEqn = sumAll (variable "j") $ sy massj `mulRe` square (sy rRot)
+momentOfInertiaEqn = sumAll (variable "j") $ sy massj $* square (sy rRot)
 
 momentOfInertiaDesc :: Sentence
 momentOfInertiaDesc = foldlSent [S "The", getTandS QP.momentOfInertia,
@@ -320,7 +320,7 @@ potEnergy :: SimpleQDef
 potEnergy = mkQuantDef QP.potEnergy potEnergyEqn
 
 potEnergyEqn :: Expr
-potEnergyEqn = sy QPP.mass `mulRe` sy QP.gravitationalAccel `mulRe` sy QP.height
+potEnergyEqn = sy QPP.mass $* sy QP.gravitationalAccel $* sy QP.height
 
 potEnergyDesc :: Sentence
 potEnergyDesc = foldlSent [atStartNP (the QP.potEnergy) `S.of_`

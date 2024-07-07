@@ -91,7 +91,7 @@ derControl
       "of the output signal (proportional to a derivative of the error signal)")
 
 simulation
-  = dcc "simulation" (nounPhraseSP "simulation") 
+  = dcc "simulation" (cn' "simulation") 
       "Simulation of the PD controller"
 
 ccFrequencyDomain

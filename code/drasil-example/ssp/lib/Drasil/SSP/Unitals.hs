@@ -417,7 +417,7 @@ effectiveStress = uc' "sigma'" (cn' "effective stress")
    "average stress carried by the soil skeleton")
   (prime lSigma) Real pascal
 
-effNormStress = uc' "sigmaN'" (cn' "effective normal stress")
+effNormStress = uc' "sigmaN'" (nounPhraseSP "effective normal stress")
   (S $ "the normal stress in a soil mass that is effective in causing volume " ++
    "changes; represents the average normal stress carried by the soil skeleton")
   (prime $ sub lSigma cN) Real pascal

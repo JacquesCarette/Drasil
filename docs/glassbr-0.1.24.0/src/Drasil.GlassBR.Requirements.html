@@ -145,13 +145,13 @@ r -&gt; Sentence -&gt; Sentence
 (Quantity i, MayHaveUnit i, HasShortName r, Referable r) =&gt;
 [i] -&gt; [r] -&gt; [(QuantityDict, Sentence)]
 </span><span class="hs-identifier hs-var">mkQRTupleRef</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
-</span><a href="#local-6989586621679084103"><span class="hs-identifier hs-var">r2AQs</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
-</span><a href="#local-6989586621679084102"><span class="hs-identifier hs-var">r2ARs</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679084104"><span class="hs-identifier hs-var">r2AQs</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
+</span><a href="#local-6989586621679084103"><span class="hs-identifier hs-var">r2ARs</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">forall i.
 (HasOutput i, HasShortName i, Referable i) =&gt;
 [i] -&gt; [(QuantityDict, Sentence)]
 </span><span class="hs-identifier hs-var">mkQRTuple</span></span><span> </span><span class="annot"><span class="annottext">[DataDefinition]
-</span><a href="#local-6989586621679084101"><span class="hs-identifier hs-var">r2DDs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679084102"><span class="hs-identifier hs-var">r2DDs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;ReqAssignments&quot;</span></span><span>
 </span><span id="line-56"></span><span>                                  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -161,8 +161,8 @@ Sentence -&gt; r -&gt; Sentence
 </span><span class="hs-operator hs-var">`follows`</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.GlassBR.Requirements.html#sysSetValsFollowingAssumps"><span class="hs-identifier hs-var">sysSetValsFollowingAssumps</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-57"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-58"></span><span>    </span><span id="local-6989586621679084103"><span class="annot"><span class="annottext">r2AQs :: [QuantityDict]
-</span><a href="#local-6989586621679084103"><span class="hs-identifier hs-var hs-var">r2AQs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span id="line-58"></span><span>    </span><span id="local-6989586621679084104"><span class="annot"><span class="annottext">r2AQs :: [QuantityDict]
+</span><a href="#local-6989586621679084104"><span class="hs-identifier hs-var hs-var">r2AQs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#loadSF"><span class="hs-identifier hs-var">loadSF</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
@@ -171,15 +171,15 @@ Sentence -&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">take</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">4</span></span><span> </span><span class="annot"><span class="annottext">[ConstQDef]
 </span><a href="Drasil.GlassBR.Assumptions.html#assumptionConstants"><span class="hs-identifier hs-var">assumptionConstants</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-59"></span><span>    </span><span id="local-6989586621679084102"><span class="annot"><span class="annottext">r2ARs :: [ConceptInstance]
-</span><a href="#local-6989586621679084102"><span class="hs-identifier hs-var hs-var">r2ARs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><span id="line-59"></span><span>    </span><span id="local-6989586621679084103"><span class="annot"><span class="annottext">r2ARs :: [ConceptInstance]
+</span><a href="#local-6989586621679084103"><span class="hs-identifier hs-var hs-var">r2ARs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.GlassBR.Assumptions.html#assumpGL"><span class="hs-identifier hs-var">assumpGL</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">forall a. Int -&gt; a -&gt; [a]
 </span><span class="hs-identifier hs-var">replicate</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">4</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.GlassBR.Assumptions.html#assumpSV"><span class="hs-identifier hs-var">assumpSV</span></a></span><span>
-</span><span id="line-60"></span><span>    </span><span id="local-6989586621679084101"><span class="annot"><span class="annottext">r2DDs :: [DataDefinition]
-</span><a href="#local-6989586621679084101"><span class="hs-identifier hs-var hs-var">r2DDs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DataDefinition
+</span><span id="line-60"></span><span>    </span><span id="local-6989586621679084102"><span class="annot"><span class="annottext">r2DDs :: [DataDefinition]
+</span><a href="#local-6989586621679084102"><span class="hs-identifier hs-var hs-var">r2DDs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.GlassBR.DataDefs.html#loadDF"><span class="hs-identifier hs-var">loadDF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.GlassBR.DataDefs.html#hFromt"><span class="hs-identifier hs-var">hFromt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.GlassBR.DataDefs.html#glaTyFac"><span class="hs-identifier hs-var">glaTyFac</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
@@ -350,7 +350,7 @@ r -&gt; Sentence -&gt; Sentence
 (HasOutput i, HasShortName i, Referable i) =&gt;
 [i] -&gt; [(QuantityDict, Sentence)]
 </span><span class="hs-identifier hs-var">mkQRTuple</span></span><span> </span><span class="annot"><span class="annottext">[DataDefinition]
-</span><a href="#local-6989586621679084071"><span class="hs-identifier hs-var">r6DDs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679084072"><span class="hs-identifier hs-var">r6DDs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;ReqOutputs&quot;</span></span><span>
 </span><span id="line-85"></span><span>                              </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -363,9 +363,9 @@ Sentence -&gt; r -&gt; Sentence
 </span><span class="hs-operator hs-var">`follows`</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.GlassBR.Requirements.html#outputValues"><span class="hs-identifier hs-var">outputValues</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-86"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-87"></span><span>    </span><span class="annot"><a href="#local-6989586621679084071"><span class="hs-identifier hs-type">r6DDs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span class="hs-special">]</span><span>
-</span><span id="line-88"></span><span>    </span><span id="local-6989586621679084071"><span class="annot"><span class="annottext">r6DDs :: [DataDefinition]
-</span><a href="#local-6989586621679084071"><span class="hs-identifier hs-var hs-var">r6DDs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DataDefinition
+</span><span id="line-87"></span><span>    </span><span class="annot"><a href="#local-6989586621679084072"><span class="hs-identifier hs-type">r6DDs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span class="hs-special">]</span><span>
+</span><span id="line-88"></span><span>    </span><span id="local-6989586621679084072"><span class="annot"><span class="annottext">r6DDs :: [DataDefinition]
+</span><a href="#local-6989586621679084072"><span class="hs-identifier hs-var hs-var">r6DDs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.GlassBR.DataDefs.html#glaTyFac"><span class="hs-identifier hs-var">glaTyFac</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.GlassBR.DataDefs.html#hFromt"><span class="hs-identifier hs-var">hFromt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.GlassBR.DataDefs.html#aspRat"><span class="hs-identifier hs-var">aspRat</span></a></span><span class="hs-special">]</span><span>

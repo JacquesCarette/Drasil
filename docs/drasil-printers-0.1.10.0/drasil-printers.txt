@@ -18,13 +18,13 @@ module Language.Drasil.Printers
 data DocType
 SRS :: DocType
 Website :: DocType
-Jupyter :: DocType
+Lesson :: DocType
 
 -- | Possible formats for printer output.
 data Format
 TeX :: Format
 HTML :: Format
-JSON :: Format
+Jupyter :: Format
 
 -- | Holds all important and relevant information for generating a
 --   traceability graph. Includes nodes, graph edges, and node family
@@ -169,7 +169,7 @@ genTeX :: Document -> PrintingInformation -> Doc
 -- | Generate a python notebook document (using json). build : build the
 --   SRS document in JSON format build': build the general Jupyter Notbook
 --   document
-genJSON :: PrintingInformation -> DocType -> Document -> Doc
+genJupyter :: PrintingInformation -> DocType -> Document -> Doc
 
 -- | Gathers all printing functions and creates the debugging tables from
 --   them.

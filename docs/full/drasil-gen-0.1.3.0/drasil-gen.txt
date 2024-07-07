@@ -84,7 +84,7 @@ genCode :: Choices -> CodeSpec -> IO ()
 data DocType
 SRS :: DocType
 Website :: DocType
-Jupyter :: DocType
+Lesson :: DocType
 
 -- | Document specifications. Holds the type of document (<a>DocType</a>)
 --   and its name (<a>Filename</a>).
@@ -95,7 +95,7 @@ DocSpec :: DocChoices -> Filename -> DocSpec
 data Format
 TeX :: Format
 HTML :: Format
-JSON :: Format
+Jupyter :: Format
 
 -- | Document choices include the type of document as well as the file
 --   formats we want to generate as.

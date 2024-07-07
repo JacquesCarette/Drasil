@@ -7,7 +7,7 @@
 </span><span id="line-7"></span><span>  </span><span class="annot"><span class="hs-comment">-- * Generator Functions</span></span><span>
 </span><span id="line-8"></span><span>  </span><span class="annot"><a href="Language.Drasil.Generate.html#gen"><span class="hs-identifier">gen</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Generate.html#genDot"><span class="hs-identifier">genDot</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Generate.html#genCode"><span class="hs-identifier">genCode</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-9"></span><span>  </span><span class="annot"><span class="hs-comment">-- * Types (Printing Options)</span></span><span>
-</span><span id="line-10"></span><span>  </span><span class="annot"><span class="hs-identifier">DocType</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier">DocSpec</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier">DocSpec</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Format</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">TeX</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">HTML</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">JSON</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocChoices"><span class="hs-identifier">DocChoices</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DC"><span class="hs-identifier">DC</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-10"></span><span>  </span><span class="annot"><span class="hs-identifier">DocType</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier">DocSpec</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier">DocSpec</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Format</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">TeX</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">HTML</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Jupyter</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocChoices"><span class="hs-identifier">DocChoices</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DC"><span class="hs-identifier">DC</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-11"></span><span>  </span><span class="annot"><span class="hs-comment">-- * Constructor</span></span><span>
 </span><span id="line-12"></span><span>  </span><span class="annot"><a href="Language.Drasil.Generate.html#docChoices"><span class="hs-identifier">docChoices</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-13"></span><span>
@@ -23,8 +23,8 @@
 </span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
 </span><span id="line-24"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DocLang</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">mkGraphInfo</span></span><span class="hs-special">)</span><span>
 </span><span id="line-25"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">SysInfo.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">SystemInformation</span></span><span class="hs-special">)</span><span>
-</span><span id="line-26"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Printers</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">DocType</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">SRS</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Website</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Jupyter</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Format</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">TeX</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">HTML</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">JSON</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-27"></span><span> </span><span class="annot"><span class="hs-identifier">makeCSS</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">genHTML</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">genTeX</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">genJSON</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">PrintingInformation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">outputDot</span></span><span class="hs-special">)</span><span>
+</span><span id="line-26"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Printers</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">DocType</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">SRS</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Website</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Lesson</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Format</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">TeX</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">HTML</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Jupyter</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-27"></span><span> </span><span class="annot"><span class="hs-identifier">makeCSS</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">genHTML</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">genTeX</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">genJupyter</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">PrintingInformation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">outputDot</span></span><span class="hs-special">)</span><span>
 </span><span id="line-28"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Code</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">generator</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">generateCode</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Choices</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">CodeSpec</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-29"></span><span>  </span><span class="annot"><span class="hs-identifier">Lang</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">getSampleData</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">readWithDataDesc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sampleInputDD</span></span><span class="hs-special">,</span><span>
 </span><span id="line-30"></span><span>  </span><span class="annot"><span class="hs-identifier">unPP</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">unJP</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">unCSP</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">unCPPP</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">unSP</span></span><span class="hs-special">)</span><span>
@@ -53,7 +53,7 @@
 </span><span id="line-45"></span><span id="prnt"><span class="annot"><span class="annottext">prnt :: PrintingInformation -&gt; DocSpec -&gt; Document -&gt; IO ()
 </span><a href="Language.Drasil.Generate.html#prnt"><span class="hs-identifier hs-var hs-var">prnt</span></a></span></span><span> </span><span id="local-6989586621679097015"><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679097015"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier hs-type">DocSpec</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DC"><span class="hs-identifier hs-type">DC</span></a></span><span> </span><span class="annot"><span class="annottext">DocType
-</span><span class="hs-identifier hs-var">Jupyter</span></span><span> </span><span class="annot"><span class="annottext">[Format]
+</span><span class="hs-identifier hs-var">Lesson</span></span><span> </span><span class="annot"><span class="annottext">[Format]
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679097014"><span class="annot"><span class="annottext">Filename
 </span><a href="#local-6989586621679097014"><span class="hs-identifier hs-var">fn</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679097013"><span class="annot"><span class="annottext">Document
 </span><a href="#local-6989586621679097013"><span class="hs-identifier hs-var">body</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
@@ -63,8 +63,8 @@
 </span><a href="#local-6989586621679097013"><span class="hs-identifier hs-var">body</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679097015"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Filename
 </span><a href="#local-6989586621679097014"><span class="hs-identifier hs-var">fn</span></a></span><span> </span><span class="annot"><span class="annottext">DocType
-</span><span class="hs-identifier hs-var">Jupyter</span></span><span> </span><span class="annot"><span class="annottext">Format
-</span><span class="hs-identifier hs-var">JSON</span></span><span>
+</span><span class="hs-identifier hs-var">Lesson</span></span><span> </span><span class="annot"><span class="annottext">Format
+</span><span class="hs-identifier hs-var">Jupyter</span></span><span>
 </span><span id="line-47"></span><span class="annot"><a href="Language.Drasil.Generate.html#prnt"><span class="hs-identifier hs-var">prnt</span></a></span><span> </span><span id="local-6989586621679097011"><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679097011"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier hs-type">DocSpec</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DC"><span class="hs-identifier hs-type">DC</span></a></span><span> </span><span id="local-6989586621679097010"><span class="annot"><span class="annottext">DocType
 </span><a href="#local-6989586621679097010"><span class="hs-identifier hs-var">dtype</span></a></span></span><span> </span><span id="local-6989586621679097009"><span class="annot"><span class="annottext">[Format]
@@ -83,7 +83,7 @@
 </span><a href="#local-6989586621679097010"><span class="hs-identifier hs-var">dtype</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Format]
 </span><a href="#local-6989586621679097009"><span class="hs-identifier hs-var">fmts</span></a></span><span>
 </span><span id="line-49"></span><span>
-</span><span id="line-50"></span><span class="hs-comment">-- | Helper for writing the documents (TeX / HTML / JSON) to file.</span><span>
+</span><span id="line-50"></span><span class="hs-comment">-- | Helper for writing the documents (TeX / HTML / Jupyter) to file.</span><span>
 </span><span id="line-51"></span><span class="annot"><a href="Language.Drasil.Generate.html#prntDoc"><span class="hs-identifier hs-type">prntDoc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Document</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PrintingInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DocType</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Format</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-52"></span><span id="prntDoc"><span class="annot"><span class="annottext">prntDoc :: Document
 -&gt; PrintingInformation -&gt; Filename -&gt; DocType -&gt; Format -&gt; IO ()
@@ -91,7 +91,7 @@
 </span><a href="#local-6989586621679097005"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span id="local-6989586621679097004"><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679097004"><span class="hs-identifier hs-var">pinfo</span></a></span></span><span> </span><span id="local-6989586621679097003"><span class="annot"><span class="annottext">Filename
 </span><a href="#local-6989586621679097003"><span class="hs-identifier hs-var">fn</span></a></span></span><span> </span><span class="annot"><span class="annottext">DocType
-</span><span class="hs-identifier hs-var">Jupyter</span></span><span> </span><span class="annot"><span class="annottext">Format
+</span><span class="hs-identifier hs-var">Lesson</span></span><span> </span><span class="annot"><span class="annottext">Format
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DocType
 -&gt; Filename
 -&gt; Filename
@@ -100,10 +100,10 @@
 -&gt; PrintingInformation
 -&gt; IO ()
 </span><a href="Language.Drasil.Generate.html#prntDoc%27"><span class="hs-identifier hs-var">prntDoc'</span></a></span><span> </span><span class="annot"><span class="annottext">DocType
-</span><span class="hs-identifier hs-var">Jupyter</span></span><span> </span><span class="annot"><span class="annottext">Filename
-</span><span class="hs-string">&quot;Jupyter&quot;</span></span><span> </span><span class="annot"><span class="annottext">Filename
+</span><span class="hs-identifier hs-var">Lesson</span></span><span> </span><span class="annot"><span class="annottext">Filename
+</span><span class="hs-string">&quot;Lesson&quot;</span></span><span> </span><span class="annot"><span class="annottext">Filename
 </span><a href="#local-6989586621679097003"><span class="hs-identifier hs-var">fn</span></a></span><span> </span><span class="annot"><span class="annottext">Format
-</span><span class="hs-identifier hs-var">JSON</span></span><span> </span><span class="annot"><span class="annottext">Document
+</span><span class="hs-identifier hs-var">Jupyter</span></span><span> </span><span class="annot"><span class="annottext">Document
 </span><a href="#local-6989586621679097005"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679097004"><span class="hs-identifier hs-var">pinfo</span></a></span><span>
 </span><span id="line-53"></span><span class="annot"><a href="Language.Drasil.Generate.html#prntDoc"><span class="hs-identifier hs-var">prntDoc</span></a></span><span> </span><span id="local-6989586621679097001"><span class="annot"><span class="annottext">Document
@@ -115,7 +115,7 @@
 </span><span id="line-54"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Format
 </span><a href="#local-6989586621679096997"><span class="hs-identifier hs-var">fmt</span></a></span><span> </span><span class="hs-keyword">of</span><span>
 </span><span id="line-55"></span><span>    </span><span class="annot"><span class="annottext">Format
-</span><span class="hs-identifier hs-var">HTML</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span> </span><span class="annot"><span class="annottext">DocType
+</span><span class="hs-identifier hs-var">HTML</span></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span> </span><span class="annot"><span class="annottext">DocType
 -&gt; Filename
 -&gt; Filename
 -&gt; Format
@@ -132,13 +132,13 @@
 </span><span class="hs-identifier hs-var">HTML</span></span><span> </span><span class="annot"><span class="annottext">Document
 </span><a href="#local-6989586621679097001"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679097000"><span class="hs-identifier hs-var">pinfo</span></a></span><span>
-</span><span id="line-56"></span><span>               </span><span class="annot"><span class="annottext">DocType -&gt; Filename -&gt; Document -&gt; IO ()
+</span><span id="line-56"></span><span>                  </span><span class="annot"><span class="annottext">DocType -&gt; Filename -&gt; Document -&gt; IO ()
 </span><a href="Language.Drasil.Generate.html#prntCSS"><span class="hs-identifier hs-var">prntCSS</span></a></span><span> </span><span class="annot"><span class="annottext">DocType
 </span><a href="#local-6989586621679096998"><span class="hs-identifier hs-var">dtype</span></a></span><span> </span><span class="annot"><span class="annottext">Filename
 </span><a href="#local-6989586621679096999"><span class="hs-identifier hs-var">fn</span></a></span><span> </span><span class="annot"><span class="annottext">Document
 </span><a href="#local-6989586621679097001"><span class="hs-identifier hs-var">d</span></a></span><span>
 </span><span id="line-57"></span><span>    </span><span class="annot"><span class="annottext">Format
-</span><span class="hs-identifier hs-var">TeX</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span> </span><span class="annot"><span class="annottext">DocType
+</span><span class="hs-identifier hs-var">TeX</span></span><span>     </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span> </span><span class="annot"><span class="annottext">DocType
 -&gt; Filename
 -&gt; Filename
 -&gt; Format
@@ -155,7 +155,7 @@
 </span><span class="hs-identifier hs-var">TeX</span></span><span> </span><span class="annot"><span class="annottext">Document
 </span><a href="#local-6989586621679097001"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679097000"><span class="hs-identifier hs-var">pinfo</span></a></span><span>
-</span><span id="line-58"></span><span>              </span><span class="annot"><span class="annottext">DocSpec -&gt; IO ()
+</span><span id="line-58"></span><span>                  </span><span class="annot"><span class="annottext">DocSpec -&gt; IO ()
 </span><a href="Language.Drasil.Generate.html#prntMake"><span class="hs-identifier hs-var">prntMake</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DocChoices -&gt; Filename -&gt; DocSpec
 </span><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier hs-var">DocSpec</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DocType -&gt; [Format] -&gt; DocChoices
@@ -163,7 +163,7 @@
 </span><a href="#local-6989586621679096998"><span class="hs-identifier hs-var">dtype</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Filename
 </span><a href="#local-6989586621679096999"><span class="hs-identifier hs-var">fn</span></a></span><span>
 </span><span id="line-59"></span><span>    </span><span class="annot"><span class="annottext">Format
-</span><span class="hs-identifier hs-var">JSON</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span> </span><span class="annot"><span class="annottext">DocType
+</span><span class="hs-identifier hs-var">Jupyter</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span> </span><span class="annot"><span class="annottext">DocType
 -&gt; Filename
 -&gt; Filename
 -&gt; Format
@@ -175,9 +175,9 @@
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">DocType
 </span><a href="#local-6989586621679096998"><span class="hs-identifier hs-var">dtype</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Filename
-</span><span class="hs-string">&quot;/JSON&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Filename
+</span><span class="hs-string">&quot;/Jupyter&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Filename
 </span><a href="#local-6989586621679096999"><span class="hs-identifier hs-var">fn</span></a></span><span> </span><span class="annot"><span class="annottext">Format
-</span><span class="hs-identifier hs-var">JSON</span></span><span> </span><span class="annot"><span class="annottext">Document
+</span><span class="hs-identifier hs-var">Jupyter</span></span><span> </span><span class="annot"><span class="annottext">Document
 </span><a href="#local-6989586621679097001"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679097000"><span class="hs-identifier hs-var">pinfo</span></a></span><span>
 </span><span id="line-60"></span><span>    </span><span class="annot"><span class="annottext">Format
@@ -235,16 +235,16 @@
 </span><a href="#local-6989586621679096987"><span class="hs-identifier hs-var">outh</span></a></span><span>
 </span><span id="line-70"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679096986"><span class="annot"><span class="annottext">getExt :: Format -&gt; Filename
 </span><a href="#local-6989586621679096986"><span class="hs-identifier hs-var hs-var">getExt</span></a></span></span><span> </span><span class="annot"><span class="annottext">Format
-</span><span class="hs-identifier hs-var">TeX</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Filename
+</span><span class="hs-identifier hs-var">TeX</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Filename
 </span><span class="hs-string">&quot;.tex&quot;</span></span><span>
 </span><span id="line-71"></span><span>        </span><span class="annot"><a href="#local-6989586621679096986"><span class="hs-identifier hs-var">getExt</span></a></span><span> </span><span class="annot"><span class="annottext">Format
-</span><span class="hs-identifier hs-var">HTML</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Filename
+</span><span class="hs-identifier hs-var">HTML</span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Filename
 </span><span class="hs-string">&quot;.html&quot;</span></span><span>
 </span><span id="line-72"></span><span>        </span><span class="annot"><a href="#local-6989586621679096986"><span class="hs-identifier hs-var">getExt</span></a></span><span> </span><span class="annot"><span class="annottext">Format
-</span><span class="hs-identifier hs-var">JSON</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Filename
+</span><span class="hs-identifier hs-var">Jupyter</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Filename
 </span><span class="hs-string">&quot;.ipynb&quot;</span></span><span>
 </span><span id="line-73"></span><span>        </span><span class="annot"><a href="#local-6989586621679096986"><span class="hs-identifier hs-var">getExt</span></a></span><span> </span><span class="annot"><span class="annottext">Format
-</span><span class="hs-identifier">_</span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. HasCallStack =&gt; Filename -&gt; a
+</span><span class="hs-identifier">_</span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. HasCallStack =&gt; Filename -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">Filename
 </span><span class="hs-string">&quot;We can only write in TeX, HTML and Jupyter Notebook (for now).&quot;</span></span><span>
 </span><span id="line-74"></span><span>
@@ -320,7 +320,7 @@
 </span><a href="Language.Drasil.Generate.html#writeDoc"><span class="hs-identifier hs-var hs-var">writeDoc</span></a></span></span><span> </span><span id="local-6989586621679096970"><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679096970"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="annot"><span class="annottext">DocType
 </span><span class="hs-identifier">_</span></span><span>  </span><span class="annot"><span class="annottext">Format
-</span><span class="hs-identifier hs-var">TeX</span></span><span>  </span><span class="annot"><span class="annottext">Filename
+</span><span class="hs-identifier hs-var">TeX</span></span><span>     </span><span class="annot"><span class="annottext">Filename
 </span><span class="hs-identifier">_</span></span><span>  </span><span id="local-6989586621679096969"><span class="annot"><span class="annottext">Document
 </span><a href="#local-6989586621679096969"><span class="hs-identifier hs-var">doc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Document -&gt; PrintingInformation -&gt; Doc
 </span><span class="hs-identifier hs-var">genTeX</span></span><span> </span><span class="annot"><span class="annottext">Document
@@ -329,7 +329,7 @@
 </span><span id="line-95"></span><span class="annot"><a href="Language.Drasil.Generate.html#writeDoc"><span class="hs-identifier hs-var">writeDoc</span></a></span><span> </span><span id="local-6989586621679096968"><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679096968"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="annot"><span class="annottext">DocType
 </span><span class="hs-identifier">_</span></span><span>  </span><span class="annot"><span class="annottext">Format
-</span><span class="hs-identifier hs-var">HTML</span></span><span> </span><span id="local-6989586621679096967"><span class="annot"><span class="annottext">Filename
+</span><span class="hs-identifier hs-var">HTML</span></span><span>    </span><span id="local-6989586621679096967"><span class="annot"><span class="annottext">Filename
 </span><a href="#local-6989586621679096967"><span class="hs-identifier hs-var">fn</span></a></span></span><span> </span><span id="local-6989586621679096966"><span class="annot"><span class="annottext">Document
 </span><a href="#local-6989586621679096966"><span class="hs-identifier hs-var">doc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Filename -&gt; Document -&gt; Doc
 </span><span class="hs-identifier hs-var">genHTML</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
@@ -339,21 +339,21 @@
 </span><span id="line-96"></span><span class="annot"><a href="Language.Drasil.Generate.html#writeDoc"><span class="hs-identifier hs-var">writeDoc</span></a></span><span> </span><span id="local-6989586621679096965"><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679096965"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679096964"><span class="annot"><span class="annottext">DocType
 </span><a href="#local-6989586621679096964"><span class="hs-identifier hs-var">dt</span></a></span></span><span> </span><span class="annot"><span class="annottext">Format
-</span><span class="hs-identifier hs-var">JSON</span></span><span> </span><span class="annot"><span class="annottext">Filename
+</span><span class="hs-identifier hs-var">Jupyter</span></span><span> </span><span class="annot"><span class="annottext">Filename
 </span><span class="hs-identifier">_</span></span><span>  </span><span id="local-6989586621679096963"><span class="annot"><span class="annottext">Document
 </span><a href="#local-6989586621679096963"><span class="hs-identifier hs-var">doc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; DocType -&gt; Document -&gt; Doc
-</span><span class="hs-identifier hs-var">genJSON</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
+</span><span class="hs-identifier hs-var">genJupyter</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
 </span><a href="#local-6989586621679096965"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">DocType
 </span><a href="#local-6989586621679096964"><span class="hs-identifier hs-var">dt</span></a></span><span> </span><span class="annot"><span class="annottext">Document
 </span><a href="#local-6989586621679096963"><span class="hs-identifier hs-var">doc</span></a></span><span>
 </span><span id="line-97"></span><span class="annot"><a href="Language.Drasil.Generate.html#writeDoc"><span class="hs-identifier hs-var">writeDoc</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">DocType
 </span><span class="hs-identifier">_</span></span><span>  </span><span class="annot"><span class="annottext">Format
-</span><span class="hs-identifier">_</span></span><span>    </span><span class="annot"><span class="annottext">Filename
+</span><span class="hs-identifier">_</span></span><span>       </span><span class="annot"><span class="annottext">Filename
 </span><span class="hs-identifier">_</span></span><span>  </span><span class="annot"><span class="annottext">Document
 </span><span class="hs-identifier">_</span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. HasCallStack =&gt; Filename -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">Filename
-</span><span class="hs-string">&quot;we can only write TeX/HTML/JSON (for now)&quot;</span></span><span>
+</span><span class="hs-string">&quot;we can only write TeX/HTML/Jupyter (for now)&quot;</span></span><span>
 </span><span id="line-98"></span><span>
 </span><span id="line-99"></span><span class="hs-comment">-- | Generates traceability graphs as .dot files.</span><span>
 </span><span id="line-100"></span><span class="annot"><a href="Language.Drasil.Generate.html#genDot"><span class="hs-identifier hs-type">genDot</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>

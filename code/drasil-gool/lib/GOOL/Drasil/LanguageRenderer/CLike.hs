@@ -15,9 +15,9 @@ import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable,
   SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall, 
   PermanenceSym(..), TypeElim(getType, getTypeString), 
   VariableElim(..), ValueSym(Value, valueType), extNewObj, ($.), ScopeSym(..))
-import qualified GOOL.Drasil.ClassInterface as S (TypeSym(bool, float, obj),
-  ValueExpression(funcAppMixedArgs, newObjMixedArgs), 
-  DeclStatement(varDec, varDecDef))
+import qualified GOOL.Drasil.ClassInterface as S (TypeSym(bool, float),
+  OOTypeSym(obj), ValueExpression(funcAppMixedArgs),
+  OOValueExpression(newObjMixedArgs), DeclStatement(varDec, varDecDef))
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, RenderType(..),
   InternalVarElim(variableBind), RenderValue(valFromData), 
   ValueElim(valuePrec), RenderMethod(intMethod))
@@ -106,7 +106,7 @@ inlineIf c' v1' v2' = do
   c <- c'
   v1 <- v1'
   v2 <- v2' 
-  valFromData (prec c) (toState $ valueType v1) 
+  valFromData (prec c) Nothing (toState $ valueType v1) 
     (RC.value c <+> text "?" <+> RC.value v1 <+> text ":" <+> RC.value v2) 
   where prec cd = valuePrec cd <|> Just 0
 
@@ -121,7 +121,7 @@ libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >>
 -- Functions --
 
 listSize :: (RenderSym r) => SValue r -> SValue r
-listSize v = v $. S.listSizeFunc
+listSize v = v $. S.listSizeFunc v
 
 -- Statements --
 

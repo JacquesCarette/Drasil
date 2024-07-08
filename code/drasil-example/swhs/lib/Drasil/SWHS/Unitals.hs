@@ -278,7 +278,7 @@ pcmVol = uqc "pcmVol" (nounPhraseSP "volume of PCM")
   "the amount of space occupied by a given quantity of phase change material"
   (sub (eqSymb vol) lPCM) m_3 Real
   [physc $ Bounded (Exc, exactDbl 0) (Exc, sy tankVol),
-   sfwrc $ UpFrom (Inc, sy fracMin `mulRe` sy tankVol)] 
+   sfwrc $ UpFrom (Inc, sy fracMin $* sy tankVol)] 
   (dbl 0.05) defaultUncrt
   -- needs to add (D,L)*minfract to end of last constraint
 
@@ -292,7 +292,7 @@ pcmSA = uqc "pcmSA"
   "area covered by the outermost layer of the phase change material"
   (sub cA lPCM) m_2 Real
   [gtZeroConstr,
-  sfwrc $ Bounded (Inc, sy pcmVol) (Inc, (exactDbl 2 $/ sy thickness) `mulRe` sy tankVol)]
+  sfwrc $ Bounded (Inc, sy pcmVol) (Inc, (exactDbl 2 $/ sy thickness) $* sy tankVol)]
   (dbl 1.2) defaultUncrt
 
 -- Constraint 5

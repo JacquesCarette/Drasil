@@ -7,27 +7,29 @@ module GOOL.Drasil.ClassInterface (
   FSModule, NamedArgs, Initializers, MixedCall, MixedCtorCall, PosCall,
   PosCtorCall,
   -- Typeclasses
-  OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
-  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), 
-  VariableSym(..), VariableElim(..), ($->), listOf, listVar, ValueSym(..), 
-  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
-  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp,
-  extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists,
+  OOProg, ProcProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
+  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), OOTypeSym(..), TypeElim(..), 
+  VariableSym(..), OOVariableSym(..), VariableElim(..), ($->), listOf, listVar,
+  ValueSym(..), OOValueSym, Argument(..), Literal(..), litZero,
+  MathConstant(..), VariableValue(..), OOVariableValue, CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), OOValueExpression(..), funcApp, funcAppNamedArgs,
+  selfFuncApp, extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists,
   InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
   objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..), ($.),
   selfAccess, GetSet(..), List(..), InternalList(..), listSlice,
-  listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
-  objDecNewNoParams, extObjDecNewNoParams, IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), StatePattern(..), initState, changeState,
-  ObserverPattern(..), observerListName, initObserverList, addObserver,
-  StrategyPattern(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..),
-  MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
+  listIndexExists, at, ThunkSym(..),
+  VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
+  ThunkAssign(..), StatementSym(..), AssignStatement(..), (&=),
+  assignToListIndex, DeclStatement(..), objDecNewNoParams,
+  extObjDecNewNoParams, IOStatement(..), StringStatement(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  StatePattern(..), initState, changeState, ObserverPattern(..),
+  observerListName, initObserverList, addObserver, StrategyPattern(..),
+  ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..),
+  privMethod, pubMethod, initializer, nonInitConstructor,
   StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..),
-  convType
+  convType, convTypeOO
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
@@ -48,14 +50,24 @@ type GSProgram a = GS (a (Program a))
 -- Functions in GOOL's interface beginning with "ext" are to be used to access items from other modules in the same program/project
 -- Functions in GOOL's interface beginning with "lib" are to be used to access items from different libraries/projects
 
+class (ProgramSym r, OOVariableValue r, VectorType r, VectorDecl r, VectorThunk r,
+  VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r,
+  IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r,
+  ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r,
+  VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
+  Comparison r, OOValueExpression r, InternalValueExp r, GetSet r, List r,
+  StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r,
+  VariableElim r) => OOProg r
+
 class (ProgramSym r, VectorType r, VectorDecl r, VectorThunk r,
   VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r,
   IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r,
   ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r,
   VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
-  Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r,
-  StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r,
-  VariableElim r) => OOProg r
+  Comparison r, ValueExpression r, List r, StatePattern r, TypeElim r,
+  VariableElim r) => ProcProg r
+
+-- Shared between OO and Procedural --
 
 class (FileSym r) => ProgramSym r where
   type Program r
@@ -111,7 +123,6 @@ class TypeSym r where
   listType      :: VSType r -> VSType r
   arrayType     :: VSType r -> VSType r
   listInnerType :: VSType r -> VSType r
-  obj           :: ClassName -> VSType r
   funcType      :: [VSType r] -> VSType r -> VSType r
   void          :: VSType r
 
@@ -124,21 +135,15 @@ type SVariable a = VS (a (Variable a))
 class (TypeSym r) => VariableSym r where
   type Variable r
   var          :: Label -> VSType r -> SVariable r
-  staticVar    :: Label -> VSType r -> SVariable r
   constant     :: Label -> VSType r -> SVariable r
   extVar       :: Library -> Label -> VSType r -> SVariable r
-  self         :: SVariable r
-  classVar     :: VSType r -> SVariable r -> SVariable r
-  extClassVar  :: VSType r -> SVariable r -> SVariable r
-  objVar       :: SVariable r -> SVariable r -> SVariable r
-  objVarSelf   :: SVariable r -> SVariable r
   arrayElem    :: Integer -> SVariable r -> SVariable r
   
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
   variableType :: r (Variable r) -> r (Type r)
 
-($->) :: (VariableSym r) => SVariable r -> SVariable r -> SVariable r
+($->) :: (OOVariableSym r) => SVariable r -> SVariable r -> SVariable r
 infixl 9 $->
 ($->) = objVar
 
@@ -257,15 +262,14 @@ type PosCtorCall r = VSType r -> [SValue r] -> SValue r
 
 -- for values that can include expressions
 class (VariableSym r, ValueSym r) => ValueExpression r where
+  -- An inline if-statement, aka the ternary operator.  Inputs:
+  -- Condition, True-value, False-value
   inlineIf     :: SValue r -> SValue r -> SValue r -> SValue r
   
   funcAppMixedArgs     ::            MixedCall r
   selfFuncAppMixedArgs ::            MixedCall r
   extFuncAppMixedArgs  :: Library -> MixedCall r
   libFuncAppMixedArgs  :: Library -> MixedCall r
-  newObjMixedArgs      ::            MixedCtorCall r
-  extNewObjMixedArgs   :: Library -> MixedCtorCall r
-  libNewObjMixedArgs   :: Library -> MixedCtorCall r
 
   lambda :: [SVariable r] -> SValue r -> SValue r
 
@@ -287,77 +291,48 @@ extFuncApp l n t vs = extFuncAppMixedArgs l n t vs []
 libFuncApp       :: (ValueExpression r) => Library -> PosCall r
 libFuncApp l n t vs = libFuncAppMixedArgs l n t vs []
 
-newObj           :: (ValueExpression r) =>            PosCtorCall r
-newObj t vs = newObjMixedArgs t vs []
-
-extNewObj        :: (ValueExpression r) => Library -> PosCtorCall r
-extNewObj l t vs = extNewObjMixedArgs l t vs []
-
-libNewObj        :: (ValueExpression r) => Library -> PosCtorCall r
-libNewObj l t vs = libNewObjMixedArgs l t vs []
-
 exists :: (ValueExpression r) => SValue r -> SValue r
 exists = notNull
 
-class (FunctionSym r) => InternalValueExp r where
-  -- | Generic function for calling an object method.
-  --   Takes the function name, the return type, the object, a list of 
-  --   positional arguments, and a list of named arguments.
-  objMethodCallMixedArgs' :: Label -> VSType r -> SValue r -> [SValue r] -> 
-    NamedArgs r -> SValue r
-
--- | Calling an object method. t is the return type of the method, o is the
---   object, f is the method name, and ps is a list of positional arguments.
-objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label -> 
-  [SValue r] -> SValue r
-objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
-
--- | Calling a method with named arguments.
-objMethodCallNamedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
-  -> NamedArgs r -> SValue r
-objMethodCallNamedArgs t o f = objMethodCallMixedArgs' f t o []
-
--- | Calling a method with a mix of positional and named arguments.
-objMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
-  -> [SValue r] -> NamedArgs r -> SValue r
-objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
-
--- | Calling a method with no parameters.
-objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r -> Label 
-  -> SValue r
-objMethodCallNoParams t o f = objMethodCall t o f []
-
-type VSFunction a = VS (a (Function a))
-
-class (ValueSym r) => FunctionSym r where
-  type Function r
-  func :: Label -> VSType r -> [SValue r] -> VSFunction r
-  objAccess :: SValue r -> VSFunction r -> SValue r
-
-($.) :: (FunctionSym r) => SValue r -> VSFunction r -> SValue r
-infixl 9 $.
-($.) = objAccess
-
-selfAccess :: (VariableValue r, FunctionSym r) => VSFunction r -> SValue r
-selfAccess = objAccess (valueOf self)
-
-class (ValueSym r, VariableSym r) => GetSet r where
-  get :: SValue r -> SVariable r -> SValue r
-  set :: SValue r -> SVariable r -> SValue r -> SValue r
-
 class (ValueSym r) => List r where
+  -- | Does any necessary conversions from GOOL's zero-indexed assumptions to
+  --   the target language's assumptions
+  intToIndex :: SValue r -> SValue r
+  -- | Does any necessary conversions from the target language's indexing
+  --   assumptions assumptions to GOOL's zero-indexed assumptions
+  indexToInt :: SValue r -> SValue r
+  -- | Finds the size of a list.
+  --   Arguments are: List
   listSize   :: SValue r -> SValue r
+  -- | Inserts a value into a list.
+  --   Arguments are: List, Index, Value
   listAdd    :: SValue r -> SValue r -> SValue r -> SValue r
+  -- | Appens a value to a list.
+  --   Arguments are: List, Value
   listAppend :: SValue r -> SValue r -> SValue r
+  -- | Gets the value of an index of a list.
+  --   Arguments are: List, Index
   listAccess :: SValue r -> SValue r -> SValue r
+  -- | Sets the value of an index of a list.
+  --   Arguments are: List, Index, Value
   listSet    :: SValue r -> SValue r -> SValue r -> SValue r
-  
+  -- | Finds the index of the first occurrence of a value in a list.
+  --   Arguments are: List, Value
   indexOf :: SValue r -> SValue r -> SValue r
 
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) 
     -> SVariable r -> SValue r -> MSBlock r
-  
+
+-- | Creates a slice of a list and assigns it to a variable.
+--   Arguments are: 
+--   Variable to assign
+--   List to read from
+--   [Start index] inclusive.
+--      (if Nothing, then list start if step > 0, list end if step < 0)
+--   [End index] exclusive.
+--      (if Nothing, then list end if step > 0, list start if step > 0)
+--   [Step] (if Nothing, then defaults to 1)
 listSlice :: (InternalList r) => SVariable r -> SValue r -> Maybe (SValue r) -> 
   Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listSlice vnew vold b e s = listSlice' b e s vnew vold
@@ -493,6 +468,9 @@ class (BodySym r, VariableSym r) => ControlStatement r where
 
   throw :: Label -> MSStatement r
 
+  -- | String of if-else statements.
+  --   Arguments: List of predicates and bodies (if this then that),
+  --   Body for else branch
   ifCond     :: [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
   switch     :: SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 
@@ -524,25 +502,6 @@ initState fsmName initialState = varDecDef (var fsmName string)
 
 changeState :: (AssignStatement r, Literal r) => Label -> Label -> MSStatement r
 changeState fsmName toState = var fsmName string &= litString toState
-
-class (StatementSym r, FunctionSym r) => ObserverPattern r where
-  notifyObservers :: VSFunction r -> VSType r -> MSStatement r
-
-observerListName :: Label
-observerListName = "observerList"
-
-initObserverList :: (DeclStatement r) => VSType r -> [SValue r] -> MSStatement r
-initObserverList t = listDecDef (var observerListName (listType t))
-
-addObserver :: (StatementSym r, VariableValue r, List r) => SValue r -> 
-  MSStatement r
-addObserver o = valStmt $ listAdd obsList lastelem o
-  where obsList = valueOf $ observerListName `listOf` onStateValue valueType o
-        lastelem = listSize obsList
-
-class (BodySym r, VariableSym r) => StrategyPattern r where
-  runStrategy     :: Label -> [(Label, MSBody r)] -> Maybe (SValue r) -> 
-    Maybe (SVariable r) -> MSBlock r
 
 class ScopeSym r where
   type Scope r
@@ -651,6 +610,104 @@ class (ClassSym r) => ModuleSym r where
   -- Module name, import names, module functions, module classes
   buildModule :: Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
 
+-- OO Only --
+
+class (TypeSym r) => OOTypeSym r where
+  obj :: ClassName -> VSType r
+
+class (ValueSym r, OOTypeSym r) => OOValueSym r
+
+class (VariableSym r, OOTypeSym r) => OOVariableSym r where
+  staticVar    :: Label -> VSType r -> SVariable r -- I *think* this is OO-only
+  self         :: SVariable r
+  classVar     :: VSType r -> SVariable r -> SVariable r
+  extClassVar  :: VSType r -> SVariable r -> SVariable r
+  objVar       :: SVariable r -> SVariable r -> SVariable r
+  objVarSelf   :: SVariable r -> SVariable r
+
+-- for values that can include expressions
+class (ValueExpression r, OOVariableSym r, OOValueSym r) => OOValueExpression r where
+  newObjMixedArgs      ::            MixedCtorCall r
+  extNewObjMixedArgs   :: Library -> MixedCtorCall r
+  libNewObjMixedArgs   :: Library -> MixedCtorCall r
+
+newObj           :: (OOValueExpression r) =>            PosCtorCall r
+newObj t vs = newObjMixedArgs t vs []
+
+extNewObj        :: (OOValueExpression r) => Library -> PosCtorCall r
+extNewObj l t vs = extNewObjMixedArgs l t vs []
+
+libNewObj        :: (OOValueExpression r) => Library -> PosCtorCall r
+libNewObj l t vs = libNewObjMixedArgs l t vs []
+
+
+class (VariableValue r, OOVariableSym r) => OOVariableValue r
+
+class (StatementSym r, FunctionSym r) => ObserverPattern r where
+  notifyObservers :: VSFunction r -> VSType r -> MSStatement r
+
+observerListName :: Label
+observerListName = "observerList"
+
+initObserverList :: (DeclStatement r) => VSType r -> [SValue r] -> MSStatement r
+initObserverList t = listDecDef (var observerListName (listType t))
+
+addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r -> 
+  MSStatement r
+addObserver o = valStmt $ listAdd obsList lastelem o
+  where obsList = valueOf $ observerListName `listOf` onStateValue valueType o
+        lastelem = listSize obsList
+
+class (BodySym r, VariableSym r) => StrategyPattern r where
+  runStrategy     :: Label -> [(Label, MSBody r)] -> Maybe (SValue r) -> 
+    Maybe (SVariable r) -> MSBlock r
+
+class (FunctionSym r) => InternalValueExp r where
+  -- | Generic function for calling a method.
+  --   Takes the function name, the return type, the object, a list of 
+  --   positional arguments, and a list of named arguments.
+  objMethodCallMixedArgs' :: Label -> VSType r -> SValue r -> [SValue r] -> 
+    NamedArgs r -> SValue r
+
+-- | Calling a method. t is the return type of the method, o is the
+--   object, f is the method name, and ps is a list of positional arguments.
+objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label -> 
+  [SValue r] -> SValue r
+objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
+
+-- | Calling a method with named arguments.
+objMethodCallNamedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
+  -> NamedArgs r -> SValue r
+objMethodCallNamedArgs t o f = objMethodCallMixedArgs' f t o []
+
+-- | Calling a method with a mix of positional and named arguments.
+objMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
+  -> [SValue r] -> NamedArgs r -> SValue r
+objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
+
+-- | Calling a method with no parameters.
+objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r -> Label 
+  -> SValue r
+objMethodCallNoParams t o f = objMethodCall t o f []
+
+type VSFunction a = VS (a (Function a))
+
+class (ValueSym r) => FunctionSym r where
+  type Function r
+  func :: Label -> VSType r -> [SValue r] -> VSFunction r
+  objAccess :: SValue r -> VSFunction r -> SValue r
+
+($.) :: (FunctionSym r) => SValue r -> VSFunction r -> SValue r
+infixl 9 $.
+($.) = objAccess
+
+selfAccess :: (OOVariableValue r, FunctionSym r) => VSFunction r -> SValue r
+selfAccess = objAccess (valueOf self)
+
+class (ValueSym r, VariableSym r) => GetSet r where
+  get :: SValue r -> SVariable r -> SValue r
+  set :: SValue r -> SVariable r -> SValue r -> SValue r
+
 -- Utility
 
 convType :: (TypeSym r) => CodeType -> VSType r
@@ -662,8 +719,12 @@ convType Char = char
 convType String = string
 convType (List t) = listType (convType t)
 convType (Array t) = arrayType (convType t)
-convType (Object n) = obj n
 convType (Func ps r) = funcType (map convType ps) (convType r)
 convType Void = void
 convType InFile = infile
 convType OutFile = outfile
+convType (Object _) = error "Objects not supported"
+
+convTypeOO :: (OOTypeSym r) => CodeType -> VSType r
+convTypeOO (Object n) = obj n
+convTypeOO t = convType t

@@ -29,14 +29,15 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock,
   cos, tan), Comparison(..), funcApp, newObj, objMethodCallNoParams, ($.),
   StatementSym(multi), AssignStatement((&++)), (&=), IOStatement(printStr,
   printStrLn, printFile, printFileStr, printFileStrLn), ifNoElse, ScopeSym(..),
-  ModuleSym(Module), convType)
+  ModuleSym(Module), convTypeOO)
 import qualified GOOL.Drasil.ClassInterface as S (
   TypeSym(int, double, char, string, listType, arrayType, listInnerType,
-  funcType, void), VariableSym(var, objVarSelf), Literal(litInt, litFloat,
-  litDouble, litString), VariableValue(valueOf), FunctionSym(func),
-  List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
-  IOStatement(print), ControlStatement(returnStmt, for), ParameterSym(param),
-  MethodSym(method))
+  funcType, void), VariableSym(var), OOVariableSym(objVarSelf),
+  Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
+  FunctionSym(func), List(listSize, listAccess), StatementSym(valStmt),
+  DeclStatement(varDecDef), IOStatement(print),
+  ControlStatement(returnStmt, for), ParameterSym(param), MethodSym(method),
+  List(intToIndex))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(commentedMod),  
   RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
   RenderFunction(funcFromData), FunctionElim(functionType), 
@@ -94,7 +95,7 @@ multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 -- Types --
 
 listInnerType :: (RenderSym r) => VSType r -> VSType r
-listInnerType t = t >>= (convType . getInnerType . getType)
+listInnerType t = t >>= (convTypeOO . getInnerType . getType)
 
 obj :: (RenderSym r) => ClassName -> VSType r
 obj n = typeFromData (Object n) n (text n)
@@ -197,7 +198,7 @@ litDouble :: (RenderSym r) => Double -> SValue r
 litDouble d = mkStateVal S.double (D.double d)
 
 litInt :: (RenderSym r) => Integer -> SValue r
-litInt i = mkStateVal S.int (integer i)
+litInt i = valFromData Nothing (Just i) S.int (integer i)
 
 litString :: (RenderSym r) => String -> SValue r
 litString s = mkStateVal S.string (doubleQuotedText s)
@@ -249,7 +250,7 @@ lambda f ps' ex' = do
   ps <- sequence ps'
   ex <- ex'
   let ft = S.funcType (map (return . variableType) ps) (return $ valueType ex)
-  valFromData (Just 0) ft (f ps ex)
+  valFromData (Just 0) Nothing ft (f ps ex)
 
 objAccess :: (RenderSym r) => SValue r -> VSFunction r -> SValue r
 objAccess = on2StateWrapped (\v f-> mkVal (functionType f) 
@@ -272,23 +273,24 @@ set :: (RenderSym r) => SValue r -> SVariable r -> SValue r -> SValue r
 set v vToSet toVal = v $. S.setFunc (onStateValue valueType v) vToSet toVal
 
 listAdd :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
-listAdd v i vToAdd = v $. S.listAddFunc v i vToAdd
+listAdd v i vToAdd = v $. S.listAddFunc v (S.intToIndex i) vToAdd
 
 listAppend :: (RenderSym r) => SValue r -> SValue r -> SValue r
-listAppend v vToApp = v $. S.listAppendFunc vToApp
+listAppend v vToApp = v $. S.listAppendFunc v vToApp
 
 listAccess :: (RenderSym r) => SValue r -> SValue r -> SValue r
 listAccess v i = do
   v' <- v
-  let checkType (List _) = S.listAccessFunc (S.listInnerType $ return $ 
-        valueType v') i
-      checkType (Array _) = i >>= (\ix -> funcFromData (brackets (RC.value ix)) 
+  let i' = S.intToIndex i
+      checkType (List _) = S.listAccessFunc (S.listInnerType $ return $ 
+        valueType v') i'
+      checkType (Array _) = i' >>= (\ix -> funcFromData (brackets (RC.value ix)) 
         (S.listInnerType $ return $ valueType v'))
       checkType _ = error "listAccess called on non-list-type value"
   v $. checkType (getType (valueType v'))
 
 listSet :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
-listSet v i toVal = v $. S.listSetFunc v i toVal
+listSet v i toVal = v $. S.listSetFunc v (S.intToIndex i) toVal
 
 getFunc :: (RenderSym r) => SVariable r -> VSFunction r
 getFunc v = v >>= (\vr -> S.func (getterName $ variableName vr) 

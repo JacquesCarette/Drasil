@@ -1,60 +1,65 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
-module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc, 
-  doxClass, doxMod, docMod', extVar, classVar, objVarSelf, indexOf, listAddFunc, 
-  discardFileLine, intClass, funcType, buildModule, arrayType, pi, printSt, 
-  arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction, 
-  buildModule', call', listSizeFunc, listAccessFunc', string, constDecDef, 
-  docInOutFunc, bindingError, extFuncAppMixedArgs, notNull, listDecDef, 
-  destructorError, stateVarDef, constVar, litArray, listSetFunc, extraClass, 
-  listAccessFunc, doubleRender, double, openFileR, openFileW, stateVar, self, 
-  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
-  mainBody, inOutFunc, docInOutFunc', boolRender, bool, floatRender, float, stringRender', 
-  string', inherit, implements
+module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
+  doxClass, doxMod, docMod', extVar, classVar, objVarSelf, indexOf, listAddFunc,
+  discardFileLine, intClass, funcType, buildModule, arrayType, pi, printSt,
+  arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction,
+  buildModule', call', listSizeFunc, listAccessFunc', string, constDecDef,
+  docInOutFunc, bindingError, extFuncAppMixedArgs, notNull, listDecDef,
+  destructorError, stateVarDef, constVar, litArray, listSetFunc, extraClass,
+  listAccessFunc, doubleRender, double, openFileR, openFileW, stateVar, self,
+  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError,
+  mainBody, inOutFunc, docInOutFunc', boolRender, bool, floatRender, float, stringRender',
+  string', inherit, implements, listSize, listAdd, listAppend, intToIndex,
+  indexToInt, intToIndex', indexToInt'
 ) where
 
 import Utils.Drasil (indent, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, VSType, 
-  SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, 
-  SClass, FSModule, Initializers, MixedCall, PermanenceSym(..), bodyStatements, 
-  oneLiner, TypeSym(infile, outfile, listInnerType, obj), 
-  TypeElim(getType, getTypeString), VariableElim(variableName, variableType), 
-  ValueSym(valueType), Comparison(..), objMethodCallNoParams, (&=), 
-  ControlStatement(returnStmt), ScopeSym(..), MethodSym(function))
+import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, VSType,
+  SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar,
+  SClass, FSModule, Initializers, MixedCall, PermanenceSym(..), bodyStatements,
+  oneLiner, TypeSym(infile, outfile, listInnerType), OOTypeSym(obj),
+  TypeElim(getType, getTypeString), VariableElim(variableName, variableType),
+  ValueSym(valueType), Comparison(..), objMethodCallNoParams, (&=),
+  ControlStatement(returnStmt), ScopeSym(..), MethodSym(function),
+  NumericExpression((#+), (#-)))
 import qualified GOOL.Drasil.ClassInterface as S (
   TypeSym(int, double, string, listType, arrayType, void),
-  VariableSym(var, self, objVar), Literal(litTrue, litFalse, litList), 
-  VariableValue(valueOf), FunctionSym(func, objAccess), StatementSym(valStmt), 
-  DeclStatement(varDec, varDecDef, constDecDef), 
-  ParameterSym(param, pointerParam), MethodSym(mainFunction), 
+  VariableSym(var), OOVariableSym(self, objVar),
+  Literal(litTrue, litFalse, litList, litInt), VariableValue(valueOf),
+  FunctionSym(func, objAccess), StatementSym(valStmt),
+  DeclStatement(varDec, varDecDef, constDecDef), List(intToIndex, indexToInt),
+  ParameterSym(param, pointerParam), MethodSym(mainFunction),
   ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (RenderSym, ImportSym(..), RenderBody(..), 
   RenderType(..), RenderVariable(varFromData), InternalVarElim(variableBind), 
   RenderFunction(funcFromData), MethodTypeSym(mType),
   RenderMethod(intMethod, commentedFunc, mthdFromData), ParentSpec, 
   BlockCommentSym(..))
-import qualified GOOL.Drasil.RendererClasses as S (RenderBody(multiBody), 
-  RenderValue(call), RenderStatement(stmt), InternalAssignStmt(multiAssign), 
-  InternalControlStmt(multiReturn), MethodTypeSym(construct), 
-  RenderMethod(intFunc), RenderClass(intClass, inherit), RenderMod(modFromData))
-import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..), 
-  PermElim(..), BodyElim(..), InternalTypeElim(..), InternalVarElim(variable), 
-  ValueElim(value), StatementElim(statement), ScopeElim(..), MethodElim(..), 
-  StateVarElim(..), ClassElim(..))
-import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, 
+import qualified GOOL.Drasil.RendererClasses as S (RenderBody(multiBody),
+  RenderValue(call), RenderStatement(stmt), InternalAssignStmt(multiAssign),
+  InternalControlStmt(multiReturn), MethodTypeSym(construct),
+  RenderMethod(intFunc), RenderClass(intClass, inherit), RenderMod(modFromData),
+  InternalListFunc(listSizeFunc, listAddFunc, listAppendFunc))
+import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..),
+  PermElim(..), BodyElim(..), InternalTypeElim(..), InternalVarElim(variable),
+  ValueElim(..), StatementElim(statement), ScopeElim(..), MethodElim(..),
+  StateVarElim(..), ClassElim(..), FunctionElim(..))
+import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2StateValues, onStateList)
 import GOOL.Drasil.LanguageRenderer (array', new', args, array, listSep, access,
-  mathFunc, ModuleDocRenderer, FuncDocRenderer, functionDox, classDox, moduleDox, variableList, valueList, intValue)
-import qualified GOOL.Drasil.LanguageRenderer as R (self, self', module', 
+  mathFunc, ModuleDocRenderer, FuncDocRenderer, functionDox, classDox,
+  moduleDox, variableList, valueList, intValue)
+import qualified GOOL.Drasil.LanguageRenderer as R (self, self', module',
   print, stateVar, stateVarList, constDecDef, extVar, listAccessFunc)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
-  mkStateVal, mkStateVar)
+  mkStateVal, mkStateVar, mkVal)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
   call, initStmts, docFunc, docFuncRepr, docClass, docMod)
 import GOOL.Drasil.AST (ScopeTag(..))
-import GOOL.Drasil.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS, 
-  lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports, 
+import GOOL.Drasil.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
+  lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports,
   getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc,
   useVarName)
 
@@ -68,6 +73,17 @@ import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
   brackets, braces, colon, vcat, equals)
 import Metadata.Drasil.DrasilMetaCall (watermark)
+
+-- Python, Java, C#, C++, and Swift --
+-- | Convert an integer to an index in a 0-indexed language
+--   Since GOOL is 0-indexed, no adjustments need be made
+intToIndex :: SValue r -> SValue r
+intToIndex = id
+
+-- | Convert an index to an integer in a 0-indexed language
+--   Since GOOL is 0-indexed, no adjustments need be made
+indexToInt :: SValue r -> SValue r
+indexToInt = id
 
 -- Python, Java, C#, and C++ --
 
@@ -112,7 +128,7 @@ objVarSelf :: (RenderSym r) => SVariable r -> SVariable r
 objVarSelf = S.objVar S.self
 
 indexOf :: (RenderSym r) => Label -> SValue r -> SValue r -> SValue r
-indexOf f l v = S.objAccess l (S.func f S.int [v])
+indexOf f l v = S.indexToInt $ S.objAccess l (S.func f S.int [v])
 
 listAddFunc :: (RenderSym r) => Label -> SValue r -> SValue r -> VSFunction r
 listAddFunc f i v = S.func f (S.listType $ onStateValue valueType v) 
@@ -484,3 +500,41 @@ docCommandSep = ": "
 authorDoc = "Authors"
 dateDoc = "Date"
 noteDoc = "Note"
+
+-- Python, Julia, and MATLAB --
+-- | Call to get the size of a list in a language where this is not a method.
+listSize :: (RenderSym r) => SValue r -> SValue r
+listSize l = do
+  f <- S.listSizeFunc l
+  mkVal (RC.functionType f) (RC.function f)
+
+-- Julia and MATLAB --
+-- | Call to insert a value into a list in a language where this is not a method.
+listAdd :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
+listAdd l i v = do
+  f <- S.listAddFunc l (S.intToIndex i) v
+  mkVal (RC.functionType f) (RC.function f)
+
+-- | Call to append a value to a list in a language where this is not a method.
+listAppend :: (RenderSym r) => SValue r -> SValue r -> SValue r
+listAppend l v = do
+  f <- S.listAppendFunc l v
+  mkVal (RC.functionType f) (RC.function f)
+
+-- | Convert an integer to an index in a 1-indexed language
+--   Since GOOL is 0-indexed, we need to add 1
+intToIndex' :: (RenderSym r) => SValue r -> SValue r
+intToIndex' v = do 
+  v' <- v
+  case RC.valueInt v' of
+    (Just i) -> S.litInt (i + 1)
+    Nothing -> v #+ S.litInt 1
+
+-- | Convert an index to an integer in a 1-indexed language
+--   Since GOOL is 0-indexed, we need to subtract 1
+indexToInt' :: (RenderSym r) => SValue r -> SValue r
+indexToInt' v = do
+  v' <- v
+  case RC.valueInt v' of
+    (Just i) -> S.litInt (i - 1)
+    Nothing -> v #- S.litInt 1

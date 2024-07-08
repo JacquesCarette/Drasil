@@ -95,10 +95,8 @@ nvvBinOp :: LD.NVVBinOp -> NVVBinOp
 nvvBinOp LD.Scale = Scale
 
 assocArithOp :: LD.AssocArithOper -> AssocArithOper
-assocArithOp LD.AddI = AddI -- TODO: These L.'s should be exported through L.D.Development
-assocArithOp LD.AddRe = AddRe
-assocArithOp LD.MulI = MulI
-assocArithOp LD.MulRe = MulRe
+assocArithOp LD.Add = Add -- TODO: These L.'s should be exported through L.D.Development
+assocArithOp LD.Mul = Mul
 
 assocBoolOp :: LD.AssocBoolOper -> AssocBoolOper
 assocBoolOp LD.And = And -- TODO: These L.'s should be exported through L.D.Development

@@ -60,8 +60,8 @@ balWtrRel :: ModelExpr
 balWtrRel = deriv (sy tempW) time $= express balWtrExpr
 
 balWtrExpr :: Expr
-balWtrExpr = recip_ (sy tauW) `mulRe` ((sy tempC $- apply1 tempW time) `addRe`
-  (sy eta `mulRe` (apply1 tempPCM time $- apply1 tempW time)))
+balWtrExpr = recip_ (sy tauW) $* ((sy tempC $- apply1 tempW time) $+
+  (sy eta $* (apply1 tempPCM time $- apply1 tempW time)))
 
 balWtrDesc :: [Sentence]
 balWtrDesc = map foldlSent [
@@ -147,7 +147,7 @@ eBalanceOnWtrDerivDesc7 eq22 = foldlSentCol [S "Finally, factoring out", eS' eq2
   S "we are left with the governing", getAcc ode `S.for` refS eBalanceOnWtr]
 
 eq1, eq2 :: Expr
-eq1 = sy wMass `mulRe` sy htCapW
+eq1 = sy wMass $* sy htCapW
 eq2 = recip_ $ sy tauW
 
 ---------
@@ -170,9 +170,9 @@ balPCMRel = deriv (sy tempPCM) time $= balPCMExpr
 
 balPCMExpr :: PExpr
 balPCMExpr = completeCase [case1, case2, case3]
-  where case1 = (recip_ (sy tauSP) `mulRe` (apply1 tempW time $-
+  where case1 = (recip_ (sy tauSP) $* (apply1 tempW time $-
           apply1 tempPCM time), realInterval tempPCM (UpTo (Exc, sy tempMeltP)))
-        case2 = (recip_ (sy tauLP) `mulRe` (apply1 tempW time $-
+        case2 = (recip_ (sy tauLP) $* (apply1 tempW time $-
           apply1 tempPCM time), realInterval tempPCM (UpFrom (Exc,sy tempMeltP)))
         case3 = (exactDbl 0, sy tempPCM $= sy tempMeltP $&& realInterval meltFrac (Bounded (Exc, exactDbl 0) (Exc, exactDbl 1)))
 
@@ -280,7 +280,7 @@ heatEInWtrFD :: SimpleQDef
 heatEInWtrFD = mkFuncDefByQ watE [time] htWtrExpr
 
 htWtrExpr :: Expr
-htWtrExpr = sy htCapW `mulRe` sy wMass `mulRe`
+htWtrExpr = sy htCapW $* sy wMass $* 
   (apply1 tempW time $- sy tempInit)
 
 htWtrNotes :: [Sentence]
@@ -310,14 +310,14 @@ heatEInPCMRC = makeRC "heatEInPCMRC" (nounPhraseSP "Heat energy in the PCM")
 
 htPCMRel :: Relation
 htPCMRel = sy pcmE $= completeCase [case1, case2, case3]
-  where case1 = (sy htCapSP `mulRe` sy pcmMass `mulRe` (apply1 tempPCM time $-
+  where case1 = (sy htCapSP $* sy pcmMass $* (apply1 tempPCM time $-
           sy tempInit), realInterval tempPCM (UpTo (Exc, sy tempMeltP)))
 
-        case2 = (sy pcmInitMltE `addRe` (sy htFusion `mulRe` sy pcmMass) `addRe`
-          (sy htCapLP `mulRe` sy pcmMass `mulRe` (apply1 tempPCM time $-
+        case2 = (sy pcmInitMltE $+ (sy htFusion $* sy pcmMass) $+
+          (sy htCapLP $* sy pcmMass $* (apply1 tempPCM time $-
           sy tempMeltP)), realInterval tempPCM (UpFrom (Exc, sy tempMeltP)))
 
-        case3 = (sy pcmInitMltE `addRe` apply1 latentEP time,
+        case3 = (sy pcmInitMltE $+ apply1 latentEP time,
           sy tempPCM $= sy tempMeltP $&& realInterval meltFrac (Bounded (Exc, exactDbl 0) (Exc, exactDbl 1)))
 
 htPCMNotes :: [Sentence]
@@ -334,7 +334,7 @@ htPCMNotes = map foldlSent [
    short phsChgMtrl, S "plus the", phrase energy, S "when", phrase melting, S "starts" `sC`
    S "plus", (phrase energy +:+ S "required to melt all") `S.the_ofThe` short phsChgMtrl],
   [atStartNP (the energy), S "required to melt all of the", short phsChgMtrl `S.is`
-   eS (sy htFusion `mulRe` sy pcmMass), sParen (unwrap $ getUnit pcmInitMltE),
+   eS (sy htFusion $* sy pcmMass), sParen (unwrap $ getUnit pcmInitMltE),
    fromSource ddHtFusion],
   [atStartNP (NP.the (change `in_` temp)) `S.is` eS (sy tempPCM $- sy tempMeltP),
    sParen (unwrap $ getUnit tempMeltP)],

@@ -5,17 +5,18 @@ module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
 import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
   SMethod, OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..),
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), InternalValueExp(..), FunctionSym(..),
-  GetSet(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), StatePattern(..), ObserverPattern(..),
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  BlockSym(..), TypeSym(..), OOTypeSym(..), TypeElim(..), VariableSym(..),
+  OOVariableSym(..), VariableElim(..), ValueSym(..), OOValueSym, Argument(..),
+  Literal(..), MathConstant(..), VariableValue(..), OOVariableValue,
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), OOValueExpression(..), InternalValueExp(..),
+  FunctionSym(..), GetSet(..), List(..), InternalList(..), ThunkSym(..),
+  VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
+  ThunkAssign(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..),
+  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..), qualName)
 import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
@@ -90,9 +91,11 @@ instance TypeSym CodeInfo where
   listType      _   = noInfoType
   arrayType     _   = noInfoType
   listInnerType _   = noInfoType
-  obj               = toState . toCode
   funcType      _ _ = noInfoType
   void              = noInfoType
+
+instance OOTypeSym CodeInfo where
+  obj               = toState . toCode
 
 instance TypeElim CodeInfo where
   getType _     = Void
@@ -101,16 +104,18 @@ instance TypeElim CodeInfo where
 instance VariableSym CodeInfo where
   type Variable CodeInfo = ()
   var         _ _   = noInfo
-  staticVar   _ _   = noInfo
   constant    _ _   = noInfo
   extVar      _ _ _ = noInfo
+  arrayElem   _ _   = noInfo
+  
+instance OOVariableSym CodeInfo where
+  staticVar   _ _   = noInfo
   self              = noInfo
   classVar    _ _   = noInfo
   extClassVar _ _   = noInfo
   objVar      _ _   = noInfo
   objVarSelf  _     = noInfo
-  arrayElem   _ _   = noInfo
-  
+
 instance VariableElim CodeInfo where
   variableName _ = ""
   variableType _ = toCode ""
@@ -118,6 +123,8 @@ instance VariableElim CodeInfo where
 instance ValueSym CodeInfo where
   type Value CodeInfo = ()
   valueType _ = toCode ""
+
+instance OOValueSym CodeInfo
 
 instance Argument CodeInfo where
   pointerArg = id
@@ -138,6 +145,8 @@ instance MathConstant CodeInfo where
 
 instance VariableValue CodeInfo where
   valueOf _ = noInfo
+
+instance OOVariableValue CodeInfo
 
 instance CommandLineArgs CodeInfo where
   arg       _ = noInfo
@@ -192,6 +201,12 @@ instance ValueExpression CodeInfo where
     executePairList ns
     addExternalCall l n  
   libFuncAppMixedArgs = extFuncAppMixedArgs
+
+  lambda _ = execute1
+
+  notNull = execute1
+
+instance OOValueExpression CodeInfo where
   newObjMixedArgs ot vs ns = do
     sequence_ vs
     executePairList ns
@@ -201,10 +216,6 @@ instance ValueExpression CodeInfo where
     executePairList ns
     addExternalConstructorCall l ot
   libNewObjMixedArgs = extNewObjMixedArgs
-
-  lambda _ = execute1
-
-  notNull = execute1
   
 instance InternalValueExp CodeInfo where
   objMethodCallMixedArgs' n _ v vs ns = v >> currModCall n vs ns
@@ -219,6 +230,8 @@ instance GetSet CodeInfo where
   set v _ = execute2 v
 
 instance List CodeInfo where
+  intToIndex = execute1
+  indexToInt = execute1
   listSize   = execute1
   listAdd    = execute3
   listAppend = execute2

@@ -4,10 +4,12 @@ module PatternTest (patternTest) where
 
 import GOOL.Drasil (GSProgram, VSType, SVariable, SValue, SMethod, OOProg,
   ProgramSym(..), FileSym(..), BodySym(..), oneLiner, BlockSym(..),
-  TypeSym(..), StatementSym(..), AssignStatement, DeclStatement(..),
-  IOStatement(..), initState, changeState, initObserverList,
-  addObserver, VariableSym(..), Literal(..), VariableValue(..),
-  ValueExpression(..), extNewObj, FunctionSym(..), GetSet(..), List, StatePattern(..), ObserverPattern(..), StrategyPattern(..), MethodSym(..), ModuleSym(..))
+  TypeSym(..), OOTypeSym(..), StatementSym(..), DeclStatement(..),
+  IOStatement(..), initState, changeState, initObserverList, addObserver,
+  VariableSym(..), OOVariableSym(..), Literal(..), VariableValue(..),
+  OOValueExpression(..), extNewObj, FunctionSym(..), GetSet(..),
+  StatePattern(..), ObserverPattern(..), StrategyPattern(..), MethodSym(..),
+  ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import Observer (observer, observerName, printNum, x)
 
@@ -26,17 +28,17 @@ obs2Name = "obs2"
 nName = "n"
 
 -- | Initialize Observer variables.
-observerType :: (TypeSym r) => VSType r
+observerType :: (OOTypeSym r) => VSType r
 observerType = obj observerName
 
 -- | Variables used in the generated code.
-n, obs1, obs2 :: (VariableSym r) => SVariable r
+n, obs1, obs2 :: (OOVariableSym r) => SVariable r
 n = var nName int
 obs1 = var obs1Name observerType
 obs2 = var obs2Name observerType
 
 -- | New Observer object.
-newObserver :: (ValueExpression r) => SValue r
+newObserver :: (OOValueExpression r) => SValue r
 newObserver = extNewObj observerName observerType []
 
 -- | Creates the pattern test program.
@@ -45,9 +47,7 @@ patternTest = prog progName "" [fileDoc (buildModule progName []
   [patternTestMainMethod] []), observer]
 
 -- | Creates the main function for PatternTest.
-patternTestMainMethod :: (MethodSym r, AssignStatement r, DeclStatement r,
-  IOStatement r, Literal r, VariableValue r, ValueExpression r, GetSet r,
-  List r, StatePattern r, ObserverPattern r, StrategyPattern r) => SMethod r
+patternTestMainMethod :: (OOProg r) => SMethod r
 patternTestMainMethod = mainFunction (body [block [
   varDec n,
   initState fsmName offState,

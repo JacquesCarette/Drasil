@@ -13,15 +13,16 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
   VSFunction, MSStatement, MSParameter, SMethod, OOProg, ProgramSym(..),
   FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..),
-  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp,
+  TypeSym(..), OOTypeSym(..), TypeElim(..), VariableSym(..), OOVariableSym(..),
+  VariableElim(..), ValueSym(..), OOValueSym, Argument(..), Literal(..), litZero,
+  MathConstant(..), VariableValue(..), OOVariableValue, CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), OOValueExpression(..), funcApp, selfFuncApp, extFuncApp,
   newObj, InternalValueExp(..), objMethodCallNoParams, FunctionSym(..), ($.),
-  GetSet(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  GetSet(..), List(..), InternalList(..), ThunkSym(..),
+  VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
+  ThunkAssign(..), StatementSym(..), AssignStatement(..), (&=),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), StatePattern(..),
   ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
@@ -29,7 +30,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
-  RenderValue(..), ValueElim(valuePrec), InternalGetSet(..),
+  RenderValue(..), ValueElim(valuePrec, valueInt), InternalGetSet(..),
   InternalListFunc(..),  RenderFunction(..), FunctionElim(functionType),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   RenderStatement(..), StatementElim(statementTerm), RenderScope(..),
@@ -70,7 +71,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   mainFunction, buildModule', string, constDecDef, docInOutFunc, bindingError, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, listSetFunc, 
   extraClass, listAccessFunc, doubleRender, openFileR, openFileW, stateVar, 
-  inherit, implements)
+  inherit, implements, intToIndex, indexToInt)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -198,9 +199,11 @@ instance TypeSym CSharpCode where
     C.listType csList t
   arrayType = CP.arrayType
   listInnerType = G.listInnerType
-  obj = G.obj
   funcType = csFuncType
   void = C.void
+
+instance OOTypeSym CSharpCode where
+  obj = G.obj
 
 instance TypeElim CSharpCode where
   getType = cType . unCSC
@@ -257,15 +260,17 @@ instance OpElim CSharpCode where
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
   var = G.var
-  staticVar = G.staticVar
   constant = var
   extVar = CP.extVar
+  arrayElem i = G.arrayElem (litInt i)
+
+instance OOVariableSym CSharpCode where
+  staticVar = G.staticVar
   self = C.self
   classVar = CP.classVar R.classVar
   extClassVar = classVar
   objVar = G.objVar
   objVarSelf = CP.objVarSelf
-  arrayElem i = G.arrayElem (litInt i)
 
 instance VariableElim CSharpCode where
   variableName = varName . unCSC
@@ -283,6 +288,8 @@ instance RenderVariable CSharpCode where
 instance ValueSym CSharpCode where
   type Value CSharpCode = ValData
   valueType = onCodeValue valType
+
+instance OOValueSym CSharpCode
 
 instance Argument CSharpCode where
   pointerArg = id
@@ -303,6 +310,8 @@ instance MathConstant CSharpCode where
 
 instance VariableValue CSharpCode where
   valueOf = G.valueOf
+
+instance OOVariableValue CSharpCode
 
 instance CommandLineArgs CSharpCode where
   arg n = G.arg (litInt n) argsList
@@ -355,13 +364,15 @@ instance ValueExpression CSharpCode where
   selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
   extFuncAppMixedArgs = CP.extFuncAppMixedArgs
   libFuncAppMixedArgs = C.libFuncAppMixedArgs
-  newObjMixedArgs = G.newObjMixedArgs (new ++ " ")
-  extNewObjMixedArgs _ = newObjMixedArgs
-  libNewObjMixedArgs = C.libNewObjMixedArgs
 
   lambda = G.lambda csLambda
 
   notNull = CP.notNull nullLabel
+
+instance OOValueExpression CSharpCode where
+  newObjMixedArgs = G.newObjMixedArgs (new ++ " ")
+  extNewObjMixedArgs _ = newObjMixedArgs
+  libNewObjMixedArgs = C.libNewObjMixedArgs
 
 instance RenderValue CSharpCode where
   inputFunc = addSystemImport csReadLineFunc
@@ -378,12 +389,13 @@ instance RenderValue CSharpCode where
 
   call = G.call csNamedArgSep
   
-  valFromData p t' d = do 
+  valFromData p i t' d = do 
     t <- t' 
-    toState $ on2CodeValues (vd p) t (toCode d)
+    toState $ on2CodeValues (vd p i) t (toCode d)
   
 instance ValueElim CSharpCode where
   valuePrec = valPrec . unCSC
+  valueInt = valInt . unCSC
   value = val . unCSC
   
 instance InternalValueExp CSharpCode where
@@ -399,6 +411,8 @@ instance GetSet CSharpCode where
   set = G.set
 
 instance List CSharpCode where
+  intToIndex = CP.intToIndex
+  indexToInt = CP.indexToInt
   listSize = C.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend
@@ -414,9 +428,9 @@ instance InternalGetSet CSharpCode where
   setFunc = G.setFunc
 
 instance InternalListFunc CSharpCode where
-  listSizeFunc = funcFromData (R.func csListSize) int
+  listSizeFunc _ = funcFromData (R.func csListSize) int
   listAddFunc _ = CP.listAddFunc csListAdd
-  listAppendFunc = G.listAppendFunc csListAppend
+  listAppendFunc _ = G.listAppendFunc csListAppend
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
 

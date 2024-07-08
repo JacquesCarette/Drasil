@@ -75,4 +75,3 @@ This section focuses on the general equations and laws that SSP is based on.
 |Notes      |<ul><li>The net force \\(\boldsymbol{F}\\) on a body is proportional to the acceleration \\(\boldsymbol{a}\text{(}t\text{)}\\) of the body, where \\(m\\) denotes the mass of the body as the constant of proportionality.</li></ul>|
 |Source     |--                                                                                                                                                                                                                                  |
 |RefBy      |[GD:weight](./SecGDs.md#GD:weight)                                                                                                                                                                                                  |
-

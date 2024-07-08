@@ -18,7 +18,6 @@ Calculate-Values: Calculate the following values: \\({t\_{\text{flight}}}\\) (fr
 
 Output-Values: Output \\({t\_{\text{flight}}}\\) (from [IM:calOfLandingTime](./SecIMs.md#IM:calOfLandingTime)), \\(s\\) (from [IM:messageIM](./SecIMs.md#IM:messageIM)), and \\({d\_{\text{offset}}}\\) (from [IM:offsetIM](./SecIMs.md#IM:offsetIM)).
 
-
 <div id="Table:ReqInputs"></div>
 
 |Symbol                    |Description    |Units                          |
@@ -28,4 +27,3 @@ Output-Values: Output \\({t\_{\text{flight}}}\\) (from [IM:calOfLandingTime](./S
 |\\(θ\\)                   |Launch angle   |\\({\text{rad}}\\)             |
 
 **<p align="center">Required Inputs following [FR:Input-Values](./SecFRs.md#inputValues)</p>**
-

@@ -1,4 +1,5 @@
 # Software Requirements Specification for Projectile
+
 Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
 
 # Table of Contents {#Sec:ToC}
@@ -164,6 +165,7 @@ This section provides general information about the system. It identifies the in
 <div id="Figure:sysCtxDiag"></div>
 
 ![System Context](../../../../../datafiles/projectile/SystemContextFigure.png)
+
 **<p align="center">System Context</p>**
 
 The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:
@@ -214,10 +216,10 @@ PS2: The projectile (with initial velocity \\({\boldsymbol{v}^{\text{i}}}\\) and
 
 PS3: The target.
 
-
 <div id="Figure:Launch"></div>
 
 ![The physical system](../../../../../datafiles/projectile/Launch.jpg)
+
 **<p align="center">The physical system</p>**
 
 # Goal Statements {#Sec:GoalStmt}
@@ -227,7 +229,6 @@ Given the initial velocity vector of the projectile and the geometric layout of 
 <div id="targetHit"></div>
 
 targetHit: Determine if the projectile hits the target.
-
 
 # Solution Characteristics Specification {#Sec:SolCharSpec}
 
@@ -296,7 +297,6 @@ timeStartZero: Time starts at zero. (RefBy: [GD:velVec](#GD:velVec), [GD:rectVel
 <div id="gravAccelValue"></div>
 
 gravAccelValue: The acceleration due to gravity is assumed to have the value provided in the section for [Values of Auxiliary Constants](#Sec:AuxConstants). (RefBy: [IM:calOfLandingDist](#IM:calOfLandingDist) and [IM:calOfLandingTime](#IM:calOfLandingTime).)
-
 
 # Theoretical Models {#Sec:TMs}
 
@@ -665,7 +665,6 @@ Calculate-Values: Calculate the following values: \\({t\_{\text{flight}}}\\) (fr
 
 Output-Values: Output \\({t\_{\text{flight}}}\\) (from [IM:calOfLandingTime](#IM:calOfLandingTime)), \\(s\\) (from [IM:messageIM](#IM:messageIM)), and \\({d\_{\text{offset}}}\\) (from [IM:offsetIM](#IM:offsetIM)).
 
-
 <div id="Table:ReqInputs"></div>
 
 |Symbol                    |Description    |Units                          |
@@ -703,7 +702,6 @@ Maintainable: If a likely change is made to the finished software, it will take 
 <div id="portable"></div>
 
 Portable: The code is able to be run in different environments.
-
 
 # Traceability Matrices and Graphs {#Sec:TraceMatrices}
 
@@ -804,26 +802,31 @@ The purpose of the traceability graphs is also to provide easy references on wha
 <div id="Figure:TraceGraphAvsA"></div>
 
 ![TraceGraphAvsA](../../../../../traceygraphs/projectile/avsa.svg)
+
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
 ![TraceGraphAvsAll](../../../../../traceygraphs/projectile/avsall.svg)
+
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
 ![TraceGraphRefvsRef](../../../../../traceygraphs/projectile/refvsref.svg)
+
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
 ![TraceGraphAllvsR](../../../../../traceygraphs/projectile/allvsr.svg)
+
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
 ![TraceGraphAllvsAll](../../../../../traceygraphs/projectile/allvsall.svg)
+
 **<p align="center">TraceGraphAllvsAll</p>**
 
 For convenience, the following graphs can be found at the links below:
@@ -885,4 +888,3 @@ This section contains the standard values that are used for calculations in Proj
 <div id="velocityWiki"></div>
 
 [9]: Wikipedia Contributors. *Velocity*. June, 2019. <https://en.wikipedia.org/wiki/Velocity>.
-

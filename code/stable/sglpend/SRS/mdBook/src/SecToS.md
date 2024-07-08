@@ -37,4 +37,3 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\(ω\\)                              |Angular velocity                                 |\\(\frac{\text{rad}}{\text{s}}\\)    |
 
 **<p align="center">Table of Symbols</p>**
-

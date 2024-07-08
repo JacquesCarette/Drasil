@@ -29,5 +29,3 @@ firstPend: The first rod has two sides. One side attaches to the origin. Another
 <div id="secondPend"></div>
 
 secondPend: The second rod has two sides. One side attaches to the first object. Another side attaches to the second object.
-
-

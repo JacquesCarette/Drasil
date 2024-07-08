@@ -40,4 +40,3 @@ An outline of all sections included in this SRS is recorded here for easy refere
 - [Values of Auxiliary Constants](./SecAuxConstants.md#Sec:AuxConstants)
 - [References](./SecReferences.md#Sec:References)
 - [Appendix](./SecAppendix.md#Sec:Appendix)
-

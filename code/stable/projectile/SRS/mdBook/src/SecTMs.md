@@ -29,4 +29,3 @@ This section focuses on the general equations and laws that Projectile is based 
 |Description|<ul><li>\\(\boldsymbol{v}\text{(}t\text{)}\\) is the velocity (\\(\frac{\text{m}}{\text{s}}\\))</li><li>\\(t\\) is the time (\\({\text{s}}\\))</li><li>\\(\boldsymbol{p}\text{(}t\text{)}\\) is the position (\\({\text{m}}\\))</li></ul>|
 |Source     |[velocityWiki](./SecReferences.md#velocityWiki)                                                                                                                                                                                          |
 |RefBy      |[GD:rectPos](./SecGDs.md#GD:rectPos)                                                                                                                                                                                                     |
-

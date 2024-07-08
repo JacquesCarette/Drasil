@@ -42,7 +42,6 @@ Display-Interslice-Shear-Forces: Using [IM:fctSfty](./SecIMs.md#IM:fctSfty), [IM
 
 Write-Results-To-File: Provide the option of writing the output result data, as given in [FR:Display-Input](./SecFRs.md#displayInput), [FR:Display-Graph](./SecFRs.md#displayGraph), [FR:Display-Factor-of-Safety](./SecFRs.md#displayFS), [FR:Display-Interslice-Normal-Forces](./SecFRs.md#displayNormal), and [FR:Display-Interslice-Shear-Forces](./SecFRs.md#displayShear), to a file.
 
-
 <div id="Table:ReqInputs"></div>
 
 |Symbol                                    |Description                           |Units                              |
@@ -80,4 +79,3 @@ Write-Results-To-File: Provide the option of writing the output result data, as 
 |\\({{y\_{\text{slip}}}^{\text{min}}}\\)   |minimum \\(y\\)-coordinate      |
 
 **<p align="center">Inputs to be Returned as Output following [FR:Display-Input](./SecFRs.md#displayInput)</p>**
-

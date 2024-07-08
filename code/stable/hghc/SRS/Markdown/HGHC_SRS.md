@@ -1,4 +1,5 @@
 # Software Requirements Specification for HGHC
+
 W. Spencer Smith
 
 # Table of Contents {#Sec:ToC}
@@ -102,4 +103,3 @@ This section collects and defines all the data needed to build the instance mode
 # Instance Models {#Sec:IMs}
 
 There are no instance models.
-

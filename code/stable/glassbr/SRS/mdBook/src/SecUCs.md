@@ -9,5 +9,3 @@ Predict-Withstanding-of-Certain-Degree: The goal of the system is to predict whe
 <div id="accAlteredGlass"></div>
 
 Accommodate-Altered-Glass: [A:glassCondition](./SecAssumps.md#assumpGC) requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
-
-

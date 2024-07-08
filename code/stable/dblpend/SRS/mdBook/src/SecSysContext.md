@@ -5,6 +5,7 @@
 <div id="Figure:sysCtxDiag"></div>
 
 ![System Context](../../../../../datafiles/dblpend/SystemContextFigure.png)
+
 **<p align="center">System Context</p>**
 
 The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:
@@ -18,4 +19,3 @@ The interaction between the product and the user is through an application progr
   - Determine if the inputs satisfy the required physical and software constraints.
   - Calculate the required outputs.
   - Generate the required graphs.
-

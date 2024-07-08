@@ -31,4 +31,3 @@ This section focuses on the general equations and laws that GlassBR is based on.
 |Notes      |<ul><li>If \\(\mathit{isSafeLoad}\\), the structure is considered safe.</li></ul>                                                                                                                                                                                               |
 |Source     |[astm2009](./SecReferences.md#astm2009)                                                                                                                                                                                                                                         |
 |RefBy      |                                                                                                                                                                                                                                                                                |
-

@@ -18,7 +18,6 @@ Calculate-Angle-Of-Rod: Calculate the following values: \\({θ\_{1}}\\) and \\({
 
 Output-Values: Output \\({θ\_{1}}\\) and \\({θ\_{2}}\\) (from [IM:calOfAngle1](./SecIMs.md#IM:calOfAngle1) and [IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2)).
 
-
 <div id="Table:ReqInputs"></div>
 
 |Symbol        |Description              |Units            |
@@ -29,4 +28,3 @@ Output-Values: Output \\({θ\_{1}}\\) and \\({θ\_{2}}\\) (from [IM:calOfAngle1]
 |\\({m\_{2}}\\)|Mass of the second object|\\({\text{kg}}\\)|
 
 **<p align="center">Required Inputs following [FR:Input-Values](./SecFRs.md#inputValues)</p>**
-

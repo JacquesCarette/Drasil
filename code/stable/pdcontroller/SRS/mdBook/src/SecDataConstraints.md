@@ -13,4 +13,3 @@ The [Data Constraints Table](./SecDataConstraints.md#Table:InDataConstraints) sh
 |\\({t\_{\text{step}}}\\)|\\(\frac{1}{1000}\leq{}{t\_{\text{step}}}\lt{}{t\_{\text{sim}}}\\)|\\(0.001\\) \\({\text{s}}\\)|10\\(\\%\\)|
 
 **<p align="center">Input Data Constraints</p>**
-

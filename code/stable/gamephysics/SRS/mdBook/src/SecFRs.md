@@ -33,5 +33,3 @@ Determine-Collisions: Determine if any of the rigid bodies in the space have col
 <div id="deterCollRespOverTime"></div>
 
 Determine-Collision-Response-Over-Time: Determine the positions and velocities over a period of time of the 2D rigid bodies that have undergone a collision.
-
-

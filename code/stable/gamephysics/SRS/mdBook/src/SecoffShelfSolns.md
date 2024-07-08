@@ -10,4 +10,3 @@ Free open source 3D game physics libraries include:
 - Bullet: http://bulletphysics.org/
 - Open Dynamics Engine: http://www.ode.org/
 - Newton Game Dynamics: http://newtondynamics.com/
-

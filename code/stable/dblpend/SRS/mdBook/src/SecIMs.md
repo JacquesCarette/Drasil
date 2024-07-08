@@ -75,4 +75,3 @@ which leads to equation 4
 \\[\sin\left({θ\_{2}}\right) \left({m\_{2}} {a\_{\text{y}2}}+{m\_{2}} g\right)=-\cos\left({θ\_{2}}\right) {m\_{2}} {a\_{\text{x}2}}\\]
 
 By giving equations [GD:accelerationX1](./SecGDs.md#GD:accelerationX1) and [GD:accelerationX2](./SecGDs.md#GD:accelerationX2) and [GD:accelerationY1](./SecGDs.md#GD:accelerationY1) and [GD:accelerationY2](./SecGDs.md#GD:accelerationY2) plus additional two equations, 3 and 4, we can get [IM:calOfAngle1](./SecIMs.md#IM:calOfAngle1) and [IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2) via a computer algebra program:
-

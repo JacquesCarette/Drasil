@@ -10,4 +10,3 @@ The [Data Constraints Table](./SecCorSolProps.md#Table:OutDataConstraints) shows
 |\\(J\\)              |\\({J\_{\text{min}}}\leq{}J\leq{}{J\_{\text{max}}}\\)|
 
 **<p align="center">Output Data Constraints</p>**
-

@@ -12,4 +12,3 @@ The [Data Constraints Table](./SecCorSolProps.md#Table:OutDataConstraints) shows
 |\\(ω\\)                              |
 
 **<p align="center">Output Data Constraints</p>**
-

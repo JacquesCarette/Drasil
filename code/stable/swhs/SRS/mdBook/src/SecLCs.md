@@ -25,5 +25,3 @@ Different-Initial-Temps-PCM-Water: [A:Same-Initial-Temp-Water-PCM](./SecAssumps.
 <div id="likeChgTLH"></div>
 
 Tank-Lose-Heat: [A:Perfect-Insulation-Tank](./SecAssumps.md#assumpPIT) - Any real tank cannot be perfectly insulated and will lose heat.
-
-

@@ -11,4 +11,3 @@ The [Data Constraints Table](./SecCorSolProps.md#Table:OutDataConstraints) shows
 |\\({t\_{\text{flight}}}\\)|\\({t\_{\text{flight}}}\gt{}0\\)                    |
 
 **<p align="center">Output Data Constraints</p>**
-

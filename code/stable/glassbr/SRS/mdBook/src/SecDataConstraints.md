@@ -15,4 +15,3 @@ The [Data Constraints Table](./SecDataConstraints.md#Table:InDataConstraints) sh
 |\\(w\\)                        |\\(w\gt{}0\\)                                |\\({w\_{\text{min}}}\leq{}w\leq{}{w\_{\text{max}}}\\)                              |\\(42\\) \\({\text{kg}}\\)|10\\(\\%\\) |
 
 **<p align="center">Input Data Constraints</p>**
-

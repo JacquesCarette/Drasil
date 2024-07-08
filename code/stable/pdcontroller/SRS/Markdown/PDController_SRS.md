@@ -1,4 +1,5 @@
 # Software Requirements Specification for PD Controller
+
 Naveen Ganesh Muralidharan
 
 # Table of Contents {#Sec:ToC}
@@ -152,6 +153,7 @@ This section provides general information about the system. It identifies the in
 <div id="Figure:systemContextDiag"></div>
 
 ![System Context](../../../../../datafiles/pdcontroller/Fig_SystemContext.png)
+
 **<p align="center">System Context</p>**
 
 PD Controller is self-contained. The only external interaction is with the user. The responsibilities of the user and the system are as follows:
@@ -218,10 +220,10 @@ PS2: The PD Controller.
 
 PS3: The Power Plant.
 
-
 <div id="Figure:pidSysDiagram"></div>
 
 ![The physical system](../../../../../datafiles/pdcontroller/Fig_PDController.png)
+
 **<p align="center">The physical system</p>**
 
 # Goal Statements {#Sec:GoalStmt}
@@ -231,7 +233,6 @@ Given Set-Point, Simulation Time, Proportional Gain, Derivative Gain, and Step T
 <div id="processVariable"></div>
 
 Process-Variable: Calculate the output of the Power Plant (Process Variable) over time.
-
 
 # Solution Characteristics Specification {#Sec:SolCharSpec}
 
@@ -284,7 +285,6 @@ Spring Damping Coefficient: The Damping Coefficient of the spring in the mass-sp
 <div id="stiffnessCoeffSpring"></div>
 
 Spring Stiffness Coefficient: The Stiffness Coefficient of the spring in the mass-spring-damper system ([A:Power plant](#pwrPlant)) is assumed to be 20. (RefBy: [GD:gdPowerPlant](#GD:gdPowerPlant) and [LC:DC Gain and Time Constant](#likeChgPP).)
-
 
 # Theoretical Models {#Sec:TMs}
 
@@ -506,7 +506,6 @@ Calculate-Values: Calculate the Process Variable (from [IM:pdEquationIM](#IM:pdE
 
 Output-Values: Output the Process Variable (from [IM:pdEquationIM](#IM:pdEquationIM)) over the simulation time.
 
-
 <div id="Table:ReqInputs"></div>
 
 |Symbol                  |Description      |Units           |
@@ -539,7 +538,6 @@ Maintainable: If a likely change is made to the finished software, it will take 
 
 Verifiable: The code shall be verifiable against a Verification and Validation plan.
 
-
 # Likely Changes {#Sec:LCs}
 
 This section lists the likely changes to be made to the software.
@@ -547,7 +545,6 @@ This section lists the likely changes to be made to the software.
 <div id="likeChgPP"></div>
 
 DC Gain and Time Constant: The mass, Damping Coefficient and the Stiffness Coefficient may be changed to be supplied by the user (from [A:Spring Mass](#massSpring), [A:Spring Damping Coefficient](#dampingCoeffSpring), and [A:Spring Stiffness Coefficient](#stiffnessCoeffSpring)).
-
 
 # Traceability Matrices and Graphs {#Sec:TraceMatrices}
 
@@ -633,26 +630,31 @@ The purpose of the traceability graphs is also to provide easy references on wha
 <div id="Figure:TraceGraphAvsA"></div>
 
 ![TraceGraphAvsA](../../../../../traceygraphs/pdcontroller/avsa.svg)
+
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
 ![TraceGraphAvsAll](../../../../../traceygraphs/pdcontroller/avsall.svg)
+
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
 ![TraceGraphRefvsRef](../../../../../traceygraphs/pdcontroller/refvsref.svg)
+
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
 ![TraceGraphAllvsR](../../../../../traceygraphs/pdcontroller/allvsr.svg)
+
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
 ![TraceGraphAllvsAll](../../../../../traceygraphs/pdcontroller/allvsall.svg)
+
 **<p align="center">TraceGraphAllvsAll</p>**
 
 For convenience, the following graphs can be found at the links below:
@@ -696,4 +698,3 @@ For convenience, the following graphs can be found at the links below:
 <div id="pidWiki"></div>
 
 [8]: Wikipedia Contributors. *PID controller*. October, 2020. <https://en.wikipedia.org/wiki/PID_controller>.
-

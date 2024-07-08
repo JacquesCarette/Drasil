@@ -9,5 +9,3 @@ Correct: The outputs of the code have the [properties of a correct solution](./S
 <div id="portable"></div>
 
 Portable: The code is able to be run in different environments.
-
-

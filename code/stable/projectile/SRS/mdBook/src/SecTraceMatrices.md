@@ -97,26 +97,31 @@ The purpose of the traceability graphs is also to provide easy references on wha
 <div id="Figure:TraceGraphAvsA"></div>
 
 ![TraceGraphAvsA](../../../../../traceygraphs/projectile/avsa.svg)
+
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
 ![TraceGraphAvsAll](../../../../../traceygraphs/projectile/avsall.svg)
+
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
 ![TraceGraphRefvsRef](../../../../../traceygraphs/projectile/refvsref.svg)
+
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
 ![TraceGraphAllvsR](../../../../../traceygraphs/projectile/allvsr.svg)
+
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
 ![TraceGraphAllvsAll](../../../../../traceygraphs/projectile/allvsall.svg)
+
 **<p align="center">TraceGraphAllvsAll</p>**
 
 For convenience, the following graphs can be found at the links below:
@@ -126,4 +131,3 @@ For convenience, the following graphs can be found at the links below:
 - [TraceGraphRefvsRef](../../../../traceygraphs/projectile/refvsref.svg)
 - [TraceGraphAllvsR](../../../../traceygraphs/projectile/allvsr.svg)
 - [TraceGraphAllvsAll](../../../../traceygraphs/projectile/allvsall.svg)
-

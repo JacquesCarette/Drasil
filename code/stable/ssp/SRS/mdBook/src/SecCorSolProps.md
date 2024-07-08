@@ -9,4 +9,3 @@ The [Data Constraints Table](./SecCorSolProps.md#Table:OutDataConstraints) shows
 |\\({F\_{\text{S}}}\\)|\\({F\_{\text{S}}}\gt{}0\\)|
 
 **<p align="center">Output Data Constraints</p>**
-

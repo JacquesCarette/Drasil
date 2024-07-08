@@ -23,4 +23,3 @@ The [Data Constraints Table](./SecDataConstraints.md#Table:InDataConstraints) sh
 |\\(φ'\\)                                  |\\(0\lt{}φ'\lt{}90\\)        |\\(25\\) \\({{}^{\circ}}\\)                    |10\\(\\%\\)|
 
 **<p align="center">Input Data Constraints</p>**
-

@@ -6,4 +6,3 @@ This subsection provides a list of terms that are used in the subsequent section
 - Specific heat capacity: The amount of energy required to raise the temperature of the unit mass of a given substance by a given amount.
 - Thermal conduction: The transfer of heat energy through a substance.
 - Transient: Changing with time.
-

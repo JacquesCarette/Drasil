@@ -57,4 +57,3 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\({w\_{\mathit{TNT}}}\\)        |Equivalent TNT charge mass                                                            |\\({\text{kg}}\\)                       |
 
 **<p align="center">Table of Symbols</p>**
-

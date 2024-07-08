@@ -12,4 +12,3 @@ The [Data Constraints Table](./SecDataConstraints.md#Table:InDataConstraints) sh
 |\\({m\_{2}}\\)|\\({m\_{2}}\gt{}0\\)|\\(0.5\\) \\({\text{kg}}\\)|10\\(\\%\\)|
 
 **<p align="center">Input Data Constraints</p>**
-

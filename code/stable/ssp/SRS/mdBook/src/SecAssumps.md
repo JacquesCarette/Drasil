@@ -65,5 +65,3 @@ Negligible-Effect-Surface-Slope-Seismic: The effect of the slope of the surface 
 <div id="assumpHFSM"></div>
 
 Hydrostatic-Force-Slice-Midpoint: The resultant surface hydrostatic forces act into the midpoint of each slice surface and the resultant base hydrostatic forces act into the midpoint of each slice base. (RefBy: [GD:srfWtrF](./SecGDs.md#GD:srfWtrF), [GD:momentEql](./SecGDs.md#GD:momentEql), and [GD:baseWtrF](./SecGDs.md#GD:baseWtrF).)
-
-

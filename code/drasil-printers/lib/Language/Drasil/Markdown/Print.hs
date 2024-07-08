@@ -31,7 +31,7 @@ import Language.Drasil.TeX.Helpers(commandD, command2D, mkEnv)
 
 import Language.Drasil.Markdown.Helpers (heading, stripStr, image, li, reflink, sq,
   reflinkURI, reflinkInfo, caption, bold, ul, br, docLength, divTag, defnHTag, em,
-  paren, h, h')
+  paren, h, h', ($^$), vcatnl)
 
 -----------------------------------------------------------------
 ------------------------- Markdown SRS --------------------------
@@ -44,15 +44,15 @@ genMD sm doc = build $ makeDocument sm doc
 -- | Build a Markdown Doc, called by genMD
 build :: Document -> Doc
 build (Document t a c) = 
-  text "#" <+> pSpec rm t $$
-  pSpec rm a <> nl $$
+  text "#" <+> pSpec rm t $^$
+  pSpec rm a $^$ 
   print rm c 
   where rm = Map.empty
 
 -- | Called by build, uses 'printLO' to render the layout objects 
 -- into a single Doc
 print :: RefMap -> [LayoutObj] -> Doc
-print rm = foldr (($$) . printLO rm) empty
+print rm = vcatnl . map (printLO rm)
 
 -----------------------------------------------------------------
 ------------------------- mdBook SRS ----------------------------
@@ -80,10 +80,10 @@ printSummary rm f = ("SUMMARY", vcat $ map (summaryItem rm) f)
 
 -- | Helper for rendering a 'SUMMARY.md' item
 summaryItem :: RefMap -> File -> Doc
-summaryItem rm (File t n d _) = bullet <+> item <> ref
+summaryItem rm (File t n d _) = bullet <+> lbl <> ref
   where
     bullet = text (replicate (d*2) ' ') <> text "-"
-    item   = sq $ pSpec rm t
+    lbl    = sq $ pSpec rm t
     ref    = paren $ text $ "./" ++ n ++ ".md"
 
 -- | Create a title page file for a Project
@@ -98,27 +98,23 @@ createTitleFile (Project t a _ _) = File t "title" 0 cons
 
 -- | Helper for rendering LayoutObjects into Markdown
 printLO :: RefMap -> LayoutObj -> Doc
-printLO rm (Header n contents l) = h (n+1) <+> heading (pSpec rm contents) (pSpec rm l) <> nl
-printLO rm (Cell layoutObs)      = vcat $ map (printLO rm) layoutObs
-printLO rm (HDiv _ layoutObs _)  = vcat $ map (printLO rm) layoutObs
-printLO rm (Paragraph contents)  = stripStr (pSpec rm contents) nl <> nl
-printLO rm (EqnBlock contents)   = mathEqn <> nl
+printLO rm (Header n contents l) = h (n+1) <+> heading (pSpec rm contents) (pSpec rm l)
+printLO rm (Cell layoutObs)      = print rm layoutObs
+printLO rm (HDiv _ layoutObs _)  = print rm layoutObs
+printLO rm (Paragraph contents)  = pSpec rm contents
+printLO rm (EqnBlock contents)   = mathEqn
   where
     mjDelimDisp d  = text "\\\\[" <> stripStr d nl <> text "\\\\]" 
     mathEqn = mjDelimDisp $ rndr contents
     rndr (E e) = pExpr e
     rndr c = pSpec rm c
 printLO rm (Table _ rows r b t)  = makeTable rm rows (pSpec rm r) b (pSpec rm t)
-printLO rm (Definition _ ssPs l) = makeDefn rm ssPs (pSpec rm l) <> nl
-printLO rm (List t)              = makeList rm t 0 <> nl
+printLO rm (Definition _ ssPs l) = makeDefn rm ssPs (pSpec rm l)
+printLO rm (List t)              = makeList rm t 0
 printLO rm (Figure r c f _)      = makeFigure (pSpec rm r) (pSpec rm c) (text $ "../" ++ f)
 printLO rm (Bib bib)             = makeBib rm bib
 printLO _ Graph {}               = empty 
 printLO _ CodeBlock {}           = empty
-
--- | Helper for rendering LayoutObj into Markdown Tables
-printLO' :: RefMap -> LayoutObj -> Doc
-printLO' rm e = stripStr (printLO rm e) nl
 
 -----------------------------------------------------------------
 ----------------------- SPEC PRINTING ---------------------------
@@ -126,7 +122,7 @@ printLO' rm e = stripStr (printLO rm e) nl
 
 -- | Helper for rendering Specs into Markdown
 pSpec :: RefMap -> Spec -> Doc
-pSpec _ (E e)      = text "\\\\(" <> pExpr e <> text "\\\\)" -- symbols used
+pSpec _ (E e)      = text "\\\\(" <> stripStr (pExpr e) nl <> text "\\\\)"
 pSpec rm (a :+: b) = pSpec rm a <> pSpec rm b
 pSpec _ HARDNL     = nl
 pSpec rm (Ref Internal       r a) = reflink     rm r (pSpec rm a)
@@ -187,14 +183,14 @@ lnl = text "\\\\\\\\"
 makeTable :: RefMap -> [[Spec]] -> Doc -> Bool -> Doc -> Doc
 makeTable _  [] _ _ _  = error "No table to print"
 makeTable rm ls r b t  = 
-  divTag r $$
+  divTag r $^$
   makeHeaderCols (head matrix) sizes $$
-  makeRows (tail matrix) sizes <> nl $$
+  makeRows (tail matrix) sizes $^$
   capt
     where
       matrix = mkDocMatrix rm ls
       sizes = columnSize matrix
-      capt = if b then bold (caption t) <> nl else empty
+      capt = if b then bold (caption t) else empty
 
 -- | Helper for creating a Doc matrix
 mkDocMatrix :: RefMap -> [[Spec]] -> [[Doc]]
@@ -236,7 +232,7 @@ makeCell content size = content <> spaces
 makeDefn :: RefMap -> [(String,[LayoutObj])] -> Doc -> Doc
 makeDefn _  [] _ = error "L.Empty definition"
 makeDefn rm ps l = 
-  makeDHeaderText rm ps l $$ 
+  makeDHeaderText rm ps l $^$ 
   makeHeaderCols [text "Refname", l] size $$ 
   makeRows docDefn size
   where
@@ -249,11 +245,11 @@ mkDocDefn rm = map (\(f, d) -> [text f, makeLO rm (f,d)])
 
 -- | Renders the title/header of the definition table
 makeDHeaderText :: RefMap -> [(String, [LayoutObj])] -> Doc -> Doc
-makeDHeaderText rm ps l = defnHTag header <> nl
+makeDHeaderText rm ps l = defnHTag header
   where
     lo = lookup "Label" ps
     c = maybe l (\lo' -> makeLO rm ("Label", lo')) lo 
-    header = nl <> h' 2 <+> heading c l <> nl
+    header = h' 2 <+> heading c l
 
 -- | Converts the [LayoutObj] to a Doc
 makeLO :: RefMap -> (String, [LayoutObj]) -> Doc
@@ -264,7 +260,7 @@ makeLO rm (f,d) =
 -- | Processes the LayoutObjs in the defn
 processDefnLO :: RefMap -> String -> LayoutObj -> Doc
 processDefnLO rm "Notes" (Paragraph con) = li $ pSpec rm con
-processDefnLO rm _ lo                    = printLO' rm lo
+processDefnLO rm _       lo              = printLO rm lo
 
 -----------------------------------------------------------------
 ----------------------- LIST PRINTING ---------------------------
@@ -272,24 +268,19 @@ processDefnLO rm _ lo                    = printLO' rm lo
 
 -- | Renders lists into Markdown
 makeList :: RefMap -> ListType -> Int -> Doc
-makeList rm (Simple      items) _  = vcat $ 
-  map (\(b,e,l) -> mlref rm l $$ 
-    (pSpec rm b <> text ":" <+> sItem rm e <> nl)) items
-makeList rm (Desc        items) _  = vcat $ 
-  map (\(b,e,l) -> mlref rm l $$ 
-    (bold (pSpec rm b) <> text ":" <+> sItem rm e <> nl)) items
+makeList rm (Simple      items) _  = vcatnl $ map (sItem rm) items
+makeList rm (Desc        items) _  = vcatnl $ map (descItem rm) items
 makeList rm (Ordered     items) bl = vcat $ 
   zipWith (\(i,_) n -> oItem rm i bl n) items [1..]
 makeList rm (Unordered   items) bl = vcat $ 
   map (\(i,_) -> uItem rm i bl) items
 makeList rm (Definitions items) _  = ul $ hcat $ 
-  map (\(b,e,_) -> li $ pSpec rm b <> text " is the" <+> sItem rm e) items
+  map (\(b,e,_) -> li $ pSpec rm b <> text " is the" <+> item rm e) items
 
 -- | Helper for setting up reference anchors
-mlref :: RefMap -> Maybe Label -> Doc
-mlref rm ml = case ml of
-  Just l -> divTag $ pSpec rm l
-  Nothing -> empty
+mlref :: RefMap -> Maybe Label -> Doc -> Doc
+mlref _ Nothing = (empty $$)
+mlref rm (Just l) = (divTag (pSpec rm l) $^$)
 
 -- | Helper for rendering unordered list items
 uItem :: RefMap -> ItemType -> Int -> Doc
@@ -309,10 +300,18 @@ oItem rm (Nested s l) i n = vcat [
   makeList rm l (i+3)
   ]
 
--- | Helper for non-bulleted markdown list items
-sItem :: RefMap -> ItemType -> Doc
-sItem rm (Flat   s)   = pSpec rm s
-sItem rm (Nested s l) = vcat [pSpec rm s, makeList rm l 0]
+-- | Helper for Desc list items
+descItem :: RefMap -> (Spec, ItemType, Maybe Label) -> Doc
+descItem rm (b,e,l) = mlref rm l (bold (pSpec rm b) <> text ":" <+> item rm e)
+
+-- | Helper for Simple list items
+sItem :: RefMap -> (Spec, ItemType, Maybe Label) -> Doc
+sItem rm (b,e,l) = mlref rm l (pSpec rm b <> text ":" <+> item rm e)
+
+-- | Helper for Markdown list items
+item :: RefMap -> ItemType -> Doc
+item rm (Flat   s)   = pSpec rm s
+item rm (Nested s l) = vcat [pSpec rm s, makeList rm l 0]
 
 -----------------------------------------------------------------
 ---------------------- FIGURE PRINTING --------------------------
@@ -320,7 +319,7 @@ sItem rm (Nested s l) = vcat [pSpec rm s, makeList rm l 0]
 
 -- | Renders figures in Markdown
 makeFigure :: Doc -> Doc -> Doc -> Doc
-makeFigure r c f = divTag r $$ image f c
+makeFigure r c f = divTag r $^$ image f c
 
 -----------------------------------------------------------------
 ------------------ Bibliography Printing ------------------------
@@ -335,10 +334,10 @@ mdBibFormatter rm = BibFormatter {
 
 -- | Renders the reference list
 makeRefList :: Doc -> Doc -> Doc -> Doc
-makeRefList a l i = divTag l $$ (i <> text ": " <> a) <> nl
+makeRefList a l i = divTag l $^$ (i <> text ": " <> a)
 
 -- | Renders the bibliography
 makeBib :: RefMap -> BibRef -> Doc
-makeBib rm = vcat .
+makeBib rm = vcatnl .
   zipWith (curry (\(x,(y,z)) -> makeRefList z y x))
   [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map (HTML.renderCite (mdBibFormatter rm))

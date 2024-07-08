@@ -61,5 +61,3 @@ timeStartZero: Time starts at zero. (RefBy: [GD:velVec](./SecGDs.md#GD:velVec), 
 <div id="gravAccelValue"></div>
 
 gravAccelValue: The acceleration due to gravity is assumed to have the value provided in the section for [Values of Auxiliary Constants](./SecAuxConstants.md#Sec:AuxConstants). (RefBy: [IM:calOfLandingDist](./SecIMs.md#IM:calOfLandingDist) and [IM:calOfLandingTime](./SecIMs.md#IM:calOfLandingTime).)
-
-

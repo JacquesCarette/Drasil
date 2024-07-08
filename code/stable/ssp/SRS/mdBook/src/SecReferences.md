@@ -43,4 +43,3 @@
 <div id="li2010"></div>
 
 [11]: Yu-Chao, Li, Yun-Min, Chen, Zhan, Tony L. T., Sao-Sheng, Ling, and Cleall, Peter John. "An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm." *Canadian Geotechnical Journal*, vol. 47, no. 7, June, 2010. pp. 806&ndash;820. Print.
-

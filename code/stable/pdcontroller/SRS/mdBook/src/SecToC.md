@@ -34,4 +34,3 @@ An outline of all sections included in this SRS is recorded here for easy refere
 - [Likely Changes](./SecLCs.md#Sec:LCs)
 - [Traceability Matrices and Graphs](./SecTraceMatrices.md#Sec:TraceMatrices)
 - [References](./SecReferences.md#Sec:References)
-

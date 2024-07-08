@@ -14,4 +14,3 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\({τ\_{\text{c}}}\\)|Clad thickness                                                   |--                                                   |
 
 **<p align="center">Table of Symbols</p>**
-

@@ -17,5 +17,3 @@ Reusable: The code is modularized.
 <div id="maintainable"></div>
 
 Maintainable: If a likely change is made to the finished software, it will take at most 10\\(\\%\\) of the original development time, assuming the same development resources are available.
-
-

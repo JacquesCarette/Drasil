@@ -13,5 +13,3 @@ No-Internal-Heat-Generation: [A:No-Internal-Heat-Generation-By-Water-PCM](./SecA
 <div id="unlikeChgNGS"></div>
 
 No-Gaseous-State: [A:No-Gaseous-State-PCM](./SecAssumps.md#assumpNGSP) - Is used for the derivation of [IM:eBalanceOnPCM](./SecIMs.md#IM:eBalanceOnPCM) and for the equation given by [IM:heatEInPCM](./SecIMs.md#IM:heatEInPCM) to be valid.
-
-

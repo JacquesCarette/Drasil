@@ -18,7 +18,6 @@ Calculate-Angular-Position-Of-Mass: Calculate the following values: \\(θ\\) and
 
 Output-Values: Output \\({L\_{\text{rod}}}\\) (from [IM:calOfAngularDisplacement](./SecIMs.md#IM:calOfAngularDisplacement)).
 
-
 <div id="Table:ReqInputs"></div>
 
 |Symbol                 |Description                       |Units                                |
@@ -30,4 +29,3 @@ Output-Values: Output \\({L\_{\text{rod}}}\\) (from [IM:calOfAngularDisplacement
 |\\({θ\_{p}}\\)         |Displacement angle of the pendulum|\\({\text{rad}}\\)                   |
 
 **<p align="center">Required Inputs following [FR:Input-Values](./SecFRs.md#inputValues)</p>**
-

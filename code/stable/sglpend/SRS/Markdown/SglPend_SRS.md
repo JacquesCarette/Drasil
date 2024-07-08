@@ -1,4 +1,5 @@
 # Software Requirements Specification for Single Pendulum
+
 Olu Owojaiye
 
 # Table of Contents {#Sec:ToC}
@@ -160,6 +161,7 @@ This section provides general information about the system. It identifies the in
 <div id="Figure:sysCtxDiag"></div>
 
 ![System Context](../../../../../datafiles/sglpend/SystemContextFigure.png)
+
 **<p align="center">System Context</p>**
 
 The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:
@@ -205,10 +207,10 @@ PS1: The rod.
 
 PS2: The mass.
 
-
 <div id="Figure:sglpend"></div>
 
 ![The physical system](../../../../../datafiles/sglpend/sglpend.jpg)
+
 **<p align="center">The physical system</p>**
 
 # Goal Statements {#Sec:GoalStmt}
@@ -218,7 +220,6 @@ Given the mass and length of the rod, initial angle of the mass and the gravitat
 <div id="motionMass"></div>
 
 Motion-of-the-mass: Calculate the motion of the mass.
-
 
 # Solution Characteristics Specification {#Sec:SolCharSpec}
 
@@ -247,7 +248,6 @@ yAxisDir: The direction of the \\(y\\)-axis is directed opposite to gravity.
 <div id="startOrigin"></div>
 
 startOrigin: The pendulum is attached to the origin.
-
 
 # Theoretical Models {#Sec:TMs}
 
@@ -757,7 +757,6 @@ Calculate-Angular-Position-Of-Mass: Calculate the following values: \\(θ\\) and
 
 Output-Values: Output \\({L\_{\text{rod}}}\\) (from [IM:calOfAngularDisplacement](#IM:calOfAngularDisplacement)).
 
-
 <div id="Table:ReqInputs"></div>
 
 |Symbol                 |Description                       |Units                                |
@@ -781,7 +780,6 @@ Correct: The outputs of the code have the [properties of a correct solution](#Se
 <div id="portable"></div>
 
 Portable: The code is able to be run in different environments.
-
 
 # Traceability Matrices and Graphs {#Sec:TraceMatrices}
 
@@ -874,26 +872,31 @@ The purpose of the traceability graphs is also to provide easy references on wha
 <div id="Figure:TraceGraphAvsA"></div>
 
 ![TraceGraphAvsA](../../../../../traceygraphs/sglpend/avsa.svg)
+
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
 ![TraceGraphAvsAll](../../../../../traceygraphs/sglpend/avsall.svg)
+
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
 ![TraceGraphRefvsRef](../../../../../traceygraphs/sglpend/refvsref.svg)
+
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
 ![TraceGraphAllvsR](../../../../../traceygraphs/sglpend/allvsr.svg)
+
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
 ![TraceGraphAllvsAll](../../../../../traceygraphs/sglpend/allvsall.svg)
+
 **<p align="center">TraceGraphAllvsAll</p>**
 
 For convenience, the following graphs can be found at the links below:
@@ -945,4 +948,3 @@ There are no auxiliary constants.
 <div id="velocityWiki"></div>
 
 [9]: Wikipedia Contributors. *Velocity*. June, 2019. <https://en.wikipedia.org/wiki/Velocity>.
-

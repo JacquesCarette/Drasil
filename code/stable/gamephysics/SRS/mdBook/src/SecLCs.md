@@ -17,5 +17,3 @@ Include-Dampening: [A:dampingInvolvement](./SecAssumps.md#assumpDI) - The librar
 <div id="lcIJC"></div>
 
 Include-Joints-Constraints: [A:constraintsAndJointsInvolvement](./SecAssumps.md#assumpCAJI) - The library may be expanded to include joints and constraints.
-
-

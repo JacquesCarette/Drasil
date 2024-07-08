@@ -74,4 +74,3 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\(ϕ\\)                                                                 |Orientation                                                                             |\\({\text{rad}}\\)                              |
 
 **<p align="center">Table of Symbols</p>**
-

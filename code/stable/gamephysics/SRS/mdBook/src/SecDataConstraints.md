@@ -19,4 +19,3 @@ The [Data Constraints Table](./SecDataConstraints.md#Table:InDataConstraints) sh
 |\\(ϕ\\)                              |--                                 |\\(0\leq{}ϕ\leq{}2 π\\)|\\(\frac{π}{2}\\) \\({\text{rad}}\\)                                        |10\\(\\%\\)|
 
 **<p align="center">Input Data Constraints</p>**
-

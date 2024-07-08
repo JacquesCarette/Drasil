@@ -10,9 +10,8 @@ PS3: The first object.
 
 PS4: The second object.
 
-
 <div id="Figure:dblpend"></div>
 
 ![The physical system](../../../../../datafiles/dblpend/dblpend.png)
-**<p align="center">The physical system</p>**
 
+**<p align="center">The physical system</p>**

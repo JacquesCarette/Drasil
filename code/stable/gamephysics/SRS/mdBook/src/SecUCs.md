@@ -17,5 +17,3 @@ Cartesian-Coordinate-System: A Cartesian Coordinate system is used.
 <div id="ucORB"></div>
 
 Objects-Rigid-Bodies: All objects are rigid bodies.
-
-

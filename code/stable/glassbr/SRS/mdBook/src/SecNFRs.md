@@ -25,5 +25,3 @@ Maintainable: If a likely change is made to the finished software, it will take 
 <div id="portable"></div>
 
 Portable: The code is able to be run in different environments.
-
-

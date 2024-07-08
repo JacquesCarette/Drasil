@@ -26,7 +26,6 @@ Calculate-Values: Calculate the following values: \\({T\_{\text{W}}}\\)(\\(t\\))
 
 Output-Values: Output \\({T\_{\text{W}}}\\)(\\(t\\)) (from [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr)) and \\({E\_{\text{W}}}\\)(\\(t\\)) (from [IM:heatEInWtr](./SecIMs.md#IM:heatEInWtr)).
 
-
 <div id="Table:ReqInputs"></div>
 
 |Symbol                   |Description                                                |Units                                                |
@@ -45,4 +44,3 @@ Output-Values: Output \\({T\_{\text{W}}}\\)(\\(t\\)) (from [IM:eBalanceOnWtr](./
 |\\({ρ\_{\text{W}}}\\)    |Density of water                                           |\\(\frac{\text{kg}}{\text{m}^{3}}\\)                 |
 
 **<p align="center">Required Inputs following [FR:Input-Initial-Values](./SecFRs.md#inputInitVals)</p>**
-

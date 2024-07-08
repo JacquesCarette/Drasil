@@ -2,8 +2,9 @@
 module Language.Drasil.Markdown.Helpers where
 
 import Prelude hiding ((<>), lookup)
-import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), ($$), hcat, vcat)
+import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), ($$), hcat)
 import Data.List.Split (splitOn)
+import Data.List (foldl')
 import Data.Map (lookup)
 import Language.Drasil.Printing.Helpers (ast)
 import Language.Drasil.Printing.LayoutObj (RefMap)
@@ -34,6 +35,18 @@ bold t = ast <> ast <> t <> ast <> ast
 em :: Doc -> Doc
 em t = ast <> t <> ast
 
+-- | Custom infix operator for concatenating 
+-- two Docs with an empty line in between
+infixl 5 $^$
+($^$) :: Doc -> Doc -> Doc
+($^$) a b = a $$ text "" $$ b
+
+-- | Concatenate a list of 'Doc's with an 
+-- empty line in between
+vcatnl :: [Doc] -> Doc
+vcatnl []     = empty
+vcatnl (l:ls) = foldl' ($^$) l ls
+
 li, ul :: Doc -> Doc
 -- | List tag wrapper
 li = wrap "li"
@@ -60,7 +73,7 @@ wrapGen sepf Align s ti = \x ->
   in  sepf [tb s, x, te s]
 wrapGen sepf Id s ti = \x ->
   let tb c = text ("<" ++ c ++ " id=\"") <> ti <> text "\">"
-      te c = text $ "</" ++ c ++ ">\n"
+      te c = text $ "</" ++ c ++ ">"
   in  sepf [tb s, x, te s]
 
 -- | Helper for setting up section div
@@ -69,7 +82,7 @@ divTag l = wrapGen hcat Id "div" l empty
 
 -- | Helper for setting up div for defn heading
 defnHTag :: Doc -> Doc
-defnHTag = wrapGen vcat Align "div" (text "center")
+defnHTag = wrapGen vcatnl Align "div" (text "center")
 
 -- | Helper for setting up links to references
 reflink :: RefMap -> String -> Doc -> Doc
@@ -90,7 +103,7 @@ reflinkURI ref txt = if ref == txt then ang ref
 
 -- | Helper for setting up figures
 image :: Doc -> Doc -> Doc
-image f c =  text "!" <> reflinkURI f c $$ bold (caption c) <> text "\n"
+image f c =  text "!" <> reflinkURI f c $^$ bold (caption c)
 
 -- | Helper for setting up captions
 caption :: Doc -> Doc
@@ -105,18 +118,16 @@ heading t l = t <+> br (text "#" <> l)
 h :: Int -> Doc
 h n
   | n < 1     = error "Illegal header (header weight must be > 0)."
-  | n > 4     = error "Illegal header (header weight must be < 5)"
+  | n > 7     = error "Illegal header (header weight must be < 8)"
   | n < 4     = h' 1
   | otherwise = h' n
 
 -- | Helper for setting up heading weights in normal Markdown.
 h' :: Int -> Doc
 h' n
-  | n == 1    = text "#"
-  | n == 2    = text "##"
-  | n == 3    = text "###"
-  | n == 4    = text "####"
-  | otherwise = error "Illegal header (header weight must be between 0 and 5)"
+  | n < 1 = error "Illegal header (header weight must be > 0)."
+  | n > 7 = error "Illegal header (header weight must be < 8)."
+  | otherwise = text $ replicate n '#'
 
 -- | Helper for stripping Docs
 stripStr :: Doc -> Doc -> Doc

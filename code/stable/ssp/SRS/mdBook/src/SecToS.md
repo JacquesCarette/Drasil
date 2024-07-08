@@ -100,4 +100,3 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\(\boldsymbol{ω}\\)                                                    |Imposed Load Angles: The angles between the external force acting into the surface of each slice and the vertical.                                                                                              |\\({{}^{\circ}}\\)                  |
 
 **<p align="center">Table of Symbols</p>**
-

@@ -42,4 +42,3 @@ If the amplitude of angular displacement is small enough, we can approximate \\(
 Thus the simple harmonic motion is:
 
 \\[{θ\_{p}}\left(t\right)={θ\_{i}} \cos\left(Ω t\right)\\]
-

@@ -59,4 +59,3 @@ This section focuses on the general equations and laws that SglPend is based on.
 |Notes      |<ul><li>The net torque \\(\boldsymbol{τ}\\) on a rigid body is proportional to its angular acceleration \\(α\\), where \\(\boldsymbol{I}\\) denotes the moment of inertia of the rigid body as the constant of proportionality.</li></ul>            |
 |Source     |--                                                                                                                                                                                                                                                   |
 |RefBy      |[IM:calOfAngularDisplacement](./SecIMs.md#IM:calOfAngularDisplacement) and [GD:angFrequencyGD](./SecGDs.md#GD:angFrequencyGD)                                                                                                                        |
-

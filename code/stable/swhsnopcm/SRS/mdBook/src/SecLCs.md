@@ -17,5 +17,3 @@ Discharging-Tank: [A:Charging-Tank-No-Temp-Discharge](./SecAssumps.md#assumpCTNT
 <div id="likeChgTLH"></div>
 
 Tank-Lose-Heat: [A:Perfect-Insulation-Tank](./SecAssumps.md#assumpPIT) - Any real tank cannot be perfectly insulated and will lose heat.
-
-

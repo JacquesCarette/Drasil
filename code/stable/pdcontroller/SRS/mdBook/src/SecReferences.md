@@ -31,4 +31,3 @@
 <div id="pidWiki"></div>
 
 [8]: Wikipedia Contributors. *PID controller*. October, 2020. <https://en.wikipedia.org/wiki/PID_controller>.
-

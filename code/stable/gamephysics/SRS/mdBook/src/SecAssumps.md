@@ -29,5 +29,3 @@ dampingInvolvement: There is no damping involved throughout the simulation and t
 <div id="assumpCAJI"></div>
 
 constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. (RefBy: [IM:transMot](./SecIMs.md#IM:transMot), [LC:Include-Joints-Constraints](./SecLCs.md#lcIJC), and [IM:col2D](./SecIMs.md#IM:col2D).)
-
-

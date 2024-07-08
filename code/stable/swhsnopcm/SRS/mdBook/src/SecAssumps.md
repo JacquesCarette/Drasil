@@ -57,5 +57,3 @@ Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melti
 <div id="assumpVCN"></div>
 
 Volume-Coil-Negligible: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible. (RefBy: [DD:waterVolume_nopcm](./SecDDs.md#DD:waterVolume.nopcm).)
-
-

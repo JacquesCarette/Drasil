@@ -5,5 +5,3 @@ Given the initial velocity vector of the projectile and the geometric layout of 
 <div id="targetHit"></div>
 
 targetHit: Determine if the projectile hits the target.
-
-

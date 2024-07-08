@@ -18,7 +18,6 @@ Calculate-Values: Calculate the Process Variable (from [IM:pdEquationIM](./SecIM
 
 Output-Values: Output the Process Variable (from [IM:pdEquationIM](./SecIMs.md#IM:pdEquationIM)) over the simulation time.
 
-
 <div id="Table:ReqInputs"></div>
 
 |Symbol                  |Description      |Units           |
@@ -30,4 +29,3 @@ Output-Values: Output the Process Variable (from [IM:pdEquationIM](./SecIMs.md#I
 |\\({t\_{\text{step}}}\\)|Step Time        |\\({\text{s}}\\)|
 
 **<p align="center">Required Inputs following [FR:Input-Values](./SecFRs.md#inputValues)</p>**
-

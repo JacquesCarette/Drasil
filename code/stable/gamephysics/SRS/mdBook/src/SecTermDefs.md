@@ -10,4 +10,3 @@ This subsection provides a list of terms that are used in the subsequent section
 - line: An interval between two points (from [lineSource](./SecReferences.md#lineSource)).
 - point: An exact location, it has no size, only position (from [pointSource](./SecReferences.md#pointSource)).
 - damping: An influence within or upon an oscillatory system that has the effect of reducing, restricting or preventing its oscillations (from [dampingSource](./SecReferences.md#dampingSource)).
-

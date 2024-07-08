@@ -5,5 +5,3 @@ Given the masses, length of the rods, initial angle of the masses and the gravit
 <div id="motionMass"></div>
 
 motionMass: Calculate the motion of the masses.
-
-

@@ -13,5 +13,3 @@ Determine-Normal-Forces: Determine the interslice normal forces between each pai
 <div id="determineShearF"></div>
 
 Determine-Shear-Forces: Determine the interslice shear forces between each pair of vertical slices of the slope.
-
-

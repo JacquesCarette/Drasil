@@ -20,4 +20,3 @@
 |Uncert.     |Typical Uncertainty                |
 
 **<p align="center">Abbreviations and Acronyms</p>**
-

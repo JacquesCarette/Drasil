@@ -38,7 +38,6 @@ Calculate-PCM-Melt-End-Time: Calculate and output the time at which the PCM stop
 
 Output-Values: Output \\({T\_{\text{W}}}\\)(\\(t\\)) (from [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr)), \\({T\_{\text{P}}}\\)(\\(t\\)) (from [IM:eBalanceOnPCM](./SecIMs.md#IM:eBalanceOnPCM)), \\({E\_{\text{W}}}\\)(\\(t\\)) (from [IM:heatEInWtr](./SecIMs.md#IM:heatEInWtr)), and \\({E\_{\text{P}}}\\)(\\(t\\)) (from [IM:heatEInPCM](./SecIMs.md#IM:heatEInPCM)).
 
-
 <div id="Table:ReqInputs"></div>
 
 |Symbol                               |Description                                                |Units                                                |
@@ -65,4 +64,3 @@ Output-Values: Output \\({T\_{\text{W}}}\\)(\\(t\\)) (from [IM:eBalanceOnWtr](./
 |\\({ρ\_{\text{W}}}\\)                |Density of water                                           |\\(\frac{\text{kg}}{\text{m}^{3}}\\)                 |
 
 **<p align="center">Required Inputs following [FR:Input-Values](./SecFRs.md#inputValues)</p>**
-

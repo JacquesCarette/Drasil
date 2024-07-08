@@ -9,5 +9,3 @@ Predict-Water-Temperature: Predict the temperature of the water over time.
 <div id="waterEnergyGS"></div>
 
 Predict-Water-Energy: Predict the change in heat energy in the water over time.
-
-

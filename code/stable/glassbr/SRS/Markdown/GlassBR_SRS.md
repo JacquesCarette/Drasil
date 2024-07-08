@@ -1,4 +1,5 @@
 # Software Requirements Specification for GlassBR
+
 Nikitha Krithnan and W. Spencer Smith
 
 # Table of Contents {#Sec:ToC}
@@ -208,6 +209,7 @@ This section provides general information about the system. It identifies the in
 <div id="Figure:sysCtxDiag"></div>
 
 ![System Context](../../../../../datafiles/glassbr/SystemContextFigure.png)
+
 **<p align="center">System Context</p>**
 
 The interaction between the product and the user is through a user interface. The responsibilities of the user and the system are as follows:
@@ -274,10 +276,10 @@ PS1: The glass slab.
 
 PS2: The point of explosion. Where the bomb, or any kind of man-made explosion, is located. The stand off distance is the distance between the point of explosion and the glass.
 
-
 <div id="Figure:physSystImage"></div>
 
 ![The physical system](../../../../../datafiles/glassbr/physicalsystimage.png)
+
 **<p align="center">The physical system</p>**
 
 # Goal Statements {#Sec:GoalStmt}
@@ -287,7 +289,6 @@ Given the dimensions of the glass plane, the glass type, the characteristics of 
 <div id="willBreakGS"></div>
 
 Predict-Glass-Withstands-Explosion: Analyze and predict whether the glass slab under consideration will be able to withstand the explosion of a certain degree which is calculated based on user input.
-
 
 # Solution Characteristics Specification {#Sec:SolCharSpec}
 
@@ -328,7 +329,6 @@ responseType: The response type considered in GlassBR is flexural. (RefBy: [LC:C
 <div id="assumpLDFC"></div>
 
 ldfConstant: With reference to [A:standardValues](#assumpSV), the value of load duration factor (\\(\mathit{LDF}\\)) is a constant in GlassBR. (RefBy: [LC:Variable-Values-of-m,k,E](#varValsOfmkE) and [DD:loadDurFactor](#DD:loadDurFactor).)
-
 
 # Theoretical Models {#Sec:TMs}
 
@@ -748,7 +748,6 @@ Check-Glass-Safety: If \\(\mathit{isSafePb}\land{}\mathit{isSafeLR}\\) (from [IM
 
 Output-Values: Output the values from the table for [Required Outputs](#Table:ReqOutputs).
 
-
 <div id="Table:ReqInputs"></div>
 
 |Symbol                         |Description                                                                           |Units            |
@@ -831,7 +830,6 @@ Maintainable: If a likely change is made to the finished software, it will take 
 
 Portable: The code is able to be run in different environments.
 
-
 # Likely Changes {#Sec:LCs}
 
 This section lists the likely changes to be made to the software.
@@ -856,7 +854,6 @@ Accomodate-More-Boundary-Conditions: [A:boundaryConditions](#assumpBC) - The sof
 
 Consider-More-than-Flexure-Glass: [A:responseType](#assumpRT) - The software may be changed to consider more than just flexure of the glass.
 
-
 # Unlikely Changes {#Sec:UCs}
 
 This section lists the unlikely changes to be made to the software.
@@ -868,7 +865,6 @@ Predict-Withstanding-of-Certain-Degree: The goal of the system is to predict whe
 <div id="accAlteredGlass"></div>
 
 Accommodate-Altered-Glass: [A:glassCondition](#assumpGC) requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
-
 
 # Traceability Matrices and Graphs {#Sec:TraceMatrices}
 
@@ -985,26 +981,31 @@ The purpose of the traceability graphs is also to provide easy references on wha
 <div id="Figure:TraceGraphAvsA"></div>
 
 ![TraceGraphAvsA](../../../../../traceygraphs/glassbr/avsa.svg)
+
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
 ![TraceGraphAvsAll](../../../../../traceygraphs/glassbr/avsall.svg)
+
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
 ![TraceGraphRefvsRef](../../../../../traceygraphs/glassbr/refvsref.svg)
+
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
 ![TraceGraphAllvsR](../../../../../traceygraphs/glassbr/allvsr.svg)
+
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
 ![TraceGraphAllvsAll](../../../../../traceygraphs/glassbr/allvsall.svg)
+
 **<p align="center">TraceGraphAllvsAll</p>**
 
 For convenience, the following graphs can be found at the links below:
@@ -1089,10 +1090,11 @@ This appendix holds the graphs ([Fig:demandVSsod](#Figure:demandVSsod) and [Fig:
 <div id="Figure:demandVSsod"></div>
 
 ![3 second duration equivalent pressure (\\(q\\)) versus Stand off distance (SD) versus Charge weight (\\(w\\))](../../../../../datafiles/glassbr/ASTM_F2248-09.png)
+
 **<p align="center">3 second duration equivalent pressure (\\(q\\)) versus Stand off distance (SD) versus Charge weight (\\(w\\))</p>**
 
 <div id="Figure:dimlessloadVSaspect"></div>
 
 ![Non dimensional lateral applied load (demand) or pressure (\\(\hat{q}\\)) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (\\(J\\))](../../../../../datafiles/glassbr/ASTM_F2248-09_BeasonEtAl.png)
-**<p align="center">Non dimensional lateral applied load (demand) or pressure (\\(\hat{q}\\)) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (\\(J\\))</p>**
 
+**<p align="center">Non dimensional lateral applied load (demand) or pressure (\\(\hat{q}\\)) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (\\(J\\))</p>**

@@ -10,4 +10,3 @@ The [Data Constraints Table](./SecCorSolProps.md#Table:OutDataConstraints) shows
 |\\({E\_{\text{W}}}\\)|\\({E\_{\text{W}}}\geq{}0\\)                                      |
 
 **<p align="center">Output Data Constraints</p>**
-

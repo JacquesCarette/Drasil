@@ -17,5 +17,3 @@ Maintainable: If a likely change is made to the finished software, it will take 
 <div id="verifiability"></div>
 
 Verifiable: The code shall be verifiable against a Verification and Validation plan.
-
-

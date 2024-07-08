@@ -5,6 +5,7 @@
 <div id="Figure:sysCtxDiag"></div>
 
 ![System Context](../../../../../datafiles/ssp/SystemContextFigure.png)
+
 **<p align="center">System Context</p>**
 
 The responsibilities of the user and the system are as follows:
@@ -19,4 +20,3 @@ The responsibilities of the user and the system are as follows:
   - Identify the critical slip surface within the possible input range
   - Find the factor of safety for the slope
   - Find the interslice normal force and shear force along the critical slip surface
-

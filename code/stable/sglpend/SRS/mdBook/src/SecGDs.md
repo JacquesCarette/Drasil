@@ -259,4 +259,3 @@ The period of the pendulum can be defined from the general definition for the eq
 Therefore from the data definition of the equation for [angular frequency](./SecDDs.md#DD:angFrequencyDD), we have
 
 \\[T=2 π \sqrt{\frac{{L\_{\text{rod}}}}{\boldsymbol{g}}}\\]
-

@@ -357,4 +357,3 @@ By the product and chain rules, we find
 #### Detailed derivation of force on the second object: {#GD:yForce2Deriv}
 
 \\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}={\boldsymbol{T}\_{2}} \cos\left({θ\_{2}}\right)-{m\_{2}} \boldsymbol{g}\\]
-

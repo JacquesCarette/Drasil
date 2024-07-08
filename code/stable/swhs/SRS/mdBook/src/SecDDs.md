@@ -164,4 +164,3 @@ This section collects and defines all the data needed to build the instance mode
 |Description|<ul><li>\\(\mathit{AR}\\) is the aspect ratio (Unitless)</li><li>\\(D\\) is the diameter of tank (\\({\text{m}}\\))</li><li>\\(L\\) is the length of tank (\\({\text{m}}\\))</li></ul>|
 |Source     |--                                                                                                                                                                                    |
 |RefBy      |                                                                                                                                                                                      |
-

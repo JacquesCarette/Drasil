@@ -22,4 +22,3 @@ This section contains the standard values that are used for calculations in Glas
 |\\({w\_{\text{min}}}\\)          |minimum permissible input charge weight                   |\\(4.5\\)                |\\({\text{kg}}\\)                       |
 
 **<p align="center">Auxiliary Constants</p>**
-

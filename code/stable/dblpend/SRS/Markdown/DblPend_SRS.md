@@ -1,4 +1,5 @@
 # Software Requirements Specification for Double Pendulum
+
 Dong Chen
 
 # Table of Contents {#Sec:ToC}
@@ -166,6 +167,7 @@ This section provides general information about the system. It identifies the in
 <div id="Figure:sysCtxDiag"></div>
 
 ![System Context](../../../../../datafiles/dblpend/SystemContextFigure.png)
+
 **<p align="center">System Context</p>**
 
 The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:
@@ -215,10 +217,10 @@ PS3: The first object.
 
 PS4: The second object.
 
-
 <div id="Figure:dblpend"></div>
 
 ![The physical system](../../../../../datafiles/dblpend/dblpend.png)
+
 **<p align="center">The physical system</p>**
 
 # Goal Statements {#Sec:GoalStmt}
@@ -228,7 +230,6 @@ Given the masses, length of the rods, initial angle of the masses and the gravit
 <div id="motionMass"></div>
 
 motionMass: Calculate the motion of the masses.
-
 
 # Solution Characteristics Specification {#Sec:SolCharSpec}
 
@@ -265,7 +266,6 @@ firstPend: The first rod has two sides. One side attaches to the origin. Another
 <div id="secondPend"></div>
 
 secondPend: The second rod has two sides. One side attaches to the first object. Another side attaches to the second object.
-
 
 # Theoretical Models {#Sec:TMs}
 
@@ -924,7 +924,6 @@ Calculate-Angle-Of-Rod: Calculate the following values: \\({θ\_{1}}\\) and \\({
 
 Output-Values: Output \\({θ\_{1}}\\) and \\({θ\_{2}}\\) (from [IM:calOfAngle1](#IM:calOfAngle1) and [IM:calOfAngle2](#IM:calOfAngle2)).
 
-
 <div id="Table:ReqInputs"></div>
 
 |Symbol        |Description              |Units            |
@@ -947,7 +946,6 @@ Correct: The outputs of the code have the [properties of a correct solution](#Se
 <div id="portable"></div>
 
 Portable: The code is able to be run in different environments.
-
 
 # Traceability Matrices and Graphs {#Sec:TraceMatrices}
 
@@ -1054,26 +1052,31 @@ The purpose of the traceability graphs is also to provide easy references on wha
 <div id="Figure:TraceGraphAvsA"></div>
 
 ![TraceGraphAvsA](../../../../../traceygraphs/dblpend/avsa.svg)
+
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
 ![TraceGraphAvsAll](../../../../../traceygraphs/dblpend/avsall.svg)
+
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
 ![TraceGraphRefvsRef](../../../../../traceygraphs/dblpend/refvsref.svg)
+
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
 ![TraceGraphAllvsR](../../../../../traceygraphs/dblpend/allvsr.svg)
+
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
 ![TraceGraphAllvsAll](../../../../../traceygraphs/dblpend/allvsall.svg)
+
 **<p align="center">TraceGraphAllvsAll</p>**
 
 For convenience, the following graphs can be found at the links below:
@@ -1125,4 +1128,3 @@ There are no auxiliary constants.
 <div id="velocityWiki"></div>
 
 [9]: Wikipedia Contributors. *Velocity*. June, 2019. <https://en.wikipedia.org/wiki/Velocity>.
-

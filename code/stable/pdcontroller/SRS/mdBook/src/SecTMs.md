@@ -46,4 +46,3 @@ This section focuses on the general equations and laws that PD Controller is bas
 |Notes      |<ul><li>The Transfer Function (from [A:Transfer Function](./SecAssumps.md#pwrPlantTxFnx)) of a Second Order System (mass-spring-damper) is characterized by this equation.</li></ul>                                                                                            |
 |Source     |[abbasi2015](./SecReferences.md#abbasi2015)                                                                                                                                                                                                                                     |
 |RefBy      |[GD:gdPowerPlant](./SecGDs.md#GD:gdPowerPlant)                                                                                                                                                                                                                                  |
-

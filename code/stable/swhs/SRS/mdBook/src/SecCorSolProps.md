@@ -22,4 +22,3 @@ In addition, the change in heat energy in the PCM should equal the energy input 
 \\[{E\_{\text{P}}}=\int\_{0}^{t}{{h\_{\text{P}}} {A\_{\text{P}}} \left({T\_{\text{W}}}\left(t\right)-{T\_{\text{P}}}\left(t\right)\right)}\\,dt\\]
 
 Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as "sanity" checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than \\({C\_{\text{tol}}}\\) [FR:Verify-Energy-Output-Follow-Conservation-of-Energy](./SecFRs.md#verifyEnergyOutput).
-

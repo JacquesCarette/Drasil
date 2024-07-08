@@ -11,4 +11,3 @@ This section contains the standard values that are used for calculations in Proj
 |\\(π\\)|ratio of circumference to diameter for any circle|\\(3.14159265\\)|--                                 |
 
 **<p align="center">Auxiliary Constants</p>**
-

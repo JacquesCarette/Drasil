@@ -5,6 +5,7 @@
 <div id="Figure:sysCtxDiag"></div>
 
 ![System Context](../../../../../datafiles/glassbr/SystemContextFigure.png)
+
 **<p align="center">System Context</p>**
 
 The interaction between the product and the user is through a user interface. The responsibilities of the user and the system are as follows:
@@ -17,4 +18,3 @@ The interaction between the product and the user is through a user interface. Th
   - Detect data type mismatch, such as a string of characters input instead of a floating point number.
   - Determine if the inputs satisfy the required physical and software constraints.
   - Predict whether the glass slab is safe or not.
-

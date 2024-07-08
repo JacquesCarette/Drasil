@@ -270,4 +270,3 @@ Integrating the right hand side:
 |Notes      |<ul><li>The moment of inertia \\(\boldsymbol{I}\\) of a body measures how much torque is needed for the body to achieve angular acceleration about the axis of rotation.</li><li>All bodies are assumed to be rigid (from [A:objectTy](./SecAssumps.md#assumpOT)).</li></ul>          |
 |Source     |--                                                                                                                                                                                                                                                                                    |
 |RefBy      |                                                                                                                                                                                                                                                                                      |
-

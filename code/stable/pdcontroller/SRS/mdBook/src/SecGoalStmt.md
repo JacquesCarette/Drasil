@@ -5,5 +5,3 @@ Given Set-Point, Simulation Time, Proportional Gain, Derivative Gain, and Step T
 <div id="processVariable"></div>
 
 Process-Variable: Calculate the output of the Power Plant (Process Variable) over time.
-
-

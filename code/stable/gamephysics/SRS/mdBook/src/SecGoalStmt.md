@@ -9,5 +9,3 @@ Determine-Linear-Properties: Determine their new positions and velocities over a
 <div id="angularGS"></div>
 
 Determine-Angular-Properties: Determine their new orientations and angular velocities over a period of time.
-
-

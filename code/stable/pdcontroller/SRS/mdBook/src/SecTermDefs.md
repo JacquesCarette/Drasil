@@ -25,4 +25,3 @@ This subsection provides a list of terms that are used in the subsequent section
 - Transfer Function: The Transfer Function of a system is the ratio of the output to the input functions in the frequency domain.
 - Damping Coefficient: Quantity that characterizes a second order system's oscillatory response.
 - Stiffness Coefficient: Quantity that characterizes a spring's stiffness.
-

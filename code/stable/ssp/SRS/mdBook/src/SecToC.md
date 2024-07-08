@@ -37,4 +37,3 @@ An outline of all sections included in this SRS is recorded here for easy refere
 - [Traceability Matrices and Graphs](./SecTraceMatrices.md#Sec:TraceMatrices)
 - [Values of Auxiliary Constants](./SecAuxConstants.md#Sec:AuxConstants)
 - [References](./SecReferences.md#Sec:References)
-

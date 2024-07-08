@@ -9,5 +9,3 @@ Normal-And-Shear-Linear-Only: Changes related to [A:Interslice-Norm-Shear-Forces
 <div id="UC_2donly"></div>
 
 2D-Analysis-Only: [A:Effective-Norm-Stress-Large](./SecAssumps.md#assumpENSL) allows for 2D analysis with these models only because stress along the \\(z\\)-direction is zero. These models do not take into account stress in the \\(z\\)-direction, and therefore cannot be used without manipulation to attempt three-dimensional analysis.
-
-

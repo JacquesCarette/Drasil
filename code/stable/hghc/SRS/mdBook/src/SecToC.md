@@ -12,4 +12,3 @@ An outline of all sections included in this SRS is recorded here for easy refere
     - [General Definitions](./SecGDs.md#Sec:GDs)
     - [Data Definitions](./SecDDs.md#Sec:DDs)
     - [Instance Models](./SecIMs.md#Sec:IMs)
-

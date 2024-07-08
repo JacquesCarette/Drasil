@@ -32,4 +32,3 @@ This section contains the standard values that are used for calculations in SWHS
 |\\({{ρ\_{\text{W}}}^{\text{min}}}\\)              |minimum density of water                                           |\\(950\\)              |\\(\frac{\text{kg}}{\text{m}^{3}}\\)                 |
 
 **<p align="center">Auxiliary Constants</p>**
-

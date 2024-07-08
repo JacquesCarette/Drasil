@@ -52,4 +52,3 @@ This section collects and defines all the data needed to build the instance mode
 |Notes      |<ul><li>\\({v^{\text{i}}}\\) is from [DD:vecMag](./SecDDs.md#DD:vecMag).</li><li>\\(θ\\) is shown in [Fig:Launch](./SecPhysSyst.md#Figure:Launch).</li></ul>                                                                                                                    |
 |Source     |--                                                                                                                                                                                                                                                                              |
 |RefBy      |[IM:calOfLandingTime](./SecIMs.md#IM:calOfLandingTime)                                                                                                                                                                                                                          |
-

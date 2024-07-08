@@ -21,5 +21,3 @@ Accomodate-More-Boundary-Conditions: [A:boundaryConditions](./SecAssumps.md#assu
 <div id="considerMoreThanFlexGlass"></div>
 
 Consider-More-than-Flexure-Glass: [A:responseType](./SecAssumps.md#assumpRT) - The software may be changed to consider more than just flexure of the glass.
-
-

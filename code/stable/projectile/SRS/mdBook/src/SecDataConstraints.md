@@ -11,4 +11,3 @@ The [Data Constraints Table](./SecDataConstraints.md#Table:InDataConstraints) sh
 |\\(θ\\)                   |\\(0\lt{}θ\lt{}\frac{π}{2}\\)   |\\(\frac{π}{4}\\) \\({\text{rad}}\\)     |10\\(\\%\\)|
 
 **<p align="center">Input Data Constraints</p>**
-

@@ -1,4 +1,5 @@
 # Software Requirements Specification for GamePhysics
+
 Alex Halliwushka, Luthfi Mawarid, and Olu Owojaiye
 
 # Table of Contents {#Sec:ToC}
@@ -202,6 +203,7 @@ This section provides general information about the system. It identifies the in
 <div id="Figure:sysCtxDiag"></div>
 
 ![System Context](../../../../../datafiles/gamephysics/sysctx.png)
+
 **<p align="center">System Context</p>**
 
 The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:
@@ -256,7 +258,6 @@ Determine-Linear-Properties: Determine their new positions and velocities over a
 
 Determine-Angular-Properties: Determine their new orientations and angular velocities over a period of time.
 
-
 # Solution Characteristics Specification {#Sec:SolCharSpec}
 
 The instance models that govern GamePhysics are presented in the [Instance Model Section](#Sec:IMs). The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
@@ -292,7 +293,6 @@ dampingInvolvement: There is no damping involved throughout the simulation and t
 <div id="assumpCAJI"></div>
 
 constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. (RefBy: [IM:transMot](#IM:transMot), [LC:Include-Joints-Constraints](#lcIJC), and [IM:col2D](#IM:col2D).)
-
 
 # Theoretical Models {#Sec:TMs}
 
@@ -849,7 +849,6 @@ Determine-Collisions: Determine if any of the rigid bodies in the space have col
 
 Determine-Collision-Response-Over-Time: Determine the positions and velocities over a period of time of the 2D rigid bodies that have undergone a collision.
 
-
 # Non-Functional Requirements {#Sec:NFRs}
 
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
@@ -874,7 +873,6 @@ Understandability: Users of Tamias2D shall be able to learn the software with ea
 
 Maintainability: If a likely change is made to the finished software, it will take at most 10\\(\\%\\) of the original development time, assuming the same development resources are available.
 
-
 # Likely Changes {#Sec:LCs}
 
 This section lists the likely changes to be made to the software.
@@ -895,7 +893,6 @@ Include-Dampening: [A:dampingInvolvement](#assumpDI) - The library may be expand
 
 Include-Joints-Constraints: [A:constraintsAndJointsInvolvement](#assumpCAJI) - The library may be expanded to include joints and constraints.
 
-
 # Unlikely Changes {#Sec:UCs}
 
 This section lists the unlikely changes to be made to the software.
@@ -915,7 +912,6 @@ Cartesian-Coordinate-System: A Cartesian Coordinate system is used.
 <div id="ucORB"></div>
 
 Objects-Rigid-Bodies: All objects are rigid bodies.
-
 
 # Off-The-Shelf Solutions {#Sec:offShelfSolns}
 
@@ -1058,26 +1054,31 @@ The purpose of the traceability graphs is also to provide easy references on wha
 <div id="Figure:TraceGraphAvsA"></div>
 
 ![TraceGraphAvsA](../../../../../traceygraphs/gamephysics/avsa.svg)
+
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
 ![TraceGraphAvsAll](../../../../../traceygraphs/gamephysics/avsall.svg)
+
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
 ![TraceGraphRefvsRef](../../../../../traceygraphs/gamephysics/refvsref.svg)
+
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
 ![TraceGraphAllvsR](../../../../../traceygraphs/gamephysics/allvsr.svg)
+
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
 ![TraceGraphAllvsAll](../../../../../traceygraphs/gamephysics/allvsall.svg)
+
 **<p align="center">TraceGraphAllvsAll</p>**
 
 For convenience, the following graphs can be found at the links below:
@@ -1145,4 +1146,3 @@ There are no auxiliary constants.
 <div id="sciComp2013"></div>
 
 [13]: Wilson, Greg, Aruliah, D. A., Titus, C., Chue Hong, Neil P., Davis, Matt, Guy, Richard T., Haddock, Steven H. D., Huff, Kathryn D., Mitchell, Ian M., Plumblet, Mark D., Waugh, Ben, White, Ethan P., and Wilson, Paul. "Best Practices for Scientific Computing, 2013." *PLoS Biol*, vol. 12, no. 1, 2013. Print.
-

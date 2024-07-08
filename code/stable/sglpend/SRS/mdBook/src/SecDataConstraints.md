@@ -10,4 +10,3 @@ The [Data Constraints Table](./SecDataConstraints.md#Table:InDataConstraints) sh
 |\\({θ\_{i}}\\)         |\\({θ\_{i}}\gt{}0\\)         |\\(2.1\\) \\({\text{rad}}\\)|10\\(\\%\\)|
 
 **<p align="center">Input Data Constraints</p>**
-

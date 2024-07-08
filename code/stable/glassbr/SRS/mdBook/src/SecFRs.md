@@ -26,7 +26,6 @@ Check-Glass-Safety: If \\(\mathit{isSafePb}\land{}\mathit{isSafeLR}\\) (from [IM
 
 Output-Values: Output the values from the table for [Required Outputs](./SecFRs.md#Table:ReqOutputs).
 
-
 <div id="Table:ReqInputs"></div>
 
 |Symbol                         |Description                                                                           |Units            |
@@ -80,4 +79,3 @@ Output-Values: Output the values from the table for [Required Outputs](./SecFRs.
 |\\({\hat{q}\_{\text{tol}}}\\)|Tolerable load                                        |[IM:tolLoad](./SecIMs.md#IM:tolLoad)            |--               |
 
 **<p align="center">Required Outputs following [FR:Output-Values](./SecFRs.md#outputValues)</p>**
-

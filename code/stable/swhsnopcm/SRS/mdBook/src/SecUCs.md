@@ -9,5 +9,3 @@ Water-Fixed-States: [A:Water-Always-Liquid](./SecAssumps.md#assumpWAL) - It is u
 <div id="unlikeChgNIHG"></div>
 
 No-Internal-Heat-Generation: [A:No-Internal-Heat-Generation-By-Water](./SecAssumps.md#assumpNIHGBW) - Is used for the derivations of [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr).
-
-

@@ -35,4 +35,3 @@
 <div id="velocityWiki"></div>
 
 [9]: Wikipedia Contributors. *Velocity*. June, 2019. <https://en.wikipedia.org/wiki/Velocity>.
-

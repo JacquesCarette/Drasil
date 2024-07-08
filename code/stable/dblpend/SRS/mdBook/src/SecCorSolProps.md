@@ -10,4 +10,3 @@ The [Data Constraints Table](./SecCorSolProps.md#Table:OutDataConstraints) shows
 |\\({θ\_{2}}\\)|\\({θ\_{2}}\gt{}0\\)|
 
 **<p align="center">Output Data Constraints</p>**
-

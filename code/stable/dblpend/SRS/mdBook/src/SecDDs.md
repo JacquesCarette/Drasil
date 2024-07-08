@@ -117,4 +117,3 @@ This section collects and defines all the data needed to build the instance mode
 |Description|<ul><li>\\(\boldsymbol{F}\\) is the force (\\({\text{N}}\\))</li><li>\\(m\\) is the mass (\\({\text{kg}}\\))</li><li>\\(\boldsymbol{a}\text{(}t\text{)}\\) is the acceleration (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li></ul>|
 |Source     |--                                                                                                                                                                                                                            |
 |RefBy      |                                                                                                                                                                                                                              |
-

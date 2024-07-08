@@ -1,4 +1,5 @@
 # Software Requirements Specification for Slope Stability analysis Program
+
 Henry Frankis and Brooks MacLachlan
 
 # Table of Contents {#Sec:ToC}
@@ -228,6 +229,7 @@ This section provides general information about the system. It identifies the in
 <div id="Figure:sysCtxDiag"></div>
 
 ![System Context](../../../../../datafiles/ssp/SystemContextFigure.png)
+
 **<p align="center">System Context</p>**
 
 The responsibilities of the user and the system are as follows:
@@ -286,10 +288,10 @@ PS1: A slope comprised of one soil layer.
 
 PS2: A water table, which may or may not exist.
 
-
 <div id="Figure:PhysicalSystem"></div>
 
 ![An example slope for analysis by SSP, where the dashed line represents the water table](../../../../../datafiles/ssp/PhysSyst.png)
+
 **<p align="center">An example slope for analysis by SSP, where the dashed line represents the water table</p>**
 
 Morgenstern-Price analysis [morgenstern1965](#morgenstern1965) of the slope involves representing the slope as a series of vertical slices. As shown in [Fig:IndexConvention](#Figure:IndexConvention), the index \\(i\\) is used to denote a value for a single slice, and an interslice value at a given index \\(i\\) refers to the value between slice \\(i\\) and adjacent slice \\(i+1\\).
@@ -297,6 +299,7 @@ Morgenstern-Price analysis [morgenstern1965](#morgenstern1965) of the slope invo
 <div id="Figure:IndexConvention"></div>
 
 ![Index convention for slice and interslice values](../../../../../datafiles/ssp/IndexConvention.png)
+
 **<p align="center">Index convention for slice and interslice values</p>**
 
 A free body diagram of the forces acting on a slice is displayed in [Fig:ForceDiagram](#Figure:ForceDiagram). The specific forces and symbols will be discussed in detail in [Sec:General Definitions](#Sec:GDs) and [Sec:Data Definitions](#Sec:DDs).
@@ -304,6 +307,7 @@ A free body diagram of the forces acting on a slice is displayed in [Fig:ForceDi
 <div id="Figure:ForceDiagram"></div>
 
 ![Free body diagram of forces acting on a slice](../../../../../datafiles/ssp/ForceDiagram.png)
+
 **<p align="center">Free body diagram of forces acting on a slice</p>**
 
 # Goal Statements {#Sec:GoalStmt}
@@ -321,7 +325,6 @@ Determine-Normal-Forces: Determine the interslice normal forces between each pai
 <div id="determineShearF"></div>
 
 Determine-Shear-Forces: Determine the interslice shear forces between each pair of vertical slices of the slope.
-
 
 # Solution Characteristics Specification {#Sec:SolCharSpec}
 
@@ -394,7 +397,6 @@ Negligible-Effect-Surface-Slope-Seismic: The effect of the slope of the surface 
 <div id="assumpHFSM"></div>
 
 Hydrostatic-Force-Slice-Midpoint: The resultant surface hydrostatic forces act into the midpoint of each slice surface and the resultant base hydrostatic forces act into the midpoint of each slice base. (RefBy: [GD:srfWtrF](#GD:srfWtrF), [GD:momentEql](#GD:momentEql), and [GD:baseWtrF](#GD:baseWtrF).)
-
 
 # Theoretical Models {#Sec:TMs}
 
@@ -1479,7 +1481,6 @@ Display-Interslice-Shear-Forces: Using [IM:fctSfty](#IM:fctSfty), [IM:nrmShrFor]
 
 Write-Results-To-File: Provide the option of writing the output result data, as given in [FR:Display-Input](#displayInput), [FR:Display-Graph](#displayGraph), [FR:Display-Factor-of-Safety](#displayFS), [FR:Display-Interslice-Normal-Forces](#displayNormal), and [FR:Display-Interslice-Shear-Forces](#displayShear), to a file.
 
-
 <div id="Table:ReqInputs"></div>
 
 |Symbol                                    |Description                           |Units                              |
@@ -1538,7 +1539,6 @@ Reusable: The code is modularized.
 
 Maintainable: If a likely change is made to the finished software, it will take at most 10\\(\\%\\) of the original development time, assuming the same development resources are available.
 
-
 # Likely Changes {#Sec:LCs}
 
 This section lists the likely changes to be made to the software.
@@ -1555,7 +1555,6 @@ Calculate-Seismic-Force: [A:Seismic-Force](#assumpSF) - The system currently ass
 
 Calculate-External-Force: [A:Surface-Load](#assumpSL) - The system currently assumes no external forces. In the future, calculations can be added for an imposed surface load on the slope.
 
-
 # Unlikely Changes {#Sec:UCs}
 
 This section lists the unlikely changes to be made to the software.
@@ -1567,7 +1566,6 @@ Normal-And-Shear-Linear-Only: Changes related to [A:Interslice-Norm-Shear-Forces
 <div id="UC_2donly"></div>
 
 2D-Analysis-Only: [A:Effective-Norm-Stress-Large](#assumpENSL) allows for 2D analysis with these models only because stress along the \\(z\\)-direction is zero. These models do not take into account stress in the \\(z\\)-direction, and therefore cannot be used without manipulation to attempt three-dimensional analysis.
-
 
 # Traceability Matrices and Graphs {#Sec:TraceMatrices}
 
@@ -1742,26 +1740,31 @@ The purpose of the traceability graphs is also to provide easy references on wha
 <div id="Figure:TraceGraphAvsA"></div>
 
 ![TraceGraphAvsA](../../../../../traceygraphs/ssp/avsa.svg)
+
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
 ![TraceGraphAvsAll](../../../../../traceygraphs/ssp/avsall.svg)
+
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
 ![TraceGraphRefvsRef](../../../../../traceygraphs/ssp/refvsref.svg)
+
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
 ![TraceGraphAllvsR](../../../../../traceygraphs/ssp/allvsr.svg)
+
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
 ![TraceGraphAllvsAll](../../../../../traceygraphs/ssp/allvsall.svg)
+
 **<p align="center">TraceGraphAllvsAll</p>**
 
 For convenience, the following graphs can be found at the links below:
@@ -1821,4 +1824,3 @@ There are no auxiliary constants.
 <div id="li2010"></div>
 
 [11]: Yu-Chao, Li, Yun-Min, Chen, Zhan, Tony L. T., Sao-Sheng, Ling, and Cleall, Peter John. "An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm." *Canadian Geotechnical Journal*, vol. 47, no. 7, June, 2010. pp. 806&ndash;820. Print.
-

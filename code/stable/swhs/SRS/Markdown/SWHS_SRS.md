@@ -1,4 +1,5 @@
 # Software Requirements Specification for Solar Water Heating Systems Incorporating PCM
+
 Thulasi Jegatheesan, Brooks MacLachlan, and W. Spencer Smith
 
 # Table of Contents {#Sec:ToC}
@@ -228,6 +229,7 @@ This section provides general information about the system. It identifies the in
 <div id="Figure:SysCon"></div>
 
 ![[Fig:SysCon](#Figure:SysCon): System Context](../../../../../datafiles/swhs/SystemContextFigure.png)
+
 **<p align="center">[Fig:SysCon](#Figure:SysCon): System Context</p>**
 
 SWHS is mostly self-contained. The only external interaction is through the user interface. The responsibilities of the user and the system are as follows:
@@ -276,10 +278,10 @@ PS2: Heating coil at bottom of tank. (\\({q\_{\text{C}}}\\) represents the heat 
 
 PS3: PCM suspended in tank. (\\({q\_{\text{P}}}\\) represents the heat flux into the PCM from water.)
 
-
 <div id="Figure:Tank"></div>
 
 ![Solar water heating tank, with heat flux into the water from the coil of \\({q\_{\text{C}}}\\) and heat flux into the PCM from water of \\({q\_{\text{P}}}\\)](../../../../../datafiles/swhs/Tank.png)
+
 **<p align="center">Solar water heating tank, with heat flux into the water from the coil of \\({q\_{\text{C}}}\\) and heat flux into the PCM from water of \\({q\_{\text{P}}}\\)</p>**
 
 # Goal Statements {#Sec:GoalStmt}
@@ -301,7 +303,6 @@ Predict-Water-Energy: Predict the change in heat energy in the water over time.
 <div id="pcmEnergyGS"></div>
 
 Predict-PCM-Energy: Predict the change in heat energy in the PCM over time.
-
 
 # Solution Characteristics Specification {#Sec:SolCharSpec}
 
@@ -390,7 +391,6 @@ Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melti
 <div id="assumpVCN"></div>
 
 Volume-Coil-Negligible: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible. (RefBy: [DD:waterVolume_pcm](#DD:waterVolume.pcm).)
-
 
 # Theoretical Models {#Sec:TMs}
 
@@ -929,7 +929,6 @@ Calculate-PCM-Melt-End-Time: Calculate and output the time at which the PCM stop
 
 Output-Values: Output \\({T\_{\text{W}}}\\)(\\(t\\)) (from [IM:eBalanceOnWtr](#IM:eBalanceOnWtr)), \\({T\_{\text{P}}}\\)(\\(t\\)) (from [IM:eBalanceOnPCM](#IM:eBalanceOnPCM)), \\({E\_{\text{W}}}\\)(\\(t\\)) (from [IM:heatEInWtr](#IM:heatEInWtr)), and \\({E\_{\text{P}}}\\)(\\(t\\)) (from [IM:heatEInPCM](#IM:heatEInPCM)).
 
-
 <div id="Table:ReqInputs"></div>
 
 |Symbol                               |Description                                                |Units                                                |
@@ -981,7 +980,6 @@ Reusable: The code is modularized.
 
 Maintainable: If a likely change is made to the finished software, it will take at most 10\\(\\%\\) of the original development time, assuming the same development resources are available.
 
-
 # Likely Changes {#Sec:LCs}
 
 This section lists the likely changes to be made to the software.
@@ -1010,7 +1008,6 @@ Different-Initial-Temps-PCM-Water: [A:Same-Initial-Temp-Water-PCM](#assumpSITWP)
 
 Tank-Lose-Heat: [A:Perfect-Insulation-Tank](#assumpPIT) - Any real tank cannot be perfectly insulated and will lose heat.
 
-
 # Unlikely Changes {#Sec:UCs}
 
 This section lists the unlikely changes to be made to the software.
@@ -1026,7 +1023,6 @@ No-Internal-Heat-Generation: [A:No-Internal-Heat-Generation-By-Water-PCM](#assum
 <div id="unlikeChgNGS"></div>
 
 No-Gaseous-State: [A:No-Gaseous-State-PCM](#assumpNGSP) - Is used for the derivation of [IM:eBalanceOnPCM](#IM:eBalanceOnPCM) and for the equation given by [IM:heatEInPCM](#IM:heatEInPCM) to be valid.
-
 
 # Traceability Matrices and Graphs {#Sec:TraceMatrices}
 
@@ -1168,26 +1164,31 @@ The purpose of the traceability graphs is also to provide easy references on wha
 <div id="Figure:TraceGraphAvsA"></div>
 
 ![TraceGraphAvsA](../../../../../traceygraphs/swhs/avsa.svg)
+
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
 ![TraceGraphAvsAll](../../../../../traceygraphs/swhs/avsall.svg)
+
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
 ![TraceGraphRefvsRef](../../../../../traceygraphs/swhs/refvsref.svg)
+
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
 ![TraceGraphAllvsR](../../../../../traceygraphs/swhs/allvsr.svg)
+
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
 ![TraceGraphAllvsAll](../../../../../traceygraphs/swhs/allvsall.svg)
+
 **<p align="center">TraceGraphAllvsAll</p>**
 
 For convenience, the following graphs can be found at the links below:
@@ -1266,4 +1267,3 @@ This section contains the standard values that are used for calculations in SWHS
 <div id="smithEtAl2007"></div>
 
 [8]: Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." *Reliable Computing, Special Issue on Reliable Engineering Computation*, vol. 13, no. 1, February, 2007. <https://doi.org/10.1007/s11155-006-9020-7>. pp. 83&ndash;107.
-

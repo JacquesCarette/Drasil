@@ -13,5 +13,3 @@ Calculate-Seismic-Force: [A:Seismic-Force](./SecAssumps.md#assumpSF) - The syste
 <div id="LC_external"></div>
 
 Calculate-External-Force: [A:Surface-Load](./SecAssumps.md#assumpSL) - The system currently assumes no external forces. In the future, calculations can be added for an imposed surface load on the slope.
-
-

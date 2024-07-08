@@ -86,4 +86,3 @@ This section collects and defines all the data needed to build the instance mode
 |Notes      |<ul><li>\\(T\\) is from [DD:frequencyDD](./SecDDs.md#DD:frequencyDD)</li></ul>                                 |
 |Source     |--                                                                                                             |
 |RefBy      |[GD:periodPend](./SecGDs.md#GD:periodPend) and [DD:angFrequencyDD](./SecDDs.md#DD:angFrequencyDD)              |
-

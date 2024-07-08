@@ -17,5 +17,3 @@ Predict-Water-Energy: Predict the change in heat energy in the water over time.
 <div id="pcmEnergyGS"></div>
 
 Predict-PCM-Energy: Predict the change in heat energy in the PCM over time.
-
-

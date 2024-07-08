@@ -51,4 +51,3 @@
 <div id="sciComp2013"></div>
 
 [13]: Wilson, Greg, Aruliah, D. A., Titus, C., Chue Hong, Neil P., Davis, Matt, Guy, Richard T., Haddock, Steven H. D., Huff, Kathryn D., Mitchell, Ian M., Plumblet, Mark D., Waugh, Ben, White, Ethan P., and Wilson, Paul. "Best Practices for Scientific Computing, 2013." *PLoS Biol*, vol. 12, no. 1, 2013. Print.
-

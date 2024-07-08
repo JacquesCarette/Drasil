@@ -58,7 +58,15 @@ data VVNBinOp = Dot
 data NVVBinOp = Scale
   deriving Eq
 
--- TODO: I suppose these can be merged to just Add and Mul?
+data SSet = SUnion
+  deriving Eq
+
+data ESSSet = SAdd | SRemove
+  deriving Eq
+  
+data ESBSet = SContains
+  deriving Eq
+
 -- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
 data AssocArithOper = Add | Mul
   deriving Eq
@@ -135,6 +143,12 @@ data Expr where
   VVNBinaryOp   :: VVNBinOp -> Expr -> Expr -> Expr
   -- | Binary operator for @Expr x Vector -> Vector@ operations (scaling).
   NVVBinaryOp   :: NVVBinOp -> Expr -> Expr -> Expr
+  -- | t
+  SSetOP :: SSet -> Expr -> Expr -> Expr
+
+  ESSSetOP :: ESSSet -> Expr -> Expr -> Expr
+
+  ESBSetOP :: ESBSet -> Expr -> Expr -> Expr
 
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.
@@ -163,6 +177,9 @@ instance Eq Expr where
   VVVBinaryOp o a b   == VVVBinaryOp p c d   =   o == p && a == c && b == d
   VVNBinaryOp o a b   == VVNBinaryOp p c d   =   o == p && a == c && b == d
   NVVBinaryOp o a b   == NVVBinaryOp p c d   =   o == p && a == c && b == d
+  SSetOP o a b        == SSetOP p c d        =   o == p && a == c && b == d
+  ESSSetOP o a b      == ESSSetOP p c d      =   o == p && a == c && b == d
+  ESBSetOP o a b      == ESBSetOP p c d      =   o == p && a == c && b == d
   _                   == _                   =   False
 -- ^ TODO: This needs to add more equality checks
 
@@ -386,16 +403,28 @@ instance Typed Expr Space where
     (_, Right rx) -> Right rx
     (Right lx, _) -> Right lx
 
-  infer cxt (NVVBinaryOp Scale l r) = case (infer cxt l, infer cxt r) of
-    (Left lt, Left (S.Vect rsp)) -> if S.isBasicNumSpace lt && lt == rsp
-      then Left rsp
-      else if lt /= rsp then
-        Right $ "Vector scaling expects a scaling by the same kind as the vector's but found scaling by`" ++ show lt ++ "` over vectors of type `" ++ show rsp ++ "`."
-      else
-        Right $ "Vector scaling expects a numeric scaling, but found `" ++ show lt ++ "`."
-    (Left _, Left rsp) -> Right $ "Vector scaling expects vector as second operand. Received `" ++ show rsp ++ "`."
+  infer cxt (SSetOP _ l r) = case (infer cxt l, infer cxt r) of
+    (Left lt@(S.Set lsp), Left rt@(S.Set rsp)) -> if lsp == rsp && S.isBasicNumSpace lsp
+      then Left lsp
+      else Right $ "Set union expects same numeric types, but found `" ++ show lt ++ "` · `" ++ show rt ++ "`."
+    (Left lsp, Left rsp) -> Right $ "Set union expects set operands. Received `" ++ show lsp ++ "` · `" ++ show rsp ++ "`."
     (_, Right rx) -> Right rx
     (Right lx, _) -> Right lx
+
+  infer cxt (ESSSetOP _ l r) = case (infer cxt l, infer cxt r) of
+    (Left lt, Left rt@(S.Set rsp)) -> if S.isBasicNumSpace lt && lt == rsp
+      then Left lt
+      else Right $ "Set Add/Sub should only be applied to Set of same space. Received `" ++ show lt ++ "` / `" ++ show rt ++ "`."
+    (_      , Right e) -> Right e
+    (Right e, _      ) -> Right e
+    (Left lt, Left rsp) -> Right $ "Set union expects set operands. Received `" ++ show lt ++ "` · `" ++ show rsp ++ "`."
+
+  infer cxt (ESBSetOP SContains l r) = case (infer cxt l, infer cxt r) of
+    (Left lt, Left rt@(S.Set rsp)) -> if S.isBasicNumSpace lt && lt == rsp
+      then Left lt
+      else Right $ "Set contains should only be applied to Set of same space. Received `" ++ show lt ++ "` / `" ++ show rt ++ "`."
+    (_      , Right e) -> Right e
+    (Right e, _      ) -> Right e
 
   infer cxt (Operator _ (S.BoundedDD _ _ bot top) body) =
     let expTy = S.Integer in

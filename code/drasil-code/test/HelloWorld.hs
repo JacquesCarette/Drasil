@@ -50,7 +50,7 @@ helloInitVariables = block [comment "Initializing variables",
     (valueOf myOtherList),
   valStmt (listAdd (valueOf myOtherList)
     (litInt 2) (litDouble 2.0)),
-  valStmt (listAppend (valueOf $ var "myOtherList" (listType double))
+  valStmt (listAppend (valueOf $ var "myOtherList" (listType double) local)
     (litDouble 2.5)),
   varDec $ var "e" double local,
   var "e" int local &= listAccess (valueOf myOtherList) (litInt 1),
@@ -102,7 +102,7 @@ listSliceTests = [
     comment "Create some variables for later tests",
     varDecDef (var "x" int local) (litInt 3),
     varDecDef (var "y" int local) (litInt 1),
-    varDecDef (var "z" int) (litInt (-1))],
+    varDecDef (var "z" int local) (litInt (-1))],
 
   -- | Initialize and assign a value to a new variable @mySlicedList@.
   --   Both bounds are set, end > start, with step defaulting to 1
@@ -143,22 +143,22 @@ listSliceTests = [
   -- | List slicing where the step is a variable with negative value
   listSlice mySlicedList8
     (valueOf myOtherList) (Just (litInt 3))
-    (Just (litInt 0)) (Just (valueOf (var "z" int))),
+    (Just (litInt 0)) (Just (valueOf (var "z" int local))),
 
   -- | List slicing where the bounds are variables with start > end, and step is a variable < 0
   listSlice mySlicedList9
-    (valueOf myOtherList) (Just (valueOf (var "x" int)))
-    (Just (valueOf (var "y" int))) (Just (valueOf (var "z" int))),
+    (valueOf myOtherList) (Just (valueOf (var "x" int local)))
+    (Just (valueOf (var "y" int local))) (Just (valueOf (var "z" int local))),
 
   -- | List slicing where end isn't given and step is a variable < 0
   listSlice mySlicedList10
     (valueOf myOtherList) (Just (litInt 2))
-    Nothing (Just (valueOf (var "z" int))),
+    Nothing (Just (valueOf (var "z" int local))),
 
   -- | List slicing where end > beg, but step is a variable < 0
   listSlice mySlicedList11
-    (valueOf myOtherList) (Just (valueOf (var "y" int)))
-    (Just (valueOf (var "x" int))) (Just (valueOf (var "z" int))),
+    (valueOf myOtherList) (Just (valueOf (var "y" int local)))
+    (Just (valueOf (var "x" int local))) (Just (valueOf (var "z" int local))),
 
   -- | Print results of list slicing tests
   block [

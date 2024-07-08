@@ -118,7 +118,7 @@ makeSetterVal :: RenderSym r => Label -> SValue r -> Maybe Integer -> Maybe (SVa
 makeSetterVal _     _    _      (Just v) _  _  = (S.emptyStmt, v)
 makeSetterVal _     _   (Just s) _       lb rb = (S.emptyStmt, if s > 0 then lb else rb)
 makeSetterVal vName step _       _       lb rb = 
-  let theVar = S.var vName S.int
+  let theVar = S.var vName S.int S.local
       theSetter = S.varDecDef theVar $ S.inlineIf (step ?> S.litInt 0) lb rb
   in (theSetter, S.intToIndex $ S.valueOf theVar)
       

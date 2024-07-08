@@ -9,20 +9,19 @@ module GOOL.Drasil.ClassInterface (
   -- Typeclasses
   OOProg, ProcProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   bodyStatements, oneLiner, BlockSym(..), TypeSym(..), OOTypeSym(..), TypeElim(..), 
-  VariableSym(..), OOVariableSym(..), ScopeSym(..), VariableElim(..), ($->),
-  listOf, listVar, ValueSym(..), OOValueSym, Argument(..), Literal(..), litZero,
-  MathConstant(..), VariableValue(..), OOVariableValue, CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), OOValueExpression(..), funcApp, funcAppNamedArgs,
-  selfFuncApp, extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists,
-  InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
-  objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..), ($.),
-  selfAccess, GetSet(..), List(..), InternalList(..), listSlice,
-  listIndexExists, at, ThunkSym(..),
-  VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
-  ThunkAssign(..), StatementSym(..), AssignStatement(..), (&=),
-  assignToListIndex, DeclStatement(..), objDecNewNoParams,
-  extObjDecNewNoParams, IOStatement(..), StringStatement(..),
+  VariableSym(..), locvar, OOVariableSym(..), ScopeSym(..), VariableElim(..),
+  ($->), listOf, listVar, ValueSym(..), OOValueSym, Argument(..), Literal(..),
+  litZero, MathConstant(..), VariableValue(..), OOVariableValue,
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), OOValueExpression(..), funcApp,
+  funcAppNamedArgs, selfFuncApp, extFuncApp, libFuncApp, newObj, extNewObj,
+  libNewObj, exists, InternalValueExp(..), objMethodCall,
+  objMethodCallNamedArgs, objMethodCallMixedArgs, objMethodCallNoParams,
+  FunctionSym(..), ($.), selfAccess, GetSet(..), List(..), InternalList(..),
+  listSlice, listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
+  objDecNewNoParams, extObjDecNewNoParams, IOStatement(..), StringStatement(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   StatePattern(..), initState, changeState, ObserverPattern(..),
   observerListName, initObserverList, addObserver, StrategyPattern(..),
@@ -143,6 +142,10 @@ class (TypeSym r, ScopeSym r) => VariableSym r where
   constant     :: Label -> VSType r -> r (Scope r) -> SVariable r
   extVar       :: Library -> Label -> VSType r -> r (Scope r) -> SVariable r
   arrayElem    :: Integer -> SVariable r -> SVariable r
+
+-- Smart constructor for a local variable.  TODO: make this be used wherever it can be
+locvar :: (VariableSym r) => Label -> VSType r -> SVariable r
+locvar l t = var l t local
   
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
@@ -616,7 +619,7 @@ class (TypeSym r) => OOTypeSym r where
 class (ValueSym r, OOTypeSym r) => OOValueSym r
 
 class (VariableSym r, OOTypeSym r) => OOVariableSym r where
-  staticVar    :: Label -> VSType r -> r (Scope r) SVariable r -- I *think* this is OO-only
+  staticVar    :: Label -> VSType r -> r (Scope r) -> SVariable r -- I *think* this is OO-only
   self         :: SVariable r
   classVar     :: VSType r -> SVariable r -> SVariable r
   extClassVar  :: VSType r -> SVariable r -> SVariable r
@@ -648,7 +651,7 @@ observerListName :: Label
 observerListName = "observerList"
 
 initObserverList :: (DeclStatement r) => VSType r -> [SValue r] -> MSStatement r
-initObserverList t = listDecDef (var observerListName (listType t))
+initObserverList t = listDecDef (var observerListName (listType t) local)
 
 addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r -> 
   MSStatement r

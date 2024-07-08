@@ -277,7 +277,7 @@ instance VariableSym JavaCode where
   arrayElem i = G.arrayElem (litInt i)
 
 instance OOVariableSym JavaCode where
-  staticVar n t _ = G.staticVar n t _
+  staticVar n t _ = G.staticVar n t
   self = C.self
   classVar = CP.classVar R.classVar
   extClassVar = classVar

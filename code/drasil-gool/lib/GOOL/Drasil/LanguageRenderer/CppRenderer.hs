@@ -274,9 +274,10 @@ instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   type Variable (p CppSrcCode CppHdrCode) = VarData
-  var n t s = pair (\tp -> var n tp (pfst s)) (\tp -> var n tp (psnd s)) t
+  var n t s = pair1 (\tp -> var n tp (pfst s)) (\tp -> var n tp (psnd s)) t
   constant n t s = pair1 (\tp -> constant n tp (pfst s)) (\tp -> constant n tp (psnd s)) t
   extVar l n t s = pair1 (\tp -> extVar l n tp (pfst s)) (\tp -> extVar l n tp (psnd s)) t
+  arrayElem i = pair1 (arrayElem i) (arrayElem i)
 
 instance (Pair p) => OOVariableSym (p CppSrcCode CppHdrCode) where
   staticVar n t s = pair1 (\tp -> staticVar n tp (pfst s)) (\tp -> staticVar n tp (psnd s)) t
@@ -1172,7 +1173,7 @@ instance VariableSym CppSrcCode where
   arrayElem i = G.arrayElem (litInt i)
 
 instance OOVariableSym CppSrcCode where
-  staticVar = G.staticVar
+  staticVar n t _ = G.staticVar n t
   self = C.self
   classVar c' v'= do 
     c <- c'
@@ -1872,13 +1873,13 @@ instance ScopeSym CppHdrCode where
 
 instance VariableSym CppHdrCode where
   type Variable CppHdrCode = VarData
-  var _ _ _ = mkStateVar "" void empty
+  var n t _ = G.var n t
   constant _ _ _ = mkStateVar "" void empty
   extVar _ _ _ _ = mkStateVar "" void empty
   arrayElem _ _ = mkStateVar "" void empty
   
 instance OOVariableSym CppHdrCode where
-  staticVar = G.staticVar
+  staticVar n t _ = G.staticVar n t
   self = mkStateVar "" void empty
   classVar _ _ = mkStateVar "" void empty
   extClassVar _ _ = mkStateVar "" void empty

@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE,
 import Control.Lens ((^.))
 
 import Language.Drasil (Constraint, HasUID(..), UID, Constrained(..),
-  isPhysC, isSfwrC)
+  isPhysRange, isSfwrRange)
 import Language.Drasil.CodeExpr.Development (CodeExpr, constraint)
 import qualified Data.Map as Map
 
@@ -21,11 +21,11 @@ constraintMap = Map.fromList . map (\x -> (x ^. uid, map constraint $ x ^. const
 
 -- | Returns a pair of a chunk and its physical constraints.
 physLookup :: HasUID q => ConstraintCEMap -> q -> (q, [ConstraintCE])
-physLookup m q = constraintLookup q m (filter isPhysC)
+physLookup m q = constraintLookup q m (filter isPhysRange)
 
 -- | Returns a pair of a chunk and its software constraints.
 sfwrLookup :: HasUID q => ConstraintCEMap -> q -> (q, [ConstraintCE])
-sfwrLookup m q = constraintLookup q m (filter isSfwrC)
+sfwrLookup m q = constraintLookup q m (filter isSfwrRange)
 
 -- | Returns a chunk and a filtered list of its constraints.
 constraintLookup :: HasUID q => q -> ConstraintCEMap

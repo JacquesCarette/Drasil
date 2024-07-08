@@ -74,17 +74,17 @@ inputDataConstraints = map uncrtnw inputsWUnitsUncrtn ++
 plateLen = uqcND "plateLen" (nounPhraseSP "plate length (long dimension)")
   lA metre Real 
   [ gtZeroConstr,
-    physc $ UpFrom (Inc, sy plateWidth),
-    sfwrc $ Bounded (Inc , sy dimMin) (Inc , sy dimMax)] (dbl 1.5) defaultUncrt
+    physRange $ UpFrom (Inc, sy plateWidth),
+    sfwrRange $ Bounded (Inc , sy dimMin) (Inc , sy dimMax)] (dbl 1.5) defaultUncrt
 
 plateWidth = uqcND "plateWidth" (nounPhraseSP "plate width (short dimension)")
   lB metre Real
-  [ physc $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen),
-    sfwrc $ Bounded (Inc, sy dimMin) (Inc, sy dimMax)] (dbl 1.2) defaultUncrt
+  [ physRange $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen),
+    sfwrRange $ Bounded (Inc, sy dimMin) (Inc, sy dimMax)] (dbl 1.2) defaultUncrt
 
 aspectRatio = uq (constrained' (dqdNoUnit aspectRatioCon (variable "AR") Real)
-  [ physc $ UpFrom (Inc, exactDbl 1), 
-    sfwrc $ UpTo (Inc, sy arMax)] (dbl 1.5)) defaultUncrt
+  [ physRange $ UpFrom (Inc, exactDbl 1), 
+    sfwrRange $ UpTo (Inc, sy arMax)] (dbl 1.5)) defaultUncrt
 
 pbTol = uvc "pbTol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Concat [lBreak, lTol])) Real
@@ -93,7 +93,7 @@ pbTol = uvc "pbTol" (nounPhraseSP "tolerable probability of breakage")
 charWeight = uqcND "charWeight" (nounPhraseSP "charge weight") 
   lW kilogram Real
   [ gtZeroConstr,
-    sfwrc $ Bounded (Inc, sy cWeightMin) (Inc, sy cWeightMax)]
+    sfwrRange $ Bounded (Inc, sy cWeightMin) (Inc, sy cWeightMax)]
     (exactDbl 42) defaultUncrt
 
 tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
@@ -102,13 +102,13 @@ tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
 
 standOffDist = uq (constrained' (uc sD (variable "SD") Real metre)
   [ gtZeroConstr,
-    sfwrc $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
+    sfwrRange $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 
 nomThick = cuc "nomThick" 
   (nounPhraseSent $ S "nominal thickness" +:+ displayDblConstrntsAsSet 
     nomThick nominalThicknesses)
   lT millimetre {-Discrete nominalThicknesses, but not implemented-} Rational 
-  (elem $ MkSet nominalThicknesses) $ exactDbl 8
+  [{-elem $ MkSet nominalThicknesses-}] $ exactDbl 8
 
 glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String) 
   [{- TODO: add back constraint: EnumeratedStr Software $ map (abrv . snd) glassType -}]
@@ -127,7 +127,7 @@ probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
   [probConstr] (Just $ dbl 0.4)
 
 stressDistFac = cvc "stressDistFac" (nounPhraseSP "stress distribution factor (Function)") 
-  cJ Real [physc $ Bounded (Inc, sy stressDistFacMin) (Inc, sy stressDistFacMax)] (Just $ exactDbl 15)
+  cJ Real [physRange $ Bounded (Inc, sy stressDistFacMin) (Inc, sy stressDistFacMax)] (Just $ exactDbl 15)
 
 probFail = cvc "probFail" (nounPhraseSP "probability of failure")
   (sub cP lFail) Real

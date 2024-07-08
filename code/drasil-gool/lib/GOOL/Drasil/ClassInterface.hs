@@ -575,7 +575,6 @@ class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r
     [MSParameter r] -> MSBody r -> SMethod r
   getMethod   :: SVariable r -> SMethod r
   setMethod   :: SVariable r -> SMethod r 
-  -- Parameters are: parameters, initializers, body
   constructor :: [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
 
   docMain :: MSBody r -> SMethod r
@@ -603,10 +602,10 @@ pubMethod :: (MethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r
 pubMethod n = method n public dynamic
 
 initializer :: (MethodSym r) => [MSParameter r] -> Initializers r -> SMethod r
-initializer ps is = getClassName >>= (\n -> constructor n ps is (body []))
+initializer ps is = constructor ps is (body [])
 
 nonInitConstructor :: (MethodSym r) => [MSParameter r] -> MSBody r -> SMethod r
-nonInitConstructor ps = getClassName >>= (\n -> constructor n ps [])
+nonInitConstructor ps = constructor ps []
 
 type CSStateVar a = CS (a (StateVar a))
 
@@ -632,9 +631,14 @@ class (MethodSym r, StateVarSym r) => ClassSym r where
   type Class r
   -- | Main external method for creating a class.
   --   Inputs: parent class, variables, constructor(s), methods
-  buildClass :: Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
+  buildClass :: Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
+    [SMethod r] -> SClass r
+  -- | Creates an extra class.
+  --   Inputs: class name, the rest are the same as buildClass.
   extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
     [SMethod r] -> SClass r
+  -- | Creates a class implementing interfaces.
+  --   Inputs: class name, interface names, variables, constructor(s), methods
   implementingClass :: Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> 
     [SMethod r] -> SClass r
 

@@ -274,13 +274,12 @@ instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   type Variable (p CppSrcCode CppHdrCode) = VarData
-  var n = pair2 (var n) (var n)
-  constant n = pair2 (constant n) (constant n)
-  extVar l n = pair2 (extVar l n) (extVar l n)
-  arrayElem i = pair2 (arrayElem i) (arrayElem i)
+  var n t s = pair (\tp -> var n tp (pfst s)) (\tp -> var n tp (psnd s)) t
+  constant n t s = pair1 (\tp -> constant n tp (pfst s)) (\tp -> constant n tp (psnd s)) t
+  extVar l n t s = pair1 (\tp -> extVar l n tp (pfst s)) (\tp -> extVar l n tp (psnd s)) t
 
 instance (Pair p) => OOVariableSym (p CppSrcCode CppHdrCode) where
-  staticVar n = pair1 (staticVar n) (staticVar n)
+  staticVar n t s = pair1 (\tp -> staticVar n tp (pfst s)) (\tp -> staticVar n tp (psnd s)) t
   self = on2StateValues pair self self
   classVar = pair2 classVar classVar
   extClassVar = pair2 extClassVar extClassVar

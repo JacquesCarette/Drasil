@@ -616,7 +616,7 @@ class (TypeSym r) => OOTypeSym r where
 class (ValueSym r, OOTypeSym r) => OOValueSym r
 
 class (VariableSym r, OOTypeSym r) => OOVariableSym r where
-  staticVar    :: Label -> VSType r -> SVariable r -- I *think* this is OO-only
+  staticVar    :: Label -> VSType r -> r (Scope r) SVariable r -- I *think* this is OO-only
   self         :: SVariable r
   classVar     :: VSType r -> SVariable r -> SVariable r
   extClassVar  :: VSType r -> SVariable r -> SVariable r

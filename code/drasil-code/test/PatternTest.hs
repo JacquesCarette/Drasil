@@ -6,7 +6,7 @@ import GOOL.Drasil (GSProgram, VSType, SVariable, SValue, SMethod, OOProg,
   ProgramSym(..), FileSym(..), BodySym(..), oneLiner, BlockSym(..),
   TypeSym(..), OOTypeSym(..), StatementSym(..), DeclStatement(..),
   IOStatement(..), initState, changeState, initObserverList, addObserver,
-  VariableSym(..), OOVariableSym(..), Literal(..), VariableValue(..),
+  VariableSym(..), OOVariableSym(..), ScopeSym(..), Literal(..), VariableValue(..),
   OOValueExpression(..), extNewObj, FunctionSym(..), GetSet(..),
   StatePattern(..), ObserverPattern(..), StrategyPattern(..), MethodSym(..),
   ModuleSym(..))
@@ -33,9 +33,9 @@ observerType = obj observerName
 
 -- | Variables used in the generated code.
 n, obs1, obs2 :: (OOVariableSym r) => SVariable r
-n = var nName int
-obs1 = var obs1Name observerType
-obs2 = var obs2Name observerType
+n = var nName int local
+obs1 = var obs1Name observerType local
+obs2 = var obs2Name observerType local
 
 -- | New Observer object.
 newObserver :: (OOValueExpression r) => SValue r

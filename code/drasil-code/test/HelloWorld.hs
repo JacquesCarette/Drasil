@@ -7,10 +7,10 @@ import GOOL.Drasil (GSProgram, MSBody, MSBlock, MSStatement, SMethod, SVariable,
   OOProg, ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), listSlice, TypeSym(..), StatementSym(..), AssignStatement(..), 
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
-  CommentStatement(..), ControlStatement(..), VariableSym(..), listVar,
-  Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), extFuncApp,
-  List(..), MethodSym(..), ModuleSym(..))
+  CommentStatement(..), ControlStatement(..), VariableSym(..), ScopeSym(..),
+  listVar, Literal(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), extFuncApp, List(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Helper (helper)
 
@@ -26,55 +26,57 @@ description = "Tests various GOOL functions. It should run without errors."
 
 -- | Variable for a list of doubles
 myOtherList :: (OOProg r) => SVariable r
-myOtherList = var "myOtherList" (listType double)
+myOtherList = var "myOtherList" (listType double) local
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 helloWorldMain :: (OOProg r) => SMethod r
 helloWorldMain = mainFunction (body ([ helloInitVariables] ++ listSliceTests ++
-    [block [printLn $ litString "", ifCond [(valueOf (var "b" int) ?>= litInt 6, 
-      bodyStatements [varDecDef (var "dummy" string) (litString "dummy")]),
-      (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody, helloIfExists,
+    [block [printLn $ litString "", ifCond [
+      (valueOf (var "b" int local) ?>= litInt 6, bodyStatements [
+        varDecDef (var "dummy" string local) (litString "dummy")]),
+      (valueOf (var "b" int local) ?== litInt 5, helloIfBody)] helloElseBody, helloIfExists,
     helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch]]))
 
 -- | Initialize variables used in the generated program.
 helloInitVariables :: (OOProg r) => MSBlock r
 helloInitVariables = block [comment "Initializing variables",
-  varDec $ var "a" int,
-  varDecDef (var "b" int) (litInt 5),
+  varDec $ var "a" int local,
+  varDecDef (var "b" int local) (litInt 5),
   listDecDef myOtherList [litDouble 1.0,
     litDouble 1.5],
-  varDecDef (var "oneIndex" int) (indexOf (valueOf myOtherList) (litDouble 1.0)),
-  printLn (valueOf $ var "oneIndex" int),
-  var "a" int &= listSize (valueOf myOtherList),
+  varDecDef (var "oneIndex" int local) (indexOf (valueOf myOtherList) (litDouble 1.0)),
+  printLn (valueOf $ var "oneIndex" int local),
+  var "a" int local &= listSize 
+    (valueOf myOtherList),
   valStmt (listAdd (valueOf myOtherList)
     (litInt 2) (litDouble 2.0)),
-  valStmt (listAppend (valueOf myOtherList)
+  valStmt (listAppend (valueOf $ var "myOtherList" (listType double))
     (litDouble 2.5)),
-  varDec $ var "e" double,
-  var "e" int &= listAccess (valueOf myOtherList) (litInt 1),
+  varDec $ var "e" double local,
+  var "e" int local &= listAccess (valueOf myOtherList) (litInt 1),
   valStmt (listSet (valueOf myOtherList)
     (litInt 1) (litDouble 17.4)),
-  listDec 7 (var "myName" (listType string)),
-  stringSplit ' ' (var "myName" (listType string)) (litString "Brooks Mac"),
-  printLn (valueOf $ var "myName" (listType string)),
-  listDecDef (var "boringList" (listType bool))
+  listDec 7 (var "myName" (listType string) local),
+  stringSplit ' ' (var "myName" (listType string) local) (litString "Brooks Mac"),
+  printLn (valueOf $ var "myName" (listType string) local),
+  listDecDef (var "boringList" (listType bool) local)
     [litFalse, litFalse, litFalse, litFalse, litFalse],
-  printLn (valueOf $ var "boringList" (listType bool))]
+  printLn (valueOf $ var "boringList" (listType bool) local)]
 
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9, 
   mySlicedList10, mySlicedList11 :: (OOProg r) => SVariable r
-mySlicedList = var "mySlicedList" (listType double)
-mySlicedList2 = var "mySlicedList2" (listType double)
-mySlicedList3 = var "mySlicedList3" (listType double)
-mySlicedList4 = var "mySlicedList4" (listType double)
-mySlicedList5 = var "mySlicedList5" (listType double)
-mySlicedList6 = var "mySlicedList6" (listType double)
-mySlicedList7 = var "mySlicedList7" (listType double)
-mySlicedList8 = var "mySlicedList8" (listType double)
-mySlicedList9 = var "mySlicedList9" (listType double)
-mySlicedList10 = var "mySlicedList10" (listType double)
-mySlicedList11 = var "mySlicedList11" (listType double)
+mySlicedList = var "mySlicedList" (listType double) local
+mySlicedList2 = var "mySlicedList2" (listType double) local
+mySlicedList3 = var "mySlicedList3" (listType double) local
+mySlicedList4 = var "mySlicedList4" (listType double) local
+mySlicedList5 = var "mySlicedList5" (listType double) local
+mySlicedList6 = var "mySlicedList6" (listType double) local
+mySlicedList7 = var "mySlicedList7" (listType double) local
+mySlicedList8 = var "mySlicedList8" (listType double) local
+mySlicedList9 = var "mySlicedList9" (listType double) local
+mySlicedList10 = var "mySlicedList10" (listType double) local
+mySlicedList11 = var "mySlicedList11" (listType double) local
 
 listSliceTests :: (OOProg r) => [MSBlock r]
 listSliceTests = [
@@ -98,8 +100,8 @@ listSliceTests = [
   -- | Initialize and assign any variables necessary for list slices
   block [
     comment "Create some variables for later tests",
-    varDecDef (var "x" int) (litInt 3),
-    varDecDef (var "y" int) (litInt 1),
+    varDecDef (var "x" int local) (litInt 3),
+    varDecDef (var "y" int local) (litInt 1),
     varDecDef (var "z" int) (litInt (-1))],
 
   -- | Initialize and assign a value to a new variable @mySlicedList@.
@@ -193,34 +195,34 @@ listSliceTests = [
 helloIfBody :: (OOProg r) => MSBody r
 helloIfBody = addComments "If body" (body [
   block [
-    varDec $ var "c" int,
-    varDec $ var "d" int,
-    assign (var "a" int) (litInt 5),
-    var "b" int &= (valueOf (var "a" int) #+ litInt 2),
-    var "c" int &= (valueOf (var "b" int) #+ litInt 3),
-    var "d" int &= valueOf (var "b" int),
-    var "d" int &-= valueOf (var "a" int),
-    var "c" int &-= valueOf (var "d" int),
-    var "b" int &+= litInt 17,
-    var "c" int &+= litInt 17,
-    (&++) (var "a" int),
-    (&++) (var "d" int),
-    (&--) (var "c" int),
-    (&--) (var "b" int),
+    varDec $ var "c" int local,
+    varDec $ var "d" int local,
+    assign (var "a" int local) (litInt 5),
+    var "b" int local &= (valueOf (var "a" int local) #+ litInt 2),
+    var "c" int local &= (valueOf (var "b" int local) #+ litInt 3),
+    var "d" int local &= valueOf (var "b" int local),
+    var "d" int local &-= valueOf (var "a" int local),
+    var "c" int local &-= valueOf (var "d" int local),
+    var "b" int local &+= litInt 17,
+    var "c" int local &+= litInt 17,
+    (&++) (var "a" int local),
+    (&++) (var "d" int local),
+    (&--) (var "c" int local),
+    (&--) (var "b" int local),
 
-    listDec 5 (var "myList" (listType int)),
-    objDecDef (var "myObj" char) (litChar 'o'),
-    constDecDef (constant "myConst" string) (litString "Imconstant"),
+    listDec 5 (var "myList" (listType int) local),
+    objDecDef (var "myObj" char local) (litChar 'o'),
+    constDecDef (constant "myConst" string local) (litString "Imconstant"),
 
-    printLn (valueOf $ var "a" int),
-    printLn (valueOf $ var "b" int),
-    printLn (valueOf $ var "c" int),
-    printLn (valueOf $ var "d" int),
+    printLn (valueOf $ var "a" int local),
+    printLn (valueOf $ var "b" int local),
+    printLn (valueOf $ var "c" int local),
+    printLn (valueOf $ var "d" int local),
     printLn (valueOf myOtherList),
-    printLn (valueOf $ var "mySlicedList" (listType double)),
+    printLn (valueOf $ var "mySlicedList" (listType double) local),
 
     printStrLn "Type an int",
-    getInput (var "d" int),
+    getInput (var "d" int local),
     printStrLn "Type another",
     discardInput],
 
@@ -254,7 +256,7 @@ helloIfBody = addComments "If body" (body [
     printLn (litInt 6 #+ (litInt 2 #* litInt 3)),
     printLn (csc (litDouble 1.0)),
     printLn (sec (litDouble 1.0)),
-    printLn (valueOf $ var "a" int),
+    printLn (valueOf $ var "a" int local),
     printLn (inlineIf litTrue (litInt 5) (litInt 0)),
     printLn (cot (litDouble 1.0))]])
 
@@ -264,32 +266,32 @@ helloElseBody = bodyStatements [printLn (arg 5)]
 
 -- | If-else statement checking if a list is empty.
 helloIfExists :: (OOProg r) => MSStatement r
-helloIfExists = ifExists (valueOf $ var "boringList" (listType bool))
+helloIfExists = ifExists (valueOf $ var "boringList" (listType bool) local)
   (oneLiner (printStrLn "Ew, boring list!")) (oneLiner (printStrLn "Great, no bores!"))
 
 -- | Creates a switch statement.
 helloSwitch :: (OOProg r) => MSStatement r
-helloSwitch = switch (valueOf $ var "a" int) [(litInt 5, oneLiner (var "b" int &= litInt 10)),
-  (litInt 0, oneLiner (var "b" int &= litInt 5))]
-  (oneLiner (var "b" int &= litInt 0))
+helloSwitch = switch (valueOf $ var "a" int local) [(litInt 5, oneLiner (var "b" int local &= litInt 10)),
+  (litInt 0, oneLiner (var "b" int local &= litInt 5))]
+  (oneLiner (var "b" int local &= litInt 0))
 
 -- | Creates a for loop.
 helloForLoop :: (OOProg r) => MSStatement r
 helloForLoop = forRange i (litInt 0) (litInt 9) (litInt 1) (oneLiner (printLn
   (valueOf i)))
-  where i = var "i" int
+  where i = var "i" int local
 
 -- | Creates a while loop.
 helloWhileLoop :: (OOProg r) => MSStatement r
-helloWhileLoop = while (valueOf (var "a" int) ?< litInt 13) (bodyStatements
-  [printStrLn "Hello", (&++) (var "a" int)])
+helloWhileLoop = while (valueOf (var "a" int local) ?< litInt 13) (bodyStatements
+  [printStrLn "Hello", (&++) (var "a" int local)])
 
 -- | Creates a for-each loop.
 helloForEachLoop :: (OOProg r) => MSStatement r
 helloForEachLoop = forEach i (valueOf $ listVar "myOtherList" double)
   (oneLiner (printLn (extFuncApp "Helper" "doubleAndAdd" double [valueOf i,
   litDouble 1.0])))
-  where i = var "num" double
+  where i = var "num" double local
 
 -- | Creates a try statement to catch an intentional error.
 helloTryCatch :: (OOProg r) => MSStatement r

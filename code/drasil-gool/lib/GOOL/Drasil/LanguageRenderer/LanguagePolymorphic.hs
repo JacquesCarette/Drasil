@@ -29,14 +29,15 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock,
   cos, tan), Comparison(..), funcApp, newObj, objMethodCallNoParams, ($.),
   StatementSym(multi), AssignStatement((&++)), (&=), IOStatement(printStr,
   printStrLn, printFile, printFileStr, printFileStrLn), ifNoElse, ScopeSym(..),
-  ModuleSym(Module), convType)
+  ModuleSym(Module), convTypeOO)
 import qualified GOOL.Drasil.ClassInterface as S (
   TypeSym(int, double, char, string, listType, arrayType, listInnerType,
-  funcType, void), VariableSym(var, objVarSelf), Literal(litInt, litFloat,
-  litDouble, litString), VariableValue(valueOf), FunctionSym(func),
-  List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
-  IOStatement(print), ControlStatement(returnStmt, for), ParameterSym(param),
-  MethodSym(method), List(intToIndex))
+  funcType, void), VariableSym(var), OOVariableSym(objVarSelf),
+  Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
+  FunctionSym(func), List(listSize, listAccess), StatementSym(valStmt),
+  DeclStatement(varDecDef), IOStatement(print),
+  ControlStatement(returnStmt, for), ParameterSym(param), MethodSym(method),
+  List(intToIndex))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(commentedMod),  
   RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
   RenderFunction(funcFromData), FunctionElim(functionType), 
@@ -94,7 +95,7 @@ multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 -- Types --
 
 listInnerType :: (RenderSym r) => VSType r -> VSType r
-listInnerType t = t >>= (convType . getInnerType . getType)
+listInnerType t = t >>= (convTypeOO . getInnerType . getType)
 
 obj :: (RenderSym r) => ClassName -> VSType r
 obj n = typeFromData (Object n) n (text n)
@@ -197,7 +198,7 @@ litDouble :: (RenderSym r) => Double -> SValue r
 litDouble d = mkStateVal S.double (D.double d)
 
 litInt :: (RenderSym r) => Integer -> SValue r
-litInt i = mkStateVal S.int (integer i)
+litInt i = valFromData Nothing (Just i) S.int (integer i)
 
 litString :: (RenderSym r) => String -> SValue r
 litString s = mkStateVal S.string (doubleQuotedText s)
@@ -249,7 +250,7 @@ lambda f ps' ex' = do
   ps <- sequence ps'
   ex <- ex'
   let ft = S.funcType (map (return . variableType) ps) (return $ valueType ex)
-  valFromData (Just 0) ft (f ps ex)
+  valFromData (Just 0) Nothing ft (f ps ex)
 
 objAccess :: (RenderSym r) => SValue r -> VSFunction r -> SValue r
 objAccess = on2StateWrapped (\v f-> mkVal (functionType f) 

@@ -1,5 +1,5 @@
 -- | Defines .json printers to generate jupyter notebooks. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.JSON.Print.html).
-module Language.Drasil.JSON.Print(genJSON) where
+module Language.Drasil.JSON.Print(genJupyter) where
 
 import Prelude hiding (print, (<>))
 import Text.PrettyPrint hiding (Str)
@@ -7,7 +7,7 @@ import Numeric (showEFloat)
 
 import qualified Language.Drasil as L
 
-import Language.Drasil.Format (DocType(Jupyter))
+import Language.Drasil.Format (DocType(Lesson))
 
 import Language.Drasil.Printing.Import (makeDocument)
 import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
@@ -33,9 +33,9 @@ import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat, co
 -- | Generate a python notebook document (using json).
 -- build : build the SRS document in JSON format
 -- build': build the general Jupyter Notbook document
-genJSON :: PrintingInformation -> DocType -> L.Document -> Doc
-genJSON sm Jupyter doc = build (makeDocument sm doc)
-genJSON sm _       doc = build' (makeDocument sm doc)
+genJupyter :: PrintingInformation -> DocType -> L.Document -> Doc
+genJupyter sm Lesson doc = build  (makeDocument sm doc)
+genJupyter sm _      doc = build' (makeDocument sm doc)
 
 -- | Build the JSON Document, called by genJSON
 build :: Document -> Doc

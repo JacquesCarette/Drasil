@@ -13,5 +13,5 @@ main = do
   setLocaleEncoding utf8
   dumpEverything fullSI printSetting ".drasil/"
   typeCheckSI fullSI
-  gen (DocSpec (docChoices SRS [HTML, TeX, JSON, Markdown GitHub, MDBook]) "SglPend_SRS") srs printSetting
+  gen (DocSpec (docChoices SRS [HTML, TeX, Jupyter, Markdown GitHub, MDBook]) "SglPend_SRS") srs printSetting
   genDot fullSI

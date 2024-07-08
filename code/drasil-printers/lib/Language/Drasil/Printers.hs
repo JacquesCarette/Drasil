@@ -1,7 +1,7 @@
 module Language.Drasil.Printers (
   -- * Formats
-  DocType(SRS, Website, Jupyter), 
-  Format(TeX, HTML, JSON, Markdown, MDBook),
+  DocType(SRS, Website, Lesson), 
+  Format(TeX, HTML, Jupyter, Markdown, MDBook),
   MDFlavour(GitHub)
   -- * DOT
   -- ** Types
@@ -27,7 +27,7 @@ module Language.Drasil.Printers (
   -- * TeX
   , genTeX
   -- * Jupyter
-  , genJSON
+  , genJupyter
   -- * Markdown
   , genMD, genMDBook, makeBook
   -- * Log
@@ -40,11 +40,11 @@ module Language.Drasil.Printers (
   )
   where
 
-import Language.Drasil.Format (DocType(SRS, Website, Jupyter), 
-  Format(TeX, HTML, JSON, Markdown, MDBook), MDFlavour(GitHub))
+import Language.Drasil.Format (DocType(SRS, Website, Lesson), 
+  Format(TeX, HTML,  Jupyter, Markdown, MDBook), MDFlavour(GitHub))
 import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
-import Language.Drasil.JSON.Print (genJSON)
+import Language.Drasil.JSON.Print (genJupyter)
 import Language.Drasil.Markdown.Print (genMD, genMDBook)
 import Language.Drasil.Markdown.Book (makeBook)
 import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS,

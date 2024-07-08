@@ -9,4 +9,4 @@ main :: IO()
 main = do
   setLocaleEncoding utf8
   dumpEverything fullSI printSetting ".drasil/"
-  gen (DocSpec (docChoices SRS [HTML, TeX, JSON, Markdown GitHub, MDBook]) "Template_SRS") srs printSetting
+  gen (DocSpec (docChoices SRS [HTML, TeX, Jupyter, Markdown GitHub, MDBook]) "Template_SRS") srs printSetting

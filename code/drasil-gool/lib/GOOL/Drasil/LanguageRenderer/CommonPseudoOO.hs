@@ -19,15 +19,16 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, VSType,
   SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar,
   SClass, FSModule, Initializers, MixedCall, PermanenceSym(..), bodyStatements,
-  oneLiner, TypeSym(infile, outfile, listInnerType, obj),
+  oneLiner, TypeSym(infile, outfile, listInnerType), OOTypeSym(obj),
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType),
   ValueSym(valueType), Comparison(..), objMethodCallNoParams, (&=),
   ControlStatement(returnStmt), ScopeSym(..), MethodSym(function),
   NumericExpression((#+), (#-)))
 import qualified GOOL.Drasil.ClassInterface as S (
   TypeSym(int, double, string, listType, arrayType, void),
-  VariableSym(var, self, objVar), Literal(litTrue, litFalse, litList, litInt),
-  VariableValue(valueOf), FunctionSym(func, objAccess), StatementSym(valStmt),
+  VariableSym(var), OOVariableSym(self, objVar),
+  Literal(litTrue, litFalse, litList, litInt), VariableValue(valueOf),
+  FunctionSym(func, objAccess), StatementSym(valStmt),
   DeclStatement(varDec, varDecDef, constDecDef), List(intToIndex, indexToInt),
   ParameterSym(param, pointerParam), MethodSym(mainFunction),
   ClassSym(buildClass))
@@ -514,9 +515,17 @@ listAppend l v = do
 -- | Convert an integer to an index in a 1-indexed language
 --   Since GOOL is 0-indexed, we need to add 1
 intToIndex' :: (RenderSym r) => SValue r -> SValue r
-intToIndex' = (#+ S.litInt 1)
+intToIndex' v = do 
+  v' <- v
+  case RC.valueInt v' of
+    (Just i) -> S.litInt (i + 1)
+    Nothing -> v #+ S.litInt 1
 
 -- | Convert an index to an integer in a 1-indexed language
 --   Since GOOL is 0-indexed, we need to subtract 1
 indexToInt' :: (RenderSym r) => SValue r -> SValue r
-indexToInt' = (#- S.litInt 1)
+indexToInt' v = do
+  v' <- v
+  case RC.valueInt v' of
+    (Just i) -> S.litInt (i - 1)
+    Nothing -> v #- S.litInt 1

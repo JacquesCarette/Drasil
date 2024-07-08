@@ -18,10 +18,10 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock,
   VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter,
   SMethod, CSStateVar, SClass, FSModule, MixedCall, FileSym(..),
   PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
-  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), InternalValueExp(..), FunctionSym(..), GetSet(..),
+  VariableSym(..), OOVariableValue, VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
+  OOValueExpression(..), InternalValueExp(..), FunctionSym(..), GetSet(..),
   List(..), InternalList(..), VectorExpression(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
@@ -38,7 +38,7 @@ import Text.PrettyPrint.HughesPJ (Doc)
 class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r, 
   StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement
   r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
-  NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r,
+  NumericExpression r, BooleanExpression r, Comparison r,
   InternalValueExp r, GetSet r, List r, InternalList r, VectorExpression r,
   StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r,
   VariableElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r,
@@ -49,7 +49,7 @@ class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r,
   InternalControlStmt r, RenderStatement r, StatementElim r, StateVarElim r,
   RenderType r, InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable
   r, InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r,
-  BlockCommentElim r) => RenderSym r
+  BlockCommentElim r, OOVariableValue r, OOValueExpression r) => RenderSym r --TODO: split RenderSym into OO and shared components
 
 class (BlockCommentSym r) => RenderFile r where
   -- top and bottom are only used for pre-processor guards for C++ header 
@@ -161,10 +161,11 @@ class RenderValue r where
   -- calls.
   call :: Maybe Library -> Maybe Doc -> MixedCall r
 
-  valFromData :: Maybe Int -> VSType r -> Doc -> SValue r
+  valFromData :: Maybe Int -> Maybe Integer -> VSType r -> Doc -> SValue r
 
 class ValueElim r where
   valuePrec :: r (Value r) -> Maybe Int
+  valueInt :: r (Value r) -> Maybe Integer
   value :: r (Value r) -> Doc
 
 class InternalGetSet r where

@@ -8,7 +8,7 @@ module Language.Drasil.Generate (
   gen, genDot, genCode,
   -- * Types (Printing Options)
   DocType(..), DocSpec(DocSpec), DocChoices(DC),
-  Format(TeX, HTML, JSON, Markdown, MDBook),
+  Format(TeX, HTML, Jupyter, Markdown, MDBook),
   MDFlavour(GitHub),
   -- * Constructor
   docChoices) where
@@ -25,8 +25,8 @@ import Build.Drasil (genMake)
 import Language.Drasil
 import Drasil.DocLang (mkGraphInfo)
 import SysInfo.Drasil (SystemInformation)
-import Language.Drasil.Printers (DocType(SRS, Website, Jupyter), makeCSS, genHTML, 
-  genTeX, Format(TeX, HTML, JSON, Markdown, MDBook), genJSON, genMD, genMDBook, 
+import Language.Drasil.Printers (DocType(SRS, Website, Lesson), makeCSS, genHTML, 
+  genTeX, Format(TeX, HTML, Jupyter, Markdown, MDBook), genJupyter, genMD, genMDBook, 
   PrintingInformation, outputDot, makeBook, MDFlavour(GitHub))
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD,
@@ -45,21 +45,21 @@ gen ds fn sm = prnt sm ds fn -- FIXME: 'prnt' is just 'gen' with the arguments r
 -- TODO: Include Jupyter into the SRS setup.
 -- | Generate the output artifacts (TeX+Makefile, HTML or Notebook).
 prnt :: PrintingInformation -> DocSpec -> Document -> IO ()
-prnt sm (DocSpec (DC Jupyter _) fn) body =
-  do prntDoc body sm fn Jupyter JSON
+prnt sm (DocSpec (DC Lesson _) fn) body =
+  do prntDoc body sm fn Lesson Jupyter
 prnt sm (DocSpec (DC dtype fmts) fn) body =
   do mapM_ (prntDoc body sm fn dtype) fmts
 
--- | Helper for writing the documents (TeX / HTML / JSON) to file.
+-- | Helper for writing the documents (TeX / HTML / Jupyter) to file.
 prntDoc :: Document -> PrintingInformation -> String -> DocType -> Format -> IO ()
-prntDoc d pinfo fn Jupyter _ = prntDoc' Jupyter "Jupyter" fn JSON d pinfo
+prntDoc d pinfo fn Lesson _ = prntDoc' Lesson "Lesson" fn Jupyter d pinfo
 prntDoc d pinfo fn dtype fmt =
   case fmt of
     HTML              -> do prntDoc' dtype (show dtype ++ "/HTML") fn HTML d pinfo
                             prntCSS dtype fn d
     TeX               -> do prntDoc' dtype (show dtype ++ "/PDF") fn TeX d pinfo
                             prntMake $ DocSpec (DC dtype []) fn
-    JSON              -> do prntDoc' dtype (show dtype ++ "/JSON") fn JSON d pinfo
+    Jupyter           -> do prntDoc' dtype (show dtype ++ "/Jupyter") fn Jupyter d pinfo
     (Markdown GitHub) -> do prntDoc' dtype (show dtype ++ "/Markdown") fn (Markdown GitHub) d pinfo
     MDBook            -> do prntDoc' dtype (show dtype ++ "/mdBook") fn MDBook d pinfo
                             prntBook dtype d pinfo
@@ -92,7 +92,7 @@ prntDoc' dt dt' fn format body' sm = do
     -- MDBook case is handled above.
     getExt  TeX         = ".tex"
     getExt  HTML        = ".html"
-    getExt  JSON        = ".ipynb"
+    getExt  Jupyter     = ".ipynb"
     getExt (Markdown _) = ".md"
     getExt _            = srsFormatError
 
@@ -126,7 +126,7 @@ prntBook dt doc sm = do
 writeDoc :: PrintingInformation -> DocType -> Format -> Filename -> Document -> Doc
 writeDoc s _  TeX               _  doc = genTeX doc s
 writeDoc s _  HTML              fn doc = genHTML s fn doc
-writeDoc s dt JSON              _  doc = genJSON s dt doc
+writeDoc s dt Jupyter           _  doc = genJupyter s dt doc
 writeDoc s _  (Markdown GitHub) _  doc = genMD s doc
 writeDoc _ _  _                 _  _   = srsFormatError
 

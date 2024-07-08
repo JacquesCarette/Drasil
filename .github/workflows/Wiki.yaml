@@ -1,10 +1,10 @@
 name: Wiki
 on:
   push:
-    branches: [main]
+    branches: main
     paths: [wiki/**, .github/workflows/Wiki.yaml]
   pull_request:
-    branches: [main]
+    branches: main
     paths: [wiki/**, .github/workflows/Wiki.yaml]
 permissions:
   contents: write

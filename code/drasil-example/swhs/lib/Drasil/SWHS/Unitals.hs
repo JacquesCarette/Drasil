@@ -264,21 +264,21 @@ tempPCM, tempW, watE, pcmE :: ConstrConcept
 tankLength = uqc "tankLength" (nounPhraseSP "length of tank")
   "the length of the tank" cL metre Real
   [gtZeroConstr,
-  sfwrc $ Bounded (Inc, sy tankLengthMin) (Inc, sy tankLengthMax)] (dbl 1.5)
+  sfwrRange $ Bounded (Inc, sy tankLengthMin) (Inc, sy tankLengthMax)] (dbl 1.5)
   defaultUncrt
 
 -- Constraint 2
 diam = uqc "diam" (nounPhraseSP "diameter of tank")
   "the diameter of the tank" cD metre Real
-  [gtZeroConstr, sfwrc $ Bounded (Inc, sy arMin) (Inc, sy arMax)]
+  [gtZeroConstr, sfwrRange $ Bounded (Inc, sy arMin) (Inc, sy arMax)]
   (dbl 0.412) defaultUncrt
 
 -- Constraint 3
 pcmVol = uqc "pcmVol" (nounPhraseSP "volume of PCM")
   "the amount of space occupied by a given quantity of phase change material"
   (sub (eqSymb vol) lPCM) m_3 Real
-  [physc $ Bounded (Exc, exactDbl 0) (Exc, sy tankVol),
-   sfwrc $ UpFrom (Inc, sy fracMin $* sy tankVol)] 
+  [physRange $ Bounded (Exc, exactDbl 0) (Exc, sy tankVol),
+   sfwrRange $ UpFrom (Inc, sy fracMin $* sy tankVol)] 
   (dbl 0.05) defaultUncrt
   -- needs to add (D,L)*minfract to end of last constraint
 
@@ -292,14 +292,14 @@ pcmSA = uqc "pcmSA"
   "area covered by the outermost layer of the phase change material"
   (sub cA lPCM) m_2 Real
   [gtZeroConstr,
-  sfwrc $ Bounded (Inc, sy pcmVol) (Inc, (exactDbl 2 $/ sy thickness) $* sy tankVol)]
+  sfwrRange $ Bounded (Inc, sy pcmVol) (Inc, (exactDbl 2 $/ sy thickness) $* sy tankVol)]
   (dbl 1.2) defaultUncrt
 
 -- Constraint 5
 pcmDensity = uq (cuc'' "pcmDensity" (nounPhraseSP "density of PCM")
   "Mass per unit volume of the phase change material"
   (autoStage $ sub (eqSymb density) lPCM) densityU Real
-  [gtZeroConstr, sfwrc $ Bounded (Exc, sy pcmDensityMin) (Exc, sy pcmDensityMax)]
+  [gtZeroConstr, sfwrRange $ Bounded (Exc, sy pcmDensityMin) (Exc, sy pcmDensityMax)]
   (exactDbl 1007)) defaultUncrt
 
 -- Constraint 6
@@ -307,7 +307,7 @@ tempMeltP = uqc "tempMeltP"
   (nounPhraseSP "melting point temperature for PCM")
   "temperature at which the phase change material transitions from a solid to a liquid"
   (sup (sub (eqSymb temp) lMelt) lPCM) centigrade Real
-  [physc $ Bounded (Exc, exactDbl 0) (Exc, sy tempC)] (dbl 44.2) defaultUncrt
+  [physRange $ Bounded (Exc, exactDbl 0) (Exc, sy tempC)] (dbl 44.2) defaultUncrt
 
 -- Constraint 7
 htCapSP = uqc "htCapSP"
@@ -316,7 +316,7 @@ htCapSP = uqc "htCapSP"
   "given unit mass of solid phase change material by a given amount")
   (sup (sub (eqSymb heatCapSpec) lPCM) lSolid) UT.heatCapSpec Real
   [gtZeroConstr,
-  sfwrc $ Bounded (Exc, sy htCapSPMin) (Exc, sy htCapSPMax)]
+  sfwrRange $ Bounded (Exc, sy htCapSPMin) (Exc, sy htCapSPMax)]
   (exactDbl 1760) defaultUncrt
 
 -- Constraint 8
@@ -326,7 +326,7 @@ htCapLP = uqc "htCapLP"
   "given unit mass of liquid phase change material by a given amount")
   (sup (sub (eqSymb heatCapSpec) lPCM) lLiquid) UT.heatCapSpec Real
   [gtZeroConstr,
-  sfwrc $ Bounded (Exc, sy htCapLPMin) (Exc, sy htCapLPMax )]
+  sfwrRange $ Bounded (Exc, sy htCapLPMin) (Exc, sy htCapLPMax )]
   (exactDbl 2270) defaultUncrt
 
 --Constraint 9
@@ -334,7 +334,7 @@ htFusion = uqc "htFusion" (nounPhraseSP "specific latent heat of fusion")
   "amount of thermal energy required to completely melt a unit mass of a substance"
   (sub cH lFusion) specificE Real
   [gtZeroConstr,
-  sfwrc $ Bounded (Exc, sy htFusionMin) (Exc, sy htFusionMax)] (exactDbl 211600) defaultUncrt
+  sfwrRange $ Bounded (Exc, sy htFusionMin) (Exc, sy htFusionMax)] (exactDbl 211600) defaultUncrt
 
 -- Constraint 10
 -- The "S "heating coil" " should be replaced by "phrase coil",
@@ -344,18 +344,18 @@ coilSA = uqc "coilSA"
   (nounPhrase'' (phrase surArea) (phrase surArea) CapFirst CapWords))
   "area covered by the outermost layer of the coil" (sub cA lCoil) m_2 Real
   [gtZeroConstr,
-  sfwrc $ UpTo (Inc, sy coilSAMax)] (dbl 0.12) defaultUncrt
+  sfwrRange $ UpTo (Inc, sy coilSAMax)] (dbl 0.12) defaultUncrt
 
 -- Constraint 11
 tempC = uqc "tempC" (nounPhraseSP "temperature of the heating coil")
   "the average kinetic energy of the particles within the coil"
   (sub (eqSymb temp) lCoil) centigrade Real
-  [physc $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 100)] (exactDbl 50) defaultUncrt
+  [physRange $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 100)] (exactDbl 50) defaultUncrt
 
 -- Constraint 12
 wDensity = uq (cuc'' "wDensity" (density `of_` water)
   "mass per unit volume of water" (autoStage $ sub (eqSymb density) lWater) densityU Real
-  [gtZeroConstr, sfwrc $ Bounded (Exc, sy wDensityMin) (Inc, sy wDensityMax)]
+  [gtZeroConstr, sfwrRange $ Bounded (Exc, sy wDensityMin) (Inc, sy wDensityMax)]
   (exactDbl 1000)) defaultUncrt
 
 -- Constraint 13
@@ -364,7 +364,7 @@ htCapW = uqc "htCapW" (heatCapSpec `of_` water)
    "temperature of a given unit mass of water by a given amount")
   (sub (eqSymb heatCapSpec) lWater) UT.heatCapSpec Real
   [gtZeroConstr,
-  sfwrc $ Bounded (Exc, sy htCapWMin) (Exc, sy htCapWMax)] (exactDbl 4186) defaultUncrt
+  sfwrRange $ Bounded (Exc, sy htCapWMin) (Exc, sy htCapWMax)] (exactDbl 4186) defaultUncrt
   
 -- Constraint 14
 coilHTC = uqc "coilHTC" (nounPhraseSP
@@ -374,7 +374,7 @@ coilHTC = uqc "coilHTC" (nounPhraseSP
   (sub (eqSymb htTransCoeff) lCoil)
   UT.heatTransferCoef Real
   [gtZeroConstr,
-  sfwrc $ Bounded (Inc, sy coilHTCMin) (Inc, sy coilHTCMax)] (exactDbl 1000) defaultUncrt
+  sfwrRange $ Bounded (Inc, sy coilHTCMin) (Inc, sy coilHTCMax)] (exactDbl 1000) defaultUncrt
 
 -- Constraint 15
 pcmHTC = uqc "pcmHTC"
@@ -383,13 +383,13 @@ pcmHTC = uqc "pcmHTC"
    "the thermal flux from the phase change material to the surrounding water")
   (sub lH lPCM) UT.heatTransferCoef Real
   [gtZeroConstr,
-  sfwrc $ Bounded (Inc, sy pcmHTCMin) (Inc, sy pcmHTCMax)] (exactDbl 1000) defaultUncrt
+  sfwrRange $ Bounded (Inc, sy pcmHTCMin) (Inc, sy pcmHTCMax)] (exactDbl 1000) defaultUncrt
   
 -- Constraint 16
 tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
   "the temperature at the beginning of the simulation"
   (sub (eqSymb temp) lInit) centigrade Real
-  [physc $ Bounded (Exc, exactDbl 0) (Exc, sy meltPt)] (exactDbl 40) defaultUncrt
+  [physRange $ Bounded (Exc, exactDbl 0) (Exc, sy meltPt)] (exactDbl 40) defaultUncrt
   
 -- Constraint 17
 timeFinal = uqc "timeFinal" (nounPhraseSP "final time")
@@ -397,13 +397,13 @@ timeFinal = uqc "timeFinal" (nounPhraseSP "final time")
    "simulation to its conclusion") (sub (eqSymb time) 
   lFinal) second Real
   [gtZeroConstr,
-  sfwrc $ UpTo (Exc, sy timeFinalMax)] (exactDbl 50000) defaultUncrt
+  sfwrRange $ UpTo (Exc, sy timeFinalMax)] (exactDbl 50000) defaultUncrt
 
 timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
   ("the finite discretization of time used in the numerical method " ++
    "for solving the computational model")
   (sub (eqSymb time) lStep) second Real
-  [physc $ Bounded (Exc, exactDbl 0) (Exc, sy timeFinal)]
+  [physRange $ Bounded (Exc, exactDbl 0) (Exc, sy timeFinal)]
   (dbl 0.01) defaultUncrt
   
 -- Output Constraints
@@ -416,26 +416,26 @@ tempW = cuc' "tempW"
   (nounPhraseSP "temperature of the water")
   "the average kinetic energy of the particles within the water" 
   (sub (eqSymb temp) lWater) centigrade (Vect Real)
-  [physc $ Bounded (Inc, sy tempInit) (Inc, sy tempC)] (exactDbl 0)
+  [physRange $ Bounded (Inc, sy tempInit) (Inc, sy tempC)] (exactDbl 0)
 
 -- Constraint 19
 tempPCM = cuc' "tempPCM"
   (nounPhraseSP "temperature of the phase change material")
   "the average kinetic energy of the particles within the phase change material"
   (sub (eqSymb temp) lPCM) centigrade Real
-  [physc $ Bounded (Inc, sy tempInit) (Inc, sy tempC)] (exactDbl 0)
+  [physRange $ Bounded (Inc, sy tempInit) (Inc, sy tempC)] (exactDbl 0)
   
 -- Constraint 20
 watE = cuc' "watE" (nounPhraseSP "change in heat energy in the water")
   "change in thermal energy within the water" 
   (sub (eqSymb sensHeat) lWater) joule Real
-  [physc $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)
+  [physRange $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)
   
 -- Constraint 21
 pcmE = cuc' "pcmE" (nounPhraseSP "change in heat energy in the PCM")
   "change in thermal energy within the phase change material" 
   (sub (eqSymb sensHeat) lPCM) joule Real
-  [physc $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)
+  [physRange $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)
 
 ---------------------------------
 -- Uncertainties with no Units --
@@ -445,12 +445,12 @@ absTol, relTol :: UncertainChunk
 
 absTol = uvc "absTol" (nounPhraseSP "absolute tolerance") 
   (sub cA lTol) Real
-  [physc $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 1)] 
+  [physRange $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 1)] 
    (dbl (10.0**(-10))) (uncty 0.01 Nothing)
 
 relTol = uvc "relTol" (nounPhraseSP "relative tolerance") 
   (sub cR lTol) Real
-  [physc $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 1)] 
+  [physRange $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 1)] 
   (dbl (10.0**(-10))) (uncty 0.01 Nothing)
 
 -------------------------

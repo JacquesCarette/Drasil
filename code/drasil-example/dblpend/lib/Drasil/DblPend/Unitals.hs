@@ -187,4 +187,4 @@ pendDisAngle = cuc' "pendDisAngle"
   (nounPhraseSP "dependent variables")
   "column vector of displacement of rods with its derivatives"
   lTheta' radian (Vect Real)
-  [physc $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)
+  [physRange $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)

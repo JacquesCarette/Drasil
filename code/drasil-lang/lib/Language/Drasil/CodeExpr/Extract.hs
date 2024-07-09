@@ -4,7 +4,7 @@ module Language.Drasil.CodeExpr.Extract (
 ) where
 
 import Language.Drasil.Space (RealInterval(..))
-import Language.Drasil.UID (UID)
+import Language.Drasil.Symbol (Symbol)
 
 import Language.Drasil.CodeExpr.Lang (CodeExpr(..))
 
@@ -12,7 +12,7 @@ import Data.List (nub)
 import Data.Set (Set, union, unions, insert, singleton, empty, fromList, toList)
 
 -- | Generic traverse of all expressions that could lead to names.
-eNames :: CodeExpr -> Set UID
+eNames :: CodeExpr -> Set Symbol
 eNames (AssocA _ l)          = unions (map eNames l)
 eNames (AssocB _ l)          = unions (map eNames l)
 eNames (C c)                 = singleton c
@@ -39,7 +39,7 @@ eNames (Matrix a)            = unions (map (unions . map eNames) a)
 eNames (RealI c b)           = insert c (eNamesRI b)
 
 -- | Generic traversal of everything that could come from an interval to names (similar to 'eNames').
-eNamesRI :: RealInterval CodeExpr CodeExpr -> Set UID
+eNamesRI :: RealInterval CodeExpr CodeExpr -> Set Symbol
 eNamesRI (Bounded (_, il) (_, iu)) = eNames il `union` eNames iu
 eNamesRI (UpTo (_, iu))            = eNames iu
 eNamesRI (UpFrom (_, il))          = eNames il
@@ -47,7 +47,7 @@ eNamesRI (UpFrom (_, il))          = eNames il
 -- | Generic traverse of all positions that could lead to 'eNames' without
 -- functions.  FIXME : this should really be done via post-facto filtering, but
 -- right now the information needed to do this is not available!
-eNames' :: CodeExpr -> [UID]
+eNames' :: CodeExpr -> [Symbol]
 eNames' (AssocA _ l)          = concatMap eNames' l
 eNames' (AssocB _ l)          = concatMap eNames' l
 eNames' (C c)                 = [c]
@@ -78,7 +78,7 @@ eNames' (Matrix a)            = concatMap (concatMap eNames') a
 eNames' (RealI c b)           = c : eNamesRI' b
 
 -- | Generic traversal of everything that could come from an interval to names without functions (similar to 'eNames'').
-eNamesRI' :: RealInterval CodeExpr CodeExpr -> [UID]
+eNamesRI' :: RealInterval CodeExpr CodeExpr -> [Symbol]
 eNamesRI' (Bounded il iu) = eNames' (snd il) ++ eNames' (snd iu)
 eNamesRI' (UpTo iu)       = eNames' (snd iu)
 eNamesRI' (UpFrom il)     = eNames' (snd il)
@@ -87,5 +87,5 @@ eNamesRI' (UpFrom il)     = eNames' (snd il)
 -- And now implement the exported traversals all in terms of the above
 
 -- | Get dependencies from an equation, without functions.
-eDep' :: CodeExpr -> [UID]
+eDep' :: CodeExpr -> [Symbol]
 eDep' = nub . eNames'

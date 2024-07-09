@@ -105,8 +105,8 @@ pExpr (Dbl d)        = pure . text $ showEFloat Nothing d ""
 pExpr (Int i)        = pure (integer i)
 pExpr (Str s)        = toText . quote . pure $ text s
 pExpr (Div n d)      = command2D "frac" (pExpr n) (pExpr d)
-pExpr (Case ps)      = mkEnv "cases" (cases ps dbs pExpr)
-pExpr (Mtx a)        = mkEnv "bmatrix" (pMatrix a dbs pExpr)
+pExpr (Case ps)      = mkEnv "cases" ($+$) (cases ps vpunctuate dbs pExpr)
+pExpr (Mtx a)        = mkEnv "bmatrix" ($+$) (pMatrix a vpunctuate dbs pExpr)
 pExpr (Row [x])      = br $ pExpr x -- FIXME: Hack needed for symbols with multiple subscripts, etc.
 pExpr (Row l)        = foldl1 (<>) (map pExpr l)
 pExpr (Ident s@[_])  = pure . text . escapeIdentSymbols $ s
@@ -187,14 +187,14 @@ fence _ Abs       = pure $ text "|"
 fence _ Norm      = pure $ text "\\|"
 
 -- | For printing a Matrix.
-pMatrix :: [[Expr]] -> TP.Doc -> (Expr -> D) -> D
-pMatrix e esc f = vpunctuate esc (map pIn e)
+pMatrix :: [[Expr]] -> (TP.Doc -> [D] -> D) -> TP.Doc -> (Expr -> D) -> D
+pMatrix e catf esc f = catf esc (map pIn e)
   where pIn x = hpunctuate (text " & ") (map f x)
 
 -- | Helper for printing case expression.
-cases :: [(Expr,Expr)] -> TP.Doc -> (Expr -> D) -> D
-cases [] _ _ = error "Attempt to create case expression without cases"
-cases e esc f = vpunctuate esc (map _case e)
+cases :: [(Expr,Expr)] -> (TP.Doc -> [D] -> D) -> TP.Doc -> (Expr -> D) -> D
+cases [] _ _ _ = error "Attempt to create case expression without cases"
+cases e catf esc f = catf esc (map _case e)
   where _case (x, y) = hpunctuate (text ", & ") (map f [x, y])
 
 -----------------------------------------------------------------
@@ -206,7 +206,7 @@ cases e esc f = vpunctuate esc (map _case e)
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
 makeTable [] _ _ _ = error "Completely empty table (not even header)"
 makeTable [_] _ _ _ = empty -- table with no actual contents... don't error
-makeTable lls@(h:tlines) r bool t = mkEnv "longtblr" $
+makeTable lls@(h:tlines) r bool t = mkEnv "longtblr" ($+$) $
   (if bool then sq $ pure (text "caption=") <> br t else empty)
   %% br (pure (text "colspec=") <> br (pure $ text $ unwords $ anyBig lls)
     <> pure (text ", rowhead=1, hline{1,Z}=\\heavyrulewidth, hline{2}=\\lightrulewidth"))
@@ -430,7 +430,7 @@ makeFigure r c f wp =
 -- | Prints graphs.
 makeGraph :: [(D,D)] -> D -> D -> D -> D -> D
 makeGraph ps w h c l =
-  mkEnv "figure" $ centering %%
+  mkEnv "figure" ($+$) $ centering %%
   mkEnvArgBr "adjustbox" "max width=\\textwidth" (
   mkEnvArgSq "tikzpicture" ">=latex,line join=bevel" (
   vcat [command "tikzstyle" "n" <> pure (text " = ") <> sq (

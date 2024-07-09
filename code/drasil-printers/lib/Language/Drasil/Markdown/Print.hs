@@ -2,6 +2,7 @@
 module Language.Drasil.Markdown.Print(genMD, genMDBook, pSpec) where
 
 import Prelude hiding (print, (<>))
+import qualified Prelude as P ((<>))
 import Text.PrettyPrint hiding (Str)
 import Data.List (transpose)
 import Data.List.Utils (replace)
@@ -19,17 +20,18 @@ import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Project(Project), Document(Document), 
   LayoutObj(..), Filename, RefMap, File(File))
 import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, unders, 
-  hat, hyph, dot, nl, tab)
+  hat, hyph, dot)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 import qualified Language.Drasil.TeX.Print as TeX (pExpr, fence, OpenClose(..),
   pMatrix, cases)
-import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, toText)
+import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, toText,
+  hpunctuate)
 import qualified Language.Drasil.HTML.Print as HTML (renderCite, pSpec)
 import Language.Drasil.HTML.Helpers(BibFormatter(..))
 import Language.Drasil.TeX.Helpers(commandD, command2D, mkEnv)
 
-import Language.Drasil.Markdown.Helpers (heading, stripStr, image, li, reflink, sq,
+import Language.Drasil.Markdown.Helpers (heading, image, li, reflink, sq,
   reflinkURI, reflinkInfo, caption, bold, ul, br, docLength, divTag, defnHTag, em,
   paren, h, h', ($^$), vcatnl)
 
@@ -102,10 +104,8 @@ printLO rm (Header n contents l) = h (n+1) <+> heading (pSpec rm contents) (pSpe
 printLO rm (Cell layoutObs)      = print rm layoutObs
 printLO rm (HDiv _ layoutObs _)  = print rm layoutObs
 printLO rm (Paragraph contents)  = pSpec rm contents
-printLO rm (EqnBlock contents)   = mathEqn
+printLO rm (EqnBlock contents)   = text "\\\\[" <> rndr contents <> text "\\\\]"
   where
-    mjDelimDisp d  = text "\\\\[" <> stripStr d nl <> text "\\\\]" 
-    mathEqn = mjDelimDisp $ rndr contents
     rndr (E e) = pExpr e
     rndr c = pSpec rm c
 printLO rm (Table _ rows r b t)  = makeTable rm rows (pSpec rm r) b (pSpec rm t)
@@ -122,9 +122,9 @@ printLO _ CodeBlock {}           = empty
 
 -- | Helper for rendering Specs into Markdown
 pSpec :: RefMap -> Spec -> Doc
-pSpec _ (E e)      = text "\\\\(" <> stripStr (pExpr e) nl <> text "\\\\)"
+pSpec _ (E e)      = text "\\\\(" <> pExpr e <> text "\\\\)"
 pSpec rm (a :+: b) = pSpec rm a <> pSpec rm b
-pSpec _ HARDNL     = nl
+pSpec _ HARDNL     = text "\n"
 pSpec rm (Ref Internal       r a) = reflink     rm r (pSpec rm a)
 pSpec rm (Ref (Cite2 EmptyS) r a) = reflink     rm r (pSpec rm a)
 pSpec rm (Ref (Cite2 n)      r a) = reflinkInfo rm r (pSpec rm a) (pSpec rm n)
@@ -143,8 +143,12 @@ pExpr (Str s)        = printMath $ toText $ pure $ lq <> text s <> rq
     lq = text "\\\\(\\``\\\\)"
     rq = text "''"
 pExpr (Div n d)      = printMath $ command2D "frac" (pExpr' n) (pExpr' d)
-pExpr (Case ps)      = printMath $ mkEnv "cases" (TeX.cases ps lnl pExpr')
-pExpr (Mtx a)        = stripStr (printMath $ mkEnv "bmatrix" (TeX.pMatrix a lnl pExpr')) tab
+pExpr (Case ps)      = printMath $ mkEnv "cases" (P.<>) cases
+  where
+    cases = TeX.cases ps hpunctuate lnl pExpr'
+pExpr (Mtx a)        = printMath $ mkEnv "bmatrix" (P.<>) matrix
+  where 
+    matrix = TeX.pMatrix a hpunctuate lnl pExpr'
 pExpr (Row [x])      = br $ pExpr x 
 pExpr (Row l)        = foldl1 (<>) (map pExpr l)
 pExpr (Label s)      = printMath $ TeX.pExpr (Label s')

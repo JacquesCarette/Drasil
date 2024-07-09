@@ -3,7 +3,6 @@ module Language.Drasil.Markdown.Helpers where
 
 import Prelude hiding ((<>), lookup)
 import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), ($$), hcat)
-import Data.List.Split (splitOn)
 import Data.List (foldl')
 import Data.Map (lookup)
 import Language.Drasil.Printing.Helpers (ast)
@@ -128,10 +127,6 @@ h' n
   | n < 1 = error "Illegal header (header weight must be > 0)."
   | n > 7 = error "Illegal header (header weight must be < 8)."
   | otherwise = text $ replicate n '#'
-
--- | Helper for stripping Docs
-stripStr :: Doc -> Doc -> Doc
-stripStr d s = hcat (map text (splitOn (show s) (show d)))
 
 -- | Helper for getting length of a Doc
 docLength :: Doc -> Int

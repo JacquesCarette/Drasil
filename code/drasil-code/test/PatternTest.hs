@@ -6,7 +6,7 @@ import GOOL.Drasil (GSProgram, VSType, SVariable, SValue, SMethod, OOProg,
   ProgramSym(..), FileSym(..), BodySym(..), oneLiner, BlockSym(..),
   TypeSym(..), OOTypeSym(..), StatementSym(..), DeclStatement(..),
   IOStatement(..), initState, changeState, initObserverList, addObserver,
-  VariableSym(..), OOVariableSym(..), ScopeSym(..), Literal(..), VariableValue(..),
+  var, OOVariableSym(..), ScopeSym(..), Literal(..), VariableValue(..),
   OOValueExpression(..), extNewObj, FunctionSym(..), GetSet(..),
   StatePattern(..), ObserverPattern(..), StrategyPattern(..), MethodSym(..),
   ModuleSym(..))

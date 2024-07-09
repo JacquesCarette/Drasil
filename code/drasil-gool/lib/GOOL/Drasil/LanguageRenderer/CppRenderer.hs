@@ -15,9 +15,9 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, NamedArgs, OOProg,
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements,
   oneLiner, BlockSym(..), TypeSym(..), OOTypeSym(..), TypeElim(..),
-  VariableSym(..), OOVariableSym(..), VariableElim(..), ValueSym(..), OOValueSym,
-  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
-  OOVariableValue, CommandLineArgs(..), NumericExpression(..),
+  VariableSym(..), locvar, OOVariableSym(..), VariableElim(..), ValueSym(..),
+  OOValueSym, Argument(..), Literal(..), litZero, MathConstant(..),
+  VariableValue(..), OOVariableValue, CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..),
   OOValueExpression(..), funcApp, selfFuncApp, extFuncApp, InternalValueExp(..),
   objMethodCall, FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..),
@@ -274,13 +274,13 @@ instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   type Variable (p CppSrcCode CppHdrCode) = VarData
-  var n t s = pair1 (\tp -> var n tp (pfst s)) (\tp -> var n tp (psnd s)) t
-  constant n t s = pair1 (\tp -> constant n tp (pfst s)) (\tp -> constant n tp (psnd s)) t
-  extVar l n t s = pair1 (\tp -> extVar l n tp (pfst s)) (\tp -> extVar l n tp (psnd s)) t
-  arrayElem i = pair1 (arrayElem i) (arrayElem i)
+  var' n s      = pair1 (var' n (pfst s)) (var' n (psnd s))
+  constant' n s = pair1 (constant' n (pfst s)) (constant' n (psnd s))
+  extVar' l n s = pair1 (extVar' l n (pfst s)) (extVar' l n (psnd s))
+  arrayElem i   = pair1 (arrayElem i) (arrayElem i)
 
 instance (Pair p) => OOVariableSym (p CppSrcCode CppHdrCode) where
-  staticVar n t s = pair1 (\tp -> staticVar n tp (pfst s)) (\tp -> staticVar n tp (psnd s)) t
+  staticVar' n s = pair1 (staticVar' n (pfst s)) (staticVar' n (psnd s))
   self = on2StateValues pair self self
   classVar = pair2 classVar classVar
   extClassVar = pair2 extClassVar extClassVar
@@ -1167,13 +1167,13 @@ instance ScopeSym CppSrcCode where
 
 instance VariableSym CppSrcCode where
   type Variable CppSrcCode = VarData
-  var n l _ = G.var n l
-  constant = var
-  extVar l n t _ = modify (addModuleImportVS l) >> var n t local
-  arrayElem i = G.arrayElem (litInt i)
+  var' n _        = G.var n
+  constant'       = var'
+  extVar' l n s t = modify (addModuleImportVS l) >> var' n s t
+  arrayElem i     = G.arrayElem (litInt i)
 
 instance OOVariableSym CppSrcCode where
-  staticVar n t _ = G.staticVar n t
+  staticVar' n _ = G.staticVar n
   self = C.self
   classVar c' v'= do 
     c <- c'
@@ -1371,7 +1371,7 @@ instance ThunkAssign CppSrcCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = var iName int local
+      i = locvar iName int
       dim = fmap pure $ t >>= commonThunkDim (fmap unCPPSC . listSize . fmap pure) . unCPPSC
       loopInit = zoom lensMStoVS (fmap unCPPSC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
@@ -1485,7 +1485,7 @@ instance IOStatement CppSrcCode where
   getFileInputLine f v = valStmt $ getLineFunc f (valueOf v)
   discardFileLine f = addLimitsImport $ cppDiscardInput '\n' f
   getFileInputAll f v = let l_line = "nextLine"
-                            var_line = var l_line string local
+                            var_line = locvar l_line string
                             v_line = valueOf var_line
                         in
     multi [varDec var_line,
@@ -1494,10 +1494,10 @@ instance IOStatement CppSrcCode where
 
 instance StringStatement CppSrcCode where
   stringSplit d vnew s = let l_ss = "ss"
-                             var_ss = var l_ss (obj stringstream) local
+                             var_ss = locvar l_ss (obj stringstream)
                              v_ss = valueOf var_ss
                              l_word = "word"
-                             var_word = var l_word string local
+                             var_word = locvar l_word string
                              v_word = valueOf var_word
                          in
     modify (addLangImport sstream) >> multi [
@@ -1541,7 +1541,7 @@ instance ControlStatement CppSrcCode where
     e <- zoom lensMStoVS i
     let l = variableName e
         t = toState $ variableType e
-        iterI = var l (iterator t) local
+        iterI = locvar l (iterator t)
     for (varDecDef iterI (iterBegin v)) (setIterVar iterI ?!= iterEnd v) 
       (iterI &++) b
   while = C.while parens bodyStart bodyEnd
@@ -1549,7 +1549,7 @@ instance ControlStatement CppSrcCode where
   tryCatch = G.tryCatch cppTryCatch
 
 instance StatePattern CppSrcCode where 
-  checkState l = switchAsIf (valueOf $ var l string local) 
+  checkState l = switchAsIf (valueOf $ var' l local string) 
 
 instance ObserverPattern CppSrcCode where
   notifyObservers = M.notifyObservers
@@ -1602,7 +1602,7 @@ instance MethodSym CppSrcCode where
   mainFunction b = intFunc True mainFunc public static (mType int) 
     [param argcVar, param argvVar]
     (on2StateValues (on2CodeValues appendToBody) b (returnStmt $ litInt 0))
-    where argcVar = var argc int local
+    where argcVar = locvar argc int
           argvVar = do 
             t <- typeFromData (List String) 
               (constDec ++ " " ++ C.charRender) (constDec' <+> text 
@@ -1630,7 +1630,7 @@ instance RenderMethod CppSrcCode where
   commentedFunc = cppCommentedFunc Source
   
   destructor vs = 
-    let i = var "i" int local
+    let i = locvar "i" int
         deleteStatements = map (onStateValue (onCodeValue destructSts) . 
           zoom lensMStoCS) vs
         loopIndexDec = varDec i
@@ -1873,13 +1873,13 @@ instance ScopeSym CppHdrCode where
 
 instance VariableSym CppHdrCode where
   type Variable CppHdrCode = VarData
-  var n t _ = G.var n t
-  constant _ _ _ = mkStateVar "" void empty
-  extVar _ _ _ _ = mkStateVar "" void empty
-  arrayElem _ _ = mkStateVar "" void empty
+  var' n _        = G.var n
+  constant' _ _ _ = mkStateVar "" void empty
+  extVar' _ _ _ _ = mkStateVar "" void empty
+  arrayElem _ _   = mkStateVar "" void empty
   
 instance OOVariableSym CppHdrCode where
-  staticVar n t _ = G.staticVar n t
+  staticVar' n _ = G.staticVar n
   self = mkStateVar "" void empty
   classVar _ _ = mkStateVar "" void empty
   extClassVar _ _ = mkStateVar "" void empty

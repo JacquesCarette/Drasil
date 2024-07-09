@@ -13,13 +13,13 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
   VSFunction, MSStatement, MSParameter, SMethod, OOProg, ProgramSym(..),
   FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..),
-  TypeSym(..), OOTypeSym(..), TypeElim(..), VariableSym(..), OOVariableSym(..),
-  VariableElim(..), ValueSym(..), OOValueSym, Argument(..), Literal(..), litZero,
-  MathConstant(..), VariableValue(..), OOVariableValue, CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), OOValueExpression(..), funcApp, selfFuncApp, extFuncApp,
-  newObj, InternalValueExp(..), objMethodCallNoParams, FunctionSym(..), ($.),
-  GetSet(..), List(..), InternalList(..), ThunkSym(..),
+  TypeSym(..), OOTypeSym(..), TypeElim(..), VariableSym(..), locvar,
+  OOVariableSym(..), VariableElim(..), ValueSym(..), OOValueSym, Argument(..),
+  Literal(..), litZero, MathConstant(..), VariableValue(..), OOVariableValue,
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), OOValueExpression(..), funcApp,
+  selfFuncApp, extFuncApp, newObj, InternalValueExp(..), objMethodCallNoParams,
+  FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), ThunkSym(..),
   VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
   ThunkAssign(..), StatementSym(..), AssignStatement(..), (&=),
   DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
@@ -264,13 +264,13 @@ instance ScopeSym CSharpCode where
 
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
-  var n t _ = G.var n t
-  constant = var
-  extVar l n t _ = CP.extVar l n t
-  arrayElem i = G.arrayElem (litInt i)
+  var' n _      = G.var n
+  constant'     = var'
+  extVar' l n _ = CP.extVar l n
+  arrayElem i   = G.arrayElem (litInt i)
 
 instance OOVariableSym CSharpCode where
-  staticVar n t _ = G.staticVar n t
+  staticVar' n _ = G.staticVar n
   self = C.self
   classVar = CP.classVar R.classVar
   extClassVar = classVar
@@ -446,7 +446,7 @@ instance ThunkAssign CSharpCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = var iName int local
+      i = locvar iName int
       dim = fmap pure $ t >>= commonThunkDim (fmap unCSC . listSize . fmap pure) . unCSC
       loopInit = zoom lensMStoVS (fmap unCSC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)

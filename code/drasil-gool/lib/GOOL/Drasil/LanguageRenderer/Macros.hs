@@ -15,7 +15,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   BooleanExpression((?&&), (?||)), at, ($.), StatementSym(multi),
   AssignStatement((&+=), (&-=), (&++)), (&=), observerListName)
 import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block), 
-  TypeSym(int, string, listInnerType), ScopeSym(..), VariableSym(var),
+  TypeSym(int, string, listInnerType), var, locvar, ScopeSym(..),
   Literal(litInt), VariableValue(valueOf), ValueExpression(notNull), 
   List(listSize, listAppend, listAccess, intToIndex), StatementSym(valStmt), 
   AssignStatement(assign), DeclStatement(varDecDef, listDec), 
@@ -66,9 +66,9 @@ listSlice beg end step vnew vold = do
   
   l_temp <- genVarName [] "temp"
   l_i <- genLoopIndex
-  let var_temp = S.var l_temp (onStateValue variableType vnew) S.local
+  let var_temp = S.var l_temp (onStateValue variableType vnew) S.local -- TODO: get scope from state
       v_temp = S.valueOf var_temp
-      var_i = S.var l_i S.int S.local
+      var_i = S.locvar l_i S.int
       v_i = S.valueOf var_i
 
   let step' = fromMaybe (S.litInt 1) step
@@ -118,7 +118,7 @@ makeSetterVal :: RenderSym r => Label -> SValue r -> Maybe Integer -> Maybe (SVa
 makeSetterVal _     _    _      (Just v) _  _  = (S.emptyStmt, v)
 makeSetterVal _     _   (Just s) _       lb rb = (S.emptyStmt, if s > 0 then lb else rb)
 makeSetterVal vName step _       _       lb rb = 
-  let theVar = S.var vName S.int S.local
+  let theVar = S.var vName S.int S.local -- TODO: get scope from state
       theSetter = S.varDecDef theVar $ S.inlineIf (step ?> S.litInt 0) lb rb
   in (theSetter, S.intToIndex $ S.valueOf theVar)
       
@@ -153,7 +153,7 @@ stringListLists lsts sl = do
       (S.listAccess sl ((v_i #* numLists) #+ S.litInt n))))
       : appendLists vs (n+1)
     numLists = S.litInt (toInteger $ length lsts)
-    var_i = S.var l_i S.int S.local
+    var_i = S.locvar l_i S.int
     v_i = S.valueOf var_i
   checkList (getType $ valueType slst)
 
@@ -163,7 +163,7 @@ forRange i initv finalv stepv = S.for (S.varDecDef i initv) (S.valueOf i ?<
   finalv) (i &+= stepv)
 
 observerIndex :: (RenderSym r) => SVariable r
-observerIndex = S.var "observerIndex" S.int S.local
+observerIndex = S.locvar "observerIndex" S.int
 
 observerIdxVal :: (RenderSym r) => SValue r
 observerIdxVal = S.valueOf observerIndex
@@ -186,4 +186,4 @@ notifyObservers' f t = S.forRange observerIndex initv (S.listSize $ obsList t)
         
 checkState :: (RenderSym r) => Label -> [(SValue r, MSBody r)] -> MSBody r -> 
   MSStatement r
-checkState l = S.switch (S.valueOf $ S.var l S.string S.local)
+checkState l = S.switch (S.valueOf $ S.var l S.string S.local) -- Don't worry about this one; it'll be removed soon

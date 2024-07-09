@@ -3,7 +3,7 @@ module Observer (observer, observerName, printNum, x) where
 
 import GOOL.Drasil (SFile, SVariable, SMethod, SClass, OOProg, FileSym(..),
   PermanenceSym(..), oneLiner, TypeSym(..), IOStatement(..), VariableSym(..),
-  ScopeSym(..), OOVariableSym(..), Literal(..), VariableValue(..),
+  var, ScopeSym(..), OOVariableSym(..), Literal(..), VariableValue(..),
   OOVariableValue, VisibilitySym(..), MethodSym(..), initializer,
   StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)

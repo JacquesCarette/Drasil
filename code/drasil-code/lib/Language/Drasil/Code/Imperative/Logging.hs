@@ -6,7 +6,7 @@ import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Choices (Logging(..))
 
 import GOOL.Drasil (Label, MSBody, MSBlock, SVariable, SValue, MSStatement,
-  OOProg, BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..),
+  OOProg, BodySym(..), BlockSym(..), TypeSym(..), var,
   VariableElim(..), Literal(..), VariableValue(..), StatementSym(..),
   DeclStatement(..), IOStatement(..), lensMStoVS, ScopeSym(..))
 
@@ -69,7 +69,7 @@ loggedMethod lName n vars = block [
 
 -- | The variable representing the log file in write mode.
 varLogFile :: (OOProg r) => SVariable r
-varLogFile = var "outfile" outfile global
+varLogFile = var "outfile" outfile local -- TODO: get scope from state?
 
 -- | The value of the variable representing the log file in write mode.
 valLogFile :: (OOProg r) => SValue r

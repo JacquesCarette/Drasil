@@ -7,7 +7,7 @@ import GOOL.Drasil (GSProgram, MSBody, MSBlock, MSStatement, SMethod, SVariable,
   OOProg, ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), listSlice, TypeSym(..), StatementSym(..), AssignStatement(..), 
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
-  CommentStatement(..), ControlStatement(..), VariableSym(..), ScopeSym(..),
+  CommentStatement(..), ControlStatement(..), var, constant, ScopeSym(..),
   listVar, Literal(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), extFuncApp, List(..), MethodSym(..), ModuleSym(..))

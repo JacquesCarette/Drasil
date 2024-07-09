@@ -4,7 +4,7 @@ module FileTests (fileTests) where
 
 import GOOL.Drasil (GSProgram, MSBlock, MSStatement, SMethod, OOProg,
   ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), TypeSym(..),
-  DeclStatement(..), IOStatement(..), VariableSym(..), ScopeSym(..),
+  DeclStatement(..), IOStatement(..), var, ScopeSym(..),
   Literal(..), VariableValue(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return, print, log, exp, sin, cos, tan)
 
@@ -20,7 +20,7 @@ fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
 -- | Generates functions that write to the file.
 writeStory :: (OOProg r) => MSBlock r
 writeStory = block [
-  varDec $ var "fileToWrite" outfile local,
+  varDec $ var "fileToWrite" outfile local, -- TODO: get scope from state.  This shows a problem - the main function may or may not be global scope
 
   openFileW (var "fileToWrite" outfile local) (litString "testText.txt"),
   printFile (valueOf $ var "fileToWrite" outfile local) (litInt 0),

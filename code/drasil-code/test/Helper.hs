@@ -3,9 +3,9 @@ module Helper (helper) where
 
 import GOOL.Drasil (SFile, SMethod,
   OOProg, FileSym(..), bodyStatements, TypeSym(..),
-  DeclStatement(..), ControlStatement(..), (&=), VariableSym(..), ScopeSym(..),
-  Literal(..), VariableValue(..), NumericExpression(..), VisibilitySym(..),
-  ParameterSym(..), MethodSym(..), ModuleSym(..))
+  DeclStatement(..), ControlStatement(..), (&=), var,
+  ScopeSym(..), Literal(..), VariableValue(..), NumericExpression(..),
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 -- | Creates Helper module that contains an addition function.

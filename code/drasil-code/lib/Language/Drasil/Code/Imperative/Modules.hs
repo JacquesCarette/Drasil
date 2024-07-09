@@ -46,12 +46,12 @@ import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc)
 
 import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement,
   SMethod, CSStateVar, SClass, OOProg, BodySym(..), bodyStatements, oneLiner,
-  BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..), ScopeSym(..),
-  Literal(..), VariableValue(..), CommandLineArgs(..), BooleanExpression(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), objDecNewNoParams,
-  extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse,
-  VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convTypeOO,
-  VisibilityTag(..))
+  BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..), var,
+  ScopeSym(..), Literal(..), VariableValue(..), CommandLineArgs(..),
+  BooleanExpression(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), objDecNewNoParams, extObjDecNewNoParams, IOStatement(..),
+  ControlStatement(..), ifNoElse, VisibilitySym(..), MethodSym(..),
+  StateVarSym(..), pubDVar, convTypeOO, VisibilityTag(..))
 
 import Prelude hiding (print)
 import Data.List (intersperse, partition)
@@ -221,9 +221,9 @@ genInputClass scp = do
       genClass inps csts = do
         vals <- mapM (convExpr . (^. codeExpr)) csts
         inputVars <- mapM (\x -> fmap (pubDVar . 
-          (\tp -> var (codeName x) tp local) . convTypeOO) (codeType x)) inps
+          var' (codeName x) local . convTypeOO) (codeType x)) inps -- TODO: get scope from state
         constVars <- zipWithM (\c vl -> fmap (\t -> constVarFunc (conRepr g)
-          (var (codeName c) (convTypeOO t) local) vl) (codeType c))
+          (var (codeName c) (convTypeOO t) local) vl) (codeType c)) -- TODO: get scope from state
           csts vals
         let getFunc Primary = primaryClass
             getFunc Auxiliary = auxClass
@@ -455,8 +455,8 @@ genConstClass scp = do
       genClass [] = return Nothing
       genClass vs = do
         vals <- mapM (convExpr . (^. codeExpr)) vs
-        vars <- mapM (\x -> fmap ((\tp -> var (codeName x) tp local)
-          . convTypeOO) (codeType x)) vs
+        vars <- mapM (\x -> fmap (var' (codeName x) local . convTypeOO) -- TODO: get scope from state
+          (codeType x)) vs
         let constVars = zipWith (constVarFunc (conRepr g)) vars vals
             getFunc Primary = primaryClass
             getFunc Auxiliary = auxClass
@@ -561,7 +561,7 @@ genOutputFormat = do
       genOutput Nothing = return Nothing
       genOutput (Just _) = do
         let l_outfile = "outputfile"
-            var_outfile = var l_outfile outfile local
+            var_outfile = var l_outfile outfile local -- TODO: get scope from state
             v_outfile = valueOf var_outfile
         parms <- getOutputParams
         outp <- mapM (\x -> do

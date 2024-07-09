@@ -32,12 +32,12 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock,
   VisibilitySym(..), ModuleSym(Module), convTypeOO)
 import qualified GOOL.Drasil.ClassInterface as S (
   TypeSym(int, double, char, string, listType, arrayType, listInnerType,
-  funcType, void), VariableSym(var), OOVariableSym(objVarSelf),
+  funcType, void), locvar, OOVariableSym(objVarSelf),
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   FunctionSym(func), List(listSize, listAccess), StatementSym(valStmt),
   DeclStatement(varDecDef), IOStatement(print),
   ControlStatement(returnStmt, for), ParameterSym(param), MethodSym(method),
-  List(intToIndex), ScopeSym(..))
+  List(intToIndex))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(commentedMod),  
   RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
   RenderFunction(funcFromData), FunctionElim(functionType), 
@@ -349,7 +349,7 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
     prFn (S.listAccess v (S.listSize v #- S.litInt 1)))], 
   prLnFn "]"]
   where l_i = "list_i" ++ show n
-        i = S.var l_i S.int S.local
+        i = S.locvar l_i S.int
 
 printObj :: ClassName -> (String -> MSStatement r) -> MSStatement r
 printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"

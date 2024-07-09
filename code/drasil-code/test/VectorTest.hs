@@ -1,7 +1,7 @@
 module VectorTest (vectorTest) where
 
 import GOOL.Drasil (GSProgram, SVariable, SMethod, OOProg, ProgramSym(..),
-  FileSym(..), BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..),
+  FileSym(..), BodySym(..), BlockSym(..), TypeSym(..), var,
   ScopeSym(..), Literal(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), DeclStatement(..), ThunkAssign(..), MethodSym(..),
   ModuleSym(..))

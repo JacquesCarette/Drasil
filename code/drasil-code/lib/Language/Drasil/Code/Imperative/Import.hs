@@ -40,7 +40,7 @@ import qualified Language.Drasil.Mod as M (Class(..))
 import GOOL.Drasil (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
   Initializers, OOProg, PermanenceSym(..), bodyStatements, BlockSym(..),
-  TypeSym(..), VariableSym(..), ScopeSym(..), OOVariableSym(..),
+  TypeSym(..), VariableSym(..), var, ScopeSym(..), OOVariableSym(..), staticVar,
   VariableElim(..), ($->), ValueSym(..), Literal(..), VariableValue(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), OOValueExpression(..), objMethodCallMixedArgs, List(..),
@@ -102,11 +102,11 @@ variable s t = do
       defFunc Var = var
       defFunc Const = staticVar
   if s `elem` map codeName (inputs cs)
-    then inputVariable (inStruct g) Var (var s t local)
+    then inputVariable (inStruct g) Var (var s t local) -- TODO: get scope from state
     else if s `elem` map codeName (constants $ codeSpec g)
       then constVariable (conStruct g) (conRepr g)
-              ((defFunc $ conRepr g) s t local)
-      else return $ var s t local
+              ((defFunc $ conRepr g) s t local) -- TODO: get scope from state
+      else return $ var s t local -- TODO: get scope from state
 
 -- | If 'Unbundled' inputs, just return variable as-is.
 -- If 'Bundled' inputs, access variable through object, where the object is self
@@ -174,7 +174,7 @@ mkVal v = do
       toGOOLVal (Just o) = do
         ot <- codeType o
         return $ valueOf $ objVar (var (codeName o) (convTypeOO ot) local)
-          (var (codeName v) (convTypeOO t) local)
+          (var (codeName v) (convTypeOO t) local) -- TODO: get scope from state
   toGOOLVal (v ^. obv)
 
 -- | Generates a GOOL Variable for a variable represented by a 'CodeVarChunk'.
@@ -184,8 +184,8 @@ mkVar v = do
   let toGOOLVar Nothing = variable (codeName v) (convTypeOO t)
       toGOOLVar (Just o) = do
         ot <- codeType o
-        return $ objVar (var (codeName o) (convTypeOO ot) local)
-          (var (codeName v) (convTypeOO t) local)
+        return $ objVar (var (codeName o) (convTypeOO ot) local) -- TODO: get scope from state
+          (var (codeName v) (convTypeOO t) local) -- TODO: get scope from state
   toGOOLVar (v ^. obv)
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
@@ -491,7 +491,7 @@ genClass :: (OOProg r) => (Name -> Maybe Name -> Description -> [CSStateVar r]
 genClass f (M.ClassDef n i desc svs ms) = let svar Pub = pubDVar
                                               svar Priv = privDVar
   in do
-  svrs <- mapM (\(SV s v) -> fmap (svar s . (\t -> var (codeName v) t local) .
+  svrs <- mapM (\(SV s v) -> fmap (svar s . var' (codeName v) local . -- TODO: get scope from state
                 convTypeOO) (codeType v)) svs
   f n i desc svrs (mapM (genFunc publicMethod svs) ms)
 
@@ -513,8 +513,8 @@ genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
 genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
   g <- get
   inits <- mapM (convExpr . snd) i
-  initvars <- mapM ((\iv -> fmap ((\tp -> var (codeName iv) tp local)
-    . convTypeOO) (codeType iv)) . fst) i
+  initvars <- mapM ((\iv -> fmap (var' (codeName iv) local . convTypeOO) -- TODO: get scope from state
+    (codeType iv)) . fst) i
   stmts <- mapM convStmt s
   vars <- mapM mkVar (fstdecl (sysinfodb $ codeSpec g) s
     \\ (map quantvar parms ++ map stVar svs))
@@ -687,7 +687,7 @@ readData ddef = do
         clearTemp :: (OOProg r) => String -> DataItem ->
           GenState (MSStatement r)
         clearTemp sfx v = fmap (\t -> listDecDef (var (codeName v ++ sfx)
-          (listInnerType $ convTypeOO t) local) []) (codeType v)
+          (listInnerType $ convTypeOO t) local) []) (codeType v) -- TODO: get scope from state
         ---------------
         appendTemps :: (OOProg r) => Maybe String -> [DataItem] ->
           [GenState (MSStatement r)]
@@ -697,8 +697,8 @@ readData ddef = do
         appendTemp :: (OOProg r) => String -> DataItem ->
           GenState (MSStatement r)
         appendTemp sfx v = fmap (\t -> valStmt $ listAppend
-          (valueOf $ var (codeName v) (convTypeOO t) local)
-          (valueOf $ var (codeName v ++ sfx) (convTypeOO t) local)) (codeType v)
+          (valueOf $ var (codeName v) (convTypeOO t) local) -- TODO: get scope from state
+          (valueOf $ var (codeName v ++ sfx) (convTypeOO t) local)) (codeType v) -- TODO: get scope from state
         ---------------
         l_line, l_lines, l_linetokens, l_infile, l_i :: Label
         var_line, var_lines, var_linetokens, var_infile, var_i ::
@@ -706,19 +706,19 @@ readData ddef = do
         v_line, v_lines, v_linetokens, v_infile, v_i ::
           (OOProg r) => SValue r
         l_line = "line"
-        var_line = var l_line string local
+        var_line = var l_line string local -- TODO: get scope from state
         v_line = valueOf var_line
         l_lines = "lines"
-        var_lines = var l_lines (listType string) local
+        var_lines = var l_lines (listType string) local -- TODO: get scope from state
         v_lines = valueOf var_lines
         l_linetokens = "linetokens"
-        var_linetokens = var l_linetokens (listType string) local
+        var_linetokens = var l_linetokens (listType string) local -- TODO: get scope from state
         v_linetokens = valueOf var_linetokens
         l_infile = "infile"
-        var_infile = var l_infile infile local
+        var_infile = var l_infile infile local -- TODO: get scope from state
         v_infile = valueOf var_infile
         l_i = "i"
-        var_i = var l_i int local
+        var_i = var l_i int local -- TODO: get scope from state
         v_i = valueOf var_i
 
 -- | Get entry variables.

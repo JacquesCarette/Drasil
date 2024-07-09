@@ -70,6 +70,18 @@ data UFuncVV = NegV
 data UFuncVN = Norm | Dim
   deriving Eq
 
+-- | Set + Set -> Set
+data SSet = SUnion
+  deriving Eq
+
+-- | Element + Set -> Set
+data ESSSet = SAdd | SRemove
+  deriving Eq
+
+-- | Element + Set -> Bool
+data ESBSet = SContains
+  deriving Eq
+
 -- * CodeExpr
 
 -- | Expression language where all terms also denote a term in GOOL
@@ -134,6 +146,12 @@ data CodeExpr where
   VVNBinaryOp   :: VVNBinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Binary operator for @Number x Vector -> Vector@ operations (scaling).
   NVVBinaryOp   :: NVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+  -- | Set operator for Set + Set -> Set
+  SSetOP :: SSet -> CodeExpr -> CodeExpr -> CodeExpr
+  -- | Set operator for Element + Set -> Set
+  ESSSetOP :: ESSSet -> CodeExpr -> CodeExpr -> CodeExpr
+  -- | Set operator for Element + Set -> Bool
+  ESBSetOP :: ESBSet -> CodeExpr -> CodeExpr -> CodeExpr
 
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.

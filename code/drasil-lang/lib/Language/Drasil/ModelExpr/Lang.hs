@@ -83,6 +83,18 @@ data SpaceBinOp = IsIn
 data DerivType = Part | Total
   deriving Eq
 
+-- | Set + Set -> Set
+data SSet = SUnion
+  deriving Eq
+
+-- | Element + Set -> Set
+data ESSSet = SAdd | SRemove
+  deriving Eq
+
+-- | Element + Set -> Bool
+data ESBSet = SContains
+  deriving Eq
+
 -- | Expression language where all terms are supposed to have a meaning, but
 --   that meaning may not be that of a definite value. For example,
 --   specification expressions, especially with quantifiers, belong here.
@@ -140,6 +152,12 @@ data ModelExpr where
   VVNBinaryOp   :: VVNBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Binary operator for @Number x Vector -> Vector@ operations (scaling).
   NVVBinaryOp   :: NVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+  -- | Set operator for Set + Set -> Set
+  SSetOP :: SSet -> ModelExpr -> ModelExpr -> ModelExpr
+  -- | Set operator for Element + Set -> Set
+  ESSSetOP :: ESSSet -> ModelExpr -> ModelExpr -> ModelExpr
+  -- | Set operator for Element + Set -> Bool
+  ESBSetOP :: ESBSet -> ModelExpr -> ModelExpr -> ModelExpr
 
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.

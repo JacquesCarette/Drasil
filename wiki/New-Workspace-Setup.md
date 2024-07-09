@@ -506,7 +506,7 @@ Please visit the [mdBook website](https://rust-lang.github.io/mdBook/guide/insta
 
 <details>
 
-<summary><h4>Mac & Linux</h4></summary>
+<summary><h4>Mac & Linux, with Rust & Cargo</h4></summary>
 
 Install Rust and Cargo using the following command:
 ```
@@ -515,6 +515,17 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 Once you have installed Rust, the following command can be used to build and install mdBook:
 ```
 cargo install mdbook
+```
+
+</details>
+
+<details>
+
+<summary><h4>Mac, with homebrew</h4></summary>
+
+Install via the following command:
+```
+brew install mdbook
 ```
 
 </details>

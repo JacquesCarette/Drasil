@@ -58,12 +58,15 @@ data VVNBinOp = Dot
 data NVVBinOp = Scale
   deriving Eq
 
+-- | Set + Set -> Set
 data SSet = SUnion
   deriving Eq
 
+-- | Element + Set -> Set
 data ESSSet = SAdd | SRemove
   deriving Eq
-  
+
+-- | Element + Set -> Bool
 data ESBSet = SContains
   deriving Eq
 
@@ -143,11 +146,11 @@ data Expr where
   VVNBinaryOp   :: VVNBinOp -> Expr -> Expr -> Expr
   -- | Binary operator for @Expr x Vector -> Vector@ operations (scaling).
   NVVBinaryOp   :: NVVBinOp -> Expr -> Expr -> Expr
-  -- | t
+  -- | Set operator for Set + Set -> Set
   SSetOP :: SSet -> Expr -> Expr -> Expr
-
+  -- | Set operator for Element + Set -> Set
   ESSSetOP :: ESSSet -> Expr -> Expr -> Expr
-
+  -- | Set operator for Element + Set -> Bool
   ESBSetOP :: ESBSet -> Expr -> Expr -> Expr
 
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
@@ -386,6 +389,17 @@ instance Typed Expr Space where
     (_, Right re) -> Right re
     (Right le, _) -> Right le
 
+  infer cxt (NVVBinaryOp Scale l r) = case (infer cxt l, infer cxt r) of
+    (Left lt, Left (S.Vect rsp)) -> if S.isBasicNumSpace lt && lt == rsp
+      then Left rsp
+      else if lt /= rsp then
+        Right $ "Vector scaling expects a scaling by the same kind as the vector's but found scaling by`" ++ show lt ++ "` over vectors of type `" ++ show rsp ++ "`."
+      else
+        Right $ "Vector scaling expects a numeric scaling, but found `" ++ show lt ++ "`."
+    (Left _, Left rsp) -> Right $ "Vector scaling expects vector as second operand. Received `" ++ show rsp ++ "`."
+    (_, Right rx) -> Right rx
+    (Right lx, _) -> Right lx
+
   infer cxt (VVVBinaryOp o l r) = vvvInfer cxt o l r
     {- case (infer cxt l, infer cxt r) of
     (Left lTy, Left rTy) -> if lTy == rTy && S.isBasicNumSpace lTy && lTy /= S.Natural
@@ -419,7 +433,7 @@ instance Typed Expr Space where
     (Right e, _      ) -> Right e
     (Left lt, Left rsp) -> Right $ "Set union expects set operands. Received `" ++ show lt ++ "` · `" ++ show rsp ++ "`."
 
-  infer cxt (ESBSetOP SContains l r) = case (infer cxt l, infer cxt r) of
+  infer cxt (ESBSetOP _ l r) = case (infer cxt l, infer cxt r) of
     (Left lt, Left rt@(S.Set rsp)) -> if S.isBasicNumSpace lt && lt == rsp
       then Left lt
       else Right $ "Set contains should only be applied to Set of same space. Received `" ++ show lt ++ "` / `" ++ show rt ++ "`."

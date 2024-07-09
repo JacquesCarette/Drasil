@@ -633,11 +633,12 @@ module Language.Drasil.Mod
 
 -- | Holds information needed to define a class.
 data Class
-ClassDef :: Name -> Maybe Name -> Description -> [StateVariable] -> [Func] -> Class
+ClassDef :: Name -> Maybe Name -> Description -> [StateVariable] -> [Func] -> [Func] -> Class
 [className] :: Class -> Name
 [implements] :: Class -> Maybe Name
 [classDesc] :: Class -> Description
 [stateVars] :: Class -> [StateVariable]
+[constructors] :: Class -> [Func]
 [methods] :: Class -> [Func]
 
 -- | State variables hold attach a <a>ScopeTag</a> to a
@@ -714,11 +715,11 @@ privStateVar :: CodeVarChunk -> StateVariable
 
 -- | Define a class with the given <a>Name</a>, <a>Description</a>, state
 --   variables, and methods.
-classDef :: Name -> Description -> [StateVariable] -> [Func] -> Class
+classDef :: Name -> Description -> [StateVariable] -> [Func] -> [Func] -> Class
 
 -- | Define a class that implements an interface. 1st <a>Name</a> is class
 --   name, 2nd is interface name.
-classImplements :: Name -> Name -> Description -> [StateVariable] -> [Func] -> Class
+classImplements :: Name -> Name -> Description -> [StateVariable] -> [Func] -> [Func] -> Class
 
 -- | Define a constructor, with the given name, description, parameters,
 --   initializers (variable-value pairs), and <a>FuncStmt</a>s for the
@@ -1886,11 +1887,11 @@ genDoxConfig :: AuxiliarySym r => GOOLState -> GenState (Maybe (r (Auxiliary r))
 genReadMe :: AuxiliarySym r => ReadMeInfo -> GenState (Maybe (r (Auxiliary r)))
 
 -- | Generates a primary class.
-primaryClass :: OOProg r => Name -> Maybe Name -> Description -> [CSStateVar r] -> GenState [SMethod r] -> GenState (SClass r)
+primaryClass :: OOProg r => Name -> Maybe Name -> Description -> [CSStateVar r] -> GenState [SMethod r] -> GenState [SMethod r] -> GenState (SClass r)
 
 -- | Generates an auxiliary class (for when a module contains multiple
 --   classes).
-auxClass :: OOProg r => Name -> Maybe Name -> Description -> [CSStateVar r] -> GenState [SMethod r] -> GenState (SClass r)
+auxClass :: OOProg r => Name -> Maybe Name -> Description -> [CSStateVar r] -> GenState [SMethod r] -> GenState [SMethod r] -> GenState (SClass r)
 
 -- | Function call generator. The first parameter (<tt>m</tt>) is the
 --   module where the function is defined. If <tt>m</tt> is not the current

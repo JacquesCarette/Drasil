@@ -668,9 +668,18 @@ pubSVar :: StateVarSym r => SVariable r -> CSStateVar r
 class (MethodSym r, StateVarSym r) => ClassSym r where {
     type Class r;
 }
-buildClass :: ClassSym r => Maybe Label -> [CSStateVar r] -> [SMethod r] -> SClass r
-extraClass :: ClassSym r => Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> SClass r
-implementingClass :: ClassSym r => Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> SClass r
+
+-- | Main external method for creating a class. Inputs: parent class,
+--   variables, constructor(s), methods
+buildClass :: ClassSym r => Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
+
+-- | Creates an extra class. Inputs: class name, the rest are the same as
+--   buildClass.
+extraClass :: ClassSym r => Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
+
+-- | Creates a class implementing interfaces. Inputs: class name, interface
+--   names, variables, constructor(s), methods
+implementingClass :: ClassSym r => Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
 docClass :: ClassSym r => String -> SClass r -> SClass r
 class (ClassSym r) => ModuleSym r where {
     type Module r;
@@ -830,7 +839,7 @@ class StateVarElim r
 stateVar :: StateVarElim r => r (StateVar r) -> Doc
 type ParentSpec = Doc
 class (BlockCommentSym r) => RenderClass r
-intClass :: RenderClass r => Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] -> SClass r
+intClass :: RenderClass r => Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
 inherit :: RenderClass r => Maybe Label -> r ParentSpec
 implements :: RenderClass r => [Label] -> r ParentSpec
 commentedClass :: RenderClass r => CS (r (BlockComment r)) -> SClass r -> SClass r
@@ -1179,8 +1188,8 @@ initStmts :: RenderSym r => Initializers r -> MSBody r
 function :: RenderSym r => Label -> r (Scope r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 docFuncRepr :: RenderSym r => FuncDocRenderer -> String -> [String] -> [String] -> SMethod r -> SMethod r
 docFunc :: RenderSym r => FuncDocRenderer -> String -> [String] -> Maybe String -> SMethod r -> SMethod r
-buildClass :: RenderSym r => Maybe Label -> [CSStateVar r] -> [SMethod r] -> SClass r
-implementingClass :: RenderSym r => Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> SClass r
+buildClass :: RenderSym r => Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
+implementingClass :: RenderSym r => Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
 docClass :: RenderSym r => ClassDocRenderer -> String -> SClass r -> SClass r
 commentedClass :: (RenderSym r, Monad r) => CS (r (BlockComment r)) -> SClass r -> CS (r Doc)
 modFromData :: Label -> (Doc -> r (Module r)) -> FS Doc -> FSModule r
@@ -1207,7 +1216,11 @@ objVarSelf :: RenderSym r => SVariable r -> SVariable r
 indexOf :: RenderSym r => Label -> SValue r -> SValue r -> SValue r
 listAddFunc :: RenderSym r => Label -> SValue r -> SValue r -> VSFunction r
 discardFileLine :: RenderSym r => Label -> SValue r -> MSStatement r
-intClass :: (RenderSym r, Monad r) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) -> Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] -> CS (r Doc)
+
+-- | An internal function for creating a class. Parameters: render
+--   function, class name, scope, parent, class variables, constructor(s),
+--   methods
+intClass :: (RenderSym r, Monad r) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) -> Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> CS (r Doc)
 funcType :: RenderSym r => [VSType r] -> VSType r -> VSType r
 buildModule :: RenderSym r => Label -> FS Doc -> FS Doc -> FS Doc -> [SMethod r] -> [SClass r] -> FSModule r
 arrayType :: RenderSym r => VSType r -> VSType r
@@ -1219,6 +1232,10 @@ openFileA :: RenderSym r => (SValue r -> VSType r -> SValue r -> SValue r) -> SV
 forEach :: RenderSym r => Doc -> Doc -> Doc -> Doc -> SVariable r -> SValue r -> MSBody r -> MSStatement r
 docMain :: RenderSym r => MSBody r -> SMethod r
 mainFunction :: RenderSym r => VSType r -> Label -> MSBody r -> SMethod r
+
+-- | Used by the language renderers to build the module. n is the module
+--   name inc is the include is is the import statements ms is the class
+--   methods cs is the classes
 buildModule' :: RenderSym r => Label -> (String -> r (Import r)) -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
 
 -- | First parameter is language name, rest similar to call from
@@ -1238,7 +1255,7 @@ stateVarDef :: (RenderSym r, Monad r) => r (Scope r) -> r (Permanence r) -> SVar
 constVar :: (RenderSym r, Monad r) => Doc -> r (Scope r) -> SVariable r -> SValue r -> CS (r Doc)
 litArray :: RenderSym r => (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
 listSetFunc :: RenderSym r => (Doc -> Doc -> Doc) -> SValue r -> SValue r -> SValue r -> VSFunction r
-extraClass :: RenderSym r => Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> SClass r
+extraClass :: RenderSym r => Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
 listAccessFunc :: RenderSym r => VSType r -> SValue r -> VSFunction r
 doubleRender :: String
 double :: RenderSym r => VSType r
@@ -2517,9 +2534,18 @@ pubSVar :: StateVarSym r => SVariable r -> CSStateVar r
 class (MethodSym r, StateVarSym r) => ClassSym r where {
     type Class r;
 }
-buildClass :: ClassSym r => Maybe Label -> [CSStateVar r] -> [SMethod r] -> SClass r
-extraClass :: ClassSym r => Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> SClass r
-implementingClass :: ClassSym r => Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> SClass r
+
+-- | Main external method for creating a class. Inputs: parent class,
+--   variables, constructor(s), methods
+buildClass :: ClassSym r => Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
+
+-- | Creates an extra class. Inputs: class name, the rest are the same as
+--   buildClass.
+extraClass :: ClassSym r => Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
+
+-- | Creates a class implementing interfaces. Inputs: class name, interface
+--   names, variables, constructor(s), methods
+implementingClass :: ClassSym r => Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
 docClass :: ClassSym r => String -> SClass r -> SClass r
 class (ClassSym r) => ModuleSym r where {
     type Module r;

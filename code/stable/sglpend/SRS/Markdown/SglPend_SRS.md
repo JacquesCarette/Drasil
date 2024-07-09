@@ -160,7 +160,7 @@ This section provides general information about the system. It identifies the in
 
 <div id="Figure:sysCtxDiag"></div>
 
-![System Context](../../../../../datafiles/sglpend/SystemContextFigure.png)
+![System Context](/assets/SystemContextFigure.png)
 
 **<p align="center">System Context</p>**
 
@@ -209,7 +209,7 @@ PS2: The mass.
 
 <div id="Figure:sglpend"></div>
 
-![The physical system](../../../../../datafiles/sglpend/sglpend.jpg)
+![The physical system](/assets/sglpend.jpg)
 
 **<p align="center">The physical system</p>**
 
@@ -871,31 +871,31 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 <div id="Figure:TraceGraphAvsA"></div>
 
-![TraceGraphAvsA](../../../../../traceygraphs/sglpend/avsa.svg)
+![TraceGraphAvsA](/assets/avsa.svg)
 
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
-![TraceGraphAvsAll](../../../../../traceygraphs/sglpend/avsall.svg)
+![TraceGraphAvsAll](/assets/avsall.svg)
 
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
-![TraceGraphRefvsRef](../../../../../traceygraphs/sglpend/refvsref.svg)
+![TraceGraphRefvsRef](/assets/refvsref.svg)
 
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
-![TraceGraphAllvsR](../../../../../traceygraphs/sglpend/allvsr.svg)
+![TraceGraphAllvsR](/assets/allvsr.svg)
 
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
-![TraceGraphAllvsAll](../../../../../traceygraphs/sglpend/allvsall.svg)
+![TraceGraphAllvsAll](/assets/allvsall.svg)
 
 **<p align="center">TraceGraphAllvsAll</p>**
 

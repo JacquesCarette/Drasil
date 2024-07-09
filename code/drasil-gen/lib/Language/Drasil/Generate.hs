@@ -27,7 +27,7 @@ import Drasil.DocLang (mkGraphInfo)
 import SysInfo.Drasil (SystemInformation)
 import Language.Drasil.Printers (DocType(SRS, Website, Lesson), makeCSS, genHTML, 
   genTeX, Format(TeX, HTML, Jupyter, Markdown, MDBook), genJupyter, genMD, genMDBook, 
-  PrintingInformation, outputDot, makeBook, MDFlavour(GitHub))
+  PrintingInformation, outputDot, makeBook, MDFlavour(GitHub), makeCSV)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD,
   unPP, unJP, unCSP, unCPPP, unSP)
@@ -63,6 +63,7 @@ prntDoc d pinfo fn dtype fmt =
     (Markdown GitHub) -> do prntDoc' dtype (show dtype ++ "/Markdown") fn (Markdown GitHub) d pinfo
     MDBook            -> do prntDoc' dtype (show dtype ++ "/mdBook") fn MDBook d pinfo
                             prntBook dtype d pinfo
+                            prntCSV  dtype pinfo
     _                 -> mempty
 
 -- | Helper function to produce an error when an incorrect SRS format is used. 
@@ -121,6 +122,14 @@ prntBook dt doc sm = do
   hClose outh
   where
     fp = show dt ++ "/mdBook" ++ "/book.toml"
+
+prntCSV :: DocType -> PrintingInformation -> IO()
+prntCSV dt sm = do
+  outh <- openFile fp WriteMode
+  hPutStrLn outh $ render (makeCSV sm)
+  hClose outh
+  where
+    fp = show dt ++ "/mdBook" ++ "/assets.csv"
 
 -- | Renders single-page documents.
 writeDoc :: PrintingInformation -> DocType -> Format -> Filename -> Document -> Doc

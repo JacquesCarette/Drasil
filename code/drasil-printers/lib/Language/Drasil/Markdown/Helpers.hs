@@ -7,7 +7,7 @@ import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), ($$), hcat,
 import Data.List (foldl')
 import Data.Map (lookup)
 import Language.Drasil.Printing.Helpers (ast)
-import Language.Drasil.Printing.LayoutObj (RefMap)
+import Language.Drasil.Printing.LayoutObj (RefMap, Filepath)
 
 data Variation =  Id | Align | None
 
@@ -91,7 +91,9 @@ reflinkURI ref txt = if ref == txt then ang ref
 
 -- | Helper for setting up figures
 image :: Doc -> Doc -> Doc
-image f c =  text "!" <> reflinkURI f c $^$ bold (caption c)
+image f c =  text "!" <> reflinkURI fp c $^$ bold (caption c)
+  where
+    fp = text $ "/assets/" ++ (extractFn $ show f)
 
 -- | Helper for setting up captions
 caption :: Doc -> Doc
@@ -120,3 +122,7 @@ h' n
 -- | Helper for getting length of a Doc
 docLength :: Doc -> Int
 docLength d = length $ show d
+
+-- | Helper for extracting the file from a filepath
+extractFn :: Filepath -> Filepath
+extractFn = reverse . takeWhile (/= '/') . reverse

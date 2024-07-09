@@ -228,7 +228,7 @@ This section provides general information about the system. It identifies the in
 
 <div id="Figure:SysCon"></div>
 
-![[Fig:SysCon](#Figure:SysCon): System Context](../../../../../datafiles/swhs/SystemContextFigure.png)
+![[Fig:SysCon](#Figure:SysCon): System Context](/assets/SystemContextFigure.png)
 
 **<p align="center">[Fig:SysCon](#Figure:SysCon): System Context</p>**
 
@@ -280,7 +280,7 @@ PS3: PCM suspended in tank. (\\({q\_{\text{P}}}\\) represents the heat flux into
 
 <div id="Figure:Tank"></div>
 
-![Solar water heating tank, with heat flux into the water from the coil of \\({q\_{\text{C}}}\\) and heat flux into the PCM from water of \\({q\_{\text{P}}}\\)](../../../../../datafiles/swhs/Tank.png)
+![Solar water heating tank, with heat flux into the water from the coil of \\({q\_{\text{C}}}\\) and heat flux into the PCM from water of \\({q\_{\text{P}}}\\)](/assets/Tank.png)
 
 **<p align="center">Solar water heating tank, with heat flux into the water from the coil of \\({q\_{\text{C}}}\\) and heat flux into the PCM from water of \\({q\_{\text{P}}}\\)</p>**
 
@@ -1163,31 +1163,31 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 <div id="Figure:TraceGraphAvsA"></div>
 
-![TraceGraphAvsA](../../../../../traceygraphs/swhs/avsa.svg)
+![TraceGraphAvsA](/assets/avsa.svg)
 
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
-![TraceGraphAvsAll](../../../../../traceygraphs/swhs/avsall.svg)
+![TraceGraphAvsAll](/assets/avsall.svg)
 
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
-![TraceGraphRefvsRef](../../../../../traceygraphs/swhs/refvsref.svg)
+![TraceGraphRefvsRef](/assets/refvsref.svg)
 
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
-![TraceGraphAllvsR](../../../../../traceygraphs/swhs/allvsr.svg)
+![TraceGraphAllvsR](/assets/allvsr.svg)
 
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
-![TraceGraphAllvsAll](../../../../../traceygraphs/swhs/allvsall.svg)
+![TraceGraphAllvsAll](/assets/allvsall.svg)
 
 **<p align="center">TraceGraphAllvsAll</p>**
 

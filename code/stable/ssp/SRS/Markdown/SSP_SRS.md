@@ -228,7 +228,7 @@ This section provides general information about the system. It identifies the in
 
 <div id="Figure:sysCtxDiag"></div>
 
-![System Context](../../../../../datafiles/ssp/SystemContextFigure.png)
+![System Context](/assets/SystemContextFigure.png)
 
 **<p align="center">System Context</p>**
 
@@ -290,7 +290,7 @@ PS2: A water table, which may or may not exist.
 
 <div id="Figure:PhysicalSystem"></div>
 
-![An example slope for analysis by SSP, where the dashed line represents the water table](../../../../../datafiles/ssp/PhysSyst.png)
+![An example slope for analysis by SSP, where the dashed line represents the water table](/assets/PhysSyst.png)
 
 **<p align="center">An example slope for analysis by SSP, where the dashed line represents the water table</p>**
 
@@ -298,7 +298,7 @@ Morgenstern-Price analysis [morgenstern1965](#morgenstern1965) of the slope invo
 
 <div id="Figure:IndexConvention"></div>
 
-![Index convention for slice and interslice values](../../../../../datafiles/ssp/IndexConvention.png)
+![Index convention for slice and interslice values](/assets/IndexConvention.png)
 
 **<p align="center">Index convention for slice and interslice values</p>**
 
@@ -306,7 +306,7 @@ A free body diagram of the forces acting on a slice is displayed in [Fig:ForceDi
 
 <div id="Figure:ForceDiagram"></div>
 
-![Free body diagram of forces acting on a slice](../../../../../datafiles/ssp/ForceDiagram.png)
+![Free body diagram of forces acting on a slice](/assets/ForceDiagram.png)
 
 **<p align="center">Free body diagram of forces acting on a slice</p>**
 
@@ -1739,31 +1739,31 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 <div id="Figure:TraceGraphAvsA"></div>
 
-![TraceGraphAvsA](../../../../../traceygraphs/ssp/avsa.svg)
+![TraceGraphAvsA](/assets/avsa.svg)
 
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
-![TraceGraphAvsAll](../../../../../traceygraphs/ssp/avsall.svg)
+![TraceGraphAvsAll](/assets/avsall.svg)
 
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
-![TraceGraphRefvsRef](../../../../../traceygraphs/ssp/refvsref.svg)
+![TraceGraphRefvsRef](/assets/refvsref.svg)
 
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
-![TraceGraphAllvsR](../../../../../traceygraphs/ssp/allvsr.svg)
+![TraceGraphAllvsR](/assets/allvsr.svg)
 
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
-![TraceGraphAllvsAll](../../../../../traceygraphs/ssp/allvsall.svg)
+![TraceGraphAllvsAll](/assets/allvsall.svg)
 
 **<p align="center">TraceGraphAllvsAll</p>**
 

@@ -166,7 +166,7 @@ This section provides general information about the system. It identifies the in
 
 <div id="Figure:sysCtxDiag"></div>
 
-![System Context](../../../../../datafiles/dblpend/SystemContextFigure.png)
+![System Context](/assets/SystemContextFigure.png)
 
 **<p align="center">System Context</p>**
 
@@ -219,7 +219,7 @@ PS4: The second object.
 
 <div id="Figure:dblpend"></div>
 
-![The physical system](../../../../../datafiles/dblpend/dblpend.png)
+![The physical system](/assets/dblpend.png)
 
 **<p align="center">The physical system</p>**
 
@@ -1051,31 +1051,31 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 <div id="Figure:TraceGraphAvsA"></div>
 
-![TraceGraphAvsA](../../../../../traceygraphs/dblpend/avsa.svg)
+![TraceGraphAvsA](/assets/avsa.svg)
 
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
-![TraceGraphAvsAll](../../../../../traceygraphs/dblpend/avsall.svg)
+![TraceGraphAvsAll](/assets/avsall.svg)
 
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
-![TraceGraphRefvsRef](../../../../../traceygraphs/dblpend/refvsref.svg)
+![TraceGraphRefvsRef](/assets/refvsref.svg)
 
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
-![TraceGraphAllvsR](../../../../../traceygraphs/dblpend/allvsr.svg)
+![TraceGraphAllvsR](/assets/allvsr.svg)
 
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
-![TraceGraphAllvsAll](../../../../../traceygraphs/dblpend/allvsall.svg)
+![TraceGraphAllvsAll](/assets/allvsall.svg)
 
 **<p align="center">TraceGraphAllvsAll</p>**
 

@@ -20,11 +20,12 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   InternalValueExp(..), objMethodCall, FunctionSym(..), GetSet(..), List(..),
   InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..),
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  AssignStatement(..), (&=), DeclStatement(..), OODeclStatement(..),
+  IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  OOFuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  switchAsIf, ObserverPattern(..), StrategyPattern(..),
+  ScopeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..),
+  ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -72,7 +73,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   mainBody, inOutFunc, docInOutFunc', listSize, intToIndex, indexToInt)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
-  notifyObservers', checkState)
+  notifyObservers')
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
@@ -532,13 +533,15 @@ instance DeclStatement PythonCode where
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
+  constDecDef = varDecDef
+  funcDecDef = CP.funcDecDef
+
+instance OODeclStatement PythonCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew lib v vs = do
     modify (addModuleImport lib)
     varDecDef v (extNewObj lib (onStateValue variableType v) vs)
-  constDecDef = varDecDef
-  funcDecDef = CP.funcDecDef
 
 instance IOStatement PythonCode where
   print      = pyOut False Nothing printFunc
@@ -573,8 +576,10 @@ instance StringStatement PythonCode where
 
 instance FuncAppStatement PythonCode where
   inOutCall = CP.inOutCall funcApp
-  selfInOutCall = CP.inOutCall selfFuncApp
   extInOutCall m = CP.inOutCall (extFuncApp m)
+
+instance OOFuncAppStatement PythonCode where
+  selfInOutCall = CP.inOutCall selfFuncApp
 
 instance CommentStatement PythonCode where
   comment = G.comment pyCommentStart
@@ -605,9 +610,6 @@ instance ControlStatement PythonCode where
     mkStmtNoEnd (pyWhile v b)
 
   tryCatch = G.tryCatch pyTryCatch
-
-instance StatePattern PythonCode where 
-  checkState = M.checkState
 
 instance ObserverPattern PythonCode where
   notifyObservers = M.notifyObservers'

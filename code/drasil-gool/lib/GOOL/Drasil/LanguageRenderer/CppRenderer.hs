@@ -23,10 +23,11 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   objMethodCall, FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..),
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), switchAsIf, StatePattern(..),
-  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), pubMethod, StateVarSym(..), ClassSym(..), ModuleSym(..))
+  DeclStatement(..), OODeclStatement(..), IOStatement(..), StringStatement(..),
+  FuncAppStatement(..), OOFuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ObserverPattern(..), StrategyPattern(..),
+  ScopeSym(..), ParameterSym(..), MethodSym(..), pubMethod, StateVarSym(..),
+  ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -533,16 +534,18 @@ instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) where
   arrayDec n vr = pair1 (arrayDec n) (arrayDec n) (zoom lensMStoVS vr)
   arrayDecDef vr vs = pair1Val1List arrayDecDef arrayDecDef (zoom lensMStoVS vr)
     (map (zoom lensMStoVS) vs)
+  constDecDef vr vl = pair2 constDecDef constDecDef (zoom lensMStoVS vr) 
+    (zoom lensMStoVS vl)
+  funcDecDef v ps = pairValListVal funcDecDef funcDecDef (zoom lensMStoVS v) 
+    (map (zoom lensMStoVS) ps)
+
+instance (Pair p) => OODeclStatement (p CppSrcCode CppHdrCode) where
   objDecDef o v = pair2 objDecDef objDecDef (zoom lensMStoVS o) 
     (zoom lensMStoVS v)
   objDecNew vr vs = pair1Val1List objDecNew objDecNew (zoom lensMStoVS vr) 
     (map (zoom lensMStoVS) vs)
   extObjDecNew lib vr vs = pair1Val1List (extObjDecNew lib) (extObjDecNew lib) 
     (zoom lensMStoVS vr) (map (zoom lensMStoVS) vs)
-  constDecDef vr vl = pair2 constDecDef constDecDef (zoom lensMStoVS vr) 
-    (zoom lensMStoVS vl)
-  funcDecDef v ps = pairValListVal funcDecDef funcDecDef (zoom lensMStoVS v) 
-    (map (zoom lensMStoVS) ps)
 
 instance (Pair p) => IOStatement (p CppSrcCode CppHdrCode) where
   print = pair1 print print . zoom lensMStoVS
@@ -592,10 +595,12 @@ instance (Pair p) => FuncAppStatement (p CppSrcCode CppHdrCode) where
   inOutCall n is os bs = pair3Lists (inOutCall n) (inOutCall n) 
     (map (zoom lensMStoVS) is) (map (zoom lensMStoVS) os) 
     (map (zoom lensMStoVS) bs)
-  selfInOutCall n is os bs = pair3Lists (selfInOutCall n) (selfInOutCall n)
+  extInOutCall m n is os bs = pair3Lists (extInOutCall m n) (extInOutCall m n) 
     (map (zoom lensMStoVS) is) (map (zoom lensMStoVS) os) 
     (map (zoom lensMStoVS) bs)
-  extInOutCall m n is os bs = pair3Lists (extInOutCall m n) (extInOutCall m n) 
+
+instance (Pair p) => OOFuncAppStatement (p CppSrcCode CppHdrCode) where
+  selfInOutCall n is os bs = pair3Lists (selfInOutCall n) (selfInOutCall n)
     (map (zoom lensMStoVS) is) (map (zoom lensMStoVS) os) 
     (map (zoom lensMStoVS) bs)
 
@@ -634,12 +639,6 @@ instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) where
   while v = pair2 while while (zoom lensMStoVS v)
 
   tryCatch = pair2 tryCatch tryCatch
-
-instance (Pair p) => StatePattern (p CppSrcCode CppHdrCode) where
-  checkState l vs = pair2Lists1Val
-    (\sts bods -> checkState l (zip sts bods))
-    (\sts bods -> checkState l (zip sts bods)) 
-    (map (zoom lensMStoVS . fst) vs) (map snd vs)
 
 instance (Pair p) => ObserverPattern (p CppSrcCode CppHdrCode) where
   notifyObservers f t = pair2 notifyObservers notifyObservers 
@@ -1443,11 +1442,13 @@ instance DeclStatement CppSrcCode where
     vdc <- arrayDec (toInteger $ length vals) vr
     vs <- mapM (zoom lensMStoVS) vals
     mkStmt $ RC.statement vdc <+> equals <+> braces (valueList vs)
+  constDecDef = CP.constDecDef
+  funcDecDef = cppFuncDecDef
+
+instance OODeclStatement CppSrcCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
-  constDecDef = CP.constDecDef
-  funcDecDef = cppFuncDecDef
 
 instance IOStatement CppSrcCode where
   print      = G.print False Nothing printFunc
@@ -1504,8 +1505,10 @@ instance StringStatement CppSrcCode where
 
 instance FuncAppStatement CppSrcCode where
   inOutCall = cppInOutCall funcApp
-  selfInOutCall = cppInOutCall selfFuncApp
   extInOutCall m = cppInOutCall (extFuncApp m)
+
+instance OOFuncAppStatement CppSrcCode where
+  selfInOutCall = cppInOutCall selfFuncApp
 
 instance CommentStatement CppSrcCode where
   comment = G.comment commentStart
@@ -1537,9 +1540,6 @@ instance ControlStatement CppSrcCode where
   while = C.while parens bodyStart bodyEnd
 
   tryCatch = G.tryCatch cppTryCatch
-
-instance StatePattern CppSrcCode where 
-  checkState l = switchAsIf (valueOf $ var l string) 
 
 instance ObserverPattern CppSrcCode where
   notifyObservers = M.notifyObservers
@@ -2100,11 +2100,13 @@ instance DeclStatement CppHdrCode where
   listDecDef _ _ = emptyStmt
   arrayDec _ _ = emptyStmt
   arrayDecDef _ _ = emptyStmt
+  constDecDef = CP.constDecDef
+  funcDecDef _ _ _ = emptyStmt
+
+instance OODeclStatement CppHdrCode where
   objDecDef _ _ = emptyStmt
   objDecNew _ _ = emptyStmt
   extObjDecNew _ _ _ = emptyStmt
-  constDecDef = CP.constDecDef
-  funcDecDef _ _ _ = emptyStmt
 
 instance IOStatement CppHdrCode where
   print _ = emptyStmt
@@ -2139,8 +2141,10 @@ instance StringStatement CppHdrCode where
 
 instance FuncAppStatement CppHdrCode where
   inOutCall _ _ _ _ = emptyStmt
-  selfInOutCall _ _ _ _ = emptyStmt
   extInOutCall _ _ _ _ _ = emptyStmt
+
+instance OOFuncAppStatement CppHdrCode where
+  selfInOutCall _ _ _ _ = emptyStmt
 
 instance CommentStatement CppHdrCode where
   comment _ = emptyStmt
@@ -2164,9 +2168,6 @@ instance ControlStatement CppHdrCode where
   while _ _ = emptyStmt
 
   tryCatch _ _ = emptyStmt
-
-instance StatePattern CppHdrCode where
-  checkState _ _ _ = emptyStmt
 
 instance ObserverPattern CppHdrCode where
   notifyObservers _ _ = emptyStmt

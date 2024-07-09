@@ -21,11 +21,11 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   newObj, InternalValueExp(..), FunctionSym(..), ($.), GetSet(..), List(..),
   InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), StatePattern(..), ObserverPattern(..),
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  AssignStatement(..), (&=), DeclStatement(..), OODeclStatement(..),
+  IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  OOFuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -83,7 +83,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char,
   intFunc, multiAssignError, multiReturnError, multiTypeError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   runStrategy, listSlice, stringListVals, stringListLists, forRange, 
-  notifyObservers, checkState)
+  notifyObservers)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
@@ -547,11 +547,13 @@ instance DeclStatement JavaCode where
   listDecDef = CP.listDecDef
   arrayDec n = CP.arrayDec (litInt n)
   arrayDecDef = CP.arrayDecDef
+  constDecDef = jConstDecDef
+  funcDecDef = jFuncDecDef
+
+instance OODeclStatement JavaCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
-  constDecDef = jConstDecDef
-  funcDecDef = jFuncDecDef
 
 instance IOStatement JavaCode where
   print      = jOut False Nothing printFunc
@@ -591,8 +593,10 @@ instance StringStatement JavaCode where
 
 instance FuncAppStatement JavaCode where
   inOutCall = jInOutCall funcApp
-  selfInOutCall = jInOutCall selfFuncApp
   extInOutCall m = jInOutCall (extFuncApp m)
+
+instance OOFuncAppStatement JavaCode where
+  selfInOutCall = jInOutCall selfFuncApp
 
 instance CommentStatement JavaCode where
   comment = G.comment commentStart
@@ -617,9 +621,6 @@ instance ControlStatement JavaCode where
 
   tryCatch = G.tryCatch jTryCatch
   
-instance StatePattern JavaCode where 
-  checkState = M.checkState
-
 instance ObserverPattern JavaCode where
   notifyObservers = M.notifyObservers
 

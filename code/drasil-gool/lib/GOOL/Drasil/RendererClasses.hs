@@ -25,9 +25,8 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock,
   List(..), InternalList(..), VectorExpression(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..),
-  ModuleSym(..))
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType)
 import GOOL.Drasil.AST (Binding, Terminator, ScopeTag)
 import GOOL.Drasil.State (FS, CS, MS, VS)
@@ -40,16 +39,17 @@ class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r,
   r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
   NumericExpression r, BooleanExpression r, Comparison r,
   InternalValueExp r, GetSet r, List r, InternalList r, VectorExpression r,
-  StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r,
-  VariableElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r,
-  RenderClass r, ClassElim r, RenderFile r, InternalGetSet r, InternalListFunc
-  r, RenderFunction r, FunctionElim r, RenderMethod r, MethodElim r, RenderMod
-  r, ModuleElim r, OpElim r, RenderParam r, ParamElim r, PermElim r,
-  RenderScope r, ScopeElim r, InternalAssignStmt r, InternalIOStmt r,
-  InternalControlStmt r, RenderStatement r, StatementElim r, StateVarElim r,
-  RenderType r, InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable
-  r, InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r,
-  BlockCommentElim r, OOVariableValue r, OOValueExpression r) => RenderSym r --TODO: split RenderSym into OO and shared components
+  ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r,
+  RenderBlock r, BlockElim r, RenderBody r, BodyElim r, RenderClass r,
+  ClassElim r, RenderFile r, InternalGetSet r, InternalListFunc r,
+  RenderFunction r, FunctionElim r, RenderMethod r, MethodElim r, RenderMod r,
+  ModuleElim r, OpElim r, RenderParam r, ParamElim r, PermElim r, RenderScope r,
+  ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r,
+  RenderStatement r, StatementElim r, StateVarElim r, RenderType r,
+  InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable r,
+  InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r,
+  BlockCommentElim r, OOVariableValue r, OOValueExpression r
+  ) => RenderSym r --TODO: split RenderSym into OO and shared components
 
 class (BlockCommentSym r) => RenderFile r where
   -- top and bottom are only used for pre-processor guards for C++ header 

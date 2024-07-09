@@ -14,7 +14,8 @@ import Language.Drasil.Mod (Name, Description, Import)
 import GOOL.Drasil (SFile, VSType, SVariable, SValue, MSStatement, SMethod,
   CSStateVar, SClass, NamedArgs, OOProg, FileSym(..), TypeElim(..),
   ValueSym(..), Argument(..), ValueExpression(..), OOValueExpression(..),
-  FuncAppStatement(..), ClassSym(..), ModuleSym(..), CodeType(..), GOOLState)
+  FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), ModuleSym(..),
+  CodeType(..), GOOLState)
 
 import Data.Bifunctor (second)
 import qualified Data.Map as Map (lookup)

@@ -31,9 +31,9 @@ import qualified Language.Drasil.HTML.Print as HTML (renderCite, pSpec)
 import Language.Drasil.HTML.Helpers(BibFormatter(..))
 import Language.Drasil.TeX.Helpers(commandD, command2D, mkEnv)
 
-import Language.Drasil.Markdown.Helpers (heading, image, li, reflink, sq,
-  reflinkURI, reflinkInfo, caption, bold, ul, br, docLength, divTag, defnHTag, em,
-  paren, h, h', ($^$), vcatnl)
+import Language.Drasil.Markdown.Helpers (heading, image, li, reflink,
+  reflinkURI, reflinkInfo, caption, bold, ul, docLength, divTag, defnHTag, em,
+  h, h', ($^$), vcatnl)
 
 -----------------------------------------------------------------
 ------------------------- Markdown SRS --------------------------
@@ -85,8 +85,8 @@ summaryItem :: RefMap -> File -> Doc
 summaryItem rm (File t n d _) = bullet <+> lbl <> ref
   where
     bullet = text (replicate (d*2) ' ') <> text "-"
-    lbl    = sq $ pSpec rm t
-    ref    = paren $ text $ "./" ++ n ++ ".md"
+    lbl    = brackets $ pSpec rm t
+    ref    = parens $ text $ "./" ++ n ++ ".md"
 
 -- | Create a title page file for a Project
 createTitleFile :: Project -> File
@@ -149,12 +149,12 @@ pExpr (Case ps)      = printMath $ mkEnv "cases" (P.<>) cases
 pExpr (Mtx a)        = printMath $ mkEnv "bmatrix" (P.<>) matrix
   where 
     matrix = TeX.pMatrix a hpunctuate lnl pExpr'
-pExpr (Row [x])      = br $ pExpr x 
+pExpr (Row [x])      = braces $ pExpr x 
 pExpr (Row l)        = foldl1 (<>) (map pExpr l)
 pExpr (Label s)      = printMath $ TeX.pExpr (Label s')
   where s' = replace "*" "\\*" (replace "_" "\\_" s)
-pExpr (Sub e)        = bslash <> unders <> br (pExpr e)
-pExpr (Sup e)        = hat    <> br (pExpr e)
+pExpr (Sub e)        = bslash <> unders <> braces (pExpr e)
+pExpr (Sup e)        = hat    <> braces (pExpr e)
 pExpr (Over Hat s)   = printMath $ commandD "hat" (pExpr' s)
 pExpr (MO Perc)      = bslash <> printMath (TeX.pExpr (MO Perc))
 pExpr (Fenced l r m) = fence TeX.Open l <> pExpr m <> fence TeX.Close r

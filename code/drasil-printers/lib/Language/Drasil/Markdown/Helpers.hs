@@ -2,25 +2,14 @@
 module Language.Drasil.Markdown.Helpers where
 
 import Prelude hiding ((<>), lookup)
-import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), ($$), hcat)
+import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), ($$), hcat,
+  brackets, parens, braces)
 import Data.List (foldl')
 import Data.Map (lookup)
 import Language.Drasil.Printing.Helpers (ast)
 import Language.Drasil.Printing.LayoutObj (RefMap)
 
 data Variation =  Id | Align | None
-
--- | Curly braces.
-br :: Doc -> Doc
-br x = text "{" <> x <> text "}"
-
--- | Square brackets
-sq :: Doc -> Doc
-sq t = text "[" <> t <> text "]" 
-
--- | Parenthesis
-paren :: Doc -> Doc
-paren t = text "(" <> t <> text ")" 
 
 -- | Angled brackets
 ang :: Doc -> Doc
@@ -85,7 +74,7 @@ defnHTag = wrapGen vcatnl Align "div" (text "center")
 
 -- | Helper for setting up links to references
 reflink :: RefMap -> String -> Doc -> Doc
-reflink rm ref txt = sq txt <> paren rp
+reflink rm ref txt = brackets txt <> parens rp
   where
     fn = maybe empty fp (lookup ref rm)
     fp s = text $ "./" ++ s ++ ".md"
@@ -98,7 +87,7 @@ reflinkInfo rm rf txt info = reflink rm rf txt <+> info
 -- | Helper for setting up links to external URIs
 reflinkURI :: Doc -> Doc -> Doc
 reflinkURI ref txt = if ref == txt then ang ref
-  else sq txt <> paren ref
+  else brackets txt <> parens ref
 
 -- | Helper for setting up figures
 image :: Doc -> Doc -> Doc
@@ -111,7 +100,7 @@ caption = wrapGen hcat Align "p" (text "center")
 -- | Helper for setting up headings with an id attribute.
 -- id attribute will only work for mdBook.
 heading ::  Doc -> Doc -> Doc
-heading t l = t <+> br (text "#" <> l)
+heading t l = t <+> braces (text "#" <> l)
 
 -- | Helper for setting up heading weights in mdBook.
 h :: Int -> Doc

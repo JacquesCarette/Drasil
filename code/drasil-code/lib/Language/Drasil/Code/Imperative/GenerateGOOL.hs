@@ -27,8 +27,8 @@ import Control.Monad.State (get, modify)
 -- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
 genModuleWithImports :: (OOProg r) => Name -> Description -> [Import] ->
-  [GenState (Maybe (SMethod r))] ->
-  [GenState (Maybe (SClass r))] -> GenState (SFile r)
+  [GenState (Maybe (SMethod r))] -> [GenState (Maybe (SClass r))] -> 
+  GenState (SFile r)
 genModuleWithImports n desc is maybeMs maybeCs = do
   g <- get
   modify (\s -> s { currentModule = n })
@@ -45,8 +45,8 @@ genModuleWithImports n desc is maybeMs maybeCs = do
 
 -- | Generates a module for when imports do not need to be explicitly stated.
 genModule :: (OOProg r) => Name -> Description ->
-  [GenState (Maybe (SMethod r))] ->
-  [GenState (Maybe (SClass r))] -> GenState (SFile r)
+  [GenState (Maybe (SMethod r))] -> [GenState (Maybe (SClass r))] ->
+  GenState (SFile r)
 genModule n desc = genModuleWithImports n desc []
 
 -- | Generates a Doxygen configuration file if the user has comments enabled.
@@ -75,31 +75,32 @@ data ClassType = Primary | Auxiliary
 -- state variables, and methods. The 'Maybe' 'Name' parameter is the name of the
 -- interface the class implements, if applicable.
 mkClass :: (OOProg r) => ClassType -> Name -> Maybe Name -> Description ->
-  [CSStateVar r] -> GenState [SMethod r] ->
+  [CSStateVar r] -> GenState [SMethod r] -> GenState [SMethod r] ->
   GenState (SClass r)
-mkClass s n l desc vs mths = do
+mkClass s n l desc vs cstrs mths = do
   g <- get
   modify (\ds -> ds {currentClass = n})
+  cs <- cstrs
   ms <- mths
   modify (\ds -> ds {currentClass = ""})
   let getFunc Primary = getFunc' l
       getFunc Auxiliary = extraClass n Nothing
       getFunc' Nothing = buildClass Nothing
       getFunc' (Just intfc) = implementingClass n [intfc]
-      c = getFunc s vs ms
+      c = getFunc s vs cs ms
   return $ if CommentClass `elem` commented g
     then docClass desc c
     else c
 
 -- | Generates a primary class.
 primaryClass :: (OOProg r) => Name -> Maybe Name -> Description ->
-  [CSStateVar r] -> GenState [SMethod r] ->
+  [CSStateVar r] -> GenState [SMethod r] -> GenState [SMethod r] ->
   GenState (SClass r)
 primaryClass = mkClass Primary
 
 -- | Generates an auxiliary class (for when a module contains multiple classes).
 auxClass :: (OOProg r) => Name -> Maybe Name -> Description ->
-  [CSStateVar r] -> GenState [SMethod r] ->
+  [CSStateVar r] -> GenState [SMethod r] -> GenState [SMethod r] ->
   GenState (SClass r)
 auxClass = mkClass Auxiliary
 

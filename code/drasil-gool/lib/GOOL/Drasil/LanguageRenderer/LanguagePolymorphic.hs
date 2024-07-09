@@ -472,13 +472,13 @@ docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 -- Classes --
 
 buildClass :: (RenderSym r) =>  Maybe Label -> [CSStateVar r] -> 
-  [SMethod r] -> SClass r
-buildClass p stVars methods = do 
+  [SMethod r] -> [SMethod r] -> SClass r
+buildClass p stVars constructors methods = do 
   n <- zoom lensCStoFS getModuleName
-  S.intClass n public (inherit p) stVars methods
+  S.intClass n public (inherit p) stVars constructors methods
 
 implementingClass :: (RenderSym r) => Label -> [Label] -> [CSStateVar r] -> 
-  [SMethod r] -> SClass r
+  [SMethod r] -> [SMethod r] -> SClass r
 implementingClass n is = S.intClass n public (implements is)
 
 docClass :: (RenderSym r) => ClassDocRenderer -> String -> SClass r -> SClass r

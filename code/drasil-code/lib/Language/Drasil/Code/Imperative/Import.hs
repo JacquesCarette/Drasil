@@ -485,14 +485,14 @@ genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
 -- | Converts a Class (from the Mod AST) to GOOL.
 -- The class generator to use is passed as a parameter.
 genClass :: (OOProg r) => (Name -> Maybe Name -> Description -> [CSStateVar r]
-  -> GenState [SMethod r] -> GenState (SClass r)) ->
+  -> GenState [SMethod r] -> GenState [SMethod r] -> GenState (SClass r)) ->
   M.Class -> GenState (SClass r)
-genClass f (M.ClassDef n i desc svs ms) = let svar Pub = pubDVar
-                                              svar Priv = privDVar
+genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
+                                                 svar Priv = privDVar
   in do
   svrs <- mapM (\(SV s v) -> fmap (svar s . var (codeName v) . convTypeOO)
     (codeType v)) svs
-  f n i desc svrs (mapM (genFunc publicMethod svs) ms)
+  f n i desc svrs (mapM (genFunc publicMethod svs) cs) (mapM (genFunc publicMethod svs) ms)
 
 -- | Converts a 'Func' (from the Mod AST) to GOOL.
 -- The function generator to use is passed as a parameter. Automatically adds

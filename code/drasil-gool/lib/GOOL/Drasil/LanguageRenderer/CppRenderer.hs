@@ -766,23 +766,24 @@ instance (Pair p) => StateVarElim (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   type Class (p CppSrcCode CppHdrCode) = Doc
-  buildClass p vs fs = do
+  buildClass p vs cs fs = do
     n <- zoom lensCStoFS getModuleName
     modify (setClassName n)
-    pair2Lists (buildClass p) (buildClass p) vs (map (zoom lensCStoMS) fs)
-  extraClass n p vs fs = modify (setClassName n) >> pair2Lists 
+    pair3Lists (buildClass p) (buildClass p) vs (map (zoom lensCStoMS) cs) 
+      (map (zoom lensCStoMS) fs)
+  extraClass n p vs cs fs = modify (setClassName n) >> pair3Lists 
     (extraClass n p) (extraClass n p)
-    vs (map (zoom lensCStoMS) fs)
-  implementingClass n is vs fs = modify (setClassName n) >> pair2Lists
+    vs (map (zoom lensCStoMS) cs) (map (zoom lensCStoMS) fs)
+  implementingClass n is vs cs fs = modify (setClassName n) >> pair3Lists
     (implementingClass n is) (implementingClass n is)
-    vs (map (zoom lensCStoMS) fs)
+    vs (map (zoom lensCStoMS) cs) (map (zoom lensCStoMS) fs)
 
   docClass d = pair1 (docClass d) (docClass d)
 
 instance (Pair p) => RenderClass (p CppSrcCode CppHdrCode) where
-  intClass n s i vs fs = pair2Lists 
+  intClass n s i vs cs fs = pair3Lists 
     (intClass n (pfst s) (pfst i)) (intClass n (psnd s) (psnd i)) 
-    vs (map (zoom lensCStoMS) fs)
+    vs (map (zoom lensCStoMS) cs) (map (zoom lensCStoMS) fs)
 
   inherit n = pair (inherit n) (inherit n)
   implements is = pair (implements is) (implements is)
@@ -794,10 +795,10 @@ instance (Pair p) => ClassElim (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
-  buildModule n is ms cs= do 
+  buildModule n is ms cs = do 
     modify (setModuleName n)
     pair2Lists (buildModule n is) (buildModule n is) 
-        (map (zoom lensFStoMS) ms) (map (zoom lensFStoCS)cs)
+      (map (zoom lensFStoMS) ms) (map (zoom lensFStoCS) cs)
   
 instance (Pair p) => RenderMod (p CppSrcCode CppHdrCode) where
   modFromData n d = on2StateValues pair (modFromData n d) (modFromData n d)
@@ -1653,9 +1654,9 @@ instance ClassSym CppSrcCode where
   docClass = CP.doxClass
 
 instance RenderClass CppSrcCode where
-  intClass n _ _ vs fs = do
+  intClass n _ _ vs cs fs = do
     modify (setClassName n)
-    on2StateLists cppsClass vs (map (zoom lensCStoMS) $ fs ++ [destructor vs])
+    on2StateLists cppsClass vs (map (zoom lensCStoMS) $ cs ++ fs ++ [destructor vs])
 
   inherit n = onCodeValue (cppInherit n . fst) public
   implements is = onCodeValue ((\p -> colon <+> hcat (map ((p <+>) . text) is)) 
@@ -2279,12 +2280,12 @@ instance ClassSym CppHdrCode where
   docClass = CP.doxClass
 
 instance RenderClass CppHdrCode where
-  intClass n _ i vs mths = do
+  intClass n _ i vs cstrs mths = do
     modify (setClassName n)
     vars <- sequence vs
     funcs <- sequence fs
     pure $ cpphClass n i vars funcs public private
-    where fs = map (zoom lensCStoMS) $ mths ++ [destructor vs]
+    where fs = map (zoom lensCStoMS) $ cstrs ++ mths ++ [destructor vs]
 
   inherit n = onCodeValue (cppInherit n . fst) public
   implements is = onCodeValue ((\p -> colon <+> hcat (map ((p <+>) . text) is)) 

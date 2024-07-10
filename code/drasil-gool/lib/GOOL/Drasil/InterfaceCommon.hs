@@ -1,38 +1,30 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module GOOL.Drasil.ClassInterface (
+module GOOL.Drasil.InterfaceCommon (
   -- Types
   Label, Library, GSProgram, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
-  VSThunk, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass,
+  VSThunk, MSStatement, MSParameter, SMethod, CSStateVar, SClass,
   FSModule, NamedArgs, Initializers, MixedCall, MixedCtorCall, PosCall,
-  PosCtorCall,
+  PosCtorCall, InOutCall,
   -- Typeclasses
-  OOProg, ProcProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
-  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), OOTypeSym(..), TypeElim(..), 
-  VariableSym(..), OOVariableSym(..), VariableElim(..), ($->), listOf, listVar,
-  ValueSym(..), OOValueSym, Argument(..), Literal(..), litZero,
-  MathConstant(..), VariableValue(..), OOVariableValue, CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), OOValueExpression(..), funcApp, funcAppNamedArgs,
-  selfFuncApp, extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists,
-  InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
-  objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..), ($.),
-  selfAccess, GetSet(..), List(..), InternalList(..), listSlice,
-  listIndexExists, at, ThunkSym(..),
-  VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
-  ThunkAssign(..), StatementSym(..), AssignStatement(..), (&=),
-  assignToListIndex, DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
-  extObjDecNewNoParams, IOStatement(..), StringStatement(..),
-  FuncAppStatement(..), OOFuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ObserverPattern(..), observerListName, initObserverList,
-  addObserver, StrategyPattern(..), ifNoElse, switchAsIf, ScopeSym(..),
-  ParameterSym(..), MethodSym(..), privMethod, pubMethod, initializer,
-  nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..),
-  ModuleSym(..), convType, convTypeOO
+  SharedProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
+  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
+  VariableSym(..), VariableElim(..), listOf, listVar, ValueSym(..),
+  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
+  libFuncApp, exists, List(..), InternalList(..), listSlice, listIndexExists,
+  at, ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
+  (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..),
+  MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
+  StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..),
+  convType
 ) where
 
-import GOOL.Drasil.CodeType (CodeType(..), ClassName)
-import GOOL.Drasil.Helpers (onStateValue)
+import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.State (GS, FS, CS, MS, VS)
 
 import qualified Data.Kind as K (Type)
@@ -49,22 +41,13 @@ type GSProgram a = GS (a (Program a))
 -- Functions in GOOL's interface beginning with "ext" are to be used to access items from other modules in the same program/project
 -- Functions in GOOL's interface beginning with "lib" are to be used to access items from different libraries/projects
 
-class (ProgramSym r, OOVariableValue r, VectorType r, VectorDecl r, VectorThunk r,
-  VectorExpression r, ThunkAssign r, AssignStatement r, OODeclStatement r,
-  IOStatement r, StringStatement r, OOFuncAppStatement r, CommentStatement r,
-  ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r,
-  VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
-  Comparison r, OOValueExpression r, InternalValueExp r, GetSet r, List r,
-  ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r
-  ) => OOProg r
-
-class (ProgramSym r, VectorType r, VectorDecl r, VectorThunk r,
+class (VectorType r, VectorDecl r, VectorThunk r,
   VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r,
   IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r,
   ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r,
   VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
   Comparison r, ValueExpression r, List r, TypeElim r, VariableElim r
-  ) => ProcProg r
+  ) => SharedProg r
 
 -- Shared between OO and Procedural --
 
@@ -141,10 +124,6 @@ class (TypeSym r) => VariableSym r where
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
   variableType :: r (Variable r) -> r (Type r)
-
-($->) :: (OOVariableSym r) => SVariable r -> SVariable r -> SVariable r
-infixl 9 $->
-($->) = objVar
 
 listVar :: (VariableSym r) => Label -> VSType r -> SVariable r
 listVar n t = var n (listType t)
@@ -266,7 +245,6 @@ class (VariableSym r, ValueSym r) => ValueExpression r where
   inlineIf     :: SValue r -> SValue r -> SValue r -> SValue r
   
   funcAppMixedArgs     ::            MixedCall r
-  selfFuncAppMixedArgs ::            MixedCall r
   extFuncAppMixedArgs  :: Library -> MixedCall r
   libFuncAppMixedArgs  :: Library -> MixedCall r
 
@@ -280,9 +258,6 @@ funcApp n t vs = funcAppMixedArgs n t vs []
 funcAppNamedArgs :: (ValueExpression r) =>            Label -> VSType r ->
   NamedArgs r -> SValue r
 funcAppNamedArgs n t = funcAppMixedArgs n t []
-
-selfFuncApp      :: (ValueExpression r) =>            PosCall r
-selfFuncApp n t vs = selfFuncAppMixedArgs n t vs []
 
 extFuncApp       :: (ValueExpression r) => Library -> PosCall r
 extFuncApp l n t vs = extFuncAppMixedArgs l n t vs []
@@ -581,117 +556,6 @@ class (ClassSym r) => ModuleSym r where
   type Module r
   buildModule :: Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
 
--- OO Only --
-class (TypeSym r) => OOTypeSym r where
-  obj :: ClassName -> VSType r
-
-class (ValueSym r, OOTypeSym r) => OOValueSym r
-
-class (VariableSym r, OOTypeSym r) => OOVariableSym r where
-  staticVar    :: Label -> VSType r -> SVariable r -- I *think* this is OO-only
-  self         :: SVariable r
-  classVar     :: VSType r -> SVariable r -> SVariable r
-  extClassVar  :: VSType r -> SVariable r -> SVariable r
-  objVar       :: SVariable r -> SVariable r -> SVariable r
-  objVarSelf   :: SVariable r -> SVariable r
-
--- for values that can include expressions
-class (ValueExpression r, OOVariableSym r, OOValueSym r) => OOValueExpression r where
-  newObjMixedArgs      ::            MixedCtorCall r
-  extNewObjMixedArgs   :: Library -> MixedCtorCall r
-  libNewObjMixedArgs   :: Library -> MixedCtorCall r
-
-newObj           :: (OOValueExpression r) =>            PosCtorCall r
-newObj t vs = newObjMixedArgs t vs []
-
-extNewObj        :: (OOValueExpression r) => Library -> PosCtorCall r
-extNewObj l t vs = extNewObjMixedArgs l t vs []
-
-libNewObj        :: (OOValueExpression r) => Library -> PosCtorCall r
-libNewObj l t vs = libNewObjMixedArgs l t vs []
-
-class (VariableValue r, OOVariableSym r) => OOVariableValue r
-
-class (FuncAppStatement r, OOVariableSym r) => OOFuncAppStatement r where
-  selfInOutCall :: InOutCall r
-
-class (DeclStatement r, OOVariableSym r) => OODeclStatement r where
-  objDecDef    :: SVariable r -> SValue r -> MSStatement r
-  objDecNew    :: SVariable r -> [SValue r] -> MSStatement r
-  extObjDecNew :: Library -> SVariable r -> [SValue r] -> MSStatement r
-
-objDecNewNoParams :: (OODeclStatement r) => SVariable r -> MSStatement r
-objDecNewNoParams v = objDecNew v []
-
-extObjDecNewNoParams :: (OODeclStatement r) => Library -> SVariable r -> 
-  MSStatement r
-extObjDecNewNoParams l v = extObjDecNew l v []
-
-class (StatementSym r, FunctionSym r) => ObserverPattern r where
-  notifyObservers :: VSFunction r -> VSType r -> MSStatement r
-
-observerListName :: Label
-observerListName = "observerList"
-
-initObserverList :: (DeclStatement r) => VSType r -> [SValue r] -> MSStatement r
-initObserverList t = listDecDef (var observerListName (listType t))
-
-addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r -> 
-  MSStatement r
-addObserver o = valStmt $ listAdd obsList lastelem o
-  where obsList = valueOf $ observerListName `listOf` onStateValue valueType o
-        lastelem = listSize obsList
-
-class (BodySym r, VariableSym r) => StrategyPattern r where
-  runStrategy     :: Label -> [(Label, MSBody r)] -> Maybe (SValue r) -> 
-    Maybe (SVariable r) -> MSBlock r
-
-class (ValueSym r) => InternalValueExp r where
-  -- | Generic function for calling a method.
-  --   Takes the function name, the return type, the object, a list of 
-  --   positional arguments, and a list of named arguments.
-  objMethodCallMixedArgs' :: Label -> VSType r -> SValue r -> [SValue r] -> 
-    NamedArgs r -> SValue r
-
--- | Calling a method. t is the return type of the method, o is the
---   object, f is the method name, and ps is a list of positional arguments.
-objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label -> 
-  [SValue r] -> SValue r
-objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
-
--- | Calling a method with named arguments.
-objMethodCallNamedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
-  -> NamedArgs r -> SValue r
-objMethodCallNamedArgs t o f = objMethodCallMixedArgs' f t o []
-
--- | Calling a method with a mix of positional and named arguments.
-objMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
-  -> [SValue r] -> NamedArgs r -> SValue r
-objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
-
--- | Calling a method with no parameters.
-objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r -> Label 
-  -> SValue r
-objMethodCallNoParams t o f = objMethodCall t o f []
-
-type VSFunction a = VS (a (Function a))
-
-class (ValueSym r) => FunctionSym r where
-  type Function r
-  func :: Label -> VSType r -> [SValue r] -> VSFunction r
-  objAccess :: SValue r -> VSFunction r -> SValue r
-
-($.) :: (FunctionSym r) => SValue r -> VSFunction r -> SValue r
-infixl 9 $.
-($.) = objAccess
-
-selfAccess :: (OOVariableValue r, FunctionSym r) => VSFunction r -> SValue r
-selfAccess = objAccess (valueOf self)
-
-class (ValueSym r, VariableSym r) => GetSet r where
-  get :: SValue r -> SVariable r -> SValue r
-  set :: SValue r -> SVariable r -> SValue r -> SValue r
-
 -- Utility
 
 convType :: (TypeSym r) => CodeType -> VSType r
@@ -708,7 +572,3 @@ convType Void = void
 convType InFile = infile
 convType OutFile = outfile
 convType (Object _) = error "Objects not supported"
-
-convTypeOO :: (OOTypeSym r) => CodeType -> VSType r
-convTypeOO (Object n) = obj n
-convTypeOO t = convType t

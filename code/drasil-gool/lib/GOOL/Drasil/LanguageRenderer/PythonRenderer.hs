@@ -9,23 +9,24 @@ module GOOL.Drasil.LanguageRenderer.PythonRenderer (
 import Utils.Drasil (blank, indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue, 
-  VSFunction, MSStatement, MixedCtorCall, OOProg, ProgramSym(..), FileSym(..),
-  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), OOTypeSym(..),
-  TypeElim(..), VariableSym(..), OOVariableSym(..), VariableElim(..),
-  ValueSym(..), OOValueSym, Argument(..), Literal(..), litZero, MathConstant(..),
-  VariableValue(..), OOVariableValue, CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..),
-  OOValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj,
-  InternalValueExp(..), objMethodCall, FunctionSym(..), GetSet(..), List(..),
+import GOOL.Drasil.InterfaceCommon (SharedProg, Label, Library, VSType,
+  SVariable, SValue, MSStatement, MixedCtorCall, ProgramSym(..), FileSym(..),
+  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
+  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, extFuncApp, List(..),
   InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), OODeclStatement(..),
-  IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  OOFuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  switchAsIf, ObserverPattern(..), StrategyPattern(..),
-  ScopeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..),
-  ModuleSym(..))
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..),
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+import GOOL.Drasil.InterfaceGOOL (VSFunction, OOProg, OOTypeSym(..),
+  OOVariableSym(..), OOValueSym, OOVariableValue, InternalValueExp(..),
+  extNewObj, objMethodCall, FunctionSym(..), GetSet(..), OOValueExpression(..),
+  selfFuncApp, OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -114,6 +115,7 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   PC x >>= f = f x
 
+instance SharedProg PythonCode
 instance OOProg PythonCode
 
 instance ProgramSym PythonCode where
@@ -365,7 +367,6 @@ instance ValueExpression PythonCode where
   inlineIf = pyInlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
-  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
   extFuncAppMixedArgs l n t ps ns = do
     modify (addModuleImportVS l)
     CP.extFuncAppMixedArgs l n t ps ns
@@ -378,6 +379,7 @@ instance ValueExpression PythonCode where
   notNull = CP.notNull pyNull
 
 instance OOValueExpression PythonCode where
+  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs l tp ps ns = do
     modify (addModuleImportVS l)

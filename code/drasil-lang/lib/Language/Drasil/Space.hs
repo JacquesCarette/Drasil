@@ -37,7 +37,7 @@ data Space =
   | Char
   | String
   | Vect Space -- TODO: Length for vectors?
-  | Set [Double]
+  | Set Space
   | Matrix Int Int Space
   | Array Space
   | Actor String

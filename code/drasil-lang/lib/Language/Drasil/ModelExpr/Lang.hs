@@ -153,11 +153,11 @@ data ModelExpr where
   -- | Binary operator for @Number x Vector -> Vector@ operations (scaling).
   NVVBinaryOp   :: NVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Set operator for Set + Set -> Set
-  SSetOP :: SSet -> ModelExpr -> ModelExpr -> ModelExpr
+  SSetOp :: SSet -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Set operator for Element + Set -> Set
-  ESSSetOP :: ESSSet -> ModelExpr -> ModelExpr -> ModelExpr
+  ESSSetOp :: ESSSet -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Set operator for Element + Set -> Bool
-  ESBSetOP :: ESBSet -> ModelExpr -> ModelExpr -> ModelExpr
+  ESBSetOp :: ESBSet -> ModelExpr -> ModelExpr -> ModelExpr
 
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.

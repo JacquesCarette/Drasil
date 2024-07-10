@@ -33,7 +33,7 @@ import Language.Drasil.TeX.Helpers(commandD, command2D, mkEnv)
 
 import Language.Drasil.Markdown.Helpers (heading, image, li, reflink,
   reflinkURI, reflinkInfo, caption, bold, ul, docLength, divTag, defnHTag, em,
-  h, h', ($^$), vcatnl)
+  h, h', ($^$), vsep)
 
 -----------------------------------------------------------------
 ------------------------- Markdown SRS --------------------------
@@ -54,7 +54,7 @@ build (Document t a c) =
 -- | Called by build, uses 'printLO' to render the layout objects 
 -- into a single Doc
 print :: RefMap -> [LayoutObj] -> Doc
-print rm = vcatnl . map (printLO rm)
+print rm = vsep . map (printLO rm)
 
 -----------------------------------------------------------------
 ------------------------- mdBook SRS ----------------------------
@@ -272,8 +272,8 @@ processDefnLO rm _       lo              = printLO rm lo
 
 -- | Renders lists into Markdown
 makeList :: RefMap -> ListType -> Int -> Doc
-makeList rm (Simple      items) _  = vcatnl $ map (sItem rm) items
-makeList rm (Desc        items) _  = vcatnl $ map (descItem rm) items
+makeList rm (Simple      items) _  = vsep $ map (sItem rm) items
+makeList rm (Desc        items) _  = vsep $ map (descItem rm) items
 makeList rm (Ordered     items) bl = vcat $ 
   zipWith (\(i,_) n -> oItem rm i bl n) items [1..]
 makeList rm (Unordered   items) bl = vcat $ 
@@ -342,6 +342,6 @@ makeRefList a l i = divTag l $^$ (i <> text ": " <> a)
 
 -- | Renders the bibliography
 makeBib :: RefMap -> BibRef -> Doc
-makeBib rm = vcatnl .
+makeBib rm = vsep .
   zipWith (curry (\(x,(y,z)) -> makeRefList z y x))
   [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map (HTML.renderCite (mdBibFormatter rm))

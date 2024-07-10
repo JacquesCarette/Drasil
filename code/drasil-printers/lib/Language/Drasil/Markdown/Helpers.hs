@@ -4,7 +4,6 @@ module Language.Drasil.Markdown.Helpers where
 import Prelude hiding ((<>), lookup)
 import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), ($$), hcat,
   brackets, parens, braces)
-import Data.List (foldl')
 import Data.Map (lookup)
 import Language.Drasil.Printing.Helpers (ast)
 import Language.Drasil.Printing.LayoutObj (RefMap)
@@ -24,16 +23,15 @@ em :: Doc -> Doc
 em t = ast <> t <> ast
 
 -- | Custom infix operator for concatenating 
--- two Docs with an empty line in between
+-- two Docs vertically with an empty line in between.
 infixl 5 $^$
 ($^$) :: Doc -> Doc -> Doc
 ($^$) a b = a $$ text "" $$ b
 
--- | Concatenate a list of 'Doc's with an 
--- empty line in between
-vcatnl :: [Doc] -> Doc
-vcatnl []     = empty
-vcatnl (l:ls) = foldl' ($^$) l ls
+-- | Concatenate a list of 'Doc's vertically 
+-- with an empty line in between.
+vsep :: [Doc] -> Doc
+vsep = foldr1 ($^$) 
 
 li, ul :: Doc -> Doc
 -- | List tag wrapper
@@ -70,7 +68,7 @@ divTag l = wrapGen hcat Id "div" l empty
 
 -- | Helper for setting up div for defn heading
 defnHTag :: Doc -> Doc
-defnHTag = wrapGen vcatnl Align "div" (text "center")
+defnHTag = wrapGen vsep Align "div" (text "center")
 
 -- | Helper for setting up links to references
 reflink :: RefMap -> String -> Doc -> Doc

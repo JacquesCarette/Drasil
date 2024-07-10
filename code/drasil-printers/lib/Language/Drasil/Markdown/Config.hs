@@ -28,14 +28,6 @@ makeBook (Document t _ _ _) sm = vcat [
   ]
 makeBook _ _ = error "Type not supported: Notebook."
 
--- | Generates the .csv file mapping the original 
--- filepaths of assets to the location mdBook uses.
-makeCSV :: PrintingInformation -> Doc
-makeCSV sm = vcat $ map line assets
-  where
-    line (a, b) = text $ a ++ "," ++ b
-    assets = assetMap sm
-
 -- | Helper function to render the title
 -- 'Sentence' as a 'Doc'
 mkTitle :: PrintingInformation -> Sentence -> Doc

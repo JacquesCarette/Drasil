@@ -701,9 +701,17 @@ instance StateVarElim PythonCode where
 
 instance ClassSym PythonCode where
   type Class PythonCode = Doc
-  buildClass = G.buildClass
-  extraClass = CP.extraClass  
-  implementingClass = G.implementingClass
+  buildClass par sVars cstrs = if length cstrs <= 1 
+                                  then G.buildClass par sVars cstrs
+                                  else error pyMultCstrsError
+  extraClass n par sVars cstrs = if 
+                                  length cstrs <= 1
+                                    then CP.extraClass n par sVars cstrs
+                                    else error pyMultCstrsError
+  implementingClass n iNms sVars cstrs = if 
+                                  length cstrs <= 1
+                                    then G.implementingClass n iNms sVars cstrs
+                                    else error pyMultCstrsError
 
   docClass = CP.doxClass
 
@@ -1003,6 +1011,9 @@ pyClass n pn s vs fs = vcat [
                 | isEmpty vs = fs
                 | isEmpty fs = vs
                 | otherwise = vcat [vs, blank, fs]
+
+pyMultCstrsError :: String
+pyMultCstrsError = "Python classes cannot have multiple constructors"
 
 pyBlockComment :: [String] -> Doc -> Doc
 pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns

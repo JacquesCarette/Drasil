@@ -120,7 +120,7 @@ data Expr where
   Case     :: Completeness -> [(Expr, Relation)] -> Expr
   -- | Represents a matrix of expressions.
   Matrix   :: [[Expr]] -> Expr
-
+  Set :: Expr -> Expr
   -- | Unary operation for most functions (eg. sin, cos, log, etc.).
   UnaryOp       :: UFunc -> Expr -> Expr
   -- | Unary operation for @Bool -> Bool@ operations.
@@ -302,6 +302,12 @@ instance Typed Expr Space where
               (\_ -> all (\ r -> length r == columns && all (== expT) r) sss)
               (const False) expT
         t = fromLeft (error "Infer on Matrix had a strong expectation of Left-valued data.") expT -- This error should never occur.
+        
+  infer cxt (Set e) =
+    case infer cxt e of
+        Left sp -> if S.isBasicNumSpace sp then Left sp else Right (show sp)
+        Right err -> Right "Expressions in case"
+      
 
   infer cxt (UnaryOp uf ex) = case infer cxt ex of
     Left sp -> case uf of
@@ -416,7 +422,7 @@ instance Typed Expr Space where
     (Left lsp, Left rsp) -> Right $ "Vector dot product expects vector operands. Received `" ++ show lsp ++ "` · `" ++ show rsp ++ "`."
     (_, Right rx) -> Right rx
     (Right lx, _) -> Right lx
-
+{-
   infer cxt (SSetOP _ l r) = case (infer cxt l, infer cxt r) of
     (Left lt@(S.Set lsp), Left rt@(S.Set rsp)) -> if lsp == rsp && S.isBasicNumSpace lsp
       then Left lsp
@@ -439,7 +445,7 @@ instance Typed Expr Space where
       else Right $ "Set contains should only be applied to Set of same space. Received `" ++ show lt ++ "` / `" ++ show rt ++ "`."
     (_      , Right e) -> Right e
     (Right e, _      ) -> Right e
-
+-}
   infer cxt (Operator _ (S.BoundedDD _ _ bot top) body) =
     let expTy = S.Integer in
     case (infer cxt bot, infer cxt top, infer cxt body) of

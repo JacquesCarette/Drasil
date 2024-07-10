@@ -6,8 +6,8 @@ module GOOL.Drasil.LanguageRenderer.Constructors (
   binExpr', binExprNumDbl', typeBinExpr
 ) where
 
-import GOOL.Drasil.ClassInterface (VSType, MSStatement, SVariable, SValue, TypeSym(..), 
-  TypeElim(..), ValueSym(..))
+import GOOL.Drasil.InterfaceCommon (VSType, MSStatement, SVariable, SValue,
+  TypeSym(..), TypeElim(..), ValueSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, VSUnOp, VSBinOp, UnaryOpSym(..),
   BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..), 
   RenderValue(..), ValueElim(valuePrec), RenderStatement(..))

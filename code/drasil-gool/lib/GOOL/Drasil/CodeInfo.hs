@@ -3,20 +3,22 @@
 -- Performs code analysis on the GOOL code
 module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
-import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
-  SMethod, OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..),
-  BlockSym(..), TypeSym(..), OOTypeSym(..), TypeElim(..), VariableSym(..),
-  OOVariableSym(..), VariableElim(..), ValueSym(..), OOValueSym, Argument(..),
-  Literal(..), MathConstant(..), VariableValue(..), OOVariableValue,
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), OOValueExpression(..), InternalValueExp(..),
-  FunctionSym(..), GetSet(..), List(..), InternalList(..), ThunkSym(..),
-  VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
-  ThunkAssign(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
-  OODeclStatement(..), IOStatement(..), StringStatement(..),
-  FuncAppStatement(..), OOFuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+import GOOL.Drasil.InterfaceCommon (MSBody, VSType, SValue, MSStatement, 
+  SMethod, SharedProg, ProgramSym(..), FileSym(..), PermanenceSym(..),
+  BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), List(..),
+  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  ScopeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..),
+  ModuleSym(..))
+import GOOL.Drasil.InterfaceGOOL (OOProg, OOTypeSym(..), OOVariableSym(..),
+  OOValueSym, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
+  FunctionSym(..), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
+  ObserverPattern(..), StrategyPattern(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..), qualName)
 import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
@@ -47,7 +49,8 @@ instance Applicative CodeInfo where
 instance Monad CodeInfo where
   CI x >>= f = f x
 
-instance OOProg CodeInfo where
+instance SharedProg CodeInfo
+instance OOProg CodeInfo
 
 instance ProgramSym CodeInfo where
   type Program CodeInfo = GOOLState
@@ -195,7 +198,6 @@ instance Comparison CodeInfo where
 instance ValueExpression CodeInfo where
   inlineIf = execute3
   funcAppMixedArgs n _ = currModCall n
-  selfFuncAppMixedArgs = funcAppMixedArgs
   extFuncAppMixedArgs l n _ vs ns = do
     sequence_ vs
     executePairList ns
@@ -207,6 +209,7 @@ instance ValueExpression CodeInfo where
   notNull = execute1
 
 instance OOValueExpression CodeInfo where
+  selfFuncAppMixedArgs = funcAppMixedArgs
   newObjMixedArgs ot vs ns = do
     sequence_ vs
     executePairList ns

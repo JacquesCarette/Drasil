@@ -10,24 +10,25 @@ module GOOL.Drasil.LanguageRenderer.SwiftRenderer (
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
-  SValue, MSStatement, MSParameter, SMethod, OOProg, Initializers,
+import GOOL.Drasil.InterfaceCommon (SharedProg, Label, MSBody, MSBlock, VSType,
+  SVariable, SValue, MSStatement, MSParameter, SMethod, Initializers,
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), oneLiner,
-  bodyStatements, BlockSym(..), TypeSym(..), OOTypeSym(..),
-  TypeElim(..), VariableSym(..), OOVariableSym(..), VariableElim(..),
-  ValueSym(..), OOValueSym, Argument(..), Literal(..), litZero, MathConstant(..),
-  VariableValue(..), OOVariableValue, CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..),
-  OOValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp,
-  newObj, InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
-  objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), listSlice,
-  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, List(..),
+  listSlice, InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), OODeclStatement(..),
-  IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  OOFuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), convTypeOO)
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
+import GOOL.Drasil.InterfaceGOOL (OOProg, OOTypeSym(..), OOVariableSym(..),
+  OOValueSym, OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
+  InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
+  objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..), convTypeOO)
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym,
   RenderFile(..), ImportSym(..), ImportElim, PermElim(binding), RenderBody(..),
   BodyElim, RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim,
@@ -122,7 +123,8 @@ instance Applicative SwiftCode where
 instance Monad SwiftCode where
   SC x >>= f = f x
 
-instance OOProg SwiftCode where
+instance SharedProg SwiftCode
+instance OOProg SwiftCode
 
 instance ProgramSym SwiftCode where
   type Program SwiftCode = ProgData
@@ -373,7 +375,6 @@ instance ValueExpression SwiftCode where
   inlineIf = C.inlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
-  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
   extFuncAppMixedArgs = CP.extFuncAppMixedArgs
   libFuncAppMixedArgs = C.libFuncAppMixedArgs
 
@@ -382,6 +383,7 @@ instance ValueExpression SwiftCode where
   notNull = CP.notNull swiftNil
 
 instance OOValueExpression SwiftCode where
+  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs m tp vs ns = do
     t <- tp

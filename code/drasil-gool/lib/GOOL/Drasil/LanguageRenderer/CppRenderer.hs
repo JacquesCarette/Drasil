@@ -11,23 +11,24 @@ module GOOL.Drasil.LanguageRenderer.CppRenderer (
 import Utils.Drasil (blank, indent, indentList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
-  VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, NamedArgs, OOProg,
+import GOOL.Drasil.InterfaceCommon (SharedProg, Label, MSBody, VSType,
+  SVariable, SValue, MSStatement, MSParameter, SMethod, CSStateVar, NamedArgs,
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements,
-  oneLiner, BlockSym(..), TypeSym(..), OOTypeSym(..), TypeElim(..),
-  VariableSym(..), OOVariableSym(..), VariableElim(..), ValueSym(..), OOValueSym,
-  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
-  OOVariableValue, CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..),
-  OOValueExpression(..), funcApp, selfFuncApp, extFuncApp, InternalValueExp(..),
-  objMethodCall, FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..),
+  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), OODeclStatement(..), IOStatement(..), StringStatement(..),
-  FuncAppStatement(..), OOFuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ObserverPattern(..), StrategyPattern(..),
-  ScopeSym(..), ParameterSym(..), MethodSym(..), pubMethod, StateVarSym(..),
-  ClassSym(..), ModuleSym(..))
+  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), pubMethod, StateVarSym(..), ClassSym(..), ModuleSym(..))
+import GOOL.Drasil.InterfaceGOOL (VSFunction, OOProg, OOTypeSym(..),
+  OOVariableSym(..), OOValueSym, OOVariableValue, OOValueExpression(..),
+  selfFuncApp, InternalValueExp(..), objMethodCall, FunctionSym(..), ($.),
+  GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -130,6 +131,7 @@ unCPPC (CPPC (CPPSC a) _) = a
 hdrToSrc :: CppHdrCode a -> CppSrcCode a
 hdrToSrc (CPPHC a) = CPPSC a
 
+instance (Pair p) => SharedProg (p CppSrcCode CppHdrCode)
 instance (Pair p) => OOProg (p CppSrcCode CppHdrCode)
 
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
@@ -371,9 +373,6 @@ instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
   inlineIf = pair3 inlineIf inlineIf
 
   funcAppMixedArgs n = pair1Val3Lists (funcAppMixedArgs n) (funcAppMixedArgs n)
-  selfFuncAppMixedArgs n = pair1Val3Lists
-    (selfFuncAppMixedArgs n) 
-    (selfFuncAppMixedArgs n) 
   extFuncAppMixedArgs l n = pair1Val3Lists
     (extFuncAppMixedArgs l n) 
     (extFuncAppMixedArgs l n) 
@@ -386,6 +385,9 @@ instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
   notNull = pair1 notNull notNull
 
 instance (Pair p) => OOValueExpression (p CppSrcCode CppHdrCode) where
+  selfFuncAppMixedArgs n = pair1Val3Lists
+    (selfFuncAppMixedArgs n)
+    (selfFuncAppMixedArgs n)
   newObjMixedArgs = pair1Val3Lists newObjMixedArgs newObjMixedArgs
   extNewObjMixedArgs l = pair1Val3Lists
     (extNewObjMixedArgs l) 
@@ -1281,7 +1283,6 @@ instance ValueExpression CppSrcCode where
   inlineIf = C.inlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
-  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs ptrAccess' self
   extFuncAppMixedArgs l n t vs ns = do
     modify (addModuleImportVS l)
     funcAppMixedArgs n t vs ns
@@ -1292,6 +1293,7 @@ instance ValueExpression CppSrcCode where
   notNull v = v
 
 instance OOValueExpression CppSrcCode where
+  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs ptrAccess' self
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs l t vs ns = do
     modify (addModuleImportVS l)
@@ -1963,7 +1965,6 @@ instance ValueExpression CppHdrCode where
   inlineIf _ _ _ = mkStateVal void empty
 
   funcAppMixedArgs _ _ _ _ = mkStateVal void empty
-  selfFuncAppMixedArgs _ _ _ _ = mkStateVal void empty
   extFuncAppMixedArgs _ _ _ _ _ = mkStateVal void empty
   libFuncAppMixedArgs _ _ _ _ _ = mkStateVal void empty
 
@@ -1972,6 +1973,7 @@ instance ValueExpression CppHdrCode where
   notNull _ = mkStateVal void empty
 
 instance OOValueExpression CppHdrCode where
+  selfFuncAppMixedArgs _ _ _ _ = mkStateVal void empty
   newObjMixedArgs _ _ _ = mkStateVal void empty
   extNewObjMixedArgs _ _ _ _ = mkStateVal void empty
   libNewObjMixedArgs _ _ _ _ = mkStateVal void empty

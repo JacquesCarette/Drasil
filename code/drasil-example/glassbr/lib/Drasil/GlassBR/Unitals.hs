@@ -17,7 +17,6 @@ import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, glassTypeFac,
   stdOffDist)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016)
 import Drasil.GlassBR.Units (sFlawPU)
-
 --FIXME: Many of the current terms can be separated into terms and defns?
 
 {--}
@@ -108,7 +107,7 @@ nomThick = cuc "nomThick"
   (nounPhraseSent $ S "nominal thickness" +:+ displayDblConstrntsAsSet 
     nomThick nominalThicknesses)
   lT millimetre {-Discrete nominalThicknesses, but not implemented-} Rational 
-  [sfwrElem $ Set nominalThicknesses] $ exactDbl 8 -- for testing
+  [{-sfwrElem $ mkSet nominalThicknesses-}] $ exactDbl 8 -- for testing
 
 glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String) 
   [{- TODO: add back constraint: EnumeratedStr Software $ map (abrv . snd) glassType -}]

@@ -152,7 +152,6 @@ data Expr where
   ESSSetOP :: ESSSet -> Expr -> Expr -> Expr
   -- | Set operator for Element + Set -> Bool
   ESBSetOP :: ESBSet -> Expr -> Expr -> Expr
-
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.
   --   ex: Summation is represented via 'Add' over a discrete domain.
@@ -422,7 +421,7 @@ instance Typed Expr Space where
     (Left lsp, Left rsp) -> Right $ "Vector dot product expects vector operands. Received `" ++ show lsp ++ "` · `" ++ show rsp ++ "`."
     (_, Right rx) -> Right rx
     (Right lx, _) -> Right lx
-{-
+
   infer cxt (SSetOP _ l r) = case (infer cxt l, infer cxt r) of
     (Left lt@(S.Set lsp), Left rt@(S.Set rsp)) -> if lsp == rsp && S.isBasicNumSpace lsp
       then Left lsp
@@ -445,7 +444,7 @@ instance Typed Expr Space where
       else Right $ "Set contains should only be applied to Set of same space. Received `" ++ show lt ++ "` / `" ++ show rt ++ "`."
     (_      , Right e) -> Right e
     (Right e, _      ) -> Right e
--}
+
   infer cxt (Operator _ (S.BoundedDD _ _ bot top) body) =
     let expTy = S.Integer in
     case (infer cxt bot, infer cxt top, infer cxt body) of

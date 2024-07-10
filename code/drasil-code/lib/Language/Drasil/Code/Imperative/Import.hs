@@ -387,6 +387,7 @@ convCall c x ns f libf = do
 -- | Converts a 'Constraint' to a 'CodeExpr'.
 renderC :: (HasUID c, HasSymbol c) => c -> Constraint CodeExpr -> CodeExpr
 renderC s (Range _ rr)         = renderRealInt s rr
+--renderC s (Elem _ rr)         = renderSet s rr
 
 -- | Converts an interval ('RealInterval') to a 'CodeExpr'.
 renderRealInt :: (HasUID c, HasSymbol c) => c -> RealInterval CodeExpr CodeExpr -> CodeExpr
@@ -398,6 +399,10 @@ renderRealInt s (UpTo    (Inc, a))          = sy s $<= a
 renderRealInt s (UpTo    (Exc, a))          = sy s $<  a
 renderRealInt s (UpFrom  (Inc, a))          = sy s $>= a
 renderRealInt s (UpFrom  (Exc, a))          = sy s $>  a
+
+--renderSet :: (HasUID c, HasSymbol c) => c -> SBSet CodeExpr -> CodeExpr
+--renderSet e (SBSet s) = (sy e isin s)
+
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.
 unop :: (SharedProg r) => UFunc -> (SValue r -> SValue r)

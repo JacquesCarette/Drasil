@@ -15,7 +15,7 @@ module Language.Drasil (
   , square, half
   , oneHalf, oneThird
   , apply1, apply2
-  , m2x2, vec2D, dgnl2x2, rowVec, columnVec
+  , m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet
   , Completeness, Relation
 
   -- ** Literals Language
@@ -306,7 +306,7 @@ import Language.Drasil.WellTyped (RequiresChecking(..), Typed(..), TypingContext
 
 import Language.Drasil.Expr.Class (ExprC(..),
   frac, recip_, square, half, oneHalf, oneThird, apply1, apply2,
-  m2x2, vec2D, dgnl2x2, rowVec, columnVec)
+  m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet)
 import Language.Drasil.Expr.Lang (Expr, Completeness, Relation)
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal)

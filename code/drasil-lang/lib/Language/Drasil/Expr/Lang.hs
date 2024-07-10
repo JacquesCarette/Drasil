@@ -120,7 +120,8 @@ data Expr where
   Case     :: Completeness -> [(Expr, Relation)] -> Expr
   -- | Represents a matrix of expressions.
   Matrix   :: [[Expr]] -> Expr
-  Set :: Expr -> Expr
+  -- | Represents a set of expressions
+  Set :: [Expr] -> Expr
   -- | Unary operation for most functions (eg. sin, cos, log, etc.).
   UnaryOp       :: UFunc -> Expr -> Expr
   -- | Unary operation for @Bool -> Bool@ operations.
@@ -147,11 +148,11 @@ data Expr where
   -- | Binary operator for @Expr x Vector -> Vector@ operations (scaling).
   NVVBinaryOp   :: NVVBinOp -> Expr -> Expr -> Expr
   -- | Set operator for Set + Set -> Set
-  SSetOP :: SSet -> Expr -> Expr -> Expr
+  SSetOp :: SSet -> Expr -> Expr -> Expr
   -- | Set operator for Element + Set -> Set
-  ESSSetOP :: ESSSet -> Expr -> Expr -> Expr
+  ESSSetOp :: ESSSet -> Expr -> Expr -> Expr
   -- | Set operator for Element + Set -> Bool
-  ESBSetOP :: ESBSet -> Expr -> Expr -> Expr
+  ESBSetOp :: ESBSet -> Expr -> Expr -> Expr
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.
   --   ex: Summation is represented via 'Add' over a discrete domain.
@@ -179,9 +180,9 @@ instance Eq Expr where
   VVVBinaryOp o a b   == VVVBinaryOp p c d   =   o == p && a == c && b == d
   VVNBinaryOp o a b   == VVNBinaryOp p c d   =   o == p && a == c && b == d
   NVVBinaryOp o a b   == NVVBinaryOp p c d   =   o == p && a == c && b == d
-  SSetOP o a b        == SSetOP p c d        =   o == p && a == c && b == d
-  ESSSetOP o a b      == ESSSetOP p c d      =   o == p && a == c && b == d
-  ESBSetOP o a b      == ESBSetOP p c d      =   o == p && a == c && b == d
+  SSetOp o a b        == SSetOp p c d        =   o == p && a == c && b == d
+  ESSSetOp o a b      == ESSSetOp p c d      =   o == p && a == c && b == d
+  ESBSetOp o a b      == ESBSetOp p c d      =   o == p && a == c && b == d
   _                   == _                   =   False
 -- ^ TODO: This needs to add more equality checks
 
@@ -301,12 +302,12 @@ instance Typed Expr Space where
               (\_ -> all (\ r -> length r == columns && all (== expT) r) sss)
               (const False) expT
         t = fromLeft (error "Infer on Matrix had a strong expectation of Left-valued data.") expT -- This error should never occur.
-        
-  infer cxt (Set e) =
+
+  infer cxt (Set (e:exs)) =
     case infer cxt e of
         Left sp -> if S.isBasicNumSpace sp then Left sp else Right (show sp)
         Right err -> Right "Expressions in case"
-      
+  infer cxt (Set _) = Right "Expressions in case"
 
   infer cxt (UnaryOp uf ex) = case infer cxt ex of
     Left sp -> case uf of
@@ -422,7 +423,7 @@ instance Typed Expr Space where
     (_, Right rx) -> Right rx
     (Right lx, _) -> Right lx
 
-  infer cxt (SSetOP _ l r) = case (infer cxt l, infer cxt r) of
+  infer cxt (SSetOp _ l r) = case (infer cxt l, infer cxt r) of
     (Left lt@(S.Set lsp), Left rt@(S.Set rsp)) -> if lsp == rsp && S.isBasicNumSpace lsp
       then Left lsp
       else Right $ "Set union expects same numeric types, but found `" ++ show lt ++ "` · `" ++ show rt ++ "`."
@@ -430,7 +431,7 @@ instance Typed Expr Space where
     (_, Right rx) -> Right rx
     (Right lx, _) -> Right lx
 
-  infer cxt (ESSSetOP _ l r) = case (infer cxt l, infer cxt r) of
+  infer cxt (ESSSetOp _ l r) = case (infer cxt l, infer cxt r) of
     (Left lt, Left rt@(S.Set rsp)) -> if S.isBasicNumSpace lt && lt == rsp
       then Left lt
       else Right $ "Set Add/Sub should only be applied to Set of same space. Received `" ++ show lt ++ "` / `" ++ show rt ++ "`."
@@ -438,13 +439,13 @@ instance Typed Expr Space where
     (Right e, _      ) -> Right e
     (Left lt, Left rsp) -> Right $ "Set union expects set operands. Received `" ++ show lt ++ "` · `" ++ show rsp ++ "`."
 
-  infer cxt (ESBSetOP _ l r) = case (infer cxt l, infer cxt r) of
+  infer cxt (ESBSetOp _ l r) = case (infer cxt l, infer cxt r) of
     (Left lt, Left rt@(S.Set rsp)) -> if S.isBasicNumSpace lt && lt == rsp
       then Left lt
       else Right $ "Set contains should only be applied to Set of same space. Received `" ++ show lt ++ "` / `" ++ show rt ++ "`."
     (_      , Right e) -> Right e
     (Right e, _      ) -> Right e
-
+    (Left lt, Left rsp) -> Right $ "Set union expects set operands. Received `" ++ show lt ++ "` · `" ++ show rsp ++ "`."
   infer cxt (Operator _ (S.BoundedDD _ _ bot top) body) =
     let expTy = S.Integer in
     case (infer cxt bot, infer cxt top, infer cxt body) of

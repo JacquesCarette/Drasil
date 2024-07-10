@@ -16,6 +16,7 @@ dependencies:
 - bytestring
 - pretty
 - containers
+- filepath
 - directory
 - time
 - drasil-build

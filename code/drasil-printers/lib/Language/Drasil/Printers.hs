@@ -29,7 +29,7 @@ module Language.Drasil.Printers (
   -- * Jupyter
   , genJupyter
   -- * Markdown
-  , genMD, genMDBook, makeBook, makeCSV
+  , genMD, genMDBook, makeBook, makeCSV, assetMap
   -- * Log
   , printAllDebugInfo
   -- * Printing Information and Options
@@ -46,7 +46,7 @@ import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.JSON.Print (genJupyter)
 import Language.Drasil.Markdown.Print (genMD, genMDBook)
-import Language.Drasil.Markdown.Config (makeBook, makeCSV)
+import Language.Drasil.Markdown.Config (makeBook, makeCSV, assetMap)
 import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS,
   extLibSec, instDoc, regularSec, endNote, whatInfo)
 import Language.Drasil.Plain.Print (SingleLine(..), sentenceDoc, exprDoc,

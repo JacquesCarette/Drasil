@@ -31,7 +31,8 @@ import Language.Drasil.Printers (DocType(SRS, Website, Lesson), makeCSS, genHTML
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD,
   unPP, unJP, unCSP, unCPPP, unSP)
-import Language.Drasil.Output.Formats(Filename, DocSpec(DocSpec), DocChoices(DC))
+import Language.Drasil.Output.Formats(Filename, DocSpec(DocSpec), DocChoices(DC),
+  MakeSpec(MakeSpec))
 
 import Language.Drasil.TypeCheck
 import Language.Drasil.Dump
@@ -58,12 +59,13 @@ prntDoc d pinfo fn dtype fmt =
     HTML              -> do prntDoc' dtype (show dtype ++ "/HTML") fn HTML d pinfo
                             prntCSS dtype fn d
     TeX               -> do prntDoc' dtype (show dtype ++ "/PDF") fn TeX d pinfo
-                            prntMake $ DocSpec (DC dtype []) fn
+                            prntMake $ MakeSpec dtype TeX fn pinfo
     Jupyter           -> do prntDoc' dtype (show dtype ++ "/Jupyter") fn Jupyter d pinfo
     (Markdown GitHub) -> do prntDoc' dtype (show dtype ++ "/Markdown") fn (Markdown GitHub) d pinfo
     MDBook            -> do prntDoc' dtype (show dtype ++ "/mdBook") fn MDBook d pinfo
                             prntBook dtype d pinfo
                             prntCSV  dtype pinfo
+                            prntMake $ MakeSpec dtype MDBook fn pinfo
     _                 -> mempty
 
 -- | Helper function to produce an error when an incorrect SRS format is used. 
@@ -98,11 +100,15 @@ prntDoc' dt dt' fn format body' sm = do
     getExt _            = srsFormatError
 
 -- | Helper for writing the Makefile(s).
-prntMake :: DocSpec -> IO ()
-prntMake ds@(DocSpec (DC dt _) _) =
-  do outh <- openFile (show dt ++ "/PDF/Makefile") WriteMode
-     hPutStrLn outh $ render $ genMake [ds]
+prntMake :: MakeSpec -> IO ()
+prntMake ms@(MakeSpec dt f _ _) =
+  do outh <- openFile (show dt ++ dir f ++ "/Makefile") WriteMode
+     hPutStrLn outh $ render $ genMake [ms]
      hClose outh
+  where
+    dir TeX    = "/PDF"
+    dir MDBook = "/mdBook"
+    dir _      = error "Makefile(s) only supported for TeX/MDBook."
 
 -- | Helper that creates a CSS file to accompany an HTML file.
 -- Takes in the folder name, generated file name, and the document.

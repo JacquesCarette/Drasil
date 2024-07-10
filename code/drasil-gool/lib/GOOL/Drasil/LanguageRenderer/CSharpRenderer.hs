@@ -22,8 +22,8 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   GetSet(..), List(..), InternalList(..), ThunkSym(..),
   VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
   ThunkAssign(..), StatementSym(..), AssignStatement(..), (&=),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), StatePattern(..),
+  DeclStatement(..), OODeclStatement(..), IOStatement(..), StringStatement(..),
+  FuncAppStatement(..), OOFuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
@@ -79,7 +79,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char,
   intFunc, multiAssignError, multiReturnError, multiTypeError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   runStrategy, listSlice, stringListVals, stringListLists, forRange, 
-  notifyObservers, checkState)
+  notifyObservers)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, 
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD, 
@@ -516,11 +516,13 @@ instance DeclStatement CSharpCode where
   listDecDef = CP.listDecDef
   arrayDec n = CP.arrayDec (litInt n)
   arrayDecDef = CP.arrayDecDef
+  constDecDef = CP.constDecDef
+  funcDecDef = csFuncDecDef
+
+instance OODeclStatement CSharpCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
-  constDecDef = CP.constDecDef
-  funcDecDef = csFuncDecDef
 
 instance IOStatement CSharpCode where
   print      = G.print False Nothing printFunc
@@ -557,8 +559,10 @@ instance StringStatement CSharpCode where
 
 instance FuncAppStatement CSharpCode where
   inOutCall = csInOutCall funcApp
-  selfInOutCall = csInOutCall selfFuncApp
   extInOutCall m = csInOutCall (extFuncApp m)
+
+instance OOFuncAppStatement CSharpCode where
+  selfInOutCall = csInOutCall selfFuncApp
 
 instance CommentStatement CSharpCode where
   comment = G.comment commentStart
@@ -584,9 +588,6 @@ instance ControlStatement CSharpCode where
   while = C.while parens bodyStart bodyEnd
 
   tryCatch = G.tryCatch csTryCatch
-
-instance StatePattern CSharpCode where 
-  checkState = M.checkState
 
 instance ObserverPattern CSharpCode where
   notifyObservers = M.notifyObservers

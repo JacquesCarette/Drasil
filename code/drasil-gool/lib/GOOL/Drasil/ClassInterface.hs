@@ -21,15 +21,14 @@ module GOOL.Drasil.ClassInterface (
   listIndexExists, at, ThunkSym(..),
   VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
   ThunkAssign(..), StatementSym(..), AssignStatement(..), (&=),
-  assignToListIndex, DeclStatement(..), objDecNewNoParams,
+  assignToListIndex, DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
   extObjDecNewNoParams, IOStatement(..), StringStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  StatePattern(..), initState, changeState, ObserverPattern(..),
-  observerListName, initObserverList, addObserver, StrategyPattern(..),
-  ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..),
-  privMethod, pubMethod, initializer, nonInitConstructor,
-  StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..),
-  convType, convTypeOO
+  FuncAppStatement(..), OOFuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ObserverPattern(..), observerListName, initObserverList,
+  addObserver, StrategyPattern(..), ifNoElse, switchAsIf, ScopeSym(..),
+  ParameterSym(..), MethodSym(..), privMethod, pubMethod, initializer,
+  nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..),
+  ModuleSym(..), convType, convTypeOO
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
@@ -51,21 +50,21 @@ type GSProgram a = GS (a (Program a))
 -- Functions in GOOL's interface beginning with "lib" are to be used to access items from different libraries/projects
 
 class (ProgramSym r, OOVariableValue r, VectorType r, VectorDecl r, VectorThunk r,
-  VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r,
-  IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r,
+  VectorExpression r, ThunkAssign r, AssignStatement r, OODeclStatement r,
+  IOStatement r, StringStatement r, OOFuncAppStatement r, CommentStatement r,
   ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r,
   VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
   Comparison r, OOValueExpression r, InternalValueExp r, GetSet r, List r,
-  StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r,
-  VariableElim r) => OOProg r
+  ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r
+  ) => OOProg r
 
 class (ProgramSym r, VectorType r, VectorDecl r, VectorThunk r,
   VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r,
   IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r,
   ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r,
   VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
-  Comparison r, ValueExpression r, List r, StatePattern r, TypeElim r,
-  VariableElim r) => ProcProg r
+  Comparison r, ValueExpression r, List r, TypeElim r, VariableElim r
+  ) => ProcProg r
 
 -- Shared between OO and Procedural --
 
@@ -404,18 +403,9 @@ class (VariableSym r, StatementSym r) => DeclStatement r where
   listDecDef   :: SVariable r -> [SValue r] -> MSStatement r
   arrayDec     :: Integer -> SVariable r -> MSStatement r
   arrayDecDef  :: SVariable r -> [SValue r] -> MSStatement r
-  objDecDef    :: SVariable r -> SValue r -> MSStatement r
-  objDecNew    :: SVariable r -> [SValue r] -> MSStatement r
-  extObjDecNew :: Library -> SVariable r -> [SValue r] -> MSStatement r
   constDecDef  :: SVariable r -> SValue r -> MSStatement r
   funcDecDef   :: SVariable r -> [SVariable r] -> MSBody r -> MSStatement r
-  
-objDecNewNoParams :: (DeclStatement r) => SVariable r -> MSStatement r
-objDecNewNoParams v = objDecNew v []
 
-extObjDecNewNoParams :: (DeclStatement r) => Library -> SVariable r -> 
-  MSStatement r
-extObjDecNewNoParams l v = extObjDecNew l v []
 
 class (VariableSym r, StatementSym r) => IOStatement r where
   print      :: SValue r -> MSStatement r
@@ -448,14 +438,13 @@ class (VariableSym r, StatementSym r) => StringStatement r where
   stringListVals  :: [SVariable r] -> SValue r -> MSStatement r
   stringListLists :: [SVariable r] -> SValue r -> MSStatement r
 
+-- The three lists are inputs, outputs, and both, respectively
 type InOutCall r = Label -> [SValue r] -> [SVariable r] -> [SVariable r] -> 
   MSStatement r
 
 class (VariableSym r, StatementSym r) => FuncAppStatement r where
-  -- The three lists are inputs, outputs, and both, respectively
-  inOutCall     ::            InOutCall r
-  selfInOutCall ::            InOutCall r
-  extInOutCall  :: Library -> InOutCall r
+  inOutCall    ::            InOutCall r
+  extInOutCall :: Library -> InOutCall r
 
 class (StatementSym r) => CommentStatement r where
   comment :: Comment -> MSStatement r
@@ -491,17 +480,6 @@ ifNoElse bs = ifCond bs $ body []
 switchAsIf :: (ControlStatement r, Comparison r) => SValue r -> 
   [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 switchAsIf v = ifCond . map (first (v ?==))
-
-class (BodySym r) => StatePattern r where
-  checkState      :: Label -> [(SValue r, MSBody r)] -> MSBody r -> 
-    MSStatement r
-
-initState :: (DeclStatement r, Literal r) => Label -> Label -> MSStatement r
-initState fsmName initialState = varDecDef (var fsmName string) 
-  (litString initialState)
-
-changeState :: (AssignStatement r, Literal r) => Label -> Label -> MSStatement r
-changeState fsmName toState = var fsmName string &= litString toState
 
 class ScopeSym r where
   type Scope r
@@ -611,7 +589,6 @@ class (ClassSym r) => ModuleSym r where
   buildModule :: Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
 
 -- OO Only --
-
 class (TypeSym r) => OOTypeSym r where
   obj :: ClassName -> VSType r
 
@@ -640,8 +617,22 @@ extNewObj l t vs = extNewObjMixedArgs l t vs []
 libNewObj        :: (OOValueExpression r) => Library -> PosCtorCall r
 libNewObj l t vs = libNewObjMixedArgs l t vs []
 
-
 class (VariableValue r, OOVariableSym r) => OOVariableValue r
+
+class (FuncAppStatement r, OOVariableSym r) => OOFuncAppStatement r where
+  selfInOutCall :: InOutCall r
+
+class (DeclStatement r, OOVariableSym r) => OODeclStatement r where
+  objDecDef    :: SVariable r -> SValue r -> MSStatement r
+  objDecNew    :: SVariable r -> [SValue r] -> MSStatement r
+  extObjDecNew :: Library -> SVariable r -> [SValue r] -> MSStatement r
+
+objDecNewNoParams :: (OODeclStatement r) => SVariable r -> MSStatement r
+objDecNewNoParams v = objDecNew v []
+
+extObjDecNewNoParams :: (OODeclStatement r) => Library -> SVariable r -> 
+  MSStatement r
+extObjDecNewNoParams l v = extObjDecNew l v []
 
 class (StatementSym r, FunctionSym r) => ObserverPattern r where
   notifyObservers :: VSFunction r -> VSType r -> MSStatement r
@@ -662,7 +653,7 @@ class (BodySym r, VariableSym r) => StrategyPattern r where
   runStrategy     :: Label -> [(Label, MSBody r)] -> Maybe (SValue r) -> 
     Maybe (SVariable r) -> MSBlock r
 
-class (FunctionSym r) => InternalValueExp r where
+class (ValueSym r) => InternalValueExp r where
   -- | Generic function for calling a method.
   --   Takes the function name, the return type, the object, a list of 
   --   positional arguments, and a list of named arguments.

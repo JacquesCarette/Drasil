@@ -13,9 +13,9 @@ import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement,
   FunctionSym(..), GetSet(..), List(..), InternalList(..), ThunkSym(..),
   VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
   ThunkAssign(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..),
-  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
+  OODeclStatement(..), IOStatement(..), StringStatement(..),
+  FuncAppStatement(..), OOFuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..), qualName)
@@ -286,11 +286,13 @@ instance DeclStatement CodeInfo where
   listDecDef             _ = zoom lensMStoVS . executeList
   arrayDec             _ _ = noInfo
   arrayDecDef            _ = zoom lensMStoVS . executeList
+  constDecDef            _ = zoom lensMStoVS . execute1
+  funcDecDef           _ _ = execute1
+
+instance OODeclStatement CodeInfo where
   objDecDef              _ = zoom lensMStoVS . execute1
   objDecNew              _ = zoom lensMStoVS . executeList
   extObjDecNew         _ _ = zoom lensMStoVS . executeList
-  constDecDef            _ = zoom lensMStoVS . execute1
-  funcDecDef           _ _ = execute1
 
 instance IOStatement CodeInfo where
   print        = zoom lensMStoVS . execute1
@@ -328,12 +330,14 @@ instance FuncAppStatement CodeInfo where
   inOutCall n vs _ _ = zoom lensMStoVS $ do
     sequence_ vs
     addCurrModCall n
-  selfInOutCall n vs _ _ = zoom lensMStoVS $ do
-    sequence_ vs
-    addCurrModCall n
   extInOutCall l n vs _ _ = zoom lensMStoVS $ do
     sequence_ vs
     addExternalCall l n
+
+instance OOFuncAppStatement CodeInfo where
+  selfInOutCall n vs _ _ = zoom lensMStoVS $ do
+    sequence_ vs
+    addCurrModCall n
 
 instance CommentStatement CodeInfo where
   comment _ = noInfo
@@ -362,9 +366,6 @@ instance ControlStatement CodeInfo where
   tryCatch _ cb = do
     _ <- cb
     noInfo
-
-instance StatePattern CodeInfo where
-  checkState _ = evalConds
 
 instance ObserverPattern CodeInfo where
   notifyObservers f _ = execute1 (zoom lensMStoVS f)

@@ -4,7 +4,7 @@
 module GOOL.Drasil.LanguageRenderer.Macros (
   ifExists, decrement1, increment, increment1, runStrategy, 
   listSlice, makeSetterVal, stringListVals, stringListLists, forRange, notifyObservers,
-  notifyObservers', checkState
+  notifyObservers'
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..))
@@ -15,11 +15,11 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   BooleanExpression((?&&), (?||)), at, ($.), StatementSym(multi),
   AssignStatement((&+=), (&-=), (&++)), (&=), observerListName)
 import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block), 
-  TypeSym(int, string, listInnerType), VariableSym(var), Literal(litInt), 
+  TypeSym(int, listInnerType), VariableSym(var), Literal(litInt), 
   VariableValue(valueOf), ValueExpression(notNull), 
   List(listSize, listAppend, listAccess, intToIndex), StatementSym(valStmt), 
   AssignStatement(assign), DeclStatement(varDecDef, listDec), 
-  ControlStatement(ifCond, switch, for, forRange), ValueExpression(inlineIf))
+  ControlStatement(ifCond, for, forRange), ValueExpression(inlineIf))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderValue(cast), 
   ValueElim(valueInt))
 import qualified GOOL.Drasil.RendererClasses as S (
@@ -183,7 +183,3 @@ notifyObservers' :: (RenderSym r) => VSFunction r -> VSType r -> MSStatement r
 notifyObservers' f t = S.forRange observerIndex initv (S.listSize $ obsList t) 
     (S.litInt 1) (notify t f)
     where initv = S.litInt 0
-        
-checkState :: (RenderSym r) => Label -> [(SValue r, MSBody r)] -> MSBody r -> 
-  MSStatement r
-checkState l = S.switch (S.valueOf $ S.var l S.string)

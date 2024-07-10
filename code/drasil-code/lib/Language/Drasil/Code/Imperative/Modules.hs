@@ -48,10 +48,10 @@ import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement,
   SMethod, CSStateVar, SClass, OOProg, BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..), Literal(..),
   VariableValue(..), CommandLineArgs(..), BooleanExpression(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), objDecNewNoParams,
-  extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse,
-  ScopeSym(..), MethodSym(..), StateVarSym(..), pubDVar, convTypeOO,
-  ScopeTag(..))
+  StatementSym(..), AssignStatement(..), DeclStatement(..), OODeclStatement(..),
+  objDecNewNoParams, extObjDecNewNoParams, IOStatement(..),
+  ControlStatement(..), ifNoElse, ScopeSym(..), MethodSym(..), StateVarSym(..),
+  pubDVar, convTypeOO, ScopeTag(..))
 
 import Prelude hiding (print)
 import Data.List (intersperse, partition)

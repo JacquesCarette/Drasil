@@ -23,11 +23,11 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), listSlice,
   InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), StatePattern(..), ObserverPattern(..),
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..), convTypeOO)
+  AssignStatement(..), (&=), DeclStatement(..), OODeclStatement(..),
+  IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  OOFuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), convTypeOO)
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym,
   RenderFile(..), ImportSym(..), ImportElim, PermElim(binding), RenderBody(..),
   BodyElim, RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim,
@@ -79,7 +79,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CLike as C (notOp, andOp, orOp,
   listSize, varDecDef, extObjDecNew, switch, while)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement1,
   increment1, runStrategy, stringListVals, stringListLists, notifyObservers',
-  checkState, makeSetterVal)
+  makeSetterVal)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
@@ -532,14 +532,16 @@ instance DeclStatement SwiftCode where
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
-  objDecDef = varDecDef
-  objDecNew = G.objDecNew
-  extObjDecNew = C.extObjDecNew
   constDecDef vr vl' = do
     vdec <- swiftVarDec swiftConst vr
     vl <- zoom lensMStoVS vl'
     mkStmtNoEnd $ RC.statement vdec <+> equals <+> RC.value vl
   funcDecDef = CP.funcDecDef
+
+instance OODeclStatement SwiftCode where
+  objDecDef = varDecDef
+  objDecNew = G.objDecNew
+  extObjDecNew = C.extObjDecNew
 
 instance IOStatement SwiftCode where
   print      = swiftOut False Nothing printFunc
@@ -594,8 +596,10 @@ instance StringStatement SwiftCode where
 
 instance FuncAppStatement SwiftCode where
   inOutCall = CP.inOutCall funcApp
-  selfInOutCall = CP.inOutCall selfFuncApp
   extInOutCall m = CP.inOutCall (extFuncApp m)
+
+instance OOFuncAppStatement SwiftCode where
+  selfInOutCall = CP.inOutCall selfFuncApp
 
 instance CommentStatement SwiftCode where
   comment = G.comment commentStart
@@ -621,9 +625,6 @@ instance ControlStatement SwiftCode where
   while = C.while id bodyStart bodyEnd
 
   tryCatch = G.tryCatch swiftTryCatch
-
-instance StatePattern SwiftCode where
-  checkState = M.checkState
 
 instance ObserverPattern SwiftCode where
   notifyObservers = M.notifyObservers'

@@ -743,12 +743,12 @@ instance ModuleSym SwiftCode where
     CP.buildModule modName (do
       lis <- getLangImports
       libis <- getLibImports
-      pure $ vcat $ map (RC.import' .
-          (langImport :: Label -> SwiftCode (Import SwiftCode)))
-          (sort $ lis ++ is ++ libis))
-      (zoom lensFStoMS swiftStringError) getMainDoc (map pure fns)
-        (map pure cls)
-
+      pure $ vcat $ map (RC.import' . 
+          (langImport :: Label -> SwiftCode (Import SwiftCode))) 
+          (sort $ lis ++ is ++ libis)) 
+      (zoom lensFStoMS swiftStringError) getMainDoc 
+        (map pure fns) (map pure cls)
+  
 instance RenderMod SwiftCode where
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)

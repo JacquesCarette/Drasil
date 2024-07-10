@@ -252,7 +252,7 @@ type ParentSpec = Doc
 
 class (BlockCommentSym r) => RenderClass r where
   intClass :: Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] 
-    -> [SMethod r] -> SClass r
+    -> [SMethod r] -> [SMethod r] -> SClass r
     
   inherit :: Maybe Label -> r ParentSpec
   implements :: [Label] -> r ParentSpec

@@ -1054,7 +1054,7 @@ jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (map fst $ bs ++ is)
           map fst os
 
 jExtraClass :: (RenderSym r) => Label -> Maybe Label -> [CSStateVar r] -> 
-  [SMethod r] -> SClass r
+  [SMethod r] -> [SMethod r] -> SClass r
 jExtraClass n = intClass n (scopeFromData Priv empty) . inherit
 
 addCallExcsCurrMod :: String -> VS ()

@@ -541,12 +541,18 @@ type SClass a = CS (a (Class a))
 
 class (MethodSym r, StateVarSym r) => ClassSym r where
   type Class r
+  -- | Main external method for creating a class.
+  --   Inputs: parent class, variables, constructor(s), methods
   buildClass :: Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
-    SClass r
+    [SMethod r] -> SClass r
+  -- | Creates an extra class.
+  --   Inputs: class name, the rest are the same as buildClass.
   extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
-    SClass r
+    [SMethod r] -> SClass r
+  -- | Creates a class implementing interfaces.
+  --   Inputs: class name, interface names, variables, constructor(s), methods
   implementingClass :: Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> 
-    SClass r
+    [SMethod r] -> SClass r
 
   docClass :: String -> SClass r -> SClass r
 
@@ -554,6 +560,7 @@ type FSModule a = FS (a (Module a))
 
 class (ClassSym r) => ModuleSym r where
   type Module r
+  -- Module name, import names, module functions, module classes
   buildModule :: Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
 
 -- Utility

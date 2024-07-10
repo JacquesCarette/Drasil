@@ -139,13 +139,16 @@ listAddFunc f i v = IG.func f (IC.listType $ onStateValue valueType v)
 discardFileLine :: (RenderSym r) => Label -> SValue r -> MSStatement r
 discardFileLine n f = IC.valStmt $ objMethodCallNoParams IC.string f n 
 
+-- | An internal function for creating a class.
+--   Parameters: render function, class name, scope, parent, class variables,
+--               constructor(s), methods
 intClass :: (RenderSym r, Monad r) => (Label -> Doc -> Doc -> Doc -> Doc -> 
   Doc) -> Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] 
-  -> CS (r Doc)
-intClass f n s i svrs mths = do
+  -> [SMethod r] -> CS (r Doc)
+intClass f n s i svrs cstrs mths = do
   modify (setClassName n) 
   svs <- onStateList (R.stateVarList . map RC.stateVar) svrs
-  ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) mths)
+  ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) (cstrs ++ mths))
   return $ onCodeValue (\p -> f n p (RC.scope s) svs ms) i 
 
 -- Python, Java, and C++ --
@@ -233,11 +236,17 @@ mainFunction s n = S.intFunc True n public static (mType IC.void)
   [IC.param (IC.var args (s >>= (\argT -> typeFromData (List String) 
   (render (RC.type' argT) ++ array) (RC.type' argT <> array'))))]
 
+-- | Used by the language renderers to build the module.
+--   n is the module name
+--   inc is the include
+--   is is the import statements
+--   ms is the class methods
+--   cs is the classes
 buildModule' :: (RenderSym r) => Label -> (String -> r (Import r)) -> [Label] 
   -> [SMethod r] -> [SClass r] -> FSModule r
 buildModule' n inc is ms cs = S.modFromData n (do
   cls <- mapM (zoom lensFStoCS) 
-          (if null ms then cs else IC.buildClass Nothing [] ms : cs) 
+          (if null ms then cs else IC.buildClass Nothing [] [] ms : cs)
   lis <- getLangImports
   libis <- getLibImports
   mis <- getModuleImports
@@ -333,7 +342,7 @@ listSetFunc f v idx setVal = join $ on2StateValues (\i toVal -> funcFromData
   setVal
 
 extraClass :: (RenderSym r) =>  Label -> Maybe Label -> [CSStateVar r] -> 
-  [SMethod r] -> SClass r
+  [SMethod r] -> [SMethod r] -> SClass r
 extraClass n = S.intClass n public . S.inherit
 
 -- Python, C#, and Swift --

@@ -5,7 +5,7 @@ module Language.Drasil.Expr.Class (
   square, half,
   oneHalf, oneThird,
   apply1, apply2,
-  m2x2, vec2D, dgnl2x2, rowVec, columnVec
+  m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet
 ) where
 
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
@@ -68,6 +68,8 @@ m2x2 a b c d = matrix [[a,b],[c,d]]
 vec2D :: ExprC r => r -> r -> r
 vec2D a b = matrix [[a],[b]]
 
+mkSet :: ExprC r => r -> r
+mkSet a = setE a 
 -- | Creates a diagonal two-by-two matrix. For example:
 --
 -- >>> dgnl2x2 1 2
@@ -181,6 +183,7 @@ class ExprC r where
   -- | Smart constructor for 'real interval' membership.
   realInterval :: HasUID c => c -> RealInterval r r -> r
   
+  setE :: r -> r
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
   euclidean :: [r] -> r
   
@@ -367,6 +370,7 @@ instance ExprC Expr where
   
   matrix = Matrix
 
+  setE = Set
   -- | Applies a given function with a list of parameters.
   apply f [] = sy f
   apply f ps = FCall (f ^. uid) ps

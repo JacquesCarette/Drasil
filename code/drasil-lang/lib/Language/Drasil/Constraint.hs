@@ -8,7 +8,7 @@ module Language.Drasil.Constraint (
   ) where
 
 import Language.Drasil.Expr.Lang
-import Language.Drasil.Space (RealInterval(..), Set(..))
+import Language.Drasil.Space (RealInterval(..), Space(..))
 
 -- | The reason behind the constraint's existence.
 data ConstraintReason = Physical | Software
@@ -21,20 +21,20 @@ data Constraint a where
   -- | By default, physical and software constraints are ranges.
   Range          :: ConstraintReason -> RealInterval a a -> Constraint a
 
-  Elem           :: ConstraintReason -> Set a -> Constraint a
+  Elem           :: ConstraintReason -> Space -> Constraint a
 
 -- | Smart constructor for range of 'Physical' constraints between two given expressions.
 physRange :: RealInterval Expr Expr -> ConstraintE
 physRange = Range Physical
 
-physElem :: Set Expr -> ConstraintE
+physElem :: Space -> ConstraintE
 physElem = Elem Physical
 
 -- | Smart constructor for range of 'Software' constraints between two given expressions.
 sfwrRange :: RealInterval Expr Expr -> ConstraintE
 sfwrRange = Range Software
 
-sfwrElem :: Set Expr -> ConstraintE
+sfwrElem :: Space -> ConstraintE
 sfwrElem = Elem Software
 
 isPhysRange, isSfwrRange, isPhysElem, isSfwrElem :: Constraint e -> Bool

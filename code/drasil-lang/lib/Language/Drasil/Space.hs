@@ -9,7 +9,7 @@
 module Language.Drasil.Space (
   -- * Types
   Space(..), Primitive,
-  RealInterval(..), Set(..), Inclusive(..),
+  RealInterval(..), Inclusive(..),
   DomainDesc(..), RTopology(..), DiscreteDomainDesc, ContinuousDomainDesc,
   -- * Class
   HasSpace(..),
@@ -37,7 +37,7 @@ data Space =
   | Char
   | String
   | Vect Space -- TODO: Length for vectors?
-  | Set Space
+  | Set [Double]
   | Matrix Int Int Space
   | Array Space
   | Actor String
@@ -82,8 +82,6 @@ data RealInterval a b where
   UpTo    :: (Inclusive, a) -> RealInterval a b                   -- ^ Interval from (-infinity .. x).
   UpFrom  :: (Inclusive, b) -> RealInterval a b                   -- ^ Interval from (x .. infinity).
 
-data Set a where
-  ElemOf :: a -> Set a
 -- | Gets the name of an 'Actor'.
 getActorName :: Space -> String
 getActorName (Actor n) = n
@@ -92,7 +90,7 @@ getActorName _         = error "getActorName called on non-actor space"
 -- | Gets the inner 'Space' of a vector or set.
 getInnerSpace :: Space -> Space
 getInnerSpace (Vect s) = s
-getInnerSpace (Set s) = s
+--getInnerSpace (Set s) = s
 getInnerSpace _        = error "getInnerSpace called on non-vector space"
 
 -- | Is this Space a basic numeric space?

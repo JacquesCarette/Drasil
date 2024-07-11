@@ -134,7 +134,7 @@ src_stub() {
   REL_PATH=$(cd "$CUR_DIR" && "$MAKE" deploy_code_path | grep "$example_name" | cut -d"$DEPLOY_CODE_PATH_KV_SEP" -f 2-)
   # On a real deploy, `deploy` folder is itself a git repo, thus we need to ensure the path lookup is in the outer Drasil repo.
   for p in $REL_PATH; do
-    ls -d "$(cd "$CUR_DIR" && git rev-parse --show-toplevel)/$p"*/ | rev | cut -d/ -f2 | rev | tr '\n' '\0' | xargs -0 printf "$p%s\n" >> "$EXAMPLE_DEST$example_name/src"
+    find "$(cd "$CUR_DIR" && git rev-parse --show-toplevel)" -name "$p*" -type d -print0 | rev | cut -d/ -f2 | rev | tr '\0' '\n' | xargs -0 printf "$p%s\n" >> "$EXAMPLE_DEST$example_name/src"
   done
 }
 
@@ -155,7 +155,7 @@ copy_traceygraphs() {
 }
 
 copy_website() {
-  cd "$CUR_DIR$DEPLOY_FOLDER"
+  cd "$CUR_DIR$DEPLOY_FOLDER" || exit
   cp -r "$CUR_DIR$WEBSITE_FOLDER". .
 
   # src stubs were consumed by site generator; safe to delete those.
@@ -163,7 +163,7 @@ copy_website() {
 }
 
 
-cd "$DEPLOY_FOLDER"
+cd "$DEPLOY_FOLDER" || exit
 copy_docs
 copy_graphs
 copy_datafiles
@@ -172,4 +172,4 @@ copy_images
 copy_analysis
 copy_traceygraphs
 copy_website
-cd "$CUR_DIR"
+cd "$CUR_DIR" || exit

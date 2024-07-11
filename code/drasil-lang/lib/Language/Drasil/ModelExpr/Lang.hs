@@ -46,6 +46,17 @@ data VVNBinOp = Dot
 data NVVBinOp = Scale
   deriving Eq
 
+-- | Element + Set -> Set
+data ESSBinOp = SAdd | SRemove
+  deriving Eq
+
+-- | Element + Set -> Bool
+data ESBBinOp = SContains
+  deriving Eq
+
+data AssocConcatOper = SUnion
+  deriving Eq
+
 -- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
 data AssocArithOper = Add | Mul
   deriving Eq
@@ -83,18 +94,6 @@ data SpaceBinOp = IsIn
 data DerivType = Part | Total
   deriving Eq
 
--- | Set + Set -> Set
-data SSet = SUnion
-  deriving Eq
-
--- | Element + Set -> Set
-data ESSSet = SAdd | SRemove
-  deriving Eq
-
--- | Element + Set -> Bool
-data ESBSet = SContains
-  deriving Eq
-
 -- | Expression language where all terms are supposed to have a meaning, but
 --   that meaning may not be that of a definite value. For example,
 --   specification expressions, especially with quantifiers, belong here.
@@ -109,6 +108,8 @@ data ModelExpr where
   AssocA    :: AssocArithOper -> [ModelExpr] -> ModelExpr
   -- | Takes an associative boolean operator with a list of expressions.
   AssocB    :: AssocBoolOper  -> [ModelExpr] -> ModelExpr
+
+  AssocC   :: AssocConcatOper -> [ModelExpr] -> ModelExpr
   -- | Derivative syntax is:
   --   Type ('Part'ial or 'Total') -> principal part of change -> with respect to
   --   For example: Deriv Part y x1 would be (dy/dx1).
@@ -122,7 +123,8 @@ data ModelExpr where
   Case      :: Completeness -> [(ModelExpr, ModelExpr)] -> ModelExpr
   -- | Represents a matrix of expressions.
   Matrix    :: [[ModelExpr]] -> ModelExpr
-  
+  -- | Represents a set of expressions
+  Set :: [ModelExpr] -> ModelExpr
   -- | Unary operation for most functions (eg. sin, cos, log, etc.).
   UnaryOp       :: UFunc -> ModelExpr -> ModelExpr
   -- | Unary operation for @Bool -> Bool@ operations.
@@ -152,12 +154,10 @@ data ModelExpr where
   VVNBinaryOp   :: VVNBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Binary operator for @Number x Vector -> Vector@ operations (scaling).
   NVVBinaryOp   :: NVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-  -- | Set operator for Set + Set -> Set
-  SSetOp :: SSet -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Set operator for Element + Set -> Set
-  ESSSetOp :: ESSSet -> ModelExpr -> ModelExpr -> ModelExpr
+  ESSBinaryOp :: ESSBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Set operator for Element + Set -> Bool
-  ESBSetOp :: ESBSet -> ModelExpr -> ModelExpr -> ModelExpr
+  ESBBinaryOp :: ESBBinOp -> ModelExpr -> ModelExpr -> ModelExpr
 
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.
@@ -216,6 +216,8 @@ instance Eq ModelExpr where
   LABinaryOp o a b    == LABinaryOp p c d    =   o == p && a == c && b == d
   VVVBinaryOp o a b   == VVVBinaryOp p c d   =   o == p && a == c && b == d
   VVNBinaryOp o a b   == VVNBinaryOp p c d   =   o == p && a == c && b == d
+  ESSBinaryOp o a b   == ESSBinaryOp p c d   =   o == p && a == c && b == d
+  ESBBinaryOp o a b   == ESBBinaryOp p c d   =   o == p && a == c && b == d
   _                   == _                   =   False
 -- ^ TODO: This needs to add more equality checks
 

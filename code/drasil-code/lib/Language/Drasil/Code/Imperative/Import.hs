@@ -13,9 +13,9 @@ import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
 import Database.Drasil (symbResolve)
 import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&))
 import Language.Drasil.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
-  AssocArithOper(..), AssocBoolOper(..), BoolBinOp(..), EqBinOp(..),
+  AssocArithOper(..), AssocBoolOper(..), AssocConcatOper, BoolBinOp(..), EqBinOp(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
-  VVNBinOp(..), VVVBinOp(..), NVVBinOp(..))
+  VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..))
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, fAppProc,
@@ -349,6 +349,8 @@ convExpr (OrdBinaryOp o a b)   = liftM2 (ordBfunc o) (convExpr a) (convExpr b)
 convExpr (VVVBinaryOp o a b)   = liftM2 (vecVecVecBfunc o) (convExpr a) (convExpr b)
 convExpr (VVNBinaryOp o a b)   = liftM2 (vecVecNumBfunc o) (convExpr a) (convExpr b)
 convExpr (NVVBinaryOp o a b)   = liftM2 (numVecVecBfunc o) (convExpr a) (convExpr b)
+convExpr (ESSBinaryOp o a b)   = liftM2 (elementSetSetBfunc o) (convExpr a) (convExpr b)
+convExpr (ESBBinaryOp o a b)   = liftM2 (elementSetBoolBfunc o) (convExpr a) (convExpr b)
 convExpr (Case c l)            = doit l -- FIXME this is sub-optimal
   where
     doit [] = error "should never happen" -- TODO: change error message?
@@ -393,7 +395,7 @@ convCall c x ns f libf = do
 -- | Converts a 'Constraint' to a 'CodeExpr'.
 renderC :: (HasUID c, HasSymbol c) => c -> Constraint CodeExpr -> CodeExpr
 renderC s (Range _ rr)         = renderRealInt s rr
---renderC s (Elem _ rr)         = renderSet s rr
+renderC s (Elem _ rr)          = renderSet s rr
 
 -- | Converts an interval ('RealInterval') to a 'CodeExpr'.
 renderRealInt :: (HasUID c, HasSymbol c) => c -> RealInterval CodeExpr CodeExpr -> CodeExpr
@@ -406,9 +408,8 @@ renderRealInt s (UpTo    (Exc, a))          = sy s $<  a
 renderRealInt s (UpFrom  (Inc, a))          = sy s $>= a
 renderRealInt s (UpFrom  (Exc, a))          = sy s $>  a
 
---renderSet :: (HasUID c, HasSymbol c) => c -> SBSet CodeExpr -> CodeExpr
---renderSet e (SBSet s) = (sy e isin s)
-
+renderSet :: (HasUID c, HasSymbol c) => c -> CodeExpr -> CodeExpr
+renderSet e s = (( s) $<= sy e)
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.
 unop :: (SharedProg r) => UFunc -> (SValue r -> SValue r)
@@ -481,6 +482,15 @@ vecVecNumBfunc Dot = error "convExpr DotProduct"
 -- Maps a 'NVVBinOp' to it's corresponding GOOL binary function.
 numVecVecBfunc :: NVVBinOp -> (SValue r -> SValue r -> SValue r)
 numVecVecBfunc Scale = error "convExpr Scaling of Vectors"
+
+-- Maps a 'ESSBinOp' to it's corresponding GOOL binary function.
+elementSetSetBfunc :: ESSBinOp -> (SValue r -> SValue r -> SValue r)
+elementSetSetBfunc SAdd = error "convExpr Adding an Element to a Set"
+elementSetSetBfunc SRemove = error "convExpr Removing an Element to a Set"
+
+-- Maps a 'ESSBinOp' to it's corresponding GOOL binary function.
+elementSetBoolBfunc :: ESBBinOp -> (SValue r -> SValue r -> SValue r)
+elementSetBoolBfunc SContains = error "convExpr checking if Element is in a Set"
 
 -- medium hacks --
 

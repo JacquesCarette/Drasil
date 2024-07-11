@@ -45,9 +45,9 @@ rocTempSimpRC = makeRC "rocTempSimpRC" (nounPhraseSP $ "Simplified rate " ++
   "of change of temperature") EmptyS rocTempSimpRel
 
 rocTempSimpRel :: ModelExpr
-rocTempSimpRel = sy QPP.mass `mulRe` sy QT.heatCapSpec `mulRe`
-  deriv (sy QT.temp) QP.time $= (sy htFluxIn `mulRe` sy inSA $-
-  (sy htFluxOut `mulRe` sy outSA)) `addRe` (sy volHtGen `mulRe` sy QPP.vol)
+rocTempSimpRel = sy QPP.mass $* sy QT.heatCapSpec $* 
+  deriv (sy QT.temp) QP.time $= (sy htFluxIn $* sy inSA $-
+  (sy htFluxOut $* sy outSA)) $+ (sy volHtGen $* sy QPP.vol)
 
 ----
 
@@ -60,7 +60,7 @@ htFluxWaterFromCoilQD :: ModelQDef
 htFluxWaterFromCoilQD = mkQuantDef htFluxC htFluxWaterFromCoilExpr
 
 htFluxWaterFromCoilExpr :: ModelExpr
-htFluxWaterFromCoilExpr = sy coilHTC `mulRe` (sy tempC $- apply1 tempW time)
+htFluxWaterFromCoilExpr = sy coilHTC $* (sy tempC $- apply1 tempW time)
 
 --Can't include info in description beyond definition of variables?
 ----
@@ -74,7 +74,7 @@ htFluxPCMFromWaterQD :: ModelQDef
 htFluxPCMFromWaterQD = mkQuantDef htFluxP htFluxPCMFromWaterExpr
 
 htFluxPCMFromWaterExpr :: ModelExpr
-htFluxPCMFromWaterExpr = sy pcmHTC `mulRe` (apply1 tempW time $- apply1 tempPCM time)
+htFluxPCMFromWaterExpr = sy pcmHTC $* (apply1 tempW time $- apply1 tempPCM time)
 
 newtonLawNote :: UnitalChunk -> ConceptInstance -> ConceptChunk -> Sentence
 newtonLawNote u a c = foldlSent [ch u `S.is` S "found by assuming that",
@@ -132,27 +132,27 @@ rocTempDerivDens = [S "Using the fact that", ch density :+: S "=" :+: ch mass :+
 rocTempDerivIntegEq, rocTempDerivGaussEq, rocTempDerivArbVolEq,
   rocTempDerivConsFlxEq, rocTempDerivDensEq :: ModelExpr
 
-rocTempDerivIntegEq = neg (intAll (eqSymb vol) (sy gradient $. sy thFluxVect)) `addRe`
+rocTempDerivIntegEq = neg (intAll (eqSymb vol) (sy gradient $. sy thFluxVect)) $+
   intAll (eqSymb vol) (sy volHtGen) $=
   intAll (eqSymb vol) (sy density
-  `mulRe` sy QT.heatCapSpec `mulRe` pderiv (sy QT.temp) time)
+  $* sy QT.heatCapSpec $* pderiv (sy QT.temp) time)
 
-rocTempDerivGaussEq = neg (intAll (eqSymb surface) (sy thFluxVect $. sy uNormalVect)) `addRe`
+rocTempDerivGaussEq = neg (intAll (eqSymb surface) (sy thFluxVect $. sy uNormalVect)) $+
   intAll (eqSymb vol) (sy volHtGen) $= 
   intAll (eqSymb vol)
-  (sy density `mulRe` sy QT.heatCapSpec `mulRe` pderiv (sy QT.temp) time)
+  (sy density $* sy QT.heatCapSpec $* pderiv (sy QT.temp) time)
 
-rocTempDerivArbVolEq = (sy htFluxIn `mulRe` sy inSA $- (sy htFluxOut `mulRe`
-  sy outSA)) `addRe` (sy volHtGen `mulRe` sy vol) $= 
-  intAll (eqSymb vol) (sy density `mulRe` sy QT.heatCapSpec `mulRe` pderiv (sy QT.temp) time)
+rocTempDerivArbVolEq = (sy htFluxIn $* sy inSA $- (sy htFluxOut $* 
+  sy outSA)) $+ (sy volHtGen $* sy vol) $= 
+  intAll (eqSymb vol) (sy density $* sy QT.heatCapSpec $* pderiv (sy QT.temp) time)
 
-rocTempDerivConsFlxEq = sy density `mulRe` sy QT.heatCapSpec `mulRe` sy vol `mulRe` deriv
-  (sy QT.temp) time $= (sy htFluxIn `mulRe` sy inSA $- (sy htFluxOut `mulRe`
-  sy outSA)) `addRe` (sy volHtGen `mulRe` sy vol)
+rocTempDerivConsFlxEq = sy density $* sy QT.heatCapSpec $* sy vol $* deriv
+  (sy QT.temp) time $= (sy htFluxIn $* sy inSA $- (sy htFluxOut $* 
+  sy outSA)) $+ (sy volHtGen $* sy vol)
 
-rocTempDerivDensEq = sy mass `mulRe` sy QT.heatCapSpec `mulRe` deriv (sy QT.temp)
-  time $= (sy htFluxIn `mulRe` sy inSA $- (sy htFluxOut
-  `mulRe` sy outSA)) `addRe` (sy volHtGen `mulRe` sy vol)
+rocTempDerivDensEq = sy mass $* sy QT.heatCapSpec $* deriv (sy QT.temp)
+  time $= (sy htFluxIn $* sy inSA $- (sy htFluxOut
+  $* sy outSA)) $+ (sy volHtGen $* sy vol)
 
 rocTempSimpDerivEqns :: [ModelExpr]
 rocTempSimpDerivEqns = [rocTempDerivIntegEq, rocTempDerivGaussEq, rocTempDerivArbVolEq, rocTempDerivConsFlxEq,

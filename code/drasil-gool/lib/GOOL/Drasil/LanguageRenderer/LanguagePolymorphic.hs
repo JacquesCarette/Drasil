@@ -19,24 +19,26 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
-import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
-  VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod,
-  CSStateVar, SClass, FSModule, NamedArgs, Initializers, MixedCall,
-  MixedCtorCall, FileSym(File), BodySym(Body), bodyStatements, oneLiner,
-  BlockSym(Block), PermanenceSym(..), TypeSym(Type), TypeElim(getType,
-  getTypeString), VariableSym(Variable), VariableElim(variableName,
-  variableType), ValueSym(Value, valueType), NumericExpression((#-), (#/), sin,
-  cos, tan), Comparison(..), funcApp, newObj, objMethodCallNoParams, ($.),
-  StatementSym(multi), AssignStatement((&++)), (&=), IOStatement(printStr,
-  printStrLn, printFile, printFileStr, printFileStrLn), ifNoElse, ScopeSym(..),
-  ModuleSym(Module), convType)
-import qualified GOOL.Drasil.ClassInterface as S (
-  TypeSym(int, double, char, string, listType, arrayType, listInnerType,
-  funcType, void), VariableSym(var, objVarSelf), Literal(litInt, litFloat,
-  litDouble, litString), VariableValue(valueOf), FunctionSym(func),
+import GOOL.Drasil.InterfaceCommon (Label, Library, SFile, MSBody, MSBlock, 
+  VSType, SVariable, SValue, MSStatement, MSParameter, SMethod, CSStateVar,
+  SClass, FSModule, NamedArgs, Initializers, MixedCall, MixedCtorCall,
+  FileSym(File), BodySym(Body), bodyStatements, oneLiner, BlockSym(Block),
+  PermanenceSym(..), TypeSym(Type), TypeElim(getType, getTypeString),
+  VariableSym(Variable), VariableElim(variableName, variableType),
+  ValueSym(Value, valueType), NumericExpression((#-), (#/), sin, cos, tan),
+  Comparison(..), funcApp, StatementSym(multi), AssignStatement((&++)), (&=),
+  IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
+  ifNoElse, ScopeSym(..), ModuleSym(Module))
+import qualified GOOL.Drasil.InterfaceCommon as IC (TypeSym(int, double, char,
+  string, listType, arrayType, listInnerType, funcType, void), VariableSym(var), 
+  Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
   IOStatement(print), ControlStatement(returnStmt, for), ParameterSym(param),
-  MethodSym(method))
+  MethodSym(method), List(intToIndex))
+import GOOL.Drasil.InterfaceGOOL (VSFunction, newObj, objMethodCallNoParams, ($.),
+  convTypeOO)
+import qualified GOOL.Drasil.InterfaceGOOL as IG (OOVariableSym(objVarSelf),
+  FunctionSym(func))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(commentedMod),  
   RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
   RenderFunction(funcFromData), FunctionElim(functionType), 
@@ -94,7 +96,7 @@ multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 -- Types --
 
 listInnerType :: (RenderSym r) => VSType r -> VSType r
-listInnerType t = t >>= (convType . getInnerType . getType)
+listInnerType t = t >>= (convTypeOO . getInnerType . getType)
 
 obj :: (RenderSym r) => ClassName -> VSType r
 obj n = typeFromData (Object n) n (text n)
@@ -115,8 +117,8 @@ cot v = valOfOne (fmap valueType v) #/ tan v
 
 valOfOne :: (RenderSym r) => VSType r -> SValue r
 valOfOne t = t >>= (getVal . getType)
-  where getVal Float = S.litFloat 1.0
-        getVal _ = S.litDouble 1.0
+  where getVal Float = IC.litFloat 1.0
+        getVal _ = IC.litDouble 1.0
 
 -- Binary Operators --
 
@@ -191,16 +193,16 @@ arrayElem i' v' = do
 -- Values --
 
 litChar :: (RenderSym r) => (Doc -> Doc) -> Char -> SValue r
-litChar f c = mkStateVal S.char (f $ if c == '\n' then text "\\n" else D.char c)
+litChar f c = mkStateVal IC.char (f $ if c == '\n' then text "\\n" else D.char c)
 
 litDouble :: (RenderSym r) => Double -> SValue r
-litDouble d = mkStateVal S.double (D.double d)
+litDouble d = mkStateVal IC.double (D.double d)
 
 litInt :: (RenderSym r) => Integer -> SValue r
-litInt i = mkStateVal S.int (integer i)
+litInt i = valFromData Nothing (Just i) IC.int (integer i)
 
 litString :: (RenderSym r) => String -> SValue r
-litString s = mkStateVal S.string (doubleQuotedText s)
+litString s = mkStateVal IC.string (doubleQuotedText s)
 
 valueOf :: (RenderSym r) => SVariable r -> SValue r
 valueOf v' = do 
@@ -211,11 +213,11 @@ arg :: (RenderSym r) => SValue r -> SValue r -> SValue r
 arg n' args' = do 
   n <- n'
   args <- args'
-  s <- S.string
+  s <- IC.string
   mkVal s (R.arg n args)
 
 argsList :: (RenderSym r) => String -> SValue r
-argsList l = mkStateVal (S.arrayType S.string) (text l)
+argsList l = mkStateVal (IC.arrayType IC.string) (text l)
 
 -- | First parameter is separator between name and value for named arguments, 
 -- rest similar to call from RendererClasses
@@ -248,8 +250,8 @@ lambda :: (RenderSym r) => ([r (Variable r)] -> r (Value r) -> Doc) ->
 lambda f ps' ex' = do
   ps <- sequence ps'
   ex <- ex'
-  let ft = S.funcType (map (return . variableType) ps) (return $ valueType ex)
-  valFromData (Just 0) ft (f ps ex)
+  let ft = IC.funcType (map (return . variableType) ps) (return $ valueType ex)
+  valFromData (Just 0) Nothing ft (f ps ex)
 
 objAccess :: (RenderSym r) => SValue r -> VSFunction r -> SValue r
 objAccess = on2StateWrapped (\v f-> mkVal (functionType f) 
@@ -272,34 +274,35 @@ set :: (RenderSym r) => SValue r -> SVariable r -> SValue r -> SValue r
 set v vToSet toVal = v $. S.setFunc (onStateValue valueType v) vToSet toVal
 
 listAdd :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
-listAdd v i vToAdd = v $. S.listAddFunc v i vToAdd
+listAdd v i vToAdd = v $. S.listAddFunc v (IC.intToIndex i) vToAdd
 
 listAppend :: (RenderSym r) => SValue r -> SValue r -> SValue r
-listAppend v vToApp = v $. S.listAppendFunc vToApp
+listAppend v vToApp = v $. S.listAppendFunc v vToApp
 
 listAccess :: (RenderSym r) => SValue r -> SValue r -> SValue r
 listAccess v i = do
   v' <- v
-  let checkType (List _) = S.listAccessFunc (S.listInnerType $ return $ 
-        valueType v') i
-      checkType (Array _) = i >>= (\ix -> funcFromData (brackets (RC.value ix)) 
-        (S.listInnerType $ return $ valueType v'))
+  let i' = IC.intToIndex i
+      checkType (List _) = S.listAccessFunc (IC.listInnerType $ return $ 
+        valueType v') i'
+      checkType (Array _) = i' >>= (\ix -> funcFromData (brackets (RC.value ix)) 
+        (IC.listInnerType $ return $ valueType v'))
       checkType _ = error "listAccess called on non-list-type value"
   v $. checkType (getType (valueType v'))
 
 listSet :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
-listSet v i toVal = v $. S.listSetFunc v i toVal
+listSet v i toVal = v $. S.listSetFunc v (IC.intToIndex i) toVal
 
 getFunc :: (RenderSym r) => SVariable r -> VSFunction r
-getFunc v = v >>= (\vr -> S.func (getterName $ variableName vr) 
+getFunc v = v >>= (\vr -> IG.func (getterName $ variableName vr) 
   (toState $ variableType vr) [])
 
 setFunc :: (RenderSym r) => VSType r -> SVariable r -> SValue r -> VSFunction r
-setFunc t v toVal = v >>= (\vr -> S.func (setterName $ variableName vr) t 
+setFunc t v toVal = v >>= (\vr -> IG.func (setterName $ variableName vr) t 
   [toVal])
 
 listAppendFunc :: (RenderSym r) => Label -> SValue r -> VSFunction r
-listAppendFunc f v = S.func f (S.listType $ onStateValue valueType v) [v]
+listAppendFunc f v = IG.func f (IC.listType $ onStateValue valueType v) [v]
 
 -- Statements --
 
@@ -335,19 +338,19 @@ increment vr' v'= do
   mkStmt $ R.addAssign vr v
 
 objDecNew :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
-objDecNew v vs = S.varDecDef v (newObj (onStateValue variableType v) vs)
+objDecNew v vs = IC.varDecDef v (newObj (onStateValue variableType v) vs)
 
 printList :: (RenderSym r) => Integer -> SValue r -> (SValue r -> MSStatement r)
   -> (String -> MSStatement r) -> (String -> MSStatement r) -> MSStatement r
 printList n v prFn prStrFn prLnFn = multi [prStrFn "[", 
-  S.for (S.varDecDef i (S.litInt 0)) 
-    (S.valueOf i ?< (S.listSize v #- S.litInt 1)) (i &++) 
-    (bodyStatements [prFn (S.listAccess v (S.valueOf i)), prStrFn ", "]), 
-  ifNoElse [(S.listSize v ?> S.litInt 0, oneLiner $
-    prFn (S.listAccess v (S.listSize v #- S.litInt 1)))], 
+  IC.for (IC.varDecDef i (IC.litInt 0)) 
+    (IC.valueOf i ?< (IC.listSize v #- IC.litInt 1)) (i &++) 
+    (bodyStatements [prFn (IC.listAccess v (IC.valueOf i)), prStrFn ", "]), 
+  ifNoElse [(IC.listSize v ?> IC.litInt 0, oneLiner $
+    prFn (IC.listAccess v (IC.listSize v #- IC.litInt 1)))], 
   prLnFn "]"]
   where l_i = "list_i" ++ show n
-        i = S.var l_i S.int
+        i = IC.var l_i IC.int
 
 printObj :: ClassName -> (String -> MSStatement r) -> MSStatement r
 printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
@@ -359,13 +362,13 @@ print newLn f printFn v = zoom lensMStoVS v >>= print' . getType . valueType
           prLnFn
         print' (Object n) = printObj n prLnFn
         print' _ = S.printSt newLn f printFn v
-        prFn = maybe S.print printFile f
+        prFn = maybe IC.print printFile f
         prStrFn = maybe printStr printFileStr f
         prLnFn = if newLn then maybe printStrLn printFileStrLn f else maybe 
           printStr printFileStr f 
 
 closeFile :: (RenderSym r) => Label -> SValue r -> MSStatement r
-closeFile n f = S.valStmt $ objMethodCallNoParams S.void f n
+closeFile n f = IC.valStmt $ objMethodCallNoParams IC.void f n
 
 returnStmt :: (RenderSym r) => Terminator -> SValue r -> MSStatement r
 returnStmt t v' = do 
@@ -383,7 +386,7 @@ comment cs c = mkStmtNoEnd (R.comment c cs)
 throw :: (RenderSym r) => (r (Value r) -> Doc) -> Terminator -> Label -> 
   MSStatement r
 throw f t l = do 
-  msg <- zoom lensMStoVS (S.litString l)
+  msg <- zoom lensMStoVS (IC.litString l)
   stmtFromData (f msg) t
 
 newtype OptionalSpace = OSpace {oSpace :: Doc}
@@ -442,17 +445,17 @@ method :: (RenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> VSType r
 method n s p t = intMethod False n s p (mType t)
 
 getMethod :: (RenderSym r) => SVariable r -> SMethod r
-getMethod v = zoom lensMStoVS v >>= (\vr -> S.method (getterName $ variableName 
+getMethod v = zoom lensMStoVS v >>= (\vr -> IC.method (getterName $ variableName 
   vr) public dynamic (toState $ variableType vr) [] getBody)
-  where getBody = oneLiner $ S.returnStmt (S.valueOf $ S.objVarSelf v)
+  where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.objVarSelf v)
 
 setMethod :: (RenderSym r) => SVariable r -> SMethod r
-setMethod v = zoom lensMStoVS v >>= (\vr -> S.method (setterName $ variableName 
-  vr) public dynamic S.void [S.param v] setBody)
-  where setBody = oneLiner $ S.objVarSelf v &= S.valueOf v
+setMethod v = zoom lensMStoVS v >>= (\vr -> IC.method (setterName $ variableName 
+  vr) public dynamic IC.void [IC.param v] setBody)
+  where setBody = oneLiner $ IG.objVarSelf v &= IC.valueOf v
 
 initStmts :: (RenderSym r) => Initializers r -> MSBody r
-initStmts = bodyStatements . map (\(vr, vl) -> S.objVarSelf vr &= vl)
+initStmts = bodyStatements . map (\(vr, vl) -> IG.objVarSelf vr &= vl)
 
 function :: (RenderSym r) => Label -> r (Scope r) -> VSType r -> 
   [MSParameter r] -> MSBody r -> SMethod r
@@ -470,13 +473,13 @@ docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 -- Classes --
 
 buildClass :: (RenderSym r) =>  Maybe Label -> [CSStateVar r] -> 
-  [SMethod r] -> SClass r
-buildClass p stVars methods = do 
+  [SMethod r] -> [SMethod r] -> SClass r
+buildClass p stVars constructors methods = do 
   n <- zoom lensCStoFS getModuleName
-  S.intClass n public (inherit p) stVars methods
+  S.intClass n public (inherit p) stVars constructors methods
 
 implementingClass :: (RenderSym r) => Label -> [Label] -> [CSStateVar r] -> 
-  [SMethod r] -> SClass r
+  [SMethod r] -> [SMethod r] -> SClass r
 implementingClass n is = S.intClass n public (implements is)
 
 docClass :: (RenderSym r) => ClassDocRenderer -> String -> SClass r -> SClass r

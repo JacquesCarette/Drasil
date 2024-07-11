@@ -9,26 +9,29 @@ module GOOL.Drasil.LanguageRenderer.PythonRenderer (
 import Utils.Drasil (blank, indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue, 
-  VSFunction, MSStatement, MixedCtorCall, OOProg, ProgramSym(..), FileSym(..),
+import GOOL.Drasil.InterfaceCommon (SharedProg, Label, Library, VSType,
+  SVariable, SValue, MSStatement, MixedCtorCall, ProgramSym(..), FileSym(..),
   PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
   VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj,
-  InternalValueExp(..), objMethodCall, FunctionSym(..), GetSet(..), List(..),
+  ValueExpression(..), funcApp, extFuncApp, List(..),
   InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..),
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..),
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+import GOOL.Drasil.InterfaceGOOL (VSFunction, OOProg, OOTypeSym(..),
+  OOVariableSym(..), OOValueSym, OOVariableValue, InternalValueExp(..),
+  extNewObj, objMethodCall, FunctionSym(..), GetSet(..), OOValueExpression(..),
+  selfFuncApp, OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
-  RenderValue(..), ValueElim(valuePrec), InternalGetSet(..), 
+  RenderValue(..), ValueElim(valuePrec, valueInt), InternalGetSet(..), 
   InternalListFunc(..), RenderFunction(..), 
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..), 
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm), 
@@ -68,10 +71,10 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   funcType, buildModule, bindingError, notNull, listDecDef, destructorError, 
   stateVarDef, constVar, litArray, listSetFunc, extraClass, listAccessFunc, 
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
-  mainBody, inOutFunc, docInOutFunc')
+  mainBody, inOutFunc, docInOutFunc', listSize, intToIndex, indexToInt)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
-  notifyObservers', checkState)
+  notifyObservers')
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
@@ -112,6 +115,7 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   PC x >>= f = f x
 
+instance SharedProg PythonCode
 instance OOProg PythonCode
 
 instance ProgramSym PythonCode where
@@ -191,9 +195,11 @@ instance TypeSym PythonCode where
   listType t' = t' >>=(\t -> typeFromData (List (getType t)) "" empty)
   arrayType = listType
   listInnerType = G.listInnerType
-  obj = G.obj
   funcType = CP.funcType
   void = typeFromData Void pyVoid (text pyVoid)
+
+instance OOTypeSym PythonCode where
+  obj = G.obj
 
 instance TypeElim PythonCode where
   getType = cType . unPC
@@ -250,9 +256,12 @@ instance OpElim PythonCode where
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
   var = G.var
-  staticVar = G.staticVar
   constant = var
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
+  arrayElem i = G.arrayElem (litInt i)
+
+instance OOVariableSym PythonCode where
+  staticVar = G.staticVar
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
   classVar = CP.classVar R.classVar
   extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify . 
@@ -260,7 +269,6 @@ instance VariableSym PythonCode where
     CP.classVar pyClassVar (toState t) v) c getClassMap
   objVar = G.objVar
   objVarSelf = CP.objVarSelf
-  arrayElem i = G.arrayElem (litInt i)
 
 instance VariableElim PythonCode where
   variableName = varName . unPC
@@ -278,6 +286,8 @@ instance RenderVariable PythonCode where
 instance ValueSym PythonCode where
   type Value PythonCode = ValData
   valueType = onCodeValue valType
+
+instance OOValueSym PythonCode
 
 instance Argument PythonCode where
   pointerArg = id
@@ -298,6 +308,8 @@ instance MathConstant PythonCode where
 
 instance VariableValue PythonCode where
   valueOf = G.valueOf
+
+instance OOVariableValue PythonCode
 
 instance CommandLineArgs PythonCode where
   arg n = G.arg (litInt $ n+1) argsList
@@ -355,13 +367,19 @@ instance ValueExpression PythonCode where
   inlineIf = pyInlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
-  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
   extFuncAppMixedArgs l n t ps ns = do
     modify (addModuleImportVS l)
     CP.extFuncAppMixedArgs l n t ps ns
   libFuncAppMixedArgs l n t ps ns = do
     modify (addLibImportVS l)
     CP.extFuncAppMixedArgs l n t ps ns
+
+  lambda = G.lambda pyLambda
+
+  notNull = CP.notNull pyNull
+
+instance OOValueExpression PythonCode where
+  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs l tp ps ns = do
     modify (addModuleImportVS l)
@@ -369,10 +387,6 @@ instance ValueExpression PythonCode where
   libNewObjMixedArgs l tp ps ns = do
     modify (addLibImportVS l)
     pyExtNewObjMixedArgs l tp ps ns
-
-  lambda = G.lambda pyLambda
-
-  notNull = CP.notNull pyNull
 
 instance RenderValue PythonCode where
   inputFunc = mkStateVal string pyInputFunc
@@ -386,12 +400,13 @@ instance RenderValue PythonCode where
   
   call = G.call pyNamedArgSep
 
-  valFromData p t' d = do 
+  valFromData p i t' d = do 
     t <- t'
-    toState $ on2CodeValues (vd p) t (toCode d)
+    toState $ on2CodeValues (vd p i) t (toCode d)
 
 instance ValueElim PythonCode where
   valuePrec = valPrec . unPC
+  valueInt = valInt . unPC
   value = val . unPC
 
 instance InternalValueExp PythonCode where
@@ -407,8 +422,9 @@ instance GetSet PythonCode where
   set = G.set
 
 instance List PythonCode where
-  listSize = on2StateWrapped(\f v-> mkVal (functionType f) 
-    (pyListSize (RC.value v) (RC.function f))) listSizeFunc
+  intToIndex = CP.intToIndex
+  indexToInt = CP.indexToInt
+  listSize = CP.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend
   listAccess = G.listAccess
@@ -424,9 +440,11 @@ instance InternalGetSet PythonCode where
   setFunc = G.setFunc
 
 instance InternalListFunc PythonCode where
-  listSizeFunc = funcFromData pyListSizeFunc int
+  listSizeFunc l = do
+    f <- funcApp pyListSize int [l]
+    funcFromData (RC.value f) int
   listAddFunc _ = CP.listAddFunc pyInsert
-  listAppendFunc = G.listAppendFunc pyAppendFunc
+  listAppendFunc _ = G.listAppendFunc pyAppendFunc
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
 
@@ -517,13 +535,15 @@ instance DeclStatement PythonCode where
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
+  constDecDef = varDecDef
+  funcDecDef = CP.funcDecDef
+
+instance OODeclStatement PythonCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew lib v vs = do
     modify (addModuleImport lib)
     varDecDef v (extNewObj lib (onStateValue variableType v) vs)
-  constDecDef = varDecDef
-  funcDecDef = CP.funcDecDef
 
 instance IOStatement PythonCode where
   print      = pyOut False Nothing printFunc
@@ -558,8 +578,10 @@ instance StringStatement PythonCode where
 
 instance FuncAppStatement PythonCode where
   inOutCall = CP.inOutCall funcApp
-  selfInOutCall = CP.inOutCall selfFuncApp
   extInOutCall m = CP.inOutCall (extFuncApp m)
+
+instance OOFuncAppStatement PythonCode where
+  selfInOutCall = CP.inOutCall selfFuncApp
 
 instance CommentStatement PythonCode where
   comment = G.comment pyCommentStart
@@ -590,9 +612,6 @@ instance ControlStatement PythonCode where
     mkStmtNoEnd (pyWhile v b)
 
   tryCatch = G.tryCatch pyTryCatch
-
-instance StatePattern PythonCode where 
-  checkState = M.checkState
 
 instance ObserverPattern PythonCode where
   notifyObservers = M.notifyObservers'
@@ -686,9 +705,17 @@ instance StateVarElim PythonCode where
 
 instance ClassSym PythonCode where
   type Class PythonCode = Doc
-  buildClass = G.buildClass
-  extraClass = CP.extraClass  
-  implementingClass = G.implementingClass
+  buildClass par sVars cstrs = if length cstrs <= 1 
+                                  then G.buildClass par sVars cstrs
+                                  else error pyMultCstrsError
+  extraClass n par sVars cstrs = if 
+                                  length cstrs <= 1
+                                    then CP.extraClass n par sVars cstrs
+                                    else error pyMultCstrsError
+  implementingClass n iNms sVars cstrs = if 
+                                  length cstrs <= 1
+                                    then G.implementingClass n iNms sVars cstrs
+                                    else error pyMultCstrsError
 
   docClass = CP.doxClass
 
@@ -775,13 +802,13 @@ pyPi = text $ pyMath `access` piLabel
 pySys :: String
 pySys = "sys"
 
-pyInputFunc, pyPrintFunc, pyListSizeFunc :: Doc
+pyInputFunc, pyPrintFunc :: Doc
 pyInputFunc = text "input()" -- raw_input() for < Python 3.0
 pyPrintFunc = text printLabel
-pyListSizeFunc = text "len"
 
-pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyOpen, pyClose, 
+pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyOpen, pyClose, 
   pyRead, pyWrite, pyAppend, pySplit, pyRange, pyRstrip, pyMath :: String
+pyListSize = "len"
 pyIndex = "index"
 pyInsert = "insert"
 pyAppendFunc = "append"
@@ -890,14 +917,11 @@ pyInlineIf c' v1' v2' = do
   c <- c'
   v1 <- v1'
   v2 <- v2'
-  valFromData (valuePrec c) (toState $ valueType v1) 
+  valFromData (valuePrec c) (valueInt c) (toState $ valueType v1) 
     (RC.value v1 <+> ifLabel <+> RC.value c <+> elseLabel <+> RC.value v2)
 
 pyLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 pyLambda ps ex = pyLambdaDec <+> variableList ps <> colon <+> RC.value ex
-
-pyListSize :: Doc -> Doc -> Doc
-pyListSize v f = f <> parens v
 
 pyStringType :: (RenderSym r) => VSType r
 pyStringType = typeFromData String pyString (text pyString)
@@ -991,6 +1015,9 @@ pyClass n pn s vs fs = vcat [
                 | isEmpty vs = fs
                 | isEmpty fs = vs
                 | otherwise = vcat [vs, blank, fs]
+
+pyMultCstrsError :: String
+pyMultCstrsError = "Python classes cannot have multiple constructors"
 
 pyBlockComment :: [String] -> Doc -> Doc
 pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns

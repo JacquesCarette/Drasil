@@ -1,9 +1,8 @@
 on:
   pull_request:
     branches: main
-    paths:
-      - 'code/drasil-**'
-      - 'code/scripts/**'
+  workflow_dispatch:
+    paths: [code/drasil-**, .github/workflows/Lint.yaml, code/scripts/**]
 name: Linter
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -15,9 +14,10 @@ defaults:
 jobs:
   linter:
     name: "Linter"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       # Prepare more specific paths filters
       - uses: dorny/paths-filter@v2.2.1
         id: filter
@@ -28,10 +28,25 @@ jobs:
               - '**/*.lhs'
             sh:
               - '**/*.sh'
-      # If a [l]hs file was edited, then run HLint
-      - name: "Haskell via HLint"
-        if: ${{ steps.filter.outputs.hs == 'true' }}
-        run: make hot_hlint
+
+      # Once we update our LTS, we can remove this step, see "Inputs": https://github.com/haskell-actions/hlint-setup
+      - name: 'Install Haskell via HLint system dependencies'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libtinfo5
+
+      - name: 'Set up HLint'
+        uses: haskell-actions/hlint-setup@v2
+        with: # DO NOT MODIFY THE BELOW LINE MANUALLY -- code/scripts/update_default_stackage.sh is in charge of this!
+          version: '3.4.1' # HLINT VERSION TIED TO CURRENT TARGET (LTS-20.26)
+
+      - name: 'Run HLint'
+        uses: haskell-actions/hlint-run@v2
+        with: # The custom hlint-bin is necessary because we need to inject options to hlint, since hlint-run does not support it yet, see: https://github.com/haskell-actions/hlint-run/issues/20
+          hlint-bin: hlint --hint=code/.hlint.yaml
+          path: code/
+          fail-on: status
+          
       # If a sh script was edited, then run shellcheck
       - name: "Shell scripts via ShellCheck"
         if: ${{ steps.filter.outputs.sh == 'true' }}

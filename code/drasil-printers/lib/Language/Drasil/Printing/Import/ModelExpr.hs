@@ -40,8 +40,7 @@ neg' (Lit (Dbl _))          = True
 neg' (Lit (Int _))          = True
 neg' (Lit (ExactDbl _))     = True
 neg' Operator{}             = True
-neg' (AssocA MulI _)        = True
-neg' (AssocA MulRe _)       = True
+neg' (AssocA Mul _)       = True
 neg' (LABinaryOp Index _ _) = True
 neg' (UnaryOp _ _)          = True
 neg' (UnaryOpB _ _)         = True
@@ -101,10 +100,8 @@ eopMuls _ (BoundedDD _ Continuous _ _) _ = error "Printing/Import.hs Product-Int
 
 -- | Helper function for translating 'EOperator's.
 eop :: PrintingInformation -> AssocArithOper -> DomainDesc t ModelExpr ModelExpr -> ModelExpr -> P.Expr
-eop sm AddI = eopAdds sm
-eop sm AddRe = eopAdds sm
-eop sm MulI = eopMuls sm
-eop sm MulRe = eopMuls sm
+eop sm Add = eopAdds sm
+eop sm Mul = eopMuls sm
 
 -- | Helper function for display nth derivative
 sup :: Integer -> [P.Expr]
@@ -118,10 +115,8 @@ modelExpr (Lit l)                    sm = literal l sm
 modelExpr (AssocB And l)             sm = assocExpr P.And (precB And) l sm
 modelExpr (AssocB Or l)              sm = assocExpr P.Or (precB Or) l sm
 modelExpr (AssocB Equivalence l)     sm = assocExpr P.Eq (precB Equivalence) l sm
-modelExpr (AssocA AddI l)            sm = P.Row $ addExpr l AddI sm
-modelExpr (AssocA AddRe l)           sm = P.Row $ addExpr l AddRe sm
-modelExpr (AssocA MulI l)            sm = P.Row $ mulExpr l MulI sm
-modelExpr (AssocA MulRe l)           sm = P.Row $ mulExpr l MulRe sm
+modelExpr (AssocA Add l)            sm = P.Row $ addExpr l Add sm
+modelExpr (AssocA Mul l)           sm = P.Row $ mulExpr l Mul sm
 modelExpr (Deriv 0 Part a _)         sm = P.Row [modelExpr a sm]
 modelExpr (Deriv 0 Total a _)        sm = P.Row [modelExpr a sm]
 modelExpr (Deriv n Part a b)         sm =
@@ -217,10 +212,8 @@ withParens prI a b = P.Row [parens (modelExpr a prI), P.Sup (modelExpr b prI)]
 
 -- | Helper for properly rendering exponents.
 pow :: PrintingInformation -> ModelExpr -> ModelExpr -> P.Expr
-pow prI a@(AssocA AddI _)          b = withParens prI a b
-pow prI a@(AssocA AddRe _)         b = withParens prI a b
-pow prI a@(AssocA MulI _)          b = withParens prI a b
-pow prI a@(AssocA MulRe _)         b = withParens prI a b
+pow prI a@(AssocA Add _)           b = withParens prI a b
+pow prI a@(AssocA Mul _)           b = withParens prI a b
 pow prI a@(ArithBinaryOp Subt _ _) b = withParens prI a b
 pow prI a@(ArithBinaryOp Frac _ _) b = withParens prI a b
 pow prI a@(ArithBinaryOp Pow _ _)  b = withParens prI a b

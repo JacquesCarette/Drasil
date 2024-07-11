@@ -10,26 +10,28 @@ module GOOL.Drasil.LanguageRenderer.JavaRenderer (
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
-  VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass, OOProg,
+import GOOL.Drasil.InterfaceCommon (SharedProg, Label, MSBody, VSType,
+  SVariable, SValue, MSStatement, MSParameter, SMethod, CSStateVar, SClass,
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), oneLiner,
   BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
   ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  selfFuncApp, extFuncApp, newObj, InternalValueExp(..), FunctionSym(..), ($.),
-  GetSet(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
+  extFuncApp, List(..), InternalList(..), ThunkSym(..), VectorType(..),
   VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
   IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), StatePattern(..),
-  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
+  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+import GOOL.Drasil.InterfaceGOOL (VSFunction, OOProg, OOTypeSym(..), OOVariableSym(..),
+  OOValueSym, OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
+  InternalValueExp(..), FunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
-  RenderValue(..), ValueElim(valuePrec),  InternalGetSet(..), 
+  RenderValue(..), ValueElim(valuePrec, valueInt),  InternalGetSet(..), 
   InternalListFunc(..), RenderFunction(..), FunctionElim(functionType), 
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), 
   RenderStatement(..), StatementElim(statementTerm), RenderScope(..), 
@@ -74,7 +76,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   docMain, mainFunction, buildModule', bindingError, listDecDef, 
   destructorError, stateVarDef, constVar, litArray, call', listSizeFunc, 
   listAccessFunc', notNull, doubleRender, double, openFileR, openFileW, 
-  stateVar, floatRender, float, string')
+  stateVar, floatRender, float, string', intToIndex, indexToInt)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -82,7 +84,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char,
   intFunc, multiAssignError, multiReturnError, multiTypeError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   runStrategy, listSlice, stringListVals, stringListLists, forRange, 
-  notifyObservers, checkState)
+  notifyObservers)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
@@ -127,7 +129,8 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   JC x >>= f = f x
 
-instance OOProg JavaCode where
+instance SharedProg JavaCode
+instance OOProg JavaCode
 
 instance ProgramSym JavaCode where
   type Program JavaCode = ProgData
@@ -205,10 +208,12 @@ instance TypeSym JavaCode where
   listType = jListType
   arrayType = CP.arrayType
   listInnerType = G.listInnerType
-  obj = G.obj
   funcType = CP.funcType
   void = C.void
 
+instance OOTypeSym JavaCode where
+  obj = G.obj
+  
 instance TypeElim JavaCode where
   getType = cType . unJC
   getTypeString = typeString . unJC
@@ -264,15 +269,17 @@ instance OpElim JavaCode where
 instance VariableSym JavaCode where
   type Variable JavaCode = VarData
   var = G.var
-  staticVar = G.staticVar
   constant = var
   extVar = CP.extVar
+  arrayElem i = G.arrayElem (litInt i)
+
+instance OOVariableSym JavaCode where
+  staticVar = G.staticVar
   self = C.self
   classVar = CP.classVar R.classVar
   extClassVar = classVar
   objVar = G.objVar
   objVarSelf = CP.objVarSelf
-  arrayElem i = G.arrayElem (litInt i)
 
 instance VariableElim JavaCode where
   variableName = varName . unJC
@@ -290,6 +297,8 @@ instance RenderVariable JavaCode where
 instance ValueSym JavaCode where
   type Value JavaCode = ValData
   valueType = onCodeValue valType
+
+instance OOValueSym JavaCode
 
 instance Argument JavaCode where
   pointerArg = id
@@ -313,6 +322,8 @@ instance MathConstant JavaCode where
 
 instance VariableValue JavaCode where
   valueOf = G.valueOf
+
+instance OOVariableValue JavaCode
 
 instance CommandLineArgs JavaCode where
   arg n = G.arg (litInt n) argsList
@@ -368,14 +379,20 @@ instance ValueExpression JavaCode where
   funcAppMixedArgs n t vs ns = do
     addCallExcsCurrMod n 
     G.funcAppMixedArgs n t vs ns
-  selfFuncAppMixedArgs n t ps ns = do
-    addCallExcsCurrMod n
-    G.selfFuncAppMixedArgs dot self n t ps ns
   extFuncAppMixedArgs l n t vs ns = do
     mem <- getMethodExcMap
     modify (maybe id addExceptions (Map.lookup (qualName l n) mem))
     CP.extFuncAppMixedArgs l n t vs ns
   libFuncAppMixedArgs = C.libFuncAppMixedArgs
+
+  lambda = G.lambda jLambda
+
+  notNull = CP.notNull nullLabel
+
+instance OOValueExpression JavaCode where
+  selfFuncAppMixedArgs n t ps ns = do
+    addCallExcsCurrMod n
+    G.selfFuncAppMixedArgs dot self n t ps ns
   newObjMixedArgs ot vs ns = addConstructorCallExcsCurrMod ot (\t -> 
     G.newObjMixedArgs (new ++ " ") t vs ns)
   extNewObjMixedArgs l ot vs ns = do
@@ -385,10 +402,6 @@ instance ValueExpression JavaCode where
     modify (maybe id addExceptions (Map.lookup (qualName l tp) mem))
     newObjMixedArgs (toState t) vs ns
   libNewObjMixedArgs = C.libNewObjMixedArgs
-
-  lambda = G.lambda jLambda
-
-  notNull = CP.notNull nullLabel
 
 instance RenderValue JavaCode where
   inputFunc = modify (addLangImportVS $ utilImport jScanner) >> mkStateVal 
@@ -404,12 +417,13 @@ instance RenderValue JavaCode where
 
   call = CP.call' jName
   
-  valFromData p t' d = do 
+  valFromData p i t' d = do 
     t <- t'
-    toState $ on2CodeValues (vd p) t (toCode d)
+    toState $ on2CodeValues (vd p i) t (toCode d)
 
 instance ValueElim JavaCode where
   valuePrec = valPrec . unJC
+  valueInt = valInt . unJC
   value = val . unJC
 
 instance InternalValueExp JavaCode where
@@ -430,6 +444,8 @@ instance GetSet JavaCode where
   set = G.set
 
 instance List JavaCode where
+  intToIndex = CP.intToIndex
+  indexToInt = CP.indexToInt
   listSize = C.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend
@@ -445,9 +461,9 @@ instance InternalGetSet JavaCode where
   setFunc = G.setFunc
 
 instance InternalListFunc JavaCode where
-  listSizeFunc = CP.listSizeFunc
+  listSizeFunc _ = CP.listSizeFunc
   listAddFunc _ = CP.listAddFunc jListAdd
-  listAppendFunc = G.listAppendFunc jListAdd
+  listAppendFunc _ = G.listAppendFunc jListAdd
   listAccessFunc = CP.listAccessFunc' jListAccess
   listSetFunc = jListSetFunc
 
@@ -533,11 +549,13 @@ instance DeclStatement JavaCode where
   listDecDef = CP.listDecDef
   arrayDec n = CP.arrayDec (litInt n)
   arrayDecDef = CP.arrayDecDef
+  constDecDef = jConstDecDef
+  funcDecDef = jFuncDecDef
+
+instance OODeclStatement JavaCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
-  constDecDef = jConstDecDef
-  funcDecDef = jFuncDecDef
 
 instance IOStatement JavaCode where
   print      = jOut False Nothing printFunc
@@ -577,8 +595,10 @@ instance StringStatement JavaCode where
 
 instance FuncAppStatement JavaCode where
   inOutCall = jInOutCall funcApp
-  selfInOutCall = jInOutCall selfFuncApp
   extInOutCall m = jInOutCall (extFuncApp m)
+
+instance OOFuncAppStatement JavaCode where
+  selfInOutCall = jInOutCall selfFuncApp
 
 instance CommentStatement JavaCode where
   comment = G.comment commentStart
@@ -603,9 +623,6 @@ instance ControlStatement JavaCode where
 
   tryCatch = G.tryCatch jTryCatch
   
-instance StatePattern JavaCode where 
-  checkState = M.checkState
-
 instance ObserverPattern JavaCode where
   notifyObservers = M.notifyObservers
 
@@ -1037,7 +1054,7 @@ jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (map fst $ bs ++ is)
           map fst os
 
 jExtraClass :: (RenderSym r) => Label -> Maybe Label -> [CSStateVar r] -> 
-  [SMethod r] -> SClass r
+  [SMethod r] -> [SMethod r] -> SClass r
 jExtraClass n = intClass n (scopeFromData Priv empty) . inherit
 
 addCallExcsCurrMod :: String -> VS ()

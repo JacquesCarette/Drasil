@@ -48,8 +48,8 @@ newtonTLNote = foldlSent [(S "Every action has an equal and opposite reaction" !
 -- FIXME: Missing ConceptDomain!
 newtonLUGModel :: ModelKind ModelExpr
 newtonLUGModel = equationalRealm' $ mkMultiDefnForQuant newtonForceQuant EmptyS $ NE.fromList [
-    mkDefiningExpr "newtonLUGviaDeriv" [] EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` sy dVect),
-    mkDefiningExpr "newtonLUGviaForm"  [] EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` (sy distMass $/ sy dispNorm))
+    mkDefiningExpr "newtonLUGviaDeriv" [] EmptyS (sy gravitationalConst $* (sy mass_1 $* sy mass_2 $/ square (sy dispNorm)) $* sy dVect),
+    mkDefiningExpr "newtonLUGviaForm"  [] EmptyS (sy gravitationalConst $* (sy mass_1 $* sy mass_2 $/ square (sy dispNorm)) $* (sy distMass $/ sy dispNorm))
   ]
 
 newtonLUG :: TheoryModel
@@ -66,7 +66,7 @@ newtonForceQuant = mkQuant' "force" (nounPhraseSP "Newton's law of universal gra
 -- verbal description instead.
 
 -- Can't properly include the gravitational constant in a sentence (in the last
--- sentence, supposed to include "6.673 `mulRe` 10^{-11} m/kgs^2" (line 187)).
+-- sentence, supposed to include "6.673 $* 10^{-11} m/kgs^2" (line 187)).
 
 newtonLUGNotes :: [Sentence]
 newtonLUGNotes = [foldlSent
@@ -86,7 +86,7 @@ newtonSLRQD :: ModelQDef
 newtonSLRQD = mkQuantDef' torque (nounPhraseSP "Newton's second law for rotational motion") newtonSLRExpr
 
 newtonSLRExpr :: PExpr
-newtonSLRExpr = sy momentOfInertia `mulRe` sy angularAccel
+newtonSLRExpr = sy momentOfInertia $* sy angularAccel
 
 newtonSLRNotes :: [Sentence]
 newtonSLRNotes = map foldlSent [

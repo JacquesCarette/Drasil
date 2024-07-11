@@ -1,0 +1,581 @@
+{-# LANGUAGE TypeFamilies #-}
+
+module GOOL.Drasil.InterfaceCommon (
+  -- Types
+  Label, Library, GSProgram, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
+  VSThunk, MSStatement, MSParameter, SMethod, CSStateVar, SClass,
+  FSModule, NamedArgs, Initializers, MixedCall, MixedCtorCall, PosCall,
+  PosCtorCall, InOutCall,
+  -- Typeclasses
+  SharedProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
+  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
+  VariableSym(..), VariableElim(..), listOf, listVar, ValueSym(..),
+  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
+  libFuncApp, exists, List(..), InternalList(..), listSlice, listIndexExists,
+  at, ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
+  (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..),
+  MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
+  StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..),
+  convType
+) where
+
+import GOOL.Drasil.CodeType (CodeType(..))
+import GOOL.Drasil.State (GS, FS, CS, MS, VS)
+
+import qualified Data.Kind as K (Type)
+import Data.Bifunctor (first)
+import CodeLang.Drasil (Comment)
+
+type Label = String
+type Library = String
+
+type GSProgram a = GS (a (Program a))
+
+-- In relation to GOOL, the type variable r can be considered as short for "representation"
+
+-- Functions in GOOL's interface beginning with "ext" are to be used to access items from other modules in the same program/project
+-- Functions in GOOL's interface beginning with "lib" are to be used to access items from different libraries/projects
+
+class (VectorType r, VectorDecl r, VectorThunk r,
+  VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r,
+  IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r,
+  ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r,
+  VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
+  Comparison r, ValueExpression r, List r, TypeElim r, VariableElim r
+  ) => SharedProg r
+
+-- Shared between OO and Procedural --
+
+class (FileSym r) => ProgramSym r where
+  type Program r
+  prog :: Label -> Label -> [SFile r] -> GSProgram r
+
+type SFile a = FS (a (File a))
+
+class (ModuleSym r) => FileSym r where 
+  type File r
+  fileDoc :: FSModule r -> SFile r
+
+  -- Module description, list of author names, date as a String, file to comment
+  docMod :: String -> [String] -> String -> SFile r -> SFile r
+
+class PermanenceSym r where
+  type Permanence r
+  static  :: r (Permanence r)
+  dynamic :: r (Permanence r)
+
+type MSBody a = MS (a (Body a))
+
+class (BlockSym r) => BodySym r where
+  type Body r
+  body           :: [MSBlock r] -> MSBody r
+
+  addComments :: Label -> MSBody r -> MSBody r
+
+bodyStatements :: (BodySym r) => [MSStatement r] -> MSBody r
+bodyStatements sts = body [block sts]
+
+oneLiner :: (BodySym r) => MSStatement r -> MSBody r
+oneLiner s = bodyStatements [s]
+
+type MSBlock a = MS (a (Block a))
+
+class (StatementSym r) => BlockSym r where
+  type Block r
+  block   :: [MSStatement r] -> MSBlock r
+
+type VSType a = VS (a (Type a))
+
+class TypeSym r where
+  type Type r
+  bool          :: VSType r
+  int           :: VSType r -- This is 32-bit signed ints except in Python, 
+                            -- which has unlimited precision ints
+  float         :: VSType r
+  double        :: VSType r
+  char          :: VSType r
+  string        :: VSType r
+  infile        :: VSType r
+  outfile       :: VSType r
+  listType      :: VSType r -> VSType r
+  arrayType     :: VSType r -> VSType r
+  listInnerType :: VSType r -> VSType r
+  funcType      :: [VSType r] -> VSType r -> VSType r
+  void          :: VSType r
+
+class (TypeSym r) => TypeElim r where
+  getType :: r (Type r) -> CodeType
+  getTypeString :: r (Type r) -> String
+
+type SVariable a = VS (a (Variable a))
+
+class (TypeSym r) => VariableSym r where
+  type Variable r
+  var          :: Label -> VSType r -> SVariable r
+  constant     :: Label -> VSType r -> SVariable r
+  extVar       :: Library -> Label -> VSType r -> SVariable r
+  arrayElem    :: Integer -> SVariable r -> SVariable r
+  
+class (VariableSym r) => VariableElim r where
+  variableName :: r (Variable r) -> String
+  variableType :: r (Variable r) -> r (Type r)
+
+listVar :: (VariableSym r) => Label -> VSType r -> SVariable r
+listVar n t = var n (listType t)
+
+listOf :: (VariableSym r) => Label -> VSType r -> SVariable r
+listOf = listVar
+
+type SValue a = VS (a (Value a))
+
+class (TypeSym r) => ValueSym r where
+  type Value r
+  valueType :: r (Value r) -> r (Type r)
+
+class (ValueSym r) => Argument r where
+  pointerArg :: SValue r -> SValue r
+
+class (ValueSym r) => Literal r where
+  litTrue   :: SValue r
+  litFalse  :: SValue r
+  litChar   :: Char -> SValue r
+  litDouble :: Double -> SValue r
+  litFloat  :: Float -> SValue r
+  litInt    :: Integer -> SValue r
+  litString :: String -> SValue r
+  litArray  :: VSType r -> [SValue r] -> SValue r
+  litList   :: VSType r -> [SValue r] -> SValue r
+
+litZero :: (TypeElim r, Literal r) => VSType r -> SValue r
+litZero t = do
+  t' <- t
+  case getType t' of
+    Integer -> litInt 0
+    Float -> litFloat 0
+    Double -> litDouble 0
+    _ -> error "litZero expects a numeric type"
+
+class (ValueSym r) => MathConstant r where
+  pi :: SValue r
+
+class (VariableSym r, ValueSym r) => VariableValue r where
+  valueOf       :: SVariable r -> SValue r
+
+class (ValueSym r) => CommandLineArgs r where
+  arg          :: Integer -> SValue r
+  argsList     :: SValue r
+  argExists    :: Integer -> SValue r
+
+class (ValueSym r) => NumericExpression r where
+  (#~)  :: SValue r -> SValue r
+  infixl 8 #~ -- Negation
+  (#/^) :: SValue r -> SValue r
+  infixl 7 #/^ -- Square root
+  (#|)  :: SValue r -> SValue r
+  infixl 7 #| -- Absolute value
+  (#+)  :: SValue r -> SValue r -> SValue r
+  infixl 5 #+
+  (#-)  :: SValue r -> SValue r -> SValue r
+  infixl 5 #-
+  (#*)  :: SValue r -> SValue r -> SValue r
+  infixl 6 #*
+  (#/)  :: SValue r -> SValue r -> SValue r
+  infixl 6 #/
+  (#%)  :: SValue r -> SValue r -> SValue r
+  infixl 6 #% -- Modulo
+  (#^)  :: SValue r -> SValue r -> SValue r
+  infixl 7 #^ -- Exponentiation
+
+  log    :: SValue r -> SValue r
+  ln     :: SValue r -> SValue r
+  exp    :: SValue r -> SValue r
+  sin    :: SValue r -> SValue r
+  cos    :: SValue r -> SValue r
+  tan    :: SValue r -> SValue r
+  csc    :: SValue r -> SValue r
+  sec    :: SValue r -> SValue r
+  cot    :: SValue r -> SValue r
+  arcsin :: SValue r -> SValue r
+  arccos :: SValue r -> SValue r
+  arctan :: SValue r -> SValue r
+  floor  :: SValue r -> SValue r
+  ceil   :: SValue r -> SValue r
+
+class (ValueSym r) => BooleanExpression r where
+  (?!)  :: SValue r -> SValue r
+  infixr 6 ?! -- Boolean 'not'
+  (?&&) :: SValue r -> SValue r -> SValue r
+  infixl 2 ?&&
+  (?||) :: SValue r -> SValue r -> SValue r
+  infixl 1 ?||
+
+class (ValueSym r) => Comparison r where
+  (?<)  :: SValue r -> SValue r -> SValue r
+  infixl 4 ?<
+  (?<=) :: SValue r -> SValue r -> SValue r
+  infixl 4 ?<=
+  (?>)  :: SValue r -> SValue r -> SValue r
+  infixl 4 ?>
+  (?>=) :: SValue r -> SValue r -> SValue r
+  infixl 4 ?>=
+  (?==) :: SValue r -> SValue r -> SValue r
+  infixl 3 ?==
+  (?!=) :: SValue r -> SValue r -> SValue r
+  infixl 3 ?!=
+
+type NamedArgs r = [(SVariable r, SValue r)]
+-- Function call with both positional and named arguments
+type MixedCall r = Label -> VSType r -> [SValue r] -> NamedArgs r -> SValue r
+-- Constructor call with both positional and named arguments
+type MixedCtorCall r = VSType r -> [SValue r] -> NamedArgs r -> SValue r
+-- Function call with only positional arguments
+type PosCall r = Label -> VSType r -> [SValue r] -> SValue r
+-- Constructor call with only positional arguments
+type PosCtorCall r = VSType r -> [SValue r] -> SValue r
+
+-- for values that can include expressions
+class (VariableSym r, ValueSym r) => ValueExpression r where
+  -- An inline if-statement, aka the ternary operator.  Inputs:
+  -- Condition, True-value, False-value
+  inlineIf     :: SValue r -> SValue r -> SValue r -> SValue r
+  
+  funcAppMixedArgs     ::            MixedCall r
+  extFuncAppMixedArgs  :: Library -> MixedCall r
+  libFuncAppMixedArgs  :: Library -> MixedCall r
+
+  lambda :: [SVariable r] -> SValue r -> SValue r
+
+  notNull :: SValue r -> SValue r
+
+funcApp          :: (ValueExpression r) =>            PosCall r
+funcApp n t vs = funcAppMixedArgs n t vs []
+
+funcAppNamedArgs :: (ValueExpression r) =>            Label -> VSType r ->
+  NamedArgs r -> SValue r
+funcAppNamedArgs n t = funcAppMixedArgs n t []
+
+extFuncApp       :: (ValueExpression r) => Library -> PosCall r
+extFuncApp l n t vs = extFuncAppMixedArgs l n t vs []
+
+libFuncApp       :: (ValueExpression r) => Library -> PosCall r
+libFuncApp l n t vs = libFuncAppMixedArgs l n t vs []
+
+exists :: (ValueExpression r) => SValue r -> SValue r
+exists = notNull
+
+class (ValueSym r) => List r where
+  -- | Does any necessary conversions from GOOL's zero-indexed assumptions to
+  --   the target language's assumptions
+  intToIndex :: SValue r -> SValue r
+  -- | Does any necessary conversions from the target language's indexing
+  --   assumptions assumptions to GOOL's zero-indexed assumptions
+  indexToInt :: SValue r -> SValue r
+  -- | Finds the size of a list.
+  --   Arguments are: List
+  listSize   :: SValue r -> SValue r
+  -- | Inserts a value into a list.
+  --   Arguments are: List, Index, Value
+  listAdd    :: SValue r -> SValue r -> SValue r -> SValue r
+  -- | Appens a value to a list.
+  --   Arguments are: List, Value
+  listAppend :: SValue r -> SValue r -> SValue r
+  -- | Gets the value of an index of a list.
+  --   Arguments are: List, Index
+  listAccess :: SValue r -> SValue r -> SValue r
+  -- | Sets the value of an index of a list.
+  --   Arguments are: List, Index, Value
+  listSet    :: SValue r -> SValue r -> SValue r -> SValue r
+  -- | Finds the index of the first occurrence of a value in a list.
+  --   Arguments are: List, Value
+  indexOf :: SValue r -> SValue r -> SValue r
+
+class (ValueSym r) => InternalList r where
+  listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) 
+    -> SVariable r -> SValue r -> MSBlock r
+
+-- | Creates a slice of a list and assigns it to a variable.
+--   Arguments are: 
+--   Variable to assign
+--   List to read from
+--   [Start index] inclusive.
+--      (if Nothing, then list start if step > 0, list end if step < 0)
+--   [End index] exclusive.
+--      (if Nothing, then list end if step > 0, list start if step > 0)
+--   [Step] (if Nothing, then defaults to 1)
+listSlice :: (InternalList r) => SVariable r -> SValue r -> Maybe (SValue r) -> 
+  Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
+listSlice vnew vold b e s = listSlice' b e s vnew vold
+
+listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
+listIndexExists lst index = listSize lst ?> index
+
+at :: (List r) => SValue r -> SValue r -> SValue r
+at = listAccess
+
+type VSThunk a = VS (a (Thunk a))
+
+class ThunkSym r where
+  -- K.Type -> K.Type annotation needed because r is not applied here so its
+  -- kind cannot be inferred (whereas for Value, r is applied in the type
+  -- signature of valueType
+  type Thunk (r :: K.Type -> K.Type)
+
+class (VariableSym r, ThunkSym r, StatementSym r) => ThunkAssign r where
+  thunkAssign :: SVariable r -> VSThunk r -> MSStatement r
+
+class TypeSym r => VectorType r where
+  vecType :: VSType r -> VSType r
+
+class (VariableSym r, StatementSym r) => VectorDecl r where
+  vecDec :: Integer -> SVariable r -> MSStatement r
+  vecDecDef :: SVariable r -> [SValue r] -> MSStatement r
+
+class (VariableSym r, ThunkSym r) => VectorThunk r where
+  vecThunk :: SVariable r -> VSThunk r
+
+class (ThunkSym r, ValueSym r) => VectorExpression r where
+  vecScale :: SValue r -> VSThunk r -> VSThunk r
+  vecAdd :: VSThunk r -> VSThunk r -> VSThunk r
+  vecIndex :: SValue r -> VSThunk r -> SValue r
+  vecDot :: VSThunk r -> VSThunk r -> VSThunk r
+
+type MSStatement a = MS (a (Statement a))
+
+class (ValueSym r) => StatementSym r where
+  type Statement r
+  valStmt :: SValue r -> MSStatement r -- converts value to statement
+  multi     :: [MSStatement r] -> MSStatement r
+
+class (VariableSym r, StatementSym r) => AssignStatement r where
+  (&-=)  :: SVariable r -> SValue r -> MSStatement r
+  infixl 1 &-=
+  (&+=)  :: SVariable r -> SValue r -> MSStatement r
+  infixl 1 &+=
+  (&++)  :: SVariable r -> MSStatement r
+  infixl 8 &++
+  (&--)  :: SVariable r -> MSStatement r
+  infixl 8 &--
+
+  assign :: SVariable r -> SValue r -> MSStatement r
+
+(&=) :: (AssignStatement r) => SVariable r -> SValue r -> MSStatement r
+infixr 1 &=
+(&=) = assign
+
+assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r 
+  -> SValue r -> SValue r -> MSStatement r
+assignToListIndex lst index v = valStmt $ listSet (valueOf lst) index v
+
+class (VariableSym r, StatementSym r) => DeclStatement r where
+  varDec       :: SVariable r -> MSStatement r
+  varDecDef    :: SVariable r -> SValue r -> MSStatement r
+  listDec      :: Integer -> SVariable r -> MSStatement r
+  listDecDef   :: SVariable r -> [SValue r] -> MSStatement r
+  arrayDec     :: Integer -> SVariable r -> MSStatement r
+  arrayDecDef  :: SVariable r -> [SValue r] -> MSStatement r
+  constDecDef  :: SVariable r -> SValue r -> MSStatement r
+  funcDecDef   :: SVariable r -> [SVariable r] -> MSBody r -> MSStatement r
+
+
+class (VariableSym r, StatementSym r) => IOStatement r where
+  print      :: SValue r -> MSStatement r
+  printLn    :: SValue r -> MSStatement r
+  printStr   :: String -> MSStatement r
+  printStrLn :: String -> MSStatement r
+
+  printFile      :: SValue r -> SValue r -> MSStatement r
+  printFileLn    :: SValue r -> SValue r -> MSStatement r
+  printFileStr   :: SValue r -> String -> MSStatement r
+  printFileStrLn :: SValue r -> String -> MSStatement r
+
+  getInput         :: SVariable r -> MSStatement r
+  discardInput     :: MSStatement r
+  getFileInput     :: SValue r -> SVariable r -> MSStatement r
+  discardFileInput :: SValue r -> MSStatement r
+
+  openFileR :: SVariable r -> SValue r -> MSStatement r
+  openFileW :: SVariable r -> SValue r -> MSStatement r
+  openFileA :: SVariable r -> SValue r -> MSStatement r
+  closeFile :: SValue r -> MSStatement r
+
+  getFileInputLine :: SValue r -> SVariable r -> MSStatement r
+  discardFileLine  :: SValue r -> MSStatement r
+  getFileInputAll  :: SValue r -> SVariable r -> MSStatement r
+
+class (VariableSym r, StatementSym r) => StringStatement r where
+  stringSplit :: Char -> SVariable r -> SValue r -> MSStatement r
+
+  stringListVals  :: [SVariable r] -> SValue r -> MSStatement r
+  stringListLists :: [SVariable r] -> SValue r -> MSStatement r
+
+-- The three lists are inputs, outputs, and both, respectively
+type InOutCall r = Label -> [SValue r] -> [SVariable r] -> [SVariable r] -> 
+  MSStatement r
+
+class (VariableSym r, StatementSym r) => FuncAppStatement r where
+  inOutCall    ::            InOutCall r
+  extInOutCall :: Library -> InOutCall r
+
+class (StatementSym r) => CommentStatement r where
+  comment :: Comment -> MSStatement r
+
+class (BodySym r, VariableSym r) => ControlStatement r where
+  break :: MSStatement r
+  continue :: MSStatement r
+
+  returnStmt :: SValue r -> MSStatement r
+
+  throw :: Label -> MSStatement r
+
+  -- | String of if-else statements.
+  --   Arguments: List of predicates and bodies (if this then that),
+  --   Body for else branch
+  ifCond     :: [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
+  switch     :: SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
+
+  ifExists :: SValue r -> MSBody r -> MSBody r -> MSStatement r
+
+  for      :: MSStatement r -> SValue r -> MSStatement r -> MSBody r -> 
+    MSStatement r
+  forRange :: SVariable r -> SValue r -> SValue r -> SValue r -> MSBody r -> 
+    MSStatement r
+  forEach  :: SVariable r -> SValue r -> MSBody r -> MSStatement r
+  while    :: SValue r -> MSBody r -> MSStatement r 
+
+  tryCatch :: MSBody r -> MSBody r -> MSStatement r
+
+ifNoElse :: (ControlStatement r) => [(SValue r, MSBody r)] -> MSStatement r
+ifNoElse bs = ifCond bs $ body []
+
+switchAsIf :: (ControlStatement r, Comparison r) => SValue r -> 
+  [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
+switchAsIf v = ifCond . map (first (v ?==))
+
+class ScopeSym r where
+  type Scope r
+  private :: r (Scope r)
+  public  :: r (Scope r)
+
+type MSParameter a = MS (a (Parameter a))
+
+class (VariableSym r) => ParameterSym r where
+  type Parameter r
+  param :: SVariable r -> MSParameter r
+  pointerParam :: SVariable r -> MSParameter r
+
+type SMethod a = MS (a (Method a))
+type Initializers r = [(SVariable r, SValue r)]
+
+-- The three lists are inputs, outputs, and both, respectively
+type InOutFunc r = [SVariable r] -> [SVariable r] -> [SVariable r] -> 
+  MSBody r -> SMethod r
+-- Parameters are: brief description of function, input descriptions and 
+-- variables, output descriptions and variables, descriptions and variables 
+-- for parameters that are both input and output, function body
+type DocInOutFunc r = String -> [(String, SVariable r)] -> 
+  [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
+
+class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r 
+  where
+  type Method r
+  method      :: Label -> r (Scope r) -> r (Permanence r) -> VSType r -> 
+    [MSParameter r] -> MSBody r -> SMethod r
+  getMethod   :: SVariable r -> SMethod r
+  setMethod   :: SVariable r -> SMethod r 
+  constructor :: [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
+
+  docMain :: MSBody r -> SMethod r
+
+  function :: Label -> r (Scope r) -> VSType r -> [MSParameter r] -> 
+    MSBody r -> SMethod r
+  mainFunction  :: MSBody r -> SMethod r
+  -- Parameters are: function description, parameter descriptions, 
+  --   return value description if applicable, function
+  docFunc :: String -> [String] -> Maybe String -> SMethod r -> SMethod r
+
+  -- inOutMethod and docInOutMethod both need the Permanence parameter
+  inOutMethod :: Label -> r (Scope r) -> r (Permanence r) -> InOutFunc r
+  docInOutMethod :: Label -> r (Scope r) -> r (Permanence r) -> DocInOutFunc r
+  -- inOutFunc and docInOutFunc both do not need the Permanence parameter
+  inOutFunc :: Label -> r (Scope r) -> InOutFunc r
+  docInOutFunc :: Label -> r (Scope r) -> DocInOutFunc r
+
+privMethod :: (MethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r 
+  -> SMethod r
+privMethod n = method n private dynamic
+
+pubMethod :: (MethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r 
+  -> SMethod r
+pubMethod n = method n public dynamic
+
+initializer :: (MethodSym r) => [MSParameter r] -> Initializers r -> SMethod r
+initializer ps is = constructor ps is (body [])
+
+nonInitConstructor :: (MethodSym r) => [MSParameter r] -> MSBody r -> SMethod r
+nonInitConstructor ps = constructor ps []
+
+type CSStateVar a = CS (a (StateVar a))
+
+class (ScopeSym r, PermanenceSym r, VariableSym r) => StateVarSym r where
+  type StateVar r
+  stateVar :: r (Scope r) -> r (Permanence r) -> SVariable r -> CSStateVar r
+  stateVarDef :: r (Scope r) -> r (Permanence r) -> SVariable r -> 
+    SValue r -> CSStateVar r
+  constVar :: r (Scope r) ->  SVariable r -> SValue r -> CSStateVar r
+
+privDVar :: (StateVarSym r) => SVariable r -> CSStateVar r
+privDVar = stateVar private dynamic
+
+pubDVar :: (StateVarSym r) => SVariable r -> CSStateVar r
+pubDVar = stateVar public dynamic
+
+pubSVar :: (StateVarSym r) => SVariable r -> CSStateVar r
+pubSVar = stateVar public static
+
+type SClass a = CS (a (Class a))
+
+class (MethodSym r, StateVarSym r) => ClassSym r where
+  type Class r
+  -- | Main external method for creating a class.
+  --   Inputs: parent class, variables, constructor(s), methods
+  buildClass :: Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
+    [SMethod r] -> SClass r
+  -- | Creates an extra class.
+  --   Inputs: class name, the rest are the same as buildClass.
+  extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
+    [SMethod r] -> SClass r
+  -- | Creates a class implementing interfaces.
+  --   Inputs: class name, interface names, variables, constructor(s), methods
+  implementingClass :: Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> 
+    [SMethod r] -> SClass r
+
+  docClass :: String -> SClass r -> SClass r
+
+type FSModule a = FS (a (Module a))
+
+class (ClassSym r) => ModuleSym r where
+  type Module r
+  -- Module name, import names, module functions, module classes
+  buildModule :: Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
+
+-- Utility
+
+convType :: (TypeSym r) => CodeType -> VSType r
+convType Boolean = bool
+convType Integer = int
+convType Float = float
+convType Double = double
+convType Char = char
+convType String = string
+convType (List t) = listType (convType t)
+convType (Array t) = arrayType (convType t)
+convType (Func ps r) = funcType (map convType ps) (convType r)
+convType Void = void
+convType InFile = infile
+convType OutFile = outfile
+convType (Object _) = error "Objects not supported"

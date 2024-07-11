@@ -17,18 +17,18 @@ module GOOL.Drasil.LanguageRenderer (
   param, method, stateVar, constVar, stateVarList, switch, assign, 
   addAssign, subAssign, increment, decrement, listDec, getTerm, return', 
   comment, var, extVar, arg, classVar, objVar, unOpDocD, unOpDocD', binOpDocD, 
-  binOpDocD', constDecDef, func, cast, listAccessFunc, listSetFunc, objAccess, 
-  castObj, break, continue, static, dynamic, private, public, blockCmt, docCmt, 
-  commentedItem, addComments, FuncDocRenderer, functionDox, ClassDocRenderer,
-  classDox, ModuleDocRenderer, moduleDox, commentedMod, valueList, 
-  variableList, parameterList, namedArgList, prependToBody, appendToBody, 
-  surroundBody, getterName, setterName, intValue
+  binOpDocD', constDecDef, func, cast, listAccessFunc, listSetFunc, 
+  objAccess, castObj, break, continue, static, dynamic, private, public, 
+  blockCmt, docCmt, commentedItem, addComments, FuncDocRenderer, functionDox,
+  ClassDocRenderer, classDox, ModuleDocRenderer, moduleDox, commentedMod, 
+  valueList, variableList, parameterList, namedArgList, prependToBody, 
+  appendToBody, surroundBody, getterName, setterName, intValue
 ) where
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, Library, SValue, BodySym(Body), 
+import GOOL.Drasil.InterfaceCommon (Label, Library, SValue, BodySym(Body), 
   PermanenceSym(Permanence), TypeSym(Type), TypeElim(..), VariableSym(Variable),
   VariableElim(..), ValueSym(..), StatementSym(Statement), ScopeSym(Scope), 
   ParameterSym(Parameter))

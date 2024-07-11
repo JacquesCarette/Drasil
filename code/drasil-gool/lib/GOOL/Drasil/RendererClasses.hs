@@ -14,20 +14,20 @@ module GOOL.Drasil.RendererClasses (
   ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..)
 ) where
 
-import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
-  VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter,
-  SMethod, CSStateVar, SClass, FSModule, MixedCall, FileSym(..),
-  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
-  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), InternalValueExp(..), FunctionSym(..), GetSet(..),
-  List(..), InternalList(..), VectorExpression(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..),
-  ModuleSym(..))
+import GOOL.Drasil.InterfaceCommon (Label, Library, SFile, MSBody, MSBlock, 
+  VSType, SVariable, SValue, MSStatement, MSParameter, SMethod, CSStateVar,
+  SClass, FSModule, MixedCall, FileSym(..), PermanenceSym(..), BodySym(..),
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), List(..), InternalList(..), VectorExpression(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
+import GOOL.Drasil.InterfaceGOOL (VSFunction, OOVariableValue,
+  OOValueExpression(..), InternalValueExp(..), FunctionSym(..), GetSet(..),
+  ObserverPattern(..), StrategyPattern(..))
 import GOOL.Drasil.CodeType (CodeType)
 import GOOL.Drasil.AST (Binding, Terminator, ScopeTag)
 import GOOL.Drasil.State (FS, CS, MS, VS)
@@ -38,18 +38,19 @@ import Text.PrettyPrint.HughesPJ (Doc)
 class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r, 
   StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement
   r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
-  NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r,
+  NumericExpression r, BooleanExpression r, Comparison r,
   InternalValueExp r, GetSet r, List r, InternalList r, VectorExpression r,
-  StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r,
-  VariableElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r,
-  RenderClass r, ClassElim r, RenderFile r, InternalGetSet r, InternalListFunc
-  r, RenderFunction r, FunctionElim r, RenderMethod r, MethodElim r, RenderMod
-  r, ModuleElim r, OpElim r, RenderParam r, ParamElim r, PermElim r,
-  RenderScope r, ScopeElim r, InternalAssignStmt r, InternalIOStmt r,
-  InternalControlStmt r, RenderStatement r, StatementElim r, StateVarElim r,
-  RenderType r, InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable
-  r, InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r,
-  BlockCommentElim r) => RenderSym r
+  ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r,
+  RenderBlock r, BlockElim r, RenderBody r, BodyElim r, RenderClass r,
+  ClassElim r, RenderFile r, InternalGetSet r, InternalListFunc r,
+  RenderFunction r, FunctionElim r, RenderMethod r, MethodElim r, RenderMod r,
+  ModuleElim r, OpElim r, RenderParam r, ParamElim r, PermElim r, RenderScope r,
+  ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r,
+  RenderStatement r, StatementElim r, StateVarElim r, RenderType r,
+  InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable r,
+  InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r,
+  BlockCommentElim r, OOVariableValue r, OOValueExpression r
+  ) => RenderSym r --TODO: split RenderSym into OO and shared components
 
 class (BlockCommentSym r) => RenderFile r where
   -- top and bottom are only used for pre-processor guards for C++ header 
@@ -161,10 +162,11 @@ class RenderValue r where
   -- calls.
   call :: Maybe Library -> Maybe Doc -> MixedCall r
 
-  valFromData :: Maybe Int -> VSType r -> Doc -> SValue r
+  valFromData :: Maybe Int -> Maybe Integer -> VSType r -> Doc -> SValue r
 
 class ValueElim r where
   valuePrec :: r (Value r) -> Maybe Int
+  valueInt :: r (Value r) -> Maybe Integer
   value :: r (Value r) -> Doc
 
 class InternalGetSet r where
@@ -172,9 +174,9 @@ class InternalGetSet r where
   setFunc :: VSType r -> SVariable r -> SValue r -> VSFunction r
 
 class InternalListFunc r where
-  listSizeFunc   :: VSFunction r
+  listSizeFunc   :: SValue r -> VSFunction r
   listAddFunc    :: SValue r -> SValue r -> SValue r -> VSFunction r
-  listAppendFunc :: SValue r -> VSFunction r
+  listAppendFunc :: SValue r -> SValue r -> VSFunction r
   listAccessFunc :: VSType r -> SValue r -> VSFunction r
   listSetFunc    :: SValue r -> SValue r -> SValue r -> VSFunction r
 
@@ -250,7 +252,7 @@ type ParentSpec = Doc
 
 class (BlockCommentSym r) => RenderClass r where
   intClass :: Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] 
-    -> [SMethod r] -> SClass r
+    -> [SMethod r] -> [SMethod r] -> SClass r
     
   inherit :: Maybe Label -> r ParentSpec
   implements :: [Label] -> r ParentSpec

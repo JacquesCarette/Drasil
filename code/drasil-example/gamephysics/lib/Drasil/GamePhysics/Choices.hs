@@ -4,7 +4,7 @@ module Drasil.GamePhysics.Choices where
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
 --   Modularity(..), Structure(..), ConstantStructure(..), 
---   ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), 
+--   ConstantRepr(..), matchConcepts, AuxFile(..), 
 --   Visibility(..), defaultChoices)
 -- import Drasil.GamePhysics.Body (fullSI)
 
@@ -14,7 +14,7 @@ module Drasil.GamePhysics.Choices where
 -- choices :: Choices
 -- choices = defaultChoices {
 --   lang             = [Python, Cpp, CSharp, Java],
---   modularity       = Modular Combined,
+--   modularity       = Modular,
 --   impType          = Library,
 --   logFile          = "log.txt",
 --   logging          = [],

@@ -17,6 +17,9 @@ assocBoolOper :: E.AssocBoolOper -> AssocBoolOper
 assocBoolOper E.And = And
 assocBoolOper E.Or  = Or
 
+assocConcatOper :: E.AssocConcatOper -> AssocConcatOper 
+assocConcatOper E.SUnion  = SUnion
+
 uFunc :: E.UFunc -> UFunc
 uFunc E.Abs    = Abs
 uFunc E.Log    = Log
@@ -77,20 +80,18 @@ vvnBinOp E.Dot = Dot
 nvvBinOp :: E.NVVBinOp -> NVVBinOp
 nvvBinOp E.Scale = Scale
 
-sSet :: E.SSet -> SSet
-sSet E.SUnion = SUnion
+essBinOp :: E.ESSBinOp -> ESSBinOp
+essBinOp E.SAdd = SAdd
+essBinOp E.SRemove = SRemove
 
-essSet :: E.ESSSet -> ESSSet
-essSet E.SAdd = SAdd
-essSet E.SRemove = SRemove
-
-esbSet :: E.ESBSet -> ESBSet
-esbSet E.SContains = SContains
+esbBinOp :: E.ESBBinOp -> ESBBinOp
+esbBinOp E.SContains = SContains
 
 expr :: E.Expr -> ModelExpr
 expr (E.Lit a)               = Lit a
 expr (E.AssocA ao es)        = AssocA (assocArithOper ao) $ map expr es
 expr (E.AssocB bo es)        = AssocB (assocBoolOper bo) $ map expr es
+expr (E.AssocC bo es)        = AssocC (assocConcatOper ao) $ map expr es
 expr (E.C u)                 = C u
 expr (E.FCall u es)          = FCall u (map expr es)
 expr (E.Case c ces)          = Case c (map (bimap expr expr) ces)
@@ -107,9 +108,8 @@ expr (E.OrdBinaryOp o l r)   = OrdBinaryOp (ordBinOp o) (expr l) (expr r)
 expr (E.VVVBinaryOp v l r)   = VVVBinaryOp (vvvBinOp v) (expr l) (expr r)
 expr (E.VVNBinaryOp v l r)   = VVNBinaryOp (vvnBinOp v) (expr l) (expr r)
 expr (E.NVVBinaryOp v l r)   = NVVBinaryOp (nvvBinOp v) (expr l) (expr r)
-expr (E.SSetOp o l r)        = SSetOp (sSet o) (expr l) (expr r)
-expr (E.ESSSetOp o l r)      = ESSSetOp (essSet o) (expr l) (expr r)
-expr (E.ESBSetOp o l r)      = ESBSetOp (esbSet o) (expr l) (expr r)
+expr (E.ESSBinaryOp o l r)      = ESSBinaryOp (essSet o) (expr l) (expr r)
+expr (E.ESBBinaryOp o l r)      = ESBBinaryOp (esbSet o) (expr l) (expr r)
 expr (E.Operator ao dd e)    = Operator (assocArithOper ao) (domainDesc dd) (expr e)
 expr (E.RealI u ri)          = RealI u (realInterval ri)
 

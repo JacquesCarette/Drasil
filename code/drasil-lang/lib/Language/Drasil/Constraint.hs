@@ -21,20 +21,20 @@ data Constraint a where
   -- | By default, physical and software constraints are ranges.
   Range          :: ConstraintReason -> RealInterval a a -> Constraint a
 
-  Elem           :: ConstraintReason -> [Expr] -> Constraint a
+  Elem           :: ConstraintReason -> a -> Constraint a
 
 -- | Smart constructor for range of 'Physical' constraints between two given expressions.
 physRange :: RealInterval Expr Expr -> ConstraintE
 physRange = Range Physical
 
-physElem :: [Expr] -> ConstraintE
+physElem :: Expr -> ConstraintE
 physElem = Elem Physical
 
 -- | Smart constructor for range of 'Software' constraints between two given expressions.
 sfwrRange :: RealInterval Expr Expr -> ConstraintE
 sfwrRange = Range Software
 
-sfwrElem :: [Expr] -> ConstraintE
+sfwrElem :: Expr -> ConstraintE
 sfwrElem = Elem Software
 
 isPhysC, isSfwrC:: Constraint e -> Bool

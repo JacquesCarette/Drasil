@@ -11,19 +11,20 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.InterfaceCommon (SharedProg, Label, MSBody, VSType,
-  SVariable, SValue, MSStatement, MSParameter, SMethod, CSStateVar, SClass,
-  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), oneLiner,
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, List(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
-import GOOL.Drasil.InterfaceGOOL (VSFunction, OOProg, OOTypeSym(..), OOVariableSym(..),
+  SVariable, SValue, MSStatement, MSParameter, SMethod, CSStateVar,
+  PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..),
+  TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
+  Literal(..), litZero, MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..),
+  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  StateVarSym(..))
+import GOOL.Drasil.InterfaceGOOL (SClass, VSFunction, OOProg, ProgramSym(..),
+  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   OOValueSym, OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
   InternalValueExp(..), FunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..))

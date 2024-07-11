@@ -14,20 +14,20 @@ module GOOL.Drasil.RendererClasses (
   ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..)
 ) where
 
-import GOOL.Drasil.InterfaceCommon (Label, Library, SFile, MSBody, MSBlock, 
+import GOOL.Drasil.InterfaceCommon (Label, Library, MSBody, MSBlock, 
   VSType, SVariable, SValue, MSStatement, MSParameter, SMethod, CSStateVar,
-  SClass, FSModule, MixedCall, FileSym(..), PermanenceSym(..), BodySym(..),
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), List(..), InternalList(..), VectorExpression(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
-import GOOL.Drasil.InterfaceGOOL (VSFunction, OOVariableValue,
-  OOValueExpression(..), InternalValueExp(..), FunctionSym(..), GetSet(..),
-  ObserverPattern(..), StrategyPattern(..))
+  MixedCall, PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..),
+  TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
+  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..), List(..),
+  InternalList(..), VectorExpression(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), StateVarSym(..))
+import GOOL.Drasil.InterfaceGOOL (SFile, VSFunction, FSModule, SClass,
+  OOVariableValue, OOValueExpression(..), InternalValueExp(..), FileSym(..),
+  ModuleSym(..), ClassSym(..), FunctionSym(..), GetSet(..), ObserverPattern(..),
+  StrategyPattern(..))
 import GOOL.Drasil.CodeType (CodeType)
 import GOOL.Drasil.AST (Binding, Terminator, ScopeTag)
 import GOOL.Drasil.State (FS, CS, MS, VS)

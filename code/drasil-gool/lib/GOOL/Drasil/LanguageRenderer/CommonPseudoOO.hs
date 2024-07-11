@@ -16,24 +16,23 @@ module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
 import Utils.Drasil (indent, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.InterfaceCommon (Label, Library, SFile, MSBody, VSType,
-  SVariable, SValue, MSStatement, MSParameter, SMethod, CSStateVar, SClass,
-  FSModule, Initializers, MixedCall, PermanenceSym(..), bodyStatements,
-  oneLiner, TypeSym(infile, outfile, listInnerType), TypeElim(getType,
-  getTypeString), VariableElim(variableName, variableType), ValueSym(valueType),
-  Comparison(..), (&=), ControlStatement(returnStmt), ScopeSym(..),
-  MethodSym(function), NumericExpression((#+), (#-)))
+import GOOL.Drasil.InterfaceCommon (Label, Library, MSBody, VSType, SVariable,
+  SValue, MSStatement, MSParameter, SMethod, CSStateVar, Initializers,
+  MixedCall, PermanenceSym(..), bodyStatements, oneLiner, TypeSym(infile,
+  outfile, listInnerType), TypeElim(getType, getTypeString),
+  VariableElim(variableName, variableType), ValueSym(valueType), Comparison(..),
+  (&=), ControlStatement(returnStmt), ScopeSym(..), MethodSym(function),
+  NumericExpression((#+), (#-)))
 import qualified GOOL.Drasil.InterfaceCommon as IC (
-  TypeSym(int, double, string, listType, arrayType, void),
-  VariableSym(var), Literal(litTrue, litFalse, litList, litInt),
-  VariableValue(valueOf), StatementSym(valStmt),
-  DeclStatement(varDec, varDecDef, constDecDef), List(intToIndex, indexToInt),
-  ParameterSym(param, pointerParam), MethodSym(mainFunction),
-  ClassSym(buildClass))
-import GOOL.Drasil.InterfaceGOOL (VSFunction, OOTypeSym(obj),
-  objMethodCallNoParams)
-import qualified GOOL.Drasil.InterfaceGOOL as IG (OOVariableSym(self, objVar),
-  FunctionSym(..))
+  TypeSym(int, double, string, listType, arrayType, void), VariableSym(var),
+  Literal(litTrue, litFalse, litList, litInt), VariableValue(valueOf),
+  StatementSym(valStmt), DeclStatement(varDec, varDecDef, constDecDef),
+  List(intToIndex, indexToInt), ParameterSym(param, pointerParam),
+  MethodSym(mainFunction))
+import GOOL.Drasil.InterfaceGOOL (SFile, FSModule, SClass, VSFunction,
+  OOTypeSym(obj), objMethodCallNoParams)
+import qualified GOOL.Drasil.InterfaceGOOL as IG (ClassSym(buildClass),
+  OOVariableSym(self, objVar), FunctionSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, ImportSym(..), RenderBody(..), 
   RenderType(..), RenderVariable(varFromData), InternalVarElim(variableBind), 
   RenderFunction(funcFromData), MethodTypeSym(mType),
@@ -246,7 +245,7 @@ buildModule' :: (RenderSym r) => Label -> (String -> r (Import r)) -> [Label]
   -> [SMethod r] -> [SClass r] -> FSModule r
 buildModule' n inc is ms cs = S.modFromData n (do
   cls <- mapM (zoom lensFStoCS) 
-          (if null ms then cs else IC.buildClass Nothing [] [] ms : cs)
+          (if null ms then cs else IG.buildClass Nothing [] [] ms : cs)
   lis <- getLangImports
   libis <- getLibImports
   mis <- getModuleImports

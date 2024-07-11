@@ -2,32 +2,77 @@
 
 module GOOL.Drasil.InterfaceGOOL (
   -- Types
-  VSFunction,
+  GSProgram, SFile, FSModule, SClass, VSFunction,
   -- Typeclasses
-  OOProg, OOTypeSym(..), OOVariableSym(..),
-  ($->), OOValueSym, OOVariableValue, OOValueExpression(..), selfFuncApp,
-  newObj, extNewObj, libNewObj, OODeclStatement(..), objDecNewNoParams,
-  extObjDecNewNoParams, OOFuncAppStatement(..), GetSet(..),
-  InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
-  objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..), ($.),
-  selfAccess, ObserverPattern(..), observerListName, initObserverList,
-  addObserver, StrategyPattern(..), convTypeOO
+  OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
+  OOTypeSym(..), OOVariableSym(..), ($->), OOValueSym, OOVariableValue,
+  OOValueExpression(..), selfFuncApp, newObj, extNewObj, libNewObj,
+  OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
+  OOFuncAppStatement(..), GetSet(..), InternalValueExp(..), objMethodCall,
+  objMethodCallNamedArgs, objMethodCallMixedArgs, objMethodCallNoParams,
+  FunctionSym(..), ($.), selfAccess, ObserverPattern(..), observerListName,
+  initObserverList, addObserver, StrategyPattern(..), convTypeOO
   ) where
 
-import GOOL.Drasil.InterfaceCommon (Label, Library, MSBody, MSBlock, VSType,
-  SVariable, SValue, MSStatement, NamedArgs, MixedCall, MixedCtorCall,
-  PosCall, PosCtorCall, InOutCall, SharedProg, ProgramSym, BodySym,
-  TypeSym(listType), VariableSym(var), ValueSym(valueType),
-  VariableValue(valueOf), ValueExpression, List(listSize, listAdd), listOf,
-  StatementSym(valStmt), DeclStatement(listDecDef), FuncAppStatement, convType)
+import GOOL.Drasil.InterfaceCommon (
+  -- Types
+  Label, Library, MSBody, MSBlock, VSType, SVariable, CSStateVar, SValue,
+  MSStatement, NamedArgs, SMethod, MixedCall, MixedCtorCall, PosCall,
+  PosCtorCall, InOutCall,
+  -- Typeclasses
+  SharedProg, BodySym, TypeSym(listType), MethodSym, VariableSym(var),
+  StateVarSym, ValueSym(valueType), VariableValue(valueOf), ValueExpression,
+  List(listSize, listAdd), listOf, StatementSym(valStmt),
+  DeclStatement(listDecDef), FuncAppStatement, convType)
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.Helpers (onStateValue)
-import GOOL.Drasil.State (VS)
+import GOOL.Drasil.State (GS, FS, CS, VS)
 
 class (SharedProg r, ProgramSym r, OOVariableValue r, OODeclStatement r,
   OOFuncAppStatement r, OOValueExpression r, InternalValueExp r, GetSet r,
   ObserverPattern r, StrategyPattern r
   ) => OOProg r
+
+type GSProgram a = GS (a (Program a))
+
+class (FileSym r) => ProgramSym r where
+  type Program r
+  prog :: Label -> Label -> [SFile r] -> GSProgram r
+
+type SFile a = FS (a (File a))
+
+class (ModuleSym r) => FileSym r where 
+  type File r
+  fileDoc :: FSModule r -> SFile r
+
+  -- Module description, list of author names, date as a String, file to comment
+  docMod :: String -> [String] -> String -> SFile r -> SFile r
+
+type FSModule a = FS (a (Module a))
+
+class (ClassSym r) => ModuleSym r where
+  type Module r
+  -- Module name, import names, module functions, module classes
+  buildModule :: Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
+
+type SClass a = CS (a (Class a))
+
+class (MethodSym r, StateVarSym r) => ClassSym r where
+  type Class r
+  -- | Main external method for creating a class.
+  --   Inputs: parent class, variables, constructor(s), methods
+  buildClass :: Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
+    [SMethod r] -> SClass r
+  -- | Creates an extra class.
+  --   Inputs: class name, the rest are the same as buildClass.
+  extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
+    [SMethod r] -> SClass r
+  -- | Creates a class implementing interfaces.
+  --   Inputs: class name, interface names, variables, constructor(s), methods
+  implementingClass :: Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> 
+    [SMethod r] -> SClass r
+
+  docClass :: String -> SClass r -> SClass r
 
 class (TypeSym r) => OOTypeSym r where
   obj :: ClassName -> VSType r

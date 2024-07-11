@@ -5,7 +5,7 @@ module Language.Drasil.Expr.Class (
   square, half,
   oneHalf, oneThird,
   apply1, apply2,
-  m2x2, vec2D, dgnl2x2, rowVec, columnVec,
+  m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet
 ) where
 
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
@@ -63,6 +63,9 @@ apply2 f a b = apply f [sy a, sy b]
 --   [3,4] ]
 m2x2 :: ExprC r => r -> r -> r -> r -> r
 m2x2 a b c d = matrix [[a,b],[c,d]]
+
+mkSet :: ExprC r => [r] -> r
+mkSet [r] = sSet [r]
 
 -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
 vec2D :: ExprC r => r -> r -> r
@@ -196,6 +199,9 @@ class ExprC r where
   -- | Vector Subtraction
   vSub :: r -> r -> r
 
+  sAdd :: r -> r -> r
+  sRemove :: r -> r -> r
+
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase :: [(r, r)] -> r
   
@@ -205,6 +211,7 @@ class ExprC r where
   -- | Create a matrix.
   matrix :: [[r]] -> r
 
+  sSet :: [r] -> r
   -- | Applies a given function with a list of parameters.
   apply :: (HasUID f, HasSymbol f) => f -> [r] -> r
    
@@ -367,6 +374,7 @@ instance ExprC Expr where
   
   matrix = Matrix
 
+  sSet = Set
   -- | Applies a given function with a list of parameters.
   apply f [] = sy f
   apply f ps = FCall (f ^. uid) ps
@@ -528,6 +536,7 @@ instance ExprC M.ModelExpr where
 
   matrix = M.Matrix
 
+  sSet = M.Set
   -- | Applies a given function with a list of parameters.
   apply f [] = sy f
   apply f ps = M.FCall (f ^. uid) ps
@@ -691,6 +700,7 @@ instance ExprC C.CodeExpr where
   
   matrix = C.Matrix
 
+  sSet = C.Set
   -- | Applies a given function with a list of parameters.
   apply f [] = sy f
   apply f ps = C.FCall (f ^. uid) ps []

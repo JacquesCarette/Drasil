@@ -45,8 +45,7 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
 import GOOL.Drasil.LanguageRenderer (dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, commentStart, elseIfLabel, forLabel, 
   inLabel, tryLabel, catchLabel, throwLabel, throwsLabel, importLabel, listSep',
-  printLabel, listSep, piLabel, access, tuple, FuncDocRenderer, 
-  ClassDocRenderer, parameterList)
+  printLabel, listSep, piLabel, access, tuple, ClassDocRenderer, parameterList)
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp, 
   sin, cos, tan, asin, acos, atan, floor, ceil, pow, class', multiStmt, body, 
   classVar, func, listSetFunc, castObj, static, dynamic, break, continue, 

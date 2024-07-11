@@ -3,13 +3,11 @@
 module SimpleClass (simpleClass, simpleClassName, simpleClassType) where
 
 import GOOL.Drasil (OOProg, SFile, FileSym (fileDoc), ModuleSym (buildModule), 
-  ClassSym (docClass, buildClass), VariableValue (valueOf), SClass, 
-  StateVarSym (stateVar), ScopeSym (..), PermanenceSym (..), 
-  VariableSym (..), SVariable, TypeSym (..), 
-  MethodSym (..), Literal (..), SMethod, initializer, IOStatement (printLn), 
-  oneLiner, ParameterSym (param), BodySym (body), BlockSym (block), 
-  ControlStatement (..), Comparison ((?==)), (&=), DeclStatement (..), 
-  bodyStatements, NumericExpression (..), VSType, newObj, objMethodCall, valStmt)
+  ClassSym (docClass, buildClass), VariableValue (valueOf), SClass,
+  StateVarSym (stateVar), ScopeSym (..), PermanenceSym (..), VariableSym (..),
+  SVariable, TypeSym (..), MethodSym (..), Literal (..), SMethod, oneLiner,
+  ParameterSym (param), BodySym (body), BlockSym (block), ControlStatement (..),
+  (&=), VSType)
 import Prelude hiding (return, print, log, exp, sin, cos, tan, const)
 
 simpleClassName, simpleDesc :: String
@@ -30,19 +28,9 @@ simpleClass = fileDoc (buildModule simpleClassName [] [] [docClass simpleDesc bu
 dynamicX :: (VariableSym r) => SVariable r
 dynamicX = var "x" int
 
-staticX :: (VariableSym r) => SVariable r
-staticX = staticVar "x" int
-
-classX :: (VariableSym r) => SVariable r
-classX = classVar simpleClassType staticX
-
 -- | Makes a variable @y@
 y :: (VariableSym r) => SVariable r
 y = var "y" int
-
--- | Makes a variable @sObj
-sObj :: (VariableSym r) => SVariable r
-sObj = var "sObj" simpleClassType
 
 buildSimpleClass :: (OOProg r) => SClass r
 buildSimpleClass = buildClass Nothing 

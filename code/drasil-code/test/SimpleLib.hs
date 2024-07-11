@@ -3,13 +3,10 @@
 module SimpleLib (simpleLib, doubleAndAdd) where
 
 import GOOL.Drasil (OOProg, SFile, FileSym (fileDoc), ModuleSym (buildModule), 
-  ClassSym (docClass, buildClass), VariableValue (valueOf), SClass, 
-  StateVarSym (stateVar), ScopeSym (..), PermanenceSym (..), 
-  VariableSym (..), SVariable, TypeSym (..), 
-  MethodSym (..), Literal (..), SMethod, initializer, IOStatement (printLn), 
-  oneLiner, ParameterSym (param), BodySym (body), BlockSym (block), 
-  ControlStatement (..), Comparison ((?==)), (&=), DeclStatement (..), 
-  bodyStatements, NumericExpression (..), VSType, newObj, objMethodCall, valStmt)
+  VariableValue (valueOf), ScopeSym (..), VariableSym (..), TypeSym (..),
+  MethodSym (..), Literal (..), SMethod, ParameterSym (param),
+  ControlStatement (..), (&=), DeclStatement (..), bodyStatements,
+  NumericExpression (..))
 import Prelude hiding (return, print, log, exp, sin, cos, tan, const)
 
 -- | Creates Helper module that contains an addition function.

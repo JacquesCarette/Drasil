@@ -50,9 +50,9 @@ helloInitVariables = block [comment "Initializing variables",
   valStmt (listAppend (valueOf $ var "myOtherList" (listType double))
     (litDouble 2.5)),
   varDec $ var "e" double,
-  var "e" int &= listAccess (valueOf $ var "myOtherList"
+  var "e" int &= listAccess (valueOf $ var "myOtherList" -- Problematic line
     (listType double)) (litInt 1),
-  valStmt (listSet (valueOf $ var "myOtherList" (listType double))
+  valStmt (listSet (valueOf $ var "myOtherList" (listType double)) -- Problematic line
     (litInt 1) (litDouble 17.4)),
   listDec 7 (var "myName" (listType string)),
   stringSplit ' ' (var "myName" (listType string)) (litString "Brooks Mac"),
@@ -89,7 +89,7 @@ helloIfBody = addComments "If body" (body [
     (&--) (var "b" int),
 
     listDec 5 (var "myList" (listType int)),
-    objDecDef (var "myObj" char) (litChar 'o'),
+    -- objDecDef (var "myObj" char) (litChar 'o'), -- This isn't compatible with procedural renderers.  TODO: split this file up
     constDecDef (constant "myConst" string) (litString "Imconstant"),
 
     printLn (valueOf $ var "a" int),

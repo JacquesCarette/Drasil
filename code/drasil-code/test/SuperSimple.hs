@@ -2,18 +2,12 @@
 -- | Tests basic GOOL functions. It *might* run without errors.
 module SuperSimple (superSimple) where
 
-import GOOL.Drasil (GSProgram, MSBody, MSBlock, SMethod, OOProg,
-  ProgramSym(..), FileSym(..), BodySym(..), ControlStatement(..), 
-  CommandLineArgs(..), BlockSym(..), TypeSym(..), StatementSym(..), 
-  Comparison(..), (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
-  CommentStatement(..), VariableSym(..), Literal(..), VariableValue(..), 
-  List(..), MethodSym(..), ModuleSym(..), VSType, SVariable, ValueExpression, 
-  SValue, listSlice, bodyStatements, extFuncApp, extNewObj, objVar,
-  objMethodCall, objMethodCallNoParams, stateVar, ScopeSym(..), 
-  PermanenceSym(..), oneLiner)
+import GOOL.Drasil (GSProgram, MSBlock, SMethod, OOProg, ProgramSym(..),
+  FileSym(..), BodySym(..), BlockSym(..), TypeSym(..), StatementSym(..), (&=),
+  DeclStatement(..), IOStatement(..), StringStatement(..), CommentStatement(..),
+  VariableSym(..), Literal(..), VariableValue(..), List(..), MethodSym(..),
+  ModuleSym(..), listSlice)
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
-import SimpleClass (simpleClass, simpleClassName, simpleClassType)
-import SimpleLib (simpleLib, doubleAndAdd)
 
 -- | Creates the SuperSimple program and necessary files.
 superSimple :: (OOProg r) => GSProgram r
@@ -68,32 +62,32 @@ helloListSlice = listSlice (var "mySlicedList" (listType double))
   (valueOf $ var "myList" (listType double)) (Just (litInt 1))
   Nothing (Just (litInt 2))
 
-s, s2, x :: (VariableSym r) => SVariable r
-s = var "s" simpleClassType
-s2 = var "s2" simpleClassType
-x = var "x" int
+-- s, s2, x :: (VariableSym r) => SVariable r
+-- s = var "s" simpleClassType
+-- s2 = var "s2" simpleClassType
+-- x = var "x" int
 
-newSimpleClass :: (ValueExpression r) => SValue r
-newSimpleClass = extNewObj simpleClassName simpleClassType []
+-- newSimpleClass :: (ValueExpression r) => SValue r
+-- newSimpleClass = extNewObj simpleClassName simpleClassType []
 
-objTest :: (OOProg r) => MSBlock r
-objTest = block [
-  varDecDef s newSimpleClass,
-  printLn $ valueOf s,
-  printLn $ objMethodCallNoParams int (valueOf s) "getX",
-  valStmt $ objMethodCall void (valueOf s) "setX" [litInt 2],
-  printLn $ objMethodCallNoParams int (valueOf s) "getX",
-  valStmt $ objMethodCall void (valueOf s) "resetXIfTrue" [litTrue],
-  printLn $ objMethodCallNoParams int (valueOf s) "getX"]
+-- objTest :: (OOProg r) => MSBlock r
+-- objTest = block [
+--   varDecDef s newSimpleClass,
+--   printLn $ valueOf s,
+--   printLn $ objMethodCallNoParams int (valueOf s) "getX",
+--   valStmt $ objMethodCall void (valueOf s) "setX" [litInt 2],
+--   printLn $ objMethodCallNoParams int (valueOf s) "getX",
+--   valStmt $ objMethodCall void (valueOf s) "resetXIfTrue" [litTrue],
+--   printLn $ objMethodCallNoParams int (valueOf s) "getX"]
 
-objTest2 :: (OOProg r) => MSBlock r
-objTest2 = block [
-  varDecDef s2 $ extFuncApp "SimpleData" "makeSimpleData" simpleClassType 
-    [litInt 4],
-  printLn $ objMethodCallNoParams int (valueOf s2) "getX",
-  valStmt $ extFuncApp "SimpleData" "updateSimpleData" void [valueOf s2, litInt 8],
-  printLn $ objMethodCallNoParams int (valueOf s2) "getX"]
+-- objTest2 :: (OOProg r) => MSBlock r
+-- objTest2 = block [
+--   varDecDef s2 $ extFuncApp "SimpleData" "makeSimpleData" simpleClassType 
+--     [litInt 4],
+--   printLn $ objMethodCallNoParams int (valueOf s2) "getX",
+--   valStmt $ extFuncApp "SimpleData" "updateSimpleData" void [valueOf s2, litInt 8],
+--   printLn $ objMethodCallNoParams int (valueOf s2) "getX"]
 
--- | Print the 5th given argument.
-helloElseBody :: (OOProg r) => MSBody r
-helloElseBody = bodyStatements [printLn (arg 5)]
+-- -- | Print the 5th given argument.
+-- helloElseBody :: (OOProg r) => MSBody r
+-- helloElseBody = bodyStatements [printLn (arg 5)]

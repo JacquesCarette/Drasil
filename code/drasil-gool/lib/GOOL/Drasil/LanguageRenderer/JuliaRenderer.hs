@@ -11,21 +11,23 @@ import Utils.Drasil (blank, indent, indentList)
 
 -- TODO: Make these pretty once their contents are stable
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, Library, VSType, SValue, SVariable,
-  MSStatement, MixedCtorCall, ProcProg, ProgramSym(..), SMethod, MSBody, MSParameter, Initializers,
+import GOOL.Drasil.ClassInterface (OOProg, Label, VSType, SValue, SVariable,
+  MSStatement, ProgramSym(..), SMethod, MSBody, MSParameter, Initializers,
   FileSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..), CSStateVar,
-  ValueExpression(..), funcApp, extFuncApp, selfFuncApp, bodyStatements,
-  FunctionSym(..), List(..), InternalList(..),
-  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), StatePattern(..),
-  ScopeSym(..), ParameterSym(..),
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), (&=), switchAsIf,
-  SClass, FSModule)
+  ValueExpression(..), funcApp, extFuncApp, bodyStatements,
+  List(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  StatePattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  StateVarSym(..), ClassSym(..), ModuleSym(..), (&=), switchAsIf, SClass,
+  FSModule,
+  -- OO-Only (remove when ready)
+  FunctionSym(..), ObserverPattern(..), StrategyPattern(..), GetSet(..),
+  InternalValueExp(..), StatePattern(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
@@ -48,25 +50,25 @@ import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp,
   sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, addComments,
   blockCmt, docCmt, commentedMod, listSetFunc, dynamic, stateVarList,
   commentedItem, break, continue)
-import GOOL.Drasil.LanguageRenderer.Constructors (mkVal, mkStateVal, mkStateVar,
-  VSOp, unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
+import GOOL.Drasil.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
+  unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
   typeBinExpr, mkStmt, mkStmtNoEnd)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  block, multiBlock, listInnerType, obj, litChar, litDouble, litInt, litString,
+  block, multiBlock, listInnerType, litChar, litDouble, litInt, litString,
   valueOf, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp,
   lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, call,
-  funcAppMixedArgs, lambda, modFromData, fileDoc, fileFromData, tryCatch,
-  csc, multiBody, sec, cot, stmt, loopStmt, emptyStmt, assign, increment,
-  subAssign, print, comment, valStmt, listAccess, objAccess, listSet,
-  docClass, function, commentedClass, method, getMethod, setMethod, objDecNew,
-  returnStmt, objVar, construct, param, docFunc, newObjMixedArgs, throw, arg,
-  argsList)
+  funcAppMixedArgs, lambda, listAccess, listSet, modFromData, fileDoc,
+  fileFromData, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt, emptyStmt,
+  assign, increment, subAssign, print, comment, valStmt, docClass, function,
+  commentedClass, method, getMethod, setMethod, returnStmt, construct, param,
+  docFunc, throw, arg, argsList)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (bool,
   boolRender, funcType, buildModule, docMod', litArray, listDec, listDecDef,
-  listAccessFunc, listSetFunc, bindingError, extraClass, notNull,
-  extFuncAppMixedArgs, functionDoc, listSize, listAdd, listAppend, intToIndex',
-  indexToInt', inOutFunc, docInOutFunc', forLoopError, openFileR', openFileW',
-  openFileA', multiReturn, multiAssign, inOutCall, stateVar, stateVarDef, mainBody)
+  listAccessFunc, listSetFunc, bindingError, notNull,
+  extFuncAppMixedArgs, functionDoc, listSize, listAdd, listAppend,
+  intToIndex', indexToInt', inOutFunc, docInOutFunc', forLoopError, openFileR',
+  openFileW', openFileA', multiReturn, multiAssign, inOutCall, stateVar,
+  stateVarDef, mainBody)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
   notOp, andOp, orOp, inlineIf, while)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1,
@@ -77,10 +79,10 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   vard, CommonThunk, progD, fd, ScopeTag(..), pd, updateMthd)
 import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, on2CodeValues,
   on2StateValues, onCodeList, onStateList, emptyIfEmpty)
-import GOOL.Drasil.State (MS, VS, CS, lensGStoFS, lensCStoFS, revFiles, setFileType, lensCStoMS, lensMStoVS, lensVStoMS,
-  getModuleImports, addModuleImportVS, getUsing, getLangImports, getLibImports,
-  useVarName, getModuleName, getClassName, setClassName, getMainDoc,
-  addLibImportVS)
+import GOOL.Drasil.State (MS, VS, CS, lensGStoFS, lensCStoFS, revFiles,
+  setFileType, lensCStoMS, lensMStoVS, getModuleImports, addModuleImportVS,
+  getUsing, getLangImports, getLibImports, useVarName, getModuleName,
+  getClassName, setClassName, getMainDoc)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -107,7 +109,7 @@ instance Applicative JuliaCode where
 instance Monad JuliaCode where
   JLC x >>= f = f x
 
-instance ProcProg JuliaCode
+instance OOProg JuliaCode
 
 instance ProgramSym JuliaCode where
   type Program JuliaCode = ProgData
@@ -188,9 +190,10 @@ instance TypeSym JuliaCode where
   listType = jlListType
   arrayType = listType -- Treat arrays and lists the same, as in Python
   listInnerType = G.listInnerType
-  obj = undefined
   funcType = CP.funcType -- Julia's functions support multiple-dispatch, so we might need to revisit this
   void = jlVoidType
+  -- OO-Only (remove when ready)
+  obj = undefined
 
 instance TypeElim JuliaCode where
   getType = cType . unJLC
@@ -257,15 +260,16 @@ instance OpElim JuliaCode where
 instance VariableSym JuliaCode where
   type Variable JuliaCode = VarData
   var = G.var
-  staticVar = undefined
   constant = var
   extVar _ = undefined
-  self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar jlSelf (obj l) (text jlSelf))
+  arrayElem _ = undefined
+  -- OO-Only (remove when ready)
+  staticVar = undefined
+  self = undefined
   classVar = undefined
   extClassVar = undefined
-  objVar = G.objVar
-  objVarSelf = objVar self
-  arrayElem _ = undefined
+  objVar = undefined
+  objVarSelf = undefined
 
 instance VariableElim JuliaCode where
   variableName = varName . unJLC
@@ -359,11 +363,12 @@ instance ValueExpression JuliaCode where
   inlineIf = C.inlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
-  selfFuncAppMixedArgs = undefined
   extFuncAppMixedArgs l n t ps ns = do
     modify (addModuleImportVS l)
     CP.extFuncAppMixedArgs l n t ps ns
   libFuncAppMixedArgs = undefined
+  -- OO-Only (remove when ready)
+  selfFuncAppMixedArgs = undefined
   newObjMixedArgs = undefined
   extNewObjMixedArgs = undefined
   libNewObjMixedArgs = undefined
@@ -394,7 +399,8 @@ instance ValueElim JuliaCode where
 instance FunctionSym JuliaCode where
   type Function JuliaCode = FuncData
   func l t vs = funcApp l t vs >>= ((`funcFromData` t) . RC.value)
-  objAccess = G.objAccess -- Can we abstract this to object/struct?  Or is that a bad idea?
+  -- OO-Only (remove when ready)
+  objAccess = undefined
 
 instance List JuliaCode where
   intToIndex = CP.intToIndex'
@@ -503,11 +509,12 @@ instance DeclStatement JuliaCode where
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
+  constDecDef = jlConstDecDef
+  funcDecDef = undefined
+  -- OO-Only (remove when ready)
   objDecDef = undefined
   objDecNew = undefined
   extObjDecNew = undefined
-  constDecDef = jlConstDecDef
-  funcDecDef = undefined
 
 instance IOStatement JuliaCode where
   print      = jlOut False Nothing printFunc
@@ -539,8 +546,9 @@ instance StringStatement JuliaCode where
 
 instance FuncAppStatement JuliaCode where
   inOutCall = CP.inOutCall funcApp
-  selfInOutCall = undefined
   extInOutCall m = CP.inOutCall (extFuncApp m)
+  -- OO-Only (remove when ready)
+  selfInOutCall = undefined
 
 instance CommentStatement JuliaCode where
   comment = G.comment jlCmtStart
@@ -574,9 +582,6 @@ instance ControlStatement JuliaCode where
     mkStmtNoEnd (jlForEach i v b) -- TODO: merge with Python and Swift
   while = C.while id empty jlEnd
   tryCatch = G.tryCatch jlTryCatch
-
-instance StatePattern JuliaCode where
-  checkState = undefined
 
 instance ScopeSym JuliaCode where
   type Scope JuliaCode = Doc
@@ -889,10 +894,6 @@ jlIntMethod n ps b = do
     indent $ RC.body bod,
     jlEnd])
 
-jlExtNewObjMixedArgs :: (RenderSym r) => Library -> MixedCtorCall r
-jlExtNewObjMixedArgs l tp vs ns = tp >>= (\t -> call (Just l) Nothing
-  (getTypeString t) (pure t) vs ns)
-
 jlClassAppend :: String -- Julia modules and structs cannot
 jlClassAppend = "Class" -- have the same name, hence the hack
 
@@ -1051,3 +1052,21 @@ jlParse :: (RenderSym r) => Label -> VSType r -> SValue r -> SValue r
 jlParse tl tp v = let
   typeLabel = mkStateVal void (text tl)
   in funcApp jlParseFunc tp [typeLabel, v]
+
+-- OO-Only (remove when ready)
+
+instance InternalValueExp JuliaCode where
+  objMethodCallMixedArgs' = undefined
+
+instance GetSet JuliaCode where
+  get = undefined
+  set = undefined
+
+instance ObserverPattern JuliaCode where
+  notifyObservers = undefined
+
+instance StrategyPattern JuliaCode where
+  runStrategy = undefined
+
+instance StatePattern JuliaCode where
+  checkState = undefined

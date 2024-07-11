@@ -95,7 +95,7 @@ choiceCombos = [baseChoices,
     folderVal = 5
   },
   baseChoices {
-    lang = [Python, Cpp, CSharp, Java, Swift, Julia],
+    lang = [Python, Cpp, CSharp, Java, Swift],
     dataInfo = makeData Bundled (Store Unbundled) Var,
     maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats,
     optFeats = makeOptFeats

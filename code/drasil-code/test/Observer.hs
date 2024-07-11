@@ -4,7 +4,7 @@ module Observer (observer, observerName, printNum, x) where
 import GOOL.Drasil (SFile, SVariable, SMethod, SClass, OOProg, FileSym(..),
   PermanenceSym(..), oneLiner, TypeSym(..), IOStatement(..), VariableSym(..),
   OOVariableSym(..), Literal(..), VariableValue(..), OOVariableValue,
-  ScopeSym(..), MethodSym(..), initializer, StateVarSym(..), ClassSym(..),
+  ScopeSym(..), OOMethodSym(..), initializer, StateVarSym(..), ClassSym(..),
   ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
@@ -35,10 +35,10 @@ helperClass = buildClass Nothing [stateVar public dynamic x]
   [observerConstructor] [printNumMethod, getMethod x, setMethod x]
 
 -- | Default value for observer class is 5.
-observerConstructor :: (MethodSym r, Literal r) => SMethod r
+observerConstructor :: (OOMethodSym r, Literal r) => SMethod r
 observerConstructor = initializer [] [(x, litInt 5)]
 
 -- | Create the @printNum@ method.
-printNumMethod :: (MethodSym r, IOStatement r, OOVariableValue r) => SMethod r
+printNumMethod :: (OOMethodSym r, IOStatement r, OOVariableValue r) => SMethod r
 printNumMethod = method printNum public dynamic void [] $
   oneLiner $ printLn $ valueOf selfX

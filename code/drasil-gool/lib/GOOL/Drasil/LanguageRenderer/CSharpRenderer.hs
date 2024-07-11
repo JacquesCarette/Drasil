@@ -11,23 +11,23 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.InterfaceCommon (SharedProg, Label, MSBody, VSType,
-  SVariable, SValue, MSStatement, MSParameter, SMethod, PermanenceSym(..),
-  BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
-  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
-  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  ScopeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..))
+  SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..), oneLiner,
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  extFuncApp, List(..), InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..))
 import GOOL.Drasil.InterfaceGOOL (VSFunction, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  OOValueSym, OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
+  StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
   InternalValueExp(..), objMethodCallNoParams, FunctionSym(..), ($.),
   GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..))
+  StrategyPattern(..), OOMethodSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -631,25 +631,22 @@ instance ParamElim CSharpCode where
 
 instance MethodSym CSharpCode where
   type Method CSharpCode = MethodData
+  docMain = CP.docMain
+  function = G.function
+  mainFunction = CP.mainFunction string csMain
+  docFunc = CP.doxFunc
+
+  inOutFunc n s = csInOut (function n s)
+  docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
+
+instance OOMethodSym CSharpCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
   constructor ps is b = getClassName >>= (\n -> CP.constructor n ps is b)
 
-  docMain = CP.docMain
- 
-  function = G.function
-  mainFunction = CP.mainFunction string csMain
-
-  docFunc = CP.doxFunc
-
   inOutMethod n s p = csInOut (method n s p)
-
   docInOutMethod n s p = CP.docInOutFunc (inOutMethod n s p)
-
-  inOutFunc n s = csInOut (function n s)
-
-  docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
 
 instance RenderMethod CSharpCode where
   intMethod m n s p t ps b = do

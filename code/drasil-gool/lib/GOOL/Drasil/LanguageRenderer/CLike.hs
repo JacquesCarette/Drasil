@@ -13,11 +13,11 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.InterfaceCommon (Label, Library, MSBody, VSType, SVariable, 
   SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall, 
-  PermanenceSym(..), TypeElim(getType, getTypeString), 
+  TypeElim(getType, getTypeString), 
   VariableElim(..), ValueSym(Value, valueType), ScopeSym(..))
 import qualified GOOL.Drasil.InterfaceCommon as IC (TypeSym(bool, float),
   ValueExpression(funcAppMixedArgs), DeclStatement(varDec, varDecDef))
-import GOOL.Drasil.InterfaceGOOL (extNewObj, ($.))
+import GOOL.Drasil.InterfaceGOOL (PermanenceSym(..), extNewObj, ($.))
 import qualified GOOL.Drasil.InterfaceGOOL as IG (OOTypeSym(obj),
   OOValueExpression(newObjMixedArgs))
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, RenderType(..),

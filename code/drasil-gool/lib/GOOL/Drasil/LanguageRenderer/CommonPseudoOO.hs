@@ -17,8 +17,8 @@ import Utils.Drasil (indent, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.InterfaceCommon (Label, Library, MSBody, VSType, SVariable,
-  SValue, MSStatement, MSParameter, SMethod, CSStateVar, Initializers,
-  MixedCall, PermanenceSym(..), bodyStatements, oneLiner, TypeSym(infile,
+  SValue, MSStatement, MSParameter, SMethod, Initializers,
+  MixedCall, bodyStatements, oneLiner, TypeSym(infile,
   outfile, listInnerType), TypeElim(getType, getTypeString),
   VariableElim(variableName, variableType), ValueSym(valueType), Comparison(..),
   (&=), ControlStatement(returnStmt), ScopeSym(..), MethodSym(function),
@@ -30,7 +30,7 @@ import qualified GOOL.Drasil.InterfaceCommon as IC (
   List(intToIndex, indexToInt), ParameterSym(param, pointerParam),
   MethodSym(mainFunction))
 import GOOL.Drasil.InterfaceGOOL (SFile, FSModule, SClass, VSFunction,
-  OOTypeSym(obj), objMethodCallNoParams)
+  CSStateVar, OOTypeSym(obj), PermanenceSym(..), objMethodCallNoParams)
 import qualified GOOL.Drasil.InterfaceGOOL as IG (ClassSym(buildClass),
   OOVariableSym(self, objVar), FunctionSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, ImportSym(..), RenderBody(..), 

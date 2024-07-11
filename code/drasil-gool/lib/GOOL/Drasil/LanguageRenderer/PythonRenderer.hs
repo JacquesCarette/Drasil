@@ -10,23 +10,23 @@ import Utils.Drasil (blank, indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.InterfaceCommon (SharedProg, Label, Library, VSType,
-  SVariable, SValue, MSStatement, MixedCtorCall, PermanenceSym(..), BodySym(..),
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, List(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), switchAsIf, ScopeSym(..),
-  ParameterSym(..), MethodSym(..), StateVarSym(..))
+  SVariable, SValue, MSStatement, MixedCtorCall, BodySym(..), BlockSym(..),
+  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..),
+  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..),
+  MethodSym(..))
 import GOOL.Drasil.InterfaceGOOL (VSFunction, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  OOValueSym, OOVariableValue, InternalValueExp(..), extNewObj, objMethodCall,
+  StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue, InternalValueExp(..), extNewObj, objMethodCall,
   FunctionSym(..), GetSet(..), OOValueExpression(..), selfFuncApp,
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..))
+  StrategyPattern(..), OOMethodSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -652,25 +652,22 @@ instance ParamElim PythonCode where
 
 instance MethodSym PythonCode where
   type Method PythonCode = MethodData
+  docMain = mainFunction
+  function = G.function
+  mainFunction = CP.mainBody
+  docFunc = CP.doxFunc
+
+  inOutFunc n s = CP.inOutFunc (function n s)
+  docInOutFunc n s = CP.docInOutFunc' functionDox (inOutFunc n s)
+
+instance OOMethodSym PythonCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
   constructor = CP.constructor initName
 
-  docMain = mainFunction
-
-  function = G.function
-  mainFunction = CP.mainBody
-
-  docFunc = CP.doxFunc
-
   inOutMethod n s p = CP.inOutFunc (method n s p)
-
   docInOutMethod n s p = CP.docInOutFunc' functionDox (inOutMethod n s p)
-
-  inOutFunc n s = CP.inOutFunc (function n s)
-
-  docInOutFunc n s = CP.docInOutFunc' functionDox (inOutFunc n s)
 
 instance RenderMethod PythonCode where
   intMethod m n _ _ _ ps b = do

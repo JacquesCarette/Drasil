@@ -12,9 +12,9 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.InterfaceCommon (SharedProg, Label, MSBody, MSBlock, VSType,
   SVariable, SValue, MSStatement, MSParameter, SMethod, Initializers,
-  PermanenceSym(..), BodySym(..), oneLiner, bodyStatements, BlockSym(..),
-  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
+  BodySym(..), oneLiner, bodyStatements, BlockSym(..), TypeSym(..),
+  TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),Argument(..),
+  Literal(..), litZero, MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
   List(..), listSlice, InternalList(..), ThunkSym(..), VectorType(..),
@@ -22,13 +22,14 @@ import GOOL.Drasil.InterfaceCommon (SharedProg, Label, MSBody, MSBlock, VSType,
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
   IOStatement(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), StateVarSym(..))
+  MethodSym(..))
 import GOOL.Drasil.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
-  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), OOValueSym,
-  OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
-  InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
-  objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
-  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..), convTypeOO)
+  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
+  StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
+  OOValueExpression(..), selfFuncApp, newObj, InternalValueExp(..),
+  objMethodCall, objMethodCallNamedArgs, objMethodCallNoParams, FunctionSym(..),
+  ($.), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
+  ObserverPattern(..), StrategyPattern(..), OOMethodSym(..), convTypeOO)
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym,
   RenderFile(..), ImportSym(..), ImportElim, PermElim(binding), RenderBody(..),
   BodyElim, RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim,
@@ -667,25 +668,22 @@ instance ParamElim SwiftCode where
 
 instance MethodSym SwiftCode where
   type Method SwiftCode = MethodData
+  docMain = mainFunction
+  function = G.function
+  mainFunction = CP.mainBody
+  docFunc = G.docFunc swiftFunctionDoc
+
+  inOutFunc n s = CP.inOutFunc (function n s)
+  docInOutFunc n s = CP.docInOutFunc' swiftFunctionDoc (inOutFunc n s)
+
+instance OOMethodSym SwiftCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
   constructor = swiftConstructor
 
-  docMain = mainFunction
-
-  function = G.function
-  mainFunction = CP.mainBody
-
-  docFunc = G.docFunc swiftFunctionDoc
-
   inOutMethod n s p = CP.inOutFunc (method n s p)
-
   docInOutMethod n s p = CP.docInOutFunc' swiftFunctionDoc (inOutMethod n s p)
-
-  inOutFunc n s = CP.inOutFunc (function n s)
-
-  docInOutFunc n s = CP.docInOutFunc' swiftFunctionDoc (inOutFunc n s)
 
 instance RenderMethod SwiftCode where
   intMethod _ = swiftMethod

@@ -4,18 +4,18 @@
 module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
 import GOOL.Drasil.InterfaceCommon (MSBody, VSType, SValue, MSStatement, 
-  SMethod, SharedProg, PermanenceSym(..),
-  BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
-  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), List(..),
-  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  ScopeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..))
+  SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
+  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
 import GOOL.Drasil.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
-  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), OOValueSym,
+  ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
+  OOVariableSym(..), PermanenceSym(..), StateVarSym(..), OOValueSym,
   OOVariableValue, OOValueExpression(..), InternalValueExp(..), FunctionSym(..),
   GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..))
@@ -391,6 +391,17 @@ instance ParameterSym CodeInfo where
 
 instance MethodSym CodeInfo where
   type Method CodeInfo = ()
+  docMain = updateMEMandCM "main"
+  function n _ _ _ = updateMEMandCM n
+  mainFunction = updateMEMandCM "main"
+  docFunc _ _ _ f = do
+    _ <- f
+    noInfo
+
+  inOutFunc      n _ _ _ _     = updateMEMandCM n
+  docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
+
+instance OOMethodSym CodeInfo where
   method n _ _ _ _ = updateMEMandCM n
   getMethod _ = noInfo
   setMethod _ = noInfo
@@ -401,22 +412,8 @@ instance MethodSym CodeInfo where
     modify (updateCallMap cn . updateMethodExcMap cn)
     noInfo
 
-  docMain = updateMEMandCM "main"
-
-  function n _ _ _ = updateMEMandCM n
-  mainFunction = updateMEMandCM "main"
-
-  docFunc _ _ _ f = do
-    _ <- f
-    noInfo
-
   inOutMethod    n _ _ _ _ _   = updateMEMandCM n
-
   docInOutMethod n _ _ _ _ _ _ = updateMEMandCM n
-
-  inOutFunc      n _ _ _ _     = updateMEMandCM n
-
-  docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
 instance StateVarSym CodeInfo where
   type StateVar CodeInfo = ()

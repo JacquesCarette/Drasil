@@ -28,10 +28,12 @@ expr :: LD.Expr -> CodeExpr
 expr (LD.Lit l)                = Lit l
 expr (LD.AssocA ao es)         = AssocA (assocArithOp ao) $ map expr es
 expr (LD.AssocB bo es)         = AssocB (assocBoolOp bo) $ map expr es
+expr (LD.AssocC bo es)         = AssocC (assocConcatOp bo) $ map expr es
 expr (LD.C u)                  = C u
 expr (LD.FCall u es)           = FCall u (map expr es) []
 expr (LD.Case c es)            = Case c $ map (bimap expr expr) es
 expr (LD.Matrix es)            = Matrix $ map (map expr) es
+expr (LD.Set es)               = Set $ map expr es
 expr (LD.UnaryOp uo e)         = UnaryOp (uFunc uo) (expr e)
 expr (LD.UnaryOpB uo e)        = UnaryOpB (uFuncB uo) (expr e)
 expr (LD.UnaryOpVV uo e)       = UnaryOpVV (uFuncVV uo) (expr e)
@@ -44,6 +46,8 @@ expr (LD.OrdBinaryOp bo l r)   = OrdBinaryOp (ordBinOp bo) (expr l) (expr r)
 expr (LD.VVVBinaryOp bo l r)   = VVVBinaryOp (vvvBinOp bo) (expr l) (expr r)
 expr (LD.VVNBinaryOp bo l r)   = VVNBinaryOp (vvnBinOp bo) (expr l) (expr r)
 expr (LD.NVVBinaryOp bo l r)   = NVVBinaryOp (nvvBinOp bo) (expr l) (expr r)
+expr (LD.ESSBinaryOp bo l r)   = ESSBinaryOp (essBinOp bo) (expr l) (expr r)
+expr (LD.ESBBinaryOp bo l r)   = ESBBinaryOp (esbBinOp bo) (expr l) (expr r)
 expr (LD.Operator aao dd e)    = Operator (assocArithOp aao) (renderDomainDesc dd) (expr e)
 expr (LD.RealI u ri)           = RealI u (realInterval ri)
 
@@ -94,6 +98,13 @@ vvnBinOp LD.Dot = Dot
 nvvBinOp :: LD.NVVBinOp -> NVVBinOp
 nvvBinOp LD.Scale = Scale
 
+essBinOp :: LD.ESSBinOp -> ESSBinOp
+essBinOp LD.SAdd = SAdd
+essBinOp LD.SRemove = SRemove
+
+esbBinOp :: LD.ESBBinOp -> ESBBinOp
+esbBinOp LD.SContains = SContains
+
 assocArithOp :: LD.AssocArithOper -> AssocArithOper
 assocArithOp LD.Add = Add -- TODO: These L.'s should be exported through L.D.Development
 assocArithOp LD.Mul = Mul
@@ -101,6 +112,9 @@ assocArithOp LD.Mul = Mul
 assocBoolOp :: LD.AssocBoolOper -> AssocBoolOper
 assocBoolOp LD.And = And -- TODO: These L.'s should be exported through L.D.Development
 assocBoolOp LD.Or = Or
+
+assocConcatOp :: LD.AssocConcatOper -> AssocConcatOper 
+assocConcatOp LD.SUnion  = SUnion
 
 uFunc :: LD.UFunc -> UFunc
 uFunc LD.Abs = Abs -- TODO: These L.'s should be exported through L.D.Development

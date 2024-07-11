@@ -30,7 +30,6 @@ foldConstraints _ [] = EmptyS
 foldConstraints c e  = E $ foldr1 ($&&) $ map constraintToExpr e
   where
     constraintToExpr (Range _ ri) = express $ realInterval c ri
-    --constraintToExpr (Elem a ls) = express $ containsElem a ls
 
 
 -- | Partial function application of 'foldle' for sentences specifically.

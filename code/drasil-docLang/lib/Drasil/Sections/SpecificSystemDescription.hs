@@ -277,11 +277,11 @@ tOutDataCstRef = makeTabRef' (outDatumConstraint ^. uid)
 
 -- | Formats Physical Constraints into a 'Sentence'.
 fmtPhys :: (Constrained c, Quantity c) => c -> Sentence
-fmtPhys c = foldConstraints c $ filter isPhysRange (c ^. constraints)
+fmtPhys c = foldConstraints c $ filter isPhysC (c ^. constraints)
 
 -- | Formats Software Constraints into a 'Sentence'.
 fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
-fmtSfwr c = foldConstraints c $ filter isSfwrRange (c ^. constraints)
+fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
 
 -- | Creates the Properties of a Correct Solution section.
 propCorSolF :: (Quantity c, Constrained c) => [c] -> [Contents] -> Section

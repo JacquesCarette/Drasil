@@ -45,10 +45,10 @@ class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r,
   RenderClass r, ClassElim r, RenderFile r, InternalGetSet r, InternalListFunc
   r, RenderFunction r, FunctionElim r, RenderMethod r, MethodElim r, RenderMod
   r, ModuleElim r, OpElim r, RenderParam r, ParamElim r, PermElim r,
-  RenderScope r, ScopeElim r, InternalAssignStmt r, InternalIOStmt r,
-  InternalControlStmt r, RenderStatement r, StatementElim r, StateVarElim r,
-  RenderType r, InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable
-  r, InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r,
+  ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r,
+  RenderStatement r, StatementElim r, StateVarElim r, RenderType r,
+  InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable r,
+  InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r,
   BlockCommentElim r) => RenderSym r
 
 class (BlockCommentSym r) => RenderFile r where

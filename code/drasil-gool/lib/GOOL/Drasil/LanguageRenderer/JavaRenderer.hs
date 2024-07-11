@@ -1038,8 +1038,8 @@ jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (map fst $ bs ++ is)
   where rets = "array containing the following values:" : map fst bs ++ 
           map fst os
 
-jExtraClass :: (RenderSym r) => Label -> Maybe Label -> [CSStateVar r] -> 
-  [SMethod r] -> [SMethod r] -> SClass r
+jExtraClass :: (RenderSym r, RenderScope r) => Label -> Maybe Label ->
+  [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
 jExtraClass n = intClass n (scopeFromData Priv empty) . inherit
 
 addCallExcsCurrMod :: String -> VS ()

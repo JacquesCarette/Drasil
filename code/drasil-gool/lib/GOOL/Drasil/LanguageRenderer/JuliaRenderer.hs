@@ -7,24 +7,23 @@ module GOOL.Drasil.LanguageRenderer.JuliaRenderer (
   JuliaCode(..), jlName, jlVersion
 ) where
 
-import Utils.Drasil (blank, indent, indentList)
+import Utils.Drasil (indent)
 
 -- TODO: Make these pretty once their contents are stable
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (OOProg, Label, VSType, SValue, SVariable,
-  MSStatement, ProgramSym(..), SMethod, MSBody, MSParameter, Initializers,
-  FileSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..),
-  TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
-  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..), CSStateVar,
-  ValueExpression(..), funcApp, extFuncApp, bodyStatements,
-  List(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  StatePattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..), (&=), switchAsIf, SClass,
-  FSModule,
+  MSStatement, ProgramSym(..), SMethod, MSBody, MSParameter, FileSym(..),
+  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
+  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), StatePattern(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
+  (&=), switchAsIf, FSModule,
   -- OO-Only (remove when ready)
   FunctionSym(..), ObserverPattern(..), StrategyPattern(..), GetSet(..),
   InternalValueExp(..), StatePattern(..))
@@ -32,24 +31,22 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(valuePrec), InternalGetSet(..), ParentSpec,
-  InternalListFunc(..), RenderFunction(..),
-  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
-  RenderScope(..), ScopeElim, MethodTypeSym(..), RenderParam(..),
-  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
-  StateVarElim, RenderClass(..), ClassElim, RenderMod(..), ModuleElim,
-  BlockCommentSym(..), BlockCommentElim)
-import qualified GOOL.Drasil.RendererClasses as RC (RenderBody(multiBody),
-  import', perm, body, block, type', uOp, bOp, variable, value, function,
-  statement, scope, parameter, method, stateVar, class', module', blockComment')
-import GOOL.Drasil.LanguageRenderer (printLabel, listSep, listSep', new,
-  ClassDocRenderer, variableList, parameterList, forLabel, inLabel,
-  tryLabel, catchLabel, ifLabel, elseLabel)
+  RenderValue(..), ValueElim(valuePrec), InternalGetSet(..),
+  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  RenderStatement(..), StatementElim(statementTerm), ScopeElim,
+  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
+  RenderMethod(..), MethodElim, StateVarElim, RenderClass(..), ClassElim,
+  RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
+import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
+  type', uOp, bOp, variable, value, function, statement, scope, parameter,
+  method, stateVar, class', module', blockComment')
+import GOOL.Drasil.LanguageRenderer (printLabel, listSep, listSep',
+  variableList, parameterList, forLabel, inLabel, tryLabel, catchLabel, ifLabel,
+  elseLabel)
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp,
   sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, addComments,
-  blockCmt, docCmt, commentedMod, listSetFunc, dynamic, stateVarList,
-  commentedItem, break, continue)
+  blockCmt, docCmt, commentedMod, listSetFunc, commentedItem, break, continue)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
   unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
   typeBinExpr, mkStmt, mkStmtNoEnd)
@@ -59,16 +56,14 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, call,
   funcAppMixedArgs, lambda, listAccess, listSet, modFromData, fileDoc,
   fileFromData, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt, emptyStmt,
-  assign, increment, subAssign, print, comment, valStmt, docClass, function,
-  commentedClass, method, getMethod, setMethod, returnStmt, construct, param,
-  docFunc, throw, arg, argsList)
+  assign, increment, subAssign, print, comment, valStmt, function, returnStmt,
+  construct, param, docFunc, throw, arg, argsList)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (bool,
   boolRender, funcType, buildModule, docMod', litArray, listDec, listDecDef,
-  listAccessFunc, listSetFunc, bindingError, notNull,
-  extFuncAppMixedArgs, functionDoc, listSize, listAdd, listAppend,
-  intToIndex', indexToInt', inOutFunc, docInOutFunc', forLoopError, openFileR',
-  openFileW', openFileA', multiReturn, multiAssign, inOutCall, stateVar,
-  stateVarDef, mainBody)
+  listAccessFunc, listSetFunc, bindingError, notNull, extFuncAppMixedArgs,
+  functionDoc, listSize, listAdd, listAppend, intToIndex', indexToInt',
+  inOutFunc, docInOutFunc', forLoopError, openFileR', openFileW', openFileA',
+  multiReturn, multiAssign, inOutCall, mainBody)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
   notOp, andOp, orOp, inlineIf, while)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1,
@@ -77,12 +72,11 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), ModData(..), md, updateMod, MethodData(..), mthd, OpData(..),
   ParamData(..), ProgData(..), TypeData(..), td, ValData(..), vd, VarData(..),
   vard, CommonThunk, progD, fd, ScopeTag(..), pd, updateMthd)
-import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, on2CodeValues,
-  on2StateValues, onCodeList, onStateList, emptyIfEmpty)
-import GOOL.Drasil.State (MS, VS, CS, lensGStoFS, lensCStoFS, revFiles,
-  setFileType, lensCStoMS, lensMStoVS, getModuleImports, addModuleImportVS,
-  getUsing, getLangImports, getLibImports, useVarName, getModuleName,
-  getClassName, setClassName, getMainDoc)
+import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
+  on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
+import GOOL.Drasil.State (MS, VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
+  getModuleImports, addModuleImportVS, getUsing, getLangImports, getLibImports,
+  useVarName, getClassName, getMainDoc)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -146,11 +140,6 @@ instance ImportSym JuliaCode where
 instance ImportElim JuliaCode where
   import' = unJLC
 
-instance PermanenceSym JuliaCode where
-  type Permanence JuliaCode = Doc
-  static = toCode empty
-  dynamic = toCode R.dynamic
-
 instance PermElim JuliaCode where
   perm = unJLC
   binding = error $ CP.bindingError jlName
@@ -193,7 +182,7 @@ instance TypeSym JuliaCode where
   funcType = CP.funcType -- Julia's functions support multiple-dispatch, so we might need to revisit this
   void = jlVoidType
   -- OO-Only (remove when ready)
-  obj = undefined
+  obj = undefined--
 
 instance TypeElim JuliaCode where
   getType = cType . unJLC
@@ -264,12 +253,12 @@ instance VariableSym JuliaCode where
   extVar _ = undefined
   arrayElem _ = undefined
   -- OO-Only (remove when ready)
-  staticVar = undefined
-  self = undefined
-  classVar = undefined
-  extClassVar = undefined
-  objVar = undefined
-  objVarSelf = undefined
+  staticVar = undefined--
+  self = undefined--
+  classVar = undefined--
+  extClassVar = undefined--
+  objVar = undefined--
+  objVarSelf = undefined--
 
 instance VariableElim JuliaCode where
   variableName = varName . unJLC
@@ -368,10 +357,10 @@ instance ValueExpression JuliaCode where
     CP.extFuncAppMixedArgs l n t ps ns
   libFuncAppMixedArgs = undefined
   -- OO-Only (remove when ready)
-  selfFuncAppMixedArgs = undefined
-  newObjMixedArgs = undefined
-  extNewObjMixedArgs = undefined
-  libNewObjMixedArgs = undefined
+  selfFuncAppMixedArgs = undefined--
+  newObjMixedArgs = undefined--
+  extNewObjMixedArgs = undefined--
+  libNewObjMixedArgs = undefined--
 
   lambda = G.lambda jlLambda
 
@@ -395,12 +384,6 @@ instance RenderValue JuliaCode where
 instance ValueElim JuliaCode where
   valuePrec = valPrec . unJLC
   value = val . unJLC
-
-instance FunctionSym JuliaCode where
-  type Function JuliaCode = FuncData
-  func l t vs = funcApp l t vs >>= ((`funcFromData` t) . RC.value)
-  -- OO-Only (remove when ready)
-  objAccess = undefined
 
 instance List JuliaCode where
   intToIndex = CP.intToIndex'
@@ -426,13 +409,19 @@ instance InternalList JuliaCode where
           getVal = fromMaybe $ mkStateVal void empty
 
 instance InternalGetSet JuliaCode where
-  getFunc = undefined
-  setFunc = undefined
+  getFunc = undefined--
+  setFunc = undefined--
 
 instance InternalListFunc JuliaCode where
-  listSizeFunc l = func jlListSize int [l]
-  listAddFunc l i v = func jlListAdd void [l, i, v]
-  listAppendFunc l v = func jlListAppend void [l, v]
+  listSizeFunc l = do
+    f <- funcApp jlListSize int [l]
+    funcFromData (RC.value f) int
+  listAddFunc l i v = do
+    f <- funcApp jlListAdd void [l, i, v]
+    funcFromData (RC.value f) void
+  listAppendFunc l v = do
+    f <- funcApp jlListAppend void [l, v]
+    funcFromData (RC.value f) void
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
 
@@ -512,9 +501,9 @@ instance DeclStatement JuliaCode where
   constDecDef = jlConstDecDef
   funcDecDef = undefined
   -- OO-Only (remove when ready)
-  objDecDef = undefined
-  objDecNew = undefined
-  extObjDecNew = undefined
+  objDecDef = undefined--
+  objDecNew = undefined--
+  extObjDecNew = undefined--
 
 instance IOStatement JuliaCode where
   print      = jlOut False Nothing printFunc
@@ -548,7 +537,7 @@ instance FuncAppStatement JuliaCode where
   inOutCall = CP.inOutCall funcApp
   extInOutCall m = CP.inOutCall (extFuncApp m)
   -- OO-Only (remove when ready)
-  selfInOutCall = undefined
+  selfInOutCall = undefined--
 
 instance CommentStatement JuliaCode where
   comment = G.comment jlCmtStart
@@ -589,9 +578,6 @@ instance ScopeSym JuliaCode where
   private = toCode empty -- Julia doesn't have private/public members
   public = toCode empty
 
-instance RenderScope JuliaCode where
-  scopeFromData _ = undefined
-
 instance ScopeElim JuliaCode where
   scope = unJLC
 
@@ -619,19 +605,20 @@ instance ParamElim JuliaCode where
 
 instance MethodSym JuliaCode where
   type Method JuliaCode = MethodData
-  method = G.method
-  getMethod = G.getMethod
-  setMethod = G.setMethod
-  constructor ps is b = getClassName >>=
-    (\n -> jlConstructor n ps is b)
   docMain = mainFunction
   function = G.function
   mainFunction = CP.mainBody
   docFunc = G.docFunc CP.functionDoc
-  inOutMethod n s p = CP.inOutFunc (method n s p)
-  docInOutMethod n s p = CP.docInOutFunc' CP.functionDoc (inOutMethod n s p)
+
   inOutFunc n s = CP.inOutFunc (function n s)
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
+  -- OO-Only (remove when ready)
+  method = undefined--
+  getMethod = undefined--
+  setMethod = undefined--
+  constructor = undefined--
+  inOutMethod = undefined--
+  docInOutMethod _ = undefined--
 
 instance RenderMethod JuliaCode where
   intMethod _ n _ _ _ = jlIntMethod n
@@ -641,47 +628,15 @@ instance RenderMethod JuliaCode where
 
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
-  destructor _ = undefined
+  destructor _ = undefined--
   mthdFromData _ d = toState $ toCode $ mthd d
 
 instance MethodElim JuliaCode where
   method = mthdDoc . unJLC
 
-instance StateVarSym JuliaCode where
-  type StateVar JuliaCode = Doc
-
-  stateVar = CP.stateVar varDec'
-  stateVarDef = CP.stateVarDef varDecDef'
-  constVar = undefined
-
-instance StateVarElim JuliaCode where
-  stateVar = unJLC
-
-instance ClassSym JuliaCode where
-  type Class JuliaCode = Doc
-
-  buildClass p stVars constructors methods = do
-    n <- zoom lensCStoFS getModuleName
-    intClass (n ++ jlClassAppend) public (inherit p) stVars constructors methods
-  extraClass n = intClass (n ++ jlClassAppend) public . inherit
-  implementingClass = undefined
-  docClass = G.docClass jlClassDoc
-
-instance RenderClass JuliaCode where
-  intClass = jlIntClass
-  inherit sup = case sup of
-    Nothing  -> toCode empty
-    (Just _) -> error "Julia doesn't support inheritance."
-  implements = undefined
-  commentedClass = G.commentedClass
-
-instance ClassElim JuliaCode where
-  class' = unJLC
-
 instance ModuleSym JuliaCode where
   type Module JuliaCode = ModData
-  -- Before: jlModStart n; After: jlEnd
-  buildModule n is fs cs = jlModContents n is fs cs <&>
+  buildModule n is fs _ = jlModContents n is fs <&>
     updateModuleDoc (\m -> emptyIfEmpty m (vibcat [jlModStart n, m, jlEnd]))
 
 instance RenderMod JuliaCode where
@@ -810,8 +765,8 @@ jlForEach i lstVar b = vcat [
 
 -- | Creates the contents of a module in Julia
 jlModContents :: Label -> [Label] -> [SMethod JuliaCode] ->
-  [SClass JuliaCode] -> FSModule JuliaCode
-jlModContents n is = CP.buildModule n (do
+  FSModule JuliaCode
+jlModContents n is fs = CP.buildModule n (do
   lis <- getLangImports
   libis <- getLibImports
   mis <- getModuleImports
@@ -821,61 +776,10 @@ jlModContents n is = CP.buildModule n (do
     vcat (map (RC.import' . li) (sort $ is ++ libis)),
     vcat (map (RC.import' . mi) mis),
     vcat (map usingModule us)])
-  (pure empty) (do getMainDoc)
+  (pure empty) (do getMainDoc) fs []
   where mi, li :: Label -> JuliaCode (Import JuliaCode)
         mi = modImport
         li = langImport
-
--- | Creates a 'class' in Julia.
---   GOOL classes are manifested quite differently in Julia, since it's not an
---   OO language.  Variables and constructors go inside the body of a struct,
---   and methods become functions that take an instance of the struct as their 
---   first argument.
-jlIntClass :: (RenderSym r, Monad r) => Label -> r (Scope r) -> r ParentSpec ->
-  [CSStateVar r] -> [SMethod r] -> [SMethod r] -> CS (r Doc)
-jlIntClass n _ i svrs cstrs mths = do
-  modify (setClassName n)
-  svs <- onStateList (R.stateVarList . map RC.stateVar) svrs
-  ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) mths)
-  cs <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) cstrs)
-  return $ onCodeValue (\_ -> jlClass n svs ms cs) i
-
--- | Creates the doc for a class.
--- | n is the name of the class.
--- | vs is the variables of the class.
--- | ms is the methods of the class (other than the constructor).
--- | cstrs is the constructors.
-jlClass :: Label -> Doc -> Doc -> Doc -> Doc
-jlClass n vs ms cstrs = vcat [
-  mutDec <+> structDec <+> text n,
-  indentList [vs, blank, cstrs],
-  jlEnd,
-  blank,
-  ms]
-
-jlClassDoc :: ClassDocRenderer
-jlClassDoc desc = [desc | not (null desc)]
-
--- | Constructor method.  Exists because Julia's constructors need to be 
---   completely different from other 'methods' in Julia.
-jlConstructor :: (RenderSym r) => Label -> [MSParameter r] -> Initializers r ->
-  MSBody r -> SMethod r
-jlConstructor fName ps initStmts b = jlConstructorMethod fName
-  ps (RC.multiBody [createSelf, b, returnSelf])
-  where args = map snd initStmts
-        constructorFunc = funcApp new (obj fName)
-        createSelf = bodyStatements [varDecDef (var jlSelf (obj fName)) (constructorFunc args)]
-        returnSelf = bodyStatements [returnStmt $ valueOf (var jlSelf (obj fName))]
-
-jlConstructorMethod :: (RenderSym r) =>
-  Label -> [MSParameter r] -> MSBody r -> SMethod r
-jlConstructorMethod n ps b = do
-  pms <- sequence ps
-  bod <- b
-  mthdFromData Pub (vcat [
-    jlFunc <+> text n <> parens (parameterList pms),
-    indent $ RC.body bod,
-    jlEnd])
 
 jlIntMethod :: (RenderSym r) => Label -> [MSParameter r] ->
   MSBody r -> SMethod r
@@ -936,28 +840,8 @@ jlStart      = text "start"
 jlEnd        = text "end"
 jlThrowLabel = text "error" -- TODO: this hints at an underdeveloped exception system
 
-jlSelf :: String
-jlSelf = "self" -- TODO: this is a placeholder (or maybe it's fine)
-
-structDec, mutDec :: Doc
-structDec = text "struct"
-mutDec = text "mutable"
-
 jlParam :: (RenderSym r) => r (Variable r) -> Doc
 jlParam v = RC.variable v <> jlType <> RC.type' (variableType v)
-
-varDec' :: SVariable JuliaCode -> MSStatement JuliaCode
-varDec' v' = do
-  v <- zoom lensMStoVS v'
-  modify $ useVarName (variableName v)
-  mkStmtNoEnd (RC.variable v <> jlType <> RC.type' (variableType v))
-
-varDecDef' :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-varDecDef' v e = do
-  v' <- zoom lensMStoVS v
-  e' <- zoom lensMStoVS e
-  modify $ useVarName (variableName v')
-  mkStmtNoEnd (RC.variable v' <> jlType <> RC.type' (variableType v') <+> equals <+> RC.value e')
 
 -- Type names specific to Julia (there's a lot of them)
 jlIntType :: (RenderSym r) => VSType r
@@ -1055,18 +939,55 @@ jlParse tl tp v = let
 
 -- OO-Only (remove when ready)
 
+instance FunctionSym JuliaCode where
+  type Function JuliaCode = FuncData
+  func = undefined--
+  objAccess = undefined--
+
 instance InternalValueExp JuliaCode where
-  objMethodCallMixedArgs' = undefined
+  objMethodCallMixedArgs' = undefined--
 
 instance GetSet JuliaCode where
-  get = undefined
-  set = undefined
+  get = undefined--
+  set = undefined--
 
 instance ObserverPattern JuliaCode where
-  notifyObservers = undefined
+  notifyObservers = undefined--
 
 instance StrategyPattern JuliaCode where
-  runStrategy = undefined
+  runStrategy = undefined--
 
 instance StatePattern JuliaCode where
-  checkState = undefined
+  checkState = undefined--
+
+instance StateVarSym JuliaCode where
+  type StateVar JuliaCode = Doc
+
+  stateVar = undefined--
+  stateVarDef = undefined--
+  constVar = undefined--
+
+instance StateVarElim JuliaCode where
+  stateVar = undefined--
+
+instance ClassSym JuliaCode where
+  type Class JuliaCode = Doc
+
+  buildClass = undefined--
+  extraClass = undefined--
+  implementingClass = undefined--
+  docClass = undefined--
+
+instance RenderClass JuliaCode where
+  intClass = undefined--
+  inherit = undefined--
+  implements = undefined
+  commentedClass = undefined--
+
+instance ClassElim JuliaCode where
+  class' = undefined--
+
+instance PermanenceSym JuliaCode where
+  type Permanence JuliaCode = Doc
+  static = undefined--
+  dynamic = undefined--

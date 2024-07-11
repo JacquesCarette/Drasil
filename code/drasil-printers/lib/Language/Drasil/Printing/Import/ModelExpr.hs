@@ -115,8 +115,9 @@ modelExpr (Lit l)                    sm = literal l sm
 modelExpr (AssocB And l)             sm = assocExpr P.And (precB And) l sm
 modelExpr (AssocB Or l)              sm = assocExpr P.Or (precB Or) l sm
 modelExpr (AssocB Equivalence l)     sm = assocExpr P.Eq (precB Equivalence) l sm
-modelExpr (AssocA Add l)            sm = P.Row $ addExpr l Add sm
-modelExpr (AssocA Mul l)           sm = P.Row $ mulExpr l Mul sm
+modelExpr (AssocA Add l)             sm = P.Row $ addExpr l Add sm
+modelExpr (AssocA Mul l)             sm = P.Row $ mulExpr l Mul sm
+modelExpr (AssocC SUnion l)          sm = assocExpr P.SUnion (precC SUnion) l sm
 modelExpr (Deriv 0 Part a _)         sm = P.Row [modelExpr a sm]
 modelExpr (Deriv 0 Total a _)        sm = P.Row [modelExpr a sm]
 modelExpr (Deriv n Part a b)         sm =
@@ -136,6 +137,7 @@ modelExpr (Case _ ps)                sm =
     then error "Attempting to use multi-case modelExpr incorrectly"
     else P.Case (zip (map (flip modelExpr sm . fst) ps) (map (flip modelExpr sm . snd) ps))
 modelExpr (Matrix a)                 sm = P.Mtx $ map (map (`modelExpr` sm)) a
+modelExpr (Set a)                    sm = P.Set $ map (`modelExpr` sm) a
 modelExpr (UnaryOp Log u)            sm = mkCall sm P.Log u
 modelExpr (UnaryOp Ln u)             sm = mkCall sm P.Ln u
 modelExpr (UnaryOp Sin u)            sm = mkCall sm P.Sin u
@@ -172,6 +174,9 @@ modelExpr (VVVBinaryOp Cross a b)    sm = mkBOp sm P.Cross a b
 modelExpr (VVVBinaryOp VAdd a b)     sm = mkBOp sm P.VAdd a b
 modelExpr (VVVBinaryOp VSub a b)     sm = mkBOp sm P.VSub a b
 modelExpr (NVVBinaryOp Scale a b)    sm = mkBOp sm P.Scale a b
+modelExpr (ESSBinaryOp SAdd a b)    sm = mkBOp sm P.SAdd a b
+modelExpr (ESSBinaryOp SRemove a b)    sm = mkBOp sm P.SRemove a b
+modelExpr (ESBBinaryOp SContains a b)    sm = mkBOp sm P.SContains a b
 modelExpr (Operator o d e)           sm = eop sm o d e
 modelExpr (RealI c ri)               sm = renderRealInt sm (lookupC (sm ^. stg)
   (sm ^. ckdb) c) ri

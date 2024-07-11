@@ -315,11 +315,11 @@ instance Typed Expr Space where
               (const False) expT
         t = fromLeft (error "Infer on Matrix had a strong expectation of Left-valued data.") expT -- This error should never occur.
 
-  infer cxt (Set (e:exs)) =
-    case infer cxt e of
+  infer cxt (Set (exs)) =
+    case infer cxt (head exs) of
         Left sp -> if S.isBasicNumSpace sp then Left sp else Right (show sp)
-        Right err -> Right "Expressions in case"
-  infer cxt (Set _) = Right "Expressions in case"
+        Right err -> Right ("Expressions in case" ++ show err)
+  --infer _ (Set _) = Right "Expressions in case"
 
   infer cxt (UnaryOp uf ex) = case infer cxt ex of
     Left sp -> case uf of

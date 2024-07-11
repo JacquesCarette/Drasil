@@ -11,6 +11,7 @@ import Language.Drasil.UID (UID)
 meNames :: ModelExpr -> [UID]
 meNames (AssocA _ l)          = concatMap meNames l
 meNames (AssocB _ l)          = concatMap meNames l
+meNames (AssocC _ l)          = concatMap meNames l
 meNames (Deriv _ _ a b)       = b : meNames a
 meNames (C c)                 = [c]
 meNames Lit{}                 = []
@@ -32,8 +33,11 @@ meNames (OrdBinaryOp _ a b)   = meNames a ++ meNames b
 meNames (VVVBinaryOp _ a b)   = meNames a ++ meNames b
 meNames (VVNBinaryOp _ a b)   = meNames a ++ meNames b
 meNames (NVVBinaryOp _ a b)   = meNames a ++ meNames b
+meNames (ESSBinaryOp _ _ s)   = meNames s
+meNames (ESBBinaryOp _ _ s)   = meNames s
 meNames (Operator _ _ e)      = meNames e
 meNames (Matrix a)            = concatMap (concatMap meNames) a
+meNames (Set a)               = concatMap meNames a
 meNames (RealI c b)           = c : meNamesRI b
 meNames (ForAll _ _ de)       = meNames de
 
@@ -49,6 +53,7 @@ meNamesRI (UpFrom (_, il))          = meNames il
 meNames' :: ModelExpr -> [UID]
 meNames' (AssocA _ l)          = concatMap meNames' l
 meNames' (AssocB _ l)          = concatMap meNames' l
+meNames' (AssocC _ l)          = concatMap meNames' l
 meNames' (Deriv _ _ a b)       = b : meNames' a
 meNames' (C c)                 = [c]
 meNames' Lit{}                 = []
@@ -70,8 +75,11 @@ meNames' (StatBinaryOp _ a b)  = meNames' a ++ meNames' b
 meNames' (VVVBinaryOp _ a b)   = meNames' a ++ meNames' b
 meNames' (VVNBinaryOp _ a b)   = meNames' a ++ meNames' b
 meNames' (NVVBinaryOp _ a b)   = meNames' a ++ meNames' b
+meNames' (ESSBinaryOp _ _ s)   = meNames' s
+meNames' (ESBBinaryOp _ _ s)   = meNames' s
 meNames' (Operator _ _ e)      = meNames' e
 meNames' (Matrix a)            = concatMap (concatMap meNames') a
+meNames' (Set a)               = concatMap meNames' a
 meNames' (RealI c b)           = c : meNamesRI' b
 meNames' (ForAll _ _ de)       = meNames' de
 

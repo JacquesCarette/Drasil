@@ -45,6 +45,16 @@ data VVNBinOp = Dot
 data NVVBinOp = Scale
   deriving Eq
 
+-- | Element + Set -> Set
+data ESSBinOp = SAdd | SRemove
+  deriving Eq
+
+-- | Element + Set -> Bool
+data ESBBinOp = SContains
+  deriving Eq
+
+data AssocConcatOper = SUnion
+  deriving Eq
 -- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
 data AssocArithOper = Add | Mul
   deriving Eq
@@ -70,18 +80,6 @@ data UFuncVV = NegV
 data UFuncVN = Norm | Dim
   deriving Eq
 
--- | Set + Set -> Set
-data SSet = SUnion
-  deriving Eq
-
--- | Element + Set -> Set
-data ESSSet = SAdd | SRemove
-  deriving Eq
-
--- | Element + Set -> Bool
-data ESBSet = SContains
-  deriving Eq
-
 -- * CodeExpr
 
 -- | Expression language where all terms also denote a term in GOOL
@@ -94,6 +92,8 @@ data CodeExpr where
   AssocA   :: AssocArithOper -> [CodeExpr] -> CodeExpr
   -- | Takes an associative boolean operator with a list of expressions.
   AssocB   :: AssocBoolOper  -> [CodeExpr] -> CodeExpr
+
+  AssocC :: AssocConcatOper -> [CodeExpr] -> CodeExpr
   -- | C stands for "Chunk", for referring to a chunk in an expression.
   --   Implicitly assumes that the chunk has a symbol.
   C        :: UID -> CodeExpr
@@ -120,7 +120,8 @@ data CodeExpr where
   Case     :: Completeness -> [(CodeExpr, CodeExpr)] -> CodeExpr
   -- | Represents a matrix of expressions.
   Matrix   :: [[CodeExpr]] -> CodeExpr
-  
+  -- | Represents a set of expressions
+  Set :: [CodeExpr] -> CodeExpr
   -- | Unary operation for most functions (eg. sin, cos, log, etc.).
   UnaryOp       :: UFunc -> CodeExpr -> CodeExpr
   -- | Unary operation for @Bool -> Bool@ operations.
@@ -147,11 +148,9 @@ data CodeExpr where
   -- | Binary operator for @Number x Vector -> Vector@ operations (scaling).
   NVVBinaryOp   :: NVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Set operator for Set + Set -> Set
-  SSetOp :: SSet -> CodeExpr -> CodeExpr -> CodeExpr
-  -- | Set operator for Element + Set -> Set
-  ESSSetOp:: ESSSet -> CodeExpr -> CodeExpr -> CodeExpr
+  ESSBinaryOp :: ESSBinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Set operator for Element + Set -> Bool
-  ESBSetOp :: ESBSet -> CodeExpr -> CodeExpr -> CodeExpr
+  ESBBinaryOp :: ESBBinOp -> CodeExpr -> CodeExpr -> CodeExpr
 
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.

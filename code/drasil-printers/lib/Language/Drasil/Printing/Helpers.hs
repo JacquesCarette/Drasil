@@ -2,44 +2,57 @@
 module Language.Drasil.Printing.Helpers where
 
 import Prelude hiding ((<>))
-import Text.PrettyPrint (text, Doc, (<>))
+import Text.PrettyPrint (text, Doc, (<>), ($$))
 import Data.Char (toUpper, toLower)
 import Language.Drasil.Printing.Citation ( CiteField(HowPublished), HP (..) )
 
+-- | Custom infix operator for concatenating 
+-- two 'Doc's vertically with an empty line in between.
+infixl 5 $^$
+($^$) :: Doc -> Doc -> Doc
+($^$) a b = a $$ emptyline $$ b
+
+-- | Concatenate a list of 'Doc's vertically 
+-- with an empty line in between.
+vsep :: [Doc] -> Doc
+vsep = foldr1 ($^$)
+
 -- | Basic text-rendering helper function.
-bslash,dbs,assign,eq,lt,gt,leq,geq,dlr,ast,pls,hat,slash,hyph,unders,pipe :: Doc
+bslash,dbs,assign,eq,lt,gt,leq,geq,dlr,ast,pls,hat,slash,hyph,unders,pipe,emptyline :: Doc
 -- | Single backslash.
-bslash = text "\\"
+bslash    = text "\\"
 -- | Double backslash.
-dbs    = text "\\\\"
+dbs       = text "\\\\"
 -- | Variable assignment character ("=").
-assign = text "="
+assign    = text "="
 -- | Equality character ("==").
-eq     = text "=="
+eq        = text "=="
 -- | Less than.
-lt     = text "<"
+lt        = text "<"
 -- | Greater than.
-gt     = text ">"
+gt        = text ">"
 -- | Less than or equal to.
-leq    = text "<="
+leq       = text "<="
 -- | Greater than or equal to.
-geq    = text ">="
+geq       = text ">="
 -- | Dollar sign.
-dlr    = text "$"
+dlr       = text "$"
 -- | Asterisk.
-ast    = text "*"
+ast       = text "*"
 -- | Plus.
-pls    = text "+"
+pls       = text "+"
 -- | Hat symbol ("^").
-hat    = text "^"
+hat       = text "^"
 -- | Forward slash.
-slash  = text "/"
+slash     = text "/"
 -- | Hyphen.
-hyph   = text "-"
+hyph      = text "-"
 -- | Underscore.
-unders = text "_"
+unders    = text "_"
 -- | Pipe.
-pipe   = text "|"
+pipe      = text "|"
+-- | Empty line.
+emptyline = text ""
 
 -- | Text-rendering helper for wrapping strings with brackets/braces.
 sq,br :: String -> Doc

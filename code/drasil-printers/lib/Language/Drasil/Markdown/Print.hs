@@ -20,7 +20,7 @@ import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Project(Project), Document(Document), 
   LayoutObj(..), Filename, RefMap, File(File))
 import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, unders, 
-  hat, hyph, dot)
+  hat, hyph, dot, ($^$), vsep)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 import qualified Language.Drasil.TeX.Print as TeX (pExpr, fence, OpenClose(..),
@@ -33,7 +33,7 @@ import Language.Drasil.TeX.Helpers(commandD, command2D, mkEnv)
 
 import Language.Drasil.Markdown.Helpers (heading, image, li, reflink,
   reflinkURI, reflinkInfo, caption, bold, ul, docLength, divTag, defnHTag, em,
-  h, h', ($^$), vsep)
+  h, h')
 
 -----------------------------------------------------------------
 ------------------------- Markdown SRS --------------------------

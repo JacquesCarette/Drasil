@@ -2,10 +2,10 @@
 module Language.Drasil.Markdown.Helpers where
 
 import Prelude hiding ((<>), lookup)
-import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), ($$), hcat,
+import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), hcat,
   brackets, parens, braces)
 import Data.Map (lookup)
-import Language.Drasil.Printing.Helpers (ast)
+import Language.Drasil.Printing.Helpers (ast, ($^$), vsep)
 import Language.Drasil.Printing.LayoutObj (RefMap, Filepath)
 
 data Variation =  Id | Align | None
@@ -21,17 +21,6 @@ bold t = ast <> ast <> t <> ast <> ast
 -- | Italicized text
 em :: Doc -> Doc
 em t = ast <> t <> ast
-
--- | Custom infix operator for concatenating 
--- two Docs vertically with an empty line in between.
-infixl 5 $^$
-($^$) :: Doc -> Doc -> Doc
-($^$) a b = a $$ text "" $$ b
-
--- | Concatenate a list of 'Doc's vertically 
--- with an empty line in between.
-vsep :: [Doc] -> Doc
-vsep = foldr1 ($^$) 
 
 li, ul :: Doc -> Doc
 -- | List tag wrapper

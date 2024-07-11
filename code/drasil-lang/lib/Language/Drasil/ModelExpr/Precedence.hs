@@ -47,6 +47,12 @@ prec2VVN _ = 190
 prec2NVV :: NVVBinOp -> Int
 prec2NVV _ = 190
 
+prec2ESS :: ESSBinOp -> Int
+prec2ESS _ = 190
+
+prec2ESB :: ESBBinOp -> Int
+prec2ESB _ = 190
+
 -- | precA - precedence for arithmetic-related Binary-Associative (Commutative) operators.
 precA :: AssocArithOper -> Int
 precA Mul  = 190
@@ -57,6 +63,9 @@ precB :: AssocBoolOper -> Int
 precB And         = 120
 precB Or          = 110
 precB Equivalence = 100
+
+precC :: AssocConcatOper -> Int
+precC SUnion      = 180
 
 -- | prec1 - precedence of unary operators.
 prec1 :: UFunc -> Int
@@ -82,11 +91,13 @@ mePrec Lit{}                  = 500
 mePrec Spc{}                  = 500
 mePrec (AssocA op _)          = precA op
 mePrec (AssocB op _)          = precB op
+mePrec (AssocC op _)          = precC op
 mePrec C{}                    = 500
 mePrec Deriv{}                = prec2Arith Frac
 mePrec FCall{}                = 210
 mePrec Case{}                 = 200
 mePrec Matrix{}               = 220
+mePrec Set{}                  = 220
 mePrec (UnaryOp fn _)         = prec1 fn
 mePrec (UnaryOpB fn _)        = prec1B fn
 mePrec (UnaryOpVV fn _)       = prec1VV fn
@@ -102,5 +113,7 @@ mePrec (OrdBinaryOp bo _ _)   = prec2Ord bo
 mePrec (VVVBinaryOp bo _ _)   = prec2VVV bo
 mePrec (VVNBinaryOp bo _ _)   = prec2VVN bo
 mePrec (NVVBinaryOp bo _ _)   = prec2NVV bo
+mePrec (ESSBinaryOp bo _ _)   = prec2ESS bo
+mePrec (ESBBinaryOp bo _ _)   = prec2ESB bo
 mePrec RealI{}                = 170
 mePrec ForAll{}               = 130

@@ -19,37 +19,41 @@ jobs:
       - uses: actions/checkout@v4
 
       # Prepare more specific paths filters
-      - uses: dorny/paths-filter@v2.2.1
+      - uses: dorny/paths-filter@v3.0.2
         id: filter
         with:
-          filters: |
+           filters: |
             hs:
               - '**/*.hs'
               - '**/*.lhs'
             sh:
               - '**/*.sh'
 
+      # If a [l]hs file was edited, then run HLint
       # Once we update our LTS, we can remove this step, see "Inputs": https://github.com/haskell-actions/hlint-setup
-      - name: 'Install Haskell via HLint system dependencies'
+      - name: 'Install HLint system dependencies'
+        if: ${{ steps.filter.outputs.hs == 'true' }}
         run: |
           sudo apt-get update
           sudo apt-get install -y libtinfo5
 
       - name: 'Set up HLint'
+        if: ${{ steps.filter.outputs.hs == 'true' }}
         uses: haskell-actions/hlint-setup@v2
         with: # DO NOT MODIFY THE BELOW LINE MANUALLY -- code/scripts/update_default_stackage.sh is in charge of this!
           version: '3.4.1' # HLINT VERSION TIED TO CURRENT TARGET (LTS-20.26)
 
       - name: 'Run HLint'
+        if: ${{ steps.filter.outputs.hs == 'true' }}
         uses: haskell-actions/hlint-run@v2
         with: # The custom hlint-bin is necessary because we need to inject options to hlint, since hlint-run does not support it yet, see: https://github.com/haskell-actions/hlint-run/issues/20
           hlint-bin: hlint --hint=code/.hlint.yaml
           path: code/
           fail-on: status
-          
+
       # If a sh script was edited, then run shellcheck
-      - name: "Shell scripts via ShellCheck"
+      - name: "Run ShellCheck"
         if: ${{ steps.filter.outputs.sh == 'true' }}
         uses: ludeeus/action-shellcheck@2.0.0
         with:
-          scandir: './scripts'
+          scandir: './code/scripts'

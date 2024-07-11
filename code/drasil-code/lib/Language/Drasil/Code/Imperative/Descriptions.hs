@@ -223,5 +223,5 @@ physAndSfwrCons = do
   let cns = concat $ mapMaybe ((`Map.lookup` (cMap $ codeSpec g)) . (^. uid))
         (inputs $ codeSpec g)
   return $ stringList [
-    if not (any isPhysRange cns) then "" else "physical constraints",
-    if not (any isSfwrRange cns) then "" else "software constraints"]
+    if not (any isPhysC cns) then "" else "physical constraints",
+    if not (any isSfwrC cns) then "" else "software constraints"]

@@ -4,7 +4,7 @@ module Language.Drasil.Constraint (
   -- * Types
   Constraint(..), ConstraintE, ConstraintReason(..),
   -- * Functions
-  physRange, sfwrRange, physElem, sfwrElem, isPhysRange, isSfwrRange, isPhysElem, isSfwrElem
+  physRange, sfwrRange, physElem, sfwrElem, isPhysC, isSfwrC
   ) where
 
 import Language.Drasil.Expr.Lang
@@ -37,18 +37,14 @@ sfwrRange = Range Software
 sfwrElem :: [Expr] -> ConstraintE
 sfwrElem = Elem Software
 
-isPhysRange, isSfwrRange, isPhysElem, isSfwrElem :: Constraint e -> Bool
+isPhysC, isSfwrC:: Constraint e -> Bool
 
 -- | Helpful for filtering for Physical constraints. True if constraint is 'Physical'.
-isPhysRange (Range Physical _) = True
-isPhysRange _ = False
-
-isPhysElem (Elem Physical _) = True
-isPhysElem _ = False
+isPhysC (Range Physical _) = True
+isPhysC (Elem Physical _) = True
+isPhysC _ = False
 
 -- | Helpful for filtering for Software constraints. True if constraint is 'Software'.
-isSfwrRange (Range Software _) = True
-isSfwrRange _ = False
-
-isSfwrElem (Elem Software _) = True
-isSfwrElem _ = False
+isSfwrC (Range Software _) = True
+isSfwrC (Elem Software _) = True
+isSfwrC _ = False

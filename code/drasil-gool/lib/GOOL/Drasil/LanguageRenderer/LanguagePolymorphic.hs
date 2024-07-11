@@ -52,7 +52,7 @@ import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData),
   RenderStatement(stmt), InternalIOStmt(..), RenderMethod(intFunc), 
   RenderClass(intClass, commentedClass))
 import qualified GOOL.Drasil.RendererClasses as RC (BodyElim(..), BlockElim(..),
-  InternalVarElim(variable), ValueElim(value), FunctionElim(function), 
+  InternalVarElim(variable), ValueElim(value), FunctionElim(..), 
   StatementElim(statement), ClassElim(..), ModuleElim(..), BlockCommentElim(..))
 import GOOL.Drasil.AST (Binding(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode, 
@@ -283,15 +283,19 @@ listAccess :: (RenderSym r) => SValue r -> SValue r -> SValue r
 listAccess v i = do
   v' <- v
   let i' = IC.intToIndex i
-      checkType (List _) = S.listAccessFunc (IC.listInnerType $ return $ 
-        valueType v') i'
-      checkType (Array _) = i' >>= (\ix -> funcFromData (brackets (RC.value ix)) 
-        (IC.listInnerType $ return $ valueType v'))
+      t  = IC.listInnerType $ return $ valueType v'
+      checkType (List _) = S.listAccessFunc t i'
+      checkType (Array _) = i' >>= 
+                              (\ix -> funcFromData (brackets (RC.value ix)) t)
       checkType _ = error "listAccess called on non-list-type value"
-  v $. checkType (getType (valueType v'))
+  f <- checkType (getType (valueType v'))
+  mkVal (RC.functionType f) (RC.value v' <> RC.function f)
 
 listSet :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
-listSet v i toVal = v $. S.listSetFunc v (IC.intToIndex i) toVal
+listSet v i toVal = do
+  v' <- v
+  f <- S.listSetFunc v (IC.intToIndex i) toVal
+  mkVal (RC.functionType f) (RC.value v' <> RC.function f)
 
 getFunc :: (RenderSym r) => SVariable r -> VSFunction r
 getFunc v = v >>= (\vr -> IG.func (getterName $ variableName vr) 

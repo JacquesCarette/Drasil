@@ -15,7 +15,7 @@ module Language.Drasil.ModelExpr.Development (
   -- ModelExpr.Extract
   , meDep
   -- ModelExpr.Precedence
-  , mePrec, precB, precA, precC
+  , mePrec,precC, precB, precA
 ) where
 
 import Language.Drasil.Expr.Lang (Completeness(..))

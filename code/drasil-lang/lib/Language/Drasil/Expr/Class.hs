@@ -66,7 +66,7 @@ m2x2 a b c d = matrix [[a,b],[c,d]]
 
 mkSet :: ExprC r => [r] -> r
 mkSet [r] = sSet [r]
-
+mkSet r = sSet r
 -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
 vec2D :: ExprC r => r -> r -> r
 vec2D a b = matrix [[a],[b]]
@@ -93,7 +93,6 @@ class ExprC r where
   infixr 4 $=
   infixr 9 $&&
   infixr 9 $||
-  
   lit :: Literal -> r
 
   -- * Binary Operators
@@ -198,9 +197,6 @@ class ExprC r where
 
   -- | Vector Subtraction
   vSub :: r -> r -> r
-
-  sAdd :: r -> r -> r
-  sRemove :: r -> r -> r
 
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase :: [(r, r)] -> r

@@ -259,8 +259,9 @@ instance OpElim CSharpCode where
 
 instance ScopeSym CSharpCode where
   type Scope CSharpCode = Doc
-  local = toCode empty
   global = toCode empty
+  mainFn = toCode empty
+  local = toCode empty
 
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData

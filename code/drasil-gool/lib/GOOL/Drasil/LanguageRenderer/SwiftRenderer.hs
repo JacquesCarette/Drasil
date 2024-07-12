@@ -265,8 +265,9 @@ instance OpElim SwiftCode where
 
 instance ScopeSym SwiftCode where
   type Scope SwiftCode = Doc
-  local = toCode empty
   global = toCode empty
+  mainFn = toCode empty
+  local = toCode empty
 
 instance VariableSym SwiftCode where
   type Variable SwiftCode = VarData

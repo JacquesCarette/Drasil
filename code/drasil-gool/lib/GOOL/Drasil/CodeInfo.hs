@@ -103,8 +103,9 @@ instance TypeElim CodeInfo where
 
 instance ScopeSym CodeInfo where
   type Scope CodeInfo = ()
-  local = toCode ()
   global = toCode ()
+  mainFn = toCode ()
+  local = toCode ()
 
 instance VariableSym CodeInfo where
   type Variable CodeInfo = ()

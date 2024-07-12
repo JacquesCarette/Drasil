@@ -269,8 +269,9 @@ instance (Pair p) => OpElim (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
   type Scope (p CppSrcCode CppHdrCode) = Doc
-  local = pair local local
   global = pair global global
+  mainFn = pair mainFn mainFn
+  local = pair local local
 
 instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   type Variable (p CppSrcCode CppHdrCode) = VarData
@@ -1162,8 +1163,9 @@ instance OpElim CppSrcCode where
 
 instance ScopeSym CppSrcCode where
   type Scope CppSrcCode = Doc
-  local = toCode empty
   global = toCode empty
+  mainFn = toCode empty
+  local = toCode empty
 
 instance VariableSym CppSrcCode where
   type Variable CppSrcCode = VarData
@@ -1868,8 +1870,9 @@ instance OpElim CppHdrCode where
 
 instance ScopeSym CppHdrCode where
   type Scope CppHdrCode = Doc
-  local = toCode empty
   global = toCode empty
+  mainFn = toCode empty
+  local = toCode empty
 
 instance VariableSym CppHdrCode where
   type Variable CppHdrCode = VarData

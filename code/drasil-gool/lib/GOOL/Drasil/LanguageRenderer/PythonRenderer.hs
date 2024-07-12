@@ -252,8 +252,9 @@ instance OpElim PythonCode where
 
 instance ScopeSym PythonCode where
   type Scope PythonCode = Doc
-  local = toCode empty
   global = toCode empty
+  mainFn = toCode empty
+  local = toCode empty
 
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData

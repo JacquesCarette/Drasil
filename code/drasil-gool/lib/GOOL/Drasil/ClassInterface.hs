@@ -132,6 +132,7 @@ class (TypeSym r) => TypeElim r where
 class ScopeSym r where
   type Scope r
   global :: r (Scope r)
+  mainFn :: r (Scope r)
   local  :: r (Scope r)
 
 type SVariable a = VS (a (Variable a))

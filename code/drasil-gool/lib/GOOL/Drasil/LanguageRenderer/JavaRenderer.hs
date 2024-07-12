@@ -267,8 +267,9 @@ instance OpElim JavaCode where
 
 instance ScopeSym JavaCode where
   type Scope JavaCode = Doc
-  local = toCode empty
   global = toCode empty
+  mainFn = toCode empty
+  local = toCode empty
 
 instance VariableSym JavaCode where
   type Variable JavaCode = VarData

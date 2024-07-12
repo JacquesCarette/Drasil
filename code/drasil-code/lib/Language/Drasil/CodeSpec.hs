@@ -13,7 +13,7 @@ import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, const
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
   auxExprs)
 import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..))
-import Language.Drasil.CodeExpr.Development (expr, eNamesRI)
+import Language.Drasil.CodeExpr.Development (expr, eNamesRI, eDep)
 import Language.Drasil.Chunk.CodeBase
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 
@@ -192,4 +192,6 @@ getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 -- | Get a list of 'CodeChunk's from a constraint.
 constraintvars :: ConstraintCE -> ChunkDB -> [CodeChunk]
 constraintvars (Range _ ri) m =
-  map (codeChunk . varResolve m) $ eNamesRI ri
+  map (codeChunk . varResolve m) $ nub $ eNamesRI ri
+constraintvars (Elem _ ri) m =
+  map (codeChunk . varResolve m) $ eDep ri

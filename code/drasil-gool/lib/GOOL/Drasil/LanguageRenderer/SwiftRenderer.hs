@@ -272,11 +272,11 @@ instance VariableSym SwiftCode where
   type Variable SwiftCode = VarData
   var' n _    = G.var n
   constant'   = var'
-  extVar' _   = var'
+  extVar _ n  = var' n local
   arrayElem i = G.arrayElem (litInt i)
 
 instance OOVariableSym SwiftCode where
-  staticVar' n _ = G.staticVar n
+  staticVar = G.staticVar
   self = CP.self
   classVar = CP.classVar R.classVar
   extClassVar = classVar

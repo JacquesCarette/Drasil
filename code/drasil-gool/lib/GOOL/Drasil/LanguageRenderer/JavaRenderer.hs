@@ -272,13 +272,13 @@ instance ScopeSym JavaCode where
 
 instance VariableSym JavaCode where
   type Variable JavaCode = VarData
-  var' n _      = G.var n
-  constant'     = var'
-  extVar' l n _ = CP.extVar l n
-  arrayElem i   = G.arrayElem (litInt i)
+  var' n _    = G.var n
+  constant'   = var'
+  extVar      = CP.extVar
+  arrayElem i = G.arrayElem (litInt i)
 
 instance OOVariableSym JavaCode where
-  staticVar' n _ = G.staticVar n
+  staticVar = G.staticVar
   self = C.self
   classVar = CP.classVar R.classVar
   extClassVar = classVar

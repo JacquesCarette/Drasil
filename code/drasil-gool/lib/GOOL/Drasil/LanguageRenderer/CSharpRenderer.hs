@@ -264,13 +264,13 @@ instance ScopeSym CSharpCode where
 
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
-  var' n _      = G.var n
-  constant'     = var'
-  extVar' l n _ = CP.extVar l n
-  arrayElem i   = G.arrayElem (litInt i)
+  var' n _    = G.var n
+  constant'   = var'
+  extVar      = CP.extVar
+  arrayElem i = G.arrayElem (litInt i)
 
 instance OOVariableSym CSharpCode where
-  staticVar' n _ = G.staticVar n
+  staticVar = G.staticVar
   self = C.self
   classVar = CP.classVar R.classVar
   extClassVar = classVar

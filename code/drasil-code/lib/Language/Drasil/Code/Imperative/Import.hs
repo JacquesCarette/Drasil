@@ -99,13 +99,13 @@ variable :: (OOProg r) => Name -> VSType r -> GenState (SVariable r)
 variable s t = do
   g <- get
   let cs = codeSpec g
-      defFunc Var = var
+      defFunc Var = \nm tp -> var nm tp local -- TODO: get scope from state
       defFunc Const = staticVar
   if s `elem` map codeName (inputs cs)
     then inputVariable (inStruct g) Var (var s t local) -- TODO: get scope from state
     else if s `elem` map codeName (constants $ codeSpec g)
       then constVariable (conStruct g) (conRepr g)
-              ((defFunc $ conRepr g) s t local) -- TODO: get scope from state
+              ((defFunc $ conRepr g) s t)
       else return $ var s t local -- TODO: get scope from state
 
 -- | If 'Unbundled' inputs, just return variable as-is.

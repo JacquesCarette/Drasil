@@ -9,27 +9,26 @@ module GOOL.Drasil.ClassInterface (
   -- Typeclasses
   OOProg, ProcProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   bodyStatements, oneLiner, BlockSym(..), TypeSym(..), OOTypeSym(..), TypeElim(..), 
-  VariableSym(..), var, constant, extVar, locvar, OOVariableSym(..), staticVar,
-  ScopeSym(..), VariableElim(..), ($->), listOf, listVar, ValueSym(..),
-  OOValueSym, Argument(..), Literal(..), litZero, MathConstant(..),
-  VariableValue(..), OOVariableValue, CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), OOValueExpression(..), funcApp, funcAppNamedArgs,
-  selfFuncApp, extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists,
-  InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
-  objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..), ($.),
-  selfAccess, GetSet(..), List(..), InternalList(..), listSlice,
-  listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
-  objDecNewNoParams, extObjDecNewNoParams, IOStatement(..), StringStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  StatePattern(..), initState, changeState, ObserverPattern(..),
-  observerListName, initObserverList, addObserver, StrategyPattern(..),
-  ifNoElse, switchAsIf, VisibilitySym(..), ParameterSym(..), MethodSym(..),
-  privMethod, pubMethod, initializer, nonInitConstructor,
-  StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..),
-  convType, convTypeOO
+  VariableSym(..), var, constant, locvar, OOVariableSym(..),  ScopeSym(..),
+  VariableElim(..), ($->), listOf, listVar, ValueSym(..), OOValueSym,
+  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
+  OOVariableValue, CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..),
+  OOValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp,
+  libFuncApp, newObj, extNewObj, libNewObj, exists, InternalValueExp(..),
+  objMethodCall, objMethodCallNamedArgs, objMethodCallMixedArgs,
+  objMethodCallNoParams, FunctionSym(..), ($.), selfAccess, GetSet(..),
+  List(..), InternalList(..), listSlice, listIndexExists, at, ThunkSym(..),
+  VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
+  ThunkAssign(..), StatementSym(..), AssignStatement(..), (&=),
+  assignToListIndex, DeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
+  IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..),StatePattern(..), initState,
+  changeState, ObserverPattern(..), observerListName, initObserverList,
+  addObserver, StrategyPattern(..), ifNoElse, switchAsIf, VisibilitySym(..),
+  ParameterSym(..), MethodSym(..), privMethod, pubMethod, initializer,
+  nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar,
+  ClassSym(..), ModuleSym(..), convType, convTypeOO
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
@@ -140,8 +139,8 @@ type SVariable a = VS (a (Variable a))
 class (TypeSym r, ScopeSym r) => VariableSym r where
   type Variable r
   var'      :: Label -> r (Scope r) -> VSType r -> SVariable r
-  constant'  :: Label -> r (Scope r) -> VSType r -> SVariable r
-  extVar'    :: Library -> Label -> r (Scope r) -> VSType r -> SVariable r
+  constant' :: Label -> r (Scope r) -> VSType r -> SVariable r
+  extVar    :: Library -> Label -> VSType r -> SVariable r
   arrayElem :: Integer -> SVariable r -> SVariable r
 
 -- Smart constructors to rearrange the parameters
@@ -150,9 +149,6 @@ var n t s = var' n s t
 
 constant :: (VariableSym r) => Label -> VSType r -> r (Scope r) -> SVariable r
 constant n t s = constant' n s t
-
-extVar :: (VariableSym r) => Library -> Label -> VSType r -> r (Scope r) -> SVariable r
-extVar l n t s = extVar' l n s t
 
 -- Smart constructor for a local variable.
 locvar :: (VariableSym r) => Label -> VSType r -> SVariable r
@@ -630,16 +626,12 @@ class (TypeSym r) => OOTypeSym r where
 class (ValueSym r, OOTypeSym r) => OOValueSym r
 
 class (VariableSym r, OOTypeSym r) => OOVariableSym r where
-  staticVar'  :: Label -> r (Scope r) -> VSType r -> SVariable r -- I *think* this is OO-only
+  staticVar  :: Label -> VSType r -> SVariable r
   self        :: SVariable r
   classVar    :: VSType r -> SVariable r -> SVariable r
   extClassVar :: VSType r -> SVariable r -> SVariable r
   objVar      :: SVariable r -> SVariable r -> SVariable r
   objVarSelf  :: SVariable r -> SVariable r
-
--- Smart constructor to rearrange the parameters of staticVar
-staticVar :: (OOVariableSym r) => Label -> VSType r -> r (Scope r) -> SVariable r
-staticVar n t s = staticVar' n s t
 
 -- for values that can include expressions
 class (ValueExpression r, OOVariableSym r, OOValueSym r) => OOValueExpression r where

@@ -259,11 +259,11 @@ instance VariableSym PythonCode where
   type Variable PythonCode = VarData
   var' n _      = G.var n
   constant'     = var'
-  extVar' l n _ t = modify (addModuleImportVS l) >> CP.extVar l n t
+  extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
   arrayElem i   = G.arrayElem (litInt i)
 
 instance OOVariableSym PythonCode where
-  staticVar' n _ = G.staticVar n
+  staticVar = G.staticVar
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
   classVar = CP.classVar R.classVar
   extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify . 

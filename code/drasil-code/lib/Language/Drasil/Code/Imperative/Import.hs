@@ -9,9 +9,9 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
   Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..))
 import Database.Drasil (symbResolve)
-import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&))
+import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&), ($=), exactDbl, idx)
 import Language.Drasil.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
-  AssocArithOper(..), AssocBoolOper(..), AssocConcatOper, BoolBinOp(..), EqBinOp(..),
+  AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..), BoolBinOp(..), EqBinOp(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
   VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..))
 import Language.Drasil.Code.Imperative.Comments (getComment)
@@ -297,6 +297,7 @@ convExpr (AssocA Add l) = foldl1 (#+)  <$> mapM convExpr l
 convExpr (AssocA Mul l) = foldl1 (#*)  <$> mapM convExpr l
 convExpr (AssocB And l) = foldl1 (?&&) <$> mapM convExpr l
 convExpr (AssocB Or l)  = foldl1 (?||) <$> mapM convExpr l
+convExpr (AssocC SUnion l)  = foldl1 (#+) <$> mapM convExpr l
 convExpr (C c)   = do
   g <- get
   let v = quantvar (lookupC g c)
@@ -349,6 +350,11 @@ convExpr (Matrix [l]) = do
                                     -- hd will never fail here
   return $ litArray (fmap valueType (head ar)) ar
 convExpr Matrix{} = error "convExpr: Matrix"
+convExpr (Set l) = do
+  ar <- mapM convExpr l
+                                    -- hd will never fail here
+  return $ litArray (fmap valueType (head ar)) ar
+--convExpr Set{} = error "convExpr: Set"
 convExpr Operator{} = error "convExpr: Operator"
 convExpr (RealI c ri)  = do
   g <- get
@@ -396,7 +402,7 @@ renderRealInt s (UpFrom  (Inc, a))          = sy s $>= a
 renderRealInt s (UpFrom  (Exc, a))          = sy s $>  a
 
 renderSet :: (HasUID c, HasSymbol c) => c -> CodeExpr -> CodeExpr
-renderSet e s = ( s $<= sy e)
+renderSet e s = ((idx s (sy e))$= exactDbl 0)
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.
 unop :: (OOProg r) => UFunc -> (SValue r -> SValue r)
@@ -448,6 +454,7 @@ eqBfunc NEq = (?!=)
 -- Maps an 'LABinOp' to it's corresponding GOOL binary function.
 laBfunc :: (OOProg r) => LABinOp -> (SValue r -> SValue r -> SValue r)
 laBfunc Index = listAccess
+laBfunc IndexOf = indexOf
 
 -- Maps an 'OrdBinOp' to it's corresponding GOOL binary function.
 ordBfunc :: (OOProg r) => OrdBinOp -> (SValue r -> SValue r -> SValue r)

@@ -27,7 +27,7 @@ data BoolBinOp = Impl | Iff
   deriving Eq
 
 -- | Index operator.
-data LABinOp = Index
+data LABinOp = Index | IndexOf
   deriving Eq
 
 -- | Ordered binary operators (less than, greater than, less than or equal to, greater than or equal to).

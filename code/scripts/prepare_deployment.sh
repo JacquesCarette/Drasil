@@ -155,7 +155,7 @@ copy_traceygraphs() {
 }
 
 copy_website() {
-  cd "$CUR_DIR$DEPLOY_FOLDER" || exit
+  cd "$CUR_DIR$DEPLOY_FOLDER" || exit 1
   cp -r "$CUR_DIR$WEBSITE_FOLDER". .
 
   # src stubs were consumed by site generator; safe to delete those.
@@ -163,7 +163,7 @@ copy_website() {
 }
 
 
-cd "$DEPLOY_FOLDER" || exit
+cd "$DEPLOY_FOLDER" || exit 1
 copy_docs
 copy_graphs
 copy_datafiles
@@ -172,4 +172,4 @@ copy_images
 copy_analysis
 copy_traceygraphs
 copy_website
-cd "$CUR_DIR" || exit
+cd "$CUR_DIR" || exit 1

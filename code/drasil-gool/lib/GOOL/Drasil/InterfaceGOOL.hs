@@ -2,7 +2,7 @@
 
 module GOOL.Drasil.InterfaceGOOL (
   -- Types
-  GSProgram, SFile, FSModule, SClass, VSFunction,
+  GSProgram, SFile, FSModule, SClass, VSFunction, CSStateVar,
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), OOValueSym, OOVariableValue,
@@ -10,18 +10,20 @@ module GOOL.Drasil.InterfaceGOOL (
   OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
   OOFuncAppStatement(..), GetSet(..), InternalValueExp(..), objMethodCall,
   objMethodCallNamedArgs, objMethodCallMixedArgs, objMethodCallNoParams,
+  OOMethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
+  StateVarSym(..), privDVar, pubDVar, pubSVar, PermanenceSym(..),
   FunctionSym(..), ($.), selfAccess, ObserverPattern(..), observerListName,
   initObserverList, addObserver, StrategyPattern(..), convTypeOO
   ) where
 
 import GOOL.Drasil.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, VSType, SVariable, CSStateVar, SValue,
-  MSStatement, NamedArgs, SMethod, MixedCall, MixedCtorCall, PosCall,
-  PosCtorCall, InOutCall,
+  Label, Library, MSBody, MSBlock, VSType, SVariable, SValue, MSStatement,
+  NamedArgs, MSParameter, SMethod, Initializers, MixedCall, MixedCtorCall,
+  PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
-  SharedProg, BodySym, TypeSym(listType), MethodSym, VariableSym(var),
-  StateVarSym, ValueSym(valueType), VariableValue(valueOf), ValueExpression,
+  SharedProg, BodySym(body), TypeSym(listType), MethodSym, VariableSym(var),
+  ScopeSym(..), ValueSym(valueType), VariableValue(valueOf), ValueExpression,
   List(listSize, listAdd), listOf, StatementSym(valStmt),
   DeclStatement(listDecDef), FuncAppStatement, convType)
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
@@ -57,7 +59,7 @@ class (ClassSym r) => ModuleSym r where
 
 type SClass a = CS (a (Class a))
 
-class (MethodSym r, StateVarSym r) => ClassSym r where
+class (OOMethodSym r, StateVarSym r) => ClassSym r where
   type Class r
   -- | Main external method for creating a class.
   --   Inputs: parent class, variables, constructor(s), methods
@@ -74,13 +76,61 @@ class (MethodSym r, StateVarSym r) => ClassSym r where
 
   docClass :: String -> SClass r -> SClass r
 
+class (MethodSym r, PermanenceSym r) => OOMethodSym r where
+  method      :: Label -> r (Scope r) -> r (Permanence r) -> VSType r -> 
+    [MSParameter r] -> MSBody r -> SMethod r
+  getMethod   :: SVariable r -> SMethod r
+  setMethod   :: SVariable r -> SMethod r 
+  constructor :: [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
+
+  -- inOutMethod and docInOutMethod both need the Permanence parameter
+  inOutMethod :: Label -> r (Scope r) -> r (Permanence r) -> InOutFunc r
+  docInOutMethod :: Label -> r (Scope r) -> r (Permanence r) -> DocInOutFunc r
+
+privMethod :: (OOMethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r 
+  -> SMethod r
+privMethod n = method n private dynamic
+
+pubMethod :: (OOMethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r 
+  -> SMethod r
+pubMethod n = method n public dynamic
+
+initializer :: (OOMethodSym r) => [MSParameter r] -> Initializers r -> SMethod r
+initializer ps is = constructor ps is (body [])
+
+nonInitConstructor :: (OOMethodSym r) => [MSParameter r] -> MSBody r -> SMethod r
+nonInitConstructor ps = constructor ps []
+
+type CSStateVar a = CS (a (StateVar a))
+
+class (ScopeSym r, PermanenceSym r, VariableSym r) => StateVarSym r where
+  type StateVar r
+  stateVar :: r (Scope r) -> r (Permanence r) -> SVariable r -> CSStateVar r
+  stateVarDef :: r (Scope r) -> r (Permanence r) -> SVariable r -> 
+    SValue r -> CSStateVar r
+  constVar :: r (Scope r) ->  SVariable r -> SValue r -> CSStateVar r
+
+privDVar :: (StateVarSym r) => SVariable r -> CSStateVar r
+privDVar = stateVar private dynamic
+
+pubDVar :: (StateVarSym r) => SVariable r -> CSStateVar r
+pubDVar = stateVar public dynamic
+
+pubSVar :: (StateVarSym r) => SVariable r -> CSStateVar r
+pubSVar = stateVar public static
+
+class PermanenceSym r where
+  type Permanence r
+  static  :: r (Permanence r)
+  dynamic :: r (Permanence r)
+
 class (TypeSym r) => OOTypeSym r where
   obj :: ClassName -> VSType r
 
 class (ValueSym r, OOTypeSym r) => OOValueSym r
 
 class (VariableSym r, OOTypeSym r) => OOVariableSym r where
-  staticVar    :: Label -> VSType r -> SVariable r -- I *think* this is OO-only
+  staticVar    :: Label -> VSType r -> SVariable r
   self         :: SVariable r
   classVar     :: VSType r -> SVariable r -> SVariable r
   extClassVar  :: VSType r -> SVariable r -> SVariable r

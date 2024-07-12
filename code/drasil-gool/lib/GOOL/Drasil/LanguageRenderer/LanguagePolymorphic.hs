@@ -20,24 +20,25 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.InterfaceCommon (Label, Library, MSBody, MSBlock, VSType,
-  SVariable, SValue, MSStatement, MSParameter, SMethod, CSStateVar, NamedArgs,
-  Initializers, MixedCall, MixedCtorCall, BodySym(Body), bodyStatements,
-  oneLiner, BlockSym(Block), PermanenceSym(..), TypeSym(Type), TypeElim(getType,
-  getTypeString), VariableSym(Variable), VariableElim(variableName,
-  variableType), ValueSym(Value, valueType), NumericExpression((#-), (#/), sin,
-  cos, tan), Comparison(..), funcApp, StatementSym(multi),
-  AssignStatement((&++)), (&=), IOStatement(printStr, printStrLn, printFile,
-  printFileStr, printFileStrLn), ifNoElse, ScopeSym(..))
+  SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs, Initializers,
+  MixedCall, MixedCtorCall, BodySym(Body), bodyStatements, oneLiner,
+  BlockSym(Block), TypeSym(Type), TypeElim(getType, getTypeString),
+  VariableSym(Variable), VariableElim(variableName, variableType),
+  ValueSym(Value, valueType), NumericExpression((#-), (#/), sin, cos, tan),
+  Comparison(..), funcApp, StatementSym(multi), AssignStatement((&++)), (&=),
+  IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
+  ifNoElse, ScopeSym(..))
 import qualified GOOL.Drasil.InterfaceCommon as IC (TypeSym(int, double, char,
   string, listType, arrayType, listInnerType, funcType, void), VariableSym(var), 
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
   IOStatement(print), ControlStatement(returnStmt, for), ParameterSym(param),
-  MethodSym(method), List(intToIndex))
-import GOOL.Drasil.InterfaceGOOL (SFile, FSModule, SClass, VSFunction, FileSym(File),
-  ModuleSym(Module), newObj, objMethodCallNoParams, ($.), convTypeOO)
+  List(intToIndex))
+import GOOL.Drasil.InterfaceGOOL (SFile, FSModule, SClass, VSFunction,
+  CSStateVar, FileSym(File), ModuleSym(Module), newObj, objMethodCallNoParams,
+  ($.), PermanenceSym(..), convTypeOO)
 import qualified GOOL.Drasil.InterfaceGOOL as IG (OOVariableSym(objVarSelf),
-  FunctionSym(func))
+  OOMethodSym(method), FunctionSym(func))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(commentedMod),  
   RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
   RenderFunction(funcFromData), FunctionElim(functionType), 
@@ -448,12 +449,12 @@ method :: (RenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> VSType r
 method n s p t = intMethod False n s p (mType t)
 
 getMethod :: (RenderSym r) => SVariable r -> SMethod r
-getMethod v = zoom lensMStoVS v >>= (\vr -> IC.method (getterName $ variableName 
+getMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (getterName $ variableName 
   vr) public dynamic (toState $ variableType vr) [] getBody)
   where getBody = oneLiner $ IC.returnStmt (IC.valueOf $ IG.objVarSelf v)
 
 setMethod :: (RenderSym r) => SVariable r -> SMethod r
-setMethod v = zoom lensMStoVS v >>= (\vr -> IC.method (setterName $ variableName 
+setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName 
   vr) public dynamic IC.void [IC.param v] setBody)
   where setBody = oneLiner $ IG.objVarSelf v &= IC.valueOf v
 

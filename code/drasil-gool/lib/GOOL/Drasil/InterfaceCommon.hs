@@ -3,27 +3,25 @@
 module GOOL.Drasil.InterfaceCommon (
   -- Types
   Label, Library, MSBody, MSBlock, VSType, SVariable, SValue, VSThunk,
-  MSStatement, MSParameter, SMethod, CSStateVar, NamedArgs, Initializers,
-  MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall,
+  MSStatement, MSParameter, SMethod, NamedArgs, Initializers, MixedCall,
+  MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
-  SharedProg, PermanenceSym(..), BodySym(..), bodyStatements, oneLiner,
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
-  listOf, listVar, ValueSym(..), Argument(..), Literal(..), litZero,
-  MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp,
-  exists, List(..), InternalList(..), listSlice, listIndexExists, at,
-  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..),
-  MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
-  StateVarSym(..), privDVar, pubDVar, pubSVar, convType
+  SharedProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
+  TypeElim(..), VariableSym(..), VariableElim(..), listOf, listVar,
+  ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  funcAppNamedArgs, extFuncApp, libFuncApp, exists, List(..), InternalList(..),
+  listSlice, listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
+  IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
+  ScopeSym(..), ParameterSym(..), MethodSym(..), convType
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.State (CS, MS, VS)
+import GOOL.Drasil.State (MS, VS)
 
 import qualified Data.Kind as K (Type)
 import Data.Bifunctor (first)
@@ -46,11 +44,6 @@ class (VectorType r, VectorDecl r, VectorThunk r,
   ) => SharedProg r
 
 -- Shared between OO and Procedural --
-
-class PermanenceSym r where
-  type Permanence r
-  static  :: r (Permanence r)
-  dynamic :: r (Permanence r)
 
 type MSBody a = MS (a (Body a))
 
@@ -463,15 +456,9 @@ type InOutFunc r = [SVariable r] -> [SVariable r] -> [SVariable r] ->
 type DocInOutFunc r = String -> [(String, SVariable r)] -> 
   [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
 
-class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r 
+class (BodySym r, ParameterSym r, ScopeSym r) => MethodSym r 
   where
   type Method r
-  method      :: Label -> r (Scope r) -> r (Permanence r) -> VSType r -> 
-    [MSParameter r] -> MSBody r -> SMethod r
-  getMethod   :: SVariable r -> SMethod r
-  setMethod   :: SVariable r -> SMethod r 
-  constructor :: [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
-
   docMain :: MSBody r -> SMethod r
 
   function :: Label -> r (Scope r) -> VSType r -> [MSParameter r] -> 
@@ -481,44 +468,8 @@ class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r
   --   return value description if applicable, function
   docFunc :: String -> [String] -> Maybe String -> SMethod r -> SMethod r
 
-  -- inOutMethod and docInOutMethod both need the Permanence parameter
-  inOutMethod :: Label -> r (Scope r) -> r (Permanence r) -> InOutFunc r
-  docInOutMethod :: Label -> r (Scope r) -> r (Permanence r) -> DocInOutFunc r
-  -- inOutFunc and docInOutFunc both do not need the Permanence parameter
   inOutFunc :: Label -> r (Scope r) -> InOutFunc r
   docInOutFunc :: Label -> r (Scope r) -> DocInOutFunc r
-
-privMethod :: (MethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r 
-  -> SMethod r
-privMethod n = method n private dynamic
-
-pubMethod :: (MethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r 
-  -> SMethod r
-pubMethod n = method n public dynamic
-
-initializer :: (MethodSym r) => [MSParameter r] -> Initializers r -> SMethod r
-initializer ps is = constructor ps is (body [])
-
-nonInitConstructor :: (MethodSym r) => [MSParameter r] -> MSBody r -> SMethod r
-nonInitConstructor ps = constructor ps []
-
-type CSStateVar a = CS (a (StateVar a))
-
-class (ScopeSym r, PermanenceSym r, VariableSym r) => StateVarSym r where
-  type StateVar r
-  stateVar :: r (Scope r) -> r (Permanence r) -> SVariable r -> CSStateVar r
-  stateVarDef :: r (Scope r) -> r (Permanence r) -> SVariable r -> 
-    SValue r -> CSStateVar r
-  constVar :: r (Scope r) ->  SVariable r -> SValue r -> CSStateVar r
-
-privDVar :: (StateVarSym r) => SVariable r -> CSStateVar r
-privDVar = stateVar private dynamic
-
-pubDVar :: (StateVarSym r) => SVariable r -> CSStateVar r
-pubDVar = stateVar public dynamic
-
-pubSVar :: (StateVarSym r) => SVariable r -> CSStateVar r
-pubSVar = stateVar public static
 
 -- Utility
 

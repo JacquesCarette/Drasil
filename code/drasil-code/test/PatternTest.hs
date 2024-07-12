@@ -33,9 +33,9 @@ observerType = obj observerName
 
 -- | Variables used in the generated code.
 n, obs1, obs2 :: (OOVariableSym r) => SVariable r
-n = var nName int local
-obs1 = var obs1Name observerType local
-obs2 = var obs2Name observerType local
+n = var nName int mainFn
+obs1 = var obs1Name observerType mainFn
+obs2 = var obs2Name observerType mainFn
 
 -- | New Observer object.
 newObserver :: (OOValueExpression r) => SValue r
@@ -69,9 +69,9 @@ patternTestMainMethod = mainFunction (body [block [
     varDecDef obs2 newObserver],
 
   block [
-    initObserverList observerType [valueOf obs1],
-    addObserver $ valueOf obs2,
-    notifyObservers (func printNum void []) observerType],
+    initObserverList observerType [valueOf obs1] mainFn,
+    addObserver (valueOf obs2) mainFn,
+    notifyObservers (func printNum void []) observerType mainFn],
 
   block [
     valStmt $ set (valueOf obs1) x (litInt 10),

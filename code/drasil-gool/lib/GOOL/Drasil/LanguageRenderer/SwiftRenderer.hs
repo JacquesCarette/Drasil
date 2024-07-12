@@ -1005,8 +1005,8 @@ swiftListSlice vn vo beg end step = do
   stepV <- zoom lensMStoVS step
 
   let mbStepV = valueInt stepV
-      (setBeg, begVal) = M.makeSetterVal "begIdx" step mbStepV beg (litInt 0)    (listSize vo #- litInt 1)
-      (setEnd, endVal) = M.makeSetterVal "endIdx" step mbStepV end (listSize vo) (litInt (-1))
+      (setBeg, begVal) = M.makeSetterVal "begIdx" step mbStepV beg (litInt 0)    (listSize vo #- litInt 1) local -- TODO: get scope from vn
+      (setEnd, endVal) = M.makeSetterVal "endIdx" step mbStepV end (listSize vo) (litInt (-1)) local -- TODO: get scope from vn
       
       i = locvar "i" int
       setToSlice = vn &= swiftMapFunc (swiftStrideFunc begVal endVal step) (lambda [i] (listAccess vo (valueOf i)))

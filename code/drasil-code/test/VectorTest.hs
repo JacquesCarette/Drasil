@@ -11,13 +11,13 @@ vectorTest = prog "VectorTest" "" [fileDoc $ buildModule "VectorTest" []
   [main] []]
 
 v1 :: OOProg r => SVariable r
-v1 = var "v1" (vecType double) local
+v1 = var "v1" (vecType double) mainFn
 
 v2 :: OOProg r => SVariable r
-v2 = var "v2" (vecType double) local
+v2 = var "v2" (vecType double) mainFn
 
 x :: OOProg r => SVariable r
-x = var "x" double local
+x = var "x" double mainFn
 
 main :: OOProg r => SMethod r
 main = mainFunction $ body [block [vecDecDef v1 [litDouble 1, litDouble 1.5],

@@ -524,20 +524,20 @@ genFunc _ _ (FData (FuncData n desc ddef)) = genDataFunc n desc ddef
 
 -- | Converts a 'FuncStmt' to a GOOL Statement.
 convStmt :: (OOProg r) => FuncStmt -> GenState (MSStatement r)
-convStmt (FAsg v (Matrix [es]))  = do
+convStmt (FAsg v (Matrix [es])) = do
   els <- mapM convExpr es
   v' <- mkVar v
   t <- codeType v
   let listFunc (C.List _) = litList
       listFunc (C.Array _) = litArray
       listFunc _ = error "Type mismatch between variable and value in assignment FuncStmt"
-  l <- maybeLog v'
+  l <- maybeLog v' local
   return $ multi $ assign v' (listFunc t (listInnerType $ fmap variableType v')
     els) : l
 convStmt (FAsg v e) = do
   e' <- convExpr e
   v' <- mkVar v
-  l <- maybeLog v'
+  l <- maybeLog v' local
   return $ multi $ assign v' e' : l
 convStmt (FAsgIndex v i e) = do
   e' <- convExpr e
@@ -547,7 +547,7 @@ convStmt (FAsgIndex v i e) = do
       asgFunc (C.Array _) = assign (arrayElem i v') e'
       asgFunc _ = error "FAsgIndex used with non-indexed value"
       vi = arrayElem i v'
-  l <- maybeLog vi
+  l <- maybeLog vi local
   return $ multi $ asgFunc t : l
 convStmt (FFor v start end step st) = do
   stmts <- mapM convStmt st
@@ -591,7 +591,7 @@ convStmt (FDecDef v (Matrix [[]])) = do
   fmap convDec (codeType v)
 convStmt (FDecDef v e) = do
   v' <- mkVar v
-  l <- maybeLog v'
+  l <- maybeLog v' local
   t <- codeType v
   let convDecDef (Matrix [lst]) = do
         let contDecDef (C.List _) = listDecDef
@@ -646,7 +646,7 @@ readData ddef = do
   where inData :: (OOProg r) => Data -> GenState [MSStatement r]
         inData (Singleton v) = do
             vv <- mkVar v
-            l <- maybeLog vv
+            l <- maybeLog vv local
             return [multi $ getFileInput v_infile vv : l]
         inData JunkData = return [discardFileLine v_infile]
         inData (Line lp d) = do
@@ -732,5 +732,5 @@ getEntryVarLogs :: (OOProg r) => LinePattern ->
   GenState [MSStatement r]
 getEntryVarLogs lp = do
   vs <- getEntryVars Nothing lp
-  logs <- mapM maybeLog vs
+  logs <- mapM (`maybeLog` local) vs
   return $ concat logs

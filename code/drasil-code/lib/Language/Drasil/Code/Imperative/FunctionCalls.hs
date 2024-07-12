@@ -17,7 +17,8 @@ import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (InternalConcept(..))
 
 import GOOL.Drasil (VSType, SValue, MSStatement, OOProg, TypeSym(..),
-  VariableValue(..), StatementSym(..), DeclStatement(..), convTypeOO)
+  VariableValue(..), StatementSym(..), DeclStatement(..), ScopeSym(..),
+  convTypeOO)
 
 import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
@@ -56,12 +57,13 @@ genConstraintCall = do
 
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the
 -- value being calculated.
-genCalcCall :: (OOProg r) => CodeDefinition -> GenState (Maybe (MSStatement r))
-genCalcCall c = do
+genCalcCall :: (OOProg r) => CodeDefinition -> r (Scope r) ->
+  GenState (Maybe (MSStatement r))
+genCalcCall c s = do
   t <- codeType c
   val <- genFuncCall (codeName c) (convTypeOO t) (getCalcParams c)
   v <- mkVar $ quantvar c
-  l <- maybeLog v
+  l <- maybeLog v s
   return $ fmap (multi . (: l) . varDecDef v) val
 
 -- | Generates a call to the function for printing outputs.

@@ -15,23 +15,23 @@ import Control.Monad.State (get)
 
 -- | Generates a statement that logs the given variable's value, if the user
 -- chose to turn on logging of variable assignments.
-maybeLog :: (OOProg r) => SVariable r -> GenState [MSStatement r]
-maybeLog v = do
+maybeLog :: (OOProg r) => SVariable r -> r (Scope r) -> GenState [MSStatement r]
+maybeLog v scp = do
   g <- get
-  sequence [loggedVar v | LogVar `elem` logKind g]
+  sequence [loggedVar v scp | LogVar `elem` logKind g]
 
 -- | Generates a statement that logs the name of the given variable, its current
 -- value, and the current module name.
-loggedVar :: (OOProg r) => SVariable r -> GenState (MSStatement r)
-loggedVar v = do
+loggedVar :: (OOProg r) => SVariable r -> r (Scope r) -> GenState (MSStatement r)
+loggedVar v scp = do
   g <- get
   return $ multi [
-    openFileA varLogFile (litString $ logName g),
-    zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("var '" ++
+    openFileA (varLogFile scp) (litString $ logName g),
+    zoom lensMStoVS v >>= (\v' -> printFileStr (valLogFile scp) ("var '" ++
       variableName v' ++ "' assigned ")),
-    printFile valLogFile (valueOf v),
-    printFileStrLn valLogFile (" in module " ++ currentModule g),
-    closeFile valLogFile ]
+    printFile (valLogFile scp) (valueOf v),
+    printFileStrLn (valLogFile scp) (" in module " ++ currentModule g),
+    closeFile (valLogFile scp)]
 
 -- | Generates the body of a function with the given name, list of parameters,
 -- and blocks to include in the body. If the user chose to turn on logging of
@@ -49,28 +49,28 @@ logBody n vars b = do
 -- inputs it was called with.
 loggedMethod :: (OOProg r) => FilePath -> Label -> [SVariable r] -> MSBlock r
 loggedMethod lName n vars = block [
-      varDec varLogFile,
-      openFileA varLogFile (litString lName),
-      printFileStrLn valLogFile ("function " ++ n ++ " called with inputs: {"),
+      varDec (varLogFile local),
+      openFileA (varLogFile local) (litString lName),
+      printFileStrLn (valLogFile local) ("function " ++ n ++ " called with inputs: {"),
       multi $ printInputs vars,
-      printFileStrLn valLogFile "  }",
-      closeFile valLogFile ]
+      printFileStrLn (valLogFile local) "  }",
+      closeFile (valLogFile local) ]
   where
     printInputs [] = []
     printInputs [v] = [
-      zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("  " ++
+      zoom lensMStoVS v >>= (\v' -> printFileStr (valLogFile local) ("  " ++
         variableName v' ++ " = ")),
-      printFileLn valLogFile (valueOf v)]
+      printFileLn (valLogFile local) (valueOf v)]
     printInputs (v:vs) = [
-      zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("  " ++
+      zoom lensMStoVS v >>= (\v' -> printFileStr (valLogFile local) ("  " ++
         variableName v' ++ " = ")),
-      printFile valLogFile (valueOf v),
-      printFileStrLn valLogFile ", "] ++ printInputs vs
+      printFile (valLogFile local) (valueOf v),
+      printFileStrLn (valLogFile local) ", "] ++ printInputs vs
 
 -- | The variable representing the log file in write mode.
-varLogFile :: (OOProg r) => SVariable r
-varLogFile = var "outfile" outfile local -- TODO: get scope from state?
+varLogFile :: (OOProg r) => r (Scope r) -> SVariable r
+varLogFile = var "outfile" outfile -- TODO: get scope from state?
 
 -- | The value of the variable representing the log file in write mode.
-valLogFile :: (OOProg r) => SValue r
-valLogFile = valueOf varLogFile
+valLogFile :: (OOProg r) => r (Scope r) -> SValue r
+valLogFile s = valueOf $ varLogFile s

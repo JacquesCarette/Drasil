@@ -83,11 +83,11 @@ genMainFunc = do
     let mainFunc Library = return Nothing
         mainFunc Program = do
           v_filename <- mkVar $ quantvar inFileName
-          logInFile <- maybeLog v_filename
+          logInFile <- maybeLog v_filename mainFn
           co <- initConsts
           ip <- getInputDecl
           ics <- genAllInputCalls
-          varDef <- mapM genCalcCall (execOrder $ codeSpec g)
+          varDef <- mapM (`genCalcCall` mainFn) (execOrder $ codeSpec g)
           wo <- genOutputCall
           return $ Just $ (if CommentFunc `elem` commented g then docMain else
             mainFunction) $ bodyStatements $ initLogFileVar (logKind g)
@@ -155,7 +155,7 @@ initConsts = do
       declVars = do
         vars <- mapM (mkVar . quantvar) cs
         vals <- mapM (convExpr . (^. codeExpr)) cs
-        logs <- mapM maybeLog vars
+        logs <- mapM (`maybeLog` mainFn) vars
         return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++
           concat logs
       defFunc Var = varDecDef
@@ -169,7 +169,7 @@ initConsts = do
 -- | Generates a statement to declare the variable representing the log file,
 -- if the user chose to turn on logs for variable assignments.
 initLogFileVar :: (OOProg r) => [Logging] -> [MSStatement r]
-initLogFileVar l = [varDec varLogFile | LogVar `elem` l]
+initLogFileVar l = [varDec (varLogFile mainFn) | LogVar `elem` l]
 
 ------- INPUT ----------
 
@@ -520,7 +520,7 @@ genCalcBlock t v (Case c e) = genCaseBlock t v c e
 genCalcBlock CalcAssign v e = do
   vv <- mkVar (quantvar v)
   ee <- convExpr e
-  l <- maybeLog vv
+  l <- maybeLog vv local
   return $ block $ assign vv ee : l
 genCalcBlock CalcReturn _ e = block <$> liftS (returnStmt <$> convExpr e)
 

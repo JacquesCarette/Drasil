@@ -648,7 +648,8 @@ instance (Pair p) => StatePattern (p CppSrcCode CppHdrCode) where
     (map (zoom lensMStoVS . fst) vs) (map snd vs)
 
 instance (Pair p) => ObserverPattern (p CppSrcCode CppHdrCode) where
-  notifyObservers f t = pair2 notifyObservers notifyObservers 
+  notifyObservers f t s = pair2 (\fn tp -> notifyObservers fn tp (pfst s)) 
+    (\fn tp -> notifyObservers fn tp (psnd s))
     (zoom lensMStoVS f) (zoom lensMStoVS t)
 
 instance (Pair p) => StrategyPattern (p CppSrcCode CppHdrCode) where
@@ -2187,7 +2188,7 @@ instance StatePattern CppHdrCode where
   checkState _ _ _ = emptyStmt
 
 instance ObserverPattern CppHdrCode where
-  notifyObservers _ _ = emptyStmt
+  notifyObservers _ _ _ = emptyStmt
 
 instance StrategyPattern CppHdrCode where
   runStrategy _ _ _ _ = toState $ toCode empty

@@ -373,7 +373,7 @@ instance StatePattern CodeInfo where
   checkState _ = evalConds
 
 instance ObserverPattern CodeInfo where
-  notifyObservers f _ = execute1 (zoom lensMStoVS f)
+  notifyObservers f _ _ = execute1 (zoom lensMStoVS f)
   
 instance StrategyPattern CodeInfo where
   runStrategy _ ss vl _ = do

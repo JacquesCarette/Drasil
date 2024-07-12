@@ -153,7 +153,7 @@ constant n t s = constant' n s t
 
 -- Smart constructor for a local variable.
 locvar :: (VariableSym r) => Label -> VSType r -> SVariable r
-locvar l t = var l t local
+locvar n = var' n local
   
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
@@ -163,10 +163,10 @@ class (VariableSym r) => VariableElim r where
 infixl 9 $->
 ($->) = objVar
 
-listVar :: (VariableSym r) => Label -> VSType r -> SVariable r
-listVar n t = var n (listType t) local -- TODO: get scope from state
+listVar :: (VariableSym r) => Label -> VSType r -> r (Scope r) -> SVariable r
+listVar n t = var n (listType t)
 
-listOf :: (VariableSym r) => Label -> VSType r -> SVariable r
+listOf :: (VariableSym r) => Label -> VSType r -> r (Scope r) -> SVariable r
 listOf = listVar
 
 type SValue a = VS (a (Value a))
@@ -513,11 +513,11 @@ class (BodySym r) => StatePattern r where
     MSStatement r
 
 initState :: (DeclStatement r, Literal r) => Label -> Label -> MSStatement r
-initState fsmName initialState = varDecDef (var fsmName string local) -- TODO: get scope from state
+initState fsmName initialState = varDecDef (var fsmName string local) -- This is being removed, so the local is fine
   (litString initialState)
 
 changeState :: (AssignStatement r, Literal r) => Label -> Label -> MSStatement r
-changeState fsmName toState = var fsmName string local &= litString toState -- TODO: get scope from state
+changeState fsmName toState = var fsmName string local &= litString toState -- This is being removed, so the local is fine
 
 class VisibilitySym r where
   type Visibility r
@@ -653,18 +653,19 @@ libNewObj l t vs = libNewObjMixedArgs l t vs []
 class (VariableValue r, OOVariableSym r) => OOVariableValue r
 
 class (StatementSym r, FunctionSym r) => ObserverPattern r where
-  notifyObservers :: VSFunction r -> VSType r -> MSStatement r
+  notifyObservers :: VSFunction r -> VSType r -> r (Scope r) -> MSStatement r
 
 observerListName :: Label
 observerListName = "observerList"
 
-initObserverList :: (DeclStatement r) => VSType r -> [SValue r] -> MSStatement r
-initObserverList t = listDecDef (locvar observerListName (listType t)) -- TODO: get scope from state
+initObserverList :: (DeclStatement r) => VSType r -> [SValue r] ->
+  r (Scope r) -> MSStatement r
+initObserverList t os s = listDecDef (var observerListName (listType t) s) os
 
 addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r -> 
-  MSStatement r
-addObserver o = valStmt $ listAdd obsList lastelem o
-  where obsList = valueOf $ observerListName `listOf` onStateValue valueType o
+  r (Scope r) -> MSStatement r
+addObserver o s = valStmt $ listAdd obsList lastelem o
+  where obsList = valueOf $ listOf observerListName (onStateValue valueType o) s
         lastelem = listSize obsList
 
 class (BodySym r, VariableSym r) => StrategyPattern r where

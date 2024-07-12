@@ -66,7 +66,7 @@ listSlice beg end step vnew vold = do
   
   l_temp <- genVarName [] "temp"
   l_i <- genLoopIndex
-  let var_temp = S.var l_temp (onStateValue variableType vnew) S.local -- TODO: get scope from state
+  let var_temp = S.var l_temp (onStateValue variableType vnew) S.local -- TODO: get scope from vnew
       v_temp = S.valueOf var_temp
       var_i = S.locvar l_i S.int
       v_i = S.valueOf var_i
@@ -74,8 +74,8 @@ listSlice beg end step vnew vold = do
   let step' = fromMaybe (S.litInt 1) step
   stepV <- zoom lensMStoVS step'
   let mbStepV = valueInt stepV
-      (setBeg, begVal) = makeSetterVal "begIdx" step' mbStepV beg (S.litInt 0)    (S.listSize vold #- S.litInt 1)
-      (setEnd, endVal) = makeSetterVal "endIdx" step' mbStepV end (S.listSize vold) (S.litInt (-1))
+      (setBeg, begVal) = makeSetterVal "begIdx" step' mbStepV beg (S.litInt 0)    (S.listSize vold #- S.litInt 1) S.local -- TODO: get scope from vnew
+      (setEnd, endVal) = makeSetterVal "endIdx" step' mbStepV end (S.listSize vold) (S.litInt (-1)) S.local -- TODO: get scope from vnew
 
   mbBegV <- case beg of
         Nothing -> pure Nothing
@@ -114,11 +114,13 @@ listSlice beg end step vnew vold = do
 --   - SValue: value of bound if bound not given and step is positive
 --   - SValue: value of bound if bound not given and step is negative
 --   Output: (MSStatement, SValue): (setter, value) of bound
-makeSetterVal :: RenderSym r => Label -> SValue r -> Maybe Integer -> Maybe (SValue r) -> SValue r -> SValue r -> (MSStatement r, SValue r)
-makeSetterVal _     _    _      (Just v) _  _  = (S.emptyStmt, v)
-makeSetterVal _     _   (Just s) _       lb rb = (S.emptyStmt, if s > 0 then lb else rb)
-makeSetterVal vName step _       _       lb rb = 
-  let theVar = S.var vName S.int S.local -- TODO: get scope from state
+makeSetterVal :: RenderSym r => Label -> SValue r -> Maybe Integer -> 
+  Maybe (SValue r) -> SValue r -> SValue r -> r (S.Scope r) ->
+  (MSStatement r, SValue r)
+makeSetterVal _     _    _      (Just v) _  _  _   = (S.emptyStmt, v)
+makeSetterVal _     _   (Just s) _       lb rb _   = (S.emptyStmt, if s > 0 then lb else rb)
+makeSetterVal vName step _       _       lb rb scp = 
+  let theVar = S.var vName S.int scp
       theSetter = S.varDecDef theVar $ S.inlineIf (step ?> S.litInt 0) lb rb
   in (theSetter, S.intToIndex $ S.valueOf theVar)
       
@@ -168,20 +170,22 @@ observerIndex = S.locvar "observerIndex" S.int
 observerIdxVal :: (RenderSym r) => SValue r
 observerIdxVal = S.valueOf observerIndex
 
-obsList :: (RenderSym r) => VSType r -> SValue r
-obsList t = S.valueOf $ observerListName `listOf` t
+obsList :: (RenderSym r) => VSType r -> r (S.Scope r) -> SValue r
+obsList t s = S.valueOf $ listOf observerListName t s
 
-notify :: (RenderSym r) => VSType r -> VSFunction r -> MSBody r
-notify t f = oneLiner $ S.valStmt $ at (obsList t) observerIdxVal $. f
+notify :: (RenderSym r) => VSType r -> r (S.Scope r) -> VSFunction r -> MSBody r
+notify t s f = oneLiner $ S.valStmt $ at (obsList t s) observerIdxVal $. f
 
-notifyObservers :: (RenderSym r) => VSFunction r -> VSType r -> MSStatement r
-notifyObservers f t = S.for initv (observerIdxVal ?< S.listSize (obsList t)) 
-  (observerIndex &++) (notify t f)
+notifyObservers :: (RenderSym r) => VSFunction r -> VSType r -> r (S.Scope r)
+  -> MSStatement r
+notifyObservers f t s = S.for initv (observerIdxVal ?< S.listSize (obsList t s)) 
+  (observerIndex &++) (notify t s f)
   where initv = S.varDecDef observerIndex $ S.litInt 0
 
-notifyObservers' :: (RenderSym r) => VSFunction r -> VSType r -> MSStatement r
-notifyObservers' f t = S.forRange observerIndex initv (S.listSize $ obsList t) 
-    (S.litInt 1) (notify t f)
+notifyObservers' :: (RenderSym r) => VSFunction r -> VSType r -> r (S.Scope r)
+  -> MSStatement r
+notifyObservers' f t s = S.forRange observerIndex initv (S.listSize $ obsList t s) 
+    (S.litInt 1) (notify t s f)
     where initv = S.litInt 0
         
 checkState :: (RenderSym r) => Label -> [(SValue r, MSBody r)] -> MSBody r -> 

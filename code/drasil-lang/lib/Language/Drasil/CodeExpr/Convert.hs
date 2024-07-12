@@ -57,9 +57,13 @@ realInterval (Bounded (il, el) (ir, er)) = Bounded (il, expr el) (ir, expr er)
 realInterval (UpTo (i, e))               = UpTo (i, expr e)
 realInterval (UpFrom (i, e))             = UpFrom (i, expr e)
 
+con :: E.Expr -> CodeExpr
+con er = expr er
+
 -- | Convert constrained expressions ('ConstraintE') into 'Constraint''CodeExpr's.
 constraint :: ConstraintE -> Constraint CodeExpr
 constraint (Range r ri) = Range r (realInterval ri)
+constraint (Elem r ri) = Elem r (con ri)
 
 -- | Convert 'DomainDesc Expr Expr' into 'DomainDesc CodeExpr CodeExpr's.
 renderDomainDesc :: DiscreteDomainDesc E.Expr E.Expr -> DiscreteDomainDesc CodeExpr CodeExpr

@@ -110,6 +110,7 @@ codeExpr (AssocB And l)           sm = assocExpr P.And (precB And) l sm
 codeExpr (AssocB Or l)            sm = assocExpr P.Or (precB Or) l sm
 codeExpr (AssocA Add l)           sm = P.Row $ addExpr l Add sm
 codeExpr (AssocA Mul l)           sm = P.Row $ mulExpr l Mul sm
+codeExpr (AssocC SUnion l)           sm = P.Row $ mulExpr l Mul sm
 codeExpr (C c)                    sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
 codeExpr (FCall f [x] [])         sm =
   P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ codeExpr x sm]
@@ -124,6 +125,7 @@ codeExpr (Case _ ps)              sm =
     then error "Attempting to use multi-case codeExpr incorrectly"
     else P.Case (zip (map (flip codeExpr sm . fst) ps) (map (flip codeExpr sm . snd) ps))
 codeExpr (Matrix a)                  sm = P.Mtx $ map (map (`codeExpr` sm)) a
+codeExpr (Set a)                     sm = P.Row $ map (`codeExpr` sm) a
 codeExpr (UnaryOp Log u)             sm = mkCall sm P.Log u
 codeExpr (UnaryOp Ln u)              sm = mkCall sm P.Ln u
 codeExpr (UnaryOp Sin u)             sm = mkCall sm P.Sin u

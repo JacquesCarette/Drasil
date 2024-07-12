@@ -19,24 +19,23 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
-import GOOL.Drasil.InterfaceCommon (Label, Library, SFile, MSBody, MSBlock, 
-  VSType, SVariable, SValue, MSStatement, MSParameter, SMethod, CSStateVar,
-  SClass, FSModule, NamedArgs, Initializers, MixedCall, MixedCtorCall,
-  FileSym(File), BodySym(Body), bodyStatements, oneLiner, BlockSym(Block),
-  PermanenceSym(..), TypeSym(Type), TypeElim(getType, getTypeString),
-  VariableSym(Variable), VariableElim(variableName, variableType),
-  ValueSym(Value, valueType), NumericExpression((#-), (#/), sin, cos, tan),
-  Comparison(..), funcApp, StatementSym(multi), AssignStatement((&++)), (&=),
-  IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
-  ifNoElse, ScopeSym(..), ModuleSym(Module))
+import GOOL.Drasil.InterfaceCommon (Label, Library, MSBody, MSBlock, VSType,
+  SVariable, SValue, MSStatement, MSParameter, SMethod, CSStateVar, NamedArgs,
+  Initializers, MixedCall, MixedCtorCall, BodySym(Body), bodyStatements,
+  oneLiner, BlockSym(Block), PermanenceSym(..), TypeSym(Type), TypeElim(getType,
+  getTypeString), VariableSym(Variable), VariableElim(variableName,
+  variableType), ValueSym(Value, valueType), NumericExpression((#-), (#/), sin,
+  cos, tan), Comparison(..), funcApp, StatementSym(multi),
+  AssignStatement((&++)), (&=), IOStatement(printStr, printStrLn, printFile,
+  printFileStr, printFileStrLn), ifNoElse, ScopeSym(..))
 import qualified GOOL.Drasil.InterfaceCommon as IC (TypeSym(int, double, char,
   string, listType, arrayType, listInnerType, funcType, void), VariableSym(var), 
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
   IOStatement(print), ControlStatement(returnStmt, for), ParameterSym(param),
   MethodSym(method), List(intToIndex))
-import GOOL.Drasil.InterfaceGOOL (VSFunction, newObj, objMethodCallNoParams, ($.),
-  convTypeOO)
+import GOOL.Drasil.InterfaceGOOL (SFile, FSModule, SClass, VSFunction, FileSym(File),
+  ModuleSym(Module), newObj, objMethodCallNoParams, ($.), convTypeOO)
 import qualified GOOL.Drasil.InterfaceGOOL as IG (OOVariableSym(objVarSelf),
   FunctionSym(func))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(commentedMod),  

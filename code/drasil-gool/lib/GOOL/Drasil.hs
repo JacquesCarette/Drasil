@@ -28,30 +28,30 @@ module GOOL.Drasil (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   cppVersion, swiftName, swiftVersion
   ) where
 
-import GOOL.Drasil.InterfaceCommon (Label, GSProgram, SFile, MSBody, MSBlock, 
+import GOOL.Drasil.InterfaceCommon (Label, MSBody, MSBlock, 
   VSType, SVariable, SValue, MSStatement, MSParameter, SMethod, CSStateVar,
-  SClass, FSModule, NamedArgs, Initializers, ProgramSym(..), FileSym(..),
-  PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..),
-  TypeSym(..), TypeElim(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
-  IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), switchAsIf, ifNoElse,
-  VariableSym(..), VariableElim(..), listOf, listVar, ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  libFuncApp, exists, List(..), listSlice, listIndexExists, at, ScopeSym(..),
-  ParameterSym(..), MethodSym(..), privMethod, pubMethod, initializer,
-  nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..),
-  ModuleSym(..), convType)
-import GOOL.Drasil.InterfaceGOOL (VSFunction, OOProg, OOTypeSym(..),
-  OOVariableSym(..), ($->), OOVariableValue, OOValueExpression(..),
-  selfFuncApp, newObj, extNewObj, libNewObj, OODeclStatement(..),
-  objDecNewNoParams, extObjDecNewNoParams, OOFuncAppStatement(..), GetSet(..),
-  objMethodCall, objMethodCallNamedArgs, objMethodCallMixedArgs,
-  objMethodCallNoParams, FunctionSym(..), ($.), selfAccess, ObserverPattern(..),
-  initObserverList, addObserver, StrategyPattern(..), convTypeOO)
+  NamedArgs, Initializers, PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
+  (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), switchAsIf, ifNoElse, VariableSym(..), VariableElim(..),
+  listOf, listVar, ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  funcAppNamedArgs, extFuncApp, libFuncApp, exists, List(..), listSlice,
+  listIndexExists, at, ScopeSym(..), ParameterSym(..), MethodSym(..),
+  privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..),
+  privDVar, pubDVar, pubSVar, convType)
+import GOOL.Drasil.InterfaceGOOL (GSProgram, SFile, FSModule, SClass,
+  VSFunction, OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
+  OOTypeSym(..), OOVariableSym(..), ($->), OOVariableValue,
+  OOValueExpression(..), selfFuncApp, newObj, extNewObj, libNewObj,
+  OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
+  OOFuncAppStatement(..), GetSet(..), objMethodCall, objMethodCallNamedArgs,
+  objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..), ($.),
+  selfAccess, ObserverPattern(..), initObserverList, addObserver,
+  StrategyPattern(..), convTypeOO)
 
 import GOOL.Drasil.AST (FileData(..), ModData(..), ProgData(..), ScopeTag(..))
 

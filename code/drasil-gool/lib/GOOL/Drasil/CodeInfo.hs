@@ -4,7 +4,7 @@
 module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
 import GOOL.Drasil.InterfaceCommon (MSBody, VSType, SValue, MSStatement, 
-  SMethod, SharedProg, ProgramSym(..), FileSym(..), PermanenceSym(..),
+  SMethod, SharedProg, PermanenceSym(..),
   BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
@@ -13,12 +13,12 @@ import GOOL.Drasil.InterfaceCommon (MSBody, VSType, SValue, MSStatement,
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  ScopeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..),
-  ModuleSym(..))
-import GOOL.Drasil.InterfaceGOOL (OOProg, OOTypeSym(..), OOVariableSym(..),
-  OOValueSym, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
-  FunctionSym(..), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
-  ObserverPattern(..), StrategyPattern(..))
+  ScopeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..))
+import GOOL.Drasil.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
+  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..), OOValueSym,
+  OOVariableValue, OOValueExpression(..), InternalValueExp(..), FunctionSym(..),
+  GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..), qualName)
 import GOOL.Drasil.CodeAnalysis (ExceptionType(..))

@@ -2,30 +2,28 @@
 
 module GOOL.Drasil.InterfaceCommon (
   -- Types
-  Label, Library, GSProgram, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
-  VSThunk, MSStatement, MSParameter, SMethod, CSStateVar, SClass,
-  FSModule, NamedArgs, Initializers, MixedCall, MixedCtorCall, PosCall,
-  PosCtorCall, InOutCall,
+  Label, Library, MSBody, MSBlock, VSType, SVariable, SValue, VSThunk,
+  MSStatement, MSParameter, SMethod, CSStateVar, NamedArgs, Initializers,
+  MixedCall, MixedCtorCall, PosCall, PosCtorCall, InOutCall,
   -- Typeclasses
-  SharedProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
-  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
-  VariableSym(..), VariableElim(..), listOf, listVar, ValueSym(..),
-  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  libFuncApp, exists, List(..), InternalList(..), listSlice, listIndexExists,
-  at, ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  SharedProg, PermanenceSym(..), BodySym(..), bodyStatements, oneLiner,
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
+  listOf, listVar, ValueSym(..), Argument(..), Literal(..), litZero,
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp,
+  exists, List(..), InternalList(..), listSlice, listIndexExists, at,
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..),
   MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
-  StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..),
-  convType
+  StateVarSym(..), privDVar, pubDVar, pubSVar, convType
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.State (GS, FS, CS, MS, VS)
+import GOOL.Drasil.State (CS, MS, VS)
 
 import qualified Data.Kind as K (Type)
 import Data.Bifunctor (first)
@@ -33,8 +31,6 @@ import CodeLang.Drasil (Comment)
 
 type Label = String
 type Library = String
-
-type GSProgram a = GS (a (Program a))
 
 -- In relation to GOOL, the type variable r can be considered as short for "representation"
 
@@ -50,19 +46,6 @@ class (VectorType r, VectorDecl r, VectorThunk r,
   ) => SharedProg r
 
 -- Shared between OO and Procedural --
-
-class (FileSym r) => ProgramSym r where
-  type Program r
-  prog :: Label -> Label -> [SFile r] -> GSProgram r
-
-type SFile a = FS (a (File a))
-
-class (ModuleSym r) => FileSym r where 
-  type File r
-  fileDoc :: FSModule r -> SFile r
-
-  -- Module description, list of author names, date as a String, file to comment
-  docMod :: String -> [String] -> String -> SFile r -> SFile r
 
 class PermanenceSym r where
   type Permanence r
@@ -536,32 +519,6 @@ pubDVar = stateVar public dynamic
 
 pubSVar :: (StateVarSym r) => SVariable r -> CSStateVar r
 pubSVar = stateVar public static
-
-type SClass a = CS (a (Class a))
-
-class (MethodSym r, StateVarSym r) => ClassSym r where
-  type Class r
-  -- | Main external method for creating a class.
-  --   Inputs: parent class, variables, constructor(s), methods
-  buildClass :: Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
-    [SMethod r] -> SClass r
-  -- | Creates an extra class.
-  --   Inputs: class name, the rest are the same as buildClass.
-  extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
-    [SMethod r] -> SClass r
-  -- | Creates a class implementing interfaces.
-  --   Inputs: class name, interface names, variables, constructor(s), methods
-  implementingClass :: Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> 
-    [SMethod r] -> SClass r
-
-  docClass :: String -> SClass r -> SClass r
-
-type FSModule a = FS (a (Module a))
-
-class (ClassSym r) => ModuleSym r where
-  type Module r
-  -- Module name, import names, module functions, module classes
-  buildModule :: Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
 
 -- Utility
 

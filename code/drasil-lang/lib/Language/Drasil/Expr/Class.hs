@@ -176,7 +176,9 @@ class ExprC r where
   
   -- | Smart constructor for indexing.
   idx :: r -> r -> r
-  
+
+  idxOf :: r -> r -> r
+
   -- | Smart constructor for the summation, product, and integral functions over an interval.
   defint, defsum, defprod :: Symbol -> r -> r -> r -> r
   
@@ -339,6 +341,7 @@ instance ExprC Expr where
   -- | Smart constructor for indexing.
   idx = LABinaryOp Index
   
+  idxOf = LABinaryOp IndexOf
   -- | Integrate over some expression with bounds (∫).
   defint v low high = Operator Add (BoundedDD v Continuous low high)
   
@@ -500,6 +503,9 @@ instance ExprC M.ModelExpr where
 
   -- | Smart constructor for indexing.
   idx = M.LABinaryOp M.Index
+
+  -- | Smart constructor for indexing.
+  idxOf = M.LABinaryOp M.IndexOf
 
   -- | Integrate over some expression with bounds (∫).
   defint v low high = M.Operator M.Add (BoundedDD v Continuous low high)
@@ -665,6 +671,7 @@ instance ExprC C.CodeExpr where
   -- | Smart constructor for indexing.
   idx = C.LABinaryOp C.Index
   
+  idxOf = C.LABinaryOp C.IndexOf
   -- | Integrate over some expression with bounds (∫).
   defint v low high = C.Operator C.Add (BoundedDD v Continuous low high)
   

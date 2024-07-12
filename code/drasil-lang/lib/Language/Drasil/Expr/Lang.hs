@@ -39,7 +39,7 @@ data BoolBinOp = Impl | Iff
   deriving Eq
 
 -- | Index operator.
-data LABinOp = Index
+data LABinOp = Index | IndexOf
   deriving Eq
 
 -- | Ordered binary operators (less than, greater than, less than or equal to, greater than or equal to).
@@ -399,7 +399,13 @@ instance Typed Expr Space where
     (Left lt         , Left _)  -> Right $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
     (_               , Right e) -> Right e
     (Right e         , _      ) -> Right e
-
+  infer cxt (LABinaryOp IndexOf l n) = case (infer cxt l, infer cxt n) of
+    (Left (S.Set lt), Left nt) -> if S.isBasicNumSpace lt && nt == lt-- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
+      then Left lt
+      else Right $ "List accessor not of type Integer nor Natural, but of type `" ++ show nt ++ "`"
+    (Left lt         , Left _)  -> Right $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
+    (_               , Right e) -> Right e
+    (Right e         , _      ) -> Right e
   infer cxt (OrdBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
     (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt
       then Left S.Boolean

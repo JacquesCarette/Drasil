@@ -11,7 +11,8 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
   Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..))
 import Database.Drasil (symbResolve)
-import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&), ($=), exactDbl, idx)
+import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&), idxOf)
+import qualified Language.Drasil.CodeExpr as CE (int)
 import Language.Drasil.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
   AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..), BoolBinOp(..), EqBinOp(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
@@ -415,7 +416,7 @@ renderRealInt s (UpFrom  (Inc, a))          = sy s $>= a
 renderRealInt s (UpFrom  (Exc, a))          = sy s $>  a
 
 renderSet :: (HasUID c, HasSymbol c) => c -> CodeExpr -> CodeExpr
-renderSet e s = ((idx s (sy e))$= exactDbl 0)
+renderSet e s = ((idxOf s (sy e))$>= CE.int 0)
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.
 unop :: (SharedProg r) => UFunc -> (SValue r -> SValue r)

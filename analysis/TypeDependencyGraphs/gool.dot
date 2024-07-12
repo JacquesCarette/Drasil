@@ -861,14 +861,6 @@ digraph alltypes {
 		Library	[shape=oval, color=red2, label="Library"];
 		Library -> String;
 		}
-		subgraph gsprograma{
-		GSPrograma	[shape=oval, color=red2, label="GSPrograma"];
-		GSPrograma -> GSaPrograma;
-		}
-		subgraph sfilea{
-		SFilea	[shape=oval, color=red2, label="SFilea"];
-		SFilea -> FSaFilea;
-		}
 		subgraph msbodya{
 		MSBodya	[shape=oval, color=red2, label="MSBodya"];
 		MSBodya -> MSaBodya;
@@ -941,23 +933,45 @@ digraph alltypes {
 		DocInOutFuncr	[shape=oval, color=red2, label="DocInOutFuncr"];
 		DocInOutFuncr -> StringStringSVariabler;
 		}
-		subgraph csstatevara{
-		CSStateVara	[shape=oval, color=red2, label="CSStateVara"];
-		CSStateVara -> CSaStateVara;
+	}
+	subgraph interfacegool {
+		subgraph gsprograma{
+		GSPrograma	[shape=oval, color=red2, label="GSPrograma"];
+		GSPrograma -> GSaPrograma;
 		}
-		subgraph sclassa{
-		SClassa	[shape=oval, color=red2, label="SClassa"];
-		SClassa -> CSaClassa;
+		subgraph sfilea{
+		SFilea	[shape=oval, color=red2, label="SFilea"];
+		SFilea -> FSaFilea;
 		}
 		subgraph fsmodulea{
 		FSModulea	[shape=oval, color=red2, label="FSModulea"];
 		FSModulea -> FSaModulea;
 		}
-	}
-	subgraph interfacegool {
+		subgraph sclassa{
+		SClassa	[shape=oval, color=red2, label="SClassa"];
+		SClassa -> CSaClassa;
+		}
+		subgraph csstatevara{
+		CSStateVara	[shape=oval, color=red2, label="CSStateVara"];
+		CSStateVara -> CSaStateVara;
+		}
 		subgraph vsfunctiona{
 		VSFunctiona	[shape=oval, color=red2, label="VSFunctiona"];
 		VSFunctiona -> VSaFunctiona;
+		}
+	}
+	subgraph interfaceproc {
+		subgraph gsprograma{
+		GSPrograma	[shape=oval, color=red2, label="GSPrograma"];
+		GSPrograma -> GSaPrograma;
+		}
+		subgraph sfilea{
+		SFilea	[shape=oval, color=red2, label="SFilea"];
+		SFilea -> FSaFilea;
+		}
+		subgraph fsmodulea{
+		FSModulea	[shape=oval, color=red2, label="FSModulea"];
+		FSModulea -> FSaModulea;
 		}
 	}
 	subgraph languagerenderer {

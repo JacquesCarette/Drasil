@@ -373,25 +373,26 @@ class (VariableSym r) => ParameterSym r where {
 }
 param :: ParameterSym r => SVariable r -> MSParameter r
 pointerParam :: ParameterSym r => SVariable r -> MSParameter r
-class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r where {
+class (BodySym r, ParameterSym r, ScopeSym r) => MethodSym r where {
     type Method r;
 }
-method :: MethodSym r => Label -> r (Scope r) -> r (Permanence r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
-getMethod :: MethodSym r => SVariable r -> SMethod r
-setMethod :: MethodSym r => SVariable r -> SMethod r
-constructor :: MethodSym r => [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
 docMain :: MethodSym r => MSBody r -> SMethod r
 function :: MethodSym r => Label -> r (Scope r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 mainFunction :: MethodSym r => MSBody r -> SMethod r
 docFunc :: MethodSym r => String -> [String] -> Maybe String -> SMethod r -> SMethod r
-inOutMethod :: MethodSym r => Label -> r (Scope r) -> r (Permanence r) -> InOutFunc r
-docInOutMethod :: MethodSym r => Label -> r (Scope r) -> r (Permanence r) -> DocInOutFunc r
 inOutFunc :: MethodSym r => Label -> r (Scope r) -> InOutFunc r
 docInOutFunc :: MethodSym r => Label -> r (Scope r) -> DocInOutFunc r
-privMethod :: MethodSym r => Label -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
-pubMethod :: MethodSym r => Label -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
-initializer :: MethodSym r => [MSParameter r] -> Initializers r -> SMethod r
-nonInitConstructor :: MethodSym r => [MSParameter r] -> MSBody r -> SMethod r
+class (MethodSym r, PermanenceSym r) => OOMethodSym r
+method :: OOMethodSym r => Label -> r (Scope r) -> r (Permanence r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+getMethod :: OOMethodSym r => SVariable r -> SMethod r
+setMethod :: OOMethodSym r => SVariable r -> SMethod r
+constructor :: OOMethodSym r => [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
+inOutMethod :: OOMethodSym r => Label -> r (Scope r) -> r (Permanence r) -> InOutFunc r
+docInOutMethod :: OOMethodSym r => Label -> r (Scope r) -> r (Permanence r) -> DocInOutFunc r
+privMethod :: OOMethodSym r => Label -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+pubMethod :: OOMethodSym r => Label -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+initializer :: OOMethodSym r => [MSParameter r] -> Initializers r -> SMethod r
+nonInitConstructor :: OOMethodSym r => [MSParameter r] -> MSBody r -> SMethod r
 class (ScopeSym r, PermanenceSym r, VariableSym r) => StateVarSym r where {
     type StateVar r;
 }
@@ -401,7 +402,7 @@ constVar :: StateVarSym r => r (Scope r) -> SVariable r -> SValue r -> CSStateVa
 privDVar :: StateVarSym r => SVariable r -> CSStateVar r
 pubDVar :: StateVarSym r => SVariable r -> CSStateVar r
 pubSVar :: StateVarSym r => SVariable r -> CSStateVar r
-class (MethodSym r, StateVarSym r) => ClassSym r where {
+class (OOMethodSym r, StateVarSym r) => ClassSym r where {
     type Class r;
 }
 

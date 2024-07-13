@@ -10,23 +10,25 @@ module GOOL.Drasil.LanguageRenderer.JavaRenderer (
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
-  VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass, OOProg,
-  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), oneLiner,
-  BlockSym(..), TypeSym(..), OOTypeSym(..), TypeElim(..), VariableSym(..), var,
-  locvar, OOVariableSym(..), VariableElim(..), ValueSym(..), OOValueSym,
-  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
-  OOVariableValue, CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..),
-  OOValueExpression(..), funcApp, selfFuncApp, extFuncApp,
-  newObj, InternalValueExp(..), FunctionSym(..), ($.), GetSet(..), List(..),
-  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), StatePattern(..), ObserverPattern(..),
-  StrategyPattern(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..), ScopeSym(..))
+import GOOL.Drasil.InterfaceCommon (SharedProg, Label, MSBody, VSType,
+  SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..), oneLiner,
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), var, locvar,
+  VisibilitySym(..), VariableElim(..),ValueSym(..), Argument(..), Literal(..),
+  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
+  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  ScopeSym(..), ParameterSym(..), MethodSym(..))
+import GOOL.Drasil.InterfaceGOOL (SClass, VSFunction, CSStateVar, OOProg,
+  ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..),
+  OOVariableSym(..), StateVarSym(..), PermanenceSym(..), OOValueSym,
+  OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
+  InternalValueExp(..), FunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
+  OOMethodSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -84,7 +86,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char,
   intFunc, multiAssignError, multiReturnError, multiTypeError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   runStrategy, listSlice, stringListVals, stringListLists, forRange, 
-  notifyObservers, checkState)
+  notifyObservers)
 import GOOL.Drasil.AST (Terminator(..), VisibilityTag(..), qualName, FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
@@ -129,7 +131,8 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   JC x >>= f = f x
 
-instance OOProg JavaCode where
+instance SharedProg JavaCode
+instance OOProg JavaCode
 
 instance ProgramSym JavaCode where
   type Program JavaCode = ProgData
@@ -384,9 +387,6 @@ instance ValueExpression JavaCode where
   funcAppMixedArgs n t vs ns = do
     addCallExcsCurrMod n 
     G.funcAppMixedArgs n t vs ns
-  selfFuncAppMixedArgs n t ps ns = do
-    addCallExcsCurrMod n
-    G.selfFuncAppMixedArgs dot self n t ps ns
   extFuncAppMixedArgs l n t vs ns = do
     mem <- getMethodExcMap
     modify (maybe id addExceptions (Map.lookup (qualName l n) mem))
@@ -398,6 +398,9 @@ instance ValueExpression JavaCode where
   notNull = CP.notNull nullLabel
 
 instance OOValueExpression JavaCode where
+  selfFuncAppMixedArgs n t ps ns = do
+    addCallExcsCurrMod n
+    G.selfFuncAppMixedArgs dot self n t ps ns
   newObjMixedArgs ot vs ns = addConstructorCallExcsCurrMod ot (\t -> 
     G.newObjMixedArgs (new ++ " ") t vs ns)
   extNewObjMixedArgs l ot vs ns = do
@@ -554,11 +557,13 @@ instance DeclStatement JavaCode where
   listDecDef = CP.listDecDef
   arrayDec n = CP.arrayDec (litInt n)
   arrayDecDef = CP.arrayDecDef
+  constDecDef = jConstDecDef
+  funcDecDef = jFuncDecDef
+
+instance OODeclStatement JavaCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
-  constDecDef = jConstDecDef
-  funcDecDef = jFuncDecDef
 
 instance IOStatement JavaCode where
   print      = jOut False Nothing printFunc
@@ -598,8 +603,10 @@ instance StringStatement JavaCode where
 
 instance FuncAppStatement JavaCode where
   inOutCall = jInOutCall funcApp
-  selfInOutCall = jInOutCall selfFuncApp
   extInOutCall m = jInOutCall (extFuncApp m)
+
+instance OOFuncAppStatement JavaCode where
+  selfInOutCall = jInOutCall selfFuncApp
 
 instance CommentStatement JavaCode where
   comment = G.comment commentStart
@@ -624,9 +631,6 @@ instance ControlStatement JavaCode where
 
   tryCatch = G.tryCatch jTryCatch
   
-instance StatePattern JavaCode where 
-  checkState = M.checkState
-
 instance ObserverPattern JavaCode where
   notifyObservers = M.notifyObservers
 
@@ -666,25 +670,22 @@ instance ParamElim JavaCode where
 
 instance MethodSym JavaCode where
   type Method JavaCode = MethodData
+  docMain = CP.docMain
+  function = G.function
+  mainFunction = CP.mainFunction string mainFunc
+  docFunc = CP.doxFunc
+
+  inOutFunc n s = jInOut (function n s)
+  docInOutFunc n s = jDocInOut (inOutFunc n s)
+
+instance OOMethodSym JavaCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
   constructor ps is b = getClassName >>= (\n -> CP.constructor n ps is b)
 
-  docMain = CP.docMain
-
-  function = G.function
-  mainFunction = CP.mainFunction string mainFunc
-
-  docFunc = CP.doxFunc
-
   inOutMethod n s p = jInOut (method n s p)
-
   docInOutMethod n s p = jDocInOut (inOutMethod n s p)
-
-  inOutFunc n s = jInOut (function n s)
-    
-  docInOutFunc n s = jDocInOut (inOutFunc n s)
 
 instance RenderMethod JavaCode where
   intMethod m n s p t ps b = do
@@ -1058,7 +1059,7 @@ jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (map fst $ bs ++ is)
           map fst os
 
 jExtraClass :: (RenderSym r) => Label -> Maybe Label -> [CSStateVar r] -> 
-  [SMethod r] -> SClass r
+  [SMethod r] -> [SMethod r] -> SClass r
 jExtraClass n = intClass n (visibilityFromData Priv empty) . inherit
 
 addCallExcsCurrMod :: String -> VS ()

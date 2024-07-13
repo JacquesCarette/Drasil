@@ -69,7 +69,7 @@ loggedMethod lName n vars = block [
 
 -- | The variable representing the log file in write mode.
 varLogFile :: (OOProg r) => r (Scope r) -> SVariable r
-varLogFile = var "outfile" outfile -- TODO: get scope from state?
+varLogFile = var "outfile" outfile
 
 -- | The value of the variable representing the log file in write mode.
 valLogFile :: (OOProg r) => r (Scope r) -> SValue r

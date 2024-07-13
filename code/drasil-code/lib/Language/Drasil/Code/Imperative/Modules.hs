@@ -49,9 +49,10 @@ import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement,
   BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..), var,
   ScopeSym(..), Literal(..), VariableValue(..), CommandLineArgs(..),
   BooleanExpression(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), objDecNewNoParams, extObjDecNewNoParams, IOStatement(..),
-  ControlStatement(..), ifNoElse, VisibilitySym(..), MethodSym(..),
-  StateVarSym(..), pubDVar, convTypeOO, VisibilityTag(..))
+  DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
+  extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse,
+  VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convTypeOO,
+  VisibilityTag(..))
 
 import Prelude hiding (print)
 import Data.List (intersperse, partition)
@@ -210,10 +211,14 @@ genInputClass scp = do
       cs = constants $ codeSpec g
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter ((Just cname ==) . flip Map.lookup (clsMap g) . codeName)
+      constructors :: (OOProg r) => GenState [SMethod r]
+      constructors = if cname `elem` defSet g
+        then concat <$> mapM (fmap maybeToList) [genInputConstructor]
+        else return []
       methods :: (OOProg r) => GenState [SMethod r]
       methods = if cname `elem` defSet g
-        then concat <$> mapM (fmap maybeToList) [genInputConstructor,
-        genInputFormat Priv, genInputDerived Priv, genInputConstraints Priv]
+        then concat <$> mapM (fmap maybeToList) [genInputFormat Priv,
+        genInputDerived Priv, genInputConstraints Priv]
         else return []
       genClass :: (OOProg r) => [CodeVarChunk] -> [CodeDefinition] ->
         GenState (Maybe (SClass r))
@@ -229,7 +234,7 @@ genInputClass scp = do
             getFunc Auxiliary = auxClass
             f = getFunc scp
         icDesc <- inputClassDesc
-        c <- f cname Nothing icDesc (inputVars ++ constVars) methods
+        c <- f cname Nothing icDesc (inputVars ++ constVars) constructors methods
         return $ Just c
   genClass (filt ins) (filt cs)
 
@@ -462,7 +467,7 @@ genConstClass scp = do
             getFunc Auxiliary = auxClass
             f = getFunc scp
         cDesc <- constClassDesc
-        cls <- f cname Nothing cDesc constVars (return [])
+        cls <- f cname Nothing cDesc constVars (return []) (return [])
         return $ Just cls
   genClass $ filter (flip member (Map.filter (cname ==) (clsMap g))
     . codeName) cs

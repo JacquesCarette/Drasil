@@ -11,14 +11,15 @@ module GOOL.Drasil.LanguageRenderer.CLike (charRender, float, double, char,
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable, 
+import GOOL.Drasil.InterfaceCommon (Label, Library, MSBody, VSType, SVariable, 
   SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall, 
-  PermanenceSym(..), TypeElim(getType, getTypeString), 
-  VariableElim(..), ValueSym(Value, valueType), extNewObj, ($.),
-  VisibilitySym(..))
-import qualified GOOL.Drasil.ClassInterface as S (TypeSym(bool, float),
-  OOTypeSym(obj), ValueExpression(funcAppMixedArgs),
-  OOValueExpression(newObjMixedArgs), DeclStatement(varDec, varDecDef))
+  TypeElim(getType, getTypeString), 
+  VariableElim(..), ValueSym(Value, valueType), VisibilitySym(..))
+import qualified GOOL.Drasil.InterfaceCommon as IC (TypeSym(bool, float),
+  ValueExpression(funcAppMixedArgs), DeclStatement(varDec, varDecDef))
+import GOOL.Drasil.InterfaceGOOL (PermanenceSym(..), extNewObj, ($.))
+import qualified GOOL.Drasil.InterfaceGOOL as IG (OOTypeSym(obj),
+  OOValueExpression(newObjMixedArgs))
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, RenderType(..),
   InternalVarElim(variableBind), RenderValue(valFromData), 
   ValueElim(valuePrec), RenderMethod(intMethod))
@@ -89,18 +90,18 @@ orOp = orPrec "||"
 self :: (RenderSym r) => SVariable r
 self = do 
   l <- zoom lensVStoMS getClassName 
-  mkStateVar R.this (S.obj l) R.this'
+  mkStateVar R.this (IG.obj l) R.this'
 
 -- Values --
 
 litTrue :: (RenderSym r) => SValue r
-litTrue = mkStateVal S.bool (text "true")
+litTrue = mkStateVal IC.bool (text "true")
 
 litFalse :: (RenderSym r) => SValue r
-litFalse = mkStateVal S.bool (text "false")
+litFalse = mkStateVal IC.bool (text "false")
 
 litFloat :: (RenderSym r) => Float -> SValue r
-litFloat f = mkStateVal S.float (D.float f <> text "f")
+litFloat f = mkStateVal IC.float (D.float f <> text "f")
 
 inlineIf :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 inlineIf c' v1' v2' = do
@@ -113,11 +114,11 @@ inlineIf c' v1' v2' = do
 
 libFuncAppMixedArgs :: (RenderSym r) => Library -> MixedCall r
 libFuncAppMixedArgs l n t vs ns = modify (addLibImportVS l) >> 
-  S.funcAppMixedArgs n t vs ns
+  IC.funcAppMixedArgs n t vs ns
   
 libNewObjMixedArgs :: (RenderSym r) => Library -> MixedCtorCall r
 libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >> 
-  S.newObjMixedArgs tp vs ns
+  IG.newObjMixedArgs tp vs ns
 
 -- Functions --
 
@@ -152,7 +153,7 @@ varDec s d pdoc v' = do
 varDecDef :: (RenderSym r) => Terminator -> SVariable r -> SValue r -> 
   MSStatement r
 varDecDef t vr vl' = do 
-  vd <- S.varDec vr
+  vd <- IC.varDec vr
   vl <- zoom lensMStoVS vl'
   let stmtCtor Empty = mkStmtNoEnd
       stmtCtor Semi = mkStmt
@@ -162,12 +163,12 @@ listDec :: (RenderSym r) => (r (Value r) -> Doc) -> SValue r -> SVariable r ->
   MSStatement r
 listDec f vl v = do 
   sz <- zoom lensMStoVS vl
-  vd <- S.varDec v
+  vd <- IC.varDec v
   mkStmt (RC.statement vd <> f sz)
   
 extObjDecNew :: (RenderSym r) => Library -> SVariable r -> [SValue r] -> 
   MSStatement r
-extObjDecNew l v vs = S.varDecDef v (extNewObj l (onStateValue variableType v)
+extObjDecNew l v vs = IC.varDecDef v (extNewObj l (onStateValue variableType v)
   vs)
 
 -- 1st parameter is a Doc function to apply to the render of the control value (i.e. parens)

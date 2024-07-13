@@ -9,22 +9,26 @@ module GOOL.Drasil.LanguageRenderer.PythonRenderer (
 import Utils.Drasil (blank, indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue, 
-  VSFunction, MSStatement, MixedCtorCall, OOProg, ProgramSym(..), FileSym(..),
-  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), OOTypeSym(..),
-  TypeElim(..), VariableSym(..), locvar, OOVariableSym(..), VariableElim(..),
-  ValueSym(..), OOValueSym, Argument(..), Literal(..), litZero, MathConstant(..),
-  VariableValue(..), OOVariableValue, CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..),
-  OOValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj,
-  InternalValueExp(..), objMethodCall, FunctionSym(..), GetSet(..), List(..),
+import GOOL.Drasil.InterfaceCommon (SharedProg, Label, Library, VSType,
+  SVariable, SValue, MSStatement, MixedCtorCall, BodySym(..), BlockSym(..),
+  TypeSym(..), TypeElim(..), VariableSym(..), locvar, VisibilitySym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
+  MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..),
   InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..),
-  StrategyPattern(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..), ScopeSym(..))
+  ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..),
+  MethodSym(..))
+import GOOL.Drasil.InterfaceGOOL (VSFunction, OOProg, ProgramSym(..),
+  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
+  StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
+  InternalValueExp(..), extNewObj, objMethodCall, FunctionSym(..), GetSet(..),
+  OOValueExpression(..), selfFuncApp, OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
+  OOMethodSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -72,7 +76,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   mainBody, inOutFunc, docInOutFunc', listSize, intToIndex, indexToInt)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
-  notifyObservers', checkState)
+  notifyObservers')
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
@@ -113,6 +117,7 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   PC x >>= f = f x
 
+instance SharedProg PythonCode
 instance OOProg PythonCode
 
 instance ProgramSym PythonCode where
@@ -370,7 +375,6 @@ instance ValueExpression PythonCode where
   inlineIf = pyInlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
-  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
   extFuncAppMixedArgs l n t ps ns = do
     modify (addModuleImportVS l)
     CP.extFuncAppMixedArgs l n t ps ns
@@ -383,6 +387,7 @@ instance ValueExpression PythonCode where
   notNull = CP.notNull pyNull
 
 instance OOValueExpression PythonCode where
+  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs l tp ps ns = do
     modify (addModuleImportVS l)
@@ -538,13 +543,15 @@ instance DeclStatement PythonCode where
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
+  constDecDef = varDecDef
+  funcDecDef = CP.funcDecDef
+
+instance OODeclStatement PythonCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew lib v vs = do
     modify (addModuleImport lib)
     varDecDef v (extNewObj lib (onStateValue variableType v) vs)
-  constDecDef = varDecDef
-  funcDecDef = CP.funcDecDef
 
 instance IOStatement PythonCode where
   print      = pyOut False Nothing printFunc
@@ -579,8 +586,10 @@ instance StringStatement PythonCode where
 
 instance FuncAppStatement PythonCode where
   inOutCall = CP.inOutCall funcApp
-  selfInOutCall = CP.inOutCall selfFuncApp
   extInOutCall m = CP.inOutCall (extFuncApp m)
+
+instance OOFuncAppStatement PythonCode where
+  selfInOutCall = CP.inOutCall selfFuncApp
 
 instance CommentStatement PythonCode where
   comment = G.comment pyCommentStart
@@ -611,9 +620,6 @@ instance ControlStatement PythonCode where
     mkStmtNoEnd (pyWhile v b)
 
   tryCatch = G.tryCatch pyTryCatch
-
-instance StatePattern PythonCode where 
-  checkState = M.checkState
 
 instance ObserverPattern PythonCode where
   notifyObservers = M.notifyObservers'
@@ -654,25 +660,22 @@ instance ParamElim PythonCode where
 
 instance MethodSym PythonCode where
   type Method PythonCode = MethodData
+  docMain = mainFunction
+  function = G.function
+  mainFunction = CP.mainBody
+  docFunc = CP.doxFunc
+
+  inOutFunc n s = CP.inOutFunc (function n s)
+  docInOutFunc n s = CP.docInOutFunc' functionDox (inOutFunc n s)
+
+instance OOMethodSym PythonCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
   constructor = CP.constructor initName
 
-  docMain = mainFunction
-
-  function = G.function
-  mainFunction = CP.mainBody
-
-  docFunc = CP.doxFunc
-
   inOutMethod n s p = CP.inOutFunc (method n s p)
-
   docInOutMethod n s p = CP.docInOutFunc' functionDox (inOutMethod n s p)
-
-  inOutFunc n s = CP.inOutFunc (function n s)
-
-  docInOutFunc n s = CP.docInOutFunc' functionDox (inOutFunc n s)
 
 instance RenderMethod PythonCode where
   intMethod m n _ _ _ ps b = do
@@ -707,9 +710,17 @@ instance StateVarElim PythonCode where
 
 instance ClassSym PythonCode where
   type Class PythonCode = Doc
-  buildClass = G.buildClass
-  extraClass = CP.extraClass  
-  implementingClass = G.implementingClass
+  buildClass par sVars cstrs = if length cstrs <= 1 
+                                  then G.buildClass par sVars cstrs
+                                  else error pyMultCstrsError
+  extraClass n par sVars cstrs = if 
+                                  length cstrs <= 1
+                                    then CP.extraClass n par sVars cstrs
+                                    else error pyMultCstrsError
+  implementingClass n iNms sVars cstrs = if 
+                                  length cstrs <= 1
+                                    then G.implementingClass n iNms sVars cstrs
+                                    else error pyMultCstrsError
 
   docClass = CP.doxClass
 
@@ -1009,6 +1020,9 @@ pyClass n pn s vs fs = vcat [
                 | isEmpty vs = fs
                 | isEmpty fs = vs
                 | otherwise = vcat [vs, blank, fs]
+
+pyMultCstrsError :: String
+pyMultCstrsError = "Python classes cannot have multiple constructors"
 
 pyBlockComment :: [String] -> Doc -> Doc
 pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns

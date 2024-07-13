@@ -46,8 +46,8 @@ import GOOL.Drasil (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
   ValueExpression(..), OOValueExpression(..), objMethodCallMixedArgs, List(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), ControlStatement(..), ifNoElse, VisibilitySym(..),
-  ParameterSym(..), MethodSym(..), pubDVar, privDVar, nonInitConstructor,
-  convTypeOO, VisibilityTag(..), CodeType(..), onStateValue)
+  ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar, privDVar,
+  nonInitConstructor, convTypeOO, VisibilityTag(..), CodeType(..), onStateValue)
 import qualified GOOL.Drasil as C (CodeType(List, Array))
 
 import Prelude hiding (sin, cos, tan, log, exp)
@@ -486,14 +486,15 @@ genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
 -- | Converts a Class (from the Mod AST) to GOOL.
 -- The class generator to use is passed as a parameter.
 genClass :: (OOProg r) => (Name -> Maybe Name -> Description -> [CSStateVar r]
-  -> GenState [SMethod r] -> GenState (SClass r)) ->
+  -> GenState [SMethod r] -> GenState [SMethod r] -> GenState (SClass r)) ->
   M.Class -> GenState (SClass r)
-genClass f (M.ClassDef n i desc svs ms) = let svar Pub = pubDVar
-                                              svar Priv = privDVar
+genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
+                                                 svar Priv = privDVar
   in do
   svrs <- mapM (\(SV s v) -> fmap (svar s . var' (codeName v) local . -- TODO: get scope from state
                 convTypeOO) (codeType v)) svs
-  f n i desc svrs (mapM (genFunc publicMethod svs) ms)
+  f n i desc svrs (mapM (genFunc publicMethod svs) cs) 
+                  (mapM (genFunc publicMethod svs) ms)
 
 -- | Converts a 'Func' (from the Mod AST) to GOOL.
 -- The function generator to use is passed as a parameter. Automatically adds

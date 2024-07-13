@@ -795,9 +795,11 @@ swiftArgVal v' = do
   mkVal (valueType v) (swiftInOutArg <> RC.value v)
 
 -- Putting "gool" in these names to avoid name conflicts
+-- The `local` is a hack, but Swift doesn't care about scope
+-- and I don't want to change the IOStatement API just for this
 swiftContentsVar, swiftLineVar :: SVariable SwiftCode
-swiftContentsVar = var "goolContents" (listType $ listType string) local -- TODO: get scope from state
-swiftLineVar = var "goolLine" (listType string) local -- TODO: get scope from state
+swiftContentsVar = var "goolContents" (listType $ listType string) local
+swiftLineVar = var "goolLine" (listType string) local
 
 swiftContentsVal, swiftLineVal :: SValue SwiftCode
 swiftContentsVal = valueOf swiftContentsVar

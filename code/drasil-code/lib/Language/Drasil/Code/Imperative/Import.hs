@@ -491,7 +491,7 @@ genClass :: (OOProg r) => (Name -> Maybe Name -> Description -> [CSStateVar r]
 genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
                                                  svar Priv = privDVar
   in do
-  svrs <- mapM (\(SV s v) -> fmap (svar s . var' (codeName v) local . -- TODO: get scope from state
+  svrs <- mapM (\(SV s v) -> fmap (svar s . var' (codeName v) local .
                 convTypeOO) (codeType v)) svs
   f n i desc svrs (mapM (genFunc publicMethod svs) cs) 
                   (mapM (genFunc publicMethod svs) ms)
@@ -514,7 +514,7 @@ genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
 genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
   g <- get
   inits <- mapM (convExpr . snd) i
-  initvars <- mapM ((\iv -> fmap (var' (codeName iv) local . convTypeOO) -- TODO: get scope from state
+  initvars <- mapM ((\iv -> fmap (var' (codeName iv) local . convTypeOO)
     (codeType iv)) . fst) i
   stmts <- mapM convStmt s
   vars <- mapM mkVar (fstdecl (sysinfodb $ codeSpec g) s
@@ -627,99 +627,100 @@ genDataFunc :: (OOProg r) => Name -> Description -> DataDesc ->
   GenState (SMethod r)
 genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef
-  bod <- readData ddef
+  bod <- readData ddef local
   publicFunc nameTitle void desc (map pcAuto $ quantvar inFileName : parms)
     Nothing bod
 
 -- this is really ugly!!
 -- | Read from a data description into a 'MSBlock' of 'MSStatement's.
-readData :: (OOProg r) => DataDesc -> GenState [MSBlock r]
-readData ddef = do
-  inD <- mapM inData ddef
+readData :: (OOProg r) => DataDesc -> r (Scope r) -> GenState [MSBlock r]
+readData ddef scope = do
+  inD <- mapM (`inData` scope) ddef
   v_filename <- mkVal $ quantvar inFileName
   return [block $
-    varDec var_infile :
-    (if any (\d -> isLine d || isLines d) ddef then [varDec var_line, listDec 0 var_linetokens] else []) ++
-    [listDec 0 var_lines | any isLines ddef] ++
-    openFileR var_infile v_filename :
-    concat inD ++ [
-    closeFile v_infile ]]
-  where inData :: (OOProg r) => Data -> GenState [MSStatement r]
-        inData (Singleton v) = do
+    varDec (var_infile scope) :
+    (if any (\d -> isLine d || isLines d) ddef then [varDec (var_line scope),
+    listDec 0 (var_linetokens scope)] else []) ++
+    [listDec 0 (var_lines scope) | any isLines ddef] ++ openFileR (var_infile scope)
+    v_filename : concat inD ++ [closeFile (v_infile scope) ]]
+  where inData :: (OOProg r) => Data -> r (Scope r) -> GenState [MSStatement r]
+        inData (Singleton v) scp = do
             vv <- mkVar v
             l <- maybeLog vv local
-            return [multi $ getFileInput v_infile vv : l]
-        inData JunkData = return [discardFileLine v_infile]
-        inData (Line lp d) = do
-          lnI <- lineData Nothing lp
+            return [multi $ getFileInput (v_infile scp) vv : l]
+        inData JunkData scp = return [discardFileLine (v_infile scp)]
+        inData (Line lp d) scp = do
+          lnI <- lineData Nothing lp scp
           logs <- getEntryVarLogs lp
-          return $ [getFileInputLine v_infile var_line,
-            stringSplit d var_linetokens v_line] ++ lnI ++ logs
-        inData (Lines lp ls d) = do
-          lnV <- lineData (Just "_temp") lp
+          return $ [getFileInputLine (v_infile scp) (var_line scp),
+            stringSplit d (var_linetokens scp) (v_line scp)] ++ lnI ++ logs
+        inData (Lines lp ls d) scp = do
+          lnV <- lineData (Just "_temp") lp scp
           logs <- getEntryVarLogs lp
-          let readLines Nothing = [getFileInputAll v_infile var_lines,
-                forRange var_i (litInt 0) (listSize v_lines) (litInt 1)
-                  (bodyStatements $ stringSplit d var_linetokens (
-                  listAccess v_lines v_i) : lnV)]
+          let readLines Nothing = [getFileInputAll (v_infile scp) (var_lines scp),
+                forRange var_i (litInt 0) (listSize (v_lines scp)) (litInt 1)
+                  (bodyStatements $ stringSplit d (var_linetokens scp) (
+                  listAccess (v_lines scp) v_i) : lnV)]
               readLines (Just numLines) = [forRange var_i (litInt 0)
                 (litInt numLines) (litInt 1)
                 (bodyStatements $
-                  [getFileInputLine v_infile var_line,
-                   stringSplit d var_linetokens v_line
+                  [getFileInputLine (v_infile scp) (var_line scp),
+                   stringSplit d (var_linetokens scp) (v_line scp)
                   ] ++ lnV)]
           return $ readLines ls ++ logs
         ---------------
-        lineData :: (OOProg r) => Maybe String -> LinePattern ->
+        lineData :: (OOProg r) => Maybe String -> LinePattern -> r (Scope r) ->
           GenState [MSStatement r]
-        lineData s p@(Straight _) = do
+        lineData s p@(Straight _) scp = do
           vs <- getEntryVars s p
-          return [stringListVals vs v_linetokens]
-        lineData s p@(Repeat ds) = do
+          return [stringListVals vs (v_linetokens scp)]
+        lineData s p@(Repeat ds) scp = do
           vs <- getEntryVars s p
-          sequence $ clearTemps s ds ++ return (stringListLists vs v_linetokens)
-            : appendTemps s ds
+          sequence $ clearTemps s ds scp ++ return
+            (stringListLists vs (v_linetokens scp)) : appendTemps s ds scp
         ---------------
-        clearTemps :: (OOProg r) => Maybe String -> [DataItem] ->
+        clearTemps :: (OOProg r) => Maybe String -> [DataItem] -> r (Scope r) ->
           [GenState (MSStatement r)]
-        clearTemps Nothing _ = []
-        clearTemps (Just sfx) es = map (clearTemp sfx) es
+        clearTemps Nothing    _  _   = []
+        clearTemps (Just sfx) es scp = map (\v -> clearTemp sfx v scp) es
         ---------------
-        clearTemp :: (OOProg r) => String -> DataItem ->
+        clearTemp :: (OOProg r) => String -> DataItem -> r (Scope r) ->
           GenState (MSStatement r)
-        clearTemp sfx v = fmap (\t -> listDecDef (var (codeName v ++ sfx)
-          (listInnerType $ convTypeOO t) local) []) (codeType v) -- TODO: get scope from state
+        clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
+          (listInnerType $ convTypeOO t) scp) []) (codeType v)
         ---------------
-        appendTemps :: (OOProg r) => Maybe String -> [DataItem] ->
-          [GenState (MSStatement r)]
-        appendTemps Nothing _ = []
-        appendTemps (Just sfx) es = map (appendTemp sfx) es
+        appendTemps :: (OOProg r) => Maybe String -> [DataItem] -> r (Scope r)
+          -> [GenState (MSStatement r)]
+        appendTemps Nothing _ _ = []
+        appendTemps (Just sfx) es scp = map (\v -> appendTemp sfx v scp) es
         ---------------
-        appendTemp :: (OOProg r) => String -> DataItem ->
+        appendTemp :: (OOProg r) => String -> DataItem -> r (Scope r) ->
           GenState (MSStatement r)
-        appendTemp sfx v = fmap (\t -> valStmt $ listAppend
-          (valueOf $ var (codeName v) (convTypeOO t) local) -- TODO: get scope from state
-          (valueOf $ var (codeName v ++ sfx) (convTypeOO t) local)) (codeType v) -- TODO: get scope from state
+        appendTemp sfx v scp = fmap (\t -> valStmt $ listAppend
+          (valueOf $ var (codeName v) (convTypeOO t) scp)
+          (valueOf $ var (codeName v ++ sfx) (convTypeOO t) scp)) (codeType v)
         ---------------
         l_line, l_lines, l_linetokens, l_infile, l_i :: Label
-        var_line, var_lines, var_linetokens, var_infile, var_i ::
-          (OOProg r) => SVariable r
-        v_line, v_lines, v_linetokens, v_infile, v_i ::
-          (OOProg r) => SValue r
+        var_line, var_lines, var_linetokens, var_infile ::
+          (OOProg r) => r (Scope r) -> SVariable r
+        var_i :: (OOProg r) => SVariable r
+        v_line, v_lines, v_linetokens, v_infile ::
+          (OOProg r) => r (Scope r) -> SValue r
+        v_i :: (OOProg r) => SValue r
         l_line = "line"
-        var_line = var l_line string local -- TODO: get scope from state
-        v_line = valueOf var_line
+        var_line = var l_line string
+        v_line scp = valueOf $ var_line scp
         l_lines = "lines"
-        var_lines = var l_lines (listType string) local -- TODO: get scope from state
-        v_lines = valueOf var_lines
+        var_lines = var l_lines (listType string)
+        v_lines scp = valueOf $ var_lines scp
         l_linetokens = "linetokens"
-        var_linetokens = var l_linetokens (listType string) local -- TODO: get scope from state
-        v_linetokens = valueOf var_linetokens
+        var_linetokens = var l_linetokens (listType string)
+        v_linetokens scp = valueOf $ var_linetokens scp
         l_infile = "infile"
-        var_infile = var l_infile infile local -- TODO: get scope from state
-        v_infile = valueOf var_infile
+        var_infile = var l_infile infile
+        v_infile scp = valueOf $ var_infile scp
         l_i = "i"
-        var_i = var l_i int local -- TODO: get scope from state
+        var_i = var l_i int local
         v_i = valueOf var_i
 
 -- | Get entry variables.

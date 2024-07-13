@@ -226,9 +226,9 @@ genInputClass scp = do
       genClass inps csts = do
         vals <- mapM (convExpr . (^. codeExpr)) csts
         inputVars <- mapM (\x -> fmap (pubDVar . 
-          var' (codeName x) local . convTypeOO) (codeType x)) inps -- TODO: get scope from state
+          var' (codeName x) local . convTypeOO) (codeType x)) inps
         constVars <- zipWithM (\c vl -> fmap (\t -> constVarFunc (conRepr g)
-          (var (codeName c) (convTypeOO t) local) vl) (codeType c)) -- TODO: get scope from state
+          (var (codeName c) (convTypeOO t) local) vl) (codeType c))
           csts vals
         let getFunc Primary = primaryClass
             getFunc Auxiliary = auxClass
@@ -414,7 +414,7 @@ genInputFormat s = do
       genInFormat _ = do
         ins <- getInputFormatIns
         outs <- getInputFormatOuts
-        bod <- readData dd
+        bod <- readData dd local
         desc <- inFmtFuncDesc
         mthd <- getFunc s giName desc ins outs bod
         return $ Just mthd
@@ -460,7 +460,7 @@ genConstClass scp = do
       genClass [] = return Nothing
       genClass vs = do
         vals <- mapM (convExpr . (^. codeExpr)) vs
-        vars <- mapM (\x -> fmap (var' (codeName x) local . convTypeOO) -- TODO: get scope from state
+        vars <- mapM (\x -> fmap (var' (codeName x) local . convTypeOO)
           (codeType x)) vs
         let constVars = zipWith (constVarFunc (conRepr g)) vars vals
             getFunc Primary = primaryClass
@@ -561,12 +561,11 @@ genOutputFormat :: (OOProg r) => GenState (Maybe (SMethod r))
 genOutputFormat = do
   g <- get
   woName <- genICName WriteOutput
-  let genOutput :: (OOProg r) => Maybe String -> GenState
-        (Maybe (SMethod r))
+  let genOutput :: (OOProg r) => Maybe String -> GenState (Maybe (SMethod r))
       genOutput Nothing = return Nothing
       genOutput (Just _) = do
         let l_outfile = "outputfile"
-            var_outfile = var l_outfile outfile local -- TODO: get scope from state
+            var_outfile = var l_outfile outfile local
             v_outfile = valueOf var_outfile
         parms <- getOutputParams
         outp <- mapM (\x -> do

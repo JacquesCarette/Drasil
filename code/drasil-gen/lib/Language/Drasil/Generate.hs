@@ -58,10 +58,11 @@ prntDoc d pinfo fn dtype fmt =
     HTML              -> do prntDoc' dtype (show dtype ++ "/HTML") fn HTML d pinfo
                             prntCSS dtype fn d
     TeX               -> do prntDoc' dtype (show dtype ++ "/PDF") fn TeX d pinfo
-                            prntMake $ DocSpec (DC dtype []) fn
+                            prntMake $ DocSpec (DC dtype [TeX]) fn
     Jupyter           -> do prntDoc' dtype (show dtype ++ "/Jupyter") fn Jupyter d pinfo
     (Markdown GitHub) -> do prntDoc' dtype (show dtype ++ "/Markdown") fn (Markdown GitHub) d pinfo
     MDBook            -> do prntDoc' dtype (show dtype ++ "/mdBook") fn MDBook d pinfo
+                            prntMake $ DocSpec (DC dtype [MDBook]) fn
                             prntBook dtype d pinfo
                             prntCSV  dtype pinfo
     _                 -> mempty
@@ -99,10 +100,14 @@ prntDoc' dt dt' fn format body' sm = do
 
 -- | Helper for writing the Makefile(s).
 prntMake :: DocSpec -> IO ()
-prntMake ds@(DocSpec (DC dt _) _) =
-  do outh <- openFile (show dt ++ "/PDF/Makefile") WriteMode
+prntMake ds@(DocSpec (DC dt f) _) =
+  do outh <- openFile (show dt ++ dir f ++ "/Makefile") WriteMode
      hPutStrLn outh $ render $ genMake [ds]
      hClose outh
+  where
+    dir [TeX]    = "/PDF"
+    dir [MDBook] = "/mdBook"
+    dir _        = error "Makefile(s) only supported for TeX/MDBook."
 
 -- | Helper that creates a CSS file to accompany an HTML file.
 -- Takes in the folder name, generated file name, and the document.

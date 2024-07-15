@@ -12,7 +12,7 @@ module Drasil.GOOL.InterfaceCommon (
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp,
-  exists, List(..), InternalList(..), listSlice, listIndexExists, at,
+  exists, List(..), Set, InternalList(..), listSlice, listIndexExists, at,
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
@@ -293,6 +293,16 @@ class (ValueSym r) => List r where
   -- | Finds the index of the first occurrence of a value in a list.
   --   Arguments are: List, Value
   indexOf :: SValue r -> SValue r -> SValue r
+
+class (ValueSym r) => Set r where
+  --
+  setSize :: SValue r -> SValue r
+  -- set, element
+  setAdd :: SValue r -> SValue r -> SValue r
+  -- converts a list to a set
+  --fromList :: SValue r -> SValue r -> SValue r
+  -- set, element
+  contains :: SValue r -> SValue r -> SValue r
 
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) 

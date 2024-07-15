@@ -5,7 +5,7 @@ module Drasil.GOOL.RendererClassesCommon (
   RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), RenderType(..),
   InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, BinaryOpSym(..),
   OpElim(..), RenderVariable(..), InternalVarElim(..), RenderValue(..),
-  ValueElim(..), InternalListFunc(..), RenderFunction(..), FunctionElim(..),
+  ValueElim(..), InternalListFunc(..), InternalSetFunc(..), RenderFunction(..), FunctionElim(..),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   RenderStatement(..), StatementElim(..), RenderVisibility(..), VisibilityElim(..),
   MSMthdType, MethodTypeSym(..), RenderParam(..), ParamElim(..),
@@ -162,6 +162,9 @@ class InternalListFunc r where
   listAccessFunc :: VSType r -> SValue r -> VSFunction r
   -- | List, Index, Value
   listSetFunc    :: SValue r -> SValue r -> SValue r -> VSFunction r
+
+class InternalSetFunc r where
+  setAddFunc :: SValue r -> SValue r -> VSFunction r
 
 class RenderFunction r where
   funcFromData :: Doc -> VSType r -> VSFunction r

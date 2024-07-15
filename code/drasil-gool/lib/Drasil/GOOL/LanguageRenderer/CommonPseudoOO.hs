@@ -1,7 +1,7 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
 module Drasil.GOOL.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   doxClass, doxMod, docMod', modDoc', functionDoc, extVar, classVar, objVarSelf,
-  indexOf, listAddFunc, discardFileLine, intClass, funcType, buildModule,
+  indexOf, contains, listAddFunc, discardFileLine, intClass, funcType, buildModule,
   arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, forEach',
   docMain, mainFunction, buildModule', call', listSizeFunc, listAccessFunc',
   string, constDecDef, docInOutFunc, bindingError, extFuncAppMixedArgs, notNull,

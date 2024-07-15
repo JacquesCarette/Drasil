@@ -11,7 +11,7 @@ module OutputFormat
     - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
     - Parameter t_flight: flight duration: the time when the projectile lands (s)
 """
-function write_output(s::AbstractString, d_offset::AbstractFloat, t_flight::AbstractFloat)
+function write_output(s::String, d_offset::Float32, t_flight::Float32)
     outputfile = open("output.txt", "w")
     print(outputfile, "s = ")
     println(outputfile, s)

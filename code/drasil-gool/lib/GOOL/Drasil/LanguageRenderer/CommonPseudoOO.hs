@@ -104,10 +104,12 @@ doxMod :: (RenderSym r) => String -> String -> [String] -> String -> SFile r ->
   SFile r
 doxMod = docMod moduleDox
 
--- Python, Java, and C# --
+-- Python, Java, C#, and Julia --
 
 extVar :: (RenderSym r) => Label -> Label -> VSType r -> SVariable r
 extVar l n t = mkStateVar (l `access` n) t (R.extVar l n)
+
+-- Python, Java, and C# --
 
 classVar :: (RenderSym r) => (Doc -> Doc -> Doc) -> VSType r -> SVariable r ->
   SVariable r
@@ -290,13 +292,14 @@ docInOutFunc f desc is [] [both] b = docFuncRepr functionDox desc (map fst $
 docInOutFunc f desc is os bs b = docFuncRepr functionDox desc (map fst $ bs ++
   is ++ os) [] (f (map snd is) (map snd os) (map snd bs) b)
 
+-- Python, Java, C#, Swift, and Julia --
+extFuncAppMixedArgs :: (RenderSym r) => Library -> MixedCall r
+extFuncAppMixedArgs l = S.call (Just l) Nothing
+
 -- Python, Java, C#, and Swift --
 
 bindingError :: String -> String
 bindingError l = "Binding unimplemented in " ++ l
-
-extFuncAppMixedArgs :: (RenderSym r) => Library -> MixedCall r
-extFuncAppMixedArgs l = S.call (Just l) Nothing
 
 notNull :: (RenderSym r) => String -> SValue r -> SValue r
 notNull nil v = v ?!= S.valueOf (S.var nil $ onStateValue valueType v)

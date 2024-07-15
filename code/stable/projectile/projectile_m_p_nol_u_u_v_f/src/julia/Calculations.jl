@@ -12,7 +12,7 @@ module Calculations
     - Parameter g: magnitude of gravitational acceleration (m/s^2)
     - Returns: flight duration: the time when the projectile lands (s)
 """
-function func_t_flight(v_launch::AbstractFloat, theta::AbstractFloat, g::AbstractFloat)
+function func_t_flight(v_launch::Float32, theta::Float32, g::Float32)
     return Float32(2.0) * v_launch * sin(theta) / g
 end
 
@@ -22,7 +22,7 @@ end
     - Parameter g: magnitude of gravitational acceleration (m/s^2)
     - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
 """
-function func_p_land(v_launch::AbstractFloat, theta::AbstractFloat, g::AbstractFloat)
+function func_p_land(v_launch::Float32, theta::Float32, g::Float32)
     return Float32(2.0) * v_launch ^ Float32(2.0) * sin(theta) * cos(theta) / g
 end
 
@@ -31,7 +31,7 @@ end
     - Parameter p_land: landing position: the distance from the launcher to the final position of the projectile (m)
     - Returns: distance between the target position and the landing position: the offset between the target position and the landing position (m)
 """
-function func_d_offset(p_target::AbstractFloat, p_land::AbstractFloat)
+function func_d_offset(p_target::Float32, p_land::Float32)
     return p_land - p_target
 end
 
@@ -41,7 +41,7 @@ end
     - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
     - Returns: output message as a string
 """
-function func_s(p_target::AbstractFloat, epsilon::AbstractFloat, d_offset::AbstractFloat)
+function func_s(p_target::Float32, epsilon::Float32, d_offset::Float32)
     if abs(d_offset / p_target) < epsilon
         return "The target was hit."
     elseif d_offset < Float32(0.0)

@@ -181,7 +181,7 @@ objVar o' v' = do
 
 arrayElem :: (RenderSym r) => SValue r -> SVariable r -> SVariable r
 arrayElem i' v' = do
-  i <- i'
+  i <- S.intToIndex i'
   v <- v'
   let vName = variableName v ++ "[" ++ render (RC.value i) ++ "]"
       vType = listInnerType $ return $ variableType v

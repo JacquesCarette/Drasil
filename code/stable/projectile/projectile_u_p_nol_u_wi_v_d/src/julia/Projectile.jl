@@ -12,7 +12,7 @@ module Projectile
     - Parameter g: magnitude of gravitational acceleration (m/s^2)
     - Returns: flight duration: the time when the projectile lands (s)
 """
-function func_t_flight(v_launch::AbstractFloat, theta::AbstractFloat, g::AbstractFloat)
+function func_t_flight(v_launch::Float64, theta::Float64, g::Float64)
     return 2.0 * v_launch * sin(theta) / g
 end
 
@@ -22,7 +22,7 @@ end
     - Parameter g: magnitude of gravitational acceleration (m/s^2)
     - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
 """
-function func_p_land(v_launch::AbstractFloat, theta::AbstractFloat, g::AbstractFloat)
+function func_p_land(v_launch::Float64, theta::Float64, g::Float64)
     return 2.0 * v_launch ^ 2.0 * sin(theta) * cos(theta) / g
 end
 
@@ -31,7 +31,7 @@ end
     - Parameter p_land: landing position: the distance from the launcher to the final position of the projectile (m)
     - Returns: distance between the target position and the landing position: the offset between the target position and the landing position (m)
 """
-function func_d_offset(p_target::AbstractFloat, p_land::AbstractFloat)
+function func_d_offset(p_target::Float64, p_land::Float64)
     return p_land - p_target
 end
 
@@ -41,7 +41,7 @@ end
     - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
     - Returns: output message as a string
 """
-function func_s(p_target::AbstractFloat, epsilon::AbstractFloat, d_offset::AbstractFloat)
+function func_s(p_target::Float64, epsilon::Float64, d_offset::Float64)
     if abs(d_offset / p_target) < epsilon
         return "The target was hit."
     elseif d_offset < 0.0
@@ -57,7 +57,7 @@ end
     - Returns: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
     - Returns: target position: the distance from the launcher to the target (m)
 """
-function get_input(filename::AbstractString)
+function get_input(filename::String)
     infile = open(filename, "r")
     readline(infile)
     v_launch = parse(Float64, readline(infile))
@@ -75,7 +75,7 @@ end
     - Parameter theta: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
     - Parameter p_target: target position: the distance from the launcher to the target (m)
 """
-function input_constraints(v_launch::AbstractFloat, theta::AbstractFloat, p_target::AbstractFloat)
+function input_constraints(v_launch::Float64, theta::Float64, p_target::Float64)
     if !(v_launch > 0.0)
         print("Warning: ")
         print("v_launch has value ")
@@ -113,7 +113,7 @@ end
     - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
     - Parameter t_flight: flight duration: the time when the projectile lands (s)
 """
-function write_output(s::AbstractString, d_offset::AbstractFloat, t_flight::AbstractFloat)
+function write_output(s::String, d_offset::Float64, t_flight::Float64)
     outputfile = open("output.txt", "w")
     print(outputfile, "s = ")
     println(outputfile, s)

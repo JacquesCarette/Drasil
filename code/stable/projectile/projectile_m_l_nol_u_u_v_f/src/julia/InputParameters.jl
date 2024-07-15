@@ -12,7 +12,7 @@ module InputParameters
     - Returns: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
     - Returns: target position: the distance from the launcher to the target (m)
 """
-function get_input(filename::AbstractString)
+function get_input(filename::String)
     infile = open(filename, "r")
     readline(infile)
     v_launch = parse(Float32, readline(infile))
@@ -30,7 +30,7 @@ end
     - Parameter theta: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
     - Parameter p_target: target position: the distance from the launcher to the target (m)
 """
-function input_constraints(v_launch::AbstractFloat, theta::AbstractFloat, p_target::AbstractFloat)
+function input_constraints(v_launch::Float32, theta::Float32, p_target::Float32)
     if !(v_launch > Float32(0.0))
         print("Warning: ")
         print("v_launch has value ")

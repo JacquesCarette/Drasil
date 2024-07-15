@@ -11,7 +11,7 @@ import Language.Drasil.Code (Choices(..), Comments(..),
   makeConstraints, makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..), 
   makeOptFeats)
 import Language.Drasil.Generate (genCode)
-import GOOL.Drasil (CodeType(..))
+import Drasil.GOOL (CodeType(..))
 import Data.Drasil.Quantities.Math (piConst)
 import Drasil.Projectile.Body (fullSI)
 import SysInfo.Drasil (SystemInformation(SI, _sys))

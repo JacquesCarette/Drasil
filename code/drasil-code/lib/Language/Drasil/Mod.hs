@@ -9,7 +9,7 @@ module Language.Drasil.Mod (Class(..), StateVariable(..), Func(..),
 
 import Language.Drasil (Space, MayHaveUnit, Quantity, CodeExpr, LiteralC(..))
 import Database.Drasil (ChunkDB)
-import GOOL.Drasil (ScopeTag(..))
+import Drasil.GOOL (ScopeTag(..))
 
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codevars,
   codevars', quantvar)

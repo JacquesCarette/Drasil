@@ -1,6 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module GOOL.Drasil.InterfaceGOOL (
+module Drasil.GOOL.InterfaceGOOL (
   -- Types
   GSProgram, SFile, FSModule, SClass, VSFunction, CSStateVar,
   -- Typeclasses
@@ -16,7 +16,7 @@ module GOOL.Drasil.InterfaceGOOL (
   initObserverList, addObserver, StrategyPattern(..), convTypeOO
   ) where
 
-import GOOL.Drasil.InterfaceCommon (
+import Drasil.GOOL.InterfaceCommon (
   -- Types
   Label, Library, MSBody, MSBlock, VSType, SVariable, SValue, MSStatement,
   NamedArgs, MSParameter, SMethod, Initializers, MixedCall, MixedCtorCall,
@@ -26,9 +26,9 @@ import GOOL.Drasil.InterfaceCommon (
   ScopeSym(..), ValueSym(valueType), VariableValue(valueOf), ValueExpression,
   List(listSize, listAdd), listOf, StatementSym(valStmt),
   DeclStatement(listDecDef), FuncAppStatement, convType)
-import GOOL.Drasil.CodeType (CodeType(..), ClassName)
-import GOOL.Drasil.Helpers (onStateValue)
-import GOOL.Drasil.State (GS, FS, CS, VS)
+import Drasil.GOOL.CodeType (CodeType(..), ClassName)
+import Drasil.GOOL.Helpers (onStateValue)
+import Drasil.GOOL.State (GS, FS, CS, VS)
 
 class (SharedProg r, ProgramSym r, OOVariableValue r, OODeclStatement r,
   OOFuncAppStatement r, OOValueExpression r, InternalValueExp r, GetSet r,

@@ -6,7 +6,7 @@ module Language.Drasil.Code.Code (
 
 import qualified Language.Drasil as S (Space(..))
 
-import GOOL.Drasil (CodeType(..))
+import Drasil.GOOL (CodeType(..))
 
 import Text.PrettyPrint.HughesPJ (Doc)
 import Data.List.NonEmpty (toList)

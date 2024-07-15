@@ -69,8 +69,8 @@ h n       | n < 1 = error "Illegal header (too small)"
           | n > 7 = error "Illegal header (too large)"
           | otherwise = wrap ("h" ++ show n) []
 
--- | HTML class or id selector.
-data Variation = Class | Id
+-- | HTML attribute selector.
+data Variation = Class | Id | Align
 
 -- | General 'Class' wrapper function and formats the document space with 'cat'.
 wrap :: String -> [String] -> Doc -> Doc
@@ -94,6 +94,10 @@ wrapGen' sepf Id s ti _ = \x ->
   let tb c = text ("<" ++ c ++ " id=\"") <> ti <> text "\">"
       te c = text $ "</" ++ c ++ ">"
   in sepf [tb s, indent x, te s] 
+wrapGen' sepf Align s ti _ = \x ->
+  let tb c = text ("<" ++ c ++ " align=\"") <> ti <> text "\">"
+      te c = text $ "</" ++ c ++ ">"
+  in sepf [tb s, x, te s] 
 
 -- | General wrapper that formats the document space nicely.
 wrapGen :: Variation -> String -> Doc -> [String] -> Doc -> Doc

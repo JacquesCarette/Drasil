@@ -7,8 +7,7 @@ import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), hcat,
 import Data.Map (lookup)
 import Language.Drasil.Printing.Helpers (ast, ($^$), vsep)
 import Language.Drasil.Printing.LayoutObj (RefMap, Filepath)
-
-data Variation =  Id | Align | None
+import Language.Drasil.HTML.Helpers (wrap', wrapGen', Variation(Id, Align))
 
 -- | Angled brackets
 ang :: Doc -> Doc
@@ -24,40 +23,17 @@ em t = ast <> t <> ast
 
 li, ul :: Doc -> Doc
 -- | List tag wrapper
-li = wrap "li"
+li = wrap' "li" []
 -- | Unordered list tag wrapper.
-ul = wrap "ul"
-
--- | Helper for wrapping HTML lists
-wrap :: String -> Doc -> Doc
-wrap a = wrapGen hcat None a empty
-
--- | Helper for setting up HTML tags
--- ([Doc] -> Doc): Doc concatenation function.
--- Variation: HTML tag attribute.
--- String: HTML tag.
--- Doc: HTML tag attribute value.
--- Doc: Content being wrapped.
-wrapGen :: ([Doc] -> Doc) -> Variation -> String -> Doc -> Doc -> Doc
-wrapGen sepf None s _ = \x ->
-  let tb c = text $ "<" ++ c ++ ">"
-  in sepf [tb s, x, tb $ '/':s]
-wrapGen sepf Align s ti = \x ->
-  let tb c = text ("<" ++ c ++ " align=\"") <> ti <> text "\">"
-      te c = text $ "</" ++ c ++ ">"
-  in  sepf [tb s, x, te s]
-wrapGen sepf Id s ti = \x ->
-  let tb c = text ("<" ++ c ++ " id=\"") <> ti <> text "\">"
-      te c = text $ "</" ++ c ++ ">"
-  in  sepf [tb s, x, te s]
+ul = wrap' "ul" []
 
 -- | Helper for setting up section div
 divTag :: Doc -> Doc
-divTag l = wrapGen hcat Id "div" l empty
+divTag l = wrapGen' hcat Id "div" l [""] empty
 
 -- | Helper for setting up div for defn heading
 defnHTag :: Doc -> Doc
-defnHTag = wrapGen vsep Align "div" (text "center")
+defnHTag = wrapGen' vsep Align "div" (text "center") [""]
 
 -- | Helper for setting up links to references
 reflink :: RefMap -> String -> Doc -> Doc
@@ -84,7 +60,7 @@ image f c =  text "!" <> reflinkURI fp c $^$ bold (caption c)
 
 -- | Helper for setting up captions
 caption :: Doc -> Doc
-caption = wrapGen hcat Align "p" (text "center")
+caption = wrapGen' hcat Align "p" (text "center") [""]
 
 -- | Helper for setting up headings with an id attribute.
 -- id attribute will only work for mdBook.

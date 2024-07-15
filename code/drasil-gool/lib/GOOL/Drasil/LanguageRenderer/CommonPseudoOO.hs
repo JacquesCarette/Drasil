@@ -1,6 +1,6 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
 module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
-  doxClass, doxMod, docMod', extVar, classVar, objVarSelf, indexOf, listAddFunc,
+  doxClass, doxMod, docMod', extVar, classVar, objVarSelf, indexOf, contains, listAddFunc,
   discardFileLine, intClass, funcType, buildModule, arrayType, pi, printSt,
   arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction,
   buildModule', call', listSizeFunc, listAccessFunc', string, constDecDef,
@@ -130,6 +130,9 @@ objVarSelf = IG.objVar IG.self
 
 indexOf :: (RenderSym r) => Label -> SValue r -> SValue r -> SValue r
 indexOf f l v = IC.indexToInt $ IG.objAccess l (IG.func f IC.int [v])
+
+contains :: (RenderSym r) => Label -> SValue r -> SValue r -> SValue r
+contains f l v = IG.objAccess l (IG.func f IC.int [v])
 
 listAddFunc :: (RenderSym r) => Label -> SValue r -> SValue r -> VSFunction r
 listAddFunc f i v = IG.func f (IC.listType $ onStateValue valueType v) 

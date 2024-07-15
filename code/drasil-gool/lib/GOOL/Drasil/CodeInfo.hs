@@ -8,7 +8,7 @@ import GOOL.Drasil.InterfaceCommon (MSBody, VSType, SValue, MSStatement,
   VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
+  ValueExpression(..), List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
   VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
@@ -241,7 +241,12 @@ instance List CodeInfo where
   listAccess = execute2
   listSet    = execute3
   indexOf    = execute2
-  
+
+instance Set CodeInfo where
+  setSize = execute1
+  setAdd = execute2
+  contains = execute2
+
 instance InternalList CodeInfo where
   listSlice' b e s _ vl = zoom lensMStoVS $ do
     mapM_ (fromMaybe noInfo) [b,e,s]

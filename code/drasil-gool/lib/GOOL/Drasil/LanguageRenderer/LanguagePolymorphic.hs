@@ -8,8 +8,8 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   classVarCheckStatic, arrayElem, litChar, litDouble, litInt, litString, 
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd, 
-  listAppend, listAccess, listSet, getFunc, setFunc, 
-  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment,
+  listAppend, listAccess, listSet, setAdd, getFunc, setFunc, 
+  listAppendFunc, setAddFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment,
   objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
   tryCatch, construct, param, method, getMethod, setMethod, initStmts,
   function, docFuncRepr, docFunc, buildClass, implementingClass, docClass,
@@ -48,7 +48,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(commentedMod),
   RenderMod(updateModuleDoc), BlockCommentSym(..))
 import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData), 
   RenderValue(call), InternalGetSet(getFunc, setFunc),InternalListFunc
-  (listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
+  (listAddFunc, listAppendFunc, listAccessFunc, listSetFunc), InternalSetFunc(setAddFunc),
   RenderStatement(stmt), InternalIOStmt(..), RenderMethod(intFunc), 
   RenderClass(intClass, commentedClass))
 import qualified GOOL.Drasil.RendererClasses as RC (BodyElim(..), BlockElim(..),
@@ -272,6 +272,9 @@ get v vToGet = v $. S.getFunc vToGet
 
 set :: (RenderSym r) => SValue r -> SVariable r -> SValue r -> SValue r
 set v vToSet toVal = v $. S.setFunc (onStateValue valueType v) vToSet toVal
+
+setAdd :: (RenderSym r) => SValue r -> SValue r -> SValue r
+setAdd v vToApp = v $. S.setAddFunc v vToApp
 
 listAdd :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 listAdd v i vToAdd = v $. S.listAddFunc v (IC.intToIndex i) vToAdd

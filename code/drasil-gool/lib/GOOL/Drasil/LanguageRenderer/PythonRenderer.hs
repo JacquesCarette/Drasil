@@ -14,7 +14,7 @@ import GOOL.Drasil.InterfaceCommon (SharedProg, Label, Library, VSType,
   TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..),
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..), Set(..),
   InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
@@ -32,7 +32,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalGetSet(..), 
-  InternalListFunc(..), RenderFunction(..), 
+  InternalListFunc(..), InternalSetFunc(..), RenderFunction(..), 
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..), 
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm), 
   RenderScope(..), ScopeElim, MethodTypeSym(..), RenderParam(..), 
@@ -60,14 +60,14 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
-  setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
+  setFunc, listAppendFunc, setAdd, stmt, loopStmt, emptyStmt, assign, subAssign,
   increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
   buildClass, implementingClass, commentedClass, modFromData, fileDoc,
   fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
-  extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
+  extFuncAppMixedArgs, indexOf, contains, listAddFunc, discardFileLine, intClass, 
   funcType, buildModule, bindingError, notNull, listDecDef, destructorError, 
   stateVarDef, constVar, litArray, listSetFunc, extraClass, listAccessFunc, 
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
@@ -431,8 +431,18 @@ instance List PythonCode where
   listSet = G.listSet
   indexOf = CP.indexOf pyIndex
 
+instance Set PythonCode where
+  setSize = CP.listSize
+  setAdd = G.setAdd
+  --fromList =
+  contains = CP.contains pyIn
+
 instance InternalList PythonCode where
   listSlice' b e s vn vo = pyListSlice vn vo (getVal b) (getVal e) (getVal s)
+    where getVal = fromMaybe (mkStateVal void empty)
+
+instance InternalSetFunc PythonCode where
+  listSlice' b t s vn vo = pyListSlice vn vo (getVal b) (getVal t) (getVal s)
     where getVal = fromMaybe (mkStateVal void empty)
 
 instance InternalGetSet PythonCode where
@@ -804,7 +814,7 @@ pyInputFunc = text "input()" -- raw_input() for < Python 3.0
 pyPrintFunc = text printLabel
 
 pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyOpen, pyClose, 
-  pyRead, pyWrite, pyAppend, pySplit, pyRange, pyRstrip, pyMath :: String
+  pyRead, pyWrite, pyAppend, pySplit, pyRange, pyRstrip, pyMath, pyIn, pySetAdd, pySet :: String
 pyListSize = "len"
 pyIndex = "index"
 pyInsert = "insert"
@@ -820,6 +830,9 @@ pySplit = "split"
 pyRange = "range"
 pyRstrip = "rstrip"
 pyMath = "math"
+pyIn = "in"
+pySetAdd = "Add"
+pySet = "set"
 
 pyDef, pyLambdaDec, pyElseIf, pyRaise, pyExcept :: Doc
 pyDef = text "def"

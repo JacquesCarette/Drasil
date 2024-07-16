@@ -2,11 +2,12 @@
 module Language.Drasil.Markdown.Helpers where
 
 import Prelude hiding ((<>), lookup)
+import System.FilePath (takeFileName)
 import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), hcat,
   brackets, parens, braces)
 import Data.Map (lookup)
 import Language.Drasil.Printing.Helpers (ast, ($^$), vsep)
-import Language.Drasil.Printing.LayoutObj (RefMap, Filepath)
+import Language.Drasil.Printing.LayoutObj (RefMap)
 import Language.Drasil.HTML.Helpers (wrap', wrapGen', Variation(Id, Align))
 
 -- | Angled brackets
@@ -56,7 +57,7 @@ reflinkURI ref txt = if ref == txt then ang ref
 image :: Doc -> Doc -> Doc
 image f c =  text "!" <> reflinkURI fp c $^$ bold (caption c)
   where
-    fp = text $ "/assets/" ++ (extractFn $ show f)
+    fp = text $ "/assets/" ++ (takeFileName $ show f)
 
 -- | Helper for setting up captions
 caption :: Doc -> Doc
@@ -85,7 +86,3 @@ h' n
 -- | Helper for getting length of a Doc
 docLength :: Doc -> Int
 docLength d = length $ show d
-
--- | Helper for extracting the file from a filepath
-extractFn :: Filepath -> Filepath
-extractFn = reverse . takeWhile (/= '/') . reverse

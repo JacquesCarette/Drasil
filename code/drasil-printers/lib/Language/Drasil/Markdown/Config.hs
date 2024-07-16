@@ -4,9 +4,9 @@ module Language.Drasil.Markdown.Config where
 import Text.PrettyPrint (Doc, text, vcat, (<+>))
 import Data.Map (empty, elems)
 import Control.Lens
+import System.FilePath (takeFileName)
 
 import Language.Drasil.Markdown.Print (pSpec)
-import Language.Drasil.Markdown.Helpers (extractFn)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..))
 import Database.Drasil (labelledcontentTable)
 import Language.Drasil.Printing.Import.Sentence (spec)
@@ -47,7 +47,7 @@ mkTitle sm t = text "\"" <> pSpec empty ts <> text "\""
 -- to the location mdBook uses.
 assetMap :: PrintingInformation -> [(Filepath, FilePath)]
 assetMap (PI {_ckdb = cdb}) = 
-  [(fp, "src/assets/" ++ extractFn fp) 
+  [(fp, "src/assets/" ++ takeFileName fp) 
   | (LblC { _ctype = Figure _ fp _ }, _) <- elems lct
   ]
   where

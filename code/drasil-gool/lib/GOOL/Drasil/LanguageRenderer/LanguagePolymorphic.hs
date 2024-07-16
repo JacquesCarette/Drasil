@@ -4,7 +4,7 @@
 module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, 
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
-  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar,
+  plusOp, minusOp, multOp, divideOp, moduloOp, inOp, var, staticVar, objVar,
   classVarCheckStatic, arrayElem, litChar, litDouble, litInt, litString, 
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd, 
@@ -154,6 +154,9 @@ divideOp = multPrec "/"
 
 moduloOp :: (Monad r) => VSOp r
 moduloOp = multPrec "%"
+
+inOp :: (Monad r) => VSOp r
+inOp = multPrec "isin"
 
 -- Variables --
 
@@ -310,7 +313,8 @@ setFunc t v toVal = v >>= (\vr -> IG.func (setterName $ variableName vr) t
 
 listAppendFunc :: (RenderSym r) => Label -> SValue r -> VSFunction r
 listAppendFunc f v = IG.func f (IC.listType $ onStateValue valueType v) [v]
-
+setAddFunc :: (RenderSym r) => Label -> SValue r -> VSFunction r
+setAddFunc f v = IG.func f (IC.listType $ onStateValue valueType v) [v]
 -- Statements --
 
 stmt :: (RenderSym r) => MSStatement r -> MSStatement r

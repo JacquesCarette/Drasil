@@ -34,7 +34,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
   RenderValue(..), ValueElim(valuePrec, valueInt),  InternalGetSet(..), 
-  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType), 
+  InternalListFunc(..), InternalSetFunc(..), RenderFunction(..), FunctionElim(functionType), 
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), 
   RenderStatement(..), StatementElim(statementTerm), RenderScope(..), 
   ScopeElim, MethodTypeSym(..), RenderParam(..), 
@@ -141,6 +141,8 @@ instance ProgramSym JavaCode where
     endStatement)))
 
 instance RenderSym JavaCode
+
+instance InternalSetFunc JavaCode
 
 instance FileSym JavaCode where
   type File JavaCode = FileData 
@@ -362,6 +364,7 @@ instance BooleanExpression JavaCode where
   (?!) = typeUnExpr notOp bool
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
+  isin = typeBinExpr inOp bool
 
 instance Comparison JavaCode where
   (?<) = typeBinExpr lessOp bool

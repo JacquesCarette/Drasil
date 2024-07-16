@@ -309,6 +309,7 @@ instance Literal CSharpCode where
   litInt = G.litInt
   litString = G.litString
   litArray = csLitList arrayType
+  litSet = csLitList arrayType
   litList = csLitList listType
 
 instance MathConstant CSharpCode where

@@ -71,7 +71,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   modFromData, fileDoc, fileFromData, defaultOptSpace)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (classVar,
   objVarSelf, intClass, buildModule, docMod', bindingError, extFuncAppMixedArgs,
-  notNull, listDecDef, destructorError, stateVarDef, constVar, litArray,
+  notNull, listDecDef, destructorError, stateVarDef, constVar, litArray, litSet,
   listSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR,
   openFileW, self, multiAssign, multiReturn, listDec, funcDecDef,
   inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', bool, float,
@@ -312,6 +312,7 @@ instance Literal SwiftCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray brackets
+  litSet = CP.litSet braces
   litList = litArray
 
 instance MathConstant SwiftCode where

@@ -48,7 +48,5 @@ mkTitle sm t = text "\"" <> pSpec empty ts <> text "\""
 assetMap :: PrintingInformation -> [(Filepath, FilePath)]
 assetMap (PI {_ckdb = cdb}) = 
   [(fp, "src/assets/" ++ takeFileName fp) 
-  | (LblC { _ctype = Figure _ fp _ }, _) <- elems lct
+  | (LblC { _ctype = Figure _ fp _ }, _) <- elems $ cdb ^. labelledcontentTable
   ]
-  where
-    lct = cdb ^. labelledcontentTable

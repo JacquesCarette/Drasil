@@ -7,7 +7,7 @@ if [ "$#" -ne 1 ]; then
 fi
 
 # Change to the mdBook project directory
-cd "$1"
+cd "$1" || exit 1
 
 # Find any CSV file in the directory
 csv_file=$(find . -maxdepth 1 -name '*.csv' | head -n 1)

@@ -363,6 +363,7 @@ instance BooleanExpression CSharpCode where
   (?!) = typeUnExpr notOp bool
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
+  isin = typeBinExpr inOp bool
 
 instance Comparison CSharpCode where
   (?<) = typeBinExpr lessOp bool

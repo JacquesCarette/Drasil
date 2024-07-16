@@ -15,8 +15,9 @@ update_files() {
 
 fetch_hlint_version() {
     local redirect_url
-    redirect_url=$(curl -Ls -o /dev/null -w "%{url_effective}" "https://www.stackage.org/lts-$1/package/hlint")
     local hlint_version
+
+    redirect_url=$(curl -Ls -o /dev/null -w "%{url_effective}" "https://www.stackage.org/lts-$1/package/hlint")
     hlint_version=$(echo "$redirect_url" | grep -oE "hlint-[0-9]+\.[0-9]+\.[0-9]+" | sed 's/hlint-//')
 
     echo "$hlint_version"

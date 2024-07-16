@@ -36,7 +36,7 @@ import Drasil.GOOL.RendererClassesCommon (MSMthdType, CommonRenderSym,
   ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
+  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..), InternalSetFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim,
@@ -376,7 +376,8 @@ instance BooleanExpression SwiftCode where
   (?!) = typeUnExpr notOp bool
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
-
+  isin = typeBinExpr inOp bool
+  
 instance Comparison SwiftCode where
   (?<) = swiftNumBinExpr (typeBinExpr lessOp bool)
   (?<=) = swiftNumBinExpr (typeBinExpr lessEqualOp bool)
@@ -432,6 +433,8 @@ instance ValueElim SwiftCode where
 
 instance InternalValueExp SwiftCode where
   objMethodCallMixedArgs' = G.objMethodCall
+
+instance InternalSetFunc SwiftCode
 
 instance FunctionSym SwiftCode where
   type Function SwiftCode = FuncData

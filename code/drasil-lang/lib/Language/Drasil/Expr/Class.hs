@@ -116,7 +116,8 @@ class ExprC r where
   ($=>), ($<=>) :: r -> r -> r
   
   ($&&), ($||) :: r -> r -> r
-  
+
+  in' :: r -> r -> r
   -- | Smart constructor for taking the absolute value of an expression.
   abs_ :: r -> r
   
@@ -278,7 +279,9 @@ instance ExprC Expr where
   a $&& b = AssocB And [a, b]
   -- | Smart constructor for the boolean /or/ operator.
   a $|| b = AssocB Or  [a, b]
-  
+
+  in' e s = ESBBinaryOp SContains e s
+
   -- | Smart constructor for taking the absolute value of an expression.
   abs_ = UnaryOp Abs
   
@@ -441,6 +444,8 @@ instance ExprC M.ModelExpr where
   a $&& b = M.AssocB M.And [a, b]
   -- | Smart constructor for the boolean /or/ operator.
   a $|| b = M.AssocB M.Or  [a, b]
+
+  in' e s = M.ESBBinaryOp M.SContains e s
 
   -- | Smart constructor for taking the absolute value of an expression.
   abs_ = M.UnaryOp M.Abs
@@ -609,6 +614,8 @@ instance ExprC C.CodeExpr where
   -- | Smart constructor for the boolean /or/ operator.
   a $|| b = C.AssocB C.Or  [a, b]
   
+  in' e s = C.ESBBinaryOp C.SContains e s
+
   -- | Smart constructor for taking the absolute value of an expression.
   abs_ = C.UnaryOp C.Abs
   

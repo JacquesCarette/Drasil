@@ -149,6 +149,7 @@ instance Literal CodeInfoOO where
   litString _ = noInfo
   litArray  _ = executeList
   litList   _ = executeList
+  litSet   _ = executeList
 
 instance MathConstant CodeInfoOO where
   pi = noInfo

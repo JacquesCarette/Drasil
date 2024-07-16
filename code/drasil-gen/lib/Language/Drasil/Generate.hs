@@ -126,7 +126,7 @@ prntBook dt doc sm = do
   hPutStrLn outh $ render (makeBook doc sm)
   hClose outh
   where
-    fp = show dt ++ "/mdBook" ++ "/book.toml"
+    fp = show dt ++ "/mdBook/book.toml"
 
 prntCSV :: DocType -> PrintingInformation -> IO()
 prntCSV dt sm = do
@@ -134,7 +134,7 @@ prntCSV dt sm = do
   hPutStrLn outh $ render (makeCSV sm)
   hClose outh
   where
-    fp = show dt ++ "/mdBook" ++ "/assets.csv"
+    fp = show dt ++ "/mdBook/assets.csv"
 
 -- | Renders single-page documents.
 writeDoc :: PrintingInformation -> DocType -> Format -> Filename -> Document -> Doc

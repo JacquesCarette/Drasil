@@ -5,6 +5,7 @@ import Data.Char (toLower)
 import Build.Drasil ((+:+), Command, makeS, mkCheckedCommand, mkCommand, mkFreeVar,
   mkFile, mkRule, RuleTransformer(makeRule))
 import Language.Drasil.Printers (DocType(..), Format(TeX, MDBook))
+import Metadata.Drasil.DrasilMetaCall (watermark)
 
 -- | When choosing your document, you must specify the filename for
 -- the generated output (specified /without/ a file extension).
@@ -22,7 +23,7 @@ data DocSpec = DocSpec DocChoices Filename
 -- | Allows the creation of Makefiles for documents that use LaTeX.
 instance RuleTransformer DocSpec where
   makeRule (DocSpec (DC dt [TeX]) fn) = [
-    mkRule [] (makeS $ map toLower $ show dt) [pdfName] [],
+    mkRule [watermark] (makeS $ map toLower $ show dt) [pdfName] [],
     mkFile [] pdfName [makeS $ fn ++ ".tex"] $
       map ($ fn) [lualatex, bibtex, lualatex, lualatex]] where
         lualatex, bibtex :: String -> Command
@@ -30,7 +31,7 @@ instance RuleTransformer DocSpec where
         bibtex = mkCommand . (+:+) (makeS "bibtex" +:+ mkFreeVar "BIBTEXFLAGS") . makeS
         pdfName = makeS $ fn ++ ".pdf"
   makeRule (DocSpec (DC _ [MDBook]) _) = [
-    mkRule [] (makeS "build")  [] [build],
+    mkRule [watermark] (makeS "build")  [] [build],
     mkRule [] (makeS "server") [] [server]]
     where
       build = mkCheckedCommand $ makeS "mdbook build"

@@ -89,6 +89,7 @@ on2StateWrapped f a' b' = do
 getInnerType :: C.CodeType -> C.CodeType
 getInnerType (C.List innerT) = innerT
 getInnerType (C.Array innerT) = innerT
+getInnerType (C.Set innerT) = innerT
 getInnerType _ = error "Attempt to extract inner type of list from a non-list type" 
 
 getNestDegree :: Integer -> C.CodeType -> Integer

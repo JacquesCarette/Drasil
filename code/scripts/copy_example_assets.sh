@@ -9,10 +9,10 @@ fi
 # Change to the mdBook project directory
 cd "$1" || exit 1
 
-# Find any CSV file in the directory
+# Declare the requirements CSV file
 csv_file=".drasil-requirements.csv"
 
-# Check if a CSV file was found
+# Check if the CSV file exists
 if [ ! -f "$csv_file" ]; then
     echo "No $csv_file file found in the directory."
     exit 1
@@ -20,6 +20,7 @@ fi
 
 # Read the CSV file line by line
 while IFS=, read -r original copy; do
+    # Copy over the assets specified by the CSV file
     dest_dir=$(dirname "$copy")
     mkdir -p "$dest_dir"
     cp "$original" "$copy"

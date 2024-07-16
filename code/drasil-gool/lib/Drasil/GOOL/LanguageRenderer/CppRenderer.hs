@@ -78,7 +78,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   fileFromData, defaultOptSpace, local)
 import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
-  constructor, doxFunc, doxClass, doxMod, funcType, buildModule, litArray,
+  constructor, doxFunc, doxClass, doxMod, funcType, buildModule, litArray, litSet,
   call', listSizeFunc, listAccessFunc', string, constDecDef, docInOutFunc,
   listSetFunc, extraClass, intToIndex, indexToInt, global)
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (charRender, float,
@@ -332,6 +332,7 @@ instance (Pair p) => Literal (p CppSrcCode CppHdrCode) where
   litInt v =on2StateValues  pair (litInt v) (litInt v)
   litString s = on2StateValues pair (litString s) (litString s)
   litArray = pair1Val1List litArray litArray
+  litSet = pair1Val1List litArray litArray
   litList = pair1Val1List litList litList
 
 instance (Pair p) => MathConstant (p CppSrcCode CppHdrCode) where
@@ -1259,6 +1260,7 @@ instance Literal CppSrcCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray braces
+  litSet = CP.litArray braces
   litList _ _ = error $ "List literals not supported in " ++ cppName
 
 instance MathConstant CppSrcCode where
@@ -1975,6 +1977,7 @@ instance Literal CppHdrCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray braces
+  litSet = CP.litArray braces
   litList _ _ = error $ "List literals not supported in " ++ cppName
 
 instance MathConstant CppHdrCode where

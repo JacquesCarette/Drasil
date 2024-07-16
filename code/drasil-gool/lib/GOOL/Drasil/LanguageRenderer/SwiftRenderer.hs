@@ -617,7 +617,7 @@ instance ControlStatement SwiftCode where
     modify setThrowUsed
     G.throw swiftThrowDoc Empty msg
 
-  ifCond = G.ifCond id bodyStart G.defaultOptSpace elseIfLabel bodyEnd
+  ifCond = G.ifCond id bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
   switch = C.switch (space <>) emptyStmt
 
   ifExists = M.ifExists

@@ -11,16 +11,16 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
-  SVariable, MSStatement, SMethod, MSBody, MSParameter, BodySym(..),
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..),
-  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  ScopeSym(..), ParameterSym(..), MethodSym(..), (&=), switchAsIf)
+  SVariable, MSStatement, SMethod, BodySym(..), BlockSym(..), TypeSym(..),
+  TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
+  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), (&=), switchAsIf)
 import GOOL.Drasil.InterfaceGOOL (OOProg, FSModule, ProgramSym(..), FileSym(..),
   ModuleSym(..), FunctionSym(..), PermanenceSym(..), ObserverPattern(..),
   StrategyPattern(..), GetSet(..), InternalValueExp(..), StateVarSym(..),
@@ -42,14 +42,14 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (printLabel, listSep, listSep',
-  variableList, parameterList, forLabel, inLabel, tryLabel, catchLabel, ifLabel,
-  elseLabel)
+  variableList, parameterList, forLabel, inLabel, tryLabel, catchLabel)
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp,
   sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, addComments,
   blockCmt, docCmt, commentedMod, listSetFunc, commentedItem, break, continue)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
   unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
   typeBinExpr, mkStmt, mkStmtNoEnd)
+import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   block, multiBlock, listInnerType, litChar, litDouble, litInt, litString,
   valueOf, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp,
@@ -57,7 +57,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   funcAppMixedArgs, lambda, listAccess, listSet, arrayElem, modFromData,
   fileDoc, fileFromData, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
   emptyStmt, assign, increment, subAssign, print, comment, valStmt, function,
-  returnStmt, construct, param, docFunc, throw, arg, argsList)
+  returnStmt, construct, param, docFunc, throw, arg, argsList, ifCond)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (bool,
   boolRender, extVar, funcType, buildModule, docMod', funcDecDef, litArray,
   listDec, listDecDef, listAccessFunc, listSetFunc, bindingError, notNull,
@@ -72,14 +72,13 @@ import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1,
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), ModData(..), md, updateMod, MethodData(..), mthd, OpData(..),
   ParamData(..), ProgData(..), TypeData(..), td, ValData(..), vd, VarData(..),
-  vard, CommonThunk, progD, fd, ScopeTag(..), pd, updateMthd, commonThunkDim,
-  commonThunkElim, vectorize, vectorize2, commonVecIndex, sumComponents,
-  pureValue)
+  vard, CommonThunk, progD, fd, pd, updateMthd, commonThunkDim, commonThunkElim,
+  vectorize, vectorize2, commonVecIndex, sumComponents, pureValue)
 import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
   getModuleImports, addModuleImportVS, getUsing, getLangImports, getLibImports,
-  addLibImportVS, useVarName, getClassName, getMainDoc, genLoopIndex)
+  addLibImportVS, useVarName, getMainDoc, genLoopIndex)
 
 import Control.Applicative (liftA2)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -88,8 +87,8 @@ import Data.Functor ((<&>))
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 import Data.List (intercalate, sort)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($+$), empty,
-  brackets, vcat, quotes, doubleQuotes, parens, equals, colon)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), empty, brackets, vcat,
+  quotes, doubleQuotes, parens, equals, colon)
 import qualified Text.PrettyPrint.HughesPJ as D (float)
 
 jlExt :: String
@@ -531,19 +530,7 @@ instance ControlStatement JuliaCode where
   continue = mkStmtNoEnd R.continue
   returnStmt = G.returnStmt Empty
   throw = G.throw jlThrow Empty
-  ifCond [] _ = error "if condition created with no cases"
-  ifCond (c:cs) eBody = -- TODO: Clean up (either put below or merge with G.ifCond)
-      let ifSect (v, b) = on2StateValues (\vl bd -> vcat [
-            ifLabel <+> RC.value vl,
-            indent $ RC.body bd]) (zoom lensMStoVS v) b
-          elseIfSect (v, b) = on2StateValues (\vl bd -> vcat [
-            elseIfLabel <+> RC.value vl,
-            indent $ RC.body bd]) (zoom lensMStoVS v) b
-          elseSect = onStateValue (\bd -> emptyIfEmpty (RC.body bd) (vcat [
-            elseLabel,
-            indent $ RC.body bd]) $+$ jlEnd) eBody
-      in sequence (ifSect c : map elseIfSect cs ++ [elseSect])
-        >>= (mkStmtNoEnd . vcat)
+  ifCond = G.ifCond id empty jlSpace elseIfLabel empty jlEnd
   switch = switchAsIf
   ifExists = M.ifExists
   for _ _ _ _ = error $ CP.forLoopError jlName
@@ -638,26 +625,29 @@ jlName, jlVersion :: String
 jlName = "Julia"
 jlVersion = "1.10.3"
 
--- Abstract and concrete versions of each Julia datatype
--- Currently only concrete ones are used, but because of Julia's workflow
--- It might be nice to use abstract types when possible
-jlIntAbs, jlIntConc, jlFloatAbs, jlFloatConc, jlDoubleAbs, jlDoubleConc,
-  jlCharAbs, jlCharConc, jlStringAbs, jlStringConc, jlListAbs, jlListConc,
+-- Concrete versions of each Julia datatype
+jlIntConc, jlFloatConc, jlDoubleConc, jlCharConc, jlStringConc, jlListConc,
   jlFile, jlVoid :: String
-jlIntAbs = "Integer"
 jlIntConc = "Int64"
-jlFloatAbs = "AbstractFloat"
 jlFloatConc = "Float32"
-jlDoubleAbs = "AbstractFloat"
 jlDoubleConc = "Float64"
-jlCharAbs = "AbstractChar"
 jlCharConc = "Char"
-jlStringAbs = "AbstractString"
 jlStringConc = "String"
-jlListAbs = "AbstractArray"
 jlListConc = "Array"
 jlFile = "IOStream"
 jlVoid = "Nothing"
+
+-- Abstract versions of each Julia datatype
+-- Currently only concrete ones are used, but because of Julia's workflow
+-- It might be nice to use abstract types when possible
+-- jlIntAbs, jlFloatAbs, jlDoubleAbs, jlCharAbs, jlStringAbs, jlListAbs, jlFile,
+--   jlVoid :: String
+-- jlIntAbs = "Integer"
+-- jlFloatAbs = "AbstractFloat"
+-- jlDoubleAbs = "AbstractFloat"
+-- jlCharAbs = "AbstractChar"
+-- jlStringAbs = "AbstractString"
+-- jlListAbs = "AbstractArray"
 
 jlClassError :: String
 jlClassError = "Classes are not supported in Julia"
@@ -768,6 +758,9 @@ jlDocCmtStart   = text "\"\"\""
 jlDocCmtEnd     = text "\"\"\""
 
 -- Control structures
+
+jlSpace :: OptionalSpace
+jlSpace = OSpace {oSpace = empty}
 
 -- | Creates a for-each loop in Julia
 jlForEach :: (RenderSym r) => r (Variable r) -> r (Value r) -> r (Body r) -> Doc

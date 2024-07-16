@@ -76,8 +76,8 @@ import Data.Maybe (fromMaybe, maybeToList)
 import Control.Monad.State (modify)
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
-import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
-  brackets, integer, vcat, comma, isEmpty, space)
+import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
+  parens, brackets, integer, vcat, comma, isEmpty, space)
 import qualified Text.PrettyPrint.HughesPJ as D (char, double)
 
 -- Bodies --
@@ -407,10 +407,11 @@ optSpaceDoc OSpace {oSpace = sp} = sp
 -- 2nd parameter is the syntax for starting a block in an if-condition
 -- 3rd parameter is the keyword for an else-if statement
 -- 4th parameter is the syntax for ending a block in an if-condition
+-- 5th parameter is the syntax for ending an if-statement
 ifCond :: (RenderSym r) => (Doc -> Doc) -> Doc -> OptionalSpace -> Doc -> Doc ->
-  [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
-ifCond _ _ _ _ _ [] _ = error "if condition created with no cases"
-ifCond f ifStart os elif bEnd (c:cs) eBody =
+  Doc -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
+ifCond _ _ _ _ _ _ [] _ = error "if condition created with no cases"
+ifCond f ifStart os elif bEnd ifEnd (c:cs) eBody =
     let ifSect (v, b) = on2StateValues (\val bd -> vcat [
           ifLabel <+> f (RC.value val) <> optSpaceDoc os <> ifStart,
           indent $ RC.body bd,
@@ -419,10 +420,10 @@ ifCond f ifStart os elif bEnd (c:cs) eBody =
           elif <+> f (RC.value val) <> optSpaceDoc os <> ifStart,
           indent $ RC.body bd,
           bEnd]) (zoom lensMStoVS v) b
-        elseSect = onStateValue (\bd -> emptyIfEmpty (RC.body bd) $ vcat [
+        elseSect = onStateValue (\bd -> emptyIfEmpty (RC.body bd) (vcat [
           elseLabel <> optSpaceDoc os <> ifStart,
           indent $ RC.body bd,
-          bEnd]) eBody
+          bEnd]) $+$ ifEnd) eBody
     in sequence (ifSect c : map elseIfSect cs ++ [elseSect]) 
       >>= (mkStmtNoEnd . vcat)
 

@@ -581,7 +581,7 @@ instance ControlStatement CSharpCode where
     modify (addLangImport csSystem)
     G.throw csThrowDoc Semi msg
 
-  ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd
+  ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
   switch = C.switch parens break
 
   ifExists = M.ifExists

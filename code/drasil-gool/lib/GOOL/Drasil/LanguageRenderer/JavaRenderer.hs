@@ -613,7 +613,7 @@ instance ControlStatement JavaCode where
   
   throw = G.throw jThrowDoc Semi
 
-  ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd
+  ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
   switch  = C.switch parens break
 
   ifExists = M.ifExists

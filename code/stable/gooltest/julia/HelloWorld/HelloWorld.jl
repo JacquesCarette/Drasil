@@ -54,7 +54,7 @@ mySlicedList4 = myOtherList[4:2 - 1]
 
 mySlicedList5 = myOtherList[4:-1:2 - 1]
 
-mySlicedList6 = myOtherList[start:-1:2 - 1]
+mySlicedList6 = myOtherList[begin:-1:2 - 1]
 
 mySlicedList7 = myOtherList[4:-1:end]
 

@@ -1522,7 +1522,7 @@ instance ControlStatement CppSrcCode where
 
   throw = G.throw cppThrowDoc Semi
 
-  ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd
+  ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
   switch = C.switch parens break
 
   ifExists _ ifBody _ = do

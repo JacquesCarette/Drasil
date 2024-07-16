@@ -2,7 +2,7 @@
 module GOOL.Drasil.LanguageRenderer.Constructors (
   mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, 
   VSOp, mkOp, unOpPrec, compEqualPrec, compPrec, addPrec, multPrec, powerPrec, 
-  andPrec, orPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr, 
+  andPrec, orPrec, inPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr, 
   binExpr', binExprNumDbl', typeBinExpr
 ) where
 
@@ -95,6 +95,9 @@ andPrec = mkOp 3 . text
 -- | Construct an operator with disjunction-level precedence
 orPrec :: (Monad r) => String -> VSOp r
 orPrec = mkOp 2 . text
+
+inPrec :: (Monad r) => String -> VSOp r
+inPrec = mkOp 2 . text
 
 -- Expressions --
 

@@ -33,7 +33,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalGetSet(..),
-  InternalListFunc(..),  RenderFunction(..), FunctionElim(functionType),
+  InternalListFunc(..), InternalSetFunc(..),  RenderFunction(..), FunctionElim(functionType),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   RenderStatement(..), StatementElim(statementTerm), RenderScope(..),
   ScopeElim, MethodTypeSym(..), RenderParam(..), ParamElim(parameterName,
@@ -131,6 +131,8 @@ instance ProgramSym CSharpCode where
     pure $ onCodeList (progD n st) fs
 
 instance RenderSym CSharpCode
+
+instance InternalSetFunc CSharpCode
 
 instance FileSym CSharpCode where
   type File CSharpCode = FileData
@@ -351,6 +353,7 @@ instance BooleanExpression CSharpCode where
   (?!) = typeUnExpr notOp bool
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
+  isin = typeBinExpr inOp bool
 
 instance Comparison CSharpCode where
   (?<) = typeBinExpr lessOp bool

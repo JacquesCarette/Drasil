@@ -35,7 +35,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalGetSet(..),
-  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
+  InternalListFunc(..), InternalSetFunc(..), RenderFunction(..), FunctionElim(functionType),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   RenderStatement(..), StatementElim(statementTerm), RenderScope(..),
   ScopeElim, MSMthdType, MethodTypeSym(..), RenderParam(..),
@@ -76,7 +76,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   call', listSizeFunc, listAccessFunc', string, constDecDef, docInOutFunc,
   listSetFunc, extraClass, intToIndex, indexToInt)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float,
-  double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
+  double, char, listType, void, notOp, andOp, orOp, inOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize,
   increment1, decrement1, varDec, varDecDef, listDec, extObjDecNew, switch,
   for, while, intFunc, multiAssignError, multiReturnError, multiTypeError)
@@ -264,6 +264,7 @@ instance (Pair p) => BinaryOpSym (p CppSrcCode CppHdrCode) where
   moduloOp = on2StateValues pair moduloOp moduloOp
   andOp = on2StateValues pair andOp andOp
   orOp = on2StateValues pair orOp orOp
+  inOp = on2StateValues pair inOp inOp
 
 instance (Pair p) => OpElim (p CppSrcCode CppHdrCode) where
   uOp o = RC.uOp $ pfst o
@@ -361,6 +362,7 @@ instance (Pair p) => BooleanExpression (p CppSrcCode CppHdrCode) where
   (?!) = pair1 (?!) (?!)
   (?&&) = pair2 (?&&) (?&&)
   (?||) = pair2 (?||) (?||)
+  isin = pair2 isin isin
 
 instance (Pair p) => Comparison (p CppSrcCode CppHdrCode) where
   (?<) = pair2 (?<) (?<)
@@ -458,6 +460,9 @@ instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where
   listAppendFunc = pair2 listAppendFunc listAppendFunc
   listAccessFunc = pair2 listAccessFunc listAccessFunc
   listSetFunc = pair3 listSetFunc listSetFunc
+
+instance (Pair p) => InternalSetFunc (p CppSrcCode CppHdrCode) where
+  setAddFunc = pair2 setAddFunc setAddFunc
 
 instance ThunkSym (p CppSrcCode CppHdrCode) where
   type Thunk (p CppSrcCode CppHdrCode) = CommonThunk VS
@@ -1014,7 +1019,7 @@ instance ProgramSym CppSrcCode where
   prog n st = onStateList (onCodeList (progD n st)) . map (zoom lensGStoFS)
 
 instance RenderSym CppSrcCode
-
+instance InternalSetFunc CppSrcCode
 instance FileSym CppSrcCode where
   type File CppSrcCode = FileData
   fileDoc m = do
@@ -1148,6 +1153,7 @@ instance BinaryOpSym CppSrcCode where
   moduloOp = G.moduloOp
   andOp = C.andOp
   orOp = C.orOp
+  inOp = C.inOp
 
 instance OpElim CppSrcCode where
   uOp = opDoc . unCPPSC
@@ -1268,6 +1274,7 @@ instance BooleanExpression CppSrcCode where
   (?!) = typeUnExpr notOp bool
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
+  isin = typeBinExpr inOp bool
 
 instance Comparison CppSrcCode where
   (?<) = typeBinExpr lessOp bool
@@ -1718,6 +1725,8 @@ instance Monad CppHdrCode where
 
 instance RenderSym CppHdrCode
 
+instance InternalSetFunc CppHdrCode
+
 instance FileSym CppHdrCode where
   type File CppHdrCode = FileData
   fileDoc m = do
@@ -1847,6 +1856,7 @@ instance BinaryOpSym CppHdrCode where
   moduloOp = mkOp 0 empty
   andOp = mkOp 0 empty
   orOp = mkOp 0 empty
+  inOp = mkOp 0 empty
 
 instance OpElim CppHdrCode where
   uOp = opDoc . unCPPHC
@@ -1947,6 +1957,7 @@ instance BooleanExpression CppHdrCode where
   (?!) _ = mkStateVal void empty
   (?&&) _ _ = mkStateVal void empty
   (?||) _ _ = mkStateVal void empty
+  isin _ _ = mkStateVal void empty
 
 instance Comparison CppHdrCode where
   (?<) _ _ = mkStateVal void empty

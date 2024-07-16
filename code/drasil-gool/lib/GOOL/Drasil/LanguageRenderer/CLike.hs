@@ -2,7 +2,7 @@
 
 -- | Implementations for C-like renderers are defined here.
 module GOOL.Drasil.LanguageRenderer.CLike (charRender, float, double, char, 
-  listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
+  listType, void, notOp, andOp, orOp, inOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
   decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
   intFunc, multiAssignError, multiReturnError, multiTypeError
@@ -34,7 +34,7 @@ import GOOL.Drasil.LanguageRenderer (forLabel, whileLabel, containing)
 import qualified GOOL.Drasil.LanguageRenderer as R (switch, increment, 
   decrement, this', this)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
-  mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
+  mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec, inPrec)
 import GOOL.Drasil.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName,
   useVarName)
 
@@ -84,6 +84,9 @@ andOp = andPrec "&&"
 
 orOp :: (Monad r) => VSOp r
 orOp = orPrec "||"
+
+inOp :: (Monad r) => VSOp r
+inOp = inPrec "||"
 
 -- Variables --
 

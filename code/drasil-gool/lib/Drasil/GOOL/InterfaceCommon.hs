@@ -82,6 +82,7 @@ class TypeSym r where
   infile        :: VSType r
   outfile       :: VSType r
   listType      :: VSType r -> VSType r
+  setType       :: VSType r -> VSType r
   arrayType     :: VSType r -> VSType r
   listInnerType :: VSType r -> VSType r
   funcType      :: [VSType r] -> VSType r -> VSType r
@@ -135,6 +136,7 @@ class (ValueSym r) => Literal r where
   litString :: String -> SValue r
   litArray  :: VSType r -> [SValue r] -> SValue r
   litList   :: VSType r -> [SValue r] -> SValue r
+  litSet    :: VSType r -> [SValue r] -> SValue r
 
 litZero :: (TypeElim r, Literal r) => VSType r -> SValue r
 litZero t = do
@@ -367,6 +369,8 @@ class (VariableSym r, StatementSym r, ScopeSym r) => DeclStatement r where
   varDecDef    :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
   listDec      :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
   listDecDef   :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+  setDec      :: Integer -> SVariable r -> MSStatement r
+  setDecDef    :: SVariable r -> [SValue r] -> MSStatement r
   arrayDec     :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
   arrayDecDef  :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
   constDecDef  :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r

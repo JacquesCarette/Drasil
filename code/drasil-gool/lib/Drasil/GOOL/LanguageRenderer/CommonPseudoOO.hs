@@ -24,8 +24,8 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, Body, MSBody, VSFunction,
   ValueSym(valueType), Comparison(..), (&=), ControlStatement(returnStmt),
   VisibilitySym(..), MethodSym(function), funcApp, ScopeSym(Scope))
 import qualified Drasil.GOOL.InterfaceCommon as IC (argsList,
-  TypeSym(int, double, string, listType, arrayType, void), VariableSym(var),
-  Literal(litTrue, litFalse, litList, litInt, litString),
+  TypeSym(int, bool, double, string, listType, arrayType, void), VariableSym(var),
+  Literal(litTrue, litFalse, litList, litSet, litInt, litString),
   VariableValue(valueOf), StatementSym(valStmt), DeclStatement(varDec,
   varDecDef, constDecDef), List(intToIndex, indexToInt), ParameterSym(param,
   pointerParam), MethodSym(mainFunction), AssignStatement(assign), ScopeSym(..))
@@ -143,7 +143,7 @@ indexOf :: (OORenderSym r) => Label -> SValue r -> SValue r -> SValue r
 indexOf f l v = IC.indexToInt $ IG.objAccess l (IG.func f IC.int [v])
 
 contains :: (OORenderSym r) => Label -> SValue r -> SValue r -> SValue r
-contains f l v = IG.objAccess l (IG.func f IC.int [v])
+contains f s v = IG.objAccess s (IG.func f IC.bool [v])
 
 listAddFunc :: (OORenderSym r) => Label -> SValue r -> SValue r -> VSFunction r
 listAddFunc f i v = IG.func f (IC.listType $ onStateValue valueType v) 
@@ -334,6 +334,18 @@ listDecDef v scp vals = do
   let lst = IC.litList (listInnerType $ return $ variableType vr) vals
   IC.varDecDef (return vr) scp lst
 
+setDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
+setDecDef v vals = do
+  vr <- zoom lensMStoVS v 
+  let st = IC.litSet (listInnerType $ return $ variableType vr) vals
+  IC.varDecDef (return vr) st
+
+setDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
+setDecDef v vals = do
+  vr <- zoom lensMStoVS v 
+  let st = IC.litSet (listInnerType $ return $ variableType vr) vals
+  IC.varDecDef (return vr) st
+
 destructorError :: String -> String
 destructorError l = "Destructors not allowed in " ++ l
 
@@ -352,6 +364,10 @@ constVar p s vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
 
 litArray :: (CommonRenderSym r) => (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
 litArray f t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t) 
+  (f $ valueList elems))
+
+litSet :: (RenderSym r) => (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
+litSet f t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t) 
   (f $ valueList elems))
 
 -- Python, C#, C++, and Swift--

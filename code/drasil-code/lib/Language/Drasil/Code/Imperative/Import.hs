@@ -38,17 +38,7 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
   Mod(..), Name, Description, StateVariable(..), fstdecl)
 import qualified Language.Drasil.Mod as M (Class(..))
 
-import GOOL.Drasil (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
-  MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
-  Initializers, OOProg, PermanenceSym(..), bodyStatements, BlockSym(..),
-  TypeSym(..), VariableSym(..), OOVariableSym(..), VariableElim(..), ($->), ValueSym(..),
-  Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), OOValueExpression(..),
-  objMethodCallMixedArgs, List(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), ControlStatement(..),
-  ifNoElse, ScopeSym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
-  pubDVar, privDVar, nonInitConstructor, convTypeOO, ScopeTag(..), CodeType(..),
-  onStateValue)
+import GOOL.Drasil hiding (Set, get)
 import qualified GOOL.Drasil as C (CodeType(List, Array))
 
 import Prelude hiding (sin, cos, tan, log, exp)
@@ -354,7 +344,7 @@ convExpr Matrix{} = error "convExpr: Matrix"
 convExpr (Set l) = do
   ar <- mapM convExpr l
                                     -- hd will never fail here
-  return $ litArray (fmap valueType (head ar)) ar
+  return $ litSet (fmap valueType (head ar)) ar
 --convExpr Set{} = error "convExpr: Set"
 convExpr Operator{} = error "convExpr: Operator"
 convExpr (RealI c ri)  = do

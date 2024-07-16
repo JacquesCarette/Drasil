@@ -68,9 +68,9 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
   extFuncAppMixedArgs, indexOf, contains, listAddFunc, setAddFunc, discardFileLine, intClass, 
-  funcType, buildModule, bindingError, notNull, listDecDef, destructorError, 
-  stateVarDef, constVar, litArray, listSetFunc, extraClass, listAccessFunc, 
-  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
+  funcType, buildModule, bindingError, notNull, listDecDef, setDecDef, destructorError, 
+  stateVarDef, constVar, litArray, litSet, listSetFunc, extraClass, listAccessFunc, 
+  multiAssign, multiReturn, listDec, setDec, funcDecDef, inOutCall, forLoopError, 
   mainBody, inOutFunc, docInOutFunc', listSize, intToIndex, indexToInt)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
@@ -97,7 +97,7 @@ import Control.Monad.State (modify)
 import Data.List (intercalate, sort)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
-  vcat, colon, brackets, isEmpty, quotes)
+  vcat, colon, brackets, isEmpty, quotes, braces)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 
 pyExt :: String
@@ -302,6 +302,7 @@ instance Literal PythonCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray brackets
+  litSet = CP.litSet braces
   litList = litArray
 
 instance MathConstant PythonCode where
@@ -547,6 +548,8 @@ instance DeclStatement PythonCode where
     modify $ useVarName (variableName v')
     assign v e
   listDec _ = CP.listDec
+  setDec _ = CP.setDec
+  setDecDef = CP.setDecDef
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef

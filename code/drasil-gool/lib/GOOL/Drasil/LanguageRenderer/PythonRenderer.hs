@@ -51,7 +51,7 @@ import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, fabs, log10,
   classVar, listSetFunc, castObj, dynamic, break, continue, addComments, 
   commentedMod, commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal, 
-  mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, 
+  mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, inPrec, 
   unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
@@ -60,14 +60,14 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
-  setFunc, listAppendFunc, setAdd, stmt, loopStmt, emptyStmt, assign, subAssign,
+  setFunc, listAppendFunc, setAddFunc, setAdd, stmt, loopStmt, emptyStmt, assign, subAssign,
   increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
   buildClass, implementingClass, commentedClass, modFromData, fileDoc,
   fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
-  extFuncAppMixedArgs, indexOf, contains, listAddFunc, discardFileLine, intClass, 
+  extFuncAppMixedArgs, indexOf, contains, listAddFunc, setAddFunc, discardFileLine, intClass, 
   funcType, buildModule, bindingError, notNull, listDecDef, destructorError, 
   stateVarDef, constVar, litArray, listSetFunc, extraClass, listAccessFunc, 
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
@@ -246,6 +246,7 @@ instance BinaryOpSym PythonCode where
   moduloOp = G.moduloOp
   andOp = andPrec pyAnd
   orOp = orPrec pyOr
+  inOp = inPrec pyIn
 
 instance OpElim PythonCode where
   uOp = opDoc . unPC
@@ -354,6 +355,7 @@ instance BooleanExpression PythonCode where
   (?!) = typeUnExpr notOp bool
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
+  isin = typeBinExpr inOp bool
 
 instance Comparison PythonCode where
   (?<) = typeBinExpr lessOp bool
@@ -441,10 +443,6 @@ instance InternalList PythonCode where
   listSlice' b e s vn vo = pyListSlice vn vo (getVal b) (getVal e) (getVal s)
     where getVal = fromMaybe (mkStateVal void empty)
 
-instance InternalSetFunc PythonCode where
-  listSlice' b t s vn vo = pyListSlice vn vo (getVal b) (getVal t) (getVal s)
-    where getVal = fromMaybe (mkStateVal void empty)
-
 instance InternalGetSet PythonCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
@@ -457,6 +455,13 @@ instance InternalListFunc PythonCode where
   listAppendFunc _ = G.listAppendFunc pyAppendFunc
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
+
+instance InternalSetFunc PythonCode where
+  setSizeFunc l = do
+    f <- funcApp pyListSize int [l]
+    funcFromData (RC.value f) int
+  setAddFunc _ = G.setAddFunc pySetAdd
+  --fromListFunc _ = G.listAppendFunc pySet
 
 instance ThunkSym PythonCode where
   type Thunk PythonCode = CommonThunk VS

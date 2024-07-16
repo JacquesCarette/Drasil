@@ -28,10 +28,10 @@ module GOOL.Drasil.LanguageRenderer (
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, Library, SValue, BodySym(Body), 
-  PermanenceSym(Permanence), TypeSym(Type), TypeElim(..), VariableSym(Variable),
-  VariableElim(..), ValueSym(..), StatementSym(Statement), ScopeSym(Scope), 
+import GOOL.Drasil.InterfaceCommon (Label, Library, SValue, BodySym(Body), 
+  TypeSym(Type), TypeElim(..), VariableSym(Variable), VariableElim(..), ValueSym(..), StatementSym(Statement), ScopeSym(Scope), 
   ParameterSym(Parameter))
+import GOOL.Drasil.InterfaceGOOL (PermanenceSym(Permanence))
 import GOOL.Drasil.RendererClasses (RenderSym)
 import qualified GOOL.Drasil.RendererClasses as RC (PermElim(..), BodyElim(..),
   InternalTypeElim(..), InternalVarElim(..), ValueElim(..), StatementElim(..),

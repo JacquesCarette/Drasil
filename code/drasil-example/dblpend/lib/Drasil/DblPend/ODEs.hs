@@ -21,23 +21,23 @@ dblPenODEInfo = odeInfo
   (exactDbl 20) -- final time
   [dbl 1.3463968515384828, exactDbl 0, dbl 2.356194490192345, exactDbl 0] -- unit in radian [3*pi/7, 0, 3*pi/4, 0]
   [ o1,
-    neg g `mulRe`
-      (two `mulRe` m1 `addRe` m2) `mulRe` sin t1 $-
-      (m2 `mulRe` g `mulRe` sin (t1 $- (two `mulRe` t2))) $-
-      ((two `mulRe` sin (t1 $- t2 )) `mulRe` m2 `mulRe`
-      (square o2 `mulRe` l2 `addRe`
-      (square o1 `mulRe` l1 `mulRe` cos (t1 $- t2))))
+    neg g $* 
+      (two $* m1 $+ m2) $* sin t1 $-
+      (m2 $* g $* sin (t1 $- (two $* t2))) $-
+      ((two $* sin (t1 $- t2 )) $* m2 $* 
+      (square o2 $* l2 $+
+      (square o1 $* l1 $* cos (t1 $- t2))))
       $/
-      l1 `mulRe`(two `mulRe` m1 `addRe` m2 $-
-      (m2 `mulRe` cos (two `mulRe` t1  $- (two `mulRe` t2)))),
+      l1 $* (two $* m1 $+ m2 $-
+      (m2 $* cos (two $* t1  $- (two $* t2)))),
     o2,
-    two `mulRe` sin (t1 $- t2) `mulRe`
-      (square o1 `mulRe` l1 `mulRe` (m1 `addRe` m2 ) `addRe`
-      (g `mulRe` (m1 `addRe` m2 ) `mulRe` cos t1) `addRe`
-      (square o2 `mulRe` l2 `mulRe` m2 `mulRe` cos (t1 $- t2 )))
+    two $* sin (t1 $- t2) $* 
+      (square o1 $* l1 $* (m1 $+ m2 ) $+
+      (g $* (m1 $+ m2 ) $* cos t1) $+
+      (square o2 $* l2 $* m2 $* cos (t1 $- t2 )))
       $/
-      l2 `mulRe`(two `mulRe` m1 `addRe` m2 $-
-      (m2 `mulRe` cos (two `mulRe` t1  $- (two `mulRe` t2))))
+      l2 $* (two $* m1 $+ m2 $-
+      (m2 $* cos (two $* t1  $- (two $* t2))))
     ]
   dblPenODEOpts
     where t1  = idx (sy pendDisAngle) (int 0) -- t1 is theta 1

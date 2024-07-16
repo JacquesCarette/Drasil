@@ -3,8 +3,9 @@ module Observer (observer, observerName, printNum, x) where
 
 import GOOL.Drasil (SFile, SVariable, SMethod, SClass, OOProg, FileSym(..),
   PermanenceSym(..), oneLiner, TypeSym(..), IOStatement(..), VariableSym(..),
-  Literal(..), VariableValue(..), ScopeSym(..), MethodSym(..), initializer, StateVarSym(..),
-  ClassSym(..), ModuleSym(..), ParameterSym (param))
+  OOVariableSym(..), Literal(..), VariableValue(..), OOVariableValue,
+  ScopeSym(..), OOMethodSym(..), initializer, StateVarSym(..), ClassSym(..),
+  ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 observerName, observerDesc, printNum :: String
@@ -25,19 +26,19 @@ x :: (VariableSym r) => SVariable r
 x = var "x" int
 
 -- | Acces the @x@ attribute of @self@.
-selfX :: (VariableSym r) => SVariable r
+selfX :: (OOVariableSym r) => SVariable r
 selfX = objVarSelf x
 
 -- | Helper function to create the class.
-helperClass :: (ClassSym r, IOStatement r, Literal r, VariableValue r) => SClass r
+helperClass :: (ClassSym r, IOStatement r, Literal r, OOVariableValue r) => SClass r
 helperClass = buildClass Nothing [stateVar public dynamic x]
   [observerConstructor] [printNumMethod, getMethod x, setMethod x]
 
 -- | Default value for observer class is 5.
-observerConstructor :: (MethodSym r, Literal r) => SMethod r
+observerConstructor :: (OOMethodSym r, Literal r) => SMethod r
 observerConstructor = initializer [] [(x, litInt 5)]
 
 -- | Create the @printNum@ method.
-printNumMethod :: (MethodSym r, IOStatement r, VariableValue r) => SMethod r
-printNumMethod = method printNum public dynamic void [param $ var "cond" bool] $
+printNumMethod :: (OOMethodSym r, IOStatement r, OOVariableValue r) => SMethod r
+printNumMethod = method printNum public dynamic void [] $
   oneLiner $ printLn $ valueOf selfX

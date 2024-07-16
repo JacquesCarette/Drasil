@@ -52,13 +52,13 @@ nFL           = commonIdeaWithDict "nFL"           (nounPhraseSP "non-factored l
  
 beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
   glass, ptOfExplsn, responseTy :: IdeaDict
-beam         = nc "beam"       (nounPhraseSP "beam")
+beam         = nc "beam"       (cn' "beam")
 blastRisk    = nc "blastRisk"  (nounPhraseSP "blast risk")
 cantilever   = nc "cantilever" (nounPhraseSP "cantilever")
 edge         = nc "edge"       (cn'          "edge")
 glass        = nc "glass"      (nounPhraseSP "glass")
-glaSlab      = nc "glaSlab"    (nounPhraseSP "glass slab")
-plane        = nc "plane"      (nounPhraseSP "plane")
+glaSlab      = nc "glaSlab"    (cn' "glass slab")
+plane        = nc "plane"      (cn' "plane")
 
 ptOfExplsn   = nc "ptOfExplsn" (cn' "point of explosion")
 

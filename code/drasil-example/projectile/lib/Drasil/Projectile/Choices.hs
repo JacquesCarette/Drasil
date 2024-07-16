@@ -75,7 +75,10 @@ codedSpaceMatch sm = case sm Real of [Double, Float] -> "D"
                                        "Unexpected SpaceMatch for Projectile"
 
 choiceCombos :: [Choices]
-choiceCombos = [baseChoices, 
+choiceCombos = [
+  baseChoices {
+    lang = [Python, Cpp, CSharp, Java, Swift, Julia]
+  }, 
   baseChoices {
     architecture = makeArchit Modular Program,
     dataInfo = makeData Bundled (Store Unbundled) Var
@@ -95,23 +98,13 @@ choiceCombos = [baseChoices,
     folderVal = 5
   },
   baseChoices {
-    lang = [Python, Cpp, CSharp, Java, Swift],
-    dataInfo = makeData Bundled (Store Unbundled) Var,
+    dataInfo = makeData Bundled WithInputs Var,
     maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats,
     optFeats = makeOptFeats
       (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
       (makeLogConfig [LogVar, LogFunc] "log.txt")
       [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME],
     folderVal = 5
-  },
-  baseChoices {
-    lang = [Python, Cpp, CSharp, Java, Swift, Julia]
-  },
-  baseChoices {
-    lang = [Python, Cpp, CSharp, Java, Swift, Julia],
-    architecture = makeArchit Modular Program,
-    dataInfo = makeData Unbundled (Store Unbundled) Var,
-    maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats
   }]
 
 matchToFloats :: SpaceMatch

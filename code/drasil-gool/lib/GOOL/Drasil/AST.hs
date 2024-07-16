@@ -5,7 +5,7 @@ module GOOL.Drasil.AST (Terminator(..), ScopeTag(..), QualifiedName, qualName,
   updateMthd, OpData(opPrec, opDoc), od, ParamData(paramVar, paramDoc), pd, 
   paramName, updateParam, ProgData(progName, progPurp, progMods), progD, emptyProg, 
   StateVarData(getStVarScp, stVar, destructSts), svd, 
-  TypeData(cType, typeString, typeDoc), td, ValData(valPrec, valType, val), 
+  TypeData(cType, typeString, typeDoc), td, ValData(valPrec, valInt, valType, val), 
   vd, updateValDoc, VarData(varBind, varName, varType, varDoc), vard,
   CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
   commonThunkElim, commonThunkDim
@@ -129,13 +129,17 @@ td :: CodeType -> String -> Doc -> TypeData
 td = TD
 
 -- Used as the underlying data type for Values in all renderers
-data ValData = VD {valPrec :: Maybe Int, valType :: TypeData, val :: Doc}
+-- valPrec is the precedence of the operator involved if the value is an expression,
+-- valInt is the int the value is holding if the value is a litInt,
+-- valType is the type of the value,
+-- val is the printed representation of the value.
+data ValData = VD {valPrec :: Maybe Int, valInt :: Maybe Integer, valType :: TypeData, val :: Doc}
 
-vd :: Maybe Int -> TypeData -> Doc -> ValData
+vd :: Maybe Int -> Maybe Integer -> TypeData -> Doc -> ValData
 vd = VD
 
 updateValDoc :: (Doc -> Doc) -> ValData -> ValData
-updateValDoc f v = vd (valPrec v) (valType v) ((f . val) v)
+updateValDoc f v = vd (valPrec v) (valInt v) (valType v) ((f . val) v)
 
 -- Used as the underlying data type for Variables in all renderers
 data VarData = VarD {varBind :: Binding, varName :: String, 

@@ -103,9 +103,6 @@ executables:
     - PatternTest
     - VectorTest
     - NameGenTest
-    - SuperSimple
-    - SimpleClass
-    - SimpleLib
     ghc-options:
     - -threaded
     - -O2

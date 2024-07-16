@@ -40,13 +40,14 @@ import qualified Language.Drasil.Mod as M (Class(..))
 import GOOL.Drasil (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
   Initializers, OOProg, PermanenceSym(..), bodyStatements, BlockSym(..),
-  TypeSym(..), VariableSym(..), VariableElim(..), ($->), ValueSym(..),
+  TypeSym(..), VariableSym(..), OOVariableSym(..), VariableElim(..), ($->), ValueSym(..),
   Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), objMethodCallMixedArgs, List(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), ControlStatement(..), ifNoElse, ScopeSym(..),
-  ParameterSym(..), MethodSym(..), pubDVar, privDVar, nonInitConstructor,
-  convType, ScopeTag(..), CodeType(..), onStateValue)
+  Comparison(..), ValueExpression(..), OOValueExpression(..),
+  objMethodCallMixedArgs, List(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), ControlStatement(..),
+  ifNoElse, ScopeSym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
+  pubDVar, privDVar, nonInitConstructor, convTypeOO, ScopeTag(..), CodeType(..),
+  onStateValue)
 import qualified GOOL.Drasil as C (CodeType(List, Array))
 
 import Prelude hiding (sin, cos, tan, log, exp)
@@ -168,22 +169,22 @@ classVariable c v = do
 mkVal :: (OOProg r) => CodeVarChunk -> GenState (SValue r)
 mkVal v = do
   t <- codeType v
-  let toGOOLVal Nothing = value (v ^. uid) (codeName v) (convType t)
+  let toGOOLVal Nothing = value (v ^. uid) (codeName v) (convTypeOO t)
       toGOOLVal (Just o) = do
         ot <- codeType o
-        return $ valueOf $ objVar (var (codeName o) (convType ot))
-          (var (codeName v) (convType t))
+        return $ valueOf $ objVar (var (codeName o) (convTypeOO ot))
+          (var (codeName v) (convTypeOO t))
   toGOOLVal (v ^. obv)
 
 -- | Generates a GOOL Variable for a variable represented by a 'CodeVarChunk'.
 mkVar :: (OOProg r) => CodeVarChunk -> GenState (SVariable r)
 mkVar v = do
   t <- codeType v
-  let toGOOLVar Nothing = variable (codeName v) (convType t)
+  let toGOOLVar Nothing = variable (codeName v) (convTypeOO t)
       toGOOLVar (Just o) = do
         ot <- codeType o
-        return $ objVar (var (codeName o) (convType ot))
-          (var (codeName v) (convType t))
+        return $ objVar (var (codeName o) (convTypeOO ot))
+          (var (codeName v) (convTypeOO t))
   toGOOLVar (v ^. obv)
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
@@ -292,12 +293,10 @@ convExpr (Lit (Perc a b)) = do
       getLiteral Float = litFloat . realToFrac
       getLiteral _ = error "convExpr: Rational space matched to invalid CodeType; should be Double or Float"
   return $ getLiteral sm (fromIntegral a / (10 ** fromIntegral b))
-convExpr (AssocA AddI l)  = foldl1 (#+)  <$> mapM convExpr l
-convExpr (AssocA AddRe l) = foldl1 (#+)  <$> mapM convExpr l
-convExpr (AssocA MulI l)  = foldl1 (#*)  <$> mapM convExpr l
-convExpr (AssocA MulRe l) = foldl1 (#*)  <$> mapM convExpr l
-convExpr (AssocB And l)   = foldl1 (?&&) <$> mapM convExpr l
-convExpr (AssocB Or l)    = foldl1 (?||) <$> mapM convExpr l
+convExpr (AssocA Add l) = foldl1 (#+)  <$> mapM convExpr l
+convExpr (AssocA Mul l) = foldl1 (#*)  <$> mapM convExpr l
+convExpr (AssocB And l) = foldl1 (?&&) <$> mapM convExpr l
+convExpr (AssocB Or l)  = foldl1 (?||) <$> mapM convExpr l
 convExpr (C c)   = do
   g <- get
   let v = quantvar (lookupC g c)
@@ -373,9 +372,9 @@ convCall c x ns f libf = do
   nms <- mapM (mkVar . quantvar . symbResolve info . fst) ns
   nargs <- mapM (convExpr . snd) ns
   maybe (maybe (error $ "Call to non-existent function " ++ funcNm)
-      (\m -> return $ libf m funcNm (convType funcTp) args (zip nms nargs))
+      (\m -> return $ libf m funcNm (convTypeOO funcTp) args (zip nms nargs))
       (Map.lookup funcNm lem))
-    (\m -> f m funcNm (convType funcTp) args (zip nms nargs))
+    (\m -> f m funcNm (convTypeOO funcTp) args (zip nms nargs))
     (Map.lookup funcNm mem)
 
 -- | Converts a 'Constraint' to a 'CodeExpr'.
@@ -491,7 +490,7 @@ genClass :: (OOProg r) => (Name -> Maybe Name -> Description -> [CSStateVar r]
 genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
                                                  svar Priv = privDVar
   in do
-  svrs <- mapM (\(SV s v) -> fmap (svar s . var (codeName v) . convType)
+  svrs <- mapM (\(SV s v) -> fmap (svar s . var (codeName v) . convTypeOO)
     (codeType v)) svs
   f n i desc svrs (mapM (genFunc publicMethod svs) cs) (mapM (genFunc publicMethod svs) ms)
 
@@ -509,11 +508,11 @@ genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
   vars <- mapM mkVar (fstdecl (sysinfodb $ codeSpec g) s
     \\ (map quantvar parms ++ map stVar svs))
   t <- spaceCodeType o
-  f n (convType t) desc parms rd [block $ map varDec vars, block stmts]
+  f n (convTypeOO t) desc parms rd [block $ map varDec vars, block stmts]
 genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
   g <- get
   inits <- mapM (convExpr . snd) i
-  initvars <- mapM ((\iv -> fmap (var (codeName iv) . convType) (codeType iv))
+  initvars <- mapM ((\iv -> fmap (var (codeName iv) . convTypeOO) (codeType iv))
     . fst) i
   stmts <- mapM convStmt s
   vars <- mapM mkVar (fstdecl (sysinfodb $ codeSpec g) s
@@ -687,7 +686,7 @@ readData ddef = do
         clearTemp :: (OOProg r) => String -> DataItem ->
           GenState (MSStatement r)
         clearTemp sfx v = fmap (\t -> listDecDef (var (codeName v ++ sfx)
-          (listInnerType $ convType t)) []) (codeType v)
+          (listInnerType $ convTypeOO t)) []) (codeType v)
         ---------------
         appendTemps :: (OOProg r) => Maybe String -> [DataItem] ->
           [GenState (MSStatement r)]
@@ -697,8 +696,8 @@ readData ddef = do
         appendTemp :: (OOProg r) => String -> DataItem ->
           GenState (MSStatement r)
         appendTemp sfx v = fmap (\t -> valStmt $ listAppend
-          (valueOf $ var (codeName v) (convType t))
-          (valueOf $ var (codeName v ++ sfx) (convType t))) (codeType v)
+          (valueOf $ var (codeName v) (convTypeOO t))
+          (valueOf $ var (codeName v ++ sfx) (convTypeOO t))) (codeType v)
         ---------------
         l_line, l_lines, l_linetokens, l_infile, l_i :: Label
         var_line, var_lines, var_linetokens, var_infile, var_i ::
@@ -725,7 +724,7 @@ readData ddef = do
 getEntryVars :: (OOProg r) => Maybe String -> LinePattern ->
   GenState [SVariable r]
 getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>= (variable
-  (codeName v ++ st) . listInnerType . convType)) s) (getPatternInputs lp)
+  (codeName v ++ st) . listInnerType . convTypeOO)) s) (getPatternInputs lp)
 
 -- | Get entry variable logs.
 getEntryVarLogs :: (OOProg r) => LinePattern ->

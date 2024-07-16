@@ -7,7 +7,7 @@ module Language.Drasil.Generate (
   -- * Generator Functions
   gen, genDot, genCode,
   -- * Types (Printing Options)
-  DocType(..), DocSpec(DocSpec), Format(TeX, HTML, JSON), DocChoices(DC),
+  DocType(..), DocSpec(DocSpec), Format(TeX, HTML, Jupyter), DocChoices(DC),
   -- * Constructor
   docChoices) where
 
@@ -23,8 +23,8 @@ import Build.Drasil (genMake)
 import Language.Drasil
 import Drasil.DocLang (mkGraphInfo)
 import SysInfo.Drasil (SystemInformation)
-import Language.Drasil.Printers (DocType(SRS, Website, Jupyter), Format(TeX, HTML, JSON),
- makeCSS, genHTML, genTeX, genJSON, PrintingInformation, outputDot)
+import Language.Drasil.Printers (DocType(SRS, Website, Lesson), Format(TeX, HTML, Jupyter),
+ makeCSS, genHTML, genTeX, genJupyter, PrintingInformation, outputDot)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD,
   unPP, unJP, unCSP, unCPPP, unSP, unJLP)
@@ -42,21 +42,21 @@ gen ds fn sm = prnt sm ds fn -- FIXME: 'prnt' is just 'gen' with the arguments r
 -- TODO: Include Jupyter into the SRS setup.
 -- | Generate the output artifacts (TeX+Makefile, HTML or Notebook).
 prnt :: PrintingInformation -> DocSpec -> Document -> IO ()
-prnt sm (DocSpec (DC Jupyter _) fn) body =
-  do prntDoc body sm fn Jupyter JSON
+prnt sm (DocSpec (DC Lesson _) fn) body =
+  do prntDoc body sm fn Lesson Jupyter
 prnt sm (DocSpec (DC dtype fmts) fn) body =
   do mapM_ (prntDoc body sm fn dtype) fmts
 
--- | Helper for writing the documents (TeX / HTML / JSON) to file.
+-- | Helper for writing the documents (TeX / HTML / Jupyter) to file.
 prntDoc :: Document -> PrintingInformation -> String -> DocType -> Format -> IO ()
-prntDoc d pinfo fn Jupyter _ = prntDoc' Jupyter "Jupyter" fn JSON d pinfo
+prntDoc d pinfo fn Lesson _ = prntDoc' Lesson "Lesson" fn Jupyter d pinfo
 prntDoc d pinfo fn dtype fmt =
   case fmt of
-    HTML -> do prntDoc' dtype (show dtype ++ "/HTML") fn HTML d pinfo
-               prntCSS dtype fn d
-    TeX -> do prntDoc' dtype (show dtype ++ "/PDF") fn TeX d pinfo
-              prntMake $ DocSpec (DC dtype []) fn
-    JSON -> do prntDoc' dtype (show dtype ++ "/JSON") fn JSON d pinfo
+    HTML    -> do prntDoc' dtype (show dtype ++ "/HTML") fn HTML d pinfo
+                  prntCSS dtype fn d
+    TeX     -> do prntDoc' dtype (show dtype ++ "/PDF") fn TeX d pinfo
+                  prntMake $ DocSpec (DC dtype []) fn
+    Jupyter -> do prntDoc' dtype (show dtype ++ "/Jupyter") fn Jupyter d pinfo
     _ -> mempty
 
 -- | Helper that takes the document type, directory name, document name, format of documents,
@@ -67,10 +67,10 @@ prntDoc' dt dt' fn format body' sm = do
   outh <- openFile (dt' ++ "/" ++ fn ++ getExt format) WriteMode
   hPutStrLn outh $ render $ writeDoc sm dt format fn body'
   hClose outh
-  where getExt TeX  = ".tex"
-        getExt HTML = ".html"
-        getExt JSON = ".ipynb"
-        getExt _    = error "We can only write in TeX, HTML and Jupyter Notebook (for now)."
+  where getExt TeX     = ".tex"
+        getExt HTML    = ".html"
+        getExt Jupyter = ".ipynb"
+        getExt _       = error "We can only write in TeX, HTML and Jupyter Notebook (for now)."
 
 -- | Helper for writing the Makefile(s).
 prntMake :: DocSpec -> IO ()
@@ -91,10 +91,10 @@ prntCSS docType fn body = do
 
 -- | Renders the documents.
 writeDoc :: PrintingInformation -> DocType -> Format -> Filename -> Document -> Doc
-writeDoc s _  TeX  _  doc = genTeX doc s
-writeDoc s _  HTML fn doc = genHTML s fn doc
-writeDoc s dt JSON _  doc = genJSON s dt doc
-writeDoc _ _  _    _  _   = error "we can only write TeX/HTML/JSON (for now)"
+writeDoc s _  TeX     _  doc = genTeX doc s
+writeDoc s _  HTML    fn doc = genHTML s fn doc
+writeDoc s dt Jupyter _  doc = genJupyter s dt doc
+writeDoc _ _  _       _  _   = error "we can only write TeX/HTML/Jupyter (for now)"
 
 -- | Generates traceability graphs as .dot files.
 genDot :: SystemInformation -> IO ()

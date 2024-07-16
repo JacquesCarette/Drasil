@@ -11,33 +11,34 @@ import Utils.Drasil (indent)
 
 -- TODO: Make these pretty once their contents are stable
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (OOProg, Label, VSType, SValue, litZero,
-  SVariable, MSStatement, ProgramSym(..), SMethod, MSBody, MSParameter,
-  FileSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..),
-  TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
-  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
-  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), StatePattern(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
-  (&=), switchAsIf, FSModule,
-  -- OO-Only (remove when ready)
-  FunctionSym(..), ObserverPattern(..), StrategyPattern(..), GetSet(..),
-  InternalValueExp(..), StatePattern(..))
+import GOOL.Drasil.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
+  SVariable, MSStatement, SMethod, MSBody, MSParameter, BodySym(..),
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..),
+  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  ScopeSym(..), ParameterSym(..), MethodSym(..), (&=), switchAsIf)
+import GOOL.Drasil.InterfaceGOOL (OOProg, FSModule, ProgramSym(..), FileSym(..),
+  ModuleSym(..), FunctionSym(..), PermanenceSym(..), ObserverPattern(..),
+  StrategyPattern(..), GetSet(..), InternalValueExp(..), StateVarSym(..),
+  ClassSym(..), OOTypeSym(..), OOVariableSym(..), OODeclStatement(..),
+  OOFuncAppStatement(..), OOMethodSym(..), OOValueExpression(..),
+  OOVariableValue, OOValueSym)
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(valuePrec), InternalGetSet(..),
-  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
-  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
-  RenderStatement(..), StatementElim(statementTerm), ScopeElim,
-  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
-  RenderMethod(..), MethodElim, StateVarElim, RenderClass(..), ClassElim,
-  RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
+  RenderValue(..), ValueElim(..), InternalGetSet(..), InternalListFunc(..),
+  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
+  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
+  StatementElim(statementTerm), ScopeElim, MethodTypeSym(..), RenderParam(..),
+  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
+  StateVarElim, RenderClass(..), ClassElim, RenderMod(..), ModuleElim,
+  BlockCommentSym(..), BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
@@ -106,6 +107,7 @@ instance Applicative JuliaCode where
 instance Monad JuliaCode where
   JLC x >>= f = f x
 
+instance SharedProg JuliaCode
 instance OOProg JuliaCode
 
 instance ProgramSym JuliaCode where
@@ -184,8 +186,6 @@ instance TypeSym JuliaCode where
   listInnerType = G.listInnerType
   funcType = CP.funcType -- Julia's functions support multiple-dispatch, so we might need to revisit this
   void = jlVoidType
-  -- OO-Only (remove when ready)
-  obj = undefined--
 
 instance TypeElim JuliaCode where
   getType = cType . unJLC
@@ -255,13 +255,6 @@ instance VariableSym JuliaCode where
   constant = var
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
   arrayElem i = G.arrayElem (litInt i)
-  -- OO-Only (remove when ready)
-  staticVar = undefined--
-  self = undefined--
-  classVar = undefined--
-  extClassVar = undefined--
-  objVar = undefined--
-  objVarSelf = undefined--
 
 instance VariableElim JuliaCode where
   variableName = varName . unJLC
@@ -361,11 +354,6 @@ instance ValueExpression JuliaCode where
   libFuncAppMixedArgs l n t ps ns = do
     modify (addLibImportVS l)
     CP.extFuncAppMixedArgs l n t ps ns
-  -- OO-Only (remove when ready)
-  selfFuncAppMixedArgs = undefined--
-  newObjMixedArgs = undefined--
-  extNewObjMixedArgs = undefined--
-  libNewObjMixedArgs = undefined--
 
   lambda = G.lambda jlLambda
 
@@ -382,12 +370,13 @@ instance RenderValue JuliaCode where
 
   call = G.call jlNamedArgSep
 
-  valFromData p t' d = do
+  valFromData p i t' d = do
     t <- t'
-    toState $ on2CodeValues (vd p) t (toCode d)
+    toState $ on2CodeValues (vd p i) t (toCode d)
 
 instance ValueElim JuliaCode where
   valuePrec = valPrec . unJLC
+  valueInt = valInt . unJLC
   value = val . unJLC
 
 instance List JuliaCode where
@@ -516,10 +505,6 @@ instance DeclStatement JuliaCode where
   arrayDecDef = listDecDef
   constDecDef = jlConstDecDef
   funcDecDef = CP.funcDecDef
-  -- OO-Only (remove when ready)
-  objDecDef = undefined--
-  objDecNew = undefined--
-  extObjDecNew = undefined--
 
 instance IOStatement JuliaCode where
   print      = jlOut False Nothing printFunc
@@ -552,8 +537,6 @@ instance StringStatement JuliaCode where
 instance FuncAppStatement JuliaCode where
   inOutCall = CP.inOutCall funcApp
   extInOutCall m = CP.inOutCall (extFuncApp m)
-  -- OO-Only (remove when ready)
-  selfInOutCall = undefined--
 
 instance CommentStatement JuliaCode where
   comment = G.comment jlCmtStart
@@ -628,13 +611,6 @@ instance MethodSym JuliaCode where
 
   inOutFunc n s = CP.inOutFunc (function n s)
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
-  -- OO-Only (remove when ready)
-  method = undefined--
-  getMethod = undefined--
-  setMethod = undefined--
-  constructor = undefined--
-  inOutMethod = undefined--
-  docInOutMethod _ = undefined--
 
 instance RenderMethod JuliaCode where
   intMethod _ n _ _ _ = jlIntMethod n
@@ -989,9 +965,6 @@ instance ObserverPattern JuliaCode where
 instance StrategyPattern JuliaCode where
   runStrategy = undefined--
 
-instance StatePattern JuliaCode where
-  checkState = undefined--
-
 instance StateVarSym JuliaCode where
   type StateVar JuliaCode = Doc
 
@@ -1023,3 +996,40 @@ instance PermanenceSym JuliaCode where
   type Permanence JuliaCode = Doc
   static = undefined--
   dynamic = undefined--
+
+instance OOTypeSym JuliaCode where
+  obj = undefined--
+
+instance OOVariableSym JuliaCode where
+  staticVar = undefined--
+  self = undefined--
+  classVar = undefined--
+  extClassVar = undefined--
+  objVar = undefined--
+  objVarSelf = undefined--
+
+instance OOValueExpression JuliaCode where
+  selfFuncAppMixedArgs = undefined--
+  newObjMixedArgs = undefined--
+  extNewObjMixedArgs = undefined--
+  libNewObjMixedArgs = undefined--
+
+instance OODeclStatement JuliaCode where
+  objDecDef = undefined--
+  objDecNew = undefined--
+  extObjDecNew = undefined--
+
+instance OOFuncAppStatement JuliaCode where
+  selfInOutCall = undefined--
+
+instance OOMethodSym JuliaCode where
+  method = undefined--
+  getMethod = undefined--
+  setMethod = undefined--
+  constructor = undefined--
+  inOutMethod = undefined--
+  docInOutMethod _ = undefined--
+
+instance OOVariableValue JuliaCode
+
+instance OOValueSym JuliaCode

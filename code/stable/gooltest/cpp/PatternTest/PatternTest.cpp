@@ -10,17 +10,6 @@ using std::vector;
 
 int main(int argc, const char *argv[]) {
     int n;
-    string myFSM = "Off";
-    myFSM = "On";
-    if (myFSM == "Off") {
-        std::cout << "Off" << std::endl;
-    }
-    else if (myFSM == "On") {
-        std::cout << "On" << std::endl;
-    }
-    else {
-        std::cout << "Neither" << std::endl;
-    }
     
     std::cout << "myStrat" << std::endl;
     n = 3;

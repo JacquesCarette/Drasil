@@ -417,7 +417,7 @@ effectiveStress = uc' "sigma'" (cn' "effective stress")
    "average stress carried by the soil skeleton")
   (prime lSigma) Real pascal
 
-effNormStress = uc' "sigmaN'" (cn' "effective normal stress")
+effNormStress = uc' "sigmaN'" (nounPhraseSP "effective normal stress")
   (S $ "the normal stress in a soil mass that is effective in causing volume " ++
    "changes; represents the average normal stress carried by the soil skeleton")
   (prime $ sub lSigma cN) Real pascal
@@ -514,7 +514,7 @@ inx :: (ExprC r, LiteralC r, Quantity e) => e -> Integer -> r
 inx e n 
   | n < 0     = idx (sy e) (sy index $- int (-n))
   | n == 0    = idx (sy e) (sy index)
-  | otherwise = idx (sy e) (sy index `addI` int n)
+  | otherwise = idx (sy e) (sy index $+ int n)
 
 sum1toN :: (ExprC r, LiteralC r) => r -> r
 sum1toN = defsum (eqSymb index) (int 1) (sy numbSlices)

@@ -10,26 +10,30 @@ module GOOL.Drasil.LanguageRenderer.CSharpRenderer (
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
-  VSFunction, MSStatement, MSParameter, SMethod, OOProg, ProgramSym(..),
-  FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..),
-  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp,
-  newObj, InternalValueExp(..), objMethodCallNoParams, FunctionSym(..), ($.),
-  GetSet(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
+import GOOL.Drasil.InterfaceCommon (SharedProg, Label, MSBody, VSType,
+  SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..), oneLiner,
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  extFuncApp, List(..), InternalList(..), ThunkSym(..), VectorType(..),
   VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
   IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), StatePattern(..),
-  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  CommentStatement(..), ControlStatement(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..))
+import GOOL.Drasil.InterfaceGOOL (VSFunction, OOProg, ProgramSym(..),
+  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
+  StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
+  OOValueExpression(..), selfFuncApp, newObj, InternalValueExp(..),
+  objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
+  OOMethodSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
-  RenderValue(..), ValueElim(valuePrec), InternalGetSet(..),
+  RenderValue(..), ValueElim(valuePrec, valueInt), InternalGetSet(..),
   InternalListFunc(..),  RenderFunction(..), FunctionElim(functionType),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   RenderStatement(..), StatementElim(statementTerm), RenderScope(..),
@@ -78,7 +82,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char,
   intFunc, multiAssignError, multiReturnError, multiTypeError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   runStrategy, listSlice, stringListVals, stringListLists, forRange, 
-  notifyObservers, checkState)
+  notifyObservers)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, 
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD, 
@@ -117,7 +121,8 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
   CSC x >>= f = f x
 
-instance OOProg CSharpCode where
+instance SharedProg CSharpCode
+instance OOProg CSharpCode
 
 instance ProgramSym CSharpCode where
   type Program CSharpCode = ProgData
@@ -198,9 +203,11 @@ instance TypeSym CSharpCode where
     C.listType csList t
   arrayType = CP.arrayType
   listInnerType = G.listInnerType
-  obj = G.obj
   funcType = csFuncType
   void = C.void
+
+instance OOTypeSym CSharpCode where
+  obj = G.obj
 
 instance TypeElim CSharpCode where
   getType = cType . unCSC
@@ -257,15 +264,17 @@ instance OpElim CSharpCode where
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
   var = G.var
-  staticVar = G.staticVar
   constant = var
   extVar = CP.extVar
+  arrayElem i = G.arrayElem (litInt i)
+
+instance OOVariableSym CSharpCode where
+  staticVar = G.staticVar
   self = C.self
   classVar = CP.classVar R.classVar
   extClassVar = classVar
   objVar = G.objVar
   objVarSelf = CP.objVarSelf
-  arrayElem i = G.arrayElem (litInt i)
 
 instance VariableElim CSharpCode where
   variableName = varName . unCSC
@@ -283,6 +292,8 @@ instance RenderVariable CSharpCode where
 instance ValueSym CSharpCode where
   type Value CSharpCode = ValData
   valueType = onCodeValue valType
+
+instance OOValueSym CSharpCode
 
 instance Argument CSharpCode where
   pointerArg = id
@@ -303,6 +314,8 @@ instance MathConstant CSharpCode where
 
 instance VariableValue CSharpCode where
   valueOf = G.valueOf
+
+instance OOVariableValue CSharpCode
 
 instance CommandLineArgs CSharpCode where
   arg n = G.arg (litInt n) argsList
@@ -352,16 +365,18 @@ instance ValueExpression CSharpCode where
   inlineIf = C.inlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
-  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
   extFuncAppMixedArgs = CP.extFuncAppMixedArgs
   libFuncAppMixedArgs = C.libFuncAppMixedArgs
-  newObjMixedArgs = G.newObjMixedArgs (new ++ " ")
-  extNewObjMixedArgs _ = newObjMixedArgs
-  libNewObjMixedArgs = C.libNewObjMixedArgs
 
   lambda = G.lambda csLambda
 
   notNull = CP.notNull nullLabel
+
+instance OOValueExpression CSharpCode where
+  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
+  newObjMixedArgs = G.newObjMixedArgs (new ++ " ")
+  extNewObjMixedArgs _ = newObjMixedArgs
+  libNewObjMixedArgs = C.libNewObjMixedArgs
 
 instance RenderValue CSharpCode where
   inputFunc = addSystemImport csReadLineFunc
@@ -378,12 +393,13 @@ instance RenderValue CSharpCode where
 
   call = G.call csNamedArgSep
   
-  valFromData p t' d = do 
+  valFromData p i t' d = do 
     t <- t' 
-    toState $ on2CodeValues (vd p) t (toCode d)
+    toState $ on2CodeValues (vd p i) t (toCode d)
   
 instance ValueElim CSharpCode where
   valuePrec = valPrec . unCSC
+  valueInt = valInt . unCSC
   value = val . unCSC
   
 instance InternalValueExp CSharpCode where
@@ -504,11 +520,13 @@ instance DeclStatement CSharpCode where
   listDecDef = CP.listDecDef
   arrayDec n = CP.arrayDec (litInt n)
   arrayDecDef = CP.arrayDecDef
+  constDecDef = CP.constDecDef
+  funcDecDef = csFuncDecDef
+
+instance OODeclStatement CSharpCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
-  constDecDef = CP.constDecDef
-  funcDecDef = csFuncDecDef
 
 instance IOStatement CSharpCode where
   print      = G.print False Nothing printFunc
@@ -545,8 +563,10 @@ instance StringStatement CSharpCode where
 
 instance FuncAppStatement CSharpCode where
   inOutCall = csInOutCall funcApp
-  selfInOutCall = csInOutCall selfFuncApp
   extInOutCall m = csInOutCall (extFuncApp m)
+
+instance OOFuncAppStatement CSharpCode where
+  selfInOutCall = csInOutCall selfFuncApp
 
 instance CommentStatement CSharpCode where
   comment = G.comment commentStart
@@ -572,9 +592,6 @@ instance ControlStatement CSharpCode where
   while = C.while parens bodyStart bodyEnd
 
   tryCatch = G.tryCatch csTryCatch
-
-instance StatePattern CSharpCode where 
-  checkState = M.checkState
 
 instance ObserverPattern CSharpCode where
   notifyObservers = M.notifyObservers
@@ -615,25 +632,22 @@ instance ParamElim CSharpCode where
 
 instance MethodSym CSharpCode where
   type Method CSharpCode = MethodData
+  docMain = CP.docMain
+  function = G.function
+  mainFunction = CP.mainFunction string csMain
+  docFunc = CP.doxFunc
+
+  inOutFunc n s = csInOut (function n s)
+  docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
+
+instance OOMethodSym CSharpCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
   constructor ps is b = getClassName >>= (\n -> CP.constructor n ps is b)
 
-  docMain = CP.docMain
- 
-  function = G.function
-  mainFunction = CP.mainFunction string csMain
-
-  docFunc = CP.doxFunc
-
   inOutMethod n s p = csInOut (method n s p)
-
   docInOutMethod n s p = CP.docInOutFunc (inOutMethod n s p)
-
-  inOutFunc n s = csInOut (function n s)
-
-  docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
 
 instance RenderMethod CSharpCode where
   intMethod m n s p t ps b = do

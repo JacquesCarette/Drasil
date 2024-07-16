@@ -3,19 +3,22 @@
 -- Performs code analysis on the GOOL code
 module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
-import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
-  SMethod, OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..),
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), InternalValueExp(..), FunctionSym(..),
-  GetSet(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
+import GOOL.Drasil.InterfaceCommon (MSBody, VSType, SValue, MSStatement, 
+  SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
+  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
   VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), StatePattern(..), ObserverPattern(..),
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
+import GOOL.Drasil.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
+  ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
+  OOVariableSym(..), PermanenceSym(..), StateVarSym(..), OOValueSym,
+  OOVariableValue, OOValueExpression(..), InternalValueExp(..), FunctionSym(..),
+  GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..), qualName)
 import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
@@ -46,7 +49,8 @@ instance Applicative CodeInfo where
 instance Monad CodeInfo where
   CI x >>= f = f x
 
-instance OOProg CodeInfo where
+instance SharedProg CodeInfo
+instance OOProg CodeInfo
 
 instance ProgramSym CodeInfo where
   type Program CodeInfo = GOOLState
@@ -90,9 +94,11 @@ instance TypeSym CodeInfo where
   listType      _   = noInfoType
   arrayType     _   = noInfoType
   listInnerType _   = noInfoType
-  obj               = toState . toCode
   funcType      _ _ = noInfoType
   void              = noInfoType
+
+instance OOTypeSym CodeInfo where
+  obj               = toState . toCode
 
 instance TypeElim CodeInfo where
   getType _     = Void
@@ -101,16 +107,18 @@ instance TypeElim CodeInfo where
 instance VariableSym CodeInfo where
   type Variable CodeInfo = ()
   var         _ _   = noInfo
-  staticVar   _ _   = noInfo
   constant    _ _   = noInfo
   extVar      _ _ _ = noInfo
+  arrayElem   _ _   = noInfo
+  
+instance OOVariableSym CodeInfo where
+  staticVar   _ _   = noInfo
   self              = noInfo
   classVar    _ _   = noInfo
   extClassVar _ _   = noInfo
   objVar      _ _   = noInfo
   objVarSelf  _     = noInfo
-  arrayElem   _ _   = noInfo
-  
+
 instance VariableElim CodeInfo where
   variableName _ = ""
   variableType _ = toCode ""
@@ -118,6 +126,8 @@ instance VariableElim CodeInfo where
 instance ValueSym CodeInfo where
   type Value CodeInfo = ()
   valueType _ = toCode ""
+
+instance OOValueSym CodeInfo
 
 instance Argument CodeInfo where
   pointerArg = id
@@ -138,6 +148,8 @@ instance MathConstant CodeInfo where
 
 instance VariableValue CodeInfo where
   valueOf _ = noInfo
+
+instance OOVariableValue CodeInfo
 
 instance CommandLineArgs CodeInfo where
   arg       _ = noInfo
@@ -186,12 +198,18 @@ instance Comparison CodeInfo where
 instance ValueExpression CodeInfo where
   inlineIf = execute3
   funcAppMixedArgs n _ = currModCall n
-  selfFuncAppMixedArgs = funcAppMixedArgs
   extFuncAppMixedArgs l n _ vs ns = do
     sequence_ vs
     executePairList ns
     addExternalCall l n  
   libFuncAppMixedArgs = extFuncAppMixedArgs
+
+  lambda _ = execute1
+
+  notNull = execute1
+
+instance OOValueExpression CodeInfo where
+  selfFuncAppMixedArgs = funcAppMixedArgs
   newObjMixedArgs ot vs ns = do
     sequence_ vs
     executePairList ns
@@ -201,10 +219,6 @@ instance ValueExpression CodeInfo where
     executePairList ns
     addExternalConstructorCall l ot
   libNewObjMixedArgs = extNewObjMixedArgs
-
-  lambda _ = execute1
-
-  notNull = execute1
   
 instance InternalValueExp CodeInfo where
   objMethodCallMixedArgs' n _ v vs ns = v >> currModCall n vs ns
@@ -275,11 +289,13 @@ instance DeclStatement CodeInfo where
   listDecDef             _ = zoom lensMStoVS . executeList
   arrayDec             _ _ = noInfo
   arrayDecDef            _ = zoom lensMStoVS . executeList
+  constDecDef            _ = zoom lensMStoVS . execute1
+  funcDecDef           _ _ = execute1
+
+instance OODeclStatement CodeInfo where
   objDecDef              _ = zoom lensMStoVS . execute1
   objDecNew              _ = zoom lensMStoVS . executeList
   extObjDecNew         _ _ = zoom lensMStoVS . executeList
-  constDecDef            _ = zoom lensMStoVS . execute1
-  funcDecDef           _ _ = execute1
 
 instance IOStatement CodeInfo where
   print        = zoom lensMStoVS . execute1
@@ -317,12 +333,14 @@ instance FuncAppStatement CodeInfo where
   inOutCall n vs _ _ = zoom lensMStoVS $ do
     sequence_ vs
     addCurrModCall n
-  selfInOutCall n vs _ _ = zoom lensMStoVS $ do
-    sequence_ vs
-    addCurrModCall n
   extInOutCall l n vs _ _ = zoom lensMStoVS $ do
     sequence_ vs
     addExternalCall l n
+
+instance OOFuncAppStatement CodeInfo where
+  selfInOutCall n vs _ _ = zoom lensMStoVS $ do
+    sequence_ vs
+    addCurrModCall n
 
 instance CommentStatement CodeInfo where
   comment _ = noInfo
@@ -352,9 +370,6 @@ instance ControlStatement CodeInfo where
     _ <- cb
     noInfo
 
-instance StatePattern CodeInfo where
-  checkState _ = evalConds
-
 instance ObserverPattern CodeInfo where
   notifyObservers f _ = execute1 (zoom lensMStoVS f)
   
@@ -376,6 +391,17 @@ instance ParameterSym CodeInfo where
 
 instance MethodSym CodeInfo where
   type Method CodeInfo = ()
+  docMain = updateMEMandCM "main"
+  function n _ _ _ = updateMEMandCM n
+  mainFunction = updateMEMandCM "main"
+  docFunc _ _ _ f = do
+    _ <- f
+    noInfo
+
+  inOutFunc      n _ _ _ _     = updateMEMandCM n
+  docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
+
+instance OOMethodSym CodeInfo where
   method n _ _ _ _ = updateMEMandCM n
   getMethod _ = noInfo
   setMethod _ = noInfo
@@ -386,22 +412,8 @@ instance MethodSym CodeInfo where
     modify (updateCallMap cn . updateMethodExcMap cn)
     noInfo
 
-  docMain = updateMEMandCM "main"
-
-  function n _ _ _ = updateMEMandCM n
-  mainFunction = updateMEMandCM "main"
-
-  docFunc _ _ _ f = do
-    _ <- f
-    noInfo
-
   inOutMethod    n _ _ _ _ _   = updateMEMandCM n
-
   docInOutMethod n _ _ _ _ _ _ = updateMEMandCM n
-
-  inOutFunc      n _ _ _ _     = updateMEMandCM n
-
-  docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
 instance StateVarSym CodeInfo where
   type StateVar CodeInfo = ()

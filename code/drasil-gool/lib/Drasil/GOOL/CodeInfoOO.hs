@@ -193,6 +193,7 @@ instance BooleanExpression CodeInfoOO where
   (?!)  = execute1
   (?&&) = execute2
   (?||) = execute2
+  isin = execute2
 
 instance Comparison CodeInfoOO where
   (?<)  = execute2

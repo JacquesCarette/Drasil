@@ -35,10 +35,10 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderValue(..), ValueElim(..), InternalGetSet(..), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
-  StatementElim(statementTerm), ScopeElim, MethodTypeSym(..), RenderParam(..),
-  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
-  StateVarElim, RenderClass(..), ClassElim, RenderMod(..), ModuleElim,
-  BlockCommentSym(..), BlockCommentElim)
+  StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..),
+  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
+  MethodElim, StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
+  ModuleElim, BlockCommentSym(..), BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
@@ -576,6 +576,9 @@ instance ScopeSym JuliaCode where
 
   private = toCode empty -- Julia doesn't have private/public members
   public = toCode empty
+
+instance RenderScope JuliaCode where
+  scopeFromData _ = toCode
 
 instance ScopeElim JuliaCode where
   scope = unJLC

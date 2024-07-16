@@ -10,11 +10,11 @@ fi
 cd "$1" || exit 1
 
 # Find any CSV file in the directory
-csv_file=$(find . -maxdepth 1 -name '*.csv' | head -n 1)
+csv_file=".drasil-requirements.csv"
 
 # Check if a CSV file was found
-if [ -z "$csv_file" ]; then
-    echo "No CSV file found in the directory."
+if [ ! -f "$csv_file" ]; then
+    echo "No $csv_file file found in the directory."
     exit 1
 fi
 

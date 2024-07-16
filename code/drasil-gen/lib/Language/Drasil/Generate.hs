@@ -134,7 +134,7 @@ prntCSV dt sm = do
   hPutStrLn outh $ render (makeCSV sm)
   hClose outh
   where
-    fp = show dt ++ "/mdBook/assets.csv"
+    fp = show dt ++ "/mdBook/.drasil-requirements.csv"
 
 -- | Renders single-page documents.
 writeDoc :: PrintingInformation -> DocType -> Format -> Filename -> Document -> Doc

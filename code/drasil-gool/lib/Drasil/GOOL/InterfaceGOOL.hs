@@ -2,7 +2,7 @@
 
 module Drasil.GOOL.InterfaceGOOL (
   -- Types
-  GSProgram, SFile, FSModule, SClass, VSFunction, CSStateVar,
+  GSProgram, SFile, FSModule, SClass, VSFunction, CSStateVar, Initializers,
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), OOValueSym, OOVariableValue,
@@ -19,8 +19,8 @@ module Drasil.GOOL.InterfaceGOOL (
 import Drasil.GOOL.InterfaceCommon (
   -- Types
   Label, Library, MSBody, MSBlock, VSType, SVariable, SValue, MSStatement,
-  NamedArgs, MSParameter, SMethod, Initializers, MixedCall, MixedCtorCall,
-  PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
+  NamedArgs, MSParameter, SMethod, MixedCall, MixedCtorCall, PosCall,
+  PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, BodySym(body), TypeSym(listType), MethodSym, VariableSym(var),
   ScopeSym(..), ValueSym(valueType), VariableValue(valueOf), ValueExpression,
@@ -75,6 +75,8 @@ class (OOMethodSym r, StateVarSym r) => ClassSym r where
     [SMethod r] -> SClass r
 
   docClass :: String -> SClass r -> SClass r
+
+type Initializers r = [(SVariable r, SValue r)]
 
 class (MethodSym r, PermanenceSym r) => OOMethodSym r where
   method      :: Label -> r (Scope r) -> r (Permanence r) -> VSType r -> 

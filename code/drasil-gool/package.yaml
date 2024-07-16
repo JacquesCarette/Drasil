@@ -28,6 +28,7 @@ library:
   source-dirs: lib
   exposed-modules:
   - Drasil.GOOL
+  - Drasil.GProc
   when:
   - condition: false
     other-modules: Paths_drasil_gool

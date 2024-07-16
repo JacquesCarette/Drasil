@@ -17,12 +17,11 @@ import Utils.Drasil (indent, stringList)
 
 import Drasil.GOOL.CodeType (CodeType(..))
 import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, VSType, SVariable,
-  SValue, MSStatement, MSParameter, SMethod, Initializers,
-  MixedCall, bodyStatements, oneLiner, TypeSym(infile,
-  outfile, listInnerType), TypeElim(getType, getTypeString),
-  VariableElim(variableName, variableType), ValueSym(valueType), Comparison(..),
-  (&=), ControlStatement(returnStmt), ScopeSym(..), MethodSym(function),
-  NumericExpression((#+), (#-)))
+  SValue, MSStatement, MSParameter, SMethod, MixedCall, bodyStatements,
+  oneLiner, TypeSym(infile, outfile, listInnerType), TypeElim(getType,
+  getTypeString), VariableElim(variableName, variableType), ValueSym(valueType),
+  Comparison(..), (&=), ControlStatement(returnStmt), ScopeSym(..),
+  MethodSym(function), NumericExpression((#+), (#-)))
 import qualified Drasil.GOOL.InterfaceCommon as IC (
   TypeSym(int, double, string, listType, arrayType, void), VariableSym(var),
   Literal(litTrue, litFalse, litList, litInt), VariableValue(valueOf),
@@ -30,7 +29,8 @@ import qualified Drasil.GOOL.InterfaceCommon as IC (
   List(intToIndex, indexToInt), ParameterSym(param, pointerParam),
   MethodSym(mainFunction))
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, VSFunction,
-  CSStateVar, OOTypeSym(obj), PermanenceSym(..), objMethodCallNoParams)
+  Initializers, CSStateVar, OOTypeSym(obj), PermanenceSym(..),
+  objMethodCallNoParams)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (ClassSym(buildClass),
   OOVariableSym(self, objVar), FunctionSym(..))
 import Drasil.GOOL.RendererClasses (RenderSym, ImportSym(..), RenderBody(..), 

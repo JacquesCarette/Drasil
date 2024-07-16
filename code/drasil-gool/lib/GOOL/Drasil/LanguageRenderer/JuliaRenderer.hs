@@ -62,8 +62,9 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (bool,
   boolRender, extVar, funcType, buildModule, docMod', funcDecDef, litArray,
   listDec, listDecDef, listAccessFunc, listSetFunc, bindingError, notNull,
   extFuncAppMixedArgs, functionDoc, listSize, listAdd, listAppend, intToIndex',
-  indexToInt', inOutFunc, docInOutFunc', forLoopError, openFileR', openFileW',
-  openFileA', multiReturn, multiAssign, inOutCall, mainBody, argExists)
+  indexToInt', inOutFunc, docInOutFunc', forLoopError, varDec, varDecDef,
+  openFileR', openFileW', openFileA', multiReturn, multiAssign, inOutCall,
+  mainBody, argExists, forEach')
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
   notOp, andOp, orOp, inlineIf, while)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1,
@@ -385,24 +386,16 @@ instance List JuliaCode where
   listAppend = CP.listAppend
   listAccess = G.listAccess
   listSet = G.listSet
-  indexOf l v = do
-    v' <- v
-    let t = toCode $ valueType v'
-    indexToInt $ funcApp
-      jlListAbsdex t [lambda [var "x" t] (valueOf (var "x" t) ?== v), l]
+  indexOf = jlIndexOf
 
 instance InternalList JuliaCode where
   -- TODO: Update for negative step
   listSlice' b e s vn vo = jlListSlice vn vo (bIndex b) (eIndex e) (getVal s)
-    where bIndex Nothing = mkStateVal void jlStart
+    where bIndex Nothing = mkStateVal void jlBegin
           bIndex (Just x) = intToIndex x
           eIndex Nothing = mkStateVal void jlEnd
           eIndex (Just x) = intToIndex x #- litInt 1
           getVal = fromMaybe $ mkStateVal void empty
-
-instance InternalGetSet JuliaCode where
-  getFunc = undefined--
-  setFunc = undefined--
 
 instance InternalListFunc JuliaCode where
   listSizeFunc l = do
@@ -489,14 +482,8 @@ instance AssignStatement JuliaCode where
   (&--) = M.decrement1
 
 instance DeclStatement JuliaCode where
-  varDec v = do -- TODO: Merge with Python
-    v' <- zoom lensMStoVS v
-    modify $ useVarName (variableName v')
-    mkStmtNoEnd empty
-  varDecDef v e = do -- TODO: Merge with Python
-    v' <- zoom lensMStoVS v
-    modify $ useVarName (variableName v')
-    assign v e
+  varDec = CP.varDec
+  varDecDef = CP.varDecDef
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
   arrayDec = listDec
@@ -545,7 +532,7 @@ instance ControlStatement JuliaCode where
   returnStmt = G.returnStmt Empty
   throw = G.throw jlThrow Empty
   ifCond [] _ = error "if condition created with no cases"
-  ifCond (c:cs) eBody =
+  ifCond (c:cs) eBody = -- TODO: Clean up (either put below or merge with G.ifCond)
       let ifSect (v, b) = on2StateValues (\vl bd -> vcat [
             ifLabel <+> RC.value vl,
             indent $ RC.body bd]) (zoom lensMStoVS v) b
@@ -561,11 +548,7 @@ instance ControlStatement JuliaCode where
   ifExists = M.ifExists
   for _ _ _ _ = error $ CP.forLoopError jlName
   forRange i initv finalv stepv = forEach i (jlRange initv finalv stepv)
-  forEach i' v' b' = do
-    i <- zoom lensMStoVS i'
-    v <- zoom lensMStoVS v'
-    b <- b'
-    mkStmtNoEnd (jlForEach i v b) -- TODO: merge with Python and Swift
+  forEach = CP.forEach' jlForEach
   while = C.while id empty jlEnd
   tryCatch = G.tryCatch jlTryCatch
 
@@ -614,15 +597,16 @@ instance MethodSym JuliaCode where
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
 instance RenderMethod JuliaCode where
-  intMethod _ n _ _ _ = jlIntMethod n
   intFunc _ n _ _ _ ps b = do
     pms <- sequence ps
     toCode . mthd . jlIntFunc n pms <$> b
 
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
-  destructor _ = undefined--
   mthdFromData _ d = toState $ toCode $ mthd d
+  -- OO-Only (remove when ready)
+  intMethod = undefined--
+  destructor _ = undefined--
 
 instance MethodElim JuliaCode where
   method = mthdDoc . unJLC
@@ -655,6 +639,8 @@ jlName = "Julia"
 jlVersion = "1.10.3"
 
 -- Abstract and concrete versions of each Julia datatype
+-- Currently only concrete ones are used, but because of Julia's workflow
+-- It might be nice to use abstract types when possible
 jlIntAbs, jlIntConc, jlFloatAbs, jlFloatConc, jlDoubleAbs, jlDoubleConc,
   jlCharAbs, jlCharConc, jlStringAbs, jlStringConc, jlListAbs, jlListConc,
   jlFile, jlVoid :: String
@@ -676,6 +662,7 @@ jlVoid = "Nothing"
 jlClassError :: String
 jlClassError = "Classes are not supported in Julia"
 
+-- The only consistent way of creating floats is by casting
 jlLitFloat :: (RenderSym r) => Float -> SValue r
 jlLitFloat f = mkStateVal float (text jlFloatConc <> parens (D.float f))
 
@@ -688,10 +675,15 @@ jlCast t' v' = do
       vDoc = RC.value v
       tDoc = RC.type' t
       jlCast' :: CodeType -> CodeType -> Doc -> Doc -> Doc
+      -- Converting string to char
       jlCast' String Char vDoc' _ = text "only" <> parens vDoc'
+      -- Converting string to something else
       jlCast' String _    vDoc' tDoc' = text "parse" <> parens (tDoc' <> listSep' <+> vDoc')
+      -- Converting non-string to char
       jlCast' _      Char vDoc' _ = text "only" <> parens (text "string" <> parens vDoc')
+      -- Converting something to string
       jlCast' _      String vDoc' _ = text "string" <> parens vDoc'
+      -- Converting non-string to non-string
       jlCast' _      _    vDoc' tDoc' = tDoc' <> parens vDoc'
   mkVal t (jlCast' vTp tTp vDoc tDoc)
 
@@ -702,11 +694,19 @@ jlConstDecDef v' def' = do
   modify $ useVarName $ variableName v
   mkStmt $ RC.variable v <+> equals <+> RC.value def --TODO: prepend `constDec' ` when in global scope
 
+-- List API
 jlListSize, jlListAdd, jlListAppend, jlListAbsdex :: Label
 jlListSize = "length"
 jlListAdd = "insert!"
 jlListAppend = "append!"
 jlListAbsdex    = "findfirst"
+
+jlIndexOf :: (SharedProg r) => SValue r -> SValue r -> SValue r
+jlIndexOf l v = do
+  v' <- v
+  let t = toCode $ valueType v'
+  indexToInt $ funcApp
+    jlListAbsdex t [lambda [var "x" t] (valueOf (var "x" t) ?== v), l]
 
 jlListSlice :: (RenderSym r, Monad r) => SVariable r -> SValue r -> SValue r ->
   SValue r -> SValue r -> MS (r Doc)
@@ -720,6 +720,7 @@ jlListSlice vn vo beg end step = zoom lensMStoVS $ do
   pure $ toCode $ RC.variable vnew <+> equals <+> RC.value vold <>
     brackets (RC.value b <> step' <> colon <> RC.value e)
 
+-- Other functionality
 jlRange :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 jlRange initv finalv stepv = do
   t <- listType int
@@ -741,7 +742,7 @@ jlParseFunc = "parse"
 jlType, arrow, jlNamedArgSep :: Doc
 jlType = colon <> colon
 arrow = text "->"
-jlNamedArgSep = equals -- TODO: Merge with Python
+jlNamedArgSep = equals
 
 jlTuple :: [String] -> String
 jlTuple ts = "Tuple{" ++ intercalate listSep ts ++ "}"
@@ -768,7 +769,7 @@ jlDocCmtEnd     = text "\"\"\""
 
 -- Control structures
 
--- | Creates a for each loop in Julia
+-- | Creates a for-each loop in Julia
 jlForEach :: (RenderSym r) => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
 jlForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar,
@@ -792,23 +793,6 @@ jlModContents n is fs = CP.buildModule n (do
   where mi, li :: Label -> JuliaCode (Import JuliaCode)
         mi = modImport
         li = langImport
-
-jlIntMethod :: (RenderSym r) => Label -> [MSParameter r] ->
-  MSBody r -> SMethod r
-jlIntMethod n ps b = do
-  pms <- sequence ps
-  bod <- b
-  nm <- getClassName
-  let pmlst = parameterList pms
-      oneParam = emptyIfEmpty pmlst listSep'
-      self' :: SVariable JuliaCode
-      self' = self
-  sl <- zoom lensMStoVS self'
-  mthdFromData Pub (vcat [
-    jlFunc <+> text n <> parens (RC.variable sl <> jlType <>
-      text nm <> oneParam <> pmlst),
-    indent $ RC.body bod,
-    jlEnd])
 
 -- Functions
 -- | Creates a function.  n is function name, pms is list of parameters, and 
@@ -841,11 +825,11 @@ includeLabel, importLabel :: Doc
 includeLabel = text "include"
 importLabel = text "import"
 
-jlMod, elseIfLabel, jlFunc, jlStart, jlEnd, jlThrowLabel :: Doc
+jlMod, elseIfLabel, jlFunc, jlBegin, jlEnd, jlThrowLabel :: Doc
 jlMod        = text "module"
 elseIfLabel  = text "elseif"
 jlFunc       = text "function"
-jlStart      = text "start"
+jlBegin      = text "begin"
 jlEnd        = text "end"
 jlThrowLabel = text "error" -- TODO: this hints at an underdeveloped exception system
 
@@ -893,7 +877,7 @@ jlModStart :: Label -> Doc
 jlModStart n = jlMod <+> text n
 
 using :: Doc
-using = text "using" -- TODO: merge with C++
+using = text "using"
 
 usingModule :: Label -> Doc -- TODO: see if you need to add context for package vs file
 usingModule n = using <+> text n
@@ -1034,3 +1018,7 @@ instance OOMethodSym JuliaCode where
 instance OOVariableValue JuliaCode
 
 instance OOValueSym JuliaCode
+
+instance InternalGetSet JuliaCode where
+  getFunc = undefined--
+  setFunc = undefined--

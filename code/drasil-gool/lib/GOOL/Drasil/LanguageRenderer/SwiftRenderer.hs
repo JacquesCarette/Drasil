@@ -75,7 +75,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (classVar,
   openFileW, self, multiAssign, multiReturn, listDec, funcDecDef, 
   inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', bool, float, 
   stringRender', string', inherit, implements, functionDoc, intToIndex,
-  indexToInt)
+  indexToInt, forEach')
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (notOp, andOp, orOp, 
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, 
   listSize, varDecDef, extObjDecNew, switch, while)
@@ -624,7 +624,7 @@ instance ControlStatement SwiftCode where
 
   for _ _ _ _ = error $ CP.forLoopError swiftName
   forRange i initv finalv stepv = forEach i (swiftStrideFunc initv finalv stepv)
-  forEach = swiftForEach
+  forEach = CP.forEach' swiftForEach
   while = C.while id bodyStart bodyEnd
 
   tryCatch = G.tryCatch swiftTryCatch
@@ -1102,16 +1102,11 @@ swiftVarDec dec v' = do
 swiftThrowDoc :: (RenderSym r) => r (Value r) -> Doc
 swiftThrowDoc errMsg = throwLabel <+> RC.value errMsg
 
-swiftForEach :: (RenderSym r) => SVariable r -> SValue r -> MSBody r ->
-  MSStatement r
-swiftForEach i' lst' b' = do
-  i <- zoom lensMStoVS i'
-  lst <- zoom lensMStoVS lst'
-  b <- b'
-  mkStmtNoEnd $ vcat [
-    forLabel <+> RC.variable i <+> inLabel <+> RC.value lst <+> bodyStart,
-    indent $ RC.body b,
-    bodyEnd]
+swiftForEach :: (RenderSym r) => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
+swiftForEach i lstVar b = vcat [
+  forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <+> bodyStart,
+  indent $ RC.body b,
+  bodyEnd]
 
 swiftTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
 swiftTryCatch tb cb = vcat [

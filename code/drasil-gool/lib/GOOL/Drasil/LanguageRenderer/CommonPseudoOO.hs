@@ -2,34 +2,34 @@
 module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   doxClass, doxMod, docMod', functionDoc, extVar, classVar, objVarSelf, indexOf,
   listAddFunc, discardFileLine, intClass, funcType, buildModule, arrayType, pi,
-  printSt, arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction,
-  buildModule', call', listSizeFunc, listAccessFunc', string, constDecDef,
-  docInOutFunc, bindingError, extFuncAppMixedArgs, notNull, listDecDef,
-  destructorError, stateVarDef, constVar, litArray, listSetFunc, extraClass,
-  listAccessFunc, doubleRender, double, openFileR, openFileW, stateVar, self,
-  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError,
-  mainBody, inOutFunc, docInOutFunc', boolRender, bool, floatRender, float,
-  stringRender', string', inherit, implements, listSize, listAdd, listAppend,
-  intToIndex, indexToInt, intToIndex', indexToInt', openFileR', openFileW',
-  openFileA', argExists
+  printSt, arrayDec, arrayDecDef, openFileA, forEach, forEach', docMain,
+  mainFunction, buildModule', call', listSizeFunc, listAccessFunc', string,
+  constDecDef, docInOutFunc, bindingError, extFuncAppMixedArgs, notNull,
+  listDecDef, destructorError, stateVarDef, constVar, litArray, listSetFunc,
+  extraClass, listAccessFunc, doubleRender, double, openFileR, openFileW,
+  stateVar, self, multiAssign, multiReturn, listDec, funcDecDef, inOutCall,
+  forLoopError, mainBody, inOutFunc, docInOutFunc', boolRender, bool,
+  floatRender, float, stringRender', string', inherit, implements, listSize,
+  listAdd, listAppend, intToIndex, indexToInt, intToIndex', indexToInt', varDec,
+  varDecDef, openFileR', openFileW', openFileA', argExists
 ) where
 
 import Utils.Drasil (indent, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.InterfaceCommon (Label, Library, MSBody, VSType, SVariable,
-  SValue, MSStatement, MSParameter, SMethod, Initializers,
-  MixedCall, bodyStatements, oneLiner, TypeSym(infile,
-  outfile, listInnerType), TypeElim(getType, getTypeString),
-  VariableElim(variableName, variableType), ValueSym(valueType), Comparison(..),
-  (&=), ControlStatement(returnStmt), ScopeSym(..), MethodSym(function),
+import GOOL.Drasil.InterfaceCommon (Label, Library, Body, MSBody, VSType,
+  Variable, SVariable, Value, SValue, MSStatement, MSParameter, SMethod,
+  Initializers, MixedCall, bodyStatements, oneLiner, TypeSym(infile, outfile,
+  listInnerType), TypeElim(getType, getTypeString), VariableElim(variableName,
+  variableType), ValueSym(valueType), Comparison(..), (&=),
+  ControlStatement(returnStmt), ScopeSym(..), MethodSym(function),
   NumericExpression((#+), (#-)), funcApp)
 import qualified GOOL.Drasil.InterfaceCommon as IC (argsList,
   TypeSym(int, double, string, listType, arrayType, void), VariableSym(var),
   Literal(litTrue, litFalse, litList, litInt, litString),
   VariableValue(valueOf), StatementSym(valStmt), DeclStatement(varDec,
   varDecDef, constDecDef), List(intToIndex, indexToInt), ParameterSym(param,
-  pointerParam), MethodSym(mainFunction))
+  pointerParam), MethodSym(mainFunction), AssignStatement(assign))
 import GOOL.Drasil.InterfaceGOOL (SFile, FSModule, SClass, VSFunction,
   CSStateVar, OOTypeSym(obj), PermanenceSym(..), objMethodCallNoParams)
 import qualified GOOL.Drasil.InterfaceGOOL as IG (ClassSym(buildClass),
@@ -474,6 +474,16 @@ inherit n = toCode $ maybe empty ((colon <+>) . text) n
 implements :: (Monad r) => [Label] -> r ParentSpec
 implements is = toCode $ colon <+> text (intercalate listSep is)
 
+-- Python, Swift, and Julia --
+
+forEach' :: (RenderSym r) => (r (Variable r) -> r (Value r) -> r (Body r) -> Doc)
+  -> SVariable r -> SValue r -> MSBody r -> MSStatement r
+forEach' f i' v' b' = do
+  i <- zoom lensMStoVS i'
+  v <- zoom lensMStoVS v'
+  b <- b'
+  mkStmtNoEnd (f i v b)
+
 -- Swift and Julia --
 boolRender :: String
 boolRender = "Bool"
@@ -516,7 +526,20 @@ noteDoc = "Note"
 paramDoc = "Parameter"
 returnDoc = "Returns"
 
--- Python and Julia
+-- Python and Julia --
+
+varDec :: (RenderSym r) => SVariable r -> MSStatement r
+varDec v = do
+  v' <- zoom lensMStoVS v
+  modify $ useVarName (variableName v')
+  mkStmtNoEnd empty
+
+varDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
+varDecDef v e = do
+  v' <- zoom lensMStoVS v
+  modify $ useVarName (variableName v')
+  IC.assign v e
+
 fileOpen, fileR, fileW, fileA :: Label
 fileOpen = "open"
 fileR = "r"

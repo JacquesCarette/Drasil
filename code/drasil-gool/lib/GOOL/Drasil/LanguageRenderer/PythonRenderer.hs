@@ -72,7 +72,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   stateVarDef, constVar, litArray, listSetFunc, extraClass, listAccessFunc, 
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
   mainBody, inOutFunc, docInOutFunc', listSize, intToIndex, indexToInt,
-  openFileR', openFileW', openFileA', argExists)
+  varDec, varDecDef, openFileR', openFileW', openFileA', argExists, forEach')
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
   notifyObservers')
@@ -86,8 +86,7 @@ import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
   revFiles, addLangImportVS, getLangImports, addLibImportVS, 
   getLibImports, addModuleImport, addModuleImportVS, getModuleImports, 
-  setFileType, getClassName, setCurrMain, getClassMap, getMainDoc, useVarName,
-  genLoopIndex)
+  setFileType, getClassName, setCurrMain, getClassMap, getMainDoc, genLoopIndex)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -524,14 +523,8 @@ instance AssignStatement PythonCode where
   (&--) = M.decrement1
 
 instance DeclStatement PythonCode where
-  varDec v = do
-    v' <- zoom lensMStoVS v
-    modify $ useVarName (variableName v')
-    mkStmtNoEnd empty
-  varDecDef v e = do
-    v' <- zoom lensMStoVS v
-    modify $ useVarName (variableName v')
-    assign v e
+  varDec = CP.varDec
+  varDecDef = CP.varDecDef
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
   arrayDec = listDec
@@ -602,11 +595,7 @@ instance ControlStatement PythonCode where
 
   for _ _ _ _ = error $ CP.forLoopError pyName
   forRange i initv finalv stepv = forEach i (range initv finalv stepv)
-  forEach i' v' b' = do
-    i <- zoom lensMStoVS i'
-    v <- zoom lensMStoVS v'
-    b <- b'
-    mkStmtNoEnd (pyForEach i v b)
+  forEach = CP.forEach' pyForEach
   while v' b' = do 
     v <- zoom lensMStoVS v'
     b <- b'

@@ -81,7 +81,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
   funcType, arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, 
   docMain, mainFunction, buildModule', bindingError, listDecDef, 
-  destructorError, stateVarDef, constVar, litArray, call', listSizeFunc, 
+  destructorError, stateVarDef, constVar, litArray, litSet, call', listSizeFunc, 
   listAccessFunc', notNull, doubleRender, double, openFileR, openFileW, 
   stateVar, floatRender, float, string', intToIndex, indexToInt, global)
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (float, double, char, 
@@ -213,6 +213,7 @@ instance TypeSym JavaCode where
   infile = jInfileType
   outfile = jOutfileType
   listType = jListType
+  setType = jSetType
   arrayType = CP.arrayType
   listInnerType = G.listInnerType
   funcType = CP.funcType
@@ -326,6 +327,11 @@ instance Literal JavaCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray braces
+  litSet t es = do
+    zoom lensVStoMS $ modify (if null es then id else addLangImport $ utilImport
+      jSet)
+    newObj (setType t) [jAsSetFunc t es | not (null es)]
+
   litList t es = do
     zoom lensVStoMS $ modify (if null es then id else addLangImport $ utilImport
       jArrays)
@@ -819,7 +825,9 @@ jFileWriter = "FileWriter"
 jIOExc = "IOException"
 jFNFExc = "FileNotFoundException"
 jArrays = "Arrays"
+jSet = "Set"
 jAsList = jArrays `access` "asList"
+jSetOf = jSet `access` "of"
 jStdIn = "in"
 jStdOut = "out"
 jPrintLn = "println"
@@ -865,6 +873,19 @@ jListType t = do
         lstInt = arrayList `containing` jInteger
         lstBool = arrayList `containing` jBool'
 
+jSetType :: (RenderSym r) => VSType r -> VSType r
+jSetType t = do
+  modify (addLangImportVS $ utilImport "Set") 
+  t >>= (jSetType' . getType)
+  where jSetType' Integer = typeFromData (Set Integer) 
+          stInt (text stInt)
+        jSetType' Float = C.listType "" CP.float
+        jSetType' Double = C.listType "HashSet" CP.double
+        jSetType' Boolean = typeFromData (Set Boolean) stBool (text stBool)
+        jSetType' _ = C.listType "" t
+        stInt = "" `containing` jInteger
+        stBool = "" `containing` jBool'
+
 jArrayType :: VSType JavaCode
 jArrayType = arrayType (obj jObject)
 
@@ -880,6 +901,9 @@ jFileWriterType = do
 
 jAsListFunc :: VSType JavaCode -> [SValue JavaCode] -> SValue JavaCode
 jAsListFunc t = funcApp jAsList (listType t)
+
+jAsSetFunc :: VSType JavaCode -> [SValue JavaCode] -> SValue JavaCode
+jAsSetFunc t = funcApp jSetOf (setType t)
 
 jEqualsFunc :: SValue JavaCode -> VSFunction JavaCode
 jEqualsFunc v = func jEquals bool [v]

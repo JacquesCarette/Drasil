@@ -4,10 +4,10 @@ module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   discardFileLine, intClass, funcType, buildModule, arrayType, pi, printSt,
   arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction,
   buildModule', call', listSizeFunc, setAddFunc, listAccessFunc', string, constDecDef,
-  docInOutFunc, bindingError, extFuncAppMixedArgs, notNull, listDecDef,
-  destructorError, stateVarDef, constVar, litArray, listSetFunc, extraClass,
+  docInOutFunc, bindingError, extFuncAppMixedArgs, notNull, listDecDef, setDecDef,
+  destructorError, stateVarDef, constVar, litArray, litSet, listSetFunc, extraClass,
   listAccessFunc, doubleRender, double, openFileR, openFileW, stateVar, self,
-  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError,
+  multiAssign, multiReturn, listDec, setDec, funcDecDef, inOutCall, forLoopError,
   mainBody, inOutFunc, docInOutFunc', boolRender, bool, floatRender, float, stringRender',
   string', inherit, implements, listSize, setSize, listAdd, listAppend, intToIndex,
   indexToInt, intToIndex', indexToInt'
@@ -24,8 +24,8 @@ import GOOL.Drasil.InterfaceCommon (Label, Library, MSBody, VSType, SVariable,
   (&=), ControlStatement(returnStmt), ScopeSym(..), MethodSym(function),
   NumericExpression((#+), (#-)))
 import qualified GOOL.Drasil.InterfaceCommon as IC (
-  TypeSym(int, double, string, listType, arrayType, void), VariableSym(var),
-  Literal(litTrue, litFalse, litList, litInt), VariableValue(valueOf),
+  TypeSym(int, bool, double, string, listType, arrayType, void), VariableSym(var),
+  Literal(litTrue, litFalse, litList, litSet, litInt), VariableValue(valueOf),
   StatementSym(valStmt), DeclStatement(varDec, varDecDef, constDecDef),
   List(intToIndex, indexToInt), ParameterSym(param, pointerParam),
   MethodSym(mainFunction))
@@ -132,7 +132,7 @@ indexOf :: (RenderSym r) => Label -> SValue r -> SValue r -> SValue r
 indexOf f l v = IC.indexToInt $ IG.objAccess l (IG.func f IC.int [v])
 
 contains :: (RenderSym r) => Label -> SValue r -> SValue r -> SValue r
-contains f l v = IG.objAccess l (IG.func f IC.int [v])
+contains f s v = IG.objAccess s (IG.func f IC.bool [v])
 
 listAddFunc :: (RenderSym r) => Label -> SValue r -> SValue r -> VSFunction r
 listAddFunc f i v = IG.func f (IC.listType $ onStateValue valueType v) 
@@ -320,6 +320,12 @@ listDecDef v vals = do
   let lst = IC.litList (listInnerType $ return $ variableType vr) vals
   IC.varDecDef (return vr) lst
 
+setDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
+setDecDef v vals = do
+  vr <- zoom lensMStoVS v 
+  let st = IC.litSet (listInnerType $ return $ variableType vr) vals
+  IC.varDecDef (return vr) st
+
 destructorError :: String -> String
 destructorError l = "Destructors not allowed in " ++ l
 
@@ -337,6 +343,10 @@ constVar p s vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
 
 litArray :: (RenderSym r) => (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
 litArray f t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t) 
+  (f $ valueList elems))
+
+litSet :: (RenderSym r) => (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
+litSet f t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t) 
   (f $ valueList elems))
 
 -- Python, C#, C++, and Swift--
@@ -408,6 +418,9 @@ multiReturn f vs = do
 
 listDec :: (RenderSym r) => SVariable r -> MSStatement r
 listDec v = IC.varDecDef v $ IC.litList (onStateValue variableType v) []
+
+setDec :: (RenderSym r) => SVariable r -> MSStatement r
+setDec v = IC.varDecDef v $ IC.litSet (onStateValue variableType v) []
 
 funcDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> MSBody r -> 
   MSStatement r

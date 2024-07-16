@@ -84,10 +84,8 @@ andOp = andPrec "&&"
 
 orOp :: (Monad r) => VSOp r
 orOp = orPrec "||"
-
 inOp :: (Monad r) => VSOp r
-inOp = inPrec "||"
-
+inOp = inPrec ""
 -- Variables --
 
 self :: (RenderSym r) => SVariable r
@@ -168,7 +166,12 @@ listDec f vl v = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v
   mkStmt (RC.statement vd <> f sz)
-  
+setDec :: (RenderSym r) => (r (Value r) -> Doc) -> SValue r -> SVariable r -> MSStatement r
+setDec f vl v = do 
+  sz <- zoom lensMStoVS vl
+  vd <- IC.varDec v
+  mkStmt (RC.statement vd <> f sz)
+
 extObjDecNew :: (RenderSym r) => Library -> SVariable r -> [SValue r] -> 
   MSStatement r
 extObjDecNew l v vs = IC.varDecDef v (extNewObj l (onStateValue variableType v)

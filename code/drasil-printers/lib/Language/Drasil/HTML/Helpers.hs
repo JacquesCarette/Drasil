@@ -70,7 +70,12 @@ h n       | n < 1 = error "Illegal header (too small)"
           | otherwise = wrap ("h" ++ show n) []
 
 -- | HTML attribute selector.
-data Variation = Class | Id | Align
+data Variation = Class | Id | Align deriving Eq
+
+instance Show Variation where
+  show Class = "class"
+  show Id    = "id"
+  show Align = "align"
 
 -- | General 'Class' wrapper function and formats the document space with 'cat'.
 wrap :: String -> [String] -> Doc -> Doc
@@ -84,25 +89,25 @@ wrap' a = wrapGen' hcat Class a empty
 -- The fourth argument provides class names for the CSS.
 wrapGen' :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
 wrapGen' sepf _ s _ [] = \x -> 
-  let tb c = text $ "<" ++ c ++ ">"
-  in sepf [tb s, indent x, tb $ '/':s]
+  sepf [text $ "<" ++ s ++ ">", indent x, tagR s]
 wrapGen' sepf Class s _ ts = \x ->
-  let tb c = text $ "<" ++ c ++ " class=\"" ++ foldr1 (++) (intersperse " " ts) ++ "\">"
-  in let te c = text $ "</" ++ c ++ ">"
-  in sepf [tb s, indent x, te s]
-wrapGen' sepf Id s ti _ = \x ->
-  let tb c = text ("<" ++ c ++ " id=\"") <> ti <> text "\">"
-      te c = text $ "</" ++ c ++ ">"
-  in sepf [tb s, indent x, te s] 
-wrapGen' sepf Align s ti _ = \x ->
-  let tb c = text ("<" ++ c ++ " align=\"") <> ti <> text "\">"
-      te c = text $ "</" ++ c ++ ">"
-  in sepf [tb s, x, te s] 
+  let val = text $ foldr1 (++) (intersperse " " ts)
+  in sepf [tagL s Class val, indent x, tagR s]
+wrapGen' sepf v s ti _ = \x ->
+  let con = if v == Align then x else indent x
+  in sepf [tagL s v ti, con, tagR s]
 
 -- | General wrapper that formats the document space nicely.
 wrapGen :: Variation -> String -> Doc -> [String] -> Doc -> Doc
 wrapGen = wrapGen' cat
 
+-- | Helper for creating a left HTML tag with a single attribute.
+tagL :: String -> Variation -> Doc -> Doc
+tagL t a v = text ("<" ++ t ++ " " ++ show a ++ "=\"") <> v <> text "\">" 
+
+-- | Helper for creating a right HTML closing tag.
+tagR :: String -> Doc
+tagR t = text $ "</" ++ t ++ ">"
 
 -- | Helper for wrapping attributes in a tag.
 --

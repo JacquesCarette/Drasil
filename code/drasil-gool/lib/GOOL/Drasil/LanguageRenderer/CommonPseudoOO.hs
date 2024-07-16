@@ -3,13 +3,13 @@ module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   doxClass, doxMod, docMod', extVar, classVar, objVarSelf, indexOf, contains, listAddFunc,
   discardFileLine, intClass, funcType, buildModule, arrayType, pi, printSt,
   arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction,
-  buildModule', call', listSizeFunc, listAccessFunc', string, constDecDef,
+  buildModule', call', listSizeFunc, setAddFunc, listAccessFunc', string, constDecDef,
   docInOutFunc, bindingError, extFuncAppMixedArgs, notNull, listDecDef,
   destructorError, stateVarDef, constVar, litArray, listSetFunc, extraClass,
   listAccessFunc, doubleRender, double, openFileR, openFileW, stateVar, self,
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError,
   mainBody, inOutFunc, docInOutFunc', boolRender, bool, floatRender, float, stringRender',
-  string', inherit, implements, listSize, listAdd, listAppend, intToIndex,
+  string', inherit, implements, listSize, setSize, listAdd, listAppend, intToIndex,
   indexToInt, intToIndex', indexToInt'
 ) where
 
@@ -42,7 +42,7 @@ import qualified GOOL.Drasil.RendererClasses as S (RenderBody(multiBody),
   RenderValue(call), RenderStatement(stmt), InternalAssignStmt(multiAssign),
   InternalControlStmt(multiReturn), MethodTypeSym(construct),
   RenderMethod(intFunc), RenderClass(intClass, inherit), RenderMod(modFromData),
-  InternalListFunc(listSizeFunc, listAddFunc, listAppendFunc))
+  InternalListFunc(listSizeFunc, listAddFunc, listAppendFunc), InternalSetFunc(setAddFunc))
 import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..),
   PermElim(..), BodyElim(..), InternalTypeElim(..), InternalVarElim(variable),
   ValueElim(..), StatementElim(statement), ScopeElim(..), MethodElim(..),
@@ -137,7 +137,11 @@ contains f l v = IG.objAccess l (IG.func f IC.int [v])
 listAddFunc :: (RenderSym r) => Label -> SValue r -> SValue r -> VSFunction r
 listAddFunc f i v = IG.func f (IC.listType $ onStateValue valueType v) 
   [i, v]
-  
+
+setAddFunc :: (RenderSym r) => Label -> SValue r -> SValue r -> VSFunction r
+setAddFunc f i v = IG.func f (IC.listType $ onStateValue valueType v) 
+  [i, v]
+
 discardFileLine :: (RenderSym r) => Label -> SValue r -> MSStatement r
 discardFileLine n f = IC.valStmt $ objMethodCallNoParams IC.string f n 
 
@@ -352,6 +356,7 @@ listSetFunc f v idx setVal = join $ on2StateValues (\i toVal -> funcFromData
   (f (RC.value i) (RC.value toVal)) (onStateValue valueType v)) (intValue idx) 
   setVal
 
+
 -- Java, C#, and Swift --
 
 doubleRender :: String
@@ -512,6 +517,12 @@ listSize l = do
   f <- S.listSizeFunc l
   mkVal (RC.functionType f) (RC.function f)
 
+setSize :: (RenderSym r) => SValue r -> SValue r
+setSize l = do
+  f <- S.listSizeFunc l
+  mkVal (RC.functionType f) (RC.function f)
+  
+
 -- Julia and MATLAB --
 -- | Call to insert a value into a list in a language where this is not a method.
 listAdd :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
@@ -523,6 +534,11 @@ listAdd l i v = do
 listAppend :: (RenderSym r) => SValue r -> SValue r -> SValue r
 listAppend l v = do
   f <- S.listAppendFunc l v
+  mkVal (RC.functionType f) (RC.function f)
+
+setAdd :: (RenderSym r) => SValue r -> SValue r -> SValue r
+setAdd l v = do
+  f <- S.setAddFunc l v
   mkVal (RC.functionType f) (RC.function f)
 
 -- | Convert an integer to an index in a 1-indexed language

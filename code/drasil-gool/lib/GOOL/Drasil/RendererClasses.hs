@@ -41,7 +41,7 @@ class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r,
   InternalValueExp r, GetSet r, List r, InternalList r, VectorExpression r,
   ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r,
   RenderBlock r, BlockElim r, RenderBody r, BodyElim r, RenderClass r,
-  ClassElim r, RenderFile r, InternalGetSet r, InternalListFunc r, InternalSetFunc r,
+  ClassElim r, RenderFile r, InternalGetSet r, InternalSetFunc r, InternalListFunc r,
   RenderFunction r, FunctionElim r, RenderMethod r, MethodElim r, RenderMod r,
   ModuleElim r, OpElim r, RenderParam r, ParamElim r, PermElim r, RenderScope r,
   ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r,
@@ -131,6 +131,7 @@ class BinaryOpSym r where
   moduloOp       :: VSBinOp r
   andOp          :: VSBinOp r
   orOp           :: VSBinOp r
+  inOp           :: VSBinOp r
 
 class OpElim r where
   uOp :: r (UnaryOp r) -> Doc
@@ -181,6 +182,7 @@ class InternalListFunc r where
 
 class InternalSetFunc r where
   setAddFunc :: SValue r -> SValue r -> VSFunction r
+  setSizeFunc :: SValue r -> VSFunction r
 
 class RenderFunction r where
   funcFromData :: Doc -> VSType r -> VSFunction r

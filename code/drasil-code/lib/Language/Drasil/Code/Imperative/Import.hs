@@ -9,7 +9,7 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
   Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..))
 import Database.Drasil (symbResolve)
-import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&), idxOf)
+import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&),in')
 import qualified Language.Drasil.CodeExpr as CE (int)
 import Language.Drasil.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
   AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..), BoolBinOp(..), EqBinOp(..),
@@ -403,7 +403,7 @@ renderRealInt s (UpFrom  (Inc, a))          = sy s $>= a
 renderRealInt s (UpFrom  (Exc, a))          = sy s $>  a
 
 renderSet :: (HasUID c, HasSymbol c) => c -> CodeExpr -> CodeExpr
-renderSet e s = ((idxOf s (sy e))$>= CE.int 0)
+renderSet e s = (in' s (sy e))
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.
 unop :: (OOProg r) => UFunc -> (SValue r -> SValue r)
@@ -484,8 +484,8 @@ elementSetSetBfunc SAdd = error "convExpr Adding an Element to a Set"
 elementSetSetBfunc SRemove = error "convExpr Removing an Element to a Set"
 
 -- Maps a 'ESSBinOp' to it's corresponding GOOL binary function.
-elementSetBoolBfunc :: ESBBinOp -> (SValue r -> SValue r -> SValue r)
-elementSetBoolBfunc SContains = error "convExpr checking if Element is in a Set"
+elementSetBoolBfunc :: (OOProg r) => ESBBinOp -> (SValue r -> SValue r -> SValue r)
+elementSetBoolBfunc SContains = (isin)
 
 -- medium hacks --
 

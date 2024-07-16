@@ -80,7 +80,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   listAccessFunc', notNull, doubleRender, double, openFileR, openFileW, 
   stateVar, floatRender, float, string', intToIndex, indexToInt)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
-  listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
+  listType, void, notOp, andOp, orOp, inOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
   decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
   intFunc, multiAssignError, multiReturnError, multiTypeError)
@@ -263,6 +263,7 @@ instance BinaryOpSym JavaCode where
   moduloOp = G.moduloOp
   andOp = C.andOp
   orOp = C.orOp
+  inOp = C.inOp
 
 instance OpElim JavaCode where
   uOp = opDoc . unJC

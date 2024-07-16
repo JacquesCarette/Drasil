@@ -186,6 +186,7 @@ instance BooleanExpression CodeInfo where
   (?!)  = execute1
   (?&&) = execute2
   (?||) = execute2
+  isin = execute2
 
 instance Comparison CodeInfo where
   (?<)  = execute2

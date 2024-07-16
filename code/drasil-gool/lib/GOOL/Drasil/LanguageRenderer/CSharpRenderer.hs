@@ -75,7 +75,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   extraClass, listAccessFunc, doubleRender, openFileR, openFileW, stateVar, 
   inherit, implements, intToIndex, indexToInt)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
-  listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
+  listType, void, notOp, andOp, orOp, inOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
   decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
   intFunc, multiAssignError, multiReturnError, multiTypeError)
@@ -255,6 +255,7 @@ instance BinaryOpSym CSharpCode where
   moduloOp = G.moduloOp
   andOp = C.andOp
   orOp = C.orOp
+  inOp = C.inOp
 
 instance OpElim CSharpCode where
   uOp = opDoc . unCSC

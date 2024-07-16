@@ -403,7 +403,7 @@ renderRealInt s (UpFrom  (Inc, a))          = sy s $>= a
 renderRealInt s (UpFrom  (Exc, a))          = sy s $>  a
 
 renderSet :: (HasUID c, HasSymbol c) => c -> CodeExpr -> CodeExpr
-renderSet e s = (in' s (sy e))
+renderSet e s = (in' (sy e) s)
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.
 unop :: (OOProg r) => UFunc -> (SValue r -> SValue r)

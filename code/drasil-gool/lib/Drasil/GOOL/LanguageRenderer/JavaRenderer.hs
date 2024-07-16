@@ -375,6 +375,7 @@ instance BooleanExpression JavaCode where
   (?!) = typeUnExpr notOp bool
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
+  isin = typeBinExpr inOp bool
 
 instance Comparison JavaCode where
   (?<) = typeBinExpr lessOp bool

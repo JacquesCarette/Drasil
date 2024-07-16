@@ -115,6 +115,7 @@ class BinaryOpSym r where
   moduloOp       :: VSBinOp r
   andOp          :: VSBinOp r
   orOp           :: VSBinOp r
+  inOp           :: VSBinOp r
 
 class OpElim r where
   uOp :: r (UnaryOp r) -> Doc
@@ -169,6 +170,7 @@ class InternalListFunc r where
 
 class InternalSetFunc r where
   setAddFunc :: SValue r -> SValue r -> VSFunction r
+  setSizeFunc :: SValue r -> VSFunction r
 
 class RenderFunction r where
   funcFromData :: Doc -> VSType r -> VSFunction r

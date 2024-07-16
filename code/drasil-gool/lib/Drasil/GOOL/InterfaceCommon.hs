@@ -198,6 +198,7 @@ class (ValueSym r) => BooleanExpression r where
   infixl 2 ?&&
   (?||) :: SValue r -> SValue r -> SValue r
   infixl 1 ?||
+  isin :: SValue r -> SValue r -> SValue r
 
 class (ValueSym r) => Comparison r where
   (?<)  :: SValue r -> SValue r -> SValue r

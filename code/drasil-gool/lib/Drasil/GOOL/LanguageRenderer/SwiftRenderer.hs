@@ -82,7 +82,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (classVar,
   inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', bool, float, 
   stringRender', string', inherit, implements, functionDoc, intToIndex,
   indexToInt, forEach', global)
-import qualified Drasil.GOOL.LanguageRenderer.CLike as C (notOp, andOp, orOp, 
+import qualified Drasil.GOOL.LanguageRenderer.CLike as C (notOp, andOp, orOp, inOp, 
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, 
   listSize, varDecDef, extObjDecNew, switch, while)
 import qualified Drasil.GOOL.LanguageRenderer.Macros as M (ifExists, decrement1,
@@ -265,6 +265,7 @@ instance BinaryOpSym SwiftCode where
   moduloOp = G.moduloOp
   andOp = C.andOp
   orOp = C.orOp
+  inOp = C.inOp
 
 instance OpElim SwiftCode where
   uOp = opDoc . unSC

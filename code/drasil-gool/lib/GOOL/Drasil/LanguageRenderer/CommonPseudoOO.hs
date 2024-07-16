@@ -11,7 +11,7 @@ module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   mainBody, inOutFunc, docInOutFunc', boolRender, bool, floatRender, float,
   stringRender', string', inherit, implements, listSize, listAdd, listAppend,
   intToIndex, indexToInt, intToIndex', indexToInt', openFileR', openFileW',
-  openFileA'
+  openFileA', argExists
 ) where
 
 import Utils.Drasil (indent, stringList)
@@ -24,7 +24,7 @@ import GOOL.Drasil.InterfaceCommon (Label, Library, MSBody, VSType, SVariable,
   VariableElim(variableName, variableType), ValueSym(valueType), Comparison(..),
   (&=), ControlStatement(returnStmt), ScopeSym(..), MethodSym(function),
   NumericExpression((#+), (#-)), funcApp)
-import qualified GOOL.Drasil.InterfaceCommon as IC (
+import qualified GOOL.Drasil.InterfaceCommon as IC (argsList,
   TypeSym(int, double, string, listType, arrayType, void), VariableSym(var),
   Literal(litTrue, litFalse, litList, litInt, litString),
   VariableValue(valueOf), StatementSym(valStmt), DeclStatement(varDec,
@@ -527,6 +527,9 @@ openFileR', openFileW', openFileA' :: (RenderSym r) => SValue r -> SValue r
 openFileR' n = funcApp fileOpen infile [n, IC.litString fileR]
 openFileW' n = funcApp fileOpen infile [n, IC.litString fileW]
 openFileA' n = funcApp fileOpen infile [n, IC.litString fileA]
+
+argExists :: (RenderSym r) => Integer -> SValue r
+argExists i = listSize IC.argsList ?> IC.litInt (fromIntegral $ i+1)
 
 -- Python, Julia, and MATLAB --
 

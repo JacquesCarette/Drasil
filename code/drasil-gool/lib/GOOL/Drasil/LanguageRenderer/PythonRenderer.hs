@@ -72,7 +72,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   stateVarDef, constVar, litArray, listSetFunc, extraClass, listAccessFunc, 
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
   mainBody, inOutFunc, docInOutFunc', listSize, intToIndex, indexToInt,
-  openFileR', openFileW', openFileA')
+  openFileR', openFileW', openFileA', argExists)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
   notifyObservers')
@@ -317,7 +317,7 @@ instance CommandLineArgs PythonCode where
   argsList = do
     modify (addLangImportVS pySys)
     G.argsList $ pySys `access` argv
-  argExists i = listSize argsList ?> litInt (fromIntegral $ i+1)
+  argExists = CP.argExists
 
 instance NumericExpression PythonCode where
   (#~) = unExpr' negateOp

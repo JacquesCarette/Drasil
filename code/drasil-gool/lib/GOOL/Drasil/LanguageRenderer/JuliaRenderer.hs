@@ -9,7 +9,6 @@ module GOOL.Drasil.LanguageRenderer.JuliaRenderer (
 
 import Utils.Drasil (indent)
 
--- TODO: Make these pretty once their contents are stable
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
   SVariable, MSStatement, SMethod, MSBody, MSParameter, BodySym(..),
@@ -64,7 +63,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (bool,
   listDec, listDecDef, listAccessFunc, listSetFunc, bindingError, notNull,
   extFuncAppMixedArgs, functionDoc, listSize, listAdd, listAppend, intToIndex',
   indexToInt', inOutFunc, docInOutFunc', forLoopError, openFileR', openFileW',
-  openFileA', multiReturn, multiAssign, inOutCall, mainBody)
+  openFileA', multiReturn, multiAssign, inOutCall, mainBody, argExists)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
   notOp, andOp, orOp, inlineIf, while)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1,
@@ -184,14 +183,14 @@ instance TypeSym JuliaCode where
   listType = jlListType
   arrayType = listType -- Treat arrays and lists the same, as in Python
   listInnerType = G.listInnerType
-  funcType = CP.funcType -- Julia's functions support multiple-dispatch, so we might need to revisit this
+  funcType = CP.funcType
   void = jlVoidType
 
 instance TypeElim JuliaCode where
   getType = cType . unJLC
   getTypeString v = let tp = typeString $ unJLC v in
     case cType $ unJLC v of
-      (Object _) -> tp ++ jlClassAppend
+      (Object _) -> error jlClassError
       _ -> tp
 
 instance RenderType JuliaCode where
@@ -204,7 +203,7 @@ instance RenderType JuliaCode where
 instance InternalTypeElim JuliaCode where
   type' v = let t = typeDoc $ unJLC v in
     case cType $ unJLC v of
-      (Object _) -> t <> text jlClassAppend
+      (Object _) -> t <> error jlClassError
       _ -> t
 
 instance UnaryOpSym JuliaCode where
@@ -241,7 +240,6 @@ instance BinaryOpSym JuliaCode where
   moduloOp = G.moduloOp
   andOp = C.andOp
   orOp = C.orOp
-
 
 instance OpElim JuliaCode where
   uOp = opDoc . unJLC
@@ -297,7 +295,7 @@ instance VariableValue JuliaCode where
 instance CommandLineArgs JuliaCode where
   arg n = G.arg (litInt $ n+1) argsList
   argsList = G.argsList jlArgs
-  argExists i = listSize argsList ?> litInt (fromIntegral $ i+1) -- TODO: merge with Python
+  argExists = CP.argExists
 
 instance NumericExpression JuliaCode where
   (#~) = unExpr' negateOp
@@ -675,6 +673,9 @@ jlListConc = "Array"
 jlFile = "IOStream"
 jlVoid = "Nothing"
 
+jlClassError :: String
+jlClassError = "Classes are not supported in Julia"
+
 jlLitFloat :: (RenderSym r) => Float -> SValue r
 jlLitFloat f = mkStateVal float (text jlFloatConc <> parens (D.float f))
 
@@ -808,9 +809,6 @@ jlIntMethod n ps b = do
       text nm <> oneParam <> pmlst),
     indent $ RC.body bod,
     jlEnd])
-
-jlClassAppend :: String -- Julia modules and structs cannot
-jlClassAppend = "Class" -- have the same name, hence the hack
 
 -- Functions
 -- | Creates a function.  n is function name, pms is list of parameters, and 

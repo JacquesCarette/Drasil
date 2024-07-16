@@ -361,7 +361,7 @@ convExpr Matrix{} = error "convExpr: Matrix"
 convExpr (Set l) = do
   ar <- mapM convExpr l
                                     -- hd will never fail here
-  return $ litArray (fmap valueType (head ar)) ar
+  return $ litSet (fmap valueType (head ar)) ar
 --convExpr Set{} = error "convExpr: Set"
 convExpr Operator{} = error "convExpr: Operator"
 convExpr (RealI c ri)  = do

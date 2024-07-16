@@ -320,11 +320,10 @@ listDecDef v vals = do
 destructorError :: String -> String
 destructorError l = "Destructors not allowed in " ++ l
 
-stateVarDef :: (RenderSym r, Monad r) => 
-  (SVariable r -> SValue r -> MSStatement r) -> r (Scope r) ->
-  r (Permanence r) -> SVariable r -> SValue r -> CS (r Doc)
-stateVarDef f s p vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
-  (RC.scope s) (RC.perm p) . RC.statement) (S.stmt $ f vr vl)
+stateVarDef :: (RenderSym r, Monad r) => r (Scope r) -> r (Permanence r) ->
+  SVariable r -> SValue r -> CS (r Doc)
+stateVarDef s p vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
+  (RC.scope s) (RC.perm p) . RC.statement) (S.stmt $ IC.varDecDef vr vl)
 
 constVar :: (RenderSym r, Monad r) => Doc -> r (Scope r) -> SVariable r ->
   SValue r -> CS (r Doc)
@@ -370,10 +369,10 @@ openFileW :: (RenderSym r) => (SValue r -> VSType r -> SValue r -> SValue r) ->
   SVariable r -> SValue r -> MSStatement r
 openFileW f vr vl = vr &= f vl outfile IC.litFalse
 
-stateVar :: (RenderSym r, Monad r) => (SVariable r -> MSStatement r) ->
-  r (Scope r) -> r (Permanence r) -> SVariable r -> CS (r Doc)
-stateVar f s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
-  (RC.scope s) (RC.perm p) . RC.statement) (S.stmt $ f v)
+stateVar :: (RenderSym r, Monad r) => r (Scope r) -> r (Permanence r) ->
+  SVariable r -> CS (r Doc)
+stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
+  (RC.scope s) (RC.perm p) . RC.statement) (S.stmt $ IC.varDec v)
 
 -- Python and Swift --
 

@@ -694,7 +694,7 @@ instance MethodElim PythonCode where
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
   stateVar _ _ _ = toState (toCode empty)
-  stateVarDef = CP.stateVarDef varDecDef
+  stateVarDef = CP.stateVarDef
   constVar = CP.constVar (RC.perm 
     (static :: PythonCode (Permanence PythonCode)))
   

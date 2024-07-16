@@ -706,8 +706,8 @@ instance MethodElim JavaCode where
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
-  stateVar = CP.stateVar varDec
-  stateVarDef = CP.stateVarDef varDecDef
+  stateVar = CP.stateVar
+  stateVarDef = CP.stateVarDef
   constVar = CP.constVar (RC.perm (static :: JavaCode (Permanence JavaCode)))
   
 instance StateVarElim JavaCode where

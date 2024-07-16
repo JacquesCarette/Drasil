@@ -12,7 +12,7 @@ import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
   SVariable, SValue, MSStatement, bodyStatements, oneLiner, TypeElim(getType),
   VariableElim(variableType), listOf, ValueSym(valueType), 
   NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
-  BooleanExpression((?&&), (?||)), at, StatementSym(multi),
+  BooleanExpression((?&&), (?||), isin), at, StatementSym(multi),
   AssignStatement((&+=), (&-=), (&++)), (&=))
 import qualified Drasil.GOOL.InterfaceCommon as IC (BlockSym(block), 
   TypeSym(int, listInnerType), var, locVar, ScopeSym(..),

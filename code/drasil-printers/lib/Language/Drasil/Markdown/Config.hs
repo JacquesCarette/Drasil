@@ -32,16 +32,12 @@ makeBook _ _ = error "Type not supported: Notebook."
 -- | Prints the .csv file mapping the original 
 -- filepaths of assets to the location mdBook uses.
 makeRequirements :: PrintingInformation -> Doc
-makeRequirements sm = makeCSV assets
-  where
-    assets = [["Original", "Copy"]] ++ assetMat sm
+makeRequirements sm = makeCSV $ [["Original", "Copy"]] ++ assetMat sm
 
 -- | Helper function to render the title
 -- 'Sentence' as a 'Doc'
 mkTitle :: PrintingInformation -> Sentence -> Doc
-mkTitle sm t = text "\"" <> pSpec empty ts <> text "\""
-  where 
-    ts = spec sm t
+mkTitle sm t = text "\"" <> pSpec empty (spec sm t) <> text "\""
 
 -- | Helper function to map the original filepaths of assets
 -- to the location mdBook uses.

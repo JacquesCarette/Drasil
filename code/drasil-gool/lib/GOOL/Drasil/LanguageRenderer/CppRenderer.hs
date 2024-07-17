@@ -14,7 +14,7 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs, BodySym(..),
   bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
-  VariableSym(..), locvar, VisibilitySym(..), VariableElim(..), ValueSym(..),
+  VariableSym(..), locVar, VisibilitySym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..),
@@ -1374,7 +1374,7 @@ instance ThunkAssign CppSrcCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = locvar iName int
+      i = locVar iName int
       dim = fmap pure $ t >>= commonThunkDim (fmap unCPPSC . listSize . fmap pure) . unCPPSC
       loopInit = zoom lensMStoVS (fmap unCPPSC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
@@ -1490,7 +1490,7 @@ instance IOStatement CppSrcCode where
   getFileInputLine f v = valStmt $ getLineFunc f (valueOf v)
   discardFileLine f = addLimitsImport $ cppDiscardInput '\n' f
   getFileInputAll f v = let l_line = "nextLine"
-                            var_line = locvar l_line string
+                            var_line = locVar l_line string
                             v_line = valueOf var_line
                         in
     multi [varDec var_line,
@@ -1499,10 +1499,10 @@ instance IOStatement CppSrcCode where
 
 instance StringStatement CppSrcCode where
   stringSplit d vnew s = let l_ss = "ss"
-                             var_ss = locvar l_ss (obj stringstream)
+                             var_ss = locVar l_ss (obj stringstream)
                              v_ss = valueOf var_ss
                              l_word = "word"
-                             var_word = locvar l_word string
+                             var_word = locVar l_word string
                              v_word = valueOf var_word
                          in
     modify (addLangImport sstream) >> multi [
@@ -1548,7 +1548,7 @@ instance ControlStatement CppSrcCode where
     e <- zoom lensMStoVS i
     let l = variableName e
         t = toState $ variableType e
-        iterI = locvar l (iterator t)
+        iterI = locVar l (iterator t)
     for (varDecDef iterI (iterBegin v)) (setIterVar iterI ?!= iterEnd v) 
       (iterI &++) b
   while = C.while parens bodyStart bodyEnd
@@ -1600,7 +1600,7 @@ instance MethodSym CppSrcCode where
   mainFunction b = intFunc True mainFunc public static (mType int)
     [param argcVar, param argvVar]
     (on2StateValues (on2CodeValues appendToBody) b (returnStmt $ litInt 0))
-    where argcVar = locvar argc int
+    where argcVar = locVar argc int
           argvVar = do 
             t <- typeFromData (List String) 
               (constDec ++ " " ++ C.charRender) (constDec' <+> text 
@@ -1631,7 +1631,7 @@ instance RenderMethod CppSrcCode where
   commentedFunc = cppCommentedFunc Source
   
   destructor vs = 
-    let i = locvar "i" int
+    let i = locVar "i" int
         deleteStatements = map (onStateValue (onCodeValue destructSts) . 
           zoom lensMStoCS) vs
         loopIndexDec = varDec i

@@ -11,7 +11,7 @@ import Utils.Drasil (blank, indent)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.InterfaceCommon (SharedProg, Label, Library, VSType,
   SVariable, SValue, MSStatement, MixedCtorCall, BodySym(..), BlockSym(..),
-  TypeSym(..), TypeElim(..), VariableSym(..), locvar, VisibilitySym(..),
+  TypeSym(..), TypeElim(..), VariableSym(..), locVar, VisibilitySym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
   MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
@@ -463,7 +463,7 @@ instance ThunkAssign PythonCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = locvar iName int
+      i = locVar iName int
       dim = fmap pure $ t >>= commonThunkDim (fmap unPC . listSize . fmap pure) . unPC
       loopInit = zoom lensMStoVS (fmap unPC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)

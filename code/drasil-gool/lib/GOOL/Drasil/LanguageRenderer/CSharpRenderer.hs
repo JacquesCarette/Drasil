@@ -12,7 +12,7 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..), oneLiner,
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), locvar,
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), locVar,
   VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
@@ -450,7 +450,7 @@ instance ThunkAssign CSharpCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = locvar iName int
+      i = locVar iName int
       dim = fmap pure $ t >>= commonThunkDim (fmap unCSC . listSize . fmap pure) . unCSC
       loopInit = zoom lensMStoVS (fmap unCSC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)

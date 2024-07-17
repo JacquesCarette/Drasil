@@ -13,7 +13,7 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.InterfaceCommon (SharedProg, Label, MSBody, MSBlock, VSType,
   SVariable, SValue, MSStatement, MSParameter, SMethod, Initializers,
   BodySym(..), oneLiner, bodyStatements, BlockSym(..), TypeSym(..),
-  TypeElim(..), VariableSym(..), var, locvar, VisibilitySym(..),
+  TypeElim(..), VariableSym(..), var, locVar, VisibilitySym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
@@ -468,7 +468,7 @@ instance ThunkAssign SwiftCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = locvar iName int
+      i = locVar iName int
       dim = fmap pure $ t >>= commonThunkDim (fmap unSC . listSize . fmap pure) . unSC
       loopInit = zoom lensMStoVS (fmap unSC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
@@ -590,7 +590,7 @@ instance IOStatement SwiftCode where
   discardFileLine _ = modify incrementLine >> emptyStmt
   getFileInputAll _ v = do
     li <- getLineIndex
-    let l = locvar "l" (listType string)
+    let l = locVar "l" (listType string)
     slc <- listSlice swiftContentsVar swiftContentsVal 
       (Just $ litInt (li+1)) Nothing Nothing
     multi [mkStmtNoEnd $ RC.block slc,
@@ -957,14 +957,14 @@ swiftIndexFunc :: (RenderSym r) => SValue r -> SValue r -> SValue r
 swiftIndexFunc l v' = do
   v <- v'
   let t = pure $ valueType v
-      ofArg = locvar swiftOf t
+      ofArg = locVar swiftOf t
   objMethodCallNamedArgs int l swiftIndex [(ofArg, pure v)]
 
 swiftStrideFunc :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 swiftStrideFunc beg end step = let t = listType int 
-                                   fromArg = locvar swiftFrom int
-                                   toArg = locvar swiftTo int
-                                   byArg = locvar swiftBy int
+                                   fromArg = locVar swiftFrom int
+                                   toArg = locVar swiftTo int
+                                   byArg = locVar swiftBy int
   in cast t (funcAppNamedArgs swiftStride t 
     [(fromArg, beg), (toArg, end), (byArg, step)])
 
@@ -972,12 +972,12 @@ swiftMapFunc :: (RenderSym r) => SValue r -> SValue r -> SValue r
 swiftMapFunc lst f = objMethodCall (onStateValue valueType lst) lst swiftMap [f]
 
 swiftListAddFunc :: (RenderSym r) => SValue r -> SValue r -> SValue r
-swiftListAddFunc i v = let atArg = locvar swiftAt int
+swiftListAddFunc i v = let atArg = locVar swiftAt int
   in funcAppMixedArgs swiftListAdd (listType $ onStateValue valueType v) 
     [v] [(atArg, i)]
 
 swiftWriteFunc :: (RenderSym r) => SValue r -> SValue r -> SValue r
-swiftWriteFunc v f = let contentsArg = locvar swiftContentsOf (obj swiftData)
+swiftWriteFunc v f = let contentsArg = locVar swiftContentsOf (obj swiftData)
   in swiftTryVal $ objMethodCallNamedArgs void f swiftWrite 
     [(contentsArg, newObj (obj swiftData) [v $. funcFromData (R.func swiftUTF8) 
     (obj swiftEncoding)])]
@@ -986,15 +986,15 @@ swiftReadLineFunc :: (RenderSym r) => SValue r
 swiftReadLineFunc = swiftUnwrapVal $ funcApp swiftReadLine string []
 
 swiftReadFileFunc :: (RenderSym r) => SValue r -> SValue r
-swiftReadFileFunc v = let contentsArg = locvar swiftContentsOf infile
+swiftReadFileFunc v = let contentsArg = locVar swiftContentsOf infile
   in swiftTryVal $ funcAppNamedArgs CP.stringRender' string [(contentsArg, v)]
 
 swiftSplitFunc :: (RenderSym r) => Char -> SValue r -> SValue r
-swiftSplitFunc d s = let sepArg = locvar swiftSepBy char
+swiftSplitFunc d s = let sepArg = locVar swiftSepBy char
   in objMethodCallNamedArgs (listType string) s swiftSplit [(sepArg, litChar d)]
 
 swiftJoinedFunc :: (RenderSym r) => Char -> SValue r -> SValue r
-swiftJoinedFunc d s = let sepArg = locvar swiftSep char
+swiftJoinedFunc d s = let sepArg = locVar swiftSep char
   in objMethodCallNamedArgs string s swiftJoined [(sepArg, litChar d)]
 
 swiftIndexOf :: (RenderSym r) => SValue r -> SValue r -> SValue r
@@ -1010,7 +1010,7 @@ swiftListSlice vn vo beg end step = do
       (setBeg, begVal) = M.makeSetterVal "begIdx" step mbStepV beg (litInt 0)    (listSize vo #- litInt 1) local -- TODO: get scope from vn
       (setEnd, endVal) = M.makeSetterVal "endIdx" step mbStepV end (listSize vo) (litInt (-1)) local -- TODO: get scope from vn
       
-      i = locvar "i" int
+      i = locVar "i" int
       setToSlice = vn &= swiftMapFunc (swiftStrideFunc begVal endVal step) (lambda [i] (listAccess vo (valueOf i)))
   block [
       setBeg,
@@ -1022,7 +1022,7 @@ swiftPrint :: Bool -> Maybe (SValue SwiftCode) -> SValue SwiftCode ->
   SValue SwiftCode -> MSStatement SwiftCode
 swiftPrint newLn Nothing _ v = do
   let s = litString "" :: SValue SwiftCode
-      nl = [(locvar swiftTerm string, s) | not newLn]
+      nl = [(locVar swiftTerm string, s) | not newLn]
   valStmt $ funcAppMixedArgs printLabel void [v] nl
 swiftPrint newLn (Just f) _ v' = do
   v <- zoom lensMStoVS v'
@@ -1052,16 +1052,16 @@ swiftInput vr vl = do
   swiftInput' (getType $ variableType vr')
 
 swiftOpenFile :: (RenderSym r) => SValue r -> VSType r -> SValue r
-swiftOpenFile n t = let forArg = locvar swiftFor (obj swiftSearchDir)
+swiftOpenFile n t = let forArg = locVar swiftFor (obj swiftSearchDir)
                         dirVal = mkStateVal (obj swiftSearchDir) swiftDocDir
-                        inArg = locvar swiftIn (obj swiftPathMask)
+                        inArg = locVar swiftIn (obj swiftPathMask)
                         maskVal = mkStateVal (obj swiftPathMask) swiftUserMask
   in objMethodCall t (swiftUnwrapVal $
     funcAppNamedArgs swiftUrls (listType t) [(forArg, dirVal), (inArg, maskVal)]
     $. funcFromData (R.func swiftFirst) t) swiftAppendPath [n]
 
 swiftOpenFileHdl :: (RenderSym r) => SValue r -> VSType r -> SValue r
-swiftOpenFileHdl n t = let forWritingArg = locvar swiftWriteTo swiftFileType
+swiftOpenFileHdl n t = let forWritingArg = locVar swiftWriteTo swiftFileType
   in swiftTryVal $ funcAppNamedArgs swiftFileHdl outfile 
     [(forWritingArg, swiftOpenFile n t)]
 
@@ -1090,7 +1090,7 @@ swiftCloseFile f' = do
   swClose (getType $ valueType f)
 
 swiftReadFile :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-swiftReadFile v f = let l = locvar "l" string
+swiftReadFile v f = let l = locVar "l" string
   in tryCatch 
   (oneLiner $ v &= swiftMapFunc (swiftSplitFunc '\n' $ swiftReadFileFunc f) 
     (lambda [l] (swiftSplitFunc ' ' (valueOf l))))

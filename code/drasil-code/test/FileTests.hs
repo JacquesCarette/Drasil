@@ -4,8 +4,8 @@ module FileTests (fileTests) where
 
 import GOOL.Drasil (GSProgram, MSBlock, MSStatement, SMethod, OOProg,
   ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), TypeSym(..),
-  DeclStatement(..), IOStatement(..), var, ScopeSym(..),
-  Literal(..), VariableValue(..), MethodSym(..), ModuleSym(..))
+  DeclStatement(..), IOStatement(..), mainVar, Literal(..), VariableValue(..),
+  MethodSym(..), ModuleSym(..))
 import Prelude hiding (return, print, log, exp, sin, cos, tan)
 
 -- | Creates a program in GOOL to test reading and writing to files.
@@ -20,32 +20,32 @@ fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
 -- | Generates functions that write to the file.
 writeStory :: (OOProg r) => MSBlock r
 writeStory = block [
-  varDec $ var "fileToWrite" outfile mainFn,
+  varDec $ mainVar "fileToWrite" outfile,
 
-  openFileW (var "fileToWrite" outfile mainFn) (litString "testText.txt"),
-  printFile (valueOf $ var "fileToWrite" outfile mainFn) (litInt 0),
-  printFileLn (valueOf $ var "fileToWrite" outfile mainFn) (litDouble 0.89),
-  printFileStr (valueOf $ var "fileToWrite" outfile mainFn) "ello",
-  printFileStrLn (valueOf $ var "fileToWrite" outfile mainFn) "bye",
-  printFileStrLn (valueOf $ var "fileToWrite" outfile mainFn) "!!",
-  closeFile (valueOf $ var "fileToWrite" outfile mainFn),
+  openFileW (mainVar "fileToWrite" outfile) (litString "testText.txt"),
+  printFile (valueOf $ mainVar "fileToWrite" outfile) (litInt 0),
+  printFileLn (valueOf $ mainVar "fileToWrite" outfile) (litDouble 0.89),
+  printFileStr (valueOf $ mainVar "fileToWrite" outfile) "ello",
+  printFileStrLn (valueOf $ mainVar "fileToWrite" outfile) "bye",
+  printFileStrLn (valueOf $ mainVar "fileToWrite" outfile) "!!",
+  closeFile (valueOf $ mainVar "fileToWrite" outfile),
 
-  varDec $ var "fileToRead" infile mainFn,
-  openFileR (var "fileToRead" infile mainFn) (litString "testText.txt"),
-  varDec $ var "fileLine" string mainFn,
-  getFileInputLine (valueOf $ var "fileToRead" infile mainFn)
-                    (var "fileLine" string mainFn),
-  discardFileLine (valueOf $ var "fileToRead" infile mainFn),
-  listDec 0 (var "fileContents" (listType string) mainFn)]
+  varDec $ mainVar "fileToRead" infile,
+  openFileR (mainVar "fileToRead" infile) (litString "testText.txt"),
+  varDec $ mainVar "fileLine" string,
+  getFileInputLine (valueOf $ mainVar "fileToRead" infile)
+                    (mainVar "fileLine" string),
+  discardFileLine (valueOf $ mainVar "fileToRead" infile),
+  listDec 0 (mainVar "fileContents" (listType string))]
 
 -- | Generates functions to read from a file.
 readStory :: (OOProg r) => MSStatement r
-readStory = getFileInputAll (valueOf $ var "fileToRead" infile mainFn)
-  (var "fileContents" (listType string) mainFn)
+readStory = getFileInputAll (valueOf $ mainVar "fileToRead" infile)
+  (mainVar "fileContents" (listType string))
 
 -- | Prints the result of the 'readStory' function. Should be the same as
 -- what was given in 'writeStory'.
 goodBye :: (OOProg r) => MSBlock r
 goodBye = block [
-  printLn (valueOf $ var "fileContents" (listType string) mainFn),
-  closeFile (valueOf $ var "fileToRead" infile mainFn)]
+  printLn (valueOf $ mainVar "fileContents" (listType string)),
+  closeFile (valueOf $ mainVar "fileToRead" infile)]

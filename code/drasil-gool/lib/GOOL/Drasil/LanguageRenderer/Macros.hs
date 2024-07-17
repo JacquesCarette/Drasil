@@ -15,7 +15,7 @@ import GOOL.Drasil.InterfaceCommon (Label, MSBody, MSBlock, VSType, SVariable,
   BooleanExpression((?&&), (?||)), at, StatementSym(multi),
   AssignStatement((&+=), (&-=), (&++)), (&=))
 import qualified GOOL.Drasil.InterfaceCommon as IC (BlockSym(block), 
-  TypeSym(int, listInnerType), var, locvar, ScopeSym(..),
+  TypeSym(int, listInnerType), var, locVar, ScopeSym(..),
   Literal(litInt), VariableValue(valueOf), ValueExpression(notNull), 
   List(listSize, listAppend, listAccess, intToIndex), StatementSym(valStmt), 
   AssignStatement(assign), DeclStatement(varDecDef, listDec), 
@@ -69,7 +69,7 @@ listSlice beg end step vnew vold = do
   l_i <- genLoopIndex
   let var_temp = IC.var l_temp (onStateValue variableType vnew) IC.local -- TODO: get scope from vnew
       v_temp = IC.valueOf var_temp
-      var_i = IC.locvar l_i IC.int
+      var_i = IC.locVar l_i IC.int
       v_i = IC.valueOf var_i
 
   let step' = fromMaybe (IC.litInt 1) step
@@ -156,7 +156,7 @@ stringListLists lsts sl = do
       (IC.listAccess sl ((v_i #* numLists) #+ IC.litInt n))))
       : appendLists vs (n+1)
     numLists = IC.litInt (toInteger $ length lsts)
-    var_i = IC.locvar l_i IC.int
+    var_i = IC.locVar l_i IC.int
     v_i = IC.valueOf var_i
   checkList (getType $ valueType slst)
 
@@ -166,7 +166,7 @@ forRange i initv finalv stepv = IC.for (IC.varDecDef i initv) (IC.valueOf i ?<
   finalv) (i &+= stepv)
 
 observerIndex :: (RenderSym r) => SVariable r
-observerIndex = IC.locvar "observerIndex" IC.int
+observerIndex = IC.locVar "observerIndex" IC.int
 
 observerIdxVal :: (RenderSym r) => SValue r
 observerIdxVal = IC.valueOf observerIndex

@@ -29,7 +29,7 @@ import GOOL.Drasil.InterfaceCommon (Label, Library, MSBody, MSBlock, VSType,
   AssignStatement((&++)), (&=), IOStatement(printStr, printStrLn, printFile,
   printFileStr, printFileStrLn), ifNoElse)
 import qualified GOOL.Drasil.InterfaceCommon as IC (TypeSym(int, double, char,
-  string, listType, arrayType, listInnerType, funcType, void), locvar,
+  string, listType, arrayType, listInnerType, funcType, void), locVar,
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
   IOStatement(print), ControlStatement(returnStmt, for), ParameterSym(param),
@@ -354,7 +354,7 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
     prFn (IC.listAccess v (IC.listSize v #- IC.litInt 1)))], 
   prLnFn "]"]
   where l_i = "list_i" ++ show n
-        i = IC.locvar l_i IC.int
+        i = IC.locVar l_i IC.int
 
 printObj :: ClassName -> (String -> MSStatement r) -> MSStatement r
 printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"

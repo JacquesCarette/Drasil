@@ -5,7 +5,7 @@ module PatternTest (patternTest) where
 import GOOL.Drasil (GSProgram, VSType, SVariable, SValue, SMethod, OOProg,
   ProgramSym(..), FileSym(..), BodySym(..), oneLiner, BlockSym(..),
   TypeSym(..), OOTypeSym(..), StatementSym(..), DeclStatement(..),
-  IOStatement(..), initObserverList, addObserver, var, OOVariableSym(..),
+  IOStatement(..), initObserverList, addObserver, mainVar, OOVariableSym(..),
   ScopeSym(..), Literal(..), VariableValue(..), OOValueExpression(..),
   extNewObj, FunctionSym(..), GetSet(..), ObserverPattern(..),
   StrategyPattern(..), MethodSym(..), ModuleSym(..))
@@ -28,9 +28,9 @@ observerType = obj observerName
 
 -- | Variables used in the generated code.
 n, obs1, obs2 :: (OOVariableSym r) => SVariable r
-n = var nName int mainFn
-obs1 = var obs1Name observerType mainFn
-obs2 = var obs2Name observerType mainFn
+n = mainVar nName int
+obs1 = mainVar obs1Name observerType
+obs2 = mainVar obs2Name observerType
 
 -- | New Observer object.
 newObserver :: (OOValueExpression r) => SValue r

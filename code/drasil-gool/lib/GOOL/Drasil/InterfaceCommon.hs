@@ -7,7 +7,7 @@ module GOOL.Drasil.InterfaceCommon (
   MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
-  TypeElim(..), VariableSym(..), var, constant, locvar, ScopeSym(..),
+  TypeElim(..), VariableSym(..), var, constant, locVar, mainVar, ScopeSym(..),
   VariableElim(..), listOf, listVar, ValueSym(..), Argument(..), Literal(..),
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
@@ -104,16 +104,21 @@ class (TypeSym r, ScopeSym r) => VariableSym r where
   extVar    :: Library -> Label -> VSType r -> SVariable r
   arrayElem :: Integer -> SVariable r -> SVariable r
   
--- Smart constructors to rearrange the parameters
+-- | Smart constructor to rearrange the parameters of var'
 var :: (VariableSym r) => Label -> VSType r -> r (Scope r) -> SVariable r
 var n t s = var' n s t
 
+-- | Smart constructor to rearrange the parameters of constant'
 constant :: (VariableSym r) => Label -> VSType r -> r (Scope r) -> SVariable r
 constant n t s = constant' n s t
 
--- Smart constructor for a local variable.
-locvar :: (VariableSym r) => Label -> VSType r -> SVariable r
-locvar n = var' n local
+-- | Smart constructor for a local variable.
+locVar :: (VariableSym r) => Label -> VSType r -> SVariable r
+locVar n = var' n local
+
+-- | Smart constructor for a variable in the main function.
+mainVar :: (VariableSym r) => Label -> VSType r -> SVariable r
+mainVar n = var' n mainFn
 
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String

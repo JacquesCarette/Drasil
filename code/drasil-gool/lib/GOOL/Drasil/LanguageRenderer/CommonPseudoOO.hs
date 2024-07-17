@@ -24,7 +24,7 @@ import GOOL.Drasil.InterfaceCommon (Label, Library, MSBody, VSType, SVariable,
   (&=), ControlStatement(returnStmt), VisibilitySym(..), MethodSym(function),
   NumericExpression((#+), (#-)))
 import qualified GOOL.Drasil.InterfaceCommon as IC (
-  TypeSym(int, double, string, listType, arrayType, void), locvar,
+  TypeSym(int, double, string, listType, arrayType, void), locVar,
   Literal(litTrue, litFalse, litList, litInt), VariableValue(valueOf),
   StatementSym(valStmt), DeclStatement(varDec, varDecDef, constDecDef),
   List(intToIndex, indexToInt), ParameterSym(param, pointerParam),
@@ -232,7 +232,7 @@ docMain b = commentedFunc (docComment $ toState $ functionDox
 
 mainFunction :: (RenderSym r) => VSType r -> Label -> MSBody r -> SMethod r
 mainFunction s n = S.intFunc True n public static (mType IC.void)
-  [IC.param (IC.locvar args (s >>= (\argT -> typeFromData (List String) 
+  [IC.param (IC.locVar args (s >>= (\argT -> typeFromData (List String) 
   (render (RC.type' argT) ++ array) (RC.type' argT <> array'))))]
 
 -- | Used by the language renderers to build the module.
@@ -305,7 +305,7 @@ extFuncAppMixedArgs :: (RenderSym r) => Library -> MixedCall r
 extFuncAppMixedArgs l = S.call (Just l) Nothing
 
 notNull :: (RenderSym r) => String -> SValue r -> SValue r
-notNull nil v = v ?!= IC.valueOf (IC.locvar nil (onStateValue valueType v))
+notNull nil v = v ?!= IC.valueOf (IC.locVar nil (onStateValue valueType v))
 
 listDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
 listDecDef v vals = do

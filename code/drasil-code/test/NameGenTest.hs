@@ -19,5 +19,5 @@ main = mainFunction $ body
     listDec 2 result],
     listSlice result (valueOf temp) (Just (litInt 1)) (Just (litInt 3)) Nothing]
   where
-    temp = var "temp" (listType int) mainFn
-    result = var "result" (listType int) mainFn
+    temp = mainVar "temp" (listType int)
+    result = mainVar "result" (listType int)

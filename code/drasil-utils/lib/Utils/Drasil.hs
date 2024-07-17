@@ -19,7 +19,10 @@ module Utils.Drasil (
   invert,
 
   -- ** Strings
-  toPlainName
+  toPlainName,
+
+  -- ** CSV
+  makeCSV
 ) where
 
 import Utils.Drasil.Document
@@ -27,3 +30,4 @@ import Utils.Drasil.English
 import Utils.Drasil.Lists
 import Utils.Drasil.Maps
 import Utils.Drasil.Strings
+import Utils.Drasil.CSV

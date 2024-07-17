@@ -27,7 +27,7 @@ import Drasil.DocLang (mkGraphInfo)
 import SysInfo.Drasil (SystemInformation)
 import Language.Drasil.Printers (DocType(SRS, Website, Lesson), makeCSS, genHTML, 
   genTeX, Format(TeX, HTML, Jupyter, Markdown, MDBook), genJupyter, genMD, genMDBook, 
-  PrintingInformation, outputDot, makeBook, MDFlavour(GitHub), makeCSV)
+  PrintingInformation, outputDot, makeBook, MDFlavour(GitHub), makeRequirements)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD,
   unPP, unJP, unCSP, unCPPP, unSP)
@@ -131,7 +131,7 @@ prntBook dt doc sm = do
 prntCSV :: DocType -> PrintingInformation -> IO()
 prntCSV dt sm = do
   outh <- openFile fp WriteMode
-  hPutStrLn outh $ render (makeCSV sm)
+  hPutStrLn outh $ render (makeRequirements sm)
   hClose outh
   where
     fp = show dt ++ "/mdBook/.drasil-requirements.csv"

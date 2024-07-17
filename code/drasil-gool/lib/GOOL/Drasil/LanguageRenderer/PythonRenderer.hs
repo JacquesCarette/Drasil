@@ -72,7 +72,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   stateVarDef, constVar, litArray, listSetFunc, extraClass, listAccessFunc, 
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
   mainBody, inOutFunc, docInOutFunc', listSize, intToIndex, indexToInt,
-  varDec, varDecDef, openFileR', openFileW', openFileA', argExists, forEach')
+  varDecDef, openFileR', openFileW', openFileA', argExists, forEach')
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
   notifyObservers')
@@ -523,8 +523,8 @@ instance AssignStatement PythonCode where
   (&--) = M.decrement1
 
 instance DeclStatement PythonCode where
-  varDec = CP.varDec
-  varDecDef = CP.varDecDef
+  varDec v = CP.varDecDef v Nothing
+  varDecDef v e = CP.varDecDef v (Just e)
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
   arrayDec = listDec

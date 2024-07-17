@@ -62,9 +62,9 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (bool,
   boolRender, extVar, funcType, buildModule, docMod', funcDecDef, litArray,
   listDec, listDecDef, listAccessFunc, listSetFunc, bindingError, notNull,
   extFuncAppMixedArgs, functionDoc, listSize, listAdd, listAppend, intToIndex',
-  indexToInt', inOutFunc, docInOutFunc', forLoopError, varDec, varDecDef,
-  openFileR', openFileW', openFileA', multiReturn, multiAssign, inOutCall,
-  mainBody, argExists, forEach')
+  indexToInt', inOutFunc, docInOutFunc', forLoopError, varDecDef, openFileR',
+  openFileW', openFileA', multiReturn, multiAssign, inOutCall, mainBody,
+  argExists, forEach')
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
   notOp, andOp, orOp, inlineIf, while)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1,
@@ -475,8 +475,8 @@ instance AssignStatement JuliaCode where
   (&--) = M.decrement1
 
 instance DeclStatement JuliaCode where
-  varDec = CP.varDec
-  varDecDef = CP.varDecDef
+  varDec v = CP.varDecDef v Nothing
+  varDecDef v e = CP.varDecDef v (Just e)
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
   arrayDec = listDec

@@ -10,7 +10,7 @@ module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   stateVar, self, multiAssign, multiReturn, listDec, funcDecDef, inOutCall,
   forLoopError, mainBody, inOutFunc, docInOutFunc', boolRender, bool,
   floatRender, float, stringRender', string', inherit, implements, listSize,
-  listAdd, listAppend, intToIndex, indexToInt, intToIndex', indexToInt', varDec,
+  listAdd, listAppend, intToIndex, indexToInt, intToIndex', indexToInt',
   varDecDef, openFileR', openFileW', openFileA', argExists
 ) where
 
@@ -39,10 +39,11 @@ import GOOL.Drasil.RendererClasses (RenderSym, ImportSym(..), RenderBody(..),
   RenderMethod(intMethod, commentedFunc, mthdFromData), ParentSpec,
   BlockCommentSym(..))
 import qualified GOOL.Drasil.RendererClasses as S (RenderBody(multiBody),
-  RenderValue(call), RenderStatement(stmt), InternalAssignStmt(multiAssign),
-  InternalControlStmt(multiReturn), MethodTypeSym(construct),
-  RenderMethod(intFunc), RenderClass(intClass, inherit), RenderMod(modFromData),
-  InternalListFunc(listSizeFunc, listAddFunc, listAppendFunc))
+  RenderValue(call), RenderStatement(stmt, emptyStmt),
+  InternalAssignStmt(multiAssign), InternalControlStmt(multiReturn),
+  MethodTypeSym(construct), RenderMethod(intFunc), RenderClass(intClass,
+  inherit), RenderMod(modFromData), InternalListFunc(listSizeFunc, listAddFunc,
+  listAppendFunc))
 import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..),
   PermElim(..), BodyElim(..), InternalTypeElim(..), InternalVarElim(variable),
   ValueElim(..), StatementElim(statement), ScopeElim(..), MethodElim(..),
@@ -527,17 +528,18 @@ returnDoc = "Returns"
 
 -- Python and Julia --
 
-varDec :: (RenderSym r) => SVariable r -> MSStatement r
-varDec v = do
-  v' <- zoom lensMStoVS v
-  modify $ useVarName (variableName v')
-  mkStmtNoEnd empty
-
-varDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
+-- | For declaring and optionally defining a variable in a language where
+--   declaring a variable before defining it is not required.
+--   v is the variable to declare, and e is Nothing if we are not defining it,
+--   and (Just d) if d is the value we are defining it as.
+varDecDef :: (RenderSym r) => SVariable r -> Maybe (SValue r) -> MSStatement r
 varDecDef v e = do
   v' <- zoom lensMStoVS v
   modify $ useVarName (variableName v')
-  IC.assign v e
+  def e
+  where
+    def Nothing = S.emptyStmt
+    def (Just d) = IC.assign v d
 
 fileOpen, fileR, fileW, fileA :: Label
 fileOpen = "open"

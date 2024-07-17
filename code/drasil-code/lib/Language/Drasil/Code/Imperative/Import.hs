@@ -74,8 +74,8 @@ spaceCodeType s = do
 -- defining 'Expr' to a value with 'convExpr'.
 -- Otherwise, just a regular variable: construct it by calling the variable, then
 -- call 'valueOf' to reference its value.
-value :: (OOProg r) => UID -> Name -> VSType r -> GenState (SValue r)
-value u s t = do
+value :: (OOProg r) => UID -> Name -> VSType r -> r (Scope r) -> GenState (SValue r)
+value u s t scp = do
   g <- get
   let cs = codeSpec g
       mm = constMap cs
@@ -86,7 +86,7 @@ value u s t = do
       maybeInline _ _ = Nothing
       cm = concMatches g
       cdCncpt = Map.lookup u cm
-  val <- maybe (valueOf <$> variable s t) (convExpr . (^. codeExpr)) constDef
+  val <- maybe (valueOf <$> variable s t scp) (convExpr . (^. codeExpr)) constDef
   return $ maybe val conceptToGOOL cdCncpt
 
 -- | If variable is an input, construct it with 'var' and pass to inputVariable.
@@ -95,18 +95,18 @@ value u s t = do
 -- If variable is a constant and 'Const' constant representation is chosen,
 -- construct it with 'staticVar' and pass to 'constVariable'.
 -- If variable is neither, just construct it with 'var' and return it.
-variable :: (OOProg r) => Name -> VSType r -> GenState (SVariable r)
-variable s t = do
+variable :: (OOProg r) => Name -> VSType r -> r (Scope r) -> GenState (SVariable r)
+variable s t scp = do
   g <- get
   let cs = codeSpec g
-      defFunc Var = \nm tp -> var nm tp local -- TODO: get scope from state
+      defFunc Var = \nm tp -> var nm tp scp
       defFunc Const = staticVar
   if s `elem` map codeName (inputs cs)
-    then inputVariable (inStruct g) Var (var s t local) -- TODO: get scope from state
+    then inputVariable (inStruct g) Var (var s t scp)
     else if s `elem` map codeName (constants $ codeSpec g)
       then constVariable (conStruct g) (conRepr g)
               ((defFunc $ conRepr g) s t)
-      else return $ var s t local -- TODO: get scope from state
+      else return $ var s t scp
 
 -- | If 'Unbundled' inputs, just return variable as-is.
 -- If 'Bundled' inputs, access variable through object, where the object is self
@@ -170,7 +170,7 @@ classVariable c v = do
 mkVal :: (OOProg r) => CodeVarChunk -> GenState (SValue r)
 mkVal v = do
   t <- codeType v
-  let toGOOLVal Nothing = value (v ^. uid) (codeName v) (convTypeOO t)
+  let toGOOLVal Nothing = value (v ^. uid) (codeName v) (convTypeOO t) local -- TODO: get scope from state
       toGOOLVal (Just o) = do
         ot <- codeType o
         return $ valueOf $ objVar (var (codeName o) (convTypeOO ot) local)
@@ -181,11 +181,11 @@ mkVal v = do
 mkVar :: (OOProg r) => CodeVarChunk -> GenState (SVariable r)
 mkVar v = do
   t <- codeType v
-  let toGOOLVar Nothing = variable (codeName v) (convTypeOO t)
+  let toGOOLVar Nothing = variable (codeName v) (convTypeOO t) local -- TODO: get scope from state
       toGOOLVar (Just o) = do
         ot <- codeType o
         return $ objVar (var (codeName o) (convTypeOO ot) local) -- TODO: get scope from state
-          (var (codeName v) (convTypeOO t) local) -- TODO: get scope from state
+          (var (codeName v) (convTypeOO t) local) -- This one's good tho
   toGOOLVar (v ^. obv)
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
@@ -651,12 +651,12 @@ readData ddef scope = do
         inData JunkData scp = return [discardFileLine (v_infile scp)]
         inData (Line lp d) scp = do
           lnI <- lineData Nothing lp scp
-          logs <- getEntryVarLogs lp
+          logs <- getEntryVarLogs lp scp
           return $ [getFileInputLine (v_infile scp) (var_line scp),
             stringSplit d (var_linetokens scp) (v_line scp)] ++ lnI ++ logs
         inData (Lines lp ls d) scp = do
           lnV <- lineData (Just "_temp") lp scp
-          logs <- getEntryVarLogs lp
+          logs <- getEntryVarLogs lp scp
           let readLines Nothing = [getFileInputAll (v_infile scp) (var_lines scp),
                 forRange var_i (litInt 0) (listSize (v_lines scp)) (litInt 1)
                   (bodyStatements $ stringSplit d (var_linetokens scp) (
@@ -672,10 +672,10 @@ readData ddef scope = do
         lineData :: (OOProg r) => Maybe String -> LinePattern -> r (Scope r) ->
           GenState [MSStatement r]
         lineData s p@(Straight _) scp = do
-          vs <- getEntryVars s p
+          vs <- getEntryVars s p scp
           return [stringListVals vs (v_linetokens scp)]
         lineData s p@(Repeat ds) scp = do
-          vs <- getEntryVars s p
+          vs <- getEntryVars s p scp
           sequence $ clearTemps s ds scp ++ return
             (stringListLists vs (v_linetokens scp)) : appendTemps s ds scp
         ---------------
@@ -724,15 +724,16 @@ readData ddef scope = do
         v_i = valueOf var_i
 
 -- | Get entry variables.
-getEntryVars :: (OOProg r) => Maybe String -> LinePattern ->
+getEntryVars :: (OOProg r) => Maybe String -> LinePattern -> r (Scope r) ->
   GenState [SVariable r]
-getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>= (variable
-  (codeName v ++ st) . listInnerType . convTypeOO)) s) (getPatternInputs lp)
+getEntryVars s lp scp = mapM (maybe mkVar (\st v -> codeType v >>= 
+  ((\sNm tp -> variable sNm tp scp) (codeName v ++ st) . listInnerType . convTypeOO))
+    s) (getPatternInputs lp)
 
 -- | Get entry variable logs.
-getEntryVarLogs :: (OOProg r) => LinePattern ->
+getEntryVarLogs :: (OOProg r) => LinePattern -> r (Scope r) ->
   GenState [MSStatement r]
-getEntryVarLogs lp = do
-  vs <- getEntryVars Nothing lp
+getEntryVarLogs lp scp = do
+  vs <- getEntryVars Nothing lp scp
   logs <- mapM (`maybeLog` local) vs
   return $ concat logs

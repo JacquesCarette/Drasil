@@ -83,7 +83,7 @@ genMainFunc = do
     g <- get
     let mainFunc Library = return Nothing
         mainFunc Program = do
-          v_filename <- mkVar $ quantvar inFileName
+          v_filename <- mkVar (quantvar inFileName) mainFn
           logInFile <- maybeLog v_filename mainFn
           co <- initConsts
           ip <- getInputDecl
@@ -111,15 +111,15 @@ genMainFunc = do
 getInputDecl :: (OOProg r) => GenState (Maybe (MSStatement r))
 getInputDecl = do
   g <- get
-  v_params <- mkVar (quantvar inParams)
+  v_params <- mkVar (quantvar inParams) local -- TODO: get scope from state
   constrParams <- getInConstructorParams
-  cps <- mapM mkVal constrParams
+  cps <- mapM (`mkVal` local) constrParams -- TODO: get scope from state
   cname <- genICName InputParameters
   let getDecl ([],[]) = constIns (partition (flip member (eMap g) .
         codeName) (map quantvar $ constants $ codeSpec g)) (conRepr g)
         (conStruct g)
       getDecl ([],ins) = do
-        vars <- mapM mkVar ins
+        vars <- mapM (`mkVar` local) ins
         return $ Just $ multi $ map varDec vars
       getDecl (i:_,[]) = return $ Just $ (if currentModule g ==
         eMap g ! codeName i then objDecNew
@@ -145,7 +145,7 @@ getInputDecl = do
 initConsts :: (OOProg r) => GenState (Maybe (MSStatement r))
 initConsts = do
   g <- get
-  v_consts <- mkVar (quantvar consts)
+  v_consts <- mkVar (quantvar consts) local -- TODO: get scope from state
   cname <- genICName Constants
   let cs = constants $ codeSpec g
       getDecl (Store Unbundled) _ = declVars
@@ -154,7 +154,7 @@ initConsts = do
       getDecl WithInputs Bundled = return Nothing
       getDecl Inline _ = return Nothing
       declVars = do
-        vars <- mapM (mkVar . quantvar) cs
+        vars <- mapM ((`mkVar` local) . quantvar) cs -- TODO: get scope from state
         vals <- mapM (convExpr . (^. codeExpr)) cs
         logs <- mapM (`maybeLog` mainFn) vars
         return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++
@@ -363,7 +363,7 @@ constraintViolatedMsg :: (OOProg r) => CodeVarChunk -> String ->
   ConstraintCE -> GenState [MSStatement r]
 constraintViolatedMsg q s c = do
   pc <- printConstraint c
-  v <- mkVal (quantvar q)
+  v <- mkVal (quantvar q) local -- TODO: get scope from state
   return $ [printStr $ codeName q ++ " has value ",
     print v,
     printStr $ ", but is " ++ s ++ " to be "] ++ pc
@@ -493,7 +493,7 @@ genCalcFunc cdef = do
   parms <- getCalcParams cdef
   let nm = codeName cdef
   tp <- codeType cdef
-  v <- mkVar (quantvar cdef)
+  v <- mkVar (quantvar cdef) local
   blcks <- case cdef ^. defType
             of Definition -> liftS $ genCalcBlock CalcReturn cdef
                  (cdef ^. codeExpr)
@@ -523,7 +523,7 @@ genCalcBlock :: (OOProg r) => CalcType -> CodeDefinition -> CodeExpr ->
   GenState (MSBlock r)
 genCalcBlock t v (Case c e) = genCaseBlock t v c e
 genCalcBlock CalcAssign v e = do
-  vv <- mkVar (quantvar v)
+  vv <- mkVar (quantvar v) local
   ee <- convExpr e
   l <- maybeLog vv local
   return $ block $ assign vv ee : l
@@ -569,7 +569,7 @@ genOutputFormat = do
             v_outfile = valueOf var_outfile
         parms <- getOutputParams
         outp <- mapM (\x -> do
-          v <- mkVal x
+          v <- mkVal x local
           return [ printFileStr v_outfile (codeName x ++ " = "),
                    printFileLn v_outfile v
                  ] ) (outputs $ codeSpec g)

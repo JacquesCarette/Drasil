@@ -6,6 +6,7 @@ import Data.Map (empty, elems)
 import Control.Lens
 import System.FilePath (takeFileName)
 
+import Utils.Drasil (makeCSV)
 import Language.Drasil.Markdown.Print (pSpec)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..))
 import Database.Drasil (labelledcontentTable)
@@ -14,7 +15,7 @@ import Language.Drasil.Printing.LayoutObj (Filepath)
 
 import Language.Drasil hiding (Expr)
 
--- | Generates the .toml config file for mdBook.
+-- | Prints the .toml config file for mdBook.
 makeBook :: Document -> PrintingInformation -> Doc  
 makeBook (Document t _ _ _) sm = vcat [
   text "[book]",
@@ -28,13 +29,12 @@ makeBook (Document t _ _ _) sm = vcat [
   ]
 makeBook _ _ = error "Type not supported: Notebook."
 
--- | Generates the .csv file mapping the original 
+-- | Prints the .csv file mapping the original 
 -- filepaths of assets to the location mdBook uses.
-makeCSV :: PrintingInformation -> Doc
-makeCSV sm = vcat $ map line assets
+makeRequirements :: PrintingInformation -> Doc
+makeRequirements sm = makeCSV assets
   where
-    line (a, b) = text $ a ++ "," ++ b
-    assets = assetMap sm
+    assets = [["Original", "Copy"]] ++ assetMat sm
 
 -- | Helper function to render the title
 -- 'Sentence' as a 'Doc'
@@ -45,8 +45,8 @@ mkTitle sm t = text "\"" <> pSpec empty ts <> text "\""
 
 -- | Helper function to map the original filepaths of assets
 -- to the location mdBook uses.
-assetMap :: PrintingInformation -> [(Filepath, FilePath)]
-assetMap (PI {_ckdb = cdb}) = 
-  [(fp, "src/assets/" ++ takeFileName fp) 
+assetMat :: PrintingInformation -> [[Filepath]]
+assetMat (PI {_ckdb = cdb}) = 
+  [[fp, "src/assets/" ++ takeFileName fp] 
   | (LblC { _ctype = Figure _ fp _ }, _) <- elems $ cdb ^. labelledcontentTable
   ]

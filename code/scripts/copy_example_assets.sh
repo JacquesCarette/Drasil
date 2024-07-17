@@ -18,10 +18,10 @@ if [ ! -f "$csv_file" ]; then
     exit 1
 fi
 
-# Read the CSV file line by line
-while IFS=, read -r original copy; do
+# Read the CSV file line by line, skipping the header row
+sed 1d "$csv_file" | while IFS=, read -r original copy; do
     # Copy over the assets specified by the CSV file
     dest_dir=$(dirname "$copy")
     mkdir -p "$dest_dir"
     cp "$original" "$copy"
-done < "$csv_file"
+done

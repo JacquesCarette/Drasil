@@ -11,16 +11,16 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
-  SVariable, MSStatement, SMethod, BodySym(..), BlockSym(..), TypeSym(..),
-  TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
-  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
-  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), (&=), switchAsIf)
+  SVariable, MSStatement, MSBlock, SMethod, BodySym(..), BlockSym(..),
+  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..),
+  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  ScopeSym(..), ParameterSym(..), MethodSym(..), (&=), switchAsIf)
 import GOOL.Drasil.InterfaceGOOL (OOProg, FSModule, ProgramSym(..), FileSym(..),
   ModuleSym(..), FunctionSym(..), PermanenceSym(..), ObserverPattern(..),
   StrategyPattern(..), GetSet(..), InternalValueExp(..), StateVarSym(..),
@@ -57,7 +57,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   funcAppMixedArgs, lambda, listAccess, listSet, arrayElem, modFromData,
   fileDoc, fileFromData, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
   emptyStmt, assign, increment, subAssign, print, comment, valStmt, function,
-  returnStmt, construct, param, docFunc, throw, arg, argsList, ifCond)
+  returnStmt, construct, param, docFunc, throw, arg, argsList, ifCond, smartAdd)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (bool,
   boolRender, extVar, funcType, buildModule, docMod', funcDecDef, litArray,
   listDec, listDecDef, listAccessFunc, listSetFunc, bindingError, notNull,
@@ -76,9 +76,9 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   vectorize, vectorize2, commonVecIndex, sumComponents, pureValue)
 import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
-import GOOL.Drasil.State (MS, VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
+import GOOL.Drasil.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
   getModuleImports, addModuleImportVS, getUsing, getLangImports, getLibImports,
-  addLibImportVS, useVarName, getMainDoc, genLoopIndex)
+  addLibImportVS, useVarName, getMainDoc, genLoopIndex, genVarName)
 
 import Control.Applicative (liftA2)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -388,13 +388,7 @@ instance List JuliaCode where
   indexOf = jlIndexOf
 
 instance InternalList JuliaCode where
-  -- TODO: Update for negative step
-  listSlice' b e s vn vo = jlListSlice vn vo (bIndex b) (eIndex e) (getVal s)
-    where bIndex Nothing = mkStateVal void jlBegin
-          bIndex (Just x) = intToIndex x
-          eIndex Nothing = mkStateVal void jlEnd
-          eIndex (Just x) = intToIndex x #- litInt 1
-          getVal = fromMaybe $ mkStateVal void empty
+  listSlice' b e s vn vo = jlListSlice vn vo b e (fromMaybe (litInt 1) s)
 
 instance InternalListFunc JuliaCode where
   listSizeFunc l = do
@@ -698,17 +692,67 @@ jlIndexOf l v = do
   indexToInt $ funcApp
     jlListAbsdex t [lambda [var "x" t] (valueOf (var "x" t) ?== v), l]
 
-jlListSlice :: (RenderSym r, Monad r) => SVariable r -> SValue r -> SValue r ->
-  SValue r -> SValue r -> MS (r Doc)
-jlListSlice vn vo beg end step = zoom lensMStoVS $ do
-  vnew <- vn
-  vold <- vo
-  b <- beg
-  e <- end
-  s <- step
-  let step' = emptyIfEmpty (RC.value s) (colon <> RC.value s)
-  pure $ toCode $ RC.variable vnew <+> equals <+> RC.value vold <>
-    brackets (RC.value b <> step' <> colon <> RC.value e)
+jlListSlice :: (RenderSym r) => SVariable r -> SValue r ->
+  Maybe (SValue r) -> Maybe (SValue r) -> SValue r -> MSBlock r
+jlListSlice vn vo beg end step = do
+  stepV <- zoom lensMStoVS step
+
+  let mbStepV = valueInt stepV
+  bName <- case (beg, mbStepV) of
+            (Nothing, Nothing) -> genVarName [] "begIdx"
+            _                  -> return ""
+  eName <- case mbStepV of
+            Nothing -> genVarName [] "endIdx"
+            _       -> return ""
+
+  let begVar = var bName int
+      endVar = var eName int
+
+      (setBeg, begVal) = case (beg, mbStepV) of
+        -- If we have a value for beg, just use it
+        (Just b, _)        -> (emptyStmt, intToIndex b)
+        -- If we don't have a value for `beg` but we do for `step`, use `begin` or `end`
+        (Nothing, Just s)  -> (emptyStmt,
+          if s > 0 then mkStateVal int jlBegin else mkStateVal int jlEnd)
+        -- Otherwise, generate an if-statement to calculate `beg` at runtime
+        (Nothing, Nothing) -> (varDecDef begVar $
+          inlineIf (step ?> litInt 0) (litInt 1) (listSize vo),
+          valueOf begVar)
+      
+      -- Similar to `begVal`, but if we're given a value, we have to either
+      -- do nothing or add 2 based on the sign of `step`, because `end` needs to be inclusive, 
+      (setEnd, endVal) = case (end, mbStepV) of
+        (Just e, Just s)  -> (emptyStmt,
+          if s > 0 then e else e `G.smartAdd` litInt 2)
+        (Just e, Nothing) -> (varDecDef endVar $
+          inlineIf (step ?> litInt 0) e (e `G.smartAdd` litInt 2),
+          valueOf endVar)
+        (Nothing, Just s) -> (emptyStmt,
+          if s > 0 then mkStateVal int jlEnd else mkStateVal int jlBegin)
+        (Nothing, Nothing) -> (varDecDef endVar $
+          inlineIf (step ?> litInt 0) (listSize vo) (litInt 1), valueOf endVar)
+
+      setToSlice = jlListSlice' vn vo begVal endVal step mbStepV
+
+  block [
+      setBeg,
+      setEnd,
+      setToSlice
+    ]
+
+jlListSlice' :: (RenderSym r) => SVariable r -> SValue r -> SValue r ->
+  SValue r -> SValue r -> Maybe Integer -> MSStatement r
+jlListSlice' vn vo beg end step mStep = do
+  vold  <- zoom lensMStoVS vo
+  beg'  <- zoom lensMStoVS beg
+  end'  <- zoom lensMStoVS end
+  step' <- zoom lensMStoVS step
+  let stepDoc = case mStep of
+        (Just 1) -> empty
+        _        -> colon <> RC.value step'
+      theSlice = mkStateVal void (RC.value vold <> brackets (RC.value beg' <> stepDoc <> colon <> RC.value end'))
+  vn &= theSlice
+  
 
 -- Other functionality
 jlRange :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r

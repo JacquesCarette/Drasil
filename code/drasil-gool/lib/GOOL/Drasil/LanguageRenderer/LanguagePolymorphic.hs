@@ -13,7 +13,8 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
   tryCatch, construct, param, method, getMethod, setMethod, initStmts,
   function, docFuncRepr, docFunc, buildClass, implementingClass, docClass,
-  commentedClass, modFromData, fileDoc, docMod, OptionalSpace(..), defaultOptSpace
+  commentedClass, modFromData, fileDoc, docMod, OptionalSpace(..),
+  defaultOptSpace, smartAdd, smartSub
 ) where
 
 import Utils.Drasil (indent)
@@ -24,10 +25,10 @@ import GOOL.Drasil.InterfaceCommon (Label, Library, MSBody, MSBlock, VSType,
   MixedCall, MixedCtorCall, BodySym(Body), bodyStatements, oneLiner,
   BlockSym(Block), TypeSym(Type), TypeElim(getType, getTypeString),
   VariableSym(Variable), VariableElim(variableName, variableType),
-  ValueSym(Value, valueType), NumericExpression((#-), (#/), sin, cos, tan),
-  Comparison(..), funcApp, StatementSym(multi), AssignStatement((&++)), (&=),
-  IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
-  ifNoElse, ScopeSym(..))
+  ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/), sin, cos,
+  tan), Comparison(..), funcApp, StatementSym(multi), AssignStatement((&++)),
+  (&=), IOStatement(printStr, printStrLn, printFile, printFileStr,
+  printFileStrLn), ifNoElse, ScopeSym(..))
 import qualified GOOL.Drasil.InterfaceCommon as IC (TypeSym(int, double, char,
   string, listType, arrayType, listInnerType, funcType, void), VariableSym(var), 
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
@@ -52,7 +53,7 @@ import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData),
   RenderStatement(stmt), InternalIOStmt(..), RenderMethod(intFunc), 
   RenderClass(intClass, commentedClass))
 import qualified GOOL.Drasil.RendererClasses as RC (BodyElim(..), BlockElim(..),
-  InternalVarElim(variable), ValueElim(value), FunctionElim(..), 
+  InternalVarElim(variable), ValueElim(value, valueInt), FunctionElim(..), 
   StatementElim(statement), ClassElim(..), ModuleElim(..), BlockCommentElim(..))
 import GOOL.Drasil.AST (Binding(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode, 
@@ -121,6 +122,22 @@ valOfOne t = t >>= (getVal . getType)
         getVal _ = IC.litDouble 1.0
 
 -- Binary Operators --
+
+smartAdd :: (RenderSym r) => SValue r -> SValue r -> SValue r
+smartAdd v1 v2 = do
+  v1' <- v1
+  v2' <- v2
+  case (RC.valueInt v1', RC.valueInt v2') of
+    (Just i1, Just i2) -> litInt (i1 + i2)
+    _                  -> v1 #+ v2
+
+smartSub :: (RenderSym r) => SValue r -> SValue r -> SValue r
+smartSub v1 v2 = do
+  v1' <- v1
+  v2' <- v2
+  case (RC.valueInt v1', RC.valueInt v2') of
+    (Just i1, Just i2) -> litInt (i1 - i2)
+    _                  -> v1 #- v2
 
 equalOp :: (Monad r) => VSOp r
 equalOp = compEqualPrec "=="

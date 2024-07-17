@@ -95,7 +95,8 @@ import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getLangImports, getLibImports, setFileType, getClassName, setModuleName,
   getModuleName, getCurrMain, getMethodExcMap, getMainDoc, setThrowUsed,
   getThrowUsed, setErrorDefined, getErrorDefined, incrementLine, incrementWord,
-  getLineIndex, getWordIndex, resetIndices, useVarName, genLoopIndex)
+  getLineIndex, getWordIndex, resetIndices, useVarName, genLoopIndex,
+  genVarName)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Applicative (liftA2)
@@ -998,10 +999,18 @@ swiftListSlice :: (RenderSym r) => SVariable r -> SValue r ->
   Maybe (SValue r) -> Maybe (SValue r) -> SValue r -> MSBlock r
 swiftListSlice vn vo beg end step = do
   stepV <- zoom lensMStoVS step
-
   let mbStepV = valueInt stepV
-      (setBeg, begVal) = M.makeSetterVal "begIdx" step mbStepV beg (litInt 0)    (listSize vo #- litInt 1)
-      (setEnd, endVal) = M.makeSetterVal "endIdx" step mbStepV end (listSize vo) (litInt (-1))
+
+  -- Generate fresh variable names if required
+  begName <- case (beg, mbStepV) of
+    (Nothing, Nothing) -> genVarName [] "begIdx"
+    _                  -> return ""
+  endName <- case (end, mbStepV) of
+    (Nothing, Nothing) -> genVarName [] "endIdx"
+    _                  -> return ""
+
+  let (setBeg, begVal) = M.makeSetterVal begName step mbStepV beg (litInt 0)    (listSize vo #- litInt 1)
+      (setEnd, endVal) = M.makeSetterVal endName step mbStepV end (listSize vo) (litInt (-1))
       
       i = var "i" int
       setToSlice = vn &= swiftMapFunc (swiftStrideFunc begVal endVal step) (lambda [i] (listAccess vo (valueOf i)))

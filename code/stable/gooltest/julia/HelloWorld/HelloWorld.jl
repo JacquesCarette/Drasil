@@ -44,27 +44,34 @@ x = 3
 y = 1
 z = -1
 
-mySlicedList = myOtherList[2:4 - 1]
+mySlicedList = myOtherList[2:3]
 
-mySlicedList2 = myOtherList[2:2:5 - 1]
+mySlicedList2 = myOtherList[2:2:4]
 
 mySlicedList3 = myOtherList[2:end]
 
-mySlicedList4 = myOtherList[4:2 - 1]
+mySlicedList4 = myOtherList[4:1]
 
-mySlicedList5 = myOtherList[4:-1:2 - 1]
+mySlicedList5 = myOtherList[4:-1:3]
 
-mySlicedList6 = myOtherList[begin:-1:2 - 1]
+mySlicedList6 = myOtherList[end:-1:3]
 
-mySlicedList7 = myOtherList[4:-1:end]
+mySlicedList7 = myOtherList[4:-1:begin]
 
-mySlicedList8 = myOtherList[4:z:1 - 1]
+endIdx = z > 0 ? 0 : 2
+mySlicedList8 = myOtherList[4:z:endIdx]
 
-mySlicedList9 = myOtherList[x + 1:z:y + 1 - 1]
+endIdx0 = z > 0 ? y : y + 2
+mySlicedList9 = myOtherList[x + 1:z:endIdx0]
 
-mySlicedList10 = myOtherList[3:z:end]
+endIdx1 = z > 0 ? length(myOtherList) : 1
+mySlicedList10 = myOtherList[3:z:endIdx1]
 
-mySlicedList11 = myOtherList[y + 1:z:x + 1 - 1]
+endIdx2 = z > 0 ? length(myOtherList) : 1
+mySlicedList10 = myOtherList[3:z:endIdx2]
+
+endIdx3 = z > 0 ? x : x + 2
+mySlicedList11 = myOtherList[y + 1:z:endIdx3]
 
 # Print results of list slicing tests
 println("")

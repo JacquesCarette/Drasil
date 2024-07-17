@@ -125,10 +125,17 @@ public class HelloWorld {
         mySlicedList10 = temp8;
         
         List<double> temp9 = new List<double>(0);
-        for (int i7 = y; y <= i7 && i7 < x && z > 0 || x < i7 && i7 <= y && z < 0; i7 += z) {
+        int endIdx0 = z > 0 ? myOtherList.Count : -1;
+        for (int i7 = 2; 2 <= i7 && i7 < endIdx0 && z > 0 || endIdx0 < i7 && i7 <= 2 && z < 0; i7 += z) {
             temp9.Add(myOtherList[i7]);
         }
-        mySlicedList11 = temp9;
+        mySlicedList10 = temp9;
+        
+        List<double> temp10 = new List<double>(0);
+        for (int i8 = y; y <= i8 && i8 < x && z > 0 || x < i8 && i8 <= y && z < 0; i8 += z) {
+            temp10.Add(myOtherList[i8]);
+        }
+        mySlicedList11 = temp10;
         
         // Print results of list slicing tests
         Console.WriteLine("");

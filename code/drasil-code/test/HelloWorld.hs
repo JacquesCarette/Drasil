@@ -153,6 +153,11 @@ listSliceTests = [
     (valueOf myOtherList) (Just (litInt 2))
     Nothing (Just (valueOf (var "z" int))),
 
+  -- | Do it again, to make sure a unique variable name for endIdx is being generated
+  listSlice mySlicedList10
+  (valueOf myOtherList) (Just (litInt 2))
+  Nothing (Just (valueOf (var "z" int))),
+
   -- | List slicing where end > beg, but step is a variable < 0
   listSlice mySlicedList11
     (valueOf myOtherList) (Just (valueOf (var "y" int)))

@@ -22,8 +22,7 @@ import GOOL.Drasil.InterfaceCommon (Label, Library, Body, MSBody, VSType,
   Initializers, MixedCall, bodyStatements, oneLiner, TypeSym(infile, outfile,
   listInnerType), TypeElim(getType, getTypeString), VariableElim(variableName,
   variableType), ValueSym(valueType), Comparison(..), (&=),
-  ControlStatement(returnStmt), ScopeSym(..), MethodSym(function),
-  NumericExpression((#+), (#-)), funcApp)
+  ControlStatement(returnStmt), ScopeSym(..), MethodSym(function), funcApp)
 import qualified GOOL.Drasil.InterfaceCommon as IC (argsList,
   TypeSym(int, double, string, listType, arrayType, void), VariableSym(var),
   Literal(litTrue, litFalse, litList, litInt, litString),
@@ -58,7 +57,7 @@ import qualified GOOL.Drasil.LanguageRenderer as R (self, self', module',
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkStateVar, mkVal, mkVal)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
-  call, initStmts, docFunc, docFuncRepr, docClass, docMod)
+  call, initStmts, docFunc, docFuncRepr, docClass, docMod, smartAdd, smartSub)
 import GOOL.Drasil.AST (ScopeTag(..))
 import GOOL.Drasil.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports,
@@ -580,17 +579,9 @@ listAppend l v = do
 -- | Convert an integer to an index in a 1-indexed language
 --   Since GOOL is 0-indexed, we need to add 1
 intToIndex' :: (RenderSym r) => SValue r -> SValue r
-intToIndex' v = do 
-  v' <- v
-  case RC.valueInt v' of
-    (Just i) -> IC.litInt (i + 1)
-    Nothing -> v #+ IC.litInt 1
+intToIndex' v = v `smartAdd` IC.litInt 1
 
 -- | Convert an index to an integer in a 1-indexed language
 --   Since GOOL is 0-indexed, we need to subtract 1
 indexToInt' :: (RenderSym r) => SValue r -> SValue r
-indexToInt' v = do
-  v' <- v
-  case RC.valueInt v' of
-    (Just i) -> IC.litInt (i - 1)
-    Nothing -> v #- IC.litInt 1
+indexToInt' v = v `smartSub` IC.litInt 1

@@ -456,7 +456,7 @@ type InOutFunc r = [SVariable r] -> [SVariable r] -> [SVariable r] ->
 type DocInOutFunc r = String -> [(String, SVariable r)] -> 
   [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
 
-class (BodySym r, ParameterSym r, ScopeSym r) => MethodSym r 
+class (BodySym r, ParameterSym r, ScopeSym r) => MethodSym r
   where
   type Method r
   docMain :: MSBody r -> SMethod r

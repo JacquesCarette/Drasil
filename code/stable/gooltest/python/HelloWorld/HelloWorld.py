@@ -112,7 +112,7 @@ elif (b == 5):
     b -= 1
     myList = []
     myObj = 'o'
-    myConst = "Imconstant"
+    MYCONST = "Imconstant"
     print(a)
     print(b)
     print(c)

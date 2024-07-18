@@ -28,7 +28,7 @@ module GOOL.Drasil.State (
   setMainDoc, getMainDoc, setScope, getScope, setCurrMainFunc, getCurrMainFunc, 
   setThrowUsed, getThrowUsed, setErrorDefined, getErrorDefined, addIter, 
   getIter, resetIter, incrementLine, incrementWord, getLineIndex, getWordIndex, 
-  resetIndices, useVarName, genVarName, genLoopIndex
+  resetIndices, useVarName, genVarName, genLoopIndex, varNameAvailable
 ) where
 
 import GOOL.Drasil.AST (FileType(..), ScopeTag(..), QualifiedName, qualName)
@@ -568,6 +568,11 @@ genVarName candidates backup = do
 
 genLoopIndex :: MS String
 genLoopIndex = genVarName ["i", "j", "k"] "i"
+
+varNameAvailable :: String -> MS Bool
+varNameAvailable n = do
+  used <- gets (^. varNames)
+  return $ isNothing $ Map.lookup n used
 
 -- Helpers
 

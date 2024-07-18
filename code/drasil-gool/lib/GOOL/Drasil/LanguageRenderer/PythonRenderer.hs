@@ -82,11 +82,11 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   vectorize2, sumComponents, commonVecIndex, commonThunkElim, commonThunkDim)
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList, on2StateWrapped)
-import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
-  revFiles, addLangImportVS, getLangImports, addLibImportVS, 
-  getLibImports, addModuleImport, addModuleImportVS, getModuleImports, 
+import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS,
+  revFiles, addLangImportVS, getLangImports, addLibImportVS,
+  getLibImports, addModuleImport, addModuleImportVS, getModuleImports,
   setFileType, getClassName, setCurrMain, getClassMap, getMainDoc, useVarName,
-  genLoopIndex)
+  genLoopIndex, varNameAvailable)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -95,6 +95,7 @@ import Control.Lens.Zoom (zoom)
 import Control.Monad (join)
 import Control.Monad.State (modify)
 import Data.List (intercalate, sort)
+import Data.Char (toUpper)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty, quotes)
@@ -535,7 +536,14 @@ instance DeclStatement PythonCode where
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
-  constDecDef = varDecDef
+  constDecDef v e = do
+    v' <- zoom lensMStoVS v
+    let n = map toUpper (variableName v')
+        newConst = constant n (pure (variableType v'))
+    available <- varNameAvailable n
+    if available
+      then varDecDef newConst e
+      else error "Cannot safely capitalize constant."
   funcDecDef = CP.funcDecDef
 
 instance OODeclStatement PythonCode where

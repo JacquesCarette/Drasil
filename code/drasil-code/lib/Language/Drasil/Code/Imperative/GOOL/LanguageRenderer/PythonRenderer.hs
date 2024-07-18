@@ -16,7 +16,7 @@ import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
 import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
-import GOOL.Drasil (onCodeList, pyName, pyVersion)
+import Drasil.GOOL (onCodeList, pyName, pyVersion)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Text.PrettyPrint.HughesPJ (Doc)

@@ -32,7 +32,7 @@ import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
 import Language.Drasil.CodeSpec (CodeSpec(..), getODE)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
 
-import GOOL.Drasil (GSProgram, SFile, OOProg, ProgramSym(..), ScopeTag(..),
+import Drasil.GOOL (GSProgram, SFile, OOProg, ProgramSym(..), ScopeTag(..),
   ProgData(..), initialState, unCI)
 
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing,

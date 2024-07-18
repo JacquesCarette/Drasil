@@ -1,14 +1,4 @@
 var n: Int
-var myFSM: String = "Off"
-myFSM = "On"
-switch myFSM {
-    case "Off":
-        print("Off")
-    case "On":
-        print("On")
-    default:
-        print("Neither")
-};
 
 print("myStrat")
 n = 3

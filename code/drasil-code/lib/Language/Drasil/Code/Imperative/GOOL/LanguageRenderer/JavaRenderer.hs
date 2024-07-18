@@ -20,7 +20,7 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, BuildName(..),
   mainModuleFile, packSep, withExt)
 import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
-import GOOL.Drasil (onCodeList, jName, jVersion)
+import Drasil.GOOL (onCodeList, jName, jVersion)
 
 import Data.List (intercalate)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))

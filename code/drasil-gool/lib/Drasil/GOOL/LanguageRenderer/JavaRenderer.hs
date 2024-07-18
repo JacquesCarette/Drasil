@@ -2,31 +2,34 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The logic to render Java code is contained in this module
-module GOOL.Drasil.LanguageRenderer.JavaRenderer (
+module Drasil.GOOL.LanguageRenderer.JavaRenderer (
   -- * Java Code Configuration -- defines syntax of all Java code
   JavaCode(..), jName, jVersion
 ) where
 
 import Utils.Drasil (indent)
 
-import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
-  VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass, OOProg,
-  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), oneLiner,
-  BlockSym(..), TypeSym(..), OOTypeSym(..), TypeElim(..), VariableSym(..),
-  OOVariableSym(..), VariableElim(..), ValueSym(..), OOValueSym, Argument(..),
-  Literal(..), litZero, MathConstant(..), VariableValue(..), OOVariableValue,
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), OOValueExpression(..), funcApp, selfFuncApp, extFuncApp,
-  newObj, InternalValueExp(..), FunctionSym(..), ($.), GetSet(..), List(..),
-  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), StatePattern(..), ObserverPattern(..),
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
-import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
+import Drasil.GOOL.CodeType (CodeType(..))
+import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, VSType,
+  SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..), oneLiner,
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  extFuncApp, List(..), InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
+  IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..))
+import Drasil.GOOL.InterfaceGOOL (SClass, VSFunction, CSStateVar, OOProg,
+  ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..),
+  OOVariableSym(..), StateVarSym(..), PermanenceSym(..), OOValueSym,
+  OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
+  InternalValueExp(..), FunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
+  OOMethodSym(..))
+import Drasil.GOOL.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
@@ -38,24 +41,24 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
   StateVarElim, RenderClass(..), ClassElim, RenderMod(..), ModuleElim, 
   BlockCommentSym(..), BlockCommentElim)
-import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
+import qualified Drasil.GOOL.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
-import GOOL.Drasil.LanguageRenderer (dot, new, elseIfLabel, forLabel, tryLabel,
+import Drasil.GOOL.LanguageRenderer (dot, new, elseIfLabel, forLabel, tryLabel,
   catchLabel, throwLabel, throwsLabel, importLabel, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, exceptionObj', 
   new', args, printLabel, exceptionObj, mainFunc, new, nullLabel, listSep, 
   access, containing, mathFunc, functionDox, variableList, parameterList, 
   appendToBody, surroundBody, intValue)
-import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, 
+import qualified Drasil.GOOL.LanguageRenderer as R (sqrt, abs, log10, 
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, package, class', 
   multiStmt, body, printFile, param, listDec, classVar, cast, castObj, static, 
   dynamic, break, continue, private, public, blockCmt, docCmt, addComments, 
   commentedMod, commentedItem)
-import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
+import Drasil.GOOL.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
   VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
   binExprNumDbl', typeBinExpr)
-import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
+import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
@@ -67,8 +70,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
   buildClass, implementingClass, commentedClass, modFromData, fileDoc,
   fileFromData, defaultOptSpace)
-import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
-import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int, 
+import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
+import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int, 
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
   extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
   funcType, arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, 
@@ -76,26 +79,26 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   destructorError, stateVarDef, constVar, litArray, call', listSizeFunc, 
   listAccessFunc', notNull, doubleRender, double, openFileR, openFileW, 
   stateVar, floatRender, float, string', intToIndex, indexToInt)
-import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
+import qualified Drasil.GOOL.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
   decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
   intFunc, multiAssignError, multiReturnError, multiTypeError)
-import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
+import qualified Drasil.GOOL.LanguageRenderer.Macros as M (ifExists, 
   runStrategy, listSlice, stringListVals, stringListLists, forRange, 
-  notifyObservers, checkState)
-import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..), 
+  notifyObservers)
+import Drasil.GOOL.AST (Terminator(..), ScopeTag(..), qualName, FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard,
   CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
   commonThunkElim, commonThunkDim)
-import GOOL.Drasil.CodeAnalysis (Exception(..), ExceptionType(..), exception, 
+import Drasil.GOOL.CodeAnalysis (Exception(..), ExceptionType(..), exception, 
   stdExc, HasException(..))
-import GOOL.Drasil.Helpers (emptyIfNull, toCode, toState, onCodeValue, 
+import Drasil.GOOL.Helpers (emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
   onCodeList, onStateList, on2StateWrapped)
-import GOOL.Drasil.State (VS, lensGStoFS, lensMStoFS, lensMStoVS, lensVStoFS, 
+import Drasil.GOOL.State (VS, lensGStoFS, lensMStoFS, lensMStoVS, lensVStoFS, 
   lensVStoMS, modifyReturn, modifyReturnList, revFiles, addProgNameToPaths, 
   addLangImport, addLangImportVS, addExceptionImports, getModuleName, 
   setFileType, getClassName, setCurrMain, setOutputsDeclared, 
@@ -128,7 +131,8 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   JC x >>= f = f x
 
-instance OOProg JavaCode where
+instance SharedProg JavaCode
+instance OOProg JavaCode
 
 instance ProgramSym JavaCode where
   type Program JavaCode = ProgData
@@ -377,9 +381,6 @@ instance ValueExpression JavaCode where
   funcAppMixedArgs n t vs ns = do
     addCallExcsCurrMod n 
     G.funcAppMixedArgs n t vs ns
-  selfFuncAppMixedArgs n t ps ns = do
-    addCallExcsCurrMod n
-    G.selfFuncAppMixedArgs dot self n t ps ns
   extFuncAppMixedArgs l n t vs ns = do
     mem <- getMethodExcMap
     modify (maybe id addExceptions (Map.lookup (qualName l n) mem))
@@ -391,6 +392,9 @@ instance ValueExpression JavaCode where
   notNull = CP.notNull nullLabel
 
 instance OOValueExpression JavaCode where
+  selfFuncAppMixedArgs n t ps ns = do
+    addCallExcsCurrMod n
+    G.selfFuncAppMixedArgs dot self n t ps ns
   newObjMixedArgs ot vs ns = addConstructorCallExcsCurrMod ot (\t -> 
     G.newObjMixedArgs (new ++ " ") t vs ns)
   extNewObjMixedArgs l ot vs ns = do
@@ -547,11 +551,13 @@ instance DeclStatement JavaCode where
   listDecDef = CP.listDecDef
   arrayDec n = CP.arrayDec (litInt n)
   arrayDecDef = CP.arrayDecDef
+  constDecDef = jConstDecDef
+  funcDecDef = jFuncDecDef
+
+instance OODeclStatement JavaCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
-  constDecDef = jConstDecDef
-  funcDecDef = jFuncDecDef
 
 instance IOStatement JavaCode where
   print      = jOut False Nothing printFunc
@@ -591,8 +597,10 @@ instance StringStatement JavaCode where
 
 instance FuncAppStatement JavaCode where
   inOutCall = jInOutCall funcApp
-  selfInOutCall = jInOutCall selfFuncApp
   extInOutCall m = jInOutCall (extFuncApp m)
+
+instance OOFuncAppStatement JavaCode where
+  selfInOutCall = jInOutCall selfFuncApp
 
 instance CommentStatement JavaCode where
   comment = G.comment commentStart
@@ -617,9 +625,6 @@ instance ControlStatement JavaCode where
 
   tryCatch = G.tryCatch jTryCatch
   
-instance StatePattern JavaCode where 
-  checkState = M.checkState
-
 instance ObserverPattern JavaCode where
   notifyObservers = M.notifyObservers
 
@@ -659,25 +664,22 @@ instance ParamElim JavaCode where
 
 instance MethodSym JavaCode where
   type Method JavaCode = MethodData
+  docMain = CP.docMain
+  function = G.function
+  mainFunction = CP.mainFunction string mainFunc
+  docFunc = CP.doxFunc
+
+  inOutFunc n s = jInOut (function n s)
+  docInOutFunc n s = jDocInOut (inOutFunc n s)
+
+instance OOMethodSym JavaCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
   constructor ps is b = getClassName >>= (\n -> CP.constructor n ps is b)
 
-  docMain = CP.docMain
-
-  function = G.function
-  mainFunction = CP.mainFunction string mainFunc
-
-  docFunc = CP.doxFunc
-
   inOutMethod n s p = jInOut (method n s p)
-
   docInOutMethod n s p = jDocInOut (inOutMethod n s p)
-
-  inOutFunc n s = jInOut (function n s)
-    
-  docInOutFunc n s = jDocInOut (inOutFunc n s)
 
 instance RenderMethod JavaCode where
   intMethod m n s p t ps b = do
@@ -1051,7 +1053,7 @@ jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (map fst $ bs ++ is)
           map fst os
 
 jExtraClass :: (RenderSym r) => Label -> Maybe Label -> [CSStateVar r] -> 
-  [SMethod r] -> SClass r
+  [SMethod r] -> [SMethod r] -> SClass r
 jExtraClass n = intClass n (scopeFromData Priv empty) . inherit
 
 addCallExcsCurrMod :: String -> VS ()

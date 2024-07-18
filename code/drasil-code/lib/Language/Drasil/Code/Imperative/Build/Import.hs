@@ -6,7 +6,7 @@ import Language.Drasil.Code.Imperative.Build.AST (asFragment, DocConfig(..),
   BuildConfig(BuildConfig), BuildDependencies(..), Ext(..), includeExt,
   NameOpts, nameOpts, packSep, Runnable(Runnable), BuildName(..), RunType(..))
 
-import GOOL.Drasil (FileData(..), ProgData(..), GOOLState(..), headers, sources,
+import Drasil.GOOL (FileData(..), ProgData(..), GOOLState(..), headers, sources,
   mainMod)
 
 import Build.Drasil (Annotation, (+:+), genMake, makeS, MakeString, mkFile, mkRule,

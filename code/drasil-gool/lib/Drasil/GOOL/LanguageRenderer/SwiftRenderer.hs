@@ -2,33 +2,34 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The logic to render Swift code is contained in this module
-module GOOL.Drasil.LanguageRenderer.SwiftRenderer (
+module Drasil.GOOL.LanguageRenderer.SwiftRenderer (
   -- * Swift Code Configuration -- defines syntax of all Swift code
   SwiftCode(..), swiftName, swiftVersion
 ) where
 
 import Utils.Drasil (indent)
 
-import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
-  SValue, MSStatement, MSParameter, SMethod, OOProg, Initializers,
-  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), oneLiner,
-  bodyStatements, BlockSym(..), TypeSym(..), OOTypeSym(..),
-  TypeElim(..), VariableSym(..), OOVariableSym(..), VariableElim(..),
-  ValueSym(..), OOValueSym, Argument(..), Literal(..), litZero, MathConstant(..),
-  VariableValue(..), OOVariableValue, CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..),
-  OOValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp,
-  newObj, InternalValueExp(..), objMethodCall, objMethodCallNamedArgs,
-  objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), listSlice,
-  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+import Drasil.GOOL.CodeType (CodeType(..))
+import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, MSBlock, VSType,
+  SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..), oneLiner,
+  bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
+  VariableElim(..), ValueSym(..),Argument(..), Literal(..), litZero,
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, List(..),
+  listSlice, InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), StatePattern(..), ObserverPattern(..),
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..), convTypeOO)
-import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym,
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
+import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
+  Initializers, ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
+  StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
+  OOValueExpression(..), selfFuncApp, newObj, InternalValueExp(..),
+  objMethodCall, objMethodCallNamedArgs, objMethodCallNoParams, FunctionSym(..),
+  ($.), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
+  ObserverPattern(..), StrategyPattern(..), OOMethodSym(..), convTypeOO)
+import Drasil.GOOL.RendererClasses (MSMthdType, RenderSym,
   RenderFile(..), ImportSym(..), ImportElim, PermElim(binding), RenderBody(..),
   BodyElim, RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim,
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
@@ -40,22 +41,22 @@ import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym,
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   StateVarElim, RenderClass(..), ClassElim, RenderMod(..), ModuleElim,
   BlockCommentSym(..), BlockCommentElim)
-import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
+import qualified Drasil.GOOL.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
-import GOOL.Drasil.LanguageRenderer (dot, blockCmtStart, blockCmtEnd,
+import Drasil.GOOL.LanguageRenderer (dot, blockCmtStart, blockCmtEnd,
   docCmtStart, bodyStart, bodyEnd, commentStart, elseIfLabel, forLabel,
   inLabel, tryLabel, catchLabel, throwLabel, throwsLabel, importLabel, listSep',
   printLabel, listSep, piLabel, access, tuple, FuncDocRenderer,
   ClassDocRenderer, parameterList)
-import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp,
+import qualified Drasil.GOOL.LanguageRenderer as R (sqrt, abs, log10, log, exp,
   sin, cos, tan, asin, acos, atan, floor, ceil, pow, class', multiStmt, body,
   classVar, func, listSetFunc, castObj, static, dynamic, break, continue,
   private, blockCmt, docCmt, addComments, commentedMod, commentedItem)
-import GOOL.Drasil.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
+import Drasil.GOOL.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
   mkVal, VSOp, unOpPrec, powerPrec, unExpr, unExpr', typeUnExpr, binExpr,
   binExpr', typeBinExpr)
-import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
+import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
@@ -67,28 +68,28 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   tryCatch, construct, param, method, getMethod, setMethod, initStmts,
   function, docFunc, buildClass, implementingClass, docClass, commentedClass,
   modFromData, fileDoc, fileFromData, defaultOptSpace)
-import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (classVar,
+import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (classVar,
   objVarSelf, intClass, buildModule, docMod', bindingError, extFuncAppMixedArgs,
   notNull, listDecDef, destructorError, stateVarDef, constVar, litArray,
   listSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR,
   openFileW, self, multiAssign, multiReturn, listDec, funcDecDef,
   inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', bool, float,
   stringRender', string', inherit, implements, intToIndex, indexToInt)
-import qualified GOOL.Drasil.LanguageRenderer.CLike as C (notOp, andOp, orOp,
+import qualified Drasil.GOOL.LanguageRenderer.CLike as C (notOp, andOp, orOp,
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs,
   listSize, varDecDef, extObjDecNew, switch, while)
-import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement1,
+import qualified Drasil.GOOL.LanguageRenderer.Macros as M (ifExists, decrement1,
   increment1, runStrategy, stringListVals, stringListLists, notifyObservers',
-  checkState, makeSetterVal)
-import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..),
+  makeSetterVal)
+import Drasil.GOOL.AST (Terminator(..), ScopeTag(..), qualName, FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), td, ValData(..), vd, Binding(..), VarData(..), vard,
   CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
   commonThunkElim, commonThunkDim)
-import GOOL.Drasil.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
+import Drasil.GOOL.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
-import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
+import Drasil.GOOL.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS, revFiles, addLangImportVS,
   getLangImports, getLibImports, setFileType, getClassName, setModuleName,
   getModuleName, getCurrMain, getMethodExcMap, getMainDoc, setThrowUsed,
@@ -122,7 +123,8 @@ instance Applicative SwiftCode where
 instance Monad SwiftCode where
   SC x >>= f = f x
 
-instance OOProg SwiftCode where
+instance SharedProg SwiftCode
+instance OOProg SwiftCode
 
 instance ProgramSym SwiftCode where
   type Program SwiftCode = ProgData
@@ -373,7 +375,6 @@ instance ValueExpression SwiftCode where
   inlineIf = C.inlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
-  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
   extFuncAppMixedArgs = CP.extFuncAppMixedArgs
   libFuncAppMixedArgs = C.libFuncAppMixedArgs
 
@@ -382,6 +383,7 @@ instance ValueExpression SwiftCode where
   notNull = CP.notNull swiftNil
 
 instance OOValueExpression SwiftCode where
+  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs m tp vs ns = do
     t <- tp
@@ -532,14 +534,16 @@ instance DeclStatement SwiftCode where
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
-  objDecDef = varDecDef
-  objDecNew = G.objDecNew
-  extObjDecNew = C.extObjDecNew
   constDecDef vr vl' = do
     vdec <- swiftVarDec swiftConst vr
     vl <- zoom lensMStoVS vl'
     mkStmtNoEnd $ RC.statement vdec <+> equals <+> RC.value vl
   funcDecDef = CP.funcDecDef
+
+instance OODeclStatement SwiftCode where
+  objDecDef = varDecDef
+  objDecNew = G.objDecNew
+  extObjDecNew = C.extObjDecNew
 
 instance IOStatement SwiftCode where
   print      = swiftOut False Nothing printFunc
@@ -594,8 +598,10 @@ instance StringStatement SwiftCode where
 
 instance FuncAppStatement SwiftCode where
   inOutCall = CP.inOutCall funcApp
-  selfInOutCall = CP.inOutCall selfFuncApp
   extInOutCall m = CP.inOutCall (extFuncApp m)
+
+instance OOFuncAppStatement SwiftCode where
+  selfInOutCall = CP.inOutCall selfFuncApp
 
 instance CommentStatement SwiftCode where
   comment = G.comment commentStart
@@ -621,9 +627,6 @@ instance ControlStatement SwiftCode where
   while = C.while id bodyStart bodyEnd
 
   tryCatch = G.tryCatch swiftTryCatch
-
-instance StatePattern SwiftCode where
-  checkState = M.checkState
 
 instance ObserverPattern SwiftCode where
   notifyObservers = M.notifyObservers'
@@ -664,25 +667,22 @@ instance ParamElim SwiftCode where
 
 instance MethodSym SwiftCode where
   type Method SwiftCode = MethodData
+  docMain = mainFunction
+  function = G.function
+  mainFunction = CP.mainBody
+  docFunc = G.docFunc swiftFunctionDoc
+
+  inOutFunc n s = CP.inOutFunc (function n s)
+  docInOutFunc n s = CP.docInOutFunc' swiftFunctionDoc (inOutFunc n s)
+
+instance OOMethodSym SwiftCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
   constructor = swiftConstructor
 
-  docMain = mainFunction
-
-  function = G.function
-  mainFunction = CP.mainBody
-
-  docFunc = G.docFunc swiftFunctionDoc
-
   inOutMethod n s p = CP.inOutFunc (method n s p)
-
   docInOutMethod n s p = CP.docInOutFunc' swiftFunctionDoc (inOutMethod n s p)
-
-  inOutFunc n s = CP.inOutFunc (function n s)
-
-  docInOutFunc n s = CP.docInOutFunc' swiftFunctionDoc (inOutFunc n s)
 
 instance RenderMethod SwiftCode where
   intMethod _ = swiftMethod
@@ -740,12 +740,12 @@ instance ModuleSym SwiftCode where
     CP.buildModule modName (do
       lis <- getLangImports
       libis <- getLibImports
-      pure $ vcat $ map (RC.import' .
-          (langImport :: Label -> SwiftCode (Import SwiftCode)))
-          (sort $ lis ++ is ++ libis))
-      (zoom lensFStoMS swiftStringError) getMainDoc (map pure fns)
-        (map pure cls)
-
+      pure $ vcat $ map (RC.import' . 
+          (langImport :: Label -> SwiftCode (Import SwiftCode))) 
+          (sort $ lis ++ is ++ libis)) 
+      (zoom lensFStoMS swiftStringError) getMainDoc 
+        (map pure fns) (map pure cls)
+  
 instance RenderMod SwiftCode where
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)

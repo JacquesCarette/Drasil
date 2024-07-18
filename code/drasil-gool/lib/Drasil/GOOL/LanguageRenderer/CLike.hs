@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | Implementations for C-like renderers are defined here.
-module GOOL.Drasil.LanguageRenderer.CLike (charRender, float, double, char, 
+module Drasil.GOOL.LanguageRenderer.CLike (charRender, float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
   decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
@@ -10,30 +10,32 @@ module GOOL.Drasil.LanguageRenderer.CLike (charRender, float, double, char,
 
 import Utils.Drasil (indent)
 
-import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable, 
+import Drasil.GOOL.CodeType (CodeType(..))
+import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, VSType, SVariable, 
   SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall, 
-  PermanenceSym(..), TypeElim(getType, getTypeString), 
-  VariableElim(..), ValueSym(Value, valueType), extNewObj, ($.), ScopeSym(..))
-import qualified GOOL.Drasil.ClassInterface as S (TypeSym(bool, float),
-  OOTypeSym(obj), ValueExpression(funcAppMixedArgs),
-  OOValueExpression(newObjMixedArgs), DeclStatement(varDec, varDecDef))
-import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, RenderType(..),
+  TypeElim(getType, getTypeString), 
+  VariableElim(..), ValueSym(Value, valueType), ScopeSym(..))
+import qualified Drasil.GOOL.InterfaceCommon as IC (TypeSym(bool, float),
+  ValueExpression(funcAppMixedArgs), DeclStatement(varDec, varDecDef))
+import Drasil.GOOL.InterfaceGOOL (PermanenceSym(..), extNewObj, ($.))
+import qualified Drasil.GOOL.InterfaceGOOL as IG (OOTypeSym(obj),
+  OOValueExpression(newObjMixedArgs))
+import Drasil.GOOL.RendererClasses (MSMthdType, RenderSym, RenderType(..),
   InternalVarElim(variableBind), RenderValue(valFromData), 
   ValueElim(valuePrec), RenderMethod(intMethod))
-import qualified GOOL.Drasil.RendererClasses as S (
+import qualified Drasil.GOOL.RendererClasses as S (
   InternalListFunc(listSizeFunc), RenderStatement(stmt, loopStmt))
-import qualified GOOL.Drasil.RendererClasses as RC (PermElim(..), BodyElim(..), 
+import qualified Drasil.GOOL.RendererClasses as RC (PermElim(..), BodyElim(..), 
   InternalTypeElim(..), InternalVarElim(variable), ValueElim(value), 
   StatementElim(statement))
-import GOOL.Drasil.AST (Binding(..), Terminator(..))
-import GOOL.Drasil.Helpers (angles, toState, onStateValue)
-import GOOL.Drasil.LanguageRenderer (forLabel, whileLabel, containing)
-import qualified GOOL.Drasil.LanguageRenderer as R (switch, increment, 
+import Drasil.GOOL.AST (Binding(..), Terminator(..))
+import Drasil.GOOL.Helpers (angles, toState, onStateValue)
+import Drasil.GOOL.LanguageRenderer (forLabel, whileLabel, containing)
+import qualified Drasil.GOOL.LanguageRenderer as R (switch, increment, 
   decrement, this', this)
-import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
+import Drasil.GOOL.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
   mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
-import GOOL.Drasil.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName,
+import Drasil.GOOL.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName,
   useVarName)
 
 import Prelude hiding (break,(<>))
@@ -88,18 +90,18 @@ orOp = orPrec "||"
 self :: (RenderSym r) => SVariable r
 self = do 
   l <- zoom lensVStoMS getClassName 
-  mkStateVar R.this (S.obj l) R.this'
+  mkStateVar R.this (IG.obj l) R.this'
 
 -- Values --
 
 litTrue :: (RenderSym r) => SValue r
-litTrue = mkStateVal S.bool (text "true")
+litTrue = mkStateVal IC.bool (text "true")
 
 litFalse :: (RenderSym r) => SValue r
-litFalse = mkStateVal S.bool (text "false")
+litFalse = mkStateVal IC.bool (text "false")
 
 litFloat :: (RenderSym r) => Float -> SValue r
-litFloat f = mkStateVal S.float (D.float f <> text "f")
+litFloat f = mkStateVal IC.float (D.float f <> text "f")
 
 inlineIf :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 inlineIf c' v1' v2' = do
@@ -112,11 +114,11 @@ inlineIf c' v1' v2' = do
 
 libFuncAppMixedArgs :: (RenderSym r) => Library -> MixedCall r
 libFuncAppMixedArgs l n t vs ns = modify (addLibImportVS l) >> 
-  S.funcAppMixedArgs n t vs ns
+  IC.funcAppMixedArgs n t vs ns
   
 libNewObjMixedArgs :: (RenderSym r) => Library -> MixedCtorCall r
 libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >> 
-  S.newObjMixedArgs tp vs ns
+  IG.newObjMixedArgs tp vs ns
 
 -- Functions --
 
@@ -151,7 +153,7 @@ varDec s d pdoc v' = do
 varDecDef :: (RenderSym r) => Terminator -> SVariable r -> SValue r -> 
   MSStatement r
 varDecDef t vr vl' = do 
-  vd <- S.varDec vr
+  vd <- IC.varDec vr
   vl <- zoom lensMStoVS vl'
   let stmtCtor Empty = mkStmtNoEnd
       stmtCtor Semi = mkStmt
@@ -161,12 +163,12 @@ listDec :: (RenderSym r) => (r (Value r) -> Doc) -> SValue r -> SVariable r ->
   MSStatement r
 listDec f vl v = do 
   sz <- zoom lensMStoVS vl
-  vd <- S.varDec v
+  vd <- IC.varDec v
   mkStmt (RC.statement vd <> f sz)
   
 extObjDecNew :: (RenderSym r) => Library -> SVariable r -> [SValue r] -> 
   MSStatement r
-extObjDecNew l v vs = S.varDecDef v (extNewObj l (onStateValue variableType v)
+extObjDecNew l v vs = IC.varDecDef v (extNewObj l (onStateValue variableType v)
   vs)
 
 -- 1st parameter is a Doc function to apply to the render of the control value (i.e. parens)

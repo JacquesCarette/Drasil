@@ -12,7 +12,8 @@ In order, you should be installing:
 
 Optionally, some functions will be limited without:
 1. [Doxygen](#doxygen)
-2. [mdBook](#mdBook)
+2. [ShellCheck](#shellcheck)
+3. [mdBook](#mdBook)
 
 **Notes**: 
 1. It is [**recommended**](https://github.com/JacquesCarette/Drasil/issues/2913#issuecomment-987300398) for Windows users to install the following tools using Linux on Windows/Windows WSL. If you choose to install using Windows WSL, you can safely ignore all Windows installation notes (except for that regarding Unicode support), and follow the instructions for Linux machines with the *apt*-package manager (e.g., Debian, Ubuntu, etc). From experience, installations with Windows WSL over native installations provide better tools, quicker installs, and an overall smoother experience.
@@ -494,6 +495,53 @@ The [Doxygen download page](https://www.doxygen.nl/download.html) has a Windows 
 <summary><h4>Mac</h4></summary>
 
 The [Doxygen download page](https://www.doxygen.nl/download.html) has a disk image download for Mac OS. Open it and follow the on-screen instructions.
+
+</details>
+
+## ShellCheck
+
+ShellCheck is integrated into our GitHub CI pipeline, providing static analysis of shell scripts. ShellCheck is required to execute the `make shellcheck` target in our primary `Makefile` to statically analyze shell scripts locally.
+
+### Installation Instructions
+
+Please visit the [ShellCheck GitHub](https://github.com/koalaman/shellcheck?tab=readme-ov-file#installing) for more detailed instructions. For convenience, we have a summary for some Linux distributions, Windows, and Mac below.
+
+<details>
+
+<summary><h4>Linux</h4></summary>
+
+For Ubuntu and Debian, you can use the following command to install ShellCheck:
+```
+sudo apt install shellcheck
+```
+
+</details>
+
+<details>
+
+<summary><h4>Windows</h4></summary>
+
+You can download pre-compiled binaries for the latest release here: [Windows, x86](https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.zip).
+
+Alternatively, if you have [`chocolatey`](https://chocolatey.org/install) installed, you can open up a new command line as an administrator and run the following command:
+```
+choco install shellcheck
+```
+
+</details>
+
+<details>
+
+<summary><h4>Mac</h4></summary>
+
+If you use [homebrew](https://brew.sh/), you can install via the following command:
+```
+brew install shellcheck
+```
+Or, you can use [MacPorts](https://www.macports.org/):
+```
+sudo port install shellcheck
+```
 
 </details>
 

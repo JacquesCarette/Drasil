@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The structure for a class of renderers is defined here.
-module GOOL.Drasil.LanguageRenderer (
+module Drasil.GOOL.LanguageRenderer (
   -- * Common Syntax
   classDec, dot, commentStart, returnLabel, ifLabel, elseLabel, elseIfLabel, 
   forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, throwsLabel, 
@@ -27,18 +27,18 @@ module GOOL.Drasil.LanguageRenderer (
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
-import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, Library, SValue, BodySym(Body), 
-  PermanenceSym(Permanence), TypeSym(Type), TypeElim(..), VariableSym(Variable),
-  VariableElim(..), ValueSym(..), StatementSym(Statement), ScopeSym(Scope), 
+import Drasil.GOOL.CodeType (CodeType(..))
+import Drasil.GOOL.InterfaceCommon (Label, Library, SValue, BodySym(Body), 
+  TypeSym(Type), TypeElim(..), VariableSym(Variable), VariableElim(..), ValueSym(..), StatementSym(Statement), ScopeSym(Scope), 
   ParameterSym(Parameter))
-import GOOL.Drasil.RendererClasses (RenderSym)
-import qualified GOOL.Drasil.RendererClasses as RC (PermElim(..), BodyElim(..),
+import Drasil.GOOL.InterfaceGOOL (PermanenceSym(Permanence))
+import Drasil.GOOL.RendererClasses (RenderSym)
+import qualified Drasil.GOOL.RendererClasses as RC (PermElim(..), BodyElim(..),
   InternalTypeElim(..), InternalVarElim(..), ValueElim(..), StatementElim(..),
   ScopeElim(..), ParamElim(..))
-import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
+import Drasil.GOOL.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateMod, TypeData(..), VarData(..))
-import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
+import Drasil.GOOL.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
 
 import Data.List (last, intercalate)
 import Prelude hiding (break,print,last,sqrt,abs,log,exp,sin,cos,tan,asin,acos,

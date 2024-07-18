@@ -19,7 +19,7 @@ import Language.Drasil.Mod (Name)
 import Data.Map (Map)
 import qualified Data.Map as Map
 
-import GOOL.Drasil (CodeType)
+import Drasil.GOOL (CodeType)
 
 import Control.Lens ((^.))
 

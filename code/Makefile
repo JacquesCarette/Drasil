@@ -425,15 +425,18 @@ convertAnalyzed: ##@Analysis Convert analyzed dot graphs into SVGs.
 	@echo "Dependency graphs built, check your '$(TYPEGRAPH_FOLDER)' and '$(CLASSINST_GRAPH_FOLDER)' folders."
 
 #---------------------------------------#
-#--- HLint and Haddock Documentation ---#
+#-- Linters and Haddock Documentation --#
 #---------------------------------------#
 
-hlint: check_stack ##@HLint Run HLint through the drasil packages. Uses a local HLint installation.
+hlint: check_stack ##@Linters Run HLint through the drasil packages. Uses a local HLint installation.
 	stack install hlint
 	hlint .
 
-hot_hlint: ##@HLint Run HLint through the drasil packages. Uses the latest HLint version, downloading the binary each time.
+hot_hlint: ##@Linters Run HLint through the drasil packages. Uses the latest HLint version, downloading the binary each time.
 	curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
+
+shellcheck: ##@Linters Run ShellCheck static analyzer on all shell script files.
+	find . -type f -name '*.sh' -exec shellcheck {} +
 
 docs: check_stack ##@Documentation Create Haddock documentation of all Drasil modules. Set FULL=1 if you want to additionally test Haddock generation for website deployment.
 	FULL="$(FULL)" DOCS_FOLDER="$(DOCS_FOLDER)" GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh
@@ -575,4 +578,4 @@ help_packages: ##@Help Lists all packages.
 		echo "  $$package"; \
 	done
 
-.PHONY: help clean clean_artifacts cleanArtifacts gool code deps hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all install $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+.PHONY: help clean clean_artifacts cleanArtifacts gool code deps hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all install examples tracegraphs doxygen $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

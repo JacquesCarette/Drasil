@@ -1,27 +1,29 @@
 {-# LANGUAGE TypeFamilies, Rank2Types #-}
 
 -- Performs code analysis on the GOOL code
-module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
+module Drasil.GOOL.CodeInfo (CodeInfo(..)) where
 
-import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
-  SMethod, OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..),
-  BlockSym(..), TypeSym(..), OOTypeSym(..), TypeElim(..), VariableSym(..),
-  OOVariableSym(..), VariableElim(..), ValueSym(..), OOValueSym, Argument(..),
-  Literal(..), MathConstant(..), VariableValue(..), OOVariableValue,
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), OOValueExpression(..), InternalValueExp(..),
-  FunctionSym(..), GetSet(..), List(..), InternalList(..), ThunkSym(..),
-  VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
-  ThunkAssign(..), StatementSym(..), AssignStatement(..), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..),
-  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
-import GOOL.Drasil.CodeType (CodeType(Void))
-import GOOL.Drasil.AST (ScopeTag(..), qualName)
-import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
-import GOOL.Drasil.Helpers (toCode, toState)
-import GOOL.Drasil.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
+import Drasil.GOOL.InterfaceCommon (MSBody, VSType, SValue, MSStatement, 
+  SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
+  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
+  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
+import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
+  ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
+  OOVariableSym(..), PermanenceSym(..), StateVarSym(..), OOValueSym,
+  OOVariableValue, OOValueExpression(..), InternalValueExp(..), FunctionSym(..),
+  GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
+  StrategyPattern(..))
+import Drasil.GOOL.CodeType (CodeType(Void))
+import Drasil.GOOL.AST (ScopeTag(..), qualName)
+import Drasil.GOOL.CodeAnalysis (ExceptionType(..))
+import Drasil.GOOL.Helpers (toCode, toState)
+import Drasil.GOOL.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   lensCStoMS, lensMStoVS, lensVStoFS, lensCStoFS, modifyReturn, 
   setClassName, getClassName, setModuleName, getModuleName, addClass, 
   updateClassMap, addException, updateMethodExcMap, updateCallMap, addCall, 
@@ -47,7 +49,8 @@ instance Applicative CodeInfo where
 instance Monad CodeInfo where
   CI x >>= f = f x
 
-instance OOProg CodeInfo where
+instance SharedProg CodeInfo
+instance OOProg CodeInfo
 
 instance ProgramSym CodeInfo where
   type Program CodeInfo = GOOLState
@@ -195,7 +198,6 @@ instance Comparison CodeInfo where
 instance ValueExpression CodeInfo where
   inlineIf = execute3
   funcAppMixedArgs n _ = currModCall n
-  selfFuncAppMixedArgs = funcAppMixedArgs
   extFuncAppMixedArgs l n _ vs ns = do
     sequence_ vs
     executePairList ns
@@ -207,6 +209,7 @@ instance ValueExpression CodeInfo where
   notNull = execute1
 
 instance OOValueExpression CodeInfo where
+  selfFuncAppMixedArgs = funcAppMixedArgs
   newObjMixedArgs ot vs ns = do
     sequence_ vs
     executePairList ns
@@ -286,11 +289,13 @@ instance DeclStatement CodeInfo where
   listDecDef             _ = zoom lensMStoVS . executeList
   arrayDec             _ _ = noInfo
   arrayDecDef            _ = zoom lensMStoVS . executeList
+  constDecDef            _ = zoom lensMStoVS . execute1
+  funcDecDef           _ _ = execute1
+
+instance OODeclStatement CodeInfo where
   objDecDef              _ = zoom lensMStoVS . execute1
   objDecNew              _ = zoom lensMStoVS . executeList
   extObjDecNew         _ _ = zoom lensMStoVS . executeList
-  constDecDef            _ = zoom lensMStoVS . execute1
-  funcDecDef           _ _ = execute1
 
 instance IOStatement CodeInfo where
   print        = zoom lensMStoVS . execute1
@@ -328,12 +333,14 @@ instance FuncAppStatement CodeInfo where
   inOutCall n vs _ _ = zoom lensMStoVS $ do
     sequence_ vs
     addCurrModCall n
-  selfInOutCall n vs _ _ = zoom lensMStoVS $ do
-    sequence_ vs
-    addCurrModCall n
   extInOutCall l n vs _ _ = zoom lensMStoVS $ do
     sequence_ vs
     addExternalCall l n
+
+instance OOFuncAppStatement CodeInfo where
+  selfInOutCall n vs _ _ = zoom lensMStoVS $ do
+    sequence_ vs
+    addCurrModCall n
 
 instance CommentStatement CodeInfo where
   comment _ = noInfo
@@ -363,9 +370,6 @@ instance ControlStatement CodeInfo where
     _ <- cb
     noInfo
 
-instance StatePattern CodeInfo where
-  checkState _ = evalConds
-
 instance ObserverPattern CodeInfo where
   notifyObservers f _ = execute1 (zoom lensMStoVS f)
   
@@ -387,6 +391,17 @@ instance ParameterSym CodeInfo where
 
 instance MethodSym CodeInfo where
   type Method CodeInfo = ()
+  docMain = updateMEMandCM "main"
+  function n _ _ _ = updateMEMandCM n
+  mainFunction = updateMEMandCM "main"
+  docFunc _ _ _ f = do
+    _ <- f
+    noInfo
+
+  inOutFunc      n _ _ _ _     = updateMEMandCM n
+  docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
+
+instance OOMethodSym CodeInfo where
   method n _ _ _ _ = updateMEMandCM n
   getMethod _ = noInfo
   setMethod _ = noInfo
@@ -397,22 +412,8 @@ instance MethodSym CodeInfo where
     modify (updateCallMap cn . updateMethodExcMap cn)
     noInfo
 
-  docMain = updateMEMandCM "main"
-
-  function n _ _ _ = updateMEMandCM n
-  mainFunction = updateMEMandCM "main"
-
-  docFunc _ _ _ f = do
-    _ <- f
-    noInfo
-
   inOutMethod    n _ _ _ _ _   = updateMEMandCM n
-
   docInOutMethod n _ _ _ _ _ _ = updateMEMandCM n
-
-  inOutFunc      n _ _ _ _     = updateMEMandCM n
-
-  docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
 instance StateVarSym CodeInfo where
   type StateVar CodeInfo = ()
@@ -422,15 +423,17 @@ instance StateVarSym CodeInfo where
 
 instance ClassSym CodeInfo where
   type Class CodeInfo = ()
-  buildClass _ _ ms = do
+  buildClass _ _ cs ms = do
     n <- zoom lensCStoFS getModuleName
-    implementingClass n [] [] ms
-  extraClass n _ _ ms = do
+    implementingClass n [] [] cs ms
+  extraClass n _ _ cs ms = do
     modify (setClassName n)
+    mapM_ (zoom lensCStoMS) cs
     mapM_ (zoom lensCStoMS) ms
     noInfo
-  implementingClass n _ _ ms = do
+  implementingClass n _ _ cs ms = do
     modify (addClass n . setClassName n)
+    mapM_ (zoom lensCStoMS) cs
     mapM_ (zoom lensCStoMS) ms
     noInfo
 
@@ -440,10 +443,10 @@ instance ClassSym CodeInfo where
 
 instance ModuleSym CodeInfo where
   type Module CodeInfo = ()
-  buildModule n _ fs cs = do
+  buildModule n _ funcs classes = do
     modify (setModuleName n)
-    mapM_ (zoom lensFStoCS) cs 
-    mapM_ (zoom lensFStoMS) fs
+    mapM_ (zoom lensFStoCS) classes 
+    mapM_ (zoom lensFStoMS) funcs
     modifyReturn (updateClassMap n) (toCode ())
 
 -- Helpers

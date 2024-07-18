@@ -4,7 +4,7 @@ module Language.Drasil.Code.Imperative.Doxygen.Import (
 
 import Utils.Drasil (blank)
 
-import GOOL.Drasil (GOOLState, headers, mainMod)
+import Drasil.GOOL (GOOLState, headers, mainMod)
 
 import Language.Drasil.Choices (Verbosity(..))
 

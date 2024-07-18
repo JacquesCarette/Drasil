@@ -6,7 +6,7 @@ module Drasil.Website.CaseStudy where
 import Language.Drasil hiding (E, Var)
 import Language.Drasil.Code
 import SysInfo.Drasil
-import GOOL.Drasil (CodeType(..))
+import Drasil.GOOL (CodeType(..))
 
 import Drasil.Website.Example (examples, Example(..))
 import qualified Drasil.Projectile.Choices as Projectile (codedDirName)

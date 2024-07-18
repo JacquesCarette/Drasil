@@ -1,4 +1,4 @@
-module GOOL.Drasil.CodeAnalysis (
+module Drasil.GOOL.CodeAnalysis (
   ExceptionType(..), Exception(loc, exc), printExc, hasLoc, exception, stdExc,
   HasException(..)
 ) where

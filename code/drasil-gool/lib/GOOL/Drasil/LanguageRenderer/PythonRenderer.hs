@@ -594,7 +594,7 @@ instance ControlStatement PythonCode where
 
   throw = G.throw pyThrow Empty
 
-  ifCond = G.ifCond parens pyBodyStart pySpace pyElseIf pyBodyEnd
+  ifCond = G.ifCond id pyBodyStart pySpace pyElseIf pyBodyEnd
   switch = switchAsIf
 
   ifExists = M.ifExists

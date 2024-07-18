@@ -5,7 +5,7 @@ module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction,
   buildModule', call', listSizeFunc, setAddFunc, listAccessFunc', string, constDecDef,
   docInOutFunc, bindingError, extFuncAppMixedArgs, notNull, listDecDef, setDecDef,
-  destructorError, stateVarDef, constVar, litArray, litSet, listSetFunc, extraClass,
+  destructorError, stateVarDef, constVar, litArray, litSet, listSetFunc, litSetFunc, extraClass,
   listAccessFunc, doubleRender, double, openFileR, openFileW, stateVar, self,
   multiAssign, multiReturn, listDec, setDec, funcDecDef, inOutCall, forLoopError,
   mainBody, inOutFunc, docInOutFunc', boolRender, bool, floatRender, float, stringRender',
@@ -42,7 +42,7 @@ import qualified GOOL.Drasil.RendererClasses as S (RenderBody(multiBody),
   RenderValue(call), RenderStatement(stmt), InternalAssignStmt(multiAssign),
   InternalControlStmt(multiReturn), MethodTypeSym(construct),
   RenderMethod(intFunc), RenderClass(intClass, inherit), RenderMod(modFromData),
-  InternalListFunc(listSizeFunc, listAddFunc, listAppendFunc), InternalSetFunc(setAddFunc))
+  InternalListFunc(listSizeFunc, listAddFunc, listAppendFunc))
 import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..),
   PermElim(..), BodyElim(..), InternalTypeElim(..), InternalVarElim(variable),
   ValueElim(..), StatementElim(statement), ScopeElim(..), MethodElim(..),
@@ -349,6 +349,10 @@ litSet :: (RenderSym r) => (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
 litSet f t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t) 
   (f $ valueList elems))
 
+litSetFunc :: (RenderSym r) => String -> VSType r -> [SValue r] -> SValue r
+litSetFunc s t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t) 
+  (text s <> parens (valueList elems)))
+
 -- Python, C#, C++, and Swift--
 
 extraClass :: (RenderSym r) =>  Label -> Maybe Label -> [CSStateVar r] ->
@@ -547,11 +551,6 @@ listAdd l i v = do
 listAppend :: (RenderSym r) => SValue r -> SValue r -> SValue r
 listAppend l v = do
   f <- S.listAppendFunc l v
-  mkVal (RC.functionType f) (RC.function f)
-
-setAdd :: (RenderSym r) => SValue r -> SValue r -> SValue r
-setAdd l v = do
-  f <- S.setAddFunc l v
   mkVal (RC.functionType f) (RC.function f)
 
 -- | Convert an integer to an index in a 1-indexed language

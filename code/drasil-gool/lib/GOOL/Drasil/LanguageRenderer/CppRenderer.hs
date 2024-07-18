@@ -17,7 +17,7 @@ import GOOL.Drasil.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
+  ValueExpression(..), funcApp, extFuncApp, List(..), Set(..), InternalList(..),
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
@@ -35,7 +35,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalGetSet(..),
-  InternalListFunc(..), InternalSetFunc(..), RenderFunction(..), FunctionElim(functionType),
+  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   RenderStatement(..), StatementElim(statementTerm), RenderScope(..),
   ScopeElim, MSMthdType, MethodTypeSym(..), RenderParam(..),
@@ -443,6 +443,9 @@ instance (Pair p) => List (p CppSrcCode CppHdrCode) where
   listSet = pair3 listSet listSet
   indexOf = pair2 indexOf indexOf
 
+instance (Pair p) => Set (p CppSrcCode CppHdrCode) where
+  contains = pair2 contains contains
+
 instance (Pair p) => InternalList (p CppSrcCode CppHdrCode) where
   listSlice' b e s vr vl = pair2
     (listSlice' (fmap (onStateValue pfst) b) (fmap (onStateValue pfst) e)
@@ -461,9 +464,6 @@ instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where
   listAppendFunc = pair2 listAppendFunc listAppendFunc
   listAccessFunc = pair2 listAccessFunc listAccessFunc
   listSetFunc = pair3 listSetFunc listSetFunc
-
-instance (Pair p) => InternalSetFunc (p CppSrcCode CppHdrCode) where
-  setAddFunc = pair2 setAddFunc setAddFunc
 
 instance ThunkSym (p CppSrcCode CppHdrCode) where
   type Thunk (p CppSrcCode CppHdrCode) = CommonThunk VS
@@ -1020,7 +1020,7 @@ instance ProgramSym CppSrcCode where
   prog n st = onStateList (onCodeList (progD n st)) . map (zoom lensGStoFS)
 
 instance RenderSym CppSrcCode
-instance InternalSetFunc CppSrcCode
+
 instance FileSym CppSrcCode where
   type File CppSrcCode = FileData
   fileDoc m = do
@@ -1348,6 +1348,9 @@ instance List CppSrcCode where
   listAccess = G.listAccess
   listSet = G.listSet
   indexOf l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBegin l
+
+instance Set CppSrcCode where
+  contains l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBegin l
 
 instance InternalList CppSrcCode where
   listSlice' = M.listSlice
@@ -1727,8 +1730,6 @@ instance Monad CppHdrCode where
 
 instance RenderSym CppHdrCode
 
-instance InternalSetFunc CppHdrCode
-
 instance FileSym CppHdrCode where
   type File CppHdrCode = FileData
   fileDoc m = do
@@ -2028,6 +2029,9 @@ instance List CppHdrCode where
   listAccess _ _ = mkStateVal void empty
   listSet _ _ _ = mkStateVal void empty
   indexOf _ _ = mkStateVal void empty
+
+instance Set CppHdrCode where
+  contains _ _ = mkStateVal void empty
 
 instance InternalList CppHdrCode where
   listSlice' _ _ _ _ _ = toState $ toCode empty

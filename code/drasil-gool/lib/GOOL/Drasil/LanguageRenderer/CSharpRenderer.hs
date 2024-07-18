@@ -16,7 +16,7 @@ import GOOL.Drasil.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, List(..), InternalList(..), ThunkSym(..), VectorType(..),
+  extFuncApp, List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
   VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
   IOStatement(..), StringStatement(..), FuncAppStatement(..),
@@ -33,7 +33,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalGetSet(..),
-  InternalListFunc(..), InternalSetFunc(..),  RenderFunction(..), FunctionElim(functionType),
+  InternalListFunc(..),  RenderFunction(..), FunctionElim(functionType),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   RenderStatement(..), StatementElim(statementTerm), RenderScope(..),
   ScopeElim, MethodTypeSym(..), RenderParam(..), ParamElim(parameterName,
@@ -68,7 +68,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   modFromData, fileDoc, fileFromData, defaultOptSpace)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
-  extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
+  extFuncAppMixedArgs, indexOf, contains, listAddFunc, discardFileLine, intClass, 
   arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, docMain, 
   mainFunction, buildModule', string, constDecDef, docInOutFunc, bindingError, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, listSetFunc, 
@@ -131,8 +131,6 @@ instance ProgramSym CSharpCode where
     pure $ onCodeList (progD n st) fs
 
 instance RenderSym CSharpCode
-
-instance InternalSetFunc CSharpCode
 
 instance FileSym CSharpCode where
   type File CSharpCode = FileData
@@ -427,7 +425,10 @@ instance List CSharpCode where
   listAccess = G.listAccess
   listSet = G.listSet
   indexOf = CP.indexOf csIndex
-  
+
+instance Set CSharpCode where
+  contains = CP.contains csContains
+
 instance InternalList CSharpCode where
   listSlice' = M.listSlice
 
@@ -765,6 +766,7 @@ csReadLine = "ReadLine"
 csWrite = "Write"
 csWriteLine = "WriteLine"
 csIndex = "IndexOf"
+csContains = "Contains"
 csListAdd = "Insert"
 csListAppend = "Add"
 csClose = "Close"

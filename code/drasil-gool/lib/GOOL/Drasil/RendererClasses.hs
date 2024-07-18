@@ -5,7 +5,7 @@ module GOOL.Drasil.RendererClasses (
   RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), RenderType(..), 
   InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, BinaryOpSym(..), 
   OpElim(..), RenderVariable(..), InternalVarElim(..), RenderValue(..), 
-  ValueElim(..), InternalGetSet(..), InternalListFunc(..), InternalSetFunc(..), RenderFunction(..),
+  ValueElim(..), InternalGetSet(..), InternalListFunc(..), RenderFunction(..),
   FunctionElim(..), InternalAssignStmt(..), InternalIOStmt(..),
   InternalControlStmt(..), RenderStatement(..), StatementElim(..),
   RenderScope(..), ScopeElim(..), MSMthdType, MethodTypeSym(..),
@@ -41,7 +41,7 @@ class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r,
   InternalValueExp r, GetSet r, List r, InternalList r, VectorExpression r,
   ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r,
   RenderBlock r, BlockElim r, RenderBody r, BodyElim r, RenderClass r,
-  ClassElim r, RenderFile r, InternalGetSet r, InternalSetFunc r, InternalListFunc r,
+  ClassElim r, RenderFile r, InternalGetSet r, InternalListFunc r,
   RenderFunction r, FunctionElim r, RenderMethod r, MethodElim r, RenderMod r,
   ModuleElim r, OpElim r, RenderParam r, ParamElim r, PermElim r, RenderScope r,
   ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r,
@@ -179,10 +179,6 @@ class InternalListFunc r where
   listAppendFunc :: SValue r -> SValue r -> VSFunction r
   listAccessFunc :: VSType r -> SValue r -> VSFunction r
   listSetFunc    :: SValue r -> SValue r -> SValue r -> VSFunction r
-
-class InternalSetFunc r where
-  setAddFunc :: SValue r -> SValue r -> VSFunction r
-  setSizeFunc :: SValue r -> VSFunction r
 
 class RenderFunction r where
   funcFromData :: Doc -> VSType r -> VSFunction r

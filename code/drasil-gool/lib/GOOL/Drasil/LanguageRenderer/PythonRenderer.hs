@@ -257,7 +257,7 @@ instance OpElim PythonCode where
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
   var = G.var
-  constant = var
+  constant n = var (map toUpper n)
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
   arrayElem i = G.arrayElem (litInt i)
 

@@ -212,6 +212,7 @@ helloIfBody = addComments "If body" (body [
     objDecDef (var "myObj" char) (litChar 'o'),
     constDecDef (constant "myConst" string) (litString "Imconstant"),
 
+    printLn (valueOf $ constant "myConst" string),
     printLn (valueOf $ var "a" int),
     printLn (valueOf $ var "b" int),
     printLn (valueOf $ var "c" int),

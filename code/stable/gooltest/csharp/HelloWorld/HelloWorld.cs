@@ -277,6 +277,7 @@ public class HelloWorld {
             List<int> myList = new List<int>(5);
             char myObj = 'o';
             const string myConst = "Imconstant";
+            Console.WriteLine(myConst);
             Console.WriteLine(a);
             Console.WriteLine(b);
             Console.WriteLine(c);

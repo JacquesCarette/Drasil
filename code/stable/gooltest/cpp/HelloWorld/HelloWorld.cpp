@@ -292,6 +292,7 @@ int main(int argc, const char *argv[]) {
         vector<int> myList(5);
         char myObj = 'o';
         const string myConst = "Imconstant";
+        std::cout << myConst << std::endl;
         std::cout << a << std::endl;
         std::cout << b << std::endl;
         std::cout << c << std::endl;

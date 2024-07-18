@@ -119,6 +119,7 @@ else if b == 5 {
     var myList: [Int] = []
     var myObj: Character = "o"
     let myConst: String = "Imconstant"
+    print(myConst)
     print(a)
     print(b)
     print(c)

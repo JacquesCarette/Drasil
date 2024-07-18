@@ -168,6 +168,7 @@ public class HelloWorld {
             ArrayList<Integer> myList = new ArrayList<Integer>(5);
             char myObj = 'o';
             final String myConst = "Imconstant";
+            System.out.println(myConst);
             System.out.println(a);
             System.out.println(b);
             System.out.println(c);

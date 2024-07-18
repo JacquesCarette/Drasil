@@ -49,10 +49,10 @@ import GOOL.Drasil.LanguageRenderer (classDec, dot, ifLabel, elseLabel,
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, fabs, log10, 
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, 
   classVar, listSetFunc, castObj, dynamic, break, continue, addComments, 
-  commentedMod, commentedItem)
+  commentedMod, commentedItem, var)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal, 
   mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, 
-  unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr)
+  unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkStaticVar)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
@@ -262,7 +262,8 @@ instance VariableSym PythonCode where
   arrayElem i = G.arrayElem (litInt i)
 
 instance OOVariableSym PythonCode where
-  staticVar = G.staticVar
+  staticVar' c n t = if c then mkStaticVar n t (R.var (map toUpper n))
+                          else G.staticVar n t
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
   classVar = CP.classVar R.classVar
   extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify . 

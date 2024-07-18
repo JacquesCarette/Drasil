@@ -5,5 +5,5 @@
 
 ## \brief Structure for holding the constant values
 class Constants:
-    AbsTol = 1.0e-10
-    RelTol = 1.0e-10
+    ABSTOL = 1.0e-10
+    RELTOL = 1.0e-10

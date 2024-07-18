@@ -279,7 +279,7 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   arrayElem i = pair1 (arrayElem i) (arrayElem i)
 
 instance (Pair p) => OOVariableSym (p CppSrcCode CppHdrCode) where
-  staticVar n = pair1 (staticVar n) (staticVar n)
+  staticVar' c n = pair1 (staticVar' c n) (staticVar' c n)
   self = on2StateValues pair self self
   classVar = pair2 classVar classVar
   extClassVar = pair2 extClassVar extClassVar
@@ -1163,7 +1163,7 @@ instance VariableSym CppSrcCode where
   arrayElem i = G.arrayElem (litInt i)
 
 instance OOVariableSym CppSrcCode where
-  staticVar = G.staticVar
+  staticVar' _ = G.staticVar
   self = C.self
   classVar c' v'= do
     c <- c'
@@ -1862,7 +1862,7 @@ instance VariableSym CppHdrCode where
   arrayElem _ _ = mkStateVar "" void empty
 
 instance OOVariableSym CppHdrCode where
-  staticVar = G.staticVar
+  staticVar' _ = G.staticVar
   self = mkStateVar "" void empty
   classVar _ _ = mkStateVar "" void empty
   extClassVar _ _ = mkStateVar "" void empty

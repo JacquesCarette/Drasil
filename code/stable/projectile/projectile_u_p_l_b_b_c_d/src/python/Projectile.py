@@ -92,8 +92,8 @@ class InputParameters:
 
 ## \brief Structure for holding the constant values
 class Constants:
-    g = 9.8
-    epsilon = 2.0e-2
+    G = 9.8
+    EPSILON = 2.0e-2
 
 ## \brief Calculates flight duration: the time when the projectile lands (s)
 # \param inParams structure holding the input values
@@ -106,7 +106,7 @@ def func_t_flight(inParams):
     print("  }", file=outfile)
     outfile.close()
     
-    return 2.0 * inParams.v_launch * math.sin(inParams.theta) / Constants.g
+    return 2.0 * inParams.v_launch * math.sin(inParams.theta) / Constants.G
 
 ## \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
 # \param inParams structure holding the input values
@@ -119,7 +119,7 @@ def func_p_land(inParams):
     print("  }", file=outfile)
     outfile.close()
     
-    return 2.0 * inParams.v_launch ** 2.0 * math.sin(inParams.theta) * math.cos(inParams.theta) / Constants.g
+    return 2.0 * inParams.v_launch ** 2.0 * math.sin(inParams.theta) * math.cos(inParams.theta) / Constants.G
 
 ## \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
 # \param inParams structure holding the input values
@@ -153,7 +153,7 @@ def func_s(inParams, d_offset):
     print("  }", file=outfile)
     outfile.close()
     
-    if (math.fabs(d_offset / inParams.p_target) < Constants.epsilon):
+    if (math.fabs(d_offset / inParams.p_target) < Constants.EPSILON):
         return "The target was hit."
     elif (d_offset < 0.0):
         return "The projectile fell short."

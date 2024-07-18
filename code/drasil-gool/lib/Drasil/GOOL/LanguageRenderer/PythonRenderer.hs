@@ -68,6 +68,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
+  setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
   increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
   buildClass, implementingClass, commentedClass, modFromData, fileDoc,
@@ -477,13 +478,6 @@ instance InternalListFunc PythonCode where
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
 
-instance InternalSetFunc PythonCode where
-  setSizeFunc l = do
-    f <- funcApp pyListSize int [l]
-    funcFromData (RC.value f) int
-  setAddFunc _ = G.setAddFunc pySetAdd
-  --fromListFunc _ = G.listAppendFunc pySet
-
 instance ThunkSym PythonCode where
   type Thunk PythonCode = CommonThunk VS
 
@@ -859,9 +853,8 @@ pySplit = "split"
 pyRange = "range"
 pyRstrip = "rstrip"
 pyMath = "math"
-pyIn = "in"
+pyIn = "__contains__"
 pySetAdd = "Add"
-pySet = "set"
 
 pyDef, pyLambdaDec, pyElseIf, pyRaise, pyExcept :: Doc
 pyDef = text "def"

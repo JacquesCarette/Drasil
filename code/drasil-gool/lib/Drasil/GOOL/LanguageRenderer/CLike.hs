@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | Implementations for C-like renderers are defined here.
-module GOOL.Drasil.LanguageRenderer.CLike (charRender, float, double, char, 
+module Drasil.GOOL.LanguageRenderer.CLike (charRender, float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
   decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
@@ -10,32 +10,32 @@ module GOOL.Drasil.LanguageRenderer.CLike (charRender, float, double, char,
 
 import Utils.Drasil (indent)
 
-import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.InterfaceCommon (Label, Library, MSBody, VSType, SVariable, 
+import Drasil.GOOL.CodeType (CodeType(..))
+import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, VSType, SVariable, 
   SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall, 
   TypeElim(getType, getTypeString), 
   VariableElim(..), ValueSym(Value, valueType), ScopeSym(..))
-import qualified GOOL.Drasil.InterfaceCommon as IC (TypeSym(bool, float),
+import qualified Drasil.GOOL.InterfaceCommon as IC (TypeSym(bool, float),
   ValueExpression(funcAppMixedArgs), DeclStatement(varDec, varDecDef))
-import GOOL.Drasil.InterfaceGOOL (PermanenceSym(..), extNewObj, ($.))
-import qualified GOOL.Drasil.InterfaceGOOL as IG (OOTypeSym(obj),
+import Drasil.GOOL.InterfaceGOOL (PermanenceSym(..), extNewObj, ($.))
+import qualified Drasil.GOOL.InterfaceGOOL as IG (OOTypeSym(obj),
   OOValueExpression(newObjMixedArgs))
-import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, RenderType(..),
+import Drasil.GOOL.RendererClasses (MSMthdType, RenderSym, RenderType(..),
   InternalVarElim(variableBind), RenderValue(valFromData), 
   ValueElim(valuePrec), RenderMethod(intMethod))
-import qualified GOOL.Drasil.RendererClasses as S (
+import qualified Drasil.GOOL.RendererClasses as S (
   InternalListFunc(listSizeFunc), RenderStatement(stmt, loopStmt))
-import qualified GOOL.Drasil.RendererClasses as RC (PermElim(..), BodyElim(..), 
+import qualified Drasil.GOOL.RendererClasses as RC (PermElim(..), BodyElim(..), 
   InternalTypeElim(..), InternalVarElim(variable), ValueElim(value), 
   StatementElim(statement))
-import GOOL.Drasil.AST (Binding(..), Terminator(..))
-import GOOL.Drasil.Helpers (angles, toState, onStateValue)
-import GOOL.Drasil.LanguageRenderer (forLabel, whileLabel, containing)
-import qualified GOOL.Drasil.LanguageRenderer as R (switch, increment, 
+import Drasil.GOOL.AST (Binding(..), Terminator(..))
+import Drasil.GOOL.Helpers (angles, toState, onStateValue)
+import Drasil.GOOL.LanguageRenderer (forLabel, whileLabel, containing)
+import qualified Drasil.GOOL.LanguageRenderer as R (switch, increment, 
   decrement, this', this)
-import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
+import Drasil.GOOL.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
   mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
-import GOOL.Drasil.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName,
+import Drasil.GOOL.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName,
   useVarName)
 
 import Prelude hiding (break,(<>))

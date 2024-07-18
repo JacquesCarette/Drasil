@@ -8,8 +8,7 @@ module Language.Drasil.Generate (
   gen, genDot, genCode,
   -- * Types (Printing Options)
   DocType(..), DocSpec(DocSpec), DocChoices(DC),
-  Format(TeX, HTML, Jupyter, Markdown, MDBook),
-  MDFlavour(GitHub),
+  Format(TeX, HTML, Jupyter, MDBook),
   -- * Constructor
   docChoices) where
 
@@ -26,8 +25,8 @@ import Language.Drasil
 import Drasil.DocLang (mkGraphInfo)
 import SysInfo.Drasil (SystemInformation)
 import Language.Drasil.Printers (DocType(SRS, Website, Lesson), makeCSS, genHTML, 
-  genTeX, Format(TeX, HTML, Jupyter, Markdown, MDBook), genJupyter, genMD, genMDBook, 
-  PrintingInformation, outputDot, makeBook, MDFlavour(GitHub), makeRequirements)
+  genTeX, Format(TeX, HTML, Jupyter, MDBook), genJupyter, genMDBook, 
+  PrintingInformation, outputDot, makeBook, makeRequirements)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD,
   unPP, unJP, unCSP, unCPPP, unSP)
@@ -60,7 +59,6 @@ prntDoc d pinfo fn dtype fmt =
     TeX               -> do prntDoc' dtype (show dtype ++ "/PDF") fn TeX d pinfo
                             prntMake $ DocSpec (DC dtype [TeX]) fn
     Jupyter           -> do prntDoc' dtype (show dtype ++ "/Jupyter") fn Jupyter d pinfo
-    (Markdown GitHub) -> do prntDoc' dtype (show dtype ++ "/Markdown") fn (Markdown GitHub) d pinfo
     MDBook            -> do prntDoc' dtype (show dtype ++ "/mdBook") fn MDBook d pinfo
                             prntMake $ DocSpec (DC dtype [MDBook]) fn
                             prntBook dtype d pinfo
@@ -69,7 +67,7 @@ prntDoc d pinfo fn dtype fmt =
 
 -- | Helper function to produce an error when an incorrect SRS format is used. 
 srsFormatError :: a
-srsFormatError = error "We can only write TeX/HTML/JSON/Markdown(GitHub)/MDBook (for now)."
+srsFormatError = error "We can only write TeX/HTML/JSON/MDBook (for now)."
 
 -- | Helper that takes the document type, directory name, document name, format of documents,
 -- document information and printing information. Then generates the document file.
@@ -95,7 +93,6 @@ prntDoc' dt dt' fn format body' sm = do
     getExt  TeX         = ".tex"
     getExt  HTML        = ".html"
     getExt  Jupyter     = ".ipynb"
-    getExt (Markdown _) = ".md"
     getExt _            = srsFormatError
 
 -- | Helper for writing the Makefile(s).
@@ -141,7 +138,6 @@ writeDoc :: PrintingInformation -> DocType -> Format -> Filename -> Document -> 
 writeDoc s _  TeX               _  doc = genTeX doc s
 writeDoc s _  HTML              fn doc = genHTML s fn doc
 writeDoc s dt Jupyter           _  doc = genJupyter s dt doc
-writeDoc s _  (Markdown GitHub) _  doc = genMD s doc
 writeDoc _ _  _                 _  _   = srsFormatError
 
 -- | Renders multi-page documents.

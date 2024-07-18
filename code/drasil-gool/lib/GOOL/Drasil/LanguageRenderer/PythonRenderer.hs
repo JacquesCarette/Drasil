@@ -32,7 +32,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalGetSet(..), 
-  InternalListFunc(..), InternalSetFunc(..), RenderFunction(..), 
+  InternalListFunc(..), RenderFunction(..), 
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..), 
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm), 
   RenderScope(..), ScopeElim, MethodTypeSym(..), RenderParam(..), 
@@ -60,7 +60,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
-  setFunc, listAppendFunc, setAddFunc, setAdd, stmt, loopStmt, emptyStmt, assign, subAssign,
+  setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
   increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
   buildClass, implementingClass, commentedClass, modFromData, fileDoc,
@@ -435,8 +435,6 @@ instance List PythonCode where
   indexOf = CP.indexOf pyIndex
 
 instance Set PythonCode where
-  setSize = CP.listSize
-  setAdd = G.setAdd
   --fromList =
   contains = CP.contains pyIn
 
@@ -456,13 +454,6 @@ instance InternalListFunc PythonCode where
   listAppendFunc _ = G.listAppendFunc pyAppendFunc
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
-
-instance InternalSetFunc PythonCode where
-  setSizeFunc l = do
-    f <- funcApp pyListSize int [l]
-    funcFromData (RC.value f) int
-  setAddFunc _ = G.setAddFunc pySetAdd
-  --fromListFunc _ = G.listAppendFunc pySet
 
 instance ThunkSym PythonCode where
   type Thunk PythonCode = CommonThunk VS
@@ -822,7 +813,7 @@ pyInputFunc = text "input()" -- raw_input() for < Python 3.0
 pyPrintFunc = text printLabel
 
 pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyOpen, pyClose, 
-  pyRead, pyWrite, pyAppend, pySplit, pyRange, pyRstrip, pyMath, pyIn, pySetAdd, pySet :: String
+  pyRead, pyWrite, pyAppend, pySplit, pyRange, pyRstrip, pyMath, pyIn, pySetAdd :: String
 pyListSize = "len"
 pyIndex = "index"
 pyInsert = "insert"
@@ -838,9 +829,8 @@ pySplit = "split"
 pyRange = "range"
 pyRstrip = "rstrip"
 pyMath = "math"
-pyIn = "in"
+pyIn = "__contains__"
 pySetAdd = "Add"
-pySet = "set"
 
 pyDef, pyLambdaDec, pyElseIf, pyRaise, pyExcept :: Doc
 pyDef = text "def"

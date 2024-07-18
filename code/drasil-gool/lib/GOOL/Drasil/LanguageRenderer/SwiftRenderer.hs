@@ -35,7 +35,7 @@ import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym,
   BodyElim, RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim,
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
   InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec, valueInt),
-  InternalGetSet(..), InternalListFunc(..), InternalSetFunc(..), RenderFunction(..),
+  InternalGetSet(..), InternalListFunc(..), RenderFunction(..),
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
   RenderScope(..), ScopeElim, MethodTypeSym(..), RenderParam(..),
@@ -423,8 +423,6 @@ instance ValueElim SwiftCode where
 instance InternalValueExp SwiftCode where
   objMethodCallMixedArgs' = G.objMethodCall
 
-instance InternalSetFunc SwiftCode
-
 instance FunctionSym SwiftCode where
   type Function SwiftCode = FuncData
   func = G.func
@@ -443,6 +441,9 @@ instance List SwiftCode where
   listAccess = G.listAccess
   listSet = G.listSet
   indexOf = swiftIndexOf
+
+instance Set SwiftCode where
+  contains = swiftIndexOf
 
 instance InternalList SwiftCode where
   listSlice' b e s vn vo = swiftListSlice vn vo b e (fromMaybe (litInt 1) s)

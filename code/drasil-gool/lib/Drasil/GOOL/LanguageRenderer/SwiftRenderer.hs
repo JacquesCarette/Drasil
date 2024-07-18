@@ -436,8 +436,6 @@ instance ValueElim SwiftCode where
 instance InternalValueExp SwiftCode where
   objMethodCallMixedArgs' = G.objMethodCall
 
-instance InternalSetFunc SwiftCode
-
 instance FunctionSym SwiftCode where
   type Function SwiftCode = FuncData
 
@@ -458,6 +456,9 @@ instance List SwiftCode where
   listAccess = G.listAccess
   listSet = G.listSet
   indexOf = swiftIndexOf
+
+instance Set SwiftCode where
+  contains = swiftIndexOf
 
 instance InternalList SwiftCode where
   listSlice' b e s vn vo = swiftListSlice vn vo b e (fromMaybe (litInt 1) s)

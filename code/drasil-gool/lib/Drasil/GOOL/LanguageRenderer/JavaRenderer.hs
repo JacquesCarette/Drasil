@@ -17,7 +17,7 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   Literal(..), litZero, MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..),
-  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  Set(..), InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
@@ -62,7 +62,7 @@ import qualified Drasil.GOOL.LanguageRenderer as R (sqrt, abs, log10,
   commentedMod, commentedItem)
 import Drasil.GOOL.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
   VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
-  binExprNumDbl', typeBinExpr)
+  binExprNumDbl', typeBinExpr, inPrec)
 import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
@@ -78,14 +78,14 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
 import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int, 
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
-  extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
+  extFuncAppMixedArgs, indexOf, contains, listAddFunc, discardFileLine, intClass, 
   funcType, arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, 
   docMain, mainFunction, buildModule', bindingError, listDecDef, 
-  destructorError, stateVarDef, constVar, litArray, litSet, call', listSizeFunc, 
+  destructorError, stateVarDef, constVar, litArray, litSetFunc, listSetFunc, call', listSizeFunc, 
   listAccessFunc', notNull, doubleRender, double, openFileR, openFileW, 
   stateVar, floatRender, float, string', intToIndex, indexToInt, global)
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (float, double, char, 
-  listType, void, notOp, andOp, orOp, inOp, self, litTrue, litFalse, litFloat, 
+  listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
   decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
   intFunc, multiAssignError, multiReturnError, multiTypeError)
@@ -267,7 +267,7 @@ instance BinaryOpSym JavaCode where
   moduloOp = G.moduloOp
   andOp = C.andOp
   orOp = C.orOp
-  inOp = C.inOp
+  inOp = inPrec jContains
 
 instance OpElim JavaCode where
   uOp = opDoc . unJC
@@ -327,10 +327,7 @@ instance Literal JavaCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray braces
-  litSet t es = do
-    zoom lensVStoMS $ modify (if null es then id else addLangImport $ utilImport
-      jSet)
-    newObj (setType t) [jAsSetFunc t es | not (null es)]
+  litSet = CP.litSetFunc "Set.of"
 
   litList t es = do
     zoom lensVStoMS $ modify (if null es then id else addLangImport $ utilImport
@@ -425,7 +422,7 @@ instance OOValueExpression JavaCode where
   libNewObjMixedArgs = C.libNewObjMixedArgs
 
 instance RenderValue JavaCode where
-  inputFunc = modify (addLangImportVS $ utilImport jScanner) >> mkStateVal 
+  inputFunc = modify (addLangImportVS $ utilImport jUtil) >> mkStateVal 
     (obj jScanner) (parens $ new' <+> jScanner' <> parens (jSystem jStdIn))
   printFunc = mkStateVal void (jSystem (jStdOut `access` printLabel))
   printLnFunc = mkStateVal void (jSystem (jStdOut `access` jPrintLn))
@@ -475,6 +472,9 @@ instance List JavaCode where
   listAccess = G.listAccess
   listSet = G.listSet
   indexOf = CP.indexOf jIndex
+
+instance Set JavaCode where
+  contains = CP.contains jContains
 
 instance InternalList JavaCode where
   listSlice' = M.listSlice
@@ -819,6 +819,8 @@ jBool' = "Boolean"
 jInteger = "Integer"
 jObject = "Object"
 jScanner = "Scanner"
+jUtil = "*"
+jContains = "contains"
 jPrintWriter = "PrintWriter"
 jFile = "File"
 jFileWriter = "FileWriter"
@@ -879,12 +881,12 @@ jSetType t = do
   t >>= (jSetType' . getType)
   where jSetType' Integer = typeFromData (Set Integer) 
           stInt (text stInt)
-        jSetType' Float = C.listType "" CP.float
+        jSetType' Float = C.listType "HashSet" CP.float
         jSetType' Double = C.listType "HashSet" CP.double
         jSetType' Boolean = typeFromData (Set Boolean) stBool (text stBool)
-        jSetType' _ = C.listType "" t
-        stInt = "" `containing` jInteger
-        stBool = "" `containing` jBool'
+        jSetType' _ = C.listType "HashSet" t
+        stInt = "HashSet" `containing` jInteger
+        stBool = "HashSet" `containing` jBool'
 
 jArrayType :: VSType JavaCode
 jArrayType = arrayType (obj jObject)

@@ -47,7 +47,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, RenderType(..),
   MethodTypeSym(mType), RenderParam(paramFromData), RenderMethod(commentedFunc),
   BlockCommentSym(..))
 import qualified Drasil.GOOL.RendererClassesCommon as S (RenderValue(call),
-  InternalListFunc (listAddFunc, listAppendFunc, listAccessFunc, listSetFunc), InternalSetFunc(setAddFunc),
+  InternalListFunc (listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
   RenderStatement(stmt), InternalIOStmt(..))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (BodyElim(..),
   BlockElim(..), InternalVarElim(variable), ValueElim(value, valueInt),

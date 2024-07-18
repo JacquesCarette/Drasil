@@ -95,7 +95,7 @@ import Control.Lens.Zoom (zoom)
 import Control.Monad (join)
 import Control.Monad.State (modify)
 import Data.List (intercalate, sort)
-import Data.Char (toUpper)
+import Data.Char (toUpper, isUpper, isLower)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty, quotes)
@@ -257,12 +257,12 @@ instance OpElim PythonCode where
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
   var = G.var
-  constant n = var (map toUpper n)
+  constant n = var $ toConstName n
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
   arrayElem i = G.arrayElem (litInt i)
 
 instance OOVariableSym PythonCode where
-  staticVar' c n t = if c then mkStaticVar n t (R.var (map toUpper n))
+  staticVar' c n t = if c then mkStaticVar n t (R.var (toConstName n))
                           else G.staticVar n t
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
   classVar = CP.classVar R.classVar
@@ -539,7 +539,7 @@ instance DeclStatement PythonCode where
   arrayDecDef = listDecDef
   constDecDef v e = do
     v' <- zoom lensMStoVS v
-    let n = map toUpper (variableName v')
+    let n = toConstName $ variableName v'
         newConst = constant n (pure (variableType v'))
     available <- varNameAvailable n
     if available
@@ -1032,3 +1032,10 @@ pyDocComment :: [String] -> Doc -> Doc -> Doc
 pyDocComment [] _ _ = empty
 pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid . 
   text) lns
+
+toConstName :: String -> String
+toConstName (s:s':ss) = if isLower s && isUpper s'
+                          then toUpper s : '_' : toUpper s' : toConstName ss
+                          else toUpper s : toConstName (s' : ss)
+toConstName (s:ss)    = toUpper s : toConstName ss
+toConstName ""        = ""

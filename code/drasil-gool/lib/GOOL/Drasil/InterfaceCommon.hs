@@ -40,7 +40,7 @@ class (VectorType r, VectorDecl r, VectorThunk r,
   IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r,
   ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r,
   VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
-  Comparison r, ValueExpression r, List r, TypeElim r, VariableElim r
+  Comparison r, ValueExpression r, List r, Set r, TypeElim r, VariableElim r
   ) => SharedProg r
 
 -- Shared between OO and Procedural --
@@ -274,13 +274,6 @@ class (ValueSym r) => List r where
   indexOf :: SValue r -> SValue r -> SValue r
 
 class (ValueSym r) => Set r where
-  --
-  setSize :: SValue r -> SValue r
-  -- set, element
-  setAdd :: SValue r -> SValue r -> SValue r
-  -- converts a list to a set
-  --fromList :: SValue r -> SValue r -> SValue r
-  -- set, element
   contains :: SValue r -> SValue r -> SValue r
 
 class (ValueSym r) => InternalList r where
@@ -496,6 +489,7 @@ convType Double = double
 convType Char = char
 convType String = string
 convType (List t) = listType (convType t)
+convType (Set t) = setType (convType t)
 convType (Array t) = arrayType (convType t)
 convType (Func ps r) = funcType (map convType ps) (convType r)
 convType Void = void

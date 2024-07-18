@@ -245,8 +245,6 @@ instance List CodeInfo where
   indexOf    = execute2
 
 instance Set CodeInfo where
-  setSize = execute1
-  setAdd = execute2
   contains = execute2
 
 instance InternalList CodeInfo where

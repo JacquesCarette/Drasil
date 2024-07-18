@@ -28,9 +28,10 @@ import qualified GOOL.Drasil.RendererClasses as S (
 import qualified GOOL.Drasil.RendererClasses as RC (BodyElim(..),
   StatementElim(statement))
 import GOOL.Drasil.Helpers (toCode, onStateValue, on2StateValues)
-import GOOL.Drasil.State (MS, lensMStoVS, genVarName, genLoopIndex)
+import GOOL.Drasil.State (MS, lensMStoVS, genVarName, genLoopIndex,
+  genVarNameIf)
 
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, isNothing)
 import Data.Functor ((<&>))
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, vcat)
@@ -77,12 +78,8 @@ listSlice beg end step vnew vold = do
   let mbStepV = valueInt stepV
 
   -- Generate fresh variable names if required
-  begName <- case (beg, mbStepV) of
-    (Nothing, Nothing) -> genVarName [] "begIdx"
-    _                  -> return ""
-  endName <- case (end, mbStepV) of
-    (Nothing, Nothing) -> genVarName [] "endIdx"
-    _                  -> return ""
+  begName <- genVarNameIf (isNothing beg && isNothing mbStepV) "begIdx"
+  endName <- genVarNameIf (isNothing end && isNothing mbStepV) "endIdx"
 
   let (setBeg, begVal) = makeSetterVal begName step' mbStepV beg (IC.litInt 0)    (IC.listSize vold #- IC.litInt 1)
       (setEnd, endVal) = makeSetterVal endName step' mbStepV end (IC.listSize vold) (IC.litInt (-1))

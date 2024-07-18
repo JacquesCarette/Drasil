@@ -78,11 +78,11 @@ import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
 import GOOL.Drasil.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
   getModuleImports, addModuleImportVS, getUsing, getLangImports, getLibImports,
-  addLibImportVS, useVarName, getMainDoc, genLoopIndex, genVarName)
+  addLibImportVS, useVarName, getMainDoc, genLoopIndex, genVarNameIf)
 
 import Control.Applicative (liftA2)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, isNothing)
 import Data.Functor ((<&>))
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
@@ -698,12 +698,8 @@ jlListSlice vn vo beg end step = do
   stepV <- zoom lensMStoVS step
 
   let mbStepV = valueInt stepV
-  bName <- case (beg, mbStepV) of
-            (Nothing, Nothing) -> genVarName [] "begIdx"
-            _                  -> return ""
-  eName <- case mbStepV of
-            Nothing -> genVarName [] "endIdx"
-            _       -> return ""
+  bName <- genVarNameIf (isNothing beg && isNothing mbStepV) "begIdx"
+  eName <- genVarNameIf (isNothing mbStepV) "endIdx"
 
   let begVar = var bName int
       endVar = var eName int

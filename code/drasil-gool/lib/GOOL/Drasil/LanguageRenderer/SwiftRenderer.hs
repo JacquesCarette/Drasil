@@ -96,7 +96,7 @@ import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getModuleName, getCurrMain, getMethodExcMap, getMainDoc, setThrowUsed,
   getThrowUsed, setErrorDefined, getErrorDefined, incrementLine, incrementWord,
   getLineIndex, getWordIndex, resetIndices, useVarName, genLoopIndex,
-  genVarName)
+  genVarNameIf)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Applicative (liftA2)
@@ -105,7 +105,7 @@ import Control.Monad.State (modify)
 import Data.Composition ((.:))
 import Data.List (intercalate, sort)
 import Data.Map (findWithDefault)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, isNothing)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, lbrace, rbrace, braces, brackets, colon, space, doubleQuotes)
 import qualified Text.PrettyPrint.HughesPJ as D (float)
@@ -1002,12 +1002,8 @@ swiftListSlice vn vo beg end step = do
   let mbStepV = valueInt stepV
 
   -- Generate fresh variable names if required
-  begName <- case (beg, mbStepV) of
-    (Nothing, Nothing) -> genVarName [] "begIdx"
-    _                  -> return ""
-  endName <- case (end, mbStepV) of
-    (Nothing, Nothing) -> genVarName [] "endIdx"
-    _                  -> return ""
+  begName <- genVarNameIf (isNothing beg && isNothing mbStepV) "begIdx"
+  endName <- genVarNameIf (isNothing end && isNothing mbStepV) "endIdx"
 
   let (setBeg, begVal) = M.makeSetterVal begName step mbStepV beg (litInt 0)    (listSize vo #- litInt 1)
       (setEnd, endVal) = M.makeSetterVal endName step mbStepV end (listSize vo) (litInt (-1))

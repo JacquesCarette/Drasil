@@ -1,23 +1,22 @@
 -- | Defines main Markdown printer functions.
-module Language.Drasil.Markdown.Print(genMD, genMDBook, pSpec) where
+module Language.Drasil.Markdown.Print(genMDBook, pSpec) where
 
 import Prelude hiding (print, (<>))
 import qualified Prelude as P ((<>))
 import Text.PrettyPrint hiding (Str)
 import Data.List (transpose)
 import Data.List.Utils (replace)
-import qualified Data.Map as Map (empty)
 
 import qualified Language.Drasil as L
 
-import Language.Drasil.Printing.Import (makeDocument, makeProject)
+import Language.Drasil.Printing.Import (makeProject)
 import Language.Drasil.Printing.AST (ItemType(Flat, Nested),  
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
   Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, E, (:+:)), Label, 
   LinkType(Internal, Cite2, External), OverSymb(Hat), Fonts(Emph, Bold), 
   Spacing(Thin), Fence(Abs), Ops(Perc))
 import Language.Drasil.Printing.Citation (BibRef)
-import Language.Drasil.Printing.LayoutObj (Project(Project), Document(Document), 
+import Language.Drasil.Printing.LayoutObj (Project(Project), 
   LayoutObj(..), Filename, RefMap, File(File))
 import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, unders, 
   hat, hyph, dot, ($^$), vsep)
@@ -34,27 +33,6 @@ import Language.Drasil.TeX.Helpers(commandD, command2D, mkEnv)
 import Language.Drasil.Markdown.Helpers (heading, image, li, reflink,
   reflinkURI, reflinkInfo, caption, bold, ul, docLength, divTag, defnHTag, em,
   h, h')
-
------------------------------------------------------------------
-------------------------- Markdown SRS --------------------------
------------------------------------------------------------------
-
--- | Generate a Markdown SRS
-genMD :: PrintingInformation -> L.Document -> Doc
-genMD sm doc = build $ makeDocument sm doc
-
--- | Build a Markdown Doc, called by genMD
-build :: Document -> Doc
-build (Document t a c) = 
-  text "#" <+> pSpec rm t $^$
-  pSpec rm a $^$ 
-  print rm c 
-  where rm = Map.empty
-
--- | Called by build, uses 'printLO' to render the layout objects 
--- into a single Doc
-print :: RefMap -> [LayoutObj] -> Doc
-print rm = vsep . map (printLO rm)
 
 -----------------------------------------------------------------
 ------------------------- mdBook SRS ----------------------------
@@ -75,6 +53,11 @@ build' p@(Project _ _ rm d) =
 -- into a single Doc
 print' :: RefMap -> File -> (Filename, Doc)
 print' rm (File _ n _ c) = (n, print rm c)
+
+-- | Uses 'printLO' to render the layout objects 
+-- into a single Doc
+print :: RefMap -> [LayoutObj] -> Doc
+print rm = vsep . map (printLO rm)
 
 -- | Renders a 'SUMMARY.md' file
 printSummary :: RefMap -> [File] -> (Filename, Doc)

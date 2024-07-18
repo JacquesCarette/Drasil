@@ -4,7 +4,7 @@ module Main (main) where
 import GHC.IO.Encoding
 import Language.Drasil.Generate (gen, typeCheckSI, genDot, 
   DocSpec(DocSpec), DocType(SRS, Lesson), Format(..), docChoices,
-  dumpEverything, MDFlavour(GitHub))
+  dumpEverything)
 import Drasil.Projectile.Body (printSetting, srs, fullSI)
 import Drasil.Projectile.Choices (choiceCombos, genCodeWithChoices)
 
@@ -16,7 +16,7 @@ main = do
   setLocaleEncoding utf8
   dumpEverything fullSI printSetting ".drasil/"
   typeCheckSI fullSI
-  gen (DocSpec (docChoices SRS [HTML, TeX, Jupyter, Markdown GitHub, MDBook]) "Projectile_SRS") srs printSetting
+  gen (DocSpec (docChoices SRS [HTML, TeX, Jupyter, MDBook]) "Projectile_SRS") srs printSetting
   gen (DocSpec (docChoices Lesson []) "Projectile_Lesson") PL.nb PL.printSetting
   genCodeWithChoices choiceCombos
   genDot fullSI

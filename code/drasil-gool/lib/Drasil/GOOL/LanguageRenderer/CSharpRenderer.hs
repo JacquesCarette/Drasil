@@ -74,7 +74,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
-  extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
+  extFuncAppMixedArgs, indexOf, contains, listAddFunc, discardFileLine, intClass, 
   arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, docMain, 
   mainFunction, buildModule', string, constDecDef, docInOutFunc, bindingError, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, listSetFunc, 
@@ -442,7 +442,10 @@ instance List CSharpCode where
   listAccess = G.listAccess
   listSet = G.listSet
   indexOf = CP.indexOf csIndex
-  
+
+instance Set CSharpCode where
+  contains = CP.contains csContains
+
 instance InternalList CSharpCode where
   listSlice' = M.listSlice
 
@@ -790,6 +793,7 @@ csReadLine = "ReadLine"
 csWrite = "Write"
 csWriteLine = "WriteLine"
 csIndex = "IndexOf"
+csContains = "Contains"
 csListAdd = "Insert"
 csListAppend = "Add"
 csClose = "Close"

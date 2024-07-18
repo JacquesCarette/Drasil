@@ -460,6 +460,9 @@ instance (Pair p) => List (p CppSrcCode CppHdrCode) where
   listSet = pair3 listSet listSet
   indexOf = pair2 indexOf indexOf
 
+instance (Pair p) => Set (p CppSrcCode CppHdrCode) where
+  contains = pair2 contains contains
+
 instance (Pair p) => InternalList (p CppSrcCode CppHdrCode) where
   listSlice' b e s vr vl = pair2
     (listSlice' (fmap (onStateValue pfst) b) (fmap (onStateValue pfst) e)
@@ -478,9 +481,6 @@ instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where
   listAppendFunc = pair2 listAppendFunc listAppendFunc
   listAccessFunc = pair2 listAccessFunc listAccessFunc
   listSetFunc = pair3 listSetFunc listSetFunc
-
-instance (Pair p) => InternalSetFunc (p CppSrcCode CppHdrCode) where
-  setAddFunc = pair2 setAddFunc setAddFunc
 
 instance ThunkSym (p CppSrcCode CppHdrCode) where
   type Thunk (p CppSrcCode CppHdrCode) = CommonThunk VS
@@ -1390,6 +1390,9 @@ instance List CppSrcCode where
   listSet = G.listSet
   indexOf l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBegin l
 
+instance Set CppSrcCode where
+  contains l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBegin l
+
 instance InternalList CppSrcCode where
   listSlice' = M.listSlice
 
@@ -2095,6 +2098,9 @@ instance List CppHdrCode where
   listAccess _ _ = mkStateVal void empty
   listSet _ _ _ = mkStateVal void empty
   indexOf _ _ = mkStateVal void empty
+
+instance Set CppHdrCode where
+  contains _ _ = mkStateVal void empty
 
 instance InternalList CppHdrCode where
   listSlice' _ _ _ _ _ = toState $ toCode empty

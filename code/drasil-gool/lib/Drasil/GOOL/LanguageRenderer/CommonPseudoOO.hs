@@ -5,7 +5,7 @@ module Drasil.GOOL.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, forEach',
   docMain, mainFunction, buildModule', call', listSizeFunc, listAccessFunc',
   string, constDecDef, docInOutFunc, bindingError, extFuncAppMixedArgs, notNull,
-  listDecDef, destructorError, stateVarDef, constVar, litArray, litSet, listSetFunc,
+  listDecDef, destructorError, stateVarDef, constVar, litArray, litSet, listSetFunc, litSetFunc,
   extraClass, listAccessFunc, doubleRender, double, openFileR, openFileW,
   stateVar, self, multiAssign, multiReturn, listDec, funcDecDef, inOutCall,
   forLoopError, mainBody, inOutFunc, docInOutFunc', boolRender, bool,
@@ -369,6 +369,10 @@ litArray f t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t)
 litSet :: (RenderSym r) => (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
 litSet f t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t) 
   (f $ valueList elems))
+
+litSetFunc :: (RenderSym r) => String -> VSType r -> [SValue r] -> SValue r
+litSetFunc s t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t) 
+  (text s <> parens (valueList elems)))
 
 -- Python, C#, C++, and Swift--
 

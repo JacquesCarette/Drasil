@@ -921,10 +921,6 @@ digraph alltypes {
 		SMethoda	[shape=oval, color=red2, label="SMethoda"];
 		SMethoda -> MSaMethoda;
 		}
-		subgraph initializersr{
-		Initializersr	[shape=oval, color=red2, label="Initializersr"];
-		Initializersr -> SVariablerSValuer;
-		}
 		subgraph inoutfuncr{
 		InOutFuncr	[shape=oval, color=red2, label="InOutFuncr"];
 		InOutFuncr -> SVariablerSVariablerSVariabler;
@@ -950,6 +946,10 @@ digraph alltypes {
 		subgraph sclassa{
 		SClassa	[shape=oval, color=red2, label="SClassa"];
 		SClassa -> CSaClassa;
+		}
+		subgraph initializersr{
+		Initializersr	[shape=oval, color=red2, label="Initializersr"];
+		Initializersr -> SVariablerSValuer;
 		}
 		subgraph csstatevara{
 		CSStateVara	[shape=oval, color=red2, label="CSStateVara"];
@@ -1069,6 +1069,8 @@ digraph alltypes {
 		VS -> StateValueState;
 		}
 	}
-	subgraph drails {
+	subgraph gool {
+	}
+	subgraph gproc {
 	}
 }

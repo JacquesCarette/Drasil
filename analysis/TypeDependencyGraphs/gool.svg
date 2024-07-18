@@ -2931,68 +2931,56 @@
 <path fill="none" stroke="black" d="M34563.04,-287.7C34563.04,-279.98 34563.04,-270.71 34563.04,-262.11"/>
 <polygon fill="black" stroke="black" points="34566.54,-262.1 34563.04,-252.1 34559.54,-262.1 34566.54,-262.1"/>
 </g>
-<!-- Initializersr -->
-<g id="node254" class="node">
-<title>Initializersr</title>
-<ellipse fill="none" stroke="#ee0000" cx="32244.04" cy="-306" rx="64.99" ry="18"/>
-<text text-anchor="middle" x="32244.04" y="-302.3" font-family="Times,serif" font-size="14.00">Initializersr</text>
-</g>
-<!-- Initializersr&#45;&gt;SVariablerSValuer -->
-<g id="edge224" class="edge">
-<title>Initializersr&#45;&gt;SVariablerSValuer</title>
-<path fill="none" stroke="black" d="M32214.75,-289.81C32195.57,-279.86 32170.24,-266.73 32149.19,-255.82"/>
-<polygon fill="black" stroke="black" points="32150.65,-252.63 32140.16,-251.13 32147.42,-258.84 32150.65,-252.63"/>
-</g>
 <!-- InOutFuncr -->
-<g id="node255" class="node">
+<g id="node254" class="node">
 <title>InOutFuncr</title>
 <ellipse fill="none" stroke="#ee0000" cx="34811.04" cy="-306" rx="64.19" ry="18"/>
 <text text-anchor="middle" x="34811.04" y="-302.3" font-family="Times,serif" font-size="14.00">InOutFuncr</text>
 </g>
 <!-- SVariablerSVariablerSVariabler -->
-<g id="node256" class="node">
+<g id="node255" class="node">
 <title>SVariablerSVariablerSVariabler</title>
 <ellipse fill="none" stroke="black" cx="34811.04" cy="-234" rx="157.07" ry="18"/>
 <text text-anchor="middle" x="34811.04" y="-230.3" font-family="Times,serif" font-size="14.00">SVariablerSVariablerSVariabler</text>
 </g>
 <!-- InOutFuncr&#45;&gt;SVariablerSVariablerSVariabler -->
-<g id="edge225" class="edge">
+<g id="edge224" class="edge">
 <title>InOutFuncr&#45;&gt;SVariablerSVariablerSVariabler</title>
 <path fill="none" stroke="black" d="M34811.04,-287.7C34811.04,-279.98 34811.04,-270.71 34811.04,-262.11"/>
 <polygon fill="black" stroke="black" points="34814.54,-262.1 34811.04,-252.1 34807.54,-262.1 34814.54,-262.1"/>
 </g>
 <!-- DocInOutFuncr -->
-<g id="node257" class="node">
+<g id="node256" class="node">
 <title>DocInOutFuncr</title>
 <ellipse fill="none" stroke="#ee0000" cx="35105.04" cy="-306" rx="81.79" ry="18"/>
 <text text-anchor="middle" x="35105.04" y="-302.3" font-family="Times,serif" font-size="14.00">DocInOutFuncr</text>
 </g>
 <!-- StringStringSVariabler -->
-<g id="node258" class="node">
+<g id="node257" class="node">
 <title>StringStringSVariabler</title>
 <ellipse fill="none" stroke="black" cx="35105.04" cy="-234" rx="118.08" ry="18"/>
 <text text-anchor="middle" x="35105.04" y="-230.3" font-family="Times,serif" font-size="14.00">StringStringSVariabler</text>
 </g>
 <!-- DocInOutFuncr&#45;&gt;StringStringSVariabler -->
-<g id="edge226" class="edge">
+<g id="edge225" class="edge">
 <title>DocInOutFuncr&#45;&gt;StringStringSVariabler</title>
 <path fill="none" stroke="black" d="M35105.04,-287.7C35105.04,-279.98 35105.04,-270.71 35105.04,-262.11"/>
 <polygon fill="black" stroke="black" points="35108.54,-262.1 35105.04,-252.1 35101.54,-262.1 35108.54,-262.1"/>
 </g>
 <!-- GSPrograma -->
-<g id="node259" class="node">
+<g id="node258" class="node">
 <title>GSPrograma</title>
 <ellipse fill="none" stroke="#ee0000" cx="35317.04" cy="-306" rx="70.39" ry="18"/>
 <text text-anchor="middle" x="35317.04" y="-302.3" font-family="Times,serif" font-size="14.00">GSPrograma</text>
 </g>
 <!-- GSaPrograma -->
-<g id="node260" class="node">
+<g id="node259" class="node">
 <title>GSaPrograma</title>
 <ellipse fill="none" stroke="black" cx="35317.04" cy="-234" rx="75.29" ry="18"/>
 <text text-anchor="middle" x="35317.04" y="-230.3" font-family="Times,serif" font-size="14.00">GSaPrograma</text>
 </g>
 <!-- GSPrograma&#45;&gt;GSaPrograma -->
-<g id="edge227" class="edge">
+<g id="edge226" class="edge">
 <title>GSPrograma&#45;&gt;GSaPrograma</title>
 <path fill="none" stroke="black" d="M35311.17,-288.05C35310.35,-280.35 35310.1,-271.03 35310.44,-262.36"/>
 <polygon fill="black" stroke="black" points="35313.94,-262.49 35311.13,-252.28 35306.95,-262.01 35313.94,-262.49"/>
@@ -3004,19 +2992,19 @@
 <polygon fill="black" stroke="black" points="35327.13,-262.01 35322.96,-252.28 35320.15,-262.49 35327.13,-262.01"/>
 </g>
 <!-- SFilea -->
-<g id="node261" class="node">
+<g id="node260" class="node">
 <title>SFilea</title>
 <ellipse fill="none" stroke="#ee0000" cx="35462.04" cy="-306" rx="40.09" ry="18"/>
 <text text-anchor="middle" x="35462.04" y="-302.3" font-family="Times,serif" font-size="14.00">SFilea</text>
 </g>
 <!-- FSaFilea -->
-<g id="node262" class="node">
+<g id="node261" class="node">
 <title>FSaFilea</title>
 <ellipse fill="none" stroke="black" cx="35462.04" cy="-234" rx="51.99" ry="18"/>
 <text text-anchor="middle" x="35462.04" y="-230.3" font-family="Times,serif" font-size="14.00">FSaFilea</text>
 </g>
 <!-- SFilea&#45;&gt;FSaFilea -->
-<g id="edge228" class="edge">
+<g id="edge227" class="edge">
 <title>SFilea&#45;&gt;FSaFilea</title>
 <path fill="none" stroke="black" d="M35456.17,-288.05C35455.35,-280.35 35455.1,-271.03 35455.44,-262.36"/>
 <polygon fill="black" stroke="black" points="35458.94,-262.49 35456.13,-252.28 35451.95,-262.01 35458.94,-262.49"/>
@@ -3028,19 +3016,19 @@
 <polygon fill="black" stroke="black" points="35472.13,-262.01 35467.96,-252.28 35465.15,-262.49 35472.13,-262.01"/>
 </g>
 <!-- FSModulea -->
-<g id="node263" class="node">
+<g id="node262" class="node">
 <title>FSModulea</title>
 <ellipse fill="none" stroke="#ee0000" cx="35601.04" cy="-306" rx="63.89" ry="18"/>
 <text text-anchor="middle" x="35601.04" y="-302.3" font-family="Times,serif" font-size="14.00">FSModulea</text>
 </g>
 <!-- FSaModulea -->
-<g id="node264" class="node">
+<g id="node263" class="node">
 <title>FSaModulea</title>
 <ellipse fill="none" stroke="black" cx="35601.04" cy="-234" rx="68.79" ry="18"/>
 <text text-anchor="middle" x="35601.04" y="-230.3" font-family="Times,serif" font-size="14.00">FSaModulea</text>
 </g>
 <!-- FSModulea&#45;&gt;FSaModulea -->
-<g id="edge229" class="edge">
+<g id="edge228" class="edge">
 <title>FSModulea&#45;&gt;FSaModulea</title>
 <path fill="none" stroke="black" d="M35595.17,-288.05C35594.35,-280.35 35594.1,-271.03 35594.44,-262.36"/>
 <polygon fill="black" stroke="black" points="35597.94,-262.49 35595.13,-252.28 35590.95,-262.01 35597.94,-262.49"/>
@@ -3052,22 +3040,34 @@
 <polygon fill="black" stroke="black" points="35611.13,-262.01 35606.96,-252.28 35604.15,-262.49 35611.13,-262.01"/>
 </g>
 <!-- SClassa -->
-<g id="node265" class="node">
+<g id="node264" class="node">
 <title>SClassa</title>
 <ellipse fill="none" stroke="#ee0000" cx="35748.04" cy="-306" rx="47.39" ry="18"/>
 <text text-anchor="middle" x="35748.04" y="-302.3" font-family="Times,serif" font-size="14.00">SClassa</text>
 </g>
 <!-- CSaClassa -->
-<g id="node266" class="node">
+<g id="node265" class="node">
 <title>CSaClassa</title>
 <ellipse fill="none" stroke="black" cx="35748.04" cy="-234" rx="59.59" ry="18"/>
 <text text-anchor="middle" x="35748.04" y="-230.3" font-family="Times,serif" font-size="14.00">CSaClassa</text>
 </g>
 <!-- SClassa&#45;&gt;CSaClassa -->
-<g id="edge230" class="edge">
+<g id="edge229" class="edge">
 <title>SClassa&#45;&gt;CSaClassa</title>
 <path fill="none" stroke="black" d="M35748.04,-287.7C35748.04,-279.98 35748.04,-270.71 35748.04,-262.11"/>
 <polygon fill="black" stroke="black" points="35751.54,-262.1 35748.04,-252.1 35744.54,-262.1 35751.54,-262.1"/>
+</g>
+<!-- Initializersr -->
+<g id="node266" class="node">
+<title>Initializersr</title>
+<ellipse fill="none" stroke="#ee0000" cx="32244.04" cy="-306" rx="64.99" ry="18"/>
+<text text-anchor="middle" x="32244.04" y="-302.3" font-family="Times,serif" font-size="14.00">Initializersr</text>
+</g>
+<!-- Initializersr&#45;&gt;SVariablerSValuer -->
+<g id="edge230" class="edge">
+<title>Initializersr&#45;&gt;SVariablerSValuer</title>
+<path fill="none" stroke="black" d="M32214.75,-289.81C32195.57,-279.86 32170.24,-266.73 32149.19,-255.82"/>
+<polygon fill="black" stroke="black" points="32150.65,-252.63 32140.16,-251.13 32147.42,-258.84 32150.65,-252.63"/>
 </g>
 <!-- CSStateVara -->
 <g id="node267" class="node">

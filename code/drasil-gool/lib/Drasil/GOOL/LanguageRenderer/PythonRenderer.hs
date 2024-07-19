@@ -27,18 +27,18 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..),
   OOFunctionSym(..), GetSet(..), OOValueExpression(..), selfFuncApp,
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..))
-import Drasil.GOOL.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
-  ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
-  BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
-  OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
-  RenderValue(..), ValueElim(valuePrec, valueInt), InternalGetSet(..), 
-  InternalListFunc(..), RenderFunction(..), 
-  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..), 
-  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm), 
-  RenderScope(..), ScopeElim, MethodTypeSym(..), RenderParam(..), 
-  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
-  StateVarElim, RenderClass(..), ClassElim, RenderMod(..), ModuleElim, 
-  BlockCommentSym(..), BlockCommentElim)
+import Drasil.GOOL.RendererClasses (CommonRenderSym, OORenderSym,
+  RenderFile(..), ImportSym(..), ImportElim, PermElim(binding), RenderBody(..),
+  BodyElim, RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim,
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
+  InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec,
+  valueInt), InternalGetSet(..), InternalListFunc(..), RenderFunction(..),
+  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
+  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
+  RenderScope(..), ScopeElim, MethodTypeSym(..), OOMethodTypeSym(..),
+  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
+  OORenderMethod(..), MethodElim, StateVarElim, RenderClass(..), ClassElim,
+  RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
 import qualified Drasil.GOOL.RendererClasses as RC (import', perm, body, block, 
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
@@ -125,7 +125,8 @@ instance ProgramSym PythonCode where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance RenderSym PythonCode
+instance CommonRenderSym PythonCode
+instance OORenderSym PythonCode
 
 instance FileSym PythonCode where
   type File PythonCode = FileData
@@ -625,6 +626,8 @@ instance ScopeElim PythonCode where
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypeData
   mType = zoom lensMStoVS
+  
+instance OOMethodTypeSym PythonCode where
   construct = G.construct
 
 instance ParameterSym PythonCode where
@@ -662,6 +665,12 @@ instance OOMethodSym PythonCode where
   docInOutMethod n s p = CP.docInOutFunc' functionDox (inOutMethod n s p)
 
 instance RenderMethod PythonCode where
+  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
+    (onStateValue (onCodeValue R.commentedItem) cmt)
+    
+  mthdFromData _ d = toState $ toCode $ mthd d
+
+instance OORenderMethod PythonCode where
   intMethod m n _ _ _ ps b = do
     modify (if m then setCurrMain else id)
     sl <- zoom lensMStoVS self
@@ -672,12 +681,7 @@ instance RenderMethod PythonCode where
     bd <- b
     pms <- sequence ps
     pure $ toCode $ mthd $ pyFunction n pms bd
-  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
-    (onStateValue (onCodeValue R.commentedItem) cmt)
-    
   destructor _ = error $ CP.destructorError pyName
-  
-  mthdFromData _ d = toState $ toCode $ mthd d
   
 instance MethodElim PythonCode where
   method = mthdDoc . unPC
@@ -874,25 +878,25 @@ addmathImport = (>>) $ modify (addLangImportVS pyMath)
 mathFunc :: (Monad r) => String -> VSOp r
 mathFunc = addmathImport . unOpPrec . access pyMath 
 
-splitFunc :: (RenderSym r) => Char -> VSFunction r
+splitFunc :: (OORenderSym r) => Char -> VSFunction r
 splitFunc d = func pySplit (listType string) [litString [d]]
 
-readline, readlines :: (RenderSym r) => SValue r -> SValue r
+readline, readlines :: (OORenderSym r) => SValue r -> SValue r
 readline f = objMethodCall string f pyReadline []
 readlines f = objMethodCall (listType string) f pyReadlines []
 
-readInt, readDouble, readString :: (RenderSym r) => SValue r -> SValue r
+readInt, readDouble, readString :: (OORenderSym r) => SValue r -> SValue r
 readInt inSrc = funcApp pyInt int [inSrc]
 readDouble inSrc = funcApp pyDouble double [inSrc]
 readString inSrc = objMethodCall string inSrc pyRstrip []
 
-range :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
+range :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 range initv finalv stepv = funcApp pyRange (listType int) [initv, finalv, stepv]
 
 pyClassVar :: Doc -> Doc -> Doc
 pyClassVar c v = c <> dot <> c <> dot <> v
 
-pyInlineIf :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
+pyInlineIf :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 pyInlineIf c' v1' v2' = do 
   c <- c'
   v1 <- v1'
@@ -900,13 +904,13 @@ pyInlineIf c' v1' v2' = do
   valFromData (valuePrec c) (valueInt c) (toState $ valueType v1) 
     (RC.value v1 <+> ifLabel <+> RC.value c <+> elseLabel <+> RC.value v2)
 
-pyLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
+pyLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 pyLambda ps ex = pyLambdaDec <+> variableList ps <> colon <+> RC.value ex
 
-pyStringType :: (RenderSym r) => VSType r
+pyStringType :: (CommonRenderSym r) => VSType r
 pyStringType = typeFromData String pyString (text pyString)
 
-pyExtNewObjMixedArgs :: (RenderSym r) => Library -> MixedCtorCall r
+pyExtNewObjMixedArgs :: (CommonRenderSym r) => Library -> MixedCtorCall r
 pyExtNewObjMixedArgs l tp vs ns = tp >>= (\t -> call (Just l) Nothing 
   (getTypeString t) (pure t) vs ns)
 
@@ -923,7 +927,7 @@ pyPrint newLn f' p' v' = do
                <> RC.value f
     mkStmtNoEnd $ RC.value prf <> parens (RC.value v <> nl <> fl)
 
-pyOut :: (RenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> 
+pyOut :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> 
   MSStatement r
 pyOut newLn f printFn v = zoom lensMStoVS v >>= pyOut' . getType . valueType
   where pyOut' (List _) = printSt newLn f printFn v
@@ -939,27 +943,27 @@ pyInput inSrc v = v &= (v >>= pyInput' . getType . variableType)
         pyInput' Char = inSrc
         pyInput' _ = error "Attempt to read a value of unreadable type"
 
-pyThrow :: (RenderSym r) => r (Value r) -> Doc
+pyThrow :: (CommonRenderSym r) => r (Value r) -> Doc
 pyThrow errMsg = pyRaise <+> exceptionObj' <> parens (RC.value errMsg)
 
-pyForEach :: (RenderSym r) => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
+pyForEach :: (CommonRenderSym r) => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
 pyForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <> colon,
   indent $ RC.body b]
 
-pyWhile :: (RenderSym r) => r (Value r) -> r (Body r) -> Doc
+pyWhile :: (CommonRenderSym r) => r (Value r) -> r (Body r) -> Doc
 pyWhile v b = vcat [
   whileLabel <+> RC.value v <> colon,
   indent $ RC.body b]
 
-pyTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
+pyTryCatch :: (CommonRenderSym r) => r (Body r) -> r (Body r) -> Doc
 pyTryCatch tryB catchB = vcat [
   tryLabel <> colon,
   indent $ RC.body tryB,
   pyExcept <+> exceptionObj' <> colon,
   indent $ RC.body catchB]
 
-pyListSlice :: (RenderSym r, Monad r) => SVariable r -> SValue r -> SValue r -> 
+pyListSlice :: (CommonRenderSym r, Monad r) => SVariable r -> SValue r -> SValue r -> 
   SValue r -> SValue r -> MS (r Doc)
 pyListSlice vn vo beg end step = zoom lensMStoVS $ do
   vnew <- vn
@@ -970,7 +974,7 @@ pyListSlice vn vo beg end step = zoom lensMStoVS $ do
   pure $ toCode $ RC.variable vnew <+> equals <+> RC.value vold <> 
     brackets (RC.value b <> colon <> RC.value e <> colon <> RC.value s)
 
-pyMethod :: (RenderSym r) => Label -> r (Variable r) -> [r (Parameter r)] ->
+pyMethod :: (CommonRenderSym r) => Label -> r (Variable r) -> [r (Parameter r)] ->
   r (Body r) -> Doc
 pyMethod n slf ps b = vcat [
   pyDef <+> text n <> parens (RC.variable slf <> oneParam <> pms) <> colon,
@@ -980,7 +984,7 @@ pyMethod n slf ps b = vcat [
             bodyD | isEmpty (RC.body b) = pyNull'
                   | otherwise = RC.body b
 
-pyFunction :: (RenderSym r) => Label -> [r (Parameter r)] -> r (Body r) -> Doc
+pyFunction :: (CommonRenderSym r) => Label -> [r (Parameter r)] -> r (Body r) -> Doc
 pyFunction n ps b = vcat [
   pyDef <+> text n <> parens (parameterList ps) <> colon,
   indent bodyD]

@@ -14,19 +14,20 @@ module Drasil.GOOL.RendererClasses (
   ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..)
 ) where
 
-import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSType,
-  SVariable, SValue, MSStatement, MSParameter, SMethod, MixedCall, BodySym(..),
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), List(..), InternalList(..), VectorExpression(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
-import Drasil.GOOL.InterfaceGOOL (SFile, VSFunction, FSModule, SClass,
+import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
+  VSType, SVariable, SValue, MSStatement, MSParameter, SMethod, MixedCall,
+  BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), List(..), InternalList(..),
+  VectorExpression(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  ScopeSym(..), ParameterSym(..), MethodSym(..))
+import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
-  FileSym(..), ModuleSym(..), ClassSym(..), FunctionSym(..),  PermanenceSym(..),
-  GetSet(..), StateVarSym(..), ObserverPattern(..), StrategyPattern(..))
+  FileSym(..), ModuleSym(..), ClassSym(..), PermanenceSym(..), GetSet(..),
+  StateVarSym(..), ObserverPattern(..), StrategyPattern(..))
 import Drasil.GOOL.CodeType (CodeType)
 import Drasil.GOOL.AST (Binding, Terminator, ScopeTag)
 import Drasil.GOOL.State (FS, CS, MS, VS)

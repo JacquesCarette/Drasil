@@ -19,10 +19,11 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
   InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  ScopeSym(..), ParameterSym(..), MethodSym(..), (&=), switchAsIf)
+  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..), (&=),
+  switchAsIf)
 import Drasil.GOOL.InterfaceGOOL (OOProg, FSModule, ProgramSym(..), FileSym(..),
-  ModuleSym(..), FunctionSym(..), PermanenceSym(..), ObserverPattern(..),
+  ModuleSym(..), OOFunctionSym(..), PermanenceSym(..), ObserverPattern(..),
   StrategyPattern(..), GetSet(..), InternalValueExp(..), StateVarSym(..),
   ClassSym(..), OOTypeSym(..), OOVariableSym(..), OODeclStatement(..),
   OOFuncAppStatement(..), OOMethodSym(..), OOValueExpression(..),
@@ -512,6 +513,9 @@ instance StringStatement JuliaCode where
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
 
+instance FunctionSym JuliaCode where
+  type Function JuliaCode = FuncData
+
 instance FuncAppStatement JuliaCode where
   inOutCall = CP.inOutCall funcApp
   extInOutCall m = CP.inOutCall (extFuncApp m)
@@ -965,8 +969,7 @@ jlParse tl tp v = let
 
 -- OO-Only (remove when ready)
 
-instance FunctionSym JuliaCode where
-  type Function JuliaCode = FuncData
+instance OOFunctionSym JuliaCode where
   func = undefined--
   objAccess = undefined--
 

@@ -10,23 +10,23 @@ module Drasil.GOOL.LanguageRenderer.CSharpRenderer (
 import Utils.Drasil (indent)
 
 import Drasil.GOOL.CodeType (CodeType(..))
-import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, VSType,
-  SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..), oneLiner,
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, List(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..))
-import Drasil.GOOL.InterfaceGOOL (VSFunction, OOProg, ProgramSym(..),
+import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, VSFunction,
+  VSType, SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..),
+  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
+  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
+import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
   OOValueExpression(..), selfFuncApp, newObj, InternalValueExp(..),
-  objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
+  objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
   OOMethodSym(..))
 import Drasil.GOOL.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
@@ -407,6 +407,8 @@ instance InternalValueExp CSharpCode where
 
 instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData
+
+instance OOFunctionSym CSharpCode where
   func = G.func
   objAccess = G.objAccess
 

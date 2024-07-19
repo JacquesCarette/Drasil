@@ -10,23 +10,22 @@ module Drasil.GOOL.LanguageRenderer.JavaRenderer (
 import Utils.Drasil (indent)
 
 import Drasil.GOOL.CodeType (CodeType(..))
-import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, VSType,
-  SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..), oneLiner,
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, List(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
-  IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..))
-import Drasil.GOOL.InterfaceGOOL (SClass, VSFunction, CSStateVar, OOProg,
-  ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..),
+import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, VSFunction,
+  VSType, SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..),
+  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
+  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
+import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..),
   OOVariableSym(..), StateVarSym(..), PermanenceSym(..), OOValueSym,
   OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
-  InternalValueExp(..), FunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
+  InternalValueExp(..), OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
   OOMethodSym(..))
 import Drasil.GOOL.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
@@ -438,6 +437,8 @@ instance InternalValueExp JavaCode where
 
 instance FunctionSym JavaCode where
   type Function JavaCode = FuncData
+
+instance OOFunctionSym JavaCode where
   func = G.func
   objAccess = G.objAccess
 

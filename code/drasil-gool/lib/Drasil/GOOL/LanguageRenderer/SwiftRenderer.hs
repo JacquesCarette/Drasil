@@ -20,15 +20,17 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, MSBlock, VSType,
   listSlice, InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
+  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   Initializers, ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
   OOValueExpression(..), selfFuncApp, newObj, InternalValueExp(..),
-  objMethodCall, objMethodCallNamedArgs, objMethodCallNoParams, FunctionSym(..),
-  ($.), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
-  ObserverPattern(..), StrategyPattern(..), OOMethodSym(..), convTypeOO)
+  objMethodCall, objMethodCallNamedArgs, objMethodCallNoParams,
+  OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
+  OOMethodSym(..), convTypeOO)
 import Drasil.GOOL.RendererClasses (MSMthdType, RenderSym,
   RenderFile(..), ImportSym(..), ImportElim, PermElim(binding), RenderBody(..),
   BodyElim, RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim,
@@ -422,6 +424,8 @@ instance InternalValueExp SwiftCode where
 
 instance FunctionSym SwiftCode where
   type Function SwiftCode = FuncData
+
+instance OOFunctionSym SwiftCode where
   func = G.func
   objAccess = G.objAccess
 

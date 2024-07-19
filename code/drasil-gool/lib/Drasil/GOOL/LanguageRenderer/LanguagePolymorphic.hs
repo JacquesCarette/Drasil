@@ -20,8 +20,8 @@ module Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (fileFromData,
 import Utils.Drasil (indent)
 
 import Drasil.GOOL.CodeType (CodeType(..), ClassName)
-import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSType,
-  SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs,
+import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
+  VSType, SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs,
   MixedCall, MixedCtorCall, BodySym(Body), bodyStatements, oneLiner,
   BlockSym(Block), TypeSym(Type), TypeElim(getType, getTypeString),
   VariableSym(Variable), VariableElim(variableName, variableType),
@@ -35,11 +35,11 @@ import qualified Drasil.GOOL.InterfaceCommon as IC (TypeSym(int, double, char,
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
   IOStatement(print), ControlStatement(returnStmt, for), ParameterSym(param),
   List(intToIndex))
-import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, VSFunction,
-  Initializers, CSStateVar, FileSym(File), ModuleSym(Module), newObj,
-  objMethodCallNoParams, ($.), PermanenceSym(..), convTypeOO)
+import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
+  CSStateVar, FileSym(File), ModuleSym(Module), newObj, objMethodCallNoParams,
+  ($.), PermanenceSym(..), convTypeOO)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (OOVariableSym(objVarSelf),
-  OOMethodSym(method), FunctionSym(func))
+  OOMethodSym(method), OOFunctionSym(func))
 import Drasil.GOOL.RendererClasses (RenderSym, RenderFile(commentedMod),  
   RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
   RenderFunction(funcFromData), FunctionElim(functionType), 

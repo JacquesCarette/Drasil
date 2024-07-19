@@ -8,8 +8,8 @@ module Drasil.GOOL.LanguageRenderer.Macros (
 ) where
 
 import Drasil.GOOL.CodeType (CodeType(..))
-import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSType, SVariable, 
-  SValue, MSStatement, bodyStatements, oneLiner, TypeElim(getType),
+import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
+  SVariable, SValue, MSStatement, bodyStatements, oneLiner, TypeElim(getType),
   VariableElim(variableType), listOf, ValueSym(valueType), 
   NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), at, StatementSym(multi),
@@ -20,7 +20,7 @@ import qualified Drasil.GOOL.InterfaceCommon as IC (BlockSym(block),
   List(listSize, listAppend, listAccess, intToIndex), StatementSym(valStmt), 
   AssignStatement(assign), DeclStatement(varDecDef, listDec), 
   ControlStatement(ifCond, for, forRange), ValueExpression(inlineIf))
-import Drasil.GOOL.InterfaceGOOL (VSFunction, ($.), observerListName)
+import Drasil.GOOL.InterfaceGOOL (($.), observerListName)
 import Drasil.GOOL.RendererClasses (RenderSym, RenderValue(cast), 
   ValueElim(valueInt))
 import qualified Drasil.GOOL.RendererClasses as S (

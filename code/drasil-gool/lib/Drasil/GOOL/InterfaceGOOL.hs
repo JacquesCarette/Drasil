@@ -2,7 +2,7 @@
 
 module Drasil.GOOL.InterfaceGOOL (
   -- Types
-  GSProgram, SFile, FSModule, SClass, VSFunction, CSStateVar, Initializers,
+  GSProgram, SFile, FSModule, SClass, CSStateVar, Initializers,
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), OOValueSym, OOVariableValue,
@@ -12,23 +12,23 @@ module Drasil.GOOL.InterfaceGOOL (
   objMethodCallNamedArgs, objMethodCallMixedArgs, objMethodCallNoParams,
   OOMethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
   StateVarSym(..), privDVar, pubDVar, pubSVar, PermanenceSym(..),
-  FunctionSym(..), ($.), selfAccess, ObserverPattern(..), observerListName,
+  OOFunctionSym(..), ($.), selfAccess, ObserverPattern(..), observerListName,
   initObserverList, addObserver, StrategyPattern(..), convTypeOO
   ) where
 
 import Drasil.GOOL.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, VSType, SVariable, SValue, MSStatement,
-  NamedArgs, MSParameter, SMethod, MixedCall, MixedCtorCall, PosCall,
-  PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
+  Label, Library, MSBody, MSBlock, VSFunction, VSType, SVariable, SValue,
+  MSStatement, NamedArgs, MSParameter, SMethod, MixedCall, MixedCtorCall,
+  PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
-  SharedProg, BodySym(body), TypeSym(listType), MethodSym, VariableSym(var),
-  ScopeSym(..), ValueSym(valueType), VariableValue(valueOf), ValueExpression,
-  List(listSize, listAdd), listOf, StatementSym(valStmt),
+  SharedProg, BodySym(body), TypeSym(listType), FunctionSym, MethodSym,
+  VariableSym(var), ScopeSym(..), ValueSym(valueType), VariableValue(valueOf),
+  ValueExpression, List(listSize, listAdd), listOf, StatementSym(valStmt),
   DeclStatement(listDecDef), FuncAppStatement, convType)
 import Drasil.GOOL.CodeType (CodeType(..), ClassName)
 import Drasil.GOOL.Helpers (onStateValue)
-import Drasil.GOOL.State (GS, FS, CS, VS)
+import Drasil.GOOL.State (GS, FS, CS)
 
 class (SharedProg r, ProgramSym r, OOVariableValue r, OODeclStatement r,
   OOFuncAppStatement r, OOValueExpression r, InternalValueExp r, GetSet r,
@@ -207,7 +207,7 @@ extObjDecNewNoParams l v = extObjDecNew l v []
 class (FuncAppStatement r, OOVariableSym r) => OOFuncAppStatement r where
   selfInOutCall :: InOutCall r
 
-class (StatementSym r, FunctionSym r) => ObserverPattern r where
+class (StatementSym r, OOFunctionSym r) => ObserverPattern r where
   notifyObservers :: VSFunction r -> VSType r -> MSStatement r
 
 observerListName :: Label
@@ -226,18 +226,15 @@ class (BodySym r, VariableSym r) => StrategyPattern r where
   runStrategy :: Label -> [(Label, MSBody r)] -> Maybe (SValue r) ->
     Maybe (SVariable r) -> MSBlock r
 
-type VSFunction a = VS (a (Function a))
-
-class (ValueSym r) => FunctionSym r where
-  type Function r
+class (FunctionSym r) => OOFunctionSym r where
   func :: Label -> VSType r -> [SValue r] -> VSFunction r
   objAccess :: SValue r -> VSFunction r -> SValue r
 
-($.) :: (FunctionSym r) => SValue r -> VSFunction r -> SValue r
+($.) :: (OOFunctionSym r) => SValue r -> VSFunction r -> SValue r
 infixl 9 $.
 ($.) = objAccess
 
-selfAccess :: (OOVariableValue r, FunctionSym r) => VSFunction r -> SValue r
+selfAccess :: (OOVariableValue r, OOFunctionSym r) => VSFunction r -> SValue r
 selfAccess = objAccess (valueOf self)
 
 class (ValueSym r, VariableSym r) => GetSet r where

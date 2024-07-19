@@ -1,4 +1,4 @@
-module GOOL.Drasil.Classes (Pair(..)) where
+module Drasil.GOOL.Classes (Pair(..)) where
 
 class Pair p where
   pfst :: p x y a -> x a

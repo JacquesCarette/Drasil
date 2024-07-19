@@ -1,15 +1,15 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module GOOL.Drasil.InterfaceProc (
+module Drasil.GOOL.InterfaceProc (
   -- Types
   GSProgram, SFile, FSModule,
   -- Typeclasses
   ProcProg, ProgramSym(..), FileSym(..), ModuleSym(..)
   ) where
 
-import GOOL.Drasil.InterfaceCommon (Label, SMethod, SharedProg,
+import Drasil.GOOL.InterfaceCommon (Label, SMethod, SharedProg,
   MethodSym)
-import GOOL.Drasil.State (GS, FS)
+import Drasil.GOOL.State (GS, FS)
 
 class (SharedProg r, ProgramSym r
   ) => ProcProg r

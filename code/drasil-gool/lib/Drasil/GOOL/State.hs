@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell, TupleSections #-}
 
-module GOOL.Drasil.State (
+module Drasil.GOOL.State (
   -- Types
   GS, GOOLState(..), FS, CS, MS, VS, 
   -- Lenses
@@ -31,9 +31,9 @@ module GOOL.Drasil.State (
   resetIndices, useVarName, genVarName, genLoopIndex, varNameAvailable
 ) where
 
-import GOOL.Drasil.AST (FileType(..), ScopeTag(..), QualifiedName, qualName)
-import GOOL.Drasil.CodeAnalysis (Exception, ExceptionType, printExc, hasLoc)
-import GOOL.Drasil.CodeType (ClassName)
+import Drasil.GOOL.AST (FileType(..), ScopeTag(..), QualifiedName, qualName)
+import Drasil.GOOL.CodeAnalysis (Exception, ExceptionType, printExc, hasLoc)
+import Drasil.GOOL.CodeType (ClassName)
 
 import Utils.Drasil (nubSort)
 

@@ -1,34 +1,34 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | Language-polymorphic functions that are defined by GOOL code
-module GOOL.Drasil.LanguageRenderer.Macros (
+module Drasil.GOOL.LanguageRenderer.Macros (
   ifExists, decrement1, increment, increment1, runStrategy, 
   listSlice, makeSetterVal, stringListVals, stringListLists, forRange, notifyObservers,
   notifyObservers'
 ) where
 
-import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.InterfaceCommon (Label, MSBody, MSBlock, VSType, SVariable, 
+import Drasil.GOOL.CodeType (CodeType(..))
+import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSType, SVariable, 
   SValue, MSStatement, bodyStatements, oneLiner, TypeElim(getType),
   VariableElim(variableType), listOf, ValueSym(valueType), 
   NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), at, StatementSym(multi),
   AssignStatement((&+=), (&-=), (&++)), (&=))
-import qualified GOOL.Drasil.InterfaceCommon as IC (BlockSym(block), 
+import qualified Drasil.GOOL.InterfaceCommon as IC (BlockSym(block), 
   TypeSym(int, listInnerType), VariableSym(var), Literal(litInt), 
   VariableValue(valueOf), ValueExpression(notNull), 
   List(listSize, listAppend, listAccess, intToIndex), StatementSym(valStmt), 
   AssignStatement(assign), DeclStatement(varDecDef, listDec), 
   ControlStatement(ifCond, for, forRange), ValueExpression(inlineIf))
-import GOOL.Drasil.InterfaceGOOL (VSFunction, ($.), observerListName)
-import GOOL.Drasil.RendererClasses (RenderSym, RenderValue(cast), 
+import Drasil.GOOL.InterfaceGOOL (VSFunction, ($.), observerListName)
+import Drasil.GOOL.RendererClasses (RenderSym, RenderValue(cast), 
   ValueElim(valueInt))
-import qualified GOOL.Drasil.RendererClasses as S (
+import qualified Drasil.GOOL.RendererClasses as S (
   RenderStatement(stmt, emptyStmt))
-import qualified GOOL.Drasil.RendererClasses as RC (BodyElim(..),
+import qualified Drasil.GOOL.RendererClasses as RC (BodyElim(..),
   StatementElim(statement))
-import GOOL.Drasil.Helpers (toCode, onStateValue, on2StateValues)
-import GOOL.Drasil.State (MS, lensMStoVS, genVarName, genLoopIndex)
+import Drasil.GOOL.Helpers (toCode, onStateValue, on2StateValues)
+import Drasil.GOOL.State (MS, lensMStoVS, genVarName, genLoopIndex)
 
 import Data.Maybe (fromMaybe)
 import Data.Functor ((<&>))

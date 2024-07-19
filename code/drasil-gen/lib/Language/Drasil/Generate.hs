@@ -33,7 +33,7 @@ import Language.Drasil.Output.Formats(Filename, DocSpec(DocSpec), DocChoices(DC)
 import Language.Drasil.TypeCheck
 import Language.Drasil.Dump
 
-import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
+import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()

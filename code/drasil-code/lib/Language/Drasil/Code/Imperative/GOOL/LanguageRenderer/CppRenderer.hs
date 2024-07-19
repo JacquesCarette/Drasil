@@ -20,7 +20,7 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   asFragment, buildAll, cppCompiler, nativeBinary, executable, sharedLibrary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
 
-import GOOL.Drasil (onCodeList, cppName, cppVersion)
+import Drasil.GOOL (onCodeList, cppName, cppVersion)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import Text.PrettyPrint.HughesPJ (Doc)

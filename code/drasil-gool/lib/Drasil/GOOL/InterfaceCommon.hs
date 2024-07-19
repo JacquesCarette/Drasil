@@ -1,10 +1,10 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module GOOL.Drasil.InterfaceCommon (
+module Drasil.GOOL.InterfaceCommon (
   -- Types
   Label, Library, MSBody, MSBlock, VSType, SVariable, SValue, VSThunk,
-  MSStatement, MSParameter, SMethod, NamedArgs, Initializers, MixedCall,
-  MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
+  MSStatement, MSParameter, SMethod, NamedArgs, MixedCall, MixedCtorCall,
+  PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), VariableElim(..), listOf, listVar,
@@ -20,8 +20,8 @@ module GOOL.Drasil.InterfaceCommon (
   ScopeSym(..), ParameterSym(..), MethodSym(..), convType
 ) where
 
-import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.State (MS, VS)
+import Drasil.GOOL.CodeType (CodeType(..))
+import Drasil.GOOL.State (MS, VS)
 
 import qualified Data.Kind as K (Type)
 import Data.Bifunctor (first)
@@ -445,7 +445,6 @@ class (VariableSym r) => ParameterSym r where
   pointerParam :: SVariable r -> MSParameter r
 
 type SMethod a = MS (a (Method a))
-type Initializers r = [(SVariable r, SValue r)]
 
 -- The three lists are inputs, outputs, and both, respectively
 type InOutFunc r = [SVariable r] -> [SVariable r] -> [SVariable r] -> 

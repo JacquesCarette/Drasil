@@ -37,7 +37,7 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
   Mod(..), Name, Description, StateVariable(..), fstdecl)
 import qualified Language.Drasil.Mod as M (Class(..))
 
-import GOOL.Drasil (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
+import Drasil.GOOL (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
   Initializers, OOProg, PermanenceSym(..), bodyStatements, BlockSym(..),
   TypeSym(..), VariableSym(..), OOVariableSym(..), staticConst,
@@ -48,7 +48,7 @@ import GOOL.Drasil (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
   StringStatement(..), ControlStatement(..), ifNoElse, ScopeSym(..),
   ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar, privDVar,
   nonInitConstructor, convTypeOO, ScopeTag(..), CodeType(..), onStateValue)
-import qualified GOOL.Drasil as C (CodeType(List, Array))
+import qualified Drasil.GOOL as C (CodeType(List, Array))
 
 import Prelude hiding (sin, cos, tan, log, exp)
 import Data.List ((\\), intersect)

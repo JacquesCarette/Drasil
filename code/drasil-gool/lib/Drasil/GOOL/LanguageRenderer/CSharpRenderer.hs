@@ -207,6 +207,9 @@ instance TypeSym CSharpCode where
     modify (addLangImportVS csGeneric) 
     C.listType csList t
   arrayType = CP.arrayType
+  setType t = do
+    modify (addLangImportVS csGeneric) 
+    C.setType csSet t
   listInnerType = G.listInnerType
   funcType = csFuncType
   void = C.void
@@ -319,7 +322,7 @@ instance Literal CSharpCode where
   litInt = G.litInt
   litString = G.litString
   litArray = csLitList arrayType
-  litSet = csLitList arrayType
+  litSet = csLitList setType
   litList = csLitList listType
 
 instance MathConstant CSharpCode where
@@ -772,6 +775,7 @@ csConsole = "Console"
 csGeneric = csSysAccess $ "Collections" `access` "Generic"
 csIO = csSysAccess "IO"
 csList = "List"
+csSet = "HashSet"
 csInt = "Int32"
 csFloat = "Single"
 csBool = "Boolean"
@@ -809,6 +813,14 @@ csOutfileType = join $ modifyReturn (addLangImportVS csIO) $
 csLitList :: (CommonRenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
   -> SValue r
 csLitList f t' es' = do 
+  es <- sequence es' 
+  lt <- f t'
+  mkVal lt (new' <+> RC.type' lt
+    <+> braces (valueList es))
+
+csLitSet :: (RenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
+  -> SValue r
+csLitSet f t' es' = do 
   es <- sequence es' 
   lt <- f t'
   mkVal lt (new' <+> RC.type' lt

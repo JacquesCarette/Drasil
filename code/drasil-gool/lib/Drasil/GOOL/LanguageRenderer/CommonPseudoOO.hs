@@ -33,23 +33,27 @@ import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
   OOTypeSym(obj), PermanenceSym(..), Initializers, objMethodCallNoParams)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (ClassSym(buildClass),
   OOVariableSym(self, objVar), OOFunctionSym(..))
-import Drasil.GOOL.RendererClasses (CommonRenderSym, OORenderSym, ImportSym(..),
+import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), RenderType(..), RenderVariable(varFromData),
   InternalVarElim(variableBind), RenderFunction(funcFromData),
   MethodTypeSym(mType), RenderMethod(commentedFunc, mthdFromData),
-  OORenderMethod(intMethod), ParentSpec, BlockCommentSym(..))
-import qualified Drasil.GOOL.RendererClasses as S (RenderBody(multiBody),
+  BlockCommentSym(..))
+import qualified Drasil.GOOL.RendererClassesCommon as S (RenderBody(multiBody),
   RenderValue(call), RenderStatement(stmt, emptyStmt),
   InternalAssignStmt(multiAssign), InternalControlStmt(multiReturn),
-  OOMethodTypeSym(construct), OORenderMethod(intFunc), RenderClass(intClass,
-  inherit), RenderMod(modFromData), InternalListFunc(listSizeFunc, listAddFunc,
-  listAppendFunc))
-import qualified Drasil.GOOL.RendererClasses as RC (ImportElim(..),
-  PermElim(..), BodyElim(..), InternalTypeElim(..), InternalVarElim(variable),
-  ValueElim(..), StatementElim(statement), ScopeElim(..), MethodElim(..),
-  StateVarElim(..), ClassElim(..), FunctionElim(..))
+  InternalListFunc(listSizeFunc, listAddFunc, listAppendFunc))
+import qualified Drasil.GOOL.RendererClassesCommon as RC (ImportElim(..),
+  BodyElim(..), InternalTypeElim(..), InternalVarElim(variable), ValueElim(..),
+  StatementElim(statement), ScopeElim(..), MethodElim(..), FunctionElim(..))
 import Drasil.GOOL.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2StateValues, onStateList)
+import Drasil.GOOL.RendererClassesOO (OORenderSym, OORenderMethod(intMethod),
+  ParentSpec)
+import qualified Drasil.GOOL.RendererClassesOO as S (OOMethodTypeSym(construct),
+  OORenderMethod(intFunc), RenderClass(intClass, inherit),
+  RenderMod(modFromData))
+import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..),
+  StateVarElim(..), ClassElim(..))
 import Drasil.GOOL.LanguageRenderer (array', new', args, array, listSep, access,
   mathFunc, ModuleDocRenderer, FuncDocRenderer, functionDox, classDox,
   moduleDox, variableList, valueList, intValue)
@@ -258,7 +262,7 @@ buildModule' n inc is ms cs = S.modFromData n (do
 
 -- Java and C++ --
 
--- | First parameter is language name, rest similar to call from RendererClasses
+-- | First parameter is language name, rest similar to call from RendererClassesCommon
 call' :: (CommonRenderSym r) => String -> Maybe Library -> Maybe Doc -> MixedCall r
 call' l _ _ _ _ _ (_:_) = error $ namedArgError l
 call' _ l o n t ps ns = call empty l o n t ps ns
@@ -320,7 +324,7 @@ listDecDef v vals = do
 destructorError :: String -> String
 destructorError l = "Destructors not allowed in " ++ l
 
-stateVarDef :: (CommonRenderSym r, Monad r) => r (Scope r) -> r (Permanence r) ->
+stateVarDef :: (OORenderSym r, Monad r) => r (Scope r) -> r (Permanence r) ->
   SVariable r -> SValue r -> CS (r Doc)
 stateVarDef s p vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.scope s) (RC.perm p) . RC.statement) (S.stmt $ IC.varDecDef vr vl)
@@ -369,7 +373,7 @@ openFileW :: (CommonRenderSym r) => (SValue r -> VSType r -> SValue r -> SValue 
   SVariable r -> SValue r -> MSStatement r
 openFileW f vr vl = vr &= f vl outfile IC.litFalse
 
-stateVar :: (CommonRenderSym r, Monad r) => r (Scope r) -> r (Permanence r) ->
+stateVar :: (OORenderSym r, Monad r) => r (Scope r) -> r (Permanence r) ->
   SVariable r -> CS (r Doc)
 stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
   (RC.scope s) (RC.perm p) . RC.statement) (S.stmt $ IC.varDec v)

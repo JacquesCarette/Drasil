@@ -20,14 +20,17 @@ import qualified Drasil.GOOL.InterfaceCommon as IC (TypeSym(bool, float),
 import Drasil.GOOL.InterfaceGOOL (PermanenceSym(..), extNewObj, ($.))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (OOTypeSym(obj),
   OOValueExpression(newObjMixedArgs))
-import Drasil.GOOL.RendererClasses (MSMthdType, CommonRenderSym, OORenderSym,
+import Drasil.GOOL.RendererClassesCommon (MSMthdType, CommonRenderSym,
   RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData), 
-  ValueElim(valuePrec), OORenderMethod(intMethod))
-import qualified Drasil.GOOL.RendererClasses as S (
+  ValueElim(valuePrec))
+import qualified Drasil.GOOL.RendererClassesCommon as S (
   InternalListFunc(listSizeFunc), RenderStatement(stmt, loopStmt))
-import qualified Drasil.GOOL.RendererClasses as RC (PermElim(..), BodyElim(..), 
-  InternalTypeElim(..), InternalVarElim(variable), ValueElim(value), 
+import qualified Drasil.GOOL.RendererClassesCommon as RC (BodyElim(..),
+  InternalTypeElim(..), InternalVarElim(variable), ValueElim(value),
   StatementElim(statement))
+import Drasil.GOOL.RendererClassesOO (OORenderSym,
+  OORenderMethod(intMethod))
+import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..))
 import Drasil.GOOL.AST (Binding(..), Terminator(..))
 import Drasil.GOOL.Helpers (angles, toState, onStateValue)
 import Drasil.GOOL.LanguageRenderer (forLabel, whileLabel, containing)
@@ -137,7 +140,7 @@ decrement1 vr' = do
   vr <- zoom lensMStoVS vr'
   (mkStmt . R.decrement) vr
 
-varDec :: (CommonRenderSym r) => r (Permanence r) -> r (Permanence r) -> Doc -> 
+varDec :: (OORenderSym r) => r (Permanence r) -> r (Permanence r) -> Doc -> 
   SVariable r -> MSStatement r
 varDec s d pdoc v' = do 
   v <- zoom lensMStoVS v' 

@@ -32,10 +32,12 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, SValue, BodySym(Body),
   TypeSym(Type), TypeElim(..), VariableSym(Variable), VariableElim(..), ValueSym(..), StatementSym(Statement), ScopeSym(Scope), 
   ParameterSym(Parameter))
 import Drasil.GOOL.InterfaceGOOL (PermanenceSym(Permanence))
-import Drasil.GOOL.RendererClasses (CommonRenderSym)
-import qualified Drasil.GOOL.RendererClasses as RC (PermElim(..), BodyElim(..),
+import Drasil.GOOL.RendererClassesCommon (CommonRenderSym)
+import qualified Drasil.GOOL.RendererClassesCommon as RC (BodyElim(..),
   InternalTypeElim(..), InternalVarElim(..), ValueElim(..), StatementElim(..),
   ScopeElim(..), ParamElim(..))
+import Drasil.GOOL.RendererClassesOO (OORenderSym)
+import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..))
 import Drasil.GOOL.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateMod, TypeData(..), VarData(..))
 import Drasil.GOOL.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
@@ -209,7 +211,7 @@ param v = RC.type' (variableType v) <+> RC.variable v
 
 -- Method --
 
-method :: (CommonRenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> 
+method :: (OORenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> 
   r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 method n s p t ps b = vcat [
   RC.scope s <+> RC.perm p <+> RC.type' t <+> text n <> 

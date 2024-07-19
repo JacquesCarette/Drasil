@@ -30,22 +30,25 @@ import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
   OOMethodSym(..))
-import Drasil.GOOL.RendererClasses (CommonRenderSym, OORenderSym,
-  RenderFile(..), ImportSym(..), ImportElim, PermElim(binding), RenderBody(..),
-  BodyElim, RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim,
-  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
-  InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec,
-  valueInt), InternalGetSet(..), InternalListFunc(..), RenderFunction(..),
-  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
-  RenderScope(..), ScopeElim, MSMthdType, MethodTypeSym(..),
-  OOMethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
-  RenderMethod(..), OORenderMethod(..), MethodElim, StateVarElim, ParentSpec,
-  RenderClass(..), ClassElim, RenderMod(..), ModuleElim, BlockCommentSym(..),
-  BlockCommentElim)
-import qualified Drasil.GOOL.RendererClasses as RC (import', perm, body, block,
+import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
+  ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
+  RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
+  OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
+  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
+  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
+  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
+  StatementElim(statementTerm), RenderScope(..), ScopeElim, MSMthdType,
+  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
+  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim)
+import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
-  method, stateVar, class', module', blockComment')
+  method, blockComment')
+import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
+  PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
+  OORenderMethod(..), StateVarElim, ParentSpec, RenderClass(..), ClassElim,
+  RenderMod(..), ModuleElim)
+import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
+  module')
 import Drasil.GOOL.LanguageRenderer (addExt, classDec, dot, blockCmtStart,
   blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, commentStart,
   returnLabel, elseIfLabel, tryLabel, catchLabel, throwLabel, array', constDec',
@@ -2767,7 +2770,7 @@ cppsStateVarDef cns s p vr' vl' = do
       endStatement) empty)
     emptS
 
-cpphStateVarDef :: (CommonRenderSym r) => Doc -> r (Permanence r) -> SVariable r ->
+cpphStateVarDef :: (OORenderSym r) => Doc -> r (Permanence r) -> SVariable r ->
   SValue r -> CS Doc
 cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (RC.perm p) .
   RC.statement) (zoom lensCStoMS $ stmt $ onBinding (binding p) (varDec

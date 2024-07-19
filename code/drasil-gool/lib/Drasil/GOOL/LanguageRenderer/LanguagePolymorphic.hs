@@ -40,22 +40,26 @@ import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
   ($.), PermanenceSym(..), convTypeOO)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (OOVariableSym(objVarSelf),
   OOMethodSym(method), OOFunctionSym(func))
-import Drasil.GOOL.RendererClasses (CommonRenderSym, OORenderSym,
-  RenderFile(commentedMod), RenderType(..), InternalVarElim(variableBind),
-  RenderValue(valFromData), RenderFunction(funcFromData),
-  FunctionElim(functionType), RenderStatement(stmtFromData),
-  StatementElim(statementTerm), MethodTypeSym(mType),
-  RenderParam(paramFromData), RenderMethod(commentedFunc),
+import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, RenderType(..),
+  InternalVarElim(variableBind), RenderValue(valFromData),
+  RenderFunction(funcFromData), FunctionElim(functionType),
+  RenderStatement(stmtFromData), StatementElim(statementTerm),
+  MethodTypeSym(mType), RenderParam(paramFromData), RenderMethod(commentedFunc),
+  BlockCommentSym(..))
+import qualified Drasil.GOOL.RendererClassesCommon as S (RenderValue(call),
+  InternalListFunc (listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
+  RenderStatement(stmt), InternalIOStmt(..))
+import qualified Drasil.GOOL.RendererClassesCommon as RC (BodyElim(..),
+  BlockElim(..), InternalVarElim(variable), ValueElim(value, valueInt),
+  FunctionElim(..), StatementElim(statement), BlockCommentElim(..))
+import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(commentedMod),
   OORenderMethod(intMethod), RenderClass(inherit, implements),
-  RenderMod(updateModuleDoc), BlockCommentSym(..))
-import qualified Drasil.GOOL.RendererClasses as S (RenderFile(fileFromData), 
-  RenderValue(call), InternalGetSet(getFunc, setFunc),InternalListFunc
-  (listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
-  RenderStatement(stmt), InternalIOStmt(..), OORenderMethod(intFunc), 
+  RenderMod(updateModuleDoc))
+import qualified Drasil.GOOL.RendererClassesOO as S (RenderFile(fileFromData),
+  InternalGetSet(getFunc, setFunc), OORenderMethod(intFunc),
   RenderClass(intClass, commentedClass))
-import qualified Drasil.GOOL.RendererClasses as RC (BodyElim(..), BlockElim(..),
-  InternalVarElim(variable), ValueElim(value, valueInt), FunctionElim(..), 
-  StatementElim(statement), ClassElim(..), ModuleElim(..), BlockCommentElim(..))
+import qualified Drasil.GOOL.RendererClassesOO as RC (ClassElim(..),
+  ModuleElim(..))
 import Drasil.GOOL.AST (Binding(..), Terminator(..), isSource)
 import Drasil.GOOL.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode, 
   toState, onStateValue, on2StateValues, onStateList, getInnerType, getNestDegree,

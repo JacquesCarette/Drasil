@@ -1,18 +1,15 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module Drasil.GOOL.RendererClasses (
-  CommonRenderSym, OORenderSym, RenderFile(..), ImportSym(..), ImportElim(..),
-  PermElim(..), RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..),
-  RenderType(..), InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp,
-  BinaryOpSym(..), OpElim(..), RenderVariable(..), InternalVarElim(..),
-  RenderValue(..), ValueElim(..), InternalGetSet(..), InternalListFunc(..),
-  RenderFunction(..), FunctionElim(..), InternalAssignStmt(..),
-  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
-  StatementElim(..), RenderScope(..), ScopeElim(..), MSMthdType,
-  MethodTypeSym(..), RenderParam(..), ParamElim(..), RenderMethod(..),
-  MethodElim(..), StateVarElim(..), ParentSpec, RenderClass(..), ClassElim(..),
-  RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..),
-  OORenderMethod(..), OOMethodTypeSym(..)
+module Drasil.GOOL.RendererClassesCommon (
+  CommonRenderSym, ImportSym(..), ImportElim(..),
+  RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), RenderType(..),
+  InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, BinaryOpSym(..),
+  OpElim(..), RenderVariable(..), InternalVarElim(..), RenderValue(..),
+  ValueElim(..), InternalListFunc(..), RenderFunction(..), FunctionElim(..),
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  RenderStatement(..), StatementElim(..), RenderScope(..), ScopeElim(..),
+  MSMthdType, MethodTypeSym(..), RenderParam(..), ParamElim(..),
+  RenderMethod(..), MethodElim(..), BlockCommentSym(..), BlockCommentElim(..),
 ) where
 
 import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
@@ -25,10 +22,6 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   ScopeSym(..), ParameterSym(..), MethodSym(..))
-import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, FSModule, SClass,
-  CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
-  FileSym(..), ModuleSym(..), ClassSym(..), PermanenceSym(..), GetSet(..),
-  StateVarSym(..), ObserverPattern(..), StrategyPattern(..))
 import Drasil.GOOL.CodeType (CodeType)
 import Drasil.GOOL.AST (Binding, Terminator, ScopeTag)
 import Drasil.GOOL.State (FS, CS, MS, VS)
@@ -42,8 +35,7 @@ class (AssignStatement r, DeclStatement r, IOStatement r,
   NumericExpression r, BooleanExpression r, Comparison r, List r,
   InternalList r, VectorExpression r, TypeElim r, VariableElim r, RenderBlock r,
   BlockElim r, RenderBody r, BodyElim r, InternalListFunc r, RenderFunction r,
-  FunctionElim r, OpElim r, RenderParam r, ParamElim r, PermElim r,
-  RenderScope r, ScopeElim r, InternalAssignStmt r, InternalIOStmt r,
+  FunctionElim r, OpElim r, RenderParam r, ParamElim r, RenderScope r, ScopeElim r, InternalAssignStmt r, InternalIOStmt r,
   InternalControlStmt r, RenderStatement r, StatementElim r, RenderType r,
   InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable r,
   InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r,
@@ -51,12 +43,6 @@ class (AssignStatement r, DeclStatement r, IOStatement r,
   MethodElim r, ParameterSym r
   ) => CommonRenderSym r
 
-class (CommonRenderSym r, IG.FileSym r, IG.InternalValueExp r, IG.GetSet r,
-  IG.ObserverPattern r, IG.StrategyPattern r, IG.OOVariableValue r,
-  IG.OOValueExpression r, RenderClass r, ClassElim r, RenderFile r,
-  InternalGetSet r, OORenderMethod r, RenderMod r, ModuleElim r,
-  StateVarElim r
-  ) => OORenderSym r
 
 -- TODO: split into multiple files, and create ProcRenderSym (or rename them both to RenderSym?)
 
@@ -241,63 +227,3 @@ class (MethodTypeSym r, BlockCommentSym r) => RenderMethod r where
 
 class MethodElim r where
   method :: r (Method r) -> Doc
-
--- OO-Only Typeclasses --
-
-class (BlockCommentSym r) => RenderFile r where
-  -- top and bottom are only used for pre-processor guards for C++ header 
-  -- files. FIXME: Remove them (generation of pre-processor guards can be 
-  -- handled by fileDoc instead)
-  top :: r (IG.Module r) -> r (Block r) 
-  bottom :: r (Block r)
-
-  commentedMod :: IG.SFile r -> FS (r (BlockComment r)) -> IG.SFile r
-
-  fileFromData :: FilePath -> IG.FSModule r -> IG.SFile r
-
-class PermElim r where
-  perm :: r (IG.Permanence r) -> Doc
-  binding :: r (IG.Permanence r) -> Binding
-
-class InternalGetSet r where
-  getFunc :: SVariable r -> VSFunction r
-  setFunc :: VSType r -> SVariable r -> SValue r -> VSFunction r
-
-class (MethodTypeSym r) => OOMethodTypeSym r where
-  construct :: Label -> MSMthdType r
-
-class (RenderMethod r, OOMethodTypeSym r) => OORenderMethod r where
-  -- | Main method?, name, public/private, static/dynamic, 
-  --   return type, parameters, body
-  intMethod     :: Bool -> Label -> r (Scope r) -> r (IG.Permanence r) -> 
-    MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
-  -- | True for main function, name, public/private, static/dynamic, 
-  --   return type, parameters, body
-  intFunc       :: Bool -> Label -> r (Scope r) -> r (IG.Permanence r) 
-    -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
-    
-  destructor :: [IG.CSStateVar r] -> SMethod r
-
-class StateVarElim r where  
-  stateVar :: r (IG.StateVar r) -> Doc
-
-type ParentSpec = Doc
-
-class (BlockCommentSym r) => RenderClass r where
-  intClass :: Label -> r (Scope r) -> r ParentSpec -> [IG.CSStateVar r] 
-    -> [SMethod r] -> [SMethod r] -> IG.SClass r
-    
-  inherit :: Maybe Label -> r ParentSpec
-  implements :: [Label] -> r ParentSpec
-
-  commentedClass :: CS (r (BlockComment r)) -> IG.SClass r -> IG.SClass r
-  
-class ClassElim r where
-  class' :: r (IG.Class r) -> Doc
-
-class RenderMod r where
-  modFromData :: String -> FS Doc -> IG.FSModule r
-  updateModuleDoc :: (Doc -> Doc) -> r (IG.Module r) -> r (IG.Module r)
-  
-class ModuleElim r where
-  module' :: r (IG.Module r) -> Doc

@@ -8,10 +8,10 @@ module Drasil.GOOL.LanguageRenderer.Constructors (
 
 import Drasil.GOOL.InterfaceCommon (VSType, MSStatement, SVariable, SValue,
   TypeSym(..), TypeElim(..), ValueSym(..))
-import Drasil.GOOL.RendererClasses (CommonRenderSym, VSUnOp, VSBinOp, UnaryOpSym(..),
-  BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..), 
+import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, VSUnOp, VSBinOp,
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
   RenderValue(..), ValueElim(valuePrec), RenderStatement(..))
-import qualified Drasil.GOOL.RendererClasses as RC (uOp, bOp, value)
+import qualified Drasil.GOOL.RendererClassesCommon as RC (uOp, bOp, value)
 import Drasil.GOOL.LanguageRenderer (unOpDocD, unOpDocD', binOpDocD, binOpDocD')
 import Drasil.GOOL.AST (Terminator(..), Binding(..), OpData, od)
 import Drasil.GOOL.CodeType (CodeType(..))

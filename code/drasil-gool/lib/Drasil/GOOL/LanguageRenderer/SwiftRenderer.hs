@@ -31,21 +31,25 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
   OOMethodSym(..), convTypeOO)
-import Drasil.GOOL.RendererClasses (MSMthdType, CommonRenderSym, OORenderSym,
-  RenderFile(..), ImportSym(..), ImportElim, PermElim(binding), RenderBody(..),
-  BodyElim, RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim,
-  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
-  InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec, valueInt),
-  InternalGetSet(..), InternalListFunc(..), RenderFunction(..),
-  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
-  RenderScope(..), ScopeElim, MethodTypeSym(..), OOMethodTypeSym(..),
+import Drasil.GOOL.RendererClassesCommon (MSMthdType, CommonRenderSym,
+  ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
+  BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
+  OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
+  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
+  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
+  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
+  StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..),
   RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
-  OORenderMethod(..), MethodElim, StateVarElim, RenderClass(..), ClassElim,
-  RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
-import qualified Drasil.GOOL.RendererClasses as RC (import', perm, body, block,
+  MethodElim, BlockCommentSym(..), BlockCommentElim)
+import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
-  method, stateVar, class', module', blockComment')
+  method, blockComment')
+import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
+  PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
+  OORenderMethod(..), StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
+  ModuleElim)
+import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar,
+  class', module')
 import Drasil.GOOL.LanguageRenderer (dot, blockCmtStart, blockCmtEnd,
   docCmtStart, bodyStart, bodyEnd, commentStart, elseIfLabel, forLabel,
   inLabel, tryLabel, catchLabel, throwLabel, throwsLabel, importLabel, listSep',

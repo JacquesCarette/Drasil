@@ -21,12 +21,13 @@ import qualified Drasil.GOOL.InterfaceCommon as IC (BlockSym(block),
   AssignStatement(assign), DeclStatement(varDecDef, listDec), 
   ControlStatement(ifCond, for, forRange), ValueExpression(inlineIf))
 import Drasil.GOOL.InterfaceGOOL (($.), observerListName)
-import Drasil.GOOL.RendererClasses (CommonRenderSym, OORenderSym,
-  RenderValue(cast), ValueElim(valueInt))
-import qualified Drasil.GOOL.RendererClasses as S (
+import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, RenderValue(cast),
+  ValueElim(valueInt))
+import qualified Drasil.GOOL.RendererClassesCommon as S (
   RenderStatement(stmt, emptyStmt))
-import qualified Drasil.GOOL.RendererClasses as RC (BodyElim(..),
+import qualified Drasil.GOOL.RendererClassesCommon as RC (BodyElim(..),
   StatementElim(statement))
+import Drasil.GOOL.RendererClassesOO (OORenderSym)
 import Drasil.GOOL.Helpers (toCode, onStateValue, on2StateValues)
 import Drasil.GOOL.State (MS, lensMStoVS, genVarName, genLoopIndex,
   genVarNameIf)

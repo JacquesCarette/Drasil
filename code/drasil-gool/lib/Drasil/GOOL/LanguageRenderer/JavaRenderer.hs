@@ -22,27 +22,32 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, VSFunction,
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
-import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..),
-  OOVariableSym(..), StateVarSym(..), PermanenceSym(..), OOValueSym,
-  OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
-  InternalValueExp(..), OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
+import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
+  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
+  StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
+  OOValueExpression(..), selfFuncApp, newObj, InternalValueExp(..),
+  OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
   OOMethodSym(..))
-import Drasil.GOOL.RendererClasses (CommonRenderSym, OORenderSym,
-  RenderFile(..), ImportSym(..), ImportElim, PermElim(binding), RenderBody(..),
-  BodyElim, RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim,
-  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
-  InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec,
-  valueInt),InternalGetSet(..), InternalListFunc(..), RenderFunction(..),
-  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
-  RenderScope(..), ScopeElim, MethodTypeSym(..), OOMethodTypeSym(..),
+import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
+  ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
+  BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
+  OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
+  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
+  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
+  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
+  StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..),
   RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
-  OORenderMethod(..), MethodElim, StateVarElim, RenderClass(..), ClassElim,
-  RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
-import qualified Drasil.GOOL.RendererClasses as RC (import', perm, body, block,
+  MethodElim, BlockCommentSym(..), BlockCommentElim)
+import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
-  method, stateVar, class', module', blockComment')
+  method, blockComment')
+import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
+  PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
+  OORenderMethod(..), StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
+  ModuleElim)
+import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
+  module')
 import Drasil.GOOL.LanguageRenderer (dot, new, elseIfLabel, forLabel, tryLabel,
   catchLabel, throwLabel, throwsLabel, importLabel, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, exceptionObj', 
@@ -983,7 +988,7 @@ jStringSplit :: (CommonRenderSym r) => SVariable r -> SValue r -> VS Doc
 jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+> 
   new' <+> RC.type' (variableType vnew) <> parens (RC.value s))
 
-jMethod :: (CommonRenderSym r) => Label -> [String] -> r (Scope r) -> r (Permanence r)
+jMethod :: (OORenderSym r) => Label -> [String] -> r (Scope r) -> r (Permanence r)
   -> r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 jMethod n es s p t ps b = vcat [
   RC.scope s <+> RC.perm p <+> RC.type' t <+> text n <> 

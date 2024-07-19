@@ -1035,7 +1035,7 @@ pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid .
 
 toConstName :: String -> String
 toConstName (s:s':ss) = if isLower s && isUpper s'
-                          then toUpper s : '_' : toUpper s' : toConstName ss
+                          then toUpper s : '_' : s' : toConstName ss
                           else toUpper s : toConstName (s' : ss)
 toConstName (s:ss)    = toUpper s : toConstName ss
 toConstName ""        = ""

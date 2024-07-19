@@ -45,7 +45,7 @@ import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.Code.ExtLibImport (defs, imports, steps)
 import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
-  ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..), 
+  ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..),
   Logging(..), Structure(..), hasSampleInput, InternalConcept(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
@@ -339,6 +339,9 @@ chooseConstr :: (OOProg r) => ConstraintBehaviour ->
 chooseConstr cb cs = do
   conds <- mapM (\(q,cns) -> mapM (convExpr . renderC q) cns) cs
   bods <- mapM (chooseCB cb) cs
+    -- Pattern match on the values inside 'bods'
+  let x = head (map snd cs)
+  let temp = map (printObjDef :: ConstraintCE -> GenState [MSStatement r]) x
   return $ concat $ zipWith (zipWith (\cond bod -> ifNoElse [((?!) cond, bod)]))
     conds bods
   where chooseCB Warning = constrWarn
@@ -378,6 +381,17 @@ constraintViolatedMsg q s c = do
     print v,
     printStr $ ", but is " ++ s ++ " to be "] ++ pc
 
+printObjDef :: (OOProg r) => ConstraintCE -> GenState [MSStatement r]
+printObjDef c = do
+  g <- get
+  let db = sysinfodb $ codeSpec g
+      printObjDef' :: (OOProg r) => ConstraintCE -> GenState [MSStatement r]
+      printObjDef' (Elem _ e) = do
+        lb <- convExpr e
+        return $ [varDecDef (var "set_i" (setType double)) lb, printStrLn "."]
+      printObjDef' _ = do
+        return $ [printStr "dne"]
+  printObjDef' c
 -- | Generates statements to print descriptions of constraints, using words and
 -- the constrained values. Constrained values are followed by printing the
 -- expression they originated from, using printExpr.

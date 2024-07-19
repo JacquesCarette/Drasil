@@ -1,9 +1,9 @@
 {-# LANGUAGE TypeFamilies, Rank2Types #-}
 
 -- Performs code analysis on the GOOL code
-module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
+module Drasil.GOOL.CodeInfo (CodeInfo(..)) where
 
-import GOOL.Drasil.InterfaceCommon (MSBody, VSType, SValue, MSStatement, 
+import Drasil.GOOL.InterfaceCommon (MSBody, VSType, SValue, MSStatement, 
   SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
   VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
@@ -14,17 +14,17 @@ import GOOL.Drasil.InterfaceCommon (MSBody, VSType, SValue, MSStatement,
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
   VisibilitySym(..))
-import GOOL.Drasil.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
+import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
   OOVariableSym(..), PermanenceSym(..), StateVarSym(..), OOValueSym,
   OOVariableValue, OOValueExpression(..), InternalValueExp(..), FunctionSym(..),
   GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..))
-import GOOL.Drasil.CodeType (CodeType(Void))
-import GOOL.Drasil.AST (VisibilityTag(..), qualName)
-import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
-import GOOL.Drasil.Helpers (toCode, toState)
-import GOOL.Drasil.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
+import Drasil.GOOL.CodeType (CodeType(Void))
+import Drasil.GOOL.AST (VisibilityTag(..), qualName)
+import Drasil.GOOL.CodeAnalysis (ExceptionType(..))
+import Drasil.GOOL.Helpers (toCode, toState)
+import Drasil.GOOL.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   lensCStoMS, lensMStoVS, lensVStoFS, lensCStoFS, modifyReturn, 
   setClassName, getClassName, setModuleName, getModuleName, addClass, 
   updateClassMap, addException, updateMethodExcMap, updateCallMap, addCall, 
@@ -119,7 +119,7 @@ instance VariableSym CodeInfo where
   arrayElem _ _   = noInfo
   
 instance OOVariableSym CodeInfo where
-  staticVar  _ _  = noInfo
+  staticVar   _ _ = noInfo
   self            = noInfo
   classVar    _ _ = noInfo
   extClassVar _ _ = noInfo

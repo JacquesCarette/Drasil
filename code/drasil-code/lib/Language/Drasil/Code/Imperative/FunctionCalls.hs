@@ -16,7 +16,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (InternalConcept(..))
 
-import GOOL.Drasil (VSType, SValue, MSStatement, OOProg, TypeSym(..),
+import Drasil.GOOL (VSType, SValue, MSStatement, OOProg, TypeSym(..),
   VariableValue(..), StatementSym(..), DeclStatement(..), ScopeSym(..),
   convTypeOO)
 

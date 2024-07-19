@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell, TupleSections #-}
 
-module GOOL.Drasil.State (
+module Drasil.GOOL.State (
   -- Types
   GS, GOOLState(..), FS, CS, MS, VS, 
   -- Lenses
@@ -25,15 +25,15 @@ module GOOL.Drasil.State (
   updateMethodExcMap, getMethodExcMap, updateCallMap, callMapTransClosure, 
   updateMEMWithCalls, addParameter, getParameters, setOutputsDeclared, 
   isOutputsDeclared, addException, addExceptions, getExceptions, addCall, 
-  setMainDoc, getMainDoc, setVisibility, getVisibility, setCurrMainFunc, getCurrMainFunc, 
-  setThrowUsed, getThrowUsed, setErrorDefined, getErrorDefined, addIter, 
-  getIter, resetIter, incrementLine, incrementWord, getLineIndex, getWordIndex, 
-  resetIndices, useVarName, genVarName, genLoopIndex
+  setMainDoc, getMainDoc, setVisibility, getVisibility, setCurrMainFunc,
+  getCurrMainFunc, setThrowUsed, getThrowUsed, setErrorDefined, getErrorDefined,
+  addIter, getIter, resetIter, incrementLine, incrementWord, getLineIndex,
+  getWordIndex,  resetIndices, useVarName, genVarName, genLoopIndex
 ) where
 
-import GOOL.Drasil.AST (FileType(..), VisibilityTag(..), QualifiedName, qualName)
-import GOOL.Drasil.CodeAnalysis (Exception, ExceptionType, printExc, hasLoc)
-import GOOL.Drasil.CodeType (ClassName)
+import Drasil.GOOL.AST (FileType(..), VisibilityTag(..), QualifiedName, qualName)
+import Drasil.GOOL.CodeAnalysis (Exception, ExceptionType, printExc, hasLoc)
+import Drasil.GOOL.CodeType (ClassName)
 
 import Utils.Drasil (nubSort)
 
@@ -262,7 +262,7 @@ initialMS = MS {
   _exceptions = [],
   _calls = [],
 
-  _currVisibility = Priv,
+  _currVisibility  = Priv,
   _currMainFunc = False,
   _iterators = [],
 

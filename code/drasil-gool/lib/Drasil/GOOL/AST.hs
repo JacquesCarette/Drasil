@@ -1,4 +1,4 @@
-module GOOL.Drasil.AST (Terminator(..), VisibilityTag(..), QualifiedName, qualName, 
+module Drasil.GOOL.AST (Terminator(..), VisibilityTag(..), QualifiedName, qualName, 
   FileType(..), isSource, Binding(..), onBinding, BindData(bind, bindDoc), bd, 
   FileData(filePath, fileMod), fileD, updateFileMod, FuncData(fType, funcDoc), 
   fd, ModData(name, modDoc), md, updateMod, MethodData(mthdDoc), mthd, 
@@ -11,7 +11,7 @@ module GOOL.Drasil.AST (Terminator(..), VisibilityTag(..), QualifiedName, qualNa
   commonThunkElim, commonThunkDim
 ) where
 
-import GOOL.Drasil.CodeType (CodeType)
+import Drasil.GOOL.CodeType (CodeType)
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, isEmpty)

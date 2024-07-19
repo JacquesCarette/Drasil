@@ -1,6 +1,6 @@
 module NameGenTest (nameGenTest) where
 
-import GOOL.Drasil
+import Drasil.GOOL
 
 nameGenTest :: OOProg r => GSProgram r
 nameGenTest = prog "NameGenTest" "" [fileDoc $ buildModule "NameGenTest" [] [main, helper] []]

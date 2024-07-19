@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.DrasilState (
 ) where
 
 import Language.Drasil
-import GOOL.Drasil (VisibilityTag(..), CodeType)
+import Drasil.GOOL (VisibilityTag(..), CodeType)
 
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)

@@ -2,7 +2,7 @@
 -- and write to files. See stable/gooltest for more details on what is generated through this.
 module FileTests (fileTests) where
 
-import GOOL.Drasil (GSProgram, MSBlock, MSStatement, SMethod, OOProg,
+import Drasil.GOOL (GSProgram, MSBlock, MSStatement, SMethod, OOProg,
   ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), TypeSym(..),
   DeclStatement(..), IOStatement(..), mainVar, Literal(..), VariableValue(..),
   MethodSym(..), ModuleSym(..))

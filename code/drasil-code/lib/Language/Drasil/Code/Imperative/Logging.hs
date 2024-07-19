@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.Logging (
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Choices (Logging(..))
 
-import GOOL.Drasil (Label, MSBody, MSBlock, SVariable, SValue, MSStatement,
+import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, MSStatement,
   OOProg, BodySym(..), BlockSym(..), TypeSym(..), var,
   VariableElim(..), Literal(..), VariableValue(..), StatementSym(..),
   DeclStatement(..), IOStatement(..), lensMStoVS, ScopeSym(..))

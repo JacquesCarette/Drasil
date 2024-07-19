@@ -408,7 +408,7 @@ printConstraint c = do
         return $ [printStr "above ", print lb] ++ printExpr e db ++ [printStrLn "."]
       printConstraint' (Elem _ e) = do
         lb <- convExpr e
-        return $ [printStr (" an element of the set "), print lb] ++ [printStrLn "."]
+        return $ [printStr ("an element of the set "), print lb] ++ [printStrLn "."]
   printConstraint' c
 
 -- | Don't print expressions that are just literals, because that would be

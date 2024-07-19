@@ -544,7 +544,7 @@ instance DeclStatement PythonCode where
     available <- varNameAvailable n
     if available
       then varDecDef newConst e
-      else error "Cannot safely capitalize constant."
+      else error "Cannot safely capitalize constant." -- TODO: make this a warning.
   funcDecDef = CP.funcDecDef
 
 instance OODeclStatement PythonCode where

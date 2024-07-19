@@ -24,7 +24,7 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
   ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.CodeType (CodeType)
 import Drasil.GOOL.AST (Binding, Terminator, ScopeTag)
-import Drasil.GOOL.State (FS, CS, MS, VS)
+import Drasil.GOOL.State (MS, VS)
 
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)

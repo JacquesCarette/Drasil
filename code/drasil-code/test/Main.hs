@@ -1,7 +1,7 @@
 -- | Main module to gather all the GOOL tests and generate them.
 module Main (main) where
 
-import GOOL.Drasil (Label, OOProg, ProgramSym(..), unCI, unJC, unPC, unCSC,
+import Drasil.GOOL (Label, OOProg, ProgramSym(..), unCI, unJC, unPC, unCSC,
   unCPPC, unSC, FileData(..), ModData(..), ProgData(..), initialState)
 
 import Language.Drasil.Code (PackageSym(..), AuxiliarySym(..), AuxData(..),

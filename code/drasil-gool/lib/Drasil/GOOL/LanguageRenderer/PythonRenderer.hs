@@ -1,15 +1,15 @@
 {-# LANGUAGE TypeFamilies #-}
 
 -- | The logic to render Python code is contained in this module
-module GOOL.Drasil.LanguageRenderer.PythonRenderer (
+module Drasil.GOOL.LanguageRenderer.PythonRenderer (
   -- * Python Code Configuration -- defines syntax of all Python code
   PythonCode(..), pyName, pyVersion
 ) where
 
 import Utils.Drasil (blank, indent)
 
-import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.InterfaceCommon (SharedProg, Label, Library, VSType,
+import Drasil.GOOL.CodeType (CodeType(..))
+import Drasil.GOOL.InterfaceCommon (SharedProg, Label, Library, VSType,
   SVariable, SValue, MSStatement, MixedCtorCall, BodySym(..), BlockSym(..),
   TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
@@ -21,13 +21,13 @@ import GOOL.Drasil.InterfaceCommon (SharedProg, Label, Library, VSType,
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..),
   MethodSym(..))
-import GOOL.Drasil.InterfaceGOOL (VSFunction, OOProg, ProgramSym(..),
+import Drasil.GOOL.InterfaceGOOL (VSFunction, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue, InternalValueExp(..), extNewObj, objMethodCall,
   FunctionSym(..), GetSet(..), OOValueExpression(..), selfFuncApp,
   OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..), OOMethodSym(..))
-import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
+import Drasil.GOOL.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
@@ -39,21 +39,21 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
   StateVarElim, RenderClass(..), ClassElim, RenderMod(..), ModuleElim, 
   BlockCommentSym(..), BlockCommentElim)
-import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block, 
+import qualified Drasil.GOOL.RendererClasses as RC (import', perm, body, block, 
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
-import GOOL.Drasil.LanguageRenderer (classDec, dot, ifLabel, elseLabel, 
+import Drasil.GOOL.LanguageRenderer (classDec, dot, ifLabel, elseLabel, 
   forLabel, inLabel, whileLabel, tryLabel, importLabel, exceptionObj', listSep',
   argv, printLabel, listSep, piLabel, access, functionDox, variableList, 
   parameterList)
-import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, fabs, log10, 
+import qualified Drasil.GOOL.LanguageRenderer as R (sqrt, fabs, log10, 
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, 
   classVar, listSetFunc, castObj, dynamic, break, continue, addComments, 
   commentedMod, commentedItem)
-import GOOL.Drasil.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal, 
+import Drasil.GOOL.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal, 
   mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, 
   unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr)
-import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
+import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
@@ -65,24 +65,24 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
   buildClass, implementingClass, commentedClass, modFromData, fileDoc,
   fileFromData)
-import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
+import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
   extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
   funcType, buildModule, bindingError, notNull, listDecDef, destructorError, 
   stateVarDef, constVar, litArray, listSetFunc, extraClass, listAccessFunc, 
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
   mainBody, inOutFunc, docInOutFunc', listSize, intToIndex, indexToInt)
-import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
+import qualified Drasil.GOOL.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
   notifyObservers')
-import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
+import Drasil.GOOL.AST (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
   td, ValData(..), vd, VarData(..), vard, CommonThunk, pureValue, vectorize,
   vectorize2, sumComponents, commonVecIndex, commonThunkElim, commonThunkDim)
-import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
+import Drasil.GOOL.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList, on2StateWrapped)
-import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
+import Drasil.GOOL.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
   revFiles, addLangImportVS, getLangImports, addLibImportVS, 
   getLibImports, addModuleImport, addModuleImportVS, getModuleImports, 
   setFileType, getClassName, setCurrMain, getClassMap, getMainDoc, useVarName,
@@ -98,7 +98,7 @@ import Data.List (intercalate, sort)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty, quotes)
-import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
+import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 
 pyExt :: String
 pyExt = "py"

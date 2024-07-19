@@ -44,7 +44,7 @@ import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
 import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc)
 
-import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement,
+import Drasil.GOOL (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement,
   SMethod, CSStateVar, SClass, OOProg, BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..), Literal(..),
   VariableValue(..), CommandLineArgs(..), BooleanExpression(..),

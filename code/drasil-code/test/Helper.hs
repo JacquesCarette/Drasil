@@ -1,7 +1,7 @@
 -- | Makes the helper file for the GOOL HelloWorld tests.
 module Helper (helper) where
 
-import GOOL.Drasil (SFile, SMethod,
+import Drasil.GOOL (SFile, SMethod,
   OOProg, FileSym(..), bodyStatements, TypeSym(..),
   DeclStatement(..), ControlStatement(..), (&=), VariableSym(..),
   Literal(..), VariableValue(..), NumericExpression(..), ScopeSym(..), ParameterSym(..), MethodSym(..),

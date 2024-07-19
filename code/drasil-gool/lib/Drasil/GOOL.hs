@@ -1,5 +1,5 @@
 -- | re-export smart constructors for external code writing
-module GOOL.Drasil (Label, GSProgram, SFile, MSBody, MSBlock, VSType, 
+module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, VSType, 
   SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar,
   SClass, FSModule, NamedArgs, Initializers, OOProg, ProgramSym(..),
   FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, oneLiner,
@@ -28,10 +28,10 @@ module GOOL.Drasil (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   cppName, cppVersion, swiftName, swiftVersion
   ) where
 
-import GOOL.Drasil.InterfaceCommon (Label, MSBody, MSBlock, VSType, SVariable,
-  SValue, MSStatement, MSParameter, SMethod, NamedArgs, Initializers,
-  BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
-  TypeElim(..), ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSType, SVariable,
+  SValue, MSStatement, MSParameter, SMethod, NamedArgs, BodySym(..),
+  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
@@ -41,31 +41,31 @@ import GOOL.Drasil.InterfaceCommon (Label, MSBody, MSBlock, VSType, SVariable,
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
   funcAppNamedArgs, extFuncApp, libFuncApp, exists, List(..), listSlice,
   listIndexExists, at, ScopeSym(..), ParameterSym(..), MethodSym(..), convType)
-import GOOL.Drasil.InterfaceGOOL (GSProgram, SFile, FSModule, SClass,
+import Drasil.GOOL.InterfaceGOOL (GSProgram, SFile, FSModule, SClass,
   CSStateVar, VSFunction, OOProg, ProgramSym(..), FileSym(..), ModuleSym(..),
-  ClassSym(..), OOMethodSym(..), OOTypeSym(..), OOVariableSym(..), ($->),
-  PermanenceSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
-  StateVarSym(..), privDVar, pubDVar, pubSVar, OOVariableValue,
-  OOValueExpression(..), selfFuncApp, newObj, extNewObj, libNewObj,
-  OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
+  ClassSym(..), OOMethodSym(..), Initializers, OOTypeSym(..), OOVariableSym(..),
+  ($->), PermanenceSym(..), privMethod, pubMethod, initializer,
+  nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar,
+  OOVariableValue, OOValueExpression(..), selfFuncApp, newObj, extNewObj,
+  libNewObj, OODeclStatement(..), objDecNewNoParams, extObjDecNewNoParams,
   OOFuncAppStatement(..), GetSet(..), objMethodCall, objMethodCallNamedArgs,
   objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..), ($.),
   selfAccess, ObserverPattern(..), initObserverList, addObserver,
   StrategyPattern(..), convTypeOO)
 
-import GOOL.Drasil.AST (FileData(..), ModData(..), ProgData(..), ScopeTag(..))
+import Drasil.GOOL.AST (FileData(..), ModData(..), ProgData(..), ScopeTag(..))
 
-import GOOL.Drasil.CodeType (CodeType(..))
+import Drasil.GOOL.CodeType (CodeType(..))
 
-import GOOL.Drasil.State (GOOLState(..), lensMStoVS, headers, sources, mainMod, 
+import Drasil.GOOL.State (GOOLState(..), lensMStoVS, headers, sources, mainMod, 
   initialState)
 
-import GOOL.Drasil.Helpers (onStateValue, onCodeList)
+import Drasil.GOOL.Helpers (onStateValue, onCodeList)
 
-import GOOL.Drasil.CodeInfo (unCI)
+import Drasil.GOOL.CodeInfo (unCI)
 
-import GOOL.Drasil.LanguageRenderer.JavaRenderer (unJC, jName, jVersion)
-import GOOL.Drasil.LanguageRenderer.PythonRenderer (unPC, pyName, pyVersion)
-import GOOL.Drasil.LanguageRenderer.CSharpRenderer (unCSC, csName, csVersion)
-import GOOL.Drasil.LanguageRenderer.CppRenderer (unCPPC, cppName, cppVersion)
-import GOOL.Drasil.LanguageRenderer.SwiftRenderer (unSC, swiftName, swiftVersion)
+import Drasil.GOOL.LanguageRenderer.JavaRenderer (unJC, jName, jVersion)
+import Drasil.GOOL.LanguageRenderer.PythonRenderer (unPC, pyName, pyVersion)
+import Drasil.GOOL.LanguageRenderer.CSharpRenderer (unCSC, csName, csVersion)
+import Drasil.GOOL.LanguageRenderer.CppRenderer (unCPPC, cppName, cppVersion)
+import Drasil.GOOL.LanguageRenderer.SwiftRenderer (unSC, swiftName, swiftVersion)

@@ -2,7 +2,7 @@
 
 # -r so that Backslash does not act as an escape character, so that escape characters are captured
 while read -r  p; do
-    echo $p >>duplicate_string_summary.txt
+    echo "$p" >>duplicate_string_summary.txt
     #looking for instances of \\, grep needs to be adjusted for escape characters
     if [[ $p == *"\\"* ]]; then
         #remove the first character (double quote) of the current string
@@ -24,7 +24,7 @@ while read -r  p; do
         echo "Number of files containing the string: ${filescontainstring}" >>duplicate_string_summary.txt
         grep -ro --exclude-dir=./Drasil/code/stable --include \*.hs "$p" ./Drasil/code | sort -u >>duplicate_string_summary.txt
     fi    
-    printf '%s\n'>>duplicate_string_summary.txt
+    printf '\n'>>duplicate_string_summary.txt
 done <duplicate_strings.txt
 
 

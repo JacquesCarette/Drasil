@@ -1,8 +1,8 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module GOOL.Drasil.InterfaceGOOL (
+module Drasil.GOOL.InterfaceGOOL (
   -- Types
-  GSProgram, SFile, FSModule, SClass, VSFunction, CSStateVar,
+  GSProgram, SFile, FSModule, SClass, VSFunction, CSStateVar, Initializers,
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..),
   OOTypeSym(..), OOVariableSym(..), ($->), OOValueSym, OOVariableValue,
@@ -16,19 +16,19 @@ module GOOL.Drasil.InterfaceGOOL (
   initObserverList, addObserver, StrategyPattern(..), convTypeOO
   ) where
 
-import GOOL.Drasil.InterfaceCommon (
+import Drasil.GOOL.InterfaceCommon (
   -- Types
   Label, Library, MSBody, MSBlock, VSType, SVariable, SValue, MSStatement,
-  NamedArgs, MSParameter, SMethod, Initializers, MixedCall, MixedCtorCall,
-  PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
+  NamedArgs, MSParameter, SMethod, MixedCall, MixedCtorCall, PosCall,
+  PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, BodySym(body), TypeSym(listType), MethodSym, VariableSym(var),
   ScopeSym(..), ValueSym(valueType), VariableValue(valueOf), ValueExpression,
   List(listSize, listAdd), listOf, StatementSym(valStmt),
   DeclStatement(listDecDef), FuncAppStatement, convType)
-import GOOL.Drasil.CodeType (CodeType(..), ClassName)
-import GOOL.Drasil.Helpers (onStateValue)
-import GOOL.Drasil.State (GS, FS, CS, VS)
+import Drasil.GOOL.CodeType (CodeType(..), ClassName)
+import Drasil.GOOL.Helpers (onStateValue)
+import Drasil.GOOL.State (GS, FS, CS, VS)
 
 class (SharedProg r, ProgramSym r, OOVariableValue r, OODeclStatement r,
   OOFuncAppStatement r, OOValueExpression r, InternalValueExp r, GetSet r,
@@ -75,6 +75,8 @@ class (OOMethodSym r, StateVarSym r) => ClassSym r where
     [SMethod r] -> SClass r
 
   docClass :: String -> SClass r -> SClass r
+
+type Initializers r = [(SVariable r, SValue r)]
 
 class (MethodSym r, PermanenceSym r) => OOMethodSym r where
   method      :: Label -> r (Scope r) -> r (Permanence r) -> VSType r -> 

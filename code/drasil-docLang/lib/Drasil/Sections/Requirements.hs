@@ -8,7 +8,7 @@ module Drasil.Sections.Requirements (
   fullReqs, fullTables, inReq, inTable,
   mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
   -- * Non-functional Requirements
-  nfReqF, mkMaintainableNFR
+  nfReqF, mkMaintainableNFR, mkPortableNFR
   ) where
 
 import Language.Drasil
@@ -28,6 +28,7 @@ import Data.List (nub)
 
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap)
+
 
 -- | Wrapper for 'reqIntro'.
 reqF :: [Section] -> Section
@@ -110,6 +111,16 @@ mkMaintainableNFR refAddress percent lbl = cic refAddress (foldlSent [
   S "original development time,",
   S "assuming the same development resources are available"
   ]) lbl nonFuncReqDom
+
+mkPortableNFR :: String -> [String] -> String -> ConceptInstance
+mkPortableNFR refAddress osList lbl
+  | null osList = cic refAddress (S "No operating systems specified.") lbl nonFuncReqDom
+  | length osList == 1 = cic refAddress (S $ "The code shall be portable to " ++ head osList) lbl nonFuncReqDom
+  | otherwise = cic refAddress (foldlSent [
+      S "The code shall be portable to multiple Operating Systems, particularly",
+      S $ foldr (\os acc -> os ++ if null acc then "" else ", " ++ acc) "" osList
+      ]) lbl nonFuncReqDom
+  
 
 -- | Creates an Input Data Table for use in the Functional Requirments section. Takes a list of wrapped variables and something that is 'Referable'.
 mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => 

@@ -3,7 +3,7 @@ module Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, inReqDesc, nonfunc
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Drasil.DocLang (inReq, mkQRTuple, mkQRTupleRef, mkValsSourceTable, mkMaintainableNFR)
+import Drasil.DocLang (inReq, mkQRTuple, mkQRTupleRef, mkValsSourceTable, mkMaintainableNFR, mkPortableNFR)
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
@@ -96,26 +96,24 @@ correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
   atStartNP' (output_ `the_ofThePS` code), S "have the",
   plural property, S "described in", refS (propCorSol [] [])
-  ]) "Correct" nonFuncReqDom
+  ]) "Correctness" nonFuncReqDom
  
 verifiable :: ConceptInstance
 verifiable = cic "verifiable" (foldlSent [
   atStartNP (the code), S "is tested with complete",
-  phrase vavPlan]) "Verifiable" nonFuncReqDom
+  phrase vavPlan]) "Verifiability" nonFuncReqDom
 
 understandable :: ConceptInstance
 understandable = cic "understandable" (foldlSent [
   atStartNP (the code), S "is modularized with complete",
-  phrase mg `S.and_` phrase mis]) "Understandable" nonFuncReqDom
+  phrase mg `S.and_` phrase mis]) "Understandability" nonFuncReqDom
 
 reusable :: ConceptInstance
 reusable = cic "reusable" (foldlSent [
-  atStartNP (the code), S "is modularized"]) "Reusable" nonFuncReqDom
+  atStartNP (the code), S "is modularized"]) "Reusability" nonFuncReqDom
 
 maintainable :: ConceptInstance
-maintainable = mkMaintainableNFR "maintainable" 10 "Maintainable"
+maintainable = mkMaintainableNFR "maintainable" 10 "Maintainability"
 
 portable :: ConceptInstance
-portable = cic "portable" (foldlSent [
-  atStartNP (the code), S "is able to be run in different", plural environment])
-  "Portable" nonFuncReqDom  
+portable = mkPortableNFR "portable" ["Windows", "Mac OSX", "Linux"] "Portablity"

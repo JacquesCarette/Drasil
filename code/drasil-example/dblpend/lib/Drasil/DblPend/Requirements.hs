@@ -2,6 +2,7 @@ module Drasil.DblPend.Requirements where
 
 import Language.Drasil
 import Drasil.DocLang.SRS (datCon, propCorSol)
+import Drasil.DocLang (mkPortableNFR)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -49,9 +50,7 @@ correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
  atStartNP' (output_ `the_ofThePS` code), S "have the", 
  namedRef (propCorSol [] []) (plural propOfCorSol)]
- ) "Correct" nonFuncReqDom
+ ) "Correctness" nonFuncReqDom
 
 portable :: ConceptInstance
-portable = cic "portable" (foldlSent [
-  atStartNP (the code), S "is able to be run in different", plural environment])
-  "Portable" nonFuncReqDom
+portable = mkPortableNFR "portable" ["Windows", "Mac OSX", "Linux"] "Portability"

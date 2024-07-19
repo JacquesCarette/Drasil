@@ -3,7 +3,7 @@
 -- Should run print statements, basic loops, math, and create a helper module without errors.
 module HelloWorld (helloWorld) where
 
-import GOOL.Drasil (GSProgram, MSBody, MSBlock, MSStatement, SMethod, SVariable,
+import Drasil.GOOL (GSProgram, MSBody, MSBlock, MSStatement, SMethod, SVariable,
   OOProg, ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), listSlice, TypeSym(..), StatementSym(..), AssignStatement(..), 
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..),

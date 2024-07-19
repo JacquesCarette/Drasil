@@ -8,7 +8,7 @@ import Language.Drasil (UID, Sentence(S), (+:+), (+:+.))
 import Language.Drasil.Choices (Choices(..), CodeConcept(..),
     MatchedConceptMap, showChs, Maps(..))
 
-import GOOL.Drasil (SValue, OOProg, MathConstant(..))
+import Drasil.GOOL (SValue, OOProg, MathConstant(..))
 
 import Prelude hiding (pi)
 import qualified Data.Map as Map (mapWithKey)

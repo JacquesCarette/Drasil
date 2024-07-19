@@ -14,7 +14,7 @@ import Language.Drasil.Code.DataDesc (DataDesc)
 import Language.Drasil.Mod (Name, Version)
 import Language.Drasil.Choices (Comments, ImplementationType, Verbosity)
 
-import GOOL.Drasil (ProgData, GOOLState)
+import Drasil.GOOL (ProgData, GOOLState)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 

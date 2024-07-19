@@ -1,6 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module GOOL.Drasil.RendererClasses (
+module Drasil.GOOL.RendererClasses (
   RenderSym, RenderFile(..), ImportSym(..), ImportElim(..), PermElim(..), 
   RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), RenderType(..), 
   InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, BinaryOpSym(..), 
@@ -14,7 +14,7 @@ module GOOL.Drasil.RendererClasses (
   ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..)
 ) where
 
-import GOOL.Drasil.InterfaceCommon (Label, Library, MSBody, MSBlock, VSType,
+import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSType,
   SVariable, SValue, MSStatement, MSParameter, SMethod, MixedCall, BodySym(..),
   BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
@@ -23,13 +23,13 @@ import GOOL.Drasil.InterfaceCommon (Label, Library, MSBody, MSBlock, VSType,
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
-import GOOL.Drasil.InterfaceGOOL (SFile, VSFunction, FSModule, SClass,
+import Drasil.GOOL.InterfaceGOOL (SFile, VSFunction, FSModule, SClass,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), ModuleSym(..), ClassSym(..), FunctionSym(..),  PermanenceSym(..),
   GetSet(..), StateVarSym(..), ObserverPattern(..), StrategyPattern(..))
-import GOOL.Drasil.CodeType (CodeType)
-import GOOL.Drasil.AST (Binding, Terminator, ScopeTag)
-import GOOL.Drasil.State (FS, CS, MS, VS)
+import Drasil.GOOL.CodeType (CodeType)
+import Drasil.GOOL.AST (Binding, Terminator, ScopeTag)
+import Drasil.GOOL.State (FS, CS, MS, VS)
 
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)

@@ -2,15 +2,15 @@
 {-# LANGUAGE InstanceSigs #-}
 
 -- | The logic to render Julia code is contained in this module
-module GOOL.Drasil.LanguageRenderer.JuliaRenderer (
+module Drasil.GOOL.LanguageRenderer.JuliaRenderer (
   -- * Julia Code Configuration -- defines syntax of all Julia code
   JuliaCode(..), jlName, jlVersion
 ) where
 
 import Utils.Drasil (indent)
 
-import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
+import Drasil.GOOL.CodeType (CodeType(..))
+import Drasil.GOOL.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
   SVariable, MSStatement, MSBlock, SMethod, BodySym(..), BlockSym(..),
   TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
@@ -21,13 +21,13 @@ import GOOL.Drasil.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   ScopeSym(..), ParameterSym(..), MethodSym(..), (&=), switchAsIf)
-import GOOL.Drasil.InterfaceGOOL (OOProg, FSModule, ProgramSym(..), FileSym(..),
+import Drasil.GOOL.InterfaceGOOL (OOProg, FSModule, ProgramSym(..), FileSym(..),
   ModuleSym(..), FunctionSym(..), PermanenceSym(..), ObserverPattern(..),
   StrategyPattern(..), GetSet(..), InternalValueExp(..), StateVarSym(..),
   ClassSym(..), OOTypeSym(..), OOVariableSym(..), OODeclStatement(..),
   OOFuncAppStatement(..), OOMethodSym(..), OOValueExpression(..),
   OOVariableValue, OOValueSym)
-import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
+import Drasil.GOOL.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
@@ -38,19 +38,19 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
   MethodElim, StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
   ModuleElim, BlockCommentSym(..), BlockCommentElim)
-import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
+import qualified Drasil.GOOL.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
-import GOOL.Drasil.LanguageRenderer (printLabel, listSep, listSep',
+import Drasil.GOOL.LanguageRenderer (printLabel, listSep, listSep',
   variableList, parameterList, forLabel, inLabel, tryLabel, catchLabel)
-import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp,
+import qualified Drasil.GOOL.LanguageRenderer as R (sqrt, abs, log10, log, exp,
   sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, addComments,
   blockCmt, docCmt, commentedMod, listSetFunc, commentedItem, break, continue)
-import GOOL.Drasil.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
+import Drasil.GOOL.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
   unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
   typeBinExpr, mkStmt, mkStmtNoEnd)
-import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
-import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
+import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
+import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   block, multiBlock, listInnerType, litChar, litDouble, litInt, litString,
   valueOf, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp,
   lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, call,
@@ -58,25 +58,25 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   fileDoc, fileFromData, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
   emptyStmt, assign, increment, subAssign, print, comment, valStmt, function,
   returnStmt, construct, param, docFunc, throw, arg, argsList, ifCond, smartAdd)
-import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (bool,
+import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (bool,
   boolRender, extVar, funcType, buildModule, docMod', funcDecDef, litArray,
   listDec, listDecDef, listAccessFunc, listSetFunc, bindingError, notNull,
   extFuncAppMixedArgs, functionDoc, listSize, listAdd, listAppend, intToIndex',
   indexToInt', inOutFunc, docInOutFunc', forLoopError, varDecDef, openFileR',
   openFileW', openFileA', multiReturn, multiAssign, inOutCall, mainBody,
   argExists, forEach')
-import qualified GOOL.Drasil.LanguageRenderer.CLike as C (litTrue, litFalse,
+import qualified Drasil.GOOL.LanguageRenderer.CLike as C (litTrue, litFalse,
   notOp, andOp, orOp, inlineIf, while)
-import qualified GOOL.Drasil.LanguageRenderer.Macros as M (increment1,
+import qualified Drasil.GOOL.LanguageRenderer.Macros as M (increment1,
   decrement1, ifExists, stringListVals, stringListLists)
-import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
+import Drasil.GOOL.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), ModData(..), md, updateMod, MethodData(..), mthd, OpData(..),
   ParamData(..), ProgData(..), TypeData(..), td, ValData(..), vd, VarData(..),
   vard, CommonThunk, progD, fd, pd, updateMthd, commonThunkDim, commonThunkElim,
   vectorize, vectorize2, commonVecIndex, sumComponents, pureValue)
-import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
+import Drasil.GOOL.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
-import GOOL.Drasil.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
+import Drasil.GOOL.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
   getModuleImports, addModuleImportVS, getUsing, getLangImports, getLibImports,
   addLibImportVS, useVarName, getMainDoc, genLoopIndex, genVarNameIf)
 

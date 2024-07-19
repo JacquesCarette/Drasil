@@ -11,7 +11,7 @@ import Language.Drasil.Choices (Comments(..), AuxFile(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Mod (Name, Description, Import)
 
-import GOOL.Drasil (SFile, VSType, SVariable, SValue, MSStatement, SMethod,
+import Drasil.GOOL (SFile, VSType, SVariable, SValue, MSStatement, SMethod,
   CSStateVar, SClass, NamedArgs, OOProg, FileSym(..), TypeElim(..),
   ValueSym(..), Argument(..), ValueExpression(..), OOValueExpression(..),
   FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), ModuleSym(..),

@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | Implementations defined here are valid for any language renderer.
-module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
+module Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, 
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
   plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar,
@@ -19,9 +19,9 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
 
 import Utils.Drasil (indent)
 
-import GOOL.Drasil.CodeType (CodeType(..), ClassName)
-import GOOL.Drasil.InterfaceCommon (Label, Library, MSBody, MSBlock, VSType,
-  SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs, Initializers,
+import Drasil.GOOL.CodeType (CodeType(..), ClassName)
+import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSType,
+  SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs,
   MixedCall, MixedCtorCall, BodySym(Body), bodyStatements, oneLiner,
   BlockSym(Block), TypeSym(Type), TypeElim(getType, getTypeString),
   VariableSym(Variable), VariableElim(variableName, variableType),
@@ -29,46 +29,46 @@ import GOOL.Drasil.InterfaceCommon (Label, Library, MSBody, MSBlock, VSType,
   tan), Comparison(..), funcApp, StatementSym(multi), AssignStatement((&++)),
   (&=), IOStatement(printStr, printStrLn, printFile, printFileStr,
   printFileStrLn), ifNoElse, ScopeSym(..))
-import qualified GOOL.Drasil.InterfaceCommon as IC (TypeSym(int, double, char,
+import qualified Drasil.GOOL.InterfaceCommon as IC (TypeSym(int, double, char,
   string, listType, arrayType, listInnerType, funcType, void), VariableSym(var), 
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
   IOStatement(print), ControlStatement(returnStmt, for), ParameterSym(param),
   List(intToIndex))
-import GOOL.Drasil.InterfaceGOOL (SFile, FSModule, SClass, VSFunction,
-  CSStateVar, FileSym(File), ModuleSym(Module), newObj, objMethodCallNoParams,
-  ($.), PermanenceSym(..), convTypeOO)
-import qualified GOOL.Drasil.InterfaceGOOL as IG (OOVariableSym(objVarSelf),
+import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, VSFunction,
+  Initializers, CSStateVar, FileSym(File), ModuleSym(Module), newObj,
+  objMethodCallNoParams, ($.), PermanenceSym(..), convTypeOO)
+import qualified Drasil.GOOL.InterfaceGOOL as IG (OOVariableSym(objVarSelf),
   OOMethodSym(method), FunctionSym(func))
-import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(commentedMod),  
+import Drasil.GOOL.RendererClasses (RenderSym, RenderFile(commentedMod),  
   RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
   RenderFunction(funcFromData), FunctionElim(functionType), 
   RenderStatement(stmtFromData),  StatementElim(statementTerm), 
   MethodTypeSym(mType), RenderParam(paramFromData), 
   RenderMethod(intMethod, commentedFunc), RenderClass(inherit, implements), 
   RenderMod(updateModuleDoc), BlockCommentSym(..))
-import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData), 
+import qualified Drasil.GOOL.RendererClasses as S (RenderFile(fileFromData), 
   RenderValue(call), InternalGetSet(getFunc, setFunc),InternalListFunc
   (listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
   RenderStatement(stmt), InternalIOStmt(..), RenderMethod(intFunc), 
   RenderClass(intClass, commentedClass))
-import qualified GOOL.Drasil.RendererClasses as RC (BodyElim(..), BlockElim(..),
+import qualified Drasil.GOOL.RendererClasses as RC (BodyElim(..), BlockElim(..),
   InternalVarElim(variable), ValueElim(value, valueInt), FunctionElim(..), 
   StatementElim(statement), ClassElim(..), ModuleElim(..), BlockCommentElim(..))
-import GOOL.Drasil.AST (Binding(..), Terminator(..), isSource)
-import GOOL.Drasil.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode, 
+import Drasil.GOOL.AST (Binding(..), Terminator(..), isSource)
+import Drasil.GOOL.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode, 
   toState, onStateValue, on2StateValues, onStateList, getInnerType, getNestDegree,
   on2StateWrapped)
-import GOOL.Drasil.LanguageRenderer (dot, ifLabel, elseLabel, access, addExt, 
+import Drasil.GOOL.LanguageRenderer (dot, ifLabel, elseLabel, access, addExt, 
   FuncDocRenderer, ClassDocRenderer, ModuleDocRenderer, getterName, setterName, 
   valueList, namedArgList)
-import qualified GOOL.Drasil.LanguageRenderer as R (file, block, assign, 
+import qualified Drasil.GOOL.LanguageRenderer as R (file, block, assign, 
   addAssign, subAssign, return', comment, getTerm, var, objVar, arg, func, 
   objAccess, commentedItem)
-import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
+import Drasil.GOOL.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
   mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, VSOp, unOpPrec, 
   compEqualPrec, compPrec, addPrec, multPrec)
-import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS, 
+import Drasil.GOOL.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS, 
   currMain, currFileType, addFile, setMainMod, setModuleName, getModuleName,
   addParameter, getParameters, useVarName)
 

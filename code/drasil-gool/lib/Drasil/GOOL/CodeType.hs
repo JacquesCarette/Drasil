@@ -1,5 +1,5 @@
 -- | Defines the 'CodeType' data type
-module GOOL.Drasil.CodeType (
+module Drasil.GOOL.CodeType (
     ClassName, CodeType(..)
     ) where
 

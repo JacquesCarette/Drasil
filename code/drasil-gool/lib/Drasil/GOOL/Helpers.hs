@@ -1,4 +1,4 @@
-module GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vicat, vibcat, 
+module Drasil.GOOL.Helpers (angles, doubleQuotedText, hicat, vicat, vibcat, 
   vmap, vimap, emptyIfEmpty, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
   onCodeList, onStateList, on2StateLists, getInnerType, on2StateWrapped,
@@ -7,7 +7,7 @@ module GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vicat, vibcat,
 
 import Utils.Drasil (blank)
 
-import qualified GOOL.Drasil.CodeType as C (CodeType(..))
+import qualified Drasil.GOOL.CodeType as C (CodeType(..))
 
 import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)

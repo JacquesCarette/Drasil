@@ -2,7 +2,7 @@
 -- the Observer class both work.
 module PatternTest (patternTest) where
 
-import GOOL.Drasil (GSProgram, VSType, SVariable, SValue, SMethod, OOProg,
+import Drasil.GOOL (GSProgram, VSType, SVariable, SValue, SMethod, OOProg,
   ProgramSym(..), FileSym(..), BodySym(..), oneLiner, BlockSym(..),
   TypeSym(..), OOTypeSym(..), StatementSym(..), DeclStatement(..),
   IOStatement(..), initObserverList, addObserver, VariableSym(..),

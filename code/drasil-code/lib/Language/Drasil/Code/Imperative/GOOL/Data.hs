@@ -3,7 +3,7 @@ module Language.Drasil.Code.Imperative.GOOL.Data (AuxData(auxFilePath, auxDoc),
   ad, PackData(packProg, packAux), packD
 ) where
 
-import GOOL.Drasil (ProgData)
+import Drasil.GOOL (ProgData)
 
 import Text.PrettyPrint.HughesPJ (Doc, isEmpty)
 

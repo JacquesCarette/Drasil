@@ -29,10 +29,10 @@ import GOOL.Drasil.InterfaceCommon (Label, Library, MSBody, MSBlock, VSType,
   IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
   ifNoElse, ScopeSym(..))
 import qualified GOOL.Drasil.InterfaceCommon as IC (TypeSym(int, double, char,
-  string, listType, arrayType, listInnerType, funcType, void), VariableSym(var), 
-  Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
+  string, listType, setType, arrayType, listInnerType, funcType, void), VariableSym(var), 
+  Literal(litInt, litFloat, litDouble, litString, litSet), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
-  IOStatement(print), ControlStatement(returnStmt, for), ParameterSym(param),
+  IOStatement(print), ControlStatement(returnStmt, for, forEach), ParameterSym(param),
   List(intToIndex))
 import GOOL.Drasil.InterfaceGOOL (SFile, FSModule, SClass, VSFunction,
   CSStateVar, FileSym(File), ModuleSym(Module), newObj, objMethodCallNoParams,
@@ -288,6 +288,7 @@ listAccess v i = do
   let i' = IC.intToIndex i
       t  = IC.listInnerType $ return $ valueType v'
       checkType (List _) = S.listAccessFunc t i'
+      checkType (Set _) = S.listAccessFunc t i'
       checkType (Array _) = i' >>= 
                               (\ix -> funcFromData (brackets (RC.value ix)) t)
       checkType _ = error "listAccess called on non-list-type value"
@@ -360,6 +361,16 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
   where l_i = "list_i" ++ show n
         i = IC.var l_i IC.int
 
+printSet :: (RenderSym r) => Integer -> SValue r -> (SValue r -> MSStatement r)
+  -> (String -> MSStatement r) -> (String -> MSStatement r) -> MSStatement r
+printSet n v prFn prStrFn prLnFn = multi [prStrFn "{ ", 
+  IC.forEach i v
+    (bodyStatements [prFn (IC.valueOf i),prStrFn " "]),
+--(IC.forEach i v (bodyStatements [prFn (IC.valueOf i)])),
+  prLnFn "}"]
+  where set_i = "set_i" ++ show n
+        i = IC.var set_i IC.double
+
 printObj :: ClassName -> (String -> MSStatement r) -> MSStatement r
 printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
@@ -369,6 +380,8 @@ print newLn f printFn v = zoom lensMStoVS v >>= print' . getType . valueType
   where print' (List t) = printList (getNestDegree 1 t) v prFn prStrFn 
           prLnFn
         print' (Object n) = printObj n prLnFn
+        print' (Set t) = printSet (getNestDegree 1 t) v prFn prStrFn 
+          prLnFn
         print' _ = S.printSt newLn f printFn v
         prFn = maybe IC.print printFile f
         prStrFn = maybe printStr printFileStr f

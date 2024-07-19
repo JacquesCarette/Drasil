@@ -2,7 +2,7 @@
 
 -- | Implementations for C-like renderers are defined here.
 module GOOL.Drasil.LanguageRenderer.CLike (charRender, float, double, char, 
-  listType, void, notOp, andOp, orOp, inOp, self, litTrue, litFalse, litFloat, 
+  listType, setType, void, notOp, andOp, orOp, inOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
   decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
   intFunc, multiAssignError, multiReturnError, multiTypeError
@@ -67,6 +67,12 @@ listType :: (RenderSym r) => String -> VSType r -> VSType r
 listType lst t' = do 
   t <- t'
   typeFromData (List (getType t)) (lst 
+    `containing` getTypeString t) $ text lst <> angles (RC.type' t) 
+
+setType :: (RenderSym r) => String -> VSType r -> VSType r
+setType lst t' = do 
+  t <- t'
+  typeFromData (Set (getType t)) (lst 
     `containing` getTypeString t) $ text lst <> angles (RC.type' t) 
 
 void :: (RenderSym r) => VSType r

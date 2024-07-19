@@ -75,7 +75,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   extraClass, listAccessFunc, doubleRender, openFileR, openFileW, stateVar, 
   inherit, implements, intToIndex, indexToInt)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
-  listType, void, notOp, andOp, orOp, inOp, self, litTrue, litFalse, litFloat, 
+  listType, setType, void, notOp, andOp, orOp, inOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
   decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
   intFunc, multiAssignError, multiReturnError, multiTypeError)
@@ -201,6 +201,9 @@ instance TypeSym CSharpCode where
     modify (addLangImportVS csGeneric) 
     C.listType csList t
   arrayType = CP.arrayType
+  setType t = do
+    modify (addLangImportVS csGeneric) 
+    C.setType csSet t
   listInnerType = G.listInnerType
   funcType = csFuncType
   void = C.void
@@ -307,7 +310,7 @@ instance Literal CSharpCode where
   litInt = G.litInt
   litString = G.litString
   litArray = csLitList arrayType
-  litSet = csLitList arrayType
+  litSet = csLitList setType
   litList = csLitList listType
 
 instance MathConstant CSharpCode where
@@ -755,6 +758,7 @@ csConsole = "Console"
 csGeneric = csSysAccess $ "Collections" `access` "Generic"
 csIO = csSysAccess "IO"
 csList = "List"
+csSet = "HashSet"
 csInt = "Int32"
 csFloat = "Single"
 csBool = "Boolean"
@@ -792,6 +796,14 @@ csOutfileType = join $ modifyReturn (addLangImportVS csIO) $
 csLitList :: (RenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
   -> SValue r
 csLitList f t' es' = do 
+  es <- sequence es' 
+  lt <- f t'
+  mkVal lt (new' <+> RC.type' lt
+    <+> braces (valueList es))
+
+csLitSet :: (RenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
+  -> SValue r
+csLitSet f t' es' = do 
   es <- sequence es' 
   lt <- f t'
   mkVal lt (new' <+> RC.type' lt

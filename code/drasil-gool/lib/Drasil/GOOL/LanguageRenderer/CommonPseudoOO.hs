@@ -1,10 +1,10 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
 module Drasil.GOOL.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
-  doxClass, doxMod, docMod', functionDoc, extVar, classVar, objVarSelf, indexOf,
-  listAddFunc, discardFileLine, intClass, funcType, buildModule, arrayType, pi,
-  printSt, arrayDec, arrayDecDef, openFileA, forEach, forEach', docMain,
-  mainFunction, buildModule', call', listSizeFunc, listAccessFunc', string,
-  constDecDef, docInOutFunc, bindingError, extFuncAppMixedArgs, notNull,
+  doxClass, doxMod, docMod', modDoc', functionDoc, extVar, classVar, objVarSelf,
+  indexOf, listAddFunc, discardFileLine, intClass, funcType, buildModule,
+  arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, forEach',
+  docMain, mainFunction, buildModule', call', listSizeFunc, listAccessFunc',
+  string, constDecDef, docInOutFunc, bindingError, extFuncAppMixedArgs, notNull,
   listDecDef, destructorError, stateVarDef, constVar, litArray, listSetFunc,
   extraClass, listAccessFunc, doubleRender, double, openFileR, openFileW,
   stateVar, self, multiAssign, multiReturn, listDec, funcDecDef, inOutCall,
@@ -495,6 +495,7 @@ boolRender = "Bool"
 bool :: (CommonRenderSym r) => VSType r
 bool = typeFromData Boolean boolRender (text boolRender)
 
+-- TODO: put docMod' back in Swift renderer, as it is no longer common.
 docMod' :: (OORenderSym r) => String -> String -> [String] -> String -> SFile r -> SFile r
 docMod' = docMod modDoc'
 

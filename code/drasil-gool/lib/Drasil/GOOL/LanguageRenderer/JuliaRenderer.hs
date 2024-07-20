@@ -57,22 +57,23 @@ import Drasil.GOOL.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
   typeBinExpr, mkStmt, mkStmtNoEnd)
 import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
-  block, multiBlock, listInnerType, litChar, litDouble, litInt, litString,
-  valueOf, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp,
-  lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, call,
-  funcAppMixedArgs, lambda, listAccess, listSet, arrayElem, modFromData,
-  fileDoc, fileFromData, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
-  emptyStmt, assign, increment, subAssign, print, comment, valStmt, function,
+  block, multiBlock, litChar, litDouble, litInt, litString, valueOf, negateOp,
+  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
+  minusOp, multOp, divideOp, moduloOp, var, call, funcAppMixedArgs, lambda,
+  listAccess, listSet, modFromData, tryCatch, csc, multiBody, sec, cot, stmt,
+  loopStmt, emptyStmt, assign, increment, subAssign, print, comment, valStmt,
   returnStmt, param, docFunc, throw, arg, argsList, ifCond, smartAdd)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (bool,
-  boolRender, extVar, funcType, buildModule, docMod', funcDecDef, litArray,
-  listDec, listDecDef, listAccessFunc, listSetFunc, bindingError, notNull,
-  extFuncAppMixedArgs, functionDoc, listSize, listAdd, listAppend, intToIndex',
-  indexToInt', inOutFunc, docInOutFunc', forLoopError, varDecDef, openFileR',
-  openFileW', openFileA', multiReturn, multiAssign, inOutCall, mainBody,
-  argExists, forEach')
+  boolRender, extVar, funcType, litArray, listDec, listDecDef, listAccessFunc,
+  listSetFunc, bindingError, notNull, extFuncAppMixedArgs, functionDoc,
+  listSize, listAdd, listAppend, intToIndex', indexToInt', inOutFunc,
+  docInOutFunc', forLoopError, varDecDef, openFileR', openFileW', openFileA',
+  multiReturn, multiAssign, inOutCall, mainBody, argExists, forEach')
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (litTrue, litFalse,
   notOp, andOp, orOp, inlineIf, while)
+import qualified Drasil.GOOL.LanguageRenderer.AbstractProc as A (fileDoc,
+  fileFromData, buildModule, docMod, listInnerType, arrayElem, funcDecDef,
+  function)
 import qualified Drasil.GOOL.LanguageRenderer.Macros as M (increment1,
   decrement1, ifExists, stringListVals, stringListLists)
 import Drasil.GOOL.AST (Terminator(..), FileType(..), FileData(..), fileD,
@@ -129,8 +130,8 @@ instance FileSym JuliaCode where
   type File JuliaCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
-    G.fileDoc jlExt top bottom m
-  docMod = CP.docMod' jlExt
+    A.fileDoc jlExt m
+  docMod = A.docMod jlExt
 
 instance RenderFile JuliaCode where
   top _ = toCode empty
@@ -138,7 +139,7 @@ instance RenderFile JuliaCode where
 
   commentedMod = on2StateValues (on2CodeValues R.commentedMod)
 
-  fileFromData = G.fileFromData (onCodeValue . fileD)
+  fileFromData = A.fileFromData (onCodeValue . fileD)
 
 instance ImportSym JuliaCode where
   type Import JuliaCode = Doc
@@ -189,7 +190,7 @@ instance TypeSym JuliaCode where
   outfile = jlOutfileType
   listType = jlListType
   arrayType = listType -- Treat arrays and lists the same, as in Python
-  listInnerType = G.listInnerType
+  listInnerType = A.listInnerType
   funcType = CP.funcType
   void = jlVoidType
 
@@ -265,7 +266,7 @@ instance VariableSym JuliaCode where
   var' n _ = G.var n
   constant' = var' -- TODO: add `const` keyword in global scope, and follow Python for local
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
-  arrayElem i = G.arrayElem (litInt i)
+  arrayElem i = A.arrayElem (litInt i)
 
 instance VariableElim JuliaCode where
   variableName = varName . unJLC
@@ -495,7 +496,7 @@ instance DeclStatement JuliaCode where
   arrayDec = listDec
   arrayDecDef = listDecDef
   constDecDef = jlConstDecDef
-  funcDecDef = CP.funcDecDef
+  funcDecDef = A.funcDecDef
 
 instance IOStatement JuliaCode where
   print      = jlOut False Nothing printFunc
@@ -585,7 +586,7 @@ instance ParamElim JuliaCode where
 instance MethodSym JuliaCode where
   type Method JuliaCode = MethodData
   docMain = mainFunction
-  function = G.function
+  function = A.function
   mainFunction = CP.mainBody
   docFunc = G.docFunc CP.functionDoc
 
@@ -828,7 +829,7 @@ jlForEach i lstVar b = vcat [
 -- | Creates the contents of a module in Julia
 jlModContents :: Label -> [Label] -> [SMethod JuliaCode] ->
   FSModule JuliaCode
-jlModContents n is fs = CP.buildModule n (do
+jlModContents n is = A.buildModule n (do
   lis <- getLangImports
   libis <- getLibImports
   mis <- getModuleImports
@@ -838,7 +839,7 @@ jlModContents n is fs = CP.buildModule n (do
     vcat (map (RC.import' . li) (sort $ is ++ libis)),
     vcat (map (RC.import' . mi) mis),
     vcat (map usingModule us)])
-  (pure empty) (do getMainDoc) fs []
+  (do getMainDoc)
   where mi, li :: Label -> JuliaCode (Import JuliaCode)
         mi = modImport
         li = langImport

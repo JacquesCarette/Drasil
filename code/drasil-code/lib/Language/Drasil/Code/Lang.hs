@@ -7,5 +7,5 @@ data Lang = Cpp
           | Java
           | Python
           | Swift
-          | Julia
+          -- | Julia
           deriving (Eq, Show)

@@ -13,10 +13,9 @@ module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
   libFuncApp, exists, List(..),  listSlice, listIndexExists, at, ScopeSym(..),
   ParameterSym(..), MethodSym(..), ModuleSym(..), convType, ProgData(..), FileData(..),
-  ModData(..), VisibilityTag(..), CodeType(..), GOOLState(..), lensMStoVS, headers,
-  sources, mainMod, initialState, onStateValue, onCodeList, unCI, unPC, unJC,
-  unCSC, unCPPC, unSC, pyName, pyVersion, jName, jVersion, csName, csVersion,
-  cppName, cppVersion, swiftName, swiftVersion
+  ModData(..), VisibilityTag(..), CodeType(..), GOOLState(..), lensMStoVS,
+  headers, sources, mainMod, initialState, onStateValue, onCodeList, unCI,
+  unJLC, jlName, jlVersion
   ) where
 
 import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSType, SVariable,
@@ -47,8 +46,4 @@ import Drasil.GOOL.Helpers (onStateValue, onCodeList)
 
 import Drasil.GOOL.CodeInfo (unCI)
 
-import Drasil.GOOL.LanguageRenderer.JavaRenderer (unJC, jName, jVersion)
-import Drasil.GOOL.LanguageRenderer.PythonRenderer (unPC, pyName, pyVersion)
-import Drasil.GOOL.LanguageRenderer.CSharpRenderer (unCSC, csName, csVersion)
-import Drasil.GOOL.LanguageRenderer.CppRenderer (unCPPC, cppName, cppVersion)
-import Drasil.GOOL.LanguageRenderer.SwiftRenderer (unSC, swiftName, swiftVersion)
+import Drasil.GOOL.LanguageRenderer.JuliaRenderer (unJLC, jlName, jlVersion)

@@ -1,8 +1,13 @@
 -- | Main module to gather all the GOOL tests and generate them.
 module Main (main) where
 
-import Drasil.GOOL (Label, OOProg, ProgramSym(..), unCI, unJC, unPC, unCSC,
-  unCPPC, unSC, unJLC, FileData(..), ModData(..), ProgData(..), initialState)
+import Drasil.GOOL (Label, OOProg, unCI, unJC, unPC, unCSC,
+  unCPPC, unSC, initialState, FileData(..))
+import qualified Drasil.GOOL as OO (ProgramSym(..), ModData(..),
+  ProgData(..))
+import Drasil.GProc (ProcProg, unJLC)
+import qualified Drasil.GProc as Proc (ProgramSym(..), FileData(..), ModData(..),
+  ProgData(..))
 
 import Language.Drasil.Code (PackageSym(..), AuxiliarySym(..), AuxData(..),
   PackData(..), unPP, unJP, unCSP, unCPPP, unSP, unJLP, ImplementationType(..))
@@ -43,22 +48,23 @@ main = do
   createDirectoryIfMissing False "swift"
   setCurrentDirectory "swift"
   genCode (classes unSC unSP)
-  setCurrentDirectory workingDir
-  createDirectoryIfMissing False "julia"
-  setCurrentDirectory "julia"
-  genCode (jlClasses unJLC unJLP)
+  -- setCurrentDirectory workingDir
+  -- createDirectoryIfMissing False "julia"
+  -- setCurrentDirectory "julia"
+  -- genCode (jlClasses unJLC unJLP)
   setCurrentDirectory workingDir
 
 -- | Gathers all information needed to generate code, sorts it, and calls the renderers.
 genCode :: [PackData] -> IO()
-genCode files = createCodeFiles (concatMap (\p -> replicate (length (progMods
-  (packProg p)) + length (packAux p)) (progName $ packProg p)) files) $ makeCode (map (progMods . packProg) files) (map packAux files)
+genCode files = createCodeFiles (concatMap (\p -> replicate (length (OO.progMods
+  (packProg p)) + length (packAux p)) (OO.progName $ packProg p)) files) $
+    makeCode (map (OO.progMods . packProg) files) (map packAux files)
 
 -- Cannot assign the list of tests in a where clause and re-use it because the
 -- "r" type variable needs to be instantiated to two different types
 -- (CodeInfo and a renderer) each time this function is called
 -- | Gathers the GOOL file tests and prepares them for rendering
-classes :: (OOProg r, PackageSym r') => (r (Program r) -> ProgData) ->
+classes :: (OOProg r, PackageSym r') => (r (OO.Program r) -> OO.ProgData) ->
   (r' (Package r') -> PackData) -> [PackData]
 classes unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
@@ -68,19 +74,19 @@ classes unRepr unRepr' = zipWith
   (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests, vectorTest, nameGenTest])
 
 -- Classes that Julia is currently able to render
-jlClasses :: (OOProg r, PackageSym r') => (r (Program r) -> ProgData) ->
-  (r' (Package r') -> PackData) -> [PackData]
-jlClasses unRepr unRepr' = zipWith
-  (\p gs -> let (p',gs') = runState p gs
-                pd = unRepr p'
-  in unRepr' $ package pd [makefile [] Program [] gs' pd])
-  [helloWorld{-, patternTest-}, fileTests, vectorTest, nameGenTest]
-  (map (unCI . (`evalState` initialState)) [helloWorld{-, patternTest-}, fileTests, vectorTest, nameGenTest])
+-- jlClasses :: (ProcProg r, PackageSym r') => (r (Proc.Program r) ->
+--   Proc.ProgData) -> (r' (Package r') -> PackData) -> [PackData]
+-- jlClasses unRepr unRepr' = zipWith
+--   (\p gs -> let (p',gs') = runState p gs
+--                 pd = unRepr p'
+--   in unRepr' $ package pd [makefile [] Program [] gs' pd])
+--   [helloWorld{-, patternTest-}, fileTests, vectorTest, nameGenTest]
+--   (map (unCI . (`evalState` initialState)) [helloWorld{-, patternTest-}, fileTests, vectorTest, nameGenTest])
 
 -- | Formats code to be rendered.
 makeCode :: [[FileData]] -> [[AuxData]] -> [(FilePath, Doc)]
 makeCode files auxs = concat $ zipWith (++)
-  (map (map (\fd -> (filePath fd, modDoc $ fileMod fd))) files)
+  (map (map (\fd -> (filePath fd, OO.modDoc $ fileMod fd))) files)
   (map (map (\ad -> (auxFilePath ad, auxDoc ad))) auxs)
 
   -- zip (map filePath files) (map (modDoc . fileMod) files)

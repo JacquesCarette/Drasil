@@ -16,7 +16,8 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, BlockCommentSym(..),
   RenderMethod(..), MSMthdType)
 
-class (CommonRenderSym r, IP.FileSym r, RenderFile r, RenderMod r, ModuleElim r
+class (CommonRenderSym r, IP.FileSym r, RenderFile r, RenderMod r, ModuleElim r,
+  ProcRenderMethod r
   ) => ProcRenderSym r
 
 -- Procedural-Only Typeclasses --

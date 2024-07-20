@@ -14,7 +14,7 @@ import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, DocConfig(..), interpMM)
 
-import Drasil.GOOL (onCodeList, jlName, jlVersion)
+import Drasil.GProc (onCodeList, jlName, jlVersion)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Text.PrettyPrint.HughesPJ (Doc, empty)

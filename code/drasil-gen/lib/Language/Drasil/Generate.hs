@@ -35,7 +35,8 @@ import Language.Drasil.Output.Formats(Filename, DocSpec(DocSpec), DocChoices(DC)
 import Language.Drasil.TypeCheck
 import Language.Drasil.Dump
 
-import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC, unJLC)
+import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC)
+import Drasil.GProc (unJLC)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
@@ -153,7 +154,7 @@ genCode chs spec = do
       genLangCode CSharp = genCall CSharp unCSC unCSP
       genLangCode Cpp = genCall Cpp unCPPC unCPPP
       genLangCode Swift = genCall Swift unSC unSP
-      genLangCode Julia = genCall Julia unJLC unJLP
+      --genLangCode Julia = genCall Julia unJLC unJLP
       genCall lng unProgRepr unPackRepr = generateCode lng unProgRepr
         unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
   mapM_ genLangCode (lang chs)

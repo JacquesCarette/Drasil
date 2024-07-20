@@ -1,4 +1,4 @@
-Languages selected as Python Cpp CSharp Java Swift Julia.
+Languages selected as Python Cpp CSharp Java Swift.
 Modularity selected as Modular.
 Input Structure selected as Unbundled.
 Constant Structure selected as Store Unbundled.

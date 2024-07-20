@@ -19,15 +19,15 @@ module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   selfFuncApp, extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists,
   objMethodCall, objMethodCallNamedArgs, objMethodCallMixedArgs,
   objMethodCallNoParams, FunctionSym(..), OOFunctionSym(..), ($.), selfAccess,
-  GetSet(..), List(..),  listSlice, listIndexExists, at, ObserverPattern(..),
+  GetSet(..), List(..), listSlice, listIndexExists, at, ObserverPattern(..),
   StrategyPattern(..), VisibilitySym(..), ParameterSym(..), MethodSym(..),
   OOMethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor,
   StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..),
   convType, convTypeOO, ProgData(..), FileData(..), ModData(..),
   VisibilityTag(..), CodeType(..), GOOLState(..), lensMStoVS, headers, sources,
   mainMod, initialState, onStateValue, onCodeList, unCI, unPC, unJC, unCSC,
-  unCPPC, unSC, unJLC, pyName, pyVersion, jName, jVersion, csName, csVersion,
-  cppName, cppVersion, swiftName, swiftVersion, jlName, jlVersion
+  unCPPC, unSC, pyName, pyVersion, jName, jVersion, csName, csVersion, cppName,
+  cppVersion, swiftName, swiftVersion
   ) where
 
 import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
@@ -74,4 +74,3 @@ import Drasil.GOOL.LanguageRenderer.PythonRenderer (unPC, pyName, pyVersion)
 import Drasil.GOOL.LanguageRenderer.CSharpRenderer (unCSC, csName, csVersion)
 import Drasil.GOOL.LanguageRenderer.CppRenderer (unCPPC, cppName, cppVersion)
 import Drasil.GOOL.LanguageRenderer.SwiftRenderer (unSC, swiftName, swiftVersion)
-import Drasil.GOOL.LanguageRenderer.JuliaRenderer (unJLC, jlName, jlVersion)

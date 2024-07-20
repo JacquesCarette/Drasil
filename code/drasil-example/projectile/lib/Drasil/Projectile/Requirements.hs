@@ -8,7 +8,7 @@ import Drasil.DocLang (mkMaintainableNFR, mkPortableNFR)
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (code, datumConstraint,
-  environment, funcReqDom, mg, mis, nonFuncReqDom, output_,
+  funcReqDom, mg, mis, nonFuncReqDom, output_,
   property, value, vavPlan, propOfCorSol)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.Software (errMsg)

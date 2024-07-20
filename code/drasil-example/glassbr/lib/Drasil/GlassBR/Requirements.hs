@@ -12,7 +12,7 @@ import Theory.Drasil (DataDefinition)
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (characteristic, code,
-  condition, datumConstraint, environment, funcReqDom, message, mg,
+  condition, datumConstraint, funcReqDom, message, mg,
   mis, nonFuncReqDom, output_, property, system, type_, value, vavPlan)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)

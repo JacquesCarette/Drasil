@@ -11,6 +11,8 @@ module Drasil.Sections.Requirements (
   nfReqF, mkMaintainableNFR, mkPortableNFR
   ) where
 
+import Utils.Drasil (stringList)
+
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -113,14 +115,13 @@ mkMaintainableNFR refAddress percent lbl = cic refAddress (foldlSent [
   ]) lbl nonFuncReqDom
 
 mkPortableNFR :: String -> [String] -> String -> ConceptInstance
-mkPortableNFR refAddress osList lbl
-  | null osList = cic refAddress (S "No operating systems specified.") lbl nonFuncReqDom
-  | length osList == 1 = cic refAddress (S $ "The code shall be portable to " ++ head osList) lbl nonFuncReqDom
-  | otherwise = cic refAddress (foldlSent [
-      S "The code shall be portable to multiple Operating Systems, particularly",
-      S $ foldr (\os acc -> os ++ if null acc then "" else ", " ++ acc) "" osList
-      ]) lbl nonFuncReqDom
-  
+mkPortableNFR refAddress osList lbl = case osList of
+  [] -> cic refAddress (S "No operating systems specified; cannot create a requirement.") lbl nonFuncReqDom
+  [os] -> cic refAddress (S $ "The code shall be portable to " ++ os) lbl nonFuncReqDom
+  _ -> cic refAddress (foldlSent [
+      S "The code shall be portable to multiple environments, particularly",
+      S $ stringList osList
+      ]) lbl nonFuncReqDom  
 
 -- | Creates an Input Data Table for use in the Functional Requirments section. Takes a list of wrapped variables and something that is 'Referable'.
 mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => 

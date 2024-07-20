@@ -8,7 +8,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (datumConstraint, funcReqDom,
-        output_, value,  nonFuncReqDom, code, environment, propOfCorSol)
+        output_, value,  nonFuncReqDom, code, propOfCorSol)
 --  likelyChg, mg, mis, module_, nonFuncReqDom,
 --   requirement, srs, traceyMatrix, unlikelyChg, value, vavPlan)
 import Data.Drasil.Concepts.Math (calculation)

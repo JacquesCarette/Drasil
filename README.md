@@ -21,7 +21,7 @@ Generate all the Things! Visit [our website](https://jacquescarette.github.io/Dr
 
 ## What is Drasil?
 
-For well understood domains, building software ought to be a matter of engineering, based on solid scientific foundations. The ultimate test of "well understood" is being able to teach the domain language to a computer. Drasil is a framework for generating all of the software artifacts for (well understood) research software, from the natural knowledge base of the domain.
+For well understood domains, building software ought to be a matter of engineering, based on solid scientific foundations. The ultimate test of "well understood" is being able to teach the domain language to a computer. Drasil is a framework for generating all of the software artifacts for [(well understood) research software](https://github.com/JacquesCarette/Drasil/blob/master/Papers/WellUnderstood/wu.pdf), from the natural knowledge base of the domain.
 
 We take advantage of the inherent duplication of knowledge present in software artifacts (code, specification, tests, etc). More precisely, we capture the information present in software artifacts so that the particular *view* of that information in the artifacts can be reproduced by Drasil. For example, the equation *`F = ma`* will *look* different when rendered in documentation and in Java or Python, although it will mean the same thing. In this way, we obtain *traceability*: we know the exact relationship between information in the specification document and in the code and, furthermore, we know that they are coherent by construction.
 

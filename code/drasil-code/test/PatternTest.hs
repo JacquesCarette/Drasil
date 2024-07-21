@@ -5,8 +5,8 @@ module PatternTest (patternTest) where
 import Drasil.GOOL (GSProgram, VSType, SVariable, SValue, SMethod, OOProg,
   ProgramSym(..), FileSym(..), BodySym(..), oneLiner, BlockSym(..),
   TypeSym(..), OOTypeSym(..), StatementSym(..), DeclStatement(..),
-  IOStatement(..), initObserverList, addObserver, VariableSym(..),
-  OOVariableSym(..), Literal(..), VariableValue(..), OOValueExpression(..),
+  IOStatement(..), initObserverList, addObserver, mainVar, OOVariableSym(..),
+  ScopeSym(..), Literal(..), VariableValue(..), OOValueExpression(..),
   extNewObj, FunctionSym(..), GetSet(..), ObserverPattern(..),
   StrategyPattern(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
@@ -28,9 +28,9 @@ observerType = obj observerName
 
 -- | Variables used in the generated code.
 n, obs1, obs2 :: (OOVariableSym r) => SVariable r
-n = var nName int
-obs1 = var obs1Name observerType
-obs2 = var obs2Name observerType
+n = mainVar nName int
+obs1 = mainVar obs1Name observerType
+obs2 = mainVar obs2Name observerType
 
 -- | New Observer object.
 newObserver :: (OOValueExpression r) => SValue r
@@ -56,9 +56,9 @@ patternTestMainMethod = mainFunction (body [block [
     varDecDef obs2 newObserver],
 
   block [
-    initObserverList observerType [valueOf obs1],
-    addObserver $ valueOf obs2,
-    notifyObservers (func printNum void []) observerType],
+    initObserverList observerType [valueOf obs1] mainFn,
+    addObserver (valueOf obs2) mainFn,
+    notifyObservers (func printNum void []) observerType mainFn],
 
   block [
     valStmt $ set (valueOf obs1) x (litInt 10),

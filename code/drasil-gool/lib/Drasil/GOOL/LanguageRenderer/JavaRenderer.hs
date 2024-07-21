@@ -12,16 +12,16 @@ import Utils.Drasil (indent)
 import Drasil.GOOL.CodeType (CodeType(..))
 import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..), oneLiner,
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, List(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..))
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), var, locVar,
+  VisibilitySym(..), VariableElim(..),ValueSym(..), Argument(..), Literal(..),
+  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
+  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (SClass, VSFunction, CSStateVar, OOProg,
   ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..),
   OOVariableSym(..), StateVarSym(..), PermanenceSym(..), OOValueSym,
@@ -36,13 +36,13 @@ import Drasil.GOOL.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderValue(..), ValueElim(valuePrec, valueInt),  InternalGetSet(..), 
   InternalListFunc(..), RenderFunction(..), FunctionElim(functionType), 
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), 
-  RenderStatement(..), StatementElim(statementTerm), RenderScope(..), 
-  ScopeElim, MethodTypeSym(..), RenderParam(..), 
+  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..), 
+  VisibilityElim, MethodTypeSym(..), RenderParam(..), 
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
   StateVarElim, RenderClass(..), ClassElim, RenderMod(..), ModuleElim, 
   BlockCommentSym(..), BlockCommentElim)
 import qualified Drasil.GOOL.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp, variable, value, function, statement, scope, parameter,
+  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, stateVar, class', module', blockComment')
 import Drasil.GOOL.LanguageRenderer (dot, new, elseIfLabel, forLabel, tryLabel,
   catchLabel, throwLabel, throwsLabel, importLabel, blockCmtStart, blockCmtEnd, 
@@ -87,9 +87,9 @@ import qualified Drasil.GOOL.LanguageRenderer.CLike as C (float, double, char,
 import qualified Drasil.GOOL.LanguageRenderer.Macros as M (ifExists, 
   runStrategy, listSlice, stringListVals, stringListLists, forRange, 
   notifyObservers)
-import Drasil.GOOL.AST (Terminator(..), ScopeTag(..), qualName, FileType(..), 
-  FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod,
-  MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
+import Drasil.GOOL.AST (Terminator(..), VisibilityTag(..), qualName,
+  FileType(..), FileData(..), fileD, FuncData(..), fd, ModData(..), md,
+  updateMod, MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard,
   CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
   commonThunkElim, commonThunkDim)
@@ -268,11 +268,17 @@ instance OpElim JavaCode where
   uOpPrec = opPrec . unJC
   bOpPrec = opPrec . unJC
 
+instance ScopeSym JavaCode where
+  type Scope JavaCode = Doc
+  global = toCode empty
+  mainFn = toCode empty
+  local = toCode empty
+
 instance VariableSym JavaCode where
   type Variable JavaCode = VarData
-  var = G.var
-  constant = var
-  extVar = CP.extVar
+  var' n _    = G.var n
+  constant'   = var'
+  extVar      = CP.extVar
   arrayElem i = G.arrayElem (litInt i)
 
 instance OOVariableSym JavaCode where
@@ -476,7 +482,7 @@ instance ThunkAssign JavaCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = var iName int
+      i = locVar iName int
       dim = fmap pure $ t >>= commonThunkDim (fmap unJC . listSize . fmap pure) . unJC
       loopInit = zoom lensMStoVS (fmap unJC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
@@ -631,16 +637,16 @@ instance ObserverPattern JavaCode where
 instance StrategyPattern JavaCode where
   runStrategy = M.runStrategy
 
-instance ScopeSym JavaCode where
-  type Scope JavaCode = Doc
+instance VisibilitySym JavaCode where
+  type Visibility JavaCode = Doc
   private = toCode R.private
   public = toCode R.public
 
-instance RenderScope JavaCode where
-  scopeFromData _ = toCode
+instance RenderVisibility JavaCode where
+  visibilityFromData _ = toCode
   
-instance ScopeElim JavaCode where
-  scope = unJC
+instance VisibilityElim JavaCode where
+  visibility = unJC
 
 instance MethodTypeSym JavaCode where
   type MethodType JavaCode = TypeData
@@ -978,17 +984,17 @@ jStringSplit :: (RenderSym r) => SVariable r -> SValue r -> VS Doc
 jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+> 
   new' <+> RC.type' (variableType vnew) <> parens (RC.value s))
 
-jMethod :: (RenderSym r) => Label -> [String] -> r (Scope r) -> r (Permanence r)
+jMethod :: (RenderSym r) => Label -> [String] -> r (Visibility r) -> r (Permanence r)
   -> r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 jMethod n es s p t ps b = vcat [
-  RC.scope s <+> RC.perm p <+> RC.type' t <+> text n <> 
+  RC.visibility s <+> RC.perm p <+> RC.type' t <+> text n <> 
     parens (parameterList ps) <+> emptyIfNull es (throwsLabel <+> 
     text (intercalate listSep (sort es))) <+> lbrace,
   indent $ RC.body b,
   rbrace]
 
 outputs :: SVariable JavaCode
-outputs = var "outputs" jArrayType
+outputs = var "outputs" jArrayType local
 
 jAssignFromArray :: Integer -> [SVariable JavaCode] -> [MSStatement JavaCode]
 jAssignFromArray _ [] = []
@@ -1054,7 +1060,7 @@ jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (map fst $ bs ++ is)
 
 jExtraClass :: (RenderSym r) => Label -> Maybe Label -> [CSStateVar r] -> 
   [SMethod r] -> [SMethod r] -> SClass r
-jExtraClass n = intClass n (scopeFromData Priv empty) . inherit
+jExtraClass n = intClass n (visibilityFromData Priv empty) . inherit
 
 addCallExcsCurrMod :: String -> VS ()
 addCallExcsCurrMod n = do

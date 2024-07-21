@@ -11,8 +11,9 @@ import Utils.Drasil (blank, indent)
 import Drasil.GOOL.CodeType (CodeType(..))
 import Drasil.GOOL.InterfaceCommon (SharedProg, Label, Library, VSType,
   SVariable, SValue, MSStatement, MixedCtorCall, BodySym(..), BlockSym(..),
-  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), litZero, MathConstant(..), VariableValue(..),
+  TypeSym(..), TypeElim(..), VariableSym(..), locVar, VisibilitySym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
+  MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..),
   InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
@@ -23,10 +24,11 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, Library, VSType,
   MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (VSFunction, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue, InternalValueExp(..), extNewObj, objMethodCall,
-  FunctionSym(..), GetSet(..), OOValueExpression(..), selfFuncApp,
-  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..), OOMethodSym(..))
+  StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
+  InternalValueExp(..), extNewObj, objMethodCall, FunctionSym(..), GetSet(..),
+  OOValueExpression(..), selfFuncApp, OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
+  OOMethodSym(..))
 import Drasil.GOOL.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -35,12 +37,12 @@ import Drasil.GOOL.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   InternalListFunc(..), RenderFunction(..), 
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..), 
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm), 
-  RenderScope(..), ScopeElim, MethodTypeSym(..), RenderParam(..), 
+  RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..), 
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
   StateVarElim, RenderClass(..), ClassElim, RenderMod(..), ModuleElim, 
   BlockCommentSym(..), BlockCommentElim)
 import qualified Drasil.GOOL.RendererClasses as RC (import', perm, body, block, 
-  type', uOp, bOp, variable, value, function, statement, scope, parameter,
+  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, stateVar, class', module', blockComment')
 import Drasil.GOOL.LanguageRenderer (classDec, dot, ifLabel, elseLabel, 
   forLabel, inLabel, whileLabel, tryLabel, importLabel, exceptionObj', listSep',
@@ -253,12 +255,18 @@ instance OpElim PythonCode where
   uOpPrec = opPrec . unPC
   bOpPrec = opPrec . unPC
 
+instance ScopeSym PythonCode where
+  type Scope PythonCode = Doc
+  global = toCode empty
+  mainFn = toCode empty
+  local = toCode empty
+
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
-  var = G.var
-  constant = var
+  var' n _      = G.var n
+  constant'     = var'
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
-  arrayElem i = G.arrayElem (litInt i)
+  arrayElem i   = G.arrayElem (litInt i)
 
 instance OOVariableSym PythonCode where
   staticVar = G.staticVar
@@ -455,7 +463,7 @@ instance ThunkAssign PythonCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = var iName int
+      i = locVar iName int
       dim = fmap pure $ t >>= commonThunkDim (fmap unPC . listSize . fmap pure) . unPC
       loopInit = zoom lensMStoVS (fmap unPC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
@@ -619,16 +627,16 @@ instance ObserverPattern PythonCode where
 instance StrategyPattern PythonCode where
   runStrategy = M.runStrategy
 
-instance ScopeSym PythonCode where
-  type Scope PythonCode = Doc
+instance VisibilitySym PythonCode where
+  type Visibility PythonCode = Doc
   private = toCode empty
   public = toCode empty
 
-instance RenderScope PythonCode where
-  scopeFromData _ = toCode
+instance RenderVisibility PythonCode where
+  visibilityFromData _ = toCode
 
-instance ScopeElim PythonCode where
-  scope = unPC
+instance VisibilityElim PythonCode where
+  visibility = unPC
 
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypeData

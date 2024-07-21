@@ -3,9 +3,9 @@ module Observer (observer, observerName, printNum, x) where
 
 import Drasil.GOOL (SFile, SVariable, SMethod, SClass, OOProg, FileSym(..),
   PermanenceSym(..), oneLiner, TypeSym(..), IOStatement(..), VariableSym(..),
-  OOVariableSym(..), Literal(..), VariableValue(..), OOVariableValue,
-  ScopeSym(..), OOMethodSym(..), initializer, StateVarSym(..), ClassSym(..),
-  ModuleSym(..))
+  var, ScopeSym(..), OOVariableSym(..), Literal(..), VariableValue(..),
+  OOVariableValue, VisibilitySym(..), OOMethodSym(..), initializer,
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 observerName, observerDesc, printNum :: String
@@ -23,7 +23,7 @@ observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
 
 -- | Makes a variable @x@.
 x :: (VariableSym r) => SVariable r
-x = var "x" int
+x = var "x" int local
 
 -- | Acces the @x@ attribute of @self@.
 selfX :: (OOVariableSym r) => SVariable r

@@ -35,9 +35,9 @@ def func_d_offset(p_target, p_land):
 # \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
 # \return output message as a string
 def func_s(p_target, epsilon, d_offset):
-    if (math.fabs(d_offset / p_target) < epsilon):
+    if math.fabs(d_offset / p_target) < epsilon:
         return "The target was hit."
-    elif (d_offset < 0.0):
+    elif d_offset < 0.0:
         return "The projectile fell short."
     else:
         return "The projectile went long."
@@ -64,7 +64,7 @@ def get_input(filename):
 # \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
 # \param p_target target position: the distance from the launcher to the target (m)
 def input_constraints(v_launch, theta, p_target):
-    if (not(v_launch > 0.0)):
+    if not(v_launch > 0.0):
         print("Warning: ", end="")
         print("v_launch has value ", end="")
         print(v_launch, end="")
@@ -72,7 +72,7 @@ def input_constraints(v_launch, theta, p_target):
         print("above ", end="")
         print(0.0, end="")
         print(".")
-    if (not(0.0 < theta and theta < math.pi / 2.0)):
+    if not(0.0 < theta and theta < math.pi / 2.0):
         print("Warning: ", end="")
         print("theta has value ", end="")
         print(theta, end="")
@@ -83,7 +83,7 @@ def input_constraints(v_launch, theta, p_target):
         print(math.pi / 2.0, end="")
         print(" ((pi)/(2))", end="")
         print(".")
-    if (not(p_target > 0.0)):
+    if not(p_target > 0.0):
         print("Warning: ", end="")
         print("p_target has value ", end="")
         print(p_target, end="")

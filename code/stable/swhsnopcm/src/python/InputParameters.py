@@ -74,7 +74,7 @@ def derived_values(D, L):
 # \param D diameter of tank: the diameter of the tank (m)
 # \param E_W change in heat energy in the water: change in thermal energy within the water (J)
 def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, E_W):
-    if (not(A_C <= Constants.Constants.A_C_max)):
+    if not(A_C <= Constants.Constants.A_C_max):
         print("Warning: ", end="")
         print("A_C has value ", end="")
         print(A_C, end="")
@@ -83,7 +83,7 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print(Constants.Constants.A_C_max, end="")
         print(" (A_C_max)", end="")
         print(".")
-    if (not(Constants.Constants.C_W_min < C_W and C_W < Constants.Constants.C_W_max)):
+    if not(Constants.Constants.C_W_min < C_W and C_W < Constants.Constants.C_W_max):
         print("Warning: ", end="")
         print("C_W has value ", end="")
         print(C_W, end="")
@@ -95,7 +95,7 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print(Constants.Constants.C_W_max, end="")
         print(" (C_W_max)", end="")
         print(".")
-    if (not(Constants.Constants.h_C_min <= h_C and h_C <= Constants.Constants.h_C_max)):
+    if not(Constants.Constants.h_C_min <= h_C and h_C <= Constants.Constants.h_C_max):
         print("Warning: ", end="")
         print("h_C has value ", end="")
         print(h_C, end="")
@@ -107,7 +107,7 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print(Constants.Constants.h_C_max, end="")
         print(" (h_C_max)", end="")
         print(".")
-    if (not(t_final < Constants.Constants.t_final_max)):
+    if not(t_final < Constants.Constants.t_final_max):
         print("Warning: ", end="")
         print("t_final has value ", end="")
         print(t_final, end="")
@@ -116,7 +116,7 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print(Constants.Constants.t_final_max, end="")
         print(" (t_final_max)", end="")
         print(".")
-    if (not(Constants.Constants.L_min <= L and L <= Constants.Constants.L_max)):
+    if not(Constants.Constants.L_min <= L and L <= Constants.Constants.L_max):
         print("Warning: ", end="")
         print("L has value ", end="")
         print(L, end="")
@@ -128,7 +128,7 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print(Constants.Constants.L_max, end="")
         print(" (L_max)", end="")
         print(".")
-    if (not(Constants.Constants.rho_W_min < rho_W and rho_W <= Constants.Constants.rho_W_max)):
+    if not(Constants.Constants.rho_W_min < rho_W and rho_W <= Constants.Constants.rho_W_max):
         print("Warning: ", end="")
         print("rho_W has value ", end="")
         print(rho_W, end="")
@@ -140,7 +140,7 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print(Constants.Constants.rho_W_max, end="")
         print(" (rho_W_max)", end="")
         print(".")
-    if (not(Constants.Constants.AR_min <= D and D <= Constants.Constants.AR_max)):
+    if not(Constants.Constants.AR_min <= D and D <= Constants.Constants.AR_max):
         print("Warning: ", end="")
         print("D has value ", end="")
         print(D, end="")
@@ -153,7 +153,7 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print(" (AR_max)", end="")
         print(".")
     
-    if (not(A_C > 0.0)):
+    if not(A_C > 0.0):
         print("Warning: ", end="")
         print("A_C has value ", end="")
         print(A_C, end="")
@@ -161,7 +161,7 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print("above ", end="")
         print(0.0, end="")
         print(".")
-    if (not(C_W > 0.0)):
+    if not(C_W > 0.0):
         print("Warning: ", end="")
         print("C_W has value ", end="")
         print(C_W, end="")
@@ -169,7 +169,7 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print("above ", end="")
         print(0.0, end="")
         print(".")
-    if (not(h_C > 0.0)):
+    if not(h_C > 0.0):
         print("Warning: ", end="")
         print("h_C has value ", end="")
         print(h_C, end="")
@@ -177,7 +177,7 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print("above ", end="")
         print(0.0, end="")
         print(".")
-    if (not(0.0 < T_init and T_init < 100.0)):
+    if not(0.0 < T_init and T_init < 100.0):
         print("Warning: ", end="")
         print("T_init has value ", end="")
         print(T_init, end="")
@@ -187,7 +187,7 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print(" and ", end="")
         print(100.0, end="")
         print(".")
-    if (not(t_final > 0.0)):
+    if not(t_final > 0.0):
         print("Warning: ", end="")
         print("t_final has value ", end="")
         print(t_final, end="")
@@ -195,7 +195,7 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print("above ", end="")
         print(0.0, end="")
         print(".")
-    if (not(L > 0.0)):
+    if not(L > 0.0):
         print("Warning: ", end="")
         print("L has value ", end="")
         print(L, end="")
@@ -203,7 +203,7 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print("above ", end="")
         print(0.0, end="")
         print(".")
-    if (not(0.0 < T_C and T_C < 100.0)):
+    if not(0.0 < T_C and T_C < 100.0):
         print("Warning: ", end="")
         print("T_C has value ", end="")
         print(T_C, end="")
@@ -213,7 +213,7 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print(" and ", end="")
         print(100.0, end="")
         print(".")
-    if (not(0.0 < t_step and t_step < t_final)):
+    if not(0.0 < t_step and t_step < t_final):
         print("Warning: ", end="")
         print("t_step has value ", end="")
         print(t_step, end="")
@@ -224,7 +224,7 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print(t_final, end="")
         print(" (t_final)", end="")
         print(".")
-    if (not(rho_W > 0.0)):
+    if not(rho_W > 0.0):
         print("Warning: ", end="")
         print("rho_W has value ", end="")
         print(rho_W, end="")
@@ -232,7 +232,7 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print("above ", end="")
         print(0.0, end="")
         print(".")
-    if (not(D > 0.0)):
+    if not(D > 0.0):
         print("Warning: ", end="")
         print("D has value ", end="")
         print(D, end="")
@@ -240,7 +240,7 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print("above ", end="")
         print(0.0, end="")
         print(".")
-    if (not(E_W >= 0.0)):
+    if not(E_W >= 0.0):
         print("Warning: ", end="")
         print("E_W has value ", end="")
         print(E_W, end="")

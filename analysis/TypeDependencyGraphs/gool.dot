@@ -42,6 +42,10 @@ digraph alltypes {
 		BinaryOpCSharpCode	[shape=oval, color=red2, label="BinaryOpCSharpCode"];
 		BinaryOpCSharpCode -> OpData;
 		}
+		subgraph scopecsharpcode{
+		ScopeCSharpCode	[shape=oval, color=red2, label="ScopeCSharpCode"];
+		ScopeCSharpCode -> Doc;
+		}
 		subgraph variablecsharpcode{
 		VariableCSharpCode	[shape=oval, color=red2, label="VariableCSharpCode"];
 		VariableCSharpCode -> VarData;
@@ -62,9 +66,9 @@ digraph alltypes {
 		StatementCSharpCode	[shape=oval, color=red2, label="StatementCSharpCode"];
 		StatementCSharpCode -> DocTerminator;
 		}
-		subgraph scopecsharpcode{
-		ScopeCSharpCode	[shape=oval, color=red2, label="ScopeCSharpCode"];
-		ScopeCSharpCode -> Doc;
+		subgraph visibilitycsharpcode{
+		VisibilityCSharpCode	[shape=oval, color=red2, label="VisibilityCSharpCode"];
+		VisibilityCSharpCode -> Doc;
 		}
 		subgraph methodtypecsharpcode{
 		MethodTypeCSharpCode	[shape=oval, color=red2, label="MethodTypeCSharpCode"];
@@ -111,7 +115,7 @@ digraph alltypes {
 		}
 		subgraph methoddata{
 		MethodData	[shape=oval, color=cyan3, label="MethodData"];
-		MethodData -> ScopeTag;
+		MethodData -> VisibilityTag;
 		MethodData -> Doc;
 		}
 		subgraph cppsrccodea{
@@ -158,6 +162,10 @@ digraph alltypes {
 		BinaryOppCppSrcCodeCppHdrCode	[shape=oval, color=red2, label="BinaryOppCppSrcCodeCppHdrCode"];
 		BinaryOppCppSrcCodeCppHdrCode -> OpData;
 		}
+		subgraph scopepcppsrccodecpphdrcode{
+		ScopepCppSrcCodeCppHdrCode	[shape=oval, color=red2, label="ScopepCppSrcCodeCppHdrCode"];
+		ScopepCppSrcCodeCppHdrCode -> Doc;
+		}
 		subgraph variablepcppsrccodecpphdrcode{
 		VariablepCppSrcCodeCppHdrCode	[shape=oval, color=red2, label="VariablepCppSrcCodeCppHdrCode"];
 		VariablepCppSrcCodeCppHdrCode -> VarData;
@@ -178,9 +186,9 @@ digraph alltypes {
 		StatementpCppSrcCodeCppHdrCode	[shape=oval, color=red2, label="StatementpCppSrcCodeCppHdrCode"];
 		StatementpCppSrcCodeCppHdrCode -> DocTerminator;
 		}
-		subgraph scopepcppsrccodecpphdrcode{
-		ScopepCppSrcCodeCppHdrCode	[shape=oval, color=red2, label="ScopepCppSrcCodeCppHdrCode"];
-		ScopepCppSrcCodeCppHdrCode -> DocScopeTag;
+		subgraph visibilitypcppsrccodecpphdrcode{
+		VisibilitypCppSrcCodeCppHdrCode	[shape=oval, color=red2, label="VisibilitypCppSrcCodeCppHdrCode"];
+		VisibilitypCppSrcCodeCppHdrCode -> DocVisibilityTag;
 		}
 		subgraph methodtypepcppsrccodecpphdrcode{
 		MethodTypepCppSrcCodeCppHdrCode	[shape=oval, color=red2, label="MethodTypepCppSrcCodeCppHdrCode"];
@@ -258,6 +266,10 @@ digraph alltypes {
 		BinaryOpCppSrcCode	[shape=oval, color=red2, label="BinaryOpCppSrcCode"];
 		BinaryOpCppSrcCode -> OpData;
 		}
+		subgraph scopecppsrccode{
+		ScopeCppSrcCode	[shape=oval, color=red2, label="ScopeCppSrcCode"];
+		ScopeCppSrcCode -> Doc;
+		}
 		subgraph variablecppsrccode{
 		VariableCppSrcCode	[shape=oval, color=red2, label="VariableCppSrcCode"];
 		VariableCppSrcCode -> VarData;
@@ -278,9 +290,9 @@ digraph alltypes {
 		StatementCppSrcCode	[shape=oval, color=red2, label="StatementCppSrcCode"];
 		StatementCppSrcCode -> DocTerminator;
 		}
-		subgraph scopecppsrccode{
-		ScopeCppSrcCode	[shape=oval, color=red2, label="ScopeCppSrcCode"];
-		ScopeCppSrcCode -> DocScopeTag;
+		subgraph visibilitycppsrccode{
+		VisibilityCppSrcCode	[shape=oval, color=red2, label="VisibilityCppSrcCode"];
+		VisibilityCppSrcCode -> DocVisibilityTag;
 		}
 		subgraph methodtypecppsrccode{
 		MethodTypeCppSrcCode	[shape=oval, color=red2, label="MethodTypeCppSrcCode"];
@@ -342,6 +354,10 @@ digraph alltypes {
 		BinaryOpCppHdrCode	[shape=oval, color=red2, label="BinaryOpCppHdrCode"];
 		BinaryOpCppHdrCode -> OpData;
 		}
+		subgraph scopecpphdrcode{
+		ScopeCppHdrCode	[shape=oval, color=red2, label="ScopeCppHdrCode"];
+		ScopeCppHdrCode -> Doc;
+		}
 		subgraph variablecpphdrcode{
 		VariableCppHdrCode	[shape=oval, color=red2, label="VariableCppHdrCode"];
 		VariableCppHdrCode -> VarData;
@@ -362,9 +378,9 @@ digraph alltypes {
 		StatementCppHdrCode	[shape=oval, color=red2, label="StatementCppHdrCode"];
 		StatementCppHdrCode -> DocTerminator;
 		}
-		subgraph scopecpphdrcode{
-		ScopeCppHdrCode	[shape=oval, color=red2, label="ScopeCppHdrCode"];
-		ScopeCppHdrCode -> DocScopeTag;
+		subgraph visibilitycpphdrcode{
+		VisibilityCppHdrCode	[shape=oval, color=red2, label="VisibilityCppHdrCode"];
+		VisibilityCppHdrCode -> DocVisibilityTag;
 		}
 		subgraph methodtypecpphdrcode{
 		MethodTypeCppHdrCode	[shape=oval, color=red2, label="MethodTypeCppHdrCode"];
@@ -436,6 +452,10 @@ digraph alltypes {
 		BinaryOpJavaCode	[shape=oval, color=red2, label="BinaryOpJavaCode"];
 		BinaryOpJavaCode -> OpData;
 		}
+		subgraph scopejavacode{
+		ScopeJavaCode	[shape=oval, color=red2, label="ScopeJavaCode"];
+		ScopeJavaCode -> Doc;
+		}
 		subgraph variablejavacode{
 		VariableJavaCode	[shape=oval, color=red2, label="VariableJavaCode"];
 		VariableJavaCode -> VarData;
@@ -456,9 +476,9 @@ digraph alltypes {
 		StatementJavaCode	[shape=oval, color=red2, label="StatementJavaCode"];
 		StatementJavaCode -> DocTerminator;
 		}
-		subgraph scopejavacode{
-		ScopeJavaCode	[shape=oval, color=red2, label="ScopeJavaCode"];
-		ScopeJavaCode -> Doc;
+		subgraph visibilityjavacode{
+		VisibilityJavaCode	[shape=oval, color=red2, label="VisibilityJavaCode"];
+		VisibilityJavaCode -> Doc;
 		}
 		subgraph methodtypejavacode{
 		MethodTypeJavaCode	[shape=oval, color=red2, label="MethodTypeJavaCode"];
@@ -538,6 +558,10 @@ digraph alltypes {
 		BinaryOpPythonCode	[shape=oval, color=red2, label="BinaryOpPythonCode"];
 		BinaryOpPythonCode -> OpData;
 		}
+		subgraph scopepythoncode{
+		ScopePythonCode	[shape=oval, color=red2, label="ScopePythonCode"];
+		ScopePythonCode -> Doc;
+		}
 		subgraph variablepythoncode{
 		VariablePythonCode	[shape=oval, color=red2, label="VariablePythonCode"];
 		VariablePythonCode -> VarData;
@@ -558,9 +582,9 @@ digraph alltypes {
 		StatementPythonCode	[shape=oval, color=red2, label="StatementPythonCode"];
 		StatementPythonCode -> DocTerminator;
 		}
-		subgraph scopepythoncode{
-		ScopePythonCode	[shape=oval, color=red2, label="ScopePythonCode"];
-		ScopePythonCode -> Doc;
+		subgraph visibilitypythoncode{
+		VisibilityPythonCode	[shape=oval, color=red2, label="VisibilityPythonCode"];
+		VisibilityPythonCode -> Doc;
 		}
 		subgraph methodtypepythoncode{
 		MethodTypePythonCode	[shape=oval, color=red2, label="MethodTypePythonCode"];
@@ -632,6 +656,10 @@ digraph alltypes {
 		BinaryOpSwiftCode	[shape=oval, color=red2, label="BinaryOpSwiftCode"];
 		BinaryOpSwiftCode -> OpData;
 		}
+		subgraph scopeswiftcode{
+		ScopeSwiftCode	[shape=oval, color=red2, label="ScopeSwiftCode"];
+		ScopeSwiftCode -> Doc;
+		}
 		subgraph variableswiftcode{
 		VariableSwiftCode	[shape=oval, color=red2, label="VariableSwiftCode"];
 		VariableSwiftCode -> VarData;
@@ -652,9 +680,9 @@ digraph alltypes {
 		StatementSwiftCode	[shape=oval, color=red2, label="StatementSwiftCode"];
 		StatementSwiftCode -> DocTerminator;
 		}
-		subgraph scopeswiftcode{
-		ScopeSwiftCode	[shape=oval, color=red2, label="ScopeSwiftCode"];
-		ScopeSwiftCode -> Doc;
+		subgraph visibilityswiftcode{
+		VisibilitySwiftCode	[shape=oval, color=red2, label="VisibilitySwiftCode"];
+		VisibilitySwiftCode -> Doc;
 		}
 		subgraph methodtypeswiftcode{
 		MethodTypeSwiftCode	[shape=oval, color=red2, label="MethodTypeSwiftCode"];
@@ -723,7 +751,7 @@ digraph alltypes {
 		}
 		subgraph statevardata{
 		StateVarData	[shape=oval, color=cyan3, label="StateVarData"];
-		StateVarData -> ScopeTag;
+		StateVarData -> VisibilityTag;
 		StateVarData -> Doc;
 		}
 		subgraph typedata{
@@ -749,8 +777,8 @@ digraph alltypes {
 		subgraph terminator{
 		Terminator	[shape=oval, color=darkviolet, label="Terminator"];
 		}
-		subgraph scopetag{
-		ScopeTag	[shape=oval, color=darkviolet, label="ScopeTag"];
+		subgraph visibilitytag{
+		VisibilityTag	[shape=oval, color=darkviolet, label="VisibilityTag"];
 		}
 		subgraph qualifiedname{
 		QualifiedName	[shape=oval, color=darkviolet, label="QualifiedName"];
@@ -806,6 +834,9 @@ digraph alltypes {
 		TypeCodeInfo	[shape=oval, color=red2, label="TypeCodeInfo"];
 		TypeCodeInfo -> String;
 		}
+		subgraph scopecodeinfo{
+		ScopeCodeInfo	[shape=oval, color=red2, label="ScopeCodeInfo"];
+		}
 		subgraph variablecodeinfo{
 		VariableCodeInfo	[shape=oval, color=red2, label="VariableCodeInfo"];
 		}
@@ -821,9 +852,9 @@ digraph alltypes {
 		subgraph statementcodeinfo{
 		StatementCodeInfo	[shape=oval, color=red2, label="StatementCodeInfo"];
 		}
-		subgraph scopecodeinfo{
-		ScopeCodeInfo	[shape=oval, color=red2, label="ScopeCodeInfo"];
-		ScopeCodeInfo -> ScopeTag;
+		subgraph visibilitycodeinfo{
+		VisibilityCodeInfo	[shape=oval, color=red2, label="VisibilityCodeInfo"];
+		VisibilityCodeInfo -> VisibilityTag;
 		}
 		subgraph parametercodeinfo{
 		ParameterCodeInfo	[shape=oval, color=red2, label="ParameterCodeInfo"];
@@ -1038,7 +1069,7 @@ digraph alltypes {
 		MethodState -> Bool;
 		MethodState -> ExceptionType;
 		MethodState -> QualifiedName;
-		MethodState -> ScopeTag;
+		MethodState -> VisibilityTag;
 		MethodState -> Index;
 		}
 		subgraph valuestate{

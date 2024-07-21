@@ -109,11 +109,11 @@ r -&gt; RefInfo -&gt; DecRef
 </span><span id="line-49"></span><span>    </span><span class="annot"><span class="annottext">ConstrConcept
 </span><span class="hs-identifier hs-var">tempW</span></span><span>
 </span><span id="line-50"></span><span>    </span><span class="annot"><span class="annottext">[[Expr]]
-</span><a href="#local-6989586621679074178"><span class="hs-identifier hs-var">coeffs</span></a></span><span>
+</span><a href="#local-6989586621679074195"><span class="hs-identifier hs-var">coeffs</span></a></span><span>
 </span><span id="line-51"></span><span>    </span><span class="annot"><span class="annottext">[Unknown]
-</span><a href="#local-6989586621679074177"><span class="hs-identifier hs-var">unknowns</span></a></span><span>
+</span><a href="#local-6989586621679074194"><span class="hs-identifier hs-var">unknowns</span></a></span><span>
 </span><span id="line-52"></span><span>    </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679074176"><span class="hs-identifier hs-var">constants</span></a></span><span>
+</span><a href="#local-6989586621679074193"><span class="hs-identifier hs-var">constants</span></a></span><span>
 </span><span id="line-53"></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;eBalanceOnWtrRC&quot;</span></span><span> </span><span>
 </span><span id="line-54"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -126,19 +126,19 @@ r -&gt; RefInfo -&gt; DecRef
 </span><span class="hs-identifier hs-var">tempW</span></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">forall c. Definition c =&gt; Lens' c Sentence
 </span><span class="hs-identifier hs-var">defn</span></span><span class="hs-special">)</span><span>
-</span><span id="line-56"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679074178"><span class="annot"><span class="annottext">coeffs :: [[Expr]]
-</span><a href="#local-6989586621679074178"><span class="hs-identifier hs-var hs-var">coeffs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Unknown -&gt; r
+</span><span id="line-56"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679074195"><span class="annot"><span class="annottext">coeffs :: [[Expr]]
+</span><a href="#local-6989586621679074195"><span class="hs-identifier hs-var hs-var">coeffs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Unknown -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Unknown
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">recip_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">tauW</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span class="hs-special">]</span><span>
-</span><span id="line-57"></span><span>          </span><span id="local-6989586621679074177"><span class="annot"><span class="annottext">unknowns :: [Unknown]
-</span><a href="#local-6989586621679074177"><span class="hs-identifier hs-var hs-var">unknowns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Unknown
+</span><span id="line-57"></span><span>          </span><span id="local-6989586621679074194"><span class="annot"><span class="annottext">unknowns :: [Unknown]
+</span><a href="#local-6989586621679074194"><span class="hs-identifier hs-var hs-var">unknowns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Unknown
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Unknown
 </span><span class="hs-number">0</span></span><span class="hs-special">]</span><span>
-</span><span id="line-58"></span><span>          </span><span id="local-6989586621679074176"><span class="annot"><span class="annottext">constants :: [Expr]
-</span><a href="#local-6989586621679074176"><span class="hs-identifier hs-var hs-var">constants</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><span id="line-58"></span><span>          </span><span id="local-6989586621679074193"><span class="annot"><span class="annottext">constants :: [Expr]
+</span><a href="#local-6989586621679074193"><span class="hs-identifier hs-var hs-var">constants</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">recip_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">tauW</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r

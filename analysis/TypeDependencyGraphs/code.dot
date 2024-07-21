@@ -784,7 +784,7 @@ digraph alltypes {
 		}
 		subgraph statevariable{
 		StateVariable	[shape=oval, color=cyan3, label="StateVariable"];
-		StateVariable -> ScopeTag;
+		StateVariable -> VisibilityTag;
 		StateVariable -> CodeVarChunk;
 		}
 		subgraph mod{

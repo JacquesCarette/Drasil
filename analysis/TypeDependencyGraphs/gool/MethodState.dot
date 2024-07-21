@@ -6,6 +6,6 @@ MethodState -> MapStringInt;
 MethodState -> Bool;
 MethodState -> ExceptionType;
 MethodState -> QualifiedName;
-MethodState -> ScopeTag;
+MethodState -> VisibilityTag;
 MethodState -> Index;
 }

@@ -641,11 +641,11 @@ ClassDef :: Name -> Maybe Name -> Description -> [StateVariable] -> [Func] -> [F
 [constructors] :: Class -> [Func]
 [methods] :: Class -> [Func]
 
--- | State variables hold attach a <a>ScopeTag</a> to a
+-- | State variables hold attach a <a>VisibilityTag</a> to a
 --   <a>CodeVarChunk</a>.
 data StateVariable
-SV :: ScopeTag -> CodeVarChunk -> StateVariable
-[svScope] :: StateVariable -> ScopeTag
+SV :: VisibilityTag -> CodeVarChunk -> StateVariable
+[svVisibility] :: StateVariable -> VisibilityTag
 [stVar] :: StateVariable -> CodeVarChunk
 
 -- | Holds a function definition or function data.
@@ -1837,7 +1837,7 @@ module Language.Drasil.Code.Imperative.Logging
 
 -- | Generates a statement that logs the given variable's value, if the
 --   user chose to turn on logging of variable assignments.
-maybeLog :: OOProg r => SVariable r -> GenState [MSStatement r]
+maybeLog :: OOProg r => SVariable r -> r (Scope r) -> GenState [MSStatement r]
 
 -- | Generates the body of a function with the given name, list of
 --   parameters, and blocks to include in the body. If the user chose to
@@ -1852,7 +1852,7 @@ logBody :: OOProg r => Label -> [SVariable r] -> [MSBlock r] -> GenState (MSBody
 loggedMethod :: OOProg r => FilePath -> Label -> [SVariable r] -> MSBlock r
 
 -- | The variable representing the log file in write mode.
-varLogFile :: OOProg r => SVariable r
+varLogFile :: OOProg r => r (Scope r) -> SVariable r
 
 module Language.Drasil.Code.Imperative.Helpers
 
@@ -2152,11 +2152,11 @@ genConstructor :: OOProg r => Label -> Description -> [ParameterChunk] -> [MSBlo
 
 -- | Generates a GOOL Variable for a variable represented by a
 --   <a>CodeVarChunk</a>.
-mkVar :: OOProg r => CodeVarChunk -> GenState (SVariable r)
+mkVar :: OOProg r => CodeVarChunk -> r (Scope r) -> GenState (SVariable r)
 
 -- | Generates a GOOL Value for a variable represented by a
 --   <a>CodeVarChunk</a>.
-mkVal :: OOProg r => CodeVarChunk -> GenState (SValue r)
+mkVal :: OOProg r => CodeVarChunk -> r (Scope r) -> GenState (SValue r)
 
 -- | Converts an <tt>Expr</tt> to a GOOL Value.
 convExpr :: OOProg r => CodeExpr -> GenState (SValue r)
@@ -2175,7 +2175,7 @@ genModClasses :: OOProg r => Mod -> [GenState (SClass r)]
 
 -- | Read from a data description into a <a>MSBlock</a> of
 --   <a>MSStatement</a>s.
-readData :: OOProg r => DataDesc -> GenState [MSBlock r]
+readData :: OOProg r => DataDesc -> r (Scope r) -> GenState [MSBlock r]
 
 -- | Converts a <a>Constraint</a> to a <a>CodeExpr</a>.
 renderC :: (HasUID c, HasSymbol c) => c -> Constraint CodeExpr -> CodeExpr
@@ -2200,7 +2200,7 @@ genConstraintCall :: OOProg r => GenState (Maybe (MSStatement r))
 
 -- | Generates a call to a calculation function, given the
 --   <a>CodeDefinition</a> for the value being calculated.
-genCalcCall :: OOProg r => CodeDefinition -> GenState (Maybe (MSStatement r))
+genCalcCall :: OOProg r => CodeDefinition -> r (Scope r) -> GenState (Maybe (MSStatement r))
 
 -- | Generates a call to the function for printing outputs.
 genOutputCall :: OOProg r => GenState (Maybe (MSStatement r))
@@ -2227,16 +2227,16 @@ genMainFunc :: OOProg r => GenState (Maybe (SMethod r))
 genInputClass :: OOProg r => ClassType -> GenState (Maybe (SClass r))
 
 -- | Generates a function for calculating derived inputs.
-genInputDerived :: OOProg r => ScopeTag -> GenState (Maybe (SMethod r))
+genInputDerived :: OOProg r => VisibilityTag -> GenState (Maybe (SMethod r))
 
 -- | Generates a single module containing all input-related components.
 genInputMod :: OOProg r => GenState [SFile r]
 
 -- | Generates function that checks constraints on the input.
-genInputConstraints :: OOProg r => ScopeTag -> GenState (Maybe (SMethod r))
+genInputConstraints :: OOProg r => VisibilityTag -> GenState (Maybe (SMethod r))
 
 -- | | Generates a function for reading inputs from a file.
-genInputFormat :: OOProg r => ScopeTag -> GenState (Maybe (SMethod r))
+genInputFormat :: OOProg r => VisibilityTag -> GenState (Maybe (SMethod r))
 
 -- | Generates a module containing the class where constants are stored.
 genConstMod :: OOProg r => GenState [SFile r]
@@ -2581,7 +2581,7 @@ codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 data Mod
 Mod :: Name -> Description -> [Import] -> [Class] -> [Func] -> Mod
 
--- | State variables hold attach a <a>ScopeTag</a> to a
+-- | State variables hold attach a <a>VisibilityTag</a> to a
 --   <a>CodeVarChunk</a>.
 data StateVariable
 

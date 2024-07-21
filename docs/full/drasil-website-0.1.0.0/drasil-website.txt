@@ -13,8 +13,11 @@
 -- | About Drasil
 module Drasil.Website.About
 
+-- | Reusable wiki page sentence.
+wikiSentence :: Sentence
+
 -- | Creates the about section.
-aboutSec :: Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Section
+aboutSec :: Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Reference -> Section
 
 -- | Paragraph to about Drasil and its goals.
 aboutParagraph1 :: Reference -> Reference -> Sentence
@@ -43,7 +46,7 @@ aboutParagraph7 :: Reference -> Sentence
 aboutParagraph8 :: Reference -> Sentence
 
 -- | Paragraph providing a link to Drasil papers and documents
-aboutParagraph9 :: Reference -> Sentence
+aboutParagraph9 :: Reference -> Reference -> Reference -> Reference -> Sentence
 
 
 -- | Contains all the information needed about the structure of the Drasil
@@ -144,7 +147,7 @@ dependencyGraphs :: FilePath -> String -> Contents
 -- | Function to get the paths of graphs we want to display on the website.
 drasilDisplayDepGraphPath :: FilePath -> FilePath -> String
 
--- | Gets all the paths to the pdf graphs from a given list of packages.
+-- | Gets all the paths to the PDF graphs from a given list of packages.
 drasilDepGraphPathsPDF :: FilePath -> [String] -> [String]
 
 -- | Create References to display as links for the dependency graph pdfs.
@@ -590,6 +593,9 @@ chunksWiki :: Reference
 recipesWiki :: Reference
 paperGOOL :: Reference
 papersWiki :: Reference
+icsePositionPaper :: Reference
+danPoster :: Reference
+wellUnderstoodPaper :: Reference
 quickStartWiki :: Reference
 newWorkspaceSetupWiki :: Reference
 contribGuideWiki :: Reference
@@ -601,6 +607,7 @@ debuggingWiki :: Reference
 websiteTitle :: String
 gitHubInfoURL :: FilePath
 imagePath :: FilePath
+danContributionPath :: FilePath
 
 -- | Create the footer section.
 footer :: FolderLocation -> Section

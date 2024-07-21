@@ -157,8 +157,8 @@ class (FuncAppStatement r, OOVariableSym r) => OOFuncAppStatement r
 selfInOutCall :: OOFuncAppStatement r => InOutCall r
 class (StatementSym r) => CommentStatement r
 comment :: CommentStatement r => Comment -> MSStatement r
-initObserverList :: DeclStatement r => VSType r -> [SValue r] -> MSStatement r
-addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r -> MSStatement r
+initObserverList :: DeclStatement r => VSType r -> [SValue r] -> r (Scope r) -> MSStatement r
+addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r -> r (Scope r) -> MSStatement r
 class (BodySym r, VariableSym r) => ControlStatement r
 break :: ControlStatement r => MSStatement r
 continue :: ControlStatement r => MSStatement r
@@ -177,13 +177,31 @@ while :: ControlStatement r => SValue r -> MSBody r -> MSStatement r
 tryCatch :: ControlStatement r => MSBody r -> MSBody r -> MSStatement r
 ifNoElse :: ControlStatement r => [(SValue r, MSBody r)] -> MSStatement r
 switchAsIf :: (ControlStatement r, Comparison r) => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
-class (TypeSym r) => VariableSym r where {
+class (TypeSym r, ScopeSym r) => VariableSym r where {
     type Variable r;
 }
-var :: VariableSym r => Label -> VSType r -> SVariable r
-constant :: VariableSym r => Label -> VSType r -> SVariable r
+var' :: VariableSym r => Label -> r (Scope r) -> VSType r -> SVariable r
+constant' :: VariableSym r => Label -> r (Scope r) -> VSType r -> SVariable r
 extVar :: VariableSym r => Library -> Label -> VSType r -> SVariable r
 arrayElem :: VariableSym r => Integer -> SVariable r -> SVariable r
+
+-- | Smart constructor to rearrange the parameters of var'
+var :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
+
+-- | Smart constructor to rearrange the parameters of constant'
+constant :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
+
+-- | Smart constructor for a local variable.
+locVar :: VariableSym r => Label -> VSType r -> SVariable r
+
+-- | Smart constructor for a variable in the main function.
+mainVar :: VariableSym r => Label -> VSType r -> SVariable r
+class ScopeSym r where {
+    type Scope r;
+}
+global :: ScopeSym r => r (Scope r)
+mainFn :: ScopeSym r => r (Scope r)
+local :: ScopeSym r => r (Scope r)
 class (VariableSym r, OOTypeSym r) => OOVariableSym r
 staticVar :: OOVariableSym r => Label -> VSType r -> SVariable r
 self :: OOVariableSym r => SVariable r
@@ -196,8 +214,8 @@ variableName :: VariableElim r => r (Variable r) -> String
 variableType :: VariableElim r => r (Variable r) -> r (Type r)
 ($->) :: OOVariableSym r => SVariable r -> SVariable r -> SVariable r
 infixl 9 $->
-listOf :: VariableSym r => Label -> VSType r -> SVariable r
-listVar :: VariableSym r => Label -> VSType r -> SVariable r
+listOf :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
+listVar :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
 class (TypeSym r) => ValueSym r where {
     type Value r;
 }
@@ -360,45 +378,45 @@ listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Ma
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 at :: List r => SValue r -> SValue r -> SValue r
 class (StatementSym r, FunctionSym r) => ObserverPattern r
-notifyObservers :: ObserverPattern r => VSFunction r -> VSType r -> MSStatement r
+notifyObservers :: ObserverPattern r => VSFunction r -> VSType r -> r (Scope r) -> MSStatement r
 class (BodySym r, VariableSym r) => StrategyPattern r
 runStrategy :: StrategyPattern r => Label -> [(Label, MSBody r)] -> Maybe (SValue r) -> Maybe (SVariable r) -> MSBlock r
-class ScopeSym r where {
-    type Scope r;
+class VisibilitySym r where {
+    type Visibility r;
 }
-private :: ScopeSym r => r (Scope r)
-public :: ScopeSym r => r (Scope r)
+private :: VisibilitySym r => r (Visibility r)
+public :: VisibilitySym r => r (Visibility r)
 class (VariableSym r) => ParameterSym r where {
     type Parameter r;
 }
 param :: ParameterSym r => SVariable r -> MSParameter r
 pointerParam :: ParameterSym r => SVariable r -> MSParameter r
-class (BodySym r, ParameterSym r, ScopeSym r) => MethodSym r where {
+class (BodySym r, ParameterSym r, VisibilitySym r) => MethodSym r where {
     type Method r;
 }
 docMain :: MethodSym r => MSBody r -> SMethod r
-function :: MethodSym r => Label -> r (Scope r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+function :: MethodSym r => Label -> r (Visibility r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 mainFunction :: MethodSym r => MSBody r -> SMethod r
 docFunc :: MethodSym r => String -> [String] -> Maybe String -> SMethod r -> SMethod r
-inOutFunc :: MethodSym r => Label -> r (Scope r) -> InOutFunc r
-docInOutFunc :: MethodSym r => Label -> r (Scope r) -> DocInOutFunc r
+inOutFunc :: MethodSym r => Label -> r (Visibility r) -> InOutFunc r
+docInOutFunc :: MethodSym r => Label -> r (Visibility r) -> DocInOutFunc r
 class (MethodSym r, PermanenceSym r) => OOMethodSym r
-method :: OOMethodSym r => Label -> r (Scope r) -> r (Permanence r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+method :: OOMethodSym r => Label -> r (Visibility r) -> r (Permanence r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 getMethod :: OOMethodSym r => SVariable r -> SMethod r
 setMethod :: OOMethodSym r => SVariable r -> SMethod r
 constructor :: OOMethodSym r => [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
-inOutMethod :: OOMethodSym r => Label -> r (Scope r) -> r (Permanence r) -> InOutFunc r
-docInOutMethod :: OOMethodSym r => Label -> r (Scope r) -> r (Permanence r) -> DocInOutFunc r
+inOutMethod :: OOMethodSym r => Label -> r (Visibility r) -> r (Permanence r) -> InOutFunc r
+docInOutMethod :: OOMethodSym r => Label -> r (Visibility r) -> r (Permanence r) -> DocInOutFunc r
 privMethod :: OOMethodSym r => Label -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 pubMethod :: OOMethodSym r => Label -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 initializer :: OOMethodSym r => [MSParameter r] -> Initializers r -> SMethod r
 nonInitConstructor :: OOMethodSym r => [MSParameter r] -> MSBody r -> SMethod r
-class (ScopeSym r, PermanenceSym r, VariableSym r) => StateVarSym r where {
+class (VisibilitySym r, PermanenceSym r, VariableSym r) => StateVarSym r where {
     type StateVar r;
 }
-stateVar :: StateVarSym r => r (Scope r) -> r (Permanence r) -> SVariable r -> CSStateVar r
-stateVarDef :: StateVarSym r => r (Scope r) -> r (Permanence r) -> SVariable r -> SValue r -> CSStateVar r
-constVar :: StateVarSym r => r (Scope r) -> SVariable r -> SValue r -> CSStateVar r
+stateVar :: StateVarSym r => r (Visibility r) -> r (Permanence r) -> SVariable r -> CSStateVar r
+stateVarDef :: StateVarSym r => r (Visibility r) -> r (Permanence r) -> SVariable r -> SValue r -> CSStateVar r
+constVar :: StateVarSym r => r (Visibility r) -> SVariable r -> SValue r -> CSStateVar r
 privDVar :: StateVarSym r => SVariable r -> CSStateVar r
 pubDVar :: StateVarSym r => SVariable r -> CSStateVar r
 pubSVar :: StateVarSym r => SVariable r -> CSStateVar r
@@ -427,9 +445,9 @@ convTypeOO :: OOTypeSym r => CodeType -> VSType r
 data ProgData
 data FileData
 data ModData
-data ScopeTag
-Pub :: ScopeTag
-Priv :: ScopeTag
+data VisibilityTag
+Pub :: VisibilityTag
+Priv :: VisibilityTag
 data CodeType
 Boolean :: CodeType
 Integer :: CodeType
@@ -625,18 +643,18 @@ while :: ControlStatement r => SValue r -> MSBody r -> MSStatement r
 tryCatch :: ControlStatement r => MSBody r -> MSBody r -> MSStatement r
 ifNoElse :: ControlStatement r => [(SValue r, MSBody r)] -> MSStatement r
 switchAsIf :: (ControlStatement r, Comparison r) => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
-class (TypeSym r) => VariableSym r where {
+class (TypeSym r, ScopeSym r) => VariableSym r where {
     type Variable r;
 }
-var :: VariableSym r => Label -> VSType r -> SVariable r
-constant :: VariableSym r => Label -> VSType r -> SVariable r
+var' :: VariableSym r => Label -> r (Scope r) -> VSType r -> SVariable r
+constant' :: VariableSym r => Label -> r (Scope r) -> VSType r -> SVariable r
 extVar :: VariableSym r => Library -> Label -> VSType r -> SVariable r
 arrayElem :: VariableSym r => Integer -> SVariable r -> SVariable r
 class (VariableSym r) => VariableElim r
 variableName :: VariableElim r => r (Variable r) -> String
 variableType :: VariableElim r => r (Variable r) -> r (Type r)
-listOf :: VariableSym r => Label -> VSType r -> SVariable r
-listVar :: VariableSym r => Label -> VSType r -> SVariable r
+listOf :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
+listVar :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
 class (TypeSym r) => ValueSym r where {
     type Value r;
 }
@@ -767,22 +785,23 @@ at :: List r => SValue r -> SValue r -> SValue r
 class ScopeSym r where {
     type Scope r;
 }
-private :: ScopeSym r => r (Scope r)
-public :: ScopeSym r => r (Scope r)
+global :: ScopeSym r => r (Scope r)
+mainFn :: ScopeSym r => r (Scope r)
+local :: ScopeSym r => r (Scope r)
 class (VariableSym r) => ParameterSym r where {
     type Parameter r;
 }
 param :: ParameterSym r => SVariable r -> MSParameter r
 pointerParam :: ParameterSym r => SVariable r -> MSParameter r
-class (BodySym r, ParameterSym r, ScopeSym r) => MethodSym r where {
+class (BodySym r, ParameterSym r, VisibilitySym r) => MethodSym r where {
     type Method r;
 }
 docMain :: MethodSym r => MSBody r -> SMethod r
-function :: MethodSym r => Label -> r (Scope r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+function :: MethodSym r => Label -> r (Visibility r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 mainFunction :: MethodSym r => MSBody r -> SMethod r
 docFunc :: MethodSym r => String -> [String] -> Maybe String -> SMethod r -> SMethod r
-inOutFunc :: MethodSym r => Label -> r (Scope r) -> InOutFunc r
-docInOutFunc :: MethodSym r => Label -> r (Scope r) -> DocInOutFunc r
+inOutFunc :: MethodSym r => Label -> r (Visibility r) -> InOutFunc r
+docInOutFunc :: MethodSym r => Label -> r (Visibility r) -> DocInOutFunc r
 class (MethodSym r) => ModuleSym r where {
     type Module r;
 }
@@ -791,9 +810,9 @@ convType :: TypeSym r => CodeType -> VSType r
 data ProgData
 data FileData
 data ModData
-data ScopeTag
-Pub :: ScopeTag
-Priv :: ScopeTag
+data VisibilityTag
+Pub :: VisibilityTag
+Priv :: VisibilityTag
 data CodeType
 Boolean :: CodeType
 Integer :: CodeType

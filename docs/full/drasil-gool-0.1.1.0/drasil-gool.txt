@@ -54,9 +54,9 @@ module Drasil.GOOL.AST
 data Terminator
 Semi :: Terminator
 Empty :: Terminator
-data ScopeTag
-Pub :: ScopeTag
-Priv :: ScopeTag
+data VisibilityTag
+Pub :: VisibilityTag
+Priv :: VisibilityTag
 data QualifiedName
 qualName :: String -> String -> QualifiedName
 data FileType
@@ -91,7 +91,7 @@ data ProgData
 progD :: String -> String -> [FileData] -> ProgData
 emptyProg :: ProgData
 data StateVarData
-svd :: ScopeTag -> Doc -> (Doc, Terminator) -> StateVarData
+svd :: VisibilityTag -> Doc -> (Doc, Terminator) -> StateVarData
 data TypeData
 td :: CodeType -> String -> Doc -> TypeData
 data ValData
@@ -107,7 +107,7 @@ sumComponents :: CommonThunk s -> CommonThunk s
 commonVecIndex :: (s ValData -> s ValData) -> CommonThunk s -> s ValData
 commonThunkElim :: (CommonThunk s -> a) -> (CommonThunk s -> a) -> CommonThunk s -> a
 commonThunkDim :: (s ValData -> s ValData) -> CommonThunk s -> s ValData
-instance GHC.Classes.Eq Drasil.GOOL.AST.ScopeTag
+instance GHC.Classes.Eq Drasil.GOOL.AST.VisibilityTag
 instance GHC.Classes.Ord Drasil.GOOL.AST.QualifiedName
 instance GHC.Classes.Eq Drasil.GOOL.AST.QualifiedName
 
@@ -235,8 +235,8 @@ getExceptions :: MS [ExceptionType]
 addCall :: QualifiedName -> ValueState -> ValueState
 setMainDoc :: Doc -> MethodState -> MethodState
 getMainDoc :: FS Doc
-setScope :: ScopeTag -> MethodState -> MethodState
-getScope :: MS ScopeTag
+setVisibility :: VisibilityTag -> MethodState -> MethodState
+getVisibility :: MS VisibilityTag
 setCurrMainFunc :: Bool -> MethodState -> MethodState
 getCurrMainFunc :: MS Bool
 setThrowUsed :: MethodState -> MethodState
@@ -306,18 +306,36 @@ void :: TypeSym r => VSType r
 class (TypeSym r) => TypeElim r
 getType :: TypeElim r => r (Type r) -> CodeType
 getTypeString :: TypeElim r => r (Type r) -> String
-class (TypeSym r) => VariableSym r where {
+class (TypeSym r, ScopeSym r) => VariableSym r where {
     type Variable r;
 }
-var :: VariableSym r => Label -> VSType r -> SVariable r
-constant :: VariableSym r => Label -> VSType r -> SVariable r
+var' :: VariableSym r => Label -> r (Scope r) -> VSType r -> SVariable r
+constant' :: VariableSym r => Label -> r (Scope r) -> VSType r -> SVariable r
 extVar :: VariableSym r => Library -> Label -> VSType r -> SVariable r
 arrayElem :: VariableSym r => Integer -> SVariable r -> SVariable r
+
+-- | Smart constructor to rearrange the parameters of var'
+var :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
+
+-- | Smart constructor to rearrange the parameters of constant'
+constant :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
+
+-- | Smart constructor for a local variable.
+locVar :: VariableSym r => Label -> VSType r -> SVariable r
+
+-- | Smart constructor for a variable in the main function.
+mainVar :: VariableSym r => Label -> VSType r -> SVariable r
+class ScopeSym r where {
+    type Scope r;
+}
+global :: ScopeSym r => r (Scope r)
+mainFn :: ScopeSym r => r (Scope r)
+local :: ScopeSym r => r (Scope r)
 class (VariableSym r) => VariableElim r
 variableName :: VariableElim r => r (Variable r) -> String
 variableType :: VariableElim r => r (Variable r) -> r (Type r)
-listOf :: VariableSym r => Label -> VSType r -> SVariable r
-listVar :: VariableSym r => Label -> VSType r -> SVariable r
+listOf :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
+listVar :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
 class (TypeSym r) => ValueSym r where {
     type Value r;
 }
@@ -539,25 +557,25 @@ while :: ControlStatement r => SValue r -> MSBody r -> MSStatement r
 tryCatch :: ControlStatement r => MSBody r -> MSBody r -> MSStatement r
 ifNoElse :: ControlStatement r => [(SValue r, MSBody r)] -> MSStatement r
 switchAsIf :: (ControlStatement r, Comparison r) => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
-class ScopeSym r where {
-    type Scope r;
+class VisibilitySym r where {
+    type Visibility r;
 }
-private :: ScopeSym r => r (Scope r)
-public :: ScopeSym r => r (Scope r)
+private :: VisibilitySym r => r (Visibility r)
+public :: VisibilitySym r => r (Visibility r)
 class (VariableSym r) => ParameterSym r where {
     type Parameter r;
 }
 param :: ParameterSym r => SVariable r -> MSParameter r
 pointerParam :: ParameterSym r => SVariable r -> MSParameter r
-class (BodySym r, ParameterSym r, ScopeSym r) => MethodSym r where {
+class (BodySym r, ParameterSym r, VisibilitySym r) => MethodSym r where {
     type Method r;
 }
 docMain :: MethodSym r => MSBody r -> SMethod r
-function :: MethodSym r => Label -> r (Scope r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+function :: MethodSym r => Label -> r (Visibility r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 mainFunction :: MethodSym r => MSBody r -> SMethod r
 docFunc :: MethodSym r => String -> [String] -> Maybe String -> SMethod r -> SMethod r
-inOutFunc :: MethodSym r => Label -> r (Scope r) -> InOutFunc r
-docInOutFunc :: MethodSym r => Label -> r (Scope r) -> DocInOutFunc r
+inOutFunc :: MethodSym r => Label -> r (Visibility r) -> InOutFunc r
+docInOutFunc :: MethodSym r => Label -> r (Visibility r) -> DocInOutFunc r
 convType :: TypeSym r => CodeType -> VSType r
 
 module Drasil.GOOL.InterfaceProc
@@ -670,22 +688,22 @@ objMethodCallMixedArgs :: InternalValueExp r => VSType r -> SValue r -> Label ->
 -- | Calling a method with no parameters.
 objMethodCallNoParams :: InternalValueExp r => VSType r -> SValue r -> Label -> SValue r
 class (MethodSym r, PermanenceSym r) => OOMethodSym r
-method :: OOMethodSym r => Label -> r (Scope r) -> r (Permanence r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+method :: OOMethodSym r => Label -> r (Visibility r) -> r (Permanence r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 getMethod :: OOMethodSym r => SVariable r -> SMethod r
 setMethod :: OOMethodSym r => SVariable r -> SMethod r
 constructor :: OOMethodSym r => [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
-inOutMethod :: OOMethodSym r => Label -> r (Scope r) -> r (Permanence r) -> InOutFunc r
-docInOutMethod :: OOMethodSym r => Label -> r (Scope r) -> r (Permanence r) -> DocInOutFunc r
+inOutMethod :: OOMethodSym r => Label -> r (Visibility r) -> r (Permanence r) -> InOutFunc r
+docInOutMethod :: OOMethodSym r => Label -> r (Visibility r) -> r (Permanence r) -> DocInOutFunc r
 privMethod :: OOMethodSym r => Label -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 pubMethod :: OOMethodSym r => Label -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 initializer :: OOMethodSym r => [MSParameter r] -> Initializers r -> SMethod r
 nonInitConstructor :: OOMethodSym r => [MSParameter r] -> MSBody r -> SMethod r
-class (ScopeSym r, PermanenceSym r, VariableSym r) => StateVarSym r where {
+class (VisibilitySym r, PermanenceSym r, VariableSym r) => StateVarSym r where {
     type StateVar r;
 }
-stateVar :: StateVarSym r => r (Scope r) -> r (Permanence r) -> SVariable r -> CSStateVar r
-stateVarDef :: StateVarSym r => r (Scope r) -> r (Permanence r) -> SVariable r -> SValue r -> CSStateVar r
-constVar :: StateVarSym r => r (Scope r) -> SVariable r -> SValue r -> CSStateVar r
+stateVar :: StateVarSym r => r (Visibility r) -> r (Permanence r) -> SVariable r -> CSStateVar r
+stateVarDef :: StateVarSym r => r (Visibility r) -> r (Permanence r) -> SVariable r -> SValue r -> CSStateVar r
+constVar :: StateVarSym r => r (Visibility r) -> SVariable r -> SValue r -> CSStateVar r
 privDVar :: StateVarSym r => SVariable r -> CSStateVar r
 pubDVar :: StateVarSym r => SVariable r -> CSStateVar r
 pubSVar :: StateVarSym r => SVariable r -> CSStateVar r
@@ -703,16 +721,16 @@ objAccess :: FunctionSym r => SValue r -> VSFunction r -> SValue r
 infixl 9 $.
 selfAccess :: (OOVariableValue r, FunctionSym r) => VSFunction r -> SValue r
 class (StatementSym r, FunctionSym r) => ObserverPattern r
-notifyObservers :: ObserverPattern r => VSFunction r -> VSType r -> MSStatement r
+notifyObservers :: ObserverPattern r => VSFunction r -> VSType r -> r (Scope r) -> MSStatement r
 observerListName :: Label
-initObserverList :: DeclStatement r => VSType r -> [SValue r] -> MSStatement r
-addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r -> MSStatement r
+initObserverList :: DeclStatement r => VSType r -> [SValue r] -> r (Scope r) -> MSStatement r
+addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r -> r (Scope r) -> MSStatement r
 class (BodySym r, VariableSym r) => StrategyPattern r
 runStrategy :: StrategyPattern r => Label -> [(Label, MSBody r)] -> Maybe (SValue r) -> Maybe (SVariable r) -> MSBlock r
 convTypeOO :: OOTypeSym r => CodeType -> VSType r
 
 module Drasil.GOOL.RendererClasses
-class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, InternalValueExp r, GetSet r, List r, InternalList r, VectorExpression r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r, RenderClass r, ClassElim r, RenderFile r, InternalGetSet r, InternalListFunc r, RenderFunction r, FunctionElim r, RenderMethod r, MethodElim r, RenderMod r, ModuleElim r, OpElim r, RenderParam r, ParamElim r, PermElim r, RenderScope r, ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, RenderStatement r, StatementElim r, StateVarElim r, RenderType r, InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable r, InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r, BlockCommentElim r, OOVariableValue r, OOValueExpression r) => RenderSym r
+class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, InternalValueExp r, GetSet r, List r, InternalList r, VectorExpression r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r, RenderClass r, ClassElim r, RenderFile r, InternalGetSet r, InternalListFunc r, RenderFunction r, FunctionElim r, RenderMethod r, MethodElim r, RenderMod r, ModuleElim r, OpElim r, RenderParam r, ParamElim r, PermElim r, RenderVisibility r, VisibilityElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, RenderStatement r, StatementElim r, StateVarElim r, RenderType r, InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable r, InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r, BlockCommentElim r, OOVariableValue r, OOValueExpression r) => RenderSym r
 class (BlockCommentSym r) => RenderFile r
 top :: RenderFile r => r (Module r) -> r (Block r)
 bottom :: RenderFile r => r (Block r)
@@ -834,10 +852,10 @@ stmtFromData :: RenderStatement r => Doc -> Terminator -> MSStatement r
 class StatementElim r
 statement :: StatementElim r => r (Statement r) -> Doc
 statementTerm :: StatementElim r => r (Statement r) -> Terminator
-class RenderScope r
-scopeFromData :: RenderScope r => ScopeTag -> Doc -> r (Scope r)
-class ScopeElim r
-scope :: ScopeElim r => r (Scope r) -> Doc
+class RenderVisibility r
+visibilityFromData :: RenderVisibility r => VisibilityTag -> Doc -> r (Visibility r)
+class VisibilityElim r
+visibility :: VisibilityElim r => r (Visibility r) -> Doc
 type MSMthdType a = MS (a (MethodType a))
 class (TypeSym r) => MethodTypeSym r where {
     type MethodType r;
@@ -851,18 +869,18 @@ parameterName :: ParamElim r => r (Parameter r) -> Label
 parameterType :: ParamElim r => r (Parameter r) -> r (Type r)
 parameter :: ParamElim r => r (Parameter r) -> Doc
 class (MethodTypeSym r, BlockCommentSym r) => RenderMethod r
-intMethod :: RenderMethod r => Bool -> Label -> r (Scope r) -> r (Permanence r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
-intFunc :: RenderMethod r => Bool -> Label -> r (Scope r) -> r (Permanence r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
+intMethod :: RenderMethod r => Bool -> Label -> r (Visibility r) -> r (Permanence r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
+intFunc :: RenderMethod r => Bool -> Label -> r (Visibility r) -> r (Permanence r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
 commentedFunc :: RenderMethod r => MS (r (BlockComment r)) -> SMethod r -> SMethod r
 destructor :: RenderMethod r => [CSStateVar r] -> SMethod r
-mthdFromData :: RenderMethod r => ScopeTag -> Doc -> SMethod r
+mthdFromData :: RenderMethod r => VisibilityTag -> Doc -> SMethod r
 class MethodElim r
 method :: MethodElim r => r (Method r) -> Doc
 class StateVarElim r
 stateVar :: StateVarElim r => r (StateVar r) -> Doc
 type ParentSpec = Doc
 class (BlockCommentSym r) => RenderClass r
-intClass :: RenderClass r => Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
+intClass :: RenderClass r => Label -> r (Visibility r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
 inherit :: RenderClass r => Maybe Label -> r ParentSpec
 implements :: RenderClass r => [Label] -> r ParentSpec
 commentedClass :: RenderClass r => CS (r (BlockComment r)) -> SClass r -> SClass r
@@ -898,12 +916,12 @@ listSlice :: RenderSym r => Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValu
 --   not given and step is positive - SValue: value of bound if bound not
 --   given and step is negative Output: (MSStatement, SValue): (setter,
 --   value) of bound
-makeSetterVal :: RenderSym r => Label -> SValue r -> Maybe Integer -> Maybe (SValue r) -> SValue r -> SValue r -> (MSStatement r, SValue r)
+makeSetterVal :: RenderSym r => Label -> SValue r -> Maybe Integer -> Maybe (SValue r) -> SValue r -> SValue r -> r (Scope r) -> (MSStatement r, SValue r)
 stringListVals :: RenderSym r => [SVariable r] -> SValue r -> MSStatement r
 stringListLists :: RenderSym r => [SVariable r] -> SValue r -> MSStatement r
 forRange :: RenderSym r => SVariable r -> SValue r -> SValue r -> SValue r -> MSBody r -> MSStatement r
-notifyObservers :: RenderSym r => VSFunction r -> VSType r -> MSStatement r
-notifyObservers' :: RenderSym r => VSFunction r -> VSType r -> MSStatement r
+notifyObservers :: RenderSym r => VSFunction r -> VSType r -> r (Scope r) -> MSStatement r
+notifyObservers' :: RenderSym r => VSFunction r -> VSType r -> r (Scope r) -> MSStatement r
 
 
 -- | The structure for a class of renderers is defined here.
@@ -980,7 +998,7 @@ body :: [Doc] -> Doc
 print :: RenderSym r => r (Value r) -> r (Value r) -> Doc
 printFile :: Label -> Doc -> Doc
 param :: RenderSym r => r (Variable r) -> Doc
-method :: RenderSym r => Label -> r (Scope r) -> r (Permanence r) -> r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
+method :: RenderSym r => Label -> r (Visibility r) -> r (Permanence r) -> r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 stateVar :: Doc -> Doc -> Doc -> Doc
 constVar :: Doc -> Doc -> Doc -> VarData -> Doc
 stateVarList :: [Doc] -> Doc
@@ -1203,11 +1221,11 @@ ifCond :: RenderSym r => (Doc -> Doc) -> Doc -> OptionalSpace -> Doc -> Doc -> [
 tryCatch :: RenderSym r => (r (Body r) -> r (Body r) -> Doc) -> MSBody r -> MSBody r -> MSStatement r
 construct :: RenderSym r => Label -> MS (r (Type r))
 param :: RenderSym r => (r (Variable r) -> Doc) -> SVariable r -> MSParameter r
-method :: RenderSym r => Label -> r (Scope r) -> r (Permanence r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+method :: RenderSym r => Label -> r (Visibility r) -> r (Permanence r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 getMethod :: RenderSym r => SVariable r -> SMethod r
 setMethod :: RenderSym r => SVariable r -> SMethod r
 initStmts :: RenderSym r => Initializers r -> MSBody r
-function :: RenderSym r => Label -> r (Scope r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+function :: RenderSym r => Label -> r (Visibility r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 docFuncRepr :: RenderSym r => FuncDocRenderer -> String -> [String] -> [String] -> SMethod r -> SMethod r
 docFunc :: RenderSym r => FuncDocRenderer -> String -> [String] -> Maybe String -> SMethod r -> SMethod r
 buildClass :: RenderSym r => Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
@@ -1242,7 +1260,7 @@ discardFileLine :: RenderSym r => Label -> SValue r -> MSStatement r
 -- | An internal function for creating a class. Parameters: render
 --   function, class name, scope, parent, class variables, constructor(s),
 --   methods
-intClass :: (RenderSym r, Monad r) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) -> Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> CS (r Doc)
+intClass :: (RenderSym r, Monad r) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) -> Label -> r (Visibility r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> CS (r Doc)
 funcType :: RenderSym r => [VSType r] -> VSType r -> VSType r
 buildModule :: RenderSym r => Label -> FS Doc -> FS Doc -> FS Doc -> [SMethod r] -> [SClass r] -> FSModule r
 arrayType :: RenderSym r => VSType r -> VSType r
@@ -1273,8 +1291,8 @@ extFuncAppMixedArgs :: RenderSym r => Library -> MixedCall r
 notNull :: RenderSym r => String -> SValue r -> SValue r
 listDecDef :: RenderSym r => SVariable r -> [SValue r] -> MSStatement r
 destructorError :: String -> String
-stateVarDef :: (RenderSym r, Monad r) => r (Scope r) -> r (Permanence r) -> SVariable r -> SValue r -> CS (r Doc)
-constVar :: (RenderSym r, Monad r) => Doc -> r (Scope r) -> SVariable r -> SValue r -> CS (r Doc)
+stateVarDef :: (RenderSym r, Monad r) => r (Visibility r) -> r (Permanence r) -> SVariable r -> SValue r -> CS (r Doc)
+constVar :: (RenderSym r, Monad r) => Doc -> r (Visibility r) -> SVariable r -> SValue r -> CS (r Doc)
 litArray :: RenderSym r => (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
 listSetFunc :: RenderSym r => (Doc -> Doc -> Doc) -> SValue r -> SValue r -> SValue r -> VSFunction r
 extraClass :: RenderSym r => Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
@@ -1283,7 +1301,7 @@ doubleRender :: String
 double :: RenderSym r => VSType r
 openFileR :: RenderSym r => (SValue r -> VSType r -> SValue r) -> SVariable r -> SValue r -> MSStatement r
 openFileW :: RenderSym r => (SValue r -> VSType r -> SValue r -> SValue r) -> SVariable r -> SValue r -> MSStatement r
-stateVar :: (RenderSym r, Monad r) => r (Scope r) -> r (Permanence r) -> SVariable r -> CS (r Doc)
+stateVar :: (RenderSym r, Monad r) => r (Visibility r) -> r (Permanence r) -> SVariable r -> CS (r Doc)
 self :: RenderSym r => SVariable r
 multiAssign :: RenderSym r => (Doc -> Doc) -> [SVariable r] -> [SValue r] -> MSStatement r
 multiReturn :: RenderSym r => (Doc -> Doc) -> [SValue r] -> MSStatement r
@@ -1366,6 +1384,7 @@ instance Drasil.GOOL.RendererClasses.InternalTypeElim Drasil.GOOL.LanguageRender
 instance Drasil.GOOL.RendererClasses.UnaryOpSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.RendererClasses.BinaryOpSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.RendererClasses.OpElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.VariableSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceGOOL.OOVariableSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.VariableElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
@@ -1418,9 +1437,9 @@ instance Drasil.GOOL.InterfaceCommon.CommentStatement Drasil.GOOL.LanguageRender
 instance Drasil.GOOL.InterfaceCommon.ControlStatement Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceGOOL.ObserverPattern Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceGOOL.StrategyPattern Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.RenderScope Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.ScopeElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.InterfaceCommon.VisibilitySym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClasses.RenderVisibility Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClasses.VisibilityElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.RendererClasses.MethodTypeSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.ParameterSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.RendererClasses.RenderParam Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
@@ -1469,7 +1488,7 @@ extObjDecNew :: RenderSym r => Library -> SVariable r -> [SValue r] -> MSStateme
 switch :: RenderSym r => (Doc -> Doc) -> MSStatement r -> SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 for :: RenderSym r => Doc -> Doc -> MSStatement r -> SValue r -> MSStatement r -> MSBody r -> MSStatement r
 while :: RenderSym r => (Doc -> Doc) -> Doc -> Doc -> SValue r -> MSBody r -> MSStatement r
-intFunc :: RenderSym r => Bool -> Label -> r (Scope r) -> r (Permanence r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
+intFunc :: RenderSym r => Bool -> Label -> r (Visibility r) -> r (Permanence r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
 multiAssignError :: String -> String
 multiReturnError :: String -> String
 multiTypeError :: String -> String
@@ -1510,6 +1529,7 @@ instance Drasil.GOOL.RendererClasses.InternalTypeElim Drasil.GOOL.LanguageRender
 instance Drasil.GOOL.RendererClasses.UnaryOpSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.RendererClasses.BinaryOpSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.RendererClasses.OpElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.VariableSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceGOOL.OOVariableSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.VariableElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
@@ -1562,9 +1582,9 @@ instance Drasil.GOOL.InterfaceCommon.CommentStatement Drasil.GOOL.LanguageRender
 instance Drasil.GOOL.InterfaceCommon.ControlStatement Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceGOOL.ObserverPattern Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceGOOL.StrategyPattern Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.RenderScope Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.ScopeElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.InterfaceCommon.VisibilitySym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClasses.RenderVisibility Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClasses.VisibilityElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.RendererClasses.MethodTypeSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.ParameterSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.RendererClasses.RenderParam Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
@@ -1619,6 +1639,7 @@ instance Drasil.GOOL.RendererClasses.InternalTypeElim Drasil.GOOL.LanguageRender
 instance Drasil.GOOL.RendererClasses.UnaryOpSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.RendererClasses.BinaryOpSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.RendererClasses.OpElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.VariableSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceGOOL.OOVariableSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.VariableElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
@@ -1671,9 +1692,9 @@ instance Drasil.GOOL.InterfaceCommon.CommentStatement Drasil.GOOL.LanguageRender
 instance Drasil.GOOL.InterfaceCommon.ControlStatement Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceGOOL.ObserverPattern Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceGOOL.StrategyPattern Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.RenderScope Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.ScopeElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.InterfaceCommon.VisibilitySym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClasses.RenderVisibility Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClasses.VisibilityElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.RendererClasses.MethodTypeSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.ParameterSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.RendererClasses.RenderParam Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
@@ -1741,6 +1762,7 @@ instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.InternalTypeE
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.UnaryOpSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.BinaryOpSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.OpElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.ScopeSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.VariableSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.OOVariableSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.VariableElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
@@ -1793,9 +1815,9 @@ instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.CommentStatem
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.ControlStatement (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.ObserverPattern (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.StrategyPattern (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.ScopeSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.RenderScope (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.ScopeElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.VisibilitySym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.RenderVisibility (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.VisibilityElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.MethodTypeSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.ParameterSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.RenderParam (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
@@ -1837,6 +1859,7 @@ instance Drasil.GOOL.RendererClasses.InternalTypeElim Drasil.GOOL.LanguageRender
 instance Drasil.GOOL.RendererClasses.UnaryOpSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.RendererClasses.BinaryOpSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.RendererClasses.OpElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.VariableSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceGOOL.OOVariableSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.VariableElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
@@ -1889,9 +1912,9 @@ instance Drasil.GOOL.InterfaceCommon.CommentStatement Drasil.GOOL.LanguageRender
 instance Drasil.GOOL.InterfaceCommon.ControlStatement Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceGOOL.ObserverPattern Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceGOOL.StrategyPattern Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.RenderScope Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.ScopeElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.InterfaceCommon.VisibilitySym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClasses.RenderVisibility Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClasses.VisibilityElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.RendererClasses.MethodTypeSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.ParameterSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.RendererClasses.RenderParam Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
@@ -1933,6 +1956,7 @@ instance Drasil.GOOL.RendererClasses.InternalTypeElim Drasil.GOOL.LanguageRender
 instance Drasil.GOOL.RendererClasses.UnaryOpSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.RendererClasses.BinaryOpSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.RendererClasses.OpElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.VariableSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceGOOL.OOVariableSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.VariableElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
@@ -1985,9 +2009,9 @@ instance Drasil.GOOL.InterfaceCommon.CommentStatement Drasil.GOOL.LanguageRender
 instance Drasil.GOOL.InterfaceCommon.ControlStatement Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceGOOL.ObserverPattern Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceGOOL.StrategyPattern Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.RenderScope Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.ScopeElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.InterfaceCommon.VisibilitySym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClasses.RenderVisibility Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClasses.VisibilityElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.RendererClasses.MethodTypeSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.ParameterSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.RendererClasses.RenderParam Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
@@ -2042,6 +2066,7 @@ instance Drasil.GOOL.RendererClasses.InternalTypeElim Drasil.GOOL.LanguageRender
 instance Drasil.GOOL.RendererClasses.UnaryOpSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.RendererClasses.BinaryOpSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.RendererClasses.OpElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.VariableSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceGOOL.OOVariableSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.VariableElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
@@ -2094,9 +2119,9 @@ instance Drasil.GOOL.InterfaceCommon.CommentStatement Drasil.GOOL.LanguageRender
 instance Drasil.GOOL.InterfaceCommon.ControlStatement Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceGOOL.ObserverPattern Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceGOOL.StrategyPattern Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.RenderScope Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.ScopeElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.InterfaceCommon.VisibilitySym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClasses.RenderVisibility Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClasses.VisibilityElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.RendererClasses.MethodTypeSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.ParameterSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.RendererClasses.RenderParam Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
@@ -2134,6 +2159,7 @@ instance Drasil.GOOL.InterfaceCommon.BlockSym Drasil.GOOL.CodeInfo.CodeInfo
 instance Drasil.GOOL.InterfaceCommon.TypeSym Drasil.GOOL.CodeInfo.CodeInfo
 instance Drasil.GOOL.InterfaceGOOL.OOTypeSym Drasil.GOOL.CodeInfo.CodeInfo
 instance Drasil.GOOL.InterfaceCommon.TypeElim Drasil.GOOL.CodeInfo.CodeInfo
+instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.CodeInfo.CodeInfo
 instance Drasil.GOOL.InterfaceCommon.VariableSym Drasil.GOOL.CodeInfo.CodeInfo
 instance Drasil.GOOL.InterfaceGOOL.OOVariableSym Drasil.GOOL.CodeInfo.CodeInfo
 instance Drasil.GOOL.InterfaceCommon.VariableElim Drasil.GOOL.CodeInfo.CodeInfo
@@ -2173,7 +2199,7 @@ instance Drasil.GOOL.InterfaceCommon.CommentStatement Drasil.GOOL.CodeInfo.CodeI
 instance Drasil.GOOL.InterfaceCommon.ControlStatement Drasil.GOOL.CodeInfo.CodeInfo
 instance Drasil.GOOL.InterfaceGOOL.ObserverPattern Drasil.GOOL.CodeInfo.CodeInfo
 instance Drasil.GOOL.InterfaceGOOL.StrategyPattern Drasil.GOOL.CodeInfo.CodeInfo
-instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.CodeInfo.CodeInfo
+instance Drasil.GOOL.InterfaceCommon.VisibilitySym Drasil.GOOL.CodeInfo.CodeInfo
 instance Drasil.GOOL.InterfaceCommon.ParameterSym Drasil.GOOL.CodeInfo.CodeInfo
 instance Drasil.GOOL.InterfaceCommon.MethodSym Drasil.GOOL.CodeInfo.CodeInfo
 instance Drasil.GOOL.InterfaceGOOL.OOMethodSym Drasil.GOOL.CodeInfo.CodeInfo
@@ -2329,8 +2355,8 @@ class (FuncAppStatement r, OOVariableSym r) => OOFuncAppStatement r
 selfInOutCall :: OOFuncAppStatement r => InOutCall r
 class (StatementSym r) => CommentStatement r
 comment :: CommentStatement r => Comment -> MSStatement r
-initObserverList :: DeclStatement r => VSType r -> [SValue r] -> MSStatement r
-addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r -> MSStatement r
+initObserverList :: DeclStatement r => VSType r -> [SValue r] -> r (Scope r) -> MSStatement r
+addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r -> r (Scope r) -> MSStatement r
 class (BodySym r, VariableSym r) => ControlStatement r
 break :: ControlStatement r => MSStatement r
 continue :: ControlStatement r => MSStatement r
@@ -2349,13 +2375,31 @@ while :: ControlStatement r => SValue r -> MSBody r -> MSStatement r
 tryCatch :: ControlStatement r => MSBody r -> MSBody r -> MSStatement r
 ifNoElse :: ControlStatement r => [(SValue r, MSBody r)] -> MSStatement r
 switchAsIf :: (ControlStatement r, Comparison r) => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
-class (TypeSym r) => VariableSym r where {
+class (TypeSym r, ScopeSym r) => VariableSym r where {
     type Variable r;
 }
-var :: VariableSym r => Label -> VSType r -> SVariable r
-constant :: VariableSym r => Label -> VSType r -> SVariable r
+var' :: VariableSym r => Label -> r (Scope r) -> VSType r -> SVariable r
+constant' :: VariableSym r => Label -> r (Scope r) -> VSType r -> SVariable r
 extVar :: VariableSym r => Library -> Label -> VSType r -> SVariable r
 arrayElem :: VariableSym r => Integer -> SVariable r -> SVariable r
+
+-- | Smart constructor to rearrange the parameters of var'
+var :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
+
+-- | Smart constructor to rearrange the parameters of constant'
+constant :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
+
+-- | Smart constructor for a local variable.
+locVar :: VariableSym r => Label -> VSType r -> SVariable r
+
+-- | Smart constructor for a variable in the main function.
+mainVar :: VariableSym r => Label -> VSType r -> SVariable r
+class ScopeSym r where {
+    type Scope r;
+}
+global :: ScopeSym r => r (Scope r)
+mainFn :: ScopeSym r => r (Scope r)
+local :: ScopeSym r => r (Scope r)
 class (VariableSym r, OOTypeSym r) => OOVariableSym r
 staticVar :: OOVariableSym r => Label -> VSType r -> SVariable r
 self :: OOVariableSym r => SVariable r
@@ -2368,8 +2412,8 @@ variableName :: VariableElim r => r (Variable r) -> String
 variableType :: VariableElim r => r (Variable r) -> r (Type r)
 ($->) :: OOVariableSym r => SVariable r -> SVariable r -> SVariable r
 infixl 9 $->
-listOf :: VariableSym r => Label -> VSType r -> SVariable r
-listVar :: VariableSym r => Label -> VSType r -> SVariable r
+listOf :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
+listVar :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
 class (TypeSym r) => ValueSym r where {
     type Value r;
 }
@@ -2532,45 +2576,45 @@ listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Ma
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 at :: List r => SValue r -> SValue r -> SValue r
 class (StatementSym r, FunctionSym r) => ObserverPattern r
-notifyObservers :: ObserverPattern r => VSFunction r -> VSType r -> MSStatement r
+notifyObservers :: ObserverPattern r => VSFunction r -> VSType r -> r (Scope r) -> MSStatement r
 class (BodySym r, VariableSym r) => StrategyPattern r
 runStrategy :: StrategyPattern r => Label -> [(Label, MSBody r)] -> Maybe (SValue r) -> Maybe (SVariable r) -> MSBlock r
-class ScopeSym r where {
-    type Scope r;
+class VisibilitySym r where {
+    type Visibility r;
 }
-private :: ScopeSym r => r (Scope r)
-public :: ScopeSym r => r (Scope r)
+private :: VisibilitySym r => r (Visibility r)
+public :: VisibilitySym r => r (Visibility r)
 class (VariableSym r) => ParameterSym r where {
     type Parameter r;
 }
 param :: ParameterSym r => SVariable r -> MSParameter r
 pointerParam :: ParameterSym r => SVariable r -> MSParameter r
-class (BodySym r, ParameterSym r, ScopeSym r) => MethodSym r where {
+class (BodySym r, ParameterSym r, VisibilitySym r) => MethodSym r where {
     type Method r;
 }
 docMain :: MethodSym r => MSBody r -> SMethod r
-function :: MethodSym r => Label -> r (Scope r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+function :: MethodSym r => Label -> r (Visibility r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 mainFunction :: MethodSym r => MSBody r -> SMethod r
 docFunc :: MethodSym r => String -> [String] -> Maybe String -> SMethod r -> SMethod r
-inOutFunc :: MethodSym r => Label -> r (Scope r) -> InOutFunc r
-docInOutFunc :: MethodSym r => Label -> r (Scope r) -> DocInOutFunc r
+inOutFunc :: MethodSym r => Label -> r (Visibility r) -> InOutFunc r
+docInOutFunc :: MethodSym r => Label -> r (Visibility r) -> DocInOutFunc r
 class (MethodSym r, PermanenceSym r) => OOMethodSym r
-method :: OOMethodSym r => Label -> r (Scope r) -> r (Permanence r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+method :: OOMethodSym r => Label -> r (Visibility r) -> r (Permanence r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 getMethod :: OOMethodSym r => SVariable r -> SMethod r
 setMethod :: OOMethodSym r => SVariable r -> SMethod r
 constructor :: OOMethodSym r => [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
-inOutMethod :: OOMethodSym r => Label -> r (Scope r) -> r (Permanence r) -> InOutFunc r
-docInOutMethod :: OOMethodSym r => Label -> r (Scope r) -> r (Permanence r) -> DocInOutFunc r
+inOutMethod :: OOMethodSym r => Label -> r (Visibility r) -> r (Permanence r) -> InOutFunc r
+docInOutMethod :: OOMethodSym r => Label -> r (Visibility r) -> r (Permanence r) -> DocInOutFunc r
 privMethod :: OOMethodSym r => Label -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 pubMethod :: OOMethodSym r => Label -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 initializer :: OOMethodSym r => [MSParameter r] -> Initializers r -> SMethod r
 nonInitConstructor :: OOMethodSym r => [MSParameter r] -> MSBody r -> SMethod r
-class (ScopeSym r, PermanenceSym r, VariableSym r) => StateVarSym r where {
+class (VisibilitySym r, PermanenceSym r, VariableSym r) => StateVarSym r where {
     type StateVar r;
 }
-stateVar :: StateVarSym r => r (Scope r) -> r (Permanence r) -> SVariable r -> CSStateVar r
-stateVarDef :: StateVarSym r => r (Scope r) -> r (Permanence r) -> SVariable r -> SValue r -> CSStateVar r
-constVar :: StateVarSym r => r (Scope r) -> SVariable r -> SValue r -> CSStateVar r
+stateVar :: StateVarSym r => r (Visibility r) -> r (Permanence r) -> SVariable r -> CSStateVar r
+stateVarDef :: StateVarSym r => r (Visibility r) -> r (Permanence r) -> SVariable r -> SValue r -> CSStateVar r
+constVar :: StateVarSym r => r (Visibility r) -> SVariable r -> SValue r -> CSStateVar r
 privDVar :: StateVarSym r => SVariable r -> CSStateVar r
 pubDVar :: StateVarSym r => SVariable r -> CSStateVar r
 pubSVar :: StateVarSym r => SVariable r -> CSStateVar r
@@ -2599,9 +2643,9 @@ convTypeOO :: OOTypeSym r => CodeType -> VSType r
 data ProgData
 data FileData
 data ModData
-data ScopeTag
-Pub :: ScopeTag
-Priv :: ScopeTag
+data VisibilityTag
+Pub :: VisibilityTag
+Priv :: VisibilityTag
 data CodeType
 Boolean :: CodeType
 Integer :: CodeType
@@ -2797,18 +2841,18 @@ while :: ControlStatement r => SValue r -> MSBody r -> MSStatement r
 tryCatch :: ControlStatement r => MSBody r -> MSBody r -> MSStatement r
 ifNoElse :: ControlStatement r => [(SValue r, MSBody r)] -> MSStatement r
 switchAsIf :: (ControlStatement r, Comparison r) => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
-class (TypeSym r) => VariableSym r where {
+class (TypeSym r, ScopeSym r) => VariableSym r where {
     type Variable r;
 }
-var :: VariableSym r => Label -> VSType r -> SVariable r
-constant :: VariableSym r => Label -> VSType r -> SVariable r
+var' :: VariableSym r => Label -> r (Scope r) -> VSType r -> SVariable r
+constant' :: VariableSym r => Label -> r (Scope r) -> VSType r -> SVariable r
 extVar :: VariableSym r => Library -> Label -> VSType r -> SVariable r
 arrayElem :: VariableSym r => Integer -> SVariable r -> SVariable r
 class (VariableSym r) => VariableElim r
 variableName :: VariableElim r => r (Variable r) -> String
 variableType :: VariableElim r => r (Variable r) -> r (Type r)
-listOf :: VariableSym r => Label -> VSType r -> SVariable r
-listVar :: VariableSym r => Label -> VSType r -> SVariable r
+listOf :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
+listVar :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
 class (TypeSym r) => ValueSym r where {
     type Value r;
 }
@@ -2939,22 +2983,23 @@ at :: List r => SValue r -> SValue r -> SValue r
 class ScopeSym r where {
     type Scope r;
 }
-private :: ScopeSym r => r (Scope r)
-public :: ScopeSym r => r (Scope r)
+global :: ScopeSym r => r (Scope r)
+mainFn :: ScopeSym r => r (Scope r)
+local :: ScopeSym r => r (Scope r)
 class (VariableSym r) => ParameterSym r where {
     type Parameter r;
 }
 param :: ParameterSym r => SVariable r -> MSParameter r
 pointerParam :: ParameterSym r => SVariable r -> MSParameter r
-class (BodySym r, ParameterSym r, ScopeSym r) => MethodSym r where {
+class (BodySym r, ParameterSym r, VisibilitySym r) => MethodSym r where {
     type Method r;
 }
 docMain :: MethodSym r => MSBody r -> SMethod r
-function :: MethodSym r => Label -> r (Scope r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+function :: MethodSym r => Label -> r (Visibility r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
 mainFunction :: MethodSym r => MSBody r -> SMethod r
 docFunc :: MethodSym r => String -> [String] -> Maybe String -> SMethod r -> SMethod r
-inOutFunc :: MethodSym r => Label -> r (Scope r) -> InOutFunc r
-docInOutFunc :: MethodSym r => Label -> r (Scope r) -> DocInOutFunc r
+inOutFunc :: MethodSym r => Label -> r (Visibility r) -> InOutFunc r
+docInOutFunc :: MethodSym r => Label -> r (Visibility r) -> DocInOutFunc r
 class (MethodSym r) => ModuleSym r where {
     type Module r;
 }
@@ -2963,9 +3008,9 @@ convType :: TypeSym r => CodeType -> VSType r
 data ProgData
 data FileData
 data ModData
-data ScopeTag
-Pub :: ScopeTag
-Priv :: ScopeTag
+data VisibilityTag
+Pub :: VisibilityTag
+Priv :: VisibilityTag
 data CodeType
 Boolean :: CodeType
 Integer :: CodeType

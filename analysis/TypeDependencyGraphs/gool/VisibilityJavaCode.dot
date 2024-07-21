@@ -1,0 +1,4 @@
+digraph visibilityjavacode{
+VisibilityJavaCode	[shape=oval, color=red2, label="VisibilityJavaCode"];
+VisibilityJavaCode -> Doc;
+}

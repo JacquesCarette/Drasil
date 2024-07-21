@@ -6,10 +6,20 @@
 </span><span id="line-6"></span><span>
 </span><span id="line-7"></span><span class="hs-comment">-- * About Section</span><span>
 </span><span id="line-8"></span><span>
-</span><span id="line-9"></span><span class="hs-comment">-- | Creates the about section.</span><span>
-</span><span id="line-10"></span><span class="annot"><a href="Drasil.Website.About.html#aboutSec"><span class="hs-identifier hs-type">aboutSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
-</span><span id="line-11"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
-</span><span id="line-12"></span><span id="aboutSec"><span class="annot"><span class="annottext">aboutSec :: Reference
+</span><span id="line-9"></span><span class="hs-comment">-- | Reusable wiki page sentence.</span><span>
+</span><span id="line-10"></span><span class="annot"><a href="Drasil.Website.About.html#wikiSentence"><span class="hs-identifier hs-type">wikiSentence</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-11"></span><span id="wikiSentence"><span class="annot"><span class="annottext">wikiSentence :: Sentence
+</span><a href="Drasil.Website.About.html#wikiSentence"><span class="hs-identifier hs-var hs-var">wikiSentence</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;wiki page&quot;</span></span><span>
+</span><span id="line-12"></span><span>
+</span><span id="line-13"></span><span class="hs-comment">-- | Creates the about section.</span><span>
+</span><span id="line-14"></span><span class="annot"><a href="Drasil.Website.About.html#aboutSec"><span class="hs-identifier hs-type">aboutSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
+</span><span id="line-15"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-16"></span><span id="aboutSec"><span class="annot"><span class="annottext">aboutSec :: Reference
+-&gt; Reference
+-&gt; Reference
+-&gt; Reference
 -&gt; Reference
 -&gt; Reference
 -&gt; Reference
@@ -20,33 +30,37 @@
 -&gt; Reference
 -&gt; Reference
 -&gt; Section
-</span><a href="Drasil.Website.About.html#aboutSec"><span class="hs-identifier hs-var hs-var">aboutSec</span></a></span></span><span> </span><span id="local-6989586621679084786"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084786"><span class="hs-identifier hs-var">csRef</span></a></span></span><span> </span><span id="local-6989586621679084785"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084785"><span class="hs-identifier hs-var">docRef</span></a></span></span><span> </span><span id="local-6989586621679084784"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084784"><span class="hs-identifier hs-var">analysisSecRef</span></a></span></span><span> </span><span id="local-6989586621679084783"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084783"><span class="hs-identifier hs-var">repoRef</span></a></span></span><span> </span><span id="local-6989586621679084782"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084782"><span class="hs-identifier hs-var">wikiRef</span></a></span></span><span> </span><span id="local-6989586621679084781"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084781"><span class="hs-identifier hs-var">infoEncodingWiki</span></a></span></span><span> </span><span id="local-6989586621679084780"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084780"><span class="hs-identifier hs-var">chunksWiki</span></a></span></span><span> </span><span id="local-6989586621679084779"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084779"><span class="hs-identifier hs-var">recipesWiki</span></a></span></span><span> </span><span id="local-6989586621679084778"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084778"><span class="hs-identifier hs-var">paperGOOL</span></a></span></span><span> </span><span id="local-6989586621679084777"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084777"><span class="hs-identifier hs-var">papersWiki</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
-</span><span id="line-13"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><a href="Drasil.Website.About.html#aboutSec"><span class="hs-identifier hs-var hs-var">aboutSec</span></a></span></span><span> </span><span id="local-6989586621679084970"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084970"><span class="hs-identifier hs-var">csRef</span></a></span></span><span> </span><span id="local-6989586621679084969"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084969"><span class="hs-identifier hs-var">docRef</span></a></span></span><span> </span><span id="local-6989586621679084968"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084968"><span class="hs-identifier hs-var">analysisSecRef</span></a></span></span><span> </span><span id="local-6989586621679084967"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084967"><span class="hs-identifier hs-var">repoRef</span></a></span></span><span> </span><span id="local-6989586621679084966"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084966"><span class="hs-identifier hs-var">wikiRef</span></a></span></span><span> </span><span id="local-6989586621679084965"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084965"><span class="hs-identifier hs-var">infoEncodingWiki</span></a></span></span><span> </span><span id="local-6989586621679084964"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084964"><span class="hs-identifier hs-var">chunksWiki</span></a></span></span><span> </span><span id="local-6989586621679084963"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084963"><span class="hs-identifier hs-var">recipesWiki</span></a></span></span><span> </span><span id="local-6989586621679084962"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084962"><span class="hs-identifier hs-var">paperGOOL</span></a></span></span><span> </span><span id="local-6989586621679084961"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084961"><span class="hs-identifier hs-var">papersWiki</span></a></span></span><span> </span><span>
+</span><span id="line-17"></span><span>  </span><span id="local-6989586621679084960"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084960"><span class="hs-identifier hs-var">icsePositionPaper</span></a></span></span><span> </span><span id="local-6989586621679084959"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084959"><span class="hs-identifier hs-var">danPoster</span></a></span></span><span> </span><span id="local-6989586621679084958"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084958"><span class="hs-identifier hs-var">wellUnderstoodPaper</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-18"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
 </span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;About&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- Title</span><span>
-</span><span id="line-14"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span id="line-19"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Contents
 </span><span class="hs-identifier hs-var">mkParagraph</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Reference -&gt; Reference -&gt; Sentence
 </span><a href="Drasil.Website.About.html#aboutParagraph1"><span class="hs-identifier hs-var">aboutParagraph1</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084783"><span class="hs-identifier hs-var">repoRef</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084782"><span class="hs-identifier hs-var">wikiRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; Reference -&gt; Reference -&gt; Sentence
+</span><a href="#local-6989586621679084967"><span class="hs-identifier hs-var">repoRef</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084966"><span class="hs-identifier hs-var">wikiRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; Reference -&gt; Reference -&gt; Sentence
 </span><a href="Drasil.Website.About.html#aboutParagraph2"><span class="hs-identifier hs-var">aboutParagraph2</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084786"><span class="hs-identifier hs-var">csRef</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084785"><span class="hs-identifier hs-var">docRef</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084784"><span class="hs-identifier hs-var">analysisSecRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679084970"><span class="hs-identifier hs-var">csRef</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084969"><span class="hs-identifier hs-var">docRef</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084968"><span class="hs-identifier hs-var">analysisSecRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Website.About.html#aboutParagraph3"><span class="hs-identifier hs-var">aboutParagraph3</span></a></span><span class="hs-special">]</span><span> </span><span>
-</span><span id="line-15"></span><span>  </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span id="line-20"></span><span>  </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Contents
 </span><a href="Drasil.Website.About.html#currentlyGeneratedArtifacts"><span class="hs-identifier hs-var">currentlyGeneratedArtifacts</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence -&gt; Contents
@@ -57,86 +71,89 @@
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Contents
 </span><span class="hs-identifier hs-var">mkParagraph</span></span><span> </span><span>
-</span><span id="line-16"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Reference -&gt; Sentence
+</span><span id="line-21"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Reference -&gt; Sentence
 </span><a href="Drasil.Website.About.html#aboutParagraph5"><span class="hs-identifier hs-var">aboutParagraph5</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084781"><span class="hs-identifier hs-var">infoEncodingWiki</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; Sentence
+</span><a href="#local-6989586621679084965"><span class="hs-identifier hs-var">infoEncodingWiki</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; Sentence
 </span><a href="Drasil.Website.About.html#aboutParagraph6"><span class="hs-identifier hs-var">aboutParagraph6</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084780"><span class="hs-identifier hs-var">chunksWiki</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; Sentence
+</span><a href="#local-6989586621679084964"><span class="hs-identifier hs-var">chunksWiki</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; Sentence
 </span><a href="Drasil.Website.About.html#aboutParagraph7"><span class="hs-identifier hs-var">aboutParagraph7</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084779"><span class="hs-identifier hs-var">recipesWiki</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; Sentence
+</span><a href="#local-6989586621679084963"><span class="hs-identifier hs-var">recipesWiki</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; Sentence
 </span><a href="Drasil.Website.About.html#aboutParagraph8"><span class="hs-identifier hs-var">aboutParagraph8</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084778"><span class="hs-identifier hs-var">paperGOOL</span></a></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-17"></span><span>  </span><span class="annot"><span class="annottext">Reference -&gt; Sentence
+</span><a href="#local-6989586621679084962"><span class="hs-identifier hs-var">paperGOOL</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-22"></span><span>  </span><span class="annot"><span class="annottext">Reference -&gt; Reference -&gt; Reference -&gt; Reference -&gt; Sentence
 </span><a href="Drasil.Website.About.html#aboutParagraph9"><span class="hs-identifier hs-var">aboutParagraph9</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084777"><span class="hs-identifier hs-var">papersWiki</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- Contents</span><span>
-</span><span id="line-18"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679084961"><span class="hs-identifier hs-var">papersWiki</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084960"><span class="hs-identifier hs-var">icsePositionPaper</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084959"><span class="hs-identifier hs-var">danPoster</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084958"><span class="hs-identifier hs-var">wellUnderstoodPaper</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- Contents</span><span>
+</span><span id="line-23"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
 </span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;About&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;About&quot;</span></span><span> </span><span class="hs-comment">-- Section reference</span><span>
-</span><span id="line-19"></span><span>
-</span><span id="line-20"></span><span class="hs-comment">-- | Paragraph to about Drasil and its goals.</span><span>
-</span><span id="line-21"></span><span class="annot"><a href="Drasil.Website.About.html#aboutParagraph1"><span class="hs-identifier hs-type">aboutParagraph1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-22"></span><span id="aboutParagraph1"><span class="annot"><span class="annottext">aboutParagraph1 :: Reference -&gt; Reference -&gt; Sentence
-</span><a href="Drasil.Website.About.html#aboutParagraph1"><span class="hs-identifier hs-var hs-var">aboutParagraph1</span></a></span></span><span> </span><span id="local-6989586621679084761"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084761"><span class="hs-identifier hs-var">repoRef</span></a></span></span><span> </span><span id="local-6989586621679084760"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084760"><span class="hs-identifier hs-var">wikiRef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-24"></span><span>
+</span><span id="line-25"></span><span class="hs-comment">-- | Paragraph to about Drasil and its goals.</span><span>
+</span><span id="line-26"></span><span class="annot"><a href="Drasil.Website.About.html#aboutParagraph1"><span class="hs-identifier hs-type">aboutParagraph1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-27"></span><span id="aboutParagraph1"><span class="annot"><span class="annottext">aboutParagraph1 :: Reference -&gt; Reference -&gt; Sentence
+</span><a href="Drasil.Website.About.html#aboutParagraph1"><span class="hs-identifier hs-var hs-var">aboutParagraph1</span></a></span></span><span> </span><span id="local-6989586621679084943"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084943"><span class="hs-identifier hs-var">repoRef</span></a></span></span><span> </span><span id="local-6989586621679084942"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084942"><span class="hs-identifier hs-var">wikiRef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Drasil is a framework for generating all of the software artifacts \
   \from a stable knowledge base, focusing currently on scientific software. The main goals are to reduce knowledge \
   \duplication and improve traceability. The artifacts are generated from a common knowledge-base using recipes \
   \written in a Domain-Specific Language (DSL). These recipes allow us to specify which pieces of \
   \knowledge should be used in which artifacts, how to transform them, and more. For more information on the design, documentation, \
-  \useage, and specifics of Drasil, please visit the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+  \usage, and specifics of Drasil, please visit the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084761"><span class="hs-identifier hs-var">repoRef</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679084943"><span class="hs-identifier hs-var">repoRef</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;GitHub repository&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;or the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span>
-</span><span id="line-28"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r.
+</span><span class="hs-operator hs-var">+:+</span></span><span>
+</span><span id="line-33"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084760"><span class="hs-identifier hs-var">wikiRef</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679084942"><span class="hs-identifier hs-var">wikiRef</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;GitHub Wiki&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-operator">!.</span><span class="hs-special">)</span><span>
-</span><span id="line-29"></span><span>
-</span><span id="line-30"></span><span class="hs-comment">-- | Paragraph to describe the layout of the rest of the Drasil website.</span><span>
-</span><span id="line-31"></span><span class="annot"><a href="Drasil.Website.About.html#aboutParagraph2"><span class="hs-identifier hs-type">aboutParagraph2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-32"></span><span id="aboutParagraph2"><span class="annot"><span class="annottext">aboutParagraph2 :: Reference -&gt; Reference -&gt; Reference -&gt; Sentence
-</span><a href="Drasil.Website.About.html#aboutParagraph2"><span class="hs-identifier hs-var hs-var">aboutParagraph2</span></a></span></span><span> </span><span id="local-6989586621679084757"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084757"><span class="hs-identifier hs-var">caseStudySecRef</span></a></span></span><span> </span><span id="local-6989586621679084756"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084756"><span class="hs-identifier hs-var">docsRef</span></a></span></span><span> </span><span id="local-6989586621679084755"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084755"><span class="hs-identifier hs-var">analysisSecRef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-34"></span><span>
+</span><span id="line-35"></span><span class="hs-comment">-- | Paragraph to describe the layout of the rest of the Drasil website.</span><span>
+</span><span id="line-36"></span><span class="annot"><a href="Drasil.Website.About.html#aboutParagraph2"><span class="hs-identifier hs-type">aboutParagraph2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-37"></span><span id="aboutParagraph2"><span class="annot"><span class="annottext">aboutParagraph2 :: Reference -&gt; Reference -&gt; Reference -&gt; Sentence
+</span><a href="Drasil.Website.About.html#aboutParagraph2"><span class="hs-identifier hs-var hs-var">aboutParagraph2</span></a></span></span><span> </span><span id="local-6989586621679084939"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084939"><span class="hs-identifier hs-var">caseStudySecRef</span></a></span></span><span> </span><span id="local-6989586621679084938"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084938"><span class="hs-identifier hs-var">docsRef</span></a></span></span><span> </span><span id="local-6989586621679084937"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084937"><span class="hs-identifier hs-var">analysisSecRef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;This webpage is designed to contain the most up to date&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-string">&quot;This webpage is designed to contain the most up-to-date&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
+</span><span id="line-38"></span><span>  </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlList</span></span><span> </span><span class="annot"><span class="annottext">SepType
 </span><span class="hs-identifier hs-var">Comma</span></span><span> </span><span class="annot"><span class="annottext">FoldType
 </span><span class="hs-identifier hs-var">List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
-</span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679084750"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084750"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679084749"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679084749"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">forall r.
+</span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679084932"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084932"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679084931"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679084931"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084750"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679084932"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679084749"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084757"><span class="hs-identifier hs-var">caseStudySecRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084756"><span class="hs-identifier hs-var">docsRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084755"><span class="hs-identifier hs-var">analysisSecRef</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679084931"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084939"><span class="hs-identifier hs-var">caseStudySecRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084938"><span class="hs-identifier hs-var">docsRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084937"><span class="hs-identifier hs-var">analysisSecRef</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;case study artifacts&quot;</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-34"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-39"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Haddock documentation&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Drasil analysis&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -145,159 +162,175 @@ r -&gt; Sentence -&gt; Sentence
   \The case study artifacts include the Software Requirements Specification (SRS) for each case study, \
   \which specifies what the program sets out to achieve. \
   \The Haddock Documentation section contains the current documentation for the Drasil framework. \
-  \The package dependency graphs shows the hierarchy of modules within each package.&quot;</span></span><span>
-</span><span id="line-39"></span><span>  </span><span class="hs-comment">-- \The footer of this page contains the continuous integration build of the project, \</span><span>
-</span><span id="line-40"></span><span>  </span><span class="hs-comment">-- \as well as the commit number that the build and artifacts are based off of.</span><span>
-</span><span id="line-41"></span><span>
-</span><span id="line-42"></span><span class="hs-comment">-- | Lists artifacts that Drasil generates</span><span>
-</span><span id="line-43"></span><span class="annot"><a href="Drasil.Website.About.html#aboutParagraph3"><span class="hs-identifier hs-type">aboutParagraph3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-44"></span><span id="aboutParagraph3"><span class="annot"><span class="annottext">aboutParagraph3 :: Sentence
+  \The package dependency graphs show the hierarchy of modules within each package.&quot;</span></span><span>
+</span><span id="line-44"></span><span>  </span><span class="hs-comment">-- \The footer of this page contains the continuous integration build of the project, \</span><span>
+</span><span id="line-45"></span><span>  </span><span class="hs-comment">-- \as well as the commit number that the build and artifacts are based off of.</span><span>
+</span><span id="line-46"></span><span>
+</span><span id="line-47"></span><span class="hs-comment">-- | Lists artifacts that Drasil generates</span><span>
+</span><span id="line-48"></span><span class="annot"><a href="Drasil.Website.About.html#aboutParagraph3"><span class="hs-identifier hs-type">aboutParagraph3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-49"></span><span id="aboutParagraph3"><span class="annot"><span class="annottext">aboutParagraph3 :: Sentence
 </span><a href="Drasil.Website.About.html#aboutParagraph3"><span class="hs-identifier hs-var hs-var">aboutParagraph3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The following is a list of artifacts that Drasil currently generates:&quot;</span></span><span> </span><span>
-</span><span id="line-45"></span><span>
-</span><span id="line-46"></span><span class="annot"><a href="Drasil.Website.About.html#currentlyGeneratedArtifacts"><span class="hs-identifier hs-type">currentlyGeneratedArtifacts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
-</span><span id="line-47"></span><span id="currentlyGeneratedArtifacts"><span class="annot"><span class="annottext">currentlyGeneratedArtifacts :: Contents
+</span><span id="line-50"></span><span>
+</span><span id="line-51"></span><span class="annot"><a href="Drasil.Website.About.html#currentlyGeneratedArtifacts"><span class="hs-identifier hs-type">currentlyGeneratedArtifacts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-52"></span><span id="currentlyGeneratedArtifacts"><span class="annot"><span class="annottext">currentlyGeneratedArtifacts :: Contents
 </span><a href="Drasil.Website.About.html#currentlyGeneratedArtifacts"><span class="hs-identifier hs-var hs-var">currentlyGeneratedArtifacts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">enumBulletU</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span>
-</span><span id="line-48"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-53"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;SRS&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-49"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-54"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;code&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-50"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-55"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;README&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-51"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-56"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Makefile&quot;</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
-</span><span id="line-52"></span><span>
-</span><span id="line-53"></span><span class="hs-comment">-- | Lists artifacts that we hope to generate with Drasil</span><span>
-</span><span id="line-54"></span><span class="annot"><a href="Drasil.Website.About.html#aboutParagraph4"><span class="hs-identifier hs-type">aboutParagraph4</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-55"></span><span id="aboutParagraph4"><span class="annot"><span class="annottext">aboutParagraph4 :: Sentence
+</span><span id="line-57"></span><span>
+</span><span id="line-58"></span><span class="hs-comment">-- | Lists artifacts that we hope to generate with Drasil</span><span>
+</span><span id="line-59"></span><span class="annot"><a href="Drasil.Website.About.html#aboutParagraph4"><span class="hs-identifier hs-type">aboutParagraph4</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-60"></span><span id="aboutParagraph4"><span class="annot"><span class="annottext">aboutParagraph4 :: Sentence
 </span><a href="Drasil.Website.About.html#aboutParagraph4"><span class="hs-identifier hs-var hs-var">aboutParagraph4</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;We hope to generate the following artifacts in the future:&quot;</span></span><span> </span><span>
-</span><span id="line-56"></span><span>
-</span><span id="line-57"></span><span class="annot"><a href="Drasil.Website.About.html#futureGeneratedArtifacts"><span class="hs-identifier hs-type">futureGeneratedArtifacts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
-</span><span id="line-58"></span><span id="futureGeneratedArtifacts"><span class="annot"><span class="annottext">futureGeneratedArtifacts :: Contents
+</span><span id="line-61"></span><span>
+</span><span id="line-62"></span><span class="annot"><a href="Drasil.Website.About.html#futureGeneratedArtifacts"><span class="hs-identifier hs-type">futureGeneratedArtifacts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-63"></span><span id="futureGeneratedArtifacts"><span class="annot"><span class="annottext">futureGeneratedArtifacts :: Contents
 </span><a href="Drasil.Website.About.html#futureGeneratedArtifacts"><span class="hs-identifier hs-var hs-var">futureGeneratedArtifacts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">enumBulletU</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span>
-</span><span id="line-59"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-64"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;License&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-60"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Installation Instructions&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-61"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Dependency List&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-62"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Authors&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-63"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Getting Started / User Manual&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-64"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Release Info&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-65"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Design Documentation&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span class="hs-string">&quot;Installation Instructions&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-66"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Build Scripts&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span class="hs-string">&quot;Dependency List&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-67"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Authors&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-68"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Getting Started / User Manual&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-69"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Release Info&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-70"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Design Documentation&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-71"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Build Scripts&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-72"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Test Cases&quot;</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
-</span><span id="line-68"></span><span>
-</span><span id="line-69"></span><span class="hs-comment">-- | Paragraph describing information encoding</span><span>
-</span><span id="line-70"></span><span class="annot"><a href="Drasil.Website.About.html#aboutParagraph5"><span class="hs-identifier hs-type">aboutParagraph5</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-71"></span><span id="aboutParagraph5"><span class="annot"><span class="annottext">aboutParagraph5 :: Reference -&gt; Sentence
-</span><a href="Drasil.Website.About.html#aboutParagraph5"><span class="hs-identifier hs-var hs-var">aboutParagraph5</span></a></span></span><span> </span><span id="local-6989586621679084746"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084746"><span class="hs-identifier hs-var">infoEncodingWiki</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-73"></span><span>
+</span><span id="line-74"></span><span class="hs-comment">-- | Paragraph describing information encoding</span><span>
+</span><span id="line-75"></span><span class="annot"><a href="Drasil.Website.About.html#aboutParagraph5"><span class="hs-identifier hs-type">aboutParagraph5</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-76"></span><span id="aboutParagraph5"><span class="annot"><span class="annottext">aboutParagraph5 :: Reference -&gt; Sentence
+</span><a href="Drasil.Website.About.html#aboutParagraph5"><span class="hs-identifier hs-var hs-var">aboutParagraph5</span></a></span></span><span> </span><span id="local-6989586621679084928"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084928"><span class="hs-identifier hs-var">infoEncodingWiki</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;As described in the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084746"><span class="hs-identifier hs-var">infoEncodingWiki</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679084928"><span class="hs-identifier hs-var">infoEncodingWiki</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Information Encoding&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span>
+</span><span id="line-77"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">sC</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.Website.About.html#wikiSentence"><span class="hs-identifier hs-var">wikiSentence</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Drasil uses specific terminology&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot; wiki page, \
-  \Drasil uses specific terminology to address types of \
+</span><span class="hs-string">&quot;to address types of \
   \knowledge for the purpose of encoding information, since we know that we want to eventually generate words, sentences, paragraphs, \
   \whole documents with headings, references, formulas, tables, graphs, and code. This is done by trying to understand the basic 'units' \
   \of all artifacts, and methods for composing larger structures from these units. The removal of duplicate units is an important feature \
   \of this methodology. The basic building blocks of the methodology include different expressions for units with a specific meaning. \
   \These are built into ontologies of domains that address broader knowledge. Chunks form a fundamental part of such ontologies.&quot;</span></span><span>
-</span><span id="line-78"></span><span>
-</span><span id="line-79"></span><span class="hs-comment">-- | Paragraph describing chunks</span><span>
-</span><span id="line-80"></span><span class="annot"><a href="Drasil.Website.About.html#aboutParagraph6"><span class="hs-identifier hs-type">aboutParagraph6</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-81"></span><span id="aboutParagraph6"><span class="annot"><span class="annottext">aboutParagraph6 :: Reference -&gt; Sentence
-</span><a href="Drasil.Website.About.html#aboutParagraph6"><span class="hs-identifier hs-var hs-var">aboutParagraph6</span></a></span></span><span> </span><span id="local-6989586621679084745"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084745"><span class="hs-identifier hs-var">chunksWiki</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-83"></span><span>
+</span><span id="line-84"></span><span class="hs-comment">-- | Paragraph describing chunks</span><span>
+</span><span id="line-85"></span><span class="annot"><a href="Drasil.Website.About.html#aboutParagraph6"><span class="hs-identifier hs-type">aboutParagraph6</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-86"></span><span id="aboutParagraph6"><span class="annot"><span class="annottext">aboutParagraph6 :: Reference -&gt; Sentence
+</span><a href="Drasil.Website.About.html#aboutParagraph6"><span class="hs-identifier hs-var hs-var">aboutParagraph6</span></a></span></span><span> </span><span id="local-6989586621679084926"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084926"><span class="hs-identifier hs-var">chunksWiki</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;As described in the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084745"><span class="hs-identifier hs-var">chunksWiki</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679084926"><span class="hs-identifier hs-var">chunksWiki</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Chunks&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span>
+</span><span id="line-87"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">sC</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.Website.About.html#wikiSentence"><span class="hs-identifier hs-var">wikiSentence</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;a chunk is a data type specialized&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;wiki page, a chunk is a data type specialized \
-  \in holding a specific type of information for \
+</span><span class="hs-string">&quot;in holding a specific type of information for \
   \a specific purpose so that knowledge may be used in generated models, definitions, and theories. Chunks are usually made up of several \
   \lower-level types that hold lower-lever information; when contained together, these pieces of lower-level information hold a new specific \
   \purpose. The structure of a chunk can be thought of as a wrapper of information, and this is all implemented using Haskell's record-type \
   \syntax. Recipes transform the acquired knowledge into a usable format.&quot;</span></span><span>
-</span><span id="line-87"></span><span>
-</span><span id="line-88"></span><span class="hs-comment">-- | Paragraph describing recipes</span><span>
-</span><span id="line-89"></span><span class="annot"><a href="Drasil.Website.About.html#aboutParagraph7"><span class="hs-identifier hs-type">aboutParagraph7</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-90"></span><span id="aboutParagraph7"><span class="annot"><span class="annottext">aboutParagraph7 :: Reference -&gt; Sentence
-</span><a href="Drasil.Website.About.html#aboutParagraph7"><span class="hs-identifier hs-var hs-var">aboutParagraph7</span></a></span></span><span> </span><span id="local-6989586621679084744"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084744"><span class="hs-identifier hs-var">recipesWiki</span></a></span></span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-92"></span><span>
+</span><span id="line-93"></span><span class="hs-comment">-- | Paragraph describing recipes</span><span>
+</span><span id="line-94"></span><span class="annot"><a href="Drasil.Website.About.html#aboutParagraph7"><span class="hs-identifier hs-type">aboutParagraph7</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-95"></span><span id="aboutParagraph7"><span class="annot"><span class="annottext">aboutParagraph7 :: Reference -&gt; Sentence
+</span><a href="Drasil.Website.About.html#aboutParagraph7"><span class="hs-identifier hs-var hs-var">aboutParagraph7</span></a></span></span><span> </span><span id="local-6989586621679084925"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084925"><span class="hs-identifier hs-var">recipesWiki</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;As described in the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084744"><span class="hs-identifier hs-var">recipesWiki</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679084925"><span class="hs-identifier hs-var">recipesWiki</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Recipes&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span>
+</span><span id="line-96"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">sC</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.Website.About.html#wikiSentence"><span class="hs-identifier hs-var">wikiSentence</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;wiki page, recipes are instructions that \
-  \unpackage necessary information from chunks and send \
+</span><span class="hs-string">&quot;recipes are instructions that&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span>
+</span><span id="line-97"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;unpackage necessary information from chunks and send \
   \that information to Drasil generators/printers to build complete artifacts. When an artifact needs to be changed, the recipe is modified to \
   \unpackage the additional necessary information from a chunk, or alternatively to omit unpackaging information that is no longer required.&quot;</span></span><span>
-</span><span id="line-94"></span><span>
-</span><span id="line-95"></span><span class="hs-comment">-- | Paragraph describing GOOL</span><span>
-</span><span id="line-96"></span><span class="annot"><a href="Drasil.Website.About.html#aboutParagraph8"><span class="hs-identifier hs-type">aboutParagraph8</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-97"></span><span id="aboutParagraph8"><span class="annot"><span class="annottext">aboutParagraph8 :: Reference -&gt; Sentence
-</span><a href="Drasil.Website.About.html#aboutParagraph8"><span class="hs-identifier hs-var hs-var">aboutParagraph8</span></a></span></span><span> </span><span id="local-6989586621679084743"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084743"><span class="hs-identifier hs-var">paperGOOL</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-100"></span><span>
+</span><span id="line-101"></span><span class="hs-comment">-- | Paragraph describing GOOL</span><span>
+</span><span id="line-102"></span><span class="annot"><a href="Drasil.Website.About.html#aboutParagraph8"><span class="hs-identifier hs-type">aboutParagraph8</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-103"></span><span id="aboutParagraph8"><span class="annot"><span class="annottext">aboutParagraph8 :: Reference -&gt; Sentence
+</span><a href="Drasil.Website.About.html#aboutParagraph8"><span class="hs-identifier hs-var hs-var">aboutParagraph8</span></a></span></span><span> </span><span id="local-6989586621679084924"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084924"><span class="hs-identifier hs-var">paperGOOL</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;As described in the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084743"><span class="hs-identifier hs-var">paperGOOL</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679084924"><span class="hs-identifier hs-var">paperGOOL</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;GOOL&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -305,22 +338,75 @@ r -&gt; Sentence -&gt; Sentence
 </span><span class="hs-string">&quot;paper, this is a Generic Object-Oriented Language \
   \that provides intermediary assistance in code \
   \generation, allowing Drasil to more efficiently generate code in several languages, including Python, Java, C-Sharp, and C++.&quot;</span></span><span>
-</span><span id="line-100"></span><span>
-</span><span id="line-101"></span><span class="hs-comment">-- | Paragraph providing a link to Drasil papers and documents</span><span>
-</span><span id="line-102"></span><span class="annot"><a href="Drasil.Website.About.html#aboutParagraph9"><span class="hs-identifier hs-type">aboutParagraph9</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-103"></span><span id="aboutParagraph9"><span class="annot"><span class="annottext">aboutParagraph9 :: Reference -&gt; Sentence
-</span><a href="Drasil.Website.About.html#aboutParagraph9"><span class="hs-identifier hs-var hs-var">aboutParagraph9</span></a></span></span><span> </span><span id="local-6989586621679084742"><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084742"><span class="hs-identifier hs-var">papersWiki</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-106"></span><span>
+</span><span id="line-107"></span><span class="hs-comment">-- | Paragraph providing a link to Drasil papers and documents</span><span>
+</span><span id="line-108"></span><span class="annot"><a href="Drasil.Website.About.html#aboutParagraph9"><span class="hs-identifier hs-type">aboutParagraph9</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-109"></span><span id="aboutParagraph9"><span class="annot"><span class="annottext">aboutParagraph9 :: Reference -&gt; Reference -&gt; Reference -&gt; Reference -&gt; Sentence
+</span><a href="Drasil.Website.About.html#aboutParagraph9"><span class="hs-identifier hs-var hs-var">aboutParagraph9</span></a></span></span><span> </span><span id="local-6989586621679084923"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084923"><span class="hs-identifier hs-var">papersWiki</span></a></span></span><span> </span><span id="local-6989586621679084922"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084922"><span class="hs-identifier hs-var">icsePositionPaper</span></a></span></span><span> </span><span id="local-6989586621679084921"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084921"><span class="hs-identifier hs-var">danPoster</span></a></span></span><span> </span><span id="local-6989586621679084920"><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084920"><span class="hs-identifier hs-var">wellUnderstoodPaper</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-110"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;A list of papers and documents written about Drasil can be found in the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-string">&quot;A list of papers and documents written about Drasil can be found on the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span>
+</span><span id="line-111"></span><span>  </span><span class="annot"><span class="annottext">forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084923"><span class="hs-identifier hs-var">papersWiki</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Drasil Papers and Documents&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.Website.About.html#wikiSentence"><span class="hs-identifier hs-var">wikiSentence</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span>
+</span><span id="line-112"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;In particular&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;there is&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlList</span></span><span> </span><span class="annot"><span class="annottext">SepType
+</span><span class="hs-identifier hs-var">Comma</span></span><span> </span><span class="annot"><span class="annottext">FoldType
+</span><span class="hs-identifier hs-var">List</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-113"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;an&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="annot"><span class="annottext">Reference
-</span><a href="#local-6989586621679084742"><span class="hs-identifier hs-var">papersWiki</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679084922"><span class="hs-identifier hs-var">icsePositionPaper</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Drasil Papers \
-  \and Documents&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-string">&quot;Old Position paper&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span>
+</span><span id="line-114"></span><span>      </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;wiki page&quot;</span></span></pre></body></html>
+</span><span class="hs-string">&quot;outlining our original ideas&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-115"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;a&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084921"><span class="hs-identifier hs-var">danPoster</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Drasil poster&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-116"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;a&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679084920"><span class="hs-identifier hs-var">wellUnderstoodPaper</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Well-Understood paper&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span>
+</span><span id="line-117"></span><span>      </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;discussing key concepts&quot;</span></span><span>
+</span><span id="line-118"></span><span>  </span><span class="hs-special">]</span></pre></body></html>

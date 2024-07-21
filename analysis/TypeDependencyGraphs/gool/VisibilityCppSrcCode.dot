@@ -1,0 +1,4 @@
+digraph visibilitycppsrccode{
+VisibilityCppSrcCode	[shape=oval, color=red2, label="VisibilityCppSrcCode"];
+VisibilityCppSrcCode -> DocVisibilityTag;
+}

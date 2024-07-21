@@ -1,0 +1,4 @@
+digraph visibilitycpphdrcode{
+VisibilityCppHdrCode	[shape=oval, color=red2, label="VisibilityCppHdrCode"];
+VisibilityCppHdrCode -> DocVisibilityTag;
+}

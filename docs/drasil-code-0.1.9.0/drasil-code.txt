@@ -310,7 +310,7 @@ codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 data Mod
 Mod :: Name -> Description -> [Import] -> [Class] -> [Func] -> Mod
 
--- | State variables hold attach a <a>ScopeTag</a> to a
+-- | State variables hold attach a <a>VisibilityTag</a> to a
 --   <a>CodeVarChunk</a>.
 data StateVariable
 

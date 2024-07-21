@@ -1,0 +1,4 @@
+digraph visibilitypythoncode{
+VisibilityPythonCode	[shape=oval, color=red2, label="VisibilityPythonCode"];
+VisibilityPythonCode -> Doc;
+}

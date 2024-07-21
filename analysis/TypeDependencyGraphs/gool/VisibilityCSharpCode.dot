@@ -1,0 +1,4 @@
+digraph visibilitycsharpcode{
+VisibilityCSharpCode	[shape=oval, color=red2, label="VisibilityCSharpCode"];
+VisibilityCSharpCode -> Doc;
+}

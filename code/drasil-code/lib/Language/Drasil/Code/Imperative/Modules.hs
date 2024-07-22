@@ -339,9 +339,6 @@ chooseConstr :: (OOProg r) => ConstraintBehaviour ->
 chooseConstr cb cs = do
   conds <- mapM (\(q,cns) -> mapM (convExpr . renderC q) cns) cs
   bods <- mapM (chooseCB cb) cs
-    -- Pattern match on the values inside 'bods'
-  let x = head (map snd cs)
-  let temp = map (printObjDef :: ConstraintCE -> GenState [MSStatement r]) x
   return $ concat $ zipWith (zipWith (\cond bod -> ifNoElse [((?!) cond, bod)]))
     conds bods
   where chooseCB Warning = constrWarn

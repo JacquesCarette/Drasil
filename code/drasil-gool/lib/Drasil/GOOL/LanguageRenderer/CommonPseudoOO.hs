@@ -1,7 +1,7 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
 module Drasil.GOOL.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   doxClass, doxMod, docMod', modDoc', functionDoc, extVar, classVar, objVarSelf,
-  indexOf, contains, listAddFunc, discardFileLine, intClass, funcType, buildModule,
+  indexOf, contains, containsInt, listAddFunc, discardFileLine, intClass, funcType, buildModule,
   arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, forEach',
   docMain, mainFunction, buildModule', call', listSizeFunc, listAccessFunc',
   string, constDecDef, docInOutFunc, bindingError, extFuncAppMixedArgs, notNull,
@@ -143,7 +143,10 @@ indexOf :: (OORenderSym r) => Label -> SValue r -> SValue r -> SValue r
 indexOf f l v = IC.indexToInt $ IG.objAccess l (IG.func f IC.int [v])
 
 contains :: (OORenderSym r) => Label -> SValue r -> SValue r -> SValue r
-contains f s v = IG.objAccess s (IG.func f IC.bool [v])
+contains f s v = IG.objAccess s (IG.func f IC.bool [v]) 
+
+containsInt :: (RenderSym r) => Label -> Label -> SValue r -> SValue r -> SValue r
+containsInt f fn s v = contains f s v ?!= IG.objAccess s (IG.func fn IC.bool [])
 
 listAddFunc :: (OORenderSym r) => Label -> SValue r -> SValue r -> VSFunction r
 listAddFunc f i v = IG.func f (IC.listType $ onStateValue valueType v) 

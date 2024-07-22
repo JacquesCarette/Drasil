@@ -51,6 +51,18 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
 import Drasil.GOOL.LanguageRenderer (addExt, classDec, dot, blockCmtStart,
+  RenderValue(..), ValueElim(valuePrec, valueInt), InternalGetSet(..),
+  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  RenderStatement(..), StatementElim(statementTerm), RenderScope(..),
+  ScopeElim, MSMthdType, MethodTypeSym(..), RenderParam(..),
+  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
+  StateVarElim, ParentSpec, RenderClass(..), ClassElim, RenderMod(..),
+  ModuleElim, BlockCommentSym(..), BlockCommentElim)
+import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
+  type', uOp, bOp, variable, value, function, statement, scope, parameter,
+  method, stateVar, class', module', blockComment')
+import GOOL.Drasil.LanguageRenderer (inLabel, addExt, classDec, dot, blockCmtStart,
   blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, commentStart,
   returnLabel, elseIfLabel, tryLabel, catchLabel, throwLabel, array', constDec',
   listSep', argc, argv, constDec, mainFunc, containing, functionDox, valueList,
@@ -78,12 +90,12 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
 import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, funcType, buildModule, litArray, litSet,
-  call', listSizeFunc, listAccessFunc', string, constDecDef, docInOutFunc,
+  call', listSizeFunc, listAccessFunc', contains, forEach, containsInt, string, constDecDef, docInOutFunc,
   listSetFunc, extraClass, intToIndex, indexToInt, global)
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, inOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize,
-  increment1, decrement1, varDec, varDecDef, listDec, extObjDecNew, switch,
+  increment1, decrement1, varDec, setType, varDecDef, listDec, extObjDecNew, switch,
   for, while, intFunc, multiAssignError, multiReturnError, multiTypeError)
 import qualified Drasil.GOOL.LanguageRenderer.Macros as M (runStrategy,
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
@@ -215,6 +227,7 @@ instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   infile = on2StateValues pair infile infile
   outfile = on2StateValues pair outfile outfile
   listType = pair1 listType listType
+  setType = pair1 setType setType
   arrayType = pair1 arrayType arrayType
   listInnerType = pair1 listInnerType listInnerType
   funcType = pair1List1Val funcType funcType
@@ -327,7 +340,7 @@ instance (Pair p) => Literal (p CppSrcCode CppHdrCode) where
   litInt v =on2StateValues  pair (litInt v) (litInt v)
   litString s = on2StateValues pair (litString s) (litString s)
   litArray = pair1Val1List litArray litArray
-  litSet = pair1Val1List litArray litArray
+  litSet = pair1Val1List litSet litSet
   litList = pair1Val1List litList litList
 
 instance (Pair p) => MathConstant (p CppSrcCode CppHdrCode) where
@@ -1114,6 +1127,9 @@ instance TypeSym CppSrcCode where
   listType t = do
     modify (addUsing vector . addLangImportVS vector)
     C.listType vector t
+  setType t = do
+    modify (addUsing cppSet . addLangImportVS cppSet) 
+    C.setType cppSet t
   arrayType = cppArrayType
   listInnerType = G.listInnerType
   funcType = CP.funcType
@@ -1244,7 +1260,7 @@ instance Literal CppSrcCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray braces
-  litSet = CP.litArray braces
+  litSet = cppLitSet setType
   litList _ _ = error $ "List literals not supported in " ++ cppName
 
 instance MathConstant CppSrcCode where
@@ -1375,7 +1391,8 @@ instance List CppSrcCode where
   indexOf l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBegin l
 
 instance Set CppSrcCode where
-  contains l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBegin l
+  contains = CP.containsInt cppIndex cppIterEnd
+
 
 instance InternalList CppSrcCode where
   listSlice' = M.listSlice
@@ -1568,13 +1585,7 @@ instance ControlStatement CppSrcCode where
 
   for = C.for bodyStart bodyEnd
   forRange = M.forRange
-  forEach i v b = do
-    e <- zoom lensMStoVS i
-    let l = variableName e
-        t = toState $ variableType e
-        iterI = locVar l (iterator t)
-    for (varDecDef iterI (iterBegin v)) (setIterVar iterI ?!= iterEnd v) 
-      (iterI &++) b
+  forEach = CP.forEach bodyStart bodyEnd (text "for") (text ":")
   while = C.while parens bodyStart bodyEnd
 
   tryCatch = G.tryCatch cppTryCatch
@@ -1834,6 +1845,9 @@ instance TypeSym CppHdrCode where
   listType t = do
     modify (addHeaderUsing vector . addHeaderLangImport vector)
     C.listType vector t
+  setType t = do
+    modify (addHeaderUsing cppSet . addHeaderLangImport cppSet) 
+    C.setType cppSet t
   arrayType = cppArrayType
   listInnerType = G.listInnerType
   funcType = CP.funcType
@@ -1948,7 +1962,7 @@ instance Literal CppHdrCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray braces
-  litSet = CP.litArray braces
+  litSet = cppLitSet setType
   litList _ _ = error $ "List literals not supported in " ++ cppName
 
 instance MathConstant CppHdrCode where
@@ -2473,7 +2487,7 @@ nmSpc, ptrAccess, std, algorithm, cppString, vector, sstream, stringstream,
   cppIterator, cppOpen, stod, stof, cppIgnore, numLimits, streamsize, max,
   endl, cin, cout, cppIndex, cppListAccess, cppListAdd, cppListAppend,
   cppIterBegin, cppIterEnd, cppR, cppW, cppA, cppGetLine, cppClose, cppClear,
-  cppStr, mathDefines :: String
+  cppStr, mathDefines, cppSet :: String
 nmSpc = "::"
 ptrAccess = "->"
 std = "std"
@@ -2514,6 +2528,7 @@ cppClose = "close"
 cppClear = "clear"
 cppStr = "str"
 mathDefines = "_USE_MATH_DEFINES"
+cppSet = "set"
 
 nmSpcAccess :: String -> String -> String
 nmSpcAccess ns e = ns ++ nmSpc ++ e
@@ -2806,6 +2821,13 @@ cppsStateVarDef cns s p vr' vl' = do
       text n `nmSpcAccess'` RC.variable vr <+> equals <+> RC.value vl <>
       endStatement) empty)
     emptS
+cppLitSet :: (RenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
+    -> SValue r
+cppLitSet f t' es' = do 
+  es <- sequence es' 
+  lt <- f t'
+  mkVal lt (RC.type' lt
+    <> braces (valueList es))
 
 cpphStateVarDef :: (OORenderSym r) => Doc -> r (Permanence r) -> SVariable r ->
   SValue r -> CS Doc

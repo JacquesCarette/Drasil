@@ -96,9 +96,9 @@ print("mySlicedList11: ", end="")
 print(mySlicedList11)
 
 print("")
-if (b >= 6):
+if b >= 6:
     dummy = "dummy"
-elif (b == 5):
+elif b == 5:
     # If body -----------------------------------------------------------------
     a = 5
     b = a + 2
@@ -160,13 +160,13 @@ elif (b == 5):
     # End If body -------------------------------------------------------------
 else:
     print(sys.argv[6])
-if (boringList != None):
+if boringList != None:
     print("Ew, boring list!")
 else:
     print("Great, no bores!")
-if (a == 5):
+if a == 5:
     b = 10
-elif (a == 0):
+elif a == 0:
     b = 5
 else:
     b = 0

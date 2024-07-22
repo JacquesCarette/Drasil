@@ -12,15 +12,16 @@ import Utils.Drasil (indent)
 import Drasil.GOOL.CodeType (CodeType(..))
 import Drasil.GOOL.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
   SVariable, MSStatement, MSBlock, SMethod, BodySym(..), BlockSym(..),
-  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
-  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  TypeSym(..), TypeElim(..), VariableSym(..), var, locVar, VariableElim(..),
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..),
   InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  ScopeSym(..), ParameterSym(..), MethodSym(..), (&=), switchAsIf)
+  ScopeSym(..), VisibilitySym(..), ParameterSym(..), MethodSym(..), (&=),
+  switchAsIf)
 import Drasil.GOOL.InterfaceGOOL (OOProg, FSModule, ProgramSym(..), FileSym(..),
   ModuleSym(..), FunctionSym(..), PermanenceSym(..), ObserverPattern(..),
   StrategyPattern(..), GetSet(..), InternalValueExp(..), StateVarSym(..),
@@ -34,12 +35,12 @@ import Drasil.GOOL.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderValue(..), ValueElim(..), InternalGetSet(..), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
-  StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..),
-  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
-  MethodElim, StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
-  ModuleElim, BlockCommentSym(..), BlockCommentElim)
+  StatementElim(statementTerm), RenderVisibility(..), VisibilityElim,
+  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
+  RenderMethod(..), MethodElim, StateVarElim, RenderClass(..), ClassElim,
+  RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
 import qualified Drasil.GOOL.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp, variable, value, function, statement, scope, parameter,
+  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, stateVar, class', module', blockComment')
 import Drasil.GOOL.LanguageRenderer (printLabel, listSep, listSep',
   variableList, parameterList, forLabel, inLabel, tryLabel, catchLabel)
@@ -247,10 +248,16 @@ instance OpElim JuliaCode where
   uOpPrec = opPrec . unJLC
   bOpPrec = opPrec . unJLC
 
+instance ScopeSym JuliaCode where
+  type Scope JuliaCode = Doc
+  global = toCode empty -- TODO: implement this properly
+  mainFn = toCode empty
+  local = toCode empty
+
 instance VariableSym JuliaCode where
   type Variable JuliaCode = VarData
-  var = G.var
-  constant = var
+  var' n _ = G.var n
+  constant' = var'
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
   arrayElem i = G.arrayElem (litInt i)
 
@@ -410,7 +417,7 @@ instance ThunkAssign JuliaCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = var iName int
+      i = locVar iName int
       dim = fmap pure $ t >>= commonThunkDim (fmap unJLC . (\l -> listSize l #- litInt 1) . fmap pure) . unJLC
       loopInit = zoom lensMStoVS (fmap unJLC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
@@ -533,17 +540,17 @@ instance ControlStatement JuliaCode where
   while = C.while id empty jlEnd
   tryCatch = G.tryCatch jlTryCatch
 
-instance ScopeSym JuliaCode where
-  type Scope JuliaCode = Doc
+instance VisibilitySym JuliaCode where
+  type Visibility JuliaCode = Doc
 
   private = toCode empty -- Julia doesn't have private/public members
   public = toCode empty
 
-instance RenderScope JuliaCode where
-  scopeFromData _ = toCode
+instance RenderVisibility JuliaCode where
+  visibilityFromData _ = toCode
 
-instance ScopeElim JuliaCode where
-  scope = unJLC
+instance VisibilityElim JuliaCode where
+  visibility = unJLC
 
 instance MethodTypeSym JuliaCode where
   type MethodType JuliaCode = TypeData
@@ -690,7 +697,7 @@ jlIndexOf l v = do
   v' <- v
   let t = toCode $ valueType v'
   indexToInt $ funcApp
-    jlListAbsdex t [lambda [var "x" t] (valueOf (var "x" t) ?== v), l]
+    jlListAbsdex t [lambda [locVar "x" t] (valueOf (locVar "x" t) ?== v), l]
 
 jlListSlice :: (RenderSym r) => SVariable r -> SValue r ->
   Maybe (SValue r) -> Maybe (SValue r) -> SValue r -> MSBlock r
@@ -701,8 +708,8 @@ jlListSlice vn vo beg end step = do
   bName <- genVarNameIf (isNothing beg && isNothing mbStepV) "begIdx"
   eName <- genVarNameIf (isNothing mbStepV) "endIdx"
 
-  let begVar = var bName int
-      endVar = var eName int
+  let begVar = var bName int local -- TODO: get scope from vn
+      endVar = var eName int local -- TODO: get scope from vn
 
       (setBeg, begVal) = case (beg, mbStepV) of
         -- If we have a value for beg, just use it

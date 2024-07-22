@@ -40,14 +40,14 @@ import qualified Language.Drasil.Mod as M (Class(..))
 import Drasil.GOOL (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
   Initializers, OOProg, PermanenceSym(..), bodyStatements, BlockSym(..),
-  TypeSym(..), VariableSym(..), OOVariableSym(..), VariableElim(..), ($->), ValueSym(..),
-  Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), OOValueExpression(..),
-  objMethodCallMixedArgs, List(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), ControlStatement(..),
-  ifNoElse, ScopeSym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
-  pubDVar, privDVar, nonInitConstructor, convTypeOO, ScopeTag(..), CodeType(..),
-  onStateValue)
+  TypeSym(..), VariableSym(..), var, ScopeSym(..), OOVariableSym(..), staticVar,
+  VariableElim(..), ($->), ValueSym(..), Literal(..), VariableValue(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), OOValueExpression(..), objMethodCallMixedArgs, List(..),
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), ControlStatement(..), ifNoElse, VisibilitySym(..),
+  ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar, privDVar,
+  nonInitConstructor, convTypeOO, VisibilityTag(..), CodeType(..), onStateValue)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
 
 import Prelude hiding (sin, cos, tan, log, exp)
@@ -74,8 +74,8 @@ spaceCodeType s = do
 -- defining 'Expr' to a value with 'convExpr'.
 -- Otherwise, just a regular variable: construct it by calling the variable, then
 -- call 'valueOf' to reference its value.
-value :: (OOProg r) => UID -> Name -> VSType r -> GenState (SValue r)
-value u s t = do
+value :: (OOProg r) => UID -> Name -> VSType r -> r (Scope r) -> GenState (SValue r)
+value u s t scp = do
   g <- get
   let cs = codeSpec g
       mm = constMap cs
@@ -86,7 +86,7 @@ value u s t = do
       maybeInline _ _ = Nothing
       cm = concMatches g
       cdCncpt = Map.lookup u cm
-  val <- maybe (valueOf <$> variable s t) (convExpr . (^. codeExpr)) constDef
+  val <- maybe (valueOf <$> variable s t scp) (convExpr . (^. codeExpr)) constDef
   return $ maybe val conceptToGOOL cdCncpt
 
 -- | If variable is an input, construct it with 'var' and pass to inputVariable.
@@ -95,17 +95,18 @@ value u s t = do
 -- If variable is a constant and 'Const' constant representation is chosen,
 -- construct it with 'staticVar' and pass to 'constVariable'.
 -- If variable is neither, just construct it with 'var' and return it.
-variable :: (OOProg r) => Name -> VSType r -> GenState (SVariable r)
-variable s t = do
+variable :: (OOProg r) => Name -> VSType r -> r (Scope r) -> GenState (SVariable r)
+variable s t scp = do
   g <- get
   let cs = codeSpec g
-      defFunc Var = var
+      defFunc Var = \nm tp -> var nm tp scp
       defFunc Const = staticVar
   if s `elem` map codeName (inputs cs)
-    then inputVariable (inStruct g) Var (var s t)
+    then inputVariable (inStruct g) Var (var s t scp)
     else if s `elem` map codeName (constants $ codeSpec g)
-      then constVariable (conStruct g) (conRepr g) ((defFunc $ conRepr g) s t)
-      else return $ var s t
+      then constVariable (conStruct g) (conRepr g)
+              ((defFunc $ conRepr g) s t)
+      else return $ var s t scp
 
 -- | If 'Unbundled' inputs, just return variable as-is.
 -- If 'Bundled' inputs, access variable through object, where the object is self
@@ -120,10 +121,10 @@ inputVariable Unbundled _ v = return v
 inputVariable Bundled Var v = do
   g <- get
   inClsName <- genICName InputParameters
-  ip <- mkVar (quantvar inParams)
+  ip <- mkVar (quantvar inParams) local -- TODO: get scope from state
   return $ if currentClass g == inClsName then objVarSelf v else ip $-> v
 inputVariable Bundled Const v = do
-  ip <- mkVar (quantvar inParams)
+  ip <- mkVar (quantvar inParams) local -- TODO: get scope from state
   classVariable ip v
 
 -- | If 'Unbundled' constants, just return variable as-is.
@@ -138,10 +139,10 @@ constVariable :: (OOProg r) => ConstantStructure -> ConstantRepr ->
   SVariable r -> GenState (SVariable r)
 constVariable (Store Unbundled) _ v = return v
 constVariable (Store Bundled) Var v = do
-  cs <- mkVar (quantvar consts)
+  cs <- mkVar (quantvar consts) local -- TODO: get scope from state
   return $ cs $-> v
 constVariable (Store Bundled) Const v = do
-  cs <- mkVar (quantvar consts)
+  cs <- mkVar (quantvar consts) local -- TODO: get scope from state
   classVariable cs v
 constVariable WithInputs cr v = do
   g <- get
@@ -166,31 +167,31 @@ classVariable c v = do
       checkCurrent (Map.lookup nm (eMap g)) (onStateValue variableType c) v
 
 -- | Generates a GOOL Value for a variable represented by a 'CodeVarChunk'.
-mkVal :: (OOProg r) => CodeVarChunk -> GenState (SValue r)
-mkVal v = do
+mkVal :: (OOProg r) => CodeVarChunk -> r (Scope r) -> GenState (SValue r)
+mkVal v scp = do
   t <- codeType v
-  let toGOOLVal Nothing = value (v ^. uid) (codeName v) (convTypeOO t)
+  let toGOOLVal Nothing = value (v ^. uid) (codeName v) (convTypeOO t) scp
       toGOOLVal (Just o) = do
         ot <- codeType o
-        return $ valueOf $ objVar (var (codeName o) (convTypeOO ot))
-          (var (codeName v) (convTypeOO t))
+        return $ valueOf $ objVar (var (codeName o) (convTypeOO ot) scp)
+          (var (codeName v) (convTypeOO t) local)
   toGOOLVal (v ^. obv)
 
 -- | Generates a GOOL Variable for a variable represented by a 'CodeVarChunk'.
-mkVar :: (OOProg r) => CodeVarChunk -> GenState (SVariable r)
-mkVar v = do
+mkVar :: (OOProg r) => CodeVarChunk -> r (Scope r) -> GenState (SVariable r)
+mkVar v scp = do
   t <- codeType v
-  let toGOOLVar Nothing = variable (codeName v) (convTypeOO t)
+  let toGOOLVar Nothing = variable (codeName v) (convTypeOO t) scp
       toGOOLVar (Just o) = do
         ot <- codeType o
-        return $ objVar (var (codeName o) (convTypeOO ot))
-          (var (codeName v) (convTypeOO t))
+        return $ objVar (var (codeName o) (convTypeOO ot) scp)
+          (var (codeName v) (convTypeOO t) local)
   toGOOLVar (v ^. obv)
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
 mkParam :: (OOProg r) => ParameterChunk -> GenState (MSParameter r)
 mkParam p = do
-  v <- mkVar (quantvar p)
+  v <- mkVar (quantvar p) local
   return $ paramFunc (passBy p) v
   where paramFunc Ref = pointerParam
         paramFunc Val = param
@@ -242,7 +243,7 @@ genMethod :: (OOProg r) => ([MSParameter r] -> MSBody r -> SMethod r) ->
   -> GenState (SMethod r)
 genMethod f n desc p r b = do
   g <- get
-  vars <- mapM (mkVar . quantvar) p
+  vars <- mapM ((`mkVar` local) . quantvar) p
   ps <- mapM mkParam p
   bod <- logBody n vars b
   let fn = f ps bod
@@ -252,7 +253,7 @@ genMethod f n desc p r b = do
 
 -- | Generates a function or method defined by its inputs and outputs.
 -- Parameters are: the GOOL constructor to use, the equivalent GOOL constructor
--- for a documented function/method, the scope, permanence, name, description,
+-- for a documented function/method, the visibility, permanence, name, description,
 -- list of inputs, list of outputs, and body.
 genInOutFunc :: (OOProg r) => ([SVariable r] -> [SVariable r] ->
     [SVariable r] -> MSBody r -> SMethod r) ->
@@ -265,9 +266,9 @@ genInOutFunc f docf n desc ins' outs' b = do
   let ins = ins' \\ outs'
       outs = outs' \\ ins'
       both = ins' `intersect` outs'
-  inVs <- mapM mkVar ins
-  outVs <- mapM mkVar outs
-  bothVs <- mapM mkVar both
+  inVs <- mapM (`mkVar` local) ins
+  outVs <- mapM (`mkVar` local) outs
+  bothVs <- mapM (`mkVar` local) both
   bod <- logBody n (bothVs ++ inVs) b
   pComms <- mapM getComment ins
   oComms <- mapM getComment outs
@@ -300,7 +301,7 @@ convExpr (AssocB Or l)  = foldl1 (?||) <$> mapM convExpr l
 convExpr (C c)   = do
   g <- get
   let v = quantvar (lookupC g c)
-  mkVal v
+  mkVal v local -- TODO: get scope from state
 convExpr (FCall c x ns) = convCall c x ns fApp libFuncAppMixedArgs
 convExpr (New c x ns) = convCall c x ns (\m _ -> ctorCall m)
   (\m _ -> libNewObjMixedArgs m)
@@ -308,7 +309,7 @@ convExpr (Message a m x ns) = do
   g <- get
   let info = sysinfodb $ codeSpec g
       objCd = quantvar (symbResolve info a)
-  o <- mkVal objCd
+  o <- (`mkVal` local) objCd -- TODO: get scope from state
   convCall m x ns
     (\_ n t ps nas -> return (objMethodCallMixedArgs t o n ps nas))
     (\_ n t -> objMethodCallMixedArgs t o n)
@@ -316,7 +317,7 @@ convExpr (Field o f) = do
   g <- get
   let ob  = quantvar (lookupC g o)
       fld = quantvar (lookupC g f)
-  v <- mkVar (ccObjVar ob fld)
+  v <- mkVar (ccObjVar ob fld) local -- TODO: get scope from state
   return $ valueOf v
 convExpr (UnaryOp o u)    = fmap (unop o) (convExpr u)
 convExpr (UnaryOpB o u)   = fmap (unopB o) (convExpr u)
@@ -369,7 +370,7 @@ convCall c x ns f libf = do
       funcNm = codeName funcCd
   funcTp <- codeType funcCd
   args <- mapM convExpr x
-  nms <- mapM (mkVar . quantvar . symbResolve info . fst) ns
+  nms <- mapM ((`mkVar` local) . quantvar . symbResolve info . fst) ns -- TODO: get scope from state
   nargs <- mapM (convExpr . snd) ns
   maybe (maybe (error $ "Call to non-existent function " ++ funcNm)
       (\m -> return $ libf m funcNm (convTypeOO funcTp) args (zip nms nargs))
@@ -490,9 +491,10 @@ genClass :: (OOProg r) => (Name -> Maybe Name -> Description -> [CSStateVar r]
 genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
                                                  svar Priv = privDVar
   in do
-  svrs <- mapM (\(SV s v) -> fmap (svar s . var (codeName v) . convTypeOO)
-    (codeType v)) svs
-  f n i desc svrs (mapM (genFunc publicMethod svs) cs) (mapM (genFunc publicMethod svs) ms)
+  svrs <- mapM (\(SV s v) -> fmap (svar s . var' (codeName v) local .
+                convTypeOO) (codeType v)) svs
+  f n i desc svrs (mapM (genFunc publicMethod svs) cs) 
+                  (mapM (genFunc publicMethod svs) ms)
 
 -- | Converts a 'Func' (from the Mod AST) to GOOL.
 -- The function generator to use is passed as a parameter. Automatically adds
@@ -505,17 +507,17 @@ genFunc :: (OOProg r) => (Name -> VSType r -> Description -> [ParameterChunk]
 genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
   g <- get
   stmts <- mapM convStmt s
-  vars <- mapM mkVar (fstdecl (sysinfodb $ codeSpec g) s
+  vars <- mapM (`mkVar` local) (fstdecl (sysinfodb $ codeSpec g) s -- TODO: get scope from state
     \\ (map quantvar parms ++ map stVar svs))
   t <- spaceCodeType o
   f n (convTypeOO t) desc parms rd [block $ map varDec vars, block stmts]
 genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
   g <- get
   inits <- mapM (convExpr . snd) i
-  initvars <- mapM ((\iv -> fmap (var (codeName iv) . convTypeOO) (codeType iv))
-    . fst) i
+  initvars <- mapM ((\iv -> fmap (var' (codeName iv) local . convTypeOO)
+    (codeType iv)) . fst) i
   stmts <- mapM convStmt s
-  vars <- mapM mkVar (fstdecl (sysinfodb $ codeSpec g) s
+  vars <- mapM (`mkVar` local) (fstdecl (sysinfodb $ codeSpec g) s -- TODO: get scope from state
     \\ (map quantvar parms ++ map stVar svs))
   genInitConstructor n desc parms (zip initvars inits)
     [block $ map varDec vars, block stmts]
@@ -523,41 +525,41 @@ genFunc _ _ (FData (FuncData n desc ddef)) = genDataFunc n desc ddef
 
 -- | Converts a 'FuncStmt' to a GOOL Statement.
 convStmt :: (OOProg r) => FuncStmt -> GenState (MSStatement r)
-convStmt (FAsg v (Matrix [es]))  = do
+convStmt (FAsg v (Matrix [es])) = do
   els <- mapM convExpr es
-  v' <- mkVar v
+  v' <- mkVar v local -- TODO: get scope from state
   t <- codeType v
   let listFunc (C.List _) = litList
       listFunc (C.Array _) = litArray
       listFunc _ = error "Type mismatch between variable and value in assignment FuncStmt"
-  l <- maybeLog v'
+  l <- maybeLog v' local
   return $ multi $ assign v' (listFunc t (listInnerType $ fmap variableType v')
     els) : l
 convStmt (FAsg v e) = do
   e' <- convExpr e
-  v' <- mkVar v
-  l <- maybeLog v'
+  v' <- mkVar v local -- TODO: get scope from state
+  l <- maybeLog v' local
   return $ multi $ assign v' e' : l
 convStmt (FAsgIndex v i e) = do
   e' <- convExpr e
-  v' <- mkVar v
+  v' <- mkVar v local -- TODO: get scope from state
   t <- codeType v
   let asgFunc (C.List _) = valStmt $ listSet (valueOf v') (litInt i) e'
       asgFunc (C.Array _) = assign (arrayElem i v') e'
       asgFunc _ = error "FAsgIndex used with non-indexed value"
       vi = arrayElem i v'
-  l <- maybeLog vi
+  l <- maybeLog vi local
   return $ multi $ asgFunc t : l
 convStmt (FFor v start end step st) = do
   stmts <- mapM convStmt st
-  vari <- mkVar v
+  vari <- mkVar v local -- TODO: get scope from state
   start' <- convExpr start
   end' <- convExpr end
   step' <- convExpr step
   return $ forRange vari start' end' step' (bodyStatements stmts)
 convStmt (FForEach v e st) = do
   stmts <- mapM convStmt st
-  vari <- mkVar v
+  vari <- mkVar v local -- TODO: get scope from state
   e' <- convExpr e
   return $ forEach vari e' (bodyStatements stmts)
 convStmt (FWhile e st) = do
@@ -583,14 +585,14 @@ convStmt (FTry t c) = do
   return $ tryCatch (bodyStatements stmt1) (bodyStatements stmt2)
 convStmt FContinue = return continue
 convStmt (FDecDef v (Matrix [[]])) = do
-  vari <- mkVar v
+  vari <- mkVar v local -- TODO: get scope from state
   let convDec (C.List _) = listDec 0 vari
       convDec (C.Array _) = arrayDec 0 vari
       convDec _ = varDec vari
   fmap convDec (codeType v)
 convStmt (FDecDef v e) = do
-  v' <- mkVar v
-  l <- maybeLog v'
+  v' <- mkVar v local
+  l <- maybeLog v' local
   t <- codeType v
   let convDecDef (Matrix [lst]) = do
         let contDecDef (C.List _) = listDecDef
@@ -604,8 +606,8 @@ convStmt (FDecDef v e) = do
   dd <- convDecDef e
   return $ multi $ dd : l
 convStmt (FFuncDef f ps sts) = do
-  f' <- mkVar $ quantvar f
-  pms <- mapM (mkVar . quantvar) ps
+  f' <- mkVar (quantvar f) local -- TODO: get scope from state
+  pms <- mapM ((`mkVar` local) . quantvar) ps -- TODO: get scope from state
   b <- mapM convStmt sts
   return $ funcDecDef f' pms (bodyStatements b)
 convStmt (FVal e) = do
@@ -625,111 +627,113 @@ genDataFunc :: (OOProg r) => Name -> Description -> DataDesc ->
   GenState (SMethod r)
 genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef
-  bod <- readData ddef
+  bod <- readData ddef local
   publicFunc nameTitle void desc (map pcAuto $ quantvar inFileName : parms)
     Nothing bod
 
 -- this is really ugly!!
 -- | Read from a data description into a 'MSBlock' of 'MSStatement's.
-readData :: (OOProg r) => DataDesc -> GenState [MSBlock r]
-readData ddef = do
-  inD <- mapM inData ddef
-  v_filename <- mkVal $ quantvar inFileName
+readData :: (OOProg r) => DataDesc -> r (Scope r) -> GenState [MSBlock r]
+readData ddef scope = do
+  inD <- mapM (`inData` scope) ddef
+  v_filename <- mkVal (quantvar inFileName) scope
   return [block $
-    varDec var_infile :
-    (if any (\d -> isLine d || isLines d) ddef then [varDec var_line, listDec 0 var_linetokens] else []) ++
-    [listDec 0 var_lines | any isLines ddef] ++
-    openFileR var_infile v_filename :
-    concat inD ++ [
-    closeFile v_infile ]]
-  where inData :: (OOProg r) => Data -> GenState [MSStatement r]
-        inData (Singleton v) = do
-            vv <- mkVar v
-            l <- maybeLog vv
-            return [multi $ getFileInput v_infile vv : l]
-        inData JunkData = return [discardFileLine v_infile]
-        inData (Line lp d) = do
-          lnI <- lineData Nothing lp
-          logs <- getEntryVarLogs lp
-          return $ [getFileInputLine v_infile var_line,
-            stringSplit d var_linetokens v_line] ++ lnI ++ logs
-        inData (Lines lp ls d) = do
-          lnV <- lineData (Just "_temp") lp
-          logs <- getEntryVarLogs lp
-          let readLines Nothing = [getFileInputAll v_infile var_lines,
-                forRange var_i (litInt 0) (listSize v_lines) (litInt 1)
-                  (bodyStatements $ stringSplit d var_linetokens (
-                  listAccess v_lines v_i) : lnV)]
+    varDec (var_infile scope) :
+    (if any (\d -> isLine d || isLines d) ddef then [varDec (var_line scope),
+    listDec 0 (var_linetokens scope)] else []) ++
+    [listDec 0 (var_lines scope) | any isLines ddef] ++ openFileR (var_infile scope)
+    v_filename : concat inD ++ [closeFile (v_infile scope) ]]
+  where inData :: (OOProg r) => Data -> r (Scope r) -> GenState [MSStatement r]
+        inData (Singleton v) scp = do
+            vv <- mkVar v scp
+            l <- maybeLog vv scp
+            return [multi $ getFileInput (v_infile scp) vv : l]
+        inData JunkData scp = return [discardFileLine (v_infile scp)]
+        inData (Line lp d) scp = do
+          lnI <- lineData Nothing lp scp
+          logs <- getEntryVarLogs lp scp
+          return $ [getFileInputLine (v_infile scp) (var_line scp),
+            stringSplit d (var_linetokens scp) (v_line scp)] ++ lnI ++ logs
+        inData (Lines lp ls d) scp = do
+          lnV <- lineData (Just "_temp") lp scp
+          logs <- getEntryVarLogs lp scp
+          let readLines Nothing = [getFileInputAll (v_infile scp) (var_lines scp),
+                forRange var_i (litInt 0) (listSize (v_lines scp)) (litInt 1)
+                  (bodyStatements $ stringSplit d (var_linetokens scp) (
+                  listAccess (v_lines scp) v_i) : lnV)]
               readLines (Just numLines) = [forRange var_i (litInt 0)
                 (litInt numLines) (litInt 1)
                 (bodyStatements $
-                  [getFileInputLine v_infile var_line,
-                   stringSplit d var_linetokens v_line
+                  [getFileInputLine (v_infile scp) (var_line scp),
+                   stringSplit d (var_linetokens scp) (v_line scp)
                   ] ++ lnV)]
           return $ readLines ls ++ logs
         ---------------
-        lineData :: (OOProg r) => Maybe String -> LinePattern ->
+        lineData :: (OOProg r) => Maybe String -> LinePattern -> r (Scope r) ->
           GenState [MSStatement r]
-        lineData s p@(Straight _) = do
-          vs <- getEntryVars s p
-          return [stringListVals vs v_linetokens]
-        lineData s p@(Repeat ds) = do
-          vs <- getEntryVars s p
-          sequence $ clearTemps s ds ++ return (stringListLists vs v_linetokens)
-            : appendTemps s ds
+        lineData s p@(Straight _) scp = do
+          vs <- getEntryVars s p scp
+          return [stringListVals vs (v_linetokens scp)]
+        lineData s p@(Repeat ds) scp = do
+          vs <- getEntryVars s p scp
+          sequence $ clearTemps s ds scp ++ return
+            (stringListLists vs (v_linetokens scp)) : appendTemps s ds scp
         ---------------
-        clearTemps :: (OOProg r) => Maybe String -> [DataItem] ->
+        clearTemps :: (OOProg r) => Maybe String -> [DataItem] -> r (Scope r) ->
           [GenState (MSStatement r)]
-        clearTemps Nothing _ = []
-        clearTemps (Just sfx) es = map (clearTemp sfx) es
+        clearTemps Nothing    _  _   = []
+        clearTemps (Just sfx) es scp = map (\v -> clearTemp sfx v scp) es
         ---------------
-        clearTemp :: (OOProg r) => String -> DataItem ->
+        clearTemp :: (OOProg r) => String -> DataItem -> r (Scope r) ->
           GenState (MSStatement r)
-        clearTemp sfx v = fmap (\t -> listDecDef (var (codeName v ++ sfx)
-          (listInnerType $ convTypeOO t)) []) (codeType v)
+        clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
+          (listInnerType $ convTypeOO t) scp) []) (codeType v)
         ---------------
-        appendTemps :: (OOProg r) => Maybe String -> [DataItem] ->
-          [GenState (MSStatement r)]
-        appendTemps Nothing _ = []
-        appendTemps (Just sfx) es = map (appendTemp sfx) es
+        appendTemps :: (OOProg r) => Maybe String -> [DataItem] -> r (Scope r)
+          -> [GenState (MSStatement r)]
+        appendTemps Nothing _ _ = []
+        appendTemps (Just sfx) es scp = map (\v -> appendTemp sfx v scp) es
         ---------------
-        appendTemp :: (OOProg r) => String -> DataItem ->
+        appendTemp :: (OOProg r) => String -> DataItem -> r (Scope r) ->
           GenState (MSStatement r)
-        appendTemp sfx v = fmap (\t -> valStmt $ listAppend
-          (valueOf $ var (codeName v) (convTypeOO t))
-          (valueOf $ var (codeName v ++ sfx) (convTypeOO t))) (codeType v)
+        appendTemp sfx v scp = fmap (\t -> valStmt $ listAppend
+          (valueOf $ var (codeName v) (convTypeOO t) scp)
+          (valueOf $ var (codeName v ++ sfx) (convTypeOO t) scp)) (codeType v)
         ---------------
         l_line, l_lines, l_linetokens, l_infile, l_i :: Label
-        var_line, var_lines, var_linetokens, var_infile, var_i ::
-          (OOProg r) => SVariable r
-        v_line, v_lines, v_linetokens, v_infile, v_i ::
-          (OOProg r) => SValue r
+        var_line, var_lines, var_linetokens, var_infile ::
+          (OOProg r) => r (Scope r) -> SVariable r
+        var_i :: (OOProg r) => SVariable r
+        v_line, v_lines, v_linetokens, v_infile ::
+          (OOProg r) => r (Scope r) -> SValue r
+        v_i :: (OOProg r) => SValue r
         l_line = "line"
         var_line = var l_line string
-        v_line = valueOf var_line
+        v_line scp = valueOf $ var_line scp
         l_lines = "lines"
         var_lines = var l_lines (listType string)
-        v_lines = valueOf var_lines
+        v_lines scp = valueOf $ var_lines scp
         l_linetokens = "linetokens"
         var_linetokens = var l_linetokens (listType string)
-        v_linetokens = valueOf var_linetokens
+        v_linetokens scp = valueOf $ var_linetokens scp
         l_infile = "infile"
         var_infile = var l_infile infile
-        v_infile = valueOf var_infile
+        v_infile scp = valueOf $ var_infile scp
         l_i = "i"
-        var_i = var l_i int
+        var_i = var l_i int local
         v_i = valueOf var_i
 
 -- | Get entry variables.
-getEntryVars :: (OOProg r) => Maybe String -> LinePattern ->
+getEntryVars :: (OOProg r) => Maybe String -> LinePattern -> r (Scope r) ->
   GenState [SVariable r]
-getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>= (variable
-  (codeName v ++ st) . listInnerType . convTypeOO)) s) (getPatternInputs lp)
+getEntryVars s lp scp = mapM (maybe (`mkVar` scp) (\st v -> codeType v >>= 
+  ((\sNm tp -> variable sNm tp scp) (codeName v ++ st) . listInnerType . convTypeOO))
+    s) (getPatternInputs lp)
 
 -- | Get entry variable logs.
-getEntryVarLogs :: (OOProg r) => LinePattern ->
+getEntryVarLogs :: (OOProg r) => LinePattern -> r (Scope r) ->
   GenState [MSStatement r]
-getEntryVarLogs lp = do
-  vs <- getEntryVars Nothing lp
-  logs <- mapM maybeLog vs
+getEntryVarLogs lp scp = do
+  vs <- getEntryVars Nothing lp scp
+  logs <- mapM (`maybeLog` local) vs
   return $ concat logs

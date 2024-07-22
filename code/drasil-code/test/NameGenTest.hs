@@ -10,8 +10,8 @@ helper = function "helper" private void [param temp] $ body
   [block [listDec 2 result],
     listSlice result (valueOf temp) (Just (litInt 1)) (Just (litInt 3)) Nothing]
   where
-    temp = var "temp" (listType int)
-    result = var "result" (listType int)
+    temp = var "temp" (listType int) local
+    result = var "result" (listType int) local
 
 main :: OOProg r => SMethod r
 main = mainFunction $ body
@@ -19,5 +19,5 @@ main = mainFunction $ body
     listDec 2 result],
     listSlice result (valueOf temp) (Just (litInt 1)) (Just (litInt 3)) Nothing]
   where
-    temp = var "temp" (listType int)
-    result = var "result" (listType int)
+    temp = mainVar "temp" (listType int)
+    result = mainVar "result" (listType int)

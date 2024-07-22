@@ -12,7 +12,8 @@ import Drasil.GOOL.InterfaceCommon (MSBody, VSType, SValue, MSStatement,
   VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
+  VisibilitySym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
   OOVariableSym(..), PermanenceSym(..), StateVarSym(..), OOValueSym,
@@ -20,7 +21,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
   StrategyPattern(..))
 import Drasil.GOOL.CodeType (CodeType(Void))
-import Drasil.GOOL.AST (ScopeTag(..), qualName)
+import Drasil.GOOL.AST (VisibilityTag(..), qualName)
 import Drasil.GOOL.CodeAnalysis (ExceptionType(..))
 import Drasil.GOOL.Helpers (toCode, toState)
 import Drasil.GOOL.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -104,20 +105,26 @@ instance TypeElim CodeInfo where
   getType _     = Void
   getTypeString = unCI
 
+instance ScopeSym CodeInfo where
+  type Scope CodeInfo = ()
+  global = toCode ()
+  mainFn = toCode ()
+  local = toCode ()
+
 instance VariableSym CodeInfo where
   type Variable CodeInfo = ()
-  var         _ _   = noInfo
-  constant    _ _   = noInfo
-  extVar      _ _ _ = noInfo
-  arrayElem   _ _   = noInfo
+  var'      _ _ _ = noInfo
+  constant' _ _ _ = noInfo
+  extVar   _ _ _  = noInfo
+  arrayElem _ _   = noInfo
   
 instance OOVariableSym CodeInfo where
-  staticVar   _ _   = noInfo
-  self              = noInfo
-  classVar    _ _   = noInfo
-  extClassVar _ _   = noInfo
-  objVar      _ _   = noInfo
-  objVarSelf  _     = noInfo
+  staticVar   _ _ = noInfo
+  self            = noInfo
+  classVar    _ _ = noInfo
+  extClassVar _ _ = noInfo
+  objVar      _ _ = noInfo
+  objVarSelf  _   = noInfo
 
 instance VariableElim CodeInfo where
   variableName _ = ""
@@ -371,7 +378,7 @@ instance ControlStatement CodeInfo where
     noInfo
 
 instance ObserverPattern CodeInfo where
-  notifyObservers f _ = execute1 (zoom lensMStoVS f)
+  notifyObservers f _ _ = execute1 (zoom lensMStoVS f)
   
 instance StrategyPattern CodeInfo where
   runStrategy _ ss vl _ = do
@@ -379,8 +386,8 @@ instance StrategyPattern CodeInfo where
     _ <- zoom lensMStoVS $ fromMaybe noInfo vl
     noInfo
 
-instance ScopeSym CodeInfo where
-  type Scope CodeInfo = ScopeTag
+instance VisibilitySym CodeInfo where
+  type Visibility CodeInfo = VisibilityTag
   private = toCode Priv
   public  = toCode Pub
 

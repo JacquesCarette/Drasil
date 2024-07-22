@@ -28,14 +28,15 @@ module Drasil.GOOL.LanguageRenderer (
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
 import Drasil.GOOL.CodeType (CodeType(..))
-import Drasil.GOOL.InterfaceCommon (Label, Library, SValue, BodySym(Body), 
-  TypeSym(Type), TypeElim(..), VariableSym(Variable), VariableElim(..), ValueSym(..), StatementSym(Statement), ScopeSym(Scope), 
+import Drasil.GOOL.InterfaceCommon (Label, Library, SValue, BodySym(Body),
+  TypeSym(Type), TypeElim(..), VariableSym(Variable), VariableElim(..),
+  ValueSym(..), StatementSym(Statement), VisibilitySym(Visibility),
   ParameterSym(Parameter))
 import Drasil.GOOL.InterfaceGOOL (PermanenceSym(Permanence))
 import Drasil.GOOL.RendererClasses (RenderSym)
 import qualified Drasil.GOOL.RendererClasses as RC (PermElim(..), BodyElim(..),
   InternalTypeElim(..), InternalVarElim(..), ValueElim(..), StatementElim(..),
-  ScopeElim(..), ParamElim(..))
+  VisibilityElim(..), ParamElim(..))
 import Drasil.GOOL.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateMod, TypeData(..), VarData(..))
 import Drasil.GOOL.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
@@ -209,10 +210,10 @@ param v = RC.type' (variableType v) <+> RC.variable v
 
 -- Method --
 
-method :: (RenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> 
+method :: (RenderSym r) => Label -> r (Visibility r) -> r (Permanence r) -> 
   r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 method n s p t ps b = vcat [
-  RC.scope s <+> RC.perm p <+> RC.type' t <+> text n <> 
+  RC.visibility s <+> RC.perm p <+> RC.type' t <+> text n <> 
     parens (parameterList ps) <+> lbrace,
   indent (RC.body b),
   rbrace]
@@ -354,7 +355,7 @@ break = text "break"
 continue :: Doc
 continue = text "continue"
 
--- Scope --
+-- Visibility --
 
 private :: Doc
 private = text "private"

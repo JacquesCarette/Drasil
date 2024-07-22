@@ -1,23 +1,22 @@
 module VectorTest (vectorTest) where
 
 import Drasil.GOOL (GSProgram, SVariable, SMethod, OOProg, ProgramSym(..),
-  FileSym(..), BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..),
-  Literal(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), DeclStatement(..), ThunkAssign(..), MethodSym(..),
-  ModuleSym(..))
+  FileSym(..), BodySym(..), BlockSym(..), TypeSym(..), mainVar, Literal(..),
+  VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
+  DeclStatement(..), ThunkAssign(..), MethodSym(..), ModuleSym(..))
 
 vectorTest :: OOProg r => GSProgram r
 vectorTest = prog "VectorTest" "" [fileDoc $ buildModule "VectorTest" []
   [main] []]
 
 v1 :: OOProg r => SVariable r
-v1 = var "v1" (vecType double)
+v1 = mainVar "v1" (vecType double)
 
 v2 :: OOProg r => SVariable r
-v2 = var "v2" (vecType double)
+v2 = mainVar "v2" (vecType double)
 
 x :: OOProg r => SVariable r
-x = var "x" double
+x = mainVar "x" double
 
 main :: OOProg r => SMethod r
 main = mainFunction $ body [block [vecDecDef v1 [litDouble 1, litDouble 1.5],

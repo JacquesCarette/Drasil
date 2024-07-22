@@ -29,14 +29,14 @@ import Language.Drasil.Printers (DocType(SRS, Website, Lesson), makeCSS, genHTML
   PrintingInformation, outputDot, makeBook)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD,
-  unPP, unJP, unCSP, unCPPP, unSP, unJLP)
+  unPP, unJP, unCSP, unCPPP, unSP, {-unJLP-}) -- TODO: add Julia support
 import Language.Drasil.Output.Formats(Filename, DocSpec(DocSpec), DocChoices(DC))
 
 import Language.Drasil.TypeCheck
 import Language.Drasil.Dump
 
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC)
-import Drasil.GProc (unJLC)
+-- import Drasil.GProc (unJLC) -- TODO: add Julia support
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()

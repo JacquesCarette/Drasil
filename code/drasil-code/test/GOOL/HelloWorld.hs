@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 -- | GOOL test program for various OO program functionality.
 -- Should run print statements, basic loops, math, and create a helper module without errors.
-module HelloWorld (helloWorld) where
+module GOOL.HelloWorld (helloWorld) where
 
 import Drasil.GOOL (GSProgram, MSBody, MSBlock, MSStatement, SMethod, SVariable,
   OOProg, ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner,
@@ -10,9 +10,10 @@ import Drasil.GOOL (GSProgram, MSBody, MSBlock, MSStatement, SMethod, SVariable,
   CommentStatement(..), ControlStatement(..), mainVar, locVar, constant,
   ScopeSym(..), Literal(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), extFuncApp, List(..), MethodSym(..), ModuleSym(..))
+  ValueExpression(..), extFuncApp, List(..), MethodSym(..), ModuleSym(..),
+  OODeclStatement(objDecDef))
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
-import Helper (helper)
+import GOOL.Helper (helper)
 
 -- | Creates the HelloWorld program and necessary files.
 helloWorld :: (OOProg r) => GSProgram r
@@ -46,8 +47,7 @@ helloInitVariables = block [comment "Initializing variables",
     litDouble 1.5],
   varDecDef (mainVar "oneIndex" int) (indexOf (valueOf myOtherList) (litDouble 1.0)),
   printLn (valueOf $ mainVar "oneIndex" int),
-  mainVar "a" int &= listSize 
-    (valueOf myOtherList),
+  mainVar "a" int &= listSize (valueOf myOtherList),
   valStmt (listAdd (valueOf myOtherList)
     (litInt 2) (litDouble 2.0)),
   valStmt (listAppend (valueOf myOtherList)
@@ -155,7 +155,6 @@ listSliceTests = [
     (valueOf myOtherList) (Just (litInt 2))
     Nothing (Just (valueOf (mainVar "z" int))),
 
-
   -- | Do it again, to make sure a unique variable name for endIdx is being generated
   listSlice mySlicedList10
   (valueOf myOtherList) (Just (litInt 2))
@@ -217,7 +216,7 @@ helloIfBody = addComments "If body" (body [
     (&--) (mainVar "b" int),
 
     listDec 5 (mainVar "myList" (listType int)),
-    -- objDecDef (mainVar "myObj" char) (litChar 'o'), -- This isn't compatible with procedural renderers.  TODO: split this file up
+    objDecDef (mainVar "myObj" char) (litChar 'o'),
     constDecDef (constant "myConst" string mainFn) (litString "Imconstant"),
 
     printLn (valueOf $ constant "myConst" string mainFn),

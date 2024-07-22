@@ -1,5 +1,5 @@
 -- | Part of the PatternTest GOOL tests. Defines an Observer class.
-module Observer (observer, observerName, printNum, x) where
+module GOOL.Observer (observer, observerName, printNum, x) where
 
 import Drasil.GOOL (SFile, SVariable, SMethod, SClass, OOProg, FileSym(..),
   PermanenceSym(..), oneLiner, TypeSym(..), IOStatement(..), VariableSym(..),

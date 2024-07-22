@@ -6,12 +6,11 @@ module HelloWorld (helloWorld) where
 import Drasil.GOOL (GSProgram, MSBody, MSBlock, MSStatement, SMethod, SVariable,
   OOProg, ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), listSlice, TypeSym(..), StatementSym(..), AssignStatement(..), 
-  (&=), DeclStatement(..), OODeclStatement(..), IOStatement(..),
-  StringStatement(..), CommentStatement(..), ControlStatement(..), mainVar,
-  locVar, constant, ScopeSym(..), Literal(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), extFuncApp, List(..), MethodSym(..),
-  ModuleSym(..))
+  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
+  CommentStatement(..), ControlStatement(..), mainVar, locVar, constant,
+  ScopeSym(..), Literal(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), extFuncApp, List(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Helper (helper)
 

@@ -6,7 +6,7 @@ module Drasil.Website.Example where
 import Language.Drasil hiding (E)
 import SysInfo.Drasil (SystemInformation(..))
 import Language.Drasil.Code (Choices(..), Lang(..))
-import Data.Char (toLower)
+import Data.Char (toLower, toUpper)
 
 import qualified Drasil.DblPend.Body as DblPend (fullSI)
 import qualified Drasil.GamePhysics.Body as GamePhysics (fullSI)
@@ -224,7 +224,7 @@ getSRSPath :: FilePath -> String -> String -> FilePath
 getSRSPath path sufx ex = 
   path
   ++ map toLower ex -- FIXME: The majority of these `map toLower`s are implicit knowledge!!! 
-  ++ "/SRS/srs/"
+  ++ "/SRS/" ++ map toUpper sufx ++ "/"
   ++ ex ++ "_SRS." ++ map toLower sufx
 
 -- | Get the file paths for generated code and doxygen locations.

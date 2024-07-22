@@ -102,6 +102,7 @@ executables:
     - PatternTest
     - VectorTest
     - NameGenTest
+    - NameGenExample
     ghc-options:
     - -threaded
     - -O2

@@ -10,22 +10,24 @@ module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   extObjDecNewNoParams, IOStatement(..), StringStatement(..),
   FuncAppStatement(..), OOFuncAppStatement(..), CommentStatement(..), 
   initObserverList, addObserver, ControlStatement(..), ifNoElse, switchAsIf,
-  VariableSym(..), OOVariableSym(..), VariableElim(..), ($->), listOf, listVar,
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  VariableSym(..), var, constant, locVar, mainVar, ScopeSym(..),
+  OOVariableSym(..), VariableElim(..), ($->), listOf, listVar, ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   OOVariableValue, CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..),
   OOValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp,
   libFuncApp, newObj, extNewObj, libNewObj, exists, objMethodCall,
   objMethodCallNamedArgs, objMethodCallMixedArgs, objMethodCallNoParams,
   FunctionSym(..), ($.), selfAccess, GetSet(..), List(..),  listSlice,
-  listIndexExists, at, ObserverPattern(..), StrategyPattern(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), OOMethodSym(..), privMethod, pubMethod,
-  initializer, nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar,
-  ClassSym(..), ModuleSym(..), convType, convTypeOO, ProgData(..), FileData(..),
-  ModData(..), ScopeTag(..), CodeType(..), GOOLState(..), lensMStoVS, headers,
-  sources, mainMod, initialState, onStateValue, onCodeList, unCI, unPC, unJC,
-  unCSC, unCPPC, unSC, pyName, pyVersion, jName, jVersion, csName, csVersion,
-  cppName, cppVersion, swiftName, swiftVersion
+  listIndexExists, at, ObserverPattern(..), StrategyPattern(..),
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
+  privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..),
+  privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), convType, convTypeOO,
+  ProgData(..), FileData(..), ModData(..), VisibilityTag(..), CodeType(..),
+  GOOLState(..), lensMStoVS, headers, sources, mainMod, initialState,
+  onStateValue, onCodeList, unCI, unPC, unJC, unCSC, unCPPC, unSC, pyName,
+  pyVersion, jName, jVersion, csName, csVersion, cppName, cppVersion, swiftName,
+  swiftVersion
   ) where
 
 import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSType, SVariable,
@@ -35,12 +37,13 @@ import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSType, SVariable,
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), switchAsIf, ifNoElse, VariableSym(..), VariableElim(..),
-  listOf, listVar, ValueSym(..), Argument(..), Literal(..), MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  funcAppNamedArgs, extFuncApp, libFuncApp, exists, List(..), listSlice,
-  listIndexExists, at, ScopeSym(..), ParameterSym(..), MethodSym(..), convType)
+  ControlStatement(..), switchAsIf, ifNoElse, VariableSym(..), var, constant,
+  extVar, locVar, mainVar, VariableElim(..), listOf, listVar, ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
+  libFuncApp, exists, List(..), listSlice, listIndexExists, at, ScopeSym(..),
+  ParameterSym(..), MethodSym(..), VisibilitySym(..), convType)
 import Drasil.GOOL.InterfaceGOOL (GSProgram, SFile, FSModule, SClass,
   CSStateVar, VSFunction, OOProg, ProgramSym(..), FileSym(..), ModuleSym(..),
   ClassSym(..), OOMethodSym(..), Initializers, OOTypeSym(..), OOVariableSym(..),
@@ -53,7 +56,8 @@ import Drasil.GOOL.InterfaceGOOL (GSProgram, SFile, FSModule, SClass,
   selfAccess, ObserverPattern(..), initObserverList, addObserver,
   StrategyPattern(..), convTypeOO)
 
-import Drasil.GOOL.AST (FileData(..), ModData(..), ProgData(..), ScopeTag(..))
+import Drasil.GOOL.AST (FileData(..), ModData(..), ProgData(..),
+  VisibilityTag(..))
 
 import Drasil.GOOL.CodeType (CodeType(..))
 

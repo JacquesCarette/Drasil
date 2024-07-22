@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.DrasilState (
 ) where
 
 import Language.Drasil
-import Drasil.GOOL (ScopeTag(..), CodeType)
+import Drasil.GOOL (VisibilityTag(..), CodeType)
 
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
@@ -114,7 +114,7 @@ modExportMap cs@CodeSpec {
   where mpair (Mod n _ _ cls fs) = map
           (, defModName (modularity m) n)
           (map className cls
-            ++ concatMap (map (codeName . stVar) . filter ((== Pub) . svScope) . stateVars) cls
+            ++ concatMap (map (codeName . stVar) . filter ((== Pub) . svVisibility) . stateVars) cls
             ++ map fname (fs ++ concatMap methods cls))
         defModName Unmodular _ = prn
         defModName _ nm = nm

@@ -1,4 +1,4 @@
-module Drasil.GOOL.AST (Terminator(..), ScopeTag(..), QualifiedName, qualName, 
+module Drasil.GOOL.AST (Terminator(..), VisibilityTag(..), QualifiedName, qualName, 
   FileType(..), isSource, Binding(..), onBinding, BindData(bind, bindDoc), bd, 
   FileData(filePath, fileMod), fileD, updateFileMod, FuncData(fType, funcDoc), 
   fd, ModData(name, modDoc), md, updateMod, MethodData(mthdDoc), mthd, 
@@ -22,7 +22,7 @@ data Terminator = Semi | Empty
 -- Used for state variables and methods
 -- Eq is needed for organizing methods and state variables into public and 
 -- private groups for C++ class rendering
-data ScopeTag = Pub | Priv deriving Eq
+data VisibilityTag = Pub | Priv deriving Eq
 
 -- Used in method exception map and call map. 
 -- Qualification first, name second
@@ -116,10 +116,10 @@ emptyProg :: ProgData
 emptyProg = progD "" "" []
 
 -- Used as the underlying data type for StateVars in the C++ renderer
-data StateVarData = SVD {getStVarScp :: ScopeTag, stVar :: Doc, 
+data StateVarData = SVD {getStVarScp :: VisibilityTag, stVar :: Doc, 
   destructSts :: (Doc, Terminator)}
 
-svd :: ScopeTag -> Doc -> (Doc, Terminator) -> StateVarData
+svd :: VisibilityTag -> Doc -> (Doc, Terminator) -> StateVarData
 svd = SVD
 
 -- Used as the underlying data type for Types in all renderers

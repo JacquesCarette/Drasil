@@ -7,18 +7,19 @@ module Drasil.GOOL.InterfaceCommon (
   PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
-  TypeElim(..), VariableSym(..), VariableElim(..), listOf, listVar,
-  ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  funcAppNamedArgs, extFuncApp, libFuncApp, exists, List(..), InternalList(..),
-  listSlice, listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
-  IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
-  ScopeSym(..), ParameterSym(..), MethodSym(..), convType
-) where
+  TypeElim(..), VariableSym(..), var, constant, locVar, mainVar, ScopeSym(..),
+  VariableElim(..), listOf, listVar, ValueSym(..), Argument(..), Literal(..),
+  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp,
+  exists, List(..), InternalList(..), listSlice, listIndexExists, at,
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
+  (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ifNoElse, switchAsIf, VisibilitySym(..),
+  ParameterSym(..), MethodSym(..), convType
+  ) where
 
 import Drasil.GOOL.CodeType (CodeType(..))
 import Drasil.GOOL.State (MS, VS)
@@ -88,23 +89,45 @@ class (TypeSym r) => TypeElim r where
   getType :: r (Type r) -> CodeType
   getTypeString :: r (Type r) -> String
 
+class ScopeSym r where
+  type Scope r
+  global :: r (Scope r)
+  mainFn :: r (Scope r)
+  local  :: r (Scope r)
+
 type SVariable a = VS (a (Variable a))
 
-class (TypeSym r) => VariableSym r where
+class (TypeSym r, ScopeSym r) => VariableSym r where
   type Variable r
-  var          :: Label -> VSType r -> SVariable r
-  constant     :: Label -> VSType r -> SVariable r
-  extVar       :: Library -> Label -> VSType r -> SVariable r
-  arrayElem    :: Integer -> SVariable r -> SVariable r
+  var'      :: Label -> r (Scope r) -> VSType r -> SVariable r
+  constant' :: Label -> r (Scope r) -> VSType r -> SVariable r
+  extVar    :: Library -> Label -> VSType r -> SVariable r
+  arrayElem :: Integer -> SVariable r -> SVariable r
   
+-- | Smart constructor to rearrange the parameters of var'
+var :: (VariableSym r) => Label -> VSType r -> r (Scope r) -> SVariable r
+var n t s = var' n s t
+
+-- | Smart constructor to rearrange the parameters of constant'
+constant :: (VariableSym r) => Label -> VSType r -> r (Scope r) -> SVariable r
+constant n t s = constant' n s t
+
+-- | Smart constructor for a local variable.
+locVar :: (VariableSym r) => Label -> VSType r -> SVariable r
+locVar n = var' n local
+
+-- | Smart constructor for a variable in the main function.
+mainVar :: (VariableSym r) => Label -> VSType r -> SVariable r
+mainVar n = var' n mainFn
+
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
   variableType :: r (Variable r) -> r (Type r)
 
-listVar :: (VariableSym r) => Label -> VSType r -> SVariable r
+listVar :: (VariableSym r) => Label -> VSType r -> r (Scope r) -> SVariable r
 listVar n t = var n (listType t)
 
-listOf :: (VariableSym r) => Label -> VSType r -> SVariable r
+listOf :: (VariableSym r) => Label -> VSType r -> r (Scope r) -> SVariable r
 listOf = listVar
 
 type SValue a = VS (a (Value a))
@@ -432,10 +455,10 @@ switchAsIf :: (ControlStatement r, Comparison r) => SValue r ->
   [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 switchAsIf v = ifCond . map (first (v ?==))
 
-class ScopeSym r where
-  type Scope r
-  private :: r (Scope r)
-  public  :: r (Scope r)
+class VisibilitySym r where
+  type Visibility r
+  private :: r (Visibility r)
+  public  :: r (Visibility r)
 
 type MSParameter a = MS (a (Parameter a))
 
@@ -455,20 +478,20 @@ type InOutFunc r = [SVariable r] -> [SVariable r] -> [SVariable r] ->
 type DocInOutFunc r = String -> [(String, SVariable r)] -> 
   [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
 
-class (BodySym r, ParameterSym r, ScopeSym r) => MethodSym r 
+class (BodySym r, ParameterSym r, VisibilitySym r) => MethodSym r 
   where
   type Method r
   docMain :: MSBody r -> SMethod r
 
-  function :: Label -> r (Scope r) -> VSType r -> [MSParameter r] -> 
+  function :: Label -> r (Visibility r) -> VSType r -> [MSParameter r] -> 
     MSBody r -> SMethod r
   mainFunction  :: MSBody r -> SMethod r
   -- Parameters are: function description, parameter descriptions, 
   --   return value description if applicable, function
   docFunc :: String -> [String] -> Maybe String -> SMethod r -> SMethod r
 
-  inOutFunc :: Label -> r (Scope r) -> InOutFunc r
-  docInOutFunc :: Label -> r (Scope r) -> DocInOutFunc r
+  inOutFunc :: Label -> r (Visibility r) -> InOutFunc r
+  docInOutFunc :: Label -> r (Visibility r) -> DocInOutFunc r
 
 -- Utility
 

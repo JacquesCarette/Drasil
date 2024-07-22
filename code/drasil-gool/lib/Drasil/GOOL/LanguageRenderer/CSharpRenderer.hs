@@ -12,16 +12,16 @@ import Utils.Drasil (indent)
 import Drasil.GOOL.CodeType (CodeType(..))
 import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..), oneLiner,
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, List(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..))
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), locVar,
+  VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
+  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
+  ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (VSFunction, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
@@ -35,12 +35,12 @@ import Drasil.GOOL.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalGetSet(..),
   InternalListFunc(..),  RenderFunction(..), FunctionElim(functionType),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
-  RenderStatement(..), StatementElim(statementTerm), RenderScope(..),
-  ScopeElim, MethodTypeSym(..), RenderParam(..), ParamElim(parameterName,
+  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..),
+  VisibilityElim, MethodTypeSym(..), RenderParam(..), ParamElim(parameterName,
   parameterType), RenderMethod(..), MethodElim, StateVarElim, RenderClass(..),
   ClassElim, RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
 import qualified Drasil.GOOL.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp, variable, value, function, statement, scope, parameter,
+  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, stateVar, class', module', blockComment')
 import Drasil.GOOL.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
@@ -260,11 +260,17 @@ instance OpElim CSharpCode where
   uOpPrec = opPrec . unCSC
   bOpPrec = opPrec . unCSC
 
+instance ScopeSym CSharpCode where
+  type Scope CSharpCode = Doc
+  global = toCode empty
+  mainFn = toCode empty
+  local = toCode empty
+
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
-  var = G.var
-  constant = var
-  extVar = CP.extVar
+  var' n _    = G.var n
+  constant'   = var'
+  extVar      = CP.extVar
   arrayElem i = G.arrayElem (litInt i)
 
 instance OOVariableSym CSharpCode where
@@ -444,7 +450,7 @@ instance ThunkAssign CSharpCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = var iName int
+      i = locVar iName int
       dim = fmap pure $ t >>= commonThunkDim (fmap unCSC . listSize . fmap pure) . unCSC
       loopInit = zoom lensMStoVS (fmap unCSC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
@@ -598,16 +604,16 @@ instance ObserverPattern CSharpCode where
 instance StrategyPattern CSharpCode where
   runStrategy = M.runStrategy
 
-instance ScopeSym CSharpCode where
-  type Scope CSharpCode = Doc
+instance VisibilitySym CSharpCode where
+  type Visibility CSharpCode = Doc
   private = toCode R.private
   public = toCode R.public
 
-instance RenderScope CSharpCode where
-  scopeFromData _ = toCode
+instance RenderVisibility CSharpCode where
+  visibilityFromData _ = toCode
   
-instance ScopeElim CSharpCode where
-  scope = unCSC
+instance VisibilityElim CSharpCode where
+  visibility = unCSC
 
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = TypeData

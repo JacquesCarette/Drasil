@@ -62,7 +62,7 @@ class InputParameters:
         print("  }", file=outfile)
         outfile.close()
         
-        if (not(self.v_launch > 0.0)):
+        if not(self.v_launch > 0.0):
             print("Warning: ", end="")
             print("v_launch has value ", end="")
             print(self.v_launch, end="")
@@ -70,7 +70,7 @@ class InputParameters:
             print("above ", end="")
             print(0.0, end="")
             print(".")
-        if (not(0.0 < self.theta and self.theta < math.pi / 2.0)):
+        if not(0.0 < self.theta and self.theta < math.pi / 2.0):
             print("Warning: ", end="")
             print("theta has value ", end="")
             print(self.theta, end="")
@@ -81,7 +81,7 @@ class InputParameters:
             print(math.pi / 2.0, end="")
             print(" ((pi)/(2))", end="")
             print(".")
-        if (not(self.p_target > 0.0)):
+        if not(self.p_target > 0.0):
             print("Warning: ", end="")
             print("p_target has value ", end="")
             print(self.p_target, end="")
@@ -153,9 +153,9 @@ def func_s(inParams, d_offset):
     print("  }", file=outfile)
     outfile.close()
     
-    if (math.fabs(d_offset / inParams.p_target) < Constants.EPSILON):
+    if math.fabs(d_offset / inParams.p_target) < Constants.EPSILON:
         return "The target was hit."
-    elif (d_offset < 0.0):
+    elif d_offset < 0.0:
         return "The projectile fell short."
     else:
         return "The projectile went long."

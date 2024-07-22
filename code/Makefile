@@ -193,9 +193,9 @@ debug: test ##@Examples Run test target with better debugging tools.
 # Debugging individual examples
 $(DEBUG_EXAMPLES): %$(DEBUG_E_SUFFIX): %$(TEST_E_SUFFIX)
 
-pr_ready: all hot_hlint ##@General Check if your current work is ready to for a PR via `all` and `hot_hlint`.
-	- echo "Your build/ and stable/ match, and your code currently passes HLint tests."
-	- echo "Feel free to create a PR for your code if you feel it's ready."
+pr_ready: all hlint ##@General Check if your current work is ready to for a PR via `all` and `hlint`.
+	@echo "Your build/ and stable/ match, and your code currently passes HLint tests."
+	@echo "Feel free to create a PR for your code if you feel it's ready."
 
 #----------------------#
 #--- Initial checks ---#

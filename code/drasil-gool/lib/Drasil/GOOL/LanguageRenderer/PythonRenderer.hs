@@ -455,7 +455,7 @@ instance List PythonCode where
 
 instance Set PythonCode where
   --fromList =
-  contains = CP.contains pyIn
+  contains a b = isin b a
 
 instance InternalList PythonCode where
   listSlice' b e s vn vo = pyListSlice vn vo (getVal b) (getVal e) (getVal s)
@@ -843,7 +843,7 @@ pySplit = "split"
 pyRange = "range"
 pyRstrip = "rstrip"
 pyMath = "math"
-pyIn = "__contains__"
+pyIn = "in"
 pySetAdd = "Add"
 
 pyDef, pyLambdaDec, pyElseIf, pyRaise, pyExcept :: Doc

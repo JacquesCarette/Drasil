@@ -6,7 +6,7 @@ module Drasil.GOOL.RendererClassesProc (
 ) where
 
 import Drasil.GOOL.InterfaceCommon (Label, SMethod, MSParameter,
-  MSBody, BlockSym(..), ScopeSym(..))
+  MSBody, BlockSym(..), VisibilitySym(..))
 import qualified Drasil.GOOL.InterfaceProc as IP (SFile, FSModule, FileSym(..),
   ModuleSym(..))
 import Drasil.GOOL.State (FS)
@@ -42,5 +42,5 @@ class ModuleElim r where
 class (RenderMethod r) => ProcRenderMethod r where
   -- | Main method?, name, public/private,
   --   return type, parameters, body
-  intMethod     :: Bool -> Label -> r (Scope r) -> MSMthdType r ->
+  intMethod     :: Bool -> Label -> r (Visibility r) -> MSMthdType r ->
     [MSParameter r] -> MSBody r -> SMethod r

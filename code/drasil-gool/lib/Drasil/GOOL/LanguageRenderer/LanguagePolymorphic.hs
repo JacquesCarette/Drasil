@@ -24,13 +24,13 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
   VSType, SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs,
   MixedCall, MixedCtorCall, BodySym(Body), bodyStatements, oneLiner,
   BlockSym(Block), TypeSym(Type), TypeElim(getType, getTypeString),
-  VariableSym(Variable), VariableElim(variableName, variableType),
-  ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/), sin, cos,
-  tan), Comparison(..), funcApp, StatementSym(multi), AssignStatement((&++)),
-  (&=), IOStatement(printStr, printStrLn, printFile, printFileStr,
-  printFileStrLn), ifNoElse, ScopeSym(..))
+  VariableSym(Variable), VisibilitySym(..), VariableElim(variableName,
+  variableType), ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/),
+  sin, cos, tan), Comparison(..), funcApp, StatementSym(multi),
+  AssignStatement((&++)), (&=), IOStatement(printStr, printStrLn, printFile,
+  printFileStr, printFileStrLn), ifNoElse)
 import qualified Drasil.GOOL.InterfaceCommon as IC (TypeSym(int, double, char,
-  string, listType, arrayType, listInnerType, funcType, void), VariableSym(var), 
+  string, listType, arrayType, listInnerType, funcType, void), locVar,
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
   IOStatement(print), ControlStatement(returnStmt, for), ParameterSym(param),
@@ -376,7 +376,7 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
     prFn (IC.listAccess v (IC.listSize v #- IC.litInt 1)))], 
   prLnFn "]"]
   where l_i = "list_i" ++ show n
-        i = IC.var l_i IC.int
+        i = IC.locVar l_i IC.int
 
 printObj :: ClassName -> (String -> MSStatement r) -> MSStatement r
 printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
@@ -467,7 +467,7 @@ param f v' = do
   modify $ useVarName n
   paramFromData v' $ f v
 
-method :: (OORenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> VSType r 
+method :: (OORenderSym r) => Label -> r (Visibility r) -> r (Permanence r) -> VSType r 
   -> [MSParameter r] -> MSBody r -> SMethod r
 method n s p t = intMethod False n s p (mType t)
 
@@ -484,7 +484,7 @@ setMethod v = zoom lensMStoVS v >>= (\vr -> IG.method (setterName $ variableName
 initStmts :: (OORenderSym r) => Initializers r -> MSBody r
 initStmts = bodyStatements . map (\(vr, vl) -> IG.objVarSelf vr &= vl)
 
-function :: (OORenderSym r) => Label -> r (Scope r) -> VSType r -> 
+function :: (OORenderSym r) => Label -> r (Visibility r) -> VSType r -> 
   [MSParameter r] -> MSBody r -> SMethod r
 function n s t = S.intFunc False n s static (mType t)
   

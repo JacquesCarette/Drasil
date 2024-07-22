@@ -7,7 +7,7 @@ module Drasil.GOOL.RendererClassesCommon (
   OpElim(..), RenderVariable(..), InternalVarElim(..), RenderValue(..),
   ValueElim(..), InternalListFunc(..), RenderFunction(..), FunctionElim(..),
   InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
-  RenderStatement(..), StatementElim(..), RenderScope(..), ScopeElim(..),
+  RenderStatement(..), StatementElim(..), RenderVisibility(..), VisibilityElim(..),
   MSMthdType, MethodTypeSym(..), RenderParam(..), ParamElim(..),
   RenderMethod(..), MethodElim(..), BlockCommentSym(..), BlockCommentElim(..),
 ) where
@@ -21,9 +21,9 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
   InternalList(..), VectorExpression(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  ScopeSym(..), ParameterSym(..), MethodSym(..))
+  VisibilitySym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.CodeType (CodeType)
-import Drasil.GOOL.AST (Binding, Terminator, ScopeTag)
+import Drasil.GOOL.AST (Binding, Terminator, VisibilityTag)
 import Drasil.GOOL.State (MS, VS)
 
 import Control.Monad.State (State)
@@ -35,7 +35,8 @@ class (AssignStatement r, DeclStatement r, IOStatement r,
   NumericExpression r, BooleanExpression r, Comparison r, List r,
   InternalList r, VectorExpression r, TypeElim r, VariableElim r, RenderBlock r,
   BlockElim r, RenderBody r, BodyElim r, InternalListFunc r, RenderFunction r,
-  FunctionElim r, OpElim r, RenderParam r, ParamElim r, RenderScope r, ScopeElim r, InternalAssignStmt r, InternalIOStmt r,
+  FunctionElim r, OpElim r, RenderParam r, ParamElim r, RenderVisibility r,
+  VisibilityElim r, InternalAssignStmt r, InternalIOStmt r,
   InternalControlStmt r, RenderStatement r, StatementElim r, RenderType r,
   InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable r,
   InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r,
@@ -191,11 +192,11 @@ class StatementElim r where
   statement :: r (Statement r) -> Doc
   statementTerm :: r (Statement r) -> Terminator
 
-class RenderScope r where
-  scopeFromData :: ScopeTag -> Doc -> r (Scope r)
+class RenderVisibility r where
+  visibilityFromData :: VisibilityTag -> Doc -> r (Visibility r)
   
-class ScopeElim r where
-  scope :: r (Scope r) -> Doc
+class VisibilityElim r where
+  visibility :: r (Visibility r) -> Doc
 
 class RenderParam r where
   paramFromData :: SVariable r -> Doc -> MSParameter r
@@ -223,7 +224,7 @@ class (TypeSym r) => MethodTypeSym r where
 class (MethodTypeSym r, BlockCommentSym r) => RenderMethod r where
   -- | Takes a BlockComment and a method and generates a function.
   commentedFunc :: MS (r (BlockComment r)) -> SMethod r -> SMethod r
-  mthdFromData :: ScopeTag -> Doc -> SMethod r
+  mthdFromData :: VisibilityTag -> Doc -> SMethod r
 
 class MethodElim r where
   method :: r (Method r) -> Doc

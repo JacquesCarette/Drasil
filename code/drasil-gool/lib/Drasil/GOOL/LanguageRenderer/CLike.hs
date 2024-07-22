@@ -14,7 +14,7 @@ import Drasil.GOOL.CodeType (CodeType(..))
 import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, VSType, SVariable, 
   SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall, 
   TypeElim(getType, getTypeString), 
-  VariableElim(..), ValueSym(Value, valueType), ScopeSym(..))
+  VariableElim(..), ValueSym(Value, valueType), VisibilitySym(..))
 import qualified Drasil.GOOL.InterfaceCommon as IC (TypeSym(bool, float),
   ValueExpression(funcAppMixedArgs), DeclStatement(varDec, varDecDef))
 import Drasil.GOOL.InterfaceGOOL (PermanenceSym(..), extNewObj, ($.))
@@ -211,8 +211,8 @@ while f bStart bEnd v' b'= do
 
 -- Methods --
 
-intFunc :: (OORenderSym r) => Bool -> Label -> r (Scope r) -> r (Permanence r) -> 
-  MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
+intFunc :: (OORenderSym r) => Bool -> Label -> r (Visibility  r) ->
+  r (Permanence r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
 intFunc = intMethod
 
 -- Error Messages --

@@ -22,9 +22,9 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, Body, MSBody, VSFunction,
   MixedCall, bodyStatements, oneLiner, TypeSym(infile, outfile, listInnerType),
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType),
   ValueSym(valueType), Comparison(..), (&=), ControlStatement(returnStmt),
-  ScopeSym(..), MethodSym(function), funcApp)
+  VisibilitySym(..), MethodSym(function), funcApp)
 import qualified Drasil.GOOL.InterfaceCommon as IC (argsList,
-  TypeSym(int, double, string, listType, arrayType, void), VariableSym(var),
+  TypeSym(int, double, string, listType, arrayType, void), locVar,
   Literal(litTrue, litFalse, litList, litInt, litString),
   VariableValue(valueOf), StatementSym(valStmt), DeclStatement(varDec,
   varDecDef, constDecDef), List(intToIndex, indexToInt), ParameterSym(param,
@@ -44,7 +44,7 @@ import qualified Drasil.GOOL.RendererClassesCommon as S (RenderBody(multiBody),
   InternalListFunc(listSizeFunc, listAddFunc, listAppendFunc))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (ImportElim(..),
   BodyElim(..), InternalTypeElim(..), InternalVarElim(variable), ValueElim(..),
-  StatementElim(statement), ScopeElim(..), MethodElim(..), FunctionElim(..))
+  StatementElim(statement), VisibilityElim(..), MethodElim(..), FunctionElim(..))
 import Drasil.GOOL.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2StateValues, onStateList)
 import Drasil.GOOL.RendererClassesOO (OORenderSym, OORenderMethod(intMethod),
@@ -63,7 +63,7 @@ import Drasil.GOOL.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkStateVar, mkVal, mkVal)
 import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
   call, initStmts, docFunc, docFuncRepr, docClass, docMod, smartAdd, smartSub)
-import Drasil.GOOL.AST (ScopeTag(..))
+import Drasil.GOOL.AST (VisibilityTag(..))
 import Drasil.GOOL.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports,
   getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc,
@@ -149,13 +149,13 @@ discardFileLine n f = IC.valStmt $ objMethodCallNoParams IC.string f n
 --   Parameters: render function, class name, scope, parent, class variables,
 --               constructor(s), methods
 intClass :: (OORenderSym r, Monad r) => (Label -> Doc -> Doc -> Doc -> Doc ->
-  Doc) -> Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r]
-  -> [SMethod r] -> CS (r Doc)
+  Doc) -> Label -> r (Visibility r) -> r ParentSpec -> [CSStateVar r] ->
+  [SMethod r]-> [SMethod r] -> CS (r Doc)
 intClass f n s i svrs cstrs mths = do
   modify (setClassName n)
   svs <- onStateList (R.stateVarList . map RC.stateVar) svrs
   ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) (cstrs ++ mths))
-  return $ onCodeValue (\p -> f n p (RC.scope s) svs ms) i
+  return $ onCodeValue (\p -> f n p (RC.visibility s) svs ms) i
 
 -- Python, Java, C++, and Julia --
 
@@ -239,7 +239,7 @@ docMain b = commentedFunc (docComment $ toState $ functionDox
 
 mainFunction :: (OORenderSym r) => VSType r -> Label -> MSBody r -> SMethod r
 mainFunction s n = S.intFunc True n public static (mType IC.void)
-  [IC.param (IC.var args (s >>= (\argT -> typeFromData (List String) 
+  [IC.param (IC.locVar args (s >>= (\argT -> typeFromData (List String) 
   (render (RC.type' argT) ++ array) (RC.type' argT <> array'))))]
 
 -- | Used by the language renderers to build the module.
@@ -313,7 +313,7 @@ bindingError :: String -> String
 bindingError l = "Binding unimplemented in " ++ l
 
 notNull :: (CommonRenderSym r) => String -> SValue r -> SValue r
-notNull nil v = v ?!= IC.valueOf (IC.var nil $ onStateValue valueType v)
+notNull nil v = v ?!= IC.valueOf (IC.locVar nil $ onStateValue valueType v)
 
 listDecDef :: (CommonRenderSym r) => SVariable r -> [SValue r] -> MSStatement r
 listDecDef v vals = do
@@ -324,15 +324,15 @@ listDecDef v vals = do
 destructorError :: String -> String
 destructorError l = "Destructors not allowed in " ++ l
 
-stateVarDef :: (OORenderSym r, Monad r) => r (Scope r) -> r (Permanence r) ->
+stateVarDef :: (OORenderSym r, Monad r) => r (Visibility  r) -> r (Permanence r) ->
   SVariable r -> SValue r -> CS (r Doc)
 stateVarDef s p vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
-  (RC.scope s) (RC.perm p) . RC.statement) (S.stmt $ IC.varDecDef vr vl)
+  (RC.visibility  s) (RC.perm p) . RC.statement) (S.stmt $ IC.varDecDef vr vl)
 
-constVar :: (CommonRenderSym r, Monad r) => Doc -> r (Scope r) -> SVariable r ->
+constVar :: (CommonRenderSym r, Monad r) => Doc -> r (Visibility  r) -> SVariable r ->
   SValue r -> CS (r Doc)
 constVar p s vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar 
-  (RC.scope s) p . RC.statement) (S.stmt $ IC.constDecDef vr vl)
+  (RC.visibility s) p . RC.statement) (S.stmt $ IC.constDecDef vr vl)
 
 -- Python, Java, C++, and Swift --
 
@@ -373,10 +373,10 @@ openFileW :: (CommonRenderSym r) => (SValue r -> VSType r -> SValue r -> SValue 
   SVariable r -> SValue r -> MSStatement r
 openFileW f vr vl = vr &= f vl outfile IC.litFalse
 
-stateVar :: (OORenderSym r, Monad r) => r (Scope r) -> r (Permanence r) ->
+stateVar :: (OORenderSym r, Monad r) => r (Visibility  r) -> r (Permanence r) ->
   SVariable r -> CS (r Doc)
 stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
-  (RC.scope s) (RC.perm p) . RC.statement) (S.stmt $ IC.varDec v)
+  (RC.visibility s) (RC.perm p) . RC.statement) (S.stmt $ IC.varDec v)
 
 -- Python and Swift --
 

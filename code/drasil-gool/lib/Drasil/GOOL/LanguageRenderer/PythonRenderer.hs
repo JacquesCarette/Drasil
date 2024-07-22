@@ -9,24 +9,26 @@ module Drasil.GOOL.LanguageRenderer.PythonRenderer (
 import Utils.Drasil (blank, indent)
 
 import Drasil.GOOL.CodeType (CodeType(..))
-import Drasil.GOOL.InterfaceCommon (SharedProg, Label, Library, VSFunction,
-  VSType, SVariable, SValue, MSStatement, MixedCtorCall, BodySym(..),
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, List(..), InternalList(..), ThunkSym(..), VectorType(..),
-  VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
-  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), switchAsIf, ScopeSym(..),
-  ParameterSym(..), MethodSym(..))
-import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..),
-  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
-  StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue, InternalValueExp(..), extNewObj, objMethodCall,
-  OOFunctionSym(..), GetSet(..), OOValueExpression(..), selfFuncApp,
-  OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..), OOMethodSym(..))
+import Drasil.GOOL.InterfaceCommon (SharedProg, Label, Library, VSType,
+  VSFunction, SVariable, SValue, MSStatement, MixedCtorCall, BodySym(..),
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), locVar,
+  VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
+  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
+  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..),
+  MethodSym(..))
+import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
+  ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
+  StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
+  InternalValueExp(..), extNewObj, objMethodCall, OOFunctionSym(..), GetSet(..),
+  OOValueExpression(..), selfFuncApp, OODeclStatement(..),
+  OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
+  OOMethodSym(..))
 import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
@@ -34,11 +36,11 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
-  StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..),
-  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
-  MethodElim, BlockCommentSym(..), BlockCommentElim)
+  StatementElim(statementTerm), RenderVisibility(..), VisibilityElim,
+  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
+  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim)
 import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block, 
-  type', uOp, bOp, variable, value, function, statement, scope, parameter,
+  type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
@@ -258,12 +260,18 @@ instance OpElim PythonCode where
   uOpPrec = opPrec . unPC
   bOpPrec = opPrec . unPC
 
+instance ScopeSym PythonCode where
+  type Scope PythonCode = Doc
+  global = toCode empty
+  mainFn = toCode empty
+  local = toCode empty
+
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
-  var = G.var
-  constant = var
+  var' n _      = G.var n
+  constant'     = var'
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
-  arrayElem i = G.arrayElem (litInt i)
+  arrayElem i   = G.arrayElem (litInt i)
 
 instance OOVariableSym PythonCode where
   staticVar = G.staticVar
@@ -462,7 +470,7 @@ instance ThunkAssign PythonCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = var iName int
+      i = locVar iName int
       dim = fmap pure $ t >>= commonThunkDim (fmap unPC . listSize . fmap pure) . unPC
       loopInit = zoom lensMStoVS (fmap unPC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
@@ -595,7 +603,7 @@ instance ControlStatement PythonCode where
 
   throw = G.throw pyThrow Empty
 
-  ifCond = G.ifCond parens pyBodyStart pySpace pyElseIf pyBodyEnd empty
+  ifCond = G.ifCond id pyBodyStart pySpace pyElseIf pyBodyEnd empty
   switch = switchAsIf
 
   ifExists = M.ifExists
@@ -616,16 +624,16 @@ instance ObserverPattern PythonCode where
 instance StrategyPattern PythonCode where
   runStrategy = M.runStrategy
 
-instance ScopeSym PythonCode where
-  type Scope PythonCode = Doc
+instance VisibilitySym PythonCode where
+  type Visibility PythonCode = Doc
   private = toCode empty
   public = toCode empty
 
-instance RenderScope PythonCode where
-  scopeFromData _ = toCode
+instance RenderVisibility PythonCode where
+  visibilityFromData _ = toCode
 
-instance ScopeElim PythonCode where
-  scope = unPC
+instance VisibilityElim PythonCode where
+  visibility = unPC
 
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypeData

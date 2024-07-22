@@ -7,7 +7,7 @@ module Drasil.GOOL.RendererClassesOO (
 ) where
 
 import Drasil.GOOL.InterfaceCommon (Label, MSBody, VSFunction, VSType,
-  SVariable, SValue, MSParameter, SMethod, BlockSym(..), ScopeSym(..))
+  SVariable, SValue, MSParameter, SMethod, BlockSym(..), VisibilitySym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, FSModule, SClass,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), ModuleSym(..), ClassSym(..), PermanenceSym(..), GetSet(..),
@@ -54,11 +54,11 @@ class (MethodTypeSym r) => OOMethodTypeSym r where
 class (RenderMethod r, OOMethodTypeSym r) => OORenderMethod r where
   -- | Main method?, name, public/private, static/dynamic, 
   --   return type, parameters, body
-  intMethod     :: Bool -> Label -> r (Scope r) -> r (IG.Permanence r) -> 
+  intMethod     :: Bool -> Label -> r (Visibility r) -> r (IG.Permanence r) -> 
     MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
   -- | True for main function, name, public/private, static/dynamic, 
   --   return type, parameters, body
-  intFunc       :: Bool -> Label -> r (Scope r) -> r (IG.Permanence r) 
+  intFunc       :: Bool -> Label -> r (Visibility r) -> r (IG.Permanence r) 
     -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
     
   destructor :: [IG.CSStateVar r] -> SMethod r
@@ -69,7 +69,7 @@ class StateVarElim r where
 type ParentSpec = Doc
 
 class (BlockCommentSym r) => RenderClass r where
-  intClass :: Label -> r (Scope r) -> r ParentSpec -> [IG.CSStateVar r] 
+  intClass :: Label -> r (Visibility r) -> r ParentSpec -> [IG.CSStateVar r] 
     -> [SMethod r] -> [SMethod r] -> IG.SClass r
     
   inherit :: Maybe Label -> r ParentSpec

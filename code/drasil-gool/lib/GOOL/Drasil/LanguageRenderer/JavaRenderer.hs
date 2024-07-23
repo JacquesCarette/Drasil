@@ -316,7 +316,7 @@ instance Literal JavaCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray braces
-  litSet = CP.litSetFunc "Set.of"
+  litSet = CP.litSetFunc jSetOf
 
   litList t es = do
     zoom lensVStoMS $ modify (if null es then id else addLangImport $ utilImport

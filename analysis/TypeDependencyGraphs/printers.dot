@@ -25,10 +25,13 @@ digraph alltypes {
 	subgraph css {
 	}
 	subgraph helpers {
+		subgraph bibformatter{
+		BibFormatter	[shape=oval, color=cyan3, label="BibFormatter"];
+		BibFormatter -> Doc;
+		BibFormatter -> SpecDoc;
+		}
 		subgraph variation{
 		Variation	[shape=oval, color=darkviolet, label="Variation"];
-		Variation -> String;
-		Variation -> Doc;
 		}
 	}
 	subgraph monad {
@@ -59,7 +62,13 @@ digraph alltypes {
 	}
 	subgraph print {
 	}
+	subgraph book {
+	}
 	subgraph createmd {
+	}
+	subgraph helpers {
+	}
+	subgraph print {
 	}
 	subgraph print {
 		subgraph singleline{
@@ -169,6 +178,20 @@ digraph alltypes {
 		Document -> Author;
 		Document -> LayoutObj;
 		}
+		subgraph project{
+		Project	[shape=oval, color=darkviolet, label="Project"];
+		Project -> Title;
+		Project -> Author;
+		Project -> RefMap;
+		Project -> File;
+		}
+		subgraph file{
+		File	[shape=oval, color=darkviolet, label="File"];
+		File -> Title;
+		File -> Filename;
+		File -> Depth;
+		File -> LayoutObj;
+		}
 		subgraph layoutobj{
 		LayoutObj	[shape=oval, color=darkviolet, label="LayoutObj"];
 		LayoutObj -> Tags;
@@ -209,9 +232,17 @@ digraph alltypes {
 		Filepath	[shape=oval, color=red2, label="Filepath"];
 		Filepath -> String;
 		}
+		subgraph filename{
+		Filename	[shape=oval, color=red2, label="Filename"];
+		Filename -> String;
+		}
 		subgraph caption{
 		Caption	[shape=oval, color=red2, label="Caption"];
 		Caption -> Spec;
+		}
+		subgraph refmap{
+		RefMap	[shape=oval, color=red2, label="RefMap"];
+		RefMap -> MapStringFilename;
 		}
 	}
 	subgraph printinginformation {

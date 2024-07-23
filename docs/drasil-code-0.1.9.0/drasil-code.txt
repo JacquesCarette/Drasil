@@ -726,6 +726,7 @@ CSharp :: Lang
 Java :: Lang
 Python :: Lang
 Swift :: Lang
+Julia :: Lang
 
 -- | Members of this class must have all the information necessary for the
 --   <a>AuxiliarySym</a> in addition to information necessary to create a
@@ -878,6 +879,7 @@ unJP :: JavaProject a -> a
 unCSP :: CSharpProject a -> a
 unCPPP :: CppProject a -> a
 unSP :: SwiftProject a -> a
+unJLP :: JuliaProject a -> a
 
 -- | Any quantity can be a named argument (wrapper for
 --   <a>QuantityDict</a>), but with more of a focus on generating code

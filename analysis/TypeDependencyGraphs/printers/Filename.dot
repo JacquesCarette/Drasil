@@ -1,0 +1,4 @@
+digraph filename{
+Filename	[shape=oval, color=red2, label="Filename"];
+Filename -> String;
+}

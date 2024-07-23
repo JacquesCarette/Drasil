@@ -1,0 +1,4 @@
+digraph refmap{
+RefMap	[shape=oval, color=red2, label="RefMap"];
+RefMap -> MapStringFilename;
+}

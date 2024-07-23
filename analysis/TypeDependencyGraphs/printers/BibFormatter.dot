@@ -1,0 +1,5 @@
+digraph bibformatter{
+BibFormatter	[shape=oval, color=cyan3, label="BibFormatter"];
+BibFormatter -> Doc;
+BibFormatter -> SpecDoc;
+}

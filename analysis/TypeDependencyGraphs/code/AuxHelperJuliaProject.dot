@@ -1,0 +1,4 @@
+digraph auxhelperjuliaproject{
+AuxHelperJuliaProject	[shape=oval, color=red2, label="AuxHelperJuliaProject"];
+AuxHelperJuliaProject -> Doc;
+}

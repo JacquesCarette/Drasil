@@ -1,0 +1,4 @@
+digraph methodjuliacode{
+MethodJuliaCode	[shape=oval, color=red2, label="MethodJuliaCode"];
+MethodJuliaCode -> MethodData;
+}

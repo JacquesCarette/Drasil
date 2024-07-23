@@ -1,0 +1,4 @@
+digraph valuejuliacode{
+ValueJuliaCode	[shape=oval, color=red2, label="ValueJuliaCode"];
+ValueJuliaCode -> ValData;
+}

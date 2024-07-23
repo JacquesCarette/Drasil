@@ -43,16 +43,17 @@ Lesson :: DocType
 data DocSpec
 DocSpec :: DocChoices -> Filename -> DocSpec
 
+-- | Document choices include the type of document as well as the file
+--   formats we want to generate as.
+data DocChoices
+DC :: DocType -> [Format] -> DocChoices
+
 -- | Possible formats for printer output.
 data Format
 TeX :: Format
 HTML :: Format
 Jupyter :: Format
-
--- | Document choices include the type of document as well as the file
---   formats we want to generate as.
-data DocChoices
-DC :: DocType -> [Format] -> DocChoices
+MDBook :: Format
 
 -- | Constructor for users to choose their document options
 docChoices :: DocType -> [Format] -> DocChoices

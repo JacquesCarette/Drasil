@@ -25,6 +25,7 @@ data Format
 TeX :: Format
 HTML :: Format
 Jupyter :: Format
+MDBook :: Format
 
 -- | Holds all important and relevant information for generating a
 --   traceability graph. Includes nodes, graph edges, and node family
@@ -170,6 +171,12 @@ genTeX :: Document -> PrintingInformation -> Doc
 --   SRS document in JSON format build': build the general Jupyter Notbook
 --   document
 genJupyter :: PrintingInformation -> DocType -> Document -> Doc
+
+-- | Generate a mdBook SRS
+genMDBook :: PrintingInformation -> Document -> [(Filename, Doc)]
+
+-- | Generates the .toml config file for mdBook.
+makeBook :: Document -> PrintingInformation -> Doc
 
 -- | Gathers all printing functions and creates the debugging tables from
 --   them.

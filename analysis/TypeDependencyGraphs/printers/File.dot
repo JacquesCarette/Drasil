@@ -1,0 +1,7 @@
+digraph file{
+File	[shape=oval, color=darkviolet, label="File"];
+File -> Title;
+File -> Filename;
+File -> Depth;
+File -> LayoutObj;
+}

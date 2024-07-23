@@ -254,12 +254,14 @@ resetIndices :: MethodState -> MethodState
 useVarName :: String -> MethodState -> MethodState
 genVarName :: [String] -> String -> MS String
 genLoopIndex :: MS String
+genVarNameIf :: Bool -> String -> MS String
 
 module Drasil.GOOL.InterfaceCommon
 type Label = String
 type Library = String
 type MSBody a = MS (a (Body a))
 type MSBlock a = MS (a (Block a))
+type VSFunction a = VS (a (Function a))
 type VSType a = VS (a (Type a))
 type SVariable a = VS (a (Variable a))
 type SValue a = VS (a (Value a))
@@ -275,7 +277,7 @@ type PosCtorCall r = VSType r -> [SValue r] -> SValue r
 type InOutCall r = Label -> [SValue r] -> [SVariable r] -> [SVariable r] -> MSStatement r
 type InOutFunc r = [SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r
 type DocInOutFunc r = String -> [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
-class (VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, List r, TypeElim r, VariableElim r) => SharedProg r
+class (VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, List r, TypeElim r, VariableElim r) => SharedProg r
 class (BlockSym r) => BodySym r where {
     type Body r;
 }
@@ -534,6 +536,9 @@ class (VariableSym r, StatementSym r) => StringStatement r
 stringSplit :: StringStatement r => Char -> SVariable r -> SValue r -> MSStatement r
 stringListVals :: StringStatement r => [SVariable r] -> SValue r -> MSStatement r
 stringListLists :: StringStatement r => [SVariable r] -> SValue r -> MSStatement r
+class (ValueSym r) => FunctionSym r where {
+    type Function r;
+}
 class (VariableSym r, StatementSym r) => FuncAppStatement r
 inOutCall :: FuncAppStatement r => InOutCall r
 extInOutCall :: FuncAppStatement r => Library -> InOutCall r
@@ -578,6 +583,160 @@ inOutFunc :: MethodSym r => Label -> r (Visibility r) -> InOutFunc r
 docInOutFunc :: MethodSym r => Label -> r (Visibility r) -> DocInOutFunc r
 convType :: TypeSym r => CodeType -> VSType r
 
+module Drasil.GOOL.RendererClassesCommon
+class (AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, List r, InternalList r, VectorExpression r, TypeElim r, VariableElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r, InternalListFunc r, RenderFunction r, FunctionElim r, OpElim r, RenderParam r, ParamElim r, RenderVisibility r, VisibilityElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, RenderStatement r, StatementElim r, RenderType r, InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable r, InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r, BlockCommentSym r, BlockCommentElim r, ValueExpression r, RenderMethod r, MethodElim r, ParameterSym r) => CommonRenderSym r
+class ImportSym r where {
+    type Import r;
+}
+langImport :: ImportSym r => Label -> r (Import r)
+modImport :: ImportSym r => Label -> r (Import r)
+class ImportElim r
+import' :: ImportElim r => r (Import r) -> Doc
+class RenderBody r
+multiBody :: RenderBody r => [MSBody r] -> MSBody r
+class BodyElim r
+body :: BodyElim r => r (Body r) -> Doc
+class RenderBlock r
+multiBlock :: RenderBlock r => [MSBlock r] -> MSBlock r
+class BlockElim r
+block :: BlockElim r => r (Block r) -> Doc
+class RenderType r
+multiType :: RenderType r => [VSType r] -> VSType r
+typeFromData :: RenderType r => CodeType -> String -> Doc -> VSType r
+class InternalTypeElim r
+type' :: InternalTypeElim r => r (Type r) -> Doc
+type VSUnOp a = VS (a (UnaryOp a))
+class UnaryOpSym r where {
+    type UnaryOp r;
+}
+notOp :: UnaryOpSym r => VSUnOp r
+negateOp :: UnaryOpSym r => VSUnOp r
+sqrtOp :: UnaryOpSym r => VSUnOp r
+absOp :: UnaryOpSym r => VSUnOp r
+logOp :: UnaryOpSym r => VSUnOp r
+lnOp :: UnaryOpSym r => VSUnOp r
+expOp :: UnaryOpSym r => VSUnOp r
+sinOp :: UnaryOpSym r => VSUnOp r
+cosOp :: UnaryOpSym r => VSUnOp r
+tanOp :: UnaryOpSym r => VSUnOp r
+asinOp :: UnaryOpSym r => VSUnOp r
+acosOp :: UnaryOpSym r => VSUnOp r
+atanOp :: UnaryOpSym r => VSUnOp r
+floorOp :: UnaryOpSym r => VSUnOp r
+ceilOp :: UnaryOpSym r => VSUnOp r
+type VSBinOp a = VS (a (BinaryOp a))
+class BinaryOpSym r where {
+    type BinaryOp r;
+}
+equalOp :: BinaryOpSym r => VSBinOp r
+notEqualOp :: BinaryOpSym r => VSBinOp r
+greaterOp :: BinaryOpSym r => VSBinOp r
+greaterEqualOp :: BinaryOpSym r => VSBinOp r
+lessOp :: BinaryOpSym r => VSBinOp r
+lessEqualOp :: BinaryOpSym r => VSBinOp r
+plusOp :: BinaryOpSym r => VSBinOp r
+minusOp :: BinaryOpSym r => VSBinOp r
+multOp :: BinaryOpSym r => VSBinOp r
+divideOp :: BinaryOpSym r => VSBinOp r
+powerOp :: BinaryOpSym r => VSBinOp r
+moduloOp :: BinaryOpSym r => VSBinOp r
+andOp :: BinaryOpSym r => VSBinOp r
+orOp :: BinaryOpSym r => VSBinOp r
+class OpElim r
+uOp :: OpElim r => r (UnaryOp r) -> Doc
+bOp :: OpElim r => r (BinaryOp r) -> Doc
+uOpPrec :: OpElim r => r (UnaryOp r) -> Int
+bOpPrec :: OpElim r => r (BinaryOp r) -> Int
+class RenderVariable r
+varFromData :: RenderVariable r => Binding -> String -> VSType r -> Doc -> SVariable r
+class InternalVarElim r
+variableBind :: InternalVarElim r => r (Variable r) -> Binding
+variable :: InternalVarElim r => r (Variable r) -> Doc
+class RenderValue r
+inputFunc :: RenderValue r => SValue r
+printFunc :: RenderValue r => SValue r
+printLnFunc :: RenderValue r => SValue r
+printFileFunc :: RenderValue r => SValue r -> SValue r
+printFileLnFunc :: RenderValue r => SValue r -> SValue r
+cast :: RenderValue r => VSType r -> SValue r -> SValue r
+
+-- | Very generic internal function for generating calls, to reduce
+--   repeated code throughout generators. Parameters are: maybe name of
+--   external module, maybe Doc for object variable (including separator
+--   between object and function) for method calls.
+call :: RenderValue r => Maybe Library -> Maybe Doc -> MixedCall r
+valFromData :: RenderValue r => Maybe Int -> Maybe Integer -> VSType r -> Doc -> SValue r
+class ValueElim r
+valuePrec :: ValueElim r => r (Value r) -> Maybe Int
+valueInt :: ValueElim r => r (Value r) -> Maybe Integer
+value :: ValueElim r => r (Value r) -> Doc
+class InternalListFunc r
+
+-- | List
+listSizeFunc :: InternalListFunc r => SValue r -> VSFunction r
+
+-- | List, Index, Value
+listAddFunc :: InternalListFunc r => SValue r -> SValue r -> SValue r -> VSFunction r
+
+-- | List, Value
+listAppendFunc :: InternalListFunc r => SValue r -> SValue r -> VSFunction r
+
+-- | List, Index
+listAccessFunc :: InternalListFunc r => VSType r -> SValue r -> VSFunction r
+
+-- | List, Index, Value
+listSetFunc :: InternalListFunc r => SValue r -> SValue r -> SValue r -> VSFunction r
+class RenderFunction r
+funcFromData :: RenderFunction r => Doc -> VSType r -> VSFunction r
+class FunctionElim r
+functionType :: FunctionElim r => r (Function r) -> r (Type r)
+function :: FunctionElim r => r (Function r) -> Doc
+class InternalAssignStmt r
+multiAssign :: InternalAssignStmt r => [SVariable r] -> [SValue r] -> MSStatement r
+class InternalIOStmt r
+printSt :: InternalIOStmt r => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MSStatement r
+class InternalControlStmt r
+multiReturn :: InternalControlStmt r => [SValue r] -> MSStatement r
+class RenderStatement r
+stmt :: RenderStatement r => MSStatement r -> MSStatement r
+loopStmt :: RenderStatement r => MSStatement r -> MSStatement r
+emptyStmt :: RenderStatement r => MSStatement r
+stmtFromData :: RenderStatement r => Doc -> Terminator -> MSStatement r
+class StatementElim r
+statement :: StatementElim r => r (Statement r) -> Doc
+statementTerm :: StatementElim r => r (Statement r) -> Terminator
+class RenderVisibility r
+visibilityFromData :: RenderVisibility r => VisibilityTag -> Doc -> r (Visibility r)
+class VisibilityElim r
+visibility :: VisibilityElim r => r (Visibility r) -> Doc
+type MSMthdType a = MS (a (MethodType a))
+class (TypeSym r) => MethodTypeSym r where {
+    type MethodType r;
+}
+mType :: MethodTypeSym r => VSType r -> MSMthdType r
+class RenderParam r
+paramFromData :: RenderParam r => SVariable r -> Doc -> MSParameter r
+class ParamElim r
+parameterName :: ParamElim r => r (Parameter r) -> Label
+parameterType :: ParamElim r => r (Parameter r) -> r (Type r)
+parameter :: ParamElim r => r (Parameter r) -> Doc
+class (MethodTypeSym r, BlockCommentSym r) => RenderMethod r
+
+-- | Takes a BlockComment and a method and generates a function.
+commentedFunc :: RenderMethod r => MS (r (BlockComment r)) -> SMethod r -> SMethod r
+mthdFromData :: RenderMethod r => VisibilityTag -> Doc -> SMethod r
+class MethodElim r
+method :: MethodElim r => r (Method r) -> Doc
+class BlockCommentSym r where {
+    type BlockComment r;
+}
+blockComment :: BlockCommentSym r => [String] -> r (BlockComment r)
+
+-- | Converts a list of strings into a block comment
+docComment :: BlockCommentSym r => State a [String] -> State a (r (BlockComment r))
+class BlockCommentElim r
+blockComment' :: BlockCommentElim r => r (BlockComment r) -> Doc
+
 module Drasil.GOOL.InterfaceProc
 type GSProgram a = GS (a (Program a))
 type SFile a = FS (a (File a))
@@ -597,12 +756,28 @@ class (MethodSym r) => ModuleSym r where {
 }
 buildModule :: ModuleSym r => Label -> [Label] -> [SMethod r] -> FSModule r
 
+module Drasil.GOOL.RendererClassesProc
+class (CommonRenderSym r, FileSym r, RenderFile r, RenderMod r, ModuleElim r) => OORenderSym r
+class (BlockCommentSym r) => RenderFile r
+top :: RenderFile r => r (Module r) -> r (Block r)
+bottom :: RenderFile r => r (Block r)
+commentedMod :: RenderFile r => SFile r -> FS (r (BlockComment r)) -> SFile r
+fileFromData :: RenderFile r => FilePath -> FSModule r -> SFile r
+class RenderMod r
+modFromData :: RenderMod r => String -> FS Doc -> FSModule r
+updateModuleDoc :: RenderMod r => (Doc -> Doc) -> r (Module r) -> r (Module r)
+class ModuleElim r
+module' :: ModuleElim r => r (Module r) -> Doc
+class (RenderMethod r) => ProcRenderMethod r
+
+-- | Main method?, name, public/private, return type, parameters, body
+intMethod :: ProcRenderMethod r => Bool -> Label -> r (Visibility r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
+
 module Drasil.GOOL.InterfaceGOOL
 type GSProgram a = GS (a (Program a))
 type SFile a = FS (a (File a))
 type FSModule a = FS (a (Module a))
 type SClass a = CS (a (Class a))
-type VSFunction a = VS (a (Function a))
 type CSStateVar a = CS (a (StateVar a))
 type Initializers r = [(SVariable r, SValue r)]
 class (SharedProg r, ProgramSym r, OOVariableValue r, OODeclStatement r, OOFuncAppStatement r, OOValueExpression r, InternalValueExp r, GetSet r, ObserverPattern r, StrategyPattern r) => OOProg r
@@ -712,15 +887,13 @@ class PermanenceSym r where {
 }
 static :: PermanenceSym r => r (Permanence r)
 dynamic :: PermanenceSym r => r (Permanence r)
-class (ValueSym r) => FunctionSym r where {
-    type Function r;
-}
-func :: FunctionSym r => Label -> VSType r -> [SValue r] -> VSFunction r
-objAccess :: FunctionSym r => SValue r -> VSFunction r -> SValue r
-($.) :: FunctionSym r => SValue r -> VSFunction r -> SValue r
+class (FunctionSym r) => OOFunctionSym r
+func :: OOFunctionSym r => Label -> VSType r -> [SValue r] -> VSFunction r
+objAccess :: OOFunctionSym r => SValue r -> VSFunction r -> SValue r
+($.) :: OOFunctionSym r => SValue r -> VSFunction r -> SValue r
 infixl 9 $.
-selfAccess :: (OOVariableValue r, FunctionSym r) => VSFunction r -> SValue r
-class (StatementSym r, FunctionSym r) => ObserverPattern r
+selfAccess :: (OOVariableValue r, OOFunctionSym r) => VSFunction r -> SValue r
+class (StatementSym r, OOFunctionSym r) => ObserverPattern r
 notifyObservers :: ObserverPattern r => VSFunction r -> VSType r -> r (Scope r) -> MSStatement r
 observerListName :: Label
 initObserverList :: DeclStatement r => VSType r -> [SValue r] -> r (Scope r) -> MSStatement r
@@ -729,153 +902,19 @@ class (BodySym r, VariableSym r) => StrategyPattern r
 runStrategy :: StrategyPattern r => Label -> [(Label, MSBody r)] -> Maybe (SValue r) -> Maybe (SVariable r) -> MSBlock r
 convTypeOO :: OOTypeSym r => CodeType -> VSType r
 
-module Drasil.GOOL.RendererClasses
-class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, InternalValueExp r, GetSet r, List r, InternalList r, VectorExpression r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r, RenderClass r, ClassElim r, RenderFile r, InternalGetSet r, InternalListFunc r, RenderFunction r, FunctionElim r, RenderMethod r, MethodElim r, RenderMod r, ModuleElim r, OpElim r, RenderParam r, ParamElim r, PermElim r, RenderVisibility r, VisibilityElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, RenderStatement r, StatementElim r, StateVarElim r, RenderType r, InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable r, InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r, BlockCommentElim r, OOVariableValue r, OOValueExpression r) => RenderSym r
+module Drasil.GOOL.RendererClassesOO
+class (CommonRenderSym r, FileSym r, InternalValueExp r, GetSet r, ObserverPattern r, StrategyPattern r, OOVariableValue r, OOValueExpression r, RenderClass r, ClassElim r, RenderFile r, InternalGetSet r, OORenderMethod r, RenderMod r, ModuleElim r, StateVarElim r, PermElim r) => OORenderSym r
 class (BlockCommentSym r) => RenderFile r
 top :: RenderFile r => r (Module r) -> r (Block r)
 bottom :: RenderFile r => r (Block r)
 commentedMod :: RenderFile r => SFile r -> FS (r (BlockComment r)) -> SFile r
 fileFromData :: RenderFile r => FilePath -> FSModule r -> SFile r
-class ImportSym r where {
-    type Import r;
-}
-langImport :: ImportSym r => Label -> r (Import r)
-modImport :: ImportSym r => Label -> r (Import r)
-class ImportElim r
-import' :: ImportElim r => r (Import r) -> Doc
 class PermElim r
 perm :: PermElim r => r (Permanence r) -> Doc
 binding :: PermElim r => r (Permanence r) -> Binding
-class RenderBody r
-multiBody :: RenderBody r => [MSBody r] -> MSBody r
-class BodyElim r
-body :: BodyElim r => r (Body r) -> Doc
-class RenderBlock r
-multiBlock :: RenderBlock r => [MSBlock r] -> MSBlock r
-class BlockElim r
-block :: BlockElim r => r (Block r) -> Doc
-class RenderType r
-multiType :: RenderType r => [VSType r] -> VSType r
-typeFromData :: RenderType r => CodeType -> String -> Doc -> VSType r
-class InternalTypeElim r
-type' :: InternalTypeElim r => r (Type r) -> Doc
-type VSUnOp a = VS (a (UnaryOp a))
-class UnaryOpSym r where {
-    type UnaryOp r;
-}
-notOp :: UnaryOpSym r => VSUnOp r
-negateOp :: UnaryOpSym r => VSUnOp r
-sqrtOp :: UnaryOpSym r => VSUnOp r
-absOp :: UnaryOpSym r => VSUnOp r
-logOp :: UnaryOpSym r => VSUnOp r
-lnOp :: UnaryOpSym r => VSUnOp r
-expOp :: UnaryOpSym r => VSUnOp r
-sinOp :: UnaryOpSym r => VSUnOp r
-cosOp :: UnaryOpSym r => VSUnOp r
-tanOp :: UnaryOpSym r => VSUnOp r
-asinOp :: UnaryOpSym r => VSUnOp r
-acosOp :: UnaryOpSym r => VSUnOp r
-atanOp :: UnaryOpSym r => VSUnOp r
-floorOp :: UnaryOpSym r => VSUnOp r
-ceilOp :: UnaryOpSym r => VSUnOp r
-type VSBinOp a = VS (a (BinaryOp a))
-class BinaryOpSym r where {
-    type BinaryOp r;
-}
-equalOp :: BinaryOpSym r => VSBinOp r
-notEqualOp :: BinaryOpSym r => VSBinOp r
-greaterOp :: BinaryOpSym r => VSBinOp r
-greaterEqualOp :: BinaryOpSym r => VSBinOp r
-lessOp :: BinaryOpSym r => VSBinOp r
-lessEqualOp :: BinaryOpSym r => VSBinOp r
-plusOp :: BinaryOpSym r => VSBinOp r
-minusOp :: BinaryOpSym r => VSBinOp r
-multOp :: BinaryOpSym r => VSBinOp r
-divideOp :: BinaryOpSym r => VSBinOp r
-powerOp :: BinaryOpSym r => VSBinOp r
-moduloOp :: BinaryOpSym r => VSBinOp r
-andOp :: BinaryOpSym r => VSBinOp r
-orOp :: BinaryOpSym r => VSBinOp r
-class OpElim r
-uOp :: OpElim r => r (UnaryOp r) -> Doc
-bOp :: OpElim r => r (BinaryOp r) -> Doc
-uOpPrec :: OpElim r => r (UnaryOp r) -> Int
-bOpPrec :: OpElim r => r (BinaryOp r) -> Int
-class RenderVariable r
-varFromData :: RenderVariable r => Binding -> String -> VSType r -> Doc -> SVariable r
-class InternalVarElim r
-variableBind :: InternalVarElim r => r (Variable r) -> Binding
-variable :: InternalVarElim r => r (Variable r) -> Doc
-class RenderValue r
-inputFunc :: RenderValue r => SValue r
-printFunc :: RenderValue r => SValue r
-printLnFunc :: RenderValue r => SValue r
-printFileFunc :: RenderValue r => SValue r -> SValue r
-printFileLnFunc :: RenderValue r => SValue r -> SValue r
-cast :: RenderValue r => VSType r -> SValue r -> SValue r
-
--- | Very generic internal function for generating calls, to reduce
---   repeated code throughout generators. Parameters are: maybe name of
---   external module, maybe Doc for object variable (including separator
---   between object and function) for method calls.
-call :: RenderValue r => Maybe Library -> Maybe Doc -> MixedCall r
-valFromData :: RenderValue r => Maybe Int -> Maybe Integer -> VSType r -> Doc -> SValue r
-class ValueElim r
-valuePrec :: ValueElim r => r (Value r) -> Maybe Int
-valueInt :: ValueElim r => r (Value r) -> Maybe Integer
-value :: ValueElim r => r (Value r) -> Doc
 class InternalGetSet r
 getFunc :: InternalGetSet r => SVariable r -> VSFunction r
 setFunc :: InternalGetSet r => VSType r -> SVariable r -> SValue r -> VSFunction r
-class InternalListFunc r
-listSizeFunc :: InternalListFunc r => SValue r -> VSFunction r
-listAddFunc :: InternalListFunc r => SValue r -> SValue r -> SValue r -> VSFunction r
-listAppendFunc :: InternalListFunc r => SValue r -> SValue r -> VSFunction r
-listAccessFunc :: InternalListFunc r => VSType r -> SValue r -> VSFunction r
-listSetFunc :: InternalListFunc r => SValue r -> SValue r -> SValue r -> VSFunction r
-class RenderFunction r
-funcFromData :: RenderFunction r => Doc -> VSType r -> VSFunction r
-class FunctionElim r
-functionType :: FunctionElim r => r (Function r) -> r (Type r)
-function :: FunctionElim r => r (Function r) -> Doc
-class InternalAssignStmt r
-multiAssign :: InternalAssignStmt r => [SVariable r] -> [SValue r] -> MSStatement r
-class InternalIOStmt r
-printSt :: InternalIOStmt r => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MSStatement r
-class InternalControlStmt r
-multiReturn :: InternalControlStmt r => [SValue r] -> MSStatement r
-class RenderStatement r
-stmt :: RenderStatement r => MSStatement r -> MSStatement r
-loopStmt :: RenderStatement r => MSStatement r -> MSStatement r
-emptyStmt :: RenderStatement r => MSStatement r
-stmtFromData :: RenderStatement r => Doc -> Terminator -> MSStatement r
-class StatementElim r
-statement :: StatementElim r => r (Statement r) -> Doc
-statementTerm :: StatementElim r => r (Statement r) -> Terminator
-class RenderVisibility r
-visibilityFromData :: RenderVisibility r => VisibilityTag -> Doc -> r (Visibility r)
-class VisibilityElim r
-visibility :: VisibilityElim r => r (Visibility r) -> Doc
-type MSMthdType a = MS (a (MethodType a))
-class (TypeSym r) => MethodTypeSym r where {
-    type MethodType r;
-}
-mType :: MethodTypeSym r => VSType r -> MSMthdType r
-construct :: MethodTypeSym r => Label -> MSMthdType r
-class RenderParam r
-paramFromData :: RenderParam r => SVariable r -> Doc -> MSParameter r
-class ParamElim r
-parameterName :: ParamElim r => r (Parameter r) -> Label
-parameterType :: ParamElim r => r (Parameter r) -> r (Type r)
-parameter :: ParamElim r => r (Parameter r) -> Doc
-class (MethodTypeSym r, BlockCommentSym r) => RenderMethod r
-intMethod :: RenderMethod r => Bool -> Label -> r (Visibility r) -> r (Permanence r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
-intFunc :: RenderMethod r => Bool -> Label -> r (Visibility r) -> r (Permanence r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
-commentedFunc :: RenderMethod r => MS (r (BlockComment r)) -> SMethod r -> SMethod r
-destructor :: RenderMethod r => [CSStateVar r] -> SMethod r
-mthdFromData :: RenderMethod r => VisibilityTag -> Doc -> SMethod r
-class MethodElim r
-method :: MethodElim r => r (Method r) -> Doc
 class StateVarElim r
 stateVar :: StateVarElim r => r (StateVar r) -> Doc
 type ParentSpec = Doc
@@ -891,23 +930,28 @@ modFromData :: RenderMod r => String -> FS Doc -> FSModule r
 updateModuleDoc :: RenderMod r => (Doc -> Doc) -> r (Module r) -> r (Module r)
 class ModuleElim r
 module' :: ModuleElim r => r (Module r) -> Doc
-class BlockCommentSym r where {
-    type BlockComment r;
-}
-blockComment :: BlockCommentSym r => [String] -> r (BlockComment r)
-docComment :: BlockCommentSym r => State a [String] -> State a (r (BlockComment r))
-class BlockCommentElim r
-blockComment' :: BlockCommentElim r => r (BlockComment r) -> Doc
+class (RenderMethod r, OOMethodTypeSym r) => OORenderMethod r
+
+-- | Main method?, name, public<i>private, static</i>dynamic, return type,
+--   parameters, body
+intMethod :: OORenderMethod r => Bool -> Label -> r (Visibility r) -> r (Permanence r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
+
+-- | True for main function, name, public<i>private, static</i>dynamic,
+--   return type, parameters, body
+intFunc :: OORenderMethod r => Bool -> Label -> r (Visibility r) -> r (Permanence r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
+destructor :: OORenderMethod r => [CSStateVar r] -> SMethod r
+class (MethodTypeSym r) => OOMethodTypeSym r
+construct :: OOMethodTypeSym r => Label -> MSMthdType r
 
 
 -- | Language-polymorphic functions that are defined by GOOL code
 module Drasil.GOOL.LanguageRenderer.Macros
-ifExists :: RenderSym r => SValue r -> MSBody r -> MSBody r -> MSStatement r
-decrement1 :: RenderSym r => SVariable r -> MSStatement r
-increment :: RenderSym r => SVariable r -> SValue r -> MSStatement r
-increment1 :: RenderSym r => SVariable r -> MSStatement r
-runStrategy :: (RenderSym r, Monad r) => Label -> [(Label, MSBody r)] -> Maybe (SValue r) -> Maybe (SVariable r) -> MS (r Doc)
-listSlice :: RenderSym r => Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
+ifExists :: CommonRenderSym r => SValue r -> MSBody r -> MSBody r -> MSStatement r
+decrement1 :: CommonRenderSym r => SVariable r -> MSStatement r
+increment :: CommonRenderSym r => SVariable r -> SValue r -> MSStatement r
+increment1 :: CommonRenderSym r => SVariable r -> MSStatement r
+runStrategy :: (CommonRenderSym r, Monad r) => Label -> [(Label, MSBody r)] -> Maybe (SValue r) -> Maybe (SVariable r) -> MS (r Doc)
+listSlice :: CommonRenderSym r => Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
 
 -- | Gets the expression and code for setting bounds in a list slice Input:
 --   - String: Variable name for bound (to be created if necessary), -
@@ -916,12 +960,12 @@ listSlice :: RenderSym r => Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValu
 --   not given and step is positive - SValue: value of bound if bound not
 --   given and step is negative Output: (MSStatement, SValue): (setter,
 --   value) of bound
-makeSetterVal :: RenderSym r => Label -> SValue r -> Maybe Integer -> Maybe (SValue r) -> SValue r -> SValue r -> r (Scope r) -> (MSStatement r, SValue r)
-stringListVals :: RenderSym r => [SVariable r] -> SValue r -> MSStatement r
-stringListLists :: RenderSym r => [SVariable r] -> SValue r -> MSStatement r
-forRange :: RenderSym r => SVariable r -> SValue r -> SValue r -> SValue r -> MSBody r -> MSStatement r
-notifyObservers :: RenderSym r => VSFunction r -> VSType r -> r (Scope r) -> MSStatement r
-notifyObservers' :: RenderSym r => VSFunction r -> VSType r -> r (Scope r) -> MSStatement r
+makeSetterVal :: CommonRenderSym r => Label -> SValue r -> Maybe Integer -> Maybe (SValue r) -> SValue r -> SValue r -> r (Scope r) -> (MSStatement r, SValue r)
+stringListVals :: CommonRenderSym r => [SVariable r] -> SValue r -> MSStatement r
+stringListLists :: CommonRenderSym r => [SVariable r] -> SValue r -> MSStatement r
+forRange :: CommonRenderSym r => SVariable r -> SValue r -> SValue r -> SValue r -> MSBody r -> MSStatement r
+notifyObservers :: OORenderSym r => VSFunction r -> VSType r -> r (Scope r) -> MSStatement r
+notifyObservers' :: OORenderSym r => VSFunction r -> VSType r -> r (Scope r) -> MSStatement r
 
 
 -- | The structure for a class of renderers is defined here.
@@ -995,36 +1039,36 @@ class' :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
 multiStmt :: [(Doc, Terminator)] -> (Doc, Terminator)
 block :: [Doc] -> Doc
 body :: [Doc] -> Doc
-print :: RenderSym r => r (Value r) -> r (Value r) -> Doc
+print :: CommonRenderSym r => r (Value r) -> r (Value r) -> Doc
 printFile :: Label -> Doc -> Doc
-param :: RenderSym r => r (Variable r) -> Doc
-method :: RenderSym r => Label -> r (Visibility r) -> r (Permanence r) -> r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
+param :: CommonRenderSym r => r (Variable r) -> Doc
+method :: OORenderSym r => Label -> r (Visibility r) -> r (Permanence r) -> r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 stateVar :: Doc -> Doc -> Doc -> Doc
 constVar :: Doc -> Doc -> Doc -> VarData -> Doc
 stateVarList :: [Doc] -> Doc
-switch :: RenderSym r => (Doc -> Doc) -> r (Statement r) -> r (Value r) -> r (Body r) -> [(r (Value r), r (Body r))] -> Doc
-assign :: RenderSym r => r (Variable r) -> r (Value r) -> Doc
-addAssign :: RenderSym r => r (Variable r) -> r (Value r) -> Doc
-subAssign :: RenderSym r => r (Variable r) -> r (Value r) -> Doc
-increment :: RenderSym r => r (Variable r) -> Doc
-decrement :: RenderSym r => r (Variable r) -> Doc
-listDec :: RenderSym r => r (Variable r) -> r (Value r) -> Doc
+switch :: CommonRenderSym r => (Doc -> Doc) -> r (Statement r) -> r (Value r) -> r (Body r) -> [(r (Value r), r (Body r))] -> Doc
+assign :: CommonRenderSym r => r (Variable r) -> r (Value r) -> Doc
+addAssign :: CommonRenderSym r => r (Variable r) -> r (Value r) -> Doc
+subAssign :: CommonRenderSym r => r (Variable r) -> r (Value r) -> Doc
+increment :: CommonRenderSym r => r (Variable r) -> Doc
+decrement :: CommonRenderSym r => r (Variable r) -> Doc
+listDec :: CommonRenderSym r => r (Variable r) -> r (Value r) -> Doc
 getTerm :: Terminator -> Doc
-return' :: RenderSym r => [r (Value r)] -> Doc
+return' :: CommonRenderSym r => [r (Value r)] -> Doc
 comment :: Label -> Doc -> Doc
 var :: Label -> Doc
 extVar :: Library -> Label -> Doc
-arg :: RenderSym r => r (Value r) -> r (Value r) -> Doc
+arg :: CommonRenderSym r => r (Value r) -> r (Value r) -> Doc
 classVar :: Doc -> Doc -> Doc
 objVar :: Doc -> Doc -> Doc
 unOpDocD :: Doc -> Doc -> Doc
 unOpDocD' :: Doc -> Doc -> Doc
 binOpDocD :: Doc -> Doc -> Doc -> Doc
 binOpDocD' :: Doc -> Doc -> Doc -> Doc
-constDecDef :: RenderSym r => r (Variable r) -> r (Value r) -> Doc
+constDecDef :: CommonRenderSym r => r (Variable r) -> r (Value r) -> Doc
 func :: Doc -> Doc
 cast :: Doc -> Doc
-listAccessFunc :: RenderSym r => r (Value r) -> Doc
+listAccessFunc :: CommonRenderSym r => r (Value r) -> Doc
 listSetFunc :: Doc -> Doc -> Doc
 objAccess :: Doc -> Doc -> Doc
 castObj :: Doc -> Doc -> Doc
@@ -1045,41 +1089,41 @@ classDox :: ClassDocRenderer
 type ModuleDocRenderer = String -> [String] -> String -> String -> [String]
 moduleDox :: ModuleDocRenderer
 commentedMod :: FileData -> Doc -> FileData
-valueList :: RenderSym r => [r (Value r)] -> Doc
-variableList :: RenderSym r => [r (Variable r)] -> Doc
-parameterList :: RenderSym r => [r (Parameter r)] -> Doc
-namedArgList :: RenderSym r => Doc -> [(r (Variable r), r (Value r))] -> Doc
+valueList :: CommonRenderSym r => [r (Value r)] -> Doc
+variableList :: CommonRenderSym r => [r (Variable r)] -> Doc
+parameterList :: CommonRenderSym r => [r (Parameter r)] -> Doc
+namedArgList :: CommonRenderSym r => Doc -> [(r (Variable r), r (Value r))] -> Doc
 prependToBody :: (Doc, Terminator) -> Doc -> Doc
 appendToBody :: Doc -> (Doc, Terminator) -> Doc
 surroundBody :: (Doc, Terminator) -> Doc -> (Doc, Terminator) -> Doc
 getterName :: String -> String
 setterName :: String -> String
-intValue :: RenderSym r => SValue r -> SValue r
+intValue :: CommonRenderSym r => SValue r -> SValue r
 
 
 -- | Generic constructors and smart constructors to be used in renderers
 module Drasil.GOOL.LanguageRenderer.Constructors
 
 -- | Constructs a statement terminated by a semi-colon
-mkStmt :: RenderSym r => Doc -> MSStatement r
+mkStmt :: CommonRenderSym r => Doc -> MSStatement r
 
 -- | Constructs a statement without a termination character
-mkStmtNoEnd :: RenderSym r => Doc -> MSStatement r
+mkStmtNoEnd :: CommonRenderSym r => Doc -> MSStatement r
 
 -- | Constructs a value in a stateful context
-mkStateVal :: RenderSym r => VSType r -> Doc -> SValue r
+mkStateVal :: CommonRenderSym r => VSType r -> Doc -> SValue r
 
 -- | Constructs a value in a non-stateful context
-mkVal :: RenderSym r => r (Type r) -> Doc -> SValue r
+mkVal :: CommonRenderSym r => r (Type r) -> Doc -> SValue r
 
 -- | Constructs a dynamic variable in a stateful context
-mkStateVar :: RenderSym r => String -> VSType r -> Doc -> SVariable r
+mkStateVar :: CommonRenderSym r => String -> VSType r -> Doc -> SVariable r
 
 -- | Constructs a dynamic variable in a non-stateful context
-mkVar :: RenderSym r => String -> r (Type r) -> Doc -> SVariable r
+mkVar :: CommonRenderSym r => String -> r (Type r) -> Doc -> SVariable r
 
 -- | Constructs a static variable in a stateful context
-mkStaticVar :: RenderSym r => String -> VSType r -> Doc -> SVariable r
+mkStaticVar :: CommonRenderSym r => String -> VSType r -> Doc -> SVariable r
 type VSOp r = VS (r OpData)
 
 -- | Construct an operator with given precedence and rendering
@@ -1111,52 +1155,52 @@ orPrec :: Monad r => String -> VSOp r
 
 -- | Constructs a unary expression like ln(v), for some operator ln and
 --   value v
-unExpr :: RenderSym r => VSUnOp r -> SValue r -> SValue r
+unExpr :: CommonRenderSym r => VSUnOp r -> SValue r -> SValue r
 
 -- | Constructs a unary expression like -v, for some operator - and value v
-unExpr' :: RenderSym r => VSUnOp r -> SValue r -> SValue r
+unExpr' :: CommonRenderSym r => VSUnOp r -> SValue r -> SValue r
 
 -- | To be used in languages where the unary operator returns a double. If
 --   the value passed to the operator is a float, this function preserves
 --   that type by casting the result to a float.
-unExprNumDbl :: RenderSym r => VSUnOp r -> SValue r -> SValue r
+unExprNumDbl :: CommonRenderSym r => VSUnOp r -> SValue r -> SValue r
 
 -- | To be used when the type of the value is different from the type of
 --   the resulting expression. The type of the result is passed as a
 --   parameter.
-typeUnExpr :: RenderSym r => VSUnOp r -> VSType r -> SValue r -> SValue r
+typeUnExpr :: CommonRenderSym r => VSUnOp r -> VSType r -> SValue r -> SValue r
 
 -- | Constructs binary expressions like v + w, for some operator + and
 --   values v and w, parenthesizing v and w if needed.
-binExpr :: RenderSym r => VSBinOp r -> SValue r -> SValue r -> SValue r
+binExpr :: CommonRenderSym r => VSBinOp r -> SValue r -> SValue r -> SValue r
 
 -- | Constructs binary expressions like pow(v,w), for some operator pow and
 --   values v and w
-binExpr' :: RenderSym r => VSBinOp r -> SValue r -> SValue r -> SValue r
+binExpr' :: CommonRenderSym r => VSBinOp r -> SValue r -> SValue r -> SValue r
 
 -- | To be used in languages where the binary operator returns a double. If
 --   either value passed to the operator is a float, this function
 --   preserves that type by casting the result to a float.
-binExprNumDbl' :: RenderSym r => VSBinOp r -> SValue r -> SValue r -> SValue r
+binExprNumDbl' :: CommonRenderSym r => VSBinOp r -> SValue r -> SValue r -> SValue r
 
 -- | To be used when the types of the values are different from the type of
 --   the resulting expression. The type of the result is passed as a
 --   parameter.
-typeBinExpr :: RenderSym r => VSBinOp r -> VSType r -> SValue r -> SValue r -> SValue r
+typeBinExpr :: CommonRenderSym r => VSBinOp r -> VSType r -> SValue r -> SValue r -> SValue r
 
 
 -- | Implementations defined here are valid for any language renderer.
 module Drasil.GOOL.LanguageRenderer.LanguagePolymorphic
-fileFromData :: RenderSym r => (FilePath -> r (Module r) -> r (File r)) -> FilePath -> FSModule r -> SFile r
-multiBody :: (RenderSym r, Monad r) => [MSBody r] -> MS (r Doc)
-block :: (RenderSym r, Monad r) => [MSStatement r] -> MS (r Doc)
-multiBlock :: (RenderSym r, Monad r) => [MSBlock r] -> MS (r Doc)
-listInnerType :: RenderSym r => VSType r -> VSType r
-obj :: RenderSym r => ClassName -> VSType r
+fileFromData :: OORenderSym r => (FilePath -> r (Module r) -> r (File r)) -> FilePath -> FSModule r -> SFile r
+multiBody :: (CommonRenderSym r, Monad r) => [MSBody r] -> MS (r Doc)
+block :: (CommonRenderSym r, Monad r) => [MSStatement r] -> MS (r Doc)
+multiBlock :: (CommonRenderSym r, Monad r) => [MSBlock r] -> MS (r Doc)
+listInnerType :: OORenderSym r => VSType r -> VSType r
+obj :: CommonRenderSym r => ClassName -> VSType r
 negateOp :: Monad r => VSOp r
-csc :: RenderSym r => SValue r -> SValue r
-sec :: RenderSym r => SValue r -> SValue r
-cot :: RenderSym r => SValue r -> SValue r
+csc :: CommonRenderSym r => SValue r -> SValue r
+sec :: CommonRenderSym r => SValue r -> SValue r
+cot :: CommonRenderSym r => SValue r -> SValue r
 equalOp :: Monad r => VSOp r
 notEqualOp :: Monad r => VSOp r
 greaterOp :: Monad r => VSOp r
@@ -1168,170 +1212,181 @@ minusOp :: Monad r => VSOp r
 multOp :: Monad r => VSOp r
 divideOp :: Monad r => VSOp r
 moduloOp :: Monad r => VSOp r
-var :: RenderSym r => Label -> VSType r -> SVariable r
-staticVar :: RenderSym r => Label -> VSType r -> SVariable r
-objVar :: RenderSym r => SVariable r -> SVariable r -> SVariable r
+var :: CommonRenderSym r => Label -> VSType r -> SVariable r
+staticVar :: CommonRenderSym r => Label -> VSType r -> SVariable r
+objVar :: CommonRenderSym r => SVariable r -> SVariable r -> SVariable r
 
 -- | To be used in classVar implementations. Throws an error if the
 --   variable is not static since classVar is for accessing static
 --   variables from a class
-classVarCheckStatic :: RenderSym r => r (Variable r) -> r (Variable r)
-arrayElem :: RenderSym r => SValue r -> SVariable r -> SVariable r
-litChar :: RenderSym r => (Doc -> Doc) -> Char -> SValue r
-litDouble :: RenderSym r => Double -> SValue r
-litInt :: RenderSym r => Integer -> SValue r
-litString :: RenderSym r => String -> SValue r
-valueOf :: RenderSym r => SVariable r -> SValue r
-arg :: RenderSym r => SValue r -> SValue r -> SValue r
-argsList :: RenderSym r => String -> SValue r
+classVarCheckStatic :: CommonRenderSym r => r (Variable r) -> r (Variable r)
+arrayElem :: OORenderSym r => SValue r -> SVariable r -> SVariable r
+litChar :: CommonRenderSym r => (Doc -> Doc) -> Char -> SValue r
+litDouble :: CommonRenderSym r => Double -> SValue r
+litInt :: CommonRenderSym r => Integer -> SValue r
+litString :: CommonRenderSym r => String -> SValue r
+valueOf :: CommonRenderSym r => SVariable r -> SValue r
+arg :: CommonRenderSym r => SValue r -> SValue r -> SValue r
+argsList :: CommonRenderSym r => String -> SValue r
 
 -- | First parameter is separator between name and value for named
 --   arguments, rest similar to call from RendererClasses
-call :: RenderSym r => Doc -> Maybe Library -> Maybe Doc -> MixedCall r
-funcAppMixedArgs :: RenderSym r => MixedCall r
-selfFuncAppMixedArgs :: RenderSym r => Doc -> SVariable r -> MixedCall r
-newObjMixedArgs :: RenderSym r => String -> MixedCtorCall r
-lambda :: RenderSym r => ([r (Variable r)] -> r (Value r) -> Doc) -> [SVariable r] -> SValue r -> SValue r
-objAccess :: RenderSym r => SValue r -> VSFunction r -> SValue r
-objMethodCall :: RenderSym r => Label -> VSType r -> SValue r -> [SValue r] -> NamedArgs r -> SValue r
-func :: RenderSym r => Label -> VSType r -> [SValue r] -> VSFunction r
-get :: RenderSym r => SValue r -> SVariable r -> SValue r
-set :: RenderSym r => SValue r -> SVariable r -> SValue r -> SValue r
-listAdd :: RenderSym r => SValue r -> SValue r -> SValue r -> SValue r
-listAppend :: RenderSym r => SValue r -> SValue r -> SValue r
-listAccess :: RenderSym r => SValue r -> SValue r -> SValue r
-listSet :: RenderSym r => SValue r -> SValue r -> SValue r -> SValue r
-getFunc :: RenderSym r => SVariable r -> VSFunction r
-setFunc :: RenderSym r => VSType r -> SVariable r -> SValue r -> VSFunction r
-listAppendFunc :: RenderSym r => Label -> SValue r -> VSFunction r
-stmt :: RenderSym r => MSStatement r -> MSStatement r
-loopStmt :: RenderSym r => MSStatement r -> MSStatement r
-emptyStmt :: RenderSym r => MSStatement r
-assign :: RenderSym r => Terminator -> SVariable r -> SValue r -> MSStatement r
-subAssign :: RenderSym r => Terminator -> SVariable r -> SValue r -> MSStatement r
-increment :: RenderSym r => SVariable r -> SValue r -> MSStatement r
-objDecNew :: RenderSym r => SVariable r -> [SValue r] -> MSStatement r
-print :: RenderSym r => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MSStatement r
-closeFile :: RenderSym r => Label -> SValue r -> MSStatement r
-returnStmt :: RenderSym r => Terminator -> SValue r -> MSStatement r
-valStmt :: RenderSym r => Terminator -> SValue r -> MSStatement r
-comment :: RenderSym r => Doc -> Label -> MSStatement r
-throw :: RenderSym r => (r (Value r) -> Doc) -> Terminator -> Label -> MSStatement r
-ifCond :: RenderSym r => (Doc -> Doc) -> Doc -> OptionalSpace -> Doc -> Doc -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
-tryCatch :: RenderSym r => (r (Body r) -> r (Body r) -> Doc) -> MSBody r -> MSBody r -> MSStatement r
-construct :: RenderSym r => Label -> MS (r (Type r))
-param :: RenderSym r => (r (Variable r) -> Doc) -> SVariable r -> MSParameter r
-method :: RenderSym r => Label -> r (Visibility r) -> r (Permanence r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
-getMethod :: RenderSym r => SVariable r -> SMethod r
-setMethod :: RenderSym r => SVariable r -> SMethod r
-initStmts :: RenderSym r => Initializers r -> MSBody r
-function :: RenderSym r => Label -> r (Visibility r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
-docFuncRepr :: RenderSym r => FuncDocRenderer -> String -> [String] -> [String] -> SMethod r -> SMethod r
-docFunc :: RenderSym r => FuncDocRenderer -> String -> [String] -> Maybe String -> SMethod r -> SMethod r
-buildClass :: RenderSym r => Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
-implementingClass :: RenderSym r => Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
-docClass :: RenderSym r => ClassDocRenderer -> String -> SClass r -> SClass r
-commentedClass :: (RenderSym r, Monad r) => CS (r (BlockComment r)) -> SClass r -> CS (r Doc)
+call :: CommonRenderSym r => Doc -> Maybe Library -> Maybe Doc -> MixedCall r
+funcAppMixedArgs :: CommonRenderSym r => MixedCall r
+selfFuncAppMixedArgs :: CommonRenderSym r => Doc -> SVariable r -> MixedCall r
+newObjMixedArgs :: CommonRenderSym r => String -> MixedCtorCall r
+lambda :: CommonRenderSym r => ([r (Variable r)] -> r (Value r) -> Doc) -> [SVariable r] -> SValue r -> SValue r
+objAccess :: CommonRenderSym r => SValue r -> VSFunction r -> SValue r
+objMethodCall :: CommonRenderSym r => Label -> VSType r -> SValue r -> [SValue r] -> NamedArgs r -> SValue r
+func :: CommonRenderSym r => Label -> VSType r -> [SValue r] -> VSFunction r
+get :: OORenderSym r => SValue r -> SVariable r -> SValue r
+set :: OORenderSym r => SValue r -> SVariable r -> SValue r -> SValue r
+listAdd :: OORenderSym r => SValue r -> SValue r -> SValue r -> SValue r
+listAppend :: OORenderSym r => SValue r -> SValue r -> SValue r
+listAccess :: CommonRenderSym r => SValue r -> SValue r -> SValue r
+listSet :: CommonRenderSym r => SValue r -> SValue r -> SValue r -> SValue r
+getFunc :: OORenderSym r => SVariable r -> VSFunction r
+setFunc :: OORenderSym r => VSType r -> SVariable r -> SValue r -> VSFunction r
+listAppendFunc :: OORenderSym r => Label -> SValue r -> VSFunction r
+stmt :: CommonRenderSym r => MSStatement r -> MSStatement r
+loopStmt :: CommonRenderSym r => MSStatement r -> MSStatement r
+emptyStmt :: CommonRenderSym r => MSStatement r
+assign :: CommonRenderSym r => Terminator -> SVariable r -> SValue r -> MSStatement r
+subAssign :: CommonRenderSym r => Terminator -> SVariable r -> SValue r -> MSStatement r
+increment :: CommonRenderSym r => SVariable r -> SValue r -> MSStatement r
+objDecNew :: OORenderSym r => SVariable r -> [SValue r] -> MSStatement r
+print :: CommonRenderSym r => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MSStatement r
+closeFile :: OORenderSym r => Label -> SValue r -> MSStatement r
+returnStmt :: CommonRenderSym r => Terminator -> SValue r -> MSStatement r
+valStmt :: CommonRenderSym r => Terminator -> SValue r -> MSStatement r
+comment :: CommonRenderSym r => Doc -> Label -> MSStatement r
+throw :: CommonRenderSym r => (r (Value r) -> Doc) -> Terminator -> Label -> MSStatement r
+ifCond :: CommonRenderSym r => (Doc -> Doc) -> Doc -> OptionalSpace -> Doc -> Doc -> Doc -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
+tryCatch :: CommonRenderSym r => (r (Body r) -> r (Body r) -> Doc) -> MSBody r -> MSBody r -> MSStatement r
+construct :: CommonRenderSym r => Label -> MS (r (Type r))
+param :: CommonRenderSym r => (r (Variable r) -> Doc) -> SVariable r -> MSParameter r
+method :: OORenderSym r => Label -> r (Visibility r) -> r (Permanence r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+getMethod :: OORenderSym r => SVariable r -> SMethod r
+setMethod :: OORenderSym r => SVariable r -> SMethod r
+initStmts :: OORenderSym r => Initializers r -> MSBody r
+function :: OORenderSym r => Label -> r (Visibility r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+docFuncRepr :: CommonRenderSym r => FuncDocRenderer -> String -> [String] -> [String] -> SMethod r -> SMethod r
+docFunc :: CommonRenderSym r => FuncDocRenderer -> String -> [String] -> Maybe String -> SMethod r -> SMethod r
+buildClass :: OORenderSym r => Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
+implementingClass :: OORenderSym r => Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
+docClass :: OORenderSym r => ClassDocRenderer -> String -> SClass r -> SClass r
+commentedClass :: (OORenderSym r, Monad r) => CS (r (BlockComment r)) -> SClass r -> CS (r Doc)
 modFromData :: Label -> (Doc -> r (Module r)) -> FS Doc -> FSModule r
-fileDoc :: RenderSym r => String -> (r (Module r) -> r (Block r)) -> r (Block r) -> FSModule r -> SFile r
-docMod :: RenderSym r => ModuleDocRenderer -> String -> String -> [String] -> String -> SFile r -> SFile r
+fileDoc :: OORenderSym r => String -> (r (Module r) -> r (Block r)) -> r (Block r) -> FSModule r -> SFile r
+
+-- | Generates a file for a documented module. mdr is a function that takes
+--   description, author, and module name and returns a doc comment e is
+--   the file extension d is the description (I think) a is a list of
+--   authors dt is the date fl is the file
+docMod :: OORenderSym r => ModuleDocRenderer -> String -> String -> [String] -> String -> SFile r -> SFile r
 newtype OptionalSpace
 OSpace :: Doc -> OptionalSpace
 [oSpace] :: OptionalSpace -> Doc
 defaultOptSpace :: OptionalSpace
+smartAdd :: CommonRenderSym r => SValue r -> SValue r -> SValue r
+smartSub :: CommonRenderSym r => SValue r -> SValue r -> SValue r
 
 
 -- | Implementations defined here are valid in some, but not all, language
 --   renderers
 module Drasil.GOOL.LanguageRenderer.CommonPseudoOO
-int :: RenderSym r => VSType r
-constructor :: RenderSym r => Label -> [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
-doxFunc :: RenderSym r => String -> [String] -> Maybe String -> SMethod r -> SMethod r
-doxClass :: RenderSym r => String -> SClass r -> SClass r
-doxMod :: RenderSym r => String -> String -> [String] -> String -> SFile r -> SFile r
-docMod' :: RenderSym r => String -> String -> [String] -> String -> SFile r -> SFile r
-extVar :: RenderSym r => Label -> Label -> VSType r -> SVariable r
-classVar :: RenderSym r => (Doc -> Doc -> Doc) -> VSType r -> SVariable r -> SVariable r
-objVarSelf :: RenderSym r => SVariable r -> SVariable r
-indexOf :: RenderSym r => Label -> SValue r -> SValue r -> SValue r
-listAddFunc :: RenderSym r => Label -> SValue r -> SValue r -> VSFunction r
-discardFileLine :: RenderSym r => Label -> SValue r -> MSStatement r
+int :: CommonRenderSym r => VSType r
+constructor :: OORenderSym r => Label -> [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
+doxFunc :: CommonRenderSym r => String -> [String] -> Maybe String -> SMethod r -> SMethod r
+doxClass :: OORenderSym r => String -> SClass r -> SClass r
+doxMod :: OORenderSym r => String -> String -> [String] -> String -> SFile r -> SFile r
+docMod' :: OORenderSym r => String -> String -> [String] -> String -> SFile r -> SFile r
+
+-- | Generates Markdown/DocC style function doc comment.
+functionDoc :: FuncDocRenderer
+extVar :: CommonRenderSym r => Label -> Label -> VSType r -> SVariable r
+classVar :: CommonRenderSym r => (Doc -> Doc -> Doc) -> VSType r -> SVariable r -> SVariable r
+objVarSelf :: OORenderSym r => SVariable r -> SVariable r
+indexOf :: OORenderSym r => Label -> SValue r -> SValue r -> SValue r
+listAddFunc :: OORenderSym r => Label -> SValue r -> SValue r -> VSFunction r
+discardFileLine :: OORenderSym r => Label -> SValue r -> MSStatement r
 
 -- | An internal function for creating a class. Parameters: render
 --   function, class name, scope, parent, class variables, constructor(s),
 --   methods
-intClass :: (RenderSym r, Monad r) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) -> Label -> r (Visibility r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> CS (r Doc)
-funcType :: RenderSym r => [VSType r] -> VSType r -> VSType r
-buildModule :: RenderSym r => Label -> FS Doc -> FS Doc -> FS Doc -> [SMethod r] -> [SClass r] -> FSModule r
-arrayType :: RenderSym r => VSType r -> VSType r
-pi :: RenderSym r => SValue r
-printSt :: RenderSym r => SValue r -> SValue r -> MSStatement r
-arrayDec :: RenderSym r => SValue r -> SVariable r -> MSStatement r
-arrayDecDef :: RenderSym r => SVariable r -> [SValue r] -> MSStatement r
-openFileA :: RenderSym r => (SValue r -> VSType r -> SValue r -> SValue r) -> SVariable r -> SValue r -> MSStatement r
-forEach :: RenderSym r => Doc -> Doc -> Doc -> Doc -> SVariable r -> SValue r -> MSBody r -> MSStatement r
-docMain :: RenderSym r => MSBody r -> SMethod r
-mainFunction :: RenderSym r => VSType r -> Label -> MSBody r -> SMethod r
+intClass :: (OORenderSym r, Monad r) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) -> Label -> r (Visibility r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> CS (r Doc)
+funcType :: CommonRenderSym r => [VSType r] -> VSType r -> VSType r
+buildModule :: OORenderSym r => Label -> FS Doc -> FS Doc -> FS Doc -> [SMethod r] -> [SClass r] -> FSModule r
+arrayType :: CommonRenderSym r => VSType r -> VSType r
+pi :: CommonRenderSym r => SValue r
+printSt :: CommonRenderSym r => SValue r -> SValue r -> MSStatement r
+arrayDec :: CommonRenderSym r => SValue r -> SVariable r -> MSStatement r
+arrayDecDef :: CommonRenderSym r => SVariable r -> [SValue r] -> MSStatement r
+openFileA :: CommonRenderSym r => (SValue r -> VSType r -> SValue r -> SValue r) -> SVariable r -> SValue r -> MSStatement r
+forEach :: CommonRenderSym r => Doc -> Doc -> Doc -> Doc -> SVariable r -> SValue r -> MSBody r -> MSStatement r
+forEach' :: CommonRenderSym r => (r (Variable r) -> r (Value r) -> r (Body r) -> Doc) -> SVariable r -> SValue r -> MSBody r -> MSStatement r
+docMain :: OORenderSym r => MSBody r -> SMethod r
+mainFunction :: OORenderSym r => VSType r -> Label -> MSBody r -> SMethod r
 
 -- | Used by the language renderers to build the module. n is the module
 --   name inc is the include is is the import statements ms is the class
 --   methods cs is the classes
-buildModule' :: RenderSym r => Label -> (String -> r (Import r)) -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
+buildModule' :: OORenderSym r => Label -> (String -> r (Import r)) -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
 
 -- | First parameter is language name, rest similar to call from
---   RendererClasses
-call' :: RenderSym r => String -> Maybe Library -> Maybe Doc -> MixedCall r
-listSizeFunc :: RenderSym r => VSFunction r
-listAccessFunc' :: RenderSym r => Label -> VSType r -> SValue r -> VSFunction r
-string :: RenderSym r => VSType r
-constDecDef :: RenderSym r => SVariable r -> SValue r -> MSStatement r
-docInOutFunc :: RenderSym r => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r) -> String -> [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
+--   RendererClassesCommon
+call' :: CommonRenderSym r => String -> Maybe Library -> Maybe Doc -> MixedCall r
+listSizeFunc :: OORenderSym r => VSFunction r
+listAccessFunc' :: OORenderSym r => Label -> VSType r -> SValue r -> VSFunction r
+string :: CommonRenderSym r => VSType r
+constDecDef :: CommonRenderSym r => SVariable r -> SValue r -> MSStatement r
+docInOutFunc :: CommonRenderSym r => ([SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r) -> String -> [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
 bindingError :: String -> String
-extFuncAppMixedArgs :: RenderSym r => Library -> MixedCall r
-notNull :: RenderSym r => String -> SValue r -> SValue r
-listDecDef :: RenderSym r => SVariable r -> [SValue r] -> MSStatement r
+extFuncAppMixedArgs :: CommonRenderSym r => Library -> MixedCall r
+notNull :: CommonRenderSym r => String -> SValue r -> SValue r
+listDecDef :: CommonRenderSym r => SVariable r -> [SValue r] -> MSStatement r
 destructorError :: String -> String
-stateVarDef :: (RenderSym r, Monad r) => r (Visibility r) -> r (Permanence r) -> SVariable r -> SValue r -> CS (r Doc)
-constVar :: (RenderSym r, Monad r) => Doc -> r (Visibility r) -> SVariable r -> SValue r -> CS (r Doc)
-litArray :: RenderSym r => (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
-listSetFunc :: RenderSym r => (Doc -> Doc -> Doc) -> SValue r -> SValue r -> SValue r -> VSFunction r
-extraClass :: RenderSym r => Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
-listAccessFunc :: RenderSym r => VSType r -> SValue r -> VSFunction r
+stateVarDef :: (OORenderSym r, Monad r) => r (Visibility r) -> r (Permanence r) -> SVariable r -> SValue r -> CS (r Doc)
+constVar :: (CommonRenderSym r, Monad r) => Doc -> r (Visibility r) -> SVariable r -> SValue r -> CS (r Doc)
+litArray :: CommonRenderSym r => (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
+listSetFunc :: CommonRenderSym r => (Doc -> Doc -> Doc) -> SValue r -> SValue r -> SValue r -> VSFunction r
+extraClass :: OORenderSym r => Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
+listAccessFunc :: CommonRenderSym r => VSType r -> SValue r -> VSFunction r
 doubleRender :: String
-double :: RenderSym r => VSType r
-openFileR :: RenderSym r => (SValue r -> VSType r -> SValue r) -> SVariable r -> SValue r -> MSStatement r
-openFileW :: RenderSym r => (SValue r -> VSType r -> SValue r -> SValue r) -> SVariable r -> SValue r -> MSStatement r
-stateVar :: (RenderSym r, Monad r) => r (Visibility r) -> r (Permanence r) -> SVariable r -> CS (r Doc)
-self :: RenderSym r => SVariable r
-multiAssign :: RenderSym r => (Doc -> Doc) -> [SVariable r] -> [SValue r] -> MSStatement r
-multiReturn :: RenderSym r => (Doc -> Doc) -> [SValue r] -> MSStatement r
-listDec :: RenderSym r => SVariable r -> MSStatement r
-funcDecDef :: RenderSym r => SVariable r -> [SVariable r] -> MSBody r -> MSStatement r
-inOutCall :: RenderSym r => (Label -> VSType r -> [SValue r] -> SValue r) -> Label -> [SValue r] -> [SVariable r] -> [SVariable r] -> MSStatement r
+double :: CommonRenderSym r => VSType r
+openFileR :: CommonRenderSym r => (SValue r -> VSType r -> SValue r) -> SVariable r -> SValue r -> MSStatement r
+openFileW :: CommonRenderSym r => (SValue r -> VSType r -> SValue r -> SValue r) -> SVariable r -> SValue r -> MSStatement r
+stateVar :: (OORenderSym r, Monad r) => r (Visibility r) -> r (Permanence r) -> SVariable r -> CS (r Doc)
+self :: OORenderSym r => SVariable r
+multiAssign :: CommonRenderSym r => (Doc -> Doc) -> [SVariable r] -> [SValue r] -> MSStatement r
+multiReturn :: CommonRenderSym r => (Doc -> Doc) -> [SValue r] -> MSStatement r
+listDec :: CommonRenderSym r => SVariable r -> MSStatement r
+funcDecDef :: OORenderSym r => SVariable r -> [SVariable r] -> MSBody r -> MSStatement r
+inOutCall :: CommonRenderSym r => (Label -> VSType r -> [SValue r] -> SValue r) -> Label -> [SValue r] -> [SVariable r] -> [SVariable r] -> MSStatement r
 forLoopError :: String -> String
-mainBody :: RenderSym r => MSBody r -> SMethod r
-inOutFunc :: RenderSym r => (VSType r -> [MSParameter r] -> MSBody r -> SMethod r) -> [SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r
-docInOutFunc' :: RenderSym r => FuncDocRenderer -> ([SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r) -> String -> [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
+mainBody :: CommonRenderSym r => MSBody r -> SMethod r
+inOutFunc :: CommonRenderSym r => (VSType r -> [MSParameter r] -> MSBody r -> SMethod r) -> [SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r
+docInOutFunc' :: CommonRenderSym r => FuncDocRenderer -> ([SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r) -> String -> [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
 boolRender :: String
-bool :: RenderSym r => VSType r
+bool :: CommonRenderSym r => VSType r
 floatRender :: String
-float :: RenderSym r => VSType r
+float :: CommonRenderSym r => VSType r
 stringRender' :: String
-string' :: RenderSym r => VSType r
+string' :: CommonRenderSym r => VSType r
 inherit :: Monad r => Maybe Label -> r ParentSpec
 implements :: Monad r => [Label] -> r ParentSpec
 
 -- | Call to get the size of a list in a language where this is not a
 --   method.
-listSize :: RenderSym r => SValue r -> SValue r
+listSize :: CommonRenderSym r => SValue r -> SValue r
 
 -- | Call to insert a value into a list in a language where this is not a
 --   method.
-listAdd :: RenderSym r => SValue r -> SValue r -> SValue r -> SValue r
+listAdd :: CommonRenderSym r => SValue r -> SValue r -> SValue r -> SValue r
 
 -- | Call to append a value to a list in a language where this is not a
 --   method.
-listAppend :: RenderSym r => SValue r -> SValue r -> SValue r
+listAppend :: CommonRenderSym r => SValue r -> SValue r -> SValue r
 
 -- | Convert an integer to an index in a 0-indexed language Since GOOL is
 --   0-indexed, no adjustments need be made
@@ -1343,11 +1398,21 @@ indexToInt :: SValue r -> SValue r
 
 -- | Convert an integer to an index in a 1-indexed language Since GOOL is
 --   0-indexed, we need to add 1
-intToIndex' :: RenderSym r => SValue r -> SValue r
+intToIndex' :: CommonRenderSym r => SValue r -> SValue r
 
 -- | Convert an index to an integer in a 1-indexed language Since GOOL is
 --   0-indexed, we need to subtract 1
-indexToInt' :: RenderSym r => SValue r -> SValue r
+indexToInt' :: CommonRenderSym r => SValue r -> SValue r
+
+-- | For declaring and optionally defining a variable in a language where
+--   declaring a variable before defining it is not required. v is the
+--   variable to declare, and e is Nothing if we are not defining it, and
+--   (Just d) if d is the value we are defining it as.
+varDecDef :: CommonRenderSym r => SVariable r -> Maybe (SValue r) -> MSStatement r
+openFileR' :: CommonRenderSym r => SValue r -> SValue r
+openFileW' :: CommonRenderSym r => SValue r -> SValue r
+openFileA' :: CommonRenderSym r => SValue r -> SValue r
+argExists :: CommonRenderSym r => Integer -> SValue r
 
 
 -- | The logic to render Python code is contained in this module
@@ -1363,33 +1428,34 @@ instance GHC.Base.Monad Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.SharedProg Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceGOOL.OOProg Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceGOOL.ProgramSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.RenderSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.CommonRenderSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesOO.OORenderSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceGOOL.FileSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.RenderFile Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.ImportSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.ImportElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesOO.RenderFile Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.ImportSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.ImportElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceGOOL.PermanenceSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.PermElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesOO.PermElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.BodySym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.RenderBody Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.BodyElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.RenderBody Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.BodyElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.BlockSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.RenderBlock Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.BlockElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.RenderBlock Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.BlockElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.TypeSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceGOOL.OOTypeSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.TypeElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.RenderType Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.InternalTypeElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.UnaryOpSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.BinaryOpSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.OpElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.RenderType Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.InternalTypeElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.UnaryOpSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.BinaryOpSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.OpElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.VariableSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceGOOL.OOVariableSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.VariableElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.InternalVarElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.RenderVariable Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.InternalVarElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.RenderVariable Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.ValueSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceGOOL.OOValueSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.Argument Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
@@ -1403,28 +1469,29 @@ instance Drasil.GOOL.InterfaceCommon.BooleanExpression Drasil.GOOL.LanguageRende
 instance Drasil.GOOL.InterfaceCommon.Comparison Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.ValueExpression Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceGOOL.OOValueExpression Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.RenderValue Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.ValueElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.RenderValue Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.ValueElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceGOOL.InternalValueExp Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.InterfaceGOOL.FunctionSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.InterfaceCommon.FunctionSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.InterfaceGOOL.OOFunctionSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceGOOL.GetSet Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.List Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.InternalList Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.InternalGetSet Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.InternalListFunc Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesOO.InternalGetSet Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.InternalListFunc Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.ThunkSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.ThunkAssign Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.VectorType Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.VectorDecl Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.VectorThunk Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.VectorExpression Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.RenderFunction Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.FunctionElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.InternalAssignStmt Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.InternalIOStmt Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.InternalControlStmt Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.RenderStatement Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.StatementElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.RenderFunction Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.FunctionElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.InternalAssignStmt Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.InternalIOStmt Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.InternalControlStmt Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.RenderStatement Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.StatementElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.StatementSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.AssignStatement Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.DeclStatement Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
@@ -1438,57 +1505,59 @@ instance Drasil.GOOL.InterfaceCommon.ControlStatement Drasil.GOOL.LanguageRender
 instance Drasil.GOOL.InterfaceGOOL.ObserverPattern Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceGOOL.StrategyPattern Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.VisibilitySym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.RenderVisibility Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.VisibilityElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.MethodTypeSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.RenderVisibility Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.VisibilityElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.MethodTypeSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesOO.OOMethodTypeSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.ParameterSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.RenderParam Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.ParamElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.RenderParam Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.ParamElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.MethodSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceGOOL.OOMethodSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.RenderMethod Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.MethodElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.RenderMethod Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesOO.OORenderMethod Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.MethodElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceGOOL.StateVarSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.StateVarElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesOO.StateVarElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceGOOL.ClassSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.RenderClass Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.ClassElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesOO.RenderClass Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesOO.ClassElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceGOOL.ModuleSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.RenderMod Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.ModuleElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.BlockCommentSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
-instance Drasil.GOOL.RendererClasses.BlockCommentElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesOO.RenderMod Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesOO.ModuleElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.BlockCommentSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.RendererClassesCommon.BlockCommentElim Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 
 
 -- | Implementations for C-like renderers are defined here.
 module Drasil.GOOL.LanguageRenderer.CLike
 charRender :: String
-float :: RenderSym r => VSType r
-double :: RenderSym r => VSType r
-char :: RenderSym r => VSType r
-listType :: RenderSym r => String -> VSType r -> VSType r
-void :: RenderSym r => VSType r
+float :: CommonRenderSym r => VSType r
+double :: CommonRenderSym r => VSType r
+char :: CommonRenderSym r => VSType r
+listType :: CommonRenderSym r => String -> VSType r -> VSType r
+void :: CommonRenderSym r => VSType r
 notOp :: Monad r => VSOp r
 andOp :: Monad r => VSOp r
 orOp :: Monad r => VSOp r
-self :: RenderSym r => SVariable r
-litTrue :: RenderSym r => SValue r
-litFalse :: RenderSym r => SValue r
-litFloat :: RenderSym r => Float -> SValue r
-inlineIf :: RenderSym r => SValue r -> SValue r -> SValue r -> SValue r
-libFuncAppMixedArgs :: RenderSym r => Library -> MixedCall r
-libNewObjMixedArgs :: RenderSym r => Library -> MixedCtorCall r
-listSize :: RenderSym r => SValue r -> SValue r
-increment1 :: RenderSym r => SVariable r -> MSStatement r
-decrement1 :: RenderSym r => SVariable r -> MSStatement r
-varDec :: RenderSym r => r (Permanence r) -> r (Permanence r) -> Doc -> SVariable r -> MSStatement r
-varDecDef :: RenderSym r => Terminator -> SVariable r -> SValue r -> MSStatement r
-listDec :: RenderSym r => (r (Value r) -> Doc) -> SValue r -> SVariable r -> MSStatement r
-extObjDecNew :: RenderSym r => Library -> SVariable r -> [SValue r] -> MSStatement r
-switch :: RenderSym r => (Doc -> Doc) -> MSStatement r -> SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
-for :: RenderSym r => Doc -> Doc -> MSStatement r -> SValue r -> MSStatement r -> MSBody r -> MSStatement r
-while :: RenderSym r => (Doc -> Doc) -> Doc -> Doc -> SValue r -> MSBody r -> MSStatement r
-intFunc :: RenderSym r => Bool -> Label -> r (Visibility r) -> r (Permanence r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
+self :: OORenderSym r => SVariable r
+litTrue :: CommonRenderSym r => SValue r
+litFalse :: CommonRenderSym r => SValue r
+litFloat :: CommonRenderSym r => Float -> SValue r
+inlineIf :: CommonRenderSym r => SValue r -> SValue r -> SValue r -> SValue r
+libFuncAppMixedArgs :: CommonRenderSym r => Library -> MixedCall r
+libNewObjMixedArgs :: OORenderSym r => Library -> MixedCtorCall r
+listSize :: OORenderSym r => SValue r -> SValue r
+increment1 :: CommonRenderSym r => SVariable r -> MSStatement r
+decrement1 :: CommonRenderSym r => SVariable r -> MSStatement r
+varDec :: OORenderSym r => r (Permanence r) -> r (Permanence r) -> Doc -> SVariable r -> MSStatement r
+varDecDef :: CommonRenderSym r => Terminator -> SVariable r -> SValue r -> MSStatement r
+listDec :: CommonRenderSym r => (r (Value r) -> Doc) -> SValue r -> SVariable r -> MSStatement r
+extObjDecNew :: OORenderSym r => Library -> SVariable r -> [SValue r] -> MSStatement r
+switch :: CommonRenderSym r => (Doc -> Doc) -> MSStatement r -> SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
+for :: CommonRenderSym r => Doc -> Doc -> MSStatement r -> SValue r -> MSStatement r -> MSBody r -> MSStatement r
+while :: CommonRenderSym r => (Doc -> Doc) -> Doc -> Doc -> SValue r -> MSBody r -> MSStatement r
+intFunc :: OORenderSym r => Bool -> Label -> r (Visibility r) -> r (Permanence r) -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
 multiAssignError :: String -> String
 multiReturnError :: String -> String
 multiTypeError :: String -> String
@@ -1508,33 +1577,34 @@ instance GHC.Base.Monad Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.SharedProg Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceGOOL.OOProg Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceGOOL.ProgramSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.RenderSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.CommonRenderSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesOO.OORenderSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceGOOL.FileSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.RenderFile Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.ImportSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.ImportElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesOO.RenderFile Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.ImportSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.ImportElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceGOOL.PermanenceSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.PermElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesOO.PermElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.BodySym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.RenderBody Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.BodyElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.RenderBody Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.BodyElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.BlockSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.RenderBlock Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.BlockElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.RenderBlock Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.BlockElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.TypeSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceGOOL.OOTypeSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.TypeElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.RenderType Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.InternalTypeElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.UnaryOpSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.BinaryOpSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.OpElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.RenderType Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.InternalTypeElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.UnaryOpSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.BinaryOpSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.OpElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.VariableSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceGOOL.OOVariableSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.VariableElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.InternalVarElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.RenderVariable Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.InternalVarElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.RenderVariable Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.ValueSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceGOOL.OOValueSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.Argument Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
@@ -1548,28 +1618,29 @@ instance Drasil.GOOL.InterfaceCommon.BooleanExpression Drasil.GOOL.LanguageRende
 instance Drasil.GOOL.InterfaceCommon.Comparison Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.ValueExpression Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceGOOL.OOValueExpression Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.RenderValue Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.ValueElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.RenderValue Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.ValueElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceGOOL.InternalValueExp Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.InterfaceGOOL.FunctionSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.InterfaceCommon.FunctionSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.InterfaceGOOL.OOFunctionSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceGOOL.GetSet Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.List Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.InternalList Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.InternalGetSet Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.InternalListFunc Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesOO.InternalGetSet Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.InternalListFunc Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.ThunkSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.ThunkAssign Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.VectorType Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.VectorDecl Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.VectorThunk Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.VectorExpression Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.RenderFunction Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.FunctionElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.InternalAssignStmt Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.InternalIOStmt Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.InternalControlStmt Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.RenderStatement Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.StatementElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.RenderFunction Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.FunctionElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.InternalAssignStmt Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.InternalIOStmt Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.InternalControlStmt Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.RenderStatement Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.StatementElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.StatementSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.AssignStatement Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.DeclStatement Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
@@ -1583,26 +1654,142 @@ instance Drasil.GOOL.InterfaceCommon.ControlStatement Drasil.GOOL.LanguageRender
 instance Drasil.GOOL.InterfaceGOOL.ObserverPattern Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceGOOL.StrategyPattern Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.VisibilitySym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.RenderVisibility Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.VisibilityElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.MethodTypeSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.RenderVisibility Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.VisibilityElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.MethodTypeSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesOO.OOMethodTypeSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.ParameterSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.RenderParam Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.ParamElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.RenderParam Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.ParamElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.MethodSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceGOOL.OOMethodSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.RenderMethod Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.MethodElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.RenderMethod Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesOO.OORenderMethod Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.MethodElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceGOOL.StateVarSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.StateVarElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesOO.StateVarElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceGOOL.ClassSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.RenderClass Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.ClassElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesOO.RenderClass Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesOO.ClassElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceGOOL.ModuleSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.RenderMod Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.ModuleElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.BlockCommentSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
-instance Drasil.GOOL.RendererClasses.BlockCommentElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesOO.RenderMod Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesOO.ModuleElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.BlockCommentSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.RendererClassesCommon.BlockCommentElim Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+
+
+-- | The logic to render Julia code is contained in this module
+module Drasil.GOOL.LanguageRenderer.JuliaRenderer
+newtype JuliaCode a
+JLC :: a -> JuliaCode a
+[unJLC] :: JuliaCode a -> a
+jlName :: String
+jlVersion :: String
+instance GHC.Base.Functor Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance GHC.Base.Applicative Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance GHC.Base.Monad Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.SharedProg Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceGOOL.OOProg Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceGOOL.ProgramSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.CommonRenderSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesOO.OORenderSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceGOOL.FileSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesOO.RenderFile Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.ImportSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.ImportElim Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesOO.PermElim Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.BodySym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.RenderBody Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.BodyElim Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.BlockSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.RenderBlock Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.BlockElim Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.TypeSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.TypeElim Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.RenderType Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.InternalTypeElim Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.UnaryOpSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.BinaryOpSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.OpElim Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.VariableSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.VariableElim Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.InternalVarElim Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.RenderVariable Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.ValueSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.Argument Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.Literal Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.MathConstant Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.VariableValue Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.CommandLineArgs Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.NumericExpression Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.BooleanExpression Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.Comparison Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.ValueExpression Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.RenderValue Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.ValueElim Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.List Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.InternalList Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.InternalListFunc Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.ThunkSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.ThunkAssign Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.VectorType Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.VectorDecl Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.VectorThunk Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.VectorExpression Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.RenderFunction Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.FunctionElim Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.InternalAssignStmt Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.InternalIOStmt Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.InternalControlStmt Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.RenderStatement Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.StatementElim Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.StatementSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.AssignStatement Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.DeclStatement Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.IOStatement Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.StringStatement Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.FunctionSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.FuncAppStatement Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.CommentStatement Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.ControlStatement Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.VisibilitySym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.RenderVisibility Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.VisibilityElim Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.MethodTypeSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.ParameterSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.RenderParam Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.ParamElim Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.MethodSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.RenderMethod Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesOO.OORenderMethod Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.MethodElim Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceGOOL.ModuleSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesOO.RenderMod Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesOO.ModuleElim Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.BlockCommentSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesCommon.BlockCommentElim Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceGOOL.OOFunctionSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceGOOL.InternalValueExp Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceGOOL.GetSet Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceGOOL.ObserverPattern Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceGOOL.StrategyPattern Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceGOOL.StateVarSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesOO.StateVarElim Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceGOOL.ClassSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesOO.RenderClass Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesOO.ClassElim Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceGOOL.PermanenceSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceGOOL.OOTypeSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceGOOL.OOVariableSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceGOOL.OOValueExpression Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceGOOL.OODeclStatement Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceGOOL.OOFuncAppStatement Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceGOOL.OOMethodSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceGOOL.OOVariableValue Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceGOOL.OOValueSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesOO.InternalGetSet Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.RendererClassesOO.OOMethodTypeSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
 
 
 -- | The logic to render Java code is contained in this module
@@ -1618,33 +1805,34 @@ instance GHC.Base.Monad Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.SharedProg Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceGOOL.OOProg Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceGOOL.ProgramSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.RenderSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.CommonRenderSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesOO.OORenderSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceGOOL.FileSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.RenderFile Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.ImportSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.ImportElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesOO.RenderFile Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.ImportSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.ImportElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceGOOL.PermanenceSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.PermElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesOO.PermElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.BodySym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.RenderBody Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.BodyElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.RenderBody Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.BodyElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.BlockSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.RenderBlock Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.BlockElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.RenderBlock Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.BlockElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.TypeSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceGOOL.OOTypeSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.TypeElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.RenderType Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.InternalTypeElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.UnaryOpSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.BinaryOpSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.OpElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.RenderType Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.InternalTypeElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.UnaryOpSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.BinaryOpSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.OpElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.VariableSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceGOOL.OOVariableSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.VariableElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.InternalVarElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.RenderVariable Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.InternalVarElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.RenderVariable Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.ValueSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceGOOL.OOValueSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.Argument Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
@@ -1658,28 +1846,29 @@ instance Drasil.GOOL.InterfaceCommon.BooleanExpression Drasil.GOOL.LanguageRende
 instance Drasil.GOOL.InterfaceCommon.Comparison Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.ValueExpression Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceGOOL.OOValueExpression Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.RenderValue Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.ValueElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.RenderValue Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.ValueElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceGOOL.InternalValueExp Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.InterfaceGOOL.FunctionSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.InterfaceCommon.FunctionSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.InterfaceGOOL.OOFunctionSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceGOOL.GetSet Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.List Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.InternalList Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.InternalGetSet Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.InternalListFunc Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesOO.InternalGetSet Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.InternalListFunc Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.ThunkSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.ThunkAssign Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.VectorType Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.VectorDecl Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.VectorThunk Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.VectorExpression Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.RenderFunction Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.FunctionElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.InternalAssignStmt Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.InternalIOStmt Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.InternalControlStmt Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.RenderStatement Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.StatementElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.RenderFunction Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.FunctionElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.InternalAssignStmt Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.InternalIOStmt Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.InternalControlStmt Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.RenderStatement Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.StatementElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.StatementSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.AssignStatement Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.DeclStatement Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
@@ -1693,26 +1882,28 @@ instance Drasil.GOOL.InterfaceCommon.ControlStatement Drasil.GOOL.LanguageRender
 instance Drasil.GOOL.InterfaceGOOL.ObserverPattern Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceGOOL.StrategyPattern Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.VisibilitySym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.RenderVisibility Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.VisibilityElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.MethodTypeSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.RenderVisibility Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.VisibilityElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.MethodTypeSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesOO.OOMethodTypeSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.ParameterSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.RenderParam Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.ParamElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.RenderParam Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.ParamElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.MethodSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceGOOL.OOMethodSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.RenderMethod Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.MethodElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.RenderMethod Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesOO.OORenderMethod Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.MethodElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceGOOL.StateVarSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.StateVarElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesOO.StateVarElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceGOOL.ClassSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.RenderClass Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.ClassElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesOO.RenderClass Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesOO.ClassElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceGOOL.ModuleSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.RenderMod Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.ModuleElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.BlockCommentSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
-instance Drasil.GOOL.RendererClasses.BlockCommentElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesOO.RenderMod Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesOO.ModuleElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.BlockCommentSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.RendererClassesCommon.BlockCommentElim Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.CodeAnalysis.HasException Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 
 
@@ -1735,39 +1926,39 @@ instance GHC.Classes.Eq a => GHC.Classes.Eq (Drasil.GOOL.LanguageRenderer.CppRen
 instance GHC.Classes.Eq a => GHC.Classes.Eq (Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode a)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.MethodSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.InterfaceCommon.MethodSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.MethodElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.MethodElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.MethodSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.MethodElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.MethodElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.SharedProg (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.OOProg (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.ProgramSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.RenderSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.CommonRenderSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.FileSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.RenderFile (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.ImportSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.ImportElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesOO.RenderFile (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.ImportSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.ImportElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.PermanenceSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.PermElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesOO.PermElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.BodySym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.RenderBody (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.BodyElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.RenderBody (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.BodyElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.BlockSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.RenderBlock (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.BlockElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.RenderBlock (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.BlockElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.TypeSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.OOTypeSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.TypeElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.RenderType (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.InternalTypeElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.UnaryOpSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.BinaryOpSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.OpElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.RenderType (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.InternalTypeElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.UnaryOpSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.BinaryOpSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.OpElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.ScopeSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.VariableSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.OOVariableSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.VariableElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.InternalVarElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.RenderVariable (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.InternalVarElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.RenderVariable (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.ValueSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.OOValueSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.Argument (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
@@ -1781,28 +1972,29 @@ instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.BooleanExpres
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.Comparison (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.ValueExpression (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.OOValueExpression (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.RenderValue (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.ValueElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.RenderValue (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.ValueElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.InternalValueExp (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.FunctionSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.FunctionSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.OOFunctionSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.GetSet (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.List (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.InternalList (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.InternalGetSet (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.InternalListFunc (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesOO.InternalGetSet (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.InternalListFunc (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.InterfaceCommon.ThunkSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.ThunkAssign (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.VectorType (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.VectorDecl (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.VectorThunk (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.VectorExpression (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.RenderFunction (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.FunctionElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.InternalAssignStmt (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.InternalIOStmt (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.InternalControlStmt (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.RenderStatement (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.StatementElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.RenderFunction (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.FunctionElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.InternalAssignStmt (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.InternalIOStmt (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.InternalControlStmt (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.RenderStatement (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.StatementElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.StatementSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.AssignStatement (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.DeclStatement (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
@@ -1816,55 +2008,58 @@ instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.ControlStatem
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.ObserverPattern (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.StrategyPattern (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.VisibilitySym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.RenderVisibility (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.VisibilityElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.MethodTypeSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.RenderVisibility (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.VisibilityElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.MethodTypeSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesOO.OOMethodTypeSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.ParameterSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.RenderParam (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.ParamElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.RenderParam (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.ParamElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.OOMethodSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.RenderMethod (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.MethodElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.RenderMethod (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesOO.OORenderMethod (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.MethodElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.StateVarSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.StateVarElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesOO.StateVarElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.ClassSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.RenderClass (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.ClassElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesOO.RenderClass (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesOO.ClassElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.ModuleSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.RenderMod (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.ModuleElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.BlockCommentSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
-instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClasses.BlockCommentElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesOO.RenderMod (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesOO.ModuleElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.BlockCommentSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.BlockCommentElim (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance GHC.Base.Functor Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance GHC.Base.Applicative Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance GHC.Base.Monad Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.RenderSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.CommonRenderSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesOO.OORenderSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceGOOL.FileSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.RenderFile Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.ImportSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.ImportElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesOO.RenderFile Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.ImportSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.ImportElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceGOOL.PermanenceSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.PermElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesOO.PermElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.BodySym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.RenderBody Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.BodyElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.RenderBody Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.BodyElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.BlockSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.RenderBlock Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.BlockElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.RenderBlock Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.BlockElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.TypeSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceGOOL.OOTypeSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.TypeElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.RenderType Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.InternalTypeElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.UnaryOpSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.BinaryOpSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.OpElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.RenderType Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.InternalTypeElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.UnaryOpSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.BinaryOpSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.OpElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.VariableSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceGOOL.OOVariableSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.VariableElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.InternalVarElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.RenderVariable Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.InternalVarElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.RenderVariable Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.ValueSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceGOOL.OOValueSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.Argument Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
@@ -1878,28 +2073,29 @@ instance Drasil.GOOL.InterfaceCommon.BooleanExpression Drasil.GOOL.LanguageRende
 instance Drasil.GOOL.InterfaceCommon.Comparison Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.ValueExpression Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceGOOL.OOValueExpression Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.RenderValue Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.ValueElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.RenderValue Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.ValueElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceGOOL.InternalValueExp Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.InterfaceGOOL.FunctionSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.InterfaceCommon.FunctionSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.InterfaceGOOL.OOFunctionSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceGOOL.GetSet Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.List Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.InternalList Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.InternalGetSet Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.InternalListFunc Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesOO.InternalGetSet Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.InternalListFunc Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.ThunkSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.ThunkAssign Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.VectorType Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.VectorDecl Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.VectorThunk Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.VectorExpression Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.RenderFunction Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.FunctionElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.InternalAssignStmt Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.InternalIOStmt Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.InternalControlStmt Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.RenderStatement Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.StatementElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.RenderFunction Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.FunctionElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.InternalAssignStmt Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.InternalIOStmt Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.InternalControlStmt Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.RenderStatement Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.StatementElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.StatementSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.AssignStatement Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.DeclStatement Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
@@ -1913,55 +2109,58 @@ instance Drasil.GOOL.InterfaceCommon.ControlStatement Drasil.GOOL.LanguageRender
 instance Drasil.GOOL.InterfaceGOOL.ObserverPattern Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceGOOL.StrategyPattern Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.VisibilitySym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.RenderVisibility Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.VisibilityElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.MethodTypeSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.RenderVisibility Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.VisibilityElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.MethodTypeSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesOO.OOMethodTypeSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.ParameterSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.RenderParam Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.ParamElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.RenderParam Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.ParamElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceGOOL.OOMethodSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.RenderMethod Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.RenderMethod Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesOO.OORenderMethod Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceGOOL.StateVarSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.StateVarElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesOO.StateVarElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceGOOL.ClassSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.RenderClass Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.ClassElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesOO.RenderClass Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesOO.ClassElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceGOOL.ModuleSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.RenderMod Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.ModuleElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.BlockCommentSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
-instance Drasil.GOOL.RendererClasses.BlockCommentElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesOO.RenderMod Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesOO.ModuleElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.BlockCommentSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.RendererClassesCommon.BlockCommentElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance GHC.Base.Functor Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance GHC.Base.Applicative Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance GHC.Base.Monad Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceGOOL.ProgramSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.RenderSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.CommonRenderSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesOO.OORenderSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceGOOL.FileSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.RenderFile Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.ImportSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.ImportElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesOO.RenderFile Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.ImportSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.ImportElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceGOOL.PermanenceSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.PermElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesOO.PermElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.BodySym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.RenderBody Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.BodyElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.RenderBody Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.BodyElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.BlockSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.RenderBlock Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.BlockElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.RenderBlock Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.BlockElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.TypeSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceGOOL.OOTypeSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.TypeElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.RenderType Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.InternalTypeElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.UnaryOpSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.BinaryOpSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.OpElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.RenderType Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.InternalTypeElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.UnaryOpSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.BinaryOpSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.OpElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.VariableSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceGOOL.OOVariableSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.VariableElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.InternalVarElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.RenderVariable Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.InternalVarElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.RenderVariable Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.ValueSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceGOOL.OOValueSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.Argument Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
@@ -1975,28 +2174,29 @@ instance Drasil.GOOL.InterfaceCommon.BooleanExpression Drasil.GOOL.LanguageRende
 instance Drasil.GOOL.InterfaceCommon.Comparison Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.ValueExpression Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceGOOL.OOValueExpression Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.RenderValue Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.ValueElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.RenderValue Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.ValueElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceGOOL.InternalValueExp Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.InterfaceGOOL.FunctionSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.InterfaceCommon.FunctionSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.InterfaceGOOL.OOFunctionSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceGOOL.GetSet Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.List Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.InternalList Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.InternalGetSet Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.InternalListFunc Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesOO.InternalGetSet Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.InternalListFunc Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.ThunkSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.ThunkAssign Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.VectorType Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.VectorDecl Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.VectorThunk Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.VectorExpression Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.RenderFunction Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.FunctionElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.InternalAssignStmt Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.InternalIOStmt Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.InternalControlStmt Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.RenderStatement Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.StatementElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.RenderFunction Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.FunctionElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.InternalAssignStmt Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.InternalIOStmt Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.InternalControlStmt Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.RenderStatement Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.StatementElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.StatementSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.AssignStatement Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.DeclStatement Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
@@ -2010,24 +2210,26 @@ instance Drasil.GOOL.InterfaceCommon.ControlStatement Drasil.GOOL.LanguageRender
 instance Drasil.GOOL.InterfaceGOOL.ObserverPattern Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceGOOL.StrategyPattern Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.VisibilitySym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.RenderVisibility Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.VisibilityElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.MethodTypeSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.RenderVisibility Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.VisibilityElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.MethodTypeSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesOO.OOMethodTypeSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.ParameterSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.RenderParam Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.ParamElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.RenderParam Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.ParamElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceGOOL.OOMethodSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.RenderMethod Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.RenderMethod Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesOO.OORenderMethod Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceGOOL.StateVarSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.StateVarElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesOO.StateVarElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceGOOL.ClassSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.RenderClass Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.ClassElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesOO.RenderClass Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesOO.ClassElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceGOOL.ModuleSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.RenderMod Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.ModuleElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.BlockCommentSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
-instance Drasil.GOOL.RendererClasses.BlockCommentElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesOO.RenderMod Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesOO.ModuleElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.BlockCommentSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.RendererClassesCommon.BlockCommentElim Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.Classes.Pair Drasil.GOOL.LanguageRenderer.CppRenderer.CppCode
 
 
@@ -2045,33 +2247,34 @@ instance GHC.Base.Monad Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.SharedProg Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceGOOL.OOProg Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceGOOL.ProgramSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.RenderSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.CommonRenderSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesOO.OORenderSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceGOOL.FileSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.RenderFile Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.ImportSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.ImportElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesOO.RenderFile Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.ImportSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.ImportElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceGOOL.PermanenceSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.PermElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesOO.PermElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.BodySym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.RenderBody Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.BodyElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.RenderBody Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.BodyElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.BlockSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.RenderBlock Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.BlockElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.RenderBlock Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.BlockElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.TypeSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceGOOL.OOTypeSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.TypeElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.RenderType Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.InternalTypeElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.UnaryOpSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.BinaryOpSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.OpElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.RenderType Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.InternalTypeElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.UnaryOpSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.BinaryOpSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.OpElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.ScopeSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.VariableSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceGOOL.OOVariableSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.VariableElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.InternalVarElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.RenderVariable Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.InternalVarElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.RenderVariable Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.ValueSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceGOOL.OOValueSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.Argument Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
@@ -2085,28 +2288,29 @@ instance Drasil.GOOL.InterfaceCommon.BooleanExpression Drasil.GOOL.LanguageRende
 instance Drasil.GOOL.InterfaceCommon.Comparison Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.ValueExpression Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceGOOL.OOValueExpression Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.RenderValue Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.ValueElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.RenderValue Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.ValueElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceGOOL.InternalValueExp Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.InterfaceGOOL.FunctionSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.InterfaceCommon.FunctionSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.InterfaceGOOL.OOFunctionSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceGOOL.GetSet Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.List Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.InternalList Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.InternalGetSet Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.InternalListFunc Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesOO.InternalGetSet Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.InternalListFunc Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.ThunkSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.ThunkAssign Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.VectorType Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.VectorDecl Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.VectorThunk Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.VectorExpression Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.RenderFunction Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.FunctionElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.InternalAssignStmt Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.InternalIOStmt Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.InternalControlStmt Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.RenderStatement Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.StatementElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.RenderFunction Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.FunctionElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.InternalAssignStmt Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.InternalIOStmt Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.InternalControlStmt Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.RenderStatement Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.StatementElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.StatementSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.AssignStatement Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.DeclStatement Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
@@ -2120,26 +2324,28 @@ instance Drasil.GOOL.InterfaceCommon.ControlStatement Drasil.GOOL.LanguageRender
 instance Drasil.GOOL.InterfaceGOOL.ObserverPattern Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceGOOL.StrategyPattern Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.VisibilitySym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.RenderVisibility Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.VisibilityElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.MethodTypeSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.RenderVisibility Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.VisibilityElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.MethodTypeSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesOO.OOMethodTypeSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.ParameterSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.RenderParam Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.ParamElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.RenderParam Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.ParamElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.MethodSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceGOOL.OOMethodSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.RenderMethod Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.MethodElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.RenderMethod Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesOO.OORenderMethod Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.MethodElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceGOOL.StateVarSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.StateVarElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesOO.StateVarElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceGOOL.ClassSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.RenderClass Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.ClassElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesOO.RenderClass Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesOO.ClassElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceGOOL.ModuleSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.RenderMod Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.ModuleElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.BlockCommentSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
-instance Drasil.GOOL.RendererClasses.BlockCommentElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesOO.RenderMod Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesOO.ModuleElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.BlockCommentSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.RendererClassesCommon.BlockCommentElim Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 
 module Drasil.GOOL.CodeInfo
 newtype CodeInfo a
@@ -2177,7 +2383,8 @@ instance Drasil.GOOL.InterfaceCommon.Comparison Drasil.GOOL.CodeInfo.CodeInfo
 instance Drasil.GOOL.InterfaceCommon.ValueExpression Drasil.GOOL.CodeInfo.CodeInfo
 instance Drasil.GOOL.InterfaceGOOL.OOValueExpression Drasil.GOOL.CodeInfo.CodeInfo
 instance Drasil.GOOL.InterfaceGOOL.InternalValueExp Drasil.GOOL.CodeInfo.CodeInfo
-instance Drasil.GOOL.InterfaceGOOL.FunctionSym Drasil.GOOL.CodeInfo.CodeInfo
+instance Drasil.GOOL.InterfaceCommon.FunctionSym Drasil.GOOL.CodeInfo.CodeInfo
+instance Drasil.GOOL.InterfaceGOOL.OOFunctionSym Drasil.GOOL.CodeInfo.CodeInfo
 instance Drasil.GOOL.InterfaceGOOL.GetSet Drasil.GOOL.CodeInfo.CodeInfo
 instance Drasil.GOOL.InterfaceCommon.List Drasil.GOOL.CodeInfo.CodeInfo
 instance Drasil.GOOL.InterfaceCommon.InternalList Drasil.GOOL.CodeInfo.CodeInfo
@@ -2529,11 +2736,12 @@ objMethodCallNoParams :: InternalValueExp r => VSType r -> SValue r -> Label -> 
 class (ValueSym r) => FunctionSym r where {
     type Function r;
 }
-func :: FunctionSym r => Label -> VSType r -> [SValue r] -> VSFunction r
-objAccess :: FunctionSym r => SValue r -> VSFunction r -> SValue r
-($.) :: FunctionSym r => SValue r -> VSFunction r -> SValue r
+class (FunctionSym r) => OOFunctionSym r
+func :: OOFunctionSym r => Label -> VSType r -> [SValue r] -> VSFunction r
+objAccess :: OOFunctionSym r => SValue r -> VSFunction r -> SValue r
+($.) :: OOFunctionSym r => SValue r -> VSFunction r -> SValue r
 infixl 9 $.
-selfAccess :: (OOVariableValue r, FunctionSym r) => VSFunction r -> SValue r
+selfAccess :: (OOVariableValue r, OOFunctionSym r) => VSFunction r -> SValue r
 class (ValueSym r, VariableSym r) => GetSet r
 get :: GetSet r => SValue r -> SVariable r -> SValue r
 set :: GetSet r => SValue r -> SVariable r -> SValue r -> SValue r
@@ -2575,7 +2783,7 @@ indexOf :: List r => SValue r -> SValue r -> SValue r
 listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 at :: List r => SValue r -> SValue r -> SValue r
-class (StatementSym r, FunctionSym r) => ObserverPattern r
+class (StatementSym r, OOFunctionSym r) => ObserverPattern r
 notifyObservers :: ObserverPattern r => VSFunction r -> VSType r -> r (Scope r) -> MSStatement r
 class (BodySym r, VariableSym r) => StrategyPattern r
 runStrategy :: StrategyPattern r => Label -> [(Label, MSBody r)] -> Maybe (SValue r) -> Maybe (SVariable r) -> MSBlock r
@@ -2683,6 +2891,7 @@ unJC :: JavaCode a -> a
 unCSC :: CSharpCode a -> a
 unCPPC :: CppCode CppSrcCode CppHdrCode a -> a
 unSC :: SwiftCode a -> a
+unJLC :: JuliaCode a -> a
 pyName :: String
 pyVersion :: String
 jName :: String
@@ -2693,6 +2902,8 @@ cppName :: String
 cppVersion :: String
 swiftName :: String
 swiftVersion :: String
+jlName :: String
+jlVersion :: String
 
 
 -- | re-export smart constructors for external code writing

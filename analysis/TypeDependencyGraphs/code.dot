@@ -159,6 +159,24 @@ digraph alltypes {
 		AuxHelperJavaProject -> Doc;
 		}
 	}
+	subgraph juliarenderer {
+		subgraph juliaprojecta{
+		JuliaProjecta	[shape=oval, color=darkgreen, label="JuliaProjecta"];
+		JuliaProjecta -> a;
+		}
+		subgraph packagejuliaproject{
+		PackageJuliaProject	[shape=oval, color=red2, label="PackageJuliaProject"];
+		PackageJuliaProject -> PackData;
+		}
+		subgraph auxiliaryjuliaproject{
+		AuxiliaryJuliaProject	[shape=oval, color=red2, label="AuxiliaryJuliaProject"];
+		AuxiliaryJuliaProject -> AuxData;
+		}
+		subgraph auxhelperjuliaproject{
+		AuxHelperJuliaProject	[shape=oval, color=red2, label="AuxHelperJuliaProject"];
+		AuxHelperJuliaProject -> Doc;
+		}
+	}
 	subgraph languagepolymorpich {
 	}
 	subgraph pytonrendererh {

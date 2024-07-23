@@ -1,0 +1,4 @@
+digraph typejuliacode{
+TypeJuliaCode	[shape=oval, color=red2, label="TypeJuliaCode"];
+TypeJuliaCode -> TypeData;
+}

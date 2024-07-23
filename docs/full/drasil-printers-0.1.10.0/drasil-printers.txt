@@ -201,6 +201,7 @@ TeX :: Format
 Plain :: Format
 HTML :: Format
 Jupyter :: Format
+MDBook :: Format
 instance GHC.Show.Show Language.Drasil.Format.DocType
 
 
@@ -410,6 +411,16 @@ Nested :: Spec -> ListType -> ItemType
 --   wrappers).
 module Language.Drasil.HTML.Helpers
 
+-- | Data type that carries functions that vary for bib printing
+data BibFormatter
+BibFormatter :: (Doc -> Doc) -> (Spec -> Doc) -> BibFormatter
+
+-- | Emphasis (italics) rendering
+[emph] :: BibFormatter -> Doc -> Doc
+
+-- | Spec rendering
+[spec] :: BibFormatter -> Spec -> Doc
+
 -- | HTML tag wrapper.
 html :: Doc -> Doc
 
@@ -467,10 +478,11 @@ img :: [(String, Doc)] -> Doc
 -- | Helper for HTML headers.
 h :: Int -> Doc -> Doc
 
--- | HTML class or id selector.
+-- | HTML attribute selector.
 data Variation
 Class :: Variation
 Id :: Variation
+Align :: Variation
 
 -- | General <a>Class</a> wrapper function and formats the document space
 --   with <a>cat</a>.
@@ -486,6 +498,12 @@ wrapGen' :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> D
 
 -- | General wrapper that formats the document space nicely.
 wrapGen :: Variation -> String -> Doc -> [String] -> Doc -> Doc
+
+-- | Helper for creating a left HTML tag with a single attribute.
+tagL :: String -> Variation -> Doc -> Doc
+
+-- | Helper for creating a right HTML closing tag.
+tagR :: String -> Doc
 
 -- | Helper for wrapping attributes in a tag.
 --   
@@ -547,6 +565,8 @@ indent :: Doc -> Doc
 --   
 --   Build case expressions.
 makeCases :: [(Expr, Expr)] -> (Expr -> Doc) -> Doc
+instance GHC.Classes.Eq Language.Drasil.HTML.Helpers.Variation
+instance GHC.Show.Show Language.Drasil.HTML.Helpers.Variation
 
 
 -- | Defines types used for printing citations.
@@ -598,6 +618,15 @@ Verb :: Spec -> HP
 
 -- | General helper functions for printing Drasil documents.
 module Language.Drasil.Printing.Helpers
+
+-- | Custom infix operator for concatenating two <a>Doc</a>s vertically
+--   with an empty line in between.
+($^$) :: Doc -> Doc -> Doc
+infixl 5 $^$
+
+-- | Concatenate a list of <a>Doc</a>s vertically with an empty line in
+--   between.
+vsep :: [Doc] -> Doc
 
 -- | Single backslash.
 --   
@@ -669,15 +698,20 @@ slash :: Doc
 --   Basic text-rendering helper function.
 hyph :: Doc
 
--- | Tab.
---   
---   Basic text-rendering helper function.
-tab :: Doc
-
 -- | Underscore.
 --   
 --   Basic text-rendering helper function.
 unders :: Doc
+
+-- | Pipe.
+--   
+--   Basic text-rendering helper function.
+pipe :: Doc
+
+-- | Empty line.
+--   
+--   Basic text-rendering helper function.
+emptyline :: Doc
 
 -- | Square brackets.
 --   
@@ -942,6 +976,15 @@ module Language.Drasil.Printing.LayoutObj
 data Document
 Document :: Title -> Author -> [LayoutObj] -> Document
 
+-- | A Project must contain a title, author, RefMap, and Files.
+data Project
+Project :: Title -> Author -> RefMap -> [File] -> Project
+
+-- | A File must contain a title, filename, depth, and contents (as
+--   <a>LayoutObj</a>s).
+data File
+File :: Title -> Filename -> Depth -> [LayoutObj] -> File
+
 -- | An author is just a sentence (<a>Spec</a>).
 type Author = Spec
 
@@ -966,8 +1009,14 @@ type Height = Float
 -- | Holds a file path.
 type Filepath = String
 
+-- | Holds a file name.
+type Filename = String
+
 -- | A caption is just a sentence (<a>Spec</a>).
 type Caption = Spec
+
+-- | A mapping of refs to the file that contains them.
+type RefMap = Map String Filename
 data LayoutObj
 
 -- | Holds all information needed for a table.
@@ -1003,6 +1052,59 @@ Cell :: [LayoutObj] -> LayoutObj
 
 -- | Bibliography section.
 Bib :: BibRef -> LayoutObj
+
+
+-- | Defines helper functions for creating Markdown files.
+module Language.Drasil.Markdown.Helpers
+
+-- | Angled brackets
+ang :: Doc -> Doc
+
+-- | Bold text
+bold :: Doc -> Doc
+
+-- | Italicized text
+em :: Doc -> Doc
+
+-- | List tag wrapper
+li :: Doc -> Doc
+
+-- | Unordered list tag wrapper.
+ul :: Doc -> Doc
+
+-- | Helper for setting up section div
+divTag :: Doc -> Doc
+
+-- | Helper for setting up div for defn heading
+defnHTag :: Doc -> Doc
+
+-- | Helper for setting up links to references
+reflink :: RefMap -> String -> Doc -> Doc
+
+-- | Helper for setting up links to references with additional information.
+reflinkInfo :: RefMap -> String -> Doc -> Doc -> Doc
+
+-- | Helper for setting up links to external URIs
+reflinkURI :: Doc -> Doc -> Doc
+
+-- | Helper for setting up figures
+image :: Doc -> Doc -> Doc
+
+-- | Helper for setting up captions
+caption :: Doc -> Doc
+
+-- | Helper for setting up headings with an id attribute. id attribute will
+--   only work for mdBook.
+heading :: Doc -> Doc -> Doc
+
+-- | Helper for setting up heading weights in mdBook.
+h :: Int -> Doc
+
+-- | Helper for setting up heading weights in normal Markdown.
+h' :: Int -> Doc
+
+-- | Helper for getting length of a Doc
+docLength :: Doc -> Int
 
 
 -- | Defines types and functions to gather all the information needed for
@@ -1161,9 +1263,31 @@ module Language.Drasil.Printing.Import.Document
 --   <a>Document</a>.
 makeDocument :: PrintingInformation -> Document -> Document
 
+-- | Translates from <a>Document</a> to a printable representation of
+--   <a>Project</a>.
+makeProject :: PrintingInformation -> Document -> Project
+
+-- | Helper function for creating sections as Files.
+createFiles :: PrintingInformation -> [Section] -> [File]
+
+-- | Helper function for creating a RefMap for a Document.
+createRefMap' :: File -> [(String, Filename)]
+
+-- | Helper function for creating a RefMap for a LayoutObj
+createRefMap :: Filename -> LayoutObj -> [(String, Filename)]
+
+-- | Helper function for mapping a Label to a Filename
+createRef :: Filename -> Label -> [(String, Filename)]
+
 -- | Helper function for creating sections as layout objects.
 createLayout :: PrintingInformation -> [Section] -> [LayoutObj]
 createLayout' :: PrintingInformation -> [Section] -> [LayoutObj]
+
+-- | Helper for extracting subsections into their own sections.
+extractSubS :: Int -> Section -> [(Depth, Section)]
+
+-- | Helper for converting a Section to a File
+file :: PrintingInformation -> (Depth, Section) -> File
 
 -- | Helper function for creating sections at the appropriate depth.
 sec :: PrintingInformation -> Int -> Section -> LayoutObj
@@ -1225,6 +1349,10 @@ symbol :: Symbol -> Expr
 -- | Translates from <a>Document</a> to a printable representation of
 --   <a>Document</a>.
 makeDocument :: PrintingInformation -> Document -> Document
+
+-- | Translates from <a>Document</a> to a printable representation of
+--   <a>Project</a>.
+makeProject :: PrintingInformation -> Document -> Project
 
 
 -- | Defines functions to print on plain files (for .txt, .log, etc.).
@@ -1481,7 +1609,7 @@ command2D :: String -> D -> D -> D
 command3 :: String -> String -> String -> String -> D
 
 -- | Encapsulate environments.
-mkEnv :: String -> D -> D
+mkEnv :: String -> (D -> D -> D) -> D -> D
 
 -- | Encapsulate environments with argument with braces.
 mkEnvArgBr :: String -> String -> D -> D
@@ -1690,6 +1818,20 @@ pUnit :: USymb -> D
 -- | Prints all <a>Expr</a>s.
 spec :: Spec -> D
 
+-- | Prints fencing notation ("(),{},|,||").
+fence :: OpenClose -> Fence -> D
+
+-- | Determine wether braces and brackets are opening or closing.
+data OpenClose
+Open :: OpenClose
+Close :: OpenClose
+
+-- | For printing a Matrix.
+pMatrix :: [[Expr]] -> (Doc -> [D] -> D) -> Doc -> (Expr -> D) -> D
+
+-- | Helper for printing case expression.
+cases :: [(Expr, Expr)] -> (Doc -> [D] -> D) -> Doc -> (Expr -> D) -> D
+
 
 -- | Defines all functions needed to print HTML files. For more information
 --   on each of the helper functions, please view the <a>source files</a>.
@@ -1699,7 +1841,14 @@ module Language.Drasil.HTML.Print
 genHTML :: PrintingInformation -> String -> Document -> Doc
 
 -- | For when we add other things to reference like website, newspaper
-renderCite :: Citation -> (Doc, Doc)
+renderCite :: BibFormatter -> Citation -> (Doc, Doc)
+
+-- | HTML specific bib rendering functions
+htmlBibFormatter :: BibFormatter
+
+-- | Renders the Sentences (<a>Expr</a>s) in the HTML body (called by
+--   <a>printLO</a>).
+pSpec :: Spec -> Doc
 
 -- | Referring to <a>fence</a> (for parenthesis and brackeds). Either
 --   opened or closed.
@@ -1710,6 +1859,24 @@ Close :: OpenClose
 -- | Allows for open/closed variants of parenthesis, curly brackets,
 --   absolute value symbols, and normal symbols.
 fence :: OpenClose -> Fence -> String
+
+
+-- | Defines main Markdown printer functions.
+module Language.Drasil.Markdown.Print
+
+-- | Generate a mdBook SRS
+genMDBook :: PrintingInformation -> Document -> [(Filename, Doc)]
+
+-- | Helper for rendering Specs into Markdown
+pSpec :: RefMap -> Spec -> Doc
+
+
+-- | Defines functions to create .toml config files for mdBook.
+module Language.Drasil.Markdown.Book
+
+-- | Generates the .toml config file for mdBook.
+makeBook :: Document -> PrintingInformation -> Doc
+mkTitle :: PrintingInformation -> Sentence -> Doc
 
 
 -- | Defines .json printers to generate jupyter notebooks. For more
@@ -1738,6 +1905,7 @@ data Format
 TeX :: Format
 HTML :: Format
 Jupyter :: Format
+MDBook :: Format
 
 -- | Holds all important and relevant information for generating a
 --   traceability graph. Includes nodes, graph edges, and node family
@@ -1883,6 +2051,12 @@ genTeX :: Document -> PrintingInformation -> Doc
 --   SRS document in JSON format build': build the general Jupyter Notbook
 --   document
 genJupyter :: PrintingInformation -> DocType -> Document -> Doc
+
+-- | Generate a mdBook SRS
+genMDBook :: PrintingInformation -> Document -> [(Filename, Doc)]
+
+-- | Generates the .toml config file for mdBook.
+makeBook :: Document -> PrintingInformation -> Doc
 
 -- | Gathers all printing functions and creates the debugging tables from
 --   them.

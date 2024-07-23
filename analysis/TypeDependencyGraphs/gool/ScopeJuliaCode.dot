@@ -1,0 +1,4 @@
+digraph scopejuliacode{
+ScopeJuliaCode	[shape=oval, color=red2, label="ScopeJuliaCode"];
+ScopeJuliaCode -> Doc;
+}

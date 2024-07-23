@@ -1,0 +1,7 @@
+digraph project{
+Project	[shape=oval, color=darkviolet, label="Project"];
+Project -> Title;
+Project -> Author;
+Project -> RefMap;
+Project -> File;
+}

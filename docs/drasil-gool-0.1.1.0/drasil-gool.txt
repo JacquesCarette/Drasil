@@ -331,11 +331,12 @@ objMethodCallNoParams :: InternalValueExp r => VSType r -> SValue r -> Label -> 
 class (ValueSym r) => FunctionSym r where {
     type Function r;
 }
-func :: FunctionSym r => Label -> VSType r -> [SValue r] -> VSFunction r
-objAccess :: FunctionSym r => SValue r -> VSFunction r -> SValue r
-($.) :: FunctionSym r => SValue r -> VSFunction r -> SValue r
+class (FunctionSym r) => OOFunctionSym r
+func :: OOFunctionSym r => Label -> VSType r -> [SValue r] -> VSFunction r
+objAccess :: OOFunctionSym r => SValue r -> VSFunction r -> SValue r
+($.) :: OOFunctionSym r => SValue r -> VSFunction r -> SValue r
 infixl 9 $.
-selfAccess :: (OOVariableValue r, FunctionSym r) => VSFunction r -> SValue r
+selfAccess :: (OOVariableValue r, OOFunctionSym r) => VSFunction r -> SValue r
 class (ValueSym r, VariableSym r) => GetSet r
 get :: GetSet r => SValue r -> SVariable r -> SValue r
 set :: GetSet r => SValue r -> SVariable r -> SValue r -> SValue r
@@ -377,7 +378,7 @@ indexOf :: List r => SValue r -> SValue r -> SValue r
 listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 at :: List r => SValue r -> SValue r -> SValue r
-class (StatementSym r, FunctionSym r) => ObserverPattern r
+class (StatementSym r, OOFunctionSym r) => ObserverPattern r
 notifyObservers :: ObserverPattern r => VSFunction r -> VSType r -> r (Scope r) -> MSStatement r
 class (BodySym r, VariableSym r) => StrategyPattern r
 runStrategy :: StrategyPattern r => Label -> [(Label, MSBody r)] -> Maybe (SValue r) -> Maybe (SVariable r) -> MSBlock r
@@ -485,6 +486,7 @@ unJC :: JavaCode a -> a
 unCSC :: CSharpCode a -> a
 unCPPC :: CppCode CppSrcCode CppHdrCode a -> a
 unSC :: SwiftCode a -> a
+unJLC :: JuliaCode a -> a
 pyName :: String
 pyVersion :: String
 jName :: String
@@ -495,6 +497,8 @@ cppName :: String
 cppVersion :: String
 swiftName :: String
 swiftVersion :: String
+jlName :: String
+jlVersion :: String
 
 
 -- | re-export smart constructors for external code writing

@@ -1,0 +1,4 @@
+digraph thunkjuliacode{
+ThunkJuliaCode	[shape=oval, color=red2, label="ThunkJuliaCode"];
+ThunkJuliaCode -> CommonThunkVS;
+}

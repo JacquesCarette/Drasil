@@ -223,6 +223,24 @@ digraph alltypes {
 		AuxHelperJavaProject -> Doc;
 		}
 	}
+	subgraph juliarenderer {
+		subgraph juliaprojecta{
+		JuliaProjecta	[shape=oval, color=darkgreen, label="JuliaProjecta"];
+		JuliaProjecta -> a;
+		}
+		subgraph packagejuliaproject{
+		PackageJuliaProject	[shape=oval, color=red2, label="PackageJuliaProject"];
+		PackageJuliaProject -> PackData;
+		}
+		subgraph auxiliaryjuliaproject{
+		AuxiliaryJuliaProject	[shape=oval, color=red2, label="AuxiliaryJuliaProject"];
+		AuxiliaryJuliaProject -> AuxData;
+		}
+		subgraph auxhelperjuliaproject{
+		AuxHelperJuliaProject	[shape=oval, color=red2, label="AuxHelperJuliaProject"];
+		AuxHelperJuliaProject -> Doc;
+		}
+	}
 	subgraph languagepolymorpich {
 	}
 	subgraph pytonrendererh {
@@ -2357,6 +2375,104 @@ digraph alltypes {
 		BlockCommentJavaCode -> Doc;
 		}
 	}
+	subgraph juliarenderer {
+		subgraph juliacodea{
+		JuliaCodea	[shape=oval, color=darkgreen, label="JuliaCodea"];
+		JuliaCodea -> a;
+		}
+		subgraph programjuliacode{
+		ProgramJuliaCode	[shape=oval, color=red2, label="ProgramJuliaCode"];
+		ProgramJuliaCode -> ProgData;
+		}
+		subgraph filejuliacode{
+		FileJuliaCode	[shape=oval, color=red2, label="FileJuliaCode"];
+		FileJuliaCode -> FileData;
+		}
+		subgraph importjuliacode{
+		ImportJuliaCode	[shape=oval, color=red2, label="ImportJuliaCode"];
+		ImportJuliaCode -> Doc;
+		}
+		subgraph bodyjuliacode{
+		BodyJuliaCode	[shape=oval, color=red2, label="BodyJuliaCode"];
+		BodyJuliaCode -> Doc;
+		}
+		subgraph blockjuliacode{
+		BlockJuliaCode	[shape=oval, color=red2, label="BlockJuliaCode"];
+		BlockJuliaCode -> Doc;
+		}
+		subgraph typejuliacode{
+		TypeJuliaCode	[shape=oval, color=red2, label="TypeJuliaCode"];
+		TypeJuliaCode -> TypeData;
+		}
+		subgraph unaryopjuliacode{
+		UnaryOpJuliaCode	[shape=oval, color=red2, label="UnaryOpJuliaCode"];
+		UnaryOpJuliaCode -> OpData;
+		}
+		subgraph binaryopjuliacode{
+		BinaryOpJuliaCode	[shape=oval, color=red2, label="BinaryOpJuliaCode"];
+		BinaryOpJuliaCode -> OpData;
+		}
+		subgraph scopejuliacode{
+		ScopeJuliaCode	[shape=oval, color=red2, label="ScopeJuliaCode"];
+		ScopeJuliaCode -> Doc;
+		}
+		subgraph variablejuliacode{
+		VariableJuliaCode	[shape=oval, color=red2, label="VariableJuliaCode"];
+		VariableJuliaCode -> VarData;
+		}
+		subgraph valuejuliacode{
+		ValueJuliaCode	[shape=oval, color=red2, label="ValueJuliaCode"];
+		ValueJuliaCode -> ValData;
+		}
+		subgraph thunkjuliacode{
+		ThunkJuliaCode	[shape=oval, color=red2, label="ThunkJuliaCode"];
+		ThunkJuliaCode -> CommonThunkVS;
+		}
+		subgraph statementjuliacode{
+		StatementJuliaCode	[shape=oval, color=red2, label="StatementJuliaCode"];
+		StatementJuliaCode -> DocTerminator;
+		}
+		subgraph functionjuliacode{
+		FunctionJuliaCode	[shape=oval, color=red2, label="FunctionJuliaCode"];
+		FunctionJuliaCode -> FuncData;
+		}
+		subgraph visibilityjuliacode{
+		VisibilityJuliaCode	[shape=oval, color=red2, label="VisibilityJuliaCode"];
+		VisibilityJuliaCode -> Doc;
+		}
+		subgraph methodtypejuliacode{
+		MethodTypeJuliaCode	[shape=oval, color=red2, label="MethodTypeJuliaCode"];
+		MethodTypeJuliaCode -> TypeData;
+		}
+		subgraph parameterjuliacode{
+		ParameterJuliaCode	[shape=oval, color=red2, label="ParameterJuliaCode"];
+		ParameterJuliaCode -> ParamData;
+		}
+		subgraph methodjuliacode{
+		MethodJuliaCode	[shape=oval, color=red2, label="MethodJuliaCode"];
+		MethodJuliaCode -> MethodData;
+		}
+		subgraph modulejuliacode{
+		ModuleJuliaCode	[shape=oval, color=red2, label="ModuleJuliaCode"];
+		ModuleJuliaCode -> ModData;
+		}
+		subgraph blockcommentjuliacode{
+		BlockCommentJuliaCode	[shape=oval, color=red2, label="BlockCommentJuliaCode"];
+		BlockCommentJuliaCode -> Doc;
+		}
+		subgraph statevarjuliacode{
+		StateVarJuliaCode	[shape=oval, color=red2, label="StateVarJuliaCode"];
+		StateVarJuliaCode -> Doc;
+		}
+		subgraph classjuliacode{
+		ClassJuliaCode	[shape=oval, color=red2, label="ClassJuliaCode"];
+		ClassJuliaCode -> Doc;
+		}
+		subgraph permanencejuliacode{
+		PermanenceJuliaCode	[shape=oval, color=red2, label="PermanenceJuliaCode"];
+		PermanenceJuliaCode -> Doc;
+		}
+	}
 	subgraph languagepolymorpich {
 		subgraph optionalspace{
 		OptionalSpace	[shape=oval, color=darkgreen, label="OptionalSpace"];
@@ -2788,6 +2904,10 @@ digraph alltypes {
 		MSStatementa	[shape=oval, color=red2, label="MSStatementa"];
 		MSStatementa -> MSaStatementa;
 		}
+		subgraph vsfunctiona{
+		VSFunctiona	[shape=oval, color=red2, label="VSFunctiona"];
+		VSFunctiona -> VSaFunctiona;
+		}
 		subgraph inoutcallr{
 		InOutCallr	[shape=oval, color=red2, label="InOutCallr"];
 		InOutCallr -> LabelSValuerSVariablerSVariabler;
@@ -2834,10 +2954,6 @@ digraph alltypes {
 		CSStateVara	[shape=oval, color=red2, label="CSStateVara"];
 		CSStateVara -> CSaStateVara;
 		}
-		subgraph vsfunctiona{
-		VSFunctiona	[shape=oval, color=red2, label="VSFunctiona"];
-		VSFunctiona -> VSaFunctiona;
-		}
 	}
 	subgraph interfaceproc {
 		subgraph gsprograma{
@@ -2867,7 +2983,7 @@ digraph alltypes {
 		ModuleDocRenderer -> StringStringStringStringString;
 		}
 	}
-	subgraph rendererclasess {
+	subgraph rendererclasescommons {
 		subgraph vsunopa{
 		VSUnOpa	[shape=oval, color=red2, label="VSUnOpa"];
 		VSUnOpa -> VSaUnaryOpa;
@@ -2880,10 +2996,14 @@ digraph alltypes {
 		MSMthdTypea	[shape=oval, color=red2, label="MSMthdTypea"];
 		MSMthdTypea -> MSaMethodTypea;
 		}
+	}
+	subgraph rendererclasesoos {
 		subgraph parentspec{
 		ParentSpec	[shape=oval, color=red2, label="ParentSpec"];
 		ParentSpec -> Doc;
 		}
+	}
+	subgraph rendererclasesprocs {
 	}
 	subgraph state {
 		subgraph goolstate{
@@ -3924,10 +4044,13 @@ digraph alltypes {
 	subgraph css {
 	}
 	subgraph helpers {
+		subgraph bibformatter{
+		BibFormatter	[shape=oval, color=cyan3, label="BibFormatter"];
+		BibFormatter -> Doc;
+		BibFormatter -> SpecDoc;
+		}
 		subgraph variation{
 		Variation	[shape=oval, color=darkviolet, label="Variation"];
-		Variation -> String;
-		Variation -> Doc;
 		}
 	}
 	subgraph monad {
@@ -3958,7 +4081,13 @@ digraph alltypes {
 	}
 	subgraph print {
 	}
+	subgraph book {
+	}
 	subgraph createmd {
+	}
+	subgraph helpers {
+	}
+	subgraph print {
 	}
 	subgraph print {
 		subgraph singleline{
@@ -4068,6 +4197,20 @@ digraph alltypes {
 		Document -> Author;
 		Document -> LayoutObj;
 		}
+		subgraph project{
+		Project	[shape=oval, color=darkviolet, label="Project"];
+		Project -> Title;
+		Project -> Author;
+		Project -> RefMap;
+		Project -> File;
+		}
+		subgraph file{
+		File	[shape=oval, color=darkviolet, label="File"];
+		File -> Title;
+		File -> Filename;
+		File -> Depth;
+		File -> LayoutObj;
+		}
 		subgraph layoutobj{
 		LayoutObj	[shape=oval, color=darkviolet, label="LayoutObj"];
 		LayoutObj -> Tags;
@@ -4108,9 +4251,17 @@ digraph alltypes {
 		Filepath	[shape=oval, color=red2, label="Filepath"];
 		Filepath -> String;
 		}
+		subgraph filename{
+		Filename	[shape=oval, color=red2, label="Filename"];
+		Filename -> String;
+		}
 		subgraph caption{
 		Caption	[shape=oval, color=red2, label="Caption"];
 		Caption -> Spec;
+		}
+		subgraph refmap{
+		RefMap	[shape=oval, color=red2, label="RefMap"];
+		RefMap -> MapStringFilename;
 		}
 	}
 	subgraph printinginformation {

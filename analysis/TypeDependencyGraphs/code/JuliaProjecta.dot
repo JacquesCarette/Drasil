@@ -1,0 +1,4 @@
+digraph juliaprojecta{
+JuliaProjecta	[shape=oval, color=darkgreen, label="JuliaProjecta"];
+JuliaProjecta -> a;
+}

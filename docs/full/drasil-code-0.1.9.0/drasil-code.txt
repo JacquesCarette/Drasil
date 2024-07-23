@@ -528,6 +528,7 @@ CSharp :: Lang
 Java :: Lang
 Python :: Lang
 Swift :: Lang
+Julia :: Lang
 instance GHC.Show.Show Language.Drasil.Code.Lang.Lang
 instance GHC.Classes.Eq Language.Drasil.Code.Lang.Lang
 
@@ -1992,6 +1993,20 @@ instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.PackageSym Language
 instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.AuxiliarySym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer.PythonProject
 
 
+-- | The logic to render Julia auxiliary files is contained in this module
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer
+
+-- | Holds a Julia project
+newtype JuliaProject a
+JLP :: a -> JuliaProject a
+[unJLP] :: JuliaProject a -> a
+instance GHC.Base.Functor Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.JuliaProject
+instance GHC.Base.Applicative Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.JuliaProject
+instance GHC.Base.Monad Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.JuliaProject
+instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.PackageSym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.JuliaProject
+instance Language.Drasil.Code.Imperative.GOOL.ClassInterface.AuxiliarySym Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer.JuliaProject
+
+
 -- | The logic to render Java auxiliary files is contained in this module
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer
 
@@ -2997,6 +3012,7 @@ CSharp :: Lang
 Java :: Lang
 Python :: Lang
 Swift :: Lang
+Julia :: Lang
 
 -- | Members of this class must have all the information necessary for the
 --   <a>AuxiliarySym</a> in addition to information necessary to create a
@@ -3149,6 +3165,7 @@ unJP :: JavaProject a -> a
 unCSP :: CSharpProject a -> a
 unCPPP :: CppProject a -> a
 unSP :: SwiftProject a -> a
+unJLP :: JuliaProject a -> a
 
 -- | Any quantity can be a named argument (wrapper for
 --   <a>QuantityDict</a>), but with more of a focus on generating code

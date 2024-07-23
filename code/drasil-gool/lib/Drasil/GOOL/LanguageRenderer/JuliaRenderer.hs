@@ -1,5 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE InstanceSigs #-}
+{-# LANGUAGE DeriveFunctor #-}
 
 -- | The logic to render Julia code is contained in this module
 module Drasil.GOOL.LanguageRenderer.JuliaRenderer (
@@ -95,10 +96,7 @@ import qualified Text.PrettyPrint.HughesPJ as D (float)
 jlExt :: String
 jlExt = "jl"
 
-newtype JuliaCode a = JLC {unJLC :: a}
-
-instance Functor JuliaCode where
-  fmap f (JLC x) = JLC (f x)
+newtype JuliaCode a = JLC {unJLC :: a} deriving Functor
 
 instance Applicative JuliaCode where
   pure = JLC

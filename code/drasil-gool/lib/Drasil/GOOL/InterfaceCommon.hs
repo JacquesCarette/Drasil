@@ -369,8 +369,6 @@ class (VariableSym r, StatementSym r, ScopeSym r) => DeclStatement r where
   varDecDef    :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
   listDec      :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
   listDecDef   :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
-  setDec      :: Integer -> SVariable r -> MSStatement r
-  setDecDef    :: SVariable r -> [SValue r] -> MSStatement r
   arrayDec     :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
   arrayDecDef  :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
   constDecDef  :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r

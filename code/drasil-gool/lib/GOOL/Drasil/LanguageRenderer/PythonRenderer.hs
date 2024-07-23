@@ -67,7 +67,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
-  extFuncAppMixedArgs, indexOf, contains, listAddFunc, setAddFunc, discardFileLine, intClass, 
+  extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
   funcType, buildModule, bindingError, notNull, listDecDef, setDecDef, destructorError, 
   stateVarDef, constVar, litArray, litSet, listSetFunc, extraClass, listAccessFunc, 
   multiAssign, multiReturn, listDec, setDec, funcDecDef, inOutCall, forLoopError, 
@@ -193,6 +193,7 @@ instance TypeSym PythonCode where
   infile = typeFromData InFile "" empty
   outfile = typeFromData OutFile "" empty
   listType t' = t' >>=(\t -> typeFromData (List (getType t)) "" empty)
+  setType t' = t' >>=(\t -> typeFromData (Set (getType t)) "" empty)
   arrayType = listType
   listInnerType = G.listInnerType
   funcType = CP.funcType
@@ -435,7 +436,6 @@ instance List PythonCode where
   indexOf = CP.indexOf pyIndex
 
 instance Set PythonCode where
-  --fromList =
   contains a b = isin b a
 
 instance InternalList PythonCode where
@@ -539,8 +539,6 @@ instance DeclStatement PythonCode where
     modify $ useVarName (variableName v')
     assign v e
   listDec _ = CP.listDec
-  setDec _ = CP.setDec
-  setDecDef = CP.setDecDef
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
@@ -813,7 +811,7 @@ pyInputFunc = text "input()" -- raw_input() for < Python 3.0
 pyPrintFunc = text printLabel
 
 pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyOpen, pyClose, 
-  pyRead, pyWrite, pyAppend, pySplit, pyRange, pyRstrip, pyMath, pyIn, pySetAdd :: String
+  pyRead, pyWrite, pyAppend, pySplit, pyRange, pyRstrip, pyMath, pyIn :: String
 pyListSize = "len"
 pyIndex = "index"
 pyInsert = "insert"
@@ -830,7 +828,6 @@ pyRange = "range"
 pyRstrip = "rstrip"
 pyMath = "math"
 pyIn = "in"
-pySetAdd = "Add"
 
 pyDef, pyLambdaDec, pyElseIf, pyRaise, pyExcept :: Doc
 pyDef = text "def"
@@ -930,9 +927,6 @@ pyInlineIf c' v1' v2' = do
 
 pyLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 pyLambda ps ex = pyLambdaDec <+> variableList ps <> colon <+> RC.value ex
-
-pyContains :: (RenderSym r) => Label -> SValue r -> SValue r -> SValue r
-pyContains f s v = G.objAccess s (G.func f bool [v]) 
 
 pyStringType :: (RenderSym r) => VSType r
 pyStringType = typeFromData String pyString (text pyString)

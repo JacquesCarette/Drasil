@@ -367,17 +367,6 @@ constraintViolatedMsg q s c = do
     print v,
     printStr $ ", but is " ++ s ++ " to be "] ++ pc
 
-printObjDef :: (OOProg r) => ConstraintCE -> GenState [MSStatement r]
-printObjDef c = do
-  g <- get
-  let db = sysinfodb $ codeSpec g
-      printObjDef' :: (OOProg r) => ConstraintCE -> GenState [MSStatement r]
-      printObjDef' (Elem _ e) = do
-        lb <- convExpr e
-        return $ [varDecDef (var "set_i" (setType double)) lb, printStrLn "."]
-      printObjDef' _ = do
-        return $ [printStr "dne"]
-  printObjDef' c
 -- | Generates statements to print descriptions of constraints, using words and
 -- the constrained values. Constrained values are followed by printing the
 -- expression they originated from, using printExpr.
@@ -402,7 +391,7 @@ printConstraint c = do
         return $ [printStr "above ", print lb] ++ printExpr e db ++ [printStrLn "."]
       printConstraint' (Elem _ e) = do
         lb <- convExpr e
-        return $ [printStr ("an element of the set "), print lb] ++ [printStrLn "."]
+        return $ [printStr "an element of the set ", print lb] ++ [printStrLn "."]
   printConstraint' c
 
 -- | Don't print expressions that are just literals, because that would be

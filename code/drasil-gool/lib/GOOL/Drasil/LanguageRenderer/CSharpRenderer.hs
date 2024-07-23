@@ -69,7 +69,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
   extFuncAppMixedArgs, indexOf, contains, listAddFunc, discardFileLine, intClass, 
-  arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, docMain, 
+  arrayType, pi, printSt, arrayDec, arrayDecDef, setDec, setDecDef, openFileA, forEach, docMain, 
   mainFunction, buildModule', string, constDecDef, docInOutFunc, bindingError, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, listSetFunc, 
   extraClass, listAccessFunc, doubleRender, openFileR, openFileW, stateVar, 
@@ -749,9 +749,9 @@ csForEach = text "foreach"
 csNamedArgSep = colon <> space
 csLambdaSep = text "=>"
 
-csSystem, csConsole, csGeneric, csIO, csList, csInt, csFloat, csBool, 
+csSystem, csConsole, csGeneric, csIO, csList, csSet, csInt, csFloat, csBool, 
   csChar, csParse, csReader, csWriter, csReadLine, csWrite, csWriteLine, 
-  csIndex, csListAdd, csListAppend, csClose, csEOS, csSplit, csMain,
+  csIndex, csContains, csListAdd, csListAppend, csClose, csEOS, csSplit, csMain,
   csFunc :: String
 csSystem = "System"
 csConsole = "Console"
@@ -796,14 +796,6 @@ csOutfileType = join $ modifyReturn (addLangImportVS csIO) $
 csLitList :: (RenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
   -> SValue r
 csLitList f t' es' = do 
-  es <- sequence es' 
-  lt <- f t'
-  mkVal lt (new' <+> RC.type' lt
-    <+> braces (valueList es))
-
-csLitSet :: (RenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
-  -> SValue r
-csLitSet f t' es' = do 
   es <- sequence es' 
   lt <- f t'
   mkVal lt (new' <+> RC.type' lt

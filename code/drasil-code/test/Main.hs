@@ -2,10 +2,10 @@
 module Main (main) where
 
 import Drasil.GOOL (Label, OOProg, ProgramSym(..), unCI, unJC, unPC, unCSC,
-  unCPPC, unSC, FileData(..), ModData(..), ProgData(..), initialState)
+  unCPPC, unSC, unJLC, FileData(..), ModData(..), ProgData(..), initialState)
 
 import Language.Drasil.Code (PackageSym(..), AuxiliarySym(..), AuxData(..),
-  PackData(..), unPP, unJP, unCSP, unCPPP, unSP, ImplementationType(..))
+  PackData(..), unPP, unJP, unCSP, unCPPP, unSP, unJLP, ImplementationType(..))
 
 import Text.PrettyPrint.HughesPJ (Doc, render)
 import Control.Monad.State (evalState, runState)
@@ -44,6 +44,10 @@ main = do
   setCurrentDirectory "swift"
   genCode (classes unSC unSP)
   setCurrentDirectory workingDir
+  createDirectoryIfMissing False "julia"
+  setCurrentDirectory "julia"
+  genCode (jlClasses unJLC unJLP)
+  setCurrentDirectory workingDir
 
 -- | Gathers all information needed to generate code, sorts it, and calls the renderers.
 genCode :: [PackData] -> IO()
@@ -62,6 +66,16 @@ classes unRepr unRepr' = zipWith
   in unRepr' $ package pd [makefile [] Program [] gs' pd])
   [helloWorld, patternTest, fileTests, vectorTest, nameGenTest]
   (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests, vectorTest, nameGenTest])
+
+-- Classes that Julia is currently able to render
+jlClasses :: (OOProg r, PackageSym r') => (r (Program r) -> ProgData) ->
+  (r' (Package r') -> PackData) -> [PackData]
+jlClasses unRepr unRepr' = zipWith
+  (\p gs -> let (p',gs') = runState p gs
+                pd = unRepr p'
+  in unRepr' $ package pd [makefile [] Program [] gs' pd])
+  [helloWorld{-, patternTest-}, fileTests, vectorTest, nameGenTest]
+  (map (unCI . (`evalState` initialState)) [helloWorld{-, patternTest-}, fileTests, vectorTest, nameGenTest])
 
 -- | Formats code to be rendered.
 makeCode :: [[FileData]] -> [[AuxData]] -> [(FilePath, Doc)]

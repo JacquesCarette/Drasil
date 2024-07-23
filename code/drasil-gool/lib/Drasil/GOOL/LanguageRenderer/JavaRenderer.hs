@@ -11,39 +11,44 @@ import Utils.Drasil (indent)
 
 import Drasil.GOOL.CodeType (CodeType(..))
 import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, VSType,
-  SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..), oneLiner,
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), var, locVar,
-  VisibilitySym(..), VariableElim(..),ValueSym(..), Argument(..), Literal(..),
-  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
-  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
-  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
-  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  ScopeSym(..), ParameterSym(..), MethodSym(..))
-import Drasil.GOOL.InterfaceGOOL (SClass, VSFunction, CSStateVar, OOProg,
-  ProgramSym(..), FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..),
-  OOVariableSym(..), StateVarSym(..), PermanenceSym(..), OOValueSym,
-  OOVariableValue, OOValueExpression(..), selfFuncApp, newObj,
-  InternalValueExp(..), FunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
+  VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..),
+  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), var,
+  locVar, VisibilitySym(..), VariableElim(..),ValueSym(..), Argument(..),
+  Literal(..), litZero, MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..),
+  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
+  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..))
+import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
+  FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
+  StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
+  OOValueExpression(..), selfFuncApp, newObj, InternalValueExp(..),
+  OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
   OOMethodSym(..))
-import Drasil.GOOL.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
-  ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
-  BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
-  OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
-  RenderValue(..), ValueElim(valuePrec, valueInt),  InternalGetSet(..), 
-  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType), 
-  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), 
-  RenderStatement(..), StatementElim(statementTerm), RenderVisibility(..), 
-  VisibilityElim, MethodTypeSym(..), RenderParam(..), 
-  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
-  StateVarElim, RenderClass(..), ClassElim, RenderMod(..), ModuleElim, 
-  BlockCommentSym(..), BlockCommentElim)
-import qualified Drasil.GOOL.RendererClasses as RC (import', perm, body, block,
+import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
+  ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
+  BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
+  OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
+  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
+  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
+  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
+  StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MethodTypeSym(..),
+  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
+  MethodElim, BlockCommentSym(..), BlockCommentElim)
+import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
-  method, stateVar, class', module', blockComment')
+  method, blockComment')
+import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
+  PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
+  OORenderMethod(..), StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
+  ModuleElim)
+import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
+  module')
 import Drasil.GOOL.LanguageRenderer (dot, new, elseIfLabel, forLabel, tryLabel,
   catchLabel, throwLabel, throwsLabel, importLabel, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, exceptionObj', 
@@ -140,7 +145,8 @@ instance ProgramSym JavaCode where
     addProgNameToPaths n) (onCodeList (progD n st . map (R.package n 
     endStatement)))
 
-instance RenderSym JavaCode
+instance CommonRenderSym JavaCode
+instance OORenderSym JavaCode
 
 instance FileSym JavaCode where
   type File JavaCode = FileData 
@@ -444,6 +450,8 @@ instance InternalValueExp JavaCode where
 
 instance FunctionSym JavaCode where
   type Function JavaCode = FuncData
+
+instance OOFunctionSym JavaCode where
   func = G.func
   objAccess = G.objAccess
 
@@ -619,7 +627,7 @@ instance ControlStatement JavaCode where
   
   throw = G.throw jThrowDoc Semi
 
-  ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd
+  ifCond = G.ifCond parens bodyStart G.defaultOptSpace elseIfLabel bodyEnd empty
   switch  = C.switch parens break
 
   ifExists = M.ifExists
@@ -651,6 +659,8 @@ instance VisibilityElim JavaCode where
 instance MethodTypeSym JavaCode where
   type MethodType JavaCode = TypeData
   mType = zoom lensMStoVS
+  
+instance OOMethodTypeSym JavaCode where
   construct = G.construct
 
 instance ParameterSym JavaCode where
@@ -688,6 +698,12 @@ instance OOMethodSym JavaCode where
   docInOutMethod n s p = jDocInOut (inOutMethod n s p)
 
 instance RenderMethod JavaCode where
+  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
+    (onStateValue (onCodeValue R.commentedItem) cmt)
+    
+  mthdFromData _ d = toState $ toCode $ mthd d
+
+instance OORenderMethod JavaCode where
   intMethod m n s p t ps b = do
     tp <- t
     pms <- sequence ps
@@ -700,12 +716,7 @@ instance RenderMethod JavaCode where
     modify ((if m then setCurrMain else id) . addExceptionImports excs) 
     pure $ toCode $ mthd $ jMethod n (map exc excs) s p tp pms bd
   intFunc = C.intFunc
-  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
-    (onStateValue (onCodeValue R.commentedItem) cmt)
-    
   destructor _ = error $ CP.destructorError jName
-  
-  mthdFromData _ d = toState $ toCode $ mthd d
   
 instance MethodElim JavaCode where
   method = mthdDoc . unJC
@@ -770,15 +781,15 @@ jVersion = "14"
 jImport :: Label -> Doc
 jImport n = importLabel <+> text n <> endStatement
 
-jBoolType :: (RenderSym r) => VSType r
+jBoolType :: (CommonRenderSym r) => VSType r
 jBoolType = typeFromData Boolean jBool (text jBool)
 
-jInfileType :: (RenderSym r) => VSType r
+jInfileType :: (CommonRenderSym r) => VSType r
 jInfileType = do 
   tpf <- typeFromData InFile jScanner jScanner'
   modifyReturn (addLangImportVS $ utilImport jScanner) tpf
 
-jOutfileType :: (RenderSym r) => VSType r
+jOutfileType :: (CommonRenderSym r) => VSType r
 jOutfileType = do 
   tpf <- typeFromData OutFile jPrintWriter (text jPrintWriter)
   modifyReturn (addLangImportVS $ ioImport jPrintWriter) tpf
@@ -840,7 +851,7 @@ jSystem = text . access "System"
 jUnaryMath :: (Monad r) => String -> VSOp r
 jUnaryMath = unOpPrec . mathFunc
 
-jListType :: (RenderSym r) => VSType r -> VSType r
+jListType :: (CommonRenderSym r) => VSType r -> VSType r
 jListType t = do
   modify (addLangImportVS $ utilImport arrayList) 
   t >>= (jListType' . getType)
@@ -856,12 +867,12 @@ jListType t = do
 jArrayType :: VSType JavaCode
 jArrayType = arrayType (obj jObject)
 
-jFileType :: (RenderSym r) => VSType r
+jFileType :: (OORenderSym r) => VSType r
 jFileType = do 
   tpf <- obj jFile
   modifyReturn (addLangImportVS $ ioImport jFile) tpf
 
-jFileWriterType :: (RenderSym r) => VSType r
+jFileWriterType :: (OORenderSym r) => VSType r
 jFileWriterType = do 
   tpf <- obj jFileWriter
   modifyReturn (addLangImportVS $ ioImport jFileWriter) tpf
@@ -900,7 +911,7 @@ jHasNextLineFunc = func jHasNextLine bool []
 jCharAtFunc :: VSFunction JavaCode
 jCharAtFunc = func jCharAt char [litInt 0]
 
-jSplitFunc :: (RenderSym r) => Char -> VSFunction r
+jSplitFunc :: (OORenderSym r) => Char -> VSFunction r
 jSplitFunc d = func jSplit (listType string) [litString [d]]
 
 jEquality :: SValue JavaCode -> SValue JavaCode -> SValue JavaCode
@@ -908,7 +919,7 @@ jEquality v1 v2 = v2 >>= jEquality' . getType . valueType
   where jEquality' String = objAccess v1 (jEqualsFunc v2)
         jEquality' _ = typeBinExpr equalOp bool v1 v2
 
-jLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
+jLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 jLambda ps ex = parens (variableList ps) <+> jLambdaSep <+> RC.value ex
 
 jCast :: VSType JavaCode -> SValue JavaCode -> SValue JavaCode
@@ -919,7 +930,7 @@ jCast = join .: on2StateValues (\t v -> jCast' (getType t) (getType $ valueType
         jCast' _ _ t v = mkStateVal (toState t) (R.castObj (R.cast (RC.type' t))
           (RC.value v))
 
-jConstDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
+jConstDecDef :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
 jConstDecDef v' def' = do
   v <- zoom lensMStoVS v'
   def <- zoom lensMStoVS def'
@@ -927,7 +938,7 @@ jConstDecDef v' def' = do
   mkStmt $ jFinal <+> RC.type' (variableType v) <+> 
     RC.variable v <+> equals <+> RC.value def
 
-jFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> MSBody r ->
+jFuncDecDef :: (CommonRenderSym r) => SVariable r -> [SVariable r] -> MSBody r ->
   MSStatement r
 jFuncDecDef v ps bod = do
   vr <- zoom lensMStoVS v
@@ -938,11 +949,11 @@ jFuncDecDef v ps bod = do
     parens (variableList pms) <+> jLambdaSep <+> bodyStart $$ indent (RC.body b)
     $$ bodyEnd
 
-jThrowDoc :: (RenderSym r) => r (Value r) -> Doc
+jThrowDoc :: (CommonRenderSym r) => r (Value r) -> Doc
 jThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <> 
   parens (RC.value errMsg)
 
-jTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
+jTryCatch :: (CommonRenderSym r) => r (Body r) -> r (Body r) -> Doc
 jTryCatch tb cb = vcat [
   tryLabel <+> lbrace,
   indent $ RC.body tb,
@@ -951,7 +962,7 @@ jTryCatch tb cb = vcat [
   indent $ RC.body cb,
   rbrace]
 
-jOut :: (RenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> 
+jOut :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> 
   MSStatement r
 jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getType . valueType
   where jOut' (List (Object _)) = G.print newLn f printFn v
@@ -973,18 +984,18 @@ jInput vr inFn = do
       jInput' _ = error "Attempt to read value of unreadable type"
   jInput' (getType $ variableType v)
 
-jOpenFileR :: (RenderSym r) => SValue r -> VSType r -> SValue r
+jOpenFileR :: (OORenderSym r) => SValue r -> VSType r -> SValue r
 jOpenFileR n t = newObj t [newObj jFileType [n]]
 
-jOpenFileWorA :: (RenderSym r) => SValue r -> VSType r -> SValue r -> SValue r
+jOpenFileWorA :: (OORenderSym r) => SValue r -> VSType r -> SValue r -> SValue r
 jOpenFileWorA n t wa = newObj t [newObj jFileWriterType [newObj jFileType [n], 
   wa]]
 
-jStringSplit :: (RenderSym r) => SVariable r -> SValue r -> VS Doc
+jStringSplit :: (CommonRenderSym r) => SVariable r -> SValue r -> VS Doc
 jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+> 
   new' <+> RC.type' (variableType vnew) <> parens (RC.value s))
 
-jMethod :: (RenderSym r) => Label -> [String] -> r (Visibility r) -> r (Permanence r)
+jMethod :: (OORenderSym r) => Label -> [String] -> r (Visibility r) -> r (Permanence r)
   -> r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 jMethod n es s p t ps b = vcat [
   RC.visibility s <+> RC.perm p <+> RC.type' t <+> text n <> 
@@ -1043,7 +1054,7 @@ jInOut f ins outs both b = f (returnTp rets)
         decls = multi $ map varDec outs
         rets = both ++ outs
 
-jDocInOut :: (RenderSym r) => ([SVariable r] -> [SVariable r] -> [SVariable r] -> 
+jDocInOut :: (CommonRenderSym r) => ([SVariable r] -> [SVariable r] -> [SVariable r] -> 
     MSBody r -> SMethod r) -> 
   String -> [(String, SVariable r)] -> [(String, SVariable r)] -> 
   [(String, SVariable r)] -> MSBody r -> SMethod r
@@ -1058,8 +1069,8 @@ jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (map fst $ bs ++ is)
   where rets = "array containing the following values:" : map fst bs ++ 
           map fst os
 
-jExtraClass :: (RenderSym r) => Label -> Maybe Label -> [CSStateVar r] -> 
-  [SMethod r] -> [SMethod r] -> SClass r
+jExtraClass :: (OORenderSym r) => Label -> Maybe Label ->
+  [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
 jExtraClass n = intClass n (visibilityFromData Priv empty) . inherit
 
 addCallExcsCurrMod :: String -> VS ()
@@ -1068,7 +1079,7 @@ addCallExcsCurrMod n = do
   mem <- getMethodExcMap
   modify (maybe id addExceptions (Map.lookup (qualName cm n) mem))
 
-addConstructorCallExcsCurrMod :: (RenderSym r) => VSType r -> 
+addConstructorCallExcsCurrMod :: (CommonRenderSym r) => VSType r -> 
   (VSType r -> SValue r) -> SValue r
 addConstructorCallExcsCurrMod ot f = do
   t <- ot

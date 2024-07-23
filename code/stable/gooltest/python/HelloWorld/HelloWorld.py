@@ -63,6 +63,8 @@ mySlicedList9 = myOtherList[x:y:z]
 
 mySlicedList10 = myOtherList[2::z]
 
+mySlicedList10 = myOtherList[2::z]
+
 mySlicedList11 = myOtherList[y:x:z]
 
 # Print results of list slicing tests
@@ -111,7 +113,6 @@ elif b == 5:
     c -= 1
     b -= 1
     myList = []
-    myObj = 'o'
     myConst = "Imconstant"
     print(a)
     print(b)

@@ -90,10 +90,10 @@ command3 :: String -> String -> String -> String -> D
 command3 s a0 a1 a2 = pure $ (H.bslash TP.<> text s) TP.<> H.br a0 TP.<> H.br a1 TP.<> H.br a2
 
 -- | Encapsulate environments.
-mkEnv :: String -> D -> D
-mkEnv nm d =
-  pure (text ("\\begin" ++ H.brace nm)) $+$ 
-  d $+$
+mkEnv :: String -> (D -> D -> D) -> D -> D
+mkEnv nm cat d =
+  pure (text ("\\begin" ++ H.brace nm)) `cat`
+  d `cat`
   pure (text ("\\end" ++ H.brace nm))
 
 -- | Encapsulate environments with argument with braces.
@@ -202,15 +202,15 @@ centering = command0 "centering"
 -- | Common commands and formatting options for a LaTeX document.
 code, itemize, enumerate, description, figure, center, document, 
   equation, symbDescription :: D -> D
-code        = mkEnv "lstlisting"
-itemize     = mkEnv "itemize"
-enumerate   = mkEnv "enumerate"
-description = mkEnv "description"
-figure      = mkEnv "figure"
-center      = mkEnv "center"
-document    = mkEnv "document"
-equation    = mkEnv "displaymath" --displays math
-symbDescription = mkEnv "symbDescription"
+code        = mkEnv "lstlisting" ($+$)
+itemize     = mkEnv "itemize" ($+$)
+enumerate   = mkEnv "enumerate" ($+$)
+description = mkEnv "description" ($+$)
+figure      = mkEnv "figure" ($+$)
+center      = mkEnv "center" ($+$)
+document    = mkEnv "document" ($+$)
+equation    = mkEnv "displaymath" ($+$) --displays math
+symbDescription = mkEnv "symbDescription" ($+$)
 
 -- | Command for the document class.
 docclass :: String -> String -> D

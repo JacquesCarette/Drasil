@@ -388,7 +388,7 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
   where l_i = "list_i" ++ show n
         i = IC.locVar l_i IC.int
 
-printSet :: (RenderSym r) => Integer -> SValue r -> (SValue r -> MSStatement r)
+printSet :: (CommonRenderSym r) => Integer -> SValue r -> (SValue r -> MSStatement r)
   -> (String -> MSStatement r) -> (String -> MSStatement r) -> MSStatement r
 printSet n v prFn prStrFn prLnFn = multi [prStrFn "{ ", 
   IC.forEach i v
@@ -396,7 +396,7 @@ printSet n v prFn prStrFn prLnFn = multi [prStrFn "{ ",
 --(IC.forEach i v (bodyStatements [prFn (IC.valueOf i)])),
   prLnFn "}"]
   where set_i = "set_i" ++ show n
-        i = IC.var set_i IC.double
+        i = IC.locVar set_i IC.double
 
 printSet :: (RenderSym r) => Integer -> SValue r -> (SValue r -> MSStatement r)
   -> (String -> MSStatement r) -> (String -> MSStatement r) -> MSStatement r

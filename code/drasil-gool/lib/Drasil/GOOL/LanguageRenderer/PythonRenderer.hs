@@ -203,6 +203,7 @@ instance TypeSym PythonCode where
   infile = typeFromData InFile "" empty
   outfile = typeFromData OutFile "" empty
   listType t' = t' >>=(\t -> typeFromData (List (getType t)) "" empty)
+  setType t' = t' >>=(\t -> typeFromData (Set (getType t)) "" empty)
   arrayType = listType
   listInnerType = G.listInnerType
   funcType = CP.funcType
@@ -454,7 +455,6 @@ instance List PythonCode where
   indexOf = CP.indexOf pyIndex
 
 instance Set PythonCode where
-  --fromList =
   contains a b = isin b a
 
 instance InternalList PythonCode where
@@ -830,8 +830,8 @@ pyInputFunc, pyPrintFunc :: Doc
 pyInputFunc = text "input()" -- raw_input() for < Python 3.0
 pyPrintFunc = text printLabel
 
-pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyClose, 
-  pySplit, pyRange, pyRstrip, pyMath :: String
+pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyOpen, pyClose, 
+  pyRead, pyWrite, pyAppend, pySplit, pyRange, pyRstrip, pyMath, pyIn :: String
 pyListSize = "len"
 pyIndex = "index"
 pyInsert = "insert"
@@ -844,7 +844,6 @@ pyRange = "range"
 pyRstrip = "rstrip"
 pyMath = "math"
 pyIn = "in"
-pySetAdd = "Add"
 
 pyDef, pyLambdaDec, pyElseIf, pyRaise, pyExcept :: Doc
 pyDef = text "def"

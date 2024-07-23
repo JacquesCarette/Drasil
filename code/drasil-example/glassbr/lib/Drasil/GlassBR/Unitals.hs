@@ -105,7 +105,7 @@ standOffDist = uq (constrained' (uc sD (variable "SD") Real metre)
 nomThick = cuc "nomThick" 
   (nounPhraseSent $ S "nominal thickness")
   lT millimetre {-Discrete nominalThicknesses, but not implemented-} Rational 
-  [sfwrElem $ mkSet (map dbl (nominalThicknesses))] $ exactDbl 8 -- for testing
+  [sfwrElem $ mkSet (map dbl nominalThicknesses)] $ exactDbl 8 -- for testing
 
 glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String) 
   [{- TODO: add back constraint: EnumeratedStr Software $ map (abrv . snd) glassType -}]

@@ -75,7 +75,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
   extFuncAppMixedArgs, indexOf, contains, listAddFunc, discardFileLine, intClass, 
-  arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, docMain, 
+  arrayType, pi, printSt, arrayDec, arrayDecDef, setDec, setDecDef, openFileA, forEach, docMain, 
   mainFunction, buildModule', string, constDecDef, docInOutFunc, bindingError, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, listSetFunc, 
   extraClass, listAccessFunc, doubleRender, openFileR, openFileW, stateVar, 
@@ -766,9 +766,9 @@ csForEach = text "foreach"
 csNamedArgSep = colon <> space
 csLambdaSep = text "=>"
 
-csSystem, csConsole, csGeneric, csIO, csList, csInt, csFloat, csBool, 
+csSystem, csConsole, csGeneric, csIO, csList, csSet, csInt, csFloat, csBool, 
   csChar, csParse, csReader, csWriter, csReadLine, csWrite, csWriteLine, 
-  csIndex, csListAdd, csListAppend, csClose, csEOS, csSplit, csMain,
+  csIndex, csContains, csListAdd, csListAppend, csClose, csEOS, csSplit, csMain,
   csFunc :: String
 csSystem = "System"
 csConsole = "Console"

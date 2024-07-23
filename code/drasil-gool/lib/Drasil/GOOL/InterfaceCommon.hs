@@ -12,7 +12,7 @@ module Drasil.GOOL.InterfaceCommon (
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp,
-  exists, List(..), Set, InternalList(..), listSlice, listIndexExists, at,
+  exists, List(..), Set(..), InternalList(..), listSlice, listIndexExists, at,
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
@@ -41,7 +41,7 @@ class (VectorType r, VectorDecl r, VectorThunk r,
   IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r,
   CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r,
   MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r,
-  BooleanExpression r, Comparison r, ValueExpression r, List r, TypeElim r,
+  BooleanExpression r, Comparison r, ValueExpression r, List r, Set r, TypeElim r,
   VariableElim r, MethodSym r, ScopeSym r
   ) => SharedProg r
 
@@ -295,11 +295,6 @@ class (ValueSym r) => List r where
   indexOf :: SValue r -> SValue r -> SValue r
 
 class (ValueSym r) => Set r where
-  --
-  setSize :: SValue r -> SValue r
-  -- set, element
-  setAdd :: SValue r -> SValue r -> SValue r
-  -- converts a list to a set
   --fromList :: SValue r -> SValue r -> SValue r
   -- set, element
   contains :: SValue r -> SValue r -> SValue r

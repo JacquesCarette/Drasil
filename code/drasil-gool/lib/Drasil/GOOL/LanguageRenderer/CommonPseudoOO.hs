@@ -142,6 +142,9 @@ objVarSelf = IG.objVar IG.self
 indexOf :: (OORenderSym r) => Label -> SValue r -> SValue r -> SValue r
 indexOf f l v = IC.indexToInt $ IG.objAccess l (IG.func f IC.int [v])
 
+contains :: (OORenderSym r) => Label -> SValue r -> SValue r -> SValue r
+contains f l v = IG.objAccess l (IG.func f IC.int [v])
+
 listAddFunc :: (OORenderSym r) => Label -> SValue r -> SValue r -> VSFunction r
 listAddFunc f i v = IG.func f (IC.listType $ onStateValue valueType v) 
   [i, v]

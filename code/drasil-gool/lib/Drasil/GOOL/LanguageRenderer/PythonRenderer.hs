@@ -75,9 +75,9 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
   extFuncAppMixedArgs, indexOf, contains, listAddFunc, discardFileLine, intClass, 
-  funcType, buildModule, bindingError, notNull, listDecDef, setDecDef, destructorError, 
+  funcType, buildModule, bindingError, notNull, listDecDef, destructorError, 
   stateVarDef, constVar, litArray, litSet, listSetFunc, extraClass, listAccessFunc, 
-  multiAssign, multiReturn, listDec, setDec, funcDecDef, inOutCall, forLoopError, 
+  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
   mainBody, inOutFunc, docInOutFunc', listSize, intToIndex, indexToInt,
   varDecDef, openFileR', openFileW', openFileA', argExists, forEach', global)
 import qualified Drasil.GOOL.LanguageRenderer.Macros as M (ifExists, 

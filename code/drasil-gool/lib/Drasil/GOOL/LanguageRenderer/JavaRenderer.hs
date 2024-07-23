@@ -882,7 +882,7 @@ jListType t = do
         lstInt = arrayList `containing` jInteger
         lstBool = arrayList `containing` jBool'
 
-jSetType :: (RenderSym r) => VSType r -> VSType r
+jSetType :: (OORenderSym r) => VSType r -> VSType r
 jSetType t = do
   modify (addLangImportVS $ utilImport "Set") 
   t >>= (jSetType' . getType)

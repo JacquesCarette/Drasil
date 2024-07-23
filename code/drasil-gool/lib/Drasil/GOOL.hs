@@ -42,7 +42,7 @@ import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  libFuncApp, exists, List(..), listSlice, listIndexExists, at, ScopeSym(..),
+  libFuncApp, exists, List(..), Set(..), listSlice, listIndexExists, at, ScopeSym(..),
   ParameterSym(..), MethodSym(..), VisibilitySym(..), convType)
 import Drasil.GOOL.InterfaceGOOL (GSProgram, SFile, FSModule, SClass,
   CSStateVar, Initializers, OOProg, ProgramSym(..), FileSym(..), ModuleSym(..),

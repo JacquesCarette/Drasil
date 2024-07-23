@@ -9,7 +9,7 @@ module Drasil.GOOL.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   extraClass, listAccessFunc, doubleRender, double, openFileR, openFileW,
   stateVar, self, multiAssign, multiReturn, listDec, funcDecDef, inOutCall,
   forLoopError, mainBody, inOutFunc, docInOutFunc', boolRender, bool,
-  floatRender, float, stringRender', string', inherit, implements, listSize,
+  floatRender, float, stringRender', string', inherit, implements, listSize, setDecDef, setDec,
   listAdd, listAppend, intToIndex, indexToInt, intToIndex', indexToInt',
   varDecDef, openFileR', openFileW', openFileA', argExists, global
 ) where
@@ -340,11 +340,17 @@ setDecDef v vals = do
   let st = IC.litSet (listInnerType $ return $ variableType vr) vals
   IC.varDecDef (return vr) st
 
-setDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
+setDecDef :: (OORenderSym r) => SVariable r -> [SValue r] -> MSStatement r
 setDecDef v vals = do
   vr <- zoom lensMStoVS v 
   let st = IC.litSet (listInnerType $ return $ variableType vr) vals
   IC.varDecDef (return vr) st
+
+setDec :: (OORenderSym r) => (r (Value r) -> Doc) -> SValue r -> SVariable r -> MSStatement r
+setDec f vl v = do 
+  sz <- zoom lensMStoVS vl
+  vd <- IC.varDec v
+  mkStmt (RC.statement vd <> f sz)
 
 destructorError :: String -> String
 destructorError l = "Destructors not allowed in " ++ l
@@ -366,11 +372,11 @@ litArray :: (CommonRenderSym r) => (Doc -> Doc) -> VSType r -> [SValue r] -> SVa
 litArray f t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t) 
   (f $ valueList elems))
 
-litSet :: (RenderSym r) => (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
+litSet :: (OORenderSym r) => (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
 litSet f t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t) 
   (f $ valueList elems))
 
-litSetFunc :: (RenderSym r) => String -> VSType r -> [SValue r] -> SValue r
+litSetFunc :: (OORenderSym r) => String -> VSType r -> [SValue r] -> SValue r
 litSetFunc s t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t) 
   (text s <> parens (valueList elems)))
 

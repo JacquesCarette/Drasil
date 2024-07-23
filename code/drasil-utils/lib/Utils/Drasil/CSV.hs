@@ -2,7 +2,7 @@
 module Utils.Drasil.CSV where
 
 import Text.PrettyPrint (Doc, text, vcat)
-import Data.List (intersperse)
+import Data.List (intercalate)
 
 -- | Creates a CSV file as a 'Doc' from a 'String' matrix.
 makeCSV :: [[String]] -> Doc
@@ -10,7 +10,7 @@ makeCSV rows = vcat $ map (text . formatRow) rows
   where
     -- | Seperates each row item with a comma.
     formatRow :: [String] -> String
-    formatRow = concat . intersperse "," . map escape
+    formatRow = intercalate "," . map escape
 
     -- | Adds quotations around the item if it contains ',', '"', \n', or ' '.
     escape :: String -> String

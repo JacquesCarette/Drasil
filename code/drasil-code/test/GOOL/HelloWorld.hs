@@ -10,7 +10,7 @@ import Drasil.GOOL (GSProgram, MSBody, MSBlock, MSStatement, SMethod, SVariable,
   CommentStatement(..), ControlStatement(..), mainVar, locVar, constant,
   ScopeSym(..), Literal(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), extFuncApp, List(..), MethodSym(..), ModuleSym(..),
+  ValueExpression(..), extFuncApp, List(..), Set(..), MethodSym(..), ModuleSym(..),
   OODeclStatement(objDecDef))
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import GOOL.Helper (helper)

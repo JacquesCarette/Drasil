@@ -78,7 +78,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   funcType, buildModule, bindingError, notNull, listDecDef, destructorError, 
   stateVarDef, constVar, litArray, litSet, listSetFunc, extraClass, listAccessFunc, 
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
-  mainBody, inOutFunc, docInOutFunc', listSize, intToIndex, indexToInt,
+  mainBody, inOutFunc, docInOutFunc', listSize, setDecDef, setDec, intToIndex, indexToInt,
   varDecDef, openFileR', openFileW', openFileA', argExists, forEach', global)
 import qualified Drasil.GOOL.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
@@ -552,7 +552,6 @@ instance DeclStatement PythonCode where
   varDec v = CP.varDecDef v Nothing
   varDecDef v e = CP.varDecDef v (Just e)
   listDec _ = CP.listDec
-  setDec _ = CP.setDec
   setDecDef = CP.setDecDef
   listDecDef = CP.listDecDef
   arrayDec = listDec

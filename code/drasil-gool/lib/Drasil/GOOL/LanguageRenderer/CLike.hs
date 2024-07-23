@@ -169,7 +169,7 @@ listDec f vl v = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v
   mkStmt (RC.statement vd <> f sz)
-setDec :: (RenderSym r) => (r (Value r) -> Doc) -> SValue r -> SVariable r -> MSStatement r
+setDec :: (OORenderSym r) => (r (Value r) -> Doc) -> SValue r -> SVariable r -> MSStatement r
 setDec f vl v = do 
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v

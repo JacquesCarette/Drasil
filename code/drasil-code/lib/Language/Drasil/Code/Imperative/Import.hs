@@ -13,10 +13,7 @@ import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
 import Database.Drasil (symbResolve)
 import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&),in')
 import qualified Language.Drasil.CodeExpr as CE (int)
-import Language.Drasil.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
-  AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..), BoolBinOp(..), EqBinOp(..),
-  LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
-  VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..))
+import Language.Drasil.CodeExpr.Development
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, fAppProc,
@@ -40,19 +37,7 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
   Mod(..), Name, Description, StateVariable(..), fstdecl)
 import qualified Language.Drasil.Mod as M (Class(..))
 
-import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
-  MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
-  Initializers, SharedProg, OOProg, PermanenceSym(..), bodyStatements,
-  BlockSym(..), TypeSym(..), VariableSym(..), var, constant, ScopeSym(..),
-  OOVariableSym(..), staticConst, VariableElim(..), ($->), ValueSym(..),
-  Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), OOValueExpression(..),
-  objMethodCallMixedArgs, List(..), StatementSym(..), AssignStatement(..),
-  DeclStatement(..), IOStatement(..), StringStatement(..), ControlStatement(..),
-  ifNoElse, VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
-  pubDVar, privDVar, nonInitConstructor, convType, convTypeOO,
-  VisibilityTag(..), CodeType(..), onStateValue)
-import qualified Drasil.GOOL as OO (SFile)
+import Drasil.GOOL hiding (Set, get)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (SFile)

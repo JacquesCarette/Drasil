@@ -585,13 +585,7 @@ listSize :: (CommonRenderSym r) => SValue r -> SValue r
 listSize l = do
   f <- S.listSizeFunc l
   mkVal (RC.functionType f) (RC.function f)
-
-setSize :: (RenderSym r) => SValue r -> SValue r
-setSize l = do
-  f <- S.listSizeFunc l
-  mkVal (RC.functionType f) (RC.function f)
   
-
 -- Julia and MATLAB --
 
 -- | Call to insert a value into a list in a language where this is not a method.
@@ -605,11 +599,6 @@ listAdd l i v = do
 listAppend :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r
 listAppend l v = do
   f <- S.listAppendFunc l v
-  mkVal (RC.functionType f) (RC.function f)
-
-setAdd :: (RenderSym r) => SValue r -> SValue r -> SValue r
-setAdd l v = do
-  f <- S.setAddFunc l v
   mkVal (RC.functionType f) (RC.function f)
 
 -- | Convert an integer to an index in a 1-indexed language

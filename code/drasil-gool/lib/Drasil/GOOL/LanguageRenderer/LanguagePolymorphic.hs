@@ -337,8 +337,7 @@ setFunc t v toVal = v >>= (\vr -> IG.func (setterName $ variableName vr) t
 
 listAppendFunc :: (OORenderSym r) => Label -> SValue r -> VSFunction r
 listAppendFunc f v = IG.func f (IC.listType $ onStateValue valueType v) [v]
-setAddFunc :: (RenderSym r) => Label -> SValue r -> VSFunction r
-setAddFunc f v = IG.func f (IC.listType $ onStateValue valueType v) [v]
+
 -- Statements --
 
 stmt :: (CommonRenderSym r) => MSStatement r -> MSStatement r

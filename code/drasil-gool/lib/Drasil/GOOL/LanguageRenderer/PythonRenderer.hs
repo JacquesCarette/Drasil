@@ -461,10 +461,6 @@ instance InternalList PythonCode where
   listSlice' b e s vn vo = pyListSlice vn vo (getVal b) (getVal e) (getVal s)
     where getVal = fromMaybe (mkStateVal void empty)
 
-instance InternalSetFunc PythonCode where
-  listSlice' b t s vn vo = pyListSlice vn vo (getVal b) (getVal t) (getVal s)
-    where getVal = fromMaybe (mkStateVal void empty)
-
 instance InternalGetSet PythonCode where
   getFunc = G.getFunc
   setFunc = G.setFunc

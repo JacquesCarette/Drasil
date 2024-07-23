@@ -44,14 +44,15 @@ import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
 import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc)
 
-import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement,
+import Drasil.GOOL (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement,
   SMethod, CSStateVar, SClass, OOProg, BodySym(..), bodyStatements, oneLiner,
-  BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..), Literal(..),
-  VariableValue(..), CommandLineArgs(..), BooleanExpression(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), objDecNewNoParams,
+  BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..), var,
+  ScopeSym(..), Literal(..), VariableValue(..), CommandLineArgs(..),
+  BooleanExpression(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
   extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse,
-  ScopeSym(..), MethodSym(..), StateVarSym(..), pubDVar, convTypeOO,
-  ScopeTag(..))
+  VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convTypeOO,
+  VisibilityTag(..))
 
 import Prelude hiding (print)
 import Data.List (intersperse, partition)
@@ -82,12 +83,12 @@ genMainFunc = do
     g <- get
     let mainFunc Library = return Nothing
         mainFunc Program = do
-          v_filename <- mkVar $ quantvar inFileName
-          logInFile <- maybeLog v_filename
+          v_filename <- mkVar (quantvar inFileName) mainFn
+          logInFile <- maybeLog v_filename mainFn
           co <- initConsts
           ip <- getInputDecl
           ics <- genAllInputCalls
-          varDef <- mapM genCalcCall (execOrder $ codeSpec g)
+          varDef <- mapM (`genCalcCall` mainFn) (execOrder $ codeSpec g)
           wo <- genOutputCall
           return $ Just $ (if CommentFunc `elem` commented g then docMain else
             mainFunction) $ bodyStatements $ initLogFileVar (logKind g)
@@ -110,15 +111,15 @@ genMainFunc = do
 getInputDecl :: (OOProg r) => GenState (Maybe (MSStatement r))
 getInputDecl = do
   g <- get
-  v_params <- mkVar (quantvar inParams)
+  v_params <- mkVar (quantvar inParams) local -- TODO: get scope from state
   constrParams <- getInConstructorParams
-  cps <- mapM mkVal constrParams
+  cps <- mapM (`mkVal` local) constrParams -- TODO: get scope from state
   cname <- genICName InputParameters
   let getDecl ([],[]) = constIns (partition (flip member (eMap g) .
         codeName) (map quantvar $ constants $ codeSpec g)) (conRepr g)
         (conStruct g)
       getDecl ([],ins) = do
-        vars <- mapM mkVar ins
+        vars <- mapM (`mkVar` local) ins
         return $ Just $ multi $ map varDec vars
       getDecl (i:_,[]) = return $ Just $ (if currentModule g ==
         eMap g ! codeName i then objDecNew
@@ -144,7 +145,7 @@ getInputDecl = do
 initConsts :: (OOProg r) => GenState (Maybe (MSStatement r))
 initConsts = do
   g <- get
-  v_consts <- mkVar (quantvar consts)
+  v_consts <- mkVar (quantvar consts) local -- TODO: get scope from state
   cname <- genICName Constants
   let cs = constants $ codeSpec g
       getDecl (Store Unbundled) _ = declVars
@@ -153,9 +154,9 @@ initConsts = do
       getDecl WithInputs Bundled = return Nothing
       getDecl Inline _ = return Nothing
       declVars = do
-        vars <- mapM (mkVar . quantvar) cs
+        vars <- mapM ((`mkVar` local) . quantvar) cs -- TODO: get scope from state
         vals <- mapM (convExpr . (^. codeExpr)) cs
-        logs <- mapM maybeLog vars
+        logs <- mapM (`maybeLog` mainFn) vars
         return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++
           concat logs
       defFunc Var = varDecDef
@@ -169,7 +170,7 @@ initConsts = do
 -- | Generates a statement to declare the variable representing the log file,
 -- if the user chose to turn on logs for variable assignments.
 initLogFileVar :: (OOProg r) => [Logging] -> [MSStatement r]
-initLogFileVar l = [varDec varLogFile | LogVar `elem` l]
+initLogFileVar l = [varDec (varLogFile mainFn) | LogVar `elem` l]
 
 ------- INPUT ----------
 
@@ -210,26 +211,30 @@ genInputClass scp = do
       cs = constants $ codeSpec g
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter ((Just cname ==) . flip Map.lookup (clsMap g) . codeName)
+      constructors :: (OOProg r) => GenState [SMethod r]
+      constructors = if cname `elem` defSet g
+        then concat <$> mapM (fmap maybeToList) [genInputConstructor]
+        else return []
       methods :: (OOProg r) => GenState [SMethod r]
       methods = if cname `elem` defSet g
-        then concat <$> mapM (fmap maybeToList) [genInputConstructor,
-        genInputFormat Priv, genInputDerived Priv, genInputConstraints Priv]
+        then concat <$> mapM (fmap maybeToList) [genInputFormat Priv,
+        genInputDerived Priv, genInputConstraints Priv]
         else return []
       genClass :: (OOProg r) => [CodeVarChunk] -> [CodeDefinition] ->
         GenState (Maybe (SClass r))
       genClass [] [] = return Nothing
       genClass inps csts = do
         vals <- mapM (convExpr . (^. codeExpr)) csts
-        inputVars <- mapM (\x -> fmap (pubDVar . var (codeName x) . convTypeOO)
-          (codeType x)) inps
+        inputVars <- mapM (\x -> fmap (pubDVar . 
+          var' (codeName x) local . convTypeOO) (codeType x)) inps
         constVars <- zipWithM (\c vl -> fmap (\t -> constVarFunc (conRepr g)
-          (var (codeName c) (convTypeOO t)) vl) (codeType c))
+          (var (codeName c) (convTypeOO t) local) vl) (codeType c))
           csts vals
         let getFunc Primary = primaryClass
             getFunc Auxiliary = auxClass
             f = getFunc scp
         icDesc <- inputClassDesc
-        c <- f cname Nothing icDesc (inputVars ++ constVars) methods
+        c <- f cname Nothing icDesc (inputVars ++ constVars) constructors methods
         return $ Just c
   genClass (filt ins) (filt cs)
 
@@ -256,7 +261,7 @@ genInputConstructor = do
     dvName, icName]
 
 -- | Generates a function for calculating derived inputs.
-genInputDerived :: (OOProg r) => ScopeTag ->
+genInputDerived :: (OOProg r) => VisibilityTag ->
   GenState (Maybe (SMethod r))
 genInputDerived s = do
   g <- get
@@ -277,7 +282,7 @@ genInputDerived s = do
   genDerived $ dvName `elem` defSet g
 
 -- | Generates function that checks constraints on the input.
-genInputConstraints :: (OOProg r) => ScopeTag ->
+genInputConstraints :: (OOProg r) => VisibilityTag ->
   GenState (Maybe (SMethod r))
 genInputConstraints s = do
   g <- get
@@ -358,7 +363,7 @@ constraintViolatedMsg :: (OOProg r) => CodeVarChunk -> String ->
   ConstraintCE -> GenState [MSStatement r]
 constraintViolatedMsg q s c = do
   pc <- printConstraint c
-  v <- mkVal (quantvar q)
+  v <- mkVal (quantvar q) local -- TODO: get scope from state
   return $ [printStr $ codeName q ++ " has value ",
     print v,
     printStr $ ", but is " ++ s ++ " to be "] ++ pc
@@ -395,7 +400,7 @@ printExpr Lit{} _  = []
 printExpr e     db = [printStr $ " (" ++ render (codeExprDoc db Implementation OneLine e) ++ ")"]
 
 -- | | Generates a function for reading inputs from a file.
-genInputFormat :: (OOProg r) => ScopeTag ->
+genInputFormat :: (OOProg r) => VisibilityTag ->
   GenState (Maybe (SMethod r))
 genInputFormat s = do
   g <- get
@@ -409,7 +414,7 @@ genInputFormat s = do
       genInFormat _ = do
         ins <- getInputFormatIns
         outs <- getInputFormatOuts
-        bod <- readData dd
+        bod <- readData dd local
         desc <- inFmtFuncDesc
         mthd <- getFunc s giName desc ins outs bod
         return $ Just mthd
@@ -455,13 +460,14 @@ genConstClass scp = do
       genClass [] = return Nothing
       genClass vs = do
         vals <- mapM (convExpr . (^. codeExpr)) vs
-        vars <- mapM (\x -> fmap (var (codeName x) . convTypeOO) (codeType x)) vs
+        vars <- mapM (\x -> fmap (var' (codeName x) local . convTypeOO)
+          (codeType x)) vs
         let constVars = zipWith (constVarFunc (conRepr g)) vars vals
             getFunc Primary = primaryClass
             getFunc Auxiliary = auxClass
             f = getFunc scp
         cDesc <- constClassDesc
-        cls <- f cname Nothing cDesc constVars (return [])
+        cls <- f cname Nothing cDesc constVars (return []) (return [])
         return $ Just cls
   genClass $ filter (flip member (Map.filter (cname ==) (clsMap g))
     . codeName) cs
@@ -487,7 +493,7 @@ genCalcFunc cdef = do
   parms <- getCalcParams cdef
   let nm = codeName cdef
   tp <- codeType cdef
-  v <- mkVar (quantvar cdef)
+  v <- mkVar (quantvar cdef) local
   blcks <- case cdef ^. defType
             of Definition -> liftS $ genCalcBlock CalcReturn cdef
                  (cdef ^. codeExpr)
@@ -517,9 +523,9 @@ genCalcBlock :: (OOProg r) => CalcType -> CodeDefinition -> CodeExpr ->
   GenState (MSBlock r)
 genCalcBlock t v (Case c e) = genCaseBlock t v c e
 genCalcBlock CalcAssign v e = do
-  vv <- mkVar (quantvar v)
+  vv <- mkVar (quantvar v) local
   ee <- convExpr e
-  l <- maybeLog vv
+  l <- maybeLog vv local
   return $ block $ assign vv ee : l
 genCalcBlock CalcReturn _ e = block <$> liftS (returnStmt <$> convExpr e)
 
@@ -555,16 +561,15 @@ genOutputFormat :: (OOProg r) => GenState (Maybe (SMethod r))
 genOutputFormat = do
   g <- get
   woName <- genICName WriteOutput
-  let genOutput :: (OOProg r) => Maybe String -> GenState
-        (Maybe (SMethod r))
+  let genOutput :: (OOProg r) => Maybe String -> GenState (Maybe (SMethod r))
       genOutput Nothing = return Nothing
       genOutput (Just _) = do
         let l_outfile = "outputfile"
-            var_outfile = var l_outfile outfile
+            var_outfile = var l_outfile outfile local
             v_outfile = valueOf var_outfile
         parms <- getOutputParams
         outp <- mapM (\x -> do
-          v <- mkVal x
+          v <- mkVal x local
           return [ printFileStr v_outfile (codeName x ++ " = "),
                    printFileLn v_outfile v
                  ] ) (outputs $ codeSpec g)

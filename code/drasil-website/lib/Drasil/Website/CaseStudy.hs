@@ -6,7 +6,7 @@ module Drasil.Website.CaseStudy where
 import Language.Drasil hiding (E, Var)
 import Language.Drasil.Code
 import SysInfo.Drasil
-import GOOL.Drasil (CodeType(..))
+import Drasil.GOOL (CodeType(..))
 
 import Drasil.Website.Example (examples, Example(..))
 import qualified Drasil.Projectile.Choices as Projectile (codedDirName)
@@ -31,7 +31,7 @@ caseStudiesDesc = "Drasil allows some design decisions to be made by the user wh
   \study, followed by a guide giving the meaning of the short-forms used in the \
   \table:"
 -- | Introduce the Case Study Table Legend as a list.
-legendIntro = "The legend for the Case Studies Table is listed below according to column header:"
+legendIntro = "The legend for the Case Studies Table is listed below according to the column header:"
 
 -- | Creates the Case Study Table
 mkCaseTable :: RawContent

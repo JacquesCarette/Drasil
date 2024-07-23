@@ -125,21 +125,21 @@ class InputParameters:
         print(" in module InputParameters", file=outfile)
         outfile.close()
         
-        if (self.g == "AN"):
+        if self.g == "AN":
             self.GTF = 1
             outfile = open("log.txt", "a")
             print("var 'self.GTF' assigned ", end="", file=outfile)
             print(self.GTF, end="", file=outfile)
             print(" in module InputParameters", file=outfile)
             outfile.close()
-        elif (self.g == "FT"):
+        elif self.g == "FT":
             self.GTF = 4
             outfile = open("log.txt", "a")
             print("var 'self.GTF' assigned ", end="", file=outfile)
             print(self.GTF, end="", file=outfile)
             print(" in module InputParameters", file=outfile)
             outfile.close()
-        elif (self.g == "HS"):
+        elif self.g == "HS":
             self.GTF = 2
             outfile = open("log.txt", "a")
             print("var 'self.GTF' assigned ", end="", file=outfile)
@@ -177,7 +177,7 @@ class InputParameters:
         print("  }", file=outfile)
         outfile.close()
         
-        if (not(0.1 <= self.a and self.a <= 5.0)):
+        if not(0.1 <= self.a and self.a <= 5.0):
             print("a has value ", end="")
             print(self.a, end="")
             print(", but is expected to be ", end="")
@@ -189,7 +189,7 @@ class InputParameters:
             print(" (d_max)", end="")
             print(".")
             raise Exception("InputError")
-        if (not(0.1 <= self.b and self.b <= 5.0)):
+        if not(0.1 <= self.b and self.b <= 5.0):
             print("b has value ", end="")
             print(self.b, end="")
             print(", but is expected to be ", end="")
@@ -201,7 +201,7 @@ class InputParameters:
             print(" (d_max)", end="")
             print(".")
             raise Exception("InputError")
-        if (not(4.5 <= self.w and self.w <= 910.0)):
+        if not(4.5 <= self.w and self.w <= 910.0):
             print("w has value ", end="")
             print(self.w, end="")
             print(", but is expected to be ", end="")
@@ -213,7 +213,7 @@ class InputParameters:
             print(" (w_max)", end="")
             print(".")
             raise Exception("InputError")
-        if (not(6.0 <= self.SD and self.SD <= 130.0)):
+        if not(6.0 <= self.SD and self.SD <= 130.0):
             print("SD has value ", end="")
             print(self.SD, end="")
             print(", but is expected to be ", end="")
@@ -225,7 +225,7 @@ class InputParameters:
             print(" (SD_max)", end="")
             print(".")
             raise Exception("InputError")
-        if (not(self.AR <= 5.0)):
+        if not(self.AR <= 5.0):
             print("AR has value ", end="")
             print(self.AR, end="")
             print(", but is expected to be ", end="")
@@ -235,7 +235,7 @@ class InputParameters:
             print(".")
             raise Exception("InputError")
         
-        if (not(self.a > 0.0)):
+        if not(self.a > 0.0):
             print("a has value ", end="")
             print(self.a, end="")
             print(", but is expected to be ", end="")
@@ -243,7 +243,7 @@ class InputParameters:
             print(0.0, end="")
             print(".")
             raise Exception("InputError")
-        if (not(self.a >= self.b)):
+        if not(self.a >= self.b):
             print("a has value ", end="")
             print(self.a, end="")
             print(", but is expected to be ", end="")
@@ -252,7 +252,7 @@ class InputParameters:
             print(" (b)", end="")
             print(".")
             raise Exception("InputError")
-        if (not(0.0 < self.b and self.b <= self.a)):
+        if not(0.0 < self.b and self.b <= self.a):
             print("b has value ", end="")
             print(self.b, end="")
             print(", but is expected to be ", end="")
@@ -263,7 +263,7 @@ class InputParameters:
             print(" (a)", end="")
             print(".")
             raise Exception("InputError")
-        if (not(self.w > 0.0)):
+        if not(self.w > 0.0):
             print("w has value ", end="")
             print(self.w, end="")
             print(", but is expected to be ", end="")
@@ -271,7 +271,7 @@ class InputParameters:
             print(0.0, end="")
             print(".")
             raise Exception("InputError")
-        if (not(0.0 <= self.P_btol and self.P_btol <= 1.0)):
+        if not(0.0 <= self.P_btol and self.P_btol <= 1.0):
             print("P_btol has value ", end="")
             print(self.P_btol, end="")
             print(", but is expected to be ", end="")
@@ -281,7 +281,7 @@ class InputParameters:
             print(1.0, end="")
             print(".")
             raise Exception("InputError")
-        if (not(self.TNT > 0.0)):
+        if not(self.TNT > 0.0):
             print("TNT has value ", end="")
             print(self.TNT, end="")
             print(", but is expected to be ", end="")
@@ -289,7 +289,7 @@ class InputParameters:
             print(0.0, end="")
             print(".")
             raise Exception("InputError")
-        if (not(self.SD > 0.0)):
+        if not(self.SD > 0.0):
             print("SD has value ", end="")
             print(self.SD, end="")
             print(", but is expected to be ", end="")
@@ -297,7 +297,7 @@ class InputParameters:
             print(0.0, end="")
             print(".")
             raise Exception("InputError")
-        if (not(self.AR >= 1.0)):
+        if not(self.AR >= 1.0):
             print("AR has value ", end="")
             print(self.AR, end="")
             print(", but is expected to be ", end="")

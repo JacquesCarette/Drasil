@@ -8,7 +8,7 @@ import Language.Drasil (Expr)
 
 import Database.Drasil (ChunkDB)
 
-import GOOL.Drasil (ProgData, GOOLState)
+import Drasil.GOOL (ProgData, GOOLState)
 
 import Language.Drasil.Choices (Comments, ImplementationType(..), Verbosity)
 import Language.Drasil.Code.DataDesc (DataDesc)

@@ -86,8 +86,8 @@ jobs:
         run: make codegenTest
 
       - name: "Compile generated TeX artifacts"
-        run: make tex SUMMARIZE_TEX=yes
-        if: steps.changes.tex.src == 'true'
+        run: make -j tex SUMMARIZE_TEX=yes
+        if: ${{ steps.changes.outputs.tex == 'true' || fromJSON(env.is_deployment) }}
 
       - name: "Compile generated software artifacts"
         run: make gool
@@ -128,7 +128,7 @@ jobs:
 
       - name: "Deploy 🚀"
         if: ${{ fromJSON(env.is_deployment) }}
-        uses: JamesIves/github-pages-deploy-action@v4.6.1
+        uses: JamesIves/github-pages-deploy-action@v4.6.3
         with:
           git-config-name: ${{ secrets.BOT_NAME }}
           git-config-email: ${{ secrets.BOT_EMAIL }}

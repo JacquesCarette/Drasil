@@ -11,7 +11,7 @@ import Language.Drasil.Code (Choices(..), Comments(..),
   makeConstraints, makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..), 
   makeOptFeats)
 import Language.Drasil.Generate (genCode)
-import GOOL.Drasil (CodeType(..))
+import Drasil.GOOL (CodeType(..))
 import Data.Drasil.Quantities.Math (piConst)
 import Drasil.Projectile.Body (fullSI)
 import SysInfo.Drasil (SystemInformation(SI, _sys))
@@ -75,12 +75,16 @@ codedSpaceMatch sm = case sm Real of [Double, Float] -> "D"
                                        "Unexpected SpaceMatch for Projectile"
 
 choiceCombos :: [Choices]
-choiceCombos = [baseChoices, 
+choiceCombos = [
+  baseChoices {
+    lang = [Python, Cpp, CSharp, Java, Swift, Julia]
+  }, 
   baseChoices {
     architecture = makeArchit Modular Program,
     dataInfo = makeData Bundled (Store Unbundled) Var
   },
   baseChoices {
+    lang = [Python, Cpp, CSharp, Java, Swift, Julia],
     architecture = makeArchit Modular Library,
     dataInfo = makeData Unbundled (Store Unbundled) Var,
     maps = makeMaps (matchConcepts [(piConst, [Pi])]) matchToFloats

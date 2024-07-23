@@ -6,7 +6,7 @@ module Drasil.Website.Example where
 import Language.Drasil hiding (E)
 import SysInfo.Drasil (SystemInformation(..))
 import Language.Drasil.Code (Choices(..), Lang(..))
-import Data.Char (toLower)
+import Data.Char (toLower, toUpper)
 
 import qualified Drasil.DblPend.Body as DblPend (fullSI)
 import qualified Drasil.GamePhysics.Body as GamePhysics (fullSI)
@@ -144,8 +144,8 @@ exampleIntro = S "The development of Drasil follows an example-driven approach, 
   \with a current focus on creating Software Requirement Specifications (SRS). \
   \More specifically, Drasil's knowledge of the domain of Physics has seen significant growth \
   \through the creation of these examples, ranging from mechanics to thermodynamics. Each of the case studies \
-  \implemented in Drasil contain their own generated PDF and HTML reports, and in some cases, \
-  \their own generated code to solve the problem defined in their respective SRS documents."
+  \implemented in Drasil contains its own generated PDF and HTML reports, and in some cases, \
+  \its own generated code to solve the problem defined in their respective SRS documents."
 
 -- | Example list titles.
 generatedCodeTitle, generatedCodeDocsTitle :: String
@@ -161,6 +161,7 @@ convertLang CSharp = "csharp"
 convertLang Java = "java"
 convertLang Python = "python"
 convertLang Swift = "swift"
+convertLang Julia = "julia"
 
 -- | Generate a reference towards the code folder. Uses 'getCodePath' to find the code path.
 getCodeRef :: Example -> Lang -> String -> Reference
@@ -224,7 +225,7 @@ getSRSPath :: FilePath -> String -> String -> FilePath
 getSRSPath path sufx ex = 
   path
   ++ map toLower ex -- FIXME: The majority of these `map toLower`s are implicit knowledge!!! 
-  ++ "/SRS/srs/"
+  ++ "/SRS/" ++ map toUpper sufx ++ "/"
   ++ ex ++ "_SRS." ++ map toLower sufx
 
 -- | Get the file paths for generated code and doxygen locations.

@@ -16,8 +16,9 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (InternalConcept(..))
 
-import GOOL.Drasil (VSType, SValue, MSStatement, OOProg, TypeSym(..),
-  VariableValue(..), StatementSym(..), DeclStatement(..), convTypeOO)
+import Drasil.GOOL (VSType, SValue, MSStatement, OOProg, TypeSym(..),
+  VariableValue(..), StatementSym(..), DeclStatement(..), ScopeSym(..),
+  convTypeOO)
 
 import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
@@ -56,12 +57,13 @@ genConstraintCall = do
 
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the
 -- value being calculated.
-genCalcCall :: (OOProg r) => CodeDefinition -> GenState (Maybe (MSStatement r))
-genCalcCall c = do
+genCalcCall :: (OOProg r) => CodeDefinition -> r (Scope r) ->
+  GenState (Maybe (MSStatement r))
+genCalcCall c scp = do
   t <- codeType c
   val <- genFuncCall (codeName c) (convTypeOO t) (getCalcParams c)
-  v <- mkVar $ quantvar c
-  l <- maybeLog v
+  v <- mkVar (quantvar c) scp
+  l <- maybeLog v scp
   return $ fmap (multi . (: l) . varDecDef v) val
 
 -- | Generates a call to the function for printing outputs.
@@ -80,7 +82,7 @@ genFuncCall n t funcPs = do
   let genFuncCall' Nothing = return Nothing
       genFuncCall' (Just m) = do
         cs <- funcPs
-        pvals <- mapM mkVal cs
+        pvals <- mapM (`mkVal` local) cs -- TODO: get scope from state
         val <- fApp m n t pvals []
         return $ Just val
   genFuncCall' mm
@@ -95,9 +97,9 @@ genInOutCall n inFunc outFunc = do
       genInOutCall' (Just m) = do
         ins' <- inFunc
         outs' <- outFunc
-        ins <- mapM mkVar (ins' \\ outs')
-        outs <- mapM mkVar (outs' \\ ins')
-        both <- mapM mkVar (ins' `intersect` outs')
+        ins <- mapM (`mkVar` local) (ins' \\ outs') -- TODO: get scope from state
+        outs <- mapM (`mkVar` local) (outs' \\ ins') -- TODO: get scope from state
+        both <- mapM (`mkVar` local) (ins' `intersect` outs') -- TODO: get scope from state
         stmt <- fAppInOut m n (map valueOf ins) outs both
         return $ Just stmt
   genInOutCall' mm

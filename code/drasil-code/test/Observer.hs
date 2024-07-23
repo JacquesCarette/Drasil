@@ -1,11 +1,11 @@
 -- | Part of the PatternTest GOOL tests. Defines an Observer class.
 module Observer (observer, observerName, printNum, x) where
 
-import GOOL.Drasil (SFile, SVariable, SMethod, SClass, OOProg, FileSym(..),
+import Drasil.GOOL (SFile, SVariable, SMethod, SClass, OOProg, FileSym(..),
   PermanenceSym(..), oneLiner, TypeSym(..), IOStatement(..), VariableSym(..),
-  OOVariableSym(..), Literal(..), VariableValue(..), OOVariableValue,
-  ScopeSym(..), MethodSym(..), initializer, StateVarSym(..), ClassSym(..),
-  ModuleSym(..))
+  var, ScopeSym(..), OOVariableSym(..), Literal(..), VariableValue(..),
+  OOVariableValue, VisibilitySym(..), OOMethodSym(..), initializer,
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 observerName, observerDesc, printNum :: String
@@ -23,7 +23,7 @@ observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
 
 -- | Makes a variable @x@.
 x :: (VariableSym r) => SVariable r
-x = var "x" int
+x = var "x" int local
 
 -- | Acces the @x@ attribute of @self@.
 selfX :: (OOVariableSym r) => SVariable r
@@ -32,13 +32,13 @@ selfX = objVarSelf x
 -- | Helper function to create the class.
 helperClass :: (ClassSym r, IOStatement r, Literal r, OOVariableValue r) => SClass r
 helperClass = buildClass Nothing [stateVar public dynamic x]
-  [observerConstructor, printNumMethod, getMethod x, setMethod x]
+  [observerConstructor] [printNumMethod, getMethod x, setMethod x]
 
 -- | Default value for observer class is 5.
-observerConstructor :: (MethodSym r, Literal r) => SMethod r
+observerConstructor :: (OOMethodSym r, Literal r) => SMethod r
 observerConstructor = initializer [] [(x, litInt 5)]
 
 -- | Create the @printNum@ method.
-printNumMethod :: (MethodSym r, IOStatement r, OOVariableValue r) => SMethod r
+printNumMethod :: (OOMethodSym r, IOStatement r, OOVariableValue r) => SMethod r
 printNumMethod = method printNum public dynamic void [] $
   oneLiner $ printLn $ valueOf selfX

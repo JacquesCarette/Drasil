@@ -145,7 +145,7 @@ indexOf f l v = IC.indexToInt $ IG.objAccess l (IG.func f IC.int [v])
 contains :: (OORenderSym r) => Label -> SValue r -> SValue r -> SValue r
 contains f s v = IG.objAccess s (IG.func f IC.bool [v]) 
 
-containsInt :: (RenderSym r) => Label -> Label -> SValue r -> SValue r -> SValue r
+containsInt :: (OORenderSym r) => Label -> Label -> SValue r -> SValue r -> SValue r
 containsInt f fn s v = contains f s v ?!= IG.objAccess s (IG.func fn IC.bool [])
 
 listAddFunc :: (OORenderSym r) => Label -> SValue r -> SValue r -> VSFunction r

@@ -51,7 +51,7 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   ModuleElim)
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar,
   class', module')
-import Drasil.GOOL.LanguageRenderer (dot, blockCmtStart, blockCmtEnd,
+import Drasil.GOOL.LanguageRenderer (valueList, dot, blockCmtStart, blockCmtEnd,
   docCmtStart, bodyStart, bodyEnd, commentStart, elseIfLabel, forLabel,
   inLabel, tryLabel, catchLabel, throwLabel, throwsLabel, importLabel, listSep',
   printLabel, listSep, piLabel, access, tuple, ClassDocRenderer, parameterList)
@@ -75,9 +75,9 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   function, docFunc, buildClass, implementingClass, docClass, commentedClass,
   modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (classVar, 
-  objVarSelf, intClass, buildModule, docMod', bindingError, extFuncAppMixedArgs, 
+  objVarSelf, intClass, buildModule, docMod', contains, bindingError, extFuncAppMixedArgs, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, litArray, litSet, 
-  listSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR, 
+  listSetFunc, litSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR, 
   openFileW, self, multiAssign, multiReturn, listDec, funcDecDef, 
   inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', bool, float, 
   stringRender', string', inherit, implements, functionDoc, intToIndex,
@@ -325,7 +325,7 @@ instance Literal SwiftCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray brackets
-  litSet = CP.litSet braces
+  litSet = swiftLitSetFunc swiftSet
   litList = litArray
 
 instance MathConstant SwiftCode where
@@ -458,7 +458,7 @@ instance List SwiftCode where
   indexOf = swiftIndexOf
 
 instance Set SwiftCode where
-  contains = swiftIndexOf
+  contains = CP.contains swiftContains
 
 instance InternalList SwiftCode where
   listSlice' b e s vn vo = swiftListSlice vn vo b e (fromMaybe (litInt 1) s)
@@ -891,7 +891,7 @@ swiftMain, swiftFoundation, swiftMath, swiftNil, swiftInt, swiftChar,
   swiftSeekEnd, swiftClose, swiftJoined, swiftAppendPath, swiftUrls, swiftSplit,
   swiftData, swiftEncoding, swiftOf, swiftFrom, swiftTo, swiftBy, swiftAt,
   swiftTerm, swiftFor, swiftIn, swiftContentsOf, swiftWriteTo, swiftSep,
-  swiftSepBy, swiftUnwrap :: String
+  swiftSepBy, swiftUnwrap, swiftContains, swiftSet :: String
 swiftMain = "main"
 swiftFoundation = "Foundation"
 swiftMath = swiftFoundation
@@ -934,6 +934,8 @@ swiftWriteTo = "forWritingTo"
 swiftSep = "separator"
 swiftSepBy = "separatedBy"
 swiftUnwrap = "!"
+swiftContains = "contains"
+swiftSet = "Set"
 
 swiftUnaryMath :: (Monad r) => String -> VSOp r
 swiftUnaryMath = addMathImport . unOpPrec
@@ -963,6 +965,10 @@ swiftLambda ps ex = braces $ parens (hicat listSep'
 
 swiftReadableTypes :: [CodeType]
 swiftReadableTypes = [Integer, Double, Float, Boolean, Char]
+
+swiftLitSetFunc :: (RenderSym r) => String -> VSType r -> [SValue r] -> SValue r
+swiftLitSetFunc s t es = sequence es >>= (\elems -> mkStateVal (arrayType t) 
+  (text s <> parens (brackets (valueList elems))))
 
 swiftCast :: (CommonRenderSym r) => VSType r -> SValue r -> SValue r
 swiftCast t' v' = do

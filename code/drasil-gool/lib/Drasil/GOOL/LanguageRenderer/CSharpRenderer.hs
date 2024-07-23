@@ -80,7 +80,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   notNull, listDecDef, destructorError, stateVarDef, constVar, listSetFunc, 
   extraClass, listAccessFunc, doubleRender, openFileR, openFileW, stateVar, 
   inherit, implements, intToIndex, indexToInt, global)
-import qualified Drasil.GOOL.LanguageRenderer.CLike as C (float, double, char, 
+import qualified Drasil.GOOL.LanguageRenderer.CLike as C (setType, float, double, char, 
   listType, void, notOp, andOp, orOp, inOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
   decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
@@ -818,7 +818,7 @@ csLitList f t' es' = do
   mkVal lt (new' <+> RC.type' lt
     <+> braces (valueList es))
 
-csLitSet :: (RenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
+csLitSet :: (CommonRenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
   -> SValue r
 csLitSet f t' es' = do 
   es <- sequence es' 

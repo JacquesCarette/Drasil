@@ -72,7 +72,7 @@ listType lst t' = do
   typeFromData (List (getType t)) (lst 
     `containing` getTypeString t) $ text lst <> angles (RC.type' t) 
 
-setType :: (RenderSym r) => String -> VSType r -> VSType r
+setType :: (OORenderSym r) => String -> VSType r -> VSType r
 setType lst t' = do 
   t <- t'
   typeFromData (Set (getType t)) (lst 

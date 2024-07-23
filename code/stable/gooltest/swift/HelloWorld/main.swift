@@ -66,6 +66,9 @@ mySlicedList9 = [Int](stride(from: x, to: y, by: z)).map({(i: Int) -> Double in 
 var endIdx: Int = z > 0 ? myOtherList.count : -1
 mySlicedList10 = [Int](stride(from: 2, to: endIdx, by: z)).map({(i: Int) -> Double in myOtherList[i]})
 
+var endIdx0: Int = z > 0 ? myOtherList.count : -1
+mySlicedList10 = [Int](stride(from: 2, to: endIdx0, by: z)).map({(i: Int) -> Double in myOtherList[i]})
+
 mySlicedList11 = [Int](stride(from: y, to: x, by: z)).map({(i: Int) -> Double in myOtherList[i]})
 
 // Print results of list slicing tests
@@ -117,7 +120,6 @@ else if b == 5 {
     c -= 1
     b -= 1
     var myList: [Int] = []
-    var myObj: Character = "o"
     let myConst: String = "Imconstant"
     print(myConst)
     print(a)

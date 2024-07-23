@@ -112,10 +112,17 @@ public class HelloWorld {
         mySlicedList10 = temp8;
         
         ArrayList<Double> temp9 = new ArrayList<Double>(0);
-        for (int i7 = y; y <= i7 && i7 < x && z > 0 || x < i7 && i7 <= y && z < 0; i7 += z) {
+        int endIdx0 = z > 0 ? myOtherList.size() : -1;
+        for (int i7 = 2; 2 <= i7 && i7 < endIdx0 && z > 0 || endIdx0 < i7 && i7 <= 2 && z < 0; i7 += z) {
             temp9.add(myOtherList.get(i7));
         }
-        mySlicedList11 = temp9;
+        mySlicedList10 = temp9;
+        
+        ArrayList<Double> temp10 = new ArrayList<Double>(0);
+        for (int i8 = y; y <= i8 && i8 < x && z > 0 || x < i8 && i8 <= y && z < 0; i8 += z) {
+            temp10.add(myOtherList.get(i8));
+        }
+        mySlicedList11 = temp10;
         
         // Print results of list slicing tests
         System.out.println("");
@@ -166,7 +173,6 @@ public class HelloWorld {
             c--;
             b--;
             ArrayList<Integer> myList = new ArrayList<Integer>(5);
-            char myObj = 'o';
             final String myConst = "Imconstant";
             System.out.println(myConst);
             System.out.println(a);

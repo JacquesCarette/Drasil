@@ -6,12 +6,11 @@ module HelloWorld (helloWorld) where
 import Drasil.GOOL (GSProgram, MSBody, MSBlock, MSStatement, SMethod, SVariable,
   OOProg, ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), listSlice, TypeSym(..), StatementSym(..), AssignStatement(..), 
-  (&=), DeclStatement(..), OODeclStatement(..), IOStatement(..),
-  StringStatement(..), CommentStatement(..), ControlStatement(..), mainVar,
-  locVar, constant, ScopeSym(..), Literal(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), extFuncApp, List(..), MethodSym(..),
-  ModuleSym(..))
+  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
+  CommentStatement(..), ControlStatement(..), mainVar, locVar, constant,
+  ScopeSym(..), Literal(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), extFuncApp, List(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Helper (helper)
 
@@ -156,6 +155,12 @@ listSliceTests = [
     (valueOf myOtherList) (Just (litInt 2))
     Nothing (Just (valueOf (mainVar "z" int))),
 
+
+  -- | Do it again, to make sure a unique variable name for endIdx is being generated
+  listSlice mySlicedList10
+  (valueOf myOtherList) (Just (litInt 2))
+  Nothing (Just (valueOf (mainVar "z" int))),
+
   -- | List slicing where end > beg, but step is a variable < 0
   listSlice mySlicedList11
     (valueOf myOtherList) (Just (valueOf (mainVar "y" int)))
@@ -212,7 +217,7 @@ helloIfBody = addComments "If body" (body [
     (&--) (mainVar "b" int),
 
     listDec 5 (mainVar "myList" (listType int)),
-    objDecDef (mainVar "myObj" char) (litChar 'o'),
+    -- objDecDef (mainVar "myObj" char) (litChar 'o'), -- This isn't compatible with procedural renderers.  TODO: split this file up
     constDecDef (constant "myConst" string mainFn) (litString "Imconstant"),
 
     printLn (valueOf $ constant "myConst" string mainFn),

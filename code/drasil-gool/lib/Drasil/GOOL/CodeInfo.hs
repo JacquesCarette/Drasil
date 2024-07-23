@@ -11,15 +11,15 @@ import Drasil.GOOL.InterfaceCommon (MSBody, VSType, SValue, MSStatement,
   ValueExpression(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
   VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..),
-  VisibilitySym(..))
+  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), VisibilitySym(..))
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOMethodSym(..), OOTypeSym(..),
   OOVariableSym(..), PermanenceSym(..), StateVarSym(..), OOValueSym,
-  OOVariableValue, OOValueExpression(..), InternalValueExp(..), FunctionSym(..),
-  GetSet(..), OODeclStatement(..), OOFuncAppStatement(..), ObserverPattern(..),
-  StrategyPattern(..))
+  OOVariableValue, OOValueExpression(..), InternalValueExp(..),
+  OOFunctionSym(..), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
+  ObserverPattern(..), StrategyPattern(..))
 import Drasil.GOOL.CodeType (CodeType(Void))
 import Drasil.GOOL.AST (VisibilityTag(..), qualName)
 import Drasil.GOOL.CodeAnalysis (ExceptionType(..))
@@ -232,6 +232,8 @@ instance InternalValueExp CodeInfo where
 
 instance FunctionSym CodeInfo where
   type Function CodeInfo = ()
+
+instance OOFunctionSym CodeInfo where
   func  _ _ = executeList
   objAccess = execute2
   

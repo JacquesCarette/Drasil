@@ -7,7 +7,7 @@ module Language.Drasil.Format where
 data DocType = SRS | Website | Lesson
 
 -- | Possible formats for printer output.
-data Format = TeX | Plain | HTML | Jupyter
+data Format = TeX | Plain | HTML | Jupyter | MDBook
 
 -- | Shows the different types of documents.
 instance Show DocType where

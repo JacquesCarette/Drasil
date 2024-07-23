@@ -29,7 +29,7 @@ module Drasil.GOOL.State (
   getCurrMainFunc, setThrowUsed, getThrowUsed, setErrorDefined, getErrorDefined,
   addIter, getIter, resetIter, incrementLine, incrementWord, getLineIndex,
   getWordIndex,  resetIndices, useVarName, genVarName, genLoopIndex,
-  varNameAvailable
+  genVarNameIf, varNameAvailable
 ) where
 
 import Drasil.GOOL.AST (FileType(..), VisibilityTag(..), QualifiedName, qualName)
@@ -569,6 +569,11 @@ genVarName candidates backup = do
 
 genLoopIndex :: MS String
 genLoopIndex = genVarName ["i", "j", "k"] "i"
+
+genVarNameIf :: Bool -> String -> MS String
+genVarNameIf True n = genVarName [] n
+genVarNameIf False _ = do
+  return ""
 
 varNameAvailable :: String -> MS Bool
 varNameAvailable n = do

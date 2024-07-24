@@ -8,9 +8,9 @@ module Language.Drasil.Expr.Development (
   -- Expr.Extract
   , eDep, eNames, eNames', eNamesRI
   -- Expr.Precedence
-  , precA, precB, eprec
+  , precA, precB, precC, eprec
 ) where
 
 import Language.Drasil.Expr.Lang
 import Language.Drasil.Expr.Extract (eDep, eNames, eNames', eNamesRI)
-import Language.Drasil.Expr.Precedence (precA, precB, eprec)
+import Language.Drasil.Expr.Precedence (precA, precB, precC, eprec)

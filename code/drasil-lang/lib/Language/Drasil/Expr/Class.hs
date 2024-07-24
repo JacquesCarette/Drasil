@@ -280,7 +280,7 @@ instance ExprC Expr where
   -- | Smart constructor for the boolean /or/ operator.
   a $|| b = AssocB Or  [a, b]
 
-  in' e s = ESBBinaryOp SContains e s
+  in' = ESBBinaryOp SContains
 
   -- | Smart constructor for taking the absolute value of an expression.
   abs_ = UnaryOp Abs
@@ -445,7 +445,7 @@ instance ExprC M.ModelExpr where
   -- | Smart constructor for the boolean /or/ operator.
   a $|| b = M.AssocB M.Or  [a, b]
 
-  in' e s = M.ESBBinaryOp M.SContains e s
+  in' = M.ESBBinaryOp M.SContains
 
   -- | Smart constructor for taking the absolute value of an expression.
   abs_ = M.UnaryOp M.Abs
@@ -614,7 +614,7 @@ instance ExprC C.CodeExpr where
   -- | Smart constructor for the boolean /or/ operator.
   a $|| b = C.AssocB C.Or  [a, b]
   
-  in' e s = C.ESBBinaryOp C.SContains e s
+  in' = C.ESBBinaryOp C.SContains
 
   -- | Smart constructor for taking the absolute value of an expression.
   abs_ = C.UnaryOp C.Abs

@@ -27,16 +27,16 @@ import SysInfo.Drasil (SystemInformation)
 import Language.Drasil.Printers (DocType(SRS, Website, Lesson), makeCSS, genHTML, 
   genTeX, Format(TeX, HTML, Jupyter, MDBook), genJupyter, genMDBook, 
   PrintingInformation, outputDot, makeBook)
-import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
-  Lang(..), getSampleData, readWithDataDesc, sampleInputDD,
-  unPP, unJP, unCSP, unCPPP, unSP, {-unJLP-}) -- TODO: add Julia support
+import Language.Drasil.Code (generator, generateCode, generateCodeProc,
+  Choices(..), CodeSpec(..), Lang(..), getSampleData, readWithDataDesc,
+  sampleInputDD, unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import Language.Drasil.Output.Formats(Filename, DocSpec(DocSpec), DocChoices(DC))
 
 import Language.Drasil.TypeCheck
 import Language.Drasil.Dump
 
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC)
--- import Drasil.GProc (unJLC) -- TODO: add Julia support
+import Drasil.GProc (unJLC)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
@@ -154,8 +154,10 @@ genCode chs spec = do
       genLangCode CSharp = genCall CSharp unCSC unCSP
       genLangCode Cpp = genCall Cpp unCPPC unCPPP
       genLangCode Swift = genCall Swift unSC unSP
-      --genLangCode Julia = genCall Julia unJLC unJLP
+      genLangCode Julia = genCallProc Julia unJLC unJLP
       genCall lng unProgRepr unPackRepr = generateCode lng unProgRepr
+        unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
+      genCallProc lng unProgRepr unPackRepr = generateCodeProc lng unProgRepr
         unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
   mapM_ genLangCode (lang chs)
   setCurrentDirectory workingDir

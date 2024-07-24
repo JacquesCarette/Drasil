@@ -58,7 +58,7 @@ realInterval (UpTo (i, e))               = UpTo (i, expr e)
 realInterval (UpFrom (i, e))             = UpFrom (i, expr e)
 
 con :: E.Expr -> CodeExpr
-con er = expr er
+con = expr
 
 -- | Convert constrained expressions ('ConstraintE') into 'Constraint''CodeExpr's.
 constraint :: ConstraintE -> Constraint CodeExpr

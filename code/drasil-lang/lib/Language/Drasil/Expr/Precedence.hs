@@ -4,7 +4,7 @@ module Language.Drasil.Expr.Precedence where
 import Language.Drasil.Expr.Lang (Expr(..),
   ArithBinOp(..), BoolBinOp, EqBinOp(..), LABinOp, OrdBinOp, VVNBinOp,
   UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
-  AssocBoolOper(..), AssocArithOper(..), VVVBinOp, NVVBinOp)
+  AssocBoolOper(..), AssocArithOper(..), VVVBinOp, NVVBinOp, AssocConcatOper(..))
 
 -- These precedences are inspired from Haskell/F# 
 -- as documented at http://kevincantu.org/code/operators.html
@@ -54,6 +54,10 @@ precB :: AssocBoolOper -> Int
 precB And = 120
 precB Or = 110
 
+precC :: AssocConcatOper -> Int
+precC SUnion = 120
+
+
 -- | prec1 - precedence of unary operators.
 prec1 :: UFunc -> Int
 prec1 Neg = 230
@@ -77,6 +81,7 @@ eprec :: Expr -> Int
 eprec Lit{}                  = 500
 eprec (AssocA op _)          = precA op
 eprec (AssocB op _)          = precB op
+eprec (AssocC op _)          = precC op
 eprec C{}                    = 500
 eprec FCall{}                = 210
 eprec Case{}                 = 200

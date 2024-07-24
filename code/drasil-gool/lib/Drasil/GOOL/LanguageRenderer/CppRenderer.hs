@@ -1,6 +1,7 @@
 {-# LANGUAGE TypeFamilies, Rank2Types #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE InstanceSigs #-}
 
 -- | The logic to render C++ code is contained in this module
 module Drasil.GOOL.LanguageRenderer.CppRenderer (
@@ -51,19 +52,9 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   RenderMod(..), ModuleElim)
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
-import Drasil.GOOL.LanguageRenderer (addExt, classDec, dot, blockCmtStart,
-  RenderValue(..), ValueElim(valuePrec, valueInt), InternalGetSet(..),
-  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType),
-  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
-  RenderStatement(..), StatementElim(statementTerm), RenderScope(..),
-  ScopeElim, MSMthdType, MethodTypeSym(..), RenderParam(..),
-  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
-  StateVarElim, ParentSpec, RenderClass(..), ClassElim, RenderMod(..),
-  ModuleElim, BlockCommentSym(..), BlockCommentElim)
-import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp, variable, value, function, statement, scope, parameter,
-  method, stateVar, class', module', blockComment')
-import GOOL.Drasil.LanguageRenderer (inLabel, addExt, classDec, dot, blockCmtStart,
+
+
+import Drasil.GOOL.LanguageRenderer (inLabel, addExt, classDec, dot, blockCmtStart,
   blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, commentStart,
   returnLabel, elseIfLabel, tryLabel, catchLabel, throwLabel, array', constDec',
   listSep', argc, argv, constDec, mainFunc, containing, functionDox, valueList,
@@ -1608,7 +1599,7 @@ instance ControlStatement CppSrcCode where
 
   for = C.for bodyStart bodyEnd
   forRange = M.forRange
-  forEach = CP.forEach bodyStart bodyEnd (text "for") (text ":")
+  forEach = CP.forEach bodyStart bodyEnd (text cppFor) (text cppIn)
   while = C.while parens bodyStart bodyEnd
 
   tryCatch = G.tryCatch cppTryCatch
@@ -2522,14 +2513,15 @@ catchAll = text "..."
 cppPi = text "M_PI"
 ptrAccess' = text ptrAccess
 
-nmSpc, ptrAccess, std, algorithm, cppString, vector, sstream, stringstream,
+nmSpc, ptrAccess, cppFor, std, algorithm, cppString, vector, sstream, stringstream,
   fstream, iostream, limits, mathh, cassert, cppBool, cppInfile, cppOutfile,
   cppIterator, cppOpen, stod, stof, cppIgnore, numLimits, streamsize, max,
   endl, cin, cout, cppIndex, cppListAccess, cppListAdd, cppListAppend,
   cppIterBegin, cppIterEnd, cppR, cppW, cppA, cppGetLine, cppClose, cppClear,
-  cppStr, mathDefines, cppSet :: String
+  cppStr, mathDefines, cppSet, cppIn :: String
 nmSpc = "::"
 ptrAccess = "->"
+cppFor = "for"
 std = "std"
 algorithm = "algorithm"
 cppString = "string"
@@ -2570,6 +2562,7 @@ cppClear = "clear"
 cppStr = "str"
 mathDefines = "_USE_MATH_DEFINES"
 cppSet = "set"
+cppIn = ":"
 
 nmSpcAccess :: String -> String -> String
 nmSpcAccess ns e = ns ++ nmSpc ++ e
@@ -2868,7 +2861,8 @@ cppsStateVarDef cns s p vr' vl' = do
       text n `nmSpcAccess'` RC.variable vr <+> equals <+> RC.value vl <>
       endStatement) empty)
     emptS
-cppLitSet :: (RenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
+
+cppLitSet :: (OORenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
     -> SValue r
 cppLitSet f t' es' = do 
   es <- sequence es' 

@@ -556,7 +556,6 @@ instance DeclStatement PythonCode where
   varDec v scp = CP.varDecDef v scp Nothing
   varDecDef v scp e = CP.varDecDef v scp (Just e)
   listDec _ = CP.listDec
-  setDecDef = CP.setDecDef
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
@@ -839,8 +838,8 @@ pyInputFunc, pyPrintFunc :: Doc
 pyInputFunc = text "input()" -- raw_input() for < Python 3.0
 pyPrintFunc = text printLabel
 
-pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyOpen, pyClose, 
-  pyRead, pyWrite, pyAppend, pySplit, pyRange, pyRstrip, pyMath, pyIn :: String
+pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyClose, 
+  pySplit, pyRange, pyRstrip, pyMath, pyIn :: String
 pyListSize = "len"
 pyIndex = "index"
 pyInsert = "insert"

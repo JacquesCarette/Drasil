@@ -174,6 +174,7 @@ public class HelloWorld {
             b--;
             ArrayList<Integer> myList = new ArrayList<Integer>(5);
             final String myConst = "Imconstant";
+            System.out.println(myConst);
             System.out.println(a);
             System.out.println(b);
             System.out.println(c);

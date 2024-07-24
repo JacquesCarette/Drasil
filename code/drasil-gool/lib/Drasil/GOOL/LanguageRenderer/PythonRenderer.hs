@@ -11,7 +11,7 @@ import Utils.Drasil (blank, indent)
 import Drasil.GOOL.CodeType (CodeType(..))
 import Drasil.GOOL.InterfaceCommon (SharedProg, Label, Library, VSType,
   VSFunction, SVariable, SValue, MSStatement, MixedCtorCall, BodySym(..),
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), locVar,
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), locVar, constant,
   VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
@@ -55,10 +55,10 @@ import Drasil.GOOL.LanguageRenderer (classDec, dot, ifLabel, elseLabel,
 import qualified Drasil.GOOL.LanguageRenderer as R (sqrt, fabs, log10, 
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, 
   classVar, listSetFunc, castObj, dynamic, break, continue, addComments, 
-  commentedMod, commentedItem)
+  commentedMod, commentedItem, var)
 import Drasil.GOOL.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal, 
   mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, 
-  unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr)
+  unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkStaticVar)
 import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
@@ -88,11 +88,12 @@ import Drasil.GOOL.AST (Terminator(..), FileType(..), FileData(..), fileD,
   td, ValData(..), vd, VarData(..), vard, CommonThunk, pureValue, vectorize,
   vectorize2, sumComponents, commonVecIndex, commonThunkElim, commonThunkDim)
 import Drasil.GOOL.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
-  onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList, on2StateWrapped)
-import Drasil.GOOL.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
-  revFiles, addLangImportVS, getLangImports, addLibImportVS, 
-  getLibImports, addModuleImport, addModuleImportVS, getModuleImports, 
-  setFileType, getClassName, setCurrMain, getClassMap, getMainDoc, genLoopIndex)
+  onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList,
+  on2StateWrapped)
+import Drasil.GOOL.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, revFiles,
+  addLangImportVS, getLangImports, addLibImportVS, getLibImports, addModuleImport,
+  addModuleImportVS, getModuleImports, setFileType, getClassName, setCurrMain,
+  getClassMap, getMainDoc, genLoopIndex, varNameAvailable)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -101,6 +102,7 @@ import Control.Lens.Zoom (zoom)
 import Control.Monad (join)
 import Control.Monad.State (modify)
 import Data.List (intercalate, sort)
+import Data.Char (toUpper, isUpper, isLower)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty, quotes)
@@ -268,13 +270,14 @@ instance ScopeSym PythonCode where
 
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
-  var' n _      = G.var n
-  constant'     = var'
+  var' n _     = G.var n
+  constant' n  = var' $ toConstName n
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
-  arrayElem i   = G.arrayElem (litInt i)
+  arrayElem i  = G.arrayElem (litInt i)
 
 instance OOVariableSym PythonCode where
-  staticVar = G.staticVar
+  staticVar' c n t = if c then mkStaticVar n t (R.var (toConstName n))
+                          else G.staticVar n t
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
   classVar = CP.classVar R.classVar
   extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify . 
@@ -544,7 +547,14 @@ instance DeclStatement PythonCode where
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
-  constDecDef = varDecDef
+  constDecDef v e = do
+    v' <- zoom lensMStoVS v
+    let n = toConstName $ variableName v'
+        newConst = constant n (pure (variableType v')) local -- TODO: get scope from v
+    available <- varNameAvailable n
+    if available
+      then varDecDef newConst e
+      else error "Cannot safely capitalize constant."
   funcDecDef = CP.funcDecDef
 
 instance OODeclStatement PythonCode where
@@ -1022,3 +1032,10 @@ pyDocComment :: [String] -> Doc -> Doc -> Doc
 pyDocComment [] _ _ = empty
 pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid . 
   text) lns
+
+toConstName :: String -> String
+toConstName (s:s':ss) = if isLower s && isUpper s'
+                          then toUpper s : '_' : s' : toConstName ss
+                          else toUpper s : toConstName (s' : ss)
+toConstName (s:ss)    = toUpper s : toConstName ss
+toConstName ""        = ""

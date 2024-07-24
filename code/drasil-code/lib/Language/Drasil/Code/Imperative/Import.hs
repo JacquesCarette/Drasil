@@ -40,14 +40,15 @@ import qualified Language.Drasil.Mod as M (Class(..))
 import Drasil.GOOL (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
   Initializers, OOProg, PermanenceSym(..), bodyStatements, BlockSym(..),
-  TypeSym(..), VariableSym(..), var, ScopeSym(..), OOVariableSym(..), staticVar,
-  VariableElim(..), ($->), ValueSym(..), Literal(..), VariableValue(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), OOValueExpression(..), objMethodCallMixedArgs, List(..),
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  StringStatement(..), ControlStatement(..), ifNoElse, VisibilitySym(..),
-  ParameterSym(..), MethodSym(..), OOMethodSym(..), pubDVar, privDVar,
-  nonInitConstructor, convTypeOO, VisibilityTag(..), CodeType(..), onStateValue)
+  TypeSym(..), VariableSym(..), var, ScopeSym(..), OOVariableSym(..),
+  staticConst, VariableElim(..), ($->), ValueSym(..), Literal(..),
+  VariableValue(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), OOValueExpression(..),
+  objMethodCallMixedArgs, List(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), ControlStatement(..),
+  ifNoElse, VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
+  pubDVar, privDVar, nonInitConstructor, convTypeOO, VisibilityTag(..),
+  CodeType(..), onStateValue)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
 
 import Prelude hiding (sin, cos, tan, log, exp)
@@ -100,7 +101,7 @@ variable s t scp = do
   g <- get
   let cs = codeSpec g
       defFunc Var = \nm tp -> var nm tp scp
-      defFunc Const = staticVar
+      defFunc Const = staticConst
   if s `elem` map codeName (inputs cs)
     then inputVariable (inStruct g) Var (var s t scp)
     else if s `elem` map codeName (constants $ codeSpec g)

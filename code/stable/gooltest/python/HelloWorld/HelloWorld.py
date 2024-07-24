@@ -113,7 +113,8 @@ elif b == 5:
     c -= 1
     b -= 1
     myList = []
-    myConst = "Imconstant"
+    MY_CONST = "Imconstant"
+    print(MY_CONST)
     print(a)
     print(b)
     print(c)

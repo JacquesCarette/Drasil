@@ -1034,7 +1034,7 @@ instance OOTypeSym JuliaCode where
   obj = undefined--
 
 instance OOVariableSym JuliaCode where
-  staticVar = undefined--
+  staticVar' = undefined--
   self = undefined--
   classVar = undefined--
   extClassVar = undefined--

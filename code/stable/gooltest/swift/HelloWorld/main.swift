@@ -121,6 +121,7 @@ else if b == 5 {
     b -= 1
     var myList: [Int] = []
     let myConst: String = "Imconstant"
+    print(myConst)
     print(a)
     print(b)
     print(c)

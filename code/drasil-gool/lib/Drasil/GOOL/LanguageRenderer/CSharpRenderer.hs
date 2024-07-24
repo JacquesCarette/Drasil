@@ -281,7 +281,7 @@ instance VariableSym CSharpCode where
   arrayElem i = G.arrayElem (litInt i)
 
 instance OOVariableSym CSharpCode where
-  staticVar = G.staticVar
+  staticVar' _ = G.staticVar
   self = C.self
   classVar = CP.classVar R.classVar
   extClassVar = classVar

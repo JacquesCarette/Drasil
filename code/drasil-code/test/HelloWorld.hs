@@ -220,6 +220,7 @@ helloIfBody = addComments "If body" (body [
     -- objDecDef (mainVar "myObj" char) (litChar 'o'), -- This isn't compatible with procedural renderers.  TODO: split this file up
     constDecDef (constant "myConst" string mainFn) (litString "Imconstant"),
 
+    printLn (valueOf $ constant "myConst" string mainFn),
     printLn (valueOf $ mainVar "a" int),
     printLn (valueOf $ mainVar "b" int),
     printLn (valueOf $ mainVar "c" int),

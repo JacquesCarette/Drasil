@@ -77,8 +77,8 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (classVar, 
   objVarSelf, intClass, buildModule, docMod', contains, bindingError, extFuncAppMixedArgs, 
-  notNull, listDecDef, destructorError, stateVarDef, constVar, litArray, litSet, 
-  listSetFunc, litSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR, 
+  notNull, listDecDef, destructorError, stateVarDef, constVar, litArray, 
+  listSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR, 
   openFileW, self, multiAssign, multiReturn, listDec, funcDecDef, 
   inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', bool, float, 
   stringRender', string', inherit, implements, functionDoc, intToIndex,
@@ -211,6 +211,7 @@ instance TypeSym SwiftCode where
   outfile = swiftFileHdlType
   listType = swiftListType
   arrayType = listType -- For now, treating arrays and lists the same, like we do for Python
+  setType = listType
   listInnerType = G.listInnerType
   funcType = swiftFuncType
   void = swiftVoidType

@@ -7,6 +7,7 @@ import Language.Drasil hiding (E)
 import SysInfo.Drasil (SystemInformation(..))
 import Language.Drasil.Code (Choices(..), Lang(..))
 import Data.Char (toLower)
+import Language.Drasil.Printers (Format(..))
 
 import qualified Drasil.DblPend.Body as DblPend (fullSI)
 import qualified Drasil.GamePhysics.Body as GamePhysics (fullSI)
@@ -86,11 +87,15 @@ individualExList :: Example -> [ItemType]
 -- No choices mean no generated code, so we do not need to display generated code and thus do not call versionList.
 individualExList ex@E{sysInfoE = SI{_sys = sys}, choicesE = [], codePath = srsP} = 
   [Flat $ namedRef (buildDrasilExSrcRef ex) (S "Drasil Source Code"),
-  Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP "html" $ programName sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ programName sys) (S "[PDF]")]
+  Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP HTML $ programName sys) (S "[HTML]") 
+  +:+ namedRef (getSRSRef srsP TeX $ programName sys) (S "[PDF]") 
+  +:+ namedRef (getSRSRef srsP MDBook $ programName sys) (S "[mdBook]")]
 -- Anything else means we need to display program information, so use versionList.
 individualExList ex@E{sysInfoE = SI{_sys = sys}, codePath = srsP} = 
   [Flat $ namedRef (buildDrasilExSrcRef ex) (S "Drasil Source Code"),
-  Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP "html" $ programName sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ programName sys) (S "[PDF]"),
+  Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP HTML $ programName sys) (S "[HTML]") 
+  +:+ namedRef (getSRSRef srsP TeX $ programName sys) (S "[PDF]")
+  +:+ namedRef (getSRSRef srsP MDBook $ programName sys) (S "[mdBook]"),
   Nested (S generatedCodeTitle) $ Bullet $ map (, Nothing) (versionList getCodeRef ex),
   Nested (S generatedCodeDocsTitle) $ Bullet $ map (, Nothing) (versionList getDoxRef noSwiftEx)]
     where
@@ -214,19 +219,20 @@ getDoxRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName =
       _   -> map toLower verName ++ "/" ++ convertLang l
 
 -- | Make references for each of the generated SRS files.
-getSRSRef :: FilePath -> String -> String -> Reference
-getSRSRef path sufx ex = makeURI refUID (getSRSPath path (map toLower sufx) ex) $ shortname' $ S refUID
+getSRSRef :: FilePath -> Format -> String -> Reference
+getSRSRef path format ex = makeURI refUID (getSRSPath path format ex) $ shortname' $ S refUID
   where
-    refUID = map toLower sufx ++ "Ref" ++ ex
+    refUID = show format ++ "Ref" ++ ex
 
 -- | Get the paths of where each reference exist for SRS files. Some example abbreviations have spaces,
--- so we just filter those out. The suffix should only be either html or pdf.
-getSRSPath :: FilePath -> String -> String -> FilePath
-getSRSPath path sufx ex = 
-  path
-  ++ map toLower ex -- FIXME: The majority of these `map toLower`s are implicit knowledge!!! 
-  ++ "/SRS/srs/"
-  ++ ex ++ "_SRS." ++ map toLower sufx
+-- so we just filter those out.
+getSRSPath :: FilePath -> Format -> String -> FilePath
+getSRSPath path format ex = path ++ map toLower ex ++ "/SRS/" ++ show format ++ "/" ++ sufx format
+  where
+    sufx MDBook = "book"
+    sufx HTML   = ex ++ "_SRS.html"
+    sufx TeX    = ex ++ "_SRS.pdf"
+    sufx _      = error "You can only get paths for TeX/HTML/MDBook."
 
 -- | Get the file paths for generated code and doxygen locations.
 getCodePath, getDoxPath :: FilePath -> String -> String -> FilePath
@@ -240,8 +246,9 @@ exampleRefs :: FilePath -> FilePath -> [Reference]
 exampleRefs codePth srsDoxPth = 
   concatMap getCodeRefDB (examples codePth srsDoxPth) ++ 
   concatMap getDoxRefDB (examples codePth srsDoxPth) ++ 
-  map (getSRSRef srsDoxPth "html" . getAbrv) (examples codePth srsDoxPth) ++ 
-  map (getSRSRef srsDoxPth "pdf" . getAbrv) (examples codePth srsDoxPth) ++ 
+  map (getSRSRef srsDoxPth HTML . getAbrv) (examples codePth srsDoxPth) ++ 
+  map (getSRSRef srsDoxPth TeX . getAbrv) (examples codePth srsDoxPth) ++ 
+  map (getSRSRef srsDoxPth MDBook . getAbrv) (examples codePth srsDoxPth) ++ 
   map buildDrasilExSrcRef (examples codePth srsDoxPth)
 
 -- | Helpers to pull code and doxygen references from an example.

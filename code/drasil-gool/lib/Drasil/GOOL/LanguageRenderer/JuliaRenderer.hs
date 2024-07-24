@@ -19,29 +19,34 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
   InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  ScopeSym(..), VisibilitySym(..), ParameterSym(..), MethodSym(..), (&=),
-  switchAsIf)
+  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), (&=), switchAsIf)
 import Drasil.GOOL.InterfaceGOOL (OOProg, FSModule, ProgramSym(..), FileSym(..),
-  ModuleSym(..), FunctionSym(..), PermanenceSym(..), ObserverPattern(..),
+  ModuleSym(..), OOFunctionSym(..), PermanenceSym(..), ObserverPattern(..),
   StrategyPattern(..), GetSet(..), InternalValueExp(..), StateVarSym(..),
   ClassSym(..), OOTypeSym(..), OOVariableSym(..), OODeclStatement(..),
   OOFuncAppStatement(..), OOMethodSym(..), OOValueExpression(..),
   OOVariableValue, OOValueSym)
-import Drasil.GOOL.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
-  ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..),
-  BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
+import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
+  ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
+  RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(..), InternalGetSet(..), InternalListFunc(..),
-  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
-  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
-  StatementElim(statementTerm), RenderVisibility(..), VisibilityElim,
-  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
-  RenderMethod(..), MethodElim, StateVarElim, RenderClass(..), ClassElim,
-  RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
-import qualified Drasil.GOOL.RendererClasses as RC (import', perm, body, block,
+  RenderValue(..), ValueElim(..), InternalListFunc(..), RenderFunction(..),
+  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
+  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
+  RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
+  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
+  BlockCommentSym(..), BlockCommentElim)
+import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
-  method, stateVar, class', module', blockComment')
+  method, blockComment')
+import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
+  PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
+  OORenderMethod(..), StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
+  ModuleElim)
+import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
+  module')
 import Drasil.GOOL.LanguageRenderer (printLabel, listSep, listSep',
   variableList, parameterList, forLabel, inLabel, tryLabel, catchLabel)
 import qualified Drasil.GOOL.LanguageRenderer as R (sqrt, abs, log10, log, exp,
@@ -58,7 +63,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   funcAppMixedArgs, lambda, listAccess, listSet, arrayElem, modFromData,
   fileDoc, fileFromData, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
   emptyStmt, assign, increment, subAssign, print, comment, valStmt, function,
-  returnStmt, construct, param, docFunc, throw, arg, argsList, ifCond, smartAdd)
+  returnStmt, param, docFunc, throw, arg, argsList, ifCond, smartAdd)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (bool,
   boolRender, extVar, funcType, buildModule, docMod', funcDecDef, litArray,
   listDec, listDecDef, listAccessFunc, listSetFunc, bindingError, notNull,
@@ -117,7 +122,8 @@ instance ProgramSym JuliaCode where
     modify revFiles
     pure $ onCodeList (progD n st) fs
 
-instance RenderSym JuliaCode
+instance CommonRenderSym JuliaCode
+instance OORenderSym JuliaCode
 
 instance FileSym JuliaCode where
   type File JuliaCode = FileData
@@ -257,7 +263,7 @@ instance ScopeSym JuliaCode where
 instance VariableSym JuliaCode where
   type Variable JuliaCode = VarData
   var' n _ = G.var n
-  constant' = var'
+  constant' = var' -- TODO: add `const` keyword in global scope, and follow Python for local
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
   arrayElem i = G.arrayElem (litInt i)
 
@@ -519,6 +525,9 @@ instance StringStatement JuliaCode where
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
 
+instance FunctionSym JuliaCode where
+  type Function JuliaCode = FuncData
+
 instance FuncAppStatement JuliaCode where
   inOutCall = CP.inOutCall funcApp
   extInOutCall m = CP.inOutCall (extFuncApp m)
@@ -556,7 +565,6 @@ instance MethodTypeSym JuliaCode where
   type MethodType JuliaCode = TypeData
 
   mType = zoom lensMStoVS
-  construct = G.construct
 
 instance ParameterSym JuliaCode where
   type Parameter JuliaCode = ParamData
@@ -585,13 +593,14 @@ instance MethodSym JuliaCode where
   docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
 
 instance RenderMethod JuliaCode where
-  intFunc _ n _ _ _ ps b = do
-    pms <- sequence ps
-    toCode . mthd . jlIntFunc n pms <$> b
-
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
     (onStateValue (onCodeValue R.commentedItem) cmt)
   mthdFromData _ d = toState $ toCode $ mthd d
+
+instance OORenderMethod JuliaCode where
+  intFunc _ n _ _ _ ps b = do
+    pms <- sequence ps
+    toCode . mthd . jlIntFunc n pms <$> b
   -- OO-Only (remove when ready)
   intMethod = undefined--
   destructor _ = undefined--
@@ -654,10 +663,10 @@ jlClassError :: String
 jlClassError = "Classes are not supported in Julia"
 
 -- The only consistent way of creating floats is by casting
-jlLitFloat :: (RenderSym r) => Float -> SValue r
+jlLitFloat :: (CommonRenderSym r) => Float -> SValue r
 jlLitFloat f = mkStateVal float (text jlFloatConc <> parens (D.float f))
 
-jlCast :: (RenderSym r) => VSType r -> SValue r -> SValue r
+jlCast :: (CommonRenderSym r) => VSType r -> SValue r -> SValue r
 jlCast t' v' = do
   t <- t'
   v <- v'
@@ -678,7 +687,7 @@ jlCast t' v' = do
       jlCast' _      _    vDoc' tDoc' = tDoc' <> parens vDoc'
   mkVal t (jlCast' vTp tTp vDoc tDoc)
 
-jlConstDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
+jlConstDecDef :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
 jlConstDecDef v' def' = do
   v <- zoom lensMStoVS v'
   def <- zoom lensMStoVS def'
@@ -699,7 +708,7 @@ jlIndexOf l v = do
   indexToInt $ funcApp
     jlListAbsdex t [lambda [locVar "x" t] (valueOf (locVar "x" t) ?== v), l]
 
-jlListSlice :: (RenderSym r) => SVariable r -> SValue r ->
+jlListSlice :: (CommonRenderSym r) => SVariable r -> SValue r ->
   Maybe (SValue r) -> Maybe (SValue r) -> SValue r -> MSBlock r
 jlListSlice vn vo beg end step = do
   stepV <- zoom lensMStoVS step
@@ -743,7 +752,7 @@ jlListSlice vn vo beg end step = do
       setToSlice
     ]
 
-jlListSlice' :: (RenderSym r) => SVariable r -> SValue r -> SValue r ->
+jlListSlice' :: (CommonRenderSym r) => SVariable r -> SValue r -> SValue r ->
   SValue r -> SValue r -> Maybe Integer -> MSStatement r
 jlListSlice' vn vo beg end step mStep = do
   vold  <- zoom lensMStoVS vo
@@ -758,7 +767,7 @@ jlListSlice' vn vo beg end step mStep = do
   
 
 -- Other functionality
-jlRange :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
+jlRange :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 jlRange initv finalv stepv = do
   t <- listType int
   iv <- initv
@@ -810,7 +819,7 @@ jlSpace :: OptionalSpace
 jlSpace = OSpace {oSpace = empty}
 
 -- | Creates a for-each loop in Julia
-jlForEach :: (RenderSym r) => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
+jlForEach :: (CommonRenderSym r) => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
 jlForEach i lstVar b = vcat [
   forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar,
   indent $ RC.body b,
@@ -837,20 +846,20 @@ jlModContents n is fs = CP.buildModule n (do
 -- Functions
 -- | Creates a function.  n is function name, pms is list of parameters, and 
 --   bod is body.
-jlIntFunc :: (RenderSym r) => Label -> [r (Parameter r)] ->
+jlIntFunc :: (CommonRenderSym r) => Label -> [r (Parameter r)] ->
   r (Body r) -> Doc
 jlIntFunc n pms bod = do
   vcat [jlFunc <+> text n <> parens (parameterList pms),
     indent $ RC.body bod, jlEnd]
 
-jlLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
+jlLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 jlLambda ps ex = variableList ps <+> arrow <+> RC.value ex
 
 -- Exceptions
-jlThrow :: (RenderSym r) => r (Value r) -> Doc
+jlThrow :: (CommonRenderSym r) => r (Value r) -> Doc
 jlThrow errMsg = jlThrowLabel <> parens (RC.value errMsg)
 
-jlTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
+jlTryCatch :: (CommonRenderSym r) => r (Body r) -> r (Body r) -> Doc
 jlTryCatch tryB catchB = vcat [
   tryLabel,
   indent $ RC.body tryB,
@@ -873,38 +882,38 @@ jlBegin      = text "begin"
 jlEnd        = text "end"
 jlThrowLabel = text "error" -- TODO: this hints at an underdeveloped exception system
 
-jlParam :: (RenderSym r) => r (Variable r) -> Doc
+jlParam :: (CommonRenderSym r) => r (Variable r) -> Doc
 jlParam v = RC.variable v <> jlType <> RC.type' (variableType v)
 
 -- Type names specific to Julia (there's a lot of them)
-jlIntType :: (RenderSym r) => VSType r
+jlIntType :: (CommonRenderSym r) => VSType r
 jlIntType = typeFromData Integer jlIntConc (text jlIntConc)
 
-jlFloatType :: (RenderSym r) => VSType r
+jlFloatType :: (CommonRenderSym r) => VSType r
 jlFloatType = typeFromData Float jlFloatConc (text jlFloatConc)
 
-jlDoubleType :: (RenderSym r) => VSType r
+jlDoubleType :: (CommonRenderSym r) => VSType r
 jlDoubleType = typeFromData Double jlDoubleConc (text jlDoubleConc)
 
-jlCharType :: (RenderSym r) => VSType r
+jlCharType :: (CommonRenderSym r) => VSType r
 jlCharType = typeFromData Char jlCharConc (text jlCharConc)
 
-jlStringType :: (RenderSym r) => VSType r
+jlStringType :: (CommonRenderSym r) => VSType r
 jlStringType = typeFromData String jlStringConc (text jlStringConc)
 
-jlInfileType :: (RenderSym r) => VSType r
+jlInfileType :: (CommonRenderSym r) => VSType r
 jlInfileType = typeFromData InFile jlFile (text jlFile)
 
-jlOutfileType :: (RenderSym r) => VSType r
+jlOutfileType :: (CommonRenderSym r) => VSType r
 jlOutfileType = typeFromData OutFile jlFile (text jlFile)
 
-jlListType :: (RenderSym r) => VSType r -> VSType r
+jlListType :: (CommonRenderSym r) => VSType r -> VSType r
 jlListType t' = do
   t <- t'
   let typeName = jlListConc ++ "{" ++ getTypeString t ++ "}"
   typeFromData (List $ getType t) typeName (text typeName)
 
-jlVoidType :: (RenderSym r) => VSType r
+jlVoidType :: (CommonRenderSym r) => VSType r
 jlVoidType = typeFromData Void jlVoid (text jlVoid)
 
 jlNull :: Label
@@ -934,7 +943,7 @@ jlPrint _ f' p' v' = do
   mkStmtNoEnd $ RC.value prf <> parens (fl <> RC.value v)
 
 -- jlPrint can handle lists, so don't use G.print for lists
-jlOut :: (RenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r ->
+jlOut :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r ->
   MSStatement r
 jlOut newLn f printFn v = zoom lensMStoVS v >>= jlOut' . getType . valueType
   where jlOut' (List _) = printSt newLn f printFn v
@@ -950,7 +959,7 @@ jlInput inSrc v = v &= (v >>= jlInput' . getType . variableType)
         jlInput' Char = jlParse jlCharConc char inSrc
         jlInput' _ = error "Attempt to read a value of unreadable type"
 
-readLine, readLines :: (RenderSym r) => SValue r -> SValue r
+readLine, readLines :: (CommonRenderSym r) => SValue r -> SValue r
 readLine f = funcApp jlReadLineFunc string [f]
 readLines f = funcApp jlReadLinesFunc (listType string) [f]
 
@@ -965,15 +974,14 @@ jlCloseFunc = "close"
 jlArgs :: Label
 jlArgs = "ARGS"
 
-jlParse :: (RenderSym r) => Label -> VSType r -> SValue r -> SValue r
+jlParse :: (CommonRenderSym r) => Label -> VSType r -> SValue r -> SValue r
 jlParse tl tp v = let
   typeLabel = mkStateVal void (text tl)
   in funcApp jlParseFunc tp [typeLabel, v]
 
 -- OO-Only (remove when ready)
 
-instance FunctionSym JuliaCode where
-  type Function JuliaCode = FuncData
+instance OOFunctionSym JuliaCode where
   func = undefined--
   objAccess = undefined--
 
@@ -1026,7 +1034,7 @@ instance OOTypeSym JuliaCode where
   obj = undefined--
 
 instance OOVariableSym JuliaCode where
-  staticVar = undefined--
+  staticVar' = undefined--
   self = undefined--
   classVar = undefined--
   extClassVar = undefined--
@@ -1062,3 +1070,6 @@ instance OOValueSym JuliaCode
 instance InternalGetSet JuliaCode where
   getFunc = undefined--
   setFunc = undefined--
+
+instance OOMethodTypeSym JuliaCode where
+  construct = undefined--

@@ -7,7 +7,7 @@ import Drasil.GOOL (GSProgram, VSType, SVariable, SValue, SMethod, OOProg,
   TypeSym(..), OOTypeSym(..), StatementSym(..), DeclStatement(..),
   IOStatement(..), initObserverList, addObserver, mainVar, OOVariableSym(..),
   ScopeSym(..), Literal(..), VariableValue(..), OOValueExpression(..),
-  extNewObj, FunctionSym(..), GetSet(..), ObserverPattern(..),
+  extNewObj, OOFunctionSym(..), GetSet(..), ObserverPattern(..),
   StrategyPattern(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import Observer (observer, observerName, printNum, x)

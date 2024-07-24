@@ -1,0 +1,8 @@
+[book]
+language = "en"
+multilingual = false
+src = "src"
+title = "Software Requirements Specification for ProgName"
+[output.html]
+smart-punctuation = true
+mathjax-support = true

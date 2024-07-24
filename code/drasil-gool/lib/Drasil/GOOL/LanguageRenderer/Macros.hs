@@ -8,8 +8,8 @@ module Drasil.GOOL.LanguageRenderer.Macros (
 ) where
 
 import Drasil.GOOL.CodeType (CodeType(..))
-import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSType, SVariable, 
-  SValue, MSStatement, bodyStatements, oneLiner, TypeElim(getType),
+import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
+  SVariable, SValue, MSStatement, bodyStatements, oneLiner, TypeElim(getType),
   VariableElim(variableType), listOf, ValueSym(valueType), 
   NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), at, StatementSym(multi),
@@ -20,13 +20,14 @@ import qualified Drasil.GOOL.InterfaceCommon as IC (BlockSym(block),
   List(listSize, listAppend, listAccess, intToIndex), StatementSym(valStmt), 
   AssignStatement(assign), DeclStatement(varDecDef, listDec), 
   ControlStatement(ifCond, for, forRange), ValueExpression(inlineIf))
-import Drasil.GOOL.InterfaceGOOL (VSFunction, ($.), observerListName)
-import Drasil.GOOL.RendererClasses (RenderSym, RenderValue(cast), 
+import Drasil.GOOL.InterfaceGOOL (($.), observerListName)
+import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, RenderValue(cast),
   ValueElim(valueInt))
-import qualified Drasil.GOOL.RendererClasses as S (
+import qualified Drasil.GOOL.RendererClassesCommon as S (
   RenderStatement(stmt, emptyStmt))
-import qualified Drasil.GOOL.RendererClasses as RC (BodyElim(..),
+import qualified Drasil.GOOL.RendererClassesCommon as RC (BodyElim(..),
   StatementElim(statement))
+import Drasil.GOOL.RendererClassesOO (OORenderSym)
 import Drasil.GOOL.Helpers (toCode, onStateValue, on2StateValues)
 import Drasil.GOOL.State (MS, lensMStoVS, genVarName, genLoopIndex,
   genVarNameIf)
@@ -36,23 +37,23 @@ import Data.Functor ((<&>))
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, vcat)
 
-ifExists :: (RenderSym r) => SValue r -> MSBody r -> MSBody r -> MSStatement r
+ifExists :: (CommonRenderSym r) => SValue r -> MSBody r -> MSBody r -> MSStatement r
 ifExists v ifBody = IC.ifCond [(IC.notNull v, ifBody)]
 
-decrement1 :: (RenderSym r) => SVariable r -> MSStatement r
+decrement1 :: (CommonRenderSym r) => SVariable r -> MSStatement r
 decrement1 v = v &-= IC.litInt 1
 
-increment :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
+increment :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
 increment vr vl = vr &= IC.valueOf vr #+ vl
 
-increment1 :: (RenderSym r) => SVariable r -> MSStatement r
+increment1 :: (CommonRenderSym r) => SVariable r -> MSStatement r
 increment1 vr = vr &+= IC.litInt 1
 
-strat :: (RenderSym r, Monad r) => MSStatement r -> MSBody r -> MS (r Doc)
+strat :: (CommonRenderSym r, Monad r) => MSStatement r -> MSBody r -> MS (r Doc)
 strat = on2StateValues (\result b -> toCode $ vcat [RC.body b, 
   RC.statement result])
 
-runStrategy :: (RenderSym r, Monad r) => Label -> [(Label, MSBody r)] -> 
+runStrategy :: (CommonRenderSym r, Monad r) => Label -> [(Label, MSBody r)] -> 
   Maybe (SValue r) -> Maybe (SVariable r) -> MS (r Doc)
 runStrategy l strats rv av = maybe
   (strError l "RunStrategy called on non-existent strategy") 
@@ -62,7 +63,7 @@ runStrategy l strats rv av = maybe
           "Attempt to assign null return to a Value") (v &=) rv
         strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
 
-listSlice :: (RenderSym r) => Maybe (SValue r) -> Maybe (SValue r) -> 
+listSlice :: (CommonRenderSym r) => Maybe (SValue r) -> Maybe (SValue r) -> 
   Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
 listSlice beg end step vnew vold = do
   
@@ -121,17 +122,17 @@ listSlice beg end step vnew vold = do
 --   - SValue: value of bound if bound not given and step is positive
 --   - SValue: value of bound if bound not given and step is negative
 --   Output: (MSStatement, SValue): (setter, value) of bound
-makeSetterVal :: RenderSym r => Label -> SValue r -> Maybe Integer -> 
+makeSetterVal :: (CommonRenderSym r) => Label -> SValue r -> Maybe Integer ->
   Maybe (SValue r) -> SValue r -> SValue r -> r (IC.Scope r) ->
   (MSStatement r, SValue r)
 makeSetterVal _     _    _      (Just v) _  _  _   = (S.emptyStmt, v)
 makeSetterVal _     _   (Just s) _       lb rb _   = (S.emptyStmt, if s > 0 then lb else rb)
-makeSetterVal vName step _       _       lb rb scp = 
+makeSetterVal vName step _       _       lb rb scp =
   let theVar = IC.var vName IC.int scp
       theSetter = IC.varDecDef theVar $ IC.inlineIf (step ?> IC.litInt 0) lb rb
   in (theSetter, IC.intToIndex $ IC.valueOf theVar)
 
-stringListVals :: (RenderSym r) => [SVariable r] -> SValue r -> MSStatement r
+stringListVals :: (CommonRenderSym r) => [SVariable r] -> SValue r -> MSStatement r
 stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList 
   (getType $ valueType slst))
   where checkList (List String) = assignVals vars 0
@@ -141,7 +142,7 @@ stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList
         assignVals (v:vs) n = IC.assign v (cast (onStateValue variableType v) 
           (IC.listAccess sl (IC.litInt n))) : assignVals vs (n+1)
 
-stringListLists :: (RenderSym r) => [SVariable r] -> SValue r -> MSStatement r
+stringListLists :: (CommonRenderSym r) => [SVariable r] -> SValue r -> MSStatement r
 stringListLists lsts sl = do
   slst <- zoom lensMStoVS sl
   l_i <- genLoopIndex
@@ -166,30 +167,30 @@ stringListLists lsts sl = do
     v_i = IC.valueOf var_i
   checkList (getType $ valueType slst)
 
-forRange :: (RenderSym r) => SVariable r -> SValue r -> SValue r -> SValue r -> 
+forRange :: (CommonRenderSym r) => SVariable r -> SValue r -> SValue r -> SValue r -> 
   MSBody r -> MSStatement r
 forRange i initv finalv stepv = IC.for (IC.varDecDef i initv) (IC.valueOf i ?< 
   finalv) (i &+= stepv)
 
-observerIndex :: (RenderSym r) => SVariable r
+observerIndex :: (CommonRenderSym r) => SVariable r
 observerIndex = IC.locVar "observerIndex" IC.int
 
-observerIdxVal :: (RenderSym r) => SValue r
+observerIdxVal :: (CommonRenderSym r) => SValue r
 observerIdxVal = IC.valueOf observerIndex
 
-obsList :: (RenderSym r) => VSType r -> r (IC.Scope r) -> SValue r
+obsList :: (CommonRenderSym r) => VSType r -> r (IC.Scope r) -> SValue r
 obsList t s = IC.valueOf $ listOf observerListName t s
 
-notify :: (RenderSym r) => VSType r -> r (IC.Scope r) -> VSFunction r -> MSBody r
+notify :: (OORenderSym r) => VSType r -> r (IC.Scope r) -> VSFunction r -> MSBody r
 notify t s f = oneLiner $ IC.valStmt $ at (obsList t s) observerIdxVal $. f
 
-notifyObservers :: (RenderSym r) => VSFunction r -> VSType r -> r (IC.Scope r)
+notifyObservers :: (OORenderSym r) => VSFunction r -> VSType r -> r (IC.Scope r)
   -> MSStatement r
 notifyObservers f t s = IC.for initv (observerIdxVal ?< IC.listSize (obsList t s)) 
   (observerIndex &++) (notify t s f)
   where initv = IC.varDecDef observerIndex $ IC.litInt 0
 
-notifyObservers' :: (RenderSym r) => VSFunction r -> VSType r -> r (IC.Scope r)
+notifyObservers' :: (OORenderSym r) => VSFunction r -> VSType r -> r (IC.Scope r)
   -> MSStatement r
 notifyObservers' f t s = IC.forRange observerIndex initv (IC.listSize $ obsList t s) 
     (IC.litInt 1) (notify t s f)

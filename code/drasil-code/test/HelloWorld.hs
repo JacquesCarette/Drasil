@@ -155,10 +155,11 @@ listSliceTests = [
     (valueOf myOtherList) (Just (litInt 2))
     Nothing (Just (valueOf (mainVar "z" int))),
 
+
   -- | Do it again, to make sure a unique variable name for endIdx is being generated
   listSlice mySlicedList10
-    (valueOf myOtherList) (Just (litInt 2))
-    Nothing (Just (valueOf (mainVar "z" int))),
+  (valueOf myOtherList) (Just (litInt 2))
+  Nothing (Just (valueOf (mainVar "z" int))),
 
   -- | List slicing where end > beg, but step is a variable < 0
   listSlice mySlicedList11
@@ -219,6 +220,7 @@ helloIfBody = addComments "If body" (body [
     -- objDecDef (mainVar "myObj" char) (litChar 'o'), -- This isn't compatible with procedural renderers.  TODO: split this file up
     constDecDef (constant "myConst" string mainFn) (litString "Imconstant"),
 
+    printLn (valueOf $ constant "myConst" string mainFn),
     printLn (valueOf $ mainVar "a" int),
     printLn (valueOf $ mainVar "b" int),
     printLn (valueOf $ mainVar "c" int),

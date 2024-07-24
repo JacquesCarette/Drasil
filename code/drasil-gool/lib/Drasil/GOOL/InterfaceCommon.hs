@@ -2,9 +2,9 @@
 
 module Drasil.GOOL.InterfaceCommon (
   -- Types
-  Label, Library, MSBody, MSBlock, VSType, SVariable, SValue, VSThunk,
-  MSStatement, MSParameter, SMethod, NamedArgs, MixedCall, MixedCtorCall,
-  PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
+  Label, Library, MSBody, MSBlock, VSFunction, VSType, SVariable, SValue,
+  VSThunk, MSStatement, MSParameter, SMethod, NamedArgs, MixedCall,
+  MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), var, constant, locVar, mainVar, ScopeSym(..),
@@ -16,7 +16,7 @@ module Drasil.GOOL.InterfaceCommon (
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  StringStatement(..), FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), ifNoElse, switchAsIf, VisibilitySym(..),
   ParameterSym(..), MethodSym(..), convType
   ) where
@@ -38,10 +38,11 @@ type Library = String
 
 class (VectorType r, VectorDecl r, VectorThunk r,
   VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r,
-  IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r,
-  ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r,
-  VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r,
-  Comparison r, ValueExpression r, List r, TypeElim r, VariableElim r
+  IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r,
+  CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r,
+  MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r,
+  BooleanExpression r, Comparison r, ValueExpression r, List r, TypeElim r,
+  VariableElim r
   ) => SharedProg r
 
 -- Shared between OO and Procedural --
@@ -412,6 +413,11 @@ class (VariableSym r, StatementSym r) => StringStatement r where
   stringListVals  :: [SVariable r] -> SValue r -> MSStatement r
   stringListLists :: [SVariable r] -> SValue r -> MSStatement r
 
+type VSFunction a = VS (a (Function a))
+
+class (ValueSym r) => FunctionSym r where
+  type Function r
+
 -- The three lists are inputs, outputs, and both, respectively
 type InOutCall r = Label -> [SValue r] -> [SVariable r] -> [SVariable r] -> 
   MSStatement r
@@ -478,7 +484,7 @@ type InOutFunc r = [SVariable r] -> [SVariable r] -> [SVariable r] ->
 type DocInOutFunc r = String -> [(String, SVariable r)] -> 
   [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
 
-class (BodySym r, ParameterSym r, VisibilitySym r) => MethodSym r 
+class (BodySym r, ParameterSym r, VisibilitySym r) => MethodSym r
   where
   type Method r
   docMain :: MSBody r -> SMethod r

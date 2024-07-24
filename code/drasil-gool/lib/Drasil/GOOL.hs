@@ -1,7 +1,7 @@
 -- | re-export smart constructors for external code writing
 module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, VSType, 
   SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar,
-  SClass, FSModule, NamedArgs, Initializers, OOProg, ProgramSym(..),
+  SClass, FSModule, NamedArgs, Initializers, SharedProg, OOProg, ProgramSym(..),
   FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), TypeSym(..), OOTypeSym(..), TypeElim(..), ThunkSym(..),
   VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
@@ -31,9 +31,9 @@ module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   ) where
 
 import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
-  SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs, BodySym(..),
-  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..),
-  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs, SharedProg,
+  BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
+  TypeElim(..), ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),

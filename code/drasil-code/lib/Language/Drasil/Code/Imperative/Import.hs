@@ -39,10 +39,10 @@ import qualified Language.Drasil.Mod as M (Class(..))
 
 import Drasil.GOOL (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
-  Initializers, OOProg, PermanenceSym(..), bodyStatements, BlockSym(..),
-  TypeSym(..), VariableSym(..), var, ScopeSym(..), OOVariableSym(..),
-  staticConst, VariableElim(..), ($->), ValueSym(..), Literal(..),
-  VariableValue(..), NumericExpression(..), BooleanExpression(..),
+  Initializers, SharedProg, OOProg, PermanenceSym(..), bodyStatements,
+  BlockSym(..), TypeSym(..), VariableSym(..), var, ScopeSym(..),
+  OOVariableSym(..), staticConst, VariableElim(..), ($->), ValueSym(..),
+  Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), OOValueExpression(..),
   objMethodCallMixedArgs, List(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), IOStatement(..), StringStatement(..), ControlStatement(..),
@@ -395,7 +395,7 @@ renderRealInt s (UpFrom  (Inc, a))          = sy s $>= a
 renderRealInt s (UpFrom  (Exc, a))          = sy s $>  a
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.
-unop :: (OOProg r) => UFunc -> (SValue r -> SValue r)
+unop :: (SharedProg r) => UFunc -> (SValue r -> SValue r)
 unop Sqrt = (#/^)
 unop Log  = log
 unop Ln   = ln
@@ -413,20 +413,20 @@ unop Arctan = arctan
 unop Neg  = (#~)
 
 -- | Similar to 'unop', but for the 'Not' constructor.
-unopB :: (OOProg r) => UFuncB -> (SValue r -> SValue r)
+unopB :: (SharedProg r) => UFuncB -> (SValue r -> SValue r)
 unopB Not = (?!)
 
 -- | Similar to 'unop', but for vectors.
-unopVN :: (OOProg r) => UFuncVN -> (SValue r -> SValue r)
+unopVN :: (SharedProg r) => UFuncVN -> (SValue r -> SValue r)
 unopVN Dim = listSize
 unopVN Norm = error "unop: Norm not implemented" -- TODO
 
 -- | Similar to 'unop', but for vectors.
-unopVV :: (OOProg r) => UFuncVV -> (SValue r -> SValue r)
+unopVV :: (SharedProg r) => UFuncVV -> (SValue r -> SValue r)
 unopVV NegV = error "unop: Negation on Vectors not implemented" -- TODO
 
 -- Maps an 'ArithBinOp' to it's corresponding GOOL binary function.
-arithBfunc :: (OOProg r) => ArithBinOp -> (SValue r -> SValue r -> SValue r)
+arithBfunc :: (SharedProg r) => ArithBinOp -> (SValue r -> SValue r -> SValue r)
 arithBfunc Pow  = (#^)
 arithBfunc Subt = (#-)
 arithBfunc Frac = (#/)
@@ -437,16 +437,16 @@ boolBfunc Impl = error "convExpr :=>"
 boolBfunc Iff  = error "convExpr :<=>"
 
 -- Maps an 'EqBinOp' to it's corresponding GOOL binary function.
-eqBfunc :: (OOProg r) => EqBinOp -> (SValue r -> SValue r -> SValue r)
+eqBfunc :: (SharedProg r) => EqBinOp -> (SValue r -> SValue r -> SValue r)
 eqBfunc Eq  = (?==)
 eqBfunc NEq = (?!=)
 
 -- Maps an 'LABinOp' to it's corresponding GOOL binary function.
-laBfunc :: (OOProg r) => LABinOp -> (SValue r -> SValue r -> SValue r)
+laBfunc :: (SharedProg r) => LABinOp -> (SValue r -> SValue r -> SValue r)
 laBfunc Index = listAccess
 
 -- Maps an 'OrdBinOp' to it's corresponding GOOL binary function.
-ordBfunc :: (OOProg r) => OrdBinOp -> (SValue r -> SValue r -> SValue r)
+ordBfunc :: (SharedProg r) => OrdBinOp -> (SValue r -> SValue r -> SValue r)
 ordBfunc Gt  = (?>)
 ordBfunc Lt  = (?<)
 ordBfunc LEq = (?<=)
@@ -703,11 +703,11 @@ readData ddef scope = do
         ---------------
         l_line, l_lines, l_linetokens, l_infile, l_i :: Label
         var_line, var_lines, var_linetokens, var_infile ::
-          (OOProg r) => r (Scope r) -> SVariable r
-        var_i :: (OOProg r) => SVariable r
+          (SharedProg r) => r (Scope r) -> SVariable r
+        var_i :: (SharedProg r) => SVariable r
         v_line, v_lines, v_linetokens, v_infile ::
-          (OOProg r) => r (Scope r) -> SValue r
-        v_i :: (OOProg r) => SValue r
+          (SharedProg r) => r (Scope r) -> SValue r
+        v_i :: (SharedProg r) => SValue r
         l_line = "line"
         var_line = var l_line string
         v_line scp = valueOf $ var_line scp

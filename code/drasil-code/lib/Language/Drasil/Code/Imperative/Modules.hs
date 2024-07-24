@@ -45,8 +45,8 @@ import Language.Drasil.Expr.Development (Completeness(..))
 import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc)
 
 import Drasil.GOOL (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement,
-  SMethod, CSStateVar, SClass, OOProg, BodySym(..), bodyStatements, oneLiner,
-  BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..), var,
+  SMethod, CSStateVar, SClass, SharedProg, OOProg, BodySym(..), bodyStatements,
+  oneLiner, BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..), var,
   ScopeSym(..), Literal(..), VariableValue(..), CommandLineArgs(..),
   BooleanExpression(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
@@ -169,7 +169,7 @@ initConsts = do
 
 -- | Generates a statement to declare the variable representing the log file,
 -- if the user chose to turn on logs for variable assignments.
-initLogFileVar :: (OOProg r) => [Logging] -> [MSStatement r]
+initLogFileVar :: (SharedProg r) => [Logging] -> [MSStatement r]
 initLogFileVar l = [varDec (varLogFile mainFn) | LogVar `elem` l]
 
 ------- INPUT ----------
@@ -395,7 +395,7 @@ printConstraint c = do
 -- | Don't print expressions that are just literals, because that would be
 -- redundant (the values are already printed by printConstraint).
 -- If expression is more than just a literal, print it in parentheses.
-printExpr :: (OOProg r) => CodeExpr -> ChunkDB -> [MSStatement r]
+printExpr :: (SharedProg r) => CodeExpr -> ChunkDB -> [MSStatement r]
 printExpr Lit{} _  = []
 printExpr e     db = [printStr $ " (" ++ render (codeExprDoc db Implementation OneLine e) ++ ")"]
 

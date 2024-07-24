@@ -12,7 +12,7 @@ import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Mod (Name, Description, Import)
 
 import Drasil.GOOL (SFile, VSType, SVariable, SValue, MSStatement, SMethod,
-  CSStateVar, SClass, NamedArgs, OOProg, FileSym(..), TypeElim(..),
+  CSStateVar, SClass, NamedArgs, SharedProg, OOProg, FileSym(..), TypeElim(..),
   ValueSym(..), Argument(..), ValueExpression(..), OOValueExpression(..),
   FuncAppStatement(..), OOFuncAppStatement(..), ClassSym(..), ModuleSym(..),
   CodeType(..), GOOLState)
@@ -107,7 +107,7 @@ auxClass = mkClass Auxiliary
 
 -- | Converts lists or objects to pointer arguments, since we use pointerParam
 -- for list or object-type parameters.
-mkArg :: (OOProg r) => SValue r -> SValue r
+mkArg :: (SharedProg r) => SValue r -> SValue r
 mkArg v = do
   vl <- v
   let mkArg' (List _) = pointerArg
@@ -118,7 +118,7 @@ mkArg v = do
 
 -- | Gets the current module and calls mkArg on the arguments.
 -- Called by more specific function call generators ('fApp' and 'ctorCall').
-fCall :: (OOProg r) => (Name -> [SValue r] -> NamedArgs r -> SValue r) ->
+fCall :: (SharedProg r) => (Name -> [SValue r] -> NamedArgs r -> SValue r) ->
   [SValue r] -> NamedArgs r -> GenState (SValue r)
 fCall f vl ns = do
   g <- get

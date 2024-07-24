@@ -966,7 +966,7 @@ swiftLambda ps ex = braces $ parens (hicat listSep'
 swiftReadableTypes :: [CodeType]
 swiftReadableTypes = [Integer, Double, Float, Boolean, Char]
 
-swiftLitSetFunc :: (RenderSym r) => String -> VSType r -> [SValue r] -> SValue r
+swiftLitSetFunc :: (OORenderSym r) => String -> VSType r -> [SValue r] -> SValue r
 swiftLitSetFunc s t es = sequence es >>= (\elems -> mkStateVal (arrayType t) 
   (text s <> parens (brackets (valueList elems))))
 

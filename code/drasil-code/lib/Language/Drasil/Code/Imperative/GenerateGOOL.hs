@@ -1,6 +1,6 @@
 module Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
   genModuleWithImports, genModule, genDoxConfig, genReadMe,
-  primaryClass, auxClass, fApp, ctorCall, fAppInOut
+  primaryClass, auxClass, fApp, fAppProc, ctorCall, fAppInOut
 ) where
 
 import Language.Drasil hiding (List)
@@ -161,3 +161,34 @@ fAppInOut m n ins outs both = do
   return $ if m /= cm then extInOutCall m n ins outs both else if Map.lookup n
     (eMap g) == Just cm then inOutCall n ins outs both else
     selfInOutCall n ins outs both
+
+-- Procedural Versions --
+
+-- | Gets the current module and calls mkArg on the arguments.
+-- Called by more specific function call generators ('fApp' and 'ctorCall').
+fCallProc :: (SharedProg r) => (Name -> [SValue r] -> NamedArgs r -> SValue r) ->
+  [SValue r] -> NamedArgs r -> GenState (SValue r)
+fCallProc f vl ns = do
+  g <- get
+  let cm = currentModule g
+      args = map mkArg vl
+      nargs = map (second mkArg) ns
+  return $ f cm args nargs
+
+-- | Function call generator.
+-- The first parameter (@m@) is the module where the function is defined.
+-- If @m@ is not the current module, use GOOL's function for calling functions from
+--   external modules.
+-- If @m@ is the current module and the function is in export map, use GOOL's basic
+--   function for function applications.
+-- If @m@ is the current module and function is not exported, use GOOL's function for
+--   calling a method on self. This assumes all private methods are dynamic,
+--   which is true for this generator.
+fAppProc :: (SharedProg r) => Name -> Name -> VSType r -> [SValue r] ->
+  NamedArgs r -> GenState (SValue r)
+fAppProc m s t vl ns = do
+  g <- get
+  fCallProc (\cm args nargs ->
+    if m /= cm then extFuncAppMixedArgs m s t args nargs else
+      if Map.lookup s (eMap g) == Just cm then funcAppMixedArgs s t args nargs
+      else error "fAppProc: Procedural languages do not support method calls.") vl ns

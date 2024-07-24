@@ -2,8 +2,8 @@
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
   publicFunc, privateMethod, publicInOutFunc, privateInOutMethod,
-  genConstructor, mkVar, mkVal, convExpr, convStmt, genModDef, genModFuncs,
-  genModClasses, readData, renderC
+  genConstructor, mkVar, mkVal, convExpr, convExprProc, convStmt, genModDef,
+  genModFuncs, genModClasses, readData, renderC
 ) where
 
 import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
@@ -16,8 +16,8 @@ import Language.Drasil.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
   VVNBinOp(..), VVVBinOp(..), NVVBinOp(..))
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
-import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, ctorCall,
-  genModuleWithImports, primaryClass)
+import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, fAppProc,
+  ctorCall, genModuleWithImports, primaryClass)
 import Language.Drasil.Code.Imperative.Helpers (lookupC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
@@ -40,15 +40,15 @@ import qualified Language.Drasil.Mod as M (Class(..))
 import Drasil.GOOL (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
   Initializers, SharedProg, OOProg, PermanenceSym(..), bodyStatements,
-  BlockSym(..), TypeSym(..), VariableSym(..), var, ScopeSym(..),
+  BlockSym(..), TypeSym(..), VariableSym(..), var, constant, ScopeSym(..),
   OOVariableSym(..), staticConst, VariableElim(..), ($->), ValueSym(..),
   Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), OOValueExpression(..),
   objMethodCallMixedArgs, List(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), IOStatement(..), StringStatement(..), ControlStatement(..),
   ifNoElse, VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
-  pubDVar, privDVar, nonInitConstructor, convTypeOO, VisibilityTag(..),
-  CodeType(..), onStateValue)
+  pubDVar, privDVar, nonInitConstructor, convType, convTypeOO,
+  VisibilityTag(..), CodeType(..), onStateValue)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
 
 import Prelude hiding (sin, cos, tan, log, exp)
@@ -738,3 +738,171 @@ getEntryVarLogs lp scp = do
   vs <- getEntryVars Nothing lp scp
   logs <- mapM (`maybeLog` local) vs
   return $ concat logs
+
+
+-- Procedural Versions --
+
+-- | If 'UID' for the variable is matched to a concept, call 'conceptToGOOL' to get
+-- the GOOL code for the concept, and return.
+-- If 'UID' is for a constant and user has chosen 'Inline', convert the constant's
+-- defining 'Expr' to a value with 'convExpr'.
+-- Otherwise, just a regular variable: construct it by calling the variable, then
+-- call 'valueOf' to reference its value.
+valueProc :: (SharedProg r) => UID -> Name -> VSType r -> r (Scope r) -> GenState (SValue r)
+valueProc u s t scp = do
+  g <- get
+  let cs = codeSpec g
+      mm = constMap cs
+      constDef = do
+        cd <- Map.lookup u mm
+        maybeInline (conStruct g) cd
+      maybeInline Inline m = Just m
+      maybeInline _ _ = Nothing
+      cm = concMatches g
+      cdCncpt = Map.lookup u cm
+  val <- maybe (valueOf <$> variableProc s t scp)
+                (convExprProc . (^. codeExpr)) constDef
+  return $ maybe val conceptToGOOL cdCncpt
+
+-- | If variable is an input, construct it with 'var' and pass to inputVariable.
+-- If variable is a constant and 'Var' constant representation is chosen,
+-- construct it with 'var' and pass to 'constVariable'.
+-- If variable is a constant and 'Const' constant representation is chosen,
+-- construct it with 'constant' and pass to 'constVariable'.
+-- If variable is neither, just construct it with 'var' and return it.
+variableProc :: (SharedProg r) => Name -> VSType r -> r (Scope r) -> GenState (SVariable r)
+variableProc s t scp = do
+  g <- get
+  let cs = codeSpec g
+      defFunc Var = \nm tp -> var nm tp scp
+      defFunc Const = \nm tp -> constant nm tp scp -- This might be wrong
+  if s `elem` map codeName (inputs cs)
+    then inputVariableProc (inStruct g) Var (var s t scp)
+    else if s `elem` map codeName (constants $ codeSpec g)
+      then constVariableProc (conStruct g) (conRepr g)
+              ((defFunc $ conRepr g) s t)
+      else return $ var s t scp
+
+-- | If 'Unbundled' inputs, just return variable as-is.
+-- If 'Bundled' inputs, throw an error, since procedural renderers
+-- don't support 'Bundled' inputs yet.
+inputVariableProc :: (SharedProg r) => Structure -> ConstantRepr -> SVariable r ->
+  GenState (SVariable r)
+inputVariableProc Unbundled _ v = return v
+inputVariableProc Bundled _ _ = error "inputVariableProc: Procedural renderers do not support bundled inputs"
+
+-- | If 'Unbundled' constants, just return variable as-is.
+-- If 'Bundled' constants, throw an error, since procedural renderers
+-- don't support 'Bundled' constants yet.
+-- If constants stored 'WithInputs', call 'inputVariable'.
+-- If constants are 'Inline'd, the generator should not be attempting to make a
+-- variable for one of the constants.
+constVariableProc :: (SharedProg r) => ConstantStructure -> ConstantRepr ->
+  SVariable r -> GenState (SVariable r)
+constVariableProc (Store Unbundled) _ v = return v
+constVariableProc (Store Bundled) _ _ = error "constVariableProc: Procedural renderers do not support bundled constants"
+constVariableProc WithInputs cr v = do
+  g <- get
+  inputVariableProc (inStruct g) cr v
+constVariableProc Inline _ _ = error $ "mkVar called on a constant, but user " ++
+  "chose to Inline constants. Generator has a bug."
+
+-- | Generates a GOOL Value for a variable represented by a 'CodeVarChunk'.
+mkValProc :: (SharedProg r) => CodeVarChunk -> r (Scope r) -> GenState (SValue r)
+mkValProc v scp = do
+  t <- codeType v
+  let toGOOLVal Nothing = valueProc (v ^. uid) (codeName v) (convType t) scp
+      toGOOLVal (Just _) = error "mkValProc: Procedural renderers do not support objects"
+  toGOOLVal (v ^. obv)
+
+-- | Generates a GOOL Variable for a variable represented by a 'CodeVarChunk'.
+mkVarProc :: (SharedProg r) => CodeVarChunk -> r (Scope r) -> GenState (SVariable r)
+mkVarProc v scp = do
+  t <- codeType v
+  let toGOOLVar Nothing = variableProc (codeName v) (convType t) scp
+      toGOOLVar (Just _) = error "mkVarProc: Procedural renderers do not support objects"
+  toGOOLVar (v ^. obv)
+
+-- | Converts an 'Expr' to a GOOL Value.
+convExprProc :: (SharedProg r) => CodeExpr -> GenState (SValue r)
+convExprProc (Lit (Dbl d)) = do
+  sm <- spaceCodeType Real
+  let getLiteral Double = litDouble d
+      getLiteral Float = litFloat (realToFrac d)
+      getLiteral _ = error "convExprProc: Real space matched to invalid CodeType; should be Double or Float"
+  return $ getLiteral sm
+convExprProc (Lit (ExactDbl d)) = convExprProc $ Lit . Dbl $ fromInteger d
+convExprProc (Lit (Int i))      = return $ litInt i
+convExprProc (Lit (Str s))      = return $ litString s
+convExprProc (Lit (Perc a b)) = do
+  sm <- spaceCodeType Rational
+  let getLiteral Double = litDouble
+      getLiteral Float = litFloat . realToFrac
+      getLiteral _ = error "convExprProc: Rational space matched to invalid CodeType; should be Double or Float"
+  return $ getLiteral sm (fromIntegral a / (10 ** fromIntegral b))
+convExprProc (AssocA Add l) = foldl1 (#+)  <$> mapM convExprProc l
+convExprProc (AssocA Mul l) = foldl1 (#*)  <$> mapM convExprProc l
+convExprProc (AssocB And l) = foldl1 (?&&) <$> mapM convExprProc l
+convExprProc (AssocB Or l)  = foldl1 (?||) <$> mapM convExprProc l
+convExprProc (C c) = do
+  g <- get
+  let v = quantvar (lookupC g c)
+  mkValProc v local -- TODO: get scope from state
+convExprProc (FCall c x ns) = convCallProc c x ns fAppProc libFuncAppMixedArgs
+convExprProc (New _ _ _) = error "convExprProc: Procedural renderers do not support object creation"
+convExprProc (Message _ _ _ _) = error "convExprProc: Procedural renderers do not support methods"
+convExprProc (Field _ _) = error "convExprProc: Procedural renderers do not support object field access"
+convExprProc (UnaryOp o u)    = fmap (unop o) (convExprProc u)
+convExprProc (UnaryOpB o u)   = fmap (unopB o) (convExprProc u)
+convExprProc (UnaryOpVV o u)  = fmap (unopVV o) (convExprProc u)
+convExprProc (UnaryOpVN o u)  = fmap (unopVN o) (convExprProc u)
+convExprProc (ArithBinaryOp Frac (Lit (Int a)) (Lit (Int b))) = do -- hack to deal with integer division
+  sm <- spaceCodeType Rational
+  let getLiteral Double = litDouble (fromIntegral a) #/ litDouble (fromIntegral b)
+      getLiteral Float = litFloat (fromIntegral a) #/ litFloat (fromIntegral b)
+      getLiteral _ = error "convExprProc: Rational space matched to invalid CodeType; should be Double or Float"
+  return $ getLiteral sm
+convExprProc (ArithBinaryOp o a b) = liftM2 (arithBfunc o) (convExprProc a) (convExprProc b)
+convExprProc (BoolBinaryOp o a b)  = liftM2 (boolBfunc o) (convExprProc a) (convExprProc b)
+convExprProc (LABinaryOp o a b)    = liftM2 (laBfunc o) (convExprProc a) (convExprProc b)
+convExprProc (EqBinaryOp o a b)    = liftM2 (eqBfunc o) (convExprProc a) (convExprProc b)
+convExprProc (OrdBinaryOp o a b)   = liftM2 (ordBfunc o) (convExprProc a) (convExprProc b)
+convExprProc (VVVBinaryOp o a b)   = liftM2 (vecVecVecBfunc o) (convExprProc a) (convExprProc b)
+convExprProc (VVNBinaryOp o a b)   = liftM2 (vecVecNumBfunc o) (convExprProc a) (convExprProc b)
+convExprProc (NVVBinaryOp o a b)   = liftM2 (numVecVecBfunc o) (convExprProc a) (convExprProc b)
+convExprProc (Case c l)            = doit l -- FIXME this is sub-optimal
+  where
+    doit [] = error "should never happen" -- TODO: change error message?
+    doit [(e,_)] = convExprProc e -- should always be the else clause
+    doit ((e,cond):xs) = liftM3 inlineIf (convExprProc cond) (convExprProc e)
+      (convExprProc (Case c xs))
+convExprProc (Matrix [l]) = do
+  ar <- mapM convExprProc l
+                                    -- hd will never fail here
+  return $ litArray (fmap valueType (head ar)) ar
+convExprProc Matrix{} = error "convExprProc: Matrix"
+convExprProc Operator{} = error "convExprProc: Operator"
+convExprProc (RealI c ri)  = do
+  g <- get
+  convExprProc $ renderRealInt (lookupC g c) ri
+
+convCallProc :: (SharedProg r) => UID -> [CodeExpr] -> [(UID, CodeExpr)] ->
+  (Name -> Name -> VSType r -> [SValue r] -> NamedArgs r ->
+  GenState (SValue r)) -> (Name -> Name -> VSType r -> [SValue r]
+  -> NamedArgs r -> SValue r) -> GenState (SValue r)
+convCallProc c x ns f libf = do
+  g <- get
+  let info = sysinfodb $ codeSpec g
+      mem = eMap g
+      lem = libEMap g
+      funcCd = quantfunc (symbResolve info c)
+      funcNm = codeName funcCd
+  funcTp <- codeType funcCd
+  args <- mapM convExprProc x
+  nms <- mapM ((`mkVarProc` local) . quantvar . symbResolve info . fst) ns -- TODO: get scope from state
+  nargs <- mapM (convExprProc . snd) ns
+  maybe (maybe (error $ "Call to non-existent function " ++ funcNm)
+      (\m -> return $ libf m funcNm (convType funcTp) args (zip nms nargs))
+      (Map.lookup funcNm lem))
+    (\m -> f m funcNm (convType funcTp) args (zip nms nargs))
+    (Map.lookup funcNm mem)

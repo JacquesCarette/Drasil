@@ -92,11 +92,15 @@ copy_examples() {
       target_srs_dir="./$EXAMPLE_DEST$example_name/$SRS_DEST"
       mkdir -p "$target_srs_dir/PDF"
       mkdir -p "$target_srs_dir/HTML"
+      mkdir -p "$target_srs_dir/mdBook"
       if [ -d "$example/SRS/PDF" ]; then
         cp "$example/SRS/PDF/"*.pdf "$target_srs_dir/PDF"
       fi
       if [ -d "$example/SRS/HTML" ]; then
         cp -r "$example/SRS/HTML/." "$target_srs_dir/HTML"
+      fi
+      if [ -d "$example/SRS/mdBook" ]; then
+        cp -r "$example/SRS/mdBook/book/" "$target_srs_dir/mdBook"
       fi
       if [ -d "$example/src" ]; then
         mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST"

@@ -44,7 +44,10 @@ jobs:
               - 'code/stable/**/*.tex'
 
       - name: "Install system requirements"
-        run: sudo apt-get install -y --fix-missing libgmp-dev python3 graphviz doxygen fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-xetex texlive-luatex g++ default-jdk mono-devel inkscape
+        run: |
+          sudo apt-get install -y --fix-missing libgmp-dev python3 graphviz doxygen fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-xetex texlive-luatex g++ default-jdk mono-devel inkscape
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+          cargo install mdbook
 
       - name: "Update PATH"
         run: |
@@ -115,6 +118,10 @@ jobs:
 
       - name: "Build trace graphs" # only needed in deployments, not required for tests
         run: make tracegraphs
+        if: ${{ fromJSON(env.is_deployment) }}
+
+      - name: "Build mdBook Examples" # only needed in deployments, not required for tests
+        run: make mdbook_build
         if: ${{ fromJSON(env.is_deployment) }}
 
       - name: "Build website generator"

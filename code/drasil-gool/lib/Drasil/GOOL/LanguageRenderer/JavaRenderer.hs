@@ -81,7 +81,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   extFuncAppMixedArgs, indexOf, contains, listAddFunc, discardFileLine, intClass, 
   funcType, arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, 
   docMain, mainFunction, buildModule', bindingError, listDecDef, 
-  destructorError, stateVarDef, constVar, litArray, litSetFunc, listSetFunc, call', listSizeFunc, 
+  destructorError, stateVarDef, constVar, litArray, litSetFunc, call', listSizeFunc, 
   listAccessFunc', notNull, doubleRender, double, openFileR, openFileW, 
   stateVar, floatRender, float, string', intToIndex, indexToInt, global)
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (float, double, char, 
@@ -808,8 +808,8 @@ jFinal = text "final"
 jScanner' = text jScanner
 jLambdaSep = text "->"
 
-arrayList, jBool, jBool', jInteger, jObject, jScanner,
-  jPrintWriter, jFile, jFileWriter, jIOExc, jFNFExc, jArrays, jAsList, jStdIn, 
+arrayList, jBool, jBool', jInteger, jObject, jScanner, jUtil, jContains,
+  jPrintWriter, jFile, jFileWriter, jIOExc, jFNFExc, jArrays, jSet, jAsList, jSetOf, jStdIn, 
   jStdOut, jPrintLn, jEquals, jParseInt, jParseDbl, jParseFloat, jIndex, 
   jListAdd, jListAccess, jListSet, jClose, jNext, jNextLine, jNextBool, 
   jHasNextLine, jCharAt, jSplit, io, util :: String
@@ -903,9 +903,6 @@ jFileWriterType = do
 
 jAsListFunc :: VSType JavaCode -> [SValue JavaCode] -> SValue JavaCode
 jAsListFunc t = funcApp jAsList (listType t)
-
-jAsSetFunc :: VSType JavaCode -> [SValue JavaCode] -> SValue JavaCode
-jAsSetFunc t = funcApp jSetOf (setType t)
 
 jEqualsFunc :: SValue JavaCode -> VSFunction JavaCode
 jEqualsFunc v = func jEquals bool [v]

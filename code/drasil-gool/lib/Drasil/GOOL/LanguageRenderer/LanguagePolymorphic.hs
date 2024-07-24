@@ -30,8 +30,8 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
   AssignStatement((&++)), (&=), IOStatement(printStr, printStrLn, printFile,
   printFileStr, printFileStrLn), ifNoElse)
 import qualified Drasil.GOOL.InterfaceCommon as IC (TypeSym(int, double, char,
-  string, listType, setType, arrayType, listInnerType, funcType, void), locVar,
-  Literal(litInt, litFloat, litDouble, litString, litSet), VariableValue(valueOf),
+  string, listType, arrayType, listInnerType, funcType, void), locVar,
+  Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
   IOStatement(print), ControlStatement(returnStmt, for, forEach), ParameterSym(param),
   List(intToIndex))

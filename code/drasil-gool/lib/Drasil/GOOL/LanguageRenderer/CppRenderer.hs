@@ -53,7 +53,7 @@ import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
 
 
-import Drasil.GOOL.LanguageRenderer (inLabel, addExt, classDec, dot, blockCmtStart,
+import Drasil.GOOL.LanguageRenderer (addExt, classDec, dot, blockCmtStart,
   blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, commentStart,
   returnLabel, elseIfLabel, tryLabel, catchLabel, throwLabel, array', constDec',
   listSep', argc, argv, constDec, mainFunc, containing, functionDox, valueList,
@@ -80,8 +80,8 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   fileFromData, defaultOptSpace, local)
 import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
-  constructor, doxFunc, doxClass, doxMod, funcType, buildModule, litArray, litSet,
-  call', listSizeFunc, listAccessFunc', contains, forEach, containsInt, string, constDecDef, docInOutFunc,
+  constructor, doxFunc, doxClass, doxMod, funcType, buildModule, litArray,
+  call', listSizeFunc, listAccessFunc', forEach, containsInt, string, constDecDef, docInOutFunc,
   listSetFunc, extraClass, intToIndex, indexToInt, global)
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, inOp, self, litTrue, litFalse,
@@ -2432,9 +2432,6 @@ addLimitsImport :: MS a -> MS a
 addLimitsImport v = do
   modify (addLangImport limits)
   v
-
-setIterVar :: CommonRenderSym r=> SVariable r -> SValue r
-setIterVar = G.valueOf
 
 iterator :: CommonRenderSym r => VSType r -> VSType r
 iterator t = do

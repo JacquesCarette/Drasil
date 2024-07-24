@@ -75,7 +75,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
   extFuncAppMixedArgs, indexOf, contains, listAddFunc, discardFileLine, intClass, 
-  arrayType, pi, printSt, arrayDec, arrayDecDef, setDec, setDecDef, openFileA, forEach, docMain, 
+  arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, docMain, 
   mainFunction, buildModule', string, constDecDef, docInOutFunc, bindingError, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, listSetFunc, 
   extraClass, listAccessFunc, doubleRender, openFileR, openFileW, stateVar, 
@@ -813,14 +813,6 @@ csOutfileType = join $ modifyReturn (addLangImportVS csIO) $
 csLitList :: (CommonRenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
   -> SValue r
 csLitList f t' es' = do 
-  es <- sequence es' 
-  lt <- f t'
-  mkVal lt (new' <+> RC.type' lt
-    <+> braces (valueList es))
-
-csLitSet :: (CommonRenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
-  -> SValue r
-csLitSet f t' es' = do 
   es <- sequence es' 
   lt <- f t'
   mkVal lt (new' <+> RC.type' lt

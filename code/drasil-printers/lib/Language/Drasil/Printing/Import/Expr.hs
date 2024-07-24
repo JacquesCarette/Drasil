@@ -110,8 +110,9 @@ expr :: Expr -> PrintingInformation -> P.Expr
 expr (Lit l)                  sm = literal l sm
 expr (AssocB And l)           sm = assocExpr P.And (precB And) l sm
 expr (AssocB Or l)            sm = assocExpr P.Or (precB Or) l sm
-expr (AssocA Add l)          sm = P.Row $ addExpr l Add sm
-expr (AssocA Mul l)         sm = P.Row $ mulExpr l Mul sm
+expr (AssocA Add l)           sm = P.Row $ addExpr l Add sm
+expr (AssocA Mul l)           sm = P.Row $ mulExpr l Mul sm
+codeExpr (AssocC SUnion l)    sm = P.Row $ mulExpr l Mul sm
 expr (C c)                    sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
 expr (FCall f [x])            sm =
   P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ expr x sm]
@@ -121,6 +122,7 @@ expr (Case _ ps)              sm =
     then error "Attempting to use multi-case expr incorrectly"
     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
 expr (Matrix a)               sm = P.Mtx $ map (map (`expr` sm)) a
+codeExpr (Set a)              sm = P.Row $ map (`expr` sm) a
 expr (UnaryOp Log u)          sm = mkCall sm P.Log u
 expr (UnaryOp Ln u)           sm = mkCall sm P.Ln u
 expr (UnaryOp Sin u)          sm = mkCall sm P.Sin u
@@ -157,6 +159,9 @@ expr (VVVBinaryOp VAdd a b)   sm = mkBOp sm P.VAdd a b
 expr (VVVBinaryOp VSub a b)   sm = mkBOp sm P.VSub a b
 expr (VVNBinaryOp Dot a b)    sm = mkBOp sm P.Dot a b
 expr (NVVBinaryOp Scale a b)  sm = mkBOp sm P.Scale a b
+expr (ESSBinaryOp SAdd a b)   sm = mkBOp sm P.SAdd a b
+expr (ESSBinaryOp SRemove a b)sm = mkBOp sm P.SRemove a b
+expr (ESBBinaryOp SAdd a b)   sm = mkBOp sm P.SContains a b
 expr (Operator o d e)         sm = eop sm o d e
 expr (RealI c ri)             sm = renderRealInt sm (lookupC (sm ^. stg)
   (sm ^. ckdb) c) ri

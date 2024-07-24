@@ -178,6 +178,7 @@ instance TypeSym JuliaCode where
   infile = jlInfileType
   outfile = jlOutfileType
   listType = jlListType
+  setType = listType
   arrayType = listType -- Treat arrays and lists the same, as in Python
   listInnerType = A.listInnerType
   funcType = CP.funcType
@@ -287,6 +288,7 @@ instance Literal JuliaCode where
   litString = G.litString
   litArray = CP.litArray brackets
   litList = litArray
+  litSet = litList
 
 instance MathConstant JuliaCode where
   pi :: SValue JuliaCode
@@ -336,6 +338,7 @@ instance BooleanExpression JuliaCode where
   (?!) = typeUnExpr notOp bool
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
+  isin = typeBinExpr orOp bool
 
 instance Comparison JuliaCode where
   (?<) = typeBinExpr lessOp bool

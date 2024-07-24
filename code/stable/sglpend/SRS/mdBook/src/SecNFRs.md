@@ -4,8 +4,8 @@ This section provides the non-functional requirements, the qualities that the so
 
 <div id="correct"></div>
 
-Correct: The outputs of the code have the [properties of a correct solution](./SecCorSolProps.md#Sec:CorSolProps).
+Correctness: The outputs of the code have the [properties of a correct solution](./SecCorSolProps.md#Sec:CorSolProps).
 
 <div id="portable"></div>
 
-Portable: The code is able to be run in different environments.
+Portability: The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.

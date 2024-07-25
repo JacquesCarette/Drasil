@@ -92,6 +92,7 @@ instance TypeSym CodeInfoOO where
   string            = noInfoType
   infile            = noInfoType
   outfile           = noInfoType
+  setType       _   = noInfoType
   listType      _   = noInfoType
   arrayType     _   = noInfoType
   listInnerType _   = noInfoType

@@ -81,7 +81,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
 import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, funcType, buildModule, litArray,
-  call', listSizeFunc, listAccessFunc', forEach, containsInt, string, constDecDef, docInOutFunc,
+  call', listSizeFunc, listAccessFunc', containsInt, string, constDecDef, docInOutFunc,
   listSetFunc, extraClass, intToIndex, indexToInt, global)
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, inOp, self, litTrue, litFalse,
@@ -110,7 +110,7 @@ import Drasil.GOOL.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing,
   setFileType, getModuleName, setModuleName, setClassName, getClassName, setCurrMain,
   getCurrMain, getClassMap, setVisibility, getVisibility, setCurrMainFunc, getCurrMainFunc,
-  addIter, getIter, resetIter, useVarName, genLoopIndex)
+  addIter, resetIter, useVarName, genLoopIndex)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,log,exp,mod,max)
 import Control.Lens.Zoom (zoom)
@@ -1260,14 +1260,7 @@ instance MathConstant CppSrcCode where
     addMathHImport (mkStateVal double cppPi)
 
 instance VariableValue CppSrcCode where
-  valueOf vr' = do
-    vr <- vr'
-    its <- zoom lensVStoMS getIter
-    let namevr = variableName vr
-    if namevr `elem` its then
-      mkStateVal (iterator $ toState $ variableType vr)
-        (parens $ cppDeref <> RC.variable vr)
-      else G.valueOf vr'
+  valueOf = G.valueOf
 
 instance OOVariableValue CppSrcCode
 
@@ -1576,7 +1569,7 @@ instance ControlStatement CppSrcCode where
 
   for = C.for bodyStart bodyEnd
   forRange = M.forRange
-  forEach = CP.forEach bodyStart bodyEnd (text cppFor) (text cppIn)
+  forEach = cppForEach bodyStart bodyEnd (text cppFor) (text cppIn)
   while = C.while parens bodyStart bodyEnd
 
   tryCatch = G.tryCatch cppTryCatch
@@ -2811,6 +2804,18 @@ cppsStateVarDef cns s p vr' vl' = do
       text n `nmSpcAccess'` RC.variable vr <+> equals <+> RC.value vl <>
       endStatement) empty)
     emptS
+
+cppForEach :: (CommonRenderSym r) => Doc -> Doc -> Doc -> Doc -> SVariable r -> SValue r
+  -> MSBody r -> MSStatement r
+cppForEach bStart bEnd forEachLabel inLbl e' v' b' = do
+  e <- zoom lensMStoVS e'
+  v <- zoom lensMStoVS v'
+  b <- b'
+  mkStmtNoEnd $ vcat [
+    forEachLabel <+> parens (text("const auto &") <> RC.variable e <+>
+      inLbl <+> RC.value v) <+> bStart,
+    indent $ RC.body b,
+    bEnd]
 
 cppLitSet :: (OORenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
     -> SValue r

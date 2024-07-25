@@ -330,7 +330,7 @@ instance Literal JavaCode where
   litString = G.litString
   litArray = CP.litArray braces
   litSet t es = do 
-    (modify (addLangImportVS (utilImport jSet)))
+    modify (addLangImportVS (utilImport jSet))
     CP.litSetFunc jSetOf t es
 
   litList t es = do

@@ -153,6 +153,7 @@ codeExpr (BoolBinaryOp Iff a b)      sm = mkBOp sm P.Iff a b
 codeExpr (EqBinaryOp Eq a b)         sm = mkBOp sm P.Eq a b
 codeExpr (EqBinaryOp NEq a b)        sm = mkBOp sm P.NEq a b
 codeExpr (LABinaryOp Index a b)      sm = indx sm a b
+codeExpr (LABinaryOp IndexOf a b)      sm = indx sm a b
 codeExpr (OrdBinaryOp Lt a b)        sm = mkBOp sm P.Lt a b
 codeExpr (OrdBinaryOp Gt a b)        sm = mkBOp sm P.Gt a b
 codeExpr (OrdBinaryOp LEq a b)       sm = mkBOp sm P.LEq a b

@@ -150,6 +150,7 @@ expr (BoolBinaryOp Iff a b)   sm = mkBOp sm P.Iff a b
 expr (EqBinaryOp Eq a b)      sm = mkBOp sm P.Eq a b
 expr (EqBinaryOp NEq a b)     sm = mkBOp sm P.NEq a b
 expr (LABinaryOp Index a b)   sm = indx sm a b
+expr (LABinaryOp IndexOf a b)   sm = indx sm a b
 expr (OrdBinaryOp Lt a b)     sm = mkBOp sm P.Lt a b
 expr (OrdBinaryOp Gt a b)     sm = mkBOp sm P.Gt a b
 expr (OrdBinaryOp LEq a b)    sm = mkBOp sm P.LEq a b

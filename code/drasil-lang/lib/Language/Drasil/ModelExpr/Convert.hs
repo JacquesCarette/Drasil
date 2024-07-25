@@ -62,6 +62,7 @@ eqBinOp E.NEq = NEq
 
 laBinOp :: E.LABinOp -> LABinOp
 laBinOp E.Index = Index
+laBinOp E.IndexOf = IndexOf
 
 ordBinOp :: E.OrdBinOp -> OrdBinOp
 ordBinOp E.Lt  = Lt

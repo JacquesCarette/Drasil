@@ -8,7 +8,7 @@ module Language.Drasil.Constraint (
   ) where
 
 import Language.Drasil.Expr.Lang
-import Language.Drasil.Space (RealInterval(..), Space(..))
+import Language.Drasil.Space (RealInterval(..))
 
 -- | The reason behind the constraint's existence.
 data ConstraintReason = Physical | Software

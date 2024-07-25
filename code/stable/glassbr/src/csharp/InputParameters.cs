@@ -5,6 +5,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 /** \brief Structure for holding the input values and derived values
@@ -249,6 +250,20 @@ public class InputParameters {
             Console.Write(" and ");
             Console.Write(910.0);
             Console.Write(" (w_max)");
+            Console.WriteLine(".");
+            throw new Exception("InputError");
+        }
+        if (!(new HashSet<double> {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}.Contains(this.t))) {
+            Console.Write("t has value ");
+            Console.Write(this.t);
+            Console.Write(", but is expected to be ");
+            Console.Write("an element of the set ");
+            Console.Write("{ ");
+            foreach (double set_i1 in new HashSet<double> {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}) {
+                Console.Write(set_i1);
+                Console.Write(" ");
+            }
+            Console.Write("}");
             Console.WriteLine(".");
             throw new Exception("InputError");
         }

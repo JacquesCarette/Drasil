@@ -84,6 +84,7 @@ boolBinOp LD.Iff = Iff
 
 laBinOp :: LD.LABinOp -> LABinOp
 laBinOp LD.Index = Index
+laBinOp LD.IndexOf = IndexOf
 
 ordBinOp :: LD.OrdBinOp -> OrdBinOp
 ordBinOp LD.Lt  = Lt

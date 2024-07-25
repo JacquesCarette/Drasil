@@ -67,7 +67,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (bool,
   varDecDef, openFileR', openFileW', openFileA', multiReturn, multiAssign,
   inOutCall, mainBody, argExists, forEach')
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (litTrue, litFalse,
-  notOp, andOp, orOp, inlineIf, while)
+  notOp, andOp, orOp, inOp, inlineIf, while)
 import qualified Drasil.GOOL.LanguageRenderer.AbstractProc as A (fileDoc,
   fileFromData, buildModule, docMod, modFromData, listInnerType, arrayElem,
   funcDecDef, function)
@@ -241,6 +241,7 @@ instance BinaryOpSym JuliaCode where
   moduloOp = G.moduloOp
   andOp = C.andOp
   orOp = C.orOp
+  inOp = C.inOp
 
 instance OpElim JuliaCode where
   uOp = opDoc . unJLC

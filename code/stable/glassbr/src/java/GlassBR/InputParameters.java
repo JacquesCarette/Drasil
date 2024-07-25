@@ -258,6 +258,15 @@ public class InputParameters {
             System.out.println(".");
             throw new Exception("InputError");
         }
+        if (!(Set.of(2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0).contains(this.t))) {
+            System.out.print("t has value ");
+            System.out.print(this.t);
+            System.out.print(", but is expected to be ");
+            System.out.print("an element of the set ");
+            System.out.print(Set.of(2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0));
+            System.out.println(".");
+            throw new Exception("InputError");
+        }
         if (!(6.0 <= this.SD && this.SD <= 130.0)) {
             System.out.print("SD has value ");
             System.out.print(this.SD);

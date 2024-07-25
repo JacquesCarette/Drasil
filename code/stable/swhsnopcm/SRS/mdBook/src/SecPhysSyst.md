@@ -8,6 +8,6 @@ PS2: Heating coil at bottom of tank. (\\({q\_{\text{C}}}\\) represents the heat 
 
 <div id="Figure:Tank"></div>
 
-![Solar water heating tank, with heat flux from heating coil of \\({q\_{\text{C}}}\\)](/assets/TankWaterOnly.png)
+![Solar water heating tank, with heat flux from heating coil of \\({q\_{\text{C}}}\\)](./assets/TankWaterOnly.png)
 
 **<p align="center">Solar water heating tank, with heat flux from heating coil of \\({q\_{\text{C}}}\\)</p>**

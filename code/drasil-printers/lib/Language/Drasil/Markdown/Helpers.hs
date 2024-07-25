@@ -57,7 +57,7 @@ reflinkURI ref txt = if ref == txt then ang ref
 image :: Doc -> Doc -> Doc
 image f c =  text "!" <> reflinkURI fp c $^$ bold (caption c)
   where
-    fp = text $ "/assets/" ++ takeFileName (show f)
+    fp = text $ "./assets/" ++ takeFileName (show f)
 
 -- | Helper for setting up captions
 caption :: Doc -> Doc

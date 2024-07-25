@@ -165,6 +165,7 @@ modelExpr (BoolBinaryOp Iff a b)     sm = mkBOp sm P.Iff a b
 modelExpr (EqBinaryOp Eq a b)        sm = mkBOp sm P.Eq a b
 modelExpr (EqBinaryOp NEq a b)       sm = mkBOp sm P.NEq a b
 modelExpr (LABinaryOp Index a b)     sm = indx sm a b
+modelExpr (LABinaryOp IndexOf a b)     sm = indx sm a b
 modelExpr (OrdBinaryOp Lt a b)       sm = mkBOp sm P.Lt a b
 modelExpr (OrdBinaryOp Gt a b)       sm = mkBOp sm P.Gt a b
 modelExpr (OrdBinaryOp LEq a b)      sm = mkBOp sm P.LEq a b

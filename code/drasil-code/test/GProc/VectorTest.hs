@@ -1,24 +1,24 @@
-module VectorTest (vectorTest) where
+module GProc.VectorTest (vectorTest) where
 
-import Drasil.GOOL (GSProgram, SVariable, SMethod, OOProg, ProgramSym(..),
+import Drasil.GProc (GSProgram, SVariable, SMethod, ProcProg, ProgramSym(..),
   FileSym(..), BodySym(..), BlockSym(..), TypeSym(..), mainVar, Literal(..),
   VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
   DeclStatement(..), ThunkAssign(..), MethodSym(..), ModuleSym(..))
 
-vectorTest :: OOProg r => GSProgram r
+vectorTest :: ProcProg r => GSProgram r
 vectorTest = prog "VectorTest" "" [fileDoc $ buildModule "VectorTest" []
-  [main] []]
+  [main]]
 
-v1 :: OOProg r => SVariable r
+v1 :: ProcProg r => SVariable r
 v1 = mainVar "v1" (vecType double)
 
-v2 :: OOProg r => SVariable r
+v2 :: ProcProg r => SVariable r
 v2 = mainVar "v2" (vecType double)
 
-x :: OOProg r => SVariable r
+x :: ProcProg r => SVariable r
 x = mainVar "x" double
 
-main :: OOProg r => SMethod r
+main :: ProcProg r => SMethod r
 main = mainFunction $ body [block [vecDecDef v1 [litDouble 1, litDouble 1.5],
   vecDecDef v2 [litDouble 0, litDouble (-1)],
   thunkAssign v1 (vecAdd (vecScale (litDouble 2) (vecThunk v1)) (vecThunk v2)),

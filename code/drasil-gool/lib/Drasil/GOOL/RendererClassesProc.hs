@@ -1,7 +1,7 @@
 {-# LANGUAGE TypeFamilies #-}
 
 module Drasil.GOOL.RendererClassesProc (
-  OORenderSym, RenderFile(..), RenderMod(..), ModuleElim(..),
+  ProcRenderSym, RenderFile(..), RenderMod(..), ModuleElim(..),
   ProcRenderMethod(..)
 ) where
 
@@ -16,8 +16,9 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, BlockCommentSym(..),
   RenderMethod(..), MSMthdType)
 
-class (CommonRenderSym r, IP.FileSym r, RenderFile r, RenderMod r, ModuleElim r
-  ) => OORenderSym r
+class (CommonRenderSym r, IP.FileSym r, RenderFile r, RenderMod r, ModuleElim r,
+  ProcRenderMethod r
+  ) => ProcRenderSym r
 
 -- Procedural-Only Typeclasses --
 
@@ -42,5 +43,5 @@ class ModuleElim r where
 class (RenderMethod r) => ProcRenderMethod r where
   -- | Main method?, name, public/private,
   --   return type, parameters, body
-  intMethod     :: Bool -> Label -> r (Visibility r) -> MSMthdType r ->
+  intFunc     :: Bool -> Label -> r (Visibility r) -> MSMthdType r ->
     [MSParameter r] -> MSBody r -> SMethod r

@@ -1,7 +1,7 @@
 {-# LANGUAGE TypeFamilies, Rank2Types #-}
 
 -- Performs code analysis on the GOOL code
-module Drasil.GOOL.CodeInfo (CodeInfo(..)) where
+module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
 import Drasil.GOOL.InterfaceCommon (MSBody, VSType, SValue, MSStatement, 
   SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
@@ -35,55 +35,55 @@ import qualified Control.Monad.State as S (get)
 import Control.Lens.Zoom (zoom)
 import Data.Maybe (fromMaybe)
 
-newtype CodeInfo a = CI {unCI :: a} deriving Eq
+newtype CodeInfoOO a = CI {unCI :: a} deriving Eq
 
 -- FIXME: Use DerivingVia language extension (and maybe DeriveFunctor) to 
 -- derive the Functor, Applicative, Monad instances for this 
 -- (and for JavaCode, PythonCode, etc.)
-instance Functor CodeInfo where
+instance Functor CodeInfoOO where
   fmap f (CI x) = CI (f x)
 
-instance Applicative CodeInfo where
+instance Applicative CodeInfoOO where
   pure = CI
   (CI f) <*> (CI x) = CI (f x)
 
-instance Monad CodeInfo where
+instance Monad CodeInfoOO where
   CI x >>= f = f x
 
-instance SharedProg CodeInfo
-instance OOProg CodeInfo
+instance SharedProg CodeInfoOO
+instance OOProg CodeInfoOO
 
-instance ProgramSym CodeInfo where
-  type Program CodeInfo = GOOLState
+instance ProgramSym CodeInfoOO where
+  type Program CodeInfoOO = GOOLState
   prog _ _ fs = do
     mapM_ (zoom lensGStoFS) fs
     modify (updateMEMWithCalls . callMapTransClosure)
     s <- S.get
     toState $ toCode s
 
-instance FileSym CodeInfo where
-  type File CodeInfo = ()
+instance FileSym CodeInfoOO where
+  type File CodeInfoOO = ()
   fileDoc = execute1
   
   docMod _ _ _ = execute1
 
-instance PermanenceSym CodeInfo where
-  type Permanence CodeInfo = ()
+instance PermanenceSym CodeInfoOO where
+  type Permanence CodeInfoOO = ()
   static  = toCode ()
   dynamic = toCode ()
 
-instance BodySym CodeInfo where
-  type Body CodeInfo = ()
+instance BodySym CodeInfoOO where
+  type Body CodeInfoOO = ()
   body = executeList
 
   addComments _ _ = noInfo
 
-instance BlockSym CodeInfo where
-  type Block CodeInfo = ()
+instance BlockSym CodeInfoOO where
+  type Block CodeInfoOO = ()
   block = executeList
 
-instance TypeSym CodeInfo where
-  type Type CodeInfo = String
+instance TypeSym CodeInfoOO where
+  type Type CodeInfoOO = String
   bool              = noInfoType
   int               = noInfoType
   float             = noInfoType
@@ -98,48 +98,48 @@ instance TypeSym CodeInfo where
   funcType      _ _ = noInfoType
   void              = noInfoType
 
-instance OOTypeSym CodeInfo where
+instance OOTypeSym CodeInfoOO where
   obj               = toState . toCode
 
-instance TypeElim CodeInfo where
+instance TypeElim CodeInfoOO where
   getType _     = Void
   getTypeString = unCI
 
-instance ScopeSym CodeInfo where
-  type Scope CodeInfo = ()
+instance ScopeSym CodeInfoOO where
+  type Scope CodeInfoOO = ()
   global = toCode ()
   mainFn = toCode ()
   local = toCode ()
 
-instance VariableSym CodeInfo where
-  type Variable CodeInfo = ()
+instance VariableSym CodeInfoOO where
+  type Variable CodeInfoOO = ()
   var'      _ _ _ = noInfo
   constant' _ _ _ = noInfo
   extVar   _ _ _  = noInfo
   arrayElem _ _   = noInfo
-  
-instance OOVariableSym CodeInfo where
-  staticVar'   _ _ _ = noInfo
+
+instance OOVariableSym CodeInfoOO where
+  staticVar'  _ _ _ = noInfo
   self              = noInfo
   classVar    _ _   = noInfo
   extClassVar _ _   = noInfo
   objVar      _ _   = noInfo
   objVarSelf  _     = noInfo
 
-instance VariableElim CodeInfo where
+instance VariableElim CodeInfoOO where
   variableName _ = ""
   variableType _ = toCode ""
 
-instance ValueSym CodeInfo where
-  type Value CodeInfo = ()
+instance ValueSym CodeInfoOO where
+  type Value CodeInfoOO = ()
   valueType _ = toCode ""
 
-instance OOValueSym CodeInfo
+instance OOValueSym CodeInfoOO
 
-instance Argument CodeInfo where
+instance Argument CodeInfoOO where
   pointerArg = id
 
-instance Literal CodeInfo where
+instance Literal CodeInfoOO where
   litTrue     = noInfo
   litFalse    = noInfo
   litChar   _ = noInfo
@@ -150,20 +150,20 @@ instance Literal CodeInfo where
   litArray  _ = executeList
   litList   _ = executeList
 
-instance MathConstant CodeInfo where
+instance MathConstant CodeInfoOO where
   pi = noInfo
 
-instance VariableValue CodeInfo where
+instance VariableValue CodeInfoOO where
   valueOf _ = noInfo
 
-instance OOVariableValue CodeInfo
+instance OOVariableValue CodeInfoOO
 
-instance CommandLineArgs CodeInfo where
+instance CommandLineArgs CodeInfoOO where
   arg       _ = noInfo
   argsList    = noInfo
   argExists _ = noInfo
 
-instance NumericExpression CodeInfo where
+instance NumericExpression CodeInfoOO where
   (#~)  = execute1
   (#/^) = execute1
   (#|)  = execute1
@@ -189,12 +189,12 @@ instance NumericExpression CodeInfo where
   floor  = execute1
   ceil   = execute1
 
-instance BooleanExpression CodeInfo where
+instance BooleanExpression CodeInfoOO where
   (?!)  = execute1
   (?&&) = execute2
   (?||) = execute2
 
-instance Comparison CodeInfo where
+instance Comparison CodeInfoOO where
   (?<)  = execute2
   (?<=) = execute2
   (?>)  = execute2
@@ -202,7 +202,7 @@ instance Comparison CodeInfo where
   (?==) = execute2
   (?!=) = execute2
     
-instance ValueExpression CodeInfo where
+instance ValueExpression CodeInfoOO where
   inlineIf = execute3
   funcAppMixedArgs n _ = currModCall n
   extFuncAppMixedArgs l n _ vs ns = do
@@ -215,7 +215,7 @@ instance ValueExpression CodeInfo where
 
   notNull = execute1
 
-instance OOValueExpression CodeInfo where
+instance OOValueExpression CodeInfoOO where
   selfFuncAppMixedArgs = funcAppMixedArgs
   newObjMixedArgs ot vs ns = do
     sequence_ vs
@@ -227,21 +227,21 @@ instance OOValueExpression CodeInfo where
     addExternalConstructorCall l ot
   libNewObjMixedArgs = extNewObjMixedArgs
   
-instance InternalValueExp CodeInfo where
+instance InternalValueExp CodeInfoOO where
   objMethodCallMixedArgs' n _ v vs ns = v >> currModCall n vs ns
 
-instance FunctionSym CodeInfo where
-  type Function CodeInfo = ()
+instance FunctionSym CodeInfoOO where
+  type Function CodeInfoOO = ()
 
-instance OOFunctionSym CodeInfo where
+instance OOFunctionSym CodeInfoOO where
   func  _ _ = executeList
   objAccess = execute2
   
-instance GetSet CodeInfo where
+instance GetSet CodeInfoOO where
   get v _ = execute1 v
   set v _ = execute2 v
 
-instance List CodeInfo where
+instance List CodeInfoOO where
   intToIndex = execute1
   indexToInt = execute1
   listSize   = execute1
@@ -251,47 +251,47 @@ instance List CodeInfo where
   listSet    = execute3
   indexOf    = execute2
   
-instance InternalList CodeInfo where
+instance InternalList CodeInfoOO where
   listSlice' b e s _ vl = zoom lensMStoVS $ do
     mapM_ (fromMaybe noInfo) [b,e,s]
     _ <- vl
     noInfo
 
-instance ThunkSym CodeInfo where
-  type Thunk CodeInfo = ()
+instance ThunkSym CodeInfoOO where
+  type Thunk CodeInfoOO = ()
 
-instance ThunkAssign CodeInfo where
+instance ThunkAssign CodeInfoOO where
   thunkAssign _ = zoom lensMStoVS . execute1
 
-instance VectorType CodeInfo where
+instance VectorType CodeInfoOO where
   vecType _ = noInfoType
 
-instance VectorDecl CodeInfo where
+instance VectorDecl CodeInfoOO where
   vecDec _ _ = noInfo
   vecDecDef _ = zoom lensMStoVS . executeList
 
-instance VectorThunk CodeInfo where
+instance VectorThunk CodeInfoOO where
   vecThunk _ = noInfo
 
-instance VectorExpression CodeInfo where
+instance VectorExpression CodeInfoOO where
   vecScale = execute2
   vecAdd = execute2
   vecIndex = execute2
   vecDot = execute2
 
-instance StatementSym CodeInfo where
-  type Statement CodeInfo = ()
+instance StatementSym CodeInfoOO where
+  type Statement CodeInfoOO = ()
   valStmt = zoom lensMStoVS . execute1
   multi    = executeList
   
-instance AssignStatement CodeInfo where
+instance AssignStatement CodeInfoOO where
   assign _ = zoom lensMStoVS . execute1
   (&-=)  _ = zoom lensMStoVS . execute1
   (&+=)  _ = zoom lensMStoVS . execute1
   (&++)  _ = noInfo
   (&--)  _ = noInfo
 
-instance DeclStatement CodeInfo where
+instance DeclStatement CodeInfoOO where
   varDec                 _ = noInfo
   varDecDef              _ = zoom lensMStoVS . execute1
   listDec              _ _ = noInfo
@@ -301,12 +301,12 @@ instance DeclStatement CodeInfo where
   constDecDef            _ = zoom lensMStoVS . execute1
   funcDecDef           _ _ = execute1
 
-instance OODeclStatement CodeInfo where
+instance OODeclStatement CodeInfoOO where
   objDecDef              _ = zoom lensMStoVS . execute1
   objDecNew              _ = zoom lensMStoVS . executeList
   extObjDecNew         _ _ = zoom lensMStoVS . executeList
 
-instance IOStatement CodeInfo where
+instance IOStatement CodeInfoOO where
   print        = zoom lensMStoVS . execute1
   printLn      = zoom lensMStoVS . execute1
   printStr   _ = noInfo
@@ -332,13 +332,13 @@ instance IOStatement CodeInfo where
   discardFileLine      = zoom lensMStoVS . execute1
   getFileInputAll  v _ = execute1 (zoom lensMStoVS v)
 
-instance StringStatement CodeInfo where
+instance StringStatement CodeInfoOO where
   stringSplit _ _ = zoom lensMStoVS . execute1
 
   stringListVals  _ = zoom lensMStoVS . execute1
   stringListLists _ = zoom lensMStoVS . execute1
 
-instance FuncAppStatement CodeInfo where
+instance FuncAppStatement CodeInfoOO where
   inOutCall n vs _ _ = zoom lensMStoVS $ do
     sequence_ vs
     addCurrModCall n
@@ -346,15 +346,15 @@ instance FuncAppStatement CodeInfo where
     sequence_ vs
     addExternalCall l n
 
-instance OOFuncAppStatement CodeInfo where
+instance OOFuncAppStatement CodeInfoOO where
   selfInOutCall n vs _ _ = zoom lensMStoVS $ do
     sequence_ vs
     addCurrModCall n
 
-instance CommentStatement CodeInfo where
+instance CommentStatement CodeInfoOO where
   comment _ = noInfo
 
-instance ControlStatement CodeInfo where
+instance ControlStatement CodeInfoOO where
   break    = noInfo
   continue = noInfo
 
@@ -379,27 +379,27 @@ instance ControlStatement CodeInfo where
     _ <- cb
     noInfo
 
-instance ObserverPattern CodeInfo where
+instance ObserverPattern CodeInfoOO where
   notifyObservers f _ _ = execute1 (zoom lensMStoVS f)
   
-instance StrategyPattern CodeInfo where
+instance StrategyPattern CodeInfoOO where
   runStrategy _ ss vl _ = do
     mapM_ snd ss
     _ <- zoom lensMStoVS $ fromMaybe noInfo vl
     noInfo
 
-instance VisibilitySym CodeInfo where
-  type Visibility CodeInfo = VisibilityTag
+instance VisibilitySym CodeInfoOO where
+  type Visibility CodeInfoOO = VisibilityTag
   private = toCode Priv
   public  = toCode Pub
 
-instance ParameterSym CodeInfo where
-  type Parameter CodeInfo = ()
+instance ParameterSym CodeInfoOO where
+  type Parameter CodeInfoOO = ()
   param        _ = noInfo
   pointerParam _ = noInfo
 
-instance MethodSym CodeInfo where
-  type Method CodeInfo = ()
+instance MethodSym CodeInfoOO where
+  type Method CodeInfoOO = ()
   docMain = updateMEMandCM "main"
   function n _ _ _ = updateMEMandCM n
   mainFunction = updateMEMandCM "main"
@@ -410,7 +410,7 @@ instance MethodSym CodeInfo where
   inOutFunc      n _ _ _ _     = updateMEMandCM n
   docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
-instance OOMethodSym CodeInfo where
+instance OOMethodSym CodeInfoOO where
   method n _ _ _ _ = updateMEMandCM n
   getMethod _ = noInfo
   setMethod _ = noInfo
@@ -424,14 +424,14 @@ instance OOMethodSym CodeInfo where
   inOutMethod    n _ _ _ _ _   = updateMEMandCM n
   docInOutMethod n _ _ _ _ _ _ = updateMEMandCM n
 
-instance StateVarSym CodeInfo where
-  type StateVar CodeInfo = ()
+instance StateVarSym CodeInfoOO where
+  type StateVar CodeInfoOO = ()
   stateVar    _ _ _   = noInfo
   stateVarDef _ _ _ _ = noInfo
   constVar    _ _ _   = noInfo
 
-instance ClassSym CodeInfo where
-  type Class CodeInfo = ()
+instance ClassSym CodeInfoOO where
+  type Class CodeInfoOO = ()
   buildClass _ _ cs ms = do
     n <- zoom lensCStoFS getModuleName
     implementingClass n [] [] cs ms
@@ -450,8 +450,8 @@ instance ClassSym CodeInfo where
     _ <- c
     noInfo
 
-instance ModuleSym CodeInfo where
-  type Module CodeInfo = ()
+instance ModuleSym CodeInfoOO where
+  type Module CodeInfoOO = ()
   buildModule n _ funcs classes = do
     modify (setModuleName n)
     mapM_ (zoom lensFStoCS) classes 
@@ -460,84 +460,84 @@ instance ModuleSym CodeInfo where
 
 -- Helpers
 
-noInfo :: State s (CodeInfo ())
+noInfo :: State s (CodeInfoOO ())
 noInfo = toState $ toCode ()
 
-noInfoType :: State s (CodeInfo String)
+noInfoType :: State s (CodeInfoOO String)
 noInfoType = toState $ toCode ""
 
-updateMEMandCM :: String -> MSBody CodeInfo -> SMethod CodeInfo
+updateMEMandCM :: String -> MSBody CodeInfoOO -> SMethod CodeInfoOO
 updateMEMandCM n b = do
   _ <- b
   modify (updateCallMap n . updateMethodExcMap n)
   noInfo
 
-evalConds :: [(SValue CodeInfo, MSBody CodeInfo)] -> MSBody CodeInfo -> 
-  MSStatement CodeInfo
+evalConds :: [(SValue CodeInfoOO, MSBody CodeInfoOO)] -> MSBody CodeInfoOO -> 
+  MSStatement CodeInfoOO
 evalConds cs def = do
   mapM_ (zoom lensMStoVS . fst) cs
   mapM_ snd cs
   _ <- def
   noInfo
 
-addCurrModCall :: String -> SValue CodeInfo
+addCurrModCall :: String -> SValue CodeInfoOO
 addCurrModCall n = do
   mn <- zoom lensVStoFS getModuleName 
   modify (addCall (qualName mn n)) 
   noInfo
 
-addCurrModConstructorCall :: VSType CodeInfo -> SValue CodeInfo
+addCurrModConstructorCall :: VSType CodeInfoOO -> SValue CodeInfoOO
 addCurrModConstructorCall ot = do
   t <- ot
   let tp = getTypeString t
   addCurrModCall tp
 
-addExternalCall :: String -> String -> SValue CodeInfo
+addExternalCall :: String -> String -> SValue CodeInfoOO
 addExternalCall l n = modify (addCall (qualName l n)) >> noInfo
 
-addExternalConstructorCall :: String -> VSType CodeInfo -> SValue CodeInfo
+addExternalConstructorCall :: String -> VSType CodeInfoOO -> SValue CodeInfoOO
 addExternalConstructorCall l ot = do
   t <- ot
   let tp = getTypeString t
   addExternalCall l tp
 
-execute1 :: State a (CodeInfo ()) -> State a (CodeInfo ())
+execute1 :: State a (CodeInfoOO ()) -> State a (CodeInfoOO ())
 execute1 s = do
   _ <- s
   noInfo
 
-executeList :: [State a (CodeInfo ())] -> State a (CodeInfo ())
+executeList :: [State a (CodeInfoOO ())] -> State a (CodeInfoOO ())
 executeList l = do
   sequence_ l
   noInfo
 
-executePairList :: [(State a (CodeInfo ()), State a (CodeInfo ()))] -> 
-  State a (CodeInfo ())
+executePairList :: [(State a (CodeInfoOO ()), State a (CodeInfoOO ()))] -> 
+  State a (CodeInfoOO ())
 executePairList ps = do
   mapM_ fst ps
   mapM_ snd ps
   noInfo
 
-execute2 :: State a (CodeInfo ()) -> State a (CodeInfo ()) -> 
-  State a (CodeInfo ())
+execute2 :: State a (CodeInfoOO ()) -> State a (CodeInfoOO ()) -> 
+  State a (CodeInfoOO ())
 execute2 s1 s2 = do
   _ <- s1
   execute1 s2
 
-execute3 :: State a (CodeInfo ()) -> State a (CodeInfo ()) -> 
-  State a (CodeInfo ()) -> State a (CodeInfo ())
+execute3 :: State a (CodeInfoOO ()) -> State a (CodeInfoOO ()) -> 
+  State a (CodeInfoOO ()) -> State a (CodeInfoOO ())
 execute3 s1 s2 s3 = do
   _ <- s1
   execute2 s2 s3
 
-execute4 :: State a (CodeInfo ()) -> State a (CodeInfo ()) -> 
-  State a (CodeInfo ()) -> State a (CodeInfo ()) -> State a (CodeInfo ())
+execute4 :: State a (CodeInfoOO ()) -> State a (CodeInfoOO ()) -> 
+  State a (CodeInfoOO ()) -> State a (CodeInfoOO ()) -> State a (CodeInfoOO ())
 execute4 s1 s2 s3 s4 = do
   _ <- s1
   execute3 s2 s3 s4
 
-currModCall :: String -> [VS (CodeInfo ())] -> 
-  [(VS (CodeInfo ()), VS (CodeInfo ()))] -> VS (CodeInfo ())
+currModCall :: String -> [VS (CodeInfoOO ())] -> 
+  [(VS (CodeInfoOO ()), VS (CodeInfoOO ()))] -> VS (CodeInfoOO ())
 currModCall n ps ns = do
   sequence_ ps
   executePairList ns

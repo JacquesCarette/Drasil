@@ -97,10 +97,11 @@ individualExList ex@E{sysInfoE = SI{_sys = sys}, codePath = srsP} =
   +:+ namedRef (getSRSRef srsP TeX $ programName sys) (S "[PDF]")
   +:+ namedRef (getSRSRef srsP MDBook $ programName sys) (S "[mdBook]"),
   Nested (S generatedCodeTitle) $ Bullet $ map (, Nothing) (versionList getCodeRef ex),
-  Nested (S generatedCodeDocsTitle) $ Bullet $ map (, Nothing) (versionList getDoxRef noSwiftEx)]
+  Nested (S generatedCodeDocsTitle) $ Bullet $ map (, Nothing) (versionList getDoxRef noSwiftJlEx)]
     where
       -- For now, swift does not generate any references using doxygen, so we pretend it doesn't exist in the doxygen list
-      noSwiftEx = ex {choicesE = map (\x -> x {lang = filter (/= Swift) $ lang x}) $ choicesE ex}
+      noSwiftJlEx = ex {choicesE = map (\x -> x {lang = filter 
+        (\l -> l /= Swift && l /= Julia) $ lang x}) $ choicesE ex}
 
 -- | Takes a function that gets the needed references (either references for the code or doxygen references)
 -- and the example to create the list out of. For examples that have more than one version of generated code (more than one set of choices)

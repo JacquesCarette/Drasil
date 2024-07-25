@@ -42,7 +42,7 @@ class (VectorType r, VectorDecl r, VectorThunk r,
   CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r,
   MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r,
   BooleanExpression r, Comparison r, ValueExpression r, List r, TypeElim r,
-  VariableElim r
+  VariableElim r, MethodSym r, ScopeSym r
   ) => SharedProg r
 
 -- Shared between OO and Procedural --

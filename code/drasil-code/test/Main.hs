@@ -1,8 +1,11 @@
 -- | Main module to gather all the GOOL tests and generate them.
 module Main (main) where
 
-import Drasil.GOOL (Label, OOProg, ProgramSym(..), unCI, unJC, unPC, unCSC,
-  unCPPC, unSC, unJLC, FileData(..), ModData(..), ProgData(..), initialState)
+import Drasil.GOOL (Label, OOProg, unJC, unPC, unCSC,
+  unCPPC, unSC, initialState, FileData(..), ModData(..))
+import qualified Drasil.GOOL as OO (unCI, ProgramSym(..), ProgData(..))
+import Drasil.GProc (ProcProg, unJLC)
+import qualified Drasil.GProc as Proc (unCI, ProgramSym(..), ProgData(..))
 
 import Language.Drasil.Code (PackageSym(..), AuxiliarySym(..), AuxData(..),
   PackData(..), unPP, unJP, unCSP, unCPPP, unSP, unJLP, ImplementationType(..))
@@ -13,11 +16,17 @@ import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurre
 import System.FilePath.Posix (takeDirectory)
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
-import HelloWorld (helloWorld)
-import PatternTest (patternTest)
-import FileTests (fileTests)
-import VectorTest (vectorTest)
-import NameGenTest (nameGenTest)
+
+import qualified GOOL.HelloWorld as OO (helloWorld)
+import GOOL.PatternTest (patternTest)
+import qualified GOOL.FileTests as OO (fileTests)
+import qualified GOOL.VectorTest as OO (vectorTest)
+import qualified GOOL.NameGenTest as OO (nameGenTest)
+
+import qualified GProc.HelloWorld as Proc (helloWorld)
+import qualified GProc.FileTests as Proc (fileTests)
+import qualified GProc.VectorTest as Proc (vectorTest)
+import qualified GProc.NameGenTest as Proc (nameGenTest)
 
 -- | Renders five GOOL tests (FileTests, HelloWorld, PatternTest, VectorTest, and NameGenTest)
 -- in Java, Python, C#, C++, and Swift.
@@ -51,31 +60,34 @@ main = do
 
 -- | Gathers all information needed to generate code, sorts it, and calls the renderers.
 genCode :: [PackData] -> IO()
-genCode files = createCodeFiles (concatMap (\p -> replicate (length (progMods
-  (packProg p)) + length (packAux p)) (progName $ packProg p)) files) $ makeCode (map (progMods . packProg) files) (map packAux files)
+genCode files = createCodeFiles (concatMap (\p -> replicate (length (OO.progMods
+  (packProg p)) + length (packAux p)) (OO.progName $ packProg p)) files) $
+    makeCode (map (OO.progMods . packProg) files) (map packAux files)
 
 -- Cannot assign the list of tests in a where clause and re-use it because the
 -- "r" type variable needs to be instantiated to two different types
 -- (CodeInfo and a renderer) each time this function is called
 -- | Gathers the GOOL file tests and prepares them for rendering
-classes :: (OOProg r, PackageSym r') => (r (Program r) -> ProgData) ->
+classes :: (OOProg r, PackageSym r') => (r (OO.Program r) -> OO.ProgData) ->
   (r' (Package r') -> PackData) -> [PackData]
 classes unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
   in unRepr' $ package pd [makefile [] Program [] gs' pd])
-  [helloWorld, patternTest, fileTests, vectorTest, nameGenTest]
-  (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests, vectorTest, nameGenTest])
+  [OO.helloWorld, patternTest, OO.fileTests, OO.vectorTest, OO.nameGenTest]
+  (map (OO.unCI . (`evalState` initialState)) [OO.helloWorld, patternTest,
+    OO.fileTests, OO.vectorTest, OO.nameGenTest])
 
 -- Classes that Julia is currently able to render
-jlClasses :: (OOProg r, PackageSym r') => (r (Program r) -> ProgData) ->
-  (r' (Package r') -> PackData) -> [PackData]
+jlClasses :: (ProcProg r, PackageSym r') => (r (Proc.Program r) ->
+  Proc.ProgData) -> (r' (Package r') -> PackData) -> [PackData]
 jlClasses unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
   in unRepr' $ package pd [makefile [] Program [] gs' pd])
-  [helloWorld{-, patternTest-}, fileTests, vectorTest, nameGenTest]
-  (map (unCI . (`evalState` initialState)) [helloWorld{-, patternTest-}, fileTests, vectorTest, nameGenTest])
+  [Proc.helloWorld, Proc.fileTests, Proc.vectorTest, Proc.nameGenTest]
+  (map (Proc.unCI . (`evalState` initialState)) [Proc.helloWorld,
+    Proc.fileTests, Proc.vectorTest, Proc.nameGenTest])
 
 -- | Formats code to be rendered.
 makeCode :: [[FileData]] -> [[AuxData]] -> [(FilePath, Doc)]

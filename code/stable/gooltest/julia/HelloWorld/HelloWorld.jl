@@ -120,7 +120,6 @@ elseif b == 5
     b -= 1
     myList = []
     myConst = "Imconstant";
-    println(myConst)
     println(a)
     println(b)
     println(c)

@@ -96,13 +96,18 @@ executables:
     main: Main
     source-dirs: test
     other-modules:
-    - FileTests
-    - HelloWorld
-    - Helper
-    - Observer
-    - PatternTest
-    - VectorTest
-    - NameGenTest
+    - GOOL.FileTests
+    - GProc.FileTests
+    - GOOL.HelloWorld
+    - GProc.HelloWorld
+    - GOOL.Helper
+    - GProc.Helper
+    - GOOL.Observer
+    - GOOL.PatternTest
+    - GOOL.VectorTest
+    - GProc.VectorTest
+    - GOOL.NameGenTest
+    - GProc.NameGenTest
     ghc-options:
     - -threaded
     - -O2

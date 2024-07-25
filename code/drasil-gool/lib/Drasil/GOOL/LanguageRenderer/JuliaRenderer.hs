@@ -1,5 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE InstanceSigs #-}
+{-# LANGUAGE DeriveFunctor #-}
 
 -- | The logic to render Julia code is contained in this module
 module Drasil.GOOL.LanguageRenderer.JuliaRenderer (
@@ -22,12 +23,9 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
   MethodSym(..), (&=), switchAsIf)
-import Drasil.GOOL.InterfaceGOOL (OOProg, FSModule, ProgramSym(..), FileSym(..),
-  ModuleSym(..), OOFunctionSym(..), PermanenceSym(..), ObserverPattern(..),
-  StrategyPattern(..), GetSet(..), InternalValueExp(..), StateVarSym(..),
-  ClassSym(..), OOTypeSym(..), OOVariableSym(..), OODeclStatement(..),
-  OOFuncAppStatement(..), OOMethodSym(..), OOValueExpression(..),
-  OOVariableValue, OOValueSym)
+import Drasil.GOOL.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
+  FileSym(..), ModuleSym(..))
+
 import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
   RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
@@ -41,12 +39,9 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
 import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
-import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
-  PermElim(binding), InternalGetSet(..), OOMethodTypeSym(..),
-  OORenderMethod(..), StateVarElim, RenderClass(..), ClassElim, RenderMod(..),
-  ModuleElim)
-import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
-  module')
+import Drasil.GOOL.RendererClassesProc (ProcRenderSym, RenderFile(..),
+  RenderMod(..), ModuleElim, ProcRenderMethod(..))
+import qualified Drasil.GOOL.RendererClassesProc as RC (module')
 import Drasil.GOOL.LanguageRenderer (printLabel, listSep, listSep',
   variableList, parameterList, forLabel, inLabel, tryLabel, catchLabel)
 import qualified Drasil.GOOL.LanguageRenderer as R (sqrt, abs, log10, log, exp,
@@ -57,22 +52,23 @@ import Drasil.GOOL.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
   typeBinExpr, mkStmt, mkStmtNoEnd)
 import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
-  block, multiBlock, listInnerType, litChar, litDouble, litInt, litString,
-  valueOf, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp,
-  lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, call,
-  funcAppMixedArgs, lambda, listAccess, listSet, arrayElem, modFromData,
-  fileDoc, fileFromData, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
-  emptyStmt, assign, increment, subAssign, print, comment, valStmt, function,
-  returnStmt, param, docFunc, throw, arg, argsList, ifCond, smartAdd)
+  block, multiBlock, litChar, litDouble, litInt, litString, valueOf, negateOp,
+  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
+  minusOp, multOp, divideOp, moduloOp, var, call, funcAppMixedArgs, lambda,
+  listAccess, listSet, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
+  emptyStmt, assign, increment, subAssign, print, comment, valStmt, returnStmt,
+  param, docFunc, throw, arg, argsList, ifCond, smartAdd)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (bool,
-  boolRender, extVar, funcType, buildModule, docMod', funcDecDef, litArray,
-  listDec, listDecDef, listAccessFunc, listSetFunc, bindingError, notNull,
-  extFuncAppMixedArgs, functionDoc, listSize, listAdd, listAppend, intToIndex',
-  indexToInt', inOutFunc, docInOutFunc', forLoopError, varDecDef, openFileR',
-  openFileW', openFileA', multiReturn, multiAssign, inOutCall, mainBody,
-  argExists, forEach')
+  boolRender, extVar, funcType, litArray, listDec, listDecDef, listAccessFunc,
+  listSetFunc, notNull, extFuncAppMixedArgs, functionDoc, listSize, listAdd,
+  listAppend, intToIndex', indexToInt', inOutFunc, docInOutFunc', forLoopError,
+  varDecDef, openFileR', openFileW', openFileA', multiReturn, multiAssign,
+  inOutCall, mainBody, argExists, forEach')
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (litTrue, litFalse,
   notOp, andOp, orOp, inlineIf, while)
+import qualified Drasil.GOOL.LanguageRenderer.AbstractProc as A (fileDoc,
+  fileFromData, buildModule, docMod, modFromData, listInnerType, arrayElem,
+  funcDecDef, function)
 import qualified Drasil.GOOL.LanguageRenderer.Macros as M (increment1,
   decrement1, ifExists, stringListVals, stringListLists)
 import Drasil.GOOL.AST (Terminator(..), FileType(..), FileData(..), fileD,
@@ -100,10 +96,7 @@ import qualified Text.PrettyPrint.HughesPJ as D (float)
 jlExt :: String
 jlExt = "jl"
 
-newtype JuliaCode a = JLC {unJLC :: a}
-
-instance Functor JuliaCode where
-  fmap f (JLC x) = JLC (f x)
+newtype JuliaCode a = JLC {unJLC :: a} deriving Functor
 
 instance Applicative JuliaCode where
   pure = JLC
@@ -113,7 +106,7 @@ instance Monad JuliaCode where
   JLC x >>= f = f x
 
 instance SharedProg JuliaCode
-instance OOProg JuliaCode
+instance ProcProg JuliaCode
 
 instance ProgramSym JuliaCode where
   type Program JuliaCode = ProgData
@@ -123,14 +116,14 @@ instance ProgramSym JuliaCode where
     pure $ onCodeList (progD n st) fs
 
 instance CommonRenderSym JuliaCode
-instance OORenderSym JuliaCode
+instance ProcRenderSym JuliaCode
 
 instance FileSym JuliaCode where
   type File JuliaCode = FileData
   fileDoc m = do
     modify (setFileType Combined)
-    G.fileDoc jlExt top bottom m
-  docMod = CP.docMod' jlExt
+    A.fileDoc jlExt m
+  docMod = A.docMod jlExt
 
 instance RenderFile JuliaCode where
   top _ = toCode empty
@@ -138,7 +131,7 @@ instance RenderFile JuliaCode where
 
   commentedMod = on2StateValues (on2CodeValues R.commentedMod)
 
-  fileFromData = G.fileFromData (onCodeValue . fileD)
+  fileFromData = A.fileFromData (onCodeValue . fileD)
 
 instance ImportSym JuliaCode where
   type Import JuliaCode = Doc
@@ -150,10 +143,6 @@ instance ImportSym JuliaCode where
 
 instance ImportElim JuliaCode where
   import' = unJLC
-
-instance PermElim JuliaCode where
-  perm = unJLC
-  binding = error $ CP.bindingError jlName
 
 instance BodySym JuliaCode where
   type Body JuliaCode = Doc
@@ -189,7 +178,7 @@ instance TypeSym JuliaCode where
   outfile = jlOutfileType
   listType = jlListType
   arrayType = listType -- Treat arrays and lists the same, as in Python
-  listInnerType = G.listInnerType
+  listInnerType = A.listInnerType
   funcType = CP.funcType
   void = jlVoidType
 
@@ -197,7 +186,7 @@ instance TypeElim JuliaCode where
   getType = cType . unJLC
   getTypeString v = let tp = typeString $ unJLC v in
     case cType $ unJLC v of
-      (Object _) -> error jlClassError
+      (Object _) -> error jlClassError -- TODO: think about splitting up CodeType
       _ -> tp
 
 instance RenderType JuliaCode where
@@ -265,7 +254,7 @@ instance VariableSym JuliaCode where
   var' n _ = G.var n
   constant' = var' -- TODO: add `const` keyword in global scope, and follow Python for local
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
-  arrayElem i = G.arrayElem (litInt i)
+  arrayElem i = A.arrayElem (litInt i)
 
 instance VariableElim JuliaCode where
   variableName = varName . unJLC
@@ -495,7 +484,7 @@ instance DeclStatement JuliaCode where
   arrayDec = listDec
   arrayDecDef = listDecDef
   constDecDef = jlConstDecDef
-  funcDecDef = CP.funcDecDef
+  funcDecDef = A.funcDecDef
 
 instance IOStatement JuliaCode where
   print      = jlOut False Nothing printFunc
@@ -585,7 +574,7 @@ instance ParamElim JuliaCode where
 instance MethodSym JuliaCode where
   type Method JuliaCode = MethodData
   docMain = mainFunction
-  function = G.function
+  function = A.function
   mainFunction = CP.mainBody
   docFunc = G.docFunc CP.functionDoc
 
@@ -597,24 +586,21 @@ instance RenderMethod JuliaCode where
     (onStateValue (onCodeValue R.commentedItem) cmt)
   mthdFromData _ d = toState $ toCode $ mthd d
 
-instance OORenderMethod JuliaCode where
-  intFunc _ n _ _ _ ps b = do
+instance ProcRenderMethod JuliaCode where
+  intFunc _ n _ _ ps b = do
     pms <- sequence ps
     toCode . mthd . jlIntFunc n pms <$> b
-  -- OO-Only (remove when ready)
-  intMethod = undefined--
-  destructor _ = undefined--
 
 instance MethodElim JuliaCode where
   method = mthdDoc . unJLC
 
 instance ModuleSym JuliaCode where
   type Module JuliaCode = ModData
-  buildModule n is fs _ = jlModContents n is fs <&>
+  buildModule n is fs = jlModContents n is fs <&>
     updateModuleDoc (\m -> emptyIfEmpty m (vibcat [jlModStart n, m, jlEnd]))
 
 instance RenderMod JuliaCode where
-  modFromData n = G.modFromData n (toCode . md n)
+  modFromData n = A.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
 
 instance ModuleElim JuliaCode where
@@ -828,7 +814,7 @@ jlForEach i lstVar b = vcat [
 -- | Creates the contents of a module in Julia
 jlModContents :: Label -> [Label] -> [SMethod JuliaCode] ->
   FSModule JuliaCode
-jlModContents n is fs = CP.buildModule n (do
+jlModContents n is = A.buildModule n (do
   lis <- getLangImports
   libis <- getLibImports
   mis <- getModuleImports
@@ -838,7 +824,7 @@ jlModContents n is fs = CP.buildModule n (do
     vcat (map (RC.import' . li) (sort $ is ++ libis)),
     vcat (map (RC.import' . mi) mis),
     vcat (map usingModule us)])
-  (pure empty) (do getMainDoc) fs []
+  (do getMainDoc)
   where mi, li :: Label -> JuliaCode (Import JuliaCode)
         mi = modImport
         li = langImport
@@ -978,98 +964,3 @@ jlParse :: (CommonRenderSym r) => Label -> VSType r -> SValue r -> SValue r
 jlParse tl tp v = let
   typeLabel = mkStateVal void (text tl)
   in funcApp jlParseFunc tp [typeLabel, v]
-
--- OO-Only (remove when ready)
-
-instance OOFunctionSym JuliaCode where
-  func = undefined--
-  objAccess = undefined--
-
-instance InternalValueExp JuliaCode where
-  objMethodCallMixedArgs' = undefined--
-
-instance GetSet JuliaCode where
-  get = undefined--
-  set = undefined--
-
-instance ObserverPattern JuliaCode where
-  notifyObservers = undefined--
-
-instance StrategyPattern JuliaCode where
-  runStrategy = undefined--
-
-instance StateVarSym JuliaCode where
-  type StateVar JuliaCode = Doc
-
-  stateVar = undefined--
-  stateVarDef = undefined--
-  constVar = undefined--
-
-instance StateVarElim JuliaCode where
-  stateVar = undefined--
-
-instance ClassSym JuliaCode where
-  type Class JuliaCode = Doc
-
-  buildClass = undefined--
-  extraClass = undefined--
-  implementingClass = undefined--
-  docClass = undefined--
-
-instance RenderClass JuliaCode where
-  intClass = undefined--
-  inherit = undefined--
-  implements = undefined--
-  commentedClass = undefined--
-
-instance ClassElim JuliaCode where
-  class' = undefined--
-
-instance PermanenceSym JuliaCode where
-  type Permanence JuliaCode = Doc
-  static = undefined--
-  dynamic = undefined--
-
-instance OOTypeSym JuliaCode where
-  obj = undefined--
-
-instance OOVariableSym JuliaCode where
-  staticVar' = undefined--
-  self = undefined--
-  classVar = undefined--
-  extClassVar = undefined--
-  objVar = undefined--
-  objVarSelf = undefined--
-
-instance OOValueExpression JuliaCode where
-  selfFuncAppMixedArgs = undefined--
-  newObjMixedArgs = undefined--
-  extNewObjMixedArgs = undefined--
-  libNewObjMixedArgs = undefined--
-
-instance OODeclStatement JuliaCode where
-  objDecDef = undefined--
-  objDecNew = undefined--
-  extObjDecNew = undefined--
-
-instance OOFuncAppStatement JuliaCode where
-  selfInOutCall = undefined--
-
-instance OOMethodSym JuliaCode where
-  method = undefined--
-  getMethod = undefined--
-  setMethod = undefined--
-  constructor = undefined--
-  inOutMethod = undefined--
-  docInOutMethod _ = undefined--
-
-instance OOVariableValue JuliaCode
-
-instance OOValueSym JuliaCode
-
-instance InternalGetSet JuliaCode where
-  getFunc = undefined--
-  setFunc = undefined--
-
-instance OOMethodTypeSym JuliaCode where
-  construct = undefined--

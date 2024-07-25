@@ -1,0 +1,463 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>General Definitions - Software Requirements Specification for Double Pendulum</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="title.html"><strong aria-hidden="true">1.</strong> Software Requirements Specification for Double Pendulum</a></li><li class="chapter-item expanded "><a href="SecToC.html"><strong aria-hidden="true">2.</strong> Table of Contents</a></li><li class="chapter-item expanded "><a href="SecRefMat.html"><strong aria-hidden="true">3.</strong> Reference Material</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecToU.html"><strong aria-hidden="true">3.1.</strong> Table of Units</a></li><li class="chapter-item expanded "><a href="SecToS.html"><strong aria-hidden="true">3.2.</strong> Table of Symbols</a></li><li class="chapter-item expanded "><a href="SecTAbbAcc.html"><strong aria-hidden="true">3.3.</strong> Abbreviations and Acronyms</a></li></ol></li><li class="chapter-item expanded "><a href="SecIntro.html"><strong aria-hidden="true">4.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecDocPurpose.html"><strong aria-hidden="true">4.1.</strong> Purpose of Document</a></li><li class="chapter-item expanded "><a href="SecReqsScope.html"><strong aria-hidden="true">4.2.</strong> Scope of Requirements</a></li><li class="chapter-item expanded "><a href="SecReaderChars.html"><strong aria-hidden="true">4.3.</strong> Characteristics of Intended Reader</a></li><li class="chapter-item expanded "><a href="SecDocOrg.html"><strong aria-hidden="true">4.4.</strong> Organization of Document</a></li></ol></li><li class="chapter-item expanded "><a href="SecGenSysDesc.html"><strong aria-hidden="true">5.</strong> General System Description</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecSysContext.html"><strong aria-hidden="true">5.1.</strong> System Context</a></li><li class="chapter-item expanded "><a href="SecUserChars.html"><strong aria-hidden="true">5.2.</strong> User Characteristics</a></li><li class="chapter-item expanded "><a href="SecSysConstraints.html"><strong aria-hidden="true">5.3.</strong> System Constraints</a></li></ol></li><li class="chapter-item expanded "><a href="SecSpecSystDesc.html"><strong aria-hidden="true">6.</strong> Specific System Description</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecProbDesc.html"><strong aria-hidden="true">6.1.</strong> Problem Description</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecTermDefs.html"><strong aria-hidden="true">6.1.1.</strong> Terminology and Definitions</a></li><li class="chapter-item expanded "><a href="SecPhysSyst.html"><strong aria-hidden="true">6.1.2.</strong> Physical System Description</a></li><li class="chapter-item expanded "><a href="SecGoalStmt.html"><strong aria-hidden="true">6.1.3.</strong> Goal Statements</a></li></ol></li><li class="chapter-item expanded "><a href="SecSolCharSpec.html"><strong aria-hidden="true">6.2.</strong> Solution Characteristics Specification</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecAssumps.html"><strong aria-hidden="true">6.2.1.</strong> Assumptions</a></li><li class="chapter-item expanded "><a href="SecTMs.html"><strong aria-hidden="true">6.2.2.</strong> Theoretical Models</a></li><li class="chapter-item expanded "><a href="SecGDs.html" class="active"><strong aria-hidden="true">6.2.3.</strong> General Definitions</a></li><li class="chapter-item expanded "><a href="SecDDs.html"><strong aria-hidden="true">6.2.4.</strong> Data Definitions</a></li><li class="chapter-item expanded "><a href="SecIMs.html"><strong aria-hidden="true">6.2.5.</strong> Instance Models</a></li><li class="chapter-item expanded "><a href="SecDataConstraints.html"><strong aria-hidden="true">6.2.6.</strong> Data Constraints</a></li><li class="chapter-item expanded "><a href="SecCorSolProps.html"><strong aria-hidden="true">6.2.7.</strong> Properties of a Correct Solution</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="SecRequirements.html"><strong aria-hidden="true">7.</strong> Requirements</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecFRs.html"><strong aria-hidden="true">7.1.</strong> Functional Requirements</a></li><li class="chapter-item expanded "><a href="SecNFRs.html"><strong aria-hidden="true">7.2.</strong> Non-Functional Requirements</a></li></ol></li><li class="chapter-item expanded "><a href="SecTraceMatrices.html"><strong aria-hidden="true">8.</strong> Traceability Matrices and Graphs</a></li><li class="chapter-item expanded "><a href="SecAuxConstants.html"><strong aria-hidden="true">9.</strong> Values of Auxiliary Constants</a></li><li class="chapter-item expanded "><a href="SecReferences.html"><strong aria-hidden="true">10.</strong> References</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Software Requirements Specification for Double Pendulum</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="Sec:GDs"><a class="header" href="#Sec:GDs">General Definitions</a></h1>
+<p>This section collects the laws and equations that will be used to build the instance models.</p>
+<div align="center">
+<h2 id="GD:velocityX1"><a class="header" href="#GD:velocityX1">The \(x\)-component of velocity of the first object</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:velocityX1</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">The \(x\)-component of velocity of the first object</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{v_{\text{x}1}}={w_{1}} {L_{1}} \cos\left({θ_{1}}\right)\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({v_{\text{x}1}}\) is the horizontal velocity of the first object (\(\frac{\text{m}}{\text{s}}\))</li><li>\({w_{1}}\) is the angular velocity of the first object (\(\frac{\text{rad}}{\text{s}}\))</li><li>\({L_{1}}\) is the length of the first rod (\({\text{m}}\))</li><li>\({θ_{1}}\) is the angle of the first rod (\({\text{rad}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"></td></tr>
+</tbody></table>
+</div>
+<h4 id="GD:velocityX1Deriv"><a class="header" href="#GD:velocityX1Deriv">Detailed derivation of the \(x\)-component of velocity:</a></h4>
+<p>At a given point in time, velocity is defined in <a href="./SecDDs.html#DD:positionGDD">DD:positionGDD</a></p>
+<p>\[\boldsymbol{v}\text{(}t\text{)}=\frac{\,d\boldsymbol{p}\text{(}t\text{)}}{\,dt}\]</p>
+<p>We also know the horizontal position that is defined in <a href="./SecDDs.html#DD:positionXDD1">DD:positionXDD1</a></p>
+<p>\[{p_{\text{x}1}}={L_{1}} \sin\left({θ_{1}}\right)\]</p>
+<p>Applying this,</p>
+<p>\[{v_{\text{x}1}}=\frac{\,d{L_{1}} \sin\left({θ_{1}}\right)}{\,dt}\]</p>
+<p>\({L_{1}}\) is constant with respect to time, so</p>
+<p>\[{v_{\text{x}1}}={L_{1}} \frac{\,d\sin\left({θ_{1}}\right)}{\,dt}\]</p>
+<p>Therefore, using the chain rule,</p>
+<p>\[{v_{\text{x}1}}={w_{1}} {L_{1}} \cos\left({θ_{1}}\right)\]</p>
+<div align="center">
+<h2 id="GD:velocityY1"><a class="header" href="#GD:velocityY1">The \(y\)-component of velocity of the first object</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:velocityY1</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">The \(y\)-component of velocity of the first object</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{v_{\text{y}1}}={w_{1}} {L_{1}} \sin\left({θ_{1}}\right)\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({v_{\text{y}1}}\) is the vertical velocity of the first object (\(\frac{\text{m}}{\text{s}}\))</li><li>\({w_{1}}\) is the angular velocity of the first object (\(\frac{\text{rad}}{\text{s}}\))</li><li>\({L_{1}}\) is the length of the first rod (\({\text{m}}\))</li><li>\({θ_{1}}\) is the angle of the first rod (\({\text{rad}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"></td></tr>
+</tbody></table>
+</div>
+<h4 id="GD:velocityY1Deriv"><a class="header" href="#GD:velocityY1Deriv">Detailed derivation of the \(y\)-component of velocity:</a></h4>
+<p>At a given point in time, velocity is defined in <a href="./SecDDs.html#DD:positionGDD">DD:positionGDD</a></p>
+<p>\[\boldsymbol{v}\text{(}t\text{)}=\frac{\,d\boldsymbol{p}\text{(}t\text{)}}{\,dt}\]</p>
+<p>We also know the vertical position that is defined in <a href="./SecDDs.html#DD:positionYDD1">DD:positionYDD1</a></p>
+<p>\[{p_{\text{y}1}}=-{L_{1}} \cos\left({θ_{1}}\right)\]</p>
+<p>Applying this,</p>
+<p>\[{v_{\text{y}1}}=-\left(\frac{\,d{L_{1}} \cos\left({θ_{1}}\right)}{\,dt}\right)\]</p>
+<p>\({L_{1}}\) is constant with respect to time, so</p>
+<p>\[{v_{\text{y}1}}=-{L_{1}} \frac{\,d\cos\left({θ_{1}}\right)}{\,dt}\]</p>
+<p>Therefore, using the chain rule,</p>
+<p>\[{v_{\text{y}1}}={w_{1}} {L_{1}} \sin\left({θ_{1}}\right)\]</p>
+<div align="center">
+<h2 id="GD:velocityX2"><a class="header" href="#GD:velocityX2">The \(x\)-component of velocity of the second object</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:velocityX2</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">The \(x\)-component of velocity of the second object</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}} {L_{2}} \cos\left({θ_{2}}\right)\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({v_{\text{x}2}}\) is the horizontal velocity of the second object (\(\frac{\text{m}}{\text{s}}\))</li><li>\({v_{\text{x}1}}\) is the horizontal velocity of the first object (\(\frac{\text{m}}{\text{s}}\))</li><li>\({w_{2}}\) is the angular velocity of the second object (\(\frac{\text{rad}}{\text{s}}\))</li><li>\({L_{2}}\) is the length of the second rod (\({\text{m}}\))</li><li>\({θ_{2}}\) is the angle of the second rod (\({\text{rad}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"></td></tr>
+</tbody></table>
+</div>
+<h4 id="GD:velocityX2Deriv"><a class="header" href="#GD:velocityX2Deriv">Detailed derivation of the \(x\)-component of velocity:</a></h4>
+<p>At a given point in time, velocity is defined in <a href="./SecDDs.html#DD:positionGDD">DD:positionGDD</a></p>
+<p>\[\boldsymbol{v}\text{(}t\text{)}=\frac{\,d\boldsymbol{p}\text{(}t\text{)}}{\,dt}\]</p>
+<p>We also know the horizontal position that is defined in <a href="./SecDDs.html#DD:positionXDD2">DD:positionXDD2</a></p>
+<p>\[{p_{\text{x}2}}={p_{\text{x}1}}+{L_{2}} \sin\left({θ_{2}}\right)\]</p>
+<p>Applying this,</p>
+<p>\[{v_{\text{x}2}}=\frac{\,d{p_{\text{x}1}}+{L_{2}} \sin\left({θ_{2}}\right)}{\,dt}\]</p>
+<p>\({L_{1}}\) is constant with respect to time, so</p>
+<p>\[{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}} {L_{2}} \cos\left({θ_{2}}\right)\]</p>
+<div align="center">
+<h2 id="GD:velocityY2"><a class="header" href="#GD:velocityY2">The \(y\)-component of velocity of the second object</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:velocityY2</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">The \(y\)-component of velocity of the second object</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}} {L_{2}} \sin\left({θ_{2}}\right)\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({v_{\text{y}2}}\) is the vertical velocity of the second object (\(\frac{\text{m}}{\text{s}}\))</li><li>\({v_{\text{y}1}}\) is the vertical velocity of the first object (\(\frac{\text{m}}{\text{s}}\))</li><li>\({w_{2}}\) is the angular velocity of the second object (\(\frac{\text{rad}}{\text{s}}\))</li><li>\({L_{2}}\) is the length of the second rod (\({\text{m}}\))</li><li>\({θ_{2}}\) is the angle of the second rod (\({\text{rad}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"></td></tr>
+</tbody></table>
+</div>
+<h4 id="GD:velocityY2Deriv"><a class="header" href="#GD:velocityY2Deriv">Detailed derivation of the \(y\)-component of velocity:</a></h4>
+<p>At a given point in time, velocity is defined in <a href="./SecDDs.html#DD:positionGDD">DD:positionGDD</a></p>
+<p>\[\boldsymbol{v}\text{(}t\text{)}=\frac{\,d\boldsymbol{p}\text{(}t\text{)}}{\,dt}\]</p>
+<p>We also know the vertical position that is defined in <a href="./SecDDs.html#DD:positionYDD2">DD:positionYDD2</a></p>
+<p>\[{p_{\text{y}2}}={p_{\text{y}1}}-{L_{2}} \cos\left({θ_{2}}\right)\]</p>
+<p>Applying this,</p>
+<p>\[{v_{\text{y}2}}=-\left(\frac{\,d{p_{\text{y}1}}-{L_{2}} \cos\left({θ_{2}}\right)}{\,dt}\right)\]</p>
+<p>Therefore, using the chain rule,</p>
+<p>\[{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}} {L_{2}} \sin\left({θ_{2}}\right)\]</p>
+<div align="center">
+<h2 id="GD:accelerationX1"><a class="header" href="#GD:accelerationX1">The \(x\)-component of acceleration of the first object</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:accelerationX1</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">The \(x\)-component of acceleration of the first object</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}^{2}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{a_{\text{x}1}}=-{w_{1}}^{2} {L_{1}} \sin\left({θ_{1}}\right)+{α_{1}} {L_{1}} \cos\left({θ_{1}}\right)\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({a_{\text{x}1}}\) is the horizontal acceleration of the first object (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({w_{1}}\) is the angular velocity of the first object (\(\frac{\text{rad}}{\text{s}}\))</li><li>\({L_{1}}\) is the length of the first rod (\({\text{m}}\))</li><li>\({θ_{1}}\) is the angle of the first rod (\({\text{rad}}\))</li><li>\({α_{1}}\) is the angular acceleration of the first object (\(\frac{\text{rad}}{\text{s}^{2}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfAngle2">IM:calOfAngle2</a></td></tr>
+</tbody></table>
+</div>
+<h4 id="GD:accelerationX1Deriv"><a class="header" href="#GD:accelerationX1Deriv">Detailed derivation of the \(x\)-component of acceleration:</a></h4>
+<p>Our acceleration is:</p>
+<p>\[\boldsymbol{a}\text{(}t\text{)}=\frac{\,d\boldsymbol{v}\text{(}t\text{)}}{\,dt}\]</p>
+<p>Earlier, we found the horizontal velocity to be</p>
+<p>\[{v_{\text{x}1}}={w_{1}} {L_{1}} \cos\left({θ_{1}}\right)\]</p>
+<p>Applying this to our equation for acceleration</p>
+<p>\[{a_{\text{x}1}}=\frac{\,d{w_{1}} {L_{1}} \cos\left({θ_{1}}\right)}{\,dt}\]</p>
+<p>By the product and chain rules, we find</p>
+<p>\[{a_{\text{x}1}}=\frac{\,d{w_{1}}}{\,dt} {L_{1}} \cos\left({θ_{1}}\right)-{w_{1}} {L_{1}} \sin\left({θ_{1}}\right) \frac{\,d{θ_{1}}}{\,dt}\]</p>
+<p>Simplifying,</p>
+<p>\[{a_{\text{x}1}}=-{w_{1}}^{2} {L_{1}} \sin\left({θ_{1}}\right)+{α_{1}} {L_{1}} \cos\left({θ_{1}}\right)\]</p>
+<div align="center">
+<h2 id="GD:accelerationY1"><a class="header" href="#GD:accelerationY1">The \(y\)-component of acceleration of the first object</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:accelerationY1</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">The \(y\)-component of acceleration of the first object</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}^{2}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{a_{\text{y}1}}={w_{1}}^{2} {L_{1}} \cos\left({θ_{1}}\right)+{α_{1}} {L_{1}} \sin\left({θ_{1}}\right)\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({a_{\text{y}1}}\) is the vertical acceleration of the first object (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({w_{1}}\) is the angular velocity of the first object (\(\frac{\text{rad}}{\text{s}}\))</li><li>\({L_{1}}\) is the length of the first rod (\({\text{m}}\))</li><li>\({θ_{1}}\) is the angle of the first rod (\({\text{rad}}\))</li><li>\({α_{1}}\) is the angular acceleration of the first object (\(\frac{\text{rad}}{\text{s}^{2}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfAngle2">IM:calOfAngle2</a></td></tr>
+</tbody></table>
+</div>
+<h4 id="GD:accelerationY1Deriv"><a class="header" href="#GD:accelerationY1Deriv">Detailed derivation of the \(y\)-component of acceleration:</a></h4>
+<p>Our acceleration is:</p>
+<p>\[\boldsymbol{a}\text{(}t\text{)}=\frac{\,d\boldsymbol{v}\text{(}t\text{)}}{\,dt}\]</p>
+<p>Earlier, we found the vertical velocity to be</p>
+<p>\[{v_{\text{y}1}}={w_{1}} {L_{1}} \sin\left({θ_{1}}\right)\]</p>
+<p>Applying this to our equation for acceleration</p>
+<p>\[{a_{\text{y}1}}=\frac{\,d{w_{1}} {L_{1}} \sin\left({θ_{1}}\right)}{\,dt}\]</p>
+<p>By the product and chain rules, we find</p>
+<p>\[{a_{\text{y}1}}=\frac{\,d{w_{1}}}{\,dt} {L_{1}} \sin\left({θ_{1}}\right)+{w_{1}} {L_{1}} \cos\left({θ_{1}}\right) \frac{\,d{θ_{1}}}{\,dt}\]</p>
+<p>Simplifying,</p>
+<p>\[{a_{\text{y}1}}={w_{1}}^{2} {L_{1}} \cos\left({θ_{1}}\right)+{α_{1}} {L_{1}} \sin\left({θ_{1}}\right)\]</p>
+<div align="center">
+<h2 id="GD:accelerationX2"><a class="header" href="#GD:accelerationX2">The \(x\)-component of acceleration of the second object</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:accelerationX2</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">The \(x\)-component of acceleration of the second object</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}^{2}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{a_{\text{x}2}}={a_{\text{x}1}}-{w_{2}}^{2} {L_{2}} \sin\left({θ_{2}}\right)+{α_{2}} {L_{2}} \cos\left({θ_{2}}\right)\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({a_{\text{x}2}}\) is the horizontal acceleration of the second object (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({a_{\text{x}1}}\) is the horizontal acceleration of the first object (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({w_{2}}\) is the angular velocity of the second object (\(\frac{\text{rad}}{\text{s}}\))</li><li>\({L_{2}}\) is the length of the second rod (\({\text{m}}\))</li><li>\({θ_{2}}\) is the angle of the second rod (\({\text{rad}}\))</li><li>\({α_{2}}\) is the angular acceleration of the second object (\(\frac{\text{rad}}{\text{s}^{2}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfAngle2">IM:calOfAngle2</a></td></tr>
+</tbody></table>
+</div>
+<h4 id="GD:accelerationX2Deriv"><a class="header" href="#GD:accelerationX2Deriv">Detailed derivation of the \(x\)-component of acceleration:</a></h4>
+<p>Our acceleration is:</p>
+<p>\[\boldsymbol{a}\text{(}t\text{)}=\frac{\,d\boldsymbol{v}\text{(}t\text{)}}{\,dt}\]</p>
+<p>Earlier, we found the horizontal velocity to be</p>
+<p>\[{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}} {L_{2}} \cos\left({θ_{2}}\right)\]</p>
+<p>Applying this to our equation for acceleration</p>
+<p>\[{a_{\text{x}2}}=\frac{\,d{v_{\text{x}1}}+{w_{2}} {L_{2}} \cos\left({θ_{2}}\right)}{\,dt}\]</p>
+<p>By the product and chain rules, we find</p>
+<p>\[{a_{\text{x}2}}={a_{\text{x}1}}-{w_{2}}^{2} {L_{2}} \sin\left({θ_{2}}\right)+{α_{2}} {L_{2}} \cos\left({θ_{2}}\right)\]</p>
+<div align="center">
+<h2 id="GD:accelerationY2"><a class="header" href="#GD:accelerationY2">The \(y\)-component of acceleration of the second object</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:accelerationY2</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">The \(y\)-component of acceleration of the second object</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}^{2}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{a_{\text{y}2}}={a_{\text{y}1}}+{w_{2}}^{2} {L_{2}} \cos\left({θ_{2}}\right)+{α_{2}} {L_{2}} \sin\left({θ_{2}}\right)\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({a_{\text{y}2}}\) is the vertical acceleration of the second object (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({a_{\text{y}1}}\) is the vertical acceleration of the first object (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({w_{2}}\) is the angular velocity of the second object (\(\frac{\text{rad}}{\text{s}}\))</li><li>\({L_{2}}\) is the length of the second rod (\({\text{m}}\))</li><li>\({θ_{2}}\) is the angle of the second rod (\({\text{rad}}\))</li><li>\({α_{2}}\) is the angular acceleration of the second object (\(\frac{\text{rad}}{\text{s}^{2}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfAngle2">IM:calOfAngle2</a></td></tr>
+</tbody></table>
+</div>
+<h4 id="GD:accelerationY2Deriv"><a class="header" href="#GD:accelerationY2Deriv">Detailed derivation of the \(y\)-component of acceleration:</a></h4>
+<p>Our acceleration is:</p>
+<p>\[\boldsymbol{a}\text{(}t\text{)}=\frac{\,d\boldsymbol{v}\text{(}t\text{)}}{\,dt}\]</p>
+<p>Earlier, we found the horizontal velocity to be</p>
+<p>\[{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}} {L_{2}} \sin\left({θ_{2}}\right)\]</p>
+<p>Applying this to our equation for acceleration</p>
+<p>\[{a_{\text{y}2}}=\frac{\,d{v_{\text{y}1}}+{w_{2}} {L_{2}} \sin\left({θ_{2}}\right)}{\,dt}\]</p>
+<p>By the product and chain rules, we find</p>
+<p>\[{a_{\text{y}2}}={a_{\text{y}1}}+{w_{2}}^{2} {L_{2}} \cos\left({θ_{2}}\right)+{α_{2}} {L_{2}} \sin\left({θ_{2}}\right)\]</p>
+<div align="center">
+<h2 id="GD:xForce1"><a class="header" href="#GD:xForce1">Horizontal force on the first object</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:xForce1</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Horizontal force on the first object</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{N}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}=-{\boldsymbol{T}_{1}} \sin\left({θ_{1}}\right)+{\boldsymbol{T}_{2}} \sin\left({θ_{2}}\right)\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{F}\) is the force (\({\text{N}}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(\boldsymbol{a}\text{(}t\text{)}\) is the acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({\boldsymbol{T}_{1}}\) is the tension of the first object (\({\text{N}}\))</li><li>\({θ_{1}}\) is the angle of the first rod (\({\text{rad}}\))</li><li>\({\boldsymbol{T}_{2}}\) is the tension of the second object (\({\text{N}}\))</li><li>\({θ_{2}}\) is the angle of the second rod (\({\text{rad}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfAngle2">IM:calOfAngle2</a></td></tr>
+</tbody></table>
+</div>
+<h4 id="GD:xForce1Deriv"><a class="header" href="#GD:xForce1Deriv">Detailed derivation of force on the first object:</a></h4>
+<p>\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}=-{\boldsymbol{T}_{1}} \sin\left({θ_{1}}\right)+{\boldsymbol{T}_{2}} \sin\left({θ_{2}}\right)\]</p>
+<div align="center">
+<h2 id="GD:yForce1"><a class="header" href="#GD:yForce1">Vertical force on the first object</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:yForce1</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Vertical force on the first object</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{N}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}={\boldsymbol{T}_{1}} \cos\left({θ_{1}}\right)-{\boldsymbol{T}_{2}} \cos\left({θ_{2}}\right)-{m_{1}} \boldsymbol{g}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{F}\) is the force (\({\text{N}}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(\boldsymbol{a}\text{(}t\text{)}\) is the acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({\boldsymbol{T}_{1}}\) is the tension of the first object (\({\text{N}}\))</li><li>\({θ_{1}}\) is the angle of the first rod (\({\text{rad}}\))</li><li>\({\boldsymbol{T}_{2}}\) is the tension of the second object (\({\text{N}}\))</li><li>\({θ_{2}}\) is the angle of the second rod (\({\text{rad}}\))</li><li>\({m_{1}}\) is the mass of the first object (\({\text{kg}}\))</li><li>\(\boldsymbol{g}\) is the gravitational acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfAngle2">IM:calOfAngle2</a></td></tr>
+</tbody></table>
+</div>
+<h4 id="GD:yForce1Deriv"><a class="header" href="#GD:yForce1Deriv">Detailed derivation of force on the first object:</a></h4>
+<p>\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}={\boldsymbol{T}_{1}} \cos\left({θ_{1}}\right)-{\boldsymbol{T}_{2}} \cos\left({θ_{2}}\right)-{m_{1}} \boldsymbol{g}\]</p>
+<div align="center">
+<h2 id="GD:xForce2"><a class="header" href="#GD:xForce2">Horizontal force on the second object</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:xForce2</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Horizontal force on the second object</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{N}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}=-{\boldsymbol{T}_{2}} \sin\left({θ_{2}}\right)\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{F}\) is the force (\({\text{N}}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(\boldsymbol{a}\text{(}t\text{)}\) is the acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({\boldsymbol{T}_{2}}\) is the tension of the second object (\({\text{N}}\))</li><li>\({θ_{2}}\) is the angle of the second rod (\({\text{rad}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfAngle2">IM:calOfAngle2</a></td></tr>
+</tbody></table>
+</div>
+<h4 id="GD:xForce2Deriv"><a class="header" href="#GD:xForce2Deriv">Detailed derivation of force on the second object:</a></h4>
+<p>\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}=-{\boldsymbol{T}_{2}} \sin\left({θ_{2}}\right)\]</p>
+<div align="center">
+<h2 id="GD:yForce2"><a class="header" href="#GD:yForce2">Vertical force on the second object</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:yForce2</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Vertical force on the second object</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{N}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}={\boldsymbol{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} \boldsymbol{g}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{F}\) is the force (\({\text{N}}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(\boldsymbol{a}\text{(}t\text{)}\) is the acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({\boldsymbol{T}_{2}}\) is the tension of the second object (\({\text{N}}\))</li><li>\({θ_{2}}\) is the angle of the second rod (\({\text{rad}}\))</li><li>\({m_{2}}\) is the mass of the second object (\({\text{kg}}\))</li><li>\(\boldsymbol{g}\) is the gravitational acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfAngle2">IM:calOfAngle2</a></td></tr>
+</tbody></table>
+</div>
+<h4 id="GD:yForce2Deriv"><a class="header" href="#GD:yForce2Deriv">Detailed derivation of force on the second object:</a></h4>
+<p>\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}={\boldsymbol{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} \boldsymbol{g}\]</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="SecTMs.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="SecDDs.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="SecTMs.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="SecDDs.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

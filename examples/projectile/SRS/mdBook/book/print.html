@@ -1,0 +1,871 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Software Requirements Specification for Projectile</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="title.html"><strong aria-hidden="true">1.</strong> Software Requirements Specification for Projectile</a></li><li class="chapter-item expanded "><a href="SecToC.html"><strong aria-hidden="true">2.</strong> Table of Contents</a></li><li class="chapter-item expanded "><a href="SecRefMat.html"><strong aria-hidden="true">3.</strong> Reference Material</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecToU.html"><strong aria-hidden="true">3.1.</strong> Table of Units</a></li><li class="chapter-item expanded "><a href="SecToS.html"><strong aria-hidden="true">3.2.</strong> Table of Symbols</a></li><li class="chapter-item expanded "><a href="SecTAbbAcc.html"><strong aria-hidden="true">3.3.</strong> Abbreviations and Acronyms</a></li></ol></li><li class="chapter-item expanded "><a href="SecIntro.html"><strong aria-hidden="true">4.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecDocPurpose.html"><strong aria-hidden="true">4.1.</strong> Purpose of Document</a></li><li class="chapter-item expanded "><a href="SecReqsScope.html"><strong aria-hidden="true">4.2.</strong> Scope of Requirements</a></li><li class="chapter-item expanded "><a href="SecReaderChars.html"><strong aria-hidden="true">4.3.</strong> Characteristics of Intended Reader</a></li><li class="chapter-item expanded "><a href="SecDocOrg.html"><strong aria-hidden="true">4.4.</strong> Organization of Document</a></li></ol></li><li class="chapter-item expanded "><a href="SecGenSysDesc.html"><strong aria-hidden="true">5.</strong> General System Description</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecSysContext.html"><strong aria-hidden="true">5.1.</strong> System Context</a></li><li class="chapter-item expanded "><a href="SecUserChars.html"><strong aria-hidden="true">5.2.</strong> User Characteristics</a></li><li class="chapter-item expanded "><a href="SecSysConstraints.html"><strong aria-hidden="true">5.3.</strong> System Constraints</a></li></ol></li><li class="chapter-item expanded "><a href="SecSpecSystDesc.html"><strong aria-hidden="true">6.</strong> Specific System Description</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecProbDesc.html"><strong aria-hidden="true">6.1.</strong> Problem Description</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecTermDefs.html"><strong aria-hidden="true">6.1.1.</strong> Terminology and Definitions</a></li><li class="chapter-item expanded "><a href="SecPhysSyst.html"><strong aria-hidden="true">6.1.2.</strong> Physical System Description</a></li><li class="chapter-item expanded "><a href="SecGoalStmt.html"><strong aria-hidden="true">6.1.3.</strong> Goal Statements</a></li></ol></li><li class="chapter-item expanded "><a href="SecSolCharSpec.html"><strong aria-hidden="true">6.2.</strong> Solution Characteristics Specification</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecAssumps.html"><strong aria-hidden="true">6.2.1.</strong> Assumptions</a></li><li class="chapter-item expanded "><a href="SecTMs.html"><strong aria-hidden="true">6.2.2.</strong> Theoretical Models</a></li><li class="chapter-item expanded "><a href="SecGDs.html"><strong aria-hidden="true">6.2.3.</strong> General Definitions</a></li><li class="chapter-item expanded "><a href="SecDDs.html"><strong aria-hidden="true">6.2.4.</strong> Data Definitions</a></li><li class="chapter-item expanded "><a href="SecIMs.html"><strong aria-hidden="true">6.2.5.</strong> Instance Models</a></li><li class="chapter-item expanded "><a href="SecDataConstraints.html"><strong aria-hidden="true">6.2.6.</strong> Data Constraints</a></li><li class="chapter-item expanded "><a href="SecCorSolProps.html"><strong aria-hidden="true">6.2.7.</strong> Properties of a Correct Solution</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="SecRequirements.html"><strong aria-hidden="true">7.</strong> Requirements</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecFRs.html"><strong aria-hidden="true">7.1.</strong> Functional Requirements</a></li><li class="chapter-item expanded "><a href="SecNFRs.html"><strong aria-hidden="true">7.2.</strong> Non-Functional Requirements</a></li></ol></li><li class="chapter-item expanded "><a href="SecTraceMatrices.html"><strong aria-hidden="true">8.</strong> Traceability Matrices and Graphs</a></li><li class="chapter-item expanded "><a href="SecAuxConstants.html"><strong aria-hidden="true">9.</strong> Values of Auxiliary Constants</a></li><li class="chapter-item expanded "><a href="SecReferences.html"><strong aria-hidden="true">10.</strong> References</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Software Requirements Specification for Projectile</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="software-requirements-specification-for-projectile"><a class="header" href="#software-requirements-specification-for-projectile">Software Requirements Specification for Projectile</a></h1>
+<p>Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:ToC"><a class="header" href="#Sec:ToC">Table of Contents</a></h1>
+<p>An outline of all sections included in this SRS is recorded here for easy reference.</p>
+<ul>
+<li><a href="./SecToC.html#Sec:ToC">Table of Contents</a></li>
+<li><a href="./SecRefMat.html#Sec:RefMat">Reference Material</a>
+<ul>
+<li><a href="./SecToU.html#Sec:ToU">Table of Units</a></li>
+<li><a href="./SecToS.html#Sec:ToS">Table of Symbols</a></li>
+<li><a href="./SecTAbbAcc.html#Sec:TAbbAcc">Abbreviations and Acronyms</a></li>
+</ul>
+</li>
+<li><a href="./SecIntro.html#Sec:Intro">Introduction</a>
+<ul>
+<li><a href="./SecDocPurpose.html#Sec:DocPurpose">Purpose of Document</a></li>
+<li><a href="./SecReqsScope.html#Sec:ReqsScope">Scope of Requirements</a></li>
+<li><a href="./SecReaderChars.html#Sec:ReaderChars">Characteristics of Intended Reader</a></li>
+<li><a href="./SecDocOrg.html#Sec:DocOrg">Organization of Document</a></li>
+</ul>
+</li>
+<li><a href="./SecGenSysDesc.html#Sec:GenSysDesc">General System Description</a>
+<ul>
+<li><a href="./SecSysContext.html#Sec:SysContext">System Context</a></li>
+<li><a href="./SecUserChars.html#Sec:UserChars">User Characteristics</a></li>
+<li><a href="./SecSysConstraints.html#Sec:SysConstraints">System Constraints</a></li>
+</ul>
+</li>
+<li><a href="./SecSpecSystDesc.html#Sec:SpecSystDesc">Specific System Description</a>
+<ul>
+<li><a href="./SecProbDesc.html#Sec:ProbDesc">Problem Description</a>
+<ul>
+<li><a href="./SecTermDefs.html#Sec:TermDefs">Terminology and Definitions</a></li>
+<li><a href="./SecPhysSyst.html#Sec:PhysSyst">Physical System Description</a></li>
+<li><a href="./SecGoalStmt.html#Sec:GoalStmt">Goal Statements</a></li>
+</ul>
+</li>
+<li><a href="./SecSolCharSpec.html#Sec:SolCharSpec">Solution Characteristics Specification</a>
+<ul>
+<li><a href="./SecAssumps.html#Sec:Assumps">Assumptions</a></li>
+<li><a href="./SecTMs.html#Sec:TMs">Theoretical Models</a></li>
+<li><a href="./SecGDs.html#Sec:GDs">General Definitions</a></li>
+<li><a href="./SecDDs.html#Sec:DDs">Data Definitions</a></li>
+<li><a href="./SecIMs.html#Sec:IMs">Instance Models</a></li>
+<li><a href="./SecDataConstraints.html#Sec:DataConstraints">Data Constraints</a></li>
+<li><a href="./SecCorSolProps.html#Sec:CorSolProps">Properties of a Correct Solution</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="./SecRequirements.html#Sec:Requirements">Requirements</a>
+<ul>
+<li><a href="./SecFRs.html#Sec:FRs">Functional Requirements</a></li>
+<li><a href="./SecNFRs.html#Sec:NFRs">Non-Functional Requirements</a></li>
+</ul>
+</li>
+<li><a href="./SecTraceMatrices.html#Sec:TraceMatrices">Traceability Matrices and Graphs</a></li>
+<li><a href="./SecAuxConstants.html#Sec:AuxConstants">Values of Auxiliary Constants</a></li>
+<li><a href="./SecReferences.html#Sec:References">References</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:RefMat"><a class="header" href="#Sec:RefMat">Reference Material</a></h1>
+<p>This section records information for easy reference.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:ToU"><a class="header" href="#Sec:ToU">Table of Units</a></h1>
+<p>The unit system used throughout is SI (Système International d’Unités). In addition to the basic units, several derived units are also used. For each unit, the <a href="./SecToU.html#Table:ToU">Table of Units</a> lists the symbol, a description, and the SI name.</p>
+<div id="Table:ToU"></div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Symbol</th><th style="text-align: left">Description</th><th style="text-align: left">SI Name</th></tr></thead><tbody>
+<tr><td style="text-align: left">\({\text{m}}\)</td><td style="text-align: left">length</td><td style="text-align: left">metre</td></tr>
+<tr><td style="text-align: left">\({\text{rad}}\)</td><td style="text-align: left">angle</td><td style="text-align: left">radian</td></tr>
+<tr><td style="text-align: left">\({\text{s}}\)</td><td style="text-align: left">time</td><td style="text-align: left">second</td></tr>
+</tbody></table>
+</div>
+<p><strong><p align="center">Table of Units</p></strong></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:ToS"><a class="header" href="#Sec:ToS">Table of Symbols</a></h1>
+<p>The symbols used in this document are summarized in the <a href="./SecToS.html#Table:ToS">Table of Symbols</a> along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.</p>
+<div id="Table:ToS"></div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Symbol</th><th style="text-align: left">Description</th><th style="text-align: left">Units</th></tr></thead><tbody>
+<tr><td style="text-align: left">\(a\)</td><td style="text-align: left">Scalar acceleration</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}^{2}}\)</td></tr>
+<tr><td style="text-align: left">\({a^{c}}\)</td><td style="text-align: left">Constant acceleration</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}^{2}}\)</td></tr>
+<tr><td style="text-align: left">\({a_{\text{x}}}\)</td><td style="text-align: left">\(x\)-component of acceleration</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}^{2}}\)</td></tr>
+<tr><td style="text-align: left">\({{a_{\text{x}}}^{\text{c}}}\)</td><td style="text-align: left">\(x\)-component of constant acceleration</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}^{2}}\)</td></tr>
+<tr><td style="text-align: left">\({a_{\text{y}}}\)</td><td style="text-align: left">\(y\)-component of acceleration</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}^{2}}\)</td></tr>
+<tr><td style="text-align: left">\({{a_{\text{y}}}^{\text{c}}}\)</td><td style="text-align: left">\(y\)-component of constant acceleration</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}^{2}}\)</td></tr>
+<tr><td style="text-align: left">\(\boldsymbol{a}\text{(}t\text{)}\)</td><td style="text-align: left">Acceleration</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}^{2}}\)</td></tr>
+<tr><td style="text-align: left">\({\boldsymbol{a}^{\text{c}}}\)</td><td style="text-align: left">Constant acceleration vector</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}^{2}}\)</td></tr>
+<tr><td style="text-align: left">\({d_{\text{offset}}}\)</td><td style="text-align: left">Distance between the target position and the landing position</td><td style="text-align: left">\({\text{m}}\)</td></tr>
+<tr><td style="text-align: left">\(g\)</td><td style="text-align: left">Magnitude of gravitational acceleration</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}^{2}}\)</td></tr>
+<tr><td style="text-align: left">\(p\)</td><td style="text-align: left">Scalar position</td><td style="text-align: left">\({\text{m}}\)</td></tr>
+<tr><td style="text-align: left">\(p\text{(}t\text{)}\)</td><td style="text-align: left">1D position</td><td style="text-align: left">\({\text{m}}\)</td></tr>
+<tr><td style="text-align: left">\({p^{\text{i}}}\)</td><td style="text-align: left">Initial position</td><td style="text-align: left">\({\text{m}}\)</td></tr>
+<tr><td style="text-align: left">\({p_{\text{land}}}\)</td><td style="text-align: left">Landing position</td><td style="text-align: left">\({\text{m}}\)</td></tr>
+<tr><td style="text-align: left">\({p_{\text{target}}}\)</td><td style="text-align: left">Target position</td><td style="text-align: left">\({\text{m}}\)</td></tr>
+<tr><td style="text-align: left">\({p_{\text{x}}}\)</td><td style="text-align: left">\(x\)-component of position</td><td style="text-align: left">\({\text{m}}\)</td></tr>
+<tr><td style="text-align: left">\({{p_{\text{x}}}^{\text{i}}}\)</td><td style="text-align: left">\(x\)-component of initial position</td><td style="text-align: left">\({\text{m}}\)</td></tr>
+<tr><td style="text-align: left">\({p_{\text{y}}}\)</td><td style="text-align: left">\(y\)-component of position</td><td style="text-align: left">\({\text{m}}\)</td></tr>
+<tr><td style="text-align: left">\({{p_{\text{y}}}^{\text{i}}}\)</td><td style="text-align: left">\(y\)-component of initial position</td><td style="text-align: left">\({\text{m}}\)</td></tr>
+<tr><td style="text-align: left">\(\boldsymbol{p}\text{(}t\text{)}\)</td><td style="text-align: left">Position</td><td style="text-align: left">\({\text{m}}\)</td></tr>
+<tr><td style="text-align: left">\(s\)</td><td style="text-align: left">Output message as a string</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">\(t\)</td><td style="text-align: left">Time</td><td style="text-align: left">\({\text{s}}\)</td></tr>
+<tr><td style="text-align: left">\({t_{\text{flight}}}\)</td><td style="text-align: left">Flight duration</td><td style="text-align: left">\({\text{s}}\)</td></tr>
+<tr><td style="text-align: left">\(v\)</td><td style="text-align: left">Speed</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">\(v\text{(}t\text{)}\)</td><td style="text-align: left">1D speed</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">\({v^{\text{i}}}\)</td><td style="text-align: left">Initial speed</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">\({v_{\text{launch}}}\)</td><td style="text-align: left">Launch speed</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">\({v_{\text{x}}}\)</td><td style="text-align: left">\(x\)-component of velocity</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">\({{v_{\text{x}}}^{\text{i}}}\)</td><td style="text-align: left">\(x\)-component of initial velocity</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">\({v_{\text{y}}}\)</td><td style="text-align: left">\(y\)-component of velocity</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">\({{v_{\text{y}}}^{\text{i}}}\)</td><td style="text-align: left">\(y\)-component of initial velocity</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">\(\boldsymbol{v}\text{(}t\text{)}\)</td><td style="text-align: left">Velocity</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">\({\boldsymbol{v}^{\text{i}}}\)</td><td style="text-align: left">Initial velocity</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">\(ε\)</td><td style="text-align: left">Hit tolerance</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">\(θ\)</td><td style="text-align: left">Launch angle</td><td style="text-align: left">\({\text{rad}}\)</td></tr>
+<tr><td style="text-align: left">\(π\)</td><td style="text-align: left">Ratio of circumference to diameter for any circle</td><td style="text-align: left">–</td></tr>
+</tbody></table>
+</div>
+<p><strong><p align="center">Table of Symbols</p></strong></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:TAbbAcc"><a class="header" href="#Sec:TAbbAcc">Abbreviations and Acronyms</a></h1>
+<div id="Table:TAbbAcc"></div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Abbreviation</th><th style="text-align: left">Full Form</th></tr></thead><tbody>
+<tr><td style="text-align: left">1D</td><td style="text-align: left">One-Dimensional</td></tr>
+<tr><td style="text-align: left">2D</td><td style="text-align: left">Two-Dimensional</td></tr>
+<tr><td style="text-align: left">A</td><td style="text-align: left">Assumption</td></tr>
+<tr><td style="text-align: left">DD</td><td style="text-align: left">Data Definition</td></tr>
+<tr><td style="text-align: left">GD</td><td style="text-align: left">General Definition</td></tr>
+<tr><td style="text-align: left">GS</td><td style="text-align: left">Goal Statement</td></tr>
+<tr><td style="text-align: left">IM</td><td style="text-align: left">Instance Model</td></tr>
+<tr><td style="text-align: left">PS</td><td style="text-align: left">Physical System Description</td></tr>
+<tr><td style="text-align: left">R</td><td style="text-align: left">Requirement</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left">Referenced by</td></tr>
+<tr><td style="text-align: left">Refname</td><td style="text-align: left">Reference Name</td></tr>
+<tr><td style="text-align: left">SRS</td><td style="text-align: left">Software Requirements Specification</td></tr>
+<tr><td style="text-align: left">TM</td><td style="text-align: left">Theoretical Model</td></tr>
+<tr><td style="text-align: left">Uncert.</td><td style="text-align: left">Typical Uncertainty</td></tr>
+</tbody></table>
+</div>
+<p><strong><p align="center">Abbreviations and Acronyms</p></strong></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:Intro"><a class="header" href="#Sec:Intro">Introduction</a></h1>
+<p>Projectile motion is a common problem in physics. Therefore, it is useful to have a program to solve and model these types of problems. Common examples of projectile motion include ballistics problems (missiles, bullets, etc.) and the flight of balls in various sports (baseball, golf, football, etc.). The program documented here is called Projectile.</p>
+<p>The following section provides an overview of the Software Requirements Specification (SRS) for Projectile. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:DocPurpose"><a class="header" href="#Sec:DocPurpose">Purpose of Document</a></h1>
+<p>The primary purpose of this document is to record the requirements of Projectile. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of Projectile. With the exception of <a href="./SecSysConstraints.html#Sec:SysConstraints">system constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.</p>
+<p>This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href="./SecReferences.html#parnasClements1986">parnasClements1986</a>, the most logical way to present the documentation is still to “fake” a rational design process.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:ReqsScope"><a class="header" href="#Sec:ReqsScope">Scope of Requirements</a></h1>
+<p>The scope of the requirements includes the analysis of a two-dimensional (2D) projectile motion problem with constant acceleration.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:ReaderChars"><a class="header" href="#Sec:ReaderChars">Characteristics of Intended Reader</a></h1>
+<p>Reviewers of this documentation should have an understanding of undergraduate level 1 physics and undergraduate level 1 calculus. The users of Projectile can have a lower level of expertise, as explained in <a href="./SecUserChars.html#Sec:UserChars">Sec:User Characteristics</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:DocOrg"><a class="header" href="#Sec:DocOrg">Organization of Document</a></h1>
+<p>The organization of this document follows the template for an SRS for scientific computing software proposed by <a href="./SecReferences.html#koothoor2013">koothoor2013</a>, <a href="./SecReferences.html#smithLai2005">smithLai2005</a>, <a href="./SecReferences.html#smithEtAl2007">smithEtAl2007</a>, and <a href="./SecReferences.html#smithKoothoor2016">smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href="./SecIMs.html#Sec:IMs">instance models</a> and trace back to find any additional information they require.</p>
+<p>The <a href="./SecGoalStmt.html#Sec:GoalStmt">goal statements</a> are refined to the theoretical models and the <a href="./SecTMs.html#Sec:TMs">theoretical models</a> to the <a href="./SecIMs.html#Sec:IMs">instance models</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:GenSysDesc"><a class="header" href="#Sec:GenSysDesc">General System Description</a></h1>
+<p>This section provides general information about the system. It identifies the interfaces between the system and its environment, describes the user characteristics, and lists the system constraints.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:SysContext"><a class="header" href="#Sec:SysContext">System Context</a></h1>
+<p><a href="./SecSysContext.html#Figure:sysCtxDiag">Fig:sysCtxDiag</a> shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (Projectile). Arrows are used to show the data flow between the system and its environment.</p>
+<div id="Figure:sysCtxDiag"></div>
+<p><img src="/assets/SystemContextFigure.png" alt="System Context" /></p>
+<p><strong><p align="center">System Context</p></strong></p>
+<p>The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:</p>
+<ul>
+<li>User Responsibilities
+<ul>
+<li>Provide initial conditions of the physical state of the motion and the input data related to the Projectile, ensuring no errors in the data entry.</li>
+<li>Ensure that consistent units are used for input variables.</li>
+<li>Ensure required <a href="./SecAssumps.html#Sec:Assumps">software assumptions</a> are appropriate for any particular problem input to the software.</li>
+</ul>
+</li>
+<li>Projectile Responsibilities
+<ul>
+<li>Detect data type mismatch, such as a string of characters input instead of a floating point number.</li>
+<li>Determine if the inputs satisfy the required physical and software constraints.</li>
+<li>Calculate the required outputs.</li>
+</ul>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:UserChars"><a class="header" href="#Sec:UserChars">User Characteristics</a></h1>
+<p>The end user of Projectile should have an understanding of high school physics and high school calculus.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:SysConstraints"><a class="header" href="#Sec:SysConstraints">System Constraints</a></h1>
+<p>There are no system constraints.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:SpecSystDesc"><a class="header" href="#Sec:SpecSystDesc">Specific System Description</a></h1>
+<p>This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:ProbDesc"><a class="header" href="#Sec:ProbDesc">Problem Description</a></h1>
+<p>A system is needed to predict whether a launched projectile hits its target.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:TermDefs"><a class="header" href="#Sec:TermDefs">Terminology and Definitions</a></h1>
+<p>This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.</p>
+<ul>
+<li>Launcher: Where the projectile is launched from and the device that does the launching.</li>
+<li>Projectile: The object to be launched at the target.</li>
+<li>Target: Where the projectile should be launched to.</li>
+<li>Gravity: The force that attracts one physical body with mass to another.</li>
+<li>Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a set of numerical coordinates, which are the signed distances to the point from two fixed perpendicular oriented lines, measured in the same unit of length (from <a href="./SecReferences.html#cartesianWiki">cartesianWiki</a>).</li>
+<li>Rectilinear: Occurring in one dimension.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:PhysSyst"><a class="header" href="#Sec:PhysSyst">Physical System Description</a></h1>
+<p>The physical system of Projectile, as shown in <a href="./SecPhysSyst.html#Figure:Launch">Fig:Launch</a>, includes the following elements:</p>
+<p>PS1: The launcher.</p>
+<p>PS2: The projectile (with initial velocity \({\boldsymbol{v}^{\text{i}}}\) and launch angle \(θ\)).</p>
+<p>PS3: The target.</p>
+<div id="Figure:Launch"></div>
+<p><img src="/assets/Launch.jpg" alt="The physical system" /></p>
+<p><strong><p align="center">The physical system</p></strong></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:GoalStmt"><a class="header" href="#Sec:GoalStmt">Goal Statements</a></h1>
+<p>Given the initial velocity vector of the projectile and the geometric layout of the launcher and target, the goal statement is:</p>
+<div id="targetHit"></div>
+<p>targetHit: Determine if the projectile hits the target.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:SolCharSpec"><a class="header" href="#Sec:SolCharSpec">Solution Characteristics Specification</a></h1>
+<p>The instance models that govern Projectile are presented in the <a href="./SecIMs.html#Sec:IMs">Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:Assumps"><a class="header" href="#Sec:Assumps">Assumptions</a></h1>
+<p>This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.</p>
+<div id="twoDMotion"></div>
+<p>twoDMotion: The projectile motion is two-dimensional (2D). (RefBy: <a href="./SecGDs.html#GD:velVec">GD:velVec</a> and <a href="./SecGDs.html#GD:posVec">GD:posVec</a>.)</p>
+<div id="cartSyst"></div>
+<p>cartSyst: A Cartesian coordinate system is used (from <a href="./SecAssumps.html#neglectCurv">A:neglectCurv</a>). (RefBy: <a href="./SecGDs.html#GD:velVec">GD:velVec</a> and <a href="./SecGDs.html#GD:posVec">GD:posVec</a>.)</p>
+<div id="yAxisGravity"></div>
+<p>yAxisGravity: The direction of the \(y\)-axis is directed opposite to gravity. (RefBy: <a href="./SecIMs.html#IM:calOfLandingDist">IM:calOfLandingDist</a>, <a href="./SecIMs.html#IM:calOfLandingTime">IM:calOfLandingTime</a>, and <a href="./SecAssumps.html#accelYGravity">A:accelYGravity</a>.)</p>
+<div id="launchOrigin"></div>
+<p>launchOrigin: The launcher is coincident with the origin. (RefBy: <a href="./SecIMs.html#IM:calOfLandingDist">IM:calOfLandingDist</a> and <a href="./SecIMs.html#IM:calOfLandingTime">IM:calOfLandingTime</a>.)</p>
+<div id="targetXAxis"></div>
+<p>targetXAxis: The target lies on the \(x\)-axis (from <a href="./SecAssumps.html#neglectCurv">A:neglectCurv</a>). (RefBy: <a href="./SecIMs.html#IM:calOfLandingTime">IM:calOfLandingTime</a>.)</p>
+<div id="posXDirection"></div>
+<p>posXDirection: The positive \(x\)-direction is from the launcher to the target. (RefBy: <a href="./SecIMs.html#IM:offsetIM">IM:offsetIM</a>, <a href="./SecIMs.html#IM:messageIM">IM:messageIM</a>, <a href="./SecIMs.html#IM:calOfLandingDist">IM:calOfLandingDist</a>, and <a href="./SecIMs.html#IM:calOfLandingTime">IM:calOfLandingTime</a>.)</p>
+<div id="constAccel"></div>
+<p>constAccel: The acceleration is constant (from <a href="./SecAssumps.html#accelXZero">A:accelXZero</a>, <a href="./SecAssumps.html#accelYGravity">A:accelYGravity</a>, <a href="./SecAssumps.html#neglectDrag">A:neglectDrag</a>, and <a href="./SecAssumps.html#freeFlight">A:freeFlight</a>). (RefBy: <a href="./SecGDs.html#GD:velVec">GD:velVec</a> and <a href="./SecGDs.html#GD:posVec">GD:posVec</a>.)</p>
+<div id="accelXZero"></div>
+<p>accelXZero: The acceleration in the \(x\)-direction is zero. (RefBy: <a href="./SecIMs.html#IM:calOfLandingDist">IM:calOfLandingDist</a> and <a href="./SecAssumps.html#constAccel">A:constAccel</a>.)</p>
+<div id="accelYGravity"></div>
+<p>accelYGravity: The acceleration in the \(y\)-direction is the acceleration due to gravity (from <a href="./SecAssumps.html#yAxisGravity">A:yAxisGravity</a>). (RefBy: <a href="./SecIMs.html#IM:calOfLandingTime">IM:calOfLandingTime</a> and <a href="./SecAssumps.html#constAccel">A:constAccel</a>.)</p>
+<div id="neglectDrag"></div>
+<p>neglectDrag: Air drag is neglected. (RefBy: <a href="./SecAssumps.html#constAccel">A:constAccel</a>.)</p>
+<div id="pointMass"></div>
+<p>pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: <a href="./SecGDs.html#GD:rectVel">GD:rectVel</a> and <a href="./SecGDs.html#GD:rectPos">GD:rectPos</a>.)</p>
+<div id="freeFlight"></div>
+<p>freeFlight: The flight is free; there are no collisions during the trajectory of the projectile. (RefBy: <a href="./SecAssumps.html#constAccel">A:constAccel</a>.)</p>
+<div id="neglectCurv"></div>
+<p>neglectCurv: The distance is small enough that the curvature of the celestial body can be neglected. (RefBy: <a href="./SecAssumps.html#targetXAxis">A:targetXAxis</a> and <a href="./SecAssumps.html#cartSyst">A:cartSyst</a>.)</p>
+<div id="timeStartZero"></div>
+<p>timeStartZero: Time starts at zero. (RefBy: <a href="./SecGDs.html#GD:velVec">GD:velVec</a>, <a href="./SecGDs.html#GD:rectVel">GD:rectVel</a>, <a href="./SecGDs.html#GD:rectPos">GD:rectPos</a>, <a href="./SecGDs.html#GD:posVec">GD:posVec</a>, and <a href="./SecIMs.html#IM:calOfLandingTime">IM:calOfLandingTime</a>.)</p>
+<div id="gravAccelValue"></div>
+<p>gravAccelValue: The acceleration due to gravity is assumed to have the value provided in the section for <a href="./SecAuxConstants.html#Sec:AuxConstants">Values of Auxiliary Constants</a>. (RefBy: <a href="./SecIMs.html#IM:calOfLandingDist">IM:calOfLandingDist</a> and <a href="./SecIMs.html#IM:calOfLandingTime">IM:calOfLandingTime</a>.)</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:TMs"><a class="header" href="#Sec:TMs">Theoretical Models</a></h1>
+<p>This section focuses on the general equations and laws that Projectile is based on.</p>
+<div align="center">
+<h2 id="TM:acceleration"><a class="header" href="#TM:acceleration">Acceleration</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">TM:acceleration</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Acceleration</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{a}\text{(}t\text{)}=\frac{\,d\boldsymbol{v}\text{(}t\text{)}}{\,dt}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{a}\text{(}t\text{)}\) is the acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\(\boldsymbol{v}\text{(}t\text{)}\) is the velocity (\(\frac{\text{m}}{\text{s}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#accelerationWiki">accelerationWiki</a></td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecGDs.html#GD:rectVel">GD:rectVel</a></td></tr>
+</tbody></table>
+</div><div align="center">
+<h2 id="TM:velocity"><a class="header" href="#TM:velocity">Velocity</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">TM:velocity</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Velocity</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{v}\text{(}t\text{)}=\frac{\,d\boldsymbol{p}\text{(}t\text{)}}{\,dt}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{v}\text{(}t\text{)}\) is the velocity (\(\frac{\text{m}}{\text{s}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\(\boldsymbol{p}\text{(}t\text{)}\) is the position (\({\text{m}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#velocityWiki">velocityWiki</a></td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecGDs.html#GD:rectPos">GD:rectPos</a></td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:GDs"><a class="header" href="#Sec:GDs">General Definitions</a></h1>
+<p>This section collects the laws and equations that will be used to build the instance models.</p>
+<div align="center">
+<h2 id="GD:rectVel"><a class="header" href="#GD:rectVel">Rectilinear (1D) velocity as a function of time for constant acceleration</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:rectVel</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Rectilinear (1D) velocity as a function of time for constant acceleration</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[v\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(v\text{(}t\text{)}\) is the 1D speed (\(\frac{\text{m}}{\text{s}}\))</li><li>\({v^{\text{i}}}\) is the initial speed (\(\frac{\text{m}}{\text{s}}\))</li><li>\({a^{c}}\) is the constant acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#hibbeler2004">hibbeler2004</a> (pg. 8)</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecGDs.html#GD:velVec">GD:velVec</a> and <a href="./SecGDs.html#GD:rectPos">GD:rectPos</a></td></tr>
+</tbody></table>
+</div>
+<h4 id="GD:rectVelDeriv"><a class="header" href="#GD:rectVelDeriv">Detailed derivation of rectilinear velocity:</a></h4>
+<p>Assume we have rectilinear motion of a particle (of negligible size and shape, from <a href="./SecAssumps.html#pointMass">A:pointMass</a>); that is, motion in a straight line. The velocity is \(v\) and the acceleration is \(a\). The motion in <a href="./SecTMs.html#TM:acceleration">TM:acceleration</a> is now one-dimensional with a constant acceleration, represented by \({a^{c}}\). The initial velocity (at \(t=0\), from <a href="./SecAssumps.html#timeStartZero">A:timeStartZero</a>) is represented by \({v^{\text{i}}}\). From <a href="./SecTMs.html#TM:acceleration">TM:acceleration</a> in 1D, and using the above symbols we have:</p>
+<p>\[{a^{c}}=\frac{\,dv}{\,dt}\]</p>
+<p>Rearranging and integrating, we have:</p>
+<p>\[\int_{{v^{\text{i}}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt\]</p>
+<p>Performing the integration, we have the required equation:</p>
+<p>\[v\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t\]</p>
+<div align="center">
+<h2 id="GD:rectPos"><a class="header" href="#GD:rectPos">Rectilinear (1D) position as a function of time for constant acceleration</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:rectPos</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Rectilinear (1D) position as a function of time for constant acceleration</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{m}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(p\text{(}t\text{)}\) is the 1D position (\({\text{m}}\))</li><li>\({p^{\text{i}}}\) is the initial position (\({\text{m}}\))</li><li>\({v^{\text{i}}}\) is the initial speed (\(\frac{\text{m}}{\text{s}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\({a^{c}}\) is the constant acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#hibbeler2004">hibbeler2004</a> (pg. 8)</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecGDs.html#GD:posVec">GD:posVec</a></td></tr>
+</tbody></table>
+</div>
+<h4 id="GD:rectPosDeriv"><a class="header" href="#GD:rectPosDeriv">Detailed derivation of rectilinear position:</a></h4>
+<p>Assume we have rectilinear motion of a particle (of negligible size and shape, from <a href="./SecAssumps.html#pointMass">A:pointMass</a>); that is, motion in a straight line. The position is \(p\) and the velocity is \(v\). The motion in <a href="./SecTMs.html#TM:velocity">TM:velocity</a> is now one-dimensional. The initial position (at \(t=0\), from <a href="./SecAssumps.html#timeStartZero">A:timeStartZero</a>) is represented by \({p^{\text{i}}}\). From <a href="./SecTMs.html#TM:velocity">TM:velocity</a> in 1D, and using the above symbols we have:</p>
+<p>\[v=\frac{\,dp}{\,dt}\]</p>
+<p>Rearranging and integrating, we have:</p>
+<p>\[\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{v}\,dt\]</p>
+<p>From <a href="./SecGDs.html#GD:rectVel">GD:rectVel</a>, we can replace \(v\):</p>
+<p>\[\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{\text{i}}}+{a^{c}} t}\,dt\]</p>
+<p>Performing the integration, we have the required equation:</p>
+<p>\[p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}\]</p>
+<div align="center">
+<h2 id="GD:velVec"><a class="header" href="#GD:velVec">Velocity vector as a function of time for 2D motion under constant acceleration</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:velVec</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Velocity vector as a function of time for 2D motion under constant acceleration</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{v}\text{(}t\text{)}=\begin{bmatrix}{{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}} t\\{{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}} t\end{bmatrix}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{v}\text{(}t\text{)}\) is the velocity (\(\frac{\text{m}}{\text{s}}\))</li><li>\({{v_{\text{x}}}^{\text{i}}}\) is the \(x\)-component of initial velocity (\(\frac{\text{m}}{\text{s}}\))</li><li>\({{a_{\text{x}}}^{\text{c}}}\) is the \(x\)-component of constant acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\({{v_{\text{y}}}^{\text{i}}}\) is the \(y\)-component of initial velocity (\(\frac{\text{m}}{\text{s}}\))</li><li>\({{a_{\text{y}}}^{\text{c}}}\) is the \(y\)-component of constant acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"></td></tr>
+</tbody></table>
+</div>
+<h4 id="GD:velVecDeriv"><a class="header" href="#GD:velVecDeriv">Detailed derivation of velocity vector:</a></h4>
+<p>For a two-dimensional Cartesian coordinate system (<a href="./SecAssumps.html#twoDMotion">A:twoDMotion</a> and <a href="./SecAssumps.html#cartSyst">A:cartSyst</a>), we can represent the velocity vector as \(\boldsymbol{v}\text{(}t\text{)}=\begin{bmatrix}{v_{\text{x}}}\\{v_{\text{y}}}\end{bmatrix}\) and the acceleration vector as \(\boldsymbol{a}\text{(}t\text{)}=\begin{bmatrix}{a_{\text{x}}}\\{a_{\text{y}}}\end{bmatrix}\). The acceleration is assumed to be constant (<a href="./SecAssumps.html#constAccel">A:constAccel</a>) and the constant acceleration vector is represented as \({\boldsymbol{a}^{\text{c}}}=\begin{bmatrix}{{a_{\text{x}}}^{\text{c}}}\\{{a_{\text{y}}}^{\text{c}}}\end{bmatrix}\). The initial velocity (at \(t=0\), from <a href="./SecAssumps.html#timeStartZero">A:timeStartZero</a>) is represented by \({\boldsymbol{v}^{\text{i}}}=\begin{bmatrix}{{v_{\text{x}}}^{\text{i}}}\\{{v_{\text{y}}}^{\text{i}}}\end{bmatrix}\). Since we have a Cartesian coordinate system, <a href="./SecGDs.html#GD:rectVel">GD:rectVel</a> can be applied to each coordinate of the velocity vector to yield the required equation:</p>
+<p>\[\boldsymbol{v}\text{(}t\text{)}=\begin{bmatrix}{{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}} t\\{{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}} t\end{bmatrix}\]</p>
+<div align="center">
+<h2 id="GD:posVec"><a class="header" href="#GD:posVec">Position vector as a function of time for 2D motion under constant acceleration</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:posVec</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Position vector as a function of time for 2D motion under constant acceleration</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{m}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{p}\text{(}t\text{)}=\begin{bmatrix}{{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\{{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}\end{bmatrix}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{p}\text{(}t\text{)}\) is the position (\({\text{m}}\))</li><li>\({{p_{\text{x}}}^{\text{i}}}\) is the \(x\)-component of initial position (\({\text{m}}\))</li><li>\({{v_{\text{x}}}^{\text{i}}}\) is the \(x\)-component of initial velocity (\(\frac{\text{m}}{\text{s}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\({{a_{\text{x}}}^{\text{c}}}\) is the \(x\)-component of constant acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({{p_{\text{y}}}^{\text{i}}}\) is the \(y\)-component of initial position (\({\text{m}}\))</li><li>\({{v_{\text{y}}}^{\text{i}}}\) is the \(y\)-component of initial velocity (\(\frac{\text{m}}{\text{s}}\))</li><li>\({{a_{\text{y}}}^{\text{c}}}\) is the \(y\)-component of constant acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfLandingDist">IM:calOfLandingDist</a> and <a href="./SecIMs.html#IM:calOfLandingTime">IM:calOfLandingTime</a></td></tr>
+</tbody></table>
+</div>
+<h4 id="GD:posVecDeriv"><a class="header" href="#GD:posVecDeriv">Detailed derivation of position vector:</a></h4>
+<p>For a two-dimensional Cartesian coordinate system (<a href="./SecAssumps.html#twoDMotion">A:twoDMotion</a> and <a href="./SecAssumps.html#cartSyst">A:cartSyst</a>), we can represent the position vector as \(\boldsymbol{p}\text{(}t\text{)}=\begin{bmatrix}{p_{\text{x}}}\\{p_{\text{y}}}\end{bmatrix}\), the velocity vector as \(\boldsymbol{v}\text{(}t\text{)}=\begin{bmatrix}{v_{\text{x}}}\\{v_{\text{y}}}\end{bmatrix}\), and the acceleration vector as \(\boldsymbol{a}\text{(}t\text{)}=\begin{bmatrix}{a_{\text{x}}}\\{a_{\text{y}}}\end{bmatrix}\). The acceleration is assumed to be constant (<a href="./SecAssumps.html#constAccel">A:constAccel</a>) and the constant acceleration vector is represented as \({\boldsymbol{a}^{\text{c}}}=\begin{bmatrix}{{a_{\text{x}}}^{\text{c}}}\\{{a_{\text{y}}}^{\text{c}}}\end{bmatrix}\). The initial velocity (at \(t=0\), from <a href="./SecAssumps.html#timeStartZero">A:timeStartZero</a>) is represented by \({\boldsymbol{v}^{\text{i}}}=\begin{bmatrix}{{v_{\text{x}}}^{\text{i}}}\\{{v_{\text{y}}}^{\text{i}}}\end{bmatrix}\). Since we have a Cartesian coordinate system, <a href="./SecGDs.html#GD:rectPos">GD:rectPos</a> can be applied to each coordinate of the position vector to yield the required equation:</p>
+<p>\[\boldsymbol{p}\text{(}t\text{)}=\begin{bmatrix}{{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\{{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}\end{bmatrix}\]</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:DDs"><a class="header" href="#Sec:DDs">Data Definitions</a></h1>
+<p>This section collects and defines all the data needed to build the instance models.</p>
+<div align="center">
+<h2 id="DD:vecMag"><a class="header" href="#DD:vecMag">Speed</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">DD:vecMag</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Speed</td></tr>
+<tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(v\)</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[v=|\boldsymbol{v}\text{(}t\text{)}|\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(v\) is the speed (\(\frac{\text{m}}{\text{s}}\))</li><li>\(\boldsymbol{v}\text{(}t\text{)}\) is the velocity (\(\frac{\text{m}}{\text{s}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>For a given velocity vector \(\boldsymbol{v}\text{(}t\text{)}\), the magnitude of the vector (\(|\boldsymbol{v}\text{(}t\text{)}|\)) is the scalar called speed.</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecDDs.html#DD:speedIY">DD:speedIY</a> and <a href="./SecDDs.html#DD:speedIX">DD:speedIX</a></td></tr>
+</tbody></table>
+</div><div align="center">
+<h2 id="DD:speedIX"><a class="header" href="#DD:speedIX">\(x\)-component of initial velocity</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">DD:speedIX</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">\(x\)-component of initial velocity</td></tr>
+<tr><td style="text-align: left">Symbol</td><td style="text-align: left">\({{v_{\text{x}}}^{\text{i}}}\)</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{{v_{\text{x}}}^{\text{i}}}={v^{\text{i}}} \cos\left(θ\right)\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({{v_{\text{x}}}^{\text{i}}}\) is the \(x\)-component of initial velocity (\(\frac{\text{m}}{\text{s}}\))</li><li>\({v^{\text{i}}}\) is the initial speed (\(\frac{\text{m}}{\text{s}}\))</li><li>\(θ\) is the launch angle (\({\text{rad}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\({v^{\text{i}}}\) is from <a href="./SecDDs.html#DD:vecMag">DD:vecMag</a>.</li><li>\(θ\) is shown in <a href="./SecPhysSyst.html#Figure:Launch">Fig:Launch</a>.</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfLandingDist">IM:calOfLandingDist</a></td></tr>
+</tbody></table>
+</div><div align="center">
+<h2 id="DD:speedIY"><a class="header" href="#DD:speedIY">\(y\)-component of initial velocity</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">DD:speedIY</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">\(y\)-component of initial velocity</td></tr>
+<tr><td style="text-align: left">Symbol</td><td style="text-align: left">\({{v_{\text{y}}}^{\text{i}}}\)</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{{v_{\text{y}}}^{\text{i}}}={v^{\text{i}}} \sin\left(θ\right)\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({{v_{\text{y}}}^{\text{i}}}\) is the \(y\)-component of initial velocity (\(\frac{\text{m}}{\text{s}}\))</li><li>\({v^{\text{i}}}\) is the initial speed (\(\frac{\text{m}}{\text{s}}\))</li><li>\(θ\) is the launch angle (\({\text{rad}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\({v^{\text{i}}}\) is from <a href="./SecDDs.html#DD:vecMag">DD:vecMag</a>.</li><li>\(θ\) is shown in <a href="./SecPhysSyst.html#Figure:Launch">Fig:Launch</a>.</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfLandingTime">IM:calOfLandingTime</a></td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:IMs"><a class="header" href="#Sec:IMs">Instance Models</a></h1>
+<p>This section transforms the problem defined in the <a href="./SecProbDesc.html#Sec:ProbDesc">problem description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in the <a href="./SecDDs.html#Sec:DDs">data definitions</a> to replace the abstract symbols in the models identified in <a href="./SecTMs.html#Sec:TMs">theoretical models</a> and <a href="./SecGDs.html#Sec:GDs">general definitions</a>.</p>
+<div align="center">
+<h2 id="IM:calOfLandingTime"><a class="header" href="#IM:calOfLandingTime">Calculation of landing time</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">IM:calOfLandingTime</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Calculation of landing time</td></tr>
+<tr><td style="text-align: left">Input</td><td style="text-align: left">\({v_{\text{launch}}}\), \(θ\)</td></tr>
+<tr><td style="text-align: left">Output</td><td style="text-align: left">\({t_{\text{flight}}}\)</td></tr>
+<tr><td style="text-align: left">Input Constraints</td><td style="text-align: left">\[{v_{\text{launch}}}\gt{}0\]\[0\lt{}θ\lt{}\frac{π}{2}\]</td></tr>
+<tr><td style="text-align: left">Output Constraints</td><td style="text-align: left">\[{t_{\text{flight}}}\gt{}0\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{g}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({t_{\text{flight}}}\) is the flight duration (\({\text{s}}\))</li><li>\({v_{\text{launch}}}\) is the launch speed (\(\frac{\text{m}}{\text{s}}\))</li><li>\(θ\) is the launch angle (\({\text{rad}}\))</li><li>\(g\) is the magnitude of gravitational acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The constraint \(0\lt{}θ\lt{}\frac{π}{2}\) is from <a href="./SecAssumps.html#posXDirection">A:posXDirection</a> and <a href="./SecAssumps.html#yAxisGravity">A:yAxisGravity</a>, and is shown in <a href="./SecPhysSyst.html#Figure:Launch">Fig:Launch</a>.</li><li>\(g\) is defined in <a href="./SecAssumps.html#gravAccelValue">A:gravAccelValue</a>.</li><li>The constraint \({t_{\text{flight}}}\gt{}0\) is from <a href="./SecAssumps.html#timeStartZero">A:timeStartZero</a>.</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfLandingDist">IM:calOfLandingDist</a>, <a href="./SecFRs.html#outputValues">FR:Output-Values</a>, and <a href="./SecFRs.html#calcValues">FR:Calculate-Values</a></td></tr>
+</tbody></table>
+</div>
+<h4 id="IM:calOfLandingTimeDeriv"><a class="header" href="#IM:calOfLandingTimeDeriv">Detailed derivation of flight duration:</a></h4>
+<p>We know that \({{p_{\text{y}}}^{\text{i}}}=0\) (<a href="./SecAssumps.html#launchOrigin">A:launchOrigin</a>) and \({{a_{\text{y}}}^{\text{c}}}=-g\) (<a href="./SecAssumps.html#accelYGravity">A:accelYGravity</a>). Substituting these values into the y-direction of <a href="./SecGDs.html#GD:posVec">GD:posVec</a> gives us:</p>
+<p>\[{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}} t-\frac{g t^{2}}{2}\]</p>
+<p>To find the time that the projectile lands, we want to find the \(t\) value (\({t_{\text{flight}}}\)) where \({p_{\text{y}}}=0\) (since the target is on the \(x\)-axis from <a href="./SecAssumps.html#targetXAxis">A:targetXAxis</a>). From the equation above we get:</p>
+<p>\[{{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{g {t_{\text{flight}}}^{2}}{2}=0\]</p>
+<p>Dividing by \({t_{\text{flight}}}\) (with the constraint \({t_{\text{flight}}}\gt{}0\)) gives us:</p>
+<p>\[{{v_{\text{y}}}^{\text{i}}}-\frac{g {t_{\text{flight}}}}{2}=0\]</p>
+<p>Solving for \({t_{\text{flight}}}\) gives us:</p>
+<p>\[{t_{\text{flight}}}=\frac{2 {{v_{\text{y}}}^{\text{i}}}}{g}\]</p>
+<p>From <a href="./SecDDs.html#DD:speedIY">DD:speedIY</a> (with \({v^{\text{i}}}={v_{\text{launch}}}\)) we can replace \({{v_{\text{y}}}^{\text{i}}}\):</p>
+<p>\[{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{g}\]</p>
+<div align="center">
+<h2 id="IM:calOfLandingDist"><a class="header" href="#IM:calOfLandingDist">Calculation of landing position</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">IM:calOfLandingDist</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Calculation of landing position</td></tr>
+<tr><td style="text-align: left">Input</td><td style="text-align: left">\({v_{\text{launch}}}\), \(θ\)</td></tr>
+<tr><td style="text-align: left">Output</td><td style="text-align: left">\({p_{\text{land}}}\)</td></tr>
+<tr><td style="text-align: left">Input Constraints</td><td style="text-align: left">\[{v_{\text{launch}}}\gt{}0\]\[0\lt{}θ\lt{}\frac{π}{2}\]</td></tr>
+<tr><td style="text-align: left">Output Constraints</td><td style="text-align: left">\[{p_{\text{land}}}\gt{}0\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({p_{\text{land}}}\) is the landing position (\({\text{m}}\))</li><li>\({v_{\text{launch}}}\) is the launch speed (\(\frac{\text{m}}{\text{s}}\))</li><li>\(θ\) is the launch angle (\({\text{rad}}\))</li><li>\(g\) is the magnitude of gravitational acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The constraint \(0\lt{}θ\lt{}\frac{π}{2}\) is from <a href="./SecAssumps.html#posXDirection">A:posXDirection</a> and <a href="./SecAssumps.html#yAxisGravity">A:yAxisGravity</a>, and is shown in <a href="./SecPhysSyst.html#Figure:Launch">Fig:Launch</a>.</li><li>\(g\) is defined in <a href="./SecAssumps.html#gravAccelValue">A:gravAccelValue</a>.</li><li>The constraint \({p_{\text{land}}}\gt{}0\) is from <a href="./SecAssumps.html#posXDirection">A:posXDirection</a>.</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:offsetIM">IM:offsetIM</a> and <a href="./SecFRs.html#calcValues">FR:Calculate-Values</a></td></tr>
+</tbody></table>
+</div>
+<h4 id="IM:calOfLandingDistDeriv"><a class="header" href="#IM:calOfLandingDistDeriv">Detailed derivation of landing position:</a></h4>
+<p>We know that \({{p_{\text{x}}}^{\text{i}}}=0\) (<a href="./SecAssumps.html#launchOrigin">A:launchOrigin</a>) and \({{a_{\text{x}}}^{\text{c}}}=0\) (<a href="./SecAssumps.html#accelXZero">A:accelXZero</a>). Substituting these values into the x-direction of <a href="./SecGDs.html#GD:posVec">GD:posVec</a> gives us:</p>
+<p>\[{p_{\text{x}}}={{v_{\text{x}}}^{\text{i}}} t\]</p>
+<p>To find the landing position, we want to find the \({p_{\text{x}}}\) value (\({p_{\text{land}}}\)) at flight duration (from <a href="./SecIMs.html#IM:calOfLandingTime">IM:calOfLandingTime</a>):</p>
+<p>\[{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{g}\]</p>
+<p>From <a href="./SecDDs.html#DD:speedIX">DD:speedIX</a> (with \({v^{\text{i}}}={v_{\text{launch}}}\)) we can replace \({{v_{\text{x}}}^{\text{i}}}\):</p>
+<p>\[{p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{g}\]</p>
+<p>Rearranging this gives us the required equation:</p>
+<p>\[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}\]</p>
+<div align="center">
+<h2 id="IM:offsetIM"><a class="header" href="#IM:offsetIM">Offset</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">IM:offsetIM</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Offset</td></tr>
+<tr><td style="text-align: left">Input</td><td style="text-align: left">\({p_{\text{land}}}\), \({p_{\text{target}}}\)</td></tr>
+<tr><td style="text-align: left">Output</td><td style="text-align: left">\({d_{\text{offset}}}\)</td></tr>
+<tr><td style="text-align: left">Input Constraints</td><td style="text-align: left">\[{p_{\text{land}}}\gt{}0\]\[{p_{\text{target}}}\gt{}0\]</td></tr>
+<tr><td style="text-align: left">Output Constraints</td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{d_{\text{offset}}}={p_{\text{land}}}-{p_{\text{target}}}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({d_{\text{offset}}}\) is the distance between the target position and the landing position (\({\text{m}}\))</li><li>\({p_{\text{land}}}\) is the landing position (\({\text{m}}\))</li><li>\({p_{\text{target}}}\) is the target position (\({\text{m}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\({p_{\text{land}}}\) is from <a href="./SecIMs.html#IM:calOfLandingDist">IM:calOfLandingDist</a>.</li><li>The constraints \({p_{\text{land}}}\gt{}0\) and \({p_{\text{target}}}\gt{}0\) are from <a href="./SecAssumps.html#posXDirection">A:posXDirection</a>.</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:messageIM">IM:messageIM</a>, <a href="./SecFRs.html#outputValues">FR:Output-Values</a>, and <a href="./SecFRs.html#calcValues">FR:Calculate-Values</a></td></tr>
+</tbody></table>
+</div><div align="center">
+<h2 id="IM:messageIM"><a class="header" href="#IM:messageIM">Output message</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">IM:messageIM</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Output message</td></tr>
+<tr><td style="text-align: left">Input</td><td style="text-align: left">\({d_{\text{offset}}}\), \({p_{\text{target}}}\)</td></tr>
+<tr><td style="text-align: left">Output</td><td style="text-align: left">\(s\)</td></tr>
+<tr><td style="text-align: left">Input Constraints</td><td style="text-align: left">\[{d_{\text{offset}}}\gt{}-{p_{\text{target}}}\]\[{p_{\text{target}}}\gt{}0\]</td></tr>
+<tr><td style="text-align: left">Output Constraints</td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[s=\begin{cases}\text{\(``\)The target was hit.‘’}, &amp; |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}|\lt{}ε\\\text{\(``\)The projectile fell short.‘’}, &amp; {d_{\text{offset}}}\lt{}0\\\text{\(``\)The projectile went long.‘’}, &amp; {d_{\text{offset}}}\gt{}0\end{cases}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(s\) is the output message as a string (Unitless)</li><li>\({d_{\text{offset}}}\) is the distance between the target position and the landing position (\({\text{m}}\))</li><li>\({p_{\text{target}}}\) is the target position (\({\text{m}}\))</li><li>\(ε\) is the hit tolerance (Unitless)</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\({d_{\text{offset}}}\) is from <a href="./SecIMs.html#IM:offsetIM">IM:offsetIM</a>.</li><li>The constraint \({p_{\text{target}}}\gt{}0\) is from <a href="./SecAssumps.html#posXDirection">A:posXDirection</a>.</li><li>The constraint \({d_{\text{offset}}}\gt{}-{p_{\text{target}}}\) is from the fact that \({p_{\text{land}}}\gt{}0\), from <a href="./SecAssumps.html#posXDirection">A:posXDirection</a>.</li><li>\(ε\) is defined in <a href="./SecAuxConstants.html#Sec:AuxConstants">Sec:Values of Auxiliary Constants</a>.</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecFRs.html#outputValues">FR:Output-Values</a> and <a href="./SecFRs.html#calcValues">FR:Calculate-Values</a></td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:DataConstraints"><a class="header" href="#Sec:DataConstraints">Data Constraints</a></h1>
+<p>The <a href="./SecDataConstraints.html#Table:InDataConstraints">Data Constraints Table</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.</p>
+<div id="Table:InDataConstraints"></div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Var</th><th style="text-align: left">Physical Constraints</th><th style="text-align: left">Typical Value</th><th style="text-align: left">Uncert.</th></tr></thead><tbody>
+<tr><td style="text-align: left">\({p_{\text{target}}}\)</td><td style="text-align: left">\({p_{\text{target}}}\gt{}0\)</td><td style="text-align: left">\(1000\) \({\text{m}}\)</td><td style="text-align: left">10\(\%\)</td></tr>
+<tr><td style="text-align: left">\({v_{\text{launch}}}\)</td><td style="text-align: left">\({v_{\text{launch}}}\gt{}0\)</td><td style="text-align: left">\(100\) \(\frac{\text{m}}{\text{s}}\)</td><td style="text-align: left">10\(\%\)</td></tr>
+<tr><td style="text-align: left">\(θ\)</td><td style="text-align: left">\(0\lt{}θ\lt{}\frac{π}{2}\)</td><td style="text-align: left">\(\frac{π}{4}\) \({\text{rad}}\)</td><td style="text-align: left">10\(\%\)</td></tr>
+</tbody></table>
+</div>
+<p><strong><p align="center">Input Data Constraints</p></strong></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:CorSolProps"><a class="header" href="#Sec:CorSolProps">Properties of a Correct Solution</a></h1>
+<p>The <a href="./SecCorSolProps.html#Table:OutDataConstraints">Data Constraints Table</a> shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.</p>
+<div id="Table:OutDataConstraints"></div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Var</th><th style="text-align: left">Physical Constraints</th></tr></thead><tbody>
+<tr><td style="text-align: left">\({p_{\text{land}}}\)</td><td style="text-align: left">\({p_{\text{land}}}\gt{}0\)</td></tr>
+<tr><td style="text-align: left">\({d_{\text{offset}}}\)</td><td style="text-align: left">\({d_{\text{offset}}}\gt{}-{p_{\text{target}}}\)</td></tr>
+<tr><td style="text-align: left">\({t_{\text{flight}}}\)</td><td style="text-align: left">\({t_{\text{flight}}}\gt{}0\)</td></tr>
+</tbody></table>
+</div>
+<p><strong><p align="center">Output Data Constraints</p></strong></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:Requirements"><a class="header" href="#Sec:Requirements">Requirements</a></h1>
+<p>This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:FRs"><a class="header" href="#Sec:FRs">Functional Requirements</a></h1>
+<p>This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.</p>
+<div id="inputValues"></div>
+<p>Input-Values: Input the values from <a href="./SecFRs.html#Table:ReqInputs">Tab:ReqInputs</a>.</p>
+<div id="verifyInVals"></div>
+<p>Verify-Input-Values: Check the entered input values to ensure that they do not exceed the <a href="./SecDataConstraints.html#Sec:DataConstraints">data constraints</a>. If any of the input values are out of bounds, an error message is displayed and the calculations stop.</p>
+<div id="calcValues"></div>
+<p>Calculate-Values: Calculate the following values: \({t_{\text{flight}}}\) (from <a href="./SecIMs.html#IM:calOfLandingTime">IM:calOfLandingTime</a>), \({p_{\text{land}}}\) (from <a href="./SecIMs.html#IM:calOfLandingDist">IM:calOfLandingDist</a>), \({d_{\text{offset}}}\) (from <a href="./SecIMs.html#IM:offsetIM">IM:offsetIM</a>), and \(s\) (from <a href="./SecIMs.html#IM:messageIM">IM:messageIM</a>).</p>
+<div id="outputValues"></div>
+<p>Output-Values: Output \({t_{\text{flight}}}\) (from <a href="./SecIMs.html#IM:calOfLandingTime">IM:calOfLandingTime</a>), \(s\) (from <a href="./SecIMs.html#IM:messageIM">IM:messageIM</a>), and \({d_{\text{offset}}}\) (from <a href="./SecIMs.html#IM:offsetIM">IM:offsetIM</a>).</p>
+<div id="Table:ReqInputs"></div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Symbol</th><th style="text-align: left">Description</th><th style="text-align: left">Units</th></tr></thead><tbody>
+<tr><td style="text-align: left">\({p_{\text{target}}}\)</td><td style="text-align: left">Target position</td><td style="text-align: left">\({\text{m}}\)</td></tr>
+<tr><td style="text-align: left">\({v_{\text{launch}}}\)</td><td style="text-align: left">Launch speed</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">\(θ\)</td><td style="text-align: left">Launch angle</td><td style="text-align: left">\({\text{rad}}\)</td></tr>
+</tbody></table>
+</div>
+<p><strong><p align="center">Required Inputs following <a href="./SecFRs.html#inputValues">FR:Input-Values</a></p></strong></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:NFRs"><a class="header" href="#Sec:NFRs">Non-Functional Requirements</a></h1>
+<p>This section provides the non-functional requirements, the qualities that the software is expected to exhibit.</p>
+<div id="correct"></div>
+<p>Correctness: The outputs of the code have the properties described in <a href="./SecCorSolProps.html#Sec:CorSolProps">Properties of a Correct Solution</a>.</p>
+<div id="verifiable"></div>
+<p>Verifiability: The code is tested with complete verification and validation plan.</p>
+<div id="understandable"></div>
+<p>Understandability: The code is modularized with complete module guide and module interface specification.</p>
+<div id="reusable"></div>
+<p>Reusability: The code is modularized.</p>
+<div id="maintainable"></div>
+<p>Maintainability: If a likely change is made to the finished software, it will take at most 10\(\%\) of the original development time, assuming the same development resources are available.</p>
+<div id="portable"></div>
+<p>Portability: The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:TraceMatrices"><a class="header" href="#Sec:TraceMatrices">Traceability Matrices and Graphs</a></h1>
+<p>The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an “X” should be modified as well. <a href="./SecTraceMatrices.html#Table:TraceMatAvsA">Tab:TraceMatAvsA</a> shows the dependencies of the assumptions on each other. <a href="./SecTraceMatrices.html#Table:TraceMatAvsAll">Tab:TraceMatAvsAll</a> shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href="./SecTraceMatrices.html#Table:TraceMatRefvsRef">Tab:TraceMatRefvsRef</a> shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. <a href="./SecTraceMatrices.html#Table:TraceMatAllvsR">Tab:TraceMatAllvsR</a> shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.</p>
+<div id="Table:TraceMatAvsA"></div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left"></th><th style="text-align: left"><a href="./SecAssumps.html#twoDMotion">A:twoDMotion</a></th><th style="text-align: left"><a href="./SecAssumps.html#cartSyst">A:cartSyst</a></th><th style="text-align: left"><a href="./SecAssumps.html#yAxisGravity">A:yAxisGravity</a></th><th style="text-align: left"><a href="./SecAssumps.html#launchOrigin">A:launchOrigin</a></th><th style="text-align: left"><a href="./SecAssumps.html#targetXAxis">A:targetXAxis</a></th><th style="text-align: left"><a href="./SecAssumps.html#posXDirection">A:posXDirection</a></th><th style="text-align: left"><a href="./SecAssumps.html#constAccel">A:constAccel</a></th><th style="text-align: left"><a href="./SecAssumps.html#accelXZero">A:accelXZero</a></th><th style="text-align: left"><a href="./SecAssumps.html#accelYGravity">A:accelYGravity</a></th><th style="text-align: left"><a href="./SecAssumps.html#neglectDrag">A:neglectDrag</a></th><th style="text-align: left"><a href="./SecAssumps.html#pointMass">A:pointMass</a></th><th style="text-align: left"><a href="./SecAssumps.html#freeFlight">A:freeFlight</a></th><th style="text-align: left"><a href="./SecAssumps.html#neglectCurv">A:neglectCurv</a></th><th style="text-align: left"><a href="./SecAssumps.html#timeStartZero">A:timeStartZero</a></th><th style="text-align: left"><a href="./SecAssumps.html#gravAccelValue">A:gravAccelValue</a></th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="./SecAssumps.html#twoDMotion">A:twoDMotion</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecAssumps.html#cartSyst">A:cartSyst</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecAssumps.html#yAxisGravity">A:yAxisGravity</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecAssumps.html#launchOrigin">A:launchOrigin</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecAssumps.html#targetXAxis">A:targetXAxis</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecAssumps.html#posXDirection">A:posXDirection</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecAssumps.html#constAccel">A:constAccel</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left">X</td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecAssumps.html#accelXZero">A:accelXZero</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecAssumps.html#accelYGravity">A:accelYGravity</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecAssumps.html#neglectDrag">A:neglectDrag</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecAssumps.html#pointMass">A:pointMass</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecAssumps.html#freeFlight">A:freeFlight</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecAssumps.html#neglectCurv">A:neglectCurv</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecAssumps.html#timeStartZero">A:timeStartZero</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecAssumps.html#gravAccelValue">A:gravAccelValue</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+</tbody></table>
+</div>
+<p><strong><p align="center">Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions</p></strong></p>
+<div id="Table:TraceMatAvsAll"></div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left"></th><th style="text-align: left"><a href="./SecAssumps.html#twoDMotion">A:twoDMotion</a></th><th style="text-align: left"><a href="./SecAssumps.html#cartSyst">A:cartSyst</a></th><th style="text-align: left"><a href="./SecAssumps.html#yAxisGravity">A:yAxisGravity</a></th><th style="text-align: left"><a href="./SecAssumps.html#launchOrigin">A:launchOrigin</a></th><th style="text-align: left"><a href="./SecAssumps.html#targetXAxis">A:targetXAxis</a></th><th style="text-align: left"><a href="./SecAssumps.html#posXDirection">A:posXDirection</a></th><th style="text-align: left"><a href="./SecAssumps.html#constAccel">A:constAccel</a></th><th style="text-align: left"><a href="./SecAssumps.html#accelXZero">A:accelXZero</a></th><th style="text-align: left"><a href="./SecAssumps.html#accelYGravity">A:accelYGravity</a></th><th style="text-align: left"><a href="./SecAssumps.html#neglectDrag">A:neglectDrag</a></th><th style="text-align: left"><a href="./SecAssumps.html#pointMass">A:pointMass</a></th><th style="text-align: left"><a href="./SecAssumps.html#freeFlight">A:freeFlight</a></th><th style="text-align: left"><a href="./SecAssumps.html#neglectCurv">A:neglectCurv</a></th><th style="text-align: left"><a href="./SecAssumps.html#timeStartZero">A:timeStartZero</a></th><th style="text-align: left"><a href="./SecAssumps.html#gravAccelValue">A:gravAccelValue</a></th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="./SecDDs.html#DD:vecMag">DD:vecMag</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecDDs.html#DD:speedIX">DD:speedIX</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecDDs.html#DD:speedIY">DD:speedIY</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecTMs.html#TM:acceleration">TM:acceleration</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecTMs.html#TM:velocity">TM:velocity</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecGDs.html#GD:rectVel">GD:rectVel</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecGDs.html#GD:rectPos">GD:rectPos</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecGDs.html#GD:velVec">GD:velVec</a></td><td style="text-align: left">X</td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecGDs.html#GD:posVec">GD:posVec</a></td><td style="text-align: left">X</td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecIMs.html#IM:calOfLandingTime">IM:calOfLandingTime</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left">X</td><td style="text-align: left">X</td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left">X</td></tr>
+<tr><td style="text-align: left"><a href="./SecIMs.html#IM:calOfLandingDist">IM:calOfLandingDist</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td></tr>
+<tr><td style="text-align: left"><a href="./SecIMs.html#IM:offsetIM">IM:offsetIM</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecIMs.html#IM:messageIM">IM:messageIM</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecFRs.html#inputValues">FR:Input-Values</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecFRs.html#verifyInVals">FR:Verify-Input-Values</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecFRs.html#calcValues">FR:Calculate-Values</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecFRs.html#outputValues">FR:Output-Values</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecNFRs.html#correct">NFR:Correctness</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecNFRs.html#verifiable">NFR:Verifiability</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecNFRs.html#understandable">NFR:Understandability</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecNFRs.html#reusable">NFR:Reusability</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecNFRs.html#maintainable">NFR:Maintainability</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecNFRs.html#portable">NFR:Portability</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+</tbody></table>
+</div>
+<p><strong><p align="center">Traceability Matrix Showing the Connections Between Assumptions and Other Items</p></strong></p>
+<div id="Table:TraceMatRefvsRef"></div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left"></th><th style="text-align: left"><a href="./SecDDs.html#DD:vecMag">DD:vecMag</a></th><th style="text-align: left"><a href="./SecDDs.html#DD:speedIX">DD:speedIX</a></th><th style="text-align: left"><a href="./SecDDs.html#DD:speedIY">DD:speedIY</a></th><th style="text-align: left"><a href="./SecTMs.html#TM:acceleration">TM:acceleration</a></th><th style="text-align: left"><a href="./SecTMs.html#TM:velocity">TM:velocity</a></th><th style="text-align: left"><a href="./SecGDs.html#GD:rectVel">GD:rectVel</a></th><th style="text-align: left"><a href="./SecGDs.html#GD:rectPos">GD:rectPos</a></th><th style="text-align: left"><a href="./SecGDs.html#GD:velVec">GD:velVec</a></th><th style="text-align: left"><a href="./SecGDs.html#GD:posVec">GD:posVec</a></th><th style="text-align: left"><a href="./SecIMs.html#IM:calOfLandingTime">IM:calOfLandingTime</a></th><th style="text-align: left"><a href="./SecIMs.html#IM:calOfLandingDist">IM:calOfLandingDist</a></th><th style="text-align: left"><a href="./SecIMs.html#IM:offsetIM">IM:offsetIM</a></th><th style="text-align: left"><a href="./SecIMs.html#IM:messageIM">IM:messageIM</a></th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="./SecDDs.html#DD:vecMag">DD:vecMag</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecDDs.html#DD:speedIX">DD:speedIX</a></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecDDs.html#DD:speedIY">DD:speedIY</a></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecTMs.html#TM:acceleration">TM:acceleration</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecTMs.html#TM:velocity">TM:velocity</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecGDs.html#GD:rectVel">GD:rectVel</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecGDs.html#GD:rectPos">GD:rectPos</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecGDs.html#GD:velVec">GD:velVec</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecGDs.html#GD:posVec">GD:posVec</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecIMs.html#IM:calOfLandingTime">IM:calOfLandingTime</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecIMs.html#IM:calOfLandingDist">IM:calOfLandingDist</a></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecIMs.html#IM:offsetIM">IM:offsetIM</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecIMs.html#IM:messageIM">IM:messageIM</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td></tr>
+</tbody></table>
+</div>
+<p><strong><p align="center">Traceability Matrix Showing the Connections Between Items and Other Sections</p></strong></p>
+<div id="Table:TraceMatAllvsR"></div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left"></th><th style="text-align: left"><a href="./SecDDs.html#DD:vecMag">DD:vecMag</a></th><th style="text-align: left"><a href="./SecDDs.html#DD:speedIX">DD:speedIX</a></th><th style="text-align: left"><a href="./SecDDs.html#DD:speedIY">DD:speedIY</a></th><th style="text-align: left"><a href="./SecTMs.html#TM:acceleration">TM:acceleration</a></th><th style="text-align: left"><a href="./SecTMs.html#TM:velocity">TM:velocity</a></th><th style="text-align: left"><a href="./SecGDs.html#GD:rectVel">GD:rectVel</a></th><th style="text-align: left"><a href="./SecGDs.html#GD:rectPos">GD:rectPos</a></th><th style="text-align: left"><a href="./SecGDs.html#GD:velVec">GD:velVec</a></th><th style="text-align: left"><a href="./SecGDs.html#GD:posVec">GD:posVec</a></th><th style="text-align: left"><a href="./SecIMs.html#IM:calOfLandingTime">IM:calOfLandingTime</a></th><th style="text-align: left"><a href="./SecIMs.html#IM:calOfLandingDist">IM:calOfLandingDist</a></th><th style="text-align: left"><a href="./SecIMs.html#IM:offsetIM">IM:offsetIM</a></th><th style="text-align: left"><a href="./SecIMs.html#IM:messageIM">IM:messageIM</a></th><th style="text-align: left"><a href="./SecFRs.html#inputValues">FR:Input-Values</a></th><th style="text-align: left"><a href="./SecFRs.html#verifyInVals">FR:Verify-Input-Values</a></th><th style="text-align: left"><a href="./SecFRs.html#calcValues">FR:Calculate-Values</a></th><th style="text-align: left"><a href="./SecFRs.html#outputValues">FR:Output-Values</a></th><th style="text-align: left"><a href="./SecNFRs.html#correct">NFR:Correctness</a></th><th style="text-align: left"><a href="./SecNFRs.html#verifiable">NFR:Verifiability</a></th><th style="text-align: left"><a href="./SecNFRs.html#understandable">NFR:Understandability</a></th><th style="text-align: left"><a href="./SecNFRs.html#reusable">NFR:Reusability</a></th><th style="text-align: left"><a href="./SecNFRs.html#maintainable">NFR:Maintainability</a></th><th style="text-align: left"><a href="./SecNFRs.html#portable">NFR:Portability</a></th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="./SecGoalStmt.html#targetHit">GS:targetHit</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecFRs.html#inputValues">FR:Input-Values</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecFRs.html#verifyInVals">FR:Verify-Input-Values</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecFRs.html#calcValues">FR:Calculate-Values</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left">X</td><td style="text-align: left">X</td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecFRs.html#outputValues">FR:Output-Values</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left">X</td><td style="text-align: left">X</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecNFRs.html#correct">NFR:Correctness</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecNFRs.html#verifiable">NFR:Verifiability</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecNFRs.html#understandable">NFR:Understandability</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecNFRs.html#reusable">NFR:Reusability</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecNFRs.html#maintainable">NFR:Maintainability</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a href="./SecNFRs.html#portable">NFR:Portability</a></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left"></td></tr>
+</tbody></table>
+</div>
+<p><strong><p align="center">Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items</p></strong></p>
+<p>The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href="./SecTraceMatrices.html#Figure:TraceGraphAvsA">Fig:TraceGraphAvsA</a> shows the dependencies of assumptions on each other. <a href="./SecTraceMatrices.html#Figure:TraceGraphAvsAll">Fig:TraceGraphAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href="./SecTraceMatrices.html#Figure:TraceGraphRefvsRef">Fig:TraceGraphRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. <a href="./SecTraceMatrices.html#Figure:TraceGraphAllvsR">Fig:TraceGraphAllvsR</a> shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. <a href="./SecTraceMatrices.html#Figure:TraceGraphAllvsAll">Fig:TraceGraphAllvsAll</a> shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.</p>
+<div id="Figure:TraceGraphAvsA"></div>
+<p><img src="/assets/avsa.svg" alt="TraceGraphAvsA" /></p>
+<p><strong><p align="center">TraceGraphAvsA</p></strong></p>
+<div id="Figure:TraceGraphAvsAll"></div>
+<p><img src="/assets/avsall.svg" alt="TraceGraphAvsAll" /></p>
+<p><strong><p align="center">TraceGraphAvsAll</p></strong></p>
+<div id="Figure:TraceGraphRefvsRef"></div>
+<p><img src="/assets/refvsref.svg" alt="TraceGraphRefvsRef" /></p>
+<p><strong><p align="center">TraceGraphRefvsRef</p></strong></p>
+<div id="Figure:TraceGraphAllvsR"></div>
+<p><img src="/assets/allvsr.svg" alt="TraceGraphAllvsR" /></p>
+<p><strong><p align="center">TraceGraphAllvsR</p></strong></p>
+<div id="Figure:TraceGraphAllvsAll"></div>
+<p><img src="/assets/allvsall.svg" alt="TraceGraphAllvsAll" /></p>
+<p><strong><p align="center">TraceGraphAllvsAll</p></strong></p>
+<p>For convenience, the following graphs can be found at the links below:</p>
+<ul>
+<li><a href="../../../../traceygraphs/projectile/avsa.svg">TraceGraphAvsA</a></li>
+<li><a href="../../../../traceygraphs/projectile/avsall.svg">TraceGraphAvsAll</a></li>
+<li><a href="../../../../traceygraphs/projectile/refvsref.svg">TraceGraphRefvsRef</a></li>
+<li><a href="../../../../traceygraphs/projectile/allvsr.svg">TraceGraphAllvsR</a></li>
+<li><a href="../../../../traceygraphs/projectile/allvsall.svg">TraceGraphAllvsAll</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:AuxConstants"><a class="header" href="#Sec:AuxConstants">Values of Auxiliary Constants</a></h1>
+<p>This section contains the standard values that are used for calculations in Projectile.</p>
+<div id="Table:TAuxConsts"></div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Symbol</th><th style="text-align: left">Description</th><th style="text-align: left">Value</th><th style="text-align: left">Unit</th></tr></thead><tbody>
+<tr><td style="text-align: left">\(g\)</td><td style="text-align: left">magnitude of gravitational acceleration</td><td style="text-align: left">\(9.8\)</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}^{2}}\)</td></tr>
+<tr><td style="text-align: left">\(ε\)</td><td style="text-align: left">hit tolerance</td><td style="text-align: left">\(2.0\%\)</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">\(π\)</td><td style="text-align: left">ratio of circumference to diameter for any circle</td><td style="text-align: left">\(3.14159265\)</td><td style="text-align: left">–</td></tr>
+</tbody></table>
+</div>
+<p><strong><p align="center">Auxiliary Constants</p></strong></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:References"><a class="header" href="#Sec:References">References</a></h1>
+<div id="hibbeler2004"></div>
+<p>[1]: Hibbeler, R. C. <em>Engineering Mechanics: Dynamics</em>. Pearson Prentice Hall, 2004. Print.</p>
+<div id="koothoor2013"></div>
+<p>[2]: Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.</p>
+<div id="parnasClements1986"></div>
+<p>[3]: Parnas, David L. and Clements, P. C. “A rational design process: How and why to fake it.” <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251–257. Print.</p>
+<div id="smithKoothoor2016"></div>
+<p>[4]: Smith, W. Spencer and Koothoor, Nirmitha. “A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis.” * Nuclear Engineering and Technology*, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404–418.</p>
+<div id="smithLai2005"></div>
+<p>[5]: Smith, W. Spencer and Lai, Lei. “A new requirements template for scientific computing.” <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP’05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107–121. In conjunction with 13th IEEE International Requirements Engineering Conference,</p>
+<div id="smithEtAl2007"></div>
+<p>[6]: Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. “Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability.” <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83–107.</p>
+<div id="accelerationWiki"></div>
+<p>[7]: Wikipedia Contributors. <em>Acceleration</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Acceleration">https://en.wikipedia.org/wiki/Acceleration</a>.</p>
+<div id="cartesianWiki"></div>
+<p>[8]: Wikipedia Contributors. <em>Cartesian coordinate system</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">https://en.wikipedia.org/wiki/Cartesian_coordinate_system</a>.</p>
+<div id="velocityWiki"></div>
+<p>[9]: Wikipedia Contributors. <em>Velocity</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Velocity">https://en.wikipedia.org/wiki/Velocity</a>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            MathJax.Hub.Register.StartupHook('End', function() {
+                window.setTimeout(window.print, 100);
+            });
+        });
+        </script>
+
+    </div>
+    </body>
+</html>

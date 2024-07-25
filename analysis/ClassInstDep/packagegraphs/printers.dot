@@ -58,5 +58,6 @@ PrintLaTeX -> Monad;
 _PrintLaTeX -> Semigroup;
 _PrintLaTeX -> Monoid;
 Latex -> RenderSpecial;
+Format -> Show;
 DocType -> Show;
 }

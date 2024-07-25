@@ -3,7 +3,7 @@
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">funcReqDom</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">nonFuncReqDom</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">datumConstraint</span></span><span class="hs-special">)</span><span>
 </span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DocLang.SRS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">datCon</span></span><span class="hs-special">)</span><span>
-</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DocLang</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">mkMaintainableNFR</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DocLang</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">mkMaintainableNFR</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mkPortableNFR</span></span><span class="hs-special">)</span><span>
 </span><span id="line-7"></span><span>
 </span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.Concepts.html"><span class="hs-identifier">Drasil.PDController.Concepts</span></a></span><span>
 </span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.IModel.html"><span class="hs-identifier">Drasil.PDController.IModel</span></a></span><span>
@@ -111,62 +111,56 @@ r -&gt; Sentence -&gt; Sentence
 </span><span id="line-45"></span><span>
 </span><span id="line-46"></span><span class="annot"><a href="Drasil.PDController.Requirements.html#portability"><span class="hs-identifier hs-type">portability</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
 </span><span id="line-47"></span><span id="portability"><span class="annot"><span class="annottext">portability :: ConceptInstance
-</span><a href="Drasil.PDController.Requirements.html#portability"><span class="hs-identifier hs-var hs-var">portability</span></a></span></span><span>
-</span><span id="line-48"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
-Concept c =&gt;
-String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
-</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;portability&quot;</span></span><span>
-</span><span id="line-49"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;The code shall be portable to multiple Operating Systems&quot;</span></span><span> </span><span class="hs-operator">!.</span><span class="hs-special">)</span><span>
-</span><span id="line-50"></span><span>      </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Portable&quot;</span></span><span>
-</span><span id="line-51"></span><span>      </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">nonFuncReqDom</span></span><span>
-</span><span id="line-52"></span><span>
-</span><span id="line-53"></span><span class="annot"><a href="Drasil.PDController.Requirements.html#security"><span class="hs-identifier hs-type">security</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-54"></span><span id="security"><span class="annot"><span class="annottext">security :: ConceptInstance
+</span><a href="Drasil.PDController.Requirements.html#portability"><span class="hs-identifier hs-var hs-var">portability</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; String -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">mkPortableNFR</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;portable&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Windows&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Mac OSX&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Linux&quot;</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Portability&quot;</span></span><span>
+</span><span id="line-48"></span><span>
+</span><span id="line-49"></span><span class="annot"><a href="Drasil.PDController.Requirements.html#security"><span class="hs-identifier hs-type">security</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-50"></span><span id="security"><span class="annot"><span class="annottext">security :: ConceptInstance
 </span><a href="Drasil.PDController.Requirements.html#security"><span class="hs-identifier hs-var hs-var">security</span></a></span></span><span>
-</span><span id="line-55"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
+</span><span id="line-51"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
 Concept c =&gt;
 String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;security&quot;</span></span><span>
-</span><span id="line-56"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-52"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span>
-</span><span id="line-57"></span><span>         </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-53"></span><span>         </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The code shall be immune to common security problems such as memory&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-58"></span><span>            </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-54"></span><span>            </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;leaks, divide by zero errors, and the square root of negative numbers&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-59"></span><span>      </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Secure&quot;</span></span><span>
-</span><span id="line-60"></span><span>      </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span id="line-55"></span><span>      </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Security&quot;</span></span><span>
+</span><span id="line-56"></span><span>      </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">nonFuncReqDom</span></span><span>
-</span><span id="line-61"></span><span>
-</span><span id="line-62"></span><span class="annot"><a href="Drasil.PDController.Requirements.html#maintainability"><span class="hs-identifier hs-type">maintainability</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-63"></span><span id="maintainability"><span class="annot"><span class="annottext">maintainability :: ConceptInstance
+</span><span id="line-57"></span><span>
+</span><span id="line-58"></span><span class="annot"><a href="Drasil.PDController.Requirements.html#maintainability"><span class="hs-identifier hs-type">maintainability</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-59"></span><span id="maintainability"><span class="annot"><span class="annottext">maintainability :: ConceptInstance
 </span><a href="Drasil.PDController.Requirements.html#maintainability"><span class="hs-identifier hs-var hs-var">maintainability</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Integer -&gt; String -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">mkMaintainableNFR</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;maintainability&quot;</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">10</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Maintainable&quot;</span></span><span>
-</span><span id="line-64"></span><span>
-</span><span id="line-65"></span><span class="annot"><a href="Drasil.PDController.Requirements.html#verifiability"><span class="hs-identifier hs-type">verifiability</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-66"></span><span id="verifiability"><span class="annot"><span class="annottext">verifiability :: ConceptInstance
+</span><span class="hs-string">&quot;Maintainability&quot;</span></span><span>
+</span><span id="line-60"></span><span>
+</span><span id="line-61"></span><span class="annot"><a href="Drasil.PDController.Requirements.html#verifiability"><span class="hs-identifier hs-type">verifiability</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-62"></span><span id="verifiability"><span class="annot"><span class="annottext">verifiability :: ConceptInstance
 </span><a href="Drasil.PDController.Requirements.html#verifiability"><span class="hs-identifier hs-var hs-var">verifiability</span></a></span></span><span>
-</span><span id="line-67"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
+</span><span id="line-63"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
 Concept c =&gt;
 String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;verifiability&quot;</span></span><span>
-</span><span id="line-68"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-64"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The code shall be verifiable against a Verification and Validation plan&quot;</span></span><span> </span><span class="hs-operator">!.</span><span class="hs-special">)</span><span>
-</span><span id="line-69"></span><span>      </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Verifiable&quot;</span></span><span>
-</span><span id="line-70"></span><span>      </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span id="line-65"></span><span>      </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Verifiability&quot;</span></span><span>
+</span><span id="line-66"></span><span>      </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">nonFuncReqDom</span></span><span>
-</span><span id="line-71"></span></pre></body></html>
+</span><span id="line-67"></span></pre></body></html>

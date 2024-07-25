@@ -10,6 +10,13 @@
 @version 0.1.1.0
 
 
+-- | Functions for constructing CSV files as a <a>Doc</a>.
+module Utils.Drasil.CSV
+
+-- | Creates a CSV file as a <a>Doc</a> from a <a>String</a> matrix.
+makeCSV :: [[String]] -> Doc
+
+
 -- | Common <a>Doc</a>-related functions for writting printers with a
 --   little more clarity.
 module Utils.Drasil.Document
@@ -159,3 +166,6 @@ invert :: Ord v => Map k [v] -> Map v [k]
 --   TODO: This can probably become a bit more comprehensive, anything
 --   other than a-z, A-Z, or 0-9 could probably be replaced.
 toPlainName :: String -> String
+
+-- | Creates a CSV file as a <a>Doc</a> from a <a>String</a> matrix.
+makeCSV :: [[String]] -> Doc

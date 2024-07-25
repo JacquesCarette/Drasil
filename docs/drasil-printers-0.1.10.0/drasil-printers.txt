@@ -175,8 +175,12 @@ genJupyter :: PrintingInformation -> DocType -> Document -> Doc
 -- | Generate a mdBook SRS
 genMDBook :: PrintingInformation -> Document -> [(Filename, Doc)]
 
--- | Generates the .toml config file for mdBook.
+-- | Prints the .toml config file for mdBook.
 makeBook :: Document -> PrintingInformation -> Doc
+
+-- | Prints the .csv file mapping the original filepaths of assets to the
+--   location mdBook uses.
+makeRequirements :: PrintingInformation -> Doc
 
 -- | Gathers all printing functions and creates the debugging tables from
 --   them.

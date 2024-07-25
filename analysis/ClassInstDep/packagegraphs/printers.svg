@@ -36,266 +36,266 @@
 <!-- Show -->
 <g id="node37" class="node">
 <title>Show</title>
-<ellipse fill="none" stroke="pink" cx="562.29" cy="-18" rx="36.29" ry="18"/>
-<text text-anchor="middle" x="562.29" y="-14.3" font-family="Times,serif" font-size="14.00">Show</text>
+<ellipse fill="none" stroke="pink" cx="622.29" cy="-18" rx="36.29" ry="18"/>
+<text text-anchor="middle" x="622.29" y="-14.3" font-family="Times,serif" font-size="14.00">Show</text>
 </g>
 <!-- Variation&#45;&gt;Show -->
 <g id="edge1" class="edge">
 <title>Variation&#45;&gt;Show</title>
-<path fill="none" stroke="black" d="M515.75,-72.41C523.46,-63.57 533.07,-52.53 541.56,-42.79"/>
-<polygon fill="black" stroke="black" points="544.43,-44.83 548.36,-34.99 539.15,-40.23 544.43,-44.83"/>
+<path fill="none" stroke="black" d="M526.96,-74.15C545.6,-63.37 570.95,-48.7 590.82,-37.21"/>
+<polygon fill="black" stroke="black" points="592.62,-40.21 599.53,-32.17 589.12,-34.15 592.62,-40.21"/>
 </g>
 <!-- PrintHTML -->
 <g id="node5" class="node">
 <title>PrintHTML</title>
-<ellipse fill="none" stroke="#00868b" cx="754.29" cy="-90" rx="63.09" ry="18"/>
-<text text-anchor="middle" x="754.29" y="-86.3" font-family="Times,serif" font-size="14.00">PrintHTML</text>
+<ellipse fill="none" stroke="#00868b" cx="860.29" cy="-90" rx="63.09" ry="18"/>
+<text text-anchor="middle" x="860.29" y="-86.3" font-family="Times,serif" font-size="14.00">PrintHTML</text>
 </g>
 <!-- RenderSpecial -->
 <g id="node38" class="node">
 <title>RenderSpecial</title>
-<ellipse fill="none" stroke="pink" cx="812.29" cy="-18" rx="77.99" ry="18"/>
-<text text-anchor="middle" x="812.29" y="-14.3" font-family="Times,serif" font-size="14.00">RenderSpecial</text>
+<ellipse fill="none" stroke="pink" cx="918.29" cy="-18" rx="77.99" ry="18"/>
+<text text-anchor="middle" x="918.29" y="-14.3" font-family="Times,serif" font-size="14.00">RenderSpecial</text>
 </g>
 <!-- PrintHTML&#45;&gt;RenderSpecial -->
 <g id="edge2" class="edge">
 <title>PrintHTML&#45;&gt;RenderSpecial</title>
-<path fill="none" stroke="black" d="M768.04,-72.41C775.09,-63.91 783.81,-53.37 791.65,-43.91"/>
-<polygon fill="black" stroke="black" points="794.56,-45.89 798.24,-35.96 789.17,-41.42 794.56,-45.89"/>
+<path fill="none" stroke="black" d="M874.04,-72.41C881.09,-63.91 889.81,-53.37 897.65,-43.91"/>
+<polygon fill="black" stroke="black" points="900.56,-45.89 904.24,-35.96 895.17,-41.42 900.56,-45.89"/>
 </g>
 <!-- OpenClose -->
 <g id="node6" class="node">
 <title>OpenClose</title>
-<ellipse fill="none" stroke="#00868b" cx="986.29" cy="-90" rx="60.39" ry="18"/>
-<text text-anchor="middle" x="986.29" y="-86.3" font-family="Times,serif" font-size="14.00">OpenClose</text>
+<ellipse fill="none" stroke="#00868b" cx="1092.29" cy="-90" rx="60.39" ry="18"/>
+<text text-anchor="middle" x="1092.29" y="-86.3" font-family="Times,serif" font-size="14.00">OpenClose</text>
 </g>
 <!-- SingleLine -->
 <g id="node7" class="node">
 <title>SingleLine</title>
-<ellipse fill="none" stroke="#00868b" cx="1124.29" cy="-90" rx="59.59" ry="18"/>
-<text text-anchor="middle" x="1124.29" y="-86.3" font-family="Times,serif" font-size="14.00">SingleLine</text>
+<ellipse fill="none" stroke="#00868b" cx="1230.29" cy="-90" rx="59.59" ry="18"/>
+<text text-anchor="middle" x="1230.29" y="-86.3" font-family="Times,serif" font-size="14.00">SingleLine</text>
 </g>
 <!-- LinkType -->
 <g id="node8" class="node">
 <title>LinkType</title>
-<ellipse fill="none" stroke="#00868b" cx="1255.29" cy="-90" rx="53.09" ry="18"/>
-<text text-anchor="middle" x="1255.29" y="-86.3" font-family="Times,serif" font-size="14.00">LinkType</text>
+<ellipse fill="none" stroke="#00868b" cx="1361.29" cy="-90" rx="53.09" ry="18"/>
+<text text-anchor="middle" x="1361.29" y="-86.3" font-family="Times,serif" font-size="14.00">LinkType</text>
 </g>
 <!-- Ops -->
 <g id="node9" class="node">
 <title>Ops</title>
-<ellipse fill="none" stroke="#00868b" cx="1355.29" cy="-90" rx="28.7" ry="18"/>
-<text text-anchor="middle" x="1355.29" y="-86.3" font-family="Times,serif" font-size="14.00">Ops</text>
+<ellipse fill="none" stroke="#00868b" cx="1461.29" cy="-90" rx="28.7" ry="18"/>
+<text text-anchor="middle" x="1461.29" y="-86.3" font-family="Times,serif" font-size="14.00">Ops</text>
 </g>
 <!-- Fence -->
 <g id="node10" class="node">
 <title>Fence</title>
-<ellipse fill="none" stroke="#00868b" cx="1440.29" cy="-90" rx="38.19" ry="18"/>
-<text text-anchor="middle" x="1440.29" y="-86.3" font-family="Times,serif" font-size="14.00">Fence</text>
+<ellipse fill="none" stroke="#00868b" cx="1546.29" cy="-90" rx="38.19" ry="18"/>
+<text text-anchor="middle" x="1546.29" y="-86.3" font-family="Times,serif" font-size="14.00">Fence</text>
 </g>
 <!-- OverSymb -->
 <g id="node11" class="node">
 <title>OverSymb</title>
-<ellipse fill="none" stroke="#00868b" cx="1556.29" cy="-90" rx="59.59" ry="18"/>
-<text text-anchor="middle" x="1556.29" y="-86.3" font-family="Times,serif" font-size="14.00">OverSymb</text>
+<ellipse fill="none" stroke="#00868b" cx="1662.29" cy="-90" rx="59.59" ry="18"/>
+<text text-anchor="middle" x="1662.29" y="-86.3" font-family="Times,serif" font-size="14.00">OverSymb</text>
 </g>
 <!-- Fonts -->
 <g id="node12" class="node">
 <title>Fonts</title>
-<ellipse fill="none" stroke="#00868b" cx="1670.29" cy="-90" rx="36.29" ry="18"/>
-<text text-anchor="middle" x="1670.29" y="-86.3" font-family="Times,serif" font-size="14.00">Fonts</text>
+<ellipse fill="none" stroke="#00868b" cx="1776.29" cy="-90" rx="36.29" ry="18"/>
+<text text-anchor="middle" x="1776.29" y="-86.3" font-family="Times,serif" font-size="14.00">Fonts</text>
 </g>
 <!-- Spacing -->
 <g id="node13" class="node">
 <title>Spacing</title>
-<ellipse fill="none" stroke="#00868b" cx="1772.29" cy="-90" rx="48.19" ry="18"/>
-<text text-anchor="middle" x="1772.29" y="-86.3" font-family="Times,serif" font-size="14.00">Spacing</text>
+<ellipse fill="none" stroke="#00868b" cx="1878.29" cy="-90" rx="48.19" ry="18"/>
+<text text-anchor="middle" x="1878.29" y="-86.3" font-family="Times,serif" font-size="14.00">Spacing</text>
 </g>
 <!-- Expr -->
 <g id="node14" class="node">
 <title>Expr</title>
-<ellipse fill="none" stroke="#00868b" cx="1871.29" cy="-90" rx="33.29" ry="18"/>
-<text text-anchor="middle" x="1871.29" y="-86.3" font-family="Times,serif" font-size="14.00">Expr</text>
+<ellipse fill="none" stroke="#00868b" cx="1977.29" cy="-90" rx="33.29" ry="18"/>
+<text text-anchor="middle" x="1977.29" y="-86.3" font-family="Times,serif" font-size="14.00">Expr</text>
 </g>
 <!-- Spec -->
 <g id="node15" class="node">
 <title>Spec</title>
-<ellipse fill="none" stroke="#00868b" cx="1955.29" cy="-90" rx="33.29" ry="18"/>
-<text text-anchor="middle" x="1955.29" y="-86.3" font-family="Times,serif" font-size="14.00">Spec</text>
+<ellipse fill="none" stroke="#00868b" cx="2061.29" cy="-90" rx="33.29" ry="18"/>
+<text text-anchor="middle" x="2061.29" y="-86.3" font-family="Times,serif" font-size="14.00">Spec</text>
 </g>
 <!-- ListType -->
 <g id="node16" class="node">
 <title>ListType</title>
-<ellipse fill="none" stroke="#00868b" cx="2057.29" cy="-90" rx="50.89" ry="18"/>
-<text text-anchor="middle" x="2057.29" y="-86.3" font-family="Times,serif" font-size="14.00">ListType</text>
+<ellipse fill="none" stroke="#00868b" cx="2163.29" cy="-90" rx="50.89" ry="18"/>
+<text text-anchor="middle" x="2163.29" y="-86.3" font-family="Times,serif" font-size="14.00">ListType</text>
 </g>
 <!-- ItemType -->
 <g id="node17" class="node">
 <title>ItemType</title>
-<ellipse fill="none" stroke="#00868b" cx="2180.29" cy="-90" rx="54.69" ry="18"/>
-<text text-anchor="middle" x="2180.29" y="-86.3" font-family="Times,serif" font-size="14.00">ItemType</text>
+<ellipse fill="none" stroke="#00868b" cx="2286.29" cy="-90" rx="54.69" ry="18"/>
+<text text-anchor="middle" x="2286.29" y="-86.3" font-family="Times,serif" font-size="14.00">ItemType</text>
 </g>
 <!-- Citation -->
 <g id="node18" class="node">
 <title>Citation</title>
-<ellipse fill="none" stroke="#00868b" cx="2301.29" cy="-90" rx="48.19" ry="18"/>
-<text text-anchor="middle" x="2301.29" y="-86.3" font-family="Times,serif" font-size="14.00">Citation</text>
+<ellipse fill="none" stroke="#00868b" cx="2407.29" cy="-90" rx="48.19" ry="18"/>
+<text text-anchor="middle" x="2407.29" y="-86.3" font-family="Times,serif" font-size="14.00">Citation</text>
 </g>
 <!-- CiteField -->
 <g id="node19" class="node">
 <title>CiteField</title>
-<ellipse fill="none" stroke="#00868b" cx="2420.29" cy="-90" rx="53.09" ry="18"/>
-<text text-anchor="middle" x="2420.29" y="-86.3" font-family="Times,serif" font-size="14.00">CiteField</text>
+<ellipse fill="none" stroke="#00868b" cx="2526.29" cy="-90" rx="53.09" ry="18"/>
+<text text-anchor="middle" x="2526.29" y="-86.3" font-family="Times,serif" font-size="14.00">CiteField</text>
 </g>
 <!-- HP -->
 <g id="node20" class="node">
 <title>HP</title>
-<ellipse fill="none" stroke="#00868b" cx="2518.29" cy="-90" rx="27" ry="18"/>
-<text text-anchor="middle" x="2518.29" y="-86.3" font-family="Times,serif" font-size="14.00">HP</text>
+<ellipse fill="none" stroke="#00868b" cx="2624.29" cy="-90" rx="27" ry="18"/>
+<text text-anchor="middle" x="2624.29" y="-86.3" font-family="Times,serif" font-size="14.00">HP</text>
 </g>
 <!-- Document -->
 <g id="node21" class="node">
 <title>Document</title>
-<ellipse fill="none" stroke="#00868b" cx="2621.29" cy="-90" rx="57.69" ry="18"/>
-<text text-anchor="middle" x="2621.29" y="-86.3" font-family="Times,serif" font-size="14.00">Document</text>
+<ellipse fill="none" stroke="#00868b" cx="2727.29" cy="-90" rx="57.69" ry="18"/>
+<text text-anchor="middle" x="2727.29" y="-86.3" font-family="Times,serif" font-size="14.00">Document</text>
 </g>
 <!-- Project -->
 <g id="node22" class="node">
 <title>Project</title>
-<ellipse fill="none" stroke="#00868b" cx="2741.29" cy="-90" rx="44.39" ry="18"/>
-<text text-anchor="middle" x="2741.29" y="-86.3" font-family="Times,serif" font-size="14.00">Project</text>
+<ellipse fill="none" stroke="#00868b" cx="2847.29" cy="-90" rx="44.39" ry="18"/>
+<text text-anchor="middle" x="2847.29" y="-86.3" font-family="Times,serif" font-size="14.00">Project</text>
 </g>
 <!-- File -->
 <g id="node23" class="node">
 <title>File</title>
-<ellipse fill="none" stroke="#00868b" cx="2832.29" cy="-90" rx="28.7" ry="18"/>
-<text text-anchor="middle" x="2832.29" y="-86.3" font-family="Times,serif" font-size="14.00">File</text>
+<ellipse fill="none" stroke="#00868b" cx="2938.29" cy="-90" rx="28.7" ry="18"/>
+<text text-anchor="middle" x="2938.29" y="-86.3" font-family="Times,serif" font-size="14.00">File</text>
 </g>
 <!-- LayoutObj -->
 <g id="node24" class="node">
 <title>LayoutObj</title>
-<ellipse fill="none" stroke="#00868b" cx="2937.29" cy="-90" rx="58.49" ry="18"/>
-<text text-anchor="middle" x="2937.29" y="-86.3" font-family="Times,serif" font-size="14.00">LayoutObj</text>
+<ellipse fill="none" stroke="#00868b" cx="3043.29" cy="-90" rx="58.49" ry="18"/>
+<text text-anchor="middle" x="3043.29" y="-86.3" font-family="Times,serif" font-size="14.00">LayoutObj</text>
 </g>
 <!-- Notation -->
 <g id="node25" class="node">
 <title>Notation</title>
-<ellipse fill="none" stroke="#00868b" cx="3065.29" cy="-90" rx="51.19" ry="18"/>
-<text text-anchor="middle" x="3065.29" y="-86.3" font-family="Times,serif" font-size="14.00">Notation</text>
+<ellipse fill="none" stroke="#00868b" cx="3171.29" cy="-90" rx="51.19" ry="18"/>
+<text text-anchor="middle" x="3171.29" y="-86.3" font-family="Times,serif" font-size="14.00">Notation</text>
 </g>
 <!-- PrintingInformation -->
 <g id="node26" class="node">
 <title>PrintingInformation</title>
-<ellipse fill="none" stroke="#00868b" cx="3238.29" cy="-90" rx="103.18" ry="18"/>
-<text text-anchor="middle" x="3238.29" y="-86.3" font-family="Times,serif" font-size="14.00">PrintingInformation</text>
+<ellipse fill="none" stroke="#00868b" cx="3344.29" cy="-90" rx="103.18" ry="18"/>
+<text text-anchor="middle" x="3344.29" y="-86.3" font-family="Times,serif" font-size="14.00">PrintingInformation</text>
 </g>
 <!-- HasPrintingOptions -->
 <g id="node39" class="node">
 <title>HasPrintingOptions</title>
-<ellipse fill="none" stroke="magenta" cx="3355.29" cy="-18" rx="102.88" ry="18"/>
-<text text-anchor="middle" x="3355.29" y="-14.3" font-family="Times,serif" font-size="14.00">HasPrintingOptions</text>
+<ellipse fill="none" stroke="magenta" cx="3461.29" cy="-18" rx="102.88" ry="18"/>
+<text text-anchor="middle" x="3461.29" y="-14.3" font-family="Times,serif" font-size="14.00">HasPrintingOptions</text>
 </g>
 <!-- PrintingInformation&#45;&gt;HasPrintingOptions -->
 <g id="edge4" class="edge">
 <title>PrintingInformation&#45;&gt;HasPrintingOptions</title>
-<path fill="none" stroke="black" d="M3265.73,-72.59C3281.6,-63.09 3301.77,-51.02 3318.96,-40.74"/>
-<polygon fill="black" stroke="black" points="3320.84,-43.69 3327.63,-35.55 3317.25,-37.68 3320.84,-43.69"/>
+<path fill="none" stroke="black" d="M3371.73,-72.59C3387.6,-63.09 3407.77,-51.02 3424.96,-40.74"/>
+<polygon fill="black" stroke="black" points="3426.84,-43.69 3433.63,-35.55 3423.25,-37.68 3426.84,-43.69"/>
 </g>
 <!-- PrintingConfiguration -->
 <g id="node27" class="node">
 <title>PrintingConfiguration</title>
-<ellipse fill="none" stroke="#00868b" cx="3472.29" cy="-90" rx="112.38" ry="18"/>
-<text text-anchor="middle" x="3472.29" y="-86.3" font-family="Times,serif" font-size="14.00">PrintingConfiguration</text>
+<ellipse fill="none" stroke="#00868b" cx="3578.29" cy="-90" rx="112.38" ry="18"/>
+<text text-anchor="middle" x="3578.29" y="-86.3" font-family="Times,serif" font-size="14.00">PrintingConfiguration</text>
 </g>
 <!-- PrintingConfiguration&#45;&gt;HasPrintingOptions -->
 <g id="edge3" class="edge">
 <title>PrintingConfiguration&#45;&gt;HasPrintingOptions</title>
-<path fill="none" stroke="black" d="M3444.57,-72.41C3428.68,-62.91 3408.57,-50.88 3391.46,-40.64"/>
-<polygon fill="black" stroke="black" points="3393.2,-37.6 3382.82,-35.47 3389.61,-43.61 3393.2,-37.6"/>
+<path fill="none" stroke="black" d="M3550.57,-72.41C3534.68,-62.91 3514.57,-50.88 3497.46,-40.64"/>
+<polygon fill="black" stroke="black" points="3499.2,-37.6 3488.82,-35.47 3495.61,-43.61 3499.2,-37.6"/>
 </g>
 <!-- MathContext -->
 <g id="node28" class="node">
 <title>MathContext</title>
-<ellipse fill="none" stroke="#00868b" cx="3674.29" cy="-90" rx="71.49" ry="18"/>
-<text text-anchor="middle" x="3674.29" y="-86.3" font-family="Times,serif" font-size="14.00">MathContext</text>
+<ellipse fill="none" stroke="#00868b" cx="3780.29" cy="-90" rx="71.49" ry="18"/>
+<text text-anchor="middle" x="3780.29" y="-86.3" font-family="Times,serif" font-size="14.00">MathContext</text>
 </g>
 <!-- PrintLaTeX -->
 <g id="node29" class="node">
 <title>PrintLaTeX</title>
-<ellipse fill="none" stroke="#00868b" cx="3826.29" cy="-90" rx="62.29" ry="18"/>
-<text text-anchor="middle" x="3826.29" y="-86.3" font-family="Times,serif" font-size="14.00">PrintLaTeX</text>
+<ellipse fill="none" stroke="#00868b" cx="3932.29" cy="-90" rx="62.29" ry="18"/>
+<text text-anchor="middle" x="3932.29" y="-86.3" font-family="Times,serif" font-size="14.00">PrintLaTeX</text>
 </g>
 <!-- Functor -->
 <g id="node40" class="node">
 <title>Functor</title>
-<ellipse fill="none" stroke="pink" cx="3698.29" cy="-18" rx="47.39" ry="18"/>
-<text text-anchor="middle" x="3698.29" y="-14.3" font-family="Times,serif" font-size="14.00">Functor</text>
+<ellipse fill="none" stroke="pink" cx="3804.29" cy="-18" rx="47.39" ry="18"/>
+<text text-anchor="middle" x="3804.29" y="-14.3" font-family="Times,serif" font-size="14.00">Functor</text>
 </g>
 <!-- PrintLaTeX&#45;&gt;Functor -->
 <g id="edge5" class="edge">
 <title>PrintLaTeX&#45;&gt;Functor</title>
-<path fill="none" stroke="black" d="M3798.52,-73.81C3779.39,-63.35 3753.83,-49.37 3733.3,-38.15"/>
-<polygon fill="black" stroke="black" points="3734.72,-34.93 3724.27,-33.21 3731.36,-41.07 3734.72,-34.93"/>
+<path fill="none" stroke="black" d="M3904.52,-73.81C3885.39,-63.35 3859.83,-49.37 3839.3,-38.15"/>
+<polygon fill="black" stroke="black" points="3840.72,-34.93 3830.27,-33.21 3837.36,-41.07 3840.72,-34.93"/>
 </g>
 <!-- Applicative -->
 <g id="node41" class="node">
 <title>Applicative</title>
-<ellipse fill="none" stroke="pink" cx="3826.29" cy="-18" rx="62.29" ry="18"/>
-<text text-anchor="middle" x="3826.29" y="-14.3" font-family="Times,serif" font-size="14.00">Applicative</text>
+<ellipse fill="none" stroke="pink" cx="3932.29" cy="-18" rx="62.29" ry="18"/>
+<text text-anchor="middle" x="3932.29" y="-14.3" font-family="Times,serif" font-size="14.00">Applicative</text>
 </g>
 <!-- PrintLaTeX&#45;&gt;Applicative -->
 <g id="edge6" class="edge">
 <title>PrintLaTeX&#45;&gt;Applicative</title>
-<path fill="none" stroke="black" d="M3826.29,-71.7C3826.29,-63.98 3826.29,-54.71 3826.29,-46.11"/>
-<polygon fill="black" stroke="black" points="3829.79,-46.1 3826.29,-36.1 3822.79,-46.1 3829.79,-46.1"/>
+<path fill="none" stroke="black" d="M3932.29,-71.7C3932.29,-63.98 3932.29,-54.71 3932.29,-46.11"/>
+<polygon fill="black" stroke="black" points="3935.79,-46.1 3932.29,-36.1 3928.79,-46.1 3935.79,-46.1"/>
 </g>
 <!-- Monad -->
 <g id="node42" class="node">
 <title>Monad</title>
-<ellipse fill="none" stroke="pink" cx="3949.29" cy="-18" rx="42.49" ry="18"/>
-<text text-anchor="middle" x="3949.29" y="-14.3" font-family="Times,serif" font-size="14.00">Monad</text>
+<ellipse fill="none" stroke="pink" cx="4055.29" cy="-18" rx="42.49" ry="18"/>
+<text text-anchor="middle" x="4055.29" y="-14.3" font-family="Times,serif" font-size="14.00">Monad</text>
 </g>
 <!-- PrintLaTeX&#45;&gt;Monad -->
 <g id="edge7" class="edge">
 <title>PrintLaTeX&#45;&gt;Monad</title>
-<path fill="none" stroke="black" d="M3853.29,-73.64C3871.72,-63.15 3896.28,-49.17 3915.94,-37.98"/>
-<polygon fill="black" stroke="black" points="3917.91,-40.89 3924.87,-32.9 3914.45,-34.81 3917.91,-40.89"/>
+<path fill="none" stroke="black" d="M3959.29,-73.64C3977.72,-63.15 4002.28,-49.17 4021.94,-37.98"/>
+<polygon fill="black" stroke="black" points="4023.91,-40.89 4030.87,-32.9 4020.45,-34.81 4023.91,-40.89"/>
 </g>
 <!-- Latex -->
 <g id="node30" class="node">
 <title>Latex</title>
-<ellipse fill="none" stroke="#00868b" cx="871.29" cy="-90" rx="36.29" ry="18"/>
-<text text-anchor="middle" x="871.29" y="-86.3" font-family="Times,serif" font-size="14.00">Latex</text>
+<ellipse fill="none" stroke="#00868b" cx="977.29" cy="-90" rx="36.29" ry="18"/>
+<text text-anchor="middle" x="977.29" y="-86.3" font-family="Times,serif" font-size="14.00">Latex</text>
 </g>
 <!-- Latex&#45;&gt;RenderSpecial -->
 <g id="edge10" class="edge">
 <title>Latex&#45;&gt;RenderSpecial</title>
-<path fill="none" stroke="black" d="M857.91,-73.12C850.58,-64.42 841.33,-53.45 833.08,-43.66"/>
-<polygon fill="black" stroke="black" points="835.57,-41.19 826.45,-35.8 830.22,-45.7 835.57,-41.19"/>
+<path fill="none" stroke="black" d="M963.91,-73.12C956.58,-64.42 947.33,-53.45 939.08,-43.66"/>
+<polygon fill="black" stroke="black" points="941.57,-41.19 932.45,-35.8 936.22,-45.7 941.57,-41.19"/>
 </g>
 <!-- Package -->
 <g id="node31" class="node">
 <title>Package</title>
-<ellipse fill="none" stroke="#00868b" cx="3955.29" cy="-90" rx="48.99" ry="18"/>
-<text text-anchor="middle" x="3955.29" y="-86.3" font-family="Times,serif" font-size="14.00">Package</text>
+<ellipse fill="none" stroke="#00868b" cx="4061.29" cy="-90" rx="48.99" ry="18"/>
+<text text-anchor="middle" x="4061.29" y="-86.3" font-family="Times,serif" font-size="14.00">Package</text>
 </g>
 <!-- Def -->
 <g id="node32" class="node">
 <title>Def</title>
-<ellipse fill="none" stroke="#00868b" cx="4049.29" cy="-90" rx="27" ry="18"/>
-<text text-anchor="middle" x="4049.29" y="-86.3" font-family="Times,serif" font-size="14.00">Def</text>
+<ellipse fill="none" stroke="#00868b" cx="4155.29" cy="-90" rx="27" ry="18"/>
+<text text-anchor="middle" x="4155.29" y="-86.3" font-family="Times,serif" font-size="14.00">Def</text>
 </g>
 <!-- FieldWrap -->
 <g id="node33" class="node">
 <title>FieldWrap</title>
-<ellipse fill="none" stroke="#00868b" cx="4152.29" cy="-90" rx="58.49" ry="18"/>
-<text text-anchor="middle" x="4152.29" y="-86.3" font-family="Times,serif" font-size="14.00">FieldWrap</text>
+<ellipse fill="none" stroke="#00868b" cx="4258.29" cy="-90" rx="58.49" ry="18"/>
+<text text-anchor="middle" x="4258.29" y="-86.3" font-family="Times,serif" font-size="14.00">FieldWrap</text>
 </g>
 <!-- StyleGuide -->
 <g id="node34" class="node">
 <title>StyleGuide</title>
-<ellipse fill="none" stroke="#00868b" cx="4290.29" cy="-90" rx="61.99" ry="18"/>
-<text text-anchor="middle" x="4290.29" y="-86.3" font-family="Times,serif" font-size="14.00">StyleGuide</text>
+<ellipse fill="none" stroke="#00868b" cx="4396.29" cy="-90" rx="61.99" ry="18"/>
+<text text-anchor="middle" x="4396.29" y="-86.3" font-family="Times,serif" font-size="14.00">StyleGuide</text>
 </g>
 <!-- DocType -->
 <g id="node35" class="node">
@@ -304,16 +304,22 @@
 <text text-anchor="middle" x="622.29" y="-86.3" font-family="Times,serif" font-size="14.00">DocType</text>
 </g>
 <!-- DocType&#45;&gt;Show -->
-<g id="edge11" class="edge">
+<g id="edge12" class="edge">
 <title>DocType&#45;&gt;Show</title>
-<path fill="none" stroke="black" d="M608.07,-72.41C600.49,-63.57 591.03,-52.53 582.69,-42.79"/>
-<polygon fill="black" stroke="black" points="585.16,-40.3 576,-34.99 579.85,-44.86 585.16,-40.3"/>
+<path fill="none" stroke="black" d="M622.29,-71.7C622.29,-63.98 622.29,-54.71 622.29,-46.11"/>
+<polygon fill="black" stroke="black" points="625.79,-46.1 622.29,-36.1 618.79,-46.1 625.79,-46.1"/>
 </g>
 <!-- Format -->
 <g id="node36" class="node">
 <title>Format</title>
-<ellipse fill="none" stroke="#00868b" cx="4414.29" cy="-90" rx="44.39" ry="18"/>
-<text text-anchor="middle" x="4414.29" y="-86.3" font-family="Times,serif" font-size="14.00">Format</text>
+<ellipse fill="none" stroke="#00868b" cx="735.29" cy="-90" rx="44.39" ry="18"/>
+<text text-anchor="middle" x="735.29" y="-86.3" font-family="Times,serif" font-size="14.00">Format</text>
+</g>
+<!-- Format&#45;&gt;Show -->
+<g id="edge11" class="edge">
+<title>Format&#45;&gt;Show</title>
+<path fill="none" stroke="black" d="M711.88,-74.5C694.77,-63.9 671.41,-49.42 652.83,-37.92"/>
+<polygon fill="black" stroke="black" points="654.49,-34.83 644.14,-32.54 650.8,-40.78 654.49,-34.83"/>
 </g>
 <!-- Semigroup -->
 <g id="node43" class="node">

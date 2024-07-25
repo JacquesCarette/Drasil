@@ -1038,6 +1038,9 @@ reqInputsRef :: Reference
 --   a label (<a>Space</a>).
 mkMaintainableNFR :: String -> Integer -> String -> ConceptInstance
 
+-- | Common Non-Functional Requirement for Portability.
+mkPortableNFR :: String -> [String] -> String -> ConceptInstance
+
 -- | General <a>Sentence</a> that describes some auxiliary specifications
 --   of the system.
 auxSpecSent :: Sentence

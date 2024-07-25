@@ -275,12 +275,11 @@ buildDrasilExSrcRef :: Example -> Reference
 getDoxRef :: Example -> Lang -> String -> Reference
 
 -- | Make references for each of the generated SRS files.
-getSRSRef :: FilePath -> String -> String -> Reference
+getSRSRef :: FilePath -> Format -> String -> Reference
 
 -- | Get the paths of where each reference exist for SRS files. Some
---   example abbreviations have spaces, so we just filter those out. The
---   suffix should only be either html or pdf.
-getSRSPath :: FilePath -> String -> String -> FilePath
+--   example abbreviations have spaces, so we just filter those out.
+getSRSPath :: FilePath -> Format -> String -> FilePath
 
 -- | Uses <tt>repoRt</tt> path (codePath in this module).
 --   

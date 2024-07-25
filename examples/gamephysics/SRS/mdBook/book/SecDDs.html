@@ -1,0 +1,434 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Data Definitions - Software Requirements Specification for GamePhysics</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="title.html"><strong aria-hidden="true">1.</strong> Software Requirements Specification for GamePhysics</a></li><li class="chapter-item expanded "><a href="SecToC.html"><strong aria-hidden="true">2.</strong> Table of Contents</a></li><li class="chapter-item expanded "><a href="SecRefMat.html"><strong aria-hidden="true">3.</strong> Reference Material</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecToU.html"><strong aria-hidden="true">3.1.</strong> Table of Units</a></li><li class="chapter-item expanded "><a href="SecToS.html"><strong aria-hidden="true">3.2.</strong> Table of Symbols</a></li><li class="chapter-item expanded "><a href="SecTAbbAcc.html"><strong aria-hidden="true">3.3.</strong> Abbreviations and Acronyms</a></li></ol></li><li class="chapter-item expanded "><a href="SecIntro.html"><strong aria-hidden="true">4.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecDocPurpose.html"><strong aria-hidden="true">4.1.</strong> Purpose of Document</a></li><li class="chapter-item expanded "><a href="SecReqsScope.html"><strong aria-hidden="true">4.2.</strong> Scope of Requirements</a></li><li class="chapter-item expanded "><a href="SecReaderChars.html"><strong aria-hidden="true">4.3.</strong> Characteristics of Intended Reader</a></li><li class="chapter-item expanded "><a href="SecDocOrg.html"><strong aria-hidden="true">4.4.</strong> Organization of Document</a></li></ol></li><li class="chapter-item expanded "><a href="SecGenSysDesc.html"><strong aria-hidden="true">5.</strong> General System Description</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecSysContext.html"><strong aria-hidden="true">5.1.</strong> System Context</a></li><li class="chapter-item expanded "><a href="SecUserChars.html"><strong aria-hidden="true">5.2.</strong> User Characteristics</a></li><li class="chapter-item expanded "><a href="SecSysConstraints.html"><strong aria-hidden="true">5.3.</strong> System Constraints</a></li></ol></li><li class="chapter-item expanded "><a href="SecSpecSystDesc.html"><strong aria-hidden="true">6.</strong> Specific System Description</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecProbDesc.html"><strong aria-hidden="true">6.1.</strong> Problem Description</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecTermDefs.html"><strong aria-hidden="true">6.1.1.</strong> Terminology and Definitions</a></li><li class="chapter-item expanded "><a href="SecGoalStmt.html"><strong aria-hidden="true">6.1.2.</strong> Goal Statements</a></li></ol></li><li class="chapter-item expanded "><a href="SecSolCharSpec.html"><strong aria-hidden="true">6.2.</strong> Solution Characteristics Specification</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecAssumps.html"><strong aria-hidden="true">6.2.1.</strong> Assumptions</a></li><li class="chapter-item expanded "><a href="SecTMs.html"><strong aria-hidden="true">6.2.2.</strong> Theoretical Models</a></li><li class="chapter-item expanded "><a href="SecGDs.html"><strong aria-hidden="true">6.2.3.</strong> General Definitions</a></li><li class="chapter-item expanded "><a href="SecDDs.html" class="active"><strong aria-hidden="true">6.2.4.</strong> Data Definitions</a></li><li class="chapter-item expanded "><a href="SecIMs.html"><strong aria-hidden="true">6.2.5.</strong> Instance Models</a></li><li class="chapter-item expanded "><a href="SecDataConstraints.html"><strong aria-hidden="true">6.2.6.</strong> Data Constraints</a></li><li class="chapter-item expanded "><a href="SecCorSolProps.html"><strong aria-hidden="true">6.2.7.</strong> Properties of a Correct Solution</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="SecRequirements.html"><strong aria-hidden="true">7.</strong> Requirements</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecFRs.html"><strong aria-hidden="true">7.1.</strong> Functional Requirements</a></li><li class="chapter-item expanded "><a href="SecNFRs.html"><strong aria-hidden="true">7.2.</strong> Non-Functional Requirements</a></li></ol></li><li class="chapter-item expanded "><a href="SecLCs.html"><strong aria-hidden="true">8.</strong> Likely Changes</a></li><li class="chapter-item expanded "><a href="SecUCs.html"><strong aria-hidden="true">9.</strong> Unlikely Changes</a></li><li class="chapter-item expanded "><a href="SecoffShelfSolns.html"><strong aria-hidden="true">10.</strong> Off-The-Shelf Solutions</a></li><li class="chapter-item expanded "><a href="SecTraceMatrices.html"><strong aria-hidden="true">11.</strong> Traceability Matrices and Graphs</a></li><li class="chapter-item expanded "><a href="SecAuxConstants.html"><strong aria-hidden="true">12.</strong> Values of Auxiliary Constants</a></li><li class="chapter-item expanded "><a href="SecReferences.html"><strong aria-hidden="true">13.</strong> References</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Software Requirements Specification for GamePhysics</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="Sec:DDs"><a class="header" href="#Sec:DDs">Data Definitions</a></h1>
+<p>This section collects and defines all the data needed to build the instance models.</p>
+<div align="center">
+<h2 id="DD:ctrOfMass"><a class="header" href="#DD:ctrOfMass">Center of Mass</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">DD:ctrOfMass</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Center of Mass</td></tr>
+<tr><td style="text-align: left">Symbol</td><td style="text-align: left">\({\boldsymbol{p}\text{(}t\text{)}_{\text{CM}}}\)</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{m}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{\boldsymbol{p}\text{(}t\text{)}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}} {\boldsymbol{p}\text{(}t\text{)}_{j}}}}{{m_{T}}}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({\boldsymbol{p}\text{(}t\text{)}_{\text{CM}}}\) is the Center of Mass (\({\text{m}}\))</li><li>\({m_{j}}\) is the mass of the j-th particle (\({\text{kg}}\))</li><li>\({\boldsymbol{p}\text{(}t\text{)}_{j}}\) is the position vector of the j-th particle (\({\text{m}}\))</li><li>\({m_{T}}\) is the total mass of the rigid body (\({\text{kg}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>).</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:transMot">IM:transMot</a> and <a href="./SecIMs.html#IM:col2D">IM:col2D</a></td></tr>
+</tbody></table>
+</div><div align="center">
+<h2 id="DD:linDisp"><a class="header" href="#DD:linDisp">Linear displacement</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">DD:linDisp</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Linear displacement</td></tr>
+<tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(u\text{(}t\text{)}\)</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{m}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[u\text{(}t\text{)}=\frac{\,d\boldsymbol{p}\text{(}t\text{)}\left(t\right)}{\,dt}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(u\text{(}t\text{)}\) is the linear displacement (\({\text{m}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\(\boldsymbol{p}\text{(}t\text{)}\) is the position (\({\text{m}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>).</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:transMot">IM:transMot</a></td></tr>
+</tbody></table>
+</div><div align="center">
+<h2 id="DD:linVel"><a class="header" href="#DD:linVel">Linear velocity</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">DD:linVel</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Linear velocity</td></tr>
+<tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(v\text{(}t\text{)}\)</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[v\text{(}t\text{)}=\frac{\,d\boldsymbol{u}\left(t\right)}{\,dt}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(v\text{(}t\text{)}\) is the linear velocity (\(\frac{\text{m}}{\text{s}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\(\boldsymbol{u}\) is the displacement (\({\text{m}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>).</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:transMot">IM:transMot</a></td></tr>
+</tbody></table>
+</div><div align="center">
+<h2 id="DD:linAcc"><a class="header" href="#DD:linAcc">Linear acceleration</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">DD:linAcc</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Linear acceleration</td></tr>
+<tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(a\text{(}t\text{)}\)</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}^{2}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[a\text{(}t\text{)}=\frac{\,d\boldsymbol{v}\text{(}t\text{)}\left(t\right)}{\,dt}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(a\text{(}t\text{)}\) is the linear acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\(\boldsymbol{v}\text{(}t\text{)}\) is the velocity (\(\frac{\text{m}}{\text{s}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>).</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:transMot">IM:transMot</a></td></tr>
+</tbody></table>
+</div><div align="center">
+<h2 id="DD:angDisp"><a class="header" href="#DD:angDisp">Angular displacement</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">DD:angDisp</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Angular displacement</td></tr>
+<tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(θ\)</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{rad}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[θ=\frac{\,dϕ\left(t\right)}{\,dt}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(θ\) is the angular displacement (\({\text{rad}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\(ϕ\) is the orientation (\({\text{rad}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>) and two-dimensional (from <a href="./SecAssumps.html#assumpOD">A:objectDimension</a>).</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:rotMot">IM:rotMot</a></td></tr>
+</tbody></table>
+</div><div align="center">
+<h2 id="DD:angVel"><a class="header" href="#DD:angVel">Angular velocity</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">DD:angVel</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Angular velocity</td></tr>
+<tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(ω\)</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{rad}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[ω=\frac{\,dθ\left(t\right)}{\,dt}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(ω\) is the angular velocity (\(\frac{\text{rad}}{\text{s}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\(θ\) is the angular displacement (\({\text{rad}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>) and two-dimensional (from <a href="./SecAssumps.html#assumpOD">A:objectDimension</a>).</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:rotMot">IM:rotMot</a></td></tr>
+</tbody></table>
+</div><div align="center">
+<h2 id="DD:angAccel"><a class="header" href="#DD:angAccel">Angular acceleration</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">DD:angAccel</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Angular acceleration</td></tr>
+<tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(α\)</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{rad}}{\text{s}^{2}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[α=\frac{\,dω\left(t\right)}{\,dt}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(α\) is the angular acceleration (\(\frac{\text{rad}}{\text{s}^{2}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\(ω\) is the angular velocity (\(\frac{\text{rad}}{\text{s}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>) and two-dimensional (from <a href="./SecAssumps.html#assumpOD">A:objectDimension</a>).</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:rotMot">IM:rotMot</a></td></tr>
+</tbody></table>
+</div><div align="center">
+<h2 id="DD:chaslesThm"><a class="header" href="#DD:chaslesThm">Chasles’ theorem</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">DD:chaslesThm</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Chasles’ theorem</td></tr>
+<tr><td style="text-align: left">Symbol</td><td style="text-align: left">\({\boldsymbol{v}\text{(}t\text{)}_{\text{B}}}\)</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{\boldsymbol{v}\text{(}t\text{)}_{\text{B}}}={\boldsymbol{v}\text{(}t\text{)}_{\text{O}}}+ω\times{\boldsymbol{u}_{\text{O}\text{B}}}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({\boldsymbol{v}\text{(}t\text{)}_{\text{B}}}\) is the velocity at point B (\(\frac{\text{m}}{\text{s}}\))</li><li>\({\boldsymbol{v}\text{(}t\text{)}_{\text{O}}}\) is the velocity at point origin (\(\frac{\text{m}}{\text{s}}\))</li><li>\(ω\) is the angular velocity (\(\frac{\text{rad}}{\text{s}}\))</li><li>\({\boldsymbol{u}_{\text{O}\text{B}}}\) is the displacement vector between the origin and point B (\({\text{m}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The linear velocity \({\boldsymbol{v}\text{(}t\text{)}_{\text{B}}}\) of any point B in a rigid body is the sum of the linear velocity \({\boldsymbol{v}\text{(}t\text{)}_{\text{O}}}\) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body’s angular velocity \(ω\) and the displacement vector between the origin and point B \({\boldsymbol{u}_{\text{O}\text{B}}}\).</li><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>).</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#chaslesWiki">chaslesWiki</a></td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"></td></tr>
+</tbody></table>
+</div><div align="center">
+<h2 id="DD:torque"><a class="header" href="#DD:torque">Torque</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">DD:torque</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Torque</td></tr>
+<tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(\boldsymbol{τ}\)</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\text{N}\text{m}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{τ}=\boldsymbol{r}\times\boldsymbol{F}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{τ}\) is the torque (\(\text{N}\text{m}\))</li><li>\(\boldsymbol{r}\) is the position vector (\({\text{m}}\))</li><li>\(\boldsymbol{F}\) is the force (\({\text{N}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The torque on a body measures the tendency of a force to rotate the body around an axis or pivot.</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"></td></tr>
+</tbody></table>
+</div><div align="center">
+<h2 id="DD:kEnergy"><a class="header" href="#DD:kEnergy">Kinetic energy</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">DD:kEnergy</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Kinetic energy</td></tr>
+<tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(KE\)</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{J}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[KE=m \frac{|\boldsymbol{v}\text{(}t\text{)}|^{2}}{2}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(KE\) is the kinetic energy (\({\text{J}}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(\boldsymbol{v}\text{(}t\text{)}\) is the velocity (\(\frac{\text{m}}{\text{s}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>Kinetic energy is the measure of the energy a body possesses due to its motion.</li><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>) and two-dimensional (from <a href="./SecAssumps.html#assumpOD">A:objectDimension</a>).</li><li>No damping occurs during the simulation (from <a href="./SecAssumps.html#assumpDI">A:dampingInvolvement</a>).</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"></td></tr>
+</tbody></table>
+</div><div align="center">
+<h2 id="DD:coeffRestitution"><a class="header" href="#DD:coeffRestitution">Coefficient of restitution</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">DD:coeffRestitution</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Coefficient of restitution</td></tr>
+<tr><td style="text-align: left">Symbol</td><td style="text-align: left">\({C_{\text{R}}}\)</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">Unitless</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{C_{\text{R}}}=-\left(\frac{{{\boldsymbol{v}\text{(}t\text{)}_{\text{f}}}^{\text{A}\text{B}}}\cdot{}\boldsymbol{n}}{{{\boldsymbol{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\boldsymbol{n}}\right)\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({C_{\text{R}}}\) is the coefficient of restitution (Unitless)</li><li>\({{\boldsymbol{v}\text{(}t\text{)}_{\text{f}}}^{\text{A}\text{B}}}\) is the final relative velocity between rigid bodies of A and B (\(\frac{\text{m}}{\text{s}}\))</li><li>\(\boldsymbol{n}\) is the collision normal vector (\({\text{m}}\))</li><li>\({{\boldsymbol{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}\) is the initial relative velocity between rigid bodies of A and B (\(\frac{\text{m}}{\text{s}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The coefficient of restitution \({C_{\text{R}}}\) determines the elasticity of a collision between two rigid bodies. \({C_{\text{R}}}=1\) results in an elastic collision, \({C_{\text{R}}}\lt{}1\) results in an inelastic collision, and \({C_{\text{R}}}=0\) results in a totally inelastic collision.</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"></td></tr>
+</tbody></table>
+</div><div align="center">
+<h2 id="DD:reVeInColl"><a class="header" href="#DD:reVeInColl">Initial Relative Velocity Between Rigid Bodies of A and B</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">DD:reVeInColl</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Initial Relative Velocity Between Rigid Bodies of A and B</td></tr>
+<tr><td style="text-align: left">Symbol</td><td style="text-align: left">\({{\boldsymbol{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}\)</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{{\boldsymbol{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}={\boldsymbol{v}\text{(}t\text{)}^{\text{A}\text{P}}}-{\boldsymbol{v}\text{(}t\text{)}^{\text{B}\text{P}}}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({{\boldsymbol{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}\) is the initial relative velocity between rigid bodies of A and B (\(\frac{\text{m}}{\text{s}}\))</li><li>\({\boldsymbol{v}\text{(}t\text{)}^{\text{A}\text{P}}}\) is the velocity of the point of collision P in body A (\(\frac{\text{m}}{\text{s}}\))</li><li>\({\boldsymbol{v}\text{(}t\text{)}^{\text{B}\text{P}}}\) is the velocity of the point of collision P in body B (\(\frac{\text{m}}{\text{s}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>In a collision, the velocity of a rigid body A colliding with another rigid body B relative to that body \({{\boldsymbol{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}\) is the difference between the velocities of A and B at point P.</li><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>).</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"></td></tr>
+</tbody></table>
+</div><div align="center">
+<h2 id="DD:impulseV"><a class="header" href="#DD:impulseV">Impulse (vector)</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">DD:impulseV</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Impulse (vector)</td></tr>
+<tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(\boldsymbol{J}\)</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\text{N}\text{s}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{J}=m Δ\boldsymbol{v}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{J}\) is the impulse (vector) (\(\text{N}\text{s}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(Δ\boldsymbol{v}\) is the change in velocity (\(\frac{\text{m}}{\text{s}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>An impulse (vector) \(\boldsymbol{J}\) occurs when a force \(\boldsymbol{F}\) acts over a body over an interval of time.</li><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>).</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"></td></tr>
+</tbody></table>
+</div>
+<h4 id="DD:impulseVDeriv"><a class="header" href="#DD:impulseVDeriv">Detailed derivation of impulse (vector):</a></h4>
+<p>Newton’s second law of motion states:</p>
+<p>\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}=m \frac{\,d\boldsymbol{v}\text{(}t\text{)}}{\,dt}\]</p>
+<p>Rearranging:</p>
+<p>\[\int_{{t_{1}}}^{{t_{2}}}{\boldsymbol{F}}\,dt=m \left(\int_{{\boldsymbol{v}\text{(}t\text{)}_{1}}}^{{\boldsymbol{v}\text{(}t\text{)}_{2}}}{1}\,d\boldsymbol{v}\text{(}t\text{)}\right)\]</p>
+<p>Integrating the right hand side:</p>
+<p>\[\int_{{t_{1}}}^{{t_{2}}}{\boldsymbol{F}}\,dt=m {\boldsymbol{v}\text{(}t\text{)}_{2}}-m {\boldsymbol{v}\text{(}t\text{)}_{1}}=m Δ\boldsymbol{v}\]</p>
+<div align="center">
+<h2 id="DD:potEnergy"><a class="header" href="#DD:potEnergy">Potential energy</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">DD:potEnergy</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Potential energy</td></tr>
+<tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(PE\)</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{J}}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[PE=m \boldsymbol{g} h\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(PE\) is the potential energy (\({\text{J}}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(\boldsymbol{g}\) is the gravitational acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\(h\) is the height (\({\text{m}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The potential energy of an object is the energy held by an object because of its position to other objects.</li><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>) and two-dimensional (from <a href="./SecAssumps.html#assumpOD">A:objectDimension</a>).</li><li>No damping occurs during the simulation (from <a href="./SecAssumps.html#assumpDI">A:dampingInvolvement</a>).</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"></td></tr>
+</tbody></table>
+</div><div align="center">
+<h2 id="DD:momentOfInertia"><a class="header" href="#DD:momentOfInertia">Moment of inertia</a></h2>
+</div>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">DD:momentOfInertia</th></tr></thead><tbody>
+<tr><td style="text-align: left">Label</td><td style="text-align: left">Moment of inertia</td></tr>
+<tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(\boldsymbol{I}\)</td></tr>
+<tr><td style="text-align: left">Units</td><td style="text-align: left">\(\text{kg}\text{m}^{2}\)</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{I}=\displaystyle\sum{{m_{j}} {d_{j}}^{2}}\]</td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{I}\) is the moment of inertia (\(\text{kg}\text{m}^{2}\))</li><li>\({m_{j}}\) is the mass of the j-th particle (\({\text{kg}}\))</li><li>\({d_{j}}\) is the distance between the j-th particle and the axis of rotation (\({\text{m}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The moment of inertia \(\boldsymbol{I}\) of a body measures how much torque is needed for the body to achieve angular acceleration about the axis of rotation.</li><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>).</li></ul></td></tr>
+<tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"></td></tr>
+</tbody></table>
+</div>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="SecGDs.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="SecIMs.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="SecGDs.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="SecIMs.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

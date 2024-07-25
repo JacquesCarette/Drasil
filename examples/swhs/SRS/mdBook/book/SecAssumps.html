@@ -1,0 +1,271 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Assumptions - Software Requirements Specification for Solar Water Heating Systems Incorporating PCM</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="title.html"><strong aria-hidden="true">1.</strong> Software Requirements Specification for Solar Water Heating Systems Incorporating PCM</a></li><li class="chapter-item expanded "><a href="SecToC.html"><strong aria-hidden="true">2.</strong> Table of Contents</a></li><li class="chapter-item expanded "><a href="SecRefMat.html"><strong aria-hidden="true">3.</strong> Reference Material</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecToU.html"><strong aria-hidden="true">3.1.</strong> Table of Units</a></li><li class="chapter-item expanded "><a href="SecToS.html"><strong aria-hidden="true">3.2.</strong> Table of Symbols</a></li><li class="chapter-item expanded "><a href="SecTAbbAcc.html"><strong aria-hidden="true">3.3.</strong> Abbreviations and Acronyms</a></li></ol></li><li class="chapter-item expanded "><a href="SecIntro.html"><strong aria-hidden="true">4.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecDocPurpose.html"><strong aria-hidden="true">4.1.</strong> Purpose of Document</a></li><li class="chapter-item expanded "><a href="SecReqsScope.html"><strong aria-hidden="true">4.2.</strong> Scope of Requirements</a></li><li class="chapter-item expanded "><a href="SecReaderChars.html"><strong aria-hidden="true">4.3.</strong> Characteristics of Intended Reader</a></li><li class="chapter-item expanded "><a href="SecDocOrg.html"><strong aria-hidden="true">4.4.</strong> Organization of Document</a></li></ol></li><li class="chapter-item expanded "><a href="SecGenSysDesc.html"><strong aria-hidden="true">5.</strong> General System Description</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecSysContext.html"><strong aria-hidden="true">5.1.</strong> System Context</a></li><li class="chapter-item expanded "><a href="SecUserChars.html"><strong aria-hidden="true">5.2.</strong> User Characteristics</a></li><li class="chapter-item expanded "><a href="SecSysConstraints.html"><strong aria-hidden="true">5.3.</strong> System Constraints</a></li></ol></li><li class="chapter-item expanded "><a href="SecSpecSystDesc.html"><strong aria-hidden="true">6.</strong> Specific System Description</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecProbDesc.html"><strong aria-hidden="true">6.1.</strong> Problem Description</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecTermDefs.html"><strong aria-hidden="true">6.1.1.</strong> Terminology and Definitions</a></li><li class="chapter-item expanded "><a href="SecPhysSyst.html"><strong aria-hidden="true">6.1.2.</strong> Physical System Description</a></li><li class="chapter-item expanded "><a href="SecGoalStmt.html"><strong aria-hidden="true">6.1.3.</strong> Goal Statements</a></li></ol></li><li class="chapter-item expanded "><a href="SecSolCharSpec.html"><strong aria-hidden="true">6.2.</strong> Solution Characteristics Specification</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecAssumps.html" class="active"><strong aria-hidden="true">6.2.1.</strong> Assumptions</a></li><li class="chapter-item expanded "><a href="SecTMs.html"><strong aria-hidden="true">6.2.2.</strong> Theoretical Models</a></li><li class="chapter-item expanded "><a href="SecGDs.html"><strong aria-hidden="true">6.2.3.</strong> General Definitions</a></li><li class="chapter-item expanded "><a href="SecDDs.html"><strong aria-hidden="true">6.2.4.</strong> Data Definitions</a></li><li class="chapter-item expanded "><a href="SecIMs.html"><strong aria-hidden="true">6.2.5.</strong> Instance Models</a></li><li class="chapter-item expanded "><a href="SecDataConstraints.html"><strong aria-hidden="true">6.2.6.</strong> Data Constraints</a></li><li class="chapter-item expanded "><a href="SecCorSolProps.html"><strong aria-hidden="true">6.2.7.</strong> Properties of a Correct Solution</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="SecRequirements.html"><strong aria-hidden="true">7.</strong> Requirements</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="SecFRs.html"><strong aria-hidden="true">7.1.</strong> Functional Requirements</a></li><li class="chapter-item expanded "><a href="SecNFRs.html"><strong aria-hidden="true">7.2.</strong> Non-Functional Requirements</a></li></ol></li><li class="chapter-item expanded "><a href="SecLCs.html"><strong aria-hidden="true">8.</strong> Likely Changes</a></li><li class="chapter-item expanded "><a href="SecUCs.html"><strong aria-hidden="true">9.</strong> Unlikely Changes</a></li><li class="chapter-item expanded "><a href="SecTraceMatrices.html"><strong aria-hidden="true">10.</strong> Traceability Matrices and Graphs</a></li><li class="chapter-item expanded "><a href="SecAuxConstants.html"><strong aria-hidden="true">11.</strong> Values of Auxiliary Constants</a></li><li class="chapter-item expanded "><a href="SecReferences.html"><strong aria-hidden="true">12.</strong> References</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Software Requirements Specification for Solar Water Heating Systems Incorporating PCM</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="Sec:Assumps"><a class="header" href="#Sec:Assumps">Assumptions</a></h1>
+<p>This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.</p>
+<div id="assumpTEO"></div>
+<p>Thermal-Energy-Only: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible. (RefBy: <a href="./SecTMs.html#TM:consThermE">TM:consThermE</a>.)</p>
+<div id="assumpHTCC"></div>
+<p>Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over time. (RefBy: <a href="./SecTMs.html#TM:nwtnCooling">TM:nwtnCooling</a>.)</p>
+<div id="assumpCWTAT"></div>
+<p>Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. (RefBy: <a href="./SecGDs.html#GD:rocTempSimp">GD:rocTempSimp</a>, <a href="./SecIMs.html#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a>, and <a href="./SecIMs.html#IM:eBalanceOnPCM">IM:eBalanceOnPCM</a>.)</p>
+<div id="assumpTPCAV"></div>
+<p>Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM. (RefBy: <a href="./SecGDs.html#GD:rocTempSimp">GD:rocTempSimp</a>, <a href="./SecIMs.html#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a>, <a href="./SecIMs.html#IM:eBalanceOnPCM">IM:eBalanceOnPCM</a>, and <a href="./SecLCs.html#likeChgUTP">LC:Uniform-Temperature-PCM</a>.)</p>
+<div id="assumpDWPCoV"></div>
+<p>Density-Water-PCM-Constant-over-Volume: The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume. (RefBy: <a href="./SecGDs.html#GD:rocTempSimp">GD:rocTempSimp</a>.)</p>
+<div id="assumpSHECov"></div>
+<p>Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume. (RefBy: <a href="./SecGDs.html#GD:rocTempSimp">GD:rocTempSimp</a>.)</p>
+<div id="assumpLCCCW"></div>
+<p>Newton-Law-Convective-Cooling-Coil-Water: Newton’s law of convective cooling applies between the heating coil and the water. (RefBy: <a href="./SecGDs.html#GD:htFluxWaterFromCoil">GD:htFluxWaterFromCoil</a>.)</p>
+<div id="assumpTHCCoT"></div>
+<p>Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time. (RefBy: <a href="./SecGDs.html#GD:htFluxWaterFromCoil">GD:htFluxWaterFromCoil</a> and <a href="./SecLCs.html#likeChgTCVOD">LC:Temperature-Coil-Variable-Over-Day</a>.)</p>
+<div id="assumpTHCCoL"></div>
+<p>Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length. (RefBy: <a href="./SecIMs.html#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a> and <a href="./SecLCs.html#likeChgTCVOL">LC:Temperature-Coil-Variable-Over-Length</a>.)</p>
+<div id="assumpLCCWP"></div>
+<p>Law-Convective-Cooling-Water-PCM: Newton’s law of convective cooling applies between the water and the PCM. (RefBy: <a href="./SecGDs.html#GD:htFluxPCMFromWater">GD:htFluxPCMFromWater</a>.)</p>
+<div id="assumpCTNOD"></div>
+<p>Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature <a href="./SecAssumps.html#assumpSITWP">A:Same-Initial-Temp-Water-PCM</a> is less than (or equal) to the temperature of the heating coil. (RefBy: <a href="./SecIMs.html#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a> and <a href="./SecLCs.html#likeChgDT">LC:Discharging-Tank</a>.)</p>
+<div id="assumpSITWP"></div>
+<p>Same-Initial-Temp-Water-PCM: The initial temperature of the water and the PCM is the same. (RefBy: <a href="./SecIMs.html#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a>, <a href="./SecIMs.html#IM:eBalanceOnPCM">IM:eBalanceOnPCM</a>, <a href="./SecLCs.html#likeChgDITPW">LC:Different-Initial-Temps-PCM-Water</a>, and <a href="./SecAssumps.html#assumpCTNOD">A:Charging-Tank-No-Temp-Discharge</a>.)</p>
+<div id="assumpPIS"></div>
+<p>PCM-Initially-Solid: The simulation will start with the PCM in a solid state. (RefBy: <a href="./SecIMs.html#IM:heatEInPCM">IM:heatEInPCM</a> and <a href="./SecIMs.html#IM:eBalanceOnPCM">IM:eBalanceOnPCM</a>.)</p>
+<div id="assumpWAL"></div>
+<p>Water-Always-Liquid: The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (RefBy: <a href="./SecIMs.html#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a>, <a href="./SecUCs.html#unlikeChgWPFS">UC:Water-PCM-Fixed-States</a>, and <a href="./SecIMs.html#IM:heatEInWtr">IM:heatEInWtr</a>.)</p>
+<div id="assumpPIT"></div>
+<p>Perfect-Insulation-Tank: The tank is perfectly insulated so that there is no heat loss from the tank. (RefBy: <a href="./SecIMs.html#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a> and <a href="./SecLCs.html#likeChgTLH">LC:Tank-Lose-Heat</a>.)</p>
+<div id="assumpNIHGBWP"></div>
+<p>No-Internal-Heat-Generation-By-Water-PCM: No internal heat is generated by either the water or the PCM; therefore, the volumetric heat generation per unit volume is zero. (RefBy: <a href="./SecIMs.html#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a>, <a href="./SecIMs.html#IM:eBalanceOnPCM">IM:eBalanceOnPCM</a>, and <a href="./SecUCs.html#unlikeChgNIHG">UC:No-Internal-Heat-Generation</a>.)</p>
+<div id="assumpVCMPN"></div>
+<p>Volume-Change-Melting-PCM-Negligible: The volume change of the PCM due to melting is negligible. (RefBy: <a href="./SecIMs.html#IM:eBalanceOnPCM">IM:eBalanceOnPCM</a>.)</p>
+<div id="assumpNGSP"></div>
+<p>No-Gaseous-State-PCM: The PCM is either in a liquid state or a solid state but not a gaseous state. (RefBy: <a href="./SecIMs.html#IM:heatEInPCM">IM:heatEInPCM</a>, <a href="./SecIMs.html#IM:eBalanceOnPCM">IM:eBalanceOnPCM</a>, <a href="./SecUCs.html#unlikeChgWPFS">UC:Water-PCM-Fixed-States</a>, and <a href="./SecUCs.html#unlikeChgNGS">UC:No-Gaseous-State</a>.)</p>
+<div id="assumpAPT"></div>
+<p>Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0\({{}^{\circ}\text{C}}\) and 100\({{}^{\circ}\text{C}}\), respectively. (RefBy: <a href="./SecIMs.html#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a> and <a href="./SecIMs.html#IM:heatEInWtr">IM:heatEInWtr</a>.)</p>
+<div id="assumpVCN"></div>
+<p>Volume-Coil-Negligible: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible. (RefBy: <a href="./SecDDs.html#DD:waterVolume.pcm">DD:waterVolume_pcm</a>.)</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="SecSolCharSpec.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="SecTMs.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="SecSolCharSpec.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="SecTMs.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

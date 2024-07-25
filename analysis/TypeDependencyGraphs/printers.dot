@@ -62,7 +62,7 @@ digraph alltypes {
 	}
 	subgraph print {
 	}
-	subgraph book {
+	subgraph config {
 	}
 	subgraph createmd {
 	}

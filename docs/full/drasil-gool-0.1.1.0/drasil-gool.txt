@@ -255,6 +255,7 @@ useVarName :: String -> MethodState -> MethodState
 genVarName :: [String] -> String -> MS String
 genLoopIndex :: MS String
 genVarNameIf :: Bool -> String -> MS String
+varNameAvailable :: String -> MS Bool
 
 module Drasil.GOOL.InterfaceCommon
 type Label = String
@@ -813,12 +814,14 @@ docClass :: ClassSym r => String -> SClass r -> SClass r
 class (TypeSym r) => OOTypeSym r
 obj :: OOTypeSym r => ClassName -> VSType r
 class (VariableSym r, OOTypeSym r) => OOVariableSym r
-staticVar :: OOVariableSym r => Label -> VSType r -> SVariable r
+staticVar' :: OOVariableSym r => Bool -> Label -> VSType r -> SVariable r
 self :: OOVariableSym r => SVariable r
 classVar :: OOVariableSym r => VSType r -> SVariable r -> SVariable r
 extClassVar :: OOVariableSym r => VSType r -> SVariable r -> SVariable r
 objVar :: OOVariableSym r => SVariable r -> SVariable r -> SVariable r
 objVarSelf :: OOVariableSym r => SVariable r -> SVariable r
+staticVar :: OOVariableSym r => Label -> VSType r -> SVariable r
+staticConst :: OOVariableSym r => Label -> VSType r -> SVariable r
 ($->) :: OOVariableSym r => SVariable r -> SVariable r -> SVariable r
 infixl 9 $->
 class (ValueSym r, OOTypeSym r) => OOValueSym r
@@ -2608,12 +2611,14 @@ global :: ScopeSym r => r (Scope r)
 mainFn :: ScopeSym r => r (Scope r)
 local :: ScopeSym r => r (Scope r)
 class (VariableSym r, OOTypeSym r) => OOVariableSym r
-staticVar :: OOVariableSym r => Label -> VSType r -> SVariable r
+staticVar' :: OOVariableSym r => Bool -> Label -> VSType r -> SVariable r
 self :: OOVariableSym r => SVariable r
 classVar :: OOVariableSym r => VSType r -> SVariable r -> SVariable r
 extClassVar :: OOVariableSym r => VSType r -> SVariable r -> SVariable r
 objVar :: OOVariableSym r => SVariable r -> SVariable r -> SVariable r
 objVarSelf :: OOVariableSym r => SVariable r -> SVariable r
+staticVar :: OOVariableSym r => Label -> VSType r -> SVariable r
+staticConst :: OOVariableSym r => Label -> VSType r -> SVariable r
 class (VariableSym r) => VariableElim r
 variableName :: VariableElim r => r (Variable r) -> String
 variableType :: VariableElim r => r (Variable r) -> r (Type r)

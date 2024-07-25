@@ -202,6 +202,7 @@ Plain :: Format
 HTML :: Format
 Jupyter :: Format
 MDBook :: Format
+instance GHC.Show.Show Language.Drasil.Format.Format
 instance GHC.Show.Show Language.Drasil.Format.DocType
 
 
@@ -1871,12 +1872,22 @@ genMDBook :: PrintingInformation -> Document -> [(Filename, Doc)]
 pSpec :: RefMap -> Spec -> Doc
 
 
--- | Defines functions to create .toml config files for mdBook.
-module Language.Drasil.Markdown.Book
+-- | Defines functions to create .toml and .csv config files for mdBook.
+module Language.Drasil.Markdown.Config
 
--- | Generates the .toml config file for mdBook.
+-- | Prints the .toml config file for mdBook.
 makeBook :: Document -> PrintingInformation -> Doc
+
+-- | Prints the .csv file mapping the original filepaths of assets to the
+--   location mdBook uses.
+makeRequirements :: PrintingInformation -> Doc
+
+-- | Helper function to render the title <a>Sentence</a> as a <a>Doc</a>
 mkTitle :: PrintingInformation -> Sentence -> Doc
+
+-- | Helper function to map the original filepaths of assets to the
+--   location mdBook uses.
+assetMat :: PrintingInformation -> [[Filepath]]
 
 
 -- | Defines .json printers to generate jupyter notebooks. For more
@@ -2055,8 +2066,12 @@ genJupyter :: PrintingInformation -> DocType -> Document -> Doc
 -- | Generate a mdBook SRS
 genMDBook :: PrintingInformation -> Document -> [(Filename, Doc)]
 
--- | Generates the .toml config file for mdBook.
+-- | Prints the .toml config file for mdBook.
 makeBook :: Document -> PrintingInformation -> Doc
+
+-- | Prints the .csv file mapping the original filepaths of assets to the
+--   location mdBook uses.
+makeRequirements :: PrintingInformation -> Doc
 
 -- | Gathers all printing functions and creates the debugging tables from
 --   them.

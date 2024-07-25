@@ -21,6 +21,7 @@ space _  Boolean        = P.MO P.Boolean
 space _  Char           = P.Ident "Char"
 space _  String         = P.Ident "String"
 space _  (Vect _)       = error "Vector space not translated"
+space _  (Set _)       = error "Set space not translated"
 space _  Matrix {}      = error "Matrix space not translated"
 space _  (Array _)      = error "Array space not translated"
 space _  (Actor s)      = P.Ident s

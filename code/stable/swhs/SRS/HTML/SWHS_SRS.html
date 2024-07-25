@@ -1096,7 +1096,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[-∇\cdot{}\symbf{q}+g=ρ C \frac{\,\partial{}T}{\,\partial{}t}\]
+                        \[-∇\cdot{}\symbf{q}+g=ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}\]
                       </td>
                     </tr>
                     <tr>
@@ -1162,9 +1162,9 @@
                       <th>Equation</th>
                       <td>
                         \[E=\begin{cases}
-                            {C^{\text{S}}} m ΔT, & T\lt{}{T_{\text{melt}}}\\
-                            {C^{\text{L}}} m ΔT, & {T_{\text{melt}}}\lt{}T\lt{}{T_{\text{boil}}}\\
-                            {C^{\text{V}}} m ΔT, & {T_{\text{boil}}}\lt{}T
+                            {C^{\text{S}}}\,m\,ΔT, & T\lt{}{T_{\text{melt}}}\\
+                            {C^{\text{L}}}\,m\,ΔT, & {T_{\text{melt}}}\lt{}T\lt{}{T_{\text{boil}}}\\
+                            {C^{\text{V}}}\,m\,ΔT, & {T_{\text{boil}}}\lt{}T
                             \end{cases}\]
                       </td>
                     </tr>
@@ -1298,7 +1298,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[q\left(t\right)=h ΔT\left(t\right)\]</td>
+                      <td>\[q\left(t\right)=h\,ΔT\left(t\right)\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1370,7 +1370,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]
+                        \[m\,C\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V\]
                       </td>
                     </tr>
                     <tr>
@@ -1424,23 +1424,23 @@
                     <p class="paragraph">
                       Integrating <a href=#TM:consThermE>TM:consThermE</a> over a volume (<em>V</em>), we have:
                     </p>
-                    \[-\int_{V}{∇\cdot{}\symbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
+                    \[-\int_{V}{∇\cdot{}\symbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
                     <p class="paragraph">
                       Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em> of the volume, with <em><b>q</b></em> as the thermal flux vector for the surface and <em><b>n&#770;</b></em> as a unit outward normal vector for a surface:
                     </p>
-                    \[-\int_{S}{\symbf{q}\cdot{}\symbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
+                    \[-\int_{S}{\symbf{q}\cdot{}\symbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
                     <p class="paragraph">
                       We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then Equation (1) can be written as:
                     </p>
-                    \[{q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
+                    \[{q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
                     <p class="paragraph">
                       Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD:rocTempSimp</a>. The integral over the surface could be simplified because the thermal flux is assumed constant over <em>A<sub>in</sub></em> and <em>A<sub>out</sub></em> and <em>0</em> on all other surfaces. Outward flux is considered positive. Assuming <em>ρ</em>, <em>C</em>, and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A:Constant-Water-Temp-Across-Tank</a>, <a href=#assumpTPCAV>A:Temp-PCM-Constant-Across-Volume</a>, <a href=#assumpDWPCoV>A:Density-Water-PCM-Constant-over-Volume</a>, and <a href=#assumpSHECov>A:Specific-Heat-Energy-Constant-over-Volume</a>, we have:
                     </p>
-                    \[ρ C V \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]
+                    \[ρ\,C\,V\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V\]
                     <p class="paragraph">
                       Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, Equation (2) can be written as:
                     </p>
-                    \[m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]
+                    \[m\,C\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V\]
                   </div>
                 </div>
                 <div id="GD:htFluxWaterFromCoil">
@@ -1464,7 +1464,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{q_{\text{C}}}={h_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)\]
+                        \[{q_{\text{C}}}={h_{\text{C}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1533,7 +1533,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{q_{\text{P}}}={h_{\text{P}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)\]
+                        \[{q_{\text{P}}}={h_{\text{P}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1608,7 +1608,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{m_{\text{W}}}={V_{\text{W}}} {ρ_{\text{W}}}\]</td>
+                      <td>\[{m_{\text{W}}}={V_{\text{W}}}\,{ρ_{\text{W}}}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1714,7 +1714,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{V_{\text{tank}}}=π \left(\frac{D}{2}\right)^{2} L\]</td>
+                      <td>\[{V_{\text{tank}}}=π\,\left(\frac{D}{2}\right)^{2}\,L\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1770,7 +1770,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{τ_{\text{W}}}=\frac{{m_{\text{W}}} {C_{\text{W}}}}{{h_{\text{C}}} {A_{\text{C}}}}\]
+                        \[{τ_{\text{W}}}=\frac{{m_{\text{W}}}\,{C_{\text{W}}}}{{h_{\text{C}}}\,{A_{\text{C}}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1832,7 +1832,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[η=\frac{{h_{\text{P}}} {A_{\text{P}}}}{{h_{\text{C}}} {A_{\text{C}}}}\]
+                        \[η=\frac{{h_{\text{P}}}\,{A_{\text{P}}}}{{h_{\text{C}}}\,{A_{\text{C}}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1896,7 +1896,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{{τ_{\text{P}}}^{\text{S}}}=\frac{{m_{\text{P}}} {{C_{\text{P}}}^{\text{S}}}}{{h_{\text{P}}} {A_{\text{P}}}}\]
+                        \[{{τ_{\text{P}}}^{\text{S}}}=\frac{{m_{\text{P}}}\,{{C_{\text{P}}}^{\text{S}}}}{{h_{\text{P}}}\,{A_{\text{P}}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1960,7 +1960,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{{τ_{\text{P}}}^{\text{L}}}=\frac{{m_{\text{P}}} {{C_{\text{P}}}^{\text{L}}}}{{h_{\text{P}}} {A_{\text{P}}}}\]
+                        \[{{τ_{\text{P}}}^{\text{L}}}=\frac{{m_{\text{P}}}\,{{C_{\text{P}}}^{\text{L}}}}{{h_{\text{P}}}\,{A_{\text{P}}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -2083,7 +2083,9 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[ϕ=\frac{{Q_{\text{P}}}}{{H_{\text{f}}} {m_{\text{P}}}}\]</td>
+                      <td>
+                        \[ϕ=\frac{{Q_{\text{P}}}}{{H_{\text{f}}}\,{m_{\text{P}}}}\]
+                      </td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -2217,7 +2219,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)+η \left({T_{\text{P}}}\left(t\right)-{T_{\text{W}}}\left(t\right)\right)\right)\]
+                        \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)+η\,\left({T_{\text{P}}}\left(t\right)-{T_{\text{W}}}\left(t\right)\right)\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -2288,29 +2290,29 @@
                     <p class="paragraph">
                       To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a>) and from the water into the PCM as <em>q<sub>P</sub></em> (<a href=#GD:htFluxPCMFromWater>GD:htFluxPCMFromWater</a>), over areas <em>A<sub>C</sub></em> and <em>A<sub>P</sub></em>, respectively. The thermal flux is constant over <em>A<sub>C</sub></em>, since the temperature of the heating coil is assumed to not vary along its length (<a href=#assumpTHCCoL>A:Temp-Heating-Coil-Constant-over-Length</a>), and the thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume (<a href=#assumpTPCAV>A:Temp-PCM-Constant-Across-Volume</a>) and the water is fully mixed (<a href=#assumpCWTAT>A:Constant-Water-Temp-Across-Tank</a>). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A:Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBWP>A:No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD:rocTempSimp</a> can be written as:
                     </p>
-                    \[{m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}} {A_{\text{C}}}-{q_{\text{P}}} {A_{\text{P}}}\]
+                    \[{m_{\text{W}}}\,{C_{\text{W}}}\,\frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}}\,{A_{\text{C}}}-{q_{\text{P}}}\,{A_{\text{P}}}\]
                     <p class="paragraph">
                       Using <a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a> for <em>q<sub>C</sub></em> and <a href=#GD:htFluxPCMFromWater>GD:htFluxPCMFromWater</a> for <em>q<sub>P</sub></em>, this can be written as:
                     </p>
-                    \[{m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)-{h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}-{T_{\text{P}}}\right)\]
+                    \[{m_{\text{W}}}\,{C_{\text{W}}}\,\frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}}\,{A_{\text{C}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)-{h_{\text{P}}}\,{A_{\text{P}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)\]
                     <p class="paragraph">
                       Dividing Equation (2) by <em>m<sub>W</sub>&#8239;C<sub>W</sub></em>, we obtain:
                     </p>
-                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)-\frac{{h_{\text{P}}} {A_{\text{P}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{W}}}-{T_{\text{P}}}\right)\]
+                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)-\frac{{h_{\text{P}}}\,{A_{\text{P}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)\]
                     <p class="paragraph">
                       Factoring the negative sign out of the second term of the right-hand side (RHS) of Equation (3) and multiplying it by <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> / <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> yields:
                     </p>
-                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{{h_{\text{C}}} {A_{\text{C}}}}{{h_{\text{C}}} {A_{\text{C}}}} \frac{{h_{\text{P}}} {A_{\text{P}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{P}}}-{T_{\text{W}}}\right)\]
+                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{h_{\text{C}}}\,{A_{\text{C}}}}\,\frac{{h_{\text{P}}}\,{A_{\text{P}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{P}}}-{T_{\text{W}}}\right)\]
                     <p class="paragraph">Rearranging this equation gives us:</p>
-                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{{h_{\text{P}}} {A_{\text{P}}}}{{h_{\text{C}}} {A_{\text{C}}}} \frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{P}}}-{T_{\text{W}}}\right)\]
+                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{{h_{\text{P}}}\,{A_{\text{P}}}}{{h_{\text{C}}}\,{A_{\text{C}}}}\,\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{P}}}-{T_{\text{W}}}\right)\]
                     <p class="paragraph">
                       By substituting <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD:balanceDecayRate</a>) and <em>η</em> (from <a href=#DD:balanceDecayTime>DD:balanceDecayTime</a>), this can be written as:
                     </p>
-                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{η}{{τ_{\text{W}}}} \left({T_{\text{P}}}-{T_{\text{W}}}\right)\]
+                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{η}{{τ_{\text{W}}}}\,\left({T_{\text{P}}}-{T_{\text{W}}}\right)\]
                     <p class="paragraph">
                       Finally, factoring out <em>\(\frac{1}{{τ_{\text{W}}}}\)</em>, we are left with the governing ODE for <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>:
                     </p>
-                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}+η \left({T_{\text{P}}}-{T_{\text{W}}}\right)\right)\]
+                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}+η\,\left({T_{\text{P}}}-{T_{\text{W}}}\right)\right)\]
                   </div>
                 </div>
                 <div id="IM:eBalanceOnPCM">
@@ -2351,8 +2353,8 @@
                       <th>Equation</th>
                       <td>
                         \[\frac{\,d{T_{\text{P}}}}{\,dt}=\begin{cases}
-                                                         \frac{1}{{{τ_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
-                                                         \frac{1}{{{τ_{\text{P}}}^{\text{L}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                                                         \frac{1}{{{τ_{\text{P}}}^{\text{S}}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                                                         \frac{1}{{{τ_{\text{P}}}^{\text{L}}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
                                                          0, & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0\lt{}ϕ\lt{}1
                                                          \end{cases}\]
                       </td>
@@ -2428,19 +2430,19 @@
                     <p class="paragraph">
                       To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy balance on the PCM. The volume being considered is the volume of PCM (<em>V<sub>P</sub></em>). The derivation that follows is initially for the solid PCM. The mass of phase change material is <em>m<sub>P</sub></em> and the specific heat capacity of PCM as a solid is <em>C<sub>P</sub><sup>S</sup></em>. The heat flux into the PCM from water is <em>q<sub>P</sub></em> (<a href=#GD:htFluxPCMFromWater>GD:htFluxPCMFromWater</a>) over phase change material surface area <em>A<sub>P</sub></em>. The thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume (<a href=#assumpTPCAV>A:Temp-PCM-Constant-Across-Volume</a>) and the water is fully mixed (<a href=#assumpCWTAT>A:Constant-Water-Temp-Across-Tank</a>). There is no heat flux output from the PCM. Assuming no volumetric heat generation per unit volume (<a href=#assumpNIHGBWP>A:No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>, the equation for <a href=#GD:rocTempSimp>GD:rocTempSimp</a> can be written as:
                     </p>
-                    \[{m_{\text{P}}} {{C_{\text{P}}}^{\text{S}}} \frac{\,d{T_{\text{P}}}}{\,dt}={q_{\text{P}}} {A_{\text{P}}}\]
+                    \[{m_{\text{P}}}\,{{C_{\text{P}}}^{\text{S}}}\,\frac{\,d{T_{\text{P}}}}{\,dt}={q_{\text{P}}}\,{A_{\text{P}}}\]
                     <p class="paragraph">
                       Using <a href=#GD:htFluxPCMFromWater>GD:htFluxPCMFromWater</a> for <em>q<sub>P</sub></em>, this equation can be written as:
                     </p>
-                    \[{m_{\text{P}}} {{C_{\text{P}}}^{\text{S}}} \frac{\,d{T_{\text{P}}}}{\,dt}={h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}-{T_{\text{P}}}\right)\]
+                    \[{m_{\text{P}}}\,{{C_{\text{P}}}^{\text{S}}}\,\frac{\,d{T_{\text{P}}}}{\,dt}={h_{\text{P}}}\,{A_{\text{P}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)\]
                     <p class="paragraph">
                       Dividing by <em>m<sub>P</sub></em> <em>C<sub>P</sub><sup>S</sup></em> we obtain:
                     </p>
-                    \[\frac{\,d{T_{\text{P}}}}{\,dt}=\frac{{h_{\text{P}}} {A_{\text{P}}}}{{m_{\text{P}}} {{C_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}-{T_{\text{P}}}\right)\]
+                    \[\frac{\,d{T_{\text{P}}}}{\,dt}=\frac{{h_{\text{P}}}\,{A_{\text{P}}}}{{m_{\text{P}}}\,{{C_{\text{P}}}^{\text{S}}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)\]
                     <p class="paragraph">
                       By substituting <em>τ<sub>P</sub><sup>S</sup></em> (from <a href=#DD:balanceSolidPCM>DD:balanceSolidPCM</a>), this can be written as:
                     </p>
-                    \[\frac{\,d{T_{\text{P}}}}{\,dt}=\frac{1}{{{τ_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}-{T_{\text{P}}}\right)\]
+                    \[\frac{\,d{T_{\text{P}}}}{\,dt}=\frac{1}{{{τ_{\text{P}}}^{\text{S}}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)\]
                     <p class="paragraph">
                       Equation (4) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that <em>C<sub>P</sub><sup>S</sup></em> is replaced by <em>C<sub>P</sub><sup>L</sup></em>, and thus <em>τ<sub>P</sub><sup>S</sup></em> is replaced by <em>τ<sub>P</sub><sup>L</sup></em>. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (<a href=#assumpVCMPN>A:Volume-Change-Melting-PCM-Negligible</a>).
                     </p>
@@ -2485,7 +2487,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{E_{\text{W}}}\left(t\right)={C_{\text{W}}} {m_{\text{W}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)\]
+                        \[{E_{\text{W}}}\left(t\right)={C_{\text{W}}}\,{m_{\text{W}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -2573,8 +2575,8 @@
                       <th>Equation</th>
                       <td>
                         \[{E_{\text{P}}}=\begin{cases}
-                                         {{C_{\text{P}}}^{\text{S}}} {m_{\text{P}}} \left({T_{\text{P}}}\left(t\right)-{T_{\text{init}}}\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
-                                         {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{H_{\text{f}}} {m_{\text{P}}}+{{C_{\text{P}}}^{\text{L}}} {m_{\text{P}}} \left({T_{\text{P}}}\left(t\right)-{{T_{\text{melt}}}^{\text{P}}}\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                                         {{C_{\text{P}}}^{\text{S}}}\,{m_{\text{P}}}\,\left({T_{\text{P}}}\left(t\right)-{T_{\text{init}}}\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                                         {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{H_{\text{f}}}\,{m_{\text{P}}}+{{C_{\text{P}}}^{\text{L}}}\,{m_{\text{P}}}\,\left({T_{\text{P}}}\left(t\right)-{{T_{\text{melt}}}^{\text{P}}}\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
                                          {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{Q_{\text{P}}}\left(t\right), & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0\lt{}ϕ\lt{}1
                                          \end{cases}\]
                       </td>
@@ -2894,11 +2896,11 @@
                 <p class="paragraph">
                   A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a> and <a href=#GD:htFluxPCMFromWater>GD:htFluxPCMFromWater</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
                 </p>
-                \[{E_{\text{W}}}=\int_{0}^{t}{{h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)}\,dt-\int_{0}^{t}{{h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt\]
+                \[{E_{\text{W}}}=\int_{0}^{t}{{h_{\text{C}}}\,{A_{\text{C}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)}\,dt-\int_{0}^{t}{{h_{\text{P}}}\,{A_{\text{P}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt\]
                 <p class="paragraph">
                   In addition, the change in heat energy in the PCM should equal the energy input to the PCM from the water. This can be expressed as
                 </p>
-                \[{E_{\text{P}}}=\int_{0}^{t}{{h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt\]
+                \[{E_{\text{P}}}=\int_{0}^{t}{{h_{\text{P}}}\,{A_{\text{P}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt\]
                 <p class="paragraph">
                   Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as "sanity" checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than <em>C<sub>tol</sub></em> <a href=#verifyEnergyOutput>FR:Verify-Energy-Output-Follow-Conservation-of-Energy</a>.
                 </p>

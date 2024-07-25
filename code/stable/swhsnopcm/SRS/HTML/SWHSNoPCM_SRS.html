@@ -836,7 +836,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[-∇\cdot{}\symbf{q}+g=ρ C \frac{\,\partial{}T}{\,\partial{}t}\]
+                        \[-∇\cdot{}\symbf{q}+g=ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}\]
                       </td>
                     </tr>
                     <tr>
@@ -902,7 +902,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[E={C^{\text{L}}} m ΔT\]</td>
+                      <td>\[E={C^{\text{L}}}\,m\,ΔT\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -953,7 +953,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[q\left(t\right)=h ΔT\left(t\right)\]</td>
+                      <td>\[q\left(t\right)=h\,ΔT\left(t\right)\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1025,7 +1025,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]
+                        \[m\,C\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V\]
                       </td>
                     </tr>
                     <tr>
@@ -1079,23 +1079,23 @@
                     <p class="paragraph">
                       Integrating <a href=#TM:consThermE>TM:consThermE</a> over a volume (<em>V</em>), we have:
                     </p>
-                    \[-\int_{V}{∇\cdot{}\symbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
+                    \[-\int_{V}{∇\cdot{}\symbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
                     <p class="paragraph">
                       Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em> of the volume, with <em><b>q</b></em> as the thermal flux vector for the surface and <em><b>n&#770;</b></em> as a unit outward normal vector for a surface:
                     </p>
-                    \[-\int_{S}{\symbf{q}\cdot{}\symbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
+                    \[-\int_{S}{\symbf{q}\cdot{}\symbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
                     <p class="paragraph">
                       We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then Equation (1) can be written as:
                     </p>
-                    \[{q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
+                    \[{q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
                     <p class="paragraph">
                       Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD:rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em>, and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A:Constant-Water-Temp-Across-Tank</a>, <a href=#assumpDWCoW>A:Density-Water-Constant-over-Volume</a>, and <a href=#assumpSHECoW>A:Specific-Heat-Energy-Constant-over-Volume</a>, we have:
                     </p>
-                    \[ρ C V \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]
+                    \[ρ\,C\,V\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V\]
                     <p class="paragraph">
                       Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, Equation (2) can be written as:
                     </p>
-                    \[m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]
+                    \[m\,C\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V\]
                   </div>
                 </div>
                 <div id="GD:htFluxWaterFromCoil">
@@ -1119,7 +1119,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{q_{\text{C}}}={h_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)\]
+                        \[{q_{\text{C}}}={h_{\text{C}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1197,7 +1197,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{m_{\text{W}}}={V_{\text{W}}} {ρ_{\text{W}}}\]</td>
+                      <td>\[{m_{\text{W}}}={V_{\text{W}}}\,{ρ_{\text{W}}}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1300,7 +1300,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{V_{\text{tank}}}=π \left(\frac{D}{2}\right)^{2} L\]</td>
+                      <td>\[{V_{\text{tank}}}=π\,\left(\frac{D}{2}\right)^{2}\,L\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1356,7 +1356,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{τ_{\text{W}}}=\frac{{m_{\text{W}}} {C_{\text{W}}}}{{h_{\text{C}}} {A_{\text{C}}}}\]
+                        \[{τ_{\text{W}}}=\frac{{m_{\text{W}}}\,{C_{\text{W}}}}{{h_{\text{C}}}\,{A_{\text{C}}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1443,7 +1443,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\frac{\,d{T_{\text{W}}}}{\,dt}+\frac{1}{{τ_{\text{W}}}} {{T_{\text{W}}}}=\frac{1}{{τ_{\text{W}}}} {T_{\text{C}}}\]
+                        \[\frac{\,d{T_{\text{W}}}}{\,dt}+\frac{1}{{τ_{\text{W}}}}\,{{T_{\text{W}}}}=\frac{1}{{τ_{\text{W}}}}\,{T_{\text{C}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1498,19 +1498,19 @@
                     <p class="paragraph">
                       To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a>), over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A:Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBW>A:No-Internal-Heat-Generation-By-Water</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD:rocTempSimp</a> can be written as:
                     </p>
-                    \[{m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}} {A_{\text{C}}}\]
+                    \[{m_{\text{W}}}\,{C_{\text{W}}}\,\frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}}\,{A_{\text{C}}}\]
                     <p class="paragraph">
                       Using <a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a> for <em>q<sub>C</sub></em>, this can be written as:
                     </p>
-                    \[{m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)\]
+                    \[{m_{\text{W}}}\,{C_{\text{W}}}\,\frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}}\,{A_{\text{C}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)\]
                     <p class="paragraph">
                       Dividing Equation (2) by <em>m<sub>W</sub>&#8239;C<sub>W</sub></em>, we obtain:
                     </p>
-                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)\]
+                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)\]
                     <p class="paragraph">
                       By substituting <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD:balanceDecayRate</a>), this can be written as:
                     </p>
-                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)\]
+                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)\]
                   </div>
                 </div>
                 <div id="IM:heatEInWtr">
@@ -1546,7 +1546,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{E_{\text{W}}}\left(t\right)={C_{\text{W}}} {m_{\text{W}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)\]
+                        \[{E_{\text{W}}}\left(t\right)={C_{\text{W}}}\,{m_{\text{W}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)\]
                       </td>
                     </tr>
                     <tr>

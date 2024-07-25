@@ -14,7 +14,7 @@ import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
   Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, E, (:+:)), Label, 
   LinkType(Internal, Cite2, External), OverSymb(Hat), Fonts(Emph, Bold), 
-  Spacing(Thin), Fence(Abs), Ops(Perc))
+  Spacing(Thin), Fence(Abs), Ops(Perc, Mul))
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Project(Project), 
   LayoutObj(..), Filename, RefMap, File(File))
@@ -139,7 +139,8 @@ pExpr (Label s)      = printMath $ TeX.pExpr (Label s')
 pExpr (Sub e)        = bslash <> unders <> braces (pExpr e)
 pExpr (Sup e)        = hat    <> braces (pExpr e)
 pExpr (Over Hat s)   = printMath $ commandD "hat" (pExpr' s)
-pExpr (MO Perc)      = bslash <> printMath (TeX.pExpr (MO Perc))
+pExpr (MO o)
+  | o == Perc || o == Mul = bslash <> printMath (TeX.pExpr (MO o))
 pExpr (Fenced l r m) = fence TeX.Open l <> pExpr m <> fence TeX.Close r
   where 
     fence _ Abs = text "\\|"

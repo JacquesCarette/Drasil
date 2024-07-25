@@ -187,7 +187,7 @@
 <tr><td style="text-align: left">Output</td><td style="text-align: left">\({T_{\text{W}}}\)</td></tr>
 <tr><td style="text-align: left">Input Constraints</td><td style="text-align: left">\[{T_{\text{C}}}\geq{}{T_{\text{init}}}\]</td></tr>
 <tr><td style="text-align: left">Output Constraints</td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\frac{\,d{T_{\text{W}}}}{\,dt}+\frac{1}{{τ_{\text{W}}}} {{T_{\text{W}}}}=\frac{1}{{τ_{\text{W}}}} {T_{\text{C}}}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\frac{\,d{T_{\text{W}}}}{\,dt}+\frac{1}{{τ_{\text{W}}}}\,{{T_{\text{W}}}}=\frac{1}{{τ_{\text{W}}}}\,{T_{\text{C}}}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(t\) is the time (\({\text{s}}\))</li><li>\({T_{\text{W}}}\) is the temperature of the water (\({{}^{\circ}\text{C}}\))</li><li>\({τ_{\text{W}}}\) is the ODE parameter for water related to decay time (\({\text{s}}\))</li><li>\({T_{\text{C}}}\) is the temperature of the heating coil (\({{}^{\circ}\text{C}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\({τ_{\text{W}}}\) is calculated from <a href="./SecDDs.html#DD:balanceDecayRate">DD:balanceDecayRate</a>.</li><li>The above equation applies as long as the water is in liquid form, \(0\lt{}{T_{\text{W}}}\lt{}100\) (\({{}^{\circ}\text{C}}\)) where \(0\) (\({{}^{\circ}\text{C}}\)) and \(100\) (\({{}^{\circ}\text{C}}\)) are the melting and boiling point temperatures of water, respectively (<a href="./SecAssumps.html#assumpWAL">A:Water-Always-Liquid</a>).</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#koothoor2013">koothoor2013</a> (with PCM removed)</td></tr>
@@ -196,13 +196,13 @@
 </div>
 <h4 id="IM:eBalanceOnWtrDeriv"><a class="header" href="#IM:eBalanceOnWtrDeriv">Detailed derivation of the energy balance on water:</a></h4>
 <p>To find the rate of change of \({T_{\text{W}}}\), we look at the energy balance on water. The volume being considered is the volume of water in the tank \({V_{\text{W}}}\), which has mass \({m_{\text{W}}}\) and specific heat capacity, \({C_{\text{W}}}\). Heat transfer occurs in the water from the heating coil as \({q_{\text{C}}}\) (<a href="./SecGDs.html#GD:htFluxWaterFromCoil">GD:htFluxWaterFromCoil</a>), over area \({A_{\text{C}}}\). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href="./SecAssumps.html#assumpPIT">A:Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href="./SecAssumps.html#assumpNIHGBW">A:No-Internal-Heat-Generation-By-Water</a>), \(g=0\). Therefore, the equation for <a href="./SecGDs.html#GD:rocTempSimp">GD:rocTempSimp</a> can be written as:</p>
-<p>\[{m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}} {A_{\text{C}}}\]</p>
+<p>\[{m_{\text{W}}}\,{C_{\text{W}}}\,\frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}}\,{A_{\text{C}}}\]</p>
 <p>Using <a href="./SecGDs.html#GD:htFluxWaterFromCoil">GD:htFluxWaterFromCoil</a> for \({q_{\text{C}}}\), this can be written as:</p>
-<p>\[{m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)\]</p>
-<p>Dividing Equation (2) by \({m_{\text{W}}} {C_{\text{W}}}\), we obtain:</p>
-<p>\[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)\]</p>
+<p>\[{m_{\text{W}}}\,{C_{\text{W}}}\,\frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}}\,{A_{\text{C}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)\]</p>
+<p>Dividing Equation (2) by \({m_{\text{W}}}\,{C_{\text{W}}}\), we obtain:</p>
+<p>\[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)\]</p>
 <p>By substituting \({τ_{\text{W}}}\) (from <a href="./SecDDs.html#DD:balanceDecayRate">DD:balanceDecayRate</a>), this can be written as:</p>
-<p>\[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)\]</p>
+<p>\[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)\]</p>
 <div align="center">
 <h2 id="IM:heatEInWtr"><a class="header" href="#IM:heatEInWtr">Heat energy in the water</a></h2>
 </div>
@@ -212,7 +212,7 @@
 <tr><td style="text-align: left">Output</td><td style="text-align: left">\({E_{\text{W}}}\)</td></tr>
 <tr><td style="text-align: left">Input Constraints</td><td style="text-align: left"></td></tr>
 <tr><td style="text-align: left">Output Constraints</td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{E_{\text{W}}}\left(t\right)={C_{\text{W}}} {m_{\text{W}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{E_{\text{W}}}\left(t\right)={C_{\text{W}}}\,{m_{\text{W}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({E_{\text{W}}}\) is the change in heat energy in the water (\({\text{J}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\({C_{\text{W}}}\) is the specific heat capacity of water (\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\))</li><li>\({m_{\text{W}}}\) is the mass of water (\({\text{kg}}\))</li><li>\({T_{\text{W}}}\) is the temperature of the water (\({{}^{\circ}\text{C}}\))</li><li>\({T_{\text{init}}}\) is the initial temperature (\({{}^{\circ}\text{C}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The above equation is derived using <a href="./SecTMs.html#TM:sensHtE">TM:sensHtE</a>.</li><li>The change in temperature is the difference between the temperature at time \(t\) (\({\text{s}}\)), \({T_{\text{W}}}\) and the initial temperature, \({T_{\text{init}}}\) (\({{}^{\circ}\text{C}}\)).</li><li>This equation applies as long as \(0\lt{}{T_{\text{W}}}\lt{}100\)\({{}^{\circ}\text{C}}\) (<a href="./SecAssumps.html#assumpWAL">A:Water-Always-Liquid</a>, <a href="./SecAssumps.html#assumpAPT">A:Atmospheric-Pressure-Tank</a>).</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#koothoor2013">koothoor2013</a></td></tr>

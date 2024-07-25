@@ -182,7 +182,7 @@
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:rocTempSimp</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Simplified rate of change of temperature</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[m\,C\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(C\) is the specific heat capacity (\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\(T\) is the temperature (\({{}^{\circ}\text{C}}\))</li><li>\({q_{\text{in}}}\) is the heat flux input (\(\frac{\text{W}}{\text{m}^{2}}\))</li><li>\({A_{\text{in}}}\) is the surface area over which heat is transferred in (\({\text{m}^{2}}\))</li><li>\({q_{\text{out}}}\) is the heat flux output (\(\frac{\text{W}}{\text{m}^{2}}\))</li><li>\({A_{\text{out}}}\) is the surface area over which heat is transferred out (\({\text{m}^{2}}\))</li><li>\(g\) is the volumetric heat generation per unit volume (\(\frac{\text{W}}{\text{m}^{3}}\))</li><li>\(V\) is the volume (\({\text{m}^{3}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecGDs.html#GD:rocTempSimp">GD:rocTempSimp</a>, <a href="./SecIMs.html#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a>, and <a href="./SecIMs.html#IM:eBalanceOnPCM">IM:eBalanceOnPCM</a></td></tr>
@@ -190,22 +190,22 @@
 </div>
 <h4 id="GD:rocTempSimpDeriv"><a class="header" href="#GD:rocTempSimpDeriv">Detailed derivation of simplified rate of change of temperature:</a></h4>
 <p>Integrating <a href="./SecTMs.html#TM:consThermE">TM:consThermE</a> over a volume (\(V\)), we have:</p>
-<p>\[-\int_{V}{∇\cdot{}\boldsymbol{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]</p>
+<p>\[-\int_{V}{∇\cdot{}\boldsymbol{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV\]</p>
 <p>Applying Gauss’s Divergence Theorem to the first term over the surface \(S\) of the volume, with \(\boldsymbol{q}\) as the thermal flux vector for the surface and \(\boldsymbol{\hat{n}}\) as a unit outward normal vector for a surface:</p>
-<p>\[-\int_{S}{\boldsymbol{q}\cdot{}\boldsymbol{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]</p>
+<p>\[-\int_{S}{\boldsymbol{q}\cdot{}\boldsymbol{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV\]</p>
 <p>We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then Equation (1) can be written as:</p>
-<p>\[{q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]</p>
+<p>\[{q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV\]</p>
 <p>Where \({q_{\text{in}}}\), \({q_{\text{out}}}\), \({A_{\text{in}}}\), and \({A_{\text{out}}}\) are explained in <a href="./SecGDs.html#GD:rocTempSimp">GD:rocTempSimp</a>. The integral over the surface could be simplified because the thermal flux is assumed constant over \({A_{\text{in}}}\) and \({A_{\text{out}}}\) and \(0\) on all other surfaces. Outward flux is considered positive. Assuming \(ρ\), \(C\), and \(T\) are constant over the volume, which is true in our case by <a href="./SecAssumps.html#assumpCWTAT">A:Constant-Water-Temp-Across-Tank</a>, <a href="./SecAssumps.html#assumpTPCAV">A:Temp-PCM-Constant-Across-Volume</a>, <a href="./SecAssumps.html#assumpDWPCoV">A:Density-Water-PCM-Constant-over-Volume</a>, and <a href="./SecAssumps.html#assumpSHECov">A:Specific-Heat-Energy-Constant-over-Volume</a>, we have:</p>
-<p>\[ρ C V \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]</p>
+<p>\[ρ\,C\,V\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V\]</p>
 <p>Using the fact that \(ρ\)=\(m\)/\(V\), Equation (2) can be written as:</p>
-<p>\[m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]</p>
+<p>\[m\,C\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V\]</p>
 <div align="center">
 <h2 id="GD:htFluxWaterFromCoil"><a class="header" href="#GD:htFluxWaterFromCoil">Heat flux into the water from the coil</a></h2>
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:htFluxWaterFromCoil</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Heat flux into the water from the coil</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{W}}{\text{m}^{2}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{q_{\text{C}}}={h_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{q_{\text{C}}}={h_{\text{C}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({q_{\text{C}}}\) is the heat flux into the water from the coil (\(\frac{\text{W}}{\text{m}^{2}}\))</li><li>\({h_{\text{C}}}\) is the convective heat transfer coefficient between coil and water (\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\))</li><li>\({T_{\text{C}}}\) is the temperature of the heating coil (\({{}^{\circ}\text{C}}\))</li><li>\({T_{\text{W}}}\) is the temperature of the water (\({{}^{\circ}\text{C}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\({q_{\text{C}}}\) is found by assuming that Newton’s law of cooling applies (<a href="./SecAssumps.html#assumpLCCCW">A:Newton-Law-Convective-Cooling-Coil-Water</a>). This law (defined in <a href="./SecTMs.html#TM:nwtnCooling">TM:nwtnCooling</a>) is used on the surface of the heating coil.</li><li><a href="./SecAssumps.html#assumpTHCCoT">A:Temp-Heating-Coil-Constant-over-Time</a></li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#koothoor2013">koothoor2013</a></td></tr>
@@ -217,7 +217,7 @@
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:htFluxPCMFromWater</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Heat flux into the PCM from water</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{W}}{\text{m}^{2}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{q_{\text{P}}}={h_{\text{P}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{q_{\text{P}}}={h_{\text{P}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({q_{\text{P}}}\) is the heat flux into the PCM from water (\(\frac{\text{W}}{\text{m}^{2}}\))</li><li>\({h_{\text{P}}}\) is the convective heat transfer coefficient between PCM and water (\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\))</li><li>\({T_{\text{W}}}\) is the temperature of the water (\({{}^{\circ}\text{C}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\({T_{\text{P}}}\) is the temperature of the phase change material (\({{}^{\circ}\text{C}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\({q_{\text{P}}}\) is found by assuming that Newton’s law of cooling applies (<a href="./SecAssumps.html#assumpLCCWP">A:Law-Convective-Cooling-Water-PCM</a>). This law (defined in <a href="./SecTMs.html#TM:nwtnCooling">TM:nwtnCooling</a>) is used on the surface of the phase change material.</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#koothoor2013">koothoor2013</a></td></tr>

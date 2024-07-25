@@ -353,7 +353,7 @@
 <div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:SysContext"><a class="header" href="#Sec:SysContext">System Context</a></h1>
 <p><a href="./SecSysContext.html#Figure:SysCon">Fig:SysCon</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHSNoPCM). Arrows are used to show the data flow between the system and its environment.</p>
 <div id="Figure:SysCon"></div>
-<p><img src="/assets/SystemContextFigure.png" alt="Fig:SysCon: System Context" /></p>
+<p><img src="./assets/SystemContextFigure.png" alt="Fig:SysCon: System Context" /></p>
 <p><strong><p align="center"><a href="./SecSysContext.html#Figure:SysCon">Fig:SysCon</a>: System Context</p></strong></p>
 <p>SWHSNoPCM is mostly self-contained. The only external interaction is through the user interface. The responsibilities of the user and the system are as follows:</p>
 <ul>
@@ -392,7 +392,7 @@
 <p>PS1: Tank containing water.</p>
 <p>PS2: Heating coil at bottom of tank. (\({q_{\text{C}}}\) represents the heat flux into the water from the coil.)</p>
 <div id="Figure:Tank"></div>
-<p><img src="/assets/TankWaterOnly.png" alt="Solar water heating tank, with heat flux from heating coil of \({q_{\text{C}}}\)" /></p>
+<p><img src="./assets/TankWaterOnly.png" alt="Solar water heating tank, with heat flux from heating coil of \({q_{\text{C}}}\)" /></p>
 <p><strong><p align="center">Solar water heating tank, with heat flux from heating coil of \({q_{\text{C}}}\)</p></strong></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:GoalStmt"><a class="header" href="#Sec:GoalStmt">Goal Statements</a></h1>
 <p>Given the temperature of the heating coil, the initial temperature of the water, and the material properties, the goal statements are:</p>
@@ -439,7 +439,7 @@
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">TM:consThermE</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Conservation of thermal energy</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[-∇\cdot{}\boldsymbol{q}+g=ρ C \frac{\,\partial{}T}{\,\partial{}t}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[-∇\cdot{}\boldsymbol{q}+g=ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(∇\) is the gradient (Unitless)</li><li>\(\boldsymbol{q}\) is the thermal flux vector (\(\frac{\text{W}}{\text{m}^{2}}\))</li><li>\(g\) is the volumetric heat generation per unit volume (\(\frac{\text{W}}{\text{m}^{3}}\))</li><li>\(ρ\) is the density (\(\frac{\text{kg}}{\text{m}^{3}}\))</li><li>\(C\) is the specific heat capacity (\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\(T\) is the temperature (\({{}^{\circ}\text{C}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The above equation gives the law of conservation of energy for transient heat transfer in a given material.</li><li>For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href="./SecAssumps.html#assumpTEO">A:Thermal-Energy-Only</a>).</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm">Fourier Law of Heat Conduction and Heat Equation</a></td></tr>
@@ -450,7 +450,7 @@
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">TM:sensHtE</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Sensible heat energy (no state change)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[E={C^{\text{L}}} m ΔT\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[E={C^{\text{L}}}\,m\,ΔT\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(E\) is the sensible heat (\({\text{J}}\))</li><li>\({C^{\text{L}}}\) is the specific heat capacity of a liquid (\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(ΔT\) is the change in temperature (\({{}^{\circ}\text{C}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\(E\) occurs as long as the material does not reach a temperature where a phase change occurs, as assumed in <a href="./SecAssumps.html#assumpWAL">A:Water-Always-Liquid</a>.</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="http://en.wikipedia.org/wiki/Sensible_heat">Definition of Sensible Heat</a></td></tr>
@@ -461,7 +461,7 @@
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">TM:nwtnCooling</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Newton’s law of cooling</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[q\left(t\right)=h ΔT\left(t\right)\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[q\left(t\right)=h\,ΔT\left(t\right)\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(q\) is the heat flux (\(\frac{\text{W}}{\text{m}^{2}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\(h\) is the convective heat transfer coefficient (\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\))</li><li>\(ΔT\) is the change in temperature (\({{}^{\circ}\text{C}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>Newton’s law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings.</li><li>\(h\) is assumed to be independent of \(T\) (from <a href="./SecAssumps.html#assumpHTCC">A:Heat-Transfer-Coeffs-Constant</a>).</li><li>\(ΔT\left(t\right)=T\left(t\right)-{T_{\text{env}}}\left(t\right)\) is the time-dependant thermal gradient between the environment and the object.</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#incroperaEtAl2007">incroperaEtAl2007</a> (pg. 8)</td></tr>
@@ -474,7 +474,7 @@
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:rocTempSimp</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Simplified rate of change of temperature</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[m\,C\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(C\) is the specific heat capacity (\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\(T\) is the temperature (\({{}^{\circ}\text{C}}\))</li><li>\({q_{\text{in}}}\) is the heat flux input (\(\frac{\text{W}}{\text{m}^{2}}\))</li><li>\({A_{\text{in}}}\) is the surface area over which heat is transferred in (\({\text{m}^{2}}\))</li><li>\({q_{\text{out}}}\) is the heat flux output (\(\frac{\text{W}}{\text{m}^{2}}\))</li><li>\({A_{\text{out}}}\) is the surface area over which heat is transferred out (\({\text{m}^{2}}\))</li><li>\(g\) is the volumetric heat generation per unit volume (\(\frac{\text{W}}{\text{m}^{3}}\))</li><li>\(V\) is the volume (\({\text{m}^{3}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecGDs.html#GD:rocTempSimp">GD:rocTempSimp</a> and <a href="./SecIMs.html#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a></td></tr>
@@ -482,22 +482,22 @@
 </div>
 <h4 id="GD:rocTempSimpDeriv"><a class="header" href="#GD:rocTempSimpDeriv">Detailed derivation of simplified rate of change of temperature:</a></h4>
 <p>Integrating <a href="./SecTMs.html#TM:consThermE">TM:consThermE</a> over a volume (\(V\)), we have:</p>
-<p>\[-\int_{V}{∇\cdot{}\boldsymbol{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]</p>
+<p>\[-\int_{V}{∇\cdot{}\boldsymbol{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV\]</p>
 <p>Applying Gauss’s Divergence Theorem to the first term over the surface \(S\) of the volume, with \(\boldsymbol{q}\) as the thermal flux vector for the surface and \(\boldsymbol{\hat{n}}\) as a unit outward normal vector for a surface:</p>
-<p>\[-\int_{S}{\boldsymbol{q}\cdot{}\boldsymbol{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]</p>
+<p>\[-\int_{S}{\boldsymbol{q}\cdot{}\boldsymbol{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV\]</p>
 <p>We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then Equation (1) can be written as:</p>
-<p>\[{q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]</p>
+<p>\[{q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV\]</p>
 <p>Where \({q_{\text{in}}}\), \({q_{\text{out}}}\), \({A_{\text{in}}}\), and \({A_{\text{out}}}\) are explained in <a href="./SecGDs.html#GD:rocTempSimp">GD:rocTempSimp</a>. Assuming \(ρ\), \(C\), and \(T\) are constant over the volume, which is true in our case by <a href="./SecAssumps.html#assumpCWTAT">A:Constant-Water-Temp-Across-Tank</a>, <a href="./SecAssumps.html#assumpDWCoW">A:Density-Water-Constant-over-Volume</a>, and <a href="./SecAssumps.html#assumpSHECoW">A:Specific-Heat-Energy-Constant-over-Volume</a>, we have:</p>
-<p>\[ρ C V \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]</p>
+<p>\[ρ\,C\,V\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V\]</p>
 <p>Using the fact that \(ρ\)=\(m\)/\(V\), Equation (2) can be written as:</p>
-<p>\[m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]</p>
+<p>\[m\,C\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V\]</p>
 <div align="center">
 <h2 id="GD:htFluxWaterFromCoil"><a class="header" href="#GD:htFluxWaterFromCoil">Heat flux into the water from the coil</a></h2>
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:htFluxWaterFromCoil</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Heat flux into the water from the coil</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{W}}{\text{m}^{2}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{q_{\text{C}}}={h_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{q_{\text{C}}}={h_{\text{C}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({q_{\text{C}}}\) is the heat flux into the water from the coil (\(\frac{\text{W}}{\text{m}^{2}}\))</li><li>\({h_{\text{C}}}\) is the convective heat transfer coefficient between coil and water (\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\))</li><li>\({T_{\text{C}}}\) is the temperature of the heating coil (\({{}^{\circ}\text{C}}\))</li><li>\({T_{\text{W}}}\) is the temperature of the water (\({{}^{\circ}\text{C}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\({q_{\text{C}}}\) is found by assuming that Newton’s law of cooling applies (<a href="./SecAssumps.html#assumpLCCCW">A:Newton-Law-Convective-Cooling-Coil-Water</a>). This law (defined in <a href="./SecTMs.html#TM:nwtnCooling">TM:nwtnCooling</a>) is used on the surface of the heating coil.</li><li><a href="./SecAssumps.html#assumpTHCCoT">A:Temp-Heating-Coil-Constant-over-Time</a></li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#koothoor2013">koothoor2013</a></td></tr>
@@ -512,7 +512,7 @@
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Mass of water</td></tr>
 <tr><td style="text-align: left">Symbol</td><td style="text-align: left">\({m_{\text{W}}}\)</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{kg}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{m_{\text{W}}}={V_{\text{W}}} {ρ_{\text{W}}}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{m_{\text{W}}}={V_{\text{W}}}\,{ρ_{\text{W}}}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({m_{\text{W}}}\) is the mass of water (\({\text{kg}}\))</li><li>\({V_{\text{W}}}\) is the volume of water (\({\text{m}^{3}}\))</li><li>\({ρ_{\text{W}}}\) is the density of water (\(\frac{\text{kg}}{\text{m}^{3}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecFRs.html#findMass">FR:Find-Mass</a></td></tr>
@@ -537,7 +537,7 @@
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Volume of the cylindrical tank</td></tr>
 <tr><td style="text-align: left">Symbol</td><td style="text-align: left">\({V_{\text{tank}}}\)</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{m}^{3}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{V_{\text{tank}}}=π \left(\frac{D}{2}\right)^{2} L\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{V_{\text{tank}}}=π\,\left(\frac{D}{2}\right)^{2}\,L\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({V_{\text{tank}}}\) is the volume of the cylindrical tank (\({\text{m}^{3}}\))</li><li>\(π\) is the ratio of circumference to diameter for any circle (Unitless)</li><li>\(D\) is the diameter of tank (\({\text{m}}\))</li><li>\(L\) is the length of tank (\({\text{m}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecDDs.html#DD:waterVolume.nopcm">DD:waterVolume_nopcm</a> and <a href="./SecFRs.html#findMass">FR:Find-Mass</a></td></tr>
@@ -549,7 +549,7 @@
 <tr><td style="text-align: left">Label</td><td style="text-align: left">ODE parameter for water related to decay time</td></tr>
 <tr><td style="text-align: left">Symbol</td><td style="text-align: left">\({τ_{\text{W}}}\)</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{s}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{τ_{\text{W}}}=\frac{{m_{\text{W}}} {C_{\text{W}}}}{{h_{\text{C}}} {A_{\text{C}}}}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{τ_{\text{W}}}=\frac{{m_{\text{W}}}\,{C_{\text{W}}}}{{h_{\text{C}}}\,{A_{\text{C}}}}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({τ_{\text{W}}}\) is the ODE parameter for water related to decay time (\({\text{s}}\))</li><li>\({m_{\text{W}}}\) is the mass of water (\({\text{kg}}\))</li><li>\({C_{\text{W}}}\) is the specific heat capacity of water (\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\))</li><li>\({h_{\text{C}}}\) is the convective heat transfer coefficient between coil and water (\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\))</li><li>\({A_{\text{C}}}\) is the heating coil surface area (\({\text{m}^{2}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#koothoor2013">koothoor2013</a></td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a> and <a href="./SecFRs.html#outputInputDerivVals">FR:Output-Input-Derived-Values</a></td></tr>
@@ -566,7 +566,7 @@
 <tr><td style="text-align: left">Output</td><td style="text-align: left">\({T_{\text{W}}}\)</td></tr>
 <tr><td style="text-align: left">Input Constraints</td><td style="text-align: left">\[{T_{\text{C}}}\geq{}{T_{\text{init}}}\]</td></tr>
 <tr><td style="text-align: left">Output Constraints</td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\frac{\,d{T_{\text{W}}}}{\,dt}+\frac{1}{{τ_{\text{W}}}} {{T_{\text{W}}}}=\frac{1}{{τ_{\text{W}}}} {T_{\text{C}}}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\frac{\,d{T_{\text{W}}}}{\,dt}+\frac{1}{{τ_{\text{W}}}}\,{{T_{\text{W}}}}=\frac{1}{{τ_{\text{W}}}}\,{T_{\text{C}}}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(t\) is the time (\({\text{s}}\))</li><li>\({T_{\text{W}}}\) is the temperature of the water (\({{}^{\circ}\text{C}}\))</li><li>\({τ_{\text{W}}}\) is the ODE parameter for water related to decay time (\({\text{s}}\))</li><li>\({T_{\text{C}}}\) is the temperature of the heating coil (\({{}^{\circ}\text{C}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\({τ_{\text{W}}}\) is calculated from <a href="./SecDDs.html#DD:balanceDecayRate">DD:balanceDecayRate</a>.</li><li>The above equation applies as long as the water is in liquid form, \(0\lt{}{T_{\text{W}}}\lt{}100\) (\({{}^{\circ}\text{C}}\)) where \(0\) (\({{}^{\circ}\text{C}}\)) and \(100\) (\({{}^{\circ}\text{C}}\)) are the melting and boiling point temperatures of water, respectively (<a href="./SecAssumps.html#assumpWAL">A:Water-Always-Liquid</a>).</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#koothoor2013">koothoor2013</a> (with PCM removed)</td></tr>
@@ -575,13 +575,13 @@
 </div>
 <h4 id="IM:eBalanceOnWtrDeriv"><a class="header" href="#IM:eBalanceOnWtrDeriv">Detailed derivation of the energy balance on water:</a></h4>
 <p>To find the rate of change of \({T_{\text{W}}}\), we look at the energy balance on water. The volume being considered is the volume of water in the tank \({V_{\text{W}}}\), which has mass \({m_{\text{W}}}\) and specific heat capacity, \({C_{\text{W}}}\). Heat transfer occurs in the water from the heating coil as \({q_{\text{C}}}\) (<a href="./SecGDs.html#GD:htFluxWaterFromCoil">GD:htFluxWaterFromCoil</a>), over area \({A_{\text{C}}}\). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href="./SecAssumps.html#assumpPIT">A:Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href="./SecAssumps.html#assumpNIHGBW">A:No-Internal-Heat-Generation-By-Water</a>), \(g=0\). Therefore, the equation for <a href="./SecGDs.html#GD:rocTempSimp">GD:rocTempSimp</a> can be written as:</p>
-<p>\[{m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}} {A_{\text{C}}}\]</p>
+<p>\[{m_{\text{W}}}\,{C_{\text{W}}}\,\frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}}\,{A_{\text{C}}}\]</p>
 <p>Using <a href="./SecGDs.html#GD:htFluxWaterFromCoil">GD:htFluxWaterFromCoil</a> for \({q_{\text{C}}}\), this can be written as:</p>
-<p>\[{m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)\]</p>
-<p>Dividing Equation (2) by \({m_{\text{W}}} {C_{\text{W}}}\), we obtain:</p>
-<p>\[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)\]</p>
+<p>\[{m_{\text{W}}}\,{C_{\text{W}}}\,\frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}}\,{A_{\text{C}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)\]</p>
+<p>Dividing Equation (2) by \({m_{\text{W}}}\,{C_{\text{W}}}\), we obtain:</p>
+<p>\[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)\]</p>
 <p>By substituting \({τ_{\text{W}}}\) (from <a href="./SecDDs.html#DD:balanceDecayRate">DD:balanceDecayRate</a>), this can be written as:</p>
-<p>\[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)\]</p>
+<p>\[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)\]</p>
 <div align="center">
 <h2 id="IM:heatEInWtr"><a class="header" href="#IM:heatEInWtr">Heat energy in the water</a></h2>
 </div>
@@ -591,7 +591,7 @@
 <tr><td style="text-align: left">Output</td><td style="text-align: left">\({E_{\text{W}}}\)</td></tr>
 <tr><td style="text-align: left">Input Constraints</td><td style="text-align: left"></td></tr>
 <tr><td style="text-align: left">Output Constraints</td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{E_{\text{W}}}\left(t\right)={C_{\text{W}}} {m_{\text{W}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{E_{\text{W}}}\left(t\right)={C_{\text{W}}}\,{m_{\text{W}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({E_{\text{W}}}\) is the change in heat energy in the water (\({\text{J}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\({C_{\text{W}}}\) is the specific heat capacity of water (\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\))</li><li>\({m_{\text{W}}}\) is the mass of water (\({\text{kg}}\))</li><li>\({T_{\text{W}}}\) is the temperature of the water (\({{}^{\circ}\text{C}}\))</li><li>\({T_{\text{init}}}\) is the initial temperature (\({{}^{\circ}\text{C}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The above equation is derived using <a href="./SecTMs.html#TM:sensHtE">TM:sensHtE</a>.</li><li>The change in temperature is the difference between the temperature at time \(t\) (\({\text{s}}\)), \({T_{\text{W}}}\) and the initial temperature, \({T_{\text{init}}}\) (\({{}^{\circ}\text{C}}\)).</li><li>This equation applies as long as \(0\lt{}{T_{\text{W}}}\lt{}100\)\({{}^{\circ}\text{C}}\) (<a href="./SecAssumps.html#assumpWAL">A:Water-Always-Liquid</a>, <a href="./SecAssumps.html#assumpAPT">A:Atmospheric-Pressure-Tank</a>).</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#koothoor2013">koothoor2013</a></td></tr>
@@ -774,19 +774,19 @@
 <p><strong><p align="center">Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items</p></strong></p>
 <p>The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href="./SecTraceMatrices.html#Figure:TraceGraphAvsA">Fig:TraceGraphAvsA</a> shows the dependencies of assumptions on each other. <a href="./SecTraceMatrices.html#Figure:TraceGraphAvsAll">Fig:TraceGraphAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href="./SecTraceMatrices.html#Figure:TraceGraphRefvsRef">Fig:TraceGraphRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. <a href="./SecTraceMatrices.html#Figure:TraceGraphAllvsR">Fig:TraceGraphAllvsR</a> shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. <a href="./SecTraceMatrices.html#Figure:TraceGraphAllvsAll">Fig:TraceGraphAllvsAll</a> shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.</p>
 <div id="Figure:TraceGraphAvsA"></div>
-<p><img src="/assets/avsa.svg" alt="TraceGraphAvsA" /></p>
+<p><img src="./assets/avsa.svg" alt="TraceGraphAvsA" /></p>
 <p><strong><p align="center">TraceGraphAvsA</p></strong></p>
 <div id="Figure:TraceGraphAvsAll"></div>
-<p><img src="/assets/avsall.svg" alt="TraceGraphAvsAll" /></p>
+<p><img src="./assets/avsall.svg" alt="TraceGraphAvsAll" /></p>
 <p><strong><p align="center">TraceGraphAvsAll</p></strong></p>
 <div id="Figure:TraceGraphRefvsRef"></div>
-<p><img src="/assets/refvsref.svg" alt="TraceGraphRefvsRef" /></p>
+<p><img src="./assets/refvsref.svg" alt="TraceGraphRefvsRef" /></p>
 <p><strong><p align="center">TraceGraphRefvsRef</p></strong></p>
 <div id="Figure:TraceGraphAllvsR"></div>
-<p><img src="/assets/allvsr.svg" alt="TraceGraphAllvsR" /></p>
+<p><img src="./assets/allvsr.svg" alt="TraceGraphAllvsR" /></p>
 <p><strong><p align="center">TraceGraphAllvsR</p></strong></p>
 <div id="Figure:TraceGraphAllvsAll"></div>
-<p><img src="/assets/allvsall.svg" alt="TraceGraphAllvsAll" /></p>
+<p><img src="./assets/allvsall.svg" alt="TraceGraphAllvsAll" /></p>
 <p><strong><p align="center">TraceGraphAllvsAll</p></strong></p>
 <p>For convenience, the following graphs can be found at the links below:</p>
 <ul>
@@ -825,7 +825,7 @@
 <div id="parnasClements1986"></div>
 <p>[4]: Parnas, David L. and Clements, P. C. “A rational design process: How and why to fake it.” <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251–257. Print.</p>
 <div id="smithKoothoor2016"></div>
-<p>[5]: Smith, W. Spencer and Koothoor, Nirmitha. “A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis.” * Nuclear Engineering and Technology*, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404–418.</p>
+<p>[5]: Smith, W. Spencer and Koothoor, Nirmitha. “A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis.” <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404–418.</p>
 <div id="smithLai2005"></div>
 <p>[6]: Smith, W. Spencer and Lai, Lei. “A new requirements template for scientific computing.” <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP’05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107–121. In conjunction with 13th IEEE International Requirements Engineering Conference,</p>
 <div id="smithEtAl2007"></div>

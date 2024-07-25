@@ -184,7 +184,7 @@
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Center of Mass</td></tr>
 <tr><td style="text-align: left">Symbol</td><td style="text-align: left">\({\boldsymbol{p}\text{(}t\text{)}_{\text{CM}}}\)</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{m}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{\boldsymbol{p}\text{(}t\text{)}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}} {\boldsymbol{p}\text{(}t\text{)}_{j}}}}{{m_{T}}}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{\boldsymbol{p}\text{(}t\text{)}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}}\,{\boldsymbol{p}\text{(}t\text{)}_{j}}}}{{m_{T}}}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({\boldsymbol{p}\text{(}t\text{)}_{\text{CM}}}\) is the Center of Mass (\({\text{m}}\))</li><li>\({m_{j}}\) is the mass of the j-th particle (\({\text{kg}}\))</li><li>\({\boldsymbol{p}\text{(}t\text{)}_{j}}\) is the position vector of the j-th particle (\({\text{m}}\))</li><li>\({m_{T}}\) is the total mass of the rigid body (\({\text{kg}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>).</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
@@ -301,7 +301,7 @@
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Kinetic energy</td></tr>
 <tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(KE\)</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{J}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[KE=m \frac{|\boldsymbol{v}\text{(}t\text{)}|^{2}}{2}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[KE=m\,\frac{|\boldsymbol{v}\text{(}t\text{)}|^{2}}{2}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(KE\) is the kinetic energy (\({\text{J}}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(\boldsymbol{v}\text{(}t\text{)}\) is the velocity (\(\frac{\text{m}}{\text{s}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>Kinetic energy is the measure of the energy a body possesses due to its motion.</li><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>) and two-dimensional (from <a href="./SecAssumps.html#assumpOD">A:objectDimension</a>).</li><li>No damping occurs during the simulation (from <a href="./SecAssumps.html#assumpDI">A:dampingInvolvement</a>).</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
@@ -340,7 +340,7 @@
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Impulse (vector)</td></tr>
 <tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(\boldsymbol{J}\)</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\text{N}\text{s}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{J}=m Δ\boldsymbol{v}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{J}=m\,Δ\boldsymbol{v}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{J}\) is the impulse (vector) (\(\text{N}\text{s}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(Δ\boldsymbol{v}\) is the change in velocity (\(\frac{\text{m}}{\text{s}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>An impulse (vector) \(\boldsymbol{J}\) occurs when a force \(\boldsymbol{F}\) acts over a body over an interval of time.</li><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>).</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
@@ -349,11 +349,11 @@
 </div>
 <h4 id="DD:impulseVDeriv"><a class="header" href="#DD:impulseVDeriv">Detailed derivation of impulse (vector):</a></h4>
 <p>Newton’s second law of motion states:</p>
-<p>\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}=m \frac{\,d\boldsymbol{v}\text{(}t\text{)}}{\,dt}\]</p>
+<p>\[\boldsymbol{F}=m\,\boldsymbol{a}\text{(}t\text{)}=m\,\frac{\,d\boldsymbol{v}\text{(}t\text{)}}{\,dt}\]</p>
 <p>Rearranging:</p>
-<p>\[\int_{{t_{1}}}^{{t_{2}}}{\boldsymbol{F}}\,dt=m \left(\int_{{\boldsymbol{v}\text{(}t\text{)}_{1}}}^{{\boldsymbol{v}\text{(}t\text{)}_{2}}}{1}\,d\boldsymbol{v}\text{(}t\text{)}\right)\]</p>
+<p>\[\int_{{t_{1}}}^{{t_{2}}}{\boldsymbol{F}}\,dt=m\,\left(\int_{{\boldsymbol{v}\text{(}t\text{)}_{1}}}^{{\boldsymbol{v}\text{(}t\text{)}_{2}}}{1}\,d\boldsymbol{v}\text{(}t\text{)}\right)\]</p>
 <p>Integrating the right hand side:</p>
-<p>\[\int_{{t_{1}}}^{{t_{2}}}{\boldsymbol{F}}\,dt=m {\boldsymbol{v}\text{(}t\text{)}_{2}}-m {\boldsymbol{v}\text{(}t\text{)}_{1}}=m Δ\boldsymbol{v}\]</p>
+<p>\[\int_{{t_{1}}}^{{t_{2}}}{\boldsymbol{F}}\,dt=m\,{\boldsymbol{v}\text{(}t\text{)}_{2}}-m\,{\boldsymbol{v}\text{(}t\text{)}_{1}}=m\,Δ\boldsymbol{v}\]</p>
 <div align="center">
 <h2 id="DD:potEnergy"><a class="header" href="#DD:potEnergy">Potential energy</a></h2>
 </div>
@@ -361,7 +361,7 @@
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Potential energy</td></tr>
 <tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(PE\)</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{J}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[PE=m \boldsymbol{g} h\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[PE=m\,\boldsymbol{g}\,h\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(PE\) is the potential energy (\({\text{J}}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(\boldsymbol{g}\) is the gravitational acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\(h\) is the height (\({\text{m}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The potential energy of an object is the energy held by an object because of its position to other objects.</li><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>) and two-dimensional (from <a href="./SecAssumps.html#assumpOD">A:objectDimension</a>).</li><li>No damping occurs during the simulation (from <a href="./SecAssumps.html#assumpDI">A:dampingInvolvement</a>).</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
@@ -374,7 +374,7 @@
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Moment of inertia</td></tr>
 <tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(\boldsymbol{I}\)</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\text{kg}\text{m}^{2}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{I}=\displaystyle\sum{{m_{j}} {d_{j}}^{2}}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{I}=\displaystyle\sum{{m_{j}}\,{d_{j}}^{2}}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{I}\) is the moment of inertia (\(\text{kg}\text{m}^{2}\))</li><li>\({m_{j}}\) is the mass of the j-th particle (\({\text{kg}}\))</li><li>\({d_{j}}\) is the distance between the j-th particle and the axis of rotation (\({\text{m}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The moment of inertia \(\boldsymbol{I}\) of a body measures how much torque is needed for the body to achieve angular acceleration about the axis of rotation.</li><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>).</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>

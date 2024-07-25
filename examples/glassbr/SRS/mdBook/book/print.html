@@ -370,7 +370,7 @@
 <div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:SysContext"><a class="header" href="#Sec:SysContext">System Context</a></h1>
 <p><a href="./SecSysContext.html#Figure:sysCtxDiag">Fig:sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (GlassBR). Arrows are used to show the data flow between the system and its environment.</p>
 <div id="Figure:sysCtxDiag"></div>
-<p><img src="/assets/SystemContextFigure.png" alt="System Context" /></p>
+<p><img src="./assets/SystemContextFigure.png" alt="System Context" /></p>
 <p><strong><p align="center">System Context</p></strong></p>
 <p>The interaction between the product and the user is through a user interface. The responsibilities of the user and the system are as follows:</p>
 <ul>
@@ -438,7 +438,7 @@
 <p>PS1: The glass slab.</p>
 <p>PS2: The point of explosion. Where the bomb, or any kind of man-made explosion, is located. The stand off distance is the distance between the point of explosion and the glass.</p>
 <div id="Figure:physSystImage"></div>
-<p><img src="/assets/physicalsystimage.png" alt="The physical system" /></p>
+<p><img src="./assets/physicalsystimage.png" alt="The physical system" /></p>
 <p><strong><p align="center">The physical system</p></strong></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:GoalStmt"><a class="header" href="#Sec:GoalStmt">Goal Statements</a></h1>
 <p>Given the dimensions of the glass plane, the glass type, the characteristics of the explosion, and the tolerable probability of breakage, the goal statement is:</p>
@@ -499,7 +499,7 @@
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Minimum thickness</td></tr>
 <tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(h\)</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{m}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[h=\frac{1}{1000} \begin{cases}2.16, &amp; t=2.5\\2.59, &amp; t=2.7\\2.92, &amp; t=3.0\\3.78, &amp; t=4.0\\4.57, &amp; t=5.0\\5.56, &amp; t=6.0\\7.42, &amp; t=8.0\\9.02, &amp; t=10.0\\11.91, &amp; t=12.0\\15.09, &amp; t=16.0\\18.26, &amp; t=19.0\\21.44, &amp; t=22.0\end{cases}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[h=\frac{1}{1000}\,\begin{cases}2.16, &amp; t=2.5\\2.59, &amp; t=2.7\\2.92, &amp; t=3.0\\3.78, &amp; t=4.0\\4.57, &amp; t=5.0\\5.56, &amp; t=6.0\\7.42, &amp; t=8.0\\9.02, &amp; t=10.0\\11.91, &amp; t=12.0\\15.09, &amp; t=16.0\\18.26, &amp; t=19.0\\21.44, &amp; t=22.0\end{cases}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(h\) is the minimum thickness (\({\text{m}}\))</li><li>\(t\) is the nominal thickness \(t\in{}{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0}\) (\({\text{mm}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\(t\) is a function that maps from the nominal thickness (\(h\)) to the minimum thickness.</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#astm2009">astm2009</a></td></tr>
@@ -563,7 +563,7 @@
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Equivalent TNT charge mass</td></tr>
 <tr><td style="text-align: left">Symbol</td><td style="text-align: left">\({w_{\mathit{TNT}}}\)</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{kg}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{w_{\mathit{TNT}}}=w \mathit{TNT}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{w_{\mathit{TNT}}}=w\,\mathit{TNT}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({w_{\mathit{TNT}}}\) is the equivalent TNT charge mass (\({\text{kg}}\))</li><li>\(w\) is the charge weight (\({\text{kg}}\))</li><li>\(\mathit{TNT}\) is the TNT equivalent factor (Unitless)</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#astm2009">astm2009</a></td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecDDs.html#DD:calofDemand">DD:calofDemand</a></td></tr>
@@ -593,7 +593,7 @@
 <tr><td style="text-align: left">Output</td><td style="text-align: left">\(B\)</td></tr>
 <tr><td style="text-align: left">Input Constraints</td><td style="text-align: left">\[a\gt{}0\]\[0\lt{}b\leq{}a\]</td></tr>
 <tr><td style="text-align: left">Output Constraints</td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[B=\frac{k}{\left(a b\right)^{m-1}} \left(E h^{2}\right)^{m} \mathit{LDF} e^{J}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[B=\frac{k}{\left(a\,b\right)^{m-1}}\,\left(E\,h^{2}\right)^{m}\,\mathit{LDF}\,e^{J}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(B\) is the risk of failure (Unitless)</li><li>\(k\) is the surface flaw parameter (\(\frac{\text{m}^{12}}{\text{N}^{7}}\))</li><li>\(a\) is the plate length (long dimension) (\({\text{m}}\))</li><li>\(b\) is the plate width (short dimension) (\({\text{m}}\))</li><li>\(m\) is the surface flaw parameter (\(\frac{\text{m}^{12}}{\text{N}^{7}}\))</li><li>\(E\) is the modulus of elasticity of glass (\({\text{Pa}}\))</li><li>\(h\) is the minimum thickness (\({\text{m}}\))</li><li>\(\mathit{LDF}\) is the load duration factor (Unitless)</li><li>\(J\) is the stress distribution factor (Function) (Unitless)</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\(a\) and \(b\) are the dimensions of the plate, where (\(a\geq{}b\)).</li><li>\(h\) is defined in <a href="./SecDDs.html#DD:minThick">DD:minThick</a> and is based on the nominal thicknesses.</li><li>\(\mathit{LDF}\) is defined in <a href="./SecDDs.html#DD:loadDurFactor">DD:loadDurFactor</a>.</li><li>\(J\) is defined in <a href="./SecIMs.html#IM:stressDistFac">IM:stressDistFac</a>.</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#astm2009">astm2009</a>, <a href="./SecReferences.html#beasonEtAl1998">beasonEtAl1998</a> (Eqs. 4-5), and <a href="./SecReferences.html#campidelli">campidelli</a> (Eq. 14)</td></tr>
@@ -623,7 +623,7 @@
 <tr><td style="text-align: left">Output</td><td style="text-align: left">\(\mathit{NFL}\)</td></tr>
 <tr><td style="text-align: left">Input Constraints</td><td style="text-align: left">\[a\gt{}0\]\[0\lt{}b\leq{}a\]</td></tr>
 <tr><td style="text-align: left">Output Constraints</td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\mathit{NFL}=\frac{{\hat{q}_{\text{tol}}} E h^{4}}{\left(a b\right)^{2}}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\mathit{NFL}=\frac{{\hat{q}_{\text{tol}}}\,E\,h^{4}}{\left(a\,b\right)^{2}}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\mathit{NFL}\) is the non-factored load (\({\text{Pa}}\))</li><li>\({\hat{q}_{\text{tol}}}\) is the tolerable load (Unitless)</li><li>\(E\) is the modulus of elasticity of glass (\({\text{Pa}}\))</li><li>\(h\) is the minimum thickness (\({\text{m}}\))</li><li>\(a\) is the plate length (long dimension) (\({\text{m}}\))</li><li>\(b\) is the plate width (short dimension) (\({\text{m}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\({\hat{q}_{\text{tol}}}\) is defined in <a href="./SecIMs.html#IM:tolLoad">IM:tolLoad</a>.</li><li>\(E\) comes from <a href="./SecAssumps.html#assumpSV">A:standardValues</a>.</li><li>\(h\) is defined in <a href="./SecDDs.html#DD:minThick">DD:minThick</a> and is based on the nominal thicknesses.</li><li>\(a\) and \(b\) are the dimensions of the plate, where (\(a\geq{}b\)).</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#astm2009">astm2009</a></td></tr>
@@ -638,7 +638,7 @@
 <tr><td style="text-align: left">Output</td><td style="text-align: left">\(\hat{q}\)</td></tr>
 <tr><td style="text-align: left">Input Constraints</td><td style="text-align: left">\[a\gt{}0\]\[0\lt{}b\leq{}a\]</td></tr>
 <tr><td style="text-align: left">Output Constraints</td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} \mathit{GTF}}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\hat{q}=\frac{q\,\left(a\,b\right)^{2}}{E\,h^{4}\,\mathit{GTF}}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\hat{q}\) is the dimensionless load (Unitless)</li><li>\(q\) is the applied load (demand) (\({\text{Pa}}\))</li><li>\(a\) is the plate length (long dimension) (\({\text{m}}\))</li><li>\(b\) is the plate width (short dimension) (\({\text{m}}\))</li><li>\(E\) is the modulus of elasticity of glass (\({\text{Pa}}\))</li><li>\(h\) is the minimum thickness (\({\text{m}}\))</li><li>\(\mathit{GTF}\) is the glass type factor (Unitless)</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\(q\) is the 3 second duration equivalent pressure, as given in <a href="./SecDDs.html#DD:calofDemand">DD:calofDemand</a>.</li><li>\(a\) and \(b\) are the dimensions of the plate, where (\(a\geq{}b\)).</li><li>\(E\) comes from <a href="./SecAssumps.html#assumpSV">A:standardValues</a>.</li><li>\(h\) is defined in <a href="./SecDDs.html#DD:minThick">DD:minThick</a> and is based on the nominal thicknesses.</li><li>\(\mathit{GTF}\) is defined in <a href="./SecDDs.html#DD:gTF">DD:gTF</a>.</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#astm2009">astm2009</a> and <a href="./SecReferences.html#campidelli">campidelli</a> (Eq. 7)</td></tr>
@@ -668,7 +668,7 @@
 <tr><td style="text-align: left">Output</td><td style="text-align: left">\({J_{\text{tol}}}\)</td></tr>
 <tr><td style="text-align: left">Input Constraints</td><td style="text-align: left">\[0\leq{}{P_{\text{b}\text{tol}}}\leq{}1\]\[a\gt{}0\]\[0\lt{}b\leq{}a\]</td></tr>
 <tr><td style="text-align: left">Output Constraints</td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} \mathit{LDF}}\right)\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right)\,\frac{\left(a\,b\right)^{m-1}}{k\,\left(E\,h^{2}\right)^{m}\,\mathit{LDF}}\right)\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({J_{\text{tol}}}\) is the tolerable stress distribution factor (Unitless)</li><li>\({P_{\text{b}\text{tol}}}\) is the tolerable probability of breakage (Unitless)</li><li>\(a\) is the plate length (long dimension) (\({\text{m}}\))</li><li>\(b\) is the plate width (short dimension) (\({\text{m}}\))</li><li>\(m\) is the surface flaw parameter (\(\frac{\text{m}^{12}}{\text{N}^{7}}\))</li><li>\(k\) is the surface flaw parameter (\(\frac{\text{m}^{12}}{\text{N}^{7}}\))</li><li>\(E\) is the modulus of elasticity of glass (\({\text{Pa}}\))</li><li>\(h\) is the minimum thickness (\({\text{m}}\))</li><li>\(\mathit{LDF}\) is the load duration factor (Unitless)</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\({P_{\text{b}\text{tol}}}\) is entered by the user.</li><li>\(a\) and \(b\) are the dimensions of the plate, where (\(a\geq{}b\)).</li><li>\(m\), \(k\), and \(E\) come from <a href="./SecAssumps.html#assumpSV">A:standardValues</a>.</li><li>\(h\) is defined in <a href="./SecDDs.html#DD:minThick">DD:minThick</a> and is based on the nominal thicknesses.</li><li>\(\mathit{LDF}\) is defined in <a href="./SecDDs.html#DD:loadDurFactor">DD:loadDurFactor</a>.</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#astm2009">astm2009</a></td></tr>
@@ -698,7 +698,7 @@
 <tr><td style="text-align: left">Output</td><td style="text-align: left">\(\mathit{LR}\)</td></tr>
 <tr><td style="text-align: left">Input Constraints</td><td style="text-align: left"></td></tr>
 <tr><td style="text-align: left">Output Constraints</td><td style="text-align: left"></td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\mathit{LR}=\mathit{NFL} \mathit{GTF} \mathit{LSF}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\mathit{LR}=\mathit{NFL}\,\mathit{GTF}\,\mathit{LSF}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\mathit{LR}\) is the load resistance (\({\text{Pa}}\))</li><li>\(\mathit{NFL}\) is the non-factored load (\({\text{Pa}}\))</li><li>\(\mathit{GTF}\) is the glass type factor (Unitless)</li><li>\(\mathit{LSF}\) is the load share factor (Unitless)</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\(\mathit{LR}\) is also called capacity.</li><li>\(\mathit{NFL}\) is defined in <a href="./SecIMs.html#IM:nFL">IM:nFL</a>.</li><li>\(\mathit{GTF}\) is defined in <a href="./SecDDs.html#DD:gTF">DD:gTF</a>.</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#astm2009">astm2009</a></td></tr>
@@ -955,19 +955,19 @@
 <p><strong><p align="center">Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items</p></strong></p>
 <p>The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href="./SecTraceMatrices.html#Figure:TraceGraphAvsA">Fig:TraceGraphAvsA</a> shows the dependencies of assumptions on each other. <a href="./SecTraceMatrices.html#Figure:TraceGraphAvsAll">Fig:TraceGraphAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href="./SecTraceMatrices.html#Figure:TraceGraphRefvsRef">Fig:TraceGraphRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. <a href="./SecTraceMatrices.html#Figure:TraceGraphAllvsR">Fig:TraceGraphAllvsR</a> shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. <a href="./SecTraceMatrices.html#Figure:TraceGraphAllvsAll">Fig:TraceGraphAllvsAll</a> shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.</p>
 <div id="Figure:TraceGraphAvsA"></div>
-<p><img src="/assets/avsa.svg" alt="TraceGraphAvsA" /></p>
+<p><img src="./assets/avsa.svg" alt="TraceGraphAvsA" /></p>
 <p><strong><p align="center">TraceGraphAvsA</p></strong></p>
 <div id="Figure:TraceGraphAvsAll"></div>
-<p><img src="/assets/avsall.svg" alt="TraceGraphAvsAll" /></p>
+<p><img src="./assets/avsall.svg" alt="TraceGraphAvsAll" /></p>
 <p><strong><p align="center">TraceGraphAvsAll</p></strong></p>
 <div id="Figure:TraceGraphRefvsRef"></div>
-<p><img src="/assets/refvsref.svg" alt="TraceGraphRefvsRef" /></p>
+<p><img src="./assets/refvsref.svg" alt="TraceGraphRefvsRef" /></p>
 <p><strong><p align="center">TraceGraphRefvsRef</p></strong></p>
 <div id="Figure:TraceGraphAllvsR"></div>
-<p><img src="/assets/allvsr.svg" alt="TraceGraphAllvsR" /></p>
+<p><img src="./assets/allvsr.svg" alt="TraceGraphAllvsR" /></p>
 <p><strong><p align="center">TraceGraphAllvsR</p></strong></p>
 <div id="Figure:TraceGraphAllvsAll"></div>
-<p><img src="/assets/allvsall.svg" alt="TraceGraphAllvsAll" /></p>
+<p><img src="./assets/allvsall.svg" alt="TraceGraphAllvsAll" /></p>
 <p><strong><p align="center">TraceGraphAllvsAll</p></strong></p>
 <p>For convenience, the following graphs can be found at the links below:</p>
 <ul>
@@ -1014,7 +1014,7 @@
 <div id="parnasClements1986"></div>
 <p>[7]: Parnas, David L. and Clements, P. C. “A rational design process: How and why to fake it.” <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251–257. Print.</p>
 <div id="smithKoothoor2016"></div>
-<p>[8]: Smith, W. Spencer and Koothoor, Nirmitha. “A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis.” * Nuclear Engineering and Technology*, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404–418.</p>
+<p>[8]: Smith, W. Spencer and Koothoor, Nirmitha. “A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis.” <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404–418.</p>
 <div id="smithLai2005"></div>
 <p>[9]: Smith, W. Spencer and Lai, Lei. “A new requirements template for scientific computing.” <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP’05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107–121. In conjunction with 13th IEEE International Requirements Engineering Conference,</p>
 <div id="smithEtAl2007"></div>
@@ -1022,10 +1022,10 @@
 <div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:Appendix"><a class="header" href="#Sec:Appendix">Appendix</a></h1>
 <p>This appendix holds the graphs (<a href="./SecAppendix.html#Figure:demandVSsod">Fig:demandVSsod</a> and <a href="./SecAppendix.html#Figure:dimlessloadVSaspect">Fig:dimlessloadVSaspect</a>) used for interpolating values needed in the models.</p>
 <div id="Figure:demandVSsod"></div>
-<p><img src="/assets/ASTM_F2248-09.png" alt="3 second duration equivalent pressure (\(q\)) versus Stand off distance (SD) versus Charge weight (\(w\))" /></p>
+<p><img src="./assets/ASTM_F2248-09.png" alt="3 second duration equivalent pressure (\(q\)) versus Stand off distance (SD) versus Charge weight (\(w\))" /></p>
 <p><strong><p align="center">3 second duration equivalent pressure (\(q\)) versus Stand off distance (SD) versus Charge weight (\(w\))</p></strong></p>
 <div id="Figure:dimlessloadVSaspect"></div>
-<p><img src="/assets/ASTM_F2248-09_BeasonEtAl.png" alt="Non dimensional lateral applied load (demand) or pressure (\(\hat{q}\)) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (\(J\))" /></p>
+<p><img src="./assets/ASTM_F2248-09_BeasonEtAl.png" alt="Non dimensional lateral applied load (demand) or pressure (\(\hat{q}\)) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (\(J\))" /></p>
 <p><strong><p align="center">Non dimensional lateral applied load (demand) or pressure (\(\hat{q}\)) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (\(J\))</p></strong></p>
 
                     </main>

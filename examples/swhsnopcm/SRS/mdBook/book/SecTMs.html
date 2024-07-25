@@ -182,7 +182,7 @@
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">TM:consThermE</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Conservation of thermal energy</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[-∇\cdot{}\boldsymbol{q}+g=ρ C \frac{\,\partial{}T}{\,\partial{}t}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[-∇\cdot{}\boldsymbol{q}+g=ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(∇\) is the gradient (Unitless)</li><li>\(\boldsymbol{q}\) is the thermal flux vector (\(\frac{\text{W}}{\text{m}^{2}}\))</li><li>\(g\) is the volumetric heat generation per unit volume (\(\frac{\text{W}}{\text{m}^{3}}\))</li><li>\(ρ\) is the density (\(\frac{\text{kg}}{\text{m}^{3}}\))</li><li>\(C\) is the specific heat capacity (\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\(T\) is the temperature (\({{}^{\circ}\text{C}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The above equation gives the law of conservation of energy for transient heat transfer in a given material.</li><li>For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href="./SecAssumps.html#assumpTEO">A:Thermal-Energy-Only</a>).</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm">Fourier Law of Heat Conduction and Heat Equation</a></td></tr>
@@ -193,7 +193,7 @@
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">TM:sensHtE</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Sensible heat energy (no state change)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[E={C^{\text{L}}} m ΔT\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[E={C^{\text{L}}}\,m\,ΔT\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(E\) is the sensible heat (\({\text{J}}\))</li><li>\({C^{\text{L}}}\) is the specific heat capacity of a liquid (\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(ΔT\) is the change in temperature (\({{}^{\circ}\text{C}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>\(E\) occurs as long as the material does not reach a temperature where a phase change occurs, as assumed in <a href="./SecAssumps.html#assumpWAL">A:Water-Always-Liquid</a>.</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="http://en.wikipedia.org/wiki/Sensible_heat">Definition of Sensible Heat</a></td></tr>
@@ -204,7 +204,7 @@
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">TM:nwtnCooling</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Newton’s law of cooling</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[q\left(t\right)=h ΔT\left(t\right)\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[q\left(t\right)=h\,ΔT\left(t\right)\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(q\) is the heat flux (\(\frac{\text{W}}{\text{m}^{2}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\(h\) is the convective heat transfer coefficient (\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\))</li><li>\(ΔT\) is the change in temperature (\({{}^{\circ}\text{C}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>Newton’s law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings.</li><li>\(h\) is assumed to be independent of \(T\) (from <a href="./SecAssumps.html#assumpHTCC">A:Heat-Transfer-Coeffs-Constant</a>).</li><li>\(ΔT\left(t\right)=T\left(t\right)-{T_{\text{env}}}\left(t\right)\) is the time-dependant thermal gradient between the environment and the object.</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#incroperaEtAl2007">incroperaEtAl2007</a> (pg. 8)</td></tr>

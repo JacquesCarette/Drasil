@@ -406,6 +406,7 @@ Definitions :: [(Title, ItemType, Maybe Label)] -> ListType
 data ItemType
 Flat :: Spec -> ItemType
 Nested :: Spec -> ListType -> ItemType
+instance GHC.Classes.Eq Language.Drasil.Printing.AST.Ops
 
 
 -- | Helper functions for creating HTML printers (specifically, HTML tag

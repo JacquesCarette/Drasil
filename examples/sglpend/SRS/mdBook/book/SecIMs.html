@@ -186,7 +186,7 @@
 <tr><td style="text-align: left">Output</td><td style="text-align: left">\({θ_{p}}\)</td></tr>
 <tr><td style="text-align: left">Input Constraints</td><td style="text-align: left">\[{L_{\text{rod}}}\gt{}0\]\[{θ_{i}}\gt{}0\]\[\boldsymbol{g}\gt{}0\]</td></tr>
 <tr><td style="text-align: left">Output Constraints</td><td style="text-align: left">\[{θ_{p}}\gt{}0\]</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{θ_{p}}\left(t\right)={θ_{i}} \cos\left(Ω t\right)\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{θ_{p}}\left(t\right)={θ_{i}}\,\cos\left(Ω\,t\right)\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({θ_{p}}\) is the displacement angle of the pendulum (\({\text{rad}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\({θ_{i}}\) is the initial pendulum angle (\({\text{rad}}\))</li><li>\(Ω\) is the angular frequency (\({\text{s}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The constraint \({θ_{i}}\gt{}0\) is required. The angular frequency is defined in <a href="./SecGDs.html#GD:angFrequencyGD">GD:angFrequencyGD</a>.</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
@@ -195,15 +195,15 @@
 </div>
 <h4 id="IM:calOfAngularDisplacementDeriv"><a class="header" href="#IM:calOfAngularDisplacementDeriv">Detailed derivation of angular displacement:</a></h4>
 <p>When the pendulum is displaced to an initial angle and released, the pendulum swings back and forth with periodic motion. By applying <a href="./SecTMs.html#TM:NewtonSecLawRotMot">Newton’s second law for rotational motion</a>, the equation of motion for the pendulum may be obtained:</p>
-<p>\[\boldsymbol{τ}=\boldsymbol{I} α\]</p>
+<p>\[\boldsymbol{τ}=\boldsymbol{I}\,α\]</p>
 <p>Where \(\boldsymbol{τ}\) denotes the torque, \(\boldsymbol{I}\) denotes the moment of inertia and \(α\) denotes the angular acceleration. This implies:</p>
-<p>\[-m \boldsymbol{g} \sin\left({θ_{p}}\right) {L_{\text{rod}}}=m {L_{\text{rod}}}^{2} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}\]</p>
+<p>\[-m\,\boldsymbol{g}\,\sin\left({θ_{p}}\right)\,{L_{\text{rod}}}=m\,{L_{\text{rod}}}^{2}\,\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}\]</p>
 <p>And rearranged as:</p>
-<p>\[\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\boldsymbol{g}}{{L_{\text{rod}}}} \sin\left({θ_{p}}\right)=0\]</p>
+<p>\[\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\boldsymbol{g}}{{L_{\text{rod}}}}\,\sin\left({θ_{p}}\right)=0\]</p>
 <p>If the amplitude of angular displacement is small enough, we can approximate \(\sin\left({θ_{p}}\right)={θ_{p}}\) for the purpose of a simple pendulum at very small angles. Then the equation of motion reduces to the equation of simple harmonic motion:</p>
-<p>\[\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\boldsymbol{g}}{{L_{\text{rod}}}} {θ_{p}}=0\]</p>
+<p>\[\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\boldsymbol{g}}{{L_{\text{rod}}}}\,{θ_{p}}=0\]</p>
 <p>Thus the simple harmonic motion is:</p>
-<p>\[{θ_{p}}\left(t\right)={θ_{i}} \cos\left(Ω t\right)\]</p>
+<p>\[{θ_{p}}\left(t\right)={θ_{i}}\,\cos\left(Ω\,t\right)\]</p>
 
                     </main>
 

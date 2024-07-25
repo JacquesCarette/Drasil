@@ -187,9 +187,9 @@
 </div>
 <p><strong><p align="center">Output Data Constraints</p></strong></p>
 <p>A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href="./SecGDs.html#GD:htFluxWaterFromCoil">GD:htFluxWaterFromCoil</a> and <a href="./SecGDs.html#GD:htFluxPCMFromWater">GD:htFluxPCMFromWater</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:</p>
-<p>\[{E_{\text{W}}}=\int_{0}^{t}{{h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)}\,dt-\int_{0}^{t}{{h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt\]</p>
+<p>\[{E_{\text{W}}}=\int_{0}^{t}{{h_{\text{C}}}\,{A_{\text{C}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)}\,dt-\int_{0}^{t}{{h_{\text{P}}}\,{A_{\text{P}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt\]</p>
 <p>In addition, the change in heat energy in the PCM should equal the energy input to the PCM from the water. This can be expressed as</p>
-<p>\[{E_{\text{P}}}=\int_{0}^{t}{{h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt\]</p>
+<p>\[{E_{\text{P}}}=\int_{0}^{t}{{h_{\text{P}}}\,{A_{\text{P}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt\]</p>
 <p>Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as “sanity” checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than \({C_{\text{tol}}}\) <a href="./SecFRs.html#verifyEnergyOutput">FR:Verify-Energy-Output-Follow-Conservation-of-Energy</a>.</p>
 
                     </main>

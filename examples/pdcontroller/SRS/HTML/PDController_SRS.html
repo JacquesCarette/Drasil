@@ -668,7 +668,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{F_{\text{s}}}=\int_{\mathit{-∞}}^{∞}{{f_{\text{t}}} e^{-s t}}\,dt\]
+                        \[{F_{\text{s}}}=\int_{\mathit{-∞}}^{∞}{{f_{\text{t}}}\,e^{-s\,t}}\,dt\]
                       </td>
                     </tr>
                     <tr>
@@ -777,7 +777,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\frac{1}{m s^{2}+c s+k}\]</td>
+                      <td>\[\frac{1}{m\,s^{2}+c\,s+k}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -976,7 +976,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{P_{\text{s}}}={K_{\text{p}}} {E_{\text{s}}}\]</td>
+                      <td>\[{P_{\text{s}}}={K_{\text{p}}}\,{E_{\text{s}}}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1036,7 +1036,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{D_{\text{s}}}={K_{\text{d}}} {E_{\text{s}}} s\]</td>
+                      <td>\[{D_{\text{s}}}={K_{\text{d}}}\,{E_{\text{s}}}\,s\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1100,7 +1100,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{C_{\text{s}}}={E_{\text{s}}} \left({K_{\text{p}}}+{K_{\text{d}}} s\right)\]
+                        \[{C_{\text{s}}}={E_{\text{s}}}\,\left({K_{\text{p}}}+{K_{\text{d}}}\,s\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1194,7 +1194,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\frac{\,d^{2}{y_{\text{t}}}}{\,dt^{2}}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {{y_{\text{t}}}}={r_{\text{t}}} {K_{\text{p}}}\]
+                        \[\frac{\,d^{2}{y_{\text{t}}}}{\,dt^{2}}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{{y_{\text{t}}}}={r_{\text{t}}}\,{K_{\text{p}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1233,19 +1233,19 @@
                     <p class="paragraph">
                       The Process Variable <em>Y<sub>s</sub></em> in a PD Control Loop is the product of the Process Error (from <a href=#DD:ddProcessError>DD:ddProcessError</a>), Control Variable (from <a href=#DD:ddCtrlVar>DD:ddCtrlVar</a>), and the Power Plant (from <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>).
                     </p>
-                    \[{Y_{\text{s}}}=\left({R_{\text{s}}}-{Y_{\text{s}}}\right) \left({K_{\text{p}}}+{K_{\text{d}}} s\right) \frac{1}{s^{2}+s+20}\]
+                    \[{Y_{\text{s}}}=\left({R_{\text{s}}}-{Y_{\text{s}}}\right)\,\left({K_{\text{p}}}+{K_{\text{d}}}\,s\right)\,\frac{1}{s^{2}+s+20}\]
                     <p class="paragraph">
                       Substituting the values and rearranging the equation.
                     </p>
-                    \[s^{2} {Y_{\text{s}}}+\left(1+{K_{\text{d}}}\right) {Y_{\text{s}}} s+\left(20+{K_{\text{p}}}\right) {Y_{\text{s}}}-{R_{\text{s}}} s {K_{\text{d}}}-{R_{\text{s}}} {K_{\text{p}}}=0\]
+                    \[s^{2}\,{Y_{\text{s}}}+\left(1+{K_{\text{d}}}\right)\,{Y_{\text{s}}}\,s+\left(20+{K_{\text{p}}}\right)\,{Y_{\text{s}}}-{R_{\text{s}}}\,s\,{K_{\text{d}}}-{R_{\text{s}}}\,{K_{\text{p}}}=0\]
                     <p class="paragraph">
                       Computing the Inverse Laplace Transform of a function (from <a href=#TM:invLaplaceTransform>TM:invLaplaceTransform</a>) of the equation.
                     </p>
-                    \[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{K_{\text{d}}} \frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}} {K_{\text{p}}}=0\]
+                    \[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{y_{\text{t}}}-{K_{\text{d}}}\,\frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}}\,{K_{\text{p}}}=0\]
                     <p class="paragraph">
                       The Set-Point <em>r<sub>t</sub></em> is a step function and a constant (from <a href=#setPoint>A:Set-Point</a>). Therefore the differential of the set point is zero. Hence the equation reduces to
                     </p>
-                    \[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{r_{\text{t}}} {K_{\text{p}}}=0\]
+                    \[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{y_{\text{t}}}-{r_{\text{t}}}\,{K_{\text{p}}}=0\]
                   </div>
                 </div>
               </div>
@@ -2303,7 +2303,7 @@
           </li>
           <li>
             <div id="smithKoothoor2016">
-              [4]: Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em> Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
+              [4]: Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
             </div>
           </li>
           <li>

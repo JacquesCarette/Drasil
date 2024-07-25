@@ -183,7 +183,7 @@
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:velocityX1</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">The \(x\)-component of velocity of the first object</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{v_{\text{x}1}}={w_{1}} {L_{1}} \cos\left({θ_{1}}\right)\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{v_{\text{x}1}}={w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({v_{\text{x}1}}\) is the horizontal velocity of the first object (\(\frac{\text{m}}{\text{s}}\))</li><li>\({w_{1}}\) is the angular velocity of the first object (\(\frac{\text{rad}}{\text{s}}\))</li><li>\({L_{1}}\) is the length of the first rod (\({\text{m}}\))</li><li>\({θ_{1}}\) is the angle of the first rod (\({\text{rad}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"></td></tr>
@@ -193,20 +193,20 @@
 <p>At a given point in time, velocity is defined in <a href="./SecDDs.html#DD:positionGDD">DD:positionGDD</a></p>
 <p>\[\boldsymbol{v}\text{(}t\text{)}=\frac{\,d\boldsymbol{p}\text{(}t\text{)}}{\,dt}\]</p>
 <p>We also know the horizontal position that is defined in <a href="./SecDDs.html#DD:positionXDD1">DD:positionXDD1</a></p>
-<p>\[{p_{\text{x}1}}={L_{1}} \sin\left({θ_{1}}\right)\]</p>
+<p>\[{p_{\text{x}1}}={L_{1}}\,\sin\left({θ_{1}}\right)\]</p>
 <p>Applying this,</p>
-<p>\[{v_{\text{x}1}}=\frac{\,d{L_{1}} \sin\left({θ_{1}}\right)}{\,dt}\]</p>
+<p>\[{v_{\text{x}1}}=\frac{\,d{L_{1}}\,\sin\left({θ_{1}}\right)}{\,dt}\]</p>
 <p>\({L_{1}}\) is constant with respect to time, so</p>
-<p>\[{v_{\text{x}1}}={L_{1}} \frac{\,d\sin\left({θ_{1}}\right)}{\,dt}\]</p>
+<p>\[{v_{\text{x}1}}={L_{1}}\,\frac{\,d\sin\left({θ_{1}}\right)}{\,dt}\]</p>
 <p>Therefore, using the chain rule,</p>
-<p>\[{v_{\text{x}1}}={w_{1}} {L_{1}} \cos\left({θ_{1}}\right)\]</p>
+<p>\[{v_{\text{x}1}}={w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)\]</p>
 <div align="center">
 <h2 id="GD:velocityY1"><a class="header" href="#GD:velocityY1">The \(y\)-component of velocity of the first object</a></h2>
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:velocityY1</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">The \(y\)-component of velocity of the first object</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{v_{\text{y}1}}={w_{1}} {L_{1}} \sin\left({θ_{1}}\right)\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{v_{\text{y}1}}={w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({v_{\text{y}1}}\) is the vertical velocity of the first object (\(\frac{\text{m}}{\text{s}}\))</li><li>\({w_{1}}\) is the angular velocity of the first object (\(\frac{\text{rad}}{\text{s}}\))</li><li>\({L_{1}}\) is the length of the first rod (\({\text{m}}\))</li><li>\({θ_{1}}\) is the angle of the first rod (\({\text{rad}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"></td></tr>
@@ -216,20 +216,20 @@
 <p>At a given point in time, velocity is defined in <a href="./SecDDs.html#DD:positionGDD">DD:positionGDD</a></p>
 <p>\[\boldsymbol{v}\text{(}t\text{)}=\frac{\,d\boldsymbol{p}\text{(}t\text{)}}{\,dt}\]</p>
 <p>We also know the vertical position that is defined in <a href="./SecDDs.html#DD:positionYDD1">DD:positionYDD1</a></p>
-<p>\[{p_{\text{y}1}}=-{L_{1}} \cos\left({θ_{1}}\right)\]</p>
+<p>\[{p_{\text{y}1}}=-{L_{1}}\,\cos\left({θ_{1}}\right)\]</p>
 <p>Applying this,</p>
-<p>\[{v_{\text{y}1}}=-\left(\frac{\,d{L_{1}} \cos\left({θ_{1}}\right)}{\,dt}\right)\]</p>
+<p>\[{v_{\text{y}1}}=-\left(\frac{\,d{L_{1}}\,\cos\left({θ_{1}}\right)}{\,dt}\right)\]</p>
 <p>\({L_{1}}\) is constant with respect to time, so</p>
-<p>\[{v_{\text{y}1}}=-{L_{1}} \frac{\,d\cos\left({θ_{1}}\right)}{\,dt}\]</p>
+<p>\[{v_{\text{y}1}}=-{L_{1}}\,\frac{\,d\cos\left({θ_{1}}\right)}{\,dt}\]</p>
 <p>Therefore, using the chain rule,</p>
-<p>\[{v_{\text{y}1}}={w_{1}} {L_{1}} \sin\left({θ_{1}}\right)\]</p>
+<p>\[{v_{\text{y}1}}={w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)\]</p>
 <div align="center">
 <h2 id="GD:velocityX2"><a class="header" href="#GD:velocityX2">The \(x\)-component of velocity of the second object</a></h2>
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:velocityX2</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">The \(x\)-component of velocity of the second object</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}} {L_{2}} \cos\left({θ_{2}}\right)\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({v_{\text{x}2}}\) is the horizontal velocity of the second object (\(\frac{\text{m}}{\text{s}}\))</li><li>\({v_{\text{x}1}}\) is the horizontal velocity of the first object (\(\frac{\text{m}}{\text{s}}\))</li><li>\({w_{2}}\) is the angular velocity of the second object (\(\frac{\text{rad}}{\text{s}}\))</li><li>\({L_{2}}\) is the length of the second rod (\({\text{m}}\))</li><li>\({θ_{2}}\) is the angle of the second rod (\({\text{rad}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"></td></tr>
@@ -239,18 +239,18 @@
 <p>At a given point in time, velocity is defined in <a href="./SecDDs.html#DD:positionGDD">DD:positionGDD</a></p>
 <p>\[\boldsymbol{v}\text{(}t\text{)}=\frac{\,d\boldsymbol{p}\text{(}t\text{)}}{\,dt}\]</p>
 <p>We also know the horizontal position that is defined in <a href="./SecDDs.html#DD:positionXDD2">DD:positionXDD2</a></p>
-<p>\[{p_{\text{x}2}}={p_{\text{x}1}}+{L_{2}} \sin\left({θ_{2}}\right)\]</p>
+<p>\[{p_{\text{x}2}}={p_{\text{x}1}}+{L_{2}}\,\sin\left({θ_{2}}\right)\]</p>
 <p>Applying this,</p>
-<p>\[{v_{\text{x}2}}=\frac{\,d{p_{\text{x}1}}+{L_{2}} \sin\left({θ_{2}}\right)}{\,dt}\]</p>
+<p>\[{v_{\text{x}2}}=\frac{\,d{p_{\text{x}1}}+{L_{2}}\,\sin\left({θ_{2}}\right)}{\,dt}\]</p>
 <p>\({L_{1}}\) is constant with respect to time, so</p>
-<p>\[{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}} {L_{2}} \cos\left({θ_{2}}\right)\]</p>
+<p>\[{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)\]</p>
 <div align="center">
 <h2 id="GD:velocityY2"><a class="header" href="#GD:velocityY2">The \(y\)-component of velocity of the second object</a></h2>
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:velocityY2</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">The \(y\)-component of velocity of the second object</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}} {L_{2}} \sin\left({θ_{2}}\right)\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({v_{\text{y}2}}\) is the vertical velocity of the second object (\(\frac{\text{m}}{\text{s}}\))</li><li>\({v_{\text{y}1}}\) is the vertical velocity of the first object (\(\frac{\text{m}}{\text{s}}\))</li><li>\({w_{2}}\) is the angular velocity of the second object (\(\frac{\text{rad}}{\text{s}}\))</li><li>\({L_{2}}\) is the length of the second rod (\({\text{m}}\))</li><li>\({θ_{2}}\) is the angle of the second rod (\({\text{rad}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"></td></tr>
@@ -260,18 +260,18 @@
 <p>At a given point in time, velocity is defined in <a href="./SecDDs.html#DD:positionGDD">DD:positionGDD</a></p>
 <p>\[\boldsymbol{v}\text{(}t\text{)}=\frac{\,d\boldsymbol{p}\text{(}t\text{)}}{\,dt}\]</p>
 <p>We also know the vertical position that is defined in <a href="./SecDDs.html#DD:positionYDD2">DD:positionYDD2</a></p>
-<p>\[{p_{\text{y}2}}={p_{\text{y}1}}-{L_{2}} \cos\left({θ_{2}}\right)\]</p>
+<p>\[{p_{\text{y}2}}={p_{\text{y}1}}-{L_{2}}\,\cos\left({θ_{2}}\right)\]</p>
 <p>Applying this,</p>
-<p>\[{v_{\text{y}2}}=-\left(\frac{\,d{p_{\text{y}1}}-{L_{2}} \cos\left({θ_{2}}\right)}{\,dt}\right)\]</p>
+<p>\[{v_{\text{y}2}}=-\left(\frac{\,d{p_{\text{y}1}}-{L_{2}}\,\cos\left({θ_{2}}\right)}{\,dt}\right)\]</p>
 <p>Therefore, using the chain rule,</p>
-<p>\[{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}} {L_{2}} \sin\left({θ_{2}}\right)\]</p>
+<p>\[{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)\]</p>
 <div align="center">
 <h2 id="GD:accelerationX1"><a class="header" href="#GD:accelerationX1">The \(x\)-component of acceleration of the first object</a></h2>
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:accelerationX1</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">The \(x\)-component of acceleration of the first object</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}^{2}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{a_{\text{x}1}}=-{w_{1}}^{2} {L_{1}} \sin\left({θ_{1}}\right)+{α_{1}} {L_{1}} \cos\left({θ_{1}}\right)\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{a_{\text{x}1}}=-{w_{1}}^{2}\,{L_{1}}\,\sin\left({θ_{1}}\right)+{α_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({a_{\text{x}1}}\) is the horizontal acceleration of the first object (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({w_{1}}\) is the angular velocity of the first object (\(\frac{\text{rad}}{\text{s}}\))</li><li>\({L_{1}}\) is the length of the first rod (\({\text{m}}\))</li><li>\({θ_{1}}\) is the angle of the first rod (\({\text{rad}}\))</li><li>\({α_{1}}\) is the angular acceleration of the first object (\(\frac{\text{rad}}{\text{s}^{2}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfAngle2">IM:calOfAngle2</a></td></tr>
@@ -281,20 +281,20 @@
 <p>Our acceleration is:</p>
 <p>\[\boldsymbol{a}\text{(}t\text{)}=\frac{\,d\boldsymbol{v}\text{(}t\text{)}}{\,dt}\]</p>
 <p>Earlier, we found the horizontal velocity to be</p>
-<p>\[{v_{\text{x}1}}={w_{1}} {L_{1}} \cos\left({θ_{1}}\right)\]</p>
+<p>\[{v_{\text{x}1}}={w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)\]</p>
 <p>Applying this to our equation for acceleration</p>
-<p>\[{a_{\text{x}1}}=\frac{\,d{w_{1}} {L_{1}} \cos\left({θ_{1}}\right)}{\,dt}\]</p>
+<p>\[{a_{\text{x}1}}=\frac{\,d{w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)}{\,dt}\]</p>
 <p>By the product and chain rules, we find</p>
-<p>\[{a_{\text{x}1}}=\frac{\,d{w_{1}}}{\,dt} {L_{1}} \cos\left({θ_{1}}\right)-{w_{1}} {L_{1}} \sin\left({θ_{1}}\right) \frac{\,d{θ_{1}}}{\,dt}\]</p>
+<p>\[{a_{\text{x}1}}=\frac{\,d{w_{1}}}{\,dt}\,{L_{1}}\,\cos\left({θ_{1}}\right)-{w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)\,\frac{\,d{θ_{1}}}{\,dt}\]</p>
 <p>Simplifying,</p>
-<p>\[{a_{\text{x}1}}=-{w_{1}}^{2} {L_{1}} \sin\left({θ_{1}}\right)+{α_{1}} {L_{1}} \cos\left({θ_{1}}\right)\]</p>
+<p>\[{a_{\text{x}1}}=-{w_{1}}^{2}\,{L_{1}}\,\sin\left({θ_{1}}\right)+{α_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)\]</p>
 <div align="center">
 <h2 id="GD:accelerationY1"><a class="header" href="#GD:accelerationY1">The \(y\)-component of acceleration of the first object</a></h2>
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:accelerationY1</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">The \(y\)-component of acceleration of the first object</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}^{2}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{a_{\text{y}1}}={w_{1}}^{2} {L_{1}} \cos\left({θ_{1}}\right)+{α_{1}} {L_{1}} \sin\left({θ_{1}}\right)\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{a_{\text{y}1}}={w_{1}}^{2}\,{L_{1}}\,\cos\left({θ_{1}}\right)+{α_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({a_{\text{y}1}}\) is the vertical acceleration of the first object (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({w_{1}}\) is the angular velocity of the first object (\(\frac{\text{rad}}{\text{s}}\))</li><li>\({L_{1}}\) is the length of the first rod (\({\text{m}}\))</li><li>\({θ_{1}}\) is the angle of the first rod (\({\text{rad}}\))</li><li>\({α_{1}}\) is the angular acceleration of the first object (\(\frac{\text{rad}}{\text{s}^{2}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfAngle2">IM:calOfAngle2</a></td></tr>
@@ -304,20 +304,20 @@
 <p>Our acceleration is:</p>
 <p>\[\boldsymbol{a}\text{(}t\text{)}=\frac{\,d\boldsymbol{v}\text{(}t\text{)}}{\,dt}\]</p>
 <p>Earlier, we found the vertical velocity to be</p>
-<p>\[{v_{\text{y}1}}={w_{1}} {L_{1}} \sin\left({θ_{1}}\right)\]</p>
+<p>\[{v_{\text{y}1}}={w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)\]</p>
 <p>Applying this to our equation for acceleration</p>
-<p>\[{a_{\text{y}1}}=\frac{\,d{w_{1}} {L_{1}} \sin\left({θ_{1}}\right)}{\,dt}\]</p>
+<p>\[{a_{\text{y}1}}=\frac{\,d{w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)}{\,dt}\]</p>
 <p>By the product and chain rules, we find</p>
-<p>\[{a_{\text{y}1}}=\frac{\,d{w_{1}}}{\,dt} {L_{1}} \sin\left({θ_{1}}\right)+{w_{1}} {L_{1}} \cos\left({θ_{1}}\right) \frac{\,d{θ_{1}}}{\,dt}\]</p>
+<p>\[{a_{\text{y}1}}=\frac{\,d{w_{1}}}{\,dt}\,{L_{1}}\,\sin\left({θ_{1}}\right)+{w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)\,\frac{\,d{θ_{1}}}{\,dt}\]</p>
 <p>Simplifying,</p>
-<p>\[{a_{\text{y}1}}={w_{1}}^{2} {L_{1}} \cos\left({θ_{1}}\right)+{α_{1}} {L_{1}} \sin\left({θ_{1}}\right)\]</p>
+<p>\[{a_{\text{y}1}}={w_{1}}^{2}\,{L_{1}}\,\cos\left({θ_{1}}\right)+{α_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)\]</p>
 <div align="center">
 <h2 id="GD:accelerationX2"><a class="header" href="#GD:accelerationX2">The \(x\)-component of acceleration of the second object</a></h2>
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:accelerationX2</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">The \(x\)-component of acceleration of the second object</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}^{2}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{a_{\text{x}2}}={a_{\text{x}1}}-{w_{2}}^{2} {L_{2}} \sin\left({θ_{2}}\right)+{α_{2}} {L_{2}} \cos\left({θ_{2}}\right)\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{a_{\text{x}2}}={a_{\text{x}1}}-{w_{2}}^{2}\,{L_{2}}\,\sin\left({θ_{2}}\right)+{α_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({a_{\text{x}2}}\) is the horizontal acceleration of the second object (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({a_{\text{x}1}}\) is the horizontal acceleration of the first object (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({w_{2}}\) is the angular velocity of the second object (\(\frac{\text{rad}}{\text{s}}\))</li><li>\({L_{2}}\) is the length of the second rod (\({\text{m}}\))</li><li>\({θ_{2}}\) is the angle of the second rod (\({\text{rad}}\))</li><li>\({α_{2}}\) is the angular acceleration of the second object (\(\frac{\text{rad}}{\text{s}^{2}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfAngle2">IM:calOfAngle2</a></td></tr>
@@ -327,18 +327,18 @@
 <p>Our acceleration is:</p>
 <p>\[\boldsymbol{a}\text{(}t\text{)}=\frac{\,d\boldsymbol{v}\text{(}t\text{)}}{\,dt}\]</p>
 <p>Earlier, we found the horizontal velocity to be</p>
-<p>\[{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}} {L_{2}} \cos\left({θ_{2}}\right)\]</p>
+<p>\[{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)\]</p>
 <p>Applying this to our equation for acceleration</p>
-<p>\[{a_{\text{x}2}}=\frac{\,d{v_{\text{x}1}}+{w_{2}} {L_{2}} \cos\left({θ_{2}}\right)}{\,dt}\]</p>
+<p>\[{a_{\text{x}2}}=\frac{\,d{v_{\text{x}1}}+{w_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)}{\,dt}\]</p>
 <p>By the product and chain rules, we find</p>
-<p>\[{a_{\text{x}2}}={a_{\text{x}1}}-{w_{2}}^{2} {L_{2}} \sin\left({θ_{2}}\right)+{α_{2}} {L_{2}} \cos\left({θ_{2}}\right)\]</p>
+<p>\[{a_{\text{x}2}}={a_{\text{x}1}}-{w_{2}}^{2}\,{L_{2}}\,\sin\left({θ_{2}}\right)+{α_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)\]</p>
 <div align="center">
 <h2 id="GD:accelerationY2"><a class="header" href="#GD:accelerationY2">The \(y\)-component of acceleration of the second object</a></h2>
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:accelerationY2</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">The \(y\)-component of acceleration of the second object</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}^{2}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{a_{\text{y}2}}={a_{\text{y}1}}+{w_{2}}^{2} {L_{2}} \cos\left({θ_{2}}\right)+{α_{2}} {L_{2}} \sin\left({θ_{2}}\right)\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{a_{\text{y}2}}={a_{\text{y}1}}+{w_{2}}^{2}\,{L_{2}}\,\cos\left({θ_{2}}\right)+{α_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({a_{\text{y}2}}\) is the vertical acceleration of the second object (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({a_{\text{y}1}}\) is the vertical acceleration of the first object (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({w_{2}}\) is the angular velocity of the second object (\(\frac{\text{rad}}{\text{s}}\))</li><li>\({L_{2}}\) is the length of the second rod (\({\text{m}}\))</li><li>\({θ_{2}}\) is the angle of the second rod (\({\text{rad}}\))</li><li>\({α_{2}}\) is the angular acceleration of the second object (\(\frac{\text{rad}}{\text{s}^{2}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfAngle2">IM:calOfAngle2</a></td></tr>
@@ -348,67 +348,67 @@
 <p>Our acceleration is:</p>
 <p>\[\boldsymbol{a}\text{(}t\text{)}=\frac{\,d\boldsymbol{v}\text{(}t\text{)}}{\,dt}\]</p>
 <p>Earlier, we found the horizontal velocity to be</p>
-<p>\[{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}} {L_{2}} \sin\left({θ_{2}}\right)\]</p>
+<p>\[{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)\]</p>
 <p>Applying this to our equation for acceleration</p>
-<p>\[{a_{\text{y}2}}=\frac{\,d{v_{\text{y}1}}+{w_{2}} {L_{2}} \sin\left({θ_{2}}\right)}{\,dt}\]</p>
+<p>\[{a_{\text{y}2}}=\frac{\,d{v_{\text{y}1}}+{w_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)}{\,dt}\]</p>
 <p>By the product and chain rules, we find</p>
-<p>\[{a_{\text{y}2}}={a_{\text{y}1}}+{w_{2}}^{2} {L_{2}} \cos\left({θ_{2}}\right)+{α_{2}} {L_{2}} \sin\left({θ_{2}}\right)\]</p>
+<p>\[{a_{\text{y}2}}={a_{\text{y}1}}+{w_{2}}^{2}\,{L_{2}}\,\cos\left({θ_{2}}\right)+{α_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)\]</p>
 <div align="center">
 <h2 id="GD:xForce1"><a class="header" href="#GD:xForce1">Horizontal force on the first object</a></h2>
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:xForce1</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Horizontal force on the first object</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{N}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}=-{\boldsymbol{T}_{1}} \sin\left({θ_{1}}\right)+{\boldsymbol{T}_{2}} \sin\left({θ_{2}}\right)\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}=-{\boldsymbol{T}_{1}}\,\sin\left({θ_{1}}\right)+{\boldsymbol{T}_{2}}\,\sin\left({θ_{2}}\right)\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{F}\) is the force (\({\text{N}}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(\boldsymbol{a}\text{(}t\text{)}\) is the acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({\boldsymbol{T}_{1}}\) is the tension of the first object (\({\text{N}}\))</li><li>\({θ_{1}}\) is the angle of the first rod (\({\text{rad}}\))</li><li>\({\boldsymbol{T}_{2}}\) is the tension of the second object (\({\text{N}}\))</li><li>\({θ_{2}}\) is the angle of the second rod (\({\text{rad}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfAngle2">IM:calOfAngle2</a></td></tr>
 </tbody></table>
 </div>
 <h4 id="GD:xForce1Deriv"><a class="header" href="#GD:xForce1Deriv">Detailed derivation of force on the first object:</a></h4>
-<p>\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}=-{\boldsymbol{T}_{1}} \sin\left({θ_{1}}\right)+{\boldsymbol{T}_{2}} \sin\left({θ_{2}}\right)\]</p>
+<p>\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}=-{\boldsymbol{T}_{1}}\,\sin\left({θ_{1}}\right)+{\boldsymbol{T}_{2}}\,\sin\left({θ_{2}}\right)\]</p>
 <div align="center">
 <h2 id="GD:yForce1"><a class="header" href="#GD:yForce1">Vertical force on the first object</a></h2>
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:yForce1</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Vertical force on the first object</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{N}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}={\boldsymbol{T}_{1}} \cos\left({θ_{1}}\right)-{\boldsymbol{T}_{2}} \cos\left({θ_{2}}\right)-{m_{1}} \boldsymbol{g}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}={\boldsymbol{T}_{1}}\,\cos\left({θ_{1}}\right)-{\boldsymbol{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{1}}\,\boldsymbol{g}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{F}\) is the force (\({\text{N}}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(\boldsymbol{a}\text{(}t\text{)}\) is the acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({\boldsymbol{T}_{1}}\) is the tension of the first object (\({\text{N}}\))</li><li>\({θ_{1}}\) is the angle of the first rod (\({\text{rad}}\))</li><li>\({\boldsymbol{T}_{2}}\) is the tension of the second object (\({\text{N}}\))</li><li>\({θ_{2}}\) is the angle of the second rod (\({\text{rad}}\))</li><li>\({m_{1}}\) is the mass of the first object (\({\text{kg}}\))</li><li>\(\boldsymbol{g}\) is the gravitational acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfAngle2">IM:calOfAngle2</a></td></tr>
 </tbody></table>
 </div>
 <h4 id="GD:yForce1Deriv"><a class="header" href="#GD:yForce1Deriv">Detailed derivation of force on the first object:</a></h4>
-<p>\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}={\boldsymbol{T}_{1}} \cos\left({θ_{1}}\right)-{\boldsymbol{T}_{2}} \cos\left({θ_{2}}\right)-{m_{1}} \boldsymbol{g}\]</p>
+<p>\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}={\boldsymbol{T}_{1}}\,\cos\left({θ_{1}}\right)-{\boldsymbol{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{1}}\,\boldsymbol{g}\]</p>
 <div align="center">
 <h2 id="GD:xForce2"><a class="header" href="#GD:xForce2">Horizontal force on the second object</a></h2>
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:xForce2</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Horizontal force on the second object</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{N}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}=-{\boldsymbol{T}_{2}} \sin\left({θ_{2}}\right)\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}=-{\boldsymbol{T}_{2}}\,\sin\left({θ_{2}}\right)\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{F}\) is the force (\({\text{N}}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(\boldsymbol{a}\text{(}t\text{)}\) is the acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({\boldsymbol{T}_{2}}\) is the tension of the second object (\({\text{N}}\))</li><li>\({θ_{2}}\) is the angle of the second rod (\({\text{rad}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfAngle2">IM:calOfAngle2</a></td></tr>
 </tbody></table>
 </div>
 <h4 id="GD:xForce2Deriv"><a class="header" href="#GD:xForce2Deriv">Detailed derivation of force on the second object:</a></h4>
-<p>\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}=-{\boldsymbol{T}_{2}} \sin\left({θ_{2}}\right)\]</p>
+<p>\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}=-{\boldsymbol{T}_{2}}\,\sin\left({θ_{2}}\right)\]</p>
 <div align="center">
 <h2 id="GD:yForce2"><a class="header" href="#GD:yForce2">Vertical force on the second object</a></h2>
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:yForce2</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Vertical force on the second object</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{N}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}={\boldsymbol{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} \boldsymbol{g}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}={\boldsymbol{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{2}}\,\boldsymbol{g}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{F}\) is the force (\({\text{N}}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(\boldsymbol{a}\text{(}t\text{)}\) is the acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({\boldsymbol{T}_{2}}\) is the tension of the second object (\({\text{N}}\))</li><li>\({θ_{2}}\) is the angle of the second rod (\({\text{rad}}\))</li><li>\({m_{2}}\) is the mass of the second object (\({\text{kg}}\))</li><li>\(\boldsymbol{g}\) is the gravitational acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfAngle2">IM:calOfAngle2</a></td></tr>
 </tbody></table>
 </div>
 <h4 id="GD:yForce2Deriv"><a class="header" href="#GD:yForce2Deriv">Detailed derivation of force on the second object:</a></h4>
-<p>\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}={\boldsymbol{T}_{2}} \cos\left({θ_{2}}\right)-{m_{2}} \boldsymbol{g}\]</p>
+<p>\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}={\boldsymbol{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{2}}\,\boldsymbol{g}\]</p>
 
                     </main>
 

@@ -186,7 +186,7 @@
 <tr><td style="text-align: left">Output</td><td style="text-align: left">\({y_{\text{t}}}\)</td></tr>
 <tr><td style="text-align: left">Input Constraints</td><td style="text-align: left">\[{r_{\text{t}}}\gt{}0\]\[{K_{\text{p}}}\gt{}0\]\[{K_{\text{d}}}\gt{}0\]</td></tr>
 <tr><td style="text-align: left">Output Constraints</td><td style="text-align: left">\[{y_{\text{t}}}\gt{}0\]</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\frac{\,d^{2}{y_{\text{t}}}}{\,dt^{2}}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {{y_{\text{t}}}}={r_{\text{t}}} {K_{\text{p}}}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\frac{\,d^{2}{y_{\text{t}}}}{\,dt^{2}}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{{y_{\text{t}}}}={r_{\text{t}}}\,{K_{\text{p}}}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(t\) is the time (\({\text{s}}\))</li><li>\({y_{\text{t}}}\) is the Process Variable (Unitless)</li><li>\({K_{\text{d}}}\) is the Derivative Gain (Unitless)</li><li>\({K_{\text{p}}}\) is the Proportional Gain (Unitless)</li><li>\({r_{\text{t}}}\) is the Set-Point (Unitless)</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#abbasi2015">abbasi2015</a> and <a href="./SecReferences.html#johnson2008">johnson2008</a></td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecFRs.html#outputValues">FR:Output-Values</a> and <a href="./SecFRs.html#calculateValues">FR:Calculate-Values</a></td></tr>
@@ -194,13 +194,13 @@
 </div>
 <h4 id="IM:pdEquationIMDeriv"><a class="header" href="#IM:pdEquationIMDeriv">Detailed derivation of Process Variable:</a></h4>
 <p>The Process Variable \({Y_{\text{s}}}\) in a PD Control Loop is the product of the Process Error (from <a href="./SecDDs.html#DD:ddProcessError">DD:ddProcessError</a>), Control Variable (from <a href="./SecDDs.html#DD:ddCtrlVar">DD:ddCtrlVar</a>), and the Power Plant (from <a href="./SecGDs.html#GD:gdPowerPlant">GD:gdPowerPlant</a>).</p>
-<p>\[{Y_{\text{s}}}=\left({R_{\text{s}}}-{Y_{\text{s}}}\right) \left({K_{\text{p}}}+{K_{\text{d}}} s\right) \frac{1}{s^{2}+s+20}\]</p>
+<p>\[{Y_{\text{s}}}=\left({R_{\text{s}}}-{Y_{\text{s}}}\right)\,\left({K_{\text{p}}}+{K_{\text{d}}}\,s\right)\,\frac{1}{s^{2}+s+20}\]</p>
 <p>Substituting the values and rearranging the equation.</p>
-<p>\[s^{2} {Y_{\text{s}}}+\left(1+{K_{\text{d}}}\right) {Y_{\text{s}}} s+\left(20+{K_{\text{p}}}\right) {Y_{\text{s}}}-{R_{\text{s}}} s {K_{\text{d}}}-{R_{\text{s}}} {K_{\text{p}}}=0\]</p>
+<p>\[s^{2}\,{Y_{\text{s}}}+\left(1+{K_{\text{d}}}\right)\,{Y_{\text{s}}}\,s+\left(20+{K_{\text{p}}}\right)\,{Y_{\text{s}}}-{R_{\text{s}}}\,s\,{K_{\text{d}}}-{R_{\text{s}}}\,{K_{\text{p}}}=0\]</p>
 <p>Computing the Inverse Laplace Transform of a function (from <a href="./SecTMs.html#TM:invLaplaceTransform">TM:invLaplaceTransform</a>) of the equation.</p>
-<p>\[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{K_{\text{d}}} \frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}} {K_{\text{p}}}=0\]</p>
+<p>\[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{y_{\text{t}}}-{K_{\text{d}}}\,\frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}}\,{K_{\text{p}}}=0\]</p>
 <p>The Set-Point \({r_{\text{t}}}\) is a step function and a constant (from <a href="./SecAssumps.html#setPoint">A:Set-Point</a>). Therefore the differential of the set point is zero. Hence the equation reduces to</p>
-<p>\[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{r_{\text{t}}} {K_{\text{p}}}=0\]</p>
+<p>\[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{y_{\text{t}}}-{r_{\text{t}}}\,{K_{\text{p}}}=0\]</p>
 
                     </main>
 

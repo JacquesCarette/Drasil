@@ -186,7 +186,7 @@
 <tr><td style="text-align: left">Output</td><td style="text-align: left">\({t_{\text{flight}}}\)</td></tr>
 <tr><td style="text-align: left">Input Constraints</td><td style="text-align: left">\[{v_{\text{launch}}}\gt{}0\]\[0\lt{}θ\lt{}\frac{π}{2}\]</td></tr>
 <tr><td style="text-align: left">Output Constraints</td><td style="text-align: left">\[{t_{\text{flight}}}\gt{}0\]</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{g}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{t_{\text{flight}}}=\frac{2\,{v_{\text{launch}}}\,\sin\left(θ\right)}{g}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({t_{\text{flight}}}\) is the flight duration (\({\text{s}}\))</li><li>\({v_{\text{launch}}}\) is the launch speed (\(\frac{\text{m}}{\text{s}}\))</li><li>\(θ\) is the launch angle (\({\text{rad}}\))</li><li>\(g\) is the magnitude of gravitational acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The constraint \(0\lt{}θ\lt{}\frac{π}{2}\) is from <a href="./SecAssumps.html#posXDirection">A:posXDirection</a> and <a href="./SecAssumps.html#yAxisGravity">A:yAxisGravity</a>, and is shown in <a href="./SecPhysSyst.html#Figure:Launch">Fig:Launch</a>.</li><li>\(g\) is defined in <a href="./SecAssumps.html#gravAccelValue">A:gravAccelValue</a>.</li><li>The constraint \({t_{\text{flight}}}\gt{}0\) is from <a href="./SecAssumps.html#timeStartZero">A:timeStartZero</a>.</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
@@ -195,15 +195,15 @@
 </div>
 <h4 id="IM:calOfLandingTimeDeriv"><a class="header" href="#IM:calOfLandingTimeDeriv">Detailed derivation of flight duration:</a></h4>
 <p>We know that \({{p_{\text{y}}}^{\text{i}}}=0\) (<a href="./SecAssumps.html#launchOrigin">A:launchOrigin</a>) and \({{a_{\text{y}}}^{\text{c}}}=-g\) (<a href="./SecAssumps.html#accelYGravity">A:accelYGravity</a>). Substituting these values into the y-direction of <a href="./SecGDs.html#GD:posVec">GD:posVec</a> gives us:</p>
-<p>\[{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}} t-\frac{g t^{2}}{2}\]</p>
+<p>\[{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}}\,t-\frac{g\,t^{2}}{2}\]</p>
 <p>To find the time that the projectile lands, we want to find the \(t\) value (\({t_{\text{flight}}}\)) where \({p_{\text{y}}}=0\) (since the target is on the \(x\)-axis from <a href="./SecAssumps.html#targetXAxis">A:targetXAxis</a>). From the equation above we get:</p>
-<p>\[{{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{g {t_{\text{flight}}}^{2}}{2}=0\]</p>
+<p>\[{{v_{\text{y}}}^{\text{i}}}\,{t_{\text{flight}}}-\frac{g\,{t_{\text{flight}}}^{2}}{2}=0\]</p>
 <p>Dividing by \({t_{\text{flight}}}\) (with the constraint \({t_{\text{flight}}}\gt{}0\)) gives us:</p>
-<p>\[{{v_{\text{y}}}^{\text{i}}}-\frac{g {t_{\text{flight}}}}{2}=0\]</p>
+<p>\[{{v_{\text{y}}}^{\text{i}}}-\frac{g\,{t_{\text{flight}}}}{2}=0\]</p>
 <p>Solving for \({t_{\text{flight}}}\) gives us:</p>
-<p>\[{t_{\text{flight}}}=\frac{2 {{v_{\text{y}}}^{\text{i}}}}{g}\]</p>
+<p>\[{t_{\text{flight}}}=\frac{2\,{{v_{\text{y}}}^{\text{i}}}}{g}\]</p>
 <p>From <a href="./SecDDs.html#DD:speedIY">DD:speedIY</a> (with \({v^{\text{i}}}={v_{\text{launch}}}\)) we can replace \({{v_{\text{y}}}^{\text{i}}}\):</p>
-<p>\[{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{g}\]</p>
+<p>\[{t_{\text{flight}}}=\frac{2\,{v_{\text{launch}}}\,\sin\left(θ\right)}{g}\]</p>
 <div align="center">
 <h2 id="IM:calOfLandingDist"><a class="header" href="#IM:calOfLandingDist">Calculation of landing position</a></h2>
 </div>
@@ -213,7 +213,7 @@
 <tr><td style="text-align: left">Output</td><td style="text-align: left">\({p_{\text{land}}}\)</td></tr>
 <tr><td style="text-align: left">Input Constraints</td><td style="text-align: left">\[{v_{\text{launch}}}\gt{}0\]\[0\lt{}θ\lt{}\frac{π}{2}\]</td></tr>
 <tr><td style="text-align: left">Output Constraints</td><td style="text-align: left">\[{p_{\text{land}}}\gt{}0\]</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{p_{\text{land}}}=\frac{2\,{v_{\text{launch}}}^{2}\,\sin\left(θ\right)\,\cos\left(θ\right)}{g}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({p_{\text{land}}}\) is the landing position (\({\text{m}}\))</li><li>\({v_{\text{launch}}}\) is the launch speed (\(\frac{\text{m}}{\text{s}}\))</li><li>\(θ\) is the launch angle (\({\text{rad}}\))</li><li>\(g\) is the magnitude of gravitational acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The constraint \(0\lt{}θ\lt{}\frac{π}{2}\) is from <a href="./SecAssumps.html#posXDirection">A:posXDirection</a> and <a href="./SecAssumps.html#yAxisGravity">A:yAxisGravity</a>, and is shown in <a href="./SecPhysSyst.html#Figure:Launch">Fig:Launch</a>.</li><li>\(g\) is defined in <a href="./SecAssumps.html#gravAccelValue">A:gravAccelValue</a>.</li><li>The constraint \({p_{\text{land}}}\gt{}0\) is from <a href="./SecAssumps.html#posXDirection">A:posXDirection</a>.</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
@@ -222,13 +222,13 @@
 </div>
 <h4 id="IM:calOfLandingDistDeriv"><a class="header" href="#IM:calOfLandingDistDeriv">Detailed derivation of landing position:</a></h4>
 <p>We know that \({{p_{\text{x}}}^{\text{i}}}=0\) (<a href="./SecAssumps.html#launchOrigin">A:launchOrigin</a>) and \({{a_{\text{x}}}^{\text{c}}}=0\) (<a href="./SecAssumps.html#accelXZero">A:accelXZero</a>). Substituting these values into the x-direction of <a href="./SecGDs.html#GD:posVec">GD:posVec</a> gives us:</p>
-<p>\[{p_{\text{x}}}={{v_{\text{x}}}^{\text{i}}} t\]</p>
+<p>\[{p_{\text{x}}}={{v_{\text{x}}}^{\text{i}}}\,t\]</p>
 <p>To find the landing position, we want to find the \({p_{\text{x}}}\) value (\({p_{\text{land}}}\)) at flight duration (from <a href="./SecIMs.html#IM:calOfLandingTime">IM:calOfLandingTime</a>):</p>
-<p>\[{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{g}\]</p>
+<p>\[{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2\,{v_{\text{launch}}}\,\sin\left(θ\right)}{g}\]</p>
 <p>From <a href="./SecDDs.html#DD:speedIX">DD:speedIX</a> (with \({v^{\text{i}}}={v_{\text{launch}}}\)) we can replace \({{v_{\text{x}}}^{\text{i}}}\):</p>
-<p>\[{p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{g}\]</p>
+<p>\[{p_{\text{land}}}=\frac{{v_{\text{launch}}}\,\cos\left(θ\right)\cdot{}2\,{v_{\text{launch}}}\,\sin\left(θ\right)}{g}\]</p>
 <p>Rearranging this gives us the required equation:</p>
-<p>\[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}\]</p>
+<p>\[{p_{\text{land}}}=\frac{2\,{v_{\text{launch}}}^{2}\,\sin\left(θ\right)\,\cos\left(θ\right)}{g}\]</p>
 <div align="center">
 <h2 id="IM:offsetIM"><a class="header" href="#IM:offsetIM">Offset</a></h2>
 </div>

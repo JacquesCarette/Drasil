@@ -367,7 +367,7 @@
 <div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:SysContext"><a class="header" href="#Sec:SysContext">System Context</a></h1>
 <p><a href="./SecSysContext.html#Figure:sysCtxDiag">Fig:sysCtxDiag</a> shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (GamePhysics). Arrows are used to show the data flow between the system and its environment.</p>
 <div id="Figure:sysCtxDiag"></div>
-<p><img src="/assets/sysctx.png" alt="System Context" /></p>
+<p><img src="./assets/sysctx.png" alt="System Context" /></p>
 <p><strong><p align="center">System Context</p></strong></p>
 <p>The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:</p>
 <ul>
@@ -437,7 +437,7 @@
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">TM:NewtonSecLawMot</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Newton’s second law of motion</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{F}=m\,\boldsymbol{a}\text{(}t\text{)}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{F}\) is the force (\({\text{N}}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(\boldsymbol{a}\text{(}t\text{)}\) is the acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The net force \(\boldsymbol{F}\) on a body is proportional to the acceleration \(\boldsymbol{a}\text{(}t\text{)}\) of the body, where \(m\) denotes the mass of the body as the constant of proportionality.</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
@@ -459,7 +459,7 @@
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">TM:UniversalGravLaw</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Newton’s law of universal gravitation</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{F}=G \frac{{m_{1}} {m_{2}}}{|\boldsymbol{d}|^{2}} \boldsymbol{\hat{d}}=G \frac{{m_{1}} {m_{2}}}{|\boldsymbol{d}|^{2}} \frac{\boldsymbol{d}}{|\boldsymbol{d}|}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{F}=G\,\frac{{m_{1}}\,{m_{2}}}{|\boldsymbol{d}|^{2}}\,\boldsymbol{\hat{d}}=G\,\frac{{m_{1}}\,{m_{2}}}{|\boldsymbol{d}|^{2}}\,\frac{\boldsymbol{d}}{|\boldsymbol{d}|}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{F}\) is the force (\({\text{N}}\))</li><li>\(G\) is the gravitational constant (\(\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}\))</li><li>\({m_{1}}\) is the mass of the first body (\({\text{kg}}\))</li><li>\({m_{2}}\) is the mass of the second body (\({\text{kg}}\))</li><li>\(|\boldsymbol{d}|\) is the Euclidean norm of the distance between the center of mass of two bodies (\({\text{m}}\))</li><li>\(\boldsymbol{\hat{d}}\) is the unit vector directed from the center of the large mass to the center of the smaller mass (\({\text{m}}\))</li><li>\(\boldsymbol{d}\) is the distance between the center of mass of the rigid bodies (\({\text{m}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>Two rigid bodies in the universe attract each other with a force \(\boldsymbol{F}\) that is directly proportional to the product of their masses, \({m_{1}}\) and \({m_{2}}\), and inversely proportional to the squared distance \({|\boldsymbol{d}|^{2}}\) between them.</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
@@ -470,7 +470,7 @@
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">TM:NewtonSecLawRotMot</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Newton’s second law for rotational motion</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{τ}=\boldsymbol{I} α\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{τ}=\boldsymbol{I}\,α\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{τ}\) is the torque (\(\text{N}\text{m}\))</li><li>\(\boldsymbol{I}\) is the moment of inertia (\(\text{kg}\text{m}^{2}\))</li><li>\(α\) is the angular acceleration (\(\frac{\text{rad}}{\text{s}^{2}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The net torque \(\boldsymbol{τ}\) on a rigid body is proportional to its angular acceleration \(α\), where \(\boldsymbol{I}\) denotes the moment of inertia of the rigid body as the constant of proportionality.</li><li>We also assume that all rigid bodies involved are two-dimensional (from <a href="./SecAssumps.html#assumpOD">A:objectDimension</a>).</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
@@ -484,7 +484,7 @@
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:accelGravity</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Acceleration due to gravity</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}^{2}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{g}=-\frac{G M}{|\boldsymbol{d}|^{2}} \boldsymbol{\hat{d}}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{g}=-\frac{G\,M}{|\boldsymbol{d}|^{2}}\,\boldsymbol{\hat{d}}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{g}\) is the gravitational acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\(G\) is the gravitational constant (\(\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}\))</li><li>\(M\) is the mass of the larger rigid body (\({\text{kg}}\))</li><li>\(|\boldsymbol{d}|\) is the Euclidean norm of the distance between the center of mass of two bodies (\({\text{m}}\))</li><li>\(\boldsymbol{\hat{d}}\) is the unit vector directed from the center of the large mass to the center of the smaller mass (\({\text{m}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>If one of the masses is much larger than the other, it is convenient to define a gravitational field around the larger mass as shown above. The negative sign in the equation indicates that the force is an attractive force.</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="https://en.wikipedia.org/wiki/Gravitational_acceleration">Definition of Gravitational Acceleration</a></td></tr>
@@ -493,22 +493,22 @@
 </div>
 <h4 id="GD:accelGravityDeriv"><a class="header" href="#GD:accelGravityDeriv">Detailed derivation of gravitational acceleration:</a></h4>
 <p>From <a href="./SecTMs.html#TM:UniversalGravLaw">Newton’s law of universal gravitation</a>, we have:</p>
-<p>\[\boldsymbol{F}=\frac{G {m_{1}} {m_{2}}}{{|\boldsymbol{d}|^{2}}} \boldsymbol{\hat{d}}\]</p>
+<p>\[\boldsymbol{F}=\frac{G\,{m_{1}}\,{m_{2}}}{{|\boldsymbol{d}|^{2}}}\,\boldsymbol{\hat{d}}\]</p>
 <p>The above equation governs the gravitational attraction between two bodies. Suppose that one of the bodies is significantly more massive than the other, so that we concern ourselves with the force the massive body exerts on the lighter body. Further, suppose that the Cartesian coordinate system is chosen such that this force acts on a line which lies along one of the principal axes. Then our unit vector directed from the center of the large mass to the center of the smaller mass \(\boldsymbol{\hat{d}}\) for the x or y axes is:</p>
 <p>\[\boldsymbol{\hat{d}}=\frac{\boldsymbol{d}}{|\boldsymbol{d}|}\]</p>
 <p>Given the above assumptions, let \(M\) and \(m\) be the mass of the massive and light body respectively. Equating \(\boldsymbol{F}\) above with Newton’s second law for the force experienced by the light body, we get:</p>
-<p>\[{\boldsymbol{F}_{\boldsymbol{g}}}=G \frac{M m}{{|\boldsymbol{d}|^{2}}} \boldsymbol{\hat{d}}=m \boldsymbol{g}\]</p>
+<p>\[{\boldsymbol{F}_{\boldsymbol{g}}}=G\,\frac{M\,m}{{|\boldsymbol{d}|^{2}}}\,\boldsymbol{\hat{d}}=m\,\boldsymbol{g}\]</p>
 <p>where \(\boldsymbol{g}\) is the gravitational acceleration. Dividing the above equation by \(m\),  we have:</p>
-<p>\[G \frac{M}{{|\boldsymbol{d}|^{2}}} \boldsymbol{\hat{d}}=\boldsymbol{g}\]</p>
+<p>\[G\,\frac{M}{{|\boldsymbol{d}|^{2}}}\,\boldsymbol{\hat{d}}=\boldsymbol{g}\]</p>
 <p>and thus the negative sign indicates that the force is an attractive force:</p>
-<p>\[\boldsymbol{g}=-G \frac{M}{{|\boldsymbol{d}|^{2}}} \boldsymbol{\hat{d}}\]</p>
+<p>\[\boldsymbol{g}=-G\,\frac{M}{{|\boldsymbol{d}|^{2}}}\,\boldsymbol{\hat{d}}\]</p>
 <div align="center">
 <h2 id="GD:impulse"><a class="header" href="#GD:impulse">Impulse for Collision</a></h2>
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:impulse</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Impulse for Collision</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\text{N}\text{s}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[j=\frac{-\left(1+{C_{\text{R}}}\right) {{\boldsymbol{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\boldsymbol{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) |\boldsymbol{n}|^{2}+\frac{|{\boldsymbol{u}_{\text{A}\text{P}}}\text{*}\boldsymbol{n}|^{2}}{{\boldsymbol{I}_{\text{A}}}}+\frac{|{\boldsymbol{u}_{\text{B}\text{P}}}\text{*}\boldsymbol{n}|^{2}}{{\boldsymbol{I}_{\text{B}}}}}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[j=\frac{-\left(1+{C_{\text{R}}}\right)\,{{\boldsymbol{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\boldsymbol{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right)\,|\boldsymbol{n}|^{2}+\frac{|{\boldsymbol{u}_{\text{A}\text{P}}}\text{*}\boldsymbol{n}|^{2}}{{\boldsymbol{I}_{\text{A}}}}+\frac{|{\boldsymbol{u}_{\text{B}\text{P}}}\text{*}\boldsymbol{n}|^{2}}{{\boldsymbol{I}_{\text{B}}}}}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(j\) is the impulse (scalar) (\(\text{N}\text{s}\))</li><li>\({C_{\text{R}}}\) is the coefficient of restitution (Unitless)</li><li>\({{\boldsymbol{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}\) is the initial relative velocity between rigid bodies of A and B (\(\frac{\text{m}}{\text{s}}\))</li><li>\(\boldsymbol{n}\) is the collision normal vector (\({\text{m}}\))</li><li>\({m_{\text{A}}}\) is the mass of rigid body A (\({\text{kg}}\))</li><li>\({m_{\text{B}}}\) is the mass of rigid body B (\({\text{kg}}\))</li><li>\(|\boldsymbol{n}|\) is the length of the normal vector (\({\text{m}}\))</li><li>\(|{\boldsymbol{u}_{\text{A}\text{P}}}\text{*}\boldsymbol{n}|\) is the length of the perpendicular vector to the contact displacement vector of rigid body A (\({\text{m}}\))</li><li>\({\boldsymbol{I}_{\text{A}}}\) is the moment of inertia of rigid body A (\(\text{kg}\text{m}^{2}\))</li><li>\(|{\boldsymbol{u}_{\text{B}\text{P}}}\text{*}\boldsymbol{n}|\) is the length of the perpendicular vector to the contact displacement vector of rigid body B (\({\text{m}}\))</li><li>\({\boldsymbol{I}_{\text{B}}}\) is the moment of inertia of rigid body B (\(\text{kg}\text{m}^{2}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>) and two-dimensional (from <a href="./SecAssumps.html#assumpOD">A:objectDimension</a>).</li><li>A right-handed coordinate system is used (from <a href="./SecAssumps.html#assumpAD">A:axesDefined</a>).</li><li>All collisions are vertex-to-edge (from <a href="./SecAssumps.html#assumpCT">A:collisionType</a>).</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="http://www.chrishecker.com/images/e/e7/Gdmphys3.pdf">Impulse for Collision Ref</a></td></tr>
@@ -523,7 +523,7 @@
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Center of Mass</td></tr>
 <tr><td style="text-align: left">Symbol</td><td style="text-align: left">\({\boldsymbol{p}\text{(}t\text{)}_{\text{CM}}}\)</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{m}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{\boldsymbol{p}\text{(}t\text{)}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}} {\boldsymbol{p}\text{(}t\text{)}_{j}}}}{{m_{T}}}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{\boldsymbol{p}\text{(}t\text{)}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}}\,{\boldsymbol{p}\text{(}t\text{)}_{j}}}}{{m_{T}}}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({\boldsymbol{p}\text{(}t\text{)}_{\text{CM}}}\) is the Center of Mass (\({\text{m}}\))</li><li>\({m_{j}}\) is the mass of the j-th particle (\({\text{kg}}\))</li><li>\({\boldsymbol{p}\text{(}t\text{)}_{j}}\) is the position vector of the j-th particle (\({\text{m}}\))</li><li>\({m_{T}}\) is the total mass of the rigid body (\({\text{kg}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>).</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
@@ -640,7 +640,7 @@
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Kinetic energy</td></tr>
 <tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(KE\)</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{J}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[KE=m \frac{|\boldsymbol{v}\text{(}t\text{)}|^{2}}{2}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[KE=m\,\frac{|\boldsymbol{v}\text{(}t\text{)}|^{2}}{2}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(KE\) is the kinetic energy (\({\text{J}}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(\boldsymbol{v}\text{(}t\text{)}\) is the velocity (\(\frac{\text{m}}{\text{s}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>Kinetic energy is the measure of the energy a body possesses due to its motion.</li><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>) and two-dimensional (from <a href="./SecAssumps.html#assumpOD">A:objectDimension</a>).</li><li>No damping occurs during the simulation (from <a href="./SecAssumps.html#assumpDI">A:dampingInvolvement</a>).</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
@@ -679,7 +679,7 @@
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Impulse (vector)</td></tr>
 <tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(\boldsymbol{J}\)</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\text{N}\text{s}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{J}=m Δ\boldsymbol{v}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{J}=m\,Δ\boldsymbol{v}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{J}\) is the impulse (vector) (\(\text{N}\text{s}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(Δ\boldsymbol{v}\) is the change in velocity (\(\frac{\text{m}}{\text{s}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>An impulse (vector) \(\boldsymbol{J}\) occurs when a force \(\boldsymbol{F}\) acts over a body over an interval of time.</li><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>).</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
@@ -688,11 +688,11 @@
 </div>
 <h4 id="DD:impulseVDeriv"><a class="header" href="#DD:impulseVDeriv">Detailed derivation of impulse (vector):</a></h4>
 <p>Newton’s second law of motion states:</p>
-<p>\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}=m \frac{\,d\boldsymbol{v}\text{(}t\text{)}}{\,dt}\]</p>
+<p>\[\boldsymbol{F}=m\,\boldsymbol{a}\text{(}t\text{)}=m\,\frac{\,d\boldsymbol{v}\text{(}t\text{)}}{\,dt}\]</p>
 <p>Rearranging:</p>
-<p>\[\int_{{t_{1}}}^{{t_{2}}}{\boldsymbol{F}}\,dt=m \left(\int_{{\boldsymbol{v}\text{(}t\text{)}_{1}}}^{{\boldsymbol{v}\text{(}t\text{)}_{2}}}{1}\,d\boldsymbol{v}\text{(}t\text{)}\right)\]</p>
+<p>\[\int_{{t_{1}}}^{{t_{2}}}{\boldsymbol{F}}\,dt=m\,\left(\int_{{\boldsymbol{v}\text{(}t\text{)}_{1}}}^{{\boldsymbol{v}\text{(}t\text{)}_{2}}}{1}\,d\boldsymbol{v}\text{(}t\text{)}\right)\]</p>
 <p>Integrating the right hand side:</p>
-<p>\[\int_{{t_{1}}}^{{t_{2}}}{\boldsymbol{F}}\,dt=m {\boldsymbol{v}\text{(}t\text{)}_{2}}-m {\boldsymbol{v}\text{(}t\text{)}_{1}}=m Δ\boldsymbol{v}\]</p>
+<p>\[\int_{{t_{1}}}^{{t_{2}}}{\boldsymbol{F}}\,dt=m\,{\boldsymbol{v}\text{(}t\text{)}_{2}}-m\,{\boldsymbol{v}\text{(}t\text{)}_{1}}=m\,Δ\boldsymbol{v}\]</p>
 <div align="center">
 <h2 id="DD:potEnergy"><a class="header" href="#DD:potEnergy">Potential energy</a></h2>
 </div>
@@ -700,7 +700,7 @@
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Potential energy</td></tr>
 <tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(PE\)</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{J}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[PE=m \boldsymbol{g} h\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[PE=m\,\boldsymbol{g}\,h\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(PE\) is the potential energy (\({\text{J}}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(\boldsymbol{g}\) is the gravitational acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\(h\) is the height (\({\text{m}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The potential energy of an object is the energy held by an object because of its position to other objects.</li><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>) and two-dimensional (from <a href="./SecAssumps.html#assumpOD">A:objectDimension</a>).</li><li>No damping occurs during the simulation (from <a href="./SecAssumps.html#assumpDI">A:dampingInvolvement</a>).</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
@@ -713,7 +713,7 @@
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Moment of inertia</td></tr>
 <tr><td style="text-align: left">Symbol</td><td style="text-align: left">\(\boldsymbol{I}\)</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\text{kg}\text{m}^{2}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{I}=\displaystyle\sum{{m_{j}} {d_{j}}^{2}}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{I}=\displaystyle\sum{{m_{j}}\,{d_{j}}^{2}}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{I}\) is the moment of inertia (\(\text{kg}\text{m}^{2}\))</li><li>\({m_{j}}\) is the mass of the j-th particle (\({\text{kg}}\))</li><li>\({d_{j}}\) is the distance between the j-th particle and the axis of rotation (\({\text{m}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The moment of inertia \(\boldsymbol{I}\) of a body measures how much torque is needed for the body to achieve angular acceleration about the axis of rotation.</li><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>).</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
@@ -773,7 +773,7 @@
 <tr><td style="text-align: left">Output</td><td style="text-align: left">\({t_{\text{c}}}\)</td></tr>
 <tr><td style="text-align: left">Input Constraints</td><td style="text-align: left">\[t\gt{}0\]\[j\gt{}0\]\[{m_{\text{A}}}\gt{}0\]\[\boldsymbol{n}\gt{}0\]</td></tr>
 <tr><td style="text-align: left">Output Constraints</td><td style="text-align: left">\[{t_{\text{c}}}\gt{}0\]</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{\boldsymbol{v}\text{(}t\text{)}_{\text{A}}}\left({t_{\text{c}}}\right)={\boldsymbol{v}\text{(}t\text{)}_{\text{A}}}\left(t\right)+\frac{j}{{m_{\text{A}}}} \boldsymbol{n}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[{\boldsymbol{v}\text{(}t\text{)}_{\text{A}}}\left({t_{\text{c}}}\right)={\boldsymbol{v}\text{(}t\text{)}_{\text{A}}}\left(t\right)+\frac{j}{{m_{\text{A}}}}\,\boldsymbol{n}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\({\boldsymbol{v}\text{(}t\text{)}_{\text{A}}}\) is the velocity at point A (\(\frac{\text{m}}{\text{s}}\))</li><li>\({t_{\text{c}}}\) is the denotes the time at collision (\({\text{s}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\(j\) is the impulse (scalar) (\(\text{N}\text{s}\))</li><li>\({m_{\text{A}}}\) is the mass of rigid body A (\({\text{kg}}\))</li><li>\(\boldsymbol{n}\) is the collision normal vector (\({\text{m}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The output of the instance model will be the functions of position, velocity, orientation, and angular acceleration over time that satisfy the equations for the velocity and angular acceleration, with the given initial conditions for position, velocity, orientation, and angular acceleration. The motion is translational, so the position, velocity, orientation, and angular acceleration functions are for the centre of mass (from <a href="./SecDDs.html#DD:ctrOfMass">DD:ctrOfMass</a>).</li><li>All bodies are assumed to be rigid (from <a href="./SecAssumps.html#assumpOT">A:objectTy</a>) and two-dimensional (from <a href="./SecAssumps.html#assumpOD">A:objectDimension</a>).</li><li>A right-handed coordinate system is used (from <a href="./SecAssumps.html#assumpAD">A:axesDefined</a>).</li><li>All collisions are vertex-to-edge (from <a href="./SecAssumps.html#assumpCT">A:collisionType</a>).</li><li>It is currently assumed that no damping occurs during the simulation (from <a href="./SecAssumps.html#assumpDI">A:dampingInvolvement</a>) and that no constraints are involved (from <a href="./SecAssumps.html#assumpCAJI">A:constraintsAndJointsInvolvement</a>).</li><li>\(j\) is defined in <a href="./SecGDs.html#GD:impulse">GD:impulse</a></li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
@@ -793,7 +793,7 @@
 <tr><td style="text-align: left">\(\boldsymbol{v}\text{(}t\text{)}\)</td><td style="text-align: left">–</td><td style="text-align: left">–</td><td style="text-align: left">\(2.51\) \(\frac{\text{m}}{\text{s}}\)</td><td style="text-align: left">10\(\%\)</td></tr>
 <tr><td style="text-align: left">\(\boldsymbol{τ}\)</td><td style="text-align: left">–</td><td style="text-align: left">–</td><td style="text-align: left">\(200\) \(\text{N}\text{m}\)</td><td style="text-align: left">10\(\%\)</td></tr>
 <tr><td style="text-align: left">\(ω\)</td><td style="text-align: left">–</td><td style="text-align: left">–</td><td style="text-align: left">\(2.1\) \(\frac{\text{rad}}{\text{s}}\)</td><td style="text-align: left">10\(\%\)</td></tr>
-<tr><td style="text-align: left">\(ϕ\)</td><td style="text-align: left">–</td><td style="text-align: left">\(0\leq{}ϕ\leq{}2 π\)</td><td style="text-align: left">\(\frac{π}{2}\) \({\text{rad}}\)</td><td style="text-align: left">10\(\%\)</td></tr>
+<tr><td style="text-align: left">\(ϕ\)</td><td style="text-align: left">–</td><td style="text-align: left">\(0\leq{}ϕ\leq{}2\,π\)</td><td style="text-align: left">\(\frac{π}{2}\) \({\text{rad}}\)</td><td style="text-align: left">10\(\%\)</td></tr>
 </tbody></table>
 </div>
 <p><strong><p align="center">Input Data Constraints</p></strong></p>
@@ -987,19 +987,19 @@
 <p><strong><p align="center">Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items</p></strong></p>
 <p>The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href="./SecTraceMatrices.html#Figure:TraceGraphAvsA">Fig:TraceGraphAvsA</a> shows the dependencies of assumptions on each other. <a href="./SecTraceMatrices.html#Figure:TraceGraphAvsAll">Fig:TraceGraphAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href="./SecTraceMatrices.html#Figure:TraceGraphRefvsRef">Fig:TraceGraphRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. <a href="./SecTraceMatrices.html#Figure:TraceGraphAllvsR">Fig:TraceGraphAllvsR</a> shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. <a href="./SecTraceMatrices.html#Figure:TraceGraphAllvsAll">Fig:TraceGraphAllvsAll</a> shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.</p>
 <div id="Figure:TraceGraphAvsA"></div>
-<p><img src="/assets/avsa.svg" alt="TraceGraphAvsA" /></p>
+<p><img src="./assets/avsa.svg" alt="TraceGraphAvsA" /></p>
 <p><strong><p align="center">TraceGraphAvsA</p></strong></p>
 <div id="Figure:TraceGraphAvsAll"></div>
-<p><img src="/assets/avsall.svg" alt="TraceGraphAvsAll" /></p>
+<p><img src="./assets/avsall.svg" alt="TraceGraphAvsAll" /></p>
 <p><strong><p align="center">TraceGraphAvsAll</p></strong></p>
 <div id="Figure:TraceGraphRefvsRef"></div>
-<p><img src="/assets/refvsref.svg" alt="TraceGraphRefvsRef" /></p>
+<p><img src="./assets/refvsref.svg" alt="TraceGraphRefvsRef" /></p>
 <p><strong><p align="center">TraceGraphRefvsRef</p></strong></p>
 <div id="Figure:TraceGraphAllvsR"></div>
-<p><img src="/assets/allvsr.svg" alt="TraceGraphAllvsR" /></p>
+<p><img src="./assets/allvsr.svg" alt="TraceGraphAllvsR" /></p>
 <p><strong><p align="center">TraceGraphAllvsR</p></strong></p>
 <div id="Figure:TraceGraphAllvsAll"></div>
-<p><img src="/assets/allvsall.svg" alt="TraceGraphAllvsAll" /></p>
+<p><img src="./assets/allvsall.svg" alt="TraceGraphAllvsAll" /></p>
 <p><strong><p align="center">TraceGraphAllvsAll</p></strong></p>
 <p>For convenience, the following graphs can be found at the links below:</p>
 <ul>
@@ -1023,7 +1023,7 @@
 <div id="pointSource"></div>
 <p>[5]: Pierce, Rod. <em>Point</em>. May, 2017. <a href="https://www.mathsisfun.com/geometry/point.html">https://www.mathsisfun.com/geometry/point.html</a>.</p>
 <div id="smithKoothoor2016"></div>
-<p>[6]: Smith, W. Spencer and Koothoor, Nirmitha. “A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis.” * Nuclear Engineering and Technology*, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404–418.</p>
+<p>[6]: Smith, W. Spencer and Koothoor, Nirmitha. “A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis.” <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404–418.</p>
 <div id="smithLai2005"></div>
 <p>[7]: Smith, W. Spencer and Lai, Lei. “A new requirements template for scientific computing.” <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP’05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107–121. In conjunction with 13th IEEE International Requirements Engineering Conference,</p>
 <div id="smithEtAl2007"></div>

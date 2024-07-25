@@ -183,7 +183,7 @@
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:rectVel</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Rectilinear (1D) velocity as a function of time for constant acceleration</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[v\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[v\text{(}t\text{)}={v^{\text{i}}}+{a^{c}}\,t\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(v\text{(}t\text{)}\) is the 1D speed (\(\frac{\text{m}}{\text{s}}\))</li><li>\({v^{\text{i}}}\) is the initial speed (\(\frac{\text{m}}{\text{s}}\))</li><li>\({a^{c}}\) is the constant acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#hibbeler2004">hibbeler2004</a> (pg. 8)</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecGDs.html#GD:velVec">GD:velVec</a> and <a href="./SecGDs.html#GD:rectPos">GD:rectPos</a></td></tr>
@@ -195,14 +195,14 @@
 <p>Rearranging and integrating, we have:</p>
 <p>\[\int_{{v^{\text{i}}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt\]</p>
 <p>Performing the integration, we have the required equation:</p>
-<p>\[v\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t\]</p>
+<p>\[v\text{(}t\text{)}={v^{\text{i}}}+{a^{c}}\,t\]</p>
 <div align="center">
 <h2 id="GD:rectPos"><a class="header" href="#GD:rectPos">Rectilinear (1D) position as a function of time for constant acceleration</a></h2>
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:rectPos</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Rectilinear (1D) position as a function of time for constant acceleration</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{m}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}}\,t+\frac{{a^{c}}\,t^{2}}{2}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(p\text{(}t\text{)}\) is the 1D position (\({\text{m}}\))</li><li>\({p^{\text{i}}}\) is the initial position (\({\text{m}}\))</li><li>\({v^{\text{i}}}\) is the initial speed (\(\frac{\text{m}}{\text{s}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\({a^{c}}\) is the constant acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#hibbeler2004">hibbeler2004</a> (pg. 8)</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecGDs.html#GD:posVec">GD:posVec</a></td></tr>
@@ -214,16 +214,16 @@
 <p>Rearranging and integrating, we have:</p>
 <p>\[\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{v}\,dt\]</p>
 <p>From <a href="./SecGDs.html#GD:rectVel">GD:rectVel</a>, we can replace \(v\):</p>
-<p>\[\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{\text{i}}}+{a^{c}} t}\,dt\]</p>
+<p>\[\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{\text{i}}}+{a^{c}}\,t}\,dt\]</p>
 <p>Performing the integration, we have the required equation:</p>
-<p>\[p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}\]</p>
+<p>\[p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}}\,t+\frac{{a^{c}}\,t^{2}}{2}\]</p>
 <div align="center">
 <h2 id="GD:velVec"><a class="header" href="#GD:velVec">Velocity vector as a function of time for 2D motion under constant acceleration</a></h2>
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:velVec</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Velocity vector as a function of time for 2D motion under constant acceleration</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\(\frac{\text{m}}{\text{s}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{v}\text{(}t\text{)}=\begin{bmatrix}{{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}} t\\{{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}} t\end{bmatrix}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{v}\text{(}t\text{)}=\begin{bmatrix}{{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}}\,t\\{{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}}\,t\end{bmatrix}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{v}\text{(}t\text{)}\) is the velocity (\(\frac{\text{m}}{\text{s}}\))</li><li>\({{v_{\text{x}}}^{\text{i}}}\) is the \(x\)-component of initial velocity (\(\frac{\text{m}}{\text{s}}\))</li><li>\({{a_{\text{x}}}^{\text{c}}}\) is the \(x\)-component of constant acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\({{v_{\text{y}}}^{\text{i}}}\) is the \(y\)-component of initial velocity (\(\frac{\text{m}}{\text{s}}\))</li><li>\({{a_{\text{y}}}^{\text{c}}}\) is the \(y\)-component of constant acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"></td></tr>
@@ -231,14 +231,14 @@
 </div>
 <h4 id="GD:velVecDeriv"><a class="header" href="#GD:velVecDeriv">Detailed derivation of velocity vector:</a></h4>
 <p>For a two-dimensional Cartesian coordinate system (<a href="./SecAssumps.html#twoDMotion">A:twoDMotion</a> and <a href="./SecAssumps.html#cartSyst">A:cartSyst</a>), we can represent the velocity vector as \(\boldsymbol{v}\text{(}t\text{)}=\begin{bmatrix}{v_{\text{x}}}\\{v_{\text{y}}}\end{bmatrix}\) and the acceleration vector as \(\boldsymbol{a}\text{(}t\text{)}=\begin{bmatrix}{a_{\text{x}}}\\{a_{\text{y}}}\end{bmatrix}\). The acceleration is assumed to be constant (<a href="./SecAssumps.html#constAccel">A:constAccel</a>) and the constant acceleration vector is represented as \({\boldsymbol{a}^{\text{c}}}=\begin{bmatrix}{{a_{\text{x}}}^{\text{c}}}\\{{a_{\text{y}}}^{\text{c}}}\end{bmatrix}\). The initial velocity (at \(t=0\), from <a href="./SecAssumps.html#timeStartZero">A:timeStartZero</a>) is represented by \({\boldsymbol{v}^{\text{i}}}=\begin{bmatrix}{{v_{\text{x}}}^{\text{i}}}\\{{v_{\text{y}}}^{\text{i}}}\end{bmatrix}\). Since we have a Cartesian coordinate system, <a href="./SecGDs.html#GD:rectVel">GD:rectVel</a> can be applied to each coordinate of the velocity vector to yield the required equation:</p>
-<p>\[\boldsymbol{v}\text{(}t\text{)}=\begin{bmatrix}{{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}} t\\{{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}} t\end{bmatrix}\]</p>
+<p>\[\boldsymbol{v}\text{(}t\text{)}=\begin{bmatrix}{{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}}\,t\\{{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}}\,t\end{bmatrix}\]</p>
 <div align="center">
 <h2 id="GD:posVec"><a class="header" href="#GD:posVec">Position vector as a function of time for 2D motion under constant acceleration</a></h2>
 </div>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">GD:posVec</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Position vector as a function of time for 2D motion under constant acceleration</td></tr>
 <tr><td style="text-align: left">Units</td><td style="text-align: left">\({\text{m}}\)</td></tr>
-<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{p}\text{(}t\text{)}=\begin{bmatrix}{{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\{{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}\end{bmatrix}\]</td></tr>
+<tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\boldsymbol{p}\text{(}t\text{)}=\begin{bmatrix}{{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}}\,t+\frac{{{a_{\text{x}}}^{\text{c}}}\,t^{2}}{2}\\{{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}}\,t+\frac{{{a_{\text{y}}}^{\text{c}}}\,t^{2}}{2}\end{bmatrix}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(\boldsymbol{p}\text{(}t\text{)}\) is the position (\({\text{m}}\))</li><li>\({{p_{\text{x}}}^{\text{i}}}\) is the \(x\)-component of initial position (\({\text{m}}\))</li><li>\({{v_{\text{x}}}^{\text{i}}}\) is the \(x\)-component of initial velocity (\(\frac{\text{m}}{\text{s}}\))</li><li>\(t\) is the time (\({\text{s}}\))</li><li>\({{a_{\text{x}}}^{\text{c}}}\) is the \(x\)-component of constant acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li><li>\({{p_{\text{y}}}^{\text{i}}}\) is the \(y\)-component of initial position (\({\text{m}}\))</li><li>\({{v_{\text{y}}}^{\text{i}}}\) is the \(y\)-component of initial velocity (\(\frac{\text{m}}{\text{s}}\))</li><li>\({{a_{\text{y}}}^{\text{c}}}\) is the \(y\)-component of constant acceleration (\(\frac{\text{m}}{\text{s}^{2}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:calOfLandingDist">IM:calOfLandingDist</a> and <a href="./SecIMs.html#IM:calOfLandingTime">IM:calOfLandingTime</a></td></tr>
@@ -246,7 +246,7 @@
 </div>
 <h4 id="GD:posVecDeriv"><a class="header" href="#GD:posVecDeriv">Detailed derivation of position vector:</a></h4>
 <p>For a two-dimensional Cartesian coordinate system (<a href="./SecAssumps.html#twoDMotion">A:twoDMotion</a> and <a href="./SecAssumps.html#cartSyst">A:cartSyst</a>), we can represent the position vector as \(\boldsymbol{p}\text{(}t\text{)}=\begin{bmatrix}{p_{\text{x}}}\\{p_{\text{y}}}\end{bmatrix}\), the velocity vector as \(\boldsymbol{v}\text{(}t\text{)}=\begin{bmatrix}{v_{\text{x}}}\\{v_{\text{y}}}\end{bmatrix}\), and the acceleration vector as \(\boldsymbol{a}\text{(}t\text{)}=\begin{bmatrix}{a_{\text{x}}}\\{a_{\text{y}}}\end{bmatrix}\). The acceleration is assumed to be constant (<a href="./SecAssumps.html#constAccel">A:constAccel</a>) and the constant acceleration vector is represented as \({\boldsymbol{a}^{\text{c}}}=\begin{bmatrix}{{a_{\text{x}}}^{\text{c}}}\\{{a_{\text{y}}}^{\text{c}}}\end{bmatrix}\). The initial velocity (at \(t=0\), from <a href="./SecAssumps.html#timeStartZero">A:timeStartZero</a>) is represented by \({\boldsymbol{v}^{\text{i}}}=\begin{bmatrix}{{v_{\text{x}}}^{\text{i}}}\\{{v_{\text{y}}}^{\text{i}}}\end{bmatrix}\). Since we have a Cartesian coordinate system, <a href="./SecGDs.html#GD:rectPos">GD:rectPos</a> can be applied to each coordinate of the position vector to yield the required equation:</p>
-<p>\[\boldsymbol{p}\text{(}t\text{)}=\begin{bmatrix}{{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\{{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}\end{bmatrix}\]</p>
+<p>\[\boldsymbol{p}\text{(}t\text{)}=\begin{bmatrix}{{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}}\,t+\frac{{{a_{\text{x}}}^{\text{c}}}\,t^{2}}{2}\\{{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}}\,t+\frac{{{a_{\text{y}}}^{\text{c}}}\,t^{2}}{2}\end{bmatrix}\]</p>
 
                     </main>
 

@@ -4,7 +4,7 @@
 
 <div id="Figure:sysCtxDiag"></div>
 
-![System Context](../../../../../datafiles/gamephysics/sysctx.png)
+![System Context](/assets/sysctx.png)
 
 **<p align="center">System Context</p>**
 

@@ -26,7 +26,7 @@ import Drasil.DocLang (mkGraphInfo)
 import SysInfo.Drasil (SystemInformation)
 import Language.Drasil.Printers (DocType(SRS, Website, Lesson), makeCSS, genHTML, 
   genTeX, Format(TeX, HTML, Jupyter, MDBook), genJupyter, genMDBook, 
-  PrintingInformation, outputDot, makeBook)
+  PrintingInformation, outputDot, makeBook, makeRequirements)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD,
   unPP, unJP, unCSP, unCPPP, unSP, unJLP)
@@ -57,10 +57,12 @@ prntDoc d pinfo fn dtype fmt =
     HTML              -> do prntDoc' dtype (show dtype ++ "/HTML") fn HTML d pinfo
                             prntCSS dtype fn d
     TeX               -> do prntDoc' dtype (show dtype ++ "/PDF") fn TeX d pinfo
-                            prntMake $ DocSpec (DC dtype []) fn
+                            prntMake $ DocSpec (DC dtype [TeX]) fn
     Jupyter           -> do prntDoc' dtype (show dtype ++ "/Jupyter") fn Jupyter d pinfo
     MDBook            -> do prntDoc' dtype (show dtype ++ "/mdBook") fn MDBook d pinfo
+                            prntMake $ DocSpec (DC dtype [MDBook]) fn
                             prntBook dtype d pinfo
+                            prntCSV  dtype pinfo
     _                 -> mempty
 
 -- | Helper function to produce an error when an incorrect SRS format is used. 
@@ -95,10 +97,14 @@ prntDoc' dt dt' fn format body' sm = do
 
 -- | Helper for writing the Makefile(s).
 prntMake :: DocSpec -> IO ()
-prntMake ds@(DocSpec (DC dt _) _) =
-  do outh <- openFile (show dt ++ "/PDF/Makefile") WriteMode
+prntMake ds@(DocSpec (DC dt f) _) =
+  do outh <- openFile (show dt ++ dir f ++ "/Makefile") WriteMode
      hPutStrLn outh $ render $ genMake [ds]
      hClose outh
+  where
+    dir [TeX]    = "/PDF"
+    dir [MDBook] = "/mdBook"
+    dir _        = error "Makefile(s) only supported for TeX/MDBook."
 
 -- | Helper that creates a CSS file to accompany an HTML file.
 -- Takes in the folder name, generated file name, and the document.
@@ -117,7 +123,15 @@ prntBook dt doc sm = do
   hPutStrLn outh $ render (makeBook doc sm)
   hClose outh
   where
-    fp = show dt ++ "/mdBook" ++ "/book.toml"
+    fp = show dt ++ "/mdBook/book.toml"
+
+prntCSV :: DocType -> PrintingInformation -> IO()
+prntCSV dt sm = do
+  outh <- openFile fp WriteMode
+  hPutStrLn outh $ render (makeRequirements sm)
+  hClose outh
+  where
+    fp = show dt ++ "/mdBook/.drasil-requirements.csv"
 
 -- | Renders single-page documents.
 writeDoc :: PrintingInformation -> DocType -> Format -> Filename -> Document -> Doc

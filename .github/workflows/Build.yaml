@@ -42,6 +42,9 @@ jobs:
           filters: |
             tex:
               - 'code/stable/**/*.tex'
+            md:
+              - code/stable/**/*.md
+              - code/stable/**/book.toml
 
       - name: "Install system requirements"
         run: |
@@ -120,9 +123,9 @@ jobs:
         run: make tracegraphs
         if: ${{ fromJSON(env.is_deployment) }}
 
-      - name: "Build mdBook Examples" # only needed in deployments, not required for tests
+      - name: "Build mdBook Examples"
         run: make mdbook_build
-        if: ${{ fromJSON(env.is_deployment) }}
+        if: ${{ steps.changes.outputs.md == 'true' || fromJSON(env.is_deployment) }}
 
       - name: "Build website generator"
         run: make website

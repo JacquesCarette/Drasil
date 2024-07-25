@@ -96,31 +96,31 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 <div id="Figure:TraceGraphAvsA"></div>
 
-![TraceGraphAvsA](/assets/avsa.svg)
+![TraceGraphAvsA](./assets/avsa.svg)
 
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
-![TraceGraphAvsAll](/assets/avsall.svg)
+![TraceGraphAvsAll](./assets/avsall.svg)
 
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
-![TraceGraphRefvsRef](/assets/refvsref.svg)
+![TraceGraphRefvsRef](./assets/refvsref.svg)
 
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
-![TraceGraphAllvsR](/assets/allvsr.svg)
+![TraceGraphAllvsR](./assets/allvsr.svg)
 
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
-![TraceGraphAllvsAll](/assets/allvsall.svg)
+![TraceGraphAllvsAll](./assets/allvsall.svg)
 
 **<p align="center">TraceGraphAllvsAll</p>**
 

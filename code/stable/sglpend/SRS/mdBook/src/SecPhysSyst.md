@@ -8,6 +8,6 @@ PS2: The mass.
 
 <div id="Figure:sglpend"></div>
 
-![The physical system](/assets/sglpend.jpg)
+![The physical system](./assets/sglpend.jpg)
 
 **<p align="center">The physical system</p>**

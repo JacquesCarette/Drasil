@@ -8,7 +8,7 @@ import Drasil.GOOL.InterfaceCommon (MSBody, SValue, MSStatement, SMethod,
   ScopeSym(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
+  ValueExpression(..), List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
   VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
@@ -46,6 +46,7 @@ instance Monad CodeInfoProc where
   CI x >>= f = f x
 
 instance SharedProg CodeInfoProc
+
 instance ProcProg CodeInfoProc
 
 instance ProgramSym CodeInfoProc where
@@ -83,6 +84,7 @@ instance TypeSym CodeInfoProc where
   infile            = noInfoType
   outfile           = noInfoType
   listType      _   = noInfoType
+  setType      _   = noInfoType
   arrayType     _   = noInfoType
   listInnerType _   = noInfoType
   funcType      _ _ = noInfoType
@@ -126,6 +128,7 @@ instance Literal CodeInfoProc where
   litString _ = noInfo
   litArray  _ = executeList
   litList   _ = executeList
+  litSet   _ = executeList
 
 instance MathConstant CodeInfoProc where
   pi = noInfo
@@ -168,6 +171,7 @@ instance BooleanExpression CodeInfoProc where
   (?!)  = execute1
   (?&&) = execute2
   (?||) = execute2
+  isin  = execute2
 
 instance Comparison CodeInfoProc where
   (?<)  = execute2
@@ -202,7 +206,10 @@ instance List CodeInfoProc where
   listAccess = execute2
   listSet    = execute3
   indexOf    = execute2
-  
+
+instance Set CodeInfoProc where
+ contains = execute2
+
 instance InternalList CodeInfoProc where
   listSlice' b e s _ vl = zoom lensMStoVS $ do
     mapM_ (fromMaybe noInfo) [b,e,s]

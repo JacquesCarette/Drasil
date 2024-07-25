@@ -954,6 +954,9 @@ printConstraintProc c = do
       printConstraint' (Range _ (UpFrom (_, e))) = do
         lb <- convExprProc e
         return $ [printStr "above ", print lb] ++ printExpr e db ++ [printStrLn "."]
+      printConstraint' (Elem _ e) = do
+        lb <- convExprProc e
+        return $ [printStr "an element of the set ", print lb] ++ [printStrLn "."]
   printConstraint' c
 
 -- | Generates a module containing the function for printing outputs.

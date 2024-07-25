@@ -62,7 +62,7 @@ import Drasil.GOOL.State (GOOLState(..), lensMStoVS, headers, sources, mainMod,
 
 import Drasil.GOOL.Helpers (onStateValue, onCodeList)
 
-import Drasil.GOOL.CodeInfo (unCI)
+import Drasil.GOOL.CodeInfoProc (unCI)
 
 import Drasil.GOOL.LanguageRenderer.JavaRenderer (unJC, jName, jVersion)
 import Drasil.GOOL.LanguageRenderer.PythonRenderer (unPC, pyName, pyVersion)

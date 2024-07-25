@@ -14,7 +14,5 @@ Logging selected as None.
 Auxiliary Files selected as SampleInput ../../../datafiles/projectile/sampleInput.txt ReadME.
 Code Concept pi selected as Pi.
 Successfully matched String with String.
-Successfully matched Actor "Constants" with Object "Constants".
 Successfully matched Real with Double.
 Successfully matched Rational with Double.
-Successfully matched Actor "InputParameters" with Object "InputParameters".

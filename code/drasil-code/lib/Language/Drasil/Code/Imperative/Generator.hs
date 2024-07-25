@@ -8,15 +8,18 @@ import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
-  genDoxConfig, genReadMe, genModuleWithImports)
+  genDoxConfig, genReadMe, genModuleWithImports, genModuleWithImportsProc)
 import Language.Drasil.Code.Imperative.GenODE (chooseODELib)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
-import Language.Drasil.Code.Imperative.Import (genModDef, genModFuncs,
-  genModClasses)
-import Language.Drasil.Code.Imperative.Modules (genInputMod, genConstClass,
-  genConstMod, genInputClass, genInputConstraints, genInputDerived,
-  genInputFormat, genMain, genMainFunc, genCalcMod, genCalcFunc,
-  genOutputFormat, genOutputMod, genSampleInput)
+import Language.Drasil.Code.Imperative.Import (genModDef, genModDefProc,
+  genModFuncs, genModFuncsProc, genModClasses)
+import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
+  genConstClass, genConstMod, checkConstClass, genInputClass,
+  genInputConstraints, genInputConstraintsProc, genInputDerived,
+  genInputDerivedProc, genInputFormat, genInputFormatProc, genMain, genMainProc,
+  genMainFunc, genMainFuncProc, genCalcMod, genCalcModProc, genCalcFunc,
+  genCalcFuncProc, genOutputFormat, genOutputFormatProc, genOutputMod,
+  genOutputModProc, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   designLog, modExportMap, clsDefMap, genICName)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
@@ -287,11 +290,34 @@ chooseModulesProc Modular = genModulesProc
 
 -- | Generates an entire SCS program as a single module.
 genUnmodularProc :: (ProcProg r) => GenState (Proc.SFile r)
-genUnmodularProc = undefined
+genUnmodularProc = do
+  g <- get
+  umDesc <- unmodularDesc
+  giName <- genICName GetInput
+  dvName <- genICName DerivedValuesFn
+  icName <- genICName InputConstraintsFn
+  let n = pName $ codeSpec g
+      cls = any (`member` clsMap g) [giName, dvName, icName]
+  if cls then error "genUnmodularProc: Procedural renderers do not support classes"
+  else genModuleWithImportsProc n umDesc (concatMap (^. imports) (elems $ extLibMap g))
+        (genMainFuncProc
+          : map (fmap Just) (map genCalcFuncProc (execOrder $ codeSpec g)
+            ++ concatMap genModFuncsProc (modules g))
+          ++ ([genInputFormatProc Pub, genInputDerivedProc Pub,
+              genInputConstraintsProc Pub] ++ [genOutputFormatProc]))
 
 -- | Generates all modules for an SCS program.
 genModulesProc :: (ProcProg r) => GenState [Proc.SFile r]
-genModulesProc = undefined
+genModulesProc = do
+  g <- get
+  mn     <- genMainProc
+  inp    <- genInputModProc
+  con    <- checkConstClass
+  cal    <- genCalcModProc
+  out    <- genOutputModProc
+  moddef <- traverse genModDefProc (modules g) -- hack ?
+  if con then error "genModulesProc: Procedural renderers do not support classes"
+  else return $ mn : inp ++ cal : out ++ moddef
 
 -- | Private utilities used in 'generateCode'.
 getDir :: Lang -> String

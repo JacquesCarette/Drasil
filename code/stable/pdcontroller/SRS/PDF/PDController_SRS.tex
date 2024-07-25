@@ -308,7 +308,7 @@ Label & Laplace Transform
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {F_{\text{s}}}=\int_{\mathit{-∞}}^{∞}{{f_{\text{t}}} e^{-s t}}\,dt
+           {F_{\text{s}}}=\int_{\mathit{-∞}}^{∞}{{f_{\text{t}}}\,e^{-s\,t}}\,dt
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -374,7 +374,7 @@ Label & Second Order Mass-Spring-Damper System
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \frac{1}{m s^{2}+c s+k}
+           \frac{1}{m\,s^{2}+c\,s+k}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -492,7 +492,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {P_{\text{s}}}={K_{\text{p}}} {E_{\text{s}}}
+           {P_{\text{s}}}={K_{\text{p}}}\,{E_{\text{s}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -531,7 +531,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {D_{\text{s}}}={K_{\text{d}}} {E_{\text{s}}} s
+           {D_{\text{s}}}={K_{\text{d}}}\,{E_{\text{s}}}\,s
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -571,7 +571,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {C_{\text{s}}}={E_{\text{s}}} \left({K_{\text{p}}}+{K_{\text{d}}} s\right)
+           {C_{\text{s}}}={E_{\text{s}}}\,\left({K_{\text{p}}}+{K_{\text{d}}}\,s\right)
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -630,7 +630,7 @@ Output Constraints & \begin{displaymath}
                      \end{displaymath}
 \\ \midrule
 Equation & \begin{displaymath}
-           \frac{\,d^{2}{y_{\text{t}}}}{\,dt^{2}}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {{y_{\text{t}}}}={r_{\text{t}}} {K_{\text{p}}}
+           \frac{\,d^{2}{y_{\text{t}}}}{\,dt^{2}}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{{y_{\text{t}}}}={r_{\text{t}}}\,{K_{\text{p}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -655,22 +655,22 @@ RefBy & \hyperref[outputValues]{FR:Output-Values} and \hyperref[calculateValues]
 The Process Variable ${Y_{\text{s}}}$ in a PD Control Loop is the product of the Process Error (from \hyperref[DD:ddProcessError]{DD:ddProcessError}), Control Variable (from \hyperref[DD:ddCtrlVar]{DD:ddCtrlVar}), and the Power Plant (from \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}).
 
 \begin{displaymath}
-{Y_{\text{s}}}=\left({R_{\text{s}}}-{Y_{\text{s}}}\right) \left({K_{\text{p}}}+{K_{\text{d}}} s\right) \frac{1}{s^{2}+s+20}
+{Y_{\text{s}}}=\left({R_{\text{s}}}-{Y_{\text{s}}}\right)\,\left({K_{\text{p}}}+{K_{\text{d}}}\,s\right)\,\frac{1}{s^{2}+s+20}
 \end{displaymath}
 Substituting the values and rearranging the equation.
 
 \begin{displaymath}
-s^{2} {Y_{\text{s}}}+\left(1+{K_{\text{d}}}\right) {Y_{\text{s}}} s+\left(20+{K_{\text{p}}}\right) {Y_{\text{s}}}-{R_{\text{s}}} s {K_{\text{d}}}-{R_{\text{s}}} {K_{\text{p}}}=0
+s^{2}\,{Y_{\text{s}}}+\left(1+{K_{\text{d}}}\right)\,{Y_{\text{s}}}\,s+\left(20+{K_{\text{p}}}\right)\,{Y_{\text{s}}}-{R_{\text{s}}}\,s\,{K_{\text{d}}}-{R_{\text{s}}}\,{K_{\text{p}}}=0
 \end{displaymath}
 Computing the Inverse Laplace Transform of a function (from \hyperref[TM:invLaplaceTransform]{TM:invLaplaceTransform}) of the equation.
 
 \begin{displaymath}
-\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{K_{\text{d}}} \frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}} {K_{\text{p}}}=0
+\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{y_{\text{t}}}-{K_{\text{d}}}\,\frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}}\,{K_{\text{p}}}=0
 \end{displaymath}
 The Set-Point ${r_{\text{t}}}$ is a step function and a constant (from \hyperref[setPoint]{A:Set-Point}). Therefore the differential of the set point is zero. Hence the equation reduces to
 
 \begin{displaymath}
-\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{r_{\text{t}}} {K_{\text{p}}}=0
+\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{y_{\text{t}}}-{r_{\text{t}}}\,{K_{\text{p}}}=0
 \end{displaymath}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}

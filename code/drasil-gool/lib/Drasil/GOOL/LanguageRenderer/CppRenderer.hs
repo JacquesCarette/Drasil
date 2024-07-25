@@ -2468,7 +2468,7 @@ nmSpc, ptrAccess, cppFor, std, algorithm, cppString, vector, sstream, stringstre
   cppIterator, cppOpen, stod, stof, cppIgnore, numLimits, streamsize, max,
   endl, cin, cout, cppIndex, cppListAccess, cppListAdd, cppListAppend,
   cppIterBegin, cppIterEnd, cppR, cppW, cppA, cppGetLine, cppClose, cppClear,
-  cppStr, mathDefines, cppSet, cppIn :: String
+  cppStr, mathDefines, cppSet, cppIn, cppConst :: String
 nmSpc = "::"
 ptrAccess = "->"
 cppFor = "for"
@@ -2512,6 +2512,7 @@ cppStr = "str"
 mathDefines = "_USE_MATH_DEFINES"
 cppSet = "set"
 cppIn = ":"
+cppConst = "const"
 
 nmSpcAccess :: String -> String -> String
 nmSpcAccess ns e = ns ++ nmSpc ++ e
@@ -2812,7 +2813,7 @@ cppForEach bStart bEnd forEachLabel inLbl e' v' b' = do
   v <- zoom lensMStoVS v'
   b <- b'
   mkStmtNoEnd $ vcat [
-    forEachLabel <+> parens (text("const auto &") <> RC.variable e <+>
+    forEachLabel <+> parens ((text cppConst <+> RC.type' (variableType e) <+> text "&") <> RC.variable e <+>
       inLbl <+> RC.value v) <+> bStart,
     indent $ RC.body b,
     bEnd]

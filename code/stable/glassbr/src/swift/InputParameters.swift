@@ -736,6 +736,15 @@ class InputParameters {
             print(".")
             throw "InputError"
         }
+        if !(Set([2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0]).contains(self.t)) {
+            print("t has value ", terminator: "")
+            print(self.t, terminator: "")
+            print(", but is expected to be ", terminator: "")
+            print("an element of the set ", terminator: "")
+            print(Set([2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0]), terminator: "")
+            print(".")
+            throw "InputError"
+        }
         if !(6.0 <= self.SD && self.SD <= 130.0) {
             print("SD has value ", terminator: "")
             print(self.SD, terminator: "")

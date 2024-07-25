@@ -7,10 +7,12 @@
 #ifndef InputParameters_h
 #define InputParameters_h
 
+#include <set>
 #include <string>
 
 using std::ifstream;
 using std::ofstream;
+using std::set;
 using std::string;
 
 /** \brief Structure for holding the input values and derived values

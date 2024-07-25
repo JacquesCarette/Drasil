@@ -14,10 +14,10 @@ module Language.Drasil.Sentence.Fold (
 
 import Language.Drasil.Classes ( Express(express), Quantity )
 import Language.Drasil.Constraint
-    ( Constraint(Range), ConstraintE )
+    ( Constraint(Range, Elem), ConstraintE )
 import Language.Drasil.Document ( mkParagraph )
 import Language.Drasil.Document.Core ( Contents )
-import Language.Drasil.Expr.Class ( ExprC(($&&), realInterval) )
+import Language.Drasil.Expr.Class ( ExprC(($&&), realInterval, in') )
 import Language.Drasil.Sentence
     ( Sentence(S, E, EmptyS, (:+:)), sParen, (+:+), sC, (+:+.), (+:) )
 import qualified Language.Drasil.Sentence.Combinators as S (and_, or_)
@@ -30,6 +30,7 @@ foldConstraints _ [] = EmptyS
 foldConstraints c e  = E $ foldr1 ($&&) $ map constraintToExpr e
   where
     constraintToExpr (Range _ ri) = express $ realInterval c ri
+    
 
 
 -- | Partial function application of 'foldle' for sentences specifically.

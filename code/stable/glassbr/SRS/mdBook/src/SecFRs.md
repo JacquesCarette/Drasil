@@ -28,18 +28,18 @@ Output-Values: Output the values from the table for [Required Outputs](./SecFRs.
 
 <div id="Table:ReqInputs"></div>
 
-|Symbol                         |Description                                                                           |Units            |
-|:------------------------------|:-------------------------------------------------------------------------------------|:----------------|
-|\\(a\\)                        |Plate length (long dimension)                                                         |\\({\text{m}}\\) |
-|\\(b\\)                        |Plate width (short dimension)                                                         |\\({\text{m}}\\) |
-|\\(g\\)                        |Glass type                                                                            |--               |
-|\\({P\_{\text{b}\text{tol}}}\\)|Tolerable probability of breakage                                                     |--               |
-|\\({\mathit{SD}\_{\text{x}}}\\)|Stand off distance (\\(x\\)-component)                                                |\\({\text{m}}\\) |
-|\\({\mathit{SD}\_{\text{y}}}\\)|Stand off distance (\\(y\\)-component)                                                |\\({\text{m}}\\) |
-|\\({\mathit{SD}\_{\text{z}}}\\)|Stand off distance (\\(z\\)-component)                                                |\\({\text{m}}\\) |
-|\\(t\\)                        |Nominal thickness \\(t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}\\)|\\({\text{mm}}\\)|
-|\\(\mathit{TNT}\\)             |TNT equivalent factor                                                                 |--               |
-|\\(w\\)                        |Charge weight                                                                         |\\({\text{kg}}\\)|
+|Symbol                         |Description                           |Units            |
+|:------------------------------|:-------------------------------------|:----------------|
+|\\(a\\)                        |Plate length (long dimension)         |\\({\text{m}}\\) |
+|\\(b\\)                        |Plate width (short dimension)         |\\({\text{m}}\\) |
+|\\(g\\)                        |Glass type                            |--               |
+|\\({P\_{\text{b}\text{tol}}}\\)|Tolerable probability of breakage     |--               |
+|\\({\mathit{SD}\_{\text{x}}}\\)|Stand off distance (\\(x\\)-component)|\\({\text{m}}\\) |
+|\\({\mathit{SD}\_{\text{y}}}\\)|Stand off distance (\\(y\\)-component)|\\({\text{m}}\\) |
+|\\({\mathit{SD}\_{\text{z}}}\\)|Stand off distance (\\(z\\)-component)|\\({\text{m}}\\) |
+|\\(t\\)                        |Nominal thickness                     |\\({\text{mm}}\\)|
+|\\(\mathit{TNT}\\)             |TNT equivalent factor                 |--               |
+|\\(w\\)                        |Charge weight                         |\\({\text{kg}}\\)|
 
 **<p align="center">Required Inputs following [FR:Input-Values](./SecFRs.md#inputValues)</p>**
 

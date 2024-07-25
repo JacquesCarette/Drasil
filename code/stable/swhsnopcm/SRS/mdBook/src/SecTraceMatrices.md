@@ -100,31 +100,31 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 <div id="Figure:TraceGraphAvsA"></div>
 
-![TraceGraphAvsA](../../../../../traceygraphs/swhsnopcm/avsa.svg)
+![TraceGraphAvsA](/assets/avsa.svg)
 
 **<p align="center">TraceGraphAvsA</p>**
 
 <div id="Figure:TraceGraphAvsAll"></div>
 
-![TraceGraphAvsAll](../../../../../traceygraphs/swhsnopcm/avsall.svg)
+![TraceGraphAvsAll](/assets/avsall.svg)
 
 **<p align="center">TraceGraphAvsAll</p>**
 
 <div id="Figure:TraceGraphRefvsRef"></div>
 
-![TraceGraphRefvsRef](../../../../../traceygraphs/swhsnopcm/refvsref.svg)
+![TraceGraphRefvsRef](/assets/refvsref.svg)
 
 **<p align="center">TraceGraphRefvsRef</p>**
 
 <div id="Figure:TraceGraphAllvsR"></div>
 
-![TraceGraphAllvsR](../../../../../traceygraphs/swhsnopcm/allvsr.svg)
+![TraceGraphAllvsR](/assets/allvsr.svg)
 
 **<p align="center">TraceGraphAllvsR</p>**
 
 <div id="Figure:TraceGraphAllvsAll"></div>
 
-![TraceGraphAllvsAll](../../../../../traceygraphs/swhsnopcm/allvsall.svg)
+![TraceGraphAllvsAll](/assets/allvsall.svg)
 
 **<p align="center">TraceGraphAllvsAll</p>**
 

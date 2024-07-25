@@ -15,6 +15,7 @@ dependencies:
 - pretty
 - containers
 - MissingH
+- filepath
 - directory
 - drasil-data
 - drasil-database

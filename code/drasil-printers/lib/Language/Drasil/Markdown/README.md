@@ -3,8 +3,8 @@
 Last updated: July 4, 2024
 ----------------------------------------------------------
 
-Book.hs
-  - Defines the printer for generating the book.toml configuration file for mdBook.
+Config.hs
+  - Defines the printer for generating the .toml and .csv configuration files for mdBook.
 
 CreateMd.hs
   - Defines the printer for generating Markdown files (READMEs) for generated GOOL code.

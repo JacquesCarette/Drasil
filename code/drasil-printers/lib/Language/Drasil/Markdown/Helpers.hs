@@ -2,6 +2,7 @@
 module Language.Drasil.Markdown.Helpers where
 
 import Prelude hiding ((<>), lookup)
+import System.FilePath (takeFileName)
 import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), hcat,
   brackets, parens, braces)
 import Data.Map (lookup)
@@ -54,7 +55,9 @@ reflinkURI ref txt = if ref == txt then ang ref
 
 -- | Helper for setting up figures
 image :: Doc -> Doc -> Doc
-image f c =  text "!" <> reflinkURI f c $^$ bold (caption c)
+image f c =  text "!" <> reflinkURI fp c $^$ bold (caption c)
+  where
+    fp = text $ "/assets/" ++ takeFileName (show f)
 
 -- | Helper for setting up captions
 caption :: Doc -> Doc

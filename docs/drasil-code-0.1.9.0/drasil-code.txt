@@ -32,6 +32,11 @@ generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 --   package will be generated in.
 generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackData) -> DrasilState -> IO ()
 
+-- | Generates a package with the given <a>DrasilState</a>. The passed
+--   un-representation functions determine which target language the
+--   package will be generated in.
+generateCodeProc :: (ProcProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackData) -> DrasilState -> IO ()
+
 -- | Reads data from a file and converts the values to <a>Expr</a>s. The
 --   file must be formatted according to the <a>DataDesc'</a> passed as a
 --   parameter.

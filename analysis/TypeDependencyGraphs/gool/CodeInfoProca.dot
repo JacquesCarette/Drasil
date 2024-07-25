@@ -1,0 +1,4 @@
+digraph codeinfoproca{
+CodeInfoProca	[shape=oval, color=darkgreen, label="CodeInfoProca"];
+CodeInfoProca -> a;
+}

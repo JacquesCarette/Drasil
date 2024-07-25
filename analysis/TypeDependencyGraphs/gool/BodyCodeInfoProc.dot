@@ -1,0 +1,3 @@
+digraph bodycodeinfoproc{
+BodyCodeInfoProc	[shape=oval, color=red2, label="BodyCodeInfoProc"];
+}

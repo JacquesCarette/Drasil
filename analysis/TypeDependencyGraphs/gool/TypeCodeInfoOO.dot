@@ -1,0 +1,4 @@
+digraph typecodeinfooo{
+TypeCodeInfoOO	[shape=oval, color=red2, label="TypeCodeInfoOO"];
+TypeCodeInfoOO -> String;
+}

@@ -1,0 +1,3 @@
+digraph thunkcodeinfoproc{
+ThunkCodeInfoProc	[shape=oval, color=red2, label="ThunkCodeInfoProc"];
+}

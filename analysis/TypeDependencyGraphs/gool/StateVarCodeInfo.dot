@@ -1,3 +1,0 @@
-digraph statevarcodeinfo{
-StateVarCodeInfo	[shape=oval, color=red2, label="StateVarCodeInfo"];
-}

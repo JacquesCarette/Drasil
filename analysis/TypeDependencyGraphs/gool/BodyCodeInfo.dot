@@ -1,3 +1,0 @@
-digraph bodycodeinfo{
-BodyCodeInfo	[shape=oval, color=red2, label="BodyCodeInfo"];
-}

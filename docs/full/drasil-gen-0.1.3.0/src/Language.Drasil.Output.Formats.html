@@ -24,11 +24,11 @@
 </span><span id="line-22"></span><span>
 </span><span id="line-23"></span><span class="hs-comment">-- | Allows the creation of Makefiles for documents that use LaTeX.</span><span>
 </span><span id="line-24"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RuleTransformer</span></span><span> </span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier hs-type">DocSpec</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-25"></span><span>  </span><span id="local-6989586621679119573"><span class="annot"><span class="annottext">makeRule :: DocSpec -&gt; [Rule]
-</span><a href="#local-6989586621679119573"><span class="hs-identifier hs-var hs-var hs-var hs-var">makeRule</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier hs-type">DocSpec</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DC"><span class="hs-identifier hs-type">DC</span></a></span><span> </span><span id="local-6989586621679119572"><span class="annot"><span class="annottext">DocType
-</span><a href="#local-6989586621679119572"><span class="hs-identifier hs-var">dt</span></a></span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Format
-</span><span class="hs-identifier hs-var">TeX</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679119571"><span class="annot"><span class="annottext">Filename
-</span><a href="#local-6989586621679119571"><span class="hs-identifier hs-var">fn</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-25"></span><span>  </span><span id="local-6989586621679120102"><span class="annot"><span class="annottext">makeRule :: DocSpec -&gt; [Rule]
+</span><a href="#local-6989586621679120102"><span class="hs-identifier hs-var hs-var hs-var hs-var">makeRule</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier hs-type">DocSpec</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DC"><span class="hs-identifier hs-type">DC</span></a></span><span> </span><span id="local-6989586621679120101"><span class="annot"><span class="annottext">DocType
+</span><a href="#local-6989586621679120101"><span class="hs-identifier hs-var">dt</span></a></span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Format
+</span><span class="hs-identifier hs-var">TeX</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679120100"><span class="annot"><span class="annottext">Filename
+</span><a href="#local-6989586621679120100"><span class="hs-identifier hs-var">fn</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-26"></span><span>    </span><span class="annot"><span class="annottext">Annotation -&gt; Target -&gt; Dependencies -&gt; [Command] -&gt; Rule
 </span><span class="hs-identifier hs-var">mkRule</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Filename
 </span><span class="hs-identifier hs-var">watermark</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Filename -&gt; Target
@@ -38,28 +38,28 @@
 </span><span class="hs-identifier hs-var">toLower</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall a. Show a =&gt; a -&gt; Filename
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">DocType
-</span><a href="#local-6989586621679119572"><span class="hs-identifier hs-var">dt</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Target
-</span><a href="#local-6989586621679119569"><span class="hs-identifier hs-var">pdfName</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679120101"><span class="hs-identifier hs-var">dt</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Target
+</span><a href="#local-6989586621679120098"><span class="hs-identifier hs-var">pdfName</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-27"></span><span>    </span><span class="annot"><span class="annottext">Annotation -&gt; Target -&gt; Dependencies -&gt; [Command] -&gt; Rule
 </span><span class="hs-identifier hs-var">mkFile</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Target
-</span><a href="#local-6989586621679119569"><span class="hs-identifier hs-var">pdfName</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Filename -&gt; Target
+</span><a href="#local-6989586621679120098"><span class="hs-identifier hs-var">pdfName</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Filename -&gt; Target
 </span><span class="hs-identifier hs-var">makeS</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Filename
-</span><a href="#local-6989586621679119571"><span class="hs-identifier hs-var">fn</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679120100"><span class="hs-identifier hs-var">fn</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Filename
 </span><span class="hs-string">&quot;.tex&quot;</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
 </span><span id="line-28"></span><span>      </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Filename
-</span><a href="#local-6989586621679119571"><span class="hs-identifier hs-var">fn</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Filename -&gt; Command
-</span><a href="#local-6989586621679119568"><span class="hs-identifier hs-var">lualatex</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Command
-</span><a href="#local-6989586621679119567"><span class="hs-identifier hs-var">bibtex</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Command
-</span><a href="#local-6989586621679119568"><span class="hs-identifier hs-var">lualatex</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Command
-</span><a href="#local-6989586621679119568"><span class="hs-identifier hs-var">lualatex</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-29"></span><span>        </span><span class="annot"><a href="#local-6989586621679119568"><span class="hs-identifier hs-type">lualatex</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="#local-6989586621679119567"><span class="hs-identifier hs-type">bibtex</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Command</span></span><span>
-</span><span id="line-30"></span><span>        </span><span id="local-6989586621679119568"><span class="annot"><span class="annottext">lualatex :: Filename -&gt; Command
-</span><a href="#local-6989586621679119568"><span class="hs-identifier hs-var hs-var">lualatex</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Target -&gt; Command
+</span><a href="#local-6989586621679120100"><span class="hs-identifier hs-var">fn</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Filename -&gt; Command
+</span><a href="#local-6989586621679120097"><span class="hs-identifier hs-var">lualatex</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Command
+</span><a href="#local-6989586621679120096"><span class="hs-identifier hs-var">bibtex</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Command
+</span><a href="#local-6989586621679120097"><span class="hs-identifier hs-var">lualatex</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Command
+</span><a href="#local-6989586621679120097"><span class="hs-identifier hs-var">lualatex</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-29"></span><span>        </span><span class="annot"><a href="#local-6989586621679120097"><span class="hs-identifier hs-type">lualatex</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="#local-6989586621679120096"><span class="hs-identifier hs-type">bibtex</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Command</span></span><span>
+</span><span id="line-30"></span><span>        </span><span id="local-6989586621679120097"><span class="annot"><span class="annottext">lualatex :: Filename -&gt; Command
+</span><a href="#local-6989586621679120097"><span class="hs-identifier hs-var hs-var">lualatex</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Target -&gt; Command
 </span><span class="hs-identifier hs-var">mkCheckedCommand</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Target -&gt; Target -&gt; Target
 </span><span class="hs-operator hs-var">(+:+)</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Filename -&gt; Target
@@ -70,8 +70,8 @@
 </span><span class="hs-string">&quot;TEXFLAGS&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Target
 </span><span class="hs-identifier hs-var">makeS</span></span><span>
-</span><span id="line-31"></span><span>        </span><span id="local-6989586621679119567"><span class="annot"><span class="annottext">bibtex :: Filename -&gt; Command
-</span><a href="#local-6989586621679119567"><span class="hs-identifier hs-var hs-var">bibtex</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Target -&gt; Command
+</span><span id="line-31"></span><span>        </span><span id="local-6989586621679120096"><span class="annot"><span class="annottext">bibtex :: Filename -&gt; Command
+</span><a href="#local-6989586621679120096"><span class="hs-identifier hs-var hs-var">bibtex</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Target -&gt; Command
 </span><span class="hs-identifier hs-var">mkCommand</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Target -&gt; Target -&gt; Target
 </span><span class="hs-operator hs-var">(+:+)</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Filename -&gt; Target
@@ -82,11 +82,11 @@
 </span><span class="hs-string">&quot;BIBTEXFLAGS&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Target
 </span><span class="hs-identifier hs-var">makeS</span></span><span>
-</span><span id="line-32"></span><span>        </span><span id="local-6989586621679119569"><span class="annot"><span class="annottext">pdfName :: Target
-</span><a href="#local-6989586621679119569"><span class="hs-identifier hs-var hs-var">pdfName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Target
+</span><span id="line-32"></span><span>        </span><span id="local-6989586621679120098"><span class="annot"><span class="annottext">pdfName :: Target
+</span><a href="#local-6989586621679120098"><span class="hs-identifier hs-var hs-var">pdfName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Target
 </span><span class="hs-identifier hs-var">makeS</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Filename
-</span><a href="#local-6989586621679119571"><span class="hs-identifier hs-var">fn</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679120100"><span class="hs-identifier hs-var">fn</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Filename
 </span><span class="hs-string">&quot;.pdf&quot;</span></span><span>
 </span><span id="line-33"></span><span>  </span><span class="annot"><span class="hs-identifier hs-var">makeRule</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier hs-type">DocSpec</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DC"><span class="hs-identifier hs-type">DC</span></a></span><span> </span><span class="annot"><span class="annottext">DocType
@@ -98,21 +98,21 @@
 </span><span class="hs-identifier hs-var">watermark</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Filename -&gt; Target
 </span><span class="hs-identifier hs-var">makeS</span></span><span> </span><span class="annot"><span class="annottext">Filename
 </span><span class="hs-string">&quot;build&quot;</span></span><span class="hs-special">)</span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Command
-</span><a href="#local-6989586621679119565"><span class="hs-identifier hs-var">build</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679120094"><span class="hs-identifier hs-var">build</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-35"></span><span>    </span><span class="annot"><span class="annottext">Annotation -&gt; Target -&gt; Dependencies -&gt; [Command] -&gt; Rule
 </span><span class="hs-identifier hs-var">mkRule</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Filename -&gt; Target
 </span><span class="hs-identifier hs-var">makeS</span></span><span> </span><span class="annot"><span class="annottext">Filename
 </span><span class="hs-string">&quot;server&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Command
-</span><a href="#local-6989586621679119564"><span class="hs-identifier hs-var">server</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679120093"><span class="hs-identifier hs-var">server</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
 </span><span id="line-36"></span><span>    </span><span class="hs-keyword">where</span><span>
-</span><span id="line-37"></span><span>      </span><span id="local-6989586621679119565"><span class="annot"><span class="annottext">build :: Command
-</span><a href="#local-6989586621679119565"><span class="hs-identifier hs-var hs-var">build</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Target -&gt; Command
+</span><span id="line-37"></span><span>      </span><span id="local-6989586621679120094"><span class="annot"><span class="annottext">build :: Command
+</span><a href="#local-6989586621679120094"><span class="hs-identifier hs-var hs-var">build</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Target -&gt; Command
 </span><span class="hs-identifier hs-var">mkCheckedCommand</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Target
 </span><span class="hs-identifier hs-var">makeS</span></span><span> </span><span class="annot"><span class="annottext">Filename
 </span><span class="hs-string">&quot;mdbook build&quot;</span></span><span>
-</span><span id="line-38"></span><span>      </span><span id="local-6989586621679119564"><span class="annot"><span class="annottext">server :: Command
-</span><a href="#local-6989586621679119564"><span class="hs-identifier hs-var hs-var">server</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Target -&gt; Command
+</span><span id="line-38"></span><span>      </span><span id="local-6989586621679120093"><span class="annot"><span class="annottext">server :: Command
+</span><a href="#local-6989586621679120093"><span class="hs-identifier hs-var hs-var">server</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Target -&gt; Command
 </span><span class="hs-identifier hs-var">mkCheckedCommand</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Target
 </span><span class="hs-identifier hs-var">makeS</span></span><span> </span><span class="annot"><span class="annottext">Filename

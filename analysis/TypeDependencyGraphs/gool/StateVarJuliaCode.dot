@@ -1,4 +1,0 @@
-digraph statevarjuliacode{
-StateVarJuliaCode	[shape=oval, color=red2, label="StateVarJuliaCode"];
-StateVarJuliaCode -> Doc;
-}

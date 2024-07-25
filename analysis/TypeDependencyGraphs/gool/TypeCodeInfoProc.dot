@@ -1,0 +1,4 @@
+digraph typecodeinfoproc{
+TypeCodeInfoProc	[shape=oval, color=red2, label="TypeCodeInfoProc"];
+TypeCodeInfoProc -> String;
+}

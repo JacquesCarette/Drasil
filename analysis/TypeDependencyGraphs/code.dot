@@ -871,8 +871,6 @@ digraph alltypes {
 	}
 	subgraph helper {
 	}
-	subgraph main {
-	}
 	subgraph namegentets {
 	}
 	subgraph obervers {
@@ -880,5 +878,17 @@ digraph alltypes {
 	subgraph patterntets {
 	}
 	subgraph vectortets {
+	}
+	subgraph filetetss {
+	}
+	subgraph helloworld {
+	}
+	subgraph helper {
+	}
+	subgraph namegentets {
+	}
+	subgraph vectortets {
+	}
+	subgraph main {
 	}
 }

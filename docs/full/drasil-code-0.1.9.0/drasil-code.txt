@@ -1838,22 +1838,22 @@ module Language.Drasil.Code.Imperative.Logging
 
 -- | Generates a statement that logs the given variable's value, if the
 --   user chose to turn on logging of variable assignments.
-maybeLog :: OOProg r => SVariable r -> r (Scope r) -> GenState [MSStatement r]
+maybeLog :: SharedProg r => SVariable r -> r (Scope r) -> GenState [MSStatement r]
 
 -- | Generates the body of a function with the given name, list of
 --   parameters, and blocks to include in the body. If the user chose to
 --   turn on logging of function calls, statements that log how the
 --   function was called are added to the beginning of the body.
-logBody :: OOProg r => Label -> [SVariable r] -> [MSBlock r] -> GenState (MSBody r)
+logBody :: SharedProg r => Label -> [SVariable r] -> [MSBlock r] -> GenState (MSBody r)
 
 -- | Generates a block that logs, to the given <a>FilePath</a>, the name of
 --   a function, and the names and values of the passed list of variables.
 --   Intended to be used as the first block in the function, to log that it
 --   was called and what inputs it was called with.
-loggedMethod :: OOProg r => FilePath -> Label -> [SVariable r] -> MSBlock r
+loggedMethod :: SharedProg r => FilePath -> Label -> [SVariable r] -> MSBlock r
 
 -- | The variable representing the log file in write mode.
-varLogFile :: OOProg r => r (Scope r) -> SVariable r
+varLogFile :: SharedProg r => r (Scope r) -> SVariable r
 
 module Language.Drasil.Code.Imperative.Helpers
 
@@ -1876,9 +1876,21 @@ Auxiliary :: ClassType
 --   comments in the file.
 genModuleWithImports :: OOProg r => Name -> Description -> [Import] -> [GenState (Maybe (SMethod r))] -> [GenState (Maybe (SClass r))] -> GenState (SFile r)
 
+-- | Defines a GOOL module. If the user chose <a>CommentMod</a>, the module
+--   will have Doxygen comments. If the user did not choose
+--   <a>CommentMod</a> but did choose <a>CommentFunc</a>, a module-level
+--   Doxygen comment is still created, though it only documents the file
+--   name, because without this Doxygen will not find the function-level
+--   comments in the file.
+genModuleWithImportsProc :: ProcProg r => Name -> Description -> [Import] -> [GenState (Maybe (SMethod r))] -> GenState (SFile r)
+
 -- | Generates a module for when imports do not need to be explicitly
 --   stated.
 genModule :: OOProg r => Name -> Description -> [GenState (Maybe (SMethod r))] -> [GenState (Maybe (SClass r))] -> GenState (SFile r)
+
+-- | Generates a module for when imports do not need to be explicitly
+--   stated.
+genModuleProc :: ProcProg r => Name -> Description -> [GenState (Maybe (SMethod r))] -> GenState (SFile r)
 
 -- | Generates a Doxygen configuration file if the user has comments
 --   enabled.
@@ -1904,6 +1916,16 @@ auxClass :: OOProg r => Name -> Maybe Name -> Description -> [CSStateVar r] -> G
 --   methods are dynamic, which is true for this generator.
 fApp :: OOProg r => Name -> Name -> VSType r -> [SValue r] -> NamedArgs r -> GenState (SValue r)
 
+-- | Function call generator. The first parameter (<tt>m</tt>) is the
+--   module where the function is defined. If <tt>m</tt> is not the current
+--   module, use GOOL's function for calling functions from external
+--   modules. If <tt>m</tt> is the current module and the function is in
+--   export map, use GOOL's basic function for function applications. If
+--   <tt>m</tt> is the current module and function is not exported, use
+--   GOOL's function for calling a method on self. This assumes all private
+--   methods are dynamic, which is true for this generator.
+fAppProc :: SharedProg r => Name -> Name -> VSType r -> [SValue r] -> NamedArgs r -> GenState (SValue r)
+
 -- | Logic similar to <a>fApp</a>, but the self case is not required here
 --   (because constructor will never be private). Calls
 --   <a>newObjMixedArgs</a>.
@@ -1911,6 +1933,9 @@ ctorCall :: OOProg r => Name -> VSType r -> [SValue r] -> NamedArgs r -> GenStat
 
 -- | Logic similar to <a>fApp</a>, but for In/Out calls.
 fAppInOut :: OOProg r => Name -> Name -> [SValue r] -> [SVariable r] -> [SVariable r] -> GenState (MSStatement r)
+
+-- | Logic similar to <a>fApp</a>, but for In/Out calls.
+fAppInOutProc :: SharedProg r => Name -> Name -> [SValue r] -> [SVariable r] -> [SVariable r] -> GenState (MSStatement r)
 
 
 -- | Contains functions for generating code comments that describe a chunk.
@@ -2138,7 +2163,7 @@ module Language.Drasil.Code.Imperative.ConceptMatch
 chooseConcept :: Choices -> State [Sentence] MatchedConceptMap
 
 -- | Translates a <a>CodeConcept</a> into GOOL.
-conceptToGOOL :: OOProg r => CodeConcept -> SValue r
+conceptToGOOL :: SharedProg r => CodeConcept -> SValue r
 
 module Language.Drasil.Code.Imperative.Import
 
@@ -2153,14 +2178,26 @@ spaceCodeType :: Space -> GenState CodeType
 -- | Generates a public function.
 publicFunc :: OOProg r => Label -> VSType r -> Description -> [ParameterChunk] -> Maybe Description -> [MSBlock r] -> GenState (SMethod r)
 
+-- | Generates a public function.
+publicFuncProc :: SharedProg r => Label -> VSType r -> Description -> [ParameterChunk] -> Maybe Description -> [MSBlock r] -> GenState (SMethod r)
+
 -- | Generates a private method.
 privateMethod :: OOProg r => Label -> VSType r -> Description -> [ParameterChunk] -> Maybe Description -> [MSBlock r] -> GenState (SMethod r)
+
+-- | Generates a private function.
+privateFuncProc :: SharedProg r => Label -> VSType r -> Description -> [ParameterChunk] -> Maybe Description -> [MSBlock r] -> GenState (SMethod r)
 
 -- | Generates a public function, defined by its inputs and outputs.
 publicInOutFunc :: OOProg r => Label -> Description -> [CodeVarChunk] -> [CodeVarChunk] -> [MSBlock r] -> GenState (SMethod r)
 
+-- | Generates a public function, defined by its inputs and outputs.
+publicInOutFuncProc :: SharedProg r => Label -> Description -> [CodeVarChunk] -> [CodeVarChunk] -> [MSBlock r] -> GenState (SMethod r)
+
 -- | Generates a private method, defined by its inputs and outputs.
 privateInOutMethod :: OOProg r => Label -> Description -> [CodeVarChunk] -> [CodeVarChunk] -> [MSBlock r] -> GenState (SMethod r)
+
+-- | Generates a private function, defined by its inputs and outputs.
+privateInOutFuncProc :: SharedProg r => Label -> Description -> [CodeVarChunk] -> [CodeVarChunk] -> [MSBlock r] -> GenState (SMethod r)
 
 -- | Generates a constructor.
 genConstructor :: OOProg r => Label -> Description -> [ParameterChunk] -> [MSBlock r] -> GenState (SMethod r)
@@ -2169,21 +2206,41 @@ genConstructor :: OOProg r => Label -> Description -> [ParameterChunk] -> [MSBlo
 --   <a>CodeVarChunk</a>.
 mkVar :: OOProg r => CodeVarChunk -> r (Scope r) -> GenState (SVariable r)
 
+-- | Generates a GOOL Variable for a variable represented by a
+--   <a>CodeVarChunk</a>.
+mkVarProc :: SharedProg r => CodeVarChunk -> r (Scope r) -> GenState (SVariable r)
+
 -- | Generates a GOOL Value for a variable represented by a
 --   <a>CodeVarChunk</a>.
 mkVal :: OOProg r => CodeVarChunk -> r (Scope r) -> GenState (SValue r)
 
+-- | Generates a GOOL Value for a variable represented by a
+--   <a>CodeVarChunk</a>.
+mkValProc :: SharedProg r => CodeVarChunk -> r (Scope r) -> GenState (SValue r)
+
 -- | Converts an <tt>Expr</tt> to a GOOL Value.
 convExpr :: OOProg r => CodeExpr -> GenState (SValue r)
+
+-- | Converts an <tt>Expr</tt> to a GOOL Value.
+convExprProc :: SharedProg r => CodeExpr -> GenState (SValue r)
 
 -- | Converts a <a>FuncStmt</a> to a GOOL Statement.
 convStmt :: OOProg r => FuncStmt -> GenState (MSStatement r)
 
+-- | Converts a <a>FuncStmt</a> to a GOOL Statement.
+convStmtProc :: SharedProg r => FuncStmt -> GenState (MSStatement r)
+
 -- | Converts a <a>Mod</a> to GOOL.
 genModDef :: OOProg r => Mod -> GenState (SFile r)
 
+-- | Converts a <a>Mod</a> to GOOL.
+genModDefProc :: ProcProg r => Mod -> GenState (SFile r)
+
 -- | Converts a <a>Mod</a>'s functions to GOOL.
 genModFuncs :: OOProg r => Mod -> [GenState (SMethod r)]
+
+-- | Converts a <a>Mod</a>'s functions to GOOL.
+genModFuncsProc :: SharedProg r => Mod -> [GenState (SMethod r)]
 
 -- | Converts a <a>Mod</a>'s classes to GOOL.
 genModClasses :: OOProg r => Mod -> [GenState (SClass r)]
@@ -2191,6 +2248,10 @@ genModClasses :: OOProg r => Mod -> [GenState (SClass r)]
 -- | Read from a data description into a <a>MSBlock</a> of
 --   <a>MSStatement</a>s.
 readData :: OOProg r => DataDesc -> r (Scope r) -> GenState [MSBlock r]
+
+-- | Read from a data description into a <a>MSBlock</a> of
+--   <a>MSStatement</a>s.
+readDataProc :: SharedProg r => DataDesc -> r (Scope r) -> GenState [MSBlock r]
 
 -- | Converts a <a>Constraint</a> to a <a>CodeExpr</a>.
 renderC :: (HasUID c, HasSymbol c) => c -> Constraint CodeExpr -> CodeExpr
@@ -2203,27 +2264,53 @@ module Language.Drasil.Code.Imperative.FunctionCalls
 --   constraints.
 genAllInputCalls :: OOProg r => GenState [MSStatement r]
 
+-- | Generates calls to all of the input-related functions. First is the
+--   call to the function for reading inputs, then the function for
+--   calculating derived inputs, then the function for checking input
+--   constraints.
+genAllInputCallsProc :: SharedProg r => GenState [MSStatement r]
+
 -- | Generates a call to the function for reading inputs from a file.
 genInputCall :: OOProg r => GenState (Maybe (MSStatement r))
 
+-- | Generates a call to the function for reading inputs from a file.
+genInputCallProc :: SharedProg r => GenState (Maybe (MSStatement r))
+
 -- | Generates a call to the function for calculating derived inputs.
 genDerivedCall :: OOProg r => GenState (Maybe (MSStatement r))
+
+-- | Generates a call to the function for calculating derived inputs.
+genDerivedCallProc :: SharedProg r => GenState (Maybe (MSStatement r))
 
 -- | Generates a call to the function for checking constraints on the
 --   input.
 genConstraintCall :: OOProg r => GenState (Maybe (MSStatement r))
 
+-- | Generates a call to the function for checking constraints on the
+--   input.
+genConstraintCallProc :: SharedProg r => GenState (Maybe (MSStatement r))
+
 -- | Generates a call to a calculation function, given the
 --   <a>CodeDefinition</a> for the value being calculated.
 genCalcCall :: OOProg r => CodeDefinition -> r (Scope r) -> GenState (Maybe (MSStatement r))
 
+-- | Generates a call to a calculation function, given the
+--   <a>CodeDefinition</a> for the value being calculated.
+genCalcCallProc :: SharedProg r => CodeDefinition -> r (Scope r) -> GenState (Maybe (MSStatement r))
+
 -- | Generates a call to the function for printing outputs.
 genOutputCall :: OOProg r => GenState (Maybe (MSStatement r))
+
+-- | Generates a call to the function for printing outputs.
+genOutputCallProc :: SharedProg r => GenState (Maybe (MSStatement r))
 
 module Language.Drasil.Code.Imperative.Modules
 
 -- | Generates a controller module.
 genMain :: OOProg r => GenState (SFile r)
+
+-- | Generates a controller module.
+genMainProc :: ProcProg r => GenState (SFile r)
 
 -- | Generates a main function, to act as the controller for an SCS
 --   program. The controller declares input and constant variables, then
@@ -2231,6 +2318,13 @@ genMain :: OOProg r => GenState (SFile r)
 --   inputs, checking constraints, calculating outputs, and printing
 --   outputs. Returns Nothing if the user chose to generate a library.
 genMainFunc :: OOProg r => GenState (Maybe (SMethod r))
+
+-- | Generates a main function, to act as the controller for an SCS
+--   program. The controller declares input and constant variables, then
+--   calls the functions for reading input values, calculating derived
+--   inputs, checking constraints, calculating outputs, and printing
+--   outputs. Returns Nothing if the user chose to generate a library.
+genMainFuncProc :: SharedProg r => GenState (Maybe (SMethod r))
 
 -- | Returns <a>Nothing</a> if no inputs or constants are mapped to
 --   InputParameters in the class definition map. If any inputs or
@@ -2244,17 +2338,33 @@ genInputClass :: OOProg r => ClassType -> GenState (Maybe (SClass r))
 -- | Generates a function for calculating derived inputs.
 genInputDerived :: OOProg r => VisibilityTag -> GenState (Maybe (SMethod r))
 
+-- | Generates a function for calculating derived inputs.
+genInputDerivedProc :: SharedProg r => VisibilityTag -> GenState (Maybe (SMethod r))
+
 -- | Generates a single module containing all input-related components.
 genInputMod :: OOProg r => GenState [SFile r]
+
+-- | Generates a single module containing all input-related components.
+genInputModProc :: ProcProg r => GenState [SFile r]
 
 -- | Generates function that checks constraints on the input.
 genInputConstraints :: OOProg r => VisibilityTag -> GenState (Maybe (SMethod r))
 
+-- | Generates function that checks constraints on the input.
+genInputConstraintsProc :: SharedProg r => VisibilityTag -> GenState (Maybe (SMethod r))
+
 -- | | Generates a function for reading inputs from a file.
 genInputFormat :: OOProg r => VisibilityTag -> GenState (Maybe (SMethod r))
 
+-- | | Generates a function for reading inputs from a file.
+genInputFormatProc :: SharedProg r => VisibilityTag -> GenState (Maybe (SMethod r))
+
 -- | Generates a module containing the class where constants are stored.
 genConstMod :: OOProg r => GenState [SFile r]
+
+-- | Checks if a class is needed to store constants, i.e. if constants are
+--   mapped to the constants class in the class definition map.
+checkConstClass :: GenState Bool
 
 -- | Generates a class to store constants, if constants are mapped to the
 --   Constants class in the class definition map, otherwise returns
@@ -2264,17 +2374,32 @@ genConstClass :: OOProg r => ClassType -> GenState (Maybe (SClass r))
 -- | Generates a module containing calculation functions.
 genCalcMod :: OOProg r => GenState (SFile r)
 
+-- | Generates a module containing calculation functions.
+genCalcModProc :: ProcProg r => GenState (SFile r)
+
 -- | Generates a calculation function corresponding to the
 --   <a>CodeDefinition</a>. For solving ODEs, the <tt>ExtLibState</tt>
 --   containing the information needed to generate code is found by looking
 --   it up in the external library map.
 genCalcFunc :: OOProg r => CodeDefinition -> GenState (SMethod r)
 
+-- | Generates a calculation function corresponding to the
+--   <a>CodeDefinition</a>. For solving ODEs, the <tt>ExtLibState</tt>
+--   containing the information needed to generate code is found by looking
+--   it up in the external library map.
+genCalcFuncProc :: SharedProg r => CodeDefinition -> GenState (SMethod r)
+
 -- | Generates a module containing the function for printing outputs.
 genOutputMod :: OOProg r => GenState [SFile r]
 
+-- | Generates a module containing the function for printing outputs.
+genOutputModProc :: ProcProg r => GenState [SFile r]
+
 -- | Generates a function for printing output values.
 genOutputFormat :: OOProg r => GenState (Maybe (SMethod r))
+
+-- | Generates a function for printing output values.
+genOutputFormatProc :: SharedProg r => GenState (Maybe (SMethod r))
 
 -- | Generates a sample input file compatible with the generated program,
 --   if the user chose to.
@@ -2294,6 +2419,11 @@ generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 --   un-representation functions determine which target language the
 --   package will be generated in.
 generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackData) -> DrasilState -> IO ()
+
+-- | Generates a package with the given <a>DrasilState</a>. The passed
+--   un-representation functions determine which target language the
+--   package will be generated in.
+generateCodeProc :: (ProcProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackData) -> DrasilState -> IO ()
 
 
 -- | Re-export code-related smart constructors for external code writing
@@ -2317,6 +2447,11 @@ generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 --   un-representation functions determine which target language the
 --   package will be generated in.
 generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackData) -> DrasilState -> IO ()
+
+-- | Generates a package with the given <a>DrasilState</a>. The passed
+--   un-representation functions determine which target language the
+--   package will be generated in.
+generateCodeProc :: (ProcProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackData) -> DrasilState -> IO ()
 
 -- | Reads data from a file and converts the values to <a>Expr</a>s. The
 --   file must be formatted according to the <a>DataDesc'</a> passed as a

@@ -1,4 +1,0 @@
-digraph codeinfoa{
-CodeInfoa	[shape=oval, color=darkgreen, label="CodeInfoa"];
-CodeInfoa -> a;
-}

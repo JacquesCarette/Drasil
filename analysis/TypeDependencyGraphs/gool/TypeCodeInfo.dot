@@ -1,4 +1,0 @@
-digraph typecodeinfo{
-TypeCodeInfo	[shape=oval, color=red2, label="TypeCodeInfo"];
-TypeCodeInfo -> String;
-}

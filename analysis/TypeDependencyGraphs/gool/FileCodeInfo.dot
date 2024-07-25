@@ -1,3 +1,0 @@
-digraph filecodeinfo{
-FileCodeInfo	[shape=oval, color=red2, label="FileCodeInfo"];
-}

@@ -1,0 +1,3 @@
+digraph scopecodeinfoproc{
+ScopeCodeInfoProc	[shape=oval, color=red2, label="ScopeCodeInfoProc"];
+}

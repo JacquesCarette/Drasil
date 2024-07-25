@@ -1,0 +1,3 @@
+digraph variablecodeinfoproc{
+VariableCodeInfoProc	[shape=oval, color=red2, label="VariableCodeInfoProc"];
+}

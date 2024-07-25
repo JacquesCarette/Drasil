@@ -1,0 +1,4 @@
+digraph visibilitycodeinfoproc{
+VisibilityCodeInfoProc	[shape=oval, color=red2, label="VisibilityCodeInfoProc"];
+VisibilityCodeInfoProc -> VisibilityTag;
+}

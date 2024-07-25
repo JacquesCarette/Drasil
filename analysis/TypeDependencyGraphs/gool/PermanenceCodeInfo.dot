@@ -1,3 +1,0 @@
-digraph permanencecodeinfo{
-PermanenceCodeInfo	[shape=oval, color=red2, label="PermanenceCodeInfo"];
-}

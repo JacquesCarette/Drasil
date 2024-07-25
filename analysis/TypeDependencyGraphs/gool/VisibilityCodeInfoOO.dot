@@ -1,0 +1,4 @@
+digraph visibilitycodeinfooo{
+VisibilityCodeInfoOO	[shape=oval, color=red2, label="VisibilityCodeInfoOO"];
+VisibilityCodeInfoOO -> VisibilityTag;
+}

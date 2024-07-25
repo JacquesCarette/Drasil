@@ -1,4 +1,0 @@
-digraph visibilitycodeinfo{
-VisibilityCodeInfo	[shape=oval, color=red2, label="VisibilityCodeInfo"];
-VisibilityCodeInfo -> VisibilityTag;
-}

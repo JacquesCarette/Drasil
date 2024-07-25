@@ -29,6 +29,7 @@ type SClass a = CS (a (Class a))
 type FSModule a = FS (a (Module a))
 type NamedArgs r = [(SVariable r, SValue r)]
 type Initializers r = [(SVariable r, SValue r)]
+class (VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, List r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r) => SharedProg r
 class (SharedProg r, ProgramSym r, OOVariableValue r, OODeclStatement r, OOFuncAppStatement r, OOValueExpression r, InternalValueExp r, GetSet r, ObserverPattern r, StrategyPattern r) => OOProg r
 class (FileSym r) => ProgramSym r where {
     type Program r;
@@ -482,13 +483,12 @@ mainMod :: Lens' GOOLState (Maybe FilePath)
 initialState :: GOOLState
 onStateValue :: (a -> b) -> State s a -> State s b
 onCodeList :: Monad m => ([a] -> b) -> [m a] -> m b
-unCI :: CodeInfo a -> a
+unCI :: CodeInfoOO a -> a
 unPC :: PythonCode a -> a
 unJC :: JavaCode a -> a
 unCSC :: CSharpCode a -> a
 unCPPC :: CppCode CppSrcCode CppHdrCode a -> a
 unSC :: SwiftCode a -> a
-unJLC :: JuliaCode a -> a
 pyName :: String
 pyVersion :: String
 jName :: String
@@ -499,8 +499,6 @@ cppName :: String
 cppVersion :: String
 swiftName :: String
 swiftVersion :: String
-jlName :: String
-jlVersion :: String
 
 
 -- | re-export smart constructors for external code writing
@@ -513,11 +511,13 @@ type MSBlock a = MS (a (Block a))
 type VSType a = VS (a (Type a))
 type SVariable a = VS (a (Variable a))
 type SValue a = VS (a (Value a))
+type VSFunction a = VS (a (Function a))
 type MSStatement a = MS (a (Statement a))
 type MSParameter a = MS (a (Parameter a))
 type SMethod a = MS (a (Method a))
 type FSModule a = FS (a (Module a))
 type NamedArgs r = [(SVariable r, SValue r)]
+class (VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, List r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r) => SharedProg r
 class (SharedProg r, ProgramSym r) => ProcProg r
 class (FileSym r) => ProgramSym r where {
     type Program r;
@@ -656,6 +656,24 @@ var' :: VariableSym r => Label -> r (Scope r) -> VSType r -> SVariable r
 constant' :: VariableSym r => Label -> r (Scope r) -> VSType r -> SVariable r
 extVar :: VariableSym r => Library -> Label -> VSType r -> SVariable r
 arrayElem :: VariableSym r => Integer -> SVariable r -> SVariable r
+
+-- | Smart constructor to rearrange the parameters of var'
+var :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
+
+-- | Smart constructor to rearrange the parameters of constant'
+constant :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
+
+-- | Smart constructor for a local variable.
+locVar :: VariableSym r => Label -> VSType r -> SVariable r
+
+-- | Smart constructor for a variable in the main function.
+mainVar :: VariableSym r => Label -> VSType r -> SVariable r
+class ScopeSym r where {
+    type Scope r;
+}
+global :: ScopeSym r => r (Scope r)
+mainFn :: ScopeSym r => r (Scope r)
+local :: ScopeSym r => r (Scope r)
 class (VariableSym r) => VariableElim r
 variableName :: VariableElim r => r (Variable r) -> String
 variableType :: VariableElim r => r (Variable r) -> r (Type r)
@@ -750,6 +768,9 @@ funcAppNamedArgs :: ValueExpression r => Label -> VSType r -> NamedArgs r -> SVa
 extFuncApp :: ValueExpression r => Library -> PosCall r
 libFuncApp :: ValueExpression r => Library -> PosCall r
 exists :: ValueExpression r => SValue r -> SValue r
+class (ValueSym r) => FunctionSym r where {
+    type Function r;
+}
 class (ValueSym r) => List r
 
 -- | Does any necessary conversions from GOOL's zero-indexed assumptions to
@@ -788,12 +809,11 @@ indexOf :: List r => SValue r -> SValue r -> SValue r
 listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 at :: List r => SValue r -> SValue r -> SValue r
-class ScopeSym r where {
-    type Scope r;
+class VisibilitySym r where {
+    type Visibility r;
 }
-global :: ScopeSym r => r (Scope r)
-mainFn :: ScopeSym r => r (Scope r)
-local :: ScopeSym r => r (Scope r)
+private :: VisibilitySym r => r (Visibility r)
+public :: VisibilitySym r => r (Visibility r)
 class (VariableSym r) => ParameterSym r where {
     type Parameter r;
 }
@@ -850,19 +870,7 @@ mainMod :: Lens' GOOLState (Maybe FilePath)
 initialState :: GOOLState
 onStateValue :: (a -> b) -> State s a -> State s b
 onCodeList :: Monad m => ([a] -> b) -> [m a] -> m b
-unCI :: CodeInfo a -> a
-unPC :: PythonCode a -> a
-unJC :: JavaCode a -> a
-unCSC :: CSharpCode a -> a
-unCPPC :: CppCode CppSrcCode CppHdrCode a -> a
-unSC :: SwiftCode a -> a
-pyName :: String
-pyVersion :: String
-jName :: String
-jVersion :: String
-csName :: String
-csVersion :: String
-cppName :: String
-cppVersion :: String
-swiftName :: String
-swiftVersion :: String
+unCI :: CodeInfoProc a -> a
+unJLC :: JuliaCode a -> a
+jlName :: String
+jlVersion :: String

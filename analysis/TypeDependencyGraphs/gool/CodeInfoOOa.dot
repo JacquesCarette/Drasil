@@ -1,0 +1,4 @@
+digraph codeinfoooa{
+CodeInfoOOa	[shape=oval, color=darkgreen, label="CodeInfoOOa"];
+CodeInfoOOa -> a;
+}

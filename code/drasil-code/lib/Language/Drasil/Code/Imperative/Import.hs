@@ -475,13 +475,13 @@ elementSetSetBfunc SAdd = error "convExpr Adding an Element to a Set"
 elementSetSetBfunc SRemove = error "convExpr Removing an Element to a Set"
 
 -- Maps a 'ESSBinOp' to it's corresponding GOOL binary function.
-elementSetBoolBfunc :: (OOProg r) => ESBBinOp -> (SValue r -> SValue r -> SValue r)
+elementSetBoolBfunc :: (SharedProg r) => ESBBinOp -> (SValue r -> SValue r -> SValue r)
 elementSetBoolBfunc SContains = contains
 
 -- medium hacks --
 
 -- | Converts a 'Mod' to GOOL.
-genModDef :: (OOProg r) => Mod -> GenState (OO.SFile r)
+genModDef :: (OOProg r) => Mod -> GenState (SFile r)
 genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
   Just . genFunc publicFunc []) fs)
   (case cs of [] -> []
@@ -981,6 +981,7 @@ convExprProc (AssocA Add l) = foldl1 (#+)  <$> mapM convExprProc l
 convExprProc (AssocA Mul l) = foldl1 (#*)  <$> mapM convExprProc l
 convExprProc (AssocB And l) = foldl1 (?&&) <$> mapM convExprProc l
 convExprProc (AssocB Or l)  = foldl1 (?||) <$> mapM convExprProc l
+convExprProc (AssocC SUnion l)  = foldl1 (#+) <$> mapM convExprProc l
 convExprProc (C c) = do
   g <- get
   let v = quantvar (lookupC g c)
@@ -1007,6 +1008,8 @@ convExprProc (OrdBinaryOp o a b)   = liftM2 (ordBfunc o) (convExprProc a) (convE
 convExprProc (VVVBinaryOp o a b)   = liftM2 (vecVecVecBfunc o) (convExprProc a) (convExprProc b)
 convExprProc (VVNBinaryOp o a b)   = liftM2 (vecVecNumBfunc o) (convExprProc a) (convExprProc b)
 convExprProc (NVVBinaryOp o a b)   = liftM2 (numVecVecBfunc o) (convExprProc a) (convExprProc b)
+convExprProc (ESSBinaryOp o a b)   = liftM2 (elementSetSetBfunc o) (convExprProc a) (convExprProc b)
+convExprProc (ESBBinaryOp o a b)   = liftM2 (elementSetBoolBfunc o) (convExprProc a) (convExprProc b)
 convExprProc (Case c l)            = doit l -- FIXME this is sub-optimal
   where
     doit [] = error "should never happen" -- TODO: change error message?
@@ -1018,6 +1021,7 @@ convExprProc (Matrix [l]) = do
                                     -- hd will never fail here
   return $ litArray (fmap valueType (head ar)) ar
 convExprProc Matrix{} = error "convExprProc: Matrix"
+convExprProc Set{} = error "convExprProc: Set"
 convExprProc Operator{} = error "convExprProc: Operator"
 convExprProc (RealI c ri)  = do
   g <- get

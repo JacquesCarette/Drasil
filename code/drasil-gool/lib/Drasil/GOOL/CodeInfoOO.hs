@@ -254,7 +254,7 @@ instance List CodeInfoOO where
   listSet    = execute3
   indexOf    = execute2
 
-instance Set CodeInfo where
+instance Set CodeInfoOO where
   contains = execute2
 
 instance InternalList CodeInfoOO where

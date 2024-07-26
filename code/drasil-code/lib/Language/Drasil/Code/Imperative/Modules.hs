@@ -95,11 +95,11 @@ genMainFunc = do
         mainFunc Program = do
           v_filename <- mkVar (quantvar inFileName) mainFn
           logInFile <- maybeLog v_filename mainFn
-          co <- initConsts
-          ip <- getInputDecl
-          ics <- genAllInputCalls
+          co <- initConsts mainFn
+          ip <- getInputDecl mainFn
+          ics <- genAllInputCalls mainFn
           varDef <- mapM (`genCalcCall` mainFn) (execOrder $ codeSpec g)
-          wo <- genOutputCall
+          wo <- genOutputCall mainFn
           return $ Just $ (if CommentFunc `elem` commented g then docMain else
             mainFunction) $ bodyStatements $ initLogFileVar (logKind g)
             ++ varDecDef v_filename (arg 0)
@@ -118,12 +118,12 @@ genMainFunc = do
 -- the InputParameters class, so 'inParams' should be declared and constructed,
 -- using 'objDecNew' if the inputs are exported by the current module, and
 -- 'extObjDecNew' if they are exported by a different module.
-getInputDecl :: (OOProg r) => GenState (Maybe (MSStatement r))
-getInputDecl = do
+getInputDecl :: (OOProg r) => r (Scope r) -> GenState (Maybe (MSStatement r))
+getInputDecl scp = do
   g <- get
-  v_params <- mkVar (quantvar inParams) local -- TODO: get scope from state
+  v_params <- mkVar (quantvar inParams) scp
   constrParams <- getInConstructorParams
-  cps <- mapM (`mkVal` local) constrParams -- TODO: get scope from state
+  cps <- mapM (`mkVal` scp) constrParams
   cname <- genICName InputParameters
   let getDecl ([],[]) = constIns (partition (flip member (eMap g) .
         codeName) (map quantvar $ constants $ codeSpec g)) (conRepr g)
@@ -152,10 +152,10 @@ getInputDecl = do
 -- If constants are 'Bundled' 'WithInputs', do 'Nothing'; declaration of the 'inParams'
 -- object is handled by 'getInputDecl'.
 -- If constants are 'Inlined', nothing needs to be declared.
-initConsts :: (OOProg r) => GenState (Maybe (MSStatement r))
-initConsts = do
+initConsts :: (OOProg r) => r (Scope r) -> GenState (Maybe (MSStatement r))
+initConsts scp = do
   g <- get
-  v_consts <- mkVar (quantvar consts) local -- TODO: get scope from state
+  v_consts <- mkVar (quantvar consts) scp
   cname <- genICName Constants
   let cs = constants $ codeSpec g
       getDecl (Store Unbundled) _ = declVars
@@ -164,8 +164,8 @@ initConsts = do
       getDecl WithInputs Bundled = return Nothing
       getDecl Inline _ = return Nothing
       declVars = do
-        vars <- mapM ((`mkVar` local) . quantvar) cs -- TODO: get scope from state
-        vals <- mapM (convExpr . (^. codeExpr)) cs
+        vars <- mapM ((`mkVar` scp) . quantvar) cs
+        vals <- mapM (convExpr scp . (^. codeExpr)) cs
         logs <- mapM (`maybeLog` mainFn) vars
         return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++
           concat logs
@@ -214,7 +214,7 @@ constVarFunc Const = constVar public
 -- generated class also contains the input-related functions as private methods.
 genInputClass :: (OOProg r) => ClassType ->
   GenState (Maybe (SClass r))
-genInputClass scp = do
+genInputClass ct = do
   g <- get
   cname <- genICName InputParameters
   let ins = inputs $ codeSpec g
@@ -234,7 +234,7 @@ genInputClass scp = do
         GenState (Maybe (SClass r))
       genClass [] [] = return Nothing
       genClass inps csts = do
-        vals <- mapM (convExpr . (^. codeExpr)) csts
+        vals <- mapM (convExpr local . (^. codeExpr)) csts
         inputVars <- mapM (\x -> fmap (pubDVar . 
           var' (codeName x) local . convTypeOO) (codeType x)) inps
         constVars <- zipWithM (\c vl -> fmap (\t -> constVarFunc (conRepr g)
@@ -242,7 +242,7 @@ genInputClass scp = do
           csts vals
         let getFunc Primary = primaryClass
             getFunc Auxiliary = auxClass
-            f = getFunc scp
+            f = getFunc ct
         icDesc <- inputClassDesc
         c <- f cname Nothing icDesc (inputVars ++ constVars) constructors methods
         return $ Just c
@@ -263,7 +263,7 @@ genInputConstructor = do
       genCtor True = do
         cdesc <- inputConstructorDesc
         cparams <- getInConstructorParams
-        ics <- genAllInputCalls
+        ics <- genAllInputCalls local
         ctor <- genConstructor ipName cdesc (map pcAuto cparams)
           [block ics]
         return $ Just ctor
@@ -285,7 +285,7 @@ genInputDerived s = do
       genDerived _ = do
         ins <- getDerivedIns
         outs <- getDerivedOuts
-        bod <- mapM (\x -> genCalcBlock CalcAssign x (x ^. codeExpr)) dvals
+        bod <- mapM (\x -> genCalcBlock local CalcAssign x (x ^. codeExpr)) dvals
         desc <- dvFuncDesc
         mthd <- getFunc s dvName desc ins outs bod
         return $ Just mthd
@@ -294,7 +294,7 @@ genInputDerived s = do
 -- | Generates function that checks constraints on the input.
 genInputConstraints :: (OOProg r) => VisibilityTag ->
   GenState (Maybe (SMethod r))
-genInputConstraints s = do
+genInputConstraints v = do
   g <- get
   icName <- genICName InputConstraintsFn
   let cm = cMap $ codeSpec g
@@ -308,37 +308,37 @@ genInputConstraints s = do
         let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec g)
             sfwrCs   = map (sfwrLookup cm) varsList
             physCs   = map (physLookup cm) varsList
-        sf <- sfwrCBody sfwrCs
-        ph <- physCBody physCs
+        sf <- sfwrCBody sfwrCs local
+        ph <- physCBody physCs local
         desc <- inConsFuncDesc
-        mthd <- getFunc s icName void desc (map pcAuto parms)
+        mthd <- getFunc v icName void desc (map pcAuto parms)
           Nothing [block sf, block ph]
         return $ Just mthd
-  genConstraints $ icName `elem` defSet g
+  genConstraints (icName `elem` defSet g)
 
 -- | Generates input constraints code block for checking software constraints.
-sfwrCBody :: (OOProg r) => [(CodeVarChunk, [ConstraintCE])] ->
+sfwrCBody :: (OOProg r) => [(CodeVarChunk, [ConstraintCE])] -> r (Scope r) ->
   GenState [MSStatement r]
-sfwrCBody cs = do
+sfwrCBody cs scp = do
   g <- get
   let cb = onSfwrC g
-  chooseConstr cb cs
+  chooseConstr cb cs scp
 
 -- | Generates input constraints code block for checking physical constraints.
-physCBody :: (OOProg r) => [(CodeVarChunk, [ConstraintCE])] ->
+physCBody :: (OOProg r) => [(CodeVarChunk, [ConstraintCE])] -> r (Scope r) ->
   GenState [MSStatement r]
-physCBody cs = do
+physCBody cs scp = do
   g <- get
   let cb = onPhysC g
-  chooseConstr cb cs
+  chooseConstr cb cs scp
 
 -- | Generates conditional statements for checking constraints, where the
 -- bodies depend on user's choice of constraint violation behaviour.
 chooseConstr :: (OOProg r) => ConstraintBehaviour ->
-  [(CodeVarChunk, [ConstraintCE])] -> GenState [MSStatement r]
-chooseConstr cb cs = do
-  conds <- mapM (\(q,cns) -> mapM (convExpr . renderC q) cns) cs
-  bods <- mapM (chooseCB cb) cs
+  [(CodeVarChunk, [ConstraintCE])] -> r (Scope r) -> GenState [MSStatement r]
+chooseConstr cb cs scp = do
+  conds <- mapM (\(q,cns) -> mapM (convExpr scp . renderC q) cns) cs
+  bods <- mapM (chooseCB cb scp) cs
   return $ concat $ zipWith (zipWith (\cond bod -> ifNoElse [((?!) cond, bod)]))
     conds bods
   where chooseCB Warning = constrWarn
@@ -347,33 +347,33 @@ chooseConstr cb cs = do
 -- | Generates body defining constraint violation behaviour if Warning chosen from 'chooseConstr'.
 -- Prints a \"Warning\" message followed by a message that says
 -- what value was \"suggested\".
-constrWarn :: (OOProg r) => (CodeVarChunk, [ConstraintCE]) ->
+constrWarn :: (OOProg r) => r (Scope r) -> (CodeVarChunk, [ConstraintCE]) ->
   GenState [MSBody r]
-constrWarn c = do
+constrWarn scp c = do
   let q = fst c
       cs = snd c
-  msgs <- mapM (constraintViolatedMsg q "suggested") cs
+  msgs <- mapM (constraintViolatedMsg scp q "suggested") cs
   return $ map (bodyStatements . (printStr "Warning: " :)) msgs
 
 -- | Generates body defining constraint violation behaviour if Exception chosen from 'chooseConstr'.
 -- Prints a message that says what value was \"expected\",
 -- followed by throwing an exception.
-constrExc :: (OOProg r) => (CodeVarChunk, [ConstraintCE]) ->
+constrExc :: (OOProg r) => r (Scope r) -> (CodeVarChunk, [ConstraintCE]) ->
   GenState [MSBody r]
-constrExc c = do
+constrExc scp c = do
   let q = fst c
       cs = snd c
-  msgs <- mapM (constraintViolatedMsg q "expected") cs
+  msgs <- mapM (constraintViolatedMsg scp q "expected") cs
   return $ map (bodyStatements . (++ [throw "InputError"])) msgs
 
 -- | Generates statements that print a message for when a constraint is violated.
 -- Message includes the name of the cosntraint quantity, its value, and a
 -- description of the constraint that is violated.
-constraintViolatedMsg :: (OOProg r) => CodeVarChunk -> String ->
+constraintViolatedMsg :: (OOProg r) => r (Scope r) -> CodeVarChunk -> String ->
   ConstraintCE -> GenState [MSStatement r]
-constraintViolatedMsg q s c = do
-  pc <- printConstraint c
-  v <- mkVal (quantvar q) local -- TODO: get scope from state
+constraintViolatedMsg scp q s c = do
+  pc <- printConstraint c scp
+  v <- mkVal (quantvar q) scp
   return $ [printStr $ codeName q ++ " has value ",
     print v,
     printStr $ ", but is " ++ s ++ " to be "] ++ pc
@@ -381,26 +381,26 @@ constraintViolatedMsg q s c = do
 -- | Generates statements to print descriptions of constraints, using words and
 -- the constrained values. Constrained values are followed by printing the
 -- expression they originated from, using printExpr.
-printConstraint :: (OOProg r) => ConstraintCE ->
+printConstraint :: (OOProg r) => ConstraintCE -> r (Scope r) ->
   GenState [MSStatement r]
-printConstraint c = do
+printConstraint c scp = do
   g <- get
   let db = sysinfodb $ codeSpec g
-      printConstraint' :: (OOProg r) => ConstraintCE -> GenState
-        [MSStatement r]
-      printConstraint' (Range _ (Bounded (_, e1) (_, e2))) = do
-        lb <- convExpr e1
-        ub <- convExpr e2
+      printConstraint' :: (OOProg r) => ConstraintCE -> r (Scope r) ->
+        GenState [MSStatement r]
+      printConstraint' (Range _ (Bounded (_, e1) (_, e2))) s = do
+        lb <- convExpr s e1
+        ub <- convExpr s e2
         return $ [printStr "between ", print lb] ++ printExpr e1 db ++
           [printStr " and ", print ub] ++ printExpr e2 db ++ [printStrLn "."]
-      printConstraint' (Range _ (UpTo (_, e))) = do
-        ub <- convExpr e
+      printConstraint' (Range _ (UpTo (_, e))) s = do
+        ub <- convExpr s e
         return $ [printStr "below ", print ub] ++ printExpr e db ++
           [printStrLn "."]
-      printConstraint' (Range _ (UpFrom (_, e))) = do
-        lb <- convExpr e
+      printConstraint' (Range _ (UpFrom (_, e))) s = do
+        lb <- convExpr s e
         return $ [printStr "above ", print lb] ++ printExpr e db ++ [printStrLn "."]
-  printConstraint' c
+  printConstraint' c scp
 
 -- | Don't print expressions that are just literals, because that would be
 -- redundant (the values are already printed by printConstraint).
@@ -461,7 +461,7 @@ genConstMod = do
 -- Constants class in the class definition map, otherwise returns Nothing.
 genConstClass :: (OOProg r) => ClassType ->
   GenState (Maybe (SClass r))
-genConstClass scp = do
+genConstClass ct = do
   g <- get
   cname <- genICName Constants
   let cs = constants $ codeSpec g
@@ -469,13 +469,13 @@ genConstClass scp = do
         (Maybe (SClass r))
       genClass [] = return Nothing
       genClass vs = do
-        vals <- mapM (convExpr . (^. codeExpr)) vs
+        vals <- mapM (convExpr local . (^. codeExpr)) vs
         vars <- mapM (\x -> fmap (var' (codeName x) local . convTypeOO)
           (codeType x)) vs
         let constVars = zipWith (constVarFunc (conRepr g)) vars vals
             getFunc Primary = primaryClass
             getFunc Auxiliary = auxClass
-            f = getFunc scp
+            f = getFunc ct
         cDesc <- constClassDesc
         cls <- f cname Nothing cDesc constVars (return []) (return [])
         return $ Just cls
@@ -505,12 +505,12 @@ genCalcFunc cdef = do
   tp <- codeType cdef
   v <- mkVar (quantvar cdef) local
   blcks <- case cdef ^. defType
-            of Definition -> liftS $ genCalcBlock CalcReturn cdef
+            of Definition -> liftS $ genCalcBlock local CalcReturn cdef
                  (cdef ^. codeExpr)
                ODE -> maybe (error $ nm ++ " missing from ExtLibMap")
                  (\el -> do
-                   defStmts <- mapM convStmt (el ^. defs)
-                   stepStmts <- mapM convStmt (el ^. steps)
+                   defStmts <- mapM (convStmt local) (el ^. defs) 
+                   stepStmts <- mapM (convStmt local) (el ^. steps)
                    return [block (varDec v : defStmts),
                      block stepStmts,
                      block [returnStmt $ valueOf v]])
@@ -529,28 +529,28 @@ data CalcType = CalcAssign | CalcReturn deriving Eq
 
 -- | Generates a calculation block for the given 'CodeDefinition', and assigns the
 -- result to a variable (if 'CalcAssign') or returns the result (if 'CalcReturn').
-genCalcBlock :: (OOProg r) => CalcType -> CodeDefinition -> CodeExpr ->
-  GenState (MSBlock r)
-genCalcBlock t v (Case c e) = genCaseBlock t v c e
-genCalcBlock CalcAssign v e = do
-  vv <- mkVar (quantvar v) local
-  ee <- convExpr e
-  l <- maybeLog vv local
+genCalcBlock :: (OOProg r) => r (Scope r) -> CalcType -> CodeDefinition ->
+  CodeExpr -> GenState (MSBlock r)
+genCalcBlock scp t v (Case c e) = genCaseBlock scp t v c e
+genCalcBlock scp CalcAssign v e = do
+  vv <- mkVar (quantvar v) scp
+  ee <- convExpr scp e
+  l <- maybeLog vv scp
   return $ block $ assign vv ee : l
-genCalcBlock CalcReturn _ e = block <$> liftS (returnStmt <$> convExpr e)
+genCalcBlock scp CalcReturn _ e = block <$> liftS (returnStmt <$> convExpr scp e)
 
 -- | Generates a calculation block for a value defined by cases.
 -- If the function is defined for every case, the final case is captured by an
 -- else clause, otherwise an error-throwing else-clause is generated.
-genCaseBlock :: (OOProg r) => CalcType -> CodeDefinition -> Completeness
-  -> [(CodeExpr, CodeExpr)] -> GenState (MSBlock r)
-genCaseBlock _ _ _ [] = error $ "Case expression with no cases encountered" ++
+genCaseBlock :: (OOProg r) => r (Scope r) -> CalcType -> CodeDefinition ->
+  Completeness -> [(CodeExpr, CodeExpr)] -> GenState (MSBlock r)
+genCaseBlock _ _ _ _ [] = error $ "Case expression with no cases encountered" ++
   " in code generator"
-genCaseBlock t v c cs = do
-  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr r) (calcBody e)) (ifEs c)
+genCaseBlock scp t v c cs = do
+  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr scp r) (calcBody e)) (ifEs c)
   els <- elseE c
   return $ block [ifCond ifs els]
-  where calcBody e = fmap body $ liftS $ genCalcBlock t v e
+  where calcBody e = fmap body $ liftS $ genCalcBlock scp t v e
         ifEs Complete = init cs
         ifEs Incomplete = cs
         elseE Complete = calcBody $ fst $ last cs
@@ -611,11 +611,11 @@ genMainFuncProc = do
         mainFunc Program = do
           v_filename <- mkVarProc (quantvar inFileName) mainFn
           logInFile <- maybeLog v_filename mainFn
-          co <- initConstsProc
-          ip <- getInputDeclProc
-          ics <- genAllInputCallsProc
+          co <- initConstsProc mainFn
+          ip <- getInputDeclProc mainFn
+          ics <- genAllInputCallsProc mainFn
           varDef <- mapM (`genCalcCallProc` mainFn) (execOrder $ codeSpec g)
-          wo <- genOutputCallProc
+          wo <- genOutputCallProc mainFn
           return $ Just $ (if CommentFunc `elem` commented g then docMain else
             mainFunction) $ bodyStatements $ initLogFileVar (logKind g)
             ++ varDecDef v_filename (arg 0)
@@ -634,8 +634,9 @@ genMainFuncProc = do
 -- If constants are 'Bundled' 'WithInputs', do 'Nothing'; declaration of the 'inParams'
 -- object is handled by 'getInputDecl'.
 -- If constants are 'Inlined', nothing needs to be declared.
-initConstsProc :: (SharedProg r) => GenState (Maybe (MSStatement r))
-initConstsProc = do
+initConstsProc :: (SharedProg r) => r (Scope r) ->
+  GenState (Maybe (MSStatement r))
+initConstsProc scp = do
   g <- get
   let cs = constants $ codeSpec g
       getDecl (Store Unbundled) _ = declVars
@@ -644,8 +645,8 @@ initConstsProc = do
       getDecl WithInputs Bundled = return Nothing
       getDecl Inline _ = return Nothing
       declVars = do
-        vars <- mapM ((`mkVarProc` local) . quantvar) cs -- TODO: get scope from state
-        vals <- mapM (convExprProc . (^. codeExpr)) cs
+        vars <- mapM ((`mkVarProc` scp) . quantvar) cs
+        vals <- mapM (convExprProc scp . (^. codeExpr)) cs
         logs <- mapM (`maybeLog` mainFn) vars
         return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++
           concat logs
@@ -702,12 +703,13 @@ checkInputClass = do
 -- the InputParameters class, so 'inParams' should be declared and constructed,
 -- using 'objDecNew' if the inputs are exported by the current module, and
 -- 'extObjDecNew' if they are exported by a different module.
-getInputDeclProc :: (SharedProg r) => GenState (Maybe (MSStatement r))
-getInputDeclProc = do
+getInputDeclProc :: (SharedProg r) => r (Scope r) ->
+  GenState (Maybe (MSStatement r))
+getInputDeclProc scp = do
   g <- get
   let getDecl ([],[]) = return Nothing
       getDecl ([],ins) = do
-        vars <- mapM (`mkVarProc` local) ins
+        vars <- mapM (`mkVarProc` scp) ins
         return $ Just $ multi $ map varDec vars
       getDecl _ = error "getInputDeclProc: Procedural renderers do not support bundled inputs"
   getDecl (partition (flip member (eMap g) . codeName)
@@ -734,12 +736,12 @@ genCalcFuncProc cdef = do
   tp <- codeType cdef
   v <- mkVarProc (quantvar cdef) local
   blcks <- case cdef ^. defType
-            of Definition -> liftS $ genCalcBlockProc CalcReturn cdef
+            of Definition -> liftS $ genCalcBlockProc local CalcReturn cdef
                  (cdef ^. codeExpr)
                ODE -> maybe (error $ nm ++ " missing from ExtLibMap")
                  (\el -> do
-                   defStmts <- mapM convStmtProc (el ^. defs)
-                   stepStmts <- mapM convStmtProc (el ^. steps)
+                   defStmts <- mapM (convStmtProc local) (el ^. defs)
+                   stepStmts <- mapM (convStmtProc local) (el ^. steps)
                    return [block (varDec v : defStmts),
                      block stepStmts,
                      block [returnStmt $ valueOf v]])
@@ -755,28 +757,28 @@ genCalcFuncProc cdef = do
 
 -- | Generates a calculation block for the given 'CodeDefinition', and assigns the
 -- result to a variable (if 'CalcAssign') or returns the result (if 'CalcReturn').
-genCalcBlockProc :: (SharedProg r) => CalcType -> CodeDefinition -> CodeExpr ->
-  GenState (MSBlock r)
-genCalcBlockProc t v (Case c e) = genCaseBlockProc t v c e
-genCalcBlockProc CalcAssign v e = do
-  vv <- mkVarProc (quantvar v) local
-  ee <- convExprProc e
-  l <- maybeLog vv local
+genCalcBlockProc :: (SharedProg r) => r (Scope r) -> CalcType ->
+  CodeDefinition -> CodeExpr -> GenState (MSBlock r)
+genCalcBlockProc scp t v (Case c e) = genCaseBlockProc scp t v c e
+genCalcBlockProc scp CalcAssign v e = do
+  vv <- mkVarProc (quantvar v) scp
+  ee <- convExprProc scp e
+  l <- maybeLog vv scp
   return $ block $ assign vv ee : l
-genCalcBlockProc CalcReturn _ e = block <$> liftS (returnStmt <$> convExprProc e)
+genCalcBlockProc scp CalcReturn _ e = block <$> liftS (returnStmt <$> convExprProc scp e)
 
 -- | Generates a calculation block for a value defined by cases.
 -- If the function is defined for every case, the final case is captured by an
 -- else clause, otherwise an error-throwing else-clause is generated.
-genCaseBlockProc :: (SharedProg r) => CalcType -> CodeDefinition -> Completeness
-  -> [(CodeExpr, CodeExpr)] -> GenState (MSBlock r)
-genCaseBlockProc _ _ _ [] = error $ "Case expression with no cases encountered" ++
+genCaseBlockProc :: (SharedProg r) => r (Scope r) -> CalcType -> CodeDefinition
+  -> Completeness -> [(CodeExpr, CodeExpr)] -> GenState (MSBlock r)
+genCaseBlockProc _ _ _ _ [] = error $ "Case expression with no cases encountered" ++
   " in code generator"
-genCaseBlockProc t v c cs = do
-  ifs <- mapM (\(e,r) -> liftM2 (,) (convExprProc r) (calcBody e)) (ifEs c)
+genCaseBlockProc scp t v c cs = do
+  ifs <- mapM (\(e,r) -> liftM2 (,) (convExprProc scp r) (calcBody e)) (ifEs c)
   els <- elseE c
   return $ block [ifCond ifs els]
-  where calcBody e = fmap body $ liftS $ genCalcBlockProc t v e
+  where calcBody e = fmap body $ liftS $ genCalcBlockProc scp t v e
         ifEs Complete = init cs
         ifEs Incomplete = cs
         elseE Complete = calcBody $ fst $ last cs
@@ -819,7 +821,7 @@ genInputDerivedProc s = do
       genDerived _ = do
         ins <- getDerivedIns
         outs <- getDerivedOuts
-        bod <- mapM (\x -> genCalcBlockProc CalcAssign x (x ^. codeExpr)) dvals
+        bod <- mapM (\x -> genCalcBlockProc local CalcAssign x (x ^. codeExpr)) dvals
         desc <- dvFuncDesc
         mthd <- getFunc s dvName desc ins outs bod
         return $ Just mthd
@@ -828,7 +830,7 @@ genInputDerivedProc s = do
 -- | Generates function that checks constraints on the input.
 genInputConstraintsProc :: (SharedProg r) => VisibilityTag ->
   GenState (Maybe (SMethod r))
-genInputConstraintsProc s = do
+genInputConstraintsProc v = do
   g <- get
   icName <- genICName InputConstraintsFn
   let cm = cMap $ codeSpec g
@@ -842,37 +844,37 @@ genInputConstraintsProc s = do
         let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec g)
             sfwrCs   = map (sfwrLookup cm) varsList
             physCs   = map (physLookup cm) varsList
-        sf <- sfwrCBodyProc sfwrCs
-        ph <- physCBodyProc physCs
+        sf <- sfwrCBodyProc sfwrCs local
+        ph <- physCBodyProc physCs local
         desc <- inConsFuncDesc
-        mthd <- getFunc s icName void desc (map pcAuto parms)
+        mthd <- getFunc v icName void desc (map pcAuto parms)
           Nothing [block sf, block ph]
         return $ Just mthd
-  genConstraints $ icName `elem` defSet g
+  genConstraints (icName `elem` defSet g)
 
 -- | Generates input constraints code block for checking software constraints.
 sfwrCBodyProc :: (SharedProg r) => [(CodeVarChunk, [ConstraintCE])] ->
-  GenState [MSStatement r]
-sfwrCBodyProc cs = do
+  r (Scope r) -> GenState [MSStatement r]
+sfwrCBodyProc cs scp = do
   g <- get
   let cb = onSfwrC g
-  chooseConstrProc cb cs
+  chooseConstrProc cb cs scp
 
 -- | Generates input constraints code block for checking physical constraints.
 physCBodyProc :: (SharedProg r) => [(CodeVarChunk, [ConstraintCE])] ->
-  GenState [MSStatement r]
-physCBodyProc cs = do
+  r (Scope r) -> GenState [MSStatement r]
+physCBodyProc cs scp = do
   g <- get
   let cb = onPhysC g
-  chooseConstrProc cb cs
+  chooseConstrProc cb cs scp
 
 -- | Generates conditional statements for checking constraints, where the
 -- bodies depend on user's choice of constraint violation behaviour.
 chooseConstrProc :: (SharedProg r) => ConstraintBehaviour ->
-  [(CodeVarChunk, [ConstraintCE])] -> GenState [MSStatement r]
-chooseConstrProc cb cs = do
-  conds <- mapM (\(q,cns) -> mapM (convExprProc . renderC q) cns) cs
-  bods <- mapM (chooseCB cb) cs
+  [(CodeVarChunk, [ConstraintCE])] -> r (Scope r) -> GenState [MSStatement r]
+chooseConstrProc cb cs scp = do
+  conds <- mapM (\(q,cns) -> mapM (convExprProc scp . renderC q) cns) cs
+  bods <- mapM (chooseCB cb scp) cs
   return $ concat $ zipWith (zipWith (\cond bod -> ifNoElse [((?!) cond, bod)]))
     conds bods
   where chooseCB Warning = constrWarnProc
@@ -881,33 +883,33 @@ chooseConstrProc cb cs = do
 -- | Generates body defining constraint violation behaviour if Warning chosen from 'chooseConstr'.
 -- Prints a \"Warning\" message followed by a message that says
 -- what value was \"suggested\".
-constrWarnProc :: (SharedProg r) => (CodeVarChunk, [ConstraintCE]) ->
-  GenState [MSBody r]
-constrWarnProc c = do
+constrWarnProc :: (SharedProg r) => r (Scope r) ->
+  (CodeVarChunk, [ConstraintCE]) -> GenState [MSBody r]
+constrWarnProc scp c = do
   let q = fst c
       cs = snd c
-  msgs <- mapM (constraintViolatedMsgProc q "suggested") cs
+  msgs <- mapM (constraintViolatedMsgProc scp q "suggested") cs
   return $ map (bodyStatements . (printStr "Warning: " :)) msgs
 
 -- | Generates body defining constraint violation behaviour if Exception chosen from 'chooseConstr'.
 -- Prints a message that says what value was \"expected\",
 -- followed by throwing an exception.
-constrExcProc :: (SharedProg r) => (CodeVarChunk, [ConstraintCE]) ->
-  GenState [MSBody r]
-constrExcProc c = do
+constrExcProc :: (SharedProg r) => r (Scope r) ->
+  (CodeVarChunk, [ConstraintCE]) -> GenState [MSBody r]
+constrExcProc scp c = do
   let q = fst c
       cs = snd c
-  msgs <- mapM (constraintViolatedMsgProc q "expected") cs
+  msgs <- mapM (constraintViolatedMsgProc scp q "expected") cs
   return $ map (bodyStatements . (++ [throw "InputError"])) msgs
 
 -- | Generates statements that print a message for when a constraint is violated.
 -- Message includes the name of the cosntraint quantity, its value, and a
 -- description of the constraint that is violated.
-constraintViolatedMsgProc :: (SharedProg r) => CodeVarChunk -> String ->
-  ConstraintCE -> GenState [MSStatement r]
-constraintViolatedMsgProc q s c = do
-  pc <- printConstraintProc c
-  v <- mkValProc (quantvar q) local -- TODO: get scope from state
+constraintViolatedMsgProc :: (SharedProg r) => r (Scope r) -> CodeVarChunk ->
+  String -> ConstraintCE -> GenState [MSStatement r]
+constraintViolatedMsgProc scp q s c = do
+  pc <- printConstraintProc c scp
+  v <- mkValProc (quantvar q) scp
   return $ [printStr $ codeName q ++ " has value ",
     print v,
     printStr $ ", but is " ++ s ++ " to be "] ++ pc
@@ -915,26 +917,26 @@ constraintViolatedMsgProc q s c = do
 -- | Generates statements to print descriptions of constraints, using words and
 -- the constrained values. Constrained values are followed by printing the
 -- expression they originated from, using printExpr.
-printConstraintProc :: (SharedProg r) => ConstraintCE ->
+printConstraintProc :: (SharedProg r) => ConstraintCE -> r (Scope r) ->
   GenState [MSStatement r]
-printConstraintProc c = do
+printConstraintProc c scp = do
   g <- get
   let db = sysinfodb $ codeSpec g
-      printConstraint' :: (SharedProg r) => ConstraintCE -> GenState
-        [MSStatement r]
-      printConstraint' (Range _ (Bounded (_, e1) (_, e2))) = do
-        lb <- convExprProc e1
-        ub <- convExprProc e2
+      printConstraint' :: (SharedProg r) => ConstraintCE -> r (Scope r) ->
+        GenState [MSStatement r]
+      printConstraint' (Range _ (Bounded (_, e1) (_, e2))) s = do
+        lb <- convExprProc s e1
+        ub <- convExprProc s e2
         return $ [printStr "between ", print lb] ++ printExpr e1 db ++
           [printStr " and ", print ub] ++ printExpr e2 db ++ [printStrLn "."]
-      printConstraint' (Range _ (UpTo (_, e))) = do
-        ub <- convExprProc e
+      printConstraint' (Range _ (UpTo (_, e))) s = do
+        ub <- convExprProc s e
         return $ [printStr "below ", print ub] ++ printExpr e db ++
           [printStrLn "."]
-      printConstraint' (Range _ (UpFrom (_, e))) = do
-        lb <- convExprProc e
+      printConstraint' (Range _ (UpFrom (_, e))) s = do
+        lb <- convExprProc s e
         return $ [printStr "above ", print lb] ++ printExpr e db ++ [printStrLn "."]
-  printConstraint' c
+  printConstraint' c scp
 
 -- | Generates a module containing the function for printing outputs.
 genOutputModProc :: (ProcProg r) => GenState [Proc.SFile r]

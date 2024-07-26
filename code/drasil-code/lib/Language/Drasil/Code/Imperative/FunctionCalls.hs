@@ -32,30 +32,30 @@ import Control.Monad.State (get)
 -- | Generates calls to all of the input-related functions. First is the call to
 -- the function for reading inputs, then the function for calculating derived
 -- inputs, then the function for checking input constraints.
-genAllInputCalls :: (OOProg r) => GenState [MSStatement r]
-genAllInputCalls = do
-  gi <- genInputCall
-  dv <- genDerivedCall
-  ic <- genConstraintCall
+genAllInputCalls :: (OOProg r) => r (Scope r) -> GenState [MSStatement r]
+genAllInputCalls scp = do
+  gi <- genInputCall scp
+  dv <- genDerivedCall scp
+  ic <- genConstraintCall scp
   return $ catMaybes [gi, dv, ic]
 
 -- | Generates a call to the function for reading inputs from a file.
-genInputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
-genInputCall = do
+genInputCall :: (OOProg r) => r (Scope r) -> GenState (Maybe (MSStatement r))
+genInputCall scp = do
   giName <- genICName GetInput
-  genInOutCall giName getInputFormatIns getInputFormatOuts
+  genInOutCall giName getInputFormatIns getInputFormatOuts scp
 
 -- | Generates a call to the function for calculating derived inputs.
-genDerivedCall :: (OOProg r) => GenState (Maybe (MSStatement r))
-genDerivedCall = do
+genDerivedCall :: (OOProg r) => r (Scope r) -> GenState (Maybe (MSStatement r))
+genDerivedCall scp = do
   dvName <- genICName DerivedValuesFn
-  genInOutCall dvName getDerivedIns getDerivedOuts
+  genInOutCall dvName getDerivedIns getDerivedOuts scp
 
 -- | Generates a call to the function for checking constraints on the input.
-genConstraintCall :: (OOProg r) => GenState (Maybe (MSStatement r))
-genConstraintCall = do
+genConstraintCall :: (OOProg r) => r (Scope r) -> GenState (Maybe (MSStatement r))
+genConstraintCall scp = do
   icName <- genICName InputConstraintsFn
-  val <- genFuncCall icName void getConstraintParams
+  val <- genFuncCall icName void getConstraintParams scp
   return $ fmap valStmt val
 
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the
@@ -64,45 +64,45 @@ genCalcCall :: (OOProg r) => CodeDefinition -> r (Scope r) ->
   GenState (Maybe (MSStatement r))
 genCalcCall c scp = do
   t <- codeType c
-  val <- genFuncCall (codeName c) (convTypeOO t) (getCalcParams c)
+  val <- genFuncCall (codeName c) (convTypeOO t) (getCalcParams c) scp
   v <- mkVar (quantvar c) scp
   l <- maybeLog v scp
   return $ fmap (multi . (: l) . varDecDef v) val
 
 -- | Generates a call to the function for printing outputs.
-genOutputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
-genOutputCall = do
+genOutputCall :: (OOProg r) => r (Scope r) -> GenState (Maybe (MSStatement r))
+genOutputCall scp = do
   woName <- genICName WriteOutput
-  val <- genFuncCall woName void getOutputParams
+  val <- genFuncCall woName void getOutputParams scp
   return $ fmap valStmt val
 
--- | Generates a function call given the name, return type, and arguments to
--- the function.
+-- | Generates a function call given the name, return type, arguments to
+-- the function, and scope of the calling statement.
 genFuncCall :: (OOProg r) => Name -> VSType r ->
-  GenState [CodeVarChunk] -> GenState (Maybe (SValue r))
-genFuncCall n t funcPs = do
+  GenState [CodeVarChunk] -> r (Scope r) -> GenState (Maybe (SValue r))
+genFuncCall n t funcPs scp = do
   mm <- genCall n
   let genFuncCall' Nothing = return Nothing
       genFuncCall' (Just m) = do
         cs <- funcPs
-        pvals <- mapM (`mkVal` local) cs -- TODO: get scope from state
+        pvals <- mapM (`mkVal` scp) cs
         val <- fApp m n t pvals []
         return $ Just val
   genFuncCall' mm
 
 -- | Generates a function call given the name, inputs, and outputs for the
--- function.
+-- function; and the scope of the calling statement.
 genInOutCall :: (OOProg r) => Name -> GenState [CodeVarChunk] ->
-  GenState [CodeVarChunk] -> GenState (Maybe (MSStatement r))
-genInOutCall n inFunc outFunc = do
+  GenState [CodeVarChunk] -> r (Scope r) -> GenState (Maybe (MSStatement r))
+genInOutCall n inFunc outFunc scp = do
   mm <- genCall n
   let genInOutCall' Nothing = return Nothing
       genInOutCall' (Just m) = do
         ins' <- inFunc
         outs' <- outFunc
-        ins <- mapM (`mkVar` local) (ins' \\ outs') -- TODO: get scope from state
-        outs <- mapM (`mkVar` local) (outs' \\ ins') -- TODO: get scope from state
-        both <- mapM (`mkVar` local) (ins' `intersect` outs') -- TODO: get scope from state
+        ins <- mapM (`mkVar` scp) (ins' \\ outs')
+        outs <- mapM (`mkVar` scp) (outs' \\ ins')
+        both <- mapM (`mkVar` scp) (ins' `intersect` outs')
         stmt <- fAppInOut m n (map valueOf ins) outs both
         return $ Just stmt
   genInOutCall' mm
@@ -130,30 +130,33 @@ genCall n = do
 -- | Generates calls to all of the input-related functions. First is the call to
 -- the function for reading inputs, then the function for calculating derived
 -- inputs, then the function for checking input constraints.
-genAllInputCallsProc :: (SharedProg r) => GenState [MSStatement r]
-genAllInputCallsProc = do
-  gi <- genInputCallProc
-  dv <- genDerivedCallProc
-  ic <- genConstraintCallProc
+genAllInputCallsProc :: (SharedProg r) => r (Scope r) -> GenState [MSStatement r]
+genAllInputCallsProc scp = do
+  gi <- genInputCallProc scp
+  dv <- genDerivedCallProc scp
+  ic <- genConstraintCallProc scp
   return $ catMaybes [gi, dv, ic]
 
 -- | Generates a call to the function for reading inputs from a file.
-genInputCallProc:: (SharedProg r) => GenState (Maybe (MSStatement r))
-genInputCallProc = do
+genInputCallProc:: (SharedProg r) => r (Scope r) ->
+  GenState (Maybe (MSStatement r))
+genInputCallProc scp = do
   giName <- genICName GetInput
-  genInOutCallProc giName getInputFormatIns getInputFormatOuts
+  genInOutCallProc giName getInputFormatIns getInputFormatOuts scp
 
 -- | Generates a call to the function for calculating derived inputs.
-genDerivedCallProc :: (SharedProg r) => GenState (Maybe (MSStatement r))
-genDerivedCallProc = do
+genDerivedCallProc :: (SharedProg r) => r (Scope r) ->
+  GenState (Maybe (MSStatement r))
+genDerivedCallProc scp = do
   dvName <- genICName DerivedValuesFn
-  genInOutCallProc dvName getDerivedIns getDerivedOuts
+  genInOutCallProc dvName getDerivedIns getDerivedOuts scp
 
 -- | Generates a call to the function for checking constraints on the input.
-genConstraintCallProc :: (SharedProg r) => GenState (Maybe (MSStatement r))
-genConstraintCallProc = do
+genConstraintCallProc :: (SharedProg r) => r (Scope r) ->
+  GenState (Maybe (MSStatement r))
+genConstraintCallProc scp = do
   icName <- genICName InputConstraintsFn
-  val <- genFuncCallProc icName void getConstraintParams
+  val <- genFuncCallProc icName void getConstraintParams scp
   return $ fmap valStmt val
 
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the
@@ -162,45 +165,46 @@ genCalcCallProc :: (SharedProg r) => CodeDefinition -> r (Scope r) ->
   GenState (Maybe (MSStatement r))
 genCalcCallProc c scp = do
   t <- codeType c
-  val <- genFuncCallProc (codeName c) (convType t) (getCalcParams c)
+  val <- genFuncCallProc (codeName c) (convType t) (getCalcParams c) scp
   v <- mkVarProc (quantvar c) scp
   l <- maybeLog v scp
   return $ fmap (multi . (: l) . varDecDef v) val
 
 -- | Generates a call to the function for printing outputs.
-genOutputCallProc :: (SharedProg r) => GenState (Maybe (MSStatement r))
-genOutputCallProc = do
+genOutputCallProc :: (SharedProg r) => r (Scope r) ->
+  GenState (Maybe (MSStatement r))
+genOutputCallProc scp = do
   woName <- genICName WriteOutput
-  val <- genFuncCallProc woName void getOutputParams
+  val <- genFuncCallProc woName void getOutputParams scp
   return $ fmap valStmt val
 
--- | Generates a function call given the name, return type, and arguments to
--- the function.
+-- | Generates a function call given the name, return type, arguments to
+-- the function, and the scope of the calling statement.
 genFuncCallProc :: (SharedProg r) => Name -> VSType r ->
-  GenState [CodeVarChunk] -> GenState (Maybe (SValue r))
-genFuncCallProc n t funcPs = do
+  GenState [CodeVarChunk] -> r (Scope r) -> GenState (Maybe (SValue r))
+genFuncCallProc n t funcPs scp = do
   mm <- genCall n
   let genFuncCall' Nothing = return Nothing
       genFuncCall' (Just m) = do
         cs <- funcPs
-        pvals <- mapM (`mkValProc` local) cs -- TODO: get scope from state
+        pvals <- mapM (`mkValProc` scp) cs
         val <- fAppProc m n t pvals []
         return $ Just val
   genFuncCall' mm
 
 -- | Generates a function call given the name, inputs, and outputs for the
--- function.
+-- function; and the scope of the calling statement
 genInOutCallProc :: (SharedProg r) => Name -> GenState [CodeVarChunk] ->
-  GenState [CodeVarChunk] -> GenState (Maybe (MSStatement r))
-genInOutCallProc n inFunc outFunc = do
+  GenState [CodeVarChunk] -> r (Scope r) -> GenState (Maybe (MSStatement r))
+genInOutCallProc n inFunc outFunc scp = do
   mm <- genCall n
   let genInOutCall' Nothing = return Nothing
       genInOutCall' (Just m) = do
         ins' <- inFunc
         outs' <- outFunc
-        ins <- mapM (`mkVarProc` local) (ins' \\ outs') -- TODO: get scope from state
-        outs <- mapM (`mkVarProc` local) (outs' \\ ins') -- TODO: get scope from state
-        both <- mapM (`mkVarProc` local) (ins' `intersect` outs') -- TODO: get scope from state
+        ins <- mapM (`mkVarProc` scp) (ins' \\ outs')
+        outs <- mapM (`mkVarProc` scp) (outs' \\ ins')
+        both <- mapM (`mkVarProc` scp) (ins' `intersect` outs')
         stmt <- fAppInOutProc m n (map valueOf ins) outs both
         return $ Just stmt
   genInOutCall' mm

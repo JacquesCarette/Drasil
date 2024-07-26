@@ -35,8 +35,8 @@ import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
 import Language.Drasil.CodeSpec (CodeSpec(..), getODE)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
 
-import Drasil.GOOL (OOProg, VisibilityTag(..),
-  ProgData(..), initialState)
+import Drasil.GOOL (OOProg, VisibilityTag(..), ProgData(..),
+  initialState)
 import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)

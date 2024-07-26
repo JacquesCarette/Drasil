@@ -200,16 +200,17 @@ newpage   = command0 "newpage"
 centering = command0 "centering"
 
 -- | Common commands and formatting options for a LaTeX document.
-code, itemize, enumerate, description, figure, center, document, 
-  equation, symbDescription :: D -> D
-code        = mkEnv "lstlisting" ($+$)
-itemize     = mkEnv "itemize" ($+$)
-enumerate   = mkEnv "enumerate" ($+$)
-description = mkEnv "description" ($+$)
-figure      = mkEnvArgSq "figure" "H"
-center      = mkEnv "center" ($+$)
-document    = mkEnv "document" ($+$)
-equation    = mkEnv "displaymath" ($+$) --displays math
+code, itemize, enumerate, description, description', figure, 
+  center, document, equation, symbDescription :: D -> D
+code         = mkEnv "lstlisting" ($+$)
+itemize      = mkEnv "itemize" ($+$)
+enumerate    = mkEnv "enumerate" ($+$)
+description  = mkEnv "description" ($+$)
+description' = mkEnvArgSq "description" "font=\\normalfont"
+figure       = mkEnvArgSq "figure" "H"
+center       = mkEnv "center" ($+$)
+document     = mkEnv "document" ($+$)
+equation     = mkEnv "displaymath" ($+$) --displays math
 symbDescription = mkEnv "symbDescription" ($+$)
 
 -- | Command for the document class.

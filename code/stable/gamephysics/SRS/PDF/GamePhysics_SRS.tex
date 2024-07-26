@@ -331,10 +331,10 @@ This subsection provides a list of terms that are used in the subsequent section
 \label{Sec:GoalStmt}
 Given the kinematic properties, and forces (including any collision forces) applied on a set of rigid bodies, the goal statements are:
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Determine-Linear-Properties:\phantomsection\label{linearGS}]{Determine their new positions and velocities over a period of time.}
 \item[Determine-Angular-Properties:\phantomsection\label{angularGS}]{Determine their new orientations and angular velocities over a period of time.}
-\end{itemize}
+\end{description}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
 The instance models that govern GamePhysics are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
@@ -343,7 +343,7 @@ The instance models that govern GamePhysics are presented in the \hyperref[Sec:I
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[objectTy:\phantomsection\label{assumpOT}]{All objects are rigid bodies. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:rotMot]{IM:rotMot}, \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:chaslesThm]{DD:chaslesThm}, \hyperref[DD:reVeInColl]{DD:reVeInColl}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[DD:ctrOfMass]{DD:ctrOfMass}, \hyperref[DD:momentOfInertia]{DD:momentOfInertia}, \hyperref[DD:linVel]{DD:linVel}, \hyperref[DD:linDisp]{DD:linDisp}, \hyperref[DD:linAcc]{DD:linAcc}, \hyperref[DD:kEnergy]{DD:kEnergy}, \hyperref[DD:impulseV]{DD:impulseV}, \hyperref[IM:col2D]{IM:col2D}, \hyperref[DD:angVel]{DD:angVel}, \hyperref[DD:angDisp]{DD:angDisp}, and \hyperref[DD:angAccel]{DD:angAccel}.)}
 \item[objectDimension:\phantomsection\label{assumpOD}]{All objects are 2D. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:rotMot]{IM:rotMot}, \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}, \hyperref[DD:kEnergy]{DD:kEnergy}, \hyperref[IM:col2D]{IM:col2D}, \hyperref[DD:angVel]{DD:angVel}, \hyperref[DD:angDisp]{DD:angDisp}, and \hyperref[DD:angAccel]{DD:angAccel}.)}
 \item[coordinateSystemTy:\phantomsection\label{assumpCST}]{The library uses a Cartesian coordinate system.}
@@ -351,7 +351,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[collisionType:\phantomsection\label{assumpCT}]{All rigid bodies collisions are vertex-to-edge collisions. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[lcEC]{LC:Expanded-Collisions}, and \hyperref[IM:col2D]{IM:col2D}.)}
 \item[dampingInvolvement:\phantomsection\label{assumpDI}]{There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[lcID]{LC:Include-Dampening}, \hyperref[DD:kEnergy]{DD:kEnergy}, and \hyperref[IM:col2D]{IM:col2D}.)}
 \item[constraintsAndJointsInvolvement:\phantomsection\label{assumpCAJI}]{There are no constraints and joints involved throughout the simulation. (RefBy: \hyperref[IM:transMot]{IM:transMot}, \hyperref[lcIJC]{LC:Include-Joints-Constraints}, and \hyperref[IM:col2D]{IM:col2D}.)}
-\end{itemize}
+\end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
 This section focuses on the general equations and laws that GamePhysics is based on.
@@ -1507,7 +1507,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \label{Sec:FRs}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Simulation-Space:\phantomsection\label{simSpace}]{Create a space for all of the rigid bodies in the physical simulation to interact in.}
 \item[Input-Initial-Conditions:\phantomsection\label{inputInitialConds}]{Input the initial masses, velocities, orientations, angular velocities of, and forces applied on rigid bodies.}
 \item[Input-Surface-Properties:\phantomsection\label{inputSurfaceProps}]{Input the surface properties of the bodies such as friction or elasticity.}
@@ -1516,38 +1516,38 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Calculate-Rotation-Over-Time:\phantomsection\label{calcRotOverTime}]{Determine the orientations and angular velocities over a period of time of the 2D rigid bodies.}
 \item[Determine-Collisions:\phantomsection\label{deterColls}]{Determine if any of the rigid bodies in the space have collided.}
 \item[Determine-Collision-Response-Over-Time:\phantomsection\label{deterCollRespOverTime}]{Determine the positions and velocities over a period of time of the 2D rigid bodies that have undergone a collision.}
-\end{itemize}
+\end{description}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Performance:\phantomsection\label{performance}]{The execution time for collision detection and collision resolution shall be comparable to an existing 2D physics library on the market (e.g. Pymunk).}
 \item[Correctness:\phantomsection\label{correctness}]{The output of simulation results shall be compared to an existing implementation like Pymunk (please refer to: http://www.pymunk.org/en/latest/).}
 \item[Usability:\phantomsection\label{usability}]{Software shall be easy to learn and use. Usability shall be measured by how long it takes a user to learn how to use the library to create a small program to simulate the movement of 2 bodies over time in space. Creating a program should take no less than 30 to 60 minutes for an intermediate to experienced programmer.}
 \item[Understandability:\phantomsection\label{understandability}]{Users of Tamias2D shall be able to learn the software with ease. Users shall be able to easily create a small program using the library. Creating a small program to simulate the movement of 2 bodies in space should take no less that 60 minutes.}
 \item[Maintainability:\phantomsection\label{maintainability}]{If a likely change is made to the finished software, it will take at most 10$\%$ of the original development time, assuming the same development resources are available.}
-\end{itemize}
+\end{description}
 \section{Likely Changes}
 \label{Sec:LCs}
 This section lists the likely changes to be made to the software.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Variable-ODE-Solver:\phantomsection\label{lcVODES}]{The internal ODE-solving algorithm used by the library may be changed in the future.}
 \item[Expanded-Collisions:\phantomsection\label{lcEC}]{\hyperref[assumpCT]{A:collisionType} - The library may be expanded to deal with edge-to-edge and vertex-to-vertex collisions.}
 \item[Include-Dampening:\phantomsection\label{lcID}]{\hyperref[assumpDI]{A:dampingInvolvement} - The library may be expanded to include motion with damping.}
 \item[Include-Joints-Constraints:\phantomsection\label{lcIJC}]{\hyperref[assumpCAJI]{A:constraintsAndJointsInvolvement} - The library may be expanded to include joints and constraints.}
-\end{itemize}
+\end{description}
 \section{Unlikely Changes}
 \label{Sec:UCs}
 This section lists the unlikely changes to be made to the software.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Simulate-Rigid-Bodies:\phantomsection\label{ucSRB}]{The goal of the system is to simulate the interactions of rigid bodies.}
 \item[External-Input:\phantomsection\label{ucEI}]{There will always be a source of input data external to the software.}
 \item[Cartesian-Coordinate-System:\phantomsection\label{ucCCS}]{A Cartesian Coordinate system is used.}
 \item[Objects-Rigid-Bodies:\phantomsection\label{ucORB}]{All objects are rigid bodies.}
-\end{itemize}
+\end{description}
 \section{Off-The-Shelf Solutions}
 \label{Sec:offShelfSolns}
 As mentioned in the \hyperref[Sec:ProbDesc]{problem description}, there already exist free open source game physics libraries. Similar 2D physics libraries are:

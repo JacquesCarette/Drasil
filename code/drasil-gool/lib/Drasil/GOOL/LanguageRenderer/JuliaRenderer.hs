@@ -44,17 +44,18 @@ import Drasil.GOOL.RendererClassesProc (ProcRenderSym, RenderFile(..),
 import qualified Drasil.GOOL.RendererClassesProc as RC (module')
 import Drasil.GOOL.LanguageRenderer (printLabel, listSep, listSep',
   variableList, parameterList, forLabel, inLabel, tryLabel, catchLabel)
-import qualified Drasil.GOOL.LanguageRenderer as R (sqrt, abs, log10, log, exp,
-  sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, addComments,
-  blockCmt, docCmt, commentedMod, listSetFunc, commentedItem, break, continue)
-import Drasil.GOOL.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
-  unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
+import qualified Drasil.GOOL.LanguageRenderer as R (var, sqrt, abs, log10, log,
+  exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
+  addComments, blockCmt, docCmt, commentedMod, listSetFunc, commentedItem,
+  break, continue)
+import Drasil.GOOL.LanguageRenderer.Constructors (mkVal, mkStateVal, mkStateVar,
+  VSOp, unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
   typeBinExpr, mkStmt, mkStmtNoEnd)
 import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   block, multiBlock, litChar, litDouble, litInt, litString, valueOf, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
-  minusOp, multOp, divideOp, moduloOp, var, call, funcAppMixedArgs, lambda,
+  minusOp, multOp, divideOp, moduloOp, call, funcAppMixedArgs, lambda,
   listAccess, listSet, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
   emptyStmt, assign, increment, subAssign, print, comment, valStmt, returnStmt,
   param, docFunc, throw, arg, argsList, ifCond, smartAdd)
@@ -75,7 +76,8 @@ import Drasil.GOOL.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), ModData(..), md, updateMod, MethodData(..), mthd, OpData(..),
   ParamData(..), ProgData(..), TypeData(..), td, ValData(..), vd, VarData(..),
   vard, CommonThunk, progD, fd, pd, updateMthd, commonThunkDim, commonThunkElim,
-  vectorize, vectorize2, commonVecIndex, sumComponents, pureValue)
+  vectorize, vectorize2, commonVecIndex, sumComponents, pureValue, ScopeTag(..),
+  ScopeData, sd)
 import Drasil.GOOL.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
 import Drasil.GOOL.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
@@ -244,14 +246,14 @@ instance OpElim JuliaCode where
   bOpPrec = opPrec . unJLC
 
 instance ScopeSym JuliaCode where
-  type Scope JuliaCode = Doc
-  global = toCode empty -- TODO: implement this properly
-  mainFn = toCode empty
-  local = toCode empty
+  type Scope JuliaCode = ScopeData
+  global = toCode $ sd Global (text "global")
+  mainFn = global
+  local = toCode $ sd Local empty
 
 instance VariableSym JuliaCode where
   type Variable JuliaCode = VarData
-  var' n _ = G.var n
+  var' n _ t = mkStateVar n t (R.var n)
   constant' = var' -- TODO: add `const` keyword in global scope, and follow Python for local
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
   arrayElem i = A.arrayElem (litInt i)

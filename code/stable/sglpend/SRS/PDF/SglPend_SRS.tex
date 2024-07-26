@@ -13,6 +13,7 @@
 \usepackage{caption}
 \usepackage{graphics}
 \usepackage{svg}
+\usepackage{float}
 \usepackage{enumitem}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
@@ -193,7 +194,7 @@ This section provides general information about the system. It identifies the in
 \label{Sec:SysContext}
 \hyperref[Figure:sysCtxDiag]{Fig:sysCtxDiag} shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (SglPend). Arrows are used to show the data flow between the system and its environment.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../../../../datafiles/sglpend/SystemContextFigure.png}
 \caption{System Context}
@@ -249,7 +250,7 @@ The physical system of SglPend, as shown in \hyperref[Figure:sglpend]{Fig:sglpen
 \item[PS1:]{The rod.}
 \item[PS2:]{The mass.}
 \end{itemize}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{../../../../datafiles/sglpend/sglpend.jpg}
 \caption{The physical system}
@@ -1339,35 +1340,35 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/sglpend/avsa}
 \caption{TraceGraphAvsA}
 \label{Figure:TraceGraphAvsA}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/sglpend/avsall}
 \caption{TraceGraphAvsAll}
 \label{Figure:TraceGraphAvsAll}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/sglpend/refvsref}
 \caption{TraceGraphRefvsRef}
 \label{Figure:TraceGraphRefvsRef}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/sglpend/allvsr}
 \caption{TraceGraphAllvsR}
 \label{Figure:TraceGraphAllvsR}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/sglpend/allvsall}
 \caption{TraceGraphAllvsAll}

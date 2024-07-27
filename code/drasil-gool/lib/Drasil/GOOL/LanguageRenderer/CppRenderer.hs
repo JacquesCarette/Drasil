@@ -300,6 +300,7 @@ instance (Pair p) => OOVariableSym (p CppSrcCode CppHdrCode) where
 instance (Pair p) => VariableElim (p CppSrcCode CppHdrCode) where
   variableName v = variableName $ pfst v
   variableType v = pair (variableType $ pfst v) (variableType $ psnd v)
+  variableScope v = pair (variableScope $ pfst v) (variableScope $ psnd v)
 
 instance (Pair p) => InternalVarElim (p CppSrcCode CppHdrCode) where
   variableBind v = variableBind $ pfst v
@@ -1210,6 +1211,7 @@ instance OOVariableSym CppSrcCode where
 instance VariableElim CppSrcCode where
   variableName = varName . unCPPSC
   variableType = onCodeValue varType
+  variableScope = onCodeValue varScope
 
 instance InternalVarElim CppSrcCode where
   variableBind = varBind . unCPPSC
@@ -1908,6 +1910,7 @@ instance OOVariableSym CppHdrCode where
 instance VariableElim CppHdrCode where
   variableName = varName . unCPPHC
   variableType = onCodeValue varType
+  variableScope = onCodeValue varScope
 
 instance InternalVarElim CppHdrCode where
   variableBind = varBind . unCPPHC

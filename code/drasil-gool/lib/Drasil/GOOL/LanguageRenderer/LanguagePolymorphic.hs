@@ -25,16 +25,16 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
   NamedArgs, MixedCall, MixedCtorCall, BodySym(Body), bodyStatements, oneLiner,
   BlockSym(Block), TypeSym(Type), TypeElim(getType, getTypeString),
   VariableSym(Variable), VisibilitySym(..), VariableElim(variableName,
-  variableType), ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/),
-  sin, cos, tan), Comparison(..), funcApp, StatementSym(multi),
-  AssignStatement((&++)), (&=), IOStatement(printStr, printStrLn, printFile,
-  printFileStr, printFileStrLn), ifNoElse)
+  variableType, variableScope), ValueSym(Value, valueType),
+  NumericExpression((#+), (#-), (#/), sin, cos, tan), Comparison(..), funcApp,
+  StatementSym(multi), AssignStatement((&++)), (&=), IOStatement(printStr,
+  printStrLn, printFile, printFileStr, printFileStrLn), ifNoElse)
 import qualified Drasil.GOOL.InterfaceCommon as IC (TypeSym(int, double, char,
   string, listType, arrayType, listInnerType, funcType, void), locVar,
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
   IOStatement(print), ControlStatement(returnStmt, for), ParameterSym(param),
-  List(intToIndex), ScopeSym(local))
+  List(intToIndex))
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
   CSStateVar, FileSym(File), ModuleSym(Module), newObj, objMethodCallNoParams,
   ($.), PermanenceSym(..), convTypeOO)
@@ -201,7 +201,7 @@ objVar o' v' = do
   let objVar' Static = error 
         "Cannot access static variables through an object, use classVar instead"
       objVar' Dynamic = mkVar (variableName o `access` variableName v) 
-        IC.local (variableType v) (R.objVar (RC.variable o) (RC.variable v)) -- TODO: get scope from o
+        (variableScope o) (variableType v) (R.objVar (RC.variable o) (RC.variable v))
   objVar' (variableBind v)
 
 arrayElem :: (OORenderSym r) => SValue r -> SVariable r -> SVariable r
@@ -211,7 +211,7 @@ arrayElem i' v' = do
   let vName = variableName v ++ "[" ++ render (RC.value i) ++ "]"
       vType = listInnerType $ return $ variableType v
       vRender = RC.variable v <> brackets (RC.value i)
-  mkStateVar vName IC.local vType vRender -- TODO: get scope from v
+  mkStateVar vName (variableScope v) vType vRender
 
 -- Scope --
 local :: (Monad r) => r ScopeData

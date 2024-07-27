@@ -261,6 +261,7 @@ instance VariableSym JuliaCode where
 instance VariableElim JuliaCode where
   variableName = varName . unJLC
   variableType = onCodeValue varType
+  variableScope = onCodeValue varScope
 
 instance InternalVarElim JuliaCode where
   variableBind = varBind . unJLC
@@ -700,13 +701,14 @@ jlListSlice :: (CommonRenderSym r) => SVariable r -> SValue r ->
   Maybe (SValue r) -> Maybe (SValue r) -> SValue r -> MSBlock r
 jlListSlice vn vo beg end step = do
   stepV <- zoom lensMStoVS step
+  vnew <- zoom lensMStoVS vn
 
   let mbStepV = valueInt stepV
   bName <- genVarNameIf (isNothing beg && isNothing mbStepV) "begIdx"
   eName <- genVarNameIf (isNothing mbStepV) "endIdx"
 
-  let begVar = var bName int local -- TODO: get scope from vn
-      endVar = var eName int local -- TODO: get scope from vn
+  let begVar = var bName int (variableScope vnew)
+      endVar = var eName int (variableScope vnew)
 
       (setBeg, begVal) = case (beg, mbStepV) of
         -- If we have a value for beg, just use it

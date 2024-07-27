@@ -10,7 +10,7 @@ module Drasil.GOOL.LanguageRenderer.Macros (
 import Drasil.GOOL.CodeType (CodeType(..))
 import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
   SVariable, SValue, MSStatement, bodyStatements, oneLiner, TypeElim(getType),
-  VariableElim(variableType), listOf, ValueSym(valueType), 
+  VariableElim(variableType, variableScope), listOf, ValueSym(valueType), 
   NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), at, StatementSym(multi),
   AssignStatement((&+=), (&-=), (&++)), (&=))
@@ -66,10 +66,12 @@ runStrategy l strats rv av = maybe
 listSlice :: (CommonRenderSym r) => Maybe (SValue r) -> Maybe (SValue r) -> 
   Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
 listSlice beg end step vnew vold = do
+
+  vn <- zoom lensMStoVS vnew
   
   l_temp <- genVarName [] "temp"
   l_i <- genLoopIndex
-  let var_temp = IC.var l_temp (onStateValue variableType vnew) IC.local -- TODO: get scope from vnew
+  let var_temp = IC.var l_temp (onStateValue variableType vnew) (variableScope vn)
       v_temp = IC.valueOf var_temp
       var_i = IC.locVar l_i IC.int
       v_i = IC.valueOf var_i
@@ -82,8 +84,8 @@ listSlice beg end step vnew vold = do
   begName <- genVarNameIf (isNothing beg && isNothing mbStepV) "begIdx"
   endName <- genVarNameIf (isNothing end && isNothing mbStepV) "endIdx"
 
-  let (setBeg, begVal) = makeSetterVal begName step' mbStepV beg (IC.litInt 0)    (IC.listSize vold #- IC.litInt 1) IC.local -- TODO: get scope from vnew
-      (setEnd, endVal) = makeSetterVal endName step' mbStepV end (IC.listSize vold) (IC.litInt (-1)) IC.local -- TODO: get scope from vnew
+  let (setBeg, begVal) = makeSetterVal begName step' mbStepV beg (IC.litInt 0)    (IC.listSize vold #- IC.litInt 1) (variableScope vn)
+      (setEnd, endVal) = makeSetterVal endName step' mbStepV end (IC.listSize vold) (IC.litInt (-1)) (variableScope vn)
 
   mbBegV <- case beg of
         Nothing -> pure Nothing

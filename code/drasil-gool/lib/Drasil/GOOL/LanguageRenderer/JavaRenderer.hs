@@ -298,6 +298,7 @@ instance OOVariableSym JavaCode where
 instance VariableElim JavaCode where
   variableName = varName . unJC
   variableType = onCodeValue varType
+  variableScope = onCodeValue varScope
   
 instance InternalVarElim JavaCode where
   variableBind = varBind . unJC

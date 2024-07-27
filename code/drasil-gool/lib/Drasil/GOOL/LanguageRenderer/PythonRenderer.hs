@@ -291,6 +291,7 @@ instance OOVariableSym PythonCode where
 instance VariableElim PythonCode where
   variableName = varName . unPC
   variableType = onCodeValue varType
+  variableScope = onCodeValue varScope
 
 instance InternalVarElim PythonCode where
   variableBind = varBind . unPC
@@ -549,10 +550,10 @@ instance DeclStatement PythonCode where
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
-  constDecDef v e = do
-    v' <- zoom lensMStoVS v
-    let n = toConstName $ variableName v'
-        newConst = constant n (pure (variableType v')) local -- TODO: get scope from v
+  constDecDef v' e = do
+    v <- zoom lensMStoVS v'
+    let n = toConstName $ variableName v
+        newConst = constant n (pure (variableType v)) (variableScope v)
     available <- varNameAvailable n
     if available
       then varDecDef newConst e

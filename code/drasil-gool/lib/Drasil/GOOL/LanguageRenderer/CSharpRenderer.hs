@@ -291,6 +291,7 @@ instance OOVariableSym CSharpCode where
 instance VariableElim CSharpCode where
   variableName = varName . unCSC
   variableType = onCodeValue varType
+  variableScope = onCodeValue varScope
 
 instance InternalVarElim CSharpCode where
   variableBind = varBind . unCSC

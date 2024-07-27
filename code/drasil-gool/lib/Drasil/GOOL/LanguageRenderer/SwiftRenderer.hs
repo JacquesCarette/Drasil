@@ -298,6 +298,7 @@ instance OOVariableSym SwiftCode where
 instance VariableElim SwiftCode where
   variableName = varName . unSC
   variableType = onCodeValue varType
+  variableScope = onCodeValue varScope
 
 instance InternalVarElim SwiftCode where
   variableBind = varBind . unSC
@@ -1021,14 +1022,15 @@ swiftListSlice :: (OORenderSym r) => SVariable r -> SValue r ->
   Maybe (SValue r) -> Maybe (SValue r) -> SValue r -> MSBlock r
 swiftListSlice vn vo beg end step = do
   stepV <- zoom lensMStoVS step
+  vnew <- zoom lensMStoVS vn
   let mbStepV = valueInt stepV
 
   -- Generate fresh variable names if required
   begName <- genVarNameIf (isNothing beg && isNothing mbStepV) "begIdx"
   endName <- genVarNameIf (isNothing end && isNothing mbStepV) "endIdx"
 
-  let (setBeg, begVal) = M.makeSetterVal begName step mbStepV beg (litInt 0)    (listSize vo #- litInt 1) local -- TODO: get scope from vn
-      (setEnd, endVal) = M.makeSetterVal endName step mbStepV end (listSize vo) (litInt (-1)) local -- TODO: get scope from vn
+  let (setBeg, begVal) = M.makeSetterVal begName step mbStepV beg (litInt 0)    (listSize vo #- litInt 1) (variableScope vnew)
+      (setEnd, endVal) = M.makeSetterVal endName step mbStepV end (listSize vo) (litInt (-1)) (variableScope vnew)
       
       i = locVar "i" int
       setToSlice = vn &= swiftMapFunc (swiftStrideFunc begVal endVal step) (lambda [i] (listAccess vo (valueOf i)))

@@ -124,6 +124,7 @@ mainVar n = var' n mainFn
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
   variableType :: r (Variable r) -> r (Type r)
+  variableScope :: r (Variable r) -> r (Scope r)
 
 listVar :: (VariableSym r) => Label -> VSType r -> r (Scope r) -> SVariable r
 listVar n t = var n (listType t)

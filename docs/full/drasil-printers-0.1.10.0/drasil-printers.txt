@@ -1713,6 +1713,9 @@ enumerate :: D -> D
 description :: D -> D
 
 -- | Common commands and formatting options for a LaTeX document.
+description' :: D -> D
+
+-- | Common commands and formatting options for a LaTeX document.
 figure :: D -> D
 
 -- | Common commands and formatting options for a LaTeX document.

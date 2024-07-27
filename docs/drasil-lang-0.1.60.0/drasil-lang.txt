@@ -3973,7 +3973,7 @@ Numeric :: [(ItemType, Maybe String)] -> ListType
 -- | Simple list with items denoted by <tt>:</tt>. Renders as "Title: Item"
 Simple :: [ListTuple] -> ListType
 
--- | Descriptive list, renders as "<b>Title: Item</b>" (see
+-- | Descriptive list, renders as "<b>Title</b>: Item" (see
 --   <a>ListTuple</a>).
 Desc :: [ListTuple] -> ListType
 

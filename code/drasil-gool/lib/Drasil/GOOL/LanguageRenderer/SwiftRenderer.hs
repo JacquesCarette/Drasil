@@ -73,7 +73,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   increment, objDecNew, print, returnStmt, valStmt, comment, throw, ifCond,
   tryCatch, construct, param, method, getMethod, setMethod, initStmts,
   function, docFunc, buildClass, implementingClass, docClass, commentedClass,
-  modFromData, fileDoc, fileFromData, defaultOptSpace)
+  modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (classVar, 
   objVarSelf, intClass, buildModule, docMod', bindingError, extFuncAppMixedArgs, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, litArray, 
@@ -81,7 +81,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (classVar,
   openFileW, self, multiAssign, multiReturn, listDec, funcDecDef, 
   inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', bool, float, 
   stringRender', string', inherit, implements, functionDoc, intToIndex,
-  indexToInt, forEach')
+  indexToInt, forEach', global)
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (notOp, andOp, orOp, 
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, 
   listSize, varDecDef, extObjDecNew, switch, while)
@@ -93,7 +93,7 @@ import Drasil.GOOL.AST (Terminator(..), VisibilityTag(..), qualName, FileType(..
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), td, ValData(..), vd, Binding(..), VarData(..), vard,
   CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
-  commonThunkElim, commonThunkDim)
+  commonThunkElim, commonThunkDim, ScopeData)
 import Drasil.GOOL.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import Drasil.GOOL.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -274,10 +274,10 @@ instance OpElim SwiftCode where
   bOpPrec = opPrec . unSC
 
 instance ScopeSym SwiftCode where
-  type Scope SwiftCode = Doc
-  global = toCode empty
-  mainFn = toCode empty
-  local = toCode empty
+  type Scope SwiftCode = ScopeData
+  global = CP.global
+  mainFn = global
+  local = G.local
 
 instance VariableSym SwiftCode where
   type Variable SwiftCode = VarData

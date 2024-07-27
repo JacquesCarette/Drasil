@@ -71,7 +71,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   increment, objDecNew, print, closeFile, returnStmt, valStmt,
   comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
   setMethod, function, buildClass, implementingClass, commentedClass,
-  modFromData, fileDoc, fileFromData, defaultOptSpace)
+  modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
   extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
@@ -79,7 +79,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   mainFunction, buildModule', string, constDecDef, docInOutFunc, bindingError, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, listSetFunc, 
   extraClass, listAccessFunc, doubleRender, openFileR, openFileW, stateVar, 
-  inherit, implements, intToIndex, indexToInt)
+  inherit, implements, intToIndex, indexToInt, global)
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -93,7 +93,7 @@ import Drasil.GOOL.AST (Terminator(..), FileType(..), FileData(..), fileD,
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD, 
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
   vard, CommonThunk, pureValue, vectorize, vectorize2, sumComponents,
-  commonVecIndex, commonThunkElim, commonThunkDim)
+  commonVecIndex, commonThunkElim, commonThunkDim, ScopeData)
 import Drasil.GOOL.Helpers (angles, hicat, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
   on2StateWrapped, onCodeList, onStateList)
@@ -268,10 +268,10 @@ instance OpElim CSharpCode where
   bOpPrec = opPrec . unCSC
 
 instance ScopeSym CSharpCode where
-  type Scope CSharpCode = Doc
-  global = toCode empty
-  mainFn = toCode empty
-  local = toCode empty
+  type Scope CSharpCode = ScopeData
+  global = CP.global
+  mainFn = local
+  local = G.local
 
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData

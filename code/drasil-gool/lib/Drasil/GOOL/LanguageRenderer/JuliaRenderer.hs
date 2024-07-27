@@ -58,7 +58,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, call, funcAppMixedArgs, lambda,
   listAccess, listSet, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
   emptyStmt, assign, increment, subAssign, print, comment, valStmt, returnStmt,
-  param, docFunc, throw, arg, argsList, ifCond, smartAdd)
+  param, docFunc, throw, arg, argsList, ifCond, smartAdd, local)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (bool,
   boolRender, extVar, funcType, litArray, listDec, listDecDef, listAccessFunc,
   listSetFunc, notNull, extFuncAppMixedArgs, functionDoc, listSize, listAdd,
@@ -249,7 +249,7 @@ instance ScopeSym JuliaCode where
   type Scope JuliaCode = ScopeData
   global = toCode $ sd Global (text "global")
   mainFn = global
-  local = toCode $ sd Local empty
+  local = G.local
 
 instance VariableSym JuliaCode where
   type Variable JuliaCode = VarData

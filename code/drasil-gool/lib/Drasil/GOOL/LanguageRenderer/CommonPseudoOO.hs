@@ -11,7 +11,7 @@ module Drasil.GOOL.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   forLoopError, mainBody, inOutFunc, docInOutFunc', boolRender, bool,
   floatRender, float, stringRender', string', inherit, implements, listSize,
   listAdd, listAppend, intToIndex, indexToInt, intToIndex', indexToInt',
-  varDecDef, openFileR', openFileW', openFileA', argExists
+  varDecDef, openFileR', openFileW', openFileA', argExists, global
 ) where
 
 import Utils.Drasil (indent, stringList)
@@ -63,7 +63,7 @@ import Drasil.GOOL.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkStateVar, mkVal, mkVal)
 import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
   call, initStmts, docFunc, docFuncRepr, docClass, docMod, smartAdd, smartSub)
-import Drasil.GOOL.AST (VisibilityTag(..))
+import Drasil.GOOL.AST (VisibilityTag(..), ScopeTag(Global), ScopeData, sd)
 import Drasil.GOOL.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports,
   getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc,
@@ -90,6 +90,10 @@ intToIndex = id
 --   Since GOOL is 0-indexed, no adjustments need be made
 indexToInt :: SValue r -> SValue r
 indexToInt = id
+
+-- Global for langauges that don't use declarations for them
+global :: (Monad r) => r ScopeData
+global = toCode $ sd Global empty
 
 -- Python, Java, C#, and C++ --
 

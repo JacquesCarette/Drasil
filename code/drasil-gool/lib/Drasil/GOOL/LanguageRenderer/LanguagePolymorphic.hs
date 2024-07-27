@@ -5,7 +5,7 @@ module Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, 
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
   plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar,
-  classVarCheckStatic, arrayElem, litChar, litDouble, litInt, litString, 
+  classVarCheckStatic, arrayElem, local, litChar, litDouble, litInt, litString, 
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd, 
   listAppend, listAccess, listSet, getFunc, setFunc, 
@@ -60,7 +60,8 @@ import qualified Drasil.GOOL.RendererClassesOO as S (RenderFile(fileFromData),
   RenderClass(intClass, commentedClass))
 import qualified Drasil.GOOL.RendererClassesOO as RC (ClassElim(..),
   ModuleElim(..))
-import Drasil.GOOL.AST (Binding(..), Terminator(..), isSource)
+import Drasil.GOOL.AST (Binding(..), Terminator(..), isSource, ScopeTag(Local),
+  ScopeData, sd)
 import Drasil.GOOL.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode, 
   toState, onStateValue, on2StateValues, onStateList, getInnerType, getNestDegree,
   on2StateWrapped)
@@ -211,6 +212,10 @@ arrayElem i' v' = do
       vType = listInnerType $ return $ variableType v
       vRender = RC.variable v <> brackets (RC.value i)
   mkStateVar vName vType vRender
+
+-- Scope --
+local :: (Monad r) => r ScopeData
+local = toCode $ sd Local empty
 
 -- Values --
 

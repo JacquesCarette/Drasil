@@ -74,12 +74,12 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
   buildClass, implementingClass, commentedClass, modFromData, fileDoc,
-  fileFromData, defaultOptSpace)
+  fileFromData, defaultOptSpace, local)
 import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, funcType, buildModule, litArray,
   call', listSizeFunc, listAccessFunc', string, constDecDef, docInOutFunc,
-  listSetFunc, extraClass, intToIndex, indexToInt)
+  listSetFunc, extraClass, intToIndex, indexToInt, global)
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize,
@@ -92,7 +92,7 @@ import Drasil.GOOL.AST (Terminator(..), VisibilityTag(..), Binding(..), onBindin
   ModData(..), md, updateMod, OpData(..), ParamData(..), pd, ProgData(..),
   progD, emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd,
   VarData(..), vard, CommonThunk, pureValue, vectorize, vectorize2,
-  sumComponents, commonVecIndex, commonThunkElim, commonThunkDim)
+  sumComponents, commonVecIndex, commonThunkElim, commonThunkDim, ScopeData)
 import Drasil.GOOL.Classes (Pair(..))
 import Drasil.GOOL.Helpers (angles, doubleQuotedText, hicat, vibcat,
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues,
@@ -277,7 +277,7 @@ instance (Pair p) => OpElim (p CppSrcCode CppHdrCode) where
   bOpPrec o = bOpPrec $ pfst o
 
 instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
-  type Scope (p CppSrcCode CppHdrCode) = Doc
+  type Scope (p CppSrcCode CppHdrCode) = ScopeData
   global = pair global global
   mainFn = pair mainFn mainFn
   local = pair local local
@@ -1174,10 +1174,10 @@ instance OpElim CppSrcCode where
   bOpPrec = opPrec . unCPPSC
 
 instance ScopeSym CppSrcCode where
-  type Scope CppSrcCode = Doc
-  global = toCode empty
-  mainFn = toCode empty
-  local = toCode empty
+  type Scope CppSrcCode = ScopeData
+  global = CP.global
+  mainFn = local
+  local = G.local
 
 instance VariableSym CppSrcCode where
   type Variable CppSrcCode = VarData
@@ -1885,10 +1885,10 @@ instance OpElim CppHdrCode where
   bOpPrec = opPrec . unCPPHC
 
 instance ScopeSym CppHdrCode where
-  type Scope CppHdrCode = Doc
-  global = toCode empty
-  mainFn = toCode empty
-  local = toCode empty
+  type Scope CppHdrCode = ScopeData
+  global = CP.global
+  mainFn = local
+  local = G.local
 
 instance VariableSym CppHdrCode where
   type Variable CppHdrCode = VarData

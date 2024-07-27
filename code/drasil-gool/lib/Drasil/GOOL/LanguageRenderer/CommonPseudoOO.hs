@@ -28,7 +28,8 @@ import qualified Drasil.GOOL.InterfaceCommon as IC (argsList,
   Literal(litTrue, litFalse, litList, litInt, litString),
   VariableValue(valueOf), StatementSym(valStmt), DeclStatement(varDec,
   varDecDef, constDecDef), List(intToIndex, indexToInt), ParameterSym(param,
-  pointerParam), MethodSym(mainFunction), AssignStatement(assign))
+  pointerParam), MethodSym(mainFunction), AssignStatement(assign),
+  ScopeSym(local, global))
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
   OOTypeSym(obj), PermanenceSym(..), Initializers, objMethodCallNoParams)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (ClassSym(buildClass),
@@ -122,17 +123,17 @@ doxMod = docMod moduleDox
 -- Python, Java, C#, and Julia --
 
 extVar :: (CommonRenderSym r) => Label -> Label -> VSType r -> SVariable r
-extVar l n t = mkStateVar (l `access` n) t (R.extVar l n)
+extVar l n t = mkStateVar (l `access` n) IC.global t (R.extVar l n)
 
 -- Python, Java, and C# --
 
-classVar :: (CommonRenderSym r) => (Doc -> Doc -> Doc) -> VSType r -> SVariable r ->
-  SVariable r
+classVar :: (CommonRenderSym r) => (Doc -> Doc -> Doc) -> VSType r ->
+  SVariable r -> SVariable r
 classVar f c' v'= do
   c <- c'
   v <- v'
   vr <- varFromData
-    (variableBind v) (getTypeString c `access` variableName v)
+    (variableBind v) (getTypeString c `access` variableName v) IC.global
     (toState $ variableType v) (f (RC.type' c) (RC.variable v))
   toState $ classVarCheckStatic vr
 
@@ -385,8 +386,8 @@ stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar
 -- Python and Swift --
 
 self :: (OORenderSym r) => SVariable r
-self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar R.self (obj l)
-  R.self')
+self = zoom lensVStoMS getClassName >>=
+  (\l -> mkStateVar R.self IC.local (obj l) R.self')
 
 multiAssign :: (CommonRenderSym r) => (Doc -> Doc) -> [SVariable r] -> [SValue r] ->
   MSStatement r
@@ -400,7 +401,7 @@ multiAssign f vars vals = if length vals /= 1 && length vars /= length vals
   vls <- mapM (zoom lensMStoVS) vals
   let wrapIfMult :: [a] -> Doc -> Doc
       wrapIfMult l = if length l > 1 then f else id
-  mkStateVar "" IC.void (wrapIfMult vrs (variableList vrs)) &= 
+  mkStateVar "" IC.local IC.void (wrapIfMult vrs (variableList vrs)) &= 
     mkStateVal IC.void (wrapIfMult vls (valueList vls))
 
 multiReturn :: (CommonRenderSym r) => (Doc -> Doc) -> [SValue r] -> MSStatement r

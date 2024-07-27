@@ -7,7 +7,7 @@ module Drasil.GOOL.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
 
 import Drasil.GOOL.InterfaceCommon (Label, SMethod, MSBody, MSStatement, SValue,
   SVariable, MSParameter, VSType, VariableElim(variableName, variableType),
-  VisibilitySym(..), getType, convType)
+  VisibilitySym(..), getType, convType, ScopeSym(local))
 import qualified Drasil.GOOL.InterfaceCommon as IC (MethodSym(function),
   List(intToIndex), ParameterSym(param))
 import Drasil.GOOL.InterfaceProc (SFile, FSModule, FileSym (File),
@@ -87,7 +87,7 @@ arrayElem i' v' = do
   let vName = variableName v ++ "[" ++ render (RCC.value i) ++ "]"
       vType = listInnerType $ return $ variableType v
       vRender = RCC.variable v <> brackets (RCC.value i)
-  mkStateVar vName vType vRender
+  mkStateVar vName local vType vRender -- TODO: get scope from v
 
 funcDecDef :: (ProcRenderSym r) => SVariable r -> [SVariable r] -> MSBody r ->
   MSStatement r

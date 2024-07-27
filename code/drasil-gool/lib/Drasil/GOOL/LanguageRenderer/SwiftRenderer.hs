@@ -95,7 +95,8 @@ import Drasil.GOOL.AST (Terminator(..), VisibilityTag(..), qualName, FileType(..
   CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
   commonThunkElim, commonThunkDim, ScopeData)
 import Drasil.GOOL.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
-  onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
+  onStateValue, on2CodeValues, on3CodeValues, on2StateValues, onCodeList,
+  onStateList)
 import Drasil.GOOL.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS, revFiles, addLangImportVS,
   getLangImports, getLibImports, setFileType, getClassName, setModuleName,
@@ -281,7 +282,7 @@ instance ScopeSym SwiftCode where
 
 instance VariableSym SwiftCode where
   type Variable SwiftCode = VarData
-  var' n _    = G.var n
+  var'        = G.var
   constant'   = var'
   extVar _ n  = var' n local
   arrayElem i = G.arrayElem (litInt i)
@@ -303,9 +304,9 @@ instance InternalVarElim SwiftCode where
   variable = varDoc . unSC
 
 instance RenderVariable SwiftCode where
-  varFromData b n t' d = do
+  varFromData b n s t' d = do
     t <- t'
-    pure $ on2CodeValues (vard b n) t (toCode d)
+    pure $ on3CodeValues (vard b n) s t (toCode d)
 
 instance ValueSym SwiftCode where
   type Value SwiftCode = ValData

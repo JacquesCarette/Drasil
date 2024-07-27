@@ -13,8 +13,8 @@ import Utils.Drasil (indent)
 import Drasil.GOOL.CodeType (CodeType(..))
 import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, VSType, SVariable, 
   SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall, 
-  TypeElim(getType, getTypeString), 
-  VariableElim(..), ValueSym(Value, valueType), VisibilitySym(..))
+  TypeElim(getType, getTypeString), VariableElim(..), ValueSym(Value,
+  valueType), VisibilitySym(..), ScopeSym(local))
 import qualified Drasil.GOOL.InterfaceCommon as IC (TypeSym(bool, float),
   ValueExpression(funcAppMixedArgs), DeclStatement(varDec, varDecDef))
 import Drasil.GOOL.InterfaceGOOL (PermanenceSym(..), extNewObj, ($.))
@@ -93,7 +93,7 @@ orOp = orPrec "||"
 self :: (OORenderSym r) => SVariable r
 self = do 
   l <- zoom lensVStoMS getClassName 
-  mkStateVar R.this (IG.obj l) R.this'
+  mkStateVar R.this local (IG.obj l) R.this'
 
 -- Values --
 

@@ -306,8 +306,8 @@ instance (Pair p) => InternalVarElim (p CppSrcCode CppHdrCode) where
   variable v = RC.variable $ pfst v
 
 instance (Pair p) => RenderVariable (p CppSrcCode CppHdrCode) where
-  varFromData b n t' d = pair1 (\t ->varFromData b n t d)
-    (\t -> varFromData b n t d) t'
+  varFromData b n s t' d = pair1 (\t -> varFromData b n (pfst s) t d)
+    (\t -> varFromData b n (psnd s) t d) t'
 
 instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   type Value (p CppSrcCode CppHdrCode) = ValData
@@ -1181,19 +1181,19 @@ instance ScopeSym CppSrcCode where
 
 instance VariableSym CppSrcCode where
   type Variable CppSrcCode = VarData
-  var' n _        = G.var n
-  constant'       = var'
+  var'         = G.var
+  constant'    = var'
   extVar l n t = modify (addModuleImportVS l) >> var' n global t
-  arrayElem i     = G.arrayElem (litInt i)
+  arrayElem i  = G.arrayElem (litInt i)
 
 instance OOVariableSym CppSrcCode where
   staticVar' _ = G.staticVar
   self = C.self
-  classVar c' v'= do
+  classVar c' v' = do
     c <- c'
     v <- v'
     vfd <- varFromData
-      (variableBind v) (getTypeString c `nmSpcAccess` variableName v)
+      (variableBind v) (getTypeString c `nmSpcAccess` variableName v) global
       (toState $ variableType v) (cppClassVar (RC.type' c) (RC.variable v))
     toState $ classVarCheckStatic vfd
   extClassVar c v = do
@@ -1204,7 +1204,7 @@ instance OOVariableSym CppSrcCode where
   objVar = G.objVar
   objVarSelf v' = do
     v <- v'
-    mkVar (R.this ++ ptrAccess ++ variableName v)
+    mkVar (R.this ++ ptrAccess ++ variableName v) local
       (variableType v) (R.this' <> ptrAccess' <> RC.variable v)
 
 instance VariableElim CppSrcCode where
@@ -1216,9 +1216,9 @@ instance InternalVarElim CppSrcCode where
   variable = varDoc . unCPPSC
 
 instance RenderVariable CppSrcCode where
-  varFromData b n t' d = do
+  varFromData b n s t' d = do
     t <- t'
-    toState $ on2CodeValues (vard b n) t (toCode d)
+    toState $ on3CodeValues (vard b n) s t (toCode d)
 
 instance ValueSym CppSrcCode where
   type Value CppSrcCode = ValData
@@ -1620,7 +1620,7 @@ instance MethodSym CppSrcCode where
             t <- typeFromData (List String) 
               (constDec ++ " " ++ C.charRender) (constDec' <+> text 
               C.charRender)
-            mkVar argv t (cppDeref <> text argv <> array')
+            mkVar argv local t (cppDeref <> text argv <> array')
   docFunc = CP.doxFunc
 
   inOutFunc n s = cppsInOut (function n s)
@@ -1892,18 +1892,18 @@ instance ScopeSym CppHdrCode where
 
 instance VariableSym CppHdrCode where
   type Variable CppHdrCode = VarData
-  var' n _        = G.var n
-  constant' _ _ _ = mkStateVar "" void empty
-  extVar _ _ _    = mkStateVar "" void empty
-  arrayElem _ _   = mkStateVar "" void empty
+  var'            = G.var
+  constant' _ _ _ = mkStateVar "" local void empty
+  extVar _ _ _    = mkStateVar "" local void empty
+  arrayElem _ _   = mkStateVar "" local void empty
   
 instance OOVariableSym CppHdrCode where
   staticVar' _ = G.staticVar
-  self = mkStateVar "" void empty
-  classVar _ _ = mkStateVar "" void empty
-  extClassVar _ _ = mkStateVar "" void empty
+  self = mkStateVar "" local void empty
+  classVar _ _ = mkStateVar "" local void empty
+  extClassVar _ _ = mkStateVar "" local void empty
   objVar = G.objVar
-  objVarSelf _ = mkStateVar "" void empty
+  objVarSelf _ = mkStateVar "" local void empty
 
 instance VariableElim CppHdrCode where
   variableName = varName . unCPPHC
@@ -1914,9 +1914,9 @@ instance InternalVarElim CppHdrCode where
   variable = varDoc . unCPPHC
 
 instance RenderVariable CppHdrCode where
-  varFromData b n t' d = do
+  varFromData b n s t' d = do
     t <- t'
-    toState $ on2CodeValues (vard b n) t (toCode d)
+    toState $ on3CodeValues (vard b n) s t (toCode d)
 
 instance ValueSym CppHdrCode where
   type Value CppHdrCode = ValData

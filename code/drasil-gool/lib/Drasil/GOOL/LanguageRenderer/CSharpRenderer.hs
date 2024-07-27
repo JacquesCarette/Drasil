@@ -275,7 +275,7 @@ instance ScopeSym CSharpCode where
 
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
-  var' n _    = G.var n
+  var'        = G.var
   constant'   = var'
   extVar      = CP.extVar
   arrayElem i = G.arrayElem (litInt i)
@@ -297,9 +297,9 @@ instance InternalVarElim CSharpCode where
   variable = varDoc . unCSC
 
 instance RenderVariable CSharpCode where
-  varFromData b n t' d = do 
+  varFromData b n s t' d = do
     t <- t'
-    toState $ on2CodeValues (vard b n) t (toCode d)
+    toState $ on3CodeValues (vard b n) s t (toCode d)
 
 instance ValueSym CSharpCode where
   type Value CSharpCode = ValData

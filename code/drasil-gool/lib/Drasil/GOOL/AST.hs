@@ -126,9 +126,9 @@ svd = SVD
 -- Used as the underlying data type for Scopes in the Julia renderer
 data ScopeTag = Local | Global
 
-data ScopeData = SD {scopeTag :: ScopeTag, scopeDoc :: Doc}
+newtype ScopeData = SD {scopeTag :: ScopeTag}
 
-sd :: ScopeTag -> Doc -> ScopeData
+sd :: ScopeTag -> ScopeData
 sd = SD
 
 -- Used as the underlying data type for Types in all renderers

@@ -93,7 +93,7 @@ indexToInt = id
 
 -- Global for langauges that don't use declarations for them
 global :: (Monad r) => r ScopeData
-global = toCode $ sd Global empty
+global = toCode $ sd Global
 
 -- Python, Java, C#, and C++ --
 

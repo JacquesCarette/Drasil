@@ -215,7 +215,7 @@ arrayElem i' v' = do
 
 -- Scope --
 local :: (Monad r) => r ScopeData
-local = toCode $ sd Local empty
+local = toCode $ sd Local
 
 -- Values --
 

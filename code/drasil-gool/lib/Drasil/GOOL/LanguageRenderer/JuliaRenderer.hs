@@ -247,7 +247,7 @@ instance OpElim JuliaCode where
 
 instance ScopeSym JuliaCode where
   type Scope JuliaCode = ScopeData
-  global = toCode $ sd Global (text "global")
+  global = toCode $ sd Global
   mainFn = global
   local = G.local
 

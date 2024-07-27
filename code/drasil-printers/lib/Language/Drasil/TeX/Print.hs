@@ -29,8 +29,8 @@ import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import qualified Language.Drasil.Printing.Import as I
 import Language.Drasil.Printing.Helpers hiding (br, paren, sq, sqbrac)
 import Language.Drasil.TeX.Helpers (author, bold, br, caption, center, centering,
-  cite, command, command0, commandD, command2D, description, document, empty,
-  enumerate, externalref, figure, fraction, includegraphics, item, item',
+  cite, command, command0, commandD, command2D, description, description', document, 
+  empty, enumerate, externalref, figure, fraction, includegraphics, item, item',
   itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgBr, mkEnvArgSq,
   mkMinipage, newline, newpage, parens, quote, sec, snref, sq, superscript,
   symbDescription, texSym, title, toEqn)
@@ -374,10 +374,10 @@ makeList (Desc []   )        = empty
 makeList (Unordered []   )   = empty
 makeList (Ordered []   )     = empty
 makeList (Definitions []   ) = empty
-makeList (Simple items)      = itemize     $ vcat $ simItem items
-makeList (Desc items)        = description $ vcat $ simItem items
-makeList (Unordered items)   = itemize     $ vcat $ map plItem items
-makeList (Ordered items)     = enumerate   $ vcat $ map plItem items
+makeList (Simple items)      = description' $ vcat $ simItem items
+makeList (Desc items)        = description  $ vcat $ simItem items
+makeList (Unordered items)   = itemize      $ vcat $ map plItem items
+makeList (Ordered items)     = enumerate    $ vcat $ map plItem items
 makeList (Definitions items) = symbDescription $ vcat $ defItem items
 
 -- | Helper that renders items in 'makeList'.

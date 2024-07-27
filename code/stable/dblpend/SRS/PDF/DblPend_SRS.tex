@@ -258,12 +258,12 @@ This subsection provides a list of terms that are used in the subsequent section
 \label{Sec:PhysSyst}
 The physical system of DblPend, as shown in \hyperref[Figure:dblpend]{Fig:dblpend}, includes the following elements:
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[PS1:]{The first rod (with length of the first rod ${L_{1}}$).}
 \item[PS2:]{The second rod (with length of the second rod ${L_{2}}$).}
 \item[PS3:]{The first object.}
 \item[PS4:]{The second object.}
-\end{itemize}
+\end{description}
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=0.6\textwidth]{../../../../datafiles/dblpend/dblpend.png}
@@ -275,9 +275,9 @@ The physical system of DblPend, as shown in \hyperref[Figure:dblpend]{Fig:dblpen
 \label{Sec:GoalStmt}
 Given the masses, length of the rods, initial angle of the masses and the gravitational constant, the goal statement is:
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[motionMass:\phantomsection\label{motionMass}]{Calculate the motion of the masses.}
-\end{itemize}
+\end{description}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
 The instance models that govern DblPend are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
@@ -286,7 +286,7 @@ The instance models that govern DblPend are presented in the \hyperref[Sec:IMs]{
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[twoDMotion:\phantomsection\label{twoDMotion}]{The pendulum motion is two-dimensional (2D).}
 \item[cartSys:\phantomsection\label{cartSys}]{A Cartesian coordinate system is used.}
 \item[cartSysR:\phantomsection\label{cartSysR}]{The Cartesian coordinate system is right-handed where positive $x$-axis and $y$-axis point right up.}
@@ -294,7 +294,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[startOrigin:\phantomsection\label{startOrigin}]{The first rod is attached to the origin.}
 \item[firstPend:\phantomsection\label{firstPend}]{The first rod has two sides. One side attaches to the origin. Another side attaches to the first object.}
 \item[secondPend:\phantomsection\label{secondPend}]{The second rod has two sides. One side attaches to the first object. Another side attaches to the second object.}
-\end{itemize}
+\end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
 This section focuses on the general equations and laws that DblPend is based on.
@@ -1516,12 +1516,12 @@ This section provides the functional requirements, the tasks and behaviours that
 \label{Sec:FRs}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}.}
 \item[Verify-Input-Values:\phantomsection\label{verifyInptVals}]{Check the entered input values to ensure that they do not exceed the \hyperref[Sec:DataConstraints]{data constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
 \item[Calculate-Angle-Of-Rod:\phantomsection\label{calcAng}]{Calculate the following values: ${θ_{1}}$ and ${θ_{2}}$ (from \hyperref[IM:calOfAngle1]{IM:calOfAngle1} and \hyperref[IM:calOfAngle2]{IM:calOfAngle2}).}
 \item[Output-Values:\phantomsection\label{outputValues}]{Output ${θ_{1}}$ and ${θ_{2}}$ (from \hyperref[IM:calOfAngle1]{IM:calOfAngle1} and \hyperref[IM:calOfAngle2]{IM:calOfAngle2}).}
-\end{itemize}
+\end{description}
 \begin{longtblr}
 [caption={Required Inputs following \hyperref[inputValues]{FR:Input-Values}}]
 {colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
@@ -1540,10 +1540,10 @@ ${m_{2}}$ & Mass of the second object & ${\text{kg}}$
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Correctness:\phantomsection\label{correct}]{The outputs of the code have the \hyperref[Sec:CorSolProps]{properties of a correct solution}.}
 \item[Portability:\phantomsection\label{portable}]{The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.}
-\end{itemize}
+\end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Tab:TraceMatAvsA} shows the dependencies of the assumptions on each other. \hyperref[Table:TraceMatAvsAll]{Tab:TraceMatAvsAll} shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Tab:TraceMatRefvsRef} shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Table:TraceMatAllvsR]{Tab:TraceMatAllvsR} shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.

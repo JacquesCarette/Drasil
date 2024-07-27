@@ -391,10 +391,10 @@ This subsection provides a list of terms that are used in the subsequent section
 \label{Sec:PhysSyst}
 The physical system of SSP, as shown in \hyperref[Figure:PhysicalSystem]{Fig:PhysicalSystem}, includes the following elements:
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[PS1:]{A slope comprised of one soil layer.}
 \item[PS2:]{A water table, which may or may not exist.}
-\end{itemize}
+\end{description}
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../../../../datafiles/ssp/PhysSyst.png}
@@ -424,11 +424,11 @@ A free body diagram of the forces acting on a slice is displayed in \hyperref[Fi
 \label{Sec:GoalStmt}
 Given the shape of the soil mass, the location of the water table, and the material properties of the soil, the goal statements are:
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Identify-Crit-and-FS:\phantomsection\label{identifyCritAndFS}]{Identify the critical slip surface and the corresponding factor of safety.}
 \item[Determine-Normal-Forces:\phantomsection\label{determineNormalF}]{Determine the interslice normal forces between each pair of vertical slices of the slope.}
 \item[Determine-Shear-Forces:\phantomsection\label{determineShearF}]{Determine the interslice shear forces between each pair of vertical slices of the slope.}
-\end{itemize}
+\end{description}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
 The instance models that govern SSP are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
@@ -437,7 +437,7 @@ The instance models that govern SSP are presented in the \hyperref[Sec:IMs]{Inst
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Slip-Surface-Concave:\phantomsection\label{assumpSSC}]{The slip surface is concave with respect to the slope surface. The (${\symbf{x}_{\text{slip}}}$, ${\symbf{y}_{\text{slip}}}$) coordinates of a slip surface follow a concave up function. (RefBy: \hyperref[IM:crtSlpId]{IM:crtSlpId}.)}
 \item[Factor-of-Safety:\phantomsection\label{assumpFOS}]{The factor of safety is assumed to be constant across the entire slip surface. (RefBy: \hyperref[GD:mobShr]{GD:mobShr}.)}
 \item[Soil-Layer-Homogeneous:\phantomsection\label{assumpSLH}]{The soil mass is homogeneous, with consistent soil properties throughout. (RefBy: \hyperref[GD:sliceWght]{GD:sliceWght}, \hyperref[GD:resShr]{GD:resShr}, and \hyperref[LC_inhomogeneous]{LC:Calculate-Inhomogeneous-Soil-Layers}.)}
@@ -454,7 +454,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[Water-Intersects-Surface-Edge:\phantomsection\label{assumpWISE}]{The water table only intersects the slope surface at the edge of a slice. (RefBy: \hyperref[GD:srfWtrF]{GD:srfWtrF} and \hyperref[GD:sliceWght]{GD:sliceWght}.)}
 \item[Negligible-Effect-Surface-Slope-Seismic:\phantomsection\label{assumpNESSS}]{The effect of the slope of the surface of the soil on the seismic force is assumed to be negligible. (RefBy: \hyperref[GD:momentEql]{GD:momentEql}.)}
 \item[Hydrostatic-Force-Slice-Midpoint:\phantomsection\label{assumpHFSM}]{The resultant surface hydrostatic forces act into the midpoint of each slice surface and the resultant base hydrostatic forces act into the midpoint of each slice base. (RefBy: \hyperref[GD:srfWtrF]{GD:srfWtrF}, \hyperref[GD:momentEql]{GD:momentEql}, and \hyperref[GD:baseWtrF]{GD:baseWtrF}.)}
-\end{itemize}
+\end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
 This section focuses on the general equations and laws that SSP is based on.
@@ -2586,7 +2586,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \label{Sec:FRs}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Read-and-Store:\phantomsection\label{readAndStore}]{Read the inputs, shown in the table \hyperref[Table:ReqInputs]{Required Inputs}, and store the data.}
 \item[Verify-Input:\phantomsection\label{verifyInput}]{Verify that the input data lie within the \hyperref[Sec:DataConstraints]{physical constraints}.}
 \item[Determine-Critical-Slip-Surface:\phantomsection\label{determineCritSlip}]{Determine the critical slip surface for the input slope, corresponding to the minimum factor of safety, by using \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, and \hyperref[IM:intsliceFs]{IM:intsliceFs} to calculate the factor of safety for a slip surface and using \hyperref[IM:crtSlpId]{IM:crtSlpId} to find the slip surface that minimizes it.}
@@ -2597,7 +2597,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Display-Interslice-Normal-Forces:\phantomsection\label{displayNormal}]{Using \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, and \hyperref[IM:intsliceFs]{IM:intsliceFs}, calculate and graphically display the interslice normal forces.}
 \item[Display-Interslice-Shear-Forces:\phantomsection\label{displayShear}]{Using \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, and \hyperref[IM:intsliceFs]{IM:intsliceFs}, calculate and graphically display the interslice shear forces.}
 \item[Write-Results-To-File:\phantomsection\label{writeToFile}]{Provide the option of writing the output result data, as given in \hyperref[displayInput]{FR:Display-Input}, \hyperref[displayGraph]{FR:Display-Graph}, \hyperref[displayFS]{FR:Display-Factor-of-Safety}, \hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}, and \hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}, to a file.}
-\end{itemize}
+\end{description}
 \begin{longtblr}
 [caption={Required Inputs following \hyperref[readAndStore]{FR:Read-and-Store}}]
 {colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
@@ -2662,29 +2662,29 @@ ${{y_{\text{slip}}}^{\text{min}}}$ & minimum $y$-coordinate
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Correct:\phantomsection\label{correct}]{The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Sec:Properties of a Correct Solution}.}
 \item[Understandable:\phantomsection\label{understandable}]{The code is modularized with complete module guide and module interface specification.}
 \item[Reusable:\phantomsection\label{reusable}]{The code is modularized.}
 \item[Maintainable:\phantomsection\label{maintainable}]{If a likely change is made to the finished software, it will take at most 10$\%$ of the original development time, assuming the same development resources are available.}
-\end{itemize}
+\end{description}
 \section{Likely Changes}
 \label{Sec:LCs}
 This section lists the likely changes to be made to the software.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Calculate-Inhomogeneous-Soil-Layers:\phantomsection\label{LC_inhomogeneous}]{\hyperref[assumpSLH]{A:Soil-Layer-Homogeneous} - The system currently assumes the soil mass is homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.}
 \item[Calculate-Seismic-Force:\phantomsection\label{LC_seismic}]{\hyperref[assumpSF]{A:Seismic-Force} - The system currently assumes no seismic force. In the future, calculations can be added for the presence of seismic force.}
 \item[Calculate-External-Force:\phantomsection\label{LC_external}]{\hyperref[assumpSL]{A:Surface-Load} - The system currently assumes no external forces. In the future, calculations can be added for an imposed surface load on the slope.}
-\end{itemize}
+\end{description}
 \section{Unlikely Changes}
 \label{Sec:UCs}
 This section lists the unlikely changes to be made to the software.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Normal-And-Shear-Linear-Only:\phantomsection\label{UC_normshearlinear}]{Changes related to \hyperref[assumpINSFL]{A:Interslice-Norm-Shear-Forces-Linear} are not possible due to the dependency of the calculations on the linear relationship between interslice normal forces and interslice shear forces.}
 \item[2D-Analysis-Only:\phantomsection\label{UC_2donly}]{\hyperref[assumpENSL]{A:Effective-Norm-Stress-Large} allows for 2D analysis with these models only because stress along the $z$-direction is zero. These models do not take into account stress in the $z$-direction, and therefore cannot be used without manipulation to attempt three-dimensional analysis.}
-\end{itemize}
+\end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Tab:TraceMatAvsA} shows the dependencies of the assumptions on each other. \hyperref[Table:TraceMatAvsAll]{Tab:TraceMatAvsAll} shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Tab:TraceMatRefvsRef} shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Table:TraceMatAllvsR]{Tab:TraceMatAllvsR} shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.

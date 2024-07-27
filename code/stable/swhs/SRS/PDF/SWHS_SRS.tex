@@ -379,11 +379,11 @@ This subsection provides a list of terms that are used in the subsequent section
 \label{Sec:PhysSyst}
 The physical system of SWHS, as shown in \hyperref[Figure:Tank]{Fig:Tank}, includes the following elements:
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[PS1:]{Tank containing water.}
 \item[PS2:]{Heating coil at bottom of tank. (${q_{\text{C}}}$ represents the heat flux into the water from the coil.)}
 \item[PS3:]{PCM suspended in tank. (${q_{\text{P}}}$ represents the heat flux into the PCM from water.)}
-\end{itemize}
+\end{description}
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../../../../datafiles/swhs/Tank.png}
@@ -395,12 +395,12 @@ The physical system of SWHS, as shown in \hyperref[Figure:Tank]{Fig:Tank}, inclu
 \label{Sec:GoalStmt}
 Given the temperature of the heating coil, the initial conditions for the temperature of the water and the temperature of the phase change material, and the material properties, the goal statements are:
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Predict-Water-Temperature:\phantomsection\label{waterTempGS}]{Predict the temperature of the water over time.}
 \item[Predict-PCM-Temperature:\phantomsection\label{pcmTempGS}]{Predict the temperature of the phase change material over time.}
 \item[Predict-Water-Energy:\phantomsection\label{waterEnergyGS}]{Predict the change in heat energy in the water over time.}
 \item[Predict-PCM-Energy:\phantomsection\label{pcmEnergyGS}]{Predict the change in heat energy in the PCM over time.}
-\end{itemize}
+\end{description}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
 The instance models that govern SWHS are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
@@ -409,7 +409,7 @@ The instance models that govern SWHS are presented in the \hyperref[Sec:IMs]{Ins
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Thermal-Energy-Only:\phantomsection\label{assumpTEO}]{The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible. (RefBy: \hyperref[TM:consThermE]{TM:consThermE}.)}
 \item[Heat-Transfer-Coeffs-Constant:\phantomsection\label{assumpHTCC}]{All heat transfer coefficients are constant over time. (RefBy: \hyperref[TM:nwtnCooling]{TM:nwtnCooling}.)}
 \item[Constant-Water-Temp-Across-Tank:\phantomsection\label{assumpCWTAT}]{The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. (RefBy: \hyperref[GD:rocTempSimp]{GD:rocTempSimp}, \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, and \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}.)}
@@ -430,7 +430,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[No-Gaseous-State-PCM:\phantomsection\label{assumpNGSP}]{The PCM is either in a liquid state or a solid state but not a gaseous state. (RefBy: \hyperref[IM:heatEInPCM]{IM:heatEInPCM}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[unlikeChgWPFS]{UC:Water-PCM-Fixed-States}, and \hyperref[unlikeChgNGS]{UC:No-Gaseous-State}.)}
 \item[Atmospheric-Pressure-Tank:\phantomsection\label{assumpAPT}]{The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${{}^{\circ}\text{C}}$ and 100${{}^{\circ}\text{C}}$, respectively. (RefBy: \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr} and \hyperref[IM:heatEInWtr]{IM:heatEInWtr}.)}
 \item[Volume-Coil-Negligible:\phantomsection\label{assumpVCN}]{When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible. (RefBy: \hyperref[DD:waterVolume.pcm]{DD:waterVolume\_pcm}.)}
-\end{itemize}
+\end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
 This section focuses on the general equations and laws that SWHS is based on.
@@ -1522,7 +1522,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \label{Sec:FRs}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}, which define the tank parameters, material properties, and initial conditions.}
 \item[Find-Mass:\phantomsection\label{findMass}]{Use the inputs in \hyperref[inputValues]{FR:Input-Values} to find the masses needed for \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{IM:heatEInWtr}, and \hyperref[IM:heatEInPCM]{IM:heatEInPCM}, using \hyperref[DD:waterMass]{DD:waterMass}, \hyperref[DD:waterVolume.pcm]{DD:waterVolume\_pcm}, and \hyperref[DD:tankVolume]{DD:tankVolume}.}
 \item[Check-Input-with-Physical\_Constraints:\phantomsection\label{checkWithPhysConsts}]{Verify that the inputs satisfy the required \hyperref[Sec:DataConstraints]{physical constraints}.}
@@ -1532,7 +1532,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Calculate-PCM-Melt-Begin-Time:\phantomsection\label{calcPCMMeltBegin}]{Calculate and output the time at which the PCM begins to melt ${{t_{\text{melt}}}^{\text{init}}}$ (from \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}).}
 \item[Calculate-PCM-Melt-End-Time:\phantomsection\label{calcPCMMeltEnd}]{Calculate and output the time at which the PCM stops melting ${{t_{\text{melt}}}^{\text{final}}}$ (from \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}).}
 \item[Output-Values:\phantomsection\label{outputValues}]{Output ${T_{\text{W}}}$($t$) (from \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}), ${T_{\text{P}}}$($t$) (from \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}), ${E_{\text{W}}}$($t$) (from \hyperref[IM:heatEInWtr]{IM:heatEInWtr}), and ${E_{\text{P}}}$($t$) (from \hyperref[IM:heatEInPCM]{IM:heatEInPCM}).}
-\end{itemize}
+\end{description}
 \begin{longtblr}
 [caption={Required Inputs following \hyperref[inputValues]{FR:Input-Values}}]
 {colspec={l X[l] l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
@@ -1583,34 +1583,34 @@ ${ρ_{\text{W}}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Correct:\phantomsection\label{correct}]{The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Properties of a Correct Solution}.}
 \item[Verifiable:\phantomsection\label{verifiable}]{The code is tested with complete verification and validation plan.}
 \item[Understandable:\phantomsection\label{understandable}]{The code is modularized with complete module guide and module interface specification.}
 \item[Reusable:\phantomsection\label{reusable}]{The code is modularized.}
 \item[Maintainable:\phantomsection\label{maintainable}]{If a likely change is made to the finished software, it will take at most 10$\%$ of the original development time, assuming the same development resources are available.}
-\end{itemize}
+\end{description}
 \section{Likely Changes}
 \label{Sec:LCs}
 This section lists the likely changes to be made to the software.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Uniform-Temperature-PCM:\phantomsection\label{likeChgUTP}]{\hyperref[assumpTPCAV]{A:Temp-PCM-Constant-Across-Volume} - PCM is actually a poor thermal conductor, so the assumption of uniform temperature of the phase change material is not likely.}
 \item[Temperature-Coil-Variable-Over-Day:\phantomsection\label{likeChgTCVOD}]{\hyperref[assumpTHCCoT]{A:Temp-Heating-Coil-Constant-over-Time} - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.}
 \item[Temperature-Coil-Variable-Over-Length:\phantomsection\label{likeChgTCVOL}]{\hyperref[assumpTHCCoL]{A:Temp-Heating-Coil-Constant-over-Length} - The temperature of the heating coil will actually change along its length as the water within it cools.}
 \item[Discharging-Tank:\phantomsection\label{likeChgDT}]{\hyperref[assumpCTNOD]{A:Charging-Tank-No-Temp-Discharge} - The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.}
 \item[Different-Initial-Temps-PCM-Water:\phantomsection\label{likeChgDITPW}]{\hyperref[assumpSITWP]{A:Same-Initial-Temp-Water-PCM} - To add more flexibility to the simulation, the initial temperature of the water and the PCM could be allowed to have different values.}
 \item[Tank-Lose-Heat:\phantomsection\label{likeChgTLH}]{\hyperref[assumpPIT]{A:Perfect-Insulation-Tank} - Any real tank cannot be perfectly insulated and will lose heat.}
-\end{itemize}
+\end{description}
 \section{Unlikely Changes}
 \label{Sec:UCs}
 This section lists the unlikely changes to be made to the software.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Water-PCM-Fixed-States:\phantomsection\label{unlikeChgWPFS}]{\hyperref[assumpWAL]{A:Water-Always-Liquid}, \hyperref[assumpNGSP]{A:No-Gaseous-State-PCM} - It is unlikely for the change of water from liquid to a solid or the state change of the phase change material from a liquid to a gas to be considered.}
 \item[No-Internal-Heat-Generation:\phantomsection\label{unlikeChgNIHG}]{\hyperref[assumpNIHGBWP]{A:No-Internal-Heat-Generation-By-Water-PCM} - Is used for the derivations of \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr} and \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}.}
 \item[No-Gaseous-State:\phantomsection\label{unlikeChgNGS}]{\hyperref[assumpNGSP]{A:No-Gaseous-State-PCM} - Is used for the derivation of \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM} and for the equation given by \hyperref[IM:heatEInPCM]{IM:heatEInPCM} to be valid.}
-\end{itemize}
+\end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Tab:TraceMatAvsA} shows the dependencies of the assumptions on each other. \hyperref[Table:TraceMatAvsAll]{Tab:TraceMatAvsAll} shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Tab:TraceMatRefvsRef} shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Table:TraceMatAllvsR]{Tab:TraceMatAllvsR} shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.

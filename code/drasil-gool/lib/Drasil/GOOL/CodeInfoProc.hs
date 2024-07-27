@@ -108,6 +108,7 @@ instance VariableSym CodeInfoProc where
 instance VariableElim CodeInfoProc where
   variableName _ = ""
   variableType _ = toCode ""
+  variableScope _ = toCode ()
 
 instance ValueSym CodeInfoProc where
   type Value CodeInfoProc = ()

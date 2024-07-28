@@ -57,6 +57,13 @@ Empty :: Terminator
 data VisibilityTag
 Pub :: VisibilityTag
 Priv :: VisibilityTag
+data ScopeTag
+Local :: ScopeTag
+Global :: ScopeTag
+newtype ScopeData
+SD :: ScopeTag -> ScopeData
+[scopeTag] :: ScopeData -> ScopeTag
+sd :: ScopeTag -> ScopeData
 data QualifiedName
 qualName :: String -> String -> QualifiedName
 data FileType
@@ -1224,6 +1231,7 @@ objVar :: CommonRenderSym r => SVariable r -> SVariable r -> SVariable r
 --   variables from a class
 classVarCheckStatic :: CommonRenderSym r => r (Variable r) -> r (Variable r)
 arrayElem :: OORenderSym r => SValue r -> SVariable r -> SVariable r
+local :: Monad r => r ScopeData
 litChar :: CommonRenderSym r => (Doc -> Doc) -> Char -> SValue r
 litDouble :: CommonRenderSym r => Double -> SValue r
 litInt :: CommonRenderSym r => Integer -> SValue r
@@ -1421,6 +1429,7 @@ openFileR' :: CommonRenderSym r => SValue r -> SValue r
 openFileW' :: CommonRenderSym r => SValue r -> SValue r
 openFileA' :: CommonRenderSym r => SValue r -> SValue r
 argExists :: CommonRenderSym r => Integer -> SValue r
+global :: Monad r => r ScopeData
 
 
 -- | The logic to render Python code is contained in this module

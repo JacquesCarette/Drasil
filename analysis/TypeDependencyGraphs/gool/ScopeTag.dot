@@ -1,0 +1,4 @@
+digraph scopetag{
+ScopeTag	[shape=oval, color=cyan3, label="ScopeTag"];
+ScopeTag -> ScopeTag;
+}

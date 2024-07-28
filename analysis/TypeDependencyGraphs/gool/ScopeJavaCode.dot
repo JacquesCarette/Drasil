@@ -1,4 +1,4 @@
 digraph scopejavacode{
 ScopeJavaCode	[shape=oval, color=red2, label="ScopeJavaCode"];
-ScopeJavaCode -> Doc;
+ScopeJavaCode -> ScopeData;
 }

@@ -46,7 +46,7 @@ digraph alltypes {
 		}
 		subgraph scopecsharpcode{
 		ScopeCSharpCode	[shape=oval, color=red2, label="ScopeCSharpCode"];
-		ScopeCSharpCode -> Doc;
+		ScopeCSharpCode -> ScopeData;
 		}
 		subgraph variablecsharpcode{
 		VariableCSharpCode	[shape=oval, color=red2, label="VariableCSharpCode"];
@@ -166,7 +166,7 @@ digraph alltypes {
 		}
 		subgraph scopepcppsrccodecpphdrcode{
 		ScopepCppSrcCodeCppHdrCode	[shape=oval, color=red2, label="ScopepCppSrcCodeCppHdrCode"];
-		ScopepCppSrcCodeCppHdrCode -> Doc;
+		ScopepCppSrcCodeCppHdrCode -> ScopeData;
 		}
 		subgraph variablepcppsrccodecpphdrcode{
 		VariablepCppSrcCodeCppHdrCode	[shape=oval, color=red2, label="VariablepCppSrcCodeCppHdrCode"];
@@ -270,7 +270,7 @@ digraph alltypes {
 		}
 		subgraph scopecppsrccode{
 		ScopeCppSrcCode	[shape=oval, color=red2, label="ScopeCppSrcCode"];
-		ScopeCppSrcCode -> Doc;
+		ScopeCppSrcCode -> ScopeData;
 		}
 		subgraph variablecppsrccode{
 		VariableCppSrcCode	[shape=oval, color=red2, label="VariableCppSrcCode"];
@@ -358,7 +358,7 @@ digraph alltypes {
 		}
 		subgraph scopecpphdrcode{
 		ScopeCppHdrCode	[shape=oval, color=red2, label="ScopeCppHdrCode"];
-		ScopeCppHdrCode -> Doc;
+		ScopeCppHdrCode -> ScopeData;
 		}
 		subgraph variablecpphdrcode{
 		VariableCppHdrCode	[shape=oval, color=red2, label="VariableCppHdrCode"];
@@ -456,7 +456,7 @@ digraph alltypes {
 		}
 		subgraph scopejavacode{
 		ScopeJavaCode	[shape=oval, color=red2, label="ScopeJavaCode"];
-		ScopeJavaCode -> Doc;
+		ScopeJavaCode -> ScopeData;
 		}
 		subgraph variablejavacode{
 		VariableJavaCode	[shape=oval, color=red2, label="VariableJavaCode"];
@@ -550,7 +550,7 @@ digraph alltypes {
 		}
 		subgraph scopejuliacode{
 		ScopeJuliaCode	[shape=oval, color=red2, label="ScopeJuliaCode"];
-		ScopeJuliaCode -> Doc;
+		ScopeJuliaCode -> ScopeData;
 		}
 		subgraph variablejuliacode{
 		VariableJuliaCode	[shape=oval, color=red2, label="VariableJuliaCode"];
@@ -648,7 +648,7 @@ digraph alltypes {
 		}
 		subgraph scopepythoncode{
 		ScopePythonCode	[shape=oval, color=red2, label="ScopePythonCode"];
-		ScopePythonCode -> Doc;
+		ScopePythonCode -> ScopeData;
 		}
 		subgraph variablepythoncode{
 		VariablePythonCode	[shape=oval, color=red2, label="VariablePythonCode"];
@@ -746,7 +746,7 @@ digraph alltypes {
 		}
 		subgraph scopeswiftcode{
 		ScopeSwiftCode	[shape=oval, color=red2, label="ScopeSwiftCode"];
-		ScopeSwiftCode -> Doc;
+		ScopeSwiftCode -> ScopeData;
 		}
 		subgraph variableswiftcode{
 		VariableSwiftCode	[shape=oval, color=red2, label="VariableSwiftCode"];
@@ -841,6 +841,10 @@ digraph alltypes {
 		StateVarData	[shape=oval, color=cyan3, label="StateVarData"];
 		StateVarData -> VisibilityTag;
 		StateVarData -> Doc;
+		}
+		subgraph scopetag{
+		ScopeTag	[shape=oval, color=cyan3, label="ScopeTag"];
+		ScopeTag -> ScopeTag;
 		}
 		subgraph typedata{
 		TypeData	[shape=oval, color=cyan3, label="TypeData"];

@@ -1,4 +1,4 @@
 digraph scopecsharpcode{
 ScopeCSharpCode	[shape=oval, color=red2, label="ScopeCSharpCode"];
-ScopeCSharpCode -> Doc;
+ScopeCSharpCode -> ScopeData;
 }

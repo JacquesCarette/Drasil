@@ -57,11 +57,11 @@
 </span><span id="line-27"></span><span id="message"><span class="annot"><span class="annottext">message :: PExpr
 </span><a href="Drasil.Projectile.Expressions.html#message"><span class="hs-identifier hs-var hs-var">message</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; [(r, r)] -&gt; r
 </span><span class="hs-identifier hs-var">completeCase</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(r, r)
-</span><a href="#local-6989586621679069487"><span class="hs-identifier hs-var">case1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(r, r)
-</span><a href="#local-6989586621679069486"><span class="hs-identifier hs-var">case2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(r, r)
-</span><a href="#local-6989586621679069485"><span class="hs-identifier hs-var">case3</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-28"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679069487"><span class="annot"><span class="annottext">case1 :: (r, r)
-</span><a href="#local-6989586621679069487"><span class="hs-identifier hs-var hs-var">case1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; String -&gt; r
+</span><a href="#local-6989586621679069496"><span class="hs-identifier hs-var">case1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(r, r)
+</span><a href="#local-6989586621679069495"><span class="hs-identifier hs-var">case2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(r, r)
+</span><a href="#local-6989586621679069494"><span class="hs-identifier hs-var">case3</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-28"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679069496"><span class="annot"><span class="annottext">case1 :: (r, r)
+</span><a href="#local-6989586621679069496"><span class="hs-identifier hs-var hs-var">case1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; String -&gt; r
 </span><span class="hs-identifier hs-var">str</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The target was hit.&quot;</span></span><span class="hs-special">,</span><span>        </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">abs_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -73,8 +73,8 @@
 </span><span class="hs-operator hs-var">$&lt;</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.Projectile.Unitals.html#tol"><span class="hs-identifier hs-var">tol</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-29"></span><span>        </span><span id="local-6989586621679069486"><span class="annot"><span class="annottext">case2 :: (r, r)
-</span><a href="#local-6989586621679069486"><span class="hs-identifier hs-var hs-var">case2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; String -&gt; r
+</span><span id="line-29"></span><span>        </span><span id="local-6989586621679069495"><span class="annot"><span class="annottext">case2 :: (r, r)
+</span><a href="#local-6989586621679069495"><span class="hs-identifier hs-var hs-var">case2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; String -&gt; r
 </span><span class="hs-identifier hs-var">str</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The projectile fell short.&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
@@ -82,8 +82,8 @@
 </span><span class="hs-operator hs-var">$&lt;</span></span><span> </span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-30"></span><span>        </span><span id="local-6989586621679069485"><span class="annot"><span class="annottext">case3 :: (r, r)
-</span><a href="#local-6989586621679069485"><span class="hs-identifier hs-var hs-var">case3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; String -&gt; r
+</span><span id="line-30"></span><span>        </span><span id="local-6989586621679069494"><span class="annot"><span class="annottext">case3 :: (r, r)
+</span><a href="#local-6989586621679069494"><span class="hs-identifier hs-var hs-var">case3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; String -&gt; r
 </span><span class="hs-identifier hs-var">str</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The projectile went long.&quot;</span></span><span class="hs-special">,</span><span>  </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept

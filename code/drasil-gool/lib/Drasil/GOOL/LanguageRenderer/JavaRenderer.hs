@@ -74,7 +74,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
   buildClass, implementingClass, commentedClass, modFromData, fileDoc,
-  fileFromData, defaultOptSpace)
+  fileFromData, defaultOptSpace, local)
 import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int, 
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
@@ -83,7 +83,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   docMain, mainFunction, buildModule', bindingError, listDecDef, 
   destructorError, stateVarDef, constVar, litArray, call', listSizeFunc, 
   listAccessFunc', notNull, doubleRender, double, openFileR, openFileW, 
-  stateVar, floatRender, float, string', intToIndex, indexToInt)
+  stateVar, floatRender, float, string', intToIndex, indexToInt, global)
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -97,7 +97,7 @@ import Drasil.GOOL.AST (Terminator(..), VisibilityTag(..), qualName,
   updateMod, MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd,
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard,
   CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
-  commonThunkElim, commonThunkDim)
+  commonThunkElim, commonThunkDim, ScopeData)
 import Drasil.GOOL.CodeAnalysis (Exception(..), ExceptionType(..), exception, 
   stdExc, HasException(..))
 import Drasil.GOOL.Helpers (emptyIfNull, toCode, toState, onCodeValue, 
@@ -275,10 +275,10 @@ instance OpElim JavaCode where
   bOpPrec = opPrec . unJC
 
 instance ScopeSym JavaCode where
-  type Scope JavaCode = Doc
-  global = toCode empty
-  mainFn = toCode empty
-  local = toCode empty
+  type Scope JavaCode = ScopeData
+  global = CP.global
+  mainFn = local
+  local = G.local
 
 instance VariableSym JavaCode where
   type Variable JavaCode = VarData

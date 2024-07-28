@@ -1,13 +1,14 @@
-module Drasil.GOOL.AST (Terminator(..), VisibilityTag(..), QualifiedName, qualName, 
-  FileType(..), isSource, Binding(..), onBinding, BindData(bind, bindDoc), bd, 
-  FileData(filePath, fileMod), fileD, updateFileMod, FuncData(fType, funcDoc), 
-  fd, ModData(name, modDoc), md, updateMod, MethodData(mthdDoc), mthd, 
-  updateMthd, OpData(opPrec, opDoc), od, ParamData(paramVar, paramDoc), pd, 
-  paramName, updateParam, ProgData(progName, progPurp, progMods), progD, emptyProg, 
-  StateVarData(getStVarScp, stVar, destructSts), svd, 
-  TypeData(cType, typeString, typeDoc), td, ValData(valPrec, valInt, valType, val), 
-  vd, updateValDoc, VarData(varBind, varName, varType, varDoc), vard,
-  CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
+module Drasil.GOOL.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
+  ScopeData(..), sd, QualifiedName, qualName, FileType(..), isSource,
+  Binding(..), onBinding, BindData(bind, bindDoc), bd, FileData(filePath,
+  fileMod), fileD, updateFileMod, FuncData(fType, funcDoc), fd, ModData(name,
+  modDoc), md, updateMod, MethodData(mthdDoc), mthd, updateMthd, OpData(opPrec,
+  opDoc), od, ParamData(paramVar, paramDoc), pd, paramName, updateParam,
+  ProgData(progName, progPurp, progMods), progD, emptyProg,
+  StateVarData(getStVarScp, stVar, destructSts), svd, TypeData(cType,
+  typeString, typeDoc), td, ValData(valPrec, valInt, valType, val), vd,
+  updateValDoc, VarData(varBind, varName, varType, varDoc), vard, CommonThunk,
+  pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
   commonThunkElim, commonThunkDim
 ) where
 
@@ -121,6 +122,14 @@ data StateVarData = SVD {getStVarScp :: VisibilityTag, stVar :: Doc,
 
 svd :: VisibilityTag -> Doc -> (Doc, Terminator) -> StateVarData
 svd = SVD
+
+-- Used as the underlying data type for Scopes in the Julia renderer
+data ScopeTag = Local | Global
+
+newtype ScopeData = SD {scopeTag :: ScopeTag}
+
+sd :: ScopeTag -> ScopeData
+sd = SD
 
 -- Used as the underlying data type for Types in all renderers
 data TypeData = TD {cType :: CodeType, typeString :: String, typeDoc :: Doc}

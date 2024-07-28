@@ -70,7 +70,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
   buildClass, implementingClass, commentedClass, modFromData, fileDoc,
-  fileFromData)
+  fileFromData, local)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
   extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
@@ -78,7 +78,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   stateVarDef, constVar, litArray, listSetFunc, extraClass, listAccessFunc, 
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
   mainBody, inOutFunc, docInOutFunc', listSize, intToIndex, indexToInt,
-  varDecDef, openFileR', openFileW', openFileA', argExists, forEach')
+  varDecDef, openFileR', openFileW', openFileA', argExists, forEach', global)
 import qualified Drasil.GOOL.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
   notifyObservers')
@@ -86,7 +86,8 @@ import Drasil.GOOL.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
   td, ValData(..), vd, VarData(..), vard, CommonThunk, pureValue, vectorize,
-  vectorize2, sumComponents, commonVecIndex, commonThunkElim, commonThunkDim)
+  vectorize2, sumComponents, commonVecIndex, commonThunkElim, commonThunkDim,
+  ScopeData)
 import Drasil.GOOL.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList,
   on2StateWrapped)
@@ -263,10 +264,10 @@ instance OpElim PythonCode where
   bOpPrec = opPrec . unPC
 
 instance ScopeSym PythonCode where
-  type Scope PythonCode = Doc
-  global = toCode empty
-  mainFn = toCode empty
-  local = toCode empty
+  type Scope PythonCode = ScopeData
+  global = CP.global
+  mainFn = global
+  local = G.local
 
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData

@@ -69,9 +69,9 @@ packages:
 # Dependency packages to be pulled from upstream that are not in the resolver
 # (e.g., acme-missiles-0.3)
 extra-deps:
-- multiplate-0.0.3@sha256:5d2ffc50d23c55008100b7a8b70f77b5fcce08c6f23822c5a6adc5b5b9356a32
-- unicode-names-3.2.0.0@sha256:fef7241d93170e26265e84553090253a5e8ee207645d47cf271816f5834d07d2
-- unicode-properties-3.2.0.0@sha256:239766a6ac4322329353f6b9cd546024fd8c5f0235c8e32b3cba2d6bd245a699
+- multiplate-0.0.3@sha256:5d2ffc50d23c55008100b7a8b70f77b5fcce08c6f23822c5a6adc5b5b9356a32,1311
+- unicode-names-3.2.0.0@sha256:fef7241d93170e26265e84553090253a5e8ee207645d47cf271816f5834d07d2,470
+- unicode-properties-3.2.0.0@sha256:239766a6ac4322329353f6b9cd546024fd8c5f0235c8e32b3cba2d6bd245a699,1000
 
 # The following packages are dependencies needed for 'stan', specifically tested against GHC 9.4.8.
 - clay-0.14.0@sha256:a50ba73137a39c55e89f24a7792107ec40ba07320b2c5ff7932049845c50ffc9,2204

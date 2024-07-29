@@ -197,7 +197,7 @@ debug: test ##@Examples Run test target with better debugging tools.
 # Debugging individual examples
 $(DEBUG_EXAMPLES): %$(DEBUG_E_SUFFIX): %$(TEST_E_SUFFIX)
 
-pr_ready: all hlint ##@General Check if your current work is ready to for a PR via `all` and `hlint`.
+pr_ready: all stan hlint ##@General Check if your current work is ready to for a PR via `all` and `hlint` and stan.
 	@echo "Your build/ and stable/ match, and your code currently passes HLint tests."
 	@echo "Feel free to create a PR for your code if you feel it's ready."
 
@@ -533,6 +533,11 @@ clean: clean_artifacts ##@Cleaning Fully clean all generated builds, artifacts, 
 #--------------------------#
 #--- Help & Information ---#
 #--------------------------#
+
+stan: ##@Stan Run Stan static analysis tool on the Drasil packages.
+	find . -type d -name 'drasil-*' -exec sh -c 'cd {} && stan > stan.log' \;
+	cat drasil-*/stan.log
+#use to display stan logs, cat drasil-*/stan.log
 
 # Credits to "nowox" from StackOverflow: https://stackoverflow.com/a/30796664/16760741
 HELP_FUN = \

@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Avoid lambda" #-}
 module Language.Drasil.Code.Imperative.Modules (
   genMain, genMainProc, genMainFunc, genMainFuncProc, genInputClass,
   genInputDerived, genInputDerivedProc, genInputMod, genInputModProc,
@@ -60,6 +62,7 @@ import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MSStatement,
   extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse,
   VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
     convTypeOO, VisibilityTag(..))
+
 import qualified Drasil.GOOL as OO (SFile)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (SFile)
@@ -235,7 +238,7 @@ genInputClass scp = do
       genClass [] [] = return Nothing
       genClass inps csts = do
         vals <- mapM (convExpr . (^. codeExpr)) csts
-        inputVars <- mapM (\x -> fmap (pubDVar . 
+        inputVars <- mapM (\x -> fmap (pubDVar .
           var' (codeName x) local . convTypeOO) (codeType x)) inps
         constVars <- zipWithM (\c vl -> fmap (\t -> constVarFunc (conRepr g)
           (var (codeName c) (convTypeOO t) local) vl) (codeType c))
@@ -337,12 +340,17 @@ physCBody cs = do
 chooseConstr :: (OOProg r) => ConstraintBehaviour ->
   [(CodeVarChunk, [ConstraintCE])] -> GenState [MSStatement r]
 chooseConstr cb cs = do
+  --let q = map fst cs
+  let c = concat (map snd cs)
+  varDecs <- mapM printConstraintx c
   conds <- mapM (\(q,cns) -> mapM (convExpr . renderC q) cns) cs
   bods <- mapM (chooseCB cb) cs
-  return $ concat $ zipWith (zipWith (\cond bod -> ifNoElse [((?!) cond, bod)]))
-    conds bods
+  let bodies = concat $ zipWith (zipWith (\cond bod -> ifNoElse [((?!) cond, bod)])) conds bods
+  let num = concat varDecs
+  return $ num ++ bodies
   where chooseCB Warning = constrWarn
         chooseCB Exception = constrExc
+
 
 -- | Generates body defining constraint violation behaviour if Warning chosen from 'chooseConstr'.
 -- Prints a \"Warning\" message followed by a message that says
@@ -354,6 +362,7 @@ constrWarn c = do
       cs = snd c
   msgs <- mapM (constraintViolatedMsg q "suggested") cs
   return $ map (bodyStatements . (printStr "Warning: " :)) msgs
+
 
 -- | Generates body defining constraint violation behaviour if Exception chosen from 'chooseConstr'.
 -- Prints a message that says what value was \"expected\",
@@ -378,9 +387,21 @@ constraintViolatedMsg q s c = do
     print v,
     printStr $ ", but is " ++ s ++ " to be "] ++ pc
 
+
 -- | Generates statements to print descriptions of constraints, using words and
 -- the constrained values. Constrained values are followed by printing the
 -- expression they originated from, using printExpr.
+printConstraintx :: (OOProg r) => ConstraintCE ->
+  GenState [MSStatement r]
+printConstraintx (Elem _ e) = do
+  lb <- convExpr e
+  let value = var ("set") (setType double) local
+  return [varDecDef value lb]
+printConstraintx (Range _ _) =
+  return [printStr " "]
+
+
+
 printConstraint :: (OOProg r) => ConstraintCE ->
   GenState [MSStatement r]
 printConstraint c = do
@@ -404,6 +425,7 @@ printConstraint c = do
         lb <- convExpr e
         return $ [printStr "an element of the set ", print lb] ++ [printStrLn "."]
   printConstraint' c
+
 
 -- | Don't print expressions that are just literals, because that would be
 -- redundant (the values are already printed by printConstraint).
@@ -448,7 +470,7 @@ genSampleInput :: (AuxiliarySym r) => GenState (Maybe (r (Auxiliary r)))
 genSampleInput = do
   g <- get
   dd <- genDataDesc
-  if hasSampleInput (auxiliaries g) then (return . Just) $ sampleInput
+  if hasSampleInput (auxiliaries g) then return . Just $ sampleInput
     (sysinfodb $ codeSpec g) dd (sampleData g) else return Nothing
 
 ----- CONSTANTS -----

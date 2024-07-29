@@ -88,7 +88,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CLike as C (float, double, char,
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
   decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
-  intFunc, multiAssignError, multiReturnError, multiTypeError)
+  intFunc, multiAssignError, multiReturnError, multiTypeError, setType)
 import qualified Drasil.GOOL.LanguageRenderer.Macros as M (ifExists, 
   runStrategy, listSlice, stringListVals, stringListLists, forRange, 
   notifyObservers)
@@ -328,8 +328,9 @@ instance Literal JavaCode where
   litString = G.litString
   litArray = CP.litArray braces
   litSet t es = do 
-    modify (addLangImportVS (utilImport jSet))
-    CP.litSetFunc jSetOf t es
+    zoom lensVStoMS $ modify (if null es then id else addLangImport $ utilImport
+      jSet)
+    newObj (setType t) [jAsSetFunc t es | not (null es)]
 
   litList t es = do
     zoom lensVStoMS $ modify (if null es then id else addLangImport $ utilImport
@@ -883,10 +884,10 @@ jSetType t = do
   t >>= (jSetType' . getType)
   where jSetType' Integer = typeFromData (Set Integer) 
           stInt (text stInt)
-        jSetType' Float = C.listType "HashSet" CP.float
-        jSetType' Double = C.listType "HashSet" CP.double
+        jSetType' Float = C.setType "HashSet" CP.float
+        jSetType' Double = C.setType "HashSet" CP.double
         jSetType' Boolean = typeFromData (Set Boolean) stBool (text stBool)
-        jSetType' _ = C.listType "HashSet" t
+        jSetType' _ = C.setType "HashSet" t
         stInt = "HashSet" `containing` jInteger
         stBool = "HashSet" `containing` jBool'
 
@@ -905,6 +906,9 @@ jFileWriterType = do
 
 jAsListFunc :: VSType JavaCode -> [SValue JavaCode] -> SValue JavaCode
 jAsListFunc t = funcApp jAsList (listType t)
+
+jAsSetFunc :: VSType JavaCode -> [SValue JavaCode] -> SValue JavaCode
+jAsSetFunc t = funcApp jSetOf (setType t)
 
 jEqualsFunc :: SValue JavaCode -> VSFunction JavaCode
 jEqualsFunc v = func jEquals bool [v]

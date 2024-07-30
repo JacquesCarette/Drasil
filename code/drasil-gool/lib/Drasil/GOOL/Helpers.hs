@@ -10,7 +10,7 @@ import Utils.Drasil (blank)
 import qualified Drasil.GOOL.CodeType as C (CodeType(..))
 
 import Prelude hiding ((<>))
-import Control.Applicative (liftA2, liftA3)
+import Control.Applicative (liftA3)
 import Control.Monad (liftM2, liftM3)
 import Control.Monad.State (State)
 import Data.List (intersperse)

@@ -8,8 +8,10 @@ PS2: The PD Controller.
 
 PS3: The Power Plant.
 
-<div id="Figure:pidSysDiagram"></div>
+<div id="Figure:pidSysDiagram" align="center" >
 
 ![The physical system](./assets/Fig_PDController.png)
 
-**<p align="center">The physical system</p>**
+**The physical system**
+
+</div>

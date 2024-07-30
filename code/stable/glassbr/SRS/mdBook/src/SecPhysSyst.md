@@ -6,8 +6,10 @@ PS1: The glass slab.
 
 PS2: The point of explosion. Where the bomb, or any kind of man-made explosion, is located. The stand off distance is the distance between the point of explosion and the glass.
 
-<div id="Figure:physSystImage"></div>
+<div id="Figure:physSystImage" align="center" >
 
 ![The physical system](./assets/physicalsystimage.png)
 
-**<p align="center">The physical system</p>**
+**The physical system**
+
+</div>

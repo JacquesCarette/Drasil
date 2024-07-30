@@ -6,8 +6,10 @@ PS1: The rod.
 
 PS2: The mass.
 
-<div id="Figure:sglpend"></div>
+<div id="Figure:sglpend" align="center" >
 
 ![The physical system](./assets/sglpend.jpg)
 
-**<p align="center">The physical system</p>**
+**The physical system**
+
+</div>

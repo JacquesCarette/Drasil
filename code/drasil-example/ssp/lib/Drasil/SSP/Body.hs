@@ -165,7 +165,11 @@ symbMap = cdb (map (^. output) SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw units)
   (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units SSP.dataDefs SSP.iMods
-  generalDefinitions tMods concIns section labCon []
+  generalDefinitions tMods concIns section labCon allRefs
+
+-- | Holds all references and links used in the document.
+allRefs :: [Reference]
+allRefs = [externalLinkRef]
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
@@ -206,14 +210,21 @@ startIntro = foldlSent [atStartNP (a_ slope), S "of geological",
   S "assessment" `S.ofThe` S "safety of a" +:+ phrase slope `sC`
   S "identifying the", phrase surface,
   S "most likely to experience", phrase slip `S.and_`
-  S "an index of its relative stability known as the", phrase fs]
+  S "an index of its relative stability known as the" +:+. phrase fs]
 
 kSent = keySent ssa ssp
 
 keySent :: (Idea a, Idea b) => a -> b -> Sentence
 keySent probType pname = foldlSent_ [(phraseNP (NP.a_ (combineNINI probType problem)) !.),
   S "The developed", phrase program, S "will be referred to as the",
-  introduceAbb pname]
+  introduceAbb pname,
+  S "based on the original, manually created version of" +:+
+  namedRef externalLinkRef (S "SSP")]
+
+externalLinkRef :: Reference
+externalLinkRef = makeURI "SSP" 
+  "https://github.com/smiths/caseStudies/tree/main/CaseStudies/ssp" 
+  (shortname' $ S "SSP")
   
 -- SECTION 2.1 --
 -- Purpose of Document automatically generated in IPurpose

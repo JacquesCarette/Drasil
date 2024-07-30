@@ -109,7 +109,11 @@ symbMap = cdb (qw (heatEInPCM ^. output) : symbolsAll) -- heatEInPCM ?
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
   ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
   (cw heatEInPCM : map cw symbols ++ srsDomains ++ map cw specParamValList) -- FIXME: heatEInPCM?
-  (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns section [] []
+  (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns section [] allRefs
+
+-- | Holds all references and links used in the document.
+allRefs :: [Reference]
+allRefs = [externalLinkRef]
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronymsFull)
@@ -210,8 +214,15 @@ introStartSWHS = foldlSent [capSent $ pluralNP $ progName ^. term, S "incorporat
 
 introEnd :: Sentence -> CI -> Sentence
 introEnd progSent pro = foldlSent_ [(progSent !.), S "The developed",
-  phrase program, S "will be referred to as", titleize pro, sParen (short pro)]
+  phrase program, S "will be referred to as", titleize pro, sParen (short pro),
+  S "based on the original, manually created version of" +:+
+  namedRef externalLinkRef (S "SWHS")]
   -- SSP has same style sentence here
+
+externalLinkRef :: Reference
+externalLinkRef = makeURI "SWHS_SRSLink" 
+  "https://github.com/smiths/swhs" 
+  (shortname' $ S "SWHS_SRSLink")
 
 -------------------------------
 -- 2.1 : Purpose of Document --

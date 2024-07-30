@@ -41,7 +41,7 @@ import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
-import Drasil.SWHS.Body (charsOfReader, dataContMid, introEnd, introStart,
+import Drasil.SWHS.Body (charsOfReader, dataContMid, introStart, externalLinkRef,
   physSyst1, physSyst2, sysCntxtDesc, systContRespBullets,
   sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
@@ -215,7 +215,11 @@ symbMap = cdb symbolsAll (nw progName : map nw symbols ++ map nw acronyms ++ map
   ++ map nw physicalcon ++ map nw unitalChuncks ++ map nw [absTol, relTol]
   ++ [nw srsSWHS, nw algorithm, nw inValue, nw htTrans, nw materialProprty, nw phsChgMtrl])
   (map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
-  tMods concIns section labCon []
+  tMods concIns section labCon allRefs
+
+-- | Holds all references and links used in the document.
+allRefs :: [Reference]
+allRefs = [externalLinkRef, externalLinkRef']
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw symbols ++ map nw acronyms)
@@ -228,6 +232,17 @@ usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw symbols ++ map nw acro
 -- To get this generating properly we need to add a constructor for custom plural and capital case, see #3535
 introStartNoPCM :: Sentence
 introStartNoPCM = atStart' progName +:+ S "provide a novel way of storing" +:+. phrase energy
+
+introEnd :: Sentence -> CI -> Sentence
+introEnd progSent pro = foldlSent_ [progSent +:+ S "The developed program",
+  S "will be referred to as", titleize pro, sParen (short pro),
+  S "based on the original, manually created version of" +:+
+  namedRef externalLinkRef (S "SWHSNoPCM")]
+
+externalLinkRef' :: Reference
+externalLinkRef' = makeURI "SWHSNoPCM_SRSLink" 
+  "https://github.com/smiths/caseStudies/tree/master/CaseStudies/noPCM" 
+  (shortname' $ S "SWHSNoPCM_SRSLink")
 
 -----------------------------------
 --Section 2.1 : PURPOSE OF DOCUMENT

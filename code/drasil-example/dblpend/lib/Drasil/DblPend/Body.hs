@@ -141,7 +141,11 @@ symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll)
    map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz] ++
    [nw algorithm] ++ map nw compcon ++ map nw educon ++ map nw prodtcon)
   (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz])
-  dataDefs iMods genDefns tMods concIns [] [] ([] :: [Reference])
+  dataDefs iMods genDefns tMods concIns [] [] allRefs
+
+-- | Holds all references and links used in the document.
+allRefs :: [Reference]
+allRefs = [externalLinkRef]
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw acronyms ++ map nw symbols) ([] :: [ConceptChunk])
@@ -166,8 +170,14 @@ justification prog = foldlSent [ atStartNP (a_ pendulum), S "consists" `S.of_` p
                             (S "highly sensitive to initial conditions" !.), S "Therefore" `sC`
                             S "it is useful to have a", phrase program, S "to simulate", phraseNP (motion
                             `the_ofThe` pendulum), (S "to exhibit its chaotic characteristics" !.),
-                            atStartNP (the program), S "documented here is called", phrase prog]
-
+                            S "The document describes the program called", phrase prog,
+                            S ", which is based on the original, manually created version of" +:+
+                            namedRef externalLinkRef (S "Double Pendulum")]
+                            
+externalLinkRef :: Reference
+externalLinkRef = makeURI "DblPendSRSLink" 
+  "https://github.com/Zhang-Zhi-ZZ/CAS741Project" 
+  (shortname' $ S "DblPendSRSLink")                            
 -------------------------------
 -- 2.1 : Purpose of Document --
 -------------------------------

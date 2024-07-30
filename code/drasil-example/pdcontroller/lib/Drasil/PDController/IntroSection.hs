@@ -12,10 +12,16 @@ introPara
          S "in a variety of applications such as thermostats, automobile",
          S "cruise-control, etc. The gains of a controller in an application" +:+. 
          S "must be tuned before the controller is ready for production",
-       S "Therefore a simulation of the", phrase pidC, S "with a",
+       S "Therefore, a simulation of the", phrase pidC, S "with a",
          phrase secondOrderSystem,
-         S "is created in this project that can be",
-         S "used to tune the gain constants"]
+         S "is created in this project based on the original, manually created version of" +:+
+         namedRef externalLinkRef (S "PD Controller"),
+         S "that can be used to tune the gain constants"]
+
+externalLinkRef :: Reference
+externalLinkRef = makeURI "PD_Controller_SRSLink" 
+  "https://github.com/smiths/caseStudies/tree/main/CaseStudies/gamephys" 
+  (shortname' $ S "PD_Controller_SRSLink")
 
 introscopeOfReq
   = foldlSent_

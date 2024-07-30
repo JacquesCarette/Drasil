@@ -136,7 +136,11 @@ symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw symb ++ terms ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns section
-  labCon []
+  labCon allRefs
+
+-- | Holds all references and links used in the document.
+allRefs :: [Reference]
+allRefs = [externalLinkRef]
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
@@ -203,7 +207,14 @@ startIntro prgm _ progName = foldlSent [
   +:+. purp, S "For example" `sC` S "we might wish to know whether a pane of",
   phrase glass, S "fails from a gas main", phrase explosion `S.or_` 
   S "from a small fertilizer truck bomb." +:+
-  S "The program documented here is called", short progName]
+  S "The document describes the program called", short progName,
+  S ", which is based on the original, manually created version of" +:+
+  namedRef externalLinkRef (S "GlassBR")]
+
+externalLinkRef :: Reference
+externalLinkRef = makeURI "glassBRSRSLink" 
+  "https://github.com/smiths/caseStudies/tree/main/CaseStudies/glass" 
+  (shortname' $ S "glassBRSRSLink")
 
 undIR, appStanddIR :: [Sentence]
 undIR = [phrase scndYrCalculus, phrase structuralMechanics, phrase glBreakage,

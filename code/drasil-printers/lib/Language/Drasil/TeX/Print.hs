@@ -1,5 +1,6 @@
 -- | Defines main LaTeX printer functions. For more information on each of the helper functions, please view the [source files](https://jacquescarette.github.io/Drasil/docs/full/drasil-printers-0.1.10.0/src/Language.Drasil.TeX.Print.html).
-module Language.Drasil.TeX.Print(genTeX, pExpr, pUnit, spec) where
+module Language.Drasil.TeX.Print(genTeX, pExpr, pUnit, spec, fence, OpenClose(..),
+  pMatrix, cases) where
 
 import Prelude hiding (print)
 import Data.Bifunctor (bimap)
@@ -28,8 +29,8 @@ import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import qualified Language.Drasil.Printing.Import as I
 import Language.Drasil.Printing.Helpers hiding (br, paren, sq, sqbrac)
 import Language.Drasil.TeX.Helpers (author, bold, br, caption, center, centering,
-  cite, command, command0, commandD, command2D, description, document, empty,
-  enumerate, externalref, figure, fraction, includegraphics, item, item',
+  cite, command, command0, commandD, command2D, description, description', document, 
+  empty, enumerate, externalref, figure, fraction, includegraphics, item, item',
   itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgBr, mkEnvArgSq,
   mkMinipage, newline, newpage, parens, quote, sec, snref, sq, superscript,
   symbDescription, texSym, title, toEqn)
@@ -104,8 +105,8 @@ pExpr (Dbl d)        = pure . text $ showEFloat Nothing d ""
 pExpr (Int i)        = pure (integer i)
 pExpr (Str s)        = toText . quote . pure $ text s
 pExpr (Div n d)      = command2D "frac" (pExpr n) (pExpr d)
-pExpr (Case ps)      = mkEnv "cases" (cases ps)
-pExpr (Mtx a)        = mkEnv "bmatrix" (pMatrix a)
+pExpr (Case ps)      = mkEnv "cases" ($+$) (cases ps vpunctuate dbs pExpr)
+pExpr (Mtx a)        = mkEnv "bmatrix" ($+$) (pMatrix a vpunctuate dbs pExpr)
 pExpr (Row [x])      = br $ pExpr x -- FIXME: Hack needed for symbols with multiple subscripts, etc.
 pExpr (Row l)        = foldl1 (<>) (map pExpr l)
 pExpr (Ident s@[_])  = pure . text . escapeIdentSymbols $ s
@@ -165,7 +166,7 @@ pOps Subt     = pure hyph
 pOps And      = commandD "land" empty
 pOps Or       = commandD "lor" empty
 pOps Add      = pure pls
-pOps Mul      = pure $ text " "
+pOps Mul      = pure $ text "\\,"
 pOps Summ     = command0 "displaystyle" <> command0 "sum"
 pOps Prod     = command0 "displaystyle" <> command0 "prod"
 pOps Inte     = texSym "int"
@@ -186,15 +187,15 @@ fence _ Abs       = pure $ text "|"
 fence _ Norm      = pure $ text "\\|"
 
 -- | For printing a Matrix.
-pMatrix :: [[Expr]] -> D
-pMatrix e = vpunctuate dbs (map pIn e)
-  where pIn x = hpunctuate (text " & ") (map pExpr x)
+pMatrix :: [[Expr]] -> (TP.Doc -> [D] -> D) -> TP.Doc -> (Expr -> D) -> D
+pMatrix e catf esc f = catf esc (map pIn e)
+  where pIn x = hpunctuate (text " & ") (map f x)
 
 -- | Helper for printing case expression.
-cases :: [(Expr,Expr)] -> D
-cases [] = error "Attempt to create case expression without cases"
-cases e  = vpunctuate dbs (map _case e)
-  where _case (x, y) = hpunctuate (text ", & ") (map pExpr [x, y])
+cases :: [(Expr,Expr)] -> (TP.Doc -> [D] -> D) -> TP.Doc -> (Expr -> D) -> D
+cases [] _ _ _ = error "Attempt to create case expression without cases"
+cases e catf esc f = catf esc (map _case e)
+  where _case (x, y) = hpunctuate (text ", & ") (map f [x, y])
 
 -----------------------------------------------------------------
 ------------------ TABLE PRINTING---------------------------
@@ -205,7 +206,7 @@ cases e  = vpunctuate dbs (map _case e)
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
 makeTable [] _ _ _ = error "Completely empty table (not even header)"
 makeTable [_] _ _ _ = empty -- table with no actual contents... don't error
-makeTable lls@(h:tlines) r bool t = mkEnv "longtblr" $
+makeTable lls@(h:tlines) r bool t = mkEnv "longtblr" ($+$) $
   (if bool then sq $ pure (text "caption=") <> br t else empty)
   %% br (pure (text "colspec=") <> br (pure $ text $ unwords $ anyBig lls)
     <> pure (text ", rowhead=1, hline{1,Z}=\\heavyrulewidth, hline{2}=\\lightrulewidth"))
@@ -373,10 +374,10 @@ makeList (Desc []   )        = empty
 makeList (Unordered []   )   = empty
 makeList (Ordered []   )     = empty
 makeList (Definitions []   ) = empty
-makeList (Simple items)      = itemize     $ vcat $ simItem items
-makeList (Desc items)        = description $ vcat $ simItem items
-makeList (Unordered items)   = itemize     $ vcat $ map plItem items
-makeList (Ordered items)     = enumerate   $ vcat $ map plItem items
+makeList (Simple items)      = description' $ vcat $ simItem items
+makeList (Desc items)        = description  $ vcat $ simItem items
+makeList (Unordered items)   = itemize      $ vcat $ map plItem items
+makeList (Ordered items)     = enumerate    $ vcat $ map plItem items
 makeList (Definitions items) = symbDescription $ vcat $ defItem items
 
 -- | Helper that renders items in 'makeList'.
@@ -429,7 +430,7 @@ makeFigure r c f wp =
 -- | Prints graphs.
 makeGraph :: [(D,D)] -> D -> D -> D -> D -> D
 makeGraph ps w h c l =
-  mkEnv "figure" $ centering %%
+  mkEnv "figure" ($+$) $ centering %%
   mkEnvArgBr "adjustbox" "max width=\\textwidth" (
   mkEnvArgSq "tikzpicture" ">=latex,line join=bevel" (
   vcat [command "tikzstyle" "n" <> pure (text " = ") <> sq (

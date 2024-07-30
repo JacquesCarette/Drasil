@@ -57,7 +57,7 @@ def get_input(filename):
 # \param L length of tank: the length of the tank (m)
 # \return volume of the cylindrical tank: the amount of space encompassed by a tank (m^3)
 def derived_values(D, L):
-    V_tank = Constants.Constants.pi * (D / 2.0) ** 2.0 * L
+    V_tank = Constants.Constants.PI * (D / 2.0) ** 2.0 * L
     
     return V_tank
 
@@ -74,82 +74,82 @@ def derived_values(D, L):
 # \param D diameter of tank: the diameter of the tank (m)
 # \param E_W change in heat energy in the water: change in thermal energy within the water (J)
 def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, E_W):
-    if not(A_C <= Constants.Constants.A_C_max):
+    if not(A_C <= Constants.Constants.A_C_MAX):
         print("Warning: ", end="")
         print("A_C has value ", end="")
         print(A_C, end="")
         print(", but is suggested to be ", end="")
         print("below ", end="")
-        print(Constants.Constants.A_C_max, end="")
+        print(Constants.Constants.A_C_MAX, end="")
         print(" (A_C_max)", end="")
         print(".")
-    if not(Constants.Constants.C_W_min < C_W and C_W < Constants.Constants.C_W_max):
+    if not(Constants.Constants.C_W_MIN < C_W and C_W < Constants.Constants.C_W_MAX):
         print("Warning: ", end="")
         print("C_W has value ", end="")
         print(C_W, end="")
         print(", but is suggested to be ", end="")
         print("between ", end="")
-        print(Constants.Constants.C_W_min, end="")
+        print(Constants.Constants.C_W_MIN, end="")
         print(" (C_W_min)", end="")
         print(" and ", end="")
-        print(Constants.Constants.C_W_max, end="")
+        print(Constants.Constants.C_W_MAX, end="")
         print(" (C_W_max)", end="")
         print(".")
-    if not(Constants.Constants.h_C_min <= h_C and h_C <= Constants.Constants.h_C_max):
+    if not(Constants.Constants.H_C_MIN <= h_C and h_C <= Constants.Constants.H_C_MAX):
         print("Warning: ", end="")
         print("h_C has value ", end="")
         print(h_C, end="")
         print(", but is suggested to be ", end="")
         print("between ", end="")
-        print(Constants.Constants.h_C_min, end="")
+        print(Constants.Constants.H_C_MIN, end="")
         print(" (h_C_min)", end="")
         print(" and ", end="")
-        print(Constants.Constants.h_C_max, end="")
+        print(Constants.Constants.H_C_MAX, end="")
         print(" (h_C_max)", end="")
         print(".")
-    if not(t_final < Constants.Constants.t_final_max):
+    if not(t_final < Constants.Constants.T_FINAL_MAX):
         print("Warning: ", end="")
         print("t_final has value ", end="")
         print(t_final, end="")
         print(", but is suggested to be ", end="")
         print("below ", end="")
-        print(Constants.Constants.t_final_max, end="")
+        print(Constants.Constants.T_FINAL_MAX, end="")
         print(" (t_final_max)", end="")
         print(".")
-    if not(Constants.Constants.L_min <= L and L <= Constants.Constants.L_max):
+    if not(Constants.Constants.L_MIN <= L and L <= Constants.Constants.L_MAX):
         print("Warning: ", end="")
         print("L has value ", end="")
         print(L, end="")
         print(", but is suggested to be ", end="")
         print("between ", end="")
-        print(Constants.Constants.L_min, end="")
+        print(Constants.Constants.L_MIN, end="")
         print(" (L_min)", end="")
         print(" and ", end="")
-        print(Constants.Constants.L_max, end="")
+        print(Constants.Constants.L_MAX, end="")
         print(" (L_max)", end="")
         print(".")
-    if not(Constants.Constants.rho_W_min < rho_W and rho_W <= Constants.Constants.rho_W_max):
+    if not(Constants.Constants.RHO_W_MIN < rho_W and rho_W <= Constants.Constants.RHO_W_MAX):
         print("Warning: ", end="")
         print("rho_W has value ", end="")
         print(rho_W, end="")
         print(", but is suggested to be ", end="")
         print("between ", end="")
-        print(Constants.Constants.rho_W_min, end="")
+        print(Constants.Constants.RHO_W_MIN, end="")
         print(" (rho_W_min)", end="")
         print(" and ", end="")
-        print(Constants.Constants.rho_W_max, end="")
+        print(Constants.Constants.RHO_W_MAX, end="")
         print(" (rho_W_max)", end="")
         print(".")
-    if not(Constants.Constants.AR_min <= D and D <= Constants.Constants.AR_max):
+    if not(Constants.Constants.AR_MIN <= D and D <= Constants.Constants.AR_MAX):
         print("Warning: ", end="")
         print("D has value ", end="")
         print(D, end="")
         print(", but is suggested to be ", end="")
         print("between ", end="")
-        print(Constants.Constants.AR_min, end="")
+        print(Constants.Constants.AR_MIN, end="")
         print(" (AR_min)", end="")
         print(" and ", end="")
-        print(Constants.Constants.AR_max, end="")
+        print(Constants.Constants.AR_MAX, end="")
         print(" (AR_max)", end="")
         print(".")
     

@@ -13,6 +13,7 @@
 \usepackage{caption}
 \usepackage{graphics}
 \usepackage{svg}
+\usepackage{float}
 \usepackage{enumitem}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
@@ -273,7 +274,7 @@ This section provides general information about the system. It identifies the in
 \label{Sec:SysContext}
 \hyperref[Figure:sysCtxDiag]{Fig:sysCtxDiag} shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (GamePhysics). Arrows are used to show the data flow between the system and its environment.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../../../../datafiles/gamephysics/sysctx.png}
 \caption{System Context}
@@ -330,10 +331,10 @@ This subsection provides a list of terms that are used in the subsequent section
 \label{Sec:GoalStmt}
 Given the kinematic properties, and forces (including any collision forces) applied on a set of rigid bodies, the goal statements are:
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Determine-Linear-Properties:\phantomsection\label{linearGS}]{Determine their new positions and velocities over a period of time.}
 \item[Determine-Angular-Properties:\phantomsection\label{angularGS}]{Determine their new orientations and angular velocities over a period of time.}
-\end{itemize}
+\end{description}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
 The instance models that govern GamePhysics are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
@@ -342,7 +343,7 @@ The instance models that govern GamePhysics are presented in the \hyperref[Sec:I
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[objectTy:\phantomsection\label{assumpOT}]{All objects are rigid bodies. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:rotMot]{IM:rotMot}, \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:chaslesThm]{DD:chaslesThm}, \hyperref[DD:reVeInColl]{DD:reVeInColl}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[DD:ctrOfMass]{DD:ctrOfMass}, \hyperref[DD:momentOfInertia]{DD:momentOfInertia}, \hyperref[DD:linVel]{DD:linVel}, \hyperref[DD:linDisp]{DD:linDisp}, \hyperref[DD:linAcc]{DD:linAcc}, \hyperref[DD:kEnergy]{DD:kEnergy}, \hyperref[DD:impulseV]{DD:impulseV}, \hyperref[IM:col2D]{IM:col2D}, \hyperref[DD:angVel]{DD:angVel}, \hyperref[DD:angDisp]{DD:angDisp}, and \hyperref[DD:angAccel]{DD:angAccel}.)}
 \item[objectDimension:\phantomsection\label{assumpOD}]{All objects are 2D. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:rotMot]{IM:rotMot}, \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}, \hyperref[DD:kEnergy]{DD:kEnergy}, \hyperref[IM:col2D]{IM:col2D}, \hyperref[DD:angVel]{DD:angVel}, \hyperref[DD:angDisp]{DD:angDisp}, and \hyperref[DD:angAccel]{DD:angAccel}.)}
 \item[coordinateSystemTy:\phantomsection\label{assumpCST}]{The library uses a Cartesian coordinate system.}
@@ -350,7 +351,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[collisionType:\phantomsection\label{assumpCT}]{All rigid bodies collisions are vertex-to-edge collisions. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[lcEC]{LC:Expanded-Collisions}, and \hyperref[IM:col2D]{IM:col2D}.)}
 \item[dampingInvolvement:\phantomsection\label{assumpDI}]{There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[lcID]{LC:Include-Dampening}, \hyperref[DD:kEnergy]{DD:kEnergy}, and \hyperref[IM:col2D]{IM:col2D}.)}
 \item[constraintsAndJointsInvolvement:\phantomsection\label{assumpCAJI}]{There are no constraints and joints involved throughout the simulation. (RefBy: \hyperref[IM:transMot]{IM:transMot}, \hyperref[lcIJC]{LC:Include-Joints-Constraints}, and \hyperref[IM:col2D]{IM:col2D}.)}
-\end{itemize}
+\end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
 This section focuses on the general equations and laws that GamePhysics is based on.
@@ -367,7 +368,7 @@ Label & Newton's second law of motion
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}\text{(}t\text{)}
+           \symbf{F}=m\,\symbf{a}\text{(}t\text{)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -431,7 +432,7 @@ Label & Newton's law of universal gravitation
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{F}=G \frac{{m_{1}} {m_{2}}}{\|\symbf{d}\|^{2}} \symbf{\hat{d}}=G \frac{{m_{1}} {m_{2}}}{\|\symbf{d}\|^{2}} \frac{\symbf{d}}{\|\symbf{d}\|}
+           \symbf{F}=G\,\frac{{m_{1}}\,{m_{2}}}{\|\symbf{d}\|^{2}}\,\symbf{\hat{d}}=G\,\frac{{m_{1}}\,{m_{2}}}{\|\symbf{d}\|^{2}}\,\frac{\symbf{d}}{\|\symbf{d}\|}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -468,7 +469,7 @@ Label & Newton's second law for rotational motion
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{τ}=\symbf{I} α
+           \symbf{τ}=\symbf{I}\,α
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -510,7 +511,7 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{g}=-\frac{G M}{\|\symbf{d}\|^{2}} \symbf{\hat{d}}
+           \symbf{g}=-\frac{G\,M}{\|\symbf{d}\|^{2}}\,\symbf{\hat{d}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -538,7 +539,7 @@ RefBy & \hyperref[IM:transMot]{IM:transMot}
 From \hyperref[TM:UniversalGravLaw]{Newton's law of universal gravitation}, we have:
 
 \begin{displaymath}
-\symbf{F}=\frac{G {m_{1}} {m_{2}}}{{\|\symbf{d}\|^{2}}} \symbf{\hat{d}}
+\symbf{F}=\frac{G\,{m_{1}}\,{m_{2}}}{{\|\symbf{d}\|^{2}}}\,\symbf{\hat{d}}
 \end{displaymath}
 The above equation governs the gravitational attraction between two bodies. Suppose that one of the bodies is significantly more massive than the other, so that we concern ourselves with the force the massive body exerts on the lighter body. Further, suppose that the Cartesian coordinate system is chosen such that this force acts on a line which lies along one of the principal axes. Then our unit vector directed from the center of the large mass to the center of the smaller mass $\symbf{\hat{d}}$ for the x or y axes is:
 
@@ -548,17 +549,17 @@ The above equation governs the gravitational attraction between two bodies. Supp
 Given the above assumptions, let $M$ and $m$ be the mass of the massive and light body respectively. Equating $\symbf{F}$ above with Newton's second law for the force experienced by the light body, we get:
 
 \begin{displaymath}
-{\symbf{F}_{\symbf{g}}}=G \frac{M m}{{\|\symbf{d}\|^{2}}} \symbf{\hat{d}}=m \symbf{g}
+{\symbf{F}_{\symbf{g}}}=G\,\frac{M\,m}{{\|\symbf{d}\|^{2}}}\,\symbf{\hat{d}}=m\,\symbf{g}
 \end{displaymath}
 where $\symbf{g}$ is the gravitational acceleration. Dividing the above equation by $m$,  we have:
 
 \begin{displaymath}
-G \frac{M}{{\|\symbf{d}\|^{2}}} \symbf{\hat{d}}=\symbf{g}
+G\,\frac{M}{{\|\symbf{d}\|^{2}}}\,\symbf{\hat{d}}=\symbf{g}
 \end{displaymath}
 and thus the negative sign indicates that the force is an attractive force:
 
 \begin{displaymath}
-\symbf{g}=-G \frac{M}{{\|\symbf{d}\|^{2}}} \symbf{\hat{d}}
+\symbf{g}=-G\,\frac{M}{{\|\symbf{d}\|^{2}}}\,\symbf{\hat{d}}
 \end{displaymath}
 \medskip
 \noindent
@@ -575,7 +576,7 @@ Units & $\text{N}\text{s}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           j=\frac{-\left(1+{C_{\text{R}}}\right) {{\symbf{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \|\symbf{n}\|^{2}+\frac{\|{\symbf{u}_{\text{A}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{A}}}}+\frac{\|{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{B}}}}}
+           j=\frac{-\left(1+{C_{\text{R}}}\right)\,{{\symbf{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right)\,\|\symbf{n}\|^{2}+\frac{\|{\symbf{u}_{\text{A}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{A}}}}+\frac{\|{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{B}}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -630,7 +631,7 @@ Units & ${\text{m}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {\symbf{p}\text{(}t\text{)}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}} {\symbf{p}\text{(}t\text{)}_{j}}}}{{m_{T}}}
+           {\symbf{p}\text{(}t\text{)}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}}\,{\symbf{p}\text{(}t\text{)}_{j}}}}{{m_{T}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -983,7 +984,7 @@ Units & ${\text{J}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           KE=m \frac{\|\symbf{v}\text{(}t\text{)}\|^{2}}{2}
+           KE=m\,\frac{\|\symbf{v}\text{(}t\text{)}\|^{2}}{2}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1104,7 +1105,7 @@ Units & $\text{N}\text{s}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{J}=m Δ\symbf{v}
+           \symbf{J}=m\,Δ\symbf{v}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1131,17 +1132,17 @@ RefBy &
 Newton's second law of motion states:
 
 \begin{displaymath}
-\symbf{F}=m \symbf{a}\text{(}t\text{)}=m \frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
+\symbf{F}=m\,\symbf{a}\text{(}t\text{)}=m\,\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
 \end{displaymath}
 Rearranging:
 
 \begin{displaymath}
-\int_{{t_{1}}}^{{t_{2}}}{\symbf{F}}\,dt=m \left(\int_{{\symbf{v}\text{(}t\text{)}_{1}}}^{{\symbf{v}\text{(}t\text{)}_{2}}}{1}\,d\symbf{v}\text{(}t\text{)}\right)
+\int_{{t_{1}}}^{{t_{2}}}{\symbf{F}}\,dt=m\,\left(\int_{{\symbf{v}\text{(}t\text{)}_{1}}}^{{\symbf{v}\text{(}t\text{)}_{2}}}{1}\,d\symbf{v}\text{(}t\text{)}\right)
 \end{displaymath}
 Integrating the right hand side:
 
 \begin{displaymath}
-\int_{{t_{1}}}^{{t_{2}}}{\symbf{F}}\,dt=m {\symbf{v}\text{(}t\text{)}_{2}}-m {\symbf{v}\text{(}t\text{)}_{1}}=m Δ\symbf{v}
+\int_{{t_{1}}}^{{t_{2}}}{\symbf{F}}\,dt=m\,{\symbf{v}\text{(}t\text{)}_{2}}-m\,{\symbf{v}\text{(}t\text{)}_{1}}=m\,Δ\symbf{v}
 \end{displaymath}
 \medskip
 \noindent
@@ -1161,7 +1162,7 @@ Units & ${\text{J}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           PE=m \symbf{g} h
+           PE=m\,\symbf{g}\,h
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1204,7 +1205,7 @@ Units & $\text{kg}\text{m}^{2}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{I}=\displaystyle\sum{{m_{j}} {d_{j}}^{2}}
+           \symbf{I}=\displaystyle\sum{{m_{j}}\,{d_{j}}^{2}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1415,7 +1416,7 @@ Output Constraints & \begin{displaymath}
                      \end{displaymath}
 \\ \midrule
 Equation & \begin{displaymath}
-           {\symbf{v}\text{(}t\text{)}_{\text{A}}}\left({t_{\text{c}}}\right)={\symbf{v}\text{(}t\text{)}_{\text{A}}}\left(t\right)+\frac{j}{{m_{\text{A}}}} \symbf{n}
+           {\symbf{v}\text{(}t\text{)}_{\text{A}}}\left({t_{\text{c}}}\right)={\symbf{v}\text{(}t\text{)}_{\text{A}}}\left(t\right)+\frac{j}{{m_{\text{A}}}}\,\symbf{n}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1477,7 +1478,7 @@ $\symbf{τ}$ & -- & -- & $200$ $\text{N}\text{m}$ & 10$\%$
 \\
 $ω$ & -- & -- & $2.1$ $\frac{\text{rad}}{\text{s}}$ & 10$\%$
 \\
-$ϕ$ & -- & $0\leq{}ϕ\leq{}2 π$ & $\frac{π}{2}$ ${\text{rad}}$ & 10$\%$
+$ϕ$ & -- & $0\leq{}ϕ\leq{}2\,π$ & $\frac{π}{2}$ ${\text{rad}}$ & 10$\%$
 \label{Table:InDataConstraints}
 \end{longtblr}
 \subsubsection{Properties of a Correct Solution}
@@ -1506,7 +1507,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \label{Sec:FRs}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Simulation-Space:\phantomsection\label{simSpace}]{Create a space for all of the rigid bodies in the physical simulation to interact in.}
 \item[Input-Initial-Conditions:\phantomsection\label{inputInitialConds}]{Input the initial masses, velocities, orientations, angular velocities of, and forces applied on rigid bodies.}
 \item[Input-Surface-Properties:\phantomsection\label{inputSurfaceProps}]{Input the surface properties of the bodies such as friction or elasticity.}
@@ -1515,38 +1516,38 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Calculate-Rotation-Over-Time:\phantomsection\label{calcRotOverTime}]{Determine the orientations and angular velocities over a period of time of the 2D rigid bodies.}
 \item[Determine-Collisions:\phantomsection\label{deterColls}]{Determine if any of the rigid bodies in the space have collided.}
 \item[Determine-Collision-Response-Over-Time:\phantomsection\label{deterCollRespOverTime}]{Determine the positions and velocities over a period of time of the 2D rigid bodies that have undergone a collision.}
-\end{itemize}
+\end{description}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Performance:\phantomsection\label{performance}]{The execution time for collision detection and collision resolution shall be comparable to an existing 2D physics library on the market (e.g. Pymunk).}
 \item[Correctness:\phantomsection\label{correctness}]{The output of simulation results shall be compared to an existing implementation like Pymunk (please refer to: http://www.pymunk.org/en/latest/).}
 \item[Usability:\phantomsection\label{usability}]{Software shall be easy to learn and use. Usability shall be measured by how long it takes a user to learn how to use the library to create a small program to simulate the movement of 2 bodies over time in space. Creating a program should take no less than 30 to 60 minutes for an intermediate to experienced programmer.}
 \item[Understandability:\phantomsection\label{understandability}]{Users of Tamias2D shall be able to learn the software with ease. Users shall be able to easily create a small program using the library. Creating a small program to simulate the movement of 2 bodies in space should take no less that 60 minutes.}
 \item[Maintainability:\phantomsection\label{maintainability}]{If a likely change is made to the finished software, it will take at most 10$\%$ of the original development time, assuming the same development resources are available.}
-\end{itemize}
+\end{description}
 \section{Likely Changes}
 \label{Sec:LCs}
 This section lists the likely changes to be made to the software.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Variable-ODE-Solver:\phantomsection\label{lcVODES}]{The internal ODE-solving algorithm used by the library may be changed in the future.}
 \item[Expanded-Collisions:\phantomsection\label{lcEC}]{\hyperref[assumpCT]{A:collisionType} - The library may be expanded to deal with edge-to-edge and vertex-to-vertex collisions.}
 \item[Include-Dampening:\phantomsection\label{lcID}]{\hyperref[assumpDI]{A:dampingInvolvement} - The library may be expanded to include motion with damping.}
 \item[Include-Joints-Constraints:\phantomsection\label{lcIJC}]{\hyperref[assumpCAJI]{A:constraintsAndJointsInvolvement} - The library may be expanded to include joints and constraints.}
-\end{itemize}
+\end{description}
 \section{Unlikely Changes}
 \label{Sec:UCs}
 This section lists the unlikely changes to be made to the software.
 
-\begin{itemize}
+\begin{description}[font=\normalfont]
 \item[Simulate-Rigid-Bodies:\phantomsection\label{ucSRB}]{The goal of the system is to simulate the interactions of rigid bodies.}
 \item[External-Input:\phantomsection\label{ucEI}]{There will always be a source of input data external to the software.}
 \item[Cartesian-Coordinate-System:\phantomsection\label{ucCCS}]{A Cartesian Coordinate system is used.}
 \item[Objects-Rigid-Bodies:\phantomsection\label{ucORB}]{All objects are rigid bodies.}
-\end{itemize}
+\end{description}
 \section{Off-The-Shelf Solutions}
 \label{Sec:offShelfSolns}
 As mentioned in the \hyperref[Sec:ProbDesc]{problem description}, there already exist free open source game physics libraries. Similar 2D physics libraries are:
@@ -1774,35 +1775,35 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/gamephysics/avsa}
 \caption{TraceGraphAvsA}
 \label{Figure:TraceGraphAvsA}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/gamephysics/avsall}
 \caption{TraceGraphAvsAll}
 \label{Figure:TraceGraphAvsAll}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/gamephysics/refvsref}
 \caption{TraceGraphRefvsRef}
 \label{Figure:TraceGraphRefvsRef}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/gamephysics/allvsr}
 \caption{TraceGraphAllvsR}
 \label{Figure:TraceGraphAllvsR}
 \end{center}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 \begin{center}
 \includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/gamephysics/allvsall}
 \caption{TraceGraphAllvsAll}
@@ -1861,7 +1862,7 @@ year={2017}}
 @article{smithKoothoor2016,
 author={Smith, W. Spencer and Koothoor, Nirmitha},
 title={A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis},
-journal={ Nuclear Engineering and Technology},
+journal={Nuclear Engineering and Technology},
 year={2016},
 month=apr,
 volume={48},

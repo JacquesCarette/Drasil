@@ -1014,20 +1014,20 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[h=\frac{1}{1000} \begin{cases}
-                                           2.16, & t=2.5\\
-                                           2.59, & t=2.7\\
-                                           2.92, & t=3.0\\
-                                           3.78, & t=4.0\\
-                                           4.57, & t=5.0\\
-                                           5.56, & t=6.0\\
-                                           7.42, & t=8.0\\
-                                           9.02, & t=10.0\\
-                                           11.91, & t=12.0\\
-                                           15.09, & t=16.0\\
-                                           18.26, & t=19.0\\
-                                           21.44, & t=22.0
-                                           \end{cases}\]
+                        \[h=\frac{1}{1000}\,\begin{cases}
+                                            2.16, & t=2.5\\
+                                            2.59, & t=2.7\\
+                                            2.92, & t=3.0\\
+                                            3.78, & t=4.0\\
+                                            4.57, & t=5.0\\
+                                            5.56, & t=6.0\\
+                                            7.42, & t=8.0\\
+                                            9.02, & t=10.0\\
+                                            11.91, & t=12.0\\
+                                            15.09, & t=16.0\\
+                                            18.26, & t=19.0\\
+                                            21.44, & t=22.0
+                                            \end{cases}\]
                       </td>
                     </tr>
                     <tr>
@@ -1316,7 +1316,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{w_{\mathit{TNT}}}=w \mathit{TNT}\]</td>
+                      <td>\[{w_{\mathit{TNT}}}=w\,\mathit{TNT}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1448,7 +1448,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[B=\frac{k}{\left(a b\right)^{m-1}} \left(E h^{2}\right)^{m} \mathit{LDF} e^{J}\]
+                        \[B=\frac{k}{\left(a\,b\right)^{m-1}}\,\left(E\,h^{2}\right)^{m}\,\mathit{LDF}\,e^{J}\]
                       </td>
                     </tr>
                     <tr>
@@ -1621,7 +1621,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathit{NFL}=\frac{{\hat{q}_{\text{tol}}} E h^{4}}{\left(a b\right)^{2}}\]
+                        \[\mathit{NFL}=\frac{{\hat{q}_{\text{tol}}}\,E\,h^{4}}{\left(a\,b\right)^{2}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1712,7 +1712,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} \mathit{GTF}}\]
+                        \[\hat{q}=\frac{q\,\left(a\,b\right)^{2}}{E\,h^{4}\,\mathit{GTF}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1885,7 +1885,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} \mathit{LDF}}\right)\]
+                        \[{J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right)\,\frac{\left(a\,b\right)^{m-1}}{k\,\left(E\,h^{2}\right)^{m}\,\mathit{LDF}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -2045,7 +2045,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\mathit{LR}=\mathit{NFL} \mathit{GTF} \mathit{LSF}\]</td>
+                      <td>\[\mathit{LR}=\mathit{NFL}\,\mathit{GTF}\,\mathit{LSF}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -2637,28 +2637,30 @@
             <div class="list">
               <p>
                 <div id="correct">
-                  Correct: The outputs of the code have the properties described in <a href=#Sec:CorSolProps>Sec:Properties of a Correct Solution</a>.
+                  Correctness: The outputs of the code have the properties described in <a href=#Sec:CorSolProps>Sec:Properties of a Correct Solution</a>.
                 </div>
               </p>
               <p>
                 <div id="verifiable">
-                  Verifiable: The code is tested with complete verification and validation plan.
+                  Verifiability: The code is tested with complete verification and validation plan.
                 </div>
               </p>
               <p>
                 <div id="understandable">
-                  Understandable: The code is modularized with complete module guide and module interface specification.
+                  Understandability: The code is modularized with complete module guide and module interface specification.
                 </div>
               </p>
-              <p><div id="reusable">Reusable: The code is modularized.</div></p>
+              <p>
+                <div id="reusable">Reusability: The code is modularized.</div>
+              </p>
               <p>
                 <div id="maintainable">
-                  Maintainable: If a likely change is made to the finished software, it will take at most 10<em>%</em> of the original development time, assuming the same development resources are available.
+                  Maintainability: If a likely change is made to the finished software, it will take at most 10<em>%</em> of the original development time, assuming the same development resources are available.
                 </div>
               </p>
               <p>
                 <div id="portable">
-                  Portable: The code is able to be run in different environments.
+                  Portablity: The code shall be portable to multiple environments, particularly Windows, Mac OSX, and Linux.
                 </div>
               </p>
             </div>
@@ -3128,7 +3130,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#correct>NFR:Correct</a></td>
+              <td><a href=#correct>NFR:Correctness</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3139,7 +3141,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#verifiable>NFR:Verifiable</a></td>
+              <td><a href=#verifiable>NFR:Verifiability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3150,7 +3152,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#understandable>NFR:Understandable</a></td>
+              <td><a href=#understandable>NFR:Understandability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3161,7 +3163,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#reusable>NFR:Reusable</a></td>
+              <td><a href=#reusable>NFR:Reusability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3172,7 +3174,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#maintainable>NFR:Maintainable</a></td>
+              <td><a href=#maintainable>NFR:Maintainability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3183,7 +3185,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#portable>NFR:Portable</a></td>
+              <td><a href=#portable>NFR:Portablity</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3767,12 +3769,12 @@
               </th>
               <th><a href=#checkGlassSafety>FR:Check-Glass-Safety</a></th>
               <th><a href=#outputValues>FR:Output-Values</a></th>
-              <th><a href=#correct>NFR:Correct</a></th>
-              <th><a href=#verifiable>NFR:Verifiable</a></th>
-              <th><a href=#understandable>NFR:Understandable</a></th>
-              <th><a href=#reusable>NFR:Reusable</a></th>
-              <th><a href=#maintainable>NFR:Maintainable</a></th>
-              <th><a href=#portable>NFR:Portable</a></th>
+              <th><a href=#correct>NFR:Correctness</a></th>
+              <th><a href=#verifiable>NFR:Verifiability</a></th>
+              <th><a href=#understandable>NFR:Understandability</a></th>
+              <th><a href=#reusable>NFR:Reusability</a></th>
+              <th><a href=#maintainable>NFR:Maintainability</a></th>
+              <th><a href=#portable>NFR:Portablity</a></th>
             </tr>
             <tr>
               <td>
@@ -4021,7 +4023,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#correct>NFR:Correct</a></td>
+              <td><a href=#correct>NFR:Correctness</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4055,7 +4057,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#verifiable>NFR:Verifiable</a></td>
+              <td><a href=#verifiable>NFR:Verifiability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4089,7 +4091,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#understandable>NFR:Understandable</a></td>
+              <td><a href=#understandable>NFR:Understandability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4123,7 +4125,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#reusable>NFR:Reusable</a></td>
+              <td><a href=#reusable>NFR:Reusability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4157,7 +4159,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#maintainable>NFR:Maintainable</a></td>
+              <td><a href=#maintainable>NFR:Maintainability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4191,7 +4193,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#portable>NFR:Portable</a></td>
+              <td><a href=#portable>NFR:Portablity</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4428,7 +4430,7 @@
           </li>
           <li>
             <div id="smithKoothoor2016">
-              [8]: Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em> Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
+              [8]: Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
             </div>
           </li>
           <li>

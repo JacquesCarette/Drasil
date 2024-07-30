@@ -67,6 +67,7 @@ library:
     - Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer
     - Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer
     - Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer
+    - Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer
     - Language.Drasil.Code.Imperative.GOOL.ClassInterface
     - Language.Drasil.Code.Imperative.Comments
     - Language.Drasil.Code.Imperative.Descriptions
@@ -95,13 +96,18 @@ executables:
     main: Main
     source-dirs: test
     other-modules:
-    - FileTests
-    - HelloWorld
-    - Helper
-    - Observer
-    - PatternTest
-    - VectorTest
-    - NameGenTest
+    - GOOL.FileTests
+    - GProc.FileTests
+    - GOOL.HelloWorld
+    - GProc.HelloWorld
+    - GOOL.Helper
+    - GProc.Helper
+    - GOOL.Observer
+    - GOOL.PatternTest
+    - GOOL.VectorTest
+    - GProc.VectorTest
+    - GOOL.NameGenTest
+    - GProc.NameGenTest
     ghc-options:
     - -threaded
     - -O2

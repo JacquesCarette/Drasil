@@ -76,6 +76,8 @@ BC_E_SUFFIX = _build_clean
 TRACE_GRAPH_SUFFIX = _trace_graph
 INSTALL_E_SUFFIX = _install
 DEBUG_E_SUFFIX = _debug
+MDBOOK_BUILD_E_SUFFIX = _mdbook_build
+MDBOOK_SERVER_E_SUFFIX = _mdbook_server
 
 # add example names with the appropriate suffixes to create per-example targets
 GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES))
@@ -88,6 +90,8 @@ BC_EXAMPLES = $(addsuffix $(BC_E_SUFFIX), $(EXAMPLES))
 TRACE_GRAPH_EXAMPLES = $(addsuffix $(TRACE_GRAPH_SUFFIX), $(EXAMPLES))
 INSTALL_EXAMPLES = $(addsuffix $(INSTALL_E_SUFFIX), $(EXAMPLES))
 DEBUG_EXAMPLES = $(addsuffix $(DEBUG_E_SUFFIX), $(EXAMPLES))
+MDBOOK_BUILD_EXAMPLES = $(addsuffix $(MDBOOK_BUILD_E_SUFFIX), $(EXAMPLES))
+MDBOOK_SERVER_EXAMPLES = $(addsuffix $(MDBOOK_SERVER_E_SUFFIX), $(EXAMPLES))
 
 # Website names with appropriate suffixes.
 TEST_WEBSITE = $(addsuffix $(TEST_E_SUFFIX), $(WEBSITE_FOLDER_NAME))
@@ -193,7 +197,7 @@ debug: test ##@Examples Run test target with better debugging tools.
 # Debugging individual examples
 $(DEBUG_EXAMPLES): %$(DEBUG_E_SUFFIX): %$(TEST_E_SUFFIX)
 
-pr_ready: all hlint ##@General Check if your current work is ready to for a PR via `all` and `hlint`.
+pr_ready: all stan hlint ##@General Check if your current work is ready to for a PR via `all` and `hlint` and stan.
 	@echo "Your build/ and stable/ match, and your code currently passes HLint tests."
 	@echo "Feel free to create a PR for your code if you feel it's ready."
 
@@ -274,6 +278,10 @@ packagedeps: graphmod check_dot
 	@echo ----------------------------
 	@stack dot --prune dblpend,gamephysics,glassbr,hghc,swhsnopcm,pdcontroller,projectile,sglpend,ssp,swhs,template,drasil-website | tred | dot -Tpng > "$(GRAPH_FOLDER)drasil-all-pkgs-deps".png	
 
+# First build all the Drasil packages, run all examples (no traceability graphs),
+# and then build the generated mdBook projects.
+mdbook_build: $(MDBOOK_BUILD_EXAMPLES) ##@Examples Build all generated mdBook projects.
+
 #--------------------------------------------------------------#
 #--- Targets that are used for individual packages/examples ---#
 #--------------------------------------------------------------#
@@ -281,8 +289,8 @@ packagedeps: graphmod check_dot
 # with an appended suffix (first argument of filter).
 
 # Variables needed to create individual example targets using filter.
-%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX) %$(MDBOOK_BUILD_E_SUFFIX) %$(MDBOOK_SERVER_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX) %$(MDBOOK_BUILD_E_SUFFIX) %$(MDBOOK_SERVER_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 %$(GEN_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
 
 # Build individual Drasil packages. Each package will have the target packageName_build.
@@ -370,6 +378,18 @@ $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_WEBSITE)): %$(STABILIZE_E_SUFFIX): 
 %$(TEX_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(TRACE_GRAPH_SUFFIX)
 	EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE="$(MAKE)" TERM="$(BATCHTERM)" "$(SHELL)" "$(SCRIPT_FOLDER)"tex_build.sh
+
+# Build individual example mdBook SRSs.
+# Targets will have the form exampleName_mdBook_build.
+$(filter %$(MDBOOK_BUILD_E_SUFFIX), $(MDBOOK_BUILD_EXAMPLES)): %$(MDBOOK_BUILD_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX)
+	- "$(SHELL)" "$(SCRIPT_FOLDER)copy_example_assets.sh" "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook"
+	mdbook build "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook"
+
+# Launch local server for individual example mdBook SRSs.
+# Targets will have the form exampleName_mdBook_server.
+$(filter %$(MDBOOK_SERVER_E_SUFFIX), $(MDBOOK_SERVER_EXAMPLES)): %$(MDBOOK_SERVER_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX)
+	- "$(SHELL)" "$(SCRIPT_FOLDER)copy_example_assets.sh" "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook"
+	mdbook serve --open "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook"
 
 #----------------------------------------------------------------------------------#
 #--- Generate analysis of module, class, datatype, and class instance structure ---#
@@ -514,6 +534,11 @@ clean: clean_artifacts ##@Cleaning Fully clean all generated builds, artifacts, 
 #--- Help & Information ---#
 #--------------------------#
 
+stan: ##@Stan Run Stan static analysis tool on the Drasil packages.
+	find . -type d -name 'drasil-*' -exec sh -c 'cd {} && stan > stan.log' \;
+	cat drasil-*/stan.log
+#use to display stan logs, cat drasil-*/stan.log
+
 # Credits to "nowox" from StackOverflow: https://stackoverflow.com/a/30796664/16760741
 HELP_FUN = \
 	%help; while(<>){push@{$$help{$$2//'options'}},[$$1,$$3] \
@@ -541,6 +566,8 @@ help:  ##@Help Show this help.
 	@echo "  X$(BC_E_SUFFIX)       Remove specific example from the build folder."
 	@echo "  X$(CODE_E_SUFFIX)              Generate individual example code."
 	@echo "  X$(DCP_E_SUFFIX)  Get all generated code file paths in the example."
+	@echo "  X$(MDBOOK_BUILD_E_SUFFIX)      Build the mdBook SRS of an individual example."
+	@echo "  X$(MDBOOK_SERVER_E_SUFFIX)     Launch local server for the mdBook SRS of an individual example."
 	@echo ""
 	@echo "Set a 'DEBUG_ENV' environment variable to 'true' if you want to check out the list of chunks in a Drasil run."
 	@echo ""
@@ -558,4 +585,4 @@ help_packages: ##@Help Lists all packages.
 		echo "  $$package"; \
 	done
 
-.PHONY: help clean clean_artifacts cleanArtifacts gool code deps hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all install examples tracegraphs doxygen $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+.PHONY: help clean clean_artifacts cleanArtifacts gool code deps hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all install examples tracegraphs doxygen shellcheck mdbook_build $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

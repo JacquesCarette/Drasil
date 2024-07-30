@@ -88,14 +88,14 @@ digraph allvsall {
 	verifyInputs	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInputs"];
 	calculateValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calculateValues"];
 	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
-	portability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portability"];
+	portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
 	security	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:security"];
 	maintainability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainability"];
 	verifiability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiability"];
 
 	subgraph FR {
 	rank="same"
-	{inputValues, verifyInputs, calculateValues, outputValues, portability, security, maintainability, verifiability}
+	{inputValues, verifyInputs, calculateValues, outputValues, portable, security, maintainability, verifiability}
 	}
 
 	processVariable	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:processVariable"];

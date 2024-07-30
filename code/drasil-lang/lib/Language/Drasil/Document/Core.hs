@@ -21,7 +21,7 @@ import Control.Lens ((^.), makeLenses, Lens', set, view)
 data ListType = Bullet      [(ItemType, Maybe String)] -- ^ Bulleted list.
               | Numeric     [(ItemType, Maybe String)] -- ^ Enumerated list.
               | Simple      [ListTuple] -- ^ Simple list with items denoted by @:@. Renders as "Title: Item"
-              | Desc        [ListTuple] -- ^ Descriptive list, renders as "__Title: Item__" (see 'ListTuple').
+              | Desc        [ListTuple] -- ^ Descriptive list, renders as "__Title__: Item" (see 'ListTuple').
               | Definitions [ListTuple] -- ^ Renders a list of "@'Title'@ is the @Item@".
 
 -- | Denotes how something should behave in a list ('ListType').

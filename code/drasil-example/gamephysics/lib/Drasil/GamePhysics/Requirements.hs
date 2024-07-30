@@ -1,5 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs) where
+module Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, pymunk) where
 
 import Language.Drasil hiding (organization)
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -111,9 +111,13 @@ performance = cic "performance" (foldlSent [
 correctness :: ConceptInstance
 correctness = cic "correctness" (foldlSent [
   atStartNP (the output_) `S.of_` S "simulation results shall be compared to", 
-  S "an existing implementation like Pymunk (please refer to:", 
-  S "http://www.pymunk.org/en/latest/)"
+  S "an existing implementation like", 
+  namedRef pymunk (S "Pymunk")
   ]) "Correctness" nonFuncReqDom
+
+pymunk :: Reference
+pymunk = makeURI "pymunk" "http://www.pymunk.org/en/latest/" $
+  shortname' (S "Pymunk")
  
 usability :: ConceptInstance
 usability = cic "usability" (foldlSent [

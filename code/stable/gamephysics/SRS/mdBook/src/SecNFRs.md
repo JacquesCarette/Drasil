@@ -8,7 +8,7 @@ Performance: The execution time for collision detection and collision resolution
 
 <div id="correctness"></div>
 
-Correctness: The output of simulation results shall be compared to an existing implementation like Pymunk (please refer to: http://www.pymunk.org/en/latest/).
+Correctness: The output of simulation results shall be compared to an existing implementation like [Pymunk](http://www.pymunk.org/en/latest/).
 
 <div id="usability"></div>
 

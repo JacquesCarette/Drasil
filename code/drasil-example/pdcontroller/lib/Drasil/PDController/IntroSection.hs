@@ -20,7 +20,7 @@ introPara
 
 externalLinkRef :: Reference
 externalLinkRef = makeURI "PD_Controller_SRSLink" 
-  "https://github.com/smiths/caseStudies/tree/main/CaseStudies/gamephys" 
+  "https://github.com/muralidn/CAS741-Fall20/blob/master/docs/SRS/SRS.pdf" 
   (shortname' $ S "PD_Controller_SRSLink")
 
 introscopeOfReq

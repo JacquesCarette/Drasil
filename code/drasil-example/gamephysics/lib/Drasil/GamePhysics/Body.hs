@@ -193,7 +193,7 @@ para1_introduction_intro = foldlSent
 
 externalLinkRef :: Reference
 externalLinkRef = makeURI "GamePhysicsSRSLink" 
-  "https://github.com/smiths/caseStudies/tree/main/CaseStudies/gamephys" 
+  "https://github.com/smiths/caseStudies/blob/master/CaseStudies/gamephys/docs/SRS/GamePhysicsSRS.pdf" 
   (shortname' $ S "GamePhysicsSRSLink")
 -------------------------------
 -- 2.1 : Purpose of Document --

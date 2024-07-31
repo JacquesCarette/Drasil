@@ -237,11 +237,11 @@ introEnd :: Sentence -> CI -> Sentence
 introEnd progSent pro = foldlSent_ [progSent +:+ S "The developed program",
   S "will be referred to as", titleize pro, sParen (short pro),
   S "based on the original, manually created version of" +:+
-  namedRef externalLinkRef (S "SWHSNoPCM")]
+  namedRef externalLinkRef' (S "SWHSNoPCM")]
 
 externalLinkRef' :: Reference
 externalLinkRef' = makeURI "SWHSNoPCM_SRSLink" 
-  "https://github.com/smiths/caseStudies/tree/master/CaseStudies/noPCM" 
+  "https://github.com/smiths/caseStudies/blob/master/CaseStudies/noPCM/docs/SRS/SRS.pdf" 
   (shortname' $ S "SWHSNoPCM_SRSLink")
 
 -----------------------------------

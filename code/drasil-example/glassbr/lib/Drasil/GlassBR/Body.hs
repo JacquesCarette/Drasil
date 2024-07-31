@@ -213,7 +213,7 @@ startIntro prgm _ progName = foldlSent [
 
 externalLinkRef :: Reference
 externalLinkRef = makeURI "glassBRSRSLink" 
-  "https://github.com/smiths/caseStudies/tree/main/CaseStudies/glass" 
+  "https://github.com/smiths/caseStudies/blob/master/CaseStudies/glass/docs/SRS/glassbr_srs.pdf" 
   (shortname' $ S "glassBRSRSLink")
 
 undIR, appStanddIR :: [Sentence]

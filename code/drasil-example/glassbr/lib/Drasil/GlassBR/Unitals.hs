@@ -103,7 +103,7 @@ standOffDist = uq (constrained' (uc sD (variable "SD") Real metre)
     sfwrRange $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 
 nomThick = cuc "nomThick" 
-  (nounPhraseSent $ S "nominal thickness")
+  (nounPhraseSent $ S "nominal thickness t is in" +:+ eS (Spc $ DiscreteD nominalThicknesses))
   lT millimetre {-Discrete nominalThicknesses, but not implemented-} Rational 
   [sfwrElem $ mkSet (map dbl nominalThicknesses)] $ exactDbl 8 -- for testing
 

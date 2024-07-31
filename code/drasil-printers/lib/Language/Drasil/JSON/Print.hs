@@ -145,6 +145,7 @@ pExpr (Int i)        = text $ show i
 pExpr (Str s)        = doubleQuotes $ text s
 pExpr (Div n d)      = mkDiv "frac" (pExpr n) (pExpr d)
 pExpr (Row l)        = hcat $ map pExpr l
+pExpr (Set l)        = hcat $ map pExpr l
 pExpr (Ident s)      = text s
 pExpr (Label s)      = text s
 pExpr (Spec s)       = text $ unPH $ L.special s

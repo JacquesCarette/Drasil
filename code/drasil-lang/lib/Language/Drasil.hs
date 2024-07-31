@@ -27,6 +27,7 @@ module Language.Drasil (
 
   -- Language.Drasil.ModelExpr
   , ModelExpr
+  , ModelExpr(Spc)
   , DerivType
   , ModelExprC(..)
 
@@ -311,7 +312,7 @@ import Language.Drasil.Expr.Lang (Expr, Completeness, Relation)
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal)
 import Language.Drasil.ModelExpr.Class (ModelExprC(..))
-import Language.Drasil.ModelExpr.Lang (ModelExpr, DerivType)
+import Language.Drasil.ModelExpr.Lang (ModelExpr, DerivType, ModelExpr(Spc))
 import Language.Drasil.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.CodeExpr.Class (CodeExprC(..))
 import Language.Drasil.Document (section, fig, figWithWidth

@@ -346,7 +346,6 @@ convExpr (Set l) = do
   ar <- mapM convExpr l
                                     -- hd will never fail here
   return $ litSet (fmap valueType (head ar)) ar
-convExpr Set{} = error "convExpr: Set"
 convExpr Operator{} = error "convExpr: Operator"
 convExpr (RealI c ri)  = do
   g <- get
@@ -1025,7 +1024,6 @@ convExprProc (Set l) = do
   ar <- mapM convExprProc l
                                     -- hd will never fail here
   return $ litSet (fmap valueType (head ar)) ar
-convExprProc Set{} = error "convExprProc: Set"
 convExprProc Operator{} = error "convExprProc: Operator"
 convExprProc (RealI c ri)  = do
   g <- get

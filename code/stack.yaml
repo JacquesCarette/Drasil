@@ -92,7 +92,8 @@ extra-deps:
 - parsec-3.1.17.0@sha256:8407cbd428d7f640a0fff8891bd2f7aca13cebe70a5e654856f8abec9a648b56,5149
 - process-1.6.20.0@sha256:2a9393de33f18415fb8f4826957a87a94ffe8840ca8472a9b69dca6de45aca03,2790
 - unix-2.8.5.1@sha256:3f702a252a313a7bcb56e3908a14e7f9f1b40e41b7bdc8ae8a9605a1a8686f06,9808
-
+- Cabal-3.12.1.0@sha256:08be296ddd941b3f9be4bd125fbb3e6857f5c707b8d10464f6f1d30c91ca3e5f,13551
+- Cabal-syntax-3.12.1.0@sha256:6dbb06fb08ff77520947fb4c1ef281c9cea5b8dc7fd9a41ad62273fa916cf4b2,7407
 # This configuration option allows the use of newer versions of dependencies than what is specified
 allow-newer: true
 
@@ -100,7 +101,7 @@ allow-newer: true
 # In this case, it's allowing newer versions of the 'stan' package.
 allow-newer-deps:
 - stan
-- wedder
+- weeder
 - multiplate
 
 # Used only for a basic set of flags for haddock

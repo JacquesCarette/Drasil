@@ -108,6 +108,7 @@ nomThick = cuc "nomThick"
   (nounPhraseSent $ S "nominal thickness" +:+ displayDblConstrntsAsSet 
     nomThick nominalThicknesses)
   lT millimetre {-Discrete nominalThicknesses, but not implemented-} Rational 
+  [sfwrElem $ ESBSet (dbl 4.0)] $ exactDbl 8
   [{- TODO: add back constraint: enumc nominalThicknesses -}] $ exactDbl 8
 
 glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String) 
@@ -160,6 +161,10 @@ dimMin     = mkQuantDef (unitary "dimMin"
 arMax     = mkQuantDef (vc "arMax"
   (nounPhraseSP "maximum aspect ratio")
   (subMax (variable "AR")) Real) (exactDbl 5)
+
+nominalThicknessesQ = mkQuantDef (vc "nominalThicknesses"
+  (nounPhraseSP "List of nominal thicknesses")
+  (subMax (variable "nomThickness")) Real) (nominalThicknesses)
 
 cWeightMax = mkQuantDef (unitary "cWeightMax" 
   (nounPhraseSP "maximum permissible input charge weight")

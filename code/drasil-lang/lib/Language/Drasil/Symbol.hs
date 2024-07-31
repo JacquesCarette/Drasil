@@ -61,7 +61,7 @@ data Symbol =
     -- @
   | Concat   [Symbol] -- ^ Concatentation of two symbols: @[s1, s2] -> s1s2@
   | Empty -- ^ Placeholder for when a symbol is not needed.
-  deriving Eq
+  deriving (Eq, Ord)
 
 -- TODO: Instead of having "Stage" as a parameter of "symbol", we can make it a typeclass parameter instead.. extensibility for cheap!
 -- | A HasSymbol is anything which has a 'Symbol'.
